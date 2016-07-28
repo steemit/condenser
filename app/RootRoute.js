@@ -9,8 +9,8 @@ import resolveRoute from './ResolveRoute';
 export default {
     path: '/',
     component: App,
-    getChildRoutes(location, cb) {
-        const route = resolveRoute(location.pathname);
+    getChildRoutes(nextState, cb) {
+        const route = resolveRoute(nextState.location.pathname);
         if (route.page === 'About') {
             //require.ensure([], (require) => {
                 cb(null, [require('app/components/pages/About')]);

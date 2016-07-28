@@ -183,7 +183,6 @@ export default class PostFull extends React.Component {
                 <span className="TimeAgo"><TimeAgoWrapper date={content.created} /></span>
             </Tooltip>
             <span> by <Author author={content.author} /></span>
-            <span> in <TagList post={content} /></span>
         </span>;
 
         return (
@@ -226,6 +225,9 @@ export default class PostFull extends React.Component {
                     </div>
                 </div>
                 <div className="row">
+                    <div className="column">
+                        <TagList post={content} horizontal />
+                    </div>
                     <div className="column large-8 medium-10 small-12">
                         {showReply && renderedEditor}
                     </div>

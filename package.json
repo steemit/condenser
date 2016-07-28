@@ -1,5 +1,9 @@
 {
-  "name": "clout",
+  "name": "Steemit.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/steemit/steemit.com.git"
+  },
   "version": "1.0.0",
   "description": "",
   "main": "index.js",

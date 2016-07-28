@@ -7,3 +7,19 @@
     }
   }
 }
+
+.TagList__horizontal {
+  margin: 0.6rem;
+  a {
+    margin: 0 0.2rem;
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.3rem;
+    background: #EEE;
+    color: #8a8a8a;
+
+    &:hover {
+      background: #8a8a8a;
+      color: #EEE !important;
+    }
+  }
+}

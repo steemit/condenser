@@ -201,7 +201,7 @@ export default class BlocktradesDeposit extends React.Component {
                             <label className="float-left" htmlFor="estimateAmount"> Estimate using {estimateInputCoin}</label>
                             <span className="float-right" onClick={onFlip}>{flipIcon}</span>
                         </div>
-                        <input id="estimateAmount" type="text" {...cleanReduxInput(amount)} disabled={submitting}
+                        <input id="estimateAmount" type="tel" {...cleanReduxInput(amount)} disabled={submitting}
                             placeholder={`Amount to send ${estimateInputCoin}`}
                             autoComplete="off" ref="amountRef"
                         />

@@ -31,9 +31,6 @@ csrf(app);
 app.use(mount(grant));
 app.use(flash({key: 'flash'}));
 
-// various security headers
-app.use(helmet());
-
 // remember ch, cn, r url params in the session and remove them from url
 app.use(function *(next) {
     if (this.method === 'GET' && /\?[^\w]*(ch=|cn=|r=)/.test(this.url)) {
@@ -58,7 +55,10 @@ if (env === 'production') {
     app.use(require('koa-etag')());
     app.use(require('koa-compressor')());
     app.use(prod_logger());
+    app.use(helmet.contentSecurityPolicy(config.helmet));
 } else {
+    app.use(helmet());
+    // app.use(helmet.contentSecurityPolicy(config.helmet));
     app.use(koa_logger());
 }
 

@@ -6,6 +6,7 @@ import config from 'config';
 import recordWebEvent from 'server/record_web_event';
 import {esc, escAttrs} from 'db/models';
 import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF} from './utils';
+import coBody from 'co-body';
 
 export default function useGeneralApi(app) {
     const router = koa_router({prefix: '/api/v1'});
@@ -181,6 +182,13 @@ export default function useGeneralApi(app) {
             this.body = JSON.stringify({error: error.message});
             this.status = 500;
         }
+    });
+
+    router.post('/csp_violation', function *() {
+        if (rateLimitReq(this, this.req)) return;
+        const params = yield coBody.json(this);
+        console.log('-- /csp_violation -->', this.req.headers['user-agent'], params);
+        this.body = '';
     });
 }
 

@@ -11,10 +11,10 @@ import {Apis} from 'shared/api_client';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 
 export const userWatches = [
+    watchRemoveHighSecurityKeys, // keep first to remove keys early when a page change happens
     loginWatch,
     saveLoginWatch,
     logoutWatch,
-    watchRemoveHighSecurityKeys,
     // getCurrentAccountWatch,
     loginErrorWatch,
     lookupPreviousOwnerAuthorityWatch,

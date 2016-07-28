@@ -36,9 +36,9 @@ import extractMeta from 'app/utils/ExtractMeta';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 
 const sagaMiddleware = createSagaMiddleware(
+    ...userWatches, // keep first to remove keys early when a page change happens
     ...fetchDataWatches,
     ...sharedWatches,
-    ...userWatches,
     ...authWatches,
     ...transactionWatches,
     ...marketWatches

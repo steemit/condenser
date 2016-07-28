@@ -12,6 +12,7 @@ class CategorySelector extends React.Component {
         onChange: React.PropTypes.func.isRequired,
         onBlur: React.PropTypes.func.isRequired,
         isEdit: React.PropTypes.bool,
+        disabled: React.PropTypes.bool,
         value: React.PropTypes.string,
         tabIndex: React.PropTypes.number,
 
@@ -46,7 +47,7 @@ class CategorySelector extends React.Component {
         }
     }
     render() {
-        const {trending, tabIndex} = this.props
+        const {trending, tabIndex, disabled} = this.props
         const categories = trending.slice(0, 11).filterNot(c => validateCategory(c))
         const {createCategory} = this.state
 
@@ -55,10 +56,10 @@ class CategorySelector extends React.Component {
 
         const impProps = {...this.props}
         const categoryInput =
-            <input type="text" {...cleanReduxInput(impProps)} ref="categoryRef" tabIndex={tabIndex} />
+            <input type="text" {...cleanReduxInput(impProps)} ref="categoryRef" tabIndex={tabIndex} disabled={disabled} />
 
         const categorySelect = (
-            <select {...cleanReduxInput(this.props)} onChange={this.categorySelectOnChange} ref="categoryRef" tabIndex={tabIndex}>
+            <select {...cleanReduxInput(this.props)} onChange={this.categorySelectOnChange} ref="categoryRef" tabIndex={tabIndex} disabled={disabled}>
                 <option value="">Select a tag...</option>
                 {categoryOptions}
                 <option value="new">{this.props.placeholder}</option>

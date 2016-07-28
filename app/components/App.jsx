@@ -100,19 +100,19 @@ class App extends React.Component {
                 </div>
             </div>;
         }
-        else if (false && ip && this.state.showCallout) {
+        else if (ip && this.state.showCallout) {
             callout = <div className="row">
                 <div className={classNames('column callout success', {alert}, {warning}, {success})} style={{margin: '20px', padding: '20px', paddingRight: '40px'}}>
                     <CloseButton onClick={() => this.setState({showCallout: false})} />
                     <ul>
                         <li>
-                            <a href="https://steemit.com/steemit/@steemitblog/steemit-re-opens-new-user-registration">
-                                Steemit Re-Opens New User Registration
+                            <a href="https://steemit.com/steemit/@steemitblog/steemit-com-is-now-open-source">
+                                Steemit.com is now Open Source
                             </a>
                         </li>
                         <li>
-                            <a href="https://steemit.com/steemit/@steemit3/third-update-to-july-14th-security-announcement-account-recovery-begins">
-                                Third Update to July 14th Security Announcement - Account Recovery Begins
+                            <a href="https://steemit.com/steemit/@steemitblog/all-recovered-accounts-have-been-fully-refunded">
+                                All Recovered Accounts have been fully Refunded
                             </a>
                         </li>
                     </ul>

@@ -80,7 +80,8 @@ class Voting extends React.Component {
         const classDown = 'Voting__button Voting__button-down' + (myVote < 0 ? ' Voting__button--downvoted' : '') + (votingDownActive ? ' votingDown' : '');
 
         if (flag) {
-            const down_votes = active_votes.toJS().filter( v => v.percent < 0 ).length
+            // Remove negitive votes unless full power -1000 (we had downvoting spam)
+            const down_votes = active_votes.filter( v => v.get('percent') === -1000 ).size
             return <span className={classDown}>
                 {down_votes > 0 && <span className="Voting__button-downvotes">{down_votes}</span>}
                 {votingDownActive ? down : <a href="#" onClick={this.voteDown} title="Downvote">{down}</a>}
@@ -121,6 +122,10 @@ class Voting extends React.Component {
         let voters = [];
         for( let v = 0; v < avotes.length; ++v ) {
             const pct = avotes[v].percent
+            // Remove negitive votes unless full power -1000 (we had downvoting spam)
+            if(pct < 0 && pct !== -1000)
+                continue
+
             const cnt = Math.sign(pct)
             count += cnt
             if(cnt === 0) continue

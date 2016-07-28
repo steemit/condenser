@@ -23,7 +23,7 @@ export default ({post, horizontal}) => {
     tags = tags.filter( (value, index, self) => value && (self.indexOf(value) === index) )
 
     if (horizontal) { // show it as a dropdown in Preview
-        const list = tags.map( tag => <Link to={`/trending/${tag}`}> {tag} </Link>)
+        const list = tags.map( (tag,idx) => <Link to={`/trending/${tag}`} key={idx}> {tag} </Link>)
         return <div className="TagList__horizontal">{list}</div>;
     } else {
         if(tags.length == 1) {

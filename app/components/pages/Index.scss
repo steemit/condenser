@@ -1,0 +1,29 @@
+.LP {
+  background-color: #fafbfc;
+  color: #1a5099;
+
+  @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+    height: 800px;
+  }
+
+  h1 {
+    font-weight: 300;
+    max-width: 1300px;
+    padding: 0 1rem;
+  }
+
+  strong {
+    font-weight: 400;
+  }
+
+  .center {
+    margin: 0 auto;
+  }
+
+  .action {
+    background-color: #4ba2f2;
+    &:hover {
+      background-color: smart-scale(#4ba2f2, 5%);
+    }
+  }
+}

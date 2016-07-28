@@ -1,0 +1,77 @@
+.App {
+  // min-height: 100vh;
+  padding-top: 50px;
+}
+
+.App__content {
+  margin-top: 1.5rem;
+}
+
+.welcomeWrapper {
+  padding-bottom: 1rem;
+}
+.welcomeBanner {
+  padding-bottom: 2.35rem;
+  background-image: url(../images/lp-bottom.jpg);
+  background-repeat: repeat-x;
+  background-position:bottom;
+  //background-attachment:fixed;
+}
+
+.RightMenu {
+  background-color: #555;
+  height: 100vh;
+  color: #fff;
+  padding-top: 3rem;
+  .close-button {
+    color: #fff;
+  }
+  .menu > li {
+    > a {
+      color: #fff;
+      border-top: 1px solid #777;
+    }
+    > a:hover {
+      background-color: #666;
+    }
+  }
+  .menu > li.last {
+    border-bottom: 1px solid #777;
+  }
+  .button.hollow {
+    color: #fff;
+    border: none;
+  }
+}
+.PlainLink {
+    color: #8a8a8a;
+}
+
+.welcomeBanner {
+  position: relative;
+  h2 {
+    font-size: 3.8rem;
+    font-weight: 300;
+  }
+  h4 {
+    color: #999;
+    font-weight: 600;
+  }
+  .close-button {
+    top: -1rem;
+  }
+}
+.downvoted {
+    color: #848282;
+    opacity: .3;
+    -webkit-filter: grayscale(1); // image
+    filter: gray; // image grayscale
+    .Comment__header-user {
+        color: #848282;
+    }
+}
+.downvoted:hover {
+    opacity: 1;
+    filter: none;
+    -webkit-filter: grayscale(0%);
+}

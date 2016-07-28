@@ -1,0 +1,55 @@
+{
+  "db": {
+    "username": "root",
+    "password": null,
+    "database": "steemit_dev",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "session_key": "steemses",
+  "grant": {
+    "server": {
+      "protocol": "http",
+      "host": "localhost:3002"
+    },
+    "facebook": {
+      "key": "",
+      "secret": "",
+      "callback": "/handle_facebook_callback",
+      "scope": [
+        "email",
+        "user_location"
+      ]
+    },
+    "reddit": {
+      "key": "",
+      "secret": "",
+      "callback": "/handle_reddit_callback",
+      "custom_params": {"state": "void", "duration": "temporary"},
+      "scope": [
+        "identity"
+      ]
+    }
+  },
+  "registrar": {
+    "account": "-",
+    "signing_key": "-",
+    "fee": "5.000 STEEM"
+  },
+  "requestAccountRecovery": {
+    "signing_key": "5J.....",
+    "recovery_account": "steem"
+  },
+  "ws_connection_client": "ws://localhost:8090",
+  "ws_connection_server": [
+    "ws://localhost:8090",
+    "ws://localhost:8091",
+    "ws://localhost:8092"
+  ],
+  "img_proxy_prefix": "",
+  "ipfs_prefix": "",
+  "google_analytics_id": "",
+  "disable_signups": false,
+  "read_only_mode": false,
+  "uploadImage": "https://..."
+}

@@ -1,0 +1,30 @@
+.UserProfile {
+}
+
+.UserProfile__top-nav {
+  padding: 0;
+  padding-bottom: 1.5rem;
+  background-color: transparent;
+  .menu {
+    background-color: transparent;
+  }
+  .menu > li > a {
+      padding-left: 0.7rem;
+      padding-right: 0.7rem;
+    color: $dark-gray;
+    @include hoverUnderline;
+    &.active {
+      color: $black;
+      font-weight: bold;
+    }
+  }
+  .menu > li:first-child > a {
+    padding-left: 0;
+  }
+}
+
+.UserProfile__section-title {
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #EEE;
+}

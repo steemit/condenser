@@ -1,0 +1,33 @@
+.menu > li > a {
+  line-height: 1.5rem;
+}
+
+.menu > li > a:focus {
+  outline: none;
+}
+
+.tooltip {
+  margin-top: -1rem;
+}
+
+.dropdown-pane {
+  width: auto;
+  padding: 0;
+  box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.75);
+  z-index: 1000;
+}
+
+
+div[role=dialog] {
+  z-index: 500;
+}
+
+:focus {
+  outline: none;
+}
+
+input[type=submit].disabled, input[type=submit].disabled:focus {
+  opacity: 1;
+  cursor: inherit;
+  background-color: $medium-gray;
+}

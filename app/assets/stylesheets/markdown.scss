@@ -1,0 +1,58 @@
+.Markdown, .ReplyEditor__body.rte {
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Source Serif Pro', serif;
+    font-weight: 600;
+  }
+
+  h1 {
+    margin: 2rem 0 1rem 0;
+    font-size: 160%
+  }
+  h2 {
+    margin: 2rem 0 1rem 0;
+    font-size: 140%;
+  }
+  h3 {
+    margin: 1.72rem 0 0.87rem 0;
+    font-size: 120%;
+  }
+  h4 {
+    margin: 1rem 0 0.5rem 0;
+    font-size: 100%;
+  }
+  h6 {
+    margin: 1rem 0 0.5rem 0;
+    font-size: 90%;
+  }
+
+  code {
+    padding: 0.25rem 0.5rem;
+    font-size: 84%;
+    border-radius: 2px;
+    border-color: $light-gray;
+    background-color: #efefef;
+  }
+
+  pre > code {
+    display: block;
+  }
+
+  p {
+    margin: 0.5rem 0 1rem 0;
+  }
+
+  strong {
+    font-weight: 600;
+  }
+  
+  img {
+      max-width: 400px;
+      max-height: 400px;
+  }
+  .Card {
+      border-radius: 2px;
+      border-color: $light-gray;
+  }
+
+}

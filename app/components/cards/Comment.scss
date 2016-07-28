@@ -1,0 +1,117 @@
+.Comment {
+  clear: both;
+  margin-bottom: 2.4rem;
+  .Markdown p {
+    margin: 0.1rem 0 0.6rem 0;
+  }
+}
+
+.Comment__Userpic {
+  position: relative;
+  top: 0.4rem;
+}
+
+.Comment__Userpic-small {
+  position: relative;
+  top: 4px;
+  @include hide-for(medium);
+  path {
+    fill: $dark_gray;
+  }
+}
+
+.Comment.collapsed {
+  > .Comment__Userpic {
+    top: 0;
+    left: 26px;
+    .Userpic {
+      img {
+        width: 24px;
+        height: 24px;
+      }
+    }
+  }
+  .Comment__header {
+    .Voting {
+      margin-left: 1rem;
+      border-right: none;
+    }
+    a {
+      color: $dark-gray;
+      @include hoverUnderline;
+    }
+  }
+}
+
+.Comment__header {
+  margin-left: 62px;
+  color: $dark-gray;
+}
+
+.Comment__header-user {
+  color: $black;
+  font-size: 100%;
+  font-weight: 600;
+  @include hoverUnderline;
+}
+
+.Comment__header_collapse {
+  visibility: hidden;
+  //width: 1rem;
+  float: right;
+  a {
+    color: $dark-gray;
+    letter-spacing: 0.1rem;
+    padding: 0 0.5rem;
+  }
+  .Icon {
+    top: 5px;
+  }
+}
+
+.Comment:hover > .Comment__header > .Comment__header_collapse {
+  visibility: visible;
+}
+
+.Comment__body {
+  margin-left: 62px;
+  max-width: 50rem;
+  font-size: 110%;
+  word-wrap: break-word;
+}
+
+.Comment__footer {
+  margin-left: 62px;
+  margin-top: -0.4rem;
+  a {
+    color: $dark-gray;
+    @include hoverUnderline;
+  }
+  .Voting {
+    border-right: 1px solid $medium-gray;
+    padding-right: 1rem;
+    margin-right: 1rem;
+  }
+}
+
+.Comment__replies {
+  margin-top: 1.4rem;
+  margin-left: 62px;
+  .Comment {
+    margin-bottom: 1.4rem;
+  }
+}
+
+
+@media screen and (max-width: 39.9375em) {
+  .root {
+    .Comment__header, .Comment__footer, .Comment__body, .Comment__replies {
+      margin-left: 0;
+    }
+  }
+  .reply {
+    .Comment__header, .Comment__footer, .Comment__body, .Comment__replies {
+      margin-left: 20px;
+    }
+  }
+}

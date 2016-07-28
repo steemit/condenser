@@ -1,0 +1,226 @@
+ul.PostsList__summaries {
+  margin-left: 0;
+}
+
+.PostSummary {
+  padding: 0 0 0.5rem;
+  margin: 0 0 1.25vw;
+  background-color: #fff;
+  clear: left;
+  @include clearfix;
+}
+
+.PostSummary__image {
+  float: left;
+  width: 7.5rem;
+  height: 4.5rem;
+  background-color: white;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: 1px solid #EEE;
+}
+
+.PostSummary__image-mobile {
+  display: block;
+  background: #F8F8F8;
+
+  img {
+    margin: 0 auto;
+    display: block;
+    max-width: 100%;
+    max-height: 640px;
+    background: white;
+  }
+}
+
+.PostSummary.with-image .PostSummary__content {
+  margin-left: 8rem;
+}
+
+.PostSummary__header {
+  > h6 {
+    margin: 0.5rem;
+    > a {
+      color: $dark-gray;
+      text-transform: uppercase;
+      font-weight: 400;
+      @include hoverUnderline;
+    }
+  }
+  > h1 {
+    font: 600 100% "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Arial, sans-serif;
+    margin: 0;
+    > a {
+      color: #333;
+      > .Icon path {
+        fill: $dark-gray;
+      }
+    }
+    > a:visited {
+      color: #777;
+    }
+  }
+  > h1, > h6 {
+    overflow: hidden;
+  }
+  .author a {
+    color: $black;
+    font: 400 100% 'Source Sans Pro';
+    @include hoverUnderline;
+  }
+  .de-emphasize > a {
+    color: $dark-gray;
+    > .Icon path {
+      fill: $dark-gray;
+    }
+  }
+  .domain {
+    color: $dark-gray;
+    font-size: 90%;
+    font-weight: normal;
+    padding-left: 0.2rem;
+  }
+}
+
+ul.PostSummary__tags {
+  list-style: none;
+  margin: 0.2rem 0;
+  font-size: 85%;
+  display: inline-block;
+
+  li {
+    display: inline-block;
+
+    a {
+      background: #E8E8E8;
+      color: #555;
+      border-radius: 5px;
+      padding: 0.1rem 0.4rem;
+      margin: 0.1rem;
+      display: inline-block;
+    }
+    a:hover {
+      background: #DDD;
+    }
+  }
+}
+
+.PostSummary__body {
+  width: auto;
+  padding: 0.3rem 0.1rem 0.15rem;
+  font-family: "Helvetica Neue", Helvetica, Verdana, Arial, sans-serif;
+  color: #666;
+  cursor: pointer;
+  overflow: hidden;
+  line-height: 1.4;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  a {
+    color: $black;
+  }
+
+  .PostSummary__body-read_more {
+    color: $dark-gray;
+    font-weight: 400;
+    @include hoverUnderline;
+  }
+
+  .Markdown {
+    p {
+      margin: 0;
+    }
+    h1, h2, h3, h4, h5, h6, strong, em {
+      margin: 0;
+      font: 400 100% 'Source Sans Pro';
+    }
+  }
+}
+
+.PostSummary__body--empty {
+  margin-bottom: 0.5rem;
+}
+
+.PostSummary__footer {
+  color: $dark-gray;
+  font-weight: 400;
+  a {
+    color: #449;
+  }
+  .Voting {
+    .dropdown-arrow svg {
+      fill: $medium-gray;
+    }
+  }
+}
+
+.PostSummary__footer {
+  path {
+    fill: $dark-gray;
+  }
+  a {
+    color: $dark-gray;
+    font-weight: bold;
+  }
+  .FormattedAsset {
+    font-weight: normal;
+  }
+  .FormattedAsset {
+    font-size: 110%;
+  }
+}
+
+.PostSummary__lifetime {
+  color: $dark-gray;
+  font-size: 80%;
+}
+
+.PostSummary__time_author_category {
+  color: $dark-gray;
+  a {
+    color: $dark-gray;
+    font-weight: bold;
+    @include hoverUnderline;
+  }
+  padding-right: 1rem;
+  margin-right: 1rem;
+  border-right: 1px solid #cacaca;
+}
+
+.PostSummary__time_author_category_small > a {
+  color: $dark-gray;
+}
+
+/* Small only */
+@media screen and (max-width: 39.9375em) {
+  .PostSummary {
+    padding: 1rem 0.5rem;
+    margin-bottom: 0;
+    border: none;
+    border-top: 1px solid $light-gray;
+  }
+  .PostSummary__image {
+    float: none;
+    margin-top: 0.5rem;
+    // background-size: contain;
+    display: block;
+    width: 100%;
+    height: 40vw;
+  }
+  .PostSummary__body {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
+    white-space: normal;
+    text-overflow: initial;
+    padding-bottom: 0.3rem;
+  }
+  .PostSummary.with-image .PostSummary__content {
+    margin-left: 0;
+  }
+  .PostSummary__footer .Voting, .PostSummary__footer .Voting__inner {
+    border-right: none;
+  }
+}

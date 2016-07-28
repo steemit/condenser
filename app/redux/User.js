@@ -1,0 +1,152 @@
+import {fromJS} from 'immutable';
+import createModule from 'redux-modules';
+import {PropTypes} from 'react';
+
+const {string, object, bool, shape, oneOf} = PropTypes
+const defaultState = fromJS({
+    current: null,
+    show_login_modal: false,
+    show_transfer_modal: false,
+    show_signup_modal: false,
+    pub_keys_used: null
+});
+
+export default createModule({
+    name: 'user',
+    initialState: defaultState,
+    transformations: [
+        {
+            action: 'SHOW_LOGIN',
+            payloadTypes: {
+                operation: object,
+                loginDefault: object,
+            },
+            reducer: (state, {payload}) => {
+                // https://github.com/mboperator/redux-modules/issues/11
+                if (typeof payload === 'function') payload = undefined
+                let operation, loginDefault
+                if(payload) {
+                    operation = fromJS(payload.operation)
+                    loginDefault = fromJS(payload.loginDefault)
+                }
+                return state.merge({show_login_modal: true, loginBroadcastOperation: operation, loginDefault})
+            }
+        },
+        { action: 'HIDE_LOGIN', reducer: state =>
+            state.merge({show_login_modal: false, loginBroadcastOperation: undefined, loginDefault: undefined}) },
+        { action: 'SAVE_LOGIN_CONFIRM', reducer: (state, {payload}) => state.set('saveLoginConfirm', payload) },
+        { action: 'SAVE_LOGIN', reducer: (state) => state }, // Use only for low security keys (like posting only keys)
+        { action: 'REMOVE_HIGH_SECURITY_KEYS', reducer: (state) => {
+            if(!state.hasIn(['current', 'private_keys'])) return state
+            state = state.updateIn(['current', 'private_keys'], private_keys => {
+                if(private_keys.has('active_private'))
+                    console.log('removeHighSecurityKeys')
+                private_keys = private_keys.delete('active_private')
+                return private_keys
+            })
+            const username = state.getIn(['current', 'username'])
+            state = state.setIn(['authority', username, 'active'], 'none')
+            state = state.setIn(['authority', username, 'owner'], 'none')
+            return state
+        }},
+        { action: 'SHOW_TRANSFER', reducer: state => state.set('show_transfer_modal', true) },
+        { action: 'HIDE_TRANSFER', reducer: state => state.set('show_transfer_modal', false) },
+        { action: 'SET_TRANSFER_DEFAULTS', reducer: (state, {payload}) => state.set('transfer_defaults', fromJS(payload)) },
+        { action: 'CLEAR_TRANSFER_DEFAULTS', reducer: (state) => state.remove('transfer_defaults') },
+        {
+            action: 'USERNAME_PASSWORD_LOGIN',
+            payloadTypes: {
+                username: string,
+                password: string,
+                operationType: string,
+                saveLogin: bool,
+            },
+            reducer: state => state, // saga
+        },
+        {
+            action: 'SET_USER',
+            payloadTypes: {
+                username: string,
+                password: string,
+                account: object,
+                private_key: object,
+                private_keys: object,
+                login_owner_pubkey: string,
+                previous_owner_authority: object,
+                // pending_private_key: object,
+            },
+            reducer: (state, {payload}) => {
+                // console.log('SET_USER')
+                return state.mergeDeep({ current: payload, show_login_modal: false, loginBroadcastOperation: undefined, loginDefault: undefined, logged_out: undefined })
+            }
+        },
+        {
+            action: 'CLOSE_LOGIN',
+            payloadTypes: {
+                error: string,
+            },
+            reducer: (state) => state.merge({ login_error: undefined, show_login_modal: false, loginBroadcastOperation: undefined, loginDefault: undefined })
+        },
+        {
+            action: 'LOGIN_ERROR',
+            payloadTypes: {
+                error: string,
+            },
+            reducer: (state, {payload: {error}}) => state.merge({ login_error: error, logged_out: undefined })
+        },
+        {
+            action: 'LOGOUT',
+            reducer: () => {
+                return defaultState.merge({logged_out: true})
+            }
+        },
+        // {
+        //     action: 'ACCEPTED_COMMENT',
+        //     // User can only post 1 comment per minute
+        //     reducer: (state) => state.merge({ current: {lastComment: Date.now()} })
+        // },
+        { action: 'SHOW_SIGN_UP', reducer: state => state.set('show_signup_modal', true) },
+        { action: 'HIDE_SIGN_UP', reducer: state => state.set('show_signup_modal', false) },
+
+        {
+            action: 'KEYS_ERROR',
+            payloadTypes: {
+                error: string,
+            },
+            reducer: (state, {payload: {error}}) => state.merge({ keys_error: error })
+        },
+        // { action: 'UPDATE_PERMISSIONS', reducer: state => {
+        //     return state // saga
+        // }},
+        { // AuthSaga
+            action: 'ACCOUNT_AUTH_LOOKUP',
+            payloadTypes: {
+                account: object.isRequired, // immutable Map
+                highSecurityLogin: bool,
+                private_keys: shape({
+                    posting_private: object,
+                    active_private: object,
+                }), // Immutable Map
+                login_owner_pubkey: string,
+            },
+            reducer: state => state
+        },
+        { // AuthSaga
+            action: 'SET_AUTHORITY',
+            payloadTypes: {
+                accountName: string.isRequired,
+                auth: shape({
+                    posting: oneOf(['full', 'partial', 'none']),
+                    active: oneOf(['full', 'partial', 'none']),
+                    owner: oneOf(['full', 'partial', 'none']),
+                }).isRequired, // Immutable Set
+                pub_keys_used: object,
+            },
+            reducer: (state, {payload: {accountName, auth, pub_keys_used}}) => {
+                return state.setIn(['authority', accountName], fromJS(auth)).set('pub_keys_used', pub_keys_used)
+            },
+        },
+        { action: 'HIDE_CONNECTION_ERROR_MODAL', reducer: state => state.set('hide_connection_error_modal', true) },
+    ]
+});
+

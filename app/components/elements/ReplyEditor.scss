@@ -1,0 +1,60 @@
+.ReplyEditor {
+  max-width: 50rem;
+  .rte {
+    clear: right;
+  }
+}
+
+.SubmitPost .DraftEditor-editorContainer {
+  // height: 40vh;
+}
+
+.ReplyEditor .Markdown {
+  border: 1px solid $light-gray;
+  padding: 0 1rem;
+}
+
+.ReplyEditor__body {
+  margin-top: 1rem;
+  border-radius: 4px;
+  > div {
+    border: none;
+  }
+}
+
+.ReplyEditor__body.rte {
+  border: 1px solid $medium-gray;
+}
+
+.Comment__replies .ReplyEditor__body {
+  margin-top: -1rem;
+}
+.medium-editor-element {
+    background-color: inherit !important;
+}
+.medium-editor-toolbar-actions button {
+    margin-right: 0 !important;
+}
+// .medium-insert-images.medium-insert-images-grid.small-grid figure {
+//     width: 10%;
+// }
+// @media (max-width: 750px) {
+//     .medium-insert-images.medium-insert-images-grid.small-grid figure {
+//         width: 20%;
+//     }
+// }
+// @media (max-width: 450px) {
+//     .medium-insert-images.medium-insert-images-grid.small-grid figure {
+//         width: 25%;
+//     }
+// }
+// .editable {
+//     outline: none;
+//     min-height: 38px;
+//     margin: 0 0 20px 0;
+//     padding: 0 0 20px 0;
+// }
+
+.RichTextEditor__root___33zoV button {
+  margin-right: 0 !important;
+}

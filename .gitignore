@@ -1,0 +1,12 @@
+.DS_Store
+.idea
+server/webpack-stats.json
+coverage
+node_modules
+*.log
+dist
+vendor/*
+tmp/*
+config/steem.json
+config/steem-dev.json
+config/process.json

@@ -460,7 +460,7 @@ export default formId => reduxForm(
             const rootTag = /^[-a-z\d]+$/.test(rootCategory) ? rootCategory : null
 
             const rtags = HtmlReady(body, {mutate: false})
-            let allCategories = Set([...formCategories.toJS()])
+            let allCategories = Set([...formCategories.toJS(), ...rtags.hashtags])
             if(rootTag) allCategories = allCategories.add(rootTag)
 
             // merge
@@ -479,6 +479,11 @@ export default formId => reduxForm(
             const text = getHtml(body) != null ? sanitize(body, sanitizeConfig({sanitizeErrors})) : body
             if(sanitizeErrors.length) {
                 errorCallback(sanitizeErrors.join('.  '))
+                return
+            }
+            if(meta.tags.length > 5) {
+                const includingCategory = /edit/.test(type) ? ` (including the category '${rootCategory}')` : ''
+                errorCallback(`You have ${meta.tags.length} tags total${includingCategory}.  Please use only 5 in your post and category line.`)
                 return
             }
             const operation = {

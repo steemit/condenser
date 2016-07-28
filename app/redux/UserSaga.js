@@ -62,6 +62,8 @@ function* usernamePasswordLogin(action) {
 const isHighSecurityOperations = ['transfer', 'transfer_to_vesting', 'withdraw_vesting',
     'limit_order_create', 'limit_order_cancel', 'account_update', 'account_witness_vote']
 
+const highSecurityPages = ['/market']
+
 const clean = (value) => value == null || value === '' || /null|undefined/.test(value) ? undefined : value
 
 function* usernamePasswordLogin2({payload: {username, password, saveLogin,
@@ -87,9 +89,12 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         // "alice/active" will login only with Alices active key
         [username, userProvidedRole] = username.split('/')
     }
+    const current_route = yield select(state => state.global.get('current_route'))
+
     const highSecurityLogin =
         /owner|active/.test(userProvidedRole) ||
-        isHighSecurityOperations.indexOf(operationType) !== -1
+        isHighSecurityOperations.indexOf(operationType) !== -1 ||
+        highSecurityPages.indexOf(current_route) !== -1
 
     const isRole = (role, fn) => (!userProvidedRole || role === userProvidedRole ? fn() : undefined)
 

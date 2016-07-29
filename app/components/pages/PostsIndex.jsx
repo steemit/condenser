@@ -1,3 +1,4 @@
+/* eslint react/prop-types: 0 */
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import Topics from './Topics';
@@ -5,6 +6,7 @@ import constants from 'app/redux/constants';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import PostsList from 'app/components/cards/PostsList';
 import {isFetchingOrRecentlyUpdated} from 'app/utils/StateFunctions';
+import g from 'app/redux/GlobalReducer';
 
 class PostsIndex extends React.Component {
 
@@ -41,7 +43,9 @@ class PostsIndex extends React.Component {
         const [author, permlink] = last_post.split('/');
         this.props.requestData({author, permlink, order, category});
     }
-
+    depositSteem = () => {
+        this.props.depositSteem()
+    }
     render() {
         const {order = constants.DEFAULT_SORT_ORDER, category} = this.props.routeParams;
         const posts = this.getPosts(order, category);
@@ -58,6 +62,7 @@ class PostsIndex extends React.Component {
                     <PostsList ref="list" posts={posts ? posts.toArray() : []} loading={fetching} category={category} loadMore={this.loadMore} />
                 </div>
                 <div className="PostsIndex__topics column shrink show-for-large">
+                    <div className="PostsIndex__buysp button hollow text-center slim" onClick={this.depositSteem}>Buy Steem Power</div>
                     <Topics order={order} current={category} compact={false} />
                 </div>
             </div>
@@ -77,7 +82,10 @@ module.exports = {
         },
         (dispatch) => {
             return {
-                requestData: (args) => dispatch({type: 'REQUEST_DATA', payload: args})
+                requestData: (args) => dispatch({type: 'REQUEST_DATA', payload: args}),
+                depositSteem: () => {
+                    dispatch(g.actions.showDialog({name: 'blocktrades_deposit', params: {outputCoinType: 'VESTS'}}));
+                },
             }
         }
     )(PostsIndex)

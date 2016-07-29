@@ -13,6 +13,7 @@ import DropdownMenu from 'app/components/elements/DropdownMenu';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 
 const ABOUT_FLAG = 'Flagging or downvoting a post can remove rewards and make this material less visible.  You can still unflag or upvote later if you change your mind.'
+const MAX_VOTES_DISPLAY = 20;
 
 class Voting extends React.Component {
 
@@ -117,7 +118,7 @@ class Voting extends React.Component {
 
         const avotes = active_votes.toJS();
         // sort votes by time, people don't want to see whales constantly on the top
-        avotes.sort((b, a) => a.time < b.time ? -1 : a.time > b.time ? 1 : 0)
+        // avotes.sort((b, a) => a.time < b.time ? -1 : a.time > b.time ? 1 : 0)
         let count = 0;
         let voters = [];
         for( let v = 0; v < avotes.length; ++v ) {
@@ -129,8 +130,9 @@ class Voting extends React.Component {
             const cnt = Math.sign(pct)
             count += cnt
             if(cnt === 0) continue
-            if (showList) voters.push({value: (cnt > 0 ? '+ ' : '- ') + avotes[v].voter, link: '/@' + avotes[v].voter})
+            if (showList && voters.length < MAX_VOTES_DISPLAY) voters.push({value: (cnt > 0 ? '+ ' : '- ') + avotes[v].voter, link: '/@' + avotes[v].voter})
         }
+        if (voters.length === MAX_VOTES_DISPLAY) voters.push({value: '...'});
 
 
         let voters_list = null;

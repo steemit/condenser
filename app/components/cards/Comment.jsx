@@ -310,15 +310,18 @@ const Comment = connect(
         let votes = Long.ZERO
         if (comment) {
             comment.get('active_votes').forEach(v => {
+                // console.log('voter', v.get('voter'), v.get('rshares'), v.toJS())
                 votes = votes.add(Long.fromString('' + v.get('rshares')))
             })
         }
+        const netVoteSign = votes.compare(Long.ZERO)
+        const hasPayout = netVoteSign > 0
         const current = state.user.get('current')
         const username = current ? current.get('username') : null
-        const ignore = username ? state.global.getIn(['follow', 'get_following', username, 'result', c.get('author')], List()).contains('ignore') : false
+        const ignore = !hasPayout && username ? state.global.getIn(['follow', 'get_following', username, 'result', c.get('author')], List()).contains('ignore') : false
         return {
             ...ownProps,
-            netVoteSign: votes.compare(Long.ZERO),
+            netVoteSign,
             comment_link,
             anchor_link,
             rootComment: rc,

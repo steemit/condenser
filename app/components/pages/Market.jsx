@@ -51,8 +51,8 @@ class Market extends React.Component {
         const owner = user.get('username')
         const amount_to_sell = parseFloat(ReactDOM.findDOMNode(this.refs.buySteem_total).value)
         const min_to_receive = parseFloat(ReactDOM.findDOMNode(this.refs.buySteem_amount).value)
-        const price = (amount_to_sell / min_to_receive).toFixed(8)
-        // Changed toFixex(8) because of rounding issue caused orderbook display.
+        const price = (amount_to_sell / min_to_receive).toFixed(6)
+        // Changed toFixex(8) because of rounding issue caused orderbook display?
         placeOrder(owner, amount_to_sell + " SBD", min_to_receive + " STEEM", "$" + price + "/STEEM", (msg) => {
             this.props.notify(msg)
             this.props.reload(owner)
@@ -65,8 +65,8 @@ class Market extends React.Component {
         const owner = user.get('username')
         const min_to_receive = parseFloat(ReactDOM.findDOMNode(this.refs.sellSteem_total).value)
         const amount_to_sell = parseFloat(ReactDOM.findDOMNode(this.refs.sellSteem_amount).value)
-        const price = (min_to_receive / amount_to_sell).toFixed(8)
-        // Changed toFixex(8) because of rounding issue caused orderbook display.
+        const price = (min_to_receive / amount_to_sell).toFixed(6)
+        // Changed toFixex(8) because of rounding issue caused orderbook display?
         placeOrder(owner, amount_to_sell + " STEEM", min_to_receive + " SBD", "$" + price + "/STEEM", (msg) => {
             this.props.notify(msg)
             this.props.reload(owner)

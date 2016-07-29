@@ -22,7 +22,10 @@ class Post extends React.Component {
         current_user: React.PropTypes.object,
     };
     constructor() {
-        super()
+        super();
+        this.state = {
+            showNegativeComments: false
+        }
         this.showSignUp = () => {this.props.showSignUp()}
     }
     componentDidMount() {
@@ -30,6 +33,12 @@ class Post extends React.Component {
             const comments_el = document.getElementById('comments');
             if (comments_el) comments_el.scrollIntoView();
         }
+    }
+
+    toggleNegativeReplies() {
+        this.setState({
+            showNegativeComments: !this.state.showNegativeComments
+        });
     }
 
     render() {
@@ -49,7 +58,27 @@ class Post extends React.Component {
 
         sortComments( g, replies, sort_order );
 
-        replies = replies.map(reply => <Comment root key={post + reply} content={reply} global={g} sort_order={sort_order}/>);
+        let positiveComments = replies.filter(a => {
+            return g.get('content').get(a).get("net_rshares") >= 0;
+        })
+        .map(reply => <Comment root key={post + reply} content={reply} global={g} sort_order={sort_order} />);
+
+        let negativeReplies = replies.filter(a => {
+            return g.get('content').get(a).get("net_rshares") < 0;
+        });
+        let negativeCount = negativeReplies.length;
+
+        let negativeGroup = !negativeCount ? null :
+            (<div className="hentry Comment root Comment__negative_group">
+                {this.state.showNegativeComments ?
+                    <p>Now showing {negativeCount} comments with low ratings: <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies.bind(this)}>Hide</button></p> :
+                    <p>{negativeCount} comments were hidden due to low ratings. <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies.bind(this)}>Show</button></p>
+                }
+            </div>
+        );
+
+        let negativeComments = !this.state.showNegativeComments || !negativeCount ? null :
+            negativeReplies.map(reply => <Comment root key={post + reply} content={reply} global={g} sort_order={sort_order} />);
 
         // console.log( rout_params );
 
@@ -58,7 +87,7 @@ class Post extends React.Component {
         let sort_menu = [];
 
         let selflink = '/' + rout_params.category +'/@'+ rout_params.username + '/' + rout_params.slug;
-        for( let o = 0; o < sort_orders.length; ++o ){ 
+        for( let o = 0; o < sort_orders.length; ++o ){
             sort_menu.push({
                 value: sort_orders[o],
                 label: sort_labels[o],
@@ -90,11 +119,13 @@ class Post extends React.Component {
                 <div id="comments" className="Post_comments row hfeed">
                     <div className="column large-12">
                         <div className="Post_comments__content">
-                            {replies.length > 0 && <div className="Post__comments_sort_order float-right">
+                            {positiveComments.length && <div className="Post__comments_sort_order float-right">
                                 Sort Order: &nbsp;
                                 <FoundationDropdownMenu menu={sort_menu} label={sort_order} dropdownPosition="bottom" dropdownAlignment="right" />
                             </div>}
-                            {replies}
+                            {positiveComments}
+                            {negativeGroup}
+                            {negativeComments}
                         </div>
                     </div>
                 </div>

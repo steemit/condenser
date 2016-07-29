@@ -21,36 +21,60 @@ import {blacklistAccounts} from 'app/utils/Blacklist';
 
 export function sortComments( g, comments, sort_order ){
 
+  function netNegative(a)  {
+      return a.get("net_rshares") < 0;
+  }
+
   let sort_orders = {
   /** sort replies by active */
       active: (a,b) => {
-                let acontent = g.get('content').get(a); 
-                let bcontent = g.get('content').get(b); 
+                let acontent = g.get('content').get(a);
+                let bcontent = g.get('content').get(b);
+                if (netNegative(acontent)) {
+                    return 1;
+                } else if (netNegative(bcontent)) {
+                    return -1;
+                }
                 let aactive = Date.parse( acontent.get('active') );
                 let bactive = Date.parse( bcontent.get('active') );
                 return bactive - aactive;
               },
       update: (a,b) => {
-                let acontent = g.get('content').get(a); 
-                let bcontent = g.get('content').get(b); 
+                let acontent = g.get('content').get(a);
+                let bcontent = g.get('content').get(b);
+                if (netNegative(acontent)) {
+                    return 1;
+                } else if (netNegative(bcontent)) {
+                    return -1;
+                }
                 let aactive = Date.parse( acontent.get('last_update') );
                 let bactive = Date.parse( bcontent.get('last_update') );
                 return bactive.getTime() - aactive.getTime();
               },
       created:  (a,b) =>  {
-                let acontent = g.get('content').get(a); 
-                let bcontent = g.get('content').get(b); 
+                let acontent = g.get('content').get(a);
+                let bcontent = g.get('content').get(b);
+                if (netNegative(acontent)) {
+                    return 1;
+                } else if (netNegative(bcontent)) {
+                    return -1;
+                }
                 let aactive = Date.parse( acontent.get('created') );
                 let bactive = Date.parse( bcontent.get('created') );
                 return bactive - aactive;
               },
       trending:  (a,b) => {
-                let acontent = g.get('content').get(a); 
-                let bcontent = g.get('content').get(b); 
+                let acontent = g.get('content').get(a);
+                let bcontent = g.get('content').get(b);
+                if (netNegative(acontent)) {
+                    return 1;
+                } else if (netNegative(bcontent)) {
+                    return -1;
+                }
                 let aactive = acontent.get('children_rshares2');
                 let bactive = bcontent.get('children_rshares2');
-                aactive = ("0").repeat( 100 - aactive.length ) + aactive; 
-                bactive = ("0").repeat( 100 - bactive.length ) + bactive; 
+                aactive = ("0").repeat( 100 - aactive.length ) + aactive;
+                bactive = ("0").repeat( 100 - bactive.length ) + bactive;
                 if( bactive < aactive ) return -1;
                 if( bactive > aactive ) return 1;
                 return 0;

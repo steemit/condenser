@@ -102,6 +102,11 @@
   }
 }
 
+.Comment__negative_group {
+    border-top: 1px solid $medium-gray;
+    padding-top: 1rem;
+}
+
 
 @media screen and (max-width: 39.9375em) {
   .root {

@@ -51,15 +51,6 @@ export default class Index extends React.Component {
                 </h1>
                 <br />
                 <br />
-                {/*<form className="text-center" onSubmit={this.onSubmit} noValidate>
-                    <div className="medium-5 large-5 small-6 columns center">
-                        <input type="email" name="email" placeholder="Email me when it is ready" />
-                        <input type="submit" className="button action" value="SUBMIT" />
-                    </div>
-                </form>*/}
-                <div>
-                    <div className="Mailchimp" dangerouslySetInnerHTML={{__html: mailchimp_form}} />
-                </div>
             </div>);
     }
 };

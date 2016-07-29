@@ -10,3 +10,4 @@ tmp/*
 config/steem.json
 config/steem-dev.json
 config/process.json
+app/assets/static/*.js

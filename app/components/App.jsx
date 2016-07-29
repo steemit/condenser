@@ -176,12 +176,10 @@ class App extends React.Component {
             </SidePanel>
             <Header toggleOffCanvasMenu={this.toggleOffCanvasMenu} menuOpen={this.state.open} />
             <div className="App__content">
-                {/*<div dangerouslySetInnerHTML={ { __html: '<gcse:search></gcse:search>' } }></div>*/}
                 {welcome_screen}
                 {callout}
                 {children}
                 {lp ? <LpFooter /> : null}
-                {/* loading && <LoadingIndicator /> */}
             </div>
             <Dialogs />
             <Modals />

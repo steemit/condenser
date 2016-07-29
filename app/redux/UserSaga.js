@@ -1,6 +1,6 @@
-import {fromJS, Set} from 'immutable'
+import {fromJS, Set, Map} from 'immutable'
 import {takeLatest} from 'redux-saga';
-import {call, put, select} from 'redux-saga/effects';
+import {call, put, select, fork} from 'redux-saga/effects';
 import {accountAuthLookup} from 'app/redux/AuthSaga'
 import {PrivateKey} from 'shared/ecc'
 import user from 'app/redux/User'
@@ -29,7 +29,6 @@ function* loginWatch() {
 function* saveLoginWatch() {
     yield* takeLatest('user/SAVE_LOGIN', saveLogin_localStorage);
 }
-
 function* logoutWatch() {
     yield* takeLatest('user/LOGOUT', logout);
 }
@@ -57,7 +56,44 @@ function* removeHighSecurityKeys() {
 function* usernamePasswordLogin(action) {
     // Sets 'loading' while the login is taking place.  The key generation can take a while on slow computers.
     yield call(usernamePasswordLogin2, action)
+    const current = yield select(state => state.user.get('current'))
+    if(current) {
+        const follower = current.get('username')
+        yield fork(loadFollows, follower)
+    }
 }
+// Test limit with 2 (not 1, infinate looping)
+function* loadFollows(follower, start = '', limit = 100) {
+    const res = fromJS(yield Apis.follow('get_following', follower, start, limit))
+    // console.log('res.toJS()', res.toJS())
+    let cnt = 0
+    let lastFollowing = null
+    yield put({type: 'global/UPDATE', payload: {
+        key: ['follow', 'get_following', follower],
+        notSet: Map(),
+        updater: m => {
+            m = m.update('result', Map(), m2 => {
+                res.forEach(value => {
+                    cnt++
+                    const what = value.get('what')
+                    const following = lastFollowing = value.get('following')
+                    m2 = m2.set(following, what)
+                })
+                return m2
+            })
+            return m.merge({loading: true, error: null})
+        }
+    }})
+    if(cnt === limit) {
+        yield call(loadFollows, follower, lastFollowing)
+    } else {
+        yield put({type: 'global/UPDATE', payload: {
+            key: ['follow', 'get_following', follower],
+            updater: m => m.merge({loading: false, error: null})
+        }})
+    }
+}
+
 
 const isHighSecurityOperations = ['transfer', 'transfer_to_vesting', 'withdraw_vesting',
     'limit_order_create', 'limit_order_cancel', 'account_update', 'account_witness_vote']

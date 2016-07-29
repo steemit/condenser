@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link, browserHistory} from 'react-router';
+import Author from 'app/components/elements/Author';
 import ReplyEditor from 'app/components/elements/ReplyEditor';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
@@ -12,10 +13,11 @@ import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Icon from 'app/components/elements/Icon';
 import Userpic from 'app/components/elements/Userpic';
 import transaction from 'app/redux/Transaction'
-import {List} from 'immutable'
+import {List, Set} from 'immutable'
 import {Long} from 'bytebuffer'
 import pluralize from 'pluralize';
 import {parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
+import {blacklistAccounts} from 'app/utils/Blacklist';
 
 export function sortComments( g, comments, sort_order ){
 
@@ -78,13 +80,13 @@ class CommentImpl extends React.Component {
         deletePost: React.PropTypes.func.isRequired,
     };
     static defaultProps = {
-        depth: 1
+        depth: 1,
     }
 
     constructor(props) {
         super();
-        const {netVoteSign, global, content} = props
-        const hasReplies = global.getIn(['content', content, 'replies'], List()).size > 0
+        const {netVoteSign, /*global, content*/} = props
+        // const hasReplies = global.getIn(['content', content, 'replies'], List()).size > 0
         this.state = {show_details: true, //hasReplies || netVoteSign >= 0,
                       hide_body: netVoteSign < 0};
         this.toggleDetails = this.toggleDetails.bind(this);
@@ -176,6 +178,7 @@ class CommentImpl extends React.Component {
             return <div>Loading...</div>
         }
         const comment = dis.toJS();
+        const hide_body = this.state.hide_body || this.props.ignore
         const {author, permlink, json_metadata} = comment
         const {username, depth, rootComment, comment_link, anchor_link, netVoteSign} = this.props
         const {onCommentClick, onShowReply, onShowEdit, onDeletePost} = this
@@ -202,9 +205,8 @@ class CommentImpl extends React.Component {
         let replies = null;
         let body = null;
         let controls = null;
-        let author_link = "/@" + comment.author;
 
-        if (this.state.show_details && !this.state.hide_body) {
+        if (this.state.show_details && !hide_body) {
             body = (<MarkdownViewer formId={post + '-viewer'} text={comment.body} jsonMetadata={jsonMetadata} />);
             controls = (<div>
                 <Voting post={post} pending_payout={comment.pending_payout_value} total_payout={comment.total_payout_value} />
@@ -230,8 +232,8 @@ class CommentImpl extends React.Component {
         const commentClasses = ['hentry']
         commentClasses.push('Comment')
         commentClasses.push(this.props.root ? 'root' : 'reply')
-        if(this.state.hide_body || !this.state.show_details) commentClasses.push('collapsed');
-        const downVotedClass = netVoteSign < 0 ? 'downvoted' : ' '
+        if(hide_body || !this.state.show_details) commentClasses.push('collapsed');
+        const downVotedClass = netVoteSign < 0 || hide_body ? 'downvoted' : ' '
         //console.log(comment);
         let renderedEditor = null;
         if (showReply || showEdit) {
@@ -249,8 +251,6 @@ class CommentImpl extends React.Component {
                 />
             </div>
         }
-
-
         return (
             <div className={commentClasses.join(' ')} id={anchor_link} itemScope itemType ="http://schema.org/comment">
                 {/*<a name={anchor_link}></a>*/}
@@ -262,19 +262,19 @@ class CommentImpl extends React.Component {
                         <Voting post={post} flag />
                         <a title="Collapse/Expand" onClick={this.toggleDetails}>{ this.state.show_details ? '[-]' : '[+]' }</a>
                     </div>
-                    <Link className="Comment__header-user" to={author_link}>
+                    <span className="Comment__header-user">
                         <Icon name="user" className="Comment__Userpic-small" />
-                        <span itemProp="author" itemScope itemType="http://schema.org/Person">{comment.author}</span>
-                    </Link>
+                        <span itemProp="author" itemScope itemType="http://schema.org/Person"><Author author={comment.author} /></span>
+                    </span>
                     &nbsp; &middot; &nbsp;
                     <a href={comment_link} onClick={onCommentClick} className="PlainLink">
                         <TimeAgoWrapper date={comment.created} id={`@${author}/${permlink}`} />
                     </a>
-                    { this.state.hide_body &&
+                    { !this.state.show_details && hide_body &&
                       <Voting post={post} pending_payout={comment.pending_payout_value} total_payout={comment.total_payout_value} showList={comment.active_votes.length !== 0 ? true : false} /> }
                     { this.state.show_details || comment.children == 0 ||
                       <span style={{marginLeft: '1rem'}}>{pluralize('replies', comment.children, true)}</span>}
-                    { this.state.show_details && this.state.hide_body &&
+                    { this.state.show_details && hide_body &&
                         <a style={{marginLeft: '1rem'}} onClick={this.revealBody}>reveal comment</a>}
                 </div>
                 <div className={"Comment__body entry-content " + downVotedClass}>
@@ -313,6 +313,9 @@ const Comment = connect(
                 votes = votes.add(Long.fromString('' + v.get('rshares')))
             })
         }
+        const current = state.user.get('current')
+        const username = current ? current.get('username') : null
+        const ignore = username ? state.global.getIn(['follow', 'get_following', username, 'result', c.get('author')], List()).contains('ignore') : false
         return {
             ...ownProps,
             netVoteSign: votes.compare(Long.ZERO),
@@ -320,6 +323,7 @@ const Comment = connect(
             anchor_link,
             rootComment: rc,
             username: state.user.getIn(['current', 'username']),
+            ignore,
         }
     },
 

@@ -58,7 +58,7 @@ class Post extends React.Component {
         let sort_menu = [];
 
         let selflink = '/' + rout_params.category +'/@'+ rout_params.username + '/' + rout_params.slug;
-        for( let o = 0; o < sort_orders.length; ++o ){ 
+        for( let o = 0; o < sort_orders.length; ++o ){
             sort_menu.push({
                 value: sort_orders[o],
                 label: sort_labels[o],
@@ -78,6 +78,13 @@ class Post extends React.Component {
                         <PostFull post={post} global={g} />
                     </div>
                 </div>
+
+                //@Jasonmcz
+                //Comment: Perhaps it would be good to havd a render/timeout
+                //Because it takes about 5-15 seconds right now to load an account
+                //which pretty much shows up the promotion of $10.00 STEEM every single time
+                //perhaps add a timeout here prior to render this?
+
                 {!current_user && <div className="row">
                     <div className="column">
                       <div className="Post__promo">

@@ -35,7 +35,7 @@ class Post extends React.Component {
         }
     }
 
-    toggleNegativeReplies() {
+    toggleNegativeReplies = () => {
         this.setState({
             showNegativeComments: !this.state.showNegativeComments
         });
@@ -71,8 +71,8 @@ class Post extends React.Component {
         let negativeGroup = !negativeCount ? null :
             (<div className="hentry Comment root Comment__negative_group">
                 {this.state.showNegativeComments ?
-                    <p>Now showing {negativeCount} comments with low ratings: <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies.bind(this)}>Hide</button></p> :
-                    <p>{negativeCount} comments were hidden due to low ratings. <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies.bind(this)}>Show</button></p>
+                    <p>Now showing {negativeCount} comments with low ratings: <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>Hide</button></p> :
+                    <p>{negativeCount} comments were hidden due to low ratings. <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>Show</button></p>
                 }
             </div>
         );

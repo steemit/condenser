@@ -4,7 +4,7 @@ import config from 'config';
 export default function ServerHTML({ body, assets, locale, title, meta }) {
     let page_title = title;
     return (
-        <html lang={ locale }>
+        <html lang="en">
         <head>
             <meta charSet="utf-8" />
             {process.env.NODE_ENV === 'production' && <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests" />}

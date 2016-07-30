@@ -80,7 +80,7 @@ export default class PostsList extends React.Component {
             <div id="posts_list" className="PostsList">
                 <ul className="PostsList__summaries hfeed" itemScope itemType="http://schema.org/blogPosts">
                     {
-                        posts.map(item => <li style={{listStyleType: 'none'}} key={item}>
+                        posts.map(item => <li key={item}>
                             <PostSummary post={item} currentCategory={category} thumbSize={thumbSize} />
                         </li>)
                     }

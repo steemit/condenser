@@ -81,11 +81,6 @@ export default class UserProfile extends React.Component {
         else if( section === 'posts' && account.post_history ) {
            if( account.posts )
            {
-              // const post_log = account.posts.map( item => {
-              //     return (<li style={{listStyleType: 'none'}} key={item}>
-              //         <PostSummary post={account.name+'/'+item} currentCategory="-" />
-              //     </li>);
-              //  });
               tab_content = <PostsList
                   emptyText={`Looks like ${account.name} hasn't made any posts yet!`}
                   posts={account.posts.map(p => `${account.name}/${p}`)}
@@ -98,11 +93,6 @@ export default class UserProfile extends React.Component {
            }
         } else if(!section  || section === 'blog') {
             if (account.blog) {
-                // const blog_summary = account.blog.map(item => {
-                //     return (<li style={{listStyleType: 'none'}} key={item}>
-                //         <PostSummary post={accountname + '/' + item} currentCategory="-" />
-                //     </li>);
-                // });
                 tab_content = <PostsList
                     emptyText={`Looks like ${account.name} hasn't started blogging yet!`}
                     posts={account.blog.map(p => `${account.name}/${p}`)}

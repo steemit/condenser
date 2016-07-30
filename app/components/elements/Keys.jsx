@@ -43,7 +43,6 @@ class Keys extends Component {
             const authorities = authority.get('key_auths')
             pubkeys = authorities.map(a => a.get(0))
         }
-        // const edit = <a style={{fontSize: '120%'}}>&#9998;{/*edit✎*/}</a>
         const rowClass = 'hoverBackground'
         let idx = 0
         const auths = pubkeys.map(pubkey => (

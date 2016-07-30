@@ -93,37 +93,43 @@ class App extends React.Component {
         const success = flash.get('success');
         let callout = null;
         if (this.state.showCallout && (alert || warning || success)) {
-            callout = <div className="row">
-                <div className={classNames('column callout', {alert}, {warning}, {success})} style={{margin: '20px', paddingRight: '40px'}}>
-                    <CloseButton onClick={() => this.setState({showCallout: false})} />
-                    <p>{alert || warning || success}</p>
+            callout = <div className="App__announcement row">
+                <div className="column">
+                    <div className={classNames('callout', {alert}, {warning}, {success})}>
+                        <CloseButton onClick={() => this.setState({showCallout: false})} />
+                        <p>{alert || warning || success}</p>
+                    </div>
                 </div>
             </div>;
         }
         else if (false && ip && this.state.showCallout) {
-            callout = <div className="row">
-                <div className={classNames('column callout success', {alert}, {warning}, {success})} style={{margin: '20px', padding: '20px', paddingRight: '40px'}}>
-                    <CloseButton onClick={() => this.setState({showCallout: false})} />
-                    <ul>
-                        <li>
-                            <a href="https://steemit.com/steemit/@steemitblog/steemit-re-opens-new-user-registration">
-                                Steemit Re-Opens New User Registration
-                            </a>
-                        </li>
-                        <li>
-                            <a href="https://steemit.com/steemit/@steemit3/third-update-to-july-14th-security-announcement-account-recovery-begins">
-                                Third Update to July 14th Security Announcement - Account Recovery Begins
-                            </a>
-                        </li>
-                    </ul>
+            callout = <div className="App__announcement row">
+                <div className="column">
+                    <div className={classNames('callout success', {alert}, {warning}, {success})}>
+                        <CloseButton onClick={() => this.setState({showCallout: false})} />
+                        <ul>
+                            <li>
+                                <a href="https://steemit.com/steemit/@steemitblog/steemit-com-is-now-open-source">
+                                    Steemit.com is now Open Source
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://steemit.com/steemit/@steemitblog/all-recovered-accounts-have-been-fully-refunded">
+                                    All Recovered Accounts have been fully Refunded
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         }
         if ($STM_Config.read_only_mode && this.state.showCallout) {
-            callout = <div className="row">
-                <div className={classNames('column callout warning', {alert}, {warning}, {success})} style={{margin: '20px', paddingRight: '40px'}}>
-                    <CloseButton onClick={() => this.setState({showCallout: false})} />
-                    <p>Due to server maintenance we are running in read only mode.  We are sorry for the inconvenience.</p>
+            callout = <div className="App__announcement row">
+                <div className="column">
+                    <div className={classNames('callout warning', {alert}, {warning}, {success})}>
+                        <CloseButton onClick={() => this.setState({showCallout: false})} />
+                        <p>Due to server maintenance we are running in read only mode.  We are sorry for the inconvenience.</p>
+                    </div>
                 </div>
             </div>;
         }
@@ -152,10 +158,7 @@ class App extends React.Component {
             );
         }
 
-        return <div className={'App' + (lp ? ' LP' : '') + (ip ? ' index-page' : '')}
-            onMouseMove={this.onEntropyEvent}
-        >
-            {/*<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet" />*//*medium-editor*/}
+        return <div className={'App' + (lp ? ' LP' : '') + (ip ? ' index-page' : '')} onMouseMove={this.onEntropyEvent}>
             <SidePanel ref="side_panel" alignment="right">
                 <TopRightMenu vertical navigate={this.navigate} />
                 <ul className="vertical menu">

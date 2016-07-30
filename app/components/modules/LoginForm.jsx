@@ -118,7 +118,6 @@ class LoginForm extends Component {
             error = <span>This password is bound to your account's owner key and can not be used to login to this site.
                 However, you can use it to <a onClick={this.showChangePassword}>update your password</a> to obtain a more secure set of keys.</span>
         }
-        // const cameraIcon = <span className="button slim secondary hollow" style={{fontSize: '120%'}} onClick={qrReader}>📷</span>//testing browser compatibility
         let message = null;
         if (msg) {
             if (msg === 'accountcreated') {
@@ -145,7 +144,6 @@ class LoginForm extends Component {
                 return dispatchSubmit(data, loginBroadcastOperation, afterLoginRedirectToAccount)
             })}
                 onChange={this.props.clearError}
-                style={{maxWidth: '400px'}}
                 method="post"
             >
                 <div>

@@ -260,7 +260,7 @@ class CommentImpl extends React.Component {
         //console.log(comment);
         let renderedEditor = null;
         if (showReply || showEdit) {
-            renderedEditor = <div key="editor" style={{listStyleType: 'none'}}>
+            renderedEditor = <div key="editor">
                 <Editor {...comment} type={showReply ? 'submit_comment' : 'edit'}
                                      successCallback={() => {
                                 this.setState({showReply: false, showEdit: false})
@@ -296,9 +296,9 @@ class CommentImpl extends React.Component {
                     { !this.state.show_details && (hide_body && !showNegativeComments) &&
                       <Voting post={post} pending_payout={comment.pending_payout_value} total_payout={comment.total_payout_value} showList={comment.active_votes.length !== 0 ? true : false} /> }
                     { this.state.show_details || comment.children == 0 ||
-                      <span style={{marginLeft: '1rem'}}>{pluralize('replies', comment.children, true)}</span>}
+                      <span className="marginLeft1rem">{pluralize('replies', comment.children, true)}</span>}
                     { this.state.show_details && (hide_body && !showNegativeComments) &&
-                        <a style={{marginLeft: '1rem'}} onClick={this.revealBody}>reveal comment</a>}
+                        <a className="marginLeft1rem" onClick={this.revealBody}>reveal comment</a>}
                 </div>
                 <div className={"Comment__body entry-content " + downVotedClass}>
                     {showEdit ? renderedEditor : body}

@@ -50,7 +50,7 @@ export default class GeneratedPasswordInput extends React.Component {
                 <div className="GeneratedPasswordInput__field">
                     <label>GENERATED PASSWORD<br />
                         <code className="GeneratedPasswordInput__generated_password">{showPasswordString ? generatedPassword : '-'}</code>
-                        <center><span style={{fontWeight: 'bold'}}>Back it up by storing in your password manager or a text file</span></center>
+                        <div className="GeneratedPasswordInput__backup_text">Back it up by storing in your password manager or a text file</div>
                     </label>
                 </div>
                 <div className="GeneratedPasswordInput__field">

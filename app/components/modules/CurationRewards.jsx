@@ -73,7 +73,7 @@ class CurationRewards extends React.Component {
 
          const navButtons = (
              <nav>
-               <ul className="pager" style={{marginTop: 0, marginBottom: 0}}>
+               <ul className="pager">
                  <li>
                      <div className={"button tiny hollow float-left " + (historyIndex === 0 ? " disabled" : "")} onClick={this._setHistoryPage.bind(this, false)} aria-label="Previous">
                          <span aria-hidden="true">&larr; Newer</span>

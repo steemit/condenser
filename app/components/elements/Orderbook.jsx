@@ -47,10 +47,10 @@ export default class Orderbook extends React.Component {
         return (
             <thead>
                 <tr>
-                    <th style={{textAlign: "right"}}>{buy ? "Total SD ($)" : "Price"}</th>
-                    <th style={{textAlign: "right"}}>{buy ? "SD ($)" : "Steem"}</th>
-                    <th style={{textAlign: "right"}}>{buy ? "Steem" : "SD ($)"}</th>
-                    <th style={{textAlign: "right"}}>{buy ? "Price" : "Total SD ($)"}</th>
+                    <th>{buy ? "Total SD ($)" : "Price"}</th>
+                    <th>{buy ? "SD ($)" : "Steem"}</th>
+                    <th>{buy ? "Steem" : "SD ($)"}</th>
+                    <th>{buy ? "Price" : "Total SD ($)"}</th>
                 </tr>
             </thead>
         );
@@ -104,7 +104,7 @@ export default class Orderbook extends React.Component {
                     </tbody>
                 </table>
                 <nav>
-                  <ul className="pager" style={{marginTop: 0, marginBottom: 0}}>
+                  <ul className="pager">
                     <li>
                         <div className={"button tiny hollow " + (buy ? "float-left" : "float-left") + (currentIndex === 0 ? " disabled" : "")} onClick={this._setBuySellPage.bind(this, false)} aria-label="Previous">
                             <span aria-hidden="true">&larr; {buy ? "Higher" : "Lower"}</span>

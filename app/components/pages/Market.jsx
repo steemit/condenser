@@ -288,7 +288,7 @@ class Market extends React.Component {
 
                 <div className="row">
                     <div className="small-12 medium-6 columns">
-                        <h4 style={{color: 'rgba(0,150,0,1.0)'}}>BUY STEEM</h4>
+                        <h4 className="buy-color">BUY STEEM</h4>
                         <form className="Market__orderform" onSubmit={buySteem}>
 
                             <div className="row">

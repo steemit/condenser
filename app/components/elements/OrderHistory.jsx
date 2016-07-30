@@ -67,10 +67,10 @@ export default class OrderHistory extends React.Component {
                 <table className="Market__trade-history">
                     <thead>
                         <tr>
-                            <th style={{textAlign: "center"}}>Date</th>
-                            <th style={{textAlign: "right"}}>Price</th>
-                            <th style={{textAlign: "right"}}>Steem</th>
-                            <th style={{textAlign: "right"}}>SD ($)</th>
+                            <th>Date</th>
+                            <th>Price</th>
+                            <th>Steem</th>
+                            <th>SD ($)</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -79,7 +79,7 @@ export default class OrderHistory extends React.Component {
                 </table>
 
                 <nav>
-                  <ul className="pager" style={{marginTop: 0, marginBottom: 0}}>
+                  <ul className="pager">
                     <li>
                         <div className={"button tiny hollow float-left " + (historyIndex === 0 ? " disabled" : "")}  onClick={this._setHistoryPage.bind(this, false)} aria-label="Previous">
                             <span aria-hidden="true">&larr; Newer</span>

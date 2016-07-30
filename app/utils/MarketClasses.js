@@ -59,7 +59,7 @@ class TradeHistory {
     constructor(fill) {
         this.date = new Date(fill.date);
         this.type = fill.current_pays.indexOf("SBD") !== -1 ? "bid" : "ask";
-        this.color = this.type == "bid" ? '#080' : '#C00';
+        this.color = this.type == "bid" ? "buy-color" : "sell-color";
         if (this.type === "bid") {
             this.sbd = parseFloat(fill.current_pays.split(" SBD")[0]);
             this.steem = parseFloat(fill.open_pays.split(" STEEM")[0]);

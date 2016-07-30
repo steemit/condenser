@@ -2,7 +2,6 @@
 //if (typeof require.ensure !== 'function') require.ensure = (d, c) => c(require);
 
 import App from 'app/components/App';
-// import Index from 'app/components/pages/Index';
 import PostsIndex from 'app/components/pages/PostsIndex';
 import resolveRoute from './ResolveRoute';
 

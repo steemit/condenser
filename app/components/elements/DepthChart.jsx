@@ -73,7 +73,7 @@ class DepthChart extends React.Component {
         const depth_chart_config = generateDepthChart(bids, asks);
 
         return (
-            <div><ReactHighcharts ref="depthChart" config={depth_chart_config} style={{height: 250}} /></div>
+            <div className="DepthChart"><ReactHighcharts ref="depthChart" config={depth_chart_config} /></div>
         );
     }
 }
@@ -189,7 +189,7 @@ function generateDepthChart(bidsArray, asksArray) {
             shared: false,
             backgroundColor: "rgba(0, 0, 0, 0.3)",
             formatter() {
-                return `<span style="font-size: 90%;">Price: ${(this.x / power).toFixed(6)} $/STEEM</span><br/><span style="color:${this.series.color}">\u25CF</span>${this.series.name}: <b>${(this.y / 1000).toFixed(3)} SD ($)</b>`;
+                return `<span>Price: ${(this.x / power).toFixed(6)} $/STEEM</span><br/><span>\u25CF</span>${this.series.name}: <b>${(this.y / 1000).toFixed(3)} SD ($)</b>`;
             },
             style: {
                 color: "#FFFFFF"

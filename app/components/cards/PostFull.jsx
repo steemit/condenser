@@ -160,7 +160,7 @@ export default class PostFull extends React.Component {
         const Editor = this.state.showReply ? PostFullReplyEditor : PostFullEditEditor
         let renderedEditor = null;
         if (showReply || showEdit) {
-            renderedEditor = <div key="editor" style={{listStyleType: 'none'}}>
+            renderedEditor = <div key="editor">
                 <Editor {...replyParams} type={this.state.showReply ? 'submit_comment' : 'edit'}
                                          successCallback={() => {
                                                 this.setState({showReply: false, showEdit: false})

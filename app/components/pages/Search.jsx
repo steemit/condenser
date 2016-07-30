@@ -7,7 +7,7 @@ class Search extends React.Component {
             <div>
                 {/*<iframe style={{width: "100%", height: "100vh", maxWidth: "800px"}} frameBorder="0" src="/static/search.html">
                 </iframe>*/}
-                <div>Site search if temporary unavailable. Sorry for the inconvenience.</div>
+                <div className="row align-center">Site search is temporarily unavailable. Sorry for the inconvenience.</div>
             </div>
         );
     }

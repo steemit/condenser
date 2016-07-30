@@ -11,6 +11,8 @@ import extractContent from 'app/utils/ExtractContent';
 import { browserHistory } from 'react-router';
 import VotesAndComments from 'app/components/elements/VotesAndComments';
 import TagList from 'app/components/elements/TagList';
+import {List} from 'immutable';
+import {Long} from 'bytebuffer'
 
 function TimeAuthorCategory({post, links}) {
     return (
@@ -44,7 +46,8 @@ export default class PostSummary extends React.Component {
     }
 
     render() {
-        const {post, content, pending_payout, total_payout, cashout_time, currentCategory, thumbSize} = this.props;
+        const {currentCategory, thumbSize} = this.props;
+        const {post, content, pending_payout, total_payout, cashout_time, ignore, netVoteSign} = this.props;
         if (!content) return null;
         const p = extractContent(immutableAccessor, content);
         let desc = p.desc
@@ -101,9 +104,10 @@ export default class PostSummary extends React.Component {
             thumb = <Link to={p.link} className="PostSummary__image" style={{backgroundImage: 'url(' + url + ')'}}></Link>
           }
         }
-
+        const commentClasses = []
+        if(ignore) commentClasses.push('downvoted')
         return (
-            <article className={'PostSummary hentry' + (thumb ? ' with-image' : '')} itemScope itemType ="http://schema.org/blogPost">
+            <article className={'PostSummary hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')} itemScope itemType ="http://schema.org/blogPost">
                 <div className="float-right"><Voting post={post} flag /></div>
                 <div className="PostSummary__header show-for-small-only">
                     {content_title}
@@ -129,6 +133,7 @@ export default class PostSummary extends React.Component {
         )
     }
 }
+import {parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 
 export default connect(
     (state, props) => {
@@ -137,12 +142,21 @@ export default connect(
         let pending_payout = 0;
         let total_payout = 0;
         let cashout_time = null;
+        let votes = Long.ZERO
         if (content) {
             pending_payout = content.get('pending_payout_value');
             total_payout = content.get('total_payout_value');
             cashout_time = content.get('cashout_time');
+            content.get('active_votes').forEach(v => {
+                votes = votes.add(Long.fromString('' + v.get('rshares')))
+            })
         }
-        return {post, content, pending_payout, total_payout, cashout_time};
+        const netVoteSign = votes.compare(Long.ZERO)
+        const hasPayout = parsePayoutAmount(pending_payout) > 0.02 || parsePayoutAmount(total_payout) > 0.02
+        const current = state.user.get('current')
+        const username = current ? current.get('username') : null
+        const ignore = !hasPayout && username ? state.global.getIn(['follow', 'get_following', username, 'result', content.get('author')], List()).contains('ignore') : false
+        return {post, content, pending_payout, total_payout, cashout_time, ignore, netVoteSign};
     },
 
     (dispatch) => ({

@@ -108,10 +108,10 @@ class CommentImpl extends React.Component {
 
     constructor(props) {
         super();
-        const {netVoteSign, /*global, content*/} = props
+        const {netVoteSign, ignore} = props
         // const hasReplies = global.getIn(['content', content, 'replies'], List()).size > 0
         this.state = {show_details: true, //hasReplies || netVoteSign >= 0,
-                      hide_body: netVoteSign < 0};
+                      hide_body: netVoteSign < 0 || ignore};
         this.toggleDetails = this.toggleDetails.bind(this);
         this.revealBody = this.revealBody.bind(this);
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Comment')
@@ -201,7 +201,7 @@ class CommentImpl extends React.Component {
             return <div>Loading...</div>
         }
         const comment = dis.toJS();
-        const hide_body = this.state.hide_body || this.props.ignore
+        const hide_body = this.state.hide_body
         const {author, permlink, json_metadata} = comment
         const {username, depth, rootComment, comment_link, anchor_link, netVoteSign} = this.props
         const {onCommentClick, onShowReply, onShowEdit, onDeletePost} = this
@@ -214,14 +214,14 @@ class CommentImpl extends React.Component {
         } catch(error) {
             // console.error('Invalid json metadata string', json_metadata, 'in post', this.props.content);
         }
-        let get_asset_value = ( asset_str ) => { return parseFloat( asset_str.split(' ')[0] ); }
-        const steem_supply = this.props.global.getIn(['props','current_supply']);
+        // const get_asset_value = ( asset_str ) => { return parseFloat( asset_str.split(' ')[0] ); }
+        // const steem_supply = this.props.global.getIn(['props','current_supply']);
 
         const showDeleteOption = username === author &&
             dis.get('replies', List()).size === 0 &&
             netVoteSign <= 0
 
-        let robohash = "https://robohash.org/" + author + ".png?size=64x64"
+        // let robohash = "https://robohash.org/" + author + ".png?size=64x64"
         const total_payout = parsePayoutAmount(comment.total_payout_value);
         const showEditOption = username === author && total_payout === 0
 
@@ -248,7 +248,7 @@ class CommentImpl extends React.Component {
         if(this.state.show_details) {
             replies = comment.replies;
             sortComments( g, replies, this.props.sort_order );
-            replies = replies.map((reply,idx) => <Comment key={idx} content={reply} global={g}
+            replies = replies.map((reply, idx) => <Comment key={idx} content={reply} global={g}
                 sort_order={this.props.sort_order} depth={depth + 1} rootComment={rootComment} />);
         }
 
@@ -331,14 +331,17 @@ const Comment = connect(
         }
         const comment = global.get('content').get(ownProps.content);
         let votes = Long.ZERO
+        let hasPayout
         if (comment) {
             comment.get('active_votes').forEach(v => {
                 // console.log('voter', v.get('voter'), v.get('rshares'), v.toJS())
                 votes = votes.add(Long.fromString('' + v.get('rshares')))
             })
+            const pending_payout = comment.get('pending_payout_value');
+            const total_payout = comment.get('total_payout_value');
+            hasPayout = parsePayoutAmount(pending_payout) > 0.02 || parsePayoutAmount(total_payout) > 0.02
         }
         const netVoteSign = votes.compare(Long.ZERO)
-        const hasPayout = netVoteSign > 0
         const current = state.user.get('current')
         const username = current ? current.get('username') : null
         const ignore = !hasPayout && username ? state.global.getIn(['follow', 'get_following', username, 'result', c.get('author')], List()).contains('ignore') : false

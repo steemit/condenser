@@ -44,6 +44,7 @@ class Post extends React.Component {
     render() {
         const {showSignUp} = this
         const {current_user} = this.props
+        const {showNegativeComments} = this.state
         const rout_params = this.props.routeParams;
         let g = this.props.global;
         let post = rout_params.username + '/' + rout_params.slug;
@@ -78,7 +79,7 @@ class Post extends React.Component {
         );
 
         let negativeComments = !this.state.showNegativeComments || !negativeCount ? null :
-            negativeReplies.map(reply => <Comment root key={post + reply} content={reply} global={g} sort_order={sort_order} />);
+            negativeReplies.map(reply => <Comment root key={post + reply} content={reply} global={g} sort_order={sort_order} showNegativeComments />);
 
         // console.log( rout_params );
 

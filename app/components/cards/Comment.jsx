@@ -90,6 +90,7 @@ class CommentImpl extends React.Component {
         content: React.PropTypes.string.isRequired,
         sort_order: React.PropTypes.oneOf(['active', 'update', 'created', 'trending']).isRequired,
         root: React.PropTypes.bool,
+        showNegativeComments: React.PropTypes.bool,
 
         // component props (for recursion)
         depth: React.PropTypes.number,
@@ -112,7 +113,6 @@ class CommentImpl extends React.Component {
         // const hasReplies = global.getIn(['content', content, 'replies'], List()).size > 0
         this.state = {show_details: true, //hasReplies || netVoteSign >= 0,
                       hide_body: netVoteSign < 0 || ignore};
-        this.toggleDetails = this.toggleDetails.bind(this);
         this.revealBody = this.revealBody.bind(this);
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Comment')
         this.onCommentClick = e => {
@@ -203,7 +203,7 @@ class CommentImpl extends React.Component {
         const comment = dis.toJS();
         const hide_body = this.state.hide_body
         const {author, permlink, json_metadata} = comment
-        const {username, depth, rootComment, comment_link, anchor_link, netVoteSign} = this.props
+        const {username, depth, rootComment, comment_link, anchor_link, netVoteSign, showNegativeComments} = this.props
         const {onCommentClick, onShowReply, onShowEdit, onDeletePost} = this
         const post = comment.author + '/' + comment.permlink
         const {PostReplyEditor, PostEditEditor, showReply, showEdit} = this.state
@@ -229,7 +229,7 @@ class CommentImpl extends React.Component {
         let body = null;
         let controls = null;
 
-        if (this.state.show_details && !hide_body) {
+        if (this.state.show_details && (!hide_body || showNegativeComments)) {
             body = (<MarkdownViewer formId={post + '-viewer'} text={comment.body} jsonMetadata={jsonMetadata} />);
             controls = (<div>
                 <Voting post={post} pending_payout={comment.pending_payout_value} total_payout={comment.total_payout_value} />
@@ -255,7 +255,7 @@ class CommentImpl extends React.Component {
         const commentClasses = ['hentry']
         commentClasses.push('Comment')
         commentClasses.push(this.props.root ? 'root' : 'reply')
-        if(hide_body || !this.state.show_details) commentClasses.push('collapsed');
+        if((hide_body && !showNegativeComments) || !this.state.show_details) commentClasses.push('collapsed');
         const downVotedClass = netVoteSign < 0 || hide_body ? 'downvoted' : ' '
         //console.log(comment);
         let renderedEditor = null;
@@ -293,11 +293,11 @@ class CommentImpl extends React.Component {
                     <a href={comment_link} onClick={onCommentClick} className="PlainLink">
                         <TimeAgoWrapper date={comment.created} id={`@${author}/${permlink}`} />
                     </a>
-                    { !this.state.show_details && hide_body &&
+                    { !this.state.show_details && (hide_body && !showNegativeComments) &&
                       <Voting post={post} pending_payout={comment.pending_payout_value} total_payout={comment.total_payout_value} showList={comment.active_votes.length !== 0 ? true : false} /> }
                     { this.state.show_details || comment.children == 0 ||
                       <span style={{marginLeft: '1rem'}}>{pluralize('replies', comment.children, true)}</span>}
-                    { this.state.show_details && hide_body &&
+                    { this.state.show_details && (hide_body && !showNegativeComments) &&
                         <a style={{marginLeft: '1rem'}} onClick={this.revealBody}>reveal comment</a>}
                 </div>
                 <div className={"Comment__body entry-content " + downVotedClass}>

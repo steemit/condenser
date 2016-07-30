@@ -2,6 +2,7 @@
 
 const iframeWhitelist = [
     /^(https?:)?\/\/www.youtube.com\/embed\/.*/i,
+    /^(https?:)?\/\/w.soundcloud.com\/player\/.*/i,
     // /^(https?:)?\/\/player.vimeo.com\/video\/.*/i, // <-- medium-editor branch
 ]
 

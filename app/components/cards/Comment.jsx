@@ -109,10 +109,10 @@ class CommentImpl extends React.Component {
 
     constructor(props) {
         super();
-        const {netVoteSign, ignore} = props
+        const {netVoteSign, hasPayout, ignore} = props
         // const hasReplies = global.getIn(['content', content, 'replies'], List()).size > 0
         this.state = {show_details: true, //hasReplies || netVoteSign >= 0,
-                      hide_body: netVoteSign < 0 || ignore};
+                      hide_body: !hasPayout && (netVoteSign < 0 || ignore)};
         this.revealBody = this.revealBody.bind(this);
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Comment')
         this.onCommentClick = e => {
@@ -167,10 +167,6 @@ class CommentImpl extends React.Component {
     revealBody() {
         this.setState({hide_body: false});
     }
-
-    flagPost() {
-
-    }
     initEditor(props) {
         if(this.state.PostReplyEditor) return
         const g = props.global;
@@ -201,13 +197,16 @@ class CommentImpl extends React.Component {
             return <div>Loading...</div>
         }
         const comment = dis.toJS();
-        const hide_body = this.state.hide_body
         const {author, permlink, json_metadata} = comment
-        const {username, depth, rootComment, comment_link, anchor_link, netVoteSign, showNegativeComments} = this.props
+        const {username, depth, rootComment, comment_link, anchor_link, netVoteSign, showNegativeComments, hasPayout} = this.props
         const {onCommentClick, onShowReply, onShowEdit, onDeletePost} = this
         const post = comment.author + '/' + comment.permlink
-        const {PostReplyEditor, PostEditEditor, showReply, showEdit} = this.state
+        const {PostReplyEditor, PostEditEditor, showReply, showEdit, hide_body} = this.state
         const Editor = showReply ? PostReplyEditor : PostEditEditor
+
+        if(hide_body && comment.replies.length === 0 && !showNegativeComments && !hasPayout)
+            return <span></span>
+
         let jsonMetadata = null
         try {
             if(!showReply) jsonMetadata = JSON.parse(json_metadata)
@@ -249,7 +248,7 @@ class CommentImpl extends React.Component {
             replies = comment.replies;
             sortComments( g, replies, this.props.sort_order );
             replies = replies.map((reply, idx) => <Comment key={idx} content={reply} global={g}
-                sort_order={this.props.sort_order} depth={depth + 1} rootComment={rootComment} />);
+                sort_order={this.props.sort_order} depth={depth + 1} rootComment={rootComment} showNegativeComments={showNegativeComments} />);
         }
 
         const commentClasses = ['hentry']
@@ -344,7 +343,7 @@ const Comment = connect(
         const netVoteSign = votes.compare(Long.ZERO)
         const current = state.user.get('current')
         const username = current ? current.get('username') : null
-        const ignore = !hasPayout && username ? state.global.getIn(['follow', 'get_following', username, 'result', c.get('author')], List()).contains('ignore') : false
+        const ignore = username ? state.global.getIn(['follow', 'get_following', username, 'result', c.get('author')], List()).contains('ignore') : false
         return {
             ...ownProps,
             netVoteSign,
@@ -353,6 +352,7 @@ const Comment = connect(
             rootComment: rc,
             username: state.user.getIn(['current', 'username']),
             ignore,
+            hasPayout,
         }
     },
 

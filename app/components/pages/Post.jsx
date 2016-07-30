@@ -62,9 +62,9 @@ class Post extends React.Component {
         let positiveComments = replies.filter(a => {
             return g.get('content').get(a).get("net_rshares") >= 0;
         })
-        .map(reply => <Comment root key={post + reply} content={reply} global={g} sort_order={sort_order} />);
+        .map(reply => <Comment root key={post + reply} content={reply} global={g} sort_order={sort_order} showNegativeComments={showNegativeComments} />);
 
-        let negativeReplies = replies.filter(a => {
+        const negativeReplies = replies.filter(a => {
             return g.get('content').get(a).get("net_rshares") < 0;
         });
         let negativeCount = negativeReplies.length;

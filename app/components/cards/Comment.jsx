@@ -17,7 +17,6 @@ import {List, Set} from 'immutable'
 import {Long} from 'bytebuffer'
 import pluralize from 'pluralize';
 import {parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
-import {blacklistAccounts} from 'app/utils/Blacklist';
 
 export function sortComments( g, comments, sort_order ){
 

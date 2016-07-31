@@ -23,14 +23,15 @@ ul.PostsList__summaries {
 
 .PostSummary__image-mobile {
   display: block;
-  background: #F8F8F8;
+  background: white;
 
   img {
     margin: 0 auto;
     display: block;
     max-width: 100%;
-    max-height: 640px;
+    max-height: 200px;
     background: white;
+    transform: translate3d(0, 0, 0);
   }
 }
 

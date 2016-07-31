@@ -27,10 +27,9 @@ class ConfirmTransactionForm extends Component {
         const {onCancel, okClick} = this
         const {confirm, confirmBroadcastOperation} = this.props
         const conf = typeof confirm === 'function' ? confirm() : confirm
-        const type = confirmBroadcastOperation.get('type')
         return (
            <div className="ConfirmTransactionForm">
-               <h4>Confirm {typeName(type)}</h4>
+               <h4>{typeName(confirmBroadcastOperation)}</h4>
                <hr />
                {conf}
                <br />
@@ -40,7 +39,12 @@ class ConfirmTransactionForm extends Component {
        )
     }
 }
-const typeName = name => (name.split('_').map(n => n.charAt(0).toUpperCase() + n.substring(1))).join(' ')
+const typeName = confirmBroadcastOperation => {
+    const title = confirmBroadcastOperation.getIn(['operation', '__config', 'title'])
+    if(title) return title
+    const type = confirmBroadcastOperation.get('type')
+    return 'Confirm ' + (type.split('_').map(n => n.charAt(0).toUpperCase() + n.substring(1))).join(' ')
+}
 
 export default connect(
     // mapStateToProps

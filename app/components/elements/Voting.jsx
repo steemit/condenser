@@ -12,7 +12,7 @@ import {formatDecimal, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 
-const ABOUT_FLAG = 'Flagging or downvoting a post can remove rewards and make this material less visible.  You can still unflag or upvote later if you change your mind.'
+const ABOUT_FLAG = 'Flagging a post can remove rewards and make this material less visible.  You can still unflag or upvote later if you change your mind.'
 
 class Voting extends React.Component {
 
@@ -204,8 +204,10 @@ export default connect(
             }
             dispatch(transaction.actions.broadcastOperation({
                 type: 'vote',
-                operation: {voter: username, author, permlink, weight},
-                confirm
+                operation: {voter: username, author, permlink, weight,
+                    __config: {title: weight < 0 ? 'Confirm Flag' : null},
+                },
+                confirm,
             }))
         },
     })

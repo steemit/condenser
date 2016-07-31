@@ -1,9 +1,12 @@
 
+const reYoutube = /^(https?:)?\/\/www.youtube.com\/embed\/.*/i;
+const reSoundcloud = /^(https?:)?\/\/w.soundcloud.com\/player\/.*/i;
+const reVimeo = /^(https?:)?\/\/player.vimeo.com\/video\/.*/i; // <-- medium-editor branch
 
 const iframeWhitelist = [
-    /^(https?:)?\/\/www.youtube.com\/embed\/.*/i,
-    /^(https?:)?\/\/w.soundcloud.com\/player\/.*/i,
-    // /^(https?:)?\/\/player.vimeo.com\/video\/.*/i, // <-- medium-editor branch
+    reYoutube,
+    reSoundcloud
+    // reVimeo
 ]
 
 // Medium insert plugin uses: div, figure, figcaption, iframe
@@ -28,13 +31,16 @@ export default ({large = true, highQualityPost = true, sanitizeErrors = []}) => 
     },
     transformTags: {
         iframe: (tagName, attribs) => {
-            const src = attribs.src
+            var src = attribs.src;
             for(const re of iframeWhitelist)
                 if(re.test(src)) {
+                    if (src.indexOf(reYoutube) === 0) {
+                        src = src.replace(/\?.+$/, ''); // strip query string (yt: autoplay=1,controls=0,showinfo=0, etc)
+                    }
                     return {
                         tagName: 'iframe',
                         attribs: {
-                            src: src.replace(/\?.+$/, ''), // strip query string (yt: autoplay=1,controls=0,showinfo=0, etc)
+                            src: src,
                             width: large ? '640' : '384',
                             height: large ? '360' : '240',
                             allowFullScreen: 'on',

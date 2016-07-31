@@ -105,7 +105,7 @@ export default class PostSummary extends React.Component {
           }
         }
         const commentClasses = []
-        if(ignore || netVoteSign < 0) commentClasses.push('downvoted')
+        if(netVoteSign < 0) commentClasses.push('downvoted')
         return (
             <article className={'PostSummary hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')} itemScope itemType ="http://schema.org/blogPost">
                 <div className="float-right"><Voting post={post} flag /></div>

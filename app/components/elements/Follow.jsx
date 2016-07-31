@@ -6,7 +6,7 @@ import transaction from 'app/redux/Transaction';
 import g from 'app/redux/GlobalReducer';
 import {Set, Map} from 'immutable'
 
-const {string, object, bool, func} = PropTypes
+const {string, object, bool, func, element} = PropTypes
 const followTypes = ['blog', 'posts']
 const followTypeSet = Set(followTypes)
 
@@ -18,6 +18,7 @@ export default class Follow extends React.Component {
         showFollow: bool,
         showMute: bool,
         fat: bool,
+        children: element,
 
         // redux
         follow: func,
@@ -45,7 +46,7 @@ export default class Follow extends React.Component {
         this.unignore = () => follow(follower, following, Set())
     }
     render() {
-        const {follower, following, what, showFollow, showMute, fat} = this.props // html
+        const {follower, following, what, showFollow, showMute, fat, children} = this.props // html
         const {existingFollows, loading} = this.props // redux
         if(loading) return <span><LoadingIndicator /> Loading&hellip;</span>
         if(!follower || !following || !what) return <span></span>
@@ -65,6 +66,7 @@ export default class Follow extends React.Component {
             {showFollow && existingFollows.has(what) && <label className={cnActive} onClick={this.unfollow}>Unfollow</label>}
             {showMute && !existingFollows.has('ignore') && <label className={cnInactive} onClick={this.ignore}>Mute</label>}
             {showMute && existingFollows.has('ignore') && <label className={cnActive} onClick={this.unignore}>Unmute</label>}
+            {children && <span>&nbsp;&nbsp;{children}</span>}
         </span>
     }
 }

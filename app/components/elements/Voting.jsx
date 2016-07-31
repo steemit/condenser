@@ -191,8 +191,9 @@ export default connect(
                         <h5>{ABOUT_FLAG}</h5>
                         <h5>
                             <Follow follower={username} following={author} showFollow={false}
-                                className="float-right" what="blog" />&nbsp;&nbsp;
-                            Stop seeing content from this user
+                                className="float-right" what="blog">&nbsp;&nbsp;
+                                Stop seeing content from this user
+                            </Follow>
                         </h5>
                     </span>
                 }

@@ -139,7 +139,6 @@ export default connect(
             const username = current ? current.get('username') : null
             const ignore = !hasPendingPayout && username ? state.global.getIn(['follow', 'get_following', username, 'result', content.get('author')], List()).contains('ignore') : false
             const show = !ignore || hasPendingPayout
-            console.log('show', show, item.toJS())
             if(show)
                 positiveComments.push({item, ignore, netVoteSign})
             else {

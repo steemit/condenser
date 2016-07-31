@@ -109,10 +109,10 @@ class CommentImpl extends React.Component {
 
     constructor(props) {
         super();
-        const {netVoteSign, hasPayout, ignore} = props
+        const {netVoteSign, hasPendingPayout, ignore} = props
         // const hasReplies = global.getIn(['content', content, 'replies'], List()).size > 0
         this.state = {show_details: true, //hasReplies || netVoteSign >= 0,
-                      hide_body: !hasPayout && (netVoteSign < 0 || ignore)};
+                      hide_body: !hasPendingPayout && (netVoteSign < 0 || ignore)};
         this.revealBody = this.revealBody.bind(this);
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Comment')
         this.onCommentClick = e => {
@@ -198,13 +198,13 @@ class CommentImpl extends React.Component {
         }
         const comment = dis.toJS();
         const {author, permlink, json_metadata} = comment
-        const {username, depth, rootComment, comment_link, anchor_link, netVoteSign, showNegativeComments, hasPayout} = this.props
+        const {username, depth, rootComment, comment_link, anchor_link, netVoteSign, showNegativeComments, hasPendingPayout} = this.props
         const {onCommentClick, onShowReply, onShowEdit, onDeletePost} = this
         const post = comment.author + '/' + comment.permlink
         const {PostReplyEditor, PostEditEditor, showReply, showEdit, hide_body} = this.state
         const Editor = showReply ? PostReplyEditor : PostEditEditor
 
-        if(hide_body && comment.replies.length === 0 && !showNegativeComments && !hasPayout)
+        if(hide_body && comment.replies.length === 0 && !showNegativeComments && !hasPendingPayout)
             return <span></span>
 
         let jsonMetadata = null
@@ -330,15 +330,15 @@ const Comment = connect(
         }
         const comment = global.get('content').get(ownProps.content);
         let votes = Long.ZERO
-        let hasPayout
+        let hasPendingPayout
         if (comment) {
             comment.get('active_votes').forEach(v => {
                 // console.log('voter', v.get('voter'), v.get('rshares'), v.toJS())
                 votes = votes.add(Long.fromString('' + v.get('rshares')))
             })
             const pending_payout = comment.get('pending_payout_value');
-            const total_payout = comment.get('total_payout_value');
-            hasPayout = parsePayoutAmount(pending_payout) > 0.02 || parsePayoutAmount(total_payout) > 0.02
+            // const total_payout = comment.get('total_payout_value');
+            hasPendingPayout = parsePayoutAmount(pending_payout) >= 0.02
         }
         const netVoteSign = votes.compare(Long.ZERO)
         const current = state.user.get('current')
@@ -352,7 +352,7 @@ const Comment = connect(
             rootComment: rc,
             username: state.user.getIn(['current', 'username']),
             ignore,
-            hasPayout,
+            hasPendingPayout,
         }
     },
 

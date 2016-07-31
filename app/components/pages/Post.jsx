@@ -120,10 +120,11 @@ class Post extends React.Component {
                 <div id="comments" className="Post_comments row hfeed">
                     <div className="column large-12">
                         <div className="Post_comments__content">
-                            {positiveComments.length && <div className="Post__comments_sort_order float-right">
+                            {positiveComments.length ?
+                            (<div className="Post__comments_sort_order float-right">
                                 Sort Order: &nbsp;
                                 <FoundationDropdownMenu menu={sort_menu} label={sort_order} dropdownPosition="bottom" dropdownAlignment="right" />
-                            </div>}
+                            </div>) : null}
                             {positiveComments}
                             {negativeGroup}
                             {negativeComments}

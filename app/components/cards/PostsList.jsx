@@ -80,20 +80,21 @@ class PostsList extends React.Component {
 
     render() {
         const {posts, loading, category, emptyText} = this.props;
-        const {positiveComments, negativeComments} = this.props
-        const {thumbSize, showNegativeComments} = this.state
+        const {positiveComments, /*negativeComments*/} = this.props
+        const {thumbSize, /*showNegativeComments*/} = this.state
 
         if (!loading && !posts.length) {
             return <div>{emptyText}</div>;
         }
-        const negativeGroup = negativeComments.length === 0 ? null :
-            (<div className="hentry Comment root Comment__negative_group">
-                {showNegativeComments ?
-                    <p>Now showing {negativeComments.length} posts with low ratings: <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>Hide</button></p> :
-                    <p>{negativeComments.length} posts were hidden due to low ratings. <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>Show</button></p>
-                }
-            </div>
-        );
+        // Does not work with auto-scrolling
+        // const negativeGroup = negativeComments.length === 0 ? null :
+        //     (<div className="hentry Comment root Comment__negative_group">
+        //         {showNegativeComments ?
+        //             <p>Now showing {negativeComments.length} posts with low ratings: <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>Hide</button></p> :
+        //             <p>{negativeComments.length} posts were hidden due to low ratings. <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>Show</button></p>
+        //         }
+        //     </div>
+        // );
         const renderSummary = items => items.map(({item, ignore, netVoteSign}) => <li key={item}>
             <PostSummary post={item} currentCategory={category} thumbSize={thumbSize}
                 ignore={ignore} netVoteSign={netVoteSign} />
@@ -102,12 +103,14 @@ class PostsList extends React.Component {
             <div id="posts_list" className="PostsList">
                 <ul className="PostsList__summaries hfeed" itemScope itemType="http://schema.org/blogPosts">
                     {renderSummary(positiveComments)}
-                    {negativeGroup}
-                    {showNegativeComments && renderSummary(negativeComments)}
                 </ul>
                 {loading && <center><LoadingIndicator type="circle" /></center>}
             </div>
         );
+                    // {negativeGroup}
+                    // {showNegativeComments && <div className="PostsList__showNegativeComments">
+                    //     {renderSummary(negativeComments)}
+                    // </div>}
     }
 }
 

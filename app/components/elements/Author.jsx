@@ -57,7 +57,7 @@ class Author extends React.Component {
                     <span className="FoundationDropdownMenu__label">
                         <span itemProp="author" itemScope itemType="http://schema.org/Person">
                             <strong>{author}</strong>
-                            {authorRepLog10 != null && <span>({authorRepLog10})</span>}
+                            {authorRepLog10 != null && <span style={{fontWeight: 'normal'}}> ({authorRepLog10})</span>}
                         </span>
                         <Icon className="dropdown-arrow" name="dropdown-arrow" />
                     </span>

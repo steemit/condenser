@@ -15,7 +15,7 @@ import TagList from 'app/components/elements/TagList';
 function TimeAuthorCategory({post, links, authorRepLog10}) {
     const author = <Tooltip t={authorRepLog10 ? authorRepLog10 + ' Reputation' : ''}>
         <span className={authorRepLog10 <= -5 ? 'darkred' : ''}>
-            {post.author}({authorRepLog10})
+            {post.author} <span style={{fontWeight: 'normal'}}>({authorRepLog10})</span>
         </span>
     </Tooltip>
 

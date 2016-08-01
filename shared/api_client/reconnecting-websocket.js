@@ -253,11 +253,12 @@
 
         this.reconnect = function () {
             var timeout = self.reconnectInterval * Math.pow(self.reconnectDecay, self.reconnectAttempts);
+            timeout = timeout > self.maxReconnectInterval ? self.maxReconnectInterval : timeout;
             console.log('WebSocket: will try to reconnect in ' + parseInt(timeout/1000) + ' sec, attempt #' + (self.reconnectAttempts + 1));
             setTimeout(function () {
                 self.reconnectAttempts++;
                 self.open(true);
-            }, timeout > self.maxReconnectInterval ? self.maxReconnectInterval : timeout);
+            }, timeout);
         }
 
         this.open = function (reconnectAttempt) {

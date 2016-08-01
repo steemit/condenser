@@ -13,6 +13,12 @@ import VotesAndComments from 'app/components/elements/VotesAndComments';
 import TagList from 'app/components/elements/TagList';
 
 function TimeAuthorCategory({post, links, authorRepLog10}) {
+    const author = <Tooltip t={authorRepLog10 ? authorRepLog10 + ' Reputation' : ''}>
+        <span className={authorRepLog10 <= -5 ? 'darkred' : ''}>
+            {post.author}({authorRepLog10})
+        </span>
+    </Tooltip>
+
     return (
         <span className="vcard">
             <Tooltip t={new Date(post.created).toLocaleString()}>
@@ -20,10 +26,8 @@ function TimeAuthorCategory({post, links, authorRepLog10}) {
             </Tooltip>
             <span> by&nbsp;
                 <span itemProp="author" itemScope itemType="http://schema.org/Person">
-                    <Tooltip t={authorRepLog10 ? authorRepLog10 + ' Reputation' : ''}>
-                        {links ? <Link to={post.author_link}>{post.author}({authorRepLog10})</Link> :
-                            <strong>{post.author}({authorRepLog10})</strong>}
-                    </Tooltip>
+                    {links ? <Link to={post.author_link}>{author}</Link> :
+                        <strong>{author}</strong>}
                 </span>
             </span>
             <span> in&nbsp;{links ? <TagList post={post} /> : <strong>{post.category}</strong>}</span>

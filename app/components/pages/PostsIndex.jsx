@@ -74,13 +74,7 @@ class PostsIndex extends React.Component {
                 <div className="PostsIndex__topics column shrink show-for-large">
                     <div className="PostsIndex__buysp button hollow text-center slim" onClick={this.depositSteem}>Buy Steem Power</div>
                     <Topics order={order} current={category} compact={false} />
-                    <span>
-                        <small>
-                            <button className="button hollow slim" onClick={this.onShowSpam}>{showSpam ? 'Hide' : 'Show'}</button>
-                            <br />
-                            {showSpam ? 'Showing' : 'Hiding'} low value posts
-                        </small>
-                    </span>
+                    <small><a onClick={this.onShowSpam}>{showSpam ? 'Show less' : 'Show more'}</a> low value posts</small>
                 </div>
             </div>
         );

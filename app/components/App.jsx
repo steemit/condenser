@@ -1,23 +1,14 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import AppPropTypes from 'app/utils/AppPropTypes';
-import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import Header from 'app/components/modules/Header';
-import LpHeader from 'app/components/modules/lp/LpHeader';
 import LpFooter from 'app/components/modules/lp/LpFooter';
-// import Footer from 'app/components/modules/Footer';
 import user from 'app/redux/User';
 import g from 'app/redux/GlobalReducer';
-// import {
-//     OffCanvas,
-//     OffCanvasContent,
-//     OffCanvasContainer,
-// } from 'react-foundation-components/lib/global/off-canvas';
 import { Link } from 'react-router';
 import TopRightMenu from 'app/components/modules/TopRightMenu';
 import { browserHistory } from 'react-router';
 import classNames from 'classnames';
-// import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import SidePanel from 'app/components/modules/SidePanel';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import Dialogs from 'app/components/modules/Dialogs';
@@ -179,12 +170,10 @@ class App extends React.Component {
             </SidePanel>
             <Header toggleOffCanvasMenu={this.toggleOffCanvasMenu} menuOpen={this.state.open} />
             <div className="App__content">
-                {/*<div dangerouslySetInnerHTML={ { __html: '<gcse:search></gcse:search>' } }></div>*/}
                 {welcome_screen}
                 {callout}
                 {children}
                 {lp ? <LpFooter /> : null}
-                {/* loading && <LoadingIndicator /> */}
             </div>
             <Dialogs />
             <Modals />

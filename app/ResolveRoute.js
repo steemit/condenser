@@ -15,9 +15,6 @@ export default function resolveRoute(path)
     if (path === '/support.html') {
         return {page: 'Support'};
     }
-    if (path === '/search.html') {
-        return {page: 'Search'};
-    }
     if (path === '/xss/test' && process.env.NODE_ENV === 'development') {
         return {page: 'XSSTest'};
     }

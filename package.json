@@ -37,6 +37,7 @@
     "bytebuffer": "^5.0.0",
     "bytes": "^2.4.0",
     "classnames": "^2.2.5",
+    "co-body": "^4.2.0",
     "crypto-js": "^3.1.5",
     "css-loader": "^0.23.1",
     "diff-match-patch": "^1.0.0",

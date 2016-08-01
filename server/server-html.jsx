@@ -1,39 +1,10 @@
 import React from 'react';
 import config from 'config';
 
-const GA = config.google_analytics_id ? `(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-  ga('create', '${config.google_analytics_id}', 'auto');
-  ga('send', 'pageview');` : null;
-
-const FB = config.grant.facebook.key ? `
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '${config.grant.facebook.key}',
-      xfbml      : true,
-      version    : 'v2.6'
-    });
-  };
-
-  (function(d, s, id){
-     var js, fjs = d.getElementsByTagName(s)[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement(s); js.id = id;
-     js.src = "//connect.facebook.net/en_US/sdk.js";
-     fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
-` : null;
-
-const TMP = `(function() {
-    localStorage.removeItem('autopost');
-})();`;
-
 export default function ServerHTML({ body, assets, locale, title, meta }) {
     let page_title = title;
     return (
-        <html lang={ locale }>
+        <html lang="en">
         <head>
             <meta charSet="utf-8" />
             {process.env.NODE_ENV === 'production' && <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests" />}
@@ -81,15 +52,11 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
             { assets.style.map((href, idx) =>
                 <link key={ idx } rel="stylesheet" href={ href } />) }
             <title>{ page_title }</title>
-            {/* use with weinre: weinre --boundHost -all- <script src="http://192.168.2.10:8080/target/target-script-min.js#steemit"></script>*/}
         </head>
         <body>
         <div id="content" dangerouslySetInnerHTML={ { __html: body } }></div>
-        <script dangerouslySetInnerHTML={ { __html: TMP } }></script>
-        { assets.script.map((href, idx) =>
-            <script key={ idx } src={ href }></script>) }
-        {process.env.NODE_ENV === 'production' && <script dangerouslySetInnerHTML={ { __html: GA } }></script>}
-        {process.env.NODE_ENV === 'production' && <script dangerouslySetInnerHTML={ { __html: FB } }></script>}
+        {assets.script.map((href, idx) => <script key={ idx } src={ href }></script>) }
+        {config.js_plugins_path && <script src={config.js_plugins_path}></script>}
         </body>
         </html>
     );

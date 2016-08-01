@@ -49,6 +49,8 @@ app.use(function *(next) {
     }
 });
 
+app.use(mount('/static', staticCache(path.join(__dirname, '../app/assets/static'), cacheOpts)));
+
 if (env === 'production') {
     // load production middleware
     app.use(require('koa-conditional-get')());
@@ -78,7 +80,6 @@ app.use(isBot());
 const cacheOpts = {maxAge: 86400000, gzip: true};
 app.use(mount('/favicons', staticCache(path.join(__dirname, '../app/assets/images/favicons'), cacheOpts)));
 app.use(mount('/images', staticCache(path.join(__dirname, '../app/assets/images'), cacheOpts)));
-app.use(mount('/static', staticCache(path.join(__dirname, '../app/assets/static'), cacheOpts)));
 // Proxy asset folder to webpack development server in development mode
 if (env === 'development') {
     const PORT = parseInt(process.env.PORT, 10) + 1 || 3001;

@@ -151,6 +151,7 @@ class CommentImpl extends React.Component {
             const content = this.props.global.get('content').get(this.props.content);
             deletePost(content.get('author'), content.get('permlink'))
         }
+        this.toggleDetails = this.toggleDetails.bind(this);
     }
     componentWillMount() {
         this.initEditor(this.props)

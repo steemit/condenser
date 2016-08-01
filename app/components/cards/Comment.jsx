@@ -281,7 +281,9 @@ class CommentImpl extends React.Component {
                 <div className="Comment__Userpic show-for-medium">
                     <Userpic account={comment.author} />
                 </div>
-                <div className={"Comment__header " + downVotedClass}>
+
+                <div className={downVotedClass}>
+                <div className="Comment__header">
                     <div className="Comment__header_collapse">
                         <Voting post={post} flag />
                         <a title="Collapse/Expand" onClick={this.toggleDetails}>{ this.state.show_details ? '[-]' : '[+]' }</a>
@@ -302,12 +304,14 @@ class CommentImpl extends React.Component {
                     { this.state.show_details && (hide_body && !showNegativeComments) &&
                         <a className="marginLeft1rem" onClick={this.revealBody}>reveal comment</a>}
                 </div>
-                <div className={"Comment__body entry-content " + downVotedClass}>
+                <div className="Comment__body entry-content">
                     {showEdit ? renderedEditor : body}
                 </div>
-                <div className={"Comment__footer " + downVotedClass}>
+                <div className="Comment__footer">
                     {controls}
                 </div>
+                </div>
+
                 <div className="Comment__replies hfeed">
                     {showReply && renderedEditor}
                     {replies}

@@ -281,37 +281,35 @@ class CommentImpl extends React.Component {
                 <div className="Comment__Userpic show-for-medium">
                     <Userpic account={comment.author} />
                 </div>
-
                 <div className={downVotedClass}>
-                <div className="Comment__header">
-                    <div className="Comment__header_collapse">
-                        <Voting post={post} flag />
-                        <a title="Collapse/Expand" onClick={this.toggleDetails}>{ this.state.show_details ? '[-]' : '[+]' }</a>
+                    <div className="Comment__header">
+                        <div className="Comment__header_collapse">
+                            <Voting post={post} flag />
+                            <a title="Collapse/Expand" onClick={this.toggleDetails}>{ this.state.show_details ? '[-]' : '[+]' }</a>
+                        </div>
+                        <span className="Comment__header-user">
+                            <Icon name="user" className="Comment__Userpic-small" />
+                            <span itemProp="author" itemScope itemType="http://schema.org/Person">
+                                <Author author={comment.author} authorRepLog10={authorRepLog10} /></span>
+                        </span>
+                        &nbsp; &middot; &nbsp;
+                        <a href={comment_link} onClick={onCommentClick} className="PlainLink">
+                            <TimeAgoWrapper date={comment.created} id={`@${author}/${permlink}`} />
+                        </a>
+                        { !this.state.show_details && (hide_body && !showNegativeComments) &&
+                          <Voting post={post} pending_payout={comment.pending_payout_value} total_payout={comment.total_payout_value} showList={comment.active_votes.length !== 0 ? true : false} /> }
+                        { this.state.show_details || comment.children == 0 ||
+                          <span className="marginLeft1rem">{pluralize('replies', comment.children, true)}</span>}
+                        { this.state.show_details && (hide_body && !showNegativeComments) &&
+                            <a className="marginLeft1rem" onClick={this.revealBody}>reveal comment</a>}
                     </div>
-                    <span className="Comment__header-user">
-                        <Icon name="user" className="Comment__Userpic-small" />
-                        <span itemProp="author" itemScope itemType="http://schema.org/Person">
-                            <Author author={comment.author} authorRepLog10={authorRepLog10} /></span>
-                    </span>
-                    &nbsp; &middot; &nbsp;
-                    <a href={comment_link} onClick={onCommentClick} className="PlainLink">
-                        <TimeAgoWrapper date={comment.created} id={`@${author}/${permlink}`} />
-                    </a>
-                    { !this.state.show_details && (hide_body && !showNegativeComments) &&
-                      <Voting post={post} pending_payout={comment.pending_payout_value} total_payout={comment.total_payout_value} showList={comment.active_votes.length !== 0 ? true : false} /> }
-                    { this.state.show_details || comment.children == 0 ||
-                      <span className="marginLeft1rem">{pluralize('replies', comment.children, true)}</span>}
-                    { this.state.show_details && (hide_body && !showNegativeComments) &&
-                        <a className="marginLeft1rem" onClick={this.revealBody}>reveal comment</a>}
+                    <div className="Comment__body entry-content">
+                        {showEdit ? renderedEditor : body}
+                    </div>
+                    <div className="Comment__footer">
+                        {controls}
+                    </div>
                 </div>
-                <div className="Comment__body entry-content">
-                    {showEdit ? renderedEditor : body}
-                </div>
-                <div className="Comment__footer">
-                    {controls}
-                </div>
-                </div>
-
                 <div className="Comment__replies hfeed">
                     {showReply && renderedEditor}
                     {replies}

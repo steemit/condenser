@@ -275,7 +275,7 @@
                 surl = self.url[this.reconnectAttempts % self.url.length];
             }
 
-            console.log('connecting to ', surl);
+            console.log('connecting to', surl);
             ws = process.env.BROWSER ? new WebSocket(surl) : new WebSocket(surl, protocols || [], null, null, null, {maxReceivedFrameSize: 0x300000});
             ws.binaryType = this.binaryType;
 
@@ -309,7 +309,7 @@
 
             ws.onclose = function(event) {
                 if(event.code !== 1000)
-                    console.log('WARNING! ws connection closed: ', event && event.reason ? event.reason : event);
+                    console.log('WARNING! ws connection', surl, 'closed: ', event && event.reason ? event.reason : event);
                 clearTimeout(timeout);
                 ws = null;
                 if (forcedClose) {

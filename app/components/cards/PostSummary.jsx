@@ -12,15 +12,19 @@ import { browserHistory } from 'react-router';
 import VotesAndComments from 'app/components/elements/VotesAndComments';
 import TagList from 'app/components/elements/TagList';
 
-function TimeAuthorCategory({post, links}) {
+function TimeAuthorCategory({post, links, authorRepLog10}) {
     return (
         <span className="vcard">
             <Tooltip t={new Date(post.created).toLocaleString()}>
                 <span className="TimeAgo"><TimeAgoWrapper date={post.created} /></span>
             </Tooltip>
-            <span> by&nbsp;<span itemProp="author" itemScope itemType="http://schema.org/Person">
-                    {links ? <Link to={post.author_link}>{post.author}</Link> : <strong>{post.author}</strong>}
-            </span>
+            <span> by&nbsp;
+                <span itemProp="author" itemScope itemType="http://schema.org/Person">
+                    <Tooltip t={authorRepLog10 ? authorRepLog10 + ' Reputation' : ''}>
+                        {links ? <Link to={post.author_link}>{post.author}({authorRepLog10})</Link> :
+                            <strong>{post.author}({authorRepLog10})</strong>}
+                    </Tooltip>
+                </span>
             </span>
             <span> in&nbsp;{links ? <TagList post={post} /> : <strong>{post.category}</strong>}</span>
         </span>
@@ -37,6 +41,7 @@ export default class PostSummary extends React.Component {
         netVoteSign: React.PropTypes.number,
         currentCategory: React.PropTypes.string,
         thumbSize: React.PropTypes.string,
+        authorRepLog10: React.PropTypes.number,
     };
 
     shouldComponentUpdate(props) {
@@ -46,8 +51,8 @@ export default class PostSummary extends React.Component {
     }
 
     render() {
-        const {currentCategory, thumbSize} = this.props;
-        const {post, content, pending_payout, total_payout, cashout_time, ignore, netVoteSign} = this.props;
+        const {currentCategory, thumbSize, authorRepLog10} = this.props;
+        const {post, content, pending_payout, total_payout, cashout_time, netVoteSign} = this.props;
         if (!content) return null;
         const p = extractContent(immutableAccessor, content);
         let desc = p.desc
@@ -105,7 +110,7 @@ export default class PostSummary extends React.Component {
           }
         }
         const commentClasses = []
-        if(netVoteSign < 0) commentClasses.push('downvoted')
+        if(netVoteSign < 0 || authorRepLog10 <= -5) commentClasses.push('downvoted')
         return (
             <article className={'PostSummary hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')} itemScope itemType ="http://schema.org/blogPost">
                 <div className="float-right"><Voting post={post} flag /></div>
@@ -113,7 +118,7 @@ export default class PostSummary extends React.Component {
                     {content_title}
                 </div>
                 <div className="PostSummary__time_author_category_small show-for-small-only">
-                    <Link to={title_link_url}><TimeAuthorCategory post={p} links={false} /></Link>
+                    <Link to={title_link_url}><TimeAuthorCategory post={p} links={false} authorRepLog10={authorRepLog10} /></Link>
                 </div>
                 {thumb}
                 <div className="PostSummary__content">
@@ -124,7 +129,7 @@ export default class PostSummary extends React.Component {
                     <div className="PostSummary__footer">
                         <Voting post={post} pending_payout={pending_payout} total_payout={total_payout} showList={false} cashout_time={cashout_time} />
                         <span className="PostSummary__time_author_category show-for-medium">
-                            <TimeAuthorCategory post={p} links />
+                            <TimeAuthorCategory post={p} links authorRepLog10={authorRepLog10} />
                         </span>
                         <VotesAndComments post={post} commentsLink={comments_link} />
                     </div>

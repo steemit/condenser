@@ -17,8 +17,13 @@ class PostsList extends React.Component {
         loading: PropTypes.bool.isRequired,
         category: PropTypes.string,
         loadMore: PropTypes.func,
-        emptyText: PropTypes.string
+        emptyText: PropTypes.string,
+        showSpam: PropTypes.bool,
     };
+
+    static defaultProps = {
+        showSpam: false,
+    }
 
     constructor() {
         super();
@@ -80,50 +85,36 @@ class PostsList extends React.Component {
 
     render() {
         const {posts, loading, category, emptyText} = this.props;
-        const {positiveComments, /*negativeComments*/} = this.props
-        const {thumbSize, /*showNegativeComments*/} = this.state
+        const {comments} = this.props
+        const {thumbSize} = this.state
 
         if (!loading && !posts.length) {
             return <div>{emptyText}</div>;
         }
-        // Does not work with auto-scrolling
-        // const negativeGroup = negativeComments.length === 0 ? null :
-        //     (<div className="hentry Comment root Comment__negative_group">
-        //         {showNegativeComments ?
-        //             <p>Now showing {negativeComments.length} posts with low ratings: <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>Hide</button></p> :
-        //             <p>{negativeComments.length} posts were hidden due to low ratings. <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>Show</button></p>
-        //         }
-        //     </div>
-        // );
-        const renderSummary = items => items.map(({item, ignore, netVoteSign}) => <li key={item}>
+        const renderSummary = items => items.map(({item, ignore, netVoteSign, authorRepLog10}) => <li key={item}>
             <PostSummary post={item} currentCategory={category} thumbSize={thumbSize}
-                ignore={ignore} netVoteSign={netVoteSign} />
+                ignore={ignore} netVoteSign={netVoteSign} authorRepLog10={authorRepLog10} />
         </li>)
         return (
             <div id="posts_list" className="PostsList">
                 <ul className="PostsList__summaries hfeed" itemScope itemType="http://schema.org/blogPosts">
-                    {renderSummary(positiveComments)}
+                    {renderSummary(comments)}
                 </ul>
                 {loading && <center><LoadingIndicator type="circle" /></center>}
             </div>
         );
-                    // {negativeGroup}
-                    // {showNegativeComments && <div className="PostsList__showNegativeComments">
-                    //     {renderSummary(negativeComments)}
-                    // </div>}
     }
 }
 
 import {List} from 'immutable'
 import {Long} from 'bytebuffer'
 import {connect} from 'react-redux'
-import {parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
+import {parsePayoutAmount, repLog10} from 'app/utils/ParsersAndFormatters';
 
 export default connect(
     (state, props) => {
-        const {posts} = props;
-        const positiveComments = []
-        const negativeComments = []
+        const {posts, showSpam} = props;
+        const comments = []
         posts.forEach(item => {
             const content = state.global.get('content').get(item);
             let pending_payout = 0;
@@ -141,13 +132,11 @@ export default connect(
             const current = state.user.get('current')
             const username = current ? current.get('username') : null
             const ignore = !hasPendingPayout && username ? state.global.getIn(['follow', 'get_following', username, 'result', content.get('author')], List()).contains('ignore') : false
-            const show = !ignore || hasPendingPayout
-            if(show)
-                positiveComments.push({item, ignore, netVoteSign})
-            else {
-                negativeComments.push({item, ignore, netVoteSign})
-            }
+            const authorRepLog10 = repLog10(content.get('author_reputation'))
+            const hide = !hasPendingPayout && (ignore || authorRepLog10 <= -6)
+            if(!hide || showSpam)
+                comments.push({item, ignore, netVoteSign, authorRepLog10})
         })
-        return {...props, positiveComments, negativeComments};
+        return {...props, comments};
     },
 )(PostsList)

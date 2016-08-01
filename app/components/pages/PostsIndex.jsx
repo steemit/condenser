@@ -18,8 +18,13 @@ class PostsIndex extends React.Component {
         loading: PropTypes.bool
     };
 
+    static defaultProps = {
+        showSpam: false
+    }
+
     constructor() {
         super();
+        this.state = {}
         this.loadMore = this.loadMore.bind(this);
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'PostsIndex')
     }
@@ -46,12 +51,16 @@ class PostsIndex extends React.Component {
     depositSteem = () => {
         this.props.depositSteem()
     }
+    onShowSpam = () => {
+        this.setState({showSpam: !this.state.showSpam})
+    }
     render() {
         const {order = constants.DEFAULT_SORT_ORDER, category} = this.props.routeParams;
         const posts = this.getPosts(order, category);
 
         const status = this.props.status ? this.props.status.getIn([category || '', order]) : null;
         const fetching = (status && status.fetching) || this.props.loading;
+        const {showSpam} = this.state
 
         return (
             <div className={'PostsIndex row' + (fetching ? ' fetching' : '')}>
@@ -59,11 +68,19 @@ class PostsIndex extends React.Component {
                     <div className="PostsIndex__topics_compact show-for-small hide-for-large">
                         <Topics order={order} current={category} compact />
                     </div>
-                    <PostsList ref="list" posts={posts ? posts.toArray() : []} loading={fetching} category={category} loadMore={this.loadMore} />
+                    <PostsList ref="list" posts={posts ? posts.toArray() : []} loading={fetching} category={category}
+                        loadMore={this.loadMore} showSpam={showSpam} />
                 </div>
                 <div className="PostsIndex__topics column shrink show-for-large">
                     <div className="PostsIndex__buysp button hollow text-center slim" onClick={this.depositSteem}>Buy Steem Power</div>
                     <Topics order={order} current={category} compact={false} />
+                    <span>
+                        <small>
+                            <button className="button hollow slim" onClick={this.onShowSpam}>{showSpam ? 'Hide' : 'Show'}</button>
+                            <br />
+                            {showSpam ? 'Showing' : 'Hiding'} low value posts
+                        </small>
+                    </span>
                 </div>
             </div>
         );

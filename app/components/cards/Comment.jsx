@@ -16,7 +16,7 @@ import transaction from 'app/redux/Transaction'
 import {List, Set} from 'immutable'
 import {Long} from 'bytebuffer'
 import pluralize from 'pluralize';
-import {parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
+import {parsePayoutAmount, repLog10} from 'app/utils/ParsersAndFormatters';
 
 export function sortComments( g, comments, sort_order ){
 
@@ -91,6 +91,7 @@ class CommentImpl extends React.Component {
         sort_order: React.PropTypes.oneOf(['active', 'update', 'created', 'trending']).isRequired,
         root: React.PropTypes.bool,
         showNegativeComments: React.PropTypes.bool,
+        authorRepLog10: React.PropTypes.number,
 
         // component props (for recursion)
         depth: React.PropTypes.number,
@@ -198,7 +199,8 @@ class CommentImpl extends React.Component {
         }
         const comment = dis.toJS();
         const {author, permlink, json_metadata} = comment
-        const {username, depth, rootComment, comment_link, anchor_link, netVoteSign, showNegativeComments, hasPendingPayout} = this.props
+        const {username, depth, rootComment, comment_link, anchor_link, netVoteSign, showNegativeComments,
+            hasPendingPayout, authorRepLog10} = this.props
         const {onCommentClick, onShowReply, onShowEdit, onDeletePost} = this
         const post = comment.author + '/' + comment.permlink
         const {PostReplyEditor, PostEditEditor, showReply, showEdit, hide_body} = this.state
@@ -286,7 +288,8 @@ class CommentImpl extends React.Component {
                     </div>
                     <span className="Comment__header-user">
                         <Icon name="user" className="Comment__Userpic-small" />
-                        <span itemProp="author" itemScope itemType="http://schema.org/Person"><Author author={comment.author} /></span>
+                        <span itemProp="author" itemScope itemType="http://schema.org/Person">
+                            <Author author={comment.author} authorRepLog10={authorRepLog10} /></span>
                     </span>
                     &nbsp; &middot; &nbsp;
                     <a href={comment_link} onClick={onCommentClick} className="PlainLink">
@@ -344,6 +347,7 @@ const Comment = connect(
         const current = state.user.get('current')
         const username = current ? current.get('username') : null
         const ignore = username ? state.global.getIn(['follow', 'get_following', username, 'result', c.get('author')], List()).contains('ignore') : false
+        const authorRepLog10 = repLog10(c.get('author_reputation'))
         return {
             ...ownProps,
             netVoteSign,
@@ -353,6 +357,7 @@ const Comment = connect(
             username: state.user.getIn(['current', 'username']),
             ignore,
             hasPendingPayout,
+            authorRepLog10,
         }
     },
 

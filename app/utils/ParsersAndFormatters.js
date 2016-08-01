@@ -28,3 +28,13 @@ export function formatDecimal(value, decPlaces = 2, truncate0s = true) {
 export function parsePayoutAmount(amount) {
     return parseFloat(String(amount).replace(/\s[A-Z]*$/, ''));
 }
+
+export const repLog10 = rep2 => {
+    if(rep2 == null) return rep2
+    let rep = String(rep2)
+    const neg = rep.charAt(0) === '-'
+    rep = neg ? rep.substring(1) : rep
+    rep = rep.length <= 8 ? 1 : rep.length - 8; //Math.max(rep.length - 8, 1)
+    rep = neg ? -1 * rep : rep
+    return rep
+}

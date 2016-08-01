@@ -6,13 +6,14 @@ import Follow from 'app/components/elements/Follow';
 import Icon from 'app/components/elements/Icon'
 import {browserHistory} from 'react-router'
 
-const {string, bool} = React.PropTypes
+const {string, bool, number} = React.PropTypes
 
 class Author extends React.Component {
     static propTypes = {
         author: string.isRequired,
         follow: bool,
         mute: bool,
+        authorRepLog10: number,
     }
     static defaultProps = {
         follow: true,
@@ -24,7 +25,7 @@ class Author extends React.Component {
         browserHistory.push('/@' + author)
     }
     render() {
-        const {author, follow, mute} = this.props // html
+        const {author, follow, mute, authorRepLog10} = this.props // html
         const {username} = this.props // redux
         const author_link = <span itemProp="author" itemScope itemType="http://schema.org/Person">
             <a onClick={this.onAuthorClick}>{author}</a>
@@ -56,6 +57,7 @@ class Author extends React.Component {
                     <span className="FoundationDropdownMenu__label">
                         <span itemProp="author" itemScope itemType="http://schema.org/Person">
                             <strong>{author}</strong>
+                            {authorRepLog10 != null && <span>({authorRepLog10})</span>}
                         </span>
                         <Icon className="dropdown-arrow" name="dropdown-arrow" />
                     </span>

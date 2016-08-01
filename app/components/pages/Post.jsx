@@ -69,11 +69,13 @@ class Post extends React.Component {
         });
         let negativeCount = negativeReplies.length;
 
+        let commentText = negativeCount > 1 ? "comments" : "comment";
+
         let negativeGroup = !negativeCount ? null :
             (<div className="hentry Comment root Comment__negative_group">
                 {this.state.showNegativeComments ?
-                    <p>Now showing {negativeCount} comments with low ratings: <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>Hide</button></p> :
-                    <p>{negativeCount} comments were hidden due to low ratings. <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>Show</button></p>
+                    <p>Now showing {negativeCount} {commentText} with low ratings: <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>Hide</button></p> :
+                    <p>{negativeCount} {commentText} {negativeCount > 1 ? "were" : "was"} hidden due to low ratings. <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>Show</button></p>
                 }
             </div>
         );

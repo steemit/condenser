@@ -59,12 +59,13 @@ function* usernamePasswordLogin(action) {
     const current = yield select(state => state.user.get('current'))
     if(current) {
         const follower = current.get('username')
-        yield fork(loadFollows, follower)
+        yield fork(loadFollows, follower, 'blog')
+        yield fork(loadFollows, follower, 'ignore')
     }
 }
 // Test limit with 2 (not 1, infinate looping)
-function* loadFollows(follower, start = '', limit = 100) {
-    const res = fromJS(yield Apis.follow('get_following', follower, start, limit))
+function* loadFollows(follower, type, start = '', limit = 100) {
+    const res = fromJS(yield Apis.follow('get_following', follower, start, type, limit))
     // console.log('res.toJS()', res.toJS())
     let cnt = 0
     let lastFollowing = null
@@ -85,7 +86,7 @@ function* loadFollows(follower, start = '', limit = 100) {
         }
     }})
     if(cnt === limit) {
-        yield call(loadFollows, follower, lastFollowing)
+        yield call(loadFollows, follower, type, lastFollowing)
     } else {
         yield put({type: 'global/UPDATE', payload: {
             key: ['follow', 'get_following', follower],

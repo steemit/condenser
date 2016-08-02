@@ -117,20 +117,17 @@ class Voting extends React.Component {
         </DropdownMenu>;
 
         const avotes = active_votes.toJS();
+        avotes.sort((a, b) => Math.abs(parseInt(a.rshares)) > Math.abs(parseInt(b.rshares)) ? -1 : 1)
         let count = 0;
         let voters = [];
         for( let v = 0; v < avotes.length; ++v ) {
             const pct = avotes[v].percent
-            // ? Remove negative votes unless full power -1000 (we had downvoting spam)
-            if(pct < 0 /*&& pct !== -1000*/)
-                continue
-
             const cnt = Math.sign(pct)
-            count += cnt
             if(cnt === 0) continue
+            count += 1
             if (showList && voters.length < MAX_VOTES_DISPLAY) voters.push({value: (cnt > 0 ? '+ ' : '- ') + avotes[v].voter, link: '/@' + avotes[v].voter})
         }
-        if (voters.length === MAX_VOTES_DISPLAY) voters.push({value: '...'});
+        if (count > MAX_VOTES_DISPLAY) voters.push({value: '...'});
 
         let voters_list = null;
         if (showList) {

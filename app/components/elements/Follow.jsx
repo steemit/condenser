@@ -63,9 +63,9 @@ export default class Follow extends React.Component {
         const cnInactive = cnActive + ' hollow secondary'
         return <span>
             {showFollow && !existingFollows.has(what) && <label className={cnInactive} onClick={this.follow}>Follow</label>}
-            {showFollow && existingFollows.has(what) && <label className={cnActive} onClick={this.unfollow}>Unfollow</label>}
+            {showFollow && existingFollows.has(what) && <label className={cnInactive} onClick={this.unfollow}>Unfollow</label>}
             {showMute && !existingFollows.has('ignore') && <label className={cnInactive} onClick={this.ignore}>Mute</label>}
-            {showMute && existingFollows.has('ignore') && <label className={cnActive} onClick={this.unignore}>Unmute</label>}
+            {showMute && existingFollows.has('ignore') && <label className={cnInactive} onClick={this.unignore}>Unmute</label>}
             {children && <span>&nbsp;&nbsp;{children}</span>}
         </span>
     }

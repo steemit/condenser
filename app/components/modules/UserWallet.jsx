@@ -10,7 +10,7 @@ import BlocktradesDeposit from 'app/components/modules/BlocktradesDeposit';
 import Reveal from 'react-foundation-components/lib/global/reveal'
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {steemTip, powerTip, dollarTip, valueTip} from 'app/utils/Tips'
-import {numberWithCommas} from 'app/utils/StateFunctions'
+import {numberWithCommas, vestingSteem} from 'app/utils/StateFunctions'
 
 class UserWallet extends React.Component {
     constructor() {
@@ -31,11 +31,9 @@ class UserWallet extends React.Component {
         let account          = this.props.account;
         let current_user     = this.props.current_user;
         let gprops           = this.props.global.getIn( ['props'] ).toJS();
-        let vests            = parseFloat(account.vesting_shares.split( ' ' )[0]);
-        let total_vests      = parseFloat(gprops.total_vesting_shares.split( ' ' )[0]);
-        let total_vest_steem = parseFloat(gprops.total_vesting_fund_steem.split( ' ' )[0]);
-        let vesting_steemf   = total_vest_steem * (vests / total_vests);
-        let vesting_steem    = vesting_steemf.toFixed(3);
+
+        let vesting_steemf = vestingSteem(account, gprops);
+        let vesting_steem = vesting_steemf.toFixed(3);
 
         let isMyAccount = current_user && current_user.get('username') === account.name;
 

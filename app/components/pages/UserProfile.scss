@@ -5,21 +5,32 @@
   padding: 0;
   padding-bottom: 1.5rem;
   background-color: transparent;
+  .row {
+      background-color: $black;
+
+      .columns {
+          overflow-x: auto;
+      }
+  }
   .menu {
     background-color: transparent;
   }
   .menu > li > a {
+      transition: all 200ms ease-in;
+      transform: translate3d( 0, 0, 0);
       padding-left: 0.7rem;
       padding-right: 0.7rem;
-    color: $dark-gray;
-    @include hoverUnderline;
-    &.active {
-      color: $black;
-      font-weight: bold;
-    }
-  }
-  .menu > li:first-child > a {
-    padding-left: 0;
+      color: $white;
+      background-color: transparent;
+      @include hoverUnderline;
+      &.active {
+          background-color: $white;
+          z-index: 2;
+          color: $black;
+          font-weight: bold;
+          border-top-left-radius: 3px;
+          border-top-right-radius: 3px;
+        }
   }
 }
 
@@ -27,4 +38,45 @@
   margin-bottom: 1.5rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid #EEE;
+}
+
+.UserProfile__banner {
+    text-align: center;
+    color: $white;
+    > div.column {
+        background-color: #535a99;
+        height: 200px;
+    }
+    h2 {
+        padding-top: 20px;
+    }
+
+    .UserProfile__buttons {
+        position: absolute;
+        top: 15px;
+        right: 5px;
+
+        label.button {
+            color: black;
+            border-radius: 3px;
+            background-color: white;
+        }
+    }
+}
+
+@media screen and (max-width: 39.9375em) {
+
+    .UserProfile__top-nav li>a {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+
+    .UserProfile__banner .UserProfile__buttons {
+        text-align: right;
+
+        label.button {
+            display: block;
+        }
+    }
 }

@@ -14,7 +14,7 @@ import AuthorRewards from 'app/components/modules/AuthorRewards';
 import Follow from 'app/components/elements/Follow';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import PostsList from 'app/components/cards/PostsList';
-import {isFetchingOrRecentlyUpdated} from 'app/utils/StateFunctions';
+import {isFetchingOrRecentlyUpdated, numberWithCommas, vestingSteem} from 'app/utils/StateFunctions';
 
 export default class UserProfile extends React.Component {
     constructor() {
@@ -43,6 +43,7 @@ export default class UserProfile extends React.Component {
         } = this;
         let { accountname, section } = this.props.routeParams;
         const username = current_user ? current_user.get('username') : null
+        const gprops = this.props.global.getIn( ['props'] ).toJS();
         if( !section ) section = 'blog';
 
         // const isMyAccount = current_user ? current_user.get('username') === accountname : false;
@@ -58,6 +59,13 @@ export default class UserProfile extends React.Component {
         const global_status = this.props.global.get('status');
         const status = global_status ? global_status.getIn([section, 'by_author']) : null;
         const fetching = (status && status.fetching) || this.props.loading;
+
+        let balance_steem = parseFloat(account.balance.split(' ')[0]);
+        let vesting_steem = vestingSteem(account, gprops).toFixed(2);
+        const steem_balance_str = numberWithCommas(balance_steem.toFixed(2)) + " STEEM";
+        const power_balance_str = numberWithCommas(vesting_steem) + " STEEM POWER";
+        const sbd_balance = parseFloat(account.sbd_balance)
+        const sbd_balance_str = numberWithCommas('$' + sbd_balance.toFixed(2));
 
         if( section === 'transfers' ) {
             tab_content = <UserWallet global={this.props.global}
@@ -152,7 +160,7 @@ export default class UserProfile extends React.Component {
 
         const wallet_tab_active = section === 'transfers' || section === 'password' || section === 'permissions' ? 'active' : '';
 
-        const top_menu = <div className="UserProfile__top-nav row">
+        const top_menu = <div className="row">
             <div className="columns small-12 medium-expand">
                 <ul className="menu">
                     <li><Link to={`/@${accountname}`} activeClassName="active">Blog</Link></li>
@@ -172,16 +180,32 @@ export default class UserProfile extends React.Component {
          </div>;
         return (
             <div className="UserProfile">
-                <div className="row">
+
+                <div className="UserProfile__banner row">
+
+                    <div className="column">
+                        <div style={{position: "relative"}}>
+                            <div className="UserProfile__buttons">
+                                {section === 'blog' ? <Follow follower={username} following={accountname} what={section} /> : null}
+                            </div>
+                        </div>
+                        <h2>{account.name}</h2>
+
+
+                        <div>
+                            <p>{account.post_count} posts</p>
+                            <p style={{marginBottom: 5}}><span>{power_balance_str}</span></p>
+                            <p><span>{steem_balance_str}</span> <span style={{paddingLeft: 10, paddingRight: 10}}>{sbd_balance_str}</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div className="UserProfile__top-nav row">
                     <div className="column">
                         {top_menu}
                     </div>
                 </div>
                 <div className="row">
                     <div className="column">
-                        <span className="float-right">
-                            {section === 'blog' && <Follow follower={username} following={accountname} what={section} />}
-                        </span>
                         {printLink}
                         {/*section_title && <h2 className="UserProfile__section-title">{section_title}</h2>*/}
                         {tab_content}

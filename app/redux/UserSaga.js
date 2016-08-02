@@ -99,7 +99,7 @@ function* loadFollows(follower, type, start = '', limit = 100) {
 const isHighSecurityOperations = ['transfer', 'transfer_to_vesting', 'withdraw_vesting',
     'limit_order_create', 'limit_order_cancel', 'account_update', 'account_witness_vote']
 
-const highSecurityPages = Array(/\/market/, /\/@.+\/transfers/)
+const highSecurityPages = Array(/\/market/, /\/@.+\/transfers/, /\/~witnesses/)
 
 const clean = (value) => value == null || value === '' || /null|undefined/.test(value) ? undefined : value
 

@@ -110,10 +110,8 @@ class CommentImpl extends React.Component {
 
     constructor(props) {
         super();
-        const {netVoteSign, hasPendingPayout, ignore} = props
-        // const hasReplies = global.getIn(['content', content, 'replies'], List()).size > 0
-        this.state = {show_details: true, //hasReplies || netVoteSign >= 0,
-                      hide_body: !hasPendingPayout && (netVoteSign < 0 || ignore)};
+        const {netVoteSign, hasPendingPayout} = props
+        this.state = {show_details: true, hide_body: !hasPendingPayout && netVoteSign < 0};
         this.revealBody = this.revealBody.bind(this);
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Comment')
         this.onCommentClick = e => {
@@ -201,13 +199,15 @@ class CommentImpl extends React.Component {
         const comment = dis.toJS();
         const {author, permlink, json_metadata} = comment
         const {username, depth, rootComment, comment_link, anchor_link, netVoteSign, showNegativeComments,
-            hasPendingPayout, authorRepLog10} = this.props
+            hasPendingPayout, authorRepLog10, ignore} = this.props
         const {onCommentClick, onShowReply, onShowEdit, onDeletePost} = this
         const post = comment.author + '/' + comment.permlink
         const {PostReplyEditor, PostEditEditor, showReply, showEdit, hide_body} = this.state
         const Editor = showReply ? PostReplyEditor : PostEditEditor
 
-        if(hide_body && comment.replies.length === 0 && !showNegativeComments && !hasPendingPayout)
+        const auto_hide = ignore || (comment.replies.length === 0 && !showNegativeComments && !hasPendingPayout)
+
+        if(!showNegativeComments && (auto_hide || hide_body))
             return <span></span>
 
         let jsonMetadata = null

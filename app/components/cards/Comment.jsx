@@ -206,7 +206,8 @@ class CommentImpl extends React.Component {
         const {PostReplyEditor, PostEditEditor, showReply, showEdit, hide_body} = this.state
         const Editor = showReply ? PostReplyEditor : PostEditEditor
 
-        const auto_hide = ignore || (authorRepLog10 <= -6 && comment.replies.length === 0 && !showNegativeComments && !hasPendingPayout)
+        const negative_comment = ignore || authorRepLog10 <= -6
+        const auto_hide = !showNegativeComments && negative_comment && comment.replies.length === 0 && !hasPendingPayout
         if(!showNegativeComments && (auto_hide || hide_body)) {
             if(onHide) onHide()
             return <span></span>
@@ -260,7 +261,7 @@ class CommentImpl extends React.Component {
         commentClasses.push('Comment')
         commentClasses.push(this.props.root ? 'root' : 'reply')
         if((hide_body && !showNegativeComments) || !this.state.show_details) commentClasses.push('collapsed');
-        const downVotedClass = netVoteSign < 0 || hide_body ? 'downvoted' : ' '
+        const downVotedClass = netVoteSign < 0 || (negative_comment || hide_body) ? 'downvoted' : ' '
         //console.log(comment);
         let renderedEditor = null;
         if (showReply || showEdit) {

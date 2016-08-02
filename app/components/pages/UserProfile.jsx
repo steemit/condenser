@@ -86,7 +86,8 @@ export default class UserProfile extends React.Component {
                   posts={account.posts.map(p => `${account.name}/${p}`)}
                   loading={fetching}
                   category="posts"
-                  loadMore={null} />;
+                  loadMore={null}
+                  showSpam />;
            }
            else {
               tab_content = (<center><LoadingIndicator type="circle" /></center>);
@@ -100,7 +101,8 @@ export default class UserProfile extends React.Component {
                     }).map(p => `${account.name}/${p}`)}
                     loading={fetching}
                     category="blog"
-                    loadMore={this.loadMore} />;
+                    loadMore={this.loadMore}
+                    showSpam />;
             } else {
                 tab_content = (<center><LoadingIndicator type="circle" /></center>);
             }

@@ -34,7 +34,7 @@ export const repLog10 = rep2 => {
     let rep = String(rep2)
     const neg = rep.charAt(0) === '-'
     rep = neg ? rep.substring(1) : rep
-    rep = rep.length <= 8 ? 1 : rep.length - 8; //Math.max(rep.length - 8, 1)
+    rep = rep.length <= 8 ? 1 : rep.length - 8;
     rep = neg ? -1 * rep : rep
     return rep
 }

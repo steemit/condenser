@@ -41,17 +41,20 @@ class Post extends React.Component {
         });
     }
 
+    onHideComment = () => {
+        this.setState({commentHidden: true})
+    }
+
     render() {
         const {showSignUp} = this
         const {current_user} = this.props
-        const {showNegativeComments} = this.state
+        const {showNegativeComments, commentHidden} = this.state
         const rout_params = this.props.routeParams;
         let g = this.props.global;
         let post = rout_params.username + '/' + rout_params.slug;
         const dis = g.get('content').get(post);
         if (!dis) return null;
-        let idx = 0
-        let replies = dis.get('replies').toJS();
+        const replies = dis.get('replies').toJS();
 
         let sort_order = 'trending';
         if( this.props.location.query.sort )
@@ -62,26 +65,26 @@ class Post extends React.Component {
         let positiveComments = replies.filter(a => {
             return g.get('content').get(a).get("net_rshares") >= 0;
         })
-        .map(reply => <Comment root key={post + reply} content={reply} global={g} sort_order={sort_order} showNegativeComments={showNegativeComments} />);
+        .map(reply => <Comment root key={post + reply} content={reply} global={g} sort_order={sort_order} showNegativeComments={showNegativeComments} onHide={this.onHideComment} />);
 
+        // Not the complete hidding logic, just move to the bottom the rest hide inplace
         const negativeReplies = replies.filter(a => {
             return g.get('content').get(a).get("net_rshares") < 0;
         });
-        let negativeCount = negativeReplies.length;
+        const stuffHidden = negativeReplies.length > 0 || commentHidden
 
-        let commentText = negativeCount > 1 ? "comments" : "comment";
+        const negativeComments =
+            negativeReplies.map(reply => <Comment root key={post + reply} content={reply} global={g} sort_order={sort_order} showNegativeComments onHide={this.onHideComment} />);
 
-        let negativeGroup = !negativeCount ? null :
+        const negativeGroup = !stuffHidden ? null :
             (<div className="hentry Comment root Comment__negative_group">
                 {this.state.showNegativeComments ?
-                    <p>Now showing {negativeCount} {commentText} with low ratings: <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>Hide</button></p> :
-                    <p>{negativeCount} {commentText} {negativeCount > 1 ? "were" : "was"} hidden due to low ratings. <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>Show</button></p>
+                    <p>Now showing comments with low ratings: <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>Hide</button></p> :
+                    <p>Comments were hidden due to low ratings. <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>Show</button></p>
                 }
             </div>
         );
 
-        let negativeComments = !this.state.showNegativeComments || !negativeCount ? null :
-            negativeReplies.map(reply => <Comment root key={post + reply} content={reply} global={g} sort_order={sort_order} showNegativeComments />);
 
         // console.log( rout_params );
 
@@ -129,7 +132,7 @@ class Post extends React.Component {
                             </div>) : null}
                             {positiveComments}
                             {negativeGroup}
-                            {negativeComments}
+                            {showNegativeComments && negativeComments}
                         </div>
                     </div>
                 </div>

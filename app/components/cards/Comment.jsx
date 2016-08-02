@@ -92,6 +92,7 @@ class CommentImpl extends React.Component {
         root: React.PropTypes.bool,
         showNegativeComments: React.PropTypes.bool,
         authorRepLog10: React.PropTypes.number,
+        onHide: React.PropTypes.func,
 
         // component props (for recursion)
         depth: React.PropTypes.number,
@@ -199,15 +200,17 @@ class CommentImpl extends React.Component {
         const comment = dis.toJS();
         const {author, permlink, json_metadata} = comment
         const {username, depth, rootComment, comment_link, anchor_link, netVoteSign, showNegativeComments,
-            hasPendingPayout, authorRepLog10, ignore} = this.props
+            hasPendingPayout, authorRepLog10, ignore, onHide} = this.props
         const {onCommentClick, onShowReply, onShowEdit, onDeletePost} = this
         const post = comment.author + '/' + comment.permlink
         const {PostReplyEditor, PostEditEditor, showReply, showEdit, hide_body} = this.state
         const Editor = showReply ? PostReplyEditor : PostEditEditor
 
         const auto_hide = ignore || (authorRepLog10 <= -6 && comment.replies.length === 0 && !showNegativeComments && !hasPendingPayout)
-        if(!showNegativeComments && (auto_hide || hide_body))
+        if(!showNegativeComments && (auto_hide || hide_body)) {
+            if(onHide) onHide()
             return <span></span>
+        }
 
         let jsonMetadata = null
         try {

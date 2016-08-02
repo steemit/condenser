@@ -81,8 +81,8 @@ class Voting extends React.Component {
         const classDown = 'Voting__button Voting__button-down' + (myVote < 0 ? ' Voting__button--downvoted' : '') + (votingDownActive ? ' votingDown' : '');
 
         if (flag) {
-            // Remove negative votes unless full power -1000 (we had downvoting spam)
-            const down_votes = active_votes.size // filter( v => v.get('percent') === -1000 ).size
+            // ? Remove negative votes unless full power -1000 (we had downvoting spam)
+            const down_votes = active_votes.filter( v => v.get('percent') < 0 /*=== -1000*/).size
             return <span className={classDown}>
                 {down_votes > 0 && <span className="Voting__button-downvotes">{down_votes}</span>}
                 {votingDownActive ? down : <a href="#" onClick={this.voteDown} title="Downvote">{down}</a>}
@@ -117,15 +117,13 @@ class Voting extends React.Component {
         </DropdownMenu>;
 
         const avotes = active_votes.toJS();
-        // sort votes by time, people don't want to see whales constantly on the top
-        // avotes.sort((b, a) => a.time < b.time ? -1 : a.time > b.time ? 1 : 0)
         let count = 0;
         let voters = [];
         for( let v = 0; v < avotes.length; ++v ) {
             const pct = avotes[v].percent
-            // Remove negative votes unless full power -1000 (we had downvoting spam)
-            // if(pct < 0 && pct !== -1000)
-            //     continue
+            // ? Remove negative votes unless full power -1000 (we had downvoting spam)
+            if(pct < 0 /*&& pct !== -1000*/)
+                continue
 
             const cnt = Math.sign(pct)
             count += cnt
@@ -133,7 +131,6 @@ class Voting extends React.Component {
             if (showList && voters.length < MAX_VOTES_DISPLAY) voters.push({value: (cnt > 0 ? '+ ' : '- ') + avotes[v].voter, link: '/@' + avotes[v].voter})
         }
         if (voters.length === MAX_VOTES_DISPLAY) voters.push({value: '...'});
-
 
         let voters_list = null;
         if (showList) {

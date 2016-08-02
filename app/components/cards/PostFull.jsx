@@ -137,9 +137,9 @@ export default class PostFull extends React.Component {
 
         let net_rshares = Long.ZERO
         post_content.get('active_votes', List()).forEach(v => {
-            // Remove negative votes unless full power -1000 (we had downvoting spam)
-            // const percent = v.get('percent')
-            // if(percent < 0 && percent !== -1000) return
+            // ? Remove negative votes unless full power -1000 (we had downvoting spam)
+            const percent = v.get('percent')
+            if(percent < 0 /*&& percent !== -1000*/) return
             net_rshares = net_rshares.add(Long.fromString(String(v.get('rshares'))))
         })
         const showDeleteOption = username === author &&

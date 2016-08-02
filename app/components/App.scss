@@ -12,6 +12,7 @@
 }
 .welcomeBanner {
   padding-bottom: 2.35rem;
+  background-color: #fafbfd;
   background-image: url(../images/lp-bottom.jpg);
   background-repeat: repeat-x;
   background-position:bottom;
@@ -52,13 +53,18 @@
   h2 {
     font-size: 3.8rem;
     font-weight: 300;
+    margin-bottom: 0;
   }
   h4 {
     color: #999;
-    font-weight: 600;
+    font-weight: 500;
+    margin-bottom: 1rem;
   }
   .close-button {
-    top: -1rem;
+    top: 0.5rem;
+  }
+  .button.hollow {
+    background-color: rgba(255,255,255,0.5);
   }
 }
 .downvoted {

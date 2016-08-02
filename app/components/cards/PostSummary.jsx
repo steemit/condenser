@@ -11,11 +11,12 @@ import extractContent from 'app/utils/ExtractContent';
 import { browserHistory } from 'react-router';
 import VotesAndComments from 'app/components/elements/VotesAndComments';
 import TagList from 'app/components/elements/TagList';
+import {authorNameAndRep} from 'app/utils/ComponentFormatters'
 
 function TimeAuthorCategory({post, links, authorRepLog10}) {
     const author = <Tooltip t={authorRepLog10 ? authorRepLog10 + ' Reputation' : ''}>
         <span className={authorRepLog10 <= -5 ? 'darkred' : ''}>
-            {post.author} <span style={{fontWeight: 'normal'}}>({authorRepLog10})</span>
+            {authorNameAndRep(post.author, authorRepLog10)}
         </span>
     </Tooltip>
 

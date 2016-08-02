@@ -15,12 +15,11 @@ import ReplyEditor from 'app/components/elements/ReplyEditor';
 import {immutableAccessor} from 'app/utils/Accessors';
 import extractContent from 'app/utils/ExtractContent';
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
-import Follow from 'app/components/elements/Follow';
 import TagList from 'app/components/elements/TagList';
 import Author from 'app/components/elements/Author';
 import {Long} from 'bytebuffer'
 import {List} from 'immutable'
-import {/*formatDecimal,*/ parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
+import {repLog10, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 
 export default class PostFull extends React.Component {
     static propTypes = {
@@ -174,18 +173,18 @@ export default class PostFull extends React.Component {
                 />
             </div>
         }
-
         const pending_payout = parsePayoutAmount(content.pending_payout_value);
         const total_payout = parsePayoutAmount(content.total_payout_value);
         const high_quality_post = pending_payout + total_payout > 10.0;
         const showEditOption = username === author && total_payout === 0
+        const authorRepLog10 = repLog10(content.author_reputation)
 
         const time_author_category = <span className="PostFull__time_author_category vcard">
             <Tooltip t={new Date(content.created).toLocaleString()}>
                 <Icon name="clock" className="space-right" />
                 <span className="TimeAgo"><TimeAgoWrapper date={content.created} /></span>
             </Tooltip>
-            <span> by <Author author={content.author} /></span>
+            <span> by <Author author={content.author} authorRepLog10={authorRepLog10} /></span>
         </span>;
 
         return (

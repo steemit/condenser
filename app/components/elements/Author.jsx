@@ -5,6 +5,7 @@ import {LinkWithDropdown} from 'react-foundation-components/lib/global/dropdown'
 import Follow from 'app/components/elements/Follow';
 import Icon from 'app/components/elements/Icon'
 import {browserHistory} from 'react-router'
+import {authorNameAndRep} from 'app/utils/ComponentFormatters'
 
 const {string, bool, number} = React.PropTypes
 
@@ -27,8 +28,9 @@ class Author extends React.Component {
     render() {
         const {author, follow, mute, authorRepLog10} = this.props // html
         const {username} = this.props // redux
+
         const author_link = <span itemProp="author" itemScope itemType="http://schema.org/Person">
-            <a onClick={this.onAuthorClick}>{author}</a>
+            <a onClick={this.onAuthorClick}>{authorNameAndRep(author, authorRepLog10)}</a>
         </span>
 
         if(!username)
@@ -56,8 +58,7 @@ class Author extends React.Component {
                 >
                     <span className="FoundationDropdownMenu__label">
                         <span itemProp="author" itemScope itemType="http://schema.org/Person">
-                            <strong>{author}</strong>
-                            {authorRepLog10 != null && <span style={{fontWeight: 'normal'}}> ({authorRepLog10})</span>}
+                            {authorNameAndRep(author, authorRepLog10)}
                         </span>
                         <Icon className="dropdown-arrow" name="dropdown-arrow" />
                     </span>

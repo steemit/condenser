@@ -156,7 +156,7 @@ class App extends React.Component {
                     <li><a href="https://steem.io" onClick={this.navigate}>About</a></li>
                     <li><a href="/tags.html/hot" onClick={this.navigate}>Explore</a></li>
                     <li><a href="https://steem.io/SteemWhitePaper.pdf" onClick={this.navigate}>Steem Whitepaper</a></li>
-                    <li><a onClick={() => depositSteem()}>Buy Steem Power</a></li>
+                    <li><a onClick={() => depositSteem()}>Buy Steem</a></li>
                     <li><a href="/market" onClick={this.navigate}>Market</a></li>
                     <li><a href="/recover_account_step_1" onClick={this.navigate}>Stolen Account Recovery</a></li>
                     <li><a href="/change_password" onClick={this.navigate}>Change Account Password</a></li>

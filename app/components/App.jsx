@@ -141,7 +141,7 @@ class App extends React.Component {
                             <br />
                             <br />
                             <div className="tag3">
-                                <b>Get $10 of Steem Power when you sign up today.</b>
+                                <b>Get $7 of Steem Power when you sign up today.</b>
                             </div>
                         </div>
                     </div>

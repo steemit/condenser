@@ -114,7 +114,7 @@ class Post extends React.Component {
                     <div className="column">
                       <div className="Post__promo">
                           Authors get paid when people like you upvote their post. <br/>
-                          If you enjoyed what you read here, earn $10 of Steem Power <br />
+                          If you enjoyed what you read here, earn $7 of Steem Power <br />
                           when you <a onClick={showSignUp}>sign up</a> and vote for it.
                       </div>
                     </div>

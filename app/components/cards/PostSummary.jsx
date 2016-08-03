@@ -15,7 +15,7 @@ import {authorNameAndRep} from 'app/utils/ComponentFormatters'
 
 function TimeAuthorCategory({post, links, authorRepLog10}) {
     const author = <Tooltip t={authorRepLog10 ? authorRepLog10 + ' Reputation' : ''}>
-        <span className={authorRepLog10 <= -5 ? 'darkred' : ''}>
+        <span className={authorRepLog10 < 1 ? 'darkred' : '' /*rephide*/}>
             {authorNameAndRep(post.author, authorRepLog10)}
         </span>
     </Tooltip>
@@ -115,7 +115,7 @@ export default class PostSummary extends React.Component {
           }
         }
         const commentClasses = []
-        if(netVoteSign < 0 || authorRepLog10 <= -5) commentClasses.push('downvoted')
+        if(netVoteSign < 0 || authorRepLog10 < 1) commentClasses.push('downvoted') // rephide
         return (
             <article className={'PostSummary hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')} itemScope itemType ="http://schema.org/blogPost">
                 <div className="float-right"><Voting post={post} flag /></div>

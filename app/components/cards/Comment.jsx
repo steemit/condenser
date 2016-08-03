@@ -206,7 +206,7 @@ class CommentImpl extends React.Component {
         const {PostReplyEditor, PostEditEditor, showReply, showEdit, hide_body} = this.state
         const Editor = showReply ? PostReplyEditor : PostEditEditor
 
-        const negative_comment = ignore || authorRepLog10 <= -6
+        const negative_comment = ignore || authorRepLog10 < 0 // rephide
         const auto_hide = !showNegativeComments && negative_comment && comment.replies.length === 0 && !hasPendingPayout
         if(!showNegativeComments && (auto_hide || hide_body)) {
             if(onHide) onHide()

@@ -31,9 +31,9 @@ export function parsePayoutAmount(amount) {
 
 // This is a rough approximation of log10 that works with huge digit-strings.
 function log10(str) {
-    let leadingDigits = parseInt(str.substring(0, 4));
-    let log = Math.log(leadingDigits) / Math.log(10)
-    let n = str.length - 1;
+    const leadingDigits = parseInt(str.substring(0, 4));
+    const log = Math.log(leadingDigits) / Math.log(10)
+    const n = str.length - 1;
     return n + (log - parseInt(log));
 }
 
@@ -42,8 +42,10 @@ export const repLog10 = rep2 => {
     let rep = String(rep2)
     const neg = rep.charAt(0) === '-'
     rep = neg ? rep.substring(1) : rep
-    rep = log10(rep) + 1
-    let out = Math.max(rep - 8, 1);
+    let out = log10(rep)
+    out = Math.max(out - 8, 0); // -8 to remove reputation Satoshis
     out = (neg ? -1 : 1) * out
-    return Math.round(out * 100) / 100.0 // return 2 dec points
+    out += 4 // set the base-line 0 to darken and < 0 to auto hide (grep rephide)
+    out = Math.round(out * 100) / 100.0 // return 2 dec points
+    return out
 }

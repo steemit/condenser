@@ -139,7 +139,7 @@ export default connect(
             const username = current ? current.get('username') : null
             const ignore = !hasPendingPayout && username ? state.global.getIn(['follow', 'get_following', username, 'result', content.get('author')], List()).contains('ignore') : false
             const authorRepLog10 = repLog10(content.get('author_reputation'))
-            const hide = !hasPendingPayout && (ignore || authorRepLog10 <= -6)
+            const hide = !hasPendingPayout && (ignore || authorRepLog10 < 0) // rephide
             if(!hide || showSpam)
                 comments.push({item, ignore, netVoteSign, authorRepLog10})
         })

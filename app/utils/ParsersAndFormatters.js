@@ -29,12 +29,21 @@ export function parsePayoutAmount(amount) {
     return parseFloat(String(amount).replace(/\s[A-Z]*$/, ''));
 }
 
+// This is a rough approximation of log10 that works with huge digit-strings.
+function log10(str) {
+    let leadingDigits = parseInt(str.substring(0, 4));
+    let log = Math.log(leadingDigits) / Math.log(10)
+    let n = str.length - 1;
+    return n + (log - parseInt(log));
+}
+
 export const repLog10 = rep2 => {
     if(rep2 == null) return rep2
     let rep = String(rep2)
     const neg = rep.charAt(0) === '-'
     rep = neg ? rep.substring(1) : rep
-    rep = rep.length <= 8 ? 1 : rep.length - 8;
-    rep = neg ? -1 * rep : rep
-    return rep
+    rep = log10(rep) + 1
+    let out = Math.max(rep - 8, 1);
+    out = (neg ? -1 : 1) * out
+    return Math.round(out * 100) / 100.0 // return 2 dec points
 }

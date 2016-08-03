@@ -59,14 +59,14 @@ export default class UserProfile extends React.Component {
         const following = this.props.global.getIn( ['follow', 'get_following', accountname] );
         let loadingFollowers = true, loadingFollowing = true;
 
-        if (followers) {
+        if (followers && followers.has('result')) {
             followerCount = followers.get('result').filter(a => {
                 return a.get(0) === "blog";
             }).size;
             loadingFollowers = followers.get("loading");
         }
 
-        if (following) {
+        if (following && following.has('result')) {
             followingCount = following.get('result').filter(a => {
                 return a.get(0) === "blog";
             }).size;
@@ -134,6 +134,18 @@ export default class UserProfile extends React.Component {
             } else {
                 tab_content = (<center><LoadingIndicator type="circle" /></center>);
             }
+        } else if(!section || section === 'feed') {
+            if (account.feed) {
+                tab_content = <PostsList
+                    emptyText={`Looks like ${account.name} hasn't followed anything yet!`}
+                    posts={account.feed}
+                    loading={fetching}
+                    category="blog"
+                    loadMore={this.loadMore}
+                    showSpam />;
+            } else {
+                tab_content = (<center><LoadingIndicator type="circle" /></center>);
+            }
 
         }
         else if( (section === 'recent-replies') && account.recent_replies ) {
@@ -186,6 +198,7 @@ export default class UserProfile extends React.Component {
                     <li><Link to={`/@${accountname}`} activeClassName="active">Blog</Link></li>
                     <li><Link to={`/@${accountname}/posts`} activeClassName="active">Posts</Link></li>
                     <li><Link to={`/@${accountname}/recent-replies`} activeClassName="active">Replies</Link></li>
+                    <li><Link to={`/@${accountname}/feed`} activeClassName="active">Feeds</Link></li>
                     <li><Link to={`/@${accountname}/curation-rewards`} activeClassName="active">Curation rewards</Link></li>
                     <li><Link to={`/@${accountname}/author-rewards`} activeClassName="active">Author rewards</Link></li>
                     <li><Link to={`/@${accountname}/transfers`} className={wallet_tab_active} activeClassName="active">Wallet</Link></li>

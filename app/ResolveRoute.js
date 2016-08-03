@@ -49,7 +49,7 @@ export default function resolveRoute(path)
         return {page: 'SubmitPost'};
     }
     let match = path.match(/^\/(@[\w\.\d-]+)\/?$/) ||
-        path.match(/^\/(@[\w\.\d-]+)\/(blog|posts|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|password)\/?$/);
+        path.match(/^\/(@[\w\.\d-]+)\/(blog|posts|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password)\/?$/);
     if (match) {
         return {page: 'UserProfile', params: match.slice(1)};
     }

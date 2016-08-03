@@ -119,6 +119,10 @@ export default connect(
         const comments = []
         posts.forEach(item => {
             const content = state.global.get('content').get(item);
+            if(!content) {
+                console.error('PostsList --> Missing content key', content)
+                return
+            }
             let pending_payout = 0;
             // let total_payout = 0;
             let votes = Long.ZERO

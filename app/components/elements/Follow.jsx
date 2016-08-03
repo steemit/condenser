@@ -6,7 +6,7 @@ import transaction from 'app/redux/Transaction';
 import g from 'app/redux/GlobalReducer';
 import {Set, Map} from 'immutable'
 
-const {string, object, bool, func, element} = PropTypes
+const {string, object, bool, func, any} = PropTypes
 const followTypes = ['blog', 'posts']
 const followTypeSet = Set(followTypes)
 
@@ -18,7 +18,7 @@ export default class Follow extends React.Component {
         showFollow: bool,
         showMute: bool,
         fat: bool,
-        children: element,
+        children: any,
 
         // redux
         follow: func,

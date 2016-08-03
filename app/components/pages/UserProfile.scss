@@ -62,6 +62,20 @@
             background-color: white;
         }
     }
+
+    .UserProfile__stats {
+        margin-bottom: 5px;
+        padding-bottom: 5px;
+
+        span {
+            padding: 0px 10px;
+        }
+
+        span:nth-child(2) {
+            border-left: 1px solid grey;
+            border-right: 1px solid grey;
+        }
+    }
 }
 
 @media screen and (max-width: 39.9375em) {

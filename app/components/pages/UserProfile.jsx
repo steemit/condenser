@@ -53,6 +53,26 @@ export default class UserProfile extends React.Component {
         else {
             return <div><center>Unknown Account</center></div>
         }
+
+        let followerCount = 0, followingCount = 0;
+        const followers = this.props.global.getIn( ['follow', 'get_followers', accountname] );
+        const following = this.props.global.getIn( ['follow', 'get_following', accountname] );
+        let loadingFollowers = true, loadingFollowing = true;
+
+        if (followers) {
+            followerCount = followers.get('result').filter(a => {
+                return a.get(0) === "blog";
+            }).size;
+            loadingFollowers = followers.get("loading");
+        }
+
+        if (following) {
+            followingCount = following.get('result').filter(a => {
+                return a.get(0) === "blog";
+            }).size;
+            loadingFollowing = following.get("loading");
+        }
+
         const isMyAccount = username === account.name
         let tab_content = null;
 
@@ -100,7 +120,7 @@ export default class UserProfile extends React.Component {
            else {
               tab_content = (<center><LoadingIndicator type="circle" /></center>);
            }
-        } else if(!section  || section === 'blog') {
+        } else if(!section || section === 'blog') {
             if (account.blog) {
                 tab_content = <PostsList
                     emptyText={`Looks like ${account.name} hasn't started blogging yet!`}
@@ -178,6 +198,7 @@ export default class UserProfile extends React.Component {
                 </ul>
             </div>}
          </div>;
+
         return (
             <div className="UserProfile">
 
@@ -191,9 +212,12 @@ export default class UserProfile extends React.Component {
                         </div>
                         <h2>{account.name}</h2>
 
-
                         <div>
-                            <p>{account.post_count} posts</p>
+                            <div className="UserProfile__stats">
+                                <span>{followerCount} followers</span>
+                                <span>{account.post_count} posts</span>
+                                <span>{followingCount} followed</span>
+                            </div>
                             <p style={{marginBottom: 5}}><span>{power_balance_str}</span></p>
                             <p><span>{steem_balance_str}</span> <span style={{paddingLeft: 10, paddingRight: 10}}>{sbd_balance_str}</span></p>
                         </div>
@@ -229,7 +253,7 @@ module.exports = {
                 current_user,
                 // current_account,
                 wifShown,
-                loading: state.app.get('loading'),
+                loading: state.app.get('loading')
             };
         },
         dispatch => ({

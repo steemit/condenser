@@ -273,7 +273,7 @@ export default createModule({
                 notSet: any,
                 updater: any,
             },
-            reducer: (state, {payload: {key, notSet, updater}}) =>
+            reducer: (state, {payload: {key, notSet = Map(), updater}}) =>
                 // key = Array.isArray(key) ? key : [key] // TODO enable and test
                 state.updateIn(key, notSet, updater)
         },

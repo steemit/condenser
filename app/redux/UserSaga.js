@@ -9,6 +9,7 @@ import {browserHistory} from 'react-router'
 import {serverApiLogin, serverApiLogout, /*serverApiRecordEvent*/} from 'app/utils/ServerApiClient';
 import {Apis} from 'shared/api_client';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
+import {loadFollowing} from 'app/redux/FollowSaga'
 
 export const userWatches = [
     watchRemoveHighSecurityKeys, // keep first to remove keys early when a page change happens
@@ -58,43 +59,11 @@ function* usernamePasswordLogin(action) {
     yield call(usernamePasswordLogin2, action)
     const current = yield select(state => state.user.get('current'))
     if(current) {
-        const follower = current.get('username')
-        yield fork(loadFollows, follower, 'blog')
-        yield fork(loadFollows, follower, 'ignore')
+        const username = current.get('username')
+        yield fork(loadFollowing, username, 'blog')
+        yield fork(loadFollowing, username, 'ignore')
     }
 }
-// Test limit with 2 (not 1, infinate looping)
-function* loadFollows(follower, type, start = '', limit = 100) {
-    const res = fromJS(yield Apis.follow('get_following', follower, start, type, limit))
-    // console.log('res.toJS()', res.toJS())
-    let cnt = 0
-    let lastFollowing = null
-    yield put({type: 'global/UPDATE', payload: {
-        key: ['follow', 'get_following', follower],
-        notSet: Map(),
-        updater: m => {
-            m = m.update('result', Map(), m2 => {
-                res.forEach(value => {
-                    cnt++
-                    const what = value.get('what')
-                    const following = lastFollowing = value.get('following')
-                    m2 = m2.set(following, what)
-                })
-                return m2
-            })
-            return m.merge({loading: true, error: null})
-        }
-    }})
-    if(cnt === limit) {
-        yield call(loadFollows, follower, type, lastFollowing)
-    } else {
-        yield put({type: 'global/UPDATE', payload: {
-            key: ['follow', 'get_following', follower],
-            updater: m => m.merge({loading: false, error: null})
-        }})
-    }
-}
-
 
 const isHighSecurityOperations = ['transfer', 'transfer_to_vesting', 'withdraw_vesting',
     'limit_order_create', 'limit_order_cancel', 'account_update', 'account_witness_vote']

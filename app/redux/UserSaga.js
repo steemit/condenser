@@ -9,7 +9,7 @@ import {browserHistory} from 'react-router'
 import {serverApiLogin, serverApiLogout, /*serverApiRecordEvent*/} from 'app/utils/ServerApiClient';
 import {Apis} from 'shared/api_client';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
-import {loadFollowing} from 'app/redux/FollowSaga'
+import {loadFollows} from 'app/redux/FollowSaga'
 
 export const userWatches = [
     watchRemoveHighSecurityKeys, // keep first to remove keys early when a page change happens
@@ -60,8 +60,8 @@ function* usernamePasswordLogin(action) {
     const current = yield select(state => state.user.get('current'))
     if(current) {
         const username = current.get('username')
-        yield fork(loadFollowing, username, 'blog')
-        yield fork(loadFollowing, username, 'ignore')
+        yield fork(loadFollows, "get_following", username, 'blog')
+        yield fork(loadFollows, "get_following", username, 'ignore')
     }
 }
 

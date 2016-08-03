@@ -1,6 +1,6 @@
 import {takeLatest, takeEvery} from 'redux-saga';
 import {call, put, select, fork} from 'redux-saga/effects';
-import {loadFollowers} from 'app/redux/FollowSaga';
+import {loadFollows} from 'app/redux/FollowSaga';
 import Apis from 'shared/api_client/ApiInstances';
 import GlobalReducer from './GlobalReducer';
 import constants from './constants';
@@ -16,7 +16,7 @@ export function* fetchState(location_change_action) {
     const {pathname, /*search*/} = location_change_action.payload;
     if(/@[a-z0-9\.-]+$/.test(pathname)) {
         const username = pathname.substring(2)
-        yield fork(loadFollowers, username, 'blog')
+        yield fork(loadFollows, "get_followers", username, 'blog')
     }
     const server_location = yield select(state => state.offchain.get('server_location'));
     if (pathname === server_location) return;

@@ -55,7 +55,6 @@ class PostsList extends React.Component {
     }
 
     scrollListener = debounce(() => {
-        console.log("scrollListener");
         const el = window.document.getElementById('posts_list');
         if (!el) return;
         const scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset :

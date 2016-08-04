@@ -130,7 +130,7 @@ export default class UserProfile extends React.Component {
                 tab_content = <PostsList
                     emptyText={`Looks like ${account.name} hasn't started blogging yet!`}
                     posts={account.blog.filter(p => {
-                        return !(p.indexOf("re-") === 0);
+                        return !(p.indexOf("re-") === 0 && p[p.length - 1] === "z");
                     }).map(p => `${account.name}/${p}`)}
                     loading={fetching}
                     category="blog"

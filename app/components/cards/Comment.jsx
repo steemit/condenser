@@ -154,6 +154,18 @@ class CommentImpl extends React.Component {
     }
     componentWillMount() {
         this.initEditor(this.props)
+        const g = this.props.global;
+        const content = g.get('content').get(this.props.content);
+        if (content) {
+            const {showNegativeComments, hasPendingPayout, authorRepLog10, onHide} = this.props
+            const {hide_body} = this.state
+            const auto_hide = !showNegativeComments && authorRepLog10 < 0 && content.get('replies').size === 0 && !hasPendingPayout
+            if(!showNegativeComments && (auto_hide || hide_body)) {
+                // console.log('Comment --> onHide')
+                if(onHide) onHide()
+            }
+            this.setState({auto_hide})
+        }
     }
     componentDidMount() {
         const {anchor_link} = this.props
@@ -200,14 +212,13 @@ class CommentImpl extends React.Component {
         const comment = dis.toJS();
         const {author, permlink, json_metadata} = comment
         const {username, depth, rootComment, comment_link, anchor_link, netVoteSign, showNegativeComments,
-            hasPendingPayout, authorRepLog10, ignore, onHide} = this.props
+            authorRepLog10, ignore, onHide} = this.props
         const {onCommentClick, onShowReply, onShowEdit, onDeletePost} = this
         const post = comment.author + '/' + comment.permlink
-        const {PostReplyEditor, PostEditEditor, showReply, showEdit, hide_body} = this.state
+        const {PostReplyEditor, PostEditEditor, showReply, showEdit, hide_body, auto_hide} = this.state
         const Editor = showReply ? PostReplyEditor : PostEditEditor
 
         const negative_comment = ignore || authorRepLog10 < 1 // rephide
-        const auto_hide = !showNegativeComments && authorRepLog10 < 0 && comment.replies.length === 0 && !hasPendingPayout
         if(!showNegativeComments && (auto_hide || hide_body)) {
             if(onHide) onHide()
             return <span></span>

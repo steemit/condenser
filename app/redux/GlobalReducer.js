@@ -166,7 +166,7 @@ export default createModule({
                 // console.log('-- RECEIVE_DATA state -->', state.toJS());
                 let new_state;
                 if (order === 'by_author') {
-                    new_state = state.updateIn(['accounts', author, category], list => {
+                    new_state = state.updateIn(['accounts', author, category], List(), list => {
                         return list.withMutations(posts => {
                             data.forEach(value => {
                                 if (!posts.includes(value.permlink)) posts.push(value.permlink);

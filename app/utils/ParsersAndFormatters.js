@@ -45,7 +45,7 @@ export const repLog10 = rep2 => {
     let out = log10(rep)
     out = Math.max(out - 8, 0); // -8 to remove reputation Satoshis
     out = (neg ? -1 : 1) * out
-    out += 4 // set the base-line 0 to darken and < 0 to auto hide (grep rephide)
+    out += 5 // set the base-line 0 to darken and < 0 to auto hide (grep rephide)
     out = Math.round(out * 100) / 100.0 // return 2 dec points
     return out
 }

@@ -57,20 +57,20 @@ export default class UserProfile extends React.Component {
         let followerCount = 0, followingCount = 0;
         const followers = this.props.global.getIn( ['follow', 'get_followers', accountname] );
         const following = this.props.global.getIn( ['follow', 'get_following', accountname] );
-        let loadingFollowers = true, loadingFollowing = true;
+        // let loadingFollowers = true, loadingFollowing = true;
 
         if (followers && followers.has('result')) {
             followerCount = followers.get('result').filter(a => {
                 return a.get(0) === "blog";
             }).size;
-            loadingFollowers = followers.get("loading");
+            // loadingFollowers = followers.get("loading");
         }
 
         if (following && following.has('result')) {
             followingCount = following.get('result').filter(a => {
                 return a.get(0) === "blog";
             }).size;
-            loadingFollowing = following.get("loading");
+            // loadingFollowing = following.get("loading");
         }
 
         const isMyAccount = username === account.name
@@ -80,12 +80,12 @@ export default class UserProfile extends React.Component {
         const status = global_status ? global_status.getIn([section, 'by_author']) : null;
         const fetching = (status && status.fetching) || this.props.loading;
 
-        let balance_steem = parseFloat(account.balance.split(' ')[0]);
-        let vesting_steem = vestingSteem(account, gprops).toFixed(2);
-        const steem_balance_str = numberWithCommas(balance_steem.toFixed(2)) + " STEEM";
-        const power_balance_str = numberWithCommas(vesting_steem) + " STEEM POWER";
-        const sbd_balance = parseFloat(account.sbd_balance)
-        const sbd_balance_str = numberWithCommas('$' + sbd_balance.toFixed(2));
+        // let balance_steem = parseFloat(account.balance.split(' ')[0]);
+        // let vesting_steem = vestingSteem(account, gprops).toFixed(2);
+        // const steem_balance_str = numberWithCommas(balance_steem.toFixed(2)) + " STEEM";
+        // const power_balance_str = numberWithCommas(vesting_steem) + " STEEM POWER";
+        // const sbd_balance = parseFloat(account.sbd_balance)
+        // const sbd_balance_str = numberWithCommas('$' + sbd_balance.toFixed(2));
 
         if( section === 'transfers' ) {
             tab_content = <UserWallet global={this.props.global}
@@ -146,7 +146,6 @@ export default class UserProfile extends React.Component {
             } else {
                 tab_content = (<center><LoadingIndicator type="circle" /></center>);
             }
-
         }
         else if( (section === 'recent-replies') && account.recent_replies ) {
            const reply_summary = account.recent_replies.map( item => {
@@ -231,8 +230,6 @@ export default class UserProfile extends React.Component {
                                 <span>{account.post_count} posts</span>
                                 <span>{followingCount} followed</span>
                             </div>
-                            <p style={{marginBottom: 5}}><span>{power_balance_str}</span></p>
-                            <p><span>{steem_balance_str}</span> <span style={{paddingLeft: 10, paddingRight: 10}}>{sbd_balance_str}</span></p>
                         </div>
                     </div>
                 </div>

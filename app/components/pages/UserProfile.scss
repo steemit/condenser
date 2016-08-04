@@ -6,7 +6,7 @@
   padding-bottom: 1.5rem;
   background-color: transparent;
   .row {
-      background-color: $black;
+      background-color: #333333;
 
       .columns {
           overflow-x: auto;
@@ -44,8 +44,8 @@
     text-align: center;
     color: $white;
     > div.column {
-        background-color: #535a99;
-        height: 200px;
+        background-color: #23579d;
+        height: 150px;
     }
     h2 {
         padding-top: 20px;
@@ -79,6 +79,12 @@
 }
 
 @media screen and (max-width: 39.9375em) {
+
+    .UserProfile__banner {
+        > div.column {
+            height: 110px;
+        }
+    }
 
     .UserProfile__top-nav li>a {
         padding-left: 5px;

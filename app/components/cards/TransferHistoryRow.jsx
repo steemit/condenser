@@ -66,9 +66,9 @@ class TransferHistoryRow extends React.Component {
             else
                 description_start += "Start power down of " + data.vesting_shares;
         } else if( type === 'curate_reward' ) {
-            description_start += `Curation reward of ${curate_reward} STEEM POWER for ${data.comment_author}/${data.comment_permlink}`;
-            // other_account = ``;
-            description_end = '';
+            description_start += `Curation reward of ${curate_reward} STEEM POWER for `;
+            other_account = data.comment_author;
+            description_end = `/${data.comment_permlink}`;
         } else if (type === 'comment_reward') {
             description_start += `Author reward of ${renameToSd(data.sbd_payout)} and ${comment_reward} STEEM POWER for ${data.author}/${data.permlink}`;
             // other_account = ``;

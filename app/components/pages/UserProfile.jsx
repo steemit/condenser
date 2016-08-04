@@ -198,18 +198,19 @@ export default class UserProfile extends React.Component {
 
         const top_menu = <div className="row">
             <div className="columns small-12 medium-expand">
-                <ul className="menu">
+                <ul className="menu" style={{flexWrap: "wrap"}}>
                     <li><Link to={`/@${accountname}`} activeClassName="active">Blog</Link></li>
                     <li><Link to={`/@${accountname}/posts`} activeClassName="active">Posts</Link></li>
                     <li><Link to={`/@${accountname}/recent-replies`} activeClassName="active">Replies</Link></li>
                     <li><Link to={`/@${accountname}/feed`} activeClassName="active">Feeds</Link></li>
                     <li><Link to={`/@${accountname}/curation-rewards`} activeClassName="active">Curation rewards</Link></li>
                     <li><Link to={`/@${accountname}/author-rewards`} activeClassName="active">Author rewards</Link></li>
-                    <li><Link to={`/@${accountname}/transfers`} className={wallet_tab_active} activeClassName="active">Wallet</Link></li>
+
                 </ul>
             </div>
             {isMyAccount && <div className="columns shrink">
                 <ul className="menu">
+                    <li><Link to={`/@${accountname}/transfers`} className={wallet_tab_active} activeClassName="active">Wallet</Link></li>
                     <li><Link to={`/@${account.name}/permissions`} activeClassName="active">Permissions</Link></li>
                     <li><Link to={`/@${account.name}/password`} activeClassName="active">Change Password</Link></li>
                 </ul>

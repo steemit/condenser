@@ -1,13 +1,12 @@
 .UserProfile {
+    margin-top: -1.5rem;
 }
 
 .UserProfile__top-nav {
+  background-color: #333333;
   padding: 0;
-  padding-bottom: 1.5rem;
-  background-color: transparent;
+  margin-bottom: 1.5rem;
   .row {
-      background-color: #333333;
-
       .columns {
           overflow-x: auto;
       }
@@ -76,6 +75,16 @@
             border-right: 1px solid grey;
         }
     }
+}
+
+.UserProfile__top-menu {
+    max-width: 71.42857rem;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-flow: row wrap;
+    padding-left: 0.89286rem;
+    padding-right: 0.89286rem;
 }
 
 @media screen and (max-width: 39.9375em) {

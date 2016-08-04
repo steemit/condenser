@@ -201,6 +201,7 @@ export default class PostFull extends React.Component {
                     </div>
                 }
 
+                <TagList post={content} horizontal />
                 <div className="PostFull__footer row align-middle">
                     <div className="column">
                         {time_author_category}
@@ -227,10 +228,7 @@ export default class PostFull extends React.Component {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="column small-12">
-                        <TagList post={content} horizontal />
-                    </div>
-                    <div className="column large-8 medium-10 small-12">
+                     <div className="column large-8 medium-10 small-12">
                         {showReply && renderedEditor}
                     </div>
                 </div>

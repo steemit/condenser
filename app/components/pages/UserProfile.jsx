@@ -220,7 +220,7 @@ export default class UserProfile extends React.Component {
         return (
             <div className="UserProfile">
 
-                <div className="UserProfile__banner row">
+                <div className="UserProfile__banner row expanded">
 
                     <div className="column">
                         <div style={{position: "relative"}}>
@@ -239,9 +239,11 @@ export default class UserProfile extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div className="UserProfile__top-nav row">
+                <div className="UserProfile__top-nav row expanded">
                     <div className="column">
-                        {top_menu}
+                        <div className="UserProfile__top-menu">
+                            {top_menu}
+                        </div>
                     </div>
                 </div>
                 <div className="row">

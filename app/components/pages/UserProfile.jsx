@@ -14,7 +14,9 @@ import AuthorRewards from 'app/components/modules/AuthorRewards';
 import Follow from 'app/components/elements/Follow';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import PostsList from 'app/components/cards/PostsList';
-import {isFetchingOrRecentlyUpdated, numberWithCommas, vestingSteem} from 'app/utils/StateFunctions';
+import {isFetchingOrRecentlyUpdated} from 'app/utils/StateFunctions';
+import {repLog10} from 'app/utils/ParsersAndFormatters.js';
+import Tooltip from 'app/components/elements/Tooltip';
 
 export default class UserProfile extends React.Component {
     constructor() {
@@ -72,6 +74,9 @@ export default class UserProfile extends React.Component {
             }).size;
             // loadingFollowing = following.get("loading");
         }
+
+        // Reputation
+        const rep = repLog10(account.reputation);
 
         const isMyAccount = username === account.name
         let tab_content = null;
@@ -222,7 +227,7 @@ export default class UserProfile extends React.Component {
                                 {section === 'blog' ? <Follow follower={username} following={accountname} what={section} /> : null}
                             </div>
                         </div>
-                        <h2>{account.name}</h2>
+                        <h2>{account.name} <Tooltip t={`This is ${accountname}'s reputation score.\n\nThe reputation score is based on the history of votes received by the account, and is used to hide low quality comment.`}><span style={{fontSize: "80%"}}>({rep})</span></Tooltip></h2>
 
                         <div>
                             <div className="UserProfile__stats">

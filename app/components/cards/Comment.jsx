@@ -220,7 +220,6 @@ class CommentImpl extends React.Component {
 
         const negative_comment = ignore || authorRepLog10 < 1 // rephide
         if(!showNegativeComments && (auto_hide || hide_body)) {
-            if(onHide) onHide()
             return <span></span>
         }
 

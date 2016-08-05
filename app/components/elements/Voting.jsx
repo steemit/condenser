@@ -127,7 +127,7 @@ class Voting extends React.Component {
             count += 1
             if (showList && voters.length < MAX_VOTES_DISPLAY) voters.push({value: (cnt > 0 ? '+ ' : '- ') + avotes[v].voter, link: '/@' + avotes[v].voter})
         }
-        if (count > MAX_VOTES_DISPLAY) voters.push({value: '...'});
+        if (count > MAX_VOTES_DISPLAY) voters.push({value: <span>&hellip; and {(count - MAX_VOTES_DISPLAY)} more</span>});
 
         let voters_list = null;
         if (showList) {

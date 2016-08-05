@@ -105,8 +105,7 @@ export default class PostSummary extends React.Component {
         let thumb = null;
         if(pictures && p.image_link) {
           const prox = $STM_Config.img_proxy_prefix
-          //const size = (thumbSize == 'mobile') ? '640x640' : '120x240'
-          const size = '0x0' // until scaling resolved
+          const size = (thumbSize == 'mobile') ? '640x480' : '128x256'
           const url = (prox ? prox + size + '/' : '') + p.image_link
           if(thumbSize == 'mobile') {
             thumb = <Link to={p.link} className="PostSummary__image-mobile"><img src={url} /></Link>

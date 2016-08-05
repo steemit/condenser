@@ -109,10 +109,10 @@ class CommentImpl extends React.Component {
         depth: 1,
     }
 
-    constructor(props) {
+    constructor() {
         super();
-        const {netVoteSign, hasPendingPayout} = props
-        this.state = {show_details: true, hide_body: !hasPendingPayout && netVoteSign < 0};
+        // const hide_body = this.shouldHide(props)
+        this.state = {show_details: true, hide_body: false};
         this.revealBody = this.revealBody.bind(this);
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Comment')
         this.onCommentClick = e => {
@@ -174,16 +174,21 @@ class CommentImpl extends React.Component {
         const g = props.global;
         const content = g.get('content').get(props.content);
         if (content) {
-            const {showNegativeComments, hasPendingPayout, authorRepLog10, onHide} = props
+            const {onHide} = this.props
             const {hide_body} = this.state
-            const auto_hide = !showNegativeComments && authorRepLog10 < 0 && content.get('replies').size === 0 && !hasPendingPayout
-            if(!showNegativeComments && (auto_hide || hide_body)) {
+            const auto_hide = this.shouldHide(this.props)
+            if(auto_hide || hide_body) {
+                // console.log('Comment --> onHide')
                 if(onHide) onHide()
             }
             this.setState({auto_hide})
         }
     }
 
+    shouldHide(props) {
+        const {showNegativeComments, hasPendingPayout, authorRepLog10, hasReplies} = props
+        return !showNegativeComments && authorRepLog10 < 0 && !hasPendingPayout && !hasReplies
+    }
     toggleDetails() {
         this.setState({show_details: !this.state.show_details});
     }
@@ -222,7 +227,7 @@ class CommentImpl extends React.Component {
         const comment = dis.toJS();
         const {author, permlink, json_metadata} = comment
         const {username, depth, rootComment, comment_link, anchor_link, netVoteSign, showNegativeComments,
-            authorRepLog10, ignore, onHide} = this.props
+            authorRepLog10, ignore} = this.props
         const {onCommentClick, onShowReply, onShowEdit, onDeletePost} = this
         const post = comment.author + '/' + comment.permlink
         const {PostReplyEditor, PostEditEditor, showReply, showEdit, hide_body, auto_hide} = this.state
@@ -374,6 +379,7 @@ const Comment = connect(
         const username = current ? current.get('username') : null
         const ignore = username ? state.global.getIn(['follow', 'get_following', username, 'result', c.get('author')], List()).contains('ignore') : false
         const authorRepLog10 = repLog10(c.get('author_reputation'))
+        const hasReplies = comment.get('replies').size
         return {
             ...ownProps,
             netVoteSign,
@@ -384,6 +390,7 @@ const Comment = connect(
             ignore,
             hasPendingPayout,
             authorRepLog10,
+            hasReplies,
         }
     },
 

@@ -1,5 +1,7 @@
 import assert from 'assert';
 import constants from 'app/redux/constants';
+import {parsePayoutAmount, repLog10} from 'app/utils/ParsersAndFormatters';
+import {Long} from 'bytebuffer';
 
 export const numberWithCommas = (x) => x.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 
@@ -42,4 +44,24 @@ export function isFetchingOrRecentlyUpdated(global_status, order, category) {
         return res;
     }
     return false;
+}
+
+export function contentStats(content) {
+    if(!content) return {}
+    let votes = Long.ZERO
+    content.get('active_votes').forEach(v => {
+        votes = votes.add(Long.fromString('' + v.get('rshares')))
+    })
+    const netVoteSign = votes.compare(Long.ZERO)
+    const pending_payout = content.get('pending_payout_value');
+    const hasPendingPayout = parsePayoutAmount(pending_payout) >= 0.02
+
+    const authorRepLog10 = repLog10(content.get('author_reputation'))
+    const hasReplies = content.get('replies').size !== 0
+
+    const gray = authorRepLog10 < 1 || netVoteSign < 0
+    const hide = authorRepLog10 < 0 && !hasPendingPayout && !hasReplies
+    const pictures = !gray
+
+    return {hide, gray, pictures, netVoteSign, hasPendingPayout, authorRepLog10, hasReplies}
 }

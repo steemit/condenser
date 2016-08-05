@@ -3,6 +3,7 @@ import createModule from 'redux-modules';
 import {PropTypes} from 'react';
 import {emptyContent} from 'app/redux/EmptyState';
 import constants from './constants';
+import {contentStats} from 'app/utils/StateFunctions'
 
 const {string, object, bool, array, oneOf, oneOfType, func, any} = PropTypes
 
@@ -79,11 +80,14 @@ export default createModule({
                 content: object.isRequired, // full content object (replace from the blockchain)
             },
             reducer: (state, {payload: {content}}) => {
+                // console.log('GlobalReducer -- RECEIVE_CONTENT content', content)
                 content = fromJS(content)
                 const key = content.get('author') + '/' + content.get('permlink')
                 return state.updateIn(['content', key], Map(), c => {
                     c = c.delete('active_votes')
-                    return c.mergeDeep(content)
+                    c = c.mergeDeep(content)
+                    c = c.set('stats', fromJS(contentStats(c)))
+                    return c
                 })
             }
         },
@@ -161,7 +165,7 @@ export default createModule({
         },
         {
             action: 'RECEIVE_DATA',
-            reducer: (state, {payload: {data, order, category, author/*, permlink*/}}) => {
+            reducer: (state, {payload: {data, order, category, author, /*permlink*/}}) => {
                 // console.log('-- RECEIVE_DATA reducer -->', order, category, author, permlink, data);
                 // console.log('-- RECEIVE_DATA state -->', state.toJS());
                 let new_state;
@@ -186,8 +190,11 @@ export default createModule({
                 new_state = new_state.updateIn(['content'], content => {
                     return content.withMutations(map => {
                         data.forEach(value => {
+                            // console.log('GlobalReducer -- RECEIVE_DATA', value)
                             const key = `${value.author}/${value.permlink}`;
-                            map.set(key, fromJS(value));
+                            value = fromJS(value)
+                            value = value.set('stats', fromJS(contentStats(value)))
+                            map.set(key, value);
                         });
                     });
                 });
@@ -219,7 +226,9 @@ export default createModule({
                     return content.withMutations(map => {
                         data.forEach(value => {
                             const key = `${value.author}/${value.permlink}`;
-                            if (!map.has(key)) map.set(key, fromJS(value));
+                            value = fromJS(value)
+                            value = value.set('stats', fromJS(contentStats(value)))
+                            if (!map.has(key)) map.set(key, value);
                         });
                     });
                 });

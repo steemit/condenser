@@ -226,9 +226,11 @@ export default createModule({
                     return content.withMutations(map => {
                         data.forEach(value => {
                             const key = `${value.author}/${value.permlink}`;
-                            value = fromJS(value)
-                            value = value.set('stats', fromJS(contentStats(value)))
-                            if (!map.has(key)) map.set(key, value);
+                            if (!map.has(key)) {
+                                value = fromJS(value)
+                                value = value.set('stats', fromJS(contentStats(value)))
+                                map.set(key, value);
+                            }
                         });
                     });
                 });

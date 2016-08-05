@@ -48,9 +48,9 @@ export const repLog10 = rep2 => {
 
     let out = log10(rep)
     if(isNaN(out)) out = 0
-    out = Math.max(out - 7, 0); // -7 to remove reputation Satoshis
+    out = Math.max(out - 9, 0); // @ -9, $0.50 earned is approx magnitude 1
     out = (neg ? -1 : 1) * out
-    out = (out + 5) * 5
+    out = (out * 10) + 25 // 10 points per magnitude. center at 25
     // base-line 0 to darken and < 0 to auto hide (grep rephide)
     out = parseInt(out)
     return out

@@ -161,11 +161,11 @@ export default createModule({
         },
         {
             action: 'RECEIVE_DATA',
-            reducer: (state, {payload: {data, order, category, author, permlink}}) => {
+            reducer: (state, {payload: {data, order, category, author/*, permlink*/}}) => {
                 // console.log('-- RECEIVE_DATA reducer -->', order, category, author, permlink, data);
                 // console.log('-- RECEIVE_DATA state -->', state.toJS());
                 let new_state;
-                if (order === 'by_author') {
+                if (order === 'by_author' || order === 'by_feed') {
                     new_state = state.updateIn(['accounts', author, category], List(), list => {
                         return list.withMutations(posts => {
                             data.forEach(value => {

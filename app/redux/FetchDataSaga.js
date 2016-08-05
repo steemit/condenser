@@ -42,7 +42,8 @@ export function* watchLocationChange() {
 }
 
 export function* fetchData(action) {
-    let {order, category, author, permlink} = action.payload;
+    const {order, author, permlink, accountname} = action.payload;
+    let {category} = action.payload;
     if( !category ) category = "";
     category = category.toLowerCase();
 
@@ -101,6 +102,13 @@ export function* fetchData(action) {
         call_name = 'get_discussions_by_hot';
         args = [
         { tag: category,
+          limit: constants.FETCH_DATA_BATCH_SIZE,
+          start_author: author,
+          start_permlink: permlink}];
+    } else if( order === 'by_feed' ) {
+        call_name = 'get_discussions_by_feed';
+        args = [
+        { tag: accountname,
           limit: constants.FETCH_DATA_BATCH_SIZE,
           start_author: author,
           start_permlink: permlink}];

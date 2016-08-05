@@ -31,11 +31,12 @@ export default class UserProfile extends React.Component {
     }
 
     loadMore(last_post, category) {
+        const {accountname} = this.props.routeParams
         if (!last_post) return;
-        const order = 'by_author';
+        const order = category === 'feed' ? 'by_feed' : 'by_author';
         if (isFetchingOrRecentlyUpdated(this.props.global.get('status'), order, category)) return;
         const [author, permlink] = last_post.split('/');
-        this.props.requestData({author, permlink, order, category});
+        this.props.requestData({author, permlink, order, category, accountname});
     }
 
     render() {
@@ -45,7 +46,7 @@ export default class UserProfile extends React.Component {
         } = this;
         let { accountname, section } = this.props.routeParams;
         const username = current_user ? current_user.get('username') : null
-        const gprops = this.props.global.getIn( ['props'] ).toJS();
+        // const gprops = this.props.global.getIn( ['props'] ).toJS();
         if( !section ) section = 'blog';
 
         // const isMyAccount = current_user ? current_user.get('username') === accountname : false;
@@ -145,7 +146,7 @@ export default class UserProfile extends React.Component {
                     emptyText={`Looks like ${account.name} hasn't followed anything yet!`}
                     posts={account.feed}
                     loading={fetching}
-                    category="blog"
+                    category="feed"
                     loadMore={this.loadMore}
                     showSpam />;
             } else {

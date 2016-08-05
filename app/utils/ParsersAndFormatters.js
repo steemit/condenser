@@ -50,7 +50,7 @@ export const repLog10 = rep2 => {
     if(isNaN(out)) out = 0
     out = Math.max(out - 9, 0); // @ -9, $0.50 earned is approx magnitude 1
     out = (neg ? -1 : 1) * out
-    out = (out * 10) + 25 // 10 points per magnitude. center at 25
+    out = (out * 9) + 25 // 9 points per magnitude. center at 25
     // base-line 0 to darken and < 0 to auto hide (grep rephide)
     out = parseInt(out)
     return out

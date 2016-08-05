@@ -152,21 +152,12 @@ class CommentImpl extends React.Component {
         }
         this.toggleDetails = this.toggleDetails.bind(this);
     }
+
     componentWillMount() {
         this.initEditor(this.props)
-        const g = this.props.global;
-        const content = g.get('content').get(this.props.content);
-        if (content) {
-            const {showNegativeComments, hasPendingPayout, authorRepLog10, onHide} = this.props
-            const {hide_body} = this.state
-            const auto_hide = !showNegativeComments && authorRepLog10 < 0 && content.get('replies').size === 0 && !hasPendingPayout
-            if(!showNegativeComments && (auto_hide || hide_body)) {
-                // console.log('Comment --> onHide')
-                if(onHide) onHide()
-            }
-            this.setState({auto_hide})
-        }
+        this._checkHide(this.props);
     }
+
     componentDidMount() {
         const {anchor_link} = this.props
         if (window.location.hash.indexOf(anchor_link) !== -1) {
@@ -174,6 +165,25 @@ class CommentImpl extends React.Component {
             if (comments_el) comments_el.scrollIntoView({behavior: 'smooth'});
         }
     }
+
+    componentWillReceiveProps(np) {
+        this._checkHide(np);
+    }
+
+    _checkHide(props) {
+        const g = props.global;
+        const content = g.get('content').get(props.content);
+        if (content) {
+            const {showNegativeComments, hasPendingPayout, authorRepLog10, onHide} = props
+            const {hide_body} = this.state
+            const auto_hide = !showNegativeComments && authorRepLog10 < 0 && content.get('replies').size === 0 && !hasPendingPayout
+            if(!showNegativeComments && (auto_hide || hide_body)) {
+                if(onHide) onHide()
+            }
+            this.setState({auto_hide})
+        }
+    }
+
     toggleDetails() {
         this.setState({show_details: !this.state.show_details});
     }
@@ -220,7 +230,7 @@ class CommentImpl extends React.Component {
 
         const negative_comment = ignore || authorRepLog10 < 1 // rephide
         if(!showNegativeComments && (auto_hide || hide_body)) {
-            return <span></span>
+            return null;
         }
 
         let jsonMetadata = null

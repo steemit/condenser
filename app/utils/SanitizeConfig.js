@@ -1,7 +1,7 @@
 
 const reYoutube = /^(https?:)?\/\/www.youtube.com\/embed\/.*/i;
 const reSoundcloud = /^(https?:)?\/\/w.soundcloud.com\/player\/.*/i;
-const reVimeo = /^(https?:)?\/\/player.vimeo.com\/video\/.*/i; // <-- medium-editor branch
+// const reVimeo = /^(https?:)?\/\/player.vimeo.com\/video\/.*/i; // <-- medium-editor branch
 
 const iframeWhitelist = [
     reYoutube,
@@ -10,7 +10,7 @@ const iframeWhitelist = [
 ]
 
 // Medium insert plugin uses: div, figure, figcaption, iframe
-export default ({large = true, highQualityPost = true, sanitizeErrors = []}) => ({
+export default ({large = true, highQualityPost = true, noImage = false, sanitizeErrors = []}) => ({
     allowedTags: `
         div, iframe,
         a, p, b, q, br, ul, li, ol, img, h1, h2, h3, h4, h5, h6, hr,
@@ -40,7 +40,7 @@ export default ({large = true, highQualityPost = true, sanitizeErrors = []}) => 
                     return {
                         tagName: 'iframe',
                         attribs: {
-                            src: src,
+                            src,
                             width: large ? '640' : '384',
                             height: large ? '360' : '240',
                             allowFullScreen: 'on',
@@ -54,6 +54,7 @@ export default ({large = true, highQualityPost = true, sanitizeErrors = []}) => 
             return {tagName: 'img', attribs: {src: 'brokenimg.jpg'}}
         },
         img: (tagName, attribs) => {
+            if(noImage) return {tagName: 'div', text: '(Image removed)'}
             //See https://github.com/punkave/sanitize-html/issues/117
             let {src} = attribs
             if(!/^(https?:)?\/\//i.test(src)) {

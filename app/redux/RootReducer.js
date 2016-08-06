@@ -18,7 +18,6 @@ function initReducer(reducer, type) {
         if (state && (action.type === '@@redux/INIT' || action.type === '@@INIT')) {
             state = state instanceof Map ? state : Immutable.fromJS(state);
             if(type === 'global') {
-                console.log('RootReducer:', action, state);
                 const content = state.get('content').withMutations(c => {
                     c.forEach((cc, key) => {
                         const stats = fromJS(contentStats(cc))

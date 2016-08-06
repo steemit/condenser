@@ -6,6 +6,7 @@ import constants from './constants';
 import {contentStats} from 'app/utils/StateFunctions'
 
 const {string, object, bool, array, oneOf, oneOfType, func, any} = PropTypes
+const emptyContentMap = Map(emptyContent)
 
 export default createModule({
     name: 'global',
@@ -25,9 +26,18 @@ export default createModule({
             action: 'RECEIVE_STATE',
             // payloadTypes: { },
             reducer: (state, action) => {
-                // console.log('RECEIVE_STATE');
+                // console.log('RECEIVE_STATE', action, state.toJS());
+                let payload = fromJS(action.payload)
+                const content = payload.get('content').withMutations(c => {
+                    c.forEach((cc, key) => {
+                        cc = emptyContentMap.mergeDeep(cc)
+                        const stats = fromJS(contentStats(cc))
+                        c.setIn([key, 'stats'], stats)
+                    })
+                })
+                payload = payload.set('content', content)
                 // console.log('state.mergeDeep(action.payload).toJS(), action.payload', state.mergeDeep(action.payload).toJS(), action.payload)
-                return state.mergeDeep(action.payload);
+                return state.mergeDeep(payload);
             }
         },
         {
@@ -84,6 +94,7 @@ export default createModule({
                 content = fromJS(content)
                 const key = content.get('author') + '/' + content.get('permlink')
                 return state.updateIn(['content', key], Map(), c => {
+                    c = emptyContentMap.mergeDeep(c)
                     c = c.delete('active_votes')
                     c = c.mergeDeep(content)
                     c = c.set('stats', fromJS(contentStats(c)))

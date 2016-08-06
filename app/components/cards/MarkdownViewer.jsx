@@ -26,6 +26,7 @@ class MarkdownViewer extends Component {
         canEdit: React.PropTypes.bool,
         jsonMetadata: React.PropTypes.object,
         highQualityPost: React.PropTypes.bool,
+        noImage: React.PropTypes.bool,
     }
 
     static defaultProps = {
@@ -41,6 +42,7 @@ class MarkdownViewer extends Component {
     }
 
     render() {
+        const {noImage} = this.props
         let {text} = this.props
         if (!text) text = '' // text can be empty, still view the link meta data
         const {large, /*formId, canEdit, jsonMetadata,*/ highQualityPost} = this.props
@@ -62,7 +64,7 @@ class MarkdownViewer extends Component {
 
         // Complete removal of javascript and other dangerous tags..
         // The must remain as close as possible to dangerouslySetInnerHTML
-        const cleanText = sanitize(renderedText, sanitizeConfig({large, highQualityPost}))
+        const cleanText = sanitize(renderedText, sanitizeConfig({large, highQualityPost, noImage}))
 
         if(/<\s*script/ig.test(cleanText)) {
             // Not meant to be complete checking, just a secondary trap and red flag (code can change)

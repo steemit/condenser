@@ -11,6 +11,7 @@ import user from 'app/redux/User'
 // import { Link } from 'react-router';
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
 import SvgImage from 'app/components/elements/SvgImage';
+import {List} from 'immutable'
 
 class Post extends React.Component {
 
@@ -47,7 +48,7 @@ class Post extends React.Component {
 
     render() {
         const {showSignUp} = this
-        const {current_user} = this.props
+        const {current_user, following} = this.props
         const {showNegativeComments, commentHidden} = this.state
         const rout_params = this.props.routeParams;
         let g = this.props.global;
@@ -61,20 +62,25 @@ class Post extends React.Component {
            sort_order = this.props.location.query.sort;
 
         sortComments( g, replies, sort_order );
+        const keep = a => {
+            const c = g.getIn(['content', a])
+            const hide = c.getIn(['stats', 'hide'])
+            let ignore = false
+            if(following) {
+                ignore = following.get(c.get('author'), List()).contains('ignore')
+            }
+            return !hide && !ignore
+        }
+        const positiveComments = replies.filter(a => keep(a))
+            .map(reply => <Comment root key={post + reply} content={reply} global={g}
+                sort_order={sort_order} showNegativeComments={showNegativeComments} onHide={this.onHideComment} />);
 
-        let positiveComments = replies.filter(a => {
-            return g.get('content').get(a).get("net_rshares") >= 0;
-        })
-        .map(reply => <Comment root key={post + reply} content={reply} global={g} sort_order={sort_order} showNegativeComments={showNegativeComments} onHide={this.onHideComment} />);
-
-        // Not the complete hidding logic, just move to the bottom the rest hide inplace
-        const negativeReplies = replies.filter(a => {
-            return g.get('content').get(a).get("net_rshares") < 0;
-        });
+        // Not the complete hidding logic, just move to the bottom, the rest hide in-place
+        const negativeReplies = replies.filter(a => !keep(a));
         const stuffHidden = negativeReplies.length > 0 || commentHidden
 
         const negativeComments =
-            negativeReplies.map(reply => <Comment root key={post + reply} content={reply} global={g} sort_order={sort_order} showNegativeComments onHide={this.onHideComment} />);
+            negativeReplies.map(reply => <Comment root key={post + reply} content={reply} global={g} sort_order={sort_order} showNegativeComments onHide={this.onHideComment} noImage />);
 
         const negativeGroup = !stuffHidden ? null :
             (<div className="hentry Comment root Comment__negative_group">
@@ -146,9 +152,15 @@ module.exports = {
 path: '/(:category/)@:username/:slug',
     component: connect(state => {
         const current_user = state.user.get('current')
+        let following
+        if(current_user) {
+            const key = ['follow', 'get_following', current_user, 'result']
+            following = state.global.getIn(key, List())
+        }
         return {
             global: state.global,
             current_user,
+            following,
         }
     },
     dispatch => ({

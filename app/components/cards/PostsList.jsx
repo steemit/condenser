@@ -108,9 +108,7 @@ class PostsList extends React.Component {
 }
 
 import {List} from 'immutable'
-import {Long} from 'bytebuffer'
 import {connect} from 'react-redux'
-import {parsePayoutAmount, repLog10} from 'app/utils/ParsersAndFormatters';
 
 export default connect(
     (state, props) => {
@@ -122,24 +120,13 @@ export default connect(
                 console.error('PostsList --> Missing content key', content)
                 return
             }
-            let pending_payout = 0;
             // let total_payout = 0;
-            let votes = Long.ZERO
-            if (content) {
-                pending_payout = content.get('pending_payout_value');
-                // total_payout = content.get('total_payout_value');
-                content.get('active_votes').forEach(v => {
-                    votes = votes.add(Long.fromString('' + v.get('rshares')))
-                })
-            }
-            const netVoteSign = votes.compare(Long.ZERO)
-            const hasPendingPayout = parsePayoutAmount(pending_payout) >= 0.02
             const current = state.user.get('current')
             const username = current ? current.get('username') : null
-            const ignore = !hasPendingPayout && username ? state.global.getIn(['follow', 'get_following', username, 'result', content.get('author')], List()).contains('ignore') : false
-            const authorRepLog10 = repLog10(content.get('author_reputation'))
-            const hide = !hasPendingPayout && (ignore || authorRepLog10 < 0) // rephide
-            if(!hide || showSpam)
+            const key = ['follow', 'get_following', username, 'result', content.get('author')]
+            const ignore = username ? state.global.getIn(key, List()).contains('ignore') : false
+            const {hide, netVoteSign, authorRepLog10} = content.get('stats').toJS()
+            if(!(ignore || hide) || showSpam) // rephide
                 comments.push({item, ignore, netVoteSign, authorRepLog10})
         })
         return {...props, comments};

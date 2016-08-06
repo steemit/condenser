@@ -1,9 +1,13 @@
 
-
 const iframeWhitelist = [
-    /^(https?:)?\/\/www.youtube.com\/embed\/.*/i,
-    // /^(https?:)?\/\/player.vimeo.com\/video\/.*/i, // <-- medium-editor branch
-]
+    // { 're': /^(https?:)?\/\/player.vimeo.com\/video\/.*/i }, // <-- medium-editor branch
+    { 're': /^(https?:)?\/\/www.youtube.com\/embed\/.*/i,
+      'fn': function(src, re) {
+        return src.replace(/\?.+$/, ''); // strip query string (yt: autoplay=1,controls=0,showinfo=0, etc)
+      }
+    },
+    { 're': /^(https?:)?\/\/w.soundcloud.com\/player\/.*/i }
+];
 
 // Medium insert plugin uses: div, figure, figcaption, iframe
 export default ({large = true, highQualityPost = true, sanitizeErrors = []}) => ({
@@ -27,13 +31,13 @@ export default ({large = true, highQualityPost = true, sanitizeErrors = []}) => 
     },
     transformTags: {
         iframe: (tagName, attribs) => {
-            const src = attribs.src
-            for(const re of iframeWhitelist)
-                if(re.test(src)) {
+            const src = attribs.src;
+            for(const item of iframeWhitelist)
+                if(item.re.test(src)) {
                     return {
                         tagName: 'iframe',
                         attribs: {
-                            src: src.replace(/\?.+$/, ''), // strip query string (yt: autoplay=1,controls=0,showinfo=0, etc)
+                            src: (typeof item.fn === 'function') ? item.fn(src, item.re) : src,
                             width: large ? '640' : '384',
                             height: large ? '360' : '240',
                             allowFullScreen: 'on',

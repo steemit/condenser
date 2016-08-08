@@ -11,15 +11,12 @@ import extractContent from 'app/utils/ExtractContent';
 import { browserHistory } from 'react-router';
 import VotesAndComments from 'app/components/elements/VotesAndComments';
 import TagList from 'app/components/elements/TagList';
-import {authorNameAndRep} from 'app/utils/ComponentFormatters'
-import {Map} from 'immutable'
+import {authorNameAndRep} from 'app/utils/ComponentFormatters';
+import {Map} from 'immutable';
+import Reputation from 'app/components/elements/Reputation';
 
 function TimeAuthorCategory({post, links, authorRepLog10, gray}) {
-    const author = <Tooltip t={authorRepLog10 ? authorRepLog10 + ' Reputation' : ''}>
-        <span className={gray ? 'darkred' : '' /*rephide*/}>
-            {authorNameAndRep(post.author, authorRepLog10)}
-        </span>
-    </Tooltip>
+    const author = <strong>{post.author}</strong>;
 
     return (
         <span className="vcard">
@@ -30,6 +27,7 @@ function TimeAuthorCategory({post, links, authorRepLog10, gray}) {
                 <span itemProp="author" itemScope itemType="http://schema.org/Person">
                     {links ? <Link to={post.author_link}>{author}</Link> :
                         <strong>{author}</strong>}
+                    <Reputation value={authorRepLog10} />
                 </span>
             </span>
             <span> in&nbsp;{links ? <TagList post={post} /> : <strong>{post.category}</strong>}</span>

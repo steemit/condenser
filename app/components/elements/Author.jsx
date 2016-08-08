@@ -30,7 +30,7 @@ class Author extends React.Component {
         const {author, follow, mute, authorRepLog10} = this.props // html
         const {username} = this.props // redux
 
-        const author_link = <span itemProp="author" itemScope itemType="http://schema.org/Person">
+        const author_link = <span className="Author" itemProp="author" itemScope itemType="http://schema.org/Person">
             <a onClick={this.onAuthorClick}><strong>{author}</strong></a><Reputation value={authorRepLog10} />
         </span>
 
@@ -59,11 +59,12 @@ class Author extends React.Component {
                 >
                     <span className="FoundationDropdownMenu__label">
                         <span itemProp="author" itemScope itemType="http://schema.org/Person">
-                            {authorNameAndRep(author, authorRepLog10)}
+                            <strong>{author}</strong>
                         </span>
                         <Icon className="dropdown-arrow" name="dropdown-arrow" />
                     </span>
                 </LinkWithDropdown>
+                <Reputation value={authorRepLog10} />
             </span>
         )
                 // by <span itemProp="author" itemScope itemType="http://schema.org/Person"><Link

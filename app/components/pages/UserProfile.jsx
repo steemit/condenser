@@ -213,7 +213,7 @@ export default class UserProfile extends React.Component {
                 <ul className="menu">
                     <li><Link to={`/@${accountname}/transfers`} activeClassName="active">Wallet</Link></li>
                     {wallet_tab_active && isMyAccount && <li><Link to={`/@${account.name}/permissions`} activeClassName="active">Permissions</Link></li>}
-                    {wallet_tab_active && <li><Link to={`/@${account.name}/password`} activeClassName="active">Password</Link></li>}
+                    {wallet_tab_active && isMyAccount && <li><Link to={`/@${account.name}/password`} activeClassName="active">Password</Link></li>}
                 </ul>
             </div>
          </div>;

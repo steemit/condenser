@@ -195,7 +195,7 @@ export default class UserProfile extends React.Component {
            section_title = 'Recent replies to ' + account.name + "'s posts";
         }
 
-        // const wallet_tab_active = section === 'transfers' || section === 'password' || section === 'permissions' ? 'active' : ''; // className={wallet_tab_active}
+        const wallet_tab_active = section === 'transfers' || section === 'password' || section === 'permissions' ? 'active' : ''; // className={wallet_tab_active}
 
         const top_menu = <div className="row">
             <div className="columns small-12 medium-expand">
@@ -209,13 +209,13 @@ export default class UserProfile extends React.Component {
 
                 </ul>
             </div>
-            {isMyAccount && <div className="columns shrink">
+            <div className="columns shrink">
                 <ul className="menu">
                     <li><Link to={`/@${accountname}/transfers`} activeClassName="active">Wallet</Link></li>
-                    <li><Link to={`/@${account.name}/permissions`} activeClassName="active">Permissions</Link></li>
-                    <li><Link to={`/@${account.name}/password`} activeClassName="active">Change Password</Link></li>
+                    {wallet_tab_active && isMyAccount && <li><Link to={`/@${account.name}/permissions`} activeClassName="active">Permissions</Link></li>}
+                    {wallet_tab_active && <li><Link to={`/@${account.name}/password`} activeClassName="active">Password</Link></li>}
                 </ul>
-            </div>}
+            </div>
          </div>;
 
         return (

@@ -53,7 +53,6 @@ export function contentStats(content) {
     let votes = Long.ZERO
     content.get('active_votes').forEach(v => {
         const rshares = Long.fromString(String(v.get('rshares')))
-        console.log('rshares, ', rshares.toString(), rshares.compare(rshareCutOff) < 0)
         // There were malicious downvotes (@hater)
         if(rshares.compare(rshareCutOff) < 0) return
         votes = votes.add(rshares)

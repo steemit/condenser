@@ -46,15 +46,16 @@ export function isFetchingOrRecentlyUpdated(global_status, order, category) {
     return false;
 }
 
-const tenMillion = new Long(10 * 1000000)
+const rshareCutOff = new Long(-100 * 1000000)
 
 export function contentStats(content) {
     if(!content) return {}
     let votes = Long.ZERO
     content.get('active_votes').forEach(v => {
         const rshares = Long.fromString(String(v.get('rshares')))
+        console.log('rshares, ', rshares.toString(), rshares.compare(rshareCutOff) < 0)
         // There were malicious downvotes (@hater)
-        if(rshares.compare(tenMillion) < 0) return
+        if(rshares.compare(rshareCutOff) < 0) return
         votes = votes.add(rshares)
     })
     const netVoteSign = votes.compare(Long.ZERO)

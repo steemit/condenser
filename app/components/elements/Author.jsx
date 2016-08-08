@@ -1,11 +1,12 @@
 /* eslint react/prop-types: 0 */
-import React from 'react'
+import React from 'react';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import {LinkWithDropdown} from 'react-foundation-components/lib/global/dropdown'
 import Follow from 'app/components/elements/Follow';
-import Icon from 'app/components/elements/Icon'
-import {browserHistory} from 'react-router'
-import {authorNameAndRep} from 'app/utils/ComponentFormatters'
+import Icon from 'app/components/elements/Icon';
+import {browserHistory} from 'react-router';
+import {authorNameAndRep} from 'app/utils/ComponentFormatters';
+import Reputation from 'app/components/elements/Reputation';
 
 const {string, bool, number} = React.PropTypes
 
@@ -30,7 +31,7 @@ class Author extends React.Component {
         const {username} = this.props // redux
 
         const author_link = <span itemProp="author" itemScope itemType="http://schema.org/Person">
-            <a onClick={this.onAuthorClick}>{authorNameAndRep(author, authorRepLog10)}</a>
+            <a onClick={this.onAuthorClick}><strong>{author}</strong></a><Reputation value={authorRepLog10} />
         </span>
 
         if(!username)

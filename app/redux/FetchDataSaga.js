@@ -14,9 +14,14 @@ export function* watchDataRequests() {
 
 export function* fetchState(location_change_action) {
     const {pathname, /*search*/} = location_change_action.payload;
-    if(/@[a-z0-9\.-]+$/.test(pathname)) {
-        const username = pathname.substring(2)
-        yield fork(loadFollows, "get_followers", username, 'blog')
+    const m = pathname.match(/@([a-z0-9\.-]+)/)
+    if(m && m.length === 2) {
+        const username = m[1]
+        const hasFollows = yield select(state => state.global.hasIn(['follow', 'get_followers', username]))
+        if(!hasFollows) {
+            yield fork(loadFollows, "get_followers", username, 'blog')
+            yield fork(loadFollows, "get_following", username, 'blog')
+        }
     }
     const server_location = yield select(state => state.offchain.get('server_location'));
     if (pathname === server_location) return;

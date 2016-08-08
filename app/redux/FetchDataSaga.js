@@ -105,13 +105,13 @@ export function* fetchData(action) {
           limit: constants.FETCH_DATA_BATCH_SIZE,
           start_author: author,
           start_permlink: permlink}];
-    // } else if( order === 'by_feed' ) { https://github.com/steemit/steem/issues/249
-    //     call_name = 'get_discussions_by_feed';
-    //     args = [
-    //     { tag: accountname,
-    //       limit: constants.FETCH_DATA_BATCH_SIZE,
-    //       start_author: author,
-    //       start_permlink: permlink}];
+    } else if( order === 'by_feed' ) { // https://github.com/steemit/steem/issues/249
+        call_name = 'get_discussions_by_feed';
+        args = [
+        { tag: accountname,
+          limit: constants.FETCH_DATA_BATCH_SIZE,
+          start_author: author,
+          start_permlink: permlink}];
     } else if( order === 'by_author' ) {
         call_name = 'get_discussions_by_author_before_date';
         args = [author, permlink, '1970-01-01T00:00:00', constants.FETCH_DATA_BATCH_SIZE];
@@ -126,7 +126,7 @@ export function* fetchData(action) {
     try {
         const db_api = Apis.instance().db_api;
         const data = yield call([db_api, db_api.exec], call_name, args);
-        yield put(GlobalReducer.actions.receiveData({data, order, category, author, permlink}));
+        yield put(GlobalReducer.actions.receiveData({data, order, category, author, permlink, accountname}));
     } catch (error) {
         console.error('~~ Saga fetchData error ~~>', call_name, args, error);
         yield put({type: 'global/STEEM_API_ERROR', error: error.message});

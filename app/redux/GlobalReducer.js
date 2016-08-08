@@ -176,15 +176,18 @@ export default createModule({
         },
         {
             action: 'RECEIVE_DATA',
-            reducer: (state, {payload: {data, order, category, author, /*permlink*/}}) => {
+            reducer: (state, {payload: {data, order, category, author, accountname, /*permlink*/}}) => {
                 // console.log('-- RECEIVE_DATA reducer -->', order, category, author, permlink, data);
                 // console.log('-- RECEIVE_DATA state -->', state.toJS());
                 let new_state;
                 if (order === 'by_author' || order === 'by_feed') {
-                    new_state = state.updateIn(['accounts', author, category], List(), list => {
+                    const by_feed = order === 'by_feed'
+                    const key = ['accounts', by_feed ? accountname : author, category]
+                    new_state = state.updateIn(key, List(), list => {
                         return list.withMutations(posts => {
                             data.forEach(value => {
-                                if (!posts.includes(value.permlink)) posts.push(value.permlink);
+                                const key2 = by_feed ? `${value.author}/${value.permlink}` : value.permlink
+                                if (!posts.includes(key2)) posts.push(key2);
                             });
                         });
                     });

@@ -43,7 +43,6 @@ export default ({large = true, highQualityPost = true, noImage = false, sanitize
     transformTags: {
         iframe: (tagName, attribs) => {
             const srcAtty = attribs.src;
-            console.log('srcAtty', srcAtty)
             for(const item of iframeWhitelist)
                 if(item.re.test(srcAtty)) {
                     const src = typeof item.fn === 'function' ? item.fn(srcAtty, item.re) : srcAtty

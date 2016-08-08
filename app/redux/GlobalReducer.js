@@ -28,14 +28,16 @@ export default createModule({
             reducer: (state, action) => {
                 // console.log('RECEIVE_STATE', action, state.toJS());
                 let payload = fromJS(action.payload)
-                const content = payload.get('content').withMutations(c => {
-                    c.forEach((cc, key) => {
-                        cc = emptyContentMap.mergeDeep(cc)
-                        const stats = fromJS(contentStats(cc))
-                        c.setIn([key, 'stats'], stats)
+                if(payload.has('content')) {
+                    const content = payload.get('content').withMutations(c => {
+                        c.forEach((cc, key) => {
+                            cc = emptyContentMap.mergeDeep(cc)
+                            const stats = fromJS(contentStats(cc))
+                            c.setIn([key, 'stats'], stats)
+                        })
                     })
-                })
-                payload = payload.set('content', content)
+                    payload = payload.set('content', content)
+                }
                 // console.log('state.mergeDeep(action.payload).toJS(), action.payload', state.mergeDeep(action.payload).toJS(), action.payload)
                 return state.mergeDeep(payload);
             }

@@ -124,30 +124,30 @@ class UserWallet extends React.Component {
                 </div>
             </div>
             <div className="UserWallet__balance row">
-                <div className="column small-8">
+                <div className="column small-12 medium-8">
                     STEEM<br /><span className="secondary">{steemTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})}</span>
                 </div>
-                <div className="column small-3 text-right">
+                <div className="column small-12 medium-3">
                     {isMyAccount ?
                     <DropdownMenu selected={steem_balance_str + ' STEEM'} className="Header__sort-order-menu" items={steem_menu} el="span" />
                     : steem_balance_str + ' STEEM'}
                 </div>
             </div>
             <div className="UserWallet__balance row">
-                <div className="column small-8">
+                <div className="column small-12 medium-8">
                     STEEM POWER<br /><span className="secondary">{powerTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})}</span>
                 </div>
-                <div className="column small-3 text-right">
+                <div className="column small-12 medium-3">
                     {isMyAccount ?
                     <DropdownMenu selected={power_balance_str + ' STEEM'} className="Header__sort-order-menu" items={power_menu} el="span" />
                     : power_balance_str + ' STEEM'}
                 </div>
             </div>
             <div className="UserWallet__balance row">
-                <div className="column small-8">
+                <div className="column small-12 medium-8">
                     STEEM DOLLARS<br /><span className="secondary">{dollarTip}</span>
                 </div>
-                <div className="column small-3 text-right">
+                <div className="column small-12 medium-3">
                     {isMyAccount ?
                     <DropdownMenu selected={sbd_balance_str} items={dollar_menu} el="span" />
                     : sbd_balance_str}
@@ -160,10 +160,10 @@ class UserWallet extends React.Component {
                 </div>
             </div>
             <div className="UserWallet__balance row">
-                <div className="column small-8">
+                <div className="column small-12 medium-8">
                     Estimated Account Value<br /><span className="secondary">{valueTip}</span>
                 </div>
-                <div className="column small-3 text-right">
+                <div className="column small-12 medium-3">
                     {total_value}
                 </div>
             </div>

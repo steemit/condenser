@@ -81,7 +81,7 @@ class TransferHistoryRow extends React.Component {
                             // <Icon name="clock" className="space-right" />
         return(
                 <tr key={op[0]} className="Trans">
-                    <td width="180px">
+                    <td>
                         <Tooltip t={new Date(op[1].timestamp).toLocaleString()}>
                             <TimeAgoWrapper date={op[1].timestamp} />
                         </Tooltip>
@@ -91,7 +91,7 @@ class TransferHistoryRow extends React.Component {
                         {other_account && <Link to={`/@${other_account}`}>{other_account}</Link>}
                         {description_end}
                     </td>
-                    <td>
+                    <td className="show-for-medium">
                         <Memo text={data.memo} username={context} />
                     </td>
                 </tr>

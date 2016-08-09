@@ -64,7 +64,7 @@ export default ({large = true, highQualityPost = true, noImage = false, sanitize
             return {tagName: 'div', text: `(Unsupported ${srcAtty})`}
         },
         img: (tagName, attribs) => {
-            if(noImage) return {tagName: 'div', text: '(Image removed)'}
+            if(noImage) return {tagName: 'div', text: '(Image not shown due to low ratings)'}
             //See https://github.com/punkave/sanitize-html/issues/117
             let {src} = attribs
             if(!/^(https?:)?\/\//i.test(src)) {

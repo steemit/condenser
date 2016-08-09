@@ -17,6 +17,8 @@ import PostsList from 'app/components/cards/PostsList';
 import {isFetchingOrRecentlyUpdated} from 'app/utils/StateFunctions';
 import {repLog10} from 'app/utils/ParsersAndFormatters.js';
 import Tooltip from 'app/components/elements/Tooltip';
+import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
+import VerticalMenu from 'app/components/elements/VerticalMenu';
 
 export default class UserProfile extends React.Component {
     constructor() {
@@ -93,6 +95,7 @@ export default class UserProfile extends React.Component {
         // const sbd_balance = parseFloat(account.sbd_balance)
         // const sbd_balance_str = numberWithCommas('$' + sbd_balance.toFixed(2));
 
+        let rewardsClass = "";
         if( section === 'transfers' ) {
             tab_content = <UserWallet global={this.props.global}
                           account={account}
@@ -101,12 +104,14 @@ export default class UserProfile extends React.Component {
                           withdrawVesting={this.props.withdrawVesting} />
         }
         else if( section === 'curation-rewards' ) {
+            rewardsClass = "active";
             tab_content = <CurationRewards global={this.props.global}
                           account={account}
                           current_user={current_user}
                           />
         }
         else if( section === 'author-rewards' ) {
+            rewardsClass = "active";
             tab_content = <AuthorRewards global={this.props.global}
                           account={account}
                           current_user={current_user}
@@ -197,20 +202,38 @@ export default class UserProfile extends React.Component {
 
         const wallet_tab_active = section === 'transfers' || section === 'password' || section === 'permissions' ? 'active' : ''; // className={wallet_tab_active}
 
-        const top_menu = <div className="row">
+        let rewardsMenu = [
+            {link: `/@${accountname}/curation-rewards`, label: "Curation rewards", value: "Curation rewards"},
+            {link: `/@${accountname}/author-rewards`, label: "Author rewards", value: "Author rewards"}
+        ];
+
+        const top_menu = <div className="row UserProfile__top-menu">
             <div className="columns small-12 medium-expand">
                 <ul className="menu" style={{flexWrap: "wrap"}}>
                     <li><Link to={`/@${accountname}`} activeClassName="active">Blog</Link></li>
                     <li><Link to={`/@${accountname}/posts`} activeClassName="active">Posts</Link></li>
                     <li><Link to={`/@${accountname}/recent-replies`} activeClassName="active">Replies</Link></li>
                     <li><Link to={`/@${accountname}/feed`} activeClassName="active">Feeds</Link></li>
-                    <li><Link to={`/@${accountname}/curation-rewards`} activeClassName="active">Curation rewards</Link></li>
-                    <li><Link to={`/@${accountname}/author-rewards`} activeClassName="active">Author rewards</Link></li>
+                    <li>
+                        <LinkWithDropdown
+                            closeOnClickOutside
+                            dropdownPosition="bottom"
+                            dropdownAlignment="right"
+                            dropdownContent={
+                                <VerticalMenu items={rewardsMenu} />
+                            }
+                        >
+                            <a className={rewardsClass}>
+                                Rewards
+                                <Icon className="dropdown-arrow" name="dropdown-arrow" />
+                            </a>
+                        </LinkWithDropdown>
+                    </li>
 
                 </ul>
             </div>
             <div className="columns shrink">
-                <ul className="menu">
+                <ul className="menu" style={{flexWrap: "wrap"}}>
                     <li><Link to={`/@${accountname}/transfers`} activeClassName="active">Wallet</Link></li>
                     {wallet_tab_active && isMyAccount && <li><Link to={`/@${account.name}/permissions`} activeClassName="active">Permissions</Link></li>}
                     {wallet_tab_active && <li><Link to={`/@${account.name}/password`} activeClassName="active">Password</Link></li>}
@@ -229,7 +252,7 @@ export default class UserProfile extends React.Component {
                                 {section === 'blog' ? <Follow follower={username} following={accountname} what={section} /> : null}
                             </div>
                         </div>
-                        <h2>{account.name} <Tooltip t={`This is ${accountname}'s reputation score.\n\nThe reputation score is based on the history of votes received by the account, and is used to hide low quality comment.`}><span style={{fontSize: "80%"}}>({rep})</span></Tooltip></h2>
+                        <h2>{account.name} <Tooltip t={`This is ${accountname}'s reputation score.\n\nThe reputation score is based on the history of votes received by the account, and is used to hide low quality content.`}><span style={{fontSize: "80%"}}>({rep})</span></Tooltip></h2>
 
                         <div>
                             <div className="UserProfile__stats">
@@ -241,11 +264,7 @@ export default class UserProfile extends React.Component {
                     </div>
                 </div>
                 <div className="UserProfile__top-nav row expanded">
-                    <div className="column">
-                        <div className="UserProfile__top-menu">
-                            {top_menu}
-                        </div>
-                    </div>
+                    {top_menu}
                 </div>
                 <div className="row">
                     <div className="column">

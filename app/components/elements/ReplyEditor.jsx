@@ -20,10 +20,16 @@ const RTE_DEFAULT = false
 
 let saveEditorTimeout
 
+// removes <html></html> wrapper if exists
 function getHtml(text) {
     const m = text.match(/<html>([\S\s]*)<\/html>/m);
-    return m && m.length === 2 ? m[1] : null;
+    return m && m.length === 2 ? m[1] : text;
 }
+
+const isHtmlTest = text =>
+    /^<html>/.test(text) ||
+    /^<p>/.test(text)
+
 
 class ReplyEditor extends React.Component {
 
@@ -123,7 +129,7 @@ class ReplyEditor extends React.Component {
                     if (editorData.body) {
                         body.onChange(editorData.body)
                         const html = getHtml(editorData.body)
-                        this.state.rte_value = RichTextEditor.createValueFromString(html || editorData.body, 'html')
+                        this.state.rte_value = RichTextEditor.createValueFromString(html, 'html')
                     }
                 }
             }
@@ -138,8 +144,8 @@ class ReplyEditor extends React.Component {
             let rte_value;
             if (RichTextEditor) {
                 if (body.value) {
-                    const html = getHtml(body.value);
-                    if (html) {
+                    if (isHtmlTest(body.value)) {
+                        const html = getHtml(body.value);
                         rte_value = RichTextEditor.createValueFromString(html, 'html')
                     } else {
                         rte = false;
@@ -190,7 +196,7 @@ class ReplyEditor extends React.Component {
                 if(this.state.rte) {
                     const {body} = nextProps.fields
                     const html = getHtml(body.value)
-                    this.state.rte_value = RichTextEditor.createValueFromString(html || body.value, 'html');
+                    this.state.rte_value = RichTextEditor.createValueFromString(html, 'html');
                 }
             }
         }
@@ -293,7 +299,7 @@ class ReplyEditor extends React.Component {
         let isHtml = false;
         let isMarkdown = false;
         if (body.value) {
-            isMarkdown = !getHtml(body.value);
+            isMarkdown = !isHtmlTest(body.value);
             isHtml = !isMarkdown;
         }
 
@@ -476,7 +482,7 @@ export default formId => reduxForm(
             // cp('description')
             // if(Object.keys(json_metadata.steem).length === 0) json_metadata = {}// keep json_metadata minimal
             const sanitizeErrors = []
-            const text = getHtml(body) != null ? sanitize(body, sanitizeConfig({sanitizeErrors})) : body
+            const text = isHtmlTest(body) ? sanitize(body, sanitizeConfig({sanitizeErrors})) : body
             if(sanitizeErrors.length) {
                 errorCallback(sanitizeErrors.join('.  '))
                 return

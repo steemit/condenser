@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import transaction from 'app/redux/Transaction';
-// import ReactTooltip from 'react-tooltip';
+import Slider from 'react-rangeslider';
 import Icon from 'app/components/elements/Icon';
 import Tooltip from 'app/components/elements/Tooltip';
 import Follow from 'app/components/elements/Follow';
@@ -11,9 +11,17 @@ import pluralize from 'pluralize';
 import {formatDecimal, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
+import {Dropdown} from 'react-foundation-components/lib/global/dropdown';
 
 const ABOUT_FLAG = 'Flagging a post can remove rewards and make this material less visible.  You can still unflag or upvote later if you change your mind.'
 const MAX_VOTES_DISPLAY = 20;
+const VOTE_WEIGHT_DROPDOWN_THRESHOLD = 1000.0 * 1000.0 * 1000.0;
+
+function findParent(el, class_name) {
+    if (el.className && el.className.indexOf && el.className.indexOf(class_name) !== -1) return el;
+    if (el.parentElement) return findParent(el.parentElement, class_name);
+    return null;
+}
 
 class Voting extends React.Component {
 
@@ -33,6 +41,7 @@ class Voting extends React.Component {
         pending_payout: React.PropTypes.string,
         total_payout: React.PropTypes.string,
         cashout_time: React.PropTypes.string,
+        vesting_shares: React.PropTypes.number,
         showList: React.PropTypes.bool,
         voting: React.PropTypes.bool,
     };
@@ -42,18 +51,26 @@ class Voting extends React.Component {
         flag: false
     };
 
-    constructor() {
-        super()
-        this.state = {}
+    constructor(props) {
+        super(props);
+        const saved_weight_value = (process.env.BROWSER && localStorage.getItem('vote_weight'));
+        this.state = {
+            showWeight: false,
+            weight: saved_weight_value ? parseInt(saved_weight_value, 10) : 10000
+        }
         this.voteUp = e => {
             e.preventDefault();
             if(this.props.voting) return
             this.setState({votingUp: true, votingDown: false})
             const {author, permlink, username, myVote} = this.props
             // already voted Up, remove the vote
-            const weight = myVote > 0 ? 0 : 10000
+            if (this.state.weight !== 10000) {
+                localStorage.setItem('vote_weight', this.state.weight);
+            }
+            const weight = myVote > 0 ? 0 : this.state.weight
+            if (this.state.showWeight) this.setState({showWeight: false})
             this.props.vote(weight, {author, permlink, username, myVote})
-        }
+        };
         this.voteDown = e => {
             e.preventDefault();
             if(this.props.voting) return
@@ -62,13 +79,37 @@ class Voting extends React.Component {
             // already vote Down, remove vote
             const weight = myVote < 0 ? 0 : -10000
             this.props.vote(weight, {author, permlink, username, myVote})
-        }
+        };
+        this.handleWeightChange = weight => {
+            this.setState({weight: weight + 100})
+        };
+        this.toggleWeight = e => {
+            e.preventDefault();
+            this.setState({showWeight: !this.state.showWeight})
+        };
+        this.closeWeightDropdownOnOutsideClick = e => {
+            const inside_dropdown = findParent(e.target, 'Voting__adjust_weight');
+            const inside_upvote_button = findParent(e.target, 'Voting__button-up');
+            if (!inside_dropdown && !inside_upvote_button) this.setState({showWeight: false});
+        };
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Voting')
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        const showWeight = this.state.showWeight;
+        if (showWeight !== prevState.showWeight) {
+            if (showWeight) document.body.addEventListener('click', this.closeWeightDropdownOnOutsideClick);
+            else document.body.removeEventListener('click', this.closeWeightDropdownOnOutsideClick);
+        }
+    }
+
+    componentWillUnmount() {
+        document.body.removeEventListener('click', this.closeWeightDropdownOnOutsideClick);
+    }
+
     render() {
-        const {myVote, active_votes, showList, voting, flag} = this.props;
-        const {votingUp, votingDown} = this.state;
+        const {myVote, active_votes, showList, voting, flag, vesting_shares} = this.props;
+        const {votingUp, votingDown, showWeight, weight} = this.state;
         // console.log('-- Voting.render -->', myVote, votingUp, votingDown);
         if(!active_votes) return <span></span>
         // if( payout[0] == '-' ) payout = "0.000 SBD";
@@ -133,20 +174,35 @@ class Voting extends React.Component {
         if (showList) {
             voters_list = <DropdownMenu selected={pluralize('votes', count, true)} className="Voting__voters_list" items={voters} el="div" />;
         }
+
+        let voteUpClick = this.voteUp;
+        let dropdown = null;
+        if (vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD) {
+            voteUpClick = this.toggleWeight;
+            if (showWeight) {
+                dropdown = <Dropdown>
+                    <div className="Voting__adjust_weight">
+                        <Slider min={100} max={10000} step={100} value={weight} orientation="vertical" onChange={this.handleWeightChange} />
+                        <div className="weight-display">{weight / 100}%</div>
+                        <a href="#" onClick={this.voteUp} className="button">Vote</a>
+                    </div>
+                </Dropdown>;
+            }
+        }
         return (
             <span className="Voting">
                 <span className="Voting__inner">
                     <span className={classUp}>
-                        {votingUpActive ? up : <a href="#" onClick={this.voteUp} title={myVote > 0 ? 'Remove Vote' : 'Upvote'}>{up}</a>}
+                        {votingUpActive ? up : <a href="#" onClick={voteUpClick} title={myVote > 0 ? 'Remove Vote' : 'Upvote'}>{up}</a>}
+                        {dropdown}
                     </span>
+                </span>
+                <span className="Voting__inner">
                     {payoutEl}
-                    {/*<span className={classDown}>
-                        {votingDownActive ? down : <a href="#" onClick={this.voteDown} title="Downvote">{down}</a>}
-                    </span>*/}
                 </span>
                 {voters_list}
             </span>
-            );
+        );
     }
 }
 
@@ -159,7 +215,9 @@ export default connect(
         const permlink = post.get('permlink')
         const last_payout = post.get('last_payout')
         const active_votes = post.get('active_votes')
-        const username = state.user.getIn(['current', 'username'])
+        const current_account = state.user.get('current')
+        const username = current_account ? current_account.get('username') : null;
+        const vesting_shares = current_account ? current_account.get('vesting_shares') : 0.0;
         const voting = state.global.get(`transaction_vote_active_${author}_${permlink}`)
         let myVote = null;
         if (username && active_votes) {
@@ -169,7 +227,7 @@ export default connect(
         }
         return {
             ...ownProps,
-            myVote, author, permlink, username, active_votes,
+            myVote, author, permlink, username, active_votes, vesting_shares,
             loggedin: username != null,
             voting
         }

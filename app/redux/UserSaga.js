@@ -189,10 +189,13 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         private_keys = private_keys.remove('memo_private')
 
     // If user is signing operation by operaion and has no saved login, don't save to RAM
-    if(!operationType || saveLogin)
+    if(!operationType || saveLogin) {
         // Keep the posting key in RAM but only when not signing an operation.
         // No operation or the user has checked: Keep me logged in...
-        yield put(user.actions.setUser({username, private_keys, login_owner_pubkey}))
+        yield put(user.actions.setUser({username, private_keys, login_owner_pubkey, vesting_shares: account.get('vesting_shares')}))
+    } else {
+        yield put(user.actions.setUser({username, vesting_shares: account.get('vesting_shares')}))
+    }
 
     if (!autopost && saveLogin)
         yield put(user.actions.saveLogin());

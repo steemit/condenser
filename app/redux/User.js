@@ -80,10 +80,12 @@ export default createModule({
                 private_keys: object,
                 login_owner_pubkey: string,
                 previous_owner_authority: object,
+                vesting_shares: string,
                 // pending_private_key: object,
             },
             reducer: (state, {payload}) => {
                 // console.log('SET_USER')
+                if (payload.vesting_shares) payload.vesting_shares = parseFloat(payload.vesting_shares);
                 return state.mergeDeep({ current: payload, show_login_modal: false, loginBroadcastOperation: undefined, loginDefault: undefined, logged_out: undefined })
             }
         },

@@ -89,6 +89,7 @@
     "react-overlays": "0.6.4",
     "react-prop-types": "^0.3.0",
     "react-qr": "0.0.2",
+    "react-rangeslider": "^1.0.3",
     "react-redux": "^4.4.0",
     "react-router": "^2.4.0",
     "react-router-redux": "^4.0.0",

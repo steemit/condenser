@@ -5499,6 +5499,11 @@
       "from": "resolve-from@>=1.0.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/resolve-from/-/resolve-from-1.0.1.tgz"
     },
+    "resp-modifier": {
+      "version": "6.0.2",
+      "from": "resp-modifier@6.0.2",
+      "resolved": "https://registry.npmjs.org/resp-modifier/-/resp-modifier-6.0.2.tgz"
+    },
     "restore-cursor": {
       "version": "1.0.1",
       "from": "restore-cursor@>=1.0.1 <2.0.0",

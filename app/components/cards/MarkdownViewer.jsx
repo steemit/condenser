@@ -52,6 +52,8 @@ class MarkdownViewer extends Component {
         if (m && m.length === 2) {
             html = true;
             text = m[1];
+        } else {
+            html = /^<p>/.test(text)
         }
 
         // Strip out HTML comments. "JS-DOS" bug.

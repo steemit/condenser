@@ -208,7 +208,7 @@ export default class UserProfile extends React.Component {
         ];
 
         const top_menu = <div className="row UserProfile__top-menu">
-            <div className="columns small-12 medium-expand">
+            <div className="columns small-10 medium-12 medium-expand">
                 <ul className="menu" style={{flexWrap: "wrap"}}>
                     <li><Link to={`/@${accountname}`} activeClassName="active">Blog</Link></li>
                     <li><Link to={`/@${accountname}/posts`} activeClassName="active">Posts</Link></li>

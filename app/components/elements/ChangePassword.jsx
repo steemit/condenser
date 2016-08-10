@@ -20,14 +20,19 @@ class ChangePassword extends React.Component {
     }
     constructor(props) {
         super(props)
-        this.state = {accountName: props.username, nameError: ''}
+        this.state = {accountName: props.username, nameError: '', generated: false}
         this.onNameChange = this.onNameChange.bind(this)
+        this.generateWif = this.generateWif.bind(this)
     }
     componentWillMount() {
-        newWif = 'P' + key_utils.get_random_key().toWif()
     }
     componentWillUnmount() {
         newWif = null
+    }
+
+    generateWif(e) {
+        newWif = 'P' + key_utils.get_random_key().toWif()
+        this.setState({generated: true})
     }
     validateAccountName(name) {
         let nameError = '';
@@ -79,7 +84,7 @@ class ChangePassword extends React.Component {
                 </div>
             </div>;
         }
-        const {loading, error} = this.state
+        const {generated, loading, error} = this.state
         const {username, authType, priorAuthKey, /*enable2fa*/} = this.props
         const {handleSubmit, submitting, onClose} = this.props // form stuff
         const {password, confirmPassword, confirmCheck, confirmSaved /*twofa*/} = this.props.fields
@@ -100,9 +105,9 @@ class ChangePassword extends React.Component {
                     {username && <h4>Reset {username}&apos;s Password</h4>}
                     {authType ?
                         <p>This will update {username}&apos; {authType} key.</p> :
-                        <div style={{opacity: '0.5'}}>
+                        <div className="ChangePassword__rules">
                             <hr />
-                            <p style={{textAlign: 'center'}}>
+                            <p>
                                 The first rule of Steemit is: Do not lose your password.<br />
                                 The second rule of Steemit is: Do <strong>not</strong> lose your password.<br />
                                 The third rule of Steemit is: We cannot recover your password.<br />
@@ -123,7 +128,7 @@ class ChangePassword extends React.Component {
                     </div>
                     <br />
                     <label>
-                        <span style={{float: 'right'}}><a href="/recover_account_step_1">Recover Account</a></span>
+                        <div className="float-right"><a href="/recover_account_step_1">Recover Account</a></div>
                         Current Password
                         <br />
                         <input {...cleanReduxInput(password)} type="password" disabled={loading} />
@@ -135,15 +140,19 @@ class ChangePassword extends React.Component {
                     <label>
                         Generated Password <span className="secondary">(new)</span><br />
                     </label>
-                    <div>
-                        {/* !! Do not put keys in a label, labels have an uppercase css style applied !! */}
-                        <div className="overflow-ellipsis"><code style={{display: 'block', padding: '0.2rem 0.5rem', background: 'white', color: '#c7254e', wordWrap: 'break-word', fontSize: '100%', textAlign: 'center'}}>{newWif}</code></div>
-                    </div>
-                    <label><center>
-                        <strong style={{color: '#333', fontSize: '90%'}}>Back it up by storing in your password manager or a text file.</strong><br />
-                        {/*<strong style={{color: '#333', fontSize: '90%'}}>Be a hero. Save your password, save the world.</strong>*/}
-                    </center></label>
-
+                    {generated &&
+                        <span>
+                            <div>
+                                {/* !! Do not put keys in a label, labels have an uppercase css style applied !! */}
+                                <div className="overflow-ellipsis"><code style={{display: 'block', padding: '0.2rem 0.5rem', background: 'white', color: '#c7254e', wordWrap: 'break-word', fontSize: '100%', textAlign: 'center'}}>{newWif}</code></div>
+                            </div>
+                            <label className="ChangePassword__backup_text">
+                                Back it up by storing in your password manager or a text file.
+                            </label>
+                        </span>
+                        ||
+                        <center><button type="button" className="button hollow" onClick={this.generateWif}>Click to generate password</button></center>
+                    }
 
                     <br></br>
 
@@ -152,7 +161,6 @@ class ChangePassword extends React.Component {
                         <br />
                         <input {...cleanReduxInput(confirmPassword)} type="password" disabled={loading} />
                     </label>
-                    {/*<span style={{color: '#000', fontSize: '82.5%'}}>By re-entering the generated password you confirm that you have backed it up safely.</span>*/}
                     {confirmPassword.touched && confirmPassword.error && <div className="error">{confirmPassword.error}</div>}
 
                     <br />

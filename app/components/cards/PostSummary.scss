@@ -12,12 +12,12 @@ ul.PostsList__summaries {
 
 .PostSummary__image {
   float: left;
-  width: 7.5rem;
+  width: 130px;
   height: 4.5rem;
-  background-color: white;
+  background-color: #EEE;
   background-size: 100%;
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: 50% 20%;
   border: 1px solid #EEE;
 }
 
@@ -29,13 +29,14 @@ ul.PostsList__summaries {
     margin: 0 auto;
     display: block;
     max-width: 100%;
-    max-height: 640px;
+    max-height: 80vw;
     background: white;
+    transform: translate3d(0, 0, 0);
   }
 }
 
 .PostSummary.with-image .PostSummary__content {
-  margin-left: 8rem;
+  margin-left: 8.25rem;
 }
 
 .PostSummary__header {

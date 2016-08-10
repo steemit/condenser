@@ -82,7 +82,7 @@ class AuthorRewards extends React.Component {
 
          const navButtons = (
              <nav>
-               <ul className="pager" style={{marginTop: 0, marginBottom: 0}}>
+               <ul className="pager">
                  <li>
                      <div className={"button tiny hollow float-left " + (historyIndex === 0 ? " disabled" : "")} onClick={this._setHistoryPage.bind(this, false)} aria-label="Previous">
                          <span aria-hidden="true">&larr; Newer</span>
@@ -102,32 +102,32 @@ class AuthorRewards extends React.Component {
                     <h4>AUTHOR REWARDS</h4>
                 </div>
             </div>
-            <div className="UserWallet__balance row">
-                <div className="column small-8">
-                    Author rewards last 24 hours
+            <div className="UserWallet__balance UserReward__row row">
+                <div className="column small-12 medium-8">
+                    Author rewards last 24 hours:
                 </div>
-                <div className="column small-3 text-right">
+                <div className="column small-12 medium-3">
                     {numberWithCommas(vestsToSp(this.props.state, rewards24Vests + " VESTS")) + " STEEM POWER"}
                     <br />
                     {rewards24SBD.toFixed(3) + " SD"}
                 </div>
             </div>
 
-            <div className="UserWallet__balance row">
-                <div className="column small-8">
-                    Daily average author rewards
+            <div className="UserWallet__balance UserReward__row row">
+                <div className="column small-12 medium-8">
+                    Daily average author rewards:
                 </div>
-                <div className="column small-3 text-right">
+                <div className="column small-12 medium-3">
                     {numberWithCommas(vestsToSp(this.props.state, averageCurationVests + " VESTS")) + " STEEM POWER"}
                     <br />
                     {averageCurationSBD.toFixed(3) + " SD"}
                 </div>
             </div>
-            <div className="UserWallet__balance row">
-                <div className="column small-8">
-                    {!hasFullWeek ? "Estimated author rewards last week" : "Author rewards last week"}
+            <div className="UserWallet__balance UserReward__row row">
+                <div className="column small-12 medium-8">
+                    {!hasFullWeek ? "Estimated author rewards last week" : "Author rewards last week"}:
                 </div>
-                <div className="column small-3 text-right">
+                <div className="column small-12 medium-3">
                     {numberWithCommas(vestsToSp(this.props.state, (hasFullWeek ? rewardsWeekVests : averageCurationVests * 7) + " VESTS")) + " STEEM POWER"}
                     <br />
                     {(hasFullWeek ? rewardsWeekSBD : averageCurationSBD * 7).toFixed(3) + " SD"}

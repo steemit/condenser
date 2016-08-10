@@ -1,11 +1,12 @@
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
+import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import transaction from 'app/redux/Transaction';
 import g from 'app/redux/GlobalReducer';
 import {Set, Map} from 'immutable'
 
-const {string, object, bool, func} = PropTypes
+const {string, object, bool, func, any} = PropTypes
 const followTypes = ['blog', 'posts']
 const followTypeSet = Set(followTypes)
 
@@ -17,11 +18,11 @@ export default class Follow extends React.Component {
         showFollow: bool,
         showMute: bool,
         fat: bool,
+        children: any,
 
         // redux
         follow: func,
         loading: bool,
-        getFollowing: func,
         existingFollows: object,
     }
     static defaultProps = {
@@ -34,11 +35,7 @@ export default class Follow extends React.Component {
         this.initEvents(props)
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Follow')
     }
-    componentWillMount() {
-        getFollowers(this.props)
-    }
     componentWillUpdate(nextProps) {
-        getFollowers(nextProps)
         this.initEvents(nextProps)
     }
     initEvents(props) {
@@ -49,9 +46,9 @@ export default class Follow extends React.Component {
         this.unignore = () => follow(follower, following, Set())
     }
     render() {
-        const {follower, following, what, showFollow, showMute, fat} = this.props // html
+        const {follower, following, what, showFollow, showMute, fat, children} = this.props // html
         const {existingFollows, loading} = this.props // redux
-        if(loading) return <span></span>
+        if(loading) return <span><LoadingIndicator /> Loading&hellip;</span>
         if(!follower || !following || !what) return <span></span>
         if(follower === following) return <span></span> // don't follow self
         if(loading !== false) {
@@ -66,16 +63,12 @@ export default class Follow extends React.Component {
         const cnInactive = cnActive + ' hollow secondary'
         return <span>
             {showFollow && !existingFollows.has(what) && <label className={cnInactive} onClick={this.follow}>Follow</label>}
-            {showFollow && existingFollows.has(what) && <label className={cnActive} onClick={this.unfollow}>Unfollow</label>}
+            {showFollow && existingFollows.has(what) && <label className={cnInactive} onClick={this.unfollow}>Unfollow</label>}
             {showMute && !existingFollows.has('ignore') && <label className={cnInactive} onClick={this.ignore}>Mute</label>}
-            {showMute && existingFollows.has('ignore') && <label className={cnActive} onClick={this.unignore}>Unmute</label>}
+            {showMute && existingFollows.has('ignore') && <label className={cnInactive} onClick={this.unignore}>Unmute</label>}
+            {children && <span>&nbsp;&nbsp;{children}</span>}
         </span>
     }
-}
-function getFollowers(props) {
-    const {getFollowing, follower, loading} = props
-    if(loading == null)
-        getFollowing(follower)
 }
 const emptyMap = Map()
 const emptySet = Set()
@@ -97,30 +90,6 @@ module.exports = connect(
         };
     },
     dispatch => ({
-        getFollowing: follower => {
-            if(!follower) return
-            const limit = 100 // Test with 2 (not 1, infinate looping)
-            const fetch = (start = '') => {
-                let cnt = 0
-                dispatch({ type: 'global/FETCH_API', payload: {
-                    exec: ['follow', 'get_following', follower, start, limit],
-                    key: ['follow', 'get_following', follower],
-                    skipLoading: true,
-                    reducer: [
-                        (r, value) => {
-                            const what = value.get('what')
-                            const following = value.get('following')
-                            if(++cnt === limit) {
-                                fetch(following)
-                            }
-                            return r.set(following, what)
-                        },
-                        Map()
-                    ]
-                }})
-            }
-            fetch()
-        },
         follow: (follower, following, what) => {
             const json = {follower, following, what: what.toJS()}
             dispatch(g.actions.update({

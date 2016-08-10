@@ -20,6 +20,8 @@
 @import "./elements/VotesAndComments";
 @import "./elements/GeneratedPasswordInput";
 @import "./elements/TagList";
+@import "./elements/ChangePassword";
+@import "./elements/Reputation";
 
 // modules
 @import "./modules/Header";
@@ -31,11 +33,11 @@
 @import "./modules/SidePanel";
 @import "./modules/BottomPanel";
 @import "./modules/UserWallet";
+@import "./modules/BlocktradesDeposit";
 
 // pages
 @import "./pages/PostsIndex";
 @import "./pages/Topics";
-@import "./pages/Index";
 @import "./pages/CreateAccount";
 @import "./pages/Post";
 @import "./pages/Privacy";

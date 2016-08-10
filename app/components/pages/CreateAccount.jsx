@@ -209,9 +209,9 @@ class CreateAccount extends React.Component {
                 <div className="column large-7 small-10">
                     {existingUserAccountAlert}
                     <h2>Sign Up</h2>
-                    <div style={{opacity: '0.5'}}>
+                    <div className="CreateAccount__rules">
                         <hr />
-                        <p style={{textAlign: 'center'}}>
+                        <p>
                             The first rule of Steemit is: Do not lose your password.<br />
                             The second rule of Steemit is: Do <strong>not</strong> lose your password.<br />
                             The third rule of Steemit is: We cannot recover your password.<br />

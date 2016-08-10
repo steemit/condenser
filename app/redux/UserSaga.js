@@ -1,6 +1,6 @@
-import {fromJS, Set} from 'immutable'
+import {fromJS, Set, Map} from 'immutable'
 import {takeLatest} from 'redux-saga';
-import {call, put, select} from 'redux-saga/effects';
+import {call, put, select, fork} from 'redux-saga/effects';
 import {accountAuthLookup} from 'app/redux/AuthSaga'
 import {PrivateKey} from 'shared/ecc'
 import user from 'app/redux/User'
@@ -9,12 +9,13 @@ import {browserHistory} from 'react-router'
 import {serverApiLogin, serverApiLogout, /*serverApiRecordEvent*/} from 'app/utils/ServerApiClient';
 import {Apis} from 'shared/api_client';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
+import {loadFollows} from 'app/redux/FollowSaga'
 
 export const userWatches = [
+    watchRemoveHighSecurityKeys, // keep first to remove keys early when a page change happens
     loginWatch,
     saveLoginWatch,
     logoutWatch,
-    watchRemoveHighSecurityKeys,
     // getCurrentAccountWatch,
     loginErrorWatch,
     lookupPreviousOwnerAuthorityWatch,
@@ -29,7 +30,6 @@ function* loginWatch() {
 function* saveLoginWatch() {
     yield* takeLatest('user/SAVE_LOGIN', saveLogin_localStorage);
 }
-
 function* logoutWatch() {
     yield* takeLatest('user/LOGOUT', logout);
 }
@@ -57,10 +57,18 @@ function* removeHighSecurityKeys() {
 function* usernamePasswordLogin(action) {
     // Sets 'loading' while the login is taking place.  The key generation can take a while on slow computers.
     yield call(usernamePasswordLogin2, action)
+    const current = yield select(state => state.user.get('current'))
+    if(current) {
+        const username = current.get('username')
+        yield fork(loadFollows, "get_following", username, 'blog')
+        yield fork(loadFollows, "get_following", username, 'ignore')
+    }
 }
 
 const isHighSecurityOperations = ['transfer', 'transfer_to_vesting', 'withdraw_vesting',
     'limit_order_create', 'limit_order_cancel', 'account_update', 'account_witness_vote']
+
+const highSecurityPages = Array(/\/market/, /\/@.+\/transfers/, /\/~witnesses/)
 
 const clean = (value) => value == null || value === '' || /null|undefined/.test(value) ? undefined : value
 
@@ -87,9 +95,12 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         // "alice/active" will login only with Alices active key
         [username, userProvidedRole] = username.split('/')
     }
+    const current_route = yield select(state => state.global.get('current_route'))
+
     const highSecurityLogin =
         /owner|active/.test(userProvidedRole) ||
-        isHighSecurityOperations.indexOf(operationType) !== -1
+        isHighSecurityOperations.indexOf(operationType) !== -1 ||
+        highSecurityPages.find(p => p.test(current_route)) != null
 
     const isRole = (role, fn) => (!userProvidedRole || role === userProvidedRole ? fn() : undefined)
 

@@ -73,7 +73,7 @@ class CurationRewards extends React.Component {
 
          const navButtons = (
              <nav>
-               <ul className="pager" style={{marginTop: 0, marginBottom: 0}}>
+               <ul className="pager">
                  <li>
                      <div className={"button tiny hollow float-left " + (historyIndex === 0 ? " disabled" : "")} onClick={this._setHistoryPage.bind(this, false)} aria-label="Previous">
                          <span aria-hidden="true">&larr; Newer</span>
@@ -97,28 +97,28 @@ class CurationRewards extends React.Component {
                     <h4>CURATION REWARDS</h4>
                 </div>
             </div>
-            <div className="UserWallet__balance row">
-                <div className="column small-8">
-                    Curation rewards last 24 hours
+            <div className="UserWallet__balance UserReward__row row">
+                <div className="column small-12 medium-8">
+                    Curation rewards last 24 hours:
                 </div>
-                <div className="column small-3 text-right">
+                <div className="column small-12 medium-3">
                     {numberWithCommas(vestsToSp(this.props.state, rewards24 + " VESTS")) + " STEEM POWER"}
                 </div>
             </div>
-            <div className="UserWallet__balance row">
-                <div className="column small-8">
-                    Daily average curation rewards
+            <div className="UserWallet__balance UserReward__row row">
+                <div className="column small-12 medium-8">
+                    Daily average curation rewards:
                 </div>
-                <div className="column small-3 text-right">
+                <div className="column small-12 medium-3">
                     {numberWithCommas(vestsToSp(this.props.state, averageCuration + " VESTS")) + " STEEM POWER"}
                 </div>
             </div>
-            <div className="UserWallet__balance row">
-                <div className="column small-8">
+            <div className="UserWallet__balance UserReward__row row">
+                <div className="column small-12 medium-8">
                     {!hasFullWeek ? "Estimated curation rewards last week" : "Curation rewards last week"}
                 </div>
-                <div className="column small-3 text-right">
-                    {numberWithCommas(vestsToSp(this.props.state, (hasFullWeek ? rewardsWeek : averageCuration * 7) + " VESTS")) + " STEEM POWER"}
+                <div className="column small-12 medium-3">
+                    {numberWithCommas(vestsToSp(this.props.state, (hasFullWeek ? rewardsWeek : averageCuration * 7) + " VESTS")) + " STEEM POWER"}:
                 </div>
             </div>
             <div className="row">

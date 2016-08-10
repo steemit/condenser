@@ -25,18 +25,18 @@ const icons = [
     'voters',
     'empty',
     'flag1',
-    'flag2'
+    'flag2',
 ];
 const icons_map = {};
 for (const i of icons) icons_map[i] = require(`app/assets/icons/${i}.svg`);
 
-const rem_sizes = {'1x': '1.12', '2x': '2', '3x': '3.45', '4x': '4.60', '5x': '5.75', '10x': '10.0'};
+const rem_sizes = {'1x': '1.12', '1_5x': '1.5', '2x': '2', '3x': '3.45', '4x': '4.60', '5x': '5.75', '10x': '10.0'};
 
 export default class Icon extends React.Component {
 
     static propTypes = {
         name: React.PropTypes.string.isRequired,
-        size: React.PropTypes.oneOf(['1x', '2x', '3x', '4x', '5x', '10x']),
+        size: React.PropTypes.oneOf(['1x', '1_5x', '2x', '3x', '4x', '5x', '10x']),
         inverse: React.PropTypes.bool,
         className: React.PropTypes.string
     };

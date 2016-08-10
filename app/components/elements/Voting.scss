@@ -106,6 +106,19 @@
   }
 }
 
+.DropdownMenu.Voting__voters_list ul {
+  li > a {
+    //font-weight: 200;
+  }
+
+  li > span {
+    padding: 0.25rem 0.5rem;
+    font-size: 82.5%;
+    display: block;
+    color: #666;
+  }
+}
+
 .Voting__inner {
   border-right: 1px solid $medium-gray;
   padding-right: 0.5rem;

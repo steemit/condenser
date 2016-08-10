@@ -129,8 +129,8 @@ export default class BlocktradesDeposit extends React.Component {
         const hasError = userTradeError != null
         const est = getEstimatedValue(this.props, flip)
         const getAddressLabel = inputAddress ? 'Change Deposit Address' : 'Get Deposit Address'
-        const arrowIcon = <span style={{fontSize: '135%'}}>→</span>
-        const flipIcon = <span style={{fontSize: '135%'}}>⇆</span>
+        const arrowIcon = <span>→</span>
+        const flipIcon = <span>⇆</span>
         const estimateInputCoin = flip ? coinName(outputCoin.value) : coinName(inputCoin.value)
 
         const trRows = !transactions ? null : transactions.toJS().map((tr, idx) => <div key={idx}>
@@ -183,7 +183,7 @@ export default class BlocktradesDeposit extends React.Component {
                 <span>&hellip;</span>
             }
         </span>
-        return <div>
+        return <div className="BlocktradesDeposit">
             <div className="row">
                 <div className="column small-12">
                     <h1>Buy {coinName(outputCoin.value)}</h1>
@@ -226,7 +226,7 @@ export default class BlocktradesDeposit extends React.Component {
                 <br />
                 <div className="row">
                     <div className="column small-12">
-                        {inputAddress && trRows && <div style={{overflowY: 'auto', maxHeight: '150px'}}>
+                        {inputAddress && trRows && <div className="BlocktradesDeposit__history">
                             <h4>Transaction History</h4>
                             {trRows.length ? trRows : <div>Nothing yet&hellip;</div>}
                         </div>}

@@ -3,8 +3,10 @@ import createModule from 'redux-modules';
 import {PropTypes} from 'react';
 import {emptyContent} from 'app/redux/EmptyState';
 import constants from './constants';
+import {contentStats} from 'app/utils/StateFunctions'
 
 const {string, object, bool, array, oneOf, oneOfType, func, any} = PropTypes
+const emptyContentMap = Map(emptyContent)
 
 export default createModule({
     name: 'global',
@@ -24,9 +26,20 @@ export default createModule({
             action: 'RECEIVE_STATE',
             // payloadTypes: { },
             reducer: (state, action) => {
-                // console.log('RECEIVE_STATE');
+                // console.log('RECEIVE_STATE', action, state.toJS());
+                let payload = fromJS(action.payload)
+                if(payload.has('content')) {
+                    const content = payload.get('content').withMutations(c => {
+                        c.forEach((cc, key) => {
+                            cc = emptyContentMap.mergeDeep(cc)
+                            const stats = fromJS(contentStats(cc))
+                            c.setIn([key, 'stats'], stats)
+                        })
+                    })
+                    payload = payload.set('content', content)
+                }
                 // console.log('state.mergeDeep(action.payload).toJS(), action.payload', state.mergeDeep(action.payload).toJS(), action.payload)
-                return state.mergeDeep(action.payload);
+                return state.mergeDeep(payload);
             }
         },
         {
@@ -79,11 +92,15 @@ export default createModule({
                 content: object.isRequired, // full content object (replace from the blockchain)
             },
             reducer: (state, {payload: {content}}) => {
+                // console.log('GlobalReducer -- RECEIVE_CONTENT content', content)
                 content = fromJS(content)
                 const key = content.get('author') + '/' + content.get('permlink')
                 return state.updateIn(['content', key], Map(), c => {
+                    c = emptyContentMap.mergeDeep(c)
                     c = c.delete('active_votes')
-                    return c.mergeDeep(content)
+                    c = c.mergeDeep(content)
+                    c = c.set('stats', fromJS(contentStats(c)))
+                    return c
                 })
             }
         },
@@ -161,15 +178,18 @@ export default createModule({
         },
         {
             action: 'RECEIVE_DATA',
-            reducer: (state, {payload: {data, order, category, author, permlink}}) => {
+            reducer: (state, {payload: {data, order, category, author, accountname, /*permlink*/}}) => {
                 // console.log('-- RECEIVE_DATA reducer -->', order, category, author, permlink, data);
                 // console.log('-- RECEIVE_DATA state -->', state.toJS());
                 let new_state;
-                if (order === 'by_author') {
-                    new_state = state.updateIn(['accounts', author, category], list => {
+                if (order === 'by_author' || order === 'by_feed') {
+                    const by_feed = order === 'by_feed'
+                    const key = ['accounts', by_feed ? accountname : author, category]
+                    new_state = state.updateIn(key, List(), list => {
                         return list.withMutations(posts => {
                             data.forEach(value => {
-                                if (!posts.includes(value.permlink)) posts.push(value.permlink);
+                                const key2 = by_feed ? `${value.author}/${value.permlink}` : value.permlink
+                                if (!posts.includes(key2)) posts.push(key2);
                             });
                         });
                     });
@@ -186,8 +206,11 @@ export default createModule({
                 new_state = new_state.updateIn(['content'], content => {
                     return content.withMutations(map => {
                         data.forEach(value => {
+                            // console.log('GlobalReducer -- RECEIVE_DATA', value)
                             const key = `${value.author}/${value.permlink}`;
-                            map.set(key, fromJS(value));
+                            value = fromJS(value)
+                            value = value.set('stats', fromJS(contentStats(value)))
+                            map.set(key, value);
                         });
                     });
                 });
@@ -219,7 +242,11 @@ export default createModule({
                     return content.withMutations(map => {
                         data.forEach(value => {
                             const key = `${value.author}/${value.permlink}`;
-                            if (!map.has(key)) map.set(key, fromJS(value));
+                            if (!map.has(key)) {
+                                value = fromJS(value)
+                                value = value.set('stats', fromJS(contentStats(value)))
+                                map.set(key, value);
+                            }
                         });
                     });
                 });
@@ -273,7 +300,7 @@ export default createModule({
                 notSet: any,
                 updater: any,
             },
-            reducer: (state, {payload: {key, notSet, updater}}) =>
+            reducer: (state, {payload: {key, notSet = Map(), updater}}) =>
                 // key = Array.isArray(key) ? key : [key] // TODO enable and test
                 state.updateIn(key, notSet, updater)
         },

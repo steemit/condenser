@@ -2,15 +2,14 @@
 //if (typeof require.ensure !== 'function') require.ensure = (d, c) => c(require);
 
 import App from 'app/components/App';
-// import Index from 'app/components/pages/Index';
 import PostsIndex from 'app/components/pages/PostsIndex';
 import resolveRoute from './ResolveRoute';
 
 export default {
     path: '/',
     component: App,
-    getChildRoutes(location, cb) {
-        const route = resolveRoute(location.pathname);
+    getChildRoutes(nextState, cb) {
+        const route = resolveRoute(nextState.location.pathname);
         if (route.page === 'About') {
             //require.ensure([], (require) => {
                 cb(null, [require('app/components/pages/About')]);

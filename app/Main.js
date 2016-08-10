@@ -28,8 +28,10 @@ Iso.bootstrap(initial_state => {
 });
 
 try {
-    // Adds some object refs to the global window object
-    ConsoleExports.init(window)
+    if(process.env.NODE_ENV === 'development') {
+        // Adds some object refs to the global window object
+        ConsoleExports.init(window)
+    }
 } catch (e) {
     console.error(e)
 }

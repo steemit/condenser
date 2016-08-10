@@ -4,7 +4,7 @@ import SvgImage from 'app/components/elements/SvgImage';
 class NotFound extends React.Component {
     render() {
         return (
-            <div className="float-center" style={{width: '640px'}}>
+            <div className="NotFound float-center">
                 <a href="/"><SvgImage name="404" width="640px" height="480px" /></a>
             </div>
         );

@@ -15,12 +15,11 @@ import ReplyEditor from 'app/components/elements/ReplyEditor';
 import {immutableAccessor} from 'app/utils/Accessors';
 import extractContent from 'app/utils/ExtractContent';
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
-import Follow from 'app/components/elements/Follow';
 import TagList from 'app/components/elements/TagList';
 import Author from 'app/components/elements/Author';
 import {Long} from 'bytebuffer'
 import {List} from 'immutable'
-import {/*formatDecimal,*/ parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
+import {repLog10, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 
 export default class PostFull extends React.Component {
     static propTypes = {
@@ -137,9 +136,9 @@ export default class PostFull extends React.Component {
 
         let net_rshares = Long.ZERO
         post_content.get('active_votes', List()).forEach(v => {
-            // Remove negitive votes unless full power -1000 (we had downvoting spam)
+            // ? Remove negative votes unless full power -1000 (we had downvoting spam)
             const percent = v.get('percent')
-            if(percent < 0 && percent !== -1000) return
+            if(percent < 0 /*&& percent !== -1000*/) return
             net_rshares = net_rshares.add(Long.fromString(String(v.get('rshares'))))
         })
         const showDeleteOption = username === author &&
@@ -160,7 +159,7 @@ export default class PostFull extends React.Component {
         const Editor = this.state.showReply ? PostFullReplyEditor : PostFullEditEditor
         let renderedEditor = null;
         if (showReply || showEdit) {
-            renderedEditor = <div key="editor" style={{listStyleType: 'none'}}>
+            renderedEditor = <div key="editor">
                 <Editor {...replyParams} type={this.state.showReply ? 'submit_comment' : 'edit'}
                                          successCallback={() => {
                                                 this.setState({showReply: false, showEdit: false})
@@ -174,19 +173,18 @@ export default class PostFull extends React.Component {
                 />
             </div>
         }
-
         const pending_payout = parsePayoutAmount(content.pending_payout_value);
         const total_payout = parsePayoutAmount(content.total_payout_value);
         const high_quality_post = pending_payout + total_payout > 10.0;
         const showEditOption = username === author && total_payout === 0
+        const authorRepLog10 = repLog10(content.author_reputation)
 
         const time_author_category = <span className="PostFull__time_author_category vcard">
             <Tooltip t={new Date(content.created).toLocaleString()}>
                 <Icon name="clock" className="space-right" />
                 <span className="TimeAgo"><TimeAgoWrapper date={content.created} /></span>
             </Tooltip>
-            <span> by <Author author={content.author} /></span>
-            <span> in <TagList post={content} /></span>
+            <span> by <Author author={content.author} authorRepLog10={authorRepLog10} /></span>
         </span>;
 
         return (
@@ -199,10 +197,11 @@ export default class PostFull extends React.Component {
                 {showEdit ?
                     renderedEditor :
                     <div className="PostFull__body entry-content">
-                        <MarkdownViewer formId={formId + '-viewer'} text={content_body} jsonMetadata={jsonMetadata} large highQualityPost={high_quality_post} />
+                        <MarkdownViewer formId={formId + '-viewer'} text={content_body} jsonMetadata={jsonMetadata} large highQualityPost={high_quality_post} noImage={!content.stats.pictures} />
                     </div>
                 }
 
+                <TagList post={content} horizontal />
                 <div className="PostFull__footer row align-middle">
                     <div className="column">
                         {time_author_category}
@@ -229,7 +228,7 @@ export default class PostFull extends React.Component {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="column large-8 medium-10 small-12">
+                     <div className="column large-8 medium-10 small-12">
                         {showReply && renderedEditor}
                     </div>
                 </div>

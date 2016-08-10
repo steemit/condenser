@@ -84,37 +84,43 @@ class App extends React.Component {
         const success = flash.get('success');
         let callout = null;
         if (this.state.showCallout && (alert || warning || success)) {
-            callout = <div className="row">
-                <div className={classNames('column callout', {alert}, {warning}, {success})} style={{margin: '20px', paddingRight: '40px'}}>
-                    <CloseButton onClick={() => this.setState({showCallout: false})} />
-                    <p>{alert || warning || success}</p>
+            callout = <div className="App__announcement row">
+                <div className="column">
+                    <div className={classNames('callout', {alert}, {warning}, {success})}>
+                        <CloseButton onClick={() => this.setState({showCallout: false})} />
+                        <p>{alert || warning || success}</p>
+                    </div>
                 </div>
             </div>;
         }
-        else if (ip && this.state.showCallout) {
-            callout = <div className="row">
-                <div className={classNames('column callout success', {alert}, {warning}, {success})} style={{margin: '20px', padding: '20px', paddingRight: '40px'}}>
-                    <CloseButton onClick={() => this.setState({showCallout: false})} />
-                    <ul>
-                        <li>
-                            <a href="https://steemit.com/steemit/@steemitblog/steemit-com-is-now-open-source">
-                                Steemit.com is now Open Source
-                            </a>
-                        </li>
-                        <li>
-                            <a href="https://steemit.com/steemit/@steemitblog/all-recovered-accounts-have-been-fully-refunded">
-                                All Recovered Accounts have been fully Refunded
-                            </a>
-                        </li>
-                    </ul>
+        else if (false && ip && this.state.showCallout) {
+            callout = <div className="App__announcement row">
+                <div className="column">
+                    <div className={classNames('callout success', {alert}, {warning}, {success})}>
+                        <CloseButton onClick={() => this.setState({showCallout: false})} />
+                        <ul>
+                            <li>
+                                <a href="https://steemit.com/steemit/@steemitblog/steemit-com-is-now-open-source">
+                                    Steemit.com is now Open Source
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://steemit.com/steemit/@steemitblog/all-recovered-accounts-have-been-fully-refunded">
+                                    All Recovered Accounts have been fully Refunded
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         }
         if ($STM_Config.read_only_mode && this.state.showCallout) {
-            callout = <div className="row">
-                <div className={classNames('column callout warning', {alert}, {warning}, {success})} style={{margin: '20px', paddingRight: '40px'}}>
-                    <CloseButton onClick={() => this.setState({showCallout: false})} />
-                    <p>Due to server maintenance we are running in read only mode.  We are sorry for the inconvenience.</p>
+            callout = <div className="App__announcement row">
+                <div className="column">
+                    <div className={classNames('callout warning', {alert}, {warning}, {success})}>
+                        <CloseButton onClick={() => this.setState({showCallout: false})} />
+                        <p>Due to server maintenance we are running in read only mode.  We are sorry for the inconvenience.</p>
+                    </div>
                 </div>
             </div>;
         }
@@ -135,7 +141,7 @@ class App extends React.Component {
                             <br />
                             <br />
                             <div className="tag3">
-                                <b>Get $10 of Steem Power when you sign up today.</b>
+                                <b>Get $7 of Steem Power when you sign up today.</b>
                             </div>
                         </div>
                     </div>
@@ -143,17 +149,14 @@ class App extends React.Component {
             );
         }
 
-        return <div className={'App' + (lp ? ' LP' : '') + (ip ? ' index-page' : '')}
-            onMouseMove={this.onEntropyEvent}
-        >
-            {/*<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet" />*//*medium-editor*/}
+        return <div className={'App' + (lp ? ' LP' : '') + (ip ? ' index-page' : '')} onMouseMove={this.onEntropyEvent}>
             <SidePanel ref="side_panel" alignment="right">
                 <TopRightMenu vertical navigate={this.navigate} />
                 <ul className="vertical menu">
                     <li><a href="https://steem.io" onClick={this.navigate}>About</a></li>
                     <li><a href="/tags.html/hot" onClick={this.navigate}>Explore</a></li>
                     <li><a href="https://steem.io/SteemWhitePaper.pdf" onClick={this.navigate}>Steem Whitepaper</a></li>
-                    <li><a onClick={() => depositSteem()}>Buy Steem Power</a></li>
+                    <li><a onClick={() => depositSteem()}>Buy Steem</a></li>
                     <li><a href="/market" onClick={this.navigate}>Market</a></li>
                     <li><a href="/recover_account_step_1" onClick={this.navigate}>Stolen Account Recovery</a></li>
                     <li><a href="/change_password" onClick={this.navigate}>Change Account Password</a></li>

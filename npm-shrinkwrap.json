@@ -1,5 +1,5 @@
 {
-  "name": "clout",
+  "name": "Steemit.com",
   "version": "1.0.0",
   "dependencies": {
     "abab": {
@@ -4053,6 +4053,11 @@
       "version": "4.4.0",
       "from": "lodash.clonedeep@>=4.3.2 <5.0.0",
       "resolved": "https://registry.npmjs.org/lodash.clonedeep/-/lodash.clonedeep-4.4.0.tgz"
+    },
+    "lodash.debounce": {
+      "version": "4.0.7",
+      "from": "lodash.debounce@latest",
+      "resolved": "https://registry.npmjs.org/lodash.debounce/-/lodash.debounce-4.0.7.tgz"
     },
     "lodash.deburr": {
       "version": "3.2.0",

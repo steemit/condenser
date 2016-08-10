@@ -263,7 +263,7 @@ class ReplyEditor extends React.Component {
         const {onCancel, autoVoteOnChange} = this
         const {title, category, body, autoVote} = this.props.fields
         const {
-            reply, username, hasCategory, isStory, formId,
+            reply, username, hasCategory, isStory, formId, noImage,
             author, permlink, parent_author, parent_permlink, type, jsonMetadata, metaLinkData,
             state, successCallback, handleSubmit, submitting, invalid, //lastComment,
         } = this.props
@@ -362,7 +362,7 @@ class ReplyEditor extends React.Component {
                         {!loading && !rte && markdownViewerText && <div className={'Preview ' + vframe_section_shrink_class}>
                             {!isHtml && <div className="float-right"><a target="_blank" href="https://guides.github.com/features/mastering-markdown/">Styling with Markdown is supported.</a></div>}
                             <h6>Preview</h6>
-                            <MarkdownViewer formId={formId} text={markdownViewerText} canEdit jsonMetadata={jsonMetadata} large={isStory} />
+                            <MarkdownViewer formId={formId} text={markdownViewerText} canEdit jsonMetadata={jsonMetadata} large={isStory} noImage={noImage} />
                         </div>}
                     </form>
                 </div>
@@ -460,7 +460,7 @@ export default formId => reduxForm(
             const rootTag = /^[-a-z\d]+$/.test(rootCategory) ? rootCategory : null
 
             const rtags = HtmlReady(body, {mutate: false})
-            let allCategories = Set([...formCategories.toJS()])
+            let allCategories = Set([...formCategories.toJS(), ...rtags.hashtags])
             if(rootTag) allCategories = allCategories.add(rootTag)
 
             // merge
@@ -479,6 +479,11 @@ export default formId => reduxForm(
             const text = getHtml(body) != null ? sanitize(body, sanitizeConfig({sanitizeErrors})) : body
             if(sanitizeErrors.length) {
                 errorCallback(sanitizeErrors.join('.  '))
+                return
+            }
+            if(meta.tags.length > 5) {
+                const includingCategory = /edit/.test(type) ? ` (including the category '${rootCategory}')` : ''
+                errorCallback(`You have ${meta.tags.length} tags total${includingCategory}.  Please use only 5 in your post and category line.`)
                 return
             }
             const operation = {

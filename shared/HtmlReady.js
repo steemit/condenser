@@ -90,7 +90,7 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
         return space + `<a href="/trending/${tag2.toLowerCase()}">${tag}</a>`
     })
     // usertag (mention)
-    content = content.replace(/(^|\s)(@[-\.a-z\d]+)/ig, user => {
+    content = content.replace(/(^|\s)(@[a-z][-\.a-z\d]+[a-z\d])/ig, user => {
         const space = /^\s/.test(user) ? user[0] : ''
         const user2 = user.trim().substring(1)
         const valid = validate_account_name(user2) == null

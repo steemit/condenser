@@ -1,4 +1,4 @@
-import Immutable, {Map} from 'immutable';
+import Immutable, {Map, fromJS} from 'immutable';
 import {combineReducers} from 'redux';
 import {routerReducer} from 'react-router-redux';
 import appReducer from './AppReducer';
@@ -10,19 +10,30 @@ import user from './User';
 import transaction from './Transaction';
 import offchain from './Offchain';
 import {reducer as formReducer} from 'redux-form';
+import {contentStats} from 'app/utils/StateFunctions'
 
-function initReducer(reducer) {
+function initReducer(reducer, type) {
     return (state, action) => {
-        // console.log('RootReducer:', action.type);
+        // @@redux/INIT server and client init
         if (state && (action.type === '@@redux/INIT' || action.type === '@@INIT')) {
-            return state instanceof Map ? state : Immutable.fromJS(state);
+            state = state instanceof Map ? state : Immutable.fromJS(state);
+            if(type === 'global') {
+                const content = state.get('content').withMutations(c => {
+                    c.forEach((cc, key) => {
+                        const stats = fromJS(contentStats(cc))
+                        c.setIn([key, 'stats'], stats)
+                    })
+                })
+                state = state.set('content', content)
+            }
+            return state
         }
         return reducer(state, action);
     }
 }
 
 export default combineReducers({
-    global: initReducer(globalReducerModule.reducer),
+    global: initReducer(globalReducerModule.reducer, 'global'),
     market: initReducer(marketReducerModule.reducer),
     offchain: initReducer(offchain.reducer),
     user: initReducer(user.reducer),

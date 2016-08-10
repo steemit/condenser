@@ -38,12 +38,19 @@ export default createModule({
         { action: 'SAVE_LOGIN', reducer: (state) => state }, // Use only for low security keys (like posting only keys)
         { action: 'REMOVE_HIGH_SECURITY_KEYS', reducer: (state) => {
             if(!state.hasIn(['current', 'private_keys'])) return state
+            let empty = false
             state = state.updateIn(['current', 'private_keys'], private_keys => {
                 if(private_keys.has('active_private'))
                     console.log('removeHighSecurityKeys')
                 private_keys = private_keys.delete('active_private')
+                empty = private_keys.size === 0
                 return private_keys
             })
+            if(empty) {
+                // User logged in with Active key then navigates away from the page
+                // LOGOUT
+                return defaultState.merge({logged_out: true})
+            }
             const username = state.getIn(['current', 'username'])
             state = state.setIn(['authority', username, 'active'], 'none')
             state = state.setIn(['authority', username, 'owner'], 'none')

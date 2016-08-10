@@ -11,16 +11,24 @@ import extractContent from 'app/utils/ExtractContent';
 import { browserHistory } from 'react-router';
 import VotesAndComments from 'app/components/elements/VotesAndComments';
 import TagList from 'app/components/elements/TagList';
+import {authorNameAndRep} from 'app/utils/ComponentFormatters';
+import {Map} from 'immutable';
+import Reputation from 'app/components/elements/Reputation';
 
-function TimeAuthorCategory({post, links}) {
+function TimeAuthorCategory({post, links, authorRepLog10, gray}) {
+    const author = <strong>{post.author}</strong>;
+
     return (
         <span className="vcard">
             <Tooltip t={new Date(post.created).toLocaleString()}>
                 <span className="TimeAgo"><TimeAgoWrapper date={post.created} /></span>
             </Tooltip>
-            <span> by&nbsp;<span itemProp="author" itemScope itemType="http://schema.org/Person">
-                    {links ? <Link to={post.author_link}>{post.author}</Link> : <strong>{post.author}</strong>}
-            </span>
+            <span> by&nbsp;
+                <span itemProp="author" itemScope itemType="http://schema.org/Person">
+                    {links ? <Link to={post.author_link}>{author}</Link> :
+                        <strong>{author}</strong>}
+                    <Reputation value={authorRepLog10} />
+                </span>
             </span>
             <span> in&nbsp;{links ? <TagList post={post} /> : <strong>{post.category}</strong>}</span>
         </span>
@@ -33,6 +41,7 @@ export default class PostSummary extends React.Component {
         pending_payout: React.PropTypes.string.isRequired,
         total_payout: React.PropTypes.string.isRequired,
         content: React.PropTypes.object.isRequired,
+        netVoteSign: React.PropTypes.number,
         currentCategory: React.PropTypes.string,
         thumbSize: React.PropTypes.string,
     };
@@ -44,8 +53,10 @@ export default class PostSummary extends React.Component {
     }
 
     render() {
-        const {post, content, pending_payout, total_payout, cashout_time, currentCategory, thumbSize} = this.props;
+        const {currentCategory, thumbSize, ignore} = this.props;
+        const {post, content, pending_payout, total_payout, cashout_time} = this.props;
         if (!content) return null;
+        const {gray, pictures, authorRepLog10} = content.get('stats', Map()).toJS()
         const p = extractContent(immutableAccessor, content);
         let desc = p.desc
         if(p.image_link)// image link is already shown in the preview
@@ -77,7 +88,7 @@ export default class PostSummary extends React.Component {
             title_link = <Link to={title_link}>{title_text}</Link>;
         }
 
-        if(p.net_rshares < 0) desc = "";
+        // if(p.net_rshares < 0) desc = "";
 
         let content_body = <div className="PostSummary__body entry-content" onClick={() => browserHistory.push(title_link_url)}>{desc}</div>;
         let content_title = <h1 className="entry-title">{title_link}</h1>;
@@ -90,10 +101,9 @@ export default class PostSummary extends React.Component {
         }
 
         let thumb = null;
-        if(p.net_rshares >= 0 && p.image_link) {
+        if(pictures && p.image_link) {
           const prox = $STM_Config.img_proxy_prefix
-          //const size = (thumbSize == 'mobile') ? '640x640' : '120x240'
-          const size = '0x0' // until scaling resolved
+          const size = (thumbSize == 'mobile') ? '640x480' : '128x256'
           const url = (prox ? prox + size + '/' : '') + p.image_link
           if(thumbSize == 'mobile') {
             thumb = <Link to={p.link} className="PostSummary__image-mobile"><img src={url} /></Link>
@@ -101,15 +111,16 @@ export default class PostSummary extends React.Component {
             thumb = <Link to={p.link} className="PostSummary__image" style={{backgroundImage: 'url(' + url + ')'}}></Link>
           }
         }
-
+        const commentClasses = []
+        if(gray || ignore) commentClasses.push('downvoted') // rephide
         return (
-            <article className={'PostSummary hentry' + (thumb ? ' with-image' : '')} itemScope itemType ="http://schema.org/blogPost">
+            <article className={'PostSummary hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')} itemScope itemType ="http://schema.org/blogPost">
                 <div className="float-right"><Voting post={post} flag /></div>
                 <div className="PostSummary__header show-for-small-only">
                     {content_title}
                 </div>
                 <div className="PostSummary__time_author_category_small show-for-small-only">
-                    <Link to={title_link_url}><TimeAuthorCategory post={p} links={false} /></Link>
+                    <Link to={title_link_url}><TimeAuthorCategory post={p} links={false} authorRepLog10={authorRepLog10} gray={gray} /></Link>
                 </div>
                 {thumb}
                 <div className="PostSummary__content">
@@ -120,7 +131,7 @@ export default class PostSummary extends React.Component {
                     <div className="PostSummary__footer">
                         <Voting post={post} pending_payout={pending_payout} total_payout={total_payout} showList={false} cashout_time={cashout_time} />
                         <span className="PostSummary__time_author_category show-for-medium">
-                            <TimeAuthorCategory post={p} links />
+                            <TimeAuthorCategory post={p} links authorRepLog10={authorRepLog10} />
                         </span>
                         <VotesAndComments post={post} commentsLink={comments_link} />
                     </div>
@@ -132,7 +143,7 @@ export default class PostSummary extends React.Component {
 
 export default connect(
     (state, props) => {
-        const post = props.post;
+        const {post} = props;
         const content = state.global.get('content').get(post);
         let pending_payout = 0;
         let total_payout = 0;

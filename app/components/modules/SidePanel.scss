@@ -55,3 +55,10 @@ $menu-width: 250px;
     }
   }
 }
+
+/* Small only */
+@media screen and (max-width: 39.9375em) {
+  .SidePanel > div > .menu > li > a {
+    padding: 0.3rem 1rem;
+  }
+}

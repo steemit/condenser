@@ -103,8 +103,8 @@ class UserWallet extends React.Component {
 
         let dollar_menu = [
             { value: 'Transfer', link: '#', onClick: showTransfer.bind( this, 'SBD' ) },
+            { value: 'Buy or Sell', link: '/market' },
             { value: 'Convert to STEEM', link: '#', onClick: convertToSteem },
-            { value: 'Buy or Sell', link: '/market' }
         ]
         const isWithdrawScheduled = new Date(account.next_vesting_withdrawal + 'Z').getTime() > Date.now()
         const depositReveal = showDeposit && <div>

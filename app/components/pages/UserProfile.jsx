@@ -213,7 +213,7 @@ export default class UserProfile extends React.Component {
                     <li><Link to={`/@${accountname}`} activeClassName="active">Blog</Link></li>
                     <li><Link to={`/@${accountname}/posts`} activeClassName="active">Posts</Link></li>
                     <li><Link to={`/@${accountname}/recent-replies`} activeClassName="active">Replies</Link></li>
-                    <li><Link to={`/@${accountname}/feed`} activeClassName="active">Feeds</Link></li>
+                    <li><Link to={`/@${accountname}/feed`} activeClassName="active">Feed</Link></li>
                     <li>
                         <LinkWithDropdown
                             closeOnClickOutside

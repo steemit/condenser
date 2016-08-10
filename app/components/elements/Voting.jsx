@@ -163,7 +163,7 @@ export default connect(
         const voting = state.global.get(`transaction_vote_active_${author}_${permlink}`)
         let myVote = null;
         if (username && active_votes) {
-            const vote = active_votes.find(el => el.get('voter') === username && el.get('time') > last_payout)
+            const vote = active_votes.find(el => el.get('voter') === username)
             // weigth warning, the API may send a string or a number (when zero)
             if(vote) myVote = parseInt(vote.get('percent') || 0, 10)
         }

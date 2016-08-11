@@ -467,6 +467,7 @@ export default formId => reduxForm(
 
             const rtags = HtmlReady(body, {mutate: false})
             allowedTags.forEach(tag => {rtags.htmltags.delete(tag)})
+            rtags.htmltags.delete('html')
             if(rtags.htmltags.size) {
                 errorCallback('Please remove the following tags from your post: ' + Array(...rtags.htmltags).join(', '))
                 return

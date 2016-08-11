@@ -11,6 +11,7 @@ import PasswordReset from 'app/components/elements/PasswordReset';
 import UserWallet from 'app/components/modules/UserWallet';
 import CurationRewards from 'app/components/modules/CurationRewards';
 import AuthorRewards from 'app/components/modules/AuthorRewards';
+import UserList from 'app/components/elements/UserList';
 import Follow from 'app/components/elements/Follow';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import PostsList from 'app/components/cards/PostsList';
@@ -116,6 +117,24 @@ export default class UserProfile extends React.Component {
                           account={account}
                           current_user={current_user}
                           />
+        }
+        else if( section === 'followers' ) {
+            if (followers && followers.has('result')) {
+                tab_content = <UserList global={this.props.global}
+                          title="Followers"
+                          account={account}
+                          users={followers}
+                          />
+            }
+        }
+        else if( section === 'followed' ) {
+            if (following && following.has('result')) {
+                tab_content = <UserList global={this.props.global}
+                          title="Followed"
+                          account={account}
+                          users={following}
+                          />
+            }
         }
         else if( section === 'posts' && account.post_history ) {
            if( account.posts )
@@ -256,9 +275,9 @@ export default class UserProfile extends React.Component {
 
                         <div>
                             <div className="UserProfile__stats">
-                                <span>{followerCount} followers</span>
+                                <span><Link to={`/@${accountname}/followers`}>{followerCount} followers</Link></span>
                                 <span>{account.post_count} posts</span>
-                                <span>{followingCount} followed</span>
+                                <span><Link to={`/@${accountname}/followed`}>{followingCount} followed</Link></span>
                             </div>
                         </div>
                     </div>

@@ -51,6 +51,9 @@
 .UserProfile__banner {
     text-align: center;
     color: $white;
+    a {
+        color: $white;
+    }
     > div.column {
         background-color: #23579d;
         height: 150px;

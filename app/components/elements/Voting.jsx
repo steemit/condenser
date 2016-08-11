@@ -196,8 +196,6 @@ class Voting extends React.Component {
                         {votingUpActive ? up : <a href="#" onClick={voteUpClick} title={myVote > 0 ? 'Remove Vote' : 'Upvote'}>{up}</a>}
                         {dropdown}
                     </span>
-                </span>
-                <span className="Voting__inner">
                     {payoutEl}
                 </span>
                 {voters_list}

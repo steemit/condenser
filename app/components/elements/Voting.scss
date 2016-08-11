@@ -120,7 +120,9 @@
 }
 
 .Voting__inner {
-  // padding-right: 0.5rem;
+  border-right: 1px solid #cacaca;
+  padding-right: .5rem;
+  margin-right: 1rem;
   position: relative;
   .cancel {
     font-size: 80%;

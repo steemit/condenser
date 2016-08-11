@@ -61,6 +61,13 @@ export function* fetchData(action) {
           limit: constants.FETCH_DATA_BATCH_SIZE,
           start_author: author,
           start_permlink: permlink}];
+    } else if (order === 'trending30') {
+        call_name = 'get_discussions_by_trending30';
+        args = [
+        { tag: category,
+          limit: constants.FETCH_DATA_BATCH_SIZE,
+          start_author: author,
+          start_permlink: permlink}];
     } else if( order === 'active' ) {
         call_name = 'get_discussions_by_active';
         args = [

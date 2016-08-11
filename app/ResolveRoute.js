@@ -59,8 +59,8 @@ export default function resolveRoute(path)
     if (match) {
         return {page: 'Post', params: match.slice(1)};
     }
-    match = path.match(/^\/(best|updated|hot|votes|responses|trending|cashout|created|recent|active)\/?$/)
-    || path.match(/^\/(best|trending|hot|updated|votes|responses|cashout|created|recent|active)\/([\w\d-]+)\/?$/);
+    match = path.match(/^\/(best|updated|hot|votes|responses|trending|trending30|cashout|created|recent|active)\/?$/)
+         || path.match(/^\/(best|updated|hot|votes|responses|trending|trending30|cashout|created|recent|active)\/([\w\d-]+)\/?$/);
     if (match) {
         return {page: 'PostsIndex', params: match.slice(1)};
     }

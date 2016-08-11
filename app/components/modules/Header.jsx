@@ -52,6 +52,7 @@ class Header extends React.Component {
         const sort_orders = {
                 hot: 'hot',
                 trending: 'trending',
+                trending30: 'trending (30 day)',
                 cashout: 'payout time',
                 created: 'new',
                 active: 'active',

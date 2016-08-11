@@ -2,6 +2,8 @@
 import React from 'react';
 import UserListRow from 'app/components/cards/UserListRow';
 
+const PER_PAGE = 50;
+
 class UserList extends React.Component {
 
     constructor() {
@@ -10,12 +12,12 @@ class UserList extends React.Component {
     }
 
     _setHistoryPagePrevious = () => {
-        const newIndex = this.state.historyIndex + (-10);
+        const newIndex = this.state.historyIndex - PER_PAGE;
         this.setState({historyIndex: Math.max(0, newIndex)});
     }
 
     _setHistoryPageNext = () => {
-        const newIndex = this.state.historyIndex + (10);
+        const newIndex = this.state.historyIndex + PER_PAGE;
         this.setState({historyIndex: Math.max(0, newIndex)});
     }
 
@@ -34,10 +36,10 @@ class UserList extends React.Component {
 
         let currentIndex = -1;
         const usersLength = users.size;
-        const limitedIndex = Math.min(historyIndex, usersLength - 50);
+        const limitedIndex = Math.min(historyIndex, usersLength - PER_PAGE);
         user_list = user_list.reverse().filter(() => {
             currentIndex++;
-            return currentIndex >= limitedIndex && currentIndex < limitedIndex + 50;
+            return currentIndex >= limitedIndex && currentIndex < limitedIndex + PER_PAGE;
         });
 
         const navButtons = (
@@ -49,7 +51,7 @@ class UserList extends React.Component {
                      </div>
                  </li>
                  <li>
-                     <div className={"button tiny hollow float-right " + (historyIndex >= (usersLength - 10) ? " disabled" : "")} onClick={historyIndex >= (usersLength - 10) ? null : this._setHistoryPageNext} aria-label="Next">
+                     <div className={"button tiny hollow float-right " + (historyIndex >= (usersLength - PER_PAGE) ? " disabled" : "")} onClick={historyIndex >= (usersLength - PER_PAGE) ? null : this._setHistoryPageNext} aria-label="Next">
                          <span aria-hidden="true">Next &rarr;</span>
                      </div>
                  </li>

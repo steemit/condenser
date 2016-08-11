@@ -482,7 +482,7 @@ export default formId => reduxForm(
             // cp('description')
             // if(Object.keys(json_metadata.steem).length === 0) json_metadata = {}// keep json_metadata minimal
             const sanitizeErrors = []
-            const text = isHtmlTest(body) ? sanitize(body, sanitizeConfig({sanitizeErrors})) : body
+            sanitize(body, sanitizeConfig({sanitizeErrors}))
             if(sanitizeErrors.length) {
                 errorCallback(sanitizeErrors.join('.  '))
                 return
@@ -501,7 +501,7 @@ export default formId => reduxForm(
             }
             const operation = {
                 ...linkProps,
-                category: rootCategory, title, body: text,
+                category: rootCategory, title, body,
                 json_metadata: meta,
                 __config: {originalPost, autoVote}
             }

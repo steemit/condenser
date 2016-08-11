@@ -104,3 +104,20 @@ export default ({large = true, highQualityPost = true, noImage = false, sanitize
         },
     }
 })
+
+
+export const sanitizeBlockchainBlacklist = ({sanitizeErrors = []}) => {
+    const tags = `canvas, form, frame, frameset, head, input, 
+        link, menu, meta, noscript, object, progress, ruby, script,
+        select, style, textarea, time, var,
+    `.trim().split(/,\s*/)
+    const transformTags = {}
+    const config = {allowedTags: tags, transformTags}
+    for(const tag of tags) {
+        transformTags[tag] = tagName => {
+            sanitizeErrors.push(tag)
+            return {tagName, text: tagName + ' blacklisted'}
+        }
+    }
+    return config
+}

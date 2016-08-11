@@ -7,7 +7,7 @@ import {validateCategory} from 'app/components/cards/CategorySelector'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import Tooltip from 'app/components/elements/Tooltip'
-import sanitizeConfig from 'app/utils/SanitizeConfig'
+import sanitizeConfig, {sanitizeBlockchainBlacklist} from 'app/utils/SanitizeConfig'
 import sanitize from 'sanitize-html'
 import HtmlReady from 'shared/HtmlReady'
 import g from 'app/redux/GlobalReducer'
@@ -487,6 +487,13 @@ export default formId => reduxForm(
                 errorCallback(sanitizeErrors.join('.  '))
                 return
             }
+
+            sanitize(body, sanitizeBlockchainBlacklist({sanitizeErrors}))
+            if(sanitizeErrors.length) {
+                errorCallback('Please remove the following tags from your post: ' + sanitizeErrors.join(', '))
+                return
+            }
+
             if(meta.tags.length > 5) {
                 const includingCategory = /edit/.test(type) ? ` (including the category '${rootCategory}')` : ''
                 errorCallback(`You have ${meta.tags.length} tags total${includingCategory}.  Please use only 5 in your post and category line.`)

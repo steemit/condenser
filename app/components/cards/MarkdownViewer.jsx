@@ -59,7 +59,7 @@ class MarkdownViewer extends Component {
         const {large, /*formId, canEdit, jsonMetadata,*/ highQualityPost} = this.props
 
         let html = false;
-        const m = text.match(/<html>([\S\s]*)<\/html>/m);
+        const m = text.match(/^<html>([\S\s]*)<\/html>$/);
         if (m && m.length === 2) {
             html = true;
             text = m[1];
@@ -68,7 +68,7 @@ class MarkdownViewer extends Component {
         }
 
         // Strip out HTML comments. "JS-DOS" bug.
-        text = text.replace(/<!--[\s\S]+?(-->|$)/g, '')
+        text = text.replace(/<!--([\s\S]+?)(-->|$)/g, '(html comment removed: $1)')
 
         let renderedText = html ? text : remarkable.render(text)
 

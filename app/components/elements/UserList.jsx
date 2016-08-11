@@ -23,10 +23,10 @@ class UserList extends React.Component {
 
         let user_list = users.map((item, index) => {
             if(item.get(0) === "blog") {
-                return <UserListRow account={account} user={index} />
+                return <UserListRow account={account} user={index} key={index} />
             }
             return null;
-        }).filter(el => !!el);
+        }).filter(el => !!el).toArray();
 
         let currentIndex = -1;
         const usersLength = users.size;

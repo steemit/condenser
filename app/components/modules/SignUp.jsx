@@ -32,7 +32,7 @@ export default class SignUp extends React.Component {
             <div className="row">
                 <div className="column">
                     <h3>Sign Up</h3>
-                    <p>Steemit funds each account with over $7 worth of Steem Power; to prevent abuse, we
+                    <p>Steemit funds each account with over $5 worth of Steem Power; to prevent abuse, we
                         require new users to login via social media.<br />
                         Your personal information will be kept <a href="/privacy.html" target="_blank">private</a>.
                     </p>

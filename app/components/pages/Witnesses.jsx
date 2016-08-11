@@ -78,6 +78,14 @@ class Witnesses extends React.Component {
         <div className="Witnesses row">
            <h2>Top Witnesses</h2>
         </div>
+
+          {header}
+          <div className="Witnesses row">
+            <div className="column small-12">         
+                 {witnesses.toArray()}
+            </div>
+          </div>
+          <hr/>          
           <div className="row">
             <div className="column small-6">
               <p>If the witness is not in the top 50, enter their username here to cast a vote.</p>
@@ -85,13 +93,8 @@ class Witnesses extends React.Component {
                 <input type="text" style={{float: "left", width: "75%"}} value={customUsername} onChange={onWitnessChange} />
                 <button className="darkbtn" onClick={accountWitnessVote.bind(this, customUsername, !(witness_votes ? witness_votes.has(customUsername) : null))}>Vote</button>
               </form>
+              <br/><br/>
              </div>
-          </div>
-          {header}
-          <div className="Witnesses row">
-            <div className="column small-12">         
-                 {witnesses.toArray()}
-            </div>
           </div>
       </div>
       );

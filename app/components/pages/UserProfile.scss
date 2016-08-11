@@ -78,6 +78,10 @@
         margin-bottom: 5px;
         padding-bottom: 5px;
 
+        a {
+          border-bottom: 1px dotted rgba(255,255,255,0.5);
+	}
+
         span {
             padding: 0px 10px;
         }

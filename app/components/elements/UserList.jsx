@@ -1,6 +1,5 @@
 /* eslint react/prop-types: 0 */
 import React from 'react';
-import {connect} from 'react-redux'
 import UserListRow from 'app/components/cards/UserListRow';
 
 class UserList extends React.Component {
@@ -10,8 +9,13 @@ class UserList extends React.Component {
         this.state = {historyIndex: 0}
     }
 
-    _setHistoryPage(back) {
-        const newIndex = this.state.historyIndex + (back ? 10 : -10);
+    _setHistoryPagePrevious = () => {
+        const newIndex = this.state.historyIndex + (-10);
+        this.setState({historyIndex: Math.max(0, newIndex)});
+    }
+
+    _setHistoryPageNext = () => {
+        const newIndex = this.state.historyIndex + (10);
         this.setState({historyIndex: Math.max(0, newIndex)});
     }
 
@@ -40,12 +44,12 @@ class UserList extends React.Component {
              <nav>
                <ul className="pager">
                  <li>
-                     <div className={"button tiny hollow float-left " + (historyIndex === 0 ? " disabled" : "")} onClick={this._setHistoryPage.bind(this, false)} aria-label="Previous">
+                     <div className={"button tiny hollow float-left " + (historyIndex === 0 ? " disabled" : "")} onClick={this._setHistoryPagePrevious} ariaLabel="Previous">
                          <span aria-hidden="true">&larr; Previous</span>
                      </div>
                  </li>
                  <li>
-                     <div className={"button tiny hollow float-right " + (historyIndex >= (usersLength - 10) ? " disabled" : "")} onClick={historyIndex >= (usersLength - 10) ? null : this._setHistoryPage.bind(this, true)} aria-label="Next">
+                     <div className={"button tiny hollow float-right " + (historyIndex >= (usersLength - 10) ? " disabled" : "")} onClick={historyIndex >= (usersLength - 10) ? null : this._setHistoryPageNext} aria-label="Next">
                          <span aria-hidden="true">Next &rarr;</span>
                      </div>
                  </li>
@@ -70,4 +74,4 @@ class UserList extends React.Component {
     }
 }
 
-export default connect()(UserList)
+export default UserList

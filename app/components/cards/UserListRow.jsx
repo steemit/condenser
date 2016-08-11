@@ -8,7 +8,7 @@ class UserListRow extends React.Component {
         return(
             <tr>
                 <td width="250">
-                    <Follow follower={account.name} following={user} what='blog' />
+                    <Follow follower={account.name} following={user} what="blog" />
                 </td>
                 <td>
                     <Link to={'/@' + user}><strong>{user}</strong></Link>
@@ -16,7 +16,6 @@ class UserListRow extends React.Component {
             </tr>
         );
     }
-};
+}
 
-import {connect} from 'react-redux'
-export default connect()(UserListRow)
+export default UserListRow

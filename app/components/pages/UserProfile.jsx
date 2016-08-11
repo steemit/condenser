@@ -120,7 +120,7 @@ export default class UserProfile extends React.Component {
         }
         else if( section === 'followers' ) {
             if (followers && followers.has('result')) {
-                tab_content = <UserList global={this.props.global}
+                tab_content = <UserList
                           title="Followers"
                           account={account}
                           users={followers}
@@ -129,7 +129,7 @@ export default class UserProfile extends React.Component {
         }
         else if( section === 'followed' ) {
             if (following && following.has('result')) {
-                tab_content = <UserList global={this.props.global}
+                tab_content = <UserList
                           title="Followed"
                           account={account}
                           users={following}

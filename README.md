@@ -6,6 +6,9 @@ Steemit
 #### Install dependencies
 
 ```bash
+# Install at least Node v6.3 if you don't already have it (NVM recommended)
+nvm install v6
+
 npm install
 npm install -g babel-cli
 ```

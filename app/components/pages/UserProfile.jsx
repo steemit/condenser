@@ -268,7 +268,7 @@ export default class UserProfile extends React.Component {
                     <div className="column">
                         <div style={{position: "relative"}}>
                             <div className="UserProfile__buttons">
-                                {section === 'blog' ? <Follow follower={username} following={accountname} what={section} /> : null}
+                                <Follow follower={username} following={accountname} what="blog" />
                             </div>
                         </div>
                         <h2>{account.name} <Tooltip t={`This is ${accountname}'s reputation score.\n\nThe reputation score is based on the history of votes received by the account, and is used to hide low quality content.`}><span style={{fontSize: "80%"}}>({rep})</span></Tooltip></h2>

@@ -15,7 +15,7 @@ import {Dropdown} from 'react-foundation-components/lib/global/dropdown';
 
 const ABOUT_FLAG = 'Flagging a post can remove rewards and make this material less visible.  You can still unflag or upvote later if you change your mind.'
 const MAX_VOTES_DISPLAY = 20;
-const VOTE_WEIGHT_DROPDOWN_THRESHOLD = 1000.0 * 1000.0 * 1000.0;
+const VOTE_WEIGHT_DROPDOWN_THRESHOLD = 100.0 * 1000.0 * 1000.0;
 
 function findParent(el, class_name) {
     if (el.className && el.className.indexOf && el.className.indexOf(class_name) !== -1) return el;

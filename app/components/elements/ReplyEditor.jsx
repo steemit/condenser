@@ -7,7 +7,7 @@ import {validateCategory} from 'app/components/cards/CategorySelector'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import Tooltip from 'app/components/elements/Tooltip'
-import sanitizeConfig, {sanitizeBlockchainBlacklist} from 'app/utils/SanitizeConfig'
+import sanitizeConfig, {allowedTags} from 'app/utils/SanitizeConfig'
 import sanitize from 'sanitize-html'
 import HtmlReady from 'shared/HtmlReady'
 import g from 'app/redux/GlobalReducer'
@@ -466,6 +466,12 @@ export default formId => reduxForm(
             const rootTag = /^[-a-z\d]+$/.test(rootCategory) ? rootCategory : null
 
             const rtags = HtmlReady(body, {mutate: false})
+            allowedTags.forEach(tag => {rtags.htmltags.delete(tag)})
+            if(rtags.htmltags.size) {
+                errorCallback('Please remove the following tags from your post: ' + Array(...rtags.htmltags).join(', '))
+                return
+            }
+
             let allCategories = Set([...formCategories.toJS(), ...rtags.hashtags])
             if(rootTag) allCategories = allCategories.add(rootTag)
 
@@ -488,11 +494,6 @@ export default formId => reduxForm(
                 return
             }
 
-            sanitize(body, sanitizeBlockchainBlacklist({sanitizeErrors}))
-            if(sanitizeErrors.length) {
-                errorCallback('Please remove the following tags from your post: ' + sanitizeErrors.join(', '))
-                return
-            }
 
             if(meta.tags.length > 5) {
                 const includingCategory = /edit/.test(type) ? ` (including the category '${rootCategory}')` : ''

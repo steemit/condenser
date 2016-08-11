@@ -20,15 +20,16 @@ const iframeWhitelist = [
     }
 ];
 export const noImageText = '(Image not shown due to low ratings)'
+export const allowedTags = `
+    div, iframe,
+    a, p, b, q, br, ul, li, ol, img, h1, h2, h3, h4, h5, h6, hr,
+    blockquote, pre, code, em, strong, center, table, thead, tbody, tr, th, td,
+    strike, sup,
+`.trim().split(/,\s*/)
 
 // Medium insert plugin uses: div, figure, figcaption, iframe
 export default ({large = true, highQualityPost = true, noImage = false, sanitizeErrors = []}) => ({
-    allowedTags: `
-        div, iframe,
-        a, p, b, q, br, ul, li, ol, img, h1, h2, h3, h4, h5, h6, hr,
-        blockquote, pre, code, em, strong, center, table, thead, tbody, tr, th, td,
-        strike, sup,
-    `.trim().split(/,\s*/),
+    allowedTags,
         // figure, figcaption,
 
     // SEE https://www.owasp.org/index.php/XSS_Filter_Evasion_Cheat_Sheet
@@ -104,20 +105,3 @@ export default ({large = true, highQualityPost = true, noImage = false, sanitize
         },
     }
 })
-
-
-export const sanitizeBlockchainBlacklist = ({sanitizeErrors = []}) => {
-    const tags = `canvas, form, frame, frameset, head, input, 
-        link, menu, meta, noscript, object, progress, ruby, script,
-        select, style, textarea, time, var,
-    `.trim().split(/,\s*/)
-    const transformTags = {}
-    const config = {allowedTags: tags, transformTags}
-    for(const tag of tags) {
-        transformTags[tag] = tagName => {
-            sanitizeErrors.push(tag)
-            return {tagName, text: tagName + ' blacklisted'}
-        }
-    }
-    return config
-}

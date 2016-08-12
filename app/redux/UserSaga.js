@@ -1,4 +1,4 @@
-import {fromJS, Set, Map} from 'immutable'
+import {fromJS, Set} from 'immutable'
 import {takeLatest} from 'redux-saga';
 import {call, put, select, fork} from 'redux-saga/effects';
 import {accountAuthLookup} from 'app/redux/AuthSaga'
@@ -65,10 +65,10 @@ function* usernamePasswordLogin(action) {
     }
 }
 
-const isHighSecurityOperations = ['transfer', 'transfer_to_vesting', 'withdraw_vesting',
-    'limit_order_create', 'limit_order_cancel', 'account_update', 'account_witness_vote']
+// const isHighSecurityOperations = ['transfer', 'transfer_to_vesting', 'withdraw_vesting',
+//     'limit_order_create', 'limit_order_cancel', 'account_update', 'account_witness_vote']
 
-const highSecurityPages = Array(/\/market/, /\/@.+\/transfers/, /\/~witnesses/)
+const highSecurityPages = Array(/\/market/, /\/@.+\/(transfers|permissions|password)/, /\/~witnesses/)
 
 const clean = (value) => value == null || value === '' || /null|undefined/.test(value) ? undefined : value
 
@@ -98,8 +98,8 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     const current_route = yield select(state => state.global.get('current_route'))
 
     const highSecurityLogin =
-        /owner|active/.test(userProvidedRole) ||
-        isHighSecurityOperations.indexOf(operationType) !== -1 ||
+        // /owner|active/.test(userProvidedRole) ||
+        // isHighSecurityOperations.indexOf(operationType) !== -1 ||
         highSecurityPages.find(p => p.test(current_route)) != null
 
     const isRole = (role, fn) => (!userProvidedRole || role === userProvidedRole ? fn() : undefined)
@@ -132,7 +132,13 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         private_keys = private_keys.set('memo_private', PrivateKey.fromWif(memoWif))
 
     yield call(accountAuthLookup, {payload: {account, private_keys, highSecurityLogin, login_owner_pubkey}})
-    const authority = yield select(state => state.user.getIn(['authority', username]))
+    let authority = yield select(state => state.user.getIn(['authority', username]))
+    const hasActiveAuth = authority.get('active') === 'full'
+    if(!highSecurityLogin) {
+        const accountName = account.get('name')
+        authority = authority.set('active', 'none')
+        yield put(user.actions.setAuthority({accountName, auth: authority}))
+    }
     const fullAuths = authority.reduce((r, auth, type) => (auth === 'full' ? r.add(type) : r), Set())
     if (!fullAuths.size) {
         localStorage.removeItem('autopost2')
@@ -145,6 +151,8 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         }
         if(login_owner_pubkey === owner_pub_key || login_wif_owner_pubkey === owner_pub_key) {
             yield put(user.actions.loginError({ error: 'owner_login_blocked' }))
+        } else if(!highSecurityLogin && hasActiveAuth) {
+            yield put(user.actions.loginError({ error: 'active_login_blocked' }))
         } else {
             const generated_type = password[0] === 'P' && password.length > 40;
             serverApiRecordEvent('login_attempt', JSON.stringify({name: username, login_owner_pubkey, owner_pub_key, generated_type}))

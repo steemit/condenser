@@ -16,10 +16,6 @@ class Keys extends Component {
         super()
         this.state = {}
     }
-    componentWillMount() {
-        const {auth, accountAuthLookup, account} = this.props
-        if (!auth) accountAuthLookup({account})
-    }
     shouldComponentUpdate(nextProps, nextState) {
         return this.props.auth !== nextProps.auth ||
             this.props.authType !== nextProps.authType ||
@@ -96,10 +92,6 @@ export default connect(
         return {...ownProps, auth, authLogin, privateKeys}
     },
     dispatch => ({
-        accountAuthLookup: ({account}) => {
-            // console.log('account.toJS()', account.toJS())
-            dispatch(user.actions.accountAuthLookup({account}))
-        },
         showChangePassword: (username, authType, priorAuthKey) => {
             const name = 'changePassword'
             dispatch(g.actions.remove({key: name}))

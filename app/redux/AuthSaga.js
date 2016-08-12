@@ -17,7 +17,7 @@ function* watchForAuth() {
     yield* takeEvery('user/ACCOUNT_AUTH_LOOKUP', accountAuthLookup);
 }
 
-export function* accountAuthLookup({payload: {account, private_keys, highSecurityLogin, login_owner_pubkey}}) {
+export function* accountAuthLookup({payload: {account, private_keys, login_owner_pubkey}}) {
     account = fromJS(account)
     private_keys = fromJS(private_keys)
     // console.log('accountAuthLookup', account.name)
@@ -29,21 +29,17 @@ export function* accountAuthLookup({payload: {account, private_keys, highSecurit
         keys = stateUser.getIn(['current', 'private_keys'])
 
     if (!keys || !keys.has('posting_private')) return
-    const toPub = k => { return k ? k.toPublicKey().toString() : '-'}
+    const toPub = k => k ? k.toPublicKey().toString() : '-'
     const posting = keys.get('posting_private')
     const active = keys.get('active_private')
     const memo = keys.get('memo_private')
-    let activeRole = 'none', ownerRole = 'none'
-    if(highSecurityLogin) {
-        activeRole = active ? yield authorityLookup(
-            {pubkeys: Set([toPub(active)]), authority: account.get('active'), authType: 'active'}) : null
-        ownerRole = 'none'
-    }
     const auth = {
         posting: posting ? yield authorityLookup(
-            {pubkeys: Set([toPub(posting)]), authority: account.get('posting'), authType: 'posting'}) : null,
-        active: activeRole, owner: ownerRole,
-        memo: account.get('memo_key') === memo ? 'full' : 'none'
+            {pubkeys: Set([toPub(posting)]), authority: account.get('posting'), authType: 'posting'}) : 'none',
+        active: active ? yield authorityLookup(
+            {pubkeys: Set([toPub(active)]), authority: account.get('active'), authType: 'active'}) : 'none',
+        owner: 'none',
+        memo: account.get('memo_key') === toPub(memo) ? 'full' : 'none'
     }
     const accountName = account.get('name')
     const pub_keys_used = {posting: toPub(posting), active: toPub(active), owner: login_owner_pubkey};

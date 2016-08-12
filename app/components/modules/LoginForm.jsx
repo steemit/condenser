@@ -126,6 +126,9 @@ class LoginForm extends Component {
         if (error === 'owner_login_blocked') {
             error = <span>This password is bound to your account's owner key and can not be used to login to this site.
                 However, you can use it to <a onClick={this.showChangePassword}>update your password</a> to obtain a more secure set of keys.</span>
+        } else if (error === 'active_login_blocked') {
+            error = <span>This password is bound to your account's active key and can not be used to login to this page.  You may use this
+                active key on other more secure pages like the Wallet or Market pages.</span>
         }
         let message = null;
         if (msg) {

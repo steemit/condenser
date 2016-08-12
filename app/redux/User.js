@@ -131,7 +131,6 @@ export default createModule({
             action: 'ACCOUNT_AUTH_LOOKUP',
             payloadTypes: {
                 account: object.isRequired, // immutable Map
-                highSecurityLogin: bool,
                 private_keys: shape({
                     posting_private: object,
                     active_private: object,
@@ -152,7 +151,10 @@ export default createModule({
                 pub_keys_used: object,
             },
             reducer: (state, {payload: {accountName, auth, pub_keys_used}}) => {
-                return state.setIn(['authority', accountName], fromJS(auth)).set('pub_keys_used', pub_keys_used)
+                state = state.setIn(['authority', accountName], fromJS(auth))
+                if(pub_keys_used)
+                    state = state.set('pub_keys_used', pub_keys_used)
+                return state
             },
         },
         { action: 'HIDE_CONNECTION_ERROR_MODAL', reducer: state => state.set('hide_connection_error_modal', true) },

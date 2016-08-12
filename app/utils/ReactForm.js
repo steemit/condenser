@@ -6,7 +6,6 @@
     @arg {function} validation - values => ({ username: ! values.username ? 'Required' : null, ... })
 */
 export default function reactForm({name, instance, fields, initialValues, validation = () => {}}) {
-
     if(typeof instance !== 'object') throw new TypeError('instance is a required object')
     if(!Array.isArray(fields)) throw new TypeError('fields is a required array')
     if(typeof initialValues !== 'object') throw new TypeError('initialValues is a required object')
@@ -47,26 +46,33 @@ export default function reactForm({name, instance, fields, initialValues, valida
     }
 
     for(const fieldName of fields) {
-        formState[fieldName] = {
-            // This is expanded <input {...fieldName.props} />, so only add common props here
-            props: {
-                onChange: e => {
-                    const value = e.target ? e.target.value : e // API may pass value directly
-                    const v = {...(instance.state[fieldName] || {})}
-                    v.props.value = value
-                    v.props.checked = typeof initialValues[fieldName] === 'boolean' ? value : undefined
-                    v.touched = value !== (initialValues[fieldName] || '')
-                    instance.setState(
-                        {[fieldName]: v},
-                        () => {isValid(name, instance, fields, validation)}
-                    )
-                },
-                // `value` prop on `input` should not be null. Consider using the empty string to clear the component or `undefined` for uncontrolled
-                value: initialValues[fieldName] === null ? '' : initialValues[fieldName],
-                checked: typeof initialValues[fieldName] === 'boolean' ? initialValues[fieldName] : undefined,
-            },
-            touched: false,
+        const fs = formState[fieldName] = {
+            value: null,
             error: null,
+            touched: false,
+        }
+
+        // This is expanded <input {...fieldName.props} />, so only add common props here
+        fs.props = {
+            onChange: e => {
+                const value = e.target ? e.target.value : e // API may pass value directly
+                console.log('value', value)
+                const v = {...(instance.state[fieldName] || {})}
+                v.value = value
+                v.touched = value !== (initialValues[fieldName] || '')
+                instance.setState(
+                    {[fieldName]: v},
+                    () => {isValid(name, instance, fields, validation)}
+                )
+            },
+        }
+
+        const initialValue = initialValues[fieldName]
+        fs.value = initialValue
+        if(typeof initialValue === 'boolean') {
+            fs.props.defaultChecked = initialValue
+        } else if(initialValue != null) {
+            fs.props.defaultValue = initialValue
         }
     }
 }
@@ -91,7 +97,7 @@ function isValid(name, instance, fields, validation) {
 function getData(fields, state) {
     const data = {}
     for(const fieldName of fields) {
-        data[fieldName] = state[fieldName].props.value
+        data[fieldName] = state[fieldName].value
     }
     return data
 }

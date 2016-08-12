@@ -32,8 +32,8 @@ class LoginForm extends Component {
         }
         this.state = {cryptographyFailure}
         this.usernameOnChange = e => {
-            e.target.value = e.target.value.toLowerCase()
-            this.state.username.props.onChange(e)
+            const value = e.target.value.toLowerCase()
+            this.state.username.props.onChange(value)
         }
         this.onCancel = () => {
             const {onCancel, loginBroadcastOperation} = this.props
@@ -159,7 +159,7 @@ class LoginForm extends Component {
             >
                 <div>
                     <input type="text" required placeholder="Enter your username" ref="username"
-                        {...username.props} onChange={usernameOnChange} autoComplete="on" disabled={submitting} />
+                        {...username.props} onChange={usernameOnChange} value={username.value} autoComplete="on" disabled={submitting} />
                     <div className="error">{username.touched && username.error && username.error}&nbsp;</div>
                 </div>
 
@@ -206,7 +206,7 @@ if (process.env.BROWSER) {
 }
 
 function urlAccountName() {
-    let suggestedAccountName = '';
+    let suggestedAccountName = null;
     const account_match = window.location.hash.match(/account\=([\w\d\-\.]+)/);
     if (account_match && account_match.length > 1) suggestedAccountName = account_match[1];
     return suggestedAccountName
@@ -223,7 +223,6 @@ export default connect(
 
         const initialValues = {
             username: currentUser ? currentUser.get('username') : urlAccountName(),
-            password: '',
             saveLogin: saveLoginDefault,
         }
 

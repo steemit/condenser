@@ -140,7 +140,7 @@ class Voting extends React.Component {
         const classUp = 'Voting__button Voting__button-up' + (myVote > 0 ? ' Voting__button--upvoted' : '') + (votingUpActive ? ' votingUp' : '');
 
         const payoutItems = [
-            {value: 'Pending Payout $' + formatDecimal(pending_payout_value).join('')}
+            {value: 'Potential Payout $' + formatDecimal(pending_payout_value).join('')}
         ];
         if (cashout_time && cashout_time.indexOf('1969') !== 0 && cashout_time.indexOf('1970') !== 0) {
             payoutItems.push({value: <TimeAgoWrapper date={cashout_time} />});

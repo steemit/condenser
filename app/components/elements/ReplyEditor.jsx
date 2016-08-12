@@ -145,11 +145,14 @@ class ReplyEditor extends React.Component {
             if (RichTextEditor) {
                 if (body.value) {
                     if (isHtmlTest(body.value)) {
+                        rte = true;
                         const html = getHtml(body.value);
                         rte_value = RichTextEditor.createValueFromString(html, 'html')
                     } else {
                         rte = false;
-                        rte_value = RichTextEditor.createValueFromString(body.initialValue, 'html');
+                        rte_value = RichTextEditor.createEmptyValue();
+                        // body.initialValue causes 100% cpu when editing http://localhost:3002/steemit/@cryptomental/can-a-viral-introduceyourself-post-be-engineered
+                        // rte_value = RichTextEditor.createValueFromString(body.initialValue, 'html');
                     }
                 } else {
                     rte_value = RichTextEditor.createEmptyValue();

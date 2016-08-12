@@ -177,7 +177,7 @@ class Voting extends React.Component {
 
         let voteUpClick = this.voteUp;
         let dropdown = null;
-        if (vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD) {
+        if (myVote <= 0 && vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD) {
             voteUpClick = this.toggleWeight;
             if (showWeight) {
                 dropdown = <Dropdown>

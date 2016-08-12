@@ -287,7 +287,7 @@ class CommentImpl extends React.Component {
         const commentClasses = ['hentry']
         commentClasses.push('Comment')
         commentClasses.push(this.props.root ? 'root' : 'reply')
-        // if((hide_body && !showNegativeComments) || !this.state.show_details) commentClasses.push('collapsed');
+        if((hide_body && !showNegativeComments) || !this.state.show_details) commentClasses.push('collapsed');
         const downVotedClass = ignore || gray ? 'downvoted' : ' '
         //console.log(comment);
         let renderedEditor = null;

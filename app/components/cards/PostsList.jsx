@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react';
 import PostSummary from 'app/components/cards/PostSummary';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+import debounce from "lodash.debounce";
 
 function topPosition(domElt) {
     if (!domElt) {
@@ -53,7 +54,7 @@ class PostsList extends React.Component {
         });
     }
 
-    scrollListener() {
+    scrollListener = debounce(() => {
         const el = window.document.getElementById('posts_list');
         if (!el) return;
         const scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset :
@@ -64,13 +65,13 @@ class PostsList extends React.Component {
         }
 
         // Detect if we're in mobile mode (renders larger preview imgs)
-        var mq = window.matchMedia('screen and (max-width: 39.9375em)')
+        var mq = window.matchMedia('screen and (max-width: 39.9375em)');
         if(mq.matches) {
             this.setState({thumbSize: 'mobile'})
         } else {
             this.setState({thumbSize: 'desktop'})
         }
-    }
+    }, 150)
 
     attachScrollListener() {
         window.addEventListener('scroll', this.scrollListener);
@@ -107,9 +108,7 @@ class PostsList extends React.Component {
 }
 
 import {List} from 'immutable'
-import {Long} from 'bytebuffer'
 import {connect} from 'react-redux'
-import {parsePayoutAmount, repLog10} from 'app/utils/ParsersAndFormatters';
 
 export default connect(
     (state, props) => {
@@ -117,24 +116,17 @@ export default connect(
         const comments = []
         posts.forEach(item => {
             const content = state.global.get('content').get(item);
-            let pending_payout = 0;
-            // let total_payout = 0;
-            let votes = Long.ZERO
-            if (content) {
-                pending_payout = content.get('pending_payout_value');
-                // total_payout = content.get('total_payout_value');
-                content.get('active_votes').forEach(v => {
-                    votes = votes.add(Long.fromString('' + v.get('rshares')))
-                })
+            if(!content) {
+                console.error('PostsList --> Missing content key', content)
+                return
             }
-            const netVoteSign = votes.compare(Long.ZERO)
-            const hasPendingPayout = parsePayoutAmount(pending_payout) >= 0.02
+            // let total_payout = 0;
             const current = state.user.get('current')
             const username = current ? current.get('username') : null
-            const ignore = !hasPendingPayout && username ? state.global.getIn(['follow', 'get_following', username, 'result', content.get('author')], List()).contains('ignore') : false
-            const authorRepLog10 = repLog10(content.get('author_reputation'))
-            const hide = !hasPendingPayout && (ignore || authorRepLog10 <= -6)
-            if(!hide || showSpam)
+            const key = ['follow', 'get_following', username, 'result', content.get('author')]
+            const ignore = username ? state.global.getIn(key, List()).contains('ignore') : false
+            const {hide, netVoteSign, authorRepLog10} = content.get('stats').toJS()
+            if(!(ignore || hide) || showSpam) // rephide
                 comments.push({item, ignore, netVoteSign, authorRepLog10})
         })
         return {...props, comments};

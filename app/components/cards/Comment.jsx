@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link, browserHistory} from 'react-router';
+import {browserHistory} from 'react-router';
 import Author from 'app/components/elements/Author';
 import ReplyEditor from 'app/components/elements/ReplyEditor';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
@@ -7,13 +7,14 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 // import FormattedAsset from 'app/components/elements/FormattedAsset';
 import Voting from 'app/components/elements/Voting';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import user from 'app/redux/User';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 // import Tooltip from 'app/components/elements/Tooltip';
 import Icon from 'app/components/elements/Icon';
 import Userpic from 'app/components/elements/Userpic';
 import transaction from 'app/redux/Transaction'
-import {List, Set} from 'immutable'
+import {List} from 'immutable'
 import {Long} from 'bytebuffer'
 import pluralize from 'pluralize';
 import {parsePayoutAmount, repLog10} from 'app/utils/ParsersAndFormatters';
@@ -91,8 +92,8 @@ class CommentImpl extends React.Component {
         sort_order: React.PropTypes.oneOf(['active', 'update', 'created', 'trending']).isRequired,
         root: React.PropTypes.bool,
         showNegativeComments: React.PropTypes.bool,
-        authorRepLog10: React.PropTypes.number,
         onHide: React.PropTypes.func,
+        noImage: React.PropTypes.bool,
 
         // component props (for recursion)
         depth: React.PropTypes.number,
@@ -101,25 +102,18 @@ class CommentImpl extends React.Component {
         username: React.PropTypes.string,
         rootComment: React.PropTypes.string.isRequired,
         comment_link: React.PropTypes.string.isRequired,
-        anchor_link: React.PropTypes.string.isRequired,
-        netVoteSign: React.PropTypes.number.isRequired,
         deletePost: React.PropTypes.func.isRequired,
     };
     static defaultProps = {
         depth: 1,
     }
 
-    constructor(props) {
+    constructor() {
         super();
-        const {netVoteSign, hasPendingPayout} = props
-        this.state = {show_details: true, hide_body: !hasPendingPayout && netVoteSign < 0};
+        // const hide_body = this.shouldHide(props)
+        this.state = {show_details: true, hide_body: false};
         this.revealBody = this.revealBody.bind(this);
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Comment')
-        this.onCommentClick = e => {
-            e.preventDefault()
-            const {comment_link} = this.props
-            browserHistory.push(comment_link)
-        }
         this.onShowReply = () => {
             const {showReply} = this.state
             this.setState({showReply: !showReply, showEdit: false})
@@ -152,15 +146,34 @@ class CommentImpl extends React.Component {
         }
         this.toggleDetails = this.toggleDetails.bind(this);
     }
+
     componentWillMount() {
         this.initEditor(this.props)
+        this._checkHide(this.props);
     }
-    componentDidMount() {
-        const {anchor_link} = this.props
-        if (window.location.hash.indexOf(anchor_link) !== -1) {
-            const comments_el = document.getElementById(anchor_link);
-            if (comments_el) comments_el.scrollIntoView({behavior: 'smooth'});
+
+    componentWillReceiveProps(np) {
+        this._checkHide(np);
+    }
+
+    _checkHide(props) {
+        const g = props.global;
+        const content = g.get('content').get(props.content);
+        if (content) {
+            const {hide_body} = this.state
+            const hide = content.getIn(['stats', 'hide'])
+            if(hide || hide_body) {
+                const {onHide} = this.props
+                // console.log('Comment --> onHide')
+                if(onHide) onHide()
+            }
         }
+    }
+
+    shouldHide(props) {
+        const {showNegativeComments} = props
+        const content = this.props.global.getIn(['content', this.props.content]);
+        return !showNegativeComments && content.getIn(['stats', 'hide'])
     }
     toggleDetails() {
         this.setState({show_details: !this.state.show_details});
@@ -198,19 +211,22 @@ class CommentImpl extends React.Component {
             return <div>Loading...</div>
         }
         const comment = dis.toJS();
+        if(!comment.stats) {
+            console.error('Comment -- missing stats object')
+            comment.stats = {}
+        }
+        const {netVoteSign, hasReplies, authorRepLog10, hide, pictures, gray} = comment.stats
         const {author, permlink, json_metadata} = comment
-        const {username, depth, rootComment, comment_link, anchor_link, netVoteSign, showNegativeComments,
-            hasPendingPayout, authorRepLog10, ignore, onHide} = this.props
+        const {username, depth, rootComment, comment_link,
+            showNegativeComments, ignore, noImage} = this.props
         const {onCommentClick, onShowReply, onShowEdit, onDeletePost} = this
         const post = comment.author + '/' + comment.permlink
+        const anchor_link = '#@' + post
         const {PostReplyEditor, PostEditEditor, showReply, showEdit, hide_body} = this.state
         const Editor = showReply ? PostReplyEditor : PostEditEditor
 
-        const negative_comment = ignore || authorRepLog10 <= -6
-        const auto_hide = !showNegativeComments && negative_comment && comment.replies.length === 0 && !hasPendingPayout
-        if(!showNegativeComments && (auto_hide || hide_body)) {
-            if(onHide) onHide()
-            return <span></span>
+        if(!showNegativeComments && (hide || hide_body)) {
+            return null;
         }
 
         let jsonMetadata = null
@@ -222,9 +238,7 @@ class CommentImpl extends React.Component {
         // const get_asset_value = ( asset_str ) => { return parseFloat( asset_str.split(' ')[0] ); }
         // const steem_supply = this.props.global.getIn(['props','current_supply']);
 
-        const showDeleteOption = username === author &&
-            dis.get('replies', List()).size === 0 &&
-            netVoteSign <= 0
+        const showDeleteOption = username === author && !hasReplies && netVoteSign <= 0
 
         // let robohash = "https://robohash.org/" + author + ".png?size=64x64"
         const total_payout = parsePayoutAmount(comment.total_payout_value);
@@ -235,7 +249,8 @@ class CommentImpl extends React.Component {
         let controls = null;
 
         if (this.state.show_details && (!hide_body || showNegativeComments)) {
-            body = (<MarkdownViewer formId={post + '-viewer'} text={comment.body} jsonMetadata={jsonMetadata} />);
+            body = (<MarkdownViewer formId={post + '-viewer'} text={comment.body}
+                noImage={noImage || !pictures} jsonMetadata={jsonMetadata} />);
             controls = (<div>
                 <Voting post={post} pending_payout={comment.pending_payout_value} total_payout={comment.total_payout_value} />
                 {!$STM_Config.read_only_mode && depth !== 5 && <a onClick={onShowReply}>Reply</a>}
@@ -261,7 +276,7 @@ class CommentImpl extends React.Component {
         commentClasses.push('Comment')
         commentClasses.push(this.props.root ? 'root' : 'reply')
         if((hide_body && !showNegativeComments) || !this.state.show_details) commentClasses.push('collapsed');
-        const downVotedClass = netVoteSign < 0 || (negative_comment || hide_body) ? 'downvoted' : ' '
+        const downVotedClass = ignore || gray ? 'downvoted' : ' '
         //console.log(comment);
         let renderedEditor = null;
         if (showReply || showEdit) {
@@ -281,7 +296,6 @@ class CommentImpl extends React.Component {
         }
         return (
             <div className={commentClasses.join(' ')} id={anchor_link} itemScope itemType ="http://schema.org/comment">
-                {/*<a name={anchor_link}></a>*/}
                 <div className="Comment__Userpic show-for-medium">
                     <Userpic account={comment.author} />
                 </div>
@@ -297,9 +311,9 @@ class CommentImpl extends React.Component {
                                 <Author author={comment.author} authorRepLog10={authorRepLog10} /></span>
                         </span>
                         &nbsp; &middot; &nbsp;
-                        <a href={comment_link} onClick={onCommentClick} className="PlainLink">
-                            <TimeAgoWrapper date={comment.created} id={`@${author}/${permlink}`} />
-                        </a>
+                        <Link to={comment_link} className="PlainLink">
+                            <TimeAgoWrapper date={comment.created} />
+                        </Link>
                         { !this.state.show_details && (hide_body && !showNegativeComments) &&
                           <Voting post={post} pending_payout={comment.pending_payout_value} total_payout={comment.total_payout_value} showList={comment.active_votes.length !== 0 ? true : false} /> }
                         { this.state.show_details || comment.children == 0 ||
@@ -330,40 +344,22 @@ const Comment = connect(
         let {depth} = ownProps
         if(depth == null) depth = 1
         const c = global.getIn(['content', content])
-        let comment_link = null, anchor_link = null
+        let comment_link = null
         let rc = ownProps.rootComment
         if(c) {
             if(depth === 1) rc = c.get('parent_author') + '/' + c.get('parent_permlink')
             comment_link = `/${c.get('category')}/@${rc}#@${c.get('author')}/${c.get('permlink')}`
-            anchor_link = `#@${c.get('author')}/${c.get('permlink')}`
         }
-        const comment = global.get('content').get(ownProps.content);
-        let votes = Long.ZERO
-        let hasPendingPayout
-        if (comment) {
-            comment.get('active_votes').forEach(v => {
-                // console.log('voter', v.get('voter'), v.get('rshares'), v.toJS())
-                votes = votes.add(Long.fromString('' + v.get('rshares')))
-            })
-            const pending_payout = comment.get('pending_payout_value');
-            // const total_payout = comment.get('total_payout_value');
-            hasPendingPayout = parsePayoutAmount(pending_payout) >= 0.02
-        }
-        const netVoteSign = votes.compare(Long.ZERO)
         const current = state.user.get('current')
         const username = current ? current.get('username') : null
-        const ignore = username ? state.global.getIn(['follow', 'get_following', username, 'result', c.get('author')], List()).contains('ignore') : false
-        const authorRepLog10 = repLog10(c.get('author_reputation'))
+        const key = ['follow', 'get_following', username, 'result', c.get('author')]
+        const ignore = username ? state.global.getIn(key, List()).contains('ignore') : false
         return {
             ...ownProps,
-            netVoteSign,
             comment_link,
-            anchor_link,
             rootComment: rc,
-            username: state.user.getIn(['current', 'username']),
+            username,
             ignore,
-            hasPendingPayout,
-            authorRepLog10,
         }
     },
 

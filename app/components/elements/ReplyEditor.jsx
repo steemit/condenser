@@ -7,7 +7,7 @@ import {validateCategory} from 'app/components/cards/CategorySelector'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import Tooltip from 'app/components/elements/Tooltip'
-import sanitizeConfig from 'app/utils/SanitizeConfig'
+import sanitizeConfig, {allowedTags} from 'app/utils/SanitizeConfig'
 import sanitize from 'sanitize-html'
 import HtmlReady from 'shared/HtmlReady'
 import g from 'app/redux/GlobalReducer'
@@ -20,10 +20,16 @@ const RTE_DEFAULT = false
 
 let saveEditorTimeout
 
+// removes <html></html> wrapper if exists
 function getHtml(text) {
     const m = text.match(/<html>([\S\s]*)<\/html>/m);
-    return m && m.length === 2 ? m[1] : null;
+    return m && m.length === 2 ? m[1] : text;
 }
+
+const isHtmlTest = text =>
+    /^<html>/.test(text) ||
+    /^<p>/.test(text)
+
 
 class ReplyEditor extends React.Component {
 
@@ -123,7 +129,7 @@ class ReplyEditor extends React.Component {
                     if (editorData.body) {
                         body.onChange(editorData.body)
                         const html = getHtml(editorData.body)
-                        this.state.rte_value = RichTextEditor.createValueFromString(html || editorData.body, 'html')
+                        this.state.rte_value = RichTextEditor.createValueFromString(html, 'html')
                     }
                 }
             }
@@ -138,12 +144,15 @@ class ReplyEditor extends React.Component {
             let rte_value;
             if (RichTextEditor) {
                 if (body.value) {
-                    const html = getHtml(body.value);
-                    if (html) {
+                    if (isHtmlTest(body.value)) {
+                        rte = true;
+                        const html = getHtml(body.value);
                         rte_value = RichTextEditor.createValueFromString(html, 'html')
                     } else {
                         rte = false;
-                        rte_value = RichTextEditor.createValueFromString(body.initialValue, 'html');
+                        rte_value = RichTextEditor.createEmptyValue();
+                        // body.initialValue causes 100% cpu when editing http://localhost:3002/steemit/@cryptomental/can-a-viral-introduceyourself-post-be-engineered
+                        // rte_value = RichTextEditor.createValueFromString(body.initialValue, 'html');
                     }
                 } else {
                     rte_value = RichTextEditor.createEmptyValue();
@@ -190,7 +199,7 @@ class ReplyEditor extends React.Component {
                 if(this.state.rte) {
                     const {body} = nextProps.fields
                     const html = getHtml(body.value)
-                    this.state.rte_value = RichTextEditor.createValueFromString(html || body.value, 'html');
+                    this.state.rte_value = RichTextEditor.createValueFromString(html, 'html');
                 }
             }
         }
@@ -263,7 +272,7 @@ class ReplyEditor extends React.Component {
         const {onCancel, autoVoteOnChange} = this
         const {title, category, body, autoVote} = this.props.fields
         const {
-            reply, username, hasCategory, isStory, formId,
+            reply, username, hasCategory, isStory, formId, noImage,
             author, permlink, parent_author, parent_permlink, type, jsonMetadata, metaLinkData,
             state, successCallback, handleSubmit, submitting, invalid, //lastComment,
         } = this.props
@@ -293,7 +302,7 @@ class ReplyEditor extends React.Component {
         let isHtml = false;
         let isMarkdown = false;
         if (body.value) {
-            isMarkdown = !getHtml(body.value);
+            isMarkdown = !isHtmlTest(body.value);
             isHtml = !isMarkdown;
         }
 
@@ -362,7 +371,7 @@ class ReplyEditor extends React.Component {
                         {!loading && !rte && markdownViewerText && <div className={'Preview ' + vframe_section_shrink_class}>
                             {!isHtml && <div className="float-right"><a target="_blank" href="https://guides.github.com/features/mastering-markdown/">Styling with Markdown is supported.</a></div>}
                             <h6>Preview</h6>
-                            <MarkdownViewer formId={formId} text={markdownViewerText} canEdit jsonMetadata={jsonMetadata} large={isStory} />
+                            <MarkdownViewer formId={formId} text={markdownViewerText} canEdit jsonMetadata={jsonMetadata} large={isStory} noImage={noImage} />
                         </div>}
                     </form>
                 </div>
@@ -460,6 +469,13 @@ export default formId => reduxForm(
             const rootTag = /^[-a-z\d]+$/.test(rootCategory) ? rootCategory : null
 
             const rtags = HtmlReady(body, {mutate: false})
+            allowedTags.forEach(tag => {rtags.htmltags.delete(tag)})
+            rtags.htmltags.delete('html')
+            if(rtags.htmltags.size) {
+                errorCallback('Please remove the following tags from your post: ' + Array(...rtags.htmltags).join(', '))
+                return
+            }
+
             let allCategories = Set([...formCategories.toJS(), ...rtags.hashtags])
             if(rootTag) allCategories = allCategories.add(rootTag)
 
@@ -476,11 +492,13 @@ export default formId => reduxForm(
             // cp('description')
             // if(Object.keys(json_metadata.steem).length === 0) json_metadata = {}// keep json_metadata minimal
             const sanitizeErrors = []
-            const text = getHtml(body) != null ? sanitize(body, sanitizeConfig({sanitizeErrors})) : body
+            sanitize(body, sanitizeConfig({sanitizeErrors}))
             if(sanitizeErrors.length) {
                 errorCallback(sanitizeErrors.join('.  '))
                 return
             }
+
+
             if(meta.tags.length > 5) {
                 const includingCategory = /edit/.test(type) ? ` (including the category '${rootCategory}')` : ''
                 errorCallback(`You have ${meta.tags.length} tags total${includingCategory}.  Please use only 5 in your post and category line.`)
@@ -488,7 +506,7 @@ export default formId => reduxForm(
             }
             const operation = {
                 ...linkProps,
-                category: rootCategory, title, body: text,
+                category: rootCategory, title, body,
                 json_metadata: meta,
                 __config: {originalPost, autoVote}
             }

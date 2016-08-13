@@ -41,6 +41,8 @@ class ConvertToSteem extends React.Component {
                     <div className="small-12 columns">
                         <h1>Convert to Steem</h1>
                         <p>This action will take place one week from now and can not be canceled. These Steem Dollars will immediatly become unavailable.</p>
+                        <p>Your existing Steem Dollars are liquid and transferable.  Instead you may wish to trade Steem Dollars directly in this site under <i>Buy or Sell</i> or transfer to an external market.</p>
+                        <p>This is a price feed conversion. The one week day delay is necessary to prevent abuse from gaming the price feed average.</p>
                     </div>
                 </div>
                 <div className="row">

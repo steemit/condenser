@@ -24,4 +24,13 @@ export const emptyContent = {
     total_pending_payout_value: '0.000 STEEM',
     active_votes: [],
     replies: [],
+    stats: {
+        authorRepLog10: 86,
+        gray: false,
+        hasPendingPayout: false,
+        hasReplies: false,
+        hide: false,
+        netVoteSign: 0,
+        pictures: true,
+    },
 }

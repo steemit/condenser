@@ -14,6 +14,7 @@ export default function (html, {large = false, mutate = true}) {
     const state = {large, mutate}
     state.hashtags = new Set()
     state.usertags = new Set()
+    state.htmltags = new Set()
     state.images = new Set()
     state.links = new Set()
     try {
@@ -33,6 +34,9 @@ function traverse(node, state, depth = 0) {
     if(!node || !node.childNodes) return
     Array(...node.childNodes).forEach(child => {
         // console.log(depth, 'child.tag,data', child.tagName, child.data)
+        if(child.tagName)
+            state.htmltags.add(child.tagName.trim().toLowerCase())
+
         if(/img/i.test(child.tagName))
             img(state, child)
         else if(/a/i.test(child.tagName))
@@ -90,7 +94,7 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
         return space + `<a href="/trending/${tag2.toLowerCase()}">${tag}</a>`
     })
     // usertag (mention)
-    content = content.replace(/(^|\s)(@[-\.a-z\d]+)/ig, user => {
+    content = content.replace(/(^|\s)(@[a-z][-\.a-z\d]+[a-z\d])/ig, user => {
         const space = /^\s/.test(user) ? user[0] : ''
         const user2 = user.trim().substring(1)
         const valid = validate_account_name(user2) == null

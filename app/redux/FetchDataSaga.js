@@ -1,5 +1,6 @@
 import {takeLatest, takeEvery} from 'redux-saga';
-import {call, put, select} from 'redux-saga/effects';
+import {call, put, select, fork} from 'redux-saga/effects';
+import {loadFollows} from 'app/redux/FollowSaga';
 import Apis from 'shared/api_client/ApiInstances';
 import GlobalReducer from './GlobalReducer';
 import constants from './constants';
@@ -13,8 +14,25 @@ export function* watchDataRequests() {
 
 export function* fetchState(location_change_action) {
     const {pathname, /*search*/} = location_change_action.payload;
+    const m = pathname.match(/@([a-z0-9\.-]+)/)
+    if(m && m.length === 2) {
+        const username = m[1]
+        const hasFollows = yield select(state => state.global.hasIn(['follow', 'get_followers', username]))
+        if(!hasFollows) {
+            yield fork(loadFollows, "get_followers", username, 'blog')
+            yield fork(loadFollows, "get_following", username, 'blog')
+        }
+    }
     const server_location = yield select(state => state.offchain.get('server_location'));
     if (pathname === server_location) return;
+
+    // virtual pageview
+    const {ga} = window
+    if(ga) {
+        ga('set', 'page', pathname);
+        ga('send', 'pageview');
+    }
+
     let url = `${pathname}`;
     if (url === '/') url = 'trending';
     // Replace /curation-rewards and /author-rewards with /transfers for UserProfile
@@ -37,7 +55,8 @@ export function* watchLocationChange() {
 }
 
 export function* fetchData(action) {
-    let {order, category, author, permlink} = action.payload;
+    const {order, author, permlink, accountname} = action.payload;
+    let {category} = action.payload;
     if( !category ) category = "";
     category = category.toLowerCase();
 
@@ -45,6 +64,13 @@ export function* fetchData(action) {
     let call_name, args;
     if (order === 'trending') {
         call_name = 'get_discussions_by_trending';
+        args = [
+        { tag: category,
+          limit: constants.FETCH_DATA_BATCH_SIZE,
+          start_author: author,
+          start_permlink: permlink}];
+    } else if (order === 'trending30') {
+        call_name = 'get_discussions_by_trending30';
         args = [
         { tag: category,
           limit: constants.FETCH_DATA_BATCH_SIZE,
@@ -99,6 +125,13 @@ export function* fetchData(action) {
           limit: constants.FETCH_DATA_BATCH_SIZE,
           start_author: author,
           start_permlink: permlink}];
+    } else if( order === 'by_feed' ) { // https://github.com/steemit/steem/issues/249
+        call_name = 'get_discussions_by_feed';
+        args = [
+        { tag: accountname,
+          limit: constants.FETCH_DATA_BATCH_SIZE,
+          start_author: author,
+          start_permlink: permlink}];
     } else if( order === 'by_author' ) {
         call_name = 'get_discussions_by_author_before_date';
         args = [author, permlink, '1970-01-01T00:00:00', constants.FETCH_DATA_BATCH_SIZE];
@@ -113,7 +146,7 @@ export function* fetchData(action) {
     try {
         const db_api = Apis.instance().db_api;
         const data = yield call([db_api, db_api.exec], call_name, args);
-        yield put(GlobalReducer.actions.receiveData({data, order, category, author, permlink}));
+        yield put(GlobalReducer.actions.receiveData({data, order, category, author, permlink, accountname}));
     } catch (error) {
         console.error('~~ Saga fetchData error ~~>', call_name, args, error);
         yield put({type: 'global/STEEM_API_ERROR', error: error.message});

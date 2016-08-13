@@ -42,11 +42,14 @@ class PostsIndex extends React.Component {
     }
 
     loadMore(last_post) {
+        const {accountname} = this.props.routeParams
         if (!last_post) return;
-        const {order = constants.DEFAULT_SORT_ORDER, category} = this.props.routeParams;
+        const {category} = this.props.routeParams;
+        let {order = constants.DEFAULT_SORT_ORDER} = this.props.routeParams;
+        if(category === 'feed') order = 'by_feed'
         if (isFetchingOrRecentlyUpdated(this.props.status, order, category)) return;
         const [author, permlink] = last_post.split('/');
-        this.props.requestData({author, permlink, order, category});
+        this.props.requestData({author, permlink, order, category, accountname});
     }
     depositSteem = () => {
         this.props.depositSteem()
@@ -55,7 +58,9 @@ class PostsIndex extends React.Component {
         this.setState({showSpam: !this.state.showSpam})
     }
     render() {
-        const {order = constants.DEFAULT_SORT_ORDER, category} = this.props.routeParams;
+        const {category} = this.props.routeParams;
+        let {order = constants.DEFAULT_SORT_ORDER} = this.props.routeParams;
+        if(category === 'feed') order = 'by_feed'
         const posts = this.getPosts(order, category);
 
         const status = this.props.status ? this.props.status.getIn([category || '', order]) : null;

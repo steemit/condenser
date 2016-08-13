@@ -57,7 +57,12 @@ class Order {
 class TradeHistory {
 
     constructor(fill) {
-        this.date = new Date(fill.date);
+        // Norm date (FF bug)
+        var zdate = fill.date;
+        if(!/Z$/.test(zdate))
+          zdate = zdate + 'Z'
+
+        this.date = new Date(zdate);
         this.type = fill.current_pays.indexOf("SBD") !== -1 ? "bid" : "ask";
         this.color = this.type == "bid" ? "buy-color" : "sell-color";
         if (this.type === "bid") {

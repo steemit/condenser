@@ -6,19 +6,19 @@ import transaction from 'app/redux/Transaction';
 import g from 'app/redux/GlobalReducer';
 import {Set, Map} from 'immutable'
 
-const {string, object, bool, func, element} = PropTypes
+const {string, object, bool, func, any} = PropTypes
 const followTypes = ['blog', 'posts']
 const followTypeSet = Set(followTypes)
 
 export default class Follow extends React.Component {
     static propTypes = {
-        follower: string, // default to current user
         following: string,
+        follower: string, // OPTIONAL default to current user
         what: string, // see followTypes
         showFollow: bool,
         showMute: bool,
         fat: bool,
-        children: element,
+        children: any,
 
         // redux
         follow: func,
@@ -63,9 +63,9 @@ export default class Follow extends React.Component {
         const cnInactive = cnActive + ' hollow secondary'
         return <span>
             {showFollow && !existingFollows.has(what) && <label className={cnInactive} onClick={this.follow}>Follow</label>}
-            {showFollow && existingFollows.has(what) && <label className={cnActive} onClick={this.unfollow}>Unfollow</label>}
+            {showFollow && existingFollows.has(what) && <label className={cnInactive} onClick={this.unfollow}>Unfollow</label>}
             {showMute && !existingFollows.has('ignore') && <label className={cnInactive} onClick={this.ignore}>Mute</label>}
-            {showMute && existingFollows.has('ignore') && <label className={cnActive} onClick={this.unignore}>Unmute</label>}
+            {showMute && existingFollows.has('ignore') && <label className={cnInactive} onClick={this.unignore}>Unmute</label>}
             {children && <span>&nbsp;&nbsp;{children}</span>}
         </span>
     }

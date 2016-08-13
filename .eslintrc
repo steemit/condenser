@@ -59,5 +59,6 @@ find node_modules/eslint-config-airbnb -name '*.js'|xargs sed -i "s/': 2/': 1/"
     "react/sort-comp": [1, { "order": [ 'lifecycle' ] }],
     "react/prefer-stateless-function": 0,
     "react/prop-types": 0,
+    "radix": 0,
   }
 }

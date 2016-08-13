@@ -141,7 +141,7 @@ class App extends React.Component {
                             <br />
                             <br />
                             <div className="tag3">
-                                <b>Get $7 of Steem Power when you sign up today.</b>
+                                <b>Get $5 of Steem Power when you sign up today.</b>
                             </div>
                         </div>
                     </div>
@@ -158,6 +158,7 @@ class App extends React.Component {
                     <li><a href="https://steem.io/SteemWhitePaper.pdf" onClick={this.navigate}>Steem Whitepaper</a></li>
                     <li><a onClick={() => depositSteem()}>Buy Steem</a></li>
                     <li><a href="/market" onClick={this.navigate}>Market</a></li>
+                    <li><a href="http://steemtools.com/" onClick={this.navigate}>Steem App Center</a></li>
                     <li><a href="/recover_account_step_1" onClick={this.navigate}>Stolen Account Recovery</a></li>
                     <li><a href="/change_password" onClick={this.navigate}>Change Account Password</a></li>
                     <li><a href="https://steemit.chat/home" target="_blank">Steemit Chat&nbsp;<Icon name="extlink"/></a></li>

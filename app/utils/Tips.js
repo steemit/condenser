@@ -1,4 +1,4 @@
-export const steemTip = 'Steem, tradeable tokens that may be transferred at anytime. Steem can be converted to Steem Power in a process called powering up.'
+export const steemTip = 'Tradeable tokens that may be transferred anywhere at anytime. Steem can be converted to Steem Power in a process called powering up.'
 export const dollarTip = 'Tokens worth about $1.00 of Steem.'
 //export const powerTip = 'Influence tokens which give you more control over post payouts and allow you to earn on curation rewards.'
 export const powerTip = 'Influence tokens which earn more power by holding long term. The more you hold the more you influence post rewards and earn for accurate voting.'

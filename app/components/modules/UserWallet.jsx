@@ -10,7 +10,7 @@ import BlocktradesDeposit from 'app/components/modules/BlocktradesDeposit';
 import Reveal from 'react-foundation-components/lib/global/reveal'
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {steemTip, powerTip, dollarTip, valueTip} from 'app/utils/Tips'
-import {numberWithCommas} from 'app/utils/StateFunctions'
+import {numberWithCommas, vestingSteem} from 'app/utils/StateFunctions'
 
 class UserWallet extends React.Component {
     constructor() {
@@ -31,11 +31,9 @@ class UserWallet extends React.Component {
         let account          = this.props.account;
         let current_user     = this.props.current_user;
         let gprops           = this.props.global.getIn( ['props'] ).toJS();
-        let vests            = parseFloat(account.vesting_shares.split( ' ' )[0]);
-        let total_vests      = parseFloat(gprops.total_vesting_shares.split( ' ' )[0]);
-        let total_vest_steem = parseFloat(gprops.total_vesting_fund_steem.split( ' ' )[0]);
-        let vesting_steemf   = total_vest_steem * (vests / total_vests);
-        let vesting_steem    = vesting_steemf.toFixed(3);
+
+        let vesting_steemf = vestingSteem(account, gprops);
+        let vesting_steem = vesting_steemf.toFixed(3);
 
         let isMyAccount = current_user && current_user.get('username') === account.name;
 
@@ -105,8 +103,8 @@ class UserWallet extends React.Component {
 
         let dollar_menu = [
             { value: 'Transfer', link: '#', onClick: showTransfer.bind( this, 'SBD' ) },
+            { value: 'Buy or Sell', link: '/market' },
             { value: 'Convert to STEEM', link: '#', onClick: convertToSteem },
-            { value: 'Buy or Sell', link: '/market' }
         ]
         const isWithdrawScheduled = new Date(account.next_vesting_withdrawal + 'Z').getTime() > Date.now()
         const depositReveal = showDeposit && <div>
@@ -126,30 +124,30 @@ class UserWallet extends React.Component {
                 </div>
             </div>
             <div className="UserWallet__balance row">
-                <div className="column small-8">
+                <div className="column small-12 medium-8">
                     STEEM<br /><span className="secondary">{steemTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})}</span>
                 </div>
-                <div className="column small-3 text-right">
+                <div className="column small-12 medium-3">
                     {isMyAccount ?
                     <DropdownMenu selected={steem_balance_str + ' STEEM'} className="Header__sort-order-menu" items={steem_menu} el="span" />
                     : steem_balance_str + ' STEEM'}
                 </div>
             </div>
             <div className="UserWallet__balance row">
-                <div className="column small-8">
+                <div className="column small-12 medium-8">
                     STEEM POWER<br /><span className="secondary">{powerTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})}</span>
                 </div>
-                <div className="column small-3 text-right">
+                <div className="column small-12 medium-3">
                     {isMyAccount ?
                     <DropdownMenu selected={power_balance_str + ' STEEM'} className="Header__sort-order-menu" items={power_menu} el="span" />
                     : power_balance_str + ' STEEM'}
                 </div>
             </div>
             <div className="UserWallet__balance row">
-                <div className="column small-8">
+                <div className="column small-12 medium-8">
                     STEEM DOLLARS<br /><span className="secondary">{dollarTip}</span>
                 </div>
-                <div className="column small-3 text-right">
+                <div className="column small-12 medium-3">
                     {isMyAccount ?
                     <DropdownMenu selected={sbd_balance_str} items={dollar_menu} el="span" />
                     : sbd_balance_str}
@@ -162,10 +160,10 @@ class UserWallet extends React.Component {
                 </div>
             </div>
             <div className="UserWallet__balance row">
-                <div className="column small-8">
+                <div className="column small-12 medium-8">
                     Estimated Account Value<br /><span className="secondary">{valueTip}</span>
                 </div>
-                <div className="column small-3 text-right">
+                <div className="column small-12 medium-3">
                     {total_value}
                 </div>
             </div>

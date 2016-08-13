@@ -11,10 +11,15 @@ import PasswordReset from 'app/components/elements/PasswordReset';
 import UserWallet from 'app/components/modules/UserWallet';
 import CurationRewards from 'app/components/modules/CurationRewards';
 import AuthorRewards from 'app/components/modules/AuthorRewards';
+import UserList from 'app/components/elements/UserList';
 import Follow from 'app/components/elements/Follow';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import PostsList from 'app/components/cards/PostsList';
 import {isFetchingOrRecentlyUpdated} from 'app/utils/StateFunctions';
+import {repLog10} from 'app/utils/ParsersAndFormatters.js';
+import Tooltip from 'app/components/elements/Tooltip';
+import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
+import VerticalMenu from 'app/components/elements/VerticalMenu';
 
 export default class UserProfile extends React.Component {
     constructor() {
@@ -29,11 +34,12 @@ export default class UserProfile extends React.Component {
     }
 
     loadMore(last_post, category) {
+        const {accountname} = this.props.routeParams
         if (!last_post) return;
-        const order = 'by_author';
+        const order = category === 'feed' ? 'by_feed' : 'by_author';
         if (isFetchingOrRecentlyUpdated(this.props.global.get('status'), order, category)) return;
         const [author, permlink] = last_post.split('/');
-        this.props.requestData({author, permlink, order, category});
+        this.props.requestData({author, permlink, order, category, accountname});
     }
 
     render() {
@@ -43,6 +49,7 @@ export default class UserProfile extends React.Component {
         } = this;
         let { accountname, section } = this.props.routeParams;
         const username = current_user ? current_user.get('username') : null
+        // const gprops = this.props.global.getIn( ['props'] ).toJS();
         if( !section ) section = 'blog';
 
         // const isMyAccount = current_user ? current_user.get('username') === accountname : false;
@@ -52,6 +59,29 @@ export default class UserProfile extends React.Component {
         else {
             return <div><center>Unknown Account</center></div>
         }
+
+        let followerCount = 0, followingCount = 0;
+        const followers = this.props.global.getIn( ['follow', 'get_followers', accountname] );
+        const following = this.props.global.getIn( ['follow', 'get_following', accountname] );
+        // let loadingFollowers = true, loadingFollowing = true;
+
+        if (followers && followers.has('result')) {
+            followerCount = followers.get('result').filter(a => {
+                return a.get(0) === "blog";
+            }).size;
+            // loadingFollowers = followers.get("loading");
+        }
+
+        if (following && following.has('result')) {
+            followingCount = following.get('result').filter(a => {
+                return a.get(0) === "blog";
+            }).size;
+            // loadingFollowing = following.get("loading");
+        }
+
+        // Reputation
+        const rep = repLog10(account.reputation);
+
         const isMyAccount = username === account.name
         let tab_content = null;
 
@@ -59,6 +89,14 @@ export default class UserProfile extends React.Component {
         const status = global_status ? global_status.getIn([section, 'by_author']) : null;
         const fetching = (status && status.fetching) || this.props.loading;
 
+        // let balance_steem = parseFloat(account.balance.split(' ')[0]);
+        // let vesting_steem = vestingSteem(account, gprops).toFixed(2);
+        // const steem_balance_str = numberWithCommas(balance_steem.toFixed(2)) + " STEEM";
+        // const power_balance_str = numberWithCommas(vesting_steem) + " STEEM POWER";
+        // const sbd_balance = parseFloat(account.sbd_balance)
+        // const sbd_balance_str = numberWithCommas('$' + sbd_balance.toFixed(2));
+
+        let rewardsClass = "";
         if( section === 'transfers' ) {
             tab_content = <UserWallet global={this.props.global}
                           account={account}
@@ -67,16 +105,36 @@ export default class UserProfile extends React.Component {
                           withdrawVesting={this.props.withdrawVesting} />
         }
         else if( section === 'curation-rewards' ) {
+            rewardsClass = "active";
             tab_content = <CurationRewards global={this.props.global}
                           account={account}
                           current_user={current_user}
                           />
         }
         else if( section === 'author-rewards' ) {
+            rewardsClass = "active";
             tab_content = <AuthorRewards global={this.props.global}
                           account={account}
                           current_user={current_user}
                           />
+        }
+        else if( section === 'followers' ) {
+            if (followers && followers.has('result')) {
+                tab_content = <UserList
+                          title="Followers"
+                          account={account}
+                          users={followers}
+                          />
+            }
+        }
+        else if( section === 'followed' ) {
+            if (following && following.has('result')) {
+                tab_content = <UserList
+                          title="Followed"
+                          account={account}
+                          users={following}
+                          />
+            }
         }
         else if( section === 'posts' && account.post_history ) {
            if( account.posts )
@@ -92,12 +150,12 @@ export default class UserProfile extends React.Component {
            else {
               tab_content = (<center><LoadingIndicator type="circle" /></center>);
            }
-        } else if(!section  || section === 'blog') {
+        } else if(!section || section === 'blog') {
             if (account.blog) {
                 tab_content = <PostsList
                     emptyText={`Looks like ${account.name} hasn't started blogging yet!`}
                     posts={account.blog.filter(p => {
-                        return !(p.indexOf("re-") === 0);
+                        return !(p.indexOf("re-") === 0 && p[p.length - 1] === "z");
                     }).map(p => `${account.name}/${p}`)}
                     loading={fetching}
                     category="blog"
@@ -106,7 +164,18 @@ export default class UserProfile extends React.Component {
             } else {
                 tab_content = (<center><LoadingIndicator type="circle" /></center>);
             }
-
+        } else if(!section || section === 'feed') {
+            if (account.feed) {
+                tab_content = <PostsList
+                    emptyText={`Looks like ${account.name} hasn't followed anything yet!`}
+                    posts={account.feed}
+                    loading={fetching}
+                    category="feed"
+                    loadMore={this.loadMore}
+                    showSpam />;
+            } else {
+                tab_content = (<center><LoadingIndicator type="circle" /></center>);
+            }
         }
         else if( (section === 'recent-replies') && account.recent_replies ) {
            const reply_summary = account.recent_replies.map( item => {
@@ -150,38 +219,74 @@ export default class UserProfile extends React.Component {
            section_title = 'Recent replies to ' + account.name + "'s posts";
         }
 
-        const wallet_tab_active = section === 'transfers' || section === 'password' || section === 'permissions' ? 'active' : '';
+        const wallet_tab_active = section === 'transfers' || section === 'password' || section === 'permissions' ? 'active' : ''; // className={wallet_tab_active}
 
-        const top_menu = <div className="UserProfile__top-nav row">
-            <div className="columns small-12 medium-expand">
-                <ul className="menu">
+        let rewardsMenu = [
+            {link: `/@${accountname}/curation-rewards`, label: "Curation rewards", value: "Curation rewards"},
+            {link: `/@${accountname}/author-rewards`, label: "Author rewards", value: "Author rewards"}
+        ];
+
+        const top_menu = <div className="row UserProfile__top-menu">
+            <div className="columns small-10 medium-12 medium-expand">
+                <ul className="menu" style={{flexWrap: "wrap"}}>
                     <li><Link to={`/@${accountname}`} activeClassName="active">Blog</Link></li>
                     <li><Link to={`/@${accountname}/posts`} activeClassName="active">Posts</Link></li>
                     <li><Link to={`/@${accountname}/recent-replies`} activeClassName="active">Replies</Link></li>
-                    <li><Link to={`/@${accountname}/curation-rewards`} activeClassName="active">Curation rewards</Link></li>
-                    <li><Link to={`/@${accountname}/author-rewards`} activeClassName="active">Author rewards</Link></li>
-                    <li><Link to={`/@${accountname}/transfers`} className={wallet_tab_active} activeClassName="active">Wallet</Link></li>
+                    <li><Link to={`/@${accountname}/feed`} activeClassName="active">Feed</Link></li>
+                    <li>
+                        <LinkWithDropdown
+                            closeOnClickOutside
+                            dropdownPosition="bottom"
+                            dropdownAlignment="right"
+                            dropdownContent={
+                                <VerticalMenu items={rewardsMenu} />
+                            }
+                        >
+                            <a className={rewardsClass}>
+                                Rewards
+                                <Icon className="dropdown-arrow" name="dropdown-arrow" />
+                            </a>
+                        </LinkWithDropdown>
+                    </li>
+
                 </ul>
             </div>
-            {isMyAccount && <div className="columns shrink">
-                <ul className="menu">
-                    <li><Link to={`/@${account.name}/permissions`} activeClassName="active">Permissions</Link></li>
-                    <li><Link to={`/@${account.name}/password`} activeClassName="active">Change Password</Link></li>
+            <div className="columns shrink">
+                <ul className="menu" style={{flexWrap: "wrap"}}>
+                    <li><Link to={`/@${accountname}/transfers`} activeClassName="active">Wallet</Link></li>
+                    {wallet_tab_active && isMyAccount && <li><Link to={`/@${account.name}/permissions`} activeClassName="active">Permissions</Link></li>}
+                    {wallet_tab_active && isMyAccount && <li><Link to={`/@${account.name}/password`} activeClassName="active">Password</Link></li>}
                 </ul>
-            </div>}
+            </div>
          </div>;
+
         return (
             <div className="UserProfile">
-                <div className="row">
+
+                <div className="UserProfile__banner row expanded">
+
                     <div className="column">
-                        {top_menu}
+                        <div style={{position: "relative"}}>
+                            <div className="UserProfile__buttons">
+                                <Follow follower={username} following={accountname} what="blog" />
+                            </div>
+                        </div>
+                        <h2>{account.name} <Tooltip t={`This is ${accountname}'s reputation score.\n\nThe reputation score is based on the history of votes received by the account, and is used to hide low quality content.`}><span style={{fontSize: "80%"}}>({rep})</span></Tooltip></h2>
+
+                        <div>
+                            <div className="UserProfile__stats">
+                                <span><Link to={`/@${accountname}/followers`}>{followerCount} followers</Link></span>
+                                <span>{account.post_count} posts</span>
+                                <span><Link to={`/@${accountname}/followed`}>{followingCount} followed</Link></span>
+                            </div>
+                        </div>
                     </div>
+                </div>
+                <div className="UserProfile__top-nav row expanded">
+                    {top_menu}
                 </div>
                 <div className="row">
                     <div className="column">
-                        <span className="float-right">
-                            {section === 'blog' && <Follow follower={username} following={accountname} what={section} />}
-                        </span>
                         {printLink}
                         {/*section_title && <h2 className="UserProfile__section-title">{section_title}</h2>*/}
                         {tab_content}
@@ -205,7 +310,7 @@ module.exports = {
                 current_user,
                 // current_account,
                 wifShown,
-                loading: state.app.get('loading'),
+                loading: state.app.get('loading')
             };
         },
         dispatch => ({

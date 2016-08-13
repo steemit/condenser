@@ -1,4 +1,4 @@
-import {fromJS, Set, Map} from 'immutable'
+import {fromJS, Set} from 'immutable'
 import {takeLatest} from 'redux-saga';
 import {call, put, select, fork} from 'redux-saga/effects';
 import {accountAuthLookup} from 'app/redux/AuthSaga'
@@ -9,6 +9,7 @@ import {browserHistory} from 'react-router'
 import {serverApiLogin, serverApiLogout, /*serverApiRecordEvent*/} from 'app/utils/ServerApiClient';
 import {Apis} from 'shared/api_client';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
+import {loadFollows} from 'app/redux/FollowSaga'
 
 export const userWatches = [
     watchRemoveHighSecurityKeys, // keep first to remove keys early when a page change happens
@@ -58,48 +59,16 @@ function* usernamePasswordLogin(action) {
     yield call(usernamePasswordLogin2, action)
     const current = yield select(state => state.user.get('current'))
     if(current) {
-        const follower = current.get('username')
-        yield fork(loadFollows, follower, 'blog')
-        yield fork(loadFollows, follower, 'ignore')
-    }
-}
-// Test limit with 2 (not 1, infinate looping)
-function* loadFollows(follower, type, start = '', limit = 100) {
-    const res = fromJS(yield Apis.follow('get_following', follower, start, type, limit))
-    // console.log('res.toJS()', res.toJS())
-    let cnt = 0
-    let lastFollowing = null
-    yield put({type: 'global/UPDATE', payload: {
-        key: ['follow', 'get_following', follower],
-        notSet: Map(),
-        updater: m => {
-            m = m.update('result', Map(), m2 => {
-                res.forEach(value => {
-                    cnt++
-                    const what = value.get('what')
-                    const following = lastFollowing = value.get('following')
-                    m2 = m2.set(following, what)
-                })
-                return m2
-            })
-            return m.merge({loading: true, error: null})
-        }
-    }})
-    if(cnt === limit) {
-        yield call(loadFollows, follower, type, lastFollowing)
-    } else {
-        yield put({type: 'global/UPDATE', payload: {
-            key: ['follow', 'get_following', follower],
-            updater: m => m.merge({loading: false, error: null})
-        }})
+        const username = current.get('username')
+        yield fork(loadFollows, "get_following", username, 'blog')
+        yield fork(loadFollows, "get_following", username, 'ignore')
     }
 }
 
+// const isHighSecurityOperations = ['transfer', 'transfer_to_vesting', 'withdraw_vesting',
+//     'limit_order_create', 'limit_order_cancel', 'account_update', 'account_witness_vote']
 
-const isHighSecurityOperations = ['transfer', 'transfer_to_vesting', 'withdraw_vesting',
-    'limit_order_create', 'limit_order_cancel', 'account_update', 'account_witness_vote']
-
-const highSecurityPages = Array(/\/market/, /\/@.+\/transfers/, /\/~witnesses/)
+const highSecurityPages = Array(/\/market/, /\/@.+\/(transfers|permissions|password)/, /\/~witnesses/)
 
 const clean = (value) => value == null || value === '' || /null|undefined/.test(value) ? undefined : value
 
@@ -129,8 +98,8 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     const current_route = yield select(state => state.global.get('current_route'))
 
     const highSecurityLogin =
-        /owner|active/.test(userProvidedRole) ||
-        isHighSecurityOperations.indexOf(operationType) !== -1 ||
+        // /owner|active/.test(userProvidedRole) ||
+        // isHighSecurityOperations.indexOf(operationType) !== -1 ||
         highSecurityPages.find(p => p.test(current_route)) != null
 
     const isRole = (role, fn) => (!userProvidedRole || role === userProvidedRole ? fn() : undefined)
@@ -163,7 +132,13 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         private_keys = private_keys.set('memo_private', PrivateKey.fromWif(memoWif))
 
     yield call(accountAuthLookup, {payload: {account, private_keys, highSecurityLogin, login_owner_pubkey}})
-    const authority = yield select(state => state.user.getIn(['authority', username]))
+    let authority = yield select(state => state.user.getIn(['authority', username]))
+    const hasActiveAuth = authority.get('active') === 'full'
+    if(!highSecurityLogin) {
+        const accountName = account.get('name')
+        authority = authority.set('active', 'none')
+        yield put(user.actions.setAuthority({accountName, auth: authority}))
+    }
     const fullAuths = authority.reduce((r, auth, type) => (auth === 'full' ? r.add(type) : r), Set())
     if (!fullAuths.size) {
         localStorage.removeItem('autopost2')
@@ -176,6 +151,8 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         }
         if(login_owner_pubkey === owner_pub_key || login_wif_owner_pubkey === owner_pub_key) {
             yield put(user.actions.loginError({ error: 'owner_login_blocked' }))
+        } else if(!highSecurityLogin && hasActiveAuth) {
+            yield put(user.actions.loginError({ error: 'active_login_blocked' }))
         } else {
             const generated_type = password[0] === 'P' && password.length > 40;
             serverApiRecordEvent('login_attempt', JSON.stringify({name: username, login_owner_pubkey, owner_pub_key, generated_type}))
@@ -220,10 +197,13 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         private_keys = private_keys.remove('memo_private')
 
     // If user is signing operation by operaion and has no saved login, don't save to RAM
-    if(!operationType || saveLogin)
+    if(!operationType || saveLogin) {
         // Keep the posting key in RAM but only when not signing an operation.
         // No operation or the user has checked: Keep me logged in...
-        yield put(user.actions.setUser({username, private_keys, login_owner_pubkey}))
+        yield put(user.actions.setUser({username, private_keys, login_owner_pubkey, vesting_shares: account.get('vesting_shares')}))
+    } else {
+        yield put(user.actions.setUser({username, vesting_shares: account.get('vesting_shares')}))
+    }
 
     if (!autopost && saveLogin)
         yield put(user.actions.saveLogin());

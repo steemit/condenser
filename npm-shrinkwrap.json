@@ -1,5 +1,5 @@
 {
-  "name": "clout",
+  "name": "Steemit.com",
   "version": "1.0.0",
   "dependencies": {
     "abab": {
@@ -4054,6 +4054,11 @@
       "from": "lodash.clonedeep@>=4.3.2 <5.0.0",
       "resolved": "https://registry.npmjs.org/lodash.clonedeep/-/lodash.clonedeep-4.4.0.tgz"
     },
+    "lodash.debounce": {
+      "version": "4.0.7",
+      "from": "lodash.debounce@latest",
+      "resolved": "https://registry.npmjs.org/lodash.debounce/-/lodash.debounce-4.0.7.tgz"
+    },
     "lodash.deburr": {
       "version": "3.2.0",
       "from": "lodash.deburr@>=3.0.0 <4.0.0",
@@ -5231,6 +5236,11 @@
       "from": "react-qr@0.0.2",
       "resolved": "https://registry.npmjs.org/react-qr/-/react-qr-0.0.2.tgz"
     },
+    "react-rangeslider": {
+      "version": "1.0.3",
+      "from": "react-rangeslider@1.0.3",
+      "resolved": "https://registry.npmjs.org/react-rangeslider/-/react-rangeslider-1.0.3.tgz"
+    },
     "react-redux": {
       "version": "4.4.5",
       "from": "react-redux@>=4.4.0 <5.0.0",
@@ -5490,16 +5500,9 @@
       "resolved": "https://registry.npmjs.org/resolve-from/-/resolve-from-1.0.1.tgz"
     },
     "resp-modifier": {
-      "version": "6.0.1",
-      "from": "resp-modifier@6.0.1",
-      "resolved": "https://registry.npmjs.org/resp-modifier/-/resp-modifier-6.0.1.tgz",
-      "dependencies": {
-        "minimatch": {
-          "version": "2.0.10",
-          "from": "minimatch@>=2.0.1 <3.0.0",
-          "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-2.0.10.tgz"
-        }
-      }
+      "version": "6.0.2",
+      "from": "resp-modifier@6.0.2",
+      "resolved": "https://registry.npmjs.org/resp-modifier/-/resp-modifier-6.0.2.tgz"
     },
     "restore-cursor": {
       "version": "1.0.1",

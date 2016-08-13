@@ -9,17 +9,16 @@
 }
 
 .TagList__horizontal {
-  margin: 0.6rem;
+  margin-bottom: 1rem;
   a {
     margin: 0 0.2rem;
-    padding: 0.2rem 0.4rem;
+    padding: 0.2rem 0.5rem;
     border-radius: 0.3rem;
-    background: #EEE;
+    background: #efefef;
     color: #8a8a8a;
 
     &:hover {
-      background: #8a8a8a;
-      color: #EEE !important;
+      background: #e6e6e6;
     }
   }
 }

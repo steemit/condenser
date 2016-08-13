@@ -1,25 +1,44 @@
 .UserProfile {
+    margin-top: -1.5rem;
 }
 
 .UserProfile__top-nav {
+  background-color: #333333;
   padding: 0;
-  padding-bottom: 1.5rem;
-  background-color: transparent;
+  margin-bottom: 1.5rem;
+  .row {
+      .columns {
+          overflow-x: auto;
+      }
+  }
   .menu {
     background-color: transparent;
   }
   .menu > li > a {
+      transition: all 200ms ease-in;
+      transform: translate3d( 0, 0, 0);
       padding-left: 0.7rem;
       padding-right: 0.7rem;
-    color: $dark-gray;
-    @include hoverUnderline;
-    &.active {
-      color: $black;
-      font-weight: bold;
-    }
+      color: $white;
+      background-color: transparent;
+      @include hoverUnderline;
+      &.active {
+          background-color: $white;
+          z-index: 2;
+          color: $black;
+          font-weight: bold;
+          border-top-left-radius: 3px;
+          border-top-right-radius: 3px;
+        }
   }
-  .menu > li:first-child > a {
-    padding-left: 0;
+
+  div.UserProfile__top-menu {
+      max-width: 71.42857rem;
+      margin-left: auto;
+      margin-right: auto;
+      display: flex;
+      flex-flow: row wrap;
+      width: 100%;
   }
 }
 
@@ -27,4 +46,93 @@
   margin-bottom: 1.5rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid #EEE;
+}
+
+.UserProfile__banner {
+    text-align: center;
+    color: $white;
+    a {
+        color: $white;
+    }
+    > div.column {
+        background-color: #23579d;
+        height: 150px;
+    }
+    h2 {
+        padding-top: 20px;
+    }
+
+    .UserProfile__buttons {
+        position: absolute;
+        top: 15px;
+        right: 5px;
+
+        label.button {
+            color: black;
+            border-radius: 3px;
+            background-color: white;
+        }
+    }
+
+    .UserProfile__stats {
+        margin-bottom: 5px;
+        padding-bottom: 5px;
+
+        a {
+          border-bottom: 1px dotted rgba(255,255,255,0.5);
+	}
+
+        span {
+            padding: 0px 10px;
+        }
+
+        span:nth-child(2) {
+            border-left: 1px solid grey;
+            border-right: 1px solid grey;
+        }
+    }
+}
+
+.UserWallet__balance {
+    > div:nth-child(2) {
+        text-align: right;
+    }
+}
+
+@media screen and (max-width: 39.9375em) {
+
+    .UserProfile__banner {
+        > div.column {
+            height: 110px;
+        }
+    }
+
+    div.UserProfile__top-nav .menu li>a {
+        padding: 8px;
+    }
+
+    .UserProfile__top-menu > div.columns {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .UserProfile__banner .UserProfile__buttons {
+        text-align: right;
+
+        label.button {
+            display: block;
+        }
+    }
+
+    .UserWallet__balance {
+        > div:last-of-type {
+            text-align: left;
+        }
+    }
+
+    .UserReward__row {
+        > div:last-of-type {
+            padding-left: 20px;
+        }
+    }
 }

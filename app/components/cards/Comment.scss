@@ -52,7 +52,10 @@
   color: $black;
   font-size: 100%;
   font-weight: 600;
-  @include hoverUnderline;
+  a {
+    color: $black;
+    @include hoverUnderline;
+  }
 }
 
 .Comment__header_collapse {
@@ -103,6 +106,7 @@
 }
 
 .Comment__negative_group {
+    color: crimson;
     border-top: 1px solid $medium-gray;
     padding-top: 1rem;
 }

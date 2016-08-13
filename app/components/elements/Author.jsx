@@ -1,11 +1,12 @@
 /* eslint react/prop-types: 0 */
-import React from 'react'
+import React from 'react';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import {LinkWithDropdown} from 'react-foundation-components/lib/global/dropdown'
 import Follow from 'app/components/elements/Follow';
-import Icon from 'app/components/elements/Icon'
-import {browserHistory} from 'react-router'
-import {authorNameAndRep} from 'app/utils/ComponentFormatters'
+import Icon from 'app/components/elements/Icon';
+import { Link } from 'react-router';
+import {authorNameAndRep} from 'app/utils/ComponentFormatters';
+import Reputation from 'app/components/elements/Reputation';
 
 const {string, bool, number} = React.PropTypes
 
@@ -21,16 +22,12 @@ class Author extends React.Component {
         mute: true,
     }
     shouldComponentUpdate = shouldComponentUpdate(this, 'Author')
-    onAuthorClick = () => {
-        const {author} = this.props
-        browserHistory.push('/@' + author)
-    }
     render() {
         const {author, follow, mute, authorRepLog10} = this.props // html
         const {username} = this.props // redux
 
-        const author_link = <span itemProp="author" itemScope itemType="http://schema.org/Person">
-            <a onClick={this.onAuthorClick}>{authorNameAndRep(author, authorRepLog10)}</a>
+        const author_link = <span className="Author" itemProp="author" itemScope itemType="http://schema.org/Person">
+            <Link to={'/@' + author}><strong>{author}</strong></Link><Reputation value={authorRepLog10} />
         </span>
 
         if(!username)
@@ -48,6 +45,7 @@ class Author extends React.Component {
                 </div>
             </div>
         </span>
+
         return (
             <span className="Author">
                 <LinkWithDropdown
@@ -58,17 +56,19 @@ class Author extends React.Component {
                 >
                     <span className="FoundationDropdownMenu__label">
                         <span itemProp="author" itemScope itemType="http://schema.org/Person">
-                            {authorNameAndRep(author, authorRepLog10)}
+                            <strong>{author}</strong>
                         </span>
                         <Icon className="dropdown-arrow" name="dropdown-arrow" />
                     </span>
                 </LinkWithDropdown>
+                <Reputation value={authorRepLog10} />
             </span>
         )
                 // by <span itemProp="author" itemScope itemType="http://schema.org/Person"><Link
                 //    to={author_link}>{content.author}</Link></span>
     }
 }
+
 import {connect} from 'react-redux'
 export default connect(
     (state, ownProps) => {

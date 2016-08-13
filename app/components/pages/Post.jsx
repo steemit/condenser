@@ -11,6 +11,7 @@ import user from 'app/redux/User'
 // import { Link } from 'react-router';
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
 import SvgImage from 'app/components/elements/SvgImage';
+import {List} from 'immutable'
 
 class Post extends React.Component {
 
@@ -33,6 +34,14 @@ class Post extends React.Component {
             const comments_el = document.getElementById('comments');
             if (comments_el) comments_el.scrollIntoView();
         }
+
+        // Jump to comment via hash (note: comment element's id has a hash(#) in it)
+        const anchor_link = window.location.hash;
+        const comment_el = anchor_link ? document.getElementById(anchor_link) : null;
+        if (comment_el) {
+            comment_el.scrollIntoView(true);
+            document.body.scrollTop -= 200;
+        }
     }
 
     toggleNegativeReplies = () => {
@@ -47,7 +56,7 @@ class Post extends React.Component {
 
     render() {
         const {showSignUp} = this
-        const {current_user} = this.props
+        const {current_user, following} = this.props
         const {showNegativeComments, commentHidden} = this.state
         const rout_params = this.props.routeParams;
         let g = this.props.global;
@@ -61,26 +70,31 @@ class Post extends React.Component {
            sort_order = this.props.location.query.sort;
 
         sortComments( g, replies, sort_order );
+        const keep = a => {
+            const c = g.getIn(['content', a])
+            const hide = c.getIn(['stats', 'hide'])
+            let ignore = false
+            if(following) {
+                ignore = following.get(c.get('author'), List()).contains('ignore')
+            }
+            return !hide && !ignore
+        }
+        const positiveComments = replies.filter(a => keep(a))
+            .map(reply => <Comment root key={post + reply} content={reply} global={g}
+                sort_order={sort_order} showNegativeComments={showNegativeComments} onHide={this.onHideComment} />);
 
-        let positiveComments = replies.filter(a => {
-            return g.get('content').get(a).get("net_rshares") >= 0;
-        })
-        .map(reply => <Comment root key={post + reply} content={reply} global={g} sort_order={sort_order} showNegativeComments={showNegativeComments} onHide={this.onHideComment} />);
-
-        // Not the complete hidding logic, just move to the bottom the rest hide inplace
-        const negativeReplies = replies.filter(a => {
-            return g.get('content').get(a).get("net_rshares") < 0;
-        });
+        // Not the complete hidding logic, just move to the bottom, the rest hide in-place
+        const negativeReplies = replies.filter(a => !keep(a));
         const stuffHidden = negativeReplies.length > 0 || commentHidden
 
         const negativeComments =
-            negativeReplies.map(reply => <Comment root key={post + reply} content={reply} global={g} sort_order={sort_order} showNegativeComments onHide={this.onHideComment} />);
+            negativeReplies.map(reply => <Comment root key={post + reply} content={reply} global={g} sort_order={sort_order} showNegativeComments onHide={this.onHideComment} noImage />);
 
         const negativeGroup = !stuffHidden ? null :
             (<div className="hentry Comment root Comment__negative_group">
                 {this.state.showNegativeComments ?
-                    <p>Now showing comments with low ratings: <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>Hide</button></p> :
-                    <p>Comments were hidden due to low ratings. <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>Show</button></p>
+                    <p onClick={this.toggleNegativeReplies}>Now showing comments with low ratings: <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>Hide</button></p> :
+                    <p onClick={this.toggleNegativeReplies}>Comments were hidden due to low ratings. <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>Show</button></p>
                 }
             </div>
         );
@@ -117,7 +131,7 @@ class Post extends React.Component {
                     <div className="column">
                       <div className="Post__promo">
                           Authors get paid when people like you upvote their post. <br/>
-                          If you enjoyed what you read here, earn $7 of Steem Power <br />
+                          If you enjoyed what you read here, earn $5 of Steem Power <br />
                           when you <a onClick={showSignUp}>sign up</a> and vote for it.
                       </div>
                     </div>
@@ -146,9 +160,15 @@ module.exports = {
 path: '/(:category/)@:username/:slug',
     component: connect(state => {
         const current_user = state.user.get('current')
+        let following
+        if(current_user) {
+            const key = ['follow', 'get_following', current_user, 'result']
+            following = state.global.getIn(key, List())
+        }
         return {
             global: state.global,
             current_user,
+            following,
         }
     },
     dispatch => ({

@@ -21,16 +21,18 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
     const nav = navigate || defaultNavigate;
     const submit_story = $STM_Config.read_only_mode ? null : <li className={lcn + ' submit-story'}><a href="/submit.html" onClick={nav}>Submit a Story</a></li>;
     const userpic_src = userpic || require('app/assets/images/user.png');
-    const account_link = `/@${username}`;
-    const posts_link = `/@${username}/posts`;
+    const feed_link = `/@${username}/feed`;
     const replies_link = `/@${username}/recent-replies`;
     const wallet_link = `/@${username}/transfers`;
+    const account_link = `/@${username}`;
+    const posts_link = `/@${username}/posts`;
     const reset_password_link = `/@${username}/password`;
     if (loggedIn) { // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!
         const user_menu = [
             {link: account_link, value: 'Blog'},
             {link: posts_link, value: 'Posts'},
-            {link: replies_link, value: 'Recent Replies'},
+            {link: replies_link, value: 'Replies'},
+            {link: feed_link, value: 'Feed'},
             {link: wallet_link, value: 'Wallet'},
             {link: reset_password_link, value: 'Change Password'},
             loggedIn ?

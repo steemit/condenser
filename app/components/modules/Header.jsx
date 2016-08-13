@@ -17,6 +17,14 @@ class Header extends React.Component {
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Header');
     }
 
+    componentWillReceiveProps(nextPrps) {
+        if (nextPrps.location.pathname !== this.props.location.pathname) {
+            const route = resolveRoute(nextPrps.location.pathname);
+            const sort_order = route && route.page === 'PostsIndex' && route.params && route.params.length > 0 ? route.params[0] : null;
+            if (sort_order) this.last_sort_order = sort_order;
+        }
+    }
+
     render() {
         const route = resolveRoute(this.props.location.pathname);
         let page_title = route.page;
@@ -46,12 +54,13 @@ class Header extends React.Component {
 
         if (process.env.BROWSER) document.title = page_title + ' — Steemit';
 
-        const logo_link = '/';
-        let topic_link = topic ? <Link to={'/active/' + topic}>{topic}</Link> : null;
+        const logo_link = route.params && route.params.length > 1 && this.last_sort_order ? '/' + this.last_sort_order : '/';
+        let topic_link = topic ? <Link to={`/${this.last_sort_order || 'trending'}/${topic}`}>{topic}</Link> : null;
 
         const sort_orders = {
                 hot: 'hot',
                 trending: 'trending',
+                trending30: 'trending (30 day)',
                 cashout: 'payout time',
                 created: 'new',
                 active: 'active',

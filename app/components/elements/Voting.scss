@@ -106,8 +106,99 @@
   }
 }
 
+.DropdownMenu.Voting__voters_list ul {
+  li > a {
+    //font-weight: 200;
+  }
+
+  li > span {
+    padding: 0.25rem 0.5rem;
+    font-size: 82.5%;
+    display: block;
+    color: #666;
+  }
+}
+
 .Voting__inner {
-  border-right: 1px solid $medium-gray;
-  padding-right: 0.5rem;
+  border-right: 1px solid #cacaca;
+  padding-right: .5rem;
   margin-right: 1rem;
+  position: relative;
+  .cancel {
+    font-size: 80%;
+    padding: 0 0.4em;
+    margin-left: 0.5rem;
+    margin-right: 2px;
+    background-color: #f8f8f8;
+    border-radius: 50%;
+    border: 1px solid #dadada;
+    color: #8a8a8a;
+  }
+}
+
+.Voting__adjust_weight {
+  padding: 10px;
+  padding-bottom: 0;
+  .weight-display {
+    text-align: center;
+    color: $dark-gray;
+  }
+}
+
+.Voting__adjust_weight {
+  .rangeslider {
+    position: relative;
+    background: #e6e6e6;
+    .rangeslider__fill, .rangeslider__handle {
+      position: absolute;
+    }
+    &, .rangeslider__fill {
+      display: block;
+      box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+    }
+    .rangeslider__handle {
+      background: #fff;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      display: inline-block;
+      position: absolute;
+      &:active {
+        background: #999;
+      }
+    }
+  }
+  .rangeslider-vertical {
+    margin: 0 auto;
+    height: 150px;
+    max-width: 10px;
+    background: none;
+    .rangeslider__fill {
+      width: 100%;
+      background: #4ba2f2;
+      box-shadow: none;
+      bottom: 0;
+    }
+    .rangeslider__handle {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      left: -10px;
+      &:active {
+        box-shadow: none;
+      }
+    }
+  }
+
+  .button {
+    color: #fff;
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
+.Voting__button-up {
+  display: inline-block;
+  position: relative;
 }

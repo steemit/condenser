@@ -12,6 +12,7 @@ export default ({post, horizontal}) => {
         } else {
             tags = json && JSON.parse(json).tags || [];
         }
+        if(typeof tags == 'string') tags = tags.split(' ');
     } catch(e) {
         tags = []
     }

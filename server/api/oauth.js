@@ -9,7 +9,9 @@ const reddit = new Purest({provider: 'reddit'});
 
 function logErrorAndRedirect(ctx, where, error) {
     const s = ctx.session;
-    const msg = error.error && error.error.message ? error.error.message : JSON.stringify(error); // error.message || error.msg || error;
+    let msg = 'unknown';
+    if (error.toString()) msg = error.toString()
+    else msg = error.error && error.error.message ? error.error.message : (error.msg || JSON.stringify(error));
     console.error(`oauth error [${where}|${s.user}|${s.uid}]|${ctx.req.headers['user-agent']}: ${msg}`);
     if (process.env.NODE_ENV = 'development') console.log(error.stack);
     ctx.flash = {alert: `${where} error: ${msg}`};
@@ -111,6 +113,8 @@ function* handleFacebookCallback() {
             }
             return null;
         }
+
+        if (!attrs.email) throw new Error('not valid email');
 
         if (user) {
             attrs.id = user.id;

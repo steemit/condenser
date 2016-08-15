@@ -53,7 +53,6 @@ class Voting extends React.Component {
 
     constructor(props) {
         super(props);
-        const voteWeightKey = 'voteWeight-' + this.props.username;
         this.state = {
             showWeight: false,
             weight: 10000
@@ -64,8 +63,8 @@ class Voting extends React.Component {
             this.setState({votingUp: true, votingDown: false})
             const {author, permlink, username, myVote} = this.props
             // already voted Up, remove the vote
-            if (this.state.weight !== 10000) {
-                localStorage.setItem(voteWeightKey, this.state.weight);
+            if (this.props.vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD) {
+                localStorage.setItem('voteWeight-'+username, this.state.weight);
             }
             const weight = myVote > 0 ? 0 : this.state.weight
             if (this.state.showWeight) this.setState({showWeight: false})
@@ -85,10 +84,11 @@ class Voting extends React.Component {
         };
         this.toggleWeight = e => {
             e.preventDefault();
+            const {username} = this.props
             // Upon opening dialog, read last used weight (this works accross tabs)
             if(! this.state.showWeight) {
                 localStorage.removeItem('vote_weight'); // deprecated. remove this line after 8/31
-                const saved_weight = localStorage.getItem(voteWeightKey);
+                const saved_weight = localStorage.getItem('voteWeight-'+username);
                 this.setState({weight: saved_weight ? parseInt(saved_weight, 10) : 10000});
             }
             this.setState({showWeight: !this.state.showWeight})

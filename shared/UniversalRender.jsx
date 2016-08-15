@@ -139,8 +139,8 @@ async function universalRender({ location, initial_state, offchain }) {
         let url = location === '/' ? 'trending' : location;
         // Replace /curation-rewards and /author-rewards with /transfers for UserProfile
         // to resolve data correctly
-        if (url.indexOf("/curation-rewards") !== -1) url = url.replace("/curation-rewards", "/transfers");
-        if (url.indexOf("/author-rewards") !== -1) url = url.replace("/author-rewards", "/transfers");
+        if (url.indexOf('/curation-rewards') !== -1) url = url.replace(/\/curation-rewards$/, '/transfers');
+        if (url.indexOf('/author-rewards') !== -1) url = url.replace(/\/author-rewards$/, '/transfers');
 
         onchain = await Apis.instance().db_api.exec('get_state', [url]);
         offchain.server_location = location;

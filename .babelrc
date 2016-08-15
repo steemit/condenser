@@ -1,7 +1,10 @@
 {
   "presets": ["es2015", "stage-0", "react"],
-  "plugins": "transform-runtime",
-  "env": {
+    "plugins": [
+        "transform-regenerator",
+        "transform-async-to-generator",
+    ],
+    "env": {
       "browser": {
         "plugins": [["react-transform", {
           "transforms": [
@@ -12,6 +15,9 @@
               "redbox-react"
             ]
           }]
+        }], ["transform-runtime", {
+            "polyfill": false,
+            "regenerator": true
         }]]
       }
     }

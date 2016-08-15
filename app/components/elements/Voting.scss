@@ -140,17 +140,25 @@
 .Voting__button-up {
   .dropdown-pane {
     top: -18px;
-    left: -32px;
+    left: -28px;
   }
 }
 
 .Voting__adjust_weight {
-  text-align: center;
-  padding: 10px;
-  width: 80px;
+  padding: 10px 20px;
+  width: 340px;
+  overflow: hidden;
   .weight-display {
-    text-align: center;
+    width: 3rem;
+    float: left;
+    margin-right: 0.5rem;
+    text-align: right;
     color: $dark-gray;
+    line-height: 2.5rem;
+  }
+
+  a.confirm_weight {
+    float: left;
   }
 }
 
@@ -177,33 +185,27 @@
       }
     }
   }
-  .rangeslider-vertical {
-    margin: 0.5rem auto;
-    height: 150px;
-    max-width: 10px;
+
+  .rangeslider-horizontal {
+    height: 10px;
+    width: 200px;
     background: none;
+    float: left;
+    margin-top: 16px;
     .rangeslider__fill {
-      width: 100%;
+      height: 100%;
       background: #4ba2f2;
       box-shadow: none;
-      bottom: 0;
+      left: 0;
     }
     .rangeslider__handle {
       width: 30px;
       height: 30px;
       border-radius: 50%;
-      left: -10px;
+      top: -10px;
       &:active {
         box-shadow: none;
       }
-    }
-  }
-
-  .button {
-    color: #fff;
-    margin: 0 0 0.5rem;
-    &:hover {
-      text-decoration: none;
     }
   }
 }

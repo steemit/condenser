@@ -80,7 +80,7 @@ class Voting extends React.Component {
             this.props.vote(weight, {author, permlink, username, myVote})
         };
         this.handleWeightChange = weight => {
-            this.setState({weight: weight + 100})
+            this.setState({weight: weight})
         };
         this.toggleWeight = e => {
             e.preventDefault();
@@ -188,9 +188,9 @@ class Voting extends React.Component {
             if (showWeight) {
                 dropdown = <Dropdown>
                     <div className="Voting__adjust_weight">
-                        <a href="#" onClick={this.voteUp} className=""><Icon size="2x" name="chevron-up-circle" /></a>
+                        <a href="#" onClick={this.voteUp} className="confirm_weight"><Icon size="2x" name="chevron-up-circle" /></a>
                         <div className="weight-display">{weight / 100}%</div>
-                        <Slider min={100} max={10000} step={100} value={weight} orientation="vertical" onChange={this.handleWeightChange} />
+                        <Slider min={100} max={10000} step={100} value={weight} onChange={this.handleWeightChange} />
                     </div>
                 </Dropdown>;
             }

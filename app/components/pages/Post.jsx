@@ -127,6 +127,13 @@ class Post extends React.Component {
                         <PostFull post={post} global={g} />
                     </div>
                 </div>
+
+                //@Jasonmcz
+                //Comment: Perhaps it would be good to HAVE a render/timeout
+                //Because it takes about 5-15 seconds right now to load an account
+                //which pretty much shows up the promotion of $10.00 STEEM every single time
+                //perhaps add a timeout here prior to render this?
+
                 {!current_user && <div className="row">
                     <div className="column">
                       <div className="Post__promo">

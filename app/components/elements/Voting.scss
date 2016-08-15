@@ -136,9 +136,18 @@
   }
 }
 
+
+.Voting__button-up {
+  .dropdown-pane {
+    top: -18px;
+    left: -32px;
+  }
+}
+
 .Voting__adjust_weight {
+  text-align: center;
   padding: 10px;
-  padding-bottom: 0;
+  width: 80px;
   .weight-display {
     text-align: center;
     color: $dark-gray;
@@ -164,12 +173,12 @@
       display: inline-block;
       position: absolute;
       &:active {
-        background: #999;
+        background: #4ba2f2;
       }
     }
   }
   .rangeslider-vertical {
-    margin: 0 auto;
+    margin: 0.5rem auto;
     height: 150px;
     max-width: 10px;
     background: none;
@@ -192,6 +201,7 @@
 
   .button {
     color: #fff;
+    margin: 0 0 0.5rem;
     &:hover {
       text-decoration: none;
     }

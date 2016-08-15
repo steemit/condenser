@@ -182,9 +182,9 @@ class Voting extends React.Component {
             if (showWeight) {
                 dropdown = <Dropdown>
                     <div className="Voting__adjust_weight">
-                        <Slider min={100} max={10000} step={100} value={weight} orientation="vertical" onChange={this.handleWeightChange} />
+                        <a href="#" onClick={this.voteUp} className=""><Icon size="2x" name="chevron-up-circle" /></a>
                         <div className="weight-display">{weight / 100}%</div>
-                        <a href="#" onClick={this.voteUp} className="button">Vote</a>
+                        <Slider min={100} max={10000} step={100} value={weight} orientation="vertical" onChange={this.handleWeightChange} />
                     </div>
                 </Dropdown>;
             }

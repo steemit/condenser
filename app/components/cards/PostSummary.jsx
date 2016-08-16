@@ -90,11 +90,10 @@ export default class PostSummary extends React.Component {
 
         // if(p.net_rshares < 0) desc = "";
 
-        let content_body = <div className="PostSummary__body entry-content" onClick={() => browserHistory.push(title_link_url)}>{desc}</div>;
+        let content_body = <div className="PostSummary__body entry-content"><Link to={title_link_url}>{desc}</Link></div>;
         let content_title = <h1 className="entry-title">{title_link}</h1>;
 
-        if( !currentCategory || (currentCategory && !currentCategory.match( /nsfw/ )) )
-        {
+        if( !(currentCategory && currentCategory.match( /nsfw/ )) ) {
            if (currentCategory !== '-' && currentCategory !== p.category && p.category.match(/nsfw/) ) {
                return null;
            }

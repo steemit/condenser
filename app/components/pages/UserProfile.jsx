@@ -230,7 +230,7 @@ export default class UserProfile extends React.Component {
             <div className="columns small-10 medium-12 medium-expand">
                 <ul className="menu" style={{flexWrap: "wrap"}}>
                     <li><Link to={`/@${accountname}`} activeClassName="active">Blog</Link></li>
-                    <li><Link to={`/@${accountname}/posts`} activeClassName="active">Posts</Link></li>
+                    <li><Link to={`/@${accountname}/posts`} activeClassName="active">Comments</Link></li>
                     <li><Link to={`/@${accountname}/recent-replies`} activeClassName="active">Replies</Link></li>
                     <li><Link to={`/@${accountname}/feed`} activeClassName="active">Feed</Link></li>
                     <li>

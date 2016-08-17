@@ -123,9 +123,7 @@ class Voting extends React.Component {
         const votingUpActive = voting && votingUp
         const votingDownActive = voting && votingDown
 
-        const down = <Tooltip t={ABOUT_FLAG}>
-            <Icon name={votingDownActive ? 'empty' : (myVote < 0 ? 'flag2' : 'flag1')} />
-        </Tooltip>
+        const down = <Icon name={votingDownActive ? 'empty' : (myVote < 0 ? 'flag2' : 'flag1')} />;
         const classDown = 'Voting__button Voting__button-down' + (myVote < 0 ? ' Voting__button--downvoted' : '') + (votingDownActive ? ' votingDown' : '');
 
         if (flag) {

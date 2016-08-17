@@ -26,9 +26,10 @@ function getHtml(text) {
     return m && m.length === 2 ? m[1] : text;
 }
 
+// See also MarkdownViewer render
 const isHtmlTest = text =>
     /^<html>/.test(text) ||
-    /^<p>/.test(text)
+    /^<p>[\S\s]*<\/p>/.test(text)
 
 
 class ReplyEditor extends React.Component {

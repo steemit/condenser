@@ -59,12 +59,14 @@ class MarkdownViewer extends Component {
         const {large, /*formId, canEdit, jsonMetadata,*/ highQualityPost} = this.props
 
         let html = false;
+        // See also ReplyEditor isHtmlTest
         const m = text.match(/^<html>([\S\s]*)<\/html>$/);
         if (m && m.length === 2) {
             html = true;
             text = m[1];
         } else {
-            html = /^<p>/.test(text)
+            // See also ReplyEditor isHtmlTest
+            html = /^<p>[\S\s]*<\/p>/.test(text)
         }
 
         // Strip out HTML comments. "JS-DOS" bug.

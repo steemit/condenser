@@ -12,6 +12,7 @@ import {formatDecimal, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import {Dropdown} from 'react-foundation-components/lib/global/dropdown';
+import CloseButton from 'react-foundation-components/lib/global/close-button';
 
 const ABOUT_FLAG = 'Flagging a post can remove rewards and make this material less visible.  You can still unflag or upvote later if you change your mind.'
 const MAX_VOTES_DISPLAY = 20;
@@ -188,9 +189,10 @@ class Voting extends React.Component {
             if (showWeight) {
                 dropdown = <Dropdown>
                     <div className="Voting__adjust_weight">
-                        <a href="#" onClick={this.voteUp} className="confirm_weight"><Icon size="2x" name="chevron-up-circle" /></a>
+                        <a href="#" onClick={this.voteUp} className="confirm_weight" title="Upvote"><Icon size="2x" name="chevron-up-circle" /></a>
                         <div className="weight-display">{weight / 100}%</div>
                         <Slider min={100} max={10000} step={100} value={weight} onChange={this.handleWeightChange} />
+                        <CloseButton onClick={() => this.setState({showWeight: false})} />
                     </div>
                 </Dropdown>;
             }

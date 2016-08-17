@@ -27,14 +27,15 @@
   > a {
     padding-right: 0.5rem;
   }
-  > a:hover {
-    path {
-      fill: #333;
-    }
-    circle {
-      fill: #fff;
-      stroke: #333;
-    }
+}
+
+.Voting__button-up > a:hover, a.confirm_weight:hover {
+  path {
+    fill: #333;
+  }
+  circle {
+    fill: #fff;
+    stroke: #333;
   }
 }
 
@@ -146,6 +147,7 @@
 
 .Voting__adjust_weight {
   padding: 10px 20px;
+  margin-right: 10px;
   width: 340px;
   overflow: hidden;
   .weight-display {
@@ -156,15 +158,12 @@
     color: $dark-gray;
     line-height: 2.5rem;
   }
-
   a.confirm_weight {
     float: left;
   }
-}
-
-.Voting__adjust_weight {
   .rangeslider {
     position: relative;
+    float: left;
     background: #e6e6e6;
     .rangeslider__fill, .rangeslider__handle {
       position: absolute;
@@ -185,7 +184,6 @@
       }
     }
   }
-
   .rangeslider-horizontal {
     height: 10px;
     width: 200px;
@@ -207,6 +205,10 @@
         box-shadow: none;
       }
     }
+  }
+  .close-button {
+    top: -2px !important;
+    right: -8px !important;
   }
 }
 

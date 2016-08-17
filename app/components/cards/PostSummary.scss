@@ -84,6 +84,13 @@ ul.PostsList__summaries {
     padding-left: 0.2rem;
   }
 }
+.PostSummary__collapse {
+  visibility: hidden;
+}
+
+.PostSummary:hover .PostSummary__collapse {
+  visibility: visible;
+}
 
 ul.PostSummary__tags {
   list-style: none;

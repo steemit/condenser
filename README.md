@@ -7,8 +7,10 @@ Steemit
 
 ```bash
 npm install
-npm install -g babel-cli
+npm install --save-dev babel-cli
 ```
+~~npm install -g babel-cli~~ # see https://babeljs.io/docs/usage/cli/ - it s better to have this locally
+
 
 #### Create config file
 

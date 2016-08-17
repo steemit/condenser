@@ -54,9 +54,9 @@ export default function reactForm({name, instance, fields, initialValues, valida
 
         // This is expanded <input {...fieldName.props} />, so only add common props here
         fs.props = {
+            name: fieldName,
             onChange: e => {
                 const value = e.target ? e.target.value : e // API may pass value directly
-                console.log('value', value)
                 const v = {...(instance.state[fieldName] || {})}
                 v.value = value
                 v.touched = value !== (initialValues[fieldName] || '')
@@ -70,9 +70,9 @@ export default function reactForm({name, instance, fields, initialValues, valida
         const initialValue = initialValues[fieldName]
         fs.value = initialValue
         if(typeof initialValue === 'boolean') {
-            fs.props.defaultChecked = initialValue
+            fs.props.defaultChecked = initialValue == null ? undefined : null
         } else if(initialValue != null) {
-            fs.props.defaultValue = initialValue
+            fs.props.defaultValue = initialValue == null ? undefined : null
         }
     }
 }

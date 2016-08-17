@@ -49,6 +49,13 @@ class LoginForm extends Component {
         this.initForm(props)
     }
 
+    componentWillMount() {
+        // Use username.value as the defult (input types should not contain both value and defaultValue)
+        const username = {...this.state.username}
+        username.value = this.props.initialUsername
+        this.setState({username})
+    }
+
     componentDidMount() {
         if (this.refs.username) ReactDOM.findDOMNode(this.refs.username).focus()
     }
@@ -206,7 +213,7 @@ if (process.env.BROWSER) {
 }
 
 function urlAccountName() {
-    let suggestedAccountName = null;
+    let suggestedAccountName = '';
     const account_match = window.location.hash.match(/account\=([\w\d\-\.]+)/);
     if (account_match && account_match.length > 1) suggestedAccountName = account_match[1];
     return suggestedAccountName
@@ -222,9 +229,11 @@ export default connect(
         const loginBroadcastOperation = state.user.get('loginBroadcastOperation')
 
         const initialValues = {
-            username: currentUser ? currentUser.get('username') : urlAccountName(),
             saveLogin: saveLoginDefault,
         }
+
+        // The username input has a value prop, so it should not use initialValues
+         const initialUsername = currentUser && currentUser.has('username') ? currentUser.get('username') : urlAccountName()
 
         const loginDefault = state.user.get('loginDefault')
         if(loginDefault) {
@@ -241,6 +250,7 @@ export default connect(
             loginBroadcastOperation,
             fields,
             initialValues,
+            initialUsername,
             msg,
             offchain_user: state.offchain.get('user')
         }

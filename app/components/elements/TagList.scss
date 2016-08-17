@@ -9,9 +9,10 @@
 }
 
 .TagList__horizontal {
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   a {
-    margin: 0 0.2rem;
+    display: inline-block;
+    margin: 0.1rem 0.2rem;
     padding: 0.2rem 0.5rem;
     border-radius: 0.3rem;
     background: #efefef;

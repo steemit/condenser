@@ -28,6 +28,9 @@ module.exports = {
             email: {
                 type: Sequelize.STRING
             },
+            confirm_token: {
+                type: Sequelize.STRING
+            },
             verified: {
                 type: Sequelize.BOOLEAN
             },
@@ -43,7 +46,7 @@ module.exports = {
                 type: Sequelize.DATE
             }
         }).then(function () {
-            queryInterface.addIndex('identities', ['email'], {indicesType: 'UNIQUE'});
+            queryInterface.addIndex('identities', ['email']);
         });
     },
     down: function (queryInterface, Sequelize) {

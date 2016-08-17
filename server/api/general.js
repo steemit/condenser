@@ -5,7 +5,7 @@ import findUser from 'db/utils/find_user';
 import config from 'config';
 import recordWebEvent from 'server/record_web_event';
 import {esc, escAttrs} from 'db/models';
-import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF} from './utils';
+import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF} from '../utils';
 import coBody from 'co-body';
 
 export default function useGeneralApi(app) {
@@ -68,6 +68,13 @@ export default function useGeneralApi(app) {
             if (user.waiting_list) {
                 console.log(`api /accounts: waiting_list user ${this.session.uid} #${user_id}`);
                 throw new Error('You are on the waiting list. We will get back to you at the earliest possible opportunity.');
+            }
+            const eid = yield models.Identity.findOne(
+                {attributes: ['id'], where: {user_id, provider: 'email', verified: true}, order: 'id DESC'}
+            );
+            if (!eid) {
+                console.log(`api /accounts: not confirmed email for user ${this.session.uid} #${user_id}`);
+                throw new Error('Please confirm your email address first');
             }
 
             yield createAccount({

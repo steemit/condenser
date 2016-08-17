@@ -27,6 +27,11 @@ class Market extends React.Component {
           return true
       }
 
+      if( nextState.buy_price_warning != this.state.buy_price_warning ||
+          nextState.sell_price_warning != this.state.sell_price_warning) {
+          return true
+      }
+
       let tc = (typeof this.props.ticker == 'undefined') ||
           (this.props.ticker.latest !== nextProps.ticker.latest) ||
           (this.props.ticker.sbd_volume !== nextProps.ticker.sbd_volume)
@@ -97,25 +102,34 @@ class Market extends React.Component {
         this.validateSellSteem()
     }
 
+    percentDiff = (a, b) => {
+        console.log(200 * Math.abs(a - b) / (a + b))
+        return 200 * Math.abs(a - b) / (a + b)
+    }
+
     validateBuySteem = () => {
         const amount = parseFloat(this.refs.buySteem_amount.value)
         const price = parseFloat(this.refs.buySteem_price.value)
         const total = parseFloat(this.refs.buySteem_total.value)
-        this.setState({buy_disabled: !(amount > 0 && price > 0 && total > 0)});
+        const valid = (amount > 0 && price > 0 && total > 0)
+        this.setState({buy_disabled: !valid, buy_price_warning: valid && this.percentDiff(total/amount, price) > 1 });
     }
 
     validateSellSteem = () => {
         const amount = parseFloat(this.refs.sellSteem_amount.value)
         const price = parseFloat(this.refs.sellSteem_price.value)
         const total = parseFloat(this.refs.sellSteem_total.value)
-        this.setState({sell_disabled: !(amount > 0 && price > 0 && total > 0)});
+        const valid = (amount > 0 && price > 0 && total > 0)
+        this.setState({sell_disabled: !valid, sell_price_warning: valid && this.percentDiff(total/amount, price) > 1 });
     }
 
     constructor(props) {
         super(props);
         this.state = {
             buy_disabled: true,
-            sell_disabled: true
+            sell_disabled: true,
+            buy_price_warning: false,
+            sell_price_warning: false,
         };
     }
 
@@ -123,7 +137,8 @@ class Market extends React.Component {
     render() {
         const {sellSteem, buySteem, cancelOrderClick, setFormPrice,
                validateBuySteem, validateSellSteem} = this
-        const {buy_disabled, sell_disabled} = this.state
+        const {buy_disabled, sell_disabled,
+               buy_price_warning, sell_price_warning} = this.state
 
         let ticker = {
             latest:         0,
@@ -297,7 +312,8 @@ class Market extends React.Component {
                                 </div>
                                 <div className="column small-9 large-8">
                                     <div className="input-group">
-                                        <input className="input-group-field" type="text" ref="buySteem_price" placeholder="0.0" onChange={e => {
+                                        <input className={'input-group-field' + (buy_price_warning ? ' price_warning' : '')} type="text" 
+                                          ref="buySteem_price" placeholder="0.0" onChange={e => {
                                             const amount = parseFloat(this.refs.buySteem_amount.value)
                                             const price  = parseFloat(this.refs.buySteem_price.value)
                                             if(amount >= 0 && price >= 0) this.refs.buySteem_total.value = roundUp(price * amount, 3)
@@ -386,7 +402,8 @@ class Market extends React.Component {
                                 </div>
                                 <div className="column small-9 large-8">
                                     <div className="input-group">
-                                        <input className="input-group-field" type="text" ref="sellSteem_price" placeholder="0.0" onChange={e => {
+                                        <input className={'input-group-field' + (sell_price_warning ? ' price_warning' : '')} type="text" 
+                                          ref="sellSteem_price" placeholder="0.0" onChange={e => {
                                           const amount = parseFloat(this.refs.sellSteem_amount.value)
                                           const price  = parseFloat(this.refs.sellSteem_price.value)
                                           if(amount >= 0 && price >= 0) this.refs.sellSteem_total.value = roundDown(price * amount, 3)

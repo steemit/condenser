@@ -75,6 +75,9 @@ input.sell-color:hover {
     text-align: right;
   }
 
+  input.price_warning {
+    color: rgba(0,0,0,0.25);
+  }
 }
 
 .Market__ticker {

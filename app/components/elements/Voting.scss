@@ -148,7 +148,7 @@
 .Voting__adjust_weight {
   padding: 10px 20px;
   margin-right: 10px;
-  width: 340px;
+  width: 350px;
   overflow: hidden;
   .weight-display {
     width: 3rem;
@@ -156,7 +156,7 @@
     margin-right: 0.5rem;
     text-align: right;
     color: $dark-gray;
-    line-height: 2.5rem;
+    line-height: 2.6rem;
   }
   a.confirm_weight {
     float: left;
@@ -189,7 +189,7 @@
     width: 200px;
     background: none;
     float: left;
-    margin-top: 16px;
+    margin-top: 18px;
     .rangeslider__fill {
       height: 100%;
       background: #4ba2f2;
@@ -207,8 +207,9 @@
     }
   }
   .close-button {
-    top: -2px !important;
-    right: -8px !important;
+    position: static;
+    line-height: 1.4;
+    margin-left: 1rem;
   }
 }
 

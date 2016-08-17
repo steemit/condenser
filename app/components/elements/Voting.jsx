@@ -105,13 +105,13 @@ class Voting extends React.Component {
     componentDidUpdate(prevProps, prevState) {
         const showWeight = this.state.showWeight;
         if (showWeight !== prevState.showWeight) {
-            if (showWeight) document.body.addEventListener('click', this.closeWeightDropdownOnOutsideClick);
-            else document.body.removeEventListener('click', this.closeWeightDropdownOnOutsideClick);
+            if (showWeight) document.body.addEventListener('mousedown', this.closeWeightDropdownOnOutsideClick);
+            else document.body.removeEventListener('mousedown', this.closeWeightDropdownOnOutsideClick);
         }
     }
 
     componentWillUnmount() {
-        document.body.removeEventListener('click', this.closeWeightDropdownOnOutsideClick);
+        document.body.removeEventListener('mousedown', this.closeWeightDropdownOnOutsideClick);
     }
 
     render() {

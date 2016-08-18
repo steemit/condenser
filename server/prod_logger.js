@@ -45,7 +45,7 @@ function log(ctx, start, len, err, asset) {
         status,
         time(start),
         length,
-        ctx.session.uid);
+        ctx.session.uid || '');
 }
 
 function time(start) {

@@ -111,8 +111,7 @@ if (env !== 'test') {
         // if (app_router.dbStatus.ok) recordWebEvent(this, 'page_load');
         const bot = this.state.isBot;
         if (bot) {
-            console.log(`BOT: ${bot} ${this.req.originalUrl} ${this.status}`);
-            return;
+            console.log(`  --> ${this.method} ${this.originalUrl} ${this.status} (BOT '${bot}')`);
         }
     });
 

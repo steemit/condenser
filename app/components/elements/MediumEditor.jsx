@@ -26,6 +26,7 @@ const EditorOptions = {
     }*/
 }
 
+const MAX_STORY_KB = 100, MAX_COMMENT_KB = 16
 let saveEditorTimeout
 
 class MediumEditor extends React.Component {
@@ -269,7 +270,6 @@ class MediumEditor extends React.Component {
         const rteRef = this.state.rteRef
 
         const emptyBody = body.value.trim() === ''
-
         return (
             <div className="ReplyEditor row">
                 <div className="column small-12">
@@ -376,7 +376,7 @@ export default formId => reduxForm(
         }
         if (hasCategory) fields.push('category')
         const isEdit = type === 'edit'
-        const maxKb = isStory ? 100 : 16
+        const maxKb = isStory ? MAX_STORY_KB : MAX_COMMENT_KB
         const validate = values => ({
             title: isStory && (
                 !values.title || values.title.trim() === '' ? 'Required' :
@@ -385,7 +385,8 @@ export default formId => reduxForm(
             ),
             category: hasCategory && validateCategory(values.category, !isEdit),
             body: isBodyEmpty(state, values.body) ? 'Required' :
-              values.body.length > maxKb * 1024 ? 'Exceeds maximum length ('+maxKb+'KB)' : null,
+                values.body.replace(/src="data:.+?"/, '').length > maxKb * 1024 ? 'Exceeds maximum length ('+maxKb+'KB)' :
+            null
         })
         let {category, title, body} = ownProps
 
@@ -484,6 +485,15 @@ export default formId => reduxForm(
             if(meta.tags.length > 5) {
                 const includingCategory = /edit/.test(type) ? ` (including the category '${rootCategory}')` : ''
                 errorCallback(`You have ${meta.tags.length} tags total${includingCategory}.  Please use only 5 in your post and category line.`)
+                return
+            }
+            const isStory = /submit_story/.test(type) || (
+                /edit/.test(type) && parent_author === ''
+            )
+
+            const maxKb = isStory ? MAX_STORY_KB : MAX_COMMENT_KB
+            if(body.length > maxKb * 1024) {
+                errorCallback('Exceeds maximum length ('+maxKb+'KB)')
                 return
             }
 

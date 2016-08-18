@@ -385,7 +385,7 @@ export default formId => reduxForm(
             ),
             category: hasCategory && validateCategory(values.category, !isEdit),
             body: isBodyEmpty(state, values.body) ? 'Required' :
-                values.body.replace(/src="data:.+?"/, '').length > maxKb * 1024 ? 'Exceeds maximum length ('+maxKb+'KB)' :
+                values.body.replace(/data:image\/.+?("|quot)/g, '"').length > maxKb * 1024 ? 'Exceeds maximum length ('+maxKb+'KB)' :
             null
         })
         let {category, title, body} = ownProps

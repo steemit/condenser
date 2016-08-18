@@ -237,7 +237,7 @@ class MediumEditor extends React.Component {
         const {onCancel, autoVoteOnChange} = this
         const {title, category, body, autoVote} = this.props.fields
         const {
-            reply, username, hasCategory, isStory, formId,
+            reply, username, hasCategory, isStory, formId, noImage,
             author, permlink, parent_author, parent_permlink, type, jsonMetadata, metaLinkData,
             state, successCallback, handleSubmit, submitting, invalid, //lastComment,
         } = this.props
@@ -335,7 +335,7 @@ class MediumEditor extends React.Component {
                         {!loading && !rte && <div className={'Preview ' + vframe_section_shrink_class}>
                             {!rte && <div className="float-right"><a target="_blank" href="https://guides.github.com/features/mastering-markdown/">Styling with Markdown is supported.</a></div>}
                             <h6>Preview</h6>
-                            <MarkdownViewer formId={formId} text={body.value} canEdit jsonMetadata={jsonMetadata} large={isStory} />
+                            <MarkdownViewer formId={formId} text={body.value} canEdit jsonMetadata={jsonMetadata} large={isStory} noImage={noImage} />
                         </div>}
                     </form>
                 </div>

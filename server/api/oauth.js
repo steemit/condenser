@@ -129,11 +129,11 @@ function* handleFacebookCallback() {
             console.log('-- fb updated user -->', this.session.uid, user.id, u.name, u.email);
         } else {
             user = yield models.User.create(attrs);
+            i_attrs_email.user_id = i_attrs.user_id = user.id;
             console.log('-- fb created user -->', user.id, u.name, u.email);
             const identity = yield models.Identity.create(i_attrs);
             console.log('-- fb created identity -->', this.session.uid, identity.id);
             if (i_attrs_email.email) {
-                i_attrs_email.user_id = i_attrs.user_id = user.id;
                 const email_identity = yield models.Identity.create(i_attrs_email);
                 console.log('-- fb created email identity -->', this.session.uid, email_identity.id);
             }

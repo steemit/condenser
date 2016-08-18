@@ -105,17 +105,23 @@ export default function useEnterAndConfirmEmailPages(app) {
         if (!user_id) { this.body = 'user not found'; return; }
         const email = this.request.body.email;
         if (!email) { this.redirect('/enter_email'); return; }
-        console.log('-- /submit_email -->', this.session.uid, this.session.user, email);
-
         const confirmation_code = Math.random().toString(36).slice(2);
-        yield models.Identity.create({
-            provider: 'email',
-            user_id,
-            uid: this.session.uid,
-            email,
-            verified: false,
-            confirmation_code
-        });
+        let eid = yield models.Identity.findOne(
+            {attributes: ['id', 'email'], where: {user_id, provider: 'email'}, order: 'id DESC'}
+        );
+        if (eid.email === email) {
+            yield eid.update({confirmation_code});
+        } else {
+            eid = yield models.Identity.create({
+                provider: 'email',
+                user_id,
+                uid: this.session.uid,
+                email,
+                verified: false,
+                confirmation_code
+            });
+        }
+        console.log('-- /submit_email -->', this.session.uid, this.session.user, email, eid.id);
         sendEmail('confirm_email', email, {confirmation_code});
 
         const body = renderToString(<div className="App">

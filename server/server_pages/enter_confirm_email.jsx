@@ -41,15 +41,15 @@ const header = <header className="Header">
 function *confirmEmailHandler() {
     const confirmation_code = this.params && this.params.code ? this.params.code : this.request.body.code;
     console.log('-- /confirm_email -->', this.session.uid, this.session.user, confirmation_code);
-    const user_id = this.session.user;
     const eid = yield models.Identity.findOne(
-        {attributes: ['id', 'verified', 'created_at'], where: {user_id, provider: 'email', confirmation_code, verified: false}, order: 'id DESC'}
+        {attributes: ['id', 'user_id', 'verified', 'created_at'], where: {provider: 'email', confirmation_code, verified: false}, order: 'id DESC'}
     );
     if (!eid) {
         this.status = 401;
         this.body = 'confirmation code not found';
         return;
     }
+    this.session.user = eid.user_id;
     const hours_ago = (Date.now() - eid.created_at) / 1000.0 / 3600.0;
     if (hours_ago > 24.0) {
         this.status = 401;

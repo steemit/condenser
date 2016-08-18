@@ -190,9 +190,8 @@ class CreateAccount extends React.Component {
         }
 
         const existingUserAccount = offchainUser.get('account');
-        let existingUserAccountAlert = null;
         if (existingUserAccount) {
-            existingUserAccountAlert = <div className="row">
+            return <div className="row">
                 <div className="column">
                     <div className="callout alert">
                         <p>Our records indicate that you already have steem account: <strong>{existingUserAccount}</strong></p>
@@ -207,7 +206,6 @@ class CreateAccount extends React.Component {
         return (
             <div className="CreateAccount row">
                 <div className="column large-7 small-10">
-                    {existingUserAccountAlert}
                     <h2>Sign Up</h2>
                     <div className="CreateAccount__rules">
                         <hr />

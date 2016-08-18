@@ -43,16 +43,14 @@ export default function useGeneralApi(app) {
                 this.status = 401;
                 return;
             }
-            // if (!user.verified) throw new Error('Verified Facebook account is required');
 
             const existing_account = yield models.Account.findOne({
                 attributes: ['id', 'created_at'],
-                where: {user_id, id: {$gt: 13152}},
+                where: {user_id},
                 order: 'id DESC'
             });
             if (existing_account) {
-                const days_ago = (Date.now() - existing_account.created_at) / 60000 / 60 / 24;
-                if (days_ago < 7) throw new Error("Only one Steem account per user is allowed in order to prevent abuse (Steemit, Inc. funds each new account with 3 STEEM)");
+                throw new Error("Only one Steem account per user is allowed in order to prevent abuse (Steemit, Inc. funds each new account with 3 STEEM)");
             }
 
             const same_ip_account = yield models.Account.findOne(

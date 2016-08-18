@@ -11,7 +11,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import MediumEditor from 'medium-editor';
 import {connect} from 'react-redux';
-import config from 'config'
+
+const {uploadImage} = $STM_Config
 
 require('medium-editor-insert-plugin')($);
 
@@ -57,7 +58,7 @@ class ReactMediumEditor extends React.Component {
                     styles: null, // left / right align is broken
                     fileUploadOptions: { // See https://github.com/blueimp/jQuery-File-Upload/wiki/Options
                         type: 'POST',
-                        url: config.uploadImage,
+                        url: uploadImage,
                         acceptFileTypes: /(\.|\/)(gif|jpe?g|png|svg|ico)$/i, // todo: test svg|ico
                         maxFileSize: 5000 * 1024,
                         formData: () => {

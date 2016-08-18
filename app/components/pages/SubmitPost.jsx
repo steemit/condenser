@@ -1,10 +1,10 @@
 import React from 'react';
 // import {connect} from 'react-redux';
 import { browserHistory } from 'react-router';
-import ReplyEditor from 'app/components/elements/ReplyEditor'
+import MediumEditor from 'app/components/elements/MediumEditor'
 
 const formId = 'submitStory'
-const SubmitReplyEditor = ReplyEditor(formId)
+const SubmitReplyEditor = MediumEditor(formId)
 
 class SubmitPost extends React.Component {
     // static propTypes = {

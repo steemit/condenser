@@ -41,7 +41,10 @@ export default {
     plugins: [
         // write webpack stats
         function () { this.plugin('done', writeStats); },
-        webpack_isomorphic_tools_plugin
+        webpack_isomorphic_tools_plugin,
+        new webpack.ProvidePlugin({
+            $: 'jquery'
+        })
     ],
     resolve: {
         root: [
@@ -53,9 +56,3 @@ export default {
     scssLoaders,
     cssLoaders
 };
-/* medium-editor, add to plugins[]
-
-        new webpack.ProvidePlugin({
-            $: 'jquery'
-        })
-*/

@@ -11,7 +11,7 @@ import transaction from 'app/redux/Transaction'
 import Voting from 'app/components/elements/Voting';
 import Tooltip from 'app/components/elements/Tooltip';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
-import ReplyEditor from 'app/components/elements/ReplyEditor';
+import MediumEditor from 'app/components/elements/MediumEditor';
 import {immutableAccessor} from 'app/utils/Accessors';
 import extractContent from 'app/utils/ExtractContent';
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
@@ -75,8 +75,8 @@ export default class PostFull extends React.Component {
         const formId = `postFull-${post}`
         this.setState({
             formId,
-            PostFullReplyEditor: ReplyEditor(formId + '-reply'),
-            PostFullEditEditor: ReplyEditor(formId + '-edit')
+            PostFullReplyEditor: MediumEditor(formId + '-reply'),
+            PostFullEditEditor: MediumEditor(formId + '-edit'),
         })
         if (process.env.BROWSER) {
             let showEditor = localStorage.getItem('showEditor-' + formId)

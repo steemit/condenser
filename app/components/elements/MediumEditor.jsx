@@ -25,7 +25,6 @@ const EditorOptions = {
         hideOnClick: true
     }*/
 }
-const RTE_DEFAULT = false
 
 let saveEditorTimeout
 
@@ -139,15 +138,14 @@ class MediumEditor extends React.Component {
             }
         } else {
             const {body} = this.props.fields
-            const {isStory} = this.props
-            if(isStory)
-                rte = JSON.parse(localStorage.getItem('replyEditorData-rte') || RTE_DEFAULT);
+            // const {isStory} = this.props
+            // if(isStory)
+            rte = true //JSON.parse(localStorage.getItem('replyEditorData-rte') || RTE_DEFAULT);
             if (RichTextEditor) {
                 if (body.initialValue !== '') {
                     const html = getHtml(body.initialValue);
                     if (html) {
                         rte_value = body.initialValue
-                        rte = true
                     }
                 }/* else {
                     rte_value = ''

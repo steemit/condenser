@@ -1,7 +1,7 @@
 import React from 'react';
 import {browserHistory} from 'react-router';
 import Author from 'app/components/elements/Author';
-import ReplyEditor from 'app/components/elements/ReplyEditor';
+import MediumEditor from 'app/components/elements/MediumEditor';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 // import FormattedAsset from 'app/components/elements/FormattedAsset';
@@ -186,8 +186,8 @@ class CommentImpl extends React.Component {
         const content = g.get('content').get(props.content);
         if (!content) return
         const post = content.get('author') + '/' + content.get('permlink')
-        const PostReplyEditor = ReplyEditor(post + '-reply')
-        const PostEditEditor = ReplyEditor(post + '-edit')
+        const PostReplyEditor = MediumEditor(post + '-reply')
+        const PostEditEditor = MediumEditor(post + '-reply')
         if(process.env.BROWSER) {
             const formId = post
             let showEditor = localStorage.getItem('showEditor-' + formId)

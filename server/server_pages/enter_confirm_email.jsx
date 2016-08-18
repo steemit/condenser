@@ -17,6 +17,7 @@ import sendEmail from '../sendEmail';
 // alter table identities add confirmation_code varchar(256);
 // alter table identities drop index identities_email;
 // create index `identities_email` ON `identities` (`email`);
+// create index `identities_confirmation_code` ON `identities` (`confirmation_code`);
 // alter table users drop index users_email;
 // create index `users_email` ON `users` (`email`);
 
@@ -42,7 +43,7 @@ function *confirmEmailHandler() {
     const confirmation_code = this.params && this.params.code ? this.params.code : this.request.body.code;
     console.log('-- /confirm_email -->', this.session.uid, this.session.user, confirmation_code);
     const eid = yield models.Identity.findOne(
-        {attributes: ['id', 'user_id', 'verified', 'created_at'], where: {provider: 'email', confirmation_code, verified: false}, order: 'id DESC'}
+        {attributes: ['id', 'user_id', 'verified', 'created_at'], where: {confirmation_code}, order: 'id DESC'}
     );
     if (!eid) {
         this.status = 401;

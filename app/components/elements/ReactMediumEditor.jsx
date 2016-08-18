@@ -55,7 +55,7 @@ class ReactMediumEditor extends React.Component {
                     // A preview will leave a data url in the post if the upload fails.  Don't enable until a retry can be performed, we should not bloat the blockchain with data urls.
                     preview: true,
                     captions: false, // needs css (after edit)
-                    styles: null, // left / right align is broken
+                    // styles: null, // left / right align is broken
                     fileUploadOptions: { // See https://github.com/blueimp/jQuery-File-Upload/wiki/Options
                         type: 'POST',
                         url: uploadImage,

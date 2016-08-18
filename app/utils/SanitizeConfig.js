@@ -33,13 +33,13 @@ export const allowedTags = `
     div, iframe, del,
     a, p, b, q, br, ul, li, ol, img, h1, h2, h3, h4, h5, h6, hr,
     blockquote, pre, code, em, strong, center, table, thead, tbody, tr, th, td,
-    strike, sup
+    strike, sup,
+    figure, figcaption
 `.trim().split(/,\s*/)
-
 // Medium insert plugin uses: div, figure, figcaption, iframe
+
 export default ({large = true, highQualityPost = true, noImage = false, sanitizeErrors = []}) => ({
     allowedTags,
-        // figure, figcaption,
 
     // SEE https://www.owasp.org/index.php/XSS_Filter_Evasion_Cheat_Sheet
     allowedAttributes: {

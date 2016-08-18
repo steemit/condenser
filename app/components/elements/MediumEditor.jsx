@@ -11,8 +11,6 @@ import sanitizeConfig from 'app/utils/SanitizeConfig'
 import sanitize from 'sanitize-html'
 import HtmlReady from 'shared/HtmlReady'
 import g from 'app/redux/GlobalReducer'
-import sanitize from 'sanitize-html'
-import links from 'app/utils/Links'
 import {Map, Set} from 'immutable'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 
@@ -450,7 +448,7 @@ export default formId => reduxForm(
             if(rte_serialize) body = rte_serialize()
 
             const rtags = HtmlReady(body, {mutate: false})
-            let allCategories = Set([...formCategories.toJS()])
+            let allCategories = Set([...formCategories.toJS(), ...rtags.hashtags])
             if(rootTag) allCategories = allCategories.add(rootTag)
 
             for(const image of rtags.images) {
@@ -475,6 +473,11 @@ export default formId => reduxForm(
             const cleanText = sanitize(body, sanitizeConfig({sanitizeErrors}))
             if(sanitizeErrors.length) {
                 errorCallback(sanitizeErrors.join('.  '))
+                return
+            }
+            if(meta.tags.length > 5) {
+                const includingCategory = /edit/.test(type) ? ` (including the category '${rootCategory}')` : ''
+                errorCallback(`You have ${meta.tags.length} tags total${includingCategory}.  Please use only 5 in your post and category line.`)
                 return
             }
             if(rte_serialize) body = `<html>${body}</html>`

@@ -70,9 +70,9 @@ export default function reactForm({name, instance, fields, initialValues, valida
         const initialValue = initialValues[fieldName]
         fs.value = initialValue
         if(typeof initialValue === 'boolean') {
-            fs.props.defaultChecked = initialValue == null ? undefined : null
+            fs.props.defaultChecked = initialValue
         } else if(initialValue != null) {
-            fs.props.defaultValue = initialValue == null ? undefined : null
+            fs.props.defaultValue = initialValue
         }
     }
 }

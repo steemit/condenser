@@ -10,7 +10,7 @@ class CategorySelector extends React.Component {
         autoComplete: React.PropTypes.string,
         placeholder: React.PropTypes.string,
         onChange: React.PropTypes.func.isRequired,
-        onBlur: React.PropTypes.func.isRequired,
+        onBlur: React.PropTypes.func,
         isEdit: React.PropTypes.bool,
         disabled: React.PropTypes.bool,
         value: React.PropTypes.string,

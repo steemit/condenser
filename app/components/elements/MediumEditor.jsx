@@ -1,5 +1,6 @@
+/* eslint react/prop-types: 0 */
 import React from 'react';
-import {reduxForm} from 'redux-form'
+import reactForm from 'app/utils/ReactForm'
 import transaction from 'app/redux/Transaction';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer'
 import CategorySelector from 'app/components/cards/CategorySelector'
@@ -12,7 +13,6 @@ import sanitize from 'sanitize-html'
 import HtmlReady from 'shared/HtmlReady'
 import g from 'app/redux/GlobalReducer'
 import {Map, Set} from 'immutable'
-import {cleanReduxInput} from 'app/utils/ReduxForms'
 
 let RichTextEditor
 if(process.env.BROWSER) {
@@ -48,23 +48,6 @@ class MediumEditor extends React.Component {
         title: React.PropTypes.string, // initial value
         body: React.PropTypes.string, // initial value
 
-        //redux connect
-        reply: React.PropTypes.func.isRequired,
-        setMetaLink: React.PropTypes.func.isRequired,
-        clearMetaData: React.PropTypes.func.isRequired,
-        setMetaData: React.PropTypes.func.isRequired,
-        metaLinkData: React.PropTypes.object,
-        state: React.PropTypes.object.isRequired,
-        hasCategory: React.PropTypes.bool.isRequired,
-        isStory: React.PropTypes.bool.isRequired,
-        username: React.PropTypes.string,
-
-        // redux-form
-        fields: React.PropTypes.object.isRequired,
-        handleSubmit: React.PropTypes.func.isRequired,
-        resetForm: React.PropTypes.func.isRequired,
-        submitting: React.PropTypes.bool.isRequired,
-        invalid: React.PropTypes.bool.isRequired,
     }
 
     static defaultProps = {
@@ -76,21 +59,23 @@ class MediumEditor extends React.Component {
         metaLinkData: Map(),
     }
 
-    constructor() {
+    constructor(props) {
         super()
         this.state = { rteRef: Date.now() }
+        this.initForm(props)
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'MediumEditor')
         this.onTitleChange = e => {
             const value = e.target.value
             // TODO block links in title (the do not make good permlinks)
             const hasMarkdown = /(?:\*[\w\s]*\*|\#[\w\s]*\#|_[\w\s]*_|~[\w\s]*~|\]\s*\(|\]\s*\[)/.test(value)
             this.setState({ titleWarn: hasMarkdown ? 'Markdown is not supported here' : '' })
-            this.props.fields.title.onChange(e)
+            this.state.title.props.onChange(e)
         }
         this.onCancel = e => {
             if(e) e.preventDefault()
-            const {onCancel, resetForm} = this.props
-            resetForm()
+            const {onCancel} = this.props
+            const {mediumForm} = this.state
+            mediumForm.clearForm()
             this.setAutoVote()
             this.setState({rte_value: RichTextEditor ? '' : null, rteRef: Date.now()})
             if(onCancel) onCancel(e)
@@ -110,10 +95,10 @@ class MediumEditor extends React.Component {
             }
         }
         this.autoVoteOnChange = () => {
-            const {autoVote} = this.props.fields
+            const {autoVote} = this.state
             const key = 'replyEditorData-autoVote-story'
             localStorage.setItem(key, !autoVote.value)
-            autoVote.onChange(!autoVote.value)
+            autoVote.props.onChange(!autoVote.value)
         }
     }
     componentWillMount() {
@@ -125,20 +110,20 @@ class MediumEditor extends React.Component {
         if(editorData) {
             editorData = JSON.parse(editorData)
             if(editorData.formId === formId) {
-                const {fields: {category, title, body}} = this.props
-                if(category) category.onChange(editorData.category)
-                if(title) title.onChange(editorData.title)
+                const {category, title, body} = this.state
+                if(category) category.props.onChange(editorData.category)
+                if(title) title.props.onChange(editorData.title)
                 if (editorData.body) {
                     const html = getHtml(editorData.body)
                     if(html) {
                         rte_value = editorData.body
                         rte = true
                     } else
-                        body.onChange(editorData.body)
+                        body.props.onChange(editorData.body)
                 }
             }
         } else {
-            const {body} = this.props.fields
+            const {body} = this.state
             // const {isStory} = this.props
             // if(isStory)
             rte = true //JSON.parse(localStorage.getItem('replyEditorData-rte') || RTE_DEFAULT);
@@ -165,21 +150,21 @@ class MediumEditor extends React.Component {
         }, 300)
     }
     componentWillUpdate(nextProps, nextState) {
-        const {fields: {body}} = nextProps
-        const tp = this.props.fields
-        const np = nextProps.fields
+        const ts = this.state
+        const ns = nextState
         if(
-            tp.body.value !== np.body.value ||
-            this.state.rte_value !== nextState.rte_value ||
-            (np.category && tp.category.value !== np.category.value) ||
-            (np.title && tp.title.value !== np.title.value)
+            ts.body.value !== ns.body.value ||
+            ts.rte_value !== ns.rte_value ||
+            (ns.category && ts.category.value !== ns.category.value) ||
+            (ns.title && ts.title.value !== ns.title.value)
         ) { // also prevents saving after parent deletes this information
-            const {fields: {category, title}, formId} = nextProps
+            const {formId} = nextProps
+            const {category, title} = ns
+            const {rte, rte_value} = ns
             const data = {formId}
-            const {rte, rte_value} = nextState
             data.title = title ? title.value : undefined
             data.category = category ? category.value : undefined
-            data.body = rte ? rte_value : body.value
+            data.body = rte ? rte_value : ns.body.value
             clearTimeout(saveEditorTimeout)
             saveEditorTimeout = setTimeout(() => {
                 // console.log('save formId', formId)
@@ -191,33 +176,57 @@ class MediumEditor extends React.Component {
         const {clearMetaData, formId} = this.props
         clearMetaData(formId)
     }
+
+    initForm(props) {
+        const {isStory, type, hasCategory, fields} = props
+        const isEdit = type === 'edit'
+        const maxKb = isStory ? MAX_STORY_KB : MAX_COMMENT_KB
+        reactForm({
+            fields,
+            instance: this,
+            name: 'mediumForm',
+            initialValues: props.initialValues,
+            validation: values => ({
+                title: isStory && (
+                    !values.title || values.title.trim() === '' ? 'Required' :
+                    values.title.length > 255 ? 'Shorten title' :
+                    null
+                ),
+                category: hasCategory && validateCategory(values.category, !isEdit),
+                body: isBodyEmpty(this.state, values.body) ? 'Required' :
+                    values.body.replace(/data:image\/.+?("|quot)/g, '"').length > maxKb * 1024 ? 'Exceeds maximum length ('+maxKb+'KB)' :
+                null
+            })
+        })
+    }
+
     onChange(value, rte_serialize) {
         // Serilize can be expensive.. Only use it for a small body or when submitting the post...
         let rte_value
         if(value === '') {
             rte_value = EMPTY_MEDIUM_HTML
-            this.props.fields.body.onChange('')
+            this.state.body.props.onChange('')
         } else if(value.length < 1000) {
             // Allow valid tags which have no body but can show something.  Sanitize will strip out all other html but leave text which indicates the user is looking at something...
             const ser = sanitize(value, {allowedTags: ['img', 'iframe']}).trim()
             if(ser === '' || ser === '+'/*insert plugin*/) {
                 rte_value = EMPTY_MEDIUM_HTML
-                this.props.fields.body.onChange('')
+                this.state.body.props.onChange('')
             }
         }
         if(!rte_value) {
             rte_value = `<html>${value}</html>`
-            this.props.fields.body.onChange(rte_value)
+            this.state.body.props.onChange(rte_value)
         }
         this.setState({rte_value, rte_serialize})
     }
     setAutoVote() {
         const {isStory} = this.props
         if(isStory) {
-            const {autoVote} = this.props.fields
+            const {autoVote} = this.state
             const key = 'replyEditorData-autoVote-story'
             const autoVoteDefault = JSON.parse(localStorage.getItem(key) || true)
-            autoVote.onChange(autoVoteDefault)
+            autoVote.props.onChange(autoVoteDefault)
         }
     }
     toggleRte(e) {
@@ -234,13 +243,15 @@ class MediumEditor extends React.Component {
             body: this.props.body,
         }
         const {onCancel, autoVoteOnChange} = this
-        const {title, category, body, autoVote} = this.props.fields
+        const {title, category, body, autoVote} = this.state
         const {
             reply, username, hasCategory, isStory, formId, noImage,
             author, permlink, parent_author, parent_permlink, type, jsonMetadata, metaLinkData,
-            state, successCallback, handleSubmit, submitting, invalid, //lastComment,
+            state, successCallback,
         } = this.props
-        const {postError, loading, titleWarn, rte, rte_serialize} = this.state
+        const {submitting, valid, handleSubmit} = this.state.mediumForm
+        const {postError, titleWarn, rte, rte_serialize} = this.state
+        const loading = submitting // tmp
         const {onTitleChange} = this
         const errorCallback = estr => { this.setState({ postError: estr, loading: false }) }
         const successCallbackWrapper = (...args) => {
@@ -282,7 +293,7 @@ class MediumEditor extends React.Component {
                     >
                         <div className={vframe_section_shrink_class}>
                             {isStory && <span>
-                                <input type="text" {...cleanReduxInput(title)} onChange={onTitleChange} disabled={loading}
+                                <input type="text" {...title.props} onChange={onTitleChange} disabled={loading}
                                     placeholder="Title" autoComplete="off" ref="titleRef" tabIndex={1} />
                                 {titleError}
                             </span>}
@@ -301,7 +312,7 @@ class MediumEditor extends React.Component {
                                     options={EditorOptions}
                                     readOnly={loading} />
                                 :
-                                <textarea {...cleanReduxInput(body)} disabled={loading} rows={isStory ? 10 : 3} placeholder={isStory ? 'Write your story...' : 'Reply'} autoComplete="off" ref="postRef" tabIndex={2} />
+                                <textarea {...body.props} disabled={loading} rows={isStory ? 10 : 3} placeholder={isStory ? 'Write your story...' : 'Reply'} autoComplete="off" ref="postRef" tabIndex={2} />
                             }
                         </div>
                         <div className={vframe_section_shrink_class}>
@@ -310,7 +321,7 @@ class MediumEditor extends React.Component {
 
                         <div className={vframe_section_shrink_class} style={{marginTop: '0.5rem'}}>
                             {hasCategory && <span>
-                                <CategorySelector {...category} disabled={loading} isEdit={isEdit} tabIndex={3} />
+                                <CategorySelector {...category.props} disabled={loading} isEdit={isEdit} tabIndex={3} />
                                 <div className="error">{category.touched && category.error && category.error}&nbsp;</div>
                             </span>}
                         </div>
@@ -318,16 +329,20 @@ class MediumEditor extends React.Component {
                             {postError && <div className="error">{postError}</div>}
                         </div>
                         <div className={vframe_section_shrink_class}>
-                            {!loading && <button type="submit" className="button" disabled={submitting || invalid} tabIndex={4}>{isEdit ? 'Update Post' : postLabel}</button>}
+                            {!loading &&
+                                <button type="submit" className="button" disabled={submitting}
+                                    tabIndex={4}>{isEdit ? 'Update Post' : postLabel}</button>
+                            }
                             {loading && <span><br /><LoadingIndicator type="circle" /></span>}
                             &nbsp; {!loading && this.props.onCancel &&
-                                <button type="button" className="secondary hollow button no-border" tabIndex={5} onClick={(e) => {e.preventDefault(); onCancel()}}>Cancel</button>
+                                <button type="button" className="secondary hollow button no-border" tabIndex={5}
+                                    onClick={(e) => {e.preventDefault(); onCancel()}}>Cancel</button>
                             }
                             {!loading && !this.props.onCancel && <button className="button hollow no-border" tabIndex={5} disabled={submitting} onClick={onCancel}>Clear</button>}
                             {isStory && !isEdit && <div className="float-right">
                                 <small onClick={autoVoteOnChange}>Upvote post</small>
                                 &nbsp;&nbsp;
-                                <input type="checkbox" {...cleanReduxInput(autoVote)} onChange={autoVoteOnChange} />
+                                <input type="checkbox" {...autoVote.props} onChange={autoVoteOnChange} />
                             </div>}
                         </div>
                         {!loading && !rte && <div className={'Preview ' + vframe_section_shrink_class}>
@@ -355,17 +370,14 @@ function isBodyEmpty(state, body) {
     return false
 }
 
-export default formId => reduxForm(
-    // config
-    {form: formId},
-    // https://github.com/erikras/redux-form/issues/949
-    // Warning: Failed propType: Required prop `form` was not specified in `ReduxFormConnector(ReplyEditor)`. Check the render method of `ConnectedForm`.
+import {connect} from 'react-redux'
 
+export default formId => connect(
     // mapStateToProps
     (state, ownProps) => {
         // const current = state.user.get('current')||Map()
         const username = state.user.getIn(['current', 'username'])
-        const fields = ['body', 'autoVote']
+        const fields = ['body', 'autoVote:bool']
         const {type, parent_author, jsonMetadata} = ownProps
         const isStory = /submit_story/.test(type) || (
             /edit/.test(type) && parent_author === ''
@@ -375,19 +387,6 @@ export default formId => reduxForm(
             fields.push('title')
         }
         if (hasCategory) fields.push('category')
-        const isEdit = type === 'edit'
-        const maxKb = isStory ? MAX_STORY_KB : MAX_COMMENT_KB
-        const validate = values => ({
-            title: isStory && (
-                !values.title || values.title.trim() === '' ? 'Required' :
-                values.title.length > 255 ? 'Shorten title' :
-                null
-            ),
-            category: hasCategory && validateCategory(values.category, !isEdit),
-            body: isBodyEmpty(state, values.body) ? 'Required' :
-                values.body.replace(/data:image\/.+?("|quot)/g, '"').length > maxKb * 1024 ? 'Exceeds maximum length ('+maxKb+'KB)' :
-            null
-        })
         let {category, title, body} = ownProps
 
         if (/submit_/.test(type)) title = body = ''
@@ -398,7 +397,7 @@ export default formId => reduxForm(
         const metaLinkData = state.global.getIn(['metaLinkData', formId])
         const ret = {
             ...ownProps,
-            fields, validate, isStory, hasCategory, username,
+            fields, isStory, hasCategory, username,
             initialValues: {title, body, category}, state,
             // lastComment: current.get('lastComment'),
             formId,
@@ -444,6 +443,8 @@ export default formId => reduxForm(
                 originalPost.category : formCategories.first()
             const rootTag = /^[-a-z\d]+$/.test(rootCategory) ? rootCategory : null
 
+            // if(rte_serialize) console.log('body', body)
+            // if(rte_serialize) console.log('body ser', rte_serialize())
             if(rte_serialize) body = rte_serialize()
 
             const rtags = HtmlReady(body, {mutate: false})

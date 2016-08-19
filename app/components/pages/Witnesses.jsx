@@ -73,6 +73,29 @@ class Witnesses extends React.Component {
             )
         });
 
+        let addl_witnesses = false;
+        if(witness_votes) {
+            addl_witnesses = witness_votes.filter(function(item) {
+                return !sorted_witnesses.has(item)
+            }).map(item => {
+                return (
+                       <div className="row" key={item}>
+                           <div className="column small-12">
+                              <span>{/*className="Voting"*/}
+                                  <span className="Voting__button Voting__button-up space-right Voting__button--upvoted">
+                                      <a href="#" onClick={accountWitnessVote.bind(this, item, false)}
+                                          title="Vote">{up}</a>
+                                      &nbsp;
+                                  </span>
+                              </span>
+                             <Link to={'/@'+item}>{item}</Link>
+                           </div>
+                       </div>
+                )
+            }).toArray();
+        }
+
+
       return (
         <div>
         <div className="Witnesses row">
@@ -81,19 +104,21 @@ class Witnesses extends React.Component {
 
           {header}
           <div className="Witnesses row">
-            <div className="column small-12">         
+            <div className="column small-12">
                  {witnesses.toArray()}
             </div>
           </div>
-          <hr/>          
+          <hr/>
           <div className="row">
             <div className="column small-6">
-              <p>If the witness is not in the top 50, enter their username here to cast a vote.</p>
-              <form>
-                <input type="text" style={{float: "left", width: "75%"}} value={customUsername} onChange={onWitnessChange} />
-                <button className="darkbtn" onClick={accountWitnessVote.bind(this, customUsername, !(witness_votes ? witness_votes.has(customUsername) : null))}>Vote</button>
-              </form>
-              <br/><br/>
+                <p>If the witness is not in the top 50, enter their username here to cast a vote.</p>
+                <form>
+                    <input type="text" style={{float: "left", width: "75%"}} value={customUsername} onChange={onWitnessChange} />
+                    <button className="darkbtn" onClick={accountWitnessVote.bind(this, customUsername, !(witness_votes ? witness_votes.has(customUsername) : null))}>Vote</button>
+                </form>
+                <br/>
+                {addl_witnesses}
+                <br/><br/>
              </div>
           </div>
       </div>

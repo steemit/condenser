@@ -25,6 +25,7 @@ const grant = new Grant(config.grant);
 const app = new Koa();
 app.name = 'Steemit app';
 const env = process.env.NODE_ENV || 'development';
+const cacheOpts = {maxAge: 86400000, gzip: true};
 
 app.keys = [config.session_key];
 app.use(session({maxAge: 1000 * 3600 * 24 * 7}, app));
@@ -50,19 +51,22 @@ app.use(function *(next) {
     }
 });
 
-app.use(mount('/static', staticCache(path.join(__dirname, '../app/assets/static'), cacheOpts)));
-
 if (env === 'production') {
     // load production middleware
     app.use(require('koa-conditional-get')());
     app.use(require('koa-etag')());
     app.use(require('koa-compressor')());
     app.use(prod_logger());
+} else {
+    app.use(koa_logger());
+}
+
+app.use(mount('/static', staticCache(path.join(__dirname, '../app/assets/static'), cacheOpts)));
+
+if (env === 'production') {
     app.use(helmet.contentSecurityPolicy(config.helmet));
 } else {
     app.use(helmet());
-    // app.use(helmet.contentSecurityPolicy(config.helmet));
-    app.use(koa_logger());
 }
 
 app.use(mount('/robots.txt', function* () {
@@ -78,8 +82,6 @@ useAccountRecoveryApi(app);
 useEnterAndConfirmEmailPages(app);
 app.use(favicon(path.join(__dirname, '../app/assets/images/favicons/favicon.ico')));
 app.use(isBot());
-
-const cacheOpts = {maxAge: 86400000, gzip: true};
 app.use(mount('/favicons', staticCache(path.join(__dirname, '../app/assets/images/favicons'), cacheOpts)));
 app.use(mount('/images', staticCache(path.join(__dirname, '../app/assets/images'), cacheOpts)));
 // Proxy asset folder to webpack development server in development mode

@@ -73,7 +73,6 @@ class MarkdownViewer extends Component {
         text = text.replace(/<!--([\s\S]+?)(-->|$)/g, '(html comment removed: $1)')
 
         let renderedText = html ? text : remarkable.render(text)
-
         // Embed videos, link mentions and hashtags, etc...
         if(renderedText) renderedText = HtmlReady(renderedText, {large}).html
 
@@ -89,14 +88,10 @@ class MarkdownViewer extends Component {
 
         const noImageActive = cleanText.indexOf(noImageText) !== -1
 
-        // Use split around things like the youtube iframe.  This allows react to compare separatly preventing excessive re-rendering.
-        const cleanTextSplits = cleanText.replace(/<\/p>/g, `</p><!--split-->`)
-        const sections = cleanTextSplits.split('<!--split-->')
-
         const cn = 'Markdown' + (this.props.className ? ` ${this.props.className}` : '') + (html ? ' html' : '')
         let idx = 0
         return (<div className={"MarkdownViewer " + cn}>
-            {sections.map(s => <div key={idx++} dangerouslySetInnerHTML={{__html: s}} />)}
+            <div dangerouslySetInnerHTML={{__html: cleanText}} />
             {noImageActive && allowNoImage &&
                 <div onClick={this.onAllowNoImage} className="MarkdownViewer__negative_group">
                     Images were hidden due to low ratings.

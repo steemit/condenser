@@ -37,6 +37,9 @@ export default ({large = true, highQualityPost = true, noImage = false, sanitize
         // "src" MUST pass a whitelist (below)
         iframe: ['src', 'width', 'height', 'frameBorder', 'allowFullScreen'], //'class'
 
+        // class attribute is strictly whitelisted (below)
+        div: ['class'],
+
         // style is subject to attack, filtering more below
         td: ['style'],
         img: ['src'],
@@ -79,6 +82,17 @@ export default ({large = true, highQualityPost = true, noImage = false, sanitize
             src = src.replace(/^http:\/\//i, '//')
 
             return {tagName, attribs: {src}}
+        },
+        div: (tagName, attribs) => {
+            const attys = {}
+            const classWhitelist = ['pull-right', 'pull-left', 'text-justify']
+            const validClass = classWhitelist.find(e => attribs.class == e)
+            if(validClass)
+                attys.class = validClass
+            return {
+                tagName,
+                attribs: attys
+            }
         },
         td: (tagName, attribs) => {
             const attys = {}

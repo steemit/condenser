@@ -73,6 +73,7 @@ class MarkdownViewer extends Component {
         text = text.replace(/<!--([\s\S]+?)(-->|$)/g, '(html comment removed: $1)')
 
         let renderedText = html ? text : remarkable.render(text)
+
         // Embed videos, link mentions and hashtags, etc...
         if(renderedText) renderedText = HtmlReady(renderedText, {large}).html
 

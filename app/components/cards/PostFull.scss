@@ -50,13 +50,19 @@
 .PostFull__body {
   padding: 1rem 0 2rem 0;
   clear: left;
+
   font-family: 'Source Serif Pro', serif;
   font-size: 120%;
   line-height: 150%;
+
   overflow-wrap: break-word;
   word-wrap: break-word;
   word-break: break-word;
   hyphens: auto;
+
+  table td {
+    word-break: normal; // issue #146
+  }
 
   p {
     font-size: 100%;

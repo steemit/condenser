@@ -27,7 +27,16 @@ cp steem-example.json steem-dev.json
 
 See https://github.com/steemit/steem for instructions.
 
-Launch steemd with `--rpc-endpoint 127.0.0.1:8090` flag
+OS X :
+```bash
+brew update
+brew doctor
+brew upgrade
+brew tap homebrew/versions
+brew install TigerND/core/steem
+```
+
+Launch steemd with `--rpc-endpoint 127.0.0.1:8090` flag.
 
 The first launch will generate a `config.ini` file in your data-dir.  Ensure you enable the following:
 ```
@@ -63,7 +72,7 @@ mysql -u root
 Install `sequelize-cli` globally:
 
 ```bash
-npm install -g sequelize-cli pm2
+npm install -g sequilize sequelize-cli pm2 mysql
 ```
 
 Run `sequelize db:migrate` in `db/` directory.
@@ -71,9 +80,13 @@ Run `sequelize db:migrate` in `db/` directory.
 
 ### Development
 
+Before running the local front end, mysql and steemd both need to be running, and the entire blockchain needs to be synced. Use a command like ```steemd --rpc-endpoint 127.0.0.1:8090 --seed-node="seed.steemed.net:2001" --seed-node="52.74.152.79:2001" —witness=“YOURACCOUNT”```, otherwise refer to [Mining steem for dummies](https://steemit.com/steemhelp/@joseph/mining-steem-for-dummies) for further instructions and configuration.
+
 ```bash
 npm start
 ```
+
+You now have your development front end running at localhost:3002, connected to the main public steem blockchain. Use your regular account name and credentials to login -- there is no separate dev login.
 
 #### Style Guides
 

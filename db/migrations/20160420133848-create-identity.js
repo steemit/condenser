@@ -28,7 +28,7 @@ module.exports = {
             email: {
                 type: Sequelize.STRING
             },
-            confirm_token: {
+            confirmation_code: {
                 type: Sequelize.STRING
             },
             verified: {
@@ -47,6 +47,7 @@ module.exports = {
             }
         }).then(function () {
             queryInterface.addIndex('identities', ['email']);
+            queryInterface.addIndex('identities', ['confirmation_code']);
         });
     },
     down: function (queryInterface, Sequelize) {

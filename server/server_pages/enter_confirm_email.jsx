@@ -109,7 +109,7 @@ export default function useEnterAndConfirmEmailPages(app) {
         let eid = yield models.Identity.findOne(
             {attributes: ['id', 'email'], where: {user_id, provider: 'email'}, order: 'id DESC'}
         );
-        if (eid.email === email) {
+        if (eid && eid.email === email) {
             yield eid.update({confirmation_code});
         } else {
             eid = yield models.Identity.create({

@@ -48,6 +48,10 @@ class Witnesses extends React.Component {
             const myVote = witness_votes ? witness_votes.has(owner) : null
             const classUp = 'Voting__button Voting__button-up' +
                 (myVote === true ? ' Voting__button--upvoted' : '');
+            let witness_thread = ""
+            if(thread) {
+                witness_thread = <Link to={thread}>witness thread</Link>
+            }
             return (
                     <tr key={owner}>
                         <td width="75">
@@ -61,7 +65,7 @@ class Witnesses extends React.Component {
                             <Link to={'/@'+owner}>{owner}</Link>
                         </td>
                         <td>
-                            <Link to={thread}>witness thread</Link>
+                            {witness_thread}
                         </td>
                     </tr>
             )

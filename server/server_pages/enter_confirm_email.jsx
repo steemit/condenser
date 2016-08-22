@@ -3,26 +3,10 @@ import koa_body from 'koa-body';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import models from 'db/models';
-import findUser from 'db/utils/find_user';
-import config from 'config';
-import recordWebEvent from 'server/record_web_event';
 import {esc, escAttrs} from 'db/models';
-import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF} from '../utils';
-import coBody from 'co-body';
 import ServerHTML from '../server-html';
-import { Link } from 'react-router';
 import Icon from 'app/components/elements/Icon.jsx';
 import sendEmail from '../sendEmail';
-
-// alter table identities add confirmation_code varchar(256);
-// alter table identities drop index identities_email;
-// create index `identities_email` ON `identities` (`email`);
-// create index `identities_confirmation_code` ON `identities` (`confirmation_code`);
-// alter table users drop index users_email;
-// create index `users_email` ON `users` (`email`);
-
-
-const assets = require('../webpack-stats.json');
 
 const header = <header className="Header">
     <div className="Header__top header">
@@ -95,6 +79,8 @@ export default function useEnterAndConfirmEmailPages(app) {
                 </form>
             </div>
         </div>);
+        const assets_filename = process.env.NODE_ENV === 'production' ? 'tmp/webpack-stats-prod.json' : 'tmp/webpack-stats-dev.json';
+        const assets = require(assets_filename);
         const props = { body, title: 'Email Address', assets, meta: [] };
         this.body = '<!DOCTYPE html>' + renderToString(<ServerHTML { ...props } />);
     });

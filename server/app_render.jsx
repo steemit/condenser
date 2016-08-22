@@ -61,12 +61,13 @@ async function appRender(ctx) {
         }
         const { body, title, statusCode, meta } = await universalRender({location: ctx.request.url, store, offchain});
 
-        // Assets name are found into `webpack-stats`
-        const assets = require('./webpack-stats.json');
+        // Assets name are found in `webpack-stats` file
+        const assets_filename = process.env.NODE_ENV === 'production' ? 'tmp/webpack-stats-prod.json' : 'tmp/webpack-stats-dev.json';
+        const assets = require(assets_filename);
 
         // Don't cache assets name on dev
         if (process.env.NODE_ENV === 'development') {
-            delete require.cache[require.resolve('./webpack-stats.json')];
+            delete require.cache[require.resolve(assets_filename)];
         }
 
         const props = {body, assets, title, meta};

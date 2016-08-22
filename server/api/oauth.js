@@ -122,10 +122,19 @@ function* handleFacebookCallback() {
         }
 
         if (user) {
-            attrs.id = user.id;
+            i_attrs_email.user_id = attrs.id = user.id;
             yield models.User.update(attrs, {where: {id: user.id}});
             yield models.Identity.update(i_attrs, {where: {user_id: user.id, provider: 'facebook'}});
-            if(verified_email) yield models.Identity.update(i_attrs_email, {where: {user_id: user.id, provider: 'email', email: u.email}});
+            if (verified_email) {
+                const eid = yield models.Identity.findOne(
+                    {attributes: ['id', 'verified'], where: {user_id: user.id, provider: 'email'}, order: 'id DESC'}
+                );
+                if (eid) {
+                    if (!eid.verified) yield eid.update({email: u.email, verified: true});
+                } else {
+                    yield models.Identity.create(i_attrs_email);
+                }
+            }
             console.log('-- fb updated user -->', this.session.uid, user.id, u.name, u.email);
         } else {
             user = yield models.User.create(attrs);

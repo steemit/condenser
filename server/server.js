@@ -98,7 +98,7 @@ if (env === 'development') {
 }
 
 if (env !== 'test') {
-    const app_router = require('./router');
+    const appRender = require('./app_render');
     app.use(function* () {
         this.first_visit = false;
         this.last_visit = this.session.last_visit;
@@ -110,7 +110,7 @@ if (env !== 'test') {
         } else {
             this.session.new_visit = this.session.last_visit - this.last_visit > 1800;
         }
-        yield app_router(this);
+        yield appRender(this);
         // if (app_router.dbStatus.ok) recordWebEvent(this, 'page_load');
         const bot = this.state.isBot;
         if (bot) {

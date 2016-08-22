@@ -6,7 +6,7 @@ import models from 'db/models';
 
 const DB_RECONNECT_TIMEOUT = process.env.NODE_ENV === 'development' ? 1000 * 60 * 60 : 1000 * 60 * 10;
 
-async function router(ctx) {
+async function appRender(ctx) {
     const store = {};
     try {
         const offchain = {
@@ -19,7 +19,7 @@ async function router(ctx) {
         const user_id = ctx.session.user;
         if (user_id) {
             let user = null;
-            if (router.dbStatus.ok || (new Date() - router.dbStatus.lastAttempt) > DB_RECONNECT_TIMEOUT) {
+            if (appRender.dbStatus.ok || (new Date() - appRender.dbStatus.lastAttempt) > DB_RECONNECT_TIMEOUT) {
                 try {
                     user = await models.User.findOne({
                         attributes: ['name', 'email', 'picture_small'],
@@ -27,9 +27,9 @@ async function router(ctx) {
                         include: [{model: models.Account, attributes: ['name']}],
                         logging: false
                     });
-                    router.dbStatus = {ok: true};
+                    appRender.dbStatus = {ok: true};
                 } catch (e) {
-                    router.dbStatus = {ok: false, lastAttempt: new Date()};
+                    appRender.dbStatus = {ok: false, lastAttempt: new Date()};
                     console.error('WARNING! mysql query failed: ', e.toString());
                     offchain.serverBusy = true;
                 }
@@ -87,5 +87,5 @@ async function router(ctx) {
     }
 }
 
-router.dbStatus = {ok: true};
-module.exports = router;
+appRender.dbStatus = {ok: true};
+module.exports = appRender;

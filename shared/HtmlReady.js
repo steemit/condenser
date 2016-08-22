@@ -8,6 +8,15 @@ const DOMParser = new xmldom.DOMParser({
 })
 const XMLSerializer = new xmldom.XMLSerializer()
 
+/** Split the HTML on top-level elements. This allows react to compare separately, preventing excessive re-rendering.
+ * Used in MarkdownViewer.jsx
+ */
+export function sectionHtml (html) {
+  const doc = DOMParser.parseFromString(html, 'text/html')
+  const sections = Array(...doc.childNodes).map(child => XMLSerializer.serializeToString(child))
+  return sections
+}
+
 /** Embed videos, link mentions and hashtags, etc...
 */
 export default function (html, {large = false, mutate = true}) {

@@ -49,11 +49,23 @@ function traverse(node, state, depth = 0) {
         if(/img/i.test(child.tagName))
             img(state, child)
         else if(/a/i.test(child.tagName))
-            atty(child, 'href', a => state.links.add(a.value))
+            link(state, child)
         else if(!embedYouTubeNode(child, state.large, state.links))
             linkifyNode(child, state)
         traverse(child, state, ++depth)
     })
+}
+
+function link(state, child) {
+    const url = child.getAttribute('href')
+    if(url) {
+        state.links.add(url)
+        if(state.mutate) {
+            if(! /(https?:)?\/\//.test(url)) {
+                child.setAttribute('href', "https://"+url)
+            }
+        }
+    }
 }
 
 function img(state, child) {

@@ -132,9 +132,9 @@ function embedYouTubeNode(child, large, links) {try{
         if(match && match.length >= 2) {
             const id = match[1]
             const src = `//www.youtube.com/embed/${id}?enablejsapi=0&rel=0&origin=https://steemit.com`
-            const v = DOMParser.parseFromString(`<!--split--><div key="${id}" class="videoWrapper">
-                <iframe width="${large ? '640' : '384'}" height="${large ? 360 : 240}" src="${src}" frameBorder="0" allowFullScreen="true"></iframe>
-            </div><!--split-->`)
+            const w = large ? 640 : 384,
+                  h = large ? 360 : 240
+            const v = DOMParser.parseFromString(`<iframe width="${w}" height="${h}" src="${src}" frameBorder="0" allowFullScreen="true"></iframe>`)
             child.parentNode.replaceChild(v, child)
             replaced = true
             if(links) links.add(url)

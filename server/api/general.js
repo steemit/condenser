@@ -72,7 +72,7 @@ export default function useGeneralApi(app) {
             );
             if (!eid) {
                 console.log(`api /accounts: not confirmed email for user ${this.session.uid} #${user_id}`);
-                throw new Error('Please confirm your email address first');
+                throw new Error('Email address is not confirmed');
             }
 
             yield createAccount({

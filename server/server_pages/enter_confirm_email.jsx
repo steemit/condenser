@@ -7,6 +7,10 @@ import {esc, escAttrs} from 'db/models';
 import ServerHTML from '../server-html';
 import Icon from 'app/components/elements/Icon.jsx';
 import sendEmail from '../sendEmail';
+import {checkCSRF} from '../utils';
+
+const assets_filename = process.env.NODE_ENV === 'production' ? 'tmp/webpack-stats-prod.json' : 'tmp/webpack-stats-dev.json';
+const assets = require(assets_filename);
 
 const header = <header className="Header">
     <div className="Header__top header">
@@ -27,7 +31,7 @@ function *confirmEmailHandler() {
     const confirmation_code = this.params && this.params.code ? this.params.code : this.request.body.code;
     console.log('-- /confirm_email -->', this.session.uid, this.session.user, confirmation_code);
     const eid = yield models.Identity.findOne(
-        {attributes: ['id', 'user_id', 'email', 'verified', 'created_at'], where: {confirmation_code}, order: 'id DESC'}
+        {attributes: ['id', 'user_id', 'email', 'verified', 'updated_at'], where: {confirmation_code}, order: 'id DESC'}
     );
     if (!eid) {
         this.status = 401;
@@ -35,7 +39,7 @@ function *confirmEmailHandler() {
         return;
     }
     this.session.user = eid.user_id;
-    const hours_ago = (Date.now() - eid.created_at) / 1000.0 / 3600.0;
+    const hours_ago = (Date.now() - eid.updated_at) / 1000.0 / 3600.0;
     if (hours_ago > 24.0) {
         this.status = 401;
         this.body = 'confirmation code not found';
@@ -79,8 +83,6 @@ export default function useEnterAndConfirmEmailPages(app) {
                 </form>
             </div>
         </div>);
-        const assets_filename = process.env.NODE_ENV === 'production' ? 'tmp/webpack-stats-prod.json' : 'tmp/webpack-stats-dev.json';
-        const assets = require(assets_filename);
         const props = { body, title: 'Email Address', assets, meta: [] };
         this.body = '<!DOCTYPE html>' + renderToString(<ServerHTML { ...props } />);
     });

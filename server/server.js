@@ -64,6 +64,7 @@ if (env === 'production') {
 app.use(mount('/static', staticCache(path.join(__dirname, '../app/assets/static'), cacheOpts)));
 
 if (env === 'production') {
+    app.use(helmet());
     app.use(helmet.contentSecurityPolicy(config.helmet));
 } else {
     app.use(helmet());

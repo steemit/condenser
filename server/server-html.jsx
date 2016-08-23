@@ -55,6 +55,7 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
         </head>
         <body>
         <div id="content" dangerouslySetInnerHTML={ { __html: body } }></div>
+        <script src="https://cdn.jsdelivr.net/webtorrent/latest/webtorrent.min.js"></script>
         {assets.script.map((href, idx) => <script key={ idx } src={ href }></script>) }
         {config.js_plugins_path && <script src={config.js_plugins_path}></script>}
         </body>

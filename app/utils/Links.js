@@ -18,6 +18,8 @@ export const remote = (flags = 'i') => new RegExp(urlSet({domain: `(?!localhost|
 export const youTube = (flags = 'i') => new RegExp(urlSet({domain: '(?:(?:.*\.)?youtube.com|youtu.be)'}), flags)
 export const image = (flags = 'i') => new RegExp(urlSet({path: imagePath}), flags)
 export const imageFile = (flags = 'i') => new RegExp(imagePath, flags)
+export const webtorrent = (flags = 'i') => new RegExp(urlSet({domain: 'magnet:'}), flags)
+
 // export const nonImage = (flags = 'i') => new RegExp(urlSet({path: '!' + imageFile}), flags)
 // export const markDownImageRegExp = (flags = 'i') => new RegExp('\!\[[\w\s]*\]\(([^\)]+)\)', flags);
 
@@ -31,6 +33,7 @@ export default {
     youTubeId: /(?:(?:youtube.com\/watch\?v=)|(?:youtu.be\/)|(?:youtube.com\/embed\/))([A-Za-z0-9\_\-]+)/i,
     // simpleLink: new RegExp(`<a href="(.*)">(.*)<\/a>`, 'ig'),
     ipfsPrefix: /(https?:\/\/.*)?\/ipfs/i,
+    webtorrent: webtorrent()
 }
 
 // Original regex

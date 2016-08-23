@@ -14,4 +14,4 @@ ADD wait-for-it.sh /usr/bin/wait-for-it
 RUN chmod +x /usr/bin/wait-for-it
 RUN chmod +x /usr/bin/steemitcom
 EXPOSE 3002
-CMD ["/usr/bin/steemitcom"]
+CMD ["/usr/bin/npm","start"]

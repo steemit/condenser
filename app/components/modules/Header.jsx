@@ -21,7 +21,7 @@ class Header extends React.Component {
         if (nextPrps.location.pathname !== this.props.location.pathname) {
             const route = resolveRoute(nextPrps.location.pathname);
             const sort_order = route && route.page === 'PostsIndex' && route.params && route.params.length > 0 ? route.params[0] : null;
-            if (sort_order) this.last_sort_order = sort_order;
+            if (sort_order) window.last_sort_order = this.last_sort_order = sort_order;
         }
     }
 

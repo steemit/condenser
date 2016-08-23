@@ -283,7 +283,7 @@ function* lookupPreviousOwnerAuthority({payload: {}}) {
     const username = current.get('username')
     const key_auths = yield select(state => state.global.getIn(['accounts', username, 'owner', 'key_auths']))
     if(key_auths.find(key => key.get(0) === login_owner_pubkey)) {
-        console.log('UserSaga ---> Login matches current account owner');
+        // console.log('UserSaga ---> Login matches current account owner');
         return
     }
     // Owner history since this index was installed July 14

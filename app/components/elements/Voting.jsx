@@ -12,6 +12,7 @@ import {formatDecimal, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import {Dropdown} from 'react-foundation-components/lib/global/dropdown';
+import CloseButton from 'react-foundation-components/lib/global/close-button';
 
 const ABOUT_FLAG = 'Flagging a post can remove rewards and make this material less visible.  You can still unflag or upvote later if you change your mind.'
 const MAX_VOTES_DISPLAY = 20;
@@ -53,10 +54,9 @@ class Voting extends React.Component {
 
     constructor(props) {
         super(props);
-        const saved_weight_value = (process.env.BROWSER && localStorage.getItem('vote_weight'));
         this.state = {
             showWeight: false,
-            weight: saved_weight_value ? parseInt(saved_weight_value, 10) : 10000
+            weight: 10000
         }
         this.voteUp = e => {
             e.preventDefault();
@@ -64,8 +64,8 @@ class Voting extends React.Component {
             this.setState({votingUp: true, votingDown: false})
             const {author, permlink, username, myVote} = this.props
             // already voted Up, remove the vote
-            if (this.state.weight !== 10000) {
-                localStorage.setItem('vote_weight', this.state.weight);
+            if (this.props.vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD) {
+                localStorage.setItem('voteWeight-'+username, this.state.weight);
             }
             const weight = myVote > 0 ? 0 : this.state.weight
             if (this.state.showWeight) this.setState({showWeight: false})
@@ -81,10 +81,17 @@ class Voting extends React.Component {
             this.props.vote(weight, {author, permlink, username, myVote})
         };
         this.handleWeightChange = weight => {
-            this.setState({weight: weight + 100})
+            this.setState({weight: weight})
         };
         this.toggleWeight = e => {
             e.preventDefault();
+            const {username} = this.props
+            // Upon opening dialog, read last used weight (this works accross tabs)
+            if(! this.state.showWeight) {
+                localStorage.removeItem('vote_weight'); // deprecated. remove this line after 8/31
+                const saved_weight = localStorage.getItem('voteWeight-'+username);
+                this.setState({weight: saved_weight ? parseInt(saved_weight, 10) : 10000});
+            }
             this.setState({showWeight: !this.state.showWeight})
         };
         this.closeWeightDropdownOnOutsideClick = e => {
@@ -98,13 +105,13 @@ class Voting extends React.Component {
     componentDidUpdate(prevProps, prevState) {
         const showWeight = this.state.showWeight;
         if (showWeight !== prevState.showWeight) {
-            if (showWeight) document.body.addEventListener('click', this.closeWeightDropdownOnOutsideClick);
-            else document.body.removeEventListener('click', this.closeWeightDropdownOnOutsideClick);
+            if (showWeight) document.body.addEventListener('mousedown', this.closeWeightDropdownOnOutsideClick);
+            else document.body.removeEventListener('mousedown', this.closeWeightDropdownOnOutsideClick);
         }
     }
 
     componentWillUnmount() {
-        document.body.removeEventListener('click', this.closeWeightDropdownOnOutsideClick);
+        document.body.removeEventListener('mousedown', this.closeWeightDropdownOnOutsideClick);
     }
 
     render() {
@@ -116,9 +123,7 @@ class Voting extends React.Component {
         const votingUpActive = voting && votingUp
         const votingDownActive = voting && votingDown
 
-        const down = <Tooltip t={ABOUT_FLAG}>
-            <Icon name={votingDownActive ? 'empty' : (myVote < 0 ? 'flag2' : 'flag1')} />
-        </Tooltip>
+        const down = <Icon name={votingDownActive ? 'empty' : (myVote < 0 ? 'flag2' : 'flag1')} />;
         const classDown = 'Voting__button Voting__button-down' + (myVote < 0 ? ' Voting__button--downvoted' : '') + (votingDownActive ? ' votingDown' : '');
 
         if (flag) {
@@ -182,9 +187,10 @@ class Voting extends React.Component {
             if (showWeight) {
                 dropdown = <Dropdown>
                     <div className="Voting__adjust_weight">
-                        <Slider min={100} max={10000} step={100} value={weight} orientation="vertical" onChange={this.handleWeightChange} />
+                        <a href="#" onClick={this.voteUp} className="confirm_weight" title="Upvote"><Icon size="2x" name="chevron-up-circle" /></a>
                         <div className="weight-display">{weight / 100}%</div>
-                        <a href="#" onClick={this.voteUp} className="button">Vote</a>
+                        <Slider min={100} max={10000} step={100} value={weight} onChange={this.handleWeightChange} />
+                        <CloseButton onClick={() => this.setState({showWeight: false})} />
                     </div>
                 </Dropdown>;
             }

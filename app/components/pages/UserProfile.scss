@@ -55,7 +55,9 @@
         color: $white;
     }
     > div.column {
-        background-color: #23579d;
+        background: #23579d; /* for older browsers */
+        background: linear-gradient(to bottom, #1a4072 0%, #23579d 100%);
+
         height: 150px;
     }
     h2 {

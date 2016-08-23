@@ -31,7 +31,7 @@ class ConfirmTransactionForm extends Component {
            <div className="ConfirmTransactionForm">
                <h4>{typeName(confirmBroadcastOperation)}</h4>
                <hr />
-               <p>{conf}</p>
+               <div>{conf}</div>
                <button className="button" onClick={okClick}>Ok</button>
                <button type="button hollow" className="button hollow" onClick={onCancel}>Cancel</button>
            </div>

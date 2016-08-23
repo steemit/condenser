@@ -32,3 +32,7 @@ input[type=submit].disabled, input[type=submit].disabled:focus {
   cursor: inherit;
   background-color: $medium-gray;
 }
+
+button, .button {
+  text-transform: uppercase;
+}

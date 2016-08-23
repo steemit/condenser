@@ -21,6 +21,19 @@ import {Long} from 'bytebuffer'
 import {List} from 'immutable'
 import {repLog10, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 
+function TimeAuthorCategory({content, authorRepLog10, showTags}) {
+    return (
+        <span className="PostFull__time_author_category vcard">
+            <Tooltip t={new Date(content.created).toLocaleString()}>
+                <Icon name="clock" className="space-right" />
+                <span className="TimeAgo"><TimeAgoWrapper date={content.created} /></span>
+            </Tooltip>
+            <span> by <Author author={content.author} authorRepLog10={authorRepLog10} /></span>
+            {showTags && <span> in&nbsp;<TagList post={content} /></span>}
+        </span>
+     );
+}
+
 export default class PostFull extends React.Component {
     static propTypes = {
         // html props
@@ -179,20 +192,12 @@ export default class PostFull extends React.Component {
         const showEditOption = username === author && total_payout === 0
         const authorRepLog10 = repLog10(content.author_reputation)
 
-        const time_author_category = <span className="PostFull__time_author_category vcard">
-            <Tooltip t={new Date(content.created).toLocaleString()}>
-                <Icon name="clock" className="space-right" />
-                <span className="TimeAgo"><TimeAgoWrapper date={content.created} /></span>
-            </Tooltip>
-            <span> by <Author author={content.author} authorRepLog10={authorRepLog10} /></span>
-        </span>;
-
         return (
             <article className="PostFull hentry" itemScope itemType ="http://schema.org/blogPost">
                 <div className="float-right"><Voting post={post} flag /></div>
                 <div className="PostFull__header">
                     <h1 className="entry-title">{content.title}</h1>
-                    {time_author_category}
+                    <TimeAuthorCategory content={content} authorRepLog10={authorRepLog10} showTags />
                 </div>
                 {showEdit ?
                     renderedEditor :
@@ -204,7 +209,7 @@ export default class PostFull extends React.Component {
                 <TagList post={content} horizontal />
                 <div className="PostFull__footer row align-middle">
                     <div className="column">
-                        {time_author_category}
+                        <TimeAuthorCategory content={content} authorRepLog10={authorRepLog10} />
                         <Voting post={post} pending_payout={content.pending_payout_value} total_payout={content.total_payout_value} cashout_time={content.cashout_time} />
                     </div>
                     <div className="column shrink">

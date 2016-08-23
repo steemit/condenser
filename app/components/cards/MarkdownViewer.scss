@@ -4,3 +4,24 @@
     border-top: 1px solid $medium-gray;
     padding-top: 1rem;
 }
+
+.MarkdownViewer {
+
+  height: 100%;
+  overflow: hidden;
+
+  div.pull-right {
+    float: right;
+    padding-left: 1rem;
+  }
+
+  div.pull-left {
+    float: left;
+    padding-right: 1rem;
+  }
+
+  div.text-justify {
+    text-align: justify;
+  }
+
+}

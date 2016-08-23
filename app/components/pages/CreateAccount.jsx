@@ -190,9 +190,8 @@ class CreateAccount extends React.Component {
         }
 
         const existingUserAccount = offchainUser.get('account');
-        let existingUserAccountAlert = null;
         if (existingUserAccount) {
-            existingUserAccountAlert = <div className="row">
+            return <div className="row">
                 <div className="column">
                     <div className="callout alert">
                         <p>Our records indicate that you already have steem account: <strong>{existingUserAccount}</strong></p>
@@ -207,7 +206,6 @@ class CreateAccount extends React.Component {
         return (
             <div className="CreateAccount row">
                 <div className="column large-7 small-10">
-                    {existingUserAccountAlert}
                     <h2>Sign Up</h2>
                     <div className="CreateAccount__rules">
                         <hr />
@@ -234,6 +232,7 @@ class CreateAccount extends React.Component {
                         {server_error && <div className="callout alert">
                             <h5>Couldn't create account. Server returned the following error:</h5>
                             <p>{server_error}</p>
+                            {server_error === 'Email address is not confirmed' && <a href="/enter_email">Confirm Email</a>}
                         </div>}
                         <noscript>
                             <div className="callout alert">

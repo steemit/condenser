@@ -58,7 +58,7 @@ module.exports = {
                 type: Sequelize.DATE
             }
         }).then(function () {
-            queryInterface.addIndex('users', ['email'], {indicesType: 'UNIQUE'});
+            queryInterface.addIndex('users', ['email']);
             queryInterface.addIndex('users', ['uid'], {indicesType: 'UNIQUE'});
         });
     },

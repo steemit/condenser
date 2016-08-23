@@ -47,6 +47,13 @@
     "ws://localhost:8091",
     "ws://localhost:8092"
   ],
+  "sendgrid": {
+    "key": "SG.xxx_yyyy",
+    "from": "noreply@steemit.com",
+    "templates": {
+      "confirm_email": "some_template_id"
+    }
+  },
   "img_proxy_prefix": "",
   "ipfs_prefix": "",
   "google_analytics_id": "",

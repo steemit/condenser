@@ -5,7 +5,7 @@ import Remarkable from 'remarkable'
 // import CardView from 'app/components/cards/CardView'
 import sanitizeConfig, {noImageText} from 'app/utils/SanitizeConfig'
 import sanitize from 'sanitize-html'
-import HtmlReady from 'shared/HtmlReady'
+import HtmlReady, {sectionHtml} from 'shared/HtmlReady'
 
 const remarkable = new Remarkable({
     html: true, // remarkable renders first then sanitize runs...
@@ -59,12 +59,14 @@ class MarkdownViewer extends Component {
         const {large, /*formId, canEdit, jsonMetadata,*/ highQualityPost} = this.props
 
         let html = false;
+        // See also ReplyEditor isHtmlTest
         const m = text.match(/^<html>([\S\s]*)<\/html>$/);
         if (m && m.length === 2) {
             html = true;
             text = m[1];
         } else {
-            html = /^<p>/.test(text)
+            // See also ReplyEditor isHtmlTest
+            html = /^<p>[\S\s]*<\/p>/.test(text)
         }
 
         // Strip out HTML comments. "JS-DOS" bug.
@@ -87,14 +89,12 @@ class MarkdownViewer extends Component {
 
         const noImageActive = cleanText.indexOf(noImageText) !== -1
 
-        // Use split around things like the youtube iframe.  This allows react to compare separatly preventing excessive re-rendering.
-        const cleanTextSplits = cleanText.replace(/<\/p>/g, `</p><!--split-->`)
-        const sections = cleanTextSplits.split('<!--split-->')
+        // Split and key HTML doc by its root children.  This allows react to compare separately preventing excessive re-rendering.
+        const sections = sectionHtml(cleanText).map( (s, idx) => <div key={idx++} dangerouslySetInnerHTML={{__html: s}} />);
 
         const cn = 'Markdown' + (this.props.className ? ` ${this.props.className}` : '') + (html ? ' html' : '')
-        let idx = 0
         return (<div className={"MarkdownViewer " + cn}>
-            {sections.map(s => <div key={idx++} dangerouslySetInnerHTML={{__html: s}} />)}
+            {sections}
             {noImageActive && allowNoImage &&
                 <div onClick={this.onAllowNoImage} className="MarkdownViewer__negative_group">
                     Images were hidden due to low ratings.

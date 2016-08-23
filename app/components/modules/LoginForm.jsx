@@ -35,7 +35,8 @@ class LoginForm extends Component {
             const value = e.target.value.toLowerCase()
             this.state.username.props.onChange(value)
         }
-        this.onCancel = () => {
+        this.onCancel = (e) => {
+            if(e.preventDefault) e.preventDefault()
             const {onCancel, loginBroadcastOperation} = this.props
             const errorCallback = loginBroadcastOperation && loginBroadcastOperation.get('errorCallback')
             if (errorCallback) errorCallback('Canceled')
@@ -49,6 +50,13 @@ class LoginForm extends Component {
         this.initForm(props)
     }
 
+    componentWillMount() {
+        // Use username.value as the defult (input types should not contain both value and defaultValue)
+        const username = {...this.state.username}
+        username.value = this.props.initialUsername
+        this.setState({username})
+    }
+
     componentDidMount() {
         if (this.refs.username) ReactDOM.findDOMNode(this.refs.username).focus()
     }
@@ -59,7 +67,7 @@ class LoginForm extends Component {
         reactForm({
             name: 'login',
             instance: this,
-            fields: ['username', 'password', 'saveLogin'],
+            fields: ['username', 'password', 'saveLogin:bool'],
             initialValues: props.initialValues,
             validation: values => ({
                 username: ! values.username ? 'Required' : validate_account_name(values.username.split('/')[0]),
@@ -124,10 +132,10 @@ class LoginForm extends Component {
         const submitLabel = loginBroadcastOperation ? 'Sign' : 'Login';
         let error = password.touched && password.error ? password.error : this.props.login_error
         if (error === 'owner_login_blocked') {
-            error = <span>This password is bound to your account's owner key and can not be used to login to this site.
+            error = <span>This password is bound to your account&apos;s owner key and can not be used to login to this site.
                 However, you can use it to <a onClick={this.showChangePassword}>update your password</a> to obtain a more secure set of keys.</span>
         } else if (error === 'active_login_blocked') {
-            error = <span>This password is bound to your account's active key and can not be used to login to this page.  You may use this
+            error = <span>This password is bound to your account&apos;s active key and can not be used to login to this page.  You may use this
                 active key on other more secure pages like the Wallet or Market pages.</span>
         }
         let message = null;
@@ -159,7 +167,7 @@ class LoginForm extends Component {
             >
                 <div>
                     <input type="text" required placeholder="Enter your username" ref="username"
-                        {...username.props} onChange={usernameOnChange} value={username.value} autoComplete="on" disabled={submitting} />
+                        {...username.props} onChange={usernameOnChange} autoComplete="on" disabled={submitting} />
                     <div className="error">{username.touched && username.error && username.error}&nbsp;</div>
                 </div>
 
@@ -206,7 +214,7 @@ if (process.env.BROWSER) {
 }
 
 function urlAccountName() {
-    let suggestedAccountName = null;
+    let suggestedAccountName = '';
     const account_match = window.location.hash.match(/account\=([\w\d\-\.]+)/);
     if (account_match && account_match.length > 1) suggestedAccountName = account_match[1];
     return suggestedAccountName
@@ -222,9 +230,11 @@ export default connect(
         const loginBroadcastOperation = state.user.get('loginBroadcastOperation')
 
         const initialValues = {
-            username: currentUser ? currentUser.get('username') : urlAccountName(),
             saveLogin: saveLoginDefault,
         }
+
+        // The username input has a value prop, so it should not use initialValues
+         const initialUsername = currentUser && currentUser.has('username') ? currentUser.get('username') : urlAccountName()
 
         const loginDefault = state.user.get('loginDefault')
         if(loginDefault) {
@@ -234,13 +244,12 @@ export default connect(
         let msg = '';
         const msg_match = window.location.hash.match(/msg\=([\w]+)/);
         if (msg_match && msg_match.length > 1) msg = msg_match[1];
-        const fields = ['username', 'password', 'saveLogin']
         hasError = !!login_error
         return {
             login_error,
             loginBroadcastOperation,
-            fields,
             initialValues,
+            initialUsername,
             msg,
             offchain_user: state.offchain.get('user')
         }

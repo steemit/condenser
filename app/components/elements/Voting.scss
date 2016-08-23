@@ -27,14 +27,15 @@
   > a {
     padding-right: 0.5rem;
   }
-  > a:hover {
-    path {
-      fill: #333;
-    }
-    circle {
-      fill: #fff;
-      stroke: #333;
-    }
+}
+
+.Voting__button-up > a:hover, a.confirm_weight:hover {
+  path {
+    fill: #333;
+  }
+  circle {
+    fill: #fff;
+    stroke: #333;
   }
 }
 
@@ -136,18 +137,33 @@
   }
 }
 
-.Voting__adjust_weight {
-  padding: 10px;
-  padding-bottom: 0;
-  .weight-display {
-    text-align: center;
-    color: $dark-gray;
+
+.Voting__button-up {
+  .dropdown-pane {
+    top: -18px;
+    left: -28px;
   }
 }
 
 .Voting__adjust_weight {
+  padding: 10px 20px;
+  margin-right: 10px;
+  width: 350px;
+  overflow: hidden;
+  .weight-display {
+    width: 3rem;
+    float: left;
+    margin-right: 0.5rem;
+    text-align: right;
+    color: $dark-gray;
+    line-height: 2.6rem;
+  }
+  a.confirm_weight {
+    float: left;
+  }
   .rangeslider {
     position: relative;
+    float: left;
     background: #e6e6e6;
     .rangeslider__fill, .rangeslider__handle {
       position: absolute;
@@ -164,37 +180,36 @@
       display: inline-block;
       position: absolute;
       &:active {
-        background: #999;
+        background: #4ba2f2;
       }
     }
   }
-  .rangeslider-vertical {
-    margin: 0 auto;
-    height: 150px;
-    max-width: 10px;
+  .rangeslider-horizontal {
+    height: 10px;
+    width: 200px;
     background: none;
+    float: left;
+    margin-top: 18px;
     .rangeslider__fill {
-      width: 100%;
+      height: 100%;
       background: #4ba2f2;
       box-shadow: none;
-      bottom: 0;
+      left: 0;
     }
     .rangeslider__handle {
       width: 30px;
       height: 30px;
       border-radius: 50%;
-      left: -10px;
+      top: -10px;
       &:active {
         box-shadow: none;
       }
     }
   }
-
-  .button {
-    color: #fff;
-    &:hover {
-      text-decoration: none;
-    }
+  .close-button {
+    position: static;
+    line-height: 1.4;
+    margin-left: 1rem;
   }
 }
 

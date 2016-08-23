@@ -11,7 +11,7 @@ function prod_logger() {
             || this.originalUrl.indexOf('/images/') === 0
             || this.originalUrl.indexOf('/favicon.ico') === 0;
         if (!asset)
-            console.log('  <-- ' + this.method + ' ' + this.originalUrl + ' ' + this.session.uid);
+            console.log('  <-- ' + this.method + ' ' + this.originalUrl + ' ' + (this.session.uid || ''));
         try {
             yield next;
         } catch (err) {
@@ -45,7 +45,7 @@ function log(ctx, start, len, err, asset) {
         status,
         time(start),
         length,
-        ctx.session.uid);
+        ctx.session.uid || '');
 }
 
 function time(start) {

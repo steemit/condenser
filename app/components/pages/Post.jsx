@@ -20,6 +20,7 @@ class Post extends React.Component {
         routeParams: React.PropTypes.object.isRequired,
         location: React.PropTypes.object.isRequired,
         showSignUp: React.PropTypes.func.isRequired,
+        signup_bonus: React.PropTypes.string,
         current_user: React.PropTypes.object,
     };
     constructor() {
@@ -56,7 +57,7 @@ class Post extends React.Component {
 
     render() {
         const {showSignUp} = this
-        const {current_user, following} = this.props
+        const {current_user, following, signup_bonus} = this.props
         const {showNegativeComments, commentHidden} = this.state
         const rout_params = this.props.routeParams;
         let g = this.props.global;
@@ -120,6 +121,7 @@ class Post extends React.Component {
                 <SvgImage name="404" width="640px" height="480px" />
             </center>
 
+
         return (
             <div className="Post">
                 <div className="row">
@@ -131,7 +133,7 @@ class Post extends React.Component {
                     <div className="column">
                       <div className="Post__promo">
                           Authors get paid when people like you upvote their post. <br/>
-                          If you enjoyed what you read here, earn $5 of Steem Power <br />
+                          If you enjoyed what you read here, earn {signup_bonus} of Steem Power <br />
                           when you <a onClick={showSignUp}>sign up</a> and vote for it.
                       </div>
                     </div>
@@ -167,6 +169,7 @@ path: '/(:category/)@:username/:slug',
         }
         return {
             global: state.global,
+            signup_bonus: state.offchain.get('signup_bonus'),
             current_user,
             following,
         }

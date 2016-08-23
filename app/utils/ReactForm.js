@@ -42,37 +42,70 @@ export default function reactForm({name, instance, fields, initialValues, valida
                     instance.setState({[name]: fs})
                 }
             )
-        }
+        },
+        resetForm: () => {
+            for(const field of fields) {
+                const fieldName = n(field)
+                const f = instance.state[fieldName]
+                const def = initialValues[fieldName]
+                f.props.onChange(def)
+            }
+        },
+        clearForm: () => {
+            for(const field of fields) {
+                const fieldName = n(field)
+                const f = instance.state[fieldName]
+                f.props.onChange()
+            }
+        },
     }
 
-    for(const fieldName of fields) {
+    for(const field of fields) {
+        const fieldName = n(field)
+        const fieldType = t(field)
+
         const fs = formState[fieldName] = {
             value: null,
             error: null,
             touched: false,
         }
 
-        // This is expanded <input {...fieldName.props} />, so only add common props here
-        fs.props = {
-            onChange: e => {
-                const value = e.target ? e.target.value : e // API may pass value directly
-                console.log('value', value)
-                const v = {...(instance.state[fieldName] || {})}
-                v.value = value
-                v.touched = value !== (initialValues[fieldName] || '')
-                instance.setState(
-                    {[fieldName]: v},
-                    () => {isValid(name, instance, fields, validation)}
-                )
-            },
-        }
+        // Caution: fs.props is expanded <input {...fieldName.props} />, so only add valid props for the component
+        fs.props = {name: fieldName}
 
         const initialValue = initialValues[fieldName]
-        fs.value = initialValue
-        if(typeof initialValue === 'boolean') {
-            fs.props.defaultChecked = initialValue
-        } else if(initialValue != null) {
-            fs.props.defaultValue = initialValue
+
+        if(fieldType === 'bool') {
+            fs.props.checked = toBool(initialValue)
+            fs.value = fs.props.checked
+        } else if(fieldType === 'option') {
+            fs.props.selected = toString(initialValue)
+            fs.value = fs.props.selected
+        } else {
+            fs.props.value = toString(initialValue)
+            fs.value = fs.props.value
+        }
+        fs.touched = false
+
+        fs.props.onChange = e => {
+            const value = e && e.target ? e.target.value : e // API may pass value directly
+            const v = {...(instance.state[fieldName] || {})}
+
+            if(fieldType === 'bool') {
+                v.touched = toBool(value) === toBool(initialValue)
+                v.value = v.props.checked = toBool(value)
+            } else if(fieldType === 'option') {
+                v.touched = toString(value) === toString(initialValue)
+                v.value = v.props.selected = toString(value)
+            } else {
+                v.touched = toString(value) === toString(initialValue)
+                v.value = v.props.value = toString(value)
+            }
+
+            instance.setState(
+                {[fieldName]: v},
+                () => {isValid(name, instance, fields, validation)}
+            )
         }
     }
 }
@@ -80,7 +113,8 @@ export default function reactForm({name, instance, fields, initialValues, valida
 function isValid(name, instance, fields, validation) {
     let formValid = true
     const v = validation(getData(fields, instance.state))
-    for(const fieldName of fields) {
+    for(const field of fields) {
+        const fieldName = n(field)
         const validate = v[fieldName]
         const error = validate ? validate : null
         const value = {...(instance.state[fieldName] || {})}
@@ -96,8 +130,33 @@ function isValid(name, instance, fields, validation) {
 
 function getData(fields, state) {
     const data = {}
-    for(const fieldName of fields) {
+    for(const field of fields) {
+        const fieldName = n(field)
         data[fieldName] = state[fieldName].value
     }
     return data
 }
+
+/*
+    @arg {string} field - field:type
+    <pre>
+        type = bool,checkbox,radio
+        type = option,select
+        type = string
+    </pre>
+*/
+function t(field) {
+    let [, type = 'string'] = field.split(':')
+    if(/checkbox|radio/.test(type)) type = 'bool'
+    if(/select|option/.test(type)) type = 'option'
+    return type
+}
+
+function n(field) {
+    const [name] = field.split(':')
+    return name
+}
+
+const hasValue = v => v == null ? false : (typeof v === 'string' ? v.trim() : v) === '' ? false : true
+const toBool = v => hasValue(v) ? JSON.parse(v) : false
+const toString = v => hasValue(v) ? v : ''

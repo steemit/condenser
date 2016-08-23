@@ -5,5 +5,5 @@ export default ({children, t}) => {
     //return (<LinkWithTooltip tooltipContent={t} tooltipPosition="top" tooltipIndicator={false}>
     //    {children}
     //</LinkWithTooltip>);
-    return <span style={{cursor: "help"}} title={t}>{children}</span>;
+    return <span title={t}>{children}</span>;
 }

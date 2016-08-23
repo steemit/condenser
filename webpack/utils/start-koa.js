@@ -50,8 +50,8 @@ const startServer = () => {
                 // Start watcher on server files
                 // and reload browser on change
                 watch(
-                    path.join(__dirname, '../../server'),
-                    (file) => !file.match('webpack-stats.json') ? restartServer() : () => ({})
+                    path.join(__dirname, '../../tmp'),
+                    (file) => !file.match('webpack-stats-dev.json') ? restartServer() : () => ({})
                 );
             }
         }

@@ -232,6 +232,7 @@ class CreateAccount extends React.Component {
                         {server_error && <div className="callout alert">
                             <h5>Couldn't create account. Server returned the following error:</h5>
                             <p>{server_error}</p>
+                            {server_error === 'Email address is not confirmed' && <a href="/enter_email">Confirm Email</a>}
                         </div>}
                         <noscript>
                             <div className="callout alert">

@@ -76,16 +76,9 @@
     max-height: none;
   }
 
-  .videoWrapper > iframe {
+  iframe {
     max-width: 100%;
-  }
-
-  /* Small only */
-  @media screen and (max-width: 30em) {
-    iframe {
-      max-width: 100%;
-      max-height: 75vw;
-    }
+    max-height: 75vw;
   }
 }
 

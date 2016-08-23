@@ -2,8 +2,6 @@
 import fs from 'fs';
 import path from 'path';
 
-const filepath = path.resolve(__dirname, '../../server/webpack-stats.json');
-
 export default function (stats) {
     const publicPath = this.options.output.publicPath;
     const json = stats.toJson();
@@ -41,6 +39,8 @@ export default function (stats) {
 
     const content = {script, style, images};
 
+    const filename = process.env.NODE_ENV === 'production' ? 'webpack-stats-prod.json' : 'webpack-stats-dev.json';
+    const filepath = path.resolve(__dirname, '../../tmp/' + filename);
     fs.writeFileSync(filepath, JSON.stringify(content, null, 4));
-    console.error('`webpack-stats.json` updated');
+    console.error('updated', filename);
 }

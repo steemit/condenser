@@ -26,15 +26,15 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
                     return null;
                 })
             }
-            <link rel="icon" type="image/ico" href="/favicon.ico" />
-            <link rel="apple-touch-icon-precomposed" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png" />
-            <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png" />
-            <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png" />
-            <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png" />
-            <link rel="apple-touch-icon-precomposed" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png" />
-            <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png" />
-            <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png" />
-            <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png" />
+            <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+            <link rel="apple-touch-icon-precomposed" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png" type="image/png" />
+            <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png" type="image/png" />
+            <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png" type="image/png" />
+            <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png" type="image/png" />
+            <link rel="apple-touch-icon-precomposed" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png" type="image/png" />
+            <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png" type="image/png" />
+            <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png" type="image/png" />
+            <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png" type="image/png" />
             <link rel="icon" type="image/png" href="/images/favicons/favicon-196x196.png" sizes="196x196" />
             <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96" />
             <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32" />
@@ -50,8 +50,8 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
             <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600" rel="stylesheet" type="text/css" />
             <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,600" rel="stylesheet" type="text/css" />
             { assets.style.map((href, idx) =>
-                <link key={ idx } rel="stylesheet" href={ href } />) }
-            <title>{ page_title }</title>
+                <link href={href} key={idx} rel="stylesheet" type="text/css" />) }
+            <title>{page_title}</title>
         </head>
         <body>
         <div id="content" dangerouslySetInnerHTML={ { __html: body } }></div>

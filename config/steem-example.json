@@ -43,13 +43,11 @@
   },
   "ws_connection_client": "ws://node.steem.ws",
   "ws_connection_server": [
-    "ws://node.steem.ws",
-    "ws://localhost:8091",
-    "ws://localhost:8092"
+    "ws://node.steem.ws"
   ],
   "sendgrid": {
     "key": "SG.xxx_yyyy",
-    "from": "noreply@steemit.com",
+    "from": "noreply@example.com",
     "templates": {
       "confirm_email": "some_template_id"
     }

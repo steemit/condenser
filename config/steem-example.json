@@ -41,9 +41,9 @@
     "signing_key": "5J.....",
     "recovery_account": "steem"
   },
-  "ws_connection_client": "ws://localhost:8090",
+  "ws_connection_client": "ws://node.steem.ws",
   "ws_connection_server": [
-    "ws://localhost:8090",
+    "ws://node.steem.ws",
     "ws://localhost:8091",
     "ws://localhost:8092"
   ],

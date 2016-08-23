@@ -41,9 +41,8 @@ export default class YoutubePreview extends React.Component {
             const previewLink = `http://img.youtube.com/vi/${youTubeId}/${thumbnail}`
             return (
                 <div className="youtube" onClick={this.onPlay}>
-                    <div className="play">
-                        <img src={previewLink} style={{width, maxWidth: width, height, maxHeight: height}} />
-                    </div>
+                    <div className="play"></div>
+                    <img src={previewLink} style={{width, maxWidth: width, height, maxHeight: height}} />
                 </div>
             )
         }

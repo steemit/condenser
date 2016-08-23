@@ -3,9 +3,11 @@ import {connect} from 'react-redux'
 import {Component} from 'react'
 import Remarkable from 'remarkable'
 // import CardView from 'app/components/cards/CardView'
+import YoutubePreview from 'app/components/elements/YoutubePreview'
 import sanitizeConfig, {noImageText} from 'app/utils/SanitizeConfig'
+import {renderToString} from 'react-dom/server';
 import sanitize from 'sanitize-html'
-import HtmlReady, {sectionHtml} from 'shared/HtmlReady'
+import HtmlReady from 'shared/HtmlReady'
 
 const remarkable = new Remarkable({
     html: true, // remarkable renders first then sanitize runs...
@@ -75,7 +77,7 @@ class MarkdownViewer extends Component {
         let renderedText = html ? text : remarkable.render(text)
 
         // Embed videos, link mentions and hashtags, etc...
-        if(renderedText) renderedText = HtmlReady(renderedText, {large}).html
+        if(renderedText) renderedText = HtmlReady(renderedText).html
 
         // Complete removal of javascript and other dangerous tags..
         // The must remain as close as possible to dangerouslySetInnerHTML
@@ -89,8 +91,24 @@ class MarkdownViewer extends Component {
 
         const noImageActive = cleanText.indexOf(noImageText) !== -1
 
-        // Split and key HTML doc by its root children.  This allows react to compare separately preventing excessive re-rendering.
-        const sections = sectionHtml(cleanText).map( (s, idx) => <div key={idx++} dangerouslySetInnerHTML={{__html: s}} />);
+        // In addition to inserting the youtube compoennt, this allows react to compare separately preventing excessive re-rendering.
+        let idx = 0
+        const sections = []
+        // HtmlReady inserts ~~~ youtube:${id} ~~~
+        for(let section of cleanText.split('~~~ youtube:')) {
+            if(/^[A-Za-z0-9\_\-]+ ~~~/.test(section)) {
+                const youTubeId = section.split(' ')[0]
+                section = section.substring(youTubeId.length + ' ~~~'.length)
+                const w = large ? 640 : 320,
+                      h = large ? 480 : 180
+                sections.push(
+                    <YoutubePreview key={idx++} width={w} height={h} youTubeId={youTubeId}
+                        frameBorder="0" allowFullScreen="true" />
+                )
+            }
+            if(section === '') continue
+            sections.push(<div key={idx++} dangerouslySetInnerHTML={{__html: section}} />)
+        }
 
         const cn = 'Markdown' + (this.props.className ? ` ${this.props.className}` : '') + (html ? ' html' : '')
         return (<div className={"MarkdownViewer " + cn}>

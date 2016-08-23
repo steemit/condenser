@@ -36,6 +36,7 @@ class Voting extends React.Component {
         author: React.PropTypes.string, // post was deleted
         permlink: React.PropTypes.string,
         username: React.PropTypes.string,
+        is_comment: React.PropTypes.bool,
         myVote: React.PropTypes.number,
         active_votes: React.PropTypes.object,
         loggedin: React.PropTypes.bool,
@@ -62,10 +63,10 @@ class Voting extends React.Component {
             e.preventDefault();
             if(this.props.voting) return
             this.setState({votingUp: true, votingDown: false})
-            const {author, permlink, username, myVote} = this.props
+            const {author, permlink, username, myVote, is_comment} = this.props
             // already voted Up, remove the vote
             if (this.props.vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD) {
-                localStorage.setItem('voteWeight-'+username, this.state.weight);
+                localStorage.setItem('voteWeight-'+username+(is_comment ? '-comment' : ''), this.state.weight);
             }
             const weight = myVote > 0 ? 0 : this.state.weight
             if (this.state.showWeight) this.setState({showWeight: false})
@@ -85,11 +86,11 @@ class Voting extends React.Component {
         };
         this.toggleWeight = e => {
             e.preventDefault();
-            const {username} = this.props
+            const {username, is_comment} = this.props
             // Upon opening dialog, read last used weight (this works accross tabs)
             if(! this.state.showWeight) {
                 localStorage.removeItem('vote_weight'); // deprecated. remove this line after 8/31
-                const saved_weight = localStorage.getItem('voteWeight-'+username);
+                const saved_weight = localStorage.getItem('voteWeight-'+username+(is_comment ? '-comment' : ''));
                 this.setState({weight: saved_weight ? parseInt(saved_weight, 10) : 10000});
             }
             this.setState({showWeight: !this.state.showWeight})
@@ -219,6 +220,7 @@ export default connect(
         const permlink = post.get('permlink')
         const last_payout = post.get('last_payout')
         const active_votes = post.get('active_votes')
+        const is_comment = post.get('parent_author') !== ''
         const current_account = state.user.get('current')
         const username = current_account ? current_account.get('username') : null;
         const vesting_shares = current_account ? current_account.get('vesting_shares') : 0.0;
@@ -231,7 +233,7 @@ export default connect(
         }
         return {
             ...ownProps,
-            myVote, author, permlink, username, active_votes, vesting_shares,
+            myVote, author, permlink, username, active_votes, vesting_shares, is_comment,
             loggedin: username != null,
             voting
         }

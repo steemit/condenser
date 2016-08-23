@@ -46,8 +46,8 @@ class Header extends React.Component {
             sort_order = '';
             topic = route.params[0];
         } else if (route.page === 'UserProfile') {
-            page_title = ''; //route.params[0];
             user_name = route.params[0].slice(1);
+            page_title = user_name;
         } else {
             page_name = ''; //page_title = route.page.replace( /([a-z])([A-Z])/g, '$1 $2' ).toLowerCase();
         }

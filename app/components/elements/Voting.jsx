@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import transaction from 'app/redux/Transaction';
 import Slider from 'react-rangeslider';
 import Icon from 'app/components/elements/Icon';
-import Tooltip from 'app/components/elements/Tooltip';
 import Follow from 'app/components/elements/Follow';
 import FormattedAsset from 'app/components/elements/FormattedAsset';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
@@ -11,18 +10,12 @@ import pluralize from 'pluralize';
 import {formatDecimal, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
-import {Dropdown} from 'react-foundation-components/lib/global/dropdown';
+import FoundationDropdown from 'app/components/elements/FoundationDropdown';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 
 const ABOUT_FLAG = 'Flagging a post can remove rewards and make this material less visible.  You can still unflag or upvote later if you change your mind.'
 const MAX_VOTES_DISPLAY = 20;
 const VOTE_WEIGHT_DROPDOWN_THRESHOLD = 100.0 * 1000.0 * 1000.0;
-
-function findParent(el, class_name) {
-    if (el.className && el.className.indexOf && el.className.indexOf(class_name) !== -1) return el;
-    if (el.parentElement) return findParent(el.parentElement, class_name);
-    return null;
-}
 
 class Voting extends React.Component {
 
@@ -95,24 +88,7 @@ class Voting extends React.Component {
             }
             this.setState({showWeight: !this.state.showWeight})
         };
-        this.closeWeightDropdownOnOutsideClick = e => {
-            const inside_dropdown = findParent(e.target, 'Voting__adjust_weight');
-            const inside_upvote_button = findParent(e.target, 'Voting__button-up');
-            if (!inside_dropdown && !inside_upvote_button) this.setState({showWeight: false});
-        };
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Voting')
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        const showWeight = this.state.showWeight;
-        if (showWeight !== prevState.showWeight) {
-            if (showWeight) document.body.addEventListener('mousedown', this.closeWeightDropdownOnOutsideClick);
-            else document.body.removeEventListener('mousedown', this.closeWeightDropdownOnOutsideClick);
-        }
-    }
-
-    componentWillUnmount() {
-        document.body.removeEventListener('mousedown', this.closeWeightDropdownOnOutsideClick);
     }
 
     render() {
@@ -185,16 +161,14 @@ class Voting extends React.Component {
         let dropdown = null;
         if (myVote <= 0 && vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD) {
             voteUpClick = this.toggleWeight;
-            if (showWeight) {
-                dropdown = <Dropdown>
-                    <div className="Voting__adjust_weight">
-                        <a href="#" onClick={this.voteUp} className="confirm_weight" title="Upvote"><Icon size="2x" name="chevron-up-circle" /></a>
-                        <div className="weight-display">{weight / 100}%</div>
-                        <Slider min={100} max={10000} step={100} value={weight} onChange={this.handleWeightChange} />
-                        <CloseButton onClick={() => this.setState({showWeight: false})} />
-                    </div>
-                </Dropdown>;
-            }
+            dropdown = <FoundationDropdown show={showWeight}>
+                <div className="Voting__adjust_weight">
+                    <a href="#" onClick={this.voteUp} className="confirm_weight" title="Upvote"><Icon size="2x" name="chevron-up-circle" /></a>
+                    <div className="weight-display">{weight / 100}%</div>
+                    <Slider min={100} max={10000} step={100} value={weight} onChange={this.handleWeightChange} />
+                    <CloseButton onClick={() => this.setState({showWeight: false})} />
+                </div>
+            </FoundationDropdown>;
         }
         return (
             <span className="Voting">

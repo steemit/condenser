@@ -145,6 +145,11 @@
   }
 }
 
+.Voting__adjust_weight_down {
+    @extend .Voting__adjust_weight;
+    left: -333px;
+}
+
 .Voting__adjust_weight {
   padding: 10px 20px;
   margin-right: 10px;

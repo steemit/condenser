@@ -52,38 +52,47 @@ class Voting extends React.Component {
             showWeight: false,
             weight: 10000
         }
+
         this.voteUp = e => {
             e.preventDefault();
+            this.voteUpOrDown(true)
+        }
+        this.voteDown = e => {
+            e.preventDefault();
+            this.voteUpOrDown(false)
+        }
+        this.voteUpOrDown = (up) => {
             if(this.props.voting) return
-            this.setState({votingUp: true, votingDown: false})
+            this.setState({votingUp: up, votingDown: !up})
             const {author, permlink, username, myVote, is_comment} = this.props
-            // already voted Up, remove the vote
             if (this.props.vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD) {
-                localStorage.setItem('voteWeight-'+username+(is_comment ? '-comment' : ''), this.state.weight);
+                localStorage.setItem('voteWeight' + (up ? '' : 'Down') + '-'+username+(is_comment ? '-comment' : ''),
+                    this.state.weight);
             }
-            const weight = myVote > 0 ? 0 : this.state.weight
+            // already voted Up, remove the vote
+            const weight = up ? (myVote > 0 ? 0 : this.state.weight) : (myVote < 0 ? 0 : -1 * this.state.weight)
             if (this.state.showWeight) this.setState({showWeight: false})
             this.props.vote(weight, {author, permlink, username, myVote})
         };
-        this.voteDown = e => {
-            e.preventDefault();
-            if(this.props.voting) return
-            this.setState({votingUp: false, votingDown: true})
-            const {author, permlink, username, myVote} = this.props
-            // already vote Down, remove vote
-            const weight = myVote < 0 ? 0 : -10000
-            this.props.vote(weight, {author, permlink, username, myVote})
-        };
+
         this.handleWeightChange = weight => {
-            this.setState({weight: weight})
+            this.setState({weight})
         };
-        this.toggleWeight = e => {
+
+        this.toggleWeightUp = e => {
             e.preventDefault();
+            this.toggleWeightUpOrDown(true)
+        }
+        this.toggleWeightDown = e => {
+            e.preventDefault();
+            this.toggleWeightUpOrDown(false)
+        }
+        this.toggleWeightUpOrDown = up => {
             const {username, is_comment} = this.props
             // Upon opening dialog, read last used weight (this works accross tabs)
             if(! this.state.showWeight) {
                 localStorage.removeItem('vote_weight'); // deprecated. remove this line after 8/31
-                const saved_weight = localStorage.getItem('voteWeight-'+username+(is_comment ? '-comment' : ''));
+                const saved_weight = localStorage.getItem('voteWeight' + (up ? '' : 'Down') + '-'+username+(is_comment ? '-comment' : ''));
                 this.setState({weight: saved_weight ? parseInt(saved_weight, 10) : 10000});
             }
             this.setState({showWeight: !this.state.showWeight})
@@ -93,6 +102,7 @@ class Voting extends React.Component {
 
     render() {
         const {myVote, active_votes, showList, voting, flag, vesting_shares} = this.props;
+        const {username, author} = this.props;
         const {votingUp, votingDown, showWeight, weight} = this.state;
         // console.log('-- Voting.render -->', myVote, votingUp, votingDown);
         if(!active_votes) return <span></span>
@@ -104,12 +114,43 @@ class Voting extends React.Component {
         const classDown = 'Voting__button Voting__button-down' + (myVote < 0 ? ' Voting__button--downvoted' : '') + (votingDownActive ? ' votingDown' : '');
 
         if (flag) {
+            // myVote === current vote
+            let voteDownClick = this.voteDown;
+            let dropdown = null;
+            if (myVote == null && vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD) {
+                voteDownClick = this.toggleWeightDown;
+                dropdown =
+                    <FoundationDropdown show={showWeight} className="Voting__adjust_weight_down">
+                        <div className="clear">
+                            <a href="#" onClick={this.voteDown} className="confirm_weight" title="Flag"><Icon size="2x" name="chevron-down-circle" /></a>
+                            <div className="weight-display"> - {weight / 100}%</div>
+                            <Slider min={100} max={10000} step={100} value={weight} onChange={this.handleWeightChange} />
+                        </div>
+                        <div className="clear">
+                            <p>{ABOUT_FLAG}</p>
+                            <p>
+                                <Follow follower={username} following={author} showFollow={false}
+                                    className="float-right" what="blog">&nbsp;&nbsp;
+                                    Stop seeing content from this user
+                                </Follow>
+                            </p>
+                        </div>
+                        <CloseButton onClick={() => this.setState({showWeight: false})} />
+                    </FoundationDropdown>
+            }
             // ? Remove negative votes unless full power -1000 (we had downvoting spam)
             const down_votes = active_votes.filter( v => v.get('percent') < 0 /*=== -1000*/).size
-            return <span className={classDown}>
-                {down_votes > 0 && <span className="Voting__button-downvotes">{down_votes}</span>}
-                {votingDownActive ? down : <a href="#" onClick={this.voteDown} title="Downvote">{down}</a>}
-            </span>;
+            return <span className="Voting">
+                <span className="Voting__inner">
+                    <span className={classDown}>
+                        {down_votes > 0 && <span className="Voting__button-downvotes">{down_votes}</span>}
+                        {votingDownActive ? down : <a href="#" onClick={voteDownClick} title="Flag">{down}</a>}
+                        {dropdown}
+                    </span>
+                    {payoutEl}
+                </span>
+                {voters_list}
+            </span>
         }
 
         const {pending_payout, total_payout, cashout_time} = this.props;
@@ -160,7 +201,7 @@ class Voting extends React.Component {
         let voteUpClick = this.voteUp;
         let dropdown = null;
         if (myVote <= 0 && vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD) {
-            voteUpClick = this.toggleWeight;
+            voteUpClick = this.toggleWeightUp;
             dropdown = <FoundationDropdown show={showWeight}>
                 <div className="Voting__adjust_weight">
                     <a href="#" onClick={this.voteUp} className="confirm_weight" title="Upvote"><Icon size="2x" name="chevron-up-circle" /></a>
@@ -217,20 +258,7 @@ export default connect(
     (dispatch) => ({
         vote: (weight, {author, permlink, username, myVote}) => {
             const confirm = () => {
-                if(myVote == null) {
-                    if(weight >= 0) return null
-                    return <span>
-                        <div className="float-right">
-                        </div>
-                        <h5>{ABOUT_FLAG}</h5>
-                        <h5>
-                            <Follow follower={username} following={author} showFollow={false}
-                                className="float-right" what="blog">&nbsp;&nbsp;
-                                Stop seeing content from this user
-                            </Follow>
-                        </h5>
-                    </span>
-                }
+                if(myVote == null) return
                 const t = ' will reset your curation rewards for this post.'
                 if(weight === 0) return 'Removing your vote' + t
                 if(weight > 0) return 'Changing to an Up-Vote' + t

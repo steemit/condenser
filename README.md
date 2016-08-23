@@ -22,28 +22,6 @@ cp steem-example.json steem-dev.json
 
 (note: it's steem.json in production)
 
-
-#### Install steemd
-
-See https://github.com/steemit/steem for instructions.
-
-OS X :
-```bash
-brew update
-brew doctor
-brew upgrade
-brew tap homebrew/versions
-brew install TigerND/core/steem
-```
-
-Launch steemd with `--rpc-endpoint 127.0.0.1:8090` flag.
-
-The first launch will generate a `config.ini` file in your data-dir.  Ensure you enable the following:
-```
-enable-plugin = witness account_history tags follow market_history
-public-api = database_api login_api network_broadcast_api follow_api market_history_api
-```
-
 #### Install mysql server
  
 OS X :
@@ -80,13 +58,11 @@ Run `sequelize db:migrate` in `db/` directory.
 
 ### Development
 
-Before running the local front end, mysql and steemd both need to be running, and the entire blockchain needs to be synced. Use a command like ```steemd --rpc-endpoint 127.0.0.1:8090 --seed-node="seed.steemed.net:2001" --seed-node="52.74.152.79:2001" —witness=“YOURACCOUNT”```, otherwise refer to [Mining steem for dummies](https://steemit.com/steemhelp/@joseph/mining-steem-for-dummies) for further instructions and configuration.
-
 ```bash
 npm start
 ```
 
-You now have your development front end running at localhost:3002, connected to the main public steem blockchain. Use your regular account name and credentials to login -- there is no separate dev login.
+You now have your development front end running at localhost:3002, connected to the main public steem blockchain. You don't need to run ```steemd``` locally, by default you will connect to ```ws://node.steem.ws```.  Use your regular account name and credentials to login -- there is no separate dev login.
 
 #### Style Guides
 

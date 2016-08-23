@@ -130,7 +130,7 @@ export default class PostSummary extends React.Component {
                     </div>
                     {content_body}
                     <div className="PostSummary__footer">
-                        <Voting post={post} pending_payout={pending_payout} total_payout={total_payout} showList={false} cashout_time={cashout_time} />
+                        <Voting post={post} showList={false} />
                         <span className="PostSummary__time_author_category show-for-medium">
                             <TimeAuthorCategory post={p} links authorRepLog10={authorRepLog10} />
                         </span>

@@ -238,7 +238,7 @@ export default class PostFull extends React.Component {
                 <div className="PostFull__footer row align-middle">
                     <div className="column">
                         <TimeAuthorCategory content={content} authorRepLog10={authorRepLog10} />
-                        <Voting post={post} pending_payout={content.pending_payout_value} total_payout={content.total_payout_value} cashout_time={content.cashout_time} />
+                        <Voting post={post} />
                     </div>
                     <div className="column shrink">
                             <span className="PostFull__responses">

@@ -33,8 +33,9 @@ class Voting extends React.Component {
         myVote: React.PropTypes.number,
         active_votes: React.PropTypes.object,
         loggedin: React.PropTypes.bool,
-        pending_payout: React.PropTypes.string,
-        total_payout: React.PropTypes.string,
+        pending_payout: React.PropTypes.number,
+        total_author_payout: React.PropTypes.number,
+        total_curator_payout: React.PropTypes.number,
         cashout_time: React.PropTypes.string,
         vesting_shares: React.PropTypes.number,
         showList: React.PropTypes.bool,
@@ -112,26 +113,24 @@ class Voting extends React.Component {
             </span>;
         }
 
-        const {pending_payout, total_payout, cashout_time} = this.props;
-        const pending_payout_value = parsePayoutAmount(pending_payout);
-        const total_payout_value = parsePayoutAmount(total_payout);
-        let payout = pending_payout_value + total_payout_value;
+        const {pending_payout, total_author_payout, total_curator_payout, cashout_time} = this.props;
+        let payout = pending_payout + total_author_payout + total_curator_payout;
         if (payout < 0.0) payout = 0.0;
 
         const up = <Icon name={votingUpActive ? 'empty' : 'chevron-up-circle'} />;
         const classUp = 'Voting__button Voting__button-up' + (myVote > 0 ? ' Voting__button--upvoted' : '') + (votingUpActive ? ' votingUp' : '');
 
         const payoutItems = [
-            {value: 'Potential Payout $' + formatDecimal(pending_payout_value).join('')}
+            {value: 'Potential Payout $' + formatDecimal(pending_payout).join('')}
         ];
         if (cashout_time && cashout_time.indexOf('1969') !== 0 && cashout_time.indexOf('1970') !== 0) {
             payoutItems.push({value: <TimeAgoWrapper date={cashout_time} />});
         }
-        if(total_payout_value > 0) {
-            payoutItems.push({value: 'Past Payouts $' + formatDecimal(total_payout_value).join('')});
+        if(total_author_payout > 0) {
+            payoutItems.push({value: 'Past Payouts $' + formatDecimal(total_author_payout + total_curator_payout).join('')});
+            payoutItems.push({value: ' - Authors: $' + formatDecimal(total_author_payout).join('')});
+            payoutItems.push({value: ' - Curators: $' + formatDecimal(total_curator_payout).join('')});
         }
-        // payoutItems.push({value: 'Author $ ' + formatDecimal(payout * 0.75).join('')});
-        // payoutItems.push({value: 'Curators $ ' + formatDecimal(payout * 0.25).join('')});
         const payoutEl = <DropdownMenu el="div" items={payoutItems}>
             <span>
                 <FormattedAsset amount={payout} asset="$" />
@@ -196,6 +195,10 @@ export default connect(
         const active_votes = post.get('active_votes')
         const is_comment = post.get('parent_author') !== ''
         const current_account = state.user.get('current')
+        const cashout_time = post.get('cashout_time')
+        const pending_payout       = parsePayoutAmount(post.get('pending_payout_value'))
+        const total_author_payout  = parsePayoutAmount(post.get('total_payout_value'))
+        const total_curator_payout = parsePayoutAmount(post.get('curator_payout_value'))
         const username = current_account ? current_account.get('username') : null;
         const vesting_shares = current_account ? current_account.get('vesting_shares') : 0.0;
         const voting = state.global.get(`transaction_vote_active_${author}_${permlink}`)
@@ -208,6 +211,7 @@ export default connect(
         return {
             ...ownProps,
             myVote, author, permlink, username, active_votes, vesting_shares, is_comment,
+            pending_payout, total_author_payout, total_curator_payout, cashout_time,
             loggedin: username != null,
             voting
         }

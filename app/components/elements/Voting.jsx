@@ -106,6 +106,7 @@ class Voting extends React.Component {
         const {votingUp, votingDown, showWeight, weight} = this.state;
         // console.log('-- Voting.render -->', myVote, votingUp, votingDown);
         if(!active_votes) return <span></span>
+        if(flag && !username) return null
         // if( payout[0] == '-' ) payout = "0.000 SBD";
         const votingUpActive = voting && votingUp
         const votingDownActive = voting && votingDown
@@ -115,36 +116,34 @@ class Voting extends React.Component {
 
         if (flag) {
             // myVote === current vote
-            let voteDownClick = this.voteDown;
-            let dropdown = null;
-            if (myVote == null && vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD) {
-                voteDownClick = this.toggleWeightDown;
-                dropdown =
-                    <FoundationDropdown show={showWeight} className="Voting__adjust_weight_down">
-                        <div className="clear">
-                            <a href="#" onClick={this.voteDown} className="confirm_weight" title="Flag"><Icon size="2x" name="chevron-down-circle" /></a>
-                            <div className="weight-display"> - {weight / 100}%</div>
-                            <Slider min={100} max={10000} step={100} value={weight} onChange={this.handleWeightChange} />
-                        </div>
-                        <div className="clear">
-                            <p>{ABOUT_FLAG}</p>
-                            <p>
-                                <Follow follower={username} following={author} showFollow={false}
-                                    className="float-right" what="blog">&nbsp;&nbsp;
-                                    Stop seeing content from this user
-                                </Follow>
-                            </p>
-                        </div>
-                        <CloseButton onClick={() => this.setState({showWeight: false})} />
-                    </FoundationDropdown>
-            }
+            const dropdown = <FoundationDropdown show={showWeight} className="Voting__adjust_weight_down">
+                <a href="#" onClick={this.voteDown} className="confirm_weight" title="Flag">
+                <Icon size="2x" name="chevron-down-circle" /></a>
+                {myVote == null && vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD &&
+                    <div className="clear">
+                        <div className="weight-display"> - {weight / 100}%</div>
+                        <Slider min={100} max={10000} step={100} value={weight} onChange={this.handleWeightChange} />
+                    </div>
+                }
+                <div className="clear">
+                    <p>{ABOUT_FLAG}</p>
+                    <p>
+                        <Follow follower={username} following={author} showFollow={false}
+                            className="float-right" what="blog">&nbsp;&nbsp;
+                            Additionally, stop seeing content from this user?
+                        </Follow>
+                    </p>
+                </div>
+                <CloseButton onClick={() => this.setState({showWeight: false})} />
+            </FoundationDropdown>
+
             // ? Remove negative votes unless full power -1000 (we had downvoting spam)
             const down_votes = active_votes.filter( v => v.get('percent') < 0 /*=== -1000*/).size
             return <span className="Voting">
                 <span className="Voting__inner">
                     <span className={classDown}>
                         {down_votes > 0 && <span className="Voting__button-downvotes">{down_votes}</span>}
-                        {votingDownActive ? down : <a href="#" onClick={voteDownClick} title="Flag">{down}</a>}
+                        {votingDownActive ? down : <a href="#" onClick={this.toggleWeightDown} title="Flag">{down}</a>}
                         {dropdown}
                     </span>
                     {payoutEl}

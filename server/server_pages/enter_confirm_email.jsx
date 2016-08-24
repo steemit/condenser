@@ -1,5 +1,6 @@
 import koa_router from 'koa-router';
 import koa_body from 'koa-body';
+import request from 'co-request';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import models from 'db/models';
@@ -8,9 +9,15 @@ import ServerHTML from '../server-html';
 import Icon from 'app/components/elements/Icon.jsx';
 import sendEmail from '../sendEmail';
 import {checkCSRF} from '../utils';
+import config from '../../config';
 
-const assets_filename = process.env.NODE_ENV === 'production' ? 'tmp/webpack-stats-prod.json' : 'tmp/webpack-stats-dev.json';
-const assets = require(assets_filename);
+let assets;
+if (process.env.NODE_ENV === 'production') {
+    assets = Object.assign({}, require('tmp/webpack-stats-prod.json'), {script: ['https://www.google.com/recaptcha/api.js']});
+} else {
+    assets = Object.assign({}, require('tmp/webpack-stats-dev.json'));
+    assets.script.push('https://www.google.com/recaptcha/api.js');
+}
 
 const header = <header className="Header">
     <div className="Header__top header">
@@ -79,6 +86,9 @@ export default function useEnterAndConfirmEmailPages(app) {
                         <input type="email" name="email" defaultValue={eid ? eid.email : ''} />
                     </label>
                     <br />
+                    <div className="g-recaptcha" data-sitekey={config.recaptcha.site_key}></div>
+                    <br />
+                    <div className="error">{this.flash.error}</div>
                     <input type="submit" className="button" value="CONTINUE" />
                 </form>
             </div>
@@ -92,7 +102,30 @@ export default function useEnterAndConfirmEmailPages(app) {
         const user_id = this.session.user;
         if (!user_id) { this.body = 'user not found'; return; }
         const email = this.request.body.email;
-        if (!email) { this.redirect('/enter_email'); return; }
+        if (!email) {
+            this.flash = {error: 'Please provide an email address'};
+            this.redirect('/enter_email');
+            return;
+        }
+
+        const recaptcha = this.request.body['g-recaptcha-response'];
+        const verificationUrl = 'https://www.google.com/recaptcha/api/siteverify?secret=' + config.recaptcha.secret_key + '&response=' + recaptcha + '&remoteip=' + this.req.connection.remoteAddress;
+        let captcha_failed;
+        try {
+            const recaptcha_res = yield request(verificationUrl);
+            const body = JSON.parse(recaptcha_res.body);
+            captcha_failed = !body.success;
+        } catch (e) {
+            captcha_failed = true;
+            console.error('-- /submit_email recaptcha request failed -->', verificationUrl, e);
+        }
+        if (captcha_failed) {
+            console.log('-- /submit_email captcha verification failed -->', user_id, this.session.uid, email, this.req.connection.remoteAddress);
+            this.flash = {error: 'Failed captcha verification, please try again.'};
+            this.redirect('/enter_email');
+            return;
+        }
+
         const confirmation_code = Math.random().toString(36).slice(2);
         let eid = yield models.Identity.findOne(
             {attributes: ['id', 'email'], where: {user_id, provider: 'email'}, order: 'id DESC'}

@@ -122,9 +122,9 @@ class UserWallet extends React.Component {
                 <div className="column small-12 medium-8">
                     <h4>BALANCES</h4>
                 </div>
-                <div className="column small-12 medium-4">
-                    <button className="UserWallet__buysp button hollow float-right " onClick={this.onShowDepositSteem}>Deposit Steem or Steem Power</button>
-                </div>
+                {isMyAccount && <div className="column small-12 medium-4">
+                    <button className="UserWallet__buysp button hollow float-right " onClick={this.onShowDepositSteem}>Buy Steem or Steem Power</button>
+                </div>}
             </div>
             <br />
             <div className="UserWallet__balance row">

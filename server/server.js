@@ -65,10 +65,6 @@ app.use(helmet());
 
 app.use(mount('/static', staticCache(path.join(__dirname, '../app/assets/static'), cacheOpts)));
 
-if (env === 'production') {
-    app.use(helmet.contentSecurityPolicy(config.helmet));
-}
-
 app.use(mount('/robots.txt', function* () {
     this.set('Cache-Control', 'public, max-age=86400000');
     this.type = 'text/plain';
@@ -76,10 +72,16 @@ app.use(mount('/robots.txt', function* () {
 }));
 
 useRedirects(app);
+useEnterAndConfirmEmailPages(app);
+
+if (env === 'production') {
+    app.use(helmet.contentSecurityPolicy(config.helmet));
+}
+
+useAccountRecoveryApi(app);
 useOauthLogin(app);
 useGeneralApi(app);
-useAccountRecoveryApi(app);
-useEnterAndConfirmEmailPages(app);
+
 app.use(favicon(path.join(__dirname, '../app/assets/images/favicons/favicon.ico')));
 app.use(isBot());
 app.use(mount('/favicons', staticCache(path.join(__dirname, '../app/assets/images/favicons'), cacheOpts)));

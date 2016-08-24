@@ -252,7 +252,7 @@ class CommentImpl extends React.Component {
             body = (<MarkdownViewer formId={post + '-viewer'} text={comment.body}
                 noImage={noImage || !pictures} jsonMetadata={jsonMetadata} />);
             controls = (<div>
-                <Voting post={post} pending_payout={comment.pending_payout_value} total_payout={comment.total_payout_value} />
+                <Voting post={post} />
                 {!$STM_Config.read_only_mode && depth !== 5 && <a onClick={onShowReply}>Reply</a>}
                 {showEditOption && <span>
                     &nbsp;&nbsp;
@@ -315,7 +315,7 @@ class CommentImpl extends React.Component {
                             <TimeAgoWrapper date={comment.created} />
                         </Link>
                         { !this.state.show_details && (hide_body && !showNegativeComments) &&
-                          <Voting post={post} pending_payout={comment.pending_payout_value} total_payout={comment.total_payout_value} showList={comment.active_votes.length !== 0 ? true : false} /> }
+                          <Voting post={post} showList={comment.active_votes.length !== 0 ? true : false} /> }
                         { this.state.show_details || comment.children == 0 ||
                           <span className="marginLeft1rem">{pluralize('replies', comment.children, true)}</span>}
                         { this.state.show_details && (hide_body && !showNegativeComments) &&

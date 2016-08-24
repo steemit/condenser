@@ -106,21 +106,21 @@ class Witnesses extends React.Component {
                         </p>
                     </div>
                 </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Witness</th>
-                            <th>Information</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {witnesses.toArray()}
-                    </tbody>
-                </table>
-                <hr/>
-                <div className="row">
+                <div className="row small-collapse">
                     <div className="column small-12">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Witness</th>
+                                    <th>Information</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {witnesses.toArray()}
+                            </tbody>
+                        </table>
+                        <hr/>
                         <p>If you would like to vote for a witness outside of the top 50, enter the account name below to cast a vote.</p>
                         <form>
                             <input type="text" style={{float: "left", width: "75%"}} value={customUsername} onChange={onWitnessChange} />

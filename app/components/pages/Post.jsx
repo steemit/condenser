@@ -164,7 +164,7 @@ path: '/(:category/)@:username/:slug',
         const current_user = state.user.get('current')
         let following
         if(current_user) {
-            const key = ['follow', 'get_following', current_user, 'result']
+            const key = ['follow', 'get_following', current_user.get('username'), 'result']
             following = state.global.getIn(key, List())
         }
         return {

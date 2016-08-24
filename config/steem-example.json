@@ -52,6 +52,10 @@
       "confirm_email": "some_template_id"
     }
   },
+  "recaptcha": {
+    "site_key": "",
+    "secret_key": ""
+  },
   "img_proxy_prefix": "",
   "ipfs_prefix": "",
   "google_analytics_id": "",

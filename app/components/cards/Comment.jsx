@@ -238,10 +238,7 @@ class CommentImpl extends React.Component {
         // const steem_supply = this.props.global.getIn(['props','current_supply']);
 
         const showDeleteOption = username === author && !hasReplies && netVoteSign <= 0
-
-        // let robohash = "https://robohash.org/" + author + ".png?size=64x64"
-        const total_payout = parsePayoutAmount(comment.total_payout_value);
-        const showEditOption = username === author && total_payout === 0
+        const showEditOption = username === author && comment.mode == 'first_payout'
 
         let replies = null;
         let body = null;
@@ -267,6 +264,8 @@ class CommentImpl extends React.Component {
         if(!this.state.collapsed) {
             replies = comment.replies;
             sortComments( g, replies, this.props.sort_order );
+            // When a comment has hidden replies and is collapsed, the reply count is off
+            //console.log("replies:", replies.length, "num_visible:", replies.filter( reply => !g.get('content').get(reply).getIn(['stats', 'hide'])).length)
             replies = replies.map((reply, idx) => <Comment key={idx} content={reply} global={g}
                 sort_order={this.props.sort_order} depth={depth + 1} rootComment={rootComment} showNegativeComments={showNegativeComments} />);
         }

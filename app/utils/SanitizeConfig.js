@@ -1,6 +1,15 @@
 
 const iframeWhitelist = [
-    // { re: /^(https?:)?\/\/player.vimeo.com\/video\/.*/i }, // <-- medium-editor branch
+    {
+        re: /^(https?:)?\/\/player.vimeo.com\/video\/.*/i,
+        fn: src => {
+            // <iframe src="https://player.vimeo.com/video/179213493" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+            if(!src) return null
+            const m = src.match(/https:\/\/player\.vimeo\.com\/video\/([0-9]+)/)
+            if(!m || m.length !== 2) return null
+            return 'https://player.vimeo.com/video/' + m[1]
+        }
+    },
     { re: /^(https?:)?\/\/www.youtube.com\/embed\/.*/i,
       fn: src => {
         return src.replace(/\?.+$/, ''); // strip query string (yt: autoplay=1,controls=0,showinfo=0, etc)

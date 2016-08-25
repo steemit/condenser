@@ -21,6 +21,8 @@ export const userWatches = [
     lookupPreviousOwnerAuthorityWatch,
 ]
 
+const highSecurityPages = Array(/\/market/, /\/@.+\/(transfers|permissions|password)/, /\/~witnesses/)
+
 function* lookupPreviousOwnerAuthorityWatch() {
     yield* takeLatest('user/lookupPreviousOwnerAuthority', lookupPreviousOwnerAuthority);
 }
@@ -45,8 +47,16 @@ export function* watchRemoveHighSecurityKeys() {
 // function* getCurrentAccountWatch() {
 //     // yield* takeLatest('user/SHOW_TRANSFER', getCurrentAccount);
 // }
+
 function* removeHighSecurityKeys() {
-    yield put(user.actions.removeHighSecurityKeys())
+    const current_route = yield select(state => state.global.get('current_route'))
+    const highSecurityPage = highSecurityPages.find(p => p.test(current_route)) != null
+    // Let the user keep the active key when going from one high security page to another.  This helps when
+    // the user logins into the Wallet then the Permissions tab appears (it was hidden).  This keeps them
+    // from getting logged out when they click on Permissions (which is really bad because that tab
+    // disappears again).
+    if(!highSecurityPage)
+        yield put(user.actions.removeHighSecurityKeys())
 }
 
 /**
@@ -68,7 +78,6 @@ function* usernamePasswordLogin(action) {
 // const isHighSecurityOperations = ['transfer', 'transfer_to_vesting', 'withdraw_vesting',
 //     'limit_order_create', 'limit_order_cancel', 'account_update', 'account_witness_vote']
 
-const highSecurityPages = Array(/\/market/, /\/@.+\/(transfers|permissions|password)/, /\/~witnesses/)
 
 const clean = (value) => value == null || value === '' || /null|undefined/.test(value) ? undefined : value
 
@@ -95,8 +104,8 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         // "alice/active" will login only with Alices active key
         [username, userProvidedRole] = username.split('/')
     }
-    const current_route = yield select(state => state.global.get('current_route'))
 
+    const current_route = yield select(state => state.global.get('current_route'))
     const highSecurityLogin =
         // /owner|active/.test(userProvidedRole) ||
         // isHighSecurityOperations.indexOf(operationType) !== -1 ||

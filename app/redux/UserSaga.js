@@ -49,7 +49,6 @@ export function* watchRemoveHighSecurityKeys() {
 // }
 
 function* removeHighSecurityKeys({payload: {pathname}}) {
-    console.log('pathname', pathname)
     const highSecurityPage = highSecurityPages.find(p => p.test(pathname)) != null
     // Let the user keep the active key when going from one high security page to another.  This helps when
     // the user logins into the Wallet then the Permissions tab appears (it was hidden).  This keeps them

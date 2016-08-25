@@ -5,7 +5,7 @@
     "url": "https://github.com/steemit/steemit.com.git"
   },
   "version": "1.0.0",
-  "description": "Steemit.com is the web front end for the world's first blockchain content + social media monetization platform!",
+  "description": "Steemit.com is the web server and in-browser code for the world's first blockchain content + social media monetization platform!",
   "main": "index.js",
   "scripts": {
     "build": "NODE_ENV=production babel-node ./node_modules/.bin/webpack --stats --config ./webpack/prod.config.js",

@@ -9,7 +9,7 @@ import {numberWithCommas, vestsToSp} from 'app/utils/StateFunctions'
 class TransferHistoryRow extends React.Component {
 
     render() {
-        const {op, context, curate_reward, comment_reward} = this.props
+        const {op, context, curation_reward, author_reward} = this.props
         // context -> account perspective
 
         let type = op[1].op[0];
@@ -65,12 +65,12 @@ class TransferHistoryRow extends React.Component {
                 description_start += "Stop power down";
             else
                 description_start += "Start power down of " + data.vesting_shares;
-        } else if( type === 'curate_reward' ) {
-            description_start += `Curation reward of ${curate_reward} STEEM POWER for `;
+        } else if( type === 'curation_reward' ) {
+            description_start += `Curation reward of ${curation_reward} STEEM POWER for `;
             other_account = data.comment_author;
             description_end = `/${data.comment_permlink}`;
-        } else if (type === 'comment_reward') {
-            description_start += `Author reward of ${renameToSd(data.sbd_payout)} and ${comment_reward} STEEM POWER for ${data.author}/${data.permlink}`;
+        } else if (type === 'author_reward') {
+            description_start += `Author reward of ${renameToSd(data.sbd_payout)} and ${author_reward} STEEM POWER for ${data.author}/${data.permlink}`;
             // other_account = ``;
             description_end = '';
         } else if (type === 'interest') {
@@ -86,12 +86,12 @@ class TransferHistoryRow extends React.Component {
                             <TimeAgoWrapper date={op[1].timestamp} />
                         </Tooltip>
                     </td>
-                    <td className="TransferHistoryRow__text">
+                    <td className="TransferHistoryRow__text" style={{maxWidth: "40rem"}}>
                         {description_start}
                         {other_account && <Link to={`/@${other_account}`}>{other_account}</Link>}
                         {description_end}
                     </td>
-                    <td className="show-for-medium">
+                    <td className="show-for-medium" style={{maxWidth: "40rem"}}>
                         <Memo text={data.memo} username={context} />
                     </td>
                 </tr>
@@ -108,12 +108,12 @@ export default connect(
         const op = ownProps.op
         const type = op[1].op[0]
         const data = op[1].op[1]
-        const curate_reward = type === 'curate_reward' ? numberWithCommas(vestsToSp(state, data.reward)) : undefined
-        const comment_reward = type === 'comment_reward' ? numberWithCommas(vestsToSp(state, data.vesting_payout)) : undefined
+        const curation_reward = type === 'curation_reward' ? numberWithCommas(vestsToSp(state, data.reward)) : undefined
+        const author_reward = type === 'author_reward' ? numberWithCommas(vestsToSp(state, data.vesting_payout)) : undefined
         return {
             ...ownProps,
-            curate_reward,
-            comment_reward,
+            curation_reward,
+            author_reward,
         }
     },
 )(TransferHistoryRow)

@@ -44,7 +44,7 @@ class AuthorRewards extends React.Component {
         let firstDate, finalDate;
         let author_log = account.transfer_history.map((item, index) => {
             // Filter out rewards
-            if (item[1].op[0] === "comment_reward") {
+            if (item[1].op[0] === "author_reward") {
                 if (!finalDate) {
                     finalDate = new Date(item[1].timestamp).getTime();
                 }

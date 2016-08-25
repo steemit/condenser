@@ -43,7 +43,7 @@ class CurationRewards extends React.Component {
         let firstDate, finalDate;
         let curation_log = account.transfer_history.map((item, index) => {
             // Filter out rewards
-            if (item[1].op[0] === "curate_reward") {
+            if (item[1].op[0] === "curation_reward") {
                 if (!finalDate) {
                     finalDate = new Date(item[1].timestamp).getTime();
                 }

@@ -75,7 +75,7 @@ class UserWallet extends React.Component {
         const transfer_log = account.transfer_history.map(item => {
             const data = item[1].op[1]
             // Filter out rewards
-            if (item[1].op[0] === "curate_reward" || item[1].op[0] === "comment_reward") {
+            if (item[1].op[0] === "curation_reward" || item[1].op[0] === "author_reward") {
                 return null;
             }
 

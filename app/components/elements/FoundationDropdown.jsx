@@ -5,7 +5,8 @@ import {Dropdown} from 'react-foundation-components/lib/global/dropdown';
 export default class FoundationDropdown extends React.Component {
     static propTypes = {
         show: React.PropTypes.bool.isRequired,
-        children: React.PropTypes.object,
+        className: React.PropTypes.string,
+        children: React.PropTypes.any,
     };
 
     constructor(props) {
@@ -34,12 +35,13 @@ export default class FoundationDropdown extends React.Component {
 
     closeOnOutsideClick(e) {
         const inside_dropdown = findParent(e.target, 'FoundationDropdown');
-        console.log('-- closeOnOutsideClick -->', e.target, inside_dropdown);
+        // console.log('-- closeOnOutsideClick -->', e.target, inside_dropdown);
         if (!inside_dropdown) this.setState({show: false});
     };
 
     render() {
         if (!this.state.show) return null;
-        return <Dropdown className="FoundationDropdown">{this.props.children}</Dropdown>;
+        const {className} = this.props;
+        return <Dropdown className={`FoundationDropdown ${className}`}>{this.props.children}</Dropdown>;
     }
 }

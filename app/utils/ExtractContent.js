@@ -74,6 +74,14 @@ export default function extractContent(get, content) {
         }
     }
 
+    if(!image_link ) {
+        const match = body.match( links.webtorrent );
+        if( match ) {
+            image_link = 'https://img.youtube.com/vi/' + match[1] + '/0.jpg'
+        }
+    }
+
+
     if( image_link ) external_link = null;
     // if(image_link) console.log('image_link', image_link)
 

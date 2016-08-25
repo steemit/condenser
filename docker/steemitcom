@@ -1,0 +1,9 @@
+#!/bin/bash
+sh /usr/bin/wait-for-it mysql:3306
+sh /usr/bin/wait-for-it steemitcom:8090
+cd /steemit.com/db
+sequelize db:migrate
+cd /steemit.com
+npm i
+npm i react@15.3.1
+npm start

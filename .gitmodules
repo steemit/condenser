@@ -1,0 +1,3 @@
+[submodule "docker/docker-steemd"]
+	path = docker/docker-steemd
+	url = https://github.com/sneak/docker-steemd

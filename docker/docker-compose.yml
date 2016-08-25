@@ -1,0 +1,26 @@
+version: '2'
+services:
+  steemit.com:
+    build: ./
+    depends_on:
+      - mysql
+      - steemd
+    links:
+      - mysql:mysql
+      - steemd:steemd
+    entrypoint: /usr/bin/steemitcom
+  mysql:
+    image: mysql
+    environment:
+      MYSQL_DATABASE: steemit_dev
+      MYSQL_USER: root
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+  steemd:
+    image: sneak/steemd
+    environment:
+      STEEMD_WITNESS_NAME:
+      STEEMD_MINER_NAME:
+      STEEMD_MINING_THREADS:
+      STEEMD_EXTRA_OPTS:
+    volumes:
+      - ./witness_node_data_dir/:/var/lib/steemd/

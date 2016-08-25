@@ -51,9 +51,6 @@ class PostsIndex extends React.Component {
         const [author, permlink] = last_post.split('/');
         this.props.requestData({author, permlink, order, category, accountname});
     }
-    depositSteem = () => {
-        this.props.depositSteem()
-    }
     onShowSpam = () => {
         this.setState({showSpam: !this.state.showSpam})
     }
@@ -77,7 +74,6 @@ class PostsIndex extends React.Component {
                         loadMore={this.loadMore} showSpam={showSpam} />
                 </div>
                 <div className="PostsIndex__topics column shrink show-for-large">
-                    <div className="PostsIndex__buysp button hollow text-center slim" onClick={this.depositSteem}>Buy Steem Power</div>
                     <Topics order={order} current={category} compact={false} />
                     <small><a onClick={this.onShowSpam}>{showSpam ? 'Show less' : 'Show more'}</a> low value posts</small>
                 </div>
@@ -99,9 +95,6 @@ module.exports = {
         (dispatch) => {
             return {
                 requestData: (args) => dispatch({type: 'REQUEST_DATA', payload: args}),
-                depositSteem: () => {
-                    dispatch(g.actions.showDialog({name: 'blocktrades_deposit', params: {outputCoinType: 'VESTS'}}));
-                },
             }
         }
     )(PostsIndex)

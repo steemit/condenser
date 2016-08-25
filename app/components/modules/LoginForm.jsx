@@ -1,14 +1,14 @@
 /* eslint react/prop-types: 0 */
 import React, { PropTypes, Component } from 'react';
 import ReactDOM from 'react-dom';
-import {reduxForm} from 'redux-form';
 import {PublicKey} from 'shared/ecc'
 import transaction from 'app/redux/Transaction'
 import g from 'app/redux/GlobalReducer'
 import user from 'app/redux/User'
 import {validate_account_name} from 'app/utils/ChainValidation';
 import runTests from 'shared/ecc/test/BrowserTests';
-import {cleanReduxInput} from 'app/utils/ReduxForms';
+import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
+import reactForm from 'app/utils/ReactForm'
 
 class LoginForm extends Component {
 
@@ -30,42 +30,63 @@ class LoginForm extends Component {
             console.error('CreateAccount - cryptoTestResult: ', cryptoTestResult);
             cryptographyFailure = true
         }
-        this.state = {
-            cryptographyFailure
-        }
+        this.state = {cryptographyFailure}
         this.usernameOnChange = e => {
-            e.target.value = e.target.value.toLowerCase()
-            this.props.fields.username.onChange(e)
+            const value = e.target.value.toLowerCase()
+            this.state.username.props.onChange(value)
         }
-        this.onCancel = () => {
+        this.onCancel = (e) => {
+            if(e.preventDefault) e.preventDefault()
             const {onCancel, loginBroadcastOperation} = this.props
             const errorCallback = loginBroadcastOperation && loginBroadcastOperation.get('errorCallback')
             if (errorCallback) errorCallback('Canceled')
             if (onCancel) onCancel()
         }
-        this.initFunc(props)
+        this.qrReader = () => {
+            const {qrReader} = props
+            const {password} = this.state
+            qrReader(data => {password.props.onChange(data)})
+        }
+        this.initForm(props)
     }
+
+    componentWillMount() {
+        // Use username.value as the defult (input types should not contain both value and defaultValue)
+        const username = {...this.state.username}
+        username.value = this.props.initialUsername
+        this.setState({username})
+    }
+
     componentDidMount() {
         if (this.refs.username) ReactDOM.findDOMNode(this.refs.username).focus()
-        // ReactDOM.findDOMNode(this.refs.pw).focus() // does not work
     }
-    componentWillReceiveProps(nextProps) {
-        this.initFunc(nextProps)
+
+    shouldComponentUpdate = shouldComponentUpdate(this, 'LoginForm')
+
+    initForm(props) {
+        reactForm({
+            name: 'login',
+            instance: this,
+            fields: ['username', 'password', 'saveLogin:bool'],
+            initialValues: props.initialValues,
+            validation: values => ({
+                username: ! values.username ? 'Required' : validate_account_name(values.username.split('/')[0]),
+                password: ! values.password ? 'Required' :
+                    values.password.length < 16 ? 'Password must be 16 characters or more' :
+                    PublicKey.fromString(values.password) ? 'You need a private password or key (not a public key)' :
+                    null,
+            })
+        })
     }
-    initFunc(props) {
-        const {qrReader, fields: {password}} = props
-        this.qrReader = () => {
-            qrReader(data => {password.onChange(data)})
-        }
-    }
-    saveLoginToggle = (e) => {
-        const {saveLogin} = this.props.fields
+
+    saveLoginToggle = () => {
+        const {saveLogin} = this.state
         saveLoginDefault = !saveLoginDefault
         localStorage.setItem('saveLogin', saveLoginDefault ? 'yes' : 'no')
-        saveLogin.onChange(e) // change UI
+        saveLogin.props.onChange(saveLoginDefault) // change UI
     }
     showChangePassword = () => {
-        const {username, password} = this.props.fields
+        const {username, password} = this.state
         this.props.showChangePassword(username.value, password.value)
     }
     render() {
@@ -97,15 +118,11 @@ class LoginForm extends Component {
             </div>;
         }
 
-        const {
-            loginBroadcastOperation,
-            fields: {username, password, saveLogin},
-            handleSubmit, dispatchSubmit,
-            submitting, afterLoginRedirectToAccount, suggestedAccountName, msg
-        } = this.props;
-
+        const {loginBroadcastOperation, dispatchSubmit, afterLoginRedirectToAccount, msg} = this.props;
+        const {username, password, saveLogin} = this.state
+        const {submitting, valid, handleSubmit} = this.state.login
         const {usernameOnChange, onCancel, /*qrReader*/} = this
-        const disabled = submitting;
+        const disabled = submitting || !valid;
 
         const title = loginBroadcastOperation ?
             'Authenticate for this transaction' :
@@ -115,8 +132,11 @@ class LoginForm extends Component {
         const submitLabel = loginBroadcastOperation ? 'Sign' : 'Login';
         let error = password.touched && password.error ? password.error : this.props.login_error
         if (error === 'owner_login_blocked') {
-            error = <span>This password is bound to your account's owner key and can not be used to login to this site.
+            error = <span>This password is bound to your account&apos;s owner key and can not be used to login to this site.
                 However, you can use it to <a onClick={this.showChangePassword}>update your password</a> to obtain a more secure set of keys.</span>
+        } else if (error === 'active_login_blocked') {
+            error = <span>This password is bound to your account&apos;s active key and can not be used to login to this page.  You may use this
+                active key on other more secure pages like the Wallet or Market pages.</span>
         }
         let message = null;
         if (msg) {
@@ -132,42 +152,43 @@ class LoginForm extends Component {
             }
             else if (msg === 'passwordupdated') {
                 message = <div className="callout primary">
-                    <p>The password for `{suggestedAccountName}` was successfully updated.</p>
+                    <p>The password for `{username.value}` was successfully updated.</p>
                 </div>;
             }
         }
-
         const form = (
             <form onSubmit={handleSubmit(data => {
                 // bind redux-form to react-redux
-                // console.log('Login\tdispatchSubmit');
+                console.log('Login\tdispatchSubmit');
                 return dispatchSubmit(data, loginBroadcastOperation, afterLoginRedirectToAccount)
             })}
                 onChange={this.props.clearError}
                 method="post"
             >
                 <div>
-                    <input type="text" placeholder="Enter your username" ref="username" {...cleanReduxInput(username)}
-                        onChange={usernameOnChange} autoComplete="on" disabled={submitting} defaultValue={suggestedAccountName} />
+                    <input type="text" required placeholder="Enter your username" ref="username"
+                        {...username.props} onChange={usernameOnChange} autoComplete="on" disabled={submitting} />
                     <div className="error">{username.touched && username.error && username.error}&nbsp;</div>
                 </div>
 
                 <div>
-                    <input type="password" ref="pw" placeholder="Password or WIF" {...cleanReduxInput(password)} autoComplete="on" disabled={submitting} />
+                    <input type="password" required ref="pw" placeholder="Password or WIF" {...password.props} autoComplete="on" disabled={submitting} />
                     <div className="error">{error}&nbsp;</div>
                 </div>
                 {loginBroadcastOperation && <div>
                     <div className="info">This operation requires your {authType} key (or use your master password).</div>
                 </div>}
                 <div>
-                    <label htmlFor="saveLogin">Keep me logged in <input id="saveLogin" type="checkbox" ref="pw" {...cleanReduxInput(saveLogin)} onChange={this.saveLoginToggle} disabled={submitting} /></label>
+                    <label htmlFor="saveLogin">
+                        Keep me logged in &nbsp;
+                        <input id="saveLogin" type="checkbox" ref="pw" {...saveLogin.props} onChange={this.saveLoginToggle} disabled={submitting} /></label>
                 </div>
                 <br />
                 <div>
-                    <button type="submit" disabled={disabled} className="button">
+                    <button type="submit" disabled={submitting || disabled} className="button">
                         {submitLabel}
                     </button>
-                    {this.props.onCancel && <button type="button" disabled={submitting} className="button hollow" onClick={onCancel}>
+                    {this.props.onCancel && <button type="button float-right" disabled={submitting} className="button hollow" onClick={onCancel}>
                         Cancel
                     </button>}
                 </div>
@@ -185,14 +206,6 @@ class LoginForm extends Component {
     }
 }
 
-const validate = values => ({
-    username: ! values.username ? 'Required' : validate_account_name(values.username.split('/')[0]),
-    password: ! values.password ? 'Required' :
-        values.password.length < 16 ? 'Password must be 16 characters or more' :
-        PublicKey.fromString(values.password) ? 'You need a private password or key (not a public key)' :
-        null,
-})
-
 let hasError
 let saveLoginDefault = true
 if (process.env.BROWSER) {
@@ -200,38 +213,43 @@ if (process.env.BROWSER) {
     if (s === 'no') saveLoginDefault = false
 }
 
-export default reduxForm(
-    // config
-    { form: 'login', validate },
+function urlAccountName() {
+    let suggestedAccountName = '';
+    const account_match = window.location.hash.match(/account\=([\w\d\-\.]+)/);
+    if (account_match && account_match.length > 1) suggestedAccountName = account_match[1];
+    return suggestedAccountName
+}
+
+import {connect} from 'react-redux'
+export default connect(
 
     // mapStateToProps
     (state) => {
         const login_error = state.user.get('login_error')
         const currentUser = state.user.get('current')
         const loginBroadcastOperation = state.user.get('loginBroadcastOperation')
+
         const initialValues = {
-            username: currentUser && currentUser.get('username'),
             saveLogin: saveLoginDefault,
         }
+
+        // The username input has a value prop, so it should not use initialValues
+         const initialUsername = currentUser && currentUser.has('username') ? currentUser.get('username') : urlAccountName()
+
         const loginDefault = state.user.get('loginDefault')
         if(loginDefault) {
             const {username, authType} = loginDefault.toJS()
             if(username && authType) initialValues.username = username + '/' + authType
         }
-        const account_match = window.location.hash.match(/account\=([\w\d\-\.]+)/);
-        let suggestedAccountName = '';
-        if (account_match && account_match.length > 1) suggestedAccountName = account_match[1];
         let msg = '';
         const msg_match = window.location.hash.match(/msg\=([\w]+)/);
         if (msg_match && msg_match.length > 1) msg = msg_match[1];
-        const fields = ['username', 'password', 'saveLogin']
         hasError = !!login_error
         return {
             login_error,
             loginBroadcastOperation,
-            fields,
             initialValues,
-            suggestedAccountName,
+            initialUsername,
             msg,
             offchain_user: state.offchain.get('user')
         }

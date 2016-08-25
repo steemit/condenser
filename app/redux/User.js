@@ -80,10 +80,12 @@ export default createModule({
                 private_keys: object,
                 login_owner_pubkey: string,
                 previous_owner_authority: object,
+                vesting_shares: string,
                 // pending_private_key: object,
             },
             reducer: (state, {payload}) => {
                 // console.log('SET_USER')
+                if (payload.vesting_shares) payload.vesting_shares = parseFloat(payload.vesting_shares);
                 return state.mergeDeep({ current: payload, show_login_modal: false, loginBroadcastOperation: undefined, loginDefault: undefined, logged_out: undefined })
             }
         },
@@ -129,7 +131,6 @@ export default createModule({
             action: 'ACCOUNT_AUTH_LOOKUP',
             payloadTypes: {
                 account: object.isRequired, // immutable Map
-                highSecurityLogin: bool,
                 private_keys: shape({
                     posting_private: object,
                     active_private: object,
@@ -150,7 +151,10 @@ export default createModule({
                 pub_keys_used: object,
             },
             reducer: (state, {payload: {accountName, auth, pub_keys_used}}) => {
-                return state.setIn(['authority', accountName], fromJS(auth)).set('pub_keys_used', pub_keys_used)
+                state = state.setIn(['authority', accountName], fromJS(auth))
+                if(pub_keys_used)
+                    state = state.set('pub_keys_used', pub_keys_used)
+                return state
             },
         },
         { action: 'HIDE_CONNECTION_ERROR_MODAL', reducer: state => state.set('hide_connection_error_modal', true) },

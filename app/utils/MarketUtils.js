@@ -1,15 +1,21 @@
 function roundUp(num, precision) {
-    let n = Math.floor(parseFloat(num) * Math.pow(10, precision + 1))
-    n = Math.round(n / 10.0)
-    //console.log("roundup: ", num, " res: ", n);
-    return Math.ceil(n) / Math.pow(10, precision)
+    let satoshis = parseFloat(num) * Math.pow(10, precision)
+
+    // Attempt to correct floating point: 1.0001 satoshis should not round up.
+    satoshis = satoshis - 0.0001
+
+    // Round up, restore precision
+    return Math.ceil(satoshis) / Math.pow(10, precision)
 }
 
 function roundDown(num, precision) {
-    let n = Math.floor(parseFloat(num) * Math.pow(10, precision + 1))
-    n = Math.floor(n / 10.0)
-    //console.log("rounddown: ", num, " res: ", n);
-    return Math.floor(n) / Math.pow(10, precision)
+    let satoshis = parseFloat(num) * Math.pow(10, precision)
+
+    // Attempt to correct floating point: 1.9999 satoshis should not round down.
+    satoshis = satoshis + 0.0001
+
+    // Round down, restore precision
+    return Math.floor(satoshis) / Math.pow(10, precision)
 }
 
 module.exports = {

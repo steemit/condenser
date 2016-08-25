@@ -19,7 +19,8 @@ global.$STM_Config = {
     img_proxy_prefix: config.img_proxy_prefix,
     ipfs_prefix: config.ipfs_prefix,
     disable_signups: config.disable_signups,
-    read_only_mode: config.read_only_mode
+    read_only_mode: config.read_only_mode,
+    registrar_fee: config.registrar.fee
 };
 
 const WebpackIsomorphicTools = require('webpack-isomorphic-tools');

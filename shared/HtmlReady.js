@@ -8,12 +8,22 @@ const DOMParser = new xmldom.DOMParser({
 })
 const XMLSerializer = new xmldom.XMLSerializer()
 
+/** Split the HTML on top-level elements. This allows react to compare separately, preventing excessive re-rendering.
+ * Used in MarkdownViewer.jsx
+ */
+// export function sectionHtml (html) {
+//   const doc = DOMParser.parseFromString(html, 'text/html')
+//   const sections = Array(...doc.childNodes).map(child => XMLSerializer.serializeToString(child))
+//   return sections
+// }
+
 /** Embed videos, link mentions and hashtags, etc...
 */
-export default function (html, {large = false, mutate = true}) {
-    const state = {large, mutate}
+export default function (html, {mutate = true} = {}) {
+    const state = {mutate}
     state.hashtags = new Set()
     state.usertags = new Set()
+    state.htmltags = new Set()
     state.images = new Set()
     state.links = new Set()
     try {
@@ -33,14 +43,29 @@ function traverse(node, state, depth = 0) {
     if(!node || !node.childNodes) return
     Array(...node.childNodes).forEach(child => {
         // console.log(depth, 'child.tag,data', child.tagName, child.data)
+        if(child.tagName)
+            state.htmltags.add(child.tagName.trim().toLowerCase())
+
         if(/img/i.test(child.tagName))
             img(state, child)
         else if(/a/i.test(child.tagName))
-            atty(child, 'href', a => state.links.add(a.value))
-        else if(!embedYouTubeNode(child, state.large, state.links))
+            link(state, child)
+        else if(!embedYouTubeNode(child, state.links))
             linkifyNode(child, state)
         traverse(child, state, ++depth)
     })
+}
+
+function link(state, child) {
+    const url = child.getAttribute('href')
+    if(url) {
+        state.links.add(url)
+        if(state.mutate) {
+            if(! /(https?:)?\/\//.test(url)) {
+                child.setAttribute('href', "https://"+url)
+            }
+        }
+    }
 }
 
 function img(state, child) {
@@ -118,7 +143,7 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
     return content
 }
 
-function embedYouTubeNode(child, large, links) {try{
+function embedYouTubeNode(child, links) {try{
     if(!child.data) return false
     const data = child.data
     if(/code/i.test(child.parentNode.tagName)) return false
@@ -127,10 +152,7 @@ function embedYouTubeNode(child, large, links) {try{
         const match = url.match(linksRe.youTubeId)
         if(match && match.length >= 2) {
             const id = match[1]
-            const src = `//www.youtube.com/embed/${id}?enablejsapi=0&rel=0&origin=https://steemit.com`
-            const v = DOMParser.parseFromString(`<!--split--><div key="${id}" class="videoWrapper">
-                <iframe width="${large ? '640' : '384'}" height="${large ? 360 : 240}" src="${src}" frameBorder="0" allowFullScreen="true"></iframe>
-            </div><!--split-->`)
+            const v = DOMParser.parseFromString(`~~~ youtube:${id} ~~~`)
             child.parentNode.replaceChild(v, child)
             replaced = true
             if(links) links.add(url)

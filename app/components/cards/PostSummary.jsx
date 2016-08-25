@@ -56,7 +56,7 @@ export default class PostSummary extends React.Component {
         const {currentCategory, thumbSize, ignore} = this.props;
         const {post, content, pending_payout, total_payout, cashout_time} = this.props;
         if (!content) return null;
-        const {gray, pictures, authorRepLog10} = content.get('stats', Map()).toJS()
+        const {gray, pictures, authorRepLog10, hasFlag} = content.get('stats', Map()).toJS()
         const p = extractContent(immutableAccessor, content);
         let desc = p.desc
         if(p.image_link)// image link is already shown in the preview
@@ -90,11 +90,10 @@ export default class PostSummary extends React.Component {
 
         // if(p.net_rshares < 0) desc = "";
 
-        let content_body = <div className="PostSummary__body entry-content" onClick={() => browserHistory.push(title_link_url)}>{desc}</div>;
+        let content_body = <div className="PostSummary__body entry-content"><Link to={title_link_url}>{desc}</Link></div>;
         let content_title = <h1 className="entry-title">{title_link}</h1>;
 
-        if( !currentCategory || (currentCategory && !currentCategory.match( /nsfw/ )) )
-        {
+        if( !(currentCategory && currentCategory.match( /nsfw/ )) ) {
            if (currentCategory !== '-' && currentCategory !== p.category && p.category.match(/nsfw/) ) {
                return null;
            }
@@ -115,7 +114,9 @@ export default class PostSummary extends React.Component {
         if(gray || ignore) commentClasses.push('downvoted') // rephide
         return (
             <article className={'PostSummary hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')} itemScope itemType ="http://schema.org/blogPost">
-                <div className="float-right"><Voting post={post} flag /></div>
+                <div className={hasFlag ? '' : 'PostSummary__collapse'}>
+                    <div className="float-right"><Voting post={post} flag /></div>
+                </div>
                 <div className="PostSummary__header show-for-small-only">
                     {content_title}
                 </div>
@@ -129,7 +130,7 @@ export default class PostSummary extends React.Component {
                     </div>
                     {content_body}
                     <div className="PostSummary__footer">
-                        <Voting post={post} pending_payout={pending_payout} total_payout={total_payout} showList={false} cashout_time={cashout_time} />
+                        <Voting post={post} showList={false} />
                         <span className="PostSummary__time_author_category show-for-medium">
                             <TimeAuthorCategory post={p} links authorRepLog10={authorRepLog10} />
                         </span>

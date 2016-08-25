@@ -27,6 +27,7 @@ ul.PostsList__summaries {
 
   img {
     margin: 0 auto;
+    margin-top: 0.2rem;
     display: block;
     max-width: 100%;
     max-height: 80vw;
@@ -83,6 +84,13 @@ ul.PostsList__summaries {
     padding-left: 0.2rem;
   }
 }
+.PostSummary__collapse {
+  visibility: hidden;
+}
+
+.PostSummary:hover .PostSummary__collapse {
+  visibility: visible;
+}
 
 ul.PostSummary__tags {
   list-style: none;
@@ -112,35 +120,15 @@ ul.PostSummary__tags {
   padding: 0.3rem 0.1rem 0.15rem;
   font-family: "Helvetica Neue", Helvetica, Verdana, Arial, sans-serif;
   color: #666;
-  cursor: pointer;
   overflow: hidden;
   line-height: 1.4;
   white-space: nowrap;
   text-overflow: ellipsis;
 
   a {
-    color: $black;
+    color: inherit;
+    display: block;
   }
-
-  .PostSummary__body-read_more {
-    color: $dark-gray;
-    font-weight: 400;
-    @include hoverUnderline;
-  }
-
-  .Markdown {
-    p {
-      margin: 0;
-    }
-    h1, h2, h3, h4, h5, h6, strong, em {
-      margin: 0;
-      font: 400 100% 'Source Sans Pro';
-    }
-  }
-}
-
-.PostSummary__body--empty {
-  margin-bottom: 0.5rem;
 }
 
 .PostSummary__footer {
@@ -170,11 +158,6 @@ ul.PostSummary__tags {
   .FormattedAsset {
     font-size: 110%;
   }
-}
-
-.PostSummary__lifetime {
-  color: $dark-gray;
-  font-size: 80%;
 }
 
 .PostSummary__time_author_category {

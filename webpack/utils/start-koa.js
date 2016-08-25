@@ -47,12 +47,8 @@ const startServer = () => {
                     if (parsedData === 'rs') return restartServer();
                 });
 
-                // Start watcher on server files
-                // and reload browser on change
-                watch(
-                    path.join(__dirname, '../../server'),
-                    (file) => !file.match('webpack-stats.json') ? restartServer() : () => ({})
-                );
+                // Start watcher on server files and restart server on change
+                watch(path.join(__dirname, '../../server'), () => restartServer());
             }
         }
     });

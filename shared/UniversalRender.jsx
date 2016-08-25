@@ -120,7 +120,10 @@ async function universalRender({ location, initial_state, offchain }) {
             return !newLocation.location.hash;
             return !prevLocation || prevLocation.location.pathname !== newLocation.location.pathname;
         });
-        if (process.env.NODE_ENV === 'production') console.error(console_warning);
+        if (process.env.NODE_ENV === 'production') {
+            console.log('%c%s','color: red; background: yellow; font-size: 24px;', 'WARNING!');
+            console.log('%c%s','color: black; font-size: 16px;', 'This is a developer console, you must read and understand anything you paste or type here or you could compromise your account and your private keys.');
+        }
         return render(
             <Provider store={store}>
                 <Router
@@ -139,10 +142,21 @@ async function universalRender({ location, initial_state, offchain }) {
         let url = location === '/' ? 'trending' : location;
         // Replace /curation-rewards and /author-rewards with /transfers for UserProfile
         // to resolve data correctly
-        if (url.indexOf("/curation-rewards") !== -1) url = url.replace("/curation-rewards", "/transfers");
-        if (url.indexOf("/author-rewards") !== -1) url = url.replace("/author-rewards", "/transfers");
+        if (url.indexOf('/curation-rewards') !== -1) url = url.replace(/\/curation-rewards$/, '/transfers');
+        if (url.indexOf('/author-rewards') !== -1) url = url.replace(/\/author-rewards$/, '/transfers');
 
         onchain = await Apis.instance().db_api.exec('get_state', [url]);
+
+        // Calculate signup bonus
+        const fee = parseFloat($STM_Config.registrar_fee.split(' ')[0]),
+              {base, quote} = onchain.feed_price,
+              feed = parseFloat(base.split(' ')[0]) / parseFloat(quote.split(' ')[0]);
+        const sd = fee * feed,
+              sdInt = parseInt(sd),
+              sdDec = (sd - sdInt),
+              sdDisp = '$' + sdInt + (sdInt < 5 && sdDec >= 0.5 ? '.50' : '');
+
+        offchain.signup_bonus = sdDisp;
         offchain.server_location = location;
         server_store = createStore(rootReducer, { global: onchain, offchain});
         server_store.dispatch({type: '@@router/LOCATION_CHANGE', payload: {pathname: location}});
@@ -182,14 +196,3 @@ async function universalRender({ location, initial_state, offchain }) {
 }
 
 export default universalRender;
-
-const console_warning = `
-███████╗    ████████╗     ██████╗     ██████╗
-██╔════╝    ╚══██╔══╝    ██╔═══██╗    ██╔══██╗
-███████╗       ██║       ██║   ██║    ██████╔╝
-╚════██║       ██║       ██║   ██║    ██╔═══╝
-███████║       ██║       ╚██████╔╝    ██║
-╚══════╝       ╚═╝        ╚═════╝     ╚═╝
-
-This is a developer console, you must read and understand anything you paste or type here or you could compromise your account and your private keys.
-`

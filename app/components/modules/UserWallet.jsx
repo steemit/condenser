@@ -103,8 +103,8 @@ class UserWallet extends React.Component {
 
         let dollar_menu = [
             { value: 'Transfer', link: '#', onClick: showTransfer.bind( this, 'SBD' ) },
+            { value: 'Buy or Sell', link: '/market' },
             { value: 'Convert to STEEM', link: '#', onClick: convertToSteem },
-            { value: 'Buy or Sell', link: '/market' }
         ]
         const isWithdrawScheduled = new Date(account.next_vesting_withdrawal + 'Z').getTime() > Date.now()
         const depositReveal = showDeposit && <div>
@@ -119,15 +119,19 @@ class UserWallet extends React.Component {
         const sbd_balance_str = numberWithCommas('$' + sbd_balance.toFixed(3)) // formatDecimal(account.sbd_balance, 3)
         return (<div className="UserWallet">
             <div className="row">
-                <div className="column small-12">
+                <div className="column small-12 medium-8">
                     <h4>BALANCES</h4>
                 </div>
+                {isMyAccount && <div className="column small-12 medium-4">
+                    <button className="UserWallet__buysp button hollow float-right " onClick={this.onShowDepositSteem}>Buy Steem or Steem Power</button>
+                </div>}
             </div>
+            <br />
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
                     STEEM<br /><span className="secondary">{steemTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})}</span>
                 </div>
-                <div className="column small-12 medium-3">
+                <div className="column small-12 medium-4">
                     {isMyAccount ?
                     <DropdownMenu selected={steem_balance_str + ' STEEM'} className="Header__sort-order-menu" items={steem_menu} el="span" />
                     : steem_balance_str + ' STEEM'}
@@ -137,7 +141,7 @@ class UserWallet extends React.Component {
                 <div className="column small-12 medium-8">
                     STEEM POWER<br /><span className="secondary">{powerTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})}</span>
                 </div>
-                <div className="column small-12 medium-3">
+                <div className="column small-12 medium-4">
                     {isMyAccount ?
                     <DropdownMenu selected={power_balance_str + ' STEEM'} className="Header__sort-order-menu" items={power_menu} el="span" />
                     : power_balance_str + ' STEEM'}
@@ -147,7 +151,7 @@ class UserWallet extends React.Component {
                 <div className="column small-12 medium-8">
                     STEEM DOLLARS<br /><span className="secondary">{dollarTip}</span>
                 </div>
-                <div className="column small-12 medium-3">
+                <div className="column small-12 medium-4">
                     {isMyAccount ?
                     <DropdownMenu selected={sbd_balance_str} items={dollar_menu} el="span" />
                     : sbd_balance_str}
@@ -163,7 +167,7 @@ class UserWallet extends React.Component {
                 <div className="column small-12 medium-8">
                     Estimated Account Value<br /><span className="secondary">{valueTip}</span>
                 </div>
-                <div className="column small-12 medium-3">
+                <div className="column small-12 medium-4">
                     {total_value}
                 </div>
             </div>

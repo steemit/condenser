@@ -147,7 +147,19 @@
 
 .Voting__adjust_weight_down {
     @extend .Voting__adjust_weight;
-    left: -333px;
+
+    right: 0;
+    width: 500px !important;
+
+    div.clear {
+      clear: both;
+    }
+    p, span {
+      white-space: normal !important;
+    }
+    .weight-display {
+      color: #C00 !important;
+    }
 }
 
 .Voting__adjust_weight {

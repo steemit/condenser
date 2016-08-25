@@ -120,11 +120,12 @@ class Voting extends React.Component {
                 <a href="#" onClick={this.voteDown} className="confirm_weight" title="Flag">
                 <Icon size="2x" name="chevron-down-circle" /></a>
                 {myVote == null && vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD &&
-                    <div className="clear">
+                    <div>
                         <div className="weight-display"> - {weight / 100}%</div>
                         <Slider min={100} max={10000} step={100} value={weight} onChange={this.handleWeightChange} />
                     </div>
                 }
+                <CloseButton onClick={() => this.setState({showWeight: false})} />
                 <div className="clear">
                     <p>{ABOUT_FLAG}</p>
                     <p>
@@ -134,7 +135,6 @@ class Voting extends React.Component {
                         </Follow>
                     </p>
                 </div>
-                <CloseButton onClick={() => this.setState({showWeight: false})} />
             </FoundationDropdown>
 
             // ? Remove negative votes unless full power -1000 (we had downvoting spam)

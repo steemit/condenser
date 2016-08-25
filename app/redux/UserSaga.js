@@ -48,9 +48,9 @@ export function* watchRemoveHighSecurityKeys() {
 //     // yield* takeLatest('user/SHOW_TRANSFER', getCurrentAccount);
 // }
 
-function* removeHighSecurityKeys() {
-    const current_route = yield select(state => state.global.get('current_route'))
-    const highSecurityPage = highSecurityPages.find(p => p.test(current_route)) != null
+function* removeHighSecurityKeys({payload: {pathname}}) {
+    console.log('pathname', pathname)
+    const highSecurityPage = highSecurityPages.find(p => p.test(pathname)) != null
     // Let the user keep the active key when going from one high security page to another.  This helps when
     // the user logins into the Wallet then the Permissions tab appears (it was hidden).  This keeps them
     // from getting logged out when they click on Permissions (which is really bad because that tab
@@ -105,11 +105,11 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         [username, userProvidedRole] = username.split('/')
     }
 
-    const current_route = yield select(state => state.global.get('current_route'))
+    const pathname = yield select(state => state.global.get('pathname'))
     const highSecurityLogin =
         // /owner|active/.test(userProvidedRole) ||
         // isHighSecurityOperations.indexOf(operationType) !== -1 ||
-        highSecurityPages.find(p => p.test(current_route)) != null
+        highSecurityPages.find(p => p.test(pathname)) != null
 
     const isRole = (role, fn) => (!userProvidedRole || role === userProvidedRole ? fn() : undefined)
 

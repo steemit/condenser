@@ -58,13 +58,13 @@ class Header extends React.Component {
         let topic_link = topic ? <Link to={`/${this.last_sort_order || 'trending'}/${topic}`}>{topic}</Link> : null;
 
         const sort_orders = {
+                promoted: 'promoted',
                 hot: 'hot',
                 trending: 'trending',
                 trending30: 'trending (30 day)',
                 cashout: 'payout time',
                 created: 'new',
                 active: 'active',
-                responses: 'responses',
                 votes: 'popular' };
         const sort_order_menu = Object.keys(sort_orders).filter(so => so !== sort_order).map(so => ({link: `/${so}/${topic}`, value: sort_orders[so]}));
 

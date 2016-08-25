@@ -34,6 +34,7 @@ class Voting extends React.Component {
         active_votes: React.PropTypes.object,
         loggedin: React.PropTypes.bool,
         pending_payout: React.PropTypes.number,
+        promoted: React.PropTypes.number,
         total_author_payout: React.PropTypes.number,
         total_curator_payout: React.PropTypes.number,
         cashout_time: React.PropTypes.string,
@@ -153,7 +154,7 @@ class Voting extends React.Component {
             </span>
         }
 
-        const {pending_payout, total_author_payout, total_curator_payout, cashout_time} = this.props;
+        const {pending_payout, total_author_payout, total_curator_payout, cashout_time, promoted} = this.props;
         let payout = pending_payout + total_author_payout + total_curator_payout;
         if (payout < 0.0) payout = 0.0;
 
@@ -161,7 +162,8 @@ class Voting extends React.Component {
         const classUp = 'Voting__button Voting__button-up' + (myVote > 0 ? ' Voting__button--upvoted' : '') + (votingUpActive ? ' votingUp' : '');
 
         const payoutItems = [
-            {value: 'Potential Payout $' + formatDecimal(pending_payout).join('')}
+            {value: 'Potential Payout $' + formatDecimal(pending_payout).join('')},
+            {value: 'Boost Payments $' + formatDecimal(promoted).join('')}
         ];
         if (cashout_time && cashout_time.indexOf('1969') !== 0 && cashout_time.indexOf('1970') !== 0) {
             payoutItems.push({value: <TimeAgoWrapper date={cashout_time} />});
@@ -237,6 +239,7 @@ export default connect(
         const current_account = state.user.get('current')
         const cashout_time = post.get('cashout_time')
         const pending_payout       = parsePayoutAmount(post.get('pending_payout_value'))
+        const promoted             = parsePayoutAmount(post.get('promoted'))
         const total_author_payout  = parsePayoutAmount(post.get('total_payout_value'))
         const total_curator_payout = parsePayoutAmount(post.get('curator_payout_value'))
         const username = current_account ? current_account.get('username') : null;
@@ -251,7 +254,7 @@ export default connect(
         return {
             ...ownProps,
             myVote, author, permlink, username, active_votes, vesting_shares, is_comment,
-            pending_payout, total_author_payout, total_curator_payout, cashout_time,
+            pending_payout, promoted, total_author_payout, total_curator_payout, cashout_time,
             loggedin: username != null,
             voting
         }

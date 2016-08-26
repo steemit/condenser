@@ -91,7 +91,7 @@ module.exports = connect(
     },
     dispatch => ({
         follow: (follower, following, what) => {
-            const json = {follower, following, what: what.toJS()}
+            const json = ['follow', {follower, following, what: what.toJS()}]
             dispatch(g.actions.update({
                 key: ['follow', 'get_following', follower, 'result', following],
                 notSet: Set(),

@@ -222,24 +222,20 @@ Types.uint64 =
 
 Types.string =
     {fromByteBuffer(b){
-        var b_copy;
-        var len = b.readVarint32();
-        b_copy = b.copy(b.offset, b.offset + len), b.skip(len);
-        return new Buffer(b_copy.toBinary(), 'binary');
+        return new Buffer(b.readVString(), 'utf8');
     },
     appendByteBuffer(b, object){
         v.required(object);
-        b.writeVarint32(object.length);
-        b.append(object.toString('binary'), 'binary');
+        b.writeVString(object.toString())
         return;
     },
     fromObject(object){
         v.required(object);
-        return new Buffer(object);
+        return new Buffer(object, 'utf8');
     },
     toObject(object, debug = {}){
         if (debug.use_default && object === undefined) { return ""; }
-        return object.toString();
+        return object.toString('utf8');
     }
     };
 

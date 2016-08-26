@@ -45,6 +45,7 @@ export default class PostFull extends React.Component {
         username: React.PropTypes.string,
         unlock: React.PropTypes.func.isRequired,
         deletePost: React.PropTypes.func.isRequired,
+        showPromotePost: React.PropTypes.func.isRequired,
     };
 
     constructor() {
@@ -234,6 +235,9 @@ export default class PostFull extends React.Component {
                     </div>
                 }
 
+                <div className="float-right">
+                    <button className="button hollow slim" onClick={this.props.showPromotePost}>Promote</button>
+                </div>
                 <TagList post={content} horizontal />
                 <div className="PostFull__footer row align-middle">
                     <div className="column">
@@ -287,7 +291,10 @@ export default connect(
                 type: 'delete_comment',
                 operation: {author, permlink},
                 confirm: 'Are you sure?'
-            }))
+            }));
+        },
+        showPromotePost: () => {
+            dispatch(user.actions.showPromotePost());
         },
     })
 )(PostFull)

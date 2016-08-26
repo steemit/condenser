@@ -5,6 +5,7 @@ import Reveal from 'react-foundation-components/lib/global/reveal';
 import LoginForm from 'app/components/modules/LoginForm';
 import ConfirmTransactionForm from 'app/components/modules/ConfirmTransactionForm';
 import Transfer from 'app/components/modules/Transfer';
+import PromotePost from 'app/components/modules/PromotePost';
 import SignUp from 'app/components/modules/SignUp';
 import user from 'app/redux/User';
 import tr from 'app/redux/Transaction';
@@ -20,10 +21,12 @@ class Modals extends React.Component {
         show_confirm_modal: React.PropTypes.bool,
         show_transfer_modal: React.PropTypes.bool,
         show_signup_modal: React.PropTypes.bool,
+        show_promote_post_modal: React.PropTypes.bool,
         hideLogin: React.PropTypes.func.isRequired,
         hideConfirm: React.PropTypes.func.isRequired,
         hideSignUp: React.PropTypes.func.isRequired,
         hideTransfer: React.PropTypes.func.isRequired,
+        hidePromotePost: React.PropTypes.func.isRequired,
         notifications: React.PropTypes.object,
         removeNotification: React.PropTypes.func,
     };
@@ -37,7 +40,7 @@ class Modals extends React.Component {
         const {
             show_login_modal, show_confirm_modal, show_transfer_modal, show_signup_modal,
             hideLogin, hideTransfer, hideConfirm, hideSignUp,
-            notifications, removeNotification
+            notifications, removeNotification, hidePromotePost, show_promote_post_modal
         } = this.props;
 
         const notifications_array = notifications ? notifications.toArray().map(n => {
@@ -51,13 +54,17 @@ class Modals extends React.Component {
                     <CloseButton onClick={hideLogin} />
                     <LoginForm onCancel={hideLogin} />
                 </Reveal>}
-                {show_confirm_modal && <Reveal onHide={this.props.hideConfirm} show={show_confirm_modal}>
+                {show_confirm_modal && <Reveal onHide={hideConfirm} show={show_confirm_modal}>
                     <CloseButton onClick={hideConfirm} />
                     <ConfirmTransactionForm onCancel={hideConfirm} />
                 </Reveal>}
-                {show_transfer_modal && <Reveal onHide={this.props.hideTransfer} show={show_transfer_modal}>
+                {show_transfer_modal && <Reveal onHide={hideTransfer} show={show_transfer_modal}>
                     <CloseButton onClick={hideTransfer} />
                     <Transfer />
+                </Reveal>}
+                {show_promote_post_modal && <Reveal onHide={hidePromotePost} show={show_promote_post_modal}>
+                    <CloseButton onClick={hidePromotePost} />
+                    <PromotePost />
                 </Reveal>}
                 {show_signup_modal && <Reveal onHide={hideSignUp} show={show_signup_modal}>
                     <CloseButton onClick={hideSignUp} />
@@ -79,6 +86,7 @@ export default connect(
             show_login_modal: state.user.get('show_login_modal'),
             show_confirm_modal: state.transaction.get('show_confirm_modal'),
             show_transfer_modal: state.user.get('show_transfer_modal'),
+            show_promote_post_modal: state.user.get('show_promote_post_modal'),
             show_signup_modal: state.user.get('show_signup_modal'),
             notifications: state.app.get('notifications')
         }
@@ -95,6 +103,10 @@ export default connect(
         hideTransfer: e => {
             if (e) e.preventDefault();
             dispatch(user.actions.hideTransfer())
+        },
+        hidePromotePost: e => {
+            if (e) e.preventDefault();
+            dispatch(user.actions.hidePromotePost())
         },
         hideSignUp: e => {
             if (e) e.preventDefault();

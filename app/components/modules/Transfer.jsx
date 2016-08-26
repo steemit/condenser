@@ -167,7 +167,7 @@ export default reduxForm(
         const fields = toVesting ? ['to', 'amount'] : ['to', 'amount', 'asset', 'memo']
         const currentUser = state.user.getIn(['current'])
         const currentAccount = state.global.getIn(['accounts', currentUser.get('username')])
-        const insufficentFunds = (asset, amount) => {
+        const insufficientFunds = (asset, amount) => {
             const balanceValue =
                 !asset || asset === 'STEEM' ? currentAccount.get('balance') :
                 asset === 'SBD' ? currentAccount.get('sbd_balance') :
@@ -185,7 +185,7 @@ export default reduxForm(
             amount:
                 ! values.amount ? 'Required' :
                 ! /^[0-9]*\.?[0-9]*/.test(values.amount) ? 'Amount is in the form 99999.999' :
-                insufficentFunds(values.asset, values.amount) ? 'Insufficent funds' :
+                insufficientFunds(values.asset, values.amount) ? 'Insufficient funds' :
                 null,
             asset:
                 toVesting ? null :

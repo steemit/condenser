@@ -239,6 +239,29 @@ Types.string =
     }
     };
 
+Types.string_binary =
+    {fromByteBuffer(b){
+        var b_copy;
+        var len = b.readVarint32();
+        b_copy = b.copy(b.offset, b.offset + len), b.skip(len);
+        return new Buffer(b_copy.toBinary(), 'binary');
+
+    },
+    appendByteBuffer(b, object){
+        b.writeVarint32(object.length);
+        b.append(object.toString('binary'), 'binary');
+        return;
+    },
+    fromObject(object){
+        v.required(object);
+        return new Buffer(object);
+    },
+    toObject(object, debug = {}){
+        if (debug.use_default && object === undefined) { return ""; }
+        return object.toString();
+    }
+    };
+
 Types.bytes = function(size){
     return {fromByteBuffer(b){
         if (size === undefined) {

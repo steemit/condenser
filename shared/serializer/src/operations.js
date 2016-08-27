@@ -5,7 +5,7 @@ var {
     //id_type,
     //varint32,
     uint8, uint16, uint32, int16, int64, uint64,
-    string, bytes, bool, array, fixed_array,
+    string, string_binary, bytes, bool, array, fixed_array,
     protocol_id_type, object_id_type, vote_id,
     future_extensions,
     static_variant, map, set,
@@ -21,6 +21,9 @@ future_extensions = types.void
 When updating generated code
 Replace:  var operation = static_variant([
 with:     operation.st_operations = [
+
+Replace:     encrypted: string}
+with:     encrypted: string_binary}
 
 Delete (these are custom types instead):
 var public_key = new Serializer( 
@@ -480,5 +483,5 @@ var transaction = new Serializer(
     to: public_key,
     nonce: uint64,
     check: uint32,
-    encrypted: string}
+    encrypted: string_binary}
 );

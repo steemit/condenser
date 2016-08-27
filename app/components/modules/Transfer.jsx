@@ -210,7 +210,7 @@ export default reduxForm(
             const operation = {
                 from: username,
                 to, amount: parseFloat(amount, 10).toFixed(3) + ' ' + asset2,
-                memo: toVesting ? undefined : new Buffer(memo || '', 'utf-8')
+                memo: toVesting ? undefined : (memo ? memo : '')
             }
             dispatch(transaction.actions.broadcastOperation({
                 type: toVesting ? 'transfer_to_vesting' : 'transfer',

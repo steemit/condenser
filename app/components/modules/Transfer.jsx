@@ -7,6 +7,7 @@ import user from 'app/redux/User';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import {powerTip, powerTip2, powerTip3} from 'app/utils/Tips'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
+import {browserTests} from 'shared/ecc/test/BrowserTests'
 
 /** Warning .. This is used for Power UP too. */
 class TransferForm extends Component {
@@ -190,6 +191,10 @@ export default reduxForm(
             asset:
                 toVesting ? null :
                 ! values.asset ? 'Required' : null,
+            memo:
+                values.memo && (!browserTests.memo_encryption && /^#/.test(values.memo)) ?
+                'Encrypted memos are temporarily unavailable (issue #98)' :
+                null,
         })
         return {
             ...ownProps,

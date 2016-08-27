@@ -682,9 +682,9 @@
       "resolved": "https://registry.npmjs.org/base64-arraybuffer/-/base64-arraybuffer-0.1.2.tgz"
     },
     "base64-js": {
-      "version": "0.0.8",
-      "from": "base64-js@0.0.8",
-      "resolved": "https://registry.npmjs.org/base64-js/-/base64-js-0.0.8.tgz"
+      "version": "1.1.2",
+      "from": "base64-js@>=1.0.2 <2.0.0",
+      "resolved": "https://registry.npmjs.org/base64-js/-/base64-js-1.1.2.tgz"
     },
     "base64-url": {
       "version": "1.2.2",
@@ -839,9 +839,9 @@
       "resolved": "https://registry.npmjs.org/bs58/-/bs58-3.0.0.tgz"
     },
     "buffer": {
-      "version": "3.6.0",
-      "from": "buffer@>=3.0.3 <4.0.0",
-      "resolved": "https://registry.npmjs.org/buffer/-/buffer-3.6.0.tgz"
+      "version": "4.9.1",
+      "from": "buffer@>=4.9.0 <5.0.0",
+      "resolved": "https://registry.npmjs.org/buffer/-/buffer-4.9.1.tgz"
     },
     "buffer-shims": {
       "version": "1.0.0",
@@ -4410,9 +4410,9 @@
       }
     },
     "node-libs-browser": {
-      "version": "0.5.3",
-      "from": "node-libs-browser@>=0.4.0 <=0.6.0",
-      "resolved": "https://registry.npmjs.org/node-libs-browser/-/node-libs-browser-0.5.3.tgz",
+      "version": "0.6.0",
+      "from": "node-libs-browser@>=0.6.0 <0.7.0",
+      "resolved": "https://registry.npmjs.org/node-libs-browser/-/node-libs-browser-0.6.0.tgz",
       "dependencies": {
         "isarray": {
           "version": "0.0.1",
@@ -5006,9 +5006,9 @@
       "resolved": "https://registry.npmjs.org/private/-/private-0.1.6.tgz"
     },
     "process": {
-      "version": "0.11.6",
+      "version": "0.11.8",
       "from": "process@>=0.11.0 <0.12.0",
-      "resolved": "https://registry.npmjs.org/process/-/process-0.11.6.tgz"
+      "resolved": "https://registry.npmjs.org/process/-/process-0.11.8.tgz"
     },
     "process-nextick-args": {
       "version": "1.0.7",
@@ -5165,14 +5165,26 @@
       "resolved": "https://registry.npmjs.org/raw-body/-/raw-body-2.1.7.tgz"
     },
     "react": {
-      "version": "15.2.1",
-      "from": "react@>=15.2.1 <16.0.0",
-      "resolved": "https://registry.npmjs.org/react/-/react-15.2.1.tgz"
+      "version": "15.3.1",
+      "from": "react@15.3.1",
+      "resolved": "https://registry.npmjs.org/react/-/react-15.3.1.tgz",
+      "dependencies": {
+        "core-js": {
+          "version": "1.2.7",
+          "from": "core-js@>=1.0.0 <2.0.0",
+          "resolved": "https://registry.npmjs.org/core-js/-/core-js-1.2.7.tgz"
+        },
+        "fbjs": {
+          "version": "0.8.4",
+          "from": "fbjs@>=0.8.4 <0.9.0",
+          "resolved": "https://registry.npmjs.org/fbjs/-/fbjs-0.8.4.tgz"
+        }
+      }
     },
     "react-addons-pure-render-mixin": {
-      "version": "15.2.1",
-      "from": "react-addons-pure-render-mixin@>=15.0.1 <16.0.0",
-      "resolved": "https://registry.npmjs.org/react-addons-pure-render-mixin/-/react-addons-pure-render-mixin-15.2.1.tgz"
+      "version": "15.3.1",
+      "from": "react-addons-pure-render-mixin@15.3.1",
+      "resolved": "https://registry.npmjs.org/react-addons-pure-render-mixin/-/react-addons-pure-render-mixin-15.3.1.tgz"
     },
     "react-deep-force-update": {
       "version": "1.0.1",
@@ -5180,9 +5192,9 @@
       "resolved": "https://registry.npmjs.org/react-deep-force-update/-/react-deep-force-update-1.0.1.tgz"
     },
     "react-dom": {
-      "version": "15.2.1",
-      "from": "react-dom@>=15.2.1 <16.0.0",
-      "resolved": "https://registry.npmjs.org/react-dom/-/react-dom-15.2.1.tgz"
+      "version": "15.3.1",
+      "from": "react-dom@15.3.1",
+      "resolved": "https://registry.npmjs.org/react-dom/-/react-dom-15.3.1.tgz"
     },
     "react-foundation-components": {
       "version": "0.11.1",
@@ -5663,6 +5675,16 @@
           "resolved": "https://registry.npmjs.org/statuses/-/statuses-1.2.1.tgz"
         }
       }
+    },
+    "sendgrid": {
+      "version": "4.0.2",
+      "from": "sendgrid@>=4.0.1 <5.0.0",
+      "resolved": "https://registry.npmjs.org/sendgrid/-/sendgrid-4.0.2.tgz"
+    },
+    "sendgrid-rest": {
+      "version": "2.2.1",
+      "from": "sendgrid-rest@>=2.2.1 <3.0.0",
+      "resolved": "https://registry.npmjs.org/sendgrid-rest/-/sendgrid-rest-2.2.1.tgz"
     },
     "sentence-case": {
       "version": "1.1.3",
@@ -6556,9 +6578,9 @@
       "resolved": "https://registry.npmjs.org/webidl-conversions/-/webidl-conversions-2.0.1.tgz"
     },
     "webpack": {
-      "version": "1.13.1",
-      "from": "webpack@>=1.13.0 <2.0.0",
-      "resolved": "https://registry.npmjs.org/webpack/-/webpack-1.13.1.tgz",
+      "version": "1.13.2",
+      "from": "webpack@1.13.2",
+      "resolved": "https://registry.npmjs.org/webpack/-/webpack-1.13.2.tgz",
       "dependencies": {
         "interpret": {
           "version": "0.6.6",

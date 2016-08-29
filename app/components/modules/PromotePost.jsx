@@ -74,7 +74,7 @@ class PromotePost extends Component {
                    <form onSubmit={this.onSubmit} onChange={() => this.setState({trxError: ''})}>
                        <h4>Promote Post</h4>
 
-                       <p>Spend you Steem Dollars to advertise this post in the promoted content section. This doesn&apos;t pay the author directly, instead the funds are &#8220;burned.&#8221;  When funds are burned, they become a dividend to share holders.</p>
+                       <p>Spend your Steem Dollars to advertise this post in the promoted content section. This doesn&apos;t pay the author directly, instead the funds are &#8220;burned.&#8221;  When funds are burned, they become a dividend to share holders.</p>
 
                        <hr />
 

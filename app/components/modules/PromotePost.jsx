@@ -14,7 +14,7 @@ class PromotePost extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            amount: '',
+            amount: '1.0',
             asset: '',
             loading: false,
             amountError: '',
@@ -42,7 +42,7 @@ class PromotePost extends Component {
         const {amount, asset} = this.state
         this.setState({loading: true});
         console.log('-- PromotePost.onSubmit -->');
-        this.props.dispatchSubmit({amount, asset, author, permlink, onClose,
+        this.props.dispatchSubmit({amount, 'SBD', author, permlink, onClose,
             currentUser: this.props.currentUser, errorCallback: this.errorCallback});
     }
 
@@ -66,27 +66,24 @@ class PromotePost extends Component {
             asset.value === 'SBD' ? currentAccount.get('sbd_balance') :
             null
 
-        const submitDisabled = !amount || !asset;
+        const submitDisabled = !amount;
 
         return (
            <div className="PromotePost row">
                <div className="column small-12">
                    <form onSubmit={this.onSubmit} onChange={() => this.setState({trxError: ''})}>
                        <h4>Promote Post</h4>
-                       <p>Please select an amount and currency below</p>
+                       <p>Spend you Steem Dollars to advertise your post in the promoted content section.</p>
                        <div className="row">
                            <div className="column small-4">
-                               <label> Amount
-                                <input type="text" placeholder="Amount" value={amount} ref="amount" autoComplete="off" disabled={loading} onChange={this.amountChange} />
-                                <div className="error">{amountError}</div>
-                               </label>
-                               <label> Currency
-                                   <select onChange={this.assetChange} disabled={loading} value={asset}>
-                                        <option></option>
-                                        <option value="STEEM">STEEM</option>
-                                        <option value="SBD">SBD</option>
-                                   </select>
-                               </label>
+                               <label>Amount</label>
+                               <div className="input-group">
+                                   <input className="input-group-field" type="text" placeholder="Amount" value={amount} ref="amount" autoComplete="off"
+                                          disabled={loading} onChange={this.amountChange} />
+                                   <span className="input-group-label">SD ($)</span>
+
+                                   <div className="error">{amountError}</div>
+                               </div>
                                {/*<AssetBalance balanceValue={balanceValue} />*/}
                            </div>
                        </div>

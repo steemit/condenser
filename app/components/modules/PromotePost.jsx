@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import transaction from 'app/redux/Transaction';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 
+
 class PromotePost extends Component {
 
     static propTypes = {
@@ -59,13 +60,10 @@ class PromotePost extends Component {
     // }
 
     render() {
-        const {amount, loading, amountError, trxError} = this.state;
-        // const {currentAccount} = this.props;
-        // const balanceValue =
-        //     !asset || asset.value === 'STEEM' ? currentAccount.get('balance') :
-        //     asset.value === 'SBD' ? currentAccount.get('sbd_balance') :
-        //     null
-
+        const {amount, asset, loading, amountError, trxError} = this.state;
+        const {currentAccount} = this.props;
+        const balanceValue = currentAccount.get('sbd_balance');
+        const balance = balanceValue ? balanceValue.split(' ')[0] : 0.0;
         const submitDisabled = !amount;
 
         return (
@@ -73,23 +71,19 @@ class PromotePost extends Component {
                <div className="column small-12">
                    <form onSubmit={this.onSubmit} onChange={() => this.setState({trxError: ''})}>
                        <h4>Promote Post</h4>
-
                        <p>Spend your Steem Dollars to advertise this post in the promoted content section. This doesn&apos;t pay the author directly, instead the funds are &#8220;burned.&#8221;  When funds are burned, they become a dividend to share holders.</p>
-
                        <hr />
-
                        <div className="row">
                            <div className="column small-4">
                                <label>Amount</label>
                                <div className="input-group">
                                    <input className="input-group-field" type="text" placeholder="Amount" value={amount} ref="amount" autoComplete="off" disabled={loading} onChange={this.amountChange} />
                                    <span className="input-group-label">SD ($)</span>
-
                                    <div className="error">{amountError}</div>
                                </div>
-                               {/*<AssetBalance balanceValue={balanceValue} />*/}
                            </div>
                        </div>
+                       <div>Balance: {balance} SD ($)</div>
                        <br />
                        {loading && <span><LoadingIndicator type="circle" /><br /></span>}
                        {!loading && <span>

@@ -31,11 +31,13 @@ class Header extends React.Component {
     hideSubheader(){
         const subheader_hidden = this.state.subheader_hidden;
         if (window.scrollY === this.prevScrollY) return;
-        window.scrollY > this.prevScrollY?
-        !subheader_hidden && this.setState({subheader_hidden: true})
-            :
-        subheader_hidden && this.setState({subheader_hidden: false})
-
+        if (window.scrollY < 5) {
+            this.setState({subheader_hidden: false});
+        } else if (window.scrollY > this.prevScrollY) {
+            if (!subheader_hidden) this.setState({subheader_hidden: true})
+        } else {
+            if (subheader_hidden) this.setState({subheader_hidden: false})
+        }
         this.prevScrollY = window.scrollY;
     }
 

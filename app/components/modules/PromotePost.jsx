@@ -1,17 +1,14 @@
 import React, { PropTypes, Component } from 'react';
 import {connect} from 'react-redux';
 import ReactDOM from 'react-dom';
-import {Map} from 'immutable';
 import transaction from 'app/redux/Transaction';
-import user from 'app/redux/User';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 
 class PromotePost extends Component {
 
     static propTypes = {
-        currentAccount: PropTypes.object.isRequired,
-        currentUser: PropTypes.object.isRequired,
-        dispatchSubmit: PropTypes.func.isRequired,
+        author: PropTypes.string.isRequired,
+        permlink: PropTypes.string.isRequired,
     };
 
     constructor(props) {
@@ -41,9 +38,11 @@ class PromotePost extends Component {
 
     onSubmit(e) {
         e.preventDefault();
+        const {author, permlink, onClose} = this.props
+        const {amount, asset} = this.state
         this.setState({loading: true});
         console.log('-- PromotePost.onSubmit -->');
-        this.props.dispatchSubmit({to: 'null', amount: 1.0, asset: 'STEEM', memo: '', toVesting: false,
+        this.props.dispatchSubmit({amount, asset, author, permlink, onClose,
             currentUser: this.props.currentUser, errorCallback: this.errorCallback});
     }
 
@@ -104,8 +103,8 @@ class PromotePost extends Component {
     }
 }
 
-const AssetBalance = ({onClick, balanceValue}) =>
-    <a onClick={onClick} style={{borderBottom: '#A09F9F 1px dotted', cursor: 'pointer'}}>Balance: {balanceValue}</a>
+// const AssetBalance = ({onClick, balanceValue}) =>
+//     <a onClick={onClick} style={{borderBottom: '#A09F9F 1px dotted', cursor: 'pointer'}}>Balance: {balanceValue}</a>
 
 export default connect(
     (state, ownProps) => {
@@ -116,20 +115,19 @@ export default connect(
 
     // mapDispatchToProps
     dispatch => ({
-        dispatchSubmit: ({to, amount, asset, memo, toVesting, currentUser, errorCallback}) => {
+        dispatchSubmit: ({amount, asset, author, permlink, currentUser, onClose, errorCallback}) => {
             const username = currentUser.get('username')
             const successCallback = () => {
                 dispatch({type: 'global/GET_STATE', payload: {url: `@${username}/transfers`}}) // refresh transfer history
-                dispatch(user.actions.hidePromotePost())
+                onClose()
             }
-            const asset2 = toVesting ? 'STEEM' : asset
             const operation = {
                 from: username,
-                to, amount: parseFloat(amount, 10).toFixed(3) + ' ' + asset2,
-                memo: toVesting ? undefined : new Buffer(memo || '', 'utf-8')
+                to: 'null', amount: parseFloat(amount, 10).toFixed(3) + ' ' + asset,
+                memo: author + '/' + permlink
             }
             dispatch(transaction.actions.broadcastOperation({
-                type: toVesting ? 'transfer_to_vesting' : 'transfer',
+                type: 'transfer',
                 operation,
                 successCallback,
                 errorCallback

@@ -129,6 +129,14 @@ export default class PostFull extends React.Component {
         window.open('https://www.linkedin.com/shareArticle?' + q, 'Share', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=' + winWidth + ',height=' + winHeight);
     }
 
+    showPromotePost = () => {
+        const post_content = this.props.global.get('content').get(this.props.post);
+        if (!post_content) return
+        const author = post_content.get('author')
+        const permlink = post_content.get('permlink')
+        this.props.showPromotePost(author, permlink)
+    }
+
     render() {
         const {props: {username, post}, state: {PostFullReplyEditor, PostFullEditEditor, formId, showReply, showEdit},
             onShowReply, onShowEdit, onDeletePost} = this
@@ -234,9 +242,9 @@ export default class PostFull extends React.Component {
                     </div>
                 }
 
-                <div className="float-right">
-                    <button className="button hollow slim" onClick={this.props.showPromotePost}>Promote</button>
-                </div>
+                {username && <div className="float-right">
+                    <button className="button hollow tiny" onClick={this.showPromotePost}>Promote</button>
+                </div>}
                 <TagList post={content} horizontal />
                 <div className="PostFull__footer row align-middle">
                     <div className="column">
@@ -292,8 +300,8 @@ export default connect(
                 confirm: 'Are you sure?'
             }));
         },
-        showPromotePost: () => {
-            dispatch(user.actions.showPromotePost());
+        showPromotePost: (author, permlink) => {
+            dispatch({type: 'global/SHOW_DIALOG', payload: {name: 'promotePost', params: {author, permlink}}});
         },
     })
 )(PostFull)

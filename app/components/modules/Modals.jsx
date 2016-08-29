@@ -5,7 +5,6 @@ import Reveal from 'react-foundation-components/lib/global/reveal';
 import LoginForm from 'app/components/modules/LoginForm';
 import ConfirmTransactionForm from 'app/components/modules/ConfirmTransactionForm';
 import Transfer from 'app/components/modules/Transfer';
-import PromotePost from 'app/components/modules/PromotePost';
 import SignUp from 'app/components/modules/SignUp';
 import user from 'app/redux/User';
 import tr from 'app/redux/Transaction';
@@ -61,10 +60,6 @@ class Modals extends React.Component {
                 {show_transfer_modal && <Reveal onHide={hideTransfer} show={show_transfer_modal}>
                     <CloseButton onClick={hideTransfer} />
                     <Transfer />
-                </Reveal>}
-                {show_promote_post_modal && <Reveal onHide={hidePromotePost} show={show_promote_post_modal}>
-                    <CloseButton onClick={hidePromotePost} />
-                    <PromotePost />
                 </Reveal>}
                 {show_signup_modal && <Reveal onHide={hideSignUp} show={show_signup_modal}>
                     <CloseButton onClick={hideSignUp} />

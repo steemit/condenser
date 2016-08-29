@@ -42,7 +42,7 @@ class PromotePost extends Component {
         const {amount, asset} = this.state
         this.setState({loading: true});
         console.log('-- PromotePost.onSubmit -->');
-        this.props.dispatchSubmit({amount, 'SBD', author, permlink, onClose,
+        this.props.dispatchSubmit({amount, asset: 'SBD', author, permlink, onClose,
             currentUser: this.props.currentUser, errorCallback: this.errorCallback});
     }
 
@@ -73,7 +73,8 @@ class PromotePost extends Component {
                <div className="column small-12">
                    <form onSubmit={this.onSubmit} onChange={() => this.setState({trxError: ''})}>
                        <h4>Promote Post</h4>
-                       <p>Spend you Steem Dollars to advertise your post in the promoted content section.</p>
+                       <p>Spend you Steem Dollars to advertise your post in the promoted content section. This doesn't pay the author directly,
+                       instead the funds are "burnt". Burnt funds become a dividend to share holders.</p>
                        <div className="row">
                            <div className="column small-4">
                                <label>Amount</label>

@@ -29,7 +29,6 @@ class Header extends React.Component {
     }
 
     hideSubheader(){
-        console.log('-- Header.hideSubheader -->', this.prevScrollY, window.scrollY);
         const subheader_hidden = this.state.subheader_hidden;
         if (window.scrollY === this.prevScrollY) return;
         window.scrollY > this.prevScrollY?
@@ -83,18 +82,27 @@ class Header extends React.Component {
         const sort_orders = {
             created: 'new',
             hot: 'hot',
-            trending: 'trending',
+            trending: 'trending (24 hour)',
+            trending30: 'trending (30 day)',
             promoted: 'promoted',
             votes: 'popular'
         };
         const sort_order_menu = Object.keys(sort_orders).filter(so => so !== sort_order).map(so => ({link: `/${so}/${topic}`, value: sort_orders[so]}));
-        const sort_order_menu_horizontal = Object.keys(sort_orders).map(so => {
+
+
+        const sort_orders_horizontal = {
+            created: 'new',
+            hot: 'hot',
+            trending: 'trending',
+            promoted: 'promoted',
+            votes: 'popular'
+        };
+        const sort_order_menu_horizontal = Object.keys(sort_orders_horizontal).map(so => {
             const active = (so === sort_order) || (so === 'trending' && sort_order === 'trending30')
-                return {link: `/${so}/${topic}`, value: sort_orders[so], active};
+                return {link: `/${so}/${topic}`, value: sort_orders_horizontal[so], active};
             });
 
         let sort_order_extra_menu = null;
-        console.log('-- Header.render -->', sort_order);
         if (sort_order === 'trending' || sort_order === 'trending30') {
             const items = [
                 {link: `/trending/${topic}`, value: '24 hour', active: sort_order === 'trending'},

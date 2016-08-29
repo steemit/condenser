@@ -87,7 +87,7 @@ class Header extends React.Component {
             trending: 'trending (24 hour)',
             trending30: 'trending (30 day)',
             promoted: 'promoted',
-            votes: 'popular'
+            active: 'active'
         };
         const sort_order_menu = Object.keys(sort_orders).filter(so => so !== sort_order).map(so => ({link: `/${so}/${topic}`, value: sort_orders[so]}));
 
@@ -97,7 +97,7 @@ class Header extends React.Component {
             hot: 'hot',
             trending: 'trending',
             promoted: 'promoted',
-            votes: 'popular'
+            active: 'active'
         };
         const sort_order_menu_horizontal = Object.keys(sort_orders_horizontal).map(so => {
             const active = (so === sort_order) || (so === 'trending' && sort_order === 'trending30')

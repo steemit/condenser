@@ -195,7 +195,7 @@ export default class PostFull extends React.Component {
 
         let post_header = <h1 className="entry-title">{content.title}</h1>
         if(content.depth > 0) {
-            let parent_link = `/@${content.parent_author}/${content.parent_permlink}`;
+            let parent_link = `/${content.category}/@${content.parent_author}/${content.parent_permlink}`;
             let direct_parent_link
             if(content.depth > 1) {
                 direct_parent_link = <li>
@@ -204,7 +204,6 @@ export default class PostFull extends React.Component {
                     </Link>
                 </li>
             }
-            if (content.category) parent_link = `/${content.category}${parent_link}`;
             post_header = <div className="callout">
                 <h5>You are viewing a single comment&#39;s thread from:</h5>
                 <p>

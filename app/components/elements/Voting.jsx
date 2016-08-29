@@ -142,15 +142,11 @@ class Voting extends React.Component {
             // ? Remove negative votes unless full power -1000 (we had downvoting spam)
             const down_votes = active_votes.filter( v => v.get('percent') < 0 /*=== -1000*/).size
             return <span className="Voting">
-                <span className="Voting__inner">
-                    <span className={classDown}>
-                        {down_votes > 0 && <span className="Voting__button-downvotes">{down_votes}</span>}
-                        {votingDownActive ? down : <a href="#" onClick={this.toggleWeightDown} title="Flag">{down}</a>}
-                        {dropdown}
-                    </span>
-                    {payoutEl}
+                <span className={classDown}>
+                    {down_votes > 0 && <span className="Voting__button-downvotes">{down_votes}</span>}
+                    {votingDownActive ? down : <a href="#" onClick={this.toggleWeightDown} title="Flag">{down}</a>}
+                    {dropdown}
                 </span>
-                {voters_list}
             </span>
         }
 

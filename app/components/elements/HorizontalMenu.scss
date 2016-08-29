@@ -1,0 +1,16 @@
+.HorizontalMenu {
+  .active > a {
+    background: none;
+    color: $black;
+    font-weight: 600;
+  }
+  li > a:hover {
+    color: $black;
+  }
+  > li:first-child > a {
+    padding-left: 0;
+  }
+  > li:last-child > a {
+    padding-right: 0;
+  }
+}

@@ -6,6 +6,7 @@ import Icon from 'app/components/elements/Icon.jsx';
 import resolveRoute from 'app/ResolveRoute';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+import HorizontalMenu from 'app/components/elements/HorizontalMenu';
 
 class Header extends React.Component {
     static propTypes = {
@@ -14,7 +15,9 @@ class Header extends React.Component {
 
     constructor() {
         super();
+        this.state = {subheader_hidden: false}
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Header');
+        this.hideSubheader = this.hideSubheader.bind(this);
     }
 
     componentWillReceiveProps(nextPrps) {
@@ -23,6 +26,24 @@ class Header extends React.Component {
             const sort_order = route && route.page === 'PostsIndex' && route.params && route.params.length > 0 ? route.params[0] : null;
             if (sort_order) window.last_sort_order = this.last_sort_order = sort_order;
         }
+    }
+
+    hideSubheader(){
+        const subheader_hidden = this.state.subheader_hidden;
+        window.scrollY > this.prevScrollY?
+        !subheader_hidden && this.setState({subheader_hidden: true})
+            :
+        subheader_hidden && this.setState({subheader_hidden: false})
+
+        this.prevScrollY = window.scrollY;
+    }
+
+    componentDidMount() {
+        window.addEventListener('scroll', this.hideSubheader);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('scroll', this.hideSubheader);
     }
 
     render() {
@@ -58,15 +79,27 @@ class Header extends React.Component {
         let topic_link = topic ? <Link to={`/${this.last_sort_order || 'trending'}/${topic}`}>{topic}</Link> : null;
 
         const sort_orders = {
-                promoted: 'promoted',
-                hot: 'hot',
-                trending: 'trending',
-                trending30: 'trending (30 day)',
-                cashout: 'payout time',
-                created: 'new',
-                active: 'active',
-                votes: 'popular' };
+            created: 'new',
+            hot: 'hot',
+            trending: 'trending',
+            promoted: 'promoted',
+            votes: 'popular'
+        };
         const sort_order_menu = Object.keys(sort_orders).filter(so => so !== sort_order).map(so => ({link: `/${so}/${topic}`, value: sort_orders[so]}));
+        const sort_order_menu_horizontal = Object.keys(sort_orders).map(so => {
+            const active = (so === sort_order) || (so === 'trending' && sort_order === 'trending30')
+                return {link: `/${so}/${topic}`, value: sort_orders[so], active};
+            });
+
+        let sort_order_extra_menu = null;
+        console.log('-- Header.render -->', sort_order);
+        if (sort_order === 'trending' || sort_order === 'trending30') {
+            const items = [
+                {link: `/trending/${topic}`, value: 'trending (1 day)', active: sort_order === 'trending'},
+                {link: `/trending30/${topic}`, value: 'trending (30 day)', active: sort_order === 'trending30'}
+            ];
+            sort_order_extra_menu = <HorizontalMenu items={items} />
+        }
 
         return (
             <header className="Header">
@@ -84,14 +117,21 @@ class Header extends React.Component {
                                 {topic_link && <li className="Header__top-topic">{topic_link}</li>}
                                 {user_name && <li><Link to={`/@${user_name}`}>{user_name}</Link></li>}
                                 {page_name && <li><span>{page_name}</span></li>}
-                                {sort_order && <li className="delim show-for-medium">|</li>}
                                 {(topic_link || user_name || page_name) && sort_order && <li className="delim show-for-small-only">|</li>}
-                                {sort_order && <DropdownMenu className="Header__sort-order-menu" items={sort_order_menu} selected={sort_orders[sort_order]} el="li" />}
+                                {sort_order && <DropdownMenu className="Header__sort-order-menu show-for-small-only" items={sort_order_menu} selected={sort_orders[sort_order]} el="li" />}
                             </ul>
                         </div>
                         <div className="columns shrink">
                             <TopRightMenu {...this.props} />
                         </div>
+                    </div>
+                </div>
+                <div className={'Header__sub-nav expanded show-for-medium row' + (this.state.subheader_hidden ? ' hidden' : '')}>
+                    <div className="columns">
+                        <HorizontalMenu items={sort_order_menu_horizontal} />
+                    </div>
+                    <div className="columns shrink show-for-large">
+                        {sort_order_extra_menu}
                     </div>
                 </div>
             </header>

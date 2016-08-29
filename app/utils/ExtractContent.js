@@ -7,18 +7,6 @@ import Remarkable from 'remarkable'
 
 const remarkable = new Remarkable({ html: true, linkify: false })
 
-/**
- * Returns a youtube image URL if a youtube url is detected
- */
-function getYoutubeThumbFromUrls(urls) {
-    const youtubeId = Array.from(urls).map( url => {
-        let m = url.match( links.youTubeId )
-        return m ? m[1] : null
-    } ).find( url => !!url )
-
-    return youtubeId ? 'https://img.youtube.com/vi/' + youtubeId + '/0.jpg' : null
-}
-
 export default function extractContent(get, content) {
     const {
         author,
@@ -61,10 +49,6 @@ export default function extractContent(get, content) {
         if(jsonMetadata.image) {
             [image_link] = jsonMetadata.image
         }
-        // If nothing found in image array, check links for youtube vid
-        if(!image_link && Array.isArray(jsonMetadata.links)) {
-            image_link = getYoutubeThumbFromUrls(jsonMetadata.links)
-        }
     }
 
     // If nothing found in json metadata, parse body and check images/links
@@ -77,9 +61,6 @@ export default function extractContent(get, content) {
         }
 
         [image_link] = Array.from(rtags.images)
-        if(!image_link) {
-            image_link = getYoutubeThumbFromUrls(rtags.links)
-        }
     }
 
     // Was causing broken thumnails.  IPFS was not finding images uploaded to another server until a restart.

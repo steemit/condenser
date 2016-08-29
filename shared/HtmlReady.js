@@ -50,7 +50,7 @@ function traverse(node, state, depth = 0) {
             img(state, child)
         else if(/a/i.test(child.tagName))
             link(state, child)
-        else if(!embedYouTubeNode(child, state.links))
+        else if(!embedYouTubeNode(child, state.links, state.images))
             linkifyNode(child, state)
         traverse(child, state, ++depth)
     })
@@ -143,7 +143,7 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
     return content
 }
 
-function embedYouTubeNode(child, links) {try{
+function embedYouTubeNode(child, links, images) {try{
     if(!child.data) return false
     const data = child.data
     if(/code/i.test(child.parentNode.tagName)) return false
@@ -156,6 +156,7 @@ function embedYouTubeNode(child, links) {try{
             child.parentNode.replaceChild(v, child)
             replaced = true
             if(links) links.add(url)
+            if(images) images.add('https://img.youtube.com/vi/' + id + '/0.jpg')
             return
         }
         console.log("Youtube link without ID?", url);

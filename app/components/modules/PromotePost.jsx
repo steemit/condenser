@@ -23,7 +23,7 @@ class PromotePost extends Component {
         this.onSubmit = this.onSubmit.bind(this);
         this.errorCallback = this.errorCallback.bind(this);
         this.amountChange = this.amountChange.bind(this);
-        this.assetChange = this.assetChange.bind(this);
+        // this.assetChange = this.assetChange.bind(this);
     }
 
     componentDidMount() {
@@ -39,7 +39,7 @@ class PromotePost extends Component {
     onSubmit(e) {
         e.preventDefault();
         const {author, permlink, onClose} = this.props
-        const {amount, asset} = this.state
+        const {amount} = this.state
         this.setState({loading: true});
         console.log('-- PromotePost.onSubmit -->');
         this.props.dispatchSubmit({amount, asset: 'SBD', author, permlink, onClose,
@@ -52,19 +52,19 @@ class PromotePost extends Component {
         this.setState({amount});
     }
 
-    assetChange(e) {
-        const asset = e.target.value;
-        console.log('-- PromotePost.assetChange -->', e.target.value);
-        this.setState({asset});
-    }
+    // assetChange(e) {
+    //     const asset = e.target.value;
+    //     console.log('-- PromotePost.assetChange -->', e.target.value);
+    //     this.setState({asset});
+    // }
 
     render() {
-        const {amount, asset, loading, amountError, trxError} = this.state;
-        const {currentAccount, currentUser} = this.props;
-        const balanceValue =
-            !asset || asset.value === 'STEEM' ? currentAccount.get('balance') :
-            asset.value === 'SBD' ? currentAccount.get('sbd_balance') :
-            null
+        const {amount, loading, amountError, trxError} = this.state;
+        // const {currentAccount} = this.props;
+        // const balanceValue =
+        //     !asset || asset.value === 'STEEM' ? currentAccount.get('balance') :
+        //     asset.value === 'SBD' ? currentAccount.get('sbd_balance') :
+        //     null
 
         const submitDisabled = !amount;
 
@@ -73,14 +73,16 @@ class PromotePost extends Component {
                <div className="column small-12">
                    <form onSubmit={this.onSubmit} onChange={() => this.setState({trxError: ''})}>
                        <h4>Promote Post</h4>
-                       <p>Spend you Steem Dollars to advertise your post in the promoted content section. This doesn't pay the author directly,
-                       instead the funds are "burnt". Burnt funds become a dividend to share holders.</p>
+
+                       <p>Spend you Steem Dollars to advertise this post in the promoted content section. This doesn&apos;t pay the author directly, instead the funds are &#8220;burned.&#8221;  When funds are burned, they become a dividend to share holders.</p>
+
+                       <hr />
+
                        <div className="row">
                            <div className="column small-4">
                                <label>Amount</label>
                                <div className="input-group">
-                                   <input className="input-group-field" type="text" placeholder="Amount" value={amount} ref="amount" autoComplete="off"
-                                          disabled={loading} onChange={this.amountChange} />
+                                   <input className="input-group-field" type="text" placeholder="Amount" value={amount} ref="amount" autoComplete="off" disabled={loading} onChange={this.amountChange} />
                                    <span className="input-group-label">SD ($)</span>
 
                                    <div className="error">{amountError}</div>

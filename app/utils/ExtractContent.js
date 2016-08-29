@@ -2,6 +2,22 @@ import remarkableStripper from 'app/utils/RemarkableStripper'
 import links from 'app/utils/Links'
 import sanitize from 'sanitize-html'
 import {htmlDecode} from 'app/utils/Html'
+import HtmlReady from 'shared/HtmlReady'
+import Remarkable from 'remarkable'
+
+const remarkable = new Remarkable({ html: true, linkify: false })
+
+/**
+ * Returns a youtube image URL if a youtube url is detected
+ */
+function getYoutubeThumbFromUrls(urls) {
+    const youtubeId = Array.from(urls).map( url => {
+        let m = url.match( links.youTubeId )
+        return m ? m[1] : null
+    } ).find( url => !!url )
+
+    return youtubeId ? 'https://img.youtube.com/vi/' + youtubeId + '/0.jpg' : null
+}
 
 export default function extractContent(get, content) {
     const {
@@ -38,44 +54,33 @@ export default function extractContent(get, content) {
     } catch(error) {
         // console.error('Invalid json metadata string', json_metadata, 'in post', author, permlink);
     }
+
+    // First, attempt to find an image url in the json metadata
     let image_link
-    let external_link
     if(jsonMetadata) {
         if(jsonMetadata.image) {
-            // these were created together in the same markdown statement:
-            // [![Foo](http://www.google.com.au/images/nav_logo7.png)](http://google.com.au/)
-            const [image, imageLink] = jsonMetadata.image
-            image_link = image
-            external_link = imageLink
+            [image_link] = jsonMetadata.image
         }
-        if(!external_link && Array.isArray(jsonMetadata.links)) {
-            const [extLink] = jsonMetadata.links
-            if(extLink) external_link = extLink
-        }
-    }
-    if(!external_link) {
-        // console.log('match remote');
-        const match = body.match(links.remote)
-        external_link = match ? match[0] : null
-        // console.log('match remote done');
-    }
-    // console.log('match image');
-    if(!image_link) {
-        const match = body.match(links.image)
-        if(match) {
-            image_link = match[0]
-        }
-    }
-    // console.log('match image done');
-    if(!image_link ) {
-        const match = body.match( links.youTubeId );
-        if( match ) {
-            image_link = 'https://img.youtube.com/vi/' + match[1] + '/0.jpg'
+        // If nothing found in image array, check links for youtube vid
+        if(!image_link && Array.isArray(jsonMetadata.links)) {
+            image_link = getYoutubeThumbFromUrls(jsonMetadata.links)
         }
     }
 
-    if( image_link ) external_link = null;
-    // if(image_link) console.log('image_link', image_link)
+    // If nothing found in json metadata, parse body and check images/links
+    if(!image_link) {
+        let rtags
+        {
+            const isHtml = /^<html>([\S\s]*)<\/html>$/.test(body)
+            const htmlText = isHtml ? body : remarkable.render(body)
+            rtags = HtmlReady(htmlText, {mutate: false})
+        }
+
+        [image_link] = Array.from(rtags.images)
+        if(!image_link) {
+            image_link = getYoutubeThumbFromUrls(rtags.links)
+        }
+    }
 
     // Was causing broken thumnails.  IPFS was not finding images uploaded to another server until a restart.
     // if(config.ipfs_prefix && image_link) // allow localhost nodes to see ipfs images
@@ -124,7 +129,6 @@ export default function extractContent(get, content) {
         net_rshares,
         children,
         link,
-        external_link,
         image_link,
         desc,
         desc_complete,

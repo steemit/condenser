@@ -29,7 +29,9 @@ class Header extends React.Component {
     }
 
     hideSubheader(){
+        console.log('-- Header.hideSubheader -->', this.prevScrollY, window.scrollY);
         const subheader_hidden = this.state.subheader_hidden;
+        if (window.scrollY === this.prevScrollY) return;
         window.scrollY > this.prevScrollY?
         !subheader_hidden && this.setState({subheader_hidden: true})
             :
@@ -95,8 +97,8 @@ class Header extends React.Component {
         console.log('-- Header.render -->', sort_order);
         if (sort_order === 'trending' || sort_order === 'trending30') {
             const items = [
-                {link: `/trending/${topic}`, value: 'trending (1 day)', active: sort_order === 'trending'},
-                {link: `/trending30/${topic}`, value: 'trending (30 day)', active: sort_order === 'trending30'}
+                {link: `/trending/${topic}`, value: '24 hour', active: sort_order === 'trending'},
+                {link: `/trending30/${topic}`, value: '30 day', active: sort_order === 'trending30'}
             ];
             sort_order_extra_menu = <HorizontalMenu items={items} />
         }
@@ -130,7 +132,7 @@ class Header extends React.Component {
                     <div className="columns">
                         <HorizontalMenu items={sort_order_menu_horizontal} />
                     </div>
-                    <div className="columns shrink show-for-large">
+                    <div className="columns shrink">
                         {sort_order_extra_menu}
                     </div>
                 </div>

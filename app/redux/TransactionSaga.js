@@ -176,9 +176,11 @@ function* broadcast({payload: {operations, keys, username, successCallback, erro
             }
             const config = operation.__config
             if (config && config.successMessage) {
-                // TODO replace assert with notice dialog after merge with main branch
-                alert(config.successMessage)
-                yield put(tr.actions.set({key: 'successMessage', value: config.successMessage}))
+                yield put({type: 'ADD_NOTIFICATION', payload: {
+                    key: "trx_" + Date.now(),
+                    message: config.successMessage,
+                    dismissAfter: 5000
+                }})
             }
         }
         if (successCallback) try { successCallback() } catch (error) { console.error(error) }

@@ -118,7 +118,8 @@ export default connect(
             const operation = {
                 from: username,
                 to: 'null', amount: parseFloat(amount, 10).toFixed(3) + ' ' + asset,
-                memo: `@${author}/${permlink}`
+                memo: `@${author}/${permlink}`,
+                __config: {successMessage: 'You successfully promoted this post.'}
             }
             dispatch(transaction.actions.broadcastOperation({
                 type: 'transfer',

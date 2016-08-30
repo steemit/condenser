@@ -141,7 +141,7 @@
 .Voting__button-up {
   .dropdown-pane {
     top: -18px;
-    left: -28px;
+    left: -10px;
   }
 }
 
@@ -149,7 +149,8 @@
     @extend .Voting__adjust_weight;
 
     right: 0;
-    width: 500px !important;
+    width: auto !important;
+    max-width: 500px;
 
     div.clear {
       clear: both;
@@ -159,6 +160,9 @@
     }
     .weight-display {
       color: #C00 !important;
+    }
+    .rangeslider {
+      margin-right: 2rem;
     }
 }
 
@@ -223,7 +227,7 @@
       }
     }
   }
-  .close-button {
+  .Voting__adjust_weight_close {
     position: static;
     line-height: 1.4;
     margin-left: 1rem;

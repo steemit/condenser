@@ -1,5 +1,4 @@
 import React from 'react';
-import {browserHistory} from 'react-router';
 import Author from 'app/components/elements/Author';
 import ReplyEditor from 'app/components/elements/ReplyEditor';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
@@ -15,9 +14,7 @@ import Icon from 'app/components/elements/Icon';
 import Userpic from 'app/components/elements/Userpic';
 import transaction from 'app/redux/Transaction'
 import {List} from 'immutable'
-import {Long} from 'bytebuffer'
 import pluralize from 'pluralize';
-import {parsePayoutAmount, repLog10} from 'app/utils/ParsersAndFormatters';
 
 export function sortComments( g, comments, sort_order ){
 
@@ -215,16 +212,16 @@ class CommentImpl extends React.Component {
             comment.stats = {}
         }
         const {netVoteSign, hasReplies, authorRepLog10, hide, pictures, gray} = comment.stats
-        const {author, permlink, json_metadata} = comment
+        const {author, json_metadata} = comment
         const {username, depth, rootComment, comment_link,
             showNegativeComments, ignore, noImage} = this.props
-        const {onCommentClick, onShowReply, onShowEdit, onDeletePost} = this
+        const {onShowReply, onShowEdit, onDeletePost} = this
         const post = comment.author + '/' + comment.permlink
         const anchor_link = '#@' + post
         const {PostReplyEditor, PostEditEditor, showReply, showEdit, hide_body} = this.state
         const Editor = showReply ? PostReplyEditor : PostEditEditor
 
-        if(!showNegativeComments && hide) {
+        if(!showNegativeComments && (hide || ignore)) {
             return null;
         }
 
@@ -274,7 +271,7 @@ class CommentImpl extends React.Component {
         commentClasses.push('Comment')
         commentClasses.push(this.props.root ? 'root' : 'reply')
         if(hide_body || this.state.collapsed) commentClasses.push('collapsed');
-        const downVotedClass = ignore || gray ? 'downvoted' : ' '
+        const downVotedClass = gray ? 'downvoted' : ' '
         //console.log(comment);
         let renderedEditor = null;
         if (showReply || showEdit) {

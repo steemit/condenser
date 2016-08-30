@@ -35,7 +35,7 @@ class TagsIndex extends React.Component {
         const {search} = this.state;
         const order = this.props.routeParams.order;
         let tags = tagsAll;
-        if (search) tags = tags.filter(tag => tag.get('name').indexOf(search) !== -1);
+        if (search) tags = tags.filter(tag => tag.get('name').indexOf(search.toLowerCase()) !== -1);
         tags = tags.filter(tag => tag.get('name')).sort((a,b) => {
             return a.get('name').localeCompare(b.get('name'));
         }).map(tag => {

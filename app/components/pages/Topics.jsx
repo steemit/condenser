@@ -57,7 +57,7 @@ class Topics extends React.Component {
             </select>;
         }
 
-        if (search) categories = categories.filter(val => val.indexOf(search) !== -1);
+        if (search) categories = categories.filter(val => val.indexOf(search.toLowerCase()) !== -1);
         categories = categories.map(cat => {
             const link = order ? `/${order}/${cat}` : `/hot/${cat}`;
             return (<li key={cat}>

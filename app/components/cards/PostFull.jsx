@@ -134,7 +134,7 @@ export default class PostFull extends React.Component {
         if (!post_content) return
         const author = post_content.get('author')
         const permlink = post_content.get('permlink')
-        if(post_content.get('mode')=="first_payout"){
+        if(post_content.get('mode')=="first_payout" && post_content.get("depth") == 0){
             this.props.showPromotePost(author, permlink)
         }
     }

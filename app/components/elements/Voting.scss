@@ -137,14 +137,6 @@
   }
 }
 
-
-.Voting__button-up {
-  .dropdown-pane {
-    top: -18px;
-    left: -10px;
-  }
-}
-
 .Voting__adjust_weight_down {
     @extend .Voting__adjust_weight;
 
@@ -234,7 +226,24 @@
   }
 }
 
-.Voting__button-up {
-  display: inline-block;
-  position: relative;
+
+@media screen and (max-width: 39.9375em) {
+  .Voting__button-up {
+    .dropdown-pane {
+      margin-top: -36px;
+      margin-left: -10px;
+    }
+  }
+}
+
+/* Medium and bigger */
+@media screen and (min-width: 39.9375em) {
+  .Voting__button-up {
+    display: inline-block;
+    position: relative;
+    .dropdown-pane {
+      top: -18px;
+      left: -10px;
+    }
+  }
 }

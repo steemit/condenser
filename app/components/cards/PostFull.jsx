@@ -227,7 +227,9 @@ export default class PostFull extends React.Component {
                 </ul>
             </div>
         }
+
         const firstPayout = post_content.get('mode') === "first_payout"
+        const rootComment = post_content.get('depth') == 0
 
         return (
             <article className="PostFull hentry" itemScope itemType ="http://schema.org/blogPost">
@@ -243,7 +245,7 @@ export default class PostFull extends React.Component {
                     </div>
                 }
 
-                {username && firstPayout && <div className="float-right">
+                {username && firstPayout && rootComment && <div className="float-right">
                     <button className="button hollow tiny" onClick={this.showPromotePost}>Promote</button>
                 </div>}
                 <TagList post={content} horizontal />

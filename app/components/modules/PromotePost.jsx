@@ -60,7 +60,7 @@ class PromotePost extends Component {
     // }
 
     render() {
-        const {amount, asset, loading, amountError, trxError} = this.state;
+        const {amount, loading, amountError, trxError} = this.state;
         const {currentAccount} = this.props;
         const balanceValue = currentAccount.get('sbd_balance');
         const balance = balanceValue ? balanceValue.split(' ')[0] : 0.0;

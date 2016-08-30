@@ -178,11 +178,11 @@ class LoginForm extends Component {
                 {loginBroadcastOperation && <div>
                     <div className="info">This operation requires your {authType} key (or use your master password).</div>
                 </div>}
-                <div>
+                {!loginBroadcastOperation && <div>
                     <label htmlFor="saveLogin">
                         Keep me logged in &nbsp;
                         <input id="saveLogin" type="checkbox" ref="pw" {...saveLogin.props} onChange={this.saveLoginToggle} disabled={submitting} /></label>
-                </div>
+                </div>}
                 <br />
                 <div>
                     <button type="submit" disabled={submitting || disabled} className="button">
@@ -263,10 +263,9 @@ export default connect(
             if (loginBroadcastOperation) {
                 const {type, operation, successCallback, errorCallback} = loginBroadcastOperation.toJS()
                 dispatch(transaction.actions.broadcastOperation({type, operation, username, password, successCallback, errorCallback}))
-                dispatch(user.actions.usernamePasswordLogin({username, password, saveLogin, afterLoginRedirectToAccount, operationType: type}))
-                if (!saveLogin) {
-                    dispatch(user.actions.closeLogin())
-                }
+                // Avoid saveLogin, this could be a user-provided content page and the login might be an active key.  Security will reject that...
+                dispatch(user.actions.usernamePasswordLogin({username, password, saveLogin: false, afterLoginRedirectToAccount, operationType: type}))
+                dispatch(user.actions.closeLogin())
             } else {
                 dispatch(user.actions.usernamePasswordLogin({username, password, saveLogin, afterLoginRedirectToAccount}))
             }

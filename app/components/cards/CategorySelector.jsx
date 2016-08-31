@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
+import { translate } from '../../Translator.js';
 
 class CategorySelector extends React.Component {
     static propTypes = {
@@ -21,7 +22,6 @@ class CategorySelector extends React.Component {
     }
     static defaultProps = {
         autoComplete: 'on',
-        placeholder: 'Tag (up to 5 tags), the first tag is your main category.',
         id: 'CategorySelectorId',
         isEdit: false,
     }
@@ -60,7 +60,7 @@ class CategorySelector extends React.Component {
 
         const categorySelect = (
             <select {...cleanReduxInput(this.props)} onChange={this.categorySelectOnChange} ref="categoryRef" tabIndex={tabIndex} disabled={disabled}>
-                <option value="">Select a tag...</option>
+                <option value="">{translate('select_a_tag')}...</option>
                 {categoryOptions}
                 <option value="new">{this.props.placeholder}</option>
             </select>
@@ -73,23 +73,23 @@ class CategorySelector extends React.Component {
     }
 }
 export function validateCategory(category, required = true) {
-    if(!category || category.trim() === '') return required ? 'Required' : null
+    if(!category || category.trim() === '') return required ? translate( 'required' ) : null
     const cats = category.split(' ')
     return (
         // !category || category.trim() === '' ? 'Required' :
-        cats.length > 5 ? 'Please use only Five categories' :
-        cats.find(c => c.split('-').length > 2) ? 'Use only one dash' :
-        cats.find(c => c.indexOf(',') >= 0) ? 'Use spaces to separate tags' :
-        cats.find(c => !/^[a-z0-9-]+$/.test(c)) ? 'Use only lowercase letters, digits and one dash' :
-        cats.find(c => !/^[a-z]/.test(c)) ? 'Must start with a letter' :
-        cats.find(c => !/[a-z0-9]$/.test(c)) ? 'Must end with a letter or number' :
+        cats.length > 5 ? translate('use_limitied_amount_of_categories', {amount: 5}) :
+        cats.find(c => c.split('-').length > 2) ? translate('use_one_dash') :
+        cats.find(c => c.indexOf(',') >= 0) ? translate('use_spaces_to_separate_tags') :
+        cats.find(c => !/^[a-z0-9-]+$/.test(c)) ? translate('use_only_allowed_characters') :
+        cats.find(c => !/^[a-z]/.test(c)) ? translate('must_start_with_a_letter') :
+        cats.find(c => !/[a-z0-9]$/.test(c)) ? translate('must_end_with_a_letter_or_number') :
         null
     )
 }
 export default connect((state, ownProps) => {
     const trending = state.global.get('category_idx').get('trending')
-    return {
-        trending,
-        ...ownProps,
-    }
+    // apply translations
+    // they are used here because default prop can't acces intl property
+    const placeholder = translate('tag_your_story');
+    return { trending, placeholder, ...ownProps, }
 })(CategorySelector);

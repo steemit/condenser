@@ -17,6 +17,7 @@ import {List} from 'immutable'
 import {Long} from 'bytebuffer'
 import pluralize from 'pluralize';
 import {parsePayoutAmount, repLog10} from 'app/utils/ParsersAndFormatters';
+import { translate } from '../../Translator';
 
 export function sortComments( g, comments, sort_order ){
 
@@ -221,7 +222,7 @@ class CommentImpl extends React.Component {
         let g = this.props.global;
         const dis = g.get('content').get(this.props.content);
         if (!dis) {
-            return <div>Loading...</div>
+            return <div>{translate('loading')}...</div>
         }
         const comment = dis.toJS();
         if(!comment.stats) {
@@ -265,14 +266,14 @@ class CommentImpl extends React.Component {
                 noImage={noImage || !pictures} jsonMetadata={jsonMetadata} />);
             controls = (<div>
                 <Voting post={post} pending_payout={comment.pending_payout_value} total_payout={comment.total_payout_value} />
-                {!$STM_Config.read_only_mode && depth !== 5 && <a onClick={onShowReply}>Reply</a>}
+                {!$STM_Config.read_only_mode && depth !== 5 && <a onClick={onShowReply}>{translate('reply')}</a>}
                 {showEditOption && <span>
                     &nbsp;&nbsp;
-                    <a onClick={onShowEdit}>Edit</a>
+                    <a onClick={onShowEdit}>{translate('edit')}</a>
                 </span>}
                 {showDeleteOption && <span>
                     &nbsp;&nbsp;
-                    <a onClick={onDeletePost}>Delete</a>
+                    <a onClick={onDeletePost}>{translate('delete')}</a>
                 </span>}
             </div>);
         }
@@ -316,7 +317,7 @@ class CommentImpl extends React.Component {
                     <div className="Comment__header">
                         <div className="Comment__header_collapse">
                             <Voting post={post} flag />
-                            <a title="Collapse/Expand" onClick={this.toggleDetails}>{ this.state.show_details ? '[-]' : '[+]' }</a>
+                            <a title={translate('collapse_or_expand')} onClick={this.toggleDetails}>{ this.state.show_details ? '[-]' : '[+]' }</a>
                         </div>
                         <span className="Comment__header-user">
                             <Icon name="user" className="Comment__Userpic-small" />
@@ -332,7 +333,7 @@ class CommentImpl extends React.Component {
                         { this.state.show_details || comment.children == 0 ||
                           <span className="marginLeft1rem">{pluralize('replies', comment.children, true)}</span>}
                         { this.state.show_details && (hide_body && !showNegativeComments) &&
-                            <a className="marginLeft1rem" onClick={this.revealBody}>reveal comment</a>}
+                            <a className="marginLeft1rem" onClick={this.revealBody}>{translate('reveal_comment')}</a>}
                     </div>
                     <div className="Comment__body entry-content">
                         {showEdit ? renderedEditor : body}
@@ -385,7 +386,7 @@ const Comment = connect(
             dispatch(transaction.actions.broadcastOperation({
                 type: 'delete_comment',
                 operation: {author, permlink},
-                confirm: 'Are you sure?'
+                confirm: translate('are_you_sure'),
             }))
         },
     })

@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import Link from 'app/components/elements/Link'
 import g from 'app/redux/GlobalReducer'
 import links from 'app/utils/Links'
+import { translate } from '../../Translator';
 
 /** @deprecated */
 class CardView extends React.Component {
@@ -43,13 +44,13 @@ class CardView extends React.Component {
         const youTubeImage = links.youTube.test(link)
         return <span className="Card">
             {image && !youTubeImage && <div>
-                {canEdit && <div>(<a onClick={this.onCloseImage}>remove</a>)<br /></div>}
+                {canEdit && <div>(<a onClick={this.onCloseImage}>{translate('remove')}</a>)<br /></div>}
                 <Link href={link}>
                     <img src={image} alt={alt} />
                 </Link>
             </div>}
             {description && <div>
-                {canEdit && <span>(<a onClick={this.onCloseDescription}>remove</a>)</span>}
+                {canEdit && <span>(<a onClick={this.onCloseDescription}>{translate('remove')}</a>)</span>}
                 <Link href={link}>
                     <blockquote>{description}</blockquote>
                 </Link>

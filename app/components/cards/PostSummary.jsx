@@ -14,23 +14,28 @@ import TagList from 'app/components/elements/TagList';
 import {authorNameAndRep} from 'app/utils/ComponentFormatters';
 import {Map} from 'immutable';
 import Reputation from 'app/components/elements/Reputation';
+import { FormattedMessage } from 'react-intl';
+
+
+// NOTE FIXME this is the only place in entire app where translate() fails and returns empty function
+// i spended 2 days trying to solve it with no success.
+// Using <FormattedMessage /> as workaround
 
 function TimeAuthorCategory({post, links, authorRepLog10, gray}) {
     const author = <strong>{post.author}</strong>;
-
     return (
         <span className="vcard">
             <Tooltip t={new Date(post.created).toLocaleString()}>
                 <span className="TimeAgo"><TimeAgoWrapper date={post.created} /></span>
             </Tooltip>
-            <span> by&nbsp;
+            <span>{' '}<FormattedMessage id="by" />&nbsp;
                 <span itemProp="author" itemScope itemType="http://schema.org/Person">
                     {links ? <Link to={post.author_link}>{author}</Link> :
                         <strong>{author}</strong>}
                     <Reputation value={authorRepLog10} />
                 </span>
             </span>
-            <span> in&nbsp;{links ? <TagList post={post} /> : <strong>{post.category}</strong>}</span>
+            <span>{' '}<FormattedMessage id="in" />&nbsp;{links ? <TagList post={post} /> : <strong>{post.category}</strong>}</span>
         </span>
     );
 }

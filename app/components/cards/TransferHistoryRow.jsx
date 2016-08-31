@@ -5,6 +5,7 @@ import Tooltip from 'app/components/elements/Tooltip';
 // import Icon from 'app/components/elements/Icon';
 import Memo from 'app/components/elements/Memo'
 import {numberWithCommas, vestsToSp} from 'app/utils/StateFunctions'
+import { translate } from '../../Translator';
 
 class TransferHistoryRow extends React.Component {
 
@@ -31,50 +32,60 @@ class TransferHistoryRow extends React.Component {
 
         if( type === 'transfer_to_vesting' ) {
             if( data.from === context ) {
+                const amount = data.amount.split(' ')[0]
                 if( data.to === "" ) {
-                    description_start += "Transfer " + data.amount.split(' ')[0] + " to STEEM POWER";
+                    description_start += translate('transfer_amount_to_steem_power', { amount });
                 }
                 else {
-                    description_start += "Transfer " + data.amount.split(' ')[0] + " STEEM POWER to ";
+                    description_start += translate('transfer_amount_steem_power_to', { amount }) + ' ';
                     other_account = data.to;
                 }
             }
             else if( data.to === context ) {
-                description_start += "Receive " + data.amount.split(' ')[0] + " STEEM POWER from ";
+                description_start += translate('recieve_amount_steem_power_from', { amount }) + ' ';
                 other_account = data.from;
             } else {
-                description_start += "Transfer " + data.amount.split(' ')[0] + " STEEM POWER from " + data.from + " to ";
+                description_start += translate('transfer_amount_steem_power_from_to', {
+                    amount,
+                    from: data.from
+                }) + ' ';
                 other_account = data.to;
             }
         }
         else if( type === 'transfer' ) {
+            const { amount } = data
             if( data.from === context ) {
-                description_start += "Transfer " + data.amount + " to ";
+                description_start += translate('transfer_amount_to', {amount}) + ' ';
                 other_account = data.to;
             }
             else if( data.to === context ) {
-                description_start += "Receive " + data.amount + " from ";
+                description_start += translate('recieve_amount_from', {amount}) + ' ';
                 other_account = data.from;
             } else {
-                description_start += "Transfer " + data.amount + " from ";
+                description_start += translate('transfer_amount_from', {amount});
                 other_account = data.from;
-                description_end += " to " + data.to;
+                description_end += ` ${translate('to')} ${data.to}`;
             }
-        } else if( type === 'withdraw_vesting' ){
+        } else if( type === 'withdraw_vesting' ) {
             if( data.vesting_shares === '0.000000 VESTS' )
-                description_start += "Stop power down";
+                description_start += translate('stop_power_down')
             else
-                description_start += "Start power down of " + data.vesting_shares;
+                description_start += translate('start_power_down_of') + " " + data.vesting_shares;
         } else if( type === 'curate_reward' ) {
-            description_start += `Curation reward of ${curate_reward} STEEM POWER for `;
+            description_start += translate('curation_reward_of_steem_power_for', { reward: curate_reward }) + ' ';
             other_account = data.comment_author;
             description_end = `/${data.comment_permlink}`;
         } else if (type === 'comment_reward') {
-            description_start += `Author reward of ${renameToSd(data.sbd_payout)} and ${comment_reward} STEEM POWER for ${data.author}/${data.permlink}`;
+            description_start += translate('author_reward_of_steem_power_for', {
+                payout: renameToSd(data.sbd_payout),
+                reward: comment_reward
+            }) + ` ${data.author}/${data.permlink}`;
             // other_account = ``;
             description_end = '';
         } else if (type === 'interest') {
-            description_start += `Receive interest of ${data.interest}`;
+            description_start += translate('recieve_interest_of', {
+                interest: data.interest
+            });
         } else {
             description_start += JSON.stringify({type, ...data}, null, 2);
         }

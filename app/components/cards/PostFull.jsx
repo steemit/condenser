@@ -20,6 +20,7 @@ import Author from 'app/components/elements/Author';
 import {Long} from 'bytebuffer'
 import {List} from 'immutable'
 import {repLog10, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
+import { translate } from '../../Translator';
 
 export default class PostFull extends React.Component {
     static propTypes = {
@@ -184,7 +185,7 @@ export default class PostFull extends React.Component {
                 <Icon name="clock" className="space-right" />
                 <span className="TimeAgo"><TimeAgoWrapper date={content.created} /></span>
             </Tooltip>
-            <span> by <Author author={content.author} authorRepLog10={authorRepLog10} /></span>
+            <span>{' ' + translate('by') + ' '}<Author author={content.author} authorRepLog10={authorRepLog10} /></span>
         </span>;
 
         return (
@@ -214,17 +215,17 @@ export default class PostFull extends React.Component {
                                 </Link>
                             </span>
                             <span className="PostFull__reply">
-                                {!$STM_Config.read_only_mode && <a onClick={onShowReply}>Reply</a>}
+                                {!$STM_Config.read_only_mode && <a onClick={onShowReply}>{translate('reply')}</a>}
                                 {showEditOption && !showEdit && <span>
                                     &nbsp;&nbsp;
-                                    <a onClick={onShowEdit}>Edit</a>
+                                    <a onClick={onShowEdit}>{translate('edit')}</a>
                                 </span>}
                                 {showDeleteOption && !showReply && <span>
                                     &nbsp;&nbsp;
-                                    <a onClick={onDeletePost}>Delete</a>
+                                    <a onClick={onDeletePost}>{translate('edit')}</a>
                                 </span>}
                             </span>
-                            <FoundationDropdownMenu menu={share_menu} icon="share" label="Share" dropdownPosition="bottom" dropdownAlignment="right" />
+                            <FoundationDropdownMenu menu={share_menu} icon="share" label={translate('share')} dropdownPosition="bottom" dropdownAlignment="right" />
                     </div>
                 </div>
                 <div className="row">
@@ -253,7 +254,7 @@ export default connect(
             dispatch(transaction.actions.broadcastOperation({
                 type: 'delete_comment',
                 operation: {author, permlink},
-                confirm: 'Are you sure?'
+                confirm: translate('are_you_sure')
             }))
         },
     })

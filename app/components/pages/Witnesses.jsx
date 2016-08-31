@@ -5,6 +5,7 @@ import Icon from 'app/components/elements/Icon';
 import transaction from 'app/redux/Transaction'
 import ByteBuffer from 'bytebuffer'
 import {Set} from 'immutable'
+import { translate } from '../../Translator';
 
 const Long = ByteBuffer.Long
 const {string, func, object} = PropTypes
@@ -36,10 +37,10 @@ class Witnesses extends React.Component {
         const header =
             <div className="row">
                 <div className="column small-1">
-                    <label>Vote</label>
+                    <label>{translate('vote')}</label>
                 </div>
                 <div className="column small-4">
-                    <label>Witness</label>
+                    <label>{translate('witness')}</label>
                 </div>
             </div>
         const up = <Icon name="chevron-up-circle" />;
@@ -57,7 +58,7 @@ class Witnesses extends React.Component {
                               &nbsp;&nbsp;
                               <span className={classUp}>
                                   <a href="#" onClick={accountWitnessVote.bind(this, owner, !myVote)}
-                                      title="Vote">{up}</a>
+                                      title={translate('vote')}>{up}</a>
                                   &nbsp;
                               </span>
                           </span>
@@ -70,7 +71,7 @@ class Witnesses extends React.Component {
       return (
       <div>
          <div className="Witnesses row">
-             <h2>Top Witnesses</h2>
+             <h2>{translate('top_witnesses')}</h2>
          </div>
         {header}
          <div className="Witnesses row">

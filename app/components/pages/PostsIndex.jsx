@@ -7,6 +7,7 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import PostsList from 'app/components/cards/PostsList';
 import {isFetchingOrRecentlyUpdated} from 'app/utils/StateFunctions';
 import g from 'app/redux/GlobalReducer';
+import { translate } from '../../Translator';
 
 class PostsIndex extends React.Component {
 
@@ -77,9 +78,18 @@ class PostsIndex extends React.Component {
                         loadMore={this.loadMore} showSpam={showSpam} />
                 </div>
                 <div className="PostsIndex__topics column shrink show-for-large">
-                    <div className="PostsIndex__buysp button hollow text-center slim" onClick={this.depositSteem}>Buy Steem Power</div>
+                    <div className="PostsIndex__buysp button hollow text-center slim" onClick={this.depositSteem}>
+                        {translate('buy_steem_power')}
+                    </div>
                     <Topics order={order} current={category} compact={false} />
-                    <small><a onClick={this.onShowSpam}>{showSpam ? 'Show less' : 'Show more'}</a> low value posts</small>
+                    <small>
+                        <a onClick={this.onShowSpam}>
+                            {translate(
+                                showSpam
+                                ? 'show_less_low_value_posts'
+                                : 'show_more_low_value_posts')}
+                        </a>
+                    </small>
                 </div>
             </div>
         );
@@ -106,4 +116,3 @@ module.exports = {
         }
     )(PostsIndex)
 };
-

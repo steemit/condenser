@@ -11,6 +11,7 @@ import SignUp from 'app/components/modules/SignUp';
 import runTests from 'shared/ecc/test/BrowserTests';
 import g from 'app/redux/GlobalReducer';
 import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInput';
+import { translate, translateHtml } from '../../Translator';
 
 const PASSWORD_MIN_LENGTH = 32;
 
@@ -85,7 +86,7 @@ class CreateAccount extends React.Component {
                 if (res.error === 'Unauthorized') {
                     this.props.showSignUp();
                 }
-                this.setState({server_error: res.error || 'Unknown', loading: false});
+                this.setState({server_error: res.error || translate('unknown'), loading: false});
             } else {
                 window.location = `/login.html#account=${name}&msg=accountcreated`;
                 // this.props.loginUser(name, password);
@@ -121,7 +122,7 @@ class CreateAccount extends React.Component {
             name_error = validate_account_name(name);
             if (!name_error) {
                 promise = Apis.db_api('get_accounts', [name]).then(res => {
-                    return res && res.length > 0 ? 'Account name is not available' : '';
+                    return res && res.length > 0 ? translate('account_name_is_not_available') : '';
                 });
             }
         }
@@ -136,7 +137,7 @@ class CreateAccount extends React.Component {
         if (!process.env.BROWSER) { // don't render this page on the server
             return <div className="row">
                 <div className="column">
-                    Loading..
+                    {translate('loading')}..
                 </div>
             </div>;
         }
@@ -158,7 +159,7 @@ class CreateAccount extends React.Component {
             return <div className="row">
                 <div className="column">
                     <div className="callout alert">
-                        <p>Membership to Steemit.com is now under invitation only because of unexpectedly high sign up rate.</p>
+                        <p>{translate('membership_invitation_only')}</p>
                     </div>
                 </div>
             </div>;
@@ -167,9 +168,12 @@ class CreateAccount extends React.Component {
             return <div className="row">
                 <div className="column">
                     <div className="callout alert">
-                        <h4>Cryptography test failed</h4>
-                        <p>We will be unable to create your Steem account with this browser.</p>
-                        <p>The latest versions of <a href="https://www.google.com/chrome/">Chrome</a> and <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a> are well tested and known to work with steemit.com.</p>
+                        <h4>{translate('ctyptography_test_failed')}</h4>
+                        <p>{translate('we_will_be_unable_to_create_account_with_this_browser')}.</p>
+                        <p>{translate('latest_browsers_do_work', {
+                                chromeLink: <a href="https://www.google.com/chrome/">Chrome</a>,
+                                firefoxLink: <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a>
+                        })}</p>
                     </div>
                 </div>
             </div>;
@@ -182,8 +186,8 @@ class CreateAccount extends React.Component {
             return <div className="row">
                 <div className="column">
                     <div className="callout alert">
-                        <p>You need to <a href="#" onClick={logout}>Logout</a> before you can create another account.</p>
-                        <p>Please note that Steemit can only register one account per verified user.</p>
+                        <p>{translate('you_need_to_logout_before_creating_account', { logoutLink: <a href="#" onClick={logout}>{translate('logout')}</a>})}.</p>
+                        <p>{translate('steemit_can_only_register_one_account_per_verified_user')}.</p>
                     </div>
                 </div>
             </div>;
@@ -195,10 +199,12 @@ class CreateAccount extends React.Component {
             existingUserAccountAlert = <div className="row">
                 <div className="column">
                     <div className="callout alert">
-                        <p>Our records indicate that you already have steem account: <strong>{existingUserAccount}</strong></p>
-                        <p>In order to prevent abuse (each registered account costs 3 STEEM) Steemit can only register one account per verified user.</p>
-                        <p>You can either <a href="/login.html">login</a> to your existing account
-                           or <a href="mailto:support@steemit.com">send us email</a> if you need a new account.</p>
+                        <p>{translate('our_records_indicate_you_already_have_account')}: <strong>{existingUserAccount}</strong></p>
+                        <p>{translate('to_prevent_abuse_steemit_can_only_register_one_account_per_user')}</p>
+                        <p>{translate('you_can_either_login_or_send_us_email', {
+                                loginLink: <a href="/login.html">{translate('login')}</a>,
+                                emailLink: <a href="mailto:support@steemit.com">{translate('send_us_email')}</a>
+                            })}.</p>
                     </div>
                 </div>
             </div>;
@@ -208,23 +214,15 @@ class CreateAccount extends React.Component {
             <div className="CreateAccount row">
                 <div className="column large-7 small-10">
                     {existingUserAccountAlert}
-                    <h2>Sign Up</h2>
+                    <h2>{translate('sign_up')}</h2>
                     <div className="CreateAccount__rules">
                         <hr />
-                        <p>
-                            The first rule of Steemit is: Do not lose your password.<br />
-                            The second rule of Steemit is: Do <strong>not</strong> lose your password.<br />
-                            The third rule of Steemit is: We cannot recover your password.<br />
-                            The fourth rule: If you can remember the password, it&apos;s not secure.<br />
-                            The fifth rule: Use only randomly-generated passwords.<br />
-                            The sixth rule: Do not tell anyone your password.<br />
-                            The seventh rule: Always back up your password.
-                        </p>
+                        <p>{translate('the_rules_of_steemit')}</p>
                         <hr />
                     </div>
                     <form onSubmit={this.onSubmit} autoComplete="off" noValidate method="post">
                         <div className={name_error ? 'error' : ''}>
-                            <label>USERNAME
+                            <label className="uppercase">{translate('username')}
                                 <input type="text" name="name" autoComplete="off" onChange={this.onNameChange} value={name} />
                             </label>
                             <p>{name_error}</p>
@@ -232,16 +230,16 @@ class CreateAccount extends React.Component {
                         <GeneratedPasswordInput onChange={this.onPasswordChange} disabled={loading} showPasswordString={name.length > 0 && !name_error} />
                         <br />
                         {server_error && <div className="callout alert">
-                            <h5>Couldn't create account. Server returned the following error:</h5>
+                            <h5>{translate('couldnt_create_account_server_returned_error')}:</h5>
                             <p>{server_error}</p>
                         </div>}
                         <noscript>
                             <div className="callout alert">
-                                <p>This form requires javascript to be enabled in your browser</p>
+                                <p>{translate('form_requires_javascript_to_be_enabled')}</p>
                             </div>
                         </noscript>
                         {loading && <LoadingIndicator type="circle" />}
-                        <input disabled={submit_btn_disabled} type="submit" className={submit_btn_class} value="SIGN UP" />
+                        <input disabled={submit_btn_disabled} type="submit" className={submit_btn_class + ' uppercase'} value={translate('sign_up')} />
                     </form>
                 </div>
             </div>

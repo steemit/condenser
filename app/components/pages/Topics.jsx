@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import {connect} from 'react-redux';
 import { browserHistory } from 'react-router';
+import { translate } from '../../Translator';
 
 class Topics extends React.Component {
     static propTypes = {
@@ -49,7 +50,7 @@ class Topics extends React.Component {
 
         if (compact) {
             return <select className={cn} onChange={(e) => browserHistory.push(e.target.value)} value={currentValue}>
-                <option key={'*'} value={'/' + order}>Select Topic</option>
+                <option key={'*'} value={'/' + order}>{translate('select_topic') }</option>
                 {categories.map(cat => {
                     const link = order ? `/${order}/${cat}` : `/${cat}`;
                     return <option key={cat} value={link}>{cat}</option>
@@ -64,20 +65,22 @@ class Topics extends React.Component {
                         <Link to={link} activeClassName="active">{cat}</Link>
                     </li>);
         });
+
         return (
             <ul className={cn}>
-                <li className="Topics__title" key={'*'}>Tags and Topics</li>
-                <li className="Topics__filter"><input type="text" placeholder="Filter" value={search} onChange={onChangeSearch} /></li>
+                {translate("filter")}
+                <li className="Topics__title" key={'*'}>{translate("tags_and_topics")}</li>
+                <li className="Topics__filter"><input type="text" placeholder={translate('filter')} value={search} onChange={onChangeSearch} /></li>
                {categories}
                {!expanded && !search && <li className="show-more">
                    {/*<a href="#" onClick={expand}>Show more topics..</a>*/}
-                   <Link to={`/tags.html/${order}`}>Show more topics..</Link>
+                   <Link to={`/tags.html/${order}`}>{translate("show_more_topics")}..</Link>
                </li>}
             </ul>
         );
     }
 }
 
-export default connect(state => ({
-    categories: state.global.get('category_idx')
-}))(Topics);
+export default  connect(state => ({
+                            categories: state.global.get('category_idx')
+                        }))(Topics);

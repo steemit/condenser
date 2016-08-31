@@ -12,6 +12,7 @@ import user from 'app/redux/User'
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
 import SvgImage from 'app/components/elements/SvgImage';
 import {List} from 'immutable'
+import { translate } from '../../Translator';
 
 class Post extends React.Component {
 
@@ -85,8 +86,8 @@ class Post extends React.Component {
         const negativeGroup = !stuffHidden ? null :
             (<div className="hentry Comment root Comment__negative_group">
                 {this.state.showNegativeComments ?
-                    <p onClick={this.toggleNegativeReplies}>Now showing comments with low ratings: <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>Hide</button></p> :
-                    <p onClick={this.toggleNegativeReplies}>Comments were hidden due to low ratings. <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>Show</button></p>
+                    <p onClick={this.toggleNegativeReplies}>{translate('now_showing_comments_with_low_ratings')}: <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>{translate('hide')}</button></p> :
+                    <p onClick={this.toggleNegativeReplies}>{translate('comments_were_hidden_due_to_low_ratings')}. <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>{translate('show')}</button></p>
                 }
             </div>
         );
@@ -122,9 +123,10 @@ class Post extends React.Component {
                 {!current_user && <div className="row">
                     <div className="column">
                       <div className="Post__promo">
-                          Authors get paid when people like you upvote their post. <br/>
-                          If you enjoyed what you read here, earn $7 of Steem Power <br />
-                          when you <a onClick={showSignUp}>sign up</a> and vote for it.
+                            {translate('post_promo', {
+                                amount: 7,
+                                link: <a onClick={showSignUp}>{translate("sign_up")}</a>
+                            })}
                       </div>
                     </div>
                 </div>}
@@ -133,7 +135,7 @@ class Post extends React.Component {
                         <div className="Post_comments__content">
                             {positiveComments.length ?
                             (<div className="Post__comments_sort_order float-right">
-                                Sort Order: &nbsp;
+                                {translate('sort_order')}: &nbsp;
                                 <FoundationDropdownMenu menu={sort_menu} label={sort_order} dropdownPosition="bottom" dropdownAlignment="right" />
                             </div>) : null}
                             {positiveComments}

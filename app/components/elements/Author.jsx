@@ -58,7 +58,7 @@ class Author extends React.Component {
                         <span itemProp="author" itemScope itemType="http://schema.org/Person">
                             <strong>{author}</strong>
                         </span>
-                        <Icon className="dropdown-arrow" name="dropdown-arrow" />
+                        <Icon name="dropdown-arrow" />
                     </span>
                 </LinkWithDropdown>
                 <Reputation value={authorRepLog10} />

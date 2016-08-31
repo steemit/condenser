@@ -166,7 +166,7 @@ class Voting extends React.Component {
         const payoutEl = <DropdownMenu el="div" items={payoutItems}>
             <span>
                 <FormattedAsset amount={payout} asset="$" />
-                <Icon className="dropdown-arrow" name="dropdown-arrow" />
+                <Icon name="dropdown-arrow" />
             </span>
         </DropdownMenu>;
 

@@ -95,10 +95,6 @@
     font-weight: 600;
     @include hoverUnderline;
   }
-  svg {
-    position: relative;
-    top: 2px;
-  }
   .FormattedAsset {
     font-size: 110%;
   }

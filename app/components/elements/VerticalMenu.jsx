@@ -10,7 +10,7 @@ export default class VerticalMenu extends React.Component {
         hideValue: React.PropTypes.string,
     };
 
-    closeMenu = (e) => {
+    closeMenu = () => {
         document.body.click();
     }
 

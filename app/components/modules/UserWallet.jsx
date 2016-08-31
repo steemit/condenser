@@ -17,10 +17,12 @@ class UserWallet extends React.Component {
         super()
         this.state = {}
         this.onShowDeposit = () => {this.setState({showDeposit: !this.state.showDeposit})}
-        this.onShowDepositSteem = () => {
+        this.onShowDepositSteem = (e) => {
+            e.preventDefault()
             this.setState({showDeposit: !this.state.showDeposit, depositType: 'STEEM'})
         }
-        this.onShowDepositPower = () => {
+        this.onShowDepositPower = (e) => {
+            e.preventDefault()
             this.setState({showDeposit: !this.state.showDeposit, depositType: 'VESTS'})
         }
         // this.onShowDeposit = this.onShowDeposit.bind(this)

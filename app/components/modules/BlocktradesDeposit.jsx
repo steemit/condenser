@@ -8,6 +8,7 @@ import g from 'app/redux/GlobalReducer'
 import QRCode from 'react-qr'
 import {steemTip, powerTip, powerTip2} from 'app/utils/Tips'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
+import { translate } from '../../Translator.js';
 
 const coinNames = {
     STEEM: 'Steem',
@@ -128,7 +129,7 @@ export default class BlocktradesDeposit extends React.Component {
         const {fields: {inputCoin, outputCoin, amount}, submitting, handleSubmit} = this.props
         const hasError = userTradeError != null
         const est = getEstimatedValue(this.props, flip)
-        const getAddressLabel = inputAddress ? 'Change Deposit Address' : 'Get Deposit Address'
+        const getAddressLabel = translate(inputAddress ? 'change_deposit_address' : 'get_deposit_address')
         const arrowIcon = <span>→</span>
         const flipIcon = <span>⇆</span>
         const estimateInputCoin = flip ? coinName(outputCoin.value) : coinName(inputCoin.value)
@@ -171,14 +172,17 @@ export default class BlocktradesDeposit extends React.Component {
             {onClick: () => inputCoin.onChange('BTS'), value: 'Bitshares', icon: 'bitshares', link: '#'},
         ];
         const selectInputCoin = <DropdownMenu className="move-left" items={coin_menu} selected={coinName(inputCoin.value)} el="span" />
-        const estimateButtonLabel = est.inputAmount != null ? 'Update Estimate' : 'Get Estimate'
+        const estimateButtonLabel = est.inputAmount != null ? translate('update_estimate') : translate('get_estimate')
         const sendTo = <span>
-            Send {amount.value} {coinName(inputCoin.value)} to&nbsp;
+            {translate("send_amount_of_coins_to", {
+                value: amount.value,
+                coinName: coinName(inputCoin.value)
+            }) + ' '}
             {
                 inputAddress && !hasError ? <span><code>{inputAddress}</code>
                 {inputAddressMemo && <span><br />
-                    Memo: <code>{inputAddressMemo}</code><br />
-                    You must include the memo above&hellip;
+                    {translate("memo")}: <code>{inputAddressMemo}</code><br />
+                    {translate("must_include_memo")}&hellip;
                 </span>} </span> :
                 <span>&hellip;</span>
             }
@@ -186,7 +190,7 @@ export default class BlocktradesDeposit extends React.Component {
         return <div className="BlocktradesDeposit">
             <div className="row">
                 <div className="column small-12">
-                    <h1>Buy {coinName(outputCoin.value)}</h1>
+                    <h1>{translate('buy') + ' ' + coinName(outputCoin.value)}</h1>
                     <span className="text-center">{selectOutputCoin}</span>
                     <span><Icon name="steem" /></span>
                     <div>{depositTip}</div>
@@ -198,11 +202,13 @@ export default class BlocktradesDeposit extends React.Component {
                     <div className="column small-9">
                         <h5>{est.inputAmount} {coinName(inputCoin.value, true)} {arrowIcon} {est.outputAmount} {coinName(outputCoin.value, true)}</h5>
                         <div>
-                            <label className="float-left" htmlFor="estimateAmount"> Estimate using {estimateInputCoin}</label>
+                            <label className="float-left" htmlFor="estimateAmount">
+                                {translate('estimate_using') + ' ' + estimateInputCoin}
+                            </label>
                             <span className="float-right" onClick={onFlip}>{flipIcon}</span>
                         </div>
                         <input id="estimateAmount" type="tel" {...cleanReduxInput(amount)} disabled={submitting}
-                            placeholder={`Amount to send ${estimateInputCoin}`}
+                            placeholder={translate('amount_to_send', {estimateInputCoin})}
                             autoComplete="off" ref="amountRef"
                         />
                         <div className="warning">{amount.touched && amount.error && amount.error}&nbsp;</div>
@@ -213,22 +219,22 @@ export default class BlocktradesDeposit extends React.Component {
                 </div>
                 <div className="row">
                     <div className="column small-12">
-                        Deposit using {selectInputCoin}
+                        {translate('deposit_using') + ' '} {selectInputCoin}
                     </div>
                 </div>
                 <div className="row">
                     <div className="column small-12">
                         {sendTo}
                         {paymentLink && !hasError && <a href={paymentLink}>&nbsp;<Icon name="extlink" /></a>}
-                        <div className="de-empasize">{depositLimit && `Suggested limit ${depositLimit}`}&nbsp;</div>
+                        <div className="de-empasize">{depositLimit && translate('suggested_limit', {depositLimit})}&nbsp;</div>
                     </div>
                 </div>
                 <br />
                 <div className="row">
                     <div className="column small-12">
                         {inputAddress && trRows && <div className="BlocktradesDeposit__history">
-                            <h4>Transaction History</h4>
-                            {trRows.length ? trRows : <div>Nothing yet&hellip;</div>}
+                            <h4>{translate("transaction_history")}</h4>
+                            {trRows.length ? trRows : <div>{translate("nothing_yet")}&hellip;</div>}
                         </div>}
                     </div>
                 </div>
@@ -239,7 +245,7 @@ export default class BlocktradesDeposit extends React.Component {
                         <button type="submit" className="button" disabled={submitting || !username}>
                             {estimateButtonLabel}</button>
 
-                        {onClose && <button className="button secondary hollow float-right" type="button" disabled={submitting} onClick={onClose}>Close</button>}
+                        {onClose && <button className="button secondary hollow float-right" type="button" disabled={submitting} onClick={onClose}>{translate("closed")}</button>}
                         <button onClick={fetchInputAddress} className="button secondary hollow float-right" type="button" disabled={submitting || !username}>
                             {getAddressLabel}</button>
                     </div>
@@ -247,7 +253,7 @@ export default class BlocktradesDeposit extends React.Component {
                 <div className="row">
                     <div className="column small-12">
                         <div className="secondary">
-                            Powered by <a href="//blocktrades.us" target="_blank">Blocktrades</a>
+                            {translate('powered_by') + ' '}<a href="//blocktrades.us" target="_blank">Blocktrades</a>
                         </div>
                     </div>
                 </div>
@@ -302,12 +308,12 @@ export default reduxForm(
             const error = tradeError.toJS()
             userTradeError = error.message
             console.error('Blocktrades API Error', error)
-            const prefix = 'Internal Server Error: '
+            const prefix = translate('internal_server_error') + ': '
             if (userTradeError.startsWith(prefix))
                 userTradeError = userTradeError.substr(prefix.length);
         }
         const validate = values => ({
-            amount: !/[0-9\.]/.test(values.amount) ? 'Enter Amount' : null
+            amount: !/[0-9\.]/.test(values.amount) ? translate('enter_amount') : null
         })
         // 'defaults' is needed because the redux form `initialValues` are not available in the fields at mounting time
         return {...ownProps, initialValues, defaults: initialValues, validate,
@@ -349,9 +355,9 @@ export default reduxForm(
 
 // ['transaction_seen' or 'transaction_fully_confirmed' or 'no_output_mapping' or 'permanent_output_failure_unauthorized_input_currency' or 'permanent_output_failure_unauthorized_output_currency' or 'permanent_output_failure_input_too_small' or 'output_wallet_unreachable' or 'insufficient_funds_in_hot_wallet' or 'output_transaction_initiated' or 'awaiting_order_fill' or 'unknown_error_sending_output' or 'output_transaction_broadcast' or 'output_transaction_fully_confirmed' or 'no_refund_address']
 const statusNames = {
-    transaction_seen: 'Processing',
-    output_transaction_broadcast: 'Broadcasted',
-    output_transaction_fully_confirmed: 'Confirmed',
+    transaction_seen: translate('processing'),
+    output_transaction_broadcast: translate('broadcasted'),
+    output_transaction_fully_confirmed: translate('confirmed'),
 }
 
 const coalesce = (...values) => values.find(v => v != null)

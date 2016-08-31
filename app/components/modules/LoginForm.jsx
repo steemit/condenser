@@ -9,6 +9,7 @@ import user from 'app/redux/User'
 import {validate_account_name} from 'app/utils/ChainValidation';
 import runTests from 'shared/ecc/test/BrowserTests';
 import {cleanReduxInput} from 'app/utils/ReduxForms';
+import { translate } from '../../Translator';
 
 class LoginForm extends Component {
 
@@ -71,18 +72,23 @@ class LoginForm extends Component {
     render() {
         if (!process.env.BROWSER) {
             return <div className="row">
-                <div className="column">
-                    <p>Loading..</p>
-                </div>
-            </div>;
+                        <div className="column">
+                            <p>{translate("loading")}..</p>
+                        </div>
+                    </div>;
         }
         if (this.state.cryptographyFailure) {
             return <div className="row">
                 <div className="column">
                     <div className="callout alert">
-                        <h4>Cryptography test failed</h4>
-                        <p>We will be unable to log you in with this browser.</p>
-                        <p>The latest versions of <a href="https://www.google.com/chrome/">Chrome</a> and <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a> are well tested and known to work with steemit.com.</p>
+                        <h4>{translate("cryptography_test_failed")}</h4>
+                        <p>{translate("unable_to_log_you_in")}.</p>
+                        <p>
+                            {translate('latest_browsers_do_work', {
+                                chromeLink: <a href="https://www.google.com/chrome/">Chrome</a>,
+                                mozillaLink: <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a>
+                            })}
+                        </p>
                     </div>
                 </div>
             </div>;
@@ -90,11 +96,12 @@ class LoginForm extends Component {
 
         if ($STM_Config.read_only_mode) {
             return <div className="row">
-                <div className="column">
-                    <div className="callout alert">
-                        <p>Due to server maintenance we are running in read only mode. We are sorry for the inconvenience.</p></div>
-                </div>
-            </div>;
+                        <div className="column">
+                            <div className="callout alert">
+                                <p>{translate("read_only_mode")}</p>
+                            </div>
+                        </div>
+                    </div>;
         }
 
         const {
@@ -115,24 +122,29 @@ class LoginForm extends Component {
         const submitLabel = loginBroadcastOperation ? 'Sign' : 'Login';
         let error = password.touched && password.error ? password.error : this.props.login_error
         if (error === 'owner_login_blocked') {
-            error = <span>This password is bound to your account's owner key and can not be used to login to this site.
-                However, you can use it to <a onClick={this.showChangePassword}>update your password</a> to obtain a more secure set of keys.</span>
+            error = <span>
+                        {translate("password_is_bound_to_account", {
+                                changePasswordLink: <a onClick={this.showChangePassword} >
+                                                        {translate('update_your_password')}
+                                                    </a>
+                            })} />
+                    </span>
         }
         let message = null;
         if (msg) {
             if (msg === 'accountcreated') {
                 message =<div className="callout primary">
-                        <p>You account has been successfully created!</p>
+                        <p>{translate("account_creation_succes")}</p>
                     </div>;
             }
             else if (msg === 'accountrecovered') {
                 message =<div className="callout primary">
-                    <p>You account has been successfully recovered!</p>
+                    <p>{translate("account_recovery_succes")}</p>
                 </div>;
             }
             else if (msg === 'passwordupdated') {
                 message = <div className="callout primary">
-                    <p>The password for `{suggestedAccountName}` was successfully updated.</p>
+                    <p>{translate("password_update_succes", { accountName: suggestedAccountName })}.</p>
                 </div>;
             }
         }
@@ -147,20 +159,22 @@ class LoginForm extends Component {
                 method="post"
             >
                 <div>
-                    <input type="text" placeholder="Enter your username" ref="username" {...cleanReduxInput(username)}
+                    <input type="text" placeholder={translate('enter_username')} ref="username" {...cleanReduxInput(username)}
                         onChange={usernameOnChange} autoComplete="on" disabled={submitting} defaultValue={suggestedAccountName} />
                     <div className="error">{username.touched && username.error && username.error}&nbsp;</div>
                 </div>
 
                 <div>
-                    <input type="password" ref="pw" placeholder="Password or WIF" {...cleanReduxInput(password)} autoComplete="on" disabled={submitting} />
+                    <input type="password" ref="pw" placeholder={translate('password_or_wif')} {...cleanReduxInput(password)} autoComplete="on" disabled={submitting} />
                     <div className="error">{error}&nbsp;</div>
                 </div>
                 {loginBroadcastOperation && <div>
-                    <div className="info">This operation requires your {authType} key (or use your master password).</div>
+                    <div className="info">
+                        {translate("requires_auth_key", { authType })} />.
+                    </div>
                 </div>}
                 <div>
-                    <label htmlFor="saveLogin">Keep me logged in <input id="saveLogin" type="checkbox" ref="pw" {...cleanReduxInput(saveLogin)} onChange={this.saveLoginToggle} disabled={submitting} /></label>
+                    <label htmlFor="saveLogin">{translate("keep_me_logged_in") + ' '}<input id="saveLogin" type="checkbox" ref="pw" {...cleanReduxInput(saveLogin)} onChange={this.saveLoginToggle} disabled={submitting} /></label>
                 </div>
                 <br />
                 <div>
@@ -168,7 +182,7 @@ class LoginForm extends Component {
                         {submitLabel}
                     </button>
                     {this.props.onCancel && <button type="button" disabled={submitting} className="button hollow" onClick={onCancel}>
-                        Cancel
+                        {translate("cancel")}
                     </button>}
                 </div>
             </form>
@@ -186,10 +200,10 @@ class LoginForm extends Component {
 }
 
 const validate = values => ({
-    username: ! values.username ? 'Required' : validate_account_name(values.username.split('/')[0]),
-    password: ! values.password ? 'Required' :
-        values.password.length < 16 ? 'Password must be 16 characters or more' :
-        PublicKey.fromString(values.password) ? 'You need a private password or key (not a public key)' :
+    username: ! values.username ? translate('required') : validate_account_name(values.username.split('/')[0]),
+    password: ! values.password ? translate('required') :
+        values.password.length < 16 ? translate('password_must_be_characters_or_more', {amount: 16}) :
+        PublicKey.fromString(values.password) ? translate('need_password_or_key') :
         null,
 })
 

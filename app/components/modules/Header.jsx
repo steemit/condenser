@@ -6,6 +6,7 @@ import Icon from 'app/components/elements/Icon.jsx';
 import resolveRoute from 'app/ResolveRoute';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+import { translate } from '../../Translator';
 
 class Header extends React.Component {
     static propTypes = {
@@ -50,13 +51,14 @@ class Header extends React.Component {
         let topic_link = topic ? <Link to={'/active/' + topic}>{topic}</Link> : null;
 
         const sort_orders = {
-                hot: 'hot',
-                trending: 'trending',
-                cashout: 'payout time',
-                created: 'new',
-                active: 'active',
-                responses: 'responses',
-                votes: 'popular' };
+                hot: translate('hot'),
+                trending: translate('trending'),
+                cashout: translate('payout_time'),
+                created: translate('new'),
+                active: translate('active'),
+                responses: translate('responses'),
+                votes: translate('popular')
+        };
         const sort_order_menu = Object.keys(sort_orders).filter(so => so !== sort_order).map(so => ({link: `/${so}/${topic}`, value: sort_orders[so]}));
 
         return (
@@ -70,7 +72,9 @@ class Header extends React.Component {
                                         <Icon name="steem" size="2x" />
                                     </Link>
                                 </li>
-                                <li className="Header__top-steemit show-for-medium"><Link to={logo_link}>steemit<span className="beta">beta</span></Link></li>
+                                <li className="Header__top-steemit show-for-medium">
+                                    <Link to={logo_link}>steemit<span className="beta">beta</span></Link>
+                                </li>
                                 {(topic_link || user_name || page_name) && <li className="delim show-for-medium">|</li>}
                                 {topic_link && <li className="Header__top-topic">{topic_link}</li>}
                                 {user_name && <li><Link to={`/@${user_name}`}>{user_name}</Link></li>}

@@ -7,6 +7,8 @@ import user from 'app/redux/User';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import {powerTip, powerTip2, powerTip3} from 'app/utils/Tips'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
+import { translate } from '../../Translator.js';
+
 
 /** Warning .. This is used for Power UP too. */
 class TransferForm extends Component {
@@ -154,7 +156,7 @@ class TransferForm extends Component {
 }
 
 const AssetBalance = ({onClick, balanceValue}) =>
-    <a onClick={onClick} style={{borderBottom: '#A09F9F 1px dotted', cursor: 'pointer'}}>Balance: {balanceValue}</a>
+    <a onClick={onClick} style={{borderBottom: '#A09F9F 1px dotted', cursor: 'pointer'}}>{translate('balance') + ': ' + balanceValue}</a>
 
 export default reduxForm(
     // config
@@ -184,12 +186,12 @@ export default reduxForm(
                 ! values.to ? 'Required' : null,
             amount:
                 ! values.amount ? 'Required' :
-                ! /^[0-9]*\.?[0-9]*/.test(values.amount) ? 'Amount is in the form 99999.999' :
-                insufficentFunds(values.asset, values.amount) ? 'Insufficent funds' :
+                ! /^[0-9]*\.?[0-9]*/.test(values.amount) ? translate('amount_is_in_form') :
+                insufficentFunds(values.asset, values.amount) ? translate('insufficent_funds') :
                 null,
             asset:
                 toVesting ? null :
-                ! values.asset ? 'Required' : null,
+                ! values.asset ? translate('required') : null,
         })
         return {
             ...ownProps,

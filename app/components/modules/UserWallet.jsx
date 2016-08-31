@@ -11,6 +11,7 @@ import Reveal from 'react-foundation-components/lib/global/reveal'
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {steemTip, powerTip, dollarTip, valueTip} from 'app/utils/Tips'
 import {numberWithCommas, vestingSteem} from 'app/utils/StateFunctions'
+import { translate } from '../../Translator';
 
 class UserWallet extends React.Component {
     constructor() {
@@ -120,7 +121,7 @@ class UserWallet extends React.Component {
         return (<div className="UserWallet">
             <div className="row">
                 <div className="column small-12">
-                    <h4>BALANCES</h4>
+                    <h4 className="uppercase">{translate('balances')}</h4>
                 </div>
             </div>
             <div className="UserWallet__balance row">
@@ -161,7 +162,7 @@ class UserWallet extends React.Component {
             </div>
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
-                    Estimated Account Value<br /><span className="secondary">{valueTip}</span>
+                    {translate('estimate_account_value')}<br /><span className="secondary">{valueTip}</span>
                 </div>
                 <div className="column small-12 medium-3">
                     {total_value}
@@ -169,7 +170,7 @@ class UserWallet extends React.Component {
             </div>
             <div className="UserWallet__balance row">
                 <div className="column small-12">
-                    {isWithdrawScheduled && <span>The next power down is scheduled to happen&nbsp; <TimeAgoWrapper date={account.next_vesting_withdrawal} />.</span> }
+                    {isWithdrawScheduled && <span>{translate('next_power_down_is_scheduled_to_happen_at')}&nbsp; <TimeAgoWrapper date={account.next_vesting_withdrawal} />.</span> }
                     {/*toggleDivestError && <div className="callout alert">{toggleDivestError}</div>*/}
                     <TransactionError opType="withdraw_vesting" />
                 </div>
@@ -177,7 +178,7 @@ class UserWallet extends React.Component {
             {disabledWarning && <div className="row">
                 <div className="column small-12">
                     <div className="callout warning">
-                        Transfers are temporary disabled.
+                        {translate('transfers_are_temporary_disabled')}.
                     </div>
                 </div>
             </div>}
@@ -190,7 +191,7 @@ class UserWallet extends React.Component {
             <div className="row">
                 <div className="column small-12">
                     {/** history */}
-                    <h4>HISTORY</h4>
+                    <h4 className="uppercase">{translate('history')}</h4>
                     <table>
                         <tbody>
                         {transfer_log}

@@ -108,6 +108,12 @@
   span {
     white-space: normal;
   }
+
+  .Reblog__button {
+    padding-right: 1rem;
+    margin-right: 1rem;
+    border-right: 1px solid $medium-gray;
+  }
 }
 
 .PostFull__responses {

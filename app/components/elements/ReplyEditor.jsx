@@ -14,6 +14,8 @@ import g from 'app/redux/GlobalReducer'
 import links from 'app/utils/Links'
 import {Map, Set} from 'immutable'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
+import { translate } from '../../Translator.js';
+
 
 const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
 const RTE_DEFAULT = false
@@ -80,7 +82,7 @@ class ReplyEditor extends React.Component {
             const value = e.target.value
             // TODO block links in title (the do not make good permlinks)
             const hasMarkdown = /(?:\*[\w\s]*\*|\#[\w\s]*\#|_[\w\s]*_|~[\w\s]*~|\]\s*\(|\]\s*\[)/.test(value)
-            this.setState({ titleWarn: hasMarkdown ? 'Markdown is not supported here' : '' })
+            this.setState({ titleWarn: hasMarkdown ? translate('markdown_not_supported') : ''})
             this.props.fields.title.onChange(e)
         }
         this.onCancel = e => {
@@ -313,7 +315,7 @@ class ReplyEditor extends React.Component {
                     >
                         <div className={vframe_section_shrink_class}>
                             {isStory && <span>
-                                <input type="text" {...cleanReduxInput(title)} onChange={onTitleChange} disabled={loading} placeholder="Title" autoComplete="off" ref="titleRef" tabIndex={1} />
+                                <input type="text" {...cleanReduxInput(title)} onChange={onTitleChange} disabled={loading} placeholder={translate('title')} autoComplete="off" ref="titleRef" tabIndex={1} />
                                 {titleError}
                             </span>}
                         </div>
@@ -321,7 +323,7 @@ class ReplyEditor extends React.Component {
                         <div className={'ReplyEditor__body ' + (rte ? `rte ${vframe_section_class}` : vframe_section_shrink_class)} onClick={this.focus}>
                             <div className="float-right secondary" style={{marginRight: '1rem'}}>
                                 {rte && <a href="#" onClick={this.toggleRte}>{isHtml ? 'Raw HTML' : 'Markdown'}</a>}
-                                {!rte && isStory && (isHtml || !body.value) && <a href="#" onClick={this.toggleRte}>Editor</a>}
+                                {!rte && isStory && (isHtml || !body.value) && <a href="#" onClick={this.toggleRte}>{translate("Editor")}</a>}
                             </div>
                             {process.env.BROWSER && rte ?
                                 <RichTextEditor ref="rte"
@@ -330,7 +332,7 @@ class ReplyEditor extends React.Component {
                                     onChange={this.onChange}
                                     onBlur={body.onBlur} tabIndex={2} />
                                 :
-                                <textarea {...cleanReduxInput(body)} disabled={loading} rows={isStory ? 10 : 3} placeholder={isStory ? 'Write your story...' : 'Reply'} autoComplete="off" ref="postRef" tabIndex={2} />
+                                <textarea {...cleanReduxInput(body)} disabled={loading} rows={isStory ? 10 : 3} placeholder={translate(isStory ? 'write_your_story' : 'reply')} autoComplete="off" ref="postRef" tabIndex={2} />
                             }
                         </div>
                         <div className={vframe_section_shrink_class}>
@@ -350,18 +352,18 @@ class ReplyEditor extends React.Component {
                             {!loading && <button type="submit" className="button" disabled={submitting || invalid} tabIndex={4}>{isEdit ? 'Update Post' : postLabel}</button>}
                             {loading && <span><br /><LoadingIndicator type="circle" /></span>}
                             &nbsp; {!loading && this.props.onCancel &&
-                                <button type="button" className="secondary hollow button no-border" tabIndex={5} onClick={(e) => {e.preventDefault(); onCancel()}}>Cancel</button>
+                                <button type="button" className="secondary hollow button no-border" tabIndex={5} onClick={(e) => {e.preventDefault(); onCancel()}}>{translate("cancel")}</button>
                             }
-                            {!loading && !this.props.onCancel && <button className="button hollow no-border" tabIndex={5} disabled={submitting} onClick={onCancel}>Clear</button>}
+                            {!loading && !this.props.onCancel && <button className="button hollow no-border uppercase" tabIndex={5} disabled={submitting} onClick={onCancel}>{translate("clear")}</button>}
                             {isStory && !isEdit && <div className="float-right">
-                                <small onClick={autoVoteOnChange}>Upvote post</small>
+                                <small onClick={autoVoteOnChange}>{translate("upvote_post")}</small>
                                 &nbsp;&nbsp;
                                 <input type="checkbox" {...cleanReduxInput(autoVote)} onChange={autoVoteOnChange} />
                             </div>}
                         </div>
                         {!loading && !rte && markdownViewerText && <div className={'Preview ' + vframe_section_shrink_class}>
-                            {!isHtml && <div className="float-right"><a target="_blank" href="https://guides.github.com/features/mastering-markdown/">Styling with Markdown is supported.</a></div>}
-                            <h6>Preview</h6>
+                            {!isHtml && <div className="float-right"><a target="_blank" href="https://guides.github.com/features/mastering-markdown/">{translate("markdown_is_supported")}.</a></div>}
+                            <h6>{translate("preview")}</h6>
                             <MarkdownViewer formId={formId} text={markdownViewerText} canEdit jsonMetadata={jsonMetadata} large={isStory} noImage={noImage} />
                         </div>}
                     </form>
@@ -380,28 +382,28 @@ export default formId => reduxForm(
     // mapStateToProps
     (state, ownProps) => {
         // const current = state.user.get('current')||Map()
-        const username = state.user.getIn(['current', 'username'])
-        const fields = ['body', 'autoVote']
-        const {type, parent_author, jsonMetadata} = ownProps
-        const isStory = /submit_story/.test(type) || (
-            /edit/.test(type) && parent_author === ''
-        )
-        const hasCategory = isStory // /submit_story/.test(type)
-        if (isStory) {
-            fields.push('title')
-        }
+        const   username = state.user.getIn(['current', 'username']),
+                fields = ['body', 'autoVote'],
+                {type, parent_author, jsonMetadata} = ownProps,
+                isStory =   /submit_story/.test(type) || (
+                                /edit/.test(type) && parent_author === ''
+                            ),
+                hasCategory = isStory // /submit_story/.test(type)
+
+        if (isStory) fields.push('title')
         if (hasCategory) fields.push('category')
+
         const isEdit = type === 'edit'
         const maxKb = isStory ? 100 : 16
         const validate = values => ({
             title: isStory && (
-                !values.title || values.title.trim() === '' ? 'Required' :
-                values.title.length > 255 ? 'Shorten title' :
+                !values.title || values.title.trim() === '' ? translate('required') :
+                values.title.length > 255 ? translate('shorten_title') :
                 null
             ),
             category: hasCategory && validateCategory(values.category, !isEdit),
-            body: !values.body ? 'Required' :
-                  values.body.length > maxKb * 1024 ? 'Exceeds maximum length ('+maxKb+'KB)' : null,
+            body: !values.body ? translate('required') :
+                  values.body.length > maxKb * 1024 ? translate('exceeds_maximum_length', { maxKb }) : null,
         })
         let {category, title, body} = ownProps
 
@@ -423,7 +425,7 @@ export default formId => reduxForm(
     },
 
     // mapDispatchToProps
-    dispatch => ({
+    (dispatch, ownProps) => ({
         setMetaLink: (/*id, link*/) => {
             // TODO
             // dispatch(g.actions.requestMeta({id, link}))
@@ -482,8 +484,8 @@ export default formId => reduxForm(
                 return
             }
             if(meta.tags.length > 5) {
-                const includingCategory = /edit/.test(type) ? ` (including the category '${rootCategory}')` : ''
-                errorCallback(`You have ${meta.tags.length} tags total${includingCategory}.  Please use only 5 in your post and category line.`)
+                const includingCategory = /edit/.test(type) ? translate('including_the_category', {rootCategory}) : ''
+                errorCallback(translate('use_limited_amount_of_tags', {tagsLength: meta.tags.length, includingCategory}))
                 return
             }
             const operation = {
@@ -503,4 +505,3 @@ export default formId => reduxForm(
         },
     })
 )(ReplyEditor)
-

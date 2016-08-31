@@ -1,5 +1,6 @@
 import React from "react";
 import OrderbookRow from "./OrderbookRow";
+import { translate } from '../../Translator.js';
 
 export default class Orderbook extends React.Component {
 
@@ -47,10 +48,10 @@ export default class Orderbook extends React.Component {
         return (
             <thead>
                 <tr>
-                    <th>{buy ? "Total SD ($)" : "Price"}</th>
-                    <th>{buy ? "SD ($)" : "Steem"}</th>
-                    <th>{buy ? "Steem" : "SD ($)"}</th>
-                    <th>{buy ? "Price" : "Total SD ($)"}</th>
+                    <th>{translate(buy ? "total_sd_dollars" : "price")}</th>
+                    <th>{buy ? translate("sd_dollars") : "Steem"}</th>
+                    <th>{buy ? "Steem" : translate("sd_dollars")}</th>
+                    <th>{translate(buy ? "price" : "total_sd_dollars")}</th>
                 </tr>
             </thead>
         );
@@ -107,12 +108,12 @@ export default class Orderbook extends React.Component {
                   <ul className="pager">
                     <li>
                         <div className={"button tiny hollow " + (buy ? "float-left" : "float-left") + (currentIndex === 0 ? " disabled" : "")} onClick={this._setBuySellPage.bind(this, false)} aria-label="Previous">
-                            <span aria-hidden="true">&larr; {buy ? "Higher" : "Lower"}</span>
+                            <span aria-hidden="true">&larr; {translate(buy ? "higher" : "lower")}</span>
                         </div>
                     </li>
                     <li>
                         <div className={"button tiny hollow " + (buy ? "float-right" : "float-right") + (currentIndex >= (orders.length - 10) ? " disabled" : "")} onClick={this._setBuySellPage.bind(this, true)} aria-label="Next">
-                            <span aria-hidden="true">{buy ? "Lower" : "Higher"} &rarr;</span>
+                            <span aria-hidden="true">{translate(buy ? "lower" : "higher")} &rarr;</span>
                         </div>
                     </li>
                   </ul>

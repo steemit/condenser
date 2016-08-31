@@ -15,6 +15,7 @@ import sanitize from 'sanitize-html'
 import links from 'app/utils/Links'
 import {Map, Set} from 'immutable'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
+import { translate } from '../../Translator';
 
 let RichTextEditor
 if(process.env.BROWSER) {
@@ -86,7 +87,7 @@ class MediumEditor extends React.Component {
             const value = e.target.value
             // TODO block links in title (the do not make good permlinks)
             const hasMarkdown = /(?:\*[\w\s]*\*|\#[\w\s]*\#|_[\w\s]*_|~[\w\s]*~|\]\s*\(|\]\s*\[)/.test(value)
-            this.setState({ titleWarn: hasMarkdown ? 'Markdown is not supported here' : '' })
+            this.setState({ titleWarn: hasMarkdown ? translate('markdown_not_supported') : '' })
             this.props.fields.title.onChange(e)
         }
         this.onCancel = e => {
@@ -257,11 +258,11 @@ class MediumEditor extends React.Component {
             author, permlink, parent_author, parent_permlink, type, state, originalPost, rte_serialize,
             jsonMetadata, metaLinkData, autoVote: autoVoteValue, successCallback: successCallbackWrapper, errorCallback
         }
-        const postLabel = username ? <Tooltip t={'Post as “' + username + '”'}>Post</Tooltip> : 'Post'
+        const postLabel = username ? <Tooltip t={translate('post_as') + ' “' + username + '”'}><span className="uppercase">{translate('post')}</span></Tooltip> : translate('post')
         const hasTitleError = title && title.touched && title.error
         let titleError = null
         // The Required title error (triggered onBlur) can shift the form making it hard to click on things..
-        if ((hasTitleError && (title.error !== 'Required' || category.value !== '')) || titleWarn) {
+        if ((hasTitleError && (title.error !== translate('required') || category.value !== '')) || titleWarn) {
             titleError = <div className={hasTitleError ? 'error' : 'warning'}>
                 {hasTitleError ? title.error : titleWarn}&nbsp;
             </div>
@@ -287,15 +288,15 @@ class MediumEditor extends React.Component {
                         <div className={vframe_section_shrink_class}>
                             {isStory && <span>
                                 <input type="text" {...cleanReduxInput(title)} onChange={onTitleChange} disabled={loading}
-                                    placeholder="Title" autoComplete="off" ref="titleRef" tabIndex={1} />
+                                    placeholder={translate('title')} autoComplete="off" ref="titleRef" tabIndex={1} />
                                 {titleError}
                             </span>}
                         </div>
 
                         <div className={'ReplyEditor__body ' + (rte ? `rte ${vframe_section_class}` : vframe_section_shrink_class)} onClick={this.focus}>
                             {emptyBody && <div className="float-right secondary" style={{marginRight: '1rem'}}>
-                                {rte && isStory && <a href="#" onClick={this.toggleRte}>Markdown</a>}
-                                {!rte && isStory && <a href="#" onClick={this.toggleRte}>Editor</a>}
+                                {rte && isStory && <a href="#" onClick={this.toggleRte}>{translate('markmarkdown')}</a>}
+                                {!rte && isStory && <a href="#" onClick={this.toggleRte}>{translate('editor')}</a>}
                             </div>}
                             {rte ?
                                 <RichTextEditor
@@ -305,11 +306,11 @@ class MediumEditor extends React.Component {
                                     options={EditorOptions}
                                     readOnly={loading} />
                                 :
-                                <textarea {...cleanReduxInput(body)} disabled={loading} rows={isStory ? 10 : 3} placeholder={isStory ? 'Write your story...' : 'Reply'} autoComplete="off" ref="postRef" tabIndex={2} />
+                                <textarea {...cleanReduxInput(body)} disabled={loading} rows={isStory ? 10 : 3} placeholder={translate(isStory ? 'write_your_story' + '...' : 'reply')} autoComplete="off" ref="postRef" tabIndex={2} />
                             }
                         </div>
                         <div className={vframe_section_shrink_class}>
-                            <div className="error">{body.touched && body.error && body.error !== 'Required' && body.error}</div>
+                            <div className="error">{body.touched && body.error && body.error !== translate('required') && body.error}</div>
                         </div>
 
                         <div className={vframe_section_shrink_class} style={{marginTop: '0.5rem'}}>
@@ -322,21 +323,21 @@ class MediumEditor extends React.Component {
                             {postError && <div className="error">{postError}</div>}
                         </div>
                         <div className={vframe_section_shrink_class}>
-                            {!loading && <button type="submit" className="button" disabled={submitting || invalid} tabIndex={4}>{isEdit ? 'Update Post' : postLabel}</button>}
+                            {!loading && <button type="submit" className="button uppercase" disabled={submitting || invalid} tabIndex={4}>{isEdit ? translate('update_post') : postLabel}</button>}
                             {loading && <span><br /><LoadingIndicator type="circle" /></span>}
                             &nbsp; {!loading && this.props.onCancel &&
-                                <button type="button" className="secondary hollow button no-border" tabIndex={5} onClick={(e) => {e.preventDefault(); onCancel()}}>Cancel</button>
+                                <button type="button" className="secondary hollow button no-border" tabIndex={5} onClick={(e) => {e.preventDefault(); onCancel()}}>{translate('cancel')}</button>
                             }
-                            {!loading && !this.props.onCancel && <button className="button hollow no-border" tabIndex={5} disabled={submitting} onClick={onCancel}>Clear</button>}
+                            {!loading && !this.props.onCancel && <button className="button hollow no-border" tabIndex={5} disabled={submitting} onClick={onCancel}>{translate('cancel')}</button>}
                             {isStory && !isEdit && <div className="float-right">
-                                <small onClick={autoVoteOnChange}>Upvote post</small>
+                                <small onClick={autoVoteOnChange}>{translate('upvote_post')}</small>
                                 &nbsp;&nbsp;
                                 <input type="checkbox" {...cleanReduxInput(autoVote)} onChange={autoVoteOnChange} />
                             </div>}
                         </div>
                         {!loading && !rte && <div className={'Preview ' + vframe_section_shrink_class}>
-                            {!rte && <div className="float-right"><a target="_blank" href="https://guides.github.com/features/mastering-markdown/">Styling with Markdown is supported.</a></div>}
-                            <h6>Preview</h6>
+                            {!rte && <div className="float-right"><a target="_blank" href="https://guides.github.com/features/mastering-markdown/">{translate('markdown_is_supported')}.</a></div>}
+                            <h6>{translate('preview')}</h6>
                             <MarkdownViewer formId={formId} text={body.value} canEdit jsonMetadata={jsonMetadata} large={isStory} />
                         </div>}
                     </form>
@@ -383,13 +384,13 @@ export default formId => reduxForm(
         const maxKb = isStory ? 100 : 16
         const validate = values => ({
             title: isStory && (
-                !values.title || values.title.trim() === '' ? 'Required' :
-                values.title.length > 255 ? 'Shorten title' :
+                !values.title || values.title.trim() === '' ? translate('required') :
+                values.title.length > 255 ? translate('shorten_title') :
                 null
             ),
             category: hasCategory && validateCategory(values.category, !isEdit),
-            body: isBodyEmpty(state, values.body) ? 'Required' :
-              values.body.length > maxKb * 1024 ? 'Exceeds maximum length ('+maxKb+'KB)' : null,
+            body: isBodyEmpty(state, values.body) ? translate('required') :
+              values.body.length > maxKb * 1024 ? translate('exceeds_maximum_length', {maxKb}) : null,
         })
         let {category, title, body} = ownProps
 
@@ -495,4 +496,3 @@ export default formId => reduxForm(
         },
     })
 )(MediumEditor)
-

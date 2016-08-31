@@ -11,8 +11,9 @@ import pluralize from 'pluralize';
 import {formatDecimal, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
+import { translate } from '../../Translator';
 
-const ABOUT_FLAG = 'Flagging a post can remove rewards and make this material less visible.  You can still unflag or upvote later if you change your mind.'
+const ABOUT_FLAG = translate('flagging_post_can_remove_rewards_you_can_still_unflag_late')
 const MAX_VOTES_DISPLAY = 20;
 
 class Voting extends React.Component {
@@ -85,7 +86,7 @@ class Voting extends React.Component {
             const down_votes = active_votes.filter( v => v.get('percent') < 0 /*=== -1000*/).size
             return <span className={classDown}>
                 {down_votes > 0 && <span className="Voting__button-downvotes">{down_votes}</span>}
-                {votingDownActive ? down : <a href="#" onClick={this.voteDown} title="Downvote">{down}</a>}
+                {votingDownActive ? down : <a href="#" onClick={this.voteDown} title={translate('downvote')}>{down}</a>}
             </span>;
         }
 
@@ -99,13 +100,13 @@ class Voting extends React.Component {
         const classUp = 'Voting__button Voting__button-up' + (myVote > 0 ? ' Voting__button--upvoted' : '') + (votingUpActive ? ' votingUp' : '');
 
         const payoutItems = [
-            {value: 'Pending Payout $' + formatDecimal(pending_payout_value).join('')}
+            {value: translate('pending_payout') + ' $' + formatDecimal(pending_payout_value).join('')}
         ];
         if (cashout_time && cashout_time.indexOf('1969') !== 0 && cashout_time.indexOf('1970') !== 0) {
             payoutItems.push({value: <TimeAgoWrapper date={cashout_time} />});
         }
         if(total_payout_value > 0) {
-            payoutItems.push({value: 'Past Payouts $' + formatDecimal(total_payout_value).join('')});
+            payoutItems.push({value: translate('past_payouts') + ' $' + formatDecimal(total_payout_value).join('')});
         }
         // payoutItems.push({value: 'Author $ ' + formatDecimal(payout * 0.75).join('')});
         // payoutItems.push({value: 'Curators $ ' + formatDecimal(payout * 0.25).join('')});
@@ -127,7 +128,7 @@ class Voting extends React.Component {
             count += 1
             if (showList && voters.length < MAX_VOTES_DISPLAY) voters.push({value: (cnt > 0 ? '+ ' : '- ') + avotes[v].voter, link: '/@' + avotes[v].voter})
         }
-        if (count > MAX_VOTES_DISPLAY) voters.push({value: <span>&hellip; and {(count - MAX_VOTES_DISPLAY)} more</span>});
+        if (count > MAX_VOTES_DISPLAY) voters.push({value: <span>&hellip; {' ' + translate('and') + ' '} {(count - MAX_VOTES_DISPLAY)} {' ' + translate('more')}</span>});
 
         let voters_list = null;
         if (showList) {
@@ -137,7 +138,7 @@ class Voting extends React.Component {
             <span className="Voting">
                 <span className="Voting__inner">
                     <span className={classUp}>
-                        {votingUpActive ? up : <a href="#" onClick={this.voteUp} title={myVote > 0 ? 'Remove Vote' : 'Upvote'}>{up}</a>}
+                        {votingUpActive ? up : <a href="#" onClick={this.voteUp} title={translate(myVote > 0 ? 'remove_vote' : 'upvote')}>{up}</a>}
                     </span>
                     {payoutEl}
                     {/*<span className={classDown}>
@@ -188,21 +189,21 @@ export default connect(
                         <h5>
                             <Follow follower={username} following={author} showFollow={false}
                                 className="float-right" what="blog">&nbsp;&nbsp;
-                                Stop seeing content from this user
+                                {translate('stop_seeing_content_from_this_user')}
                             </Follow>
                         </h5>
                     </span>
                 }
-                const t = ' will reset your curation rewards for this post.'
-                if(weight === 0) return 'Removing your vote' + t
-                if(weight > 0) return 'Changing to an Up-Vote' + t
-                if(weight < 0) return 'Changing to a Down-Vote' + t
+                const t = ' ' + translate('we_will_reset_curation_rewards_for_this_post') + '.'
+                if(weight === 0) return translate('removing_your_vote') + t
+                if(weight > 0) return translate('changing_to_an_upvote') + t
+                if(weight < 0) return translate('changing_to_a_downvote') + t
                 return null
             }
             dispatch(transaction.actions.broadcastOperation({
                 type: 'vote',
                 operation: {voter: username, author, permlink, weight,
-                    __config: {title: weight < 0 ? 'Confirm Flag' : null},
+                    __config: {title: weight < 0 ? translate('confirm_flag') : null},
                 },
                 confirm,
             }))

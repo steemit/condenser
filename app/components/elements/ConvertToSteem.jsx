@@ -7,6 +7,7 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import TransactionError from 'app/components/elements/TransactionError'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
+import { translate } from '../../Translator';
 
 class ConvertToSteem extends React.Component {
     constructor() {
@@ -39,16 +40,16 @@ class ConvertToSteem extends React.Component {
             <form onSubmit={handleSubmit(data => {dispatchSubmit(data)})}>
                 <div className="row">
                     <div className="small-12 columns">
-                        <h1>Convert to Steem</h1>
-                        <p>This action will take place one week from now and can not be canceled. These Steem Dollars will immediatly become unavailable.</p>
+                        <h1>{translate('convert_to_steem')}</h1>
+                        <p>{translate('steem_dollars_will_be_unavailable')}.</p>
                     </div>
                 </div>
                 <div className="row">
                     <div className="small-12 columns">
-                        <label>Amount</label>
+                        <label>{translate('amount')}</label>
                         <input type="amount" ref="amt" {...cleanReduxInput(amount)} autoComplete="off" disabled={loading} />
                         &nbsp;
-                        STEEM DOLLARS
+                        {translate('steem_dollars')}
                         <br />
                         <div className="error">{amount.touched && amount.error && amount.error}&nbsp;</div>
                     </div>
@@ -60,10 +61,10 @@ class ConvertToSteem extends React.Component {
                         <br />
                         <div>
                             <button type="submit" className="button" disabled={loading}>
-                                Convert
+                                {translate('convert')}
                             </button>
                             <button type="button" disabled={submitting} className="button hollow float-right" onClick={onClose}>
-                                Cancel
+                                {translate('cancel')}
                             </button>
                         </div>
                     </div>
@@ -83,8 +84,8 @@ export default reduxForm(
         const max = sbd_balance.split(' ')[0]
         const validate = values => ({
             amount: ! values.amount ? 'Required' :
-                isNaN(values.amount) || parseFloat(values.amount) <= 0 ? 'Invalid amount' :
-                parseFloat(values.amount) > parseFloat(max) ? 'Insufficient balance' :
+                isNaN(values.amount) || parseFloat(values.amount) <= 0 ? translate('invalid_amount') :
+                parseFloat(values.amount) > parseFloat(max) ? translate('insufficient_balance') :
                 null,
         })
         return {
@@ -98,7 +99,7 @@ export default reduxForm(
         convert: (owner, amt, success, error) => {
             const amount = String(parseFloat(amt).toFixed(3)) + ' SBD'
             const requestid = Math.floor(Date.now() / 1000)
-            const conf = `In one week, convert ${amount.split(' ')[0]} STEEM DOLLARS into STEEM`
+            const conf = translate('in_week_convert_steem_dollars_to_steem', { amount: amount.split(' ')[0] })
             dispatch(transaction.actions.broadcastOperation({
                 type: 'convert',
                 operation: {owner, requestid, amount},
@@ -107,7 +108,7 @@ export default reduxForm(
                     success()
                     dispatch({type: 'ADD_NOTIFICATION', payload:
                         {key: "convert_sd_to_steem_" + Date.now(),
-                         message: `Order placed: ${conf}`,
+                         message: translate('order_placed') + ': ' + conf,
                          dismissAfter: 5000}
                     })
                 },

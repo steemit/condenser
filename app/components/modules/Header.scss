@@ -5,7 +5,6 @@
   width: 100%;
   z-index: 100;
   background-color: $white;
-  border-bottom: 1px solid $light-gray;
   h3 {
     padding-left: 1rem;
     margin-bottom: 0;
@@ -35,6 +34,7 @@
 
 .Header__top {
   background-color: $white;
+  border-bottom: 1px solid $light-gray;
   ul > li.delim {
     color: $medium-gray;
   }
@@ -84,7 +84,7 @@ ul > li > .button {
   position: relative;
   padding: 0;
   background-color: $white;
-  border-top: 1px solid $light-gray;
+  border-bottom: 1px solid $light-gray;
   transition: all .3s;
   z-index: -1;
   // border-bottom: 1px solid $light-gray;
@@ -104,7 +104,7 @@ ul > li > .button {
 
 .Header__sub-nav.hidden {
   // display: none;
-  margin-top: -40px;
+  margin-top: -42px;
 }
 
 

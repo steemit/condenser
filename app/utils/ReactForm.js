@@ -106,6 +106,13 @@ export default function reactForm({name, instance, fields, initialValues, valida
                 () => {isValid(name, instance, fields, validation)}
             )
         }
+
+        fs.props.onBlur = () => {
+            // Some errors are better shown only after blur === true
+            const v = {...(instance.state[fieldName] || {})}
+            v.blur = true
+            instance.setState({[fieldName]: v})
+        }
     }
 }
 

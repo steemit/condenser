@@ -168,7 +168,7 @@ class LoginForm extends Component {
                 <div>
                     <input type="text" required placeholder="Enter your username" ref="username"
                         {...username.props} onChange={usernameOnChange} autoComplete="on" disabled={submitting} />
-                    <div className="error">{username.touched && username.error && username.error}&nbsp;</div>
+                    <div className="error">{username.touched && username.blur && username.error}&nbsp;</div>
                 </div>
 
                 <div>

@@ -132,7 +132,7 @@ class TransferForm extends Component {
                     <div className="column small-10">
                         <input type="text" placeholder="Send to account" {...to.props}
                             ref="to" autoComplete="off" disabled={loading} />
-                        {to.touched && to.error ?
+                        {to.touched && to.blur && to.error ?
                             <div className="error">{to.error}&nbsp;</div> :
                             <p>{toVesting && powerTip3}</p>
                         }

@@ -4,6 +4,7 @@ import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Icon from 'app/components/elements/Icon';
 import { connect } from 'react-redux';
 import user from 'app/redux/User';
+import Reblog from 'app/components/elements/Reblog';
 import Voting from 'app/components/elements/Voting';
 import Tooltip from 'app/components/elements/Tooltip';
 import {immutableAccessor} from 'app/utils/Accessors';
@@ -119,6 +120,7 @@ export default class PostSummary extends React.Component {
                         <Voting post={post} showList={false} />
                         <span className="PostSummary__time_author_category show-for-medium">
                             <TimeAuthorCategory post={p} links authorRepLog10={authorRepLog10} />
+                            <Reblog author={p.author} permlink={p.permlink} />
                         </span>
                         <VotesAndComments post={post} commentsLink={comments_link} />
                     </div>

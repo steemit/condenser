@@ -97,6 +97,11 @@ class TransferForm extends Component {
         this.state.amount.props.onChange(this.balanceValue().split(' ')[0])
     }
 
+    onChangeTo = (e) => {
+        const {value} = e.target
+        this.state.to.props.onChange(value.toLowerCase().trim())
+    }
+
     render() {
         const {to, amount, asset, memo} = this.state
         const {loading, trxError, advanced} = this.state
@@ -131,7 +136,7 @@ class TransferForm extends Component {
                     <div className="column small-2">To</div>
                     <div className="column small-10">
                         <input type="text" placeholder="Send to account" {...to.props}
-                            ref="to" autoComplete="off" disabled={loading} />
+                            onChange={this.onChangeTo} ref="to" autoComplete="off" disabled={loading} />
                         {to.touched && to.blur && to.error ?
                             <div className="error">{to.error}&nbsp;</div> :
                             <p>{toVesting && powerTip3}</p>

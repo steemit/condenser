@@ -224,7 +224,8 @@ export default connect(
     },
     // mapDispatchToProps
     dispatch => ({
-        convertToSteem: () => {
+        convertToSteem: (e) => {
+            e.preventDefault()
             const name = 'convertToSteem'
             dispatch(g.actions.showDialog({name}))
         },

@@ -1,11 +1,11 @@
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
-import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+// import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import transaction from 'app/redux/Transaction';
 import Icon from 'app/components/elements/Icon';
 
-const {string, object, bool, func, any} = PropTypes
+const {string, func} = PropTypes
 
 export default class Reblog extends React.Component {
     static propTypes = {
@@ -14,11 +14,12 @@ export default class Reblog extends React.Component {
         permlink: string,
         reblog: func,
     }
-    constructor(props) {
+    constructor() {
         super()
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Reblog')
         this.state = {active: false} // may need a "loading" flag
-        this.reblog = () => {
+        this.reblog = e => {
+            e.preventDefault()
             const {account, author, permlink, reblog} = this.props
             reblog(account, author, permlink)
             this.setState({active: true})
@@ -26,7 +27,7 @@ export default class Reblog extends React.Component {
     }
 
     render() {
-        let state = this.state.active ? 'active' : 'inactive'
+        const state = this.state.active ? 'active' : 'inactive'
         return <span className={'Reblog__button Reblog__button-'+state}>
             <a href="#" onClick={this.reblog}><Icon name="reblog" /></a>
         </span>

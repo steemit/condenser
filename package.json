@@ -151,5 +151,8 @@
     "sinon": "^1.17.3",
     "sinon-chai": "^2.8.0",
     "supertest": "^1.2.0"
+  },
+  "engines": {
+    "node": ">=6.4.0"
   }
 }

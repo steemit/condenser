@@ -40,7 +40,7 @@ function TimeAuthorCategory({post, links, authorRepLog10, gray}) {
     );
 }
 
-export default class PostSummary extends React.Component {
+class PostSummary extends React.Component {
     static propTypes = {
         post: React.PropTypes.string.isRequired,
         pending_payout: React.PropTypes.string.isRequired,

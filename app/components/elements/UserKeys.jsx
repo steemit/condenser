@@ -7,7 +7,7 @@ import QRCode from 'react-qr'
 
 const keyTypes = ['Posting', 'Active', 'Owner', 'Memo']
 
-export default class UserKeys extends Component {
+class UserKeys extends Component {
     static propTypes = {
         // HTML
         account: PropTypes.object.isRequired,

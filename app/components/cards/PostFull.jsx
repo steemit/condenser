@@ -35,7 +35,7 @@ function TimeAuthorCategory({content, authorRepLog10, showTags}) {
      );
 }
 
-export default class PostFull extends React.Component {
+class PostFull extends React.Component {
     static propTypes = {
         // html props
         /* Show extra options (component is being viewed alone) */

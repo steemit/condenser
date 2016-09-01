@@ -17,18 +17,22 @@ export default class Reblog extends React.Component {
     constructor() {
         super()
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Reblog')
-        this.state = {active: false} // may need a "loading" flag
+        this.state = {active: false, loading: false}
         this.reblog = e => {
             e.preventDefault()
-            const {account, author, permlink, reblog} = this.props
-            reblog(account, author, permlink)
-            this.setState({active: true})
+            this.setState({loading: true})
+            const {reblog, account, author, permlink} = this.props
+            reblog(account, author, permlink,
+                () => {this.setState({active: true, loading: false})},
+                () => {this.setState({active: false, loading: false})},
+            )
         }
     }
 
     render() {
         const state = this.state.active ? 'active' : 'inactive'
-        return <span className={'Reblog__button Reblog__button-'+state}>
+        const loading = this.state.loading ? ' loading' : ''
+        return <span className={'Reblog__button Reblog__button-'+state + loading}>
             <a href="#" onClick={this.reblog}><Icon name="reblog" /></a>
         </span>
     }
@@ -43,7 +47,7 @@ module.exports = connect(
         return {...ownProps, account}
     },
     dispatch => ({
-        reblog: (account, author, permlink) => {
+        reblog: (account, author, permlink, successCallback, errorCallback) => {
             const json = ['reblog', {account, author, permlink}]
             dispatch(transaction.actions.broadcastOperation({
                 type: 'custom_json',
@@ -52,6 +56,7 @@ module.exports = connect(
                     required_posting_auths: [account],
                     json: JSON.stringify(json),
                 },
+                successCallback, errorCallback,
             }))
         },
     })

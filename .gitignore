@@ -1,6 +1,5 @@
 .DS_Store
 .idea
-server/webpack-stats.json
 coverage
 node_modules
 *.log

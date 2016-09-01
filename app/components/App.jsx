@@ -76,7 +76,7 @@ class App extends React.Component {
 
     render() {
         const {location, params, children, loading, flash, showSignUp, new_visitor,
-            depositSteem} = this.props;
+            depositSteem, signup_bonus} = this.props;
         const lp = false; //location.pathname === '/';
         const params_keys = Object.keys(params);
         const ip = location.pathname === '/' || (params_keys.length === 2 && params_keys[0] === 'order' && params_keys[1] === 'category');
@@ -143,7 +143,7 @@ class App extends React.Component {
                             <br />
                             <br />
                             <div className="tag3">
-                                <b>{translate("get_sp_when_sign_up")}</b>
+                                <b>{translate("get_sp_when_sign_up", {signupBonus: signup_bonus})}</b>
                             </div>
                         </div>
                     </div>
@@ -174,6 +174,11 @@ class App extends React.Component {
                     <li>
                         <a onClick={() => depositSteem()}>
                             {translate("buy_steem")}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://steemtools.com/" onClick={this.navigate}>
+                            {translate('steem_app_center')}
                         </a>
                     </li>
                     <li>
@@ -233,6 +238,7 @@ App.propTypes = {
     error: React.PropTypes.string,
     children: AppPropTypes.Children,
     location: React.PropTypes.object,
+    signup_bonus: React.PropTypes.string,
     loading: React.PropTypes.bool,
     loginUser: React.PropTypes.func.isRequired,
     depositSteem: React.PropTypes.func.isRequired,
@@ -243,6 +249,7 @@ export default connect(
         return {
             error: state.app.get('error'),
             flash: state.offchain.get('flash'),
+            signup_bonus: state.offchain.get('signup_bonus'),
             loading: state.app.get('loading'),
             new_visitor: !state.user.get('current') &&
                 !state.offchain.get('user') &&

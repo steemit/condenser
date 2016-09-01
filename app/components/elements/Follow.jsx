@@ -13,8 +13,8 @@ const followTypeSet = Set(followTypes)
 
 export default class Follow extends React.Component {
     static propTypes = {
-        follower: string, // default to current user
         following: string,
+        follower: string, // OPTIONAL default to current user
         what: string, // see followTypes
         showFollow: bool,
         showMute: bool,

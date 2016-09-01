@@ -36,8 +36,8 @@ export default class SignUp extends React.Component {
                 <div className="column">
                     <h3>{translate("sign_up")}</h3>
                     <p>
-                        {translate("we_require_social_account")} <br />
-                    {translate("personal_info_will_be_private")}
+                        {translate("we_require_social_account", {signup_bonus: this.props.signup_bonus})} <br />
+                        {translate("personal_info_will_be_private")}
                         {' '}
                         <a href="/privacy.html" target="_blank">
                             {translate("personal_info_will_be_private_link")}
@@ -97,6 +97,7 @@ export default class SignUp extends React.Component {
 export default connect(
     state => {
         return {
+            signup_bonus: state.offchain.get('signup_bonus'),
             serverBusy: state.offchain.get('serverBusy')
         };
     }

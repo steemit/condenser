@@ -7,12 +7,10 @@ import {validateCategory} from 'app/components/cards/CategorySelector'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import Tooltip from 'app/components/elements/Tooltip'
-import sanitizeConfig from 'app/utils/SanitizeConfig'
+import sanitizeConfig, {allowedTags} from 'app/utils/SanitizeConfig'
 import sanitize from 'sanitize-html'
 import HtmlReady from 'shared/HtmlReady'
 import g from 'app/redux/GlobalReducer'
-import sanitize from 'sanitize-html'
-import links from 'app/utils/Links'
 import {Map, Set} from 'immutable'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import { translate } from '../../Translator';
@@ -240,7 +238,7 @@ class MediumEditor extends React.Component {
         const {onCancel, autoVoteOnChange} = this
         const {title, category, body, autoVote} = this.props.fields
         const {
-            reply, username, hasCategory, isStory, formId,
+            reply, username, hasCategory, isStory, formId, noImage,
             author, permlink, parent_author, parent_permlink, type, jsonMetadata, metaLinkData,
             state, successCallback, handleSubmit, submitting, invalid, //lastComment,
         } = this.props
@@ -338,7 +336,7 @@ class MediumEditor extends React.Component {
                         {!loading && !rte && <div className={'Preview ' + vframe_section_shrink_class}>
                             {!rte && <div className="float-right"><a target="_blank" href="https://guides.github.com/features/mastering-markdown/">{translate('markdown_is_supported')}.</a></div>}
                             <h6>{translate('preview')}</h6>
-                            <MarkdownViewer formId={formId} text={body.value} canEdit jsonMetadata={jsonMetadata} large={isStory} />
+                            <MarkdownViewer formId={formId} text={body.value} canEdit jsonMetadata={jsonMetadata} large={isStory} noImage={noImage} />
                         </div>}
                     </form>
                 </div>
@@ -451,7 +449,14 @@ export default formId => reduxForm(
             if(rte_serialize) body = rte_serialize()
 
             const rtags = HtmlReady(body, {mutate: false})
-            let allCategories = Set([...formCategories.toJS()])
+            allowedTags.forEach(tag => {rtags.htmltags.delete(tag)})
+            rtags.htmltags.delete('html')
+            if(rtags.htmltags.size) {
+                errorCallback('Please remove the following tags from your post: ' + Array(...rtags.htmltags).join(', '))
+                return
+            }
+
+            let allCategories = Set([...formCategories.toJS(), ...rtags.hashtags])
             if(rootTag) allCategories = allCategories.add(rootTag)
 
             for(const image of rtags.images) {
@@ -473,15 +478,22 @@ export default formId => reduxForm(
             // cp('description')
             // if(Object.keys(json_metadata.steem).length === 0) json_metadata = {}// keep json_metadata minimal
             const sanitizeErrors = []
-            const cleanText = sanitize(body, sanitizeConfig({sanitizeErrors}))
+            sanitize(body, sanitizeConfig({sanitizeErrors}))
             if(sanitizeErrors.length) {
                 errorCallback(sanitizeErrors.join('.  '))
                 return
             }
+
+            if(meta.tags.length > 5) {
+                const includingCategory = /edit/.test(type) ? ` (including the category '${rootCategory}')` : ''
+                errorCallback(`You have ${meta.tags.length} tags total${includingCategory}.  Please use only 5 in your post and category line.`)
+                return
+            }
+
             if(rte_serialize) body = `<html>${body}</html>`
             const operation = {
                 ...linkProps,
-                category: rootCategory, title, body: cleanText,
+                category: rootCategory, title, body,
                 json_metadata: meta,
                 __config: {originalPost, autoVote}
             }

@@ -9,7 +9,9 @@ const reddit = new Purest({provider: 'reddit'});
 
 function logErrorAndRedirect(ctx, where, error) {
     const s = ctx.session;
-    const msg = error.error && error.error.message ? error.error.message : JSON.stringify(error); // error.message || error.msg || error;
+    let msg = 'unknown';
+    if (error.toString()) msg = error.toString()
+    else msg = error.error && error.error.message ? error.error.message : (error.msg || JSON.stringify(error));
     console.error(`oauth error [${where}|${s.user}|${s.uid}]|${ctx.req.headers['user-agent']}: ${msg}`);
     if (process.env.NODE_ENV = 'development') console.log(error.stack);
     ctx.flash = {alert: `${where} error: ${msg}`};
@@ -40,11 +42,13 @@ function retrieveFacebookUserData(access_token) {
 
 function* handleFacebookCallback() {
     console.log('-- /handle_facebook_callback -->', this.session.uid, this.query);
+    let verified_email = false;
     try {
         if (this.query['error[error][message]']) {
             return logErrorAndRedirect(this, 'facebook:1', this.query['error[error][message]']);
         }
         const u = yield retrieveFacebookUserData(this.query.access_token);
+        verified_email = !!(u.verified && u.email);
         const attrs = {
             uid: this.session.uid,
             name: u.name,
@@ -70,6 +74,11 @@ function* handleFacebookCallback() {
             email: u.email,
             verified: u.verified,
             provider_user_id: u.id
+        };
+        const i_attrs_email = {
+            provider: 'email',
+            email: u.email,
+            verified: verified_email
         };
 
         let user = yield findUser({email: u.email, provider_user_id: u.id});
@@ -113,23 +122,41 @@ function* handleFacebookCallback() {
         }
 
         if (user) {
-            attrs.id = user.id;
+            i_attrs_email.user_id = attrs.id = user.id;
             yield models.User.update(attrs, {where: {id: user.id}});
-            yield models.Identity.update(i_attrs, {where: {user_id: user.id}});
+            yield models.Identity.update(i_attrs, {where: {user_id: user.id, provider: 'facebook'}});
+            if (verified_email) {
+                const eid = yield models.Identity.findOne(
+                    {attributes: ['id', 'verified'], where: {user_id: user.id, provider: 'email'}, order: 'id DESC'}
+                );
+                if (eid) {
+                    if (!eid.verified) yield eid.update({email: u.email, verified: true});
+                } else {
+                    yield models.Identity.create(i_attrs_email);
+                }
+            }
             console.log('-- fb updated user -->', this.session.uid, user.id, u.name, u.email);
         } else {
             user = yield models.User.create(attrs);
+            i_attrs_email.user_id = i_attrs.user_id = user.id;
             console.log('-- fb created user -->', user.id, u.name, u.email);
-            i_attrs.user_id = user.id;
             const identity = yield models.Identity.create(i_attrs);
             console.log('-- fb created identity -->', this.session.uid, identity.id);
+            if (i_attrs_email.email) {
+                const email_identity = yield models.Identity.create(i_attrs_email);
+                console.log('-- fb created email identity -->', this.session.uid, email_identity.id);
+            }
         }
         this.session.user = user.id;
     } catch (error) {
         return logErrorAndRedirect(this, 'facebook:2', error);
     }
     this.flash = {success: 'Successfully authenticated with Facebook'};
-    this.redirect('/create_account');
+    if (verified_email) {
+        this.redirect('/create_account');
+    } else {
+        this.redirect('/enter_email');
+    }
     return null;
 }
 
@@ -232,7 +259,7 @@ function* handleRedditCallback() {
     } catch (error) {
         return logErrorAndRedirect(this, 'reddit', error);
     }
-    this.redirect('/create_account');
+    this.redirect('/enter_email');
     return null;
 }
 

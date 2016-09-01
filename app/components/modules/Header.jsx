@@ -18,6 +18,14 @@ class Header extends React.Component {
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Header');
     }
 
+    componentWillReceiveProps(nextPrps) {
+        if (nextPrps.location.pathname !== this.props.location.pathname) {
+            const route = resolveRoute(nextPrps.location.pathname);
+            const sort_order = route && route.page === 'PostsIndex' && route.params && route.params.length > 0 ? route.params[0] : null;
+            if (sort_order) window.last_sort_order = this.last_sort_order = sort_order;
+        }
+    }
+
     render() {
         const route = resolveRoute(this.props.location.pathname);
         let page_title = route.page;
@@ -39,24 +47,24 @@ class Header extends React.Component {
             sort_order = '';
             topic = route.params[0];
         } else if (route.page === 'UserProfile') {
-            page_title = ''; //route.params[0];
             user_name = route.params[0].slice(1);
+            page_title = user_name;
         } else {
             page_name = ''; //page_title = route.page.replace( /([a-z])([A-Z])/g, '$1 $2' ).toLowerCase();
         }
 
         if (process.env.BROWSER) document.title = page_title + ' — Steemit';
 
-        const logo_link = '/';
-        let topic_link = topic ? <Link to={'/active/' + topic}>{topic}</Link> : null;
+        const logo_link = route.params && route.params.length > 1 && this.last_sort_order ? '/' + this.last_sort_order : '/';
+        let topic_link = topic ? <Link to={`/${this.last_sort_order || 'trending'}/${topic}`}>{topic}</Link> : null;
 
         const sort_orders = {
                 hot: translate('hot'),
                 trending: translate('trending'),
+                trending30: translate('trending_30_day'),
                 cashout: translate('payout_time'),
                 created: translate('new'),
                 active: translate('active'),
-                responses: translate('responses'),
                 votes: translate('popular')
         };
         const sort_order_menu = Object.keys(sort_orders).filter(so => so !== sort_order).map(so => ({link: `/${so}/${topic}`, value: sort_orders[so]}));

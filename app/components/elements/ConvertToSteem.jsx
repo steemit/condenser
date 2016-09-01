@@ -42,6 +42,8 @@ class ConvertToSteem extends React.Component {
                     <div className="small-12 columns">
                         <h1>{translate('convert_to_steem')}</h1>
                         <p>{translate('steem_dollars_will_be_unavailable')}.</p>
+                        <p>{translate('your_existing_SD_are_liquid_and_transferable', {link: <i>{translate('buy_or_sell')}</i>})}</p>
+                        <p>{translate('this_is_a_price_feed_conversion')}.</p>
                     </div>
                 </div>
                 <div className="row">

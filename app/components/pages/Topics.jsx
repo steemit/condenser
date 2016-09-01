@@ -50,7 +50,7 @@ class Topics extends React.Component {
 
         if (compact) {
             return <select className={cn} onChange={(e) => browserHistory.push(e.target.value)} value={currentValue}>
-                <option key={'*'} value={'/' + order}>{translate('select_topic') }</option>
+                <option key={'*'} value={'/' + order}>{translate('topics')}...</option>
                 {categories.map(cat => {
                     const link = order ? `/${order}/${cat}` : `/${cat}`;
                     return <option key={cat} value={link}>{cat}</option>

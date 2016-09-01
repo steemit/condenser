@@ -25,6 +25,14 @@ export function* fetchState(location_change_action) {
     }
     const server_location = yield select(state => state.offchain.get('server_location'));
     if (pathname === server_location) return;
+
+    // virtual pageview
+    const {ga} = window
+    if(ga) {
+        ga('set', 'page', pathname);
+        ga('send', 'pageview');
+    }
+
     let url = `${pathname}`;
     if (url === '/') url = 'trending';
     // Replace /curation-rewards and /author-rewards with /transfers for UserProfile
@@ -56,6 +64,20 @@ export function* fetchData(action) {
     let call_name, args;
     if (order === 'trending') {
         call_name = 'get_discussions_by_trending';
+        args = [
+        { tag: category,
+          limit: constants.FETCH_DATA_BATCH_SIZE,
+          start_author: author,
+          start_permlink: permlink}];
+    } else if (order === 'trending30') {
+        call_name = 'get_discussions_by_trending30';
+        args = [
+        { tag: category,
+          limit: constants.FETCH_DATA_BATCH_SIZE,
+          start_author: author,
+          start_permlink: permlink}];
+    } else if (order === 'promoted') {
+        call_name = 'get_discussions_by_promoted';
         args = [
         { tag: category,
           limit: constants.FETCH_DATA_BATCH_SIZE,

@@ -194,9 +194,8 @@ class CreateAccount extends React.Component {
         }
 
         const existingUserAccount = offchainUser.get('account');
-        let existingUserAccountAlert = null;
         if (existingUserAccount) {
-            existingUserAccountAlert = <div className="row">
+            return <div className="row">
                 <div className="column">
                     <div className="callout alert">
                         <p>{translate('our_records_indicate_you_already_have_account')}: <strong>{existingUserAccount}</strong></p>
@@ -213,7 +212,6 @@ class CreateAccount extends React.Component {
         return (
             <div className="CreateAccount row">
                 <div className="column large-7 small-10">
-                    {existingUserAccountAlert}
                     <h2>{translate('sign_up')}</h2>
                     <div className="CreateAccount__rules">
                         <hr />
@@ -232,6 +230,7 @@ class CreateAccount extends React.Component {
                         {server_error && <div className="callout alert">
                             <h5>{translate('couldnt_create_account_server_returned_error')}:</h5>
                             <p>{server_error}</p>
+                            {server_error === 'Email address is not confirmed' && <a href="/enter_email">Confirm Email</a>}
                         </div>}
                         <noscript>
                             <div className="callout alert">

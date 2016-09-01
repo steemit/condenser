@@ -21,7 +21,7 @@ const en = 	{
 	submit_a_story: 'Submit a Story',
 	nothing_yet: 'Nothing yet',
 	close: 'Close',
-	promo_text: "Authors get paid when people like you upvote their post \n If you enjoyed what you read here, earn ${amount} of Steem Power \n when you {link} and vote for it.",
+	post_promo_text: "Authors get paid when people like you upvote their post \n If you enjoyed what you read here, earn ${amount} of Steem Power \n when you {link} and vote for it.",
 	read_only_mode: 'Due to server maintenance we are running in read only mode. We are sorry for the inconvenience.',
 	membership_invitation_only: 'Membership to Steemit.com is now under invitation only because of unexpectedly high sign up rate.',
 	submit_email_to_get_on_waiting_list: 'Submit your email to get on the waiting list',
@@ -33,7 +33,7 @@ const en = 	{
 	tags_and_topics: "Tags and Topics",
 	filter: "Filter",
 	show_more_topics: "Show more topics",
-	we_require_social_account: 'Steemit funds each account with over $7 worth of Steem Power; to prevent abuse, we require new users to login via social media.',
+	we_require_social_account: 'Steemit funds each account with over ${signup_bonus} worth of Steem Power; to prevent abuse, we require new users to login via social media.',
 	personal_info_will_be_private: 'Your personal information will be kept',
 	personal_info_will_be_private_link: 'Private',
 	continue_with_facebook: 'Continue with Facebook',
@@ -85,7 +85,7 @@ const en = 	{
 	welcome_to_the_blockchain: 'Welcome to the Blockchain!',
 	your_voice_is_worth_something: 'Your voice is worth something',
 	learn_more: 'Learn More',
-	get_sp_when_sign_up: 'Get $7 of Steem Power when you sign up today.',
+	get_sp_when_sign_up: 'Get ${signupBonus} of Steem Power when you sign up today.',
 	all_accounts_refunded: 'All Recovered Accounts have been fully Refunded',
 	steemit_is_now_open_source: 'Steemit.com is now Open Source',
 	// this is mainly from ReplyEditor
@@ -327,7 +327,24 @@ const en = 	{
 	search: 'Search',
 	begin_recovery: "Begin Recovery",
 	post_as: 'Post as', // 'Post as Misha'
-	action: 'Action'
+	action: 'Action',
+	steem_app_center: 'Steem App Center',
+	witness_thread: 'witness thread',
+	you_have_votes_remaining: 'You have {votesCount} votes remaining',
+	you_can_vote_for_maximum_of_witnesses: 'You can vote for a maximum of 30 witnesses',
+	information: 'Information',
+	if_you_want_to_vote_outside_of_top_enter_account_name: 'If you would like to vote for a witness outside of the top 50, enter the account name below to cast a votes',
+	view_the_direct_parent: 'View the direct parent',
+	you_are_viewing_single_comments_thread_from: 'You are viewing a single comment&#39;s thread from',
+	view_the_full_context: 'View the full context',
+	this_is_a_price_feed_conversion: 'This is a price feed conversion. The one week day delay is necessary to prevent abuse from gaming the price feed average',
+	your_existing_SD_are_liquid_and_transferable: 'Your existing Steem Dollars are liquid and transferable.  Instead you may wish to trade Steem Dollars directly in this site under {link} or transfer to an external market.',
+	buy_or_sell: 'Buy or Sells',
+	trending_30_day: 'trending (30 day)',
+	promoted: 'promoted',
+	comments: 'Comments',
+	topics: 'Topics',
+	this_password_is_bound_to_your_accounts_private_key: 'This password is bound to your account\'s active key and can not be used to login to this page. You may use this active key on other more secure pages like the Wallet or Market pages.'
 }
 
 export { en }

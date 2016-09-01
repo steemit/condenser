@@ -1,6 +1,15 @@
 
 const iframeWhitelist = [
-    // { re: /^(https?:)?\/\/player.vimeo.com\/video\/.*/i }, // <-- medium-editor branch
+    {
+        re: /^(https?:)?\/\/player.vimeo.com\/video\/.*/i,
+        fn: src => {
+            // <iframe src="https://player.vimeo.com/video/179213493" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+            if(!src) return null
+            const m = src.match(/https:\/\/player\.vimeo\.com\/video\/([0-9]+)/)
+            if(!m || m.length !== 2) return null
+            return 'https://player.vimeo.com/video/' + m[1]
+        }
+    },
     { re: /^(https?:)?\/\/www.youtube.com\/embed\/.*/i,
       fn: src => {
         return src.replace(/\?.+$/, ''); // strip query string (yt: autoplay=1,controls=0,showinfo=0, etc)
@@ -19,21 +28,26 @@ const iframeWhitelist = [
         }
     }
 ];
+export const noImageText = '(Image not shown due to low ratings)'
+export const allowedTags = `
+    div, iframe, del,
+    a, p, b, q, br, ul, li, ol, img, h1, h2, h3, h4, h5, h6, hr,
+    blockquote, pre, code, em, strong, center, table, thead, tbody, tr, th, td,
+    strike, sup
+`.trim().split(/,\s*/)
 
 // Medium insert plugin uses: div, figure, figcaption, iframe
 export default ({large = true, highQualityPost = true, noImage = false, sanitizeErrors = []}) => ({
-    allowedTags: `
-        div, iframe,
-        a, p, b, q, br, ul, li, ol, img, h1, h2, h3, h4, h5, h6, hr,
-        blockquote, pre, code, em, strong, center, table, thead, tbody, tr, th, td,
-        strike, sup,
-    `.trim().split(/,\s*/),
+    allowedTags,
         // figure, figcaption,
 
     // SEE https://www.owasp.org/index.php/XSS_Filter_Evasion_Cheat_Sheet
     allowedAttributes: {
         // "src" MUST pass a whitelist (below)
         iframe: ['src', 'width', 'height', 'frameBorder', 'allowFullScreen'], //'class'
+
+        // class attribute is strictly whitelisted (below)
+        div: ['class'],
 
         // style is subject to attack, filtering more below
         td: ['style'],
@@ -64,7 +78,7 @@ export default ({large = true, highQualityPost = true, noImage = false, sanitize
             return {tagName: 'div', text: `(Unsupported ${srcAtty})`}
         },
         img: (tagName, attribs) => {
-            if(noImage) return {tagName: 'div', text: '(Image not shown due to low ratings)'}
+            if(noImage) return {tagName: 'div', text: noImageText}
             //See https://github.com/punkave/sanitize-html/issues/117
             let {src} = attribs
             if(!/^(https?:)?\/\//i.test(src)) {
@@ -77,6 +91,17 @@ export default ({large = true, highQualityPost = true, noImage = false, sanitize
             src = src.replace(/^http:\/\//i, '//')
 
             return {tagName, attribs: {src}}
+        },
+        div: (tagName, attribs) => {
+            const attys = {}
+            const classWhitelist = ['pull-right', 'pull-left', 'text-justify']
+            const validClass = classWhitelist.find(e => attribs.class == e)
+            if(validClass)
+                attys.class = validClass
+            return {
+                tagName,
+                attribs: attys
+            }
         },
         td: (tagName, attribs) => {
             const attys = {}

@@ -3,7 +3,9 @@ import {connect} from 'react-redux'
 import {Component} from 'react'
 import Remarkable from 'remarkable'
 // import CardView from 'app/components/cards/CardView'
-import sanitizeConfig from 'app/utils/SanitizeConfig'
+import YoutubePreview from 'app/components/elements/YoutubePreview'
+import sanitizeConfig, {noImageText} from 'app/utils/SanitizeConfig'
+import {renderToString} from 'react-dom/server';
 import sanitize from 'sanitize-html'
 import HtmlReady from 'shared/HtmlReady'
 
@@ -34,37 +36,52 @@ class MarkdownViewer extends Component {
         large: false,
     }
 
-    shouldComponentUpdate(np) {
+    constructor() {
+        super()
+        this.state = {allowNoImage: true}
+    }
+
+    shouldComponentUpdate(np, ns) {
         return np.text !== this.props.text ||
         np.large !== this.props.large ||
         // np.formId !== this.props.formId ||
-        np.canEdit !== this.props.canEdit
+        np.canEdit !== this.props.canEdit ||
+        ns.allowNoImage !== this.state.allowNoImage
+    }
+
+    onAllowNoImage = () => {
+        this.setState({allowNoImage: false})
     }
 
     render() {
         const {noImage} = this.props
+        const {allowNoImage} = this.state
         let {text} = this.props
         if (!text) text = '' // text can be empty, still view the link meta data
         const {large, /*formId, canEdit, jsonMetadata,*/ highQualityPost} = this.props
 
         let html = false;
-        const m = text.match(/<html>([\S\s]*)<\/html>/m);
+        // See also ReplyEditor isHtmlTest
+        const m = text.match(/^<html>([\S\s]*)<\/html>$/);
         if (m && m.length === 2) {
             html = true;
             text = m[1];
+        } else {
+            // See also ReplyEditor isHtmlTest
+            html = /^<p>[\S\s]*<\/p>/.test(text)
         }
 
         // Strip out HTML comments. "JS-DOS" bug.
-        text = text.replace(/<!--[\s\S]+?(-->|$)/g, '')
+        text = text.replace(/<!--([\s\S]+?)(-->|$)/g, '(html comment removed: $1)')
 
         let renderedText = html ? text : remarkable.render(text)
 
         // Embed videos, link mentions and hashtags, etc...
-        if(renderedText) renderedText = HtmlReady(renderedText, {large}).html
+        if(renderedText) renderedText = HtmlReady(renderedText).html
 
         // Complete removal of javascript and other dangerous tags..
         // The must remain as close as possible to dangerouslySetInnerHTML
-        const cleanText = sanitize(renderedText, sanitizeConfig({large, highQualityPost, noImage}))
+        const cleanText = sanitize(renderedText, sanitizeConfig({large, highQualityPost, noImage: noImage && allowNoImage}))
 
         if(/<\s*script/ig.test(cleanText)) {
             // Not meant to be complete checking, just a secondary trap and red flag (code can change)
@@ -72,14 +89,36 @@ class MarkdownViewer extends Component {
             return <div></div>
         }
 
-        // Use split around things like the youtube iframe.  This allows react to compare separatly preventing excessive re-rendering.
-        const cleanTextSplits = cleanText.replace(/<\/p>/g, `</p><!--split-->`)
-        const sections = cleanTextSplits.split('<!--split-->')
+        const noImageActive = cleanText.indexOf(noImageText) !== -1
+
+        // In addition to inserting the youtube compoennt, this allows react to compare separately preventing excessive re-rendering.
+        let idx = 0
+        const sections = []
+        // HtmlReady inserts ~~~ youtube:${id} ~~~
+        for(let section of cleanText.split('~~~ youtube:')) {
+            if(/^[A-Za-z0-9\_\-]+ ~~~/.test(section)) {
+                const youTubeId = section.split(' ')[0]
+                section = section.substring(youTubeId.length + ' ~~~'.length)
+                const w = large ? 640 : 320,
+                      h = large ? 480 : 180
+                sections.push(
+                    <YoutubePreview key={idx++} width={w} height={h} youTubeId={youTubeId}
+                        frameBorder="0" allowFullScreen="true" />
+                )
+            }
+            if(section === '') continue
+            sections.push(<div key={idx++} dangerouslySetInnerHTML={{__html: section}} />)
+        }
 
         const cn = 'Markdown' + (this.props.className ? ` ${this.props.className}` : '') + (html ? ' html' : '')
-        let idx = 0
         return (<div className={"MarkdownViewer " + cn}>
-            {sections.map(s => <div key={idx++} dangerouslySetInnerHTML={{__html: s}} />)}
+            {sections}
+            {noImageActive && allowNoImage &&
+                <div onClick={this.onAllowNoImage} className="MarkdownViewer__negative_group">
+                    Images were hidden due to low ratings.
+                    <button style={{marginBottom: 0}} className="button hollow tiny float-right">Show</button>
+                </div>
+            }
         </div>)
         // <CardView formId={formId} canEdit={canEdit} metaLinkData={jsonMetadata ? jsonMetadata.steem : null} />
     }

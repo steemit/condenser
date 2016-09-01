@@ -11,6 +11,7 @@ import PasswordReset from 'app/components/elements/PasswordReset';
 import UserWallet from 'app/components/modules/UserWallet';
 import CurationRewards from 'app/components/modules/CurationRewards';
 import AuthorRewards from 'app/components/modules/AuthorRewards';
+import UserList from 'app/components/elements/UserList';
 import Follow from 'app/components/elements/Follow';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import PostsList from 'app/components/cards/PostsList';
@@ -121,6 +122,24 @@ export default class UserProfile extends React.Component {
                           current_user={current_user}
                           />
         }
+        else if( section === 'followers' ) {
+            if (followers && followers.has('result')) {
+                tab_content = <UserList
+                          title="Followers"
+                          account={account}
+                          users={followers}
+                          />
+            }
+        }
+        else if( section === 'followed' ) {
+            if (following && following.has('result')) {
+                tab_content = <UserList
+                          title="Followed"
+                          account={account}
+                          users={following}
+                          />
+            }
+        }
         else if( section === 'posts' && account.post_history ) {
            if( account.posts )
            {
@@ -212,10 +231,10 @@ export default class UserProfile extends React.Component {
         ];
 
         const top_menu = <div className="row UserProfile__top-menu">
-            <div className="columns small-12 medium-expand">
+            <div className="columns small-10 medium-12 medium-expand">
                 <ul className="menu" style={{flexWrap: "wrap"}}>
                     <li><Link to={`/@${accountname}`} activeClassName="active">{translate('blog')}</Link></li>
-                    <li><Link to={`/@${accountname}/posts`} activeClassName="active">{translate('posts')}</Link></li>
+                    <li><Link to={`/@${accountname}/posts`} activeClassName="active">{translate('comments')}</Link></li>
                     <li><Link to={`/@${accountname}/recent-replies`} activeClassName="active">{translate('replies')}</Link></li>
                     <li><Link to={`/@${accountname}/feed`} activeClassName="active">{translate('feeds')}</Link></li>
                     <li>
@@ -253,7 +272,7 @@ export default class UserProfile extends React.Component {
                     <div className="column">
                         <div style={{position: "relative"}}>
                             <div className="UserProfile__buttons">
-                                {section === 'blog' ? <Follow follower={username} following={accountname} what={section} /> : null}
+                                <Follow follower={username} following={accountname} what="blog" />
                             </div>
                         </div>
                         <h2>{account.name} <Tooltip t={translate('this_is_users_reputations_score_it_is_based_on_history_of_votes', {name})}><span style={{fontSize: "80%"}}>({rep})</span></Tooltip></h2>

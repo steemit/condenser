@@ -10,6 +10,7 @@ import useRedirects from './redirects';
 import useOauthLogin from './api/oauth';
 import useGeneralApi from './api/general';
 import useAccountRecoveryApi from './api/account_recovery';
+import useEnterAndConfirmEmailPages from './server_pages/enter_confirm_email';
 import isBot from 'koa-isbot';
 import session from 'koa-session';
 import csrf from 'koa-csrf';
@@ -24,6 +25,7 @@ const grant = new Grant(config.grant);
 const app = new Koa();
 app.name = 'Steemit app';
 const env = process.env.NODE_ENV || 'development';
+const cacheOpts = {maxAge: 86400000, gzip: true};
 
 app.keys = [config.session_key];
 app.use(session({maxAge: 1000 * 3600 * 24 * 7}, app));
@@ -49,20 +51,19 @@ app.use(function *(next) {
     }
 });
 
-app.use(mount('/static', staticCache(path.join(__dirname, '../app/assets/static'), cacheOpts)));
-
 if (env === 'production') {
     // load production middleware
     app.use(require('koa-conditional-get')());
     app.use(require('koa-etag')());
     app.use(require('koa-compressor')());
     app.use(prod_logger());
-    app.use(helmet.contentSecurityPolicy(config.helmet));
 } else {
-    app.use(helmet());
-    // app.use(helmet.contentSecurityPolicy(config.helmet));
     app.use(koa_logger());
 }
+
+app.use(helmet());
+
+app.use(mount('/static', staticCache(path.join(__dirname, '../app/assets/static'), cacheOpts)));
 
 app.use(mount('/robots.txt', function* () {
     this.set('Cache-Control', 'public, max-age=86400000');
@@ -71,13 +72,18 @@ app.use(mount('/robots.txt', function* () {
 }));
 
 useRedirects(app);
+useEnterAndConfirmEmailPages(app);
+
+if (env === 'production') {
+    app.use(helmet.contentSecurityPolicy(config.helmet));
+}
+
+useAccountRecoveryApi(app);
 useOauthLogin(app);
 useGeneralApi(app);
-useAccountRecoveryApi(app);
+
 app.use(favicon(path.join(__dirname, '../app/assets/images/favicons/favicon.ico')));
 app.use(isBot());
-
-const cacheOpts = {maxAge: 86400000, gzip: true};
 app.use(mount('/favicons', staticCache(path.join(__dirname, '../app/assets/images/favicons'), cacheOpts)));
 app.use(mount('/images', staticCache(path.join(__dirname, '../app/assets/images'), cacheOpts)));
 // Proxy asset folder to webpack development server in development mode
@@ -93,7 +99,7 @@ if (env === 'development') {
 }
 
 if (env !== 'test') {
-    const app_router = require('./router');
+    const appRender = require('./app_render');
     app.use(function* () {
         this.first_visit = false;
         this.last_visit = this.session.last_visit;
@@ -105,12 +111,11 @@ if (env !== 'test') {
         } else {
             this.session.new_visit = this.session.last_visit - this.last_visit > 1800;
         }
-        yield app_router(this);
+        yield appRender(this);
         // if (app_router.dbStatus.ok) recordWebEvent(this, 'page_load');
         const bot = this.state.isBot;
         if (bot) {
-            console.log(`BOT: ${bot} ${this.req.originalUrl} ${this.status}`);
-            return;
+            console.log(`  --> ${this.method} ${this.originalUrl} ${this.status} (BOT '${bot}')`);
         }
     });
 

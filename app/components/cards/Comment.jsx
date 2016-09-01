@@ -7,6 +7,7 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 // import FormattedAsset from 'app/components/elements/FormattedAsset';
 import Voting from 'app/components/elements/Voting';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import user from 'app/redux/User';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 // import Tooltip from 'app/components/elements/Tooltip';
@@ -102,7 +103,6 @@ class CommentImpl extends React.Component {
         username: React.PropTypes.string,
         rootComment: React.PropTypes.string.isRequired,
         comment_link: React.PropTypes.string.isRequired,
-        anchor_link: React.PropTypes.string.isRequired,
         deletePost: React.PropTypes.func.isRequired,
     };
     static defaultProps = {
@@ -115,11 +115,6 @@ class CommentImpl extends React.Component {
         this.state = {show_details: true, hide_body: false};
         this.revealBody = this.revealBody.bind(this);
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Comment')
-        this.onCommentClick = e => {
-            e.preventDefault()
-            const {comment_link} = this.props
-            browserHistory.push(comment_link)
-        }
         this.onShowReply = () => {
             const {showReply} = this.state
             this.setState({showReply: !showReply, showEdit: false})
@@ -156,14 +151,6 @@ class CommentImpl extends React.Component {
     componentWillMount() {
         this.initEditor(this.props)
         this._checkHide(this.props);
-    }
-
-    componentDidMount() {
-        const {anchor_link} = this.props
-        if (window.location.hash.indexOf(anchor_link) !== -1) {
-            const comments_el = document.getElementById(anchor_link);
-            if (comments_el) comments_el.scrollIntoView({behavior: 'smooth'});
-        }
     }
 
     componentWillReceiveProps(np) {
@@ -231,10 +218,11 @@ class CommentImpl extends React.Component {
         }
         const {netVoteSign, hasReplies, authorRepLog10, hide, pictures, gray} = comment.stats
         const {author, permlink, json_metadata} = comment
-        const {username, depth, rootComment, comment_link, anchor_link,
+        const {username, depth, rootComment, comment_link,
             showNegativeComments, ignore, noImage} = this.props
         const {onCommentClick, onShowReply, onShowEdit, onDeletePost} = this
         const post = comment.author + '/' + comment.permlink
+        const anchor_link = '#@' + post
         const {PostReplyEditor, PostEditEditor, showReply, showEdit, hide_body} = this.state
         const Editor = showReply ? PostReplyEditor : PostEditEditor
 
@@ -265,7 +253,7 @@ class CommentImpl extends React.Component {
             body = (<MarkdownViewer formId={post + '-viewer'} text={comment.body}
                 noImage={noImage || !pictures} jsonMetadata={jsonMetadata} />);
             controls = (<div>
-                <Voting post={post} pending_payout={comment.pending_payout_value} total_payout={comment.total_payout_value} />
+                <Voting post={post} />
                 {!$STM_Config.read_only_mode && depth !== 5 && <a onClick={onShowReply}>{translate('reply')}</a>}
                 {showEditOption && <span>
                     &nbsp;&nbsp;
@@ -288,7 +276,7 @@ class CommentImpl extends React.Component {
         const commentClasses = ['hentry']
         commentClasses.push('Comment')
         commentClasses.push(this.props.root ? 'root' : 'reply')
-        // if((hide_body && !showNegativeComments) || !this.state.show_details) commentClasses.push('collapsed');
+        if((hide_body && !showNegativeComments) || !this.state.show_details) commentClasses.push('collapsed');
         const downVotedClass = ignore || gray ? 'downvoted' : ' '
         //console.log(comment);
         let renderedEditor = null;
@@ -309,7 +297,6 @@ class CommentImpl extends React.Component {
         }
         return (
             <div className={commentClasses.join(' ')} id={anchor_link} itemScope itemType ="http://schema.org/comment">
-                {/*<a name={anchor_link}></a>*/}
                 <div className="Comment__Userpic show-for-medium">
                     <Userpic account={comment.author} />
                 </div>
@@ -325,11 +312,11 @@ class CommentImpl extends React.Component {
                                 <Author author={comment.author} authorRepLog10={authorRepLog10} /></span>
                         </span>
                         &nbsp; &middot; &nbsp;
-                        <a href={comment_link} onClick={onCommentClick} className="PlainLink">
-                            <TimeAgoWrapper date={comment.created} id={`@${author}/${permlink}`} />
-                        </a>
+                        <Link to={comment_link} className="PlainLink">
+                            <TimeAgoWrapper date={comment.created} />
+                        </Link>
                         { !this.state.show_details && (hide_body && !showNegativeComments) &&
-                          <Voting post={post} pending_payout={comment.pending_payout_value} total_payout={comment.total_payout_value} showList={comment.active_votes.length !== 0 ? true : false} /> }
+                          <Voting post={post} showList={comment.active_votes.length !== 0 ? true : false} /> }
                         { this.state.show_details || comment.children == 0 ||
                           <span className="marginLeft1rem">{pluralize('replies', comment.children, true)}</span>}
                         { this.state.show_details && (hide_body && !showNegativeComments) &&
@@ -358,12 +345,11 @@ const Comment = connect(
         let {depth} = ownProps
         if(depth == null) depth = 1
         const c = global.getIn(['content', content])
-        let comment_link = null, anchor_link = null
+        let comment_link = null
         let rc = ownProps.rootComment
         if(c) {
             if(depth === 1) rc = c.get('parent_author') + '/' + c.get('parent_permlink')
             comment_link = `/${c.get('category')}/@${rc}#@${c.get('author')}/${c.get('permlink')}`
-            anchor_link = `#@${c.get('author')}/${c.get('permlink')}`
         }
         const current = state.user.get('current')
         const username = current ? current.get('username') : null
@@ -372,7 +358,6 @@ const Comment = connect(
         return {
             ...ownProps,
             comment_link,
-            anchor_link,
             rootComment: rc,
             username,
             ignore,

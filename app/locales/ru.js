@@ -344,7 +344,11 @@ const ru = {
 	promoted: 'promoted',
 	comments: 'Comments',
 	topics: 'Topics',
-	this_password_is_bound_to_your_accounts_private_key: 'This password is bound to your account\'s active key and can not be used to login to this page. You may use this active key on other more secure pages like the Wallet or Market pages.'
+	this_password_is_bound_to_your_accounts_private_key: 'This password is bound to your account\'s active key and can not be used to login to this page. You may use this active key on other more secure pages like the Wallet or Market pages.',
+	potential_payout: 'Potential Payout',
+	boost_payments: 'Boost Payments',
+	authors: 'Authors',
+	curators: 'Curators',
 
 }
 

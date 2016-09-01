@@ -56,7 +56,7 @@ export default function extractContent(get, content) {
         let rtags
         {
             const isHtml = /^<html>([\S\s]*)<\/html>$/.test(body)
-            const htmlText = isHtml ? body : remarkable.render(body)
+            const htmlText = isHtml ? body : remarkable.render(body.replace(/<!--([\s\S]+?)(-->|$)/g, '(html comment removed: $1)'))
             rtags = HtmlReady(htmlText, {mutate: false})
         }
 

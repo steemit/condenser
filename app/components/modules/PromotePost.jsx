@@ -49,7 +49,7 @@ class PromotePost extends Component {
 
     amountChange(e) {
         const amount = e.target.value;
-        console.log('-- PromotePost.amountChange -->', amount);
+        // console.log('-- PromotePost.amountChange -->', amount);
         this.setState({amount});
     }
 

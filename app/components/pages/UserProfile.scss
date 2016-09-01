@@ -39,6 +39,10 @@
       display: flex;
       flex-flow: row wrap;
       width: 100%;
+      // Override default svg vertical alignment
+      .Icon > svg, .Icon span.icon {
+          vertical-align: middle!important;
+      }
   }
 }
 

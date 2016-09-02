@@ -126,13 +126,16 @@ function* handleFacebookCallback() {
         }
 
         // this helps prevent bots registrations (keep this in private branch)
+        if (!u.verified) {
+            throw new Error('Not verified Facebook account. Please verify your Facebook account and try again to sign up to Steemit.');
+        }
         if (u.email.match(/\.ru$/)) {
-            throw new Error('We are sorry but we no longer allow signups from .ru zone due to spam and faucet abuse.');
+            throw new Error('We are sorry, currently we unable to sign up users from your domain zone at this moment.');
         }
         if (u.email.match(/yandex\.com$/) || u.email.match(/dcemail\.com$/) || u.email.match(/msgos\.com$/) || u.email.match(/vmani\.com$/)
-            || u.email.match(/polyfaust\.com$/) || u.email.match(/pokemail\.net$/)
+            || u.email.match(/polyfaust\.com$/) || u.email.match(/pokemail\.net$/) || u.email.match(/cracker\.com$/)
         ) {
-            throw new Error('unsupported email provider');
+            throw new Error('We are sorry, currently we unable to sign up users from your domain zone at this moment.');
         }
         if (user) {
             i_attrs_email.user_id = attrs.id = user.id;

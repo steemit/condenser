@@ -13,7 +13,15 @@ import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import FoundationDropdown from 'app/components/elements/FoundationDropdown';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 
-const ABOUT_FLAG = 'Flagging a post can remove rewards and make this material less visible.  You can still unflag or upvote later if you change your mind.'
+const ABOUT_FLAG = <div>
+    <p>Flagging a post can remove rewards and make this material less visible.  The flag should be used for the following:</p>
+    <ul>
+        <li>Fraud or Plagiarism</li>
+        <li>Hate Speech or Internet Trolling</li>
+        <li>Intentional miss-categorized content or Spam</li>
+    </ul>
+</div>
+
 const MAX_VOTES_DISPLAY = 20;
 const VOTE_WEIGHT_DROPDOWN_THRESHOLD = 100.0 * 1000.0 * 1000.0;
 
@@ -104,7 +112,7 @@ class Voting extends React.Component {
 
     render() {
         const {myVote, active_votes, showList, voting, flag, vesting_shares} = this.props;
-        const {username, author} = this.props;
+        const {username} = this.props;
         const {votingUp, votingDown, showWeight, weight} = this.state;
         // console.log('-- Voting.render -->', myVote, votingUp, votingDown);
         if(!active_votes) return <span></span>
@@ -126,7 +134,7 @@ class Voting extends React.Component {
                     </div>
                 }
                 <CloseButton onClick={() => this.setState({showWeight: false})} />
-                <div className="clear">
+                <div className="clear Voting__about-flag">
                     <p>{ABOUT_FLAG}</p>
                     <a href="#" onClick={this.voteDown} className="confirm_weight button outline" title="Flag">Flag</a>
                 </div>

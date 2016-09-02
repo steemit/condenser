@@ -76,7 +76,7 @@ class Post extends React.Component {
                     <div className="Post">
                         <div className="row">
                             <div className="column">
-                                <div>
+                                <div className="PostFull">
                                     <p onClick={this.showAnywayClick}>This post was hidden due to low ratings. <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.showAnywayClick}>Show</button></p>
                                 </div>
                             </div>

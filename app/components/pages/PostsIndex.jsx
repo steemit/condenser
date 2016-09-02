@@ -45,7 +45,7 @@ class PostsIndex extends React.Component {
         if (!last_post) return;
         let {accountname} = this.props.routeParams
         let {category, order = constants.DEFAULT_SORT_ORDER} = this.props.routeParams;
-        if (category === 'feed' || category === 'home'){
+        if (category === 'feed'){
             accountname = order.slice(1);
             order = 'by_feed';
         }
@@ -60,11 +60,13 @@ class PostsIndex extends React.Component {
         let {category, order = constants.DEFAULT_SORT_ORDER} = this.props.routeParams;
         let topics_order = order;
         let posts = [];
-        if (category === 'feed' || category === 'home') {
+        let emptyText = '';
+        if (category === 'feed') {
             const account_name = order.slice(1);
             order = 'by_feed';
             topics_order = 'trending';
             posts = this.props.global.getIn(['accounts', account_name, 'feed']);
+            emptyText = `Looks like ${account_name} hasn't followed anything yet!`;
         } else {
             posts = this.getPosts(order, category);
         }
@@ -79,8 +81,13 @@ class PostsIndex extends React.Component {
                     <div className="PostsIndex__topics_compact show-for-small hide-for-large">
                         <Topics order={topics_order} current={category} compact />
                     </div>
-                    <PostsList ref="list" posts={posts ? posts.toArray() : []} loading={fetching} category={category}
-                        loadMore={this.loadMore} showSpam={showSpam} />
+                    <PostsList ref="list"
+                        posts={posts ? posts.toArray() : []}
+                        loading={fetching}
+                        category={category}
+                        loadMore={this.loadMore}
+                        emptyText = {emptyText}
+                        showSpam={showSpam} />
                 </div>
                 <div className="PostsIndex__topics column shrink show-for-large">
                     <Topics order={topics_order} current={category} compact={false} />

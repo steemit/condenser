@@ -61,6 +61,7 @@ class Header extends React.Component {
     render() {
         const route = resolveRoute(this.props.location.pathname);
         const current_account_name =  this.props.current_account_name;
+        let home_account = false;
         let page_title = route.page;
 
         let sort_order = '';
@@ -70,7 +71,11 @@ class Header extends React.Component {
 
         if (route.page === 'PostsIndex') {
             sort_order = route.params[0];
-            if (sort_order !== 'home') {
+            if (sort_order === 'home') {
+                const account_name = route.params[1];
+                if (current_account_name && account_name.indexOf(current_account_name) === 1)
+                    home_account = true;
+            } else {
                 if (route.params.length > 1) {
                     topic = route.params[1];
                     page_title = `${topic}/${sort_order}`;
@@ -114,7 +119,8 @@ class Header extends React.Component {
         ];
         if (current_account_name) sort_orders_horizontal.unshift(['home', 'home']);
         const sort_order_menu_horizontal = sort_orders_horizontal.map(so => {
-                const active = (so[0] === sort_order) || (so[0] === 'trending' && sort_order === 'trending30');
+                let active = (so[0] === sort_order) || (so[0] === 'trending' && sort_order === 'trending30');
+                if (so[0] === 'home' && sort_order === 'home' && !home_account) active = false;
                 return {link: sortOrderToLink(so[0], topic, current_account_name), value: so[1], active};
             });
 

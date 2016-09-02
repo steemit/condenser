@@ -4,7 +4,7 @@ import Apis from 'shared/api_client/ApiInstances';
 import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInput';
 import {PrivateKey} from 'shared/ecc';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import AlertCallout from 'app/components/elements/AlertCallout';
+import Callout from 'app/components/elements/Callout';
 
 function passwordToOwnerPubKey(account_name, password) {
     let pub_key;
@@ -121,7 +121,7 @@ class RecoverAccountStep2 extends React.Component {
         }
         const {account_to_recover} = this.props;
         if (!account_to_recover) {
-            return <AlertCallout body="Account recovery request is not confirmed yes, please get back later, thank you for your patience." />;
+            return <Callout body="Account recovery request is not confirmed yes, please get back later, thank you for your patience." />;
         }
         const {oldPassword, valid, error, progress_status, name_error, success} = this.state;
         const submit_btn_class = 'button action' + (!valid || !oldPassword ? ' disabled' : '');

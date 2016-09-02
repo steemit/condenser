@@ -2,7 +2,8 @@ import React, {PropTypes} from 'react';
 import PostSummary from 'app/components/cards/PostSummary';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
-import debounce from "lodash.debounce";
+import debounce from 'lodash.debounce';
+import Callout from 'app/components/elements/Callout';
 
 function topPosition(domElt) {
     if (!domElt) {
@@ -90,7 +91,7 @@ class PostsList extends React.Component {
         const {thumbSize} = this.state
 
         if (!loading && !posts.length) {
-            return <div>{emptyText}</div>;
+            return <Callout body={emptyText} type="success" />;
         }
         const renderSummary = items => items.map(({item, ignore, netVoteSign, authorRepLog10}) => <li key={item}>
             <PostSummary post={item} currentCategory={category} thumbSize={thumbSize}

@@ -8,9 +8,16 @@ import DropdownMenu from 'app/components/elements/DropdownMenu';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import HorizontalMenu from 'app/components/elements/HorizontalMenu';
 
+function sortOrderToLink(so, topic, account) {
+    if (so === 'home') return '/@' + account + '/feed';
+    if (topic) return `/${so}/${topic}`;
+    return `/${so}`;
+}
+
 class Header extends React.Component {
     static propTypes = {
         location: React.PropTypes.object.isRequired,
+        current_account_name: React.PropTypes.string
     };
 
     constructor() {
@@ -20,11 +27,13 @@ class Header extends React.Component {
         this.hideSubheader = this.hideSubheader.bind(this);
     }
 
-    componentWillReceiveProps(nextPrps) {
-        if (nextPrps.location.pathname !== this.props.location.pathname) {
-            const route = resolveRoute(nextPrps.location.pathname);
-            const sort_order = route && route.page === 'PostsIndex' && route.params && route.params.length > 0 ? route.params[0] : null;
-            if (sort_order) window.last_sort_order = this.last_sort_order = sort_order;
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.location.pathname !== this.props.location.pathname) {
+            const route = resolveRoute(nextProps.location.pathname);
+            if (route && route.page === 'PostsIndex' && route.params && route.params.length > 0) {
+                const sort_order = route.params[0] !== 'home' ? route.params[0] : null;
+                if (sort_order) window.last_sort_order = this.last_sort_order = sort_order;
+            }
         }
     }
 
@@ -51,6 +60,7 @@ class Header extends React.Component {
 
     render() {
         const route = resolveRoute(this.props.location.pathname);
+        const current_account_name =  this.props.current_account_name;
         let page_title = route.page;
 
         let sort_order = '';
@@ -60,11 +70,13 @@ class Header extends React.Component {
 
         if (route.page === 'PostsIndex') {
             sort_order = route.params[0];
-            if (route.params.length > 1) {
-                topic = route.params[1];
-                page_title = `${topic}/${sort_order}`;
-            } else {
-                page_title = `${sort_order}`;
+            if (sort_order !== 'home') {
+                if (route.params.length > 1) {
+                    topic = route.params[1];
+                    page_title = `${topic}/${sort_order}`;
+                } else {
+                    page_title = `${sort_order}`;
+                }
             }
         } else if (route.page === 'Post') {
             sort_order = '';
@@ -78,30 +90,32 @@ class Header extends React.Component {
 
         if (process.env.BROWSER) document.title = page_title + ' — Steemit';
 
-        const logo_link = route.params && route.params.length > 1 && this.last_sort_order ? '/' + this.last_sort_order : '/';
+        const logo_link = route.params && route.params.length > 1 && this.last_sort_order ? '/' + this.last_sort_order : (current_account_name ? `/@${current_account_name}/feed` : '/');
         let topic_link = topic ? <Link to={`/${this.last_sort_order || 'trending'}/${topic}`}>{topic}</Link> : null;
 
-        const sort_orders = {
-            created: 'new',
-            hot: 'hot',
-            trending: 'trending (24 hour)',
-            trending30: 'trending (30 day)',
-            promoted: 'promoted',
-            active: 'active'
-        };
-        const sort_order_menu = Object.keys(sort_orders).filter(so => so !== sort_order).map(so => ({link: `/${so}/${topic}`, value: sort_orders[so]}));
+        const sort_orders = [
+            ['created', 'new'],
+            ['hot', 'hot'],
+            ['trending', 'trending (24 hour)'],
+            ['trending30', 'trending (30 day)'],
+            ['promoted', 'promoted'],
+            ['active', 'active']
+        ];
+        if (current_account_name) sort_orders.unshift(['home', 'home']);
+        const sort_order_menu = sort_orders.filter(so => so[0] !== sort_order).map(so => ({link: sortOrderToLink(so[0], topic, current_account_name), value: so[1]}));
 
 
-        const sort_orders_horizontal = {
-            created: 'new',
-            hot: 'hot',
-            trending: 'trending',
-            promoted: 'promoted',
-            active: 'active'
-        };
-        const sort_order_menu_horizontal = Object.keys(sort_orders_horizontal).map(so => {
-            const active = (so === sort_order) || (so === 'trending' && sort_order === 'trending30')
-                return {link: `/${so}/${topic}`, value: sort_orders_horizontal[so], active};
+        const sort_orders_horizontal = [
+            ['created', 'new'],
+            ['hot', 'hot'],
+            ['trending', 'trending'],
+            ['promoted', 'promoted'],
+            ['active', 'active']
+        ];
+        if (current_account_name) sort_orders_horizontal.unshift(['home', 'home']);
+        const sort_order_menu_horizontal = sort_orders_horizontal.map(so => {
+                const active = (so[0] === sort_order) || (so[0] === 'trending' && sort_order === 'trending30');
+                return {link: sortOrderToLink(so[0], topic, current_account_name), value: so[1], active};
             });
 
         let sort_order_extra_menu = null;
@@ -155,8 +169,11 @@ export {Header as _Header_};
 
 export default connect(
     state => {
+        const current_user = state.user.get('current');
+        const current_account_name = current_user ? current_user.get('username') : state.offchain.get('account');
         return {
-            location: state.app.get('location')
+            location: state.app.get('location'),
+            current_account_name
         }
     }
 )(Header);

@@ -164,19 +164,20 @@ export default class UserProfile extends React.Component {
             } else {
                 tab_content = (<center><LoadingIndicator type="circle" /></center>);
             }
-        } else if(!section || section === 'feed') {
-            if (account.feed) {
-                tab_content = <PostsList
-                    emptyText={`Looks like ${account.name} hasn't followed anything yet!`}
-                    posts={account.feed}
-                    loading={fetching}
-                    category="feed"
-                    loadMore={this.loadMore}
-                    showSpam />;
-            } else {
-                tab_content = (<center><LoadingIndicator type="circle" /></center>);
-            }
         }
+        // else if(!section || section === 'feed') {
+        //     if (account.feed) {
+        //         tab_content = <PostsList
+        //             emptyText={`Looks like ${account.name} hasn't followed anything yet!`}
+        //             posts={account.feed}
+        //             loading={fetching}
+        //             category="feed"
+        //             loadMore={this.loadMore}
+        //             showSpam />;
+        //     } else {
+        //         tab_content = (<center><LoadingIndicator type="circle" /></center>);
+        //     }
+        // }
         else if( (section === 'recent-replies') && account.recent_replies ) {
            const reply_summary = account.recent_replies.map( item => {
                return (<li style={{listStyleType: 'none'}} key={item}>
@@ -232,7 +233,7 @@ export default class UserProfile extends React.Component {
                     <li><Link to={`/@${accountname}`} activeClassName="active">Blog</Link></li>
                     <li><Link to={`/@${accountname}/posts`} activeClassName="active">Comments</Link></li>
                     <li><Link to={`/@${accountname}/recent-replies`} activeClassName="active">Replies</Link></li>
-                    <li><Link to={`/@${accountname}/feed`} activeClassName="active">Feed</Link></li>
+                    {/*<li><Link to={`/@${accountname}/feed`} activeClassName="active">Feed</Link></li>*/}
                     <li>
                         <LinkWithDropdown
                             closeOnClickOutside

@@ -6,7 +6,7 @@ import {PrivateKey} from 'shared/ecc'
 import user from 'app/redux/User'
 import {getAccount} from 'app/redux/SagaShared'
 import {browserHistory} from 'react-router'
-import {serverApiLogin, serverApiLogout, /*serverApiRecordEvent*/} from 'app/utils/ServerApiClient';
+import {serverApiLogin, serverApiLogout} from 'app/utils/ServerApiClient';
 import {Apis} from 'shared/api_client';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import {loadFollows} from 'app/redux/FollowSaga'
@@ -96,7 +96,11 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         }
     }
     // no saved password
-    if (!username || !password) return
+    if (!username || !password) {
+        const offchain_account = yield select(state => state.offchain.get('account'))
+        if (offchain_account) serverApiLogout()
+        return
+    }
 
     let userProvidedRole // login via:  username/owner
     if (username.indexOf('/') > -1) {

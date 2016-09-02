@@ -127,6 +127,13 @@
   font-size: 80%;
 }
 
+.Author__dropdown {
+  padding: 1rem;
+  > a {
+    @include hoverUnderline;
+  }
+}
+
 /* Small only */
 @media screen and (max-width: 39.9375em) {
   .Post {

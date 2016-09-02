@@ -90,7 +90,7 @@ class PostsList extends React.Component {
         const {comments} = this.props
         const {thumbSize} = this.state
 
-        if (!loading && !posts.length) {
+        if (!loading && !posts.length && emptyText) {
             return <Callout body={emptyText} type="success" />;
         }
         const renderSummary = items => items.map(({item, ignore, netVoteSign, authorRepLog10}) => <li key={item}>

@@ -32,7 +32,6 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
             {link: account_link, value: 'Blog'},
             {link: posts_link, value: 'Comments'},
             {link: replies_link, value: 'Replies'},
-            {link: feed_link, value: 'Feed'},
             {link: wallet_link, value: 'Wallet'},
             {link: reset_password_link, value: 'Change Password'},
             loggedIn ?

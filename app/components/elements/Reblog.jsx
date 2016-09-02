@@ -20,6 +20,7 @@ export default class Reblog extends React.Component {
         this.state = {active: false, loading: false}
         this.reblog = e => {
             e.preventDefault()
+            if(this.state.active) return
             this.setState({loading: true})
             const {reblog, account, author, permlink} = this.props
             reblog(account, author, permlink,

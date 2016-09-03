@@ -108,7 +108,7 @@ class Header extends React.Component {
         ];
         if (current_account_name) sort_orders.unshift(['home', 'home']);
         const sort_order_menu = sort_orders.filter(so => so[0] !== sort_order).map(so => ({link: sortOrderToLink(so[0], topic, current_account_name), value: so[1]}));
-
+        const selected_sort_order = sort_orders.find(so => so[0] === sort_order);
 
         const sort_orders_horizontal = [
             ['created', 'new'],
@@ -132,7 +132,6 @@ class Header extends React.Component {
             ];
             sort_order_extra_menu = <HorizontalMenu items={items} />
         }
-
         return (
             <header className="Header">
                 <div className="Header__top header">
@@ -150,7 +149,7 @@ class Header extends React.Component {
                                 {user_name && <li><Link to={`/@${user_name}`}>{user_name}</Link></li>}
                                 {page_name && <li><span>{page_name}</span></li>}
                                 {(topic_link || user_name || page_name) && sort_order && <li className="delim show-for-small-only">|</li>}
-                                {sort_order && <DropdownMenu className="Header__sort-order-menu show-for-small-only" items={sort_order_menu} selected={sort_orders[sort_order]} el="li" />}
+                                {sort_order && <DropdownMenu className="Header__sort-order-menu show-for-small-only" items={sort_order_menu} selected={selected_sort_order[1]} el="li" />}
                             </ul>
                         </div>
                         <div className="columns shrink">

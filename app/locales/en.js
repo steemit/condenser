@@ -271,8 +271,27 @@ const en = 	{
 	rewards: 'Rewards',
 	permissions: 'Permissions',
 	password: 'Password',
-	followers: 'followers',
-	follwed: 'followed',
+	posts: 'Posts',
+	// english language does not need plurals, but your language might need it
+	// context usually is about profile stats: 'User has: 3 posts, 2 followers, 5 followed'
+	posts_amount: `{postCount, plural,
+		zero {0 posts}
+		one {# post}
+		few {# posts}
+		many {# posts}
+	}`,
+	followers_amount: `{followerCount, plural,
+		zero {0 followers}
+		one {# followers}
+		few {# followers}
+		many {# followers}
+	}`,
+	followed_amount: `{followingCount, plural,
+		zero {0 followed}
+		one {# followed}
+		few {# followed}
+		many {# followed}
+	}`,
 	this_is_users_reputations_score_it_is_based_on_history_of_votes: "This is ${name}'s reputation score.\n\nThe reputation score is based on the history of votes received by the account, and is used to hide low quality content.",
 	newer: 'Newer',
 	older: 'Older',

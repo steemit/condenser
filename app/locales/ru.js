@@ -271,8 +271,27 @@ const ru = {
 	rewards: 'Награды',
 	permissions: 'Разрешения',
 	password: 'Пароль',
-	followers: 'читатели',
-	follwed: 'читает',
+	posts: 'Посты',
+	// english language does not need plurals, but your language might need it
+	// context usually is about profile stats: 'User has: 3 posts, 2 followers, 5 followed'
+	posts_amount: `{postCount, plural,
+		zero {0 постов}
+		one {# пост}
+		few {# поста}
+		many {# постов}
+	}`,
+	followers_amount: `{followerCount, plural,
+		zero {нет подписчиков}
+		one {# подписчик}
+		few {# подписчика}
+		many {# подписчиков}
+	}`,
+	followed_amount: `{followingCount, plural,
+		zero {0 подписок}
+		one {# подписка}
+		few {# подписки}
+		many {# подписок}
+	}`,
 	this_is_users_reputations_score_it_is_based_on_history_of_votes: "This is ${name}'s reputation score.\n\nThe reputation score is based on the history of votes received by the account, and is used to hide low quality content.",
 	newer: 'Новее',
 	older: 'Старее',

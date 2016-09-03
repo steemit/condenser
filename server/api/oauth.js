@@ -120,6 +120,10 @@ function* handleFacebookCallback() {
             }
             return null;
         }
+        if (!u.email) {
+            console.log('-- /handle_facebook_callback no email -->', this.session.uid, u.name);
+            throw new Error('Your Facebook account has no associated email address. Please add email to your Facebook account and try again.');
+        }
 
         if (user) {
             i_attrs_email.user_id = attrs.id = user.id;

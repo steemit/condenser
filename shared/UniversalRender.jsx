@@ -34,6 +34,7 @@ import PollDataSaga from 'app/redux/PollDataSaga';
 import {component as NotFound} from 'app/components/pages/NotFound';
 import extractMeta from 'app/utils/ExtractMeta';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
+import Translator from 'app/Translator';
 
 const sagaMiddleware = createSagaMiddleware(
     ...userWatches, // keep first to remove keys early when a page change happens
@@ -125,13 +126,15 @@ async function universalRender({ location, initial_state, offchain }) {
             console.log('%c%s','color: black; font-size: 16px;', 'This is a developer console, you must read and understand anything you paste or type here or you could compromise your account and your private keys.');
         }
         return render(
-            <Provider store={store}>
-                <Router
-                    routes={RootRoute}
-                    history={history}
-                    onError={onRouterError}
-                    render={applyRouterMiddleware(scroll)} />
-            </Provider>,
+                <Provider store={store}>
+                    <Translator>
+                        <Router
+                            routes={RootRoute}
+                            history={history}
+                            onError={onRouterError}
+                            render={applyRouterMiddleware(scroll)} />
+                    </Translator>
+                </Provider>,
             document.getElementById('content')
         );
     }

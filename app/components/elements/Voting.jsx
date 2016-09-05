@@ -6,7 +6,7 @@ import Icon from 'app/components/elements/Icon';
 import Follow from 'app/components/elements/Follow';
 import FormattedAsset from 'app/components/elements/FormattedAsset';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
-import pluralize from 'pluralize';
+import Tooltip from 'app/components/elements/Tooltip';
 import {formatDecimal, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
@@ -95,6 +95,7 @@ class Voting extends React.Component {
     }
 
     render() {
+        // return null
         const {myVote, active_votes, showList, voting, flag, vesting_shares} = this.props;
         const {votingUp, votingDown, showWeight, weight} = this.state;
         // console.log('-- Voting.render -->', myVote, votingUp, votingDown);
@@ -124,6 +125,7 @@ class Voting extends React.Component {
 
         const payoutItems = [
             {value: translate('potential_payout') + ' $' + formatDecimal(pending_payout).join('')},
+            // after merging update
             {value: translate('boost_payments') + ' $' + formatDecimal(promoted).join('')}
         ];
         if (cashout_time && cashout_time.indexOf('1969') !== 0 && cashout_time.indexOf('1970') !== 0) {
@@ -156,7 +158,7 @@ class Voting extends React.Component {
 
         let voters_list = null;
         if (showList) {
-            voters_list = <DropdownMenu selected={pluralize('votes', count, true)} className="Voting__voters_list" items={voters} el="div" />;
+            voters_list = <DropdownMenu selected={translate('vote_count', {voteCount: count})} className="Voting__voters_list" items={voters} el="div" />;
         }
 
         let voteUpClick = this.voteUp;
@@ -190,7 +192,7 @@ class Voting extends React.Component {
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
-        const post = state.global.getIn(['content', ownProps.post])
+        const post = state.global.getIn(['content', ownProps.post]) || 0
         if (!post) return ownProps
         const author = post.get('author')
         const permlink = post.get('permlink')
@@ -200,7 +202,7 @@ export default connect(
         const current_account = state.user.get('current')
         const cashout_time = post.get('cashout_time')
         const pending_payout       = parsePayoutAmount(post.get('pending_payout_value'))
-        const promoted             = parsePayoutAmount(post.get('promoted'))
+        const promoted             = parsePayoutAmount(post.get('promoted')) || 0
         const total_author_payout  = parsePayoutAmount(post.get('total_payout_value'))
         const total_curator_payout = parsePayoutAmount(post.get('curator_payout_value'))
         const username = current_account ? current_account.get('username') : null;

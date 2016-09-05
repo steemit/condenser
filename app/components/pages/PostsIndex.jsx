@@ -75,15 +75,8 @@ class PostsIndex extends React.Component {
                         loadMore={this.loadMore} showSpam={showSpam} />
                 </div>
                 <div className="PostsIndex__topics column shrink show-for-large">
-                    <Topics order={order} current={category} compact={false} />
-                    <small>
-                        <a onClick={this.onShowSpam}>
-                            {translate(
-                                showSpam
-                                ? 'show_less_low_value_posts'
-                                : 'show_more_low_value_posts')}
-                        </a>
-                    </small>
+                    <Topics order={topics_order} current={category} compact={false} />
+                    <small><a onClick={this.onShowSpam}>{showSpam ? 'Show less' : 'Show more'}</a> low value posts</small>
                 </div>
             </div>
         );

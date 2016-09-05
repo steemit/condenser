@@ -16,7 +16,6 @@ import Userpic from 'app/components/elements/Userpic';
 import transaction from 'app/redux/Transaction'
 import {List} from 'immutable'
 import {Long} from 'bytebuffer'
-import pluralize from 'pluralize';
 import {parsePayoutAmount, repLog10} from 'app/utils/ParsersAndFormatters';
 import { translate } from '../../Translator';
 
@@ -303,7 +302,7 @@ class CommentImpl extends React.Component {
                 <div className={downVotedClass}>
                     <div className="Comment__header">
                         <div className="Comment__header_collapse">
-                            <Voting post={post} flag />
+                            <Voting post={post} pending_payout={comment.pending_payout_value} total_payout={comment.total_payout_value} flag />
                             <a title={translate('collapse_or_expand')} onClick={this.toggleDetails}>{ this.state.show_details ? '[-]' : '[+]' }</a>
                         </div>
                         <span className="Comment__header-user">
@@ -316,9 +315,9 @@ class CommentImpl extends React.Component {
                             <TimeAgoWrapper date={comment.created} />
                         </Link>
                         { !this.state.show_details && (hide_body && !showNegativeComments) &&
-                          <Voting post={post} showList={comment.active_votes.length !== 0 ? true : false} /> }
+                          <Voting pending_payout={comment.pending_payout_value} total_payout={comment.total_payout_value} post={post} showList={comment.active_votes.length !== 0 ? true : false} /> }
                         { this.state.show_details || comment.children == 0 ||
-                          <span className="marginLeft1rem">{pluralize('replies', comment.children, true)}</span>}
+                          <span className="marginLeft1rem">{translate('reply_count', {replyCount: comment.children})}</span>}
                         { this.state.show_details && (hide_body && !showNegativeComments) &&
                             <a className="marginLeft1rem" onClick={this.revealBody}>{translate('reveal_comment')}</a>}
                     </div>

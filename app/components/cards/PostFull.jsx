@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
-import pluralize from 'pluralize';
 import Icon from 'app/components/elements/Icon';
 import { connect } from 'react-redux';
 // import FormattedAsset from 'app/components/elements/FormattedAsset';
@@ -243,7 +242,7 @@ class PostFull extends React.Component {
                     </div>
                     <div className="column shrink">
                             <span className="PostFull__responses">
-                                <Link to={link} title={pluralize('Responses', content.children, true)}>
+                                <Link to={link} title={translate('response_count', {responseCount: content.children})}>
                                     <Icon name="chatboxes" className="space-right" />{content.children}
                                 </Link>
                             </span>

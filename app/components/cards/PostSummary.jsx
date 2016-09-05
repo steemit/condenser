@@ -14,12 +14,7 @@ import TagList from 'app/components/elements/TagList';
 import {authorNameAndRep} from 'app/utils/ComponentFormatters';
 import {Map} from 'immutable';
 import Reputation from 'app/components/elements/Reputation';
-import { FormattedMessage } from 'react-intl';
-
-
-// NOTE FIXME this is the only place in entire app where translate() fails and returns empty function
-// i spended 2 days trying to solve it with no success.
-// Using <FormattedMessage /> as workaround
+import { translate } from 'app/Translator';
 
 function TimeAuthorCategory({post, links, authorRepLog10, gray}) {
     const author = <strong>{post.author}</strong>;
@@ -28,14 +23,14 @@ function TimeAuthorCategory({post, links, authorRepLog10, gray}) {
             <Tooltip t={new Date(post.created).toLocaleString()}>
                 <span className="TimeAgo"><TimeAgoWrapper date={post.created} /></span>
             </Tooltip>
-            <span>{' '}<FormattedMessage id="by" />&nbsp;
+            <span>{' ' + translate('by')}&nbsp;
                 <span itemProp="author" itemScope itemType="http://schema.org/Person">
                     {links ? <Link to={post.author_link}>{author}</Link> :
                         <strong>{author}</strong>}
                     <Reputation value={authorRepLog10} />
                 </span>
             </span>
-            <span>{' '}<FormattedMessage id="in" />&nbsp;{links ? <TagList post={post} /> : <strong>{post.category}</strong>}</span>
+            <span>{' ' + translate('in')}&nbsp;{links ? <TagList post={post} /> : <strong>{post.category}</strong>}</span>
         </span>
     );
 }
@@ -120,7 +115,7 @@ class PostSummary extends React.Component {
         return (
             <article className={'PostSummary hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')} itemScope itemType ="http://schema.org/blogPost">
                 <div className={hasFlag ? '' : 'PostSummary__collapse'}>
-                    <div className="float-right"><Voting post={post} flag /></div>
+                    <div className="float-right"><Voting pending_payout={pending_payout} total_payout={total_payout} showList={false} cashout_time={cashout_time} post={post} flag /></div>
                 </div>
                 <div className="PostSummary__header show-for-small-only">
                     {content_title}
@@ -135,7 +130,7 @@ class PostSummary extends React.Component {
                     </div>
                     {content_body}
                     <div className="PostSummary__footer">
-                        <Voting post={post} showList={false} />
+                        <Voting pending_payout={pending_payout} total_payout={total_payout} showList={false} cashout_time={cashout_time} post={post} showList={false} />
                         <span className="PostSummary__time_author_category show-for-medium">
                             <TimeAuthorCategory post={p} links authorRepLog10={authorRepLog10} />
                         </span>

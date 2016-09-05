@@ -99,20 +99,25 @@ function* broadcastOperation({payload:
         return
     }
     const payload = {operations: [[type, operation]], keys, username, successCallback, errorCallback}
-    if (!keys || keys.length === 0) {
-        payload.keys = []
-        // user may already be logged in, or just enterend a signing passowrd or wif
-        const signingKey = yield call(findSigningKey, {opType: type, username, password})
-        if (signingKey)
-            payload.keys.push(signingKey)
-        else {
-            if (!password) {
-                yield put(user.actions.showLogin({operation: {type, operation, username, successCallback, errorCallback, saveLogin: true}}))
-                return
+    try {
+        if (!keys || keys.length === 0) {
+            payload.keys = []
+            // user may already be logged in, or just enterend a signing passowrd or wif
+            const signingKey = yield call(findSigningKey, {opType: type, username, password})
+            if (signingKey)
+                payload.keys.push(signingKey)
+            else {
+                if (!password) {
+                    yield put(user.actions.showLogin({operation: {type, operation, username, successCallback, errorCallback, saveLogin: true}}))
+                    return
+                }
             }
         }
+        yield call(broadcast, {payload})
+    } catch(error) {
+        console.error('TransactionSage', error)
+        if(errorCallback) errorCallback(error.toString())
     }
-    yield call(broadcast, {payload})
 }
 
 function* broadcast({payload: {operations, keys, username, successCallback, errorCallback}}) {
@@ -176,9 +181,11 @@ function* broadcast({payload: {operations, keys, username, successCallback, erro
             }
             const config = operation.__config
             if (config && config.successMessage) {
-                // TODO replace assert with notice dialog after merge with main branch
-                alert(config.successMessage)
-                yield put(tr.actions.set({key: 'successMessage', value: config.successMessage}))
+                yield put({type: 'ADD_NOTIFICATION', payload: {
+                    key: "trx_" + Date.now(),
+                    message: config.successMessage,
+                    dismissAfter: 5000
+                }})
             }
         }
         if (successCallback) try { successCallback() } catch (error) { console.error(error) }

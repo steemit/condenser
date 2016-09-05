@@ -1,12 +1,11 @@
 import {fromJS} from 'immutable';
 import createModule from 'redux-modules';
-import {PropTypes} from 'react';
 
-const {string, object, bool, shape, oneOf} = PropTypes
 const defaultState = fromJS({
     current: null,
     show_login_modal: false,
     show_transfer_modal: false,
+    show_promote_post_modal: false,
     show_signup_modal: false,
     pub_keys_used: null
 });
@@ -17,10 +16,6 @@ export default createModule({
     transformations: [
         {
             action: 'SHOW_LOGIN',
-            payloadTypes: {
-                operation: object,
-                loginDefault: object,
-            },
             reducer: (state, {payload}) => {
                 // https://github.com/mboperator/redux-modules/issues/11
                 if (typeof payload === 'function') payload = undefined
@@ -58,31 +53,16 @@ export default createModule({
         }},
         { action: 'SHOW_TRANSFER', reducer: state => state.set('show_transfer_modal', true) },
         { action: 'HIDE_TRANSFER', reducer: state => state.set('show_transfer_modal', false) },
+        { action: 'SHOW_PROMOTE_POST', reducer: state => state.set('show_promote_post_modal', true) },
+        { action: 'HIDE_PROMOTE_POST', reducer: state => state.set('show_promote_post_modal', false) },
         { action: 'SET_TRANSFER_DEFAULTS', reducer: (state, {payload}) => state.set('transfer_defaults', fromJS(payload)) },
         { action: 'CLEAR_TRANSFER_DEFAULTS', reducer: (state) => state.remove('transfer_defaults') },
         {
             action: 'USERNAME_PASSWORD_LOGIN',
-            payloadTypes: {
-                username: string,
-                password: string,
-                operationType: string,
-                saveLogin: bool,
-            },
             reducer: state => state, // saga
         },
         {
             action: 'SET_USER',
-            payloadTypes: {
-                username: string,
-                password: string,
-                account: object,
-                private_key: object,
-                private_keys: object,
-                login_owner_pubkey: string,
-                previous_owner_authority: object,
-                vesting_shares: string,
-                // pending_private_key: object,
-            },
             reducer: (state, {payload}) => {
                 // console.log('SET_USER')
                 if (payload.vesting_shares) payload.vesting_shares = parseFloat(payload.vesting_shares);
@@ -91,16 +71,10 @@ export default createModule({
         },
         {
             action: 'CLOSE_LOGIN',
-            payloadTypes: {
-                error: string,
-            },
             reducer: (state) => state.merge({ login_error: undefined, show_login_modal: false, loginBroadcastOperation: undefined, loginDefault: undefined })
         },
         {
             action: 'LOGIN_ERROR',
-            payloadTypes: {
-                error: string,
-            },
             reducer: (state, {payload: {error}}) => state.merge({ login_error: error, logged_out: undefined })
         },
         {
@@ -119,9 +93,6 @@ export default createModule({
 
         {
             action: 'KEYS_ERROR',
-            payloadTypes: {
-                error: string,
-            },
             reducer: (state, {payload: {error}}) => state.merge({ keys_error: error })
         },
         // { action: 'UPDATE_PERMISSIONS', reducer: state => {
@@ -129,27 +100,10 @@ export default createModule({
         // }},
         { // AuthSaga
             action: 'ACCOUNT_AUTH_LOOKUP',
-            payloadTypes: {
-                account: object.isRequired, // immutable Map
-                private_keys: shape({
-                    posting_private: object,
-                    active_private: object,
-                }), // Immutable Map
-                login_owner_pubkey: string,
-            },
             reducer: state => state
         },
         { // AuthSaga
             action: 'SET_AUTHORITY',
-            payloadTypes: {
-                accountName: string.isRequired,
-                auth: shape({
-                    posting: oneOf(['full', 'partial', 'none']),
-                    active: oneOf(['full', 'partial', 'none']),
-                    owner: oneOf(['full', 'partial', 'none']),
-                }).isRequired, // Immutable Set
-                pub_keys_used: object,
-            },
             reducer: (state, {payload: {accountName, auth, pub_keys_used}}) => {
                 state = state.setIn(['authority', accountName], fromJS(auth))
                 if(pub_keys_used)

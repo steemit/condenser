@@ -53,7 +53,7 @@ export default class DropdownMenu extends React.Component {
             {children || <span>
                 {/*selectedEntry && selectedEntry.icon && <Icon name={selectedEntry.icon} />*/}{/*looks bad on the deposit screen*/}
                 {selectedLabel}
-                <Icon className="dropdown-arrow" name="dropdown-arrow" />
+                <Icon name="dropdown-arrow" />
             </span>}
         </a>;
         const menu = <VerticalMenu key="menu" title={title} items={items} hideValue={selected} className="VerticalMenu" />;

@@ -45,7 +45,7 @@ class AuthorRewards extends React.Component {
         let firstDate, finalDate;
         let author_log = account.transfer_history.map((item, index) => {
             // Filter out rewards
-            if (item[1].op[0] === "comment_reward") {
+            if (item[1].op[0] === "author_reward") {
                 if (!finalDate) {
                     finalDate = new Date(item[1].timestamp).getTime();
                 }
@@ -85,12 +85,12 @@ class AuthorRewards extends React.Component {
              <nav>
                <ul className="pager">
                  <li>
-                     <div className={"button tiny hollow float-left " + (historyIndex === 0 ? " disabled" : "")} onClick={this._setHistoryPage.bind(this, false)} aria-label="Previous">
+                     <div className={"button tiny hollow float-left " + (historyIndex === 0 ? " disabled" : "")} onClick={this._setHistoryPage.bind(this, false)} aria-label={translate('newer')}>
                          <span aria-hidden="true">&larr; {translate('newer')}</span>
                      </div>
                  </li>
                  <li>
-                     <div className={"button tiny hollow float-right " + (historyIndex >= (curationLength - 10) ? " disabled" : "")} onClick={historyIndex >= (curationLength - 10) ? null : this._setHistoryPage.bind(this, true)} aria-label="Next">
+                     <div className={"button tiny hollow float-right " + (historyIndex >= (curationLength - 10) ? " disabled" : "")} onClick={historyIndex >= (curationLength - 10) ? null : this._setHistoryPage.bind(this, true)} aria-label={translate('older')}>
                          <span aria-hidden="true">{translate('older')} &rarr;</span>
                      </div>
                  </li>
@@ -126,7 +126,7 @@ class AuthorRewards extends React.Component {
             </div>
             <div className="UserWallet__balance UserReward__row row">
                 <div className="column small-12 medium-8">
-                    {!hasFullWeek ? "Estimated author rewards last week" : "Author rewards last week"}:
+                    {translate(!hasFullWeek ? 'estimated_author_rewards_last_week' : 'author_rewards_last_week')}:
                 </div>
                 <div className="column small-12 medium-3">
                     {numberWithCommas(vestsToSp(this.props.state, (hasFullWeek ? rewardsWeekVests : averageCurationVests * 7) + " VESTS")) + " STEEM POWER"}

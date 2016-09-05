@@ -6,7 +6,7 @@ import {PrivateKey} from 'shared/ecc'
 import user from 'app/redux/User'
 import {getAccount} from 'app/redux/SagaShared'
 import {browserHistory} from 'react-router'
-import {serverApiLogin, serverApiLogout, /*serverApiRecordEvent*/} from 'app/utils/ServerApiClient';
+import {serverApiLogin, serverApiLogout} from 'app/utils/ServerApiClient';
 import {Apis} from 'shared/api_client';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import {loadFollows} from 'app/redux/FollowSaga'
@@ -20,6 +20,8 @@ export const userWatches = [
     loginErrorWatch,
     lookupPreviousOwnerAuthorityWatch,
 ]
+
+const highSecurityPages = Array(/\/market/, /\/@.+\/(transfers|permissions|password)/, /\/~witnesses/)
 
 function* lookupPreviousOwnerAuthorityWatch() {
     yield* takeLatest('user/lookupPreviousOwnerAuthority', lookupPreviousOwnerAuthority);
@@ -45,8 +47,15 @@ export function* watchRemoveHighSecurityKeys() {
 // function* getCurrentAccountWatch() {
 //     // yield* takeLatest('user/SHOW_TRANSFER', getCurrentAccount);
 // }
-function* removeHighSecurityKeys() {
-    yield put(user.actions.removeHighSecurityKeys())
+
+function* removeHighSecurityKeys({payload: {pathname}}) {
+    const highSecurityPage = highSecurityPages.find(p => p.test(pathname)) != null
+    // Let the user keep the active key when going from one high security page to another.  This helps when
+    // the user logins into the Wallet then the Permissions tab appears (it was hidden).  This keeps them
+    // from getting logged out when they click on Permissions (which is really bad because that tab
+    // disappears again).
+    if(!highSecurityPage)
+        yield put(user.actions.removeHighSecurityKeys())
 }
 
 /**
@@ -68,7 +77,6 @@ function* usernamePasswordLogin(action) {
 // const isHighSecurityOperations = ['transfer', 'transfer_to_vesting', 'withdraw_vesting',
 //     'limit_order_create', 'limit_order_cancel', 'account_update', 'account_witness_vote']
 
-const highSecurityPages = Array(/\/market/, /\/@.+\/(transfers|permissions|password)/, /\/~witnesses/)
 
 const clean = (value) => value == null || value === '' || /null|undefined/.test(value) ? undefined : value
 
@@ -88,19 +96,23 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         }
     }
     // no saved password
-    if (!username || !password) return
+    if (!username || !password) {
+        const offchain_account = yield select(state => state.offchain.get('account'))
+        if (offchain_account) serverApiLogout()
+        return
+    }
 
     let userProvidedRole // login via:  username/owner
     if (username.indexOf('/') > -1) {
         // "alice/active" will login only with Alices active key
         [username, userProvidedRole] = username.split('/')
     }
-    const current_route = yield select(state => state.global.get('current_route'))
 
+    const pathname = yield select(state => state.global.get('pathname'))
     const highSecurityLogin =
         // /owner|active/.test(userProvidedRole) ||
         // isHighSecurityOperations.indexOf(operationType) !== -1 ||
-        highSecurityPages.find(p => p.test(current_route)) != null
+        highSecurityPages.find(p => p.test(pathname)) != null
 
     const isRole = (role, fn) => (!userProvidedRole || role === userProvidedRole ? fn() : undefined)
 

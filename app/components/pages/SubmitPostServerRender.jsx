@@ -1,10 +1,11 @@
 import React from 'react';
+import { translate } from 'app/Translator';
 
 class SubmitPostServerRender extends React.Component {
     render() {
         return (
             <div className="text-center">
-                Loading...
+                {translate('loading')}...
             </div>
         );
     }

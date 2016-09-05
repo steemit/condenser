@@ -1,6 +1,7 @@
 /* eslint react/prop-types: 0 */
 import React from 'react';
 import UserListRow from 'app/components/cards/UserListRow';
+import { translate } from '../../Translator';
 
 const PER_PAGE = 50;
 
@@ -46,13 +47,13 @@ class UserList extends React.Component {
              <nav>
                <ul className="pager">
                  <li>
-                     <div className={"button tiny hollow float-left " + (historyIndex === 0 ? " disabled" : "")} onClick={this._setHistoryPagePrevious} aria-label="Previous">
-                         <span aria-hidden="true">&larr; Previous</span>
+                     <div className={"button tiny hollow float-left " + (historyIndex === 0 ? " disabled" : "")} onClick={this._setHistoryPagePrevious} aria-label={translate('previous')}>
+                         <span aria-hidden="true">&larr; {translate('previous')}</span>
                      </div>
                  </li>
                  <li>
-                     <div className={"button tiny hollow float-right " + (historyIndex >= (usersLength - PER_PAGE) ? " disabled" : "")} onClick={historyIndex >= (usersLength - PER_PAGE) ? null : this._setHistoryPageNext} aria-label="Next">
-                         <span aria-hidden="true">Next &rarr;</span>
+                     <div className={"button tiny hollow float-right " + (historyIndex >= (usersLength - PER_PAGE) ? " disabled" : "")} onClick={historyIndex >= (usersLength - PER_PAGE) ? null : this._setHistoryPageNext} aria-label={translate('next')}>
+                         <span aria-hidden="true">{translate('next')} &rarr;</span>
                      </div>
                  </li>
                </ul>

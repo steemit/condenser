@@ -11,6 +11,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import MediumEditor from 'medium-editor';
 import {connect} from 'react-redux';
+import { translate } from '../../Translator';
 
 const {uploadImage} = $STM_Config
 
@@ -48,7 +49,7 @@ class ReactMediumEditor extends React.Component {
             addons: {
                 embeds: {
                     // placeholder: 'Paste a YouTube, Vimeo, Facebook, Twitter or Instagram link and press Enter', //available
-                    placeholder: 'Paste a YouTube or Vimeo and press Enter', // the ones with iframes
+                    placeholder: translate('paste_a_youtube_or_vimeo_and_press_enter'), // the ones with iframes
                     oembedProxy: null,
                 },
                 images: {
@@ -67,7 +68,7 @@ class ReactMediumEditor extends React.Component {
                         fail: (data, e) => {
                             console.log('data, e', data, e)
                             const name = e.files[0].name
-                            this.props.notify(`${e.errorThrown ? e.errorThrown : 'There was an error uploading your image'} (${name})`)
+                            this.props.notify(`${e.errorThrown ? e.errorThrown : translate('there_was_an_error_uploading_your_image')} (${name})`)
                         },
                     },
                     deleteScript: null, //'deleteImage',

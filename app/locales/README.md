@@ -1,68 +1,36 @@
-Notes for hackers and translators:
-none of the strings are bind directly to components to keep them reusable.
-few reasons behind it:
+# internationalization guide
 
+## how to add your own language
 
+1. copy ./en.js
+2. rename it (for example jp.js)
+3. translate it
+4. add localeData and newly translated strings as it is done in Translator.jsx (read the comments)
 
+## Notes for hackers and translators
+'keep_syntax_lowercase_with_dashes' on string names. Example: show_password: 'Show Password'
+Please keep in mind that none of the strings are bind directly to components to keep them reusable. For example: 'messages_count' can be used in one page today, but also can be placed in another tomorrow.
+Strings must be as close to source as possible.
+They must keep proper structure because "change_password" can translate both 'Change Password' and 'Change Account Password'.
+Same with "user hasn't started posting" and "user hasn't started posting yet", 'user_hasnt_followed_anything_yet' and 'user_hasnt_followed_anything' is not the same
 
+### About syntax rules
 
+Do not use anything to style strings unless you are 100% sure what you are doing.
+This is no good: 'LOADING' instead of 'Loading'. Avoid whitespace styling: '   Loading' - is no good.
+Also, try to avoid using syntax signs, unless it's a long ass string which will always end with dot no matter where you put it. Example: 'Loading...', 'Loading!' is no good, use 'Loading' instead.
+If you are not sure which syntax to use and how to write your translations just copy the way original string have been written.
 
-// do i even want to write this shit?
+### How to use plurals
 
+Plurals are strings which look differently depending on what numbers are used.
+We use formatJs syntax, read the docs http://formatjs.io/guides/message-syntax/
+Pay special attention to '{plural} Format' section.
+[This link](http://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html) shows how they determine which plural to use in different languages (they explain how string falls under 'few', 'many' and 'other' category. If you are completely lost, just look at the other translation files (en.js or ru.js).
 
-
-
-
-
-How to add your own language:
-* copy ./en.js and translate
-* add localeData and newly translated strings as it is done in Translator.jsx
-
-
-// explain why long ass strings are used
-// NOTE: here are some placeholders:
-// Strings are not bind to components to keep them isomorphic and reusable.
-// long ass strings like 'by_verifying_you_agree' and 'by_verifying_you_agree_terms_and_conditions' used together and nearby to avoid out of context problems. Because you cant just use 'terms_and_conditions' string template because it can have different formatting and prononciation in different languages depending on context
-// do not add dots at the end (but what about long texts?)
-// notes
-// so not use space and indentation as styling tool in strings( ie '   something    else    and      this')
-// but what about this kind of sentences? transfer_amount_to_steem_power
-// transfer_amount_steem_power_to
-// recieve_amount_from
-// transfer_amount_from_to
-// they allways will have identation on the end and never will be used out of context(?) (or not?)
-// IDEA what about adding indentation based of formatJS syntax? (defaultValue or { indent: true })
-// JUST USE SAME RULES AS ORIGINAL SYNTAX (question about lower/upper class)
-
-// try to write 5 instead of FIVE because it is hard to change it in the future
-
-// all strings are lowercase and use underscore to separate multiple strings (except not full sentence(ie 'by')), or intermediate strings (ie 'in reply to' is used before something else) // TODO (before what exactly?) (PostHistoryRow)
-
-// another example why not to use dots and other syntax marks: santence can be put into text(dot needed), but also can be put in snackbar or button(dot not needed)
-
-// not sure but possible problems
-// example: 'by Mike'
-// in english it is 'by Mike', but in some language it might be 'Mike by' (sort of, hope you understand)
-
-// TODO heck defineMessages API of react-intl, it will allow to improve strings
-// DO NOT FORGET TO ADD RUBLE SIGN
-
-// add rules about using quotes for non programmers? (ie \', \n)
-
-// TODO remove all '$' signs. What is proper syntax?
-
-// TODO add coin and brand name as constant here. Like so:
-// const 	brandName = 'SteemIt',
-// 		coinName = 'Steem Power'
-// form empty strings (ex. 'by') use ' ' instead of ''
-
-// if you are going to add strings please keep in mind:
-// strings must be as close to source as possible
-// they must keep propert structure because "change_password" can translate both
-// 'Change Password' and 'Change Account Password',
-// same with 'user hasnt started posting' and 'user hasnt started posting yet'
-// 'user_hasnt_followed_anything_yet' and 'user_hasnt_followed_anything' is not the same
-
-// FIXME name this file README.md and place in locales (for better github view)
-
-// TODO add explanation on how to change formatted date values
+### How to use special symbols
+\n means new line break
+\' means ' (single quote sign)
+this works: 'hasn\'t', "hasn't" (double quotes > single quotes)
+this does not: 'hasn't'
+Some languages require certain strings to be empty. For example, Russian language in some context does not have equivalent for 'by'('Post created by Misha'). For empty strings use ' '(empty quotes with single space)  instead of '', otherwise you will see string name instead of nothing.

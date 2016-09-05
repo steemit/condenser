@@ -1,4 +1,4 @@
-import Immutable, {Map, fromJS} from 'immutable';
+import {Map, fromJS} from 'immutable';
 import {combineReducers} from 'redux';
 import {routerReducer} from 'react-router-redux';
 import appReducer from './AppReducer';
@@ -14,9 +14,13 @@ import {contentStats} from 'app/utils/StateFunctions'
 
 function initReducer(reducer, type) {
     return (state, action) => {
+        if(!state) return reducer(state, action);
+
         // @@redux/INIT server and client init
-        if (state && (action.type === '@@redux/INIT' || action.type === '@@INIT')) {
-            state = state instanceof Map ? state : Immutable.fromJS(state);
+        if (action.type === '@@redux/INIT' || action.type === '@@INIT') {
+            if(!(state instanceof Map)) {
+                state = fromJS(state);
+            }
             if(type === 'global') {
                 const content = state.get('content').withMutations(c => {
                     c.forEach((cc, key) => {
@@ -28,6 +32,12 @@ function initReducer(reducer, type) {
             }
             return state
         }
+
+        if (action.type === '@@router/LOCATION_CHANGE' && type === 'global') {
+            state = state.set('pathname', action.payload.pathname)
+            // console.log(action.type, type, action, state.toJS())
+        }
+
         return reducer(state, action);
     }
 }

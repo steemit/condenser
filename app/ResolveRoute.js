@@ -48,7 +48,11 @@ export default function resolveRoute(path)
     if (path === '/submit.html') {
         return {page: 'SubmitPost'};
     }
-    let match = path.match(/^\/(@[\w\.\d-]+)\/?$/) ||
+    let match = path.match(/^\/(@[\w\.\d-]+)\/feed\/?$/);
+    if (match) {
+        return {page: 'PostsIndex', params: ['home', match[1]]};
+    }
+    match = path.match(/^\/(@[\w\.\d-]+)\/?$/) ||
         path.match(/^\/(@[\w\.\d-]+)\/(blog|posts|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers)\/?$/);
     if (match) {
         return {page: 'UserProfile', params: match.slice(1)};

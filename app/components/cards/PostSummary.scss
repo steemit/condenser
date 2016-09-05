@@ -127,7 +127,7 @@ ul.PostSummary__tags {
 
   a {
     color: inherit;
-    display: block;
+    display: inline;
   }
 }
 
@@ -200,6 +200,9 @@ ul.PostSummary__tags {
     white-space: normal;
     text-overflow: initial;
     padding-bottom: 0.3rem;
+    a {
+        display: block;
+    }
   }
   .PostSummary.with-image .PostSummary__content {
     margin-left: 0;

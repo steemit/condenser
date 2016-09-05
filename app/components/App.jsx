@@ -15,7 +15,7 @@ import Dialogs from 'app/components/modules/Dialogs';
 import Modals from 'app/components/modules/Modals';
 import Icon from 'app/components/elements/Icon';
 import {key_utils} from 'shared/ecc'
-import Translator, { translate } from '../Translator.js';
+import { translate } from '../Translator.js';
 
 class App extends React.Component {
     constructor(props) {
@@ -151,8 +151,7 @@ class App extends React.Component {
             );
         }
 
-        return <Translator>
-            <div className={'App' + (lp ? ' LP' : '') + (ip ? ' index-page' : '')} onMouseMove={this.onEntropyEvent}>
+        return <div className={'App' + (lp ? ' LP' : '') + (ip ? ' index-page' : '')} onMouseMove={this.onEntropyEvent}>
             <SidePanel ref="side_panel" alignment="right">
                 <TopRightMenu vertical navigate={this.navigate} />
                 <ul className="vertical menu">
@@ -230,7 +229,6 @@ class App extends React.Component {
             <Dialogs />
             <Modals />
         </div>
-    </Translator>
     }
 }
 

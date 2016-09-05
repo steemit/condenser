@@ -14,12 +14,7 @@ import TagList from 'app/components/elements/TagList';
 import {authorNameAndRep} from 'app/utils/ComponentFormatters';
 import {Map} from 'immutable';
 import Reputation from 'app/components/elements/Reputation';
-import { FormattedMessage } from 'react-intl';
-
-
-// NOTE FIXME this is the only place in entire app where translate() fails and returns empty function
-// i spended 2 days trying to solve it with no success.
-// Using <FormattedMessage /> as workaround
+import { translate } from 'app/Translator';
 
 function TimeAuthorCategory({post, links, authorRepLog10, gray}) {
     const author = <strong>{post.author}</strong>;
@@ -28,19 +23,19 @@ function TimeAuthorCategory({post, links, authorRepLog10, gray}) {
             <Tooltip t={new Date(post.created).toLocaleString()}>
                 <span className="TimeAgo"><TimeAgoWrapper date={post.created} /></span>
             </Tooltip>
-            <span>{' '}<FormattedMessage id="by" />&nbsp;
+            <span>{' ' + translate('by')}&nbsp;
                 <span itemProp="author" itemScope itemType="http://schema.org/Person">
                     {links ? <Link to={post.author_link}>{author}</Link> :
                         <strong>{author}</strong>}
                     <Reputation value={authorRepLog10} />
                 </span>
             </span>
-            <span>{' '}<FormattedMessage id="in" />&nbsp;{links ? <TagList post={post} /> : <strong>{post.category}</strong>}</span>
+            <span>{' ' + translate('in')}&nbsp;{links ? <TagList post={post} /> : <strong>{post.category}</strong>}</span>
         </span>
     );
 }
 
-export default class PostSummary extends React.Component {
+class PostSummary extends React.Component {
     static propTypes = {
         post: React.PropTypes.string.isRequired,
         pending_payout: React.PropTypes.string.isRequired,
@@ -66,37 +61,23 @@ export default class PostSummary extends React.Component {
         let desc = p.desc
         if(p.image_link)// image link is already shown in the preview
             desc = desc.replace(p.image_link, '')
-        let title_link;
+        let title_link_url;
         let title_text = p.title;
         let comments_link;
         let is_comment = false;
 
         if( content.get( 'parent_author') !== "" ) {
            title_text = "Re: " + content.get('root_title');
-           title_link = content.get( 'url' );
-           comments_link = title_link;
+           title_link_url = content.get( 'url' );
+           comments_link = title_link_url;
            is_comment = true;
         } else {
-           title_link = p.link;
+           title_link_url = p.link;
            comments_link = p.link + '#comments';
         }
 
-        const title_link_url = title_link;
-        if (p.external_link && p.desc_complete && !is_comment) {
-            const domain = p.external_link.match(/:\/\/(www\.)?([\.\d\w-]+)/);
-            title_link = <span>
-                <a target="_blank" href={p.external_link}><Icon name="extlink" /></a>&nbsp;
-                <Link to={title_link}>{title_text}</Link>&nbsp;
-                <span className="domain">{domain ? domain[2] : ''}</span>
-            </span>
-        } else {
-            title_link = <Link to={title_link}>{title_text}</Link>;
-        }
-
-        // if(p.net_rshares < 0) desc = "";
-
         let content_body = <div className="PostSummary__body entry-content"><Link to={title_link_url}>{desc}</Link></div>;
-        let content_title = <h1 className="entry-title">{title_link}</h1>;
+        let content_title = <h1 className="entry-title"><Link to={title_link_url}>{title_text}</Link></h1>;
 
         if( !(currentCategory && currentCategory.match( /nsfw/ )) ) {
            if (currentCategory !== '-' && currentCategory !== p.category && p.category.match(/nsfw/) ) {
@@ -120,7 +101,7 @@ export default class PostSummary extends React.Component {
         return (
             <article className={'PostSummary hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')} itemScope itemType ="http://schema.org/blogPost">
                 <div className={hasFlag ? '' : 'PostSummary__collapse'}>
-                    <div className="float-right"><Voting post={post} flag /></div>
+                    <div className="float-right"><Voting pending_payout={pending_payout} total_payout={total_payout} showList={false} cashout_time={cashout_time} post={post} flag /></div>
                 </div>
                 <div className="PostSummary__header show-for-small-only">
                     {content_title}
@@ -135,7 +116,7 @@ export default class PostSummary extends React.Component {
                     </div>
                     {content_body}
                     <div className="PostSummary__footer">
-                        <Voting post={post} showList={false} />
+                        <Voting pending_payout={pending_payout} total_payout={total_payout} showList={false} cashout_time={cashout_time} post={post} showList={false} />
                         <span className="PostSummary__time_author_category show-for-medium">
                             <TimeAuthorCategory post={p} links authorRepLog10={authorRepLog10} />
                         </span>

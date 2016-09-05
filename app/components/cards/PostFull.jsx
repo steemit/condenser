@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
-import pluralize from 'pluralize';
 import Icon from 'app/components/elements/Icon';
 import { connect } from 'react-redux';
 // import FormattedAsset from 'app/components/elements/FormattedAsset';
@@ -35,7 +34,7 @@ function TimeAuthorCategory({content, authorRepLog10, showTags}) {
      );
 }
 
-export default class PostFull extends React.Component {
+class PostFull extends React.Component {
     static propTypes = {
         // html props
         /* Show extra options (component is being viewed alone) */
@@ -46,6 +45,7 @@ export default class PostFull extends React.Component {
         username: React.PropTypes.string,
         unlock: React.PropTypes.func.isRequired,
         deletePost: React.PropTypes.func.isRequired,
+        showPromotePost: React.PropTypes.func.isRequired,
     };
 
     constructor() {
@@ -129,6 +129,14 @@ export default class PostFull extends React.Component {
         window.open('https://www.linkedin.com/shareArticle?' + q, 'Share', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=' + winWidth + ',height=' + winHeight);
     }
 
+    showPromotePost = () => {
+        const post_content = this.props.global.get('content').get(this.props.post);
+        if (!post_content) return
+        const author = post_content.get('author')
+        const permlink = post_content.get('permlink')
+        this.props.showPromotePost(author, permlink)
+    }
+
     render() {
         const {props: {username, post}, state: {PostFullReplyEditor, PostFullEditEditor, formId, showReply, showEdit},
             onShowReply, onShowEdit, onDeletePost} = this
@@ -195,7 +203,7 @@ export default class PostFull extends React.Component {
 
         let post_header = <h1 className="entry-title">{content.title}</h1>
         if(content.depth > 0) {
-            let parent_link = `/@${content.parent_author}/${content.parent_permlink}`;
+            let parent_link = `/${content.category}/@${content.parent_author}/${content.parent_permlink}`;
             let direct_parent_link
             if(content.depth > 1) {
                 direct_parent_link = <li>
@@ -204,7 +212,6 @@ export default class PostFull extends React.Component {
                     </Link>
                 </li>
             }
-            if (content.category) parent_link = `/${content.category}${parent_link}`;
             post_header = <div className="callout">
                 <h5>{translate('you_are_viewing_single_comments_thread_from')}:</h5>
                 <p>
@@ -221,6 +228,9 @@ export default class PostFull extends React.Component {
             </div>
         }
 
+        const firstPayout = post_content.get('mode') === "first_payout"
+        const rootComment = post_content.get('depth') == 0
+
         return (
             <article className="PostFull hentry" itemScope itemType ="http://schema.org/blogPost">
                 <div className="float-right"><Voting post={post} flag /></div>
@@ -235,6 +245,9 @@ export default class PostFull extends React.Component {
                     </div>
                 }
 
+                {username && firstPayout && rootComment && <div className="float-right">
+                    <button className="button hollow tiny" onClick={this.showPromotePost}>Promote</button>
+                </div>}
                 <TagList post={content} horizontal />
                 <div className="PostFull__footer row align-middle">
                     <div className="column">
@@ -243,7 +256,7 @@ export default class PostFull extends React.Component {
                     </div>
                     <div className="column shrink">
                             <span className="PostFull__responses">
-                                <Link to={link} title={pluralize('Responses', content.children, true)}>
+                                <Link to={link} title={translate('response_count', {responseCount: content.children})}>
                                     <Icon name="chatboxes" className="space-right" />{content.children}
                                 </Link>
                             </span>
@@ -288,7 +301,10 @@ export default connect(
                 type: 'delete_comment',
                 operation: {author, permlink},
                 confirm: translate('are_you_sure')
-            }))
+            }));
+        },
+        showPromotePost: (author, permlink) => {
+            dispatch({type: 'global/SHOW_DIALOG', payload: {name: 'promotePost', params: {author, permlink}}});
         },
     })
 )(PostFull)

@@ -26,7 +26,7 @@ const coinToTypes = [
     ['ETH', 'eth'],
 ]
 
-export default class BlocktradesDeposit extends React.Component {
+class BlocktradesDeposit extends React.Component {
     static propTypes = {
         // html
         inputCoinType: React.PropTypes.string,
@@ -167,9 +167,12 @@ export default class BlocktradesDeposit extends React.Component {
         </span>
 
         const coin_menu = [
-            {onClick: () => inputCoin.onChange('ETH'), value: 'Ether', icon: 'ether', link: '#'},
-            {onClick: () => inputCoin.onChange('BTC'), value: 'Bitcoin', icon: 'bitcoin', link: '#'},
-            {onClick: () => inputCoin.onChange('BTS'), value: 'Bitshares', icon: 'bitshares', link: '#'},
+            {onClick: (e) => {e.preventDefault(); inputCoin.onChange('ETH')},
+                value: 'Ether', icon: 'ether', link: '#'},
+            {onClick: (e) => {e.preventDefault(); inputCoin.onChange('BTC')},
+                value: 'Bitcoin', icon: 'bitcoin', link: '#'},
+            {onClick: (e) => {e.preventDefault(); inputCoin.onChange('BTS')},
+                value: 'Bitshares', icon: 'bitshares', link: '#'},
         ];
         const selectInputCoin = <DropdownMenu className="move-left" items={coin_menu} selected={coinName(inputCoin.value)} el="span" />
         const estimateButtonLabel = est.inputAmount != null ? translate('update_estimate') : translate('get_estimate')

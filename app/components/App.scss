@@ -4,11 +4,24 @@
 }
 
 .App__content {
-  margin-top: 1.5rem;
+    margin-top: 3.5rem;
+    /* Small only */
+    @media screen and (max-width: 39.9375em) {
+        margin-top: 1.5rem;
+    }
+    /* Medium only */
+    @media screen and (min-width: 40em) and (max-width: 63.9375em) {
+        margin-top: 3.5rem;
+    }
+    /* Large and above */
+    @media screen and (min-width: 64.063em) {
+        margin-top: 3.5rem;
+    }
+
 }
 
 .welcomeWrapper {
-  margin-top: -1.5rem;
+  margin-top: -1rem;
   padding-bottom: 1rem;
 }
 .welcomeBanner {

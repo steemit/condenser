@@ -18,10 +18,12 @@ class UserWallet extends React.Component {
         super()
         this.state = {}
         this.onShowDeposit = () => {this.setState({showDeposit: !this.state.showDeposit})}
-        this.onShowDepositSteem = () => {
+        this.onShowDepositSteem = (e) => {
+            e.preventDefault()
             this.setState({showDeposit: !this.state.showDeposit, depositType: 'STEEM'})
         }
-        this.onShowDepositPower = () => {
+        this.onShowDepositPower = (e) => {
+            e.preventDefault()
             this.setState({showDeposit: !this.state.showDeposit, depositType: 'VESTS'})
         }
         // this.onShowDeposit = this.onShowDeposit.bind(this)
@@ -76,7 +78,7 @@ class UserWallet extends React.Component {
         const transfer_log = account.transfer_history.map(item => {
             const data = item[1].op[1]
             // Filter out rewards
-            if (item[1].op[0] === "curate_reward" || item[1].op[0] === "comment_reward") {
+            if (item[1].op[0] === "curation_reward" || item[1].op[0] === "author_reward") {
                 return null;
             }
 
@@ -124,7 +126,7 @@ class UserWallet extends React.Component {
                     <h4 className="uppercase">{translate('balances')}</h4>
                 </div>
                 {isMyAccount && <div className="column small-12 medium-4">
-                    <button className="UserWallet__buysp button hollow float-right " onClick={this.onShowDepositSteem}>Buy Steem or Steem Power</button>
+                    <button className="UserWallet__buysp button hollow float-right " onClick={this.onShowDepositSteem}>{translate('buy_steem_or_steem_power')}</button>
                 </div>}
             </div>
             <br />
@@ -225,7 +227,8 @@ export default connect(
     },
     // mapDispatchToProps
     dispatch => ({
-        convertToSteem: () => {
+        convertToSteem: (e) => {
+            e.preventDefault()
             const name = 'convertToSteem'
             dispatch(g.actions.showDialog({name}))
         },

@@ -6,9 +6,10 @@ import g from 'app/redux/GlobalReducer'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import Icon from 'app/components/elements/Icon'
 import {key_utils} from 'shared/ecc'
+import { translate } from '../../Translator';
 
 const {bool} = React.PropTypes
-export const steemitCannotRecoverPasswords = 'Steemit cannot recover passwords.  Keep this page in a secure location, such as a fireproof safe or safety deposit box.'
+export const steemitCannotRecoverPasswords = translate('steemit_cannot_recover_passwords_keep_this_page_in_a_secure_location')
 
 class SuggestPassword extends React.Component {
     static propTypes = {
@@ -34,7 +35,7 @@ class SuggestPassword extends React.Component {
                 <Icon name="steem" size="2x" /> Steemit
                 <hr />
                 <div>
-                    {print ? <h5>Steemit Password Backup</h5> : <h5>Steemit Password Backup (required)</h5>}
+                    <h5>{translate(print ? 'steemit_password_backup' : 'steemit_password_backup_required')}</h5>
                     {steemitCannotRecoverPasswords}
                 </div>
                 <br />
@@ -45,12 +46,12 @@ class SuggestPassword extends React.Component {
                             <code><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></code>
                         </div>
                     </div>}
-                    {!print && <div>After printing, write down your user name.</div>}
+                    {!print && <div>{translate('after_printing_write_down_your_user_name')}.</div>}
                 </div>
                 <br />
                 <div>
                     {!print && <a onClick={() => openPP(render(true))}>
-                        <Icon name="printer" size="3x" />&nbsp;Print&nbsp;&nbsp;
+                        <Icon name="printer" size="3x" />&nbsp;{translate('print')}&nbsp;&nbsp;
                         <br />
                         <br />
                     </a>}

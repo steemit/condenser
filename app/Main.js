@@ -35,8 +35,3 @@ try {
 } catch (e) {
     console.error(e)
 }
-
-// redux-form performance work-around https://github.com/erikras/redux-form/issues/529
-// window.reduxFormPerformFix = fields => {
-//     Object.keys(fields).forEach(el => {fields[el].onChange = e => {fields[el].value = e.target.value}})
-// }

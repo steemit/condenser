@@ -42,11 +42,15 @@ class Topics extends React.Component {
             state: {expanded, search},
             onChangeSearch, expand
         } = this;
+        console.warn(compact)
         let categories = this.props.categories.get('trending');
         if (!(expanded || search) || compact) categories = categories.take(50);
 
         const cn = 'Topics' + (className ? ` ${className}` : '');
         const currentValue = `/${order}/${current}`;
+        console.warn(categories)
+        console.warn('dicks')
+        console.warn(compact)
 
         if (compact) {
             return <select className={cn} onChange={(e) => browserHistory.push(e.target.value)} value={currentValue}>
@@ -58,7 +62,7 @@ class Topics extends React.Component {
             </select>;
         }
 
-        if (search) categories = categories.filter(val => val.indexOf(search) !== -1);
+        if (search) categories = categories.filter(val => val.indexOf(search.toLowerCase()) !== -1);
         categories = categories.map(cat => {
             const link = order ? `/${order}/${cat}` : `/hot/${cat}`;
             return (<li key={cat}>

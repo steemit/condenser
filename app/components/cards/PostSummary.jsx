@@ -61,37 +61,23 @@ class PostSummary extends React.Component {
         let desc = p.desc
         if(p.image_link)// image link is already shown in the preview
             desc = desc.replace(p.image_link, '')
-        let title_link;
+        let title_link_url;
         let title_text = p.title;
         let comments_link;
         let is_comment = false;
 
         if( content.get( 'parent_author') !== "" ) {
            title_text = "Re: " + content.get('root_title');
-           title_link = content.get( 'url' );
-           comments_link = title_link;
+           title_link_url = content.get( 'url' );
+           comments_link = title_link_url;
            is_comment = true;
         } else {
-           title_link = p.link;
+           title_link_url = p.link;
            comments_link = p.link + '#comments';
         }
 
-        const title_link_url = title_link;
-        if (p.external_link && p.desc_complete && !is_comment) {
-            const domain = p.external_link.match(/:\/\/(www\.)?([\.\d\w-]+)/);
-            title_link = <span>
-                <a target="_blank" href={p.external_link}><Icon name="extlink" /></a>&nbsp;
-                <Link to={title_link}>{title_text}</Link>&nbsp;
-                <span className="domain">{domain ? domain[2] : ''}</span>
-            </span>
-        } else {
-            title_link = <Link to={title_link}>{title_text}</Link>;
-        }
-
-        // if(p.net_rshares < 0) desc = "";
-
         let content_body = <div className="PostSummary__body entry-content"><Link to={title_link_url}>{desc}</Link></div>;
-        let content_title = <h1 className="entry-title">{title_link}</h1>;
+        let content_title = <h1 className="entry-title"><Link to={title_link_url}>{title_text}</Link></h1>;
 
         if( !(currentCategory && currentCategory.match( /nsfw/ )) ) {
            if (currentCategory !== '-' && currentCategory !== p.category && p.category.match(/nsfw/) ) {

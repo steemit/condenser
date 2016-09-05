@@ -33,7 +33,6 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
             {link: account_link, value: translate('blog')},
             {link: posts_link, value: translate('posts')},
             {link: replies_link, value: translate('replies')},
-            {link: feed_link, value: translate('feed')},
             {link: wallet_link, value: translate('wallet')},
             {link: reset_password_link, value: translate('change_password')},
             loggedIn ?

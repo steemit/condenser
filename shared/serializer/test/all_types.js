@@ -9,7 +9,7 @@ var ops = require('../src/operations');
 var {
     //varint32,
     uint8, uint16, uint32, int16, int64, uint64,
-    string, bytes, bool, array, fixed_array,
+    string, string_binary, bytes, bool, array, fixed_array,
     protocol_id_type, object_id_type, vote_id,
     // future_extensions,
     static_variant, map, set,
@@ -24,7 +24,7 @@ var { price, transfer } = ops
 // Must stay in sync with allTypes below.
 let AllTypes = new Serilizer("all_types", {
     uint8, uint16, uint32, int16, int64, uint64,
-    string, bytes: bytes(1), bool, array: array(uint8), fixed_array: fixed_array(2, uint8),
+    string, string_binary, bytes: bytes(1), bool, array: array(uint8), fixed_array: fixed_array(2, uint8),
     protocol_id_type: protocol_id_type("base"), object_id_type, //vote_id,
 
     static_variant: array(static_variant( [transfer, price] )),
@@ -44,7 +44,7 @@ let allTypes = {
     uint8: Math.pow(2,8)-1, uint16: Math.pow(2,16)-1, uint32: Math.pow(2,32)-1,
     int16: 30000, int64: "9223372036854775807", uint64: "9223372036854775807",
 
-    string: "test", bytes: "ff", bool: true, array: [2, 1], fixed_array: [1, 0],
+    string: "‘Quote’", string_binary: '\u0001', bytes: "ff", bool: true, array: [2, 1], fixed_array: [1, 0],
     protocol_id_type: "1.1.1", object_id_type: "1.1.1", //vote_id: "2:1",
 
     static_variant: [

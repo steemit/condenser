@@ -33,18 +33,11 @@ class Author extends React.Component {
         if(!username)
             return author_link
 
-        const dropdown = <span>
-            <div className="row">
-                <div className="column small-12">
-                    {author_link}
-                </div>
-                <hr />
-                <div className="column small-12">
-                    <Follow className="float-right" follower={username} following={author} what="blog"
-                        showFollow={follow} showMute={mute} />
-                </div>
-            </div>
-        </span>
+        const dropdown = <div className="Author__dropdown">
+            <Link to={'/@' + author}>Profile</Link> &nbsp;
+            <Follow className="float-right" follower={username} following={author} what="blog"
+                    showFollow={follow} showMute={mute} />
+        </div>
 
         return (
             <span className="Author">
@@ -58,7 +51,7 @@ class Author extends React.Component {
                         <span itemProp="author" itemScope itemType="http://schema.org/Person">
                             <strong>{author}</strong>
                         </span>
-                        <Icon className="dropdown-arrow" name="dropdown-arrow" />
+                        <Icon name="dropdown-arrow" />
                     </span>
                 </LinkWithDropdown>
                 <Reputation value={authorRepLog10} />

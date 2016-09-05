@@ -56,15 +56,37 @@ class Post extends React.Component {
         this.setState({commentHidden: true})
     }
 
+    showAnywayClick = () => {
+        this.setState({showAnyway: true})
+    }
+
     render() {
         const {showSignUp} = this
         const {current_user, following, signup_bonus} = this.props
-        const {showNegativeComments, commentHidden} = this.state
+        const {showNegativeComments, commentHidden, showAnyway} = this.state
         const rout_params = this.props.routeParams;
         let g = this.props.global;
         let post = rout_params.username + '/' + rout_params.slug;
         const dis = g.get('content').get(post);
         if (!dis) return null;
+
+        if(!showAnyway) {
+            const {authorRepLog10, netVoteSign} = dis.get('stats').toJS()
+            if(authorRepLog10 < 1 || netVoteSign < 0) {
+                return (
+                    <div className="Post">
+                        <div className="row">
+                            <div className="column">
+                                <div className="PostFull">
+                                    <p onClick={this.showAnywayClick}>This post was hidden due to low ratings. <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.showAnywayClick}>Show</button></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+        }
+
         const replies = dis.get('replies').toJS();
 
         let sort_order = 'trending';
@@ -166,7 +188,7 @@ path: '/(:category/)@:username/:slug',
         const current_user = state.user.get('current')
         let following
         if(current_user) {
-            const key = ['follow', 'get_following', current_user, 'result']
+            const key = ['follow', 'get_following', current_user.get('username'), 'result']
             following = state.global.getIn(key, List())
         }
         return {

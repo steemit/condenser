@@ -41,9 +41,9 @@
     "signing_key": "5J.....",
     "recovery_account": "steem"
   },
-  "ws_connection_client": "ws://node.steem.ws",
+  "ws_connection_client": "wss://node.steem.ws",
   "ws_connection_server": [
-    "ws://node.steem.ws"
+    "wss://node.steem.ws"
   ],
   "sendgrid": {
     "key": "SG.xxx_yyyy",

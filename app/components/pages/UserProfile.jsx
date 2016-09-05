@@ -168,19 +168,20 @@ export default class UserProfile extends React.Component {
             } else {
                 tab_content = (<center><LoadingIndicator type="circle" /></center>);
             }
-        } else if(!section || section === 'feed') {
-            if (account.feed) {
-                tab_content = <PostsList
-                    emptyText={translate('user_hasnt_followed_anything_yet', {name})}
-                    posts={account.feed}
-                    loading={fetching}
-                    category="feed"
-                    loadMore={this.loadMore}
-                    showSpam />;
-            } else {
-                tab_content = (<center><LoadingIndicator type="circle" /></center>);
-            }
         }
+        // else if(!section || section === 'feed') {
+        //     if (account.feed) {
+        //         tab_content = <PostsList
+        //             emptyText={`Looks like ${account.name} hasn't followed anything yet!`}
+        //             posts={account.feed}
+        //             loading={fetching}
+        //             category="feed"
+        //             loadMore={this.loadMore}
+        //             showSpam />;
+        //     } else {
+        //         tab_content = (<center><LoadingIndicator type="circle" /></center>);
+        //     }
+        // }
         else if( (section === 'recent-replies') && account.recent_replies ) {
            const reply_summary = account.recent_replies.map( item => {
                return (<li style={{listStyleType: 'none'}} key={item}>
@@ -236,7 +237,7 @@ export default class UserProfile extends React.Component {
                     <li><Link to={`/@${accountname}`} activeClassName="active">{translate('blog')}</Link></li>
                     <li><Link to={`/@${accountname}/posts`} activeClassName="active">{translate('comments')}</Link></li>
                     <li><Link to={`/@${accountname}/recent-replies`} activeClassName="active">{translate('replies')}</Link></li>
-                    <li><Link to={`/@${accountname}/feed`} activeClassName="active">{translate('feeds')}</Link></li>
+                    {/*<li><Link to={`/@${accountname}/feed`} activeClassName="active">{translate('feeds')}</Link></li>*/}
                     <li>
                         <LinkWithDropdown
                             closeOnClickOutside
@@ -248,7 +249,7 @@ export default class UserProfile extends React.Component {
                         >
                             <a className={rewardsClass}>
                                 {translate('rewards')}
-                                <Icon className="dropdown-arrow" name="dropdown-arrow" />
+                                <Icon className="dropdown-arrow" />
                             </a>
                         </LinkWithDropdown>
                     </li>

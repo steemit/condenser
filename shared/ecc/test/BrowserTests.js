@@ -3,6 +3,8 @@ import {PrivateKey, PublicKey} from 'shared/ecc'
 import {encode, decode} from 'shared/chain/memo'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient'
 
+export const browserTests = {}
+
 export default function runTests() {
     let rpt = ''
     let pass = true
@@ -20,7 +22,6 @@ export default function runTests() {
     }
 
     let private_key, public_key, encodedMemo
-    const testNonce = ''
     const wif = '5JdeC9P7Pbd1uGdFVEsJ41EkEnADbbHGq6p1BwFxm6txNBsQnsw'
     const pubkey = 'STM8m5UgaFAAYQRuaNejYdS8FVLVp9Ss3K1qAVk5de6F8s3HnVbvA'
 
@@ -40,11 +41,15 @@ export default function runTests() {
         assert(PublicKey.fromString(public_key.toString()))
     })
     it('encrypts memo', () => {
-        encodedMemo = encode(private_key, public_key, 'memo', testNonce)
+        encodedMemo = encode(private_key, public_key, '#memo')
         assert(encodedMemo)
     })
     it('decripts memo', () => {
-        assert.equal('memo', decode(private_key, encodedMemo), 'Decoded memo did not match')
+        const dec = decode(private_key, encodedMemo)
+        if(dec !== '#memo') {
+            console.error('Decoded memo did not match (memo encryption is unavailable)')
+            browserTests.memo_encryption = false
+        }
     })
     if(!pass) return rpt
 }

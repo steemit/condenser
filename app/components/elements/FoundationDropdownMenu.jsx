@@ -14,7 +14,7 @@ const FoundationDropdownMenu = ({menu, icon, label, dropdownPosition, dropdownAl
     >
         <span className="FoundationDropdownMenu__label">
             {icon && <Icon name="share" className="space-right" />}{label}
-            <Icon className="dropdown-arrow" name="dropdown-arrow" />
+            <Icon name="dropdown-arrow" />
         </span>
     </LinkWithDropdown>;
 }

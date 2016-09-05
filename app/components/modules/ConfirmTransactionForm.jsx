@@ -33,6 +33,7 @@ class ConfirmTransactionForm extends Component {
                <h4>{typeName(confirmBroadcastOperation)}</h4>
                <hr />
                <div>{conf}</div>
+               <br />
                <button className="button" onClick={okClick}>{translate('ok')}</button>
                <button type="button hollow" className="button hollow" onClick={onCancel}>{translate('cancel')}</button>
            </div>
@@ -43,7 +44,7 @@ const typeName = confirmBroadcastOperation => {
     const title = confirmBroadcastOperation.getIn(['operation', '__config', 'title'])
     if(title) return title
     const type = confirmBroadcastOperation.get('type')
-    return trabslate('confirm') + ' ' + (type.split('_').map(n => n.charAt(0).toUpperCase() + n.substring(1))).join(' ')
+    return translate('confirm') + ' ' + (type.split('_').map(n => n.charAt(0).toUpperCase() + n.substring(1))).join(' ')
 }
 
 export default connect(

@@ -135,7 +135,7 @@ class LoginForm extends Component {
             'Authenticate for this transaction' :
             'Login to your Steem Account';
         const opType = loginBroadcastOperation ? loginBroadcastOperation.get('type') : null
-        const authType = /vote|comment/.test(opType) ? 'Posting, Active, or Owner' : 'Active or Owner'
+        const authType = /vote|comment/.test(opType) ? 'Posting' : 'Active or Owner'
         const submitLabel = loginBroadcastOperation ? 'Sign' : 'Login';
         let error = password.touched && password.error ? password.error : this.props.login_error
         if (error === 'owner_login_blocked') {
@@ -179,7 +179,7 @@ class LoginForm extends Component {
                 <div>
                     <input type="text" required placeholder={translate('enter_username')} ref="username"
                         {...username.props} onChange={usernameOnChange} autoComplete="on" disabled={submitting} />
-                    <div className="error">{username.touched && username.error && username.error}&nbsp;</div>
+                    <div className="error">{username.touched && username.blur && username.error}&nbsp;</div>
                 </div>
 
                 <div>
@@ -191,11 +191,11 @@ class LoginForm extends Component {
                         {translate("requires_auth_key", { authType })} />.
                     </div>
                 </div>}
-                <div>
+                {!loginBroadcastOperation && <div>
                     <label htmlFor="saveLogin">
                         {translate("keep_me_logged_in") + ' '}
                         <input id="saveLogin" type="checkbox" ref="pw" {...saveLogin.props} onChange={this.saveLoginToggle} disabled={submitting} /></label>
-                </div>
+                </div>}
                 <br />
                 <div>
                     <button type="submit" disabled={submitting || disabled} className="button">
@@ -276,10 +276,9 @@ export default connect(
             if (loginBroadcastOperation) {
                 const {type, operation, successCallback, errorCallback} = loginBroadcastOperation.toJS()
                 dispatch(transaction.actions.broadcastOperation({type, operation, username, password, successCallback, errorCallback}))
-                dispatch(user.actions.usernamePasswordLogin({username, password, saveLogin, afterLoginRedirectToAccount, operationType: type}))
-                if (!saveLogin) {
-                    dispatch(user.actions.closeLogin())
-                }
+                // Avoid saveLogin, this could be a user-provided content page and the login might be an active key.  Security will reject that...
+                dispatch(user.actions.usernamePasswordLogin({username, password, saveLogin: false, afterLoginRedirectToAccount, operationType: type}))
+                dispatch(user.actions.closeLogin())
             } else {
                 dispatch(user.actions.usernamePasswordLogin({username, password, saveLogin, afterLoginRedirectToAccount}))
             }

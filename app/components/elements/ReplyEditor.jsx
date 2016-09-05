@@ -15,8 +15,9 @@ import links from 'app/utils/Links'
 import {Map, Set} from 'immutable'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import { translate } from '../../Translator.js';
+import Remarkable from 'remarkable'
 
-
+const remarkable = new Remarkable({ html: true, linkify: false })
 const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
 const RTE_DEFAULT = false
 
@@ -471,7 +472,13 @@ export default formId => reduxForm(
                 originalPost.category : formCategories.first()
             const rootTag = /^[-a-z\d]+$/.test(rootCategory) ? rootCategory : null
 
-            const rtags = HtmlReady(body, {mutate: false})
+            let rtags
+            {
+                const isHtml = /^<html>([\S\s]*)<\/html>$/.test(body)
+                const htmlText = isHtml ? body : remarkable.render(body)
+                rtags = HtmlReady(htmlText, {mutate: false})
+            }
+
             allowedTags.forEach(tag => {rtags.htmltags.delete(tag)})
             rtags.htmltags.delete('html')
             if(rtags.htmltags.size) {
@@ -500,7 +507,6 @@ export default formId => reduxForm(
                 errorCallback(sanitizeErrors.join('.  '))
                 return
             }
-
 
             if(meta.tags.length > 5) {
                 const includingCategory = /edit/.test(type) ? translate('including_the_category', {rootCategory}) : ''

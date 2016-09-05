@@ -36,7 +36,7 @@ class TagsIndex extends React.Component {
         const {search} = this.state;
         const order = this.props.routeParams.order;
         let tags = tagsAll;
-        if (search) tags = tags.filter(tag => tag.get('name').indexOf(search) !== -1);
+        if (search) tags = tags.filter(tag => tag.get('name').indexOf(search.toLowerCase()) !== -1);
         tags = tags.filter(tag => tag.get('name')).sort((a,b) => {
             return a.get('name').localeCompare(b.get('name'));
         }).map(tag => {
@@ -54,7 +54,7 @@ class TagsIndex extends React.Component {
         return (
             <div className="TagsIndex row">
                 <div className="column">
-                    <div className="float-right">
+                    <div className="medium-2 medium-offset-10">
                         <input type="text" placeholder={translate('filter')} value={search} onChange={this.onChangeSearch} />
                     </div>
                     <table>

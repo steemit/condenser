@@ -85,20 +85,19 @@ export default function reactForm({name, instance, fields, initialValues, valida
             fs.props.value = toString(initialValue)
             fs.value = fs.props.value
         }
-        fs.touched = false
 
         fs.props.onChange = e => {
             const value = e && e.target ? e.target.value : e // API may pass value directly
             const v = {...(instance.state[fieldName] || {})}
 
             if(fieldType === 'bool') {
-                v.touched = toBool(value) === toBool(initialValue)
+                v.touched = toBool(value) !== toBool(initialValue)
                 v.value = v.props.checked = toBool(value)
             } else if(fieldType === 'option') {
-                v.touched = toString(value) === toString(initialValue)
+                v.touched = toString(value) !== toString(initialValue)
                 v.value = v.props.selected = toString(value)
             } else {
-                v.touched = toString(value) === toString(initialValue)
+                v.touched = toString(value) !== toString(initialValue)
                 v.value = v.props.value = toString(value)
             }
 
@@ -106,6 +105,13 @@ export default function reactForm({name, instance, fields, initialValues, valida
                 {[fieldName]: v},
                 () => {isValid(name, instance, fields, validation)}
             )
+        }
+
+        fs.props.onBlur = () => {
+            // Some errors are better shown only after blur === true
+            const v = {...(instance.state[fieldName] || {})}
+            v.blur = true
+            instance.setState({[fieldName]: v})
         }
     }
 }

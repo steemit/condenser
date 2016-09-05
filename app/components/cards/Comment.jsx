@@ -1,5 +1,4 @@
 import React from 'react';
-import {browserHistory} from 'react-router';
 import Author from 'app/components/elements/Author';
 import ReplyEditor from 'app/components/elements/ReplyEditor';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
@@ -15,11 +14,9 @@ import Icon from 'app/components/elements/Icon';
 import Userpic from 'app/components/elements/Userpic';
 import transaction from 'app/redux/Transaction'
 import {List} from 'immutable'
-import {Long} from 'bytebuffer'
-import {parsePayoutAmount, repLog10} from 'app/utils/ParsersAndFormatters';
-import { translate } from '../../Translator';
+import { translate } from 'app/Translator';
 
-export function sortComments( g, comments, sort_order ){
+export function sortComments( g, comments, sort_order ) {
 
   function netNegative(a)  {
       return a.get("net_rshares") < 0;
@@ -110,8 +107,7 @@ class CommentImpl extends React.Component {
 
     constructor() {
         super();
-        // const hide_body = this.shouldHide(props)
-        this.state = {show_details: true, hide_body: false};
+        this.state = {collapsed: false, hide_body: false};
         this.revealBody = this.revealBody.bind(this);
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Comment')
         this.onShowReply = () => {
@@ -144,7 +140,7 @@ class CommentImpl extends React.Component {
             const content = this.props.global.get('content').get(this.props.content);
             deletePost(content.get('author'), content.get('permlink'))
         }
-        this.toggleDetails = this.toggleDetails.bind(this);
+        this.toggleCollapsed = this.toggleCollapsed.bind(this);
     }
 
     componentWillMount() {
@@ -152,31 +148,31 @@ class CommentImpl extends React.Component {
         this._checkHide(this.props);
     }
 
-    componentWillReceiveProps(np) {
-        this._checkHide(np);
-    }
+    //componentWillReceiveProps(np) {
+    //    this._checkHide(np);
+    //}
 
+    /**
+     * - `hide` is based on author reputation, and will hide the entire post on initial render.
+     * - `hide_body` is true when comment rshares OR author rep is negative.
+     *    it hides the comment body (but not the header) until the "reveal comment" link is clicked.
+     */
     _checkHide(props) {
         const g = props.global;
         const content = g.get('content').get(props.content);
         if (content) {
-            const {hide_body} = this.state
             const hide = content.getIn(['stats', 'hide'])
-            if(hide || hide_body) {
+            if(hide) {
                 const {onHide} = this.props
                 // console.log('Comment --> onHide')
                 if(onHide) onHide()
             }
+            this.setState({hide_body: hide || content.getIn(['stats', 'netVoteSign']) == -1})
         }
     }
 
-    shouldHide(props) {
-        const {showNegativeComments} = props
-        const content = this.props.global.getIn(['content', this.props.content]);
-        return !showNegativeComments && content.getIn(['stats', 'hide'])
-    }
-    toggleDetails() {
-        this.setState({show_details: !this.state.show_details});
+    toggleCollapsed() {
+        this.setState({collapsed: !this.state.collapsed});
     }
     revealBody() {
         this.setState({hide_body: false});
@@ -216,16 +212,16 @@ class CommentImpl extends React.Component {
             comment.stats = {}
         }
         const {netVoteSign, hasReplies, authorRepLog10, hide, pictures, gray} = comment.stats
-        const {author, permlink, json_metadata} = comment
+        const {author, json_metadata} = comment
         const {username, depth, rootComment, comment_link,
             showNegativeComments, ignore, noImage} = this.props
-        const {onCommentClick, onShowReply, onShowEdit, onDeletePost} = this
+        const {onShowReply, onShowEdit, onDeletePost} = this
         const post = comment.author + '/' + comment.permlink
         const anchor_link = '#@' + post
         const {PostReplyEditor, PostEditEditor, showReply, showEdit, hide_body} = this.state
         const Editor = showReply ? PostReplyEditor : PostEditEditor
 
-        if(!showNegativeComments && (hide || hide_body)) {
+        if(!showNegativeComments && (hide || ignore)) {
             return null;
         }
 
@@ -239,16 +235,13 @@ class CommentImpl extends React.Component {
         // const steem_supply = this.props.global.getIn(['props','current_supply']);
 
         const showDeleteOption = username === author && !hasReplies && netVoteSign <= 0
-
-        // let robohash = "https://robohash.org/" + author + ".png?size=64x64"
-        const total_payout = parsePayoutAmount(comment.total_payout_value);
-        const showEditOption = username === author && total_payout === 0
+        const showEditOption = username === author && comment.mode == 'first_payout'
 
         let replies = null;
         let body = null;
         let controls = null;
 
-        if (this.state.show_details && (!hide_body || showNegativeComments)) {
+        if (!this.state.collapsed && !hide_body) {
             body = (<MarkdownViewer formId={post + '-viewer'} text={comment.body}
                 noImage={noImage || !pictures} jsonMetadata={jsonMetadata} />);
             controls = (<div>
@@ -265,9 +258,11 @@ class CommentImpl extends React.Component {
             </div>);
         }
 
-        if(this.state.show_details) {
+        if(!this.state.collapsed) {
             replies = comment.replies;
             sortComments( g, replies, this.props.sort_order );
+            // When a comment has hidden replies and is collapsed, the reply count is off
+            //console.log("replies:", replies.length, "num_visible:", replies.filter( reply => !g.get('content').get(reply).getIn(['stats', 'hide'])).length)
             replies = replies.map((reply, idx) => <Comment key={idx} content={reply} global={g}
                 sort_order={this.props.sort_order} depth={depth + 1} rootComment={rootComment} showNegativeComments={showNegativeComments} />);
         }
@@ -275,7 +270,7 @@ class CommentImpl extends React.Component {
         const commentClasses = ['hentry']
         commentClasses.push('Comment')
         commentClasses.push(this.props.root ? 'root' : 'reply')
-        if((hide_body && !showNegativeComments) || !this.state.show_details) commentClasses.push('collapsed');
+        if(hide_body || this.state.collapsed) commentClasses.push('collapsed');
         const downVotedClass = ignore || gray ? 'downvoted' : ' '
         //console.log(comment);
         let renderedEditor = null;
@@ -294,6 +289,7 @@ class CommentImpl extends React.Component {
                 />
             </div>
         }
+
         return (
             <div className={commentClasses.join(' ')} id={anchor_link} itemScope itemType ="http://schema.org/comment">
                 <div className="Comment__Userpic show-for-medium">
@@ -302,8 +298,8 @@ class CommentImpl extends React.Component {
                 <div className={downVotedClass}>
                     <div className="Comment__header">
                         <div className="Comment__header_collapse">
-                            <Voting post={post} pending_payout={comment.pending_payout_value} total_payout={comment.total_payout_value} flag />
-                            <a title={translate('collapse_or_expand')} onClick={this.toggleDetails}>{ this.state.show_details ? '[-]' : '[+]' }</a>
+                            <Voting post={post} flag />
+                            <a title={translate('collapse_or_expand')} onClick={this.toggleCollapsed}>{ this.state.collapsed ? '[+]' : '[-]' }</a>
                         </div>
                         <span className="Comment__header-user">
                             <Icon name="user" className="Comment__Userpic-small" />
@@ -314,11 +310,11 @@ class CommentImpl extends React.Component {
                         <Link to={comment_link} className="PlainLink">
                             <TimeAgoWrapper date={comment.created} />
                         </Link>
-                        { !this.state.show_details && (hide_body && !showNegativeComments) &&
-                          <Voting pending_payout={comment.pending_payout_value} total_payout={comment.total_payout_value} post={post} showList={comment.active_votes.length !== 0 ? true : false} /> }
-                        { this.state.show_details || comment.children == 0 ||
+                        { (this.state.collapsed || hide_body) &&
+                          <Voting post={post} showList={false} /> }
+                        { this.state.collapsed && comment.children > 0 &&
                           <span className="marginLeft1rem">{translate('reply_count', {replyCount: comment.children})}</span>}
-                        { this.state.show_details && (hide_body && !showNegativeComments) &&
+                        { !this.state.collapsed && hide_body &&
                             <a className="marginLeft1rem" onClick={this.revealBody}>{translate('reveal_comment')}</a>}
                     </div>
                     <div className="Comment__body entry-content">

@@ -241,7 +241,7 @@ const en = 	{
 	checking_account_owner: 'Checking account owner',
 	sending_recovery_request: 'Sending recovery request',
 	cant_confirm_account_ownership: 'We can\'t confirm account ownership. Check your password',
-	account_recovery_request_not_confirmed: "Account recovery request is not confirmed yes, please get back later, thank you for your patience.",
+	account_recovery_request_not_confirmed: "Account recovery request is not confirmed yet, please get back later, thank you for your patience.",
 	vote: 'Vote',
 	witness: 'Witness',
 	top_witnesses: 'Top Witnesses',
@@ -345,7 +345,10 @@ const en = 	{
 	connection_lost_reconnecting: 'Connection lost, reconnecting',
 	// Voting.jsx
 	stop_seeing_content_from_this_user: 'Stop seeing content from this user',
-	flagging_post_can_remove_rewards_you_can_still_unflag_late: 'Flagging a post can remove rewards and make this material less visible.  You can still unflag or upvote later if you change your mind.',
+	flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following: 'Flagging a post can remove rewards and make this material less visible. The flag should be used for the following',
+	fraud_or_plagiarism: 'Fraud or Plagiarism',
+	hate_speech_or_internet_trolling: 'Hate Speech or Internet Trolling',
+	intentional_miss_categorized_content_or_spam: 'Intentional miss-categorized content or Spam',
 	downvote: 'Downvote',
 	pending_payout: 'Pending Payout',
 	past_payouts: 'Past Payouts',
@@ -369,7 +372,7 @@ const en = 	{
 	you_have_votes_remaining: 'You have {votesCount} votes remaining',
 	you_can_vote_for_maximum_of_witnesses: 'You can vote for a maximum of 30 witnesses',
 	information: 'Information',
-	if_you_want_to_vote_outside_of_top_enter_account_name: 'If you would like to vote for a witness outside of the top 50, enter the account name below to cast a votes',
+	if_you_want_to_vote_outside_of_top_enter_account_name: 'If you would like to vote for a witness outside of the top 50, enter the account name below to cast a vote',
 	view_the_direct_parent: 'View the direct parent',
 	you_are_viewing_single_comments_thread_from: 'You are viewing a single comment&#39;s thread from',
 	view_the_full_context: 'View the full context',
@@ -446,6 +449,11 @@ const en = 	{
 	sorry_your_reddit_account_doesnt_have_enough_karma: "Sorry, your Reddit account doesn't have enough Reddit Karma to qualify for a free sign up. Please add your email for a place on the waiting list",
 	register_with_facebook: 'Register with Facebook',
 	or_click_the_button_below_to_register_with_facebook: 'Or click the button below to register with Facebook',
+	trending_24_hour: 'trending (24 hour)',
+	home: 'home',
+	'24_hour': '24 hour',
+	'30_day': '30 day',
+	flag: "Flag",
 
 }
 

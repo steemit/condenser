@@ -178,7 +178,9 @@ async function universalRender({ location, initial_state, offchain }) {
     try {
         app = renderToString(
             <Provider store={server_store}>
-                <RouterContext { ...renderProps } />
+                <Translator>
+                    <RouterContext { ...renderProps } />
+                </Translator>
             </Provider>
         );
         meta = extractMeta(onchain, renderProps.params);

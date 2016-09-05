@@ -1,5 +1,6 @@
 import React from "react";
 import HistoryRow from "./OrderhistoryRow.jsx";
+import { translate } from '../../Translator';
 
 export default class OrderHistory extends React.Component {
 
@@ -67,8 +68,8 @@ export default class OrderHistory extends React.Component {
                 <table className="Market__trade-history">
                     <thead>
                         <tr>
-                            <th>Date</th>
-                            <th>Price</th>
+                            <th>{translate('date')}</th>
+                            <th>{translate('price')}</th>
                             <th>Steem</th>
                             <th>SD ($)</th>
                         </tr>
@@ -82,12 +83,12 @@ export default class OrderHistory extends React.Component {
                   <ul className="pager">
                     <li>
                         <div className={"button tiny hollow float-left " + (historyIndex === 0 ? " disabled" : "")}  onClick={this._setHistoryPage.bind(this, false)} aria-label="Previous">
-                            <span aria-hidden="true">&larr; Newer</span>
+                            <span aria-hidden="true">&larr; {' ' + translate('newer')}</span>
                         </div>
                     </li>
                     <li>
                         <div className={"button tiny hollow float-right " + (historyIndex >= (history.length - 10) ? " disabled" : "")}  onClick={this._setHistoryPage.bind(this, true)} aria-label="Next">
-                            <span aria-hidden="true">Older &rarr;</span>
+                            <span aria-hidden="true">{translate('older') + ' '} &rarr;</span>
                         </div>
                     </li>
                   </ul>

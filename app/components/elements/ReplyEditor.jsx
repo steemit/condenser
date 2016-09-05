@@ -293,7 +293,7 @@ class ReplyEditor extends React.Component {
             author, permlink, parent_author, parent_permlink, type, state, originalPost,
             jsonMetadata, metaLinkData, autoVote: autoVoteValue, successCallback: successCallbackWrapper, errorCallback
         }
-        const postLabel = username ? <Tooltip t={'Post as “' + username + '”'}>Post</Tooltip> : 'Post'
+        const postLabel = username ? <Tooltip t={translate('post_as') + ' “' + username + '”'}>{translate('post')}</Tooltip> : translate('post')
         const hasTitleError = title && title.touched && title.error
         let titleError = null
         // The Required title error (triggered onBlur) can shift the form making it hard to click on things..
@@ -332,7 +332,7 @@ class ReplyEditor extends React.Component {
 
                         <div className={'ReplyEditor__body ' + (rte ? `rte ${vframe_section_class}` : vframe_section_shrink_class)} onClick={this.focus}>
                             <div className="float-right secondary" style={{marginRight: '1rem'}}>
-                                {rte && <a href="#" onClick={this.toggleRte}>{isHtml ? 'Raw HTML' : 'Markdown'}</a>}
+                                {rte && <a href="#" onClick={this.toggleRte}>{isHtml ? translate('raw_html') : 'Markdown'}</a>}
                                 {!rte && isStory && (isHtml || !body.value) && <a href="#" onClick={this.toggleRte}>{translate("Editor")}</a>}
                             </div>
                             {process.env.BROWSER && rte ?
@@ -359,7 +359,7 @@ class ReplyEditor extends React.Component {
                             {postError && <div className="error">{postError}</div>}
                         </div>
                         <div className={vframe_section_shrink_class}>
-                            {!loading && <button type="submit" className="button" disabled={submitting || invalid} tabIndex={4}>{isEdit ? 'Update Post' : postLabel}</button>}
+                            {!loading && <button type="submit" className="button" disabled={submitting || invalid} tabIndex={4}>{isEdit ? translate('update_post') : postLabel}</button>}
                             {loading && <span><br /><LoadingIndicator type="circle" /></span>}
                             &nbsp; {!loading && this.props.onCancel &&
                                 <button type="button" className="secondary hollow button no-border" tabIndex={5} onClick={(e) => {e.preventDefault(); onCancel()}}>{translate("cancel")}</button>
@@ -475,7 +475,7 @@ export default formId => reduxForm(
             allowedTags.forEach(tag => {rtags.htmltags.delete(tag)})
             rtags.htmltags.delete('html')
             if(rtags.htmltags.size) {
-                errorCallback('Please remove the following HTML elements from your post: ' + Array(...rtags.htmltags).join(', '))
+                errorCallback(translate('please_remove_following_html_elements') + Array(...rtags.htmltags).join(', '))
                 return
             }
 

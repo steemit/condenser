@@ -4,6 +4,7 @@ import Keys from 'app/components/elements/Keys'
 import g from 'app/redux/GlobalReducer'
 import {connect} from 'react-redux';
 import QRCode from 'react-qr'
+import { translate } from '../../Translator';
 
 const keyTypes = ['Posting', 'Active', 'Owner', 'Memo']
 
@@ -53,23 +54,23 @@ class UserKeys extends Component {
                 <hr />
                 <div className="row">
                     <div className="column small-2">
-                        <label>Public</label>
+                        <label>{translate('public')}</label>
                         <QRCode text={keyObj.pubkey} />
                     </div>
                     <div className="column small-8">
-                        <label>Public {key} Key</label>
+                        <label>{translate('public_something_key', {key})}</label>
                         <div className="overflow-ellipsis">
                             <code><small>{keyObj.pubkey}</small></code>
                         </div>
                         {keyObj.wif && <div>
-                            <label>Private {key} Key</label>
+                            <label>{translate('private_something_key', {key})}</label>
                             <div className="overflow-ellipsis">
                                 <code><small>{keyObj.wif}</small></code>
                             </div>
                         </div>}
                     </div>
                     {keyObj.wif && <div className="column small-2">
-                        <label>Private</label>
+                        <label>{translate('private')}</label>
                         <QRCode text={keyObj.wif} />
                     </div>}
                 </div>
@@ -78,19 +79,19 @@ class UserKeys extends Component {
         return (<div className="row">
             <div style={{paddingBottom: 10}} className="column small-12">
                 <Keys account={account} authType="posting" onKey={onKey.Posting} />
-                <span className="secondary">The posting key is used for posting and voting. It should be different from the active and owner keys.</span>
+                <span className="secondary">{translate('posting_key_is_required_it_should_be_different')}</span>
             </div>
             <div style={{paddingBottom: 10}} className="column small-12">
                 <Keys account={account} authType="active" onKey={onKey.Active} />
-                <span className="secondary">The active key is used to make transfers and place orders in the internal market.</span>
+                <span className="secondary">{translate('the_active_key_is_used_to_make_transfers_and_place_orders')}</span>
             </div>
             <div style={{paddingBottom: 10}} className="column small-12">
                 <Keys account={account} authType="owner" onKey={onKey.Owner} />
-                <span className="secondary">The owner key is the master key for the account and is required to change the other keys.<br/>The private key or password for the owner key should be kept offline as much as possible.</span>
+                <span className="secondary">{translate('the_owner_key_is_required_to_change_other_keys')}<br />{translate('the_private_key_or_password_should_be_kept_offline')}</span>
             </div>
             <div style={{paddingBottom: 10}} className="column small-12">
                 <Keys account={account} authType="memo" onKey={onKey.Memo} />
-                <span className="secondary">The memo key is used to create and read memos.</span>
+                <span className="secondary">{translate('the_memo_key_is_used_to_create_and_read_memos')}</span>
             </div>
             {/*
             <div className="column small-12">

@@ -193,10 +193,10 @@ const ru = {
 	insufficent_balance: 'Недостаточный баланс',
 	in_week_convert_steem_dollars_to_steem: 'In one week, convert {amount} STEEM DOLLARS into STEEM',
 	order_placed: 'Заказ размещен', // ex.: "Order placed: Sell {someamount_to_sell} for atleast {min_to_receive}"
-	follow: 'Следить',
-	unfollow: 'Не следить',
-	mute: 'Mute',
-	unmute: 'Unmute',
+	follow: 'Подписаться',
+	unfollow: 'Отписаться',
+	mute: 'Блокировать',
+	unmute: 'Разблокировать',
 	confirm_password: 'Подтвердить пароль',
 	login_to_see_memo: 'login to see memo',
 	post: 'Пост', // places used: tooltip in MediumEditor
@@ -249,7 +249,6 @@ const ru = {
 	feed: 'Лента',
 	wallet: 'Кошелек',
 	blog: 'Блог',
-	posts: 'Посты',
 	change_password: 'Сменить пароль',
 	// UserProfile
 	unknown_account: 'Неизвестный аккаунт',
@@ -274,23 +273,41 @@ const ru = {
 	posts: 'Посты',
 	// english language does not need plurals, but your language might need it
 	// context usually is about profile stats: 'User has: 3 posts, 2 followers, 5 followed'
-	posts_amount: `{postCount, plural,
+	post_count: `{postCount, plural,
 		zero {0 постов}
 		one {# пост}
 		few {# поста}
 		many {# постов}
 	}`,
-	followers_amount: `{followerCount, plural,
-		zero {нет подписчиков}
+	follower_count: `{followerCount, plural,
+		zero {0 подписчиков}
 		one {# подписчик}
 		few {# подписчика}
 		many {# подписчиков}
 	}`,
-	followed_amount: `{followingCount, plural,
+	followed_count: `{followingCount, plural,
 		zero {0 подписок}
 		one {# подписка}
 		few {# подписки}
 		many {# подписок}
+	}`,
+	vote_count: `{voteCount, plural,
+		zero {0 голосов}
+		one {# голос}
+		few {# голоса}
+		many {# голосов}
+	}`,
+	response_count: `{responseCount, plural,
+		zero {0 ответов}
+		one {# ответ}
+		few {# ответа}
+		many {# ответов}
+	}`,
+	reply_count: `{replyCount, plural,
+		zero {0 ответов}
+		one {# ответ}
+		few {# ответа}
+		many {# ответов}
 	}`,
 	this_is_users_reputations_score_it_is_based_on_history_of_votes: "This is ${name}'s reputation score.\n\nThe reputation score is based on the history of votes received by the account, and is used to hide low quality content.",
 	newer: 'Новее',
@@ -351,7 +368,7 @@ const ru = {
 	witness_thread: 'witness thread',
 	you_have_votes_remaining: 'You have {votesCount} votes remaining',
 	you_can_vote_for_maximum_of_witnesses: 'You can vote for a maximum of 30 witnesses',
-	information: 'Information',
+	information: 'Информация',
 	if_you_want_to_vote_outside_of_top_enter_account_name: 'If you would like to vote for a witness outside of the top 50, enter the account name below to cast a votes',
 	view_the_direct_parent: 'View the direct parent',
 	you_are_viewing_single_comments_thread_from: 'You are viewing a single comment&#39;s thread from',
@@ -359,15 +376,75 @@ const ru = {
 	this_is_a_price_feed_conversion: 'This is a price feed conversion. The one week day delay is necessary to prevent abuse from gaming the price feed average',
 	your_existing_SD_are_liquid_and_transferable: 'Your existing Steem Dollars are liquid and transferable.  Instead you may wish to trade Steem Dollars directly in this site under {link} or transfer to an external market.',
 	buy_or_sell: 'Buy or Sells',
-	trending_30_day: 'trending (30 day)',
+	trending_30_day: 'трендовое (30 дней)',
 	promoted: 'promoted',
-	comments: 'Comments',
+	comments: 'Комментарии',
 	topics: 'Topics',
 	this_password_is_bound_to_your_accounts_private_key: 'This password is bound to your account\'s active key and can not be used to login to this page. You may use this active key on other more secure pages like the Wallet or Market pages.',
 	potential_payout: 'Potential Payout',
 	boost_payments: 'Boost Payments',
 	authors: 'Authors',
 	curators: 'Curators',
+	date: 'Дата',
+	no_responses_yet_click_to_respond: 'Ответов пока нет. Нажмите чтобы ответить.',
+	click_to_respond: 'Нажмите чтобы ответить',
+	new_password: 'Новый пароль',
+	paste_a_youtube_or_vimeo_and_press_enter: 'Paste a YouTube or Vimeo and press Enter',
+	there_was_an_error_uploading_your_image: 'There was an error uploading your image',
+	raw_html: 'Raw HTML',
+	please_remove_following_html_elements: 'Please remove the following HTML elements from your post: ',
+	reputation: "Репутация",
+	remember_voting_and_posting_key: "Remember voting & posting key",
+	// example usage: 'Autologin? yes/no'
+	auto_login_question_mark: 'Заходить автоматически?',
+	yes: 'Да',
+	no: 'Нет',
+	hide_private_key: 'Скрыть приватный ключ',
+	login_to_show: 'Войти чтобы показать',
+	steemit_cannot_recover_passwords_keep_this_page_in_a_secure_location: 'Steemit cannot recover passwords.  Keep this page in a secure location, such as a fireproof safe or safety deposit box.',
+	steemit_password_backup: 'Steemit Password Backup',
+	steemit_password_backup_required: 'Steemit Password Backup (required)',
+	after_printing_write_down_your_user_name: 'After printing, write down your user name',
+	public: 'Публичное',
+	private: 'Приватное',
+	public_something_key: 'Публичный {key} ключ',
+	private_something_key: 'Приватный {key} ключ',
+	posting_key_is_required_it_should_be_different: 'The posting key is used for posting and voting. It should be different from the active and owner keys.',
+	the_active_key_is_used_to_make_transfers_and_place_orders: 'The active key is used to make transfers and place orders in the internal market.',
+	the_owner_key_is_required_to_change_other_keys: 'The owner key is the master key for the account and is required to change the other keys.',
+	the_private_key_or_password_should_be_kept_offline: 'The private key or password for the owner key should be kept offline as much as possible.',
+	the_memo_key_is_used_to_create_and_read_memos: 'The memo key is used to create and read memos.',
+	previous: 'Предыдущий',
+	next: 'Следующий',
+	browse: 'Посмотреть',
+	not_valid_email: 'Не действительный адресы',
+	thank_you_for_being_an_early_visitor_to_steemit: 'Thank you for being an early visitor to Steemit. We will get back to you at the earliest possible opportunity.',
+	estimated_author_rewards_last_week: "Estimated author rewards last week",
+	author_rewards_last_week: "Estimated author rewards last week",
+	confirm: 'Подтвердить',
+	asset: 'Актив',
+	this_memo_is_private: 'This Memo is Private',
+	this_memo_is_public: 'This Memo is Public',
+	power_up: 'Power Up',
+	transfer: 'Transfer',
+	basic: 'Basic',
+	advanced: 'Advanced',
+	convert_to_steem_power: 'Convert to Steem Power',
+	transfer_to_account: 'Transfer to Account',
+	buy_steem_or_steem_power: 'Buy Steem or Steem Power',
+	version: 'Version',
+	about_steemit: 'About Steemit',
+	steemit_is_a_social_media_platform_where_everyone_gets_paid_for_creating_and_curating_content: 'Steemit is a social media platform where <strong>everyone</strong>&nbsp;gets <strong>paid</strong> for creating and curating content',
+	steemit_is_a_social_media_platform_where_everyone_gets_paid: 'Steemit is a social media platform where everyone gets paid for creating and curating content. It leverages a robust digital points system, called Steem, that supports real value for digital rewards through market price discovery and liquidity.',
+	learn_more_at_steem_io: 'Learn more at steem.io',
+	resources: 'Resources',
+	steem_whitepaper: 'Steem Whitepaper',
+	join_our_slack: 'Join our Slack',
+	steemit_support: 'Steemit Support',
+	please_email_questions_to: 'Please email your questions to',
+	sorry_your_reddit_account_doesnt_have_enough_karma: "Sorry, your Reddit account doesn't have enough Reddit Karma to qualify for a free sign up. Please add your email for a place on the waiting list",
+	register_with_facebook: 'Register with Facebook',
+	or_click_the_button_below_to_register_with_facebook: 'Or click the button below to register with Facebook',
 
 }
 

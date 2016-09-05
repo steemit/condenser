@@ -249,7 +249,6 @@ const en = 	{
 	feed: 'Feed',
 	wallet: 'Wallet',
 	blog: 'Blog',
-	posts: 'Posts',
 	change_password: 'Change Password',
 	// UserProfile
 	unknown_account: 'Unknown Account',
@@ -274,23 +273,41 @@ const en = 	{
 	posts: 'Posts',
 	// english language does not need plurals, but your language might need it
 	// context usually is about profile stats: 'User has: 3 posts, 2 followers, 5 followed'
-	posts_amount: `{postCount, plural,
+	post_count: `{postCount, plural,
 		zero {0 posts}
 		one {# post}
 		few {# posts}
 		many {# posts}
 	}`,
-	followers_amount: `{followerCount, plural,
+	follower_count: `{followerCount, plural,
 		zero {0 followers}
 		one {# followers}
 		few {# followers}
 		many {# followers}
 	}`,
-	followed_amount: `{followingCount, plural,
+	followed_count: `{followingCount, plural,
 		zero {0 followed}
 		one {# followed}
 		few {# followed}
 		many {# followed}
+	}`,
+	vote_count: `{voteCount, plural,
+		zero {0 votes}
+		one {# votes}
+		few {# votes}
+		many {# votes}
+	}`,
+	response_count: `{responseCount, plural,
+		zero {0 responses}
+		one {# responses}
+		few {# responses}
+		many {# responses}
+	}`,
+	reply_count: `{replyCount, plural,
+		zero {0 replies}
+		one {# replies}
+		few {# replies}
+		many {# replies}
 	}`,
 	this_is_users_reputations_score_it_is_based_on_history_of_votes: "This is ${name}'s reputation score.\n\nThe reputation score is based on the history of votes received by the account, and is used to hide low quality content.",
 	newer: 'Newer',
@@ -368,6 +385,67 @@ const en = 	{
 	boost_payments: 'Boost Payments',
 	authors: 'Authors',
 	curators: 'Curators',
+	date: 'Date',
+	no_responses_yet_click_to_respond: 'No responses yet. Click to respond.',
+	click_to_respond: 'Click to respond',
+	new_password: 'New Password',
+	paste_a_youtube_or_vimeo_and_press_enter: 'Paste a YouTube or Vimeo and press Enter',
+	there_was_an_error_uploading_your_image: 'There was an error uploading your image',
+	raw_html: 'Raw HTML',
+	please_remove_following_html_elements: 'Please remove the following HTML elements from your post: ',
+	reputation: "Reputation",
+	remember_voting_and_posting_key: "Remember voting & posting key",
+	// example usage: 'Autologin? yes/no'
+	auto_login_question_mark: 'Auto login?',
+	yes: 'Yes',
+	no: 'No',
+	hide_private_key: 'Hide private key',
+	login_to_show: 'Login to show',
+	steemit_cannot_recover_passwords_keep_this_page_in_a_secure_location: 'Steemit cannot recover passwords.  Keep this page in a secure location, such as a fireproof safe or safety deposit box.',
+	steemit_password_backup: 'Steemit Password Backup',
+	steemit_password_backup_required: 'Steemit Password Backup (required)',
+	after_printing_write_down_your_user_name: 'After printing, write down your user name',
+	public: 'Public',
+	private: 'Private',
+	public_something_key: 'Public {key} Key',
+	private_something_key: 'Private {key} Key',
+	posting_key_is_required_it_should_be_different: 'The posting key is used for posting and voting. It should be different from the active and owner keys.',
+	the_active_key_is_used_to_make_transfers_and_place_orders: 'The active key is used to make transfers and place orders in the internal market.',
+	the_owner_key_is_required_to_change_other_keys: 'The owner key is the master key for the account and is required to change the other keys.',
+	the_private_key_or_password_should_be_kept_offline: 'The private key or password for the owner key should be kept offline as much as possible.',
+	the_memo_key_is_used_to_create_and_read_memos: 'The memo key is used to create and read memos.',
+	previous: 'Previous',
+	next: 'Next',
+	browse: 'Browse',
+	not_valid_email: 'Not valid email',
+	thank_you_for_being_an_early_visitor_to_steemit: 'Thank you for being an early visitor to Steemit. We will get back to you at the earliest possible opportunity.',
+	estimated_author_rewards_last_week: "Estimated author rewards last week",
+	author_rewards_last_week: "Estimated author rewards last week",
+	confirm: 'Confirm',
+	canceled: 'Canceled',
+	asset: "Asset",
+	this_memo_is_private: 'This Memo is Private',
+	this_memo_is_public: 'This Memo is Public',
+	power_up: 'Power Up',
+	transfer: 'Transfer',
+	basic: 'Basic',
+	advanced: 'Advanced',
+	convert_to_steem_power: 'Convert to Steem Power',
+	transfer_to_account: 'Transfer to Account',
+	buy_steem_or_steem_power: 'Buy Steem or Steem Power',
+	version: 'Version',
+	about_steemit: 'About Steemit',
+	steemit_is_a_social_media_platform_where_everyone_gets_paid_for_creating_and_curating_content: 'Steemit is a social media platform where <strong>everyone</strong>&nbsp;gets <strong>paid</strong> for creating and curating content',
+	steemit_is_a_social_media_platform_where_everyone_gets_paid: 'Steemit is a social media platform where everyone gets paid for creating and curating content. It leverages a robust digital points system, called Steem, that supports real value for digital rewards through market price discovery and liquidity.',
+	learn_more_at_steem_io: 'Learn more at steem.io',
+	resources: 'Resources',
+	steem_whitepaper: 'Steem Whitepaper',
+	join_our_slack: 'Join our Slack',
+	steemit_support: 'Steemit Support',
+	please_email_questions_to: 'Please email your questions to',
+	sorry_your_reddit_account_doesnt_have_enough_karma: "Sorry, your Reddit account doesn't have enough Reddit Karma to qualify for a free sign up. Please add your email for a place on the waiting list",
+	register_with_facebook: 'Register with Facebook',
+	or_click_the_button_below_to_register_with_facebook: 'Or click the button below to register with Facebook',
 
 }
 

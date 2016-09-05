@@ -46,11 +46,19 @@ class DummyComponentToExportProps extends React.Component {
 		return <span hidden>{' '}</span>
 	}
 
-	// assign functons on mount
-	componentDidMount() {
+	// IMPORTANT
+	// use 'componentWillMount' instead of 'componentDidMount',
+	// or there will be all sorts of partially renddered components
+	componentWillMount() {
+		// assign functions after component is created (context is picked up)
 		translate = 	(...params) => this.translateHandler('string', ...params)
 		translateHtml = (...params) => this.translateHandler('html', ...params)
 	}
+	// // assign functons on mount
+	// componentDidMount() {
+	// 	translate = 	(...params) => this.translateHandler('string', ...params)
+	// 	translateHtml = (...params) => this.translateHandler('html', ...params)
+	// }
 
 	translateHandler(translateType, id, values, options) {
 		const 	{ formatMessage, formatHTMLMessage } = this.props.intl,
@@ -71,23 +79,28 @@ class DummyComponentToExportProps extends React.Component {
 class Translator extends React.Component {
 	render() {
         /* LANGUAGE PICKER */
-		// Problem: "navigator" is not defined while rendering on server side
-		// "try/catch" and "if" constructs do not work, this is the workaround
-		if (!global.navigator) global.navigator = {language: ''}
 
-        // Define user's language. Different browsers have the user locale defined
-        // on different fields on the `navigator` object, so we make sure to account
-        // for these different by checking all of them
-	    const language = 	navigator ? (navigator.languages && navigator.languages[0])
-	                        || navigator.language
-	                        || navigator.userLanguage : '';
+		// Define user's language. Different browsers have the user locale defined
+		// on different fields on the `navigator` object, so we make sure to account
+		// for these different by checking all of them
+		let language = 'en';
+		// while Server Side Rendering is in process, 'navigator' is undefined
+		if (process.env.BROWSER) language = navigator
+											? (navigator.languages && navigator.languages[0])
+					                        || navigator.language
+					                        || navigator.userLanguage
+											: '';
         //Split locales with a region code (ie. 'en-EN' to 'en')
         const languageWithoutRegionCode = language.toLowerCase().split(/[_-]+/)[0];
 
-		return 	<IntlProvider locale={languageWithoutRegionCode} messages={messages}>
+		// TODO: don't forget to add Safari polyfill
+
+		// to ensure dynamic language change, "key" property with same "locale" info must be added
+		// see: https://github.com/yahoo/react-intl/wiki/Components#multiple-intl-contexts
+		return 	<IntlProvider locale={languageWithoutRegionCode} key={languageWithoutRegionCode} messages={messages}>
 					<div>
-						{this.props.children}
 						<DummyComponentToExportProps />
+						{this.props.children}
 					</div>
 				</IntlProvider>
 	}

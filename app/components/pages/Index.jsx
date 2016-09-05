@@ -1,5 +1,6 @@
 import React from 'react';
 import SvgImage from 'app/components/elements/SvgImage';
+import { translateHtml } from 'app/Translator';
 
 const mailchimp_form = `
 <!-- Begin MailChimp Signup Form -->
@@ -47,7 +48,7 @@ export default class Index extends React.Component {
                     <SvgImage name="steemit" width="480px" height="240px" />
                 </div>
                 <h1 className="center text-center">
-                    Steemit is a social media platform where <strong>everyone</strong>&nbsp;gets <strong>paid</strong> for creating and curating content.
+                    {translateHtml('steemit_is_a_social_media_platform_where_everyone_gets_paid_for_creating_and_curating_content')}.
                 </h1>
                 <br />
                 <br />

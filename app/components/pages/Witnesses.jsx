@@ -50,7 +50,7 @@ class Witnesses extends React.Component {
                 </div>
             </div>
         const up = <Icon name="chevron-up-circle" />;
-        let witness_votes_count = 30
+        let witness_vote_count = 30
         let rank = 1
         const witnesses = sorted_witnesses.map(item => {
             const owner = item.get('owner')
@@ -63,40 +63,12 @@ class Witnesses extends React.Component {
                 witness_thread = <Link to={thread}>{translate('witness_thread')}</Link>
             }
             return (
-// <<<<<<< HEAD
-//                    <div className="row" key={owner}>
-//                        <div className="column small-12">
-//                           <span>{/*className="Voting"*/}
-//                               {(rank < 10) && '0'}{rank++}
-//                               &nbsp;&nbsp;
-//                               <span className={classUp}>
-//                                   <a href="#" onClick={accountWitnessVote.bind(this, owner, !myVote)}
-//                                       title={translate('vote')}>{up}</a>
-//                                   &nbsp;
-//                               </span>
-//                           </span>
-//                          <Link to={'/@'+owner}>{owner}</Link>
-//                        </div>
-//                    </div>
-//             )
-//         });
-//
-//       return (
-//       <div>
-//          <div className="Witnesses row">
-//              <h2>{translate('top_witnesses')}</h2>
-//          </div>
-//         {header}
-//          <div className="Witnesses row">
-//             <div className="column small-12">
-//                  {witnesses.toArray()}
-// =======
                     <tr key={owner}>
                         <td width="75">
                             {(rank < 10) && '0'}{rank++}
                             &nbsp;&nbsp;
                             <span className={classUp}>
-                                <a href="#" onClick={accountWitnessVote.bind(this, owner, !myVote)} title="Vote">{up}</a>
+                                <a href="#" onClick={accountWitnessVote.bind(this, owner, !myVote)} title={translate('vote')}>{up}</a>
                             </span>
                         </td>
                         <td>
@@ -111,7 +83,7 @@ class Witnesses extends React.Component {
 
         let addl_witnesses = false;
         if(witness_votes) {
-            witness_votes_count -= witness_votes.size
+            witness_vote_count -= witness_votes.size
             addl_witnesses = witness_votes.filter(function(item) {
                 return !sorted_witnesses.has(item)
             }).map(item => {
@@ -121,7 +93,7 @@ class Witnesses extends React.Component {
                               <span>{/*className="Voting"*/}
                                   <span className="Voting__button Voting__button-up space-right Voting__button--upvoted">
                                       <a href="#" onClick={accountWitnessVote.bind(this, item, false)}
-                                          title="Vote">{up}</a>
+                                          title={translate('vote')}>{up}</a>
                                       &nbsp;
                                   </span>
                               </span>
@@ -139,7 +111,7 @@ class Witnesses extends React.Component {
                     <div className="column">
                         <h2>{translate('top_witnesses')}</h2>
                         <p>
-                            <strong>{translate('you_have_votes_remaining', {votesCount: witness_votes_count})}.</strong>
+                            <strong>{translate('you_have_votes_remaining', {votesCount: witness_vote_count})}.</strong>
                             {translate('you_can_vote_for_maximum_of_witnesses')}.
                         </p>
                     </div>
@@ -169,7 +141,6 @@ class Witnesses extends React.Component {
                         <br/><br/>
                      </div>
                 </div>
->>>>>>> 52fc8131a9b454a12595673feef66831feb66be8
             </div>
         );
     }

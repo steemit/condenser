@@ -124,7 +124,7 @@ class UserWallet extends React.Component {
                     <h4 className="uppercase">{translate('balances')}</h4>
                 </div>
                 {isMyAccount && <div className="column small-12 medium-4">
-                    <button className="UserWallet__buysp button hollow float-right " onClick={this.onShowDepositSteem}>Buy Steem or Steem Power</button>
+                    <button className="UserWallet__buysp button hollow float-right " onClick={this.onShowDepositSteem}>{translate('buy_steem_or_steem_power')}</button>
                 </div>}
             </div>
             <br />

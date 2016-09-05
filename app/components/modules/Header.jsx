@@ -6,7 +6,7 @@ import Icon from 'app/components/elements/Icon.jsx';
 import resolveRoute from 'app/ResolveRoute';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
-import { translate } from '../../Translator';
+import { translate } from 'app/Translator';
 
 class Header extends React.Component {
     static propTypes = {

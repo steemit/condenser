@@ -110,10 +110,10 @@ class TransferForm extends Component {
                 <div className="row">
                     <div className="column small-2">Amount</div>
                     <div className="column small-10">
-                        <input type="text" placeholder="Amount" {...cleanReduxInput(amount)} ref="amount" autoComplete="off" disabled={loading} />
+                        <input type="text" placeholder={translate('amount')} {...cleanReduxInput(amount)} ref="amount" autoComplete="off" disabled={loading} />
                         <div className="error">{amount.touched && amount.error && amount.error}&nbsp;</div>
                         {asset && <span>
-                            <select {...cleanReduxInput(asset)} placeholder="Asset" disabled={loading}>
+                            <select {...cleanReduxInput(asset)} placeholder={translate('asset')} disabled={loading}>
                                 <option></option>
                                 <option value="STEEM">STEEM</option>
                                 <option value="SBD">SBD</option>
@@ -126,8 +126,8 @@ class TransferForm extends Component {
                 {memo && <div className="row">
                     <div className="column small-2">Memo</div>
                     <div className="column small-10">
-                        <small>This Memo is {isMemoPrivate ? 'Private' : 'Public'}</small>
-                        <input type="text" placeholder="Memo" {...cleanReduxInput(memo)}
+                        <small>{translate(isMemoPrivate ? 'this_memo_is_private' : 'this_memo_is_public')}</small>
+                        <input type="text" placeholder={translate('memo')} {...cleanReduxInput(memo)}
                             ref="memo" autoComplete="on" disabled={loading} />
                         <div className="error">{memo.touched && memo.error && memo.error}&nbsp;</div>
                     </div>
@@ -136,15 +136,15 @@ class TransferForm extends Component {
                 {!loading && <span>
                     {trxError && <div className="error">{trxError}</div>}
                     <button type="submit" disabled={submitting} className="button">
-                        {toVesting ? 'Power Up' : 'Transfer'}
+                        {translate(toVesting ? 'Power Up' : 'Transfer')}
                     </button>
-                    {toVesting && <button className="button hollow no-border" disabled={submitting} onClick={this.onAdvanced}>{advanced ? 'Basic' : 'Advanced'}</button>}
+                    {toVesting && <button className="button hollow no-border" disabled={submitting} onClick={this.onAdvanced}>{translate(advanced ? 'basic' : 'advanced')}</button>}
                 </span>}
             </form>
         )
         return (
            <div>
-               <h3>{toVesting ? 'Convert to Steem Power' : 'Transfer to Account'}</h3>
+               <h3>{translate(toVesting ? 'convert_to_steem_power' : 'transfer_to_account')}</h3>
                <div className="row">
                    <div className="column small-12">
                        {form}

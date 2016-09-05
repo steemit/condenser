@@ -1,4 +1,5 @@
 import React from 'react';
+import { translate } from 'app/Translator';
 
 const email_regex = /^([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22))*\x40([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d))*$/;
 
@@ -38,7 +39,7 @@ export default class AddToWaitingList extends React.Component {
     onEmailChange(e) {
         const email = e.target.value.trim().toLowerCase();
         let email_error = '';
-        if (!email_regex.test(email.toLowerCase())) email_error = 'Not valid email';
+        if (!email_regex.test(email.toLowerCase())) email_error = translate('not_valid_email');
         this.setState({email, email_error});
     }
 
@@ -46,12 +47,12 @@ export default class AddToWaitingList extends React.Component {
         const {email, email_error, submitted} = this.state;
         if (submitted) {
             return <div className="callout success">
-                Thank you for being an early visitor to Steemit. We will get back to you at the earliest possible opportunity.
+                {translate('thank_you_for_being_an_early_visitor_to_steemit')}
             </div>
         }
         return <form onSubmit={this.onSubmit}>
             <div>
-                <label>Email
+                <label>{translate('email')}
                     <input ref="email" type="text" name="name" autoComplete="off" value={email} onChange={this.onEmailChange} />
                 </label>
                 <p className="error">{email_error}</p>

@@ -7,9 +7,9 @@ import g from 'app/redux/GlobalReducer'
 import user from 'app/redux/User'
 import {validate_account_name} from 'app/utils/ChainValidation';
 import runTests from 'shared/ecc/test/BrowserTests';
-import { translate } from '../../Translator';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import reactForm from 'app/utils/ReactForm'
+import { translate } from 'app/Translator';
 
 class LoginForm extends Component {
 
@@ -40,7 +40,7 @@ class LoginForm extends Component {
             if(e.preventDefault) e.preventDefault()
             const {onCancel, loginBroadcastOperation} = this.props
             const errorCallback = loginBroadcastOperation && loginBroadcastOperation.get('errorCallback')
-            if (errorCallback) errorCallback('Canceled')
+            if (errorCallback) errorCallback(translate('canceled'))
             if (onCancel) onCancel()
         }
         this.qrReader = () => {
@@ -71,10 +71,10 @@ class LoginForm extends Component {
             fields: ['username', 'password', 'saveLogin:bool'],
             initialValues: props.initialValues,
             validation: values => ({
-                username: ! values.username ? 'Required' : validate_account_name(values.username.split('/')[0]),
-                password: ! values.password ? 'Required' :
-                    values.password.length < 16 ? 'Password must be 16 characters or more' :
-                    PublicKey.fromString(values.password) ? 'You need a private password or key (not a public key)' :
+                username: ! values.username ? translate('required') : validate_account_name(values.username.split('/')[0]),
+                password: ! values.password ? translate('required') :
+                    values.password.length < 16 ? translate('password_must_be_characters_or_more', {amount: 16}) :
+                    PublicKey.fromString(values.password) ? translate('you_need_private_password_or_key_not_a_public_key') :
                     null,
             })
         })

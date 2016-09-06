@@ -194,15 +194,6 @@ class UserWallet extends React.Component {
                         </div>
                     </div>
             }
-
-            <div className="UserWallet__balance row">
-                <div className="column small-12 medium-8">
-                    {translate('estimate_account_value')}<br /><span className="secondary">{valueTip}</span>
-                </div>
-                <div className="column small-12 medium-4">
-                    {total_value}
-                </div>
-            </div>
             <div className="UserWallet__balance row">
                 <div className="column small-12">
                     {isWithdrawScheduled && <span>{translate('next_power_down_is_scheduled_to_happen_at')}&nbsp; <TimeAgoWrapper date={account.next_vesting_withdrawal} />.</span> }

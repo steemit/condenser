@@ -147,8 +147,6 @@ class TransferForm extends Component {
                 <div className="row">
                     <div className="column small-2">Amount</div>
                     <div className="column small-10">
-                        <input type="text" placeholder="Amount" {...amount.props} ref="amount" autoComplete="off" disabled={loading} />
-                        <div className="error">{amount.touched && amount.error && amount.error}&nbsp;</div>
                         {asset && <span>
                             <select {...asset.props} placeholder="Asset" disabled={loading}>
                                 <option></option>
@@ -158,6 +156,8 @@ class TransferForm extends Component {
                         </span>}
                         <AssetBalance balanceValue={this.balanceValue()} onClick={this.assetBalanceClick} />
                         <div className="error">{asset && asset.touched && asset.error && asset.error}&nbsp;</div>
+                        <input type="text" placeholder="Amount" {...amount.props} ref="amount" autoComplete="off" disabled={loading} />
+                        <div className="error">{amount.touched && amount.error && amount.error}&nbsp;</div>
                     </div>
                 </div>
                 {memo && <div className="row">

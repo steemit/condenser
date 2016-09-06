@@ -72,6 +72,7 @@ class UserWallet extends React.Component {
         let total_value = '$' + numberWithCommas(
             (((vesting_steemf + balance_steem) * price_per_steem) + sbd_balance
         ).toFixed(2))
+        const total_value_number = Number(total_value.substring(1).split('"'))
 
         /// transfer log
         let idx = 0
@@ -166,6 +167,20 @@ class UserWallet extends React.Component {
                     </div>
                 </div>
             </div>
+            {/* if 'total_value_number' is NaN hide the section */}
+            {
+                isNaN(total_value_number)
+                ?   null
+                :   <div className="UserWallet__balance row">
+                        <div className="column small-12 medium-8">
+                            {translate('estimate_account_value')}<br /><span className="secondary">{valueTip}</span>
+                        </div>
+                        <div className="column small-12 medium-4">
+                            {total_value}
+                        </div>
+                    </div>
+            }
+
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
                     {translate('estimate_account_value')}<br /><span className="secondary">{valueTip}</span>

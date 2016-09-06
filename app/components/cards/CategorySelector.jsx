@@ -74,7 +74,7 @@ class CategorySelector extends React.Component {
 }
 export function validateCategory(category, required = true) {
     if(!category || category.trim() === '') return required ? 'Required' : null
-    const cats = category.split(' ')
+    const cats = category.trim().split(' ')
     return (
         // !category || category.trim() === '' ? 'Required' :
         cats.length > 5 ? 'Please use only Five categories' :

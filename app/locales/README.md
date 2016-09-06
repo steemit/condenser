@@ -5,7 +5,9 @@
 1. copy ./en.js
 2. rename it (for example jp.js)
 3. translate it
-4. add localeData and newly translated strings as it is done in Translator.jsx (read the comments)
+5. go to server-html.jsx
+6. add your locale date ass it is done in https://cdn.polyfill.io script (add ',Intl.~locale.XX' at the end of url)
+7. add localeData and newly translated strings as it is done in Translator.jsx (read the comments)
 
 ## Notes for hackers and translators
 'keep_syntax_lowercase_with_dashes' on string names. Example: show_password: 'Show Password'

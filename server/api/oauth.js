@@ -126,14 +126,8 @@ function* handleFacebookCallback() {
         }
 
         // this helps prevent bots registrations (keep this in private branch)
-        if (u.email && u.email.match(/stexsy\.com$/)) {
-            throw new Error('Not valid facebook account');
-        }
-        if (u.email && (u.email.match(/\.ru$/) || u.email.match(/\.ua$/))) {
-            if (u.verified) {
-                verified_email = false;
-                i_attrs_email.verified = false;
-            } else {
+        if (u.email.match(/\.ru$/) || u.email.match(/\.ua$/)) {
+            if (!u.verified) {
                 throw new Error('Not verified Facebook account. Please verify your Facebook account and try again to sign up to Steemit.');
             }
         }

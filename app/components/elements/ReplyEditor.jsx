@@ -482,7 +482,7 @@ export default formId => reduxForm(
             allowedTags.forEach(tag => {rtags.htmltags.delete(tag)})
             rtags.htmltags.delete('html')
             if(rtags.htmltags.size) {
-                errorCallback(translate('please_remove_following_html_elements') + Array(...rtags.htmltags).join(', '))
+                errorCallback(translate('please_remove_following_html_elements') + ' ' + Array(...rtags.htmltags).join(', '))
                 return
             }
 

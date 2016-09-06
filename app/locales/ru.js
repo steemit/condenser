@@ -403,6 +403,7 @@ const ru = {
 	yes: 'Да',
 	no: 'Нет',
 	hide_private_key: 'Скрыть приватный ключ',
+	show_private_key: 'Показать приватный ключ',
 	login_to_show: 'Войти чтобы показать',
 	steemit_cannot_recover_passwords_keep_this_page_in_a_secure_location: 'Steemit cannot recover passwords.  Keep this page in a secure location, such as a fireproof safe or safety deposit box.',
 	steemit_password_backup: 'Steemit Password Backup',

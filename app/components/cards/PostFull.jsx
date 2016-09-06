@@ -246,7 +246,7 @@ class PostFull extends React.Component {
                 }
 
                 {username && firstPayout && rootComment && <div className="float-right">
-                    <button className="button hollow tiny" onClick={this.showPromotePost}>Promote</button>
+                    <button className="button hollow tiny" onClick={this.showPromotePost}>{translate('promote')}</button>
                 </div>}
                 <TagList post={content} horizontal />
                 <div className="PostFull__footer row align-middle">

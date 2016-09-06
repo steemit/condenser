@@ -403,6 +403,7 @@ const en = 	{
 	yes: 'Yes',
 	no: 'No',
 	hide_private_key: 'Hide private key',
+	show_private_key: 'Show private key',
 	login_to_show: 'Login to show',
 	steemit_cannot_recover_passwords_keep_this_page_in_a_secure_location: 'Steemit cannot recover passwords.  Keep this page in a secure location, such as a fireproof safe or safety deposit box.',
 	steemit_password_backup: 'Steemit Password Backup',

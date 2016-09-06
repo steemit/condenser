@@ -11,3 +11,4 @@ config/steem-dev.json
 config/process.json
 app/assets/static/*.js
 #db/
+clean.sh

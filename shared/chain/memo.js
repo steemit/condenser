@@ -31,7 +31,21 @@ export function decode(private_key, memo) {
 
     // remove varint length prefix
     const mbuf = ByteBuffer.fromBinary(memo.toString('binary'), ByteBuffer.DEFAULT_CAPACITY, ByteBuffer.LITTLE_ENDIAN)
-    return mbuf.readVString()
+    try {
+        // I get better luck using readVString .. but (see cache)
+        return mbuf.readVString()
+    } catch(e) {
+        // Piston's encrypted memos fail the above varibale length utf-8 conversion.
+        // The origainal code works for Piston.
+        // https://github.com/steemit/steemit.com/issues/202
+        const len = mbuf.readVarint32() // remove the varint length prefix
+        const remaining = mbuf.remaining()
+        if(len !== remaining) // warn
+            console.error(`Memo's length prefix ${len} does not match remaining bytes ${remaining}`)
+
+        memo = new Buffer(mbuf.toString('binary'), 'binary').toString('utf-8')
+        return memo
+    }
 }
 
 /**

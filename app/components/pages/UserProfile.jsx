@@ -87,6 +87,7 @@ export default class UserProfile extends React.Component {
         const rep = repLog10(account.reputation);
 
         const isMyAccount = username === account.name
+        const {name} = account
         let tab_content = null;
 
         const global_status = this.props.global.get('status');

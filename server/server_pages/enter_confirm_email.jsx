@@ -83,8 +83,9 @@ export default function useEnterAndConfirmEmailPages(app) {
                     <input type="hidden" name="csrf" value={this.csrf} />
                     <label>
                         Email
-                        <input type="email" name="email" defaultValue={eid ? eid.email : ''} />
+                        <input type="email" name="email" defaultValue={eid ? eid.email : ''} readOnly={eid && eid.email} />
                     </label>
+                    {eid && eid.email && <div className="secondary"><i>Email address cannot be changed at this moment, sorry for the inconvenience.</i></div>}
                     <br />
                     <div className="g-recaptcha" data-sitekey={config.recaptcha.site_key}></div>
                     <br />
@@ -128,9 +129,9 @@ export default function useEnterAndConfirmEmailPages(app) {
 
         const confirmation_code = Math.random().toString(36).slice(2);
         let eid = yield models.Identity.findOne(
-            {attributes: ['id', 'email'], where: {user_id, provider: 'email'}, order: 'id DESC'}
+            {attributes: ['id', 'email'], where: {user_id, provider: 'email'}, order: 'id'}
         );
-        if (eid && eid.email === email) {
+        if (eid) {
             yield eid.update({confirmation_code});
         } else {
             eid = yield models.Identity.create({

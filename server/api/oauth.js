@@ -48,7 +48,7 @@ function* handleFacebookCallback() {
             return logErrorAndRedirect(this, 'facebook:1', this.query['error[error][message]']);
         }
         const u = yield retrieveFacebookUserData(this.query.access_token);
-        verified_email = !!(u.verified && u.email);
+        verified_email = false; // verified_email = !!(u.verified && u.email);
         const attrs = {
             uid: this.session.uid,
             name: u.name,

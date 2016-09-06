@@ -11,7 +11,7 @@ import Reveal from 'react-foundation-components/lib/global/reveal'
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {steemTip, powerTip, dollarTip, valueTip} from 'app/utils/Tips'
 import {numberWithCommas, vestingSteem} from 'app/utils/StateFunctions'
-import { translate } from '../../Translator';
+import { translate } from 'app/Translator';
 
 class UserWallet extends React.Component {
     constructor() {
@@ -90,25 +90,25 @@ class UserWallet extends React.Component {
         transfer_log.reverse();
 
         let steem_menu = [
-            { value: 'Transfer', link: '#', onClick: showTransfer.bind( this, 'STEEM' ) },
-            { value: 'Power Up', link: '#', onClick: showTransfer.bind( this, 'VESTS' ) },
+            { value: translate('transfer'), link: '#', onClick: showTransfer.bind( this, 'STEEM' ) },
+            { value: translate('power_up'), link: '#', onClick: showTransfer.bind( this, 'VESTS' ) },
         ]
         let power_menu = [
-            { value: 'Power Down', link: '#', onClick: powerDown.bind(this, false) }
+            { value: translate('power_down'), link: '#', onClick: powerDown.bind(this, false) }
         ]
         if(isMyAccount) {
-            steem_menu.push({ value: 'Deposit', link: '#', onClick: onShowDepositSteem })
-            steem_menu.push({ value: 'Buy or Sell', link: '/market' })
-            power_menu.push({ value: 'Deposit', link: '#', onClick: onShowDepositPower })
+            steem_menu.push({ value: translate('deposit'), link: '#', onClick: onShowDepositSteem })
+            steem_menu.push({ value: translate('buy_or_sell'), link: '/market' })
+            power_menu.push({ value: translate('deposit'), link: '#', onClick: onShowDepositPower })
         }
         if( divesting ) {
-            power_menu.push( { value: 'Cancel Power Down', link:'#', onClick: powerDown.bind(this,true) } );
+            power_menu.push({ value: translate('cancel_power_down'), link: '#', onClick: powerDown.bind(this, true) });
         }
 
         let dollar_menu = [
-            { value: 'Transfer', link: '#', onClick: showTransfer.bind( this, 'SBD' ) },
-            { value: 'Buy or Sell', link: '/market' },
-            { value: 'Convert to STEEM', link: '#', onClick: convertToSteem },
+            { value: translate('transfer'), link: '#', onClick: showTransfer.bind( this, 'SBD' ) },
+            { value: translate('buy_or_sell'), link: '/market' },
+            { value: translate('convert_to_steem'), link: '#', onClick: convertToSteem },
         ]
         const isWithdrawScheduled = new Date(account.next_vesting_withdrawal + 'Z').getTime() > Date.now()
         const depositReveal = showDeposit && <div>

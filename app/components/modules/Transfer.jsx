@@ -5,6 +5,7 @@ import {Map} from 'immutable';
 import transaction from 'app/redux/Transaction';
 import user from 'app/redux/User';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+import {transferToSavingsTip} from 'app/utils/Tips'
 import {powerTip, powerTip2, powerTip3} from 'app/utils/Tips'
 import {browserTests} from 'shared/ecc/test/BrowserTests'
 import {validate_account_name} from 'app/utils/ChainValidation';
@@ -55,7 +56,9 @@ class TransferForm extends Component {
             return parseFloat(amount) > parseFloat(balance)
         }
         const {toVesting} = props
-        const fields = toVesting ? ['to', 'amount'] : ['to', 'amount', 'asset', 'memo']
+        const fields = toVesting ? ['to', 'amount'] :
+            ['transferType:radio', 'to', 'amount', 'asset', 'memo']
+
         reactForm({
             name: 'transfer',
             instance: this, fields,
@@ -102,13 +105,35 @@ class TransferForm extends Component {
         this.state.to.props.onChange(value.toLowerCase().trim())
     }
 
+    onTransferToSavingsSelected = (e) => {
+        const {to, transferType} = this.state
+        transferType.props.onChange(e.target.value)
+        if(to.value === '') {
+            const {currentUser} = this.props
+            to.props.onChange(currentUser.get('username'))
+        }
+    }
+
     render() {
         const {to, amount, asset, memo} = this.state
-        const {loading, trxError, advanced} = this.state
+        const {loading, trxError, advanced, transferType} = this.state
         const {currentUser, toVesting, dispatchSubmit} = this.props
         const {submitting, valid, handleSubmit} = this.state.transfer
 
         const isMemoPrivate = memo && /^#/.test(memo.value)
+
+        const selectTransferType = toVesting ? <span></span> : <div>
+             <input type="radio" {...transferType.props} value="Account" id="tferAccount"
+                 checked={transferType.value === 'Account'} />
+             &nbsp;
+             <label htmlFor="tferAccount">Account</label>
+
+             <input type="radio" {...transferType.props} value="Savings" id="tferSavings"
+                 checked={transferType.value === 'Savings'}
+                 onChange={this.onTransferToSavingsSelected} />
+             &nbsp;
+             <label htmlFor="tferSavings">Savings</label>
+        </div>
 
         const form = (
             <form onSubmit={handleSubmit(data => {
@@ -125,12 +150,26 @@ class TransferForm extends Component {
                     </div>
                 </div>}
 
+                {!toVesting && <div>
+                    <div className="row">
+                        <div className="column small-12">
+                            {selectTransferType}
+                        </div>
+                    </div>
+                    {transferType.value === 'Savings' && <div>
+                        {transferToSavingsTip}
+                    </div>}
+                    <br />
+                </div>}
+
                 <div className="row">
                     <div className="column small-2">From</div>
                     <div className="column small-10">
                         <b>{currentUser.get('username')}</b>
                     </div>
                 </div>
+
+                <br />
 
                 {(advanced || !toVesting) && <div className="row">
                     <div className="column small-2">To</div>
@@ -160,6 +199,7 @@ class TransferForm extends Component {
                         <div className="error">{amount.touched && amount.error && amount.error}&nbsp;</div>
                     </div>
                 </div>
+
                 {memo && <div className="row">
                     <div className="column small-2">Memo</div>
                     <div className="column small-10">
@@ -181,7 +221,7 @@ class TransferForm extends Component {
         )
         return (
            <div>
-               <h3>{toVesting ? 'Convert to Steem Power' : 'Transfer to Account'}</h3>
+               <h3>{toVesting ? 'Convert to Steem Power' : 'Transfer to ' + transferType.value}</h3>
                <div className="row">
                    <div className="column small-12">
                        {form}
@@ -208,12 +248,21 @@ export default connect(
         if (toVesting && !initialValues.to)
             initialValues.to = currentUser.get('username')
 
+        if(!toVesting && !initialValues.transferType)
+            initialValues.transferType = 'Account'
+
         return {...ownProps, currentUser, currentAccount, toVesting, initialValues}
     },
 
     // mapDispatchToProps
     dispatch => ({
-        dispatchSubmit: ({to, amount, asset, memo, toVesting, currentUser, errorCallback}) => {
+        dispatchSubmit: ({
+            to, amount, asset, memo, transferType,
+            toVesting, currentUser, errorCallback
+        }) => {
+            if(!toVesting && !/Account|Savings/.test(transferType))
+                throw new Error(`Invalid transfer params: toVesting ${toVesting}, transferType ${transferType}`)
+
             const username = currentUser.get('username')
             const successCallback = () => {
                 dispatch({type: 'global/GET_STATE', payload: {url: `@${username}/transfers`}}) // refresh transfer history
@@ -225,8 +274,10 @@ export default connect(
                 to, amount: parseFloat(amount, 10).toFixed(3) + ' ' + asset2,
                 memo: toVesting ? undefined : (memo ? memo : '')
             }
+
             dispatch(transaction.actions.broadcastOperation({
-                type: toVesting ? 'transfer_to_vesting' : 'transfer',
+                type: toVesting ? 'transfer_to_vesting' :
+                    (transferType === 'Savings' ? 'transfer_to_savings' : 'transfer'),
                 operation,
                 successCallback,
                 errorCallback

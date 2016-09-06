@@ -149,8 +149,11 @@ class BlocktradesDeposit extends React.Component {
             {/*{trHashLink(outputCoin.value, tr.outputTransactionHash)}&nbsp;*/}
         </div>)
 
-        const depositTip = outputCoin.value === 'STEEM' ? steemTip :
-            outputCoin.value === 'VESTS' ? <div>
+        const depositTip = outputCoin.value === 'STEEM'
+            ? translate('tradeable_tokens_that_may_be_transferred_anywhere_at_anytime')
+                + ' ' +
+                translate('steem_can_be_converted_to_steem_power_in_a_process_called_powering_up')
+            : outputCoin.value === 'VESTS' ? <div>
                 <p>{powerTip}</p>
                 <p>{powerTip2}</p>
             </div>

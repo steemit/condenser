@@ -133,7 +133,14 @@ class UserWallet extends React.Component {
             <br />
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
-                    STEEM<br /><span className="secondary">{steemTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})}</span>
+                    STEEM
+                    <br />
+                    <span className="secondary">
+                        {/* not using steemTip because translate strings may be undefined on load */}
+                        {/* {steemTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})} */}
+                        <div>{translate('tradeable_tokens_that_may_be_transferred_anywhere_at_anytime')}</div>
+                        <div>{translate('steem_can_be_converted_to_steem_power_in_a_process_called_powering_up')}</div>
+                    </span>
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
@@ -143,7 +150,14 @@ class UserWallet extends React.Component {
             </div>
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
-                    STEEM POWER<br /><span className="secondary">{powerTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})}</span>
+                    STEEM POWER
+                    <br />
+                    <span className="secondary">
+                        {/* not using steemTip because translate strings may be undefined on load */}
+                        {/* {powerTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})} */}
+                        <div>{translate('influence_tokens_which_earn_more_power_by_holding_long_term')}</div>
+                        <div>{translate('the_more_you_hold_the_more_you_influence_post_rewards')}</div>
+                    </span>
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
@@ -153,7 +167,7 @@ class UserWallet extends React.Component {
             </div>
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
-                    STEEM DOLLARS<br /><span className="secondary">{dollarTip}</span>
+                    STEEM DOLLARS<br /><span className="secondary">{translate('tokens_worth_about_dollar_of_steem')}</span>
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
@@ -173,7 +187,7 @@ class UserWallet extends React.Component {
                 ?   null
                 :   <div className="UserWallet__balance row">
                         <div className="column small-12 medium-8">
-                            {translate('estimate_account_value')}<br /><span className="secondary">{valueTip}</span>
+                            {translate('estimate_account_value')}<br /><span className="secondary">{translate('the_estimated_value_is_based_on_a_7_day_average_value_of_steem_in_us_dollars')}</span>
                         </div>
                         <div className="column small-12 medium-4">
                             {total_value}

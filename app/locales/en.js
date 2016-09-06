@@ -455,7 +455,16 @@ const en = 	{
 	'24_hour': '24 hour',
 	'30_day': '30 day',
 	flag: "Flag",
-
+	promote: 'Promote',
+	// Tips
+	tradeable_tokens_that_may_be_transferred_anywhere_at_anytime: 'Tradeable tokens that may be transferred anywhere at anytime.',
+	steem_can_be_converted_to_steem_power_in_a_process_called_powering_up: 'Steem can be converted to Steem Power in a process called powering up.',
+	tokens_worth_about_dollar_of_steem: 'Tokens worth about $1.00 of Steem.',
+	influence_tokens_which_earn_more_power_by_holding_long_term: 'Influence tokens which earn more power by holding long term.',
+	the_more_you_hold_the_more_you_influence_post_rewards: 'The more you hold the more you influence post rewards and earn for accurate voting.',
+	the_estimated_value_is_based_on_a_7_day_average_value_of_steem_in_us_dollars: 'The estimated value is based on a 7 day average value of Steem in US Dollars.',
+	steem_power_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_steem: 'Steem Power is non-transferrable and will require 2 years and 104 payments to convert back to Steem.',
+	converted_steem_power_can_be_sent_to_yourself_but_can_not_transfer_again: 'Converted Steem Power can be sent to yourself or someone else but can not transfer again without converting back to Steem.',
 }
 
 export { en }

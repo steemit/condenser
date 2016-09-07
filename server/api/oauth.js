@@ -228,7 +228,7 @@ function* handleRedditCallback() {
             return null;
         }
 
-        const waiting_list = !u.comment_karma || u.comment_karma < 1;
+        const waiting_list = !u.comment_karma || u.comment_karma < 5;
         const i_attrs = {
             provider: 'reddit',
             provider_user_id: u.id,

@@ -44,7 +44,8 @@ export default ({large = true, highQualityPost = true, noImage = false, sanitize
     // SEE https://www.owasp.org/index.php/XSS_Filter_Evasion_Cheat_Sheet
     allowedAttributes: {
         // "src" MUST pass a whitelist (below)
-        iframe: ['src', 'width', 'height', 'frameBorder', 'allowFullScreen'], //'class'
+        iframe: ['src', 'width', 'height', 'frameborder', 'allowfullscreen',
+            'webkitallowfullscreen', 'mozallowfullscreen'],
 
         // class attribute is strictly whitelisted (below)
         div: ['class'],
@@ -64,12 +65,13 @@ export default ({large = true, highQualityPost = true, noImage = false, sanitize
                     return {
                         tagName: 'iframe',
                         attribs: {
+                            frameborder: '0',
+                            allowfullscreen: 'on',
+                            ...attribs,
                             src,
                             width: large ? '640' : '384',
                             height: large ? '360' : '240',
-                            allowFullScreen: 'on',
                             class: 'videoWrapper',
-                            frameBorder: '0',
                         },
                     }
                 }

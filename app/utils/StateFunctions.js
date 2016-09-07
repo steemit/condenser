@@ -52,6 +52,12 @@ export function contentStats(content) {
     let hasFlag = false
     content.get('active_votes').forEach(v => {
         const rshares = String(v.get('rshares'))
+        const voterRepLog10 = repLog10(v.get('reputation'))
+        if(voterRepLog10) {
+            // Don't allow low rep users to gray out everyone's posts.
+            if(voterRepLog10 < 25)
+                return
+        }
         const neg = rshares.substring(0, 1) === '-'
         if(neg) hasFlag = true
         // Prevent tiny downvotes (less than 9 digits) from hiding content

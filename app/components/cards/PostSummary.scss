@@ -159,7 +159,8 @@ ul.PostSummary__tags {
     font-size: 110%;
   }
   .Icon {
-    vertical-align: text-top;
+    position: relative;
+    top: -1px;
   }
 }
 

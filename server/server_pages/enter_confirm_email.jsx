@@ -54,7 +54,7 @@ function *confirmEmailHandler() {
     }
     if (!eid.verified) {
         yield eid.update({verified: true});
-        yield models.User.update({email: eid.email}, {where: {id: eid.user_id}});
+        yield models.User.update({email: eid.email, waiting_list: false}, {where: {id: eid.user_id}});
     }
     this.redirect('/create_account');
 }

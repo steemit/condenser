@@ -22,14 +22,15 @@ class TransferForm extends Component {
 
     constructor(props) {
         super()
-        this.state = {advanced: !props.toVesting}
+        const {transferToSelf} = props
+        this.state = {advanced: !transferToSelf}
         this.initForm(props)
     }
 
     componentDidMount() {
         setTimeout(() => {
-            const {to} = this.state
-            if (!to.value || to.value === '')
+            const {advanced} = this.state
+            if (advanced)
                 ReactDOM.findDOMNode(this.refs.to).focus()
             else
                 ReactDOM.findDOMNode(this.refs.amount).focus()
@@ -38,10 +39,9 @@ class TransferForm extends Component {
 
     onAdvanced = (e) => {
         e.preventDefault() // prevent form submission!!
-        if(!this.state.advance) {
-            const username = this.props.currentUser.get('username')
-            this.state.to.props.onChange(username)
-        }
+        const username = this.props.currentUser.get('username')
+        this.state.to.props.onChange(username)
+        // setTimeout(() => {ReactDOM.findDOMNode(this.refs.amount).focus()}, 300)
         this.setState({advanced: !this.state.advanced})
     }
 
@@ -56,8 +56,7 @@ class TransferForm extends Component {
             return parseFloat(amount) > parseFloat(balance)
         }
         const {toVesting} = props
-        const fields = toVesting ? ['to', 'amount'] :
-            ['transferType:radio', 'to', 'amount', 'asset', 'memo']
+        const fields = toVesting ? ['to', 'amount'] : ['to', 'amount', 'asset', 'memo']
 
         reactForm({
             name: 'transfer',
@@ -105,41 +104,18 @@ class TransferForm extends Component {
         this.state.to.props.onChange(value.toLowerCase().trim())
     }
 
-    onTransferToSavingsSelected = (e) => {
-        const {to, transferType} = this.state
-        transferType.props.onChange(e.target.value)
-        if(to.value === '') {
-            const {currentUser} = this.props
-            to.props.onChange(currentUser.get('username'))
-        }
-    }
-
     render() {
         const {to, amount, asset, memo} = this.state
-        const {loading, trxError, advanced, transferType} = this.state
-        const {currentUser, toVesting, dispatchSubmit} = this.props
+        const {loading, trxError, advanced} = this.state
+        const {currentUser, toVesting, transferToSelf, dispatchSubmit} = this.props
+        const {transferType} = this.props.initialValues
         const {submitting, valid, handleSubmit} = this.state.transfer
-
         const isMemoPrivate = memo && /^#/.test(memo.value)
-
-        const selectTransferType = toVesting ? <span></span> : <div>
-             <input type="radio" {...transferType.props} value="Account" id="tferAccount"
-                 checked={transferType.value === 'Account'} />
-             &nbsp;
-             <label htmlFor="tferAccount">Account</label>
-
-             <input type="radio" {...transferType.props} value="Savings" id="tferSavings"
-                 checked={transferType.value === 'Savings'}
-                 onChange={this.onTransferToSavingsSelected} />
-             &nbsp;
-             <label htmlFor="tferSavings">Savings</label>
-        </div>
-
         const form = (
             <form onSubmit={handleSubmit(data => {
                 // bind redux-form to react-redux
                 this.setState({loading: true})
-                dispatchSubmit({...data, errorCallback: this.errorCallback, currentUser, toVesting})
+                dispatchSubmit({...data, errorCallback: this.errorCallback, currentUser, toVesting, transferType})
             })}
                 onChange={this.clearError}
             >
@@ -153,12 +129,11 @@ class TransferForm extends Component {
                 {!toVesting && <div>
                     <div className="row">
                         <div className="column small-12">
-                            {selectTransferType}
+                            {transferType === 'Transfer to Savings' && <div>
+                                {transferToSavingsTip}
+                            </div>}
                         </div>
                     </div>
-                    {transferType.value === 'Savings' && <div>
-                        {transferToSavingsTip}
-                    </div>}
                     <br />
                 </div>}
 
@@ -171,7 +146,7 @@ class TransferForm extends Component {
 
                 <br />
 
-                {(advanced || !toVesting) && <div className="row">
+                {advanced && <div className="row">
                     <div className="column small-2">To</div>
                     <div className="column small-10">
                         <input type="text" placeholder="Send to account" {...to.props}
@@ -213,15 +188,15 @@ class TransferForm extends Component {
                 {!loading && <span>
                     {trxError && <div className="error">{trxError}</div>}
                     <button type="submit" disabled={submitting || !valid} className="button">
-                        {toVesting ? 'Power Up' : 'Transfer'}
+                        {toVesting ? 'Power Up' : 'Submit'}
                     </button>
-                    {toVesting && <button className="button hollow no-border" disabled={submitting} onClick={this.onAdvanced}>{advanced ? 'Basic' : 'Advanced'}</button>}
+                    {transferToSelf && <button className="button hollow no-border" disabled={submitting} onClick={this.onAdvanced}>{advanced ? 'Basic' : 'Advanced'}</button>}
                 </span>}
             </form>
         )
         return (
            <div>
-               <h3>{toVesting ? 'Convert to Steem Power' : 'Transfer to ' + transferType.value}</h3>
+               <h3>{toVesting ? 'Convert to Steem Power' : transferType}</h3>
                <div className="row">
                    <div className="column small-12">
                        {form}
@@ -245,13 +220,17 @@ export default connect(
         const currentUser = state.user.getIn(['current'])
         const currentAccount = state.global.getIn(['accounts', currentUser.get('username')])
 
-        if (toVesting && !initialValues.to)
+        if(!toVesting && !initialValues.transferType)
+            initialValues.transferType = 'Transfer to Account'
+
+        let transferToSelf = toVesting || /Transfer to Savings|Savings Withdraw/.test(initialValues.transferType)
+        if (transferToSelf && !initialValues.to)
             initialValues.to = currentUser.get('username')
 
-        if(!toVesting && !initialValues.transferType)
-            initialValues.transferType = 'Account'
+        if(initialValues.to !== currentUser.get('username'))
+            transferToSelf = false // don't hide the to field
 
-        return {...ownProps, currentUser, currentAccount, toVesting, initialValues}
+        return {...ownProps, currentUser, currentAccount, toVesting, transferToSelf, initialValues}
     },
 
     // mapDispatchToProps
@@ -260,7 +239,7 @@ export default connect(
             to, amount, asset, memo, transferType,
             toVesting, currentUser, errorCallback
         }) => {
-            if(!toVesting && !/Account|Savings/.test(transferType))
+            if(!toVesting && !/Transfer to Account|Transfer to Savings|Savings Withdraw/.test(transferType))
                 throw new Error(`Invalid transfer params: toVesting ${toVesting}, transferType ${transferType}`)
 
             const username = currentUser.get('username')
@@ -275,9 +254,16 @@ export default connect(
                 memo: toVesting ? undefined : (memo ? memo : '')
             }
 
+            if(transferType === 'Savings Withdraw')
+                operation.request_id = Math.floor(Date.now() / 1000)
+
             dispatch(transaction.actions.broadcastOperation({
-                type: toVesting ? 'transfer_to_vesting' :
-                    (transferType === 'Savings' ? 'transfer_to_savings' : 'transfer'),
+                type: toVesting ? 'transfer_to_vesting' : (
+                    transferType === 'Transfer to Account' ? 'transfer' :
+                    transferType === 'Transfer to Savings' ? 'transfer_to_savings' :
+                    transferType === 'Savings Withdraw' ? 'transfer_from_savings' :
+                    null
+                ),
                 operation,
                 successCallback,
                 errorCallback

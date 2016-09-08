@@ -4,5 +4,5 @@ export const powerTip = 'Influence tokens which give you more control over post 
 export const valueTip = 'The estimated value is based on a 7 day average value of Steem in US Dollars.'
 export const powerTip2 = 'Steem Power is non-transferrable and will require 2 years and 104 payments to convert back to Steem.'
 export const powerTip3 = 'Converted Steem Power can be sent to yourself or someone else but can not transfer again without converting back to Steem.'
-
-export const transferToSavingsTip = 'All funds in savings are protected by a 3 day withdraw waiting period.'
+export const savingsTip = 'Balance subject to 3 day withdraw waiting period.'
+export const transferToSavingsTip = 'A savings account will protect funds using a 3 day withdraw waiting period.'

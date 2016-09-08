@@ -9,7 +9,7 @@ import DropdownMenu from 'app/components/elements/DropdownMenu';
 import BlocktradesDeposit from 'app/components/modules/BlocktradesDeposit';
 import Reveal from 'react-foundation-components/lib/global/reveal'
 import CloseButton from 'react-foundation-components/lib/global/close-button';
-import {steemTip, powerTip, dollarTip, valueTip} from 'app/utils/Tips'
+import {steemTip, powerTip, dollarTip, valueTip, savingsTip} from 'app/utils/Tips'
 import {numberWithCommas, vestingSteem} from 'app/utils/StateFunctions'
 
 class UserWallet extends React.Component {
@@ -42,14 +42,15 @@ class UserWallet extends React.Component {
         const disabledWarning = false;
         // isMyAccount = false; // false to hide wallet transactions
 
-        const showTransfer = (asset, e) => {
+        const showTransfer = (asset, transferType, e) => {
             e.preventDefault();
-            if (!current_user) {
-                this.props.login();
-                return;
-            }
-            this.props.showTransfer({to: (isMyAccount ? null : account.name), asset});
+            this.props.showTransfer({
+                to: (isMyAccount ? null : account.name),
+                asset, transferType
+            });
         };
+
+        const {savings_balance, savings_sbd_balance} = account
 
         const powerDown = (cancel, e) => {
             e.preventDefault()
@@ -88,8 +89,9 @@ class UserWallet extends React.Component {
         transfer_log.reverse();
 
         let steem_menu = [
-            { value: 'Transfer', link: '#', onClick: showTransfer.bind( this, 'STEEM' ) },
-            { value: 'Power Up', link: '#', onClick: showTransfer.bind( this, 'VESTS' ) },
+            { value: 'Transfer', link: '#', onClick: showTransfer.bind( this, 'STEEM', 'Transfer to Account' ) },
+            { value: 'Transfer to Savings', link: '#', onClick: showTransfer.bind( this, 'STEEM', 'Transfer to Savings' ) },
+            { value: 'Power Up', link: '#', onClick: showTransfer.bind( this, 'VESTS', 'Transfer to Account' ) },
         ]
         let power_menu = [
             { value: 'Power Down', link: '#', onClick: powerDown.bind(this, false) }
@@ -104,7 +106,8 @@ class UserWallet extends React.Component {
         }
 
         let dollar_menu = [
-            { value: 'Transfer', link: '#', onClick: showTransfer.bind( this, 'SBD' ) },
+            { value: 'Transfer', link: '#', onClick: showTransfer.bind( this, 'SBD', 'Transfer to Account' ) },
+            { value: 'Transfer to Savings', link: '#', onClick: showTransfer.bind( this, 'SBD', 'Transfer to Savings' ) },
             { value: 'Buy or Sell', link: '/market' },
             { value: 'Convert to STEEM', link: '#', onClick: convertToSteem },
         ]
@@ -119,6 +122,14 @@ class UserWallet extends React.Component {
         const steem_balance_str = numberWithCommas(balance_steem.toFixed(3)) // formatDecimal(balance_steem, 3)
         const power_balance_str = numberWithCommas(vesting_steem) // formatDecimal(vesting_steem, 3)
         const sbd_balance_str = numberWithCommas('$' + sbd_balance.toFixed(3)) // formatDecimal(account.sbd_balance, 3)
+
+        const savings_menu = [
+            { value: 'Withdraw Steem', link: '#', onClick: showTransfer.bind( this, 'STEEM', 'Savings Withdraw' ) },
+        ]
+        const savings_sbd_menu = [
+            { value: 'Withdraw Steem Dollars', link: '#', onClick: showTransfer.bind( this, 'SBD', 'Savings Withdraw' ) },
+        ]
+
         return (<div className="UserWallet">
             <div className="row">
                 <div className="column small-12 medium-8">
@@ -135,7 +146,7 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
-                    <DropdownMenu selected={steem_balance_str + ' STEEM'} className="Header__sort-order-menu" items={steem_menu} el="span" />
+                    <DropdownMenu selected={steem_balance_str + ' STEEM'} className="Header__sort-order-menu UserWallet__dropdown" items={steem_menu} el="span" />
                     : steem_balance_str + ' STEEM'}
                 </div>
             </div>
@@ -157,6 +168,20 @@ class UserWallet extends React.Component {
                     {isMyAccount ?
                     <DropdownMenu selected={sbd_balance_str} items={dollar_menu} el="span" />
                     : sbd_balance_str}
+                </div>
+            </div>
+            <div className="UserWallet__balance row">
+                <div className="column small-12 medium-8">
+                    SAVINGS<br /><span className="secondary">{savingsTip}</span>
+                </div>
+                <div className="column small-12 medium-4">
+                    {isMyAccount ?
+                    <DropdownMenu selected={savings_balance} items={savings_menu} el="span" />
+                    : savings_balance}
+                    <br />
+                    {isMyAccount ?
+                    <DropdownMenu selected={savings_sbd_balance} items={savings_sbd_menu} el="span" />
+                    : savings_sbd_balance}
                 </div>
             </div>
             <div className="row">

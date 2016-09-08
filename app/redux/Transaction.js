@@ -79,7 +79,7 @@ export default createModule({
                             if (err_lines.length > 2) {
                                 errorKey = err_lines[1];
                                 const txt = errorKey.split(': ')
-                                if(txt.length) {
+                                if(txt.length && txt[txt.length - 1].trim() !== '') {
                                     errorKey = errorStr = txt[txt.length - 1]
                                 } else
                                     errorStr = `Transaction failed: ${err_lines[1]}`;

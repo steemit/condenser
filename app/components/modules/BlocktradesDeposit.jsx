@@ -8,11 +8,12 @@ import g from 'app/redux/GlobalReducer'
 import QRCode from 'react-qr'
 import {steemTip, powerTip, powerTip2} from 'app/utils/Tips'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
-import { translate } from '../../Translator.js';
+import { translate } from 'app/Translator.js';
+import { APP_NAME, DEBT_TOKEN, DEBT_TOKEN_SHORT, OWNERSHIP_TOKEN, CURRENCY_SIGN, INVEST_TOKEN } from 'config/client_config';
 
 const coinNames = {
-    STEEM: 'Steem',
-    VESTS: 'Steem Power',
+    STEEM: OWNERSHIP_TOKEN,
+    VESTS: INVEST_TOKEN,
     BTC: 'Bitcoin',
     BTS: 'Bitshares',
     ETH: 'Ether',
@@ -162,11 +163,11 @@ class BlocktradesDeposit extends React.Component {
         const selectOutputCoin = <span>
              <input type="radio" {...cleanReduxInput(outputCoin)} value="VESTS" checked={outputCoin.value === 'VESTS'} id="powerCheck" />
              &nbsp;
-             <label htmlFor="powerCheck">Steem Power</label>
+             <label htmlFor="powerCheck">{INVEST_TOKEN}</label>
 
              <input type="radio" {...cleanReduxInput(outputCoin)} value="STEEM" checked={outputCoin.value === 'STEEM'} id="steemCheck" />
              &nbsp;
-             <label htmlFor="steemCheck">Steem</label>
+             <label htmlFor="steemCheck">{OWNERSHIP_TOKEN}</label>
         </span>
 
         const coin_menu = [
@@ -178,7 +179,7 @@ class BlocktradesDeposit extends React.Component {
                 value: 'Bitshares', icon: 'bitshares', link: '#'},
         ];
         const selectInputCoin = <DropdownMenu className="move-left" items={coin_menu} selected={coinName(inputCoin.value)} el="span" />
-        const estimateButtonLabel = est.inputAmount != null ? translate('update_estimate') : translate('get_estimate')
+        const estimateButtonLabel = est.inputAmount != translate(null ? 'update_estimate' : 'get_estimate')
         const sendTo = <span>
             {translate("send_amount_of_coins_to", {
                 value: amount.value,
@@ -251,7 +252,7 @@ class BlocktradesDeposit extends React.Component {
                         <button type="submit" className="button" disabled={submitting || !username}>
                             {estimateButtonLabel}</button>
 
-                        {onClose && <button className="button secondary hollow float-right" type="button" disabled={submitting} onClick={onClose}>{translate("closed")}</button>}
+                        {onClose && <button className="button secondary hollow float-right" type="button" disabled={submitting} onClick={onClose}>{translate("close")}</button>}
                         <button onClick={fetchInputAddress} className="button secondary hollow float-right" type="button" disabled={submitting || !username}>
                             {getAddressLabel}</button>
                     </div>

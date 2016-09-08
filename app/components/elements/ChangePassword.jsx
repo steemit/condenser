@@ -7,8 +7,8 @@ import {key_utils} from 'shared/ecc'
 import Apis from 'shared/api_client/ApiInstances'
 import {validate_account_name} from 'app/utils/ChainValidation'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
-// import { formatted } from 'module';
 import { translate, translateHtml } from '../../Translator';
+import { FormattedHTMLMessage } from 'react-intl';
 
 const {string, oneOf} = React.PropTypes
 
@@ -111,8 +111,9 @@ class ChangePassword extends React.Component {
                             })}</p> :
                         <div className="ChangePassword__rules">
                             <hr />
-                            <p> {translateHtml("the_rules_of_steemit")} </p>
-                            <hr />
+                            {/* currently translateHtml() does not work, using <FormattedHTMLMessage /> instead */}
+                            <p> <FormattedHTMLMessage id="the_rules_of_steemit" /> </p>
+                        <hr />
                         </div>
                     }
 

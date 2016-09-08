@@ -16,6 +16,7 @@ import Modals from 'app/components/modules/Modals';
 import Icon from 'app/components/elements/Icon';
 import {key_utils} from 'shared/ecc'
 import { translate } from '../Translator.js';
+import { SEGMENT_ANALYTICS_KEY } from 'config/client_config';
 
 class App extends React.Component {
     constructor(props) {
@@ -26,8 +27,18 @@ class App extends React.Component {
     }
 
     componentWillMount() {
+        console.info('APP WILL MOUNT!')
         if (process.env.BROWSER) localStorage.removeItem('autopost') // July 14 '16 compromise, renamed to autopost2
         this.props.loginUser();
+        // SEGMENT.COM ANALYTICS INITIALIZATION
+        console.info(process.env.BROWSER)
+    	if (process.env.BROWSER) {
+            console.info('APP IS RENDERING ON CLIENT SIDE!')
+            !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
+            analytics.load(SEGMENT_ANALYTICS_KEY);
+            analytics.page()
+            }}();
+        }
     }
 
     componentDidMount() {
@@ -167,17 +178,17 @@ class App extends React.Component {
                     </li>
                     <li>
                         <a href="https://steem.io/SteemWhitePaper.pdf" onClick={this.navigate}>
-                            {translate("whitepaper")}
+                            {translate("APP_NAME_whitepaper")}
                         </a>
                     </li>
                     <li>
                         <a onClick={() => depositSteem()}>
-                            {translate("buy_steem")}
+                            {translate("buy_OWNERSHIP_TOKEN")}
                         </a>
                     </li>
                     <li>
                         <a href="http://steemtools.com/" onClick={this.navigate}>
-                            {translate('steem_app_center')}
+                            {translate('APP_NAME_app_center')}
                         </a>
                     </li>
                     <li>
@@ -197,7 +208,7 @@ class App extends React.Component {
                     </li>
                     <li>
                         <a href="https://steemit.chat/home" target="_blank">
-                            {translate("steemit_chat")}&nbsp;<Icon name="extlink" />
+                            {translate("APP_NAME_chat")}&nbsp;<Icon name="extlink" />
                         </a>
                     </li>
                     <li className="last">

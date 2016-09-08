@@ -334,7 +334,7 @@ class ReplyEditor extends React.Component {
                         <div className={'ReplyEditor__body ' + (rte ? `rte ${vframe_section_class}` : vframe_section_shrink_class)} onClick={this.focus}>
                             <div className="float-right secondary" style={{marginRight: '1rem'}}>
                                 {rte && <a href="#" onClick={this.toggleRte}>{isHtml ? translate('raw_html') : 'Markdown'}</a>}
-                                {!rte && isStory && (isHtml || !body.value) && <a href="#" onClick={this.toggleRte}>{translate("Editor")}</a>}
+                                {!rte && isStory && (isHtml || !body.value) && <a href="#" onClick={this.toggleRte}>{translate('editor')}</a>}
                             </div>
                             {process.env.BROWSER && rte ?
                                 <RichTextEditor ref="rte"
@@ -423,6 +423,7 @@ export default formId => reduxForm(
         if(hasCategory && jsonMetadata && jsonMetadata.tags) {
             category = Set([category, ...jsonMetadata.tags]).join(' ')
         }
+
         const metaLinkData = state.global.getIn(['metaLinkData', formId])
         const ret = {
             ...ownProps,

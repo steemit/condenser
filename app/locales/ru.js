@@ -1,14 +1,16 @@
+import { APP_NAME, OWNERSHIP_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, INVEST_TOKEN } from 'config/client_config';
+
 const ru = {
 	// this variables mainly used in navigation section
 	about: "О проекте",
 	explore: "Исследовать",
-	whitepaper: "Бумага о Steem",
-	buy_steem: "Купить Steem",
-	sell_steem: "Продать Steem",
+	APP_NAME_whitepaper: "Бумага о " + APP_NAME,
+	buy_OWNERSHIP_TOKEN: 'Купить ' + OWNERSHIP_TOKEN,
+	sell_OWNERSHIP_TOKEN: 'Продать ' + OWNERSHIP_TOKEN,
 	market: "Маркет",
 	stolen_account_recovery: "Возврат украденного аккаунта",
 	change_account_password: "Изменить пароль аккаунта",
-	steemit_chat: "Steemit чат",
+	APP_NAME_chat: APP_NAME + " чат",
 	witnesses: "Делегаты",
 	privacy_policy: "Политика Конфиденциальности",
 	terms_of_service: "Условия пользования",
@@ -59,10 +61,9 @@ const ru = {
 	account_creation_succes: 'Твой аккаунт успешно создан!',
 	account_recovery_succes: 'Твой аккаунт успено восстановлен!',
 	password_update_succes: 'Пароль для {accountName} был успешно обновлен',
-	// TODO
-	password_is_bound_to_account: "This password is bound to your account\'s owner key and can not be used to login to this site. \nHowever, you can use it to {changePasswordLink} to obtain a more secure set of keys.",
+	password_is_bound_to_account: "Этот пароль привязан к главному ключу аккаунта и не может быть использован для логинации на сайте. Тем не менее его можно использовать {changePasswordLink} для получения более безопасного набора ключей.",
 	update_your_password: 'обновить твой пароль',
-	enter_username: 'Введи свой username',
+	enter_username: 'Введи свое имя пользователя',
 	password_or_wif: 'Пароль или WIF',
 	requires_auth_key: 'Эта операция требует вашего {authType} ключа (или используйте главный пароль)',
 	keep_me_logged_in: 'Оставлять меня залогиненным',
@@ -85,8 +86,7 @@ const ru = {
 	your_voice_is_worth_something: 'Твой голос чего-то стоит',
 	learn_more: 'Узнать больше',
 	get_sp_when_sign_up: 'Получи {signupBonus} Steem Power подписавшись сегодня.',
-	// TODO
-	all_accounts_refunded: 'All Recovered Accounts have been fully Refunded',
+	all_accounts_refunded: 'Все потери по восстанавливаемым аккаунтам были полностью компенсированы',
 	steemit_is_now_open_source: 'Steemit.com теперь Open Source',
 	// this is mainly from ReplyEditor
 	tag_your_story: 'Добавь тэги (до 5 штук), первый тэг станет основной категорией.',
@@ -114,16 +114,15 @@ const ru = {
 	// for example 'powered by Blocktrades'
 	powered_by: 'Powered by', // NOTE this might be deleted in future
 	send_amount_of_coins_to: 'Отправить {value} {coinName} к',
-	// TODO спросить Валентина
-	amount_is_in_form: 'Amount is in the form 99999.999',
-	insufficent_funds: 'Insufficent funds',
-	update_estimate: 'Update Estimate',
-	get_estimate: 'Get Estimate',
-	memo: 'Memo',
-	must_include_memo: 'You must include the memo above',
+	amount_is_in_form: 'Сумма должна быть в формате 99999.999',
+	insufficent_funds: 'Недостаточно средств',
+	update_estimate: 'Обновить оценку',
+	get_estimate: 'Получить оценку',
+	memo: 'Заметка',
+	must_include_memo: 'Необходимо включить заметку',
 	estimate_using: 'Подсчитать используя',
-	amount_to_send: 'Amount to send {estimateInputCoin}',
-	deposit_using: 'Deposit using', // example: 'deposit using Steem Power' // TODO: is this example right?
+	amount_to_send: 'Сумма к отправке {estimateInputCoin}',
+	deposit_using: 'Пополнить через', // example: 'deposit using Steem Power' // TODO: is this example right?
 	suggested_limit: 'Предлогаемый лимит {depositLimit}',
 	internal_server_error: 'Внутренняя ошибка сервера',
 	enter_amount: 'Ввести количество',
@@ -145,15 +144,14 @@ const ru = {
 	recieve_amount_steem_power_from: "Получить {amount} STEEM POWER от",
 	transfer_amount_steem_power_from_to: "Передать {amount} STEEM POWER от {from} к",
 	transfer_amount_to: "Передать {amount} к",
-	recieve_amount_from: "Получить {amount} от",
+	recieve_amount_from: "Получен {amount} от",
 	transfer_amount_from: "Передать {amount} от",
 	// TODO
 	stop_power_down: "Stop power down",
 	start_power_down_of: "Start power down of",
 	curation_reward_of_steem_power_for: 'Кураторские вознаграждения {reward} STEEM POWER за',
 	author_reward_of_steem_power_for: 'Авторские вознаграждения {payout} и {reward} STEEM POWER за',
-	// TODO
-	recieve_interest_of: 'Receive interest of {interest}',
+	recieve_interest_of: 'Получены проценты в размере {interest}',
 	// TODO find where this is used and write an example
 	to: 'к',
 	account_not_found: 'Аккаунт не найден',
@@ -162,7 +160,7 @@ const ru = {
 	recover_your_account: 'восстановить ваш аккаунт', // this probably will end with question mark
 	reset_usernames_password: "Сбросить пароль пользователя {username}",
 	this_will_update_usernames_authtype_key: 'Это обновит {username} {authType} ключ',
-	the_rules_of_steemit: "Первая правило Steemit: не теряйте свой пароль.<br /> Второе правило Steemit: <strong>Не</strong> теряйте свой пароль.<br /> Третье правило Steemit: мы не можем восстановить ваш пароль.<br /> Четвертое правило: если вы можете запомнить свой пароль, значит он не безопасен.<br /> Пятое правило: используйте только сгенерированные случайным образом пароли.<br /> Шестое правило: Никому не говорите свой пароль.<br /> Седьмое правило: Всегда надежно сохраняйте свой пароль.",
+	the_rules_of_steemit: "Первая правило " + APP_NAME + ": не теряйте свой пароль.<br /> Второе правило " + APP_NAME + ": <strong>Не</strong> теряйте свой пароль.<br /> Третье правило " + APP_NAME + ": мы не можем восстановить ваш пароль.<br /> Четвертое правило: если вы можете запомнить свой пароль, значит он не безопасен.<br /> Пятое правило: используйте только сгенерированные случайным образом пароли.<br /> Шестое правило: Никому не говорите свой пароль.<br /> Седьмое правило: Всегда надежно сохраняйте свой пароль.",
 	account_name: 'Имя аккаунта',
 	recover_password: 'Восстановить аккаунт',
 	current_password: 'Текущий пароль',
@@ -170,11 +168,10 @@ const ru = {
 	generated_password: 'Сгенерированный пароль',
 	recover_account: 'Восстановить аккаунт',
 	new: 'новый', // ex. 'Generated Password (new)', but not exclusively
-	// TODO
-	backup_password_by_storing_it: 'Back it up by storing in your password manager or a text file',
+	backup_password_by_storing_it: 'Сделайте резервную копию в менеджере паролей или текстовом файле',
 	click_to_generate_password: 'Нажмите чтобы сгененировать пароль',
 	re_enter_generate_password: 'Повторно введите пароль',
-	understand_that_steemit_cannot_recover_password: 'Я понимаю что Steemit не сможет восстановить утраченный пароль',
+	understand_that_steemit_cannot_recover_password: 'Я понимаю что ' + APP_NAME + ' не сможет восстановить утраченный пароль',
 	i_saved_password: 'Я надежно сохранил сгенерированный пароль',
 	update_password: 'Обновить пароль',
 	password_must_be_characters_or_more: 'Пароль должен быть {amount} символов или больше',
@@ -185,7 +182,7 @@ const ru = {
 	your_password_permissions_were_reduced: 'Ваши резрешения пароля были снижены',
 	if_you_did_not_make_this_change: 'Если вы не делали этих изменений, пожалуйста',
 	// TODO
-	owhership_changed_on: 'Ownership Changed On',
+	owhership_changed_on: 'Собственность изменена на',
 	deadline_for_recovery_is: 'Deadline for recovery is',
 	i_understand_dont_show_again: "Понимаю, больше не показывать",
 	ok: 'Ок', // Лучше использовать "хорошо" или "ладно"?
@@ -203,8 +200,7 @@ const ru = {
 	mute: 'Блокировать',
 	unmute: 'Разблокировать',
 	confirm_password: 'Подтвердить пароль',
-	// TODO
-	login_to_see_memo: 'login to see memo',
+	login_to_see_memo: 'войти чтобы увидеть заметку',
 	post: 'Пост', // places used: tooltip in MediumEditor
 	unknown: 'Неизвестный', // exp.: 'unknown error'
 	account_name_is_not_available: 'Имя аккаунта не доступно',
@@ -228,8 +224,7 @@ const ru = {
 	buy_atleast_amount_for: 'Купить {min_to_receive} за {amount_to_sell} ({effectivePrice})',
 	higher: 'Дороже', // context is about prices
 	lower: 'Дешевле', // context is about prices
-	total_sd_dollars: "Сумма SD ($)",
-	sd_dollars: "SD ($)",
+	total_DEBT_TOKEN_SHORT_CURRENCY_SIGN: "Сумма " + DEBT_TOKEN_SHORT + ' (' + CURRENCY_SIGN + ')',
 	// RecoverAccountStep1.jsx // recover account stuff
 	not_valid: 'Недействительно',
 	account_name_is_not_found: 'Имя аккаунта не найдено',
@@ -245,7 +240,6 @@ const ru = {
 	continue_with_email: "Продолжить с электронной почтой",
 	// TODO
 	thanks_for_submitting_request_for_account_recovery: '<p>Thanks for submitting your request for Account Recovery using Steem’s blockchain-based multi factor authentication.</p> <p>We will respond to you as quickly as possible, however, please expect there may be some delay in response due to high volume of emails.</p> <p>Please be prepared to verify your identity.</p> <p>Regards,</p> <p>Ned Scott</p> <p>CEO Steemit</p>',
-	// TODO
 	recovering_account: 'Recovering account',
 	checking_account_owner: 'Checking account owner',
 	sending_recovery_request: 'Sending recovery request',
@@ -319,7 +313,7 @@ const ru = {
 		many {# ответов}
 	}`,
 	// TODO
-	this_is_users_reputations_score_it_is_based_on_history_of_votes: "This is ${name}'s reputation score.\n\nThe reputation score is based on the history of votes received by the account, and is used to hide low quality content.",
+	this_is_users_reputations_score_it_is_based_on_history_of_votes: "This is {name}'s reputation score.\n\nThe reputation score is based on the history of votes received by the account, and is used to hide low quality content.",
 	newer: 'Новее',
 	older: 'Старее',
 	author_rewards_last_24_hours: 'Авторские вознаграждения за последние 24 часа',
@@ -362,14 +356,12 @@ const ru = {
 	hate_speech_or_internet_trolling: 'Разжигание ненависти или интернет троллинг',
 	intentional_miss_categorized_content_or_spam: 'Преднамеренная неправильная категоризация контента или спам',
 	downvote: 'Проголосовать против',
-	// TODO
 	pending_payout: 'Ожидаемая выплата',
 	past_payouts: 'Прошлые выплаты',
 	and: 'и',
 	more: 'больше',
 	remove_vote: 'Убрать голос',
 	upvote: 'Проголосовать за',
-	// TODO
 	we_will_reset_curation_rewards_for_this_post: 'сбросит ваши кураторские вознаграждения за этот пост',
 	removing_your_vote: 'Удаляем ваш голос',
 	changing_to_an_upvote: 'Изменяем на голос за',
@@ -382,7 +374,7 @@ const ru = {
 	post_as: 'Запостить как', // 'Post as Misha'
 	action: 'Действие',
 	// TODO
-	steem_app_center: 'Steem App Center',
+	APP_NAME_app_center: APP_NAME + ' центр приложений',
 	witness_thread: 'witness thread',
 	you_have_votes_remaining: 'У вас осталось {votesCount} голосов',
 	you_can_vote_for_maximum_of_witnesses: 'Вы можете голосовать максимум за 30 делегатов',
@@ -454,13 +446,13 @@ const ru = {
 	power_up: 'Power Up',
 	power_down: 'Power Down',
 	cancel_power_down: 'Cancel Power Down',
-	transfer: 'Transfer',
+	transfer: 'Передать',
 	deposit: 'Deposit',
 	basic: 'Basic',
 	advanced: 'Advanced',
 	convert_to_steem_power: 'Convert to Steem Power',
-	transfer_to_account: 'Transfer to Account',
-	buy_steem_or_steem_power: 'Buy Steem or Steem Power',
+	transfer_to_account: 'Передать пользователю',
+	buy_OWNERSHIP_TOKEN_or_INVEST_TOKEN: 'Купить ' + OWNERSHIP_TOKEN + ' или ' + INVEST_TOKEN,
 	version: 'Version',
 	about_steemit: 'About Steemit',
 	steemit_is_a_social_media_platform_where_everyone_gets_paid_for_creating_and_curating_content: 'Steemit is a social media platform where <strong>everyone</strong>&nbsp;gets <strong>paid</strong> for creating and curating content',
@@ -489,6 +481,8 @@ const ru = {
 	the_estimated_value_is_based_on_a_7_day_average_value_of_steem_in_us_dollars: 'The estimated value is based on a 7 day average value of Steem in US Dollars.',
 	steem_power_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_steem: 'Steem Power is non-transferrable and will require 2 years and 104 payments to convert back to Steem.',
 	converted_steem_power_can_be_sent_to_yourself_but_can_not_transfer_again: 'Converted Steem Power can be sent to yourself or someone else but can not transfer again without converting back to Steem.',
+	profile: 'Профиль',
+	send_to_account: "Send to account",
 }
 
 export { ru }

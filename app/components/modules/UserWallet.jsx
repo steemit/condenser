@@ -12,6 +12,8 @@ import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {steemTip, powerTip, dollarTip, valueTip} from 'app/utils/Tips'
 import {numberWithCommas, vestingSteem} from 'app/utils/StateFunctions'
 import { translate } from 'app/Translator';
+import { OWNERSHIP_TOKEN, DEBT_TOKEN, CURRENCY_SIGN, INVEST_TOKEN } from 'config/client_config';
+
 
 class UserWallet extends React.Component {
     constructor() {
@@ -69,7 +71,7 @@ class UserWallet extends React.Component {
         let divesting = parseFloat(account.vesting_withdraw_rate.split(' ')[0]) > 0.000000;
         const sbd_balance = parseFloat(account.sbd_balance)
 
-        let total_value = '$' + numberWithCommas(
+        let total_value = CURRENCY_SIGN + numberWithCommas(
             (((vesting_steemf + balance_steem) * price_per_steem) + sbd_balance
         ).toFixed(2))
         const total_value_number = Number(total_value.substring(1).split('"'))
@@ -120,20 +122,20 @@ class UserWallet extends React.Component {
 
         const steem_balance_str = numberWithCommas(balance_steem.toFixed(3)) // formatDecimal(balance_steem, 3)
         const power_balance_str = numberWithCommas(vesting_steem) // formatDecimal(vesting_steem, 3)
-        const sbd_balance_str = numberWithCommas('$' + sbd_balance.toFixed(3)) // formatDecimal(account.sbd_balance, 3)
+        const sbd_balance_str = numberWithCommas(CURRENCY_SIGN + sbd_balance.toFixed(3)) // formatDecimal(account.sbd_balance, 3)
         return (<div className="UserWallet">
             <div className="row">
                 <div className="column small-12 medium-8">
                     <h4 className="uppercase">{translate('balances')}</h4>
                 </div>
                 {isMyAccount && <div className="column small-12 medium-4">
-                    <button className="UserWallet__buysp button hollow float-right " onClick={this.onShowDepositSteem}>{translate('buy_steem_or_steem_power')}</button>
+                    <button className="UserWallet__buysp button hollow float-right " onClick={this.onShowDepositSteem}>{translate('buy_OWNERSHIP_TOKEN_or_INVEST_TOKEN')}</button>
                 </div>}
             </div>
             <br />
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
-                    STEEM
+                    <span className="uppercase">{OWNERSHIP_TOKEN}</span>
                     <br />
                     <span className="secondary">
                         {/* not using steemTip because translate strings may be undefined on load */}
@@ -144,13 +146,13 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
-                    <DropdownMenu selected={steem_balance_str + ' STEEM'} className="Header__sort-order-menu" items={steem_menu} el="span" />
-                    : steem_balance_str + ' STEEM'}
+                    <DropdownMenu selected={<span className="uppercase">{steem_balance_str + ' ' + OWNERSHIP_TOKEN}</span>} className="Header__sort-order-menu" items={steem_menu} el="span" />
+                    : steem_balance_str + ' ' + OWNERSHIP_TOKEN}
                 </div>
             </div>
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
-                    STEEM POWER
+                    <span className="uppercase">{INVEST_TOKEN}</span>
                     <br />
                     <span className="secondary">
                         {/* not using steemTip because translate strings may be undefined on load */}
@@ -161,13 +163,15 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
-                    <DropdownMenu selected={power_balance_str + ' STEEM'} className="Header__sort-order-menu" items={power_menu} el="span" />
-                    : power_balance_str + ' STEEM'}
+                    <DropdownMenu selected={<span className="uppercase">{power_balance_str + ' ' + OWNERSHIP_TOKEN}</span>} className="Header__sort-order-menu" items={power_menu} el="span" />
+                    : power_balance_str + ' ' + OWNERSHIP_TOKEN}
                 </div>
             </div>
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
-                    STEEM DOLLARS<br /><span className="secondary">{translate('tokens_worth_about_dollar_of_steem')}</span>
+                    <span className="uppercase">{DEBT_TOKEN}</span>
+                    <br />
+                    <span className="secondary">{translate('tokens_worth_about_dollar_of_steem')}</span>
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?

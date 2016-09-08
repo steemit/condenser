@@ -10,7 +10,8 @@ import Orderbook from "app/components/elements/Orderbook";
 import OrderHistory from "app/components/elements/OrderHistory";
 import {Order, TradeHistory} from "app/utils/MarketClasses";
 import {roundUp, roundDown} from "app/utils/MarketUtils";
-import { translate } from '../../Translator.js';
+import { translate } from 'app/Translator.js';
+import { OWNERSHIP_TOKEN, INVEST_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN } from 'config/client_config';
 
 class Market extends React.Component {
     static propTypes = {
@@ -247,8 +248,8 @@ class Market extends React.Component {
                         <th>{translate('date_created')}</th>
                         <th>{translate('type')}</th>
                         <th>{translate('price')}</th>
-                        <th>STEEM</th>
-                        <th>SD ($)</th>
+                        <th className="uppercase">{translate('OWNERSHIP_TOKEN')}</th>
+                        <th>{`${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}</th>
                         <th>{translate('action')}</th>
                     </tr>
                 </thead>
@@ -304,7 +305,7 @@ class Market extends React.Component {
 
                 <div className="row">
                     <div className="small-12 medium-6 columns">
-                        <h4 className="buy-color uppercase">{translate('buy_steem')}</h4>
+                        <h4 className="buy-color uppercase">{translate('buy_OWNERSHIP_TOKEN')}</h4>
                         <form className="Market__orderform" onSubmit={buySteem}>
 
                             <div className="row">
@@ -313,14 +314,14 @@ class Market extends React.Component {
                                 </div>
                                 <div className="column small-9 large-8">
                                     <div className="input-group">
-                                        <input className={'input-group-field' + (buy_price_warning ? ' price_warning' : '')} type="text" 
+                                        <input className={'input-group-field' + (buy_price_warning ? ' price_warning' : '')} type="text"
                                           ref="buySteem_price" placeholder="0.0" onChange={e => {
                                             const amount = parseFloat(this.refs.buySteem_amount.value)
                                             const price  = parseFloat(this.refs.buySteem_price.value)
                                             if(amount >= 0 && price >= 0) this.refs.buySteem_total.value = roundUp(price * amount, 3)
                                             validateBuySteem()
                                         }} />
-                                        <span className="input-group-label">SD/STEEM</span>
+                                    <span className="input-group-label uppercase">{`${DEBT_TOKEN_SHORT}/${OWNERSHIP_TOKEN}`}</span>
                                     </div>
                                 </div>
                             </div>
@@ -337,7 +338,7 @@ class Market extends React.Component {
                                             if(price >= 0 && amount >= 0) this.refs.buySteem_total.value = roundUp(price * amount, 3)
                                             validateBuySteem()
                                         }} />
-                                        <span className="input-group-label">STEEM</span>
+                                    <span className="input-group-label uppercase"> {OWNERSHIP_TOKEN}</span>
                                     </div>
                                 </div>
                             </div>
@@ -354,7 +355,7 @@ class Market extends React.Component {
                                             if(total >= 0 && price >= 0) this.refs.buySteem_amount.value = roundUp(total / price, 3)
                                             validateBuySteem()
                                         }} />
-                                        <span className="input-group-label">SD ($)</span>
+                                    <span className="input-group-label">{`${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}</span>
                                     </div>
                                 </div>
                             </div>
@@ -363,7 +364,7 @@ class Market extends React.Component {
                                 <div className="column small-3 large-2">
                                 </div>
                                 <div className="column small-9 large-8">
-                                    <input disabled={buy_disabled} type="submit" className="button hollow buy-color float-right uppercase" value={translate('buy_steem')} />
+                                    <input disabled={buy_disabled} type="submit" className="button hollow buy-color float-right uppercase" value={translate('buy_OWNERSHIP_TOKEN')} />
                                     {account &&
                                     <div><small>
                                         <a href="#" onClick={e => {
@@ -394,7 +395,7 @@ class Market extends React.Component {
 
 
                     <div className="small-12 medium-6 columns">
-                        <h4 className="sell-color uppercase">{translate('sell_steem')}</h4>
+                        <h4 className="sell-color uppercase">{translate('sell_OWNERSHIP_TOKEN')}</h4>
 
                         <form className="Market__orderform" onSubmit={sellSteem}>
                             <div className="row">
@@ -403,14 +404,14 @@ class Market extends React.Component {
                                 </div>
                                 <div className="column small-9 large-8">
                                     <div className="input-group">
-                                        <input className={'input-group-field' + (sell_price_warning ? ' price_warning' : '')} type="text" 
+                                        <input className={'input-group-field' + (sell_price_warning ? ' price_warning' : '')} type="text"
                                           ref="sellSteem_price" placeholder="0.0" onChange={e => {
                                           const amount = parseFloat(this.refs.sellSteem_amount.value)
                                           const price  = parseFloat(this.refs.sellSteem_price.value)
                                           if(amount >= 0 && price >= 0) this.refs.sellSteem_total.value = roundDown(price * amount, 3)
                                           validateSellSteem()
                                         }} />
-                                        <span className="input-group-label">SD/STEEM</span>
+                                    <span className="input-group-label uppercase">{`${DEBT_TOKEN_SHORT}/${OWNERSHIP_TOKEN}`}</span>
                                     </div>
                                 </div>
                             </div>
@@ -427,7 +428,7 @@ class Market extends React.Component {
                                           if(price >= 0 && amount >= 0) this.refs.sellSteem_total.value = roundDown(price * amount, 3)
                                           validateSellSteem()
                                         }} />
-                                        <span className="input-group-label">STEEM</span>
+                                    <span className="input-group-label uppercase">{OWNERSHIP_TOKEN}</span>
                                     </div>
                                 </div>
                             </div>
@@ -444,7 +445,7 @@ class Market extends React.Component {
                                           if(price >= 0 && total >= 0) this.refs.sellSteem_amount.value = roundUp(total / price, 3)
                                           validateSellSteem()
                                       }} />
-                                      <span className="input-group-label">SD ($)</span>
+                                      <span className="input-group-label">{`${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}</span>
                                     </div>
                                 </div>
                             </div>
@@ -452,7 +453,7 @@ class Market extends React.Component {
                             <div className="row">
                                 <div className="column small-3 large-2"></div>
                                 <div className="column small-9 large-8">
-                                    <input disabled={sell_disabled} type="submit" className="button hollow sell-color float-right uppercase" value={translate('sell_steem')} />
+                                    <input disabled={sell_disabled} type="submit" className="button hollow sell-color float-right uppercase" value={translate('sell_OWNERSHIP_TOKEN')} />
                                     {account &&
                                         <div><small><a href="#" onClick={e => {e.preventDefault()
                                             const price = parseFloat(this.refs.sellSteem_price.value)

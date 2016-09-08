@@ -8,7 +8,8 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import {powerTip, powerTip2, powerTip3} from 'app/utils/Tips'
 import {browserTests} from 'shared/ecc/test/BrowserTests'
 import {validate_account_name} from 'app/utils/ChainValidation';
-import { translate } from '../../Translator.js';
+import { translate } from 'app/Translator';
+import { APP_NAME, OWNERSHIP_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, INVEST_TOKEN } from 'config/client_config';
 
 /** Warning .. This is used for Power UP too. */
 class TransferForm extends Component {
@@ -63,15 +64,15 @@ class TransferForm extends Component {
             initialValues: props.initialValues,
             validation: values => ({
                 to:
-                    ! values.to ? 'Required' : validate_account_name(values.to),
+                    ! values.to ? translate('required') : validate_account_name(values.to),
                 amount:
-                    ! values.amount ? 'Required' :
-                    ! /^[0-9]*\.?[0-9]*/.test(values.amount) ? 'Amount is in the form 99999.999' :
-                    insufficientFunds(values.asset, values.amount) ? 'Insufficient funds' :
+                    ! values.amount ? translate('required') :
+                    ! /^[0-9]*\.?[0-9]*/.test(values.amount) ? translate('amount_is_in_form') :
+                    insufficientFunds(values.asset, values.amount) ? translate('insufficent_funds') :
                     null,
                 asset:
                     props.toVesting ? null :
-                    ! values.asset ? 'Required' : null,
+                    ! values.asset ? translate('required') : null,
                 memo:
                     values.memo && (!browserTests.memo_encryption && /^#/.test(values.memo)) ?
                     'Encrypted memos are temporarily unavailable (issue #98)' :
@@ -134,9 +135,9 @@ class TransferForm extends Component {
                 </div>
 
                 {(advanced || !toVesting) && <div className="row">
-                    <div className="column small-2">To</div>
+                    <div className="column small-2">{translate('to')}</div>
                     <div className="column small-10">
-                        <input type="text" placeholder="Send to account" {...to.props}
+                        <input type="text" placeholder={translate('send_to_account')} {...to.props}
                             onChange={this.onChangeTo} ref="to" autoComplete="off" disabled={loading} />
                         {to.touched && to.blur && to.error ?
                             <div className="error">{to.error}&nbsp;</div> :
@@ -146,14 +147,15 @@ class TransferForm extends Component {
                 </div>}
 
                 <div className="row">
-                    <div className="column small-2">Amount</div>
+                    <div className="column small-2">{translate('amount')}</div>
                     <div className="column small-10">
                         <input type="text" placeholder={translate('amount')} {...amount.props} ref="amount" autoComplete="off" disabled={loading} />
                         <div className="error">{amount.touched && amount.error && amount.error}&nbsp;</div>
                         {asset && <span>
                             <select {...asset.props} placeholder={translate('asset')} disabled={loading}>
                                 <option></option>
-                                <option value="STEEM">STEEM</option>
+                                <option value="STEEM">{OWNERSHIP_TOKEN}</option>
+                                {/* TODO */}
                                 <option value="SBD">SBD</option>
                             </select>
                         </span>}
@@ -162,7 +164,7 @@ class TransferForm extends Component {
                     </div>
                 </div>
                 {memo && <div className="row">
-                    <div className="column small-2">Memo</div>
+                    <div className="column small-2">{translate('memo')}</div>
                     <div className="column small-10">
                         <small>{translate(isMemoPrivate ? 'this_memo_is_private' : 'this_memo_is_public')}</small>
                         <input type="text" placeholder={translate('memo')} {...memo.props}
@@ -174,7 +176,7 @@ class TransferForm extends Component {
                 {!loading && <span>
                     {trxError && <div className="error">{trxError}</div>}
                     <button type="submit" disabled={submitting || !valid} className="button">
-                        {translate(toVesting ? 'Power Up' : 'Transfer')}
+                        {translate(toVesting ? 'power_up' : 'transfer')}
                     </button>
                     {toVesting && <button className="button hollow no-border" disabled={submitting} onClick={this.onAdvanced}>{translate(advanced ? 'basic' : 'advanced')}</button>}
                 </span>}

@@ -54,16 +54,11 @@ class DummyComponentToExportProps extends React.Component {
 		translate = 	(...params) => this.translateHandler('string', ...params)
 		translateHtml = (...params) => this.translateHandler('html', ...params)
 	}
-	// // assign functons on mount
-	// componentDidMount() {
-	// 	translate = 	(...params) => this.translateHandler('string', ...params)
-	// 	translateHtml = (...params) => this.translateHandler('html', ...params)
-	// }
 
 	translateHandler(translateType, id, values, options) {
 		const 	{ formatMessage, formatHTMLMessage } = this.props.intl,
 				// choose which method of rendering to choose: normal string or string with html
-				handler = translateType == 'string' ? formatMessage : formatHTMLMessage
+				handler = translateType === 'string' ? formatMessage : formatHTMLMessage
 		// check if right parameters were used before running function
 		if (isString(id)) {
 			if (!isUndefined(values) && !isObject(values)) throw new Error('translating function second parameter must be an object!');

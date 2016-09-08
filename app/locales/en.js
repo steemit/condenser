@@ -1,14 +1,16 @@
+import { APP_NAME, DEBT_TOKEN, DEBT_TOKEN_SHORT, OWNERSHIP_TOKEN, CURRENCY_SIGN, INVEST_TOKEN } from 'config/client_config';
+
 const en = 	{
 	// this variables mainly used in navigation section
 	about: "About",
 	explore: "Explore",
-	whitepaper: "Steem Whitepaper",
-	buy_steem: "Buy Steem",
-	sell_steem: "Sell Steem",
+	APP_NAME_whitepaper: APP_NAME + " Whitepaper",
+	buy_OWNERSHIP_TOKEN: 'Buy ' + OWNERSHIP_TOKEN,
+	sell_OWNERSHIP_TOKEN: 'Sell ' + OWNERSHIP_TOKEN,
 	market: "Market",
 	stolen_account_recovery: "Stolen Accounts Recovery",
 	change_account_password: "Change Account Password",
-	steemit_chat: "Steemit Chat",
+	APP_NAME_chat: APP_NAME + " Chat",
 	witnesses: "Witnesses",
 	privacy_policy: "Privacy Policy",
 	terms_of_service: "Terms of Service",
@@ -157,7 +159,7 @@ const en = 	{
 	recover_your_account: 'recover your account', // this probably will end with question mark
 	reset_usernames_password: "Reset {username}\'s Password",
 	this_will_update_usernames_authtype_key: 'This will update {username} {authType} key',
-	the_rules_of_steemit: "The first rule of Steemit is: Do not lose your password.<br /> The second rule of Steemit is: Do <strong>not</strong> lose your password.<br /> The third rule of Steemit is: We cannot recover your password.<br /> The fourth rule: If you can remember the password, it&apos;s not secure.<br /> The fifth rule: Use only randomly-generated passwords.<br /> The sixth rule: Do not tell anyone your password.<br /> The seventh rule: Always back up your password.",
+	the_rules_of_steemit: "The first rule of " + APP_NAME + " is: Do not lose your password.<br /> The second rule of " + APP_NAME + " is: Do <strong>not</strong> lose your password.<br /> The third rule of " + APP_NAME + " is: We cannot recover your password.<br /> The fourth rule: If you can remember the password, it&apos;s not secure.<br /> The fifth rule: Use only randomly-generated passwords.<br /> The sixth rule: Do not tell anyone your password.<br /> The seventh rule: Always back up your password.",
 	account_name: 'Account Name',
 	recover_password: 'Recover Account',
 	current_password: 'Current Password',
@@ -168,7 +170,7 @@ const en = 	{
 	backup_password_by_storing_it: 'Back it up by storing in your password manager or a text file',
 	click_to_generate_password: 'Click to generate password',
 	re_enter_generate_password: 'Re-enter Generated Password',
-	understand_that_steemit_cannot_recover_password: 'I understand that Steemit cannot recover lost passwords',
+	understand_that_steemit_cannot_recover_password: 'I understand that ' + APP_NAME + ' cannot recover lost passwords',
 	i_saved_password: 'I have securely saved my generated password',
 	update_password: 'Update Password',
 	password_must_be_characters_or_more: 'Password must be {amount} characters or more',
@@ -220,8 +222,7 @@ const en = 	{
 	buy_atleast_amount_for: 'Buy at least {min_to_receive} for {amount_to_sell} ({effectivePrice})',
 	higher: 'Higher', // context is about prices
 	lower: 'Lower', // context is about prices
-	total_sd_dollars: "Total SD ($)",
-	sd_dollars: "SD ($)",
+	total_DEBT_TOKEN_SHORT_CURRENCY_SIGN: "Total " + DEBT_TOKEN_SHORT + ' (' + CURRENCY_SIGN + ')',
 	// RecoverAccountStep1.jsx // recover account stuff
 	not_valid: 'Not valid',
 	account_name_is_not_found: 'Account name is not found',
@@ -307,7 +308,7 @@ const en = 	{
 		few {# replies}
 		many {# replies}
 	}`,
-	this_is_users_reputations_score_it_is_based_on_history_of_votes: "This is ${name}'s reputation score.\n\nThe reputation score is based on the history of votes received by the account, and is used to hide low quality content.",
+	this_is_users_reputations_score_it_is_based_on_history_of_votes: "This is {name}'s reputation score.\n\nThe reputation score is based on the history of votes received by the account, and is used to hide low quality content.",
 	newer: 'Newer',
 	older: 'Older',
 	author_rewards_last_24_hours: 'Author rewards last 24 hours',
@@ -365,7 +366,7 @@ const en = 	{
 	begin_recovery: "Begin Recovery",
 	post_as: 'Post as', // 'Post as Misha'
 	action: 'Action',
-	steem_app_center: 'Steem App Center',
+	APP_NAME_app_center: APP_NAME + ' App Center',
 	witness_thread: 'witness thread',
 	you_have_votes_remaining: 'You have {votesCount} votes remaining',
 	you_can_vote_for_maximum_of_witnesses: 'You can vote for a maximum of 30 witnesses',
@@ -437,7 +438,7 @@ const en = 	{
 	advanced: 'Advanced',
 	convert_to_steem_power: 'Convert to Steem Power',
 	transfer_to_account: 'Transfer to Account',
-	buy_steem_or_steem_power: 'Buy Steem or Steem Power',
+	buy_OWNERSHIP_TOKEN_or_INVEST_TOKEN: 'Buy ' + OWNERSHIP_TOKEN + ' or ' + INVEST_TOKEN,
 	version: 'Version',
 	about_steemit: 'About Steemit',
 	steemit_is_a_social_media_platform_where_everyone_gets_paid_for_creating_and_curating_content: 'Steemit is a social media platform where <strong>everyone</strong>&nbsp;gets <strong>paid</strong> for creating and curating content',
@@ -466,6 +467,8 @@ const en = 	{
 	the_estimated_value_is_based_on_a_7_day_average_value_of_steem_in_us_dollars: 'The estimated value is based on a 7 day average value of Steem in US Dollars.',
 	steem_power_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_steem: 'Steem Power is non-transferrable and will require 2 years and 104 payments to convert back to Steem.',
 	converted_steem_power_can_be_sent_to_yourself_but_can_not_transfer_again: 'Converted Steem Power can be sent to yourself or someone else but can not transfer again without converting back to Steem.',
+	profile: 'Profile',
+	send_to_account: "Send to account",
 }
 
 export { en }

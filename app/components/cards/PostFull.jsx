@@ -28,8 +28,8 @@ function TimeAuthorCategory({content, authorRepLog10, showTags}) {
                 <Icon name="clock" className="space-right" />
                 <span className="TimeAgo"><TimeAgoWrapper date={content.created} /></span>
             </Tooltip>
-            <span> by <Author author={content.author} authorRepLog10={authorRepLog10} /></span>
-            {showTags && <span> in&nbsp;<TagList post={content} /></span>}
+            <span> {translate('by')} <Author author={content.author} authorRepLog10={authorRepLog10} /></span>
+            {showTags && <span> {translate('in')}&nbsp;<TagList post={content} /></span>}
         </span>
      );
 }

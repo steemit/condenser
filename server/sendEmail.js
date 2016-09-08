@@ -3,11 +3,12 @@ import config from '../config';
 
 const sg = sendgrid(config.sendgrid.key);
 
-export default function sendEmail(template, to, params) {
+export default function sendEmail(template, to, params, from = null) {
     if (to.match(/stexsy\.com$/) ||
         to.match(/lackmail\.ru$/) ||
         to.match(/discard\.email$/) ||
-        to.match(/wimsg\.com$/)
+        to.match(/wimsg\.com$/) ||
+        to.match(/rediffmail\.com$/)
     ) {
         console.log('-- sendEmail: skip -->', to);
         return;
@@ -24,7 +25,7 @@ export default function sendEmail(template, to, params) {
                 {to: [{email: to}],
                  substitutions: params},
             ],
-            from: {email: config.sendgrid.from}
+            from: {email: from || config.sendgrid.from}
         }
     });
 

@@ -8,6 +8,7 @@ import DropdownMenu from 'app/components/elements/DropdownMenu';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import { translate } from 'app/Translator';
 import HorizontalMenu from 'app/components/elements/HorizontalMenu';
+import { APP_NAME } from 'config/client_config';
 
 function sortOrderToLink(so, topic, account) {
     if (so === 'home') return '/@' + account + '/feed';
@@ -146,7 +147,7 @@ class Header extends React.Component {
                                     </Link>
                                 </li>
                                 <li className="Header__top-steemit show-for-medium">
-                                    <Link to={logo_link}>steemit<span className="beta">beta</span></Link>
+                                    <Link to={logo_link}>{APP_NAME}<span className="beta">beta</span></Link>
                                 </li>
                                 {(topic_link || user_name || page_name) && <li className="delim show-for-medium">|</li>}
                                 {topic_link && <li className="Header__top-topic">{topic_link}</li>}

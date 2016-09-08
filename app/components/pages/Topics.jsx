@@ -42,16 +42,13 @@ class Topics extends React.Component {
             state: {expanded, search},
             onChangeSearch, expand
         } = this;
-        console.warn(compact)
+
         let categories = this.props.categories.get('trending');
         if (!(expanded || search) || compact) categories = categories.take(50);
 
         const cn = 'Topics' + (className ? ` ${className}` : '');
         const currentValue = `/${order}/${current}`;
-        console.warn(categories)
-        console.warn('dicks')
-        console.warn(compact)
-
+        
         if (compact) {
             return <select className={cn} onChange={(e) => browserHistory.push(e.target.value)} value={currentValue}>
                 <option key={'*'} value={'/' + order}>{translate('topics')}...</option>

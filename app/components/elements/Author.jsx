@@ -7,6 +7,7 @@ import Icon from 'app/components/elements/Icon';
 import { Link } from 'react-router';
 import {authorNameAndRep} from 'app/utils/ComponentFormatters';
 import Reputation from 'app/components/elements/Reputation';
+import { translate } from 'app/Translator';
 
 const {string, bool, number} = React.PropTypes
 
@@ -34,7 +35,7 @@ class Author extends React.Component {
             return author_link
 
         const dropdown = <div className="Author__dropdown">
-            <Link to={'/@' + author}>Profile</Link> &nbsp;
+            <Link to={'/@' + author}>{translate('profile')}</Link> &nbsp;
             <Follow className="float-right" follower={username} following={author} what="blog"
                     showFollow={follow} showMute={mute} />
         </div>

@@ -172,7 +172,7 @@ class Voting extends React.Component {
         if(total_author_payout > 0) {
             payoutItems.push({value: translate('past_payouts') + ' $' + formatDecimal(total_author_payout + total_curator_payout).join('')});
             payoutItems.push({value: ' - ' + translate('authors') + ': $' + formatDecimal(total_author_payout).join('')});
-            payoutItems.push({value: ' - ' + translate('curators6') + ': $' + formatDecimal(total_curator_payout).join('')});
+            payoutItems.push({value: ' - ' + translate('curators') + ': $' + formatDecimal(total_curator_payout).join('')});
         }
         const payoutEl = <DropdownMenu el="div" items={payoutItems}>
             <span>

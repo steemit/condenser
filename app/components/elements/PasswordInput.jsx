@@ -1,5 +1,5 @@
 import React from 'react';
-import { translate } from '../../Translator';
+import { translate } from 'app/Translator';
 
 function validatePassword(value, new_password) {
     if (!new_password) return '';
@@ -69,7 +69,7 @@ export default class PasswordInput extends React.Component {
         const res = {newPassword: {value, error}};
         if (value !== this.state.confirmPassword.value) {
             res.confirmPassword = this.state.confirmPassword;
-            res.confirmPassword.error = 'Passwords do not match';
+            res.confirmPassword.error = translate('passwords_do_not_match');
         }
         this.setState(res);
         this.onChange(res);
@@ -78,7 +78,7 @@ export default class PasswordInput extends React.Component {
     confirmPasswordChange(e) {
         const value = e.target.value.trim();
         let error = '';
-        if (value !== this.state.newPassword.value) error = 'Passwords do not match';
+        if (value !== this.state.newPassword.value) error = translate('passwords_do_not_match');
         const res = {confirmPassword: {value, error}};
         this.setState(res);
         this.onChange(res);

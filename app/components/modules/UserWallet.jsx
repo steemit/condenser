@@ -11,7 +11,9 @@ import Reveal from 'react-foundation-components/lib/global/reveal'
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {steemTip, powerTip, dollarTip, valueTip} from 'app/utils/Tips'
 import {numberWithCommas, vestingSteem} from 'app/utils/StateFunctions'
-import { translate } from '../../Translator';
+import { translate } from 'app/Translator';
+import { OWNERSHIP_TOKEN, DEBT_TOKEN, CURRENCY_SIGN, INVEST_TOKEN } from 'config/client_config';
+
 
 class UserWallet extends React.Component {
     constructor() {
@@ -69,9 +71,10 @@ class UserWallet extends React.Component {
         let divesting = parseFloat(account.vesting_withdraw_rate.split(' ')[0]) > 0.000000;
         const sbd_balance = parseFloat(account.sbd_balance)
 
-        let total_value = '$' + numberWithCommas(
+        let total_value = CURRENCY_SIGN + numberWithCommas(
             (((vesting_steemf + balance_steem) * price_per_steem) + sbd_balance
         ).toFixed(2))
+        const total_value_number = Number(total_value.substring(1).split('"'))
 
         /// transfer log
         let idx = 0
@@ -89,25 +92,25 @@ class UserWallet extends React.Component {
         transfer_log.reverse();
 
         let steem_menu = [
-            { value: 'Transfer', link: '#', onClick: showTransfer.bind( this, 'STEEM' ) },
-            { value: 'Power Up', link: '#', onClick: showTransfer.bind( this, 'VESTS' ) },
+            { value: translate('transfer'), link: '#', onClick: showTransfer.bind( this, 'STEEM' ) },
+            { value: translate('power_up'), link: '#', onClick: showTransfer.bind( this, 'VESTS' ) },
         ]
         let power_menu = [
-            { value: 'Power Down', link: '#', onClick: powerDown.bind(this, false) }
+            { value: translate('power_down'), link: '#', onClick: powerDown.bind(this, false) }
         ]
         if(isMyAccount) {
-            steem_menu.push({ value: 'Deposit', link: '#', onClick: onShowDepositSteem })
-            steem_menu.push({ value: 'Buy or Sell', link: '/market' })
-            power_menu.push({ value: 'Deposit', link: '#', onClick: onShowDepositPower })
+            steem_menu.push({ value: translate('deposit'), link: '#', onClick: onShowDepositSteem })
+            steem_menu.push({ value: translate('buy_or_sell'), link: '/market' })
+            power_menu.push({ value: translate('deposit'), link: '#', onClick: onShowDepositPower })
         }
         if( divesting ) {
-            power_menu.push( { value: 'Cancel Power Down', link:'#', onClick: powerDown.bind(this,true) } );
+            power_menu.push({ value: translate('cancel_power_down'), link: '#', onClick: powerDown.bind(this, true) });
         }
 
         let dollar_menu = [
-            { value: 'Transfer', link: '#', onClick: showTransfer.bind( this, 'SBD' ) },
-            { value: 'Buy or Sell', link: '/market' },
-            { value: 'Convert to STEEM', link: '#', onClick: convertToSteem },
+            { value: translate('transfer'), link: '#', onClick: showTransfer.bind( this, 'SBD' ) },
+            { value: translate('buy_or_sell'), link: '/market' },
+            { value: translate('convert_to_steem'), link: '#', onClick: convertToSteem },
         ]
         const isWithdrawScheduled = new Date(account.next_vesting_withdrawal + 'Z').getTime() > Date.now()
         const depositReveal = showDeposit && <div>
@@ -119,40 +122,56 @@ class UserWallet extends React.Component {
 
         const steem_balance_str = numberWithCommas(balance_steem.toFixed(3)) // formatDecimal(balance_steem, 3)
         const power_balance_str = numberWithCommas(vesting_steem) // formatDecimal(vesting_steem, 3)
-        const sbd_balance_str = numberWithCommas('$' + sbd_balance.toFixed(3)) // formatDecimal(account.sbd_balance, 3)
+        const sbd_balance_str = numberWithCommas(CURRENCY_SIGN + sbd_balance.toFixed(3)) // formatDecimal(account.sbd_balance, 3)
         return (<div className="UserWallet">
             <div className="row">
                 <div className="column small-12 medium-8">
                     <h4 className="uppercase">{translate('balances')}</h4>
                 </div>
                 {isMyAccount && <div className="column small-12 medium-4">
-                    <button className="UserWallet__buysp button hollow float-right " onClick={this.onShowDepositSteem}>{translate('buy_steem_or_steem_power')}</button>
+                    <button className="UserWallet__buysp button hollow float-right " onClick={this.onShowDepositSteem}>{translate('buy_OWNERSHIP_TOKEN_or_INVEST_TOKEN')}</button>
                 </div>}
             </div>
             <br />
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
-                    STEEM<br /><span className="secondary">{steemTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})}</span>
+                    <span className="uppercase">{OWNERSHIP_TOKEN}</span>
+                    <br />
+                    <span className="secondary">
+                        {/* not using steemTip because translate strings may be undefined on load */}
+                        {/* {steemTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})} */}
+                        <div>{translate('tradeable_tokens_that_may_be_transferred_anywhere_at_anytime')}</div>
+                        <div>{translate('steem_can_be_converted_to_steem_power_in_a_process_called_powering_up')}</div>
+                    </span>
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
-                    <DropdownMenu selected={steem_balance_str + ' STEEM'} className="Header__sort-order-menu" items={steem_menu} el="span" />
-                    : steem_balance_str + ' STEEM'}
+                    <DropdownMenu selected={<span className="uppercase">{steem_balance_str + ' ' + OWNERSHIP_TOKEN}</span>} className="Header__sort-order-menu" items={steem_menu} el="span" />
+                    : steem_balance_str + ' ' + OWNERSHIP_TOKEN}
                 </div>
             </div>
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
-                    STEEM POWER<br /><span className="secondary">{powerTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})}</span>
+                    <span className="uppercase">{INVEST_TOKEN}</span>
+                    <br />
+                    <span className="secondary">
+                        {/* not using steemTip because translate strings may be undefined on load */}
+                        {/* {powerTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})} */}
+                        <div>{translate('influence_tokens_which_earn_more_power_by_holding_long_term')}</div>
+                        <div>{translate('the_more_you_hold_the_more_you_influence_post_rewards')}</div>
+                    </span>
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
-                    <DropdownMenu selected={power_balance_str + ' STEEM'} className="Header__sort-order-menu" items={power_menu} el="span" />
-                    : power_balance_str + ' STEEM'}
+                    <DropdownMenu selected={<span className="uppercase">{power_balance_str + ' ' + OWNERSHIP_TOKEN}</span>} className="Header__sort-order-menu" items={power_menu} el="span" />
+                    : power_balance_str + ' ' + OWNERSHIP_TOKEN}
                 </div>
             </div>
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
-                    STEEM DOLLARS<br /><span className="secondary">{dollarTip}</span>
+                    <span className="uppercase">{DEBT_TOKEN}</span>
+                    <br />
+                    <span className="secondary">{translate('tokens_worth_about_dollar_of_steem')}</span>
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
@@ -166,14 +185,19 @@ class UserWallet extends React.Component {
                     </div>
                 </div>
             </div>
-            <div className="UserWallet__balance row">
-                <div className="column small-12 medium-8">
-                    {translate('estimate_account_value')}<br /><span className="secondary">{valueTip}</span>
-                </div>
-                <div className="column small-12 medium-4">
-                    {total_value}
-                </div>
-            </div>
+            {/* if 'total_value_number' is NaN hide the section */}
+            {
+                isNaN(total_value_number)
+                ?   null
+                :   <div className="UserWallet__balance row">
+                        <div className="column small-12 medium-8">
+                            {translate('estimate_account_value')}<br /><span className="secondary">{translate('the_estimated_value_is_based_on_a_7_day_average_value_of_steem_in_us_dollars')}</span>
+                        </div>
+                        <div className="column small-12 medium-4">
+                            {total_value}
+                        </div>
+                    </div>
+            }
             <div className="UserWallet__balance row">
                 <div className="column small-12">
                     {isWithdrawScheduled && <span>{translate('next_power_down_is_scheduled_to_happen_at')}&nbsp; <TimeAgoWrapper date={account.next_vesting_withdrawal} />.</span> }

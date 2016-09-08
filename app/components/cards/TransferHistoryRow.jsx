@@ -72,13 +72,13 @@ class TransferHistoryRow extends React.Component {
             else
                 description_start += translate('start_power_down_of') + " " + data.vesting_shares;
         } else if( type === 'curation_reward' ) {
-            description_start += translate('curation_reward_of_steem_power_for', { reward: curate_reward }) + ' ';
+            description_start += translate('curation_reward_of_steem_power_for', { reward: curation_reward }) + ' ';
             other_account = data.comment_author;
             description_end = `/${data.comment_permlink}`;
         } else if (type === 'author_reward') {
             description_start += translate('author_reward_of_steem_power_for', {
                 payout: renameToSd(data.sbd_payout),
-                reward: comment_reward
+                reward: author_reward
             }) + ` ${data.author}/${data.permlink}`;
             // other_account = ``;
             description_end = '';

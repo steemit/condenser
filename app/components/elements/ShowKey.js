@@ -62,7 +62,7 @@ class ShowKey extends Component {
         const {show, wif} = this.state
         const keyIcon = <span style={{fontSize: '100%'}}>{translate('hide_private_key')}</span>
         // Tooltip is trigggering a setState on unmounted component exception
-        const showTip = 'Show private key'//<Tooltip t="Show private key (WIF)">show</Tooltip>
+        const showTip = translate('show_private_key')//<Tooltip t="Show private key (WIF)">show</Tooltip>
 
         const keyLink = wif ?
             <div style={{marginBottom: 0}} className="hollow tiny button"><a onClick={onShow}>{show ? keyIcon : showTip}</a></div> :

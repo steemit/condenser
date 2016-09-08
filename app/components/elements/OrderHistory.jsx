@@ -1,6 +1,7 @@
 import React from "react";
 import HistoryRow from "./OrderhistoryRow.jsx";
 import { translate } from '../../Translator';
+import { OWNERSHIP_TOKEN, CURRENCY_SIGN } from 'config/client_config';
 
 export default class OrderHistory extends React.Component {
 
@@ -70,8 +71,8 @@ export default class OrderHistory extends React.Component {
                         <tr>
                             <th>{translate('date')}</th>
                             <th>{translate('price')}</th>
-                            <th>Steem</th>
-                            <th>SD ($)</th>
+                            <th>{OWNERSHIP_TOKEN}</th>
+                            <th>{`${OWNERSHIP_TOKEN} (${CURRENCY_SIGN})`}</th>
                         </tr>
                     </thead>
                     <tbody>

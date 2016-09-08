@@ -1,14 +1,16 @@
+import { APP_NAME, DEBT_TOKEN, DEBT_TOKEN_SHORT, OWNERSHIP_TOKEN, CURRENCY_SIGN, INVEST_TOKEN } from 'config/client_config';
+
 const en = 	{
 	// this variables mainly used in navigation section
 	about: "About",
 	explore: "Explore",
-	whitepaper: "Steem Whitepaper",
-	buy_steem: "Buy Steem",
-	sell_steem: "Sell Steem",
+	APP_NAME_whitepaper: APP_NAME + " Whitepaper",
+	buy_OWNERSHIP_TOKEN: 'Buy ' + OWNERSHIP_TOKEN,
+	sell_OWNERSHIP_TOKEN: 'Sell ' + OWNERSHIP_TOKEN,
 	market: "Market",
 	stolen_account_recovery: "Stolen Accounts Recovery",
 	change_account_password: "Change Account Password",
-	steemit_chat: "Steemit Chat",
+	APP_NAME_chat: APP_NAME + " Chat",
 	witnesses: "Witnesses",
 	privacy_policy: "Privacy Policy",
 	terms_of_service: "Terms of Service",
@@ -33,7 +35,7 @@ const en = 	{
 	tags_and_topics: "Tags and Topics",
 	filter: "Filter",
 	show_more_topics: "Show more topics",
-	we_require_social_account: 'Steemit funds each account with over ${signup_bonus} worth of Steem Power; to prevent abuse, we require new users to login via social media.',
+	we_require_social_account: 'Steemit funds each account with over {signup_bonus} worth of Steem Power; to prevent abuse, we require new users to login via social media.',
 	personal_info_will_be_private: 'Your personal information will be kept',
 	personal_info_will_be_private_link: 'Private',
 	continue_with_facebook: 'Continue with Facebook',
@@ -79,9 +81,7 @@ const en = 	{
 	update_post: 'Update Post',
 	markdown_is_supported: 'Styling with Markdown is supported',
 	preview: 'Preview',
-	// TODO do not forget to implment REQUIRED error in reply Editor
 	markdown_not_supported: 'Markdown is not supported here',
-	// markdown: 'Markdown', // this will probably be removed
 	welcome_to_the_blockchain: 'Welcome to the Blockchain!',
 	your_voice_is_worth_something: 'Your voice is worth something',
 	learn_more: 'Learn More',
@@ -95,7 +95,7 @@ const en = 	{
 	shorten_title: 'Shorten title',
 	exceeds_maximum_length: 'Exceeds maximum length ({maxKb}KB)',
 	including_the_category: "(including the category '{rootCategory}')",
-	use_limited_amount_of_tags: 'You have {tagsLength} tags total{includingCategory}.  Please use only 5 in your post and category line.',
+	use_limited_amount_of_tags: 'You have {tagsLength} tags total {includingCategory}.  Please use only 5 in your post and category line.',
 	// this is mainly used in CategorySelector
 	use_limitied_amount_of_categories: 'Please use only {amount} categories',
 	use_one_dash: 'Use only one dash',
@@ -159,7 +159,7 @@ const en = 	{
 	recover_your_account: 'recover your account', // this probably will end with question mark
 	reset_usernames_password: "Reset {username}\'s Password",
 	this_will_update_usernames_authtype_key: 'This will update {username} {authType} key',
-	the_rules_of_steemit: "The first rule of Steemit is: Do not lose your password.<br /> The second rule of Steemit is: Do <strong>not</strong> lose your password.<br /> The third rule of Steemit is: We cannot recover your password.<br /> The fourth rule: If you can remember the password, it&apos;s not secure.<br /> The fifth rule: Use only randomly-generated passwords.<br /> The sixth rule: Do not tell anyone your password.<br /> The seventh rule: Always back up your password.",
+	the_rules_of_steemit: "The first rule of " + APP_NAME + " is: Do not lose your password.<br /> The second rule of " + APP_NAME + " is: Do <strong>not</strong> lose your password.<br /> The third rule of " + APP_NAME + " is: We cannot recover your password.<br /> The fourth rule: If you can remember the password, it&apos;s not secure.<br /> The fifth rule: Use only randomly-generated passwords.<br /> The sixth rule: Do not tell anyone your password.<br /> The seventh rule: Always back up your password.",
 	account_name: 'Account Name',
 	recover_password: 'Recover Account',
 	current_password: 'Current Password',
@@ -170,7 +170,7 @@ const en = 	{
 	backup_password_by_storing_it: 'Back it up by storing in your password manager or a text file',
 	click_to_generate_password: 'Click to generate password',
 	re_enter_generate_password: 'Re-enter Generated Password',
-	understand_that_steemit_cannot_recover_password: 'I understand that Steemit cannot recover lost passwords',
+	understand_that_steemit_cannot_recover_password: 'I understand that ' + APP_NAME + ' cannot recover lost passwords',
 	i_saved_password: 'I have securely saved my generated password',
 	update_password: 'Update Password',
 	password_must_be_characters_or_more: 'Password must be {amount} characters or more',
@@ -222,8 +222,7 @@ const en = 	{
 	buy_atleast_amount_for: 'Buy at least {min_to_receive} for {amount_to_sell} ({effectivePrice})',
 	higher: 'Higher', // context is about prices
 	lower: 'Lower', // context is about prices
-	total_sd_dollars: "Total SD ($)",
-	sd_dollars: "SD ($)",
+	total_DEBT_TOKEN_SHORT_CURRENCY_SIGN: "Total " + DEBT_TOKEN_SHORT + ' (' + CURRENCY_SIGN + ')',
 	// RecoverAccountStep1.jsx // recover account stuff
 	not_valid: 'Not valid',
 	account_name_is_not_found: 'Account name is not found',
@@ -309,7 +308,7 @@ const en = 	{
 		few {# replies}
 		many {# replies}
 	}`,
-	this_is_users_reputations_score_it_is_based_on_history_of_votes: "This is ${name}'s reputation score.\n\nThe reputation score is based on the history of votes received by the account, and is used to hide low quality content.",
+	this_is_users_reputations_score_it_is_based_on_history_of_votes: "This is {name}'s reputation score.\n\nThe reputation score is based on the history of votes received by the account, and is used to hide low quality content.",
 	newer: 'Newer',
 	older: 'Older',
 	author_rewards_last_24_hours: 'Author rewards last 24 hours',
@@ -340,7 +339,7 @@ const en = 	{
 	form_requires_javascript_to_be_enabled: 'This form requires javascript to be enabled in your browser',
 	our_records_indicate_you_already_have_account: 'Our records indicate that you already have steem account',
 	to_prevent_abuse_steemit_can_only_register_one_account_per_user: 'In order to prevent abuse (each registered account costs 3 STEEM) Steemit can only register one account per verified user.',
-	you_can_either_login_or_send_us_email: 'You can either {loginLink} to your existing account or  if you need a new account',
+	you_can_either_login_or_send_us_email: 'You can either {loginLink} to your existing account or if you need a new account',
 	send_us_email: 'send us email',
 	connection_lost_reconnecting: 'Connection lost, reconnecting',
 	// Voting.jsx
@@ -367,18 +366,18 @@ const en = 	{
 	begin_recovery: "Begin Recovery",
 	post_as: 'Post as', // 'Post as Misha'
 	action: 'Action',
-	steem_app_center: 'Steem App Center',
+	APP_NAME_app_center: APP_NAME + ' App Center',
 	witness_thread: 'witness thread',
 	you_have_votes_remaining: 'You have {votesCount} votes remaining',
 	you_can_vote_for_maximum_of_witnesses: 'You can vote for a maximum of 30 witnesses',
 	information: 'Information',
 	if_you_want_to_vote_outside_of_top_enter_account_name: 'If you would like to vote for a witness outside of the top 50, enter the account name below to cast a vote',
 	view_the_direct_parent: 'View the direct parent',
-	you_are_viewing_single_comments_thread_from: 'You are viewing a single comment&#39;s thread from',
+	you_are_viewing_single_comments_thread_from: 'You are viewing a single comment\'s thread from',
 	view_the_full_context: 'View the full context',
 	this_is_a_price_feed_conversion: 'This is a price feed conversion. The one week day delay is necessary to prevent abuse from gaming the price feed average',
 	your_existing_SD_are_liquid_and_transferable: 'Your existing Steem Dollars are liquid and transferable.  Instead you may wish to trade Steem Dollars directly in this site under {link} or transfer to an external market.',
-	buy_or_sell: 'Buy or Sells',
+	buy_or_sell: 'Buy or Sell',
 	trending_30_day: 'trending (30 day)',
 	promoted: 'promoted',
 	comments: 'Comments',
@@ -403,8 +402,9 @@ const en = 	{
 	yes: 'Yes',
 	no: 'No',
 	hide_private_key: 'Hide private key',
+	show_private_key: 'Show private key',
 	login_to_show: 'Login to show',
-	steemit_cannot_recover_passwords_keep_this_page_in_a_secure_location: 'Steemit cannot recover passwords.  Keep this page in a secure location, such as a fireproof safe or safety deposit box.',
+	steemit_cannot_recover_passwords_keep_this_page_in_a_secure_location: 'Steemit cannot recover passwords. Keep this page in a secure location, such as a fireproof safe or safety deposit box.',
 	steemit_password_backup: 'Steemit Password Backup',
 	steemit_password_backup_required: 'Steemit Password Backup (required)',
 	after_printing_write_down_your_user_name: 'After printing, write down your user name',
@@ -430,12 +430,15 @@ const en = 	{
 	this_memo_is_private: 'This Memo is Private',
 	this_memo_is_public: 'This Memo is Public',
 	power_up: 'Power Up',
+	power_down: 'Power Down',
+	cancel_power_down: 'Cancel Power Down',
 	transfer: 'Transfer',
+	deposit: 'Deposit',
 	basic: 'Basic',
 	advanced: 'Advanced',
 	convert_to_steem_power: 'Convert to Steem Power',
 	transfer_to_account: 'Transfer to Account',
-	buy_steem_or_steem_power: 'Buy Steem or Steem Power',
+	buy_OWNERSHIP_TOKEN_or_INVEST_TOKEN: 'Buy ' + OWNERSHIP_TOKEN + ' or ' + INVEST_TOKEN,
 	version: 'Version',
 	about_steemit: 'About Steemit',
 	steemit_is_a_social_media_platform_where_everyone_gets_paid_for_creating_and_curating_content: 'Steemit is a social media platform where <strong>everyone</strong>&nbsp;gets <strong>paid</strong> for creating and curating content',
@@ -454,7 +457,18 @@ const en = 	{
 	'24_hour': '24 hour',
 	'30_day': '30 day',
 	flag: "Flag",
-
+	promote: 'Promote',
+	// Tips
+	tradeable_tokens_that_may_be_transferred_anywhere_at_anytime: 'Tradeable tokens that may be transferred anywhere at anytime.',
+	steem_can_be_converted_to_steem_power_in_a_process_called_powering_up: 'Steem can be converted to Steem Power in a process called powering up.',
+	tokens_worth_about_dollar_of_steem: 'Tokens worth about $1.00 of Steem.',
+	influence_tokens_which_earn_more_power_by_holding_long_term: 'Influence tokens which earn more power by holding long term.',
+	the_more_you_hold_the_more_you_influence_post_rewards: 'The more you hold the more you influence post rewards and earn for accurate voting.',
+	the_estimated_value_is_based_on_a_7_day_average_value_of_steem_in_us_dollars: 'The estimated value is based on a 7 day average value of Steem in US Dollars.',
+	steem_power_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_steem: 'Steem Power is non-transferrable and will require 2 years and 104 payments to convert back to Steem.',
+	converted_steem_power_can_be_sent_to_yourself_but_can_not_transfer_again: 'Converted Steem Power can be sent to yourself or someone else but can not transfer again without converting back to Steem.',
+	profile: 'Profile',
+	send_to_account: "Send to account",
 }
 
 export { en }

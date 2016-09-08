@@ -380,7 +380,9 @@ export default formId => reduxForm(
         if (hasCategory) fields.push('category')
         const isEdit = type === 'edit'
         const maxKb = isStory ? 100 : 16
-        const validate = values => ({
+        const validate = values => {
+            console.warn(values)
+            return ({
             title: isStory && (
                 !values.title || values.title.trim() === '' ? translate('required') :
                 values.title.length > 255 ? translate('shorten_title') :
@@ -389,7 +391,7 @@ export default formId => reduxForm(
             category: hasCategory && validateCategory(values.category, !isEdit),
             body: isBodyEmpty(state, values.body) ? translate('required') :
               values.body.length > maxKb * 1024 ? translate('exceeds_maximum_length', {maxKb}) : null,
-        })
+        })}
         let {category, title, body} = ownProps
 
         if (/submit_/.test(type)) title = body = ''
@@ -425,7 +427,7 @@ export default formId => reduxForm(
             type, originalPost, autoVote = false, state, jsonMetadata, /*metaLinkData,*/ successCallback, errorCallback, loadingCallback}) => {
             // const post = state.global.getIn(['content', author + '/' + permlink])
             const username = state.user.getIn(['current', 'username'])
-
+            console.warn(category)
             // Wire up the current and parent props for either an Edit or a Submit (new post)
             //'submit_story', 'submit_comment', 'edit'
             const linkProps =

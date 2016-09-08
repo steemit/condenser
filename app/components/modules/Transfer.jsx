@@ -5,7 +5,7 @@ import {Map} from 'immutable';
 import transaction from 'app/redux/Transaction';
 import user from 'app/redux/User';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import {transferToSavingsTip} from 'app/utils/Tips'
+import {transferTips} from 'app/utils/Tips'
 import {powerTip, powerTip2, powerTip3} from 'app/utils/Tips'
 import {browserTests} from 'shared/ecc/test/BrowserTests'
 import {validate_account_name} from 'app/utils/ChainValidation';
@@ -129,9 +129,7 @@ class TransferForm extends Component {
                 {!toVesting && <div>
                     <div className="row">
                         <div className="column small-12">
-                            {transferType === 'Transfer to Savings' && <div>
-                                {transferToSavingsTip}
-                            </div>}
+                            {transferTips[transferType]}
                         </div>
                     </div>
                     <br />

@@ -9,7 +9,7 @@ import DropdownMenu from 'app/components/elements/DropdownMenu';
 import BlocktradesDeposit from 'app/components/modules/BlocktradesDeposit';
 import Reveal from 'react-foundation-components/lib/global/reveal'
 import CloseButton from 'react-foundation-components/lib/global/close-button';
-import {steemTip, powerTip, dollarTip, valueTip, savingsTip} from 'app/utils/Tips'
+import {steemTip, powerTip, dollarTip, valueTip, savingsTip, transferTips} from 'app/utils/Tips'
 import {numberWithCommas, vestingSteem} from 'app/utils/StateFunctions'
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu'
 

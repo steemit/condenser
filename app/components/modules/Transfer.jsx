@@ -86,10 +86,15 @@ class TransferForm extends Component {
     errorCallback = estr => { this.setState({ trxError: estr, loading: false }) }
 
     balanceValue() {
+        const {transferType} = this.props.initialValues
         const {currentAccount} = this.props
         const {asset} = this.state
-        return !asset || asset.value === 'STEEM' ? currentAccount.get('balance') :
-            asset.value === 'SBD' ? currentAccount.get('sbd_balance') :
+        const isWithdraw = transferType && transferType === 'Savings Withdraw'
+        return !asset ||
+            asset.value === 'STEEM' ?
+                isWithdraw ? currentAccount.get('savings_balance') : currentAccount.get('balance') :
+            asset.value === 'SBD' ?
+                isWithdraw ? currentAccount.get('savings_sbd_balance') : currentAccount.get('sbd_balance') :
             null
     }
 
@@ -253,7 +258,7 @@ export default connect(
             }
 
             if(transferType === 'Savings Withdraw')
-                operation.request_id = Math.floor(Date.now() / 1000)
+                operation.request_id = Math.floor((Date.now() / 1000) % 4294967295)
 
             dispatch(transaction.actions.broadcastOperation({
                 type: toVesting ? 'transfer_to_vesting' : (

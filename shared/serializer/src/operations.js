@@ -458,7 +458,7 @@ let transfer_to_savings = new Serializer(
 let transfer_from_savings = new Serializer( 
     "transfer_from_savings",{
     from: string,
-    request_id: uint16,
+    request_id: uint32,
     to: string,
     amount: asset,
     memo: string
@@ -468,7 +468,7 @@ let transfer_from_savings = new Serializer(
 let cancel_transfer_from_savings = new Serializer( 
     "cancel_transfer_from_savings",{
     from: string,
-    request_id: uint16
+    request_id: uint32
 }
 );
 

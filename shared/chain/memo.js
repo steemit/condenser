@@ -32,12 +32,14 @@ export function decode(private_key, memo) {
     // remove varint length prefix
     const mbuf = ByteBuffer.fromBinary(memo.toString('binary'), ByteBuffer.DEFAULT_CAPACITY, ByteBuffer.LITTLE_ENDIAN)
     try {
+        mbuf.mark()
         // I get better luck using readVString .. but (see cache)
         return mbuf.readVString()
     } catch(e) {
         // Piston's encrypted memos fail the above varibale length utf-8 conversion.
         // The origainal code works for Piston.
         // https://github.com/steemit/steemit.com/issues/202
+        mbuf.reset()
         const len = mbuf.readVarint32() // remove the varint length prefix
         const remaining = mbuf.remaining()
         if(len !== remaining) // warn

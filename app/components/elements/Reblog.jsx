@@ -53,7 +53,7 @@ module.exports = connect(
             dispatch(transaction.actions.broadcastOperation({
                 type: 'custom_json',
                 operation: {
-                    id: 'reblog',
+                    id: 'follow',
                     required_posting_auths: [account],
                     json: JSON.stringify(json),
                 },

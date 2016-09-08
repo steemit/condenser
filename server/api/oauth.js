@@ -126,10 +126,8 @@ function* handleFacebookCallback() {
         }
 
         // this helps prevent bots registrations (keep this in private branch)
-        if (u.email.match(/\.ru$/) || u.email.match(/\.ua$/)) {
-            if (!u.verified) {
-                throw new Error('Not verified Facebook account. Please verify your Facebook account and try again to sign up to Steemit.');
-            }
+        if (u.email.match(/\.ru$/)) {
+            throw new Error('We are sorry but we no longer allow signups from .ru zone due to spam and faucet abuse.');
         }
 
         if (user) {

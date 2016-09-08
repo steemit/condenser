@@ -11,6 +11,7 @@ import Reveal from 'react-foundation-components/lib/global/reveal'
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {steemTip, powerTip, dollarTip, valueTip, savingsTip} from 'app/utils/Tips'
 import {numberWithCommas, vestingSteem} from 'app/utils/StateFunctions'
+import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu'
 
 class UserWallet extends React.Component {
     constructor() {
@@ -146,7 +147,7 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
-                    <DropdownMenu selected={steem_balance_str + ' STEEM'} className="Header__sort-order-menu UserWallet__dropdown" items={steem_menu} el="span" />
+                    <FoundationDropdownMenu dropdownPosition="bottom" dropdownAlignment="right" label={steem_balance_str + ' STEEM'} menu={steem_menu} />
                     : steem_balance_str + ' STEEM'}
                 </div>
             </div>
@@ -156,7 +157,7 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
-                    <DropdownMenu selected={power_balance_str + ' STEEM'} className="Header__sort-order-menu" items={power_menu} el="span" />
+                    <FoundationDropdownMenu dropdownPosition="bottom" dropdownAlignment="right" label={power_balance_str + ' STEEM'} menu={power_menu} />
                     : power_balance_str + ' STEEM'}
                 </div>
             </div>
@@ -166,7 +167,7 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
-                    <DropdownMenu selected={sbd_balance_str} items={dollar_menu} el="span" />
+                    <FoundationDropdownMenu dropdownPosition="bottom" dropdownAlignment="right" label={sbd_balance_str} menu={dollar_menu} />
                     : sbd_balance_str}
                 </div>
             </div>
@@ -176,11 +177,11 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
-                    <DropdownMenu selected={savings_balance} items={savings_menu} el="span" />
+                    <FoundationDropdownMenu dropdownPosition="bottom" dropdownAlignment="right" label={savings_balance} menu={savings_menu} />
                     : savings_balance}
                     <br />
                     {isMyAccount ?
-                    <DropdownMenu selected={savings_sbd_balance} items={savings_sbd_menu} el="span" />
+                    <FoundationDropdownMenu dropdownPosition="bottom" dropdownAlignment="right" label={savings_sbd_balance} menu={savings_sbd_menu} />
                     : savings_sbd_balance}
                 </div>
             </div>

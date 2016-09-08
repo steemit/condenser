@@ -217,7 +217,7 @@ class CommentImpl extends React.Component {
             showNegativeComments, ignore, noImage} = this.props
         const {onShowReply, onShowEdit, onDeletePost} = this
         const post = comment.author + '/' + comment.permlink
-        const anchor_link = '@' + post
+        const anchor_link = '#@' + post // Using a hash here is not standard but intentional; see issue #124 for details
         const {PostReplyEditor, PostEditEditor, showReply, showEdit, hide_body} = this.state
         const Editor = showReply ? PostReplyEditor : PostEditEditor
 

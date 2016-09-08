@@ -55,7 +55,7 @@ export default class SignUp extends React.Component {
                 </div>
                 <div className="column large-8">
                     <a href="/connect/reddit" className="button SignUp--reddit-button">Continue with Reddit</a>
-                    <br /><span className="secondary">(requires positive Reddit comment karma)</span>
+                    <br /><span className="secondary">(requires 5 or more Reddit comment karma)</span>
                 </div>
             </div>
             <div className="row">

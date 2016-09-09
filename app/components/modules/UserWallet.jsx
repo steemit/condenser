@@ -65,13 +65,14 @@ class UserWallet extends React.Component {
 
 
         /// vests + steem balance
-        let balance_steem = parseFloat(account.balance.split(' ')[0]);
-        let total_steem   = (vesting_steemf + balance_steem).toFixed(3);
-        let divesting = parseFloat(account.vesting_withdraw_rate.split(' ')[0]) > 0.000000;
+        const balance_steem = parseFloat(account.balance.split(' ')[0]);
+        const saving_balance_steem = parseFloat(savings_balance.split(' ')[0]);
+        const total_steem = (vesting_steemf + balance_steem + saving_balance_steem).toFixed(3);
+        const divesting = parseFloat(account.vesting_withdraw_rate.split(' ')[0]) > 0.000000;
         const sbd_balance = parseFloat(account.sbd_balance)
-
+        const sbd_balance_savings = parseFloat(savings_sbd_balance.split(' ')[0]);
         let total_value = '$' + numberWithCommas(
-            (((vesting_steemf + balance_steem) * price_per_steem) + sbd_balance
+            ((total_steem * price_per_steem) + sbd_balance + sbd_balance_savings
         ).toFixed(2))
 
         /// transfer log

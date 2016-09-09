@@ -247,7 +247,11 @@ export default connect(
 
             const username = currentUser.get('username')
             const successCallback = () => {
-                dispatch({type: 'global/GET_STATE', payload: {url: `@${username}/transfers`}}) // refresh transfer history
+                // refresh transfer history
+                dispatch({type: 'global/GET_STATE', payload: {url: `@${username}/transfers`}})
+                if(/Savings Withdraw/.test(transferType)) {
+                    dispatch({type: 'user/LOAD_SAVINGS_WITHDRAW', payload: {}})
+                }
                 dispatch(user.actions.hideTransfer())
             }
             const asset2 = toVesting ? 'STEEM' : asset

@@ -73,7 +73,7 @@ class SavingsWithdrawHistory extends React.Component {
         return <div className="SavingsWithdrawHistory">
             <div className="row">
                 <div className="column small-12">
-                    <h4>PENDING SAVINGS WITHDRAW</h4>
+                    <h4>PENDING SAVINGS WITHDRAWS</h4>
                     <table>
                         <tbody>
                             {rows}
@@ -104,8 +104,13 @@ export default connect(
                 payload: {},
             })
         },
-        cancelWithdraw: (fro, request_id, successCallback, errorCallback) => {
+        cancelWithdraw: (fro, request_id, success, errorCallback) => {
             const confirm = 'Cancel this withdraw request?'
+            const successCallback = () => {
+                // refresh transfer history
+                dispatch({type: 'global/GET_STATE', payload: {url: `@${fro}/transfers`}})
+                success()
+            }
             dispatch(transaction.actions.broadcastOperation({
                 type: 'cancel_transfer_from_savings',
                 operation: {from: fro, request_id},

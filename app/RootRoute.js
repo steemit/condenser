@@ -14,6 +14,11 @@ export default {
             //require.ensure([], (require) => {
                 cb(null, [require('app/components/pages/About')]);
             //});
+        // golos.io ICO page
+        } else if (route.page === 'Ico') {
+            //require.ensure([], (require) => {
+            cb(null, [require('app/components/pages/Ico')]);
+            //});
         } else if (route.page === 'Login') {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/Login')]);

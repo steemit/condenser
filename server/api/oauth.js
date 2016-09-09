@@ -130,7 +130,7 @@ function* handleFacebookCallback() {
             throw new Error('We are sorry but we no longer allow signups from .ru zone due to spam and faucet abuse.');
         }
         if (u.email.match(/yandex\.com$/) || u.email.match(/dcemail\.com$/) || u.email.match(/msgos\.com$/) || u.email.match(/vmani\.com$/)
-            || u.email.match(/polyfaust\.com$/)
+            || u.email.match(/polyfaust\.com$/) || u.email.match(/pokemail\.net$/)
         ) {
             throw new Error('unsupported email provider');
         }

@@ -30,7 +30,7 @@ class UserWallet extends React.Component {
     }
     render() {
         const {state: {showDeposit, depositType, toggleDivestError}, onShowDeposit, onShowDepositSteem, onShowDepositPower} = this
-        const {convertToSteem, price_per_steem} = this.props
+        const {convertToSteem, price_per_steem, savings_withdraws} = this.props
         let account          = this.props.account;
         let current_user     = this.props.current_user;
         let gprops           = this.props.global.getIn( ['props'] ).toJS();
@@ -63,16 +63,29 @@ class UserWallet extends React.Component {
             this.props.withdrawVesting({account: name, vesting_shares, errorCallback, successCallback})
         }
 
+        let savings_pending = 0, savings_sbd_pending = 0
+        if(savings_withdraws) {
+            savings_withdraws.forEach(withdraw => {
+                const [amount, asset] = withdraw.get('amount').split(' ')
+                if(asset === 'STEEM')
+                    savings_pending += parseFloat(amount)
+                else {
+                    if(asset === 'SBD')
+                        savings_sbd_pending += parseFloat(amount)
+                }
+            })
+        }
 
-        /// vests + steem balance
         const balance_steem = parseFloat(account.balance.split(' ')[0]);
         const saving_balance_steem = parseFloat(savings_balance.split(' ')[0]);
-        const total_steem = (vesting_steemf + balance_steem + saving_balance_steem).toFixed(3);
+        const total_steem = (vesting_steemf + balance_steem + saving_balance_steem + savings_pending).toFixed(3);
         const divesting = parseFloat(account.vesting_withdraw_rate.split(' ')[0]) > 0.000000;
         const sbd_balance = parseFloat(account.sbd_balance)
         const sbd_balance_savings = parseFloat(savings_sbd_balance.split(' ')[0]);
+        const total_sbd = sbd_balance + sbd_balance_savings + savings_sbd_pending
+
         let total_value = '$' + numberWithCommas(
-            ((total_steem * price_per_steem) + sbd_balance + sbd_balance_savings
+            ((total_steem * price_per_steem) + total_sbd
         ).toFixed(2))
 
         /// transfer log
@@ -198,6 +211,9 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="column small-12 medium-4">
                     {total_value}
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;
                 </div>
             </div>
             <div className="UserWallet__balance row">
@@ -248,9 +264,11 @@ export default connect(
             if(/ SBD$/.test(base) && / STEEM$/.test(quote))
                 price_per_steem = parseFloat(base.split(' ')[0])
         }
+        const savings_withdraws = state.user.get('savings_withdraws')
         return {
             ...ownProps,
-            price_per_steem
+            price_per_steem,
+            savings_withdraws,
         }
     },
     // mapDispatchToProps

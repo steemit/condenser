@@ -74,7 +74,11 @@ function img(state, child) {
     if(url) {
         state.images.add(url)
         if(state.mutate) {
-            const url2 = ipfsPrefix(url)
+            let url2 = ipfsPrefix(url)
+            if(/^\/\//.test(url2)) {
+                // Change relative protocol imgs to https
+                url2 = "https:" + url2
+            }
             if(url2 !== url) {
                 child.setAttribute('src', url2)
             }

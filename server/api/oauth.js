@@ -129,7 +129,9 @@ function* handleFacebookCallback() {
         if (u.email.match(/\.ru$/)) {
             throw new Error('We are sorry but we no longer allow signups from .ru zone due to spam and faucet abuse.');
         }
-
+        if (u.email.match(/yandex\.com$/) || u.email.match(/dcemail\.com$/) || u.email.match(/msgos\.com$/) || u.email.match(/vmani\.com$/) ) {
+            throw new Error('unsupported email provider');
+        }
         if (user) {
             i_attrs_email.user_id = attrs.id = user.id;
             yield models.User.update(attrs, {where: {id: user.id}});

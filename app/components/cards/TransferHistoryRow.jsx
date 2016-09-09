@@ -5,7 +5,8 @@ import Tooltip from 'app/components/elements/Tooltip';
 // import Icon from 'app/components/elements/Icon';
 import Memo from 'app/components/elements/Memo'
 import {numberWithCommas, vestsToSp} from 'app/utils/StateFunctions'
-import { translate } from '../../Translator';
+import { translate } from 'app/Translator';
+import { APP_NAME, DEBT_TOKEN, DEBT_TOKEN_SHORT, OWNERSHIP_TOKEN, CURRENCY_SIGN, INVEST_TOKEN } from 'config/client_config';
 
 class TransferHistoryRow extends React.Component {
 
@@ -34,7 +35,7 @@ class TransferHistoryRow extends React.Component {
             if( data.from === context ) {
                 const amount = data.amount.split(' ')[0]
                 if( data.to === "" ) {
-                    description_start += translate('transfer_amount_to_steem_power', { amount });
+                    description_start += translate('transfer_amount_to_INVEST_TOKEN', { amount });
                 }
                 else {
                     description_start += translate('transfer_amount_steem_power_to', { amount }) + ' ';
@@ -42,7 +43,7 @@ class TransferHistoryRow extends React.Component {
                 }
             }
             else if( data.to === context ) {
-                description_start += translate('recieve_amount_steem_power_from', { amount }) + ' ';
+                description_start += translate('recieve_amount_INVEST_TOKEN_from', { amount }) + ' ';
                 other_account = data.from;
             } else {
                 description_start += translate('transfer_amount_steem_power_from_to', {
@@ -72,11 +73,11 @@ class TransferHistoryRow extends React.Component {
             else
                 description_start += translate('start_power_down_of') + " " + data.vesting_shares;
         } else if( type === 'curation_reward' ) {
-            description_start += translate('curation_reward_of_steem_power_for', { reward: curation_reward }) + ' ';
+            description_start += translate('curation_reward_of_INVEST_TOKEN_for', { reward: curation_reward }) + ' ';
             other_account = data.comment_author;
             description_end = `/${data.comment_permlink}`;
         } else if (type === 'author_reward') {
-            description_start += translate('author_reward_of_steem_power_for', {
+            description_start += translate('author_reward_of_INVEST_TOKEN_for', {
                 payout: renameToSd(data.sbd_payout),
                 reward: author_reward
             }) + ` ${data.author}/${data.permlink}`;
@@ -110,7 +111,7 @@ class TransferHistoryRow extends React.Component {
     }
 };
 
-const renameToSd = (txt) => txt ? numberWithCommas(txt.replace('SBD', 'SD')) : txt
+const renameToSd = (txt) => txt ? numberWithCommas(txt.replace('SBD', DEBT_TOKEN_SHORT)) : txt
 
 import {connect} from 'react-redux'
 export default connect(

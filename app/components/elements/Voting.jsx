@@ -14,15 +14,6 @@ import FoundationDropdown from 'app/components/elements/FoundationDropdown';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import { translate } from '../../Translator';
 
-const ABOUT_FLAG = <div>
-    <p>{translate('flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following')}:</p>
-    <ul>
-        <li>{translate('fraud_or_plagiarism')}</li>
-        <li>{translate('hate_speech_or_internet_trolling')}</li>
-        <li>{translate('intentional_miss_categorized_content_or_spam')}</li>
-    </ul>
-</div>
-
 const MAX_VOTES_DISPLAY = 20;
 const VOTE_WEIGHT_DROPDOWN_THRESHOLD = 100.0 * 1000.0 * 1000.0;
 
@@ -126,6 +117,15 @@ class Voting extends React.Component {
         const down = <Icon name={votingDownActive ? 'empty' : (myVote < 0 ? 'flag2' : 'flag1')} />;
         const classDown = 'Voting__button Voting__button-down' + (myVote < 0 ? ' Voting__button--downvoted' : '') + (votingDownActive ? ' votingDown' : '');
 
+        const ABOUT_FLAG = <div>
+            <p>{translate('flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following')}:</p>
+            <ul>
+                <li>{translate('fraud_or_plagiarism')}</li>
+                <li>{translate('hate_speech_or_internet_trolling')}</li>
+                <li>{translate('intentional_miss_categorized_content_or_spam')}</li>
+            </ul>
+        </div>
+
         if (flag) {
             // myVote === current vote
             const dropdown = <FoundationDropdown show={showWeight} className="Voting__adjust_weight_down">
@@ -138,7 +138,7 @@ class Voting extends React.Component {
                 <CloseButton onClick={() => this.setState({showWeight: false})} />
                 <div className="clear Voting__about-flag">
                     <p>{ABOUT_FLAG}</p>
-                    <a href="#" onClick={this.voteDown} className="confirm_weight button outline" title="Flag">Flag</a>
+                    <a href="#" onClick={this.voteDown} className="confirm_weight button outline" title={translate('flag')}>{translate('flag')}</a>
                 </div>
             </FoundationDropdown>
 
@@ -212,6 +212,7 @@ class Voting extends React.Component {
                 </div>
             </FoundationDropdown>;
         }
+
         return (
             <span className="Voting">
                 <span className="Voting__inner">

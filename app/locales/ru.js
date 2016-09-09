@@ -35,7 +35,7 @@ const ru = {
 	tags_and_topics: "Тэги и топики",
 	filter: "Фильтр",
 	show_more_topics: "Показать больше топиков",
-	we_require_social_account: 'Steemit спонсирует каждый аккаунт с болеем чем {signup_bonus} в Steem Power; чтобы предотвратить злоупотребление, мы просим новых пользователей регистрировать используя социальные сети.',
+	we_require_social_account: APP_NAME + ' спонсирует каждый аккаунт с болеем чем {signup_bonus} в ' + INVEST_TOKEN + '; чтобы предотвратить злоупотребление, мы просим новых пользователей регистрироваться используя социальные сети.',
 	personal_info_will_be_private: 'Твоя персональная информация будет оставаться',
 	personal_info_will_be_private_link: 'приватной',
 	continue_with_facebook: 'Продолжить с Facebook',
@@ -50,7 +50,7 @@ const ru = {
 	hot: 'горячее',
 	trending: 'набирающее популярность',
 	payout_time: 'время выплаты',
-	active: 'активное',
+	active: 'активный',
 	responses: 'ответы',
 	popular: 'популярное',
 	/* end dropdown menu */
@@ -85,6 +85,10 @@ const ru = {
 	welcome_to_the_blockchain: 'Добро пожаловать в Blockchain!',
 	your_voice_is_worth_something: 'Твой голос чего-то стоит',
 	learn_more: 'Узнать больше',
+	// TODO
+	// 1) добавить INVEST_TOKEN_UPPERCASE
+	// 2) Перелопатить код, расставить правильно INVEST_TOKEN и INVEST_TOKEN_UPPERCASE
+	// 3) перевести это:
 	get_sp_when_sign_up: 'Получи {signupBonus} Steem Power подписавшись сегодня.',
 	all_accounts_refunded: 'Все потери по восстанавливаемым аккаунтам были полностью компенсированы',
 	steemit_is_now_open_source: 'Steemit.com теперь Open Source',
@@ -93,14 +97,14 @@ const ru = {
 	select_a_tag: 'Выбрать тэг',
 	required: 'Обязательно',
 	shorten_title: 'Сократите заголовок',
-	exceeds_maximum_length: 'Пребывает максимальную длину ({maxKb}KB)',
+	exceeds_maximum_length: 'Превышает максимальную длину ({maxKb}KB)',
 	including_the_category: "(включая категорию '{rootCategory}')",
 	use_limited_amount_of_tags: 'У тебя {tagsLength} тэгов включая {includingCategory}.  Пожалуйста, используйте не более 5 в посте и категории.',
 	// this is mainly used in CategorySelector
 	use_limitied_amount_of_categories: 'Пожалуйста используйте не более {amount} категорий',
 	use_one_dash: 'Используйте только одно тире',
 	use_spaces_to_separate_tags: 'Используйте пробел чтобы разделить тэги',
-	с: 'Используйте только строчные буквы, цифры и одно тире',
+	use_only_allowed_characters: 'Используйте только строчные буквы, цифры и одно тире',
 	must_start_with_a_letter: 'Должно начинаться с буквы',
 	must_end_with_a_letter_or_number: 'Должно заканчиваться с буквы или номера',
 	// tags page
@@ -139,20 +143,21 @@ const ru = {
 	share: 'Поделиться',
 	in_reply_to: 'в ответ на',
 	replied_to: 'ответил', // тоже что и 'by'
-	transfer_amount_to_steem_power: "Передать {amount} в STEEM POWER",
-	transfer_amount_steem_power_to: "Передать {amount} STEEM POWER в",
-	recieve_amount_steem_power_from: "Получить {amount} STEEM POWER от",
-	transfer_amount_steem_power_from_to: "Передать {amount} STEEM POWER от {from} к",
+	transfer_amount_to_INVEST_TOKEN: "Передать {amount} в " + INVEST_TOKEN,
+	transfer_amount_INVEST_TOKEN_to: "Передать {amount} " + INVEST_TOKEN + " в",
+	recieve_amount_INVEST_TOKEN_from: "Получить {amount} " + INVEST_TOKEN + " от",
+	transfer_amount_INVEST_TOKEN_from_to: "Передать {amount} " + INVEST_TOKEN + " от {from} к",
 	transfer_amount_to: "Передать {amount} к",
 	recieve_amount_from: "Получен {amount} от",
 	transfer_amount_from: "Передать {amount} от",
 	// TODO
 	stop_power_down: "Stop power down",
 	start_power_down_of: "Start power down of",
-	curation_reward_of_steem_power_for: 'Кураторские вознаграждения {reward} STEEM POWER за',
-	author_reward_of_steem_power_for: 'Авторские вознаграждения {payout} и {reward} STEEM POWER за',
+	curation_reward_of_INVEST_TOKEN_for: 'Кураторские вознаграждения {reward} ' + INVEST_TOKEN + ' за',
+	author_reward_of_INVEST_TOKEN_for: 'Авторские вознаграждения {payout} и {reward} ' + INVEST_TOKEN + ' за',
 	recieve_interest_of: 'Получены проценты в размере {interest}',
 	// TODO find where this is used and write an example
+	from: 'от',
 	to: 'к',
 	account_not_found: 'Аккаунт не найден',
 	this_is_wrong_password: 'Это неправильный пароль',
@@ -160,7 +165,7 @@ const ru = {
 	recover_your_account: 'восстановить ваш аккаунт', // this probably will end with question mark
 	reset_usernames_password: "Сбросить пароль пользователя {username}",
 	this_will_update_usernames_authtype_key: 'Это обновит {username} {authType} ключ',
-	the_rules_of_steemit: "Первая правило " + APP_NAME + ": не теряйте свой пароль.<br /> Второе правило " + APP_NAME + ": <strong>Не</strong> теряйте свой пароль.<br /> Третье правило " + APP_NAME + ": мы не можем восстановить ваш пароль.<br /> Четвертое правило: если вы можете запомнить свой пароль, значит он не безопасен.<br /> Пятое правило: используйте только сгенерированные случайным образом пароли.<br /> Шестое правило: Никому не говорите свой пароль.<br /> Седьмое правило: Всегда надежно сохраняйте свой пароль.",
+	the_rules_of_steemit: "Первое правило " + APP_NAME + ": не теряйте свой пароль.<br /> Второе правило " + APP_NAME + ": <strong>Не</strong> теряйте свой пароль.<br /> Третье правило " + APP_NAME + ": мы не можем восстановить ваш пароль.<br /> Четвертое правило: если вы можете запомнить свой пароль, значит он не безопасен.<br /> Пятое правило: используйте только сгенерированные случайным образом пароли.<br /> Шестое правило: Никому не говорите свой пароль.<br /> Седьмое правило: Всегда надежно храните свой пароль.",
 	account_name: 'Имя аккаунта',
 	recover_password: 'Восстановить аккаунт',
 	current_password: 'Текущий пароль',
@@ -186,7 +191,7 @@ const ru = {
 	deadline_for_recovery_is: 'Deadline for recovery is',
 	i_understand_dont_show_again: "Понимаю, больше не показывать",
 	ok: 'Ок', // Лучше использовать "хорошо" или "ладно"?
-	convert_to_steem: 'Перевести в Steem',
+	convert_to_INVEST_TOKEN: 'Перевести в ' + INVEST_TOKEN,
 	steem_dollars_will_be_unavailable: 'Эта операция будет проходить через неделю от настоящего момента и ее нельзя отменить. Эти Steem доллары мгновенно станут недоступны',
 	amount: 'Количество',
 	steem_dollars: 'STEEM ДОЛЛАРЫ',
@@ -274,7 +279,8 @@ const ru = {
 	permissions: 'Разрешения',
 	password: 'Пароль',
 	posts: 'Посты',
-	// english language does not need plurals, but your language might need it
+	// PLURALS
+	// see locales/README.md on how to properly use them
 	// context usually is about profile stats: 'User has: 3 posts, 2 followers, 5 followed'
 	post_count: `{postCount, plural,
 		zero {0 постов}
@@ -319,6 +325,7 @@ const ru = {
 	author_rewards_last_24_hours: 'Авторские вознаграждения за последние 24 часа',
 	daily_average_author_rewards: 'Среднесуточные авторские вознаграждения',
 	author_rewards_history: 'История авторских наград',
+	balance: 'Баланс',
 	balances: 'Балансы',
 	estimate_account_value: 'Оценочная ценность аккаунта',
 	// TODO
@@ -345,29 +352,29 @@ const ru = {
 	form_requires_javascript_to_be_enabled: 'Эта форма требует активированный в браузере javascript',
 	our_records_indicate_you_already_have_account: 'Наши записи показывают что у вас уже есть steem аккант',
 	to_prevent_abuse_steemit_can_only_register_one_account_per_user: 'Чтобы предотвратить злоупотребление (каждый зарегистрированный аккаунт стоит 3 STEEM) Steemit может регистрировать только один аккаунт для каждого подтвержденного пользователя.',
-	you_can_either_login_or_send_us_email: 'Вы можете или {loginLink} в ваш существующий аккаунт или, если вам нужен новый аккаунт,',
+	you_can_either_login_or_send_us_email: 'Вы можете или {loginLink} в ваш существующий аккаунт или {emailLink}, если вам нужен новый аккаунт,',
 	send_us_email: 'отправьте нам электронную почту',
 	connection_lost_reconnecting: 'Связь потеряна, переподключаемся',
 	// Voting.jsx
 	stop_seeing_content_from_this_user: 'Перестать видеть контент от этого пользователя',
 	// TODO
-	flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following: 'Flagging a post can remove rewards and make this material less visible. The flag should be used for the following',
-	fraud_or_plagiarism: 'Мошенничество или Плагиат',
+	flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following: 'Голос против может снять вознаграждения и сделать пост менее видимым. Голосование против должно основываться на',
+	fraud_or_plagiarism: 'Мошенничество или плагиат',
 	hate_speech_or_internet_trolling: 'Разжигание ненависти или интернет троллинг',
 	intentional_miss_categorized_content_or_spam: 'Преднамеренная неправильная категоризация контента или спам',
-	downvote: 'Проголосовать против',
+	downvote: 'Голосовать против',
 	pending_payout: 'Ожидаемая выплата',
 	past_payouts: 'Прошлые выплаты',
 	and: 'и',
 	more: 'больше',
 	remove_vote: 'Убрать голос',
-	upvote: 'Проголосовать за',
+	upvote: 'Голосовать за',
 	we_will_reset_curation_rewards_for_this_post: 'сбросит ваши кураторские вознаграждения за этот пост',
 	removing_your_vote: 'Удаляем ваш голос',
-	changing_to_an_upvote: 'Изменяем на голос за',
-	changing_to_a_downvote: 'Изменяем на голос против',
+	changing_to_an_upvote: 'Измение на голос за',
+	changing_to_a_downvote: 'Измение на голос против',
 	// TODO
-	confirm_flag: 'Confirm Flag',
+	confirm_flag: 'Подтвердить Flag',
 	date_created: 'Дата создания',
 	search: 'Поиск',
 	begin_recovery: 'Начать восстановление',
@@ -425,24 +432,25 @@ const ru = {
 	public_something_key: 'Публичный {key} ключ',
 	private_something_key: 'Приватный {key} ключ',
 	// TODO
-	posting_key_is_required_it_should_be_different: 'The posting key is used for posting and voting. It should be different from the active and owner keys.',
-	the_active_key_is_used_to_make_transfers_and_place_orders: 'The active key is used to make transfers and place orders in the internal market.',
-	the_owner_key_is_required_to_change_other_keys: 'The owner key is the master key for the account and is required to change the other keys.',
-	the_private_key_or_password_should_be_kept_offline: 'The private key or password for the owner key should be kept offline as much as possible.',
-	the_memo_key_is_used_to_create_and_read_memos: 'The memo key is used to create and read memos.',
+	// UserProfile > Permissions
+	posting_key_is_required_it_should_be_different: 'Постинг ключ используется для постинга и голосования. Он должен отличаться от активного и ключа владельца.',
+	the_active_key_is_used_to_make_transfers_and_place_orders: 'Активный ключ используется для переводов и размещения заказов на внутреннем рынке.',
+	the_owner_key_is_required_to_change_other_keys: 'Ключ владельца это главный ключ ко всему аккаунта, он необходим для изменения других ключей.',
+	the_private_key_or_password_should_be_kept_offline: 'Приватный ключ или пароль должен храниться в оффлайне так часто насколько возможно.',
+	the_memo_key_is_used_to_create_and_read_memos: 'Ключ заметок используется для создания и чтения заметок.',
 	previous: 'Предыдущий',
 	next: 'Следующий',
 	browse: 'Посмотреть',
 	not_valid_email: 'Не действительный адресы',
 	// TODO
 	thank_you_for_being_an_early_visitor_to_steemit: 'Thank you for being an early visitor to Steemit. We will get back to you at the earliest possible opportunity.',
-	estimated_author_rewards_last_week: "Estimated author rewards last week",
-	author_rewards_last_week: "Estimated author rewards last week",
+	estimated_author_rewards_last_week: "Оценочные автосркие вознаграждения за прошлую неделю",
+	author_rewards_last_week: "Оценочные авторские вознаграждения за прошлую неделю",
 	confirm: 'Подтвердить',
 	asset: 'Актив',
 	// TODO
-	this_memo_is_private: 'This Memo is Private',
-	this_memo_is_public: 'This Memo is Public',
+	this_memo_is_private: 'Эта заметка является приватной',
+	this_memo_is_public: 'Эта заметка является публичной',
 	power_up: 'Power Up',
 	power_down: 'Power Down',
 	cancel_power_down: 'Cancel Power Down',
@@ -470,19 +478,27 @@ const ru = {
 	home: 'главная',
 	'24_hour': '24 часа',
 	'30_day': '30 дней',
-	flag: "Flag",
+	flag: "Голосовать против",
 	promote: 'Продвинуть',
 	// Tips
-	tradeable_tokens_that_may_be_transferred_anywhere_at_anytime: 'Tradeable tokens that may be transferred anywhere at anytime.',
-	steem_can_be_converted_to_steem_power_in_a_process_called_powering_up: 'Steem can be converted to Steem Power in a process called powering up.',
-	tokens_worth_about_dollar_of_steem: 'Tokens worth about $1.00 of Steem.',
-	influence_tokens_which_earn_more_power_by_holding_long_term: 'Influence tokens which earn more power by holding long term.',
-	the_more_you_hold_the_more_you_influence_post_rewards: 'The more you hold the more you influence post rewards and earn for accurate voting.',
-	the_estimated_value_is_based_on_a_7_day_average_value_of_steem_in_us_dollars: 'The estimated value is based on a 7 day average value of Steem in US Dollars.',
+	tradeable_tokens_that_may_be_transferred_anywhere_at_anytime: 'Ходовые жетоны, которые могут переданы куда угодно и когда угодно.',
+	OWNERSHIP_TOKEN_can_be_converted_to_INVEST_TOKEN_in_a_process_called_powering_up: OWNERSHIP_TOKEN + ' может быть конвертирован в ' + INVEST_TOKEN + ' в процессе под названием "усиление голоса".',
+	tokens_worth_about_CURRENCY_SIGN_of_OWNERSHIP_TOKEN: 'Жетоны стоимостью около ' + CURRENCY_SIGN + '1.00 ' + ' ' + OWNERSHIP_TOKEN + '.',
+	influence_tokens_which_earn_more_power_by_holding_long_term: 'Жетоны влияния, которые усиливаются при долгосрочном хранении.',
+	the_more_you_hold_the_more_you_influence_post_rewards: 'Чем их больше, тем сильней вы влияете на вознаграждения за пост и тем больше зарабатываете за правильное голосование.',
+	the_estimated_value_is_based_on_a_7_day_average_value_of_steem_in_currency: 'Оценочная стоимость расчитывается на 7ми дневной средней стоимости ' + OWNERSHIP_TOKEN + ' в российских рублях.',
 	steem_power_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_steem: 'Steem Power is non-transferrable and will require 2 years and 104 payments to convert back to Steem.',
 	converted_steem_power_can_be_sent_to_yourself_but_can_not_transfer_again: 'Converted Steem Power can be sent to yourself or someone else but can not transfer again without converting back to Steem.',
 	profile: 'Профиль',
-	send_to_account: "Send to account",
+	send_to_account: 'Отправить аккаунту',
+	confirm_email: 'Подтвердить электронную почту',
+	authenticate_for_this_transaction: 'Авторизируйтесь для этой транзакции',
+	login_to_your_APP_NAME_account: 'Зайдите в ваш ' + APP_NAME + ' аккаунт',
+	// UserProfile > Permissions
+	posting: 'Постинг',
+	owner: 'Владелец',
+	active_or_owner: 'активный или владельца',
+	sign: 'Войти'
 }
 
 export { ru }

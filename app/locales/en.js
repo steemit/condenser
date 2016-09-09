@@ -35,7 +35,7 @@ const en = 	{
 	tags_and_topics: "Tags and Topics",
 	filter: "Filter",
 	show_more_topics: "Show more topics",
-	we_require_social_account: 'Steemit funds each account with over {signup_bonus} worth of Steem Power; to prevent abuse, we require new users to login via social media.',
+	we_require_social_account: APP_NAME + ' funds each account with over {signup_bonus} worth of ' + INVEST_TOKEN + '; to prevent abuse, we require new users to login via social media.',
 	personal_info_will_be_private: 'Your personal information will be kept',
 	personal_info_will_be_private_link: 'Private',
 	continue_with_facebook: 'Continue with Facebook',
@@ -139,19 +139,20 @@ const en = 	{
 	share: 'Share',
 	in_reply_to: 'in reply to',
 	replied_to: 'replied to',
-	transfer_amount_to_steem_power: "Transfer {amount} to STEEM POWER",
-	transfer_amount_steem_power_to: "Transfer {amount} STEEM POWER to",
-	recieve_amount_steem_power_from: "Receive {amount} STEEM POWER from",
-	transfer_amount_steem_power_from_to: "Transfer {amount} STEEM POWER from {from} to",
+	transfer_amount_to_INVEST_TOKEN: "Transfer {amount} to " + INVEST_TOKEN,
+	transfer_amount_INVEST_TOKEN_to: "Transfer {amount} " + INVEST_TOKEN + " to",
+	recieve_amount_INVEST_TOKEN_from: "Receive {amount} " + INVEST_TOKEN + " from",
+	transfer_amount_INVEST_TOKEN_from_to: "Transfer {amount} " + INVEST_TOKEN + " from {from} to",
 	transfer_amount_to: "Transfer {amount} to",
 	recieve_amount_from: "Receive {amount} from",
 	transfer_amount_from: "Transfer {amount} from",
 	stop_power_down: "Stop power down",
 	start_power_down_of: "Start power down of",
-	curation_reward_of_steem_power_for: 'Curation reward of {reward} STEEM POWER for',
-	author_reward_of_steem_power_for: 'Author reward of {payout} and {reward} STEEM POWER for',
+	curation_reward_of_INVEST_TOKEN_for: 'Curation reward of {reward} ' + INVEST_TOKEN + ' for',
+	author_reward_of_INVEST_TOKEN_for: 'Author reward of {payout} and {reward} ' + INVEST_TOKEN + ' for',
 	recieve_interest_of: 'Receive interest of {interest}',
 	// TODO find where this is used and write an example
+	from: 'from',
 	to: 'to',
 	account_not_found: 'Account not found',
 	this_is_wrong_password: 'This is the wrong password',
@@ -270,7 +271,8 @@ const en = 	{
 	permissions: 'Permissions',
 	password: 'Password',
 	posts: 'Posts',
-	// english language does not need plurals, but your language might need it
+	// PLURALS
+	// see locales/README.md on how to properly use them
 	// context usually is about profile stats: 'User has: 3 posts, 2 followers, 5 followed'
 	post_count: `{postCount, plural,
 		zero {0 posts}
@@ -314,6 +316,7 @@ const en = 	{
 	author_rewards_last_24_hours: 'Author rewards last 24 hours',
 	daily_average_author_rewards: 'Daily average author rewards',
 	author_rewards_history: 'Author Rewards History',
+	balance: 'Balance',
 	balances: 'Balances',
 	estimate_account_value: 'Estimated Account Value',
 	next_power_down_is_scheduled_to_happen_at: 'The next power down is scheduled to happen',
@@ -339,7 +342,7 @@ const en = 	{
 	form_requires_javascript_to_be_enabled: 'This form requires javascript to be enabled in your browser',
 	our_records_indicate_you_already_have_account: 'Our records indicate that you already have steem account',
 	to_prevent_abuse_steemit_can_only_register_one_account_per_user: 'In order to prevent abuse (each registered account costs 3 STEEM) Steemit can only register one account per verified user.',
-	you_can_either_login_or_send_us_email: 'You can either {loginLink} to your existing account or if you need a new account',
+	you_can_either_login_or_send_us_email: 'You can either {loginLink} to your existing account or {emailLink} if you need a new account',
 	send_us_email: 'send us email',
 	connection_lost_reconnecting: 'Connection lost, reconnecting',
 	// Voting.jsx
@@ -412,6 +415,7 @@ const en = 	{
 	private: 'Private',
 	public_something_key: 'Public {key} Key',
 	private_something_key: 'Private {key} Key',
+	// UserProfile > Permissions
 	posting_key_is_required_it_should_be_different: 'The posting key is used for posting and voting. It should be different from the active and owner keys.',
 	the_active_key_is_used_to_make_transfers_and_place_orders: 'The active key is used to make transfers and place orders in the internal market.',
 	the_owner_key_is_required_to_change_other_keys: 'The owner key is the master key for the account and is required to change the other keys.',
@@ -436,7 +440,7 @@ const en = 	{
 	deposit: 'Deposit',
 	basic: 'Basic',
 	advanced: 'Advanced',
-	convert_to_steem_power: 'Convert to Steem Power',
+	convert_to_INVEST_TOKEN: 'Convert to ' + INVEST_TOKEN,
 	transfer_to_account: 'Transfer to Account',
 	buy_OWNERSHIP_TOKEN_or_INVEST_TOKEN: 'Buy ' + OWNERSHIP_TOKEN + ' or ' + INVEST_TOKEN,
 	version: 'Version',
@@ -460,15 +464,23 @@ const en = 	{
 	promote: 'Promote',
 	// Tips
 	tradeable_tokens_that_may_be_transferred_anywhere_at_anytime: 'Tradeable tokens that may be transferred anywhere at anytime.',
-	steem_can_be_converted_to_steem_power_in_a_process_called_powering_up: 'Steem can be converted to Steem Power in a process called powering up.',
-	tokens_worth_about_dollar_of_steem: 'Tokens worth about $1.00 of Steem.',
+	OWNERSHIP_TOKEN_can_be_converted_to_INVEST_TOKEN_in_a_process_called_powering_up: OWNERSHIP_TOKEN + ' can be converted to ' + INVEST_TOKEN + ' in a process called powering up.',
+	tokens_worth_about_CURRENCY_SIGN_of_OWNERSHIP_TOKEN: 'Tokens worth about ' + CURRENCY_SIGN + '1.00 ' + ' of ' + OWNERSHIP_TOKEN + '.',
 	influence_tokens_which_earn_more_power_by_holding_long_term: 'Influence tokens which earn more power by holding long term.',
 	the_more_you_hold_the_more_you_influence_post_rewards: 'The more you hold the more you influence post rewards and earn for accurate voting.',
-	the_estimated_value_is_based_on_a_7_day_average_value_of_steem_in_us_dollars: 'The estimated value is based on a 7 day average value of Steem in US Dollars.',
+	the_estimated_value_is_based_on_a_7_day_average_value_of_steem_in_currency: 'The estimated value is based on a 7 day average value of Steem in US Dollars.',
 	steem_power_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_steem: 'Steem Power is non-transferrable and will require 2 years and 104 payments to convert back to Steem.',
 	converted_steem_power_can_be_sent_to_yourself_but_can_not_transfer_again: 'Converted Steem Power can be sent to yourself or someone else but can not transfer again without converting back to Steem.',
 	profile: 'Profile',
 	send_to_account: "Send to account",
+	confirm_email: 'Confirm Email',
+	authenticate_for_this_transaction: 'Authenticate for this transaction',
+	login_to_your_APP_NAME_account: 'Login to your ' + APP_NAME + ' Account',
+	// UserProfile > Permissions
+	posting: 'Posting',
+	owner: 'Owner',
+	active_or_owner: 'Active or Owner',
+	sign: 'Sign'
 }
 
 export { en }

@@ -73,12 +73,8 @@ class CategorySelector extends React.Component {
     }
 }
 export function validateCategory(category, required = true) {
-    console.log(category)
-    // console.warn(category)
     if(!category || category.trim() === '') return required ? translate( 'required' ) : null
-    // console.warn(category)
     const cats = category.split(' ')
-    // console.warn(category)
     return (
         // !category || category.trim() === '' ? 'Required' :
         cats.length > 5 ? translate('use_limitied_amount_of_categories', {amount: 5}) :

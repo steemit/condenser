@@ -2,7 +2,8 @@ import React from 'react';
 import {connect} from 'react-redux';
 import SvgImage from 'app/components/elements/SvgImage';
 import AddToWaitingList from 'app/components/modules/AddToWaitingList';
-import { translate } from '../../Translator';
+import { translate } from 'app/Translator';
+import { formatCoins } from 'app/utils/FormatCoins';
 
 class SignUp extends React.Component {
     constructor() {
@@ -36,7 +37,8 @@ class SignUp extends React.Component {
                 <div className="column">
                     <h3>{translate("sign_up")}</h3>
                     <p>
-                        {translate("we_require_social_account", {signup_bonus: this.props.signup_bonus})} <br />
+                        {translate("we_require_social_account", {signup_bonus: formatCoins(this.props.signup_bonus)})}
+                        <br />
                         {translate("personal_info_will_be_private")}
                         {' '}
                         <a href="/privacy.html" target="_blank">

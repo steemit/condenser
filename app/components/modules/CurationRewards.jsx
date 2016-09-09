@@ -3,7 +3,8 @@ import React from 'react';
 import {connect} from 'react-redux'
 import TransferHistoryRow from 'app/components/cards/TransferHistoryRow';
 import {numberWithCommas, vestsToSp, assetFloat} from 'app/utils/StateFunctions'
-import { translate } from '../../Translator';
+import { translate } from 'app/Translator';
+import { APP_NAME, DEBT_TOKEN, DEBT_TOKEN_SHORT, OWNERSHIP_TOKEN, CURRENCY_SIGN, INVEST_TOKEN } from 'config/client_config';
 
 class CurationRewards extends React.Component {
     constructor() {
@@ -103,7 +104,7 @@ class CurationRewards extends React.Component {
                     {translate('curation_rewards_last_24_hours')}:
                 </div>
                 <div className="column small-12 medium-3">
-                    {numberWithCommas(vestsToSp(this.props.state, rewards24 + " VESTS")) + " STEEM POWER"}
+                    {numberWithCommas(vestsToSp(this.props.state, rewards24 + " VESTS")) + " "+ INVEST_TOKEN}
                 </div>
             </div>
             <div className="UserWallet__balance UserReward__row row">
@@ -111,7 +112,7 @@ class CurationRewards extends React.Component {
                     {translate('daily_average_curation_rewards')}:
                 </div>
                 <div className="column small-12 medium-3">
-                    {numberWithCommas(vestsToSp(this.props.state, averageCuration + " VESTS")) + " STEEM POWER"}
+                    {numberWithCommas(vestsToSp(this.props.state, averageCuration + " VESTS")) + " "+ INVEST_TOKEN}
                 </div>
             </div>
             <div className="UserWallet__balance UserReward__row row">
@@ -119,7 +120,7 @@ class CurationRewards extends React.Component {
                     {translate(!hasFullWeek ? 'estimated_curation_rewards_last_week' : 'curation_rewards_last_week')}
                 </div>
                 <div className="column small-12 medium-3">
-                    {numberWithCommas(vestsToSp(this.props.state, (hasFullWeek ? rewardsWeek : averageCuration * 7) + " VESTS")) + " STEEM POWER"}:
+                    {numberWithCommas(vestsToSp(this.props.state, (hasFullWeek ? rewardsWeek : averageCuration * 7) + " VESTS")) + " "+ INVEST_TOKEN}
                 </div>
             </div>
             <div className="row">

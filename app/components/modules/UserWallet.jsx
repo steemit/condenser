@@ -12,7 +12,7 @@ import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {steemTip, powerTip, dollarTip, valueTip} from 'app/utils/Tips'
 import {numberWithCommas, vestingSteem} from 'app/utils/StateFunctions'
 import { translate } from 'app/Translator';
-import { OWNERSHIP_TOKEN, DEBT_TOKEN, CURRENCY_SIGN, INVEST_TOKEN } from 'config/client_config';
+import { OWNERSHIP_TOKEN, DEBT_TOKEN, CURRENCY_SIGN, INVEST_TOKEN, DEBT_TOKEN_SHORT } from 'config/client_config';
 
 
 class UserWallet extends React.Component {
@@ -108,7 +108,7 @@ class UserWallet extends React.Component {
         }
 
         let dollar_menu = [
-            { value: translate('transfer'), link: '#', onClick: showTransfer.bind( this, 'SBD' ) },
+            { value: translate('transfer'), link: '#', onClick: showTransfer.bind( this, DEBT_TOKEN_SHORT ) },
             { value: translate('buy_or_sell'), link: '/market' },
             { value: translate('convert_to_steem'), link: '#', onClick: convertToSteem },
         ]
@@ -141,7 +141,7 @@ class UserWallet extends React.Component {
                         {/* not using steemTip because translate strings may be undefined on load */}
                         {/* {steemTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})} */}
                         <div>{translate('tradeable_tokens_that_may_be_transferred_anywhere_at_anytime')}</div>
-                        <div>{translate('steem_can_be_converted_to_steem_power_in_a_process_called_powering_up')}</div>
+                        <div>{translate('OWNERSHIP_TOKEN_can_be_converted_to_INVEST_TOKEN_in_a_process_called_powering_up')}</div>
                     </span>
                 </div>
                 <div className="column small-12 medium-4">
@@ -171,7 +171,7 @@ class UserWallet extends React.Component {
                 <div className="column small-12 medium-8">
                     <span className="uppercase">{DEBT_TOKEN}</span>
                     <br />
-                    <span className="secondary">{translate('tokens_worth_about_dollar_of_steem')}</span>
+                    <span className="secondary">{translate('tokens_worth_about_CURRENCY_SIGN_of_OWNERSHIP_TOKEN')}</span>
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
@@ -191,7 +191,7 @@ class UserWallet extends React.Component {
                 ?   null
                 :   <div className="UserWallet__balance row">
                         <div className="column small-12 medium-8">
-                            {translate('estimate_account_value')}<br /><span className="secondary">{translate('the_estimated_value_is_based_on_a_7_day_average_value_of_steem_in_us_dollars')}</span>
+                            {translate('estimate_account_value')}<br /><span className="secondary">{translate('the_estimated_value_is_based_on_a_7_day_average_value_of_steem_in_currency')}</span>
                         </div>
                         <div className="column small-12 medium-4">
                             {total_value}

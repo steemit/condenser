@@ -16,7 +16,7 @@ import Modals from 'app/components/modules/Modals';
 import Icon from 'app/components/elements/Icon';
 import {key_utils} from 'shared/ecc'
 import { translate } from '../Translator.js';
-import { SEGMENT_ANALYTICS_KEY } from 'config/client_config';
+import { SEGMENT_ANALYTICS_KEY, LANDING_PAGE_URL, WHITEPAPER_URL } from 'config/client_config';
 
 class App extends React.Component {
     constructor(props) {
@@ -150,7 +150,7 @@ class App extends React.Component {
                             <br />
                             <a className="button" href="/create_account" onClick={showSignUp}> <b>{translate("sign_up")}</b> </a>
                             &nbsp; &nbsp; &nbsp;
-                            <a className="button hollow uppercase" href="https://steem.io" target="_blank"> <b>{translate("learn_more")}</b> </a>
+                            <a className="button hollow uppercase" href={LANDING_PAGE_URL} target="_blank"> <b>{translate("learn_more")}</b> </a>
                             <br />
                             <br />
                             <div className="tag3">
@@ -167,7 +167,7 @@ class App extends React.Component {
                 <TopRightMenu vertical navigate={this.navigate} />
                 <ul className="vertical menu">
                     <li>
-                        <a href="https://steem.io" onClick={this.navigate}>
+                        <a href={LANDING_PAGE_URL} onClick={this.navigate}>
                             {translate("about")}
                         </a>
                     </li>
@@ -177,7 +177,7 @@ class App extends React.Component {
                         </a>
                     </li>
                     <li>
-                        <a href="https://steem.io/SteemWhitePaper.pdf" onClick={this.navigate}>
+                        <a href={WHITEPAPER_URL} onClick={this.navigate}>
                             {translate("APP_NAME_whitepaper")}
                         </a>
                     </li>

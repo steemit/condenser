@@ -112,6 +112,13 @@ export default createModule({
             },
         },
         { action: 'HIDE_CONNECTION_ERROR_MODAL', reducer: state => state.set('hide_connection_error_modal', true) },
+        {
+            action: 'SET',
+            reducer: (state, {payload: {key, value}}) => {
+                key = Array.isArray(key) ? key : [key]
+                return state.setIn(key, fromJS(value))
+            }
+        },
     ]
 });
 

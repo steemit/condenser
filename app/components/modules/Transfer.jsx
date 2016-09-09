@@ -47,9 +47,14 @@ class TransferForm extends Component {
 
     initForm(props) {
         const insufficientFunds = (asset, amount) => {
+            const {currentAccount} = props
+            const {transferType} = props.initialValues
+            const isWithdraw = transferType && transferType === 'Savings Withdraw'
             const balanceValue =
-                !asset || asset === 'STEEM' ? props.currentAccount.get('balance') :
-                asset === 'SBD' ? props.currentAccount.get('sbd_balance') :
+                !asset || asset === 'STEEM' ?
+                    isWithdraw ? currentAccount.get('savings_balance') : currentAccount.get('balance') :
+                asset === 'SBD' ?
+                    isWithdraw ? currentAccount.get('savings_sbd_balance') : currentAccount.get('sbd_balance') :
                 null
             if(!balanceValue) return false
             const balance = balanceValue.split(' ')[0]

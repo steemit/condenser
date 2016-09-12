@@ -134,8 +134,9 @@ function* handleFacebookCallback() {
         }
         if (u.email.match(/yandex\.com$/) || u.email.match(/dcemail\.com$/) || u.email.match(/msgos\.com$/) || u.email.match(/vmani\.com$/)
             || u.email.match(/polyfaust\.com$/) || u.email.match(/pokemail\.net$/) || u.email.match(/cracker\.com$/)
+            || u.email.match(/tutanota\.com$/)
         ) {
-            throw new Error('We are sorry, currently we unable to sign up users from your domain zone at this moment.');
+            throw new Error('Not supported email address: ' + u.email);
         }
         if (user) {
             i_attrs_email.user_id = attrs.id = user.id;

@@ -157,7 +157,7 @@ class BlocktradesDeposit extends React.Component {
                 translate('OWNERSHIP_TOKEN_can_be_converted_to_INVEST_TOKEN_in_a_process_called_powering_up')
             : outputCoin.value === 'VESTS' ? <div>
                 <p>{translate('influence_tokens_which_earn_more_power_by_holding_long_term') + ' ' + translate('the_more_you_hold_the_more_you_influence_post_rewards')}</p>
-                <p>{translate('steem_power_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_steem')}</p>
+                <p>{translate('INVEST_TOKEN_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_OWNERSHIP_TOKEN')}</p>
             </div>
             : null
 

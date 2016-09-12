@@ -65,7 +65,7 @@ export default class GeneratedPasswordInput extends React.Component {
                 </div>
                 <div className="GeneratedPasswordInput__checkboxes">
                     <label><input type="checkbox" name="box1" onChange={this.confirmCheckChange} checked={confirmCheckboxes.box1} />
-                        {translate('understand_that_steemit_cannot_recover_password')}.
+                        {translate('understand_that_APP_NAME_cannot_recover_password')}.
                     </label>
                     <label><input type="checkbox" name="box2" onChange={this.confirmCheckChange} checked={confirmCheckboxes.box2} />
                         {translate('i_saved_password')}.

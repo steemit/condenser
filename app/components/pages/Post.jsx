@@ -12,7 +12,8 @@ import user from 'app/redux/User'
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
 import SvgImage from 'app/components/elements/SvgImage';
 import {List} from 'immutable'
-import { translate } from '../../Translator';
+import { translate } from 'app/Translator';
+import { FormattedHTMLMessage, FormattedMessage } from 'react-intl';
 
 class Post extends React.Component {
 
@@ -144,6 +145,7 @@ class Post extends React.Component {
                 <SvgImage name="404" width="640px" height="480px" />
             </center>
 
+        console.info(translate("sign_up"))
 
         return (
             <div className="Post">
@@ -155,10 +157,14 @@ class Post extends React.Component {
                 {!current_user && <div className="row">
                     <div className="column">
                       <div className="Post__promo">
-                            {translate('post_promo_text', {
-                                amount: signup_bonus,
-                                link: <a onClick={showSignUp}>{translate("sign_up")}</a>
-                            })}
+                          {/* TODO fix this */}
+                            <FormattedHTMLMessage
+                                id="post_promo_text"
+                                values={{
+                                    amount: signup_bonus,
+                                    link: <a onClick={showSignUp}><FormattedHTMLMessage id="sign_up" /></a>
+                                }}
+                            />
                       </div>
                     </div>
                 </div>}

@@ -111,7 +111,7 @@ class Witnesses extends React.Component {
                     <div className="column">
                         <h2>{translate('top_witnesses')}</h2>
                         <p>
-                            <strong>{translate('you_have_votes_remaining', {votesCount: witness_vote_count})}.</strong>
+                            <strong>{translate('you_have_votes_remaining', {votesCount: witness_vote_count})}.</strong>{' '}
                             {translate('you_can_vote_for_maximum_of_witnesses')}.
                         </p>
                     </div>

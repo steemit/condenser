@@ -9,7 +9,7 @@ import {key_utils} from 'shared/ecc'
 import { translate } from '../../Translator';
 
 const {bool} = React.PropTypes
-export const steemitCannotRecoverPasswords = translate('steemit_cannot_recover_passwords_keep_this_page_in_a_secure_location')
+export const steemitCannotRecoverPasswords = translate('APP_NAME_cannot_recover_passwords_keep_this_page_in_a_secure_location')
 
 class SuggestPassword extends React.Component {
     static propTypes = {
@@ -35,7 +35,7 @@ class SuggestPassword extends React.Component {
                 <Icon name="steem" size="2x" /> Steemit
                 <hr />
                 <div>
-                    <h5>{translate(print ? 'steemit_password_backup' : 'steemit_password_backup_required')}</h5>
+                    <h5>{translate(print ? 'APP_NAME_password_backup' : 'APP_NAME_password_backup_required')}</h5>
                     {steemitCannotRecoverPasswords}
                 </div>
                 <br />

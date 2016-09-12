@@ -48,7 +48,7 @@ export default class Index extends React.Component {
                     <SvgImage name="steemit" width="480px" height="240px" />
                 </div>
                 <h1 className="center text-center">
-                    {translateHtml('steemit_is_a_social_media_platform_where_everyone_gets_paid_for_creating_and_curating_content')}.
+                    {translateHtml('APP_NAME_is_a_social_media_platform_where_everyone_gets_paid_for_creating_and_curating_content')}.
                 </h1>
                 <br />
                 <br />

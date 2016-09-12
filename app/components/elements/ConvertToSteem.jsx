@@ -7,7 +7,9 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import TransactionError from 'app/components/elements/TransactionError'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
-import { translate } from '../../Translator';
+import { translate } from 'app/Translator';
+import { FormattedMessage, FormattedHTMLMessage } from 'react-intl';
+import { DEBT_TOKEN } from 'config/client_config';
 
 class ConvertToSteem extends React.Component {
     constructor() {
@@ -40,9 +42,10 @@ class ConvertToSteem extends React.Component {
             <form onSubmit={handleSubmit(data => {dispatchSubmit(data)})}>
                 <div className="row">
                     <div className="small-12 columns">
-                        <h1>{translate('convert_to_steem')}</h1>
-                        <p>{translate('steem_dollars_will_be_unavailable')}.</p>
-                        <p>{translate('your_existing_SD_are_liquid_and_transferable', {link: <i>{translate('buy_or_sell')}</i>})}</p>
+                        <h1>{translate('convert_to_OWNERSHIP_TOKEN')}</h1>
+                        <p>{translate('DEBT_TOKEN_will_be_unavailable')}.</p>
+                        {/* using <FormattedMessage /> because nested html tag in values doesn't want to be rendered properly in translate() */}
+                        <p><FormattedMessage id="your_existing_DEBT_TOKEN_are_liquid_and_transferable" values={{ link: <i>{translate("buy_or_sell")}</i> }} /></p>
                         <p>{translate('this_is_a_price_feed_conversion')}.</p>
                     </div>
                 </div>
@@ -51,7 +54,7 @@ class ConvertToSteem extends React.Component {
                         <label>{translate('amount')}</label>
                         <input type="amount" ref="amt" {...cleanReduxInput(amount)} autoComplete="off" disabled={loading} />
                         &nbsp;
-                        {translate('steem_dollars')}
+                        {DEBT_TOKEN}
                         <br />
                         <div className="error">{amount.touched && amount.error && amount.error}&nbsp;</div>
                     </div>
@@ -85,7 +88,7 @@ export default reduxForm(
         const sbd_balance = account.get('sbd_balance')
         const max = sbd_balance.split(' ')[0]
         const validate = values => ({
-            amount: ! values.amount ? 'Required' :
+            amount: ! values.amount ? translate('required') :
                 isNaN(values.amount) || parseFloat(values.amount) <= 0 ? translate('invalid_amount') :
                 parseFloat(values.amount) > parseFloat(max) ? translate('insufficient_balance') :
                 null,

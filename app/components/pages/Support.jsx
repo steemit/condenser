@@ -6,7 +6,7 @@ class Support extends React.Component {
         return (
             <div className="row">
                 <div>
-                    <h2>{translate('steemit_support')}</h2>
+                    <h2>{translate('APP_NAME_support')}</h2>
                     <p>
                         {translate('please_email_questions_to')} <a href="mailto:support@steemit.com">support@steemit.com</a>.
                     </p>

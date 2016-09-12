@@ -30,6 +30,7 @@ const messages = Object.assign(en, ru)
 // which is not available until component is being created)
 let translate = () => {};
 let translateHtml = () => {};
+let translatePlural = () => {};
 
 // react-intl's formatMessage and formatHTMLMessage functions depend on context(this is where strings are stored)
 // thats why we:
@@ -53,12 +54,24 @@ class DummyComponentToExportProps extends React.Component {
 		// assign functions after component is created (context is picked up)
 		translate = 	(...params) => this.translateHandler('string', ...params)
 		translateHtml = (...params) => this.translateHandler('html', ...params)
+		translatePlural = (...params) => this.translateHandler('plural', ...params)
 	}
 
 	translateHandler(translateType, id, values, options) {
-		const 	{ formatMessage, formatHTMLMessage } = this.props.intl,
-				// choose which method of rendering to choose: normal string or string with html
-				handler = translateType === 'string' ? formatMessage : formatHTMLMessage
+		const 	{ formatMessage, formatHTMLMessage, formatPlural } = this.props.intl
+		// choose which method of rendering to choose: normal string or string with html
+		// handler = translateType === 'string' ? formatMessage : formatHTMLMessage
+		let handler
+		switch (translateType) {
+			case 'string':
+				handler = formatMessage; break
+			case 'html':
+				handler = formatHTMLMessage; break
+			case 'plural':
+				handler = formatPlural; break
+			default:
+				throw new Error('unknown translate handler type')
+		}
 		// check if right parameters were used before running function
 		if (isString(id)) {
 			if (!isUndefined(values) && !isObject(values)) throw new Error('translating function second parameter must be an object!');
@@ -101,6 +114,6 @@ class Translator extends React.Component {
 	}
 }
 
-export { translate, translateHtml }
+export { translate, translateHtml, translatePlural }
 
 export default Translator

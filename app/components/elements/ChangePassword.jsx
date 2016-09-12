@@ -162,7 +162,7 @@ class ChangePassword extends React.Component {
 
                     <br />
 
-                    <label><input {...cleanReduxInput(confirmCheck)} type="checkbox" /> {translate('understand_that_steemit_cannot_recover_password')}.</label>
+                    <label><input {...cleanReduxInput(confirmCheck)} type="checkbox" /> {translate('understand_that_APP_NAME_cannot_recover_password')}.</label>
                     {confirmCheck.touched && confirmCheck.error && <div className="error">{confirmCheck.error}</div>}
 
                     <label><input {...cleanReduxInput(confirmSaved)} type="checkbox" />{translate('i_saved_password')}.</label>

@@ -114,7 +114,7 @@ class App extends React.Component {
                         <ul>
                             <li>
                                 <a href="https://steemit.com/steemit/@steemitblog/steemit-com-is-now-open-source">
-                                    {translate('steemit_is_now_open_source')}
+                                    {translate('APP_NAME_is_now_open_source')}
                                 </a>
                             </li>
                             <li>
@@ -154,7 +154,7 @@ class App extends React.Component {
                             <br />
                             <br />
                             <div className="tag3">
-                                <b>{translate("get_sp_when_sign_up", {signupBonus: signup_bonus})}</b>
+                                <b>{translate("get_INVEST_TOKEN_when_sign_up", {signupBonus: signup_bonus})}</b>
                             </div>
                         </div>
                     </div>

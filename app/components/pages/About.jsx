@@ -10,7 +10,7 @@ class About extends React.Component {
                     <div className="float-right"><a href="#" onClick={e => {e.preventDefault(); alert(process.env.VERSION)}}>{translate('version')}</a></div>
                 <h2>{translate('about_steemit')}</h2>
                     <p>
-                        {translate('steemit_is_a_social_media_platform_where_everyone_gets_paid')}
+                        {translate('APP_NAME_is_a_social_media_platform_where_everyone_gets_paid')}
                         <a href={LANDING_PAGE_URL}>{translate('learn_more_at_steem_io')}</a>.
                     </p>
                     <h2>{translate('resources')}</h2>

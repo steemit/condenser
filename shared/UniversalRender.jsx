@@ -35,6 +35,7 @@ import {component as NotFound} from 'app/components/pages/NotFound';
 import extractMeta from 'app/utils/ExtractMeta';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import Translator from 'app/Translator';
+import { APP_NAME } from 'config/client_config';
 
 const sagaMiddleware = createSagaMiddleware(
     ...userWatches, // keep first to remove keys early when a page change happens
@@ -192,8 +193,8 @@ async function universalRender({ location, initial_state, offchain }) {
     }
 
     return {
-        title: 'Steemit',
-        titleBase: 'Steemit - ',
+        title: APP_NAME,
+        titleBase: APP_NAME + ' - ',
         meta,
         statusCode: status,
         body: Iso.render(app, server_store.getState())

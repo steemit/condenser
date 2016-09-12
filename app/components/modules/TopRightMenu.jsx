@@ -42,6 +42,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
         const search = translate('search')
         return (
             <ul className={mcn}>
+                <li><a href="/ico.html" className="button alert">Инвестировать</a></li>
                 <li className={lcn}><a href="/static/search.html" title={search}>{vertical ? <span>{search}</span> : <Icon name="search" />}</a></li>
                 {submit_story}
                 <LinkWithDropdown
@@ -67,6 +68,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
     if (probablyLoggedIn) {
         return (
             <ul className={mcn}>
+                {!vertical && <li><a href="/ico.html" className="button alert">Инвестировать</a></li>}
                 {!vertical && <li><a href="/static/search.html" title="Search"><Icon name="search" /></a></li>}
                 <li className={lcn}><LoadingIndicator type="circle" inline /></li>
                 {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
@@ -77,6 +79,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
     }
     return (
         <ul className={mcn}>
+            {!vertical && <li className={lcn}><a href="/ico.html" className="button alert">Инвестировать</a></li>}
             {!vertical && <li><a href="/static/search.html" title="Search"><Icon name="search" /></a></li>}
             <li className={lcn}><a href="/create_account" onClick={showSignUp}>{translate('sign_up')}</a></li>
             <li className={lcn}><a href="/login.html" onClick={showLogin}>{translate('login')}</a></li>

@@ -12,7 +12,7 @@ export const DEBT_TOKEN = 'Golos Backed Gold' // 'STEEM DOLLAR'
 // export const DEBT_TOKEN_UPPERCASE = 'Golos Backed Gold' // 'STEEM DOLLAR'
 export const DEBT_TOKEN_SHORT = 'GBG' // 'SD'
 export const CURRENCY_SIGN = '₽' // '$'
-export const LANDING_PAGE_URL = 'https://steem.it'
+export const LANDING_PAGE_URL = 'https://steem.io'
 export const WHITEPAPER_URL = 'https://steem.io/SteemWhitePaper.pdf'
 export const SEGMENT_ANALYTICS_KEY = 'tNUbmBxX8o1OAWIkFRGMTMpXe6BfNLBb'
 

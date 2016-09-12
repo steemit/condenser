@@ -8,13 +8,13 @@ class About extends React.Component {
             <div className="row">
                 <div className="column">
                     <div className="float-right"><a href="#" onClick={e => {e.preventDefault(); alert(process.env.VERSION)}}>{translate('version')}</a></div>
-                <h2>{translate('about_steemit')}</h2>
+                <h2>{translate('about_APP_NAME')}</h2>
                     <p>
                         {translate('APP_NAME_is_a_social_media_platform_where_everyone_gets_paid')}
-                        <a href={LANDING_PAGE_URL}>{translate('learn_more_at_steem_io')}</a>.
+                        <a href={LANDING_PAGE_URL}>{translate('learn_more_at_LANDING_PAGE_URL')}</a>.
                     </p>
                     <h2>{translate('resources')}</h2>
-                <h3><a href={WHITEPAPER_URL} onClick={this.navigate}>{translate('steem_whitepaper')}</a> <small>[PDF]</small></h3>
+                <h3><a href={WHITEPAPER_URL} onClick={this.navigate}>{translate('APP_NAME_whitepaper')}</a> <small>[PDF]</small></h3>
             <h3><a href="http://steem.herokuapp.com" target="_blank">{translate('join_our_slack')}</a></h3>
                 </div>
             </div>

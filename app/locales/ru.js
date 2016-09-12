@@ -1,4 +1,4 @@
-import { APP_NAME, APP_URL, OWNERSHIP_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, INVEST_TOKEN } from 'config/client_config';
+import { APP_NAME, APP_URL, LANDING_PAGE_URL, OWNERSHIP_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, INVEST_TOKEN } from 'config/client_config';
 
 const ru = {
 	// this variables mainly used in navigation section
@@ -408,16 +408,14 @@ const ru = {
 	hide_private_key: 'Скрыть приватный ключ',
 	show_private_key: 'Показать приватный ключ',
 	login_to_show: 'Войти чтобы показать',
-	// TODO
 	APP_NAME_cannot_recover_passwords_keep_this_page_in_a_secure_location: APP_NAME + ' не может восстановить пароли. Сохраните эту страницу в безопасном месте, например, в огнестойком сейфе или в депозитарной ячейке.',
-	APP_NAME_password_backup: APP_NAME + ' Password Backup',
-	APP_NAME_password_backup_required: APP_NAME + ' Password Backup (required)',
+	APP_NAME_password_backup: APP_NAME + ' резервное копирование пароля',
+	APP_NAME_password_backup_required: APP_NAME + ' резервное копирование пароля (обязательно)',
 	after_printing_write_down_your_user_name: 'После печати запишите ваше имя пользователя',
 	public: 'Публичное',
 	private: 'Приватное',
 	public_something_key: 'Публичный {key} ключ',
 	private_something_key: 'Приватный {key} ключ',
-	// TODO
 	// UserProfile > Permissions
 	posting_key_is_required_it_should_be_different: 'Постинг ключ используется для постинга и голосования. Он должен отличаться от активного и ключа владельца.',
 	the_active_key_is_used_to_make_transfers_and_place_orders: 'Активный ключ используется для переводов и размещения заказов на внутреннем рынке.',
@@ -427,14 +425,12 @@ const ru = {
 	previous: 'Предыдущий',
 	next: 'Следующий',
 	browse: 'Посмотреть',
-	not_valid_email: 'Не действительный адресы',
-	// TODO
-	thank_you_for_being_an_early_visitor_to_steemit: 'Thank you for being an early visitor to Steemit. We will get back to you at the earliest possible opportunity.',
-	estimated_author_rewards_last_week: "Оценочные автосркие вознаграждения за прошлую неделю",
+	not_valid_email: 'Не действительный адрес',
+	thank_you_for_being_an_early_visitor_to_APP_NAME: 'Благодарим вас за то что являетесь ранним посетителем ' + APP_NAME + '. Мы свяжемся с Вами при первой же возможности.',
+	estimated_author_rewards_last_week: "Оценочные авторские вознаграждения за прошлую неделю",
 	author_rewards_last_week: "Оценочные авторские вознаграждения за прошлую неделю",
 	confirm: 'Подтвердить',
 	asset: 'Актив',
-	// TODO
 	this_memo_is_private: 'Эта заметка является приватной',
 	this_memo_is_public: 'Эта заметка является публичной',
 	power_up: 'Усилить силу голоса',
@@ -448,17 +444,16 @@ const ru = {
 	transfer_to_account: 'Передать пользователю',
 	buy_OWNERSHIP_TOKEN_or_INVEST_TOKEN: 'Купить ' + OWNERSHIP_TOKEN + ' или ' + INVEST_TOKEN,
 	// TODO
-	version: 'Version',
-	about_steemit: 'About Steemit',
-	APP_NAME_is_a_social_media_platform_where_everyone_gets_paid_for_creating_and_curating_content: APP_NAME + ' is a social media platform where <strong>everyone</strong>&nbsp;gets <strong>paid</strong> for creating and curating content',
-	APP_NAME_is_a_social_media_platform_where_everyone_gets_paid: APP_NAME + ' is a social media platform where everyone gets paid for creating and curating content. It leverages a robust digital points system, called Steem, that supports real value for digital rewards through market price discovery and liquidity.',
-	learn_more_at_steem_io: 'Learn more at steem.io',
-	resources: 'Resources',
-	steem_whitepaper: 'Steem Whitepaper',
-	join_our_slack: 'Join our Slack',
-	APP_NAME_support: APP_NAME + ' Support',
-	please_email_questions_to: 'Please email your questions to',
-	sorry_your_reddit_account_doesnt_have_enough_karma: "Sorry, your Reddit account doesn't have enough Reddit Karma to qualify for a free sign up. Please add your email for a place on the waiting list",
+	version: 'Версия',
+	about_APP_NAME: 'О ' + APP_NAME,
+	APP_NAME_is_a_social_media_platform_where_everyone_gets_paid_for_creating_and_curating_content: APP_NAME + ' это социальная медиа платформа в которой <strong>все</strong>&nbsp;получают <strong>деньги</strong> за создание и курирование контента',
+	APP_NAME_is_a_social_media_platform_where_everyone_gets_paid: APP_NAME + ' это социальная медиа платформа в которой каждый зарабатывает за создание и курирование контента. Он использует надежную систему цифровых очков под названием ' + OWNERSHIP_TOKEN + ', который поддерживает реальную ценность для цифровых наград через выявление рыночной цены и ликвидности.',
+	learn_more_at_LANDING_PAGE_URL: 'Узнать больше в ' + LANDING_PAGE_URL,
+	resources: 'Ресурсы',
+	join_our_slack: 'Присоединяйтесь к нашему Slack',
+	APP_NAME_support: APP_NAME + ' поддержка',
+	please_email_questions_to: 'Пожалуйста, шлите ваши вопросы на электронную почту',
+	sorry_your_reddit_account_doesnt_have_enough_karma: "Извините, у вашего Reddit аккаунта недостаточно Reddit кармы чтобы иметь возможность бесплатной регистрации. Пожалуйста, добавьте вашу электронную почту чтобы записаться в лист ожидания",
 	register_with_facebook: 'Регистрация с Facebook',
 	or_click_the_button_below_to_register_with_facebook: 'Или нажмите кнопку, чтобы зарегистрироваться с Facebook',
 	trending_24_hour: 'популярное (24 часа)',
@@ -467,7 +462,7 @@ const ru = {
 	'30_day': '30 дней',
 	flag: "Голосовать против",
 	promote: 'Продвинуть',
-	// Tips
+	// Tips.js
 	tradeable_tokens_that_may_be_transferred_anywhere_at_anytime: 'Ходовые жетоны, которые могут переданы куда угодно и когда угодно.',
 	OWNERSHIP_TOKEN_can_be_converted_to_INVEST_TOKEN_in_a_process_called_powering_up: OWNERSHIP_TOKEN + ' может быть конвертирован в ' + INVEST_TOKEN + ' в процессе под названием "усиление голоса".',
 	tokens_worth_about_CURRENCY_SIGN_of_OWNERSHIP_TOKEN: 'Жетоны стоимостью около ' + CURRENCY_SIGN + '1.00 ' + ' ' + OWNERSHIP_TOKEN + '.',
@@ -475,7 +470,8 @@ const ru = {
 	the_more_you_hold_the_more_you_influence_post_rewards: 'Чем их больше, тем сильней вы влияете на вознаграждения за пост и тем больше зарабатываете за правильное голосование.',
 	the_estimated_value_is_based_on_a_7_day_average_value_of_steem_in_currency: 'Оценочная стоимость расчитывается на 7ми дневной средней стоимости ' + OWNERSHIP_TOKEN + ' в российских рублях.',
 	INVEST_TOKEN_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_OWNERSHIP_TOKEN: INVEST_TOKEN + ' нельзя передавать и потребуется 2 года и 104 выплаты чтобы перевести обратно в ' + OWNERSHIP_TOKEN + '.',
-	converted_steem_power_can_be_sent_to_yourself_but_can_not_transfer_again: 'Converted Steem Power can be sent to yourself or someone else but can not transfer again without converting back to Steem.',
+	// TODO
+	converted_INVEST_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again: 'Конвертированная ' + INVEST_TOKEN + ' может быть отправлена себе или кому-то еще, но не может быть передана вновь без конвертирования назад в ' + OWNERSHIP_TOKEN + '.',
 	profile: 'Профиль',
 	send_to_account: 'Отправить аккаунту',
 	confirm_email: 'Подтвердить электронную почту',

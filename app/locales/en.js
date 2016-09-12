@@ -1,4 +1,4 @@
-import { APP_NAME, APP_URL, DEBT_TOKEN, DEBT_TOKEN_SHORT, OWNERSHIP_TOKEN, CURRENCY_SIGN, INVEST_TOKEN } from 'config/client_config';
+import { APP_NAME, APP_URL, LANDING_PAGE_URL, DEBT_TOKEN, DEBT_TOKEN_SHORT, OWNERSHIP_TOKEN, CURRENCY_SIGN, INVEST_TOKEN } from 'config/client_config';
 
 const en = 	{
 	// this variables mainly used in navigation section
@@ -425,7 +425,7 @@ const en = 	{
 	next: 'Next',
 	browse: 'Browse',
 	not_valid_email: 'Not valid email',
-	thank_you_for_being_an_early_visitor_to_steemit: 'Thank you for being an early visitor to Steemit. We will get back to you at the earliest possible opportunity.',
+	thank_you_for_being_an_early_visitor_to_APP_NAME: 'Thank you for being an early visitor to ' + APP_NAME + '. We will get back to you at the earliest possible opportunity.',
 	estimated_author_rewards_last_week: "Estimated author rewards last week",
 	author_rewards_last_week: "Estimated author rewards last week",
 	confirm: 'Confirm',
@@ -444,12 +444,11 @@ const en = 	{
 	transfer_to_account: 'Transfer to Account',
 	buy_OWNERSHIP_TOKEN_or_INVEST_TOKEN: 'Buy ' + OWNERSHIP_TOKEN + ' or ' + INVEST_TOKEN,
 	version: 'Version',
-	about_steemit: 'About Steemit',
+	about_APP_NAME: 'About ' + APP_NAME,
 	APP_NAME_is_a_social_media_platform_where_everyone_gets_paid_for_creating_and_curating_content: APP_NAME + ' is a social media platform where <strong>everyone</strong>&nbsp;gets <strong>paid</strong> for creating and curating content',
 	APP_NAME_is_a_social_media_platform_where_everyone_gets_paid: APP_NAME + ' is a social media platform where everyone gets paid for creating and curating content. It leverages a robust digital points system, called Steem, that supports real value for digital rewards through market price discovery and liquidity.',
-	learn_more_at_steem_io: 'Learn more at steem.io',
+	learn_more_at_LANDING_PAGE_URL: 'Learn more at ' + LANDING_PAGE_URL,
 	resources: 'Resources',
-	steem_whitepaper: 'Steem Whitepaper',
 	join_our_slack: 'Join our Slack',
 	APP_NAME_support: APP_NAME + ' Support',
 	please_email_questions_to: 'Please email your questions to',
@@ -462,7 +461,7 @@ const en = 	{
 	'30_day': '30 day',
 	flag: "Flag",
 	promote: 'Promote',
-	// Tips
+	// Tips.js
 	tradeable_tokens_that_may_be_transferred_anywhere_at_anytime: 'Tradeable tokens that may be transferred anywhere at anytime.',
 	OWNERSHIP_TOKEN_can_be_converted_to_INVEST_TOKEN_in_a_process_called_powering_up: OWNERSHIP_TOKEN + ' can be converted to ' + INVEST_TOKEN + ' in a process called powering up.',
 	tokens_worth_about_CURRENCY_SIGN_of_OWNERSHIP_TOKEN: 'Tokens worth about ' + CURRENCY_SIGN + '1.00 ' + ' of ' + OWNERSHIP_TOKEN + '.',
@@ -470,7 +469,7 @@ const en = 	{
 	the_more_you_hold_the_more_you_influence_post_rewards: 'The more you hold the more you influence post rewards and earn for accurate voting.',
 	the_estimated_value_is_based_on_a_7_day_average_value_of_steem_in_currency: 'The estimated value is based on a 7 day average value of Steem in US Dollars.',
 	INVEST_TOKEN_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_OWNERSHIP_TOKEN: INVEST_TOKEN + ' is non-transferrable and will require 2 years and 104 payments to convert back to ' + OWNERSHIP_TOKEN + '.',
-	converted_steem_power_can_be_sent_to_yourself_but_can_not_transfer_again: 'Converted Steem Power can be sent to yourself or someone else but can not transfer again without converting back to Steem.',
+	converted_INVEST_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again: 'Converted ' + INVEST_TOKEN + ' can be sent to yourself or someone else but can not transfer again without converting back to ' + OWNERSHIP_TOKEN + '.',
 	profile: 'Profile',
 	send_to_account: "Send to account",
 	confirm_email: 'Confirm Email',

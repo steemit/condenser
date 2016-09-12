@@ -47,7 +47,7 @@ export default class AddToWaitingList extends React.Component {
         const {email, email_error, submitted} = this.state;
         if (submitted) {
             return <div className="callout success">
-                {translate('thank_you_for_being_an_early_visitor_to_steemit')}
+                {translate('thank_you_for_being_an_early_visitor_to_APP_NAME')}
             </div>
         }
         return <form onSubmit={this.onSubmit}>

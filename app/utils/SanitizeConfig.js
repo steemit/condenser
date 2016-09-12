@@ -66,8 +66,9 @@ export default ({large = true, highQualityPost = true, noImage = false, sanitize
                         tagName: 'iframe',
                         attribs: {
                             frameborder: '0',
-                            allowfullscreen: 'on',
-                            ...attribs,
+                            allowfullscreen: 'allowfullscreen',
+                            webkitallowfullscreen: 'webkitallowfullscreen', // deprecated but required for vimeo : https://vimeo.com/forums/help/topic:278181
+                            mozallowfullscreen: 'mozallowfullscreen',       // deprecated but required for vimeo
                             src,
                             width: large ? '640' : '384',
                             height: large ? '360' : '240',

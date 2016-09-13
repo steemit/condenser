@@ -123,6 +123,7 @@ class ReplyEditor extends React.Component {
         const {setMetaData, formId, jsonMetadata} = this.props
         if(process.env.BROWSER) {
             let editorData = localStorage.getItem('replyEditorData-' + formId)
+            let rte_value = RichTextEditor.createEmptyValue();
             if(editorData) {
                 editorData = JSON.parse(editorData)
                 if(editorData.formId === formId) {
@@ -131,8 +132,10 @@ class ReplyEditor extends React.Component {
                     if(title) title.onChange(editorData.title)
                     if (editorData.body) {
                         body.onChange(editorData.body)
-                        const html = getHtml(editorData.body)
-                        this.state.rte_value = RichTextEditor.createValueFromString(html, 'html')
+                        // const html = getHtml(editorData.body)
+                        // console.log('createValueFromString mnt1', html);
+                        // this.state.rte_value = RichTextEditor.createValueFromString(html, 'html')
+                        // console.log('createValueFromString mnt1 done');
                     }
                 }
             }
@@ -144,7 +147,6 @@ class ReplyEditor extends React.Component {
                 if(isStory)
                     rte = JSON.parse(localStorage.getItem('replyEditorData-rte') || RTE_DEFAULT);
             }
-            let rte_value;
             if (RichTextEditor) {
                 if (body.value) {
                     if (isHtmlTest(body.value)) {
@@ -153,12 +155,10 @@ class ReplyEditor extends React.Component {
                         rte_value = RichTextEditor.createValueFromString(html, 'html')
                     } else {
                         rte = false;
-                        rte_value = RichTextEditor.createEmptyValue();
-                        // body.initialValue causes 100% cpu when editing http://localhost:3002/steemit/@cryptomental/can-a-viral-introduceyourself-post-be-engineered
+                        // console.log('createValueFromString mnt3');
                         // rte_value = RichTextEditor.createValueFromString(body.initialValue, 'html');
+                        // console.log('createValueFromString mnt3 done');
                     }
-                } else {
-                    rte_value = RichTextEditor.createEmptyValue();
                 }
             }
             this.setState({rte, rte_value})

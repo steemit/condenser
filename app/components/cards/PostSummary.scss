@@ -36,6 +36,7 @@ ul.PostsList__summaries {
   }
 }
 
+.PostSummary.with-image .PostSummary__reblogged_by,
 .PostSummary.with-image .PostSummary__content {
   margin-left: 8.25rem;
 }
@@ -119,6 +120,20 @@ ul.PostsList__summaries {
   color: $dark-gray;
 }
 
+.PostSummary__reblogged_by {
+  .Icon path {
+    fill: #cacaca;
+  }
+  color: $dark-gray;
+  font-size: 90%;
+  margin-top: -0.5rem;
+  a {
+    color: inherit;
+    font-weight: bold;
+    @include hoverUnderline;
+  }
+}
+
 /* Small only */
 @media screen and (max-width: 39.9375em) {
   .PostSummary {
@@ -147,6 +162,7 @@ ul.PostsList__summaries {
         display: block;
     }
   }
+  .PostSummary.with-image .PostSummary__reblogged_by,
   .PostSummary.with-image .PostSummary__content {
     margin-left: 0;
   }

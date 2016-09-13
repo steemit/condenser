@@ -58,6 +58,14 @@ export default class PostSummary extends React.Component {
         const {post, content, pending_payout, total_payout} = this.props;
 
         if (!content) return null;
+
+        let reblogged_by = content.get('first_reblogged_by')
+        if(reblogged_by) {
+          reblogged_by = <div className="PostSummary__reblogged_by">
+                             <Icon name="reblog" /> Reblogged by <Link to={'/@'+reblogged_by}>{reblogged_by}</Link>
+                         </div>
+        }
+
         const {gray, pictures, authorRepLog10, hasFlag} = content.get('stats', Map()).toJS()
         const p = extractContent(immutableAccessor, content);
         let desc = p.desc
@@ -105,6 +113,7 @@ export default class PostSummary extends React.Component {
                 <div className={hasFlag ? '' : 'PostSummary__collapse'}>
                     <div className="float-right"><Voting post={post} flag /></div>
                 </div>
+                {reblogged_by}
                 <div className="PostSummary__header show-for-small-only">
                     {content_title}
                 </div>

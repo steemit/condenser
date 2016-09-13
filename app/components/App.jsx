@@ -166,7 +166,6 @@ class App extends React.Component {
             <SidePanel ref="side_panel" alignment="right">
                 <TopRightMenu vertical navigate={this.navigate} />
                 <ul className="vertical menu">
-                    <li><a href="/ico.html" className="button alert">Инвестировать</a></li>
                     <li>
                         <a href="https://steem.io" onClick={this.navigate}>
                             {translate("about")}

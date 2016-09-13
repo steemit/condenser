@@ -55,7 +55,8 @@ export default class PostSummary extends React.Component {
 
     render() {
         const {currentCategory, thumbSize, ignore} = this.props;
-        const {post, content, pending_payout, total_payout, cashout_time} = this.props;
+        const {post, content, pending_payout, total_payout} = this.props;
+
         if (!content) return null;
         const {gray, pictures, authorRepLog10, hasFlag} = content.get('stats', Map()).toJS()
         const p = extractContent(immutableAccessor, content);
@@ -136,13 +137,11 @@ export default connect(
         const content = state.global.get('content').get(post);
         let pending_payout = 0;
         let total_payout = 0;
-        let cashout_time = null;
         if (content) {
             pending_payout = content.get('pending_payout_value');
             total_payout = content.get('total_payout_value');
-            cashout_time = content.get('cashout_time');
         }
-        return {post, content, pending_payout, total_payout, cashout_time};
+        return {post, content, pending_payout, total_payout};
     },
 
     (dispatch) => ({

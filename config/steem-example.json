@@ -33,13 +33,13 @@
   },
   "helmet": {},
   "registrar": {
-    "account": "-",
-    "signing_key": "-",
-    "fee": "5.000 STEEM"
+    "account": "cyberfounder",
+    "signing_key": "",
+    "fee": "5.000 GOLOS"
   },
   "requestAccountRecovery": {
     "signing_key": "5J.....",
-    "recovery_account": "steem"
+    "recovery_account": "cyberfounder"
   },
   "ws_connection_client": "wss://node.steem.ws",
   "ws_connection_server": [

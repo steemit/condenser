@@ -5,7 +5,7 @@
   "keywords": "ECC, Private Key, Public Key, Cryptographic Signature, AES, Encryption, Decryption",
   "main": "index.js",
   "config": {
-    "address_prefix": "TST"
+    "address_prefix": "GLS"
   },
   "scripts": {
     "test": "mocha --compilers js:babel-core/register --recursive",

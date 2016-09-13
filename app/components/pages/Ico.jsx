@@ -36,7 +36,6 @@ class Ico extends React.Component {
             </div>
         );
     }
-
 }
 
 module.exports = {

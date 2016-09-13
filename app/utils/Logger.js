@@ -38,7 +38,7 @@ var logger = {
   print: function(label, value, condensed) {
     if (typeof label === 'string') {
       if (typeof value === 'object') {
-        console.log([label, util.inspect(value)].join(": "));
+        console.log([label, util.inspect(value, {depth: 3})].join(": "));
       } else {
         console.log([label, value].join(": "));
       }

@@ -3,6 +3,10 @@ import Purest from 'purest';
 import models from 'db/models';
 import findUser from 'db/utils/find_user';
 import {esc, escAttrs} from 'db/models';
+import request from 'request'
+import {getLogger} from '../../app/utils/Logger'
+
+const print = getLogger('oauth').print
 
 const facebook = new Purest({provider: 'facebook'});
 const reddit = new Purest({provider: 'reddit'});
@@ -264,12 +268,11 @@ function* handleRedditCallback() {
     return null;
 }
 
-
 function retrieveVkUserData(access_token) {
+    console.log('https://api.vk.com/method/account.getProfileInfo?v=5.53&access_token='+access_token)
     return new Promise((resolve, reject) => {
-        vk.query()
-            .get('https://api.vk.com/method/account.getProfileInfo?access_token='+access_token+'&v=5.53')
-            .request((err, res) => {
+       vk.query().get('https://api.vk.com/method/account.getProfileInfo?v=5.53&access_token='+access_token)
+       .request((err, res) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -278,15 +281,14 @@ function retrieveVkUserData(access_token) {
             });
     });
 }
-import {getLogger} from '../../app/utils/Logger'
-let print = getLogger('oauth').print
 
 function* handleVkCallback() {
-
+     print ('vk -', this.query)
+     print ('vk -' , this.query.access_token)
     //console.log('-- /handle_facebook_callback -->', this.session.uid, this.query);
     //let verified_email = false;
     try {
-      const u = yield retrieveRedditUserData(this.query.access_token);
+      const u = yield retrieveVkUserData(this.query.access_token);
       print ('received data', u)
       /*
         if (this.query['error[error][message]']) {

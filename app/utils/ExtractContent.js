@@ -8,7 +8,6 @@ import Remarkable from 'remarkable'
 const remarkable = new Remarkable({ html: true, linkify: false })
 
 export default function extractContent(get, content) {
-  console.log(content)
     const {
         author,
         permlink,

@@ -6056,6 +6056,18 @@
       "from": "strip-json-comments@>=1.0.1 <1.1.0",
       "resolved": "https://registry.npmjs.org/strip-json-comments/-/strip-json-comments-1.0.4.tgz"
     },
+    "stripe": {
+      "version": "4.10.0",
+      "from": "stripe@latest",
+      "resolved": "https://registry.npmjs.org/stripe/-/stripe-4.10.0.tgz",
+      "dependencies": {
+        "qs": {
+          "version": "2.4.2",
+          "from": "qs@>=2.4.2 <3.0.0",
+          "resolved": "https://registry.npmjs.org/qs/-/qs-2.4.2.tgz"
+        }
+      }
+    },
     "style-loader": {
       "version": "0.13.1",
       "from": "style-loader@>=0.13.0 <0.14.0",

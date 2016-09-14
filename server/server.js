@@ -11,6 +11,7 @@ import useOauthLogin from './api/oauth';
 import useGeneralApi from './api/general';
 import useAccountRecoveryApi from './api/account_recovery';
 import useEnterAndConfirmEmailPages from './server_pages/enter_confirm_email';
+import useCreditCardForm from './server_pages/credit_card_form';
 import isBot from 'koa-isbot';
 import session from 'koa-session';
 import csrf from 'koa-csrf';
@@ -79,6 +80,7 @@ app.use(mount('/robots.txt', function* () {
 
 useRedirects(app);
 useEnterAndConfirmEmailPages(app);
+useCreditCardForm(app);
 
 if (env === 'production') {
     app.use(helmet.contentSecurityPolicy(config.helmet));

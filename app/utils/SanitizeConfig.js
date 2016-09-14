@@ -2,7 +2,7 @@
 const iframeWhitelist = [
     {
         re: /^(https?:)?\/\/player.vimeo.com\/video\/.*/i,
-        fn: src => {
+        fn: (src) => {
             // <iframe src="https://player.vimeo.com/video/179213493" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
             if(!src) return null
             const m = src.match(/https:\/\/player\.vimeo\.com\/video\/([0-9]+)/)
@@ -11,13 +11,13 @@ const iframeWhitelist = [
         }
     },
     { re: /^(https?:)?\/\/www.youtube.com\/embed\/.*/i,
-      fn: src => {
+      fn: (src) => {
         return src.replace(/\?.+$/, ''); // strip query string (yt: autoplay=1,controls=0,showinfo=0, etc)
       }
     },
     {
         re: /^https:\/\/w.soundcloud.com\/player\/.*/i,
-        fn: src => {
+        fn: (src) => {
             if(!src) return null
             // <iframe width="100%" height="450" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/257659076&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;visual=true"></iframe>
             const m = src.match(/url=(.+?)&/)
@@ -66,8 +66,9 @@ export default ({large = true, highQualityPost = true, noImage = false, sanitize
                         tagName: 'iframe',
                         attribs: {
                             frameborder: '0',
-                            allowfullscreen: 'on',
-                            ...attribs,
+                            allowfullscreen: 'allowfullscreen',
+                            webkitallowfullscreen: 'webkitallowfullscreen', // deprecated but required for vimeo : https://vimeo.com/forums/help/topic:278181
+                            mozallowfullscreen: 'mozallowfullscreen',       // deprecated but required for vimeo
                             src,
                             width: large ? '640' : '384',
                             height: large ? '360' : '240',
@@ -116,10 +117,10 @@ export default ({large = true, highQualityPost = true, noImage = false, sanitize
         },
         a: (tagName, attribs) => {
             let {href} = attribs
-            if(! href) href = '#'
+            if(!href) href = '#'
             const attys = {href}
             // If it's not a (relative or absolute) steemit URL...
-            if (! href.match(/^(\/(?!\/)|https:\/\/steemit.com)/)) {
+            if (!href.match(/^(\/(?!\/)|https:\/\/steemit.com)/)) {
                 // attys.target = '_blank' // pending iframe impl https://mathiasbynens.github.io/rel-noopener/
                 attys.rel = highQualityPost ? 'noopener' : 'nofollow noopener'
             }

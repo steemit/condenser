@@ -17,6 +17,7 @@ const defaultNavigate = (e) => {
 
 function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpic, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn}) {
     const mcn = 'menu' + (vertical ? ' vertical show-for-small-only' : '');
+    const mcl = vertical ? '' : ' sub-menu';
     const lcn = vertical ? '' : 'show-for-medium';
     const nav = navigate || defaultNavigate;
     const submit_story = $STM_Config.read_only_mode ? null : <li className={lcn + ' submit-story'}><a href="/submit.html" onClick={nav}>Submit a Story</a></li>;
@@ -40,7 +41,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                 {link: '#', onClick: showLogin, value: 'Login'}
         ];
         return (
-            <ul className={mcn}>
+            <ul className={mcn + mcl}>
                 <li className={lcn}><a href="/static/search.html" title="Search">{vertical ? <span>Search</span> : <Icon name="search" />}</a></li>
                 {submit_story}
                 <LinkWithDropdown
@@ -65,7 +66,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
     }
     if (probablyLoggedIn) {
         return (
-            <ul className={mcn}>
+            <ul className={mcn + mcl}>
                 {!vertical && <li><a href="/static/search.html" title="Search"><Icon name="search" /></a></li>}
                 <li className={lcn}><LoadingIndicator type="circle" inline /></li>
                 {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
@@ -75,7 +76,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
         );
     }
     return (
-        <ul className={mcn}>
+        <ul className={mcn + mcl}>
             {!vertical && <li><a href="/static/search.html" title="Search"><Icon name="search" /></a></li>}
             <li className={lcn}><a href="/create_account" onClick={showSignUp}>Sign Up</a></li>
             <li className={lcn}><a href="/login.html" onClick={showLogin}>Login</a></li>

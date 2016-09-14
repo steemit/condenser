@@ -5,7 +5,7 @@ import findUser from 'db/utils/find_user';
 import config from 'config';
 import recordWebEvent from 'server/record_web_event';
 import {esc, escAttrs} from 'db/models';
-import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF} from '../utils';
+import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF} from 'server/utils';
 import coBody from 'co-body';
 
 export default function useGeneralApi(app) {

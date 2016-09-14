@@ -35,6 +35,9 @@
 .Header__top {
   background-color: $white;
   border-bottom: 1px solid $light-gray;
+  ul > li.Header__top-logo {
+    padding: .35rem 0 .35rem 0;
+  }
   ul > li.delim {
     color: $medium-gray;
   }

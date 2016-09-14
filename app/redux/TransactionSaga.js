@@ -271,7 +271,7 @@ import secureRandom from 'secure-random'
 function* preBroadcast_comment({operation, username}) {
     if (!operation.author) operation.author = username
     let permlink = operation.permlink
-    const {author, __config: {originalPost, autoVote}} = operation
+    const {author, __config: {originalPost, autoVote, comment_options}} = operation
     const {parent_author = '', parent_permlink = operation.category } = operation
     const {title} = operation
     let {body} = operation
@@ -306,15 +306,35 @@ function* preBroadcast_comment({operation, username}) {
         body: new Buffer(body2, 'utf-8'),
     }
 
-    // For immediate UI updates call g.actions.receiveComment(op).  This requires a rollback.
-    // Show the original body (not the patch).
-    // yield put(g.actions.receiveComment({...op, body: new Buffer(body, 'utf-8')}))
-    if(!autoVote) return op
-    const vote = {voter: op.author, author: op.author, permlink: op.permlink, weight: 10000}
-    return [
+    const comment_op = [
         ['comment', op],
-        ['vote', vote],
     ]
+
+    if(autoVote) {
+        const vote = {voter: op.author, author: op.author, permlink: op.permlink, weight: 10000}
+        comment_op.push(['vote', vote])
+    }
+
+    if(comment_options) {
+        const {
+            max_accepted_payout = "1000000.000 SBD",
+            percent_steem_dollars = 10000, // 10000 === 100%
+            allow_votes = true,
+            allow_curation_rewards = true,
+        } = comment_options
+        comment_op.push(
+            ['comment_options', {
+                author,
+                permlink,
+                max_accepted_payout,
+                percent_steem_dollars,
+                allow_votes,
+                allow_curation_rewards,
+                extensions: comment_options.extensions ? comment_options.extensions : []
+            }]
+        )
+    }
+    return comment_op
 }
 
 function* createPermlink(title, author, parent_author, parent_permlink) {

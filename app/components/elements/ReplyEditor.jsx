@@ -123,6 +123,7 @@ class ReplyEditor extends React.Component {
         const {setMetaData, formId, jsonMetadata} = this.props
         if(process.env.BROWSER) {
             let editorData = localStorage.getItem('replyEditorData-' + formId)
+            let rte_value = RichTextEditor.createEmptyValue();
             if(editorData) {
                 editorData = JSON.parse(editorData)
                 if(editorData.formId === formId) {
@@ -131,8 +132,10 @@ class ReplyEditor extends React.Component {
                     if(title) title.onChange(editorData.title)
                     if (editorData.body) {
                         body.onChange(editorData.body)
-                        const html = getHtml(editorData.body)
-                        this.state.rte_value = RichTextEditor.createValueFromString(html, 'html')
+                        // const html = getHtml(editorData.body)
+                        // console.log('createValueFromString mnt1', html);
+                        // this.state.rte_value = RichTextEditor.createValueFromString(html, 'html')
+                        // console.log('createValueFromString mnt1 done');
                     }
                 }
             }
@@ -144,7 +147,6 @@ class ReplyEditor extends React.Component {
                 if(isStory)
                     rte = JSON.parse(localStorage.getItem('replyEditorData-rte') || RTE_DEFAULT);
             }
-            let rte_value;
             if (RichTextEditor) {
                 if (body.value) {
                     if (isHtmlTest(body.value)) {
@@ -153,12 +155,10 @@ class ReplyEditor extends React.Component {
                         rte_value = RichTextEditor.createValueFromString(html, 'html')
                     } else {
                         rte = false;
-                        rte_value = RichTextEditor.createEmptyValue();
-                        // body.initialValue causes 100% cpu when editing http://localhost:3002/steemit/@cryptomental/can-a-viral-introduceyourself-post-be-engineered
+                        // console.log('createValueFromString mnt3');
                         // rte_value = RichTextEditor.createValueFromString(body.initialValue, 'html');
+                        // console.log('createValueFromString mnt3 done');
                     }
-                } else {
-                    rte_value = RichTextEditor.createEmptyValue();
                 }
             }
             this.setState({rte, rte_value})
@@ -265,6 +265,11 @@ class ReplyEditor extends React.Component {
         this.setState(state);
         localStorage.setItem('replyEditorData-rte', !this.state.rte)
     }
+
+    toggleAllSteemPower = () => {
+        this.setState({allSteemPower: !this.state.allSteemPower})
+    }
+
     render() {
         // NOTE title, category, and body are UI form fields ..
         const originalPost = {
@@ -279,7 +284,7 @@ class ReplyEditor extends React.Component {
             author, permlink, parent_author, parent_permlink, type, jsonMetadata, metaLinkData,
             state, successCallback, handleSubmit, submitting, invalid, //lastComment,
         } = this.props
-        const {postError, markdownViewerText, loading, titleWarn, rte} = this.state
+        const {postError, markdownViewerText, loading, titleWarn, rte, allSteemPower} = this.state
         const {onTitleChange} = this
         const errorCallback = estr => { this.setState({ postError: estr, loading: false }) }
         const successCallbackWrapper = (...args) => {
@@ -291,7 +296,8 @@ class ReplyEditor extends React.Component {
         const autoVoteValue = !isEdit && autoVote.value
         const replyParams = {
             author, permlink, parent_author, parent_permlink, type, state, originalPost,
-            jsonMetadata, metaLinkData, autoVote: autoVoteValue, successCallback: successCallbackWrapper, errorCallback
+            jsonMetadata, metaLinkData, autoVote: autoVoteValue, allSteemPower,
+            successCallback: successCallbackWrapper, errorCallback
         }
         const postLabel = username ? <Tooltip t={'Post as “' + username + '”'}>Post</Tooltip> : 'Post'
         const hasTitleError = title && title.touched && title.error
@@ -366,6 +372,12 @@ class ReplyEditor extends React.Component {
                             }
                             {!loading && !this.props.onCancel && <button className="button hollow no-border" tabIndex={5} disabled={submitting} onClick={onCancel}>Clear</button>}
                             {isStory && !isEdit && <div className="float-right">
+                                <small onClick={this.toggleAllSteemPower} title="Leave this unchecked to receive 1/2 your reward in Steem Power and 1/2 in Steem Dollars">Pay me 100% in Steem Power</small>
+                                &nbsp;&nbsp;
+                                <input type="checkbox" onChange={this.toggleAllSteemPower} checked={allSteemPower} />
+
+                                <br />
+
                                 <small onClick={autoVoteOnChange}>Upvote post</small>
                                 &nbsp;&nbsp;
                                 <input type="checkbox" {...cleanReduxInput(autoVote)} onChange={autoVoteOnChange} />
@@ -447,7 +459,10 @@ export default formId => reduxForm(
             dispatch(g.actions.setMetaData({id, meta: jsonMetadata ? jsonMetadata.steem : null}))
         },
         reply: ({category, title, body, author, permlink, parent_author, parent_permlink,
-            type, originalPost, autoVote = false, state, jsonMetadata, /*metaLinkData,*/ successCallback, errorCallback, loadingCallback}) => {
+            type, originalPost, autoVote = false, allSteemPower = false,
+            state, jsonMetadata, /*metaLinkData,*/
+            successCallback, errorCallback, loadingCallback
+        }) => {
             // const post = state.global.getIn(['content', author + '/' + permlink])
             const username = state.user.getIn(['current', 'username'])
 
@@ -512,14 +527,22 @@ export default formId => reduxForm(
                 errorCallback(`You have ${meta.tags.length} tags total${includingCategory}.  Please use only 5 in your post and category line.`)
                 return
             }
+            // loadingCallback starts the loading indicator
+            loadingCallback()
+
+            const __config = {originalPost, autoVote}
+
+            if(allSteemPower) {
+                __config.comment_options = {
+                    percent_steem_dollars: 0, // 10000 === 100%
+                }
+            }
             const operation = {
                 ...linkProps,
                 category: rootCategory, title, body,
                 json_metadata: meta,
-                __config: {originalPost, autoVote}
+                __config
             }
-            // loadingCallback starts the loading indicator
-            loadingCallback()
             dispatch(transaction.actions.broadcastOperation({
                 type: 'comment',
                 operation,

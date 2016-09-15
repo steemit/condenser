@@ -11,13 +11,9 @@ import sendEmail from '../sendEmail';
 import {checkCSRF} from '../utils';
 import config from '../../config';
 
-let assets;
-if (process.env.NODE_ENV === 'production') {
-    assets = Object.assign({}, require('tmp/webpack-stats-prod.json'), {script: ['https://www.google.com/recaptcha/api.js']});
-} else {
-    assets = Object.assign({}, require('tmp/webpack-stats-dev.json'));
-    assets.script.push('https://www.google.com/recaptcha/api.js');
-}
+const assets_file = process.env.NODE_ENV === 'production' ? 'tmp/webpack-stats-prod.json' : 'tmp/webpack-stats-dev.json';
+const assets = Object.assign({}, require(assets_file), {script: []});
+assets.script.push('https://www.google.com/recaptcha/api.js');
 
 const header = <header className="Header">
     <div className="Header__top header">

@@ -7,7 +7,6 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
         <html lang="en">
         <head>
             <meta charSet="utf-8" />
-            {process.env.NODE_ENV === 'production' && <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests" />}
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             {
                 meta && meta.map(m => {

@@ -1,3 +1,4 @@
+
 import { APP_NAME, APP_URL, LANDING_PAGE_URL, OWNERSHIP_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, INVEST_TOKEN } from 'config/client_config';
 
 const ru = {
@@ -254,7 +255,7 @@ const ru = {
 	unknown_account: 'Неизвестный аккаунт',
 	user_hasnt_made_any_posts_yet: "Похоже что {name} еще не написал постов!",
 	user_hasnt_started_bloggin_yet: "Похоже что {name} еще не завед блог!",
-	user_hasnt_followed_anything_yet: "Похоже что {name} еще никого не на кого не подписан!",
+	user_hasnt_followed_anything_yet: "Похоже что {name} еще никого ни на кого не подписан!",
 	user_hasnt_had_any_replies_yet: "{name} еще не получил ответов",
 	users_blog: "блог {name}",
 	users_posts: "посты {name}",
@@ -481,7 +482,8 @@ const ru = {
 	posting: 'Постинг',
 	owner: 'Владелец',
 	active_or_owner: 'активный или владельца',
-	sign: 'Войти'
+	sign: 'Войти',
+	dismiss: 'Скрыть'
 }
 
 export { ru }

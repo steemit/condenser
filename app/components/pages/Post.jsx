@@ -145,8 +145,6 @@ class Post extends React.Component {
                 <SvgImage name="404" width="640px" height="480px" />
             </center>
 
-        console.info(translate("sign_up"))
-
         return (
             <div className="Post">
                 <div className="row">

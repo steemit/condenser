@@ -479,7 +479,8 @@ const en = 	{
 	posting: 'Posting',
 	owner: 'Owner',
 	active_or_owner: 'Active or Owner',
-	sign: 'Sign'
+	sign: 'Sign',
+	dismiss: 'Dismiss'
 }
 
 export { en }

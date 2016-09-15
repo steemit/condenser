@@ -67,7 +67,7 @@ class PostsIndex extends React.Component {
             order = 'by_feed';
             topics_order = 'trending';
             posts = this.props.global.getIn(['accounts', account_name, 'feed']);
-            emptyText = `Looks like ${account_name} hasn't followed anything yet!`;
+            emptyText = translate('user_hasnt_followed_anything_yet', {name: account_name});
         } else {
             posts = this.getPosts(order, category);
         }

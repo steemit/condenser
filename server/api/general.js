@@ -80,6 +80,7 @@ export default function useGeneralApi(app) {
                 fee: config.registrar.fee,
                 creator: config.registrar.account,
                 new_account_name: account.name,
+                //json_meta: account.ico_address,
                 owner: account.owner_key,
                 active: account.active_key,
                 posting: account.posting_key,

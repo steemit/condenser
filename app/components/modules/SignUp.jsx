@@ -72,6 +72,17 @@ class SignUp extends React.Component {
                     </span>
                 </div>
             </div>
+
+            <div className="row">
+                <div className="column large-4 shrink">
+                </div>
+                <div className="column large-8">
+                    <a href="/connect/vk" className="button SignUp--vk-button">
+                        Регистрация через vk
+                    </a>
+                </div>
+            </div>
+
             <div className="row">
                 <div className="column">
                       <br />

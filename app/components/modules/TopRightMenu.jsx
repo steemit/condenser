@@ -42,15 +42,14 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
         const search = translate('search')
         return (
             <ul className={mcn}>
+                <li><a href="/ico.html" className="button alert">Инвестировать</a></li>
                 <li className={lcn}><a href="/static/search.html" title={search}>{vertical ? <span>{search}</span> : <Icon name="search" />}</a></li>
                 {submit_story}
                 <LinkWithDropdown
                     closeOnClickOutside
                     dropdownPosition="bottom"
                     dropdownAlignment="right"
-                    dropdownContent={
-                                <VerticalMenu items={user_menu} title={username} />
-                              }
+                    dropdownContent={<VerticalMenu items={user_menu} title={username} />}
                 >
                     {!vertical && <li className={'Header__userpic '}>
                         <a href={account_link} title={username} onClick={e => e.preventDefault()}>

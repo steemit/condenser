@@ -15,6 +15,7 @@ import {authorNameAndRep} from 'app/utils/ComponentFormatters';
 import {Map} from 'immutable';
 import Reputation from 'app/components/elements/Reputation';
 import { translate } from 'app/Translator';
+import { detransliterate } from 'app/utils/ParsersAndFormatters';
 
 function TimeAuthorCategory({post, links, authorRepLog10, gray}) {
     const author = <strong>{post.author}</strong>;
@@ -30,7 +31,7 @@ function TimeAuthorCategory({post, links, authorRepLog10, gray}) {
                     <Reputation value={authorRepLog10} />
                 </span>
             </span>
-            <span>{' ' + translate('in')}&nbsp;{links ? <TagList post={post} /> : <strong>{post.category}</strong>}</span>
+            <span>{' ' + translate('in')}&nbsp;{links ? <TagList post={post} /> : <strong>{detransliterate(post.category)}</strong>}</span>
         </span>
     );
 }

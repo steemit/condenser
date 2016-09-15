@@ -113,6 +113,7 @@
     "svg-inline-loader": "^0.4.0",
     "svg-inline-react": "^1.0.2",
     "svgo-loader": "^1.1.0",
+    "transliteration": "^1.1.9",
     "uncontrollable": "^3.2.1",
     "underscore.string": "^3.2.3",
     "url-loader": "^0.5.7",

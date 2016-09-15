@@ -140,7 +140,7 @@ export default class UserProfile extends React.Component {
            if( account.posts )
            {
               tab_content = <PostsList
-                  emptyText={`Looks like ${account.name} hasn't made any posts yet!`}
+                  emptyText={`Looks like ${account.name} hasn't made any comments yet!`}
                   posts={account.posts.map(p => `${account.name}/${p}`)}
                   loading={fetching}
                   category="posts"

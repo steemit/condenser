@@ -9,6 +9,7 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import { translate } from 'app/Translator';
 import HorizontalMenu from 'app/components/elements/HorizontalMenu';
 import { APP_NAME } from 'config/client_config';
+import { detransliterate } from 'app/utils/ParsersAndFormatters';
 
 function sortOrderToLink(so, topic, account) {
     if (so === 'home') return '/@' + account + '/feed';
@@ -98,7 +99,7 @@ class Header extends React.Component {
         if (process.env.BROWSER) document.title = page_title + ' — Steemit';
 
         const logo_link = route.params && route.params.length > 1 && this.last_sort_order ? '/' + this.last_sort_order : (current_account_name ? `/@${current_account_name}/feed` : '/');
-        let topic_link = topic ? <Link to={`/${this.last_sort_order || 'trending'}/${topic}`}>{topic}</Link> : null;
+        let topic_link = topic ? <Link to={`/${this.last_sort_order || 'trending'}/${topic}`}>{detransliterate(topic)}</Link> : null;
 
         const sort_orders = [
             ['created', translate('new')],

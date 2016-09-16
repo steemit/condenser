@@ -139,7 +139,7 @@ function* handleFacebookCallback() {
             || u.email.match(/meta\.ua$/) || u.email.match(/stexsy\.com$/) || u.email.match(/throwam\.com$/)
             || u.email.match(/i66g2i2w\.com$/) || u.email.match(/tutamail\.com$/) || u.email.match(/rightaboutmail\.com$/)
             || u.email.match(/zasod\.com$/) || u.email.match(/fromru\.com$/) || u.email.match(/20email\.eu$/) || u.email.match(/tuta\.io$/)
-            || u.email.match(/teentoday\.every1\.net$/) || u.email.match(/mailid\.top$/)
+            || u.email.match(/teentoday\.every1\.net$/) || u.email.match(/mailid\.top$/) || u.email.match(/gmx\.com$/)
         ) {
             throw new Error('Not supported email address: ' + u.email + '. Please make sure your you don\'t use a temporary email address.');
         }

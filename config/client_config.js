@@ -14,7 +14,7 @@ export const DEBT_TOKEN_SHORT = 'GBG' // 'SD'
 export const CURRENCY_SIGN = '₽' // '$'
 export const LANDING_PAGE_URL = 'https://steem.io'
 export const WHITEPAPER_URL = 'https://steem.io/SteemWhitePaper.pdf'
-export const SEGMENT_ANALYTICS_KEY = 'tNUbmBxX8o1OAWIkFRGMTMpXe6BfNLBb'
+export const SEGMENT_ANALYTICS_KEY = 'F7tldQJxt491gXYqDGi5TkTT4wFpSPps'
 
 // export const LANDING_PAGE_URL =
 // export const WHITEPAPER_URL =

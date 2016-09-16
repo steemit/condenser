@@ -35,14 +35,6 @@ class Post extends React.Component {
             const comments_el = document.getElementById('comments');
             if (comments_el) comments_el.scrollIntoView();
         }
-
-        // Jump to comment via hash (note: comment element's id has a hash(#) in it)
-        const anchor_link = window.location.hash;
-        const comment_el = anchor_link ? document.getElementById(anchor_link) : null;
-        if (comment_el) {
-            comment_el.scrollIntoView(true);
-            document.body.scrollTop -= 200;
-        }
     }
 
     toggleNegativeReplies = () => {

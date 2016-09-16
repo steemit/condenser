@@ -99,6 +99,7 @@ class CommentImpl extends React.Component {
         username: React.PropTypes.string,
         rootComment: React.PropTypes.string.isRequired,
         comment_link: React.PropTypes.string.isRequired,
+        anchor_link: React.PropTypes.string.isRequired,
         deletePost: React.PropTypes.func.isRequired,
     };
     static defaultProps = {
@@ -146,6 +147,17 @@ class CommentImpl extends React.Component {
     componentWillMount() {
         this.initEditor(this.props)
         this._checkHide(this.props);
+    }
+
+    componentDidMount() {
+        // Jump to comment via hash (note: comment element's id has a hash(#) in it)
+        if (window.location.hash == this.props.anchor_link) {
+            const comment_el = document.getElementById(this.props.anchor_link)
+            if (comment_el) {
+                comment_el.scrollIntoView(true);
+                document.body.scrollTop -= 200;
+            }
+        }
     }
 
     //componentWillReceiveProps(np) {
@@ -213,11 +225,10 @@ class CommentImpl extends React.Component {
         }
         const {netVoteSign, hasReplies, authorRepLog10, hide, pictures, gray} = comment.stats
         const {author, json_metadata} = comment
-        const {username, depth, rootComment, comment_link,
+        const {username, depth, rootComment, comment_link, anchor_link,
             showNegativeComments, ignore, noImage} = this.props
         const {onShowReply, onShowEdit, onDeletePost} = this
         const post = comment.author + '/' + comment.permlink
-        const anchor_link = '#@' + post // Using a hash here is not standard but intentional; see issue #124 for details
         const {PostReplyEditor, PostEditEditor, showReply, showEdit, hide_body} = this.state
         const Editor = showReply ? PostReplyEditor : PostEditEditor
 
@@ -353,6 +364,7 @@ const Comment = connect(
         return {
             ...ownProps,
             comment_link,
+            anchor_link: '#@' + content, // Using a hash here is not standard but intentional; see issue #124 for details
             rootComment: rc,
             username,
             ignore,

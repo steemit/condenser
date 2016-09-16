@@ -14,20 +14,39 @@ export default class Reblog extends React.Component {
         permlink: string,
         reblog: func,
     }
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Reblog')
-        this.state = {active: false, loading: false}
+        this.state = {active: this.isReblogged(), loading: false}
         this.reblog = e => {
             e.preventDefault()
             if(this.state.active) return
             this.setState({loading: true})
             const {reblog, account, author, permlink} = this.props
             reblog(account, author, permlink,
-                () => {this.setState({active: true, loading: false})},
+                () => {this.setState({active: true, loading: false})
+                       this.setReblogged()},
                 () => {this.setState({active: false, loading: false})},
             )
         }
+    }
+
+    getRebloggedList() {
+        let posts = localStorage.getItem("reblogged")
+        try {
+            posts = JSON.parse(posts) || []
+        } catch(e) {
+            posts = []
+        }
+        return posts
+    }
+    isReblogged() {
+        return this.getRebloggedList().includes(this.props.author + '/' + this.props.permlink)
+    }
+    setReblogged() {
+       let posts = this.getRebloggedList()
+       posts.push(this.props.author + '/' + this.props.permlink)
+       localStorage.setItem("reblogged", JSON.stringify(posts))
     }
 
     render() {

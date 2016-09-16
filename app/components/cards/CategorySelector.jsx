@@ -77,12 +77,14 @@ export function validateCategory(category, required = true) {
     const cats = category.trim().split(' ')
     return (
         // !category || category.trim() === '' ? 'Required' :
-        cats.length > 5 ? 'Please use only Five categories' :
+        cats.length > 5 ? 'Please use only five categories' :
+        cats.find(c => c.length > 24)           ? 'Maximum tag length is 24 characters' :
         cats.find(c => c.split('-').length > 2) ? 'Use only one dash' :
-        cats.find(c => c.indexOf(',') >= 0) ? 'Use spaces to separate tags' :
+        cats.find(c => c.indexOf(',') >= 0)     ? 'Use spaces to separate tags' :
+        cats.find(c => /[A-Z]/.test(c))         ? 'Use only lowercase letters' :
         cats.find(c => !/^[a-z0-9-]+$/.test(c)) ? 'Use only lowercase letters, digits and one dash' :
-        cats.find(c => !/^[a-z]/.test(c)) ? 'Must start with a letter' :
-        cats.find(c => !/[a-z0-9]$/.test(c)) ? 'Must end with a letter or number' :
+        cats.find(c => !/^[a-z]/.test(c))       ? 'Must start with a letter' :
+        cats.find(c => !/[a-z0-9]$/.test(c))    ? 'Must end with a letter or number' :
         null
     )
 }

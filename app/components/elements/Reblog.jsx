@@ -17,7 +17,7 @@ export default class Reblog extends React.Component {
     constructor(props) {
         super(props)
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Reblog')
-        this.state = {active: this.isReblogged(), loading: false}
+        this.state = {active: false, loading: false}
         this.reblog = e => {
             e.preventDefault()
             if(this.state.active) return
@@ -25,14 +25,20 @@ export default class Reblog extends React.Component {
             const {reblog, account, author, permlink} = this.props
             reblog(account, author, permlink,
                 () => {this.setState({active: true, loading: false})
-                       this.setReblogged()},
+                       this.setReblogged(account)},
                 () => {this.setState({active: false, loading: false})},
             )
         }
     }
 
-    getRebloggedList() {
-        let posts = localStorage.getItem("reblogged")
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.account) {
+            this.setState({active: this.isReblogged(nextProps.account)})
+        }
+    }
+
+    getRebloggedList(account) {
+        let posts = localStorage.getItem("reblogged_" + account)
         try {
             posts = JSON.parse(posts) || []
         } catch(e) {
@@ -40,13 +46,15 @@ export default class Reblog extends React.Component {
         }
         return posts
     }
-    isReblogged() {
-        return this.getRebloggedList().includes(this.props.author + '/' + this.props.permlink)
+    isReblogged(account) {
+        const {author, permlink} = this.props
+        return this.getRebloggedList(account).includes(author + '/' + permlink)
     }
-    setReblogged() {
-       let posts = this.getRebloggedList()
-       posts.push(this.props.author + '/' + this.props.permlink)
-       localStorage.setItem("reblogged", JSON.stringify(posts))
+    setReblogged(account) {
+        const {author, permlink} = this.props
+        let posts = this.getRebloggedList(account)
+        posts.push(author + '/' + permlink)
+        localStorage.setItem("reblogged_" + account, JSON.stringify(posts))
     }
 
     render() {

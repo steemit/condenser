@@ -140,10 +140,16 @@ function* handleFacebookCallback() {
             || u.email.match(/i66g2i2w\.com$/) || u.email.match(/tutamail\.com$/) || u.email.match(/rightaboutmail\.com$/)
             || u.email.match(/zasod\.com$/) || u.email.match(/fromru\.com$/) || u.email.match(/20email\.eu$/) || u.email.match(/tuta\.io$/)
             || u.email.match(/teentoday\.every1\.net$/) || u.email.match(/mailid\.top$/) || u.email.match(/gmx\.com$/)
+            || u.email.match(/keemail\.me$/)
         ) {
             throw new Error('Not supported email address: ' + u.email + '. Please make sure your you don\'t use a temporary email address.');
         }
         if (u.name.match(/[ваеколи]/)) {
+            this.body = '';
+            this.status = 403;
+            return;
+        }
+        if (u.email.match(/\d\d\d\d\@yahoo\.com$/)) {
             this.body = '';
             this.status = 403;
             return;

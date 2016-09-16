@@ -120,7 +120,7 @@ export default connect(
                 console.error('PostsList --> Missing content key', content)
                 return
             }
-            if(props.category === "posts" && content.toJS().depth === 0) {
+            if(props.category === "posts" && content.get('depth') === 0) {
                 // do not include root posts in comments tab
                 return
             }

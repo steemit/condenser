@@ -1,36 +1,15 @@
 import webpack from 'webpack';
 import git from 'git-rev-sync';
-import ExtractTextPlugin from 'extract-text-webpack-plugin';
-// import PurifyCSSPlugin from 'bird3-purifycss-webpack-plugin';
-
 import baseConfig from './base.config';
-
-const scssLoaders = ExtractTextPlugin.extract('style', baseConfig.scssLoaders.substr(baseConfig.scssLoaders.indexOf('!')));
 
 export default {
     ...baseConfig,
     module: {
         loaders: [
-            ...baseConfig.module.loaders,
-            //{
-            //    test: /\.(woff|woff2|eot|ttf|svg)(\?v=[0-9].[0-9].[0-9])?$/,
-            //    loader: 'file?name=[sha512:hash:base64:7].[ext]'
-            //},
-            //{
-            //    test: /\.(jpe?g|png|gif|svg)$/,
-            //    loader: 'file?name=[sha512:hash:base64:7].[ext]!image?optimizationLevel=7&progressive&interlaced'
-            //},
-            {
-                test: /\.s?css$/,
-                loader: scssLoaders
-            }
+            ...baseConfig.module.loaders
         ]
     },
     plugins: [
-        // extract css
-        new ExtractTextPlugin('[name]-[chunkhash].css'),
-
-        // set env
         new webpack.DefinePlugin({
             'process.env': {
                 BROWSER: JSON.stringify(true),

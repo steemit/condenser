@@ -179,13 +179,13 @@ export default class UserProfile extends React.Component {
         //     }
         // }
         else if( (section === 'recent-replies') && account.recent_replies ) {
-           const reply_summary = account.recent_replies.map( item => {
-               return (<li style={{listStyleType: 'none'}} key={item}>
-                   <PostSummary post={item} currentCategory="-" />
-               </li>);
-            });
-            tab_content = reply_summary.length ? reply_summary :
-                <div>{account.name} hasn't had any replies yet.</div>;
+              tab_content = <PostsList
+                  emptyText={`${account.name} hasn't had any replies yet.`}
+                  posts={account.recent_replies}
+                  loading={fetching}
+                  category="recent-replies"
+                  loadMore={null}
+                  showSpam={false} />;
         }
         else if( section === 'permissions' && isMyAccount ) {
             tab_content = <UserKeys account={accountImm} />

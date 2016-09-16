@@ -20,6 +20,10 @@
   }
 }
 
+.Comment .highlighted {
+  background: #FFD;
+}
+
 .Comment.collapsed {
   > .Comment__Userpic {
     top: 0;

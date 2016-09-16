@@ -108,7 +108,7 @@ class CommentImpl extends React.Component {
 
     constructor() {
         super();
-        this.state = {collapsed: false, hide_body: false};
+        this.state = {collapsed: false, hide_body: false, highlight: false};
         this.revealBody = this.revealBody.bind(this);
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Comment')
         this.onShowReply = () => {
@@ -156,6 +156,7 @@ class CommentImpl extends React.Component {
             if (comment_el) {
                 comment_el.scrollIntoView(true);
                 document.body.scrollTop -= 200;
+                this.setState({highlight: true})
             }
         }
     }
@@ -282,7 +283,10 @@ class CommentImpl extends React.Component {
         commentClasses.push('Comment')
         commentClasses.push(this.props.root ? 'root' : 'reply')
         if(hide_body || this.state.collapsed) commentClasses.push('collapsed');
-        const downVotedClass = ignore || gray ? 'downvoted' : ' '
+
+        let innerCommentClass = ignore || gray ? 'downvoted' : ''
+        if(this.state.highlight) innerCommentClass = innerCommentClass + ' highlighted'
+
         //console.log(comment);
         let renderedEditor = null;
         if (showReply || showEdit) {
@@ -306,7 +310,7 @@ class CommentImpl extends React.Component {
                 <div className="Comment__Userpic show-for-medium">
                     <Userpic account={comment.author} />
                 </div>
-                <div className={downVotedClass}>
+                <div className={innerCommentClass}>
                     <div className="Comment__header">
                         <div className="Comment__header_collapse">
                             <Voting post={post} flag />

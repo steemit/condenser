@@ -8,16 +8,9 @@ module.exports = function (sequelize, DataTypes) {
           },
           field: 'account_id'
       },
-      AccountName: {
-          type: DataTypes.STRING,
-          references: {
-              model: 'accounts',
-              key: 'name'
-          },
-          field: 'account_name'
-      },
+      account_name: {type: DataTypes.STRING, unique: true}
   }, {
-      tableName: 'ico_addresses',
+      tableName: 'ico_address',
       createdAt   : 'created_at',
       updatedAt   : 'updated_at',
       timestamps  : true,

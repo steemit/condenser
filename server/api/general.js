@@ -7,6 +7,9 @@ import recordWebEvent from 'server/record_web_event';
 import {esc, escAttrs} from 'db/models';
 import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF} from '../utils';
 import coBody from 'co-body';
+import {getLogger} from '../../app/utils/Logger'
+
+let print = getLogger('API - general').print
 
 export default function useGeneralApi(app) {
     const router = koa_router({prefix: '/api/v1'});
@@ -16,6 +19,7 @@ export default function useGeneralApi(app) {
     router.post('/accounts', koaBody, function *() {
         if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;
+        print('params', params)
         const account = typeof(params) === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, account.csrf)) return;
         console.log('-- /accounts -->', this.session.uid, this.session.user, account);
@@ -25,6 +29,12 @@ export default function useGeneralApi(app) {
             this.status = 401;
             return;
         }
+        let json_meta = account.json_meta;
+
+        print ('json_meta', json_meta)
+        let meta = JSON.parse(json_meta);
+
+        print ("meta", meta);
 
         const remote_ip = getRemoteIp(this.req);
 
@@ -74,13 +84,14 @@ export default function useGeneralApi(app) {
                 console.log(`api /accounts: not confirmed email for user ${this.session.uid} #${user_id}`);
                 throw new Error('Email address is not confirmed');
             }
-
+            let print = getLogger('API -general - createACC').print;
+            print ('meta', meta);
             yield createAccount({
                 signingKey: config.registrar.signing_key,
                 fee: config.registrar.fee,
                 creator: config.registrar.account,
                 new_account_name: account.name,
-                //json_meta: account.ico_address,
+                json_meta: JSON.stringify(meta),
                 owner: account.owner_key,
                 active: account.active_key,
                 posting: account.posting_key,
@@ -91,6 +102,7 @@ export default function useGeneralApi(app) {
 
             this.body = JSON.stringify({status: 'ok'});
 
+// models.IcoAddresses.create... blabla
             models.Account.create(escAttrs({
                 user_id,
                 name: account.name,
@@ -100,7 +112,22 @@ export default function useGeneralApi(app) {
                 memo_key: account.memo_key,
                 remote_ip,
                 referrer: this.session.r
-            })).catch(error => {
+            })).then(instance => {
+                let accountDoc = instance.dataValues;
+                let print = getLogger('API - general - cb1').print;
+                print ("acc doc", accountDoc);
+                print ("account_name", accountDoc.name);
+                print ("meta", meta);
+                print ("btc_address", meta.ico_address);
+                models.IcoAddress.create(escAttrs({
+                    account_id: accountDoc.user_id,
+                    account_name: accountDoc.name,
+                    btc_address: meta.ico_address || "0"
+                })).then(ico_instance => {
+                    let print = getLogger('API - general - cb1').print
+                })
+            })
+            .catch(error => {
                 console.error('!!! Can\'t create account model in /accounts api', this.session.uid, error);
             });
         } catch (error) {

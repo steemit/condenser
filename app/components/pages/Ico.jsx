@@ -8,14 +8,32 @@ class Ico extends React.Component {
         buttonIsDisabled: false
     }
 
+    componentWillMount() {
+      // make http request
+    }
+
     changeAddress = () => {
-        this.setState({
+        fetch('/test_meow').then(function(rr) {
+            return rr.json();
+        }).then(data =>{
+            console.log(data);
+            this.setState({
+                tooltip: data.hello || 'ooooouch!'
+            })
+        })
+
+/*
+            this.setState({
+                tooltip: 'ПОДОЖДИ ЕПТ',
+            )
+            this.setState({
             tooltip: 'ПОДОЖДИ ЕПТ',
             buttonIsDisabled: true
-        })
-        setTimeout(() => {
+            })
+            setTimeout(() => {
             this.setState({ address: "ОПА"})
-        }, 2500);
+            }, 2500);
+*/
     }
 
     render() {

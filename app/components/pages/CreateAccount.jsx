@@ -81,8 +81,8 @@ class CreateAccount extends React.Component {
                 owner_key: public_keys[0],
                 active_key: public_keys[1],
                 posting_key: public_keys[2],
-                memo_key: public_keys[3],
-                json_meta: JSON.stringify({"ico_address": icoAddress})
+                memo_key: public_keys[3]//,
+                //json_meta: JSON.stringify({"ico_address": icoAddress})
             })
         }).then(r => r.json()).then(res => {
             if (res.error || res.status !== 'ok') {

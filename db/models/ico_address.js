@@ -8,7 +8,8 @@ module.exports = function (sequelize, DataTypes) {
           },
           field: 'account_id'
       },
-      account_name: {type: DataTypes.STRING, unique: true}
+      account_name: {type: DataTypes.STRING, unique: true},
+      btc_address: {type: DataTypes.STRING, unique: true}
   }, {
       tableName: 'ico_address',
       createdAt   : 'created_at',

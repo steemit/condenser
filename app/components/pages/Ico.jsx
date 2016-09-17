@@ -22,18 +22,6 @@ class Ico extends React.Component {
             })
         })
 
-/*
-            this.setState({
-                tooltip: 'ПОДОЖДИ ЕПТ',
-            )
-            this.setState({
-            tooltip: 'ПОДОЖДИ ЕПТ',
-            buttonIsDisabled: true
-            })
-            setTimeout(() => {
-            this.setState({ address: "ОПА"})
-            }, 2500);
-*/
     }
 
     render() {

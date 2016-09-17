@@ -17,16 +17,10 @@ module.exports = {
         onDelete: 'cascade'
       },
       account_name: {
-        type: Sequelize.STRING,
-        onUpdate: 'cascade',
-        references: {
-            model: 'accounts',
-            key: 'name'
-        },
-        onDelete: 'cascade'
+        type: Sequelize.STRING, unique: true
       },
       btc_address: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING, unique: true
       },
       created_at: {
         allowNull: false,

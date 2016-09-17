@@ -2,10 +2,6 @@
   line-height: 1.5rem;
 }
 
-.menu > li > a:focus {
-  outline: none;
-}
-
 .tooltip {
   margin-top: -1rem;
 }
@@ -21,10 +17,6 @@
 
 div[role=dialog] {
   z-index: 500;
-}
-
-:focus {
-  outline: none;
 }
 
 input[type=submit].disabled, input[type=submit].disabled:focus {

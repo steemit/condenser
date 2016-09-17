@@ -89,7 +89,6 @@ class PostsList extends React.Component {
         const {posts, loading, category, emptyText} = this.props;
         const {comments} = this.props
         const {thumbSize} = this.state
-
         if (!loading && !posts.length && emptyText) {
             return <Callout body={emptyText} type="success" />;
         }
@@ -119,6 +118,10 @@ export default connect(
             const content = state.global.get('content').get(item);
             if(!content) {
                 console.error('PostsList --> Missing content key', content)
+                return
+            }
+            if(props.category === "posts" && content.get('depth') === 0) {
+                // do not include root posts in comments tab
                 return
             }
             // let total_payout = 0;

@@ -1,4 +1,5 @@
 import React from 'react';
+import {connect} from 'react-redux';
 
 class Ico extends React.Component {
 
@@ -25,9 +26,14 @@ class Ico extends React.Component {
     }
 
     render() {
+        const {current_user} = this.props
+        // current_user is always null on page load, it loads dynamically few moments later
+        const username = current_user ? current_user.get('username') : null
+
         return (
             <div className="row">
                 <div className="column">
+                    <h1>ИМЯ АККАУНТА {username ? username : 'ЕЩЕ ЗАГРУЖАЕТСЯ ИЛИ НЕ ЗАЛОГИНЕН'}</h1>
                     <h2>ЭТО ICO СТРАНИЦА</h2>
                     <button
                         onClick={this.changeAddress}
@@ -46,5 +52,9 @@ class Ico extends React.Component {
 
 module.exports = {
     path: 'ico.html',
-    component: Ico
+    component: connect(
+        state => {
+            return {current_user: state.user.get('current')};
+        }
+    )(Ico)
 };

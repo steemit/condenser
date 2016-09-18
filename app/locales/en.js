@@ -23,7 +23,13 @@ const en = 	{
 	submit_a_story: 'Submit a Story',
 	nothing_yet: 'Nothing yet',
 	close: 'Close',
-	post_promo_text: "Authors get paid when people like you upvote their post \n If you enjoyed what you read here, earn ${amount} " + INVEST_TOKEN + "\n when you {link} and vote for it.",
+	// next 5 strings were supposed to be sinngle block of text, but due large amount,
+	// code erros they were splitted.
+	authors_get_paid_when_people_like_you_upvote_their_post: 'Authors get paid when people like you upvote their post',
+	if_you_enjoyed_what_you_read_earn_amount: 'If you enjoyed what you read here, earn {amount} ' + INVEST_TOKEN,
+	when_you: "when you",
+	when_you_link_text: 'Sign Up',
+	and_vote_for_it: 'and vote for it',
 	read_only_mode: 'Due to server maintenance we are running in read only mode. We are sorry for the inconvenience.',
 	membership_invitation_only: 'Membership to Steemit.com is now under invitation only because of unexpectedly high sign up rate.',
 	submit_email_to_get_on_waiting_list: 'Submit your email to get on the waiting list',
@@ -464,7 +470,7 @@ const en = 	{
 	// Tips.js
 	tradeable_tokens_that_may_be_transferred_anywhere_at_anytime: 'Tradeable tokens that may be transferred anywhere at anytime.',
 	OWNERSHIP_TOKEN_can_be_converted_to_INVEST_TOKEN_in_a_process_called_powering_up: OWNERSHIP_TOKEN + ' can be converted to ' + INVEST_TOKEN + ' in a process called powering up.',
-	tokens_worth_about_CURRENCY_SIGN_of_OWNERSHIP_TOKEN: 'Tokens worth about ' + CURRENCY_SIGN + '1.00 ' + ' of ' + OWNERSHIP_TOKEN + '.',
+	tokens_worth_about_AMOUNT_of_OWNERSHIP_TOKEN: 'Tokens worth about {amount} of ' + OWNERSHIP_TOKEN + '.',
 	influence_tokens_which_earn_more_power_by_holding_long_term: 'Influence tokens which earn more power by holding long term.',
 	the_more_you_hold_the_more_you_influence_post_rewards: 'The more you hold the more you influence post rewards and earn for accurate voting.',
 	the_estimated_value_is_based_on_a_7_day_average_value_of_steem_in_currency: 'The estimated value is based on a 7 day average value of Steem in US Dollars.',
@@ -480,7 +486,11 @@ const en = 	{
 	owner: 'Owner',
 	active_or_owner: 'Active or Owner',
 	sign: 'Sign',
-	dismiss: 'Dismiss'
+	dismiss: 'Dismiss',
+	// next 3 strings are used conditionally together
+	show_more: 'Show more',
+	show_less: 'Show less',
+	value_posts: 'value posts'
 }
 
 export { en }

@@ -24,7 +24,15 @@ const ru = {
 	submit_a_story: 'Добавить пост',
 	nothing_yet: 'Пока ничего нет',
 	close: 'Закрыть',
-	post_promo_text: "Авторам платят когда люди голосуют за их посты\nЕсли вам нравится что вы находите здесь, заработайте {amount} " + INVEST_TOKEN + "\n когда вы {link} и проголосуете за это.",
+	// next 5 strings were supposed to be sinngle block of text, but due large amount,
+	// code erros they were splitted.
+	authors_get_paid_when_people_like_you_upvote_their_post: 'Авторам платят когда люди голосуют за их посты',
+	if_you_enjoyed_what_you_read_earn_amount: "Если вам нравится что вы находите здесь, заработайте {amount} в " + INVEST_TOKEN,
+	when_you: "когда вы",
+	when_you_link_text: 'зарегистрируетесь',
+	and_vote_for_it: 'и проголосуете за него',
+	// post_promo_text: "Авторам платят когда люди голосуют за их посты<br />Если вам нравится что вы находите здесь, заработайте {amount} в " + INVEST_TOKEN + "<br /> когда вы {link} и проголосуете за это.",
+	post_promo_text_link: '',
 	read_only_mode: 'Из-за технического обслуживания сервера мы работает в режиме только чтения. Извините за неудобства.',
 	membership_invitation_only: 'Членство в Steemit.com сейчас работает только по приглашению из-за слишком большого количества регистрируемых пользователей.',
 	submit_email_to_get_on_waiting_list: 'Добавьте ваш адрес электронной почты чтобы попасть в лист ожидания',
@@ -389,7 +397,7 @@ const ru = {
 	// TODO
 	this_password_is_bound_to_your_accounts_private_key: 'This password is bound to your account\'s active key and can not be used to login to this page. You may use this active key on other more secure pages like the Wallet or Market pages.',
 	potential_payout: 'Потенциальная выплата',
-	boost_payments: 'Boost Payments',
+	boost_payments: 'Платеж за продвижение',
 	authors: 'Авторы',
 	curators: 'Кураторы',
 	date: 'Дата',
@@ -466,7 +474,7 @@ const ru = {
 	// Tips.js
 	tradeable_tokens_that_may_be_transferred_anywhere_at_anytime: 'Ходовые жетоны, которые могут переданы куда угодно и когда угодно.',
 	OWNERSHIP_TOKEN_can_be_converted_to_INVEST_TOKEN_in_a_process_called_powering_up: OWNERSHIP_TOKEN + ' может быть конвертирован в ' + INVEST_TOKEN + ' в процессе под названием "усиление голоса".',
-	tokens_worth_about_CURRENCY_SIGN_of_OWNERSHIP_TOKEN: 'Жетоны стоимостью около ' + CURRENCY_SIGN + '1.00 ' + ' ' + OWNERSHIP_TOKEN + '.',
+	tokens_worth_about_AMOUNT_of_OWNERSHIP_TOKEN: 'Жетоны стоимостью около {amount} ' + OWNERSHIP_TOKEN + '.',
 	influence_tokens_which_earn_more_power_by_holding_long_term: 'Жетоны влияния, которые усиливаются при долгосрочном хранении.',
 	the_more_you_hold_the_more_you_influence_post_rewards: 'Чем их больше, тем сильней вы влияете на вознаграждения за пост и тем больше зарабатываете за правильное голосование.',
 	the_estimated_value_is_based_on_a_7_day_average_value_of_steem_in_currency: 'Оценочная стоимость расчитывается на 7ми дневной средней стоимости ' + OWNERSHIP_TOKEN + ' в российских рублях.',
@@ -483,7 +491,11 @@ const ru = {
 	owner: 'Владелец',
 	active_or_owner: 'активный или владельца',
 	sign: 'Войти',
-	dismiss: 'Скрыть'
+	dismiss: 'Скрыть',
+	// next 3 strings are used conditionally together
+	show_more: 'Показать больше',
+	show_less: 'Показать меньше',
+	value_posts: 'сообщений низкой стоимости'
 }
 
 export { ru }

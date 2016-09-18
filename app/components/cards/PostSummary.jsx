@@ -44,6 +44,7 @@ export default class PostSummary extends React.Component {
         netVoteSign: React.PropTypes.number,
         currentCategory: React.PropTypes.string,
         thumbSize: React.PropTypes.string,
+        onClick: React.PropTypes.func
     };
 
     shouldComponentUpdate(props) {
@@ -53,7 +54,7 @@ export default class PostSummary extends React.Component {
     }
 
     render() {
-        const {currentCategory, thumbSize, ignore} = this.props;
+        const {currentCategory, thumbSize, ignore, onClick} = this.props;
         const {post, content, pending_payout, total_payout, cashout_time} = this.props;
         if (!content) return null;
         const {gray, pictures, authorRepLog10, hasFlag} = content.get('stats', Map()).toJS()
@@ -77,7 +78,8 @@ export default class PostSummary extends React.Component {
         }
 
         let content_body = <div className="PostSummary__body entry-content"><Link to={title_link_url}>{desc}</Link></div>;
-        let content_title = <h1 className="entry-title"><Link to={title_link_url}>{title_text}</Link></h1>;
+        let content_title = <h1 className="entry-title"><a href={title_link_url}
+           onClick={e => {e.preventDefault(); return onClick ? onClick(post, title_link_url) : browserHistory.push(title_link_url)}}>{title_text}</a></h1>;
 
         if( !(currentCategory && currentCategory.match( /nsfw/ )) ) {
            if (currentCategory !== '-' && currentCategory !== p.category && p.category.match(/nsfw/) ) {

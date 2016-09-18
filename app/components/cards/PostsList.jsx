@@ -1,9 +1,11 @@
 import React, {PropTypes} from 'react';
 import PostSummary from 'app/components/cards/PostSummary';
+import PostFull from 'app/components/cards/PostFull';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import debounce from 'lodash.debounce';
 import Callout from 'app/components/elements/Callout';
+import CloseButton from 'react-foundation-components/lib/global/close-button';
 
 function topPosition(domElt) {
     if (!domElt) {
@@ -21,6 +23,7 @@ class PostsList extends React.Component {
         loadMore: PropTypes.func,
         emptyText: PropTypes.string,
         showSpam: PropTypes.bool,
+        global: React.PropTypes.object.isRequired,
     };
 
     static defaultProps = {
@@ -32,8 +35,10 @@ class PostsList extends React.Component {
         this.state = {
             thumbSize: 'desktop',
             showNegativeComments: false,
+            showPost: null
         }
         this.scrollListener = this.scrollListener.bind(this);
+        this.onPostClick = this.onPostClick.bind(this);
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'PostsList')
     }
 
@@ -43,6 +48,15 @@ class PostsList extends React.Component {
 
     componentWillUnmount() {
         this.detachScrollListener();
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (this.state.showPost) {
+            document.getElementsByTagName('body')[0].className = 'with-post-overlay';
+        } else if (prevState.showPost) {
+            window.history.pushState({}, '', this.original_url);
+            document.getElementsByTagName('body')[0].className = '';
+        }
     }
 
     fetchIfNeeded() {
@@ -85,16 +99,22 @@ class PostsList extends React.Component {
         window.removeEventListener('resize', this.scrollListener);
     }
 
+    onPostClick(post, url) {
+        this.original_url = window.location.pathname;
+        window.history.pushState({}, '', url);
+        this.setState({showPost: post});
+    }
+
     render() {
-        const {posts, loading, category, emptyText} = this.props;
+        const {posts, loading, category, emptyText, global} = this.props;
         const {comments} = this.props
-        const {thumbSize} = this.state
+        const {thumbSize, showPost} = this.state
         if (!loading && !posts.length && emptyText) {
             return <Callout body={emptyText} type="success" />;
         }
         const renderSummary = items => items.map(({item, ignore, netVoteSign, authorRepLog10}) => <li key={item}>
             <PostSummary post={item} currentCategory={category} thumbSize={thumbSize}
-                ignore={ignore} netVoteSign={netVoteSign} authorRepLog10={authorRepLog10} />
+                ignore={ignore} netVoteSign={netVoteSign} authorRepLog10={authorRepLog10} onClick={this.onPostClick} />
         </li>)
         return (
             <div id="posts_list" className="PostsList">
@@ -102,6 +122,10 @@ class PostsList extends React.Component {
                     {renderSummary(comments)}
                 </ul>
                 {loading && <center><LoadingIndicator type="circle" /></center>}
+                {showPost && <div className="PostsList__post_overlay">
+                    <CloseButton onClick={() => {this.setState({showPost: null})}} />
+                    <PostFull global={global} post={showPost} />
+                </div>}
             </div>
         );
     }
@@ -133,6 +157,6 @@ export default connect(
             if(!(ignore || hide) || showSpam) // rephide
                 comments.push({item, ignore, netVoteSign, authorRepLog10})
         })
-        return {...props, comments};
+        return {...props, comments, global: state.global};
     },
 )(PostsList)

@@ -1,0 +1,24 @@
+.PostsList__post_overlay {
+  position: fixed;
+  padding: 1rem 0.5rem;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  z-index: 1000;
+  background-color: rgba(255,255,255,0.9);
+  overflow-y: scroll;
+  // filter: none;
+  transition: all 0.4s ease;
+  .PostFull {
+    background-color: $white;
+  }
+
+}
+
+body.with-post-overlay {
+  //.App__content {
+  //  filter: blur(2px) grayscale(50%);
+  //}
+  overflow: hidden;
+}

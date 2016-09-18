@@ -281,9 +281,9 @@ export default class UserProfile extends React.Component {
 
                         <div>
                             <div className="UserProfile__stats">
-                                <span>{translate('follower_count', {followerCount})}</span>
-                                <span>{translate('post_count', {postCount: account.post_count})}</span>
-                                <span>{translate('followed_count', {followingCount})}</span>
+                                <span>{translate('follower_count', {followerCount: followerCount || 0})}</span>
+                                <span>{translate('post_count', {postCount: account.post_count || 0})}</span>
+                                <span>{translate('followed_count', {followingCount: followingCount || 0})}</span>
                             </div>
                         </div>
                     </div>

@@ -9,7 +9,8 @@ import QRCode from 'react-qr'
 import {steemTip, powerTip, powerTip2} from 'app/utils/Tips'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import { translate } from 'app/Translator.js';
-import { APP_NAME, DEBT_TOKEN, DEBT_TOKEN_SHORT, OWNERSHIP_TOKEN, CURRENCY_SIGN, INVEST_TOKEN } from 'config/client_config';
+import { formatCoins } from 'app/utils/FormatCoins';
+import { APP_NAME, APP_ICON, DEBT_TOKEN, DEBT_TOKEN_SHORT, OWNERSHIP_TOKEN, CURRENCY_SIGN, INVEST_TOKEN } from 'config/client_config';
 
 const coinNames = {
     STEEM: OWNERSHIP_TOKEN,
@@ -153,10 +154,10 @@ class BlocktradesDeposit extends React.Component {
         const depositTip = outputCoin.value === 'STEEM'
             ? translate('tradeable_tokens_that_may_be_transferred_anywhere_at_anytime')
                 + ' ' +
-                translate('steem_can_be_converted_to_steem_power_in_a_process_called_powering_up')
+                translate('OWNERSHIP_TOKEN_can_be_converted_to_INVEST_TOKEN_in_a_process_called_powering_up')
             : outputCoin.value === 'VESTS' ? <div>
-                <p>{powerTip}</p>
-                <p>{powerTip2}</p>
+                <p>{translate('influence_tokens_which_earn_more_power_by_holding_long_term') + ' ' + translate('the_more_you_hold_the_more_you_influence_post_rewards')}</p>
+                <p>{translate('INVEST_TOKEN_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_OWNERSHIP_TOKEN')}</p>
             </div>
             : null
 
@@ -179,7 +180,7 @@ class BlocktradesDeposit extends React.Component {
                 value: 'Bitshares', icon: 'bitshares', link: '#'},
         ];
         const selectInputCoin = <DropdownMenu className="move-left" items={coin_menu} selected={coinName(inputCoin.value)} el="span" />
-        const estimateButtonLabel = est.inputAmount != translate(null ? 'update_estimate' : 'get_estimate')
+        const estimateButtonLabel = translate(est.inputAmount != null ? 'update_estimate' : 'get_estimate')
         const sendTo = <span>
             {translate("send_amount_of_coins_to", {
                 value: amount.value,
@@ -199,7 +200,7 @@ class BlocktradesDeposit extends React.Component {
                 <div className="column small-12">
                     <h1>{translate('buy') + ' ' + coinName(outputCoin.value)}</h1>
                     <span className="text-center">{selectOutputCoin}</span>
-                    <span><Icon name="steem" /></span>
+                    <span><Icon name={APP_ICON} /></span>
                     <div>{depositTip}</div>
                 </div>
             </div>
@@ -207,7 +208,9 @@ class BlocktradesDeposit extends React.Component {
             <form onSubmit={handleSubmit(() => {fetchEstimate()})}>
                 <div className="row">
                     <div className="column small-9">
-                        <h5>{est.inputAmount} {coinName(inputCoin.value, true)} {arrowIcon} {est.outputAmount} {coinName(outputCoin.value, true)}</h5>
+                        <h5>
+                            {est.inputAmount} {coinName(inputCoin.value, true)} {arrowIcon} {est.outputAmount} {formatCoins(coinName(outputCoin.value, true))}
+                        </h5>
                         <div>
                             <label className="float-left" htmlFor="estimateAmount">
                                 {translate('estimate_using') + ' ' + estimateInputCoin}

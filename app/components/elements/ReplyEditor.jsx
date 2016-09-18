@@ -16,6 +16,7 @@ import {Map, Set} from 'immutable'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import { translate } from '../../Translator.js';
 import Remarkable from 'remarkable'
+import { transliterate } from 'transliteration';
 
 const remarkable = new Remarkable({ html: true, linkify: false })
 const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
@@ -450,9 +451,19 @@ export default formId => reduxForm(
         },
         reply: ({category, title, body, author, permlink, parent_author, parent_permlink,
             type, originalPost, autoVote = false, state, jsonMetadata, /*metaLinkData,*/ successCallback, errorCallback, loadingCallback}) => {
+
             // const post = state.global.getIn(['content', author + '/' + permlink])
             const username = state.user.getIn(['current', 'username'])
-
+            // Parse categories:
+            // if category string starts with russian symbol, add 'ru-' prefix to it
+            // when transletirate it
+            // This is needed to be able to detransletirate it back to russian in future (to show russian categories to user)
+            // (all of this is needed because blockchain does not allow russian symbols in category)
+            if (category) {
+                category = category.split(' ')
+                                    .map(item => /^[а-я]/.test(item) ? 'ru-' + transliterate(category) : item)
+                                    .join(' ')
+            }
             // Wire up the current and parent props for either an Edit or a Submit (new post)
             //'submit_story', 'submit_comment', 'edit'
             const linkProps =

@@ -73,20 +73,17 @@ class CategorySelector extends React.Component {
     }
 }
 export function validateCategory(category, required = true) {
-    console.log(category)
-    // console.warn(category)
     if(!category || category.trim() === '') return required ? translate( 'required' ) : null
-    // console.warn(category)
     const cats = category.split(' ')
-    // console.warn(category)
     return (
         // !category || category.trim() === '' ? 'Required' :
         cats.length > 5 ? translate('use_limitied_amount_of_categories', {amount: 5}) :
         cats.find(c => c.split('-').length > 2) ? translate('use_one_dash') :
         cats.find(c => c.indexOf(',') >= 0) ? translate('use_spaces_to_separate_tags') :
-        cats.find(c => !/^[a-z0-9-]+$/.test(c)) ? translate('use_only_allowed_characters') :
-        cats.find(c => !/^[a-z]/.test(c)) ? translate('must_start_with_a_letter') :
-        cats.find(c => !/[a-z0-9]$/.test(c)) ? translate('must_end_with_a_letter_or_number') :
+        // check for russian or english symbols
+        cats.find(c => !/^[a-zа-я0-9-]+$/.test(c)) ? translate('use_only_allowed_characters') :
+        cats.find(c => !/^[a-zа-я-]/.test(c)) ? translate('must_start_with_a_letter') :
+        cats.find(c => !/[a-zа-я0-9]$/.test(c)) ? translate('must_end_with_a_letter_or_number') :
         null
     )
 }

@@ -9,6 +9,7 @@ import {powerTip, powerTip2, powerTip3} from 'app/utils/Tips'
 import {browserTests} from 'shared/ecc/test/BrowserTests'
 import {validate_account_name} from 'app/utils/ChainValidation';
 import { translate } from 'app/Translator';
+import { formatCoins } from 'app/utils/FormatCoins';
 import { APP_NAME, OWNERSHIP_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, INVEST_TOKEN } from 'config/client_config';
 
 /** Warning .. This is used for Power UP too. */
@@ -88,9 +89,9 @@ class TransferForm extends Component {
     balanceValue() {
         const {currentAccount} = this.props
         const {asset} = this.state
-        return !asset || asset.value === 'STEEM' ? currentAccount.get('balance') :
+        return formatCoins(!asset || asset.value === 'STEEM' ? currentAccount.get('balance') :
             asset.value === 'SBD' ? currentAccount.get('sbd_balance') :
-            null
+            null)
     }
 
     assetBalanceClick = e => {
@@ -122,13 +123,13 @@ class TransferForm extends Component {
             >
                 {toVesting && <div className="row">
                     <div className="column small-12">
-                        <p>{powerTip}</p>
-                        <p>{powerTip2}</p>
+                        <p>{translate('influence_tokens_which_earn_more_power_by_holding_long_term') + ' ' + translate('the_more_you_hold_the_more_you_influence_post_rewards')}</p>
+                        <p>{translate('INVEST_TOKEN_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_OWNERSHIP_TOKEN')}</p>
                     </div>
                 </div>}
 
                 <div className="row">
-                    <div className="column small-2">From</div>
+                    <div className="column small-2">{translate('from')}</div>
                     <div className="column small-10">
                         <b>{currentUser.get('username')}</b>
                     </div>
@@ -156,7 +157,7 @@ class TransferForm extends Component {
                                 <option></option>
                                 <option value="STEEM">{OWNERSHIP_TOKEN}</option>
                                 {/* TODO */}
-                                <option value="SBD">SBD</option>
+                                <option value="SBD">{DEBT_TOKEN_SHORT}</option>
                             </select>
                         </span>}
                         <AssetBalance balanceValue={this.balanceValue()} onClick={this.assetBalanceClick} />
@@ -184,7 +185,7 @@ class TransferForm extends Component {
         )
         return (
            <div>
-               <h3>{translate(toVesting ? 'convert_to_steem_power' : 'transfer_to_account')}</h3>
+               <h3>{translate(toVesting ? 'convert_to_INVEST_TOKEN' : 'transfer_to_account')}</h3>
                <div className="row">
                    <div className="column small-12">
                        {form}

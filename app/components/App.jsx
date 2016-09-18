@@ -16,7 +16,7 @@ import Modals from 'app/components/modules/Modals';
 import Icon from 'app/components/elements/Icon';
 import {key_utils} from 'shared/ecc'
 import { translate } from '../Translator.js';
-import { SEGMENT_ANALYTICS_KEY } from 'config/client_config';
+import { SEGMENT_ANALYTICS_KEY, LANDING_PAGE_URL, WHITEPAPER_URL } from 'config/client_config';
 
 class App extends React.Component {
     constructor(props) {
@@ -27,13 +27,10 @@ class App extends React.Component {
     }
 
     componentWillMount() {
-        console.info('APP WILL MOUNT!')
         if (process.env.BROWSER) localStorage.removeItem('autopost') // July 14 '16 compromise, renamed to autopost2
         this.props.loginUser();
         // SEGMENT.COM ANALYTICS INITIALIZATION
-        console.info(process.env.BROWSER)
     	if (process.env.BROWSER) {
-            console.info('APP IS RENDERING ON CLIENT SIDE!')
             !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
             analytics.load(SEGMENT_ANALYTICS_KEY);
             analytics.page()
@@ -114,7 +111,7 @@ class App extends React.Component {
                         <ul>
                             <li>
                                 <a href="https://steemit.com/steemit/@steemitblog/steemit-com-is-now-open-source">
-                                    {translate('steemit_is_now_open_source')}
+                                    {translate('APP_NAME_is_now_open_source')}
                                 </a>
                             </li>
                             <li>
@@ -150,11 +147,11 @@ class App extends React.Component {
                             <br />
                             <a className="button" href="/create_account" onClick={showSignUp}> <b>{translate("sign_up")}</b> </a>
                             &nbsp; &nbsp; &nbsp;
-                            <a className="button hollow uppercase" href="https://steem.io" target="_blank"> <b>{translate("learn_more")}</b> </a>
+                            <a className="button hollow uppercase" href={LANDING_PAGE_URL} target="_blank"> <b>{translate("learn_more")}</b> </a>
                             <br />
                             <br />
                             <div className="tag3">
-                                <b>{translate("get_sp_when_sign_up", {signupBonus: signup_bonus})}</b>
+                                <b>{translate("get_INVEST_TOKEN_when_sign_up", {signupBonus: signup_bonus})}</b>
                             </div>
                         </div>
                     </div>
@@ -167,7 +164,7 @@ class App extends React.Component {
                 <TopRightMenu vertical navigate={this.navigate} />
                 <ul className="vertical menu">
                     <li>
-                        <a href="https://steem.io" onClick={this.navigate}>
+                        <a href={LANDING_PAGE_URL} onClick={this.navigate}>
                             {translate("about")}
                         </a>
                     </li>
@@ -177,7 +174,7 @@ class App extends React.Component {
                         </a>
                     </li>
                     <li>
-                        <a href="https://steem.io/SteemWhitePaper.pdf" onClick={this.navigate}>
+                        <a href={WHITEPAPER_URL} onClick={this.navigate}>
                             {translate("APP_NAME_whitepaper")}
                         </a>
                     </li>

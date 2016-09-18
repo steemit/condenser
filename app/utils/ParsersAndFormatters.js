@@ -55,3 +55,41 @@ export const repLog10 = rep2 => {
     out = parseInt(out)
     return out
 }
+
+
+// copypaste from https://gist.github.com/tamr/5fb00a1c6214f5cab4f6
+var d = /\t+/g,
+    rus = "щ	щ	ш	ч	ц	ю	ю	я	я	ё	ё	ж	ъ	ъ	ы	э	э	а	б	в	г	д	е	з	и	й	й	й	к	л	м	н	о	п	р	с	т	у	ф	х	х	ь	ь".split(d),
+    eng = "shh	w	sh	ch	cz	yu	ju	ya	q	yo	jo	zh	``	''	y	e`	e'	a	b	v	g	d	e	z	i	j	i`	i'	k	l	m	n	o	p	r	s	t	u	f	x	h	`	'".split(d);
+
+export function detransliterate(str) {
+    // TODO add 'ru-' checker
+    if (str.substring(0, 3) !== 'ru-') return str
+    str = str.substring(3)
+
+    var i,
+        s = /[^[\]]+(?=])/g, orig = str.match(s),
+        t = /<(.|\n)*?>/g, tags = str.match(t);
+
+    for(i = 0; i < rus.length; ++i) {
+        str = str.split(eng[i]).join(rus[i]);
+        str = str.split(eng[i].toUpperCase()).join(rus[i].toUpperCase());
+    }
+
+    if(orig) {
+        var restoreOrig = str.match(s);
+
+        for (i = 0; i < restoreOrig.length; ++i)
+            str = str.replace(restoreOrig[i], orig[i]);
+    }
+
+    if(tags) {
+        var restoreTags = str.match(t);
+
+        for (i = 0; i < restoreTags.length; ++i)
+            str = str.replace(restoreTags[i], tags[i]);
+
+        str = str.replace(/\[/g, '').replace(/\]/g, '');
+    }
+    return str;
+}

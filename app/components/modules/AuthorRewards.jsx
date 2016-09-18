@@ -3,7 +3,9 @@ import React from 'react';
 import {connect} from 'react-redux'
 import TransferHistoryRow from 'app/components/cards/TransferHistoryRow';
 import {numberWithCommas, vestsToSp, assetFloat} from 'app/utils/StateFunctions'
-import { translate } from '../../Translator';
+import { translate } from 'app/Translator';
+import { APP_NAME, DEBT_TOKEN, DEBT_TOKEN_SHORT, OWNERSHIP_TOKEN, CURRENCY_SIGN, INVEST_TOKEN } from 'config/client_config';
+
 
 class AuthorRewards extends React.Component {
     constructor() {
@@ -108,9 +110,9 @@ class AuthorRewards extends React.Component {
                     {translate('author_rewards_last_24_hours')}:
                 </div>
                 <div className="column small-12 medium-3">
-                    {numberWithCommas(vestsToSp(this.props.state, rewards24Vests + " VESTS")) + " STEEM POWER"}
+                    {numberWithCommas(vestsToSp(this.props.state, rewards24Vests + " VESTS")) + " " + INVEST_TOKEN}
                     <br />
-                    {rewards24SBD.toFixed(3) + " SD"}
+                    {rewards24SBD.toFixed(3) + " " + DEBT_TOKEN_SHORT}
                 </div>
             </div>
 
@@ -119,9 +121,9 @@ class AuthorRewards extends React.Component {
                     {translate('daily_average_author_rewards')}:
                 </div>
                 <div className="column small-12 medium-3">
-                    {numberWithCommas(vestsToSp(this.props.state, averageCurationVests + " VESTS")) + " STEEM POWER"}
+                    {numberWithCommas(vestsToSp(this.props.state, averageCurationVests + " VESTS")) + " " + INVEST_TOKEN}
                     <br />
-                    {averageCurationSBD.toFixed(3) + " SD"}
+                    {averageCurationSBD.toFixed(3) + " " + DEBT_TOKEN_SHORT}
                 </div>
             </div>
             <div className="UserWallet__balance UserReward__row row">
@@ -129,9 +131,9 @@ class AuthorRewards extends React.Component {
                     {translate(!hasFullWeek ? 'estimated_author_rewards_last_week' : 'author_rewards_last_week')}:
                 </div>
                 <div className="column small-12 medium-3">
-                    {numberWithCommas(vestsToSp(this.props.state, (hasFullWeek ? rewardsWeekVests : averageCurationVests * 7) + " VESTS")) + " STEEM POWER"}
+                    {numberWithCommas(vestsToSp(this.props.state, (hasFullWeek ? rewardsWeekVests : averageCurationVests * 7) + " VESTS")) + " " + INVEST_TOKEN}
                     <br />
-                    {(hasFullWeek ? rewardsWeekSBD : averageCurationSBD * 7).toFixed(3) + " SD"}
+                    {(hasFullWeek ? rewardsWeekSBD : averageCurationSBD * 7).toFixed(3) + " " + DEBT_TOKEN_SHORT}
                 </div>
             </div>
 

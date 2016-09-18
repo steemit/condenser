@@ -67,7 +67,7 @@ class PostsIndex extends React.Component {
             order = 'by_feed';
             topics_order = 'trending';
             posts = this.props.global.getIn(['accounts', account_name, 'feed']);
-            emptyText = `Looks like ${account_name} hasn't followed anything yet!`;
+            emptyText = translate('user_hasnt_followed_anything_yet', {name: account_name});
         } else {
             posts = this.getPosts(order, category);
         }
@@ -92,7 +92,7 @@ class PostsIndex extends React.Component {
                 </div>
                 <div className="PostsIndex__topics column shrink show-for-large">
                     <Topics order={topics_order} current={category} compact={false} />
-                    <small><a onClick={this.onShowSpam}>{showSpam ? 'Show less' : 'Show more'}</a> low value posts</small>
+                    <small><a onClick={this.onShowSpam}>{translate(showSpam ? 'show_less' : 'show_more')}</a>{' ' + translate('value_posts')}</small>
                 </div>
             </div>
         );

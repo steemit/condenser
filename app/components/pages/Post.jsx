@@ -12,7 +12,9 @@ import user from 'app/redux/User'
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
 import SvgImage from 'app/components/elements/SvgImage';
 import {List} from 'immutable'
-import { translate } from '../../Translator';
+import { translate } from 'app/Translator';
+import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
+import { FormattedHTMLMessage, FormattedMessage } from 'react-intl';
 
 class Post extends React.Component {
 
@@ -144,7 +146,6 @@ class Post extends React.Component {
                 <SvgImage name="404" width="640px" height="480px" />
             </center>
 
-
         return (
             <div className="Post">
                 <div className="row">
@@ -154,12 +155,14 @@ class Post extends React.Component {
                 </div>
                 {!current_user && <div className="row">
                     <div className="column">
-                      <div className="Post__promo">
-                            {translate('post_promo_text', {
-                                amount: signup_bonus,
-                                link: <a onClick={showSignUp}>{translate("sign_up")}</a>
-                            })}
-                      </div>
+                        <div className="Post__promo">
+                            {translate('authors_get_paid_when_people_like_you_upvote_their_post')}
+                            <br /> {// remove '$' from signup_bonus before parsing it into local currency
+                                    translate('if_you_enjoyed_what_you_read_earn_amount', {amount: localizedCurrency(signup_bonus.substring(1))})}
+                            <br /> {translate('when_you') + ' '}
+                            <a onClick={showSignUp}>{translate('when_you_link_text')}</a>
+                            {' ' + translate('and_vote_for_it') + '.'}
+                        </div>
                     </div>
                 </div>}
                 <div id="comments" className="Post_comments row hfeed">

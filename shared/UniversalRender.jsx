@@ -35,6 +35,7 @@ import {component as NotFound} from 'app/components/pages/NotFound';
 import extractMeta from 'app/utils/ExtractMeta';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import Translator from 'app/Translator';
+import { APP_NAME } from 'config/client_config';
 
 const sagaMiddleware = createSagaMiddleware(
     ...userWatches, // keep first to remove keys early when a page change happens
@@ -157,8 +158,9 @@ async function universalRender({ location, initial_state, offchain }) {
         const sd = fee * feed,
               sdInt = parseInt(sd),
               sdDec = (sd - sdInt),
-              sdDisp = '$' + sdInt + (sdInt < 5 && sdDec >= 0.5 ? '.50' : '');
-
+              // TODO check where this variable is used and find if something is breaking
+              // sdDisp = '$' + sdInt + (sdInt < 5 && sdDec >= 0.5 ? '.50' : '');
+              sdDisp = sdInt + (sdInt < 5 && sdDec >= 0.5 ? '.50' : '');
         offchain.signup_bonus = sdDisp;
         offchain.server_location = location;
         server_store = createStore(rootReducer, { global: onchain, offchain});
@@ -192,8 +194,8 @@ async function universalRender({ location, initial_state, offchain }) {
     }
 
     return {
-        title: 'Steemit',
-        titleBase: 'Steemit - ',
+        title: APP_NAME,
+        titleBase: APP_NAME + ' - ',
         meta,
         statusCode: status,
         body: Iso.render(app, server_store.getState())

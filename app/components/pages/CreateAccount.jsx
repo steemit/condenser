@@ -203,7 +203,7 @@ class CreateAccount extends React.Component {
                 <div className="column">
                     <div className="callout alert">
                         <p>{translate('our_records_indicate_you_already_have_account')}: <strong>{existingUserAccount}</strong></p>
-                        <p>{translate('to_prevent_abuse_steemit_can_only_register_one_account_per_user')}</p>
+                        <p>{translate('to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user')}</p>
                         <p>{translate('you_can_either_login_or_send_us_email', {
                                 loginLink: <a href="/login.html">{translate('login')}</a>,
                                 emailLink: <a href="mailto:support@steemit.com">{translate('send_us_email')}</a>
@@ -234,7 +234,7 @@ class CreateAccount extends React.Component {
                         {server_error && <div className="callout alert">
                             <h5>{translate('couldnt_create_account_server_returned_error')}:</h5>
                             <p>{server_error}</p>
-                            {server_error === 'Email address is not confirmed' && <a href="/enter_email">Confirm Email</a>}
+                            {server_error === 'Email address is not confirmed' && <a href="/enter_email">{translate('confirm_email')}</a>}
                         </div>}
                         <noscript>
                             <div className="callout alert">

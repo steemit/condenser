@@ -2,7 +2,8 @@ import React from 'react';
 import { Link } from 'react-router';
 import {connect} from 'react-redux';
 import { browserHistory } from 'react-router';
-import { translate } from '../../Translator';
+import { translate } from 'app/Translator';
+import { formatCoins } from 'app/utils/FormatCoins';
 
 class TagsIndex extends React.Component {
     static propTypes = {
@@ -48,7 +49,7 @@ class TagsIndex extends React.Component {
                     <Link to={link} activeClassName="active">{name}</Link>
                 </td>
                 <td>{tag.get('discussions')}</td>
-                <td>{tag.get('total_payouts')}</td>
+                <td>{formatCoins(tag.get('total_payouts'))}</td>
             </tr>);
         }).toArray();
         return (

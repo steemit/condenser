@@ -10,6 +10,7 @@ import Icon from 'app/components/elements/Icon.jsx';
 import sendEmail from '../sendEmail';
 import {checkCSRF} from '../utils';
 import config from '../../config';
+import { APP_ICON, APP_NAME } from 'config/client_config';
 
 let assets;
 if (process.env.NODE_ENV === 'production') {
@@ -25,9 +26,9 @@ const header = <header className="Header">
             <div className="columns">
                 <ul className="menu">
                     <li className="Header__top-logo">
-                        <a href="/"><Icon name="steem" size="2x" /></a>
+                        <a href="/"><Icon name={APP_ICON} size="2x" /></a>
                     </li>
-                    <li className="Header__top-steemit show-for-medium"><a href="/">steemit<span className="beta">beta</span></a></li>
+                    <li className="Header__top-steemit show-for-medium"><a href="/">{APP_NAME}<span className="beta">alfa</span></a></li>
                 </ul>
             </div>
         </div>

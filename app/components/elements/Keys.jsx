@@ -5,6 +5,7 @@ import {connect} from 'react-redux'
 import user from 'app/redux/User'
 import g from 'app/redux/GlobalReducer'
 import ShowKey from 'app/components/elements/ShowKey'
+import { translate } from 'app/Translator';
 
 class Keys extends Component {
     static propTypes = {
@@ -57,11 +58,14 @@ class Keys extends Component {
                 </div>
             </div>
         ))
+
         return (
             <span>
                 <div className="row">
                     <div className="column small-2">
-                        <label>{authType}</label>
+                        {/* authType will mosts likely will be one of the following: ['Posting', 'Active', 'Owner', 'Memo'] */}
+                        {/* string id is always lowercased, hence usage of .toLowerCase() */}
+                        <label>{translate(authType.toLowerCase())}</label>
                     </div>
                     <div className="column small-10">
                         {auths}

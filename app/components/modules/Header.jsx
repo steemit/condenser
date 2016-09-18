@@ -8,7 +8,8 @@ import DropdownMenu from 'app/components/elements/DropdownMenu';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import { translate } from 'app/Translator';
 import HorizontalMenu from 'app/components/elements/HorizontalMenu';
-import { APP_NAME } from 'config/client_config';
+import { APP_NAME, APP_ICON } from 'config/client_config';
+import { detransliterate } from 'app/utils/ParsersAndFormatters';
 
 function sortOrderToLink(so, topic, account) {
     if (so === 'home') return '/@' + account + '/feed';
@@ -95,10 +96,10 @@ class Header extends React.Component {
             page_name = ''; //page_title = route.page.replace( /([a-z])([A-Z])/g, '$1 $2' ).toLowerCase();
         }
 
-        if (process.env.BROWSER) document.title = page_title + ' — Steemit';
+        if (process.env.BROWSER) document.title = page_title + ' — ' + APP_NAME;
 
         const logo_link = route.params && route.params.length > 1 && this.last_sort_order ? '/' + this.last_sort_order : (current_account_name ? `/@${current_account_name}/feed` : '/');
-        let topic_link = topic ? <Link to={`/${this.last_sort_order || 'trending'}/${topic}`}>{topic}</Link> : null;
+        let topic_link = topic ? <Link to={`/${this.last_sort_order || 'trending'}/${topic}`}>{detransliterate(topic)}</Link> : null;
 
         const sort_orders = [
             ['created', translate('new')],
@@ -143,11 +144,11 @@ class Header extends React.Component {
                             <ul className="menu">
                                 <li className="Header__top-logo">
                                     <Link to={logo_link}>
-                                        <Icon name="steem" size="2x" />
+                                        <Icon name={APP_ICON} size="2x" />
                                     </Link>
                                 </li>
                                 <li className="Header__top-steemit show-for-medium">
-                                    <Link to={logo_link}>{APP_NAME}<span className="beta">beta</span></Link>
+                                    <Link to={logo_link}>{APP_NAME}<span className="beta">alfa</span></Link>
                                 </li>
                                 {(topic_link || user_name || page_name) && <li className="delim show-for-medium">|</li>}
                                 {topic_link && <li className="Header__top-topic">{topic_link}</li>}

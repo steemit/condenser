@@ -132,11 +132,11 @@ class LoginForm extends Component {
         const disabled = submitting || !valid;
 
         const title = loginBroadcastOperation ?
-            'Authenticate for this transaction' :
-            'Login to your Steem Account';
+            translate('authenticate_for_this_transaction') :
+            translate('login_to_your_APP_NAME_account');
         const opType = loginBroadcastOperation ? loginBroadcastOperation.get('type') : null
-        const authType = /vote|comment/.test(opType) ? 'Posting' : 'Active or Owner'
-        const submitLabel = loginBroadcastOperation ? 'Sign' : 'Login';
+        const authType = translate(/vote|comment/.test(opType) ? 'posting' : 'active_or_owner')
+        const submitLabel = translate(loginBroadcastOperation ? 'sign' : 'login');
         let error = password.touched && password.error ? password.error : this.props.login_error
         if (error === 'owner_login_blocked') {
             error = <span>
@@ -170,7 +170,6 @@ class LoginForm extends Component {
         const form = (
             <form onSubmit={handleSubmit(data => {
                 // bind redux-form to react-redux
-                console.log('Login\tdispatchSubmit');
                 return dispatchSubmit(data, loginBroadcastOperation, afterLoginRedirectToAccount)
             })}
                 onChange={this.props.clearError}
@@ -188,7 +187,7 @@ class LoginForm extends Component {
                 </div>
                 {loginBroadcastOperation && <div>
                     <div className="info">
-                        {translate("requires_auth_key", { authType })} />.
+                        {translate("requires_auth_key", { authType })}.
                     </div>
                 </div>}
                 {!loginBroadcastOperation && <div>

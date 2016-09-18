@@ -12,7 +12,8 @@ import DropdownMenu from 'app/components/elements/DropdownMenu';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import FoundationDropdown from 'app/components/elements/FoundationDropdown';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
-import { translate } from '../../Translator';
+import { translate } from 'app/Translator';
+import LocalizedCurrency, {localizedCurrency} from 'app/components/elements/LocalizedCurrency';
 
 const MAX_VOTES_DISPLAY = 20;
 const VOTE_WEIGHT_DROPDOWN_THRESHOLD = 100.0 * 1000.0 * 1000.0;
@@ -162,21 +163,23 @@ class Voting extends React.Component {
         const classUp = 'Voting__button Voting__button-up' + (myVote > 0 ? ' Voting__button--upvoted' : '') + (votingUpActive ? ' votingUp' : '');
 
         const payoutItems = [
-            {value: translate('potential_payout') + ' $' + formatDecimal(pending_payout).join('')},
+            {value: translate('potential_payout') + ' ' + localizedCurrency(formatDecimal(pending_payout).join(''))},
             // after merging update
-            {value: translate('boost_payments') + ' $' + formatDecimal(promoted).join('')}
+            {value: translate('boost_payments') + ' ' + localizedCurrency(formatDecimal(promoted).join(''))}
         ];
         if (cashout_time && cashout_time.indexOf('1969') !== 0 && cashout_time.indexOf('1970') !== 0) {
             payoutItems.push({value: <TimeAgoWrapper date={cashout_time} />});
         }
         if(total_author_payout > 0) {
-            payoutItems.push({value: translate('past_payouts') + ' $' + formatDecimal(total_author_payout + total_curator_payout).join('')});
-            payoutItems.push({value: ' - ' + translate('authors') + ': $' + formatDecimal(total_author_payout).join('')});
-            payoutItems.push({value: ' - ' + translate('curators') + ': $' + formatDecimal(total_curator_payout).join('')});
+            payoutItems.push({value: translate('past_payouts') + ' ' + localizedCurrency(formatDecimal(total_author_payout + total_curator_payout).join(''))});
+            payoutItems.push({value: ' - ' + translate('authors') + ': ' + localizedCurrency(formatDecimal(total_author_payout).join(''))});
+            payoutItems.push({value: ' - ' + translate('curators') + ': ' + localizedCurrency(formatDecimal(total_curator_payout).join(''))});
         }
         const payoutEl = <DropdownMenu el="div" items={payoutItems}>
             <span>
-                <FormattedAsset amount={payout} asset="$" />
+                {/* <FormattedAsset amount={payout} asset="$" /> */}
+                {/* TODO check FormattedAsset and it's possible replacememnt with LocalizedCurrency */}
+                <LocalizedCurrency amount={payout} />
                 <Icon name="dropdown-arrow" />
             </span>
         </DropdownMenu>;

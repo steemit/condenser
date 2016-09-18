@@ -158,8 +158,9 @@ async function universalRender({ location, initial_state, offchain }) {
         const sd = fee * feed,
               sdInt = parseInt(sd),
               sdDec = (sd - sdInt),
-              sdDisp = '$' + sdInt + (sdInt < 5 && sdDec >= 0.5 ? '.50' : '');
-
+              // TODO check where this variable is used and find if something is breaking
+              // sdDisp = '$' + sdInt + (sdInt < 5 && sdDec >= 0.5 ? '.50' : '');
+              sdDisp = sdInt + (sdInt < 5 && sdDec >= 0.5 ? '.50' : '');
         offchain.signup_bonus = sdDisp;
         offchain.server_location = location;
         server_store = createStore(rootReducer, { global: onchain, offchain});

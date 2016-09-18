@@ -6,7 +6,8 @@ import g from 'app/redux/GlobalReducer'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import Icon from 'app/components/elements/Icon'
 import {key_utils} from 'shared/ecc'
-import { translate } from '../../Translator';
+import { translate } from 'app/Translator';
+import { APP_NAME, APP_ICON } from 'config/client_config';
 
 const {bool} = React.PropTypes
 export const steemitCannotRecoverPasswords = translate('APP_NAME_cannot_recover_passwords_keep_this_page_in_a_secure_location')
@@ -32,7 +33,7 @@ class SuggestPassword extends React.Component {
         const {suggestedPassword} = this.props
         const render = print =>
             <span className="SuggestPassword">
-                <Icon name="steem" size="2x" /> Steemit
+                <Icon name={APP_ICON} size="2x" /> {APP_NAME}
                 <hr />
                 <div>
                     <h5>{translate(print ? 'APP_NAME_password_backup' : 'APP_NAME_password_backup_required')}</h5>

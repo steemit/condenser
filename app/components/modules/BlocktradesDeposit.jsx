@@ -10,7 +10,7 @@ import {steemTip, powerTip, powerTip2} from 'app/utils/Tips'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import { translate } from 'app/Translator.js';
 import { formatCoins } from 'app/utils/FormatCoins';
-import { APP_NAME, DEBT_TOKEN, DEBT_TOKEN_SHORT, OWNERSHIP_TOKEN, CURRENCY_SIGN, INVEST_TOKEN } from 'config/client_config';
+import { APP_NAME, APP_ICON, DEBT_TOKEN, DEBT_TOKEN_SHORT, OWNERSHIP_TOKEN, CURRENCY_SIGN, INVEST_TOKEN } from 'config/client_config';
 
 const coinNames = {
     STEEM: OWNERSHIP_TOKEN,
@@ -200,7 +200,7 @@ class BlocktradesDeposit extends React.Component {
                 <div className="column small-12">
                     <h1>{translate('buy') + ' ' + coinName(outputCoin.value)}</h1>
                     <span className="text-center">{selectOutputCoin}</span>
-                    <span><Icon name="steem" /></span>
+                    <span><Icon name={APP_ICON} /></span>
                     <div>{depositTip}</div>
                 </div>
             </div>

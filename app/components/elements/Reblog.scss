@@ -1,0 +1,23 @@
+.Reblog__button {
+  path {
+    fill: $medium-gray;
+  }
+}
+
+.Reblog__button-active {
+  path {
+    fill: green !important;
+  }
+}
+
+.Reblog__button.loading {
+  padding-right: 0.5rem;
+  svg {
+    border: 1px solid #4BA2F2;
+    border-radius: 100%;
+    border-right-color: transparent;
+    border-top-color: transparent;
+    animation: loading 500ms infinite linear;
+    path {opacity: 0}
+  }
+}

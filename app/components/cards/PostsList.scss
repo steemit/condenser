@@ -1,19 +1,29 @@
 .PostsList__post_overlay {
   position: fixed;
-  padding: 1rem 0.5rem;
+  // padding: 1rem 0.5rem;
   top: 0;
   left: 0;
   width: 100%;
-  height: auto;
+  height: 100%;
   z-index: 1000;
-  background-color: rgba(255,255,255,1);
+  border: 1px solid red;
+  background-color: $light-gray;
+  // transition: all 0.4s ease;
   overflow-y: scroll;
-  // filter: none;
-  transition: all 0.4s ease;
+  > .close-button {
+    position: fixed;
+  }
+}
+
+.PostsList__post_container {
+  border: 1px solid green;
+  z-index: 1001;
+  background-color: $white;
+  width: 52rem;
+  margin: 1rem auto 0 auto;
   .PostFull {
     background-color: $white;
   }
-
 }
 
 body.with-post-overlay {
@@ -21,4 +31,7 @@ body.with-post-overlay {
   //  filter: blur(2px) grayscale(50%);
   //}
   overflow: hidden;
+  .PostsList__summaries {
+    visibility: hidden;
+  }
 }

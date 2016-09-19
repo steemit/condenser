@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import PostSummary from 'app/components/cards/PostSummary';
-import PostFull from 'app/components/cards/PostFull';
+import Post from 'app/components/pages/Post';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import debounce from 'lodash.debounce';
@@ -133,7 +133,9 @@ class PostsList extends React.Component {
                 {loading && <center><LoadingIndicator type="circle" /></center>}
                 {showPost && <div className="PostsList__post_overlay">
                     <CloseButton onClick={() => {this.setState({showPost: null})}} />
-                    <PostFull global={global} post={showPost} />
+                    <div className="PostsList__post_container">
+                        <Post post={showPost} />
+                    </div>
                 </div>}
             </div>
         );

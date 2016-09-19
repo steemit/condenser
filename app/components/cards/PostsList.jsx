@@ -6,6 +6,7 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import debounce from 'lodash.debounce';
 import Callout from 'app/components/elements/Callout';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
+import {findParent} from 'app/utils/DomUtils';
 
 function topPosition(domElt) {
     if (!domElt) {
@@ -25,6 +26,7 @@ class PostsList extends React.Component {
         showSpam: PropTypes.bool,
         global: PropTypes.object.isRequired,
         fetchState: PropTypes.func.isRequired,
+        pathname: PropTypes.string,
     };
 
     static defaultProps = {
@@ -41,6 +43,7 @@ class PostsList extends React.Component {
         this.scrollListener = this.scrollListener.bind(this);
         this.onPostClick = this.onPostClick.bind(this);
         this.onBackButton = this.onBackButton.bind(this);
+        this.closeOnOutsideClick = this.closeOnOutsideClick.bind(this);
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'PostsList')
     }
 
@@ -50,14 +53,24 @@ class PostsList extends React.Component {
 
     componentWillUnmount() {
         this.detachScrollListener();
+        window.removeEventListener('popstate', this.onBackButton);
+        document.body.removeEventListener('mousedown', this.closeOnOutsideClick);
+    }
+
+    componentWillUpdate(nextProps) {
+        if (this.state.showPost && (window.location.pathname !== this.post_url)) {
+            this.setState({showPost: null});
+        }
     }
 
     componentDidUpdate(prevProps, prevState) {
         if (this.state.showPost) {
             document.getElementsByTagName('body')[0].className = 'with-post-overlay';
             window.addEventListener('popstate', this.onBackButton);
+            document.body.addEventListener('mousedown', this.closeOnOutsideClick);
         } else if (prevState.showPost) {
-            window.history.pushState({}, '', this.original_url);
+            window.history.pushState({}, '', this.props.pathname);
+            this.post_url = null;
         }
         if (!this.state.showPost) {
             document.getElementsByTagName('body')[0].className = '';
@@ -67,6 +80,14 @@ class PostsList extends React.Component {
     onBackButton() {
         window.removeEventListener('popstate', this.onBackButton);
         this.setState({showPost: null});
+    }
+
+    closeOnOutsideClick(e) {
+        const inside_post = findParent(e.target, 'PostsList__post_container');
+        if (!inside_post) {
+            document.body.removeEventListener('mousedown', this.closeOnOutsideClick);
+            this.setState({showPost: null});
+        }
     }
 
     fetchIfNeeded() {
@@ -110,7 +131,7 @@ class PostsList extends React.Component {
     }
 
     onPostClick(post, url) {
-        this.original_url = window.location.pathname;
+        this.post_url = url;
         this.props.fetchState(url);
         this.setState({showPost: post});
         window.history.pushState({}, '', url);
@@ -151,6 +172,7 @@ export default connect(
     (state, props) => {
         const {posts, showSpam} = props;
         const comments = []
+        const pathname = state.app.get('location').pathname;
         posts.forEach(item => {
             const content = state.global.get('content').get(item);
             if(!content) {
@@ -170,7 +192,7 @@ export default connect(
             if(!(ignore || hide) || showSpam) // rephide
                 comments.push({item, ignore, netVoteSign, authorRepLog10})
         })
-        return {...props, comments, global: state.global};
+        return {...props, comments, global: state.global, pathname};
     },
     dispatch => ({
         fetchState: (pathname) => {

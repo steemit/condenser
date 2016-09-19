@@ -39,6 +39,7 @@ class PostsList extends React.Component {
         }
         this.scrollListener = this.scrollListener.bind(this);
         this.onPostClick = this.onPostClick.bind(this);
+        this.onBackButton = this.onBackButton.bind(this);
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'PostsList')
     }
 
@@ -53,10 +54,18 @@ class PostsList extends React.Component {
     componentDidUpdate(prevProps, prevState) {
         if (this.state.showPost) {
             document.getElementsByTagName('body')[0].className = 'with-post-overlay';
+            window.addEventListener('popstate', this.onBackButton);
         } else if (prevState.showPost) {
             window.history.pushState({}, '', this.original_url);
+        }
+        if (!this.state.showPost) {
             document.getElementsByTagName('body')[0].className = '';
         }
+    }
+
+    onBackButton() {
+        window.removeEventListener('popstate', this.onBackButton);
+        this.setState({showPost: null});
     }
 
     fetchIfNeeded() {

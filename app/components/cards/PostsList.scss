@@ -1,0 +1,54 @@
+.PostsList__post_overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  background-color: $white;
+  padding: 0 .9rem;
+}
+
+.PostsList__post_container {
+  position: relative;
+  z-index: 1001;
+  background-color: $white;
+  margin: 1rem auto;
+  padding-top: 1rem;
+  .PostFull {
+    background-color: $white;
+  }
+  > .close-button {
+    right: -0.8rem;
+    top: -0.8rem;
+  }
+}
+
+body.with-post-overlay {
+  overflow: hidden;
+}
+
+@media screen and (min-width: 60rem) {
+  .PostsList__post_overlay {
+    background-color: rgba(150, 150, 150, 0.9);
+    padding: 0 .5rem;
+  }
+  .PostsList__post_container {
+    padding-top: 2rem;
+    border-radius: 3px;
+    width: 56rem;
+    box-shadow: 0 0 5px 0px rgba(64,64,64,1);
+    > .close-button {
+      right: 0.2rem;
+      top: 0.5rem;
+    }
+  }
+}
+
+@media screen and (min-width: 67rem) {
+  .PostsList__post_container {
+    width: 62rem;
+  }
+}

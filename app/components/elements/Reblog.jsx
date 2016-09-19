@@ -18,16 +18,12 @@ export default class Reblog extends React.Component {
         super(props)
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Reblog')
         this.state = {active: false, loading: false}
-        this.reblog = e => {
-            e.preventDefault()
-            if(this.state.active) return
-            this.setState({loading: true})
-            const {reblog, account, author, permlink} = this.props
-            reblog(account, author, permlink,
-                () => {this.setState({active: true, loading: false})
-                       this.setReblogged(account)},
-                () => {this.setState({active: false, loading: false})},
-            )
+    }
+
+    componentWillMount() {
+        const {account} = this.props
+        if(account) {
+            this.setState({active: this.isReblogged(account)})
         }
     }
 
@@ -37,23 +33,30 @@ export default class Reblog extends React.Component {
         }
     }
 
-    getRebloggedList(account) {
-        let posts = localStorage.getItem("reblogged_" + account)
-        try {
-            posts = JSON.parse(posts) || []
-        } catch(e) {
-            posts = []
-        }
-        return posts
+    reblog = e => {
+        e.preventDefault()
+        if(this.state.active) return
+        this.setState({loading: true})
+        const {reblog, account, author, permlink} = this.props
+        reblog(account, author, permlink,
+            () => {this.setState({active: true, loading: false})
+                   this.setReblogged(account)},
+            () => {this.setState({active: false, loading: false})},
+        )
     }
+
     isReblogged(account) {
         const {author, permlink} = this.props
-        return this.getRebloggedList(account).includes(author + '/' + permlink)
+        return getRebloggedList(account).includes(author + '/' + permlink)
     }
+
     setReblogged(account) {
         const {author, permlink} = this.props
-        let posts = this.getRebloggedList(account)
+        const posts = getRebloggedList(account)
         posts.push(author + '/' + permlink)
+        if(posts.length > 200)
+            posts.shift(1)
+
         localStorage.setItem("reblogged_" + account, JSON.stringify(posts))
     }
 
@@ -67,11 +70,7 @@ export default class Reblog extends React.Component {
 }
 module.exports = connect(
     (state, ownProps) => {
-        let {account} = ownProps
-        if(!account) {
-            const current_user = state.user.get('current')
-            account = current_user ? current_user.get('username') : null
-        }
+        const account = state.user.getIn(['current', 'username']) || state.offchain.get('account')
         return {...ownProps, account}
     },
     dispatch => ({
@@ -89,3 +88,23 @@ module.exports = connect(
         },
     })
 )(Reblog)
+
+let lastAccount
+let cachedPosts
+
+function getRebloggedList(account) {
+    if(!process.env.BROWSER)
+        return []
+
+    if(lastAccount === account)
+        return cachedPosts
+
+    lastAccount = account
+    const posts = localStorage.getItem("reblogged_" + account)
+    try {
+        cachedPosts = JSON.parse(posts) || []
+    } catch(e) {
+        cachedPosts = []
+    }
+    return cachedPosts
+}

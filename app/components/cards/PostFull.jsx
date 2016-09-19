@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import user from 'app/redux/User';
 import transaction from 'app/redux/Transaction'
 import Voting from 'app/components/elements/Voting';
+import Reblog from 'app/components/elements/Reblog';
 import Tooltip from 'app/components/elements/Tooltip';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import ReplyEditor from 'app/components/elements/ReplyEditor';
@@ -255,6 +256,7 @@ export default class PostFull extends React.Component {
                         <Voting post={post} />
                     </div>
                     <div className="column shrink">
+                            <Reblog author={author} permlink={permlink} />
                             <span className="PostFull__responses">
                                 <Link to={link} title={pluralize('Responses', content.children, true)}>
                                     <Icon name="chatboxes" className="space-right" />{content.children}

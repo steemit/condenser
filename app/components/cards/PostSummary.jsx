@@ -4,6 +4,7 @@ import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Icon from 'app/components/elements/Icon';
 import { connect } from 'react-redux';
 import user from 'app/redux/User';
+import Reblog from 'app/components/elements/Reblog';
 import Voting from 'app/components/elements/Voting';
 import Tooltip from 'app/components/elements/Tooltip';
 import {immutableAccessor} from 'app/utils/Accessors';
@@ -55,8 +56,16 @@ export default class PostSummary extends React.Component {
 
     render() {
         const {currentCategory, thumbSize, ignore, onClick} = this.props;
-        const {post, content, pending_payout, total_payout, cashout_time} = this.props;
+        const {post, content, pending_payout, total_payout} = this.props;
         if (!content) return null;
+
+        let reblogged_by = content.get('first_reblogged_by')
+        if(reblogged_by) {
+          reblogged_by = <div className="PostSummary__reblogged_by">
+                             <Icon name="reblog" /> Reblogged by <Link to={'/@'+reblogged_by}>{reblogged_by}</Link>
+                         </div>
+        }
+
         const {gray, pictures, authorRepLog10, hasFlag} = content.get('stats', Map()).toJS()
         const p = extractContent(immutableAccessor, content);
         let desc = p.desc
@@ -105,6 +114,7 @@ export default class PostSummary extends React.Component {
                 <div className={hasFlag ? '' : 'PostSummary__collapse'}>
                     <div className="float-right"><Voting post={post} flag /></div>
                 </div>
+                {reblogged_by}
                 <div className="PostSummary__header show-for-small-only">
                     {content_title}
                 </div>
@@ -121,6 +131,7 @@ export default class PostSummary extends React.Component {
                         <Voting post={post} showList={false} />
                         <span className="PostSummary__time_author_category show-for-medium">
                             <TimeAuthorCategory post={p} links authorRepLog10={authorRepLog10} />
+                            <Reblog author={p.author} permlink={p.permlink} />
                         </span>
                         <VotesAndComments post={post} commentsLink={comments_link} />
                     </div>
@@ -136,13 +147,11 @@ export default connect(
         const content = state.global.get('content').get(post);
         let pending_payout = 0;
         let total_payout = 0;
-        let cashout_time = null;
         if (content) {
             pending_payout = content.get('pending_payout_value');
             total_payout = content.get('total_payout_value');
-            cashout_time = content.get('cashout_time');
         }
-        return {post, content, pending_payout, total_payout, cashout_time};
+        return {post, content, pending_payout, total_payout};
     },
 
     (dispatch) => ({

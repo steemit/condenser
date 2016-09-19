@@ -1,7 +1,6 @@
 import webpack from 'webpack';
 import git from 'git-rev-sync';
 import { isArray } from 'lodash';
-
 import baseConfig from './base.config';
 import startKoa from './utils/start-koa';
 
@@ -41,17 +40,9 @@ export default {
             ...baseConfig.module,
             loaders: [
                 ...baseConfig.module.loaders,
-                {test: /\.scss$/, loader: baseConfig.scssLoaders},
-                {test: /\.css$/, loader: baseConfig.cssLoaders}
-                //{
-                //    test: /\.(jpe?g|png|gif|svg|woff|woff2|eot|ttf)(\?v=[0-9].[0-9].[0-9])?$/,
-                //    loader: 'url?name=[sha512:hash:base64:7].[ext]',
-                //    exclude: /node_modules\/(?!font-awesome)/
-                //},
             ]
         },
         plugins: [
-            // hot reload
             new webpack.optimize.OccurenceOrderPlugin(),
             new webpack.HotModuleReplacementPlugin(),
             new webpack.NoErrorsPlugin(),

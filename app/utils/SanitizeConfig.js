@@ -97,7 +97,7 @@ export default ({large = true, highQualityPost = true, noImage = false, sanitize
         },
         div: (tagName, attribs) => {
             const attys = {}
-            const classWhitelist = ['pull-right', 'pull-left', 'text-justify']
+            const classWhitelist = ['pull-right', 'pull-left', 'text-justify', 'text-rtl']
             const validClass = classWhitelist.find(e => attribs.class == e)
             if(validClass)
                 attys.class = validClass

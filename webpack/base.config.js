@@ -1,10 +1,6 @@
 import path from 'path';
-import webpack from 'webpack';
-
+import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import writeStats from './utils/write-stats';
-
-const scssLoaders = 'style!css!autoprefixer!sass?outputStyle=expanded';
-const cssLoaders = 'style!css!autoprefixer';
 
 const Webpack_isomorphic_tools_plugin = require('webpack-isomorphic-tools/plugin');
 const webpack_isomorphic_tools_plugin =
@@ -35,13 +31,21 @@ export default {
             {
                 test: require.resolve("medium-editor-insert-plugin"),
                 loader: "imports?define=>false"
+            },
+            {
+                test: /\.css$/,
+                loader: 'style!css!autoprefixer'
+            },
+            {
+                test: /\.scss$/,
+                loader: ExtractTextPlugin.extract('style', 'css!autoprefixer!sass?outputStyle=expanded')
             }
         ]
     },
     plugins: [
-        // write webpack stats
         function () { this.plugin('done', writeStats); },
-        webpack_isomorphic_tools_plugin
+        webpack_isomorphic_tools_plugin,
+        new ExtractTextPlugin('[name]-[chunkhash].css')
     ],
     resolve: {
         root: [
@@ -49,9 +53,7 @@ export default {
         ],
         extensions: ['', '.js', '.json', '.jsx'],
         modulesDirectories: ['node_modules']
-    },
-    scssLoaders,
-    cssLoaders
+    }
 };
 /* medium-editor, add to plugins[]
 

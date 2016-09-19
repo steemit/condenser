@@ -18,7 +18,7 @@ const ABOUT_FLAG = <div>
     <ul>
         <li>Fraud or Plagiarism</li>
         <li>Hate Speech or Internet Trolling</li>
-        <li>Intentional miss-categorized content or Spam</li>
+        <li>Intentional miscategorized content or Spam</li>
     </ul>
 </div>
 
@@ -136,7 +136,7 @@ class Voting extends React.Component {
                 <CloseButton onClick={() => this.setState({showWeight: false})} />
                 <div className="clear Voting__about-flag">
                     <p>{ABOUT_FLAG}</p>
-                    <a href="#" onClick={this.voteDown} className="confirm_weight button outline" title="Flag">Flag</a>
+                    <a href="#" onClick={this.voteDown} className="button outline" title="Flag">Flag</a>
                 </div>
             </FoundationDropdown>
 

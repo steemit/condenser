@@ -118,7 +118,7 @@ export default connect(
         posts.forEach(item => {
             const content = state.global.get('content').get(item);
             if(!content) {
-                console.error('PostsList --> Missing content key', content)
+                console.error('PostsList --> Missing content key', item)
                 return
             }
             // let total_payout = 0;

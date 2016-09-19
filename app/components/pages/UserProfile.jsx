@@ -36,7 +36,14 @@ export default class UserProfile extends React.Component {
     loadMore(last_post, category) {
         const {accountname} = this.props.routeParams
         if (!last_post) return;
-        const order = category === 'feed' ? 'by_feed' : 'by_author';
+
+        let order;
+        switch(category) {
+          case "feed": order = 'by_feed'; break;
+          case "blog": order = 'by_author'; break;
+          default: console.log("unhandled category:", category);
+        }
+
         if (isFetchingOrRecentlyUpdated(this.props.global.get('status'), order, category)) return;
         const [author, permlink] = last_post.split('/');
         this.props.requestData({author, permlink, order, category, accountname});
@@ -154,9 +161,7 @@ export default class UserProfile extends React.Component {
             if (account.blog) {
                 tab_content = <PostsList
                     emptyText={`Looks like ${account.name} hasn't started blogging yet!`}
-                    posts={account.blog.filter(p => {
-                        return !(p.indexOf("re-") === 0 && p[p.length - 1] === "z");
-                    }).map(p => `${account.name}/${p}`)}
+                    posts={account.blog}
                     loading={fetching}
                     category="blog"
                     loadMore={this.loadMore}

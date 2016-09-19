@@ -54,7 +54,9 @@ class PostsList extends React.Component {
     componentWillUnmount() {
         this.detachScrollListener();
         window.removeEventListener('popstate', this.onBackButton);
-        document.body.removeEventListener('mousedown', this.closeOnOutsideClick);
+        const post_overlay = document.getElementById('post_overlay');
+        if (post_overlay) post_overlay.removeEventListener('mousedown', this.closeOnOutsideClick);
+        document.getElementsByTagName('body')[0].className = "";
     }
 
     componentWillUpdate(nextProps) {
@@ -67,7 +69,8 @@ class PostsList extends React.Component {
         if (this.state.showPost) {
             document.getElementsByTagName('body')[0].className = 'with-post-overlay';
             window.addEventListener('popstate', this.onBackButton);
-            document.body.addEventListener('mousedown', this.closeOnOutsideClick);
+            const post_overlay = document.getElementById('post_overlay');
+            if (post_overlay) post_overlay.addEventListener('mousedown', this.closeOnOutsideClick);
         } else if (prevState.showPost) {
             window.history.pushState({}, '', this.props.pathname);
             this.post_url = null;
@@ -85,7 +88,8 @@ class PostsList extends React.Component {
     closeOnOutsideClick(e) {
         const inside_post = findParent(e.target, 'PostsList__post_container');
         if (!inside_post) {
-            document.body.removeEventListener('mousedown', this.closeOnOutsideClick);
+            const post_overlay = document.getElementById('post_overlay');
+            if (post_overlay) post_overlay.removeEventListener('mousedown', this.closeOnOutsideClick);
             this.setState({showPost: null});
         }
     }
@@ -154,7 +158,7 @@ class PostsList extends React.Component {
                     {renderSummary(comments)}
                 </ul>
                 {loading && <center><LoadingIndicator type="circle" /></center>}
-                {showPost && <div className="PostsList__post_overlay">
+                {showPost && <div id="post_overlay" className="PostsList__post_overlay">
                     <CloseButton onClick={() => {this.setState({showPost: null})}} />
                     <div className="PostsList__post_container">
                         <Post post={showPost} />

@@ -23,7 +23,8 @@ class PostsList extends React.Component {
         loadMore: PropTypes.func,
         emptyText: PropTypes.string,
         showSpam: PropTypes.bool,
-        global: React.PropTypes.object.isRequired,
+        global: PropTypes.object.isRequired,
+        fetchState: PropTypes.func.isRequired,
     };
 
     static defaultProps = {
@@ -110,8 +111,9 @@ class PostsList extends React.Component {
 
     onPostClick(post, url) {
         this.original_url = window.location.pathname;
-        window.history.pushState({}, '', url);
+        this.props.fetchState(url);
         this.setState({showPost: post});
+        window.history.pushState({}, '', url);
     }
 
     render() {
@@ -170,4 +172,9 @@ export default connect(
         })
         return {...props, comments, global: state.global};
     },
+    dispatch => ({
+        fetchState: (pathname) => {
+            dispatch({type: 'FETCH_STATE', payload: {pathname}})
+        }
+    })
 )(PostsList)

@@ -151,14 +151,15 @@ export default createModule({
                 // console.log('-- RECEIVE_DATA reducer -->', order, category, author, permlink, data);
                 // console.log('-- RECEIVE_DATA state -->', state.toJS());
                 let new_state;
-                if (order === 'by_author' || order === 'by_feed') {
+                if (order === 'by_author' || order === 'by_feed' || order === 'by_comments') {
                     const by_feed = order === 'by_feed'
                     // in this case, category is either "blog" or "feed"
                     const key = ['accounts', by_feed ? accountname : author, category]
                     new_state = state.updateIn(key, List(), list => {
                         return list.withMutations(posts => {
                             data.forEach(value => {
-                                const key2 = `${value.author}/${value.permlink}`
+                                // in get_state @author/posts, comments are returned without 'author/' prefix.
+                                const key2 = order === 'by_comments' ? value.permlink :`${value.author}/${value.permlink}`
                                 if (!posts.includes(key2)) posts.push(key2);
                             });
                         });

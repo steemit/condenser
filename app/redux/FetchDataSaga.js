@@ -146,6 +146,12 @@ export function* fetchData(action) {
           limit: constants.FETCH_DATA_BATCH_SIZE,
           start_author: author,
           start_permlink: permlink}];
+    } else if( order === 'by_comments' ) {
+        call_name = 'get_discussions_by_comments';
+        args = [
+        { limit: constants.FETCH_DATA_BATCH_SIZE,
+          start_author: author,
+          start_permlink: permlink}];
     } else {
         call_name = 'get_discussions_by_active';
         args = [{

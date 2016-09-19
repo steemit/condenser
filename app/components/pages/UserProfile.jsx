@@ -41,6 +41,7 @@ export default class UserProfile extends React.Component {
         switch(category) {
           case "feed": order = 'by_feed'; break;
           case "blog": order = 'by_author'; break;
+          case "posts": order = 'by_comments'; break;
           default: console.log("unhandled category:", category);
         }
 
@@ -151,7 +152,7 @@ export default class UserProfile extends React.Component {
                   posts={account.posts.map(p => `${account.name}/${p}`)}
                   loading={fetching}
                   category="posts"
-                  loadMore={null}
+                  loadMore={this.loadMore}
                   showSpam />;
            }
            else {

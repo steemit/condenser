@@ -159,8 +159,8 @@ class PostsList extends React.Component {
                 </ul>
                 {loading && <center><LoadingIndicator type="circle" /></center>}
                 {showPost && <div id="post_overlay" className="PostsList__post_overlay">
-                    <CloseButton onClick={() => {this.setState({showPost: null})}} />
                     <div className="PostsList__post_container">
+                        <CloseButton onClick={() => {this.setState({showPost: null})}} />
                         <Post post={showPost} />
                     </div>
                 </div>}

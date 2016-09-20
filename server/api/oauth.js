@@ -122,7 +122,7 @@ function* handleFacebookCallback() {
         }
         if (!u.email) {
             console.log('-- /handle_facebook_callback no email -->', this.session.uid, u);
-            this.flash = 'Facebook login didn\'t provide any email addresses. Please make sure your Facebook account has a primary email address and try again.';
+            this.flash = {alert: 'Facebook login didn\'t provide any email addresses. Please make sure your Facebook account has a primary email address and try again.'};
             this.redirect('/');
             return;
         }

@@ -4,6 +4,7 @@ import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Icon from 'app/components/elements/Icon';
 import { connect } from 'react-redux';
 import user from 'app/redux/User';
+import Reblog from 'app/components/elements/Reblog';
 import Voting from 'app/components/elements/Voting';
 import Tooltip from 'app/components/elements/Tooltip';
 import {immutableAccessor} from 'app/utils/Accessors';
@@ -35,6 +36,12 @@ function TimeAuthorCategory({post, links, authorRepLog10, gray}) {
     );
 }
 
+function navigate(e, onClick, post, url) {
+    e.preventDefault();
+    if (onClick) onClick(post, url);
+    else browserHistory.push(url);
+}
+
 export default class PostSummary extends React.Component {
     static propTypes = {
         post: React.PropTypes.string.isRequired,
@@ -44,6 +51,7 @@ export default class PostSummary extends React.Component {
         netVoteSign: React.PropTypes.number,
         currentCategory: React.PropTypes.string,
         thumbSize: React.PropTypes.string,
+        onClick: React.PropTypes.func
     };
 
     shouldComponentUpdate(props) {
@@ -53,9 +61,19 @@ export default class PostSummary extends React.Component {
     }
 
     render() {
-        const {currentCategory, thumbSize, ignore} = this.props;
-        const {post, content, pending_payout, total_payout, cashout_time} = this.props;
+        const {currentCategory, thumbSize, ignore, onClick} = this.props;
+        const {post, content, pending_payout, total_payout} = this.props;
         if (!content) return null;
+
+        const archived = content.get('mode') === 'archived'
+
+        let reblogged_by = content.get('first_reblogged_by')
+        if(reblogged_by) {
+          reblogged_by = <div className="PostSummary__reblogged_by">
+                             <Icon name="reblog" /> Resteemed by <Link to={'/@'+reblogged_by}>{reblogged_by}</Link>
+                         </div>
+        }
+
         const {gray, pictures, authorRepLog10, hasFlag} = content.get('stats', Map()).toJS()
         const p = extractContent(immutableAccessor, content);
         let desc = p.desc
@@ -76,8 +94,12 @@ export default class PostSummary extends React.Component {
            comments_link = p.link + '#comments';
         }
 
-        let content_body = <div className="PostSummary__body entry-content"><Link to={title_link_url}>{desc}</Link></div>;
-        let content_title = <h1 className="entry-title"><Link to={title_link_url}>{title_text}</Link></h1>;
+        let content_body = <div className="PostSummary__body entry-content">
+            <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>{desc}</a>
+        </div>;
+        let content_title = <h1 className="entry-title">
+            <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>{title_text}</a>
+        </h1>;
 
         if( !(currentCategory && currentCategory.match( /nsfw/ )) ) {
            if (currentCategory !== '-' && currentCategory !== p.category && p.category.match(/nsfw/) ) {
@@ -91,9 +113,9 @@ export default class PostSummary extends React.Component {
           const size = (thumbSize == 'mobile') ? '640x480' : '128x256'
           const url = (prox ? prox + size + '/' : '') + p.image_link
           if(thumbSize == 'mobile') {
-            thumb = <Link to={p.link} className="PostSummary__image-mobile"><img src={url} /></Link>
+            thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image-mobile"><img src={url} /></a>
           } else {
-            thumb = <Link to={p.link} className="PostSummary__image" style={{backgroundImage: 'url(' + url + ')'}}></Link>
+            thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image" style={{backgroundImage: 'url(' + url + ')'}}></a>
           }
         }
         const commentClasses = []
@@ -103,11 +125,12 @@ export default class PostSummary extends React.Component {
                 <div className={hasFlag ? '' : 'PostSummary__collapse'}>
                     <div className="float-right"><Voting post={post} flag /></div>
                 </div>
+                {reblogged_by}
                 <div className="PostSummary__header show-for-small-only">
                     {content_title}
                 </div>
                 <div className="PostSummary__time_author_category_small show-for-small-only">
-                    <Link to={title_link_url}><TimeAuthorCategory post={p} links={false} authorRepLog10={authorRepLog10} gray={gray} /></Link>
+                    <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}><TimeAuthorCategory post={p} links={false} authorRepLog10={authorRepLog10} gray={gray} /></a>
                 </div>
                 {thumb}
                 <div className="PostSummary__content">
@@ -119,6 +142,7 @@ export default class PostSummary extends React.Component {
                         <Voting post={post} showList={false} />
                         <span className="PostSummary__time_author_category show-for-medium">
                             <TimeAuthorCategory post={p} links authorRepLog10={authorRepLog10} />
+                            {!archived && <Reblog author={p.author} permlink={p.permlink} />}
                         </span>
                         <VotesAndComments post={post} commentsLink={comments_link} />
                     </div>
@@ -134,13 +158,11 @@ export default connect(
         const content = state.global.get('content').get(post);
         let pending_payout = 0;
         let total_payout = 0;
-        let cashout_time = null;
         if (content) {
             pending_payout = content.get('pending_payout_value');
             total_payout = content.get('total_payout_value');
-            cashout_time = content.get('cashout_time');
         }
-        return {post, content, pending_payout, total_payout, cashout_time};
+        return {post, content, pending_payout, total_payout};
     },
 
     (dispatch) => ({

@@ -5,6 +5,7 @@ const icons = [
     'share',
     'chevron-up-circle',
     'chevron-down-circle',
+    'chevron-left',
     'chatboxes',
     'chatbox',
     'facebook',
@@ -26,6 +27,7 @@ const icons = [
     'empty',
     'flag1',
     'flag2',
+    'reblog',
 ];
 const icons_map = {};
 for (const i of icons) icons_map[i] = require(`app/assets/icons/${i}.svg`);

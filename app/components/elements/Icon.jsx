@@ -5,6 +5,7 @@ const icons = [
     'share',
     'chevron-up-circle',
     'chevron-down-circle',
+    'chevron-left',
     'chatboxes',
     'chatbox',
     'facebook',

@@ -7,6 +7,7 @@ import debounce from 'lodash.debounce';
 import Callout from 'app/components/elements/Callout';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {findParent} from 'app/utils/DomUtils';
+import Icon from 'app/components/elements/Icon';
 
 function topPosition(domElt) {
     if (!domElt) {
@@ -55,7 +56,7 @@ class PostsList extends React.Component {
         this.detachScrollListener();
         window.removeEventListener('popstate', this.onBackButton);
         const post_overlay = document.getElementById('post_overlay');
-        if (post_overlay) post_overlay.removeEventListener('mousedown', this.closeOnOutsideClick);
+        if (post_overlay) post_overlay.removeEventListener('click', this.closeOnOutsideClick);
         document.getElementsByTagName('body')[0].className = "";
     }
 
@@ -70,7 +71,7 @@ class PostsList extends React.Component {
             document.getElementsByTagName('body')[0].className = 'with-post-overlay';
             window.addEventListener('popstate', this.onBackButton);
             const post_overlay = document.getElementById('post_overlay');
-            if (post_overlay) post_overlay.addEventListener('mousedown', this.closeOnOutsideClick);
+            if (post_overlay) post_overlay.addEventListener('click', this.closeOnOutsideClick);
         } else if (prevState.showPost) {
             window.history.pushState({}, '', this.props.pathname);
             this.post_url = null;
@@ -88,9 +89,12 @@ class PostsList extends React.Component {
     closeOnOutsideClick(e) {
         const inside_post = findParent(e.target, 'PostsList__post_container');
         if (!inside_post) {
-            const post_overlay = document.getElementById('post_overlay');
-            if (post_overlay) post_overlay.removeEventListener('mousedown', this.closeOnOutsideClick);
-            this.setState({showPost: null});
+            const inside_top_bar = findParent(e.target, 'PostsList__post_top_bar');
+            if (!inside_top_bar) {
+                const post_overlay = document.getElementById('post_overlay');
+                if (post_overlay) post_overlay.removeEventListener('click', this.closeOnOutsideClick);
+                this.setState({showPost: null});
+            }
         }
     }
 
@@ -159,8 +163,15 @@ class PostsList extends React.Component {
                 </ul>
                 {loading && <center><LoadingIndicator type="circle" /></center>}
                 {showPost && <div id="post_overlay" className="PostsList__post_overlay">
+                    <div className="PostsList__post_top_overlay">
+                        <div className="PostsList__post_top_bar">
+                            <button className="back-button" type="button" title="Back" onClick={() => {this.setState({showPost: null})}}>
+                                <span aria-hidden="true"><Icon name="chevron-left" /></span>
+                            </button>
+                            <CloseButton onClick={() => {this.setState({showPost: null})}} />
+                        </div>
+                    </div>
                     <div className="PostsList__post_container">
-                        <CloseButton onClick={() => {this.setState({showPost: null})}} />
                         <Post post={showPost} />
                     </div>
                 </div>}

@@ -36,7 +36,16 @@ function TimeAuthorCategory({post, links, authorRepLog10, gray}) {
     );
 }
 
+function isLeftClickEvent(event) {
+    return event.button === 0
+}
+
+function isModifiedEvent(event) {
+    return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey)
+}
+
 function navigate(e, onClick, post, url) {
+    if (isModifiedEvent(e) || !isLeftClickEvent(e)) return;
     e.preventDefault();
     if (onClick) onClick(post, url);
     else browserHistory.push(url);

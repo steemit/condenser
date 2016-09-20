@@ -61,7 +61,8 @@ class PostsList extends React.Component {
     }
 
     componentWillUpdate(nextProps) {
-        if (this.state.showPost && (window.location.pathname !== this.post_url)) {
+        const location = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+        if (this.state.showPost && (location !== this.post_url)) {
             this.setState({showPost: null});
         }
     }

@@ -62,10 +62,12 @@ export default class Reblog extends React.Component {
     }
 
     render() {
+        if(this.props.author == this.props.account) return null;
+
         const state = this.state.active ? 'active' : 'inactive'
         const loading = this.state.loading ? ' loading' : ''
         return <span className={'Reblog__button Reblog__button-'+state + loading}>
-            <a href="#" onClick={this.reblog} title="Reblog"><Icon name="reblog" /></a>
+            <a href="#" onClick={this.reblog} title="Resteem"><Icon name="reblog" /></a>
         </span>
     }
 }

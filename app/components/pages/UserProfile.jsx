@@ -39,11 +39,9 @@ export default class UserProfile extends React.Component {
 
         let order;
         switch(category) {
-          case 'feed': order = 'by_feed'; break;
-          case 'blog': order = 'by_author'; break;
-          case 'posts': order = 'by_comments'; break;
-          case 'recent_replies': order = 'by_replies'; break;
-          default: console.log('unhandled category:', category);
+          case "feed": order = 'by_feed'; break;
+          case "blog": order = 'by_author'; break;
+          default: console.log("unhandled category:", category);
         }
 
         if (isFetchingOrRecentlyUpdated(this.props.global.get('status'), order, category)) return;
@@ -153,7 +151,7 @@ export default class UserProfile extends React.Component {
                   posts={account.posts.map(p => `${account.name}/${p}`)}
                   loading={fetching}
                   category="posts"
-                  loadMore={this.loadMore}
+                  loadMore={null}
                   showSpam />;
            }
            else {
@@ -190,8 +188,8 @@ export default class UserProfile extends React.Component {
                   emptyText={`${account.name} hasn't had any replies yet.`}
                   posts={account.recent_replies}
                   loading={fetching}
-                  category="recent_replies"
-                  loadMore={this.loadMore}
+                  category="recent-replies"
+                  loadMore={null}
                   showSpam={false} />;
         }
         else if( section === 'permissions' && isMyAccount ) {

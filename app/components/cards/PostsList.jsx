@@ -194,10 +194,6 @@ export default connect(
                 console.error('PostsList --> Missing content key', item)
                 return
             }
-            if(props.category === "posts" && content.get('depth') === 0) {
-                // do not include root posts in comments tab
-                return
-            }
             // let total_payout = 0;
             const current = state.user.get('current')
             const username = current ? current.get('username') : null

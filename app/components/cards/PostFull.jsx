@@ -199,7 +199,7 @@ export default class PostFull extends React.Component {
         const pending_payout = parsePayoutAmount(content.pending_payout_value);
         const total_payout = parsePayoutAmount(content.total_payout_value);
         const high_quality_post = pending_payout + total_payout > 10.0;
-        const showEditOption = username === author && total_payout === 0
+        const showEditOption = username === author && post_content.get('mode') != 'archived'
         const authorRepLog10 = repLog10(content.author_reputation)
 
         let post_header = <h1 className="entry-title">{content.title}</h1>

@@ -39,11 +39,11 @@ export default class UserProfile extends React.Component {
 
         let order;
         switch(category) {
-          case "feed": order = 'by_feed'; break;
-          case "blog": order = 'by_author'; break;
-          case "posts": order = 'by_comments'; break;
+          case 'feed': order = 'by_feed'; break;
+          case 'blog': order = 'by_author'; break;
+          case 'posts': order = 'by_comments'; break;
           case 'recent_replies': order = 'by_replies'; break;
-          default: console.log("unhandled category:", category);
+          default: console.log('unhandled category:', category);
         }
 
         if (isFetchingOrRecentlyUpdated(this.props.global.get('status'), order, category)) return;

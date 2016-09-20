@@ -9,7 +9,14 @@
 6. add your locale date ass it is done in https://cdn.polyfill.io script (add ',Intl.~locale.XX' at the end of url)
 7. add localeData and newly translated strings as it is done in Translator.jsx (read the comments)
 
-## how to add translations / Notes for hackers and translators
+## how to work with translations
+1. go to app/locales/YOUR_DESIRED_LANGUAGE.js (for example: app/locales/ru.js)
+2. find string by file search. Usually shortcut is ctrl+F
+3. If you need to see context where else string is used: take strings code (for example: 'sign_up', but NOT 'Sign Up'). Search through WHOLE project (shortcut is usually shift+ctrl+F). If you see something like 'translate("sign_up")' means you are found where string is used.
+4. make desired changes
+5. commit & pull request
+
+## Notes for hackers and translators
 'keep_syntax_lowercase_with_dashes' on string names. Example: show_password: 'Show Password'  
 Please keep in mind that none of the strings are bind directly to components to keep them reusable. For example:   'messages_count' can be used in one page today, but also can be placed in another tomorrow.  
 Strings must be as close to source as possible.  

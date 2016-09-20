@@ -229,6 +229,7 @@ export default class PostFull extends React.Component {
             </div>
         }
 
+        const archived    = post_content.get('mode') === 'archived'
         const firstPayout = post_content.get('mode') === "first_payout"
         const rootComment = post_content.get('depth') == 0
 
@@ -256,7 +257,7 @@ export default class PostFull extends React.Component {
                         <Voting post={post} />
                     </div>
                     <div className="column shrink">
-                            <Reblog author={author} permlink={permlink} />
+                            {!archived && <Reblog author={author} permlink={permlink} />}
                             <span className="PostFull__responses">
                                 <Link to={link} title={pluralize('Responses', content.children, true)}>
                                     <Icon name="chatboxes" className="space-right" />{content.children}

@@ -52,7 +52,8 @@ export default class Reblog extends React.Component {
 
     setReblogged(account) {
         const {author, permlink} = this.props
-        const posts = getRebloggedList(account)
+        clearRebloggedCache()
+        let posts = getRebloggedList(account)
         posts.push(author + '/' + permlink)
         if(posts.length > 200)
             posts.shift(1)
@@ -107,4 +108,8 @@ function getRebloggedList(account) {
         cachedPosts = []
     }
     return cachedPosts
+}
+
+function clearRebloggedCache() {
+    lastAccount = null
 }

@@ -65,10 +65,12 @@ export default class PostSummary extends React.Component {
         const {post, content, pending_payout, total_payout} = this.props;
         if (!content) return null;
 
+        const archived = content.get('mode') === 'archived'
+
         let reblogged_by = content.get('first_reblogged_by')
         if(reblogged_by) {
           reblogged_by = <div className="PostSummary__reblogged_by">
-                             <Icon name="reblog" /> Reblogged by <Link to={'/@'+reblogged_by}>{reblogged_by}</Link>
+                             <Icon name="reblog" /> Resteemed by <Link to={'/@'+reblogged_by}>{reblogged_by}</Link>
                          </div>
         }
 
@@ -140,7 +142,7 @@ export default class PostSummary extends React.Component {
                         <Voting post={post} showList={false} />
                         <span className="PostSummary__time_author_category show-for-medium">
                             <TimeAuthorCategory post={p} links authorRepLog10={authorRepLog10} />
-                            <Reblog author={p.author} permlink={p.permlink} />
+                            {!archived && <Reblog author={p.author} permlink={p.permlink} />}
                         </span>
                         <VotesAndComments post={post} commentsLink={comments_link} />
                     </div>

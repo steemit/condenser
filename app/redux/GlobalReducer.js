@@ -151,7 +151,7 @@ export default createModule({
                 // console.log('-- RECEIVE_DATA reducer -->', order, category, author, permlink, data);
                 // console.log('-- RECEIVE_DATA state -->', state.toJS());
                 let new_state;
-                if (order === 'by_author' || order === 'by_feed' || order === 'by_comments') {
+                if (order === 'by_author' || order === 'by_feed' || order === 'by_comments' || order === 'by_replies') {
                     const by_feed = order === 'by_feed'
                     // in this case, category is either "blog" or "feed"
                     const key = ['accounts', by_feed ? accountname : author, category]

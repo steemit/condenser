@@ -111,6 +111,9 @@ export function* fetchData(action) {
           limit: constants.FETCH_DATA_BATCH_SIZE,
           start_author: author,
           start_permlink: permlink}];
+    } else if( order === 'by_replies' ) {
+        call_name = 'get_replies_by_last_update';
+        args = [author, permlink, constants.FETCH_DATA_BATCH_SIZE];
     } else if( order === 'responses' ) {
         call_name = 'get_discussions_by_children';
         args = [

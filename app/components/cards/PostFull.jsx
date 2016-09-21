@@ -211,6 +211,7 @@ export default class PostFull extends React.Component {
                 </li>
             }
             post_header = <div className="callout">
+                <h3 className="entry-title">RE: {content.root_title}</h3>
                 <h5>You are viewing a single comment&#39;s thread from:</h5>
                 <p>
                     {content.root_title}

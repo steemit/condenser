@@ -317,7 +317,7 @@ function* handleVkCallback() {
           birthday: birthday,
           gender: userData.gender,
           location_id: null,
-          location_name: [country, city].joi(', '),
+          location_name: [country, city].join(', '),
           locale: userData.locale,
           timezone: userData.timezone,
           remote_ip: getRemoteIp(this.request.req),

@@ -9,7 +9,6 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import user from 'app/redux/User';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
-// import Tooltip from 'app/components/elements/Tooltip';
 import Icon from 'app/components/elements/Icon';
 import Userpic from 'app/components/elements/Userpic';
 import transaction from 'app/redux/Transaction'
@@ -318,12 +317,11 @@ class CommentImpl extends React.Component {
                         </div>
                         <span className="Comment__header-user">
                             <Icon name="user" className="Comment__Userpic-small" />
-                            <span itemProp="author" itemScope itemType="http://schema.org/Person">
-                                <Author author={comment.author} authorRepLog10={authorRepLog10} /></span>
+                            <Author author={comment.author} authorRepLog10={authorRepLog10} />
                         </span>
                         &nbsp; &middot; &nbsp;
                         <Link to={comment_link} className="PlainLink">
-                            <TimeAgoWrapper date={comment.created} />
+                            <TimeAgoWrapper date={comment.created} className="updated" />
                         </Link>
                         { (this.state.collapsed || hide_body) &&
                           <Voting post={post} showList={false} /> }

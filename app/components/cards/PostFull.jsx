@@ -10,7 +10,6 @@ import user from 'app/redux/User';
 import transaction from 'app/redux/Transaction'
 import Voting from 'app/components/elements/Voting';
 import Reblog from 'app/components/elements/Reblog';
-import Tooltip from 'app/components/elements/Tooltip';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import ReplyEditor from 'app/components/elements/ReplyEditor';
 import {immutableAccessor} from 'app/utils/Accessors';
@@ -25,12 +24,10 @@ import {repLog10, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 function TimeAuthorCategory({content, authorRepLog10, showTags}) {
     return (
         <span className="PostFull__time_author_category vcard">
-            <Tooltip t={new Date(content.created).toLocaleString()}>
-                <Icon name="clock" className="space-right" />
-                <span className="TimeAgo"><TimeAgoWrapper date={content.created} /></span>
-            </Tooltip>
-            <span> by <Author author={content.author} authorRepLog10={authorRepLog10} /></span>
-            {showTags && <span> in&nbsp;<TagList post={content} /></span>}
+            <Icon name="clock" className="space-right" />
+            <TimeAgoWrapper date={content.created} className="updated" />
+            {} by <Author author={content.author} authorRepLog10={authorRepLog10} />
+            {showTags && <span> in <TagList post={content} single /></span>}
         </span>
      );
 }
@@ -214,6 +211,7 @@ export default class PostFull extends React.Component {
                 </li>
             }
             post_header = <div className="callout">
+                <h3 className="entry-title">RE: {content.root_title}</h3>
                 <h5>You are viewing a single comment&#39;s thread from:</h5>
                 <p>
                     {content.root_title}

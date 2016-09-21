@@ -232,7 +232,7 @@ export default class PostFull extends React.Component {
         const rootComment = post_content.get('depth') == 0
 
         return (
-            <article className="PostFull hentry" itemScope itemType ="http://schema.org/blogPost">
+            <article className="PostFull hentry" itemScope itemType="http://schema.org/blogPost">
                 <div className="float-right"><Voting post={post} flag /></div>
                 <div className="PostFull__header">
                     {post_header}
@@ -263,14 +263,8 @@ export default class PostFull extends React.Component {
                             </span>
                             <span className="PostFull__reply">
                                 {!$STM_Config.read_only_mode && <a onClick={onShowReply}>Reply</a>}
-                                {showEditOption && !showEdit && <span>
-                                    &nbsp;&nbsp;
-                                    <a onClick={onShowEdit}>Edit</a>
-                                </span>}
-                                {showDeleteOption && !showReply && <span>
-                                    &nbsp;&nbsp;
-                                    <a onClick={onDeletePost}>Delete</a>
-                                </span>}
+                                {' '}{showEditOption && !showEdit && <a onClick={onShowEdit}>Edit</a>}
+                                {' '}{showDeleteOption && !showReply && <a onClick={onDeletePost}>Delete</a>}
                             </span>
                             <FoundationDropdownMenu menu={share_menu} icon="share" label="Share" dropdownPosition="bottom" dropdownAlignment="right" />
                     </div>

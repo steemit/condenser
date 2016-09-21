@@ -268,11 +268,11 @@ function* handleRedditCallback() {
     return null;
 }
 
-/*
-function retrieveVkUserData(access_token) {
-    console.log('https://api.vk.com/method/account.getProfileInfo?v=5.53&access_token='+access_token)
+
+function retrieveVkUserData(access_token, userId) {
+    console.log('https://api.vk.com/method/account.getProfileInfo?v=5.53&user_ids='+userId)
     return new Promise((resolve, reject) => {
-       vk.query().get('https://api.vk.com/method/account.getProfileInfo?v=5.53&access_token='+access_token)
+       vk.query().get('https://api.vk.com/method/users.get?v=5.53&user_ids='+userId+'&fields=verified,sex,bdate,city,country,nickname,timezone,screen_name')
        .request((err, res) => {
                 if (err) {
                     reject(err);
@@ -281,11 +281,12 @@ function retrieveVkUserData(access_token) {
                 }
             });
     });
-}*/
+}
 
 function* handleVkCallback() {
-    print ('vk - session id', this.session.uid);
-    print ('vk - query', this.query)
+    let print = getLogger('oauth - vk').print;
+    print ('session id', this.session.uid);
+    print ('query', this.query)
     //console.log('-- /handle_facebook_callback -->', this.session.uid, this.query);
     let verified_email = false;
     let vkData = this.query;
@@ -293,8 +294,33 @@ function* handleVkCallback() {
       //const u = yield retrieveVkUserData(this.query.access_token);
       //print ('received data', u)
       if (!vkData['raw[email]']) {
-          return logErrorAndRedirect(this, 'vk:1', 'we need your email address so later you can recover account');
+          return logErrorAndRedirect(this, 'Ошибка регистрации через vkontakte:', 'нам нужен ваш email, на случай если вы забудете пароль');
       }
+      let provider = 'vk'
+      let providerId = vkData['raw[user_id]']
+      let email = vkData['raw[email]']
+
+      const u = yield retrieveVkUserData(vkData.access_token, providerId);
+      print ('user dara', u);
+      /*
+      const attrs = {
+          uid: this.session.uid,
+          name: u.name,
+          email: email,
+          first_name: '',
+          last_name: '',
+          birthday: null,
+          gender: u.gender,
+          picture_small: u.picture ? u.picture.data.url : null,
+          location_id: u.location ? u.location.id : null,
+          location_name: u.location ? u.location.name : null,
+          locale: u.locale,
+          timezone: u.timezone,
+          remote_ip: getRemoteIp(this.request.req),
+          verified: u.verified,
+          waiting_list: false,
+          facebook_id: u.id
+      };
        /*
         const u = yield retrieveVkUserData(this.query.access_token);
         verified_email = !!(u.verified && u.email);

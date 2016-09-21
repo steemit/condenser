@@ -17,6 +17,7 @@ import Icon from 'app/components/elements/Icon';
 import {key_utils} from 'shared/ecc'
 import { translate } from '../Translator.js';
 import { SEGMENT_ANALYTICS_KEY, LANDING_PAGE_URL, WHITEPAPER_URL } from 'config/client_config';
+import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 
 class App extends React.Component {
     constructor(props) {
@@ -63,6 +64,8 @@ class App extends React.Component {
         e.preventDefault();
         // this.setState({open: this.state.open ? null : 'left'});
         this.refs.side_panel.show();
+        console.log('sidebar menu toggled')
+        analytics.track('sidebar menu toggled')
     }
 
     handleClose = () => this.setState({open: null});
@@ -71,9 +74,22 @@ class App extends React.Component {
         const a = e.target.nodeName.toLowerCase() === 'a' ? e.target : e.target.parentNode;
         // this.setState({open: null});
         if (a.host !== window.location.host) return;
+        console.log(a)
         e.preventDefault();
         browserHistory.push(a.pathname + a.search + a.hash);
     };
+
+    componentWillReceiveProps(nextProps) {
+        console.log('nextProps', nextProps)
+        console.log('browserHistory', browserHistory)
+        console.log(this.props.router)
+        console.log('this.props.location', this.props.location)
+        const newPath = '/dicks'
+        console.log('browserHistory', browserHistory)
+        // this checker is important
+        // if (this.props.location.pathname != newPath) browserHistory.replace('/dicks')
+        // browserHistory.replace('/dicks')
+    }
 
     onEntropyEvent(e) {
         if(e.type === 'mousemove')
@@ -151,14 +167,18 @@ class App extends React.Component {
                             <br />
                             <br />
                             <div className="tag3">
-                                <b>{translate("get_INVEST_TOKEN_when_sign_up", {signupBonus: signup_bonus})}</b>
+                                <b>{translate("get_INVEST_TOKEN_when_sign_up", {signupBonus: localizedCurrency(signup_bonus)})}</b>
                             </div>
                         </div>
                     </div>
                 </div>
             );
         }
-
+        if (process.env.BROWSER) {
+            console.log(window.history)
+            console.log(this.props.history)
+            // console.log(browserHistory.replace('/dicks'))
+        }
         return <div className={'App' + (lp ? ' LP' : '') + (ip ? ' index-page' : '')} onMouseMove={this.onEntropyEvent}>
             <SidePanel ref="side_panel" alignment="right">
                 <TopRightMenu vertical navigate={this.navigate} />

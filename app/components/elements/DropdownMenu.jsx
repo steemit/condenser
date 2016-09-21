@@ -46,7 +46,7 @@ export default class DropdownMenu extends React.Component {
     };
 
     render() {
-        const {el, items, selected, children, className, title, href} = this.props;
+        const {el, items, selected, children, className, title, href, onClick} = this.props;
         const selectedEntry = items.find(i => i.value === selected)
         const selectedLabel = selectedEntry && selectedEntry.label ? selectedEntry.label : selected
         const entry = <a key="entry" href={href || '#'} onClick={this.show}>
@@ -58,7 +58,6 @@ export default class DropdownMenu extends React.Component {
         </a>;
         const menu = <VerticalMenu key="menu" title={title} items={items} hideValue={selected} className="VerticalMenu" />;
         const cls = 'DropdownMenu' + (this.state.shown ? ' show' : '') + (className ? ` ${className}` : '')
-        return React.createElement(el, {className: cls}, [entry, menu]);
+        return React.createElement(el, {className: cls, onClick}, [entry, menu]);
     }
 }
-

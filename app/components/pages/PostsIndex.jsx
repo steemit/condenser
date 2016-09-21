@@ -103,6 +103,7 @@ module.exports = {
     path: ':order(/:category)',
     component: connect(
         (state) => {
+            // console.log('state.global', state.global)
             return {
                 discussions: state.global.get('discussion_idx'),
                 status: state.global.get('status'),

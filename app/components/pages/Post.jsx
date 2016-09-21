@@ -70,6 +70,7 @@ class Post extends React.Component {
         let g = this.props.global;
         let post = rout_params.username + '/' + rout_params.slug;
         const dis = g.get('content').get(post);
+
         if (!dis) return null;
 
         if(!showAnyway) {
@@ -156,7 +157,7 @@ class Post extends React.Component {
                 {!current_user && <div className="row">
                     <div className="column">
                         <div className="Post__promo">
-                            {translate('authors_get_paid_when_people_like_you_upvote_their_post')}
+                            {translate('authors_get_paid_when_people_like_you_upvote_their_post')}.
                             <br /> {// remove '$' from signup_bonus before parsing it into local currency
                                     translate('if_you_enjoyed_what_you_read_earn_amount', {amount: localizedCurrency(signup_bonus.substring(1))})}
                             <br /> {translate('when_you') + ' '}

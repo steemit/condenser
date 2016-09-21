@@ -145,6 +145,11 @@ class LoginForm extends Component {
                                                         {translate('update_your_password')}
                                                     </a>
                             })} />
+                        {translate('password_is_bound_to_your_accounts_owner_key')}.
+                        <br />
+                        {translate('however_you_can_use_it_to') + ' '}
+                        <a onClick={this.showChangePassword}>{translate('update_your_password')}</a>
+                        {' ' + translate('to_obtaion_a_more_secure_set_of_keys')}.
                     </span>
                 } else if (error === 'active_login_blocked') {
                     error = <span>{translate('this_password_is_bound_to_your_accounts_private_key')}</span>

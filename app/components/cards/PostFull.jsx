@@ -135,15 +135,23 @@ class PostFull extends React.Component {
         const author = post_content.get('author')
         const permlink = post_content.get('permlink')
         this.props.showPromotePost(author, permlink)
+        analytics.track('promote button clicked')
+    }
+
+    trackAnalytics = eventType => {
+        console.log(eventType)
+        analytics.track(eventType)
     }
 
     render() {
         const {props: {username, post}, state: {PostFullReplyEditor, PostFullEditEditor, formId, showReply, showEdit},
             onShowReply, onShowEdit, onDeletePost} = this
         const post_content = this.props.global.get('content').get(this.props.post);
+        // console.log(post_content)
         if (!post_content) return null;
         const p = extractContent(immutableAccessor, post_content);
         const content = post_content.toJS();
+        // console.log(content)
         const {author, permlink, parent_author, parent_permlink} = content
         const jsonMetadata = this.state.showReply ? null : p.json_metadata
         // let author_link = '/@' + content.author;
@@ -268,10 +276,10 @@ class PostFull extends React.Component {
                                 </span>}
                                 {showDeleteOption && !showReply && <span>
                                     &nbsp;&nbsp;
-                                    <a onClick={onDeletePost}>{translate('edit')}</a>
+                                    <a onClick={onDeletePost}>{translate('delete')}</a>
                                 </span>}
                             </span>
-                            <FoundationDropdownMenu menu={share_menu} icon="share" label={translate('share')} dropdownPosition="bottom" dropdownAlignment="right" />
+                            <FoundationDropdownMenu menu={share_menu} onClick={this.trackAnalytics.bind(this, '"share" dropdown menu clicked')} icon="share" label={translate('share')} dropdownPosition="bottom" dropdownAlignment="right" />
                     </div>
                 </div>
                 <div className="row">

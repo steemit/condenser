@@ -23,6 +23,7 @@ class UserWallet extends React.Component {
         this.onShowDeposit = () => {this.setState({showDeposit: !this.state.showDeposit})}
         this.onShowDepositSteem = (e) => {
             e.preventDefault()
+            this.trackAnalytics('buy golos button clicked in user\'s wallet')
             this.setState({showDeposit: !this.state.showDeposit, depositType: 'STEEM'})
         }
         this.onShowDepositPower = (e) => {
@@ -30,6 +31,10 @@ class UserWallet extends React.Component {
             this.setState({showDeposit: !this.state.showDeposit, depositType: 'VESTS'})
         }
         // this.onShowDeposit = this.onShowDeposit.bind(this)
+        this.trackAnalytics = eventType => {
+            console.log(eventType)
+            analytics.track(eventType)
+        }
     }
     render() {
         const {state: {showDeposit, depositType, toggleDivestError}, onShowDeposit, onShowDepositSteem, onShowDepositPower} = this
@@ -126,7 +131,7 @@ class UserWallet extends React.Component {
                     <h4 className="uppercase">{translate('balances')}</h4>
                 </div>
                 {isMyAccount && <div className="column small-12 medium-4">
-                    <button className="UserWallet__buysp button hollow float-right " onClick={this.onShowDepositSteem}>{translate('buy_OWNERSHIP_TOKEN_or_INVEST_TOKEN')}</button>
+                    <button className="UserWallet__buysp button hollow float-right" onClick={this.onShowDepositSteem}>{translate('buy_OWNERSHIP_TOKEN_or_INVEST_TOKEN')}</button>
                 </div>}
             </div>
             <br />
@@ -143,7 +148,7 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
-                    <DropdownMenu selected={<span className="uppercase">{steem_balance_str + ' ' + OWNERSHIP_TOKEN}</span>} className="Header__sort-order-menu" items={steem_menu} el="span" />
+                    <DropdownMenu onClick={this.trackAnalytics.bind(this, 'golos dropdown in user\'s profile clicked')} selected={<span className="uppercase">{steem_balance_str + ' ' + OWNERSHIP_TOKEN}</span>} className="Header__sort-order-menu" items={steem_menu} el="span" />
                     : steem_balance_str + ' ' + OWNERSHIP_TOKEN}
                 </div>
             </div>
@@ -160,7 +165,7 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
-                    <DropdownMenu selected={<span className="uppercase">{power_balance_str + ' ' + OWNERSHIP_TOKEN}</span>} className="Header__sort-order-menu" items={power_menu} el="span" />
+                    <DropdownMenu onClick={this.trackAnalytics.bind(this, 'golos power dropdown in user\'s profile clicked')} selected={<span className="uppercase">{power_balance_str + ' ' + OWNERSHIP_TOKEN}</span>} className="Header__sort-order-menu" items={power_menu} el="span" />
                     : power_balance_str + ' ' + OWNERSHIP_TOKEN}
                 </div>
             </div>
@@ -172,7 +177,7 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
-                    <DropdownMenu selected={sbd_balance_str} items={dollar_menu} el="span" />
+                    <DropdownMenu onClick={this.trackAnalytics.bind(this, 'gbg dropdown in user\'s profile clicked')} selected={sbd_balance_str} items={dollar_menu} el="span" />
                     : sbd_balance_str}
                 </div>
             </div>

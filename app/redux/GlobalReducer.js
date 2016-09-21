@@ -54,11 +54,11 @@ export default createModule({
         {
             action: 'RECEIVE_COMMENT',
             reducer: (state, {payload: op}) => {
-                const {author, permlink, parent_author = '', parent_permlink = '', title = '', body} = op
+                const {author, permlink, parent_author = '', parent_permlink = '', title = '', body, i18n_category} = op
                 const key = author + '/' + permlink
 
                 let updatedState = state.updateIn(['content', key], Map(emptyContent), r => r.merge({
-                    author, permlink, parent_author, parent_permlink,
+                    author, permlink, parent_author, parent_permlink, i18n_category,
                     title: title.toString('utf-8'),
                     body: body.toString('utf-8'),
                 }))

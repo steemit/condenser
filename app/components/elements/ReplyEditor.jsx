@@ -14,9 +14,11 @@ import g from 'app/redux/GlobalReducer'
 import links from 'app/utils/Links'
 import {Map, Set} from 'immutable'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
-import { translate } from '../../Translator.js';
 import Remarkable from 'remarkable'
+import { translate } from 'app/Translator.js';
+// TODO check and remove this
 import { transliterate } from 'transliteration';
+import { detransliterate } from 'app/utils/ParsersAndFormatters';
 
 const remarkable = new Remarkable({ html: true, linkify: false })
 const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
@@ -143,8 +145,9 @@ class ReplyEditor extends React.Component {
             let rte = false
             if(process.env.BROWSER) {
                 const {isStory} = this.props
-                if(isStory)
-                    rte = JSON.parse(localStorage.getItem('replyEditorData-rte') || RTE_DEFAULT);
+                if(isStory) {
+                        rte = JSON.parse(localStorage.getItem('replyEditorData-rte') || RTE_DEFAULT);
+                }
             }
             let rte_value;
             if (RichTextEditor) {
@@ -434,6 +437,7 @@ export default formId => reduxForm(
             formId,
             metaLinkData,
         }
+        // console.log('ret', ret)
         return ret
     },
 
@@ -451,9 +455,13 @@ export default formId => reduxForm(
         },
         reply: ({category, title, body, author, permlink, parent_author, parent_permlink,
             type, originalPost, autoVote = false, state, jsonMetadata, /*metaLinkData,*/ successCallback, errorCallback, loadingCallback}) => {
-
+                // console.log('type', type)
+                // console.log('category', category)
+                // console.log('jsonMetadata', jsonMetadata)
             // const post = state.global.getIn(['content', author + '/' + permlink])
             const username = state.user.getIn(['current', 'username'])
+            console.log('category', category)
+            category.split(' ').map((item) => {console.log(/^[а-я]/.test(item))})
             // Parse categories:
             // if category string starts with russian symbol, add 'ru-' prefix to it
             // when transletirate it
@@ -461,9 +469,10 @@ export default formId => reduxForm(
             // (all of this is needed because blockchain does not allow russian symbols in category)
             if (category) {
                 category = category.split(' ')
-                                    .map(item => /^[а-я]/.test(item) ? 'ru-' + transliterate(category) : item)
+                                    .map(item => /^[а-я]/.test(item) ? 'ru--' + detransliterate(item, true) : item)
                                     .join(' ')
             }
+            console.log(category)
             // Wire up the current and parent props for either an Edit or a Submit (new post)
             //'submit_story', 'submit_comment', 'edit'
             const linkProps =
@@ -525,12 +534,14 @@ export default formId => reduxForm(
                 errorCallback(translate('use_limited_amount_of_tags', {tagsLength: meta.tags.length, includingCategory}))
                 return
             }
+
             const operation = {
                 ...linkProps,
                 category: rootCategory, title, body,
                 json_metadata: meta,
                 __config: {originalPost, autoVote}
             }
+
             // loadingCallback starts the loading indicator
             loadingCallback()
             dispatch(transaction.actions.broadcastOperation({

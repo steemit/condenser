@@ -5,6 +5,7 @@ export const emptyContent = {
     author: '',
     permlink: '',
     category: '',
+    i18n_category: '',
     parent_author: '',
     parent_permlink: '',
     title: '',

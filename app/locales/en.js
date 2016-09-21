@@ -1,5 +1,7 @@
 import { APP_NAME, APP_URL, LANDING_PAGE_URL, DEBT_TOKEN, DEBT_TOKEN_SHORT, OWNERSHIP_TOKEN, CURRENCY_SIGN, INVEST_TOKEN } from 'config/client_config';
-
+/**
+ * see: app/locales/README.md
+ */
 const en = 	{
 	// this variables mainly used in navigation section
 	about: "About",
@@ -23,7 +25,7 @@ const en = 	{
 	submit_a_story: 'Submit a Story',
 	nothing_yet: 'Nothing yet',
 	close: 'Close',
-	// next 5 strings were supposed to be sinngle block of text, but due large amount,
+	// next 5 strings were supposed to be sinngle block of text, but due large size,
 	// code erros they were splitted.
 	authors_get_paid_when_people_like_you_upvote_their_post: 'Authors get paid when people like you upvote their post',
 	if_you_enjoyed_what_you_read_earn_amount: 'If you enjoyed what you read here, earn {amount} ' + INVEST_TOKEN,
@@ -67,7 +69,9 @@ const en = 	{
 	account_creation_succes: 'Your account has been successfully created!',
 	account_recovery_succes: 'Your account has been successfully recovered!',
 	password_update_succes: 'The password for {accountName} was successfully updated',
-	password_is_bound_to_account: "This password is bound to your account\'s owner key and can not be used to login to this site. \nHowever, you can use it to {changePasswordLink} to obtain a more secure set of keys.",
+	password_is_bound_to_your_accounts_owner_key: "This password is bound to your account\'s owner key and can not be used to login to this site",
+	however_you_can_use_it_to: "However, you can use it to",
+	to_obtaion_a_more_secure_set_of_keys: "to obtain a more secure set of keys",
 	update_your_password: 'update your password',
 	enter_username: 'Enter your username',
 	password_or_wif: 'Password or WIF',
@@ -490,7 +494,11 @@ const en = 	{
 	// next 3 strings are used conditionally together
 	show_more: 'Show more',
 	show_less: 'Show less',
-	value_posts: 'value posts'
+	value_posts: 'value posts',
+	// PormotePost.jsx
+	promote_post: 'Promote Post',
+	spend_your_DEBT_TOKEN_to_advertise_this_post: 'Spend your ' + DEBT_TOKEN + 's to advertise this post in the promoted content section',
+	you_successdully_promoted_this_post: 'You successfully promoted this post'
 }
 
 export { en }

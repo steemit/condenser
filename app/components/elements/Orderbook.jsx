@@ -1,6 +1,7 @@
 import React from "react";
 import OrderbookRow from "./OrderbookRow";
-import { translate } from '../../Translator.js';
+import { translate } from 'app/Translator.js';
+import { localizedCurrency, localCurrencySymbol } from 'app/components/elements/LocalizedCurrency';
 import { OWNERSHIP_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN } from 'config/client_config';
 
 export default class Orderbook extends React.Component {
@@ -50,8 +51,8 @@ export default class Orderbook extends React.Component {
             <thead>
                 <tr>
                     <th>{translate(buy ? "total_DEBT_TOKEN_SHORT_CURRENCY_SIGN" : "price")}</th>
-                    <th>{buy ? `${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})` : OWNERSHIP_TOKEN}</th>
-                    <th>{buy ? OWNERSHIP_TOKEN : `${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}</th>
+                    <th>{buy ? `${DEBT_TOKEN_SHORT} (${localCurrencySymbol})` : OWNERSHIP_TOKEN}</th>
+                    <th>{buy ? OWNERSHIP_TOKEN : `${DEBT_TOKEN_SHORT} (${localCurrencySymbol})`}</th>
                     <th>{translate(buy ? "price" : "total_DEBT_TOKEN_SHORT_CURRENCY_SIGN")}</th>
                 </tr>
             </thead>

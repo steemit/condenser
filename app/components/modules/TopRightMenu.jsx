@@ -28,6 +28,10 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
     const account_link = `/@${username}`;
     const posts_link = `/@${username}/posts`;
     const reset_password_link = `/@${username}/password`;
+    function trackAnalytics(eventType) {
+        console.log(eventType)
+        analytics.track(eventType)
+    }
     if (loggedIn) { // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!
         const user_menu = [
             {link: account_link, value: translate('blog')},
@@ -50,6 +54,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                     dropdownPosition="bottom"
                     dropdownAlignment="right"
                     dropdownContent={<VerticalMenu items={user_menu} title={username} />}
+                    onClick={trackAnalytics.bind(this, 'user dropdown menu clicked')}
                 >
                     {!vertical && <li className={'Header__userpic '}>
                         <a href={account_link} title={username} onClick={e => e.preventDefault()}>

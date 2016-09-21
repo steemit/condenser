@@ -1,6 +1,8 @@
 
 import { APP_NAME, APP_URL, LANDING_PAGE_URL, OWNERSHIP_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, INVEST_TOKEN } from 'config/client_config';
-
+/**
+ * see: app/locales/README.md
+ */
 const ru = {
 	// this variables mainly used in navigation section
 	about: "О проекте",
@@ -24,10 +26,10 @@ const ru = {
 	submit_a_story: 'Добавить пост',
 	nothing_yet: 'Пока ничего нет',
 	close: 'Закрыть',
-	// next 5 strings were supposed to be sinngle block of text, but due large amount,
+	// next 5 strings were supposed to be sinngle block of text, but due large size,
 	// code erros they were splitted.
 	authors_get_paid_when_people_like_you_upvote_their_post: 'Авторам платят когда люди голосуют за их посты',
-	if_you_enjoyed_what_you_read_earn_amount: "Если вам нравится что вы находите здесь, заработайте {amount} в " + INVEST_TOKEN,
+	if_you_enjoyed_what_you_read_earn_amount: "Если вам нравится что вы читаете, заработайте {amount} в " + INVEST_TOKEN,
 	when_you: "когда вы",
 	when_you_link_text: 'зарегистрируетесь',
 	and_vote_for_it: 'и проголосуете за него',
@@ -70,7 +72,9 @@ const ru = {
 	account_creation_succes: 'Твой аккаунт успешно создан!',
 	account_recovery_succes: 'Твой аккаунт успено восстановлен!',
 	password_update_succes: 'Пароль для {accountName} был успешно обновлен',
-	password_is_bound_to_account: "Этот пароль привязан к главному ключу аккаунта и не может быть использован для логинации на сайте. Тем не менее его можно использовать {changePasswordLink} для получения более безопасного набора ключей.",
+	password_is_bound_to_your_accounts_owner_key: "Этот пароль привязан к главному ключу аккаунта и не может быть использован для логинации на сайте",
+	however_you_can_use_it_to: "Тем не менее его можно использовать чтобы",
+	to_obtaion_a_more_secure_set_of_keys: "для получения более безопасного набора ключей",
 	update_your_password: 'обновить твой пароль',
 	enter_username: 'Введи свое имя пользователя',
 	password_or_wif: 'Пароль или WIF',
@@ -369,7 +373,7 @@ const ru = {
 	remove_vote: 'Убрать голос',
 	upvote: 'Голосовать за',
 	we_will_reset_curation_rewards_for_this_post: 'сбросит ваши кураторские вознаграждения за этот пост',
-	removing_your_vote: 'Удаляем ваш голос',
+	removing_your_vote: 'Удаление голоса',
 	changing_to_an_upvote: 'Измение на голос за',
 	changing_to_a_downvote: 'Измение на голос против',
 	confirm_flag: 'Подтвердить голос против',
@@ -395,7 +399,7 @@ const ru = {
 	comments: 'Комментарии',
 	topics: 'Топики',
 	// TODO
-	this_password_is_bound_to_your_accounts_private_key: 'This password is bound to your account\'s active key and can not be used to login to this page. You may use this active key on other more secure pages like the Wallet or Market pages.',
+	this_password_is_bound_to_your_accounts_private_key: 'Этот пароль привязан к активному ключу вашего аккаунта и не может быть использован для входа на эту страницу. Вы можете использовать его для входа на другие более защищенные страницы как "кошелек" или "маркет".',
 	potential_payout: 'Потенциальная выплата',
 	boost_payments: 'Платеж за продвижение',
 	authors: 'Авторы',
@@ -495,7 +499,11 @@ const ru = {
 	// next 3 strings are used conditionally together
 	show_more: 'Показать больше',
 	show_less: 'Показать меньше',
-	value_posts: 'сообщений низкой стоимости'
+	value_posts: 'сообщений низкой стоимости',
+	// PormotePost.jsx
+	promote_post: 'Продвинуть пост',
+	spend_your_DEBT_TOKEN_to_advertise_this_post: 'Используйте ваши ' + DEBT_TOKEN + ' чтобы прорекламировать этот пост в секции продвигаемого контента',
+	you_successdully_promoted_this_post: 'Вы успешно продвинули этот пост'
 }
 
 export { ru }

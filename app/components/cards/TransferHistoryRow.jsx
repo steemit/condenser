@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
-import Tooltip from 'app/components/elements/Tooltip';
 // import Icon from 'app/components/elements/Icon';
 import Memo from 'app/components/elements/Memo'
 import {numberWithCommas, vestsToSp} from 'app/utils/StateFunctions'
@@ -82,9 +81,7 @@ class TransferHistoryRow extends React.Component {
         return(
                 <tr key={op[0]} className="Trans">
                     <td>
-                        <Tooltip t={new Date(op[1].timestamp).toLocaleString()}>
-                            <TimeAgoWrapper date={op[1].timestamp} />
-                        </Tooltip>
+                        <TimeAgoWrapper date={op[1].timestamp} />
                     </td>
                     <td className="TransferHistoryRow__text" style={{maxWidth: "40rem"}}>
                         {description_start}

@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import user from 'app/redux/User';
 import Reblog from 'app/components/elements/Reblog';
 import Voting from 'app/components/elements/Voting';
-import Tooltip from 'app/components/elements/Tooltip';
 import {immutableAccessor} from 'app/utils/Accessors';
 import extractContent from 'app/utils/ExtractContent';
 import { browserHistory } from 'react-router';
@@ -21,11 +20,9 @@ function TimeAuthorCategory({post, links, authorRepLog10, gray}) {
 
     return (
         <span className="vcard">
-            <Tooltip t={new Date(post.created).toLocaleString()}>
-                <span className="TimeAgo"><TimeAgoWrapper date={post.created} /></span>
-            </Tooltip>
+            <TimeAgoWrapper date={post.created} className="updated" />
             <span> by&nbsp;
-                <span itemProp="author" itemScope itemType="http://schema.org/Person">
+                <span className="author" itemProp="author" itemScope itemType="http://schema.org/Person">
                     {links ? <Link to={post.author_link}>{author}</Link> :
                         <strong>{author}</strong>}
                     <Reputation value={authorRepLog10} />

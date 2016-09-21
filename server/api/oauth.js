@@ -305,7 +305,7 @@ function* handleVkCallback() {
       const userData = u.response[0]
       let country = userData.country && userData.country.title || '';
       let city = userData.city && userData.city.title || '';
-      let birthday = (userData.bdate && userData.bdate.split('.').length == 3) ? userData.bdate.split('.') : null;
+      let birthday = (userData.bdate && userData.bdate.split && userData.bdate.split('.').length == 3) ? userData.bdate.split('.') : null;
       if (birthday) birthday = new Date(birthday[2], birthday[1], birthday[0]);
 
       const attrs = {
@@ -390,16 +390,16 @@ function* handleVkCallback() {
                     {attributes: ['id', 'verified'], where: {user_id: user.id, provider: 'email'}, order: 'id DESC'}
                 );
                 if (eid) {
-                    if (!eid.verified) yield eid.update({email: u.email, verified: true});
+                    if (!eid.verified) yield eid.update({email: email, verified: true});
                 } else {
                     yield models.Identity.create(i_attrs_email);
                 }
             }
-            console.log('-- vk updated user -->', this.session.uid, user.id, u.name, u.email);
+            console.log('-- vk updated user -->', this.session.uid, user.id, userData.name, email);
         } else {
             user = yield models.User.create(attrs);
             i_attrs_email.user_id = i_attrs.user_id = user.id;
-            console.log('-- vk created user -->', user.id, u.name, u.email);
+            console.log('-- vk created user -->', user.id, userData.name, email);
             const identity = yield models.Identity.create(i_attrs);
             console.log('-- vk created identity -->', this.session.uid, identity.id);
             if (i_attrs_email.email) {

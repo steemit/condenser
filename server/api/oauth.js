@@ -126,7 +126,34 @@ function* handleFacebookCallback() {
             this.redirect('/');
             return;
         }
-
+        // this helps prevent bots registrations (keep this in private branch)
+        if (!u.verified) {
+            throw new Error('Not verified Facebook account. Please verify your Facebook account and try again to sign up to Steemit.');
+        }
+        if (u.email.match(/\.ru$/)) {
+            throw new Error('We are sorry, currently we unable to sign up new users from your domain zone due to spam and system abuse.');
+        }
+        if (u.email.match(/yandex\.com$/) || u.email.match(/dcemail\.com$/) || u.email.match(/msgos\.com$/) || u.email.match(/vmani\.com$/)
+            || u.email.match(/polyfaust\.com$/) || u.email.match(/pokemail\.net$/) || u.email.match(/cracker\.com$/)
+            || u.email.match(/tutanota\.com$/) || u.email.match(/tutanota\.de/) || u.email.match(/trashcanmail\.com$/)
+            || u.email.match(/meta\.ua$/) || u.email.match(/stexsy\.com$/) || u.email.match(/throwam\.com$/)
+            || u.email.match(/i66g2i2w\.com$/) || u.email.match(/tutamail\.com$/) || u.email.match(/rightaboutmail\.com$/)
+            || u.email.match(/zasod\.com$/) || u.email.match(/fromru\.com$/) || u.email.match(/20email\.eu$/) || u.email.match(/tuta\.io$/)
+            || u.email.match(/teentoday\.every1\.net$/) || u.email.match(/mailid\.top$/) || u.email.match(/gmx\.com$/)
+            || u.email.match(/keemail\.me$/)
+        ) {
+            throw new Error('Not supported email address: ' + u.email + '. Please make sure your you don\'t use a temporary email address.');
+        }
+        if (u.name.match(/[ваеколи]/)) {
+            this.body = '';
+            this.status = 403;
+            return;
+        }
+        if (u.email.match(/\d\d\d\d\@yahoo\.com$/) || u.email.match(/pochta\.com$/) || u.email.match(/cartelera\.org$/)) {
+            this.body = '';
+            this.status = 403;
+            return;
+        }
         if (user) {
             i_attrs_email.user_id = attrs.id = user.id;
             yield models.User.update(attrs, {where: {id: user.id}});

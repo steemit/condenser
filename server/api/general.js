@@ -46,7 +46,7 @@ export default function useGeneralApi(app) {
 
             const existing_account = yield models.Account.findOne({
                 attributes: ['id', 'created_at'],
-                where: {user_id},
+                where: {user_id, ignored: false},
                 order: 'id DESC'
             });
             if (existing_account) {

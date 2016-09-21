@@ -26,8 +26,8 @@ function TimeAuthorCategory({content, authorRepLog10, showTags}) {
         <span className="PostFull__time_author_category vcard">
             <Icon name="clock" className="space-right" />
             <TimeAgoWrapper date={content.created} className="updated" />
-            <span> by <Author author={content.author} authorRepLog10={authorRepLog10} /></span>
-            {showTags && <span> in&nbsp;<TagList post={content} /></span>}
+            {} by <Author author={content.author} authorRepLog10={authorRepLog10} />
+            {showTags && <span> in <TagList post={content} single /></span>}
         </span>
      );
 }

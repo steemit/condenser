@@ -10,25 +10,17 @@ import {immutableAccessor} from 'app/utils/Accessors';
 import extractContent from 'app/utils/ExtractContent';
 import { browserHistory } from 'react-router';
 import VotesAndComments from 'app/components/elements/VotesAndComments';
-import TagList from 'app/components/elements/TagList';
 import {authorNameAndRep} from 'app/utils/ComponentFormatters';
 import {Map} from 'immutable';
 import Reputation from 'app/components/elements/Reputation';
+import Author from 'app/components/elements/Author';
 
-function TimeAuthorCategory({post, links, authorRepLog10, gray}) {
-    const author = <strong>{post.author}</strong>;
-
+function TimeAuthorCategory({post, authorRepLog10}) {
     return (
         <span className="vcard">
             <TimeAgoWrapper date={post.created} className="updated" />
-            <span> by&nbsp;
-                <span className="author" itemProp="author" itemScope itemType="http://schema.org/Person">
-                    {links ? <Link to={post.author_link}>{author}</Link> :
-                        <strong>{author}</strong>}
-                    <Reputation value={authorRepLog10} />
-                </span>
-            </span>
-            <span> in&nbsp;{links ? <TagList post={post} /> : <strong>{post.category}</strong>}</span>
+            {} by <Author author={post.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
+            {} in <strong>{post.category}</strong>
         </span>
     );
 }
@@ -136,7 +128,7 @@ export default class PostSummary extends React.Component {
                     {content_title}
                 </div>
                 <div className="PostSummary__time_author_category_small show-for-small-only">
-                    <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}><TimeAuthorCategory post={p} links={false} authorRepLog10={authorRepLog10} gray={gray} /></a>
+                    <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}><TimeAuthorCategory post={p} authorRepLog10={authorRepLog10} /></a>
                 </div>
                 {thumb}
                 <div className="PostSummary__content">
@@ -147,7 +139,7 @@ export default class PostSummary extends React.Component {
                     <div className="PostSummary__footer">
                         <Voting post={post} showList={false} />
                         <span className="PostSummary__time_author_category show-for-medium">
-                            <TimeAuthorCategory post={p} links authorRepLog10={authorRepLog10} />
+                            <TimeAuthorCategory post={p} authorRepLog10={authorRepLog10} />
                             {!archived && <Reblog author={p.author} permlink={p.permlink} />}
                         </span>
                         <VotesAndComments post={post} commentsLink={comments_link} />

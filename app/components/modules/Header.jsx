@@ -42,15 +42,16 @@ class Header extends React.Component {
 
     hideSubheader(){
         const subheader_hidden = this.state.subheader_hidden;
-        if (window.scrollY === this.prevScrollY) return;
-        if (window.scrollY < 5) {
+        const y = window.scrollY >= 0 ? window.scrollY : document.documentElement.scrollTop;
+        if (y === this.prevScrollY) return;
+        if (y < 5) {
             this.setState({subheader_hidden: false});
-        } else if (window.scrollY > this.prevScrollY) {
+        } else if (y > this.prevScrollY) {
             if (!subheader_hidden) this.setState({subheader_hidden: true})
         } else {
             if (subheader_hidden) this.setState({subheader_hidden: false})
         }
-        this.prevScrollY = window.scrollY;
+        this.prevScrollY = y;
     }
 
     componentDidMount() {
@@ -75,6 +76,7 @@ class Header extends React.Component {
         if (route.page === 'PostsIndex') {
             sort_order = route.params[0];
             if (sort_order === 'home') {
+                page_title = "Home"
                 const account_name = route.params[1];
                 if (current_account_name && account_name.indexOf(current_account_name) === 1)
                     home_account = true;
@@ -96,7 +98,7 @@ class Header extends React.Component {
             page_name = ''; //page_title = route.page.replace( /([a-z])([A-Z])/g, '$1 $2' ).toLowerCase();
         }
 
-        if (process.env.BROWSER) document.title = page_title + ' — ' + APP_NAME;
+        if (process.env.BROWSER && route.page !== 'Post') document.title = page_title + ' — Steemit';
 
         const logo_link = route.params && route.params.length > 1 && this.last_sort_order ? '/' + this.last_sort_order : (current_account_name ? `/@${current_account_name}/feed` : '/');
         let topic_link = topic ? <Link to={`/${this.last_sort_order || 'trending'}/${topic}`}>{detransliterate(topic)}</Link> : null;
@@ -111,7 +113,7 @@ class Header extends React.Component {
         ];
         if (current_account_name) sort_orders.unshift(['home', translate('home')]);
         const sort_order_menu = sort_orders.filter(so => so[0] !== sort_order).map(so => ({link: sortOrderToLink(so[0], topic, current_account_name), value: so[1]}));
-
+        const selected_sort_order = sort_orders.find(so => so[0] === sort_order);
 
         const sort_orders_horizontal = [
             ['created', translate('new')],
@@ -135,7 +137,6 @@ class Header extends React.Component {
             ];
             sort_order_extra_menu = <HorizontalMenu items={items} />
         }
-
         return (
             <header className="Header">
                 <div className="Header__top header">
@@ -155,7 +156,7 @@ class Header extends React.Component {
                                 {user_name && <li><Link to={`/@${user_name}`}>{user_name}</Link></li>}
                                 {page_name && <li><span>{page_name}</span></li>}
                                 {(topic_link || user_name || page_name) && sort_order && <li className="delim show-for-small-only">|</li>}
-                                {sort_order && <DropdownMenu className="Header__sort-order-menu show-for-small-only" items={sort_order_menu} selected={sort_orders[sort_order]} el="li" />}
+                                {selected_sort_order && <DropdownMenu className="Header__sort-order-menu show-for-small-only" items={sort_order_menu} selected={selected_sort_order[1]} el="li" />}
                             </ul>
                         </div>
                         <div className="columns shrink">

@@ -12,11 +12,18 @@ import DropdownMenu from 'app/components/elements/DropdownMenu';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import FoundationDropdown from 'app/components/elements/FoundationDropdown';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
-import { translate } from 'app/Translator';
-import LocalizedCurrency, {localizedCurrency} from 'app/components/elements/LocalizedCurrency';
+
+const ABOUT_FLAG = <div>
+    <p>Flagging a post can remove rewards and make this material less visible.  The flag should be used for the following:</p>
+    <ul>
+        <li>Fraud or Plagiarism</li>
+        <li>Hate Speech or Internet Trolling</li>
+        <li>Intentional miscategorized content or Spam</li>
+    </ul>
+</div>
 
 const MAX_VOTES_DISPLAY = 20;
-const VOTE_WEIGHT_DROPDOWN_THRESHOLD = 100.0 * 1000.0 * 1000.0;
+const VOTE_WEIGHT_DROPDOWN_THRESHOLD = 1.0 * 1000.0 * 1000.0;
 
 class Voting extends React.Component {
 
@@ -139,7 +146,7 @@ class Voting extends React.Component {
                 <CloseButton onClick={() => this.setState({showWeight: false})} />
                 <div className="clear Voting__about-flag">
                     <p>{ABOUT_FLAG}</p>
-                    <a href="#" onClick={this.voteDown} className="confirm_weight button outline" title={translate('flag')}>{translate('flag')}</a>
+                    <a href="#" onClick={this.voteDown} className="button outline" title="Flag">Flag</a>
                 </div>
             </FoundationDropdown>
 
@@ -171,9 +178,9 @@ class Voting extends React.Component {
             payoutItems.push({value: <TimeAgoWrapper date={cashout_time} />});
         }
         if(total_author_payout > 0) {
-            payoutItems.push({value: translate('past_payouts') + ' ' + localizedCurrency(formatDecimal(total_author_payout + total_curator_payout).join(''))});
-            payoutItems.push({value: ' - ' + translate('authors') + ': ' + localizedCurrency(formatDecimal(total_author_payout).join(''))});
-            payoutItems.push({value: ' - ' + translate('curators') + ': ' + localizedCurrency(formatDecimal(total_curator_payout).join(''))});
+            payoutItems.push({value: 'Past Payouts $' + formatDecimal(total_author_payout + total_curator_payout).join('')});
+            payoutItems.push({value: ' - Author: $' + formatDecimal(total_author_payout).join('')});
+            payoutItems.push({value: ' - Curators: $' + formatDecimal(total_curator_payout).join('')});
         }
         const payoutEl = <DropdownMenu el="div" items={payoutItems}>
             <span>

@@ -31,7 +31,15 @@ export function decode(private_key, memo) {
 
     // remove varint length prefix
     const mbuf = ByteBuffer.fromBinary(memo.toString('binary'), ByteBuffer.DEFAULT_CAPACITY, ByteBuffer.LITTLE_ENDIAN)
-    return mbuf.readVString()
+    try {
+        mbuf.mark()
+        return mbuf.readVString()
+    } catch(e) {
+        mbuf.reset()
+        // Sender did not length-prefix the memo
+        memo = new Buffer(mbuf.toString('binary'), 'binary').toString('utf-8')
+        return memo
+    }
 }
 
 /**

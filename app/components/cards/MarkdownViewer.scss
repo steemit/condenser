@@ -13,15 +13,20 @@
   div.pull-right {
     float: right;
     padding-left: 1rem;
+    max-width: 50%;
   }
 
   div.pull-left {
     float: left;
     padding-right: 1rem;
+    max-width: 50%;
   }
 
   div.text-justify {
     text-align: justify;
   }
 
+  div.text-rtl {
+    direction: rtl;
+  }
 }

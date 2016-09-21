@@ -42,11 +42,10 @@ class ConvertToSteem extends React.Component {
             <form onSubmit={handleSubmit(data => {dispatchSubmit(data)})}>
                 <div className="row">
                     <div className="small-12 columns">
-                        <h1>{translate('convert_to_OWNERSHIP_TOKEN')}</h1>
-                        <p>{translate('DEBT_TOKEN_will_be_unavailable')}.</p>
-                        {/* using <FormattedMessage /> because nested html tag in values doesn't want to be rendered properly in translate() */}
-                        <p><FormattedMessage id="your_existing_DEBT_TOKEN_are_liquid_and_transferable" values={{ link: <i>{translate("buy_or_sell")}</i> }} /></p>
-                        <p>{translate('this_is_a_price_feed_conversion')}.</p>
+                        <h1>Convert to Steem</h1>
+                        <p>This action will take place one week from now and can not be canceled. These Steem Dollars will immediately become unavailable.</p>
+                        <p>Your existing Steem Dollars are liquid and transferable.  Instead you may wish to trade Steem Dollars directly on this site under <i>Buy or Sell</i> or transfer to an external market.</p>
+                        <p>This is a price feed conversion. The one week delay is necessary to prevent abuse from gaming the price feed average.</p>
                     </div>
                 </div>
                 <div className="row">

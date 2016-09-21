@@ -32,7 +32,7 @@ export default function (html, {mutate = true} = {}) {
         if(mutate) proxifyImages(doc)
         // console.log('state', state)
         if(!mutate) return state
-        return {html: XMLSerializer.serializeToString(doc), ...state}
+        return {html: (doc) ? XMLSerializer.serializeToString(doc) : '', ...state}
     }catch(error) {
         // Not Used, parseFromString might throw an error in the future
         console.error(error.toString())
@@ -74,7 +74,11 @@ function img(state, child) {
     if(url) {
         state.images.add(url)
         if(state.mutate) {
-            const url2 = ipfsPrefix(url)
+            let url2 = ipfsPrefix(url)
+            if(/^\/\//.test(url2)) {
+                // Change relative protocol imgs to https
+                url2 = "https:" + url2
+            }
             if(url2 !== url) {
                 child.setAttribute('src', url2)
             }
@@ -85,6 +89,7 @@ function img(state, child) {
 // For all img elements with non-local URLs, prepend the proxy URL (e.g. `https://img0.steemit.com/0x0/`)
 function proxifyImages(doc) {
     if (!$STM_Config.img_proxy_prefix) return
+    if (!doc) return;
     [...doc.getElementsByTagName('img')].forEach(node => {
         const url = node.getAttribute('src')
         if(! linksRe.local.test(url))

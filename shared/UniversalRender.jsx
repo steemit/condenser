@@ -1,12 +1,6 @@
 /* eslint react/display-name: 0 */
 /* eslint space-before-function-paren:0 */
 // https://github.com/eslint/eslint/issues/4442
-
-if (process.env.BROWSER) {
-    require('babel-core/register');
-    require('babel-polyfill');
-}
-
 import Iso from 'iso';
 import React from 'react';
 import { render } from 'react-dom';

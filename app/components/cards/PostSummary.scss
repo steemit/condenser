@@ -36,52 +36,22 @@ ul.PostsList__summaries {
   }
 }
 
+.PostSummary.with-image .PostSummary__reblogged_by,
 .PostSummary.with-image .PostSummary__content {
   margin-left: 8.25rem;
 }
 
 .PostSummary__header {
-  > h6 {
-    margin: 0.5rem;
-    > a {
-      color: $dark-gray;
-      text-transform: uppercase;
-      font-weight: 400;
-      @include hoverUnderline;
-    }
-  }
   > h1 {
     font: 600 100% "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Arial, sans-serif;
     margin: 0;
+    overflow: hidden;
     > a {
       color: #333;
-      > .Icon path {
-        fill: $dark-gray;
-      }
     }
     > a:visited {
       color: #777;
     }
-  }
-  > h1, > h6 {
-    overflow: hidden;
-  }
-  .author a {
-    color: $black;
-    font: 400 100% 'Source Sans Pro';
-    @include hoverUnderline;
-  }
-  .de-emphasize > a {
-    color: $dark-gray;
-    > .Icon path {
-      fill: $dark-gray;
-    }
-  }
-  .domain {
-    color: $dark-gray;
-    font-size: 90%;
-    font-weight: normal;
-    padding-left: 0.2rem;
   }
 }
 .PostSummary__collapse {
@@ -90,29 +60,6 @@ ul.PostsList__summaries {
 
 .PostSummary:hover .PostSummary__collapse {
   visibility: visible;
-}
-
-ul.PostSummary__tags {
-  list-style: none;
-  margin: 0.2rem 0;
-  font-size: 85%;
-  display: inline-block;
-
-  li {
-    display: inline-block;
-
-    a {
-      background: #E8E8E8;
-      color: #555;
-      border-radius: 5px;
-      padding: 0.1rem 0.4rem;
-      margin: 0.1rem;
-      display: inline-block;
-    }
-    a:hover {
-      background: #DDD;
-    }
-  }
 }
 
 .PostSummary__body {
@@ -134,17 +81,6 @@ ul.PostSummary__tags {
 .PostSummary__footer {
   color: $dark-gray;
   font-weight: 400;
-  a {
-    color: #449;
-  }
-  .Voting {
-    .dropdown-arrow svg {
-      fill: $medium-gray;
-    }
-  }
-}
-
-.PostSummary__footer {
   path {
     fill: $dark-gray;
   }
@@ -154,9 +90,11 @@ ul.PostSummary__tags {
   }
   .FormattedAsset {
     font-weight: normal;
-  }
-  .FormattedAsset {
     font-size: 110%;
+  }
+  .Icon {
+    position: relative;
+    top: -1px;
   }
 }
 
@@ -170,10 +108,30 @@ ul.PostSummary__tags {
   padding-right: 1rem;
   margin-right: 1rem;
   border-right: 1px solid #cacaca;
+
+  .Reblog__button {
+    margin-left: 1rem;
+    padding-left: 1rem;
+    border-left: 1px solid #cacaca;
+  }
 }
 
 .PostSummary__time_author_category_small > a {
   color: $dark-gray;
+}
+
+.PostSummary__reblogged_by {
+  .Icon path {
+    fill: #cacaca;
+  }
+  color: $dark-gray;
+  font-size: 90%;
+  margin-top: -0.5rem;
+  a {
+    color: inherit;
+    font-weight: bold;
+    @include hoverUnderline;
+  }
 }
 
 /* Small only */
@@ -204,6 +162,7 @@ ul.PostSummary__tags {
         display: block;
     }
   }
+  .PostSummary.with-image .PostSummary__reblogged_by,
   .PostSummary.with-image .PostSummary__content {
     margin-left: 0;
   }

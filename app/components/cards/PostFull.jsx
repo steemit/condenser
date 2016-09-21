@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import user from 'app/redux/User';
 import transaction from 'app/redux/Transaction'
 import Voting from 'app/components/elements/Voting';
+import Reblog from 'app/components/elements/Reblog';
 import Tooltip from 'app/components/elements/Tooltip';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import ReplyEditor from 'app/components/elements/ReplyEditor';
@@ -198,7 +199,7 @@ class PostFull extends React.Component {
         const pending_payout = parsePayoutAmount(content.pending_payout_value);
         const total_payout = parsePayoutAmount(content.total_payout_value);
         const high_quality_post = pending_payout + total_payout > 10.0;
-        const showEditOption = username === author && total_payout === 0
+        const showEditOption = username === author && post_content.get('mode') != 'archived'
         const authorRepLog10 = repLog10(content.author_reputation)
 
         let post_header = <h1 className="entry-title">{content.title}</h1>
@@ -228,6 +229,7 @@ class PostFull extends React.Component {
             </div>
         }
 
+        const archived    = post_content.get('mode') === 'archived'
         const firstPayout = post_content.get('mode') === "first_payout"
         const rootComment = post_content.get('depth') == 0
 
@@ -255,6 +257,7 @@ class PostFull extends React.Component {
                         <Voting post={post} />
                     </div>
                     <div className="column shrink">
+                            {!archived && <Reblog author={author} permlink={permlink} />}
                             <span className="PostFull__responses">
                                 <Link to={link} title={translate('response_count', {responseCount: content.children})}>
                                     <Icon name="chatboxes" className="space-right" />{content.children}

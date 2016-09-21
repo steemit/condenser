@@ -99,6 +99,7 @@ class CommentImpl extends React.Component {
         username: React.PropTypes.string,
         rootComment: React.PropTypes.string.isRequired,
         comment_link: React.PropTypes.string.isRequired,
+        anchor_link: React.PropTypes.string.isRequired,
         deletePost: React.PropTypes.func.isRequired,
     };
     static defaultProps = {
@@ -107,7 +108,7 @@ class CommentImpl extends React.Component {
 
     constructor() {
         super();
-        this.state = {collapsed: false, hide_body: false};
+        this.state = {collapsed: false, hide_body: false, highlight: false};
         this.revealBody = this.revealBody.bind(this);
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Comment')
         this.onShowReply = () => {
@@ -146,6 +147,18 @@ class CommentImpl extends React.Component {
     componentWillMount() {
         this.initEditor(this.props)
         this._checkHide(this.props);
+    }
+
+    componentDidMount() {
+        // Jump to comment via hash (note: comment element's id has a hash(#) in it)
+        if (window.location.hash == this.props.anchor_link) {
+            const comment_el = document.getElementById(this.props.anchor_link)
+            if (comment_el) {
+                comment_el.scrollIntoView(true);
+                document.body.scrollTop -= 200;
+                this.setState({highlight: true})
+            }
+        }
     }
 
     //componentWillReceiveProps(np) {
@@ -213,11 +226,10 @@ class CommentImpl extends React.Component {
         }
         const {netVoteSign, hasReplies, authorRepLog10, hide, pictures, gray} = comment.stats
         const {author, json_metadata} = comment
-        const {username, depth, rootComment, comment_link,
+        const {username, depth, rootComment, comment_link, anchor_link,
             showNegativeComments, ignore, noImage} = this.props
         const {onShowReply, onShowEdit, onDeletePost} = this
         const post = comment.author + '/' + comment.permlink
-        const anchor_link = '#@' + post
         const {PostReplyEditor, PostEditEditor, showReply, showEdit, hide_body} = this.state
         const Editor = showReply ? PostReplyEditor : PostEditEditor
 
@@ -246,7 +258,7 @@ class CommentImpl extends React.Component {
                 noImage={noImage || !pictures} jsonMetadata={jsonMetadata} />);
             controls = (<div>
                 <Voting post={post} />
-                {!$STM_Config.read_only_mode && depth !== 5 && <a onClick={onShowReply}>{translate('reply')}</a>}
+                {!$STM_Config.read_only_mode && depth < 6 && <a onClick={onShowReply}>Reply</a>}
                 {showEditOption && <span>
                     &nbsp;&nbsp;
                     <a onClick={onShowEdit}>{translate('edit')}</a>
@@ -271,7 +283,10 @@ class CommentImpl extends React.Component {
         commentClasses.push('Comment')
         commentClasses.push(this.props.root ? 'root' : 'reply')
         if(hide_body || this.state.collapsed) commentClasses.push('collapsed');
-        const downVotedClass = ignore || gray ? 'downvoted' : ' '
+
+        let innerCommentClass = ignore || gray ? 'downvoted' : ''
+        if(this.state.highlight) innerCommentClass = innerCommentClass + ' highlighted'
+
         //console.log(comment);
         let renderedEditor = null;
         if (showReply || showEdit) {
@@ -295,7 +310,7 @@ class CommentImpl extends React.Component {
                 <div className="Comment__Userpic show-for-medium">
                     <Userpic account={comment.author} />
                 </div>
-                <div className={downVotedClass}>
+                <div className={innerCommentClass}>
                     <div className="Comment__header">
                         <div className="Comment__header_collapse">
                             <Voting post={post} flag />
@@ -353,6 +368,7 @@ const Comment = connect(
         return {
             ...ownProps,
             comment_link,
+            anchor_link: '#@' + content, // Using a hash here is not standard but intentional; see issue #124 for details
             rootComment: rc,
             username,
             ignore,

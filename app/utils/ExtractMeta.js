@@ -30,6 +30,7 @@ export default function extractMeta(chain_data, rp) {
             const title = d.title + ' — Steemit';
             const desc  = d.desc + " by " + d.author;
             const image = d.image_link
+            const {category, created} = d
 
             // Standard meta
             metas.push({title});
@@ -44,6 +45,8 @@ export default function extractMeta(chain_data, rp) {
             metas.push({property: 'og:description',  content: desc});
             metas.push({property: 'og:site_name',    content: 'Steemit'});
             metas.push({property: 'fb:app_id',       content: $STM_Config.fb_app});
+            metas.push({property: 'article:tag',     content: category});
+            metas.push({property: 'article:published_time', content: created});
 
             // Twitter card data
             metas.push({name: 'twitter:card',        content: 'summary'});

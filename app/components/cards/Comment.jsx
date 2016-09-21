@@ -257,7 +257,7 @@ class CommentImpl extends React.Component {
                 noImage={noImage || !pictures} jsonMetadata={jsonMetadata} />);
             controls = (<div>
                 <Voting post={post} />
-                {!$STM_Config.read_only_mode && depth !== 5 && <a onClick={onShowReply}>Reply</a>}
+                {!$STM_Config.read_only_mode && depth < 6 && <a onClick={onShowReply}>Reply</a>}
                 {showEditOption && <span>
                     &nbsp;&nbsp;
                     <a onClick={onShowEdit}>Edit</a>

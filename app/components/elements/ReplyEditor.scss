@@ -3,6 +3,14 @@
   .rte {
     clear: right;
   }
+
+  .vframe {
+    display: block;
+    .public-DraftEditor-content {
+      height: 20em;
+      resize: vertical;
+    }
+  }
 }
 
 .SubmitPost .DraftEditor-editorContainer {

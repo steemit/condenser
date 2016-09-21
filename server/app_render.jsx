@@ -24,7 +24,7 @@ async function appRender(ctx) {
                     user = await models.User.findOne({
                         attributes: ['name', 'email', 'picture_small'],
                         where: {id: user_id},
-                        include: [{model: models.Account, attributes: ['name']}],
+                        include: [{model: models.Account, attributes: ['name', 'ignored']}],
                         logging: false
                     });
                     appRender.dbStatus = {ok: true};
@@ -38,8 +38,11 @@ async function appRender(ctx) {
             }
             if (user) {
                 let account = null;
-                if (user.Accounts && user.Accounts.length > 0) {
-                    account = user.Accounts[user.Accounts.length - 1].name;
+                for (const a of user.Accounts) {
+                    if (!a.ignored) {
+                        account = a.name;
+                        break;
+                    }
                 }
                 offchain.user = {
                     id: user_id,

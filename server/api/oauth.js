@@ -268,6 +268,7 @@ function* handleRedditCallback() {
     return null;
 }
 
+/*
 function retrieveVkUserData(access_token) {
     console.log('https://api.vk.com/method/account.getProfileInfo?v=5.53&access_token='+access_token)
     return new Promise((resolve, reject) => {
@@ -280,20 +281,21 @@ function retrieveVkUserData(access_token) {
                 }
             });
     });
-}
+}*/
 
 function* handleVkCallback() {
-     print ('vk -', this.query)
-     print ('vk -' , this.query.access_token)
+    print ('vk - session id', this.session.uid);
+    print ('vk - query', this.query)
     //console.log('-- /handle_facebook_callback -->', this.session.uid, this.query);
-    //let verified_email = false;
+    let verified_email = false;
+    let vkData = this.query;
     try {
-      const u = yield retrieveVkUserData(this.query.access_token);
-      print ('received data', u)
-      /*
-        if (this.query['error[error][message]']) {
-            return logErrorAndRedirect(this, 'facebook:1', this.query['error[error][message]']);
-        }
+      //const u = yield retrieveVkUserData(this.query.access_token);
+      //print ('received data', u)
+      if (!vkData['raw[email]']) {
+          return logErrorAndRedirect(this, 'vk:1', 'we need your email address so later you can recover account');
+      }
+       /*
         const u = yield retrieveVkUserData(this.query.access_token);
         verified_email = !!(u.verified && u.email);
         const attrs = {
@@ -399,7 +401,7 @@ function* handleVkCallback() {
     } catch (error) {
         return logErrorAndRedirect(this, 'vk:2', JSON.stringify(error));
     }
-    this.flash = {success: 'Successfully authenticated with Facebook'};
+    this.flash = {success: 'Successfully authenticated with Vk'};
     this.redirect('/')
     /*
     if (verified_email) {

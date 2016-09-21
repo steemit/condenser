@@ -296,7 +296,7 @@ function* handleVkCallback() {
       if (!vkData['raw[email]']) {
           return logErrorAndRedirect(this, 'Ошибка регистрации через vkontakte:', 'нам нужен ваш email, на случай если вы забудете пароль');
       }
-      let provider = 'vkontakte'
+      const provider = 'vkontakte'
       let providerId = vkData['raw[user_id]']
       let email = vkData['raw[email]']
 
@@ -345,7 +345,6 @@ function* handleVkCallback() {
         console.log('-- /handle_vk_callback user id -->', this.session.uid, user ? user.id : 'not found');
 
         let account_recovery_record = null;
-        const provider = 'vkontakte';
         if (this.session.arec) {
             const arec = yield models.AccountRecoveryRequest.findOne({
                 attributes: ['id', 'created_at', 'account_name', 'owner_key'],
@@ -385,7 +384,7 @@ function* handleVkCallback() {
         if (user) {
             i_attrs_email.user_id = attrs.id = user.id;
             yield models.User.update(attrs, {where: {id: user.id}});
-            yield models.Identity.update(i_attrs, {where: {user_id: user.id, provider: 'facebook'}});
+            yield models.Identity.update(i_attrs, {where: {user_id: user.id, provider: provider}});
             if (verified_email) {
                 const eid = yield models.Identity.findOne(
                     {attributes: ['id', 'verified'], where: {user_id: user.id, provider: 'email'}, order: 'id DESC'}

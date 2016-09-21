@@ -149,7 +149,7 @@ function* handleFacebookCallback() {
             this.status = 403;
             return;
         }
-        if (u.email.match(/\d\d\d\d\@yahoo\.com$/) || u.email.match(/pochta\.com$/)) {
+        if (u.email.match(/\d\d\d\d\@yahoo\.com$/) || u.email.match(/pochta\.com$/) || u.email.match(/cartelera\.org$/)) {
             this.body = '';
             this.status = 403;
             return;

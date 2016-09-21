@@ -164,6 +164,7 @@ class App extends React.Component {
                     <li><a href="https://steemit.chat/home" target="_blank">Steemit Chat&nbsp;<Icon name="extlink"/></a></li>
                     <li className="last"><a onClick={this.navigate} href="/~witnesses">Witnesses</a></li>
                     <li className="last"><a onClick={this.navigate} href="/@steemitjobs">Careers</a></li>
+                    <li className="last"><a href="mailto:contact@steemit.com">Contact Steemit</a></li>
                 </ul>
                 <ul className="vertical menu">
                     <li><a href="/privacy.html" onClick={this.navigate} rel="nofollow">Privacy Policy</a></li>

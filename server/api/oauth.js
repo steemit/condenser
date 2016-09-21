@@ -272,7 +272,7 @@ function* handleRedditCallback() {
 function retrieveVkUserData(access_token, userId) {
     console.log('https://api.vk.com/method/account.getProfileInfo?v=5.53&user_ids='+userId)
     return new Promise((resolve, reject) => {
-       vk.query().get('https://api.vk.com/method/users.get?v=5.53&user_ids='+userId+'&fields=verified,sex,bdate,city,country,nickname,timezone,screen_name')
+       vk.query().get('https://api.vk.com/method/users.get?v=5.53&user_ids='+userId+'&fields=verified,sex,bdate,city,country,timezone,screen_name')
        .request((err, res) => {
                 if (err) {
                     reject(err);
@@ -296,71 +296,56 @@ function* handleVkCallback() {
       if (!vkData['raw[email]']) {
           return logErrorAndRedirect(this, 'Ошибка регистрации через vkontakte:', 'нам нужен ваш email, на случай если вы забудете пароль');
       }
-      let provider = 'vk'
+      let provider = 'vkontakte'
       let providerId = vkData['raw[user_id]']
       let email = vkData['raw[email]']
 
       const u = yield retrieveVkUserData(vkData.access_token, providerId);
       print ('user dara', u);
-      /*
+      const userData = u.response[0]
+      let country = userData.country && userData.country.title || '';
+      let city = userData.city && userData.city.title || '';
+      let birthday = (userData.bdate && userData.bdate.split('.').length == 3) ? userData.bdate.split('.') : null;
+      if (birthday) birthday = new Date(birthday[2], birthday[1], birthday[0]);
+
       const attrs = {
           uid: this.session.uid,
-          name: u.name,
+          name: [userData.first_name, userData.last_name].join(' '),
           email: email,
-          first_name: '',
-          last_name: '',
-          birthday: null,
-          gender: u.gender,
-          picture_small: u.picture ? u.picture.data.url : null,
-          location_id: u.location ? u.location.id : null,
-          location_name: u.location ? u.location.name : null,
-          locale: u.locale,
-          timezone: u.timezone,
+          first_name: userData.first_name,
+          last_name: userData.last_name,
+          birthday: birthday,
+          gender: userData.gender,
+          location_id: null,
+          location_name: [country, city].joi(', '),
+          locale: userData.locale,
+          timezone: userData.timezone,
           remote_ip: getRemoteIp(this.request.req),
-          verified: u.verified,
+          verified: !!userData.verified,
           waiting_list: false,
-          facebook_id: u.id
+          vk_id: userData.id
       };
-       /*
-        const u = yield retrieveVkUserData(this.query.access_token);
-        verified_email = !!(u.verified && u.email);
-        const attrs = {
-            uid: this.session.uid,
-            name: u.name,
-            email: u.email,
-            first_name: u.first_name,
-            last_name: u.last_name,
-            birthday: u.birthday ? new Date(u.birthday) : null,
-            gender: u.gender,
-            picture_small: u.picture ? u.picture.data.url : null,
-            location_id: u.location ? u.location.id : null,
-            location_name: u.location ? u.location.name : null,
-            locale: u.locale,
-            timezone: u.timezone,
-            remote_ip: getRemoteIp(this.request.req),
-            verified: u.verified,
-            waiting_list: false,
-            facebook_id: u.id
-        };
+      verified_email = !!(userData.verified && email);
+
         const i_attrs = {
-            provider: 'facebook',
-            uid: u.id,
-            name: u.name,
-            email: u.email,
-            verified: u.verified,
-            provider_user_id: u.id
+            provider: provider,
+            uid: userData.id,
+            name: attrs.name,
+            email: email,
+            verified: !!userData.verified,
+            provider_user_id: userData.id
         };
         const i_attrs_email = {
             provider: 'email',
-            email: u.email,
+            email: email,
             verified: verified_email
         };
 
-        let user = yield findUser({email: u.email, provider_user_id: u.id});
+        let user = yield findUser({email: email, provider_user_id: userData.id});
         console.log('-- /handle_vk_callback user id -->', this.session.uid, user ? user.id : 'not found');
 
         let account_recovery_record = null;
-        const provider = 'vk';
+        const provider = 'vkontakte';
         if (this.session.arec) {
             const arec = yield models.AccountRecoveryRequest.findOne({
                 attributes: ['id', 'created_at', 'account_name', 'owner_key'],
@@ -368,7 +353,7 @@ function* handleVkCallback() {
             });
             if (arec) {
                 const seconds_ago = (Date.now() - arec.created_at) / 1000;
-                console.log('-- /handle_facebook_callback arec -->', this.session.uid, seconds_ago, arec.created_at);
+                console.log('-- /handle_vk_callback arec -->', this.session.uid, seconds_ago, arec.created_at);
                 if (seconds_ago < 600) account_recovery_record = arec;
             }
         }
@@ -392,7 +377,7 @@ function* handleVkCallback() {
             } else {
                 console.log('-- arec: failed to confirm user for account (no user) -->', this.session.uid, provider, this.session.uid, this.session.email);
                 account_recovery_record.update({status: 'user not found'});
-                this.body = 'We cannot verify the user account. Please contact support@steemit.com';
+                this.body = 'We cannot verify the user account. Please contact support@golos.io';
             }
             return null;
         }
@@ -423,18 +408,18 @@ function* handleVkCallback() {
                 console.log('-- vk created email identity -->', this.session.uid, email_identity.id);
             }
         }
-        this.session.user = user.id; */
+        this.session.user = user.id;
     } catch (error) {
         return logErrorAndRedirect(this, 'vk:2', JSON.stringify(error));
     }
-    this.flash = {success: 'Successfully authenticated with Vk'};
+    this.flash = {success: 'Successfully authenticated with Vkontakte'};
     this.redirect('/')
-    /*
+
     if (verified_email) {
         this.redirect('/create_account');
     } else {
         this.redirect('/enter_email');
-    }*/
+    }
     return null;
 }
 

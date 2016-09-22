@@ -78,8 +78,10 @@ export function validateCategory(category, required = true) {
     return (
         // !category || category.trim() === '' ? 'Required' :
         cats.length > 5 ? translate('use_limitied_amount_of_categories', {amount: 5}) :
+        cats.find(c => c.length > 24)           ? translate('maximum_tag_length_is_24_characters') :
         cats.find(c => c.split('-').length > 2) ? translate('use_one_dash') :
-        cats.find(c => c.indexOf(',') >= 0) ? translate('use_spaces_to_separate_tags') :
+        cats.find(c => c.indexOf(',') >= 0)     ? translate('use_spaces_to_separate_tags') :
+        cats.find(c => /[A-ZА-Я]/.test(c))      ? translate('use_only_lowercase_letters') :
         // check for russian or english symbols
         cats.find(c => !/^[a-zа-я0-9-]+$/.test(c)) ? translate('use_only_allowed_characters') :
         cats.find(c => !/^[a-zа-я-]/.test(c)) ? translate('must_start_with_a_letter') :

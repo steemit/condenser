@@ -47,6 +47,7 @@ $menu-width: 250px;
     &.right {
       right: -$menu-width;
       visibility: hidden;
+      overflow-y: auto;
     }
 
     &.visible.right {

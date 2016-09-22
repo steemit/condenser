@@ -73,7 +73,6 @@ class LoginForm extends Component {
             validation: values => ({
                 username: ! values.username ? translate('required') : validate_account_name(values.username.split('/')[0]),
                 password: ! values.password ? translate('required') :
-                    values.password.length < 16 ? translate('password_must_be_characters_or_more', {amount: 16}) :
                     PublicKey.fromString(values.password) ? translate('you_need_private_password_or_key_not_a_public_key') :
                     null,
             })

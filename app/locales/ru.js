@@ -110,7 +110,9 @@ const ru = {
 	including_the_category: "(включая категорию '{rootCategory}')",
 	use_limited_amount_of_tags: 'У тебя {tagsLength} тэгов включая {includingCategory}.  Пожалуйста, используйте не более 5 в посте и категории.',
 	// this is mainly used in CategorySelector
+	maximum_tag_length_is_24_characters: 'Максимальная длина категории 24 знака',
 	use_limitied_amount_of_categories: 'Пожалуйста используйте не более {amount} категорий',
+	use_only_lowercase_letters: 'Используйте только символы нижнего регистра',
 	use_one_dash: 'Используйте только одно тире',
 	use_spaces_to_separate_tags: 'Используйте пробел чтобы разделить тэги',
 	use_only_allowed_characters: 'Используйте только строчные буквы, цифры и одно тире',
@@ -503,7 +505,9 @@ const ru = {
 	// PormotePost.jsx
 	promote_post: 'Продвинуть пост',
 	spend_your_DEBT_TOKEN_to_advertise_this_post: 'Используйте ваши ' + DEBT_TOKEN + ' чтобы прорекламировать этот пост в секции продвигаемого контента',
-	you_successdully_promoted_this_post: 'Вы успешно продвинули этот пост'
+	you_successdully_promoted_this_post: 'Вы успешно продвинули этот пост',
+	pay_me_100_in_INVEST_TOKEN: 'Заплатите мне 100% в ' + INVEST_TOKEN,
+	requires_5_or_more_reddit_comment_karma: 'необходимо 5 или больше Reddit кармы комментирования'
 }
 
 export { ru }

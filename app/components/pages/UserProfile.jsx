@@ -37,7 +37,14 @@ export default class UserProfile extends React.Component {
     loadMore(last_post, category) {
         const {accountname} = this.props.routeParams
         if (!last_post) return;
-        const order = category === 'feed' ? 'by_feed' : 'by_author';
+
+        let order;
+        switch(category) {
+          case "feed": order = 'by_feed'; break;
+          case "blog": order = 'by_author'; break;
+          default: console.log("unhandled category:", category);
+        }
+
         if (isFetchingOrRecentlyUpdated(this.props.global.get('status'), order, category)) return;
         const [author, permlink] = last_post.split('/');
         this.props.requestData({author, permlink, order, category, accountname});
@@ -159,9 +166,7 @@ export default class UserProfile extends React.Component {
             if (account.blog) {
                 tab_content = <PostsList
                     emptyText={translate('user_hasnt_started_bloggin_yet', {name})}
-                    posts={account.blog.filter(p => {
-                        return !(p.indexOf("re-") === 0 && p[p.length - 1] === "z");
-                    }).map(p => `${account.name}/${p}`)}
+                    posts={account.blog}
                     loading={fetching}
                     category="blog"
                     loadMore={this.loadMore}
@@ -184,13 +189,13 @@ export default class UserProfile extends React.Component {
         //     }
         // }
         else if( (section === 'recent-replies') && account.recent_replies ) {
-           const reply_summary = account.recent_replies.map( item => {
-               return (<li style={{listStyleType: 'none'}} key={item}>
-                   <PostSummary post={item} currentCategory="-" />
-               </li>);
-            });
-            tab_content = reply_summary.length ? reply_summary :
-                <div>{translate('user_hasnt_had_any_replies_yet', {name})}.</div>;
+              tab_content = <PostsList
+                  emptyText={translate('user_hasnt_had_any_replies_yet', {name}) + '.'}
+                  posts={account.recent_replies}
+                  loading={fetching}
+                  category="recent-replies"
+                  loadMore={null}
+                  showSpam={false} />;
         }
         else if( section === 'permissions' && isMyAccount ) {
             tab_content = <UserKeys account={accountImm} />

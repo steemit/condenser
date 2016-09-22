@@ -107,7 +107,9 @@ const en = 	{
 	including_the_category: "(including the category '{rootCategory}')",
 	use_limited_amount_of_tags: 'You have {tagsLength} tags total {includingCategory}.  Please use only 5 in your post and category line.',
 	// this is mainly used in CategorySelector
+	maximum_tag_length_is_24_characters: 'Maximum tag length is 24 characters',
 	use_limitied_amount_of_categories: 'Please use only {amount} categories',
+	use_only_lowercase_letters: 'Use only lowercase letters',
 	use_one_dash: 'Use only one dash',
 	use_spaces_to_separate_tags: 'Use spaces to separate tags',
 	use_only_allowed_characters: 'Use only lowercase letters, digits and one dash',
@@ -498,7 +500,10 @@ const en = 	{
 	// PormotePost.jsx
 	promote_post: 'Promote Post',
 	spend_your_DEBT_TOKEN_to_advertise_this_post: 'Spend your ' + DEBT_TOKEN + 's to advertise this post in the promoted content section',
-	you_successdully_promoted_this_post: 'You successfully promoted this post'
+	you_successdully_promoted_this_post: 'You successfully promoted this post',
+	leave_this_unchecked_to_receive_half_your_reward: "Leave this unchecked to receive 1/2 your reward in " + INVEST_TOKEN + " and 1/2 in " + DEBT_TOKEN,
+	pay_me_100_in_INVEST_TOKEN: 'Pay me 100% in ' + INVEST_TOKEN,
+	requires_5_or_more_reddit_comment_karma: 'requires 5 or more Reddit comment karma'
 }
 
 export { en }

@@ -1,0 +1,15 @@
+.sub-menu {
+    li {
+        padding: .7rem 1rem;
+        a {
+            padding: 0px;
+        }
+    }
+    li:last-child {
+        padding: 0 0 0 1rem;
+    }
+}
+
+li.Header__userpic {
+    padding: 0;
+}

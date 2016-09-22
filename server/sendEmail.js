@@ -3,7 +3,7 @@ import config from '../config';
 
 const sg = sendgrid(config.sendgrid.key);
 
-export default function sendEmail(template, to, params) {
+export default function sendEmail(template, to, params, from = null) {
     const tmpl_id = config.sendgrid.templates[template];
     if (!tmpl_id) throw new Error(`can't find template ${template}`);
 
@@ -16,7 +16,7 @@ export default function sendEmail(template, to, params) {
                 {to: [{email: to}],
                  substitutions: params},
             ],
-            from: {email: config.sendgrid.from}
+            from: {email: from || config.sendgrid.from}
         }
     });
 

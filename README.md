@@ -25,7 +25,7 @@ cp steem-example.json steem-dev.json
 (note: it's steem.json in production)
 
 #### Install mysql server
- 
+
 OS X :
 
 ```bash
@@ -48,7 +48,7 @@ Now launch mysql client and create steemit_dev database:
 mysql -u root
 > create database steemit_dev;
 ```
- 
+
 Install `sequelize-cli` globally:
 
 ```bash

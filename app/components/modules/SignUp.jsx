@@ -69,7 +69,7 @@ class SignUp extends React.Component {
                     </a>
                     <br />
                     <span className="secondary">
-                        ({translate("requires_positive_karma")})
+                        ({translate("requires_5_or_more_reddit_comment_karma")})
                     </span>
                 </div>
             </div>

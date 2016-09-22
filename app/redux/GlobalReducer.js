@@ -152,8 +152,8 @@ export default createModule({
                 // console.log('-- RECEIVE_DATA state -->', state.toJS());
                 let new_state;
                 if (order === 'by_author' || order === 'by_feed' || order === 'by_comments' || order === 'by_replies') {
-                    // category is either "blog", "feed", "posts", or "recent_replies"
-                    const key = ['accounts', order === 'by_feed' || order === 'by_replies' ? accountname : author, category]
+                    // category is either "blog", "feed", "posts", or "recent_replies" (respectively) -- and all posts are keyed under current profile
+                    const key = ['accounts', accountname, category]
                     new_state = state.updateIn(key, List(), list => {
                         return list.withMutations(posts => {
                             data.forEach(value => {

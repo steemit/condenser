@@ -80,9 +80,15 @@ class Header extends React.Component {
             } else {
                 if (route.params.length > 1) {
                     topic = route.params[1];
-                    page_title = `${topic}/${sort_order}`;
+                    // Overwrite default created for more human readable title
+                    if (route.params[0] === "created") {
+                        page_title = `New ${topic} posts`;
+                    }
+                    else {
+                        page_title = `${sort_order} ${topic} posts`;
+                    }
                 } else {
-                    page_title = `${sort_order}`;
+                    page_title = `${sort_order} posts`;
                 }
             }
         } else if (route.page === 'Post') {

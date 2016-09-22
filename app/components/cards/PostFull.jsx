@@ -196,8 +196,6 @@ export default class PostFull extends React.Component {
         const pending_payout = parsePayoutAmount(content.pending_payout_value);
         const total_payout = parsePayoutAmount(content.total_payout_value);
         const high_quality_post = pending_payout + total_payout > 10.0;
-        const showEditOption = username === author && post_content.get('mode') != 'archived'
-        const authorRepLog10 = repLog10(content.author_reputation)
 
         let post_header = <h1 className="entry-title">{content.title}</h1>
         if(content.depth > 0) {
@@ -227,9 +225,10 @@ export default class PostFull extends React.Component {
             </div>
         }
 
-        const archived    = post_content.get('mode') === 'archived'
-        const firstPayout = post_content.get('mode') === "first_payout"
-        const rootComment = post_content.get('depth') == 0
+        const readonly = post_content.get('mode') === 'archived' || $STM_Config.read_only_mode
+        const showPromote = username && post_content.get('mode') === "first_payout" && post_content.get('depth') == 0
+        const showEditOption = username === author
+        const authorRepLog10 = repLog10(content.author_reputation)
 
         return (
             <article className="PostFull hentry" itemScope itemType="http://schema.org/blogPost">
@@ -245,9 +244,7 @@ export default class PostFull extends React.Component {
                     </div>
                 }
 
-                {username && firstPayout && rootComment && <div className="float-right">
-                    <button className="button hollow tiny" onClick={this.showPromotePost}>Promote</button>
-                </div>}
+                {showPromote && <button className="float-right button hollow tiny" onClick={this.showPromotePost}>Promote</button>}
                 <TagList post={content} horizontal />
                 <div className="PostFull__footer row align-middle">
                     <div className="column">
@@ -255,17 +252,18 @@ export default class PostFull extends React.Component {
                         <Voting post={post} />
                     </div>
                     <div className="column shrink">
-                            {!archived && <Reblog author={author} permlink={permlink} />}
+                            {!readonly && <Reblog author={author} permlink={permlink} />}
                             <span className="PostFull__responses">
                                 <Link to={link} title={pluralize('Responses', content.children, true)}>
                                     <Icon name="chatboxes" className="space-right" />{content.children}
                                 </Link>
                             </span>
-                            <span className="PostFull__reply">
-                                {!$STM_Config.read_only_mode && <a onClick={onShowReply}>Reply</a>}
-                                {' '}{showEditOption && !showEdit && <a onClick={onShowEdit}>Edit</a>}
-                                {' '}{showDeleteOption && !showReply && <a onClick={onDeletePost}>Delete</a>}
-                            </span>
+                            {!readonly &&
+                                <span className="PostFull__reply">
+                                    <a onClick={onShowReply}>Reply</a>
+                                    {' '}{showEditOption   && !showEdit  && <a onClick={onShowEdit}>Edit</a>}
+                                    {' '}{showDeleteOption && !showReply && <a onClick={onDeletePost}>Delete</a>}
+                                </span>}
                             <FoundationDropdownMenu menu={share_menu} icon="share" label="Share" dropdownPosition="bottom" dropdownAlignment="right" />
                     </div>
                 </div>

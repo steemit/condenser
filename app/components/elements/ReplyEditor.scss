@@ -1,5 +1,6 @@
 .ReplyEditor {
   max-width: 50rem;
+  margin-bottom: 0.5rem;
   .rte {
     clear: right;
   }
@@ -11,10 +12,6 @@
       resize: vertical;
     }
   }
-}
-
-.SubmitPost .DraftEditor-editorContainer {
-  // height: 40vh;
 }
 
 .ReplyEditor .Markdown {
@@ -34,9 +31,6 @@
   border: 1px solid $medium-gray;
 }
 
-.Comment__replies .ReplyEditor__body {
-  margin-top: -1rem;
-}
 .medium-editor-element {
     background-color: inherit !important;
 }

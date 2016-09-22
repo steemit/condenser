@@ -154,7 +154,7 @@ export default createModule({
                 if (order === 'by_author' || order === 'by_feed') {
                     const by_feed = order === 'by_feed'
                     // in this case, category is either "blog" or "feed"
-                    const key = ['accounts', by_feed ? accountname : author, category]
+                    const key = ['accounts', accountname, category]
                     new_state = state.updateIn(key, List(), list => {
                         return list.withMutations(posts => {
                             data.forEach(value => {

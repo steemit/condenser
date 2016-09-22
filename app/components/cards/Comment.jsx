@@ -247,6 +247,7 @@ class CommentImpl extends React.Component {
 
         const showDeleteOption = username === author && !hasReplies && netVoteSign <= 0
         const showEditOption = username === author && comment.mode == 'first_payout'
+        const readonly = comment.mode == 'archived' || $STM_Config.read_only_mode
 
         let replies = null;
         let body = null;
@@ -255,18 +256,15 @@ class CommentImpl extends React.Component {
         if (!this.state.collapsed && !hide_body) {
             body = (<MarkdownViewer formId={post + '-viewer'} text={comment.body}
                 noImage={noImage || !pictures} jsonMetadata={jsonMetadata} />);
-            controls = (<div>
+            controls = <div>
                 <Voting post={post} />
-                {!$STM_Config.read_only_mode && depth < 6 && <a onClick={onShowReply}>Reply</a>}
-                {showEditOption && <span>
-                    &nbsp;&nbsp;
-                    <a onClick={onShowEdit}>Edit</a>
-                </span>}
-                {showDeleteOption && <span>
-                    &nbsp;&nbsp;
-                    <a onClick={onDeletePost}>Delete</a>
-                </span>}
-            </div>);
+                {!readonly &&
+                    <span className="Comment__footer__controls">
+                        {depth < 6 && <a onClick={onShowReply}>Reply</a>}
+                        {' '}{showEditOption   && <a onClick={onShowEdit}>Edit</a>}
+                        {' '}{showDeleteOption && <a onClick={onDeletePost}>Delete</a>}
+                    </span>}
+            </div>;
         }
 
         if(!this.state.collapsed) {

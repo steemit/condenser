@@ -202,7 +202,6 @@ import {PublicKey} from 'shared/ecc'
 let newWif = null
 const keyValidate = (values) => ({
     password: ! values.password ? 'Required' :
-        values.password.length < 16 ? 'Password must be 16 characters or more' :
         PublicKey.fromString(values.password) ? 'You need a private password or key (not a public key)' :
         null,
     confirmPassword: ! values.confirmPassword ? 'Required' :

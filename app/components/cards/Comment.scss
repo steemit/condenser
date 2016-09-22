@@ -95,10 +95,12 @@
     color: $dark-gray;
     @include hoverUnderline;
   }
+  .Voting__voters_list {
+    border-right: 1px solid $medium-gray;
+    padding-right: 1rem;
+    margin-right: 1rem;
+  }
   .Comment__footer__controls {
-    border-left: 1px solid $medium-gray;
-    padding-left: 1rem;
-    margin-left: 1rem;
     a {margin: 0 0.2rem;}
   }
 }

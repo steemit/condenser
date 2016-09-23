@@ -28,7 +28,7 @@ export default function useGeneralApi(app) {
 
         const remote_ip = getRemoteIp(this.req);
 
-        const user_id = this.session.user = 'jsc'; // TODO 999
+        const user_id = this.session.user;
         if (!user_id) { // require user to sign in with identity provider
             this.body = JSON.stringify({error: 'Unauthorized'});
             this.status = 401;

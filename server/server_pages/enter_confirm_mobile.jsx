@@ -38,7 +38,7 @@ function *confirmMobileHandler() {
     const confirmation_code = this.params && this.params.code ? this.params.code : this.request.body.code;
     console.log('-- /confirm_mobile -->', this.session.uid, this.session.user, confirmation_code);
     const eid = yield models.Identity.findOne(
-        {attributes: ['id', 'user_id', 'mobile', 'verified', 'updated_at'], where: {confirmation_code}, order: 'id DESC'}
+        {attributes: ['id', 'user_id', 'mobile', 'updated_at'], where: {confirmation_code, verified: false}, order: 'id DESC'}
     );
     if (!eid) {
         this.status = 401;
@@ -47,15 +47,12 @@ function *confirmMobileHandler() {
     }
     this.session.user = eid.user_id;
     const hours_ago = (Date.now() - eid.updated_at) / 1000.0 / 3600.0;
-    if (hours_ago > 240.0) {
+    if (hours_ago > 240.0 * 30) {
         this.status = 401;
         this.body = 'confirmation code not found or expired';
         return;
     }
-    if (!eid.verified) {
-        yield eid.update({verified: true});
-        yield models.User.update({mobile: eid.mobile, waiting_list: false}, {where: {id: eid.user_id}});
-    }
+    yield eid.update({verified: true});
     this.redirect('/create_account');
 }
 
@@ -69,7 +66,7 @@ export default function useEnterAndConfirmMobilePages(app) {
         const user_id = this.session.user;
         if (!user_id) { this.body = 'user not found'; return; }
         const eid = yield models.Identity.findOne(
-            {attributes: ['mobile'], where: {user_id, provider: 'mobile'}, order: 'id DESC'}
+            {attributes: ['phone'], where: {user_id, provider: 'mobile'}, order: 'id DESC'}
         );
         const body = renderToString(<div className="App">
             {header}
@@ -83,7 +80,7 @@ export default function useEnterAndConfirmMobilePages(app) {
                     <input type="hidden" name="csrf" value={this.csrf} />
                     <label>
                         Mobile
-                        <input type="tel" name="mobile" defaultValue={eid ? eid.mobile : ''} readOnly={eid && eid.mobile} />
+                        <input type="tel" name="mobile" defaultValue={eid ? eid.phone : ''} readOnly={eid && eid.phone} />
                     </label>
                     {eid && eid.mobile && <div className="secondary"><i>Mobile number cannot be changed at this moment, sorry for the inconvenience.</i></div>}
                     <br />

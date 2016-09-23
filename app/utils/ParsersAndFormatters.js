@@ -62,16 +62,27 @@ export const repLog10 = rep2 => {
 // this have been done beecause we cannot use special symbols in url (`` and '')
 // and url seems to be the only source of thruth
 var d = /\t+/g,
-    rus = "щ	ш	ч	ц	ю	ю	я	я	ий	ё	ё	ж	ъ	ъ	ы	э	э	а	б	в	г	д	е	з	и	й	й	к	л	м	н	о	п	р	с	т	у	ф	х	х".split(d),
-    eng = "sch	sh	ch	cz	yu	ju	ya	q	iy	yo	jo	zh	tvrdz	tvrdz	y	e`	e'	a	b	v	g	d	e	z	i	j	i'	k	l	m	n	o	p	r	s	t	u	f	x	h	mgkz	mgkz".split(d);
+    rus = "щ	ш	ч	ц	ю	ю	я	я  ые	ий	ё	ё	ж	ъ	э	ы	а	б	в	г	д	е	з	и	й	к	л	м	н	о	п	р	с	т	у	ф	х	х   ь".split(d),
+    eng = "sch	sh	ch	cz	yu	ju	ya	q  yie	iy	yo	jo	zh	w	ye	y	a	b	v	g	d	e	z	i	yi	k	l	m	n	o	p	r	s	t	u	f	x	h	j".split(d);
 
 export function detransliterate(str, reverse) {
     if (!reverse && str.substring(0, 4) !== 'ru--') return str
     if (!reverse) str = str.substring(4)
-//
-// h = х (хорошо)
-// x = ь
-// w = ъ
+
+    // TODO rework this
+    // (didnt placed this earlier because something is breaking and i am too lazy to figure it out ;( )
+    if(!reverse) {
+        str = str.replace(/j/g, 'ь')
+        str = str.replace(/w/g, 'ъ')
+        str = str.replace(/yie/g, 'ые')
+    }
+    else {
+        str = str.replace(/ь/g, 'j')
+        str = str.replace(/ъ/g, 'w')
+        str = str.replace(/ые/g, 'yie')
+    }
+
+
     var i,
         s = /[^[\]]+(?=])/g, orig = str.match(s),
         t = /<(.|\n)*?>/g, tags = str.match(t);
@@ -105,15 +116,6 @@ export function detransliterate(str, reverse) {
         str = str.replace(/\[/g, '').replace(/\]/g, '');
     }
 
-    // TODO rework this
-    // (didnt placed this earlier because something is breaking and i am too lazy to figure it out ;( )
-    if(!reverse) {
-        str = str.replace(/мгкз/g, 'ь')
-        str = str.replace(/тврдз/g, 'ъ')
-    }
-    else {
-        str = str.replace(/ь/g, 'mgkz')
-        str = str.replace(/ъ/g, 'tvrdz')
-    }
+
     return str;
 }

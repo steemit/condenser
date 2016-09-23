@@ -91,6 +91,24 @@ class Header extends React.Component {
         } else if (route.page === 'UserProfile') {
             user_name = route.params[0].slice(1);
             page_title = user_name;
+            if(route.params[1] === "followers"){
+                page_title = `People following ${user_name} `;
+            }
+            if(route.params[1] === "followed"){
+                page_title = `People followed by ${user_name} `;
+            }
+            if(route.params[1] === "curation-rewards"){
+                page_title = `Curation rewards by ${user_name} `;
+            }
+            if(route.params[1] === "author-rewards"){
+                page_title = `Author rewards by ${user_name} `;
+            }
+            if(route.params[1] === "recent-replies"){
+                page_title = `Replies by ${user_name} `;
+            }
+            if(route.params[1] === "posts"){
+                page_title = `Comments by ${user_name} `;
+            }
         } else {
             page_name = ''; //page_title = route.page.replace( /([a-z])([A-Z])/g, '$1 $2' ).toLowerCase();
         }

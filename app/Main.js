@@ -1,5 +1,8 @@
-require('./assets/stylesheets/app.scss');
-require('whatwg-fetch');
+import 'babel-core/register';
+import 'babel-polyfill';
+import 'whatwg-fetch';
+import './assets/stylesheets/app.scss';
+
 import Iso from 'iso';
 import universalRender from 'shared/UniversalRender';
 import ConsoleExports from './utils/ConsoleExports';

@@ -47,7 +47,7 @@ function *confirmEmailHandler() {
     }
     this.session.user = eid.user_id;
     const hours_ago = (Date.now() - eid.updated_at) / 1000.0 / 3600.0;
-    if (hours_ago > 240.0) {
+    if (hours_ago > 24.0 * 30) {
         this.status = 401;
         this.body = 'confirmation code not found or expired';
         return;

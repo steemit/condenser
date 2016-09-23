@@ -157,8 +157,7 @@ export default createModule({
                     new_state = state.updateIn(key, List(), list => {
                         return list.withMutations(posts => {
                             data.forEach(value => {
-                                // in get_state @author/posts, comments are returned without 'author/' prefix.
-                                const key2 = order === 'by_comments' ? value.permlink :`${value.author}/${value.permlink}`
+                                const key2 = `${value.author}/${value.permlink}`
                                 if (!posts.includes(key2)) posts.push(key2);
                             });
                         });

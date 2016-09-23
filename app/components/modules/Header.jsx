@@ -88,7 +88,12 @@ class Header extends React.Component {
                         page_title = `${sort_order} ${topic} posts`;
                     }
                 } else {
-                    page_title = `${sort_order} posts`;
+                    if (route.params[0] === "created") {
+                        page_title = `New posts`;
+                    }
+                    else {
+                        page_title = `${sort_order} posts`;
+                    }
                 }
             }
         } else if (route.page === 'Post') {
@@ -118,6 +123,9 @@ class Header extends React.Component {
         } else {
             page_name = ''; //page_title = route.page.replace( /([a-z])([A-Z])/g, '$1 $2' ).toLowerCase();
         }
+
+        // Always format first letter of all titles capitalized for consistency & readability
+        page_title = page_title.charAt(0).toUpperCase() + page_title.slice(1);
 
         if (process.env.BROWSER && route.page !== 'Post') document.title = page_title + ' — Steemit';
 

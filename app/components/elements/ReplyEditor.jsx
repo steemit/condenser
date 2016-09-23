@@ -14,9 +14,11 @@ import g from 'app/redux/GlobalReducer'
 import links from 'app/utils/Links'
 import {Map, Set} from 'immutable'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
-import { translate } from '../../Translator.js';
 import Remarkable from 'remarkable'
+import { translate } from 'app/Translator.js';
+// TODO check and remove this
 import { transliterate } from 'transliteration';
+import { detransliterate } from 'app/utils/ParsersAndFormatters';
 
 const remarkable = new Remarkable({ html: true, linkify: false })
 const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
@@ -125,6 +127,7 @@ class ReplyEditor extends React.Component {
         const {setMetaData, formId, jsonMetadata} = this.props
         if(process.env.BROWSER) {
             let editorData = localStorage.getItem('replyEditorData-' + formId)
+            let rte_value = RichTextEditor.createEmptyValue();
             if(editorData) {
                 editorData = JSON.parse(editorData)
                 if(editorData.formId === formId) {
@@ -133,8 +136,10 @@ class ReplyEditor extends React.Component {
                     if(title) title.onChange(editorData.title)
                     if (editorData.body) {
                         body.onChange(editorData.body)
-                        const html = getHtml(editorData.body)
-                        this.state.rte_value = RichTextEditor.createValueFromString(html, 'html')
+                        // const html = getHtml(editorData.body)
+                        // console.log('createValueFromString mnt1', html);
+                        // this.state.rte_value = RichTextEditor.createValueFromString(html, 'html')
+                        // console.log('createValueFromString mnt1 done');
                     }
                 }
             }
@@ -143,10 +148,10 @@ class ReplyEditor extends React.Component {
             let rte = false
             if(process.env.BROWSER) {
                 const {isStory} = this.props
-                if(isStory)
-                    rte = JSON.parse(localStorage.getItem('replyEditorData-rte') || RTE_DEFAULT);
+                if(isStory) {
+                        rte = JSON.parse(localStorage.getItem('replyEditorData-rte') || RTE_DEFAULT);
+                }
             }
-            let rte_value;
             if (RichTextEditor) {
                 if (body.value) {
                     if (isHtmlTest(body.value)) {
@@ -155,12 +160,10 @@ class ReplyEditor extends React.Component {
                         rte_value = RichTextEditor.createValueFromString(html, 'html')
                     } else {
                         rte = false;
-                        rte_value = RichTextEditor.createEmptyValue();
-                        // body.initialValue causes 100% cpu when editing http://localhost:3002/steemit/@cryptomental/can-a-viral-introduceyourself-post-be-engineered
+                        // console.log('createValueFromString mnt3');
                         // rte_value = RichTextEditor.createValueFromString(body.initialValue, 'html');
+                        // console.log('createValueFromString mnt3 done');
                     }
-                } else {
-                    rte_value = RichTextEditor.createEmptyValue();
                 }
             }
             this.setState({rte, rte_value})
@@ -267,6 +270,11 @@ class ReplyEditor extends React.Component {
         this.setState(state);
         localStorage.setItem('replyEditorData-rte', !this.state.rte)
     }
+
+    toggleAllSteemPower = () => {
+        this.setState({allSteemPower: !this.state.allSteemPower})
+    }
+
     render() {
         // NOTE title, category, and body are UI form fields ..
         const originalPost = {
@@ -281,7 +289,7 @@ class ReplyEditor extends React.Component {
             author, permlink, parent_author, parent_permlink, type, jsonMetadata, metaLinkData,
             state, successCallback, handleSubmit, submitting, invalid, //lastComment,
         } = this.props
-        const {postError, markdownViewerText, loading, titleWarn, rte} = this.state
+        const {postError, markdownViewerText, loading, titleWarn, rte, allSteemPower} = this.state
         const {onTitleChange} = this
         const errorCallback = estr => { this.setState({ postError: estr, loading: false }) }
         const successCallbackWrapper = (...args) => {
@@ -293,7 +301,8 @@ class ReplyEditor extends React.Component {
         const autoVoteValue = !isEdit && autoVote.value
         const replyParams = {
             author, permlink, parent_author, parent_permlink, type, state, originalPost,
-            jsonMetadata, metaLinkData, autoVote: autoVoteValue, successCallback: successCallbackWrapper, errorCallback
+            jsonMetadata, metaLinkData, autoVote: autoVoteValue, allSteemPower,
+            successCallback: successCallbackWrapper, errorCallback
         }
         const postLabel = username ? <Tooltip t={translate('post_as') + ' “' + username + '”'}>{translate('post')}</Tooltip> : translate('post')
         const hasTitleError = title && title.touched && title.error
@@ -368,6 +377,12 @@ class ReplyEditor extends React.Component {
                             }
                             {!loading && !this.props.onCancel && <button className="button hollow no-border uppercase" tabIndex={5} disabled={submitting} onClick={onCancel}>{translate("clear")}</button>}
                             {isStory && !isEdit && <div className="float-right">
+                                <small onClick={this.toggleAllSteemPower} title={translate('leave_this_unchecked_to_receive_half_your_reward')}>{translate('pay_me_100_in_INVEST_TOKEN')}</small>
+                                &nbsp;&nbsp;
+                                <input type="checkbox" onChange={this.toggleAllSteemPower} checked={allSteemPower} />
+
+                                <br />
+
                                 <small onClick={autoVoteOnChange}>{translate("upvote_post")}</small>
                                 &nbsp;&nbsp;
                                 <input type="checkbox" {...cleanReduxInput(autoVote)} onChange={autoVoteOnChange} />
@@ -434,6 +449,7 @@ export default formId => reduxForm(
             formId,
             metaLinkData,
         }
+        // console.log('ret', ret)
         return ret
     },
 
@@ -450,10 +466,14 @@ export default formId => reduxForm(
             dispatch(g.actions.setMetaData({id, meta: jsonMetadata ? jsonMetadata.steem : null}))
         },
         reply: ({category, title, body, author, permlink, parent_author, parent_permlink,
-            type, originalPost, autoVote = false, state, jsonMetadata, /*metaLinkData,*/ successCallback, errorCallback, loadingCallback}) => {
-
+            type, originalPost, autoVote = false, allSteemPower = false,
+            state, jsonMetadata, /*metaLinkData,*/
+            successCallback, errorCallback, loadingCallback
+        }) => {
             // const post = state.global.getIn(['content', author + '/' + permlink])
             const username = state.user.getIn(['current', 'username'])
+            console.log('category', category)
+            category.split(' ').map((item) => {console.log(/^[а-я]/.test(item))})
             // Parse categories:
             // if category string starts with russian symbol, add 'ru-' prefix to it
             // when transletirate it
@@ -461,9 +481,10 @@ export default formId => reduxForm(
             // (all of this is needed because blockchain does not allow russian symbols in category)
             if (category) {
                 category = category.split(' ')
-                                    .map(item => /^[а-я]/.test(item) ? 'ru-' + transliterate(category) : item)
+                                    .map(item => /^[а-я]/.test(item) ? 'ru--' + detransliterate(item, true) : item)
                                     .join(' ')
             }
+            console.log(category)
             // Wire up the current and parent props for either an Edit or a Submit (new post)
             //'submit_story', 'submit_comment', 'edit'
             const linkProps =
@@ -525,14 +546,22 @@ export default formId => reduxForm(
                 errorCallback(translate('use_limited_amount_of_tags', {tagsLength: meta.tags.length, includingCategory}))
                 return
             }
+            // loadingCallback starts the loading indicator
+            loadingCallback()
+
+            const __config = {originalPost, autoVote}
+
+            if(allSteemPower) {
+                __config.comment_options = {
+                    percent_steem_dollars: 0, // 10000 === 100%
+                }
+            }
             const operation = {
                 ...linkProps,
                 category: rootCategory, title, body,
                 json_metadata: meta,
-                __config: {originalPost, autoVote}
+                __config
             }
-            // loadingCallback starts the loading indicator
-            loadingCallback()
             dispatch(transaction.actions.broadcastOperation({
                 type: 'comment',
                 operation,

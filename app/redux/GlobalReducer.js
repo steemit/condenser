@@ -54,11 +54,11 @@ export default createModule({
         {
             action: 'RECEIVE_COMMENT',
             reducer: (state, {payload: op}) => {
-                const {author, permlink, parent_author = '', parent_permlink = '', title = '', body} = op
+                const {author, permlink, parent_author = '', parent_permlink = '', title = '', body, i18n_category} = op
                 const key = author + '/' + permlink
 
                 let updatedState = state.updateIn(['content', key], Map(emptyContent), r => r.merge({
-                    author, permlink, parent_author, parent_permlink,
+                    author, permlink, parent_author, parent_permlink, i18n_category,
                     title: title.toString('utf-8'),
                     body: body.toString('utf-8'),
                 }))
@@ -153,11 +153,12 @@ export default createModule({
                 let new_state;
                 if (order === 'by_author' || order === 'by_feed') {
                     const by_feed = order === 'by_feed'
+                    // in this case, category is either "blog" or "feed"
                     const key = ['accounts', by_feed ? accountname : author, category]
                     new_state = state.updateIn(key, List(), list => {
                         return list.withMutations(posts => {
                             data.forEach(value => {
-                                const key2 = by_feed ? `${value.author}/${value.permlink}` : value.permlink
+                                const key2 = `${value.author}/${value.permlink}`
                                 if (!posts.includes(key2)) posts.push(key2);
                             });
                         });

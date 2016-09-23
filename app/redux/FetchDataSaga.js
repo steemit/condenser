@@ -6,14 +6,14 @@ import GlobalReducer from './GlobalReducer';
 import constants from './constants';
 import {fromJS, Map} from 'immutable'
 
-export const fetchDataWatches = [watchLocationChange, watchDataRequests, watchApiRequests, watchFetchJsonRequests];
+export const fetchDataWatches = [watchLocationChange, watchDataRequests, watchApiRequests, watchFetchJsonRequests, watchFetchState];
 
 export function* watchDataRequests() {
     yield* takeLatest('REQUEST_DATA', fetchData);
 }
 
 export function* fetchState(location_change_action) {
-    const {pathname, /*search*/} = location_change_action.payload;
+    const {pathname} = location_change_action.payload;
     const m = pathname.match(/@([a-z0-9\.-]+)/)
     if(m && m.length === 2) {
         const username = m[1]
@@ -52,6 +52,10 @@ export function* fetchState(location_change_action) {
 
 export function* watchLocationChange() {
     yield* takeLatest('@@router/LOCATION_CHANGE', fetchState);
+}
+
+export function* watchFetchState() {
+    yield* takeLatest('FETCH_STATE', fetchState);
 }
 
 export function* fetchData(action) {
@@ -140,8 +144,12 @@ export function* fetchData(action) {
           start_author: author,
           start_permlink: permlink}];
     } else if( order === 'by_author' ) {
-        call_name = 'get_discussions_by_author_before_date';
-        args = [author, permlink, '1970-01-01T00:00:00', constants.FETCH_DATA_BATCH_SIZE];
+        call_name = 'get_discussions_by_blog';
+        args = [
+        { tag: accountname,
+          limit: constants.FETCH_DATA_BATCH_SIZE,
+          start_author: author,
+          start_permlink: permlink}];
     } else {
         call_name = 'get_discussions_by_active';
         args = [{

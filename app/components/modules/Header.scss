@@ -35,6 +35,9 @@
 .Header__top {
   background-color: $white;
   border-bottom: 1px solid $light-gray;
+  ul > li.Header__top-logo {
+    padding: .35rem 0 .35rem 0;
+  }
   ul > li.delim {
     color: $medium-gray;
   }
@@ -87,13 +90,22 @@ ul > li > .button {
   border-bottom: 1px solid $light-gray;
   transition: all .3s;
   z-index: -1;
-  // border-bottom: 1px solid $light-gray;
+  li {
+    line-height: 1rem;
+    padding: 1.2rem 0 1.2rem 0;
+    margin: 0 0 0 2rem;
+    }
+  // No margin adjustments for first child element in menu items
+  li:first-child {
+    margin: 0 0 0 0;
+  }
   li > a {
     color: $dark-gray;
     background-color: $white;
     border-bottom: 1px solid transparent;
     font-size: 1rem;
-    line-height: 1rem;
+    line-height: 0;
+    padding: 0;
   }
   a.active {
     color: $black;
@@ -120,7 +132,7 @@ ul > li > .button {
   .beta {
     position: relative;
     top: 14px;
-    right: 22px;
+    right: 29px;
     font-size: 0.7rem;
     color: #4ba2f2;
   }

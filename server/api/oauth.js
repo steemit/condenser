@@ -53,7 +53,7 @@ function* handleFacebookCallback() {
             return logErrorAndRedirect(this, 'facebook:1', this.query['error[error][message]']);
         }
         const u = yield retrieveFacebookUserData(this.query.access_token);
-        verified_email = !!(u.verified && u.email);
+        verified_email = false; // verified_email = !!(u.verified && u.email);
         const attrs = {
             uid: this.session.uid,
             name: u.name,
@@ -124,6 +124,12 @@ function* handleFacebookCallback() {
                 this.body = 'We cannot verify the user account. Please contact support@steemit.com';
             }
             return null;
+        }
+        if (!u.email) {
+            console.log('-- /handle_facebook_callback no email -->', this.session.uid, u);
+            this.flash = {alert: 'Facebook login didn\'t provide any email addresses. Please make sure your Facebook account has a primary email address and try again.'};
+            this.redirect('/');
+            return;
         }
 
         if (user) {
@@ -229,7 +235,7 @@ function* handleRedditCallback() {
             return null;
         }
 
-        const waiting_list = !u.comment_karma || u.comment_karma < 1;
+        const waiting_list = !u.comment_karma || u.comment_karma < 5;
         const i_attrs = {
             provider: 'reddit',
             provider_user_id: u.id,

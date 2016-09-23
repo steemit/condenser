@@ -38,10 +38,12 @@ class TagsIndex extends React.Component {
         const order = this.props.routeParams.order;
         let tags = tagsAll;
         if (search) tags = tags.filter(tag => tag.get('name').indexOf(search.toLowerCase()) !== -1);
+        tags.map((tag) => {console.log(tag.get('name'))})
         tags = tags.filter(tag => tag.get('name')).sort((a,b) => {
             return a.get('name').localeCompare(b.get('name'));
         }).map(tag => {
             const name = tag.get('name');
+            console.log(name)
             const link = order ? `/${order}/${name}` : `/hot/${name}`;
             // const tag_info = tagsAll.get(tag);
             return (<tr key={name}>
@@ -52,6 +54,7 @@ class TagsIndex extends React.Component {
                 <td>{formatCoins(tag.get('total_payouts'))}</td>
             </tr>);
         }).toArray();
+        console.log(tags)
         return (
             <div className="TagsIndex row">
                 <div className="column">

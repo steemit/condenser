@@ -4,6 +4,7 @@ import SvgImage from 'app/components/elements/SvgImage';
 import AddToWaitingList from 'app/components/modules/AddToWaitingList';
 import { translate } from 'app/Translator';
 import { formatCoins } from 'app/utils/FormatCoins';
+import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 
 class SignUp extends React.Component {
     constructor() {
@@ -37,7 +38,7 @@ class SignUp extends React.Component {
                 <div className="column">
                     <h3>{translate("sign_up")}</h3>
                     <p>
-                        {translate("we_require_social_account", {signup_bonus: formatCoins(this.props.signup_bonus)})}
+                        {translate("we_require_social_account", {signup_bonus: localizedCurrency(this.props.signup_bonus)})}
                         <br />
                         {translate("personal_info_will_be_private")}
                         {' '}
@@ -68,7 +69,7 @@ class SignUp extends React.Component {
                     </a>
                     <br />
                     <span className="secondary">
-                        ({translate("requires_positive_karma")})
+                        ({translate("requires_5_or_more_reddit_comment_karma")})
                     </span>
                 </div>
             </div>

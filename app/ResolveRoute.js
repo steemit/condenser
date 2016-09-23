@@ -1,5 +1,6 @@
 export default function resolveRoute(path)
 {
+    // routes
     if (path === '/') {
         return {page: 'PostsIndex', params: ['trending']};
     }

@@ -95,7 +95,8 @@
 }
 
 .Voting .DropdownMenu ul {
-  width: 240px;
+  min-width: 240px;
+  width: auto;
 
   li > a {
     padding: 0 0.5rem;
@@ -174,6 +175,9 @@
   }
   a.confirm_weight {
     float: left;
+    width: 2rem;
+    height: 2rem;
+    line-height: 2.6rem;
   }
   .rangeslider {
     position: relative;
@@ -222,7 +226,8 @@
   }
   .Voting__adjust_weight_close {
     position: static;
-    line-height: 1.4;
+    line-height: 2.6rem;
+    font-size: 2rem;
     margin-left: 1rem;
   }
 }
@@ -244,7 +249,7 @@
     position: relative;
     .dropdown-pane {
       top: -18px;
-      left: -10px;
+      left: -28px;
     }
   }
 }

@@ -73,7 +73,6 @@ class LoginForm extends Component {
             validation: values => ({
                 username: ! values.username ? translate('required') : validate_account_name(values.username.split('/')[0]),
                 password: ! values.password ? translate('required') :
-                    values.password.length < 16 ? translate('password_must_be_characters_or_more', {amount: 16}) :
                     PublicKey.fromString(values.password) ? translate('you_need_private_password_or_key_not_a_public_key') :
                     null,
             })
@@ -145,6 +144,11 @@ class LoginForm extends Component {
                                                         {translate('update_your_password')}
                                                     </a>
                             })} />
+                        {translate('password_is_bound_to_your_accounts_owner_key')}.
+                        <br />
+                        {translate('however_you_can_use_it_to') + ' '}
+                        <a onClick={this.showChangePassword}>{translate('update_your_password')}</a>
+                        {' ' + translate('to_obtaion_a_more_secure_set_of_keys')}.
                     </span>
                 } else if (error === 'active_login_blocked') {
                     error = <span>{translate('this_password_is_bound_to_your_accounts_private_key')}</span>

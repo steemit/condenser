@@ -10,6 +10,7 @@ export default {
     component: App,
     getChildRoutes(nextState, cb) {
         const route = resolveRoute(nextState.location.pathname);
+        console.log(nextState.location)
         if (route.page === 'About') {
             //require.ensure([], (require) => {
                 cb(null, [require('app/components/pages/About')]);
@@ -83,7 +84,7 @@ export default {
             //});
         } else if (route.page === 'Post') {
             //require.ensure([], (require) => {
-                cb(null, [require('app/components/pages/Post')]);
+                cb(null, [require('app/components/pages/PostPage')]);
             //});
         } else if (route.page === 'PostsIndex') {
             //require.ensure([], (require) => {

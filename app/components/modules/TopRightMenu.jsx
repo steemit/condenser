@@ -18,6 +18,7 @@ const defaultNavigate = (e) => {
 
 function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpic, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn}) {
     const mcn = 'menu' + (vertical ? ' vertical show-for-small-only' : '');
+    const mcl = vertical ? '' : ' sub-menu';
     const lcn = vertical ? '' : 'show-for-medium';
     const nav = navigate || defaultNavigate;
     const submit_story = $STM_Config.read_only_mode ? null : <li className={lcn + ' submit-story'}><a href="/submit.html" onClick={nav}>{translate("submit_a_story")}</a></li>;
@@ -28,10 +29,15 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
     const account_link = `/@${username}`;
     const posts_link = `/@${username}/posts`;
     const reset_password_link = `/@${username}/password`;
+    function trackAnalytics(eventType) {
+        console.log(eventType)
+        analytics.track(eventType)
+    }
     if (loggedIn) { // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!
         const user_menu = [
+            {link: feed_link, value: translate('feed')},
             {link: account_link, value: translate('blog')},
-            {link: posts_link, value: translate('posts')},
+            {link: posts_link, value: translate('comments')},
             {link: replies_link, value: translate('replies')},
             {link: wallet_link, value: translate('wallet')},
             {link: reset_password_link, value: translate('change_password')},
@@ -50,6 +56,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                     dropdownPosition="bottom"
                     dropdownAlignment="right"
                     dropdownContent={<VerticalMenu items={user_menu} title={username} />}
+                    onClick={trackAnalytics.bind(this, 'user dropdown menu clicked')}
                 >
                     {!vertical && <li className={'Header__userpic '}>
                         <a href={account_link} title={username} onClick={e => e.preventDefault()}>
@@ -65,7 +72,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
     }
     if (probablyLoggedIn) {
         return (
-            <ul className={mcn}>
+            <ul className={mcn + mcl}>
                 {!vertical && <li><a href="/static/search.html" title="Search"><Icon name="search" /></a></li>}
                 <li className={lcn}><LoadingIndicator type="circle" inline /></li>
                 {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
@@ -75,7 +82,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
         );
     }
     return (
-        <ul className={mcn}>
+        <ul className={mcn + mcl}>
             {!vertical && <li><a href="/static/search.html" title="Search"><Icon name="search" /></a></li>}
             <li className={lcn}><a href="/create_account" onClick={showSignUp}>{translate('sign_up')}</a></li>
             <li className={lcn}><a href="/login.html" onClick={showLogin}>{translate('login')}</a></li>

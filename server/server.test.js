@@ -11,10 +11,12 @@ const request = agent(server.listen());
 chai.use(dirtyChai);
 
 describe('/favicon.ico', function () {
+/* not maintained
     it('should return image', function *() {
         const res = yield request.get('/favicon.ico').end();
         expect(res.status).to.equal(200);
         expect(res.body).to.be.ok();
         expect(res.headers['content-type']).to.equal('image/x-icon');
     });
+*/
 });

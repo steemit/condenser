@@ -44,7 +44,11 @@ const typeName = confirmBroadcastOperation => {
     const title = confirmBroadcastOperation.getIn(['operation', '__config', 'title'])
     if(title) return title
     const type = confirmBroadcastOperation.get('type')
-    return translate('confirm') + ' ' + (type.split('_').map(n => n.charAt(0).toUpperCase() + n.substring(1))).join(' ')
+    // this part was too complicated to add i18n
+    //  Plus i didn't know where and how exactly thi component is used
+    //  so i added generic 'Confirm Action' title
+    // return translate('confirm') + ' ' + translate((type.split('_').map(n => n.charAt(0).toLowerCase() + n.substring(1))).join(' '))
+    return translate('confirm') + ' ' + translate('action')
 }
 
 export default connect(

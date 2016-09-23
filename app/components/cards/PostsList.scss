@@ -1,0 +1,95 @@
+.PostsList__post_overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 300;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  background-color: $white;
+  // padding: 0 .9rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+.PostsList__post_top_overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 310;
+  height: 2.5rem;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  border-bottom: 1px solid $light-gray;
+}
+
+.PostsList__post_top_bar {
+  position: relative;
+  width: 100%;
+  height: 2.5rem;
+  margin: 0 auto;
+  padding: 0.3rem 0.9rem 0;
+  background-color: $white;
+  > .close-button {
+    visibility: hidden;
+    top: 1rem;
+    right: 0;
+  }
+  > .back-button {
+    position: relative;
+    font-size: 2em;
+    line-height: 1;
+    cursor: pointer;
+    path {
+      fill: map-get($foundation-palette, 'primary');
+    }
+  }
+}
+
+.PostsList__post_container {
+  position: relative;
+  background-color: $white;
+  margin: 1rem auto;
+  padding: 2rem 0.9rem 0 0.9rem;
+  .PostFull {
+    background-color: $white;
+  }
+}
+
+body.with-post-overlay {
+  overflow: hidden;
+}
+
+@media screen and (min-width: 60rem) {
+  .PostsList__post_overlay {
+    background-color: rgba(150, 150, 150, 0.9);
+  }
+  .PostsList__post_top_overlay {
+    border-bottom: none;
+  }
+  .PostsList__post_top_bar {
+    width: 56rem;
+    background-color: transparent;
+    > .close-button {
+      visibility: visible;
+    }
+    > .back-button {
+      visibility: hidden;
+    }
+  }
+  .PostsList__post_container {
+    border-radius: 3px;
+    width: 56rem;
+    box-shadow: 0 0 5px 0px rgba(64,64,64,1);
+  }
+}
+
+@media screen and (min-width: 67rem) {
+  .PostsList__post_container {
+    width: 62rem;
+  }
+  .PostsList__post_top_bar {
+    width: 62rem;
+  }
+}

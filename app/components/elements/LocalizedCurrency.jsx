@@ -2,16 +2,23 @@ import React from 'react';
 import store from 'store';
 import cc from 'currency-codes';
 import { injectIntl } from 'react-intl';
+import { getSymbolFromCurrency } from 'currency-symbol-map';
 
-
+let localCurrencySymbol
 let localizedCurrency = () => {}
 
 // TODO add comments on what this code does
-
+// TODO add decimal symbols property
 // TODO remove injectIntl, create formatNumber function in Translator
 @injectIntl
 export default class LocalizedCurrency extends React.Component {
-	static propTypes = { amount: React.PropTypes.number.isRequired }
+
+	static propTypes = {
+		amount: React.PropTypes.number.isRequired,
+		noSymbol: React.PropTypes.bool
+	}
+
+	// static defaultProps = { noSymbol: false } // is this needed?
 
 	state = {
 		exchangeRate: store.get('exchangeRate'),
@@ -31,7 +38,8 @@ export default class LocalizedCurrency extends React.Component {
 
 	// fetch exchange rates and users country. Store data in localStorage
 	fetchExchangeRates = () => {
-		console.warn('fetchExchangeRates is called!')
+		console.warn('exchange rates are outdated!')
+		console.info('fetching new ones...')
 		// get users country by ip
 		fetch('http://freegeoip.net/json/')
 			.then(function(response) {
@@ -44,6 +52,7 @@ export default class LocalizedCurrency extends React.Component {
 				const currency = cc.country( data.country_name.toLowerCase() )[0].code
 				store.set('currency', currency)
 				this.setState({currency})
+				console.info('fetched exchange rates successfully!')
 			})
 			.catch(err => console.error('Failed to get users loaction info', err))
 
@@ -61,24 +70,29 @@ export default class LocalizedCurrency extends React.Component {
 
 	render() {
 		const {currency, exchangeRate} 	 = this.state
-		const {amount, intl: {formatNumber}} = this.props
-		const style = 'currency'
+		const {amount, intl: {formatNumber}, noSymbol} = this.props
 
+		localCurrencySymbol = getSymbolFromCurrency(currency)
 
-		// depending on exchange rates data parse local currency or dollars
-		localizedCurrency = (number) => exchangeRate
-										? formatNumber(number * exchangeRate, {style, currency})
-										: formatNumber(number, {style, currency})
+		/**
+		 * localyze currency
+		 * @param  {number} amount to parse
+		 * @param  {object} options
+		 * @return {string}
+		 */
+		// depending on exchange rates data parse local currency or default one
+		localizedCurrency = (number, options) => {
+			const currencyAmount = 	exchangeRate
+										? formatNumber(number * exchangeRate)
+										: formatNumber(number)
+			// if noSymbol is specified return only amount of digits
+			return 	noSymbol || options && options.noSymbol
+					? currencyAmount
+					: localCurrencySymbol + ' ' + currencyAmount
+		}
 
-		return 	<span>
-					{localizedCurrency(amount)}
-					{/* {
-						exchangeRate
-						? formatNumber(amount * exchangeRate, {style, currency})
-						: formatNumber(amount, {style, currency})
-					} */}
-				</span>
+		return 	<span {...this.props}>{localizedCurrency(amount)}</span>
 	}
 }
 
-export { localizedCurrency }
+export { localizedCurrency, localCurrencySymbol }

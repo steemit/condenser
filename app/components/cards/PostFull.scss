@@ -51,7 +51,7 @@
   padding: 1rem 0 2rem 0;
   clear: left;
 
-  font-family: 'Source Serif Pro', serif;
+  font-family: Georgia, serif;
   font-size: 120%;
   line-height: 150%;
 
@@ -108,6 +108,12 @@
   span {
     white-space: normal;
   }
+
+  .Reblog__button {
+    padding-right: 1rem;
+    margin-right: 1rem;
+    border-right: 1px solid $medium-gray;
+  }
 }
 
 .PostFull__responses {
@@ -138,7 +144,7 @@
 @media screen and (max-width: 39.9375em) {
   .Post {
     width: 100%;
-    overflow-x: hidden;
+    overflow: hidden;
   }
   .PostFull__footer > .column {
     -webkit-box-flex: 0;

@@ -61,7 +61,7 @@ const ru = {
 	hot: 'горячее',
 	trending: 'набирающее популярность',
 	payout_time: 'время выплаты',
-	active: 'активный',
+	active: 'обсуждаемое',
 	responses: 'ответы',
 	popular: 'популярное',
 	/* end dropdown menu */
@@ -182,7 +182,7 @@ const ru = {
 	recent_password: 'Недавний пароль',
 	generated_password: 'Сгенерированный пароль',
 	recover_account: 'Восстановить аккаунт',
-	new: 'новый', // ex. 'Generated Password (new)', but not exclusively
+	new: 'новое', // ex. 'Generated Password (new)', but not exclusively
 	backup_password_by_storing_it: 'Сделайте резервную копию в менеджере паролей или текстовом файле',
 	click_to_generate_password: 'Нажмите чтобы сгененировать пароль',
 	re_enter_generate_password: 'Повторно введите пароль',
@@ -507,7 +507,8 @@ const ru = {
 	spend_your_DEBT_TOKEN_to_advertise_this_post: 'Используйте ваши ' + DEBT_TOKEN + ' чтобы прорекламировать этот пост в секции продвигаемого контента',
 	you_successdully_promoted_this_post: 'Вы успешно продвинули этот пост',
 	pay_me_100_in_INVEST_TOKEN: 'Заплатите мне 100% в ' + INVEST_TOKEN,
-	requires_5_or_more_reddit_comment_karma: 'необходимо 5 или больше Reddit кармы комментирования'
+	requires_5_or_more_reddit_comment_karma: 'необходимо 5 или больше Reddit кармы комментирования',
+	this_post_was_hidden_due_to_low_ratings: 'Этот пост был скрыт из-за низкого рейтинга',
 }
 
 export { ru }

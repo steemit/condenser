@@ -63,6 +63,7 @@ class CreateAccount extends React.Component {
             });
         }
 
+        // createAccount
         fetch('/api/v1/accounts', {
             method: 'post',
             mode: 'no-cors',
@@ -203,6 +204,15 @@ class CreateAccount extends React.Component {
             </div>;
         }
 
+        const next_step = !server_error ? null :
+            server_error === 'Mobile is not confirmed' ? <div>
+                <a href="/enter_mobile">Verify a Mobile</a>
+            </div> : <div className="callout alert">
+                <h5>Couldn't create account. Server returned the following error:</h5>
+                <p>{server_error}</p>
+                {server_error === 'Email address is not confirmed' && <a href="/enter_email">Confirm Email</a>}
+            </div>
+
         return (
             <div className="CreateAccount row">
                 <div className="column large-7 small-10">
@@ -229,11 +239,7 @@ class CreateAccount extends React.Component {
                         </div>
                         <GeneratedPasswordInput onChange={this.onPasswordChange} disabled={loading} showPasswordString={name.length > 0 && !name_error} />
                         <br />
-                        {server_error && <div className="callout alert">
-                            <h5>Couldn't create account. Server returned the following error:</h5>
-                            <p>{server_error}</p>
-                            {server_error === 'Email address is not confirmed' && <a href="/enter_email">Confirm Email</a>}
-                        </div>}
+                        {next_step && <div>{next_step}<br /></div>}
                         <noscript>
                             <div className="callout alert">
                                 <p>This form requires javascript to be enabled in your browser</p>

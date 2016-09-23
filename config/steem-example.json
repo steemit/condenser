@@ -52,6 +52,9 @@
       "confirm_email": "some_template_id"
     }
   },
+  "telesign": {
+      "ucid": "TRVF",
+  },
   "recaptcha": {
     "site_key": "",
     "secret_key": ""

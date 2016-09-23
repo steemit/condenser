@@ -1,18 +1,24 @@
 import models from '../db/models';
-import sendEmail from '../server/sendEmail';
+import sendMobile from 'server/sendMobile';
 
-function inviteUser(u, email, number) {
-    const confirmation_code = Math.random().toString(36).slice(2);
-    console.log(`\n***** invite #${number} ***** `, u.id, email, confirmation_code);
+function smsUser(u, mobile) {
+    const confirmation_code = Math.random().toString().slice(14);
+    const query = {
+        attributes: ['email'],
+        where: {mobile}
+    };
+    models.Identity.findOne(query).then(identity => {
+    })
+    console.log(`\n***** sms #${mobile} ***** `, u.id, mobile, confirmation_code);
     const i_attrs = {
-        provider: 'email',
+        provider: 'mobile',
         user_id: u.id,
-        email,
+        email: mobile,
         verified: false,
         confirmation_code
     };
     models.Identity.create(i_attrs).then(() => {
-        sendEmail('waiting_list_invite', 'to@example.com', {confirmation_code}, 'from@example.com');
+        sendMobile({mobile, confirmation_code, ip});
     });
 }
 

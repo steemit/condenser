@@ -28,7 +28,7 @@ export default function useGeneralApi(app) {
 
         const remote_ip = getRemoteIp(this.req);
 
-        const user_id = this.session.user;
+        const user_id = this.session.user = 'jsc'; // TODO 999
         if (!user_id) { // require user to sign in with identity provider
             this.body = JSON.stringify({error: 'Unauthorized'});
             this.status = 401;
@@ -73,6 +73,14 @@ export default function useGeneralApi(app) {
             if (!eid) {
                 console.log(`api /accounts: not confirmed email for user ${this.session.uid} #${user_id}`);
                 throw new Error('Email address is not confirmed');
+            }
+
+            const sid = yield models.Identity.findOne(
+                {attributes: ['id'], where: {user_id, provider: 'mobile', verified: true}, order: 'id DESC'}
+            );
+            if (!sid) {
+                console.log(`api /accounts: not confirmed sms for user ${this.session.uid} #${user_id}`);
+                throw new Error('Mobile is not confirmed');
             }
 
             yield createAccount({

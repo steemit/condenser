@@ -74,22 +74,9 @@ class App extends React.Component {
         const a = e.target.nodeName.toLowerCase() === 'a' ? e.target : e.target.parentNode;
         // this.setState({open: null});
         if (a.host !== window.location.host) return;
-        console.log(a)
         e.preventDefault();
         browserHistory.push(a.pathname + a.search + a.hash);
     };
-
-    componentWillReceiveProps(nextProps) {
-        console.log('nextProps', nextProps)
-        console.log('browserHistory', browserHistory)
-        console.log(this.props.router)
-        console.log('this.props.location', this.props.location)
-        const newPath = '/dicks'
-        console.log('browserHistory', browserHistory)
-        // this checker is important
-        // if (this.props.location.pathname != newPath) browserHistory.replace('/dicks')
-        // browserHistory.replace('/dicks')
-    }
 
     onEntropyEvent(e) {
         if(e.type === 'mousemove')
@@ -174,11 +161,7 @@ class App extends React.Component {
                 </div>
             );
         }
-        if (process.env.BROWSER) {
-            console.log(window.history)
-            console.log(this.props.history)
-            // console.log(browserHistory.replace('/dicks'))
-        }
+
         return <div className={'App' + (lp ? ' LP' : '') + (ip ? ' index-page' : '')} onMouseMove={this.onEntropyEvent}>
             <SidePanel ref="side_panel" alignment="right">
                 <TopRightMenu vertical navigate={this.navigate} />

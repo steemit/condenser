@@ -483,7 +483,7 @@ const ru = {
 	tokens_worth_about_AMOUNT_of_OWNERSHIP_TOKEN: 'Жетоны стоимостью около {amount} ' + OWNERSHIP_TOKEN + '.',
 	influence_tokens_which_earn_more_power_by_holding_long_term: 'Жетоны влияния, которые усиливаются при долгосрочном хранении.',
 	the_more_you_hold_the_more_you_influence_post_rewards: 'Чем их больше, тем сильней вы влияете на вознаграждения за пост и тем больше зарабатываете за правильное голосование.',
-	the_estimated_value_is_based_on_a_7_day_average_value_of_steem_in_currency: 'Оценочная стоимость расчитывается на 7ми дневной средней стоимости ' + OWNERSHIP_TOKEN + ' в российских рублях.',
+	the_estimated_value_is_based_on_a_7_day_average_value_of_steem_in_currency: 'Оценочная стоимость расчитывается из 7ми дневной средней стоимости ' + OWNERSHIP_TOKEN + ' в российских рублях.',
 	INVEST_TOKEN_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_OWNERSHIP_TOKEN: INVEST_TOKEN + ' нельзя передавать и потребуется 2 года и 104 выплаты чтобы перевести обратно в ' + OWNERSHIP_TOKEN + '.',
 	// TODO
 	converted_INVEST_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again: 'Конвертированная ' + INVEST_TOKEN + ' может быть отправлена себе или кому-то еще, но не может быть передана вновь без конвертирования назад в ' + OWNERSHIP_TOKEN + '.',

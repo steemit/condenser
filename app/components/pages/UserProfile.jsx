@@ -170,6 +170,7 @@ export default class UserProfile extends React.Component {
                     loading={fetching}
                     category="blog"
                     loadMore={this.loadMore}
+                    accountName={account.name}
                     showSpam />;
             } else {
                 tab_content = (<center><LoadingIndicator type="circle" /></center>);

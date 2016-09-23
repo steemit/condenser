@@ -192,18 +192,33 @@ import {connect} from 'react-redux'
 
 export default connect(
     (state, props) => {
+
         const {posts, showSpam} = props;
         const comments = []
         const pathname = state.app.get('location').pathname;
+        const current = state.user.get('current')
+        const username = current ? current.get('username') : null
+
         posts.forEach(item => {
-            const content = state.global.get('content').get(item);
+            let content = state.global.get('content').get(item);
+
+            // when you go to 'blog' tab in user profile content is not getting picked up properly,
+            // due to bad content key (it's 'sometitle' instead of 'username/sometitle')
+            // no idead how this did happanen. But this workaround fixes the issue
+
+            // if there is no content add username to content key
             if(!content) {
-                console.error('PostsList --> Missing content key', item)
-                return
+                item = props.accountName + '/' + item
+                content = state.global.get('content').get(item)
+                // only if content is still missing throw actual error
+                if(!content) {
+                    console.error('PostsList --> Missing content key', item)
+                    return
+                }
             }
+
             // let total_payout = 0;
-            const current = state.user.get('current')
-            const username = current ? current.get('username') : null
+
             const key = ['follow', 'get_following', username, 'result', content.get('author')]
             const ignore = username ? state.global.getIn(key, List()).contains('ignore') : false
             const {hide, netVoteSign, authorRepLog10} = content.get('stats').toJS()

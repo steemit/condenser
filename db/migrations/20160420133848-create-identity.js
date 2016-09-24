@@ -28,6 +28,9 @@ module.exports = {
             email: {
                 type: Sequelize.STRING
             },
+            phone: {
+                type: Sequelize.STRING(32)
+            },
             confirmation_code: {
                 type: Sequelize.STRING
             },
@@ -47,6 +50,7 @@ module.exports = {
             }
         }).then(function () {
             queryInterface.addIndex('identities', ['email']);
+            queryInterface.addIndex('identities', ['phone']);
             queryInterface.addIndex('identities', ['confirmation_code']);
         });
     },

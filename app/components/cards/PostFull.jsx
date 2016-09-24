@@ -10,7 +10,6 @@ import user from 'app/redux/User';
 import transaction from 'app/redux/Transaction'
 import Voting from 'app/components/elements/Voting';
 import Reblog from 'app/components/elements/Reblog';
-import Tooltip from 'app/components/elements/Tooltip';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import ReplyEditor from 'app/components/elements/ReplyEditor';
 import {immutableAccessor} from 'app/utils/Accessors';
@@ -25,12 +24,10 @@ import {repLog10, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 function TimeAuthorCategory({content, authorRepLog10, showTags}) {
     return (
         <span className="PostFull__time_author_category vcard">
-            <Tooltip t={new Date(content.created).toLocaleString()}>
-                <Icon name="clock" className="space-right" />
-                <span className="TimeAgo"><TimeAgoWrapper date={content.created} /></span>
-            </Tooltip>
-            <span> by <Author author={content.author} authorRepLog10={authorRepLog10} /></span>
-            {showTags && <span> in&nbsp;<TagList post={content} /></span>}
+            <Icon name="clock" className="space-right" />
+            <TimeAgoWrapper date={content.created} className="updated" />
+            {} by <Author author={content.author} authorRepLog10={authorRepLog10} />
+            {showTags && <span> in <TagList post={content} single /></span>}
         </span>
      );
 }
@@ -199,8 +196,6 @@ export default class PostFull extends React.Component {
         const pending_payout = parsePayoutAmount(content.pending_payout_value);
         const total_payout = parsePayoutAmount(content.total_payout_value);
         const high_quality_post = pending_payout + total_payout > 10.0;
-        const showEditOption = username === author && total_payout === 0
-        const authorRepLog10 = repLog10(content.author_reputation)
 
         let post_header = <h1 className="entry-title">{content.title}</h1>
         if(content.depth > 0) {
@@ -214,6 +209,7 @@ export default class PostFull extends React.Component {
                 </li>
             }
             post_header = <div className="callout">
+                <h3 className="entry-title">RE: {content.root_title}</h3>
                 <h5>You are viewing a single comment&#39;s thread from:</h5>
                 <p>
                     {content.root_title}
@@ -229,11 +225,13 @@ export default class PostFull extends React.Component {
             </div>
         }
 
-        const firstPayout = post_content.get('mode') === "first_payout"
-        const rootComment = post_content.get('depth') == 0
+        const readonly = post_content.get('mode') === 'archived' || $STM_Config.read_only_mode
+        const showPromote = username && post_content.get('mode') === "first_payout" && post_content.get('depth') == 0
+        const showEditOption = username === author
+        const authorRepLog10 = repLog10(content.author_reputation)
 
         return (
-            <article className="PostFull hentry" itemScope itemType ="http://schema.org/blogPost">
+            <article className="PostFull hentry" itemScope itemType="http://schema.org/blogPost">
                 <div className="float-right"><Voting post={post} flag /></div>
                 <div className="PostFull__header">
                     {post_header}
@@ -246,9 +244,7 @@ export default class PostFull extends React.Component {
                     </div>
                 }
 
-                {username && firstPayout && rootComment && <div className="float-right">
-                    <button className="button hollow tiny" onClick={this.showPromotePost}>Promote</button>
-                </div>}
+                {showPromote && <button className="float-right button hollow tiny" onClick={this.showPromotePost}>Promote</button>}
                 <TagList post={content} horizontal />
                 <div className="PostFull__footer row align-middle">
                     <div className="column">
@@ -256,23 +252,18 @@ export default class PostFull extends React.Component {
                         <Voting post={post} />
                     </div>
                     <div className="column shrink">
-                            <Reblog author={author} permlink={permlink} />
+                            {!readonly && <Reblog author={author} permlink={permlink} />}
                             <span className="PostFull__responses">
                                 <Link to={link} title={pluralize('Responses', content.children, true)}>
                                     <Icon name="chatboxes" className="space-right" />{content.children}
                                 </Link>
                             </span>
-                            <span className="PostFull__reply">
-                                {!$STM_Config.read_only_mode && <a onClick={onShowReply}>Reply</a>}
-                                {showEditOption && !showEdit && <span>
-                                    &nbsp;&nbsp;
-                                    <a onClick={onShowEdit}>Edit</a>
+                            {!readonly &&
+                                <span className="PostFull__reply">
+                                    <a onClick={onShowReply}>Reply</a>
+                                    {' '}{showEditOption   && !showEdit  && <a onClick={onShowEdit}>Edit</a>}
+                                    {' '}{showDeleteOption && !showReply && <a onClick={onDeletePost}>Delete</a>}
                                 </span>}
-                                {showDeleteOption && !showReply && <span>
-                                    &nbsp;&nbsp;
-                                    <a onClick={onDeletePost}>Delete</a>
-                                </span>}
-                            </span>
                             <FoundationDropdownMenu menu={share_menu} icon="share" label="Share" dropdownPosition="bottom" dropdownAlignment="right" />
                     </div>
                 </div>

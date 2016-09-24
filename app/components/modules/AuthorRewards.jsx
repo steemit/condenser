@@ -35,6 +35,7 @@ class AuthorRewards extends React.Component {
 
         /// transfer log
         let rewards24Vests = 0, rewardsWeekVests = 0, totalRewardsVests = 0;
+        let rewards24Steem = 0, rewardsWeekSteem = 0, totalRewardsSteem = 0;
         let rewards24SBD = 0, rewardsWeekSBD = 0, totalRewardsSBD = 0;
         const today = new Date();
         const oneDay = 86400 * 1000;
@@ -49,20 +50,25 @@ class AuthorRewards extends React.Component {
                     finalDate = new Date(item[1].timestamp).getTime();
                 }
                 firstDate = new Date(item[1].timestamp).getTime();
-                const vest = assetFloat(item[1].op[1].vesting_payout, 'VESTS');
-                const sbd = assetFloat(item[1].op[1].sbd_payout, 'SBD');
 
-                if (new Date(item[1].timestamp).getTime() > yesterday) {
-                    rewards24Vests += vest;
+                const vest  = assetFloat(item[1].op[1].vesting_payout, 'VESTS');
+                const steem = assetFloat(item[1].op[1].steem_payout, 'STEEM');
+                const sbd   = assetFloat(item[1].op[1].sbd_payout, 'SBD');
+
+                if (new Date(item[1].timestamp).getTime() > lastWeek) {
+                    if (new Date(item[1].timestamp).getTime() > yesterday) {
+                        rewards24Vests += vest;
+                        rewards24Steem += steem;
+                        rewards24SBD   += sbd;
+                    }
                     rewardsWeekVests += vest;
-                    rewards24SBD += sbd;
-                    rewardsWeekSBD += sbd;
-                } else if (new Date(item[1].timestamp).getTime() > lastWeek) {
-                    rewardsWeekVests += vest;
-                    rewardsWeekSBD += sbd;
+                    rewardsWeekSteem += steem;
+                    rewardsWeekSBD   += sbd;
                 }
                 totalRewardsVests += vest;
-                totalRewardsSBD += sbd;
+                totalRewardsSteem += steem;
+                totalRewardsSBD   += sbd;
+
                 return <TransferHistoryRow key={index} op={item} context={account.name} />
             }
             return null;
@@ -72,7 +78,8 @@ class AuthorRewards extends React.Component {
         const curationLength = author_log.length;
         const daysOfCuration = (firstDate - finalDate) / oneDay || 1;
         const averageCurationVests = !daysOfCuration ? 0 : totalRewardsVests / daysOfCuration;
-        const averageCurationSBD = !daysOfCuration ? 0 : totalRewardsSBD / daysOfCuration;
+        const averageCurationSteem = !daysOfCuration ? 0 : totalRewardsSteem / daysOfCuration;
+        const averageCurationSBD   = !daysOfCuration ? 0 : totalRewardsSBD   / daysOfCuration;
         const hasFullWeek = daysOfCuration >= 7;
         const limitedIndex = Math.min(historyIndex, curationLength - 10);
         author_log = author_log.reverse().filter(() => {
@@ -109,6 +116,8 @@ class AuthorRewards extends React.Component {
                 <div className="column small-12 medium-3">
                     {numberWithCommas(vestsToSp(this.props.state, rewards24Vests + " VESTS")) + " STEEM POWER"}
                     <br />
+                    {rewards24Steem.toFixed(3) + " STEEM"}
+                    <br />
                     {rewards24SBD.toFixed(3) + " SD"}
                 </div>
             </div>
@@ -120,6 +129,8 @@ class AuthorRewards extends React.Component {
                 <div className="column small-12 medium-3">
                     {numberWithCommas(vestsToSp(this.props.state, averageCurationVests + " VESTS")) + " STEEM POWER"}
                     <br />
+                    {averageCurationSteem.toFixed(3) + " STEEM"}
+                    <br />
                     {averageCurationSBD.toFixed(3) + " SD"}
                 </div>
             </div>
@@ -129,6 +140,8 @@ class AuthorRewards extends React.Component {
                 </div>
                 <div className="column small-12 medium-3">
                     {numberWithCommas(vestsToSp(this.props.state, (hasFullWeek ? rewardsWeekVests : averageCurationVests * 7) + " VESTS")) + " STEEM POWER"}
+                    <br />
+                    {(hasFullWeek ? rewardsWeekSteem : averageCurationSteem * 7).toFixed(3) + " STEEM"}
                     <br />
                     {(hasFullWeek ? rewardsWeekSBD : averageCurationSBD * 7).toFixed(3) + " SD"}
                 </div>

@@ -1,0 +1,12 @@
+version: v1.5.0
+ignore: {}
+patch:
+  'npm:minimatch:20160620':
+    - sequelize-cli > gulp > vinyl-fs > glob-stream > minimatch:
+        patched: '2016-09-24T10:58:52.221Z'
+    - sequelize-cli > gulp > vinyl-fs > glob-stream > glob > minimatch:
+        patched: '2016-09-24T10:58:52.221Z'
+    - sequelize-cli > gulp > vinyl-fs > glob-watcher > gaze > globule > minimatch:
+        patched: '2016-09-24T10:58:52.221Z'
+    - sequelize-cli > gulp > vinyl-fs > glob-watcher > gaze > globule > glob > minimatch:
+        patched: '2016-09-24T10:58:52.221Z'

@@ -114,6 +114,6 @@ pm2 start config/process.json
 
 To report a non-critical issue, please file an issue on this GitHub project.
 
-If you find a security issue please report details to: security[at]steemit[dot]com
+If you find a security issue please report details to: security@steemit.com
 
 We will evaluate the risk and make a patch available before filing the issue.

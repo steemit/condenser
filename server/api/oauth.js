@@ -299,12 +299,12 @@ function* handleVkCallback() {
     try {
       //const u = yield retrieveVkUserData(this.query.access_token);
       //print ('received data', u)
-      if (!vkData['raw[email]']) {
-          return logErrorAndRedirect(this, 'Ошибка регистрации через vkontakte:', 'нам нужен ваш email, на случай если вы забудете пароль');
-      }
+      //if (!vkData['raw[email]']) {
+        //  return logErrorAndRedirect(this, 'Ошибка регистрации через vkontakte:', 'нам нужен ваш email, на случай если вы забудете пароль');
+      //}
       const provider = 'vkontakte'
       let providerId = vkData['raw[user_id]']
-      let email = vkData['raw[email]']
+      let email = vkData['raw[email]'] || null;
 
       const u = yield retrieveVkUserData(vkData.access_token, providerId);
       print ('user dara', u);

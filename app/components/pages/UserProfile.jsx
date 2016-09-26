@@ -256,7 +256,7 @@ export default class UserProfile extends React.Component {
                         >
                             <a className={rewardsClass}>
                                 {translate('rewards')}
-                                <Icon className="dropdown-arrow" />
+                                <Icon name="dropdown-arrow" />
                             </a>
                         </LinkWithDropdown>
                     </li>

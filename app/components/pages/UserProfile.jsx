@@ -287,9 +287,9 @@ export default class UserProfile extends React.Component {
 
                         <div>
                             <div className="UserProfile__stats">
-                                <span>{translate('follower_count', {followerCount: followerCount || 0})}</span>
+                                <span><Link to={`/@${accountname}/followers`}>{translate('follower_count', {followerCount: followerCount || 0})}</Link></span>
                                 <span>{translate('post_count', {postCount: account.post_count || 0})}</span>
-                                <span>{translate('followed_count', {followingCount: followingCount || 0})}</span>
+                                <span><Link to={`/@${accountname}/followed`}>{translate('followed_count', {followingCount: followingCount || 0})}</Link></span>
                             </div>
                         </div>
                     </div>

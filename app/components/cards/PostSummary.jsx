@@ -15,12 +15,21 @@ import {Map} from 'immutable';
 import Reputation from 'app/components/elements/Reputation';
 import Author from 'app/components/elements/Author';
 
+
 function TimeAuthorCategory({post, authorRepLog10}) {
+    // filter location parameters
+    let route_params = location.pathname.split('/').filter(function(x){
+        return (x !== (undefined || ''));
+    });
+
+    // set post list view category link based on location filters
+    let cat_link = `/trending/${post.category}`;
+    if(route_params[0]) cat_link = `/${route_params[0]}/${post.category}`;
     return (
         <span className="vcard">
             <TimeAgoWrapper date={post.created} className="updated" />
             {} by <Author author={post.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
-            {} in <strong>{post.category}</strong>
+            {} in <Link to={cat_link}>{post.category}</Link>
         </span>
     );
 }

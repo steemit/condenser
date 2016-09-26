@@ -6,14 +6,14 @@ import GlobalReducer from './GlobalReducer';
 import constants from './constants';
 import {fromJS, Map} from 'immutable'
 
-export const fetchDataWatches = [watchLocationChange, watchDataRequests, watchApiRequests, watchFetchJsonRequests];
+export const fetchDataWatches = [watchLocationChange, watchDataRequests, watchApiRequests, watchFetchJsonRequests, watchFetchState];
 
 export function* watchDataRequests() {
     yield* takeLatest('REQUEST_DATA', fetchData);
 }
 
 export function* fetchState(location_change_action) {
-    const {pathname, /*search*/} = location_change_action.payload;
+    const {pathname} = location_change_action.payload;
     const m = pathname.match(/@([a-z0-9\.-]+)/)
     if(m && m.length === 2) {
         const username = m[1]
@@ -52,6 +52,10 @@ export function* fetchState(location_change_action) {
 
 export function* watchLocationChange() {
     yield* takeLatest('@@router/LOCATION_CHANGE', fetchState);
+}
+
+export function* watchFetchState() {
+    yield* takeLatest('FETCH_STATE', fetchState);
 }
 
 export function* fetchData(action) {
@@ -111,6 +115,9 @@ export function* fetchData(action) {
           limit: constants.FETCH_DATA_BATCH_SIZE,
           start_author: author,
           start_permlink: permlink}];
+    } else if( order === 'by_replies' ) {
+        call_name = 'get_replies_by_last_update';
+        args = [author, permlink, constants.FETCH_DATA_BATCH_SIZE];
     } else if( order === 'responses' ) {
         call_name = 'get_discussions_by_children';
         args = [
@@ -144,6 +151,12 @@ export function* fetchData(action) {
         args = [
         { tag: accountname,
           limit: constants.FETCH_DATA_BATCH_SIZE,
+          start_author: author,
+          start_permlink: permlink}];
+    } else if( order === 'by_comments' ) {
+        call_name = 'get_discussions_by_comments';
+        args = [
+        { limit: constants.FETCH_DATA_BATCH_SIZE,
           start_author: author,
           start_permlink: permlink}];
     } else {

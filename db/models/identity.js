@@ -9,9 +9,10 @@ module.exports = function (sequelize, DataTypes) {
             field: 'user_id'
         },
         provider: DataTypes.STRING,
-        provider_user_id: {type: DataTypes.STRING, unique: true},
+        provider_user_id: {type: DataTypes.STRING},
         name: DataTypes.STRING,
-        email: {type: DataTypes.STRING, unique: true},
+        email: {type: DataTypes.STRING},
+        phone: {type: DataTypes.STRING(32)},
         confirmation_code: {type: DataTypes.STRING, unique: true},
         verified: DataTypes.BOOLEAN,
         score: DataTypes.INTEGER

@@ -2,10 +2,11 @@ import React from 'react';
 import { Link } from 'react-router';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 
-export default ({post, horizontal}) => {
+export default ({post, horizontal, single}) => {
     let sort_order = 'trending';
     if (process.env.BROWSER && window.last_sort_order) sort_order = window.last_sort_order;
-    if (!horizontal) return <strong><Link to={`/${sort_order}/${post.category}`}>{post.category}</Link></strong>;
+
+    if (single) return <strong><Link to={`/${sort_order}/${post.category}`}>{post.category}</Link></strong>;
 
     let json = post.json_metadata;
     let tags = []

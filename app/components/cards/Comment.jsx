@@ -9,7 +9,6 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import user from 'app/redux/User';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
-// import Tooltip from 'app/components/elements/Tooltip';
 import Icon from 'app/components/elements/Icon';
 import Userpic from 'app/components/elements/Userpic';
 import transaction from 'app/redux/Transaction'
@@ -99,6 +98,7 @@ class CommentImpl extends React.Component {
         username: React.PropTypes.string,
         rootComment: React.PropTypes.string.isRequired,
         comment_link: React.PropTypes.string.isRequired,
+        anchor_link: React.PropTypes.string.isRequired,
         deletePost: React.PropTypes.func.isRequired,
     };
     static defaultProps = {
@@ -107,7 +107,7 @@ class CommentImpl extends React.Component {
 
     constructor() {
         super();
-        this.state = {collapsed: false, hide_body: false};
+        this.state = {collapsed: false, hide_body: false, highlight: false};
         this.revealBody = this.revealBody.bind(this);
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Comment')
         this.onShowReply = () => {
@@ -146,6 +146,18 @@ class CommentImpl extends React.Component {
     componentWillMount() {
         this.initEditor(this.props)
         this._checkHide(this.props);
+    }
+
+    componentDidMount() {
+        // Jump to comment via hash (note: comment element's id has a hash(#) in it)
+        if (window.location.hash == this.props.anchor_link) {
+            const comment_el = document.getElementById(this.props.anchor_link)
+            if (comment_el) {
+                comment_el.scrollIntoView(true);
+                document.body.scrollTop -= 200;
+                this.setState({highlight: true})
+            }
+        }
     }
 
     //componentWillReceiveProps(np) {
@@ -213,11 +225,10 @@ class CommentImpl extends React.Component {
         }
         const {netVoteSign, hasReplies, authorRepLog10, hide, pictures, gray} = comment.stats
         const {author, json_metadata} = comment
-        const {username, depth, rootComment, comment_link,
+        const {username, depth, rootComment, comment_link, anchor_link,
             showNegativeComments, ignore, noImage} = this.props
         const {onShowReply, onShowEdit, onDeletePost} = this
         const post = comment.author + '/' + comment.permlink
-        const anchor_link = '#@' + post // Using a hash here is not standard but intentional; see issue #124 for details
         const {PostReplyEditor, PostEditEditor, showReply, showEdit, hide_body} = this.state
         const Editor = showReply ? PostReplyEditor : PostEditEditor
 
@@ -236,6 +247,7 @@ class CommentImpl extends React.Component {
 
         const showDeleteOption = username === author && !hasReplies && netVoteSign <= 0
         const showEditOption = username === author && comment.mode == 'first_payout'
+        const readonly = comment.mode == 'archived' || $STM_Config.read_only_mode
 
         let replies = null;
         let body = null;
@@ -244,18 +256,15 @@ class CommentImpl extends React.Component {
         if (!this.state.collapsed && !hide_body) {
             body = (<MarkdownViewer formId={post + '-viewer'} text={comment.body}
                 noImage={noImage || !pictures} jsonMetadata={jsonMetadata} />);
-            controls = (<div>
+            controls = <div>
                 <Voting post={post} />
-                {!$STM_Config.read_only_mode && depth !== 5 && <a onClick={onShowReply}>Reply</a>}
-                {showEditOption && <span>
-                    &nbsp;&nbsp;
-                    <a onClick={onShowEdit}>Edit</a>
-                </span>}
-                {showDeleteOption && <span>
-                    &nbsp;&nbsp;
-                    <a onClick={onDeletePost}>Delete</a>
-                </span>}
-            </div>);
+                {!readonly &&
+                    <span className="Comment__footer__controls">
+                        {depth < 6 && <a onClick={onShowReply}>Reply</a>}
+                        {' '}{showEditOption   && <a onClick={onShowEdit}>Edit</a>}
+                        {' '}{showDeleteOption && <a onClick={onDeletePost}>Delete</a>}
+                    </span>}
+            </div>;
         }
 
         if(!this.state.collapsed) {
@@ -271,7 +280,10 @@ class CommentImpl extends React.Component {
         commentClasses.push('Comment')
         commentClasses.push(this.props.root ? 'root' : 'reply')
         if(hide_body || this.state.collapsed) commentClasses.push('collapsed');
-        const downVotedClass = ignore || gray ? 'downvoted' : ' '
+
+        let innerCommentClass = ignore || gray ? 'downvoted' : ''
+        if(this.state.highlight) innerCommentClass = innerCommentClass + ' highlighted'
+
         //console.log(comment);
         let renderedEditor = null;
         if (showReply || showEdit) {
@@ -295,7 +307,7 @@ class CommentImpl extends React.Component {
                 <div className="Comment__Userpic show-for-medium">
                     <Userpic account={comment.author} />
                 </div>
-                <div className={downVotedClass}>
+                <div className={innerCommentClass}>
                     <div className="Comment__header">
                         <div className="Comment__header_collapse">
                             <Voting post={post} flag />
@@ -303,12 +315,11 @@ class CommentImpl extends React.Component {
                         </div>
                         <span className="Comment__header-user">
                             <Icon name="user" className="Comment__Userpic-small" />
-                            <span itemProp="author" itemScope itemType="http://schema.org/Person">
-                                <Author author={comment.author} authorRepLog10={authorRepLog10} /></span>
+                            <Author author={comment.author} authorRepLog10={authorRepLog10} />
                         </span>
                         &nbsp; &middot; &nbsp;
                         <Link to={comment_link} className="PlainLink">
-                            <TimeAgoWrapper date={comment.created} />
+                            <TimeAgoWrapper date={comment.created} className="updated" />
                         </Link>
                         { (this.state.collapsed || hide_body) &&
                           <Voting post={post} showList={false} /> }
@@ -353,6 +364,7 @@ const Comment = connect(
         return {
             ...ownProps,
             comment_link,
+            anchor_link: '#@' + content, // Using a hash here is not standard but intentional; see issue #124 for details
             rootComment: rc,
             username,
             ignore,

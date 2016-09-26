@@ -78,7 +78,7 @@ export default {
             //});
         } else if (route.page === 'Post') {
             //require.ensure([], (require) => {
-                cb(null, [require('app/components/pages/Post')]);
+                cb(null, [require('app/components/pages/PostPage')]);
             //});
         } else if (route.page === 'PostsIndex') {
             //require.ensure([], (require) => {

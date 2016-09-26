@@ -26,11 +26,11 @@ class Author extends React.Component {
         const {author, follow, mute, authorRepLog10} = this.props // html
         const {username} = this.props // redux
 
-        const author_link = <span className="Author" itemProp="author" itemScope itemType="http://schema.org/Person">
+        const author_link = <span className="author" itemProp="author" itemScope itemType="http://schema.org/Person">
             <Link to={'/@' + author}><strong>{author}</strong></Link><Reputation value={authorRepLog10} />
         </span>
 
-        if(!username)
+        if(!username || !(follow || mute))
             return author_link
 
         const dropdown = <div className="Author__dropdown">
@@ -57,8 +57,6 @@ class Author extends React.Component {
                 <Reputation value={authorRepLog10} />
             </span>
         )
-                // by <span itemProp="author" itemScope itemType="http://schema.org/Person"><Link
-                //    to={author_link}>{content.author}</Link></span>
     }
 }
 

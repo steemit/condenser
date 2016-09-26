@@ -268,7 +268,7 @@ const ru = {
 	// UserProfile
 	unknown_account: 'Неизвестный аккаунт',
 	user_hasnt_made_any_posts_yet: "Похоже что {name} еще не написал постов!",
-	user_hasnt_started_bloggin_yet: "Похоже что {name} еще не завед блог!",
+	user_hasnt_started_bloggin_yet: "Похоже что {name} еще не завёл блог!",
 	user_hasnt_followed_anything_yet: "Похоже что {name} еще никого ни на кого не подписан!",
 	user_hasnt_had_any_replies_yet: "{name} еще не получил ответов",
 	users_blog: "блог {name}",

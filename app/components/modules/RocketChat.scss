@@ -10,7 +10,11 @@
   }
 }
 
-.chatik {
+.RocketChat {
+  backgound-color: white;
+  position: fixed;
+  bottom: 0;
+  right: 0;
   iframe {
     animation-duration: 0.7s;
     animation-timing-function: ease-in-out;
@@ -19,6 +23,7 @@
     transition: transform 0.3s ease-in-out 0.3s;
     &.open {
       transform: rotate(-180deg);
+    //   margin-bottom: 15px;
     }
   }
 

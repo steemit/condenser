@@ -18,7 +18,7 @@ import {key_utils} from 'shared/ecc'
 import { translate } from '../Translator.js';
 import { SEGMENT_ANALYTICS_KEY, LANDING_PAGE_URL, WHITEPAPER_URL } from 'config/client_config';
 import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
-import Chatik from 'app/components/modules/Chatik'
+import RocketChat from 'app/components/modules/RocketChat'
 
 class App extends React.Component {
     constructor(props) {
@@ -164,7 +164,7 @@ class App extends React.Component {
         }
 
         return <div className={'App' + (lp ? ' LP' : '') + (ip ? ' index-page' : '')} onMouseMove={this.onEntropyEvent}>
-            <Chatik />
+            <RocketChat />
 
             <SidePanel ref="side_panel" alignment="right">
                 <TopRightMenu vertical navigate={this.navigate} />

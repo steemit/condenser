@@ -11,15 +11,23 @@
 }
 
 .chatik {
-  iframe {
-    animation-duration: 0.7s;
-    animation-timing-function: ease-in-out;
-  }
+  transition:right 0.5s ease-out;
+
   button {
-    transition: transform 0.3s ease-in-out 0.3s;
+    transform: rotate(-180deg);
+    transition: transform 0.3s ease-in-out 0.55s;
     &.open {
-      transform: rotate(-180deg);
+      transform: rotate(0);
     }
   }
-
+  background:rgba(255,255,255,0.9);
+  position:fixed;
+  top:0;
+  bottom:0;
+  right:-50%;
+  width:50%;
+  z-index:120;
+  &.open {
+    right: 0;
+  }
 }

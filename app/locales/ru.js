@@ -510,6 +510,8 @@ const ru = {
 	pay_me_100_in_INVEST_TOKEN: 'Заплатите мне 100% в ' + INVEST_TOKEN,
 	requires_5_or_more_reddit_comment_karma: 'необходимо 5 или больше Reddit кармы комментирования',
 	this_post_was_hidden_due_to_low_ratings: 'Этот пост был скрыт из-за низкого рейтинга',
+	reblogged_by: 'Поделился',
+	reblog: 'Поделиться'
 }
 
 export { ru }

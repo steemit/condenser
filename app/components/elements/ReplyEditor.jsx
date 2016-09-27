@@ -104,7 +104,7 @@ class ReplyEditor extends React.Component {
 
     constructor() {
         super()
-        this.state = {}
+        this.state = {payoutType: (localStorage.getItem('defaultPayoutType') || '50%')}
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'ReplyEditor')
         this.onTitleChange = e => {
             const value = e.target.value
@@ -237,8 +237,10 @@ class ReplyEditor extends React.Component {
         localStorage.setItem('replyEditorData-rte', !this.state.rte)
     }
 
-    toggleAllSteemPower = () => {
-        this.setState({allSteemPower: !this.state.allSteemPower})
+    onPayoutTypeChange = (e) => {
+        const payoutType = e.currentTarget.value
+        this.setState({payoutType})
+        localStorage.setItem('defaultPayoutType', payoutType)
     }
 
     render() {
@@ -255,7 +257,7 @@ class ReplyEditor extends React.Component {
             author, permlink, parent_author, parent_permlink, type, jsonMetadata,
             state, successCallback, handleSubmit, submitting, invalid, //lastComment,
         } = this.props
-        const {postError, loading, titleWarn, rte, allSteemPower} = this.state
+        const {postError, loading, titleWarn, rte, payoutType} = this.state
         const {onTitleChange} = this
         const errorCallback = estr => { this.setState({ postError: estr, loading: false }) }
         const successCallbackWrapper = (...args) => {
@@ -267,7 +269,7 @@ class ReplyEditor extends React.Component {
         const autoVoteValue = !isEdit && autoVote.value
         const replyParams = {
             author, permlink, parent_author, parent_permlink, type, state, originalPost, isHtml: rte,
-            jsonMetadata, autoVote: autoVoteValue, allSteemPower,
+            jsonMetadata, autoVote: autoVoteValue, payoutType,
             successCallback: successCallbackWrapper, errorCallback
         }
         const postLabel = username ? <Tooltip t={'Post as “' + username + '”'}>Post</Tooltip> : 'Post'
@@ -338,16 +340,21 @@ class ReplyEditor extends React.Component {
                                 <button type="button" className="secondary hollow button no-border" tabIndex={5} onClick={(e) => {e.preventDefault(); onCancel()}}>Cancel</button>
                             }
                             {!loading && !this.props.onCancel && <button className="button hollow no-border" tabIndex={5} disabled={submitting} onClick={onCancel}>Clear</button>}
-                            {isStory && !isEdit && <div className="float-right">
-                                <small onClick={this.toggleAllSteemPower} title="Leave this unchecked to receive 1/2 your reward in Steem Power and 1/2 in Steem Dollars">Pay me 100% in Steem Power</small>
-                                &nbsp;&nbsp;
-                                <input type="checkbox" onChange={this.toggleAllSteemPower} checked={allSteemPower} />
+
+                            {isStory && !isEdit && <div className="ReplyEditor__options float-right text-right">
+
+                                Rewards:&nbsp;
+                                <select value={this.state.payoutType} onChange={this.onPayoutTypeChange} style={{color: this.state.payoutType == '0%' ? 'red' : 'inherit'}}>
+                                    <option value="100%">Power Up 100%</option>
+                                    <option value="50%">Default (50% / 50%)</option>
+                                    <option value="0%">Decline Payout</option>
+                                </select>
 
                                 <br />
-
-                                <small onClick={autoVoteOnChange}>Upvote post</small>
-                                &nbsp;&nbsp;
-                                <input type="checkbox" checked={autoVote.value} onChange={autoVoteOnChange} />
+                                <label title="Check this to auto-upvote your post">
+                                  Upvote post&nbsp;
+                                  <input type="checkbox" checked={autoVote.value} onChange={autoVoteOnChange} />
+                                </label>
                             </div>}
                         </div>
                         {!loading && !rte && body.value && <div className={'Preview ' + vframe_section_shrink_class}>
@@ -419,7 +426,7 @@ export default formId => reduxForm(
             dispatch(g.actions.setMetaData({id, meta: jsonMetadata ? jsonMetadata.steem : null}))
         },
         reply: ({category, title, body, author, permlink, parent_author, parent_permlink, isHtml,
-            type, originalPost, autoVote = false, allSteemPower = false,
+            type, originalPost, autoVote = false, payoutType = '50%',
             state, jsonMetadata,
             successCallback, errorCallback, loadingCallback
         }) => {
@@ -490,11 +497,20 @@ export default formId => reduxForm(
 
             const __config = {originalPost, autoVote}
 
-            if(allSteemPower) {
-                __config.comment_options = {
-                    percent_steem_dollars: 0, // 10000 === 100%
-                }
+            switch(payoutType) {
+                case '0%': // decline payout
+                    __config.comment_options = {
+                        max_accepted_payout: '0.000 SBD',
+                    }
+                    break;
+                case '100%': // 100% steem power payout
+                    __config.comment_options = {
+                        percent_steem_dollars: 0, // 10000 === 100% (of 50%)
+                    }
+                    break;
+                default: // 50% steem power, 50% sd+steem
             }
+
             const operation = {
                 ...linkProps,
                 category: rootCategory, title, body,

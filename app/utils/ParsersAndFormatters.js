@@ -82,7 +82,6 @@ export function detransliterate(str, reverse) {
         str = str.replace(/ые/g, 'yie')
     }
 
-
     var i,
         s = /[^[\]]+(?=])/g, orig = str.match(s),
         t = /<(.|\n)*?>/g, tags = str.match(t);
@@ -115,7 +114,6 @@ export function detransliterate(str, reverse) {
 
         str = str.replace(/\[/g, '').replace(/\]/g, '');
     }
-
 
     return str;
 }

@@ -37,7 +37,6 @@ class Topics extends React.Component {
     };
 
     render() {
-        // console.log('Topics');
         const {
             props: {order, current, compact, className},
             state: {expanded, search},
@@ -45,7 +44,7 @@ class Topics extends React.Component {
         } = this;
 
         let categories = this.props.categories.get('trending');
-        console.log(categories)
+
         if (!(expanded || search) || compact) categories = categories.take(50);
 
         const cn = 'Topics' + (className ? ` ${className}` : '');
@@ -68,8 +67,6 @@ class Topics extends React.Component {
                         <Link to={link} activeClassName="active">{detransliterate(cat)}</Link>
                     </li>);
         });
-
-        console.log(categories)
 
         return (
             <ul className={cn}>

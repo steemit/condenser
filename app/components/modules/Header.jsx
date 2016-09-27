@@ -193,6 +193,10 @@ export {Header as _Header_};
 export default connect(
     state => {
         const current_user = state.user.get('current');
+        // console.log(state.user)
+        // console.log('current_user', current_user)
+        // console.log(current_user.get('username'))
+        // console.log(state.offchain.get('account'))
         const current_account_name = current_user ? current_user.get('username') : state.offchain.get('account');
         return {
             location: state.app.get('location'),

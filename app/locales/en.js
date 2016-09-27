@@ -66,7 +66,12 @@ const en = 	{
 	loading: 'Loading',
 	cryptography_test_failed: 'Cryptography test failed',
 	unable_to_log_you_in: 'We will be unable to log you in with this browser',
-	latest_browsers_do_work: 'The latest versions of {chromeLink} and {mozillaLink} are well tested and known to work with steemit.com.',
+	// next 3 blocks will be used in conjunction
+	/* this is how it will look like:
+	'The latest versions of <a href="https://www.google.com/chrome/">Chrome</a> and <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a> are well tested and known to work with steemit.com.' */
+	the_latest_versions_of: 'The latest versions of',
+	and: 'and',
+	are_well_tested_and_known_to_work_with: 'are well tested and known to work with ' + APP_URL + '.',
 	account_creation_succes: 'Your account has been successfully created!',
 	account_recovery_succes: 'Your account has been successfully recovered!',
 	password_update_succes: 'The password for {accountName} was successfully updated',
@@ -353,9 +358,12 @@ const en = 	{
 	username: 'Username',
 	couldnt_create_account_server_returned_error: "Couldn't create account. Server returned the following error",
 	form_requires_javascript_to_be_enabled: 'This form requires javascript to be enabled in your browser',
-	our_records_indicate_you_already_have_account: 'Our records indicate that you already have steem account',
-	to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user: 'In order to prevent abuse (each registered account costs 3 STEEM) Steemit can only register one account per verified user.',
-	you_can_either_login_or_send_us_email: 'You can either {loginLink} to your existing account or {emailLink} if you need a new account',
+	our_records_indicate_you_already_have_account: 'Our records indicate that you already have ' + APP_NAME + ' account',
+	to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user: 'In order to prevent abuse (each registered account costs {amount} in ' + OWNERSHIP_TOKEN + ') ' + APP_NAME + ' can only register one account per verified user.',
+	// next 3 blocks are meant to be used together
+	you_can_either: 'You can either', // context 'you can either login'
+	to_your_existing_account_or: 'to your existing account or', // context: 'to your existing account or send us email'
+	if_you_need_a_new_account: 'if you need a new account',
 	send_us_email: 'send us email',
 	connection_lost_reconnecting: 'Connection lost, reconnecting',
 	// Voting.jsx

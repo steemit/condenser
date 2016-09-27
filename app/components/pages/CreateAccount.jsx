@@ -12,6 +12,7 @@ import runTests from 'shared/ecc/test/BrowserTests';
 import g from 'app/redux/GlobalReducer';
 import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInput';
 import { translate, translateHtml } from '../../Translator';
+import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 
 const PASSWORD_MIN_LENGTH = 32;
 
@@ -174,10 +175,13 @@ class CreateAccount extends React.Component {
                     <div className="callout alert">
                         <h4>{translate('ctyptography_test_failed')}</h4>
                         <p>{translate('we_will_be_unable_to_create_account_with_this_browser')}.</p>
-                        <p>{translate('latest_browsers_do_work', {
-                                chromeLink: <a href="https://www.google.com/chrome/">Chrome</a>,
-                                firefoxLink: <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a>
-                        })}</p>
+                        <p>
+                            {translate('the_latest_versions_of') + ' '}
+                            <a href="https://www.google.com/chrome/">Chrome</a>
+                            {' ' + translate('and')}
+                            <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a>
+                            {' ' + translate('are_well_tested_and_known_to_work_with')}
+                        </p>
                     </div>
                 </div>
             </div>;
@@ -203,11 +207,14 @@ class CreateAccount extends React.Component {
                 <div className="column">
                     <div className="callout alert">
                         <p>{translate('our_records_indicate_you_already_have_account')}: <strong>{existingUserAccount}</strong></p>
-                        <p>{translate('to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user')}</p>
-                        <p>{translate('you_can_either_login_or_send_us_email', {
-                                loginLink: <a href="/login.html">{translate('login')}</a>,
-                                emailLink: <a href="mailto:support@steemit.com">{translate('send_us_email')}</a>
-                            })}.</p>
+                        <p>{translate('to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user', {amount: localizedCurrency(3)})}</p>
+                        <p>
+                            {translate('you_can_either') + ' '}
+                            <a href="/login.html">{translate('login')}</a>
+                            {translate('to_your_existing_account_or') + ' '}
+                            <a href="mailto:support@steemit.com">{translate('send_us_email')}</a>
+                            {' ' + translate('if_you_need_a_new_account')}.
+                        </p>
                     </div>
                 </div>
             </div>;

@@ -69,7 +69,12 @@ const ru = {
 	loading: 'Загрузка',
 	cryptography_test_failed: 'Криптографический тест провален',
 	unable_to_log_you_in: 'У нас не получится залогинить вас в этом браузере',
-	latest_browsers_do_work: 'Последние версии {chromeLink} и {mozillaLink} хорошо тестированы и работают с steemit.com.',
+	// next 3 blocks will be used in conjunction
+	/* this is how it will look like:
+	'The latest versions of <a href="https://www.google.com/chrome/">Chrome</a> and <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a> are well tested and known to work with steemit.com.' */
+	the_latest_versions_of: 'Последние версии',
+	and: 'и',
+	are_well_tested_and_known_to_work_with: 'хорошо тестированы и работают с ' + APP_URL + '.',
 	account_creation_succes: 'Твой аккаунт успешно создан!',
 	account_recovery_succes: 'Твой аккаунт успено восстановлен!',
 	password_update_succes: 'Пароль для {accountName} был успешно обновлен',
@@ -356,10 +361,13 @@ const ru = {
 	username: 'Имя пользователя',
 	couldnt_create_account_server_returned_error: "Не получилось создать аккаунт. Сервер вернул эту ошибку",
 	form_requires_javascript_to_be_enabled: 'Эта форма требует активированный в браузере javascript',
-	our_records_indicate_you_already_have_account: 'Наши записи показывают что у вас уже есть steem аккант',
+	our_records_indicate_you_already_have_account: 'Наши записи показывают что у вас уже есть ' + APP_NAME + ' аккант',
 	// TODO
-	to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user: 'Чтобы предотвратить злоупотребление (каждый зарегистрированный аккаунт стоит 3 STEEM) Steemit может регистрировать только один аккаунт для каждого подтвержденного пользователя.',
-	you_can_either_login_or_send_us_email: 'Вы можете или {loginLink} в ваш существующий аккаунт или {emailLink}, если вам нужен новый аккаунт,',
+	to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user: 'Чтобы предотвратить злоупотребление (каждый зарегистрированный аккаунт стоит {amount} в ' + OWNERSHIP_TOKEN + ') ' + APP_NAME + ' может регистрировать только один аккаунт для каждого подтвержденного пользователя.',
+	// next 3 blocks are meant to be used together
+	you_can_either: 'Вы можете или', // context 'you can either login'
+	to_your_existing_account_or: 'в ваш существующий аккаунт или', // context: 'to your existing account or send us email'
+	if_you_need_a_new_account: 'если вам нужен новый аккаунт',
 	send_us_email: 'отправьте нам электронную почту',
 	connection_lost_reconnecting: 'Связь потеряна, переподключаемся',
 	// Voting.jsx

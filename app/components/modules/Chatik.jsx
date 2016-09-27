@@ -4,6 +4,7 @@ import CloseButton from 'react-foundation-components/lib/global/close-button';
 export default class Chatik extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {toggle: false};
         this.state = {
             open: false
         };
@@ -34,15 +35,15 @@ export default class Chatik extends React.Component {
         return 'chatik '
     }
 
-    buttonClass() {
+    stateClass() {
         return this.state.open
             ? "open"
             : ""
     }
 
     render() {
-        return <div className={this.chatikClass() + this.buttonClass()}>
-            <button className={this.buttonClass()} style={{
+        return <div className={this.chatikClass() + this.stateClass()}>
+            <button className={this.stateClass()} style={{
                 bottom: '0',
                 position: 'absolute',
                 width: '48px',

@@ -12,6 +12,7 @@ import SuggestPassword from 'app/components/elements/SuggestPassword'
 import ChangePassword from 'app/components/elements/ChangePassword'
 import CheckLoginOwner from 'app/components/elements/CheckLoginOwner'
 import PromotePost from 'app/components/modules/PromotePost';
+import PostingGuide from 'app/components/modules/PostingGuide';
 
 class Dialogs extends React.Component {
     static propTypes = {
@@ -70,6 +71,12 @@ class Dialogs extends React.Component {
                 <Reveal onHide={this['hide_' + k]} show>
                     <CloseButton onClick={this['hide_' + k]} />
                     <PromotePost onClose={this['hide_' + k]} {...v.get('params').toJS()} />
+                </Reveal>
+            </span>:
+            k === 'postingGuide' ? <span key={idx++} >
+                <Reveal onHide={this['hide_' + k]} show>
+                    <CloseButton onClick={this['hide_' + k]} />
+                    <PostingGuide onClose={this['hide_' + k]} />
                 </Reveal>
             </span>:
             null

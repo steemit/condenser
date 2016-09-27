@@ -81,6 +81,7 @@ class ReplyEditor extends React.Component {
         //redux connect
         reply: React.PropTypes.func.isRequired,
         clearMetaData: React.PropTypes.func.isRequired,
+        showPostingGuide: React.PropTypes.func.isRequired,
         setMetaData: React.PropTypes.func.isRequired,
         state: React.PropTypes.object.isRequired,
         isStory: React.PropTypes.bool.isRequired,
@@ -252,13 +253,18 @@ class ReplyEditor extends React.Component {
         if(payoutType !== '0%') localStorage.setItem('defaultPayoutType', payoutType)
     }
 
+    onShowPostingGuide = (e) => {
+        e.preventDefault();
+        this.props.showPostingGuide();
+    }
+
     render() {
         // NOTE title, category, and body are UI form fields ..
         const originalPost = {
             category: this.props.category,
             body: this.props.body,
         }
-        const {onCancel, autoVoteOnChange} = this
+        const {onShowPostingGuide, onCancel, autoVoteOnChange} = this
         const {title, category, body, autoVote} = this.props.fields
         const {
             reply, username, isStory, formId, noImage,
@@ -352,6 +358,8 @@ class ReplyEditor extends React.Component {
 
                             {isStory && !isEdit && <div className="ReplyEditor__options float-right text-right">
 
+                                <a href="#" onClick={onShowPostingGuide}>Steemit Posting Guide</a><br />
+
                                 Rewards:&nbsp;
                                 <select value={this.state.payoutType} onChange={this.onPayoutTypeChange} style={{color: this.state.payoutType == '0%' ? 'orange' : 'inherit'}}>
                                     <option value="100%">Power Up 100%</option>
@@ -423,6 +431,9 @@ export default formId => reduxForm(
 
     // mapDispatchToProps
     dispatch => ({
+        showPostingGuide: () => {
+            dispatch({type: 'global/SHOW_DIALOG', payload: {name: 'postingGuide'}});
+        },
         clearMetaData: (id) => {
             dispatch(g.actions.clearMeta({id}))
         },

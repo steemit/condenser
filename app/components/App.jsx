@@ -18,6 +18,7 @@ import {key_utils} from 'shared/ecc'
 import { translate } from '../Translator.js';
 import { SEGMENT_ANALYTICS_KEY, LANDING_PAGE_URL, WHITEPAPER_URL } from 'config/client_config';
 import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
+import Chatik from 'app/components/modules/Chatik'
 
 class App extends React.Component {
     constructor(props) {
@@ -163,6 +164,8 @@ class App extends React.Component {
         }
 
         return <div className={'App' + (lp ? ' LP' : '') + (ip ? ' index-page' : '')} onMouseMove={this.onEntropyEvent}>
+            <Chatik />
+
             <SidePanel ref="side_panel" alignment="right">
                 <TopRightMenu vertical navigate={this.navigate} />
                 <ul className="vertical menu">
@@ -236,6 +239,7 @@ class App extends React.Component {
                 {callout}
                 {children}
                 {lp ? <LpFooter /> : null}
+
             </div>
             <Dialogs />
             <Modals />

@@ -1,7 +1,14 @@
 import React from 'react';
+import CloseButton from 'react-foundation-components/lib/global/close-button';
 
 export default class Chatik extends React.Component {
-    state = {toggled: false, open: false};
+    constructor(props) {
+        super(props);
+        this.state = {toggle: false};
+        this.state = {
+            open: false
+        };
+    }
 
     toggle() {
         if (!this.state.toggled) {
@@ -25,7 +32,7 @@ export default class Chatik extends React.Component {
     }
 
     chatikClass() {
-        return 'RocketChat '
+        return 'chatik '
     }
 
     stateClass() {
@@ -37,10 +44,16 @@ export default class Chatik extends React.Component {
     render() {
         return <div className={this.chatikClass() + this.stateClass()}>
             <button className={this.stateClass()} style={{
-
+                bottom: '0',
+                position: 'absolute',
+                width: '48px',
+                height: '48px',
+                left: '-48px'
             }} onClick={this.toggle.bind(this)}><img src={this.iconUrl()}/></button>
             <div className="sidebar" style={{
-
+                position: 'relative',
+                width: '100%',
+                height: '100%'
             }}>
                 <iframe src={this.link()} width="100%" height="100%"/>
             </div>

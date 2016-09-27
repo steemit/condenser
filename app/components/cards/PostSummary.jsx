@@ -79,6 +79,7 @@ class PostSummary extends React.Component {
         let title_text = p.title;
         let comments_link;
         let is_comment = false;
+        let full_power = content.get('percent_steem_dollars') === 0;
 
         if( content.get( 'parent_author') !== "" ) {
            title_text = "Re: " + content.get('root_title');
@@ -94,7 +95,10 @@ class PostSummary extends React.Component {
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>{desc}</a>
         </div>;
         let content_title = <h1 className="entry-title">
-            <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>{title_text}</a>
+            <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>
+                {title_text}
+                {full_power && <Icon name="steem" />}
+            </a>
         </h1>;
 
         // author and category

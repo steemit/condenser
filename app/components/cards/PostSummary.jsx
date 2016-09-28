@@ -15,25 +15,6 @@ import {Map} from 'immutable';
 import Reputation from 'app/components/elements/Reputation';
 import Author from 'app/components/elements/Author';
 
-
-function TimeAuthorCategory({post, authorRepLog10}) {
-    // filter location parameters
-    let route_params = location.pathname.split('/').filter(function(x){
-        return (x !== (undefined || ''));
-    });
-
-    // set post list view category link based on location filters
-    let cat_link = `/trending/${post.category}`;
-    if(route_params[0]) cat_link = `/${route_params[0]}/${post.category}`;
-    return (
-        <span className="vcard">
-            <TimeAgoWrapper date={post.created} className="updated" />
-            {} by <Author author={post.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
-            {} in <Link to={cat_link}>{post.category}</Link>
-        </span>
-    );
-}
-
 function isLeftClickEvent(event) {
     return event.button === 0
 }
@@ -108,6 +89,21 @@ export default class PostSummary extends React.Component {
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>{title_text}</a>
         </h1>;
 
+        // filter sort order
+        let sort = this.props.sortOrder;
+        let route_params = sort.split('/').filter(function(x){
+            return (x !== (undefined || ''));
+        });
+        // set nested category link based on sort order
+        let cat_link = `/trending/${p.category}`;
+        if(route_params[0]) cat_link = `/${route_params[0]}/${p.category}`;
+        // structure links time, author and linked category
+        let author_category = <span className="vcard">
+            <TimeAgoWrapper date={p.created} className="updated" />
+            {} by <Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
+            {} in <Link to={cat_link}>{p.category}</Link>
+        </span>
+
         if( !(currentCategory && currentCategory.match( /nsfw/ )) ) {
            if (currentCategory !== '-' && currentCategory !== p.category && p.category.match(/nsfw/) ) {
                return null;
@@ -127,6 +123,7 @@ export default class PostSummary extends React.Component {
         }
         const commentClasses = []
         if(gray || ignore) commentClasses.push('downvoted') // rephide
+
         return (
             <article className={'PostSummary hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')} itemScope itemType ="http://schema.org/blogPost">
                 <div className={hasFlag ? '' : 'PostSummary__collapse'}>
@@ -137,7 +134,7 @@ export default class PostSummary extends React.Component {
                     {content_title}
                 </div>
                 <div className="PostSummary__time_author_category_small show-for-small-only">
-                    <TimeAuthorCategory post={p} authorRepLog10={authorRepLog10} />
+                    {author_category}
 
                 </div>
                 {thumb}
@@ -149,7 +146,7 @@ export default class PostSummary extends React.Component {
                     <div className="PostSummary__footer">
                         <Voting post={post} showList={false} />
                         <span className="PostSummary__time_author_category show-for-medium">
-                            <TimeAuthorCategory post={p} authorRepLog10={authorRepLog10} />
+                            {author_category}
                             {!archived && <Reblog author={p.author} permlink={p.permlink} />}
                         </span>
                         <VotesAndComments post={post} commentsLink={comments_link} />

@@ -21,7 +21,7 @@ export default class Chatik extends React.Component {
     }
 
     iconUrl() {
-        return "https://avatars1.githubusercontent.com/RocketChat?&s=48"
+        return "https://test.golos.io/images/RocketChat.png"
     }
 
     chatikClass() {

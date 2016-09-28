@@ -1,3 +1,8 @@
+var fs = require('fs');
+
+if(!fs.existsSync('tmp'))
+    fs.mkdirSync('tmp');
+
 process.env.BABEL_ENV = 'browser';
 process.env.NODE_ENV = 'development';
 

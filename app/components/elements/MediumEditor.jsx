@@ -330,7 +330,7 @@ class MediumEditor extends React.Component {
                         </div>
                         <div className={vframe_section_shrink_class}>
                             {!loading &&
-                                <button type="submit" className="button" disabled={submitting}
+                                <button type="submit" className="button" disabled={submitting || !valid}
                                     tabIndex={4}>{isEdit ? 'Update Post' : postLabel}</button>
                             }
                             {loading && <span><br /><LoadingIndicator type="circle" /></span>}

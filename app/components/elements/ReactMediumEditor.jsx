@@ -82,9 +82,6 @@ class ReactMediumEditor extends React.Component {
                     const editor = this.medium
                     const allContents = editor.serialize() // mediumInsert plugin
                     let elContent = allContents["element-0"].value
-                    // https://github.com/orthes/medium-editor-insert-plugin/issues/341
-                    elContent = elContent.replace('<div class="medium-insert-images-progress"></div>', '')
-                    elContent = elContent.replace(' class="medium-insert-images medium-insert-active"', '')
                     return elContent
                 })
             }

@@ -14,6 +14,7 @@ import {authorNameAndRep} from 'app/utils/ComponentFormatters';
 import {Map} from 'immutable';
 import Reputation from 'app/components/elements/Reputation';
 import Author from 'app/components/elements/Author';
+import TagList from 'app/components/elements/TagList';
 
 function isLeftClickEvent(event) {
     return event.button === 0
@@ -89,19 +90,11 @@ export default class PostSummary extends React.Component {
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>{title_text}</a>
         </h1>;
 
-        // filter sort order
-        let sort = this.props.sortOrder;
-        let route_params = sort.split('/').filter(function(x){
-            return (x !== (undefined || ''));
-        });
-        // set nested category link based on sort order
-        let cat_link = `/trending/${p.category}`;
-        if(route_params[0]) cat_link = `/${route_params[0]}/${p.category}`;
-        // structure links time, author and linked category
+        // author and category
         let author_category = <span className="vcard">
             <TimeAgoWrapper date={p.created} className="updated" />
             {} by <Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
-            {} in <Link to={cat_link}>{p.category}</Link>
+            {} in <TagList post={p} single />
         </span>
 
         if( !(currentCategory && currentCategory.match( /nsfw/ )) ) {

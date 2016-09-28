@@ -1,9 +1,22 @@
 import React from 'react'
 
 export default class BuyGolos extends React.Component {
+
+	/**
+	 * if url contains 'buy_golos' scroll to it
+	 */
+	componentDidMount() {
+		if (process.env.BROWSER) {
+			if (window.location.href.includes('#buy_golos')) {
+				const el = document.getElementById("buy_golos")
+				// IE9 does not support .scrollIntoView
+				if (!!el && el.scrollIntoView) el.scrollIntoView();
+			}
+		}
+	}
+
 	render() {
-		const {props} = this
-		return 	<div className="row" {...props}>
+		return 	<div id="buy_golos" className="row">
 					<div className="column small-9 text-center">
 						<h2>Покупка Голосов</h2>
 						<p>1NBSbGHeDCTt9a6qD58egvyz6ouvLRa</p>

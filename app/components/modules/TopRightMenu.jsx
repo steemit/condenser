@@ -8,7 +8,7 @@ import { browserHistory } from 'react-router';
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
 import VerticalMenu from 'app/components/elements/VerticalMenu';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import { translate } from '../../Translator';
+import { translate } from 'app/Translator';
 
 const defaultNavigate = (e) => {
     e.preventDefault();
@@ -48,7 +48,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
         const search = translate('search')
         return (
             <ul className={mcn}>
-                <li><a href="/ico.html" className="button alert">Инвестировать</a></li>
+                <li><a href={`/@${username}/transfers#buy_golos`} className="button alert">купить голоса</a></li>
                 <li className={lcn}><a href="/static/search.html" title={search}>{vertical ? <span>{search}</span> : <Icon name="search" />}</a></li>
                 {submit_story}
                 <LinkWithDropdown

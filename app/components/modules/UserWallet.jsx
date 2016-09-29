@@ -13,6 +13,7 @@ import {steemTip, powerTip, dollarTip, valueTip} from 'app/utils/Tips'
 import {numberWithCommas, vestingSteem} from 'app/utils/StateFunctions'
 import { translate } from 'app/Translator';
 import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
+import BuyGolos from 'app/components/elements/BuyGolos'
 import { OWNERSHIP_TOKEN, DEBT_TOKEN, CURRENCY_SIGN, INVEST_TOKEN, DEBT_TOKEN_SHORT } from 'config/client_config';
 
 
@@ -214,6 +215,8 @@ class UserWallet extends React.Component {
                     <hr />
                 </div>
             </div>
+
+            <BuyGolos id="buy_golos" />
 
             <div className="row">
                 <div className="column small-12">

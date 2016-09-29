@@ -53,7 +53,8 @@
     }
   },
   "telesign": {
-      "ucid": "TRVF",
+      "customer_id": "",
+      "rest_api_key": ""
   },
   "recaptcha": {
     "site_key": "",

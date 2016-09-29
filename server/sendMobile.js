@@ -2,7 +2,7 @@ import 'whatwg-fetch';
 import config from '../config';
 
 export default function sendMobile({mobile, confirmation_code, ip}) {
-    const {ucid} = config.telesign
+    const {customer_id, rest_api_key} = config.telesign
 
     // https://developer.telesign.com/v2.0/docs/rest_api-verify-sms
     return fetch({

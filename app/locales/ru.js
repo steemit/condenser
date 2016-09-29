@@ -60,7 +60,7 @@ const ru = {
 	terms_and_conditions: 'Условия и Положения',
 	// this is from top-right dropdown menu
 	hot: 'горячее',
-	trending: 'популярное', // трендовое? ;)
+	trending: 'актуальное', 
 	payout_time: 'время выплаты', // подумать
 	active: 'обсуждаемое',
 	responses: 'ответы',
@@ -74,7 +74,7 @@ const ru = {
 	account_recovery_succes: 'Твой аккаунт успено восстановлен!',
 	password_update_succes: 'Пароль для {accountName} был успешно обновлен',
 	password_is_bound_to_your_accounts_owner_key: "Этот пароль привязан к главному ключу аккаунта и не может быть использован для авторизации на сайте",
-	however_you_can_use_it_to: "Тем не менее его можно использовать чтобы",
+	however_you_can_use_it_to: "Тем не менее его можно использовать",
 	to_obtaion_a_more_secure_set_of_keys: "для получения более безопасного набора ключей",
 	update_your_password: 'обновить свой пароль',
 	enter_username: 'Введи свое имя пользователя',
@@ -217,7 +217,7 @@ const ru = {
 	confirm_password: 'Подтвердить пароль',
 	login_to_see_memo: 'войдите чтобы увидеть заметку',
 	post: 'Пост', // places used: tooltip in MediumEditor
-	unknown: 'Неизвестный', // exp.: 'unknown error'
+	unknown: 'Неизвестная', // exp.: 'unknown error'
 	account_name_is_not_available: 'Имя аккаунта не доступно',
 	type: 'Тип',
 	price: 'Цена',

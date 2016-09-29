@@ -13,17 +13,17 @@
         }
         button {
             transition: transform 0.3s ease-in-out 0.55s;
-            transform: rotate(-180deg);
+            transform: rotate(-90deg);
             bottom: 0;
             position: absolute;
             width: 48px;
             height: 48px;
             left: -48px;
             &.open {
-                transform: rotate(0);
+                transform: rotate(90deg);
             }
             &:focus {
-                background-color: yellow;
+                outline: none;
             }
         }
         .sidebar {

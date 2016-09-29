@@ -21,11 +21,11 @@ export default class Chatik extends React.Component {
     }
 
     iconUrl() {
-        return "https://avatars1.githubusercontent.com/RocketChat?&s=48"
+        return "/images/RocketChat.png"
     }
 
     chatikClass() {
-        return 'RocketChat '
+        return 'RocketChat sidepanel '
     }
 
     stateClass() {

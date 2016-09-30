@@ -70,7 +70,7 @@ export default class LocalizedCurrency extends React.Component {
 
 	render() {
 		const {currency, exchangeRate} 	 = this.state
-		const {amount, intl: {formatNumber}, noSymbol} = this.props
+		const {amount, intl: {formatNumber}, noSymbol, ...rest} = this.props
 
 		localCurrencySymbol = getSymbolFromCurrency(currency)
 
@@ -91,7 +91,7 @@ export default class LocalizedCurrency extends React.Component {
 					: localCurrencySymbol + ' ' + currencyAmount
 		}
 
-		return 	<span {...this.props}>{localizedCurrency(amount)}</span>
+		return 	<span {...rest}>{localizedCurrency(amount)}</span>
 	}
 }
 

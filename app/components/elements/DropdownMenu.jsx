@@ -6,7 +6,10 @@ import VerticalMenu from './VerticalMenu';
 export default class DropdownMenu extends React.Component {
     static propTypes = {
         items: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-        selected: React.PropTypes.string,
+        selected: React.PropTypes.oneOfType([
+            React.PropTypes.string,
+            React.PropTypes.element
+        ]),
         children: React.PropTypes.object,
         className: React.PropTypes.string,
         title: React.PropTypes.string,

@@ -127,13 +127,26 @@ function* handleFacebookCallback() {
             return;
         }
 
-        const same_ip_bot = models.User.findOne({
+        const same_ip_bot = yield models.User.findOne({
             attributes: ['id', 'created_at'],
             where: {remote_ip: attrs.remote_ip, bot: true}
         });
         if (same_ip_bot) {
             console.log('-- /handle_facebook_callback same_ip_bot -->', this.session.uid, attrs.remote_ip);
-            this.flash = {alert: 'We are sorry, we cannot sign you up at this time because your IP address is associated with bots activity. Please contact support@steemit.com for a resolution.'};
+            this.flash = {alert: 'We are sorry, we cannot sign you up at this time because your IP address is associated with bots activity. Please contact support@steemit.com for more information.'};
+            this.redirect('/');
+            return;
+        }
+
+        const email_provider = u.email.match(/\@(.+)$/)[1];
+        if (!email_provider) throw new Error('Incorrect email format');
+        const blocked_email = yield models.List.findOne({
+            attributes: ['id'],
+            where: {kk: 'block-email-provider', value: email_provider}
+        });
+        if (blocked_email) {
+            console.log('-- /handle_facebook_callback blocked_email -->', this.session.uid, u.email);
+            this.flash = {alert: 'Not supported email address: ' + u.email + '. Please make sure your you don\'t use any temporary email providers, contact support@steemit.com for more information.'};
             this.redirect('/');
             return;
         }

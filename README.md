@@ -1,9 +1,9 @@
-Steemit
+# Steemit
 ========
 
 ## Installation
 
-# Clone the repository and make the tmp folder
+#### Clone the repository and make a tmp folder
 ```bash
 git clone https://github.com/steemit/steemit.com
 cd steemit.com

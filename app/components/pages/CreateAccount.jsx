@@ -226,7 +226,7 @@ class CreateAccount extends React.Component {
                     <h2>{translate('sign_up')}</h2>
                     <div className="CreateAccount__rules">
                         <hr />
-                        <p>{translate('the_rules_of_steemit')}</p>
+                        <p>{translate('the_rules_of_APP_NAME')}</p>
                         <hr />
                     </div>
                     <form onSubmit={this.onSubmit} autoComplete="off" noValidate method="post">

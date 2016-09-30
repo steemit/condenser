@@ -115,7 +115,7 @@ class App extends React.Component {
                         <ul>
                             <li>
                                 <a href="https://steemit.com/steemit/@steemitblog/steemit-com-is-now-open-source">
-                                    {translate('APP_NAME_is_now_open_source')}
+                                    {translate('APP_URL_is_now_open_source')}
                                 </a>
                             </li>
                             <li>

@@ -104,7 +104,7 @@ export default reduxForm(
         convert: (owner, amt, success, error) => {
             const amount = String(parseFloat(amt).toFixed(3)) + ' SBD'
             const requestid = Math.floor(Date.now() / 1000)
-            const conf = translate('in_week_convert_steem_dollars_to_steem', { amount: amount.split(' ')[0] })
+            const conf = translate('in_week_convert_DEBT_TOKEN_to_OWNERSHIP_TOKEN', { amount: amount.split(' ')[0] })
             dispatch(transaction.actions.broadcastOperation({
                 type: 'convert',
                 operation: {owner, requestid, amount},

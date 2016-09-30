@@ -112,7 +112,7 @@ class ChangePassword extends React.Component {
                         <div className="ChangePassword__rules">
                             <hr />
                             {/* currently translateHtml() does not work, using <FormattedHTMLMessage /> instead */}
-                            <p> <FormattedHTMLMessage id="the_rules_of_steemit" /> </p>
+                            <p> <FormattedHTMLMessage id="the_rules_of_APP_NAME" /> </p>
                         <hr />
                         </div>
                     }

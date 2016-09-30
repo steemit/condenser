@@ -4448,41 +4448,9 @@
       "resolved": "https://registry.npmjs.org/react-dom/-/react-dom-15.3.2.tgz"
     },
     "react-foundation-components": {
-      "version": "0.12.0",
+      "version": "0.11.1",
       "from": "git+https://github.com/valzav/react-foundation-components.git#lib",
-      "resolved": "git+https://github.com/valzav/react-foundation-components.git#5cd3f17d9efe06a0e8b3ef1398af004cb399ff2b",
-      "dependencies": {
-        "foundation-sites": {
-          "version": "6.2.3",
-          "from": "foundation-sites@>=6.2.3 <7.0.0",
-          "resolved": "https://registry.npmjs.org/foundation-sites/-/foundation-sites-6.2.3.tgz"
-        },
-        "lodash": {
-          "version": "4.16.2",
-          "from": "lodash@>=4.16.1 <5.0.0",
-          "resolved": "https://registry.npmjs.org/lodash/-/lodash-4.16.2.tgz"
-        },
-        "react-overlays": {
-          "version": "0.6.7",
-          "from": "react-overlays@>=0.6.6 <0.7.0",
-          "resolved": "https://registry.npmjs.org/react-overlays/-/react-overlays-0.6.7.tgz"
-        },
-        "react-prop-types": {
-          "version": "0.4.0",
-          "from": "react-prop-types@>=0.4.0 <0.5.0",
-          "resolved": "https://registry.npmjs.org/react-prop-types/-/react-prop-types-0.4.0.tgz"
-        },
-        "uncontrollable": {
-          "version": "4.0.3",
-          "from": "uncontrollable@>=4.0.3 <5.0.0",
-          "resolved": "https://registry.npmjs.org/uncontrollable/-/uncontrollable-4.0.3.tgz"
-        },
-        "warning": {
-          "version": "3.0.0",
-          "from": "warning@>=3.0.0 <4.0.0",
-          "resolved": "https://registry.npmjs.org/warning/-/warning-3.0.0.tgz"
-        }
-      }
+      "resolved": "git+https://github.com/valzav/react-foundation-components.git#58935f818dab50266e2d7943d315404acb198ab3"
     },
     "react-highcharts": {
       "version": "8.4.2",

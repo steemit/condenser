@@ -1,5 +1,5 @@
 import models from '../db/models';
-import sendMobile from 'server/sendMobile';
+import teleSign from 'server/teleSign';
 
 function smsUser(u, mobile) {
     const confirmation_code = Math.random().toString().slice(14);
@@ -18,7 +18,7 @@ function smsUser(u, mobile) {
         confirmation_code
     };
     models.Identity.create(i_attrs).then(() => {
-        sendMobile({mobile, confirmation_code, ip});
+        teleSign.verifySms({mobile, confirmation_code, ip});
     });
 }
 

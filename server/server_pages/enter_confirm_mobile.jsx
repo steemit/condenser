@@ -6,7 +6,7 @@ import { renderToString } from 'react-dom/server';
 import models from 'db/models';
 import ServerHTML from '../server-html';
 import Icon from 'app/components/elements/Icon.jsx';
-import sendMobile from '../sendMobile';
+import teleSign from '../teleSign';
 import {checkCSRF} from '../utils';
 import config from '../../config';
 import {getRemoteIp} from 'server/utils';
@@ -142,7 +142,7 @@ export default function useEnterAndConfirmMobilePages(app) {
         }
         console.log('-- /submit_mobile -->', this.session.uid, this.session.user, mobile, eid.id);
         const ip = getRemoteIp(this.req)
-        yield sendMobile({mobile, confirmation_code, ip});
+        yield teleSign.verifySms({mobile, confirmation_code, ip});
 
         const body = renderToString(<div className="App">
             {header}

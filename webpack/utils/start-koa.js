@@ -1,6 +1,5 @@
 import cp from 'child_process';
 import path from 'path';
-import browserSync from 'browser-sync';
 import watch from 'node-watch';
 
 let server;

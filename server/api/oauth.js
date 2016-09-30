@@ -127,6 +127,17 @@ function* handleFacebookCallback() {
             return;
         }
 
+        const same_ip_bot = models.User.findOne({
+            attributes: ['id', 'created_at'],
+            where: {remote_ip: attrs.remote_ip, bot: true}
+        });
+        if (same_ip_bot) {
+            console.log('-- /handle_facebook_callback same_ip_bot -->', this.session.uid, attrs.remote_ip);
+            this.flash = {alert: 'We are sorry, we cannot sign you up at this time because your IP address is associated with bots activity. Please contact support@steemit.com for a resolution.'};
+            this.redirect('/');
+            return;
+        }
+
         if (user) {
             i_attrs_email.user_id = attrs.id = user.id;
             yield models.User.update(attrs, {where: {id: user.id}});

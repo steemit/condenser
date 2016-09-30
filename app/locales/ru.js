@@ -10,7 +10,7 @@ const ru = {
 	APP_NAME_whitepaper: "Белая книга о " + APP_NAME, // или тех записка? или аналитическая записка?
 	buy_OWNERSHIP_TOKEN: 'Купить ' + OWNERSHIP_TOKEN,
 	sell_OWNERSHIP_TOKEN: 'Продать ' + OWNERSHIP_TOKEN,
-	market: "Маркет",
+	market: "Рынок",
 	stolen_account_recovery: "Возврат украденного аккаунта",
 	change_account_password: "Изменить пароль аккаунта",
 	APP_NAME_chat: APP_NAME + " чат",
@@ -226,7 +226,7 @@ const ru = {
 	'24h_volume': 'Объем за 24 часа',
 	bid: 'Покупка',
 	ask: 'Продажа',
-	spread: 'Разница', // Спрэд? Нужно посмотреть биржевой термин.
+	spread: 'Спрэд', // Спрэд? Нужно посмотреть биржевой термин.
 	total: 'Итого',
 	available: 'Доступно',
 	lowest_ask: 'Лучшая цена продажи',

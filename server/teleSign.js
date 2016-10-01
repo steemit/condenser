@@ -24,9 +24,9 @@ export function verifySms({mobile, confirmation_code, ip}) {
             headers: authHeaders({resource, method, fields})
         }
     )
+    .then(r => r.json())
     .then(response => {
-        const {status, statusText} = response
-        console.log(`SMS to ${mobile} code ${confirmation_code}:`, status, statusText);
+        console.log(`SMS to ${mobile} code ${confirmation_code}:`, response)
     })
     .catch(error => {
         console.error(`SMS failed to ${mobile} code ${confirmation_code} req ip ${ip}`, error);
@@ -63,13 +63,17 @@ function authHeaders({
     strToSign += '\n' + resource
 
     const sig = crypto.createHmac('sha256', api_key).update(strToSign, 'utf8').digest('base64')
+    console.log('strToSign', strToSign)
 
-    return {
+    const headers = {
         Authorization: `TSA ${customer_id}:${sig}`,
+        'Content-Type': content_type,
         'x-ts-date': currDate,
         'x-ts-auth-method': auth_method,
         'x-ts-nonce': nonce
     }
+    // console.log('headers', headers)
+    return headers
 }
 
 const urlencode = json =>

@@ -1,0 +1,72 @@
+
+// TODO change pixels to rems
+// TODO add common supporting text styles
+.Landing {
+	/* COMMON ELEMENTS */
+	h2 {
+		margin-top: 90px;
+	}
+	hr {
+		margin: 0;
+		max-width: 100%;
+		background-color: #e0dfdf;
+	}
+	.button {
+		padding: 23px 63px;
+		text-transform: none;
+	}
+
+	/* SECTIONS */
+	.WhatIsGolos {
+		padding-top: 145px;
+		background-color: #f2f2f2;
+		.WhatIsGolos__header {
+			h2 {
+				margin-top: 0;
+			}
+			margin-bottom: 80px;
+		}
+		.WhatIsGolos__video {
+			margin-left: auto;
+			margin-right: auto;
+		}
+		a {
+			margin-top: 65px;
+			margin-bottom: 100px;
+		}
+	}
+	.JoinUs {
+		padding-top: 160px;
+		margin-bottom: 100px;
+		h2 {
+			margin-top: 0;
+			color: #f12b24;
+		}
+		.JoinUs__support-text {
+			color: #d2d2d2;
+			font-size: 27px;
+		}
+		.JoinUs__item {
+			// img {
+			//
+			// }
+			strong {
+				font-size: 27px;
+				color: #1a1a1a;
+			}
+			p {
+				color: #717171;
+				font-size: 14px;
+			}
+		}
+	}
+	.BlockchainRevolution {
+		padding-top: 90px;
+		.BlockchainRevolution__header {
+
+		}
+		.BlockchainRevolution__supporting-text {
+			color: #d2d2d2;
+		}
+	}
+}

@@ -481,7 +481,7 @@ export default formId => reduxForm(
 
             if (!linkProps) throw new Error('Unknown type: ' + type)
 
-            const formCategories = Set(category ? category.split(/ +/) : [])
+            const formCategories = Set(category ? category.replace("#","").split(/ +/) : [])
             const rootCategory = originalPost && originalPost.category ?
                 originalPost.category : formCategories.first()
             const rootTag = /^[-a-z\d]+$/.test(rootCategory) ? rootCategory : null

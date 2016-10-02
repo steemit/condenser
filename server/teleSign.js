@@ -1,19 +1,21 @@
 import fetch from 'node-fetch';
 import config from '../config';
+import crypto from 'crypto'
 
 const {customer_id} = config.telesign
 const api_key = new Buffer(config.telesign.rest_api_key, 'base64')
 
 export function verifySms({mobile, confirmation_code, ip}) {
     // https://developer.telesign.com/v2.0/docs/rest_api-verify-sms
-    const fields = urlencode({
+    const f = {
         phone_number: mobile,
-        // originating_ip: ip,
         language: 'en-US',
         verify_code: confirmation_code,
         template: 'Your code is $$CODE$$',
-    })
-    console.log('fields', fields)
+    }
+    if(ip) f.originating_ip = ip
+    const fields = urlencode(f)
+
     const resource = '/v1/verify/sms'
     const method = 'POST'
     return fetch(
@@ -26,21 +28,25 @@ export function verifySms({mobile, confirmation_code, ip}) {
     )
     .then(r => r.json())
     .then(response => {
-        console.log(`SMS to ${mobile} code ${confirmation_code}:`, response)
+        const {status} = response
+        if(status.code === 290) {
+            // Message in progress
+            console.log(`Sent SMS to ${mobile} code ${confirmation_code}`)
+            return Promise.resolve()
+        }
+        console.error(`ERROR: SMS to ${mobile} code ${confirmation_code}:`, response)
+        return Promise.reject(response)
     })
     .catch(error => {
         console.error(`SMS failed to ${mobile} code ${confirmation_code} req ip ${ip}`, error);
+        return Promise.reject(error)
     });
 }
 
-import crypto from 'crypto'
-
 /**
-    @arg {string} resource `/v1/verify/AEBC93B5898342F790E4E19FED41A7DA`, everything
-        in the URI from directly after .com to directly before the ?.
-
+    @arg {string} resource `/v1/verify/AEBC93B5898342F790E4E19FED41A7DA`
     @arg {string} method [GET|POST|PUT]
-    @arg {object|string} fields url query string parameters (will be encoded)
+    @arg {string} fields url query string
 */
 function authHeaders({
     resource,
@@ -63,7 +69,6 @@ function authHeaders({
     strToSign += '\n' + resource
 
     const sig = crypto.createHmac('sha256', api_key).update(strToSign, 'utf8').digest('base64')
-    console.log('strToSign', strToSign)
 
     const headers = {
         Authorization: `TSA ${customer_id}:${sig}`,

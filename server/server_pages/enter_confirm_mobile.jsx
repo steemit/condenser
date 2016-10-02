@@ -2,14 +2,13 @@ import koa_router from 'koa-router';
 import koa_body from 'koa-body';
 import request from 'co-request';
 import React from 'react';
-import { renderToString } from 'react-dom/server';
+import {renderToString} from 'react-dom/server';
 import models from 'db/models';
-import ServerHTML from '../server-html';
+import ServerHTML from 'server/server-html';
 import Icon from 'app/components/elements/Icon.jsx';
-import teleSign from '../teleSign';
-import {checkCSRF} from '../utils';
-import config from '../../config';
-import {getRemoteIp} from 'server/utils';
+import {verifySms} from 'server/teleSign';
+import {getRemoteIp, checkCSRF} from 'server/utils';
+import config from 'config';
 
 let assets;
 if (process.env.NODE_ENV === 'production') {
@@ -38,18 +37,18 @@ function *confirmMobileHandler() {
     const confirmation_code = this.params && this.params.code ? this.params.code : this.request.body.code;
     console.log('-- /confirm_mobile -->', this.session.uid, this.session.user, confirmation_code);
     const eid = yield models.Identity.findOne(
-        {attributes: ['id', 'user_id', 'mobile', 'updated_at'], where: {confirmation_code, verified: false}, order: 'id DESC'}
+        {attributes: ['id', 'user_id', 'phone', 'updated_at'], where: {user_id: this.session.user, confirmation_code, verified: false}, order: 'id DESC'}
     );
     if (!eid) {
         this.status = 401;
-        this.body = 'confirmation code not found';
+        this.body = 'Confirmation code not found';
         return;
     }
     this.session.user = eid.user_id;
     const hours_ago = (Date.now() - eid.updated_at) / 1000.0 / 3600.0;
     if (hours_ago > 240.0 * 30) {
         this.status = 401;
-        this.body = 'confirmation code not found or expired';
+        this.body = 'Confirmation code expired';
         return;
     }
     yield eid.update({verified: true});
@@ -66,7 +65,7 @@ export default function useEnterAndConfirmMobilePages(app) {
         const user_id = this.session.user;
         if (!user_id) { this.body = 'user not found'; return; }
         const eid = yield models.Identity.findOne(
-            {attributes: ['phone'], where: {user_id, provider: 'mobile'}, order: 'id DESC'}
+            {attributes: ['phone'], where: {user_id, provider: 'phone'}, order: 'id DESC'}
         );
         const body = renderToString(<div className="App">
             {header}
@@ -126,23 +125,23 @@ export default function useEnterAndConfirmMobilePages(app) {
 
         const confirmation_code = Math.random().toString().slice(14);
         let eid = yield models.Identity.findOne(
-            {attributes: ['id', 'mobile'], where: {user_id, provider: 'mobile'}, order: 'id'}
+            {attributes: ['id', 'phone'], where: {user_id, provider: 'phone'}, order: 'id'}
         );
         if (eid) {
             yield eid.update({confirmation_code});
         } else {
             eid = yield models.Identity.create({
-                provider: 'mobile',
+                provider: 'phone',
                 user_id,
                 uid: this.session.uid,
-                email: mobile,
+                phone: mobile,
                 verified: false,
                 confirmation_code
             });
         }
         console.log('-- /submit_mobile -->', this.session.uid, this.session.user, mobile, eid.id);
         const ip = getRemoteIp(this.req)
-        yield teleSign.verifySms({mobile, confirmation_code, ip});
+        yield verifySms({mobile, confirmation_code, ip});
 
         const body = renderToString(<div className="App">
             {header}

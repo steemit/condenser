@@ -76,7 +76,7 @@ export default function useGeneralApi(app) {
             }
 
             const sid = yield models.Identity.findOne(
-                {attributes: ['id'], where: {user_id, provider: 'mobile', verified: true}, order: 'id DESC'}
+                {attributes: ['id'], where: {user_id, provider: 'phone', verified: true}, order: 'id DESC'}
             );
             if (!sid) {
                 console.log(`api /accounts: not confirmed sms for user ${this.session.uid} #${user_id}`);

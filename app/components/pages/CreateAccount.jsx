@@ -1,6 +1,5 @@
 /* eslint react/prop-types: 0 */
 import React from 'react';
-import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import Apis from 'shared/api_client/ApiInstances';
@@ -9,10 +8,7 @@ import user from 'app/redux/User';
 import {validate_account_name} from 'app/utils/ChainValidation';
 import SignUp from 'app/components/modules/SignUp';
 import runTests from 'shared/ecc/test/BrowserTests';
-import g from 'app/redux/GlobalReducer';
 import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInput';
-
-const PASSWORD_MIN_LENGTH = 32;
 
 class CreateAccount extends React.Component {
 
@@ -42,7 +38,7 @@ class CreateAccount extends React.Component {
         const cryptoTestResult = runTests();
         if (cryptoTestResult !== undefined) {
             console.error('CreateAccount - cryptoTestResult: ', cryptoTestResult);
-            this.setState({cryptographyFailure: true});
+            this.setState({cryptographyFailure: true}); // TODO: do not use setState in componentDidMount
         }
     }
 
@@ -143,7 +139,7 @@ class CreateAccount extends React.Component {
         }
 
         const {
-            name, password_valid, showPasswordString,
+            name, password_valid, //showPasswordString,
             name_error, server_error, loading, cryptographyFailure
         } = this.state;
 

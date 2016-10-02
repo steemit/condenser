@@ -1,3 +1,5 @@
+if(process.env.NEW_RELIC_APP_NAME) require('newrelic');
+
 import path from 'path';
 import Koa from 'koa';
 import mount from 'koa-mount';

@@ -3,10 +3,17 @@ Steemit
 
 ## Installation
 
+# Clone the repository and make the tmp folder
+```bash
+git clone https://github.com/steemit/steemit.com
+cd steemit.com
+mkdir tmp
+```
+
 #### Install dependencies
 
 ```bash
-# Install at least Node v6.3 if you don't already have it (NVM recommended)
+# Install at least Node v6.3 if you don't already have it ([NVM](https://github.com/creationix/nvm) recommended)
 nvm install v6
 
 npm install
@@ -114,6 +121,6 @@ pm2 start config/process.json
 
 To report a non-critical issue, please file an issue on this GitHub project.
 
-If you find a security issue please report details to: secure[at]steemit[dot]com
+If you find a security issue please report details to: security@steemit.com
 
 We will evaluate the risk and make a patch available before filing the issue.

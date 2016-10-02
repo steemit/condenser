@@ -18,10 +18,14 @@ class Market extends React.Component {
         ticker: React.PropTypes.object,
         // redux PropTypes
         placeOrder: React.PropTypes.func.isRequired,
-        user: React.PropTypes.object,
+        user: React.PropTypes.string,
     };
 
     shouldComponentUpdate = (nextProps, nextState) => {
+      if( this.props.user !== nextProps.user && nextProps.user) {
+          this.props.reload(nextProps.user)
+      }
+
       if( nextState.buy_disabled != this.state.buy_disabled ||
           nextState.sell_disabled != this.state.sell_disabled) {
           return true
@@ -42,7 +46,7 @@ class Market extends React.Component {
 
       let oc = (typeof nextProps.open_orders !== undefined) && (
           typeof this.props.open_orders == 'undefined' ||
-          this.props.open_orders.length != nextProps.open_orders.length)
+          JSON.stringify(this.props.open_orders) != JSON.stringify(nextProps.open_orders))
 
       // Update if ticker info changed, order book changed size, or open orders length changed.
       //if(tc || bc || oc) console.log("tc?", tc, "bc?", bc, "oc?", oc)
@@ -53,36 +57,33 @@ class Market extends React.Component {
         e.preventDefault()
         const {placeOrder, user} = this.props
         if(!user) return
-        const owner = user.get('username')
         const amount_to_sell = parseFloat(ReactDOM.findDOMNode(this.refs.buySteem_total).value)
         const min_to_receive = parseFloat(ReactDOM.findDOMNode(this.refs.buySteem_amount).value)
         const price = (amount_to_sell / min_to_receive).toFixed(6)
-        placeOrder(owner, amount_to_sell + " SBD", min_to_receive + " STEEM", "$" + price + "/STEEM", (msg) => {
+        placeOrder(user, amount_to_sell + " SBD", min_to_receive + " STEEM", "$" + price + "/STEEM", (msg) => {
             this.props.notify(msg)
-            this.props.reload(owner)
+            this.props.reload(user)
         })
     }
     sellSteem = (e) => {
         e.preventDefault()
         const {placeOrder, user} = this.props
         if(!user) return
-        const owner = user.get('username')
         const min_to_receive = parseFloat(ReactDOM.findDOMNode(this.refs.sellSteem_total).value)
         const amount_to_sell = parseFloat(ReactDOM.findDOMNode(this.refs.sellSteem_amount).value)
         const price = (min_to_receive / amount_to_sell).toFixed(6)
-        placeOrder(owner, amount_to_sell + " STEEM", min_to_receive + " SBD", "$" + price + "/STEEM", (msg) => {
+        placeOrder(user, amount_to_sell + " STEEM", min_to_receive + " SBD", "$" + price + "/STEEM", (msg) => {
             this.props.notify(msg)
-            this.props.reload(owner)
+            this.props.reload(user)
         })
     }
     cancelOrderClick = (e, orderid) => {
         e.preventDefault()
         const {cancelOrder, user} = this.props
         if(!user) return
-        const owner = user.get('username')
-        cancelOrder(owner, orderid, (msg) => {
+        cancelOrder(user, orderid, (msg) => {
             this.props.notify(msg)
-            this.props.reload(owner)
+            this.props.reload(user)
         })
     }
 
@@ -524,7 +525,7 @@ module.exports = {
         ticker:      state.market.get('ticker'),
         account:     state.market.get('account'),
         history:     state.market.get('history'),
-        user:        state.user.get('current'),
+        user:        state.user.get('current') ? state.user.get('current').get('username') : null,
         feed:        state.global.get('feed_price').toJS()
     }),
     dispatch => ({

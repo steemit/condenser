@@ -9,7 +9,6 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import user from 'app/redux/User';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
-// import Tooltip from 'app/components/elements/Tooltip';
 import Icon from 'app/components/elements/Icon';
 import Userpic from 'app/components/elements/Userpic';
 import transaction from 'app/redux/Transaction'
@@ -248,6 +247,7 @@ class CommentImpl extends React.Component {
 
         const showDeleteOption = username === author && !hasReplies && netVoteSign <= 0
         const showEditOption = username === author && comment.mode == 'first_payout'
+        const readonly = comment.mode == 'archived' || $STM_Config.read_only_mode
 
         let replies = null;
         let body = null;
@@ -256,18 +256,15 @@ class CommentImpl extends React.Component {
         if (!this.state.collapsed && !hide_body) {
             body = (<MarkdownViewer formId={post + '-viewer'} text={comment.body}
                 noImage={noImage || !pictures} jsonMetadata={jsonMetadata} />);
-            controls = (<div>
+            controls = <div>
                 <Voting post={post} />
-                {!$STM_Config.read_only_mode && depth < 6 && <a onClick={onShowReply}>Reply</a>}
-                {showEditOption && <span>
-                    &nbsp;&nbsp;
-                    <a onClick={onShowEdit}>Edit</a>
-                </span>}
-                {showDeleteOption && <span>
-                    &nbsp;&nbsp;
-                    <a onClick={onDeletePost}>Delete</a>
-                </span>}
-            </div>);
+                {!readonly &&
+                    <span className="Comment__footer__controls">
+                        {depth < 6 && <a onClick={onShowReply}>Reply</a>}
+                        {' '}{showEditOption   && <a onClick={onShowEdit}>Edit</a>}
+                        {' '}{showDeleteOption && <a onClick={onDeletePost}>Delete</a>}
+                    </span>}
+            </div>;
         }
 
         if(!this.state.collapsed) {
@@ -318,12 +315,11 @@ class CommentImpl extends React.Component {
                         </div>
                         <span className="Comment__header-user">
                             <Icon name="user" className="Comment__Userpic-small" />
-                            <span itemProp="author" itemScope itemType="http://schema.org/Person">
-                                <Author author={comment.author} authorRepLog10={authorRepLog10} /></span>
+                            <Author author={comment.author} authorRepLog10={authorRepLog10} />
                         </span>
                         &nbsp; &middot; &nbsp;
                         <Link to={comment_link} className="PlainLink">
-                            <TimeAgoWrapper date={comment.created} />
+                            <TimeAgoWrapper date={comment.created} className="updated" />
                         </Link>
                         { (this.state.collapsed || hide_body) &&
                           <Voting post={post} showList={false} /> }

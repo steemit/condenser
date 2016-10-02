@@ -4,10 +4,6 @@
   max-width: 50rem;
   border-bottom: 1px solid $light-gray;
 
-  .TimeAgo {
-    color: $dark-gray;
-    font-weight: 400;
-  }
   .ReplyEditor {
     margin-top: 2rem;
   }
@@ -126,6 +122,7 @@
   padding-right: 1rem;
   margin-right: 1rem;
   border-right: 1px solid $medium-gray;
+  a {margin: 0 0.15rem;}
 }
 
 .PostFull__lifetime {

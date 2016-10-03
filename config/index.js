@@ -21,10 +21,15 @@ function envOverride(c, base = 'STEEMIT_') {
         }
 
         if(hasEnv) {
-            try {
-                c[key] = JSON.parse(v)
-            } catch(error) {
-                c[key] = v
+            if(/STEEMIT_HELMET_DIRECTIVES_/.test(base + ENV_KEY)) {
+                // avoid difficult escaping in the config file
+                c[key] = v.split(/, */)
+            } else {
+                try {
+                    c[key] = JSON.parse(v)
+                } catch(error) {
+                    c[key] = v
+                }
             }
         } else {
             const value = c[key]

@@ -127,6 +127,10 @@ function* handleFacebookCallback() {
             return;
         }
 
+        if (!u.verified) {
+            throw new Error('Not verified Facebook account. Please verify your Facebook account and try again to sign up to Steemit.');
+        }
+
         const same_ip_bot = yield models.User.findOne({
             attributes: ['id', 'created_at'],
             where: {remote_ip: attrs.remote_ip, bot: true}
@@ -138,7 +142,7 @@ function* handleFacebookCallback() {
             return;
         }
 
-        const email_provider = u.email.match(/\@(.+)$/)[1];
+        const email_provider = u.email.match(/([\w\d-]+\.\w+)$/)[1];
         if (!email_provider) throw new Error('Incorrect email format');
         const blocked_email = yield models.List.findOne({
             attributes: ['id'],

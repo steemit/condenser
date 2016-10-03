@@ -16,6 +16,14 @@ module.exports = {
       }
     }).then(function () {
       queryInterface.addIndex('lists', ['kk']);
+      queryInterface.addIndex(
+          'lists',
+          ['kk', 'value'],
+          {
+            indexName: 'KeyValue',
+            indicesType: 'UNIQUE'
+          }
+      )
     });
   },
   down: function (queryInterface, Sequelize) {

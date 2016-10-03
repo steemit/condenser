@@ -248,7 +248,7 @@ function* accepted_account_update({operation}) {
     // }
 }
 
-// TODO remove soon, this was replaced by the UserKeys edit running usernamePasswordLogin (on dialog close) 
+// TODO remove soon, this was replaced by the UserKeys edit running usernamePasswordLogin (on dialog close)
 // function* error_account_update({operation}) {
 //     const {account} = operation
 //     const stateUser = yield select(state => state.user)

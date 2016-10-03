@@ -491,6 +491,7 @@ export default formId => reduxForm(
                                     .map(item => /^[а-я]/.test(item) ? 'ru--' + detransliterate(item, true) : item)
                                     .join(' ')
             }
+
             if (category){console.log(category);}else{console.log(author);}
             // Wire up the current and parent props for either an Edit or a Submit (new post)
             //'submit_story', 'submit_comment', 'edit'

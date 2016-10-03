@@ -78,10 +78,10 @@ export default function useEnterAndConfirmMobilePages(app) {
                     </p>
                     <input type="hidden" name="csrf" value={this.csrf} />
                     <label>
-                        Mobile (include country code if other than the US)
+                        Mobile
                         <input type="tel" name="mobile" defaultValue={eid ? eid.phone : ''} />
                     </label>
-                    {eid && eid.mobile && <div className="secondary"><i>Mobile number cannot be changed at this moment, sorry for the inconvenience.</i></div>}
+                    <small className="warning">Include country code if outside the US</small>
                     <br />
                     <div className="g-recaptcha" data-sitekey={config.recaptcha.site_key}></div>
                     <br />
@@ -127,12 +127,12 @@ export default function useEnterAndConfirmMobilePages(app) {
             captcha_failed = true;
             console.error('-- /submit_mobile recaptcha request failed -->', verificationUrl, e);
         }
-        // if (captcha_failed) {
-        //     console.log('-- /submit_mobile captcha verification failed -->', user_id, this.session.uid, mobile, this.req.connection.remoteAddress);
-        //     this.flash = {error: 'Failed captcha verification, please try again.'};
-        //     this.redirect('/enter_mobile');
-        //     return;
-        // }
+        if (captcha_failed) {
+            console.log('-- /submit_mobile captcha verification failed -->', user_id, this.session.uid, mobile, this.req.connection.remoteAddress);
+            this.flash = {error: 'Failed captcha verification, please try again.'};
+            this.redirect('/enter_mobile');
+            return;
+        }
 
         const confirmation_code = Math.random().toString().slice(14);
         let eid = yield models.Identity.findOne(

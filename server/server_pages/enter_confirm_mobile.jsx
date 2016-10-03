@@ -6,7 +6,7 @@ import {renderToString} from 'react-dom/server';
 import models from 'db/models';
 import ServerHTML from 'server/server-html';
 import Icon from 'app/components/elements/Icon.jsx';
-import {verifySms} from 'server/teleSign';
+import {verify} from 'server/teleSign';
 import {getRemoteIp, checkCSRF} from 'server/utils';
 import config from 'config';
 
@@ -78,8 +78,8 @@ export default function useEnterAndConfirmMobilePages(app) {
                     </p>
                     <input type="hidden" name="csrf" value={this.csrf} />
                     <label>
-                        Mobile
-                        <input type="tel" name="mobile" defaultValue={eid ? eid.phone : ''} readOnly={eid && eid.phone} />
+                        Mobile (include country code if other than the US)
+                        <input type="tel" name="mobile" defaultValue={eid ? eid.phone : ''} />
                     </label>
                     {eid && eid.mobile && <div className="secondary"><i>Mobile number cannot be changed at this moment, sorry for the inconvenience.</i></div>}
                     <br />
@@ -98,11 +98,22 @@ export default function useEnterAndConfirmMobilePages(app) {
         if (!checkCSRF(this, this.request.body.csrf)) return;
         const user_id = this.session.user;
         if (!user_id) { this.body = 'user not found'; return; }
-        const mobile = this.request.body.mobile;
+        let mobile = this.request.body.mobile;
         if (!mobile) {
-            this.flash = {error: 'Please provide an mobile number'};
+            this.flash = {error: 'Please provide a mobile number'};
             this.redirect('/enter_mobile');
             return;
+        }
+
+        mobile = mobile.match(/\d+/g).join('')
+        if(mobile.length < "9998887777".length) {
+            this.flash = {error: 'Please provide an area code'};
+            this.redirect('/enter_mobile');
+            return;
+        }
+
+        if(mobile.length === "9998887777".length) {
+            mobile = `1${mobile}`
         }
 
         const recaptcha = this.request.body['g-recaptcha-response'];
@@ -116,19 +127,19 @@ export default function useEnterAndConfirmMobilePages(app) {
             captcha_failed = true;
             console.error('-- /submit_mobile recaptcha request failed -->', verificationUrl, e);
         }
-        if (captcha_failed) {
-            console.log('-- /submit_mobile captcha verification failed -->', user_id, this.session.uid, mobile, this.req.connection.remoteAddress);
-            this.flash = {error: 'Failed captcha verification, please try again.'};
-            this.redirect('/enter_mobile');
-            return;
-        }
+        // if (captcha_failed) {
+        //     console.log('-- /submit_mobile captcha verification failed -->', user_id, this.session.uid, mobile, this.req.connection.remoteAddress);
+        //     this.flash = {error: 'Failed captcha verification, please try again.'};
+        //     this.redirect('/enter_mobile');
+        //     return;
+        // }
 
         const confirmation_code = Math.random().toString().slice(14);
         let eid = yield models.Identity.findOne(
             {attributes: ['id', 'phone'], where: {user_id, provider: 'phone'}, order: 'id'}
         );
         if (eid) {
-            yield eid.update({confirmation_code});
+            yield eid.update({confirmation_code, phone: mobile});
         } else {
             eid = yield models.Identity.create({
                 provider: 'phone',
@@ -141,7 +152,13 @@ export default function useEnterAndConfirmMobilePages(app) {
         }
         console.log('-- /submit_mobile -->', this.session.uid, this.session.user, mobile, eid.id);
         const ip = getRemoteIp(this.req)
-        yield verifySms({mobile, confirmation_code, ip});
+
+        const verifyResult = yield verify({mobile, confirmation_code, ip});
+        if(verifyResult && verifyResult.error) {
+            this.flash = {error: verifyResult.error};
+            this.redirect('/enter_mobile');
+            return;
+        }
 
         const body = renderToString(<div className="App">
             {header}
@@ -149,7 +166,7 @@ export default function useEnterAndConfirmMobilePages(app) {
             <div className="row">
                 <div className="column">
                     Thank you for providing your mobile number ({mobile}).<br />
-                To continue please enter the SMS code we've sent you.
+                    To continue please enter the SMS code we've sent you.
                 </div>
             </div>
             <br />

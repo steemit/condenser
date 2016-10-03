@@ -1,5 +1,5 @@
 // https://www.airpair.com/docker/posts/the-painful-journey-of-painless-deployments
-// referece example: constants.js
+// reference (see constants.js in the-painful-journey-of-painless-deployments)
 
 const config = require('./defaults.json');
 const INFO = false

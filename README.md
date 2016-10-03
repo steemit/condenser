@@ -22,6 +22,8 @@ npm install -g babel-cli
 
 #### Create config file
 
+If you need to configure something:
+
 ```bash
 cd config
 cp config/steem-example.sh config/steem-dev.sh

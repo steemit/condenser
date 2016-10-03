@@ -1,5 +1,8 @@
+// https://www.airpair.com/docker/posts/the-painful-journey-of-painless-deployments
+// referece example: constants.js
+
 const config = require('./defaults.json');
-const INFO = true
+const INFO = false
 
 function envOverride(c, base = 'STEEMIT_') {
     if(!c) return

@@ -25,7 +25,6 @@ class PostsList extends React.Component {
         loadMore: PropTypes.func,
         emptyText: PropTypes.string,
         showSpam: PropTypes.bool,
-        global: PropTypes.object.isRequired,
         fetchState: PropTypes.func.isRequired,
         pathname: PropTypes.string,
     };
@@ -153,7 +152,7 @@ class PostsList extends React.Component {
     }
 
     render() {
-        const {posts, loading, category, emptyText, global} = this.props;
+        const {posts, loading, category, emptyText} = this.props;
         const {comments} = this.props
         const {thumbSize, showPost} = this.state
         if (!loading && !posts.length && emptyText) {
@@ -210,7 +209,7 @@ export default connect(
             if(!(ignore || hide) || showSpam) // rephide
                 comments.push({item, ignore, netVoteSign, authorRepLog10})
         })
-        return {...props, comments, global: state.global, pathname};
+        return {...props, comments, pathname};
     },
     dispatch => ({
         fetchState: (pathname) => {

@@ -24,10 +24,9 @@ npm install -g babel-cli
 
 ```bash
 cd config
-cp steem-example.json steem-dev.json
+cp config/steem-example.sh config/steem-dev.sh
+. ./config/steem-dev.sh
 ```
-
-(note: it's steem.json in production)
 
 #### Install mysql server
  

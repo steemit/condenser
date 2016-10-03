@@ -465,15 +465,22 @@ export default formId => reduxForm(
         setMetaData: (id, jsonMetadata) => {
             dispatch(g.actions.setMetaData({id, meta: jsonMetadata ? jsonMetadata.steem : null}))
         },
-        reply: ({category, title, body, author, permlink, parent_author, parent_permlink,
+        reply: ({category, title, username, body, author, permlink, parent_author, parent_permlink,
             type, originalPost, autoVote = false, allSteemPower = false,
             state, jsonMetadata, /*metaLinkData,*/
             successCallback, errorCallback, loadingCallback
         }) => {
             // const post = state.global.getIn(['content', author + '/' + permlink])
-            const username = state.user.getIn(['current', 'username'])
+            //const username = state.user.getIn(['current', 'username'])
             console.log('category', category)
-            category.split(' ').map((item) => {console.log(/^[а-я]/.test(item))})
+            console.log('title', title)
+            console.log('author', author)
+            //console.log('body', body)
+            console.log('permlink', permlink)
+          //  console.log('parent_author', parent_author)
+            console.log('type', type)
+            console.log('originalPost', originalPost)
+
             // Parse categories:
             // if category string starts with russian symbol, add 'ru-' prefix to it
             // when transletirate it
@@ -484,7 +491,8 @@ export default formId => reduxForm(
                                     .map(item => /^[а-я]/.test(item) ? 'ru--' + detransliterate(item, true) : item)
                                     .join(' ')
             }
-            console.log(category)
+
+            if (category){console.log(category);}else{console.log(author);}
             // Wire up the current and parent props for either an Edit or a Submit (new post)
             //'submit_story', 'submit_comment', 'edit'
             const linkProps =

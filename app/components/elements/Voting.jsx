@@ -161,7 +161,7 @@ class Voting extends React.Component {
 
         const payoutItems = [
             {value: 'Potential Payout $' + formatDecimal(pending_payout).join('')},
-            {value: 'Boost Payments $' + formatDecimal(promoted).join('')}
+            {value: 'Promotion Cost $' + formatDecimal(promoted).join('')}
         ];
         if (cashout_time && cashout_time.indexOf('1969') !== 0 && cashout_time.indexOf('1970') !== 0) {
             payoutItems.push({value: <TimeAgoWrapper date={cashout_time} />});

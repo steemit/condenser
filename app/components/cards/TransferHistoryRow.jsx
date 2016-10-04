@@ -32,8 +32,8 @@ class TransferHistoryRow extends React.Component {
         let description_end = "";
 
         if( type === 'transfer_to_vesting' ) {
+            const amount = data.amount && data.amount.split && data.amount.split(' ')[0]
             if( data.from === context ) {
-                const amount = data.amount.split(' ')[0]
                 if( data.to === "" ) {
                     description_start += translate('transfer_amount_to_INVEST_TOKEN', { amount });
                 }

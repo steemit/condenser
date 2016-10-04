@@ -1,0 +1,74 @@
+.SlateEditor {
+  padding: 1rem;
+}
+
+.SlateEditor > * > * + * {
+  margin-top: 1em;
+}
+
+.SlateEditor__menu > * {
+  display: inline-block;
+}
+
+.SlateEditor__menu > * + * {
+  margin-left: 10px;
+}
+
+.SlateEditor__menu-button {
+  font-family: 'Georgia', serif;
+  color: #777;
+  cursor: pointer;
+  > span {
+    display: inline-block;
+    width: 2rem;
+    text-align: center;
+    background: #333;
+    border-radius: 2px;
+    code {
+      border: none;
+      background: transparent;
+      color: inherit;
+    }
+  }
+  > span:hover {
+    background: #555;
+    color: white;
+  }
+}
+
+.SlateEditor__menu-button[data-active="true"] {
+  color: white;
+  > span {
+    background: #555;
+  }
+}
+
+/*
+.toolbar-menu {
+  padding: 1px 0 17px 18px;
+  margin: 0 -20px;
+  border-bottom: 2px solid #eee;
+  margin-bottom: 20px;
+}
+*/
+
+.SlateEditor__hover-menu {
+  padding: 8px 7px 6px;
+  position: absolute;
+  z-index: 1;
+  top: -10000px;
+  left: -10000px;
+  margin-top: -6px;
+  opacity: 0;
+  background-color: #222;
+  border-radius: 4px;
+  transition: opacity .75s;
+}
+
+.SlateEditor__hover-menu .button {
+  color: #aaa;
+}
+
+.SlateEditor__hover-menu .button[data-active="true"] {
+  color: #fff;
+}

@@ -110,9 +110,9 @@ async function universalRender({ location, initial_state, offchain }) {
         // Bump transaction (for live UI testing).. Put 0 in now (no effect),
         // to enable browser's autocomplete and help prevent typos.
         window.bump = parseInt(localStorage.getItem('bump') || 0);
-        const scroll = useScroll((prevLocation, newLocation) => {
-            return !newLocation.location.hash;
-            return !prevLocation || prevLocation.location.pathname !== newLocation.location.pathname;
+        const scroll = useScroll((prevLocation, {location}) => {
+            if (location.hash || location.action === 'POP') return false;
+            return !prevLocation || prevLocation.location.pathname !== location.pathname;
         });
         if (process.env.NODE_ENV === 'production') {
             console.log('%c%s','color: red; background: yellow; font-size: 24px;', 'WARNING!');

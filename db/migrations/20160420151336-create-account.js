@@ -41,7 +41,9 @@ module.exports = {
                 type: Sequelize.STRING
             },
             ignored: {
-                type: Sequelize.BOOLEAN
+                type: Sequelize.BOOLEAN,
+                defaultValue: false,
+                allowNull: false
             },
             created_at: {
                 allowNull: false,

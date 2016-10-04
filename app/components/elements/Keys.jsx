@@ -60,10 +60,8 @@ class Keys extends Component {
         return (
             <span>
                 <div className="row">
-                    <div className="column small-2">
+                    <div className="column small-12">
                         <label>{authType}</label>
-                    </div>
-                    <div className="column small-10">
                         {auths}
                     </div>
                 </div>

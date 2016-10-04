@@ -38,7 +38,7 @@ function *confirmEmailHandler() {
     const confirmation_code = this.params && this.params.code ? this.params.code : this.request.body.code;
     console.log('-- /confirm_email -->', this.session.uid, this.session.user, confirmation_code);
     const eid = yield models.Identity.findOne(
-        {attributes: ['id', 'user_id', 'email', 'verified', 'updated_at'], where: {confirmation_code}, order: 'id DESC'}
+        {attributes: ['id', 'user_id', 'email', 'updated_at', 'verified'], where: {confirmation_code}, order: 'id DESC'}
     );
     if (!eid) {
         this.status = 401;
@@ -47,7 +47,7 @@ function *confirmEmailHandler() {
     }
     this.session.user = eid.user_id;
     const hours_ago = (Date.now() - eid.updated_at) / 1000.0 / 3600.0;
-    if (hours_ago > 240.0) {
+    if (hours_ago > 24.0 * 30) {
         this.status = 401;
         this.body = 'confirmation code not found or expired';
         return;

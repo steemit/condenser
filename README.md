@@ -1,12 +1,25 @@
-Steemit
+# Steemit.com
+Steemit.com is the react.js web interface to the world's first and best blockchain-based social media platform.  It uses [STEEM](https://github.com/steemit/steem), a blockchain powered by Graphene 2.0 technology to store JSON-based content for a plethora of web applications.   
 ========
 
+## Why would I want to use Steemit.com?
+* Learning how to build blockchain-based web applications using STEEM as a content storage mechanism in react.js
+* Reviewing the inner workings of the steemit.com social media platform
+* Assisting with software development for steemit.com
+
 ## Installation
+
+#### Clone the repository and make a tmp folder
+```bash
+git clone https://github.com/steemit/steemit.com
+cd steemit.com
+mkdir tmp
+```
 
 #### Install dependencies
 
 ```bash
-# Install at least Node v6.3 if you don't already have it (NVM recommended)
+# Install at least Node v6.3 if you don't already have it ([NVM](https://github.com/creationix/nvm) recommended)
 nvm install v6
 
 npm install
@@ -114,6 +127,6 @@ pm2 start config/process.json
 
 To report a non-critical issue, please file an issue on this GitHub project.
 
-If you find a security issue please report details to: secure[at]steemit[dot]com
+If you find a security issue please report details to: security@steemit.com
 
 We will evaluate the risk and make a patch available before filing the issue.

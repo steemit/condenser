@@ -101,3 +101,9 @@ label {
 .NotFound {
   width: 640px;
 }
+
+@media print {
+  .noPrint {
+    display:none;
+  }
+}

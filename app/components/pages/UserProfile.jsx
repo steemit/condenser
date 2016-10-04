@@ -39,9 +39,11 @@ export default class UserProfile extends React.Component {
 
         let order;
         switch(category) {
-          case "feed": order = 'by_feed'; break;
-          case "blog": order = 'by_author'; break;
-          default: console.log("unhandled category:", category);
+          case 'feed': order = 'by_feed'; break;
+          case 'blog': order = 'by_author'; break;
+          case 'posts': order = 'by_comments'; break;
+          case 'recent_replies': order = 'by_replies'; break;
+          default: console.log('unhandled category:', category);
         }
 
         if (isFetchingOrRecentlyUpdated(this.props.global.get('status'), order, category)) return;
@@ -148,10 +150,10 @@ export default class UserProfile extends React.Component {
            {
               tab_content = <PostsList
                   emptyText={`Looks like ${account.name} hasn't made any comments yet!`}
-                  posts={account.posts.map(p => `${account.name}/${p}`)}
+                  posts={account.posts}
                   loading={fetching}
                   category="posts"
-                  loadMore={null}
+                  loadMore={this.loadMore}
                   showSpam />;
            }
            else {
@@ -188,8 +190,8 @@ export default class UserProfile extends React.Component {
                   emptyText={`${account.name} hasn't had any replies yet.`}
                   posts={account.recent_replies}
                   loading={fetching}
-                  category="recent-replies"
-                  loadMore={null}
+                  category="recent_replies"
+                  loadMore={this.loadMore}
                   showSpam={false} />;
         }
         else if( section === 'permissions' && isMyAccount ) {
@@ -215,9 +217,12 @@ export default class UserProfile extends React.Component {
         } else if( section === 'permissions' ) {
            section_title = account.name + "'s permissions"
            if(isMyAccount && wifShown) {
-               printLink = <a className="float-right" onClick={onPrint}>
-                   <Icon name="printer" />&nbsp;Print&nbsp;&nbsp;
-               </a>
+               printLink = <div>
+                   <a className="float-right noPrint" onClick={onPrint}>
+                       <Icon name="printer" />&nbsp;
+                       Print
+                   </a>
+               </div>
            }
         } else if( section === 'posts' ) {
            section_title = account.name + "'s posts";
@@ -288,12 +293,16 @@ export default class UserProfile extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div className="UserProfile__top-nav row expanded">
+                <div className="UserProfile__top-nav row expanded noPrint">
                     {top_menu}
                 </div>
                 <div className="row">
                     <div className="column">
                         {printLink}
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="column">
                         {/*section_title && <h2 className="UserProfile__section-title">{section_title}</h2>*/}
                         {tab_content}
                     </div>

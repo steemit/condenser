@@ -1,7 +1,7 @@
 module.exports = function (sequelize, DataTypes) {
     var User = sequelize.define('User', {
         name: DataTypes.STRING,
-        email: {type: DataTypes.STRING, unique: true},
+        email: {type: DataTypes.STRING},
         uid: {type: DataTypes.STRING(64)},
         first_name: DataTypes.STRING,
         last_name: DataTypes.STRING,
@@ -15,7 +15,8 @@ module.exports = function (sequelize, DataTypes) {
         timezone: DataTypes.INTEGER,
         remote_ip: DataTypes.STRING,
         verified: DataTypes.BOOLEAN,
-        waiting_list: DataTypes.BOOLEAN
+        waiting_list: DataTypes.BOOLEAN,
+        bot: DataTypes.BOOLEAN
     }, {
         tableName: 'users',
         createdAt   : 'created_at',

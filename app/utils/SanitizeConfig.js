@@ -33,7 +33,7 @@ export const allowedTags = `
     div, iframe, del,
     a, p, b, q, br, ul, li, ol, img, h1, h2, h3, h4, h5, h6, hr,
     blockquote, pre, code, em, strong, center, table, thead, tbody, tr, th, td,
-    strike, sup
+    strike, sup, sub
 `.trim().split(/,\s*/)
 
 // Medium insert plugin uses: div, figure, figcaption, iframe
@@ -52,7 +52,7 @@ export default ({large = true, highQualityPost = true, noImage = false, sanitize
 
         // style is subject to attack, filtering more below
         td: ['style'],
-        img: ['src'],
+        img: ['src', 'alt'],
         a: ['href', 'rel'],
     },
     transformTags: {
@@ -83,7 +83,7 @@ export default ({large = true, highQualityPost = true, noImage = false, sanitize
         img: (tagName, attribs) => {
             if(noImage) return {tagName: 'div', text: noImageText}
             //See https://github.com/punkave/sanitize-html/issues/117
-            let {src} = attribs
+            let {src, alt} = attribs
             if(!/^(https?:)?\/\//i.test(src)) {
                 console.log('Blocked, image tag src does not appear to be a url', tagName, attribs)
                 sanitizeErrors.push('Image URL does not appear to be valid: ' + src)
@@ -93,7 +93,9 @@ export default ({large = true, highQualityPost = true, noImage = false, sanitize
             // replace http:// with // to force https when needed
             src = src.replace(/^http:\/\//i, '//')
 
-            return {tagName, attribs: {src}}
+            let atts = {src}
+            if(alt && alt !== '') atts.alt = alt
+            return {tagName, attribs: atts}
         },
         div: (tagName, attribs) => {
             const attys = {}

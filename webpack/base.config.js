@@ -53,6 +53,9 @@ export default {
         ],
         extensions: ['', '.js', '.json', '.jsx'],
         modulesDirectories: ['node_modules']
+    },
+    externals: {
+        newrelic: true
     }
 };
 /* medium-editor, add to plugins[]

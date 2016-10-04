@@ -9,7 +9,7 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import { translate } from 'app/Translator';
 import { FormattedMessage, FormattedHTMLMessage } from 'react-intl';
-import { DEBT_TOKEN } from 'config/client_config';
+import { DEBT_TOKEN, DEBT_TICKER } from 'config/client_config';
 
 class ConvertToSteem extends React.Component {
     constructor() {
@@ -102,7 +102,7 @@ export default reduxForm(
     // mapDispatchToProps
     dispatch => ({
         convert: (owner, amt, success, error) => {
-            const amount = String(parseFloat(amt).toFixed(3)) + ' SBD'
+            const amount = [parseFloat(amt).toFixed(3), DEBT_TICKER].join(" ")
             const requestid = Math.floor(Date.now() / 1000)
             const conf = translate('in_week_convert_DEBT_TOKEN_to_OWNERSHIP_TOKEN', { amount: amount.split(' ')[0] })
             dispatch(transaction.actions.broadcastOperation({

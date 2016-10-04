@@ -4,7 +4,8 @@ import {connect} from 'react-redux'
 import TransferHistoryRow from 'app/components/cards/TransferHistoryRow';
 import {numberWithCommas, vestsToSp, assetFloat} from 'app/utils/StateFunctions'
 import { translate } from 'app/Translator';
-import { APP_NAME, DEBT_TOKEN, DEBT_TOKEN_SHORT, OWNERSHIP_TOKEN, CURRENCY_SIGN, INVEST_TOKEN } from 'config/client_config';
+import { APP_NAME, DEBT_TOKEN, DEBT_TOKEN_SHORT, OWNERSHIP_TOKEN, CURRENCY_SIGN, INVEST_TOKEN,
+OWNERSHIP_TICKER, VEST_TICKER, DEBT_TICKER } from 'config/client_config';
 
 
 class AuthorRewards extends React.Component {
@@ -13,10 +14,10 @@ class AuthorRewards extends React.Component {
         this.state = {historyIndex: 0}
         this.onShowDeposit = () => {this.setState({showDeposit: !this.state.showDeposit})}
         this.onShowDepositSteem = () => {
-            this.setState({showDeposit: !this.state.showDeposit, depositType: 'STEEM'})
+            this.setState({showDeposit: !this.state.showDeposit, depositType: OWNERSHIP_TICKER})
         }
         this.onShowDepositPower = () => {
-            this.setState({showDeposit: !this.state.showDeposit, depositType: 'VESTS'})
+            this.setState({showDeposit: !this.state.showDeposit, depositType: VEST_TICKER})
         }
         // this.onShowDeposit = this.onShowDeposit.bind(this)
     }
@@ -52,8 +53,8 @@ class AuthorRewards extends React.Component {
                     finalDate = new Date(item[1].timestamp).getTime();
                 }
                 firstDate = new Date(item[1].timestamp).getTime();
-                const vest = assetFloat(item[1].op[1].vesting_payout, 'VESTS');
-                const sbd = assetFloat(item[1].op[1].sbd_payout, 'SBD');
+                const vest = assetFloat(item[1].op[1].vesting_payout, VEST_TICKER);
+                const sbd = assetFloat(item[1].op[1].sbd_payout, DEBT_TICKER);
 
                 if (new Date(item[1].timestamp).getTime() > yesterday) {
                     rewards24Vests += vest;
@@ -110,7 +111,7 @@ class AuthorRewards extends React.Component {
                     {translate('author_rewards_last_24_hours')}:
                 </div>
                 <div className="column small-12 medium-3">
-                    {numberWithCommas(vestsToSp(this.props.state, rewards24Vests + " VESTS")) + " " + INVEST_TOKEN}
+                    {numberWithCommas(vestsToSp(this.props.state, [rewards24Vests, VEST_TICKER].join(" "))) + " " + INVEST_TOKEN}
                     <br />
                     {rewards24SBD.toFixed(3) + " " + DEBT_TOKEN_SHORT}
                 </div>
@@ -121,7 +122,7 @@ class AuthorRewards extends React.Component {
                     {translate('daily_average_author_rewards')}:
                 </div>
                 <div className="column small-12 medium-3">
-                    {numberWithCommas(vestsToSp(this.props.state, averageCurationVests + " VESTS")) + " " + INVEST_TOKEN}
+                    {numberWithCommas(vestsToSp(this.props.state, [averageCurationVests, VEST_TICKER].join(" ") )) + " " + INVEST_TOKEN}
                     <br />
                     {averageCurationSBD.toFixed(3) + " " + DEBT_TOKEN_SHORT}
                 </div>
@@ -131,7 +132,7 @@ class AuthorRewards extends React.Component {
                     {translate(!hasFullWeek ? 'estimated_author_rewards_last_week' : 'author_rewards_last_week')}:
                 </div>
                 <div className="column small-12 medium-3">
-                    {numberWithCommas(vestsToSp(this.props.state, (hasFullWeek ? rewardsWeekVests : averageCurationVests * 7) + " VESTS")) + " " + INVEST_TOKEN}
+                    {numberWithCommas(vestsToSp(this.props.state, [(hasFullWeek ? rewardsWeekVests : averageCurationVests * 7), VEST_TICKER].join(" ") )) + " " + INVEST_TOKEN}
                     <br />
                     {(hasFullWeek ? rewardsWeekSBD : averageCurationSBD * 7).toFixed(3) + " " + DEBT_TOKEN_SHORT}
                 </div>

@@ -91,7 +91,7 @@ export default function useGeneralApi(app) {
                 where: {user_id, ignored: false},
                 order: 'id DESC'
             });
-            if (existing_account) {
+            if (existing_account) { //TODO
                 throw new Error("Only one Steem account per user is allowed in order to prevent abuse (Steemit, Inc. funds each new account with 3 STEEM)");
             }
 

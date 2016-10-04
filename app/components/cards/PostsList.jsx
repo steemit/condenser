@@ -159,7 +159,7 @@ class PostsList extends React.Component {
             return <Callout body={emptyText} type="success" />;
         }
         const renderSummary = items => items.map(({item, ignore, netVoteSign, authorRepLog10}) => <li key={item}>
-            <PostSummary post={item} currentCategory={category} thumbSize={thumbSize}
+            <PostSummary post={item} currentCategory={category} thumbSize={thumbSize} 
                 ignore={ignore} netVoteSign={netVoteSign} authorRepLog10={authorRepLog10} onClick={this.onPostClick} />
         </li>)
         return (

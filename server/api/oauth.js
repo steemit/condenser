@@ -136,7 +136,7 @@ function* handleFacebookCallback() {
             where: {remote_ip: attrs.remote_ip, bot: true}
         });
         if (same_ip_bot) {
-            console.log('-- /handle_facebook_callback same_ip_bot -->', this.session.uid, attrs.remote_ip);
+            console.log('-- /handle_facebook_callback same_ip_bot -->', this.session.uid, attrs.remote_ip, attrs.email);
             this.flash = {alert: 'We are sorry, we cannot sign you up at this time because your IP address is associated with bots activity. Please contact support@steemit.com for more information.'};
             this.redirect('/');
             return;

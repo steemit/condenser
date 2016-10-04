@@ -554,8 +554,6 @@ export default formId => reduxForm(
                 errorCallback(translate('use_limited_amount_of_tags', {tagsLength: meta.tags.length, includingCategory}))
                 return
             }
-            // loadingCallback starts the loading indicator
-            loadingCallback()
 
             const __config = {originalPost, autoVote}
 
@@ -570,6 +568,8 @@ export default formId => reduxForm(
                 json_metadata: meta,
                 __config
             }
+            // loadingCallback starts the loading indicator
+            loadingCallback()
             dispatch(transaction.actions.broadcastOperation({
                 type: 'comment',
                 operation,

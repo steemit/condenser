@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import ReactDOM from 'react-dom';
 import transaction from 'app/redux/Transaction';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import {DEBT_TOKEN_SHORT, CURRENCY_SIGN} from 'config/client_config';
+import {DEBT_TOKEN_SHORT, CURRENCY_SIGN, DEBT_TICKER} from 'config/client_config';
 import { translate } from 'app/Translator';
 
 
@@ -45,7 +45,7 @@ class PromotePost extends Component {
         const {amount} = this.state
         this.setState({loading: true});
         console.log('-- PromotePost.onSubmit -->');
-        this.props.dispatchSubmit({amount, asset: 'SBD', author, permlink, onClose,
+        this.props.dispatchSubmit({amount, asset: DEBT_TICKER, author, permlink, onClose,
             currentUser: this.props.currentUser, errorCallback: this.errorCallback});
     }
 

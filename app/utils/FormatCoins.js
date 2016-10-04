@@ -2,6 +2,7 @@ import { APP_NAME, OWNERSHIP_TOKEN, OWNERSHIP_TOKEN_UPPERCASE, DEBT_TOKEN, DEBT_
 
 // TODO add comments and explanations
 // TODO change name to formatCoinTypes?
+// TODO make use of DEBT_TICKER etc defined in config/clietn_config
 export function formatCoins(string) {
 	// return null or undefined if string is not provided
 	if(!string) return string

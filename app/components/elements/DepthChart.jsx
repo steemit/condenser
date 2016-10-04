@@ -3,7 +3,8 @@ import React from 'react';
 const ReactHighcharts = require("react-highcharts/dist/ReactHighstock");
 import { translate } from 'app/Translator';
 import { localizedCurrency, localCurrencySymbol } from 'app/components/elements/LocalizedCurrency';
-import { OWNERSHIP_TOKEN_UPPERCASE, DEBT_TOKEN_SHORT } from 'config/client_config';
+import { OWNERSHIP_TOKEN_UPPERCASE, DEBT_TOKEN_SHORT, OWNERSHIP_TICKER } from 'config/client_config';
+
 
 
 //Highstock does not play well with decimal x values, so we need to
@@ -133,11 +134,11 @@ function generateDepthChart(bidsArray, asksArray) {
 
     if(process.env.BROWSER) {
         if(bids[0]) {
-            series.push({step: 'right', name: translate('bid'), color: 'rgba(0,150,0,1.0)', fillColor: 'rgba(0,150,0,0.2)', tooltip: {valueSuffix: ' STEEM'},
+            series.push({step: 'right', name: translate('bid'), color: 'rgba(0,150,0,1.0)', fillColor: 'rgba(0,150,0,0.2)', tooltip: {valueSuffix: ' '+ OWNERSHIP_TICKER},
              data:  bids})
         }
         if(asks[0]) {
-            series.push({step: 'left', name: translate('ask'), color: 'rgba(150,0,0,1.0)', fillColor: 'rgba(150,0,0,0.2)', tooltip: {valueSuffix: ' STEEM'},
+            series.push({step: 'left', name: translate('ask'), color: 'rgba(150,0,0,1.0)', fillColor: 'rgba(150,0,0,0.2)', tooltip: {valueSuffix: ' '+ OWNERSHIP_TICKER},
              data: asks})
         }
     }

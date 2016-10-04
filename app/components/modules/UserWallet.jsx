@@ -14,7 +14,7 @@ import {numberWithCommas, vestingSteem} from 'app/utils/StateFunctions'
 import { translate } from 'app/Translator';
 import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 import BuyGolos from 'app/components/elements/BuyGolos'
-import { OWNERSHIP_TOKEN, DEBT_TOKEN, CURRENCY_SIGN, INVEST_TOKEN, DEBT_TOKEN_SHORT } from 'config/client_config';
+import { OWNERSHIP_TOKEN, DEBT_TOKEN, CURRENCY_SIGN, INVEST_TOKEN, DEBT_TOKEN_SHORT, OWNERSHIP_TICKER, VEST_TICKER, DEBT_TICKER } from 'config/client_config';
 
 
 class UserWallet extends React.Component {
@@ -25,11 +25,11 @@ class UserWallet extends React.Component {
         this.onShowDepositSteem = (e) => {
             e.preventDefault()
             this.trackAnalytics('buy golos button clicked in user\'s wallet')
-            this.setState({showDeposit: !this.state.showDeposit, depositType: 'STEEM'})
+            this.setState({showDeposit: !this.state.showDeposit, depositType: OWNERSHIP_TICKER})
         }
         this.onShowDepositPower = (e) => {
             e.preventDefault()
-            this.setState({showDeposit: !this.state.showDeposit, depositType: 'VESTS'})
+            this.setState({showDeposit: !this.state.showDeposit, depositType: VEST_TICKER})
         }
         // this.onShowDeposit = this.onShowDeposit.bind(this)
         this.trackAnalytics = eventType => {
@@ -64,7 +64,7 @@ class UserWallet extends React.Component {
         const powerDown = (cancel, e) => {
             e.preventDefault()
             const {name} = account
-            const vesting_shares = cancel ? '0.000000 VESTS' : account.vesting_shares
+            const vesting_shares = cancel ? '0.000000 '+VEST_TICKER : account.vesting_shares
             this.setState({toggleDivestError: null})
             const errorCallback = e2 => {this.setState({toggleDivestError: e2.toString()})}
             const successCallback = () => {this.setState({toggleDivestError: null})}
@@ -88,15 +88,15 @@ class UserWallet extends React.Component {
                 return null;
             }
 
-            if(data.sbd_payout === '0.000 SBD' && data.vesting_payout === '0.000000 VESTS')
+            if(data.sbd_payout === '0.000 ' + DEBT_TICKER && data.vesting_payout === '0.000000 ' + VEST_TICKER)
                 return null
             return <TransferHistoryRow key={idx++} op={item} context={account.name} />;
         }).filter(el => !!el);
         transfer_log.reverse();
 
         let steem_menu = [
-            { value: translate('transfer'), link: '#', onClick: showTransfer.bind( this, 'STEEM' ) },
-            { value: translate('power_up'), link: '#', onClick: showTransfer.bind( this, 'VESTS' ) },
+            { value: translate('transfer'), link: '#', onClick: showTransfer.bind( this, OWNERSHIP_TICKER ) },
+            { value: translate('power_up'), link: '#', onClick: showTransfer.bind( this, VEST_TICKER ) },
         ]
         let power_menu = [
             { value: translate('power_down'), link: '#', onClick: powerDown.bind(this, false) }
@@ -241,7 +241,7 @@ export default connect(
         const feed_price = state.global.get('feed_price')
         if(feed_price && feed_price.has('base') && feed_price.has('quote')) {
             const {base, quote} = feed_price.toJS()
-            if(/ SBD$/.test(base) && / STEEM$/.test(quote))
+            if(/ GBG/.test(base) && / GOLOS$/.test(quote))
                 price_per_steem = parseFloat(base.split(' ')[0])
         }
         return {

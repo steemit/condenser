@@ -1,4 +1,7 @@
 /* Stub content (or objects) that may be inserted into the UI before being accepted by the blockchain. */
+
+//TODO!
+import { OWNERSHIP_TICKER, DEBT_TICKER } from 'config/client_config'
 export const emptyContent = {
     fetched: new Date(), /// the date at which this data was requested from the server
     id: '2.8.0',
@@ -20,9 +23,9 @@ export const emptyContent = {
     abs_rshares: 0,
     cashout_time: new Date().toISOString(),
     total_vote_weight: '0',
-    total_payout_value: '0.000 SBD',
-    pending_payout_value: '0.000 STEEM',
-    total_pending_payout_value: '0.000 STEEM',
+    total_payout_value: ['0.000', DEBT_TICKER].join(" "),
+    pending_payout_value: ['0.000', OWNERSHIP_TICKER].join(" "),
+    total_pending_payout_value: ['0.000', OWNERSHIP_TICKER].join(" "),
     active_votes: [],
     replies: [],
     stats: {

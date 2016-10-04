@@ -11,13 +11,22 @@ export const INVEST_TOKEN_UPPERCASE = 'СИЛА ГОЛОСА' // 'STEEM POWER'
 export const INVEST_TOKEN_SHORT = 'СГ' // 'SP'
 export const DEBT_TOKEN = 'Золотой' // 'STEEM DOLLAR'
 // export const DEBT_TOKEN_UPPERCASE = 'Golos Backed Gold' // 'STEEM DOLLAR'
-export const DEBT_TOKEN_SHORT = 'GBG' // 'SD'
+// export const DEBT_TOKEN_SHORT = 'GBG' // 'SD'
 export const CURRENCY_SIGN = '₽≈' // '$'
 export const LANDING_PAGE_URL = 'https://steem.io'
 export const WHITEPAPER_URL = 'https://steem.io/SteemWhitePaper.pdf'
 export const SEGMENT_ANALYTICS_KEY = 'F7tldQJxt491gXYqDGi5TkTT4wFpSPps'
 // used on application internationalization bootstrap
 export const DEFAULT_LANGUAGE = 'ru' // 'en'
+
+// these are dealing with asset types, not displaying to client, rather sending data over websocket
+
+export const OWNERSHIP_TICKER = 'GOLOS'
+export const INVEST_TICKER = 'GP'
+export const VEST_TICKER = 'GESTS'
+export const DEBT_TICKER = 'GBG'
+export const DEBT_TOKEN_SHORT = 'GBG' // 'SD'
+
 
 // export const LANDING_PAGE_URL =
 // export const WHITEPAPER_URL =

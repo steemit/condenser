@@ -409,13 +409,13 @@ export default formId => reduxForm(
     // mapStateToProps
     (state, ownProps) => {
         // const current = state.user.get('current')||Map()
-        const   username = state.user.getIn(['current', 'username']),
-                fields = ['body', 'autoVote'],
-                {type, parent_author, jsonMetadata} = ownProps,
-                isStory =   /submit_story/.test(type) || (
-                                /edit/.test(type) && parent_author === ''
-                            ),
-                hasCategory = isStory // /submit_story/.test(type)
+        const username = state.user.getIn(['current', 'username'])
+        const fields = ['body', 'autoVote']
+        const {type, parent_author, jsonMetadata} = ownProps
+        const isStory =   /submit_story/.test(type) || (
+            /edit/.test(type) && parent_author === ''
+        )
+        const hasCategory = isStory // /submit_story/.test(type)
 
         if (isStory) fields.push('title')
         if (hasCategory) fields.push('category')
@@ -465,13 +465,14 @@ export default formId => reduxForm(
         setMetaData: (id, jsonMetadata) => {
             dispatch(g.actions.setMetaData({id, meta: jsonMetadata ? jsonMetadata.steem : null}))
         },
-        reply: ({category, title, username, body, author, permlink, parent_author, parent_permlink,
+        reply: ({category, title, body, author, permlink, parent_author, parent_permlink,
             type, originalPost, autoVote = false, allSteemPower = false,
             state, jsonMetadata, /*metaLinkData,*/
             successCallback, errorCallback, loadingCallback
         }) => {
             // const post = state.global.getIn(['content', author + '/' + permlink])
-            //const username = state.user.getIn(['current', 'username'])
+            const username = state.user.getIn(['current', 'username'])
+
             console.log('category', category)
             console.log('title', title)
             console.log('author', author)
@@ -555,7 +556,7 @@ export default formId => reduxForm(
                 return
             }
 
-            const __config = {originalPost, autoVote}
+            //const __config = {originalPost, autoVote}
 
             if(allSteemPower) {
                 __config.comment_options = {
@@ -566,7 +567,7 @@ export default formId => reduxForm(
                 ...linkProps,
                 category: rootCategory, title, body,
                 json_metadata: meta,
-                __config
+                __config: {originalPost, autoVote}
             }
             // loadingCallback starts the loading indicator
             loadingCallback()

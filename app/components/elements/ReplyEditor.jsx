@@ -556,7 +556,7 @@ export default formId => reduxForm(
                 return
             }
 
-            //const __config = {originalPost, autoVote}
+            const __config = {originalPost, autoVote}
 
             if(allSteemPower) {
                 __config.comment_options = {
@@ -567,7 +567,7 @@ export default formId => reduxForm(
                 ...linkProps,
                 category: rootCategory, title, body,
                 json_metadata: meta,
-                __config: {originalPost, autoVote}
+                __config
             }
             // loadingCallback starts the loading indicator
             loadingCallback()

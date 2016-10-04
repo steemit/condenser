@@ -15,6 +15,7 @@ import Dialogs from 'app/components/modules/Dialogs';
 import Modals from 'app/components/modules/Modals';
 import Icon from 'app/components/elements/Icon';
 import {key_utils} from 'shared/ecc'
+import { translate } from '../Translator.js';
 
 class App extends React.Component {
     constructor(props) {
@@ -101,12 +102,12 @@ class App extends React.Component {
                         <ul>
                             <li>
                                 <a href="https://steemit.com/steemit/@steemitblog/steemit-com-is-now-open-source">
-                                    Steemit.com is now Open Source
+                                    {translate('steemit_is_now_open_source')}
                                 </a>
                             </li>
                             <li>
                                 <a href="https://steemit.com/steemit/@steemitblog/all-recovered-accounts-have-been-fully-refunded">
-                                    All Recovered Accounts have been fully Refunded
+                                    {translate("all_accounts_refunded")}
                                 </a>
                             </li>
                         </ul>
@@ -119,7 +120,7 @@ class App extends React.Component {
                 <div className="column">
                     <div className={classNames('callout warning', {alert}, {warning}, {success})}>
                         <CloseButton onClick={() => this.setState({showCallout: false})} />
-                        <p>Due to server maintenance we are running in read only mode.  We are sorry for the inconvenience.</p>
+                        <p>{translate("read_only_mode")}</p>
                     </div>
                 </div>
             </div>;
@@ -132,16 +133,16 @@ class App extends React.Component {
                     <div className="welcomeBanner">
                         <CloseButton onClick={() => this.setState({showBanner: false})} />
                         <div className="text-center">
-                            <h2>Welcome to the Blockchain!</h2>
-                            <h4>Your voice is worth something</h4>
+                            <h2>{translate("welcome_to_the_blockchain")}</h2>
+                            <h4>{translate("your_voice_is_worth_something")}</h4>
                             <br />
-                            <a className="button" href="/create_account" onClick={showSignUp}> <b>SIGN UP</b> </a>
+                            <a className="button" href="/create_account" onClick={showSignUp}> <b>{translate("sign_up")}</b> </a>
                             &nbsp; &nbsp; &nbsp;
-                            <a className="button hollow" href="https://steem.io" target="_blank"> <b>LEARN MORE</b> </a>
+                            <a className="button hollow uppercase" href="https://steem.io" target="_blank"> <b>{translate("learn_more")}</b> </a>
                             <br />
                             <br />
                             <div className="tag3">
-                                <b>Get {signup_bonus} of Steem Power when you sign up today.</b>
+                                <b>{translate("get_sp_when_sign_up", {signupBonus: signup_bonus})}</b>
                             </div>
                         </div>
                     </div>
@@ -153,22 +154,68 @@ class App extends React.Component {
             <SidePanel ref="side_panel" alignment="right">
                 <TopRightMenu vertical navigate={this.navigate} />
                 <ul className="vertical menu">
-                    <li><a href="https://steem.io" onClick={this.navigate}>About</a></li>
-                    <li><a href="/tags.html/hot" onClick={this.navigate}>Explore</a></li>
-                    <li><a href="https://steem.io/SteemWhitePaper.pdf" onClick={this.navigate}>Steem Whitepaper</a></li>
-                    <li><a onClick={() => depositSteem()}>Buy Steem</a></li>
-                    <li><a href="/market" onClick={this.navigate}>Market</a></li>
-                    <li><a href="http://steemtools.com/" onClick={this.navigate}>Steem App Center</a></li>
-                    <li><a href="/recover_account_step_1" onClick={this.navigate}>Stolen Account Recovery</a></li>
-                    <li><a href="/change_password" onClick={this.navigate}>Change Account Password</a></li>
-                    <li><a href="https://steemit.chat/home" target="_blank">Steemit Chat&nbsp;<Icon name="extlink"/></a></li>
-                    <li className="last"><a onClick={this.navigate} href="/~witnesses">Witnesses</a></li>
-                    <li className="last"><a onClick={this.navigate} href="/@steemitjobs">Careers</a></li>
-                    <li className="last"><a href="mailto:contact@steemit.com">Contact Steemit</a></li>
+                    <li>
+                        <a href="https://steem.io" onClick={this.navigate}>
+                            {translate("about")}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/tags.html/hot" onClick={this.navigate}>
+                            {translate("explore")}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://steem.io/SteemWhitePaper.pdf" onClick={this.navigate}>
+                            {translate("whitepaper")}
+                        </a>
+                    </li>
+                    <li>
+                        <a onClick={() => depositSteem()}>
+                            {translate("buy_steem")}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://steemtools.com/" onClick={this.navigate}>
+                            {translate('steem_app_center')}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/market" onClick={this.navigate}>
+                            {translate("market")}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/recover_account_step_1" onClick={this.navigate}>
+                        {translate("stolen_account_recovery")}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/change_password" onClick={this.navigate}>
+                            {translate("change_account_password")}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://steemit.chat/home" target="_blank">
+                            {translate("steemit_chat")}&nbsp;<Icon name="extlink" />
+                        </a>
+                    </li>
+                    <li className="last">
+                        <a href="/~witnesses" onClick={this.navigate}>
+                            {translate("witnesses")}
+                        </a>
+                    </li>
                 </ul>
                 <ul className="vertical menu">
-                    <li><a href="/privacy.html" onClick={this.navigate} rel="nofollow">Privacy Policy</a></li>
-                    <li><a href="/tos.html" onClick={this.navigate} rel="nofollow">Terms of Service</a></li>
+                    <li>
+                        <a href="/privacy.html" onClick={this.navigate} rel="nofollow">
+                            {translate("privacy_policy")}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/tos.html" onClick={this.navigate} rel="nofollow">
+                            {translate("terms_of_service")}
+                        </a>
+                    </li>
                 </ul>
             </SidePanel>
             <Header toggleOffCanvasMenu={this.toggleOffCanvasMenu} menuOpen={this.state.open} />
@@ -180,7 +227,7 @@ class App extends React.Component {
             </div>
             <Dialogs />
             <Modals />
-        </div>;
+        </div>
     }
 }
 

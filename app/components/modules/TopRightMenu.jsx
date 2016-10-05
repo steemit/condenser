@@ -20,7 +20,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
     const mcl = vertical ? '' : ' sub-menu';
     const lcn = vertical ? '' : 'show-for-medium';
     const nav = navigate || defaultNavigate;
-    const submit_story = $STM_Config.read_only_mode ? null : <li className={lcn + ' submit-story'}><a href="/submit.html" onClick={nav}>Submit a Story</a></li>;
+    const submit_story = $STM_Config.read_only_mode ? null : <li className={lcn + ' submit-story'}><a href="/submit.html" onClick={nav}>Create a Post</a></li>;
     const userpic_src = userpic || require('app/assets/images/user.png');
     const feed_link = `/@${username}/feed`;
     const replies_link = `/@${username}/recent-replies`;

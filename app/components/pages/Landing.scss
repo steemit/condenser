@@ -64,6 +64,43 @@
 	}
 }
 
+.Distribution {
+	.Distribution__headers {
+		margin-bottom: 95px;
+		.Distribution__supporting-text {
+			font-size: 27px;
+			color: #d2d2d2;
+		}
+	}
+	.Distribution__list {
+		margin-top: 65px;
+	}
+	.Distribution__item {
+		text-align: left;
+		list-style-type: none;
+		font-size: 24px;
+		.Distribution__strong {
+			font-size: 37px;
+		}
+		.Distribution__dot {
+			display: inline-block;
+			margin: 0 15px;
+			width: 15px;
+			height: 15px;
+			border-radius: 15px;
+		}
+	}
+	.Distribution__action {
+		margin: 105px auto 85px;
+		.button {
+			color: #707070;
+			background-color: transparent;
+			border: 2px solid #c0c0bf;
+			border-radius: 4px;
+		}
+	}
+}
+
 .WhatIsGolos {
 	padding-top: 145px;
 	background-color: #f2f2f2;
@@ -97,9 +134,10 @@
 	.JoinUs__reasons {
 		margin: 100px auto;
 		.JoinUs__item {
-			// text-align: left;
+			margin-bottom: 65px;
 			img {
 				margin-right: 40px;
+				margin-bottom: 40px;
 				float: left;
 				width: 40px;
 				height: 40px;

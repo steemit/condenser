@@ -19,8 +19,7 @@ import Footer from 'app/components/elements/LandingFooter'
     there is little to no comments
 */
 
-// const crodwsaleStart = new Date(2016, 10, 15); //, hours, minutes, seconds, milliseconds
-// format date till start properly
+// format date properly
 function createDate(month, day) {
 	const today = new Date()
 	const date = new Date(2016, month, day, today.getHours(), today.getMinutes(), today.getSeconds())
@@ -28,18 +27,16 @@ function createDate(month, day) {
 }
 
 const tilCrowdsaleStart = createDate(9, 16)
-const tilCrowdsaleEnd = createDate(10, 16)
-const crowdSaleIsActive = tilCrowdsaleStart.getTime() > tilCrowdsaleEnd.getTime()
-
-console.log(crowdSaleIsActive)
+// const tilCrowdsaleEnd = createDate(10, 16)
+// const crowdSaleIsActive = tilCrowdsaleStart.getTime() > tilCrowdsaleEnd.getTime()
 
 const buyGolosButton = <a href="" className="button Landing__button_big">Купи <strong>Силу Голоса</strong></a>
 
 class Landing extends React.Component {
 
     render() {
-        // if crodsale hasn't started show some info
-        if (tilCrowdsaleStart > Date.now()) return <CountDowns prefill crowdsaleStart={tilCrowdsaleStart} />
+        // if crodwsale hasn't started yet render countdown til crodwsale start
+        // if (tilCrowdsaleStart > Date.now()) return <CountDowns prefill crowdsaleStart={tilCrowdsaleStart} />
 
         return (
             <div className="Landing text-center">

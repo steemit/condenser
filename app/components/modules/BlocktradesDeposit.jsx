@@ -10,19 +10,19 @@ import {steemTip, powerTip, powerTip2} from 'app/utils/Tips'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import { translate } from 'app/Translator.js';
 import { formatCoins } from 'app/utils/FormatCoins';
-import { APP_NAME, APP_ICON, DEBT_TOKEN, DEBT_TOKEN_SHORT, OWNERSHIP_TOKEN, CURRENCY_SIGN, INVEST_TOKEN } from 'config/client_config';
+import { APP_NAME, APP_ICON, DEBT_TOKEN, DEBT_TOKEN_SHORT, OWNERSHIP_TOKEN, CURRENCY_SIGN, INVEST_TOKEN, VEST_TICKER, OWNERSHIP_TICKER } from 'config/client_config';
 
 const coinNames = {
-    STEEM: OWNERSHIP_TOKEN,
-    VESTS: INVEST_TOKEN,
+    [OWNERSHIP_TICKER]: OWNERSHIP_TOKEN,
+    [VEST_TICKER]: INVEST_TOKEN,
     BTC: 'Bitcoin',
     BTS: 'Bitshares',
     ETH: 'Ether',
 }
 
 const coinToTypes = [
-    ['STEEM', 'steem'],
-    ['VESTS', 'steem_power'],
+    [OWNERSHIP_TICKER, 'steem'],
+    [VEST_TICKER, 'steem_power'],
     ['BTC', 'btc'],
     ['BTS', 'bts'],
     ['ETH', 'eth'],
@@ -151,22 +151,22 @@ class BlocktradesDeposit extends React.Component {
             {/*{trHashLink(outputCoin.value, tr.outputTransactionHash)}&nbsp;*/}
         </div>)
 
-        const depositTip = outputCoin.value === 'STEEM'
+        const depositTip = outputCoin.value === OWNERSHIP_TICKER
             ? translate('tradeable_tokens_that_may_be_transferred_anywhere_at_anytime')
                 + ' ' +
                 translate('OWNERSHIP_TOKEN_can_be_converted_to_INVEST_TOKEN_in_a_process_called_powering_up')
-            : outputCoin.value === 'VESTS' ? <div>
+            : outputCoin.value === VEST_TICKER ? <div>
                 <p>{translate('influence_tokens_which_earn_more_power_by_holding_long_term') + ' ' + translate('the_more_you_hold_the_more_you_influence_post_rewards')}</p>
                 <p>{translate('INVEST_TOKEN_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_OWNERSHIP_TOKEN')}</p>
             </div>
             : null
 
         const selectOutputCoin = <span>
-             <input type="radio" {...cleanReduxInput(outputCoin)} value="VESTS" checked={outputCoin.value === 'VESTS'} id="powerCheck" />
+             <input type="radio" {...cleanReduxInput(outputCoin)} value={VEST_TICKER} checked={outputCoin.value === VEST_TICKER} id="powerCheck" />
              &nbsp;
              <label htmlFor="powerCheck">{INVEST_TOKEN}</label>
 
-             <input type="radio" {...cleanReduxInput(outputCoin)} value="STEEM" checked={outputCoin.value === 'STEEM'} id="steemCheck" />
+             <input type="radio" {...cleanReduxInput(outputCoin)} value={OWNERSHIP_TICKER} checked={outputCoin.value === OWNERSHIP_TICKER} id="steemCheck" />
              &nbsp;
              <label htmlFor="steemCheck">{OWNERSHIP_TOKEN}</label>
         </span>
@@ -282,7 +282,7 @@ export default reduxForm(
     },
     (state, ownProps) => {
         // static defaultProps were not available, set them here instead
-        let {inputCoinType = 'BTC', outputCoinType = 'VESTS'} = ownProps
+        let {inputCoinType = 'BTC', outputCoinType = VEST_TICKER} = ownProps
         if(state.form.blocktradesDeposit) {
             const blocktradesDepositForm = state.form.blocktradesDeposit
             if(blocktradesDepositForm.inputCoin.value)
@@ -372,7 +372,7 @@ const statusNames = {
 
 const coalesce = (...values) => values.find(v => v != null)
 const coinName = (symbol, full = false) =>
-    coalesce(coinNames[symbol] ? (full ? coinNames[symbol] + (symbol === 'VESTS' ? '' : ' (' + symbol + ')') :
+    coalesce(coinNames[symbol] ? (full ? coinNames[symbol] + (symbol === VEST_TICKER ? '' : ' (' + symbol + ')') :
     coinNames[symbol]) : null, symbol)
 const toSteem = value => coalesce(coalesce(coinToTypes.find(v => v[1] === value), [])[0], value)
 const toTrade = value => coalesce(coalesce(coinToTypes.find(v => v[0] === value), [])[1], value)
@@ -381,7 +381,7 @@ const trStatus = stat => coalesce(statusNames[stat], stat)
 const trHashLink = (coin, hash) =>
     !hash ? null :
     coin === 'BTC' ? <a href={`https://blockchain.info/tx/${hash}`} target="_blank"><Icon name="extlink" /></a> :
-    /STEEM|VESTS|SBD/.test(coin) ? <a href={`https://steemd.com/tx/${hash}`} target="_blank"><Icon name="extlink" /></a> :
+    /GOLOS|GESTS|GBG/.test(coin) ? <a href={`https://____golos.io/tx/${hash}`} target="_blank"><Icon name="extlink" /></a> :
     <span t={hash}>hash.substring(0, 10) + '...'</span>
 
 /** Memory backed local storage.  Assumes this is the sole maintainer of this key.

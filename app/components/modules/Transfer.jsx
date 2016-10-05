@@ -10,7 +10,8 @@ import {browserTests} from 'shared/ecc/test/BrowserTests'
 import {validate_account_name} from 'app/utils/ChainValidation';
 import { translate } from 'app/Translator';
 import { formatCoins } from 'app/utils/FormatCoins';
-import { APP_NAME, OWNERSHIP_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, INVEST_TOKEN } from 'config/client_config';
+import { APP_NAME, OWNERSHIP_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, INVEST_TOKEN,
+OWNERSHIP_TICKER, DEBT_TICKER, VEST_TICKER } from 'config/client_config';
 
 /** Warning .. This is used for Power UP too. */
 class TransferForm extends Component {
@@ -50,8 +51,8 @@ class TransferForm extends Component {
     initForm(props) {
         const insufficientFunds = (asset, amount) => {
             const balanceValue =
-                !asset || asset === 'STEEM' ? props.currentAccount.get('balance') :
-                asset === 'SBD' ? props.currentAccount.get('sbd_balance') :
+                !asset || asset === OWNERSHIP_TICKER ? props.currentAccount.get('balance') :
+                asset === DEBT_TICKER ? props.currentAccount.get('sbd_balance') :
                 null
             if(!balanceValue) return false
             const balance = balanceValue.split(' ')[0]
@@ -89,8 +90,8 @@ class TransferForm extends Component {
     balanceValue() {
         const {currentAccount} = this.props
         const {asset} = this.state
-        return formatCoins(!asset || asset.value === 'STEEM' ? currentAccount.get('balance') :
-            asset.value === 'SBD' ? currentAccount.get('sbd_balance') :
+        return formatCoins(!asset || asset.value === OWNERSHIP_TICKER ? currentAccount.get('balance') :
+            asset.value === DEBT_TICKER ? currentAccount.get('sbd_balance') :
             null)
     }
 
@@ -155,9 +156,9 @@ class TransferForm extends Component {
                         {asset && <span>
                             <select {...asset.props} placeholder={translate('asset')} disabled={loading}>
                                 <option></option>
-                                <option value="STEEM">{OWNERSHIP_TOKEN}</option>
+                                <option value={OWNERSHIP_TICKER}>{OWNERSHIP_TOKEN}</option>
                                 {/* TODO */}
-                                <option value="SBD">{DEBT_TOKEN_SHORT}</option>
+                                <option value={DEBT_TICKER}>{DEBT_TOKEN_SHORT}</option>
                             </select>
                         </span>}
                         <AssetBalance balanceValue={this.balanceValue()} onClick={this.assetBalanceClick} />
@@ -205,7 +206,7 @@ export default connect(
     // mapStateToProps
     (state, ownProps) => {
         const initialValues = state.user.get('transfer_defaults', Map()).toJS()
-        const toVesting = initialValues.asset === 'VESTS'
+        const toVesting = initialValues.asset === VEST_TICKER
         const currentUser = state.user.getIn(['current'])
         const currentAccount = state.global.getIn(['accounts', currentUser.get('username')])
 
@@ -223,7 +224,7 @@ export default connect(
                 dispatch({type: 'global/GET_STATE', payload: {url: `@${username}/transfers`}}) // refresh transfer history
                 dispatch(user.actions.hideTransfer())
             }
-            const asset2 = toVesting ? 'STEEM' : asset
+            const asset2 = toVesting ? OWNERSHIP_TICKER : asset
             const operation = {
                 from: username,
                 to, amount: parseFloat(amount, 10).toFixed(3) + ' ' + asset2,

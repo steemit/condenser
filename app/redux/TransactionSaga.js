@@ -14,6 +14,7 @@ import g from 'app/redux/GlobalReducer'
 import user from 'app/redux/User'
 import tr from 'app/redux/Transaction'
 import getSlug from 'speakingurl'
+import {DEBT_TICKER} from 'config/client_config'
 
 const {transaction} = ops
 
@@ -248,7 +249,7 @@ function* accepted_account_update({operation}) {
     // }
 }
 
-// TODO remove soon, this was replaced by the UserKeys edit running usernamePasswordLogin (on dialog close) 
+// TODO remove soon, this was replaced by the UserKeys edit running usernamePasswordLogin (on dialog close)
 // function* error_account_update({operation}) {
 //     const {account} = operation
 //     const stateUser = yield select(state => state.user)
@@ -317,7 +318,7 @@ function* preBroadcast_comment({operation, username}) {
 
     if(comment_options) {
         const {
-            max_accepted_payout = "1000000.000 SBD",
+            max_accepted_payout = ["1000000.000", DEBT_TICKER].join(" "),
             percent_steem_dollars = 10000, // 10000 === 100%
             allow_votes = true,
             allow_curation_rewards = true,

@@ -2,14 +2,15 @@ import assert from 'assert';
 import constants from 'app/redux/constants';
 import {parsePayoutAmount, repLog10} from 'app/utils/ParsersAndFormatters';
 import {Long} from 'bytebuffer';
+import {VEST_TICKER, OWNERSHIP_TICKER} from 'config/client_config'
 
 export const numberWithCommas = (x) => x.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 
 export function vestsToSp(state, vesting_shares) {
     const {global} = state
-    const vests = assetFloat(vesting_shares, 'VESTS')
-    const total_vests = assetFloat(global.getIn(['props', 'total_vesting_shares']), 'VESTS')
-    const total_vest_steem = assetFloat(global.getIn(['props', 'total_vesting_fund_steem']), 'STEEM')
+    const vests = assetFloat(vesting_shares, VEST_TICKER)
+    const total_vests = assetFloat(global.getIn(['props', 'total_vesting_shares']), VEST_TICKER)
+    const total_vest_steem = assetFloat(global.getIn(['props', 'total_vesting_fund_steem']), OWNERSHIP_TICKER)
     const vesting_steemf = total_vest_steem * (vests / total_vests);
     const steem_power = vesting_steemf.toFixed(3)
     return steem_power

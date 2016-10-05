@@ -1,4 +1,4 @@
-
+import {OWNERSHIP_TICKER} from 'config/client_config'
 
 // Low-level types that make up operations
 
@@ -62,7 +62,7 @@ Types.asset = {
         return object
     },
     toObject(object, debug = {}){
-        if (debug.use_default && object === undefined) { return "0.000 STEEM"; }
+        if (debug.use_default && object === undefined) { return ['0.000', OWNERSHIP_TICKER].join(" "); }
         return object
     }
 }

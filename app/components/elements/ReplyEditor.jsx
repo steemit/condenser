@@ -409,13 +409,13 @@ export default formId => reduxForm(
     // mapStateToProps
     (state, ownProps) => {
         // const current = state.user.get('current')||Map()
-        const   username = state.user.getIn(['current', 'username']),
-                fields = ['body', 'autoVote'],
-                {type, parent_author, jsonMetadata} = ownProps,
-                isStory =   /submit_story/.test(type) || (
-                                /edit/.test(type) && parent_author === ''
-                            ),
-                hasCategory = isStory // /submit_story/.test(type)
+        const username = state.user.getIn(['current', 'username'])
+        const fields = ['body', 'autoVote']
+        const {type, parent_author, jsonMetadata} = ownProps
+        const isStory =   /submit_story/.test(type) || (
+            /edit/.test(type) && parent_author === ''
+        )
+        const hasCategory = isStory // /submit_story/.test(type)
 
         if (isStory) fields.push('title')
         if (hasCategory) fields.push('category')
@@ -472,7 +472,8 @@ export default formId => reduxForm(
         }) => {
             // const post = state.global.getIn(['content', author + '/' + permlink])
             const username = state.user.getIn(['current', 'username'])
-            console.log('category', category)
+
+
             // Parse categories:
             // if category string starts with russian symbol, add 'ru-' prefix to it
             // when transletirate it
@@ -483,7 +484,8 @@ export default formId => reduxForm(
                                     .map(item => /^[а-я]/.test(item) ? 'ru--' + detransliterate(item, true) : item)
                                     .join(' ')
             }
-            console.log(category)
+
+            if (category){console.log(category);}else{console.log(author);}
             // Wire up the current and parent props for either an Edit or a Submit (new post)
             //'submit_story', 'submit_comment', 'edit'
             const linkProps =
@@ -545,8 +547,6 @@ export default formId => reduxForm(
                 errorCallback(translate('use_limited_amount_of_tags', {tagsLength: meta.tags.length, includingCategory}))
                 return
             }
-            // loadingCallback starts the loading indicator
-            loadingCallback()
 
             const __config = {originalPost, autoVote}
 
@@ -561,6 +561,8 @@ export default formId => reduxForm(
                 json_metadata: meta,
                 __config
             }
+            // loadingCallback starts the loading indicator
+            loadingCallback()
             dispatch(transaction.actions.broadcastOperation({
                 type: 'comment',
                 operation,

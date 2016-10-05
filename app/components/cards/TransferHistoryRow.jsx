@@ -6,7 +6,7 @@ import Tooltip from 'app/components/elements/Tooltip';
 import Memo from 'app/components/elements/Memo'
 import {numberWithCommas, vestsToSp} from 'app/utils/StateFunctions'
 import { translate } from 'app/Translator';
-import { APP_NAME, DEBT_TOKEN, DEBT_TOKEN_SHORT, OWNERSHIP_TOKEN, CURRENCY_SIGN, INVEST_TOKEN } from 'config/client_config';
+import { APP_NAME, DEBT_TOKEN, DEBT_TOKEN_SHORT, OWNERSHIP_TOKEN, CURRENCY_SIGN, INVEST_TOKEN, VEST_TICKER } from 'config/client_config';
 
 class TransferHistoryRow extends React.Component {
 
@@ -32,8 +32,8 @@ class TransferHistoryRow extends React.Component {
         let description_end = "";
 
         if( type === 'transfer_to_vesting' ) {
+            const amount = data.amount && data.amount.split && data.amount.split(' ')[0]
             if( data.from === context ) {
-                const amount = data.amount.split(' ')[0]
                 if( data.to === "" ) {
                     description_start += translate('transfer_amount_to_INVEST_TOKEN', { amount });
                 }
@@ -68,7 +68,7 @@ class TransferHistoryRow extends React.Component {
                 description_end += ` ${translate('to')} ${data.to}`;
             }
         } else if( type === 'withdraw_vesting' ) {
-            if( data.vesting_shares === '0.000000 VESTS' )
+            if( data.vesting_shares === ['0.000000', VEST_TICKER].join(" ") )
                 description_start += translate('stop_power_down')
             else
                 description_start += translate('start_power_down_of') + " " + data.vesting_shares;
@@ -111,6 +111,7 @@ class TransferHistoryRow extends React.Component {
     }
 };
 
+// TODO: check this
 const renameToSd = (txt) => txt ? numberWithCommas(txt.replace('SBD', DEBT_TOKEN_SHORT)) : txt
 
 import {connect} from 'react-redux'

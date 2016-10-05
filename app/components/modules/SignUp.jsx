@@ -50,6 +50,19 @@ class SignUp extends React.Component {
             </div>
             <div className="row">
                 <div className="column large-4 shrink">
+                    <SvgImage name="vk" width="64px" height="64px" />
+                </div>
+                <div className="column large-8">
+                    <a href="/connect/vk" className="button SignUp--vk-button">
+                        {translate("continue_with_vk")}
+                    </a>
+                </div>
+            </div>
+            <div className="row">
+            &nbsp;
+            </div>
+            <div className="row">
+                <div className="column large-4 shrink">
                     <SvgImage name="facebook" width="64px" height="64px" />
                 </div>
                 <div className="column large-8">
@@ -71,16 +84,6 @@ class SignUp extends React.Component {
                     <span className="secondary">
                         ({translate("requires_5_or_more_reddit_comment_karma")})
                     </span>
-                </div>
-            </div>
-
-            <div className="row">
-                <div className="column large-4 shrink">
-                </div>
-                <div className="column large-8">
-                    <a href="/connect/vk" className="button SignUp--vk-button">
-                        Регистрация через vk
-                    </a>
                 </div>
             </div>
 

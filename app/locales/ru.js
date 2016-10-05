@@ -7,7 +7,7 @@ const ru = {
 	// this variables mainly used in navigation section
 	about: "О проекте",
 	explore: "Узнать",
-	APP_NAME_whitepaper: "Аналитическая записка" + APP_NAME, // или тех записка? или аналитическая записка?
+	APP_NAME_whitepaper: "Аналитическая записка " + APP_NAME, // или тех записка? или аналитическая записка?
 	buy_OWNERSHIP_TOKEN: 'Купить ' + OWNERSHIP_TOKEN,
 	sell_OWNERSHIP_TOKEN: 'Продать ' + OWNERSHIP_TOKEN,
 	market: "Рынок",
@@ -128,20 +128,20 @@ const ru = {
 	change_deposit_address: 'Изменить адрес депозита',
 	get_deposit_address: 'Получить адрес депозита',
 	// for example 'powered by Blocktrades'
-	powered_by: 'Powered by', // NOTE this might be deleted in future
+	powered_by: 'Заряжено ', // NOTE this might be deleted in future
 	send_amount_of_coins_to: 'Отправить {value} {coinName}',
-	amount_is_in_form: 'Сумма должна быть в формате 99999,999',
+	amount_is_in_form: 'Сумма должна быть в формате 99999.999', // если сумма с , а не . - то дробная часть отсекается. сейчас так.
 	insufficent_funds: 'Недостаточно средств',
 	update_estimate: 'Обновить оценку', // ??
 	get_estimate: 'Получить оценку',
 	memo: 'Заметка',
-	must_include_memo: 'Необходимо включить заметку',
-	estimate_using: 'Подсчитать, используя',
-	amount_to_send: 'Сумма к отправке {estimateInputCoin}',
-	deposit_using: 'Пополнить через', // example: 'deposit using Steem Power' // TODO: is this example right?
+	must_include_memo: 'Необходимо включить заметку ',
+	estimate_using: 'Подсчитать, используя ',
+	amount_to_send: 'Сумма к отправке: {estimateInputCoin}',
+	deposit_using: 'Пополнить через ', // example: 'deposit using Steem Power' // TODO: is this example right?
 	suggested_limit: 'Предлагаемый лимит {depositLimit}',
 	internal_server_error: 'Внутренняя ошибка сервера',
-	enter_amount: 'Введите количество',
+	enter_amount: 'Введите количество:',
 	processing: 'Обрабатывается',
 	broadcasted: 'Транслируется', // ??
 	confirmed: 'Подтверждено',
@@ -151,25 +151,25 @@ const ru = {
 	are_you_sure: 'Вы уверены?',
 	// PostFull.jsx
 	by: ' ', // здеcь специально ничего нет, пример: "posted by 'Vitya'" > "добавил 'Vitya'"
-	in: 'в',
+	in: 'в ',
 	share: 'Поделиться',
-	in_reply_to: 'В ответ на',
-	replied_to: 'Ответил', // тоже что и 'by'
+	in_reply_to: 'В ответ на ',
+	replied_to: 'Ответил ', // тоже что и 'by'
 	transfer_amount_to_INVEST_TOKEN: "Передать {amount} в " + INVEST_TOKEN, // ??
-	transfer_amount_INVEST_TOKEN_to: "Передать {amount} " + INVEST_TOKEN + " в",
-	recieve_amount_INVEST_TOKEN_from: "Получить {amount} " + INVEST_TOKEN + " от",
-	transfer_amount_INVEST_TOKEN_from_to: "Передать {amount} " + INVEST_TOKEN + " от {from} к",
+	transfer_amount_INVEST_TOKEN_to: "Передать {amount} " + INVEST_TOKEN + " в ",
+	recieve_amount_INVEST_TOKEN_from: "Получить {amount} " + INVEST_TOKEN + " от ",
+	transfer_amount_INVEST_TOKEN_from_to: "Передать {amount} " + INVEST_TOKEN + " от {from} к ",
 	transfer_amount_to: "Передать {amount} ",
-	recieve_amount_from: "Получен {amount} от",
-	transfer_amount_from: "Передать {amount} от",
-	stop_power_down: "Остановить уменьшение Силы ГОЛОСА",
-	start_power_down_of: "Началось Уменьшение Силы ГОЛОСА с",
+	recieve_amount_from: "Получен {amount} от ",
+	transfer_amount_from: "Передать {amount} от ",
+	stop_power_down: "Остановить уменьшение Силы ГОЛОСА ",
+	start_power_down_of: "Началось Уменьшение Силы ГОЛОСА с ",
 	curation_reward_of_INVEST_TOKEN_for: 'Кураторское вознаграждение {reward} ' + INVEST_TOKEN + ' за',
 	author_reward_of_INVEST_TOKEN_for: 'Авторское вознаграждение {payout} и {reward} ' + INVEST_TOKEN + ' за',
 	recieve_interest_of: 'Получены проценты в размере {interest}',
 	// TODO find where this is used and write an example
-	from: 'от',
-	to: 'к',
+	from: 'от ',
+	to: 'к ',
 	account_not_found: 'К сожалению, учетная запись не найдена.',
 	this_is_wrong_password: 'Это неправильный пароль.',
 	do_you_need_to: 'Нужно ли вам',
@@ -391,7 +391,7 @@ const ru = {
 	you_can_vote_for_maximum_of_witnesses: 'Вы можете голосовать максимум за 30 делегатов',
 	information: 'Информация',
 	if_you_want_to_vote_outside_of_top_enter_account_name: 'Если вы хотите проголосовать за делегата вне top 50, введите имя аккаунта ниже',
-	view_the_direct_parent: 'Просмотр прямого родителя', // ох подумаю
+	view_the_direct_parent: 'К предыдущей реплике', // ох подумаю
 	you_are_viewing_single_comments_thread_from: 'Вы читаете одну ветку комментариев от',
 	view_the_full_context: 'Показать полный контекст',
 	this_is_a_price_feed_conversion: 'Это котировка цены. Неделя отсрочки необходима чтобы предотвратить злоупотребление от игры на средней ценовой котировке.',
@@ -466,7 +466,7 @@ const ru = {
 	APP_NAME_is_a_social_media_platform_where_everyone_gets_paid: APP_NAME + ' это социальная медиа платформа в которой каждый зарабатывает за создание и курирование контента. Он использует надежную систему цифровых жетонов под названием ' + OWNERSHIP_TOKEN + ', который поддерживает реальную ценность для цифровых наград через выявление рыночной цены и ликвидности.', // ?? очков? фишек, а ну вон там ниже в тексте жетоны же, значит нужно их везде так называть
 	learn_more_at_LANDING_PAGE_URL: 'Узнать больше в ' + LANDING_PAGE_URL,
 	resources: 'Ресурсы',
-	join_our_slack: 'Присоединяйтесь к нашему Slack',
+	join_our_slack: 'Присоединяйтесь к нашему чату',
 	APP_NAME_support: APP_NAME + ' поддержка',
 	please_email_questions_to: 'Пожалуйста, шлите ваши вопросы на электронную почту',
 	sorry_your_reddit_account_doesnt_have_enough_karma: "Извините, у вашего Reddit аккаунта недостаточно Reddit кармы чтобы иметь возможность бесплатной регистрации. Пожалуйста, добавьте вашу электронную почту чтобы записаться в список ожидания",

@@ -22,7 +22,7 @@ describe('Links', () => {
         assert.equal(match[0], 'https://example.com/2')
     })
     it('by domain', () => {
-        const locals = ['https://localhost/', 'http://steemit.com', 'http://steemit.com/group']
+        const locals = ['https://localhost/', 'http://test.golos.io', 'http://test.golos.io/group']
         match(linksRe.local(), locals)
         matchNot(linksRe.remote(), locals)
 

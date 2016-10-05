@@ -19,12 +19,14 @@ import flash from 'koa-flash';
 import minimist from 'minimist';
 import Grant from 'grant-koa';
 import config from '../config';
+import {githash as appCommitVersion} from 'config/last-build'
 
 const grant = new Grant(config.grant);
 // import uploadImage from 'server/upload-image' //medium-editor
 
 const app = new Koa();
-app.name = 'Steemit app';
+app.name = 'Голос';
+
 const env = process.env.NODE_ENV || 'development';
 const cacheOpts = {maxAge: 86400000, gzip: true};
 
@@ -95,6 +97,8 @@ app.use(isBot());
 app.use(mount('/favicons', staticCache(path.join(__dirname, '../app/assets/images/favicons'), cacheOpts)));
 app.use(mount('/images', staticCache(path.join(__dirname, '../app/assets/images'), cacheOpts)));
 // Proxy asset folder to webpack development server in development mode
+console.log (env)
+
 if (env === 'development') {
     const PORT = parseInt(process.env.PORT, 10) + 1 || 3001;
     const proxy = require('koa-proxy')({
@@ -109,6 +113,7 @@ if (env === 'development') {
 if (env !== 'test') {
     const appRender = require('./app_render');
     app.use(function* () {
+        this.gitCommit = appCommitVersion;
         this.first_visit = false;
         this.last_visit = this.session.last_visit;
         this.session.last_visit = (new Date()).getTime() / 1000 | 0;

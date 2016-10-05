@@ -1,5 +1,5 @@
 
-import { APP_NAME, APP_URL, LANDING_PAGE_URL, OWNERSHIP_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, INVEST_TOKEN } from 'config/client_config';
+import { APP_NAME, APP_URL, LANDING_PAGE_URL, OWNERSHIP_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, INVEST_TOKEN, OWNERSHIP_TICKER } from 'config/client_config';
 /**
  * see: app/locales/README.md
  */
@@ -160,15 +160,16 @@ const ru = {
 	share: 'Поделиться',
 	in_reply_to: 'в ответ на',
 	replied_to: 'ответил', // тоже что и 'by'
-	transfer_amount_to_INVEST_TOKEN: "Передать {amount} в " + INVEST_TOKEN,
-	transfer_amount_INVEST_TOKEN_to: "Передать {amount} " + INVEST_TOKEN + " в",
-	recieve_amount_INVEST_TOKEN_from: "Получить {amount} " + INVEST_TOKEN + " от",
+	transfer_amount_to_INVEST_TOKEN: "Перевести {amount} в " + INVEST_TOKEN,
+	transfer_amount_INVEST_TOKEN_to: "Перевод {amount} " + INVEST_TOKEN + " в",
+	recieve_amount_INVEST_TOKEN_from: "Получение {amount} " + INVEST_TOKEN + " от",
 	transfer_amount_INVEST_TOKEN_from_to: "Передать {amount} " + INVEST_TOKEN + " от {from} к",
-	transfer_amount_to: "Передать {amount} к",
-	recieve_amount_from: "Получен {amount} от",
-	transfer_amount_from: "Передать {amount} от",
+	transfer_amount_to: "Перевод {amount} на счёт",
+	recieve_amount_from: "Получение {amount} от",
+	transfer_amount_from: "Перевод {amount} со счёта",
+  transfer_amount_steem_power_to: "Перевод {amount} "+OWNERSHIP_TICKER+" в Силу Голоса",
 	stop_power_down: "Остановить понижение голоса",
-	start_power_down_of: "Начать снижение голоса с",
+	start_power_down_of: "Ослабление Силы Голоса с",
 	curation_reward_of_INVEST_TOKEN_for: 'Кураторские вознаграждения {reward} ' + INVEST_TOKEN + ' за',
 	author_reward_of_INVEST_TOKEN_for: 'Авторские вознаграждения {payout} и {reward} ' + INVEST_TOKEN + ' за',
 	recieve_interest_of: 'Получены проценты в размере {interest}',
@@ -253,7 +254,7 @@ const ru = {
 	recover_account_intro: "Иногда бывает что  ключ владельца может быть скомпрометирован. Восстановление украденного аккаунта дает законному владельцу 30 дней чтобы вернуть аккаунт с момента изменения владельческого ключа мошенником. Восстановление украденного аккаунта в " + APP_URL + " возможно только если владелец аккаунта ранее указал '" + APP_NAME + "' в качестве доверенного лица и согласился с Условиями Использования сайта  " + APP_NAME + ".",
 	login_with_facebook_or_reddit_media_to_verify_identity: 'Пожалуйста, войдите используя Facebook или Reddit чтобы подтвердить вашу личность',
 	login_with_social_media_to_verify_identity: 'Пожалуйста, зайдите с помощью {show_social_login} чтобы подтвердить вашу личность',
-	enter_email_toverify_identity: 'Нам нужно подтвердить вашу личность. Пожалуйста укажите вашу электронную почту ниже чтобы начать проверку.',
+	enter_email_toverify_identity: 'Нам нужно подтвердить вашу личность. Пожалуйста укажите вашу электронную почту ниже, чтобы начать проверку.',
 	email: 'Электронная почта',
 	continue_with_email: "Продолжить с электронной почтой",
 	thanks_for_submitting_request_for_account_recovery: '<p>Благодарим Вас за отправку запроса на восстановление аккаунта используя основанную на блокчейне мультифакторную аутентификацию ' + APP_NAME + '’a.</p> <p>Мы ответим Вам как можно быстрее, однако, пожалуйста, ожидайте что может быть некоторая задержка из-за большого объема писем.</p> <p>Пожалуйста, будьте готовы подтвердить свою личность.</p>',
@@ -479,7 +480,7 @@ const ru = {
 	register_with_facebook: 'Регистрация с Facebook',
 	or_click_the_button_below_to_register_with_facebook: 'Или нажмите кнопку, чтобы зарегистрироваться с Facebook',
 	trending_24_hour: 'популярное (24 часа)',
-	home: 'главная',
+	home: 'лента',
 	'24_hour': '24 часа',
 	'30_day': '30 дней',
 	flag: "Голосовать против",

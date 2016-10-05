@@ -19,7 +19,8 @@ import flash from 'koa-flash';
 import minimist from 'minimist';
 import Grant from 'grant-koa';
 import config from '../config';
-import {githash as appCommitVersion} from 'config/last-build'
+
+import {githash} from 'config/last-build';
 
 const grant = new Grant(config.grant);
 // import uploadImage from 'server/upload-image' //medium-editor
@@ -113,7 +114,6 @@ if (env === 'development') {
 if (env !== 'test') {
     const appRender = require('./app_render');
     app.use(function* () {
-        this.gitCommit = appCommitVersion;
         this.first_visit = false;
         this.last_visit = this.session.last_visit;
         this.session.last_visit = (new Date()).getTime() / 1000 | 0;

@@ -15,15 +15,6 @@ import CloseButton from 'react-foundation-components/lib/global/close-button';
 import { translate } from 'app/Translator';
 import LocalizedCurrency, {localizedCurrency} from 'app/components/elements/LocalizedCurrency';
 
-const ABOUT_FLAG = <div>
-    <p>{translate('flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following')}:</p>
-    <ul>
-        <li>{translate('fraud_or_plagiarism')}</li>
-        <li>{translate('hate_speech_or_internet_trolling')}</li>
-        <li>{translate('intentional_miss_categorized_content_or_spam')}</li>
-    </ul>
-</div>
-
 const MAX_VOTES_DISPLAY = 20;
 const VOTE_WEIGHT_DROPDOWN_THRESHOLD = 1.0 * 1000.0 * 1000.0;
 
@@ -131,6 +122,15 @@ class Voting extends React.Component {
 
         const down = <Icon name={votingDownActive ? 'empty' : (myVote < 0 ? 'flag2' : 'flag1')} />;
         const classDown = 'Voting__button Voting__button-down' + (myVote < 0 ? ' Voting__button--downvoted' : '') + (votingDownActive ? ' votingDown' : '');
+
+        const ABOUT_FLAG = <div>
+            <p>{translate('flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following')}:</p>
+            <ul>
+                <li>{translate('fraud_or_plagiarism')}</li>
+                <li>{translate('hate_speech_or_internet_trolling')}</li>
+                <li>{translate('intentional_miss_categorized_content_or_spam')}</li>
+            </ul>
+        </div>
 
         if (flag) {
             // myVote === current vote

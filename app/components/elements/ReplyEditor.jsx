@@ -473,14 +473,6 @@ export default formId => reduxForm(
             // const post = state.global.getIn(['content', author + '/' + permlink])
             const username = state.user.getIn(['current', 'username'])
 
-            console.log('category', category)
-            console.log('title', title)
-            console.log('author', author)
-            //console.log('body', body)
-            console.log('permlink', permlink)
-          //  console.log('parent_author', parent_author)
-            console.log('type', type)
-            console.log('originalPost', originalPost)
 
             // Parse categories:
             // if category string starts with russian symbol, add 'ru-' prefix to it

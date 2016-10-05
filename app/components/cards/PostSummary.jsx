@@ -28,7 +28,7 @@ function TimeAuthorCategory({post, links, authorRepLog10, gray}) {
             <span>{' ' + translate('by')}&nbsp;
                 <span itemProp="author" itemScope itemType="http://schema.org/Person">
                     {links ? <Link to={post.author_link}>{author}</Link> :
-                        <strong>{author}</strong>}
+                        <strong>{author}</strong>}&nbsp;
                     <Reputation value={authorRepLog10} />
                 </span>
             </span>

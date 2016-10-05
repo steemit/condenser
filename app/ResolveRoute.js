@@ -11,6 +11,10 @@ export default function resolveRoute(path)
     if (path === '/ico.html') {
         return {page: 'Ico'};
     }
+    // golos.io landing page
+    if (path === '/landing.html') {
+        return {page: 'Landing'};
+    }
     if (path === '/login.html') {
         return {page: 'Login'};
     }

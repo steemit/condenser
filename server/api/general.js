@@ -75,17 +75,12 @@ export default function useGeneralApi(app) {
                 throw new Error('Email address is not confirmed');
             }
 
-            const fb = yield models.Identity.findOne(
-                {attributes: ['id'], where: {user_id, provider: 'facebook', verified: true}, order: 'id DESC'}
+            const mid = yield models.Identity.findOne(
+                {attributes: ['id'], where: {user_id, provider: 'phone', verified: true}, order: 'id DESC'}
             );
-            if(fb) {
-                const sid = yield models.Identity.findOne(
-                    {attributes: ['id'], where: {user_id, provider: 'phone', verified: true}, order: 'id DESC'}
-                );
-                if (!sid) {
-                    console.log(`api /accounts: not confirmed sms for user ${this.session.uid} #${user_id}`);
-                    throw new Error('Mobile is not confirmed');
-                }
+            if (!mid) {
+                console.log(`api /accounts: not confirmed sms for user ${this.session.uid} #${user_id}`);
+                throw new Error('Phone number is not confirmed');
             }
 
             yield createAccount({

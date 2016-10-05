@@ -7,6 +7,7 @@ import models from 'db/models';
 import ServerHTML from 'server/server-html';
 import Icon from 'app/components/elements/Icon.jsx';
 import {verify} from 'server/teleSign';
+import {renderHeader, renderSignupProgressBar} from './shared';
 import {getRemoteIp, checkCSRF} from 'server/utils';
 import config from 'config';
 
@@ -18,40 +19,25 @@ if (process.env.NODE_ENV === 'production') {
     assets.script.push('https://www.google.com/recaptcha/api.js');
 }
 
-const header = <header className="Header">
-    <div className="Header__top header">
-        <div className="expanded row">
-            <div className="columns">
-                <ul className="menu">
-                    <li className="Header__top-logo">
-                        <a href="/"><Icon name="steem" size="2x" /></a>
-                    </li>
-                    <li className="Header__top-steemit show-for-medium"><a href="/">steemit<span className="beta">beta</span></a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</header>;
-
 function *confirmMobileHandler() {
     const confirmation_code = this.params && this.params.code ? this.params.code : this.request.body.code;
     console.log('-- /confirm_mobile -->', this.session.uid, this.session.user, confirmation_code);
-    const eid = yield models.Identity.findOne(
+    const mid = yield models.Identity.findOne(
         {attributes: ['id', 'user_id', 'phone', 'updated_at'], where: {user_id: this.session.user, confirmation_code, verified: false}, order: 'id DESC'}
     );
-    if (!eid) {
+    if (!mid) {
         this.status = 401;
         this.body = 'Confirmation code not found';
         return;
     }
-    this.session.user = eid.user_id;
-    const hours_ago = (Date.now() - eid.updated_at) / 1000.0 / 3600.0;
+    this.session.user = mid.user_id;
+    const hours_ago = (Date.now() - mid.updated_at) / 1000.0 / 3600.0;
     if (hours_ago > 240.0 * 30) {
         this.status = 401;
         this.body = 'Confirmation code expired';
         return;
     }
-    yield eid.update({verified: true});
+    yield mid.update({verified: true});
     this.redirect('/create_account');
 }
 
@@ -64,33 +50,34 @@ export default function useEnterAndConfirmMobilePages(app) {
         console.log('-- /enter_mobile -->', this.session.uid, this.session.user);
         const user_id = this.session.user;
         if (!user_id) { this.body = 'user not found'; return; }
-        const eid = yield models.Identity.findOne(
+        const mid = yield models.Identity.findOne(
             {attributes: ['phone'], where: {user_id, provider: 'phone'}, order: 'id DESC'}
         );
         const body = renderToString(<div className="App">
-            {header}
+            {renderHeader()}
+            {renderSignupProgressBar([this.session.prv || 'facebook', 'email', 'phone', 'steem account'], 3)}
             <br />
-            <div className="row">
-                <form className="column small-4" action="/submit_mobile" method="POST">
+            <div className="row" style={{maxWidth: '32rem'}}>
+                <form className="column" action="/submit_mobile" method="POST">
                     <p>
-                        Please provide your mobile number to continue the registration process.<br />
+                        Please provide your phone number to continue the registration process.<br />
                         <span className="secondary">This information allows Steemit to assist with Account Recovery in case your account is ever compromised.</span>
                     </p>
                     <input type="hidden" name="csrf" value={this.csrf} />
                     <label>
-                        Mobile
-                        <input type="tel" name="mobile" defaultValue={eid ? eid.phone : ''} />
+                        Phone number
+                        <input type="tel" name="mobile" defaultValue={mid ? mid.phone : ''} />
                     </label>
                     <small className="warning">Include country code if outside the US</small>
                     <br />
-                    <div className="g-recaptcha" data-sitekey={config.recaptcha.site_key}></div>
+                    {/*<div className="g-recaptcha" data-sitekey={config.recaptcha.site_key}></div>*/}
                     <br />
                     <div className="error">{this.flash.error}</div>
                     <input type="submit" className="button" value="CONTINUE" />
                 </form>
             </div>
         </div>);
-        const props = { body, title: 'Mobile Address', assets, meta: [] };
+        const props = { body, title: 'Phone Number', assets, meta: [] };
         this.body = '<!DOCTYPE html>' + renderToString(<ServerHTML { ...props } />);
     });
 
@@ -116,32 +103,53 @@ export default function useEnterAndConfirmMobilePages(app) {
             mobile = `1${mobile}`
         }
 
-        const recaptcha = this.request.body['g-recaptcha-response'];
-        const verificationUrl = 'https://www.google.com/recaptcha/api/siteverify?secret=' + config.recaptcha.secret_key + '&response=' + recaptcha + '&remoteip=' + this.req.connection.remoteAddress;
-        let captcha_failed;
-        try {
-            const recaptcha_res = yield request(verificationUrl);
-            const body = JSON.parse(recaptcha_res.body);
-            captcha_failed = !body.success;
-        } catch (e) {
-            captcha_failed = true;
-            console.error('-- /submit_mobile recaptcha request failed -->', verificationUrl, e);
-        }
-        if (captcha_failed) {
-            console.log('-- /submit_mobile captcha verification failed -->', user_id, this.session.uid, mobile, this.req.connection.remoteAddress);
-            this.flash = {error: 'Failed captcha verification, please try again.'};
+        const eid = yield models.Identity.findOne(
+            {attributes: ['id'], where: {user_id, provider: 'email', verified: true}, order: 'id DESC'}
+        );
+        if (!eid) {
+            this.flash = {error: 'Please confirm your email address first'};
             this.redirect('/enter_mobile');
             return;
         }
 
+        // const recaptcha = this.request.body['g-recaptcha-response'];
+        // const verificationUrl = 'https://www.google.com/recaptcha/api/siteverify?secret=' + config.recaptcha.secret_key + '&response=' + recaptcha + '&remoteip=' + this.req.connection.remoteAddress;
+        // let captcha_failed;
+        // try {
+        //     const recaptcha_res = yield request(verificationUrl);
+        //     const body = JSON.parse(recaptcha_res.body);
+        //     captcha_failed = !body.success;
+        // } catch (e) {
+        //     captcha_failed = true;
+        //     console.error('-- /submit_mobile recaptcha request failed -->', verificationUrl, e);
+        // }
+        // if (captcha_failed) {
+        //     console.log('-- /submit_mobile captcha verification failed -->', user_id, this.session.uid, mobile, this.req.connection.remoteAddress);
+        //     this.flash = {error: 'Failed captcha verification, please try again.'};
+        //     this.redirect('/enter_mobile');
+        //     return;
+        // }
+
         const confirmation_code = Math.random().toString().substring(2, 6);
-        let eid = yield models.Identity.findOne(
-            {attributes: ['id', 'phone'], where: {user_id, provider: 'phone'}, order: 'id'}
+        let mid = yield models.Identity.findOne(
+            {attributes: ['id', 'phone', 'verified'], where: {user_id, provider: 'phone'}, order: 'id'}
         );
-        if (eid) {
-            yield eid.update({confirmation_code, phone: mobile});
+        if (mid) {
+            if (mid.verified) {
+                this.flash = {success: 'Phone number has been verified'};
+                this.redirect('/create_account'); return;
+            } else {
+                if (mid.phone == mobile) {
+                    // TODO: resend confirmation if last one was sent more than 1 min ago and number of attempts < 4
+                    this.flash = {error: 'Confirmation was already sent'};
+                    this.redirect('/enter_mobile'); return;
+                } else {
+                    // TODO: limit number of attempts with different numbers to < 4
+                    yield mid.update({confirmation_code, phone: mobile});
+                }
+            }
         } else {
-            eid = yield models.Identity.create({
+            mid = yield models.Identity.create({
                 provider: 'phone',
                 user_id,
                 uid: this.session.uid,
@@ -150,7 +158,7 @@ export default function useEnterAndConfirmMobilePages(app) {
                 confirmation_code
             });
         }
-        console.log('-- /submit_mobile -->', this.session.uid, this.session.user, mobile, eid.id);
+        console.log('-- /submit_mobile -->', this.session.uid, this.session.user, mobile, mid.id);
         const ip = getRemoteIp(this.req)
 
         const verifyResult = yield verify({mobile, confirmation_code, ip});
@@ -161,22 +169,23 @@ export default function useEnterAndConfirmMobilePages(app) {
         }
 
         const body = renderToString(<div className="App">
-            {header}
+            {renderHeader()}
+            {renderSignupProgressBar([this.session.prv || 'facebook', 'email', 'phone', 'steem account'], 3)}
             <br />
-            <div className="row">
+            <div className="row" style={{maxWidth: '32rem'}}>
                 <div className="column">
                     Thank you for providing your mobile number ({mobile}).<br />
                     To continue please enter the SMS code we've sent you.
                 </div>
             </div>
             <br />
-            <div className="row">
+            <div className="row" style={{maxWidth: '32rem'}}>
                 <div className="column">
                     <a href="/enter_mobile">Re-send SMS</a>
                 </div>
             </div>
-            <div className="row">
-                <form className="column small-4" action="/confirm_mobile" method="POST">
+            <div className="row" style={{maxWidth: '32rem'}}>
+                <form className="column" action="/confirm_mobile" method="POST">
                     <label>
                         Confirmation code
                         <input type="text" name="code" />

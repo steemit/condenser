@@ -9,7 +9,7 @@ import ServerHTML from '../server-html';
 import sendEmail from '../sendEmail';
 import {checkCSRF} from '../utils';
 import config from '../../config';
-import {renderPage, renderHeader, renderSignupProgressBar} from './shared';
+import {renderHeader, renderSignupProgressBar} from './shared';
 
 const assets_file = process.env.NODE_ENV === 'production' ? 'tmp/webpack-stats-prod.json' : 'tmp/webpack-stats-dev.json';
 const assets = Object.assign({}, require(assets_file), {script: []});
@@ -35,7 +35,7 @@ function *confirmEmailHandler() {
     }
     yield eid.update({verified: true});
     yield models.User.update({email: eid.email, waiting_list: false}, {where: {id: eid.user_id}});
-    this.redirect('/create_account');
+    this.redirect('/enter_mobile');
 }
 
 export default function useEnterAndConfirmEmailPages(app) {

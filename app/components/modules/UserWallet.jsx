@@ -124,7 +124,7 @@ class UserWallet extends React.Component {
 
         const steem_balance_str = numberWithCommas(balance_steem.toFixed(3)) // formatDecimal(balance_steem, 3)
         const power_balance_str = numberWithCommas(vesting_steem) // formatDecimal(vesting_steem, 3)
-        const sbd_balance_str = numberWithCommas(CURRENCY_SIGN + ' ' + sbd_balance.toFixed(3)) // formatDecimal(account.sbd_balance, 3)
+        const sbd_balance_str = numberWithCommas(CURRENCY_SIGN + sbd_balance.toFixed(3)) // formatDecimal(account.sbd_balance, 3)
         return (<div className="UserWallet">
             <div className="row">
                 <div className="column small-12 medium-8">

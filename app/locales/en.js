@@ -48,7 +48,6 @@ const en = 	{
 	personal_info_will_be_private_link: 'Private',
 	continue_with_facebook: 'Continue with Facebook',
 	continue_with_reddit: 'Continue with Reddit',
-	continue_with_vk: 'Continue with Vk',
 	requires_positive_karma: 'requires positive Reddit comment karma',
 	dont_have_facebook: 'Don\'t have a Facebook or Reddit account?',
 	subscribe_to_get_sms_confirm: 'Subscribe to get a notification when SMS confirmation is available',

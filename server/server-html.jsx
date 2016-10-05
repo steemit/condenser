@@ -52,16 +52,15 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
             <meta name="msapplication-square310x310logo" content="/images/favicons/mstile-310x310.png" /> */}
 
             {/* new steemit icons */}
-            <link rel="icon" type="image/x-icon" href="/images/favicons/favicon.ico" />
-            <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon.png" />
-            <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32" />
-            <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16" />
-            <link rel="manifest" href="/images/favicons/manifest.json" />
-            <link rel="mask-icon" href="/images/favicons/safari-pinned-tab.svg" color="#5bbad5" />
+            <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+            <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32" />
+            <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16" />
+            <link rel="manifest" href="/manifest.json" />
+            <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
             <meta name="theme-color" content="#ffffff" />
 
             <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" />
-
+            
             { assets.style.map((href, idx) =>
                 <link href={href} key={idx} rel="stylesheet" type="text/css" />) }
             <title>{page_title}</title>

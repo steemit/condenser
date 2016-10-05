@@ -144,7 +144,7 @@ export default class LandingCountDowns extends React.Component {
 							</div>
 							<div className="small-12 medium-6 columns text-right CountDowns__social-links">
 								<p>Социальные сети: </p>
-								<ul style={{marginRight: '0.2em'}}>
+								<ul>
 									<li>
 										<a href="facebook.com"><img src="images/landing/fb.jpg" /></a>
 									</li>

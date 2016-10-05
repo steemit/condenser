@@ -5,9 +5,9 @@ export default class LandingWhatIsGolos extends React.Component {
 		return (
 			<section className="WhatIsGolos">
 				<div className="row text-center">
-					<div className="Landing__header small-12 columns WhatIsGolos__header">
+					<div className="   small-12 columns WhatIsGolos__header">
 						<h2>Что такое Голос?</h2>
-						<span className="Landing__header">Децентрализованная социальная сеть для блоггеров и журналистов</span>
+						<span className="  ">Децентрализованная социальная сеть для блоггеров и журналистов</span>
 					</div>
 				</div>
 				<div className="row">

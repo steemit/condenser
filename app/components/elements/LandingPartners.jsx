@@ -5,7 +5,7 @@ export default class LandingPress extends React.Component {
 		return (
 			<section>
 				<div className="row text-center">
-					<div className="Landing__header small-12 columns">
+					<div className="   small-12 columns">
 						<h2>Партнеры</h2>
 					</div>
 				</div>

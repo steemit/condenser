@@ -1,11 +1,11 @@
-
 // TODO change pixels to rems
 // TODO add common supporting text styles
 .Landing {
 	/* COMMON ELEMENTS */
-	h2 {
-		margin-top: 90px;
-	}
+	.Landing__h2_blue 	{ color: #6191cf; }
+	.Landing__h2_red 	{ color: #f12b24; }
+	.Landing__button_big { font-size: 47px; }
+	h2 { margin-top: 90px; }
 	hr {
 		margin: 0;
 		max-width: 100%;
@@ -15,41 +15,95 @@
 		padding: 23px 63px;
 		text-transform: none;
 	}
+	.Landing__supporting-text { color: #d2d2d2; }
+}
 
-	/* SECTIONS */
-	.WhatIsGolos {
-		padding-top: 145px;
-		background-color: #f2f2f2;
-		.WhatIsGolos__header {
-			h2 {
-				margin-top: 0;
-			}
-			margin-bottom: 80px;
+/* SECTIONS */
+.CountDowns {
+	.CountDowns__headers {
+		background-image: url('../../assets/images/landing/coundowns_background.png');
+	    background-repeat: round;
+		margin-top: 115px;
+		.CountDowns__slogan {
+			color: #6191cf;
+			font-size: 37px;
+			// font-family: 'Myriad Pro';
 		}
-		.WhatIsGolos__video {
-			margin-left: auto;
-			margin-right: auto;
-		}
-		a {
-			margin-top: 65px;
-			margin-bottom: 100px;
+		h1 {
+			margin: 50px auto 120px;
+			// font-size: 6.3rem;
 		}
 	}
-	.JoinUs {
-		padding-top: 160px;
-		margin-bottom: 100px;
+	.CountDowns__counters { margin-bottom: 100px; }
+	.CountDowns__button {
+		margin-bottom: 80px;
+		small {
+			display: block;
+		}
+	}
+	.CountDowns__links {
+		margin-bottom: 90px;
+		.CountDowns__button_small {
+			font-size: 15px;
+			color: #535353;
+			border: 2px #d1e1f0 solid;
+			padding: 7px 10px;
+			margin-right: 10px;
+			border-radius: 5px;
+		}
+		.CountDowns__social-links {
+			p { display: inline-block; }
+			ul { display: inline; }
+			li {
+				display: inline-block;
+				float: right;
+				text-align: left;
+				list-style-type: none;
+			}
+		}
+	}
+}
+
+.WhatIsGolos {
+	padding-top: 145px;
+	background-color: #f2f2f2;
+	.WhatIsGolos__header {
 		h2 {
 			margin-top: 0;
-			color: #f12b24;
 		}
-		.JoinUs__support-text {
-			color: #d2d2d2;
-			font-size: 27px;
-		}
+		margin-bottom: 80px;
+	}
+	.WhatIsGolos__video {
+		margin-left: auto;
+		margin-right: auto;
+	}
+	a {
+		margin-top: 65px;
+		margin-bottom: 100px;
+	}
+}
+
+.JoinUs {
+	padding-top: 160px;
+	margin-bottom: 100px;
+	h2 {
+		margin-top: 0;
+		color: #f12b24;
+	}
+	.JoinUs__support-text {
+		color: #d2d2d2;
+		font-size: 27px;
+	}
+	.JoinUs__reasons {
+		margin: 100px auto;
 		.JoinUs__item {
-			// img {
-			//
-			// }
+			// text-align: left;
+			img {
+				margin-right: 40px;
+				float: left;
+				width: 40px;
+				height: 40px;
+			}
 			strong {
 				font-size: 27px;
 				color: #1a1a1a;
@@ -60,13 +114,82 @@
 			}
 		}
 	}
-	.BlockchainRevolution {
-		padding-top: 90px;
-		.BlockchainRevolution__header {
+}
 
+.BlockchainRevolution {
+	.BlockchainRevolution__header {
+		h2 { margin-bottom: 55px; }
+		p { margin-bottom: 50px; }
+		margin-bottom: 120px;
+	}
+	.BlockchainRevolution__supporting-text {
+		color: #d2d2d2;
+	}
+	.BlockchainRevolution__table {
+		margin-bottom: 60px;
+		thead tr {
+			// padding: 25px;
 		}
-		.BlockchainRevolution__supporting-text {
-			color: #d2d2d2;
+		// overide foundation table styles
+		table thead, table tfoot { background-color: transparent; }
+		table tbody tr:nth-child(even) { background-color: transparent; }
+		// tr { background-color: ; }
+	}
+}
+
+.Documentation {
+	// .Landing__supporting-text {
+	// 	margin-bottom: 30px;
+	// }
+	.Documentation__image {
+		margin-top: 30px;
+		margin-bottom: 65px;
+	}
+	.Documentation__buttons {
+		margin-top: 50px;
+		margin-bottom: 120px;
+	}
+}
+
+.WhyGolos {
+	h2 { color: #6191cf; }
+	.Landing__supporting-text { margin-bottom: 65px; }
+	.WhyGolos__image { margin: 65px auto; }
+	.WhyGolos__reasons {
+		margin-top: 65px;
+		margin-bottom: 115px;
+		strong {
+			display: block;
+			margin-bottom: 50px;
 		}
+	}
+}
+
+.WhoWeAre {
+	.WhoWeAre__headers { margin-bottom: 65px; }
+	.WhoWeAre__images {
+		img {
+			width: 200px;
+			height: 200px;
+		}
+		margin-bottom: 75px;
+	}
+	.WhoWeAre__texts {
+		span {
+			display: block;
+			margin-top: 50px;
+			margin-bottom: 100px;
+		}
+	}
+}
+
+.LandingFooter {
+	padding-top: 90px;
+	ul { margin-left: 0; }
+	li { list-style-type: none; }
+	.LandingFooter__description {
+		margin: 30px auto;
+		color: #c5c5c5;
+		font-size: 17px;
 	}
 }

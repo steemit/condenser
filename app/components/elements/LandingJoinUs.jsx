@@ -29,15 +29,19 @@ export default class LandingJoinUs extends React.Component {
 						</div>
 			})
 		}
+		// 100px между хеадером и риазонс
+		// 40px от картинки до текста слева
+		// 13px от толстой надписи до текста
+		// 70px марджин боттон между элементами
 		return (
 			<section className="JoinUs">
 				<div className="row text-center">
-					<div className="Landing__header small-12 columns">
-						<h2>Присоединяйся</h2>
+					<div className="small-12 columns">
+						<h2 className="Landing__h2_red">Присоединяйся</h2>
 						<span className="JoinUs__support-text">Получи 10 голосов за регистрацию</span>
 					</div>
 				</div>
-				<div className="row">
+				<div className="row text-left JoinUs__reasons">
 					{renderItems()}
 					{/* <div className="JoinUs__item small-12 medium-6 columns">
 						<strong>Вознаграждение за посты</strong>

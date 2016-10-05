@@ -2,25 +2,55 @@ import React from 'react'
 
 export default class LandingBlockchainRevolution extends React.Component {
 	render() {
+		const texts = [
+			'Отсутствие цензурирования',
+			'Доход от постов и лайков',
+			'Математический нотариат',
+			'Приватные сообщения',
+			'Открытый код',
+			'Открытые данные',
+			'Неподкупный алгоритм',
+			'Неизменность истории',
+			'Отсутствие рекламы',
+			'Сам себе банк',
+			'Стабильная валюта'
+		]
+
+		function renderTable() {
+			return	texts.map((item, index) => {
+				return 	<tr key={index} className="text-center">
+							<td className="text-left">{item}</td>
+							<td><img src="images/landing/checked.gif" /></td>
+							<td><img src="images/landing/unchecked.gif" /></td>
+							<td><img src="images/landing/unchecked.gif" /></td>
+						</tr>
+			})
+		}
+
 		return (
 			<section className="BlockchainRevolution">
 				<div className="row text-center">
-					<div className="Landing__header small-12 columns">
+					<div className="BlockchainRevolution__header small-12 columns">
 						<h2>Блокчейн-революция</h2>
-						<span className="BlockchainRevolution__supporting-text">Сила Голоса позволяет оценивать опубликованный контент</span>
+						<p>«Революцию, которую произвел интернет, можно повторить, перевернув человеческие взаимоотношения, убрав посредника не только из денежных переводов, как предлагал биткоин, но из любой сферы»</p>
+						<span className="BlockchainRevolution__supporting-text"> — уверен Виталий Бутерин, создатель нашумевшего стартапа Ethereum.</span>
 					</div>
 				</div>
-				<div className="row">
-					<div className="small-6 columns">
-						<img src="https://www.steemimg.com/images/2016/08/24/cyberfund92a82.jpg" alt="cyber.fund logo" />
-					</div>
-					<div className="small-6 columns">
-						{/* 10%   	Резерв на развитие
-10%   	Распределение держателям Steem
-10% 	Cyber.Fund
-7%   		Основателям Голоса
-3%   		Майнерам Голоса
-60% 	Краудсейл */}
+				<div className="row BlockchainRevolution__table">
+					<div className="small-12 columns">
+						<table>
+							<thead>
+								<tr>
+									<th width="200" className="text-left">Социальные сети</th>
+									<th width="100" className="text-center"><img src="images/landing/golos.jpg" alt="лого проекта Голос" /> </th>
+									<th width="100" className="text-center"><img src="images/landing/vkontakte.jpg" alt="лого VK" />		</th>
+									<th width="100" className="text-center"><img src="images/landing/facebook.jpg" alt="лого Facebook" />	</th>
+								</tr>
+							</thead>
+							<tbody>
+								{renderTable()}
+							</tbody>
+						</table>
 					</div>
 				</div>
 				<div className="row">
@@ -28,8 +58,14 @@ export default class LandingBlockchainRevolution extends React.Component {
 						<a href="" className="button">Узнать больше, что такое Голос</a>
 					</div>
 				</div>
-				<hr />
+				{/* <hr /> */}
 			</section>
 		)
 	}
 }
+// «Революцию, которую произвел интернет, можно повторить, перевернув человеческие взаимоотношения, убрав посредника
+// не только из денежных переводов, как предлагал биткоин,
+// но из любой сферы»
+//
+//
+//  — уверен Виталий Бутерин, создатель нашумевшего стартапа Ethereum.

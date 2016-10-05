@@ -5,21 +5,31 @@ export default class LandingDistribution extends React.Component {
 		return (
 			<section className="Distribution">
 				<div className="row text-center">
-					<div className="Landing__header small-12 columns WhatIsGolos__header">
-						<h2>Распределение Силы Голоса</h2>
-						<span className="Landing__header">Сила Голоса позволяет оценивать опубликованный контент</span>
+					<div className="small-12 columns WhatIsGolos__header">
+						<h2 className="Landing__h2_blue">Распределение Силы Голоса</h2>
+						<span>Сила Голоса позволяет оценивать опубликованный контент</span>
 					</div>
 				</div>
 				<div className="row">
-					<div className="small-12 medium-6 large-centered columns columns WhatIsGolos__video">
-						<div className="flex-video">
-							<iframe width="420" height="315" src="//www.youtube.com/embed/aiBt44rrslw" frameBorder="0" allowFullScreen />
+					<div className="small-6">
+						<img src="images/landing/pie.png" />
+					</div>
+					<div className="small-6">
+						<div className="small-6 columns">
+							<ul>
+								<li>10%   	Резерв на развитие</li>
+								<li>10%   	Распределение держателям Steem</li>
+								<li>10% 	Cyber.Fund</li>
+								<li>7%   	Основателям Голоса</li>
+								<li>3%   	Майнерам Голоса</li>
+								<li>60% 	Краудсейл</li>
+							</ul>
 						</div>
 					</div>
 				</div>
 				<div className="row">
 					<div className="small-12 columns text-center">
-						<a href="" className="button">Узнать больше что такое Голос</a>
+						<a href="" className="button secondary">Узнать больше что такое Голос</a>
 					</div>
 				</div>
 				<hr />

@@ -60,7 +60,7 @@ const ru = {
 	terms_and_conditions: 'Условия и Соглашения',
 	// this is from top-right dropdown menu
 	hot: 'горячее',
-	trending: 'набирающее популярность',
+	trending: 'популярное',
 	payout_time: 'время выплаты',
 	active: 'обсуждаемое',
 	responses: 'ответы',

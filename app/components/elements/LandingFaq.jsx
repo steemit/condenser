@@ -25,9 +25,9 @@ export default class LandingFaq extends React.Component {
 				</div>
 				<div className="row">
 					<div className="small-12 columns">
-						<Accordion defaultActiveKey="Vagina">
-							<Accordion title="Vagina">Penis</Accordion>
-							<Accordion title="Penis">Vagina</Accordion>
+						<Accordion defaultActiveKey="..">
+							<Accordion title="...">...</Accordion>
+							<Accordion title="..">..</Accordion>
 						</Accordion>
 					</div>
 				</div>

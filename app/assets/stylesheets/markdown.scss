@@ -46,13 +46,36 @@
   strong {
     font-weight: 600;
   }
-  
-  img {
-      max-width: 400px;
-      max-height: 400px;
-  }
 
   ol, ul {
     margin-left: 2rem;
+  }
+
+  table td {
+    word-break: normal; // issue #146
+  }
+
+  p {
+    font-size: 100%;
+    line-height: 150%;
+  }
+
+  img {
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: none;
+  }
+
+  iframe {
+    max-width: 100%;
+    max-height: 75vw;
+  }
+}
+
+.Markdown.MarkdownViewer--small {
+  img {
+    max-width: 400px;
+    max-height: 400px;
   }
 }

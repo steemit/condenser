@@ -109,7 +109,7 @@ class MarkdownViewer extends Component {
             sections.push(<div key={idx++} dangerouslySetInnerHTML={{__html: section}} />)
         }
 
-        const cn = 'Markdown' + (this.props.className ? ` ${this.props.className}` : '') + (html ? ' html' : '')
+        const cn = 'Markdown' + (this.props.className ? ` ${this.props.className}` : '') + (html ? ' html' : '') + (large ? '' : ' MarkdownViewer--small')
         return (<div className={"MarkdownViewer " + cn}>
             {sections}
             {noImageActive && allowNoImage &&

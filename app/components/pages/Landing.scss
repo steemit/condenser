@@ -72,22 +72,23 @@
 			color: #d2d2d2;
 		}
 	}
+	.Distribution__strong {
+		text-align: right;
+		float: left;
+	}
 	.Distribution__list {
 		margin-top: 65px;
 	}
 	.Distribution__item {
 		text-align: left;
 		list-style-type: none;
-		font-size: 24px;
-		.Distribution__strong {
-			font-size: 37px;
-		}
+		font-size: 12px;
 		.Distribution__dot {
 			display: inline-block;
-			margin: 0 15px;
-			width: 15px;
-			height: 15px;
-			border-radius: 15px;
+			margin: 0 7px 1px;
+			width: 7px;
+			height: 7px;
+			border-radius: 7px;
 		}
 	}
 	.Distribution__action {
@@ -130,14 +131,20 @@
 	.JoinUs__support-text {
 		color: #d2d2d2;
 		font-size: 27px;
+		padding-bottom: 3em;
 	}
 	.JoinUs__reasons {
-		margin: 100px auto;
+		margin: 3em auto;
 		.JoinUs__item {
-			margin-bottom: 65px;
+			max-width: 44rem;
+			padding: 0 3rem;
+			margin-top: 2rem;
+			position: relative;
+			margin-bottom: 4rem;
+			height: 5rem;
 			img {
-				margin-right: 40px;
-				margin-bottom: 40px;
+				margin-top: 12px;
+				margin-right: 1.2rem;
 				float: left;
 				width: 40px;
 				height: 40px;
@@ -145,10 +152,17 @@
 			strong {
 				font-size: 27px;
 				color: #1a1a1a;
+				vertical-align: middle;
+				position: absolute;
+				line-height: 0.9;
+				bottom: 0.6rem;
 			}
-			p {
+			div {
 				color: #717171;
 				font-size: 14px;
+				line-height: 1;
+				position: absolute;
+				top: 5.3rem;
 			}
 		}
 	}

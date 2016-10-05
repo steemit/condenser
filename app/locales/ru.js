@@ -168,7 +168,7 @@ const ru = {
 	recieve_amount_from: "Получение {amount} от",
 	transfer_amount_from: "Перевод {amount} со счёта",
   transfer_amount_steem_power_to: "Перевод {amount} "+OWNERSHIP_TICKER+" в Силу Голоса",
-	stop_power_down: "Остановить понижение голоса",
+	stop_power_down: "Сила Голоса ослаблена",
 	start_power_down_of: "Ослабление Силы Голоса с",
 	curation_reward_of_INVEST_TOKEN_for: 'Кураторские вознаграждения {reward} ' + INVEST_TOKEN + ' за',
 	author_reward_of_INVEST_TOKEN_for: 'Авторские вознаграждения {payout} и {reward} ' + INVEST_TOKEN + ' за',

@@ -104,7 +104,7 @@ class ReplyEditor extends React.Component {
 
     constructor() {
         super()
-        this.state = {payoutType: (localStorage.getItem('defaultPayoutType') || '50%')}
+        this.state = {}
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'ReplyEditor')
         this.onTitleChange = e => {
             const value = e.target.value
@@ -169,6 +169,7 @@ class ReplyEditor extends React.Component {
                 rte_value: rte ? stateFromHtml(html) : null
             })
             this.setAutoVote()
+            this.setState({payoutType: this.props.isStory ? (localStorage.getItem('defaultPayoutType') || '50%') : '50%'})
         }
     }
 
@@ -240,7 +241,7 @@ class ReplyEditor extends React.Component {
     onPayoutTypeChange = (e) => {
         const payoutType = e.currentTarget.value
         this.setState({payoutType})
-        localStorage.setItem('defaultPayoutType', payoutType)
+        if(payoutType !== '0%') localStorage.setItem('defaultPayoutType', payoutType)
     }
 
     render() {

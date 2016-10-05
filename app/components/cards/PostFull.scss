@@ -21,10 +21,8 @@
 }
 
 .PostFull__header {
-  > h1, > h6 {
-    overflow: hidden;
-  }
   > h1 {
+    overflow: hidden;
     font: 700 200% "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Arial, sans-serif;
   }
   a {

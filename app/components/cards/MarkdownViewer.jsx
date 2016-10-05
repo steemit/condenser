@@ -2,7 +2,6 @@ import React from 'react';
 import {connect} from 'react-redux'
 import {Component} from 'react'
 import Remarkable from 'remarkable'
-// import CardView from 'app/components/cards/CardView'
 import YoutubePreview from 'app/components/elements/YoutubePreview'
 import sanitizeConfig, {noImageText} from 'app/utils/SanitizeConfig'
 import {renderToString} from 'react-dom/server';
@@ -120,7 +119,6 @@ class MarkdownViewer extends Component {
                 </div>
             }
         </div>)
-        // <CardView formId={formId} canEdit={canEdit} metaLinkData={jsonMetadata ? jsonMetadata.steem : null} />
     }
 }
 

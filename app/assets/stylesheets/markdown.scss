@@ -27,11 +27,12 @@
   }
 
   code {
-    padding: 0.25rem 0.5rem;
-    font-size: 84%;
-    border-radius: 2px;
-    border-color: $light-gray;
-    background-color: #efefef;
+    padding: 0.2rem;
+    font-size: 85%;
+    border-radius: 3px;
+    border: none;
+    background-color: #F4F4F4;
+    font-weight: inherit;
   }
 
   pre > code {
@@ -50,9 +51,8 @@
       max-width: 400px;
       max-height: 400px;
   }
-  .Card {
-      border-radius: 2px;
-      border-color: $light-gray;
-  }
 
+  ol, ul {
+    margin-left: 2rem;
+  }
 }

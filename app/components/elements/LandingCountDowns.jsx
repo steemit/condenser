@@ -84,8 +84,6 @@ export default class LandingCountDowns extends React.Component {
 	}
 
 	render() {
-		console.log(this.props.crowdSaleIsActive < Date.now())
-		console.log('this.props.prefill', this.props.prefill)
 		return (
 			<section className="CountDowns">
 
@@ -134,8 +132,9 @@ export default class LandingCountDowns extends React.Component {
 					this.props.prefill
 					? 	<div className="row CountDowns__links">
 							<div className="small-12 columns text-center">
-								<a href="#" className="CountDowns__button_small">я не помню какие-ссылки сюда вставлять</a>
-								<a href="#" className="CountDowns__button_small">напишите мне в wire если забуду это исправить</a>
+								<a href="http://golos.io/" className="CountDowns__button_small">вики проэкта</a>
+								<a href="https://www.youtube.com/channel/UCcBPq2gUdpkL9m-_a92AFVQ" className="CountDowns__button_small">youtube</a>
+								<a href="https://github.com/goloschain" className="CountDowns__button_small">github</a>
 							</div>
 						</div>
 					: 	<div className="row CountDowns__links">

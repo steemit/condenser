@@ -134,7 +134,7 @@ export default function useEnterAndConfirmMobilePages(app) {
             return;
         }
 
-        const confirmation_code = Math.random().toString().slice(14);
+        const confirmation_code = Math.random().toString().substring(2, 6);
         let eid = yield models.Identity.findOne(
             {attributes: ['id', 'phone'], where: {user_id, provider: 'phone'}, order: 'id'}
         );

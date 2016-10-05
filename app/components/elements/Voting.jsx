@@ -152,9 +152,11 @@ class Voting extends React.Component {
             </span>
         }
 
-        const {pending_payout, total_author_payout, total_curator_payout, cashout_time, promoted} = this.props;
+        const {max_payout, pending_payout, total_author_payout, total_curator_payout, cashout_time, promoted} = this.props;
         let payout = pending_payout + total_author_payout + total_curator_payout;
         if (payout < 0.0) payout = 0.0;
+        if (payout > max_payout) payout = max_payout;
+        const payout_limit_hit = payout >= max_payout;
 
         const up = <Icon name={votingUpActive ? 'empty' : 'chevron-up-circle'} />;
         const classUp = 'Voting__button Voting__button-up' + (myVote > 0 ? ' Voting__button--upvoted' : '') + (votingUpActive ? ' votingUp' : '');
@@ -166,13 +168,16 @@ class Voting extends React.Component {
         if (cashout_time && cashout_time.indexOf('1969') !== 0 && cashout_time.indexOf('1970') !== 0) {
             payoutItems.push({value: <TimeAgoWrapper date={cashout_time} />});
         }
+        if(max_payout < 1000000) {
+            payoutItems.push({value: 'Max Payout $' + formatDecimal(max_payout).join('')})
+        }
         if(total_author_payout > 0) {
             payoutItems.push({value: 'Past Payouts $' + formatDecimal(total_author_payout + total_curator_payout).join('')});
             payoutItems.push({value: ' - Author: $' + formatDecimal(total_author_payout).join('')});
             payoutItems.push({value: ' - Curators: $' + formatDecimal(total_curator_payout).join('')});
         }
         const payoutEl = <DropdownMenu el="div" items={payoutItems}>
-            <span>
+            <span style={payout_limit_hit ? {opacity: '0.5'} : {}}>
                 <FormattedAsset amount={payout} asset="$" />
                 <Icon name="dropdown-arrow" />
             </span>
@@ -236,6 +241,7 @@ export default connect(
         const is_comment = post.get('parent_author') !== ''
         const current_account = state.user.get('current')
         const cashout_time = post.get('cashout_time')
+        const max_payout           = parsePayoutAmount(post.get('max_accepted_payout'))
         const pending_payout       = parsePayoutAmount(post.get('pending_payout_value'))
         const promoted             = parsePayoutAmount(post.get('promoted'))
         const total_author_payout  = parsePayoutAmount(post.get('total_payout_value'))
@@ -252,7 +258,7 @@ export default connect(
         return {
             ...ownProps,
             myVote, author, permlink, username, active_votes, vesting_shares, is_comment,
-            pending_payout, promoted, total_author_payout, total_curator_payout, cashout_time,
+            max_payout, pending_payout, promoted, total_author_payout, total_curator_payout, cashout_time,
             loggedin: username != null,
             voting
         }

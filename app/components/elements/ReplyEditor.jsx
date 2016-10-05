@@ -55,10 +55,8 @@ class ReplyEditor extends React.Component {
 
         //redux connect
         reply: React.PropTypes.func.isRequired,
-        setMetaLink: React.PropTypes.func.isRequired,
         clearMetaData: React.PropTypes.func.isRequired,
         setMetaData: React.PropTypes.func.isRequired,
-        metaLinkData: React.PropTypes.object,
         state: React.PropTypes.object.isRequired,
         hasCategory: React.PropTypes.bool.isRequired,
         isStory: React.PropTypes.bool.isRequired,
@@ -78,7 +76,6 @@ class ReplyEditor extends React.Component {
         parent_author: '',
         parent_permlink: '',
         type: 'submit_comment',
-        metaLinkData: Map(),
     }
 
     constructor() {
@@ -102,16 +99,6 @@ class ReplyEditor extends React.Component {
         }
         this.onChange = this.onChange.bind(this);
         this.toggleRte = this.toggleRte.bind(this);
-        this.focus = (e) => {
-            if(e) e.stopPropagation()
-            const {postRef, rte} = this.refs
-            if(postRef)
-                postRef.focus()
-            else {
-                if (e.target && e.target.className && e.target.className.indexOf('ReplyEditor__body') !== -1)
-                    rte._focus();
-            }
-        }
         this.autoVoteOnChange = () => {
             const {autoVote} = this.props.fields
             const key = 'replyEditorData-autoVote-story'
@@ -119,24 +106,18 @@ class ReplyEditor extends React.Component {
             autoVote.onChange(!autoVote.value)
         }
     }
+
     componentWillMount() {
         const {setMetaData, formId, jsonMetadata} = this.props
         if(process.env.BROWSER) {
             let editorData = localStorage.getItem('replyEditorData-' + formId)
-            let rte_value = RichTextEditor.createEmptyValue();
             if(editorData) {
                 editorData = JSON.parse(editorData)
                 if(editorData.formId === formId) {
                     const {fields: {category, title, body}} = this.props
                     if(category) category.onChange(editorData.category)
                     if(title) title.onChange(editorData.title)
-                    if (editorData.body) {
-                        body.onChange(editorData.body)
-                        // const html = getHtml(editorData.body)
-                        // console.log('createValueFromString mnt1', html);
-                        // this.state.rte_value = RichTextEditor.createValueFromString(html, 'html')
-                        // console.log('createValueFromString mnt1 done');
-                    }
+                    if (editorData.body) body.onChange(editorData.body)
                 }
             }
             this.setAutoVote()
@@ -147,6 +128,8 @@ class ReplyEditor extends React.Component {
                 if(isStory)
                     rte = JSON.parse(localStorage.getItem('replyEditorData-rte') || RTE_DEFAULT);
             }
+
+            let rte_value = RichTextEditor.createEmptyValue();
             if (RichTextEditor) {
                 if (body.value) {
                     if (isHtmlTest(body.value)) {
@@ -155,9 +138,6 @@ class ReplyEditor extends React.Component {
                         rte_value = RichTextEditor.createValueFromString(html, 'html')
                     } else {
                         rte = false;
-                        // console.log('createValueFromString mnt3');
-                        // rte_value = RichTextEditor.createValueFromString(body.initialValue, 'html');
-                        // console.log('createValueFromString mnt3 done');
                     }
                 }
             }
@@ -165,8 +145,8 @@ class ReplyEditor extends React.Component {
         }
         setMetaData(formId, jsonMetadata)
     }
+
     componentDidMount() {
-        // focus
         setTimeout(() => {
             if (this.props.isStory) this.refs.titleRef.focus()
             else if (this.refs.postRef) this.refs.postRef.focus()
@@ -211,6 +191,7 @@ class ReplyEditor extends React.Component {
         const {clearMetaData, formId} = this.props
         clearMetaData(formId)
     }
+
     onChange(rte_value) {
         this.setState({rte_value})
         let html = rte_value.toString('html');
@@ -226,34 +207,6 @@ class ReplyEditor extends React.Component {
             const key = 'replyEditorData-autoVote-story'
             const autoVoteDefault = JSON.parse(localStorage.getItem(key) || true)
             autoVote.onChange(autoVoteDefault)
-        }
-    }
-    testForMetaLink(bodyText) {
-        if(!bodyText) return
-        // Check for links but not on every character (you'll get a lot of invalid links while typing)
-        // Save the link in metaLink when it is complete.
-        const {markdownViewerText} = this.state
-        const oldLen = markdownViewerText ? markdownViewerText.length : 0
-        const newLen = bodyText.length
-        const bodyChanged = oldLen !== newLen
-        if(!bodyChanged) return
-        const match = bodyText.match(links.any)
-        if(match) {
-            const link = match[0]
-            // body suddenly increases by more than one char
-            const bodyPasted = oldLen + 1 < newLen
-            const {formId, setMetaLink} = this.props
-            if(bodyPasted)
-                // pasted link is complete
-                setMetaLink(formId, link)
-            else {
-                // user is typing
-                if(this.state.typingLink === link) {
-                    // the link stopped changing
-                    setMetaLink(formId, link)
-                } else
-                    this.setState({typingLink: link})
-            }
         }
     }
     toggleRte(e) {
@@ -281,7 +234,7 @@ class ReplyEditor extends React.Component {
         const {title, category, body, autoVote} = this.props.fields
         const {
             reply, username, hasCategory, isStory, formId, noImage,
-            author, permlink, parent_author, parent_permlink, type, jsonMetadata, metaLinkData,
+            author, permlink, parent_author, parent_permlink, type, jsonMetadata,
             state, successCallback, handleSubmit, submitting, invalid, //lastComment,
         } = this.props
         const {postError, markdownViewerText, loading, titleWarn, rte, allSteemPower} = this.state
@@ -296,7 +249,7 @@ class ReplyEditor extends React.Component {
         const autoVoteValue = !isEdit && autoVote.value
         const replyParams = {
             author, permlink, parent_author, parent_permlink, type, state, originalPost,
-            jsonMetadata, metaLinkData, autoVote: autoVoteValue, allSteemPower,
+            jsonMetadata, autoVote: autoVoteValue, allSteemPower,
             successCallback: successCallbackWrapper, errorCallback
         }
         const postLabel = username ? <Tooltip t={'Post as “' + username + '”'}>Post</Tooltip> : 'Post'
@@ -307,12 +260,6 @@ class ReplyEditor extends React.Component {
             titleError = <div className={hasTitleError ? 'error' : 'warning'}>
                 {hasTitleError ? title.error : titleWarn}&nbsp;
             </div>
-        }
-        let isHtml = false;
-        let isMarkdown = false;
-        if (body.value) {
-            isMarkdown = !isHtmlTest(body.value);
-            isHtml = !isMarkdown;
         }
 
         const vframe_class = isStory ? 'vframe' : '';
@@ -336,11 +283,13 @@ class ReplyEditor extends React.Component {
                             </span>}
                         </div>
 
-                        <div className={'ReplyEditor__body ' + (rte ? `rte ${vframe_section_class}` : vframe_section_shrink_class)} onClick={this.focus}>
-                            <div className="float-right secondary" style={{marginRight: '1rem'}}>
-                                {rte && <a href="#" onClick={this.toggleRte}>{isHtml ? 'Raw HTML' : 'Markdown'}</a>}
-                                {!rte && isStory && (isHtml || !body.value) && <a href="#" onClick={this.toggleRte}>Editor</a>}
-                            </div>
+                        <div className={'ReplyEditor__body ' + (rte ? `rte ${vframe_section_class}` : vframe_section_shrink_class)}>
+                            {!body.value && isStory &&
+                                <div className="float-right secondary" style={{marginRight: '1rem'}}>
+                                    {rte && <a href="#" onClick={this.toggleRte}>Markdown</a>}
+                                    {!rte && <a href="#" onClick={this.toggleRte}>Editor</a>}
+                                </div>
+                            }
                             {process.env.BROWSER && rte ?
                                 <RichTextEditor ref="rte"
                                     readOnly={loading}
@@ -384,7 +333,7 @@ class ReplyEditor extends React.Component {
                             </div>}
                         </div>
                         {!loading && !rte && markdownViewerText && <div className={'Preview ' + vframe_section_shrink_class}>
-                            {!isHtml && <div className="float-right"><a target="_blank" href="https://guides.github.com/features/mastering-markdown/">Styling with Markdown is supported.</a></div>}
+                            {<div className="float-right"><a target="_blank" href="https://guides.github.com/features/mastering-markdown/">Styling with Markdown is supported.</a></div>}
                             <h6>Preview</h6>
                             <MarkdownViewer formId={formId} text={markdownViewerText} canEdit jsonMetadata={jsonMetadata} large={isStory} noImage={noImage} />
                         </div>}
@@ -434,24 +383,18 @@ export default formId => reduxForm(
         if(hasCategory && jsonMetadata && jsonMetadata.tags) {
             category = Set([category, ...jsonMetadata.tags]).join(' ')
         }
-        const metaLinkData = state.global.getIn(['metaLinkData', formId])
         const ret = {
             ...ownProps,
             fields, validate, isStory, hasCategory, username,
             initialValues: {title, body, category}, state,
             // lastComment: current.get('lastComment'),
             formId,
-            metaLinkData,
         }
         return ret
     },
 
     // mapDispatchToProps
     dispatch => ({
-        setMetaLink: (/*id, link*/) => {
-            // TODO
-            // dispatch(g.actions.requestMeta({id, link}))
-        },
         clearMetaData: (id) => {
             dispatch(g.actions.clearMeta({id}))
         },
@@ -460,7 +403,7 @@ export default formId => reduxForm(
         },
         reply: ({category, title, body, author, permlink, parent_author, parent_permlink,
             type, originalPost, autoVote = false, allSteemPower = false,
-            state, jsonMetadata, /*metaLinkData,*/
+            state, jsonMetadata,
             successCallback, errorCallback, loadingCallback
         }) => {
             // const post = state.global.getIn(['content', author + '/' + permlink])
@@ -510,10 +453,6 @@ export default formId => reduxForm(
             if(rtags.images.size) meta.image = rtags.images; else delete meta.image
             if(rtags.links.size) meta.links = rtags.links; else delete meta.links
 
-            // const cp = prop => { if(metaLinkData.has(prop)) json_metadata.steem[prop] = metaLinkData.get(prop) }
-            // cp('link')
-            // cp('image')
-            // cp('description')
             // if(Object.keys(json_metadata.steem).length === 0) json_metadata = {}// keep json_metadata minimal
             const sanitizeErrors = []
             sanitize(body, sanitizeConfig({sanitizeErrors}))

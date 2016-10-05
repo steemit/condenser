@@ -27,11 +27,12 @@
   }
 
   code {
-    padding: 0.25rem 0.5rem;
-    font-size: 84%;
-    border-radius: 2px;
-    border-color: $light-gray;
-    background-color: #efefef;
+    padding: 0.2rem;
+    font-size: 85%;
+    border-radius: 3px;
+    border: none;
+    background-color: #F4F4F4;
+    font-weight: inherit;
   }
 
   pre > code {
@@ -45,14 +46,36 @@
   strong {
     font-weight: 600;
   }
-  
-  img {
-      max-width: 400px;
-      max-height: 400px;
-  }
-  .Card {
-      border-radius: 2px;
-      border-color: $light-gray;
+
+  ol, ul {
+    margin-left: 2rem;
   }
 
+  table td {
+    word-break: normal; // issue #146
+  }
+
+  p {
+    font-size: 100%;
+    line-height: 150%;
+  }
+
+  img {
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: none;
+  }
+
+  iframe {
+    max-width: 100%;
+    max-height: 75vw;
+  }
+}
+
+.Markdown.MarkdownViewer--small {
+  img {
+    max-width: 400px;
+    max-height: 400px;
+  }
 }

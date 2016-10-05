@@ -75,6 +75,8 @@
 	.Distribution__strong {
 		text-align: right;
 		float: left;
+		width: 50px;
+		right: 0em;
 	}
 	.Distribution__list {
 		margin-top: 65px;
@@ -82,13 +84,13 @@
 	.Distribution__item {
 		text-align: left;
 		list-style-type: none;
-		font-size: 12px;
+		font-size: 26px;
 		.Distribution__dot {
 			display: inline-block;
-			margin: 0 7px 1px;
-			width: 7px;
-			height: 7px;
-			border-radius: 7px;
+			margin: 0 12px 2px;
+			width: 12px;
+			height: 12px;
+			border-radius: 12px;
 		}
 	}
 	.Distribution__action {
@@ -154,13 +156,13 @@
 				color: #1a1a1a;
 				vertical-align: middle;
 				position: absolute;
-				line-height: 0.9;
+				line-height: 1;
 				bottom: 0.6rem;
 			}
 			div {
 				color: #717171;
 				font-size: 14px;
-				line-height: 1;
+				line-height: 1.1;
 				position: absolute;
 				top: 5.3rem;
 			}

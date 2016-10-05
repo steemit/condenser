@@ -38,7 +38,7 @@ export default class LandingJoinUs extends React.Component {
 				<div className="row text-center">
 					<div className="small-12 columns">
 						<h2 className="Landing__h2_red">Присоединяйся</h2>
-						<span className="JoinUs__support-text">Получи 10 голосов за регистрацию</span>
+						<span className="JoinUs__support-text">Получи 6 голосов за регистрацию</span>
 					</div>
 				</div>
 				<div className="row text-left JoinUs__reasons">

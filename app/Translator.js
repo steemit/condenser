@@ -22,7 +22,7 @@ import ruLocaleData from 'react-intl/locale-data/ru';
 addLocaleData([...enLocaleData, ...ruLocaleData]);
 
 // Our translated strings
-import { en } from './locales/ru';
+import { ru as en } from './locales/ru';
 import { ru } from './locales/ru';
 const messages = Object.assign(en, ru)
 

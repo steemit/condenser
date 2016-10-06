@@ -51,8 +51,13 @@ export default function useEnterAndConfirmEmailPages(app) {
             return;
         }
         const eid = yield models.Identity.findOne(
-            {attributes: ['email'], where: {user_id, provider: 'email'}, order: 'id DESC'}
+            {attributes: ['email', 'verified'], where: {user_id, provider: 'email'}, order: 'id DESC'}
         );
+        if (eid && eid.verified) {
+            this.flash = {success: 'Email has already been verified'};
+            this.redirect('/enter_mobile');
+            return;
+        }
         const body = renderToString(<div className="App">
             {renderHeader()}
             {renderSignupProgressBar([this.session.prv || 'facebook', 'email', 'phone', 'steem account'], 2)}
@@ -112,10 +117,20 @@ export default function useEnterAndConfirmEmailPages(app) {
             }
             if (captcha_failed) {
                 console.log('-- /submit_email captcha verification failed -->', user_id, this.session.uid, email, this.req.connection.remoteAddress);
-                this.flash = {error: 'Failed captcha verification, please try again.'};
+                this.flash = {error: 'Failed captcha verification, please try again'};
                 this.redirect('/enter_email');
                 return;
             }
+        }
+
+        const existing_email = yield models.Identity.findOne(
+            {attributes: ['user_id'], where: {email, provider: 'email', verified: true}, order: 'id'}
+        );
+        if (existing_email && existing_email.user_id != user_id) {
+            console.log('-- /submit_email existing_email -->', user_id, this.session.uid, email, existing_email.user_id);
+            this.flash = {error: 'This email has already been taken'};
+            this.redirect('/enter_email');
+            return;
         }
 
         const confirmation_code = Math.random().toString(36).slice(2);

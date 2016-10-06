@@ -6,10 +6,10 @@ export default class LandingJoinUs extends React.Component {
 		const mainTexts = [
 			'Вознаграждение за посты',
 			'Вознаграждение за кураторство',
-			'Вознаграждение за использование',
+			'Вознаграждение за пользование',
 			'Вознаграждения за сбережения',
 			'Вознаграждения за майнинг',
-			'Вознаграждения за регистраторам'
+			'Вознаграждения регистраторам'
 		]
 		const secondaryTexts = [
 			'Получай ГОЛОС каждый раз, когда твой пост оценен другими',
@@ -22,10 +22,10 @@ export default class LandingJoinUs extends React.Component {
 
 		function renderItems() {
 			return mainTexts.map((header, index) => {
-				return 	<div key={header} className="JoinUs__item small-12 medium-6 columns">
+				return 	<div key={header} className="JoinUs__item small-12 medium-6 large-6 columns">
 							<img src={`images/landing/${index + 1}.jpg`} />
 							<strong>{header}</strong>
-							<p>{secondaryTexts[index]}</p>
+							<div>{secondaryTexts[index]}</div>
 						</div>
 			})
 		}
@@ -38,7 +38,7 @@ export default class LandingJoinUs extends React.Component {
 				<div className="row text-center">
 					<div className="small-12 columns">
 						<h2 className="Landing__h2_red">Присоединяйся</h2>
-						<span className="JoinUs__support-text">Получи 10 голосов за регистрацию</span>
+						<span className="JoinUs__support-text">Получи 6 голосов за регистрацию</span>
 					</div>
 				</div>
 				<div className="row text-left JoinUs__reasons">

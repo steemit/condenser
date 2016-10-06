@@ -34,7 +34,7 @@ class Landing extends React.Component {
 
     render() {
         // if crodwsale hasn't started yet render countdown til crodwsale start
-        if (crowdsaleStartAt > Date.now()) return <CountDowns prefill crowdsaleStartAt={crowdsaleStartAt} />
+        // if (crowdsaleStartAt > Date.now()) return <CountDowns prefill crowdsaleStartAt={crowdsaleStartAt} />
 
         return (
             <div className="Landing text-center">

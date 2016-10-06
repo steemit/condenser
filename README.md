@@ -9,35 +9,53 @@
 
 
 
-Steemit
+Социфальная платформа Голос
 ========
-27 сентября. начал переводить.
-## Installation
 
-#### Install dependencies
+## Установка
+
+### Установка зависимостей
+
+#### Установка node.js
+
+Варианты расписаны [тут](https://nodejs.org/en/download/)
+
+#### Установка последней версии node.js
 
 ```bash
-# Install at least Node v6.3 if you don't already have it (NVM recommended)
-nvm install v6
-
-npm install
-npm install --save-dev babel-cli
+# Ставим n - менеджер версий ноды
+sudo npm install -g n
+# Ставим последнюю версию ноды
+sudo n latest
 ```
-~~npm install -g babel-cli~~ # see https://babeljs.io/docs/usage/cli/ - it s better to have this locally
 
+#### Установка зависимостей проекта
 
-#### Create config file
+```bash
+npm install
+```
+
+#### Редактирование файла конфигурации
+
+В настоящий момент Вам придётся связаться с командой запуска, чтобы получить внятные инструкции.
+
 
 ```bash
 cd config
 cp steem-example.json steem-dev.json
 ```
-
 (note: it's steem.json in production)
 
-#### Install mysql server
+#### Установка базы данных (mysql)
 
-OS X :
+_на проекте используется (sequelize)[http://docs.sequelizejs.com],
+поэтому можно использовать например postgres вместо mysql, подправив настройки_
+
+Настройки базы данных дублируются: `db/config/config.json` - используется для
+создания и синхронизации таблиц; `config/steem.json`/`config/steem-dev.json` -
+используется вебклиентом для работы с базой
+
+##### OS X:
 
 ```bash
 brew update
@@ -47,35 +65,39 @@ brew install mysql
 mysql.server restart
 ```
 
-Debian based Linux:
+##### Debian:
 
 ```bash
 sudo apt-get update
 sudo apt-get install mysql-server
 ```
 
-Now launch mysql client and create steemit_dev database:
+ Подключаемся к mysql и создаём базу данных steemit_dev:
+
 ```bash
 mysql -u root
 > create database steemit_dev;
 ```
 
-Install `sequelize-cli` globally:
+Ставим `sequelize-cli` для всех пользователей:
 
 ```bash
 npm install -g sequelize-cli pm2 mysql
 ```
 
-Run `sequelize db:migrate` in `db/` directory.
+Чтоы создать таблицы (а позже запустить миграцию) - запускаем `sequelize db:migrate`
+из папки `db/`.
 
 
-### Development
+### Разработка
 
+Запуск клиента в режиме разработки -
 ```bash
 npm start
 ```
 
-You now have your development front end running at localhost:3002, connected to the main public steem blockchain. You don't need to run ```steemd``` locally, by default you will connect to ```ws://node.steem.ws```.  Use your regular account name and credentials to login -- there is no separate dev login.
+В этом режиме вебклиент берёт настройки из файла `config/steem-dev.json`
+Настройка соединения вебсокет ( в тестнете ) - `wss://ws.test.golos.io`
 
 #### Style Guides
 
@@ -121,6 +143,13 @@ npm run build
 npm -i -g pm2 # one time
 pm2 start config/process.json
 ```
+
+Команда `npm run build` запускает сборку и минификацию проекта.
+Команда `npm run prod` стартует собранный проект. В этом режиме вебклиент берёт
+настройки из файла `config/steem.json`
+
+Также, есть скрипт `build_n_run_webclient.sh`, который устанавливает зависимости npm,
+запускает сборку, и стартует собранный проект в терминале screen. 
 
 
 ## Issues

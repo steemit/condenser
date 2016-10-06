@@ -1,8 +1,8 @@
 {
-  "name": "Steemit.com",
+  "name": "golos.io",
   "repository": {
     "type": "git",
-    "url": "https://github.com/steemit/steemit.com.git"
+    "url": "https://github.com/GolosChain/webclient"
   },
   "version": "1.0.0",
   "description": "Steemit.com is the koa web server & middleware and react.js in-browser code for the world's first blockchain content + social media monetization platform!",

@@ -126,7 +126,7 @@ class PostFull extends React.Component {
         const winTop = (screen.height / 2) - (winWidth / 2);
         const winLeft = (screen.width / 2) - (winHeight / 2);
         const s = this.share_params;
-        const q = 'title=' + encodeURIComponent(s.title) + '&url=' + encodeURIComponent(s.url) + '&source=Steemit&mini=true';
+        const q = 'title=' + encodeURIComponent(s.title) + '&url=' + encodeURIComponent(s.url) + '&source=Golos&mini=true';//TODO! was: &source=Steemit
         window.open('https://www.linkedin.com/shareArticle?' + q, 'Share', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=' + winWidth + ',height=' + winHeight);
     }
 
@@ -161,7 +161,7 @@ class PostFull extends React.Component {
 
         const content_body = content.body;
         const {category, title, body} = content;
-        if (process.env.BROWSER && title) document.title = title + ' — Steemit';
+        if (process.env.BROWSER && title) document.title = title + ' — Голос';
 
         const replyParams = {author, permlink, parent_author, parent_permlink, category, title, body}
 
@@ -177,8 +177,8 @@ class PostFull extends React.Component {
             net_rshares.compare(Long.ZERO) <= 0
 
         this.share_params = {
-            url: 'https://steemit.com' + link,
-            title: title + ' — Steemit',
+            url: 'https://test.golos.io' + link,
+            title: title + ' — Голос',
             desc: p.desc
         };
 

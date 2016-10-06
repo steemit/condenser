@@ -36,9 +36,7 @@ export default class Chatik extends React.Component {
 
     render() {
         return <div className={this.chatikClass() + this.stateClass()}>
-            <button className={this.stateClass()} style={{
-
-            }} onClick={this.toggle.bind(this)}><img src={this.iconUrl()}/></button>
+            <button className={this.stateClass()} onClick={this.toggle.bind(this)}><img src={this.iconUrl()}/></button>
             <div className="sidebar" style={{
 
             }}>

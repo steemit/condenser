@@ -68,7 +68,8 @@ class TransferHistoryRow extends React.Component {
                 description_end += ` ${translate('to')} ${data.to}`;
             }
         } else if( type === 'withdraw_vesting' ) {
-            if( data.vesting_shares === ['0.000000', VEST_TICKER].join(" ") )
+            console.log(data)
+            if( data.vesting_shares === '0.000000 ' + VEST_TICKER )
                 description_start += translate('stop_power_down')
             else
                 description_start += translate('start_power_down_of') + " " + data.vesting_shares;

@@ -212,7 +212,7 @@ class CreateAccount extends React.Component {
                             {translate('you_can_either') + ' '}
                             <a href="/login.html">{translate('login')}</a>
                             {translate('to_your_existing_account_or') + ' '}
-                            <a href="mailto:support@steemit.com">{translate('send_us_email')}</a>
+                            <a href="mailto:t@cyber.fund">{translate('send_us_email')}</a>
                             {' ' + translate('if_you_need_a_new_account')}.
                         </p>
                     </div>

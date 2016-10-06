@@ -9,6 +9,7 @@ tmp/*
 config/steem.json
 config/steem-dev.json
 config/process.json
+config/last-build.json
 app/assets/static/*.js
 #db/
 clean.sh

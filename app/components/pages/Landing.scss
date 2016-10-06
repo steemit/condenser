@@ -73,7 +73,7 @@
 		}
 	}
 	.Distribution__list {
-		margin-top: 65px;
+		margin-top: 20px;
 	}
 	.Distribution__item {
 		text-align: left;
@@ -82,6 +82,7 @@
 		.Distribution__strong {
 			font-size: 37px;
 		}
+		.Distribution__strong_extra-margin { margin-right: 21px; }
 		.Distribution__dot {
 			display: inline-block;
 			margin: 0 15px;
@@ -175,6 +176,30 @@
 	}
 }
 
+.Faq {
+	.Faq__headers {
+		margin-bottom: 80px;
+		.Faq__supporting-text {
+			color: #d2d2d2;
+			font-size: 27px;
+		}
+	}
+	.Faq__accordion { margin-bottom: 100px;}
+	.Faq__action {
+		margin-bottom: 80px;
+		.Faq__p {
+			font-size: 17px;
+			color: #656565;
+		}
+	}
+}
+
+.Team {
+	.Team__member {
+		img { border-radius: 50%; }
+	}
+}
+
 .Documentation {
 	// .Landing__supporting-text {
 	// 	margin-bottom: 30px;
@@ -186,6 +211,7 @@
 	.Documentation__buttons {
 		margin-top: 50px;
 		margin-bottom: 120px;
+		.alert { margin-right: 30px; }
 	}
 }
 

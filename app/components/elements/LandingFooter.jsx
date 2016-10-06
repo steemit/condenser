@@ -1,6 +1,7 @@
 import React from 'react'
 
 export default class LandingFooter extends React.Component {
+
 	render() {
 
 		const menuHeaders = ['Используем Голос', 'Правовые документы', 'Сообщества']
@@ -13,13 +14,12 @@ export default class LandingFooter extends React.Component {
 
 		function renderMenus(align) {
 			return menuHeaders.map((header, index) => {
-				// console.log('align', align)
-				return  <div className={`small-12 medium-4 columns text-${columnsAlign[index]}`}>
+				return  <div key={index} className={`small-12 medium-4 columns text-${columnsAlign[index]}`}>
 							<strong>{header}</strong>
 							<ul>
 								{
-									menuItems[index].map(item => {
-										return  <li>
+									menuItems[index].map((item, i) => {
+										return  <li key={i}>
 													<a href="">{item}</a>
 												</li>
 									})
@@ -28,7 +28,7 @@ export default class LandingFooter extends React.Component {
 						</div>
 			})
 		}
-// 30px;
+
 		return (
 			<section className="LandingFooter">
 				<div className="row">

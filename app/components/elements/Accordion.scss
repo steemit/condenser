@@ -1,0 +1,23 @@
+.Accordion {
+	text-align: left;
+	.Accordion__item { margin-bottom: 50px; }
+	.Accordion__icon {
+		margin-right: 45px;
+	}
+	.Accordion__content {
+		transition: visibility 0s, opacity 0.5s linear;
+		margin-left: 84px;
+	}
+	.Accordion__content_active {
+		visibility: visible;
+		height: auto;
+		// transition: visibility 0s, opacity 0.5s linear;
+		opacity: 1;
+	}
+	.Accordion__content_hidden {
+		visibility: hidden;
+		height: 0;
+		opacity: 0;
+	    // transition: visibility 0s, opacity 0.5s linear;
+	}
+}

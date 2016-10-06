@@ -11,19 +11,29 @@ const listInfo = [
 
 export default class LandingDistribution extends React.Component {
 	render() {
-		// function renderDot(color) {
-		// 	return <span className="Distribution__dot" style={{ backgroundColor: color }} />
-		// }
-
-		function renderList() {
-			return	listInfo.map(
-						(item) 	=> 	<li className="Distribution__item">
-										<strong className="Distribution__strong">{item[0]}</strong>
-										<span className="Distribution__dot" style={{ backgroundColor: '#' + item[1] }} />
-										{item[2]}
-									</li>
-						)
+		function renderDot(color) {
+			return <span className="Distribution__dot" style={{ backgroundColor: '#' + color }} />
 		}
+
+		// NOTE 1: keep this code here incase of rework
+		// NOTE 2: use table tags instead of list for easier aligment
+		/* const listInfo = [
+				['10%', '2e17b8', 'Резерв на развитие'],
+				['10%', 'f9ca0f', 'Распределение держателям Steem'],
+				['10%', '1e193b', 'Cyber.Fund'],
+				[' 7%', 'cd591a', 'Основателям Голоса'],
+				[' 3%', '7bd915', 'Майнерам Голоса'],
+				['60%', 'd80a15', 'Краудсейл']
+		] */
+		// function renderList() {
+		// 	return	listInfo.map(
+		// 				(item) 	=> 	<li className="Distribution__item">
+		// 								<strong className="Distribution__strong">{item[0]}</strong>
+		// 								<span className="Distribution__dot" style={{ backgroundColor: '#' + item[1] }} />
+		// 								{item[2]}
+		// 							</li>
+		// 				)
+		// }
 
 		return (
 			<section className="Distribution">
@@ -39,7 +49,37 @@ export default class LandingDistribution extends React.Component {
 					</div>
 					<div className="small-6 columns Distribution__list">
 						<ul>
-							{renderList()}
+							{/* {renderList()} */}
+							<li className="Distribution__item">
+								<strong className="Distribution__strong">10%</strong>
+								{renderDot('2e17b8')}
+								Резерв на развитие
+							</li>
+							<li className="Distribution__item">
+								<strong className="Distribution__strong">10%</strong>
+								{renderDot('f9ca0f')}
+								Распределение держателям Steem
+							</li>
+							<li className="Distribution__item">
+								<strong className="Distribution__strong">10%</strong>
+								{renderDot('1e193b')}
+								Cyber.Fund
+							</li>
+							<li className="Distribution__item">
+								<strong className="Distribution__strong Distribution__strong_extra-margin">7%</strong>
+								{renderDot('cd591a')}
+								Основателям Голоса
+							</li>
+							<li className="Distribution__item">
+								<strong className="Distribution__strong Distribution__strong_extra-margin">3%</strong>
+								{renderDot('7bd915')}
+								Майнерам Голоса
+							</li>
+							<li className="Distribution__item">
+								<strong className="Distribution__strong">60%</strong>
+								{renderDot('d80a15')}
+								Краудсейл
+							</li>
 						</ul>
 					</div>
 				</div>

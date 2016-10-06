@@ -1,89 +1,66 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 import CountDown from 'app/components/elements/CountDown'
-// import ReactCountdownClock from 'react-countdown-clock'
 
-
-// import 'app/assets/lib/slick-countdown/css/jquery.classycountdown.css'
-// // import 'app/assets/lib/slick-countdown/js/jquery.knob.js'
-// // import 'app/assets/lib/slick-countdown/js/jquery.throttle.js'
-// import 'app/assets/lib/slick-countdown/js/jquery.classycountdown.js'
-
-
-
-
-
-
-/*
-Как должна работать функция каунтдауна:
-
-день и часы - это округленное оставшееся время, или просто Число.getDayNumber + Число.getNumber
-
-(нужно создать отдельный компонент для чистоты эксперимента)
- */
-
-
-// how to get number of days
-// var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
-// var firstDate = new Date(2008,01,12);
-// var secondDate = new Date(2008,01,22);
-//
-// var diffDays = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime())/(oneDay)));
-
-
-
-
-
-// Приоритеты(от высшего к низшему)
-// запустить нормальные каунтдауны как в псд
-// прикрутить к какнтдаунам правильные даты
-// прикрутить переход между датами и окончание краудсейла
-// закончить с элемент <Team />
-
-// нужно определиться когда будут начаты краудсейлы (кстати переспроси у Кости)
-// прогнать краудсейлы сквозь Date object
-//
-// const bonuses = ['25%', '20%']
-//
-
-// как проходит смена дат и каунтдауна
-// 1) к каунтдауну прикручивается коллбэк, который запускается когда каунтдаун закончен
-// 2) если краудсейл еще активен, то:
-// 		а) выставляются новый и следующий бонус
-// 		б) выбирается следующая дата и запускается новый каунтдаун
-
-
-// const crodwsaleStart = new Date(2016, 10, 15); //, hours, minutes, seconds, milliseconds
-// format date till start properly
-// function createDate(month, day) {
-// 	const today = new Date()
-// 	const date = new Date(2016, month, day, today.getHours(), today.getMinutes(), today.getSeconds())
-// 	// hours, minutes and seconds always start with
-// 	// date.setHours(today.getHours())
-// 	// date.setMinutes(today.getMinutes())
-// 	// date.setSeconds(today.getSeconds())
-// 	return date
-// }
-//
-// const tilCrowdsaleStart = createDate(9, 16)
-
-// 1. Допустим мы данный сайт начнем публиковать открыто с момента ICO тогда скидка:
-// 25% в первые 15 дней
-// 20% с 16 дня по 18 день
-// 15% с 19 дня по 21 день
-// 10% с 22 дня по 24 день
-// 5% с 25 дня по 27 день
-// 0% с 28 дня по 30 день
+const stages = [25, 20, 15, 10, 5, 0]
 
 export default class LandingCountDowns extends React.Component {
 
-	state = {
-		currentBonus: '25%', // calculateBonus()
-		crowdSaleIsActive: true,
-		currentStage: null,
-		// prefill: this.props.crowdSaleIsActive < Date.now()
+	static propTypes = {
+		crowdsaleEndAt: PropTypes.object,
+		crowdsaleStartAt: PropTypes.object.isRequired
 	}
 
+	state = {
+		currentBonus: '',
+		nextBonus: '',
+		bitcoinsRaised: 2000.45,
+		crowdSaleIsActive: true,
+	}
+
+	componentDidMount() {
+		const currentBonus = this.calculateCurrentStage()
+		this.setState({
+			currentBonus,
+			nextBonus: currentBonus != 0 ? currentBonus - 5 : 0
+		})
+	}
+
+	addDays = days => {
+		const result = new Date(this.props.crowdsaleStartAt)
+		result.setDate(result.getDate() + days)
+		return result
+	}
+
+	// dates are calculated based on props.crowdsaleStartAt variable
+	dates = [
+		{ date: this.addDays(15), bonus: 25 },
+		{ date: this.addDays(18), bonus: 20 },
+		{ date: this.addDays(21), bonus: 15 },
+		{ date: this.addDays(24), bonus: 10 },
+		{ date: this.addDays(27), bonus: 5 },
+		{ date: this.addDays(18), bonus: 0 }
+	]
+
+	calculateCurrentStage = () => {
+		const {crowdsaleStartAt} = this.props
+
+		if (crowdsaleStartAt < this.addDays(15)) return stages[0]
+		else if (crowdsaleStartAt < this.addDays(18)) return stages[1]
+		else if (crowdsaleStartAt < this.addDays(21)) return stages[2]
+		else if (crowdsaleStartAt < this.addDays(24)) return stages[3]
+		else if (crowdsaleStartAt < this.addDays(27)) return stages[4]
+		return stages[5]
+	}
+
+	// TODO add this
+	// handleCrowdsaleStart = () => {}
+	// handleCrowdsaleEnd = () => {}
+	// handleStageChange = () => {}
+
 	render() {
+		const {state, props} = this
+		const currentStage = this.dates.find((item) => item.bonus == this.calculateCurrentStage())
+
 		return (
 			<section className="CountDowns">
 
@@ -98,18 +75,25 @@ export default class LandingCountDowns extends React.Component {
 				{/* COUNTERS */}
 				{/* change counter */}
 				{
-					this.props.prefill
+					props.prefill
 					? 	<div className="row text-center CountDowns__counters">
 							<div className="small-12 columns">
-								<CountDown title="Продажа силы голоса начнется" date={this.props.crowdsaleStartAt} />
+								<CountDown title="Продажа силы голоса начнется" date={props.crowdsaleStartAt} />
 							</div>
 						</div>
 					: 	<div className="row text-center CountDowns__counters">
-							<div className="small-12 medium-6 columns">
-								<CountDown title="Продажа силы голоса закончится" date={this.props.crowdsaleStartAt} />
+							<div className="small-12 medium-4 columns">
+								<CountDown title="Продажа силы голоса закончится" date={props.crowdsaleEndAt} />
 							</div>
-							<div className="small-12 medium-6 columns">
-								<CountDown title="Бонус уменьшится: до 20%" date={this.state.currentStage} />
+							<div className="small-12 medium-4 columns">
+								<p>Собрано биткоинов</p>
+								<strong>{state.bitcoinsRaised} B</strong>
+								<p>
+									<small>Текущий бонус <span className="red"> + {state.currentBonus}%</span></small>
+								</p>
+							</div>
+							<div className="small-12 medium-4 columns">
+								<CountDown title={`Бонус уменьшится: до ${state.nextBonus}%`} date={currentStage.date} />
 							</div>
 						</div>
 				}
@@ -117,11 +101,11 @@ export default class LandingCountDowns extends React.Component {
 
 				{/* BUTTON */}
 				{
-					this.props.prefill
+					props.prefill
 					? null
 					: <div className="row CountDowns__button">
 						<div className="small-12 columns">
-							{this.props.button}
+							{props.button}
 							<small>Продажа Голоса закончиться при достижении 3300 ฿</small>
 						</div>
 					</div>
@@ -129,7 +113,7 @@ export default class LandingCountDowns extends React.Component {
 
 				{/* FOOTER LINKS */}
 				{
-					this.props.prefill
+					props.prefill
 					? 	<div className="row CountDowns__links">
 							<div className="small-12 columns text-center">
 								<a href="http://golos.io/" className="CountDowns__button_small">вики проэкта</a>

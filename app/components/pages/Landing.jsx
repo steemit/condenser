@@ -13,7 +13,6 @@ import Press from 'app/components/elements/LandingPress'
 import Partners from 'app/components/elements/LandingPartners'
 import Footer from 'app/components/elements/LandingFooter'
 
-
 /*
     NOTE there was so little time and so much todo, thats why code is clumsy and
     there is little to no comments
@@ -26,21 +25,20 @@ function createDate(month, day) {
 	return date
 }
 
-const tilCrowdsaleStart = createDate(9, 16)
-// const tilCrowdsaleEnd = createDate(10, 16)
-// const crowdSaleIsActive = tilCrowdsaleStart.getTime() > tilCrowdsaleEnd.getTime()
-
 const buyGolosButton = <a href="" className="button Landing__button_big">Купи <strong>Силу Голоса</strong></a>
+
+const crowdsaleStartAt = createDate(9, 16)
+const crowdsaleEndAt = createDate(10, 16)
 
 class Landing extends React.Component {
 
     render() {
         // if crodwsale hasn't started yet render countdown til crodwsale start
-        // if (tilCrowdsaleStart > Date.now()) return <CountDowns prefill crowdsaleStart={tilCrowdsaleStart} />
+        if (crowdsaleStartAt > Date.now()) return <CountDowns prefill crowdsaleStartAt={crowdsaleStartAt} />
 
         return (
             <div className="Landing text-center">
-                <CountDowns crowdsaleStartAt={tilCrowdsaleStart} button={buyGolosButton} />
+                <CountDowns crowdsaleStartAt={crowdsaleStartAt} crowdsaleEndAt={crowdsaleEndAt} button={buyGolosButton} />
                 <hr />
                 <Distribution />
                 <hr />
@@ -57,12 +55,12 @@ class Landing extends React.Component {
                 <Faq />
                 <hr />
                 <Team />
-                <hr />
-                <Press button={buyGolosButton} />
-                <hr />
+				<hr />
                 <WhyGolos />
-                <hr />
-                <Partners />
+				<hr />
+				<Partners />
+				<hr />
+                <Press button={buyGolosButton} />
                 <hr />
                 <Footer />
                 <hr />

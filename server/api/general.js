@@ -44,6 +44,18 @@ export default function useGeneralApi(app) {
                 return;
             }
 
+            // check if user's ip is associated with any bot
+            const same_ip_bot = yield models.User.findOne({
+                attributes: ['id', 'created_at'],
+                where: {remote_ip, bot: true}
+            });
+            if (same_ip_bot) {
+                console.log('-- /accounts same_ip_bot -->', user_id, this.session.uid, remote_ip, user.email);
+                this.body = JSON.stringify({error: 'We are sorry, we cannot sign you up at this time because your IP address is associated with bots activity. Please contact support@steemit.com for more information.'});
+                this.status = 401;
+                return;
+            }
+
             const existing_account = yield models.Account.findOne({
                 attributes: ['id', 'created_at'],
                 where: {user_id, ignored: false},
@@ -67,6 +79,8 @@ export default function useGeneralApi(app) {
                 console.log(`api /accounts: waiting_list user ${this.session.uid} #${user_id}`);
                 throw new Error('You are on the waiting list. We will get back to you at the earliest possible opportunity.');
             }
+
+            // check email
             const eid = yield models.Identity.findOne(
                 {attributes: ['id'], where: {user_id, provider: 'email', verified: true}, order: 'id DESC'}
             );
@@ -75,6 +89,7 @@ export default function useGeneralApi(app) {
                 throw new Error('Email address is not confirmed');
             }
 
+            // check phone
             const mid = yield models.Identity.findOne(
                 {attributes: ['id'], where: {user_id, provider: 'phone', verified: true}, order: 'id DESC'}
             );

@@ -142,6 +142,19 @@ export default function useEnterAndConfirmEmailPages(app) {
             return;
         }
 
+        const email_provider = email.match(/([\w\d-]+\.\w+)$/)[1];
+        if (!email_provider) throw new Error('Incorrect email format');
+        const blocked_email = yield models.List.findOne({
+            attributes: ['id'],
+            where: {kk: 'block-email-provider', value: email_provider}
+        });
+        if (blocked_email) {
+            console.log('-- /handle_facebook_callback blocked_email -->', this.session.uid, email);
+            this.flash = {error: 'Not supported email address: ' + email + '. Please make sure your you don\'t use any temporary email providers, contact support@steemit.com for more information.'};
+            this.redirect('/enter_email');
+            return;
+        }
+
         const confirmation_code = Math.random().toString(36).slice(2);
         let eid = yield models.Identity.findOne(
             {attributes: ['id', 'email'], where: {user_id, provider: 'email'}, order: 'id'}

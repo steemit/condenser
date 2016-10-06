@@ -31,7 +31,7 @@ function stripHtmlWrapper(text) {
 function addHtmlWrapper(body) {
     if(/^<html>/.test(body)) {
         const err = "Error: content passed to addHtmlWrapper is already wrapped";
-        serverApiRecordEvent('assert_error', error);
+        serverApiRecordEvent('assert_error', err);
         console.log(err);
         return body
     }

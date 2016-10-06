@@ -45,7 +45,6 @@ class App extends React.Component {
         const p = this.props;
         const n = nextProps;
         return p.location !== n.location || 
-                  p.loading !== n.loading ||
                   p.visitor !== n.visitor ||
                   p.flash !== n.flash || this.state !== nextState;
     }
@@ -74,9 +73,8 @@ class App extends React.Component {
     }
 
     render() {
-        const {location, params, children, loading, flash, showSignUp, new_visitor,
+        const {location, params, children, flash, showSignUp, new_visitor,
             depositSteem, signup_bonus} = this.props;
-        console.log('-- App.render -->', location.pathname);
         const lp = false; //location.pathname === '/';
         const miniHeader = location.pathname === '/create_account';
         const params_keys = Object.keys(params);
@@ -192,7 +190,6 @@ App.propTypes = {
     children: AppPropTypes.Children,
     location: React.PropTypes.object,
     signup_bonus: React.PropTypes.string,
-    loading: React.PropTypes.bool,
     loginUser: React.PropTypes.func.isRequired,
     depositSteem: React.PropTypes.func.isRequired,
 };
@@ -203,7 +200,6 @@ export default connect(
             error: state.app.get('error'),
             flash: state.offchain.get('flash'),
             signup_bonus: state.offchain.get('signup_bonus'),
-            loading: state.app.get('loading'),
             new_visitor: !state.user.get('current') &&
                 !state.offchain.get('user') &&
                 !state.offchain.get('account') &&

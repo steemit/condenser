@@ -42,13 +42,13 @@ function retrieveFacebookUserData(access_token) {
 
 function* handleFacebookCallback() {
     console.log('-- /handle_facebook_callback -->', this.session.uid, this.query);
-    let verified_email = false;
+    let email = null;
     try {
         if (this.query['error[error][message]']) {
             return logErrorAndRedirect(this, 'facebook:1', this.query['error[error][message]']);
         }
         const u = yield retrieveFacebookUserData(this.query.access_token);
-        verified_email = false; // verified_email = !!(u.verified && u.email);
+        email = u.email;
         const attrs = {
             uid: this.session.uid,
             name: u.name,
@@ -78,7 +78,7 @@ function* handleFacebookCallback() {
         const i_attrs_email = {
             provider: 'email',
             email: u.email,
-            verified: verified_email
+            verified: false
         };
 
         let user = yield findUser({email: u.email, provider_user_id: u.id});
@@ -120,55 +120,46 @@ function* handleFacebookCallback() {
             }
             return null;
         }
-        if (!u.email) {
-            console.log('-- /handle_facebook_callback no email -->', this.session.uid, u);
-            this.flash = {alert: 'Facebook login didn\'t provide any email addresses. Please make sure your Facebook account has a primary email address and try again.'};
-            this.redirect('/');
-            return;
-        }
+        // no longer necessary since there is phone verification now
+        // if (!u.email) {
+        //     console.log('-- /handle_facebook_callback no email -->', this.session.uid, u);
+        //     this.flash = {alert: 'Facebook login didn\'t provide any email addresses. Please make sure your Facebook account has a primary email address and try again.'};
+        //     this.redirect('/');
+        //     return;
+        // }
+        // if (!u.verified) {
+        //     throw new Error('Not verified Facebook account. Please verify your Facebook account and try again to sign up to Steemit.');
+        // }
 
-        if (!u.verified) {
-            throw new Error('Not verified Facebook account. Please verify your Facebook account and try again to sign up to Steemit.');
-        }
-
-        const same_ip_bot = yield models.User.findOne({
-            attributes: ['id', 'created_at'],
-            where: {remote_ip: attrs.remote_ip, bot: true}
-        });
-        if (same_ip_bot) {
-            console.log('-- /handle_facebook_callback same_ip_bot -->', this.session.uid, attrs.remote_ip, attrs.email);
-            this.flash = {alert: 'We are sorry, we cannot sign you up at this time because your IP address is associated with bots activity. Please contact support@steemit.com for more information.'};
-            this.redirect('/');
-            return;
-        }
-
-        const email_provider = u.email.match(/([\w\d-]+\.\w+)$/)[1];
-        if (!email_provider) throw new Error('Incorrect email format');
-        const blocked_email = yield models.List.findOne({
-            attributes: ['id'],
-            where: {kk: 'block-email-provider', value: email_provider}
-        });
-        if (blocked_email) {
-            console.log('-- /handle_facebook_callback blocked_email -->', this.session.uid, u.email);
-            this.flash = {alert: 'Not supported email address: ' + u.email + '. Please make sure your you don\'t use any temporary email providers, contact support@steemit.com for more information.'};
-            this.redirect('/');
-            return;
-        }
+        // TODO: move to create account procedure
+        // const same_ip_bot = yield models.User.findOne({
+        //     attributes: ['id', 'created_at'],
+        //     where: {remote_ip: attrs.remote_ip, bot: true}
+        // });
+        // if (same_ip_bot) {
+        //     console.log('-- /handle_facebook_callback same_ip_bot -->', this.session.uid, attrs.remote_ip, attrs.email);
+        //     this.flash = {alert: 'We are sorry, we cannot sign you up at this time because your IP address is associated with bots activity. Please contact support@steemit.com for more information.'};
+        //     this.redirect('/');
+        //     return;
+        // }
+        //
+        // const email_provider = u.email.match(/([\w\d-]+\.\w+)$/)[1];
+        // if (!email_provider) throw new Error('Incorrect email format');
+        // const blocked_email = yield models.List.findOne({
+        //     attributes: ['id'],
+        //     where: {kk: 'block-email-provider', value: email_provider}
+        // });
+        // if (blocked_email) {
+        //     console.log('-- /handle_facebook_callback blocked_email -->', this.session.uid, u.email);
+        //     this.flash = {alert: 'Not supported email address: ' + u.email + '. Please make sure your you don\'t use any temporary email providers, contact support@steemit.com for more information.'};
+        //     this.redirect('/');
+        //     return;
+        // }
 
         if (user) {
             i_attrs_email.user_id = attrs.id = user.id;
             yield models.User.update(attrs, {where: {id: user.id}});
             yield models.Identity.update(i_attrs, {where: {user_id: user.id, provider: 'facebook'}});
-            if (verified_email) {
-                const eid = yield models.Identity.findOne(
-                    {attributes: ['id', 'verified'], where: {user_id: user.id, provider: 'email'}, order: 'id DESC'}
-                );
-                if (eid) {
-                    if (!eid.verified) yield eid.update({email: u.email, verified: true});
-                } else {
-                    yield models.Identity.create(i_attrs_email);
-                }
-            }
             console.log('-- fb updated user -->', this.session.uid, user.id, u.name, u.email);
         } else {
             user = yield models.User.create(attrs);
@@ -186,11 +177,7 @@ function* handleFacebookCallback() {
         return logErrorAndRedirect(this, 'facebook:2', error);
     }
     this.flash = {success: 'Successfully authenticated with Facebook'};
-    if (verified_email) {
-        this.redirect('/create_account');
-    } else {
-        this.redirect('/enter_email');
-    }
+    this.redirect('/enter_email' + (email ? `?email=${email}` : ''));
     return null;
 }
 

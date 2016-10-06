@@ -11,19 +11,21 @@ const use_case_code = 'BACS' // Use Case: avoid bulk attack and spammers
 /** @return {object} - {reference_id} or {error} */
 export function* verify({mobile, confirmation_code, ip}) {
     try {
-        const {risk: {recommendation}} = yield score(mobile)
+        const result = yield getScore(mobile)
+        const {recommendation, score} = result.risk
         if(recommendation !== 'allow') {
             console.log(`TeleSign did not allow phone ${mobile} ip ${ip}. TeleSign responded: ${recommendation}`);
-            return {error: 'Unable to verify your phone number. Please try a different phone number.'}
+            return {error: 'Unable to verify your phone number. Please try a different phone number.', score}
         }
         const {reference_id} = yield verifySms({mobile, confirmation_code, ip})
-        return {reference_id}
+        return {reference_id, score}
     } catch(error) {
+        console.log('-- verify score error -->', error);
         return {error: 'Unable to verify phone, please try again later.'}
     }
 }
 
-function score(mobile) {
+function getScore(mobile) {
     const fields = urlencode({
         ucid: use_case_code,
     })

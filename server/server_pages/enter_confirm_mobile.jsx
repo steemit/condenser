@@ -137,10 +137,10 @@ export default function useEnterAndConfirmMobilePages(app) {
         // }
 
         const existing_phone = yield models.Identity.findOne(
-            {attributes: ['user_id'], where: {phone, provider: 'phone', verified: true}, order: 'id'}
+            {attributes: ['user_id'], where: {phone: mobile, provider: 'phone', verified: true}, order: 'id'}
         );
         if (existing_phone && existing_phone.user_id != user_id) {
-            console.log('-- /submit_email existing_phone -->', user_id, this.session.uid, phone, existing_phone.user_id);
+            console.log('-- /submit_email existing_phone -->', user_id, this.session.uid, mobile, existing_phone.user_id);
             this.flash = {error: 'This phone number has already been used'};
             this.redirect('/enter_mobile');
             return;
@@ -148,7 +148,7 @@ export default function useEnterAndConfirmMobilePages(app) {
 
         const confirmation_code = Math.random().toString().substring(2, 6);
         let mid = yield models.Identity.findOne(
-            {attributes: ['id', 'phone', 'verified'], where: {user_id, provider: 'phone'}, order: 'id'}
+            {attributes: ['id', 'phone', 'verified', 'updated_at'], where: {user_id, provider: 'phone'}, order: 'id'}
         );
         if (mid) {
             if (mid.verified) {
@@ -157,8 +157,13 @@ export default function useEnterAndConfirmMobilePages(app) {
             } else {
                 if (mid.phone == mobile) {
                     // TODO: resend confirmation if last one was sent more than 1 min ago and number of attempts < 4
-                    this.flash = {error: 'Confirmation was already sent'};
-                    this.redirect('/enter_mobile'); return;
+                    const seconds_ago = (Date.now() - mid.updated_at) / 1000.0;
+                    if (seconds_ago < 120) {
+                        this.flash = {error: 'Confirmation was already sent. You can try again in 2 minutes.'};
+                        this.redirect('/enter_mobile');
+                        return;
+                    }
+                    yield mid.update({confirmation_code, phone: mobile});
                 } else {
                     // TODO: limit number of attempts with different numbers to < 4
                     yield mid.update({confirmation_code, phone: mobile});
@@ -178,6 +183,7 @@ export default function useEnterAndConfirmMobilePages(app) {
         const ip = getRemoteIp(this.req)
 
         const verifyResult = yield verify({mobile, confirmation_code, ip});
+        if (verifyResult && verifyResult.score) eid.update({score: verifyResult.score});
         if(verifyResult && verifyResult.error) {
             this.flash = {error: verifyResult.error};
             this.redirect('/enter_mobile');
@@ -186,7 +192,7 @@ export default function useEnterAndConfirmMobilePages(app) {
 
         const body = renderToString(<div className="App">
             <MiniHeader />
-            {renderSignupProgressBar([this.session.prv || 'facebook', 'email', 'phone', 'steem account'], 3)}
+            <SignupProgressBar steps={[this.session.prv || 'identity', 'email', 'phone', 'steem account']} current={3} />
             <br />
             <div className="row" style={{maxWidth: '32rem'}}>
                 <div className="column">

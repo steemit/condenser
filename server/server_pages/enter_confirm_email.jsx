@@ -64,6 +64,9 @@ export default function useEnterAndConfirmEmailPages(app) {
             this.redirect('/enter_mobile');
             return;
         }
+        console.log('-- this.request.query -->', this.request.query);
+        let default_email = '';
+        if (this.request.query && this.request.query.email) default_email = this.request.query.email;
         const body = renderToString(<div className="App">
             <MiniHeader />
             <SignupProgressBar steps={[this.session.prv || 'identity', 'email', 'phone', 'steem account']} current={2} />
@@ -78,10 +81,10 @@ export default function useEnterAndConfirmEmailPages(app) {
                         <input type="hidden" name="csrf" value={this.csrf} />
                         <label>
                             Email
-                            <input type="email" name="email" defaultValue={eid ? eid.email : ''} readOnly={eid && eid.email} />
+                            <input type="email" name="email" defaultValue={default_email} />
                         </label>
-                        {eid && eid.email &&
-                        <div className="secondary"><i>Email address cannot be changed at this moment, sorry for the inconvenience.</i></div>}
+                        {/*eid && eid.email &&
+                        <div className="secondary"><i>Email address cannot be changed at this moment, sorry for the inconvenience.</i></div>*/}
                         <br />
                         <div className="g-recaptcha" data-sitekey={config.recaptcha.site_key}></div>
                         <br />
@@ -160,7 +163,7 @@ export default function useEnterAndConfirmEmailPages(app) {
 
         const body = renderToString(<div className="App">
             <MiniHeader />
-            {renderSignupProgressBar([this.session.prv || 'facebook', 'email', 'phone', 'steem account'], 2)}
+            <SignupProgressBar steps={[this.session.prv || 'identity', 'email', 'phone', 'steem account']} current={2} />
             <br />
             <div className="row" style={{maxWidth: '32rem'}}>
                 <div className="column">

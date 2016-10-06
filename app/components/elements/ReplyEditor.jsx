@@ -14,6 +14,7 @@ import g from 'app/redux/GlobalReducer'
 import {Set} from 'immutable'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import Remarkable from 'remarkable'
+import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 
 const remarkable = new Remarkable({ html: true, linkify: false })
 const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
@@ -25,6 +26,16 @@ let saveEditorTimeout
 function stripHtmlWrapper(text) {
     const m = text.match(/<html>([\S\s]*)<\/html>/m);
     return m && m.length === 2 ? m[1] : text;
+}
+
+function addHtmlWrapper(body) {
+    if(/^<html>/.test(body)) {
+        const err = "Error: content passed to addHtmlWrapper is already wrapped";
+        serverApiRecordEvent('assert_error', error);
+        console.log(err);
+        return body
+    }
+    return `<html>\n${body}\n</html>`;
 }
 
 // See also MarkdownViewer render
@@ -127,30 +138,26 @@ class ReplyEditor extends React.Component {
             let rte  = this.props.isStory && JSON.parse(localStorage.getItem('replyEditorData-rte') || RTE_DEFAULT);
             let html = null;
 
-            // Process initial state: if body exists, set `rte` flag and strip html tag if true
-            const body = this.props.fields.body
+            // Process initial body value (if this is an edit)
+            const {body} = this.props.fields
             if (body.value) {
-                rte  = isHtmlTest(body.value)
-                html = rte ? stripHtmlWrapper(body.value) : body.value
+                html = body.value
             }
 
-            // Read saved data into form
-            let editorData = localStorage.getItem('replyEditorData-' + formId)
-            if(editorData) {
-                editorData = JSON.parse(editorData)
-
-                // --- Legacy compatibility
-                if(editorData.rte === undefined) {
-                    editorData.rte  = isHtmlTest(editorData.body)
-                    editorData.body = stripHtmlWrapper(editorData.body)
-                }
-                // ---
-
+            // Check for draft data
+            let draft = localStorage.getItem('replyEditorData-' + formId)
+            if(draft) {
+                draft = JSON.parse(draft)
                 const {category, title} = this.props.fields
-                if(category) category.onChange(editorData.category)
-                if(title)    title.onChange(editorData.title)
-                rte  = editorData.rte
-                html = editorData.body
+                if(category) category.onChange(draft.category)
+                if(title) title.onChange(draft.title)
+                html = draft.body
+            }
+
+            // If we have an initial body, check if it's html or markdown
+            if(html) {
+                rte = isHtmlTest(html)
+                if(rte) html = stripHtmlWrapper(html)
             }
 
             body.onChange(html)
@@ -184,8 +191,7 @@ class ReplyEditor extends React.Component {
                     formId,
                     title: title ? title.value : undefined,
                     category: category ? category.value : undefined,
-                    body: body.value,
-                    rte: this.state.rte
+                    body: this.state.rte ? addHtmlWrapper(body.value) : body.value,
                 }
 
                 clearTimeout(saveEditorTimeout)
@@ -222,7 +228,7 @@ class ReplyEditor extends React.Component {
         e.preventDefault();
         const state = {rte: !this.state.rte};
         if (state.rte) {
-            state.rte_value = stateFromHtml(this.props.fields.body.value, 'html');
+            state.rte_value = stateFromHtml(this.props.fields.body.value);
         }
         this.setState(state);
         localStorage.setItem('replyEditorData-rte', !this.state.rte)
@@ -437,9 +443,8 @@ export default formId => reduxForm(
                 originalPost.category : formCategories.first()
             const rootTag = /^[-a-z\d]+$/.test(rootCategory) ? rootCategory : null
 
-            // Handle HTML wrapper.
-            if(/^<html>/.test(body)) { const err = "ERROR: <html> passed directly to reply(). Instead, pass `isHtml=true`."; console.log(err); alert(err); return }
-            if(isHtml) body = `<html>\n${body}\n</html>`;
+            // If this is an HTML post, add <html> wrapper to mark it as so
+            if(isHtml) body = addHtmlWrapper(body)
 
             let rtags
             {

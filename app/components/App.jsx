@@ -5,7 +5,6 @@ import Header from 'app/components/modules/Header';
 import LpFooter from 'app/components/modules/lp/LpFooter';
 import user from 'app/redux/User';
 import g from 'app/redux/GlobalReducer';
-import { Link } from 'react-router';
 import TopRightMenu from 'app/components/modules/TopRightMenu';
 import { browserHistory } from 'react-router';
 import classNames from 'classnames';
@@ -14,7 +13,8 @@ import CloseButton from 'react-foundation-components/lib/global/close-button';
 import Dialogs from 'app/components/modules/Dialogs';
 import Modals from 'app/components/modules/Modals';
 import Icon from 'app/components/elements/Icon';
-import {key_utils} from 'shared/ecc'
+import {key_utils} from 'shared/ecc';
+import MiniHeader from 'app/components/modules/MiniHeader';
 
 class App extends React.Component {
     constructor(props) {
@@ -76,7 +76,9 @@ class App extends React.Component {
     render() {
         const {location, params, children, loading, flash, showSignUp, new_visitor,
             depositSteem, signup_bonus} = this.props;
+        console.log('-- App.render -->', location.pathname);
         const lp = false; //location.pathname === '/';
+        const miniHeader = location.pathname === '/create_account';
         const params_keys = Object.keys(params);
         const ip = location.pathname === '/' || (params_keys.length === 2 && params_keys[0] === 'order' && params_keys[1] === 'category');
         const alert = this.props.error || flash.get('alert');
@@ -149,7 +151,8 @@ class App extends React.Component {
             );
         }
 
-        return <div className={'App' + (lp ? ' LP' : '') + (ip ? ' index-page' : '')} onMouseMove={this.onEntropyEvent}>
+        return <div className={'App' + (lp ? ' LP' : '') + (ip ? ' index-page' : '') + (miniHeader ? ' mini-header' : '')}
+                    onMouseMove={this.onEntropyEvent}>
             <SidePanel ref="side_panel" alignment="right">
                 <TopRightMenu vertical navigate={this.navigate} />
                 <ul className="vertical menu">
@@ -171,7 +174,7 @@ class App extends React.Component {
                     <li><a href="/tos.html" onClick={this.navigate} rel="nofollow">Terms of Service</a></li>
                 </ul>
             </SidePanel>
-            <Header toggleOffCanvasMenu={this.toggleOffCanvasMenu} menuOpen={this.state.open} />
+            {miniHeader ? <MiniHeader /> : <Header toggleOffCanvasMenu={this.toggleOffCanvasMenu} menuOpen={this.state.open} />}
             <div className="App__content">
                 {welcome_screen}
                 {callout}

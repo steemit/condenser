@@ -9,6 +9,7 @@ import {validate_account_name} from 'app/utils/ChainValidation';
 import SignUp from 'app/components/modules/SignUp';
 import runTests from 'shared/ecc/test/BrowserTests';
 import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInput';
+import SignupProgressBar from 'app/components/elements/SignupProgressBar';
 
 class CreateAccount extends React.Component {
 
@@ -27,7 +28,8 @@ class CreateAccount extends React.Component {
             name_error: '',
             server_error: '',
             loading: false,
-            cryptographyFailure: false
+            cryptographyFailure: false,
+            showRules: false
         };
         this.onSubmit = this.onSubmit.bind(this);
         this.onNameChange = this.onNameChange.bind(this);
@@ -140,7 +142,7 @@ class CreateAccount extends React.Component {
 
         const {
             name, password_valid, //showPasswordString,
-            name_error, server_error, loading, cryptographyFailure
+            name_error, server_error, loading, cryptographyFailure, showRules
         } = this.state;
 
         const {loggedIn, logout, offchainUser, serverBusy} = this.props;
@@ -210,40 +212,49 @@ class CreateAccount extends React.Component {
             </div>
 
         return (
-            <div className="CreateAccount row">
-                <div className="column large-7 small-10">
-                    <h2>Sign Up</h2>
-                    <div className="CreateAccount__rules">
-                        <hr />
-                        <p>
-                            The first rule of Steemit is: Do not lose your password.<br />
-                            The second rule of Steemit is: Do <strong>not</strong> lose your password.<br />
-                            The third rule of Steemit is: We cannot recover your password.<br />
-                            The fourth rule: If you can remember the password, it&apos;s not secure.<br />
-                            The fifth rule: Use only randomly-generated passwords.<br />
-                            The sixth rule: Do not tell anyone your password.<br />
-                            The seventh rule: Always back up your password.
-                        </p>
-                        <hr />
-                    </div>
-                    <form onSubmit={this.onSubmit} autoComplete="off" noValidate method="post">
-                        <div className={name_error ? 'error' : ''}>
-                            <label>USERNAME
-                                <input type="text" name="name" autoComplete="off" onChange={this.onNameChange} value={name} />
-                            </label>
-                            <p>{name_error}</p>
-                        </div>
-                        <GeneratedPasswordInput onChange={this.onPasswordChange} disabled={loading} showPasswordString={name.length > 0 && !name_error} />
+            <div>
+                <SignupProgressBar steps={[offchainUser.get('prv') || 'identity', 'email', 'phone', 'steem account']} current={4} />
+                <div className="CreateAccount row">
+                    <div className="column" style={{maxWidth: '36rem', margin: '0 auto'}}>
                         <br />
-                        {next_step && <div>{next_step}<br /></div>}
-                        <noscript>
-                            <div className="callout alert">
-                                <p>This form requires javascript to be enabled in your browser</p>
+                        {showRules ? <div className="CreateAccount__rules">
+                            <p>
+                                The first rule of Steemit is: Do not lose your password.<br />
+                                The second rule of Steemit is: Do <strong>not</strong> lose your password.<br />
+                                The third rule of Steemit is: We cannot recover your password.<br />
+                                The fourth rule: If you can remember the password, it&apos;s not secure.<br />
+                                The fifth rule: Use only randomly-generated passwords.<br />
+                                The sixth rule: Do not tell anyone your password.<br />
+                                The seventh rule: Always back up your password.
+                            </p>
+                            <div className="text-center">
+                                <a className="CreateAccount__rules-button" href="#" onClick={() => this.setState({showRules: false})}>
+                                    <span style={{display: 'inline-block', transform: 'rotate(-90deg)'}}>&raquo;</span>
+                                </a>
                             </div>
-                        </noscript>
-                        {loading && <LoadingIndicator type="circle" />}
-                        <input disabled={submit_btn_disabled} type="submit" className={submit_btn_class} value="SIGN UP" />
-                    </form>
+                            <hr />
+                        </div> : <div className="text-center">
+                            <a className="CreateAccount__rules-button" href="#" onClick={() => this.setState({showRules: true})}>Steemit Rules &nbsp; &raquo;</a>
+                        </div>}
+                        <form onSubmit={this.onSubmit} autoComplete="off" noValidate method="post">
+                            <div className={name_error ? 'error' : ''}>
+                                <label>ACCOUNT NAME
+                                    <input type="text" name="name" autoComplete="off" onChange={this.onNameChange} value={name} />
+                                </label>
+                                <p>{name_error}</p>
+                            </div>
+                            <GeneratedPasswordInput onChange={this.onPasswordChange} disabled={loading} showPasswordString={name.length > 0 && !name_error} />
+                            <br />
+                            {next_step && <div>{next_step}<br /></div>}
+                            <noscript>
+                                <div className="callout alert">
+                                    <p>This form requires javascript to be enabled in your browser</p>
+                                </div>
+                            </noscript>
+                            {loading && <LoadingIndicator type="circle" />}
+                            <input disabled={submit_btn_disabled} type="submit" className={submit_btn_class} value="Create Account" />
+                        </form>
+                    </div>
                 </div>
             </div>
         );

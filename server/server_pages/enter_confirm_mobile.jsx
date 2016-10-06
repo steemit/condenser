@@ -7,8 +7,9 @@ import models from 'db/models';
 import ServerHTML from 'server/server-html';
 import Icon from 'app/components/elements/Icon.jsx';
 import {verify} from 'server/teleSign';
-import {renderHeader, renderSignupProgressBar} from './shared';
+import SignupProgressBar from 'app/components/elements/SignupProgressBar';
 import {getRemoteIp, checkCSRF} from 'server/utils';
+import MiniHeader from 'app/components/modules/MiniHeader';
 
 const assets_file = process.env.NODE_ENV === 'production' ? 'tmp/webpack-stats-prod.json' : 'tmp/webpack-stats-dev.json';
 const assets = Object.assign({}, require(assets_file), {script: []});
@@ -59,8 +60,8 @@ export default function useEnterAndConfirmMobilePages(app) {
             return;
         }
         const body = renderToString(<div className="App">
-            {renderHeader()}
-            {renderSignupProgressBar([this.session.prv || 'facebook', 'email', 'phone', 'steem account'], 3)}
+            <MiniHeader />
+            <SignupProgressBar steps={[this.session.prv || 'identity', 'email', 'phone', 'steem account']} current={3} />
             <br />
             <div className="row" style={{maxWidth: '32rem'}}>
                 <form className="column" action="/submit_mobile" method="POST">
@@ -184,7 +185,7 @@ export default function useEnterAndConfirmMobilePages(app) {
         }
 
         const body = renderToString(<div className="App">
-            {renderHeader()}
+            <MiniHeader />
             {renderSignupProgressBar([this.session.prv || 'facebook', 'email', 'phone', 'steem account'], 3)}
             <br />
             <div className="row" style={{maxWidth: '32rem'}}>

@@ -9,32 +9,32 @@ import Icon from 'app/components/elements/Icon.jsx';
 import {verify} from 'server/teleSign';
 import {renderHeader, renderSignupProgressBar} from './shared';
 import {getRemoteIp, checkCSRF} from 'server/utils';
-import config from 'config';
 
-let assets;
-if (process.env.NODE_ENV === 'production') {
-    assets = Object.assign({}, require('tmp/webpack-stats-prod.json'), {script: ['https://www.google.com/recaptcha/api.js']});
-} else {
-    assets = Object.assign({}, require('tmp/webpack-stats-dev.json'));
-    assets.script.push('https://www.google.com/recaptcha/api.js');
-}
+const assets_file = process.env.NODE_ENV === 'production' ? 'tmp/webpack-stats-prod.json' : 'tmp/webpack-stats-dev.json';
+const assets = Object.assign({}, require(assets_file), {script: []});
+// assets.script.push('https://www.google.com/recaptcha/api.js');
 
 function *confirmMobileHandler() {
     const confirmation_code = this.params && this.params.code ? this.params.code : this.request.body.code;
     console.log('-- /confirm_mobile -->', this.session.uid, this.session.user, confirmation_code);
     const mid = yield models.Identity.findOne(
-        {attributes: ['id', 'user_id', 'phone', 'updated_at'], where: {user_id: this.session.user, confirmation_code, verified: false}, order: 'id DESC'}
+        {attributes: ['id', 'user_id', 'verified', 'updated_at'], where: {user_id: this.session.user, confirmation_code}, order: 'id DESC'}
     );
     if (!mid) {
         this.status = 401;
-        this.body = 'Confirmation code not found';
+        this.body = 'Wrong confirmation code';
+        return;
+    }
+    if (mid.verified) {
+        this.flash = {success: 'Phone number has already been verified'};
+        this.redirect('/create_account');
         return;
     }
     this.session.user = mid.user_id;
     const hours_ago = (Date.now() - mid.updated_at) / 1000.0 / 3600.0;
-    if (hours_ago > 240.0 * 30) {
+    if (hours_ago > 24.0) {
         this.status = 401;
-        this.body = 'Confirmation code expired';
+        this.body = 'Confirmation code has been expired';
         return;
     }
     yield mid.update({verified: true});
@@ -53,6 +53,11 @@ export default function useEnterAndConfirmMobilePages(app) {
         const mid = yield models.Identity.findOne(
             {attributes: ['phone'], where: {user_id, provider: 'phone'}, order: 'id DESC'}
         );
+        if (mid && mid.verified) {
+            this.flash = {success: 'Phone number has already been verified'};
+            this.redirect('/create_account');
+            return;
+        }
         const body = renderToString(<div className="App">
             {renderHeader()}
             {renderSignupProgressBar([this.session.prv || 'facebook', 'email', 'phone', 'steem account'], 3)}
@@ -129,6 +134,16 @@ export default function useEnterAndConfirmMobilePages(app) {
         //     this.redirect('/enter_mobile');
         //     return;
         // }
+
+        const existing_phone = yield models.Identity.findOne(
+            {attributes: ['user_id'], where: {phone, provider: 'phone', verified: true}, order: 'id'}
+        );
+        if (existing_phone && existing_phone.user_id != user_id) {
+            console.log('-- /submit_email existing_phone -->', user_id, this.session.uid, phone, existing_phone.user_id);
+            this.flash = {error: 'This phone number has already been used'};
+            this.redirect('/enter_mobile');
+            return;
+        }
 
         const confirmation_code = Math.random().toString().substring(2, 6);
         let mid = yield models.Identity.findOne(

@@ -19,11 +19,16 @@ function *confirmEmailHandler() {
     const confirmation_code = this.params && this.params.code ? this.params.code : this.request.body.code;
     console.log('-- /confirm_email -->', this.session.uid, this.session.user, confirmation_code);
     const eid = yield models.Identity.findOne(
-        {attributes: ['id', 'user_id', 'email', 'updated_at'], where: {confirmation_code, verified: false}, order: 'id DESC'}
+        {attributes: ['id', 'user_id', 'email', 'updated_at', 'verified'], where: {confirmation_code}, order: 'id DESC'}
     );
     if (!eid) {
         this.status = 401;
         this.body = 'confirmation code not found';
+        return;
+    }
+    if (eid.verified) {
+        this.flash = {success: 'Email has already been verified'};
+        this.redirect('/enter_mobile');
         return;
     }
     this.session.user = eid.user_id;

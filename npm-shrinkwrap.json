@@ -4427,15 +4427,10 @@
         }
       }
     },
-    "react-addons-perf": {
-      "version": "15.3.2",
-      "from": "react-addons-perf@>=15.3.1 <16.0.0",
-      "resolved": "https://registry.npmjs.org/react-addons-perf/-/react-addons-perf-15.3.2.tgz"
-    },
     "react-addons-pure-render-mixin": {
-      "version": "15.3.1",
-      "from": "react-addons-pure-render-mixin@15.3.1",
-      "resolved": "https://registry.npmjs.org/react-addons-pure-render-mixin/-/react-addons-pure-render-mixin-15.3.1.tgz"
+      "version": "15.3.2",
+      "from": "react-addons-pure-render-mixin@>=15.3.2 <16.0.0",
+      "resolved": "https://registry.npmjs.org/react-addons-pure-render-mixin/-/react-addons-pure-render-mixin-15.3.2.tgz"
     },
     "react-addons-test-utils": {
       "version": "15.3.2",
@@ -4448,9 +4443,38 @@
       "resolved": "https://registry.npmjs.org/react-dom/-/react-dom-15.3.2.tgz"
     },
     "react-foundation-components": {
-      "version": "0.11.1",
+      "version": "0.12.0",
       "from": "git+https://github.com/valzav/react-foundation-components.git#lib",
-      "resolved": "git+https://github.com/valzav/react-foundation-components.git#58935f818dab50266e2d7943d315404acb198ab3"
+      "resolved": "git+https://github.com/valzav/react-foundation-components.git#d14362c7c8eee946a4acc3b18d70271d5a82813e",
+      "dependencies": {
+        "foundation-sites": {
+          "version": "6.2.3",
+          "from": "foundation-sites@>=6.2.3 <7.0.0",
+          "resolved": "https://registry.npmjs.org/foundation-sites/-/foundation-sites-6.2.3.tgz"
+        },
+        "lodash": {
+          "version": "4.16.2",
+          "from": "lodash@>=4.16.1 <5.0.0",
+          "resolved": "https://registry.npmjs.org/lodash/-/lodash-4.16.2.tgz"
+        },
+        "react-overlays": {
+          "version": "0.6.3",
+          "from": "react-overlays@0.6.3",
+          "resolved": "https://registry.npmjs.org/react-overlays/-/react-overlays-0.6.3.tgz",
+          "dependencies": {
+            "react-prop-types": {
+              "version": "0.2.2",
+              "from": "react-prop-types@>=0.2.1 <0.3.0",
+              "resolved": "https://registry.npmjs.org/react-prop-types/-/react-prop-types-0.2.2.tgz"
+            }
+          }
+        },
+        "uncontrollable": {
+          "version": "4.0.3",
+          "from": "uncontrollable@>=4.0.3 <5.0.0",
+          "resolved": "https://registry.npmjs.org/uncontrollable/-/uncontrollable-4.0.3.tgz"
+        }
+      }
     },
     "react-highcharts": {
       "version": "8.4.2",

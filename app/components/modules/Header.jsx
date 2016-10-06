@@ -99,6 +99,18 @@ class Header extends React.Component {
         } else if (route.page === 'Post') {
             sort_order = '';
             topic = route.params[0];
+        } else if (route.page == 'SubmitPost') {
+            page_title = `Create a Post`;
+        } else if (route.page == 'Privacy') {
+            page_title = `Privacy Policy`;
+        } else if (route.page == 'Tos') {
+            page_title = `Terms of Service`;
+        } else if (route.page == 'ChangePassword') {
+            page_title = `Change Account Password`;
+        } else if (route.page == 'CreateAccount') {
+            page_title = `Sign Up`;
+        } else if (route.page == 'RecoverAccountStep1' || route.page == 'RecoverAccountStep2') {
+            page_title = `Stolen Account Recovery`;
         } else if (route.page === 'UserProfile') {
             user_name = route.params[0].slice(1);
             page_title = user_name;
@@ -167,7 +179,7 @@ class Header extends React.Component {
             sort_order_extra_menu = <HorizontalMenu items={items} />
         }
         return (
-            <header className="Header">
+            <header className="Header noPrint">
                 <div className="Header__top header">
                     <div className="expanded row">
                         <div className="columns">
@@ -177,7 +189,7 @@ class Header extends React.Component {
                                         <Icon name="steem" size="2x" />
                                     </Link>
                                 </li>
-                                <li className="Header__top-steemit show-for-medium"><Link to={logo_link}>steemit<span className="beta">beta</span></Link></li>
+                                <li className="Header__top-steemit show-for-medium noPrint"><Link to={logo_link}>steemit<span className="beta">beta</span></Link></li>
                                 {(topic_link || user_name || page_name) && <li className="delim show-for-medium">|</li>}
                                 {topic_link && <li className="Header__top-topic">{topic_link}</li>}
                                 {user_name && <li><Link to={`/@${user_name}`}>{user_name}</Link></li>}

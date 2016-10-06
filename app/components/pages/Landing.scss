@@ -64,18 +64,19 @@
 	}
 }
 
+
 .Distribution {
 	.Distribution__headers {
 		margin-bottom: 95px;
 		.Distribution__supporting-text {
-			font-size: 27px;
+			font-size: 26px;
 			color: #d2d2d2;
 		}
 	}
 	.Distribution__strong {
 		text-align: right;
 		float: left;
-		width: 50px;
+		width: 2em;
 		right: 0em;
 	}
 	.Distribution__list {
@@ -100,6 +101,11 @@
 			background-color: transparent;
 			border: 2px solid #c0c0bf;
 			border-radius: 4px;
+		}
+	}
+	@media screen and (max-width: 750px)  {
+		.Distribution__item {
+			font-size: 2.5vw;
 		}
 	}
 }

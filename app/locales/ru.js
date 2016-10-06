@@ -511,6 +511,7 @@ const ru = {
 	show_less: 'Показать меньше',
 	value_posts: 'сообщений низкой стоимости',
 	// PormotePost.jsx
+  leave_this_unchecked_to_receive_half_your_reward: 'не пытайтесь покинуть Омск',
 	promote_post: 'Продвинуть пост',
 	spend_your_DEBT_TOKEN_to_advertise_this_post: 'Используйте ваши ' + DEBT_TOKEN + ' чтобы прорекламировать этот пост в секции продвигаемого контента',
 	you_successdully_promoted_this_post: 'Вы успешно продвинули этот пост',

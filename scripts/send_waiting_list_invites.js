@@ -18,7 +18,7 @@ function inviteUser(u, email, number) {
 
 models.User.findAll({
     attributes: ['id', 'email'],
-    where: {waiting_list: true,  email: {$ne: null}, id: {$gt: 0}},
+    where: {waiting_list: true, email: {$ne: null}, id: {$gt: 0}},
     order: 'id',
     limit: 1000
 }).then(users => {

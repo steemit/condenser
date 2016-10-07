@@ -13,6 +13,7 @@ import useOauthLogin from './api/oauth';
 import useGeneralApi from './api/general';
 import useAccountRecoveryApi from './api/account_recovery';
 import useEnterAndConfirmEmailPages from './server_pages/enter_confirm_email';
+import useEnterAndConfirmMobilePages from './server_pages/enter_confirm_mobile';
 import isBot from 'koa-isbot';
 import session from 'koa-session';
 import csrf from 'koa-csrf';
@@ -79,8 +80,22 @@ app.use(mount('/robots.txt', function* () {
     this.body = "User-agent: *\nAllow: /";
 }));
 
+// set user's uid - used to identify users in logs and some other places
+app.use(function* (next) {
+    const last_visit = this.session.last_visit;
+    this.session.last_visit = (new Date()).getTime() / 1000 | 0;
+    if (!this.session.uid) {
+        this.session.uid = Math.random().toString(36).slice(2);
+        this.session.new_visit = true;
+    } else {
+        this.session.new_visit = this.session.last_visit - last_visit > 1800;
+    }
+    yield next;
+});
+
 useRedirects(app);
 useEnterAndConfirmEmailPages(app);
+useEnterAndConfirmMobilePages(app);
 
 if (env === 'production') {
     app.use(helmet.contentSecurityPolicy(config.helmet));
@@ -109,16 +124,6 @@ if (env === 'development') {
 if (env !== 'test') {
     const appRender = require('./app_render');
     app.use(function* () {
-        this.first_visit = false;
-        this.last_visit = this.session.last_visit;
-        this.session.last_visit = (new Date()).getTime() / 1000 | 0;
-        if (!this.session.uid) {
-            this.session.uid = Math.random().toString(36).slice(2);
-            this.first_visit = true;
-            this.session.new_visit = true;
-        } else {
-            this.session.new_visit = this.session.last_visit - this.last_visit > 1800;
-        }
         yield appRender(this);
         // if (app_router.dbStatus.ok) recordWebEvent(this, 'page_load');
         const bot = this.state.isBot;

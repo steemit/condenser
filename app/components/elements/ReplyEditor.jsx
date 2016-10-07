@@ -15,16 +15,16 @@ import {Set} from 'immutable'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import Remarkable from 'remarkable'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
+import SlateEditor, {serializeHtml, deserializeHtml, getDemoState} from 'app/components/elements/SlateEditor'
 
 const remarkable = new Remarkable({ html: true, linkify: false })
-const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
 const RTE_DEFAULT = false
 
 let saveEditorTimeout
 
 // removes <html></html> wrapper if exists
 function stripHtmlWrapper(text) {
-    const m = text.match(/<html>\n?([\S\s]+?)\n?<\/html>/m);
+    const m = text.match(/<html>\n*([\S\s]+?)?\n*<\/html>/m);
     return m && m.length === 2 ? m[1] : text;
 }
 
@@ -45,17 +45,16 @@ const isHtmlTest = text =>
     /^<p>[\S\s]*<\/p>/.test(text)
 
 function stateToHtml(state) {
-    let html = state.toString('html');
+    let html = serializeHtml(state)
     if (html === '<p></p>') html = '';
     if (html === '<p><br></p>') html = '';
     return html
 }
 
 function stateFromHtml(html = null) {
-    if(!RichTextEditor) return null;
     if(html && html.trim() == '') html = null
-    return html ? RichTextEditor.createValueFromString(html, 'html')
-                : RichTextEditor.createEmptyValue()
+    return html ? deserializeHtml(html)
+                : getDemoState()
 }
 
 class ReplyEditor extends React.Component {
@@ -163,6 +162,7 @@ class ReplyEditor extends React.Component {
                 if(rte) html = stripHtmlWrapper(html)
             }
 
+            console.log("initial reply body:", html || '(empty)')
             body.onChange(html)
             this.setState({
                 rte,
@@ -200,7 +200,7 @@ class ReplyEditor extends React.Component {
 
                 clearTimeout(saveEditorTimeout)
                 saveEditorTimeout = setTimeout(() => {
-                    // console.log('save formId', formId, JSON.stringify(data, null, 0))
+                    console.log('save formId', formId, JSON.stringify(data, null, 0))
                     localStorage.setItem('replyEditorData-' + formId, JSON.stringify(data, null, 0))
                 }, 350)
             }
@@ -308,11 +308,9 @@ class ReplyEditor extends React.Component {
                                 </div>
                             }
                             {process.env.BROWSER && rte ?
-                                <RichTextEditor ref="rte"
-                                    readOnly={loading}
-                                    value={this.state.rte_value}
-                                    onChange={this.onChange}
-                                    onBlur={body.onBlur} tabIndex={2} />
+                                <SlateEditor ref="rte"
+                                    initialState={this.state.rte_value}
+                                    onChange={this.onChange} />
                                 :
                                 <textarea {...cleanReduxInput(body)} disabled={loading} rows={isStory ? 10 : 3} placeholder={isStory ? 'Write your story...' : 'Reply'} autoComplete="off" ref="postRef" tabIndex={2} />
                             }

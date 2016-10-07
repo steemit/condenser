@@ -5,7 +5,6 @@ import Header from 'app/components/modules/Header';
 import LpFooter from 'app/components/modules/lp/LpFooter';
 import user from 'app/redux/User';
 import g from 'app/redux/GlobalReducer';
-import { Link } from 'react-router';
 import TopRightMenu from 'app/components/modules/TopRightMenu';
 import { browserHistory } from 'react-router';
 import classNames from 'classnames';
@@ -14,7 +13,8 @@ import CloseButton from 'react-foundation-components/lib/global/close-button';
 import Dialogs from 'app/components/modules/Dialogs';
 import Modals from 'app/components/modules/Modals';
 import Icon from 'app/components/elements/Icon';
-import {key_utils} from 'shared/ecc'
+import {key_utils} from 'shared/ecc';
+import MiniHeader from 'app/components/modules/MiniHeader';
 import { translate } from '../Translator.js';
 
 class App extends React.Component {
@@ -46,7 +46,6 @@ class App extends React.Component {
         const p = this.props;
         const n = nextProps;
         return p.location !== n.location || 
-                  p.loading !== n.loading ||
                   p.visitor !== n.visitor ||
                   p.flash !== n.flash || this.state !== nextState;
     }
@@ -75,9 +74,10 @@ class App extends React.Component {
     }
 
     render() {
-        const {location, params, children, loading, flash, showSignUp, new_visitor,
+        const {location, params, children, flash, showSignUp, new_visitor,
             depositSteem, signup_bonus} = this.props;
         const lp = false; //location.pathname === '/';
+        const miniHeader = location.pathname === '/create_account';
         const params_keys = Object.keys(params);
         const ip = location.pathname === '/' || (params_keys.length === 2 && params_keys[0] === 'order' && params_keys[1] === 'category');
         const alert = this.props.error || flash.get('alert');
@@ -150,7 +150,8 @@ class App extends React.Component {
             );
         }
 
-        return <div className={'App' + (lp ? ' LP' : '') + (ip ? ' index-page' : '')} onMouseMove={this.onEntropyEvent}>
+        return <div className={'App' + (lp ? ' LP' : '') + (ip ? ' index-page' : '') + (miniHeader ? ' mini-header' : '')}
+                    onMouseMove={this.onEntropyEvent}>
             <SidePanel ref="side_panel" alignment="right">
                 <TopRightMenu vertical navigate={this.navigate} />
                 <ul className="vertical menu">
@@ -218,7 +219,7 @@ class App extends React.Component {
                     </li>
                 </ul>
             </SidePanel>
-            <Header toggleOffCanvasMenu={this.toggleOffCanvasMenu} menuOpen={this.state.open} />
+            {miniHeader ? <MiniHeader /> : <Header toggleOffCanvasMenu={this.toggleOffCanvasMenu} menuOpen={this.state.open} />}
             <div className="App__content">
                 {welcome_screen}
                 {callout}
@@ -236,7 +237,6 @@ App.propTypes = {
     children: AppPropTypes.Children,
     location: React.PropTypes.object,
     signup_bonus: React.PropTypes.string,
-    loading: React.PropTypes.bool,
     loginUser: React.PropTypes.func.isRequired,
     depositSteem: React.PropTypes.func.isRequired,
 };
@@ -247,7 +247,6 @@ export default connect(
             error: state.app.get('error'),
             flash: state.offchain.get('flash'),
             signup_bonus: state.offchain.get('signup_bonus'),
-            loading: state.app.get('loading'),
             new_visitor: !state.user.get('current') &&
                 !state.offchain.get('user') &&
                 !state.offchain.get('account') &&

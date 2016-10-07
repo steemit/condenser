@@ -24,7 +24,7 @@ let saveEditorTimeout
 
 // removes <html></html> wrapper if exists
 function stripHtmlWrapper(text) {
-    const m = text.match(/<html>([\S\s]*)<\/html>/m);
+    const m = text.match(/<html>\n?([\S\s]+?)\n?<\/html>/m);
     return m && m.length === 2 ? m[1] : text;
 }
 
@@ -35,6 +35,7 @@ function addHtmlWrapper(body) {
         console.log(err);
         return body
     }
+    if(!body || body.trim() === '') body = '';
     return `<html>\n${body}\n</html>`;
 }
 
@@ -43,14 +44,16 @@ const isHtmlTest = text =>
     /^<html>/.test(text) ||
     /^<p>[\S\s]*<\/p>/.test(text)
 
-function stateToHtml(rte_state) {
-    let html = rte_state.toString('html');
+function stateToHtml(state) {
+    let html = state.toString('html');
+    if (html === '<p></p>') html = '';
     if (html === '<p><br></p>') html = '';
     return html
 }
 
-function stateFromHtml(html) {
+function stateFromHtml(html = null) {
     if(!RichTextEditor) return null;
+    if(html && html.trim() == '') html = null
     return html ? RichTextEditor.createValueFromString(html, 'html')
                 : RichTextEditor.createEmptyValue()
 }
@@ -344,7 +347,7 @@ class ReplyEditor extends React.Component {
 
                                 <small onClick={autoVoteOnChange}>Upvote post</small>
                                 &nbsp;&nbsp;
-                                <input type="checkbox" {...cleanReduxInput(autoVote)} onChange={autoVoteOnChange} />
+                                <input type="checkbox" checked={autoVote.value} onChange={autoVoteOnChange} />
                             </div>}
                         </div>
                         {!loading && !rte && body.value && <div className={'Preview ' + vframe_section_shrink_class}>

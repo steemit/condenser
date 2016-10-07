@@ -282,28 +282,24 @@ class ReplyEditor extends React.Component {
             </div>
         }
 
-        const vframe_class = isStory ? 'vframe' : '';
-        const vframe_section_class = isStory ? 'vframe__section' : '';
-        const vframe_section_shrink_class = isStory ? 'vframe__section--shrink' : '';
-
         return (
             <div className="ReplyEditor row">
                 <div className="column small-12">
-                    <form className={vframe_class}
+                    <form
                         onSubmit={handleSubmit(data => {
                             const loadingCallback = () => this.setState({loading: true, postError: undefined})
                             reply({ ...data, ...replyParams, loadingCallback })
                         })}
                         onChange={() => {this.setState({ postError: null })}}
                     >
-                        <div className={vframe_section_shrink_class}>
+                        <div>
                             {isStory && <span>
                                 <input type="text" {...cleanReduxInput(title)} onChange={onTitleChange} disabled={loading} placeholder="Title" autoComplete="off" ref="titleRef" tabIndex={1} />
                                 {titleError}
                             </span>}
                         </div>
 
-                        <div className={'ReplyEditor__body ' + (rte ? `rte ${vframe_section_class}` : vframe_section_shrink_class)}>
+                        <div className="ReplyEditor__body">
                             {!body.value && isStory &&
                                 <div className="float-right secondary" style={{marginRight: '1rem'}}>
                                     {rte && <a href="#" onClick={this.toggleRte}>Markdown</a>}
@@ -320,20 +316,20 @@ class ReplyEditor extends React.Component {
                                 <textarea {...cleanReduxInput(body)} disabled={loading} rows={isStory ? 10 : 3} placeholder={isStory ? 'Write your story...' : 'Reply'} autoComplete="off" ref="postRef" tabIndex={2} />
                             }
                         </div>
-                        <div className={vframe_section_shrink_class}>
+                        <div>
                             <div className="error">{body.touched && body.error && body.error !== 'Required' && body.error}</div>
                         </div>
 
-                        <div className={vframe_section_shrink_class} style={{marginTop: '0.5rem'}}>
+                        <div style={{marginTop: '0.5rem'}}>
                             {hasCategory && <span>
                                 <CategorySelector {...category} disabled={loading} isEdit={isEdit} tabIndex={3} />
                                 <div className="error">{category.touched && category.error && category.error}&nbsp;</div>
                             </span>}
                         </div>
-                        <div className={vframe_section_shrink_class}>
+                        <div>
                             {postError && <div className="error">{postError}</div>}
                         </div>
-                        <div className={vframe_section_shrink_class}>
+                        <div>
                             {!loading && <button type="submit" className="button" disabled={submitting || invalid} tabIndex={4}>{isEdit ? 'Update Post' : postLabel}</button>}
                             {loading && <span><br /><LoadingIndicator type="circle" /></span>}
                             &nbsp; {!loading && this.props.onCancel &&
@@ -357,7 +353,7 @@ class ReplyEditor extends React.Component {
                                 </label>
                             </div>}
                         </div>
-                        {!loading && !rte && body.value && <div className={'Preview ' + vframe_section_shrink_class}>
+                        {!loading && !rte && body.value && <div className="Preview">
                             {<div className="float-right"><a target="_blank" href="https://guides.github.com/features/mastering-markdown/">Styling with Markdown is supported.</a></div>}
                             <h6>Preview</h6>
                             <MarkdownViewer formId={formId} text={body.value} canEdit jsonMetadata={jsonMetadata} large={isStory} noImage={noImage} />

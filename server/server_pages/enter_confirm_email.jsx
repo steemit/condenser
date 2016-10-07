@@ -32,13 +32,13 @@ function *confirmEmailHandler() {
         this.redirect('/enter_mobile');
         return;
     }
-    this.session.user = eid.user_id;
     const hours_ago = (Date.now() - eid.updated_at) / 1000.0 / 3600.0;
-    if (hours_ago > 24.0 * 30) {
+    if (hours_ago > 24.0 * 10) {
         this.status = 401;
         this.body = 'confirmation code not found or expired';
         return;
     }
+    this.session.user = eid.user_id;
     yield eid.update({verified: true});
     yield models.User.update({email: eid.email, waiting_list: false}, {where: {id: eid.user_id}});
     this.redirect('/enter_mobile');
@@ -74,9 +74,9 @@ export default function useEnterAndConfirmEmailPages(app) {
             <div className="row" style={{maxWidth: '32rem'}}>
                 <div className="column">
                     <form action="/submit_email" method="POST">
-                        <p>
-                            Please provide your email address to continue the registration process.<br />
-                            <span className="secondary">This information allows Steemit to assist with Account Recovery in case your account is ever compromised.</span>
+                        <h4>Please provide your email address to continue the registration process</h4>
+                        <p className="secondary">
+                            Email verification helps with preventing spam and allows Steemit to assist with Account Recovery in case your account is ever compromised.
                         </p>
                         <input type="hidden" name="csrf" value={this.csrf} />
                         <label>

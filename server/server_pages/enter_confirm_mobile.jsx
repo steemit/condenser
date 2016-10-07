@@ -65,19 +65,21 @@ export default function useEnterAndConfirmMobilePages(app) {
             <br />
             <div className="row" style={{maxWidth: '32rem'}}>
                 <form className="column" action="/submit_mobile" method="POST">
-                    <p>
-                        Please provide your phone number to continue the registration process.<br />
-                        <span className="secondary">This information allows Steemit to assist with Account Recovery in case your account is ever compromised.</span>
-                    </p>
+                    <h4>Please provide your phone number to continue the registration process</h4>
+                    <div className="secondary">Phone verification helps with preventing spam and allows Steemit to assist with Account Recovery in case your account is ever compromised.
+                        Your phone number will not be used for any other purpose other than phone verification and account recovery.</div>
+                    <br />
                     <input type="hidden" name="csrf" value={this.csrf} />
                     <label>
                         Phone number
                         <input type="tel" name="mobile" defaultValue={mid ? mid.phone : ''} />
                     </label>
-                    <small className="secondary">Examples: 1-541-754-3010 | +1-541-754-3010 | +49-89-636-48018</small>
+                    <div className="secondary">Examples: 1-541-754-3010 | +1-541-754-3010 | +49-89-636-48018</div>
+                    <br />
+                    <div className="secondary">* fixed line phones cannot receive SMS messages</div>
+                    <div className="secondary">* message and data rates may apply</div>
                     <br />
                     {/*<div className="g-recaptcha" data-sitekey={config.recaptcha.site_key}></div>*/}
-                    <br />
                     <div className="error">{this.flash.error}</div>
                     <input type="submit" className="button" value="CONTINUE" />
                 </form>
@@ -202,7 +204,7 @@ export default function useEnterAndConfirmMobilePages(app) {
                         <input type="text" name="code" />
                     </label>
                     <br />
-                    <div className="secondary">Didn't recieve SMS? <a href="/enter_mobile">Re-send</a></div>
+                    <div className="secondary">Didn't receive the verification code? <a href="/enter_mobile">Re-send</a></div>
                     <br />
                     <input type="submit" className="button" value="CONTINUE" />
                 </form>

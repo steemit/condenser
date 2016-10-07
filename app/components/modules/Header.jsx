@@ -17,7 +17,9 @@ function sortOrderToLink(so, topic, account) {
 class Header extends React.Component {
     static propTypes = {
         location: React.PropTypes.object.isRequired,
-        current_account_name: React.PropTypes.string
+        current_account_name: React.PropTypes.string,
+        chain_participation: React.PropTypes.number,
+        chain_time: React.PropTypes.string
     };
 
     constructor() {
@@ -182,6 +184,13 @@ class Header extends React.Component {
             ];
             sort_order_extra_menu = <HorizontalMenu items={items} />
         }
+
+        let warning;
+        const participation_rate = Math.round(100.0 * this.props.chain_participation / 128.0, 2)
+        const head_block_age = (((new Date()) - (new Date(this.props.chain_time))) / 1000)
+        warning = "Participation: " + participation_rate + "% -- head block age: " + head_block_age + "s"
+
+
         return (
             <header className="Header noPrint">
                 <div className="Header__top header">
@@ -207,6 +216,7 @@ class Header extends React.Component {
                         </div>
                     </div>
                 </div>
+                {warning && <div className="Header__chain-state-warning">{warning}</div>}
                 <div className={'Header__sub-nav expanded show-for-medium row' + (this.state.subheader_hidden ? ' hidden' : '')}>
                     <div className="columns">
                         <HorizontalMenu items={sort_order_menu_horizontal} />
@@ -226,9 +236,12 @@ export default connect(
     state => {
         const current_user = state.user.get('current');
         const current_account_name = current_user ? current_user.get('username') : state.offchain.get('account');
+        const {participation_count, time} = state.global.get('props').toJS()
         return {
             location: state.app.get('location'),
-            current_account_name
+            current_account_name,
+            chain_participation: participation_count,
+            chain_time: time
         }
     }
 )(Header);

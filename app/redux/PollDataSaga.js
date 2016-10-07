@@ -29,6 +29,7 @@ function* pollData() {
                 // console.log('-- pollData.pollData -->', data);
                 // const data = yield call([db_api, db_api.exec], 'get_discussions_by_created', [{limit: 10}]);
                 // yield put(GlobalReducer.actions.receiveRecentPosts({data}));
+                yield put(GlobalReducer.actions.update({key: ['props'], updater: (m) => m.merge(data)}));
             } catch (error) {
                 console.error('~~ pollData saga error ~~>', error);
             }

@@ -13,4 +13,4 @@ config/last-build.json
 app/assets/static/*.js
 #db/
 clean.sh
-db/config
+db/config/config.json

@@ -30,6 +30,7 @@ export default class LandingDocumentation extends React.Component {
 						<a href="" className="button">Про Стим</a>
 					</div>
 				</div>
+				<hr />
 			</section>
 		)
 	}

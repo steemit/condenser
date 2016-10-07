@@ -48,11 +48,12 @@ export default class LandingJoinUs extends React.Component {
 						<p>Получай ГОЛОС каждый раз, когда твой пост оценен другими</p>
 					</div> */}
 				</div>
-				<div className="row">
+				<div className="row JoinUs__action">
 					<div className="small-12 columns text-center">
 						<a href="" className="button">Регистрация</a>
 					</div>
 				</div>
+				<hr />
 			</section>
 		)
 	}

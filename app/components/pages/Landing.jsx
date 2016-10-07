@@ -16,6 +16,7 @@ import Footer from 'app/components/elements/LandingFooter'
 /*
     NOTE there was so little time and so much todo, thats why code is clumsy and
     there is little to no comments
+	TODO add comments
 */
 
 // format date properly
@@ -34,36 +35,23 @@ class Landing extends React.Component {
 
     render() {
         // if crodwsale hasn't started yet render countdown til crodwsale start
-        // if (crowdsaleStartAt > Date.now()) return <CountDowns prefill crowdsaleStartAt={crowdsaleStartAt} />
+        if (crowdsaleStartAt > Date.now()) return <CountDowns prefill crowdsaleStartAt={crowdsaleStartAt} />
 
         return (
             <div className="Landing text-center">
                 <CountDowns crowdsaleStartAt={crowdsaleStartAt} crowdsaleEndAt={crowdsaleEndAt} button={buyGolosButton} />
-                <hr />
-                <Distribution />
-                <hr />
-                <WhatIsGolos />
-                <hr />
+                {/* <Distribution /> */}
+                {/* <WhatIsGolos /> */}
                 <JoinUs />
-                <hr />
                 <Documentation />
-                <hr />
                 <WhoWeAre />
-                <hr />
                 <BlockchainRevolution />
-                <hr />
                 <Faq />
-                <hr />
                 <Team />
-				<hr />
                 <WhyGolos />
-				<hr />
 				<Partners />
-				<hr />
                 <Press button={buyGolosButton} />
-                <hr />
                 <Footer />
-                <hr />
             </div>
         )
     }

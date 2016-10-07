@@ -13,7 +13,7 @@ export default class LandingCountDowns extends React.Component {
 	state = {
 		currentBonus: '',
 		nextBonus: '',
-		bitcoinsRaised: 2000.45,
+		bitcoinsRaised: 0, //2000.45
 		crowdSaleIsActive: true,
 	}
 
@@ -77,8 +77,15 @@ export default class LandingCountDowns extends React.Component {
 				{
 					props.prefill
 					? 	<div className="row text-center CountDowns__counters">
-							<div className="small-12 columns">
+							<div className="small-12 medium-6 columns">
 								<CountDown title="Продажа силы голоса начнется" date={props.crowdsaleStartAt} />
+								{/* TODO добавить второй каундаун к 18:00 1 ноября */}
+								{/* TODO текст: "начало продажи силы голоса начнется" */}
+							</div>
+							<div className="small-12 medium-6 columns">
+								<CountDown title="Продажа силы голоса начнется" date={props.crowdsaleStartAt} />
+								{/* TODO добавить второй каундаун к 18:00 1 ноября */}
+								{/* TODO текст: "запуск блокчейна через" */}
 							</div>
 						</div>
 					: 	<div className="row text-center CountDowns__counters">
@@ -116,15 +123,15 @@ export default class LandingCountDowns extends React.Component {
 					props.prefill
 					? 	<div className="row CountDowns__links">
 							<div className="small-12 columns text-center">
-								<a href="http://golos.io/" className="CountDowns__button_small">вики проэкта</a>
+								<a href="https://wiki.golos.io/" className="CountDowns__button_small">вики проекта</a>
 								<a href="https://www.youtube.com/channel/UCcBPq2gUdpkL9m-_a92AFVQ" className="CountDowns__button_small">youtube</a>
 								<a href="https://github.com/goloschain" className="CountDowns__button_small">github</a>
 							</div>
 						</div>
 					: 	<div className="row CountDowns__links">
 							<div className="small-12 medium-6 columns text-left">
-								<a href="#" className="CountDowns__button_small">White Paper</a>
-								<a href="#" className="CountDowns__button_small">Дорожная карта проекта</a>
+								<a href="https://wiki.golos.io/1-introduction/golos_whitepaper.html" className="CountDowns__button_small">White Paper</a>
+								<a href="https://wiki.golos.io/5-development/roadmap.html" className="CountDowns__button_small">Дорожная карта</a>
 							</div>
 							<div className="small-12 medium-6 columns text-right CountDowns__social-links">
 								<p>Социальные сети: </p>

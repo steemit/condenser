@@ -19,7 +19,7 @@ export default class LandingBlockchainRevolution extends React.Component {
 		function renderTable() {
 			return	texts.map((item, index) => {
 				return 	<tr key={index} className="text-center">
-							<td className="text-left">{item}</td>
+							<td className="text-left"><strong>{item}</strong></td>
 							<td><img src="images/landing/checked.gif" /></td>
 							<td><img src="images/landing/unchecked.gif" /></td>
 							<td><img src="images/landing/unchecked.gif" /></td>
@@ -42,23 +42,33 @@ export default class LandingBlockchainRevolution extends React.Component {
 							<thead>
 								<tr>
 									<th width="200" className="text-left">Социальные сети</th>
-									<th width="100" className="text-center"><img src="images/landing/golos.jpg" alt="лого проекта Голос" /> </th>
-									<th width="100" className="text-center"><img src="images/landing/vkontakte.jpg" alt="лого VK" />		</th>
+									<th width="100" className="text-center"><img src="images/landing/golos.jpg" alt="лого проекта Голос" /></th>
+									<th width="100" className="text-center"><img src="images/landing/vkontakte.jpg" alt="лого VK" /></th>
 									<th width="100" className="text-center"><img src="images/landing/facebook.jpg" alt="лого Facebook" />	</th>
 								</tr>
 							</thead>
 							<tbody>
-								{renderTable()}
+								{/* {renderTable()} */}
+								{
+									texts.map((item, index) => {
+										return 	<tr key={index} className="text-center">
+													<td className="text-left"><strong>{item}</strong></td>
+													<td><img src="images/landing/checked.gif" /></td>
+													<td><img src="images/landing/unchecked.gif" /></td>
+													<td><img src="images/landing/unchecked.gif" /></td>
+												</tr>
+									})
+								}
 							</tbody>
 						</table>
 					</div>
 				</div>
-				<div className="row">
+				<div className="row BlockchainRevolution__action">
 					<div className="small-12 columns text-center">
 						<a href="" className="button">Узнать больше, что такое Голос</a>
 					</div>
 				</div>
-				{/* <hr /> */}
+				<hr />
 			</section>
 		)
 	}

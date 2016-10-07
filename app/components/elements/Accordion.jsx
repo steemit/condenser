@@ -14,9 +14,9 @@ export default class Accordion extends React.Component {
 				const isActiveTab = activeTab == index
 				const classModifier = isActiveTab ? '_active' : '_hidden'
 				const questionIcon = isActiveTab ? 'open_qustion.jpg' : 'closed_question.jpg'
-	 			return	<div key={index} className='Accordion__item'>
+	 			return	<div key={index} className='Accordion__item' onClick={this.setActiveTab.bind(this, index)}>
 							<img className="Accordion__icon" src={"images/landing/" + questionIcon} />
-							<strong onClick={this.setActiveTab.bind(this, index)}>{item.title}</strong>
+							<strong>{item.title}</strong>
 							<div className={'Accordion__content Accordion__content' + classModifier}>{item.content}</div>
 						</div>
 				}

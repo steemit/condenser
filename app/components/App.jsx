@@ -30,6 +30,9 @@ class App extends React.Component {
     }
 
     componentWillMount() {
+        if (process.env.BROWSER && window.pathname != "/landing.html") {
+            // window.location.href = '/landing.html';
+        }
         if (process.env.BROWSER) localStorage.removeItem('autopost') // July 14 '16 compromise, renamed to autopost2
         this.props.loginUser();
         // SEGMENT.COM ANALYTICS INITIALIZATION
@@ -165,7 +168,7 @@ class App extends React.Component {
         }
 
         return <div className={'App' + (lp ? ' LP' : '') + (ip ? ' index-page' : '')} onMouseMove={this.onEntropyEvent}>
-            <RocketChat />
+            {/* <RocketChat />
 
             <SidePanel ref="side_panel" alignment="right">
                 <TopRightMenu vertical navigate={this.navigate} />
@@ -234,7 +237,7 @@ class App extends React.Component {
                     </li>
                 </ul>
             </SidePanel>
-            <Header toggleOffCanvasMenu={this.toggleOffCanvasMenu} menuOpen={this.state.open} />
+            <Header toggleOffCanvasMenu={this.toggleOffCanvasMenu} menuOpen={this.state.open} /> */}
             <div className="App__content">
                 {welcome_screen}
                 {callout}

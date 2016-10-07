@@ -51,6 +51,11 @@ export default class LandingDistribution extends React.Component {
 						<ul>
 							{/* {renderList()} */}
 							<li className="Distribution__item">
+								<strong className="Distribution__strong">60%</strong>
+								{renderDot('d80a15')}
+								Краудсейл
+							</li>
+							<li className="Distribution__item">
 								<strong className="Distribution__strong">10%</strong>
 								{renderDot('2e17b8')}
 								Резерв на развитие
@@ -58,7 +63,7 @@ export default class LandingDistribution extends React.Component {
 							<li className="Distribution__item">
 								<strong className="Distribution__strong">10%</strong>
 								{renderDot('f9ca0f')}
-								Распределение держателям Steem
+								Держателям Steem
 							</li>
 							<li className="Distribution__item">
 								<strong className="Distribution__strong">10%</strong>
@@ -73,12 +78,12 @@ export default class LandingDistribution extends React.Component {
 							<li className="Distribution__item">
 								<strong className="Distribution__strong Distribution__strong_extra-margin">3%</strong>
 								{renderDot('7bd915')}
-								Майнерам Голоса
+								Делегатам Голоса
 							</li>
 							<li className="Distribution__item">
-								<strong className="Distribution__strong">60%</strong>
-								{renderDot('d80a15')}
-								Краудсейл
+								<strong className="Distribution__strong Distribution__strong_extra-margin">3%</strong>
+								{renderDot('7bd915')}
+								Банти авторам на время краудсейла
 							</li>
 						</ul>
 					</div>

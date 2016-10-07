@@ -1,11 +1,22 @@
+// bold medium regular
+// @font-face {
+//     font-family: "ProximaNova";
+//     // font-style: normal;
+//     // font-weight: bold;
+//     src: url("../../assets/fonts/Proxima Nova Regular.otf") format("otf")
+// }
 // TODO change pixels to rems
 // TODO add common supporting text styles
 .Landing {
+	font-family: Verdana, Geneva, sans-serif;
 	/* COMMON ELEMENTS */
-	.Landing__h2_blue 	{ color: #6191cf; }
+	.Landing__h2_blue 	{ color: #6191cf; } // font-family: ProximaNova;
 	.Landing__h2_red 	{ color: #f12b24; }
 	.Landing__button_big { font-size: 47px; }
-	h2 { margin-top: 90px; }
+	h2 {
+		font-weight: bold;
+		margin-top: 90px;
+	}
 	hr {
 		margin: 0;
 		max-width: 100%;
@@ -14,6 +25,7 @@
 	.button {
 		padding: 23px 63px;
 		text-transform: none;
+		font-weight: bold;
 	}
 	.Landing__supporting-text { color: #d2d2d2; }
 }
@@ -82,7 +94,7 @@
 		.Distribution__strong {
 			font-size: 37px;
 		}
-		.Distribution__strong_extra-margin { margin-right: 21px; }
+		.Distribution__strong_extra-margin { margin-right: 26px; }
 		.Distribution__dot {
 			display: inline-block;
 			margin: 0 15px;
@@ -123,7 +135,6 @@
 
 .JoinUs {
 	padding-top: 160px;
-	margin-bottom: 100px;
 	h2 {
 		margin-top: 0;
 		color: #f12b24;
@@ -153,6 +164,7 @@
 			}
 		}
 	}
+	.JoinUs__action { margin-bottom: 100px; }
 }
 
 .BlockchainRevolution {
@@ -166,14 +178,23 @@
 	}
 	.BlockchainRevolution__table {
 		margin-bottom: 60px;
-		thead tr {
-			// padding: 25px;
-		}
 		// overide foundation table styles
+		table, thead, tbody { border: none; }
 		table thead, table tfoot { background-color: transparent; }
 		table tbody tr:nth-child(even) { background-color: transparent; }
-		// tr { background-color: ; }
+		// add our own
+		thead {
+			margin-bottom: 25px;
+			padding-bottom: 25px;
+			border-bottom: 1px solid #d1d1d1;
+		}
+		thead th:first-child { color: #d1d1d1; }
+		tr { padding: 0 90px;}
+		tr > td, tr > th { padding-left: 90px; }
+		tr td:last-child, tr th:last-child { padding-right: 90px; }
+
 	}
+	.BlockchainRevolution__action { margin-bottom: 115px; }
 }
 
 .Faq {
@@ -195,8 +216,28 @@
 }
 
 .Team {
+	.Team__header { margin: 90px auto 50px; }
+	.Team__members { margin-bottom: 165px; }
 	.Team__member {
-		img { border-radius: 50%; }
+		margin-top: 50px;
+		strong { display: block; }
+		li {
+			display: inline;
+			margin-left: 10px;
+			list-style-type: none;
+		}
+	}
+	.Team__members__image-wrapper {
+		width: 180px;
+		height: 180px;
+		overflow: hidden;
+		border-radius: 50%;
+		margin: 0 auto 25px;
+		border: 2px solid #d7d7d7;
+	}
+	.Team__member__img {
+		width: 180px;
+		height: 180px;
 	}
 }
 
@@ -247,10 +288,41 @@
 	}
 }
 
+.Partners {
+	.Partners__logos { margin-bottom: 80px; }
+	.Partners__law {
+		margin-bottom: 65px;
+		h3 { margin-bottom: 50px; }
+	}
+	.Partners__info {
+		margin-bottom: 65px;
+		h3 { margin-bottom: 40px; }
+	}
+}
+
+.Press {
+	.Press__logos { margin-bottom: 85px; }
+	.Press__header { margin-bottom: 100px; }
+	.Press__action { margin-bottom: 100px; }
+	.Press__action__p {
+		color: #505050;
+		font-size: 15px;
+		font-weight: bold;
+	}
+}
+
 .LandingFooter {
 	padding-top: 90px;
+	strong {
+		display: block;
+		margin-bottom: 25px;
+	}
 	ul { margin-left: 0; }
-	li { list-style-type: none; }
+	li {
+		color: black;
+		list-style-type: none;
+		a { color: black; }
+	}
 	.LandingFooter__description {
 		margin: 30px auto;
 		color: #c5c5c5;

@@ -75,11 +75,11 @@ function* handleFacebookCallback() {
             verified: u.verified,
             provider_user_id: u.id
         };
-        const i_attrs_email = {
-            provider: 'email',
-            email: u.email,
-            verified: false
-        };
+        // const i_attrs_email = {
+        //     provider: 'email',
+        //     email: u.email,
+        //     verified: false
+        // };
 
         let user = yield findUser({email: u.email, provider_user_id: u.id});
         console.log('-- /handle_facebook_callback user id -->', this.session.uid, user ? user.id : 'not found');
@@ -132,20 +132,21 @@ function* handleFacebookCallback() {
         // }
 
         if (user) {
-            i_attrs_email.user_id = attrs.id = user.id;
+            attrs.id = user.id;
             yield models.User.update(attrs, {where: {id: user.id}});
             yield models.Identity.update(i_attrs, {where: {user_id: user.id, provider: 'facebook'}});
             console.log('-- fb updated user -->', this.session.uid, user.id, u.name, u.email);
         } else {
             user = yield models.User.create(attrs);
-            i_attrs_email.user_id = i_attrs.user_id = user.id;
+            i_attrs.user_id = user.id;
             console.log('-- fb created user -->', user.id, u.name, u.email);
             const identity = yield models.Identity.create(i_attrs);
             console.log('-- fb created identity -->', this.session.uid, identity.id);
-            if (i_attrs_email.email) {
-                const email_identity = yield models.Identity.create(i_attrs_email);
-                console.log('-- fb created email identity -->', this.session.uid, email_identity.id);
-            }
+            // if (i_attrs_email.email) {
+            //     i_attrs_email.user_id = user.id
+            //     const email_identity = yield models.Identity.create(i_attrs_email);
+            //     console.log('-- fb created email identity -->', this.session.uid, email_identity.id);
+            // }
         }
         this.session.user = user.id;
     } catch (error) {

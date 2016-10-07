@@ -127,9 +127,28 @@ export default function useEnterAndConfirmEmailPages(app) {
             if (captcha_failed) {
                 console.log('-- /submit_email captcha verification failed -->', user_id, this.session.uid, email, this.req.connection.remoteAddress);
                 this.flash = {error: 'Failed captcha verification, please try again'};
-                this.redirect('/enter_email');
+                this.redirect('/enter_email?email=' + email);
                 return;
             }
+        }
+
+        const parsed_email = email.match(/^.+\@.*?([\w\d-]+\.\w+)$/);
+        if (!parsed_email || parsed_email.length < 2) {
+            console.log('-- /submit_email not valid email -->', user_id, this.session.uid, email);
+            this.flash = {error: 'Not valid email address'};
+            this.redirect('/enter_email?email=' + email);
+            return;
+        }
+        const email_provider = parsed_email[1];
+        const blocked_email = yield models.List.findOne({
+            attributes: ['id'],
+            where: {kk: 'block-email-provider', value: email_provider}
+        });
+        if (blocked_email) {
+            console.log('-- /submit_email blocked_email -->', this.session.uid, email);
+            this.flash = {error: 'Not supported email address: ' + email + '. Please make sure your you don\'t use any temporary email providers, contact support@steemit.com for more information.'};
+            this.redirect('/enter_email?email=' + email);
+            return;
         }
 
         const existing_email = yield models.Identity.findOne(
@@ -138,20 +157,7 @@ export default function useEnterAndConfirmEmailPages(app) {
         if (existing_email && existing_email.user_id != user_id) {
             console.log('-- /submit_email existing_email -->', user_id, this.session.uid, email, existing_email.user_id);
             this.flash = {error: 'This email has already been taken'};
-            this.redirect('/enter_email');
-            return;
-        }
-
-        const email_provider = email.match(/([\w\d-]+\.\w+)$/)[1];
-        if (!email_provider) throw new Error('Incorrect email format');
-        const blocked_email = yield models.List.findOne({
-            attributes: ['id'],
-            where: {kk: 'block-email-provider', value: email_provider}
-        });
-        if (blocked_email) {
-            console.log('-- /handle_facebook_callback blocked_email -->', this.session.uid, email);
-            this.flash = {error: 'Not supported email address: ' + email + '. Please make sure your you don\'t use any temporary email providers, contact support@steemit.com for more information.'};
-            this.redirect('/enter_email');
+            this.redirect('/enter_email?email=' + email);
             return;
         }
 
@@ -182,7 +188,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                 <div className="column">
                     Thank you for providing your email address ({email}).<br />
                     To continue please click on the link in the email we've sent you.<br />
-                    <span className="secondary">Didn't recieve email? <a href="/enter_email">Re-send</a></span>
+                    <span className="secondary">Didn't recieve email? <a href={`/enter_email?email=${email}`}>Re-send</a></span>
                 </div>
             </div>
         </div>);

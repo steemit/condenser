@@ -5,7 +5,7 @@ const sg = sendgrid(config.sendgrid.key);
 
 export default function sendEmail(template, to, params, from = null) {
     if (process.env.NODE_ENV !== 'production') {
-        console.log(`mail: to <${to}>, from <${from}>, template ${template}, link /confirm_email/${params.confirmation_code} (not sent due to not production env)`);
+        console.log(`mail: to <${to}>, from <${from}>, template ${template} (not sent due to not production env)`);
         return;
     }
     const tmpl_id = config.sendgrid.templates[template];

@@ -74,7 +74,7 @@ export default function useEnterAndConfirmMobilePages(app) {
                         Phone number
                         <input type="tel" name="mobile" defaultValue={mid ? mid.phone : ''} />
                     </label>
-                    <small className="warning">Include country code if outside the US</small>
+                    <small className="secondary">Examples: 1-541-754-3010 | +1-541-754-3010 | +49-89-636-48018</small>
                     <br />
                     {/*<div className="g-recaptcha" data-sitekey={config.recaptcha.site_key}></div>*/}
                     <br />
@@ -155,19 +155,13 @@ export default function useEnterAndConfirmMobilePages(app) {
                 this.flash = {success: 'Phone number has been verified'};
                 this.redirect('/create_account'); return;
             } else {
-                if (mid.phone == mobile) {
-                    // TODO: resend confirmation if last one was sent more than 1 min ago and number of attempts < 4
-                    const seconds_ago = (Date.now() - mid.updated_at) / 1000.0;
-                    if (seconds_ago < 120) {
-                        this.flash = {error: 'Confirmation was already sent. You can try again in 2 minutes.'};
-                        this.redirect('/enter_mobile');
-                        return;
-                    }
-                    yield mid.update({confirmation_code, phone: mobile});
-                } else {
-                    // TODO: limit number of attempts with different numbers to < 4
-                    yield mid.update({confirmation_code, phone: mobile});
+                const seconds_ago = (Date.now() - mid.updated_at) / 1000.0;
+                if (seconds_ago < 120) {
+                    this.flash = {error: 'Confirmation was sent a moment ago. You can try again only in 2 minutes.'};
+                    this.redirect('/enter_mobile');
+                    return;
                 }
+                yield mid.update({confirmation_code, phone: mobile});
             }
         } else {
             mid = yield models.Identity.create({
@@ -202,16 +196,13 @@ export default function useEnterAndConfirmMobilePages(app) {
             </div>
             <br />
             <div className="row" style={{maxWidth: '32rem'}}>
-                <div className="column">
-                    <a href="/enter_mobile">Re-send SMS</a>
-                </div>
-            </div>
-            <div className="row" style={{maxWidth: '32rem'}}>
                 <form className="column" action="/confirm_mobile" method="POST">
                     <label>
                         Confirmation code
                         <input type="text" name="code" />
                     </label>
+                    <br />
+                    <div className="secondary">Didn't recieve SMS? <a href="/enter_mobile">Re-send</a></div>
                     <br />
                     <input type="submit" className="button" value="CONTINUE" />
                 </form>

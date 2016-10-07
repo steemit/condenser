@@ -1,5 +1,7 @@
 import React, { PropTypes } from 'react'
 import CountDown from 'app/components/elements/CountDown'
+import Icon from 'app/components/elements/Icon'
+import {APP_ICON} from 'config/client_config'
 
 const stages = [25, 20, 15, 10, 5, 0]
 
@@ -68,7 +70,8 @@ export default class LandingCountDowns extends React.Component {
 				<div className="row text-center CountDowns__headers">
 					<div className="small-12 columns">
 						<strong className="CountDowns__slogan">Каждый Голос имеет значение!</strong>
-						<h1>Децентрализованная социальная сеть для блоггеров и журналистов</h1>
+						<div><Icon className="CountDowns__logo" name={APP_ICON} size="2x" /></div>
+						<h1>Социально-медийная блокчейн платформа</h1>
 					</div>
 				</div>
 
@@ -78,12 +81,10 @@ export default class LandingCountDowns extends React.Component {
 					props.prefill
 					? 	<div className="row text-center CountDowns__counters">
 							<div className="small-12 medium-6 columns">
-								<CountDown title="Продажа силы голоса начнется" date={props.crowdsaleStartAt} />
-								{/* TODO добавить второй каундаун к 18:00 1 ноября */}
-								{/* TODO текст: "начало продажи силы голоса начнется" */}
+								<CountDown title="До запуска блокчейна" date={props.blockchainStartAt} />
 							</div>
 							<div className="small-12 medium-6 columns">
-								<CountDown title="Продажа силы голоса начнется" date={props.crowdsaleStartAt} />
+								<CountDown title="До старта продажи силы голоса" date={props.crowdsaleStartAt} />
 								{/* TODO добавить второй каундаун к 18:00 1 ноября */}
 								{/* TODO текст: "запуск блокчейна через" */}
 							</div>
@@ -123,7 +124,8 @@ export default class LandingCountDowns extends React.Component {
 					props.prefill
 					? 	<div className="row CountDowns__links">
 							<div className="small-12 columns text-center">
-								<a href="https://wiki.golos.io/" className="CountDowns__button_small">вики проекта</a>
+								<a href="https://steemit.com/@golos" className="CountDowns__button_small">блог</a>
+								<a href="https://wiki.golos.io/" className="CountDowns__button_small">вики</a>
 								<a href="https://www.youtube.com/channel/UCcBPq2gUdpkL9m-_a92AFVQ" className="CountDowns__button_small">youtube</a>
 								<a href="https://github.com/goloschain" className="CountDowns__button_small">github</a>
 							</div>

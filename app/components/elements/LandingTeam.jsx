@@ -57,7 +57,7 @@ export default class LandingTeam extends React.Component {
 						<ul>
 							<li>in</li>
 							<li>tw</li>
-							<li>gt</li>
+							<li><a href="https://github.com/tomarcafe"><img src="images/landing/github_icon.jpg" /></a></li>
 						</ul>
 					</div>
 					<div className="small-6 medium-4 large-3 columns Team__member">

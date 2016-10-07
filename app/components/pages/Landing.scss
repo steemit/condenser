@@ -41,8 +41,17 @@
 			font-size: 37px;
 			// font-family: 'Myriad Pro';
 		}
+		.Icon_2x > svg, span.Icon_2x {
+			width: 7rem;
+			height: 7rem;
+		}
+		.CountDowns__logo {
+			display: block;
+			margin: 0 auto;
+
+		}
 		h1 {
-			margin: 50px auto 120px;
+			margin: 85px auto 120px;
 			// font-size: 6.3rem;
 		}
 	}
@@ -194,7 +203,15 @@
 		tr td:last-child, tr th:last-child { padding-right: 90px; }
 
 	}
-	.BlockchainRevolution__action { margin-bottom: 115px; }
+	.BlockchainRevolution__action {
+		margin-bottom: 115px;
+		.button {
+			border: 1px solid #c0c0bf;
+			color: #707070;
+			font-size: 27px;
+			background-color: white;
+		}
+	}
 }
 
 .Faq {
@@ -212,6 +229,7 @@
 			font-size: 17px;
 			color: #656565;
 		}
+		.button { margin-right: 0; }
 	}
 }
 
@@ -223,7 +241,7 @@
 		strong { display: block; }
 		li {
 			display: inline;
-			margin-left: 10px;
+			padding: 0 10px;
 			list-style-type: none;
 		}
 	}
@@ -237,7 +255,7 @@
 	}
 	.Team__member__img {
 		width: 180px;
-		height: 180px;
+		// height: 180px;
 	}
 }
 
@@ -280,6 +298,7 @@
 		margin-bottom: 75px;
 	}
 	.WhoWeAre__texts {
+		margin-bottom: 95px;
 		span {
 			display: block;
 			margin-top: 50px;

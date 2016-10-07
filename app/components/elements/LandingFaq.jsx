@@ -26,15 +26,15 @@ export default class LandingFaq extends React.Component {
 						<span className="Faq__supporting-text">Узнайте больше о Голосе</span>
 					</div>
 				</div>
-				<div className="row Faq__accordion">
+				{/* <div className="row Faq__accordion">
 					<div className="small-12 columns">
 						<Accordion elements={elements} />
 					</div>
-				</div>
+				</div> */}
 				<div className="row Faq__action">
 					<div className="small-12 columns">
 						<p className="Faq__p">Остались вопросы? Наше комьюнити поможет Вам найти ответы</p>
-						<button className="button">Задать вопрос</button>
+						<button className="button">Ответы на вопросы</button>
 					</div>
 				</div>
 				<hr />

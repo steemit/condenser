@@ -216,7 +216,8 @@ class UserWallet extends React.Component {
                 </div>
             </div>
 
-            <BuyGolos />
+            {/* commented out until crowdsale start */}
+            {/* <BuyGolos /> */}
 
             <div className="row">
                 <div className="column small-12">

@@ -65,7 +65,7 @@ export default class LandingBlockchainRevolution extends React.Component {
 				</div>
 				<div className="row BlockchainRevolution__action">
 					<div className="small-12 columns text-center">
-						<a href="" className="button">Узнать больше, что такое Голос</a>
+						{/* <a href="" className="button">Узнать больше, что такое Голос</a> */}
 					</div>
 				</div>
 				<hr />

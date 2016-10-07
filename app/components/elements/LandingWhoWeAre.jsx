@@ -15,7 +15,7 @@ export default class LandingWhoWeAre extends React.Component {
 						<img src="images/landing/cyberfund.png" alt="логотип Киберфонда" />
 					</div>
 					<div className="small-12 medium-6 columns">
-						<img src="images/landing/steem.png" alt="логотип Steemsit" />
+						<img src="https://www.steemimg.com/images/2016/07/20/steemad9f2.jpg" alt="логотип Steemit" />
 					</div>
 				</div>
 				<div className="row WhoWeAre__texts">

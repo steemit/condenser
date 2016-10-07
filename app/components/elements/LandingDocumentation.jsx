@@ -26,8 +26,8 @@ export default class LandingDocumentation extends React.Component {
 				</div>
 				<div className="row Documentation__buttons">
 					<div className="small-12 columns">
-						<a href="" className="button alert">Про Голос</a>
-						<a href="" className="button">Про Стим</a>
+						<a href="https://wiki.golos.io/1-introduction/golos_whitepaper.html" target="blank" className="button alert">Детали про Голос</a>
+						<a href="https://wiki.golos.io/1-introduction/steem_whitepaper.html" target="blank" className="button">Детали про Стим</a>
 					</div>
 				</div>
 				<hr />

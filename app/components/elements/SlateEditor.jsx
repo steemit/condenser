@@ -1,109 +1,20 @@
-/*
-import EditBlockquote from 'slate-edit-blockquote'
-import TrailingBlock from 'slate-trailing-block'
-
-const plugins = [
-    TrailingBlock({ type: 'paragraph' }),
-    EditBlockquote()
-]
-*/
-const plugins = []
-
+import React from 'react'
 import { Editor, Mark, Raw, Html } from 'slate'
 import Portal from 'react-portal'
-import React from 'react'
 import position from 'selection-position'
 
-const serializer = new Html({rules: [
-    {
-        deserialize: (el, next) => null,
-        serialize: (object, children) => {
-            if(object.kind == 'string') return;
-            if(object.kind == 'block') {
-                switch(object.type) {
-                    case 'paragraph':          return <p>{children}</p>
-                    case 'block-quote':        return <blockquote>{children}</blockquote>
-                    case 'bulleted-list':      return <ul>{children}</ul>
-                    case 'numbered-list':      return <ol>{children}</ol>
-                    case 'heading-one':        return <h1>{children}</h1>
-                    case 'heading-two':        return <h2>{children}</h2>
-                    case 'heading-three':      return <h3>{children}</h3>
-                    case 'heading-four':       return <h4>{children}</h4>
-                    case 'bulleted-list-item': return <li>{children}</li>
-                    case 'numbered-list-item': return <li>{children}</li>
-                }
-            }
-            if(object.kind == 'mark') {
-                switch(object.type) {
-                    case 'bold':      return <strong>{children}</strong>
-                    case 'italic':    return <i>{children}</i>
-                    case 'underline': return <u>{children}</u>
-                    case 'strike':    return <s>{children}</s>
-                    case 'code':      return <code>{children}</code>
-                }
-            }
+import demoState from 'app/utils/SlateEditor/DemoState'
+import {HtmlRules, schema, getMarkdownType} from 'app/utils/SlateEditor/Schema'
 
-            console.log("No serializer: ", object.kind, JSON.stringify(object, null, 2), children)
-        }
-    },
-]})
+const serializer = new Html({rules: HtmlRules})
+export const serializeHtml   = (state) => serializer.serialize(state)
+export const deserializeHtml = (html)  => serializer.deserialize(html)
+export const getDemoState    = ()      => Raw.deserialize(demoState, { terse: true })
 
-const schema = {
-    defaultNode: 'paragraph',
-    //blockTypes: {
-    //  ...Blocks,
-    //},
-    toolbarMarks: [
-        { type: 'bold', icon: 'bold' },
-        { type: 'italic', icon: 'italic' },
-        { type: 'underline', icon: 'underline' },
-        { type: 'code', icon: 'code' },
-    ],
-    toolbarTypes: [
-        { type: 'heading-one', icon: 'header' },
-        { type: 'heading-two', icon: 'header' },
-        { type: 'block-quote', icon: 'quote-left' },
-        { type: 'numbered-list', icon: 'list-ol' },
-        { type: 'bulleted-list', icon: 'list-ul' },
-    ],
-    sidebarTypes: [],
-    nodes: {
-        'block':   ({ children }) => <p style={{background: 'red'}}>{children}</p>,
-        'paragraph':   ({ children }) => <p style={{color: 'blue'}}>{children}</p>,
-        'block-quote':   ({ children }) => <blockquote>{children}</blockquote>,
-        'bulleted-list': ({ children }) => <ul>{children}</ul>,
-        'numbered-list': ({ children, attributes }) => <ol {...attributes}>{children}</ol>,
-        'heading-one':   ({ children }) => <h1>{children}</h1>,
-        'heading-two':   ({ children }) => <h2>{children}</h2>,
-        'heading-three': ({ children }) => <h3>{children}</h3>,
-        'heading-four':  ({ children }) => <h4>{children}</h4>,
-        'bulleted-list-item': ({ children }) => <li>{children}</li>,
-        'numbered-list-item': ({ children }) => <li>{children}</li>,
-    },
-    marks: {
-        bold:      props => <strong>{props.children}</strong>,
-        code:      props => <code>{props.children}</code>,
-        italic:    props => <em>{props.children}</em>,
-        underline: props => <u>{props.children}</u>,
-        strike:    props => <s>{props.children}</s>,
-    },
-    getMarkdownType: (chars) => {
-        switch (chars) {
-            case '*':
-            case '-': return 'bulleted-list-item';
-            case '>': return 'block-quote';
-            case '#': return 'heading-one';
-            case '##': return 'heading-two';
-            case '###': return 'heading-three';
-            case '####': return 'heading-four';
-            case '1.': return 'numbered-list-item';
-            default: return null;
-        }
-    },
-}
+const plugins = []
 
 
-class SlateEditor extends React.Component {
+export default class SlateEditor extends React.Component {
 
     constructor(props) {
         super(props)
@@ -126,6 +37,7 @@ class SlateEditor extends React.Component {
 
     onChange = (state) => {
         this.setState({ state })
+        this.props.onChange(state)
     }
 
     // When a mark button is clicked, toggle the current mark.
@@ -146,7 +58,6 @@ class SlateEditor extends React.Component {
         this.setState({ menu: portal.firstChild })
     }
 
-
     // Markdown-style quick formatting
     onKeyDown = (e, data, state) => {
         switch (data.key) {
@@ -162,7 +73,7 @@ class SlateEditor extends React.Component {
         let { selection } = state
         const { startText, startBlock, startOffset } = state
         const chars = startBlock.text.slice(0, startOffset).replace(/\s*/g, '')
-        const type = schema.getMarkdownType(chars)
+        const type = getMarkdownType(chars)
 
         if (!type) return
         if (type == 'bulleted-list-item' && startBlock.type == 'bulleted-list-item') return
@@ -230,7 +141,6 @@ class SlateEditor extends React.Component {
 
     render = () => {
         const { state } = this.state
-        console.log(serializer.serialize(state));
         return (
             <div>
                 {this.renderMenu()}
@@ -248,7 +158,7 @@ class SlateEditor extends React.Component {
                     {this.renderMarkButton('bold',      <strong>B</strong>)}
                     {this.renderMarkButton('italic',    <i>I</i>)}
                     {this.renderMarkButton('underline', <u>U</u>)}
-                    {this.renderMarkButton('strike',    <s>S</s>)}
+                    {this.renderMarkButton('strike',    <del>S</del>)}
                     {this.renderMarkButton('code',      <code>{'{}'}</code>)}
                 </div>
             </Portal>
@@ -268,7 +178,7 @@ class SlateEditor extends React.Component {
 
     renderEditor = () => {
         return (
-            <div className="SlateEditor">
+            <div className="SlateEditor Markdown">
                 <Editor
                     schema={schema}
                     plugins={plugins}
@@ -295,5 +205,3 @@ class SlateEditor extends React.Component {
         menu.style.left = `${rect.left + window.scrollX - menu.offsetWidth / 2 + rect.width / 2}px`
     }
 }
-
-export default SlateEditor

@@ -17,18 +17,18 @@
 }
 
 .SlateEditor__menu > * + * {
-  margin-left: 10px;
+  margin-left: 4px;
 }
 
 .SlateEditor__menu-button {
   font-family: 'Georgia', serif;
-  color: #777;
+  color: #FFF;
   cursor: pointer;
   > span {
     display: inline-block;
-    width: 2rem;
+    width: 1.5rem;
     text-align: center;
-    background: #333;
+    background: #555;
     border-radius: 2px;
     code {
       border: none;
@@ -36,16 +36,18 @@
       color: inherit;
     }
   }
-  > span:hover {
-    background: #555;
-    color: white;
-  }
 }
 
+.SlateEditor__menu-button[data-active="false"] {
+  > span:hover {
+    color: #333;
+    background: #CCC;
+  }
+}
 .SlateEditor__menu-button[data-active="true"] {
-  color: white;
   > span {
-    background: #555;
+    color: #333;
+    background: #EEE;
   }
 }
 
@@ -59,7 +61,8 @@
 */
 
 .SlateEditor__hover-menu {
-  padding: 8px 7px 6px;
+  font-size: 90%;
+  padding: 5px;
   position: absolute;
   z-index: 1;
   top: -10000px;
@@ -69,12 +72,4 @@
   background-color: #222;
   border-radius: 4px;
   transition: opacity .75s;
-}
-
-.SlateEditor__hover-menu .button {
-  color: #aaa;
-}
-
-.SlateEditor__hover-menu .button[data-active="true"] {
-  color: #fff;
 }

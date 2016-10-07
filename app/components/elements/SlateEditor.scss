@@ -1,5 +1,11 @@
 .SlateEditor {
   padding: 1rem;
+  border: 1px solid $medium-gray;
+  border-radius: 8px;
+}
+
+.SlateEditor.Markdown {
+  a {border-bottom: 1px dotted #00f;}
 }
 
 .SlateEditor > * > * + * {

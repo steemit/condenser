@@ -160,7 +160,7 @@ export default function useEnterAndConfirmEmailPages(app) {
             {attributes: ['id', 'email'], where: {user_id, provider: 'email'}, order: 'id'}
         );
         if (eid) {
-            yield eid.update({confirmation_code});
+            yield eid.update({confirmation_code, email});
         } else {
             eid = yield models.Identity.create({
                 provider: 'email',

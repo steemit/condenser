@@ -11,22 +11,34 @@ export default class LandingPress extends React.Component {
 				</div>
 				<div className="row Partners__logos">
 					<div className="small-6 medium-4 large-2">
-						<img src="https://www.steemimg.com/images/2016/08/24/cyberfund92a82.jpg" alt="cyber.fund logo" />
+						<a href="https://cyber.fund/" target="blank">
+							<img src="https://www.steemimg.com/images/2016/08/24/cyberfund92a82.jpg" alt="cyber.fund logo" />
+						</a>
 					</div>
 					<div className="small-6 medium-4 large-2">
-						<img src="https://www.steemimg.com/images/2016/08/24/cyberfund92a82.jpg" alt="cyber.fund logo" />
+						<a href="https://cyber.fund/" target="blank">
+							<img src="https://www.steemimg.com/images/2016/08/24/cyberfund92a82.jpg" alt="cyber.fund logo" />
+						</a>
 					</div>
 					<div className="small-6 medium-4 large-2">
-						<img src="https://www.steemimg.com/images/2016/08/24/cyberfund92a82.jpg" alt="cyber.fund logo" />
+						<a href="https://cyber.fund/" target="blank">
+							<img src="https://www.steemimg.com/images/2016/08/24/cyberfund92a82.jpg" alt="cyber.fund logo" />
+						</a>
 					</div>
 					<div className="small-6 medium-4 large-2">
-						<img src="https://www.steemimg.com/images/2016/08/24/cyberfund92a82.jpg" alt="cyber.fund logo" />
+						<a href="https://cyber.fund/" target="blank">
+							<img src="https://www.steemimg.com/images/2016/08/24/cyberfund92a82.jpg" alt="cyber.fund logo" />
+						</a>
 					</div>
 					<div className="small-6 medium-4 large-2">
-						<img src="https://www.steemimg.com/images/2016/08/24/cyberfund92a82.jpg" alt="cyber.fund logo" />
+						<a href="https://cyber.fund/" target="blank">
+							<img src="https://www.steemimg.com/images/2016/08/24/cyberfund92a82.jpg" alt="cyber.fund logo" />
+						</a>
 					</div>
 					<div className="small-6 medium-4 large-2">
-						<img src="https://www.steemimg.com/images/2016/08/24/cyberfund92a82.jpg" alt="cyber.fund logo" />
+						<a href="https://cyber.fund/" target="blank">
+							<img src="https://www.steemimg.com/images/2016/08/24/cyberfund92a82.jpg" alt="cyber.fund logo" />
+						</a>
 					</div>
 				</div>
 				<div className="row">
@@ -36,10 +48,14 @@ export default class LandingPress extends React.Component {
 				</div>
 				<div className="row Partners__law">
 					<div className="small-12 medium-6 columns">
-						<img src="images/landing/tolkachev.jpg" alt='логотип "Толкачев и партнеры"' />
+						<a href="http://www.atplaw.ru/" target="blank">
+							<img src="images/landing/tolkachev.jpg" alt='логотип "Толкачев и партнеры"' />
+						</a>
 					</div>
 					<div className="small-12 medium-6 columns">
-						<img src="images/landing/skolkovo.jpg" alt="логотип Сколково" />
+						<a href="http://sk.ru" target="blank">
+							<img src="images/landing/skolkovo.jpg" alt="логотип Сколково" />
+						</a>
 					</div>
 				</div>
 				<div className="row Partners__info">
@@ -47,10 +63,14 @@ export default class LandingPress extends React.Component {
 						<h3>Информационные партнеры</h3>
 					</div>
 					<div className="small-12 medium-6 columns">
-						<img src="images/landing/coinfox.jpg" alt="логотип Coinfox" />
+						<a href="http://www.coinfox.ru/" target="blank">
+							<img src="images/landing/coinfox.jpg" alt="логотип Coinfox" />
+						</a>
 					</div>
 					<div className="small-12 medium-6 columns">
-						<img src="images/landing/forklog.jpg" alt="логотип Forklog" />
+						<a href="http://forklog.com/" target="blank">
+							<img src="images/landing/forklog.jpg" alt="логотип Forklog" />
+						</a>
 					</div>
 				</div>
 				<hr />

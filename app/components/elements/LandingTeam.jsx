@@ -19,8 +19,6 @@ export default class LandingTeam extends React.Component {
 						<strong>Дмитрий Стародубцев</strong>
 						<p>Сооснователь cyber.fund</p>
 						<ul>
-							<li>in</li>
-							<li>tw</li>
 							<li><a href="https://github.com/21xhipster"><img src="images/landing/github_icon.jpg" /></a></li>
 						</ul>
 					</div>
@@ -36,7 +34,7 @@ export default class LandingTeam extends React.Component {
 							<li><a href="https://github.com/ValeryLitvin"><img src="images/landing/github_icon.jpg" /></a></li>
 						</ul>
 					</div>
-					<div className="small-6 medium-4 large-3 columns Team__member">
+					<div className="small-6 medium-4 large-3 columns Team__member Team__member__marina">
 						<div className="Team__members__image-wrapper">
 							<img className="Team__member__img" src="images/landing/Marina.jpg" alt="фотография Марины Гуревой" />
 						</div>
@@ -48,7 +46,7 @@ export default class LandingTeam extends React.Component {
 							<li><a href="https://www.github.com/mguryeva"><img src="images/landing/github_icon.jpg" /></a></li>
 						</ul>
 					</div>
-					<div className="small-6 medium-4 large-3 columns Team__member">
+					<div className="small-6 medium-4 large-3 columns Team__member Team__member__alexey">
 						<div className="Team__members__image-wrapper">
 							<img className="Team__member__img" src="images/landing/alexey.jpg" alt="фотография Алексея Фрумина" />
 						</div>
@@ -60,7 +58,7 @@ export default class LandingTeam extends React.Component {
 							<li><a href="https://github.com/tomarcafe"><img src="images/landing/github_icon.jpg" /></a></li>
 						</ul>
 					</div>
-					<div className="small-6 medium-4 large-3 columns Team__member">
+					<div className="small-6 medium-4 large-3 columns Team__member Team__member__vitaly">
 						<div className="Team__members__image-wrapper">
 							<img className="Team__member__img" src="https://s3.amazonaws.com/keybase_processed_uploads/bc86969a26560b7a081d1f720f6f3c05_360_360_square_360.jpeg" alt="фотография Виталия Львова" />
 						</div>
@@ -72,21 +70,22 @@ export default class LandingTeam extends React.Component {
 							<li><a href="https://github.com/vitalylvov"><img src="images/landing/github_icon.jpg" /></a></li>
 						</ul>
 					</div>
-					<div className="small-6 medium-4 large-3 columns Team__member">
+					<div className="small-6 medium-4 large-3 columns Team__member Team__member__kostya">
 						<div className="Team__members__image-wrapper">
 							<img className="Team__member__img" src="images/landing/kostya.jpg" alt="фотография Контстантина Ломашука" />
 						</div>
 						<strong>Константин Ломашук</strong>
-						<p>Маркетинг</p>
+						<p>Развитие бизнеса</p>
 						<ul>
 							<li><a href="https://ru.linkedin.com/in/lomashuk"><img src="images/landing/linkedin_icon.jpg" /></a></li>
 							<li><a href="https://www.facebook.com/k.lomashuk"><Icon name="facebook" size="2x" /></a></li>
 							<li><a href="https://github.com/lomashuk"><img src="images/landing/github_icon.jpg" /></a></li>
 						</ul>
 					</div>
-					<div className="small-6 medium-4 large-3 columns Team__member">
+					<div className="small-6 medium-4 large-3 columns Team__member Team__member__misha">
 						<div className="Team__members__image-wrapper">
-							<img className="Team__member__img" src="https://pp.vk.me/c619721/v619721379/1de32/S_1velJqxSA.jpg" alt="фотография Михаила Палей" />
+							{/* <img className="Team__member__img" src="https://pp.vk.me/c619721/v619721379/1de32/S_1velJqxSA.jpg" alt="фотография Михаила Палей" /> */}
+							<img className="Team__member__img" src="https://pp.vk.me/c637427/v637427379/6319/yNXcC70HrLA.jpg" alt="фотография Михаила Палей" />
 						</div>
 						<strong>Михаил Палей</strong>
 						<p>Front-end разработка</p>
@@ -96,27 +95,29 @@ export default class LandingTeam extends React.Component {
 						</ul>
 					</div>
 				</div>
+				<div className="row center Team__partners">
+					<div className="small-6 medium-4 large-3 small-centered medium-centered large-centered columns Team__member">
+						<div className="Team__members__image-wrapper">
+							<a href="https://www.facebook.com/mike.chobanyan.7"><img className="Team__member__img" src="http://kuna.com.ua/wp-content/uploads/2015/12/DSC_3422-240x300.jpg.pagespeed.ce.vQtihTFuzz.jpg" /></a>
+						</div>
+						<strong>Михаил Чобанян</strong>
+						<p>Информационная поддержка в Украине</p>
+						<ul>
+							<li></li>
+						</ul>
+					</div>
+					<div className="small-6 medium-4 large-3 small-centered medium-centered large-centered columns Team__member">
+						<div className="Team__members__image-wrapper">
+							<a href="http://kuna.com.ua/about/"><img className="Team__member__img" src="http://kuna.com.ua/wp-content/uploads/2014/08/kuna_logo_258x258.png.pagespeed.ce.qhr50_CAH4.png" /></a>
+						</div>
+						<strong>Kuna</strong>
+						<p>Информационная поддержка в Украине</p>
+						<ul>
+							<li></li>
+						</ul>
+					</div>
+				</div>
 				<hr />
-				<div id="media" className="small-6 medium-4 large-3 columns Team__member">
-					<div className="Team__members__image-wrapper">
-						<a href="https://www.facebook.com/mike.chobanyan.7"><img className="Team__member__img" src="http://kuna.com.ua/wp-content/uploads/2015/12/DSC_3422-240x300.jpg.pagespeed.ce.vQtihTFuzz.jpg"/></a>
-					</div>
-					<strong>Михаил Чобанян</strong>
-					<p>Информационная поддержка в Украине</p>
-					<ul>
-						<li></li>
-					</ul>
-				</div>
-				<div className="small-6 medium-4 large-3 columns Team__member">
-					<div className="Team__members__image-wrapper">
-						<a href="http://kuna.com.ua/about/"><img className="Team__member__img" src="http://kuna.com.ua/wp-content/uploads/2014/08/kuna_logo_258x258.png.pagespeed.ce.qhr50_CAH4.png"/></a>
-					</div>
-					<strong>Kuna</strong>
-					<p>Информационная поддержка в Украине</p>
-					<ul>
-						<li></li>
-					</ul>
-				</div>
 			</section>
 		)
 	}

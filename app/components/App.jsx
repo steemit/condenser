@@ -246,7 +246,7 @@ class App extends React.Component {
                 {lp ? <LpFooter /> : null}
 
             </div>
-            <div style={{position: 'fixed', bottom: '1px', left: '3px', fontSize: '70%'}}>git client# {githash} </div>
+            <div style={{color: '#00ff00',position: 'fixed', bottom: '1px', left: '3px', fontSize: '70%'}}>git client# {githash} </div>
             <Dialogs />
             <Modals />
         </div>

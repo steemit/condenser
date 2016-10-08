@@ -53,10 +53,10 @@ export default class LandingTeam extends React.Component {
 							<img className="Team__member__img" src="images/landing/alexey.jpg" alt="фотография Алексея Фрумина" />
 						</div>
 						<strong>Алексей Фрумин</strong>
-						<p>Back-end разработка</p>
+						<p>Моральная поддержка</p>
 						<ul>
-							<li>in</li>
-							<li>tw</li>
+							<li><li><a href="https://www.linkedin.com/in/alexey-frumin-9a330a42"><img src="images/landing/linkedin_icon.jpg" /></a></li></li>
+							<li><img src="images/landing/twitter_icon.jpg" /></li>
 							<li><a href="https://github.com/tomarcafe"><img src="images/landing/github_icon.jpg" /></a></li>
 						</ul>
 					</div>

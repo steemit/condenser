@@ -70,7 +70,7 @@ export default class LandingCountDowns extends React.Component {
 				<div className="row text-center CountDowns__headers">
 					<div className="small-12 columns">
 						<strong className="CountDowns__slogan">Каждый Голос имеет значение!</strong>
-						<div><Icon className="CountDowns__logo" name={APP_ICON} size="2x" /></div>
+						<div><Icon className="CountDowns__logo" name={APP_ICON} size="2x" style={{ transform: 'translateX(-50%)', marginRight: '2rem'}} /></div>
 						<h1>Социально-медийная блокчейн платформа</h1>
 					</div>
 				</div>
@@ -124,25 +124,25 @@ export default class LandingCountDowns extends React.Component {
 					props.prefill
 					? 	<div className="row CountDowns__links">
 							<div className="small-12 columns text-center">
-								<a href="https://steemit.com/@golos" className="CountDowns__button_small">блог</a>
-								<a href="https://wiki.golos.io/" className="CountDowns__button_small">вики</a>
-								<a href="https://www.youtube.com/channel/UCcBPq2gUdpkL9m-_a92AFVQ" className="CountDowns__button_small">youtube</a>
-								<a href="https://github.com/goloschain" className="CountDowns__button_small">github</a>
+								<a href="https://steemit.com/@golos" target="blank" className="CountDowns__button_small">блог</a>
+								<a href="https://wiki.golos.io/" target="blank" className="CountDowns__button_small">вики</a>
+								<a href="https://www.youtube.com/channel/UCcBPq2gUdpkL9m-_a92AFVQ" target="blank" className="CountDowns__button_small">youtube</a>
+								<a href="https://github.com/goloschain" target="blank" className="CountDowns__button_small">github</a>
 							</div>
 						</div>
 					: 	<div className="row CountDowns__links">
 							<div className="small-12 medium-6 columns text-left">
-								<a href="https://wiki.golos.io/1-introduction/golos_whitepaper.html" className="CountDowns__button_small">White Paper</a>
-								<a href="https://wiki.golos.io/5-development/roadmap.html" className="CountDowns__button_small">Дорожная карта</a>
+								<a href="https://wiki.golos.io/1-introduction/golos_whitepaper.html" target="blank" className="CountDowns__button_small">White Paper</a>
+								<a href="https://wiki.golos.io/5-development/roadmap.html" target="blank" className="CountDowns__button_small">Дорожная карта</a>
 							</div>
 							<div className="small-12 medium-6 columns text-right CountDowns__social-links">
 								<p>Социальные сети: </p>
 								<ul>
 									<li>
-										<a href="facebook.com"><img src="images/landing/fb.jpg" /></a>
+										<a href="facebook.com" target="blank"><img src="images/landing/fb.jpg" /></a>
 									</li>
 									<li>
-										<a href="twitter.com"><img src="images/landing/tw.jpg" /></a>
+										<a href="https://twitter.com/goloschain" target="blank"><img src="images/landing/tw.jpg" /></a>
 									</li>
 								</ul>
 							</div>

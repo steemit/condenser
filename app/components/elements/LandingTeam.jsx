@@ -5,10 +5,10 @@ export default class LandingTeam extends React.Component {
 // •
 	render() {
 		return (
-			<section className="Team" id="team">
+			<section className="Team">
 				<div className="row text-center">
 					<div className="small-12 columns">
-						<h2 className="Team__header">Команда</h2>
+						<h2 className="Team__header" id="team">Команда</h2>
 					</div>
 				</div>
 				<div className="row Team__members">

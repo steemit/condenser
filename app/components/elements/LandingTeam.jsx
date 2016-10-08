@@ -55,8 +55,8 @@ export default class LandingTeam extends React.Component {
 						<strong>Алексей Фрумин</strong>
 						<p>Моральная поддержка</p>
 						<ul>
-							<li><li><a href="https://www.linkedin.com/in/alexey-frumin-9a330a42"><img src="images/landing/linkedin_icon.jpg" /></a></li></li>
-							<li><img src="images/landing/twitter_icon.jpg" /></li>
+							<li><a href="https://www.linkedin.com/in/alexey-frumin-9a330a42"><img src="images/landing/linkedin_icon.jpg" /></a></li>
+							<li><a href="https://cyber.fund/"><img style={{width:'40px', height:'40px'}} src="https://cyber.fund/images/cybF.svg" /></a></li>
 							<li><a href="https://github.com/tomarcafe"><img src="images/landing/github_icon.jpg" /></a></li>
 						</ul>
 					</div>
@@ -67,7 +67,7 @@ export default class LandingTeam extends React.Component {
 						<strong>Виталий Львов</strong>
 						<p>Финансы и аудит</p>
 						<ul>
-							<li><a href="https://cyber.fund/">•</a></li>
+							<li><a href="https://cyber.fund/"><img style={{width:'40px', height:'40px'}} src="https://cyber.fund/images/cybF.svg" /></a></li>
 							<li><a href="https://twitter.com/vitalylvov"><img src="images/landing/twitter_icon.jpg" /></a></li>
 							<li><a href="https://github.com/vitalylvov"><img src="images/landing/github_icon.jpg" /></a></li>
 						</ul>

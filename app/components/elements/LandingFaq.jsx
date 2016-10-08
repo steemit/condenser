@@ -19,7 +19,7 @@ export default class LandingFaq extends React.Component {
 		]
 
 		return (
-			<section className="Faq">
+			<section className="Faq" id="qa">
 				<div className="row text-center Faq__headers">
 					<div className="small-12 columns">
 						<h2 className="Landing__h2_blue">Вопросы - ответы</h2>

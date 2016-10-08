@@ -5,7 +5,7 @@ export default class LandingTeam extends React.Component {
 // •
 	render() {
 		return (
-			<section className="Team">
+			<section className="Team" id="team">
 				<div className="row text-center">
 					<div className="small-12 columns">
 						<h2 className="Team__header">Команда</h2>
@@ -97,8 +97,7 @@ export default class LandingTeam extends React.Component {
 					</div>
 				</div>
 				<hr />
-				<hr />
-				<div className="small-6 medium-4 large-3 columns Team__member">
+				<div id="media" className="small-6 medium-4 large-3 columns Team__member">
 					<div className="Team__members__image-wrapper">
 						<a href="https://www.facebook.com/mike.chobanyan.7"><img className="Team__member__img" src="http://kuna.com.ua/wp-content/uploads/2015/12/DSC_3422-240x300.jpg.pagespeed.ce.vQtihTFuzz.jpg"/></a>
 					</div>

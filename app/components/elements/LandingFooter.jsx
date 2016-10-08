@@ -30,7 +30,7 @@ export default class LandingFooter extends React.Component {
 		}
 
 		return (
-			<section className="LandingFooter">
+			<section className="LandingFooter" id="contacts">
 				<div className="row">
 					{renderMenus()}
 				</div>

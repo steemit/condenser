@@ -3,7 +3,7 @@ import React from 'react'
 export default class LandingDocumentation extends React.Component {
 	render() {
 		return (
-			<section className="Documentation">
+			<section className="Documentation" id="docs">
 				<div className="row text-center">
 					<div className="   small-12 columns">
 						<h2>Документация</h2>

@@ -161,11 +161,12 @@
 		.JoinUs__item {
 			margin-bottom: 65px;
 			img {
-				margin-right: 40px;
-				margin-bottom: 40px;
 				float: left;
 				width: 40px;
 				height: 40px;
+				margin-top: 8px;
+				margin-right: 40px;
+				margin-bottom: 40px;
 			}
 			strong {
 				font-size: 18px; // 27px
@@ -240,9 +241,17 @@
 .Team {
 	.Team__header { margin: 90px auto 50px; }
 	.Team__members { margin-bottom: 165px; }
+	.Team__partners {
+		margin: 50px auto;
+		.columns {
+			margin-left: auto;
+			margin-right: auto;
+		}
+	}
 	.Team__member {
 		margin-top: 50px;
 		strong { display: block; }
+		ul { margin-left: 0; }
 		li {
 			display: inline;
 			padding: 0 10px;

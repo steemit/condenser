@@ -11,6 +11,7 @@ export default class LandingTeam extends React.Component {
 						<h2 className="Team__header" id="team">Команда</h2>
 					</div>
 				</div>
+
 				<div className="row Team__members">
 					<div className="small-6 medium-4 large-3 columns Team__member">
 						<div className="Team__members__image-wrapper">
@@ -20,8 +21,10 @@ export default class LandingTeam extends React.Component {
 						<p>Сооснователь cyber.fund</p>
 						<ul>
 							<li><a href="https://github.com/21xhipster"><img src="images/landing/github_icon.jpg" /></a></li>
+							<li><a href="https://cyber.fund/"><img style={{width:'40px', height:'40px'}} src="https://cyber.fund/images/cybF.svg" /></a></li>
 						</ul>
 					</div>
+
 					<div className="small-6 medium-4 large-3 columns Team__member">
 						<div className="Team__members__image-wrapper">
 							<img className="Team__member__img" src="https://avatars1.githubusercontent.com/u/1690657?v=3&s=400" alt="фотография Валерия Литвина" />
@@ -46,6 +49,7 @@ export default class LandingTeam extends React.Component {
 							<li><a href="https://www.github.com/mguryeva"><img src="images/landing/github_icon.jpg" /></a></li>
 						</ul>
 					</div>
+
 					<div className="small-6 medium-4 large-3 columns Team__member Team__member__alexey">
 						<div className="Team__members__image-wrapper">
 							<img className="Team__member__img" src="images/landing/alexey.jpg" alt="фотография Алексея Фрумина" />
@@ -63,13 +67,14 @@ export default class LandingTeam extends React.Component {
 							<img className="Team__member__img" src="https://s3.amazonaws.com/keybase_processed_uploads/bc86969a26560b7a081d1f720f6f3c05_360_360_square_360.jpeg" alt="фотография Виталия Львова" />
 						</div>
 						<strong>Виталий Львов</strong>
-						<p>Финансы и аудит</p>
+						<p>Финансы и аудит</p><br/>
 						<ul>
 							<li><a href="https://cyber.fund/"><img style={{width:'40px', height:'40px'}} src="https://cyber.fund/images/cybF.svg" /></a></li>
 							<li><a href="https://twitter.com/vitalylvov"><img src="images/landing/twitter_icon.jpg" /></a></li>
 							<li><a href="https://github.com/vitalylvov"><img src="images/landing/github_icon.jpg" /></a></li>
 						</ul>
 					</div>
+
 					<div className="small-6 medium-4 large-3 columns Team__member Team__member__kostya">
 						<div className="Team__members__image-wrapper">
 							<img className="Team__member__img" src="images/landing/kostya.jpg" alt="фотография Контстантина Ломашука" />
@@ -95,6 +100,7 @@ export default class LandingTeam extends React.Component {
 						</ul>
 					</div>
 				</div>
+
 				<div className="row center Team__partners">
 					<div className="small-6 medium-4 large-3 small-centered medium-centered large-centered columns Team__member">
 						<div className="Team__members__image-wrapper">

@@ -70,8 +70,8 @@ export default class LandingCountDowns extends React.Component {
 				<div className="row text-center CountDowns__headers">
 					<div className="small-12 columns">
 						<strong className="CountDowns__slogan">Каждый Голос имеет значение!</strong>
-						<div><Icon className="CountDowns__logo" name={APP_ICON} size="2x" style={{ transform: 'translateX(-50%)', marginRight: '2rem'}} /></div>
-						<h1>Социально-медийная блокчейн платформа</h1>
+						<div className="CountDowns__logo"><Icon name={APP_ICON} size="2x" style={{ transform: 'translateX(-50%)', marginRight: '2rem'}} /></div>
+						<h1 className="CountDowns__headers__h1">Социально-медийная блокчейн платформа</h1>
 					</div>
 				</div>
 
@@ -80,20 +80,22 @@ export default class LandingCountDowns extends React.Component {
 				{
 					props.prefill
 					? 	<div className="row text-center CountDowns__counters">
-							<div className="small-12 medium-6 columns">
-								<CountDown title="До запуска блокчейна" date={props.blockchainStartAt} />
+							<div className="small-12 medium-6 columns CountDowns__counter">
+								<CountDown title={
+										<strong>До запуска блокчейна</strong>
+									} date={props.blockchainStartAt} />
 							</div>
-							<div className="small-12 medium-6 columns">
-								<CountDown title="До старта продажи силы голоса" date={props.crowdsaleStartAt} />
-								{/* TODO добавить второй каундаун к 18:00 1 ноября */}
-								{/* TODO текст: "запуск блокчейна через" */}
+							<div className="small-12 medium-6 columns CountDowns__counter">
+								<CountDown title={
+										<strong>До старта продажи силы голоса</strong>
+									} date={props.crowdsaleStartAt} />
 							</div>
 						</div>
 					: 	<div className="row text-center CountDowns__counters">
-							<div className="small-12 medium-4 columns">
+							<div className="small-12 medium-4 columns CountDowns__counter">
 								<CountDown title="Продажа силы голоса закончится" date={props.crowdsaleEndAt} />
 							</div>
-							<div className="small-12 medium-4 columns">
+							<div className="small-12 medium-4 columns CountDowns__counter">
 								<p>Собрано биткоинов</p>
 								<strong>{state.bitcoinsRaised} B</strong>
 								<p>

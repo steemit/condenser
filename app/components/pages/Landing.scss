@@ -7,6 +7,7 @@
 // }
 // TODO change pixels to rems
 // TODO add common supporting text styles
+// http://foundation.zurb.com/sites/docs/v/5.5.3/media-queries.html
 .Landing {
 	font-family: Verdana, Geneva, sans-serif;
 	/* COMMON ELEMENTS */
@@ -28,32 +29,33 @@
 		font-weight: bold;
 	}
 	.Landing__supporting-text { color: #d2d2d2; }
+	@media #{$small-only} {
+		h2 { font-size: 2.38095rem; }
+	}
 }
 
 /* SECTIONS */
 .CountDowns {
 	.CountDowns__headers {
+		position: relative;
 		background-image: url('../../assets/images/landing/coundowns_background.png');
 	    background-repeat: round;
-		margin-top: 115px;
+		// margin-top: 115px;
 		.CountDowns__slogan {
 			color: #6191cf;
 			font-size: 37px;
-			// font-family: 'Myriad Pro';
+			display: block;
+			margin-bottom: 40px;
 		}
 		.Icon_2x > svg, span.Icon_2x {
 			width: 7rem;
 			height: 7rem;
 		}
 		.CountDowns__logo {
-			display: block;
-			margin: 0 auto;
-
+			right: 5%;
+			position: relative;
 		}
-		h1 {
-			margin: 85px auto 120px;
-			// font-size: 6.3rem;
-		}
+		h1 { margin: 135px auto 120px; }
 	}
 	.CountDowns__counters { margin-bottom: 100px; }
 	.CountDowns__button {
@@ -82,6 +84,22 @@
 				list-style-type: none;
 			}
 		}
+	}
+
+	@media #{$small-up} {
+		.CountDowns__headers { margin-top: 55px; }
+		.CountDowns__counter { margin-top: 60px; }
+	}
+
+	@media #{$small-only} {
+		h1 { margin-bottom: 80px; }
+		.CountDowns__slogan { font-size: 17px; }
+		.CountDowns__counter { margin-top: 30px; }
+		.CountDown .CountDown__single { margin-right: 10px; }
+	}
+
+	@media #{$medium-up} {
+		.CountDowns__headers { margin-top: 115px; }
 	}
 }
 
@@ -162,8 +180,6 @@
 			margin-bottom: 65px;
 			img {
 				float: left;
-				width: 40px;
-				height: 40px;
 				margin-top: 8px;
 				margin-right: 40px;
 				margin-bottom: 40px;
@@ -179,6 +195,9 @@
 		}
 	}
 	.JoinUs__action { margin-bottom: 100px; }
+	@media #{$small-only} {
+		.JoinUs__item img { margin-bottom: 60px; }
+	}
 }
 
 .BlockchainRevolution {
@@ -215,6 +234,16 @@
 			color: #707070;
 			font-size: 27px;
 			background-color: white;
+		}
+	}
+	@media #{$small-only} {
+		.BlockchainRevolution__table {
+			width: 100%;
+			overflow-y: scroll;
+			tr { padding: 0 10px;}
+			tr > td, tr > th { padding-left: 10px; }
+			tr td:last-child, tr th:last-child { padding-right: 10px; }
+			th, strong { font-size: 13px; }
 		}
 	}
 }
@@ -325,6 +354,9 @@
 		margin-top: 50px;
 		margin-bottom: 120px;
 		.alert { margin-right: 30px; }
+		@media #{$small-only} {
+			.alert { margin-right: 0; }
+		}
 	}
 }
 
@@ -398,8 +430,13 @@
 		a { color: black; }
 	}
 	.LandingFooter__description {
-		margin: 30px auto;
 		color: #c5c5c5;
 		font-size: 17px;
+		margin: 30px auto;
+		word-break: break-all;
+	}
+	@media #{$small-only} {
+		strong { text-align: center; }
+		li { text-align: center; }
 	}
 }

@@ -164,7 +164,7 @@
 				height: 40px;
 			}
 			strong {
-				font-size: 27px;
+				font-size: 18px; // 27px
 				color: #1a1a1a;
 			}
 			p {
@@ -245,9 +245,16 @@
 			list-style-type: none;
 		}
 	}
+	.Team__cyberfund-logo {
+		color: red;
+		font-size: 42px;
+		display: inline-block;
+		transform: translateY(11%);
+	}
 	.Team__members__image-wrapper {
 		width: 180px;
 		height: 180px;
+		position: relative;
 		overflow: hidden;
 		border-radius: 50%;
 		margin: 0 auto 25px;
@@ -255,7 +262,41 @@
 	}
 	.Team__member__img {
 		width: 180px;
+		position: absolute;
+	    left: 50%;
+	    top: 50%;
+	    transform: translate(-50%, -50%);
 		// height: 180px;
+	}
+	// individual stles
+	.Team__member__marina .Team__member__img  {
+		width: 300px;
+		max-width: 200%;
+	}
+	.Team__member__alexey .Team__member__img {
+		left: 56.5%;
+		width: 200px;
+		max-width: 115%;
+	}
+	.Team__member__kostya .Team__member__img  {
+		left: 52%;
+		width: 190px;
+		max-width: 110%;
+	}
+	.Team__member__vitaly{
+		p { margin-bottom: -12px; }
+
+	}
+	.Team__member__misha .Team__member__img {
+		// first picture
+		// left: 54%;
+		// width: 190px;
+		// max-width: 120%;
+		// second picture
+		left: 53%;
+		width: 320px;
+		max-width: 200%;
+
 	}
 }
 

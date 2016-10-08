@@ -7,9 +7,23 @@ export default class LandingFooter extends React.Component {
 		const menuHeaders = ['Используем Голос', 'Правовые документы', 'Сообщества']
 		const columnsAlign = ['left', 'left', 'right']
 		const menuItems = [
-			['Приложение', 'Block Explorer', 'Документация', 'Github'],
-			['Условия проведения краудфандинга', 'Правила пользования'],
-			['Chat', 'Facebook', 'VK', 'Twitter', 'Bitcointalk']
+			[
+				{name: 'Приложение'},
+				{name: 'Block Explorer'},
+				{name: 'Документация', url: 'https://wiki.golos.io/'},
+				{name: 'Github', url: 'https://github.com/goloschain'}
+			],
+			[
+				{name: 'Условия проведения краудфандинга'},
+				{name: 'Правила пользования'}
+			],
+			[
+				{name: 'Chat', url: 'https://chat.golos.io/'},
+				{name: 'Facebook'},
+				{name: 'VK'},
+				{name: 'Twitter', url: 'https://twitter.com/goloschain'},
+				{name: 'Bitcointalk'}
+			]
 		]
 
 		function renderMenus(align) {
@@ -20,7 +34,7 @@ export default class LandingFooter extends React.Component {
 								{
 									menuItems[index].map((item, i) => {
 										return  <li key={i}>
-													<a href="">{item}</a>
+													<a href={item.url} target="blank">{item.name}</a>
 												</li>
 									})
 								}

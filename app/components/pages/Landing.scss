@@ -234,7 +234,7 @@
 			font-size: 17px;
 			color: #656565;
 		}
-		.button { margin-right: 0; }
+		.button { margin-right: 0 !important; }
 	}
 }
 
@@ -339,6 +339,7 @@
 			display: block;
 			margin-bottom: 50px;
 		}
+		p { font-size: 13px; }
 	}
 }
 

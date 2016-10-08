@@ -34,7 +34,7 @@ export default class LandingFaq extends React.Component {
 				<div className="row Faq__action">
 					<div className="small-12 columns">
 						<p className="Faq__p">Остались вопросы? Наше комьюнити поможет Вам найти ответы</p>
-						<button className="button">Ответы на вопросы</button>
+						<a href="https://chat.golos.io/" target="blank" className="button">Ответы на вопросы</a>
 					</div>
 				</div>
 				<hr />

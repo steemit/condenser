@@ -8,8 +8,8 @@ export default class LandingFooter extends React.Component {
 		const columnsAlign = ['left', 'left', 'right']
 		const menuItems = [
 			[
-				{name: 'Приложение'},
-				{name: 'Block Explorer'},
+				{name: 'Приложение', url: 'https://golos.io/'},
+				{name: 'Block Explorer', url: 'http://explorer.golos.io/'},
 				{name: 'Документация', url: 'https://wiki.golos.io/'},
 				{name: 'Github', url: 'https://github.com/goloschain'}
 			],
@@ -19,10 +19,10 @@ export default class LandingFooter extends React.Component {
 			],
 			[
 				{name: 'Chat', url: 'https://chat.golos.io/'},
-				{name: 'Facebook'},
-				{name: 'VK'},
+				{name: 'Facebook', url: 'https://www.facebook.com/golosru'},
+				{name: 'VK', url: 'https://vk.com/rgolos'},
 				{name: 'Twitter', url: 'https://twitter.com/goloschain'},
-				{name: 'Bitcointalk'}
+				{name: 'Bitcointalk', url: 'https://bitcointalk.org/index.php?topic=1624364.0'}
 			]
 		]
 
@@ -44,16 +44,14 @@ export default class LandingFooter extends React.Component {
 		}
 
 		return (
-			<section className="LandingFooter" id="contacts">
+			<section className="LandingFooter">
 				<div className="row">
 					{renderMenus()}
 				</div>
 				<div className="row text-left LandingFooter__description">
-					<div className="small-6 columns">
-						2016 Golos.io
-					</div>
-					<div className="small-6 columns">
-						Децентрализованная социальная сеть для блоггеров и журналистов
+					<div className="small-12 medium-12 columns">
+						<span className="left">2016 Golos.io</span>
+						<span className="right">Децентрализованная социальная сеть для блоггеров и журналистов</span>
 					</div>
 				</div>
 			</section>

@@ -97,6 +97,27 @@ export default class LandingTeam extends React.Component {
 					</div>
 				</div>
 				<hr />
+				<hr />
+				<div className="small-6 medium-4 large-3 columns Team__member">
+					<div className="Team__members__image-wrapper">
+						<a href="https://www.facebook.com/mike.chobanyan.7"><img className="Team__member__img" src="http://kuna.com.ua/wp-content/uploads/2015/12/DSC_3422-240x300.jpg.pagespeed.ce.vQtihTFuzz.jpg"/></a>
+					</div>
+					<strong>Михаил Чобанян</strong>
+					<p>Информационная поддержка в Украине</p>
+					<ul>
+						<li></li>
+					</ul>
+				</div>
+				<div className="small-6 medium-4 large-3 columns Team__member">
+					<div className="Team__members__image-wrapper">
+						<a href="http://kuna.com.ua/about/"><img className="Team__member__img" src="http://kuna.com.ua/wp-content/uploads/2014/08/kuna_logo_258x258.png.pagespeed.ce.qhr50_CAH4.png"/></a>
+					</div>
+					<strong>Kuna</strong>
+					<p>Информационная поддержка в Украине</p>
+					<ul>
+						<li></li>
+					</ul>
+				</div>
 			</section>
 		)
 	}

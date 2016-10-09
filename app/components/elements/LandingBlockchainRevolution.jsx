@@ -16,17 +16,6 @@ export default class LandingBlockchainRevolution extends React.Component {
 			'Стабильная валюта'
 		]
 
-		function renderTable() {
-			return	texts.map((item, index) => {
-				return 	<tr key={index} className="text-center">
-							<td className="text-left"><strong>{item}</strong></td>
-							<td><img src="images/landing/checked.gif" /></td>
-							<td><img src="images/landing/unchecked.gif" /></td>
-							<td><img src="images/landing/unchecked.gif" /></td>
-						</tr>
-			})
-		}
-
 		return (
 			<section className="BlockchainRevolution">
 				<div className="row text-center">
@@ -48,12 +37,11 @@ export default class LandingBlockchainRevolution extends React.Component {
 								</tr>
 							</thead>
 							<tbody>
-								{/* {renderTable()} */}
 								{
 									texts.map((item, index) => {
 										return 	<tr key={index} className="text-center">
 													<td className="text-left"><strong>{item}</strong></td>
-													<td><img src="images/landing/checked.gif" /></td>
+													<td><img data-wow-delay="1s" className="wow bounceIn" src="images/landing/checked.gif" /></td>
 													<td><img src="images/landing/unchecked.gif" /></td>
 													<td><img src="images/landing/unchecked.gif" /></td>
 												</tr>

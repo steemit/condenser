@@ -40,10 +40,8 @@
 		position: relative;
 		background-image: url('../../assets/images/landing/coundowns_background.png');
 	    background-repeat: round;
-		// margin-top: 115px;
 		.CountDowns__slogan {
 			color: #6191cf;
-			font-size: 37px;
 			display: block;
 			margin-bottom: 40px;
 		}
@@ -99,6 +97,7 @@
 	}
 
 	@media #{$medium-up} {
+		.CountDowns__slogan { font-size: 37px; }
 		.CountDowns__headers { margin-top: 115px; }
 	}
 }
@@ -246,6 +245,16 @@
 			th, strong { font-size: 13px; }
 		}
 	}
+	@media #{$medium-only} {
+		.BlockchainRevolution__table {
+			width: 100%;
+			overflow-y: scroll;
+			tr { padding: 0 40px;}
+			tr > td, tr > th { padding-left: 40px; }
+			tr td:last-child, tr th:last-child { padding-right: 40px; }
+			th, strong { font-size: 15px; }
+		}
+	}
 }
 
 .Faq {
@@ -286,6 +295,11 @@
 			padding: 0 10px;
 			list-style-type: none;
 		}
+	}
+	.Team__facebook-logo {
+		width: 33px;
+	    height: 30px;
+	    margin-bottom: 1px;
 	}
 	.Team__cyberfund-logo {
 		color: red;
@@ -334,11 +348,33 @@
 		// left: 54%;
 		// width: 190px;
 		// max-width: 120%;
-		// second picture
-		left: 53%;
-		width: 320px;
-		max-width: 200%;
 
+		// left: 55%;
+		// width: 197px;
+		// max-width: 200%;
+		// second picture
+		// left: 53%;
+		// width: 320px;
+		// max-width: 200%;
+
+		// third picture
+		left: 6%;
+		top: 13%;
+		width: 580px;
+		max-width: 334%;
+
+	}
+	@media #{$small-only} {
+		.Team__member__misha {
+			flex: 100%;
+			max-width: 100%;
+		}
+	}
+	@media #{$medium-only} {
+		.Team__member__misha {
+			flex: 100%;
+			max-width: 100%;
+		}
 	}
 }
 

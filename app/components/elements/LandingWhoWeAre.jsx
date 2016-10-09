@@ -13,7 +13,7 @@ export default class LandingWhoWeAre extends React.Component {
 				<div className="row WhoWeAre__images">
 					<div className="small-12 medium-6 columns">
 						<a href="https://cyber.fund/" target="blank">
-							<img src="images/landing/cyberfund.png" alt="логотип Киберфонда" />
+							<img src="https://cyber.fund/images/cybF.svg" alt="логотип Киберфонда" />
 						</a>
 					</div>
 					<div className="small-12 medium-6 columns">

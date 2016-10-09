@@ -11,19 +11,19 @@ export default class LandingPress extends React.Component {
 				</div>
 				<div className="row Press__logos">
 					<div className="small-4 medium-3 large-2">
-						<img src="images/landing/cyberfund.png" alt="логотип cyber.fund" />
+						<img src="https://cyber.fund/images/cybF.svg" alt="логотип cyber.fund" />
 					</div>
 					<div className="small-4 medium-3 large-2">
 						<img src="images/landing/steem.png" alt="логотип steem" />
 					</div>
 					<div className="small-4 medium-3 large-2">
-						<img src="images/landing/cyberfund.png" alt="логотип cyber.fund" />
+						<img src="https://cyber.fund/images/cybF.svg" alt="логотип cyber.fund" />
 					</div>
 					<div className="small-4 medium-3 large-2">
 						<img src="images/landing/steem.png" alt="логотип steem" />
 					</div>
 					<div className="small-4 medium-3 large-2">
-						<img src="images/landing/cyberfund.png" alt="логотип cyber.fund" />
+						<img src="https://cyber.fund/images/cybF.svg" alt="логотип cyber.fund" />
 					</div>
 					<div className="small-4 medium-3 large-2">
 						<img src="images/landing/steem.png" alt="логотип steem" />

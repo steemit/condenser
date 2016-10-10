@@ -137,7 +137,7 @@ export default function useEnterAndConfirmMobilePages(app) {
             } else {
                 const seconds_ago = (Date.now() - mid.updated_at) / 1000.0;
                 if (seconds_ago < 120) {
-                    this.flash = {error: 'Confirmation was sent a moment ago. You can try again only in 2 minutes.'};
+                    this.flash = {error: 'Confirmation was attempted a moment ago. You can try again only in 2 minutes.'};
                     this.redirect('/enter_mobile');
                     return;
                 }
@@ -157,8 +157,8 @@ export default function useEnterAndConfirmMobilePages(app) {
         const ip = getRemoteIp(this.req)
 
         const verifyResult = yield verify({mobile, confirmation_code, ip});
-        if (verifyResult && verifyResult.score) eid.update({score: verifyResult.score});
-        if(verifyResult && verifyResult.error) {
+        if (verifyResult && verifyResult.score) mid.update({score: verifyResult.score});
+        if (verifyResult && verifyResult.error) {
             this.flash = {error: verifyResult.error};
             this.redirect('/enter_mobile');
             return;

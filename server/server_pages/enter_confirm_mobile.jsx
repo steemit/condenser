@@ -19,8 +19,8 @@ function *confirmMobileHandler() {
         {attributes: ['id', 'user_id', 'verified', 'updated_at'], where: {user_id: this.session.user, confirmation_code}, order: 'id DESC'}
     );
     if (!mid) {
-        this.status = 401;
-        this.body = 'Wrong confirmation code';
+        this.flash = {error: 'Wrong confirmation code.'};
+        this.redirect('/enter_mobile');
         return;
     }
     if (mid.verified) {
@@ -73,8 +73,8 @@ export default function useEnterAndConfirmMobilePages(app) {
                     </label>
                     <div className="secondary">Examples: 1-541-754-3010 | +1-541-754-3010 | +49-89-636-48018</div>
                     <br />
-                    <div className="secondary">* fixed line phones cannot receive SMS messages</div>
-                    <div className="secondary">* message and data rates may apply</div>
+                    <div className="secondary">* Land lines cannot receive SMS messages</div>
+                    <div className="secondary">* Message and data rates may apply</div>
                     <br />
                     <div className="error">{this.flash.error}</div>
                     <input type="submit" className="button" value="CONTINUE" />

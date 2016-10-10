@@ -75,10 +75,9 @@ export default function reactForm({name, instance, fields, initialValues, valida
 
         const initialValue = initialValues[fieldName]
 
-        if(fieldType === 'bool') {
-            fs.props.checked = toBool(initialValue)
-            fs.value = fs.props.checked
-        } else if(fieldType === 'option') {
+        if(fieldType === 'checked') {
+            fs.value = toString(initialValue)
+        } else if(fieldType === 'selected') {
             fs.props.selected = toString(initialValue)
             fs.value = fs.props.selected
         } else {
@@ -90,10 +89,10 @@ export default function reactForm({name, instance, fields, initialValues, valida
             const value = e && e.target ? e.target.value : e // API may pass value directly
             const v = {...(instance.state[fieldName] || {})}
 
-            if(fieldType === 'bool') {
-                v.touched = toBool(value) !== toBool(initialValue)
-                v.value = v.props.checked = toBool(value)
-            } else if(fieldType === 'option') {
+            if(fieldType === 'checked') {
+                v.touched = toString(value) !== toString(initialValue)
+                v.value = value
+            } else if(fieldType === 'selected') {
                 v.touched = toString(value) !== toString(initialValue)
                 v.value = v.props.selected = toString(value)
             } else {
@@ -146,15 +145,15 @@ function getData(fields, state) {
 /*
     @arg {string} field - field:type
     <pre>
-        type = bool,checkbox,radio
+        type = checkbox,radio
         type = option,select
         type = string
     </pre>
 */
 function t(field) {
     let [, type = 'string'] = field.split(':')
-    if(/checkbox|radio/.test(type)) type = 'bool'
-    if(/select|option/.test(type)) type = 'option'
+    if(/checkbox|radio/.test(type)) type = 'checked'
+    if(/select|option/.test(type)) type = 'selected'
     return type
 }
 
@@ -164,5 +163,4 @@ function n(field) {
 }
 
 const hasValue = v => v == null ? false : (typeof v === 'string' ? v.trim() : v) === '' ? false : true
-const toBool = v => hasValue(v) ? JSON.parse(v) : false
 const toString = v => hasValue(v) ? v : ''

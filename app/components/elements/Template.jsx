@@ -1,22 +1,24 @@
 /* eslint react/prop-types: 0 */
 import React from 'react'
-import g from 'app/redux/GlobalReducer'
-import transaction from 'app/redux/Transaction'
+// import g from 'app/redux/GlobalReducer'
+// import transaction from 'app/redux/Transaction'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
-import {Map} from 'immutable'
+// import {Map} from 'immutable'
 
-const {string, object} = React.PropTypes
+// const {string, object} = React.PropTypes
 
 class Template extends React.Component {
-    static propTypes = {
-    }
-
-    static defaultProps = {
-    }
+    // static propTypes = {
+    // }
+    // 
+    // static defaultProps = {
+    // }
 
     constructor() {
         super()
-        this.state = {}
+        // this.state = {}
+        // This is based on react PureRenderMixin, it makes the component very efficient by not re-rendering unless something in the props or state changed.. PureRenderMixin comes highly recommended.  shouldComponentUpdate adds a debug boolean to show you why your component rendered (what changed, in the browser console type: steemDebug_shouldComponentUpdate=true).
+        this.shouldComponentUpdate = shouldComponentUpdate(this, 'Template')
     }
 
     componentWillMount() {
@@ -25,16 +27,14 @@ class Template extends React.Component {
     componentDidMount() {
     }
 
-    componentWillReceiveProps(nextProps) {
-    }
+    // componentWillReceiveProps(nextProps) {
+    // }
 
-    // This is based on react PureRenderMixin, it makes the component very efficient by not re-rendering unless something in the props or state changed.. PureRenderMixin comes highly recommended.  shouldComponentUpdate adds a debug boolean to show you why your component rendered (what changed, in the browser console type: steemDebug_shouldComponentUpdate=true).
-    shouldComponentUpdate = shouldComponentUpdate(this, 'Template')
-    componentWillUpdate(nextProps, nextState) {
-    }
+    // componentWillUpdate(nextProps, nextState) {
+    // }
 
-    componentDidUpdate(prevProps, prevState) {
-    }
+    // componentDidUpdate(prevProps, prevState) {
+    // }
 
     componentWillUnmount() {
     }
@@ -52,15 +52,18 @@ import {connect} from 'react-redux'
 
 export default connect(
     (state, ownProps) => {
+        // const username = state.user.getIn(['current', 'username'])
         return {
             ...ownProps,
+            // username,
         }
     },
-    dispatch => ({
-        vote: (abc) => {
-            dispatch(transaction.actions.broadcastOperation({
-                abc
-            }))
-        },
-    })
+    // dispatch => ({
+    //     dispatchAction: (abc) => {
+    //         dispatch({
+    //             type: 'user/TYPE',
+    //             payload: {abc},
+    //         })
+    //     },
+    // })
 )(Template)

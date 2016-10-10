@@ -57,7 +57,6 @@ export default class LandingTeam extends React.Component {
 						<strong>Алексей Фрумин</strong>
 						<p>Моральная поддержка</p>
 						<ul>
-							<li><a href="https://www.linkedin.com/in/alexey-frumin-9a330a42"><img src="images/landing/linkedin_icon.jpg" /></a></li>
 							<li><a href="https://cyber.fund/"><img style={{width:'40px', height:'40px'}} src="https://cyber.fund/images/cybF.svg" /></a></li>
 							<li><a href="https://github.com/tomarcafe"><img src="images/landing/github_icon.jpg" /></a></li>
 						</ul>

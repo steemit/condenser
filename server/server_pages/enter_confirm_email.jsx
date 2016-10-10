@@ -51,12 +51,8 @@ export default function useEnterAndConfirmEmailPages(app) {
 
     router.get('/enter_email', function *() {
         console.log('-- /enter_email -->', this.session.uid, this.session.user);
-        const user_id = this.session.user;
-        // if (!user_id) {
-        //     this.body = 'user not found';
-        //     return;
-        // }
         let eid = null;
+        const user_id = this.session.user;
         if (user_id) {
             eid = yield models.Identity.findOne(
                 {attributes: ['email', 'verified'], where: {user_id, provider: 'email'}, order: 'id DESC'}
@@ -67,7 +63,6 @@ export default function useEnterAndConfirmEmailPages(app) {
                 return;
             }
         }
-        console.log('-- this.request.query -->', this.request.query);
         let default_email = '';
         if (this.request.query && this.request.query.email) default_email = this.request.query.email;
         const body = renderToString(<div className="App">
@@ -86,8 +81,6 @@ export default function useEnterAndConfirmEmailPages(app) {
                             Email
                             <input type="email" name="email" defaultValue={default_email} />
                         </label>
-                        {/*eid && eid.email &&
-                        <div className="secondary"><i>Email address cannot be changed at this moment, sorry for the inconvenience.</i></div>*/}
                         <br />
                         <div className="g-recaptcha" data-sitekey={config.recaptcha.site_key}></div>
                         <br />

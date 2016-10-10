@@ -102,7 +102,11 @@ label {
   width: 640px;
 }
 
-// utilities
-.uppercase {
-    text-transform: uppercase;
+
+.uppercase {text-transform: uppercase}
+
+@media print {
+  .noPrint {
+    display:none;
+  }
 }

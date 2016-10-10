@@ -5,7 +5,7 @@ import Header from 'app/components/modules/Header';
 import LpFooter from 'app/components/modules/lp/LpFooter';
 import user from 'app/redux/User';
 import g from 'app/redux/GlobalReducer';
-import { Link } from 'react-router';
+import { Route, Link } from 'react-router';
 import TopRightMenu from 'app/components/modules/TopRightMenu';
 import { browserHistory } from 'react-router';
 import classNames from 'classnames';
@@ -90,7 +90,7 @@ class App extends React.Component {
         else
             console.log('onEntropyEvent Unknown', e.type, e)
     }
-
+    log(p){console.log(p);console.log('===');}
     render() {
         const {location, params, children, loading, flash, showSignUp, new_visitor,
             depositSteem, signup_bonus} = this.props;
@@ -168,77 +168,85 @@ class App extends React.Component {
             );
         }
 
-        return <div className={'App' + (lp ? ' LP' : '') + (ip ? ' index-page' : '')} onMouseMove={this.onEntropyEvent}>
-            {/* <RocketChat />
+        let header_bar = null
+        console.log (/landing\.html/.test(location.pathname), location)
+        if (!/landing\.html/.test(location.pathname)) {
+          header_bar = (
+<div>
+          <RocketChat />
 
-            <SidePanel ref="side_panel" alignment="right">
-                <TopRightMenu vertical navigate={this.navigate} />
-                <ul className="vertical menu">
-                    <li>
-                        <a href={LANDING_PAGE_URL} onClick={this.navigate}>
-                            {translate("about")}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/tags.html/hot" onClick={this.navigate}>
-                            {translate("explore")}
-                        </a>
-                    </li>
-                    <li>
-                        <a href={WHITEPAPER_URL} onClick={this.navigate}>
-                            {translate("APP_NAME_whitepaper")}
-                        </a>
-                    </li>
-                    <li>
-                        <a onClick={() => depositSteem()}>
-                            {translate("buy_OWNERSHIP_TOKEN")}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="http://steemtools.com/" onClick={this.navigate}>
-                            {translate('APP_NAME_app_center')}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/market" onClick={this.navigate}>
-                            {translate("market")}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/recover_account_step_1" onClick={this.navigate}>
-                        {translate("stolen_account_recovery")}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/change_password" onClick={this.navigate}>
-                            {translate("change_account_password")}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://steemit.chat/home" target="_blank">
-                            {translate("APP_NAME_chat")}&nbsp;<Icon name="extlink" />
-                        </a>
-                    </li>
-                    <li className="last">
-                        <a href="/~witnesses" onClick={this.navigate}>
-                            {translate("witnesses")}
-                        </a>
-                    </li>
-                </ul>
-                <ul className="vertical menu">
-                    <li>
-                        <a href="/privacy.html" onClick={this.navigate} rel="nofollow">
-                            {translate("privacy_policy")}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/tos.html" onClick={this.navigate} rel="nofollow">
-                            {translate("terms_of_service")}
-                        </a>
-                    </li>
-                </ul>
-            </SidePanel>
-            <Header toggleOffCanvasMenu={this.toggleOffCanvasMenu} menuOpen={this.state.open} /> */}
+          <SidePanel ref="side_panel" alignment="right">
+              <TopRightMenu vertical navigate={this.navigate} />
+              <ul className="vertical menu">
+                  <li>
+                      <a href={LANDING_PAGE_URL} onClick={this.navigate}>
+                          {translate("about")}
+                      </a>
+                  </li>
+                  <li>
+                      <a href="/tags.html/hot" onClick={this.navigate}>
+                          {translate("explore")}
+                      </a>
+                  </li>
+                  <li>
+                      <a href={WHITEPAPER_URL} onClick={this.navigate}>
+                          {translate("APP_NAME_whitepaper")}
+                      </a>
+                  </li>
+                  <li>
+                      <a onClick={() => depositSteem()}>
+                          {translate("buy_OWNERSHIP_TOKEN")}
+                      </a>
+                  </li>
+                  <li>
+                      <a href="http://steemtools.com/" onClick={this.navigate}>
+                          {translate('APP_NAME_app_center')}
+                      </a>
+                  </li>
+                  <li>
+                      <a href="/market" onClick={this.navigate}>
+                          {translate("market")}
+                      </a>
+                  </li>
+                  <li>
+                      <a href="/recover_account_step_1" onClick={this.navigate}>
+                      {translate("stolen_account_recovery")}
+                      </a>
+                  </li>
+                  <li>
+                      <a href="/change_password" onClick={this.navigate}>
+                          {translate("change_account_password")}
+                      </a>
+                  </li>
+                  <li>
+                      <a href="https://steemit.chat/home" target="_blank">
+                          {translate("APP_NAME_chat")}&nbsp;<Icon name="extlink" />
+                      </a>
+                  </li>
+                  <li className="last">
+                      <a href="/~witnesses" onClick={this.navigate}>
+                          {translate("witnesses")}
+                      </a>
+                  </li>
+              </ul>
+              <ul className="vertical menu">
+                  <li>
+                      <a href="/privacy.html" onClick={this.navigate} rel="nofollow">
+                          {translate("privacy_policy")}
+                      </a>
+                  </li>
+                  <li>
+                      <a href="/tos.html" onClick={this.navigate} rel="nofollow">
+                          {translate("terms_of_service")}
+                      </a>
+                  </li>
+              </ul>
+          </SidePanel>
+          <Header toggleOffCanvasMenu={this.toggleOffCanvasMenu} menuOpen={this.state.open} /></div>);
+        }
+
+        return <div className={'App' + (lp ? ' LP' : '') + (ip ? ' index-page' : '')} onMouseMove={this.onEntropyEvent}>
+                {header_bar}
             <div className="App__content">
                 {welcome_screen}
                 {callout}

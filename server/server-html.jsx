@@ -61,6 +61,8 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
             <meta name="theme-color" content="#ffffff" />
 
             <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" />
+            {/* animate.css were added for landing page */}
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css" rel="stylesheet" />
 
             { assets.style.map((href, idx) =>
                 <link href={href} key={idx} rel="stylesheet" type="text/css" />) }

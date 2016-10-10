@@ -65,12 +65,11 @@ export default class LandingCountDowns extends React.Component {
 
 		return (
 			<section className="CountDowns">
-
 				{/* HEADERS */}
 				<div className="row text-center CountDowns__headers">
 					<div className="small-12 columns">
 						<strong className="CountDowns__slogan">Каждый Голос имеет значение!</strong>
-						<div className="CountDowns__logo"><Icon name={APP_ICON} size="2x" style={{ transform: 'translateX(-50%)', marginRight: '2rem'}} /></div>
+						<div className="CountDowns__logo wow fadeInLeft"><Icon name={APP_ICON} size="2x" /></div>
 						<h1 className="CountDowns__headers__h1">Социально-медийная блокчейн платформа</h1>
 					</div>
 				</div>

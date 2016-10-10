@@ -1,6 +1,7 @@
 import React from 'react'
 
 export default class LandingJoinUs extends React.Component {
+
 	render() {
 
 		const mainTexts = [
@@ -23,32 +24,32 @@ export default class LandingJoinUs extends React.Component {
 		function renderItems() {
 			return mainTexts.map((header, index) => {
 				return 	<div key={header} className="JoinUs__item small-12 medium-6 large-6 columns">
-							<img src={`images/landing/${index + 1}.jpg`} />
-							<strong>{header}</strong>
-							<div>{secondaryTexts[index]}</div>
+							<div className="row">
+								<div className="small-2 columns">
+									<img src={`images/landing/${index + 1}.jpg`} />
+								</div>
+								<div className="small-10 columns">
+									<strong>{header}</strong>
+									<div>{secondaryTexts[index]}</div>
+									<div className="clear" style={{clear: 'both'}}></div>
+								</div>
+							</div>
 						</div>
 			})
 		}
-		// 100px между хеадером и риазонс
-		// 40px от картинки до текста слева
-		// 13px от толстой надписи до текста
-		// 70px марджин боттон между элементами
+
 		return (
 			<section className="JoinUs">
 				<div className="row text-center">
 					<div className="small-12 columns">
 						<h2 className="Landing__h2_red">Присоединяйся</h2>
 						<span className="JoinUs__support-text">Получи 6 голосов за регистрацию</span>
-            <br />
+						<br />
 						<span className="JoinUs__support-text-2">Приведи друзей и получите дополнительные голоса</span>
 					</div>
 				</div>
 				<div className="row text-left JoinUs__reasons">
 					{renderItems()}
-					{/* <div className="JoinUs__item small-12 medium-6 columns">
-						<strong>Вознаграждение за посты</strong>
-						<p>Получай ГОЛОС каждый раз, когда твой пост оценен другими</p>
-					</div> */}
 				</div>
 				<div className="row JoinUs__action">
 					<div className="small-12 columns text-center">

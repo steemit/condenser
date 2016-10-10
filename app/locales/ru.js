@@ -10,7 +10,7 @@ const ru = {
 	APP_NAME_whitepaper: "Аналитическая записка " + APP_NAME, // или тех записка? или аналитическая записка?
 	buy_OWNERSHIP_TOKEN: 'Купить ' + OWNERSHIP_TOKEN,
 	sell_OWNERSHIP_TOKEN: 'Продать ' + OWNERSHIP_TOKEN,
-	market: "Рынок",
+	market: "Биржа",
 	stolen_account_recovery: "Возврат украденного аккаунта",
 	change_account_password: "Изменить пароль аккаунта",
 	APP_NAME_chat: APP_NAME + " чат",
@@ -29,15 +29,15 @@ const ru = {
 	// next 5 strings were supposed to be sinngle block of text, but due large size,
 	// code erros they were splitted.
 	authors_get_paid_when_people_like_you_upvote_their_post: 'Авторы получают вознаграждение, когда пользователи голосуют за их посты',
-	if_you_enjoyed_what_you_read_earn_amount: "Проголосовавшие читатели также вознаграждаюся. Если вам понравилось то, что вы прочитали, заработайте {amount} в " + INVEST_TOKEN,
+	if_you_enjoyed_what_you_read_earn_amount: "Проголосовавшие читатели также вознаграждаются. Если вам понравилось то, что вы прочитали, заработайте {amount} в " + INVEST_TOKEN,
 	when_you: "Для этого",
-	when_you_link_text: 'зарегистрируетесь',
-	and_vote_for_it: 'и проголосуете за пост',
+	when_you_link_text: 'зарегистрируйтесь',
+	and_vote_for_it: 'и проголосуйте за пост',
 	// post_promo_text: "Авторы получают вознаграждение, когда пользователи голосуют за их посты<br />Проголосовавшие также вознаграждаются. Если вам понравилось, то что вы прочитали здесь, заработайте {amount} в " + INVEST_TOKEN + "<br />. Для этого  {link} и проголосуете за пост.",
 	post_promo_text_link: '',
 	read_only_mode: 'Из-за технического обслуживания сервера мы работаем в режиме чтения. Извините за неудобство.',
 	membership_invitation_only: 'Стать пользователем Голоса сейчас возможно только по приглашению. Попросите ваших знакомых о приглашении', // желающих зарегистрироваться ?
-	submit_email_to_get_on_waiting_list: 'Добавьте ваш адрес электронной почты чтобы попасть в список ожидания',
+	submit_email_to_get_on_waiting_list: 'Добавьте ваш адрес электронной почты, чтобы попасть в список ожидания',
 	login: 'Войти',
 	logout: 'Выйти',
 	show_less_low_value_posts: "Показывать меньше постов, имеющих малое вознаграждение", 
@@ -109,7 +109,7 @@ const ru = {
 	shorten_title: 'Сократите заголовок',
 	exceeds_maximum_length: 'Превышает максимальную длину ({maxKb}KB)',
 	including_the_category: "(включая категорию '{rootCategory}')",
-	use_limited_amount_of_tags: 'У тебя {tagsLength} тэгов, включая {includingCategory}.  Пожалуйста, используйте не более 5 в посте и категории.',
+	use_limited_amount_of_tags: 'У вас {tagsLength} тэгов, включая {includingCategory}. Пожалуйста, используйте не более 5 в посте и категории.',
 	// this is mainly used in CategorySelector
 	maximum_tag_length_is_24_characters: 'Максимальная длина тэга - 24 знака',
 	use_limitied_amount_of_categories: 'Пожалуйста, используйте не более {amount} тэгов',
@@ -326,7 +326,7 @@ const ru = {
 		few {# ответа}
 		many {# ответов}
 	}`,
-	this_is_users_reputations_score_it_is_based_on_history_of_votes: "Это это количество очков репутации пользователя {name}.\n\nКоличество очков подсчитывается на основе истории полученных голосов и на его голосах против контента.",
+	this_is_users_reputations_score_it_is_based_on_history_of_votes: "Это количество очков репутации пользователя {name}.\n\nКоличество очков подсчитывается на основе истории полученных голосов и на его голосах против контента.",
 	newer: 'Новее',
 	older: 'Старее',
 	author_rewards_last_24_hours: 'Авторские вознаграждения за последние 24 часа',
@@ -334,7 +334,7 @@ const ru = {
 	author_rewards_history: 'История авторских наград',
 	balance: 'Баланс',
 	balances: 'Балансы',
-	estimate_account_value: 'Оценочная ценность аккаунта',
+	estimate_account_value: 'Оценка стоимости аккаунта',
 	next_power_down_is_scheduled_to_happen_at: 'Следующее понижение голоса запланировано на',
 	transfers_are_temporary_disabled: 'Переводы временно отключены',
 	history: 'История',

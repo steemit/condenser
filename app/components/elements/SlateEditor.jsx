@@ -13,6 +13,9 @@ export const getDemoState    = ()      => Raw.deserialize(demoState, { terse: tr
 
 let plugins = []
 
+
+import InsertBlockOnEnter from 'slate-insert-block-on-enter'
+
 if(process.env.BROWSER) {
     //import InsertImages from 'slate-drop-or-paste-images'
     const InsertImages = require('slate-drop-or-paste-images').default
@@ -28,6 +31,10 @@ if(process.env.BROWSER) {
                 })
             }
         })
+    )
+
+    plugins.push(
+        InsertBlockOnEnter({kind: 'block', type: 'paragraph', nodes: [{kind: 'text', text: '', ranges: []}]})
     )
 }
 
@@ -133,10 +140,20 @@ export default class SlateEditor extends React.Component {
         return state
     }
 
-    // On return, if at the end of a node type that should not be extended, create a new paragraph below it.
     onEnter = (e, state) => {
-        if (state.isExpanded) return //menu open
+        if (state.isExpanded) return
         const { startBlock, startOffset, endOffset } = state
+
+
+        // Allow soft returns for certain block types
+        if (startBlock.type == 'code-block' || startBlock.type == 'block-quote') {
+            let transform = state.transform()
+            if (state.isExpanded) transform = transform.delete()
+            transform = transform.insertText('\n')
+            return transform.apply()
+        }
+
+        // On return, if at the end of a node type that should not be extended, create a new paragraph below it.
         if (startOffset == 0 && startBlock.length == 0) return this.onBackspace(e, state) //empty block
         if (endOffset != startBlock.length) return //not at end of block
 

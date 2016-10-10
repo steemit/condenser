@@ -4,7 +4,7 @@ export default class Image extends React.Component {
     state = {};
 
     componentDidMount() {
-        console.log("** image mounted..", this.state)
+        console.log("** image mounted..", this.state, this.props)
         const { node } = this.props
         const { data } = node
         const file = data.get('file')
@@ -14,7 +14,20 @@ export default class Image extends React.Component {
     load(file) {
         console.log("** image being loaded.. ----->", file)
         const reader = new FileReader()
-        reader.addEventListener('load', () => this.setState({ src: reader.result }))
+        reader.addEventListener('load', () => {
+            //this.setState({ src: reader.result })
+            const {editor, node} = this.props
+            const state = editor.getState();
+            const next = state
+              .transform()
+              .setNodeByKey(node.key, {
+                data: {
+                  src: reader.result
+                }
+              })
+              .apply()
+            editor.onChange(next)
+        })
         reader.readAsDataURL(file)
     }
 

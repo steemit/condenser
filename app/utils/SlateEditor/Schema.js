@@ -1,32 +1,23 @@
 import React from 'react'
 import Image from 'app/utils/SlateEditor/Image'
 
+
+const $ = require('cheerio');
+
 /*
 
---deprecate
-s, strike?
-q
-h5, h6
-
 --unsupported
-hr
-div ['pull-right', 'pull-left', 'text-justify', 'text-rtl']
+div ['pull-right', 'pull-left', 'text-justify', 'text-rtl'], center
 iframe
-br
-center
 table, thead, tbody, tr, th, td
-
---inline
-a
-img
 
 */
 
 // Map html --> block type
 const BLOCK_TAGS = {
-    blockquote: 'block-quote',
     p:          'paragraph',
-    pre:        'code',
+    blockquote: 'block-quote',
+    pre:        'code-block',
     h1:         'heading-one',
     h2:         'heading-two',
     h3:         'heading-three',
@@ -34,6 +25,7 @@ const BLOCK_TAGS = {
     ul:         'bulleted-list',
     ol:         'numbered-list',
     li:         'bulleted-list-item',
+    hr:         'hr',
 }
 
 // Map HTML --> mark type
@@ -45,7 +37,6 @@ const MARK_TAGS = {
     u:      'underline',
     del:    'strike',
     strike: 'strike',
-    code:   'code',
     sup:    'sup',
     sub:    'sub',
 }
@@ -68,15 +59,15 @@ export const HtmlRules = [
         serialize: (object, children) => {
             if(object.kind !== 'block') return
             switch(object.type) {
-                case 'code':               return <pre><code>{children}</code></pre>
                 case 'paragraph':          return <p>{children}</p>
                 case 'block-quote':        return <blockquote>{children}</blockquote>
-                case 'bulleted-list':      return <ul>{children}</ul>
-                case 'numbered-list':      return <ol>{children}</ol>
+                case 'code-block':         return <pre><code>{children}</code></pre>
                 case 'heading-one':        return <h1>{children}</h1>
                 case 'heading-two':        return <h2>{children}</h2>
                 case 'heading-three':      return <h3>{children}</h3>
                 case 'heading-four':       return <h4>{children}</h4>
+                case 'bulleted-list':      return <ul>{children}</ul>
+                case 'numbered-list':      return <ol>{children}</ol>
                 case 'bulleted-list-item': return <li>{children}</li>
                 case 'numbered-list-item': return <li>{children}</li>
             }
@@ -118,6 +109,14 @@ export const HtmlRules = [
                     nodes: next(el.children)
                 }
             }
+            if (el.tagName == 'hr') {
+                return {
+                    kind: 'block',
+                    type: 'hr',
+                    isVoid: true,
+                    nodes: next(el.children)
+                }
+            }
             if (el.tagName == 'img') {
                 return {
                     kind: 'block',
@@ -137,12 +136,33 @@ export const HtmlRules = [
                     nodes: next(el.children)
                 }
             }
+            if (el.tagName == 'br') {
+                return {
+                    "kind": "text",
+                    "ranges": [{"text": "\n"}]
+                }
+            }
+            if (el.tagName == 'code') {
+                if(! $(el).closest('pre')) {
+                  return {
+                      kind: 'mark',
+                      type: 'code',
+                      nodes: next(el.children)
+                  }
+                } else {
+                  console.log("** skipping <code> within a <pre>")
+                }
+            }
+
             if(el.type == 'text') return
             if(BLOCK_TAGS[el.tagName] || MARK_TAGS[el.tagName]) return
             console.log("No deserializer for: ", el.tagName, el)
         },
         serialize: (object, children) => {
             if(object.kind == 'string') return;
+            if(object.kind == 'block' && object.type == 'hr') {
+                return <hr />
+            }
             if(object.kind == 'block' && object.type == 'link') {
                 const href = object.data.get('href')
                 if(!href) console.log("** ERR: serializing <a> with no href", JSON.stringify(object.data, null, 2))
@@ -155,8 +175,6 @@ export const HtmlRules = [
                   console.log("** ERR: serializing image with no src...")
                   console.log("Serializing image.... data:",   JSON.stringify(data))
                   console.log("Serializing image.... object:", JSON.stringify(object))
-                  console.log("Serializing image.... state:",  JSON.stringify(object.state))
-                  console.log("Serializing image.... node:",   JSON.stringify(object.node))
                 }
                 return <img src={src} />
             }
@@ -194,6 +212,7 @@ export const schema = {
     nodes: {
         'block':         ({ children }) => <p style={{background: 'red'}}>{children}</p>,
         'paragraph':     ({ children }) => <p>{children}</p>,
+        'code-block':    ({ children }) => <pre><code>{children}</code></pre>,
         'block-quote':   ({ children }) => <blockquote>{children}</blockquote>,
         'bulleted-list': ({ children }) => <ul>{children}</ul>,
         'numbered-list': ({ children, attributes }) => <ol {...attributes}>{children}</ol>,
@@ -203,6 +222,7 @@ export const schema = {
         'heading-four':  ({ children }) => <h4>{children}</h4>,
         'bulleted-list-item': ({ children }) => <li>{children}</li>,
         'numbered-list-item': ({ children }) => <li>{children}</li>,
+        'hr':                 ({ children }) => <hr />,
         'image': Image,
         'link':  (props) => {
             const { data } = props.node
@@ -225,13 +245,15 @@ export const schema = {
 export const getMarkdownType = (chars) => {
     switch (chars) {
         case '*':
-        case '-': return 'bulleted-list-item';
-        case '>': return 'block-quote';
-        case '#': return 'heading-one';
-        case '##': return 'heading-two';
-        case '###': return 'heading-three';
+        case '-':    return 'bulleted-list-item';
+        case '>':    return 'block-quote';
+        case '#':    return 'heading-one';
+        case '##':   return 'heading-two';
+        case '###':  return 'heading-three';
         case '####': return 'heading-four';
-        case '1.': return 'numbered-list-item';
+        case '1.':   return 'numbered-list-item';
+        case '    ': return 'code-block';
+        case '---':  return 'hr';
         default: return null;
     }
 }

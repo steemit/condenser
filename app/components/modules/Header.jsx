@@ -167,7 +167,7 @@ class Header extends React.Component {
             sort_order_extra_menu = <HorizontalMenu items={items} />
         }
         return (
-            <header className="Header">
+            <header className="Header noPrint">
                 <div className="Header__top header">
                     <div className="expanded row">
                         <div className="columns">
@@ -177,7 +177,7 @@ class Header extends React.Component {
                                         <Icon name="steem" size="2x" />
                                     </Link>
                                 </li>
-                                <li className="Header__top-steemit show-for-medium"><Link to={logo_link}>steemit<span className="beta">beta</span></Link></li>
+                                <li className="Header__top-steemit show-for-medium noPrint"><Link to={logo_link}>steemit<span className="beta">beta</span></Link></li>
                                 {(topic_link || user_name || page_name) && <li className="delim show-for-medium">|</li>}
                                 {topic_link && <li className="Header__top-topic">{topic_link}</li>}
                                 {user_name && <li><Link to={`/@${user_name}`}>{user_name}</Link></li>}

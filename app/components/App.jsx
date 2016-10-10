@@ -173,7 +173,6 @@ class App extends React.Component {
         if (!/landing\.html/.test(location.pathname)) {
           header_bar = (
 <div>
-          <RocketChat />
 
           <SidePanel ref="side_panel" alignment="right">
               <TopRightMenu vertical navigate={this.navigate} />

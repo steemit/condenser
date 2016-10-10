@@ -46,9 +46,13 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                 {link: '#', onClick: showLogin, value: translate('login')}
         ];
         const search = translate('search')
+/*
+                <li><a href={`/@${username}/transfers#buy_golos`} className="button alert">купить голоса</a></li>
+                   move down on ICO start....
+*/
         return (
             <ul className={mcn}>
-                <li><a href={`/@${username}/transfers#buy_golos`} className="button alert">купить голоса</a></li>
+
                 <li className={lcn}><a href="/static/search.html" title={search}>{vertical ? <span>{search}</span> : <Icon name="search" />}</a></li>
                 {submit_story}
                 <LinkWithDropdown

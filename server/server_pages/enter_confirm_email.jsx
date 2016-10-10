@@ -155,7 +155,7 @@ export default function useEnterAndConfirmEmailPages(app) {
 
         let user_id = this.session.user;
         if (user_id) {
-            const user = yield models.Identity.findOne({attributes: ['id'], where: {user_id}});
+            const user = yield models.User.findOne({attributes: ['id'], where: {id: user_id}});
             if (!user) user_id = null;
         }
         if (!user_id) {

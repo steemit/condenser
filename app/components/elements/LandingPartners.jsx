@@ -48,7 +48,7 @@ export default class LandingPress extends React.Component {
 							<img src="images/landing/coinfox.jpg" alt="логотип Coinfox" />
 						</a>
 					</div>
-					<div className="small-12 medium-6 columns">
+					<div style={{marginTop: '5px'}} className="small-12 medium-6 columns">
 						<a href="http://forklog.com/" target="blank">
 							<img className="Partners__forklog-logo" src="images/landing/forklog.jpg" alt="логотип Forklog" />
 						</a>

@@ -126,6 +126,7 @@
     "webpack-isomorphic-tools": "^2.2.31",
     "websocket": "^1.0.22",
     "whatwg-fetch": "^0.11.1",
+    "wowjs": "^1.1.3",
     "xmldom": "^0.1.22"
   },
   "devDependencies": {
@@ -144,6 +145,7 @@
     "eslint-config-airbnb": "^6.1.0",
     "eslint-plugin-babel": "^3.1.0",
     "eslint-plugin-react": "^4.2.0",
+    "exports-loader": "^0.6.3",
     "extract-text-webpack-plugin": "^1.0.1",
     "koa-webpack-dev-middleware": "^1.1.0",
     "koa-webpack-hot-middleware": "^1.0.3",

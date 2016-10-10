@@ -213,7 +213,7 @@ class CreateAccount extends React.Component {
 
         return (
             <div>
-                <SignupProgressBar steps={[offchainUser.get('prv') || 'identity', 'email', 'phone', 'steem account']} current={4} />
+                <SignupProgressBar steps={['email', 'phone', 'steem account']} current={3} />
                 <div className="CreateAccount row">
                     <div className="column" style={{maxWidth: '36rem', margin: '0 auto'}}>
                         <br />

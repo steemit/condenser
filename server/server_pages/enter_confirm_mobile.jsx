@@ -61,7 +61,7 @@ export default function useEnterAndConfirmMobilePages(app) {
         }
         const body = renderToString(<div className="App">
             <MiniHeader />
-            <SignupProgressBar steps={[this.session.prv || 'identity', 'email', 'phone', 'steem account']} current={3} />
+            <SignupProgressBar steps={['email', 'phone', 'steem account']} current={2} />
             <br />
             <div className="row" style={{maxWidth: '32rem'}}>
                 <form className="column" action="/submit_mobile" method="POST">
@@ -188,7 +188,7 @@ export default function useEnterAndConfirmMobilePages(app) {
 
         const body = renderToString(<div className="App">
             <MiniHeader />
-            <SignupProgressBar steps={[this.session.prv || 'identity', 'email', 'phone', 'steem account']} current={3} />
+            <SignupProgressBar steps={['email', 'phone', 'steem account']} current={2} />
             <br />
             <div className="row" style={{maxWidth: '32rem'}}>
                 <div className="column">

@@ -11,7 +11,25 @@ export const serializeHtml   = (state) => serializer.serialize(state)
 export const deserializeHtml = (html)  => serializer.deserialize(html)
 export const getDemoState    = ()      => Raw.deserialize(demoState, { terse: true })
 
-const plugins = []
+let plugins = []
+
+if(process.env.BROWSER) {
+    //import InsertImages from 'slate-drop-or-paste-images'
+    const InsertImages = require('slate-drop-or-paste-images').default
+
+    plugins.push(
+        InsertImages({
+            extensions: ['jpeg'],
+            applyTransform: (transform, file) => {
+                return transform.insertBlock({
+                    type: 'image',
+                    isVoid: true,
+                    data: { file }
+                })
+            }
+        })
+    )
+}
 
 
 export default class SlateEditor extends React.Component {
@@ -138,7 +156,6 @@ export default class SlateEditor extends React.Component {
             .apply()
     }
 
-
     render = () => {
         const { state } = this.state
         return (
@@ -155,22 +172,19 @@ export default class SlateEditor extends React.Component {
         return (
             <Portal isOpened onOpen={this.onOpen}>
                 <div className="SlateEditor__menu SlateEditor__hover-menu">
-                    {this.renderMarkButton('bold',      <strong>B</strong>)}
-                    {this.renderMarkButton('italic',    <i>I</i>)}
-                    {this.renderMarkButton('underline', <u>U</u>)}
-                    {this.renderMarkButton('strike',    <del>S</del>)}
-                    {this.renderMarkButton('code',      <code>{'{}'}</code>)}
+                    {schema.toolbarMarks.map(this.renderMarkButton)}
                 </div>
             </Portal>
         )
     }
 
-    renderMarkButton = (type, label) => {
+    renderMarkButton = (props) => {
+        const {type, label} = props
         const isActive = this.hasMark(type)
         const onMouseDown = e => this.onClickMark(e, type)
 
         return (
-            <span className="SlateEditor__menu-button" onMouseDown={onMouseDown} data-active={isActive}>
+            <span key={type} className="SlateEditor__menu-button" onMouseDown={onMouseDown} data-active={isActive}>
                 <span>{label}</span>
             </span>
         )

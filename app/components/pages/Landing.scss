@@ -353,29 +353,29 @@
 		// width: 197px;
 		// max-width: 200%;
 		// second picture
-		// left: 53%;
-		// width: 320px;
-		// max-width: 200%;
+		left: 53%;
+		width: 320px;
+		max-width: 200%;
 
-		// third picture
-		left: 6%;
-		top: 13%;
-		width: 580px;
-		max-width: 334%;
+		// third picture (the Kozel)
+		// left: 6%;
+		// top: 13%;
+		// width: 580px;
+		// max-width: 334%;
 
 	}
-	@media #{$small-only} {
-		.Team__member__misha {
-			flex: 100%;
-			max-width: 100%;
-		}
-	}
-	@media #{$medium-only} {
-		.Team__member__misha {
-			flex: 100%;
-			max-width: 100%;
-		}
-	}
+	// @media #{$small-only} {
+	// 	.Team__member__misha {
+	// 		flex: 100%;
+	// 		max-width: 100%;
+	// 	}
+	// }
+	// @media #{$medium-only} {
+	// 	.Team__member__misha {
+	// 		flex: 100%;
+	// 		max-width: 100%;
+	// 	}
+	// }
 }
 
 .Documentation {
@@ -434,12 +434,13 @@
 	.Partners__logos { margin-bottom: 80px; }
 	.Partners__law {
 		margin-bottom: 65px;
-		h3 { margin-bottom: 50px; }
+		.Partners__law__h3 { margin-bottom: 50px; }
 	}
 	.Partners__info {
 		margin-bottom: 65px;
 		h3 { margin-bottom: 40px; }
 	}
+	.Partners__forklog-logo { transform: translateY(50%); }
 }
 
 .Press {
@@ -472,7 +473,20 @@
 		word-break: break-all;
 	}
 	@media #{$small-only} {
-		strong { text-align: center; }
-		li { text-align: center; }
+		.LandingFooter__description {
+			strong { text-align: center; }
+			li { text-align: center; }
+			span {
+				display: block;
+				text-align: center;
+			}
+		}
+	}
+	@media #{$medium-up} {
+		.LandingFooter__description {
+			span { display: inline; }
+			.left { text-align: left; }
+			.right { float: right; }
+		}
 	}
 }

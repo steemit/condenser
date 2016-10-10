@@ -15,6 +15,8 @@ import TagList from 'app/components/elements/TagList';
 import {authorNameAndRep} from 'app/utils/ComponentFormatters';
 import {Map} from 'immutable';
 import Reputation from 'app/components/elements/Reputation';
+
+import Author from 'app/components/elements/Author';
 import { translate } from 'app/Translator';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
 
@@ -111,6 +113,13 @@ export default class PostSummary extends React.Component {
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>{title_text}</a>
         </h1>;
 
+        // author and category
+        let author_category = <span className="vcard">
+            <TimeAgoWrapper date={p.created} className="updated" />
+            {} by <Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
+            {} in <TagList post={p} single />
+        </span>
+
         if( !(currentCategory && currentCategory.match( /nsfw/ )) ) {
            if (currentCategory !== '-' && currentCategory !== p.category && p.category.match(/nsfw/) ) {
                return null;
@@ -130,6 +139,7 @@ export default class PostSummary extends React.Component {
         }
         const commentClasses = []
         if(gray || ignore) commentClasses.push('downvoted') // rephide
+
         return (
             <article className={'PostSummary hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')} itemScope itemType ="http://schema.org/blogPost">
                 <div className={hasFlag ? '' : 'PostSummary__collapse'}>
@@ -140,7 +150,11 @@ export default class PostSummary extends React.Component {
                     {content_title}
                 </div>
                 <div className="PostSummary__time_author_category_small show-for-small-only">
+
                     <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}><TimeAuthorCategory post={p} links={false} authorRepLog10={authorRepLog10} gray={gray} /></a>
+                {/* merged author_category from upstream; using timeAuthorCategory also*/}
+                    {author_category}
+
                 </div>
                 {thumb}
                 <div className="PostSummary__content">
@@ -151,7 +165,11 @@ export default class PostSummary extends React.Component {
                     <div className="PostSummary__footer">
                         <Voting pending_payout={pending_payout} total_payout={total_payout} showList={false} cashout_time={cashout_time} post={post} showList={false} />
                         <span className="PostSummary__time_author_category show-for-medium">
+
                             <TimeAuthorCategory post={p} links authorRepLog10={authorRepLog10} />
+                  {/* merged author_category from upstream; using timeAuthorCategory also*/}
+                            {author_category}
+
                             {!archived && <Reblog author={p.author} permlink={p.permlink} />}
                         </span>
                         <VotesAndComments post={post} commentsLink={comments_link} />

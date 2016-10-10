@@ -60,26 +60,31 @@ class ShowKey extends Component {
     render() {
         const {onShow, showLogin, props: {pubkey, cmpProps, children, authType}} = this
         const {show, wif} = this.state
+
         const keyIcon = <span style={{fontSize: '100%'}}>{translate('hide_private_key')}</span>
         // Tooltip is trigggering a setState on unmounted component exception
         const showTip = translate('show_private_key')//<Tooltip t="Show private key (WIF)">show</Tooltip>
 
+
         const keyLink = wif ?
-            <div style={{marginBottom: 0}} className="hollow tiny button"><a onClick={onShow}>{show ? keyIcon : showTip}</a></div> :
+            <div style={{marginBottom: 0}} className="hollow tiny button slim"><a onClick={onShow}>{show ? keyIcon : showTip}</a></div> :
             authType === 'memo' ? null :
             authType === 'owner' ? null :
-            <div style={{marginBottom: 0}} className="hollow tiny button"><a onClick={showLogin}>{translate('login_to_show')}</a></div>;
+
+            <div style={{marginBottom: 0}} className="hollow tiny button slim"><a onClick={showLogin}>{translate('login_to_show')}</a></div>;
+
 
         return (<div className="row">
-            <div className="column small-9 overflow-ellipsis">
+            <div className="column small-10">
+                {/* Keep this as wide as possible, check print preview makes sure WIF it not cut off */}
                 <span {...cmpProps}>{show ? wif : pubkey}</span>
             </div>
-            <div className="column small-2">
+            <div className="column small-2 noPrint">
                 {keyLink}
             </div>
-            <div className="column small-1">
+            {/*<div className="column small-1">
                 {children}
-            </div>
+            </div>*/}
         </div>)
     }
 }

@@ -221,9 +221,11 @@ export default class UserProfile extends React.Component {
         } else if( section === 'permissions' ) {
            section_title = account.name + translate('users_permissions', {name})
            if(isMyAccount && wifShown) {
-               printLink = <a className="float-right" onClick={onPrint}>
+
+               printLink = <div><a className="float-right noPrint" onClick={onPrint}>
                    <Icon name="printer" />&nbsp;{translate('print')}&nbsp;&nbsp;
-               </a>
+               </a></div>
+
            }
         } else if( section === 'posts' ) {
            section_title = translate('users_posts', {name});
@@ -294,12 +296,16 @@ export default class UserProfile extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div className="UserProfile__top-nav row expanded">
+                <div className="UserProfile__top-nav row expanded noPrint">
                     {top_menu}
                 </div>
                 <div className="row">
                     <div className="column">
                         {printLink}
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="column">
                         {/*section_title && <h2 className="UserProfile__section-title">{section_title}</h2>*/}
                         {tab_content}
                     </div>

@@ -62,12 +62,14 @@ class Keys extends Component {
         return (
             <span>
                 <div className="row">
-                    <div className="column small-2">
+
+                    <div className="column small-12">
                         {/* authType will mosts likely will be one of the following: ['Posting', 'Active', 'Owner', 'Memo'] */}
                         {/* string id is always lowercased, hence usage of .toLowerCase() */}
                         <label>{translate(authType.toLowerCase())}</label>
-                    </div>
-                    <div className="column small-10">
+
+                        <label>{authType}</label>
+
                         {auths}
                     </div>
                 </div>

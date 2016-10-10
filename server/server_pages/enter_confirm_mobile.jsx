@@ -1,11 +1,9 @@
 import koa_router from 'koa-router';
 import koa_body from 'koa-body';
-import request from 'co-request';
 import React from 'react';
 import {renderToString} from 'react-dom/server';
 import models from 'db/models';
 import ServerHTML from 'server/server-html';
-import Icon from 'app/components/elements/Icon.jsx';
 import {verify} from 'server/teleSign';
 import SignupProgressBar from 'app/components/elements/SignupProgressBar';
 import {getRemoteIp, checkCSRF} from 'server/utils';
@@ -13,7 +11,6 @@ import MiniHeader from 'app/components/modules/MiniHeader';
 
 const assets_file = process.env.NODE_ENV === 'production' ? 'tmp/webpack-stats-prod.json' : 'tmp/webpack-stats-dev.json';
 const assets = Object.assign({}, require(assets_file), {script: []});
-// assets.script.push('https://www.google.com/recaptcha/api.js');
 
 function *confirmMobileHandler() {
     const confirmation_code = this.params && this.params.code ? this.params.code : this.request.body.code;
@@ -61,7 +58,7 @@ export default function useEnterAndConfirmMobilePages(app) {
         }
         const body = renderToString(<div className="App">
             <MiniHeader />
-            <SignupProgressBar steps={[this.session.prv || 'identity', 'email', 'phone', 'steem account']} current={3} />
+            <SignupProgressBar steps={['email', 'phone', 'steem account']} current={2} />
             <br />
             <div className="row" style={{maxWidth: '32rem'}}>
                 <form className="column" action="/submit_mobile" method="POST">
@@ -79,7 +76,6 @@ export default function useEnterAndConfirmMobilePages(app) {
                     <div className="secondary">* fixed line phones cannot receive SMS messages</div>
                     <div className="secondary">* message and data rates may apply</div>
                     <br />
-                    {/*<div className="g-recaptcha" data-sitekey={config.recaptcha.site_key}></div>*/}
                     <div className="error">{this.flash.error}</div>
                     <input type="submit" className="button" value="CONTINUE" />
                 </form>
@@ -95,7 +91,7 @@ export default function useEnterAndConfirmMobilePages(app) {
         if (!user_id) { this.body = 'user not found'; return; }
         let mobile = this.request.body.mobile;
         if (!mobile) {
-            this.flash = {error: 'Please provide a mobile number'};
+            this.flash = {error: 'Please provide a phone number'};
             this.redirect('/enter_mobile');
             return;
         }
@@ -119,24 +115,6 @@ export default function useEnterAndConfirmMobilePages(app) {
             this.redirect('/enter_mobile');
             return;
         }
-
-        // const recaptcha = this.request.body['g-recaptcha-response'];
-        // const verificationUrl = 'https://www.google.com/recaptcha/api/siteverify?secret=' + config.recaptcha.secret_key + '&response=' + recaptcha + '&remoteip=' + this.req.connection.remoteAddress;
-        // let captcha_failed;
-        // try {
-        //     const recaptcha_res = yield request(verificationUrl);
-        //     const body = JSON.parse(recaptcha_res.body);
-        //     captcha_failed = !body.success;
-        // } catch (e) {
-        //     captcha_failed = true;
-        //     console.error('-- /submit_mobile recaptcha request failed -->', verificationUrl, e);
-        // }
-        // if (captcha_failed) {
-        //     console.log('-- /submit_mobile captcha verification failed -->', user_id, this.session.uid, mobile, this.req.connection.remoteAddress);
-        //     this.flash = {error: 'Failed captcha verification, please try again.'};
-        //     this.redirect('/enter_mobile');
-        //     return;
-        // }
 
         const existing_phone = yield models.Identity.findOne(
             {attributes: ['user_id'], where: {phone: mobile, provider: 'phone', verified: true}, order: 'id'}
@@ -188,7 +166,7 @@ export default function useEnterAndConfirmMobilePages(app) {
 
         const body = renderToString(<div className="App">
             <MiniHeader />
-            <SignupProgressBar steps={[this.session.prv || 'identity', 'email', 'phone', 'steem account']} current={3} />
+            <SignupProgressBar steps={['email', 'phone', 'steem account']} current={2} />
             <br />
             <div className="row" style={{maxWidth: '32rem'}}>
                 <div className="column">

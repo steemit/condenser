@@ -7,7 +7,7 @@ import models from 'db/models';
 import {esc, escAttrs} from 'db/models';
 import ServerHTML from '../server-html';
 import sendEmail from '../sendEmail';
-import {checkCSRF} from '../utils';
+import {checkCSRF, getRemoteIp} from '../utils';
 import config from '../../config';
 import SignupProgressBar from 'app/components/elements/SignupProgressBar';
 import MiniHeader from 'app/components/modules/MiniHeader';
@@ -52,24 +52,27 @@ export default function useEnterAndConfirmEmailPages(app) {
     router.get('/enter_email', function *() {
         console.log('-- /enter_email -->', this.session.uid, this.session.user);
         const user_id = this.session.user;
-        if (!user_id) {
-            this.body = 'user not found';
-            return;
-        }
-        const eid = yield models.Identity.findOne(
-            {attributes: ['email', 'verified'], where: {user_id, provider: 'email'}, order: 'id DESC'}
-        );
-        if (eid && eid.verified) {
-            this.flash = {success: 'Email has already been verified'};
-            this.redirect('/enter_mobile');
-            return;
+        // if (!user_id) {
+        //     this.body = 'user not found';
+        //     return;
+        // }
+        let eid = null;
+        if (user_id) {
+            eid = yield models.Identity.findOne(
+                {attributes: ['email', 'verified'], where: {user_id, provider: 'email'}, order: 'id DESC'}
+            );
+            if (eid && eid.verified) {
+                this.flash = {success: 'Email has already been verified'};
+                this.redirect('/enter_mobile');
+                return;
+            }
         }
         console.log('-- this.request.query -->', this.request.query);
         let default_email = '';
         if (this.request.query && this.request.query.email) default_email = this.request.query.email;
         const body = renderToString(<div className="App">
             <MiniHeader />
-            <SignupProgressBar steps={[this.session.prv || 'identity', 'email', 'phone', 'steem account']} current={2} />
+            <SignupProgressBar steps={['email', 'phone', 'steem account']} current={1} />
             <br />
             <div className="row" style={{maxWidth: '32rem'}}>
                 <div className="column">
@@ -100,11 +103,7 @@ export default function useEnterAndConfirmEmailPages(app) {
 
     router.post('/submit_email', koaBody, function *() {
         if (!checkCSRF(this, this.request.body.csrf)) return;
-        const user_id = this.session.user;
-        if (!user_id) {
-            this.body = 'user not found';
-            return;
-        }
+
         const email = this.request.body.email;
         if (!email) {
             this.flash = {error: 'Please provide an email address'};
@@ -161,6 +160,19 @@ export default function useEnterAndConfirmEmailPages(app) {
             return;
         }
 
+        let user_id = this.session.user;
+        if (user_id) {
+            const user = yield models.Identity.findOne({attributes: ['id'], where: {user_id}});
+            if (!user) user_id = null;
+        }
+        if (!user_id) {
+            const user = yield models.User.create({
+                uid: this.session.uid,
+                remote_ip: getRemoteIp(this.request.req)
+            });
+            this.session.user = user_id = user.id;
+        }
+
         const confirmation_code = Math.random().toString(36).slice(2);
         let eid = yield models.Identity.findOne(
             {attributes: ['id', 'email'], where: {user_id, provider: 'email'}, order: 'id'}
@@ -182,7 +194,7 @@ export default function useEnterAndConfirmEmailPages(app) {
 
         const body = renderToString(<div className="App">
             <MiniHeader />
-            <SignupProgressBar steps={[this.session.prv || 'identity', 'email', 'phone', 'steem account']} current={2} />
+            <SignupProgressBar steps={['email', 'phone', 'steem account']} current={1} />
             <br />
             <div className="row" style={{maxWidth: '32rem'}}>
                 <div className="column">

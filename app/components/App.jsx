@@ -198,11 +198,6 @@ class App extends React.Component {
                       </a>
                   </li>
                   <li>
-                      <a href="http://steemtools.com/" onClick={this.navigate}>
-                          {translate('APP_NAME_app_center')}
-                      </a>
-                  </li>
-                  <li>
                       <a href="/market" onClick={this.navigate}>
                           {translate("market")}
                       </a>
@@ -218,7 +213,7 @@ class App extends React.Component {
                       </a>
                   </li>
                   <li>
-                      <a href="https://steemit.chat/home" target="_blank">
+                      <a href="https://chat.golos.io" target="_blank">
                           {translate("APP_NAME_chat")}&nbsp;<Icon name="extlink" />
                       </a>
                   </li>

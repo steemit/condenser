@@ -1,16 +1,3 @@
-проект `голос`. тот, который клон стима.
-
-репозиторий вебклиента.
-
-используемые технологии:
- - реакт
- - вебсокеты
- - джей сон
-
-
-
-Социфальная платформа Голос
-========
 
 ## Установка
 
@@ -22,6 +9,19 @@
 
 #### Установка последней версии node.js
 
+=======
+# Steemit.com
+Steemit.com is the react.js web interface to the world's first and best blockchain-based social media platform.  It uses [STEEM](https://github.com/steemit/steem), a blockchain powered by Graphene 2.0 technology to store JSON-based content for a plethora of web applications.   
+========
+
+## Why would I want to use Steemit.com?
+* Learning how to build blockchain-based web applications using STEEM as a content storage mechanism in react.js
+* Reviewing the inner workings of the steemit.com social media platform
+* Assisting with software development for steemit.com
+
+## Installation
+
+#### Clone the repository and make a tmp folder
 ```bash
 # Ставим n - менеджер версий ноды
 sudo npm install -g n
@@ -149,7 +149,7 @@ pm2 start config/process.json
 настройки из файла `config/steem.json`
 
 Также, есть скрипт `build_n_run_webclient.sh`, который устанавливает зависимости npm,
-запускает сборку, и стартует собранный проект в терминале screen. 
+запускает сборку, и стартует собранный проект в терминале screen.
 
 
 ## Issues

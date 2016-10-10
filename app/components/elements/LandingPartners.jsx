@@ -15,7 +15,7 @@ export default class LandingPress extends React.Component {
 							<img src="https://www.steemimg.com/images/2016/08/24/cyberfund92a82.jpg" alt="cyber.fund logo" />
 						</a>
 					</div>
-					
+
 				</div>
 				<div className="row">
 					<div className="small-12 columns">
@@ -34,7 +34,8 @@ export default class LandingPress extends React.Component {
 						</a>
 					</div>
 				</div>
-				<div className="row Partners__info">
+				<div className="row Partners__info" style={{justifyContent: 'center',
+    alignItems: 'center'}}>
 					<div className="small-12 columns">
 						<h3>Информационные партнеры</h3>
 					</div>

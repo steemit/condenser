@@ -1,4 +1,5 @@
 import React from 'react'
+import Image from 'app/utils/SlateEditor/Image'
 
 /*
 
@@ -21,6 +22,7 @@ img
 
 */
 
+// Map html --> block type
 const BLOCK_TAGS = {
     blockquote: 'block-quote',
     p:          'paragraph',
@@ -34,6 +36,7 @@ const BLOCK_TAGS = {
     li:         'bulleted-list-item',
 }
 
+// Map HTML --> mark type
 const MARK_TAGS = {
     em:     'italic',
     i:      'italic',
@@ -43,11 +46,8 @@ const MARK_TAGS = {
     del:    'strike',
     strike: 'strike',
     code:   'code',
-/*
     sup:    'sup',
     sub:    'sub',
-
-*/
 }
 
 
@@ -56,56 +56,57 @@ export const HtmlRules = [
     // Block rules
     {
         deserialize: (el, next) => {
-			let type = BLOCK_TAGS[el.tagName]
-			if (!type) return
+            let type = BLOCK_TAGS[el.tagName]
+            if (!type) return
             if(type == 'bulleted-list-item' && el.parent.name == 'ol') type = 'numbered-list-item'
-			return {
-				kind: 'block',
-				type: type,
-				nodes: next(el.children)
-			}
+            return {
+                kind: 'block',
+                type: type,
+                nodes: next(el.children)
+            }
         },
         serialize: (object, children) => {
             if(object.kind !== 'block') return
-			switch(object.type) {
+            switch(object.type) {
                 case 'code':               return <pre><code>{children}</code></pre>
-				case 'paragraph':          return <p>{children}</p>
-				case 'block-quote':        return <blockquote>{children}</blockquote>
-				case 'bulleted-list':      return <ul>{children}</ul>
-				case 'numbered-list':      return <ol>{children}</ol>
-				case 'heading-one':        return <h1>{children}</h1>
-				case 'heading-two':        return <h2>{children}</h2>
-				case 'heading-three':      return <h3>{children}</h3>
-				case 'heading-four':       return <h4>{children}</h4>
-				case 'bulleted-list-item': return <li>{children}</li>
-				case 'numbered-list-item': return <li>{children}</li>
-			}
+                case 'paragraph':          return <p>{children}</p>
+                case 'block-quote':        return <blockquote>{children}</blockquote>
+                case 'bulleted-list':      return <ul>{children}</ul>
+                case 'numbered-list':      return <ol>{children}</ol>
+                case 'heading-one':        return <h1>{children}</h1>
+                case 'heading-two':        return <h2>{children}</h2>
+                case 'heading-three':      return <h3>{children}</h3>
+                case 'heading-four':       return <h4>{children}</h4>
+                case 'bulleted-list-item': return <li>{children}</li>
+                case 'numbered-list-item': return <li>{children}</li>
+            }
         }
     },
 
     // Mark rules
     {
         deserialize: (el, next) => {
-			const type = MARK_TAGS[el.tagName]
-			if (!type) return
-			return {
-				kind: 'mark',
-				type: type,
-				nodes: next(el.children)
-			}
+            const type = MARK_TAGS[el.tagName]
+            if (!type) return
+            return {
+                kind: 'mark',
+                type: type,
+                nodes: next(el.children)
+            }
         },
         serialize: (object, children) => {
             if(object.kind !== 'mark') return;
-			switch(object.type) {
-				case 'bold':      return <strong>{children}</strong>
-				case 'italic':    return <i>{children}</i>
-				case 'underline': return <u>{children}</u>
-				case 'strike':    return <del>{children}</del>
-				case 'code':      return <code>{children}</code>
-			}
+            switch(object.type) {
+                case 'bold':      return <strong>{children}</strong>
+                case 'italic':    return <i>{children}</i>
+                case 'underline': return <u>{children}</u>
+                case 'strike':    return <del>{children}</del>
+                case 'code':      return <code>{children}</code>
+                case 'sup':       return <sup>{children}</sup>
+                case 'sub':       return <sub>{children}</sub>
+            }
         }
     },
-
 
     // Custom
     {
@@ -121,51 +122,65 @@ export const HtmlRules = [
                 return {
                     kind: 'block',
                     type: 'image',
+                    isVoid: true,
                     data: {src: el.attribs.src},
                     nodes: next(el.children)
                 }
             }
             if (el.tagName == 'a') {
-                console.log("deserialized <a>, the href is", el.attribs.href)
+                const {href} = el.attribs
+                if(!href) console.log("** ERR: deserialized <a> with no href")
                 return {
                     kind: 'block',
                     type: 'link',
-                    data: {href: el.attribs.href},
+                    data: {href: href},
                     nodes: next(el.children)
                 }
             }
             if(el.type == 'text') return
             if(BLOCK_TAGS[el.tagName] || MARK_TAGS[el.tagName]) return
-			console.log("No deserializer for: ", el.tagName, el)
+            console.log("No deserializer for: ", el.tagName, el)
         },
         serialize: (object, children) => {
             if(object.kind == 'string') return;
             if(object.kind == 'block' && object.type == 'link') {
-                console.log("Serialized <a>, the href is", object.data.get('href'), JSON.stringify(object.data, null, 2))
-                return <a href={object.data.get('href')}>{children}</a>
+                const href = object.data.get('href')
+                if(!href) console.log("** ERR: serializing <a> with no href", JSON.stringify(object.data, null, 2))
+                return <a href={href}>{children}</a>
             }
             if(object.kind == 'block' && object.type == 'image') {
                 const data = object.data
                 const src = data.get('src')
+                if(!src) {
+                  console.log("** ERR: serializing image with no src...")
+                  console.log("Serializing image.... data:",   JSON.stringify(data))
+                  console.log("Serializing image.... object:", JSON.stringify(object))
+                  console.log("Serializing image.... state:",  JSON.stringify(object.state))
+                  console.log("Serializing image.... node:",   JSON.stringify(object.node))
+                }
                 return <img src={src} />
             }
-			console.log("No serializer for: ", object.kind, JSON.stringify(object, null, 2), children)
+            console.log("No serializer for: ", object.kind, JSON.stringify(object, null, 2), children)
         }
     }
 ]
 
 export const schema = {
     defaultNode: 'paragraph',
+    toolbarMarks: [
+        { type: 'bold',      label: <strong>B</strong> },
+        { type: 'italic',    label: <i>I</i> },
+        { type: 'underline', label: <u>U</u> },
+        { type: 'strike',    label: <del>S</del> },
+        { type: 'code',      label: <code>{'{}'}</code> },
+        { type: 'sup',       label: <span>x<sup>2</sup></span> },
+        { type: 'sub',       label: <span>x<sub>2</sub></span> },
+    ],
+
 /*
     blockTypes: {
       ...Blocks,
     },
-    toolbarMarks: [
-        { type: 'bold',      icon: 'bold' },
-        { type: 'italic',    icon: 'italic' },
-        { type: 'underline', icon: 'underline' },
-        { type: 'code',      icon: 'code' },
-    ],
     toolbarTypes: [
         { type: 'heading-one',   icon: 'header' },
         { type: 'heading-two',   icon: 'header' },
@@ -175,6 +190,7 @@ export const schema = {
     ],
     sidebarTypes: [],
 */
+
     nodes: {
         'block':         ({ children }) => <p style={{background: 'red'}}>{children}</p>,
         'paragraph':     ({ children }) => <p>{children}</p>,
@@ -187,24 +203,22 @@ export const schema = {
         'heading-four':  ({ children }) => <h4>{children}</h4>,
         'bulleted-list-item': ({ children }) => <li>{children}</li>,
         'numbered-list-item': ({ children }) => <li>{children}</li>,
-        'image': (props) => {
-			const { data } = props.node
-			const src = data.get('src')
-			return <img {...props.attributes} src={'https://img1.steemit.com/0x0/' + src} />
-		},
-		'link':  (props) => {
-			const { data } = props.node
-			const href = data.get('href')
-console.log("rendering link...href=",href)
-			return <a {...props.attributes} href={href}>{props.children}</a>
-		},
+        'image': Image,
+        'link':  (props) => {
+            const { data } = props.node
+            const href = data.get('href')
+            return <a {...props.attributes} href={href}>{props.children}</a>
+        },
     },
+
     marks: {
         bold:      props => <strong>{props.children}</strong>,
         code:      props => <code>{props.children}</code>,
         italic:    props => <em>{props.children}</em>,
         underline: props => <u>{props.children}</u>,
         strike:    props => <del>{props.children}</del>,
+        sub:       props => <sub>{props.children}</sub>,
+        sup:       props => <sup>{props.children}</sup>,
     },
 }
 

@@ -78,7 +78,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
     return (
         <ul className={mcn + mcl}>
             {!vertical && <li><a href="/static/search.html" title="Search"><Icon name="search" /></a></li>}
-            <li className={lcn}><a href="/create_account" onClick={showSignUp}>Sign Up</a></li>
+            <li className={lcn}><a href="/enter_email">Sign Up</a></li>
             <li className={lcn}><a href="/login.html" onClick={showLogin}>Login</a></li>
             {submit_story}
             {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>

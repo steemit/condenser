@@ -95,7 +95,7 @@ export default function useEnterAndConfirmMobilePages(app) {
         if (!user_id) { this.body = 'user not found'; return; }
         let mobile = this.request.body.mobile;
         if (!mobile) {
-            this.flash = {error: 'Please provide a mobile number'};
+            this.flash = {error: 'Please provide a phone number'};
             this.redirect('/enter_mobile');
             return;
         }

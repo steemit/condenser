@@ -202,14 +202,23 @@ class CreateAccount extends React.Component {
             </div>;
         }
 
-        const next_step = !server_error ? null :
-            server_error === 'Mobile is not confirmed' ? <div>
-                <a href="/enter_mobile">Verify a Mobile</a>
-            </div> : <div className="callout alert">
-                <h5>Couldn't create account. Server returned the following error:</h5>
-                <p>{server_error}</p>
-                {server_error === 'Email address is not confirmed' && <a href="/enter_email">Confirm Email</a>}
-            </div>
+        let next_step = null;
+        if (server_error) {
+            if (server_error === 'Email address is not confirmed') {
+                next_step = <div className="callout alert">
+                    <a href="/enter_email">Please verify your email address</a>
+                </div>;
+            } else if (server_error === 'Phone number is not confirmed') {
+                next_step = <div className="callout alert">
+                    <a href="/enter_mobile">Please verify your phone number</a>
+                </div>;
+            } else {
+                next_step = <div className="callout alert">
+                    <h5>Couldn't create account. Server returned the following error:</h5>
+                    <p>{server_error}</p>
+                </div>;
+            }
+        }
 
         return (
             <div>

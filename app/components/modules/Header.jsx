@@ -108,7 +108,7 @@ class Header extends React.Component {
         } else if (route.page == 'ChangePassword') {
             page_title = `Change Account Password`;
         } else if (route.page == 'CreateAccount') {
-            page_title = `Sign Up`;
+            page_title = `Create Account`;
         } else if (route.page == 'RecoverAccountStep1' || route.page == 'RecoverAccountStep2') {
             page_title = `Stolen Account Recovery`;
         } else if (route.page === 'UserProfile') {

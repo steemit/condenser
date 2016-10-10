@@ -32,7 +32,7 @@ class App extends React.Component {
     componentWillMount() {
         if (process.env.BROWSER && window.pathname != "/landing.html") {
             console.warn('Unexpected route. Going to redirect to "/landing.html"!');
-            this.props.history.push('landing.html');
+            this.props.history.replace('landing.html');
         }
         if (process.env.BROWSER) localStorage.removeItem('autopost') // July 14 '16 compromise, renamed to autopost2
         this.props.loginUser();

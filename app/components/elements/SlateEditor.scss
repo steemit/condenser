@@ -6,6 +6,7 @@
 
 .SlateEditor.Markdown {
   a {border-bottom: 1px dotted #00f;}
+  img.active {box-shadow: 0 0 0 2px blue;}
 }
 
 .SlateEditor > * > * + * {
@@ -17,7 +18,7 @@
 }
 
 .SlateEditor__menu > * + * {
-  margin-left: 4px;
+  margin: 0;
 }
 
 .SlateEditor__menu-button {
@@ -26,28 +27,26 @@
   cursor: pointer;
   > span {
     display: inline-block;
-    width: 1.5rem;
+    width: 2rem;
     text-align: center;
-    background: #555;
+    background: rgba(0,0,0,0.1);
     border-radius: 2px;
     code {
       border: none;
       background: transparent;
       color: inherit;
+      padding: 0;
+      font-size: 90%;
+      vertical-align: top;
     }
   }
 }
 
-.SlateEditor__menu-button[data-active="false"] {
-  > span:hover {
-    color: #333;
-    background: #CCC;
-  }
-}
+.SlateEditor__menu-button[data-active="false"]:hover,
 .SlateEditor__menu-button[data-active="true"] {
   > span {
-    color: #333;
-    background: #EEE;
+    color: #32cd32;
+    background: rgba(0,0,0,0.5);
   }
 }
 
@@ -61,8 +60,8 @@
 */
 
 .SlateEditor__hover-menu {
-  font-size: 90%;
-  padding: 5px;
+  font-size: 110%;
+  padding: 1px;
   position: absolute;
   z-index: 1;
   top: -10000px;
@@ -72,4 +71,19 @@
   background-color: #222;
   border-radius: 4px;
   transition: opacity .75s;
+  background-image: linear-gradient(180deg,#464646,#151515);
+}
+
+.SlateEditor__hover-menu:after {
+    top: 100%;
+    left: 50%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-top-color: #151515;
+    border-width: 5px;
+    margin-left: -5px;
 }

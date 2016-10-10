@@ -114,6 +114,7 @@
     "sequelize": "^3.21.0",
     "sequelize-cli": "^2.3.1",
     "slate": "^0.14.13",
+    "slate-drop-or-paste-images": "^0.2.0",
     "speakingurl": "^9.0.0",
     "style-loader": "^0.13.0",
     "svg-inline-loader": "^0.4.0",

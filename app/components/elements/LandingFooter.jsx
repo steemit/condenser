@@ -50,8 +50,8 @@ export default class LandingFooter extends React.Component {
 				</div>
 				<div className="row text-left LandingFooter__description">
 					<div className="small-12 medium-12 columns">
-						<span className="left">2016 Golos.io</span>
-						<span className="right">Децентрализованная социальная сеть для блоггеров и журналистов</span>
+						<span className="text-left">2016 Golos.io</span>
+						<span className="text-right" style={{ float: 'right' }}>Децентрализованная социальная сеть для блоггеров и журналистов</span>
 					</div>
 				</div>
 			</section>

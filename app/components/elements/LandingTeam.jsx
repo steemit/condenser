@@ -32,7 +32,7 @@ export default class LandingTeam extends React.Component {
 						<strong>Валерий Литвин</strong>
 						<p>Блокчейн-разработка</p>
 						<ul>
-							<li><a href="https://www.linkedin.com/in/valery-litvin-97864267"><img src="images/landing/linkedin_icon.jpg" /></a></li>
+							<li><a href="https://cyber.fund/@besson_by"><img style={{width:'40px', height:'40px'}} src="https://cyber.fund/images/cybF.svg" /></a></li>
 							<li><a href="https://www.facebook.com/bessonby"><img className="Team__facebook-logo" src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-facebook-512.png" /></a></li>
 							<li><a href="https://github.com/ValeryLitvin"><img src="images/landing/github_icon.jpg" /></a></li>
 						</ul>
@@ -77,7 +77,7 @@ export default class LandingTeam extends React.Component {
 
 					<div data-wow-delay="2s" className="wow fadeIn small-6 medium-4 large-3 columns Team__member Team__member__kostya">
 						<div className="Team__members__image-wrapper">
-							<img className="Team__member__img" src="images/landing/kostya.jpg" alt="фотография Контстантина Ломашука" />
+							<img className="Team__member__img" src="images/landing/kostya.jpg" alt="фотография Константина Ломашука" />
 						</div>
 						<strong>Константин Ломашук</strong>
 						<p>Развитие бизнеса</p>
@@ -90,14 +90,25 @@ export default class LandingTeam extends React.Component {
 					<div data-wow-delay="3s" className="wow fadeIn small-6 medium-4 large-3 columns Team__member Team__member__misha">
 						<div className="Team__members__image-wrapper">
 							{/* <img className="Team__member__img" src="https://pp.vk.me/c619721/v619721379/1de32/S_1velJqxSA.jpg" alt="фотография Михаила Палей" /> */}
-							<img className="Team__member__img" src="https://pp.vk.me/c636924/v636924379/26083/2NFy5W_6V8o.jpg" alt="фотография Михаила Палей" />
-							{/* <img className="Team__member__img" src="https://pp.vk.me/c637427/v637427379/6319/yNXcC70HrLA.jpg" alt="фотография Михаила Палей" /> */}
+							{/* <img className="Team__member__img" src="https://pp.vk.me/c636924/v636924379/26083/2NFy5W_6V8o.jpg" alt="фотография Михаила Палей" /> */}
+							<img className="Team__member__img" src="https://pp.vk.me/c637427/v637427379/6319/yNXcC70HrLA.jpg" alt="фотография Михаила Палей" />
 						</div>
 						<strong>Михаил Палей</strong>
 						<p>Front-end разработка</p>
 						<ul>
 							{/* <li><a href="https://www.vk.com/paleyblog">vk</a></li> */}
 							<li><a href="https://www.github.com/Undeadlol1"><img src="images/landing/github_icon.jpg" /></a></li>
+						</ul>
+					</div>
+					<div data-wow-delay="3s" className="wow fadeIn small-6 medium-4 large-3 columns Team__member Team__member__valentin">
+						<div className="Team__members__image-wrapper">
+							<img className="Team__member__img" src="https://avatars2.githubusercontent.com/u/28658?v=3&s=400" alt="фотография Валентина Завгороднева" />
+						</div>
+						<strong>Валентин Завгороднев</strong>
+						<p>Сооснователь Steemit</p>
+						<ul>
+							<li><a href="https://www.linkedin.com/in/valentine"><img src="images/landing/linkedin_icon.jpg" /></a></li>
+							<li><a href="https://github.com/valzav"><img src="images/landing/github_icon.jpg" /></a></li>
 						</ul>
 					</div>
 				</div>

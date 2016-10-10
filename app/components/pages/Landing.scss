@@ -472,7 +472,20 @@
 		word-break: break-all;
 	}
 	@media #{$small-only} {
-		strong { text-align: center; }
-		li { text-align: center; }
+		.LandingFooter__description {
+			strong { text-align: center; }
+			li { text-align: center; }
+			span {
+				display: block;
+				text-align: center;
+			}
+		}
+	}
+	@media #{$medium-up} {
+		.LandingFooter__description {
+			span { display: inline; }
+			.left { text-align: left; }
+			.right { float: right; }
+		}
 	}
 }

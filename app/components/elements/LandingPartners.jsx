@@ -11,9 +11,9 @@ export default class LandingPress extends React.Component {
 				</div>
 				<div className="row Partners__logos">
 					{/* <div className="small-6 medium-4 large-2"> */}
-					<div className="small-12">
+					<div className="small-2">
 						{/* <a href="https://cyber.fund/" target="blank"> */}
-							<img style={{ margin: '0 auto' }} src="images/landing/liqui.png" alt="Liqui logo" />
+							<img src="images/landing/liqui.png" alt="Liqui logo" />
 						{/* </a> */}
 					</div>
 					{/* <div className="small-6 medium-4 large-2">
@@ -28,9 +28,9 @@ export default class LandingPress extends React.Component {
 					</div>
 				</div>
 				<div className="row Partners__law">
-					<div className="small-12 medium-6 columns">
+					<div className="small-12 medium-6 columns Partners__tolkachev-logo">
 						<a href="http://www.atplaw.ru/" target="blank">
-							<img src="images/landing/tolkachev.jpg" alt='логотип "Толкачев и партнеры"' />
+							<img src="images/landing/tolkachev.png" alt='логотип "Толкачев и партнеры"' />
 						</a>
 					</div>
 					<div className="small-12 medium-6 columns">
@@ -50,7 +50,7 @@ export default class LandingPress extends React.Component {
 					</div>
 					<div style={{marginTop: '5px'}} className="small-12 medium-6 columns">
 						<a href="http://forklog.com/" target="blank">
-							<img className="Partners__forklog-logo" src="images/landing/forklog.jpg" alt="логотип Forklog" />
+							<img className="Partners__forklog-logo" src="http://forklog.com/wp-content/themes/newForklog/img/logo.svg" alt="логотип Forklog" />
 						</a>
 					</div>
 				</div>

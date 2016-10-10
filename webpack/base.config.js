@@ -39,6 +39,10 @@ export default {
             {
                 test: /\.scss$/,
                 loader: ExtractTextPlugin.extract('style', 'css!autoprefixer!sass?outputStyle=expanded')
+            },
+            {
+               test: require.resolve('wowjs/dist/wow.js'),
+               loader: 'exports?this.WOW'
             }
         ]
     },

@@ -163,6 +163,7 @@ export default class UserProfile extends React.Component {
             if (account.blog) {
                 tab_content = <PostsList
                     emptyText={`Looks like ${account.name} hasn't started blogging yet!`}
+                    account={account.name}
                     posts={account.blog}
                     loading={fetching}
                     category="blog"

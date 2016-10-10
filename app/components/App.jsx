@@ -90,7 +90,6 @@ class App extends React.Component {
         else
             console.log('onEntropyEvent Unknown', e.type, e)
     }
-    log(p){console.log(p);console.log('===');}
     render() {
         const {location, params, children, loading, flash, showSignUp, new_visitor,
             depositSteem, signup_bonus} = this.props;
@@ -169,10 +168,9 @@ class App extends React.Component {
         }
 
         let header_bar = null
-        console.log (/landing\.html/.test(location.pathname), location)
         if (!/landing\.html/.test(location.pathname)) {
           header_bar = (
-<div>
+          <div>
 
           <SidePanel ref="side_panel" alignment="right">
               <TopRightMenu vertical navigate={this.navigate} />

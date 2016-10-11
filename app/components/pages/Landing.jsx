@@ -1,4 +1,5 @@
 import React from 'react'
+import Header from 'app/components/elements/LandingHeader'
 import CountDowns from 'app/components/elements/LandingCountDowns'
 import Distribution from 'app/components/elements/LandingDistribution'
 import WhatIsGolos from 'app/components/elements/LandingWhatIsGolos'
@@ -46,6 +47,7 @@ class Landing extends React.Component {
 
         return (
             <div className="Landing text-center">
+				<Header />
 				<CountDowns
 					prefill={prefill}
 					crowdsaleStartAt={crowdsaleStartAt}
@@ -53,8 +55,8 @@ class Landing extends React.Component {
 					crowdsaleEndAt={crowdsaleEndAt}
 					button={buyGolosButton}
 				/>
-                {/* <Distribution /> */}
-                {/* <WhatIsGolos /> */}
+                <Distribution />
+                <WhatIsGolos />
                 <JoinUs />
                 <Documentation />
                 <WhoWeAre />

@@ -50,7 +50,7 @@ export default class LandingTeam extends React.Component {
 						</ul>
 					</div>
 
-					<div data-wow-delay="2s" className="wow fadeIn small-6 medium-4 large-3 columns Team__member Team__member__alexey">
+					<div data-wow-delay="1s" className="wow fadeIn small-6 medium-4 large-3 columns Team__member Team__member__alexey">
 						<div className="Team__members__image-wrapper">
 							<img className="Team__member__img" src="images/landing/alexey.jpg" alt="фотография Алексея Фрумина" />
 						</div>
@@ -61,7 +61,7 @@ export default class LandingTeam extends React.Component {
 							<li><a href="https://github.com/tomarcafe"><img src="images/landing/github_icon.jpg" /></a></li>
 						</ul>
 					</div>
-					<div data-wow-delay="2s" className="wow fadeIn small-6 medium-4 large-3 columns Team__member Team__member__vitaly">
+					<div data-wow-delay="1s" className="wow fadeIn small-6 medium-4 large-3 columns Team__member Team__member__vitaly">
 						<div className="Team__members__image-wrapper">
 							<img className="Team__member__img" src="https://s3.amazonaws.com/keybase_processed_uploads/bc86969a26560b7a081d1f720f6f3c05_360_360_square_360.jpeg" alt="фотография Виталия Львова" />
 						</div>
@@ -74,7 +74,7 @@ export default class LandingTeam extends React.Component {
 						</ul>
 					</div>
 
-					<div data-wow-delay="2s" className="wow fadeIn small-6 medium-4 large-3 columns Team__member Team__member__kostya">
+					<div data-wow-delay="1s" className="wow fadeIn small-6 medium-4 large-3 columns Team__member Team__member__kostya">
 						<div className="Team__members__image-wrapper">
 							<img className="Team__member__img" src="images/landing/kostya.jpg" alt="фотография Константина Ломашука" />
 						</div>
@@ -86,7 +86,7 @@ export default class LandingTeam extends React.Component {
 							<li><a href="https://github.com/lomashuk"><img src="images/landing/github_icon.jpg" /></a></li>
 						</ul>
 					</div>
-					<div data-wow-delay="3s" className="wow fadeIn small-6 medium-4 large-3 columns Team__member Team__member__misha">
+					<div data-wow-delay="1s" className="wow fadeIn small-6 medium-4 large-3 columns Team__member Team__member__misha">
 						<div className="Team__members__image-wrapper">
 							{/* <img className="Team__member__img" src="https://pp.vk.me/c619721/v619721379/1de32/S_1velJqxSA.jpg" alt="фотография Михаила Палей" /> */}
 							{/* <img className="Team__member__img" src="https://pp.vk.me/c636924/v636924379/26083/2NFy5W_6V8o.jpg" alt="фотография Михаила Палей" /> */}
@@ -99,7 +99,7 @@ export default class LandingTeam extends React.Component {
 							<li><a href="https://www.github.com/Undeadlol1"><img src="images/landing/github_icon.jpg" /></a></li>
 						</ul>
 					</div>
-					<div data-wow-delay="3s" className="wow fadeIn small-6 medium-4 large-3 columns Team__member Team__member__valentin">
+					<div data-wow-delay="1s" className="wow fadeIn small-6 medium-4 large-3 columns Team__member Team__member__valentin">
 						<div className="Team__members__image-wrapper">
 							<img className="Team__member__img" src="https://avatars2.githubusercontent.com/u/28658?v=3&s=400" alt="фотография Валентина Завгороднева" />
 						</div>
@@ -113,9 +113,9 @@ export default class LandingTeam extends React.Component {
 				</div>
 
 				<div className="row center Team__partners">
-					<div data-wow-delay="4s" className="wow fadeIn small-6 medium-4 large-3 small-centered medium-centered large-centered columns Team__member">
+					<div data-wow-delay="1s" className="wow fadeIn small-6 medium-4 large-3 small-centered medium-centered large-centered columns Team__member">
 						<div className="Team__members__image-wrapper">
-							<a href="https://www.facebook.com/mike.chobanyan.7"><img className="Team__member__img" src="http://kuna.com.ua/wp-content/uploads/2015/12/DSC_3422-240x300.jpg.pagespeed.ce.vQtihTFuzz.jpg" /></a>
+							<a href="https://www.facebook.com/mike.chobanyan.7"><img className="Team__member__img" src="images/landing/chobonyan.jpg" /></a>
 						</div>
 						<strong>Михаил Чобанян</strong>
 						<p>Информационная поддержка в Украине</p>
@@ -123,9 +123,9 @@ export default class LandingTeam extends React.Component {
 							<li></li>
 						</ul>
 					</div>
-					<div data-wow-delay="4s" className="wow fadeIn small-6 medium-4 large-3 small-centered medium-centered large-centered columns Team__member">
+					<div data-wow-delay="1s" className="wow fadeIn small-6 medium-4 large-3 small-centered medium-centered large-centered columns Team__member">
 						<div className="Team__members__image-wrapper">
-							<a href="http://kuna.com.ua/about/"><img className="Team__member__img" src="http://kuna.com.ua/wp-content/uploads/2014/08/kuna_logo_258x258.png.pagespeed.ce.qhr50_CAH4.png" /></a>
+							<a href="http://kuna.com.ua/about/"><img className="Team__member__img" src="images/landing/kuna.png" /></a>
 						</div>
 						<strong>Kuna</strong>
 						<p>Информационная поддержка в Украине</p>

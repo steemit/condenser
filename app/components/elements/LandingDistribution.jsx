@@ -28,7 +28,7 @@ export default class LandingDistribution extends React.Component {
 		// function renderList() {
 		// 	return	listInfo.map(
 		// 				(item) 	=> 	<li className="Distribution__item">
-		// 								<strong className="Distribution__strong">{item[0]}</strong>
+										// <strong className="Distribution__strong">{item[0]}</strong>
 		// 								<span className="Distribution__dot" style={{ backgroundColor: '#' + item[1] }} />
 		// 								{item[2]}
 		// 							</li>
@@ -45,52 +45,54 @@ export default class LandingDistribution extends React.Component {
 				</div>
 				<div className="row">
 					<div className="small-6">
-						<img src="images/landing/pie.png" />
+						{/* <img src="images/landing/pie.png" /> */}
+						<img src="images/landing/pie_new.png" />
+						{/* <img src="images/landing/pie3.png" /> */}
 					</div>
 					<div className="small-6 columns Distribution__list">
 						<ul>
 							{/* {renderList()} */}
 							<li className="Distribution__item">
-								<strong className="Distribution__strong">60%</strong>
+								{/* <strong className="Distribution__strong">60%</strong> */}
 								{renderDot('d80a15')}
 								Краудсейл
 							</li>
 							<li className="Distribution__item">
-								<strong className="Distribution__strong">10%</strong>
-								{renderDot('2e17b8')}
-								Резерв на развитие
-							</li>
-							<li className="Distribution__item">
-								<strong className="Distribution__strong">10%</strong>
+								{/* <strong className="Distribution__strong">10%</strong> */}
 								{renderDot('f9ca0f')}
 								Держателям Steem
 							</li>
 							<li className="Distribution__item">
-								<strong className="Distribution__strong">10%</strong>
+								{/* <strong className="Distribution__strong">10%</strong> */}
 								{renderDot('1e193b')}
 								Cyber.Fund
 							</li>
 							<li className="Distribution__item">
-								<strong className="Distribution__strong Distribution__strong_extra-margin">7%</strong>
+								{/* <strong className="Distribution__strong">8.98%</strong> */}
+								{renderDot('2e17b8')}
+								Резерв на развитие
+							</li>
+							<li className="Distribution__item">
+								{/* <strong className="Distribution__strong Distribution__strong_extra-margin">7%</strong> */}
 								{renderDot('cd591a')}
 								Основателям Голоса
 							</li>
 							<li className="Distribution__item">
-								<strong className="Distribution__strong Distribution__strong_extra-margin">3%</strong>
+								{/* <strong className="Distribution__strong Distribution__strong_extra-margin">3%</strong> */}
 								{renderDot('7bd915')}
 								Делегатам Голоса
 							</li>
 							<li className="Distribution__item">
-								<strong className="Distribution__strong Distribution__strong_extra-margin">3%</strong>
+								{/* <strong className="Distribution__strong">1.02%</strong> */}
 								{renderDot('7bd915')}
-								Банти авторам на время краудсейла
+								Награды авторам и кураторам до конца краудсейла
 							</li>
 						</ul>
 					</div>
 				</div>
 				<div className="row Distribution__action">
 					<div className="small-12 columns text-center">
-						<a href="" className="button">Узнать больше что такое Голос</a>
+						<a href="https://wiki.golos.io/" className="button">Узнать больше что такое Голос</a>
 					</div>
 				</div>
 				<hr />

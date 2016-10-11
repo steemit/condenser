@@ -131,7 +131,7 @@ export default class LandingCountDowns extends React.Component {
 							<div className="small-12 columns text-center">
 								<a href="https://steemit.com/@golos" target="blank" className="CountDowns__button_small">блог</a>
 								<a href="https://wiki.golos.io/" target="blank" className="CountDowns__button_small">вики</a>
-								<a href="https://www.youtube.com/channel/UCcBPq2gUdpkL9m-_a92AFVQ" target="blank" className="CountDowns__button_small">youtube</a>
+								<a href="https://www.youtube.com/Golosioru" target="blank" className="CountDowns__button_small">youtube</a>
 								<a href="https://github.com/goloschain" target="blank" className="CountDowns__button_small">github</a>
 							</div>
 						</div>

@@ -45,7 +45,6 @@ export default class LandingJoinUs extends React.Component {
 						<h2 className="Landing__h2_red">Присоединяйся</h2>
 						<span className="JoinUs__support-text">Получи 6 голосов за регистрацию</span>
 						<br />
-						<span className="JoinUs__support-text-2">Приведи друзей и получите дополнительные голоса</span>
 					</div>
 				</div>
 				<div className="row text-left JoinUs__reasons">

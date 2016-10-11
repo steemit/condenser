@@ -8,17 +8,19 @@ export default function resolveRoute(path)
         return {page: 'About'};
     }
     // golos.io ICO page
-    if (path === '/ico.html') {
-        return {page: 'Ico'};
-    }
+    //if (path === '/ico.html') {
+    //    return {page: 'Ico'};
+    //}
     // golos.io landing page
-    if (path === '/landing.html') {
+    if (path === '/ico') {
+        console.log("SPARTA!!!!!")
         return {page: 'Landing'};
     }
     if (path === '/login.html') {
         return {page: 'Login'};
     }
     if (path === '/privacy.html') {
+console.log("OLOLO")
         return {page: 'Privacy'};
     }
     if (path === '/support.html') {

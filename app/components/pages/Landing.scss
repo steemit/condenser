@@ -448,18 +448,36 @@
 }
 
 .Partners {
-	.Partners__logos { margin-bottom: 80px; }
+	.Partners__logos {
+		margin: 90px auto;
+		// margin-top: 90px;
+		// margin-bottom: 80px;
+		h2 { margin-bottom: 20px; }
+		img {
+			max-height: 160px;
+			margin-top: 30px;
+		}
+	}
+	h3 { margin-bottom: 50px; }
 	.Partners__law {
 		margin-bottom: 65px;
-		.Partners__law__h3 { margin-bottom: 50px; }
+		img { margin-top: 30px; }
+		// .Partners__law__h3 { margin-bottom: 50px; }
 	}
 	.Partners__info {
 		margin-bottom: 65px;
-		h3 { margin-bottom: 40px; }
+		// h3 { margin-bottom: 40px; }
 		img { width: 160px; }
 	}
-	.Partners__forklog-logo { transform: translateY(50%); }
-	.Partners__tolkachev-logo { transform: translateY(50%); }
+	.Partners__skolkovo-logo { transform: translateY(-17%); }
+	.Partners__forklog-logo { transform: translateY(0%); }
+	.Partners__tolkachev-logo { transform: translateY(5%); }
+	@media #{$small-up} {
+		.Partners__coinessa-logo { transform: translateY(50%); }
+	}
+	@media #{$medium-up} {
+		.Partners__coinessa-logo { transform: translateY(26%); }
+	}
 }
 
 .Press {

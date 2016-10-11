@@ -42,7 +42,9 @@ export default class LandingPress extends React.Component {
 					data.map((article, index) => {
 						return 	<div key={index} className="row text-left Press__article">
 									<div className="small-2 medium-2 large-2 columns">
-										<img src={article.image} />
+										<a href={article.url}>
+											<img src={article.image} />
+										</a>
 									</div>
 									<div className="small-10 medium-10 large-10 columns">
 										<a href={article.url}>

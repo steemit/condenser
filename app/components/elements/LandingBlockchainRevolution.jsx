@@ -20,7 +20,7 @@ export default class LandingBlockchainRevolution extends React.Component {
 			<section className="BlockchainRevolution">
 				<div className="row text-center">
 					<div className="BlockchainRevolution__header small-12 columns">
-						<h2>Блокчейн-революция</h2>
+						<h2 id="revolution">Блокчейн-революция</h2>
 						<p>«Революцию, которую произвел интернет, можно повторить, перевернув человеческие взаимоотношения, убрав посредника не только из денежных переводов, как предлагал биткоин, но из любой сферы»</p>
 						<span className="BlockchainRevolution__supporting-text"> — уверен Виталий Бутерин, создатель нашумевшего стартапа Ethereum.</span>
 					</div>

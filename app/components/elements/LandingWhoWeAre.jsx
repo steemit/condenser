@@ -6,7 +6,7 @@ export default class LandingWhoWeAre extends React.Component {
 			<section className="WhoWeAre">
 				<div className="row text-center WhoWeAre__headers">
 					<div className="small-12 columns">
-						<h2 className="Landing__h2_blue">Кто мы?</h2>
+						<h2 className="Landing__h2_blue" id="who-we-are">Кто мы?</h2>
 						<span>Децентрализованная социальная сеть для блоггеров и журналистов</span>
 					</div>
 				</div>

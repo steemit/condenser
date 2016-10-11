@@ -68,7 +68,7 @@ export default class LandingCountDowns extends React.Component {
 				{/* HEADERS */}
 				<div className="row text-center CountDowns__headers">
 					<div className="small-12 columns">
-						<strong className="CountDowns__slogan">Каждый Голос имеет значение!</strong>
+						<strong className="CountDowns__slogan" id="countdown">Каждый Голос имеет значение!</strong>
 						{
 							process.env.BROWSER
 							? <div className="CountDowns__logo wow fadeInLeft"><Icon name={APP_ICON} size="2x" /></div>

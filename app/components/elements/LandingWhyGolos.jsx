@@ -6,7 +6,7 @@ export default class LandingWhyGolos extends React.Component {
 			<section className="WhyGolos">
 				<div className="row text-center">
 					<div className="WhyGolos__header small-12 columns">
-						<h2 className="Landing__h2_blue">Кому полезен Голос?</h2>
+						<h2 className="Landing__h2_blue" id="benefits">Кому полезен Голос?</h2>
 						<span className="Landing__supporting-text">Децентрализованная социальная сеть для блоггеров и журналистов</span>
 					</div>
 				</div>

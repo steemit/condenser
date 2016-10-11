@@ -6,7 +6,7 @@ export default class LandingWhatIsGolos extends React.Component {
 			<section className="WhatIsGolos">
 				<div className="row text-center">
 					<div className="   small-12 columns WhatIsGolos__header">
-						<h2>Что такое Голос?</h2>
+						<h2 id="what-is-golos">Что такое Голос?</h2>
 						<span className="  ">Децентрализованная социальная сеть для блоггеров и журналистов</span>
 					</div>
 				</div>

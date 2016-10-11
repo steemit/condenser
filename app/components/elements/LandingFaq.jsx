@@ -75,7 +75,7 @@ export default class LandingFaq extends React.Component {
 			<section className="Faq" id="qa">
 				<div className="row text-center Faq__headers">
 					<div className="small-12 columns">
-						<h2 className="Landing__h2_blue">Вопросы - ответы</h2>
+						<h2 className="Landing__h2_blue" id="faq">Вопросы - ответы</h2>
 						<span className="Faq__supporting-text">Узнайте больше о Голосе</span>
 					</div>
 				</div>

@@ -45,7 +45,7 @@ export default class LandingFooter extends React.Component {
 
 		return (
 			<section className="LandingFooter">
-				<div className="row LandingFooter__menus">
+				<div className="row LandingFooter__menus" id="footer">
 					{renderMenus()}
 				</div>
 				<div className="row text-left LandingFooter__description">

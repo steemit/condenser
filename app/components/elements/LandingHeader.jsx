@@ -14,19 +14,19 @@ export default class LandingHeader extends React.Component {
 					<div className="small-10 columns">
 						<ul className="LandingHeader__menu">
 							<li className="LandingHeader__menu__li">
-								<a href="/ico">Видео</a>
+								<a href="#what-is-golos">Видео</a>
 							</li>
 							<li className="LandingHeader__menu__li">
 								<a href="#docs">Документация</a>
 							</li>
 							<li className="LandingHeader__menu__li">
-								<a href="">FAQ</a>
+								<a href="#faq">FAQ</a>
 							</li>
 							<li className="LandingHeader__menu__li">
-								<a href="">Команда</a>
+								<a href="#team">Команда</a>
 							</li>
 							<li className="LandingHeader__menu__li">
-								<a href="">
+								<a href="/login.html">
 									<img src="images/user.png" />
 									Вход
 								</a>

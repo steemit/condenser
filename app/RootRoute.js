@@ -15,6 +15,7 @@ export default {
                 cb(null, [require('app/components/pages/About')]);
             //});
         // golos.io ICO page
+        // вот бы кто определился с названиями страниц, а то у нас 2 ico
         } else if (route.page === 'Ico') {
             cb(null, [require('app/components/pages/Ico')]);
         // golos.io landing page

@@ -54,22 +54,22 @@ export default class LandingDistribution extends React.Component {
 							{/* {renderList()} */}
 							<li className="Distribution__item">
 								{/* <strong className="Distribution__strong">60%</strong> */}
-								{renderDot('d80a15')}
+								{renderDot('ff1745')}
 								Краудсейл
 							</li>
 							<li className="Distribution__item">
 								{/* <strong className="Distribution__strong">10%</strong> */}
-								{renderDot('f9ca0f')}
+								{renderDot('00e677')}
 								Держателям Steem
 							</li>
 							<li className="Distribution__item">
 								{/* <strong className="Distribution__strong">10%</strong> */}
-								{renderDot('1e193b')}
-								Cyber.Fund
+								{renderDot('2977ff')}
+								cyber•Fund
 							</li>
 							<li className="Distribution__item">
 								{/* <strong className="Distribution__strong">8.98%</strong> */}
-								{renderDot('2e17b8')}
+								{renderDot('000000')}
 								Резерв на развитие
 							</li>
 							<li className="Distribution__item">
@@ -79,12 +79,12 @@ export default class LandingDistribution extends React.Component {
 							</li>
 							<li className="Distribution__item">
 								{/* <strong className="Distribution__strong Distribution__strong_extra-margin">3%</strong> */}
-								{renderDot('7bd915')}
+								{renderDot('307d99')}
 								Делегатам Голоса
 							</li>
 							<li className="Distribution__item">
 								{/* <strong className="Distribution__strong">1.02%</strong> */}
-								{renderDot('7bd915')}
+								{renderDot('f28a35')}
 								Награды авторам и кураторам до конца краудсейла
 							</li>
 						</ul>

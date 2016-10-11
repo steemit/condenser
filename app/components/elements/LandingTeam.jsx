@@ -13,7 +13,7 @@ export default class LandingTeam extends React.Component {
 				</div>
 
 				<div className="row Team__members">
-					<div className="small-6 medium-4 large-3 columns Team__member wow fadeIn" data-wow-delay="1s">
+					<div className="small-6 medium-4 large-3 columns Team__member fadeIn" data-wow-delay="1s">
 						<div className="Team__members__image-wrapper">
 							<img className="Team__member__img" src="https://avatars2.githubusercontent.com/u/410789?v=3&s=400" alt="фотография Димы Стародубцева" />
 						</div>
@@ -21,7 +21,7 @@ export default class LandingTeam extends React.Component {
 						<p>Сооснователь cyber.fund</p>
 						<ul>
 							<li><a href="https://github.com/21xhipster"><img src="images/landing/github_icon.jpg" /></a></li>
-							<li><a href="https://cyber.fund/"><img style={{width:'40px', height:'40px'}} src="https://cyber.fund/images/cybF.svg" /></a></li>
+							<li><a href="https://cyber.fund/"><img style={{width:'33px', height:'33px'}} src="https://cyber.fund/images/cybF.svg" /></a></li>
 						</ul>
 					</div>
 
@@ -32,7 +32,7 @@ export default class LandingTeam extends React.Component {
 						<strong>Валерий Литвин</strong>
 						<p>Блокчейн-разработка</p>
 						<ul>
-							<li><a href="https://cyber.fund/@besson_by"><img style={{width:'40px', height:'40px'}} src="https://cyber.fund/images/cybF.svg" /></a></li>
+							<li><a href="https://cyber.fund/@besson_by"><img style={{width:'33px', height:'33px'}} src="https://cyber.fund/images/cybF.svg" /></a></li>
 							<li><a href="https://www.facebook.com/bessonby"><img className="Team__facebook-logo" src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-facebook-512.png" /></a></li>
 							<li><a href="https://github.com/ValeryLitvin"><img src="images/landing/github_icon.jpg" /></a></li>
 						</ul>
@@ -57,7 +57,7 @@ export default class LandingTeam extends React.Component {
 						<strong>Алексей Фрумин</strong>
 						<p>Моральная поддержка</p>
 						<ul>
-							<li><a href="https://cyber.fund/"><img style={{width:'40px', height:'40px'}} src="https://cyber.fund/images/cybF.svg" /></a></li>
+							<li><a href="https://cyber.fund/"><img style={{width:'33px', height:'33px'}} src="https://cyber.fund/images/cybF.svg" /></a></li>
 							<li><a href="https://github.com/tomarcafe"><img src="images/landing/github_icon.jpg" /></a></li>
 						</ul>
 					</div>
@@ -68,7 +68,7 @@ export default class LandingTeam extends React.Component {
 						<strong>Виталий Львов</strong>
 						<p>Финансы и аудит</p><br/>
 						<ul>
-							<li><a href="https://cyber.fund/"><img style={{width:'40px', height:'40px'}} src="https://cyber.fund/images/cybF.svg" /></a></li>
+							<li><a href="https://cyber.fund/"><img style={{width:'33px', height:'33px'}} src="https://cyber.fund/images/cybF.svg" /></a></li>
 							<li><a href="https://twitter.com/vitalylvov"><img src="images/landing/twitter_icon.jpg" /></a></li>
 							<li><a href="https://github.com/vitalylvov"><img src="images/landing/github_icon.jpg" /></a></li>
 						</ul>
@@ -111,7 +111,7 @@ export default class LandingTeam extends React.Component {
 						</ul>
 					</div>
 				</div>
-
+	<h2 className="Team__header" id="team">Делегаты</h2>
 				<div className="row center Team__partners">
 					<div data-wow-delay="1s" className="wow fadeIn small-6 medium-4 large-3 small-centered medium-centered large-centered columns Team__member">
 						<div className="Team__members__image-wrapper">

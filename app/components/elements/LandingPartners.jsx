@@ -10,6 +10,7 @@ export default class LandingPress extends React.Component {
 					</div>
 				</div>
 				<div className="row Partners__logos">
+					<div className="small-2">&nbsp;</div>
 					{/* <div className="small-6 medium-4 large-2"> */}
 					<div className="small-2">
 						{/* <a href="https://cyber.fund/" target="blank"> */}
@@ -19,7 +20,13 @@ export default class LandingPress extends React.Component {
 
 					<div className="small-2">
 						{/* <a href="https://cyber.fund/" target="blank"> */}
-							<img src="images/landing/kuna.png" alt="Liqui logo" />
+							<img src="images/landing/kuna.png" alt="Kuna logo" />
+						{/* </a> */}
+					</div>
+
+					<div className="small-2">
+						{/* <a href="https://cyber.fund/" target="blank"> */}
+							<img src="https://www.coinessa.com/resources/images/landing/logo.svg" alt="Coinessa logo" />
 						{/* </a> */}
 					</div>
 

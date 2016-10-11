@@ -13,14 +13,12 @@ export default function resolveRoute(path)
     //}
     // golos.io landing page
     if (path === '/ico') {
-        console.log("SPARTA!!!!!")
         return {page: 'Landing'};
     }
     if (path === '/login.html') {
         return {page: 'Login'};
     }
     if (path === '/privacy.html') {
-console.log("OLOLO")
         return {page: 'Privacy'};
     }
     if (path === '/support.html') {

@@ -151,7 +151,17 @@ ul > li > .button {
 
 // golos.io ico special navbar styles
 .landing {
+    a { color: black; }
+    .image-wrapper {
+        a { line-height: 2.1 !important; }
+        img {
+            width: 36px;
+            height: 36px;
+            margin-right: 12px !important;
+        }
+    }
     .show-for-medium a { font-size: 1rem; }
+    // different resollutions
     @media #{$small-only} {
         .toggle-menu { padding: .7rem 1rem !important; }
     }
@@ -160,5 +170,13 @@ ul > li > .button {
     }
     @media #{$large-up} {
         .show-for-medium a { font-size: 1.1rem; }
+    }
+}
+// sidebar vertical styles
+.landing.vertical {
+    .image-wrapper {
+        background-color: white;
+        a { color: black; }
+        span { margin-top: 4px; }
     }
 }

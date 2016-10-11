@@ -16,7 +16,7 @@ const defaultNavigate = (e) => {
     browserHistory.push(a.pathname + a.search + a.hash);
 };
 
-function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpic, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn}) {
+function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpic, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn, location}) {
     const mcn = 'menu' + (vertical ? ' vertical show-for-small-only' : '');
     const mcl = vertical ? '' : ' sub-menu';
     const lcn = vertical ? '' : 'show-for-medium';
@@ -47,7 +47,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
         ];
         const search = translate('search')
 
-        if (/^\/ico$/.test(location.pathname)) {
+        if (process.env.BROWSER && /^\/ico$/.test(window.location.pathname)) {
             return (
                 <ul className={mcn + ' landing'}>
                     <li className={lcn}><a href="#what-is-golos">Видео</a></li>
@@ -77,10 +77,10 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                             <li className={lcn}><a href="#docs">Документация</a></li>
                             <li className={lcn}><a href="#faq">FAQ</a></li>
                             <li className={lcn}><a href="#team">Команда</a></li>
-                            <li className={lcn}>
+                            <li className={lcn + ' image-wrapper'}>
                                 <a href="https://test.golos.io/login.html">
-                                    {/* <img src="images/user.png" /> */}
-                                    Тестовый Вход
+                                    <img src="images/user.png" width="36" height="36" />
+                                    <span>Тестовый Вход</span>
                                 </a>
                             </li>
                             <li className={lcn}><LoadingIndicator type="circle" inline /></li>
@@ -119,16 +119,16 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
         );
     }
     if (probablyLoggedIn) {
-        if (/^\/ico$/.test(location.pathname)) {
+        if (process.env.BROWSER && /^\/ico$/.test(window.location.pathname)) {
             return      <ul className={mcn + mcl + ' landing'}>
                             <li className={lcn}><a href="#what-is-golos">Видео</a></li>
                             <li className={lcn}><a href="#docs">Документация</a></li>
                             <li className={lcn}><a href="#faq">FAQ</a></li>
                             <li className={lcn}><a href="#team">Команда</a></li>
-                            <li className={lcn}>
+                            <li className={lcn + ' image-wrapper'}>
                                 <a href="https://test.golos.io/login.html">
-                                    {/* <img src="images/user.png" /> */}
-                                    Тестовый Вход
+                                    <img src="images/user.png" width="36" height="36" />
+                                    <span>Тестовый Вход</span>
                                 </a>
                             </li>
                             <li className={lcn}><LoadingIndicator type="circle" inline /></li>
@@ -148,27 +148,17 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
             </ul>
         );
     }
-    // <li className={lcn}><a href="#what-is-golos">Видео</a></li>
-    // <li className={lcn}><a href="#docs">Документация</a></li>
-    // <li className={lcn}><a href="#faq">FAQ</a></li>
-    // <li className={lcn}><a href="#team">Команда</a></li>
-    // <li className={lcn}>
-    //     <a href="https://test.golos.io/login.html">
-    //         <img src="images/user.png" />
-    //         Тестовый Вход
-    //     </a>
-    // </li>
 
-    if (/^\/ico$/.test(location.pathname)) {
+    if (process.env.BROWSER && /^\/ico$/.test(window.location.pathname)) {
         return  <ul className={mcn + mcl + ' landing'}>
                     <li className={lcn}><a href="#what-is-golos">Видео</a></li>
                     <li className={lcn}><a href="#docs">Документация</a></li>
                     <li className={lcn}><a href="#faq">FAQ</a></li>
                     <li className={lcn}><a href="#team">Команда</a></li>
-                    <li className={lcn}>
-                        <a className={lcn} href="https://test.golos.io/login.html">
-                            {/* <img src="images/user.png" width="36" height="36" /> */}
-                            Тестовый Вход
+                    <li className={lcn + ' image-wrapper'}>
+                        <a href="https://test.golos.io/login.html">
+                            <img src="images/user.png" width="36" height="36" />
+                            <span>Тестовый Вход</span>
                         </a>
                     </li>
                     {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>

@@ -11,19 +11,22 @@ export default class LandingPress extends React.Component {
 					</div>
 				</div>
 				<div className="row Partners__logos">
-					<div className="small-2">&nbsp;</div>
-					{/* <div className="small-6 medium-4 large-2"> */}
-					<div className="small-12 medium-5">
-						<a href="https://liqui.io/" target="blank">
-							<img src="images/landing/liqui.png" alt="логотип Liqui" />
+					<div className="small-6 medium-3">
+						<a href="http://satoshi.fund/" target="blank">
+							<img src="images/landing/satoshi_fund.png" alt="логотип satoshi.fund" />
 						</a>
 					</div>
-					<div className="small-12 medium-2">
+					<div className="small-6 medium-3">
+						<a href="https://liqui.io/" target="blank">
+							<img className="Partners__liqui-logo" src="images/landing/liqui.png" alt="логотип Liqui" />
+						</a>
+					</div>
+					<div className="small-6 medium-3">
 						<a href="http://kuna.com.ua/" target="blank">
 							<img src="images/landing/kuna.png" alt="логотип Bitup" />
 						</a>
 					</div>
-					<div className="small-12 medium-5">
+					<div className="small-6 medium-3">
 						<a href="https://www.coinessa.com/" target="blank">
 							<img className="Partners__coinessa-logo" src="images/landing/coinessa.svg" alt="логотип Coinessa" />
 						</a>

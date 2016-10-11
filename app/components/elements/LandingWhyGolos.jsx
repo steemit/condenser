@@ -17,19 +17,19 @@ export default class LandingWhyGolos extends React.Component {
 					</div>
 				</div>
 				<div className="row WhyGolos__reasons">
-					<div className="small-12 medium-6 large-3 columns">
+					<div className="small-12 medium-6 large-3 columns WhyGolos__reason">
 						<strong>Предприниматели</strong>
 						<p>Золотой работает везде где требуется стабильная валюта</p>
 					</div>
-					<div className="small-12 medium-6 large-3 columns">
+					<div className="small-12 medium-6 large-3 columns WhyGolos__reason">
 						<strong>Создатели контента</strong>
 						<p>Получите оценку и признание качества вашего труда аудиторией</p>
 					</div>
-					<div className="small-12 medium-6 large-3 columns">
+					<div className="small-12 medium-6 large-3 columns WhyGolos__reason">
 						<strong>Читатели</strong>
 						<p>Читайте лучший контент. Получайте Силу Голоса за его отбор</p>
 					</div>
-					<div className="small-12 medium-6 large-3 columns">
+					<div className="small-12 medium-6 large-3 columns WhyGolos__reason">
 						<strong>Социальные медиа</strong>
 						<p>Интегрируйтесь с Голосом. Зарабатывайте на Вашем сайте</p>
 					</div>

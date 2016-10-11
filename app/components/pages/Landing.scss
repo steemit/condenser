@@ -472,7 +472,10 @@
 	}
 	.Partners__skolkovo-logo { transform: translateY(-17%); }
 	.Partners__forklog-logo { transform: translateY(0%); }
-	.Partners__tolkachev-logo { transform: translateY(5%); }
+	.Partners__tolkachev-logo {
+		transform: translateY(5%);
+		img { max-height: 65px; }
+	}
 	@media #{$small-up} {
 		.Partners__coinessa-logo { transform: translateY(50%); }
 	}

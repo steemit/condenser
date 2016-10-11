@@ -137,6 +137,8 @@ class UserWallet extends React.Component {
         const steem_balance_str = numberWithCommas(balance_steem.toFixed(3)) // formatDecimal(balance_steem, 3)
         const power_balance_str = numberWithCommas(vesting_steem) // formatDecimal(vesting_steem, 3)
         const sbd_balance_str = numberWithCommas('$' + sbd_balance.toFixed(3)) // formatDecimal(account.sbd_balance, 3)
+        const savings_balance_str = numberWithCommas('$' + saving_balance_steem.toFixed(3))
+        const savings_sbd_balance_str = numberWithCommas('$' + sbd_balance_savings.toFixed(3))
 
         const savings_menu = [
             { value: 'Withdraw Steem', link: '#', onClick: showTransfer.bind( this, 'STEEM', 'Savings Withdraw' ) },
@@ -191,12 +193,12 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
-                    <FoundationDropdownMenu dropdownPosition="bottom" dropdownAlignment="right" label={savings_balance} menu={savings_menu} />
-                    : savings_balance}
+                    <FoundationDropdownMenu dropdownPosition="bottom" dropdownAlignment="right" label={savings_balance_str} menu={savings_menu} />
+                    : savings_balance_str}
                     <br />
                     {isMyAccount ?
-                    <FoundationDropdownMenu dropdownPosition="bottom" dropdownAlignment="right" label={savings_sbd_balance} menu={savings_sbd_menu} />
-                    : savings_sbd_balance}
+                    <FoundationDropdownMenu dropdownPosition="bottom" dropdownAlignment="right" label={savings_sbd_balance_str} menu={savings_sbd_menu} />
+                    : savings_sbd_balance_str}
                 </div>
             </div>
             <div className="row">

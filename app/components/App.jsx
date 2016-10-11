@@ -235,6 +235,27 @@ class App extends React.Component {
           </SidePanel>
           <Header toggleOffCanvasMenu={this.toggleOffCanvasMenu} menuOpen={this.state.open} /></div>);
         }
+        else {
+            header_bar = (
+            <div>
+
+            <SidePanel ref="side_panel" alignment="right">
+                <TopRightMenu vertical navigate={this.navigate} />
+                <ul className="vertical menu">
+                    <li><a href="#what-is-golos">Видео</a></li>
+                    <li><a href="#docs">Документация</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                    <li><a href="#team">Команда</a></li>
+                    <li>
+                        <a href="https://test.golos.io/login.html">
+                            {/* <img src="images/user.png" /> */}
+                            Тестовый Вход
+                        </a>
+                    </li>
+                </ul>
+            </SidePanel>
+            <Header toggleOffCanvasMenu={this.toggleOffCanvasMenu} menuOpen={this.state.open} /></div>);
+        }
 
         return <div className={'App' + (lp ? ' LP' : '') + (ip ? ' index-page' : '')} onMouseMove={this.onEntropyEvent}>
                 {header_bar}

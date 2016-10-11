@@ -26,9 +26,9 @@ export default class LandingHeader extends React.Component {
 								<a href="#team">Команда</a>
 							</li>
 							<li className="LandingHeader__menu__li">
-								<a href="/login.html">
+								<a href="https://test.golos.io/login.html">
 									<img src="images/user.png" />
-									Вход
+									Тестовый Вход
 								</a>
 							</li>
 						</ul>

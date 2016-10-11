@@ -7,14 +7,14 @@ export default class LandingHeader extends React.Component {
 			<section className="LandingHeader">
 				<div className="row">
 					<div className="small-2 columns">
-						<a href="/landing.html" className="LandingHeader__logo">
+						<a href="/ico" className="LandingHeader__logo">
 							<img src="images/landing/golos.png" />
 						</a>
 					</div>
 					<div className="small-10 columns">
 						<ul className="LandingHeader__menu">
 							<li className="LandingHeader__menu__li">
-								<a href="http://localhost:3002/landing.html">Видео</a>
+								<a href="/ico">Видео</a>
 							</li>
 							<li className="LandingHeader__menu__li">
 								<a href="#docs">Документация</a>

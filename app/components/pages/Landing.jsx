@@ -43,36 +43,35 @@ class Landing extends React.Component {
     render() {
         // if crodwsale hasn't started yet render countdown til crodwsale start
         // if (crowdsaleStartAt > Date.now()) return <CountDowns prefill crowdsaleStartAt={crowdsaleStartAt} blockchainStartAt={blockchainStartAt} />
-		const prefill = crowdsaleStartAt > Date.now()
-
+				const prefill = crowdsaleStartAt > Date.now()
         return (
             <div className="Landing text-center">
-				<Header />
-				<CountDowns
-					prefill={prefill}
-					crowdsaleStartAt={crowdsaleStartAt}
-					blockchainStartAt={blockchainStartAt}
-					crowdsaleEndAt={crowdsaleEndAt}
-					button={buyGolosButton}
-				/>
-                <Distribution />
-                <WhatIsGolos />
-                <JoinUs />
-                <Documentation />
-                <WhoWeAre />
-                <BlockchainRevolution />
-                <Faq />
-                <Team />
-                <WhyGolos />
-				<Partners />
-                <Press button={buyGolosButton} />
-                <Footer />
+							<Header />
+							<CountDowns
+								prefill={prefill}
+								crowdsaleStartAt={crowdsaleStartAt}
+								blockchainStartAt={blockchainStartAt}
+								crowdsaleEndAt={crowdsaleEndAt}
+								button={buyGolosButton}
+							/>
+              <WhatIsGolos />
+							<WhyGolos />
+              <JoinUs />
+            	<BlockchainRevolution />
+							<Documentation />
+							<Faq />
+							<Distribution />
+							<WhoWeAre />
+							<Team />
+							<Partners />
+              <Press button={buyGolosButton} />
+              <Footer />
             </div>
         )
     }
 }
 
 module.exports = {
-    path: 'landing.html',
+    path: 'ico',
     component: Landing
 };

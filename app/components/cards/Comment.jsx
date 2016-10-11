@@ -86,7 +86,7 @@ class CommentImpl extends React.Component {
         // html props
         global: React.PropTypes.object.isRequired,
         content: React.PropTypes.string.isRequired,
-        sort_order: React.PropTypes.oneOf(['active', 'update', 'created', 'trending']).isRequired,
+        sort_order: React.PropTypes.oneOf(['active', 'updated', 'created', 'trending']).isRequired,
         root: React.PropTypes.bool,
         showNegativeComments: React.PropTypes.bool,
         onHide: React.PropTypes.func,

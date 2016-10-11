@@ -17,7 +17,7 @@ export default class LandingTeam extends React.Component {
 						<div className="Team__members__image-wrapper">
 							<img className="Team__member__img" src="https://avatars2.githubusercontent.com/u/410789?v=3&s=400" alt="фотография Димы Стародубцева" />
 						</div>
-						<strong>Дмитрий Стародубцев</strong>
+						<strong>Дима Стародубцев</strong>
 						<p>Экономика</p>
 						<ul>
 							<li><a href="https://github.com/21xhipster"><img src="images/landing/github_icon.jpg" /></a></li>

@@ -19,7 +19,7 @@ export default class LandingPress extends React.Component {
 						</a>
 					</div>
 					<div className="small-12 medium-2">
-						<a href="https://bitup.io/" target="blank">
+						<a href="http://kuna.com.ua/" target="blank">
 							<img src="images/landing/kuna.png" alt="логотип Bitup" />
 						</a>
 					</div>

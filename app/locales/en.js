@@ -513,7 +513,9 @@ const en = 	{
 	requires_5_or_more_reddit_comment_karma: 'requires 5 or more Reddit comment karma',
 	this_post_was_hidden_due_to_low_ratings: 'This post was hidden due to low ratings',
 	reblogged_by: 'Resteemed by',
-	reblog: "Resteem"
+	reblog: "Resteem",
+	updated: 'updated',
+	created: 'created'
 }
 
 export { en }

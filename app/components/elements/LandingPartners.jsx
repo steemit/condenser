@@ -6,7 +6,7 @@ export default class LandingPress extends React.Component {
 			<section className="Partners">
 				<div className="row text-center">
 					<div className="small-12 columns">
-						<h2>Партнеры</h2>
+						<h2 id="partners">Партнеры</h2>
 					</div>
 				</div>
 				<div className="row Partners__logos">

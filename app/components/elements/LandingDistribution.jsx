@@ -39,7 +39,7 @@ export default class LandingDistribution extends React.Component {
 			<section className="Distribution" id="pie">
 				<div className="row text-center Distribution__headers">
 					<div className="small-12 columns">
-						<h2 className="Landing__h2_blue">Распределение Силы Голоса</h2>
+						<h2 className="Landing__h2_blue" id="distribution">Распределение Силы Голоса</h2>
 						<span className="Distribution__supporting-text">Сила Голоса позволяет оценивать опубликованный контент</span>
 					</div>
 				</div>

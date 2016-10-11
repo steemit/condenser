@@ -5,8 +5,28 @@
 }
 
 .SlateEditor.Markdown {
-  a {border-bottom: 1px dotted #00f;}
-  img.active {box-shadow: 0 0 0 2px blue;}
+  a {
+    border-bottom: 1px dotted #00f;
+    position: relative;
+  }
+  .active {
+    box-shadow: 0 0 0 2px blue;
+  }
+
+  a:hover:after{
+      border: 1px solid #ccc;
+      padding: 1px 3px;
+      background: #eee;
+      content: attr(href);
+      display: block;
+      position: absolute;
+      left: 0;
+      top: 110%;
+      line-height: 1;
+      white-space: nowrap;
+      font-size: 70%;
+      z-index: 99999;
+  }
 }
 
 .SlateEditor > * > * + * {
@@ -25,12 +45,13 @@
   font-family: 'Georgia', serif;
   color: #FFF;
   cursor: pointer;
+  display: inline-block;
+  width: 2rem;
+  height: 1.75rem;
+  text-align: center;
+  background: rgba(0,0,0,0.1);
+  border-radius: 2px;
   > span {
-    display: inline-block;
-    width: 2rem;
-    text-align: center;
-    background: rgba(0,0,0,0.1);
-    border-radius: 2px;
     code {
       border: none;
       background: transparent;
@@ -39,27 +60,39 @@
       font-size: 90%;
       vertical-align: top;
     }
+    path {fill: white}
   }
 }
 
 .SlateEditor__menu-button[data-active="false"]:hover,
 .SlateEditor__menu-button[data-active="true"] {
+  color: #32cd32;
+  background: rgba(0,0,0,0.5);
   > span {
-    color: #32cd32;
-    background: rgba(0,0,0,0.5);
+    path {fill: #32cd32;}
   }
 }
 
-/*
-.toolbar-menu {
-  padding: 1px 0 17px 18px;
-  margin: 0 -20px;
-  border-bottom: 2px solid #eee;
-  margin-bottom: 20px;
+.SlateEditor__menu-button-sup span,
+.SlateEditor__menu-button-sub span {
+  font-family: Arial;
+  font-size: 90%;
+  vertical-align: 4%;
 }
-*/
 
-.SlateEditor__hover-menu {
+.SlateEditor__menu-button-link {
+  .Icon > svg, .Icon {width: 1rem; height: 1rem;}
+}
+
+.SlateEditor__menu-button-block-quote {
+  span {
+    font-size: 140%;
+    vertical-align: -25%;
+    line-height: 1;
+  }
+}
+
+.SlateEditor__menu {
   font-size: 110%;
   padding: 1px;
   position: absolute;
@@ -74,7 +107,7 @@
   background-image: linear-gradient(180deg,#464646,#151515);
 }
 
-.SlateEditor__hover-menu:after {
+.SlateEditor__menu:after {
     top: 100%;
     left: 50%;
     border: solid transparent;

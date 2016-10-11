@@ -113,7 +113,7 @@
     "sendgrid": "^4.0.1",
     "sequelize": "^3.21.0",
     "sequelize-cli": "^2.3.1",
-    "slate": "^0.14.13",
+    "slate": "^0.14.15",
     "slate-drop-or-paste-images": "^0.2.0",
     "slate-insert-block-on-enter": "0.0.1",
     "speakingurl": "^9.0.0",

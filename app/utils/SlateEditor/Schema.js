@@ -1,5 +1,7 @@
 import React from 'react'
+import Link from 'app/utils/SlateEditor/Link'
 import Image from 'app/utils/SlateEditor/Image'
+import HRule from 'app/utils/SlateEditor/HRule'
 
 
 const $ = require('cheerio');
@@ -24,7 +26,7 @@ const BLOCK_TAGS = {
     h4:         'heading-four',
     ul:         'bulleted-list',
     ol:         'numbered-list',
-    li:         'bulleted-list-item',
+    li:         'list-item',
     hr:         'hr',
 }
 
@@ -47,12 +49,12 @@ export const HtmlRules = [
     // Block rules
     {
         deserialize: (el, next) => {
-            let type = BLOCK_TAGS[el.tagName]
+            const type = BLOCK_TAGS[el.tagName]
             if (!type) return
-            if(type == 'bulleted-list-item' && el.parent.name == 'ol') type = 'numbered-list-item'
             return {
                 kind: 'block',
                 type: type,
+                isVoid: (type == 'hr'),
                 nodes: next(el.children)
             }
         },
@@ -68,8 +70,8 @@ export const HtmlRules = [
                 case 'heading-four':       return <h4>{children}</h4>
                 case 'bulleted-list':      return <ul>{children}</ul>
                 case 'numbered-list':      return <ol>{children}</ol>
-                case 'bulleted-list-item': return <li>{children}</li>
-                case 'numbered-list-item': return <li>{children}</li>
+                case 'list-item':          return <li>{children}</li>
+                case 'hr':                 return <hr />
             }
         }
     },
@@ -102,56 +104,45 @@ export const HtmlRules = [
     // Custom
     {
         deserialize: (el, next) => {
-            if (el.tagName == 'iframe') {
-                return {
-                    kind: 'block',
-                    type: 'paragraph',
-                    nodes: next(el.children)
-                }
-            }
-            if (el.tagName == 'hr') {
-                return {
-                    kind: 'block',
-                    type: 'hr',
-                    isVoid: true,
-                    nodes: next(el.children)
-                }
-            }
-            if (el.tagName == 'img') {
-                return {
-                    kind: 'block',
-                    type: 'image',
-                    isVoid: true,
-                    data: {src: el.attribs.src},
-                    nodes: next(el.children)
-                }
-            }
-            if (el.tagName == 'a') {
-                const {href} = el.attribs
-                if(!href) console.log("** ERR: deserialized <a> with no href")
-                return {
-                    kind: 'block',
-                    type: 'link',
-                    data: {href: href},
-                    nodes: next(el.children)
-                }
-            }
-            if (el.tagName == 'br') {
-                return {
-                    "kind": "text",
-                    "ranges": [{"text": "\n"}]
-                }
-            }
-            if (el.tagName == 'code') {
-                if(! $(el).closest('pre')) {
-                  return {
-                      kind: 'mark',
-                      type: 'code',
-                      nodes: next(el.children)
-                  }
-                } else {
-                  console.log("** skipping <code> within a <pre>")
-                }
+            switch(el.tagName) {
+                case 'iframe':
+                    return {
+                        kind: 'block',
+                        type: 'paragraph',
+                        nodes: next(el.children)
+                    }
+                case 'img':
+                    return {
+                        kind: 'block',
+                        type: 'image',
+                        isVoid: true,
+                        data: {src: el.attribs.src},
+                        nodes: next(el.children)
+                    }
+                case 'a':
+                    const {href} = el.attribs
+                    if(!href) console.log("** ERR: deserialized <a> with no href")
+                    return {
+                        kind: 'inline',
+                        type: 'link',
+                        data: {href: href},
+                        nodes: next(el.children)
+                    }
+                case 'br':
+                    return {
+                        "kind": "text",
+                        "ranges": [{"text": "\n"}]
+                    }
+                case 'code':
+                    if(! $(el).closest('pre')) {
+                      return {
+                          kind: 'mark',
+                          type: 'code',
+                          nodes: next(el.children)
+                      }
+                    } else {
+                      console.log("** skipping <code> within a <pre>")
+                    }
             }
 
             if(el.type == 'text') return
@@ -160,22 +151,14 @@ export const HtmlRules = [
         },
         serialize: (object, children) => {
             if(object.kind == 'string') return;
-            if(object.kind == 'block' && object.type == 'hr') {
-                return <hr />
-            }
-            if(object.kind == 'block' && object.type == 'link') {
+            if(object.kind == 'inline' && object.type == 'link') {
                 const href = object.data.get('href')
                 if(!href) console.log("** ERR: serializing <a> with no href", JSON.stringify(object.data, null, 2))
                 return <a href={href}>{children}</a>
             }
             if(object.kind == 'block' && object.type == 'image') {
-                const data = object.data
-                const src = data.get('src')
-                if(!src) {
-                  console.log("** ERR: serializing image with no src...")
-                  console.log("Serializing image.... data:",   JSON.stringify(data))
-                  console.log("Serializing image.... object:", JSON.stringify(object))
-                }
+                const src = object.data.get('src')
+                if(!src) console.log("** ERR: serializing image with no src...", JSON.stringify(object))
                 return <img src={src} />
             }
             console.log("No serializer for: ", object.kind, JSON.stringify(object, null, 2), children)
@@ -187,9 +170,9 @@ export const schema = {
     defaultNode: 'paragraph',
     toolbarMarks: [
         { type: 'bold',      label: <strong>B</strong> },
-        { type: 'italic',    label: <i>I</i> },
-        { type: 'underline', label: <u>U</u> },
-        { type: 'strike',    label: <del>S</del> },
+        { type: 'italic',    label: <i>i</i> },
+        //{ type: 'underline', label: <u>U</u> },
+        //{ type: 'strike',    label: <del>S</del> },
         { type: 'code',      label: <code>{'{}'}</code> },
         { type: 'sup',       label: <span>x<sup>2</sup></span> },
         { type: 'sub',       label: <span>x<sub>2</sub></span> },
@@ -220,15 +203,10 @@ export const schema = {
         'heading-two':   ({ children }) => <h2>{children}</h2>,
         'heading-three': ({ children }) => <h3>{children}</h3>,
         'heading-four':  ({ children }) => <h4>{children}</h4>,
-        'bulleted-list-item': ({ children }) => <li>{children}</li>,
-        'numbered-list-item': ({ children }) => <li>{children}</li>,
-        'hr':                 ({ children }) => <hr />,
+        'list-item':     ({ children }) => <li>{children}</li>,
+        'hr':    HRule,
         'image': Image,
-        'link':  (props) => {
-            const { data } = props.node
-            const href = data.get('href')
-            return <a {...props.attributes} href={href}>{props.children}</a>
-        },
+        'link':  Link,
     },
 
     marks: {
@@ -244,15 +222,15 @@ export const schema = {
 
 export const getMarkdownType = (chars) => {
     switch (chars) {
+        case '1.':
         case '*':
-        case '-':    return 'bulleted-list-item';
+        case '-':    return 'list-item';
         case '>':    return 'block-quote';
         case '#':    return 'heading-one';
         case '##':   return 'heading-two';
         case '###':  return 'heading-three';
         case '####': return 'heading-four';
-        case '1.':   return 'numbered-list-item';
-        case '    ': return 'code-block';
+        case '   ':  return 'code-block';
         case '---':  return 'hr';
         default: return null;
     }

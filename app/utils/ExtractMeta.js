@@ -1,21 +1,20 @@
 import extractContent from 'app/utils/ExtractContent';
 import {objAccessor} from 'app/utils/Accessors';
-
-const site_desc = 'Steemit is a social media platform where everyone gets paid for creating and curating content. It leverages a robust digital points system, called Steem, that supports real value for digital rewards through market price discovery and liquidity'; //TODO
+import { SITE_DESCRIPTION } from 'config/client_config';
 
 function addSiteMeta(metas) {
     metas.push({title: 'Голос'});
     metas.push({property: 'og:type', content: 'website'});
     metas.push({property: 'og:site_name', content: 'Голос'});
     metas.push({property: 'og:title', content: 'Голос'});
-    metas.push({property: 'og:description', content: site_desc});
-    metas.push({property: 'og:image', content: 'https://steemit.com/images/steemit-share.png'});
+    metas.push({property: 'og:description', content: SITE_DESCRIPTION});
+    metas.push({property: 'og:image', content: 'https://test.golos.io/images/golos-share.png'});
     metas.push({property: 'fb:app_id', content: $STM_Config.fb_app});
     metas.push({name: 'twitter:card', content: 'summary'});
-    metas.push({name: 'twitter:site', content: '@steemit'}); //TODO
+    metas.push({name: 'twitter:site', content: '@goloschain'}); //TODO
     metas.push({name: 'twitter:title', content: 'Голос'});
-    metas.push({name: 'twitter:description', site_desc});
-    metas.push({name: 'twitter:image', content: 'https://steemit.com/images/steemit-share.png'});
+    metas.push({name: 'twitter:description', site_desc: SITE_DESCRIPTION});
+    metas.push({name: 'twitter:image', content: 'https://test.golos.io/images/golos-share.png'});
 }
 
 export default function extractMeta(chain_data, rp) {
@@ -27,8 +26,8 @@ export default function extractMeta(chain_data, rp) {
             const d = extractContent(objAccessor, content, false);
             const url = 'https://test.golos.io' + d.link;
             const title = d.title + ' — Голос';
-            const image = d.image_link ? d.image_link : 'https://steemit.com/images/steemit-share.png';
-            const twimage = d.image_link ? d.image_link : 'https://steemit.com/images/steemit-twshare.png';
+            const image = d.image_link ? d.image_link : 'https://test.golos.io/images/golos-share.png';
+            const twimage = d.image_link ? d.image_link : 'https://test.golos.io/images/golos-twshare.png';
             metas.push({title});
             metas.push({canonical: url});
             metas.push({name: 'description', content: d.desc});
@@ -40,7 +39,7 @@ export default function extractMeta(chain_data, rp) {
             metas.push({property: 'og:image', content: image});
             metas.push({property: 'fb:app_id', content: $STM_Config.fb_app});
             metas.push({name: 'twitter:card', content: 'summary'});
-            metas.push({name: 'twitter:site', content: '@steemit'});
+            metas.push({name: 'twitter:site', content: '@goloschain'});
             metas.push({name: 'twitter:title', content: title});
             metas.push({name: 'twitter:description', content: d.desc});
             metas.push({name: 'twitter:image', content: twimage});

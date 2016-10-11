@@ -27,7 +27,7 @@ export default class LandingWhyGolos extends React.Component {
 					</div>
 					<div className="small-12 medium-6 large-3 columns">
 						<strong>Читатели</strong>
-						<p>Читайте лучший контент. Получайте Силу Голоса за их отбор</p>
+						<p>Читайте лучший контент. Получайте Силу Голоса за его отбор</p>
 					</div>
 					<div className="small-12 medium-6 large-3 columns">
 						<strong>Социальные медиа</strong>

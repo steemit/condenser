@@ -99,6 +99,18 @@ class Header extends React.Component {
         } else if (route.page === 'Post') {
             sort_order = '';
             topic = route.params[0];
+        } else if (route.page == 'SubmitPost') {
+            page_title = `Create a Post`;
+        } else if (route.page == 'Privacy') {
+            page_title = `Privacy Policy`;
+        } else if (route.page == 'Tos') {
+            page_title = `Terms of Service`;
+        } else if (route.page == 'ChangePassword') {
+            page_title = `Change Account Password`;
+        } else if (route.page == 'CreateAccount') {
+            page_title = `Create Account`;
+        } else if (route.page == 'RecoverAccountStep1' || route.page == 'RecoverAccountStep2') {
+            page_title = `Stolen Account Recovery`;
         } else if (route.page === 'UserProfile') {
             user_name = route.params[0].slice(1);
             page_title = user_name;

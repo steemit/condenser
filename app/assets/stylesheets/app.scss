@@ -37,6 +37,10 @@ a, path, circle {
   clear: right;
 }
 
+.clear-left {
+  clear: left;
+}
+
 .clear-both {
   clear: both;
 }
@@ -104,6 +108,7 @@ label {
 
 @media print {
   .noPrint {
-    display:none;
+    display: none;
   }
 }
+

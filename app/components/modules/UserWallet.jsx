@@ -2,15 +2,16 @@
 import React from 'react';
 import {connect} from 'react-redux'
 import g from 'app/redux/GlobalReducer'
+import SavingsWithdrawHistory from 'app/components/elements/SavingsWithdrawHistory';
 import TransferHistoryRow from 'app/components/cards/TransferHistoryRow';
 import TransactionError from 'app/components/elements/TransactionError';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
-import DropdownMenu from 'app/components/elements/DropdownMenu';
 import BlocktradesDeposit from 'app/components/modules/BlocktradesDeposit';
 import Reveal from 'react-foundation-components/lib/global/reveal'
 import CloseButton from 'react-foundation-components/lib/global/close-button';
-import {steemTip, powerTip, dollarTip, valueTip} from 'app/utils/Tips'
+import {steemTip, powerTip, dollarTip, valueTip, savingsTip} from 'app/utils/Tips'
 import {numberWithCommas, vestingSteem} from 'app/utils/StateFunctions'
+import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu'
 
 class UserWallet extends React.Component {
     constructor() {
@@ -29,7 +30,7 @@ class UserWallet extends React.Component {
     }
     render() {
         const {state: {showDeposit, depositType, toggleDivestError}, onShowDeposit, onShowDepositSteem, onShowDepositPower} = this
-        const {convertToSteem, price_per_steem} = this.props
+        const {convertToSteem, price_per_steem, savings_withdraws} = this.props
         let account          = this.props.account;
         let current_user     = this.props.current_user;
         let gprops           = this.props.global.getIn( ['props'] ).toJS();
@@ -42,14 +43,15 @@ class UserWallet extends React.Component {
         const disabledWarning = false;
         // isMyAccount = false; // false to hide wallet transactions
 
-        const showTransfer = (asset, e) => {
+        const showTransfer = (asset, transferType, e) => {
             e.preventDefault();
-            if (!current_user) {
-                this.props.login();
-                return;
-            }
-            this.props.showTransfer({to: (isMyAccount ? null : account.name), asset});
+            this.props.showTransfer({
+                to: (isMyAccount ? null : account.name),
+                asset, transferType
+            });
         };
+
+        const {savings_balance, savings_sbd_balance} = account
 
         const powerDown = (cancel, e) => {
             e.preventDefault()
@@ -61,15 +63,29 @@ class UserWallet extends React.Component {
             this.props.withdrawVesting({account: name, vesting_shares, errorCallback, successCallback})
         }
 
+        let savings_pending = 0, savings_sbd_pending = 0
+        if(savings_withdraws) {
+            savings_withdraws.forEach(withdraw => {
+                const [amount, asset] = withdraw.get('amount').split(' ')
+                if(asset === 'STEEM')
+                    savings_pending += parseFloat(amount)
+                else {
+                    if(asset === 'SBD')
+                        savings_sbd_pending += parseFloat(amount)
+                }
+            })
+        }
 
-        /// vests + steem balance
-        let balance_steem = parseFloat(account.balance.split(' ')[0]);
-        let total_steem   = (vesting_steemf + balance_steem).toFixed(3);
-        let divesting = parseFloat(account.vesting_withdraw_rate.split(' ')[0]) > 0.000000;
+        const balance_steem = parseFloat(account.balance.split(' ')[0]);
+        const saving_balance_steem = parseFloat(savings_balance.split(' ')[0]);
+        const total_steem = (vesting_steemf + balance_steem + saving_balance_steem + savings_pending).toFixed(3);
+        const divesting = parseFloat(account.vesting_withdraw_rate.split(' ')[0]) > 0.000000;
         const sbd_balance = parseFloat(account.sbd_balance)
+        const sbd_balance_savings = parseFloat(savings_sbd_balance.split(' ')[0]);
+        const total_sbd = sbd_balance + sbd_balance_savings + savings_sbd_pending
 
         let total_value = '$' + numberWithCommas(
-            (((vesting_steemf + balance_steem) * price_per_steem) + sbd_balance
+            ((total_steem * price_per_steem) + total_sbd
         ).toFixed(2))
 
         /// transfer log
@@ -88,8 +104,9 @@ class UserWallet extends React.Component {
         transfer_log.reverse();
 
         let steem_menu = [
-            { value: 'Transfer', link: '#', onClick: showTransfer.bind( this, 'STEEM' ) },
-            { value: 'Power Up', link: '#', onClick: showTransfer.bind( this, 'VESTS' ) },
+            { value: 'Transfer', link: '#', onClick: showTransfer.bind( this, 'STEEM', 'Transfer to Account' ) },
+            { value: 'Transfer to Savings', link: '#', onClick: showTransfer.bind( this, 'STEEM', 'Transfer to Savings' ) },
+            { value: 'Power Up', link: '#', onClick: showTransfer.bind( this, 'VESTS', 'Transfer to Account' ) },
         ]
         let power_menu = [
             { value: 'Power Down', link: '#', onClick: powerDown.bind(this, false) }
@@ -104,7 +121,8 @@ class UserWallet extends React.Component {
         }
 
         let dollar_menu = [
-            { value: 'Transfer', link: '#', onClick: showTransfer.bind( this, 'SBD' ) },
+            { value: 'Transfer', link: '#', onClick: showTransfer.bind( this, 'SBD', 'Transfer to Account' ) },
+            { value: 'Transfer to Savings', link: '#', onClick: showTransfer.bind( this, 'SBD', 'Transfer to Savings' ) },
             { value: 'Buy or Sell', link: '/market' },
             { value: 'Convert to STEEM', link: '#', onClick: convertToSteem },
         ]
@@ -119,6 +137,14 @@ class UserWallet extends React.Component {
         const steem_balance_str = numberWithCommas(balance_steem.toFixed(3)) // formatDecimal(balance_steem, 3)
         const power_balance_str = numberWithCommas(vesting_steem) // formatDecimal(vesting_steem, 3)
         const sbd_balance_str = numberWithCommas('$' + sbd_balance.toFixed(3)) // formatDecimal(account.sbd_balance, 3)
+
+        const savings_menu = [
+            { value: 'Withdraw Steem', link: '#', onClick: showTransfer.bind( this, 'STEEM', 'Savings Withdraw' ) },
+        ]
+        const savings_sbd_menu = [
+            { value: 'Withdraw Steem Dollars', link: '#', onClick: showTransfer.bind( this, 'SBD', 'Savings Withdraw' ) },
+        ]
+
         return (<div className="UserWallet">
             <div className="row">
                 <div className="column small-12 medium-8">
@@ -135,7 +161,7 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
-                    <DropdownMenu selected={steem_balance_str + ' STEEM'} className="Header__sort-order-menu" items={steem_menu} el="span" />
+                    <FoundationDropdownMenu dropdownPosition="bottom" dropdownAlignment="right" label={steem_balance_str + ' STEEM'} menu={steem_menu} />
                     : steem_balance_str + ' STEEM'}
                 </div>
             </div>
@@ -145,7 +171,7 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
-                    <DropdownMenu selected={power_balance_str + ' STEEM'} className="Header__sort-order-menu" items={power_menu} el="span" />
+                    <FoundationDropdownMenu dropdownPosition="bottom" dropdownAlignment="right" label={power_balance_str + ' STEEM'} menu={power_menu} />
                     : power_balance_str + ' STEEM'}
                 </div>
             </div>
@@ -155,8 +181,22 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
-                    <DropdownMenu selected={sbd_balance_str} items={dollar_menu} el="span" />
+                    <FoundationDropdownMenu dropdownPosition="bottom" dropdownAlignment="right" label={sbd_balance_str} menu={dollar_menu} />
                     : sbd_balance_str}
+                </div>
+            </div>
+            <div className="UserWallet__balance row">
+                <div className="column small-12 medium-8">
+                    SAVINGS<br /><span className="secondary">{savingsTip}</span>
+                </div>
+                <div className="column small-12 medium-4">
+                    {isMyAccount ?
+                    <FoundationDropdownMenu dropdownPosition="bottom" dropdownAlignment="right" label={savings_balance} menu={savings_menu} />
+                    : savings_balance}
+                    <br />
+                    {isMyAccount ?
+                    <FoundationDropdownMenu dropdownPosition="bottom" dropdownAlignment="right" label={savings_sbd_balance} menu={savings_sbd_menu} />
+                    : savings_sbd_balance}
                 </div>
             </div>
             <div className="row">
@@ -171,6 +211,9 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="column small-12 medium-4">
                     {total_value}
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;
                 </div>
             </div>
             <div className="UserWallet__balance row">
@@ -192,6 +235,8 @@ class UserWallet extends React.Component {
                     <hr />
                 </div>
             </div>
+
+            {isMyAccount && <SavingsWithdrawHistory />}
 
             <div className="row">
                 <div className="column small-12">
@@ -219,9 +264,11 @@ export default connect(
             if(/ SBD$/.test(base) && / STEEM$/.test(quote))
                 price_per_steem = parseFloat(base.split(' ')[0])
         }
+        const savings_withdraws = state.user.get('savings_withdraws')
         return {
             ...ownProps,
-            price_per_steem
+            price_per_steem,
+            savings_withdraws,
         }
     },
     // mapDispatchToProps

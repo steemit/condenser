@@ -28,6 +28,7 @@ import PollDataSaga from 'app/redux/PollDataSaga';
 import {component as NotFound} from 'app/components/pages/NotFound';
 import extractMeta from 'app/utils/ExtractMeta';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
+import Translator from 'app/Translator';
 
 const sagaMiddleware = createSagaMiddleware(
     ...userWatches, // keep first to remove keys early when a page change happens
@@ -120,11 +121,13 @@ async function universalRender({ location, initial_state, offchain }) {
         }
         return render(
             <Provider store={store}>
+                    <Translator>
                 <Router
                     routes={RootRoute}
                     history={history}
                     onError={onRouterError}
                     render={applyRouterMiddleware(scroll)} />
+                    </Translator>
             </Provider>,
             document.getElementById('content')
         );
@@ -169,7 +172,9 @@ async function universalRender({ location, initial_state, offchain }) {
     try {
         app = renderToString(
             <Provider store={server_store}>
+                <Translator>
                 <RouterContext { ...renderProps } />
+                </Translator>
             </Provider>
         );
         meta = extractMeta(onchain, renderProps.params);

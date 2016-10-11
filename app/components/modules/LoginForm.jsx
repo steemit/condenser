@@ -127,7 +127,7 @@ class LoginForm extends Component {
             'Authenticate for this transaction' :
             'Login to your Steem Account';
         const opType = loginBroadcastOperation ? loginBroadcastOperation.get('type') : null
-        const authType = /vote|comment/.test(opType) ? 'Posting' : 'Active or Owner'
+        const authType = /^vote|comment/.test(opType) ? 'Posting' : 'Active or Owner'
         const submitLabel = loginBroadcastOperation ? 'Sign' : 'Login';
         let error = password.touched && password.error ? password.error : this.props.login_error
         if (error === 'owner_login_blocked') {

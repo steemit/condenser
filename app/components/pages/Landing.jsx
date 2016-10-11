@@ -45,7 +45,6 @@ class Landing extends React.Component {
 		const prefill = crowdsaleStartAt > Date.now()
         return (
             <div className="Landing text-center">
-				<Header />
 				<CountDowns
 					prefill={prefill}
 					crowdsaleStartAt={crowdsaleStartAt}

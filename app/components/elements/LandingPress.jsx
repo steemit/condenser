@@ -13,7 +13,7 @@ export default class LandingPress extends React.Component {
 			{
 				url: 'http://www.coinfox.ru/novosti/6457-kiber-fond-sozdast-russkoyazychnuyu-sotsset-na-blokchejne-steem',
 				title: 'COINFOX: Кибер•Фонд создаст русскоязычную соцсеть на блокчейне Steem',
-				image: 'http://www.coinfox.ru/images/news/Golos.png',
+				image: 'https://www.coinfox.ru/images/news/Golos.png',
 				text: 'Разработчики не удовлетворены развитием русскоязычного сообщества в существующей соцсети Steemit и надеются, что новая сеть «Голос» с собственными токенами даст толчок к его развитию.'
 			},
 			{
@@ -25,7 +25,7 @@ export default class LandingPress extends React.Component {
 			{
 				url: 'http://www.econotimes.com/CyberFund-launches-first-blockchain-based-Russian-social-network-Voice-332085',
 				title: 'ECONOTIMES: Cyber.Fund launches first blockchain-based Russian social network - Voice',
-				image: 'http://www.econotimes.com/assets/images/econotimes/metaDefault.png',
+				image: 'https://www.econotimes.com/assets/images/econotimes/metaDefault.png',
 				text: 'Cyber.Fund, an investment platform for blockchain assets, has announced the launch of first Russian-language social network –Voice, based on blockchain technology that will be an analogue of Steemit international network.'
 			}
 
@@ -42,12 +42,12 @@ export default class LandingPress extends React.Component {
 					data.map((article, index) => {
 						return 	<div key={index} className="row text-left Press__article">
 									<div className="small-2 medium-2 large-2 columns">
-										<a href={article.url}>
+										<a href={article.url} target="blank">
 											<img src={article.image} />
 										</a>
 									</div>
 									<div className="small-10 medium-10 large-10 columns">
-										<a href={article.url}>
+										<a href={article.url} target="blank">
 											<strong>{article.title}</strong>
 											<p>{article.text}</p>
 										</a>

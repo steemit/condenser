@@ -123,16 +123,6 @@ export default class LandingTeam extends React.Component {
 							<li></li>
 						</ul>
 					</div>
-					<div data-wow-delay="1s" className="wow fadeIn small-6 medium-4 large-3 small-centered medium-centered large-centered columns Team__member">
-						<div className="Team__members__image-wrapper">
-							<a href="http://kuna.com.ua/about/"><img className="Team__member__img" src="images/landing/kuna.png" /></a>
-						</div>
-						<strong>Kuna</strong>
-						<p>Информационная поддержка в Украине</p>
-						<ul>
-							<li></li>
-						</ul>
-					</div>
 				</div>
 				<hr />
 			</section>

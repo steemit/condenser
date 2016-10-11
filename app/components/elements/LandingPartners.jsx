@@ -16,6 +16,13 @@ export default class LandingPress extends React.Component {
 							<img src="images/landing/liqui.png" alt="Liqui logo" />
 						{/* </a> */}
 					</div>
+
+					<div className="small-2">
+						{/* <a href="https://cyber.fund/" target="blank"> */}
+							<img src="images/landing/kuna.png" alt="Liqui logo" />
+						{/* </a> */}
+					</div>
+
 					{/* <div className="small-6 medium-4 large-2">
 						<a href="https://cyber.fund/" target="blank">
 							<img src="https://www.steemimg.com/images/2016/08/24/cyberfund92a82.jpg" alt="cyber.fund logo" />

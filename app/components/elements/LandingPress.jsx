@@ -35,7 +35,7 @@ export default class LandingPress extends React.Component {
 			<section className="Press">
 				<div className="row">
 					<div className="small-12 columns">
-						<h2 className="Press__header Landing__h2_blue" id="press">Пресса</h2>
+						<h2 className="Press__header blue" id="press">Пресса</h2>
 					</div>
 				</div>
 				{

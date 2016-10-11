@@ -46,9 +46,9 @@ class TransferForm extends Component {
     }
 
     initForm(props) {
+        const {transferType} = props.initialValues
         const insufficientFunds = (asset, amount) => {
             const {currentAccount} = props
-            const {transferType} = props.initialValues
             const isWithdraw = transferType && transferType === 'Savings Withdraw'
             const balanceValue =
                 !asset || asset === 'STEEM' ?
@@ -61,7 +61,9 @@ class TransferForm extends Component {
             return parseFloat(amount) > parseFloat(balance)
         }
         const {toVesting} = props
-        const fields = toVesting ? ['to', 'amount'] : ['to', 'amount', 'asset', 'memo']
+        const fields = toVesting ? ['to', 'amount'] : ['to', 'amount', 'asset']
+        if(transferType !== 'Transfer to Savings' && transferType !== 'Savings Withdraw')
+            fields.push('memo')
 
         reactForm({
             name: 'transfer',

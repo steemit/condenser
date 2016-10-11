@@ -31,7 +31,7 @@ export default class LandingBlockchainRevolution extends React.Component {
 							<thead>
 								<tr>
 									<th width="200" className="text-left">Социальные сети</th>
-									<th width="100" className="text-center"><img src="images/landing/golos.jpg" alt="лого проекта Голос" /></th>
+									<th width="100" className="text-center"><img src="images/landing/golos.png" alt="лого проекта Голос" /></th>
 									<th width="100" className="text-center"><img src="images/landing/vkontakte.jpg" alt="лого VK" /></th>
 									<th width="100" className="text-center"><img src="images/landing/facebook.jpg" alt="лого Facebook" />	</th>
 								</tr>

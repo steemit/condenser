@@ -124,6 +124,9 @@ class Post extends React.Component {
 
 
         let sort_orders = [ 'trending', 'active', 'created', 'updated' ];
+        // https://github.com/GolosChain/tulupchik/issues/27
+        // возможно решение здесь. Вставить функцию translate к каждому из элементов
+        // проверить пока возможности нет, поэтому добавляю лишь коммент
         let sort_labels = [ 'trending', 'active', 'new', 'updated' ];
         let sort_menu = [];
 

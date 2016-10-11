@@ -35,6 +35,27 @@
 }
 
 /* SECTIONS */
+.LandingHeader {
+	height: 80px;
+	img { height: 36px; }
+	.LandingHeader__logo { line-height: 2.5; }
+	.LandingHeader__menu {
+		margin: 0;
+		float: right;
+	}
+	.LandingHeader__menu__li {
+		float: left;
+		line-height: 3;
+		font-style: 27px;
+		font-weight: bold;
+		margin: 0 23px;
+		display: inline;
+		list-style-type: none;
+		a { color: black; }
+	}
+	.LandingHeader__menu__li:last-of-type img { margin-right: 12px; }
+}
+
 .CountDowns {
 	.CountDowns__headers {
 		position: relative;
@@ -152,6 +173,7 @@
 	.WhatIsGolos__video {
 		margin-left: auto;
 		margin-right: auto;
+		iframe { max-width: 100%; }
 	}
 	a {
 		margin-top: 65px;
@@ -439,13 +461,20 @@
 	.Partners__info {
 		margin-bottom: 65px;
 		h3 { margin-bottom: 40px; }
+		img { width: 160px; }
 	}
 	.Partners__forklog-logo { transform: translateY(50%); }
+	.Partners__tolkachev-logo { transform: translateY(50%); }
 }
 
 .Press {
 	.Press__logos { margin-bottom: 85px; }
 	.Press__header { margin-bottom: 100px; }
+	.Press__article {
+		margin-bottom: 20px;
+		p { color: black; }
+	}
+	.Press__article:last-of-type { margin-bottom: 100px; }
 	.Press__action { margin-bottom: 100px; }
 	.Press__action__p {
 		color: #505050;
@@ -473,6 +502,7 @@
 		word-break: break-all;
 	}
 	@media #{$small-only} {
+		.LandingFooter__menus { text-align: center; }
 		.LandingFooter__description {
 			strong { text-align: center; }
 			li { text-align: center; }

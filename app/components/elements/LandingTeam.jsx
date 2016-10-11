@@ -17,8 +17,8 @@ export default class LandingTeam extends React.Component {
 						<div className="Team__members__image-wrapper">
 							<img className="Team__member__img" src="https://avatars2.githubusercontent.com/u/410789?v=3&s=400" alt="фотография Димы Стародубцева" />
 						</div>
-						<strong>Дмитрий Стародубцев</strong>
-						<p>Сооснователь cyber.fund</p>
+						<strong>Дима Стародубцев</strong>
+						<p>Экономика</p>
 						<ul>
 							<li><a href="https://github.com/21xhipster"><img src="images/landing/github_icon.jpg" /></a></li>
 							<li><a href="https://cyber.fund/"><img style={{width:'33px', height:'33px'}} src="https://cyber.fund/images/cybF.svg" /></a></li>
@@ -42,7 +42,7 @@ export default class LandingTeam extends React.Component {
 							<img className="Team__member__img" src="images/landing/Marina.jpg" alt="фотография Марины Гуревой" />
 						</div>
 						<strong>Марина Гурева</strong>
-						<p>Партнерство</p>
+						<p>Партнерства</p>
 						<ul>
 							<li><a href="https://fr.linkedin.com/in/marina-guryeva-1390a03b"><img src="images/landing/linkedin_icon.jpg" /></a></li>
 							<li><a href="https://www.facebook.com/marina.guryeva.79"><img className="Team__facebook-logo" src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-facebook-512.png" /></a></li>
@@ -55,7 +55,7 @@ export default class LandingTeam extends React.Component {
 							<img className="Team__member__img" src="images/landing/alexey.jpg" alt="фотография Алексея Фрумина" />
 						</div>
 						<strong>Алексей Фрумин</strong>
-						<p>Моральная поддержка</p>
+						<p>Back-end разработка</p>
 						<ul>
 							<li><a href="https://cyber.fund/"><img style={{width:'33px', height:'33px'}} src="https://cyber.fund/images/cybF.svg" /></a></li>
 							<li><a href="https://github.com/tomarcafe"><img src="images/landing/github_icon.jpg" /></a></li>
@@ -104,7 +104,7 @@ export default class LandingTeam extends React.Component {
 							<img className="Team__member__img" src="https://avatars2.githubusercontent.com/u/28658?v=3&s=400" alt="фотография Валентина Завгороднева" />
 						</div>
 						<strong>Валентин Завгороднев</strong>
-						<p>Сооснователь Steemit</p>
+						<p>Консультации</p>
 						<ul>
 							<li><a href="https://www.linkedin.com/in/valentine"><img src="images/landing/linkedin_icon.jpg" /></a></li>
 							<li><a href="https://github.com/valzav"><img src="images/landing/github_icon.jpg" /></a></li>

@@ -26,11 +26,15 @@ export default class CountDown extends React.Component {
 	// do not start timer while server-rendering to avoid errors
 	componentDidMount() { if (process.env.BROWSER) this.countDown }
 	// && clear timer on unmount
-	componentWillUnmount() { clearInterval(this.countDown) }
+	componentWillUnmount() { if (process.env.BROWSER) clearInterval(this.countDown) }
 
-	countDown = setInterval(() => {
-		this.setState({ timeLeft: new Date(this.state.timeLeft.getTime() - 1000) })
-	}, 1000)
+	countDown() {
+		if (process.env.BROWSER) {
+			setInterval(() => {
+				this.setState({ timeLeft: new Date(this.state.timeLeft.getTime() - 1000) })
+			}, 1000)
+	  }
+	}
 
 	render() {
 		if (!this.props.date && !this.state.timeLeft) return null

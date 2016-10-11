@@ -47,7 +47,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
         ];
         const search = translate('search')
 
-        if (/^\/ico$/.test(location.pathname)) {
+        if (process.env.BROWSER && /^\/ico$/.test(window.location.pathname)) {
             return (
                 <ul className={mcn + ' landing'}>
                     <li className={lcn}><a href="#what-is-golos">Видео</a></li>
@@ -119,7 +119,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
         );
     }
     if (probablyLoggedIn) {
-        if (/^\/ico$/.test(location.pathname)) {
+        if (process.env.BROWSER && /^\/ico$/.test(window.location.pathname)) {
             return      <ul className={mcn + mcl + ' landing'}>
                             <li className={lcn}><a href="#what-is-golos">Видео</a></li>
                             <li className={lcn}><a href="#docs">Документация</a></li>
@@ -159,7 +159,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
     //     </a>
     // </li>
 
-    if (/^\/ico$/.test(location.pathname)) {
+    if (process.env.BROWSER && /^\/ico$/.test(window.location.pathname)) {
         return  <ul className={mcn + mcl + ' landing'}>
                     <li className={lcn}><a href="#what-is-golos">Видео</a></li>
                     <li className={lcn}><a href="#docs">Документация</a></li>

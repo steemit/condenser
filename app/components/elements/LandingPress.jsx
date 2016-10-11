@@ -13,7 +13,7 @@ export default class LandingPress extends React.Component {
 			{
 				url: 'http://www.coinfox.ru/novosti/6457-kiber-fond-sozdast-russkoyazychnuyu-sotsset-na-blokchejne-steem',
 				title: 'COINFOX: Кибер•Фонд создаст русскоязычную соцсеть на блокчейне Steem',
-				image: 'https://www.coinfox.ru/images/news/Golos.png',
+				image: 'images/landing/golos-team.png',
 				text: 'Разработчики не удовлетворены развитием русскоязычного сообщества в существующей соцсети Steemit и надеются, что новая сеть «Голос» с собственными токенами даст толчок к его развитию.'
 			},
 			{

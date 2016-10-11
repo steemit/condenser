@@ -75,7 +75,7 @@
 			right: 5%;
 			position: relative;
 		}
-		h1 { margin: 135px auto 120px; }
+		h1 { margin: 90px auto 40px; }
 	}
 	.CountDowns__counters { margin-bottom: 100px; }
 	.CountDowns__button {
@@ -107,13 +107,13 @@
 	}
 
 	@media #{$small-up} {
-		.CountDowns__counter { margin-top: 60px; }
+		//.CountDowns__counter { margin-top: 60px; }
 	}
 
 	@media #{$small-only} {
 		h1 { margin-bottom: 80px; }
 		.CountDowns__slogan { font-size: 17px; }
-		.CountDowns__counter { margin-top: 30px; }
+		//.CountDowns__counter { margin-top: 30px; }
 		.CountDown .CountDown__single { margin-right: 10px; }
 	}
 
@@ -161,7 +161,6 @@
 }
 
 .WhatIsGolos {
-	padding-top: 145px;
 	background-color: #f2f2f2;
 	.WhatIsGolos__header {
 		margin-bottom: 80px;
@@ -294,7 +293,7 @@
 }
 
 .Team {
-	.Team__header { margin: 90px auto 50px; }
+	.Team__header { margin: 0 auto 40px; }
 	.Team__members { margin-bottom: 165px; }
 	.Team__partners {
 		margin: 50px auto;

@@ -9,14 +9,15 @@
 // TODO add common supporting text styles
 // http://foundation.zurb.com/sites/docs/v/5.5.3/media-queries.html
 .Landing {
+	margin-top: -6rem;
 	font-family: Verdana, Geneva, sans-serif;
 	/* COMMON ELEMENTS */
-	.Landing__h2_blue 	{ color: #6191cf; } // font-family: ProximaNova;
-	.Landing__h2_red 	{ color: #f12b24; }
+	.blue 	{ color: #6191cf; } // font-family: ProximaNova;
+	.red 	{ color: #f12b24; }
 	.Landing__button_big { font-size: 47px; }
 	h2 {
 		font-weight: bold;
-		margin-top: 90px;
+		margin-top: 2rem;
 	}
 	hr {
 		margin: 0;
@@ -106,7 +107,6 @@
 	}
 
 	@media #{$small-up} {
-		.CountDowns__headers { margin-top: 55px; }
 		.CountDowns__counter { margin-top: 60px; }
 	}
 
@@ -119,7 +119,6 @@
 
 	@media #{$medium-up} {
 		.CountDowns__slogan { font-size: 37px; }
-		.CountDowns__headers { margin-top: 115px; }
 	}
 }
 
@@ -165,9 +164,6 @@
 	padding-top: 145px;
 	background-color: #f2f2f2;
 	.WhatIsGolos__header {
-		h2 {
-			margin-top: 0;
-		}
 		margin-bottom: 80px;
 	}
 	.WhatIsGolos__video {
@@ -184,7 +180,6 @@
 .JoinUs {
 	padding-top: 160px;
 	h2 {
-		margin-top: 0;
 		color: #f12b24;
 	}
 	.JoinUs__support-text {

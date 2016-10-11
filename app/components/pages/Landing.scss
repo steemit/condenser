@@ -163,7 +163,6 @@
 
 .WhatIsGolos {
 	background-color: #f2f2f2;
-	padding-bottom: 1.5rem;
 	.WhatIsGolos__header {
 		margin-bottom: 80px;
 	}
@@ -172,7 +171,7 @@
 		margin-right: auto;
 		iframe { max-width: 100%; }
 	}
-	a {
+	.WhatIsGolos__action {
 		margin-top: 65px;
 		margin-bottom: 100px;
 	}
@@ -419,11 +418,15 @@
 	.WhyGolos__reasons {
 		margin-top: 65px;
 		margin-bottom: 115px;
-		strong {
-			display: block;
-			margin-bottom: 50px;
-		}
+		strong { display: block; }
 		p { font-size: 13px; }
+		@media #{$small-up} {
+			.WhyGolos__reason { margin-bottom: 30px; }
+			strong { margin-bottom: 8px; }
+		}
+		@media #{$large-up} {
+			strong { margin-bottom: 50px; }
+		}
 	}
 }
 
@@ -453,7 +456,7 @@
 		// margin-bottom: 80px;
 		h2 { margin-bottom: 20px; }
 		img {
-			max-height: 160px;
+			max-height: 100px;
 			margin-top: 30px;
 		}
 	}
@@ -474,9 +477,10 @@
 	@media #{$small-up} {
 		.Partners__coinessa-logo { transform: translateY(50%); }
 	}
-	@media #{$medium-up} {
-		.Partners__coinessa-logo { transform: translateY(26%); }
-	}
+	// @media #{$medium-up} {
+	// 	.Partners__liqui-logo { transform: translateY(50%); }
+	// 	.Partners__coinessa-logo { transform: translateY(86%); }
+	// }
 }
 
 .Press {
@@ -514,7 +518,10 @@
 		word-break: break-all;
 	}
 	@media #{$small-only} {
-		.LandingFooter__menus { text-align: center; }
+		.LandingFooter__menus {
+			strong { margin: 25px auto;}
+			strong, ul { text-align: center; }
+		}
 		.LandingFooter__description {
 			strong { text-align: center; }
 			li { text-align: center; }

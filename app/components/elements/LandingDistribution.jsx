@@ -6,7 +6,7 @@ const listInfo = [
 		['10%', 'f9ca0f', 'держателям Steem'],
 		['10%', '1e193b', 'cyber•Fund'],
 		['7%', 'cd591a', 'основателям Голоса'],
-		['3%', '7bd915', 'майнерам Голоса']
+		['3%', '7bd915', 'делегатам Голоса']
 ]
 
 export default class LandingDistribution extends React.Component {
@@ -22,7 +22,7 @@ export default class LandingDistribution extends React.Component {
 				['10%', 'f9ca0f', 'Распределение держателям Steem'],
 				['10%', '1e193b', 'Cyber.Fund'],
 				[' 7%', 'cd591a', 'Основателям Голоса'],
-				[' 3%', '7bd915', 'Майнерам Голоса'],
+				[' 3%', '7bd915', 'Делегатам Голоса'],
 				['60%', 'd80a15', 'Краудсейл']
 		] */
 		// function renderList() {
@@ -85,7 +85,7 @@ export default class LandingDistribution extends React.Component {
 							<li className="Distribution__item">
 								{/* <strong className="Distribution__strong">1.02%</strong> */}
 								{renderDot('f28a35')}
-								Награды авторам и кураторам до конца краудсейла
+								Авторам и кураторам до конца краудсейла
 							</li>
 						</ul>
 					</div>

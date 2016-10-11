@@ -78,7 +78,6 @@ export default class PostSummary extends React.Component {
         if (!content) return null;
 
         const archived = content.get('mode') === 'archived'
-
         let reblogged_by = content.get('first_reblogged_by')
         if(reblogged_by) {
           reblogged_by = <div className="PostSummary__reblogged_by">

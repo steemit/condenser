@@ -24,8 +24,8 @@ export default class LandingWhoWeAre extends React.Component {
 				</div>
 				<div className="row WhoWeAre__texts">
 					<div className="small-12 columns">
-						<p>Голос по лицензии Стимит инк, одна из лучших команд в области блокчейн, описать результаты - капитализацию, рост как у Фейсбука</p>
-						{/* <span>Голос по лицензии Стимит инк, одна из лучших команд в области блокчейн, описать результаты - капитализацию, рост как у Фейсбука и т.д.</span> */}
+						<p>Голос создается командой cyber•Fund по лицензии Steemit Inc.</p>
+						{/* <span></span> */}
 					</div>
 				</div>
 				<hr />

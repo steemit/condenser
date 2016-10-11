@@ -17,7 +17,7 @@
 	.Landing__button_big { font-size: 47px; }
 	h2 {
 		font-weight: bold;
-		margin-top: 2rem;
+		margin-top: 3rem;
 	}
 	hr {
 		margin: 0;
@@ -65,7 +65,8 @@
 		.CountDowns__slogan {
 			color: #6191cf;
 			display: block;
-			margin-bottom: 40px;
+			margin-top: 1.5rem;
+			margin-bottom: 1.5rem;
 		}
 		.Icon_2x > svg, span.Icon_2x {
 			width: 7rem;
@@ -75,7 +76,7 @@
 			right: 5%;
 			position: relative;
 		}
-		h1 { margin: 135px auto 120px; }
+		h1 { margin: 90px auto 40px; }
 	}
 	.CountDowns__counters { margin-bottom: 100px; }
 	.CountDowns__button {
@@ -107,13 +108,13 @@
 	}
 
 	@media #{$small-up} {
-		.CountDowns__counter { margin-top: 60px; }
+		//.CountDowns__counter { margin-top: 60px; }
 	}
 
 	@media #{$small-only} {
 		h1 { margin-bottom: 80px; }
 		.CountDowns__slogan { font-size: 17px; }
-		.CountDowns__counter { margin-top: 30px; }
+		//.CountDowns__counter { margin-top: 30px; }
 		.CountDown .CountDown__single { margin-right: 10px; }
 	}
 
@@ -161,8 +162,8 @@
 }
 
 .WhatIsGolos {
-	padding-top: 145px;
 	background-color: #f2f2f2;
+	padding-bottom: 1.5rem;
 	.WhatIsGolos__header {
 		margin-bottom: 80px;
 	}
@@ -178,7 +179,6 @@
 }
 
 .JoinUs {
-	padding-top: 160px;
 	h2 {
 		color: #f12b24;
 	}
@@ -191,7 +191,7 @@
 		font-size: 21px
 	}
 	.JoinUs__reasons {
-		margin: 100px auto;
+		margin: 40px auto 40px;
 		.JoinUs__item {
 			margin-bottom: 65px;
 			img {
@@ -294,8 +294,7 @@
 }
 
 .Team {
-	.Team__header { margin: 90px auto 50px; }
-	.Team__members { margin-bottom: 165px; }
+	.Team__members { margin-bottom: 150px; }
 	.Team__partners {
 		margin: 50px auto;
 		.columns {

@@ -11,6 +11,7 @@ export default class LandingPress extends React.Component {
 					</div>
 				</div>
 				<div className="row Partners__logos">
+					<div className="small-2">&nbsp;</div>
 					{/* <div className="small-6 medium-4 large-2"> */}
 					<div className="small-12 medium-5">
 						<a href="https://liqui.io/" target="blank">

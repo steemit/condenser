@@ -13,15 +13,15 @@ export default class LandingTeam extends React.Component {
 				</div>
 
 				<div className="row Team__members">
-					<div className="small-6 medium-4 large-3 columns Team__member wow fadeIn" data-wow-delay="1s">
+					<div className="small-6 medium-4 large-3 columns Team__member fadeIn" data-wow-delay="1s">
 						<div className="Team__members__image-wrapper">
 							<img className="Team__member__img" src="https://avatars2.githubusercontent.com/u/410789?v=3&s=400" alt="фотография Димы Стародубцева" />
 						</div>
-						<strong>Дмитрий Стародубцев</strong>
-						<p>Сооснователь cyber.fund</p>
+						<strong>Дима Стародубцев</strong>
+						<p>Экономика</p>
 						<ul>
 							<li><a href="https://github.com/21xhipster"><img src="images/landing/github_icon.jpg" /></a></li>
-							<li><a href="https://cyber.fund/"><img style={{width:'40px', height:'40px'}} src="https://cyber.fund/images/cybF.svg" /></a></li>
+							<li><a href="https://cyber.fund/"><img style={{width:'33px', height:'33px'}} src="https://cyber.fund/images/cybF.svg" /></a></li>
 						</ul>
 					</div>
 
@@ -32,7 +32,7 @@ export default class LandingTeam extends React.Component {
 						<strong>Валерий Литвин</strong>
 						<p>Блокчейн-разработка</p>
 						<ul>
-							<li><a href="https://cyber.fund/@besson_by"><img style={{width:'40px', height:'40px'}} src="https://cyber.fund/images/cybF.svg" /></a></li>
+							<li><a href="https://cyber.fund/@besson_by"><img style={{width:'33px', height:'33px'}} src="https://cyber.fund/images/cybF.svg" /></a></li>
 							<li><a href="https://www.facebook.com/bessonby"><img className="Team__facebook-logo" src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-facebook-512.png" /></a></li>
 							<li><a href="https://github.com/ValeryLitvin"><img src="images/landing/github_icon.jpg" /></a></li>
 						</ul>
@@ -42,7 +42,7 @@ export default class LandingTeam extends React.Component {
 							<img className="Team__member__img" src="images/landing/Marina.jpg" alt="фотография Марины Гуревой" />
 						</div>
 						<strong>Марина Гурева</strong>
-						<p>Партнерство</p>
+						<p>Партнерства</p>
 						<ul>
 							<li><a href="https://fr.linkedin.com/in/marina-guryeva-1390a03b"><img src="images/landing/linkedin_icon.jpg" /></a></li>
 							<li><a href="https://www.facebook.com/marina.guryeva.79"><img className="Team__facebook-logo" src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-facebook-512.png" /></a></li>
@@ -55,9 +55,9 @@ export default class LandingTeam extends React.Component {
 							<img className="Team__member__img" src="images/landing/alexey.jpg" alt="фотография Алексея Фрумина" />
 						</div>
 						<strong>Алексей Фрумин</strong>
-						<p>Моральная поддержка</p>
+						<p>Back-end разработка</p>
 						<ul>
-							<li><a href="https://cyber.fund/"><img style={{width:'40px', height:'40px'}} src="https://cyber.fund/images/cybF.svg" /></a></li>
+							<li><a href="https://cyber.fund/"><img style={{width:'33px', height:'33px'}} src="https://cyber.fund/images/cybF.svg" /></a></li>
 							<li><a href="https://github.com/tomarcafe"><img src="images/landing/github_icon.jpg" /></a></li>
 						</ul>
 					</div>
@@ -68,7 +68,7 @@ export default class LandingTeam extends React.Component {
 						<strong>Виталий Львов</strong>
 						<p>Финансы и аудит</p><br/>
 						<ul>
-							<li><a href="https://cyber.fund/"><img style={{width:'40px', height:'40px'}} src="https://cyber.fund/images/cybF.svg" /></a></li>
+							<li><a href="https://cyber.fund/"><img style={{width:'33px', height:'33px'}} src="https://cyber.fund/images/cybF.svg" /></a></li>
 							<li><a href="https://twitter.com/vitalylvov"><img src="images/landing/twitter_icon.jpg" /></a></li>
 							<li><a href="https://github.com/vitalylvov"><img src="images/landing/github_icon.jpg" /></a></li>
 						</ul>
@@ -104,14 +104,14 @@ export default class LandingTeam extends React.Component {
 							<img className="Team__member__img" src="https://avatars2.githubusercontent.com/u/28658?v=3&s=400" alt="фотография Валентина Завгороднева" />
 						</div>
 						<strong>Валентин Завгороднев</strong>
-						<p>Сооснователь Steemit</p>
+						<p>Консультации</p>
 						<ul>
 							<li><a href="https://www.linkedin.com/in/valentine"><img src="images/landing/linkedin_icon.jpg" /></a></li>
 							<li><a href="https://github.com/valzav"><img src="images/landing/github_icon.jpg" /></a></li>
 						</ul>
 					</div>
 				</div>
-
+	<h2 className="Team__header" id="team">Делегаты</h2>
 				<div className="row center Team__partners">
 					<div data-wow-delay="1s" className="wow fadeIn small-6 medium-4 large-3 small-centered medium-centered large-centered columns Team__member">
 						<div className="Team__members__image-wrapper">

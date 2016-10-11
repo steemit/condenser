@@ -148,3 +148,17 @@ ul > li > .button {
   margin-right: 4rem;
   color: #ec5840;
 }
+
+// golos.io ico special navbar styles
+.landing {
+    .show-for-medium a { font-size: 1rem; }
+    @media #{$small-only} {
+        .toggle-menu { padding: .7rem 1rem !important; }
+    }
+    @media #{$medium-up} {
+        .toggle-menu { display: none; }
+    }
+    @media #{$large-up} {
+        .show-for-medium a { font-size: 1.1rem; }
+    }
+}

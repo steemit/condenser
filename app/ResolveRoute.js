@@ -2,7 +2,7 @@ export default function resolveRoute(path)
 {
     // routes
     if (path === '/') {
-        return {page: 'Landing'};
+        return {page: 'Landing'}; // LANDING
         //return {page: 'PostsIndex', params: ['trending']};
     }
     if (path === '/about.html') {

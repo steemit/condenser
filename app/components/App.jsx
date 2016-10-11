@@ -141,7 +141,9 @@ class App extends React.Component {
         }
 
         let welcome_screen = null;
-        if (new_visitor && this.state.showBanner &&  !/^\/ico$/.test(location.pathname)) {
+        if (new_visitor && this.state.showBanner
+                  && !/^\/ico$/.test(location.pathname) && !/^\/$/.test(location.pathname)  // LANDING 
+            ) {
             welcome_screen = (
                 <div className="welcomeWrapper">
                     <div className="welcomeBanner">

@@ -42,7 +42,7 @@ app.use(flash({key: 'flash'}));
 app.use(function *(next) {
     if (this.method === 'GET' && this.url === '/' && this.session.a) {
         this.status = 301;
-        this.redirect(`/@${this.session.a}/feed`);
+        this.redirect('/ico'); // LANDING this.redirect(`/@${this.session.a}/feed`);
         return;
     }
     if (this.method === 'GET' && /\?[^\w]*(ch=|cn=|r=)/.test(this.url)) {

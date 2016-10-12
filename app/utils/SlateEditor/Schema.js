@@ -105,15 +105,9 @@ export const HtmlRules = [
     {
         deserialize: (el, next) => {
             switch(el.tagName) {
-                case 'iframe':
-                    return {
-                        kind: 'block',
-                        type: 'paragraph',
-                        nodes: next(el.children)
-                    }
                 case 'img':
                     return {
-                        kind: 'block',
+                        kind: 'inline',
                         type: 'image',
                         isVoid: true,
                         data: {src: el.attribs.src},
@@ -156,7 +150,7 @@ export const HtmlRules = [
                 if(!href) console.log("** ERR: serializing <a> with no href", JSON.stringify(object.data, null, 2))
                 return <a href={href}>{children}</a>
             }
-            if(object.kind == 'block' && object.type == 'image') {
+            if(object.kind == 'inline' && object.type == 'image') {
                 const src = object.data.get('src')
                 if(!src) console.log("** ERR: serializing image with no src...", JSON.stringify(object))
                 return <img src={src} />

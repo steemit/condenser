@@ -44,7 +44,7 @@ export default class LocalizedCurrency extends React.Component {
 
 	// TODO move this into redux
 	checkIfCurrencyChanged = () => {
-		if (this.state.currency != store.get('fetchedCurrency')) {
+		if (process.env.BROWSER && this.state.currency != store.get('fetchedCurrency')) {
 			this.fetchExchangeRates()
 		}
 	}
@@ -91,7 +91,7 @@ export default class LocalizedCurrency extends React.Component {
 	}
 
 	render() {
-		const {currency, exchangeRate, localCurrencySymbol} = this.state
+		const {exchangeRate, localCurrencySymbol} = this.state
 		const {amount, intl: {formatNumber}, noSymbol, fractionDigits, ...rest} = this.props
 
 		// localCurrencySymbol = getSymbolFromCurrency(currency)
@@ -112,7 +112,7 @@ export default class LocalizedCurrency extends React.Component {
 										options
 									)
 			// if noSymbol is specified return only amount of digits
-			return 	noSymbol || options && options.noSymbol
+			return 	noSymbol
 					? currencyAmount
 					: localCurrencySymbol + ' ' + currencyAmount
 		}

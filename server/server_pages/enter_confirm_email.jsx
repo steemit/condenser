@@ -4,7 +4,6 @@ import request from 'co-request';
 import React from 'react';
 import {renderToString} from 'react-dom/server';
 import models from 'db/models';
-import {esc, escAttrs} from 'db/models';
 import ServerHTML from '../server-html';
 import sendEmail from '../sendEmail';
 import {checkCSRF, getRemoteIp} from '../utils';
@@ -28,6 +27,7 @@ function *confirmEmailHandler() {
         return;
     }
     if (eid.verified) {
+        this.session.user = eid.user_id; // session recovery (user changed browsers)
         this.flash = {success: 'Email has already been verified'};
         this.redirect('/enter_mobile');
         return;
@@ -84,7 +84,9 @@ export default function useEnterAndConfirmEmailPages(app) {
                         <br />
                         <div className="g-recaptcha" data-sitekey={config.recaptcha.site_key}></div>
                         <br />
-                        <div className="error">{this.flash.error}</div>
+                        <div className="error">
+                            {this.flash.error}
+                        </div>
                         <input type="submit" className="button" value="CONTINUE" />
                     </form>
                 </div>
@@ -104,24 +106,11 @@ export default function useEnterAndConfirmEmailPages(app) {
             return;
         }
 
-        if (process.env.NODE_ENV === 'production') {
-            const recaptcha = this.request.body['g-recaptcha-response'];
-            const verificationUrl = 'https://www.google.com/recaptcha/api/siteverify?secret=' + config.recaptcha.secret_key + '&response=' + recaptcha + '&remoteip=' + this.req.connection.remoteAddress;
-            let captcha_failed;
-            try {
-                const recaptcha_res = yield request(verificationUrl);
-                const body = JSON.parse(recaptcha_res.body);
-                captcha_failed = !body.success;
-            } catch (e) {
-                captcha_failed = true;
-                console.error('-- /submit_email recaptcha request failed -->', verificationUrl, e);
-            }
-            if (captcha_failed) {
-                console.log('-- /submit_email captcha verification failed -->', user_id, this.session.uid, email, this.req.connection.remoteAddress);
-                this.flash = {error: 'Failed captcha verification, please try again'};
-                this.redirect('/enter_email?email=' + email);
-                return;
-            }
+        if(!(yield checkRecaptcha(this))) {
+            console.log('-- /submit_email captcha verification failed -->', user_id, this.session.uid, email, this.req.connection.remoteAddress);
+            this.flash = {error: 'Failed captcha verification, please try again'};
+            this.redirect('/enter_email?email=' + email);
+            return
         }
 
         const parsed_email = email.match(/^.+\@.*?([\w\d-]+\.\w+)$/);
@@ -144,47 +133,57 @@ export default function useEnterAndConfirmEmailPages(app) {
         }
 
         const existing_email = yield models.Identity.findOne(
-            {attributes: ['user_id'], where: {email, provider: 'email', verified: true}, order: 'id'}
+            {attributes: ['id', 'user_id', 'confirmation_code'], where: {email, provider: 'email', verified: true}, order: 'id'}
         );
+        let user_id = this.session.user;
         if (existing_email && existing_email.user_id != user_id) {
             console.log('-- /submit_email existing_email -->', user_id, this.session.uid, email, existing_email.user_id);
-            this.flash = {error: 'This email has already been taken'};
-            this.redirect('/enter_email?email=' + email);
-            return;
-        }
-
-        let user_id = this.session.user;
-        if (user_id) {
-            const user = yield models.User.findOne({attributes: ['id'], where: {id: user_id}});
-            if (!user) user_id = null;
-        }
-        if (!user_id) {
-            const user = yield models.User.create({
-                uid: this.session.uid,
-                remote_ip: getRemoteIp(this.request.req)
-            });
-            this.session.user = user_id = user.id;
-        }
-
-        const confirmation_code = Math.random().toString(36).slice(2);
-        let eid = yield models.Identity.findOne(
-            {attributes: ['id', 'email'], where: {user_id, provider: 'email'}, order: 'id'}
-        );
-        if (eid) {
-            yield eid.update({confirmation_code, email});
+            const act = yield models.Account.findOne({
+                attributes: ['id'],
+                where: {user_id: existing_email.user_id, ignored: false},
+                order: 'id DESC'
+            })
+            if(act) {
+                this.flash = {error: 'This email has already been taken.'};
+                this.redirect('/enter_email?email=' + email);
+                return
+            }
+            // We must resend the email to get teh session going again if the user gets interrupted (clears cookies or changes browser) after email verify.
+            const {confirmation_code, id} = existing_email
+            console.log('-- /submit_email resend -->', email, id, confirmation_code);
+            sendEmail('confirm_email', email, {confirmation_code});
         } else {
-            eid = yield models.Identity.create({
-                provider: 'email',
-                user_id,
-                uid: this.session.uid,
-                email,
-                verified: false,
-                confirmation_code
-            });
-        }
-        console.log('-- /submit_email -->', this.session.uid, this.session.user, email, eid.id);
-        sendEmail('confirm_email', email, {confirmation_code});
+            let user
+            if(user_id) {
+                user = yield models.User.findOne({attributes: ['id'], where: {id: user_id}});
+            }
+            if (!user) {
+                user = yield models.User.create({
+                    uid: this.session.uid,
+                    remote_ip: getRemoteIp(this.request.req)
+                });
+                this.session.user = user_id = user.id;
+            }
 
+            const confirmation_code = Math.random().toString(36).slice(2);
+            let eid = yield models.Identity.findOne(
+                {attributes: ['id', 'email'], where: {user_id, provider: 'email'}, order: 'id'}
+            );
+            if (eid) {
+                yield eid.update({confirmation_code, email});
+            } else {
+                eid = yield models.Identity.create({
+                    provider: 'email',
+                    user_id,
+                    uid: this.session.uid,
+                    email,
+                    verified: false,
+                    confirmation_code
+                });
+            }
+            console.log('-- /submit_email -->', this.session.uid, this.session.user, email, eid.id);
+            sendEmail('confirm_email', email, {confirmation_code});
+        }
         const body = renderToString(<div className="App">
             <MiniHeader />
             <SignupProgressBar steps={['email', 'phone', 'steem account']} current={1} />
@@ -203,4 +202,22 @@ export default function useEnterAndConfirmEmailPages(app) {
 
     router.get('/confirm_email/:code', confirmEmailHandler);
     router.post('/confirm_email', koaBody, confirmEmailHandler);
+}
+
+function* checkRecaptcha(ctx) {
+    if(process.env.NODE_ENV !== 'production')
+        return true
+
+    const recaptcha = ctx.request.body['g-recaptcha-response'];
+    const verificationUrl = 'https://www.google.com/recaptcha/api/siteverify?secret=' + config.recaptcha.secret_key + '&response=' + recaptcha + '&remoteip=' + ctx.req.connection.remoteAddress;
+    let captcha_failed;
+    try {
+        const recaptcha_res = yield request(verificationUrl);
+        const body = JSON.parse(recaptcha_res.body);
+        captcha_failed = !body.success;
+    } catch (e) {
+        captcha_failed = true;
+        console.error('-- /submit_email recaptcha request failed -->', verificationUrl, e);
+    }
+    return !captcha_failed
 }

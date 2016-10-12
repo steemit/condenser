@@ -233,6 +233,16 @@ class App extends React.Component {
           </SidePanel>
           <Header toggleOffCanvasMenu={this.toggleOffCanvasMenu} menuOpen={this.state.open} /></div>);
         }
+        else {
+            header_bar = (
+                <div>
+                    <SidePanel ref="side_panel" alignment="right">
+                        <TopRightMenu vertical navigate={this.navigate} />
+                    </SidePanel>
+                    <Header toggleOffCanvasMenu={this.toggleOffCanvasMenu} menuOpen={this.state.open} />
+                </div>
+            );
+        }
 
         return <div className={'App' + (lp ? ' LP' : '') + (ip ? ' index-page' : '')} onMouseMove={this.onEntropyEvent}>
                 {header_bar}

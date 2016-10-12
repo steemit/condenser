@@ -44,12 +44,12 @@ export default class LandingDistribution extends React.Component {
 					</div>
 				</div>
 				<div className="row">
-					<div className="small-6">
+					<div className="small-12 medium-6">
 						{/* <img src="images/landing/pie.png" /> */}
 						<img src="images/landing/pie_new.png" />
 						{/* <img src="images/landing/pie3.png" /> */}
 					</div>
-					<div className="small-6 columns Distribution__list">
+					<div className="small-12 medium-6 columns Distribution__list">
 						<ul>
 							{/* {renderList()} */}
 							<li className="Distribution__item">

@@ -14,7 +14,6 @@ import SvgImage from 'app/components/elements/SvgImage';
 import {List} from 'immutable'
 import { translate } from 'app/Translator';
 import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
-import { FormattedHTMLMessage, FormattedMessage } from 'react-intl';
 
 class Post extends React.Component {
 
@@ -124,10 +123,7 @@ class Post extends React.Component {
 
 
         let sort_orders = [ 'trending', 'active', 'created', 'updated' ];
-        // https://github.com/GolosChain/tulupchik/issues/27
-        // возможно решение здесь. Вставить функцию translate к каждому из элементов
-        // проверить пока возможности нет, поэтому добавляю лишь коммент
-        let sort_labels = [ 'trending', 'active', 'new', 'updated' ];
+        let sort_labels = [ translate('trending'), translate('active'), translate('new'), translate('updated') ];
         let sort_menu = [];
 
         let selflink = `/${dis.get('category')}/@${post}`;
@@ -169,7 +165,7 @@ class Post extends React.Component {
                             {positiveComments.length ?
                             (<div className="Post__comments_sort_order float-right">
                                 {translate('sort_order')}: &nbsp;
-                                <FoundationDropdownMenu menu={sort_menu} label={sort_order} dropdownPosition="bottom" dropdownAlignment="right" />
+                                <FoundationDropdownMenu menu={sort_menu} label={translate(sort_order)} dropdownPosition="bottom" dropdownAlignment="right" />
                             </div>) : null}
                             {positiveComments}
                             {negativeGroup}

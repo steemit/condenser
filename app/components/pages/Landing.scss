@@ -416,8 +416,7 @@
 	.Landing__supporting-text { margin-bottom: 65px; }
 	.WhyGolos__image { margin: 65px auto; }
 	.WhyGolos__reasons {
-		margin-top: 65px;
-		margin-bottom: 115px;
+		margin: 65px auto;
 		strong { display: block; }
 		p { font-size: 13px; }
 		@media #{$small-up} {

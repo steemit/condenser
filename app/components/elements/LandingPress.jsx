@@ -7,7 +7,7 @@ export default class LandingPress extends React.Component {
 			{
 				url: 'http://forklog.com/russkoyazychnyj-analog-steemit-obyavil-o-nachale-kraudsejla/',
 				title: 'FORKLOG: Русскоязычный аналог Steemit анонсировал краудсейл',
-				image: 'http://forklog.com/wp-content/themes/newForklog/img/logo.svg',
+				image: 'images/landing/forklog-logo.svg',
 				text: '29 сентября была сделана копия учетных записей блокчейна социальной сети Steemit в рамках договоренности о создании русскоязычной версии соцсети, получившей название “Голос”. 60% токенов сети будет распределено в рамках ICO, которое стартует 15 октября.'
 			},
 			{

@@ -12,7 +12,7 @@ import { APP_NAME, APP_ICON } from 'config/client_config';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
 
 function sortOrderToLink(so, topic, account) {
-    if (so === 'home') return  '/' // LANDING return '/@' + account + '/feed';
+    if (so === 'home') return '/@' + account + '/feed';
     if (topic) return `/${so}/${topic}`;
     return `/${so}`;
 }

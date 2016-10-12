@@ -34,7 +34,7 @@ class Author extends React.Component {
         const {username} = this.props // redux
 
         const author_link = <span className="Author" itemProp="author" itemScope itemType="http://schema.org/Person">
-            <Link to={'/@' + author}><strong>{author}</strong></Link><Reputation value={authorRepLog10} />
+            <Link to={'/@' + author}><strong>{author}</strong></Link>&nbsp;<Reputation value={authorRepLog10} />
         </span>
 
         if(!username)

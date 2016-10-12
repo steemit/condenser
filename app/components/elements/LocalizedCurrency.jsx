@@ -3,6 +3,7 @@ import store from 'store';
 import cc from 'currency-codes';
 import { injectIntl } from 'react-intl';
 import { getSymbolFromCurrency } from 'currency-symbol-map';
+import { FRACTION_DIGITS } from 'config/client_config';
 
 let localCurrencySymbol
 let localizedCurrency = () => {}
@@ -14,15 +15,19 @@ let localizedCurrency = () => {}
 export default class LocalizedCurrency extends React.Component {
 
 	static propTypes = {
-		amount: React.PropTypes.number.isRequired,
-		noSymbol: React.PropTypes.bool
+		noSymbol: React.PropTypes.bool,
+		fractionDigits: React.PropTypes.number,
+		amount: React.PropTypes.number.isRequired
 	}
 
-	// static defaultProps = { noSymbol: false } // is this needed?
+	static defaultProps = {
+		fractionDigits: FRACTION_DIGITS
+		// noSymbol: false // is this needed?
+	}
 
 	state = {
 		exchangeRate: store.get('exchangeRate'),
-		currency: store.get('currency') || 'USD'
+		currency: store.get('currency') || 'RUB'
 	}
 
 	// on mount check if data is fresh and fetch it if needed
@@ -70,7 +75,7 @@ export default class LocalizedCurrency extends React.Component {
 
 	render() {
 		const {currency, exchangeRate} 	 = this.state
-		const {amount, intl: {formatNumber}, noSymbol, ...rest} = this.props
+		const {amount, intl: {formatNumber}, noSymbol, fractionDigits, ...rest} = this.props
 
 		localCurrencySymbol = getSymbolFromCurrency(currency)
 
@@ -82,16 +87,21 @@ export default class LocalizedCurrency extends React.Component {
 		 */
 		// depending on exchange rates data parse local currency or default one
 		localizedCurrency = (number, options) => {
-			const currencyAmount = 	exchangeRate
-										? formatNumber(number * exchangeRate)
-										: formatNumber(number)
+			const currencyAmount = 	formatNumber(
+										exchangeRate
+										? number * exchangeRate
+										: number,
+										options
+									)
 			// if noSymbol is specified return only amount of digits
 			return 	noSymbol || options && options.noSymbol
 					? currencyAmount
 					: localCurrencySymbol + ' ' + currencyAmount
 		}
 
-		return 	<span {...rest}>{localizedCurrency(amount)}</span>
+		return 	<span {...rest}>
+					{localizedCurrency(amount, {maximumFractionDigits: fractionDigits})}
+				</span>
 	}
 }
 

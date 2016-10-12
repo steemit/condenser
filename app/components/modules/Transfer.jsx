@@ -63,7 +63,7 @@ class TransferForm extends Component {
         }
         const {toVesting} = props
         const fields = toVesting ? ['to', 'amount'] : ['to', 'amount', 'asset']
-        if(transferType !== 'Transfer to Savings' && transferType !== 'Savings Withdraw')
+        if(!toVesting && transferType !== 'Transfer to Savings' && transferType !== 'Savings Withdraw')
             fields.push('memo')
 
         reactForm({

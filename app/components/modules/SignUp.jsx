@@ -57,8 +57,9 @@ class SignUp extends React.Component {
                         {translate("continue_with_vk")}
                     </a>
                 </div>
+                &nbsp;
             </div>
-            <div className="row">
+            {/*<div className="row">
             &nbsp;
             </div>
             <div className="row">
@@ -71,8 +72,8 @@ class SignUp extends React.Component {
             </div>
             <div className="row">
             &nbsp;
-            </div>
-            <div className="row">
+            </div>*/}
+            {/*<div className="row">
                 <div className="column large-4 shrink">
                     <SvgImage name="reddit" width="64px" height="64px" />
                 </div>
@@ -85,17 +86,22 @@ class SignUp extends React.Component {
                         ({translate("requires_5_or_more_reddit_comment_karma")})
                     </span>
                 </div>
-            </div>
+            </div>*/}
 
-            <div className="row">
+            {/*<div className="row">
                 <div className="column">
                       <br />
-                    {translate("dont_have_facebook")} <br />
+                    translate("dont_have_facebook") <br />
                     {this.state.waiting_list ? <AddToWaitingList /> : <a href="#" onClick={() => this.setState({waiting_list: true})}>
                         <strong> {translate("subscribe_to_get_sms_confirm")}.</strong>
                     </a>}
                 </div>
-            </div>
+            </div>*/}
+            <div className="row">
+                <div className="column">
+                      <br />
+                <i>Возможность регистрации через Facebook и другие социальные ожидается в ближайшее время.</i>
+            </div></div>
             <div className="row">
                 <div className="column">
                     <br />

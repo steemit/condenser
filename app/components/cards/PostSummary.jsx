@@ -164,11 +164,7 @@ export default class PostSummary extends React.Component {
                     <div className="PostSummary__footer">
                         <Voting pending_payout={pending_payout} total_payout={total_payout} showList={false} cashout_time={cashout_time} post={post} showList={false} />
                         <span className="PostSummary__time_author_category show-for-medium">
-
-                            <TimeAuthorCategory post={p} links authorRepLog10={authorRepLog10} />
-                  {/* merged author_category from upstream; using timeAuthorCategory also*/}
                             {author_category}
-
                             {!archived && <Reblog author={p.author} permlink={p.permlink} />}
                         </span>
                         <VotesAndComments post={post} commentsLink={comments_link} />

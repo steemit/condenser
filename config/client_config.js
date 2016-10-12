@@ -28,5 +28,8 @@ export const DEBT_TICKER = 'GBG'
 export const DEBT_TOKEN_SHORT = 'GBG' // 'SD'
 
 
+export const SITE_DESCRIPTION = 'Голос - социальная сеть, построенная на публичном блокчейне. Вознаграждение пользователей осуществляется за счет дополнительной эмиссии токенов. При этом распределением токенов управляют текущие пользователи сети через голосование за лучший контент.'
+
+
 // export const LANDING_PAGE_URL =
 // export const WHITEPAPER_URL =

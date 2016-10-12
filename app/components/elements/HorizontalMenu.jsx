@@ -11,6 +11,9 @@ export default class HorizontalMenu extends React.Component {
     };
 
     render() {
+        // if this is ico page hide this section
+        if (process.env.BROWSER && /^\/ico$/.test(window.location.pathname)) return null
+
         const {items, title, className, hideValue} = this.props;
         return <ul className={'HorizontalMenu menu' + (className ? ' ' + className : '')}>
             {title && <li className="title">{title}</li>}

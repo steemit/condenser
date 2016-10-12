@@ -72,6 +72,7 @@ export default class SlateEditor extends React.Component {
     // Check if the current selection has a mark with `type` in it.
     hasMark = (type) => {
         const { state } = this.state
+        if (!state.isExpanded) return
         return state.marks.some(mark => mark.type == type)
     }
 
@@ -295,6 +296,17 @@ console.log(JSON.stringify(Raw.serialize(state, {terse: false})))
             .apply()
     }
 
+    onPaste = (e, data, state) => {
+        console.log("** onPaste:", data.type, data.html)
+        if (data.type != 'html') return
+        const { document } = serializer.deserialize(data.html)
+
+        return state
+            .transform()
+            .insertFragment(document)
+            .apply()
+    }
+
     render = () => {
         const { state } = this.state
         return (
@@ -370,6 +382,7 @@ console.log(JSON.stringify(Raw.serialize(state, {terse: false})))
                     state={this.state.state}
                     onChange={this.onChange}
                     onKeyDown={this.onKeyDown}
+                    onPaste={this.onPaste}
                 />
             </div>
         )

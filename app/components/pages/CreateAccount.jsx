@@ -119,6 +119,7 @@ class CreateAccount extends React.Component {
         if (name.length > 0) {
             name_error = validate_account_name(name);
             if (!name_error) {
+                this.setState({nameError: ''});
                 promise = Apis.db_api('get_accounts', [name]).then(res => {
                     return res && res.length > 0 ? 'Account name is not available' : '';
                 });

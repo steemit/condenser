@@ -40,6 +40,7 @@ class ChangePassword extends React.Component {
         if (name.length > 0) {
             nameError = validate_account_name(name);
             if (!nameError) {
+                this.setState({nameError: ''});
                 promise = Apis.db_api('get_accounts', [name]).then(res => {
                     return !(res && res.length > 0) ? 'Account not found' : '';
                 });

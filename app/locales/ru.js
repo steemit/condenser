@@ -522,7 +522,13 @@ const ru = {
 	reblog: 'Поделиться',
 	updated: 'обновленное',
 	created: 'новое',
-	settings: 'Настройки'
+	settings: 'Настройки',
+	incorrect_password: 'неправильный пароль',
+	username_does_not_exist: 'Такого имени не существует',
+	// string with a '.'(dot) is returned from the server, so you should add it too, despite rules
+	account_name_should_be_longer: 'Имя аккаунта должно быть длиннее.',
+	account_name_should_be_shorter: 'Имя аккаунта должно быть короче.',
+	account_name_should_start_with_a_letter: 'Имя аккаунта должно начинаться с буквы.',
 }
 
 export { ru }

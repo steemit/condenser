@@ -32,7 +32,7 @@ function createDate(month, day, hours, minutes) {
 
 const buyGolosButton = <a href="" className="button Landing__button_big">Купи <strong>Силу Голоса</strong></a>
 
-const blockchainStartAt = createDate(9, 15, 15, 0)
+const blockchainStartAt = createDate(9, 14, 15, 0)
 const crowdsaleStartAt = createDate(10, 1, 15, 0)
 const crowdsaleEndAt = createDate(11, 1, 15, 0)
 

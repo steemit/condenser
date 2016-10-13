@@ -59,20 +59,19 @@ class SignUp extends React.Component {
                 </div>
                 &nbsp;
             </div>
-            {/*<div className="row">
-            &nbsp;
-            </div>
             <div className="row">
-                <div className="column large-4 shrink">
-                    <SvgImage name="facebook" width="64px" height="64px" />
-                </div>
-                <div className="column large-8">
-                    <a href="/connect/facebook" className="button SignUp--fb-button">{translate("continue_with_facebook")}</a>
-                </div>
+              </div>
+              <div className="row">
+                  <div className="column large-4 shrink">
+                      <SvgImage name="facebook" width="64px" height="64px" />
+                  </div>
+                  <div className="column large-8">
+                      <a href="/connect/facebook" className="button SignUp--fb-button">{translate("continue_with_facebook")}</a>
+                  </div>
+              </div>
+              <div className="row">
+              &nbsp;
             </div>
-            <div className="row">
-            &nbsp;
-            </div>*/}
             {/*<div className="row">
                 <div className="column large-4 shrink">
                     <SvgImage name="reddit" width="64px" height="64px" />

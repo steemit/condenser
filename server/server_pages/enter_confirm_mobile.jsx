@@ -8,6 +8,7 @@ import {verify} from 'server/teleSign';
 import SignupProgressBar from 'app/components/elements/SignupProgressBar';
 import {getRemoteIp, checkCSRF} from 'server/utils';
 import MiniHeader from 'app/components/modules/MiniHeader';
+import secureRandom from 'secure-random'
 
 const assets_file = process.env.NODE_ENV === 'production' ? 'tmp/webpack-stats-prod.json' : 'tmp/webpack-stats-dev.json';
 const assets = Object.assign({}, require(assets_file), {script: []});
@@ -126,7 +127,7 @@ export default function useEnterAndConfirmMobilePages(app) {
             return;
         }
 
-        const confirmation_code = Math.random().toString().substring(2, 6);
+        const confirmation_code = parseInt(secureRandom.randomBuffer(8).toString('hex'), 16).toString(10).substring(0, 4); // 4 digit code
         let mid = yield models.Identity.findOne(
             {attributes: ['id', 'phone', 'verified', 'updated_at'], where: {user_id, provider: 'phone'}, order: 'id'}
         );

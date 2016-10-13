@@ -1,8 +1,9 @@
 import models from '../db/models';
 import sendEmail from '../server/sendEmail';
+import secureRandom from 'secure-random'
 
 function inviteUser(u, email, number) {
-    const confirmation_code = Math.random().toString(36).slice(2);
+    const confirmation_code = secureRandom.randomBuffer(13).toString('hex');
     console.log(`\n***** invite #${number} ***** `, u.id, email, confirmation_code);
     const i_attrs = {
         provider: 'email',

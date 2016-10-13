@@ -10,6 +10,7 @@ import {checkCSRF, getRemoteIp} from '../utils';
 import config from '../../config';
 import SignupProgressBar from 'app/components/elements/SignupProgressBar';
 import MiniHeader from 'app/components/modules/MiniHeader';
+import secureRandom from 'secure-random'
 
 const assets_file = process.env.NODE_ENV === 'production' ? 'tmp/webpack-stats-prod.json' : 'tmp/webpack-stats-dev.json';
 const assets = Object.assign({}, require(assets_file), {script: []});
@@ -165,7 +166,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                 this.session.user = user_id = user.id;
             }
 
-            const confirmation_code = Math.random().toString(36).slice(2);
+            const confirmation_code = secureRandom.randomBuffer(13).toString('hex');
             let eid = yield models.Identity.findOne(
                 {attributes: ['id', 'email'], where: {user_id, provider: 'email'}, order: 'id'}
             );

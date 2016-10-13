@@ -21,6 +21,7 @@ import flash from 'koa-flash';
 import minimist from 'minimist';
 import Grant from 'grant-koa';
 import config from '../config';
+import secureRandom from 'secure-random'
 
 const grant = new Grant(config.grant);
 // import uploadImage from 'server/upload-image' //medium-editor
@@ -85,7 +86,7 @@ app.use(function* (next) {
     const last_visit = this.session.last_visit;
     this.session.last_visit = (new Date()).getTime() / 1000 | 0;
     if (!this.session.uid) {
-        this.session.uid = Math.random().toString(36).slice(2);
+        this.session.uid = secureRandom.randomBuffer(13).toString('hex');
         this.session.new_visit = true;
     } else {
         this.session.new_visit = this.session.last_visit - last_visit > 1800;

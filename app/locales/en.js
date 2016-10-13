@@ -515,7 +515,8 @@ const en = 	{
 	reblogged_by: 'Resteemed by',
 	reblog: "Resteem",
 	updated: 'updated',
-	created: 'created'
+	created: 'created',
+	settings: 'Settings'
 }
 
 export { en }

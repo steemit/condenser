@@ -51,11 +51,16 @@ export const HtmlRules = [
         deserialize: (el, next) => {
             const type = BLOCK_TAGS[el.tagName]
             if (!type) return
+
+            // Special case for <pre>: ignore its inner <code> element.
+            const code = el.tagName == 'pre' ? el.children[0] : null
+            const children = code && code.tagName == 'code' ? code.children : el.children
+
             return {
                 kind: 'block',
                 type: type,
                 isVoid: (type == 'hr'),
-                nodes: next(el.children)
+                nodes: next(children)
             }
         },
         serialize: (object, children) => {

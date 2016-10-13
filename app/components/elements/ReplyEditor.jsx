@@ -481,7 +481,7 @@ export default formId => reduxForm(
             // (all of this is needed because blockchain does not allow russian symbols in category)
             if (category) {
                 category = category.split(' ')
-                                    .map(item => /^[а-я]/.test(item) ? 'ru--' + detransliterate(item, true) : item)
+                                    .map(item => /^[а-яё]/.test(item) ? 'ru--' + detransliterate(item, true) : item)
                                     .join(' ')
             }
 

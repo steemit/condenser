@@ -523,7 +523,7 @@ const ru = {
 	updated: 'обновленное',
 	created: 'новое',
 	settings: 'Настройки',
-	incorrect_password: 'неправильный пароль',
+	incorrect_password: 'Неправильный пароль',
 	username_does_not_exist: 'Такого имени не существует',
 	// string with a '.'(dot) is returned from the server, so you should add it too, despite rules
 	account_name_should_be_longer: 'Имя аккаунта должно быть длиннее.',

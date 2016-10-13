@@ -517,7 +517,7 @@ const en = 	{
 	updated: 'updated',
 	created: 'created',
 	settings: 'Settings',
-	incorrect_password: 'incorrect password',
+	incorrect_password: 'Incorrect password',
 	username_does_not_exist: 'Username does not exist',
 	// string with a '.'(dot) is returned from the server, so you should add it too, despite rules
 	account_name_should_start_with_a_letter: 'Account name should start with a letter.',

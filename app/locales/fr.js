@@ -33,7 +33,7 @@ const fr = 	{
 	tags_and_topics: "Tags et sujets",
 	filter: "Filtre",
 	show_more_topics: "Afficher plus de sujets",
-	we_require_social_account: 'Steemit rémunere chaque nouveau compte avec ${signup_bonus} de Steem Power; afin d\'éviter les abus, nous demandons aux nouveaux utilisateurs de lier leur compte social.',
+	we_require_social_account: 'Steemit rémunere chaque nouveau compte avec {signup_bonus} de Steem Power; afin d\'éviter les abus, nous demandons aux nouveaux utilisateurs de lier leur compte social.',
 	personal_info_will_be_private: 'Vos informations personelles seront privées',
 	personal_info_will_be_private_link: 'Privé',
 	continue_with_facebook: 'Continuer avec Facebook',
@@ -85,7 +85,7 @@ const fr = 	{
 	welcome_to_the_blockchain: 'Bienvenue sur la Blockchain!',
 	your_voice_is_worth_something: 'Votre voix a une valeur',
 	learn_more: 'En savoir plus',
-	get_sp_when_sign_up: 'Obtenez ${signupBonus} de Steem Power à votre inscription.',
+	get_sp_when_sign_up: 'Obtenez {signupBonus} de Steem Power à votre inscription.',
 	all_accounts_refunded: 'Vous les comptes récupérés ont été remboursés.',
 	steemit_is_now_open_source: 'Steemit.com est maintenant Open Source',
 	// this is mainly from ReplyEditor

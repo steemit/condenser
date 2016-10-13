@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import { Link } from 'react-router';
+import links from 'app/utils/Links'
 import Icon from 'app/components/elements/Icon';
 import transaction from 'app/redux/Transaction'
 import ByteBuffer from 'bytebuffer'
@@ -50,7 +51,11 @@ class Witnesses extends React.Component {
                 (myVote === true ? ' Voting__button--upvoted' : '');
             let witness_thread = ""
             if(thread) {
-                witness_thread = <Link to={thread}>witness thread</Link>
+                if(links.remote.test(thread)) {
+                    witness_thread = <Link to={thread} target="_blank">witness thread&nbsp;<Icon name="extlink" /></Link>
+                } else {
+                    witness_thread = <Link to={thread}>witness thread</Link>
+                }
             }
             return (
                     <tr key={owner}>
@@ -102,7 +107,7 @@ class Witnesses extends React.Component {
                         <h2>Top Witnesses</h2>
                         <p>
                             <strong>You have {witness_votes_count} votes remaining.</strong>
-                            You can vote for a maximum of 30 witnesses.
+                            &nbsp;You can vote for a maximum of 30 witnesses.
                         </p>
                     </div>
                 </div>

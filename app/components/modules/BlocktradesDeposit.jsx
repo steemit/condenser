@@ -222,7 +222,7 @@ export default class BlocktradesDeposit extends React.Component {
                 <div className="row">
                     <div className="column small-12">
                         {sendTo}
-                        {paymentLink && !hasError && <a href={paymentLink}>&nbsp;<Icon name="extlink" /></a>}
+                        {paymentLink && !hasError && <a href={paymentLink} target="_blank">&nbsp;<Icon name="extlink" /></a>}
                         <div className="de-empasize">{depositLimit && `Suggested limit ${depositLimit}`}&nbsp;</div>
                     </div>
                 </div>

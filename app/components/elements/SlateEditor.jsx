@@ -50,6 +50,10 @@ export default class SlateEditor extends React.Component {
         this.state = {state: props.initialState}
     }
 
+    reset = () => {
+        this.setState({state: this.props.initialState})
+    }
+
     componentDidMount = () => {
         this.updateMenu()
     }

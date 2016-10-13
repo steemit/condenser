@@ -28,7 +28,7 @@ if(process.env.BROWSER) {
         InsertImages({
             extensions: ['jpeg'],
             applyTransform: (transform, file) => {
-                return transform.insertBlock({
+                return transform.insertInline({
                     type: 'image',
                     isVoid: true,
                     data: { file }
@@ -160,7 +160,7 @@ export default class SlateEditor extends React.Component {
         const hasLinks = this.hasInline('link')
 
         if (hasLinks) {
-console.log(JSON.stringify(Raw.serialize(state, {terse: false})))
+console.log(JSON.stringify(Raw.serialize(state, {terse: false}), null, 2))
             state = state
                 .transform()
                 .unwrapInline('link')
@@ -195,18 +195,46 @@ console.log(JSON.stringify(Raw.serialize(state, {terse: false})))
               .collapseToEnd()
               .apply()
         }
-console.log(JSON.stringify(Raw.serialize(state, {terse: false})))
+console.log(JSON.stringify(Raw.serialize(state, {terse: false}), null, 2))
         this.setState({ state })
     }
 
 
     // Markdown-style quick formatting
     onKeyDown = (e, data, state) => {
+        if(data.isMod) return this.onModKeyDown(e, data, state);
         switch (data.key) {
             case 'space': return this.onSpace(e, state)
             case 'backspace': return this.onBackspace(e, state)
             case 'enter': return data.isShift ? this.onShiftEnter(e, state) : this.onEnter(e, state)
         }
+    }
+
+    onModKeyDown = (e, data, state) => {
+        let mark
+        switch (data.key) {
+            case 'b':
+                mark = 'bold'
+                break
+            case 'i':
+                mark = 'italic'
+                break
+            case 'u':
+                mark = 'underline'
+                break
+            case 'k':
+                return this.onClickLink(e);
+        }
+
+        if(!mark) return;
+
+        state = state
+          .transform()
+          .toggleMark(mark)
+          .apply()
+
+        e.preventDefault()
+        return state
     }
 
     // If space was entered, check if it was a markdown sequence

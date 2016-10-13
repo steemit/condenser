@@ -10,7 +10,10 @@ export default class CountDown extends React.Component {
 		title: PropTypes.node,
 		onEnd: PropTypes.func,
 		date: PropTypes.object.isRequired,
-		countFrom: PropTypes.object.isRequired
+		countFrom: 	PropTypes.oneOfType([
+			            React.PropTypes.number.isRequired,
+			            React.PropTypes.object.isRequired
+			        ])
 	}
 
 	state = { timeLeft: this.props.date }

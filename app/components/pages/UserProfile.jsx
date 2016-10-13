@@ -9,6 +9,7 @@ import PostSummary from 'app/components/cards/PostSummary';
 import UserKeys from 'app/components/elements/UserKeys';
 import PasswordReset from 'app/components/elements/PasswordReset';
 import UserWallet from 'app/components/modules/UserWallet';
+import Settings from 'app/components/modules/Settings';
 import CurationRewards from 'app/components/modules/CurationRewards';
 import AuthorRewards from 'app/components/modules/AuthorRewards';
 import UserList from 'app/components/elements/UserList';
@@ -148,6 +149,9 @@ export default class UserProfile extends React.Component {
                           />
             }
         }
+        else if( section === 'settings' ) {
+            tab_content = <Settings />
+        }
         else if( section === 'posts' && account.post_history ) {
            if( account.posts )
            {
@@ -270,6 +274,7 @@ export default class UserProfile extends React.Component {
                     <li><Link to={`/@${accountname}/transfers`} activeClassName="active">{translate('wallet')}</Link></li>
                     {wallet_tab_active && isMyAccount && <li><Link to={`/@${account.name}/permissions`} activeClassName="active">{translate('permissions')}</Link></li>}
                     {wallet_tab_active && isMyAccount && <li><Link to={`/@${account.name}/password`} activeClassName="active">{translate('password')}</Link></li>}
+                    <li><Link to={`/@${accountname}/settings`} activeClassName="active">{translate('settings')}</Link></li>
                 </ul>
             </div>
          </div>;

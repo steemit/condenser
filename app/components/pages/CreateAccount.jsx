@@ -125,7 +125,9 @@ class CreateAccount extends React.Component {
             }
         }
         if (promise) {
-            promise.then(error => this.setState({name_error: error}));
+            promise.catch(() => this.setState({
+                name_error: "Account name can't be verified right now due to server failure. Please try again later."
+            }));
         } else {
             this.setState({name_error});
         }

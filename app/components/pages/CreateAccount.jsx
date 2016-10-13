@@ -267,7 +267,6 @@ class CreateAccount extends React.Component {
                             </noscript>
                             {loading && <LoadingIndicator type="circle" />}
                             <input disabled={submit_btn_disabled} type="submit" className={submit_btn_class} value="Create Account" />
-                            <small><a className="float-right" href="/api/v1/session_reset/enter_email">Start Over</a></small>
                         </form>
                     </div>
                 </div>

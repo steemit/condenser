@@ -19,9 +19,10 @@ assets.script.push('https://www.google.com/recaptcha/api.js');
 function *confirmEmailHandler() {
     const confirmation_code = this.params && this.params.code ? this.params.code : this.request.body.code;
     console.log('-- /confirm_email -->', this.session.uid, this.session.user, confirmation_code);
-    const eid = yield models.Identity.findOne(
-        {attributes: ['id', 'user_id', 'email', 'updated_at', 'verified'], where: {confirmation_code}, order: 'id DESC'}
-    );
+    const eid = yield models.Identity.findOne({
+        attributes: ['id', 'user_id', 'email', 'updated_at', 'verified'],
+        where: {confirmation_code, provider: 'email'}, order: 'id DESC'
+    });
     if (!eid) {
         this.status = 401;
         this.body = 'confirmation code not found';

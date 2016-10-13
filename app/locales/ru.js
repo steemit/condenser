@@ -521,7 +521,8 @@ const ru = {
 	reblogged_by: 'Поделился',
 	reblog: 'Поделиться',
 	updated: 'обновленное',
-	created: 'новое'
+	created: 'новое',
+	settings: 'Настройки'
 }
 
 export { ru }

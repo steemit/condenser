@@ -1,5 +1,5 @@
 import React from 'react'
-import Header from 'app/components/elements/LandingHeader'
+// import Header from 'app/components/elements/LandingHeader'
 import CountDowns from 'app/components/elements/LandingCountDowns'
 import Distribution from 'app/components/elements/LandingDistribution'
 import WhatIsGolos from 'app/components/elements/LandingWhatIsGolos'

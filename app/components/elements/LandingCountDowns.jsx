@@ -62,6 +62,9 @@ export default class LandingCountDowns extends React.Component {
 	render() {
 		const {state, props} = this
 		const currentStage = this.dates.find((item) => item.bonus == this.calculateCurrentStage())
+		const previousStage = this.dates.find((item) => item.bonus < this.calculateCurrentStage())
+
+		const oneMounth = 1000 * 60 * 60 * 24 * 30
 
 		return (
 			<section className="CountDowns">
@@ -79,24 +82,32 @@ export default class LandingCountDowns extends React.Component {
 				</div>
 
 				{/* COUNTERS */}
-				{/* change counter */}
+				{/* prefill means pre crowdsale start info */}
 				{
 					props.prefill
 					? 	<div className="row text-center CountDowns__counters">
 							<div className="small-12 medium-6 columns CountDowns__counter">
-								<CountDown title={
-										<strong>До запуска блокчейна</strong>
-									} date={props.blockchainStartAt} />
+								<CountDown
+									title={<strong>До запуска блокчейна</strong>}
+									date={props.blockchainStartAt}
+									countFrom={props.blockchainStartAt.getTime() - oneMounth}
+								/>
 							</div>
 							<div className="small-12 medium-6 columns CountDowns__counter">
-								<CountDown title={
-										<strong>До старта продажи силы голоса</strong>
-									} date={props.crowdsaleStartAt} />
+								<CountDown
+									title={<strong>До старта продажи силы голоса</strong>}
+									date={props.crowdsaleStartAt}
+									countFrom={props.crowdsaleStartAt.getTime() - oneMounth}
+								/>
 							</div>
 						</div>
 					: 	<div className="row text-center CountDowns__counters">
 							<div className="small-12 medium-4 columns CountDowns__counter">
-								<CountDown title="Продажа силы голоса закончится" date={props.crowdsaleEndAt} />
+								<CountDown
+									title="Продажа силы голоса закончится"
+									date={props.crowdsaleEndAt}
+									countFrom={props.crowdsaleEndAt.getTime() - props.crowdsaleStartAt.getTime()}
+								/>
 							</div>
 							<div className="small-12 medium-4 columns CountDowns__counter">
 								<p>Собрано биткоинов</p>
@@ -106,7 +117,11 @@ export default class LandingCountDowns extends React.Component {
 								</p>
 							</div>
 							<div className="small-12 medium-4 columns">
-								<CountDown title={`Бонус уменьшится: до ${state.nextBonus}%`} date={currentStage.date} />
+								<CountDown
+									title={`Бонус уменьшится: до ${state.nextBonus}%`}
+									date={currentStage.date}
+									countFrom={previousStage.date.getTime() - oneMounth}
+								/>
 							</div>
 						</div>
 				}

@@ -53,18 +53,7 @@ export default function useEnterAndConfirmEmailPages(app) {
 
     router.get('/enter_email', function *() {
         console.log('-- /enter_email -->', this.session.uid, this.session.user);
-        let eid = null;
-        const user_id = this.session.user;
-        if (user_id) {
-            eid = yield models.Identity.findOne(
-                {attributes: ['email', 'verified'], where: {user_id, provider: 'email'}, order: 'id DESC'}
-            );
-            if (eid && eid.verified) {
-                this.flash = {success: 'Email has already been verified'};
-                this.redirect('/enter_mobile');
-                return;
-            }
-        }
+        this.session.user = null;
         let default_email = '';
         if (this.request.query && this.request.query.email) default_email = this.request.query.email;
         const body = renderToString(<div className="App">

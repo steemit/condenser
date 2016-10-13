@@ -79,6 +79,7 @@ export default function useEnterAndConfirmMobilePages(app) {
                     <br />
                     <div className="error">{this.flash.error}</div>
                     <input type="submit" className="button" value="CONTINUE" />
+                    <small><a className="float-right" href="/api/v1/session_reset/enter_email">Start Over</a></small>
                 </form>
             </div>
         </div>);
@@ -118,7 +119,7 @@ export default function useEnterAndConfirmMobilePages(app) {
         }
 
         const existing_phone = yield models.Identity.findOne(
-            {attributes: ['user_id'], where: {phone: mobile, provider: 'phone', verified: true}, order: 'id'}
+            {attributes: ['user_id'], where: {phone: mobile, provider: 'phone', verified: true}, order: 'id DESC'}
         );
         if (existing_phone && existing_phone.user_id != user_id) {
             console.log('-- /submit_email existing_phone -->', user_id, this.session.uid, mobile, existing_phone.user_id);
@@ -129,7 +130,7 @@ export default function useEnterAndConfirmMobilePages(app) {
 
         const confirmation_code = parseInt(secureRandom.randomBuffer(8).toString('hex'), 16).toString(10).substring(0, 4); // 4 digit code
         let mid = yield models.Identity.findOne(
-            {attributes: ['id', 'phone', 'verified', 'updated_at'], where: {user_id, provider: 'phone'}, order: 'id'}
+            {attributes: ['id', 'phone', 'verified', 'updated_at'], where: {user_id, provider: 'phone'}, order: 'id DESC'}
         );
         if (mid) {
             if (mid.verified) {
@@ -186,6 +187,7 @@ export default function useEnterAndConfirmMobilePages(app) {
                     <div className="secondary">Didn't receive the verification code? <a href="/enter_mobile">Re-send</a></div>
                     <br />
                     <input type="submit" className="button" value="CONTINUE" />
+                    <small><a className="float-right" href="/api/v1/session_reset/enter_email">Start Over</a></small>
                 </form>
             </div>
         </div>);

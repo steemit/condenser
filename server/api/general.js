@@ -218,6 +218,12 @@ export default function useGeneralApi(app) {
         console.log('-- /csp_violation -->', this.req.headers['user-agent'], params);
         this.body = '';
     });
+
+    router.get('/session_reset/:redirect', function *() {
+        this.session.uid = null
+        this.session.user = null
+        this.redirect(`/${this.params.redirect}`)
+    })
 }
 
 import {Apis} from 'shared/api_client';

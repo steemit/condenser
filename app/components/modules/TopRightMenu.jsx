@@ -50,20 +50,20 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
         ];
         const search = translate('search')
 
-        if (process.env.BROWSER && /^\/ico$/.test(window.location.pathname)) {
+        if (process.env.BROWSER && window.location.pathname.indexOf("/ico") != -1) {
             return (
                 <ul className={mcn + ' landing'}>
                     <li className={lcn}>
-                        <Link to="what-is-golos" smooth offset={-110} duration={500}>Видео</Link>
+                        <Link spy to="what-is-golos" smooth offset={-110} duration={500}>Видео</Link>
                     </li>
                     <li className={lcn}>
-                        <Link to="docs" smooth offset={-110} duration={500}>Документация</Link>
+                        <Link spy to="docs" smooth offset={-110} duration={500}>Документация</Link>
                     </li>
                     <li className={lcn}>
-                        <Link to="faq" smooth offset={-110} duration={500}>FAQ</Link>
+                        <Link spy to="faq" smooth offset={-110} duration={500}>FAQ</Link>
                     </li>
                     <li className={lcn}>
-                        <Link to="team" smooth offset={-110} duration={500}>Команда</Link>
+                        <Link spy to="team" smooth offset={-110} duration={500}>Команда</Link>
                     </li>
                     <LinkWithDropdown
                         closeOnClickOutside
@@ -85,16 +85,16 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
             );
             return      <ul className={mcn + mcl + ' landing'}>
                             <li className={lcn}>
-                                <Link to="what-is-golos" smooth offset={-110} duration={500}>Видео</Link>
+                                <Link spy to="what-is-golos" smooth offset={-110} duration={500}>Видео</Link>
                             </li>
                             <li className={lcn}>
-                                <Link to="docs" smooth offset={-110} duration={500}>Документация</Link>
+                                <Link spy to="docs" smooth offset={-110} duration={500}>Документация</Link>
                             </li>
                             <li className={lcn}>
-                                <Link to="faq" smooth offset={-110} duration={500}>FAQ</Link>
+                                <Link spy to="faq" smooth offset={-110} duration={500}>FAQ</Link>
                             </li>
                             <li className={lcn}>
-                                <Link to="team" smooth offset={-110} duration={500}>Команда</Link>
+                                <Link spy to="team" smooth offset={-110} duration={500}>Команда</Link>
                             </li>
                             <li className={lcn + ' image-wrapper'}>
                                 <a href="https://test.golos.io/login.html">
@@ -138,19 +138,19 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
         );
     }
     if (probablyLoggedIn) {
-        if (process.env.BROWSER && /^\/ico$/.test(window.location.pathname)) {
+        if (process.env.BROWSER && window.location.pathname.indexOf("/ico") != -1) {
             return      <ul className={mcn + mcl + ' landing'}>
                             <li className={lcn}>
-                                <Link to="what-is-golos" smooth offset={-110} duration={500}>Видео</Link>
+                                <Link spy to="what-is-golos" smooth offset={-110} duration={500}>Видео</Link>
                             </li>
                             <li className={lcn}>
-                                <Link to="docs" smooth offset={-110} duration={500}>Документация</Link>
+                                <Link spy to="docs" smooth offset={-110} duration={500}>Документация</Link>
                             </li>
                             <li className={lcn}>
-                                <Link to="faq" smooth offset={-110} duration={500}>FAQ</Link>
+                                <Link spy to="faq" smooth offset={-110} duration={500}>FAQ</Link>
                             </li>
                             <li className={lcn}>
-                                <Link to="team" smooth offset={-110} duration={500}>Команда</Link>
+                                <Link spy to="team" smooth offset={-110} duration={500}>Команда</Link>
                             </li>
                             <li className={lcn + ' image-wrapper'}>
                                 <a href="https://test.golos.io/login.html">
@@ -176,19 +176,19 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
         );
     }
 
-    if (process.env.BROWSER && /^\/ico$/.test(window.location.pathname)) {
+    if (process.env.BROWSER && window.location.pathname.indexOf("/ico") != -1) {
         return  <ul className={mcn + mcl + ' landing'}>
                     <li className={lcn}>
-                        <Link to="what-is-golos" smooth offset={-110} duration={500}>Видео</Link>
+                        <Link spy to="what-is-golos" smooth offset={-110} duration={500}>Видео</Link>
                     </li>
                     <li className={lcn}>
-                        <Link to="docs" smooth offset={-110} duration={500}>Документация</Link>
+                        <Link spy to="docs" smooth offset={-110} duration={500}>Документация</Link>
                     </li>
                     <li className={lcn}>
-                        <Link to="faq" smooth offset={-110} duration={500}>FAQ</Link>
+                        <Link spy to="faq" smooth offset={-110} duration={500}>FAQ</Link>
                     </li>
                     <li className={lcn}>
-                        <Link to="team" smooth offset={-110} duration={500}>Команда</Link>
+                        <Link spy to="team" smooth offset={-110} duration={500}>Команда</Link>
                     </li>
                     <li className={lcn + ' image-wrapper'}>
                         <a href="https://test.golos.io/login.html">

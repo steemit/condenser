@@ -40,7 +40,7 @@ app.use(flash({key: 'flash'}));
 // remember ch, cn, r url params in the session and remove them from url
 app.use(function *(next) {
     if (this.method === 'GET' && this.url === '/' && this.session.a) {
-        this.status = 301;
+        this.status = 302;
         this.redirect(`/@${this.session.a}/feed`);
         return;
     }
@@ -53,7 +53,7 @@ app.use(function *(next) {
         redir = redir.replace(/&&&?/, '');
         redir = redir.replace(/\?&?$/, '');
         console.log(`server redirect ${this.url} -> ${redir}`);
-        this.status = 301;
+        this.status = 302;
         this.redirect(redir);
     } else {
         yield next;

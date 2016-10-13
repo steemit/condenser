@@ -133,22 +133,22 @@ export default function useEnterAndConfirmEmailPages(app) {
         }
 
         const existing_email = yield models.Identity.findOne(
-            {attributes: ['id', 'user_id', 'confirmation_code'], where: {email, provider: 'email', verified: true}, order: 'id'}
+            {attributes: ['id', 'user_id', 'confirmation_code'], where: {email, provider: 'email'}, order: 'id'}
         );
         let user_id = this.session.user;
-        if (existing_email && existing_email.user_id != user_id) {
+        if (existing_email) {
             console.log('-- /submit_email existing_email -->', user_id, this.session.uid, email, existing_email.user_id);
             const act = yield models.Account.findOne({
                 attributes: ['id'],
                 where: {user_id: existing_email.user_id, ignored: false},
                 order: 'id DESC'
             })
-            if(act) {
+            if (act) {
                 this.flash = {error: 'This email has already been taken.'};
                 this.redirect('/enter_email?email=' + email);
                 return
             }
-            // We must resend the email to get teh session going again if the user gets interrupted (clears cookies or changes browser) after email verify.
+            // We must resend the email to get the session going again if the user gets interrupted (clears cookies or changes browser) after email verify.
             const {confirmation_code, id} = existing_email
             console.log('-- /submit_email resend -->', email, id, confirmation_code);
             sendEmail('confirm_email', email, {confirmation_code});

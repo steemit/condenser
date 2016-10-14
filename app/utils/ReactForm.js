@@ -77,6 +77,7 @@ export default function reactForm({name, instance, fields, initialValues, valida
 
         if(fieldType === 'checked') {
             fs.value = toString(initialValue)
+            fs.props.checked = toBoolean(initialValue)
         } else if(fieldType === 'selected') {
             fs.props.selected = toString(initialValue)
             fs.value = fs.props.selected
@@ -91,6 +92,7 @@ export default function reactForm({name, instance, fields, initialValues, valida
 
             if(fieldType === 'checked') {
                 v.touched = toString(value) !== toString(initialValue)
+                v.value = v.props.checked = toBoolean(value)
                 v.value = value
             } else if(fieldType === 'selected') {
                 v.touched = toString(value) !== toString(initialValue)
@@ -145,18 +147,20 @@ function getData(fields, state) {
 /*
     @arg {string} field - field:type
     <pre>
-        type = checkbox,radio
-        type = option,select
+        type = checked (for checkbox or radio)
+        type = selected (for seelct option)
         type = string
     </pre>
+    @return {string} type
 */
 function t(field) {
-    let [, type = 'string'] = field.split(':')
-    if(/checkbox|radio/.test(type)) type = 'checked'
-    if(/select|option/.test(type)) type = 'selected'
+    const [, type = 'string'] = field.split(':')
     return type
 }
 
+/**
+    @return {string} name
+*/
 function n(field) {
     const [name] = field.split(':')
     return name
@@ -164,3 +168,4 @@ function n(field) {
 
 const hasValue = v => v == null ? false : (typeof v === 'string' ? v.trim() : v) === '' ? false : true
 const toString = v => hasValue(v) ? v : ''
+const toBoolean = v => hasValue(v) ? JSON.parse(v) : ''

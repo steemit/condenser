@@ -37,14 +37,21 @@ csrf(app);
 app.use(mount(grant));
 app.use(flash({key: 'flash'}));
 
-// redirect to home page if known account
-// remember ch, cn, r url params in the session and remove them from url
+// some redirects
 app.use(function *(next) {
+    // redirect to home page/feed if known account
     if (this.method === 'GET' && this.url === '/' && this.session.a) {
         this.status = 302;
         this.redirect(`/@${this.session.a}/feed`);
         return;
     }
+    // start registration process if user has no id in sessionyet
+    if(this.url === '/create_account' && !this.session.user) {
+        this.status = 302;
+        this.redirect('/enter_email');
+        return;
+    }
+    // remember ch, cn, r url params in the session and remove them from url
     if (this.method === 'GET' && /\?[^\w]*(ch=|cn=|r=)/.test(this.url)) {
         let redir = this.url.replace(/((ch|cn|r)=[^&]+)/gi, r => {
             const p = r.split('=');

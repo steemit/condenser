@@ -10,17 +10,13 @@ export default class CountDown extends React.Component {
 		title: PropTypes.node,
 		onEnd: PropTypes.func,
 		date: PropTypes.object.isRequired,
+		countFrom: 	PropTypes.oneOfType([
+			            React.PropTypes.number.isRequired,
+			            React.PropTypes.object.isRequired
+			        ])
 	}
 
 	state = { timeLeft: this.props.date }
-
-	getDaysCount = (date = this.props.tilCrowdsaleStart) => {
-		// how to get number of days
-		const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
-		const firstDate = new Date()
-		const diffDays = Math.round(Math.abs((date - firstDate.getTime())/(oneDay))); // date.getTime()
-		return diffDays
-	}
 
 	// start timer on mount
 	// do not start timer while server-rendering to avoid errors
@@ -28,7 +24,16 @@ export default class CountDown extends React.Component {
 	// && clear timer on unmount
 	componentWillUnmount() { if (this.interval) clearInterval(this.interval) }
 
-	countDown() { this.interval = setInterval(() => {
+	getDaysCount = (date = this.props.countFrom) => {
+		// how to get number of days
+		const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+		const firstDate = new Date()
+		const diffDays = Math.round(Math.abs((date - firstDate.getTime())/(oneDay))); // date.getTime()
+		return diffDays
+	}
+
+	countDown() {
+		this.interval = setInterval(() => {
 			this.setState({ timeLeft: new Date(this.state.timeLeft.getTime() - 1000) })
 		}, 1000)
 	}

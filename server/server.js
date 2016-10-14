@@ -45,7 +45,7 @@ app.use(function *(next) {
         this.redirect(`/@${this.session.a}/feed`);
         return;
     }
-    // start registration process if user has no id in sessionyet
+    // start registration process if user get to create_account page and has no id in session yet
     if(this.url === '/create_account' && !this.session.user) {
         this.status = 302;
         this.redirect('/enter_email');

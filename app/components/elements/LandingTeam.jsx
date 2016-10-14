@@ -111,7 +111,7 @@ export default class LandingTeam extends React.Component {
 						</ul>
 					</div>
 				</div>
-	<h2 className="Team__header" id="team">Делегаты</h2>
+				<h2 className="Team__header" id="team">Делегаты</h2>
 				<div className="row center Team__partners">
 					<div data-wow-delay="1s" className="wow fadeIn small-6 medium-4 large-3 small-centered medium-centered large-centered columns Team__member">
 						<div className="Team__members__image-wrapper">
@@ -120,7 +120,18 @@ export default class LandingTeam extends React.Component {
 						<strong>Михаил Чобанян</strong>
 						<p>Информационная поддержка в Украине</p>
 						<ul>
-							<li></li>
+							<li><a href="https://www.facebook.com/mike.chobanyan.7"><img className="Team__facebook-logo" src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-facebook-512.png" /></a></li>
+						</ul>
+					</div>
+					<div data-wow-delay="1s" className="wow fadeIn small-6 medium-4 large-3 small-centered medium-centered large-centered columns Team__member Team__member__sergey">
+						<div className="Team__members__image-wrapper">
+							<a href="https://www.facebook.com/serejandmyself"><img className="Team__member__img" src="images/landing/sergey.jpg" /></a>
+						</div>
+						<strong>Сергей Симановский</strong>
+						<p>Комьюнити-менеджер</p>
+						<ul>
+							<li><a href="https://www.linkedin.com/in/sergey-simanovsky-87b5ab100"><img src="images/landing/linkedin_icon.jpg" /></a></li>
+							<li><a href="https://www.facebook.com/serejandmyself"><img className="Team__facebook-logo" src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-facebook-512.png" /></a></li>
 						</ul>
 					</div>
 				</div>

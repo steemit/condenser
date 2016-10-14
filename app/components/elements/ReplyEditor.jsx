@@ -117,8 +117,9 @@ class ReplyEditor extends React.Component {
             const {onCancel, resetForm} = this.props
             resetForm()
             this.setAutoVote()
-            this.setState({rte_value: stateFromHtml()})
-            this.refs.rte.reset()
+            //this.setState({rte_value: stateFromHtml()})
+            //this.refs.rte.reset()
+            this.refs.rte.setState({state: stateFromHtml()})
             if(onCancel) onCancel(e)
         }
         this.onChange = this.onChange.bind(this);
@@ -215,6 +216,7 @@ class ReplyEditor extends React.Component {
     // As rte_editor is updated, keep the (invisible) 'body' field in sync.
     onChange(rte_value) {
         //this.setState({rte_value})
+        this.refs.rte.setState({state: rte_value})
         const html = stateToHtml(rte_value)
         const body = this.props.fields.body
         if(body.value !== html) body.onChange(html);

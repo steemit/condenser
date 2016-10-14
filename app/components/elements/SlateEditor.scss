@@ -1,45 +1,99 @@
-.SlateEditor {
-  //padding: 1rem;
-  //border: 1px solid $medium-gray;
-  //border-radius: 8px;
-}
-
 .SlateEditor.Markdown {
   a {
     border-bottom: 1px dotted #00f;
     position: relative;
     img {border: 1px dotted #00f}
   }
-  .active {
-    box-shadow: 0 0 0 2px blue;
-  }
+  .active {box-shadow: 0 0 0 2px blue;}
+  hr.active {box-shadow: 0 0 0 1px blue;}
 
   a:hover:after{
-      border: 1px solid #ccc;
-      padding: 1px 3px;
-      background: #eee;
-      content: attr(href);
-      display: block;
-      position: absolute;
-      left: 0;
-      top: 110%;
-      line-height: 1;
-      white-space: nowrap;
-      font-size: 70%;
-      z-index: 99999;
+    border: 1px solid #ccc;
+    padding: 1px 3px;
+    background: #eee;
+    content: attr(href);
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 110%;
+    line-height: 1;
+    white-space: nowrap;
+    font-size: 70%;
+    z-index: 99999;
   }
 }
 
-.SlateEditor > * > * + * {
-  margin-top: 1em;
+
+.SlateEditor__sidebar {
+  opacity: 0.25;
+  font-size: 110%;
+  padding: 1px;
+  position: absolute;
+  z-index: 1;
+  top: -10000px;
+  left: -10000px;
+  margin-left: -10px;
+  background-color: #222;
+  border-radius: 4px;
+  transition: opacity .75s;
+  background-image: linear-gradient(180deg,#464646,#151515);
+
+  &:hover {opacity: 1;}
+  &:after {
+    top: 0.6rem;
+    left: 100%;
+    border: transparent solid;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-left-color: #464646;
+    border-width: 5px;
+    margin-left: 0px;
+  }
 }
 
-.SlateEditor__menu > * {
-  display: inline-block;
+.SlateEditor__sidebar-button {
+  display: block;
+  color: white;
+  padding: 1px 2px;
+  min-width: 1.75rem;
+  text-align: center;
+  svg {fill: white}
+  &:hover {svg {fill: #32cd32;}}
 }
 
-.SlateEditor__menu > * + * {
-  margin: 0;
+
+.SlateEditor__menu {
+  font-size: 110%;
+  padding: 1px;
+  position: absolute;
+  z-index: 1;
+  top: -10000px;
+  left: -10000px;
+  margin-top: -6px;
+  opacity: 0.9;
+  background-color: #222;
+  border-radius: 4px;
+  transition: opacity .75s;
+  background-image: linear-gradient(180deg,#464646,#151515);
+
+  &:hover {opacity: 1}
+  &:after {
+    top: 100%;
+    left: 50%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-top-color: #151515;
+    border-width: 5px;
+    margin-left: -5px;
+  }
+  > * {display: inline-block;}
 }
 
 .SlateEditor__menu-button {
@@ -53,14 +107,6 @@
   background: rgba(0,0,0,0.1);
   border-radius: 2px;
   > span {
-    code {
-      border: none;
-      background: transparent;
-      color: inherit;
-      padding: 0;
-      font-size: 90%;
-      vertical-align: top;
-    }
     path {fill: white}
   }
 }
@@ -74,50 +120,30 @@
   }
 }
 
-.SlateEditor__menu-button-sup span,
-.SlateEditor__menu-button-sub span {
-  font-family: Arial;
+.SlateEditor__menu-button-code > span > code {
+  border: none;
+  background: transparent;
+  color: inherit;
+  padding: 0;
   font-size: 90%;
+  vertical-align: top;
+}
+
+.SlateEditor__menu-button-sup > span > span ,
+.SlateEditor__menu-button-sub > span > span {
+  font-family: Arial;
+  font-size: 80%;
   vertical-align: 4%;
 }
 
 .SlateEditor__menu-button-link {
-  .Icon > svg, .Icon {width: 1rem; height: 1rem;}
+  .Icon,
+  .Icon > svg {width: 1rem; height: 1rem;}
 }
 
-.SlateEditor__menu-button-block-quote {
-  span {
-    font-size: 140%;
-    vertical-align: -25%;
-    line-height: 1;
-  }
+.SlateEditor__menu-button-block-quote > span > span {
+  font-size: 220%;
+  vertical-align: -45%;
+  line-height: 1;
 }
 
-.SlateEditor__menu {
-  font-size: 110%;
-  padding: 1px;
-  position: absolute;
-  z-index: 1;
-  top: -10000px;
-  left: -10000px;
-  margin-top: -6px;
-  opacity: 0;
-  background-color: #222;
-  border-radius: 4px;
-  transition: opacity .75s;
-  background-image: linear-gradient(180deg,#464646,#151515);
-}
-
-.SlateEditor__menu:after {
-    top: 100%;
-    left: 50%;
-    border: solid transparent;
-    content: " ";
-    height: 0;
-    width: 0;
-    position: absolute;
-    pointer-events: none;
-    border-top-color: #151515;
-    border-width: 5px;
-    margin-left: -5px;
-}

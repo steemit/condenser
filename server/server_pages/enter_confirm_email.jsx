@@ -10,6 +10,7 @@ import {checkCSRF, getRemoteIp} from '../utils';
 import config from '../../config';
 import SignupProgressBar from 'app/components/elements/SignupProgressBar';
 import MiniHeader from 'app/components/modules/MiniHeader';
+import secureRandom from 'secure-random'
 
 const assets_file = process.env.NODE_ENV === 'production' ? 'tmp/webpack-stats-prod.json' : 'tmp/webpack-stats-dev.json';
 const assets = Object.assign({}, require(assets_file), {script: []});
@@ -18,9 +19,10 @@ assets.script.push('https://www.google.com/recaptcha/api.js');
 function *confirmEmailHandler() {
     const confirmation_code = this.params && this.params.code ? this.params.code : this.request.body.code;
     console.log('-- /confirm_email -->', this.session.uid, this.session.user, confirmation_code);
-    const eid = yield models.Identity.findOne(
-        {attributes: ['id', 'user_id', 'email', 'updated_at', 'verified'], where: {confirmation_code}, order: 'id DESC'}
-    );
+    const eid = yield models.Identity.findOne({
+        attributes: ['id', 'user_id', 'email', 'updated_at', 'verified'],
+        where: {confirmation_code, provider: 'email'}, order: 'id DESC'
+    });
     if (!eid) {
         this.status = 401;
         this.body = 'confirmation code not found';
@@ -51,18 +53,7 @@ export default function useEnterAndConfirmEmailPages(app) {
 
     router.get('/enter_email', function *() {
         console.log('-- /enter_email -->', this.session.uid, this.session.user);
-        let eid = null;
-        const user_id = this.session.user;
-        if (user_id) {
-            eid = yield models.Identity.findOne(
-                {attributes: ['email', 'verified'], where: {user_id, provider: 'email'}, order: 'id DESC'}
-            );
-            if (eid && eid.verified) {
-                this.flash = {success: 'Email has already been verified'};
-                this.redirect('/enter_mobile');
-                return;
-            }
-        }
+        this.session.user = null;
         let default_email = '';
         if (this.request.query && this.request.query.email) default_email = this.request.query.email;
         const body = renderToString(<div className="App">
@@ -133,22 +124,22 @@ export default function useEnterAndConfirmEmailPages(app) {
         }
 
         const existing_email = yield models.Identity.findOne(
-            {attributes: ['id', 'user_id', 'confirmation_code'], where: {email, provider: 'email', verified: true}, order: 'id'}
+            {attributes: ['id', 'user_id', 'confirmation_code'], where: {email, provider: 'email'}, order: 'id DESC'}
         );
         let user_id = this.session.user;
-        if (existing_email && existing_email.user_id != user_id) {
+        if (existing_email) {
             console.log('-- /submit_email existing_email -->', user_id, this.session.uid, email, existing_email.user_id);
             const act = yield models.Account.findOne({
                 attributes: ['id'],
                 where: {user_id: existing_email.user_id, ignored: false},
                 order: 'id DESC'
             })
-            if(act) {
+            if (act) {
                 this.flash = {error: 'This email has already been taken.'};
                 this.redirect('/enter_email?email=' + email);
                 return
             }
-            // We must resend the email to get teh session going again if the user gets interrupted (clears cookies or changes browser) after email verify.
+            // We must resend the email to get the session going again if the user gets interrupted (clears cookies or changes browser) after email verify.
             const {confirmation_code, id} = existing_email
             console.log('-- /submit_email resend -->', email, id, confirmation_code);
             sendEmail('confirm_email', email, {confirmation_code});
@@ -165,9 +156,9 @@ export default function useEnterAndConfirmEmailPages(app) {
                 this.session.user = user_id = user.id;
             }
 
-            const confirmation_code = Math.random().toString(36).slice(2);
+            const confirmation_code = secureRandom.randomBuffer(13).toString('hex');
             let eid = yield models.Identity.findOne(
-                {attributes: ['id', 'email'], where: {user_id, provider: 'email'}, order: 'id'}
+                {attributes: ['id', 'email'], where: {user_id, provider: 'email'}, order: 'id DESC'}
             );
             if (eid) {
                 yield eid.update({confirmation_code, email});

@@ -1,9 +1,9 @@
 /* eslint react/prop-types: 0 */
 import React from 'react';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import Apis from 'shared/api_client/ApiInstances';
-import { PrivateKey } from 'shared/ecc';
+import {PrivateKey} from 'shared/ecc';
 import user from 'app/redux/User';
 import {validate_account_name} from 'app/utils/ChainValidation';
 import SignUp from 'app/components/modules/SignUp';
@@ -119,13 +119,18 @@ class CreateAccount extends React.Component {
         if (name.length > 0) {
             name_error = validate_account_name(name);
             if (!name_error) {
+                this.setState({name_error: ''});
                 promise = Apis.db_api('get_accounts', [name]).then(res => {
                     return res && res.length > 0 ? 'Account name is not available' : '';
                 });
             }
         }
         if (promise) {
-            promise.then(error => this.setState({name_error: error}));
+            promise
+                .then(name_error => this.setState({name_error}))
+                .catch(() => this.setState({
+                    name_error: "Account name can't be verified right now due to server failure. Please try again later."
+                }));
         } else {
             this.setState({name_error});
         }
@@ -147,9 +152,7 @@ class CreateAccount extends React.Component {
 
         const {loggedIn, logout, offchainUser, serverBusy} = this.props;
         const submit_btn_disabled =
-            loading ||
-            !name ||
-            !password_valid ||
+            loading || !name || !password_valid ||
             name_error;
         const submit_btn_class = 'button action' + (submit_btn_disabled ? ' disabled' : '');
 
@@ -168,7 +171,8 @@ class CreateAccount extends React.Component {
                     <div className="callout alert">
                         <h4>Cryptography test failed</h4>
                         <p>We will be unable to create your Steem account with this browser.</p>
-                        <p>The latest versions of <a href="https://www.google.com/chrome/">Chrome</a> and <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a> are well tested and known to work with steemit.com.</p>
+                        <p>The latest versions of <a href="https://www.google.com/chrome/">Chrome</a> and <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a>
+                            are well tested and known to work with steemit.com.</p>
                     </div>
                 </div>
             </div>;
@@ -196,7 +200,7 @@ class CreateAccount extends React.Component {
                         <p>Our records indicate that you already have steem account: <strong>{existingUserAccount}</strong></p>
                         <p>In order to prevent abuse (each registered account costs 3 STEEM) Steemit can only register one account per verified user.</p>
                         <p>You can either <a href="/login.html">login</a> to your existing account
-                           or <a href="mailto:support@steemit.com">send us email</a> if you need a new account.</p>
+                            or <a href="mailto:support@steemit.com">send us email</a> if you need a new account.</p>
                     </div>
                 </div>
             </div>;
@@ -243,7 +247,8 @@ class CreateAccount extends React.Component {
                             </div>
                             <hr />
                         </div> : <div className="text-center">
-                            <a className="CreateAccount__rules-button" href="#" onClick={() => this.setState({showRules: true})}>Steemit Rules &nbsp; &raquo;</a>
+                            <a className="CreateAccount__rules-button" href="#" onClick={() => this.setState({showRules: true})}>Steemit
+                                Rules &nbsp; &raquo;</a>
                         </div>}
                         <form onSubmit={this.onSubmit} autoComplete="off" noValidate method="post">
                             <div className={name_error ? 'error' : ''}>

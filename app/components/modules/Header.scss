@@ -165,6 +165,9 @@ ul > li > .button {
     @media #{$small-only} {
         .toggle-menu { padding: .7rem 1rem !important; }
     }
+    @media #{$medium-only} {
+        li.show-for-medium { padding: .7rem 1rem .7rem 0rem; }
+    }
     @media #{$medium-up} {
         .toggle-menu { display: none; }
     }

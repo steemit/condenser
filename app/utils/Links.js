@@ -1,12 +1,13 @@
 
 const urlChar = '[^\\s"\'<>\\]\\[\\(\\)]'
+const urlCharEnd = urlChar.replace(/\]$/, '.]') // insert bad chars to end on
 const imagePath = '(?:(?:\\.(?:tiff?|jpe?g|gif|png|svg|ico)|ipfs/[a-z\\d]{40,}))'
-const domainPath = '(?:[-a-zA-Z0-9\\._]+)'
-const urlChars = '(?:' + urlChar + '*)'
+const domainPath = '(?:[-a-zA-Z0-9\\._]*[-a-zA-Z0-9])'
+const urlChars = '(?:' + urlChar + '*' + urlCharEnd + ')?'
 
 const urlSet = ({domain = domainPath, path} = {}) => {
      // urlChars is everything but html or markdown stop chars
-    return `https?:\/\/${domain}(?::\\d{2,5})?(?:[/\\?#]${urlChars}${path ? path + urlChars : ''})${path ? '' : '?'}`
+    return `https?:\/\/${domain}(?::\\d{2,5})?(?:[/\\?#]${urlChars}${path ? path : ''})${path ? '' : '?'}`
 }
 
 /**

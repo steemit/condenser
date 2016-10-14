@@ -9,6 +9,7 @@ import {transferTips} from 'app/utils/Tips'
 import {powerTip, powerTip2, powerTip3} from 'app/utils/Tips'
 import {browserTests} from 'shared/ecc/test/BrowserTests'
 import {validate_account_name} from 'app/utils/ChainValidation';
+import {countDecimals} from 'app/utils/ParsersAndFormatters'
 
 /** Warning .. This is used for Power UP too. */
 class TransferForm extends Component {
@@ -62,7 +63,7 @@ class TransferForm extends Component {
         }
         const {toVesting} = props
         const fields = toVesting ? ['to', 'amount'] : ['to', 'amount', 'asset']
-        if(transferType !== 'Transfer to Savings' && transferType !== 'Savings Withdraw')
+        if(!toVesting && transferType !== 'Transfer to Savings' && transferType !== 'Savings Withdraw')
             fields.push('memo')
 
         reactForm({
@@ -76,6 +77,7 @@ class TransferForm extends Component {
                     ! values.amount ? 'Required' :
                     ! /^[0-9]*\.?[0-9]*/.test(values.amount) ? 'Amount is in the form 99999.999' :
                     insufficientFunds(values.asset, values.amount) ? 'Insufficient funds' :
+                    countDecimals(values.amount) > 3 ? 'Use only 3 digits of precison' :
                     null,
                 asset:
                     props.toVesting ? null :

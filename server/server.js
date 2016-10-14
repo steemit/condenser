@@ -21,6 +21,7 @@ import flash from 'koa-flash';
 import minimist from 'minimist';
 import Grant from 'grant-koa';
 import config from '../config';
+import secureRandom from 'secure-random'
 
 const grant = new Grant(config.grant);
 // import uploadImage from 'server/upload-image' //medium-editor
@@ -36,14 +37,21 @@ csrf(app);
 app.use(mount(grant));
 app.use(flash({key: 'flash'}));
 
-// redirect to home page if known account
-// remember ch, cn, r url params in the session and remove them from url
+// some redirects
 app.use(function *(next) {
+    // redirect to home page/feed if known account
     if (this.method === 'GET' && this.url === '/' && this.session.a) {
-        this.status = 301;
+        this.status = 302;
         this.redirect(`/@${this.session.a}/feed`);
         return;
     }
+    // start registration process if user get to create_account page and has no id in session yet
+    if(this.url === '/create_account' && !this.session.user) {
+        this.status = 302;
+        this.redirect('/enter_email');
+        return;
+    }
+    // remember ch, cn, r url params in the session and remove them from url
     if (this.method === 'GET' && /\?[^\w]*(ch=|cn=|r=)/.test(this.url)) {
         let redir = this.url.replace(/((ch|cn|r)=[^&]+)/gi, r => {
             const p = r.split('=');
@@ -53,7 +61,7 @@ app.use(function *(next) {
         redir = redir.replace(/&&&?/, '');
         redir = redir.replace(/\?&?$/, '');
         console.log(`server redirect ${this.url} -> ${redir}`);
-        this.status = 301;
+        this.status = 302;
         this.redirect(redir);
     } else {
         yield next;
@@ -85,7 +93,7 @@ app.use(function* (next) {
     const last_visit = this.session.last_visit;
     this.session.last_visit = (new Date()).getTime() / 1000 | 0;
     if (!this.session.uid) {
-        this.session.uid = Math.random().toString(36).slice(2);
+        this.session.uid = secureRandom.randomBuffer(13).toString('hex');
         this.session.new_visit = true;
     } else {
         this.session.new_visit = this.session.last_visit - last_visit > 1800;

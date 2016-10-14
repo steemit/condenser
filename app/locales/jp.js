@@ -33,7 +33,7 @@ const jp = 	{
 	tags_and_topics: "タグとトピック",
 	filter: "フィルター",
 	show_more_topics: "さらにトピックを見る",
-	we_require_social_account: 'Steemitは、それぞれのアカウントに対して、${signup_bonus} Steem Powerを付与しています。; 乱用を防ぐため、ソーシャルメディアアカウントでのログインを新しいユーザーには求めています。',
+	we_require_social_account: 'Steemitは、それぞれのアカウントに対して、{signup_bonus} Steem Powerを付与しています。; 乱用を防ぐため、ソーシャルメディアアカウントでのログインを新しいユーザーには求めています。',
 	personal_info_will_be_private: 'あなたの個人情報を保存する',
 	personal_info_will_be_private_link: 'プライベート',
 	continue_with_facebook: 'Facebookで続ける',
@@ -85,7 +85,7 @@ const jp = 	{
 	welcome_to_the_blockchain: '新しいBlockchainの世界へようこそ!',
 	your_voice_is_worth_something: 'あなたの言葉はどこかの世界のだれかに必ず役に立つ',
 	learn_more: 'もっと学ぶ',
-	get_sp_when_sign_up: '${signupBonus} 分のSteem Powerサインアップボーナスをゲットしよう',
+	get_sp_when_sign_up: '{signupBonus} 分のSteem Powerサインアップボーナスをゲットしよう',
 	all_accounts_refunded: '復元されたアカウント全てに対して払い戻されます',
 	steemit_is_now_open_source: 'Steemit.comはオープンソースプロジェクトです',
 	// this is mainly from ReplyEditor

@@ -1,6 +1,7 @@
 import fetch from 'node-fetch';
 import config from '../config';
 import crypto from 'crypto'
+import secureRandom from 'secure-random'
 
 const {customer_id} = config.telesign
 const api_key = new Buffer(config.telesign.rest_api_key, 'base64')
@@ -106,7 +107,7 @@ function authHeaders({
 }) {
     const auth_method = 'HMAC-SHA256'
     const currDate = new Date().toUTCString()
-    const nonce = Math.random().toString(36).slice(15)
+    const nonce = parseInt(secureRandom.randomBuffer(8).toString('hex'), 16).toString(36)
 
     let content_type = ''
     if(/POST|PUT/.test(method))

@@ -2,18 +2,15 @@
 
 // Low-level types that make up operations
 
-var ByteBuffer = require('bytebuffer');
-var Serializer = require('./serializer');
-var v = require('./validation');
-var ObjectId = require('./object_id')
-var fp = require('./fast_parser');
-var chain_types = require('./ChainTypes')
-var Long = ByteBuffer.Long
+const v = require('./validation');
+const ObjectId = require('./object_id')
+const fp = require('./fast_parser');
+const chain_types = require('./ChainTypes')
 
 import { PublicKey, Address, ecc_config } from "../../ecc"
-import { toImpliedDecimal, fromImpliedDecimal } from "./number_utils"
+import { fromImpliedDecimal } from "./number_utils"
 
-var Types = {}
+const Types = {}
 module.exports = Types
 
 const HEX_DUMP = process.env.npm_config__graphene_serializer_hex_dump

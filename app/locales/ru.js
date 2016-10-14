@@ -33,7 +33,7 @@ const ru = {
 	tags_and_topics: "Тэги и топики",
 	filter: "Фильтр",
 	show_more_topics: "Показать больше топиков",
-	we_require_social_account: 'Steemit funds each account with over ${signup_bonus} worth of Steem Power; to prevent abuse, we require new users to login via social media.',
+	we_require_social_account: 'Steemit funds each account with over {signup_bonus} worth of Steem Power; to prevent abuse, we require new users to login via social media.',
 	personal_info_will_be_private: 'Твоя персональная информация будет оставаться',
 	personal_info_will_be_private_link: 'приватной',
 	continue_with_facebook: 'Продолжить с Facebook',
@@ -85,7 +85,7 @@ const ru = {
 	welcome_to_the_blockchain: 'Добро пожаловать в Blockchain!',
 	your_voice_is_worth_something: 'Your voice is worth something',
 	learn_more: 'Узнать больше',
-	get_sp_when_sign_up: 'Get ${signupBonus} of Steem Power when you sign up today.',
+	get_sp_when_sign_up: 'Get {signupBonus} of Steem Power when you sign up today.',
 	all_accounts_refunded: 'All Recovered Accounts have been fully Refunded',
 	steemit_is_now_open_source: 'Steemit.com is now Open Source',
 	// this is mainly from ReplyEditor

@@ -384,12 +384,16 @@
 		left: 84%;
 		max-width: none;
 	}
-	// @media #{$small-only} {
-	// 	.Team__member__misha {
-	// 		flex: 100%;
-	// 		max-width: 100%;
-	// 	}
-	// }
+	@media #{$small-only} {
+		.Team__members__image-wrapper {
+			width: 150px;
+			height: 150px;
+		}
+		// .Team__member__misha {
+		// 	flex: 100%;
+		// 	max-width: 100%;
+		// }
+	}
 	// @media #{$medium-only} {
 	// 	.Team__member__misha {
 	// 		flex: 100%;

@@ -124,7 +124,7 @@ export default function useEnterAndConfirmEmailPages(app) {
         }
 
         const existing_email = yield models.Identity.findOne(
-            {attributes: ['id', 'user_id', 'confirmation_code'], where: {email, provider: 'email'}, order: 'id'}
+            {attributes: ['id', 'user_id', 'confirmation_code'], where: {email, provider: 'email'}, order: 'id DESC'}
         );
         let user_id = this.session.user;
         if (existing_email) {
@@ -158,7 +158,7 @@ export default function useEnterAndConfirmEmailPages(app) {
 
             const confirmation_code = secureRandom.randomBuffer(13).toString('hex');
             let eid = yield models.Identity.findOne(
-                {attributes: ['id', 'email'], where: {user_id, provider: 'email'}, order: 'id'}
+                {attributes: ['id', 'email'], where: {user_id, provider: 'email'}, order: 'id DESC'}
             );
             if (eid) {
                 yield eid.update({confirmation_code, email});

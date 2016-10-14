@@ -39,6 +39,10 @@ export default {
             {
                 test: /\.scss$/,
                 loader: ExtractTextPlugin.extract('style', 'css!autoprefixer!sass?outputStyle=expanded')
+            },
+            {
+                test: /\.md/,
+                loader: 'raw'
             }
         ]
     },

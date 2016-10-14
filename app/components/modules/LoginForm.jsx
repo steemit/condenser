@@ -67,7 +67,7 @@ class LoginForm extends Component {
         reactForm({
             name: 'login',
             instance: this,
-            fields: ['username', 'password', 'saveLogin:bool'],
+            fields: ['username', 'password', 'saveLogin:checked'],
             initialValues: props.initialValues,
             validation: values => ({
                 username: ! values.username ? 'Required' : validate_account_name(values.username.split('/')[0]),

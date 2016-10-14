@@ -26,7 +26,7 @@ if(process.env.BROWSER) {
 
     plugins.push(
         InsertImages({
-            extensions: ['jpeg'],
+            extensions: ['jpeg', 'png', 'gif'],
             applyTransform: (transform, file) => {
                 return transform.insertInline({
                     type: 'image',
@@ -56,20 +56,27 @@ export default class SlateEditor extends React.Component {
 
     componentDidMount = () => {
         this.updateMenu()
+        this.updateSidebar()
     }
 
     componentDidUpdate = () => {
         this.updateMenu()
+        this.updateSidebar()
     }
 
     onChange = (state) => {
-        this.setState({ state })
+        //this.setState({ state })
         this.props.onChange(state)
     }
 
     // When the portal opens, cache the menu element.
-    onOpen = (portal) => {
+    onMenuOpen = (portal) => {
         this.setState({ menu: portal.firstChild })
+    }
+
+    // When the portal opens, cache the menu element.
+    onSidebarOpen = (portal) => {
+        this.setState({ sidebar: portal.firstChild })
     }
 
 
@@ -295,7 +302,7 @@ console.log(JSON.stringify(Raw.serialize(state, {terse: false}), null, 2))
         const { startBlock, startOffset, endOffset } = state
 
         // Allow soft returns for certain block types
-        if (startBlock.type == 'code-block' || startBlock.type == 'block-quote') {
+        if (startBlock.type == 'paragraph' || startBlock.type == 'code-block' || startBlock.type == 'block-quote') {
             let transform = state.transform()
             if (state.isExpanded) transform = transform.delete()
             transform = transform.insertText('\n')
@@ -344,8 +351,65 @@ console.log(JSON.stringify(Raw.serialize(state, {terse: false}), null, 2))
         return (
             <div>
                 {this.renderMenu()}
+                {this.renderSidebar()}
                 {this.renderEditor()}
             </div>
+        )
+    }
+
+    renderSidebar = () => {
+        const { state } = this.state
+        const isOpen = state.isExpanded && state.isFocused
+        return (
+            <Portal isOpened onOpen={this.onSidebarOpen}>
+                <div className="SlateEditor__sidebar">
+                    {this.renderAddBlockButton({type: 'image', label: <Icon name="photo" />, handler: this.onClickInsertImage})}
+                    {this.renderAddBlockButton({type: 'hrule', label: <Icon name="line" />, handler: this.onClickInsertHr})}
+                </div>
+            </Portal>
+        )
+    }
+
+    onClickInsertImage = (e) => {
+        e.preventDefault()
+        let { state } = this.state
+
+        const src = window.prompt('Enter the URL of the image:', 'https://lh3.googleusercontent.com/-uY1D2XxBC5I/VbZbodsihNI/AAAAAAAAICw/glsw_avviBY/w592-h330/xkcdinternet.png')
+        if(!src) return;
+
+        state = state
+            .transform()
+            //.insertBlock({type: 'paragraph', isVoid: false})
+            .insertInline({type: 'image', isVoid: true, data: {src}})
+            .collapseToStartOfNextBlock()
+            .apply()
+
+        this.setState({ state })
+    }
+
+    onClickInsertHr = (e, type) => {
+        e.preventDefault()
+        let { state } = this.state
+
+        state = state
+            .transform()
+            .insertBlock({type: 'hr', isVoid: true})
+            .insertBlock({type: 'paragraph', isVoid: false})
+            .apply()
+
+        this.setState({ state })
+    }
+
+
+
+    renderAddBlockButton = (props) => {
+        const { type, label, handler } = props
+        const onMouseDown = e => handler(e)
+
+        return (
+            <span key={type} className="SlateEditor__sidebar-button" onMouseDown={onMouseDown}>
+                {label}
+            </span>
         )
     }
 
@@ -354,15 +418,15 @@ console.log(JSON.stringify(Raw.serialize(state, {terse: false}), null, 2))
         const isOpen = state.isExpanded && state.isFocused
 
         return (
-            <Portal isOpened onOpen={this.onOpen}>
+            <Portal isOpened onOpen={this.onMenuOpen}>
                 <div className="SlateEditor__menu SlateEditor__menu">
                     {schema.toolbarMarks.map(this.renderMarkButton)}
                     {this.renderInlineButton({type: 'link', label: <Icon name="link" />})}
                     {this.renderBlockButton({type: 'block-quote', label: <span>&ldquo;</span>})}
                     {this.renderBlockButton({type: 'heading-one', label: 'H1'})}
                     {this.renderBlockButton({type: 'heading-two', label: 'H2'})}
-                    {this.renderBlockButton({type: 'bulleted-list', label: 'ul'})}
-                    {this.renderBlockButton({type: 'numbered-list', label: 'ol'})}
+                    {/*this.renderBlockButton({type: 'bulleted-list', label: 'ul'})*/}
+                    {/*this.renderBlockButton({type: 'numbered-list', label: 'ol'})*/}
                     {this.renderBlockButton({type: 'code-block', label: '<>'})}
                 </div>
             </Portal>
@@ -420,6 +484,42 @@ console.log(JSON.stringify(Raw.serialize(state, {terse: false}), null, 2))
         )
     }
 
+    findParentTag = (el, tag, depth = 0) => {
+        if (!el) return null;
+        if (el.tagName == tag) return el;
+        return this.findParentTag(el.parentNode, tag, depth + 1);
+    }
+
+    getCollapsedClientRect = () => {
+        const selection = document.getSelection();
+        if (selection.rangeCount === 0 || !selection.getRangeAt || !selection.getRangeAt(0) || !selection.getRangeAt(0).startContainer || !selection.getRangeAt(0).startContainer.getBoundingClientRect) {
+            return null;
+        }
+
+        const node = selection.getRangeAt(0).startContainer;
+        if(! this.findParentTag(node, 'P')) return; // only show sidebar at the beginning of an empty <p>
+
+        const rect = node.getBoundingClientRect();
+        return rect;
+    }
+
+    updateSidebar = () => {
+        const { sidebar, state } = this.state
+        if (!sidebar) return
+
+        const rect = this.getCollapsedClientRect() //position()
+
+        if (state.isBlurred || state.isExpanded || !rect) {
+          sidebar.removeAttribute('style')
+          return
+        }
+
+        //sidebar.style.opacity = 1
+        sidebar.style.top = `${rect.top + window.scrollY}px`
+        //sidebar.style.top = `${rect.top + window.scrollY - sidebar.offsetHeight / 2 + rect.height / 2}px`
+        sidebar.style.left = `${rect.left + window.scrollX - sidebar.offsetWidth}px`
+    }
+
     updateMenu = () => {
         const { menu, state } = this.state
         if (!menu) return
@@ -430,7 +530,7 @@ console.log(JSON.stringify(Raw.serialize(state, {terse: false}), null, 2))
         }
 
         const rect = position()
-        menu.style.opacity = 1
+        //menu.style.opacity = 1
         menu.style.top = `${rect.top + window.scrollY - menu.offsetHeight}px`
         menu.style.left = `${rect.left + window.scrollX - menu.offsetWidth / 2 + rect.width / 2}px`
     }

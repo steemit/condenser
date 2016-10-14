@@ -174,7 +174,7 @@ class Voting extends React.Component {
             payoutItems.push({value: <TimeAgoWrapper date={cashout_time} />});
         }
         if(max_payout < 1000000) {
-            payoutItems.push({value: 'Max Payout $' + formatDecimal(max_payout).join('')})
+            payoutItems.push({value: 'Max Accepted Payout $' + formatDecimal(max_payout).join('')})
         }
         if(total_author_payout > 0) {
             payoutItems.push({value: 'Past Payouts $' + formatDecimal(total_author_payout + total_curator_payout).join('')});

@@ -10,6 +10,7 @@ import runTests from 'shared/ecc/test/BrowserTests';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import reactForm from 'app/utils/ReactForm'
 import { translate } from 'app/Translator';
+import { translateError } from 'app/utils/ParsersAndFormatters';
 
 class LoginForm extends Component {
 
@@ -182,12 +183,12 @@ class LoginForm extends Component {
                 <div>
                     <input type="text" required placeholder={translate('enter_username')} ref="username"
                         {...username.props} onChange={usernameOnChange} autoComplete="on" disabled={submitting} />
-                    <div className="error">{username.touched && username.blur && username.error}&nbsp;</div>
+                    <div className="error">{username.touched && username.blur && translateError(username.error)}&nbsp;</div>
                 </div>
 
                 <div>
                     <input type="password" required ref="pw" placeholder={translate('password_or_wif')} {...password.props} autoComplete="on" disabled={submitting} />
-                    <div className="error">{error}&nbsp;</div>
+                    <div className="error">{translateError(error)}&nbsp;</div>
                 </div>
                 {loginBroadcastOperation && <div>
                     <div className="info">

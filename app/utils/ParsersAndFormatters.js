@@ -1,3 +1,5 @@
+import { translate } from 'app/Translator';
+
 function fractional_part_len(value) {
     const parts = (Number(value) + '').split('.');
     return parts.length < 2 ? 0 : parts[1].length;
@@ -56,6 +58,26 @@ export const repLog10 = rep2 => {
     return out
 }
 
+// this function searches for right translation of provided error
+export function translateError(string) {
+    if (typeof(string) != 'string') return string
+    switch (string) {
+        case 'Incorrect Password':
+            return translate('incorrect_password')
+        case 'Username does not exist':
+            return translate('username_does_not_exist')
+        case 'Account name should be longer.':
+            return translate('account_name_should_be_longer')
+        case 'Account name should be shorter.':
+            return translate('account_name_should_be_shorter')
+        case 'Account name should start with a letter.':
+            return translate('account_name_should_start_with_a_letter')
+        case 'Account not found':
+            return translate('account_not_found')
+        default:
+            return string
+    }
+}
 
 // copypaste from https://gist.github.com/tamr/5fb00a1c6214f5cab4f6
 // (it have been modified: ий > iy and so on)

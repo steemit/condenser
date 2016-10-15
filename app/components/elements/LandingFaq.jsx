@@ -76,7 +76,7 @@ export default class LandingFaq extends React.Component {
 				<div className="row text-center Faq__headers">
 					<div className="small-12 columns">
 						<h2 className="blue" id="faq">Вопросы - ответы</h2>
-						<span className="Faq__supporting-text">Узнайте больше о Голосе</span>
+						<span className="Faq__supporting-text">Узнай больше о Голосе</span>
 					</div>
 				</div>
 				<div className="row Faq__accordion">
@@ -86,8 +86,8 @@ export default class LandingFaq extends React.Component {
 				</div>
 				<div className="row Faq__action">
 					<div className="small-12 columns">
-						<p className="Faq__p">Остались вопросы? Наше комьюнити поможет Вам найти ответы</p>
-						<a href="https://chat.golos.io/" target="blank" className="button">Ответы на вопросы</a>
+						<p className="Faq__p">Остались вопросы?</p>
+						<a href="https://chat.golos.io/" target="blank" className="button">Получи ответы</a>
 					</div>
 				</div>
 				<hr />

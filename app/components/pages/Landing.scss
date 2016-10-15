@@ -28,6 +28,7 @@
 		text-transform: none;
 		font-weight: bold;
 	}
+	.button-blue { background-color: #1A5099; }
 	.Landing__supporting-text { color: #d2d2d2; }
 	@media #{$small-only} {
 		h2 { font-size: 2.38095rem; }
@@ -153,10 +154,10 @@
 	.Distribution__action {
 		margin: 105px auto 85px;
 		.button {
-			color: #707070;
-			background-color: transparent;
-			border: 2px solid #c0c0bf;
+			color: white;
 			border-radius: 4px;
+			background-color: #1A5099;
+			// border: 2px solid #c0c0bf;
 		}
 	}
 }

@@ -1,5 +1,5 @@
 delete process.env.BROWSER;
-
+require('newrelic')
 const path = require('path');
 const ROOT = path.join(__dirname, '..');
 

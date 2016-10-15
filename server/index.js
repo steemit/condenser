@@ -7,7 +7,6 @@ const ROOT = path.join(__dirname, '..');
 // it will avoid `../../../../../` require strings
 process.env.NODE_PATH = path.resolve(__dirname, '..');
 require('module').Module._initPaths();
-require('newrelic');
 
 // Load Intl polyfill
 // require('utils/intl-polyfill')(require('./config/init').locales);

@@ -8,5 +8,5 @@ then
   screen -X -S $(screen -ls | grep 'webclient' | awk '{print $1}') quit
 fi
 sleep 5
-screen -dmS webclient npm run prod
+screen -dmSL webclient npm run prod
 

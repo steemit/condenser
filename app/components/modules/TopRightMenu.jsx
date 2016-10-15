@@ -49,8 +49,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                 {link: '#', onClick: showLogin, value: translate('login')}
         ];
         const search = translate('search')
-
-        if (process.env.BROWSER && window.location.pathname.indexOf("/ico") != -1) {
+        if (location && location.pathname.indexOf("/ico") != -1) {
             return (
                 <ul className={mcn + ' landing'}>
                     <li className={lcn}>
@@ -138,7 +137,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
         );
     }
     if (probablyLoggedIn) {
-        if (process.env.BROWSER && window.location.pathname.indexOf("/ico") != -1) {
+        if (location && location.pathname.indexOf("/ico") != -1) {
             return      <ul className={mcn + mcl + ' landing'}>
                             <li className={lcn}>
                                 <Link spy to="what-is-golos" smooth offset={-110} duration={500}>Видео</Link>
@@ -176,7 +175,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
         );
     }
 
-    if (process.env.BROWSER && window.location.pathname.indexOf("/ico") != -1) {
+    if (location && location.pathname.indexOf("/ico") != -1) {
         return  <ul className={mcn + mcl + ' landing'}>
                     <li className={lcn}>
                         <Link spy to="what-is-golos" smooth offset={-110} duration={500}>Видео</Link>

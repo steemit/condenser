@@ -229,7 +229,7 @@ class ReplyEditor extends React.Component {
         if(isStory) {
             const {autoVote} = this.props.fields
             const key = 'replyEditorData-autoVote-story'
-            const autoVoteDefault = JSON.parse(localStorage.getItem(key) || true)
+            const autoVoteDefault = JSON.parse(localStorage.getItem(key) || false)
             autoVote.onChange(autoVoteDefault)
         }
     }

@@ -41,7 +41,7 @@ export default class LandingPress extends React.Component {
 				<div className="row Partners__law">
 					<div className="small-12 medium-6 columns Partners__tolkachev-logo">
 						<a href="http://www.atplaw.ru/" target="blank">
-							<img src="images/landing/tolkachev.png" alt='логотип "Толкачев и партнеры"' />
+							<img src="images/landing/tolkachev2.png" alt='логотип "Толкачев и партнеры"' />
 						</a>
 					</div>
 					<div className="small-12 medium-6 columns">
@@ -63,7 +63,7 @@ export default class LandingPress extends React.Component {
 					</div>
 					<div style={{marginTop: '5px'}} className="small-12 medium-6 columns">
 						<a href="http://forklog.com/" target="blank">
-							<img className="Partners__forklog-logo" src="http://forklog.com/wp-content/themes/newForklog/img/logo.svg" alt="логотип Forklog" />
+							<img className="Partners__forklog-logo" src="images/landing/forklog-logo.svg" alt="логотип Forklog" />
 						</a>
 					</div>
 				</div>

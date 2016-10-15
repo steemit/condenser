@@ -519,7 +519,10 @@ const ru = {
 	requires_5_or_more_reddit_comment_karma: 'необходимо 5 или больше Reddit кармы комментирования',
 	this_post_was_hidden_due_to_low_ratings: 'Этот пост был скрыт из-за низкого рейтинга',
 	reblogged_by: 'Поделился',
-	reblog: 'Поделиться'
+	reblog: 'Поделиться',
+	updated: 'обновленное',
+	created: 'новое',
+	settings: 'Настройки'
 }
 
 export { ru }

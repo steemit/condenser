@@ -97,6 +97,7 @@ app.use(favicon(path.join(__dirname, '../app/assets/images/favicons/favicon.ico'
 app.use(isBot());
 app.use(mount('/favicons', staticCache(path.join(__dirname, '../app/assets/images/favicons'), cacheOpts)));
 app.use(mount('/images', staticCache(path.join(__dirname, '../app/assets/images'), cacheOpts)));
+app.use(mount('/legal', staticCache(path.join(__dirname, '../app/assets/legal'), cacheOpts)));
 // Proxy asset folder to webpack development server in development mode
 console.log (env)
 

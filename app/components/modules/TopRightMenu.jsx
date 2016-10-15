@@ -16,7 +16,7 @@ const defaultNavigate = (e) => {
     browserHistory.push(a.pathname + a.search + a.hash);
 };
 
-function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpic, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn}) {
+function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpic, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn, location}) {
     const mcn = 'menu' + (vertical ? ' vertical show-for-small-only' : '');
     const mcl = vertical ? '' : ' sub-menu';
     const lcn = vertical ? '' : 'show-for-medium';
@@ -26,6 +26,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
     const feed_link = `/@${username}/feed`;
     const replies_link = `/@${username}/recent-replies`;
     const wallet_link = `/@${username}/transfers`;
+    const settings_link = `/@${username}/settings`;
     const account_link = `/@${username}`;
     const posts_link = `/@${username}/posts`;
     const reset_password_link = `/@${username}/password`;
@@ -41,11 +42,56 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
             {link: replies_link, value: translate('replies')},
             {link: wallet_link, value: translate('wallet')},
             {link: reset_password_link, value: translate('change_password')},
+            {link: settings_link, value: translate('settings')},
             loggedIn ?
                 {link: '#', onClick: logout, value: translate('logout')} :
                 {link: '#', onClick: showLogin, value: translate('login')}
         ];
         const search = translate('search')
+
+        if (process.env.BROWSER && /^\/ico$/.test(window.location.pathname)) {
+            return (
+                <ul className={mcn + ' landing'}>
+                    <li className={lcn}><a href="#what-is-golos">Видео</a></li>
+                    <li className={lcn}><a href="#docs">Документация</a></li>
+                    <li className={lcn}><a href="#faq">FAQ</a></li>
+                    <li className={lcn}><a href="#team">Команда</a></li>
+                    <LinkWithDropdown
+                        closeOnClickOutside
+                        dropdownPosition="bottom"
+                        dropdownAlignment="right"
+                        dropdownContent={<VerticalMenu items={user_menu} title={username} />}
+                        onClick={trackAnalytics.bind(this, 'user dropdown menu clicked')}
+                    >
+                        {!vertical && <li className={'Header__userpic '}>
+                            <a href={account_link} title={username} onClick={e => e.preventDefault()}>
+                                <img src={userpic_src} width="36" height="36" />
+                            </a>
+                        </li>}
+                    </LinkWithDropdown>
+                    {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
+                        <span className="hamburger" />
+                    </a></li>}
+                </ul>
+            );
+            return      <ul className={mcn + mcl + ' landing'}>
+                            <li className={lcn}><a href="#what-is-golos">Видео</a></li>
+                            <li className={lcn}><a href="#docs">Документация</a></li>
+                            <li className={lcn}><a href="#faq">FAQ</a></li>
+                            <li className={lcn}><a href="#team">Команда</a></li>
+                            <li className={lcn + ' image-wrapper'}>
+                                <a href="https://test.golos.io/login.html">
+                                    <img src="images/user.png" width="36" height="36" />
+                                    <span>Тестовый Вход</span>
+                                </a>
+                            </li>
+                            <li className={lcn}><LoadingIndicator type="circle" inline /></li>
+                            {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
+                                <span className="hamburger" />
+                            </a></li>}
+                        </ul>
+        }
+
 /*
                 <li><a href={`/@${username}/transfers#buy_golos`} className="button alert">купить голоса</a></li>
                    move down on ICO start....
@@ -75,6 +121,25 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
         );
     }
     if (probablyLoggedIn) {
+        if (process.env.BROWSER && /^\/ico$/.test(window.location.pathname)) {
+            return      <ul className={mcn + mcl + ' landing'}>
+                            <li className={lcn}><a href="#what-is-golos">Видео</a></li>
+                            <li className={lcn}><a href="#docs">Документация</a></li>
+                            <li className={lcn}><a href="#faq">FAQ</a></li>
+                            <li className={lcn}><a href="#team">Команда</a></li>
+                            <li className={lcn + ' image-wrapper'}>
+                                <a href="https://test.golos.io/login.html">
+                                    <img src="images/user.png" width="36" height="36" />
+                                    <span>Тестовый Вход</span>
+                                </a>
+                            </li>
+                            <li className={lcn}><LoadingIndicator type="circle" inline /></li>
+                            {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
+                                <span className="hamburger" />
+                            </a></li>}
+                        </ul>
+        }
+
         return (
             <ul className={mcn + mcl}>
                 {!vertical && <li><a href="/static/search.html" title="Поиск"><Icon name="search" /></a></li>}
@@ -85,17 +150,35 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
             </ul>
         );
     }
+
+    if (process.env.BROWSER && /^\/ico$/.test(window.location.pathname)) {
+        return  <ul className={mcn + mcl + ' landing'}>
+                    <li className={lcn}><a href="#what-is-golos">Видео</a></li>
+                    <li className={lcn}><a href="#docs">Документация</a></li>
+                    <li className={lcn}><a href="#faq">FAQ</a></li>
+                    <li className={lcn}><a href="#team">Команда</a></li>
+                    <li className={lcn + ' image-wrapper'}>
+                        <a href="https://test.golos.io/login.html">
+                            <img src="images/user.png" width="36" height="36" />
+                            <span>Тестовый Вход</span>
+                        </a>
+                    </li>
+                    {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
+                        <span className="hamburger" />
+                    </a></li>}
+                </ul>
+    }
     return (
-        <ul className={mcn + mcl}>
-            {!vertical && <li><a href="/static/search.html" title="Поиск"><Icon name="search" /></a></li>}
-            <li className={lcn}><a href="/create_account" onClick={showSignUp}>{translate('sign_up')}</a></li>
-            <li className={lcn}><a href="/login.html" onClick={showLogin}>{translate('login')}</a></li>
-            {submit_story}
-            {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
-                <span className="hamburger" />
-            </a></li>}
-        </ul>
-    );
+            <ul className={mcn + mcl}>
+                {!vertical && <li><a href="/static/search.html" title="Поиск"><Icon name="search" /></a></li>}
+                <li className={lcn}><a href="/create_account" onClick={showSignUp}>{translate('sign_up')}</a></li>
+                <li className={lcn}><a href="/login.html" onClick={showLogin}>{translate('login')}</a></li>
+                {submit_story}
+                {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
+                    <span className="hamburger" />
+                </a></li>}
+            </ul>
+        );
 }
 
 TopRightMenu.propTypes = {

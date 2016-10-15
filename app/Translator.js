@@ -2,8 +2,10 @@ import React from 'react';
 import isString from 'lodash/isString';
 import isObject from 'lodash/isObject';
 import isUndefined from 'lodash/isUndefined';
+import { connect } from 'react-redux'
 import { IntlProvider, addLocaleData, injectIntl } from 'react-intl';
 import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
+import store from 'store';
 import { DEFAULT_LANGUAGE } from 'config/client_config';
 
 // most of this code creates a wrapper for i18n API.
@@ -23,9 +25,9 @@ addLocaleData([...enLocaleData, ...ruLocaleData]);
 
 // Our translated strings
 
-import { ru as en } from './locales/ru';
 import { ru } from './locales/ru';
-const messages = Object.assign(en, ru)
+import { en } from './locales/en';
+const messages = {ru, en}
 
 // exported function placeholders
 // this is needed for proper export before react-intl functions with locale data,
@@ -94,19 +96,25 @@ class Translator extends React.Component {
 		// Define user's language. Different browsers have the user locale defined
 		// on different fields on the `navigator` object, so we make sure to account
 		// for these different by checking all of them
-		let language = DEFAULT_LANGUAGE; // usually 'en'
+		let language = this.props.locale; // usually 'en'
+		if (process.env.BROWSER) {
+			const storredLanguage = store.get('language')
+			if (storredLanguage) language = storredLanguage
+		}
+		// let language = DEFAULT_LANGUAGE; // usually 'en'
 		// while Server Side Rendering is in process, 'navigator' is undefined
-		if (process.env.BROWSER) language = navigator
-											? (navigator.languages && navigator.languages[0])
-					                        || navigator.language
-					                        || navigator.userLanguage
-											: '';
+		// currently commented out, because in golos we need only russian
+		// if (process.env.BROWSER) language = navigator
+		// 									? (navigator.languages && navigator.languages[0])
+		// 			                        || navigator.language
+		// 			                        || navigator.userLanguage
+		// 									: DEFAULT_LANGUAGE;
         //Split locales with a region code (ie. 'en-EN' to 'en')
         const languageWithoutRegionCode = language.toLowerCase().split(/[_-]+/)[0];
 
 		// to ensure dynamic language change, "key" property with same "locale" info must be added
 		// see: https://github.com/yahoo/react-intl/wiki/Components#multiple-intl-contexts
-		return 	<IntlProvider locale={languageWithoutRegionCode} key={languageWithoutRegionCode} messages={messages}>
+		return 	<IntlProvider key={languageWithoutRegionCode} locale={languageWithoutRegionCode} messages={messages[languageWithoutRegionCode]}>
 					<div>
 						<DummyComponentToExportProps />
 						{/*
@@ -122,4 +130,13 @@ class Translator extends React.Component {
 
 export { translate, translateHtml, translatePlural }
 
-export default Translator
+export default connect(
+    // mapStateToProps
+    (state, ownProps) => {
+		const locale = state.user.get('locale')
+        return {
+            ...ownProps,
+            locale
+        }
+    }
+)(Translator)

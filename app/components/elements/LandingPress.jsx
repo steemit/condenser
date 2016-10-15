@@ -7,13 +7,13 @@ export default class LandingPress extends React.Component {
 			{
 				url: 'http://forklog.com/russkoyazychnyj-analog-steemit-obyavil-o-nachale-kraudsejla/',
 				title: 'FORKLOG: Русскоязычный аналог Steemit анонсировал краудсейл',
-				image: 'http://forklog.com/wp-content/themes/newForklog/img/logo.svg',
+				image: 'images/landing/forklog-logo.svg',
 				text: '29 сентября была сделана копия учетных записей блокчейна социальной сети Steemit в рамках договоренности о создании русскоязычной версии соцсети, получившей название “Голос”. 60% токенов сети будет распределено в рамках ICO, которое стартует 15 октября.'
 			},
 			{
 				url: 'http://www.coinfox.ru/novosti/6457-kiber-fond-sozdast-russkoyazychnuyu-sotsset-na-blokchejne-steem',
 				title: 'COINFOX: Кибер•Фонд создаст русскоязычную соцсеть на блокчейне Steem',
-				image: 'https://www.coinfox.ru/images/news/Golos.png',
+				image: 'images/landing/golos-team.png',
 				text: 'Разработчики не удовлетворены развитием русскоязычного сообщества в существующей соцсети Steemit и надеются, что новая сеть «Голос» с собственными токенами даст толчок к его развитию.'
 			},
 			{

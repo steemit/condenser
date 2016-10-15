@@ -9,7 +9,6 @@
 // TODO add common supporting text styles
 // http://foundation.zurb.com/sites/docs/v/5.5.3/media-queries.html
 .Landing {
-	margin-top: -6rem;
 	font-family: Verdana, Geneva, sans-serif;
 	/* COMMON ELEMENTS */
 	.blue 	{ color: #6191cf; } // font-family: ProximaNova;
@@ -131,6 +130,7 @@
 			color: #d2d2d2;
 		}
 	}
+	img { max-width: 75%; }
 	.Distribution__list {
 		margin-top: 20px;
 	}
@@ -416,8 +416,7 @@
 	.Landing__supporting-text { margin-bottom: 65px; }
 	.WhyGolos__image { margin: 65px auto; }
 	.WhyGolos__reasons {
-		margin-top: 65px;
-		margin-bottom: 115px;
+		margin: 65px auto;
 		strong { display: block; }
 		p { font-size: 13px; }
 		@media #{$small-up} {
@@ -473,7 +472,10 @@
 	}
 	.Partners__skolkovo-logo { transform: translateY(-17%); }
 	.Partners__forklog-logo { transform: translateY(0%); }
-	.Partners__tolkachev-logo { transform: translateY(5%); }
+	.Partners__tolkachev-logo {
+		transform: translateY(5%);
+		img { max-height: 65px; }
+	}
 	@media #{$small-up} {
 		.Partners__coinessa-logo { transform: translateY(50%); }
 	}

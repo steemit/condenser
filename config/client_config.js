@@ -27,9 +27,16 @@ export const VEST_TICKER = 'GESTS'
 export const DEBT_TICKER = 'GBG'
 export const DEBT_TOKEN_SHORT = 'GBG' // 'SD'
 
+export const DEFAULT_CURRENCY = 'RUB'
+export const ALLOWED_CURRENCIES = ['RUB', 'UAH', 'BYN', 'USD', 'EUR', 'CNY'] // GEL, 'KZT'
+export const FRACTION_DIGITS = 2 // default amount of decimal digits
+export const FRACTION_DIGITS_MARKET = 3 // accurate amount of deciaml digits (example: used in market)
+
+// Рубли, гривны, белорусские рубли
+// + Тенге, EUR, USD, CNY
+// Грузинские тугрики (латы)
 
 export const SITE_DESCRIPTION = 'Голос - социальная сеть, построенная на публичном блокчейне. Вознаграждение пользователей осуществляется за счет дополнительной эмиссии токенов. При этом распределением токенов управляют текущие пользователи сети через голосование за лучший контент.'
-
 
 // export const LANDING_PAGE_URL =
 // export const WHITEPAPER_URL =

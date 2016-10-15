@@ -24,8 +24,7 @@ export default class LandingWhoWeAre extends React.Component {
 				</div>
 				<div className="row WhoWeAre__texts">
 					<div className="small-12 columns">
-						<p>Голос создается командой cyber•Fund по лицензии Steemit Inc.</p>
-						{/* <span></span> */}
+						<p>Голос создан командой cyber•Fund по лицензии Steemit Inc.</p>
 					</div>
 				</div>
 				<hr />

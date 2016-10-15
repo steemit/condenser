@@ -59,10 +59,10 @@ const ru = {
 	by_verifying_you_agree_terms_and_conditions: 'условиями и соглашениями',
 	terms_and_conditions: 'Условия и Соглашения',
 	// this is from top-right dropdown menu
-	hot: 'горячее',
-	trending: 'популярное',
+	hot: 'Актуальное',
+	trending: 'Популярное',
 	payout_time: 'время выплаты',
-	active: 'обсуждаемое',
+	active: 'Обсуждаемое',
 	responses: 'ответы',
 	popular: 'популярное',
 	/* end dropdown menu */
@@ -189,7 +189,7 @@ const ru = {
 	recent_password: 'Недавний пароль',
 	generated_password: 'Сгенерированный пароль',
 	recover_account: 'Восстановить аккаунт',
-	new: 'новое', // ex. 'Generated Password (new)', but not exclusively
+	new: 'Новое', // ex. 'Generated Password (new)', but not exclusively
 	backup_password_by_storing_it: 'Сделайте резервную копию в менеджере паролей или текстовом файле',
 	click_to_generate_password: 'Нажмите чтобы сгененировать пароль',
 	re_enter_generate_password: 'Повторно введите пароль',
@@ -405,7 +405,7 @@ const ru = {
 	your_existing_DEBT_TOKEN_are_liquid_and_transferable: 'Ваши существующие ' + DEBT_TOKEN + ' ликвидны и перемещаемы. Возможно, вы хотите торговать ' + DEBT_TOKEN + ' напрямую на этом сайте в разделе {link} или перевести на внешний рынок.',
 	buy_or_sell: 'Купить или Продать',
 	trending_30_day: 'популярное (30 дней)',
-	promoted: 'продвигаемое',
+	promoted: 'Продвигаемое',
 	comments: 'Комментарии',
 	topics: 'Топики',
 	// TODO

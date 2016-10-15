@@ -69,15 +69,17 @@ export default class LandingCountDowns extends React.Component {
 		return (
 			<section className="CountDowns">
 				{/* HEADERS */}
-				<div className="row text-center CountDowns__headers">
-					<div className="small-12 columns">
-						<strong className="CountDowns__slogan" id="countdown">Каждый Голос имеет значение!</strong>
-						{
-							process.env.BROWSER
-							? <div className="CountDowns__logo wow fadeInLeft"><Icon name={APP_ICON} size="2x" /></div>
-							: null
-						}
-						<h1 className="CountDowns__headers__h1">Социально-медийная блокчейн платформа</h1>
+				<div className="CountDowns__headers">
+					<div className="row text-center">
+						<div className="small-12 columns">
+							<strong className="CountDowns__slogan" id="countdown">Каждый ГОЛОС имеет значение!</strong>
+							{
+								process.env.BROWSER
+								? <div className="CountDowns__logo wow fadeInLeft"><Icon name={APP_ICON} size="2x" /></div>
+								: null
+							}
+							<h1 className="CountDowns__headers__h1">Социально-медийная блокчейн платформа</h1>
+						</div>
 					</div>
 				</div>
 
@@ -95,7 +97,7 @@ export default class LandingCountDowns extends React.Component {
 							</div>
 							<div className="small-12 medium-6 columns CountDowns__counter">
 								<CountDown
-									title={<strong>До старта продажи силы голоса</strong>}
+									title={<strong>До старта продажи Силы Голоса</strong>}
 									date={props.crowdsaleStartAt}
 									countFrom={props.crowdsaleStartAt.getTime() - oneMounth}
 								/>

@@ -42,7 +42,7 @@ export default class LandingJoinUs extends React.Component {
 			<section className="JoinUs">
 				<div className="row text-center">
 					<div className="small-12 columns">
-						<h2 className="red" id="join">Присоединяйся</h2>
+						<h2 className="blue" id="join">Присоединяйся!</h2>
 						<span className="JoinUs__support-text">Получи 6 голосов за регистрацию</span>
 						<br />
 					</div>
@@ -52,7 +52,7 @@ export default class LandingJoinUs extends React.Component {
 				</div>
 				<div className="row JoinUs__action">
 					<div className="small-12 columns text-center">
-						<a href="https://wiki.golos.io/2-rewards/posting_rewards.html" target="blank" className="button">Узнать больше</a>
+						<a href="https://wiki.golos.io/2-rewards/posting_rewards.html" target="blank" className="button">Узнай больше!</a>
 					</div>
 				</div>
 				<hr />

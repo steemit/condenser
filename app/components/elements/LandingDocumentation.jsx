@@ -6,7 +6,7 @@ export default class LandingDocumentation extends React.Component {
 			<section className="Documentation" id="docs">
 				<div className="row text-center">
 					<div className="   small-12 columns">
-						<h2 id="docs">Документация</h2>
+						<h2>Документация</h2>
 						{/* 30px */}
 						<span className="Landing__supporting-text">Децентрализованная социальная сеть для блоггеров и журналистов</span>
 					</div>

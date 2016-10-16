@@ -96,7 +96,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                                 <Link spy to="team" smooth offset={-110} duration={500}>Команда</Link>
                             </li>
                             <li className={lcn + ' image-wrapper'}>
-                                <a href="https://test.golos.io/login.html">
+                                <a href="https://staging.golos.io/login.html">
                                     <img src="images/user.png" width="36" height="36" />
                                     <span>Тестовый Вход</span>
                                 </a>
@@ -152,7 +152,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                                 <Link spy to="team" smooth offset={-110} duration={500}>Команда</Link>
                             </li>
                             <li className={lcn + ' image-wrapper'}>
-                                <a href="https://test.golos.io/login.html">
+                                <a href="https://staging.golos.io/login.html">
                                     <img src="images/user.png" width="36" height="36" />
                                     <span>Тестовый Вход</span>
                                 </a>
@@ -190,7 +190,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                         <Link spy to="team" smooth offset={-110} duration={500}>Команда</Link>
                     </li>
                     <li className={lcn + ' image-wrapper'}>
-                        <a href="https://test.golos.io/login.html">
+                        <a href="https://staging.golos.io/login.html">
                             <img src="images/user.png" width="36" height="36" />
                             <span>Тестовый Вход</span>
                         </a>

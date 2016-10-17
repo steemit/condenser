@@ -124,8 +124,9 @@ class Header extends React.Component {
         ];
         if (current_account_name) sort_orders.unshift(['home', translate('home')]);
         const sort_order_menu = sort_orders.filter(so => so[0] !== sort_order).map(so => ({link: sortOrderToLink(so[0], topic, current_account_name), value: so[1]}));
-        const selected_sort_order = sort_orders.find(so => so[0] === sort_order);
-
+        // there were a problem when in root route ('/') when header menu didn't
+        // had any active links. Thats why selected_sort_order falls down to 'trending' if undefined
+        const selected_sort_order = sort_orders.find(so => so[0] === sort_order) || sort_orders[2];
         const sort_orders_horizontal = [
             ['created', translate('new')],
             ['hot', translate('hot')],
@@ -148,6 +149,7 @@ class Header extends React.Component {
             ];
             sort_order_extra_menu = <HorizontalMenu items={items} />
         }
+
         return (
             <header className="Header noPrint">
                 <div className="Header__top header">
@@ -195,10 +197,6 @@ export {Header as _Header_};
 export default connect(
     state => {
         const current_user = state.user.get('current');
-        // console.log(state.user)
-        // console.log('current_user', current_user)
-        // console.log(current_user.get('username'))
-        // console.log(state.offchain.get('account'))
         const current_account_name = current_user ? current_user.get('username') : state.offchain.get('account');
         return {
             location: state.app.get('location'),

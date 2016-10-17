@@ -3,6 +3,7 @@ export const APP_NAME = 'Голос' // 'Steemit'
 export const APP_NAME_UPPERCASE = 'Golos' // 'STEEMIT'
 export const APP_ICON = 'golos' // 'steem'
 export const APP_URL = 'staging.golos.io' // 'steemit.com'
+export const APP_URL = 'golos.io' // 'steemit.com'
 export const OWNERSHIP_TOKEN = 'Голос' // 'Steem'
 // sometimes it's impossible to use html tags to style coin name, hence usage of _UPPERCASE modifier
 export const OWNERSHIP_TOKEN_UPPERCASE = 'ГОЛОС' // 'STEEM'
@@ -40,3 +41,4 @@ export const SITE_DESCRIPTION = 'Голос - социальная сеть, п�
 
 // export const LANDING_PAGE_URL =
 // export const WHITEPAPER_URL =
+export const FIRST_DATE = new Date(Date.UTC(2016, 7, 1)); //1 september

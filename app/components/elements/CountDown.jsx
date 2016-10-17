@@ -78,7 +78,7 @@ export default class CountDown extends React.Component {
 					</div>
 		}
 
-		return 	<section className="CountDown">
+		return 	<section className={"CountDown " + this.props.className}>
 					<p className="CountDown__title">{this.props.title}</p>
 					{renderCounter(days, 'Дни', this.getDaysCount())}
 					{renderCounter(h, 'Часы', 24)}

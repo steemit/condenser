@@ -88,22 +88,18 @@ export default class LandingCountDowns extends React.Component {
 				{
 					props.prefill
 					? 	<div className="row text-center CountDowns__counters">
-							<div className="small-12 medium-6 columns CountDowns__counter">
-								<CountDown
-									title={<strong>До запуска блокчейна</strong>}
-									date={props.blockchainStartAt}
-									countFrom={props.blockchainStartAt.getTime()}
-									displayWhenZero
-								/>
-							</div>
-							<div className="small-12 medium-6 columns CountDowns__counter">
-								<CountDown
-									title={<strong>До старта продажи Силы Голоса</strong>}
-									date={props.crowdsaleStartAt}
-									countFrom={props.crowdsaleStartAt.getTime()}
-									displayWhenZero
-								/>
-							</div>
+							<CountDown
+								date={props.blockchainStartAt}
+								title={<strong>До запуска блокчейна</strong>}
+								countFrom={props.blockchainStartAt.getTime()}
+								className="small-12 medium-6 columns CountDowns__counter"
+							/>
+							<CountDown
+								date={props.crowdsaleStartAt}
+								countFrom={props.crowdsaleStartAt.getTime()}
+								title={<strong>До старта продажи Силы Голоса</strong>}
+								className="small-12 medium-6 columns CountDowns__counter"
+							/>
 						</div>
 					: 	<div className="row text-center CountDowns__counters">
 							<div className="small-12 medium-4 columns CountDowns__counter">

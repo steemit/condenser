@@ -28,8 +28,8 @@ const ru = {
 	close: 'Закрыть',
 	// next 5 strings were supposed to be sinngle block of text, but due large size,
 	// code erros they were splitted.
-	authors_get_paid_when_people_like_you_upvote_their_post: 'Авторы получают вознаграждение, когда пользователи голосуют за их посты',
-	if_you_enjoyed_what_you_read_earn_amount: "Проголосовавшие читатели также вознаграждаются. Если вам понравилось то, что вы прочитали, заработайте {amount} в " + INVEST_TOKEN,
+	authors_get_paid_when_people_like_you_upvote_their_post: 'В сети Голос авторы получают вознаграждение, когда пользователи голосуют за их посты.',
+	if_you_enjoyed_what_you_read_earn_amount: "Проголосовавшие читатели также вознаграждаются. Если вам понравился данный пост Вы можете вознаградить автора",
 	when_you: "Для этого",
 	when_you_link_text: 'зарегистрируйтесь',
 	and_vote_for_it: 'и проголосуйте за пост',

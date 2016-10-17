@@ -340,7 +340,7 @@ const ru = {
 	balance: 'Баланс',
 	balances: 'Балансы',
 	estimate_account_value: 'Оценка стоимости аккаунта',
-	next_power_down_is_scheduled_to_happen_at: 'Следующее понижение голоса запланировано на',
+	next_power_down_is_scheduled_to_happen_at: 'Следующее понижение Силы Голоса запланировано на',
 	transfers_are_temporary_disabled: 'Переводы временно отключены',
 	history: 'История',
 	// CurationRewards.jsx
@@ -489,7 +489,7 @@ const ru = {
 	tradeable_tokens_that_may_be_transferred_anywhere_at_anytime: 'Перемещаемые цифровые токены, которые могут переданы куда угодно в любой момент.',
 	OWNERSHIP_TOKEN_can_be_converted_to_INVEST_TOKEN_in_a_process_called_powering_up: OWNERSHIP_TOKEN + ' может быть конвертирован в ' + INVEST_TOKEN + ', этот процесс называется "усиление голоса".',
 	tokens_worth_about_AMOUNT_of_OWNERSHIP_TOKEN: 'Перемещаемые цифровые токены, цена которых всегда равна ~1 мг золота в ' + OWNERSHIP_TOKEN + '.',
-	influence_tokens_which_earn_more_power_by_holding_long_term: 'Не перемещаемые цифровые токены, их количество увеличевается при долгосрочном хранении.',
+	influence_tokens_which_earn_more_power_by_holding_long_term: 'Неперемещаемые цифровые токены, их количество увеличевается при долгосрочном хранении.',
 	the_more_you_hold_the_more_you_influence_post_rewards: 'Чем их больше, тем сильней вы влияете на вознаграждения за пост и тем больше зарабатываете за голосование.',
 	the_estimated_value_is_based_on_a_7_day_average_value_of_OWNERSHIP_TOKEN_in_currency: 'Оценочная стоимость расчитывается из 7-ми дневной средней стоимости ' + OWNERSHIP_TOKEN + '.',
 	INVEST_TOKEN_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_OWNERSHIP_TOKEN: INVEST_TOKEN + ' нельзя передавать и потребуется 2 года и 104 выплаты чтобы перевести обратно в ' + OWNERSHIP_TOKEN + '.',

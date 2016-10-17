@@ -18,7 +18,7 @@ export default class LandingWhoWeAre extends React.Component {
 					</div>
 					<div className="small-12 medium-6 columns">
 						<a href="https://steemit.com/" target="blank">
-							<img src="images/landing/steemit-logo.svg" alt="логотип Steemit" />
+							<img src="/images/landing/steemit-logo.svg" alt="логотип Steemit" />
 						</a>
 					</div>
 				</div>

@@ -120,7 +120,7 @@ export default ({large = true, highQualityPost = true, noImage = false, sanitize
             if(!href) href = '#'
             const attys = {href}
             // If it's not a (relative or absolute) steemit URL...
-            if (!href.match(/^(\/(?!\/)|https:\/\/staging.golos.io)/)) {
+            if (!href.match(/^(\/(?!\/)|https:\/\/golos.io)/)) {
                 // attys.target = '_blank' // pending iframe impl https://mathiasbynens.github.io/rel-noopener/
                 attys.rel = highQualityPost ? 'noopener' : 'nofollow noopener'
             }

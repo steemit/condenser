@@ -177,7 +177,7 @@ class PostFull extends React.Component {
             net_rshares.compare(Long.ZERO) <= 0
 
         this.share_params = {
-            url: 'https://staging.golos.io' + link,
+            url: 'https://golos.io' + link,
             title: title + ' — Голос',
             desc: p.desc
         };

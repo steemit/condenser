@@ -78,6 +78,7 @@
     "medium-editor-insert-plugin": "^2.3.2",
     "minimist": "^1.2.0",
     "mysql": "^2.10.2",
+    "newrelic": "^1.31.0",
     "node-sass": "^3.4.2",
     "pluralize": "^2.0.0",
     "purest": "^2.0.1",

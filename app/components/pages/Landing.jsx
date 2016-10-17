@@ -13,6 +13,7 @@ import Team from 'app/components/elements/LandingTeam'
 import Press from 'app/components/elements/LandingPress'
 import Partners from 'app/components/elements/LandingPartners'
 import Footer from 'app/components/elements/LandingFooter'
+import Header from 'app/components/elements/LandingHeader'
 let WOW
 if (process.env.BROWSER) WOW = require('wowjs/dist/wow.js')
 

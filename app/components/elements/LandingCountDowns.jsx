@@ -64,8 +64,6 @@ export default class LandingCountDowns extends React.Component {
 		const currentStage = this.dates.find((item) => item.bonus == this.calculateCurrentStage())
 		const previousStage = this.dates.find((item) => item.bonus < this.calculateCurrentStage())
 
-		const oneMounth = 1000 * 60 * 60 * 24 * 30
-
 		return (
 			<section className="CountDowns">
 				{/* HEADERS */}
@@ -92,14 +90,14 @@ export default class LandingCountDowns extends React.Component {
 								<CountDown
 									title={<strong>До запуска блокчейна</strong>}
 									date={props.blockchainStartAt}
-									countFrom={props.blockchainStartAt.getTime() - oneMounth}
+									countFrom={props.blockchainStartAt.getTime()}
 								/>
 							</div>
 							<div className="small-12 medium-6 columns CountDowns__counter">
 								<CountDown
 									title={<strong>До старта продажи Силы Голоса</strong>}
 									date={props.crowdsaleStartAt}
-									countFrom={props.crowdsaleStartAt.getTime() - oneMounth}
+									countFrom={props.crowdsaleStartAt.getTime()}
 								/>
 							</div>
 						</div>
@@ -122,7 +120,7 @@ export default class LandingCountDowns extends React.Component {
 								<CountDown
 									title={`Бонус уменьшится: до ${state.nextBonus}%`}
 									date={currentStage.date}
-									countFrom={previousStage.date.getTime() - oneMounth}
+									countFrom={previousStage.date.getTime()}
 								/>
 							</div>
 						</div>

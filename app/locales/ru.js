@@ -28,8 +28,8 @@ const ru = {
 	close: 'Закрыть',
 	// next 5 strings were supposed to be sinngle block of text, but due large size,
 	// code erros they were splitted.
-	authors_get_paid_when_people_like_you_upvote_their_post: 'Авторы получают вознаграждение, когда пользователи голосуют за их посты',
-	if_you_enjoyed_what_you_read_earn_amount: "Проголосовавшие читатели также вознаграждаются. Если вам понравилось то, что вы прочитали, заработайте {amount} в " + INVEST_TOKEN,
+	authors_get_paid_when_people_like_you_upvote_their_post: 'В сети Голос авторы получают вознаграждение, когда пользователи голосуют за их посты.',
+	if_you_enjoyed_what_you_read_earn_amount: "Проголосовавшие читатели также вознаграждаются. Если вам понравился данный пост Вы можете вознаградить автора",
 	when_you: "Для этого",
 	when_you_link_text: 'зарегистрируйтесь',
 	and_vote_for_it: 'и проголосуйте за пост',
@@ -182,7 +182,7 @@ const ru = {
 	recover_your_account: 'восстановить ваш аккаунт', // this probably will end with question mark
 	reset_usernames_password: "Сбросить пароль пользователя {username}",
 	this_will_update_usernames_authtype_key: 'Это обновит {username} {authType} ключ',
-	the_rules_of_APP_NAME: "Первое правило " + APP_NAME + ": не теряйте свой пароль.<br /> Второе правило " + APP_NAME + ": <strong>Не</strong> теряйте свой пароль.<br /> Третье правило " + APP_NAME + ": мы не можем восстановить ваш пароль.<br /> Четвертое правило: если вы можете запомнить свой пароль, значит он не безопасен.<br /> Пятое правило: используйте только сгенерированные случайным образом пароли.<br /> Шестое правило: Никому не говорите свой пароль.<br /> Седьмое правило: Всегда надежно храните свой пароль.",
+	the_rules_of_APP_NAME: "Первое правило сети" + APP_NAME + ": не теряйте свой пароль. <br /> Второе правило " + APP_NAME + ": <strong>Не</strong> теряйте свой пароль. <br /> Третье правило " + APP_NAME + ": мы не можем восстановить ваш пароль. <br /> Четвертое правило: если вы можете запомнить свой пароль, значит он не безопасен. <br /> Пятое правило: используйте только сгенерированные случайным образом пароли. <br /> Шестое правило: Никому не говорите свой пароль. <br /> Седьмое правило: Всегда надежно храните свой пароль.",
 	account_name: 'Имя аккаунта',
 	recover_password: 'Восстановить аккаунт',
 	current_password: 'Текущий пароль',

@@ -38,7 +38,7 @@ class Witnesses extends React.Component {
    render() {
        const {props: {global, witness_votes}, state: {customUsername}, accountWitnessVote, onWitnessChange} = this
        const sorted_witnesses = global.getIn(['witnesses'])
-            .sort((a, b) => Long.fromString(b.get('votes')).subtract(Long.fromString(a.get('votes')).toString()));
+            .sort((a, b) => Long.fromString(String(b.get('votes'))).subtract(Long.fromString(String(a.get('votes'))).toString()));
 
         const header =
             <div className="row">

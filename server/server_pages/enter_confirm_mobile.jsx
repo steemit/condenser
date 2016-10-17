@@ -104,10 +104,6 @@ export default function useEnterAndConfirmMobilePages(app) {
             return;
         }
 
-        if(mobile.length === "9998887777".length) {
-            mobile = `1${mobile}`
-        }
-
         const eid = yield models.Identity.findOne(
             {attributes: ['id'], where: {user_id, provider: 'email', verified: true}, order: 'id DESC'}
         );

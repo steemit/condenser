@@ -115,8 +115,8 @@ export default class PostSummary extends React.Component {
         // author and category
         let author_category = <span className="vcard">
             <TimeAgoWrapper date={p.created} className="updated" />
-            {} by <Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
-            {} in <TagList post={p} single />
+            {} {translate('by')} <Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
+            {} {translate('in')} <TagList post={p} single />
         </span>
 
         if( !(currentCategory && currentCategory.match( /nsfw/ )) ) {

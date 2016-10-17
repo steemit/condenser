@@ -205,7 +205,7 @@ function retrieveRedditUserData(access_token) {
             .get('https://oauth.reddit.com/api/v1/me.json?raw_json=1')
             .headers({
                 Authorization: `bearer ${access_token}`,
-                'User-Agent': 'Steembot/1.0 (+http://test.golos.io)',
+                'User-Agent': 'Steembot/1.0 (+http://golos.io)',
                 Accept: 'application/json',
                 'Content-type': 'application/json'
             })

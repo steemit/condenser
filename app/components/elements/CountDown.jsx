@@ -1,22 +1,21 @@
 import React, { PropTypes } from 'react'
 import { Circle } from 'rc-progress';
-
+import { FIRST_DATE as firstDate } from 'config/client_config'
 // TODO add comment
 // TODO add function descriptions
-
+const _ms_in_day = 1000*60*60*24;
 export default class CountDown extends React.Component {
 
 	static propTypes = {
 		title: PropTypes.node,
 		onEnd: PropTypes.func,
 		date: PropTypes.object.isRequired,
-		countFrom: 	PropTypes.oneOfType([
-			            React.PropTypes.number.isRequired,
-			            React.PropTypes.object.isRequired
-			        ])
 	}
 
-	state = { timeLeft: this.props.date }
+	componentWillMount() {
+		this.setState ({ timeLeft: this.props.date.getTime() - Date.now() })
+  }
+
 
 	// start timer on mount
 	// do not start timer while server-rendering to avoid errors
@@ -24,28 +23,36 @@ export default class CountDown extends React.Component {
 	// && clear timer on unmount
 	componentWillUnmount() { if (this.interval) clearInterval(this.interval) }
 
-	getDaysCount = (date = this.props.countFrom) => {
-		// how to get number of days
-		const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
-		const firstDate = new Date()
-		const diffDays = Math.round(Math.abs((date - firstDate.getTime())/(oneDay))); // date.getTime()
-		return diffDays
+	getDaysCount() {
+
+		const currentDate = Date.now();
+		const lastDate = this.props.date;
+
+		const spanDays = (lastDate.getTime() - firstDate.getTime())/_ms_in_day;
+	  const diffDays = (currentDate - firstDate.getTime())/_ms_in_day; //
+		return diffDays/spanDays;
 	}
 
 	countDown() {
 		this.interval = setInterval(() => {
-			this.setState({ timeLeft: new Date(this.state.timeLeft.getTime() - 1000) })
+			this.setState({ timeLeft: this.props.date.getTime() - Date.now() })
 		}, 1000)
 	}
 
 	render() {
-		if (!this.props.date && !this.state.timeLeft) return null
+		if (!this.props.date) return null
 		// get values to display
+		if (!this.state.timeLeft)
+			this.setState({ timeLeft: this.props.date.getTime() - Date.now() })
 		const { timeLeft } = this.state
-		const days = this.getDaysCount(timeLeft)
-		const hours = 	timeLeft.getHours()
-		const minutes =	timeLeft.getMinutes()
-		const seconds = timeLeft.getSeconds()
+		const seconds = (timeLeft-timeLeft%1000)/1000;
+		const minutes = (seconds - seconds%60)/60;
+		const hours = (minutes - minutes%60)/60;
+		const days = (hours - hours%24)/24;
+		const s = seconds%60;
+ 		const m = minutes%60;
+		const h = hours%24;
+		const d = days;
 
 		if(timeLeft < 0) {
 			this.props.onEnd()
@@ -66,9 +73,9 @@ export default class CountDown extends React.Component {
 		return 	<section className="CountDown">
 					<p className="CountDown__title">{this.props.title}</p>
 					{renderCounter(days, 'Дни', this.getDaysCount())}
-					{renderCounter(hours, 'Часы', 24)}
-					{renderCounter(minutes, 'Минуты', 60)}
-					{renderCounter(seconds, 'Секунды', 60)}
+					{renderCounter(h, 'Часы', 24)}
+					{renderCounter(m, 'Минуты', 60)}
+					{renderCounter(s, 'Секунды', 60)}
 				</section>
 	}
 }

@@ -2,6 +2,7 @@ import React from "react";
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 
 if (!process.env.BROWSER) {
+    // please note we don't need to define require.context for client side rendering because it's defined by webpack
     const path = require('path');
     const fs = require('fs');
     function getFolderContents(folder, recursive) {

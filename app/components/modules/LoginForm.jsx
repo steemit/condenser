@@ -1,7 +1,7 @@
 /* eslint react/prop-types: 0 */
 import React, { PropTypes, Component } from 'react';
 import ReactDOM from 'react-dom';
-import {PublicKey} from 'shared/ecc'
+import {PublicKey, PrivateKey} from 'shared/ecc'
 import transaction from 'app/redux/Transaction'
 import g from 'app/redux/GlobalReducer'
 import user from 'app/redux/User'
@@ -155,6 +155,11 @@ class LoginForm extends Component {
                 </div>;
             }
         }
+        const standardPassword = checkPasswordChecksum(password.value)
+        const password_info = standardPassword === undefined ? null :
+            standardPassword ? 'Password checks out and appears valid.' :
+            'This password was probably typed or copied incorrectly.'
+
         const form = (
             <form onSubmit={handleSubmit(data => {
                 // bind redux-form to react-redux
@@ -173,6 +178,7 @@ class LoginForm extends Component {
                 <div>
                     <input type="password" required ref="pw" placeholder="Password or WIF" {...password.props} autoComplete="on" disabled={submitting} />
                     <div className="error">{error}&nbsp;</div>
+                    {password_info && <div className="warning">{password_info}&nbsp;</div>}
                 </div>
                 {loginBroadcastOperation && <div>
                     <div className="info">This operation requires your {authType} key (or use your master password).</div>
@@ -217,6 +223,15 @@ function urlAccountName() {
     const account_match = window.location.hash.match(/account\=([\w\d\-\.]+)/);
     if (account_match && account_match.length > 1) suggestedAccountName = account_match[1];
     return suggestedAccountName
+}
+
+function checkPasswordChecksum(password) {
+    if(!/^P.{45,}/.test(password)) {// 52 is the length
+        // not even close
+        return undefined
+    }
+    const wif = password.substring(1)
+    return PrivateKey.isWif(wif)
 }
 
 import {connect} from 'react-redux'

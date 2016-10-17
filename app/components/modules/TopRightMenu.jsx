@@ -26,13 +26,13 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
     const replies_link = `/@${username}/recent-replies`;
     const wallet_link = `/@${username}/transfers`;
     const account_link = `/@${username}`;
-    const posts_link = `/@${username}/posts`;
+    const comments_link = `/@${username}/comments`;
     const reset_password_link = `/@${username}/password`;
     if (loggedIn) { // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!
         const user_menu = [
             {link: feed_link, value: 'Feed'},
             {link: account_link, value: 'Blog'},
-            {link: posts_link, value: 'Comments'},
+            {link: comments_link, value: 'Comments'},
             {link: replies_link, value: 'Replies'},
             {link: wallet_link, value: 'Wallet'},
             {link: reset_password_link, value: 'Change Password'},

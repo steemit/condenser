@@ -41,7 +41,7 @@ export default class UserProfile extends React.Component {
         switch(category) {
           case 'feed': order = 'by_feed'; break;
           case 'blog': order = 'by_author'; break;
-          case 'posts': order = 'by_comments'; break;
+          case 'comments': order = 'by_comments'; break;
           case 'recent_replies': order = 'by_replies'; break;
           default: console.log('unhandled category:', category);
         }
@@ -60,6 +60,9 @@ export default class UserProfile extends React.Component {
         const username = current_user ? current_user.get('username') : null
         // const gprops = this.props.global.getIn( ['props'] ).toJS();
         if( !section ) section = 'blog';
+
+        // @user/"posts" is deprecated in favor of "comments" as of oct-2016 (#443)
+        if( section == 'posts' ) section = 'comments';
 
         // const isMyAccount = current_user ? current_user.get('username') === accountname : false;
         let account
@@ -145,14 +148,16 @@ export default class UserProfile extends React.Component {
                           />
             }
         }
-        else if( section === 'posts' && account.post_history ) {
+        else if( section === 'comments' && account.post_history ) {
+           // NOTE: `posts` key will be renamed to `comments` (https://github.com/steemit/steem/issues/507)
+           //   -- see also GlobalReducer.js
            if( account.posts )
            {
               tab_content = <PostsList
                   emptyText={`Looks like ${account.name} hasn't made any comments yet!`}
                   posts={account.posts}
                   loading={fetching}
-                  category="posts"
+                  category="comments"
                   loadMore={this.loadMore}
                   showSpam />;
            }
@@ -204,19 +209,7 @@ export default class UserProfile extends React.Component {
         }
 
         let printLink = null;
-        let section_title = account.name + ' / ' + section;
-        if( section === 'blog' ) {
-           section_title = account.name + "'s blog";
-        } else if( section === 'transfers' ) {
-           section_title = account.name + "'s wallet";
-        } else if( section === 'curation-rewards' ) {
-          section_title = account.name + "'s curation rewards";
-      } else if( section === 'author-rewards' ) {
-        section_title = account.name + "'s author rewards";
-        } else if( section === 'password' ) {
-           section_title = ''
-        } else if( section === 'permissions' ) {
-           section_title = account.name + "'s permissions"
+        if( section === 'permissions' ) {
            if(isMyAccount && wifShown) {
                printLink = <div>
                    <a className="float-right noPrint" onClick={onPrint}>
@@ -225,10 +218,6 @@ export default class UserProfile extends React.Component {
                    </a>
                </div>
            }
-        } else if( section === 'posts' ) {
-           section_title = account.name + "'s posts";
-        } else if( section === 'recent-replies' ) {
-           section_title = 'Recent replies to ' + account.name + "'s posts";
         }
 
         const wallet_tab_active = section === 'transfers' || section === 'password' || section === 'permissions' ? 'active' : ''; // className={wallet_tab_active}
@@ -242,7 +231,7 @@ export default class UserProfile extends React.Component {
             <div className="columns small-10 medium-12 medium-expand">
                 <ul className="menu" style={{flexWrap: "wrap"}}>
                     <li><Link to={`/@${accountname}`} activeClassName="active">Blog</Link></li>
-                    <li><Link to={`/@${accountname}/posts`} activeClassName="active">Comments</Link></li>
+                    <li><Link to={`/@${accountname}/comments`} activeClassName="active">Comments</Link></li>
                     <li><Link to={`/@${accountname}/recent-replies`} activeClassName="active">Replies</Link></li>
                     {/*<li><Link to={`/@${accountname}/feed`} activeClassName="active">Feed</Link></li>*/}
                     <li>
@@ -304,7 +293,6 @@ export default class UserProfile extends React.Component {
                 </div>
                 <div className="row">
                     <div className="column">
-                        {/*section_title && <h2 className="UserProfile__section-title">{section_title}</h2>*/}
                         {tab_content}
                     </div>
                 </div>

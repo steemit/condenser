@@ -12,12 +12,10 @@ import RootRoute from 'app/RootRoute';
 import ErrorPage from 'server/server-error';
 import {createStore, applyMiddleware, compose} from 'redux';
 import { browserHistory } from 'react-router';
-//import useScroll from 'scroll-behavior/lib/useStandardScroll';
 import useScroll from 'react-router-scroll';
 import createSagaMiddleware from 'redux-saga';
 import { syncHistoryWithStore } from 'react-router-redux';
 import rootReducer from 'app/redux/RootReducer';
-// import DevTools from 'app/redux/DevTools';
 import {fetchDataWatches} from 'app/redux/FetchDataSaga';
 import {marketWatches} from 'app/redux/MarketSaga';
 import {sharedWatches} from 'app/redux/SagaShared';
@@ -44,7 +42,6 @@ let middleware;
 if (process.env.BROWSER && process.env.NODE_ENV === 'development') {
     middleware = compose(
         applyMiddleware(sagaMiddleware)
-        // DevTools.instrument()
     );
 } else {
     middleware = applyMiddleware(sagaMiddleware);

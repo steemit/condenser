@@ -6,6 +6,9 @@ export default function resolveRoute(path)
     if (path === '/about.html') {
         return {page: 'About'};
     }
+    if (path === '/faq.html') {
+        return {page: 'Faq'};
+    }
     if (path === '/login.html') {
         return {page: 'Login'};
     }

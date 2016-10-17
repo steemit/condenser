@@ -14,8 +14,9 @@ export default class LandingFooter extends React.Component {
 				{name: 'Github', url: 'https://github.com/goloschain'}
 			],
 			[
-				{name: 'Условия проведения краудфандинга'},
-				{name: 'Правила пользования'}
+				{name: 'Условия проведения краудфандинга' },
+				{name: 'Политика конфиденциальности', url: 'https://golos.io/legal/privacy_policy.pdf'}
+				{name: 'Правила пользования', url: 'https://golos.io/legal/terms_of_service.pdf'}
 			],
 			[
 				{name: 'Chat', url: 'https://chat.golos.io/'},

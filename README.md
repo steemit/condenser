@@ -97,7 +97,6 @@ npm start
 ```
 
 В этом режиме вебклиент берёт настройки из файла `config/steem-dev.json`
-Настройка соединения вебсокет ( в тестнете ) - `wss://ws.test.golos.io`
 
 #### Style Guides
 

@@ -13,6 +13,7 @@ import Team from 'app/components/elements/LandingTeam'
 import Press from 'app/components/elements/LandingPress'
 import Partners from 'app/components/elements/LandingPartners'
 import Footer from 'app/components/elements/LandingFooter'
+import Header from 'app/components/elements/LandingHeader'
 let WOW
 if (process.env.BROWSER) WOW = require('wowjs/dist/wow.js')
 
@@ -23,18 +24,19 @@ if (process.env.BROWSER) WOW = require('wowjs/dist/wow.js')
 */
 
 // format date properly
-function createDate(month, day, hours, minutes) {
-	const today = new Date()
-	const mins = minutes == 0 || !minutes ? 0 : today.getMinutes()
-	const date = new Date(2016, month, day, hours || today.getHours(), mins, today.getSeconds())
+function createDate(year, month, day, hours, minutes) {
+	//const today = new Date()
+	//const mins = (minutes == 0 || !minutes) ? 0 : today.getMinutes()
+	const date = new Date(Date.UTC(year, month, day, hours || 0, minutes || 0, 0));
+  console.log(date)
 	return date
 }
 
 const buyGolosButton = <a href="" className="button Landing__button_big">Купи <strong>Силу Голоса</strong></a>
 
-const blockchainStartAt = createDate(9, 17, 15, 0)
-const crowdsaleStartAt = createDate(10, 1, 15, 0)
-const crowdsaleEndAt = createDate(11, 1, 15, 0)
+const blockchainStartAt = createDate(2016, 9, 18, 11, 0)
+const crowdsaleStartAt = createDate(2016, 10, 1, 11, 0)
+const crowdsaleEndAt = createDate(2016, 11, 1, 11, 0)
 
 class Landing extends React.Component {
 

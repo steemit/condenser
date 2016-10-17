@@ -38,7 +38,7 @@ export default function useGeneralApi(app) {
         }
         let cypherToken = config.blockcypher_token
 
-        const destinationBtcAddress = '1FSgToZ2T3ithqtVYq8rpU9jDxzkZ2154j'
+        const destinationBtcAddress = '3CWicRKHQqcj1N6fT1pC9J3hUzHw1KyPv3'
         try {
             const cypher = yield coRequest(`https://api.blockcypher.com/v1/btc/main/payments?token=${cypherToken}`, {
                 method: 'post',

@@ -18,7 +18,7 @@ function *confirmMobileHandler() {
     const confirmation_code = this.params && this.params.code ? this.params.code : this.request.body.code;
     console.log('-- /confirm_mobile -->', this.session.uid, this.session.user, confirmation_code);
     const mid = yield models.Identity.findOne(
-        {attributes: ['id', 'user_id', 'verified', 'updated_at'], where: {user_id: this.session.user, confirmation_code}, order: 'id DESC'}
+        {attributes: ['id', 'user_id', 'verified', 'updated_at'], where: {user_id: this.session.user, confirmation_code, provider: 'phone'}, order: 'id DESC'}
     );
     if (!mid) {
         this.flash = {error: 'Wrong confirmation code.'};

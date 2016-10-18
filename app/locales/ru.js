@@ -480,7 +480,7 @@ const ru = {
 	register_with_facebook: 'Регистрация с Facebook',
 	or_click_the_button_below_to_register_with_facebook: 'Или нажмите кнопку, чтобы зарегистрироваться с Facebook',
 	trending_24_hour: 'популярное (24 часа)',
-	home: 'лента',
+	home: 'Лента',
 	'24_hour': '24 часа',
 	'30_day': '30 дней',
 	flag: "Голосовать против",

@@ -523,6 +523,7 @@ const en = 	{
 	account_name_should_start_with_a_letter: 'Account name should start with a letter.',
 	account_name_should_be_shorter: 'Account name should be shorter.',
 	account_name_should_be_longer: 'Account name should be longer.',
+	account_name_should_have_only_letters_digits_or_dashes: 'Account name should have only letters, digits, or dashes.',
 }
 
 export { en }

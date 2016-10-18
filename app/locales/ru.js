@@ -529,6 +529,7 @@ const ru = {
 	account_name_should_be_longer: 'Имя аккаунта должно быть длиннее.',
 	account_name_should_be_shorter: 'Имя аккаунта должно быть короче.',
 	account_name_should_start_with_a_letter: 'Имя аккаунта должно начинаться с буквы.',
+	account_name_should_have_only_letters_digits_or_dashes: 'Имя аккаунта должно должно состоять только из букв, цифр или дефисов.',
 }
 
 export { ru }

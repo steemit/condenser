@@ -1,6 +1,6 @@
 import React from 'react';
 import store from 'store';
-import cc from 'currency-codes';
+// import cc from 'currency-codes';
 import { injectIntl } from 'react-intl';
 import { getSymbolFromCurrency } from 'currency-symbol-map';
 import { FRACTION_DIGITS, DEFAULT_CURRENCY } from 'config/client_config';
@@ -21,8 +21,8 @@ export default class LocalizedCurrency extends React.Component {
 	}
 
 	static defaultProps = {
+		noSymbol: false,
 		fractionDigits: FRACTION_DIGITS
-		// noSymbol: false // is this needed?
 	}
 
 	state = {
@@ -84,6 +84,7 @@ export default class LocalizedCurrency extends React.Component {
 					exchangeRate,
 					localCurrencySymbol: getSymbolFromCurrency(currency)
 				})
+				console.info('Everything is fine, fetched properly')
 			})
 			.catch(error => {
 				console.error('LocalizedCurrency request failed', error)
@@ -91,8 +92,15 @@ export default class LocalizedCurrency extends React.Component {
 	}
 
 	render() {
-		const {exchangeRate, localCurrencySymbol} = this.state
+		const {exchangeRate} = this.state
 		const {amount, intl: {formatNumber}, noSymbol, fractionDigits, ...rest} = this.props
+		let {localCurrencySymbol} = this.state
+		const currency = store.get('currency')
+
+		// untill Pull Request to 'currency-symbol-map' is being accepted,
+		// manually pick proper currency symbol
+		if (currency == 'KZT') localCurrencySymbol = '₸'
+		else if (currency == 'GEL') localCurrencySymbol = '₾'
 
 		// localCurrencySymbol = getSymbolFromCurrency(currency)
 		this.checkIfCurrencyChanged()

@@ -11,8 +11,9 @@ import SignUp from 'app/components/modules/SignUp';
 import runTests from 'shared/ecc/test/BrowserTests';
 import g from 'app/redux/GlobalReducer';
 import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInput';
-import { translate, translateHtml } from '../../Translator';
+import { translate } from 'app/Translator';
 import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
+import { FormattedHTMLMessage } from 'react-intl';
 
 const PASSWORD_MIN_LENGTH = 32;
 
@@ -226,7 +227,8 @@ class CreateAccount extends React.Component {
                     <h2>{translate('sign_up')}</h2>
                     <div className="CreateAccount__rules">
                         <hr />
-                        <p>{translate('the_rules_of_APP_NAME')}</p>
+                        {/* currently translateHtml() does not work, using <FormattedHTMLMessage /> instead */}
+                        <p><FormattedHTMLMessage id="the_rules_of_APP_NAME" /></p>
                         <hr />
                     </div>
                     <form onSubmit={this.onSubmit} autoComplete="off" noValidate method="post">

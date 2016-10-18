@@ -58,7 +58,7 @@ export const repLog10 = rep2 => {
     return out
 }
 
-// this function searches for right translation of provided error
+// this function searches for right translation of provided error (usually from back-end)
 export function translateError(string) {
     if (typeof(string) != 'string') return string
     switch (string) {
@@ -74,6 +74,8 @@ export function translateError(string) {
             return translate('account_name_should_start_with_a_letter')
         case 'Account not found':
             return translate('account_not_found')
+        case 'Account name should have only letters, digits, or dashes.':
+            return translate('account_name_should_have_only_letters_digits_or_dashes')
         default:
             return string
     }

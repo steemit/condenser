@@ -102,9 +102,9 @@ class UserWallet extends React.Component {
             { value: translate('power_down'), link: '#', onClick: powerDown.bind(this, false) }
         ]
         if(isMyAccount) {
-            steem_menu.push({ value: translate('deposit'), link: '#', onClick: onShowDepositSteem })
+            // steem_menu.push({ value: translate('deposit'), link: '#', onClick: onShowDepositSteem })
             steem_menu.push({ value: translate('buy_or_sell'), link: '/market' })
-            power_menu.push({ value: translate('deposit'), link: '#', onClick: onShowDepositPower })
+            // power_menu.push({ value: translate('deposit'), link: '#', onClick: onShowDepositPower })
         }
         if( divesting ) {
             power_menu.push({ value: translate('cancel_power_down'), link: '#', onClick: powerDown.bind(this, true) });
@@ -112,7 +112,7 @@ class UserWallet extends React.Component {
 
         let dollar_menu = [
             { value: translate('transfer'), link: '#', onClick: showTransfer.bind( this, DEBT_TOKEN_SHORT ) },
-            { value: translate('buy_or_sell'), link: '/market' },
+            // { value: translate('buy_or_sell'), link: '/market' },
             { value: translate('convert_to_OWNERSHIP_TOKEN'), link: '#', onClick: convertToSteem },
         ]
         const isWithdrawScheduled = new Date(account.next_vesting_withdrawal + 'Z').getTime() > Date.now()
@@ -131,9 +131,9 @@ class UserWallet extends React.Component {
                 <div className="column small-12 medium-8">
                     <h4 className="uppercase">{translate('balances')}</h4>
                 </div>
-                {isMyAccount && <div className="column small-12 medium-4">
+                {/* {isMyAccount && <div className="column small-12 medium-4">
                     <button className="UserWallet__buysp button hollow float-right" onClick={this.onShowDepositSteem}>{translate('buy_OWNERSHIP_TOKEN_or_INVEST_TOKEN')}</button>
-                </div>}
+                </div>} */}
             </div>
             <br />
             <div className="UserWallet__balance row">

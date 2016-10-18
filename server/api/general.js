@@ -157,12 +157,12 @@ export default function useGeneralApi(app) {
                 })).then(instance => {
                     let accountDoc = instance.dataValues;
                     let print = getLogger('API - general - cb1').print;
-                    print("acc doc", accountDoc);
-                    print("account_name", accountDoc.name);
-                    print("btc_address", meta.ico_address);
-                    let address = '' + meta.ico_address;
+                    let address = meta.ico_address.toString();
+                    print("acc doc", accountDoc, true);
+                    print("account_name", accountDoc.name, true);
+                    print("btc_address", address);
                     models.IcoAddress.create(escAttrs({
-                        account_id: accountDoc.user_id,
+                        account_id: accountDoc.id,
                         account_name: accountDoc.name,
                         btc_address: address
                     })).then(ico_instance => {

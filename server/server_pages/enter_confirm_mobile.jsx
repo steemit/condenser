@@ -6,6 +6,7 @@ import models from 'db/models';
 import ServerHTML from 'server/server-html';
 import {verify} from 'server/teleSign';
 import SignupProgressBar from 'app/components/elements/SignupProgressBar';
+import CountryCode from 'app/components/elements/CountryCode';
 import {getRemoteIp, checkCSRF} from 'server/utils';
 import MiniHeader from 'app/components/modules/MiniHeader';
 import secureRandom from 'secure-random'
@@ -17,7 +18,7 @@ function *confirmMobileHandler() {
     const confirmation_code = this.params && this.params.code ? this.params.code : this.request.body.code;
     console.log('-- /confirm_mobile -->', this.session.uid, this.session.user, confirmation_code);
     const mid = yield models.Identity.findOne(
-        {attributes: ['id', 'user_id', 'verified', 'updated_at'], where: {user_id: this.session.user, confirmation_code}, order: 'id DESC'}
+        {attributes: ['id', 'user_id', 'verified', 'updated_at'], where: {user_id: this.session.user, confirmation_code, provider: 'phone'}, order: 'id DESC'}
     );
     if (!mid) {
         this.flash = {error: 'Wrong confirmation code.'};
@@ -39,8 +40,8 @@ function *confirmMobileHandler() {
     yield mid.update({verified: true});
     this.redirect('/create_account');
 }
-
 export default function useEnterAndConfirmMobilePages(app) {
+
     const router = koa_router();
     app.use(router.routes());
     const koaBody = koa_body();
@@ -57,6 +58,9 @@ export default function useEnterAndConfirmMobilePages(app) {
             this.redirect('/create_account');
             return;
         }
+        const phone = this.query.phone
+        const country = this.query.country
+
         const body = renderToString(<div className="App">
             <MiniHeader />
             <SignupProgressBar steps={['email', 'phone', 'steem account']} current={2} />
@@ -69,10 +73,14 @@ export default function useEnterAndConfirmMobilePages(app) {
                     <br />
                     <input type="hidden" name="csrf" value={this.csrf} />
                     <label>
-                        Phone number
-                        <input type="tel" name="mobile" defaultValue={mid ? mid.phone : ''} />
+                        Country Code
+                        <CountryCode name="country" value={country} />
                     </label>
-                    <div className="secondary">Examples: 1-541-754-3010 | +1-541-754-3010 | +49-89-636-48018</div>
+                    <label>
+                        Phone number
+                        <input type="tel" name="phone" value={phone} />
+                    </label>
+                    <div className="secondary">Examples: 541-754-3010 | 89-636-48018</div>
                     <br />
                     <div className="secondary">* Land lines cannot receive SMS messages</div>
                     <div className="secondary">* Message and data rates may apply</div>
@@ -90,23 +98,24 @@ export default function useEnterAndConfirmMobilePages(app) {
         if (!checkCSRF(this, this.request.body.csrf)) return;
         const user_id = this.session.user;
         if (!user_id) { this.body = 'user not found'; return; }
-        let mobile = this.request.body.mobile;
-        if (!mobile) {
+
+        const country = this.request.body.country;
+        const localPhone = this.request.body.phone;
+        const enterMobileUrl = `/enter_mobile?phone=${localPhone}&country=${country}`
+
+        if (!country && country === '') {
+            this.flash = {error: 'Please select a country code'};
+            this.redirect(enterMobileUrl);
+            return;
+        }
+
+        if (!localPhone || digits(localPhone).length === 0) {
             this.flash = {error: 'Please provide a phone number'};
-            this.redirect('/enter_mobile');
+            this.redirect(enterMobileUrl);
             return;
         }
 
-        mobile = mobile.match(/\d+/g).join('')
-        if(mobile.length < "9998887777".length) {
-            this.flash = {error: 'Please provide an area code'};
-            this.redirect('/enter_mobile');
-            return;
-        }
-
-        if(mobile.length === "9998887777".length) {
-            mobile = `1${mobile}`
-        }
+        const phone = digits(country + localPhone)
 
         const eid = yield models.Identity.findOne(
             {attributes: ['id'], where: {user_id, provider: 'email', verified: true}, order: 'id DESC'}
@@ -118,12 +127,12 @@ export default function useEnterAndConfirmMobilePages(app) {
         }
 
         const existing_phone = yield models.Identity.findOne(
-            {attributes: ['user_id'], where: {phone: mobile, provider: 'phone', verified: true}, order: 'id DESC'}
+            {attributes: ['user_id'], where: {phone, provider: 'phone', verified: true}, order: 'id DESC'}
         );
         if (existing_phone && existing_phone.user_id != user_id) {
-            console.log('-- /submit_email existing_phone -->', user_id, this.session.uid, mobile, existing_phone.user_id);
+            console.log('-- /submit_email existing_phone -->', user_id, this.session.uid, phone, existing_phone.user_id);
             this.flash = {error: 'This phone number has already been used'};
-            this.redirect('/enter_mobile');
+            this.redirect(enterMobileUrl);
             return;
         }
 
@@ -133,35 +142,38 @@ export default function useEnterAndConfirmMobilePages(app) {
         );
         if (mid) {
             if (mid.verified) {
-                this.flash = {success: 'Phone number has been verified'};
-                this.redirect('/create_account'); return;
-            } else {
-                const seconds_ago = (Date.now() - mid.updated_at) / 1000.0;
-                if (seconds_ago < 120) {
-                    this.flash = {error: 'Confirmation was attempted a moment ago. You can try again only in 2 minutes.'};
-                    this.redirect('/enter_mobile');
+                if(mid.phone === phone) {
+                    this.flash = {success: 'Phone number has been verified'};
+                    this.redirect('/create_account');
                     return;
                 }
-                yield mid.update({confirmation_code, phone: mobile});
+                yield mid.update({verified: false, phone});
             }
+            const seconds_ago = (Date.now() - mid.updated_at) / 1000.0;
+            if (seconds_ago < 120) {
+                this.flash = {error: 'Confirmation was attempted a moment ago. You can try again only in 2 minutes.'};
+                this.redirect(enterMobileUrl);
+                return;
+            }
+            yield mid.update({confirmation_code, phone});
         } else {
             mid = yield models.Identity.create({
                 provider: 'phone',
                 user_id,
                 uid: this.session.uid,
-                phone: mobile,
+                phone,
                 verified: false,
                 confirmation_code
             });
         }
-        console.log('-- /submit_mobile -->', this.session.uid, this.session.user, mobile, mid.id);
+        console.log('-- /submit_mobile -->', this.session.uid, this.session.user, phone, mid.id);
         const ip = getRemoteIp(this.req)
 
-        const verifyResult = yield verify({mobile, confirmation_code, ip});
+        const verifyResult = yield verify({mobile: phone, confirmation_code, ip});
         if (verifyResult && verifyResult.score) mid.update({score: verifyResult.score});
         if (verifyResult && verifyResult.error) {
             this.flash = {error: verifyResult.error};
-            this.redirect('/enter_mobile');
+            this.redirect(enterMobileUrl);
             return;
         }
 
@@ -171,7 +183,7 @@ export default function useEnterAndConfirmMobilePages(app) {
             <br />
             <div className="row" style={{maxWidth: '32rem'}}>
                 <div className="column">
-                    Thank you for providing your mobile number ({mobile}).<br />
+                    Thank you for providing your phone number ({phone}).<br />
                     To continue please enter the SMS code we've sent you.
                 </div>
             </div>
@@ -183,16 +195,21 @@ export default function useEnterAndConfirmMobilePages(app) {
                         <input type="text" name="code" />
                     </label>
                     <br />
-                    <div className="secondary">Didn't receive the verification code? <a href="/enter_mobile">Re-send</a></div>
+                    <div className="secondary">Didn't receive the verification code? <a href={enterMobileUrl}>Re-send</a></div>
                     <br />
                     <input type="submit" className="button" value="CONTINUE" />
                 </form>
             </div>
         </div>);
-        const props = { body, title: 'Mobile Confirmation', assets, meta: [] };
+        const props = { body, title: 'Phone Confirmation', assets, meta: [] };
         this.body = '<!DOCTYPE html>' + renderToString(<ServerHTML { ...props } />);
     });
 
     router.get('/confirm_mobile/:code', confirmMobileHandler);
     router.post('/confirm_mobile', koaBody, confirmMobileHandler);
+}
+
+function digits(text) {
+    const digitArray = text.match(/\d+/g)
+    return digitArray ? digitArray.join('') : ''
 }

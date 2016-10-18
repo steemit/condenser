@@ -4,22 +4,27 @@
     position: relative;
     img {border: 1px dotted #00f}
   }
-  .active {box-shadow: 0 0 0 2px blue;}
+  img.active {box-shadow: 0 0 0 2px blue;}
   hr.active {box-shadow: 0 0 0 1px blue;}
 
   a:hover:after{
-    border: 1px solid #ccc;
+    font-family: Arial;
+    border-radius: 3px;
     padding: 1px 3px;
     background: #eee;
     content: attr(href);
     display: block;
     position: absolute;
-    left: 0;
+    left: -25%;
     top: 110%;
     line-height: 1;
     white-space: nowrap;
-    font-size: 70%;
+    font-size: 60%;
     z-index: 99999;
+    padding: 4px 8px;
+    color: #ddd;
+    transition: opacity .75s;
+    background-image: linear-gradient(180deg,#464646,#151515);
   }
 }
 

@@ -28,7 +28,7 @@ if(process.env.BROWSER) {
         InsertImages({
             extensions: ['jpeg', 'png', 'gif'],
             applyTransform: (transform, file) => {
-                return transform.insertInline({
+                return transform.insertBlock({
                     type: 'image',
                     isVoid: true,
                     data: { file }
@@ -179,7 +179,7 @@ console.log(JSON.stringify(Raw.serialize(state, {terse: false}), null, 2))
         }
 
         else if (state.isExpanded) {
-            const href = window.prompt('Enter the URL of the link:')
+            const href = window.prompt('Enter the URL of the link:', 'http://steemit.com')
             if(href) {
                 state = state
                     .transform()
@@ -380,8 +380,8 @@ console.log(JSON.stringify(Raw.serialize(state, {terse: false}), null, 2))
         state = state
             .transform()
             //.insertBlock({type: 'paragraph', isVoid: false})
-            .insertInline({type: 'image', isVoid: true, data: {src}})
-            .collapseToStartOfNextBlock()
+            .insertBlock({type: 'image', isVoid: true, data: {src}})
+            //.collapseToStartOfNextBlock()
             .apply()
 
         this.setState({ state })

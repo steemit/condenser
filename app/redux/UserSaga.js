@@ -20,6 +20,7 @@ export const userWatches = [
     loginErrorWatch,
     lookupPreviousOwnerAuthorityWatch,
     watchLoadSavingsWithdraw,
+    uploadImageWatch,
 ]
 
 const highSecurityPages = Array(/\/market/, /\/@.+\/(transfers|permissions|password)/, /\/~witnesses/)
@@ -347,6 +348,68 @@ function* lookupPreviousOwnerAuthority({payload: {}}) {
     console.log('UserSage ---> previous_owner_authority', previous_owner_authority.toJS())
     yield put(user.actions.setUser({previous_owner_authority}))
 }
+
+import {Signature, hash} from 'shared/ecc'
+
+function* uploadImageWatch() {
+    yield* takeLatest('user/UPLOAD_IMAGE', uploadImage);
+}
+
+function* uploadImage({payload: {file, progress}}) {
+    progress = msg => {
+        console.log('Upload image progress', msg)
+        progress(msg)
+    }
+
+    if(!file) {
+        console.error('uploadImage required: file')
+        return
+    }
+
+    const reader = new FileReader()
+    const data = yield new Promise(resolve => {
+        reader.addEventListener('load', () => {
+            const result = new Buffer(reader.result, 'binary')
+            resolve(result)
+        })
+        reader.readAsBinaryString(file)
+    })
+    const bufSha = hash.sha256(data)
+
+    const stateUser = yield select(state => state.user)
+    const username = stateUser.getIn(['current', 'username'])
+    const d = stateUser.getIn(['current', 'private_keys', 'posting_private'])
+    if(!username) {
+        progress({error: 'Not logged in'})
+        return
+    }
+    if(!d) {
+        progress({error: 'Login with your posting key'})
+        return
+    }
+
+    const formData = new FormData()
+    formData.append('file', file)
+
+    const sig = Signature.signBufferSha256(bufSha, d)
+    const postUrl = `http://localhost:3234/${username}/${sig.toHex()}`
+
+    fetch(postUrl, {
+        method: 'post',
+        body: formData
+    })
+    .then(r => r.json())
+    .then(res => {
+        const {error} = res
+        if(error) {
+            progress({error: 'Error: ' + error})
+            return
+        }
+        const {files: [url]} = res
+        progress({url: `${url}/${file.name}`})
+    })
+}
+
 
 // function* getCurrentAccount() {
 //     const current = yield select(state => state.user.get('current'))

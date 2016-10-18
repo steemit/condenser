@@ -98,7 +98,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                             <li className={lcn + ' image-wrapper'}>
                                 <a href="https://golos.io/login.html">
                                     <img src="images/user.png" width="36" height="36" />
-                                    <span>Тестовый Вход</span>
+                                    <span>Вход</span>
                                 </a>
                             </li>
                             <li className={lcn}><LoadingIndicator type="circle" inline /></li>
@@ -154,7 +154,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                             <li className={lcn + ' image-wrapper'}>
                                 <a href="https://golos.io/login.html">
                                     <img src="images/user.png" width="36" height="36" />
-                                    <span>Тестовый Вход</span>
+                                    <span>Вход</span>
                                 </a>
                             </li>
                             <li className={lcn}><LoadingIndicator type="circle" inline /></li>
@@ -192,7 +192,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                     <li className={lcn + ' image-wrapper'}>
                         <a href="https://golos.io/login.html">
                             <img src="images/user.png" width="36" height="36" />
-                            <span>Тестовый Вход</span>
+                            <span>Вход</span>
                         </a>
                     </li>
                     {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>

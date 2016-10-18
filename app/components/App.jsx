@@ -171,6 +171,11 @@ class App extends React.Component {
                         </a>
                     </li>
                     <li>
+                        <a href="/faq.html" onClick={this.navigate}>
+                            FAQ
+                        </a>
+                    </li>
+                    <li>
                         <a onClick={() => depositSteem()}>
                             {translate("buy_steem")}
                         </a>

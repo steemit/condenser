@@ -55,7 +55,7 @@ class Topics extends React.Component {
                 <option key={'*'} value={'/' + order}>{translate('topics')}...</option>
                 {categories.map(cat => {
                     const link = order ? `/${order}/${cat}` : `/${cat}`;
-                    return <option key={cat} value={link}>{cat}</option>
+                    return <option key={cat} value={link}>{detransliterate(cat)}</option>
                 })}
             </select>;
         }

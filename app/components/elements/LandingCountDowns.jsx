@@ -8,15 +8,17 @@ const stages = [25, 20, 15, 10, 5, 0]
 export default class LandingCountDowns extends React.Component {
 
 	static propTypes = {
+		prefill: PropTypes.bool,
 		crowdsaleEndAt: PropTypes.object,
-		crowdsaleStartAt: PropTypes.object.isRequired
+		blockchainStartAt: PropTypes.object,
+		crowdsaleStartAt: PropTypes.object.isRequired,
 	}
 
 	state = {
 		currentBonus: '',
 		nextBonus: '',
 		bitcoinsRaised: 0, //2000.45
-		crowdSaleIsActive: true,
+		crowdSaleIsActive: this.props.crowdsaleStartAt > Date.now(),
 	}
 
 	componentDidMount() {
@@ -86,20 +88,13 @@ export default class LandingCountDowns extends React.Component {
 				{
 					props.prefill
 					? 	<div className="row text-center CountDowns__counters">
-							<div className="small-12 medium-6 columns CountDowns__counter">
-								<CountDown
-									title={<strong>До запуска блокчейна</strong>}
-									date={props.blockchainStartAt}
-									countFrom={props.blockchainStartAt.getTime()}
-								/>
-							</div>
-							<div className="small-12 medium-6 columns CountDowns__counter">
-								<CountDown
-									title={<strong>До старта продажи Силы Голоса</strong>}
-									date={props.crowdsaleStartAt}
-									countFrom={props.crowdsaleStartAt.getTime()}
-								/>
-							</div>
+						
+							<CountDown
+								date={props.crowdsaleStartAt}
+								countFrom={props.crowdsaleStartAt.getTime()}
+								title={<strong>До старта продажи Силы Голоса</strong>}
+								className="small-12 medium-6 columns CountDowns__counter"
+							/>
 						</div>
 					: 	<div className="row text-center CountDowns__counters">
 							<div className="small-12 medium-4 columns CountDowns__counter">
@@ -107,6 +102,7 @@ export default class LandingCountDowns extends React.Component {
 									title="Продажа силы голоса закончится"
 									date={props.crowdsaleEndAt}
 									countFrom={props.crowdsaleEndAt.getTime() - props.crowdsaleStartAt.getTime()}
+									displayWhenZero
 								/>
 							</div>
 							<div className="small-12 medium-4 columns CountDowns__counter">
@@ -121,6 +117,7 @@ export default class LandingCountDowns extends React.Component {
 									title={`Бонус уменьшится: до ${state.nextBonus}%`}
 									date={currentStage.date}
 									countFrom={previousStage.date.getTime()}
+									displayWhenZero
 								/>
 							</div>
 						</div>

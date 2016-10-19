@@ -50,7 +50,7 @@ export default class LocalizedCurrency extends React.Component {
 			// currency has changed
 			if(this.state.currency != store.get('fetchedCurrency')) this.fetchExchangeRates()
 			// if currency rates are not fetched at all
-			if (!store.get('goldExchangeRate') && !store.get('exchangeRate')) this.fetchExchangeRates()
+			if (!store.get('goldExchangeRate') || !store.get('exchangeRate')) this.fetchExchangeRates()
 		}
 	}
 

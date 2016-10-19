@@ -4,7 +4,6 @@ export default props => {
     return <select {...props}>
         {/* Top countries (duplicated from below) */}
         <option value="1">United States +(1)</option>
-        <option value="7">Russia +(7)</option>
         <option value="44">United Kingdom +(44)</option>
         <option value="1">Canada +(1)</option>
         <option value="34">Spain +(34)</option>

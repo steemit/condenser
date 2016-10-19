@@ -103,7 +103,7 @@ export default function useEnterAndConfirmMobilePages(app) {
         const localPhone = this.request.body.phone;
         const enterMobileUrl = `/enter_mobile?phone=${localPhone}&country=${country}`
 
-        if (!country && country === '') {
+        if (!country || country === '') {
             this.flash = {error: 'Please select a country code'};
             this.redirect(enterMobileUrl);
             return;
@@ -115,7 +115,7 @@ export default function useEnterAndConfirmMobilePages(app) {
             return;
         }
 
-        const phone = digits(country + localPhone)
+        const phone = digits(parseInt(country) + localPhone)
 
         const eid = yield models.Identity.findOne(
             {attributes: ['id'], where: {user_id, provider: 'email', verified: true}, order: 'id DESC'}

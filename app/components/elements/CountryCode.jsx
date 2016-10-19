@@ -2,6 +2,13 @@ import React from 'react'
 
 export default props => {
     return <select {...props}>
+        {/* Top countries (duplicated from below) */}
+        <option value="1">United States +(1)</option>
+        <option value="44">United Kingdom +(44)</option>
+        <option value="1">Canada +(1)</option>
+        <option value="34">Spain +(34)</option>
+
+        {/* TeleSign supported country codes */}
         <option value=""></option>
         <option value="93">Afghanistan +(93)</option>
         <option value="355">Albania +(355)</option>

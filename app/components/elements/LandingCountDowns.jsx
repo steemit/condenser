@@ -66,7 +66,7 @@ export default class LandingCountDowns extends React.Component {
 	}
 
 	componentWillUnmount() {
-		this.clearInterval(this.updateTime)
+		clearInterval(this.updateTime)
 	}
 
 	// TODO add this

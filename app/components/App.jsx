@@ -201,7 +201,7 @@ class App extends React.Component {
                         </a>
                     </li>
                     <li>
-                        <a href="https://steemit.chat/home" target="_blank">
+                        <a href="https://steemit.chat/home" target="_blank" rel="noopener noreferrer">
                             {translate("steemit_chat")}&nbsp;<Icon name="extlink" />
                         </a>
                     </li>

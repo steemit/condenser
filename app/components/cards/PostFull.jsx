@@ -227,6 +227,7 @@ export default class PostFull extends React.Component {
 
         const readonly = post_content.get('mode') === 'archived' || $STM_Config.read_only_mode
         const showPromote = username && post_content.get('mode') === "first_payout" && post_content.get('depth') == 0
+        const showReplyOption = post_content.get('depth') < 6
         const showEditOption = username === author
         const authorRepLog10 = repLog10(content.author_reputation)
 
@@ -260,7 +261,7 @@ export default class PostFull extends React.Component {
                             </span>
                             {!readonly &&
                                 <span className="PostFull__reply">
-                                    <a onClick={onShowReply}>Reply</a>
+                                    {showReplyOption && <a onClick={onShowReply}>Reply</a>}
                                     {' '}{showEditOption   && !showEdit  && <a onClick={onShowEdit}>Edit</a>}
                                     {' '}{showDeleteOption && !showReply && <a onClick={onDeletePost}>Delete</a>}
                                 </span>}

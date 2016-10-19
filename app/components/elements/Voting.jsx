@@ -161,15 +161,23 @@ class Voting extends React.Component {
         const up = <Icon name={votingUpActive ? 'empty' : 'chevron-up-circle'} />;
         const classUp = 'Voting__button Voting__button-up' + (myVote > 0 ? ' Voting__button--upvoted' : '') + (votingUpActive ? ' votingUp' : '');
 
-        const payoutItems = [
-            {value: 'Potential Payout $' + formatDecimal(pending_payout).join('')},
-            {value: 'Promotion Cost $' + formatDecimal(promoted).join('')}
-        ];
-        if (cashout_time && cashout_time.indexOf('1969') !== 0 && cashout_time.indexOf('1970') !== 0) {
+        const cashout_active = pending_payout > 0 || (cashout_time && cashout_time.indexOf('1969') !== 0 && cashout_time.indexOf('1970') !== 0)
+        const payoutItems = [];
+
+        if(cashout_active) {
+            payoutItems.push({value: 'Potential Payout $' + formatDecimal(pending_payout).join('')});
+        }
+        if(promoted > 0) {
+            payoutItems.push({value: 'Promotion Cost $' + formatDecimal(promoted).join('')});
+        }
+        if (cashout_active) {
             payoutItems.push({value: <TimeAgoWrapper date={cashout_time} />});
         }
-        if(max_payout < 1000000) {
-            payoutItems.push({value: 'Max Payout $' + formatDecimal(max_payout).join('')})
+
+        if(max_payout == 0) {
+            payoutItems.push({value: 'Payout Declined'})
+        } else if (max_payout < 1000000) {
+            payoutItems.push({value: 'Max Accepted Payout $' + formatDecimal(max_payout).join('')})
         }
         if(total_author_payout > 0) {
             payoutItems.push({value: 'Past Payouts $' + formatDecimal(total_author_payout + total_curator_payout).join('')});
@@ -179,7 +187,7 @@ class Voting extends React.Component {
         const payoutEl = <DropdownMenu el="div" items={payoutItems}>
             <span style={payout_limit_hit ? {opacity: '0.5'} : {}}>
                 <FormattedAsset amount={payout} asset="$" />
-                <Icon name="dropdown-arrow" />
+                {payoutItems.length > 0 && <Icon name="dropdown-arrow" />}
             </span>
         </DropdownMenu>;
 
@@ -197,7 +205,7 @@ class Voting extends React.Component {
         if (count > MAX_VOTES_DISPLAY) voters.push({value: <span>&hellip; and {(count - MAX_VOTES_DISPLAY)} more</span>});
 
         let voters_list = null;
-        if (showList) {
+        if (showList && count > 0) {
             voters_list = <DropdownMenu selected={pluralize('votes', count, true)} className="Voting__voters_list" items={voters} el="div" />;
         }
 

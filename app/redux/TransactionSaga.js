@@ -404,7 +404,7 @@ function* error_vote({operation: {author, permlink}}) {
 // }
 
 function slug(text) {
-    return getSlug(text, {truncate: 128})
+    return getSlug(text.replace(/[<>]/g, ''), {truncate: 128})
     //const shorten = txt => {
     //    let t = ''
     //    let words = 0

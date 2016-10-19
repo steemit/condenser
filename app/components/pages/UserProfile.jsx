@@ -169,7 +169,7 @@ export default class UserProfile extends React.Component {
                 const emptyText = isMyAccount ? <div>
                     Looks like you haven't posted anything yet.<br />
                     <Link to="/submit.html">Submit a Story</Link><br />
-                    <Link to="/steemit/@thecryptofiend/the-missing-faq-a-beginners-guide-to-using-steemit">Read The Beginner's Guide</Link>
+                    <a href="/steemit/@thecryptofiend/the-missing-faq-a-beginners-guide-to-using-steemit">Read The Beginner's Guide</a>
                 </div>:
                     <div>Looks like {account.name} hasn't started blogging yet!</div>;
                 tab_content = <PostsList

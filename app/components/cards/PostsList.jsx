@@ -23,7 +23,10 @@ class PostsList extends React.Component {
         loading: PropTypes.bool.isRequired,
         category: PropTypes.string,
         loadMore: PropTypes.func,
-        emptyText: PropTypes.object,
+        emptyText: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.node,
+        ]),
         showSpam: PropTypes.bool,
         fetchState: PropTypes.func.isRequired,
         pathname: PropTypes.string,

@@ -149,6 +149,10 @@ Steemit leverages Steem because the founders of Steemit believe Steem’s decent
 
 Users holding Steem Power can vote for witnesses of their choice by visiting this link. https://steemit.com/~witnesses
 
+## How do I report a security vulnerability?
+
+If you find a security issue please report details to security@steemit.com.
+
 ## Where can I find more information on Steemit?
 
 ### Links to Community Created FAQs

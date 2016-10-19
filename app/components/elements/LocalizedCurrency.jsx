@@ -27,6 +27,7 @@ export default class LocalizedCurrency extends React.Component {
 
 	state = {
 		exchangeRate: store.get('exchangeRate'),
+		goldExchangeRate: store.get('goldExchangeRate'),
 		currency: store.get('currency') || DEFAULT_CURRENCY,
 		localCurrencySymbol: getSymbolFromCurrency(store.get('currency') || DEFAULT_CURRENCY)
 	}
@@ -72,7 +73,13 @@ export default class LocalizedCurrency extends React.Component {
 		// 	})
 		// 	.catch(err => console.error('Failed to get users loaction info', err))
 
-		// fetch exchange rates
+		// fetch exchange rates GOLD to USD exchange rates
+		fetch('https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.xchange%20where%20pair%20in%20(%22' + 'XAU' + 'USD' + '%22)&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=')
+			.then(function(data) { return data.json() })
+			.then(data => {
+				const goldExchangeRate = data.query.results.rate.Rate
+				store.set('goldExchangeRate', goldExchangeRate)
+				store.set('exchangeRateDateGold', Date.now())
 		fetch('https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.xchange%20where%20pair%20in%20(%22' + 'USD' + currency + '%22)&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=')
 			.then(function(data) { return data.json() })
 			.then(data => {
@@ -84,7 +91,6 @@ export default class LocalizedCurrency extends React.Component {
 					exchangeRate,
 					localCurrencySymbol: getSymbolFromCurrency(currency)
 				})
-				console.info('Everything is fine, fetched properly')
 			})
 			.catch(error => {
 				console.error('LocalizedCurrency request failed', error)
@@ -92,7 +98,6 @@ export default class LocalizedCurrency extends React.Component {
 	}
 
 	render() {
-		const {exchangeRate} = this.state
 		const {amount, intl: {formatNumber}, noSymbol, fractionDigits, ...rest} = this.props
 		let {localCurrencySymbol} = this.state
 		const currency = store.get('currency')
@@ -115,7 +120,6 @@ export default class LocalizedCurrency extends React.Component {
 		localizedCurrency = (number, options) => {
 			const currencyAmount = 	formatNumber(
 										exchangeRate
-										? number * exchangeRate
 										: number,
 										options
 									)

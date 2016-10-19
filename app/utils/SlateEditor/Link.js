@@ -13,6 +13,6 @@ export default class Link extends React.Component {
         const className = isFocused ? 'active' : null
         const href = node.data.get('href')
 
-        return <a href={href} className={className}>{children}</a>
+        return <a {...attributes} href={href} className={className}>{children}</a>
     }
 }

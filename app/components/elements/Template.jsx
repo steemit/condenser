@@ -31,6 +31,7 @@ class Template extends React.Component {
     // }
 
     // componentWillUpdate(nextProps, nextState) {
+    //      // Can't call this.setState() here, use componentWillReceiveProps instead
     // }
 
     // componentDidUpdate(prevProps, prevState) {

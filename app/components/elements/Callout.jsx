@@ -1,11 +1,11 @@
 import React from 'react';
 
-export default ({title, body, type = 'alert'}) => {
+export default ({title, children, type}) => {
     return <div className="row">
         <div className="column">
-            <div className={'callout ' + type}>
+            <div className={'callout' + (type ? ` ${type}` : '')}>
                 <h4>{title}</h4>
-                <p>{body}</p>
+                <div>{children}</div>
             </div>
         </div>
     </div>

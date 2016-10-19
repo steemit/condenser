@@ -129,7 +129,8 @@ class Header extends React.Component {
             if(route.params[1] === "recent-replies"){
                 page_title = `Replies by ${user_name} `;
             }
-            if(route.params[1] === "posts"){
+            // @user/"posts" is deprecated in favor of "comments" as of oct-2016 (#443)
+            if(route.params[1] === "posts" || route.params[1] === "comments"){
                 page_title = `Comments by ${user_name} `;
             }
         } else {

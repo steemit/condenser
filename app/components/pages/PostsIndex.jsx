@@ -6,7 +6,7 @@ import constants from 'app/redux/constants';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import PostsList from 'app/components/cards/PostsList';
 import {isFetchingOrRecentlyUpdated} from 'app/utils/StateFunctions';
-import g from 'app/redux/GlobalReducer';
+import {Link} from 'react-router';
 
 class PostsIndex extends React.Component {
 
@@ -15,7 +15,8 @@ class PostsIndex extends React.Component {
         status: PropTypes.object,
         routeParams: PropTypes.object,
         requestData: PropTypes.func,
-        loading: PropTypes.bool
+        loading: PropTypes.bool,
+        current_user: PropTypes.object
     };
 
     static defaultProps = {
@@ -66,7 +67,16 @@ class PostsIndex extends React.Component {
             order = 'by_feed';
             topics_order = 'trending';
             posts = this.props.global.getIn(['accounts', account_name, 'feed']);
-            emptyText = `Looks like ${account_name} hasn't followed anything yet!`;
+            const isMyAccount = this.props.current_user && this.props.current_user.get('username') === account_name;
+            if (isMyAccount) {
+                emptyText = <div>
+                    Looks like you haven't followed anything yet.<br />
+                    <Link to="/trending">Explore Steemit</Link><br />
+                    <a href="/steemit/@thecryptofiend/the-missing-faq-a-beginners-guide-to-using-steemit">Read The Beginner's Guide</a>
+                </div>
+            } else {
+                emptyText = `Looks like ${account_name} hasn't followed anything yet!`;
+            }
         } else {
             posts = this.getPosts(order, category);
         }
@@ -106,7 +116,8 @@ module.exports = {
                 discussions: state.global.get('discussion_idx'),
                 status: state.global.get('status'),
                 loading: state.app.get('loading'),
-                global: state.global
+                global: state.global,
+                current_user: state.user.get('current')
             };
         },
         (dispatch) => {

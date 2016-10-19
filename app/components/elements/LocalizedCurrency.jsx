@@ -45,8 +45,12 @@ export default class LocalizedCurrency extends React.Component {
 
 	// TODO move this into redux
 	checkIfCurrencyChanged = () => {
-		if (process.env.BROWSER && this.state.currency != store.get('fetchedCurrency')) {
-			this.fetchExchangeRates()
+		if (process.env.BROWSER) {
+			// fetch new exchange data if:
+			// currency has changed
+			if(this.state.currency != store.get('fetchedCurrency')) this.fetchExchangeRates()
+			// if currency rates are not fetched at all
+			if (!store.get('goldExchangeRate') && !store.get('exchangeRate')) this.fetchExchangeRates()
 		}
 	}
 

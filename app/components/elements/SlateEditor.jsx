@@ -1,5 +1,5 @@
 import React from 'react'
-import { Editor, Mark, Raw, Html } from 'slate'
+import Slate, { Editor, Mark, Raw, Html } from 'slate'
 import Portal from 'react-portal'
 import position from 'selection-position'
 
@@ -19,6 +19,7 @@ let plugins = []
 
 
 import InsertBlockOnEnter from 'slate-insert-block-on-enter'
+import TrailingBlock from 'slate-trailing-block'
 
 if(process.env.BROWSER) {
     //import InsertImages from 'slate-drop-or-paste-images'
@@ -38,7 +39,10 @@ if(process.env.BROWSER) {
     )
 
     plugins.push(
-        InsertBlockOnEnter({kind: 'block', type: 'paragraph', nodes: [{kind: 'text', text: '', ranges: []}]})
+        InsertBlockOnEnter({kind: 'block', type: DEFAULT_NODE, nodes: [{kind: 'text', text: '', ranges: []}]})
+    )
+    plugins.push(
+        TrailingBlock({ type: DEFAULT_NODE })
     )
 }
 
@@ -379,9 +383,9 @@ console.log(JSON.stringify(Raw.serialize(state, {terse: false}), null, 2))
 
         state = state
             .transform()
-            //.insertBlock({type: 'paragraph', isVoid: false})
             .insertBlock({type: 'image', isVoid: true, data: {src}})
-            //.collapseToStartOfNextBlock()
+            .insertBlock({type: 'paragraph', isVoid: false, nodes: [Slate.Text.create()]})
+            .focus()
             .apply()
 
         this.setState({ state })

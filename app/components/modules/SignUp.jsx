@@ -61,15 +61,14 @@ class SignUp extends React.Component {
             </div>
             <div className="row">
               </div>
-              {/* commented out because currently this does not work */}
-              {/* <div className="row">
+              <div className="row">
                   <div className="column large-4 shrink">
                       <SvgImage name="facebook" width="64px" height="64px" />
                   </div>
                   <div className="column large-8">
                       <a href="/connect/facebook" className="button SignUp--fb-button">{translate("continue_with_facebook")}</a>
                   </div>
-              </div> */}
+              </div>
               <div className="row">
               &nbsp;
             </div>

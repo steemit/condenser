@@ -17,6 +17,7 @@
   
   - c++11 
   - [Boost](http://www.boost.org/) 
+  - CMake Build Process
   - Supports Linux, Mac OS X  (no Windows Support)
 
 ## Example Usage 

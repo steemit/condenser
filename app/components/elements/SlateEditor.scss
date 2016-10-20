@@ -4,6 +4,7 @@
     position: relative;
     img {border: 1px dotted #00f}
   }
+  div.active,
   img.active {box-shadow: 0 0 2px 1px #48C;}
   hr.active {box-shadow: 0 0 2px 1px #48C;}
 

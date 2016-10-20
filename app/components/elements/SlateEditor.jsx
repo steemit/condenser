@@ -367,6 +367,7 @@ console.log(JSON.stringify(Raw.serialize(state, {terse: false}), null, 2))
             <Portal isOpened onOpen={this.onSidebarOpen}>
                 <div className="SlateEditor__sidebar">
                     {this.renderAddBlockButton({type: 'image', label: <Icon name="photo" />, handler: this.onClickInsertImage})}
+                    {this.renderAddBlockButton({type: 'video', label: <Icon name="video" />, handler: this.onClickInsertVideo})}
                     {this.renderAddBlockButton({type: 'hrule', label: <Icon name="line" />, handler: this.onClickInsertHr})}
                 </div>
             </Portal>
@@ -383,8 +384,22 @@ console.log(JSON.stringify(Raw.serialize(state, {terse: false}), null, 2))
         state = state
             .transform()
             .insertInline({type: 'image', isVoid: true, data: {src}})
-            .insertBlock({type: 'paragraph', isVoid: false, nodes: [Slate.Text.create()]})
+            //.insertBlock({type: 'paragraph', isVoid: false, nodes: [Slate.Text.create()]})
             .focus()
+            .collapseToEndOfNextBlock()
+            .apply()
+
+        this.setState({ state })
+    }
+
+    onClickInsertVideo = (e, type) => {
+        e.preventDefault()
+        let { state } = this.state
+
+        state = state
+            .transform()
+            .insertBlock({type: 'embed', isVoid: true, data: {src: 'https://www.youtube.com/watch?v=7YOozVnEdFQ'}})
+            .insertBlock({type: 'paragraph', isVoid: false})
             .apply()
 
         this.setState({ state })

@@ -350,7 +350,6 @@ function* lookupPreviousOwnerAuthority({payload: {}}) {
 }
 
 import {Signature, hash} from 'shared/ecc'
-// import request from 'request'
 
 function* uploadImageWatch() {
     yield* takeLatest('user/UPLOAD_IMAGE', uploadImage);
@@ -411,7 +410,7 @@ function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress
     }
 
     const sig = Signature.signBufferSha256(bufSha, d)
-    const postUrl = `http://localhost:3234/${username}/${sig.toHex()}`
+    const postUrl = `${$STM_Config.uploadImage}/${username}/${sig.toHex()}`
 
     fetch(postUrl, {
         method: 'post',

@@ -23,11 +23,11 @@ export default {
             },
             {
               "text": "much",
-              "marks": [
-                {
-                  "type": "italic"
-                }
-              ]
+            //   "marks": [
+            //     {
+            //       "type": "italic"
+            //     }
+            //   ]
             },
             {
               "text": " better than a "

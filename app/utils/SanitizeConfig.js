@@ -86,7 +86,7 @@ export default ({large = true, highQualityPost = true, noImage = false, sanitize
             let {src, alt} = attribs
             if(!/^(https?:)?\/\//i.test(src)) {
                 console.log('Blocked, image tag src does not appear to be a url', tagName, attribs)
-                sanitizeErrors.push('Image URL does not appear to be valid: ' + src)
+                sanitizeErrors.push('An image in this post did not save properly.')
                 return {tagName: 'img', attribs: {src: 'brokenimg.jpg'}}
             }
 

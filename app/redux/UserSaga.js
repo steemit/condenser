@@ -350,31 +350,18 @@ function* lookupPreviousOwnerAuthority({payload: {}}) {
 }
 
 import {Signature, hash} from 'shared/ecc'
+// import request from 'request'
 
 function* uploadImageWatch() {
     yield* takeLatest('user/UPLOAD_IMAGE', uploadImage);
 }
 
-function* uploadImage({payload: {file, progress}}) {
+function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress}}) {
+    const _progress = progress
     progress = msg => {
         console.log('Upload image progress', msg)
-        progress(msg)
+        _progress(msg)
     }
-
-    if(!file) {
-        console.error('uploadImage required: file')
-        return
-    }
-
-    const reader = new FileReader()
-    const data = yield new Promise(resolve => {
-        reader.addEventListener('load', () => {
-            const result = new Buffer(reader.result, 'binary')
-            resolve(result)
-        })
-        reader.readAsBinaryString(file)
-    })
-    const bufSha = hash.sha256(data)
 
     const stateUser = yield select(state => state.user)
     const username = stateUser.getIn(['current', 'username'])
@@ -388,8 +375,40 @@ function* uploadImage({payload: {file, progress}}) {
         return
     }
 
+    if(!file && !dataUrl) {
+        console.error('uploadImage required: file or dataUrl')
+        return
+    }
+
+    let data, dataBs64
+    if(file) {
+        // drag and drop
+        const reader = new FileReader()
+        data = yield new Promise(resolve => {
+            reader.addEventListener('load', () => {
+                const result = new Buffer(reader.result, 'binary')
+                resolve(result)
+            })
+            reader.readAsBinaryString(file)
+        })
+    } else {
+        // recover from preview
+        const commaIdx = dataUrl.indexOf(',')
+        dataBs64 = dataUrl.substring(commaIdx + 1)
+        data = new Buffer(dataBs64, 'base64')
+    }
+
+    const bufSha = hash.sha256(data)
+
     const formData = new FormData()
-    formData.append('file', file)
+    if(file) {
+        formData.append('file', file)
+    } else {
+        // formData.append('file', file, filename) <- Failed to add filename=xxx to Content-Disposition
+        // Can't easily make this look like a file so this relies on the server supporting: filename and filebinary
+        formData.append('filename', filename)
+        formData.append('filebase64', dataBs64)
+    }
 
     const sig = Signature.signBufferSha256(bufSha, d)
     const postUrl = `http://localhost:3234/${username}/${sig.toHex()}`
@@ -405,8 +424,8 @@ function* uploadImage({payload: {file, progress}}) {
             progress({error: 'Error: ' + error})
             return
         }
-        const {files: [url]} = res
-        progress({url: `${url}/${file.name}`})
+        const {url} = res
+        progress({url})
     })
 }
 

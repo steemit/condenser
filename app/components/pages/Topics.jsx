@@ -70,7 +70,6 @@ class Topics extends React.Component {
 
         return (
             <ul className={cn}>
-                {translate("filter")}
                 <li className="Topics__title" key={'*'}>{translate("tags_and_topics")}</li>
                 <li className="Topics__filter hidden"><input type="text" placeholder={translate('filter')} value={detransliterate(search)} onChange={onChangeSearch} /></li>
                {categories}

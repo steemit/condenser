@@ -134,6 +134,14 @@ ChainBase was designed to be used with blockchain applications where an append-o
 to secure state in the event of power loss. This block log can be replayed to regenerate the full database
 state. Dealing with OS crashes, loss of power, and logs, is beyond the scope of ChainBase.
 
+## Portability 
+
+The contents of the database file is dependent upon the memory layout of the computer and process that created
+the database. Moving the database to a machine that uses a different compiler, operating system, libraries, or
+build type (release vs debug) will result in undefined behavior.  
+
+If portability is desired, the developer will have to export the database to a suitable format. 
+
 ## Background 
 
 Blockchain applications depend upon a high performance database capable of millions of read/write 

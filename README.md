@@ -18,7 +18,7 @@
 
 ## Example Usage 
 
-```
+``` c++
 enum tables {
    book_table
 }

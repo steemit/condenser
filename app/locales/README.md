@@ -30,6 +30,7 @@ Plurals are strings which look differently depending on what numbers are used.
 We use formatJs syntax, read the docs http://formatjs.io/guides/message-syntax/
 Pay special attention to '{plural} Format' section.
 [This link](http://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html) shows how they determine which plural to use in different languages (they explain how string falls under 'few', 'many' and 'other' category. If you are completely lost, just look at the other translation files (en.js or ru.js).
+IMPORTANT if you use wrong rules for plural, the translation will fail '{postCount, plural, zero {0 постов} one {# пост} few {# поста} many {# постов}}' instead of normal string. In that case, check what kind of rules your language needs. For example: Russian needs "zero", "one", "few", "many". But english only needs '=0', 'one', 'other'.
 
 ### How to use special symbols
 

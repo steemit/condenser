@@ -292,40 +292,34 @@ const en = 	{
 	// see locales/README.md on how to properly use them
 	// context usually is about profile stats: 'User has: 3 posts, 2 followers, 5 followed'
 	post_count: `{postCount, plural,
-		zero {0 posts}
-		one {# post}
-		few {# posts}
-		many {# posts}
+		=0 {no posts}
+		one {1 post}
+		other {{postCount} posts}
 	}`,
 	follower_count: `{followerCount, plural,
-		zero {0 followers}
-		one {# followers}
-		few {# followers}
-		many {# followers}
+		=0 {no followers}
+		one {1 follower}
+		other {{followerCount} followers}
 	}`,
 	followed_count: `{followingCount, plural,
-		zero {0 followed}
-		one {# followed}
-		few {# followed}
-		many {# followed}
+		=0 {no followed}
+		one {1 followed}
+		other {{followingCount} followed}
 	}`,
 	vote_count: `{voteCount, plural,
-		zero {0 votes}
-		one {# votes}
-		few {# votes}
-		many {# votes}
+		=0 {no votes}
+		one {1 votes}
+		other {{voteCount} votes}
 	}`,
 	response_count: `{responseCount, plural,
-		zero {0 responses}
-		one {# responses}
-		few {# responses}
-		many {# responses}
+		=0 {no responses}
+		one {1 responses}
+		other {{responseCount} responses}
 	}`,
 	reply_count: `{replyCount, plural,
-		zero {0 replies}
-		one {# replies}
-		few {# replies}
-		many {# replies}
+		=0 {no replies}
+		one {1 replies}
+		other {{responseCount} replies}
 	}`,
 	this_is_users_reputations_score_it_is_based_on_history_of_votes: "This is {name}'s reputation score.\n\nThe reputation score is based on the history of votes received by the account, and is used to hide low quality content.",
 	newer: 'Newer',
@@ -524,6 +518,8 @@ const en = 	{
 	account_name_should_be_shorter: 'Account name should be shorter.',
 	account_name_should_be_longer: 'Account name should be longer.',
 	account_name_should_have_only_letters_digits_or_dashes: 'Account name should have only letters, digits, or dashes.',
+	choose_language: 'Choose language',
+	choose_currency: 'Choose currency',
 }
 
 export { en }

@@ -4,10 +4,18 @@ import linksRe from 'app/utils/Links'
 export default class Iframe extends React.Component {
 
     normalizeEmbedUrl = (url) => {
+        let match;
+
         // Detect youtube URLs
-        const match = url.match(linksRe.youTubeId)
+        match = url.match(linksRe.youTubeId)
         if(match && match.length >= 2) {
             return 'https://www.youtube.com/embed/' + match[1]
+        }
+
+        // Detect vimeo
+        match = url.match(linksRe.vimeoId)
+        if(match && match.length >= 2) {
+            return 'https://player.vimeo.com/video/' + match[1]
         }
 
         console.log("unable to auto-detect embed url", url)

@@ -2,7 +2,6 @@ import React from 'react'
 import Slate, { Editor, Mark, Raw, Html } from 'slate'
 import Portal from 'react-portal'
 import position from 'selection-position'
-
 import Icon from 'app/components/elements/Icon';
 
 import demoState from 'app/utils/SlateEditor/DemoState'
@@ -29,7 +28,7 @@ if(process.env.BROWSER) {
         InsertImages({
             extensions: ['jpeg', 'png', 'gif'],
             applyTransform: (transform, file) => {
-                return transform.insertBlock({
+                return transform.insertInline({
                     type: 'image',
                     isVoid: true,
                     data: { file }
@@ -383,7 +382,7 @@ console.log(JSON.stringify(Raw.serialize(state, {terse: false}), null, 2))
 
         state = state
             .transform()
-            .insertBlock({type: 'image', isVoid: true, data: {src}})
+            .insertInline({type: 'image', isVoid: true, data: {src}})
             .insertBlock({type: 'paragraph', isVoid: false, nodes: [Slate.Text.create()]})
             .focus()
             .apply()

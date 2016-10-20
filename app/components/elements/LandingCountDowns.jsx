@@ -62,11 +62,11 @@ export default class LandingCountDowns extends React.Component {
 	}
 
 	componentWillMount() {
-		this.updateTime = setInterval(this.updateTime, 1000);
+		if(process.env.BROWSER) this.updateTime = setInterval(this.updateTime, 1000);
 	}
 
 	componentWillUnmount() {
-		clearInterval(this.updateTime)
+		if(process.env.BROWSER) clearInterval(this.updateTime)
 	}
 
 	// TODO add this

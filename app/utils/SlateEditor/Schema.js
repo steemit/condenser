@@ -115,7 +115,7 @@ export const HtmlRules = [
                         kind: 'block',
                         type: 'image',
                         isVoid: true,
-                        data: {src: el.attribs.src},
+                        data: {src: el.attribs.src, alt: el.attribs.al},
                         nodes: next(el.children)
                     }
                 case 'a':
@@ -157,8 +157,9 @@ export const HtmlRules = [
             }
             if(object.kind == 'block' && object.type == 'image') {
                 const src = object.data.get('src')
+                const alt = object.data.get('alt')
                 if(!src) console.log("** ERR: serializing image with no src...", JSON.stringify(object))
-                return <img src={src} />
+                return <img src={src} alt={alt} />
             }
             console.log("No serializer for: ", object.kind, JSON.stringify(object, null, 2), children)
         }

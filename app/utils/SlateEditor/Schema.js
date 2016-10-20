@@ -54,7 +54,12 @@ export const HtmlRules = [
 
             // Special case for <pre>: ignore its inner <code> element.
             const code = el.tagName == 'pre' ? el.children[0] : null
-            const children = code && code.tagName == 'code' ? code.children : el.children
+            let children = code && code.tagName == 'code' ? code.children : el.children
+
+            // enforce that lists have only <li> children
+            if(el.tagName == 'ol' || el.tagName == 'ul') {
+                children = children.filter(el => el.tagName == 'li')
+            }
 
             return {
                 kind: 'block',
@@ -112,7 +117,7 @@ export const HtmlRules = [
             switch(el.tagName) {
                 case 'img':
                     return {
-                        kind: 'block',
+                        kind: 'inline',
                         type: 'image',
                         isVoid: true,
                         data: {src: el.attribs.src, alt: el.attribs.al},
@@ -155,7 +160,7 @@ export const HtmlRules = [
                 if(!href) console.log("** ERR: serializing <a> with no href", JSON.stringify(object.data, null, 2))
                 return <a href={href}>{children}</a>
             }
-            if(object.kind == 'block' && object.type == 'image') {
+            if(object.kind == 'inline' && object.type == 'image') {
                 const src = object.data.get('src')
                 const alt = object.data.get('alt')
                 if(!src) console.log("** ERR: serializing image with no src...", JSON.stringify(object))

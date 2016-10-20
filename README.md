@@ -1,8 +1,11 @@
-# ChainBase - a fast version controlled database 
+# ChainBase - a fast version controlled, transactional database 
 
   ChainBase is designed to meet the demanding requirments of blockchain applications, but is suitable for use
   in any application that requires a robust transactional database with the ability have near-infinate levels of undo
   history.
+
+  While chainbase was designed for blockchain applications, it is suitable for any program that needs to
+  persist complex application state with the ability to undo.
 
 ## Features 
 
@@ -21,7 +24,7 @@
 ``` c++
 enum tables {
    book_table
-}
+};
 
 /**
  * Defines a "table" for storing books. This table is assigned a 
@@ -40,6 +43,10 @@ struct book : public chainbase::object<book_table, book> {
    int publish_date = 0;
 };
 
+struct by_id;
+struct by_pages;
+struct by_date;
+
 /**
  * This is a relatively standard boost multi_index_container definition that has three 
  * requirements to be used withn a chainbase database:
@@ -49,9 +56,9 @@ struct book : public chainbase::object<book_table, book> {
 typedef multi_index_container<
   book,
   indexed_by<
-     ordered_unique< member<book,book::id_type,&book::id> >, ///< required 
-     ordered_non_unique< BOOST_MULTI_INDEX_MEMBER(book,int,pages) >,
-     ordered_non_unique< BOOST_MULTI_INDEX_MEMBER(book,int,publish_date) >
+     ordered_unique< tag<by_id>, member<book,book::id_type,&book::id> >, ///< required 
+     ordered_non_unique< tag<by_pages>, BOOST_MULTI_INDEX_MEMBER(book,int,pages) >,
+     ordered_non_unique< tag<by_date>, BOOST_MULTI_INDEX_MEMBER(book,int,publish_date) >
   >,
   chainbase::allocator<book> ///< required for use with chainbase::database
 > book_index;
@@ -68,21 +75,63 @@ int main( int argc, char** argv ) {
 
    const auto& book_idx = db.get_index<book_index>().indicies();
 
+   /**
+      Returns a const reference to the book, this pointer will remain
+      valid until the book is removed from the database.
+    */
    const auto& new_book300 = db.create<book>( [&]( book& b ) {
        b.pages = 300+book_idx.size();
    } );
-   const auto& new_book400 = db.create<book>( []( book& b ) {
+   const auto& new_book400 = db.create<book>( [&]( book& b ) {
        b.pages = 300+book_idx.size();
    } );
+
+   /**
+      You modify a book by passing in a lambda that receives a
+      non-const reference to the book you wish to modify. 
+   */
+   db.modify( new_book300, [&]( book& b ) {
+      b.pages++;
+   });
 
    for( const auto& b : book_idx ) {
       std::cout << b.pages << "\n";
    }
+
+   auto itr = book_idx.get<by_pages>().lower_bound( 100 );
+   if( itr != book_idx.get<by_pages>().end() ) {
+      std::cout << itr->pages;
+   }
+
+   db.remove( new_book400 );
    
    return 0;
 }
 
 ```
+
+## Concurrent Access 
+
+By default ChainBase provides no synchronization and has the same concurrency restrictions as any 
+boost::multi_index_container.  This means that two or more threads may read the database at the
+same time, but all writes must be protected by a mutex.  
+
+Multiple processes may open the same database if care is taken to use interpocess locking on the
+database.  
+
+## Persistance 
+
+By default data is only flushed to disk upon request or when the program exits. So long as the program
+does not crash in the middle of a call to db.modify(), or db.create() the content of the
+database should remain in a consistant state. This means that you should minimize the complexity of the
+lambdas used to create and/or modify state.
+
+If the operating system crashes or the computer loses power, then the database will be left in an undefined
+state depending upon which memory pages that operating system was able to sync to disk.
+
+ChainBase was designed to be used with blockchain applications where an append-only log of blocks is used
+to secure state in the event of power loss. This block log can be replayed to regenerate the full database
+state. Dealing with OS crashes, loss of power, and logs, is beyond the scope of ChainBase.
 
 ## Background 
 

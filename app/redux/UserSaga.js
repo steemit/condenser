@@ -427,6 +427,11 @@ function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress
         const {url} = res
         progress({url})
     })
+    .catch(error => {
+        console.error(filename, error)
+        progress({error: 'Unable to contact the server.'})
+        return
+    })
 }
 
 

@@ -98,7 +98,7 @@ export default class LandingCountDowns extends React.Component {
 		}
 
 		return (
-			<section className="CountDowns">
+			<section className="CountDowns" id="CountDowns">
 				{/* HEADERS */}
 				<div className="CountDowns__headers">
 					<div className="row text-center">

@@ -56,12 +56,14 @@ class Image extends React.Component {
         } else {
             // draft, recover data using the preview data url
             const {data} = this.props.node
-            dataUrl = data.get('src')
-            filename = data.get('alt')
+            const src = data.get('src')
+            if(/^data:/.test(src)) {
+                dataUrl = src
+                filename = data.get('alt')
+            }
         }
 
         if(!file && !dataUrl) return
-
         this.setState({ progress: {}, uploading: true}, () => {
             const {uploadImage} = this.props
             uploadImage(file, dataUrl, filename, progress => {

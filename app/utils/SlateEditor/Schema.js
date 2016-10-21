@@ -29,6 +29,12 @@ const BLOCK_TAGS = {
     ol:         'numbered-list',
     li:         'list-item',
     hr:         'hr',
+    table:      'table',
+    thead:      'thead',
+    tbody:      'tbody',
+    tr:         'tr',
+    td:         'td',
+    th:         'th',
 }
 
 // Map HTML --> mark type
@@ -57,9 +63,11 @@ export const HtmlRules = [
             const code = el.tagName == 'pre' ? el.children[0] : null
             let children = code && code.tagName == 'code' ? code.children : el.children
 
-            // enforce that lists have only <li> children
-            if(el.tagName == 'ol' || el.tagName == 'ul') {
-                children = children.filter(el => el.tagName == 'li')
+            // due to disabled/broken whitespace normalization in cheerio/htmlparser2, perform basic cleaning...
+            //   i.e. removal of text nodes where they are invalid -- otherwise they may convert to <br />s in bad places
+            const noTextChildren = 'ol,ul,table,thead,tbody,tr'.split(',')
+            if(noTextChildren.includes(el.tagName)) {
+                children = children.filter(el => el.type !== 'text')
             }
 
             return {
@@ -83,6 +91,12 @@ export const HtmlRules = [
                 case 'numbered-list':      return <ol>{children}</ol>
                 case 'list-item':          return <li>{children}</li>
                 case 'hr':                 return <hr />
+                case 'table':              return <table>{children}</table>
+                case 'thead':              return <thead>{children}</thead>
+                case 'tbody':              return <tbody>{children}</tbody>
+                case 'tr':                 return <tr>{children}</tr>
+                case 'td':                 return <td>{children}</td>
+                case 'th':                 return <th>{children}</th>
             }
         }
     },
@@ -116,6 +130,14 @@ export const HtmlRules = [
     {
         deserialize: (el, next) => {
             switch(el.tagName) {
+                case 'iframe':
+                    return {
+                        kind: 'block',
+                        type: 'embed',
+                        isVoid: true,
+                        data: {src: el.attribs.src},
+                        nodes: next(el.children)
+                    }
                 case 'img':
                     return {
                         kind: 'inline',
@@ -139,7 +161,7 @@ export const HtmlRules = [
                         "ranges": [{"text": "\n"}]
                     }
                 case 'code':
-                    if(! $(el).closest('pre')) {
+                    if($(el).closest('pre').length == 0) {
                       return {
                           kind: 'mark',
                           type: 'code',
@@ -160,6 +182,10 @@ export const HtmlRules = [
                 const href = object.data.get('href')
                 if(!href) console.log("** ERR: serializing <a> with no href", JSON.stringify(object.data, null, 2))
                 return <a href={href}>{children}</a>
+            }
+            if(object.kind == 'block' && object.type == 'embed') {
+                const src = object.data.get('src')
+                return <iframe src={src} />
             }
             if(object.kind == 'inline' && object.type == 'image') {
                 const src = object.data.get('src')
@@ -209,6 +235,12 @@ export const schema = {
         'heading-three': ({ children, attributes }) => <h3 {...attributes}>{children}</h3>,
         'heading-four':  ({ children, attributes }) => <h4 {...attributes}>{children}</h4>,
         'list-item':     ({ children, attributes }) => <li {...attributes}>{children}</li>,
+        'table':         ({ children, attributes }) => <table {...attributes}>{children}</table>,
+        'thead':         ({ children, attributes }) => <thead {...attributes}>{children}</thead>,
+        'tbody':         ({ children, attributes }) => <tbody {...attributes}>{children}</tbody>,
+        'tr':            ({ children, attributes }) => <tr {...attributes}>{children}</tr>,
+        'td':            ({ children, attributes }) => <td {...attributes}>{children}</td>,
+        'th':            ({ children, attributes }) => <th {...attributes}>{children}</th>,
         'hr':    HRule,
         'image': Image,
         'link':  Link,

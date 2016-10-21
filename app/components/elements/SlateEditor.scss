@@ -16,11 +16,12 @@
     content: attr(href);
     display: block;
     position: absolute;
-    left: -25%;
+    left: 0;
     top: 110%;
     line-height: 1;
     white-space: nowrap;
-    font-size: 60%;
+    font-size: 9pt;
+    font-weight: normal;
     z-index: 99999;
     padding: 4px 8px;
     color: #ddd;

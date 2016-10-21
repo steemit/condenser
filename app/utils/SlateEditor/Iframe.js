@@ -89,7 +89,11 @@ export default class Iframe extends React.Component {
                   height="360"
                   src={src}
                   frameBorder="0"
-                  style={style}>
+                  style={style}
+                  webkitallowfullscreen
+                  mozallowfullscreen
+                  allowfullscreen
+                >
                 </iframe>
                 <div style={lockStyle}></div>
             </div>

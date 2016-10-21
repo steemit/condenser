@@ -119,7 +119,7 @@ class Header extends React.Component {
             ['hot', translate('hot')],
             ['trending', translate('trending_24_hour')],
             ['trending30', translate('trending_30_day')],
-            ['promoted', translate('promoted')],
+            // ['promoted', translate('promoted')],
             ['active', translate('active')]
         ];
         if (current_account_name) sort_orders.unshift(['home', translate('home')]);
@@ -131,7 +131,7 @@ class Header extends React.Component {
             ['created', translate('new')],
             ['hot', translate('hot')],
             ['trending', translate('trending')],
-            ['promoted', translate('promoted')],
+            // ['promoted', translate('promoted')],
             ['active', translate('active')]
         ];
         if (current_account_name) sort_orders_horizontal.unshift(['home', translate('home')]);

@@ -16,6 +16,8 @@ import {cleanReduxInput} from 'app/utils/ReduxForms'
 import Remarkable from 'remarkable'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import SlateEditor, {serializeHtml, deserializeHtml, getDemoState} from 'app/components/elements/SlateEditor'
+import MarkdownEditor, {serializeMarkdown, deserializeMarkdown, getInitalMarkdownState}
+    from 'app/components/elements/MarkdownEditor'
 
 const remarkable = new Remarkable({ html: true, linkify: false })
 const RTE_DEFAULT = false
@@ -55,6 +57,17 @@ function stateFromHtml(html = null) {
     if(html && html.trim() == '') html = null
     return html ? deserializeHtml(html)
                 : getDemoState()
+}
+
+function stateToMarkdown(state) {
+    const md = serializeMarkdown(state)
+    return md
+}
+
+function stateFromMarkdown(md = null) {
+    if(md && md.trim() == '') md = null
+    return md ? deserializeMarkdown(md)
+                : getInitalMarkdownState()
 }
 
 class ReplyEditor extends React.Component {
@@ -101,7 +114,7 @@ class ReplyEditor extends React.Component {
         type: 'submit_comment',
     }
 
-    constructor() {
+    constructor(props) {
         super()
         this.state = {}
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'ReplyEditor')
@@ -122,8 +135,14 @@ class ReplyEditor extends React.Component {
             this.refs.rte.setState({state: stateFromHtml()})
             if(onCancel) onCancel(e)
         }
-        this.onChange = this.onChange.bind(this);
-        this.toggleRte = this.toggleRte.bind(this);
+        this.onCancelMarkdown = e => {
+            if(e) e.preventDefault()
+            const {onCancel, resetForm} = this.props
+            resetForm()
+            this.setAutoVote()
+            this.refs.markdown.setState({state: stateFromMarkdown('')})
+            if(onCancel) onCancel(e)
+        }
         this.autoVoteOnChange = () => {
             const {autoVote} = this.props.fields
             const key = 'replyEditorData-autoVote-story'
@@ -137,7 +156,6 @@ class ReplyEditor extends React.Component {
         setMetaData(formId, jsonMetadata)
 
         if(process.env.BROWSER) {
-
             // Check for rte editor preference
             let rte  = this.props.isStory && JSON.parse(localStorage.getItem('replyEditorData-rte') || RTE_DEFAULT);
             let html = null;
@@ -150,6 +168,7 @@ class ReplyEditor extends React.Component {
 
             // Check for draft data
             let draft = localStorage.getItem('replyEditorData-' + formId)
+            console.log('replyEditorData- + formId', 'replyEditorData-' + formId, draft)
             if(draft) {
                 draft = JSON.parse(draft)
                 const {category, title} = this.props.fields
@@ -168,8 +187,10 @@ class ReplyEditor extends React.Component {
             body.onChange(html)
             this.setState({
                 rte,
-                rte_value: rte ? stateFromHtml(html) : null
+                rte_value: rte ? stateFromHtml(html) : null,
+                md_value: stateFromMarkdown(rte ? '' : html),
             })
+            console.log('stateFromMarkdown(rte ? : html)', stateFromMarkdown(rte ? '' : html))
             this.setAutoVote()
             this.setState({payoutType: this.props.isStory ? (localStorage.getItem('defaultPayoutType') || '50%') : '50%'})
         }
@@ -178,7 +199,7 @@ class ReplyEditor extends React.Component {
     componentDidMount() {
         setTimeout(() => {
             if (this.props.isStory) this.refs.titleRef.focus()
-            else if (this.refs.postRef) this.refs.postRef.focus()
+            // else if (this.refs.postRef) this.refs.postRef.focus() //markdown
             else if (this.refs.rte) this.refs.rte._focus()
         }, 300)
     }
@@ -214,12 +235,20 @@ class ReplyEditor extends React.Component {
     }
 
     // As rte_editor is updated, keep the (invisible) 'body' field in sync.
-    onChange(rte_value) {
+    onChange = rte_value => {
         //this.setState({rte_value})
         this.refs.rte.setState({state: rte_value})
         const html = stateToHtml(rte_value)
         const body = this.props.fields.body
         if(body.value !== html) body.onChange(html);
+    }
+
+    // As markdown editor is updated, keep the (invisible) 'body' field in sync.
+    onChangeMarkdown = state => {
+        this.refs.markdown.setState({state})
+        const md = stateToMarkdown(state)
+        const body = this.props.fields.body
+        if(body.value !== md) body.onChange(md);
     }
 
     setAutoVote() {
@@ -231,11 +260,14 @@ class ReplyEditor extends React.Component {
             autoVote.onChange(autoVoteDefault)
         }
     }
-    toggleRte(e) {
+
+    toggleRte = e => {
         e.preventDefault();
         const state = {rte: !this.state.rte};
         if (state.rte) {
             state.rte_value = stateFromHtml(this.props.fields.body.value);
+        } else {
+            state.md_value = stateFromMarkdown(this.props.fields.body.value);
         }
         this.setState(state);
         localStorage.setItem('replyEditorData-rte', !this.state.rte)
@@ -254,7 +286,8 @@ class ReplyEditor extends React.Component {
             category: this.props.category,
             body: this.props.body,
         }
-        const {onCancel, autoVoteOnChange} = this
+        const {autoVoteOnChange} = this
+        const onCancel = this.state.rte ? this.onCancel : this.onCancelMarkdown
         const {title, category, body, autoVote} = this.props.fields
         const {
             reply, username, hasCategory, isStory, formId, noImage,
@@ -320,7 +353,12 @@ class ReplyEditor extends React.Component {
                                     initialState={this.state.rte_value}
                                     onChange={this.onChange} />
                                 :
-                                <textarea {...cleanReduxInput(body)} disabled={loading} rows={isStory ? 10 : 3} placeholder={isStory ? 'Write your story...' : 'Reply'} autoComplete="off" ref="postRef" tabIndex={2} />
+                                <MarkdownEditor ref="markdown"
+                                    initialState={this.state.md_value}
+                                    onChange={this.onChangeMarkdown}
+                                    disabled={loading} rows={isStory ? 10 : 3}
+                                    placeholder={isStory ? 'Write your story...' : 'Reply'}
+                                />
                             }
                         </div>
                         <div className={vframe_section_shrink_class}>
@@ -340,7 +378,7 @@ class ReplyEditor extends React.Component {
                             {!loading && <button type="submit" className="button" disabled={submitting || invalid} tabIndex={4}>{isEdit ? 'Update Post' : postLabel}</button>}
                             {loading && <span><br /><LoadingIndicator type="circle" /></span>}
                             &nbsp; {!loading && this.props.onCancel &&
-                                <button type="button" className="secondary hollow button no-border" tabIndex={5} onClick={(e) => {e.preventDefault(); onCancel()}}>Cancel</button>
+                                <button type="button" className="secondary hollow button no-border" tabIndex={5} onClick={onCancel}>Cancel</button>
                             }
                             {!loading && !this.props.onCancel && <button className="button hollow no-border" tabIndex={5} disabled={submitting} onClick={onCancel}>Clear</button>}
 

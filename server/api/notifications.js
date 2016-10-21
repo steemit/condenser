@@ -3,7 +3,7 @@ import koa_body from 'koa-body';
 import Tarantool from 'db/tarantool';
 
 function toResArray(result) {
-    if (!result || result.length < 1) return null;
+    if (!result || result.length < 1) return [];
     return result[0].slice(1);
 }
 
@@ -22,7 +22,7 @@ export default function useNotificationsApi(app) {
             this.body = toResArray(res);
         } catch (error) {
             console.error('-- /notifications/:account error -->', error.message);
-            this.body = null;
+            this.body = [];
         }
         return;
     });
@@ -39,7 +39,7 @@ export default function useNotificationsApi(app) {
             this.body = toResArray(res);
         } catch (error) {
             console.error('-- /notifications/:account/:id error -->', error.message);
-            this.body = null;
+            this.body = [];
         }
         return;
     });

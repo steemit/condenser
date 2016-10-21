@@ -5,7 +5,19 @@ const defaultState = Map({
     loading: false,
     error: '',
     location: {},
-    notifications: null
+    notifications: null,
+    notificounters: {
+        total: 0,
+        feed: 0,
+        reward: 0,
+        transfer: 0,
+        mention: 0,
+        follow: 0,
+        vote: 0,
+        reply: 0,
+        key_update: 0,
+        message: 0
+    }
 });
 
 export default function reducer(state = defaultState, action) {
@@ -45,6 +57,9 @@ export default function reducer(state = defaultState, action) {
     }
     if (action.type === 'REMOVE_NOTIFICATION') {
         res = res.update('notifications', s => s.delete(action.payload.key));
+    }
+    if (action.type === 'UPDATE_NOTIFICOUNTERS') {
+        res = res.set('notificounters', Map(action.payload));
     }
     return res;
 }

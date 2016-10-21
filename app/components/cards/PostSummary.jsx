@@ -149,11 +149,7 @@ export default class PostSummary extends React.Component {
                     {content_title}
                 </div>
                 <div className="PostSummary__time_author_category_small show-for-small-only">
-
                     <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}><TimeAuthorCategory post={p} links={false} authorRepLog10={authorRepLog10} gray={gray} /></a>
-                {/* merged author_category from upstream; using timeAuthorCategory also*/}
-                    {author_category}
-
                 </div>
                 {thumb}
                 <div className="PostSummary__content">

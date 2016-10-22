@@ -521,6 +521,7 @@ const en = 	{
 	choose_language: 'Choose language',
 	choose_currency: 'Choose currency',
 	crowdsale: 'Crowdsale',
+	followers: 'Followers',
 	cannot_increase_reward_of_post_within_the_last_minute_before_payout: 'Cannot increase reward of post within the last minute before payout',
 }
 

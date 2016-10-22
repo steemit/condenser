@@ -21,7 +21,8 @@ import {repLog10} from 'app/utils/ParsersAndFormatters.js';
 import Tooltip from 'app/components/elements/Tooltip';
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
 import VerticalMenu from 'app/components/elements/VerticalMenu';
-import { translate } from '../../Translator';
+import { translate } from 'app/Translator';
+import BuyGolos from 'app/components/elements/BuyGolos'
 
 export default class UserProfile extends React.Component {
     constructor() {
@@ -134,7 +135,7 @@ export default class UserProfile extends React.Component {
         else if( section === 'followers' ) {
             if (followers && followers.has('result')) {
                 tab_content = <UserList
-                          title="Followers"
+                          title={translate('followers')}
                           account={account}
                           users={followers}
                           />
@@ -151,6 +152,9 @@ export default class UserProfile extends React.Component {
         }
         else if( section === 'settings' ) {
             tab_content = <Settings />
+        }
+        else if( section === 'crowdsale' ) {
+            tab_content = <BuyGolos />
         }
         else if( section === 'posts' && account.post_history ) {
            if( account.posts )
@@ -271,6 +275,7 @@ export default class UserProfile extends React.Component {
             </div>
             <div className="columns shrink">
                 <ul className="menu" style={{flexWrap: "wrap"}}>
+                    <li><Link to={`/@${accountname}/crowdsale`} activeClassName="active">{translate('crowdsale')}</Link></li>
                     <li><Link to={`/@${accountname}/transfers`} activeClassName="active">{translate('wallet')}</Link></li>
                     {wallet_tab_active && isMyAccount && <li><Link to={`/@${account.name}/permissions`} activeClassName="active">{translate('permissions')}</Link></li>}
                     {wallet_tab_active && isMyAccount && <li><Link to={`/@${account.name}/password`} activeClassName="active">{translate('password')}</Link></li>}

@@ -125,7 +125,8 @@ export default class LandingCountDowns extends React.Component {
 					</div>
 				</div>
 				{
-					props.prefill
+					// props.prefill
+					false
 					? 	<div className="row text-center CountDowns__counters">
 							<CountDown
 								date={props.crowdsaleStartAt}
@@ -164,7 +165,8 @@ export default class LandingCountDowns extends React.Component {
 
 				{/* BUTTON */}
 				{
-					props.prefill
+					// props.prefill
+					false
 					? null
 					: <div className="row CountDowns__button">
 						<div className="small-12 columns">

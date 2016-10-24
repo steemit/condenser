@@ -7,8 +7,11 @@
 #include <boost/interprocess/containers/deque.hpp>
 #include <boost/interprocess/containers/string.hpp>
 #include <boost/interprocess/allocators/allocator.hpp>
+
+#include <boost/multi_index_container.hpp>
+
 #include <boost/filesystem.hpp>
-#include <boost/lexical_cast.hpp>
+#include <boost/lexical_cast.hpp> 
 #include <boost/throw_exception.hpp>
 #include <stdexcept>
 
@@ -639,6 +642,10 @@ namespace chainbase {
              _type_name_to_id.emplace( type_name, type_id );
          }
 
+         auto get_segment_manager() -> decltype( ((bip::managed_mapped_file*)nullptr)->get_segment_manager()) {
+            return _segment->get_segment_manager();
+         }
+
          template<typename MultiIndexType>
          const generic_index<MultiIndexType>& get_index()const {
             typedef generic_index<MultiIndexType> index_type;
@@ -738,5 +745,8 @@ namespace chainbase {
 
    template<typename T>
    const T& oid<T>::operator()( const database& db )const { return db.get<T>( _id ); }
+
+   template<typename Object, typename... Args>
+   using shared_multi_index_container = boost::multi_index_container<Object,Args..., chainbase::allocator<Object> >;
 }  // namepsace chainbase
 

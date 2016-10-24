@@ -137,7 +137,7 @@ class UserWallet extends React.Component {
         const steem_balance_str = numberWithCommas(balance_steem.toFixed(3)) // formatDecimal(balance_steem, 3)
         const power_balance_str = numberWithCommas(vesting_steem) // formatDecimal(vesting_steem, 3)
         const sbd_balance_str = numberWithCommas('$' + sbd_balance.toFixed(3)) // formatDecimal(account.sbd_balance, 3)
-        const savings_balance_str = numberWithCommas('$' + saving_balance_steem.toFixed(3))
+        const savings_balance_str = numberWithCommas(saving_balance_steem.toFixed(3) + ' STEEM')
         const savings_sbd_balance_str = numberWithCommas('$' + sbd_balance_savings.toFixed(3))
 
         const savings_menu = [

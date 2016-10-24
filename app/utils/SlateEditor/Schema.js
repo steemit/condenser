@@ -4,17 +4,65 @@ import Image from 'app/utils/SlateEditor/Image'
 import Iframe from 'app/utils/SlateEditor/Iframe'
 import HRule from 'app/utils/SlateEditor/HRule'
 
-
 const $ = require('cheerio');
 
-/*
+/**
+ * Slate editor/toolbar schema, defaults
+ */
+export const schema = {
+    defaultNode: 'paragraph',
+    toolbarMarks: [
+        { type: 'bold',      label: <strong>B</strong> },
+        { type: 'italic',    label: <i>i</i> },
+        //{ type: 'underline', label: <u>U</u> },
+        //{ type: 'strike',    label: <del>S</del> },
+        { type: 'code',      label: <code>{'{}'}</code> },
+        { type: 'sup',       label: <span>x<sup>2</sup></span> },
+        { type: 'sub',       label: <span>x<sub>2</sub></span> },
+    ],
 
---unsupported
-div ['pull-right', 'pull-left', 'text-justify', 'text-rtl'], center
-iframe
-table, thead, tbody, tr, th, td
+    // blockTypes: {...Blocks,},
+    // toolbarTypes: [],
+    // sidebarTypes: [],
 
-*/
+    nodes: {
+        'paragraph':     ({ children, attributes }) => <p {...attributes}>{children}</p>,
+        'code-block':    ({ children, attributes }) => <pre {...attributes}><code>{children}</code></pre>,
+        'block-quote':   ({ children, attributes }) => <blockquote {...attributes}>{children}</blockquote>,
+        'bulleted-list': ({ children, attributes }) => <ul {...attributes}>{children}</ul>,
+        'numbered-list': ({ children, attributes }) => <ol {...attributes}>{children}</ol>,
+        'heading-one':   ({ children, attributes }) => <h1 {...attributes}>{children}</h1>,
+        'heading-two':   ({ children, attributes }) => <h2 {...attributes}>{children}</h2>,
+        'heading-three': ({ children, attributes }) => <h3 {...attributes}>{children}</h3>,
+        'heading-four':  ({ children, attributes }) => <h4 {...attributes}>{children}</h4>,
+        'list-item':     ({ children, attributes }) => <li {...attributes}>{children}</li>,
+        'table':         ({ children, attributes }) => <table {...attributes}>{children}</table>,
+        'thead':         ({ children, attributes }) => <thead {...attributes}>{children}</thead>,
+        'tbody':         ({ children, attributes }) => <tbody {...attributes}>{children}</tbody>,
+        'tr':            ({ children, attributes }) => <tr {...attributes}>{children}</tr>,
+        'td':            ({ children, attributes }) => <td {...attributes}>{children}</td>,
+        'th':            ({ children, attributes }) => <th {...attributes}>{children}</th>,
+        'hr':    HRule,
+        'image': Image,
+        'link':  Link,
+        'embed': Iframe,
+    },
+
+    marks: {
+        bold:      props => <strong>{props.children}</strong>,
+        code:      props => <code>{props.children}</code>,
+        italic:    props => <em>{props.children}</em>,
+        underline: props => <u>{props.children}</u>,
+        strike:    props => <del>{props.children}</del>,
+        sub:       props => <sub>{props.children}</sub>,
+        sup:       props => <sup>{props.children}</sup>,
+    },
+}
+
+
+/**
+ * Rules for de/serializing editor state to and from HTML
+ */
 
 // Map html --> block type
 const BLOCK_TAGS = {
@@ -51,6 +99,7 @@ const MARK_TAGS = {
 }
 
 
+// Unsupported: div ['pull-right', 'pull-left', 'text-justify', 'text-rtl'], center
 export const HtmlRules = [
 
     // Block rules
@@ -162,13 +211,13 @@ export const HtmlRules = [
                     }
                 case 'code':
                     if($(el).closest('pre').length == 0) {
-                      return {
-                          kind: 'mark',
-                          type: 'code',
-                          nodes: next(el.children)
-                      }
+                        return {
+                            kind: 'mark',
+                            type: 'code',
+                            nodes: next(el.children)
+                        }
                     } else {
-                      console.log("** skipping <code> within a <pre>")
+                        console.log("** skipping <code> within a <pre>")
                     }
             }
 
@@ -176,6 +225,7 @@ export const HtmlRules = [
             if(BLOCK_TAGS[el.tagName] || MARK_TAGS[el.tagName]) return
             console.log("No deserializer for: ", el.tagName, el)
         },
+
         serialize: (object, children) => {
             if(object.kind == 'string') return;
             if(object.kind == 'inline' && object.type == 'link') {
@@ -197,66 +247,6 @@ export const HtmlRules = [
         }
     }
 ]
-
-export const schema = {
-    defaultNode: 'paragraph',
-    toolbarMarks: [
-        { type: 'bold',      label: <strong>B</strong> },
-        { type: 'italic',    label: <i>i</i> },
-        //{ type: 'underline', label: <u>U</u> },
-        //{ type: 'strike',    label: <del>S</del> },
-        { type: 'code',      label: <code>{'{}'}</code> },
-        { type: 'sup',       label: <span>x<sup>2</sup></span> },
-        { type: 'sub',       label: <span>x<sub>2</sub></span> },
-    ],
-
-/*
-    blockTypes: {
-      ...Blocks,
-    },
-    toolbarTypes: [
-        { type: 'heading-one',   icon: 'header' },
-        { type: 'heading-two',   icon: 'header' },
-        { type: 'block-quote',   icon: 'quote-left' },
-        { type: 'numbered-list', icon: 'list-ol' },
-        { type: 'bulleted-list', icon: 'list-ul' },
-    ],
-    sidebarTypes: [],
-*/
-
-    nodes: {
-        'paragraph':     ({ children, attributes }) => <p {...attributes}>{children}</p>,
-        'code-block':    ({ children, attributes }) => <pre {...attributes}><code>{children}</code></pre>,
-        'block-quote':   ({ children, attributes }) => <blockquote {...attributes}>{children}</blockquote>,
-        'bulleted-list': ({ children, attributes }) => <ul {...attributes}>{children}</ul>,
-        'numbered-list': ({ children, attributes }) => <ol {...attributes}>{children}</ol>,
-        'heading-one':   ({ children, attributes }) => <h1 {...attributes}>{children}</h1>,
-        'heading-two':   ({ children, attributes }) => <h2 {...attributes}>{children}</h2>,
-        'heading-three': ({ children, attributes }) => <h3 {...attributes}>{children}</h3>,
-        'heading-four':  ({ children, attributes }) => <h4 {...attributes}>{children}</h4>,
-        'list-item':     ({ children, attributes }) => <li {...attributes}>{children}</li>,
-        'table':         ({ children, attributes }) => <table {...attributes}>{children}</table>,
-        'thead':         ({ children, attributes }) => <thead {...attributes}>{children}</thead>,
-        'tbody':         ({ children, attributes }) => <tbody {...attributes}>{children}</tbody>,
-        'tr':            ({ children, attributes }) => <tr {...attributes}>{children}</tr>,
-        'td':            ({ children, attributes }) => <td {...attributes}>{children}</td>,
-        'th':            ({ children, attributes }) => <th {...attributes}>{children}</th>,
-        'hr':    HRule,
-        'image': Image,
-        'link':  Link,
-        'embed': Iframe,
-    },
-
-    marks: {
-        bold:      props => <strong>{props.children}</strong>,
-        code:      props => <code>{props.children}</code>,
-        italic:    props => <em>{props.children}</em>,
-        underline: props => <u>{props.children}</u>,
-        strike:    props => <del>{props.children}</del>,
-        sub:       props => <sub>{props.children}</sub>,
-        sup:       props => <sup>{props.children}</sup>,
-    },
-}
 
 export const getMarkdownType = (chars) => {
     switch (chars) {

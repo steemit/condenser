@@ -4,6 +4,7 @@ import Portal from 'react-portal'
 import position from 'selection-position'
 import Icon from 'app/components/elements/Icon';
 
+import {getCollapsedClientRect} from 'app/utils/SlateEditor/Helpers'
 import demoState from 'app/utils/SlateEditor/DemoState'
 import {HtmlRules, schema, getMarkdownType} from 'app/utils/SlateEditor/Schema'
 
@@ -174,7 +175,6 @@ export default class SlateEditor extends React.Component {
         const hasLinks = this.hasInline('link')
 
         if (hasLinks) {
-console.log(JSON.stringify(Raw.serialize(state, {terse: false}), null, 2))
             state = state
                 .transform()
                 .unwrapInline('link')
@@ -209,7 +209,6 @@ console.log(JSON.stringify(Raw.serialize(state, {terse: false}), null, 2))
               .collapseToEnd()
               .apply()
         }
-console.log(JSON.stringify(Raw.serialize(state, {terse: false}), null, 2))
         this.setState({ state })
     }
 
@@ -347,17 +346,6 @@ console.log(JSON.stringify(Raw.serialize(state, {terse: false}), null, 2))
             .transform()
             .insertFragment(document)
             .apply()
-    }
-
-    render = () => {
-        const { state } = this.state
-        return (
-            <div>
-                {this.renderMenu()}
-                {this.renderSidebar()}
-                {this.renderEditor()}
-            </div>
-        )
     }
 
     renderSidebar = () => {
@@ -502,42 +490,22 @@ console.log(JSON.stringify(Raw.serialize(state, {terse: false}), null, 2))
         )
     }
 
-    findParentTag = (el, tag, depth = 0) => {
-        if (!el) return null;
-        if (el.tagName == tag) return el;
-        return this.findParentTag(el.parentNode, tag, depth + 1);
-    }
-
-    getCollapsedClientRect = () => {
-        const selection = document.getSelection();
-        if (selection.rangeCount === 0 || !selection.getRangeAt || !selection.getRangeAt(0) || !selection.getRangeAt(0).startContainer || !selection.getRangeAt(0).startContainer.getBoundingClientRect) {
-            return null;
-        }
-
-        const node = selection.getRangeAt(0).startContainer;
-        if(! this.findParentTag(node, 'P')) return; // only show sidebar at the beginning of an empty <p>
-
-        const rect = node.getBoundingClientRect();
-        return rect;
-    }
-
+    // move sidebar to float left of current blank paragraph
     updateSidebar = () => {
         const { sidebar, state } = this.state
         if (!sidebar) return
 
-        const rect = this.getCollapsedClientRect() //position()
-
+        const rect = getCollapsedClientRect()
         if (state.isBlurred || state.isExpanded || !rect) {
           sidebar.removeAttribute('style')
           return
         }
 
-        //sidebar.style.opacity = 1
         sidebar.style.top = `${rect.top + window.scrollY}px`
-        //sidebar.style.top = `${rect.top + window.scrollY - sidebar.offsetHeight / 2 + rect.height / 2}px`
         sidebar.style.left = `${rect.left + window.scrollX - sidebar.offsetWidth}px`
     }
 
+    // move menu to center above current selection
     updateMenu = () => {
         const { menu, state } = this.state
         if (!menu) return
@@ -548,8 +516,18 @@ console.log(JSON.stringify(Raw.serialize(state, {terse: false}), null, 2))
         }
 
         const rect = position()
-        //menu.style.opacity = 1
         menu.style.top = `${rect.top + window.scrollY - menu.offsetHeight}px`
         menu.style.left = `${rect.left + window.scrollX - menu.offsetWidth / 2 + rect.width / 2}px`
+    }
+
+    render = () => {
+        const { state } = this.state
+        return (
+            <div>
+                {this.renderMenu()}
+                {this.renderSidebar()}
+                {this.renderEditor()}
+            </div>
+        )
     }
 }

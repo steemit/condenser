@@ -115,9 +115,7 @@ class ReplyEditor extends React.Component {
             const {onCancel, resetForm} = this.props
             resetForm()
             this.setAutoVote()
-            //this.setState({rte_value: stateFromHtml()})
-            //this.refs.rte.reset()
-            this.refs.rte.setState({state: stateFromHtml()})
+            if(this.refs.rte) this.refs.rte.setState({state: stateFromHtml()})
             if(onCancel) onCancel(e)
         }
         this.onChange = this.onChange.bind(this);
@@ -199,7 +197,7 @@ class ReplyEditor extends React.Component {
 
                 clearTimeout(saveEditorTimeout)
                 saveEditorTimeout = setTimeout(() => {
-                    console.log('save formId', formId, JSON.stringify(data, null, 0))
+                    console.log('save formId', formId, body.value)
                     localStorage.setItem('replyEditorData-' + formId, JSON.stringify(data, null, 0))
                 }, 350)
             }

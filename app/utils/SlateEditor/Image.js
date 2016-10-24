@@ -81,33 +81,29 @@ class Image extends React.Component {
         const isFocused = state.selection.hasEdgeIn(node)
         const className = isFocused ? 'active' : null
 
-        const src = node.data.get('src')
-        if(src) {
-            console.log("** uploaded image being rendered..", (src ? src.substring(0, 30) : '') + '...', state)
-        }
+        const prefix = $STM_Config.img_proxy_prefix ? ($STM_Config.img_proxy_prefix + '0x0/') : ''
 
-        // if(!src) {
-        //     src = 'https://img1.steemit.com/0x0/http://ariasprado.name/wp-content/uploads/2012/09/missing-tile-256x256.png'
-        //     src = $STM_Config.img_proxy_prefix + '0x0/' + src
-        // }
+        const alt = node.data.get('alt')
+        const src = node.data.get('src')
+
+        console.log("** rendering image... src:", (src ? src.substring(0, 30) + '...' : '(null)'), state)
 
         if(!src) return <small className="info">Loading Image&hellip;</small>
 
-        const alt = node.data.get('alt')
-        const img = <img {...attributes} src={src} alt={alt} className={className} />
+        if(/^https?:\/\//.test(src)) return <img {...attributes} src={prefix + src} alt={alt} className={className} />
 
-        if(/^https?:\/\//.test(src)) return img
+        const img = <img src={prefix + src} alt={alt} className={className} />
 
         const {uploading} = this.state
         if(uploading)
-            return <div>
+            return <div {...attributes}>
                 {img}
                 <br />
                 <small className="info">Uploading Image&hellip;</small>
             </div>
 
         const { error } = this.state.progress
-        return <div>
+        return <div {...attributes}>
             {img}
             <div className="error">
                 <small>

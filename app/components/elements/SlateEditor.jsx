@@ -26,7 +26,7 @@ if(process.env.BROWSER) {
 
     plugins.push(
         InsertImages({
-            extensions: ['jpeg', 'png', 'gif'],
+            extensions: ['jpeg', 'jpg', 'png', 'gif'],
             applyTransform: (transform, file) => {
                 return transform.insertInline({
                     type: 'image',
@@ -53,9 +53,6 @@ export default class SlateEditor extends React.Component {
         this.state = {state: props.initialState}
     }
 
-    reset = () => {
-        this.setState({state: this.props.initialState})
-    }
 
     componentDidMount = () => {
         this.updateMenu()
@@ -65,6 +62,14 @@ export default class SlateEditor extends React.Component {
     componentDidUpdate = () => {
         this.updateMenu()
         this.updateSidebar()
+    }
+
+    reset = () => {
+        this.setState({state: this.props.initialState})
+    }
+
+    focus = () => {
+        this.refs.editor.focus()
     }
 
     onChange = (state) => {
@@ -491,6 +496,7 @@ console.log(JSON.stringify(Raw.serialize(state, {terse: false}), null, 2))
         return (
             <div className="SlateEditor Markdown">
                 <Editor
+                    ref="editor"
                     schema={schema}
                     plugins={plugins}
                     state={this.state.state}

@@ -199,8 +199,8 @@ class ReplyEditor extends React.Component {
     componentDidMount() {
         setTimeout(() => {
             if (this.props.isStory) this.refs.titleRef.focus()
-            // else if (this.refs.postRef) this.refs.postRef.focus() //markdown
-            else if (this.refs.rte) this.refs.rte._focus()
+            else if (this.refs.markdown) this.refs.markdown.focus()
+            else if (this.refs.rte) this.refs.rte.focus()
         }, 300)
     }
     componentWillReceiveProps(nextProps) {

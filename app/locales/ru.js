@@ -7,7 +7,7 @@ const ru = {
 	// this variables mainly used in navigation section
 	about: "О проекте",
 	explore: "Исследовать",
-	APP_NAME_whitepaper: "Бумага о " + APP_NAME,
+	APP_NAME_whitepaper: "Бумага о " + APP_NAME + 'е',
 	buy_OWNERSHIP_TOKEN: 'Купить ' + OWNERSHIP_TOKEN,
 	sell_OWNERSHIP_TOKEN: 'Продать ' + OWNERSHIP_TOKEN,
 	market: "Биржа",

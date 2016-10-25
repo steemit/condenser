@@ -98,8 +98,9 @@ export default class PostSummary extends React.Component {
         </h1>;
 
         // author and category
+
         let author_category = <span className="vcard">
-            <TimeAgoWrapper date={p.created} className="updated" />
+            <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}><TimeAgoWrapper date={p.created} className="updated" /></a>
             {} by <Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
             {} in <TagList post={p} single />
         </span>

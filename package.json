@@ -114,7 +114,7 @@
     "sendgrid": "^4.0.1",
     "sequelize": "^3.21.0",
     "sequelize-cli": "^2.3.1",
-    "slate": "git+https://github.com/steemit/slate.git",
+    "slate": "git+https://github.com/steemit/slate.git#master-normalize",
     "slate-drop-or-paste-images": "^0.2.0",
     "slate-insert-block-on-enter": "0.0.1",
     "slate-trailing-block": "^0.2.2",

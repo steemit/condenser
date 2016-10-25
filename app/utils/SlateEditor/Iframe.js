@@ -46,12 +46,29 @@ export default class Iframe extends React.Component {
         const { node, state, attributes } = this.props
         const isFocused = state.selection.hasEdgeIn(node)
         const className = isFocused ? 'active' : null
-        const style = {background: 'black', color: 'white'}
+
+        const aspectStyle = {
+            position:      'relative',
+            paddingBottom: '56.2%',
+            height:        '0'
+        }
+        const lockStyle = {
+            position: 'absolute',
+            top:      '0px',
+            left:     '0px',
+            width:    '100%',
+            height:   '100%',
+            background: 'rgba(0,0,0,0.1)',
+        }
 
         return (
-            <div {...attributes} className={className} style={style}>
-                {this.renderFrame()}
-                Embed URL: {this.renderInput()}
+            <div {...attributes} className={className}>
+                <div style={aspectStyle}>
+                    {this.renderFrame()}
+                    <div style={lockStyle}>
+                        {isFocused && <span>{this.renderInput()}</span>}
+                    </div>
+                </div>
             </div>
         )
     }
@@ -60,55 +77,51 @@ export default class Iframe extends React.Component {
         let src = this.props.node.data.get('src')
         src = this.normalizeEmbedUrl(src) || src
 
-        const aspectStyle = {
-            position: 'relative',
-            paddingBottom: '56.2%',
-            height: '0'
-        }
-        const lockStyle = {
-            position: 'absolute',
-            top: '0px',
-            left: '0px',
-            width: '100%',
-            height: '100%',
-            background: 'rgba(0,0,0,0.1)'
-        }
         const style = {
             position: 'absolute',
-            top: '0px',
-            left: '0px',
-            width: '100%',
-            height: '100%'
+            top:      '0px',
+            left:     '0px',
+            width:    '100%',
+            height:   '100%'
         }
 
         return (
-            <div style={aspectStyle}>
-                <iframe
-                  type="text/html"
-                  width="640"
-                  height="360"
-                  src={src}
-                  frameBorder="0"
-                  style={style}
-                  webkitallowfullscreen
-                  mozallowfullscreen
-                  allowfullscreen
-                >
-                </iframe>
-                <div style={lockStyle}></div>
-            </div>
+            <iframe
+              type="text/html"
+              width="640"
+              height="360"
+              src={src}
+              frameBorder="0"
+              style={style}
+              webkitallowfullscreen
+              mozallowfullscreen
+              allowfullscreen
+            />
         )
     }
 
     renderInput = () => {
         const src = this.props.node.data.get('src')
+
+        const style = {
+            fontFamily: 'Arial',
+            margin:     '200px auto',
+            width:      '90%',
+            padding:    '1rem 0.5rem',
+            background: 'rgba(255,255,255,0.9)',
+            display:    'block',
+            textAlign:  'center',
+            color:      'black',
+            borderRadius: '5px',
+        }
+
         return (
             <input
               value={src}
               onChange={this.onChange}
               onClick={this.onClick}
-              style={{ marginTop: '5px', background: 'black' }}
-              size="70"
+              placeholder="Enter a YouTube or Vimeo URL..."
+              style={style}
             />
         )
     }

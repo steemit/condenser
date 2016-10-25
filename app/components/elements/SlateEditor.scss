@@ -4,9 +4,9 @@
     position: relative;
     img {border: 1px dotted #00f}
   }
-  div.active,
+  div.active {box-shadow: 0 0 4px 2px #48C;}
   img.active {box-shadow: 0 0 2px 1px #48C;}
-  hr.active {box-shadow: 0 0 2px 1px #48C;}
+  hr.active  {box-shadow: 0 0 2px 1px #48C;}
 
   a:hover:after{
     font-family: Arial;

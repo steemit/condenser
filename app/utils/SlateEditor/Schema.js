@@ -3,6 +3,7 @@ import Link from 'app/utils/SlateEditor/Link'
 import Image from 'app/utils/SlateEditor/Image'
 import Iframe from 'app/utils/SlateEditor/Iframe'
 import HRule from 'app/utils/SlateEditor/HRule'
+import Align from 'app/utils/SlateEditor/Align'
 
 const $ = require('cheerio');
 
@@ -46,6 +47,7 @@ export const schema = {
         'image': Image,
         'link':  Link,
         'embed': Iframe,
+        'align': Align,
     },
 
     marks: {
@@ -98,9 +100,53 @@ const MARK_TAGS = {
     sub:    'sub',
 }
 
+const validAligns = [
+    'pull-right',
+    'pull-left',
+    'text-justify',
+    'text-rtl',
+    'text-center',
+    'text-right']
 
-// Unsupported: div ['pull-right', 'pull-left', 'text-justify', 'text-rtl'], center
+/**
+ * Rules for converting from and to HTML. The first rules are highest priority,
+ * with unmatched cases (i.e. null return) falling through to those below.
+ */
 export const HtmlRules = [
+
+    // Catch-all debug wrapper
+    {
+        //deserialize: (el, next) => console.log("** deserialize: ", $.html(el).replace(/\n/g, "\\n")),
+        //serialize: (object, children) => console.log("** serialize:", object.type, object.kind, 'data:', JSON.stringify(object.data))
+    },
+
+    // Alignment wrapper
+    {
+        deserialize: (el, next) => {
+            if(el.tagName == 'center') {
+                return {
+                    kind: 'block',
+                    type: 'align',
+                    data: {align: 'text-center'},
+                    nodes: next(el.children)}
+            }
+            if(el.tagName == 'div') {
+                const align = el.attribs.class
+                if(! validAligns.includes(align)) return;
+                return {
+                    kind: 'block',
+                    type: 'align',
+                    data: {align},
+                    nodes: next(el.children)}
+            }
+        },
+        serialize: (object, children) => {
+            if(object.kind == 'block' && object.type == 'align') {
+                const align = object.data.get('align')
+                return <div className={align}>{children}</div>
+            }
+        }
+    },
 
     // Block rules
     {
@@ -119,13 +165,42 @@ export const HtmlRules = [
                 children = children.filter(el => el.type !== 'text')
             }
 
-            return {
+            // If this block-level node contains *any* <center> tags, strip them out and wrap-align node
+            let center = false;
+            children = children.reduce( (out, child) => {
+                if(child.tagName == 'center') {
+                    center = true;
+                    //child.children.map(c => out.push(c))
+                    out.push(...child.children)
+                } else {
+                    out.push(child)
+                }
+                return out
+            }, [])
+
+            // Generate output block with clean children
+            const block = {
                 kind: 'block',
                 type: type,
                 isVoid: (type == 'hr'),
                 nodes: next(children)
             }
+
+            // Wrap output block with align node if needed
+            if(center) {
+                console.log("** force-centering node")
+                return {
+                    kind: 'block',
+                    type: 'align',
+                    data: {align: 'text-center'},
+                    nodes: [block]
+                }
+            }
+
+            // Otherwise return plain block
+            return block
         },
+
         serialize: (object, children) => {
             if(object.kind !== 'block') return
             switch(object.type) {
@@ -180,28 +255,29 @@ export const HtmlRules = [
         deserialize: (el, next) => {
             switch(el.tagName) {
                 case 'iframe':
+                    const {src} = el.attribs
                     return {
                         kind: 'block',
                         type: 'embed',
                         isVoid: true,
-                        data: {src: el.attribs.src},
+                        data: {src},
                         nodes: next(el.children)
                     }
                 case 'img':
+                    const {src, alt} = el.attribs
                     return {
                         kind: 'inline',
                         type: 'image',
                         isVoid: true,
-                        data: {src: el.attribs.src, alt: el.attribs.al},
+                        data: {src, alt},
                         nodes: next(el.children)
                     }
                 case 'a':
                     const {href} = el.attribs
-                    if(!href) console.log("** ERR: deserialized <a> with no href")
                     return {
                         kind: 'inline',
                         type: 'link',
-                        data: {href: href},
+                        data: {href},
                         nodes: next(el.children)
                     }
                 case 'br':
@@ -210,6 +286,7 @@ export const HtmlRules = [
                         "ranges": [{"text": "\n"}]
                     }
                 case 'code':
+                    // may not be necessary after pr #406
                     if($(el).closest('pre').length == 0) {
                         return {
                             kind: 'mark',
@@ -220,17 +297,12 @@ export const HtmlRules = [
                         console.log("** skipping <code> within a <pre>")
                     }
             }
-
-            if(el.type == 'text') return
-            if(BLOCK_TAGS[el.tagName] || MARK_TAGS[el.tagName]) return
-            console.log("No deserializer for: ", el.tagName, el)
         },
 
         serialize: (object, children) => {
             if(object.kind == 'string') return;
             if(object.kind == 'inline' && object.type == 'link') {
                 const href = object.data.get('href')
-                if(!href) console.log("** ERR: serializing <a> with no href", JSON.stringify(object.data, null, 2))
                 return <a href={href}>{children}</a>
             }
             if(object.kind == 'block' && object.type == 'embed') {
@@ -243,9 +315,14 @@ export const HtmlRules = [
                 if(!src) console.log("** ERR: serializing image with no src...", JSON.stringify(object))
                 return <img src={src} alt={alt} />
             }
-            console.log("No serializer for: ", object.kind, JSON.stringify(object, null, 2), children)
         }
-    }
+    },
+
+    // debug uncaught nodes/elements
+    {
+        deserialize: (el, next) => {if(el.type !== 'text') console.log("** no deserializer for: ", $.html(el).replace(/\n/g, "\\n"))},
+        serialize: (object, children) => {console.log("** no serializer for:", object.type, object.kind, 'data:', JSON.stringify(object.data))}
+    },
 ]
 
 export const getMarkdownType = (chars) => {

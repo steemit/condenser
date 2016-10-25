@@ -102,8 +102,6 @@ export default function useGeneralApi(app) {
                 },
                 order: 'id DESC'
             });
-/* disabled, as [probably] did not set up proxies correctly, so all users share same IP:wq
-
             if (same_ip_account) {
                 const minutes = (Date.now() - same_ip_account.created_at) / 60000;
                 if (minutes < 10) {
@@ -111,7 +109,6 @@ export default function useGeneralApi(app) {
                     throw new Error('Only one Steem account allowed per IP address every 10 minutes');
                 }
             }
-*/
             if (user.waiting_list) {
                 console.log(`api /accounts: waiting_list user ${this.session.uid} #${user_id}`);
                 throw new Error('You are on the waiting list. We will get back to you at the earliest possible opportunity.');

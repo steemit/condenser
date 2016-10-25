@@ -255,29 +255,27 @@ export const HtmlRules = [
         deserialize: (el, next) => {
             switch(el.tagName) {
                 case 'iframe':
-                    const {src} = el.attribs
                     return {
                         kind: 'block',
                         type: 'embed',
                         isVoid: true,
-                        data: {src},
+                        data: {src: el.attribs.src},
                         nodes: next(el.children)
                     }
                 case 'img':
-                    const {src, alt} = el.attribs
                     return {
                         kind: 'inline',
                         type: 'image',
                         isVoid: true,
-                        data: {src, alt},
+                        data: {src: el.attribs.src,
+                               alt: el.attribs.alt},
                         nodes: next(el.children)
                     }
                 case 'a':
-                    const {href} = el.attribs
                     return {
                         kind: 'inline',
                         type: 'link',
-                        data: {href},
+                        data: {href: el.attribs.href},
                         nodes: next(el.children)
                     }
                 case 'br':
@@ -321,7 +319,7 @@ export const HtmlRules = [
     // debug uncaught nodes/elements
     {
         deserialize: (el, next) => {if(el.type !== 'text') console.log("** no deserializer for: ", $.html(el).replace(/\n/g, "\\n"))},
-        serialize: (object, children) => {console.log("** no serializer for:", object.type, object.kind, 'data:', JSON.stringify(object.data))}
+        serialize: (object, children) => {if(object.kind != 'string') console.log("** no serializer for:", object.type, object.kind, 'data:', JSON.stringify(object))}
     },
 ]
 

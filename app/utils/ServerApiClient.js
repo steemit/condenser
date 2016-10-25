@@ -41,7 +41,7 @@ function notificationsArrayToObject(data) {
 }
 
 export function getNotifications(account) {
-    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return Promise.resolve(null);
     const request = Object.assign({}, request_base, {method: 'get'});
     return fetch(`/api/v1/notifications/${account}`, request).then(r => r.json()).then(res => {
         return notificationsArrayToObject(res);
@@ -49,7 +49,8 @@ export function getNotifications(account) {
 }
 
 export function markNotificationRead(account, nn) {
-    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    console.log('-- markNotificationRead -->', account, nn);
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return Promise.resolve(null);
     const request = Object.assign({}, request_base, {method: 'put', mode: 'cors'});
     return fetch(`/api/v1/notifications/${account}/${NTYPES.indexOf(nn)}`, request).then(r => r.json()).then(res => {
         return notificationsArrayToObject(res);

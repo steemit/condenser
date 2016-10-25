@@ -13,6 +13,9 @@ export default function useNotificationsApi(app) {
 
     // get all notifications for account
     router.get('/notifications/:account', function *() {
+        // for debugging:
+        // this.body = [10, 1, 2, 3, 4, 0, 0, 0, 0, 0, 0];
+        // return;
         const account = this.params.account;
         // TODO: make sure account name matches session
         console.log('-- GET /notifications/:account -->', account);
@@ -31,8 +34,13 @@ export default function useNotificationsApi(app) {
     router.put('/notifications/:account/:id', function *() {
         const {account, id} = this.params;
         if (!id || id < 0) {
-            body = null; return;
+            this.body = []; return;
         }
+        // for debugging:
+        // this.body = [10, 1, 2, 3, 4, 0, 0, 0, 0, 0, 0];
+        // this.body[0] = this.body[0] - this.body[id];
+        // this.body[id] = 0;
+        // return;
         console.log('-- PUT /notifications/:account/:id -->', account, id);
         try {
             const res = yield Tarantool.instance().call('notification_read', account, id);

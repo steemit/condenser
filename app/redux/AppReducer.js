@@ -58,7 +58,7 @@ export default function reducer(state = defaultState, action) {
     if (action.type === 'REMOVE_NOTIFICATION') {
         res = res.update('notifications', s => s.delete(action.payload.key));
     }
-    if (action.type === 'UPDATE_NOTIFICOUNTERS') {
+    if (action.type === 'UPDATE_NOTIFICOUNTERS' && action.payload) {
         res = res.set('notificounters', Map(action.payload));
     }
     return res;

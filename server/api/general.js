@@ -172,7 +172,7 @@ export default function useGeneralApi(app) {
             if (db_account) this.session.user = db_account.user_id;
             this.body = JSON.stringify({status: 'ok'});
         } catch (error) {
-            console.error('Error in /login_account api call', this.session.uid, error);
+            console.error('Error in /login_account api call', this.session.uid, error.message);
             this.body = JSON.stringify({error: error.message});
             this.status = 500;
         }
@@ -206,7 +206,7 @@ export default function useGeneralApi(app) {
             this.body = JSON.stringify({status: 'ok'});
             recordWebEvent(this, type, str_value);
         } catch (error) {
-            console.error('Error in /record_event api call', error);
+            console.error('Error in /record_event api call', error.message);
             this.body = JSON.stringify({error: error.message});
             this.status = 500;
         }

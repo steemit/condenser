@@ -81,7 +81,7 @@
 	.CountDowns__blocks {
 		p { font-size: 24px; };
 	}
-	.CountDowns__counters { margin-bottom: 100px; }
+	.CountDowns__counters { margin-bottom: 70px; }
 	.CountDowns__counter {
 		margin-left: auto;
 		margin-right: auto;
@@ -515,6 +515,13 @@
 		color: #505050;
 		font-size: 15px;
 		font-weight: bold;
+	}
+	.Press__action {
+		margin-top: 100px;
+		margin-bottom: 80px;
+		small {
+			display: block;
+		}
 	}
 }
 

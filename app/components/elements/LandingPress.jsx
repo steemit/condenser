@@ -64,15 +64,12 @@ export default class LandingPress extends React.Component {
 						<img src="images/landing/steem.png" alt="логотип steem" />
 					</div>
 				</div> */}
-				{/* Дима сказал убрать кнопку */}
-				{/*
 				<div className="row Press__action">
 					<div className="small-12 columns">
 						{this.props.button}
-						<p className="Press__action__p">Продажа Голоса закончиться при достижении 3300 ฿</p>
+						<small>Продажа Голоса закончиться при достижении 5000 ฿</small>
 					</div>
 				</div>
-				*/}
 				<hr />
 			</section>
 		)

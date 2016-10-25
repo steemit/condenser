@@ -27,7 +27,6 @@ function createDate(year, month, day, hours, minutes) {
 	//const today = new Date()
 	//const mins = (minutes == 0 || !minutes) ? 0 : today.getMinutes()
 	const date = new Date(Date.UTC(year, month, day, hours || 0, minutes || 0, 0));
-  console.log(date)
 	return date
 }
 
@@ -41,8 +40,8 @@ class Landing extends React.Component {
 
     render() {
 		const {current_account_name} = this.props
-		const buyGolosLink = current_account_name ? `/@${current_account_name}/crowdsale` : '/login.html'
-		const buyGolosButton = <a href={buyGolosLink} className="button Landing__button_big">Купи <strong>Силу Голоса</strong></a>
+		const buyGolosLink = current_account_name ? `/@${current_account_name}/crowdsale` : '/create_account'
+		const buyGolosButton = <a href={buyGolosLink} className="button Landing__button_big BuyGolosButton">Купи <strong>Силу Голоса</strong></a>
 		// TODO move this constant into <CountDowns />
 		const prefill = crowdsaleStartAt > Date.now()
         return (
@@ -60,7 +59,7 @@ class Landing extends React.Component {
 				<BlockchainRevolution />
 				<Documentation />
 				<Faq />
-				<Distribution />
+				<Distribution button={buyGolosButton} />
 				<WhoWeAre />
 				<Team />
 				<Partners />

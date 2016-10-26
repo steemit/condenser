@@ -19,14 +19,15 @@ class Settings extends React.Component {
         return <div className="Settings">
                     <div className="row">
                         {/* currently language chooser is completely broken */}
-                        {/* <div className="small-12 medium-6 large-3 columns">
+                        <div className="small-12 medium-6 large-3 columns">
                             <label>Выберите язык
                               <select defaultValue={store.get('language')} onChange={this.handleLanguageChange}>
                                 <option value="ru">русский</option>
                                 <option value="en">english</option>
+                                <option value="ua">українська</option>
                               </select>
                             </label>
-                        </div> */}
+                        </div>
                         <div className="small-12 medium-6 large-3 columns">
                             {/* TODO add currencies */}
                             <label>Выберите валюту

@@ -21,13 +21,16 @@ translateHtml works the same, expcept it renders string with html tags in it
 // locale data is needed for various messages, ie 'N minutes ago'
 import enLocaleData from 'react-intl/locale-data/en';
 import ruLocaleData from 'react-intl/locale-data/ru';
-addLocaleData([...enLocaleData, ...ruLocaleData]);
+// currently there is no urkanian plurals available, so we importing russian one. Temporary
+import uaLocaleData from 'react-intl/locale-data/ru';
+addLocaleData([...enLocaleData, ...ruLocaleData, ...uaLocaleData]);
 
 // Our translated strings
 
 import { ru } from './locales/ru';
 import { en } from './locales/en';
-const messages = {ru, en}
+import { ua } from './locales/ua';
+const messages = {ru, en, ua}
 
 // exported function placeholders
 // this is needed for proper export before react-intl functions with locale data,
@@ -99,6 +102,7 @@ class Translator extends React.Component {
 		let language = this.props.locale; // usually 'en'
 		if (process.env.BROWSER) {
 			const storredLanguage = store.get('language')
+			console.log('storredLanguage', storredLanguage)
 			if (storredLanguage) language = storredLanguage
 		}
 		// let language = DEFAULT_LANGUAGE; // usually 'en'

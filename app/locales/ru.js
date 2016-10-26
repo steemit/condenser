@@ -167,8 +167,8 @@ const ru = {
 	transfer_amount_to: "Перевод {amount} на счёт",
 	recieve_amount_from: "Получено {amount} от",
 	transfer_amount_from: "Перевод {amount} со счёта",
-  transfer_amount_steem_power_to: "Перевод {amount} "+OWNERSHIP_TICKER+" в Силу Голоса",
-	stop_power_down: "Остабление Силы Голоса остановлено",
+	transfer_amount_steem_power_to: "Перевод {amount} "+OWNERSHIP_TICKER+" в Силу Голоса",
+	stop_power_down: "Ослабление Силы Голоса остановлено",
 	start_power_down_of: "Ослабление Силы Голоса начато с",
 	curation_reward_of_INVEST_TOKEN_for: 'Кураторские вознаграждения {reward} ' + INVEST_TOKEN + ' за',
 	author_reward_of_INVEST_TOKEN_for: 'Авторские вознаграждения {payout} и {reward} ' + INVEST_TOKEN + ' за',
@@ -193,7 +193,7 @@ const ru = {
 	recover_account: 'Восстановить аккаунт',
 	new: 'Новое', // ex. 'Generated Password (new)', but not exclusively
 	backup_password_by_storing_it: 'Сделайте резервную копию в менеджере паролей или текстовом файле',
-	click_to_generate_password: 'Нажмите чтобы сгененировать пароль',
+	click_to_generate_password: 'Нажмите, чтобы сгененировать пароль',
 	re_enter_generate_password: 'Повторно введите пароль',
 	understand_that_APP_NAME_cannot_recover_password: 'Я понимаю что ' + APP_NAME + ' не сможет восстановить утраченный пароль',
 	i_saved_password: 'Я надежно сохранил сгенерированный пароль',
@@ -225,7 +225,7 @@ const ru = {
 	login_to_see_memo: 'войти чтобы увидеть заметку',
 	post: 'Пост', // places used: tooltip in MediumEditor
 	unknown: 'Неизвестный', // exp.: 'unknown error'
-	account_name_is_not_available: 'Имя аккаунта не доступно',
+	account_name_is_not_available: 'Имя аккаунта недоступно',
 	type: 'Тип',
 	price: 'Цена',
 	// Market.jsx

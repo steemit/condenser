@@ -389,7 +389,7 @@ class ReplyEditor extends React.Component {
                             </div>}
                         </div>
                         {!loading && !rte && markdownViewerText && <div className={'Preview ' + vframe_section_shrink_class}>
-                            {!isHtml && <div className="float-right"><a target="_blank" href="https://guides.github.com/features/mastering-markdown/">{translate("markdown_is_supported")}.</a></div>}
+                            {!isHtml && <a target="_blank" href="https://guides.github.com/features/mastering-markdown/"><small>{translate("markdown_is_supported")}.</small></a>}
                             <h6>{translate("preview")}</h6>
                             <MarkdownViewer formId={formId} text={markdownViewerText} canEdit jsonMetadata={jsonMetadata} large={isStory} noImage={noImage} />
                         </div>}

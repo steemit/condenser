@@ -42,7 +42,7 @@ class SignUp extends React.Component {
                         <br />
                         {translate("personal_info_will_be_private")}
                         {' '}
-                        <a href="/privacy.html" target="_blank">
+                        <a href="/legal/terms_of_service.pdf" target="_blank">
                             {translate("personal_info_will_be_private_link")}
                         </a>.
                     </p>
@@ -106,7 +106,7 @@ class SignUp extends React.Component {
                     <br />
                     <p className="secondary">
                         {translate("by_verifying_you_agree")}
-                        {' '}<a href="/tos.html" target="_blank">
+                        {' '}<a href="/legal/privacy_policy.pdf" target="_blank">
                                 {translate("by_verifying_you_agree_terms_and_conditions")}
                             </a>.
                     </p>

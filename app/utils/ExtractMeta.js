@@ -8,13 +8,13 @@ function addSiteMeta(metas) {
     metas.push({property: 'og:site_name', content: 'Голос'});
     metas.push({property: 'og:title', content: 'Голос'});
     metas.push({property: 'og:description', content: SITE_DESCRIPTION});
-    metas.push({property: 'og:image', content: 'https://test.golos.io/images/golos-share.png'});
+    metas.push({property: 'og:image', content: 'https://golos.io/images/golos-share.png'});
     metas.push({property: 'fb:app_id', content: $STM_Config.fb_app});
     metas.push({name: 'twitter:card', content: 'summary'});
     metas.push({name: 'twitter:site', content: '@goloschain'}); //TODO
     metas.push({name: 'twitter:title', content: 'Голос'});
     metas.push({name: 'twitter:description', site_desc: SITE_DESCRIPTION});
-    metas.push({name: 'twitter:image', content: 'https://test.golos.io/images/golos-share.png'});
+    metas.push({name: 'twitter:image', content: 'https://golos.io/images/golos-share.png'});
 }
 
 export default function extractMeta(chain_data, rp) {
@@ -24,10 +24,10 @@ export default function extractMeta(chain_data, rp) {
         const content = chain_data.content[post];
         if (content) {
             const d = extractContent(objAccessor, content, false);
-            const url = 'https://test.golos.io' + d.link;
+            const url = 'https://golos.io' + d.link;
             const title = d.title + ' — Голос';
-            const image = d.image_link ? d.image_link : 'https://test.golos.io/images/golos-share.png';
-            const twimage = d.image_link ? d.image_link : 'https://test.golos.io/images/golos-twshare.png';
+            const image = d.image_link ? d.image_link : 'https://golos.io/images/golos-share.png';
+            const twimage = d.image_link ? d.image_link : 'https://golos.io/images/golos-twshare.png';
             metas.push({title});
             metas.push({canonical: url});
             metas.push({name: 'description', content: d.desc});

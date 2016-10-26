@@ -52,6 +52,12 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
         if (location && location.pathname.indexOf("/ico") != -1) {
             return (
                 <ul className={mcn + ' landing'}>
+                    <li className={lcn + ' buttons'}>
+                        <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
+                    </li>
+                    <li className={lcn}>
+                        <Link className="button success" spy to="CountDowns" smooth offset={-110} duration={500}>Краудсейл</Link>
+                    </li>
                     <li className={lcn}>
                         <Link spy to="what-is-golos" smooth offset={-110} duration={500}>Видео</Link>
                     </li>
@@ -83,6 +89,9 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                 </ul>
             );
             return      <ul className={mcn + mcl + ' landing'}>
+                            <li className={lcn + ' buttons'}>
+                                <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
+                            </li>
                             <li className={lcn}>
                                 <Link spy to="what-is-golos" smooth offset={-110} duration={500}>Видео</Link>
                             </li>
@@ -96,9 +105,9 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                                 <Link spy to="team" smooth offset={-110} duration={500}>Команда</Link>
                             </li>
                             <li className={lcn + ' image-wrapper'}>
-                                <a href="https://test.golos.io/login.html">
+                                <a href="https://golos.io/login.html">
                                     <img src="images/user.png" width="36" height="36" />
-                                    <span>Тестовый Вход</span>
+                                    <span>Вход</span>
                                 </a>
                             </li>
                             <li className={lcn}><LoadingIndicator type="circle" inline /></li>
@@ -114,7 +123,12 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
 */
         return (
             <ul className={mcn}>
-
+                <li className={lcn + ' buttons'}>
+                    <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
+                </li>
+                <li className={lcn + ' buttons'}>
+                    <a href="/ico" className="button success">Краудсейл</a>
+                </li>
                 <li className={lcn}><a href="/static/search.html" title={search}>{vertical ? <span>{search}</span> : <Icon name="search" />}</a></li>
                 {submit_story}
                 <LinkWithDropdown
@@ -139,6 +153,12 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
     if (probablyLoggedIn) {
         if (location && location.pathname.indexOf("/ico") != -1) {
             return      <ul className={mcn + mcl + ' landing'}>
+                            <li className={lcn + ' buttons'}>
+                                <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
+                            </li>
+                            <li className={lcn}>
+                                <Link className="button success" spy to="CountDowns" smooth offset={-110} duration={500}>Краудсейл</Link>
+                            </li>
                             <li className={lcn}>
                                 <Link spy to="what-is-golos" smooth offset={-110} duration={500}>Видео</Link>
                             </li>
@@ -152,9 +172,9 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                                 <Link spy to="team" smooth offset={-110} duration={500}>Команда</Link>
                             </li>
                             <li className={lcn + ' image-wrapper'}>
-                                <a href="https://test.golos.io/login.html">
+                                <a href="https://golos.io/login.html">
                                     <img src="images/user.png" width="36" height="36" />
-                                    <span>Тестовый Вход</span>
+                                    <span>Вход</span>
                                 </a>
                             </li>
                             <li className={lcn}><LoadingIndicator type="circle" inline /></li>
@@ -166,6 +186,12 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
 
         return (
             <ul className={mcn + mcl}>
+                <li className={lcn + ' buttons'}>
+                    <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
+                </li>
+                <li className={lcn + ' buttons'}>
+                    <a href={`/ico`} className="button success">Краудсейл</a>
+                </li>
                 {!vertical && <li><a href="/static/search.html" title="Поиск"><Icon name="search" /></a></li>}
                 <li className={lcn}><LoadingIndicator type="circle" inline /></li>
                 {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
@@ -177,6 +203,12 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
 
     if (location && location.pathname.indexOf("/ico") != -1) {
         return  <ul className={mcn + mcl + ' landing'}>
+                    <li className={lcn + ' buttons'}>
+                        <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
+                    </li>
+                    <li className={lcn}>
+                        <Link className="button success" spy to="CountDowns" smooth offset={-110} duration={500}>Краудсейл</Link>
+                    </li>
                     <li className={lcn}>
                         <Link spy to="what-is-golos" smooth offset={-110} duration={500}>Видео</Link>
                     </li>
@@ -190,9 +222,9 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                         <Link spy to="team" smooth offset={-110} duration={500}>Команда</Link>
                     </li>
                     <li className={lcn + ' image-wrapper'}>
-                        <a href="https://test.golos.io/login.html">
+                        <a href="https://golos.io/login.html">
                             <img src="images/user.png" width="36" height="36" />
-                            <span>Тестовый Вход</span>
+                            <span>Вход</span>
                         </a>
                     </li>
                     {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
@@ -202,6 +234,12 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
     }
     return (
             <ul className={mcn + mcl}>
+                <li className={lcn + ' buttons'}>
+                    <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
+                </li>
+                <li className={lcn + ' buttons'}>
+                    <a href={`/ico`} className="button success">Краудсейл</a>
+                </li>
                 {!vertical && <li><a href="/static/search.html" title="Поиск"><Icon name="search" /></a></li>}
                 <li className={lcn}><a href="/create_account" onClick={showSignUp}>{translate('sign_up')}</a></li>
                 <li className={lcn}><a href="/login.html" onClick={showLogin}>{translate('login')}</a></li>

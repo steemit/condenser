@@ -13,8 +13,8 @@ export const DEBT_TOKEN = 'Золотой' // 'STEEM DOLLAR'
 // export const DEBT_TOKEN_UPPERCASE = 'Golos Backed Gold' // 'STEEM DOLLAR'
 // export const DEBT_TOKEN_SHORT = 'GBG' // 'SD'
 export const CURRENCY_SIGN = '₽≈' // '$'
-export const LANDING_PAGE_URL = 'http://golos.io'
-export const WHITEPAPER_URL = 'https://github.com/GolosChain/wiki'
+export const LANDING_PAGE_URL = 'https://golos.io/ico'
+export const WHITEPAPER_URL = 'https://wiki.golos.io/1-introduction/golos_whitepaper.html'
 export const SEGMENT_ANALYTICS_KEY = 'F7tldQJxt491gXYqDGi5TkTT4wFpSPps'
 // used on application internationalization bootstrap
 export const DEFAULT_LANGUAGE = 'ru' // 'en'
@@ -32,12 +32,6 @@ export const ALLOWED_CURRENCIES = ['RUB', 'UAH', 'BYN', 'USD', 'EUR', 'CNY', 'GE
 export const FRACTION_DIGITS = 2 // default amount of decimal digits
 export const FRACTION_DIGITS_MARKET = 3 // accurate amount of deciaml digits (example: used in market)
 
-// Рубли, гривны, белорусские рубли
-// + Тенге, EUR, USD, CNY
-// Грузинские тугрики (латы)
-
 export const SITE_DESCRIPTION = 'Голос - социальная сеть, построенная на публичном блокчейне. Вознаграждение пользователей осуществляется за счет дополнительной эмиссии токенов. При этом распределением токенов управляют текущие пользователи сети через голосование за лучший контент.'
 
-// export const LANDING_PAGE_URL =
-// export const WHITEPAPER_URL =
 export const FIRST_DATE = new Date(Date.UTC(2016, 7, 1)); //1 september

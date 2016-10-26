@@ -223,12 +223,12 @@ class App extends React.Component {
               </ul>
               <ul className="vertical menu">
                   <li>
-                      <a href="/privacy.html" onClick={this.navigate} rel="nofollow">
+                      <a href="/legal/terms_of_service.pdf" onClick={this.navigate} rel="nofollow">
                           {translate("privacy_policy")}
                       </a>
                   </li>
                   <li>
-                      <a href="/tos.html" onClick={this.navigate} rel="nofollow">
+                      <a href="/legal/privacy_policy.pdf" onClick={this.navigate} rel="nofollow">
                           {translate("terms_of_service")}
                       </a>
                   </li>

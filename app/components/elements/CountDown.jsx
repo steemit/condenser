@@ -13,16 +13,17 @@ export default class CountDown extends React.Component {
 		date: PropTypes.object.isRequired,
 	}
 
-	componentWillMount() {
-		this.setState ({ timeLeft: this.props.date.getTime() - Date.now() })
-  }
-
-
+	state = {
+		timeLeft: this.props.date ? this.props.date.getTime() - Date.now() : 0
+	}
 	// start timer on mount
 	// do not start timer while server-rendering to avoid errors
 	componentDidMount() { if (process.env.BROWSER) this.startCountDown() }
+
 	// && clear timer on unmount
-	componentWillUnmount() { clearInterval() }
+	componentWillUnmount() {
+		if (process.env.BROWSER) this.clearInterval()
+	}
 
 	// use extra method to clear interval because it will be called from various places,
 	// and refactoring will likely to brake something if used otherwise
@@ -34,7 +35,7 @@ export default class CountDown extends React.Component {
 		const lastDate = this.props.date;
 
 		const spanDays = (lastDate.getTime() - firstDate.getTime())/_ms_in_day;
-	  const diffDays = (currentDate - firstDate.getTime())/_ms_in_day; //
+		const diffDays = (currentDate - firstDate.getTime())/_ms_in_day; //
 		return diffDays/spanDays;
 	}
 

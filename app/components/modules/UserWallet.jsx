@@ -84,9 +84,16 @@ class UserWallet extends React.Component {
         const sbd_balance_savings = parseFloat(savings_sbd_balance.split(' ')[0]);
         const total_sbd = sbd_balance + sbd_balance_savings + savings_sbd_pending
 
+        // set displayed estimated value
         let total_value = '$' + numberWithCommas(
             ((total_steem * price_per_steem) + total_sbd
         ).toFixed(2))
+
+        // format spacing on estimated value based on account state
+        let estimate_output = <p>{total_value}</p>;
+        if (isMyAccount) {
+            estimate_output = <p>{total_value}&nbsp; &nbsp; &nbsp;</p>;
+        }
 
         /// transfer log
         let idx = 0
@@ -212,10 +219,7 @@ class UserWallet extends React.Component {
                     Estimated Account Value<br /><span className="secondary">{valueTip}</span>
                 </div>
                 <div className="column small-12 medium-4">
-                    {total_value}
-                    &nbsp;
-                    &nbsp;
-                    &nbsp;
+                    {estimate_output}
                 </div>
             </div>
             <div className="UserWallet__balance row">

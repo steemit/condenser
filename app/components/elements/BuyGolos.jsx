@@ -1,98 +1,99 @@
 import React from 'react'
+import isEmpty from 'lodash/isEmpty';
+import {connect} from 'react-redux';
 
+// fetch data
+@connect(
+	state => {
+		const current_user 	= 	state.user.get('current')
+		const accountImm 	= 	current_user
+								? state.global.getIn(['accounts', current_user.name])
+								: {}
+
+		let account = {}
+		if (!isEmpty(accountImm) && accountImm) account = accountImm.toJS()
+		// const current_account = current_user && state.global.getIn(['accounts', current_user.get('username')])
+		return {
+			discussions: state.global.get('discussion_idx'),
+			global: state.global,
+			current_user,
+			account
+			// current_account,
+		};
+	}
+)
 export default class BuyGolos extends React.Component {
 
 	state = {
-		transactions: [
-			{
-				address: 'STM7NBSbGHeDCTt9a6qD58egvyz6ouvLR',
-				amountBtc: '20',
-				amountGolos: '1200'
-			},
-			{
-				address: 'STM7NBSbGHeDCTt9a6qD58egvyz6ouvLR',
-				amountBtc: '20',
-				amountGolos: '1200'
-			},
-			{
-				address: 'STM7NBSbGHeDCTt9a6qD58egvyz6ouvLR',
-				amountBtc: '20',
-				amountGolos: '1200'
-			},
-		],
-		bitcoinAddress: '1HgBvtsNYTgbkcHHpDzgJioVSjraTkhzCg',
+		icoAddress: '',
+		transactions: [],
+		isOwnAccount: false,
+		checkingInProgress: false,
+		accountHaveBeenChecked: false,
+		metaData: this.props.account.json_metadata || {},
 	}
 
-	/**
-	 * if url contains 'buy_golos' scroll to it
-	 */
-	componentWillMount() {
-		if (!this.icoAddress() && this.isOwn()) {
-			console.log("!!! NO ICO_ADDRESS FOR CURRENT USER !!!")
-    }
-  }
+	checkAccount = () => {
+		this.setState({ checkingInProgress: true })
 
-	componentDidMount() {
-		if (process.env.BROWSER) {
-			if (window.location.href.includes('#buy_golos')) {
-				const el = document.getElementById("buy_golos")
-				// IE9 does not support .scrollIntoView
-				if (!!el && el.scrollIntoView) el.scrollIntoView();
-			}
-		}
-	}
-	log(wut) {
-    console.log(wut);
-  }
-
-  testClick() {
-		//this.log(this.props.global);
-		this.log(this.props.current_user)
-		this.log(this.allMeta())
-		this.log(this.icoAddress())
-		this.log("is own: " + this.isOwn())
-  }
-
-	isOwn = () => {
 		let user = this.props.current_user
 		user = user && user._root && user._root.entries;
-		let username = user.find(it => it[0] == 'username');
- 		username = username[1]
-		let accountname = this.props.account && this.props.account.name
+		let username = user.find(it => it[0] == 'username')
+		username = username[1]
+		const accountname = this.props.account && this.props.account.name
+		const isOwnAccount = username && (username === accountname)
 
-		return username && (username === accountname)
-  }
+		this.setState({
+			checkingInProgress: false,
+			accountHaveBeenChecked: true,
+			isOwnAccount: username && (username === accountname)
+		})
 
-	allMeta() {
-		return this.props.account.json_metadata || "{}"
-  }
+		if (isOwnAccount && !this.state.icoAddress) this.generateAddress()
+	}
 
-	icoAddress() {
-		let allMeta = JSON.parse(this.allMeta());
-		let address = allMeta && allMeta.ico_address
-		return address
-  }
+	setAddress = () => {
+		const metaData = JSON.parse(this.state.metaData)
+		const icoAddress = metaData && metaData.ico_address
+		this.setState({ icoAddress })
+	}
+
+	generateAddress = () => {
+		//
+		// some logic here
+		//
+		// set address in the end
+		// this.setState({ icoAddress })
+	}
+
+	testClick = () => {
+		console.log(this.icoAddress)
+		console.log(this.state.metaData)
+		console.log(this.props.current_user)
+		console.log("is own: " + this.state.isOwnAccount)
+	}
 
 	render() {
-		const {bitcoinAddress, transactions} = this.state
+		const {
+			metaData,
+			icoAddress,
+			isOwnAccount,
+			transactions,
+			bitcoinAddress,
+			checkingInProgress,
+			accountHaveBeenChecked
+		} = this.state
 
-		function renderTable() {
-			if (!transactions) return null
-			return transactions.map((item, index) => {
-				return 	<tr key={index}>
-							<td>{item.address}</td>
-							<td>{item.amountBtc}</td>
-							<td>{item.amountGolos}</td>
-						</tr>
-			})
-		}
+		// run necessery checks
+		if (!icoAddress && !isEmpty(metaData)) this.setAddress()
+		if (!checkingInProgress && !isOwnAccount && accountHaveBeenChecked) this.checkAccount()
 
 		return 	<div id="buy_golos" className="row">
 					<div className="column small-9 text-center">
 						<h2>Покупка Голосов</h2>
-						<p>{bitcoinAddress}</p>
+						<p>{icoAddress}</p>
 						<p>Перечислите биткоины сюда.</p>
-						<p>Вы покупаете Силу Голоса не леквидные</p>
+						<p>Вы покупаете Силу Голоса неликвидные</p>
 					</div>
 					<div className="column small-3">
 						<img src={`https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=${bitcoinAddress}`} alt="your QR code" />
@@ -107,12 +108,22 @@ export default class BuyGolos extends React.Component {
 								</tr>
 							</thead>
 							<tbody>
-								{renderTable()}
+								{
+									transactions.map((item, index) => {
+										return 	<tr key={index}>
+													<td>{item.address}</td>
+													<td>{item.amountBtc}</td>
+													<td>{item.amountGolos}</td>
+												</tr>
+									})
+								}
 							</tbody>
 						</table>
 					</div>
-					<div className="column small-12"><button onClick={this.testClick.bind(this)}>"Clatz me"</button>
-					<span>{this.icoAddress}</span></div>
+					<div className="column small-12">
+						<button onClick={this.testClick}>"Clatz me"</button>
+						<span>{icoAddress}</span>
+					</div>
 				</div>
 	}
 }

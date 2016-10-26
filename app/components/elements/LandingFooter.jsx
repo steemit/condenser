@@ -9,7 +9,7 @@ export default class LandingFooter extends React.Component {
 		const menuItems = [
 			[
 				{name: 'Приложение', url: 'https://golos.io/'},
-				{name: 'Поиск по блокчейну', url: 'http://explorer.golos.io/'},
+				{name: 'Поиск по блокчейну', url: 'https://golosdb.com/'},
 				{name: 'Документация', url: 'https://wiki.golos.io/'},
 				{name: 'Github', url: 'https://github.com/goloschain'}
 			],

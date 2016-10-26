@@ -101,7 +101,7 @@ class CurationRewards extends React.Component {
                 <div className="column small-12 medium-8">
                     Curation rewards last 24 hours:
                 </div>
-                <div className="column small-12 medium-3">
+                <div className="column small-12 medium-4">
                     {numberWithCommas(vestsToSp(this.props.state, rewards24 + " VESTS")) + " STEEM POWER"}
                 </div>
             </div>
@@ -109,7 +109,7 @@ class CurationRewards extends React.Component {
                 <div className="column small-12 medium-8">
                     Daily average curation rewards:
                 </div>
-                <div className="column small-12 medium-3">
+                <div className="column small-12 medium-4">
                     {numberWithCommas(vestsToSp(this.props.state, averageCuration + " VESTS")) + " STEEM POWER"}
                 </div>
             </div>
@@ -117,7 +117,7 @@ class CurationRewards extends React.Component {
                 <div className="column small-12 medium-8">
                     {!hasFullWeek ? "Estimated curation rewards last week" : "Curation rewards last week"}
                 </div>
-                <div className="column small-12 medium-3">
+                <div className="column small-12 medium-4">
                     {numberWithCommas(vestsToSp(this.props.state, (hasFullWeek ? rewardsWeek : averageCuration * 7) + " VESTS")) + " STEEM POWER"}
                 </div>
             </div>

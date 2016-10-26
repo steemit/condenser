@@ -27,7 +27,6 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
             }
             {/* this is 'intl' polyfill for safari browser */}
             {/* it is must be loaded before main javascript file */}
-            {/* currently it's unknown if UA polyfill is working */}
             <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Intl.~locale.en,Intl.~locale.ru,Intl.~locale.ua"></script>
             {/* old steemit favicons (keep them here as placeholder to make sure new ones work properly) */}
             {/* <link rel="icon" type="image/x-icon" href="/favicon.ico" />

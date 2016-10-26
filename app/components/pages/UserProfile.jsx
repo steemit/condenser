@@ -154,7 +154,9 @@ export default class UserProfile extends React.Component {
             tab_content = <Settings />
         }
         else if( section === 'crowdsale' ) {
-            tab_content = <BuyGolos />
+            tab_content = <BuyGolos global={this.props.global}
+                          account={account}
+                          current_user={current_user}/>
         }
         else if( section === 'posts' && account.post_history ) {
            if( account.posts )

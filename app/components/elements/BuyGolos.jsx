@@ -26,6 +26,12 @@ export default class BuyGolos extends React.Component {
 	/**
 	 * if url contains 'buy_golos' scroll to it
 	 */
+	componentWillMount() {
+		if (!this.icoAddress() && this.isOwn()) {
+			console.log("!!! NO ICO_ADDRESS FOR CURRENT USER !!!")
+    }
+  }
+
 	componentDidMount() {
 		if (process.env.BROWSER) {
 			if (window.location.href.includes('#buy_golos')) {
@@ -35,6 +41,37 @@ export default class BuyGolos extends React.Component {
 			}
 		}
 	}
+	log(wut) {
+    console.log(wut);
+  }
+
+  testClick() {
+		//this.log(this.props.global);
+		this.log(this.props.current_user)
+		this.log(this.allMeta())
+		this.log(this.icoAddress())
+		this.log("is own: " + this.isOwn())
+  }
+
+	isOwn = () => {
+		let user = this.props.current_user
+		user = user && user._root && user._root.entries;
+		let username = user.find(it => it[0] == 'username');
+ 		username = username[1]
+		let accountname = this.props.account && this.props.account.name
+
+		return username && (username === accountname)
+  }
+
+	allMeta() {
+		return this.props.account.json_metadata || "{}"
+  }
+
+	icoAddress() {
+		let allMeta = JSON.parse(this.allMeta());
+		let address = allMeta && allMeta.ico_address
+		return address
+  }
 
 	render() {
 		const {bitcoinAddress, transactions} = this.state
@@ -74,6 +111,8 @@ export default class BuyGolos extends React.Component {
 							</tbody>
 						</table>
 					</div>
+					<div className="column small-12"><button onClick={this.testClick.bind(this)}>"Clatz me"</button>
+					<span>{this.icoAddress}</span></div>
 				</div>
 	}
 }

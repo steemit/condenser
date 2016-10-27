@@ -53,6 +53,7 @@ class TransferHistoryRow extends React.Component {
                 other_account = data.to;
             }
         }
+<<<<<<< HEAD
         else if( type === 'transfer' ) {
             const { amount } = data
             if( data.from === context ) {
@@ -64,13 +65,41 @@ class TransferHistoryRow extends React.Component {
                 other_account = data.from;
             } else {
                 description_start += translate('transfer_amount_from', {amount});
+=======
+        else if(/^transfer$|^transfer_to_savings$|^transfer_from_savings$/.test(type)) {
+            // transfer_to_savings
+            const fromWhere =
+                type === 'transfer_to_savings' ? `to savings ` :
+                type === 'transfer_from_savings' ? `from savings ` :
+                ''
+
+            if( data.from === context ) {
+                description_start += `Transfer ${fromWhere}${data.amount} to `;
+                other_account = data.to;
+            }
+            else if( data.to === context ) {
+                description_start += `Receive ${fromWhere}${data.amount} from `;
+                other_account = data.from;
+            } else {
+                description_start += `Transfer ${fromWhere}${data.amount} from `;
+>>>>>>> steemit/develop
                 other_account = data.from;
                 description_end += ` ${translate('to')} ${data.to}`;
             }
+<<<<<<< HEAD
         } else if( type === 'withdraw_vesting' ) {
             console.log(data)
             if( data.vesting_shares === '0.000000 ' + VEST_TICKER )
                 description_start += translate('stop_power_down')
+=======
+            if(data.request_id != null)
+                description_end += ` (request ${data.request_id})`
+        } else if (type === 'cancel_transfer_from_savings') {
+            description_start += `Cancel transfer from savings (request ${data.request_id})`;
+        } else if( type === 'withdraw_vesting' ) {
+            if( data.vesting_shares === '0.000000 VESTS' )
+                description_start += "Stop power down";
+>>>>>>> steemit/develop
             else
                 description_start += translate('start_power_down_of') + " " + data.vesting_shares;
         } else if( type === 'curation_reward' ) {

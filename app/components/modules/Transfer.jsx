@@ -5,13 +5,18 @@ import {Map} from 'immutable';
 import transaction from 'app/redux/Transaction';
 import user from 'app/redux/User';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+import {transferTips} from 'app/utils/Tips'
 import {powerTip, powerTip2, powerTip3} from 'app/utils/Tips'
 import {browserTests} from 'shared/ecc/test/BrowserTests'
 import {validate_account_name} from 'app/utils/ChainValidation';
+<<<<<<< HEAD
 import { translate } from 'app/Translator';
 import { formatCoins } from 'app/utils/FormatCoins';
 import { APP_NAME, OWNERSHIP_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, INVEST_TOKEN,
 OWNERSHIP_TICKER, DEBT_TICKER, VEST_TICKER } from 'config/client_config';
+=======
+import {countDecimals} from 'app/utils/ParsersAndFormatters'
+>>>>>>> steemit/develop
 
 /** Warning .. This is used for Power UP too. */
 class TransferForm extends Component {
@@ -25,14 +30,15 @@ class TransferForm extends Component {
 
     constructor(props) {
         super()
-        this.state = {advanced: !props.toVesting}
+        const {transferToSelf} = props
+        this.state = {advanced: !transferToSelf}
         this.initForm(props)
     }
 
     componentDidMount() {
         setTimeout(() => {
-            const {to} = this.state
-            if (!to.value || to.value === '')
+            const {advanced} = this.state
+            if (advanced)
                 ReactDOM.findDOMNode(this.refs.to).focus()
             else
                 ReactDOM.findDOMNode(this.refs.amount).focus()
@@ -41,25 +47,37 @@ class TransferForm extends Component {
 
     onAdvanced = (e) => {
         e.preventDefault() // prevent form submission!!
-        if(!this.state.advance) {
-            const username = this.props.currentUser.get('username')
-            this.state.to.props.onChange(username)
-        }
+        const username = this.props.currentUser.get('username')
+        this.state.to.props.onChange(username)
+        // setTimeout(() => {ReactDOM.findDOMNode(this.refs.amount).focus()}, 300)
         this.setState({advanced: !this.state.advanced})
     }
 
     initForm(props) {
+        const {transferType} = props.initialValues
         const insufficientFunds = (asset, amount) => {
+            const {currentAccount} = props
+            const isWithdraw = transferType && transferType === 'Savings Withdraw'
             const balanceValue =
+<<<<<<< HEAD
                 !asset || asset === OWNERSHIP_TICKER ? props.currentAccount.get('balance') :
                 asset === DEBT_TICKER ? props.currentAccount.get('sbd_balance') :
+=======
+                !asset || asset === 'STEEM' ?
+                    isWithdraw ? currentAccount.get('savings_balance') : currentAccount.get('balance') :
+                asset === 'SBD' ?
+                    isWithdraw ? currentAccount.get('savings_sbd_balance') : currentAccount.get('sbd_balance') :
+>>>>>>> steemit/develop
                 null
             if(!balanceValue) return false
             const balance = balanceValue.split(' ')[0]
             return parseFloat(amount) > parseFloat(balance)
         }
         const {toVesting} = props
-        const fields = toVesting ? ['to', 'amount'] : ['to', 'amount', 'asset', 'memo']
+        const fields = toVesting ? ['to', 'amount'] : ['to', 'amount', 'asset']
+        if(!toVesting && transferType !== 'Transfer to Savings' && transferType !== 'Savings Withdraw')
+            fields.push('memo')
+
         reactForm({
             name: 'transfer',
             instance: this, fields,
@@ -68,9 +86,16 @@ class TransferForm extends Component {
                 to:
                     ! values.to ? translate('required') : validate_account_name(values.to),
                 amount:
+<<<<<<< HEAD
                     ! values.amount ? translate('required') :
                     ! /^[0-9]*\.?[0-9]*/.test(values.amount) ? translate('amount_is_in_form') :
                     insufficientFunds(values.asset, values.amount) ? translate('insufficent_funds') :
+=======
+                    ! values.amount ? 'Required' :
+                    ! /^[0-9]*\.?[0-9]*/.test(values.amount) ? 'Amount is in the form 99999.999' :
+                    insufficientFunds(values.asset, values.amount) ? 'Insufficient funds' :
+                    countDecimals(values.amount) > 3 ? 'Use only 3 digits of precison' :
+>>>>>>> steemit/develop
                     null,
                 asset:
                     props.toVesting ? null :
@@ -88,11 +113,22 @@ class TransferForm extends Component {
     errorCallback = estr => { this.setState({ trxError: estr, loading: false }) }
 
     balanceValue() {
+        const {transferType} = this.props.initialValues
         const {currentAccount} = this.props
         const {asset} = this.state
+<<<<<<< HEAD
         return formatCoins(!asset || asset.value === OWNERSHIP_TICKER ? currentAccount.get('balance') :
             asset.value === DEBT_TICKER ? currentAccount.get('sbd_balance') :
             null)
+=======
+        const isWithdraw = transferType && transferType === 'Savings Withdraw'
+        return !asset ||
+            asset.value === 'STEEM' ?
+                isWithdraw ? currentAccount.get('savings_balance') : currentAccount.get('balance') :
+            asset.value === 'SBD' ?
+                isWithdraw ? currentAccount.get('savings_sbd_balance') : currentAccount.get('sbd_balance') :
+            null
+>>>>>>> steemit/develop
     }
 
     assetBalanceClick = e => {
@@ -109,16 +145,15 @@ class TransferForm extends Component {
     render() {
         const {to, amount, asset, memo} = this.state
         const {loading, trxError, advanced} = this.state
-        const {currentUser, toVesting, dispatchSubmit} = this.props
+        const {currentUser, toVesting, transferToSelf, dispatchSubmit} = this.props
+        const {transferType} = this.props.initialValues
         const {submitting, valid, handleSubmit} = this.state.transfer
-
         const isMemoPrivate = memo && /^#/.test(memo.value)
-
         const form = (
             <form onSubmit={handleSubmit(data => {
                 // bind redux-form to react-redux
                 this.setState({loading: true})
-                dispatchSubmit({...data, errorCallback: this.errorCallback, currentUser, toVesting})
+                dispatchSubmit({...data, errorCallback: this.errorCallback, currentUser, toVesting, transferType})
             })}
                 onChange={this.clearError}
             >
@@ -129,6 +164,15 @@ class TransferForm extends Component {
                     </div>
                 </div>}
 
+                {!toVesting && <div>
+                    <div className="row">
+                        <div className="column small-12">
+                            {transferTips[transferType]}
+                        </div>
+                    </div>
+                    <br />
+                </div>}
+
                 <div className="row">
                     <div className="column small-2">{translate('from')}</div>
                     <div className="column small-10">
@@ -136,8 +180,15 @@ class TransferForm extends Component {
                     </div>
                 </div>
 
+<<<<<<< HEAD
                 {(advanced || !toVesting) && <div className="row">
                     <div className="column small-2">{translate('to')}</div>
+=======
+                <br />
+
+                {advanced && <div className="row">
+                    <div className="column small-2">To</div>
+>>>>>>> steemit/develop
                     <div className="column small-10">
                         <input type="text" placeholder={translate('send_to_account')} {...to.props}
                             onChange={this.onChangeTo} ref="to" autoComplete="off" disabled={loading} />
@@ -151,8 +202,11 @@ class TransferForm extends Component {
                 <div className="row">
                     <div className="column small-2">{translate('amount')}</div>
                     <div className="column small-10">
+<<<<<<< HEAD
                         <input type="text" placeholder={translate('amount')} {...amount.props} ref="amount" autoComplete="off" disabled={loading} />
                         <div className="error">{amount.touched && amount.error && amount.error}&nbsp;</div>
+=======
+>>>>>>> steemit/develop
                         {asset && <span>
                             <select {...asset.props} placeholder={translate('asset')} disabled={loading}>
                                 <option></option>
@@ -163,8 +217,11 @@ class TransferForm extends Component {
                         </span>}
                         <AssetBalance balanceValue={this.balanceValue()} onClick={this.assetBalanceClick} />
                         <div className="error">{asset && asset.touched && asset.error && asset.error}&nbsp;</div>
+                        <input type="text" placeholder="Amount" {...amount.props} ref="amount" autoComplete="off" disabled={loading} />
+                        <div className="error">{amount.touched && amount.error && amount.error}&nbsp;</div>
                     </div>
                 </div>
+
                 {memo && <div className="row">
                     <div className="column small-2">{translate('memo')}</div>
                     <div className="column small-10">
@@ -178,15 +235,25 @@ class TransferForm extends Component {
                 {!loading && <span>
                     {trxError && <div className="error">{trxError}</div>}
                     <button type="submit" disabled={submitting || !valid} className="button">
+<<<<<<< HEAD
                         {translate(toVesting ? 'power_up' : 'transfer')}
                     </button>
                     {toVesting && <button className="button hollow no-border" disabled={submitting} onClick={this.onAdvanced}>{translate(advanced ? 'basic' : 'advanced')}</button>}
+=======
+                        {toVesting ? 'Power Up' : 'Submit'}
+                    </button>
+                    {transferToSelf && <button className="button hollow no-border" disabled={submitting} onClick={this.onAdvanced}>{advanced ? 'Basic' : 'Advanced'}</button>}
+>>>>>>> steemit/develop
                 </span>}
             </form>
         )
         return (
            <div>
+<<<<<<< HEAD
                <h3>{translate(toVesting ? 'convert_to_INVEST_TOKEN' : 'transfer_to_account')}</h3>
+=======
+               <h3>{toVesting ? 'Convert to Steem Power' : transferType}</h3>
+>>>>>>> steemit/develop
                <div className="row">
                    <div className="column small-12">
                        {form}
@@ -210,18 +277,35 @@ export default connect(
         const currentUser = state.user.getIn(['current'])
         const currentAccount = state.global.getIn(['accounts', currentUser.get('username')])
 
-        if (toVesting && !initialValues.to)
+        if(!toVesting && !initialValues.transferType)
+            initialValues.transferType = 'Transfer to Account'
+
+        let transferToSelf = toVesting || /Transfer to Savings|Savings Withdraw/.test(initialValues.transferType)
+        if (transferToSelf && !initialValues.to)
             initialValues.to = currentUser.get('username')
 
-        return {...ownProps, currentUser, currentAccount, toVesting, initialValues}
+        if(initialValues.to !== currentUser.get('username'))
+            transferToSelf = false // don't hide the to field
+
+        return {...ownProps, currentUser, currentAccount, toVesting, transferToSelf, initialValues}
     },
 
     // mapDispatchToProps
     dispatch => ({
-        dispatchSubmit: ({to, amount, asset, memo, toVesting, currentUser, errorCallback}) => {
+        dispatchSubmit: ({
+            to, amount, asset, memo, transferType,
+            toVesting, currentUser, errorCallback
+        }) => {
+            if(!toVesting && !/Transfer to Account|Transfer to Savings|Savings Withdraw/.test(transferType))
+                throw new Error(`Invalid transfer params: toVesting ${toVesting}, transferType ${transferType}`)
+
             const username = currentUser.get('username')
             const successCallback = () => {
-                dispatch({type: 'global/GET_STATE', payload: {url: `@${username}/transfers`}}) // refresh transfer history
+                // refresh transfer history
+                dispatch({type: 'global/GET_STATE', payload: {url: `@${username}/transfers`}})
+                if(/Savings Withdraw/.test(transferType)) {
+                    dispatch({type: 'user/LOAD_SAVINGS_WITHDRAW', payload: {}})
+                }
                 dispatch(user.actions.hideTransfer())
             }
             const asset2 = toVesting ? OWNERSHIP_TICKER : asset
@@ -230,8 +314,17 @@ export default connect(
                 to, amount: parseFloat(amount, 10).toFixed(3) + ' ' + asset2,
                 memo: toVesting ? undefined : (memo ? memo : '')
             }
+
+            if(transferType === 'Savings Withdraw')
+                operation.request_id = Math.floor((Date.now() / 1000) % 4294967295)
+
             dispatch(transaction.actions.broadcastOperation({
-                type: toVesting ? 'transfer_to_vesting' : 'transfer',
+                type: toVesting ? 'transfer_to_vesting' : (
+                    transferType === 'Transfer to Account' ? 'transfer' :
+                    transferType === 'Transfer to Savings' ? 'transfer_to_savings' :
+                    transferType === 'Savings Withdraw' ? 'transfer_from_savings' :
+                    null
+                ),
                 operation,
                 successCallback,
                 errorCallback

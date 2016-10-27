@@ -237,9 +237,17 @@ class PostFull extends React.Component {
             </div>
         }
 
+<<<<<<< HEAD
         const archived    = post_content.get('mode') === 'archived'
         const firstPayout = post_content.get('mode') === "first_payout"
         const rootComment = post_content.get('depth') == 0
+=======
+        const readonly = post_content.get('mode') === 'archived' || $STM_Config.read_only_mode
+        const showPromote = username && post_content.get('mode') === "first_payout" && post_content.get('depth') == 0
+        const showReplyOption = post_content.get('depth') < 6
+        const showEditOption = username === author
+        const authorRepLog10 = repLog10(content.author_reputation)
+>>>>>>> steemit/develop
 
         return (
             <article className="PostFull hentry" itemScope itemType ="http://schema.org/blogPost">
@@ -271,6 +279,7 @@ class PostFull extends React.Component {
                                     <Icon name="chatboxes" className="space-right" />{content.children}
                                 </Link>
                             </span>
+<<<<<<< HEAD
                             <span className="PostFull__reply">
                                 {!$STM_Config.read_only_mode && <a onClick={onShowReply}>{translate('reply')}</a>}
                                 {showEditOption && !showEdit && <span>
@@ -280,6 +289,13 @@ class PostFull extends React.Component {
                                 {showDeleteOption && !showReply && <span>
                                     &nbsp;&nbsp;
                                     <a onClick={onDeletePost}>{translate('delete')}</a>
+=======
+                            {!readonly &&
+                                <span className="PostFull__reply">
+                                    {showReplyOption && <a onClick={onShowReply}>Reply</a>}
+                                    {' '}{showEditOption   && !showEdit  && <a onClick={onShowEdit}>Edit</a>}
+                                    {' '}{showDeleteOption && !showReply && <a onClick={onDeletePost}>Delete</a>}
+>>>>>>> steemit/develop
                                 </span>}
                             </span>
                             <FoundationDropdownMenu menu={share_menu} onClick={this.trackAnalytics.bind(this, '"share" dropdown menu clicked')} icon="share" label={translate('share')} dropdownPosition="bottom" dropdownAlignment="right" />

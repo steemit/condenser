@@ -26,9 +26,27 @@
   border: 1px solid $medium-gray;
 }
 
+<<<<<<< HEAD
 .Comment__replies .ReplyEditor__body {
   margin-top: -1rem;
 }
+=======
+.ReplyEditor__options {
+  font-size: 85%;
+  select {
+    font-size: 100%;
+    width: 10rem;
+    height: auto;
+    padding: 0.25rem 0.5rem;
+    margin-left: 0.25rem;
+  }
+  label {
+    font-size: 100%;
+    text-transform: none;
+  }
+}
+
+>>>>>>> steemit/develop
 .medium-editor-element {
     background-color: inherit !important;
 }

@@ -247,7 +247,12 @@ class CommentImpl extends React.Component {
         // const steem_supply = this.props.global.getIn(['props','current_supply']);
 
         const showDeleteOption = username === author && !hasReplies && netVoteSign <= 0
+<<<<<<< HEAD
         const showEditOption = username === author && comment.mode == 'first_payout'
+=======
+        const showEditOption = username === author
+        const readonly = comment.mode == 'archived' || $STM_Config.read_only_mode
+>>>>>>> steemit/develop
 
         let replies = null;
         let body = null;

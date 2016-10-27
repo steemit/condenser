@@ -105,14 +105,14 @@ ul.PostsList__summaries {
     font-weight: bold;
     @include hoverUnderline;
   }
-  padding-right: 1rem;
-  margin-right: 1rem;
-  border-right: 1px solid #cacaca;
+  padding-left: 1rem;
+  margin-left: 1rem;
+  border-left: 1px solid #cacaca;
 
   .Reblog__button {
-    margin-left: 1rem;
-    padding-left: 1rem;
-    border-left: 1px solid #cacaca;
+    margin-right: 1rem;
+    padding-right: 1rem;
+    border-right: 1px solid #cacaca;
   }
 }
 

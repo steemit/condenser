@@ -58,6 +58,7 @@ export const repLog10 = rep2 => {
     return out
 }
 
+<<<<<<< HEAD
 // this function searches for right translation of provided error (usually from back-end)
 export function translateError(string) {
     if (typeof(string) != 'string') return string
@@ -146,3 +147,11 @@ export function detransliterate(str, reverse) {
 
     return str;
 }
+=======
+export function countDecimals(amount) {
+    if(amount == null) return amount
+    amount = String(amount).match(/[\d\.]+/g).join('') // just dots and digits
+    const parts = amount.split('.')
+    return parts.length > 2 ? undefined : parts.length === 1 ? 0 : parts[1].length
+}
+>>>>>>> steemit/develop

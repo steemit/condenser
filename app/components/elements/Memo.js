@@ -7,10 +7,7 @@ import { translate } from '../../Translator';
 class Memo extends React.Component {
     static propTypes = {
         text: PropTypes.string,
-        username: PropTypes.string,
-        memo_private: PropTypes.object,
-        // redux props
-        myAccount: PropTypes.bool,
+        // username: PropTypes.string,
     }
     constructor() {
         super()

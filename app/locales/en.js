@@ -1,11 +1,15 @@
+<<<<<<< HEAD
 import { APP_NAME, APP_URL, LANDING_PAGE_URL, DEBT_TOKEN, DEBT_TOKEN_SHORT, OWNERSHIP_TOKEN, CURRENCY_SIGN, INVEST_TOKEN } from 'config/client_config';
 /**
  * see: app/locales/README.md
  */
+=======
+>>>>>>> steemit/develop
 const en = 	{
 	// this variables mainly used in navigation section
 	about: "About",
 	explore: "Explore",
+<<<<<<< HEAD
 	APP_NAME_whitepaper: APP_NAME + " Whitepaper",
 	buy_OWNERSHIP_TOKEN: 'Buy ' + OWNERSHIP_TOKEN,
 	sell_OWNERSHIP_TOKEN: 'Sell ' + OWNERSHIP_TOKEN,
@@ -13,6 +17,15 @@ const en = 	{
 	stolen_account_recovery: "Stolen Accounts Recovery",
 	change_account_password: "Change Account Password",
 	APP_NAME_chat: APP_NAME + " Chat",
+=======
+	whitepaper: "Steem Whitepaper",
+	buy_steem: "Buy Steem",
+	sell_steem: "Sell Steem",
+	market: "Market",
+	stolen_account_recovery: "Stolen Accounts Recovery",
+	change_account_password: "Change Account Password",
+	steemit_chat: "Steemit Chat",
+>>>>>>> steemit/develop
 	witnesses: "Witnesses",
 	privacy_policy: "Privacy Policy",
 	terms_of_service: "Terms of Service",
@@ -20,11 +33,16 @@ const en = 	{
 	/* end navigation */
 	buy: 'Buy',
 	sell: 'Sell',
+<<<<<<< HEAD
 	buy_INVEST_TOKEN: 'Buy ' + INVEST_TOKEN,
+=======
+	buy_steem_power: 'Buy Steem Power',
+>>>>>>> steemit/develop
 	transaction_history: 'Transaction History',
 	submit_a_story: 'Submit a Story',
 	nothing_yet: 'Nothing yet',
 	close: 'Close',
+<<<<<<< HEAD
 	// next 5 strings were supposed to be sinngle block of text, but due large size,
 	// code erros they were splitted.
 	authors_get_paid_when_people_like_you_upvote_their_post: 'Authors get paid when people like you upvote their post',
@@ -34,6 +52,11 @@ const en = 	{
 	and_vote_for_it: 'and vote for it',
 	read_only_mode: 'Due to server maintenance we are running in read only mode. We are sorry for the inconvenience.',
 	membership_invitation_only: 'Membership to ' + APP_URL + ' is now under invitation only because of unexpectedly high sign up rate.',
+=======
+	post_promo_text: "Authors get paid when people like you upvote their post \n If you enjoyed what you read here, earn ${amount} of Steem Power \n when you {link} and vote for it.",
+	read_only_mode: 'Due to server maintenance we are running in read only mode. We are sorry for the inconvenience.',
+	membership_invitation_only: 'Membership to Steemit.com is now under invitation only because of unexpectedly high sign up rate.',
+>>>>>>> steemit/develop
 	submit_email_to_get_on_waiting_list: 'Submit your email to get on the waiting list',
 	login: 'Login',
 	logout: 'Logout',
@@ -43,16 +66,27 @@ const en = 	{
 	tags_and_topics: "Tags and Topics",
 	filter: "Filter",
 	show_more_topics: "Show more topics",
+<<<<<<< HEAD
 	we_require_social_account: APP_NAME + ' funds each account with over {signup_bonus} worth of ' + INVEST_TOKEN + '; to prevent abuse, we require new users to login via social media.',
+=======
+	we_require_social_account: 'Steemit funds each account with over {signup_bonus} worth of Steem Power; to prevent abuse, we require new users to login via social media.',
+>>>>>>> steemit/develop
 	personal_info_will_be_private: 'Your personal information will be kept',
 	personal_info_will_be_private_link: 'Private',
 	continue_with_facebook: 'Continue with Facebook',
 	continue_with_reddit: 'Continue with Reddit',
+<<<<<<< HEAD
 	continue_with_vk: 'Continue with Vk',
 	requires_positive_karma: 'requires positive Reddit comment karma',
 	dont_have_facebook: 'Don\'t have a Facebook or Reddit account?',
 	subscribe_to_get_sms_confirm: 'Subscribe to get a notification when SMS confirmation is available',
 	by_verifying_you_agree: 'By verifying your account you agree to the ' + APP_NAME,
+=======
+	requires_positive_karma: 'requires positive Reddit comment karma',
+	dont_have_facebook: 'Don\'t have a Facebook or Reddit account?',
+	subscribe_to_get_sms_confirm: 'Subscribe to get a notification when SMS confirmation is available',
+	by_verifying_you_agree: 'By verifying your account you agree to the Steemit',
+>>>>>>> steemit/develop
 	by_verifying_you_agree_terms_and_conditions: 'terms and conditions',
 	terms_and_conditions: 'Terms and Conditions',
 	// this is from top-right dropdown menu
@@ -66,6 +100,7 @@ const en = 	{
 	loading: 'Loading',
 	cryptography_test_failed: 'Cryptography test failed',
 	unable_to_log_you_in: 'We will be unable to log you in with this browser',
+<<<<<<< HEAD
 	// next 3 blocks will be used in conjunction
 	/* this is how it will look like:
 	'The latest versions of <a href="https://www.google.com/chrome/">Chrome</a> and <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a> are well tested and known to work with steemit.com.' */
@@ -78,6 +113,13 @@ const en = 	{
 	password_is_bound_to_your_accounts_owner_key: "This password is bound to your account\'s owner key and can not be used to login to this site",
 	however_you_can_use_it_to: "However, you can use it to",
 	to_obtaion_a_more_secure_set_of_keys: "to obtain a more secure set of keys",
+=======
+	latest_browsers_do_work: 'The latest versions of {chromeLink} and {mozillaLink} are well tested and known to work with steemit.com.',
+	account_creation_succes: 'Your account has been successfully created!',
+	account_recovery_succes: 'Your account has been successfully recovered!',
+	password_update_succes: 'The password for {accountName} was successfully updated',
+	password_is_bound_to_account: "This password is bound to your account\'s owner key and can not be used to login to this site. \nHowever, you can use it to {changePasswordLink} to obtain a more secure set of keys.",
+>>>>>>> steemit/develop
 	update_your_password: 'update your password',
 	enter_username: 'Enter your username',
 	password_or_wif: 'Password or WIF',
@@ -97,6 +139,7 @@ const en = 	{
 	update_post: 'Update Post',
 	markdown_is_supported: 'Styling with Markdown is supported',
 	preview: 'Preview',
+<<<<<<< HEAD
 	markdown_not_supported: 'Markdown is not supported here',
 	welcome_to_the_blockchain: 'Welcome to the Blockchain!',
 	your_voice_is_worth_something: 'Your voice is worth something',
@@ -104,6 +147,17 @@ const en = 	{
 	get_INVEST_TOKEN_when_sign_up: 'Get ${signupBonus} of ' + INVEST_TOKEN + ' when you sign up today.',
 	all_accounts_refunded: 'All Recovered Accounts have been fully Refunded',
 	APP_URL_is_now_open_source: APP_URL + ' is now Open Source',
+=======
+	// TODO do not forget to implment REQUIRED error in reply Editor
+	markdown_not_supported: 'Markdown is not supported here',
+	// markdown: 'Markdown', // this will probably be removed
+	welcome_to_the_blockchain: 'Welcome to the Blockchain!',
+	your_voice_is_worth_something: 'Your voice is worth something',
+	learn_more: 'Learn More',
+	get_sp_when_sign_up: 'Get {signupBonus} of Steem Power when you sign up today.',
+	all_accounts_refunded: 'All Recovered Accounts have been fully Refunded',
+	steemit_is_now_open_source: 'Steemit.com is now Open Source',
+>>>>>>> steemit/develop
 	// this is mainly from ReplyEditor
 	tag_your_story: 'Tag (up to 5 tags), the first tag is your main category.',
 	select_a_tag: 'Select a tag',
@@ -111,11 +165,17 @@ const en = 	{
 	shorten_title: 'Shorten title',
 	exceeds_maximum_length: 'Exceeds maximum length ({maxKb}KB)',
 	including_the_category: "(including the category '{rootCategory}')",
+<<<<<<< HEAD
 	use_limited_amount_of_tags: 'You have {tagsLength} tags total {includingCategory}.  Please use only 5 in your post and category line.',
 	// this is mainly used in CategorySelector
 	maximum_tag_length_is_24_characters: 'Maximum tag length is 24 characters',
 	use_limitied_amount_of_categories: 'Please use only {amount} categories',
 	use_only_lowercase_letters: 'Use only lowercase letters',
+=======
+	use_limited_amount_of_tags: 'You have {tagsLength} tags total{includingCategory}.  Please use only 5 in your post and category line.',
+	// this is mainly used in CategorySelector
+	use_limitied_amount_of_categories: 'Please use only {amount} categories',
+>>>>>>> steemit/develop
 	use_one_dash: 'Use only one dash',
 	use_spaces_to_separate_tags: 'Use spaces to separate tags',
 	use_only_allowed_characters: 'Use only lowercase letters, digits and one dash',
@@ -157,20 +217,34 @@ const en = 	{
 	share: 'Share',
 	in_reply_to: 'in reply to',
 	replied_to: 'replied to',
+<<<<<<< HEAD
 	transfer_amount_to_INVEST_TOKEN: "Transfer {amount} to " + INVEST_TOKEN,
 	transfer_amount_INVEST_TOKEN_to: "Transfer {amount} " + INVEST_TOKEN + " to",
 	recieve_amount_INVEST_TOKEN_from: "Receive {amount} " + INVEST_TOKEN + " from",
 	transfer_amount_INVEST_TOKEN_from_to: "Transfer {amount} " + INVEST_TOKEN + " from {from} to",
+=======
+	transfer_amount_to_steem_power: "Transfer {amount} to STEEM POWER",
+	transfer_amount_steem_power_to: "Transfer {amount} STEEM POWER to",
+	recieve_amount_steem_power_from: "Receive {amount} STEEM POWER from",
+	transfer_amount_steem_power_from_to: "Transfer {amount} STEEM POWER from {from} to",
+>>>>>>> steemit/develop
 	transfer_amount_to: "Transfer {amount} to",
 	recieve_amount_from: "Receive {amount} from",
 	transfer_amount_from: "Transfer {amount} from",
 	stop_power_down: "Stop power down",
 	start_power_down_of: "Start power down of",
+<<<<<<< HEAD
 	curation_reward_of_INVEST_TOKEN_for: 'Curation reward of {reward} ' + INVEST_TOKEN + ' for',
 	author_reward_of_INVEST_TOKEN_for: 'Author reward of {payout} and {reward} ' + INVEST_TOKEN + ' for',
 	recieve_interest_of: 'Receive interest of {interest}',
 	// TODO find where this is used and write an example
 	from: 'from',
+=======
+	curation_reward_of_steem_power_for: 'Curation reward of {reward} STEEM POWER for',
+	author_reward_of_steem_power_for: 'Author reward of {payout} and {reward} STEEM POWER for',
+	recieve_interest_of: 'Receive interest of {interest}',
+	// TODO find where this is used and write an example
+>>>>>>> steemit/develop
 	to: 'to',
 	account_not_found: 'Account not found',
 	this_is_wrong_password: 'This is the wrong password',
@@ -178,7 +252,11 @@ const en = 	{
 	recover_your_account: 'recover your account', // this probably will end with question mark
 	reset_usernames_password: "Reset {username}\'s Password",
 	this_will_update_usernames_authtype_key: 'This will update {username} {authType} key',
+<<<<<<< HEAD
 	the_rules_of_APP_NAME: "The first rule of " + APP_NAME + " is: Do not lose your password.<br /> The second rule of " + APP_NAME + " is: Do <strong>not</strong> lose your password.<br /> The third rule of " + APP_NAME + " is: We cannot recover your password.<br /> The fourth rule: If you can remember the password, it&apos;s not secure.<br /> The fifth rule: Use only randomly-generated passwords.<br /> The sixth rule: Do not tell anyone your password.<br /> The seventh rule: Always back up your password.",
+=======
+	the_rules_of_steemit: "The first rule of Steemit is: Do not lose your password.<br /> The second rule of Steemit is: Do <strong>not</strong> lose your password.<br /> The third rule of Steemit is: We cannot recover your password.<br /> The fourth rule: If you can remember the password, it&apos;s not secure.<br /> The fifth rule: Use only randomly-generated passwords.<br /> The sixth rule: Do not tell anyone your password.<br /> The seventh rule: Always back up your password.",
+>>>>>>> steemit/develop
 	account_name: 'Account Name',
 	recover_password: 'Recover Account',
 	current_password: 'Current Password',
@@ -189,7 +267,11 @@ const en = 	{
 	backup_password_by_storing_it: 'Back it up by storing in your password manager or a text file',
 	click_to_generate_password: 'Click to generate password',
 	re_enter_generate_password: 'Re-enter Generated Password',
+<<<<<<< HEAD
 	understand_that_APP_NAME_cannot_recover_password: 'I understand that ' + APP_NAME + ' cannot recover lost passwords',
+=======
+	understand_that_steemit_cannot_recover_password: 'I understand that Steemit cannot recover lost passwords',
+>>>>>>> steemit/develop
 	i_saved_password: 'I have securely saved my generated password',
 	update_password: 'Update Password',
 	password_must_be_characters_or_more: 'Password must be {amount} characters or more',
@@ -203,6 +285,7 @@ const en = 	{
 	deadline_for_recovery_is: 'Deadline for recovery is',
 	i_understand_dont_show_again: "I understand, don't show me again",
 	ok: 'Ok',
+<<<<<<< HEAD
 	convert_to_OWNERSHIP_TOKEN: 'Convert to ' + OWNERSHIP_TOKEN,
 	DEBT_TOKEN_will_be_unavailable: 'This action will take place one week from now and can not be canceled. These ' + DEBT_TOKEN + ' will immediatly become unavailable',
 	amount: 'Amount',
@@ -210,6 +293,16 @@ const en = 	{
 	invalid_amount: 'Invalid amount',
 	insufficent_balance: 'Insufficient balance',
 	in_week_convert_DEBT_TOKEN_to_OWNERSHIP_TOKEN: 'In one week, convert {amount} ' + DEBT_TOKEN + 's into ' + OWNERSHIP_TOKEN,
+=======
+	convert_to_steem: 'Convert to Steem',
+	steem_dollars_will_be_unavailable: 'This action will take place one week from now and can not be canceled. These Steem Dollars will immediatly become unavailable',
+	amount: 'Amount',
+	steem_dollars: 'STEEM DOLLARS',
+	convert: 'Convert',
+	invalid_amount: 'Invalid amount',
+	insufficent_balance: 'Insufficient balance',
+	in_week_convert_steem_dollars_to_steem: 'In one week, convert {amount} STEEM DOLLARS into STEEM',
+>>>>>>> steemit/develop
 	order_placed: 'Order placed', // ex.: "Order placed: Sell {someamount_to_sell} for atleast {min_to_receive}"
 	follow: 'Follow',
 	unfollow: 'Unfollow',
@@ -240,26 +333,44 @@ const en = 	{
 	buy_atleast_amount_for: 'Buy at least {min_to_receive} for {amount_to_sell} ({effectivePrice})',
 	higher: 'Higher', // context is about prices
 	lower: 'Lower', // context is about prices
+<<<<<<< HEAD
 	total_DEBT_TOKEN_SHORT_CURRENCY_SIGN: "Total " + DEBT_TOKEN_SHORT + ' (' + CURRENCY_SIGN + ')',
+=======
+	total_sd_dollars: "Total SD ($)",
+	sd_dollars: "SD ($)",
+>>>>>>> steemit/develop
 	// RecoverAccountStep1.jsx // recover account stuff
 	not_valid: 'Not valid',
 	account_name_is_not_found: 'Account name is not found',
 	unable_to_recover_account_not_change_ownership_recently: 'We are unable to recover this account, it has not changed ownership recently.',
 	password_not_used_in_last_days: 'This password was not used on this account in the last 30 days.',
+<<<<<<< HEAD
 	request_already_submitted_contact_support: 'Your request has been already submitted and we are working on it. Please contact t@cyber.fund for the status of your request.',
 	recover_account_intro: "From time to time, a Steemian’s owner key may be compromised. Stolen Account Recovery gives the rightful account owner 30 days to recover their account from the moment the thief changed their owner key. Stolen Account Recovery can only be used on " + APP_URL + " if the account owner had perviously listed ‘" + APP_NAME + "’ as their account trustee and complied with " + APP_NAME + "’s Terms of Service.",
+=======
+	request_already_submitted_contact_support: 'Your request has been already submitted and we are working on it. Please contact support@steemit.com for the status of your request.',
+	recover_account_intro: "From time to time, a Steemian’s owner key may be compromised. Stolen Account Recovery gives the rightful account owner 30 days to recover their account from the moment the thief changed their owner key. Stolen Account Recovery can only be used on steemit.com if the account owner had perviously listed ‘Steemit’ as their account trustee and complied with Steemit’s Terms of Service.",
+>>>>>>> steemit/develop
 	login_with_facebook_or_reddit_media_to_verify_identity: 'Please login with Facebook or Reddit to verify your identity',
 	login_with_social_media_to_verify_identity: 'Please login with {show_social_login} to verify you identity',
 	enter_email_toverify_identity: 'We need to verify your identity. Please enter your email address below to begin the verification.',
 	email: 'Email',
 	continue_with_email: "Continue with Email",
+<<<<<<< HEAD
 	thanks_for_submitting_request_for_account_recovery: '<p>Thanks for submitting your request for Account Recovery using ' + APP_NAME + '’s blockchain-based multi factor authentication.</p> <p>We will respond to you as quickly as possible, however, please expect there may be some delay in response due to high volume of emails.</p> <p>Please be prepared to verify your identity.</p> <p>Regards,</p> <p>Ned Scott</p> <p>CEO Steemit</p>',
+=======
+	thanks_for_submitting_request_for_account_recovery: '<p>Thanks for submitting your request for Account Recovery using Steem’s blockchain-based multi factor authentication.</p> <p>We will respond to you as quickly as possible, however, please expect there may be some delay in response due to high volume of emails.</p> <p>Please be prepared to verify your identity.</p> <p>Regards,</p> <p>Ned Scott</p> <p>CEO Steemit</p>',
+>>>>>>> steemit/develop
 	recovering_account: 'Recovering account',
 	checking_account_owner: 'Checking account owner',
 	sending_recovery_request: 'Sending recovery request',
 	cant_confirm_account_ownership: 'We can\'t confirm account ownership. Check your password',
 	account_recovery_request_not_confirmed: "Account recovery request is not confirmed yet, please get back later, thank you for your patience.",
+<<<<<<< HEAD
 	vote: 'Vote', // context: to vote? (title attribute on voting button)
+=======
+	vote: 'Vote',
+>>>>>>> steemit/develop
 	witness: 'Witness',
 	top_witnesses: 'Top Witnesses',
 	// user's navigational menu
@@ -288,6 +399,7 @@ const en = 	{
 	permissions: 'Permissions',
 	password: 'Password',
 	posts: 'Posts',
+<<<<<<< HEAD
 	// PLURALS
 	// see locales/README.md on how to properly use them
 	// context usually is about profile stats: 'User has: 3 posts, 2 followers, 5 followed'
@@ -322,12 +434,56 @@ const en = 	{
 		other {{responseCount} replies}
 	}`,
 	this_is_users_reputations_score_it_is_based_on_history_of_votes: "This is {name}'s reputation score.\n\nThe reputation score is based on the history of votes received by the account, and is used to hide low quality content.",
+=======
+	// english language does not need plurals, but your language might need it
+	// context usually is about profile stats: 'User has: 3 posts, 2 followers, 5 followed'
+	post_count: `{postCount, plural,
+		zero {0 posts}
+		one {# post}
+		few {# posts}
+		many {# posts}
+	}`,
+	follower_count: `{followerCount, plural,
+		zero {0 followers}
+		one {# followers}
+		few {# followers}
+		many {# followers}
+	}`,
+	followed_count: `{followingCount, plural,
+		zero {0 followed}
+		one {# followed}
+		few {# followed}
+		many {# followed}
+	}`,
+	vote_count: `{voteCount, plural,
+		zero {0 votes}
+		one {# votes}
+		few {# votes}
+		many {# votes}
+	}`,
+	response_count: `{responseCount, plural,
+		zero {0 responses}
+		one {# responses}
+		few {# responses}
+		many {# responses}
+	}`,
+	reply_count: `{replyCount, plural,
+		zero {0 replies}
+		one {# replies}
+		few {# replies}
+		many {# replies}
+	}`,
+	this_is_users_reputations_score_it_is_based_on_history_of_votes: "This is ${name}'s reputation score.\n\nThe reputation score is based on the history of votes received by the account, and is used to hide low quality content.",
+>>>>>>> steemit/develop
 	newer: 'Newer',
 	older: 'Older',
 	author_rewards_last_24_hours: 'Author rewards last 24 hours',
 	daily_average_author_rewards: 'Daily average author rewards',
 	author_rewards_history: 'Author Rewards History',
+<<<<<<< HEAD
 	balance: 'Balance',
+=======
+>>>>>>> steemit/develop
 	balances: 'Balances',
 	estimate_account_value: 'Estimated Account Value',
 	next_power_down_is_scheduled_to_happen_at: 'The next power down is scheduled to happen',
@@ -345,6 +501,7 @@ const en = 	{
 	show: 'Show',
 	sort_order: 'Sort Order',
 	comments_were_hidden_due_to_low_ratings: 'Comments were hidden due to low ratings',
+<<<<<<< HEAD
 	we_will_be_unable_to_create_account_with_this_browser: 'We will be unable to create your ' + APP_NAME + ' account with this browser',
 	you_need_to_logout_before_creating_account: 'You need to {logoutLink} before you can create another account',
 	APP_NAME_can_only_register_one_account_per_verified_user: 'Please note that ' + APP_NAME + ' can only register one account per verified user',
@@ -357,6 +514,17 @@ const en = 	{
 	you_can_either: 'You can either', // context 'you can either login'
 	to_your_existing_account_or: 'to your existing account or', // context: 'to your existing account or send us email'
 	if_you_need_a_new_account: 'if you need a new account',
+=======
+	we_will_be_unable_to_create_account_with_this_browser: 'We will be unable to create your Steem account with this browser',
+	you_need_to_logout_before_creating_account: 'You need to {logoutLink} before you can create another account',
+	steemit_can_only_register_one_account_per_verified_user: 'Please note that Steemit can only register one account per verified user',
+	username: 'Username',
+	couldnt_create_account_server_returned_error: "Couldn't create account. Server returned the following error",
+	form_requires_javascript_to_be_enabled: 'This form requires javascript to be enabled in your browser',
+	our_records_indicate_you_already_have_account: 'Our records indicate that you already have steem account',
+	to_prevent_abuse_steemit_can_only_register_one_account_per_user: 'In order to prevent abuse (each registered account costs 3 STEEM) Steemit can only register one account per verified user.',
+	you_can_either_login_or_send_us_email: 'You can either {loginLink} to your existing account or  if you need a new account',
+>>>>>>> steemit/develop
 	send_us_email: 'send us email',
 	connection_lost_reconnecting: 'Connection lost, reconnecting',
 	// Voting.jsx
@@ -368,6 +536,10 @@ const en = 	{
 	downvote: 'Downvote',
 	pending_payout: 'Pending Payout',
 	past_payouts: 'Past Payouts',
+<<<<<<< HEAD
+=======
+	and: 'and',
+>>>>>>> steemit/develop
 	more: 'more',
 	remove_vote: 'Remove Vote',
 	upvote: 'Upvote',
@@ -382,18 +554,30 @@ const en = 	{
 	begin_recovery: "Begin Recovery",
 	post_as: 'Post as', // 'Post as Misha'
 	action: 'Action',
+<<<<<<< HEAD
 	APP_NAME_app_center: APP_NAME + ' App Center',
+=======
+	steem_app_center: 'Steem App Center',
+>>>>>>> steemit/develop
 	witness_thread: 'witness thread',
 	you_have_votes_remaining: 'You have {votesCount} votes remaining',
 	you_can_vote_for_maximum_of_witnesses: 'You can vote for a maximum of 30 witnesses',
 	information: 'Information',
 	if_you_want_to_vote_outside_of_top_enter_account_name: 'If you would like to vote for a witness outside of the top 50, enter the account name below to cast a vote',
 	view_the_direct_parent: 'View the direct parent',
+<<<<<<< HEAD
 	you_are_viewing_single_comments_thread_from: 'You are viewing a single comment\'s thread from',
 	view_the_full_context: 'View the full context',
 	this_is_a_price_feed_conversion: 'This is a price feed conversion. The one week day delay is necessary to prevent abuse from gaming the price feed average',
 	your_existing_DEBT_TOKEN_are_liquid_and_transferable: 'Your existing ' + DEBT_TOKEN + ' are liquid and transferable. Instead you may wish to trade ' + DEBT_TOKEN + ' directly in this site under {link} or transfer to an external market.',
 	buy_or_sell: 'Buy or Sell',
+=======
+	you_are_viewing_single_comments_thread_from: 'You are viewing a single comment&#39;s thread from',
+	view_the_full_context: 'View the full context',
+	this_is_a_price_feed_conversion: 'This is a price feed conversion. The one week day delay is necessary to prevent abuse from gaming the price feed average',
+	your_existing_SD_are_liquid_and_transferable: 'Your existing Steem Dollars are liquid and transferable.  Instead you may wish to trade Steem Dollars directly in this site under {link} or transfer to an external market.',
+	buy_or_sell: 'Buy or Sells',
+>>>>>>> steemit/develop
 	trending_30_day: 'trending (30 day)',
 	promoted: 'promoted',
 	comments: 'Comments',
@@ -418,17 +602,27 @@ const en = 	{
 	yes: 'Yes',
 	no: 'No',
 	hide_private_key: 'Hide private key',
+<<<<<<< HEAD
 	show_private_key: 'Show private key',
 	login_to_show: 'Login to show',
 	APP_NAME_cannot_recover_passwords_keep_this_page_in_a_secure_location: APP_NAME + ' cannot recover passwords. Keep this page in a secure location, such as a fireproof safe or safety deposit box.',
 	APP_NAME_password_backup: APP_NAME + ' Password Backup',
 	APP_NAME_password_backup_required: APP_NAME + ' Password Backup (required)',
+=======
+	login_to_show: 'Login to show',
+	steemit_cannot_recover_passwords_keep_this_page_in_a_secure_location: 'Steemit cannot recover passwords.  Keep this page in a secure location, such as a fireproof safe or safety deposit box.',
+	steemit_password_backup: 'Steemit Password Backup',
+	steemit_password_backup_required: 'Steemit Password Backup (required)',
+>>>>>>> steemit/develop
 	after_printing_write_down_your_user_name: 'After printing, write down your user name',
 	public: 'Public',
 	private: 'Private',
 	public_something_key: 'Public {key} Key',
 	private_something_key: 'Private {key} Key',
+<<<<<<< HEAD
 	// UserProfile > Permissions
+=======
+>>>>>>> steemit/develop
 	posting_key_is_required_it_should_be_different: 'The posting key is used for posting and voting. It should be different from the active and owner keys.',
 	the_active_key_is_used_to_make_transfers_and_place_orders: 'The active key is used to make transfers and place orders in the internal market.',
 	the_owner_key_is_required_to_change_other_keys: 'The owner key is the master key for the account and is required to change the other keys.',
@@ -438,7 +632,11 @@ const en = 	{
 	next: 'Next',
 	browse: 'Browse',
 	not_valid_email: 'Not valid email',
+<<<<<<< HEAD
 	thank_you_for_being_an_early_visitor_to_APP_NAME: 'Thank you for being an early visitor to ' + APP_NAME + '. We will get back to you at the earliest possible opportunity.',
+=======
+	thank_you_for_being_an_early_visitor_to_steemit: 'Thank you for being an early visitor to Steemit. We will get back to you at the earliest possible opportunity.',
+>>>>>>> steemit/develop
 	estimated_author_rewards_last_week: "Estimated author rewards last week",
 	author_rewards_last_week: "Estimated author rewards last week",
 	confirm: 'Confirm',
@@ -447,6 +645,7 @@ const en = 	{
 	this_memo_is_private: 'This Memo is Private',
 	this_memo_is_public: 'This Memo is Public',
 	power_up: 'Power Up',
+<<<<<<< HEAD
 	power_down: 'Power Down',
 	cancel_power_down: 'Cancel Power Down',
 	transfer: 'Transfer',
@@ -464,6 +663,23 @@ const en = 	{
 	resources: 'Resources',
 	join_our_slack: 'Join our Slack',
 	APP_NAME_support: APP_NAME + ' Support',
+=======
+	transfer: 'Transfer',
+	basic: 'Basic',
+	advanced: 'Advanced',
+	convert_to_steem_power: 'Convert to Steem Power',
+	transfer_to_account: 'Transfer to Account',
+	buy_steem_or_steem_power: 'Buy Steem or Steem Power',
+	version: 'Version',
+	about_steemit: 'About Steemit',
+	steemit_is_a_social_media_platform_where_everyone_gets_paid_for_creating_and_curating_content: 'Steemit is a social media platform where <strong>everyone</strong>&nbsp;gets <strong>paid</strong> for creating and curating content',
+	steemit_is_a_social_media_platform_where_everyone_gets_paid: 'Steemit is a social media platform where everyone gets paid for creating and curating content. It leverages a robust digital points system, called Steem, that supports real value for digital rewards through market price discovery and liquidity.',
+	learn_more_at_steem_io: 'Learn more at steem.io',
+	resources: 'Resources',
+	steem_whitepaper: 'Steem Whitepaper',
+	join_our_slack: 'Join our Slack',
+	steemit_support: 'Steemit Support',
+>>>>>>> steemit/develop
 	please_email_questions_to: 'Please email your questions to',
 	sorry_your_reddit_account_doesnt_have_enough_karma: "Sorry, your Reddit account doesn't have enough Reddit Karma to qualify for a free sign up. Please add your email for a place on the waiting list",
 	register_with_facebook: 'Register with Facebook',
@@ -473,6 +689,7 @@ const en = 	{
 	'24_hour': '24 hour',
 	'30_day': '30 day',
 	flag: "Flag",
+<<<<<<< HEAD
 	promote: 'Promote',
 	// Tips.js
 	tradeable_tokens_that_may_be_transferred_anywhere_at_anytime: 'Tradeable tokens that may be transferred anywhere at anytime.',
@@ -523,6 +740,9 @@ const en = 	{
 	crowdsale: 'Crowdsale',
 	followers: 'Followers',
 	cannot_increase_reward_of_post_within_the_last_minute_before_payout: 'Cannot increase reward of post within the last minute before payout',
+=======
+
+>>>>>>> steemit/develop
 }
 
 export { en }

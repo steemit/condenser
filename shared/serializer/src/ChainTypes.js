@@ -8,8 +8,8 @@ ChainTypes.reserved_spaces = {
   implementation_ids: 2
 };
 
-ChainTypes.operations=
-    {vote: 0,
+ChainTypes.operations= {
+    vote: 0,
     comment: 1,
     transfer: 2,
     transfer_to_vesting: 3,
@@ -39,15 +39,22 @@ ChainTypes.operations=
     escrow_transfer: 27,
     escrow_dispute: 28,
     escrow_release: 29,
-    fill_convert_request: 30,
-    comment_reward: 31,
-    curate_reward: 32,
-    liquidity_reward: 33,
-    interest: 34,
-    fill_vesting_withdraw: 35,
-    fill_order: 36,
-    comment_payout: 37
-    };
+    pow2: 30,
+    escrow_approve: 31,
+    transfer_to_savings: 32,
+    transfer_from_savings: 33,
+    cancel_transfer_from_savings: 34,
+    custom_binary: 35,
+    decline_voting_rights: 36,
+    fill_convert_request: 37,
+    author_reward: 38,
+    curation_reward: 39,
+    comment_reward: 40,
+    liquidity_reward: 41,
+    interest: 42,
+    fill_vesting_withdraw: 43,
+    fill_order: 44
+};
 
 //types.hpp
 ChainTypes.object_type = {

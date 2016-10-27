@@ -8,6 +8,7 @@ export default function resolveRoute(path)
     if (path === '/about.html') {
         return {page: 'About'};
     }
+<<<<<<< HEAD
     // golos.io ICO page
     //if (path === '/ico.html') {
     //    return {page: 'Ico'};
@@ -15,6 +16,10 @@ export default function resolveRoute(path)
     // golos.io landing page
     if (path === '/ico') {
         return {page: 'Landing'};
+=======
+    if (path === '/faq.html') {
+        return {page: 'Faq'};
+>>>>>>> steemit/develop
     }
     if (path === '/login.html') {
         return {page: 'Login'};
@@ -63,7 +68,12 @@ export default function resolveRoute(path)
         return {page: 'PostsIndex', params: ['home', match[1]]};
     }
     match = path.match(/^\/(@[\w\.\d-]+)\/?$/) ||
+<<<<<<< HEAD
         path.match(/^\/(@[\w\.\d-]+)\/(blog|posts|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)\/?$/);
+=======
+        // @user/"posts" is deprecated in favor of "comments" as of oct-2016 (#443)
+        path.match(/^\/(@[\w\.\d-]+)\/(blog|posts|comments|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers)\/?$/);
+>>>>>>> steemit/develop
     if (match) {
         return {page: 'UserProfile', params: match.slice(1)};
     }

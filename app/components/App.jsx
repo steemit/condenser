@@ -5,7 +5,10 @@ import Header from 'app/components/modules/Header';
 import LpFooter from 'app/components/modules/lp/LpFooter';
 import user from 'app/redux/User';
 import g from 'app/redux/GlobalReducer';
+<<<<<<< HEAD
 import { Route, Link } from 'react-router';
+=======
+>>>>>>> steemit/develop
 import TopRightMenu from 'app/components/modules/TopRightMenu';
 import { browserHistory } from 'react-router';
 import classNames from 'classnames';
@@ -14,12 +17,18 @@ import CloseButton from 'react-foundation-components/lib/global/close-button';
 import Dialogs from 'app/components/modules/Dialogs';
 import Modals from 'app/components/modules/Modals';
 import Icon from 'app/components/elements/Icon';
+<<<<<<< HEAD
 import {key_utils} from 'shared/ecc'
 import { translate } from '../Translator.js';
 import { SEGMENT_ANALYTICS_KEY, LANDING_PAGE_URL, WHITEPAPER_URL, VEST_TICKER } from 'config/client_config';
 import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 import RocketChat from 'app/components/modules/RocketChat'
 import {githash} from 'config/last-build'
+=======
+import {key_utils} from 'shared/ecc';
+import MiniHeader from 'app/components/modules/MiniHeader';
+import { translate } from '../Translator.js';
+>>>>>>> steemit/develop
 
 class App extends React.Component {
     constructor(props) {
@@ -57,8 +66,12 @@ class App extends React.Component {
     shouldComponentUpdate(nextProps, nextState) {
         const p = this.props;
         const n = nextProps;
+<<<<<<< HEAD
         return p.location !== n.location ||
                   p.loading !== n.loading ||
+=======
+        return p.location !== n.location || 
+>>>>>>> steemit/develop
                   p.visitor !== n.visitor ||
                   p.flash !== n.flash || this.state !== nextState;
     }
@@ -88,9 +101,10 @@ class App extends React.Component {
             console.log('onEntropyEvent Unknown', e.type, e)
     }
     render() {
-        const {location, params, children, loading, flash, showSignUp, new_visitor,
+        const {location, params, children, flash, showSignUp, new_visitor,
             depositSteem, signup_bonus} = this.props;
         const lp = false; //location.pathname === '/';
+        const miniHeader = location.pathname === '/create_account';
         const params_keys = Object.keys(params);
         const ip = location.pathname === '/' || (params_keys.length === 2 && params_keys[0] === 'order' && params_keys[1] === 'category');
         const alert = this.props.error || flash.get('alert');
@@ -116,7 +130,11 @@ class App extends React.Component {
                         <ul>
                             <li>
                                 <a href="https://steemit.com/steemit/@steemitblog/steemit-com-is-now-open-source">
+<<<<<<< HEAD
                                     {translate('APP_URL_is_now_open_source')}
+=======
+                                    {translate('steemit_is_now_open_source')}
+>>>>>>> steemit/develop
                                 </a>
                             </li>
                             <li>
@@ -152,6 +170,7 @@ class App extends React.Component {
                             <h2>{translate("welcome_to_the_blockchain")}</h2>
                             <h4>{translate("your_voice_is_worth_something")}</h4>
                             <br />
+<<<<<<< HEAD
                             <a className="button" href="/create_account" onClick={showSignUp}> <b>{translate("sign_up")}</b> </a>
                             &nbsp; &nbsp; &nbsp;
                             <a className="button hollow uppercase" href={LANDING_PAGE_URL} target="_blank"> <b>{translate("learn_more")}</b> </a>
@@ -159,6 +178,15 @@ class App extends React.Component {
                             <br />
                             <div className="tag3">
                                 <b>{translate("get_INVEST_TOKEN_when_sign_up", {signupBonus: localizedCurrency(signup_bonus)})}</b>
+=======
+                            <a className="button" href="/enter_email"> <b>{translate("sign_up")}</b> </a>
+                            &nbsp; &nbsp; &nbsp;
+                            <a className="button hollow uppercase" href="https://steem.io" target="_blank"> <b>{translate("learn_more")}</b> </a>
+                            <br />
+                            <br />
+                            <div className="tag3">
+                                <b>{translate("get_sp_when_sign_up", {signupBonus: signup_bonus})}</b>
+>>>>>>> steemit/develop
                             </div>
                         </div>
                     </div>
@@ -166,6 +194,7 @@ class App extends React.Component {
             );
         }
 
+<<<<<<< HEAD
         let header_bar = null
         // if (!/^\/ico$/.test(location.pathname) && !/^\/$/.test(location.pathname)) {
         if (location.pathname.indexOf("/ico")) {
@@ -249,6 +278,83 @@ class App extends React.Component {
 
         return <div className={'App' + (lp ? ' LP' : '') + (ip ? ' index-page' : '')} onMouseMove={this.onEntropyEvent}>
                 {header_bar}
+=======
+        return <div className={'App' + (lp ? ' LP' : '') + (ip ? ' index-page' : '') + (miniHeader ? ' mini-header' : '')}
+                    onMouseMove={this.onEntropyEvent}>
+            <SidePanel ref="side_panel" alignment="right">
+                <TopRightMenu vertical navigate={this.navigate} />
+                <ul className="vertical menu">
+                    <li>
+                        <a href="https://steem.io" onClick={this.navigate}>
+                            {translate("about")}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/tags.html/hot" onClick={this.navigate}>
+                            {translate("explore")}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://steem.io/SteemWhitePaper.pdf" onClick={this.navigate}>
+                            {translate("whitepaper")}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/faq.html" onClick={this.navigate}>
+                            FAQ
+                        </a>
+                    </li>
+                    <li>
+                        <a onClick={() => depositSteem()}>
+                            {translate("buy_steem")}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://steemtools.com/" onClick={this.navigate}>
+                            {translate('steem_app_center')}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/market" onClick={this.navigate}>
+                            {translate("market")}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/recover_account_step_1" onClick={this.navigate}>
+                        {translate("stolen_account_recovery")}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/change_password" onClick={this.navigate}>
+                            {translate("change_account_password")}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://steemit.chat/home" target="_blank" rel="noopener noreferrer">
+                            {translate("steemit_chat")}&nbsp;<Icon name="extlink" />
+                        </a>
+                    </li>
+                    <li className="last">
+                        <a href="/~witnesses" onClick={this.navigate}>
+                            {translate("witnesses")}
+                        </a>
+                    </li>
+                </ul>
+                <ul className="vertical menu">
+                    <li>
+                        <a href="/privacy.html" onClick={this.navigate} rel="nofollow">
+                            {translate("privacy_policy")}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/tos.html" onClick={this.navigate} rel="nofollow">
+                            {translate("terms_of_service")}
+                        </a>
+                    </li>
+                </ul>
+            </SidePanel>
+            {miniHeader ? <MiniHeader /> : <Header toggleOffCanvasMenu={this.toggleOffCanvasMenu} menuOpen={this.state.open} />}
+>>>>>>> steemit/develop
             <div className="App__content">
                 {welcome_screen}
                 {callout}
@@ -268,7 +374,6 @@ App.propTypes = {
     children: AppPropTypes.Children,
     location: React.PropTypes.object,
     signup_bonus: React.PropTypes.string,
-    loading: React.PropTypes.bool,
     loginUser: React.PropTypes.func.isRequired,
     depositSteem: React.PropTypes.func.isRequired,
 };
@@ -279,7 +384,6 @@ export default connect(
             error: state.app.get('error'),
             flash: state.offchain.get('flash'),
             signup_bonus: state.offchain.get('signup_bonus'),
-            loading: state.app.get('loading'),
             new_visitor: !state.user.get('current') &&
                 !state.offchain.get('user') &&
                 !state.offchain.get('account') &&

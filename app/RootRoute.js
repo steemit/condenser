@@ -14,6 +14,7 @@ export default {
             //require.ensure([], (require) => {
                 cb(null, [require('app/components/pages/About')]);
             //});
+<<<<<<< HEAD
         // golos.io ICO page
         // вот бы кто определился с названиями страниц, а то у нас 2 ico
         } else if (route.page === 'Ico') {
@@ -21,6 +22,12 @@ export default {
         // golos.io landing page
         } else if (route.page === 'Landing') {
             cb(null, [require('app/components/pages/Landing')]);
+=======
+        } else if (route.page === 'Faq') {
+            //require.ensure([], (require) => {
+            cb(null, [require('app/components/pages/Faq')]);
+            //});
+>>>>>>> steemit/develop
         } else if (route.page === 'Login') {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/Login')]);

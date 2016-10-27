@@ -66,6 +66,7 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
 
             { assets.style.map((href, idx) =>
                 <link href={href} key={idx} rel="stylesheet" type="text/css" />) }
+            <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Intl.~locale.en"></script>
             <title>{page_title}</title>
         </head>
         <body>

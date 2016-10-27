@@ -12,12 +12,10 @@ import RootRoute from 'app/RootRoute';
 import ErrorPage from 'server/server-error';
 import {createStore, applyMiddleware, compose} from 'redux';
 import { browserHistory } from 'react-router';
-//import useScroll from 'scroll-behavior/lib/useStandardScroll';
 import useScroll from 'react-router-scroll';
 import createSagaMiddleware from 'redux-saga';
 import { syncHistoryWithStore } from 'react-router-redux';
 import rootReducer from 'app/redux/RootReducer';
-// import DevTools from 'app/redux/DevTools';
 import {fetchDataWatches} from 'app/redux/FetchDataSaga';
 import {marketWatches} from 'app/redux/MarketSaga';
 import {sharedWatches} from 'app/redux/SagaShared';
@@ -29,7 +27,10 @@ import {component as NotFound} from 'app/components/pages/NotFound';
 import extractMeta from 'app/utils/ExtractMeta';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import Translator from 'app/Translator';
+<<<<<<< HEAD
 import { APP_NAME } from 'config/client_config';
+=======
+>>>>>>> steemit/develop
 
 const sagaMiddleware = createSagaMiddleware(
     ...userWatches, // keep first to remove keys early when a page change happens
@@ -45,7 +46,6 @@ let middleware;
 if (process.env.BROWSER && process.env.NODE_ENV === 'development') {
     middleware = compose(
         applyMiddleware(sagaMiddleware)
-        // DevTools.instrument()
     );
 } else {
     middleware = applyMiddleware(sagaMiddleware);
@@ -121,6 +121,7 @@ async function universalRender({ location, initial_state, offchain }) {
             console.log('%c%s','color: black; font-size: 16px;', 'This is a developer console, you must read and understand anything you paste or type here or you could compromise your account and your private keys.');
         }
         return render(
+<<<<<<< HEAD
                 <Provider store={store}>
                     <Translator>
                         <Router
@@ -130,6 +131,17 @@ async function universalRender({ location, initial_state, offchain }) {
                             render={applyRouterMiddleware(scroll)} />
                     </Translator>
                 </Provider>,
+=======
+            <Provider store={store}>
+                    <Translator>
+                <Router
+                    routes={RootRoute}
+                    history={history}
+                    onError={onRouterError}
+                    render={applyRouterMiddleware(scroll)} />
+                    </Translator>
+            </Provider>,
+>>>>>>> steemit/develop
             document.getElementById('content')
         );
     }
@@ -175,7 +187,11 @@ async function universalRender({ location, initial_state, offchain }) {
         app = renderToString(
             <Provider store={server_store}>
                 <Translator>
+<<<<<<< HEAD
                     <RouterContext { ...renderProps } />
+=======
+                <RouterContext { ...renderProps } />
+>>>>>>> steemit/develop
                 </Translator>
             </Provider>
         );

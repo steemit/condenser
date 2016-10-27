@@ -52,6 +52,10 @@
       "confirm_email": "some_template_id"
     }
   },
+  "telesign": {
+      "customer_id": "",
+      "rest_api_key": ""
+  },
   "recaptcha": {
     "site_key": "",
     "secret_key": ""

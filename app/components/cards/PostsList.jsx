@@ -23,7 +23,10 @@ class PostsList extends React.Component {
         loading: PropTypes.bool.isRequired,
         category: PropTypes.string,
         loadMore: PropTypes.func,
-        emptyText: PropTypes.string,
+        emptyText: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.node,
+        ]),
         showSpam: PropTypes.bool,
         fetchState: PropTypes.func.isRequired,
         pathname: PropTypes.string,
@@ -154,12 +157,13 @@ class PostsList extends React.Component {
     render() {
         const {posts, loading, category, emptyText} = this.props;
         const {comments} = this.props
+        const {account} = this.props
         const {thumbSize, showPost} = this.state
         if (!loading && !posts.length && emptyText) {
-            return <Callout body={emptyText} type="success" />;
+            return <Callout>{emptyText}</Callout>;
         }
         const renderSummary = items => items.map(({item, ignore, netVoteSign, authorRepLog10}) => <li key={item}>
-            <PostSummary post={item} currentCategory={category} thumbSize={thumbSize} 
+            <PostSummary account={account} post={item} currentCategory={category} thumbSize={thumbSize}
                 ignore={ignore} netVoteSign={netVoteSign} authorRepLog10={authorRepLog10} onClick={this.onPostClick} />
         </li>)
         return (

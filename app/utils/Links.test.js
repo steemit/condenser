@@ -13,6 +13,10 @@ describe('Links', () => {
         match(linksRe.any(), 'https://example.com\n', 'https://example.com')
         match(linksRe.any(), ' https://example.com ', 'https://example.com')
         match(linksRe.any(), 'https://example.com ', 'https://example.com')
+        match(linksRe.any(), 'https://example.com.', 'https://example.com')
+        match(linksRe.any(), 'https://example.com/page.', 'https://example.com/page')
+        match(linksRe.any(), 'https://example.com,', 'https://example.com')
+        match(linksRe.any(), 'https://example.com/page,', 'https://example.com/page')
     })
     it('multiple matches', () => {
         const all = linksRe.any('ig')

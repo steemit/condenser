@@ -122,7 +122,11 @@ class RecoverAccountStep2 extends React.Component {
         }
         const {account_to_recover} = this.props;
         if (!account_to_recover) {
+<<<<<<< HEAD
             return <Callout body={translate('account_recovery_request_not_confirmed')} />;
+=======
+            return <Callout body="Account recovery request is not confirmed yes, please try back later, thank you for your patience." type="alert" />;
+>>>>>>> steemit/develop
         }
         const {oldPassword, valid, error, progress_status, name_error, success} = this.state;
         const submit_btn_class = 'button action' + (!valid || !oldPassword ? ' disabled' : '');

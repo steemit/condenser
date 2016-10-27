@@ -49,6 +49,7 @@ async function appRender(ctx) {
                     name: user.name,
                     email: user.email,
                     picture: user.picture_small,
+                    prv: ctx.session.prv,
                     account
                 }
             }

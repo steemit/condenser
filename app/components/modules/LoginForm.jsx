@@ -135,7 +135,8 @@ class LoginForm extends Component {
             translate('authenticate_for_this_transaction') :
             translate('login_to_your_APP_NAME_account');
         const opType = loginBroadcastOperation ? loginBroadcastOperation.get('type') : null
-        const authType = translate(/vote|comment/.test(opType) ? 'posting' : 'active_or_owner')
+        const authType = translate(/^vote|comment/.test(opType) ? 'posting' : 'active_or_owner')
+
         const submitLabel = translate(loginBroadcastOperation ? 'sign' : 'login');
         let error = password.touched && password.error ? password.error : this.props.login_error
         if (error === 'owner_login_blocked') {

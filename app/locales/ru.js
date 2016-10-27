@@ -532,6 +532,9 @@ const ru = {
 	account_name_should_have_only_letters_digits_or_dashes: 'Имя аккаунта должно должно состоять только из букв, цифр или дефисов.',
 	choose_language: 'Выберите язык',
 	choose_currency: 'Выберите валюту',
+	crowdsale: 'Краудсейл',
+	followers: 'Подписчики',
+	cannot_increase_reward_of_post_within_the_last_minute_before_payout: 'Награда за пост не может быть увеличена по истечении 24 часов с момента публикации',
 }
 
 export { ru }

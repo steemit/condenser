@@ -76,6 +76,8 @@ export function translateError(string) {
             return translate('account_not_found')
         case 'Account name should have only letters, digits, or dashes.':
             return translate('account_name_should_have_only_letters_digits_or_dashes')
+        case 'Cannot increase reward of post within the last minute before payout':
+            return translate('cannot_increase_reward_of_post_within_the_last_minute_before_payout')
         default:
             return string
     }

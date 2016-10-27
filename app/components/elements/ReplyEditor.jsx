@@ -16,7 +16,7 @@ import {cleanReduxInput} from 'app/utils/ReduxForms'
 import Remarkable from 'remarkable'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 
-const remarkable = new Remarkable({ html: true, linkify: false })
+const remarkable = new Remarkable({ html: true, linkify: false, breaks: true })
 const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
 const RTE_DEFAULT = false
 
@@ -24,38 +24,36 @@ let saveEditorTimeout
 
 // removes <html></html> wrapper if exists
 function stripHtmlWrapper(text) {
-    const m = text.match(/<html>\n?([\S\s]+?)\n?<\/html>/m);
+    const m = text.match(/<html>\n*([\S\s]+?)?\n*<\/html>/m);
     return m && m.length === 2 ? m[1] : text;
 }
 
-function addHtmlWrapper(body) {
-    if(/^<html>/.test(body)) {
-        const err = "Error: content passed to addHtmlWrapper is already wrapped";
-        serverApiRecordEvent('assert_error', err);
-        console.log(err);
-        return body
-    }
-    if(!body || body.trim() === '') body = '';
-    return `<html>\n${body}\n</html>`;
-}
-
 // See also MarkdownViewer render
-const isHtmlTest = text =>
-    /^<html>/.test(text) ||
-    /^<p>[\S\s]*<\/p>/.test(text)
+const isHtmlTest = text => /^<html>/.test(text)
 
 function stateToHtml(state) {
     let html = state.toString('html');
     if (html === '<p></p>') html = '';
     if (html === '<p><br></p>') html = '';
-    return html
+    return `<html>\n${html}\n</html>`;
 }
 
 function stateFromHtml(html = null) {
     if(!RichTextEditor) return null;
+    if(html) html = stripHtmlWrapper(html)
     if(html && html.trim() == '') html = null
     return html ? RichTextEditor.createValueFromString(html, 'html')
                 : RichTextEditor.createEmptyValue()
+}
+
+function stateFromMarkdown(markdown) {
+    let html
+    if(markdown.trim() !== '') {
+        html = remarkable.render(markdown)
+        html = HtmlReady(html).html // TODO: option to disable youtube conversion and @-links
+        console.log("markdown converted to:", html)
+    }
+    return stateFromHtml(html)
 }
 
 class ReplyEditor extends React.Component {
@@ -138,13 +136,13 @@ class ReplyEditor extends React.Component {
         if(process.env.BROWSER) {
 
             // Check for rte editor preference
-            let rte  = this.props.isStory && JSON.parse(localStorage.getItem('replyEditorData-rte') || RTE_DEFAULT);
-            let html = null;
+            let rte = this.props.isStory && JSON.parse(localStorage.getItem('replyEditorData-rte') || RTE_DEFAULT);
+            let raw = null;
 
             // Process initial body value (if this is an edit)
             const {body} = this.props.fields
             if (body.value) {
-                html = body.value
+                raw = body.value
             }
 
             // Check for draft data
@@ -154,19 +152,18 @@ class ReplyEditor extends React.Component {
                 const {category, title} = this.props.fields
                 if(category) category.onChange(draft.category)
                 if(title) title.onChange(draft.title)
-                html = draft.body
+                raw = draft.body
             }
 
             // If we have an initial body, check if it's html or markdown
-            if(html) {
-                rte = isHtmlTest(html)
-                if(rte) html = stripHtmlWrapper(html)
+            if(raw) {
+                rte = isHtmlTest(raw)
             }
 
-            body.onChange(html)
+            body.onChange(raw)
             this.setState({
                 rte,
-                rte_value: rte ? stateFromHtml(html) : null
+                rte_value: rte ? stateFromHtml(raw) : null
             })
             this.setAutoVote()
             this.setState({payoutType: this.props.isStory ? (localStorage.getItem('defaultPayoutType') || '50%') : '50%'})
@@ -195,7 +192,7 @@ class ReplyEditor extends React.Component {
                     formId,
                     title: title ? title.value : undefined,
                     category: category ? category.value : undefined,
-                    body: this.state.rte ? addHtmlWrapper(body.value) : body.value,
+                    body: body.value,
                 }
 
                 clearTimeout(saveEditorTimeout)
@@ -232,7 +229,8 @@ class ReplyEditor extends React.Component {
         e.preventDefault();
         const state = {rte: !this.state.rte};
         if (state.rte) {
-            state.rte_value = stateFromHtml(this.props.fields.body.value);
+            const body = this.props.fields.body.value
+            state.rte_value = isHtmlTest(body) ? stateFromHtml(body) : stateFromMarkdown(body)
         }
         this.setState(state);
         localStorage.setItem('replyEditorData-rte', !this.state.rte)
@@ -266,10 +264,11 @@ class ReplyEditor extends React.Component {
             if (successCallback) successCallback(args)
         }
         const isEdit = type === 'edit'
+        const isHtml = rte || isHtmlTest(body.value)
         // Be careful, autoVote can reset curation rewards.  Never autoVote on edit..
         const autoVoteValue = !isEdit && autoVote.value
         const replyParams = {
-            author, permlink, parent_author, parent_permlink, type, state, originalPost, isHtml: rte,
+            author, permlink, parent_author, parent_permlink, type, state, originalPost, isHtml,
             jsonMetadata, autoVote: autoVoteValue, payoutType,
             successCallback: successCallbackWrapper, errorCallback
         }
@@ -454,8 +453,11 @@ export default formId => reduxForm(
                 originalPost.category : formCategories.first()
             const rootTag = /^[-a-z\d]+$/.test(rootCategory) ? rootCategory : null
 
-            // If this is an HTML post, add <html> wrapper to mark it as so
-            if(isHtml) body = addHtmlWrapper(body)
+            // If this is an HTML post, it MUST begin and end with the tag
+            if(isHtml && !body.match(/^<html>[\s\S]*<\/html>$/)) {
+                errorCallback('HTML posts must begin with <html> and end with </html>')
+                return
+            }
 
             let rtags
             {
@@ -464,9 +466,9 @@ export default formId => reduxForm(
             }
 
             allowedTags.forEach(tag => { rtags.htmltags.delete(tag) })
-            rtags.htmltags.delete('html')
+            if(isHtml) rtags.htmltags.delete('html') // html tag allowed only in HTML mode
             if(rtags.htmltags.size) {
-                errorCallback('Please remove the following HTML elements from your post: ' + Array(...rtags.htmltags).join(', '))
+                errorCallback('Please remove the following HTML elements from your post: ' + Array(...rtags.htmltags).map(tag => `<${tag}>`).join(', '))
                 return
             }
 

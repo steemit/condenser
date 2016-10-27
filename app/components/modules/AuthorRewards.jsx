@@ -113,7 +113,7 @@ class AuthorRewards extends React.Component {
                 <div className="column small-12 medium-8">
                     Author rewards last 24 hours:
                 </div>
-                <div className="column small-12 medium-3">
+                <div className="column small-12 medium-4">
                     {numberWithCommas(vestsToSp(this.props.state, rewards24Vests + " VESTS")) + " STEEM POWER"}
                     <br />
                     {rewards24Steem.toFixed(3) + " STEEM"}
@@ -126,7 +126,7 @@ class AuthorRewards extends React.Component {
                 <div className="column small-12 medium-8">
                     Daily average author rewards:
                 </div>
-                <div className="column small-12 medium-3">
+                <div className="column small-12 medium-4">
                     {numberWithCommas(vestsToSp(this.props.state, averageCurationVests + " VESTS")) + " STEEM POWER"}
                     <br />
                     {averageCurationSteem.toFixed(3) + " STEEM"}
@@ -138,7 +138,7 @@ class AuthorRewards extends React.Component {
                 <div className="column small-12 medium-8">
                     {!hasFullWeek ? "Estimated author rewards last week" : "Author rewards last week"}:
                 </div>
-                <div className="column small-12 medium-3">
+                <div className="column small-12 medium-4">
                     {numberWithCommas(vestsToSp(this.props.state, (hasFullWeek ? rewardsWeekVests : averageCurationVests * 7) + " VESTS")) + " STEEM POWER"}
                     <br />
                     {(hasFullWeek ? rewardsWeekSteem : averageCurationSteem * 7).toFixed(3) + " STEEM"}

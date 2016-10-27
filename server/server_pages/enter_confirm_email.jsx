@@ -43,7 +43,16 @@ function *confirmEmailHandler() {
     this.session.user = eid.user_id;
     yield eid.update({verified: true});
     yield models.User.update({email: eid.email, waiting_list: false}, {where: {id: eid.user_id}});
-    this.redirect('/enter_mobile');
+
+    // check if the phone is confirmed then redirect to create account - this is useful when we invite users and send them the link
+    const mid = yield models.Identity.findOne(
+        {attributes: ['verified'], where: {user_id: eid.user_id, provider: 'phone'}, order: 'id DESC'}
+    );
+    if (mid && mid.verified) {
+        this.redirect('/create_account');
+    } else {
+        this.redirect('/enter_mobile');
+    }
 }
 
 export default function useEnterAndConfirmEmailPages(app) {

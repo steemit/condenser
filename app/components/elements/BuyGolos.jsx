@@ -30,7 +30,7 @@ export default class BuyGolos extends React.Component {
 	}
 
 	componentWillReceiveProps() {
-		if (process.env.BROWSER && this.props.current_user && !this.props.icoAddress) this.generateAddress()
+		if (this.props.current_user && !this.props.icoAddress) this.generateAddress()
 	}
 
 	generateAddress = once(
@@ -66,6 +66,14 @@ export default class BuyGolos extends React.Component {
 					</div>
 					<div className="columns small-12">
 						<span>Юзер залогинен?</span>
+						{
+							metaData
+							? <div>
+								<small>metaData пользователя:</small>
+								<p>{JSON.stringify(metaData)}</p>
+							</div>
+							: null
+						}
 						<div className="switch large">
 							<input className="switch-input" id="isLoggedIn" type="checkbox" checked={props.current_user} />
 							<label className="switch-paddle" htmlFor="isLoggedIn">

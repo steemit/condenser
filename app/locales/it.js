@@ -9,6 +9,7 @@ const it = 	{
 	stolen_account_recovery: "Recupera Account Perso",
 	change_account_password: "Modifica Password Account",
 	steemit_chat: "Steemit Chat",
+    steemit_api_docs: "Steemit API Docs",
 	witnesses: "Witnesses",
 	privacy_policy: "Privacy Policy",
 	terms_of_service: "Termini di Servizio",

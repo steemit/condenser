@@ -9,6 +9,7 @@ const jp = 	{
 	stolen_account_recovery: "盗まれたアカウントの復旧",
 	change_account_password: "パスワードの変更",
 	steemit_chat: "Steemitでチャット",
+    steemit_api_docs: "Steemit API Docs",
 	witnesses: "Witnesses",
 	privacy_policy: "プライバシーポリシー",
 	terms_of_service: "利用規約",

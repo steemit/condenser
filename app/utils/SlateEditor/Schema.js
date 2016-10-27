@@ -240,7 +240,7 @@ export const HtmlRules = [
             if(object.kind !== 'mark') return;
             switch(object.type) {
                 case 'bold':      return <strong>{children}</strong>
-                case 'italic':    return <i>{children}</i>
+                case 'italic':    return <em>{children}</em>
                 case 'underline': return <u>{children}</u>
                 case 'strike':    return <del>{children}</del>
                 case 'code':      return <code>{children}</code>

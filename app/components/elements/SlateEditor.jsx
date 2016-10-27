@@ -3,13 +3,14 @@ import Slate, { Editor, Mark, Raw, Html } from 'slate'
 import Portal from 'react-portal'
 import position from 'selection-position'
 import Icon from 'app/components/elements/Icon';
+import ReactDOMServer from 'react-dom/server'
 
 import {getCollapsedClientRect} from 'app/utils/SlateEditor/Helpers'
 import demoState from 'app/utils/SlateEditor/DemoState'
 import {HtmlRules, schema, getMarkdownType} from 'app/utils/SlateEditor/Schema'
 
 const serializer = new Html({rules: HtmlRules})
-export const serializeHtml   = (state) => serializer.serialize(state)
+export const serializeHtml   = (state) => serializer.serialize(state, {render: false}).map(el => ReactDOMServer.renderToStaticMarkup(el)).join("\n")
 export const deserializeHtml = (html)  => serializer.deserialize(html)
 export const getDemoState    = ()      => Raw.deserialize(demoState, { terse: true })
 

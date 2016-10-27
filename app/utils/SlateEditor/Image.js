@@ -92,7 +92,7 @@ class Image extends React.Component {
 
         if(/^https?:\/\//.test(src)) return <img {...attributes} src={prefix + src} alt={alt} className={className} />
 
-        const img = <img src={prefix + src} alt={alt} className={className} />
+        const img = <img src={src} alt={alt} className={className} />
 
         const {uploading} = this.state
         if(uploading)

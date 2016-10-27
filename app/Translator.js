@@ -12,22 +12,26 @@ import { DEFAULT_LANGUAGE } from 'config/client_config';
 // this is needed to make i18n future proof
 
 /*
-module exports two functions: translate and translateHtml
-usage example:
-translate('reply_to_user', {username: 'undeadlol1') == 'Reply to undeadlol1'
-translateHtml works the same, expcept it renders string with html tags in it
+	module exports two functions: translate and translateHtml
+	usage example:
+	translate('reply_to_user', {username: 'undeadlol1') == 'Reply to undeadlol1'
+	translateHtml works the same, expcept it renders string with html tags in it
 */
 
 // locale data is needed for various messages, ie 'N minutes ago'
 import enLocaleData from 'react-intl/locale-data/en';
 import ruLocaleData from 'react-intl/locale-data/ru';
-addLocaleData([...enLocaleData, ...ruLocaleData]);
+// in react-intl they use 'uk' instead of 'ua'
+import ukLocaleData from 'react-intl/locale-data/uk';
+addLocaleData([...enLocaleData, ...ruLocaleData, ...ukLocaleData]);
 
 // Our translated strings
 
 import { ru } from './locales/ru';
 import { en } from './locales/en';
-const messages = {ru, en}
+// in react-intl they use 'uk' instead of 'ua'
+import { ua as uk } from './locales/ua';
+const messages = {ru, en, uk}
 
 // exported function placeholders
 // this is needed for proper export before react-intl functions with locale data,

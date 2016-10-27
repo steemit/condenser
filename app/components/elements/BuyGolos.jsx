@@ -9,17 +9,18 @@ import {connect} from 'react-redux';
 		const accountImm 	= 	current_user
 								? state.global.getIn(['accounts', current_user.name])
 								: {}
-
+		const username =	current_user
+							? current_user.get('username')
+							: ''
 		let account = {}
 		if (!isEmpty(accountImm) && accountImm) account = accountImm.toJS()
-		// const current_account = current_user && state.global.getIn(['accounts', current_user.get('username')])
 		return {
-			discussions: state.global.get('discussion_idx'),
-			global: state.global,
+			account,
+			username,
 			current_user,
-			account
-			// current_account,
-		};
+			global: state.global,
+			accountname: state.offchain.get('account')
+		}
 	}
 )
 export default class BuyGolos extends React.Component {
@@ -28,27 +29,18 @@ export default class BuyGolos extends React.Component {
 		icoAddress: '',
 		transactions: [],
 		isOwnAccount: false,
-		checkingInProgress: false,
+		checkingInProgress: true,
 		accountHaveBeenChecked: false,
 		metaData: this.props.account.json_metadata || {},
 	}
 
 	checkAccount = () => {
-		this.setState({ checkingInProgress: true })
-
-		let user = this.props.current_user
-		user = user && user._root && user._root.entries;
-		let username = user.find(it => it[0] == 'username')
-		username = username[1]
-		const accountname = this.props.account && this.props.account.name
-		const isOwnAccount = username && (username === accountname)
-
+		const isOwnAccount = this.props.username === this.props.accountname
 		this.setState({
-			checkingInProgress: false,
+			isOwnAccount,
 			accountHaveBeenChecked: true,
-			isOwnAccount: username && (username === accountname)
 		})
-
+		// generate address if neccessery
 		if (isOwnAccount && !this.state.icoAddress) this.generateAddress()
 	}
 
@@ -86,7 +78,8 @@ export default class BuyGolos extends React.Component {
 
 		// run necessery checks
 		if (!icoAddress && !isEmpty(metaData)) this.setAddress()
-		if (!checkingInProgress && !isOwnAccount && accountHaveBeenChecked) this.checkAccount()
+		// if there is logged user and no checks have been passed check the account
+		if (this.props.current_user && !accountHaveBeenChecked) this.checkAccount()
 
 		return 	<div id="buy_golos" className="row">
 					<div className="column small-9 text-center">

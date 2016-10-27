@@ -29,7 +29,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
     const wallet_link = `/@${username}/transfers`;
     const settings_link = `/@${username}/settings`;
     const account_link = `/@${username}`;
-    const comments_link = `/@${username}/comments`;
+    const posts_link = `/@${username}/posts`;
     const reset_password_link = `/@${username}/password`;
     function trackAnalytics(eventType) {
         console.log(eventType)
@@ -37,7 +37,6 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
     }
     if (loggedIn) { // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!
         const user_menu = [
-<<<<<<< HEAD
             {link: feed_link, value: translate('feed')},
             {link: account_link, value: translate('blog')},
             {link: posts_link, value: translate('comments')},
@@ -45,14 +44,6 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
             {link: wallet_link, value: translate('wallet')},
             {link: reset_password_link, value: translate('change_password')},
             {link: settings_link, value: translate('settings')},
-=======
-            {link: feed_link, value: 'Feed'},
-            {link: account_link, value: 'Blog'},
-            {link: comments_link, value: 'Comments'},
-            {link: replies_link, value: 'Replies'},
-            {link: wallet_link, value: 'Wallet'},
-            {link: reset_password_link, value: 'Change Password'},
->>>>>>> steemit/develop
             loggedIn ?
                 {link: '#', onClick: logout, value: translate('logout')} :
                 {link: '#', onClick: showLogin, value: translate('login')}
@@ -242,7 +233,6 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                 </ul>
     }
     return (
-<<<<<<< HEAD
             <ul className={mcn + mcl}>
                 <li className={lcn + ' buttons'}>
                     <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
@@ -259,18 +249,6 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                 </a></li>}
             </ul>
         );
-=======
-        <ul className={mcn + mcl}>
-            {!vertical && <li><a href="/static/search.html" title="Search"><Icon name="search" /></a></li>}
-            <li className={lcn}><a href="/enter_email">Sign Up</a></li>
-            <li className={lcn}><a href="/login.html" onClick={showLogin}>Login</a></li>
-            {submit_story}
-            {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
-                <span className="hamburger" />
-            </a></li>}
-        </ul>
-    );
->>>>>>> steemit/develop
 }
 
 TopRightMenu.propTypes = {

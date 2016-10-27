@@ -160,16 +160,13 @@ class Voting extends React.Component {
             </span>
         }
 
-        const {max_payout, pending_payout, total_author_payout, total_curator_payout, cashout_time, promoted} = this.props;
+        const {pending_payout, total_author_payout, total_curator_payout, cashout_time, promoted} = this.props;
         let payout = pending_payout + total_author_payout + total_curator_payout;
         if (payout < 0.0) payout = 0.0;
-        if (payout > max_payout) payout = max_payout;
-        const payout_limit_hit = payout >= max_payout;
 
         const up = <Icon name={votingUpActive ? 'empty' : 'chevron-up-circle'} />;
         const classUp = 'Voting__button Voting__button-up' + (myVote > 0 ? ' Voting__button--upvoted' : '') + (votingUpActive ? ' votingUp' : '');
 
-<<<<<<< HEAD
         const payoutItems = [
 
             {value: translate('potential_payout') + ' ' + localizedCurrency(formatDecimal(pending_payout).join(''))},
@@ -178,44 +175,19 @@ class Voting extends React.Component {
 
         ];
         if (cashout_time && cashout_time.indexOf('1969') !== 0 && cashout_time.indexOf('1970') !== 0) {
-=======
-        const cashout_active = pending_payout > 0 || (cashout_time && cashout_time.indexOf('1969') !== 0 && cashout_time.indexOf('1970') !== 0)
-        const payoutItems = [];
-
-        if(cashout_active) {
-            payoutItems.push({value: 'Potential Payout $' + formatDecimal(pending_payout).join('')});
-        }
-        if(promoted > 0) {
-            payoutItems.push({value: 'Promotion Cost $' + formatDecimal(promoted).join('')});
-        }
-        if (cashout_active) {
->>>>>>> steemit/develop
             payoutItems.push({value: <TimeAgoWrapper date={cashout_time} />});
-        }
-
-        if(max_payout == 0) {
-            payoutItems.push({value: 'Payout Declined'})
-        } else if (max_payout < 1000000) {
-            payoutItems.push({value: 'Max Accepted Payout $' + formatDecimal(max_payout).join('')})
         }
         if(total_author_payout > 0) {
             payoutItems.push({value: translate('past_payouts') + ' ' + localizedCurrency(formatDecimal(total_author_payout + total_curator_payout).join(''))});
             payoutItems.push({value: ' - ' + translate('authors') + ': ' + localizedCurrency(formatDecimal(total_author_payout).join(''))});
             payoutItems.push({value: ' - ' + translate('curators') + ': ' + localizedCurrency(formatDecimal(total_curator_payout).join(''))});
         }
-<<<<<<< HEAD
         const payoutEl = <DropdownMenu el="div" items={payoutItems} onClick={this.trackAnalytics.bind(this, 'rewards dropdown clicked')}>
             <span>
                 {/* <FormattedAsset amount={payout} asset="$" /> */}
                 {/* TODO check FormattedAsset and it's possible replacememnt with LocalizedCurrency */}
                 <LocalizedCurrency amount={payout} />
                 <Icon name="dropdown-arrow" />
-=======
-        const payoutEl = <DropdownMenu el="div" items={payoutItems}>
-            <span style={payout_limit_hit ? {opacity: '0.5'} : {}}>
-                <FormattedAsset amount={payout} asset="$" />
-                {payoutItems.length > 0 && <Icon name="dropdown-arrow" />}
->>>>>>> steemit/develop
             </span>
         </DropdownMenu>;
 
@@ -233,13 +205,8 @@ class Voting extends React.Component {
         if (count > MAX_VOTES_DISPLAY) voters.push({value: <span>&hellip; {' ' + translate('and') + ' '} {(count - MAX_VOTES_DISPLAY)} {' ' + translate('more')}</span>});
 
         let voters_list = null;
-<<<<<<< HEAD
         if (showList) {
             voters_list = <DropdownMenu selected={translate('vote_count', {voteCount: count})} onClick={this.trackAnalytics.bind(this, 'votes dropdown clicked')} className="Voting__voters_list" items={voters} el="div" />;
-=======
-        if (showList && count > 0) {
-            voters_list = <DropdownMenu selected={pluralize('votes', count, true)} className="Voting__voters_list" items={voters} el="div" />;
->>>>>>> steemit/develop
         }
 
         let voteUpClick = this.voteUp;
@@ -283,7 +250,6 @@ export default connect(
         const is_comment = post.get('parent_author') !== ''
         const current_account = state.user.get('current')
         const cashout_time = post.get('cashout_time')
-        const max_payout           = parsePayoutAmount(post.get('max_accepted_payout'))
         const pending_payout       = parsePayoutAmount(post.get('pending_payout_value'))
         const promoted             = parsePayoutAmount(post.get('promoted')) || 0
         const total_author_payout  = parsePayoutAmount(post.get('total_payout_value'))
@@ -300,7 +266,7 @@ export default connect(
         return {
             ...ownProps,
             myVote, author, permlink, username, active_votes, vesting_shares, is_comment,
-            max_payout, pending_payout, promoted, total_author_payout, total_curator_payout, cashout_time,
+            pending_payout, promoted, total_author_payout, total_curator_payout, cashout_time,
             loggedin: username != null,
             voting
         }

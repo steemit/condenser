@@ -11,9 +11,8 @@
 
 =======
 # Steemit.com
-
-========
 Steemit.com is the react.js web interface to the world's first and best blockchain-based social media platform.  It uses [STEEM](https://github.com/steemit/steem), a blockchain powered by Graphene 2.0 technology to store JSON-based content for a plethora of web applications.   
+========
 
 ## Why would I want to use Steemit.com?
 * Learning how to build blockchain-based web applications using STEEM as a content storage mechanism in react.js

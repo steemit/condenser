@@ -41,13 +41,8 @@ export default {
                 loader: ExtractTextPlugin.extract('style', 'css!autoprefixer!sass?outputStyle=expanded')
             },
             {
-<<<<<<< HEAD
                test: require.resolve('wowjs/dist/wow.js'),
                loader: 'exports?this.WOW'
-=======
-                test: /\.md/,
-                loader: 'raw'
->>>>>>> steemit/develop
             }
         ]
     },

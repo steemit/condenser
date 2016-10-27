@@ -102,43 +102,9 @@ class Header extends React.Component {
         } else if (route.page === 'Post') {
             sort_order = '';
             topic = route.params[0];
-        } else if (route.page == 'SubmitPost') {
-            page_title = `Create a Post`;
-        } else if (route.page == 'Privacy') {
-            page_title = `Privacy Policy`;
-        } else if (route.page == 'Tos') {
-            page_title = `Terms of Service`;
-        } else if (route.page == 'ChangePassword') {
-            page_title = `Change Account Password`;
-        } else if (route.page == 'CreateAccount') {
-            page_title = `Create Account`;
-        } else if (route.page == 'RecoverAccountStep1' || route.page == 'RecoverAccountStep2') {
-            page_title = `Stolen Account Recovery`;
         } else if (route.page === 'UserProfile') {
             user_name = route.params[0].slice(1);
             page_title = user_name;
-<<<<<<< HEAD
-=======
-            if(route.params[1] === "followers"){
-                page_title = `People following ${user_name} `;
-            }
-            if(route.params[1] === "followed"){
-                page_title = `People followed by ${user_name} `;
-            }
-            if(route.params[1] === "curation-rewards"){
-                page_title = `Curation rewards by ${user_name} `;
-            }
-            if(route.params[1] === "author-rewards"){
-                page_title = `Author rewards by ${user_name} `;
-            }
-            if(route.params[1] === "recent-replies"){
-                page_title = `Replies by ${user_name} `;
-            }
-            // @user/"posts" is deprecated in favor of "comments" as of oct-2016 (#443)
-            if(route.params[1] === "posts" || route.params[1] === "comments"){
-                page_title = `Comments by ${user_name} `;
-            }
->>>>>>> steemit/develop
         } else {
             page_name = ''; //page_title = route.page.replace( /([a-z])([A-Z])/g, '$1 $2' ).toLowerCase();
         }

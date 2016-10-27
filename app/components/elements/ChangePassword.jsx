@@ -42,18 +42,13 @@ class ChangePassword extends React.Component {
         if (name.length > 0) {
             nameError = validate_account_name(name);
             if (!nameError) {
-                this.setState({nameError: ''});
                 promise = Apis.db_api('get_accounts', [name]).then(res => {
                     return !(res && res.length > 0) ? translate('account_not_found') : '';
                 });
             }
         }
         if (promise) {
-            promise
-                .then(nameError => this.setState({nameError}))
-                .catch(() => this.setState({
-                    nameError: "Account name can't be verified right now due to server failure. Please try again later."
-                }));
+            promise.then(error => this.setState({nameError: error}));
         } else {
             this.setState({nameError});
         }

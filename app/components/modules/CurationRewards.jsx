@@ -104,39 +104,24 @@ class CurationRewards extends React.Component {
                 <div className="column small-12 medium-8">
                     {translate('curation_rewards_last_24_hours')}:
                 </div>
-<<<<<<< HEAD
                 <div className="column small-12 medium-3">
                     {numberWithCommas(vestsToSp(this.props.state, rewards24 + " " + VEST_TICKER)) + " "+ INVEST_TOKEN}
-=======
-                <div className="column small-12 medium-4">
-                    {numberWithCommas(vestsToSp(this.props.state, rewards24 + " VESTS")) + " STEEM POWER"}
->>>>>>> steemit/develop
                 </div>
             </div>
             <div className="UserWallet__balance UserReward__row row">
                 <div className="column small-12 medium-8">
                     {translate('daily_average_curation_rewards')}:
                 </div>
-<<<<<<< HEAD
                 <div className="column small-12 medium-3">
                     {numberWithCommas(vestsToSp(this.props.state, averageCuration + " " + VEST_TICKER)) + " "+ INVEST_TOKEN}
-=======
-                <div className="column small-12 medium-4">
-                    {numberWithCommas(vestsToSp(this.props.state, averageCuration + " VESTS")) + " STEEM POWER"}
->>>>>>> steemit/develop
                 </div>
             </div>
             <div className="UserWallet__balance UserReward__row row">
                 <div className="column small-12 medium-8">
                     {translate(!hasFullWeek ? 'estimated_curation_rewards_last_week' : 'curation_rewards_last_week')}:
                 </div>
-<<<<<<< HEAD
                 <div className="column small-12 medium-3">
                     {numberWithCommas(vestsToSp(this.props.state, (hasFullWeek ? rewardsWeek : averageCuration * 7) + " " + VEST_TICKER)) + " "+ INVEST_TOKEN}
-=======
-                <div className="column small-12 medium-4">
-                    {numberWithCommas(vestsToSp(this.props.state, (hasFullWeek ? rewardsWeek : averageCuration * 7) + " VESTS")) + " STEEM POWER"}
->>>>>>> steemit/develop
                 </div>
             </div>
             <div className="row">

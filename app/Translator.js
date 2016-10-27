@@ -2,15 +2,11 @@ import React from 'react';
 import isString from 'lodash/isString';
 import isObject from 'lodash/isObject';
 import isUndefined from 'lodash/isUndefined';
-<<<<<<< HEAD
 import { connect } from 'react-redux'
 import { IntlProvider, addLocaleData, injectIntl } from 'react-intl';
 import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
 import store from 'store';
 import { DEFAULT_LANGUAGE } from 'config/client_config';
-=======
-import { IntlProvider, addLocaleData, injectIntl } from 'react-intl';
->>>>>>> steemit/develop
 
 // most of this code creates a wrapper for i18n API.
 // this is needed to make i18n future proof
@@ -25,7 +21,6 @@ translateHtml works the same, expcept it renders string with html tags in it
 // locale data is needed for various messages, ie 'N minutes ago'
 import enLocaleData from 'react-intl/locale-data/en';
 import ruLocaleData from 'react-intl/locale-data/ru';
-<<<<<<< HEAD
 addLocaleData([...enLocaleData, ...ruLocaleData]);
 
 // Our translated strings
@@ -33,35 +28,11 @@ addLocaleData([...enLocaleData, ...ruLocaleData]);
 import { ru } from './locales/ru';
 import { en } from './locales/en';
 const messages = {ru, en}
-=======
-import frLocaleData from 'react-intl/locale-data/fr';
-import esLocaleData from 'react-intl/locale-data/es';
-import itLocaleData from 'react-intl/locale-data/it';
-addLocaleData([...enLocaleData, ...ruLocaleData, ...frLocaleData, ...esLocaleData, ...itLocaleData]);
-
-// Our translated strings
-import { en } from './locales/en';
-import { ru } from './locales/ru';
-import { fr } from './locales/fr';
-import { es } from './locales/es';
-import { it } from './locales/it';
-const translations = {
-	en: en,
-	ru: ru,
-	fr: fr,
-	es: es,
-	it: it
-}
->>>>>>> steemit/develop
 
 // exported function placeholders
 // this is needed for proper export before react-intl functions with locale data,
 // will be properly created (they depend on react props and context,
-<<<<<<< HEAD
 // which is not available until component is being created
-=======
-// which is not available until component is being created)
->>>>>>> steemit/develop
 let translate = () => {};
 let translateHtml = () => {};
 let translatePlural = () => {};
@@ -74,10 +45,7 @@ let translatePlural = () => {};
 // all of this shenanigans are needed because many times translations are needed outside of components(in reducers and redux "connect" functions)
 // but since react-intl functions depends on components context it would be not possible
 
-<<<<<<< HEAD
 @injectIntl // inject translation functions through 'intl' prop
-=======
->>>>>>> steemit/develop
 class DummyComponentToExportProps extends React.Component {
 
 	render() { // render hidden placeholder
@@ -120,12 +88,6 @@ class DummyComponentToExportProps extends React.Component {
 	}
 }
 
-<<<<<<< HEAD
-=======
-// inject translation functions through 'intl' prop (not using decorator)
-DummyComponentToExportProps = injectIntl(DummyComponentToExportProps)
-
->>>>>>> steemit/develop
 // actual wrapper for application
 class Translator extends React.Component {
 	render() {
@@ -134,7 +96,6 @@ class Translator extends React.Component {
 		// Define user's language. Different browsers have the user locale defined
 		// on different fields on the `navigator` object, so we make sure to account
 		// for these different by checking all of them
-<<<<<<< HEAD
 		let language = this.props.locale; // usually 'en'
 		if (process.env.BROWSER) {
 			const storredLanguage = store.get('language')
@@ -161,28 +122,6 @@ class Translator extends React.Component {
 							localizedCurrency() would never be undefined
 						*/}
 						<LocalizedCurrency amount={0} hidden />
-=======
-		let language = 'en';
-		// while Server Side Rendering is in process, 'navigator' is undefined
-		if (process.env.BROWSER) {
-			language = navigator ? (navigator.languages && navigator.languages[0])
-		                        || navigator.language
-		                        || navigator.userLanguage
-								: 'en';
-		}
-
-	    //Split locales with a region code (ie. 'en-EN' to 'en')
-	    const languageWithoutRegionCode = language.toLowerCase().split(/[_-]+/)[0];
-
-		// TODO: don't forget to add Safari polyfill
-
-		// to ensure dynamic language change, "key" property with same "locale" info must be added
-		// see: https://github.com/yahoo/react-intl/wiki/Components#multiple-intl-contexts
-		let messages = translations[languageWithoutRegionCode]
-		return 	<IntlProvider locale={languageWithoutRegionCode} key={languageWithoutRegionCode} messages={messages}>
-					<div>
-						<DummyComponentToExportProps />
->>>>>>> steemit/develop
 						{this.props.children}
 					</div>
 				</IntlProvider>
@@ -191,7 +130,6 @@ class Translator extends React.Component {
 
 export { translate, translateHtml, translatePlural }
 
-<<<<<<< HEAD
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
@@ -202,6 +140,3 @@ export default connect(
         }
     }
 )(Translator)
-=======
-export default Translator
->>>>>>> steemit/develop

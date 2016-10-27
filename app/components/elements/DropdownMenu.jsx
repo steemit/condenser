@@ -48,28 +48,17 @@ export default class DropdownMenu extends React.Component {
         browserHistory.push(a.pathname + a.search);
     };
 
-<<<<<<< HEAD
     render() {
         const {el, items, selected, children, className, title, href, onClick} = this.props;
-=======
-    getSelectedLabel = (items, selected) => {
->>>>>>> steemit/develop
         const selectedEntry = items.find(i => i.value === selected)
         const selectedLabel = selectedEntry && selectedEntry.label ? selectedEntry.label : selected
-        return selectedLabel
-    }
-
-    render() {
-        const {el, items, selected, children, className, title, href} = this.props;
-        const hasDropdown = items.length > 0
-
-        let entry = children || <span>
-                {this.getSelectedLabel(items, selected)}
-                {hasDropdown && <Icon name="dropdown-arrow" />}
-            </span>
-
-        if(hasDropdown) entry = <a key="entry" href={href || '#'} onClick={this.show}>{entry}</a>
-
+        const entry = <a key="entry" href={href || '#'} onClick={this.show}>
+            {children || <span>
+                {/*selectedEntry && selectedEntry.icon && <Icon name={selectedEntry.icon} />*/}{/*looks bad on the deposit screen*/}
+                {selectedLabel}
+                <Icon name="dropdown-arrow" />
+            </span>}
+        </a>;
         const menu = <VerticalMenu key="menu" title={title} items={items} hideValue={selected} className="VerticalMenu" />;
         const cls = 'DropdownMenu' + (this.state.shown ? ' show' : '') + (className ? ` ${className}` : '')
         return React.createElement(el, {className: cls, onClick}, [entry, menu]);

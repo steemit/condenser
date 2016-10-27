@@ -110,13 +110,8 @@ class AuthorRewards extends React.Component {
                 <div className="column small-12 medium-8">
                     {translate('author_rewards_last_24_hours')}:
                 </div>
-<<<<<<< HEAD
                 <div className="column small-12 medium-3">
                     {numberWithCommas(vestsToSp(this.props.state, [rewards24Vests, VEST_TICKER].join(" "))) + " " + INVEST_TOKEN}
-=======
-                <div className="column small-12 medium-4">
-                    {numberWithCommas(vestsToSp(this.props.state, rewards24Vests + " VESTS")) + " STEEM POWER"}
->>>>>>> steemit/develop
                     <br />
                     {rewards24SBD.toFixed(3) + " " + DEBT_TOKEN_SHORT}
                 </div>
@@ -126,15 +121,8 @@ class AuthorRewards extends React.Component {
                 <div className="column small-12 medium-8">
                     {translate('daily_average_author_rewards')}:
                 </div>
-<<<<<<< HEAD
                 <div className="column small-12 medium-3">
                     {numberWithCommas(vestsToSp(this.props.state, [averageCurationVests, VEST_TICKER].join(" ") )) + " " + INVEST_TOKEN}
-=======
-                <div className="column small-12 medium-4">
-                    {numberWithCommas(vestsToSp(this.props.state, averageCurationVests + " VESTS")) + " STEEM POWER"}
-                    <br />
-                    {averageCurationSteem.toFixed(3) + " STEEM"}
->>>>>>> steemit/develop
                     <br />
                     {averageCurationSBD.toFixed(3) + " " + DEBT_TOKEN_SHORT}
                 </div>
@@ -143,15 +131,8 @@ class AuthorRewards extends React.Component {
                 <div className="column small-12 medium-8">
                     {translate(!hasFullWeek ? 'estimated_author_rewards_last_week' : 'author_rewards_last_week')}:
                 </div>
-<<<<<<< HEAD
                 <div className="column small-12 medium-3">
                     {numberWithCommas(vestsToSp(this.props.state, [(hasFullWeek ? rewardsWeekVests : averageCurationVests * 7), VEST_TICKER].join(" ") )) + " " + INVEST_TOKEN}
-=======
-                <div className="column small-12 medium-4">
-                    {numberWithCommas(vestsToSp(this.props.state, (hasFullWeek ? rewardsWeekVests : averageCurationVests * 7) + " VESTS")) + " STEEM POWER"}
-                    <br />
-                    {(hasFullWeek ? rewardsWeekSteem : averageCurationSteem * 7).toFixed(3) + " STEEM"}
->>>>>>> steemit/develop
                     <br />
                     {(hasFullWeek ? rewardsWeekSBD : averageCurationSBD * 7).toFixed(3) + " " + DEBT_TOKEN_SHORT}
                 </div>

@@ -74,12 +74,7 @@ export default class PostSummary extends React.Component {
 
     render() {
         const {currentCategory, thumbSize, ignore, onClick} = this.props;
-<<<<<<< HEAD
         const {post, content, pending_payout, total_payout, cashout_time} = this.props;
-=======
-        const {post, content, pending_payout, total_payout} = this.props;
-        const {account} = this.props;
->>>>>>> steemit/develop
         if (!content) return null;
 
         const archived = content.get('mode') === 'archived'
@@ -87,12 +82,6 @@ export default class PostSummary extends React.Component {
         if(reblogged_by) {
           reblogged_by = <div className="PostSummary__reblogged_by">
                              <Icon name="reblog" /> {translate('reblogged_by') + ' '} <Link to={'/@'+reblogged_by}>{reblogged_by}</Link>
-                         </div>
-        }
-
-        if(account && account != content.get('author')) {
-          reblogged_by = <div className="PostSummary__reblogged_by">
-                             <Icon name="reblog" /> Resteemed
                          </div>
         }
 
@@ -125,15 +114,9 @@ export default class PostSummary extends React.Component {
 
         // author and category
         let author_category = <span className="vcard">
-<<<<<<< HEAD
             <TimeAgoWrapper date={p.created} className="updated" />
             {} {translate('by')} <Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
             {} {translate('in')} <TagList post={p} single />
-=======
-            <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}><TimeAgoWrapper date={p.created} className="updated" /></a>
-            {} by <Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
-            {} in <TagList post={p} single />
->>>>>>> steemit/develop
         </span>
 
         if( !(currentCategory && currentCategory.match( /nsfw/ )) ) {
@@ -175,16 +158,12 @@ export default class PostSummary extends React.Component {
                     </div>
                     {content_body}
                     <div className="PostSummary__footer">
-<<<<<<< HEAD
                         <Voting pending_payout={pending_payout} total_payout={total_payout} showList={false} cashout_time={cashout_time} post={post} showList={false} />
-=======
-                        <Voting post={post} showList={false} />
-                        <VotesAndComments post={post} commentsLink={comments_link} />
->>>>>>> steemit/develop
                         <span className="PostSummary__time_author_category show-for-medium">
-                            {!archived && <Reblog author={p.author} permlink={p.permlink} />}
                             {author_category}
+                            {!archived && <Reblog author={p.author} permlink={p.permlink} />}
                         </span>
+                        <VotesAndComments post={post} commentsLink={comments_link} />
                     </div>
                 </div>
             </article>

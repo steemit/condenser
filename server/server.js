@@ -12,7 +12,6 @@ import useGeneralApi from './api/general';
 import useIcoApi from './api/ico';
 import useAccountRecoveryApi from './api/account_recovery';
 import useEnterAndConfirmEmailPages from './server_pages/enter_confirm_email';
-import useEnterAndConfirmMobilePages from './server_pages/enter_confirm_mobile';
 import isBot from 'koa-isbot';
 import session from 'koa-session';
 import csrf from 'koa-csrf';
@@ -20,7 +19,6 @@ import flash from 'koa-flash';
 import minimist from 'minimist';
 import Grant from 'grant-koa';
 import config from '../config';
-import secureRandom from 'secure-random'
 
 import {githash} from 'config/last-build';
 
@@ -39,26 +37,14 @@ csrf(app);
 app.use(mount(grant));
 app.use(flash({key: 'flash'}));
 
-// some redirects
+// redirect to home page if known account
+// remember ch, cn, r url params in the session and remove them from url
 app.use(function *(next) {
-    // redirect to home page/feed if known account
     if (this.method === 'GET' && this.url === '/' && this.session.a) {
-<<<<<<< HEAD
         this.status = 301;
         this.redirect('/ico'); // LANDING this.redirect(`/@${this.session.a}/feed`);
-=======
-        this.status = 302;
-        this.redirect(`/@${this.session.a}/feed`);
->>>>>>> steemit/develop
         return;
     }
-    // start registration process if user get to create_account page and has no id in session yet
-    if(this.url === '/create_account' && !this.session.user) {
-        this.status = 302;
-        this.redirect('/enter_email');
-        return;
-    }
-    // remember ch, cn, r url params in the session and remove them from url
     if (this.method === 'GET' && /\?[^\w]*(ch=|cn=|r=)/.test(this.url)) {
         let redir = this.url.replace(/((ch|cn|r)=[^&]+)/gi, r => {
             const p = r.split('=');
@@ -68,7 +54,7 @@ app.use(function *(next) {
         redir = redir.replace(/&&&?/, '');
         redir = redir.replace(/\?&?$/, '');
         console.log(`server redirect ${this.url} -> ${redir}`);
-        this.status = 302;
+        this.status = 301;
         this.redirect(redir);
     } else {
         yield next;
@@ -95,22 +81,8 @@ app.use(mount('/robots.txt', function* () {
     this.body = "User-agent: *\nAllow: /";
 }));
 
-// set user's uid - used to identify users in logs and some other places
-app.use(function* (next) {
-    const last_visit = this.session.last_visit;
-    this.session.last_visit = (new Date()).getTime() / 1000 | 0;
-    if (!this.session.uid) {
-        this.session.uid = secureRandom.randomBuffer(13).toString('hex');
-        this.session.new_visit = true;
-    } else {
-        this.session.new_visit = this.session.last_visit - last_visit > 1800;
-    }
-    yield next;
-});
-
 useRedirects(app);
 useEnterAndConfirmEmailPages(app);
-useEnterAndConfirmMobilePages(app);
 
 if (env === 'production') {
     app.use(helmet.contentSecurityPolicy(config.helmet));
@@ -143,6 +115,16 @@ if (env === 'development') {
 if (env !== 'test') {
     const appRender = require('./app_render');
     app.use(function* () {
+        this.first_visit = false;
+        this.last_visit = this.session.last_visit;
+        this.session.last_visit = (new Date()).getTime() / 1000 | 0;
+        if (!this.session.uid) {
+            this.session.uid = Math.random().toString(36).slice(2);
+            this.first_visit = true;
+            this.session.new_visit = true;
+        } else {
+            this.session.new_visit = this.session.last_visit - this.last_visit > 1800;
+        }
         yield appRender(this);
         // if (app_router.dbStatus.ok) recordWebEvent(this, 'page_load');
         const bot = this.state.isBot;

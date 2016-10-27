@@ -9,6 +9,7 @@ const es = 	{
 	stolen_account_recovery: "Recuperación de Cuentas Robadas",
 	change_account_password: "Cambiar Contraseña",
 	steemit_chat: "Chat de Steemit",
+    steemit_api_docs: "Steemit API Docs",
 	witnesses: "Witnesses",
 	privacy_policy: "Política de Privacidad",
 	terms_of_service: "Terminos de Servicio",

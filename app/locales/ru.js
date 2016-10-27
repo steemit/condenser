@@ -9,6 +9,7 @@ const ru = {
 	stolen_account_recovery: "Возврат украденного аккаунта",
 	change_account_password: "Изменить пароль аккаунта",
 	steemit_chat: "Steemit чат",
+    steemit_api_docs: "Steemit API Docs",
 	witnesses: "Свидетели",
 	privacy_policy: "Политика Конфиденциальности",
 	terms_of_service: "Условия пользования",

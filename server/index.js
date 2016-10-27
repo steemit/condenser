@@ -20,7 +20,8 @@ global.$STM_Config = {
     ipfs_prefix: config.ipfs_prefix,
     disable_signups: config.disable_signups,
     read_only_mode: config.read_only_mode,
-    registrar_fee: config.registrar.fee
+    registrar_fee: config.registrar.fee,
+    login_challenge_description: config.login_challenge_description,
 };
 
 const WebpackIsomorphicTools = require('webpack-isomorphic-tools');

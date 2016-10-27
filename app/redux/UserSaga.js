@@ -2,11 +2,11 @@ import {fromJS, Set, List} from 'immutable'
 import {takeLatest} from 'redux-saga';
 import {call, put, select, fork} from 'redux-saga/effects';
 import {accountAuthLookup} from 'app/redux/AuthSaga'
-import {PrivateKey} from 'shared/ecc'
+import {PrivateKey, Signature, hash} from 'shared/ecc'
 import user from 'app/redux/User'
 import {getAccount} from 'app/redux/SagaShared'
 import {browserHistory} from 'react-router'
-import {serverApiLogin, serverApiLogout} from 'app/utils/ServerApiClient';
+import {serverApiLoginChallenge, serverApiLogin, serverApiLogout} from 'app/utils/ServerApiClient';
 import {Apis} from 'shared/api_client';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import {loadFollows} from 'app/redux/FollowSaga'
@@ -247,7 +247,22 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     if (!autopost && saveLogin)
         yield put(user.actions.saveLogin());
 
-    serverApiLogin(username);
+    const signatures = {}
+    try {
+        const challengeString = yield serverApiLoginChallenge()
+        const bufSha = hash.sha256(challengeString)
+        const sign = (role, d) => {
+            if(!d) return
+            const sig = Signature.signBufferSha256(bufSha, d)
+            signatures[role] = sig.toHex()
+        }
+        sign('posting', private_keys.get('posting_private'))
+        sign('active', private_keys.get('active_private'))
+    } catch(error) {
+        // Does not need to be fatal
+        console.error('Server Login Error', error);
+    }
+    serverApiLogin(username, signatures);
     if (afterLoginRedirectToAccount) browserHistory.push('/@' + username);
 }
 

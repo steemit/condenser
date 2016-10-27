@@ -7,6 +7,8 @@ import recordWebEvent from 'server/record_web_event';
 import {esc, escAttrs} from 'db/models';
 import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF} from 'server/utils';
 import coBody from 'co-body';
+import secureRandom from 'secure-random'
+import {PublicKey, Signature, hash} from 'shared/ecc'
 
 export default function useGeneralApi(app) {
     const router = koa_router({prefix: '/api/v1'});
@@ -161,7 +163,7 @@ export default function useGeneralApi(app) {
     router.post('/login_account', koaBody, function *() {
         if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;
-        const {csrf, account} = typeof(params) === 'string' ? JSON.parse(params) : params;
+        const {csrf, account, signatures} = typeof(params) === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
         console.log('-- /login_account -->', this.session.uid, account);
         try {
@@ -170,6 +172,41 @@ export default function useGeneralApi(app) {
                 {attributes: ['user_id'], where: {name: esc(account)}}
             );
             if (db_account) this.session.user = db_account.user_id;
+
+            if(signatures) {
+                if(!this.session.auth || !this.session.auth.login_challenge) {
+                    console.error('general.js missing this.session.auth.login_challenge');
+                } else {
+                    const [chainAccount] = yield Apis.db_api('get_accounts', [account])
+                    if(!chainAccount) {
+                        console.error('general.js missing blockchain account', account);
+                    } else {
+                        const auth = {username: account, active: false, posting: false}
+                        const bufSha = hash.sha256(this.session.auth.login_challenge)
+                        const verify = (type, sigHex, pubkey, weight, weight_threshold) => {
+                            if(!sigHex) return
+                            if(weight !== 1 || weight_threshold !== 1) {
+                                console.error(`general.js::login_challenge unsupported ${type} auth configuration: ${account}`);
+                            } else {
+                                const sig = parseSig(sigHex)
+                                const public_key = PublicKey.fromString(pubkey)
+                                auth[type] = sig.verifyHash(bufSha, public_key)
+                            }
+                        }
+                        {
+                            const {posting: {key_auths: [[posting_pubkey, weight]], weight_threshold}} = chainAccount
+                            verify('posting', signatures.posting, posting_pubkey, weight, weight_threshold)
+                        }
+                        {
+                            const {active: {key_auths: [[active_pubkey, weight]], weight_threshold}} = chainAccount
+                            verify('active', signatures.active, active_pubkey, weight, weight_threshold)
+                        }
+                        console.log('-- general.js --> username, auth', account, auth)
+                        this.session.auth = auth
+                    }
+                }
+            }
+
             this.body = JSON.stringify({status: 'ok'});
         } catch (error) {
             console.error('Error in /login_account api call', this.session.uid, error);
@@ -187,6 +224,7 @@ export default function useGeneralApi(app) {
         console.log('-- /logout_account -->', this.session.uid);
         try {
             this.session.a = null;
+            this.session.auth = null;
             this.body = JSON.stringify({status: 'ok'});
         } catch (error) {
             console.error('Error in /logout_account api call', this.session.uid, error);
@@ -218,6 +256,19 @@ export default function useGeneralApi(app) {
         console.log('-- /csp_violation -->', this.req.headers['user-agent'], params);
         this.body = '';
     });
+
+    router.get('/login_challenge', function *() {
+        // Don't make anything that could be a valid transaction.
+        // The client should not trust this when signing.  If the format changes,
+        // you'll need to update the client's validation in /api/v1/login_challenge ..
+        const login_challenge = JSON.stringify({
+            description: config.login_challenge_description,
+            token: secureRandom.randomBuffer(16).toString('hex'),
+        }, null, 0)
+
+        this.session.auth = {login_challenge}
+        this.body = login_challenge
+    });
 }
 
 import {Apis} from 'shared/api_client';
@@ -246,3 +297,5 @@ function* createAccount({
         Apis.broadcastTransaction(sx, () => {resolve()}).catch(e => {reject(e)})
     )
 }
+
+const parseSig = hexSig => {try {return Signature.fromHex(hexSig)} catch(e) {return null}}

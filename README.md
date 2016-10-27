@@ -29,10 +29,20 @@ npm install -g babel-cli
 
 #### Create config file
 
+
 ```bash
 cd config
 cp steem-example.json steem-dev.json
 ```
+
+Generate a new crypto_key and save under server_session_secret in ./steem-dev.json.
+
+```bash
+node
+> crypto.randomBytes(32).toString('base64')
+```
+
+You should also update the login_challenge_description.
 
 (note: it's steem.json in production)
 

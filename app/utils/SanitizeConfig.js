@@ -120,6 +120,7 @@ export default ({large = true, highQualityPost = true, noImage = false, sanitize
         a: (tagName, attribs) => {
             let {href} = attribs
             if(!href) href = '#'
+            href = href.trim()
             const attys = {href}
             // If it's not a (relative or absolute) steemit URL...
             if (!href.match(/^(\/(?!\/)|https:\/\/steemit.com)/)) {

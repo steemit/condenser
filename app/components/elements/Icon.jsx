@@ -15,6 +15,7 @@ const icons = [
     'clock',
     'extlink',
     'steem',
+    'halloween',
     'ether',
     'bitcoin',
     'bitshares',

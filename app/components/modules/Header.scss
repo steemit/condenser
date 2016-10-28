@@ -36,7 +36,7 @@
   background-color: $white;
   border-bottom: 1px solid $light-gray;
   ul > li.Header__top-logo {
-    padding: .35rem 0 .35rem 0;
+    padding: 0;
   }
   ul > li.delim {
     color: $medium-gray;
@@ -142,6 +142,11 @@ ul > li > .button {
   .VerticalMenu {
     left: 0;
   }
+}
+
+.logo {
+  padding-top: 10px!important;
+  padding-bottom: 1px!important;
 }
 
 .ConnectionError {

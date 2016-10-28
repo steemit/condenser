@@ -114,14 +114,7 @@ export default class LocalizedCurrency extends React.Component {
 		const {exchangeRate, goldExchangeRate} = this.state
 		const {amount, intl: {formatNumber}, noSymbol, fractionDigits, ...rest} = this.props
 		let {localCurrencySymbol} = this.state
-		const currency = store.get('currency')
 
-		// untill Pull Request to 'currency-symbol-map' is being accepted,
-		// manually pick proper currency symbol
-		if (currency == 'KZT') localCurrencySymbol = '₸'
-		else if (currency == 'GEL') localCurrencySymbol = '₾'
-
-		// localCurrencySymbol = getSymbolFromCurrency(currency)
 		this.checkIfCurrencyChanged()
 
 		/**

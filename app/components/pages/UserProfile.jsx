@@ -5,7 +5,6 @@ import {connect} from 'react-redux';
 import transaction from 'app/redux/Transaction';
 import user from 'app/redux/User';
 import Icon from 'app/components/elements/Icon'
-import PostSummary from 'app/components/cards/PostSummary';
 import UserKeys from 'app/components/elements/UserKeys';
 import PasswordReset from 'app/components/elements/PasswordReset';
 import UserWallet from 'app/components/modules/UserWallet';
@@ -20,6 +19,8 @@ import {repLog10} from 'app/utils/ParsersAndFormatters.js';
 import Tooltip from 'app/components/elements/Tooltip';
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
 import VerticalMenu from 'app/components/elements/VerticalMenu';
+import MarkNotificationRead from 'app/components/elements/MarkNotificationRead';
+import NotifiCounter from 'app/components/elements/NotifiCounter';
 
 export default class UserProfile extends React.Component {
     constructor() {
@@ -132,11 +133,13 @@ export default class UserProfile extends React.Component {
         }
         else if( section === 'followers' ) {
             if (followers && followers.has('result')) {
-                tab_content = <UserList
+                tab_content = <div>
+                    <UserList
                           title="Followers"
                           account={account}
-                          users={followers}
-                          />
+                          users={followers} />
+                    {isMyAccount && <MarkNotificationRead nn="follow" account={account.name} />}
+                    </div>
             }
         }
         else if( section === 'followed' ) {
@@ -198,13 +201,16 @@ export default class UserProfile extends React.Component {
         //     }
         // }
         else if( (section === 'recent-replies') && account.recent_replies ) {
-              tab_content = <PostsList
+              tab_content = <div>
+                  <PostsList
                   emptyText={`${account.name} hasn't had any replies yet.`}
                   posts={account.recent_replies}
                   loading={fetching}
                   category="recent_replies"
                   loadMore={this.loadMore}
-                  showSpam={false} />;
+                  showSpam={false} />
+                  {isMyAccount && <MarkNotificationRead nn="comment_reply" account={account.name} />}
+              </div>;
         }
         else if( section === 'permissions' && isMyAccount ) {
             tab_content = <UserKeys account={accountImm} />
@@ -282,7 +288,9 @@ export default class UserProfile extends React.Component {
 
                         <div>
                             <div className="UserProfile__stats">
-                                <span><Link to={`/@${accountname}/followers`}>{followerCount} followers</Link></span>
+                                <span><Link to={`/@${accountname}/followers`}>{followerCount} followers</Link>
+                                    &nbsp; {isMyAccount && <NotifiCounter name="follow" />}
+                                </span>
                                 <span>{account.post_count} posts</span>
                                 <span><Link to={`/@${accountname}/followed`}>{followingCount} followed</Link></span>
                             </div>

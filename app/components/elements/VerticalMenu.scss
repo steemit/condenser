@@ -15,6 +15,7 @@
   > li > a {
     color: $black;
     line-height: 1rem;
+    position: relative;
   }
 
   > li > a:hover {
@@ -28,3 +29,4 @@
     border-bottom: 1px solid $medium-gray;
   }
 }
+

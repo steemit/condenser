@@ -16,7 +16,7 @@
   }
 }
 
-.Markdown, .ReplyEditor__body.rte {
+.Markdown {
   overflow-wrap: break-word;
   word-wrap: break-word;
   word-break: break-word;
@@ -92,5 +92,33 @@
   iframe {
     max-width: 100%;
     max-height: 75vw;
+  }
+
+  div.pull-right {
+    float: right;
+    padding-left: 1rem;
+    max-width: 50%;
+  }
+
+  div.pull-left {
+    float: left;
+    padding-right: 1rem;
+    max-width: 50%;
+  }
+
+  div.text-justify {
+    text-align: justify;
+  }
+
+  div.text-right {
+    text-align: right;
+  }
+
+  div.text-center {
+    text-align: center;
+  }
+
+  div.text-rtl {
+    direction: rtl;
   }
 }

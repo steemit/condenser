@@ -1,11 +1,19 @@
 import React from 'react'
 import once from 'lodash/once'
 import {connect} from 'react-redux'
+import transaction from 'app/redux/Transaction'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import {PrivateKey} from 'shared/ecc'
 import {key_utils} from 'shared/ecc'
 import Apis from 'shared/api_client/ApiInstances'
 import { translate, translateHtml } from '../../Translator';
+
+/*
+	Логика компонента:
+	Если пользователь находится на своей странице, и если у него нет Btc адреса, то должна отображаться форма ввода owner key. После ввода пароля, для пользователя генерируется адресс.
+	Если у пользователя есть BTC адрес, то необходимо отразить аддрес, qr code и табличку с предыдущими транзакциями.
+*/
+
 // fetch data
 @connect(
 	(state, props) => {
@@ -47,7 +55,8 @@ export default class BuyGolos extends React.Component {
 		setTimeout(() => this.setState({loading: false}), 4000);
   }
 
-	handleSubmit() {
+	handleSubmit = (e) => {
+		(e && e.preventDefault())
 			//const {changePassword, authType, priorAuthKey} = this.props
 			//const {resetForm, notify} = this.props
 			//const {password, twofa} = this.props.fields
@@ -56,7 +65,7 @@ export default class BuyGolos extends React.Component {
 			const k = document.getElementById("meta-key").value;
 			const v = document.getElementById("meta-value").value;
 			const pass = document.getElementById("meta-password").value;
-			console.log(k,v,pass);
+			console.log(k, v, pass);
 
 			let meta = this.props.metaData;
 			if (typeof meta ==='string') meta = JSON.parse(meta)
@@ -67,26 +76,27 @@ export default class BuyGolos extends React.Component {
 					//const {onClose} = this.props
 					//if(onClose) onClose()
 					//if(resetForm) resetForm()
-					notify('Meta Updated')
-					window.location = window.location;
+					// notify('Meta Updated')
+					// window.location = window.location;
 			}
 			const error = (e) => {
 					this.setState({loading: false, error: e})
 			}
 
 			this.setState({loading: true, error: null})
-			changeMeta(accountName, authKey, meta, success, error)
+			this.changeMeta(this.props.accountname, pass, meta, success, error)
 	}
 
-	changeMeta (accountName, signingKey, meta, success, error) {
+	changeMeta = (accountName, signingKey, meta, onSuccess, onError) => {
 			console.log("HERE");
-			console.log(accountName, signingKey, meta, success, error);
+			console.log(accountName, signingKey, meta); // , onSuccess, onError
 			transaction.actions.updateMeta({
 					meta: JSON.stringify(meta),
 					// signingKey provides the password if it was not provided in auths
-					signingKey: signingKey,
-					accountName: accountName,
-					onSuccess: success, onError: error,
+					signingKey,
+					accountName,
+					onSuccess,
+					onError,
 					// notifySuccess: 'Change password success'
 			})
 	}
@@ -124,6 +134,85 @@ export default class BuyGolos extends React.Component {
 		const { transactions } = state
 		let loading=this.state.loading
 		return 	<div id="buy_golos" className="row">
+
+					{/* ACTUAL COMPONENT */}
+					<div className="columns small-12">
+						<h2>Макет функционала</h2>
+					</div>
+					{
+						props.isOwnAccount && !props.icoAddress
+						? 	<form className="columns small-12">
+								<label>
+									Пожалуйста, введите главный пароль, чтобы сгенерировать адресс
+									<br />
+									<input id="meta-password" type="password" disabled={loading} />
+								</label>
+							</form>
+						: null
+					}
+					{
+						props.icoAddress
+						? 	<div>
+								<div className="column small-9 text-center">
+									<h2>Покупка Голосов</h2>
+									<p>{icoAddress}</p>
+									<p>Перечислите биткоины сюда.</p>
+									<p>Вы покупаете Силу Голоса неликвидные</p>
+								</div>
+								<div className="column small-3">
+									<img src={`https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=${icoAddress}`} alt="your QR code" />
+								</div>
+								<div className="column small-12">
+									<table>
+										<thead>
+											<tr>
+												<th width="150">ID Транзакции</th>
+												<th width="250">Перечислено биткоинов</th>
+												<th width="100">Вы получите</th>
+											</tr>
+										</thead>
+										<tbody>
+											{
+												transactions.map((item, index) => {
+													return 	<tr key={index}>
+																<td>{item.address}</td>
+																<td>{item.amountBtc}</td>
+																<td>{item.amountGolos}</td>
+															</tr>
+												})
+											}
+										</tbody>
+									</table>
+								</div>
+							</div>
+						: null
+					}
+
+					<div className="columns small-12">
+						<br />
+						<hr />
+						<h2>Test</h2>
+					</div>
+					<form onSubmit={this.handleSubmit} className="columns small-12">
+						<label>
+								key
+								<br />
+								<input id="meta-key" type="text" disabled={loading} />
+						</label>
+						<label>
+								value
+								<br />
+								<input id="meta-value" type="text" disabled={loading} />
+						</label>
+						<label>
+								enter password here
+								<br />
+								<input id="meta-password" type="password" disabled={loading} />
+						</label>
+						<button type="submit" className="button" disabled={loading}>
+								change meta
+						</button>
+					</form>
 
 					{/* TEST INFO */}
 					<div className="columns small-12">
@@ -174,65 +263,10 @@ export default class BuyGolos extends React.Component {
 						</div>
 					</div>
 
-					{/* ACTUAL COMPONENT */}
-					<div className="columns small-12">
-						<h2>Макет функционала</h2>
-					</div>
-					<div className="column small-9 text-center">
-						<h2>Покупка Голосов</h2>
-						<p>{icoAddress}</p>
-						<p>Перечислите биткоины сюда.</p>
-						<p>Вы покупаете Силу Голоса неликвидные</p>
-					</div>
-					<div className="column small-3">
-						<img src={`https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=${icoAddress}`} alt="your QR code" />
-					</div>
-					<div className="column small-12">
-						<table>
-							<thead>
-								<tr>
-									<th width="150">ID Транзакции</th>
-									<th width="250">Перечислено биткоинов</th>
-									<th width="100">Вы получите</th>
-								</tr>
-							</thead>
-							<tbody>
-								{
-									transactions.map((item, index) => {
-										return 	<tr key={index}>
-													<td>{item.address}</td>
-													<td>{item.amountBtc}</td>
-													<td>{item.amountGolos}</td>
-												</tr>
-									})
-								}
-							</tbody>
-						</table>
-					</div>
 					<div className="column small-12">
 						<button onClick={this.testClick}>click to test</button>
 						<span>{icoAddress}</span>
 					</div>
-				<form onSubmit={this.handleSubmit.bind(this)}>
-					<label>
-							key
-							<br />
-							<input id="meta-key" type="text" disabled={loading} />
-					</label>
-					<label>
-							value
-							<br />
-							<input id="meta-value" type="text" disabled={loading} />
-					</label>
-					<label>
-							enter password here
-							<br />
-							<input id="meta-password" type="password" disabled={loading} />
-					</label>
-				  <button type="submit" className="button" disabled={loading}>
-							change meta
-					</button>
-		</form>
 				</div>
 	}
 }

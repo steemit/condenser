@@ -45,7 +45,7 @@ class App extends React.Component {
     shouldComponentUpdate(nextProps, nextState) {
         const p = this.props;
         const n = nextProps;
-        return p.location !== n.location || 
+        return p.location !== n.location ||
                   p.visitor !== n.visitor ||
                   p.flash !== n.flash || this.state !== nextState;
     }
@@ -203,6 +203,11 @@ class App extends React.Component {
                     <li>
                         <a href="https://steemit.chat/home" target="_blank" rel="noopener noreferrer">
                             {translate("steemit_chat")}&nbsp;<Icon name="extlink" />
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://steemit.github.io/steemit-docs/" target="_blank" rel="noopener noreferrer">
+                            {translate("steemit_api_docs")}
                         </a>
                     </li>
                     <li className="last">

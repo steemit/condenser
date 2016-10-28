@@ -1,4 +1,3 @@
-import {takeEvery} from 'redux-saga';
 import {call, put, select} from 'redux-saga/effects';
 
 import {Apis} from 'shared/api_client'
@@ -29,6 +28,9 @@ export function* watchForBroadcast() {
 }
 export function* watchForUpdateAuthorities() {
     yield* takeEvery('transaction/UPDATE_AUTHORITIES', updateAuthorities);
+}
+export function* watchForUpdateMeta() {
+    yield* takeEvery('transaction/UPDATE_META', updateMeta);
 }
 export function* watchForRecoverAccount() {
     yield* takeEvery('transaction/RECOVER_ACCOUNT', recoverAccount);
@@ -635,6 +637,32 @@ function* updateAuthorities({payload: {accountName, signingKey, auths, twofa, on
         type: 'account_update', operation: {
             account: account.name, ...ops2,
             memo_key, json_metadata,
+        }, keys: [key],
+        successCallback: onSuccess,
+        errorCallback: onError,
+    }
+    // console.log('sign key.toPublicKey().toString()', key.toPublicKey().toString())
+    // console.log('payload', payload)
+    yield call(broadcastOperation, {payload})
+}
+
+/** auths must start with most powerful key: owner for example */
+// const twofaAccount = 'steem'
+function* updateMeta({payload: {meta, accountName, signingKey, onSuccess, onError}}) {
+    // Be sure this account is up-to-date (other required fields are sent in the update)
+    const [account] = yield call([Apis, Apis.db_api], 'get_accounts', [accountName])
+    if (!account) {
+        onError('Account not found')
+        return
+    }
+    if (!signingKey) {
+        onError(`Incorrect Password`)
+        throw new Error('Have to pass owner key in order to change meta')
+    }
+    const payload = {
+        type: 'account_update', operation: {
+            account: account.name,
+            json_metadata: meta,
         }, keys: [key],
         successCallback: onSuccess,
         errorCallback: onError,

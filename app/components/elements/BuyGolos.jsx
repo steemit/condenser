@@ -1,7 +1,11 @@
 import React from 'react'
 import once from 'lodash/once'
 import {connect} from 'react-redux'
-
+import LoadingIndicator from 'app/components/elements/LoadingIndicator'
+import {PrivateKey} from 'shared/ecc'
+import {key_utils} from 'shared/ecc'
+import Apis from 'shared/api_client/ApiInstances'
+import { translate, translateHtml } from '../../Translator';
 // fetch data
 @connect(
 	(state, props) => {
@@ -27,10 +31,64 @@ export default class BuyGolos extends React.Component {
 	state = {
 		icoAddress: '',
 		transactions: [],
+    loading: false,
 	}
 
 	componentWillReceiveProps() {
-		if (this.props.current_user && !this.props.icoAddress) this.generateAddress()
+	  // if (this.props.current_user && !this.props.icoAddress) this.generateAddress()
+	}
+
+	onChangeMeta() { // test only. aiming to write arbitrary meta.
+		this.setState({loading: true})
+		const k = document.getElementById("meta-key").value;
+		const v = document.getElementById("meta-value").value;
+		const pass = document.getElementById("meta-password").value;
+		console.log(k,v,pass);
+		setTimeout(() => this.setState({loading: false}), 4000);
+  }
+
+	handleSubmit() {
+			//const {changePassword, authType, priorAuthKey} = this.props
+			//const {resetForm, notify} = this.props
+			//const {password, twofa} = this.props.fields
+			//const accountName = this.state.accountName;
+			this.setState({loading: true, error: null})
+			const k = document.getElementById("meta-key").value;
+			const v = document.getElementById("meta-value").value;
+			const pass = document.getElementById("meta-password").value;
+			console.log(k,v,pass);
+
+			let meta = this.props.metaData;
+			if (typeof meta ==='string') meta = JSON.parse(meta)
+			meta[k] = v;
+
+			const success = () => {
+					this.setState({loading: false, error: null})
+					//const {onClose} = this.props
+					//if(onClose) onClose()
+					//if(resetForm) resetForm()
+					notify('Meta Updated')
+					window.location = window.location;
+			}
+			const error = (e) => {
+					this.setState({loading: false, error: e})
+			}
+
+			this.setState({loading: true, error: null})
+			changeMeta(accountName, authKey, meta, success, error)
+	}
+
+	changeMeta (accountName, signingKey, meta, success, error) {
+			console.log("HERE");
+			console.log(accountName, signingKey, meta, success, error);
+			transaction.actions.updateMeta({
+					meta: JSON.stringify(meta),
+					// signingKey provides the password if it was not provided in auths
+					signingKey: signingKey,
+					accountName: accountName,
+					onSuccess: success, onError: error,
+					// notifySuccess: 'Change password success'
+			})
 	}
 
 	generateAddress = once(
@@ -38,18 +96,25 @@ export default class BuyGolos extends React.Component {
 			// some logic here
 			//
 			// set address in the end
-			this.setState({ icoAddress: 'адресс не сгенерирован' })
+			this.setState({ icoAddress: 'адрес не сгенерирован' })
 	})
 
 	testClick = () => {
 		console.log(this.icoAddress)
 		console.log(this.props.metaData)
-		console.log(this.props.current_user)
+		console.log(this.props)
 		console.log("is own: " + this.state.isOwnAccount)
 	}
 	// runOnce = once(this.generateAddress)
 
 	render() {
+		if (!process.env.BROWSER) { // don't render this page on the server
+				return <div className="row">
+						<div className="column">
+								{translate('loading')}..
+						</div>
+				</div>;
+		}
 		const {state, props} = this
 		const {
 			metaData,
@@ -57,7 +122,7 @@ export default class BuyGolos extends React.Component {
 			routeParams: {accountname},
 		} = props
 		const { transactions } = state
-
+		let loading=this.state.loading
 		return 	<div id="buy_golos" className="row">
 
 					{/* TEST INFO */}
@@ -145,9 +210,29 @@ export default class BuyGolos extends React.Component {
 						</table>
 					</div>
 					<div className="column small-12">
-						<button onClick={this.testClick}>"Clatz me"</button>
+						<button onClick={this.testClick}>click to test</button>
 						<span>{icoAddress}</span>
 					</div>
+				<form onSubmit={this.handleSubmit.bind(this)}>
+					<label>
+							key
+							<br />
+							<input id="meta-key" type="text" disabled={loading} />
+					</label>
+					<label>
+							value
+							<br />
+							<input id="meta-value" type="text" disabled={loading} />
+					</label>
+					<label>
+							enter password here
+							<br />
+							<input id="meta-password" type="password" disabled={loading} />
+					</label>
+				  <button type="submit" className="button" disabled={loading}>
+							change meta
+					</button>
+		</form>
 				</div>
 	}
 }

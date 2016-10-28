@@ -320,6 +320,7 @@ class ReplyEditor extends React.Component {
                         <div className={'ReplyEditor__body ' + (rte ? `rte ${vframe_section_class}` : vframe_section_shrink_class)}>
                             {process.env.BROWSER && rte ?
                                 <SlateEditor ref="rte"
+                                    placeholder={isStory ? 'Write your story...' : 'Reply'}
                                     initialState={this.state.rte_value}
                                     onChange={this.onChange} />
                                 :

@@ -367,7 +367,7 @@ export default class SlateEditor extends React.Component {
         e.preventDefault()
         let { state } = this.state
 
-        const src = window.prompt('Enter the URL of the image:', 'https://lh3.googleusercontent.com/-uY1D2XxBC5I/VbZbodsihNI/AAAAAAAAICw/glsw_avviBY/w592-h330/xkcdinternet.png')
+        const src = window.prompt('Enter the URL of the image:', '')
         if(!src) return;
 
         state = state
@@ -387,8 +387,8 @@ export default class SlateEditor extends React.Component {
 
         state = state
             .transform()
-            .insertBlock({type: 'embed', isVoid: true, data: {src: 'https://www.youtube.com/watch?v=7YOozVnEdFQ'}})
-            .insertBlock({type: 'paragraph', isVoid: false})
+            .insertBlock({type: 'embed', isVoid: true, data: {src: ''}})
+            //.insertBlock({type: 'paragraph', isVoid: false})
             .apply()
 
         this.setState({ state })
@@ -481,6 +481,7 @@ export default class SlateEditor extends React.Component {
             <div className="SlateEditor Markdown">
                 <Editor
                     schema={schema}
+                    placeholder={this.props.placeholder || 'Enter some text...'}
                     plugins={plugins}
                     state={this.state.state}
                     onChange={this.onChange}

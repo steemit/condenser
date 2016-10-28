@@ -20,6 +20,7 @@ export const userWatches = [
     loginErrorWatch,
     lookupPreviousOwnerAuthorityWatch,
     watchLoadSavingsWithdraw,
+    uploadImageWatch,
 ]
 
 const highSecurityPages = Array(/\/market/, /\/@.+\/(transfers|permissions|password)/, /\/~witnesses/)
@@ -347,6 +348,91 @@ function* lookupPreviousOwnerAuthority({payload: {}}) {
     console.log('UserSage ---> previous_owner_authority', previous_owner_authority.toJS())
     yield put(user.actions.setUser({previous_owner_authority}))
 }
+
+import {Signature, hash} from 'shared/ecc'
+
+function* uploadImageWatch() {
+    yield* takeLatest('user/UPLOAD_IMAGE', uploadImage);
+}
+
+function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress}}) {
+    const _progress = progress
+    progress = msg => {
+        console.log('Upload image progress', msg)
+        _progress(msg)
+    }
+
+    const stateUser = yield select(state => state.user)
+    const username = stateUser.getIn(['current', 'username'])
+    const d = stateUser.getIn(['current', 'private_keys', 'posting_private'])
+    if(!username) {
+        progress({error: 'Not logged in'})
+        return
+    }
+    if(!d) {
+        progress({error: 'Login with your posting key'})
+        return
+    }
+
+    if(!file && !dataUrl) {
+        console.error('uploadImage required: file or dataUrl')
+        return
+    }
+
+    let data, dataBs64
+    if(file) {
+        // drag and drop
+        const reader = new FileReader()
+        data = yield new Promise(resolve => {
+            reader.addEventListener('load', () => {
+                const result = new Buffer(reader.result, 'binary')
+                resolve(result)
+            })
+            reader.readAsBinaryString(file)
+        })
+    } else {
+        // recover from preview
+        const commaIdx = dataUrl.indexOf(',')
+        dataBs64 = dataUrl.substring(commaIdx + 1)
+        data = new Buffer(dataBs64, 'base64')
+    }
+
+    const bufSha = hash.sha256(data)
+
+    const formData = new FormData()
+    if(file) {
+        formData.append('file', file)
+    } else {
+        // formData.append('file', file, filename) <- Failed to add filename=xxx to Content-Disposition
+        // Can't easily make this look like a file so this relies on the server supporting: filename and filebinary
+        formData.append('filename', filename)
+        formData.append('filebase64', dataBs64)
+    }
+
+    const sig = Signature.signBufferSha256(bufSha, d)
+    const postUrl = `${$STM_Config.uploadImage}/${username}/${sig.toHex()}`
+
+    fetch(postUrl, {
+        method: 'post',
+        body: formData
+    })
+    .then(r => r.json())
+    .then(res => {
+        const {error} = res
+        if(error) {
+            progress({error: 'Error: ' + error})
+            return
+        }
+        const {url} = res
+        progress({url})
+    })
+    .catch(error => {
+        console.error(filename, error)
+        progress({error: 'Unable to contact the server.'})
+        return
+    })
+}
+
 
 // function* getCurrentAccount() {
 //     const current = yield select(state => state.user.get('current'))

@@ -276,7 +276,7 @@ class ReplyEditor extends React.Component {
         // Be careful, autoVote can reset curation rewards.  Never autoVote on edit..
         const autoVoteValue = !isEdit && autoVote.value
         const replyParams = {
-            author, permlink, parent_author, parent_permlink, type, state, originalPost, isHtml,
+            author, permlink, parent_author, parent_permlink, type, state, originalPost, isHtml, isStory,
             jsonMetadata, autoVote: autoVoteValue, payoutType,
             successCallback: successCallbackWrapper, errorCallback
         }
@@ -426,7 +426,7 @@ export default formId => reduxForm(
         setMetaData: (id, jsonMetadata) => {
             dispatch(g.actions.setMetaData({id, meta: jsonMetadata ? jsonMetadata.steem : null}))
         },
-        reply: ({category, title, body, author, permlink, parent_author, parent_permlink, isHtml,
+        reply: ({category, title, body, author, permlink, parent_author, parent_permlink, isHtml, isStory,
             type, originalPost, autoVote = false, payoutType = '50%',
             state, jsonMetadata,
             successCallback, errorCallback, loadingCallback
@@ -482,6 +482,11 @@ export default formId => reduxForm(
             if(rtags.usertags.size) meta.users = rtags.usertags; else delete meta.users
             if(rtags.images.size) meta.image = rtags.images; else delete meta.image
             if(rtags.links.size) meta.links = rtags.links; else delete meta.links
+
+            if(isStory) {
+                meta.app = "steemit/0.2"
+                meta.format = isHtml ? 'html' : 'markdown'
+            }
 
             // if(Object.keys(json_metadata.steem).length === 0) json_metadata = {}// keep json_metadata minimal
             const sanitizeErrors = []

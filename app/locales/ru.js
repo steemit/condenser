@@ -532,7 +532,9 @@ const ru = {
 	choose_currency: 'Выберите валюту',
 	crowdsale: 'Краудсейл',
 	followers: 'Подписчики',
+	// errors
 	cannot_increase_reward_of_post_within_the_last_minute_before_payout: 'Награда за пост не может быть увеличена по истечении 24 часов с момента публикации',
+	vote_currently_exists_user_must_be_indicate_a_to_reject_witness: 'Голос уже существует, пользователь должен обозначить желание убрать делегата',
 }
 
 export { ru }

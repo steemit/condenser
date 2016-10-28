@@ -529,5 +529,9 @@ export const ua = {
 	account_name_should_have_only_letters_digits_or_dashes: 'Имя акаунта должно должно состоять только из букв, цифр или дефисов.',
 	choose_language: 'Виберіть мову',
 	choose_currency: 'Виберіть валюту',
-	crowdsale: 'Краудсейл'
+	crowdsale: 'Краудсейл',
+	followers: 'Подписчики',
+	// errors
+	cannot_increase_reward_of_post_within_the_last_minute_before_payout: 'Награда за пост не может быть увеличена по истечении 24 часов с момента публикации',
+	vote_currently_exists_user_must_be_indicate_a_to_reject_witness: 'Голос уже существует, пользователь должен обозначить желание убрать делегата',
 }

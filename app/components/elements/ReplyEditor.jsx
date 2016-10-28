@@ -35,6 +35,7 @@ function stateToHtml(state) {
     let html = state.toString('html');
     if (html === '<p></p>') html = '';
     if (html === '<p><br></p>') html = '';
+    if(html == '') return ''
     return `<html>\n${html}\n</html>`;
 }
 
@@ -308,7 +309,7 @@ class ReplyEditor extends React.Component {
                             {isStory && <span>
                                 <input type="text" className="ReplyEditor__title" {...cleanReduxInput(title)} onChange={onTitleChange} disabled={loading} placeholder="Title" autoComplete="off" ref="titleRef" tabIndex={1} />
                                 <div className="float-right secondary" style={{marginRight: '1rem'}}>
-                                    {rte && <a href="#" onClick={this.toggleRte}>{isHtml ? 'Raw HTML' : 'Markdown'}</a>}
+                                    {rte && <a href="#" onClick={this.toggleRte}>{body.value ? 'Raw HTML' : 'Markdown'}</a>}
                                     {!rte && (isHtml || !body.value) && <a href="#" onClick={this.toggleRte}>Editor</a>}
                                 </div>
                                 {titleError}

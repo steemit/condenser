@@ -233,16 +233,18 @@ export default class PostFull extends React.Component {
 
         return (
             <article className="PostFull hentry" itemScope itemType="http://schema.org/blogPost">
-                <div className="float-right"><Voting post={post} flag /></div>
-                <div className="PostFull__header">
-                    {post_header}
-                    <TimeAuthorCategory content={content} authorRepLog10={authorRepLog10} showTags />
-                </div>
                 {showEdit ?
                     renderedEditor :
-                    <div className="PostFull__body entry-content">
-                        <MarkdownViewer formId={formId + '-viewer'} text={content_body} jsonMetadata={jsonMetadata} large highQualityPost={high_quality_post} noImage={!content.stats.pictures} />
-                    </div>
+                    <span>
+                        <div className="float-right"><Voting post={post} flag /></div>
+                        <div className="PostFull__header">
+                            {post_header}
+                            <TimeAuthorCategory content={content} authorRepLog10={authorRepLog10} showTags />
+                        </div>
+                        <div className="PostFull__body entry-content">
+                            <MarkdownViewer formId={formId + '-viewer'} text={content_body} jsonMetadata={jsonMetadata} large highQualityPost={high_quality_post} noImage={!content.stats.pictures} />
+                        </div>
+                    </span>
                 }
 
                 {showPromote && <button className="float-right button hollow tiny" onClick={this.showPromotePost}>Promote</button>}

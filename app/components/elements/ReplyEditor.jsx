@@ -35,6 +35,7 @@ function stateToHtml(state) {
     let html = state.toString('html');
     if (html === '<p></p>') html = '';
     if (html === '<p><br></p>') html = '';
+    if(html == '') return ''
     return `<html>\n${html}\n</html>`;
 }
 
@@ -197,9 +198,10 @@ class ReplyEditor extends React.Component {
 
                 clearTimeout(saveEditorTimeout)
                 saveEditorTimeout = setTimeout(() => {
-                    // console.log('save formId', formId, JSON.stringify(data, null, 0))
+                    // console.log('save formId', formId, body.value)
                     localStorage.setItem('replyEditorData-' + formId, JSON.stringify(data, null, 0))
-                }, 350)
+                    this.showDraftSaved()
+                }, 500)
             }
         }
     }
@@ -234,6 +236,12 @@ class ReplyEditor extends React.Component {
         }
         this.setState(state);
         localStorage.setItem('replyEditorData-rte', !this.state.rte)
+    }
+    showDraftSaved() {
+        const {draft} = this.refs
+        draft.className = 'ReplyEditor__draft'
+        void draft.offsetWidth; // reset animation
+        draft.className = 'ReplyEditor__draft ReplyEditor__draft-saved'
     }
 
     onPayoutTypeChange = (e) => {
@@ -289,6 +297,7 @@ class ReplyEditor extends React.Component {
         return (
             <div className="ReplyEditor row">
                 <div className="column small-12">
+                    <div ref="draft" className="ReplyEditor__draft ReplyEditor__draft-hide">Draft saved.</div>
                     <form className={vframe_class}
                         onSubmit={handleSubmit(data => {
                             const loadingCallback = () => this.setState({loading: true, postError: undefined})
@@ -298,18 +307,16 @@ class ReplyEditor extends React.Component {
                     >
                         <div className={vframe_section_shrink_class}>
                             {isStory && <span>
-                                <input type="text" {...cleanReduxInput(title)} onChange={onTitleChange} disabled={loading} placeholder="Title" autoComplete="off" ref="titleRef" tabIndex={1} />
+                                <input type="text" className="ReplyEditor__title" {...cleanReduxInput(title)} onChange={onTitleChange} disabled={loading} placeholder="Title" autoComplete="off" ref="titleRef" tabIndex={1} />
+                                <div className="float-right secondary" style={{marginRight: '1rem'}}>
+                                    {rte && <a href="#" onClick={this.toggleRte}>{body.value ? 'Raw HTML' : 'Markdown'}</a>}
+                                    {!rte && (isHtml || !body.value) && <a href="#" onClick={this.toggleRte}>Editor</a>}
+                                </div>
                                 {titleError}
                             </span>}
                         </div>
 
                         <div className={'ReplyEditor__body ' + (rte ? `rte ${vframe_section_class}` : vframe_section_shrink_class)}>
-                            {!body.value && isStory &&
-                                <div className="float-right secondary" style={{marginRight: '1rem'}}>
-                                    {rte && <a href="#" onClick={this.toggleRte}>Markdown</a>}
-                                    {!rte && <a href="#" onClick={this.toggleRte}>Editor</a>}
-                                </div>
-                            }
                             {process.env.BROWSER && rte ?
                                 <RichTextEditor ref="rte"
                                     readOnly={loading}
@@ -327,7 +334,7 @@ class ReplyEditor extends React.Component {
                         <div className={vframe_section_shrink_class} style={{marginTop: '0.5rem'}}>
                             {hasCategory && <span>
                                 <CategorySelector {...category} disabled={loading} isEdit={isEdit} tabIndex={3} />
-                                <div className="error">{category.touched && category.error && category.error}&nbsp;</div>
+                                <div className="error">{category.touched && category.error}&nbsp;</div>
                             </span>}
                         </div>
                         <div className={vframe_section_shrink_class}>
@@ -358,7 +365,7 @@ class ReplyEditor extends React.Component {
                             </div>}
                         </div>
                         {!loading && !rte && body.value && <div className={'Preview ' + vframe_section_shrink_class}>
-                            {<div className="float-right"><a target="_blank" href="https://guides.github.com/features/mastering-markdown/">Styling with Markdown is supported.</a></div>}
+                            {!isHtml && <div className="float-right"><a target="_blank" href="https://guides.github.com/features/mastering-markdown/">Markdown Styling Guide</a></div>}
                             <h6>Preview</h6>
                             <MarkdownViewer formId={formId} text={body.value} canEdit jsonMetadata={jsonMetadata} large={isStory} noImage={noImage} />
                         </div>}

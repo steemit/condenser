@@ -498,7 +498,8 @@ export default formId => reduxForm(
             // loadingCallback starts the loading indicator
             loadingCallback()
 
-            const __config = {originalPost, autoVote}
+            const originalBody = /edit/.test(type) ? originalPost.body : null
+            const __config = {originalBody, autoVote}
 
             switch(payoutType) {
                 case '0%': // decline payout

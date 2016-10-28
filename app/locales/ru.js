@@ -361,7 +361,6 @@ const ru = {
 	couldnt_create_account_server_returned_error: "Не получилось создать аккаунт. Сервер вернул эту ошибку",
 	form_requires_javascript_to_be_enabled: 'Эта форма требует активированный в браузере javascript',
 	our_records_indicate_you_already_have_account: 'Наши записи показывают что у вас уже есть ' + APP_NAME + ' аккант',
-	// TODO
 	to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user: 'Чтобы предотвратить злоупотребление (каждый зарегистрированный аккаунт стоит {amount} в ' + OWNERSHIP_TOKEN + ') ' + APP_NAME + ' может регистрировать только один аккаунт для каждого подтвержденного пользователя.',
 	// next 3 blocks are meant to be used together
 	you_can_either: 'Вы можете или', // context 'you can either login'

@@ -376,7 +376,6 @@ const en = 	{
 	changing_to_an_upvote: 'Changing to an Up-Vote',
 	changing_to_a_downvote: 'Changing to a Down-Vote',
 	confirm_flag: 'Confirm Flag',
-	//  TODO
 	date_created: 'Date Created',
 	search: 'Search',
 	begin_recovery: "Begin Recovery",

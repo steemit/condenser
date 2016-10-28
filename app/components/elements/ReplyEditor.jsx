@@ -19,6 +19,7 @@ import SlateEditor, {serializeHtml, deserializeHtml, getDemoState} from 'app/com
 
 const remarkable = new Remarkable({ html: true, linkify: false, breaks: true })
 const RTE_DEFAULT = false
+//var htmlclean = require('htmlclean');
 
 let saveEditorTimeout
 
@@ -50,7 +51,8 @@ function stateFromMarkdown(markdown) {
     let html
     if(markdown.trim() !== '') {
         html = remarkable.render(markdown)
-        html = HtmlReady(html).html // TODO: option to disable youtube conversion and @-links
+        html = HtmlReady(html).html // TODO: option to disable youtube conversion, @-links, img proxy
+        //html = htmlclean(html) // normalize whitespace
         console.log("markdown converted to:", html)
     }
     return stateFromHtml(html)
@@ -211,7 +213,6 @@ class ReplyEditor extends React.Component {
 
     // As rte_editor is updated, keep the (invisible) 'body' field in sync.
     onChange(rte_value) {
-        //this.setState({rte_value})
         this.refs.rte.setState({state: rte_value})
         const html = stateToHtml(rte_value)
         const body = this.props.fields.body

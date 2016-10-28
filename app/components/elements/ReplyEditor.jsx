@@ -49,7 +49,7 @@ function stateFromHtml(html = null) {
 
 function stateFromMarkdown(markdown) {
     let html
-    if(markdown.trim() !== '') {
+    if(markdown && markdown.trim() !== '') {
         html = remarkable.render(markdown)
         html = HtmlReady(html).html // TODO: option to disable youtube conversion, @-links, img proxy
         //html = htmlclean(html) // normalize whitespace

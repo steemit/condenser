@@ -1,3 +1,7 @@
+.SlateEditor > div[contenteditable="true"] {
+  min-height: 12rem;
+}
+
 .SlateEditor.Markdown {
   a {
     border-bottom: 1px dotted #00f;

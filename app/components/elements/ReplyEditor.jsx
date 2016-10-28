@@ -81,7 +81,6 @@ class ReplyEditor extends React.Component {
         clearMetaData: React.PropTypes.func.isRequired,
         setMetaData: React.PropTypes.func.isRequired,
         state: React.PropTypes.object.isRequired,
-        hasCategory: React.PropTypes.bool.isRequired,
         isStory: React.PropTypes.bool.isRequired,
         username: React.PropTypes.string,
 
@@ -253,16 +252,15 @@ class ReplyEditor extends React.Component {
     render() {
         // NOTE title, category, and body are UI form fields ..
         const originalPost = {
-            title: this.props.title,
             category: this.props.category,
             body: this.props.body,
         }
         const {onCancel, autoVoteOnChange} = this
         const {title, category, body, autoVote} = this.props.fields
         const {
-            reply, username, hasCategory, isStory, formId, noImage,
+            reply, username, isStory, formId, noImage,
             author, permlink, parent_author, parent_permlink, type, jsonMetadata,
-            state, successCallback, handleSubmit, submitting, invalid, //lastComment,
+            state, successCallback, handleSubmit, submitting, invalid,
         } = this.props
         const {postError, loading, titleWarn, rte, payoutType} = this.state
         const {onTitleChange} = this
@@ -332,7 +330,7 @@ class ReplyEditor extends React.Component {
                         </div>
 
                         <div className={vframe_section_shrink_class} style={{marginTop: '0.5rem'}}>
-                            {hasCategory && <span>
+                            {isStory && <span>
                                 <CategorySelector {...category} disabled={loading} isEdit={isEdit} tabIndex={3} />
                                 <div className="error">{category.touched && category.error}&nbsp;</div>
                             </span>}
@@ -390,11 +388,8 @@ export default formId => reduxForm(
         const isStory = /submit_story/.test(type) || (
             /edit/.test(type) && parent_author === ''
         )
-        const hasCategory = isStory // /submit_story/.test(type)
-        if (isStory) {
-            fields.push('title')
-        }
-        if (hasCategory) fields.push('category')
+        if (isStory) fields.push('title')
+        if (isStory) fields.push('category')
         const isEdit = type === 'edit'
         const maxKb = isStory ? 100 : 16
         const validate = values => ({
@@ -403,22 +398,20 @@ export default formId => reduxForm(
                 values.title.length > 255 ? 'Shorten title' :
                 null
             ),
-            category: hasCategory && validateCategory(values.category, !isEdit),
+            category: isStory && validateCategory(values.category, !isEdit),
             body: !values.body ? 'Required' :
                   values.body.length > maxKb * 1024 ? 'Exceeds maximum length ('+maxKb+'KB)' : null,
         })
+
         let {category, title, body} = ownProps
-
         if (/submit_/.test(type)) title = body = ''
-
-        if(hasCategory && jsonMetadata && jsonMetadata.tags) {
+        if(isStory && jsonMetadata && jsonMetadata.tags) {
             category = Set([category, ...jsonMetadata.tags]).join(' ')
         }
         const ret = {
             ...ownProps,
-            fields, validate, isStory, hasCategory, username,
+            fields, validate, isStory, username,
             initialValues: {title, body, category}, state,
-            // lastComment: current.get('lastComment'),
             formId,
         }
         return ret
@@ -505,7 +498,8 @@ export default formId => reduxForm(
             // loadingCallback starts the loading indicator
             loadingCallback()
 
-            const __config = {originalPost, autoVote}
+            const originalBody = /edit/.test(type) ? originalPost.body : null
+            const __config = {originalBody, autoVote}
 
             switch(payoutType) {
                 case '0%': // decline payout

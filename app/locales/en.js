@@ -524,6 +524,7 @@ const en = 	{
 	// errors
 	cannot_increase_reward_of_post_within_the_last_minute_before_payout: 'Cannot increase reward of post within the last minute before payout',
 	vote_currently_exists_user_must_be_indicate_a_to_reject_witness: 'vote currently exists, user must be indicate a desire to reject witness',
+	only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes: 'Only one Steem account allowed per IP address every 10 minutes',
 	// enter_confirm_email.jsx
 	thank_you_for_providing_your_email_address: 'Thank you for providing your email address',
 	to_continue_please_click_on_the_link_in_the_email_weve_sent_you: 'To continue please click on the link in the email we\'ve sent you',

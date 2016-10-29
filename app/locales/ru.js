@@ -535,6 +535,7 @@ const ru = {
 	// errors
 	cannot_increase_reward_of_post_within_the_last_minute_before_payout: 'Награда за пост не может быть увеличена по истечении 24 часов с момента публикации',
 	vote_currently_exists_user_must_be_indicate_a_to_reject_witness: 'Голос уже существует, пользователь должен обозначить желание убрать делегата',
+	only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes: 'Только один Голос аккаунт разрешен с одного IP адреса каждые десять минут',
 	// enter_confirm_email.jsx
 	thank_you_for_providing_your_email_address: 'Благодарим вас за предоставление вашей электронной почты',
 	to_continue_please_click_on_the_link_in_the_email_weve_sent_you: 'Для продолжения, кликните ссылку в письме, которое мы вам прислали',

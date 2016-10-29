@@ -7,7 +7,8 @@ import {PrivateKey} from 'shared/ecc'
 import {key_utils} from 'shared/ecc'
 import Apis from 'shared/api_client/ApiInstances'
 import { translate, translateHtml } from '../../Translator';
-
+import {ifObjectToJSON, ifStringParseJSON} from 'shared/clash/object2json'
+import {test as o2jtest} from 'shared/clash/object2json'
 /*
 	Логика компонента:
 	Если пользователь находится на своей странице, и если у него нет Btc адреса, то должна отображаться форма ввода owner key. После ввода пароля, для пользователя генерируется адресс.
@@ -45,15 +46,6 @@ export default class BuyGolos extends React.Component {
 	componentWillReceiveProps() {
 	  // if (this.props.current_user && !this.props.icoAddress) this.generateAddress()
 	}
-
-	onChangeMeta() { // test only. aiming to write arbitrary meta.
-		this.setState({loading: true})
-		const k = document.getElementById("meta-key").value;
-		const v = document.getElementById("meta-value").value;
-		const pass = document.getElementById("meta-password").value;
-		console.log(k,v,pass);
-		setTimeout(() => this.setState({loading: false}), 4000);
-  }
 
 	handleSubmit = (e) => {
 		(e && e.preventDefault())
@@ -103,19 +95,24 @@ export default class BuyGolos extends React.Component {
 
 	generateAddress = once(
 		function () {
+			console.log('ouch! what happened?!  ')
+
 			// some logic here
 			//
 			// set address in the end
 			this.setState({ icoAddress: 'адрес не сгенерирован' })
 	})
 
-	testClick = () => {
+	testFormSubmit() {
 		console.log(this.icoAddress)
 		console.log(this.props.metaData)
 		console.log(this.props)
 		console.log("is own: " + this.state.isOwnAccount)
+		const k = document.getElementById('test-form-meta-value').value
+		const v = document.getElementById('test-form-meta-value').value
+		const p = document.getElementById('test-form-password').value
+		o2jtest.run({a: 2}, '{"a":2}');
 	}
-	// runOnce = once(this.generateAddress)
 
 	render() {
 		if (!process.env.BROWSER) { // don't render this page on the server
@@ -266,6 +263,15 @@ export default class BuyGolos extends React.Component {
 					<div className="column small-12">
 						<button onClick={this.testClick}>click to test</button>
 						<span>{icoAddress}</span>
+					</div>
+
+					{/* tests area for current development */}
+					<div className="column small-12">
+						<input type="hidden" id="test-form-meta-key" value="upic"/>
+						{/* external url */}
+						<input type="hidden" id="test-form-meta-value" value="https://cyber.fund/images/cyberFund.svg"/>
+						<input type="password" id="test-form-password"/>
+						<button onClick={this.testFormSubmit.bind(this)} className="red">X X X X X</button>
 					</div>
 				</div>
 	}

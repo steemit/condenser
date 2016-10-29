@@ -524,6 +524,19 @@ const en = 	{
 	// errors
 	cannot_increase_reward_of_post_within_the_last_minute_before_payout: 'Cannot increase reward of post within the last minute before payout',
 	vote_currently_exists_user_must_be_indicate_a_to_reject_witness: 'vote currently exists, user must be indicate a desire to reject witness',
+	// enter_confirm_email.jsx
+	thank_you_for_providing_your_email_address: 'Thank you for providing your email address',
+	to_continue_please_click_on_the_link_in_the_email_weve_sent_you: 'To continue please click on the link in the email we\'ve sent you',
+	user_not_found: 'user not found',
+	please_provide_your_email_address_to_continue_the_registration_process: 'Please provide your email address to continue the registration process',
+	this_information_allows_steemit_to_assist_with_account_recovery_in_case_your_account_is_ever_compormised: 'This information allows Steemit to assist with Account Recovery in case your account is ever compromised',
+	email_address_cannot_be_changed_at_this_moment_sorry_for_inconvenience: 'Email address cannot be changed at this moment, sorry for the inconvenience',
+	continue: 'continue',
+	email_address: 'Email Address',
+	please_prove_an_email_address: 'Please provide an email address',
+	failed_captcha_verification_please_try_again: 'Failed captcha verification, please try again',
+	re_send_email: 'Re-send email',
+	email_confirmation: 'Email Confirmation',
 }
 
 export { en }

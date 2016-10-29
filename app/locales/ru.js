@@ -535,6 +535,19 @@ const ru = {
 	// errors
 	cannot_increase_reward_of_post_within_the_last_minute_before_payout: 'Награда за пост не может быть увеличена по истечении 24 часов с момента публикации',
 	vote_currently_exists_user_must_be_indicate_a_to_reject_witness: 'Голос уже существует, пользователь должен обозначить желание убрать делегата',
+	// enter_confirm_email.jsx
+	thank_you_for_providing_your_email_address: 'Благодарим вас за предоставление вашей электронной почты',
+	to_continue_please_click_on_the_link_in_the_email_weve_sent_you: 'Для продолжения, кликните ссылку в письме, которое мы вам прислали',
+	user_not_found: 'пользователь не найден',
+	please_provide_your_email_address_to_continue_the_registration_process: 'Пожалуйста, укажите адрес вашей электронной почты чтобы продолжить процесс регистрации',
+	this_information_allows_steemit_to_assist_with_account_recovery_in_case_your_account_is_ever_compormised: 'Эта информация позволяет Голосу помочь вам восстановить аккаунт, если он когда-нибудь будет украден',
+	email_address_cannot_be_changed_at_this_moment_sorry_for_inconvenience: 'Адрес электронной почты на данный момент не может быть изменен, извините за неудобства',
+	continue: 'продолжить',
+	email_address: 'Адрес электронной почты',
+	please_prove_an_email_address: 'Пожалуйста укажите адрес электронной почты',
+	failed_captcha_verification_please_try_again: 'Ошибка проверки капчи, попробуйте еще раз',
+	re_send_email: 'Повторная отправка электронной почты',
+	email_confirmation: 'Подтверждение электронной почты',
 }
 
 export { ru }

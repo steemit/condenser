@@ -46,7 +46,8 @@ ChainTypes.operations=
     interest: 34,
     fill_vesting_withdraw: 35,
     fill_order: 36,
-    comment_payout: 37
+    comment_payout: 37,
+    update_account_meta: 38
     };
 
 //types.hpp

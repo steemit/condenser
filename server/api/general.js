@@ -7,10 +7,13 @@ import recordWebEvent from 'server/record_web_event';
 import {esc, escAttrs} from 'db/models';
 import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF} from 'server/utils';
 import coBody from 'co-body';
-import {
-    getLogger
-} from '../../app/utils/Logger'
+import {getLogger} from '../../app/utils/Logger'
 import coRequest from 'co-request'
+
+import {Apis} from 'shared/api_client';
+import {createTransaction, signTransaction} from 'shared/chain/transactions';
+import {ops} from 'shared/serializer';
+const {signed_transaction} = ops;
 
 let print = getLogger('API - general').print
 
@@ -315,20 +318,6 @@ export default function useGeneralApi(app) {
     });
 }
 
-import {
-    Apis
-} from 'shared/api_client';
-import {
-    createTransaction,
-    signTransaction
-} from 'shared/chain/transactions';
-import {
-    ops
-} from 'shared/serializer';
-
-const {
-    signed_transaction
-} = ops;
 /**
  @arg signingKey {string|PrivateKey} - WIF or PrivateKey object
  */

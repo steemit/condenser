@@ -37,7 +37,16 @@ const messages = {ru, en, uk}
 // this is needed for proper export before react-intl functions with locale data,
 // will be properly created (they depend on react props and context,
 // which is not available until component is being created
-let translate = () => {};
+//
+/*
+	this placeholder is needed for usage outside of react. In server side code and in static html files.
+	This function is very simple, it does NOT support dynamic values (for example: translate('your_email_is', {email: 'x@y.com'})). Use it carefully
+*/
+let translate = string => {
+	let language = DEFAULT_LANGUAGE
+	if (process.env.BROWSER) language = store.get('language') || DEFAULT_LANGUAGE
+	return messages[language][string]
+};
 let translateHtml = () => {};
 let translatePlural = () => {};
 

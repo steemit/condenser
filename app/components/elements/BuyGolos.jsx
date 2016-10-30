@@ -7,14 +7,57 @@ import {PrivateKey} from 'shared/ecc'
 import {key_utils} from 'shared/ecc'
 import Apis from 'shared/api_client/ApiInstances'
 import { translate, translateHtml } from '../../Translator';
-import {ifObjectToJSON, ifStringParseJSON} from 'shared/clash/object2json'
-import {test as o2jtest} from 'shared/clash/object2json'
+
+import o2j from 'shared/clash/object2json'
+//import {test as o2jtest} from 'shared/clash/object2json'
+import {createTransaction, signTransaction} from 'shared/chain/transactions'
+
 /*
 	Логика компонента:
 	Если пользователь находится на своей странице, и если у него нет Btc адреса, то должна отображаться кнопка генерации адреса.
 	Если у пользователя есть BTC адрес, то необходимо отразить аддрес, qr code и табличку с предыдущими транзакциями.
 	Если пользователь находится НЕ на своей странице, то отобразить предыдущие транзакции, если они есть.
 */
+
+function* updateMeta(accountName, meta, signingKey, onSuccess, onError) {
+    // Be sure this account is up-to-date (other required fields are sent in the update)
+    // const [account] = yield call([Apis, Apis.db_api], 'get_accounts', [accountName])
+
+//    if (!account) {
+  //      onError('Account not found')
+    //    return
+  //  }
+    console.log("params", accountName, meta, signingKey, onSuccess, onError)
+    if (!signingKey) {
+        onError(`Incorrect Password`)
+        throw new Error('Have to pass owner key in order to change meta')
+    }
+
+    try {
+      const tx = yield createTransaction([
+        ['update_account_meta', {
+              account: accountName,
+              json_metadata: meta,
+          }]
+      ])
+      console.log("2");
+      console.log(tx);
+
+      const sx = signTransaction(tx, signingKey);
+      console.log("2.5");
+      yield new Promise((resolve, reject) =>
+          Apis.broadcastTransaction(sx, () => {resolve()}).catch(e => {reject(e)})
+      )
+      console.log("3");
+      if(onSuccess) onSuccess()
+      console.log("4");
+      // console.log('sign key.toPublicKey().toString()', key.toPublicKey().toString())
+      // console.log('payload', payload)
+    } catch(error) {
+      console.error('Update meta', error)
+      if(onError) onError(error)
+    }
+}
 
 // fetch data
 @connect(
@@ -44,28 +87,19 @@ export default class BuyGolos extends React.Component {
     loading: false,
 	}
 
-	componentWillReceiveProps() {
-	  // if (this.props.current_user && !this.props.icoAddress) this.generateAddress()
-	}
+	generateAddress = once(
+		function () {
+			console.log('ouch! what happened?!  ')
 
-	handleSubmit = (e) => {
-		(e && e.preventDefault())
-			//const {changePassword, authType, priorAuthKey} = this.props
-			//const {resetForm, notify} = this.props
-			//const {password, twofa} = this.props.fields
-			//const accountName = this.state.accountName;
-			this.setState({loading: true, error: null})
-			const k = document.getElementById("meta-key").value;
-			const v = document.getElementById("meta-value").value;
-			const pass = document.getElementById("meta-password").value;
-			console.log(k, v, pass);
-
-			let meta = this.props.metaData;
-			if (typeof meta ==='string') meta = JSON.parse(meta)
-			meta[k] = v;
-
-			const success = () => {
+			// some logic here
+			//
+			// set address in the end
+			this.setState({ icoAddress: 'адрес не сгенерирован' })
+	})
+  testFormSubmit () {
+			const success = (r) => {
 					this.setState({loading: false, error: null})
+					console.log(r)
 					//const {onClose} = this.props
 					//if(onClose) onClose()
 					//if(resetForm) resetForm()
@@ -74,6 +108,8 @@ export default class BuyGolos extends React.Component {
 			}
 			const error = (e) => {
 					this.setState({loading: false, error: e})
+					console.error(e);
+					console.log('---')
 			}
 
 			this.setState({loading: true, error: null})
@@ -109,13 +145,22 @@ export default class BuyGolos extends React.Component {
 
 	testFormSubmit() {
 		console.log(this.icoAddress)
-		console.log(this.props.metaData)
 		console.log(this.props)
 		console.log("is own: " + this.state.isOwnAccount)
+
 		const k = document.getElementById('test-form-meta-value').value
 		const v = document.getElementById('test-form-meta-value').value
 		const p = document.getElementById('test-form-password').value
-		o2jtest.run({a: 2}, '{"a":2}');
+		const u = document.getElementById('test-form-usernmae').value
+		let meta = o2j.ifStringParseJSON(this.props.metaData);
+		meta[k] = v;
+		meta = o2j.ifObjectToJSON(meta);
+		this.setState({loading: true, error: null});
+		let gen = updateMeta(u, meta, p, success, error); //TODO: !!! deal with generator in button click handler
+    gen.next();
+    gen.next();
+    gen.next();
+
 	}
 
 	render() {
@@ -312,18 +357,14 @@ export default class BuyGolos extends React.Component {
 						</div>
 					</div>
 
-					<div className="column small-12">
-						<button onClick={this.testClick}>click to test</button>
-						<span>{icoAddress}</span>
-					</div>
-
 					{/* tests area for current development */}
 					<div className="column small-12">
 						<input type="hidden" id="test-form-meta-key" value="upic"/>
 						{/* external url */}
 						<input type="hidden" id="test-form-meta-value" value="https://cyber.fund/images/cyberFund.svg"/>
-						<input type="password" id="test-form-password"/>
-						<button onClick={this.testFormSubmit.bind(this)} className="red">X X X X X</button>
+						<input type="hidden" id="test-form-usernmae" value="tort"/>
+						<input type="password" id="test-form-password" disabled={loading}/>
+						<button onClick={this.testFormSubmit.bind(this)} disabled={loading} className="red">X X X X X</button>
 					</div>
 				</div>
 	}

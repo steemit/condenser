@@ -14,8 +14,9 @@ import {createTransaction, signTransaction} from 'shared/chain/transactions'
 
 /*
 	Логика компонента:
-	Если пользователь находится на своей странице, и если у него нет Btc адреса, то должна отображаться форма ввода owner key. После ввода пароля, для пользователя генерируется адресс.
+	Если пользователь находится на своей странице, и если у него нет Btc адреса, то должна отображаться кнопка генерации адреса.
 	Если у пользователя есть BTC адрес, то необходимо отразить аддрес, qr code и табличку с предыдущими транзакциями.
+	Если пользователь находится НЕ на своей странице, то отобразить предыдущие транзакции, если они есть.
 */
 
 function* updateMeta(accountName, meta, signingKey, onSuccess, onError) {
@@ -110,6 +111,39 @@ export default class BuyGolos extends React.Component {
 					console.error(e);
 					console.log('---')
 			}
+
+			this.setState({loading: true, error: null})
+			this.changeMeta(this.props.accountname, pass, meta, success, error)
+	}
+
+	changeMeta = (accountName, signingKey, meta, onSuccess, onError) => {
+			console.log("HERE");
+			console.log(accountName, signingKey, meta); // , onSuccess, onError
+			transaction.actions.updateMeta({
+					meta: JSON.stringify(meta),
+					// signingKey provides the password if it was not provided in auths
+					signingKey,
+					accountName,
+					onSuccess,
+					onError,
+					// notifySuccess: 'Change password success'
+			})
+	}
+
+	generateAddress = event => {
+		event.preventDefault()
+		this.setState({ loading: true })
+		// some logic goes here
+		setTimeout(() => {
+			this.setState({
+				loading: false,
+				icoAddress: '1234',
+				transactions: []
+			})
+		}, 2000);
+	}
+
+	testFormSubmit() {
 		console.log(this.icoAddress)
 		console.log(this.props)
 		console.log("is own: " + this.state.isOwnAccount)
@@ -150,53 +184,101 @@ export default class BuyGolos extends React.Component {
 					{/* ACTUAL COMPONENT */}
 					<div className="columns small-12">
 						<h2>Макет функционала</h2>
+						<hr />
 					</div>
+
+					<div className="columns small-12">
+						<h2>ПОКУПКА СИЛЫ ГОЛОСА</h2>
+					</div>
+
+					{/* GENERATE ADDRESS */}
 					{
-						props.isOwnAccount && !props.icoAddress
-						? 	<form className="columns small-12">
-								<label>
-									Пожалуйста, введите главный пароль, чтобы сгенерировать адресс
-									<br />
-									<input id="meta-password" type="password" disabled={loading} />
-								</label>
+						props.isOwnAccount && (!state.icoAddress && !props.icoAddress)
+						? 	<form className="columns small-12" onSubmit={this.generateAddress}>
+								<div className="large-12 columns">
+									<label htmlFor="checkbox1">
+										<input id="checkbox1" type="checkbox" disabled={loading} required />
+										Я прочитал и ознакомлен с условиями сообщества описанными в документе: <br />
+										Голос: <a href="https://wiki.golos.io/1-introduction/golos_whitepaper.html">Русскоязычная социально-медийная блокчейн-платформа</a>
+									</label>
+									<label htmlFor="checkbox2">
+										<input id="checkbox2" type="checkbox" disabled={loading} required />
+										Я ознакомлен и принимаю условия <a href="/legal/sale_agreements.pdf">Договор купли-продажи токенов</a> "Голос"
+									</label>
+									<label htmlFor="checkbox3">
+										<input id="checkbox3" type="checkbox" disabled={loading} required />
+										Я ознакомлен с <a href="/legal/risk_disclosure.pdf">рисками</a>
+									</label>
+									<div className="column small-12 text-center">
+										<input type="submit" className="button" value="Получить биткоин адрес" disabled={loading} />
+									</div>
+								</div>
 							</form>
+						: 	null
+					}
+
+					{/* ADDRESS + CURRENT STAGE INFO + QR CODE */}
+					{
+						state.icoAddress || props.icoAddress
+						? <div className="row">
+							<div className="column small-9 text-center">
+								<h3><strong>{props.icoAddress || state.icoAddress}</strong></h3>
+								<table>
+									<thead>
+										<tr>
+											<th className="text-center" width="250">Максимальная Покупка</th>
+											<th className="text-center" width="150">Текущий Бонус</th>
+											<th className="text-center" width="100">До уменьшения бонуса</th>
+										</tr>
+									</thead>
+									<tbody>
+									<tr>
+										<td>100 биткоинов</td>
+										<td>25%</td>
+										<td>25 дней 3 часа</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+							<div className="column small-3">
+								<img src={`https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=${icoAddress}`} alt="your QR code" />
+							</div>
+							<div className="column small-12">
+								<p><b>Сила Голоса</b> - неперемещаемые цифровые токены. Их оценка в Голосах увеличивается при долгосрочном хранении. Чем их больше, тем сильней вы влияете на вознаграждения за пост и тем больше зарабатываете за голосование. Также Сила Голоса дает право записывать любые данные в блокчейн Голоса. Чем больше Силы Голоса, тем большая доля в пропускной способности гарантируется Вам сетью Голос. Перевод Силы Голоса в Голоса занимает 104 недели равными частями.</p>
+								<p>Если у Вас нет биткоинов, то Вы можете их купить за любую национальную валюту на Localbitcoins.net. Также сообществом Голос организованы разные сервисы по участию в краудсейле. Инструкции по покупке можно найти по тэгу #КупитьБиткоин.</p>
+							</div>
+						</div>
 						: null
 					}
+
+					{/* TRANSACTION HISTORY */}
 					{
-						props.icoAddress
-						? 	<div>
-								<div className="column small-9 text-center">
-									<h2>Покупка Голосов</h2>
-									<p>{icoAddress}</p>
-									<p>Перечислите биткоины сюда.</p>
-									<p>Вы покупаете Силу Голоса неликвидные</p>
-								</div>
-								<div className="column small-3">
-									<img src={`https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=${icoAddress}`} alt="your QR code" />
-								</div>
-								<div className="column small-12">
-									<table>
-										<thead>
-											<tr>
-												<th width="150">ID Транзакции</th>
-												<th width="250">Перечислено биткоинов</th>
-												<th width="100">Вы получите</th>
-											</tr>
-										</thead>
-										<tbody>
-											{
-												transactions.map((item, index) => {
-													return 	<tr key={index}>
-																<td>{item.address}</td>
-																<td>{item.amountBtc}</td>
-																<td>{item.amountGolos}</td>
-															</tr>
-												})
-											}
-										</tbody>
-									</table>
-								</div>
-							</div>
+						transactions.length
+						? <div className="column small-12">
+							<table>
+								<thead>
+									<tr>
+										<th width="200">ID Транзакции</th>
+										<th width="100">Перечислено биткоинов</th>
+										<th width="150">Вы получите</th>
+										<th width="50">Доля в Сети</th>
+									</tr>
+								</thead>
+								<tbody>
+									{
+										transactions.map((item, index) => {
+											return 	<tr key={index}>
+														<td>{item.address}</td>
+														<td>{item.amountBtc}</td>
+														<td>{item.amountGolos + ' Силы Голоса'}</td>
+														<td>{item.share + ' %'}</td>
+													</tr>
+										})
+									}
+								</tbody>
+							</table>
+							<p>Количество получаемых токенов Силы Голоса отображается исходя из полученных биткоинов на данный момент. Всего на краудсейле будет продано 27 072 000 токенов Силы Голоса (60% сети). Сила Голоса будет распределена пропорционально проинвестированным биткоинам с учетом бонусов. Чем больше биткоинов будет проинвестировано, тем меньше Силы Голоса вы получите, тем выше будет её цена.</p>
+						</div>
 						: null
 					}
 

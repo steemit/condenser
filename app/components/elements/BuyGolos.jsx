@@ -1,4 +1,5 @@
 import React from 'react'
+import {call, put, select} from 'redux-saga/effects';
 import once from 'lodash/once'
 import {connect} from 'react-redux'
 import transaction from 'app/redux/Transaction'
@@ -21,13 +22,13 @@ import {createTransaction, signTransaction} from 'shared/chain/transactions'
 
 function* updateMeta({accountName, meta, signingKey, onSuccess, onError}) {
     // Be sure this account is up-to-date (other required fields are sent in the update)
-    // const [account] = yield call([Apis, Apis.db_api], 'get_accounts', [accountName])
+    const [account] = yield call([Apis, Apis.db_api], 'get_accounts', [accountName])
 
-//    if (!account) {
-  //      onError('Account not found')
-    //    return
-  //  }
-  //
+   if (!account) {
+       onError('Account not found')
+       return
+   }
+
     if (!signingKey) {
         onError(`Incorrect Password`)
         throw new Error('Have to pass owner key in order to change meta')
@@ -36,7 +37,7 @@ function* updateMeta({accountName, meta, signingKey, onSuccess, onError}) {
     try {
       const tx = yield createTransaction([
         ['update_account_meta', {
-              account: accountName,
+              account,
               json_metadata: meta,
           }]
       ])
@@ -168,7 +169,7 @@ export default class BuyGolos extends React.Component {
         if (this.props.username) {
             const generator = updateMeta({
     			account_name: accountname,
-    			json_meta: metaData,
+    			meta: metaData,
                 signingKey: '',
                 onError: err => this.setState({error: err}),
                 onSucces: err => this.setState({error: 'SUCCESS'})
@@ -278,16 +279,16 @@ export default class BuyGolos extends React.Component {
 						? 	<form className="columns small-12" onSubmit={this.generateAddress}>
 								<div className="large-12 columns">
 									<label htmlFor="checkbox1">
-										<input id="checkbox1" type="checkbox" disabled={loading} required />
+										<input id="checkbox1" type="checkbox" disabled={loading} required checked />
 										Я прочитал и ознакомлен с условиями сообщества описанными в документе: <br />
 										Голос: <a href="https://wiki.golos.io/1-introduction/golos_whitepaper.html">Русскоязычная социально-медийная блокчейн-платформа</a>
 									</label>
 									<label htmlFor="checkbox2">
-										<input id="checkbox2" type="checkbox" disabled={loading} required />
+										<input id="checkbox2" type="checkbox" disabled={loading} required checked />
 										Я ознакомлен и принимаю условия <a href="/legal/sale_agreements.pdf">Договор купли-продажи токенов</a> "Голос"
 									</label>
 									<label htmlFor="checkbox3">
-										<input id="checkbox3" type="checkbox" disabled={loading} required />
+										<input id="checkbox3" type="checkbox" disabled={loading} required checked />
 										Я ознакомлен с <a href="/legal/risk_disclosure.pdf">рисками</a>
 									</label>
 									<div className="column small-12 text-center">

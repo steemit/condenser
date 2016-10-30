@@ -181,7 +181,7 @@ export const ua = {
 	reset_usernames_password: "Скинути пароль користувача {username}",
 	this_will_update_usernames_authtype_key: 'Це оновить {username} {authType} ключ',
 
-	the_rules_of_APP_NAME: "Перше правило мережі " + APP_NAME + ": не втрачайте свій пароль. <br /> Друге правило" + APP_NAME + ": <strong>Не</strong> втрачайте свій пароль. <br /> Третє правило " + APP_NAME + ": ми не можемо відновити ваш пароль. <br /> Четверте правило: якщо ви можете запам'ятати свій пароль, значить він не безпечний. <br /> П'яте правило: використовуйте тільки згенеровані випадковим чином паролі. <br /> Шосте правило: Нікому не кажіть свій пароль. <br /> Сьоме правило: Завжди надійно зберігайте свій пароль.",
+	the_rules_of_APP_NAME: "Перше правило мережі " + APP_NAME + ": не втрачайте свій пароль. <br /> Друге правило " + APP_NAME + ": <strong>Не</strong> втрачайте свій пароль. <br /> Третє правило " + APP_NAME + ": ми не можемо відновити ваш пароль. <br /> Четверте правило: якщо ви можете запам'ятати свій пароль, значить він не безпечний. <br /> П'яте правило: використовуйте тільки згенеровані випадковим чином паролі. <br /> Шосте правило: Нікому не кажіть свій пароль. <br /> Сьоме правило: Завжди надійно зберігайте свій пароль.",
 	account_name: 'Ім\'я облікового запису',
 	recover_password: 'Відновити акаунт',
 	current_password: 'Поточний пароль',
@@ -532,6 +532,20 @@ export const ua = {
 	crowdsale: 'Краудсейл',
 	followers: 'Подписчики',
 	// errors
-	cannot_increase_reward_of_post_within_the_last_minute_before_payout: 'Награда за пост не может быть увеличена по истечении 24 часов с момента публикации',
-	vote_currently_exists_user_must_be_indicate_a_to_reject_witness: 'Голос уже существует, пользователь должен обозначить желание убрать делегата',
+	cannot_increase_reward_of_post_within_the_last_minute_before_payout: 'Нагорода за пост не може бути збільшена після закінчення 24 годин з моменту публікації',
+	vote_currently_exists_user_must_be_indicate_a_to_reject_witness: 'Голос вже існує, користувач повинен позначити бажання прибрати делегата',
+	only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes: 'Тільки один Голос аккаунт дозволений з одного IP адресу кожні десять хвилин ',
+	// enter_confirm_email.jsx
+	thank_you_for_providing_your_email_address: 'Дякуємо вам за надання вашої електронної пошти ',
+	to_continue_please_click_on_the_link_in_the_email_weve_sent_you: 'Для продовження, натисніть на заслання в листі, яке ми вам надіслали',
+	user_not_found: 'користувач не знайдений',
+	please_provide_your_email_address_to_continue_the_registration_process: 'Будь ласка, вкажіть адресу вашої електронної пошти, щоб продовжити процес реєстрації',
+	this_information_allows_steemit_to_assist_with_account_recovery_in_case_your_account_is_ever_compormised: 'Ця інформація дозволяє Голосу допомогти вам відновити акаунт, якщо він коли-небудь буде вкрадений ',
+	email_address_cannot_be_changed_at_this_moment_sorry_for_inconvenience: 'Адреса електронної пошти на данний момент не може бути змінена, вибачте за незручності',
+	continue: 'продовжити',
+	email_address: 'Адреса електронної пошти',
+	please_prove_an_email_address: 'Будь ласка вкажіть адресу електронної пошти',
+	failed_captcha_verification_please_try_again: 'Помилка перевірки капчі, спробуйте ще раз',
+	re_send_email: 'Повторна відправка електронної пошти',
+	email_confirmation: 'Підтвердження електронної пошти',
 }

@@ -77,7 +77,15 @@ function* updateMeta(accountName, meta, signingKey, onSuccess, onError) {
 			isOwnAccount: username == accountname,
 			icoAddress: metaData ? metaData.ico_address : ''
 		}
-	}
+	},
+    dispatch => ({
+        updateMeta: (operation) => {
+            dispatch(transaction.actions.broadcastOperation({
+				type: 'update_account_meta',
+				operation
+            }))
+        },
+    })
 )
 export default class BuyGolos extends React.Component {
 
@@ -87,16 +95,7 @@ export default class BuyGolos extends React.Component {
     loading: false,
 	}
 
-	generateAddress = once(
-		function () {
-			console.log('ouch! what happened?!  ')
-
-			// some logic here
-			//
-			// set address in the end
-			this.setState({ icoAddress: 'адрес не сгенерирован' })
-	})
-  testFormSubmit () {
+	testFormSubmit () {
 			const success = (r) => {
 					this.setState({loading: false, error: null})
 					console.log(r)
@@ -131,8 +130,24 @@ export default class BuyGolos extends React.Component {
 	}
 
 	generateAddress = event => {
-		event.preventDefault()
+		event && event.preventDefault()
 		this.setState({ loading: true })
+		let {metaData, accountname} = this.props
+		// metaData = JSON.parse(metaData)
+		// console.log('metaData', metaData)
+		// console.log('typeof metaData', typeof metaData)
+		// metaData.foo = 'bar'
+		// console.log('typeof metaData', typeof metaData)
+		// console.log('metaData', metaData)
+		this.props.updateMeta({
+			account_name: accountname,
+			json_meta: metaData
+		})
+		// account,
+		// username,
+		// metaData,
+		// accountname,
+		// current_user,
 		// some logic goes here
 		setTimeout(() => {
 			this.setState({
@@ -141,6 +156,22 @@ export default class BuyGolos extends React.Component {
 				transactions: []
 			})
 		}, 2000);
+	}
+
+	componentDidMount() {
+		if (process.env.BROWSER) {
+			this.generateAddress()
+			fetch('/api/v1/generate_ico_address')
+				.then(function(data) {
+					console.log('data', data)
+					return data.json() })
+				.then(data => {
+					console.log('success! data', data)
+				})
+				.catch(error => {
+					console.error('address generation failed', error)
+				})
+		}
 	}
 
 	testFormSubmit() {

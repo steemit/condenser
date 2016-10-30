@@ -669,8 +669,8 @@ function* updateMeta(params) {
     try {
       const tx = yield createTransaction([
           ['update_account_meta', {
-              account: account.name,
-              json_metadata: meta,
+              account_name: account.name,
+              json_meta: meta,
           }]
       ])
       const sx = signTransaction(tx, signingKey);

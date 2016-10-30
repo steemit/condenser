@@ -20,6 +20,7 @@ const {transaction} = ops
 export const transactionWatches = [
     watchForBroadcast,
     watchForUpdateAuthorities,
+    watchForUpdateMeta,
     watchForRecoverAccount,
 ]
 
@@ -659,15 +660,23 @@ function* updateMeta({payload: {meta, accountName, signingKey, onSuccess, onErro
         onError(`Incorrect Password`)
         throw new Error('Have to pass owner key in order to change meta')
     }
-    const payload = {
-        type: 'account_update', operation: {
-            account: account.name,
-            json_metadata: meta,
-        }, keys: [key],
-        successCallback: onSuccess,
-        errorCallback: onError,
+
+    try {
+      const tx = yield createTransaction([
+          ['update_account_meta', {
+              account: account.name,
+              json_metadata: meta,
+          }]
+      ])
+      const sx = signTransaction(tx, signingKey);
+      yield new Promise((resolve, reject) =>
+          Apis.broadcastTransaction(sx, () => {resolve()}).catch(e => {reject(e)})
+      )
+      if(onSuccess) onSuccess()
+      // console.log('sign key.toPublicKey().toString()', key.toPublicKey().toString())
+      // console.log('payload', payload)
+    } catch(e) {
+      console.error('Update meta', error)
+      if(onError) onError(error)
     }
-    // console.log('sign key.toPublicKey().toString()', key.toPublicKey().toString())
-    // console.log('payload', payload)
-    yield call(broadcastOperation, {payload})
 }

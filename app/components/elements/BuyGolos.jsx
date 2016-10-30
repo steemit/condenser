@@ -27,6 +27,7 @@ function* updateMeta({accountName, meta, signingKey, onSuccess, onError}) {
   //      onError('Account not found')
     //    return
   //  }
+  //
     if (!signingKey) {
         onError(`Incorrect Password`)
         throw new Error('Have to pass owner key in order to change meta')
@@ -131,10 +132,11 @@ export default class BuyGolos extends React.Component {
 		event && event.preventDefault()
 		this.setState({ loading: true })
 		let {metaData, accountname} = this.props
-		// metaData = JSON.parse(metaData)
+		metaData = JSON.parse(metaData)
 		// console.log('metaData', metaData)
 		// console.log('typeof metaData', typeof metaData)
-		// metaData.foo = 'bar'
+		metaData.foo = 'bar'
+        metaData = JSON.stringify(metaData);
 		// console.log('typeof metaData', typeof metaData)
 		console.log('metaData', metaData)
         console.log('typeof metaData before', typeof metaData)
@@ -142,18 +144,17 @@ export default class BuyGolos extends React.Component {
         // console.log('metaData', metaData)
         // console.log('typeof metaData after', typeof metaData)
         // preserve newlines, etc - use valid JSON
-        metaData = metaData.replace(/\\n/g, "\\n")
-                       .replace(/\\'/g, "\\'")
-                       .replace(/\\"/g, '\\"')
-                       .replace(/\\&/g, "\\&")
-                       .replace(/\\r/g, "\\r")
-                       .replace(/\\t/g, "\\t")
-                       .replace(/\\b/g, "\\b")
-                       .replace(/\\f/g, "\\f");
+        // metaData = metaData.replace(/\\n/g, "\\n")
+        //                .replace(/\\'/g, "\\'")
+        //                .replace(/\\"/g, '\\"')
+        //                .replace(/\\&/g, "\\&")
+        //                .replace(/\\r/g, "\\r")
+        //                .replace(/\\t/g, "\\t")
+        //                .replace(/\\b/g, "\\b")
+        //                .replace(/\\f/g, "\\f");
         // remove non-printable and other non-valid JSON chars
-        metaData = metaData.replace(/[\u0000-\u0019]+/g,"");
-        var o = JSON.parse(metaData);
-        console.log('o', o)
+        // metaData = metaData.replace(/[\u0000-\u0019]+/g,"");
+        // metaData = JSON.parse(metaData);
 		// this.props.updateMeta({
 		// 	account_name: accountname,
 		// 	json_meta: metaData,
@@ -163,16 +164,20 @@ export default class BuyGolos extends React.Component {
         //     onError: err => this.setState({error: err}),
         //     onSucces: err => this.setState({error: 'SUCCESS'})
 		// })
-        const generator = updateMeta({
-			account_name: accountname,
-			json_meta: metaData,
-            onError(error) {
-                console.error(error)
-            },
-            onError: err => this.setState({error: err}),
-            onSucces: err => this.setState({error: 'SUCCESS'})
-		})
-        generator.next()
+		console.log('this.props.username', this.props.username)
+        if (this.props.username) {
+            const generator = updateMeta({
+    			account_name: accountname,
+    			json_meta: metaData,
+                signingKey: '',
+                onError: err => this.setState({error: err}),
+                onSucces: err => this.setState({error: 'SUCCESS'})
+    		})
+            generator.next()
+            generator.next()
+            generator.next()
+            generator.next()
+        }
 		// account,
 		// username,
 		// metaData,

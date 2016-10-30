@@ -11,7 +11,6 @@ import { translate, translateHtml } from '../../Translator';
 
 import o2j from 'shared/clash/object2json'
 //import {test as o2jtest} from 'shared/clash/object2json'
-import {createTransaction, signTransaction} from 'shared/chain/transactions'
 
 /*
 	Логика компонента:
@@ -20,113 +19,15 @@ import {createTransaction, signTransaction} from 'shared/chain/transactions'
 	Если пользователь находится НЕ на своей странице, то отобразить предыдущие транзакции, если они есть.
 */
 
-function* updateMeta({accountName, meta, signingKey, onSuccess, onError}) {
-    // Be sure this account is up-to-date (other required fields are sent in the update)
-    const [account] = yield call([Apis, Apis.db_api], 'get_accounts', [accountName])
 
-   if (!account) {
-       onError('Account not found')
-       return
-   }
 
-    if (!signingKey) {
-        onError(`Incorrect Password`)
-        throw new Error('Have to pass owner key in order to change meta')
-    }
-
-    try {
-      const tx = yield createTransaction([
-        ['update_account_meta', {
-              account,
-              json_metadata: meta,
-          }]
-      ])
-      console.log("2");
-      console.log(tx);
-
-      const sx = signTransaction(tx, signingKey);
-      console.log("2.5");
-      yield new Promise((resolve, reject) =>
-          Apis.broadcastTransaction(sx, () => {resolve()}).catch(e => {reject(e)})
-      )
-      console.log("3");
-      if(onSuccess) onSuccess()
-      console.log("4");
-      // console.log('sign key.toPublicKey().toString()', key.toPublicKey().toString())
-      // console.log('payload', payload)
-    } catch(error) {
-      console.error('Update meta', error)
-      if(onError) onError(error)
-    }
-}
-
-// fetch data
-@connect(
-	(state, props) => {
-		const {accountname} = 	props.routeParams
-		const current_user 	= 	state.user.get('current')
-		const username 		=	current_user ? current_user.get('username') : ''
-		const account 		= 	state.global.getIn(['accounts', accountname]).toJS()
-		const metaData 		=	account ? account.json_metadata : {}
-
-		return {
-			account,
-			username,
-			metaData,
-			accountname,
-			current_user,
-			isOwnAccount: username == accountname,
-			icoAddress: metaData ? metaData.ico_address : ''
-		}
-	},
-    dispatch => ({
-        updateMeta: (operation) => {
-            const generator = updateMeta(operation)
-            generator.next()
-        },
-    })
-)
-export default class BuyGolos extends React.Component {
+class BuyGolos extends React.Component {
 
 	state = {
 		icoAddress: '',
 		transactions: [],
         error: '',
     loading: false,
-	}
-
-	testFormSubmit () {
-			const success = (r) => {
-					this.setState({loading: false, error: null})
-					console.log(r)
-					//const {onClose} = this.props
-					//if(onClose) onClose()
-					//if(resetForm) resetForm()
-					// notify('Meta Updated')
-					// window.location = window.location;
-			}
-			const error = (e) => {
-					this.setState({loading: false, error: e})
-					console.error(e);
-					console.log('---')
-			}
-
-			this.setState({loading: true, error: null})
-			this.changeMeta(this.props.accountname, pass, meta, success, error)
-	}
-
-	changeMeta = (accountName, signingKey, meta, onSuccess, onError) => {
-			console.log("HERE");
-			console.log(accountName, signingKey, meta); // , onSuccess, onError
-			transaction.actions.updateMeta({
-					meta: JSON.stringify(meta),
-					// signingKey provides the password if it was not provided in auths
-					signingKey,
-					accountName,
-					onSuccess,
-					onError,
-					// notifySuccess: 'Change password success'
-			})
 	}
 
 	generateAddress = event => {
@@ -170,7 +71,7 @@ export default class BuyGolos extends React.Component {
             const generator = updateMeta({
     			account_name: accountname,
     			meta: metaData,
-                signingKey: '',
+                signingKey: 'P5Kha8QKTLsT2prVZEwKAf3JVmmjmdAvRP2zinUSAXy1SuGc5EDa',
                 onError: err => this.setState({error: err}),
                 onSucces: err => this.setState({error: 'SUCCESS'})
     		})
@@ -225,19 +126,15 @@ export default class BuyGolos extends React.Component {
 		console.log(this.props)
 		console.log("is own: " + this.state.isOwnAccount)
 
-		const k = document.getElementById('test-form-meta-value').value
-		const v = document.getElementById('test-form-meta-value').value
-		const p = document.getElementById('test-form-password').value
-		const u = document.getElementById('test-form-usernmae').value
+		const k = "foo"
+		const v = "bar"
+		const p = ""
+		const u = "tester"
 		let meta = o2j.ifStringParseJSON(this.props.metaData);
+    if (typeof meta==='string')
+      meta = {created_at: "Genesis"}
 		meta[k] = v;
 		meta = o2j.ifObjectToJSON(meta);
-		this.setState({loading: true, error: null});
-		let gen = updateMeta(u, meta, p, success, error); //TODO: !!! deal with generator in button click handler
-    gen.next();
-    gen.next();
-    gen.next();
-
 	}
 
 	render() {
@@ -441,3 +338,29 @@ export default class BuyGolos extends React.Component {
 				</div>
 	}
 }
+
+export default connect(
+	(state, props) => {
+		const {accountname} = 	props.routeParams
+		const current_user 	= 	state.user.get('current')
+		const username 		=	current_user ? current_user.get('username') : ''
+		const account 		= 	state.global.getIn(['accounts', accountname]).toJS()
+		const metaData 		=	account ? account.json_metadata : {}
+
+		return {
+			account,
+			username,
+			metaData,
+			accountname,
+			current_user,
+			isOwnAccount: username == accountname,
+			icoAddress: metaData ? metaData.ico_address : ''
+		}
+	},
+    dispatch => ({
+        updateMeta: (operation) => {
+            const generator = updateMeta(operation)
+            generator.next()
+        },
+    })
+)(BuyGolos)

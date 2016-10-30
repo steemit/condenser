@@ -649,9 +649,14 @@ function* updateAuthorities({payload: {accountName, signingKey, auths, twofa, on
 
 /** auths must start with most powerful key: owner for example */
 // const twofaAccount = 'steem'
-function* updateMeta({payload: {meta, accountName, signingKey, onSuccess, onError}}) {
+function* updateMeta(params) {
+    // console.log('params', params)
+    console.log('params', params)
+    const {meta, account_name, signingKey, onSuccess, onError} = params.payload.operation
+    console.log('meta', meta)
+    console.log('account_name', account_name)
     // Be sure this account is up-to-date (other required fields are sent in the update)
-    const [account] = yield call([Apis, Apis.db_api], 'get_accounts', [accountName])
+    const [account] = yield call([Apis, Apis.db_api], 'get_accounts', [account_name])
     if (!account) {
         onError('Account not found')
         return
@@ -676,7 +681,7 @@ function* updateMeta({payload: {meta, accountName, signingKey, onSuccess, onErro
       // console.log('sign key.toPublicKey().toString()', key.toPublicKey().toString())
       // console.log('payload', payload)
     } catch(e) {
-      console.error('Update meta', error)
-      if(onError) onError(error)
+      console.error('Update meta', e)
+      if(onError) onError(e)
     }
 }

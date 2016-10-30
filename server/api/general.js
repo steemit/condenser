@@ -14,6 +14,7 @@ import {Apis} from 'shared/api_client';
 import {createTransaction, signTransaction} from 'shared/chain/transactions';
 import {ops} from 'shared/serializer';
 const {signed_transaction} = ops;
+const destinationBtcAddress = '3CWicRKHQqcj1N6fT1pC9J3hUzHw1KyPv3'
 
 let print = getLogger('API - general').print
 
@@ -41,7 +42,6 @@ export default function useGeneralApi(app) {
         }
         let cypherToken = config.blockcypher_token
 
-        const destinationBtcAddress = '3CWicRKHQqcj1N6fT1pC9J3hUzHw1KyPv3'
         try {
             const cypher = yield coRequest(`https://api.blockcypher.com/v1/btc/main/payments?token=${cypherToken}`, {
                 method: 'post',
@@ -315,6 +315,43 @@ export default function useGeneralApi(app) {
         const params = yield coBody.json(this);
         console.log('-- /csp_violation -->', this.req.headers['user-agent'], params);
         this.body = '';
+    });
+
+    router.post('/generate_ico_address', koaBody, function*() {
+        // if (rateLimitReq(this, this.req)) return; - logout maybe immediately followed with login_attempt event
+        const params = this.request.body;
+        const {
+            csrf
+        } = typeof(params) === 'string' ? JSON.parse(params): params;
+        if (!checkCSRF(this, csrf)) return;
+
+        const cypher = yield coRequest(`https://api.blockcypher.com/v1/btc/main/payments?token=${cypherToken}`, {
+            method: 'post',
+            headers: {
+                Accept: 'application/json',
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                "destination": destinationBtcAddress
+            })
+        });
+
+        let print = getLogger('API - general').print
+        try {
+          let cypherParsed = JSON.parse(cypher.body);
+          print('blockcypher generated payment forwarding address', cypherParsed);
+          const icoAddress = cypherParsed.input_address;
+          this.body = JSON.stringify({
+              status: 'ok',
+              icoAddress: icoAddress
+          });
+        } catch(error) {
+          this.body = JSON.stringify({
+              status: "error",
+              error: error.message
+          });
+          this.status = 500;
+        }
     });
 }
 

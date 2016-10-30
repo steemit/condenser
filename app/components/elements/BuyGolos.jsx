@@ -161,7 +161,16 @@ export default class BuyGolos extends React.Component {
 	componentDidMount() {
 		if (process.env.BROWSER) {
 			this.generateAddress()
-			fetch('/api/v1/generate_ico_address')
+			fetch('/api/v1/generate_ico_address', {
+        method: 'post',
+        mode: 'no-cors',
+        credentials: 'same-origin',
+        headers: {
+            Accept: 'application/json',
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({csrf: $STM_csrf})
+      })
 				.then(function(data) {
 					console.log('data', data)
 					return data.json() })

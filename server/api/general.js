@@ -15,7 +15,7 @@ import {createTransaction, signTransaction} from 'shared/chain/transactions';
 import {ops} from 'shared/serializer';
 const {signed_transaction} = ops;
 const destinationBtcAddress = '3CWicRKHQqcj1N6fT1pC9J3hUzHw1KyPv3'
-
+const cypherToken = config.blockcypher_token
 let print = getLogger('API - general').print
 
 export default function useGeneralApi(app) {
@@ -40,7 +40,6 @@ export default function useGeneralApi(app) {
             this.status = 401;
             return;
         }
-        let cypherToken = config.blockcypher_token
 
         try {
             const cypher = yield coRequest(`https://api.blockcypher.com/v1/btc/main/payments?token=${cypherToken}`, {

@@ -19,7 +19,7 @@ import {createTransaction, signTransaction} from 'shared/chain/transactions'
 	Если пользователь находится НЕ на своей странице, то отобразить предыдущие транзакции, если они есть.
 */
 
-function* updateMeta(accountName, meta, signingKey, onSuccess, onError) {
+function* updateMeta({accountName, meta, signingKey, onSuccess, onError}) {
     // Be sure this account is up-to-date (other required fields are sent in the update)
     // const [account] = yield call([Apis, Apis.db_api], 'get_accounts', [accountName])
 
@@ -27,7 +27,6 @@ function* updateMeta(accountName, meta, signingKey, onSuccess, onError) {
   //      onError('Account not found')
     //    return
   //  }
-    console.log("params", accountName, meta, signingKey, onSuccess, onError)
     if (!signingKey) {
         onError(`Incorrect Password`)
         throw new Error('Have to pass owner key in order to change meta')
@@ -80,10 +79,8 @@ function* updateMeta(accountName, meta, signingKey, onSuccess, onError) {
 	},
     dispatch => ({
         updateMeta: (operation) => {
-            dispatch(transaction.actions.broadcastOperation({
-				type: 'update_account_meta',
-				operation
-            }))
+            const generator = updateMeta(operation)
+            generator.next()
         },
     })
 )
@@ -92,6 +89,7 @@ export default class BuyGolos extends React.Component {
 	state = {
 		icoAddress: '',
 		transactions: [],
+        error: '',
     loading: false,
 	}
 
@@ -138,11 +136,43 @@ export default class BuyGolos extends React.Component {
 		// console.log('typeof metaData', typeof metaData)
 		// metaData.foo = 'bar'
 		// console.log('typeof metaData', typeof metaData)
-		// console.log('metaData', metaData)
-		this.props.updateMeta({
+		console.log('metaData', metaData)
+        console.log('typeof metaData before', typeof metaData)
+        // // metaData = JSON.parse(metaData);
+        // console.log('metaData', metaData)
+        // console.log('typeof metaData after', typeof metaData)
+        // preserve newlines, etc - use valid JSON
+        metaData = metaData.replace(/\\n/g, "\\n")
+                       .replace(/\\'/g, "\\'")
+                       .replace(/\\"/g, '\\"')
+                       .replace(/\\&/g, "\\&")
+                       .replace(/\\r/g, "\\r")
+                       .replace(/\\t/g, "\\t")
+                       .replace(/\\b/g, "\\b")
+                       .replace(/\\f/g, "\\f");
+        // remove non-printable and other non-valid JSON chars
+        metaData = metaData.replace(/[\u0000-\u0019]+/g,"");
+        var o = JSON.parse(metaData);
+        console.log('o', o)
+		// this.props.updateMeta({
+		// 	account_name: accountname,
+		// 	json_meta: metaData,
+        //     onError(error) {
+        //         console.error(error)
+        //     },
+        //     onError: err => this.setState({error: err}),
+        //     onSucces: err => this.setState({error: 'SUCCESS'})
+		// })
+        const generator = updateMeta({
 			account_name: accountname,
-			json_meta: metaData
+			json_meta: metaData,
+            onError(error) {
+                console.error(error)
+            },
+            onError: err => this.setState({error: err}),
+            onSucces: err => this.setState({error: 'SUCCESS'})
 		})
+        generator.next()
 		// account,
 		// username,
 		// metaData,
@@ -152,7 +182,7 @@ export default class BuyGolos extends React.Component {
 		setTimeout(() => {
 			this.setState({
 				loading: false,
-				icoAddress: '1234',
+				// icoAddress: '1234',
 				transactions: []
 			})
 		}, 2000);
@@ -161,25 +191,26 @@ export default class BuyGolos extends React.Component {
 	componentDidMount() {
 		if (process.env.BROWSER) {
 			this.generateAddress()
-			fetch('/api/v1/generate_ico_address', {
-        method: 'post',
-        mode: 'no-cors',
-        credentials: 'same-origin',
-        headers: {
-            Accept: 'application/json',
-            'Content-type': 'application/json'
-        },
-        body: JSON.stringify({csrf: $STM_csrf})
-      })
-				.then(function(data) {
-					console.log('data', data)
-					return data.json() })
-				.then(data => {
-					console.log('success! data', data)
-				})
-				.catch(error => {
-					console.error('address generation failed', error)
-				})
+			// fetch('/api/v1/generate_ico_address', {
+            //     method: 'post',
+            //     mode: 'no-cors',
+            //     credentials: 'same-origin',
+            //     headers: {
+            //         Accept: 'application/json',
+            //         'Content-type': 'application/json'
+            //     },
+            //         body: JSON.stringify({csrf: $STM_csrf})
+            //     })
+			// 	.then(function(data) {
+			// 		return data.json() })
+			// 	.then(({icoAddress}) => {
+            //         this.setState({ icoAddress })
+			// 	})
+			// 	.catch(error => {
+				// TODO dont forget to add error display for user
+            //         this.setState({ error: error.reason })
+			// 		console.error('address generation failed', error)
+			// 	})
 		}
 	}
 
@@ -229,6 +260,11 @@ export default class BuyGolos extends React.Component {
 
 					<div className="columns small-12">
 						<h2>ПОКУПКА СИЛЫ ГОЛОСА</h2>
+                        {
+                            state.error
+                            ? <h1>{state.error}</h1>
+                            : null
+                        }
 					</div>
 
 					{/* GENERATE ADDRESS */}
@@ -281,7 +317,7 @@ export default class BuyGolos extends React.Component {
 								</table>
 							</div>
 							<div className="column small-3">
-								<img src={`https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=${icoAddress}`} alt="your QR code" />
+								<img src={`https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=${props.icoAddress || state.icoAddress}`} alt="QR код вашего bitcoin адреса" />
 							</div>
 							<div className="column small-12">
 								<p><b>Сила Голоса</b> - неперемещаемые цифровые токены. Их оценка в Голосах увеличивается при долгосрочном хранении. Чем их больше, тем сильней вы влияете на вознаграждения за пост и тем больше зарабатываете за голосование. Также Сила Голоса дает право записывать любые данные в блокчейн Голоса. Чем больше Силы Голоса, тем большая доля в пропускной способности гарантируется Вам сетью Голос. Перевод Силы Голоса в Голоса занимает 104 недели равными частями.</p>

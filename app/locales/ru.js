@@ -549,6 +549,10 @@ const ru = {
 	failed_captcha_verification_please_try_again: 'Ошибка проверки капчи, попробуйте еще раз',
 	re_send_email: 'Повторная отправка электронной почты',
 	email_confirmation: 'Подтверждение электронной почты',
+	// next 3 strings are used together
+	by_verifying_you_agree_with: 'Подтверждая ваш аккаунт вы соглашаетесь с',
+	by_verifying_you_agree_with_privacy_policy: 'Политикой Конфиденциальности',
+	by_verifying_you_agree_with_privacy_policy_of_website_APP_URL: 'сайта ' + APP_URL,
 }
 
 export { ru }

@@ -538,6 +538,10 @@ const en = 	{
 	failed_captcha_verification_please_try_again: 'Failed captcha verification, please try again',
 	re_send_email: 'Re-send email',
 	email_confirmation: 'Email Confirmation',
+	// next 3 strings are used together
+	by_verifying_you_agree_with: 'By verifying your account you agree to the',
+	by_verifying_you_agree_with_privacy_policy: 'Privacy Policy',
+	by_verifying_you_agree_with_privacy_policy_of_website_APP_URL: 'of ' + APP_URL,
 }
 
 export { en }

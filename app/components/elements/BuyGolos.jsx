@@ -274,16 +274,6 @@ export default class BuyGolos extends React.Component {
 							</label>
 						</div>
 					</div>
-
-					{/* tests area for current development */}
-					<div className="column small-12">
-						<input type="hidden" id="test-form-meta-key" value="upic"/>
-						{/* external url */}
-						<input type="hidden" id="test-form-meta-value" value="https://cyber.fund/images/cyberFund.svg"/>
-						<input type="hidden" id="test-form-usernmae" value="tort"/>
-						<input type="password" id="test-form-password" disabled={loading}/>
-						<button onClick={this.testFormSubmit.bind(this)} disabled={loading} className="red">X X X X X</button>
-					</div>
 				</div>
 	}
 }

@@ -27,98 +27,62 @@ class BuyGolos extends React.Component {
 		icoAddress: '',
 		transactions: [],
         error: '',
-    loading: false,
+		loading: false,
 	}
 
 	generateAddress = event => {
 		event && event.preventDefault()
 		this.setState({ loading: true })
 		let {metaData, accountname} = this.props
-		metaData = JSON.parse(metaData)
-		// console.log('metaData', metaData)
-		// console.log('typeof metaData', typeof metaData)
-		metaData.foo = 'bar'
-        metaData = JSON.stringify(metaData);
-		// console.log('typeof metaData', typeof metaData)
 		console.log('metaData', metaData)
-        console.log('typeof metaData before', typeof metaData)
-        // // metaData = JSON.parse(metaData);
-        // console.log('metaData', metaData)
-        // console.log('typeof metaData after', typeof metaData)
-        // preserve newlines, etc - use valid JSON
-        // metaData = metaData.replace(/\\n/g, "\\n")
-        //                .replace(/\\'/g, "\\'")
-        //                .replace(/\\"/g, '\\"')
-        //                .replace(/\\&/g, "\\&")
-        //                .replace(/\\r/g, "\\r")
-        //                .replace(/\\t/g, "\\t")
-        //                .replace(/\\b/g, "\\b")
-        //                .replace(/\\f/g, "\\f");
-        // remove non-printable and other non-valid JSON chars
-        // metaData = metaData.replace(/[\u0000-\u0019]+/g,"");
-        // metaData = JSON.parse(metaData);
-		// this.props.updateMeta({
-		// 	account_name: accountname,
-		// 	json_meta: metaData,
-        //     onError(error) {
-        //         console.error(error)
-        //     },
-        //     onError: err => this.setState({error: err}),
-        //     onSucces: err => this.setState({error: 'SUCCESS'})
-		// })
-		console.log('this.props.username', this.props.username)
+		metaData = JSON.parse(metaData)
+		metaData.foo = 'bar'
+        // metaData = JSON.stringify(metaData);
+		console.log('metaData', metaData)
         if (this.props.username) {
-            const generator = updateMeta({
+            const generator = this.props.updateMeta({
     			account_name: accountname,
     			meta: metaData,
                 signingKey: 'P5Kha8QKTLsT2prVZEwKAf3JVmmjmdAvRP2zinUSAXy1SuGc5EDa',
                 onError: err => this.setState({error: err}),
                 onSucces: err => this.setState({error: 'SUCCESS'})
     		})
-            generator.next()
+            console.log('generator.next()', generator.next())
             generator.next()
             generator.next()
             generator.next()
         }
-		// account,
-		// username,
-		// metaData,
-		// accountname,
-		// current_user,
-		// some logic goes here
+
+		// fetch('/api/v1/generate_ico_address', {
+		//     method: 'post',
+		//     mode: 'no-cors',
+		//     credentials: 'same-origin',
+		//     headers: {
+		//         Accept: 'application/json',
+		//         'Content-type': 'application/json'
+		//     },
+		//         body: JSON.stringify({csrf: $STM_csrf})
+		//     })
+		// 	.then(function(data) {
+		// 		return data.json() })
+		// 	.then(({icoAddress}) => {
+		//         this.setState({ icoAddress })
+		// 	})
+		// 	.catch(error => {
+		// TODO dont forget to add error display for user
+		//         this.setState({ error: error.reason })
+		// 		console.error('address generation failed', error)
+		// 	})
 		setTimeout(() => {
 			this.setState({
 				loading: false,
-				// icoAddress: '1234',
 				transactions: []
 			})
 		}, 2000);
 	}
 
 	componentDidMount() {
-		if (process.env.BROWSER) {
-			this.generateAddress()
-			// fetch('/api/v1/generate_ico_address', {
-            //     method: 'post',
-            //     mode: 'no-cors',
-            //     credentials: 'same-origin',
-            //     headers: {
-            //         Accept: 'application/json',
-            //         'Content-type': 'application/json'
-            //     },
-            //         body: JSON.stringify({csrf: $STM_csrf})
-            //     })
-			// 	.then(function(data) {
-			// 		return data.json() })
-			// 	.then(({icoAddress}) => {
-            //         this.setState({ icoAddress })
-			// 	})
-			// 	.catch(error => {
-				// TODO dont forget to add error display for user
-            //         this.setState({ error: error.reason })
-			// 		console.error('address generation failed', error)
-			// 	})
-		}
+		if (process.env.BROWSER) this.generateAddress()
 	}
 
 	testFormSubmit() {
@@ -358,9 +322,29 @@ export default connect(
 		}
 	},
     dispatch => ({
-        updateMeta: (operation) => {
-            const generator = updateMeta(operation)
-            generator.next()
+		updateMeta: (operation) => {
+			dispatch(transaction.actions.broadcastOperation({
+				type: 'update_account_meta',
+				operation
+            }))
+            // dispatch(transaction.actions.broadcastOperation({
+            //     type: 'convert',
+            //     operation: {owner, requestid, amount},
+            //     confirm: conf + '?',
+            //     successCallback: () => {
+            //         success()
+            //         dispatch({type: 'ADD_NOTIFICATION', payload:
+            //             {key: "convert_sd_to_steem_" + Date.now(),
+            //              message: translate('order_placed') + ': ' + conf,
+            //              dismissAfter: 5000}
+            //         })
+            //     },
+            //     errorCallback: () => {error()}
+            // }))
         },
+        // updateMeta: (operation) => {
+        //     const generator = updateMeta(operation)
+        //     generator.next()
+        // },
     })
 )(BuyGolos)

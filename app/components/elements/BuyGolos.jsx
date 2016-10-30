@@ -68,17 +68,7 @@ class BuyGolos extends React.Component {
 		// })
 		console.log('this.props.username', this.props.username)
         if (this.props.username) {
-            const generator = updateMeta({
-    			account_name: accountname,
-    			meta: metaData,
-                signingKey: 'P5Kha8QKTLsT2prVZEwKAf3JVmmjmdAvRP2zinUSAXy1SuGc5EDa',
-                onError: err => this.setState({error: err}),
-                onSucces: err => this.setState({error: 'SUCCESS'})
-    		})
-            generator.next()
-            generator.next()
-            generator.next()
-            generator.next()
+    
         }
 		// account,
 		// username,

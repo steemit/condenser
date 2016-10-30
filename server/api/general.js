@@ -42,25 +42,25 @@ export default function useGeneralApi(app) {
         }
 
         try {
-            const cypher = yield coRequest(`https://api.blockcypher.com/v1/btc/main/payments?token=${cypherToken}`, {
-                method: 'post',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-type': 'application/json'
-                },
-                body: JSON.stringify({
-                    "destination": destinationBtcAddress
-                })
-            });
+            //const cypher = yield coRequest(`https://api.blockcypher.com/v1/btc/main/payments?token=${cypherToken}`, {
+            //    method: 'post',
+            //    headers: {
+            //        Accept: 'application/json',
+            //        'Content-type': 'application/json'
+            //    },
+            //    body: JSON.stringify({
+            //        "destination": destinationBtcAddress
+            //    })
+            // });
 
-            let print = getLogger('API - general').print
-            let cypherParsed = JSON.parse(cypher.body);
-            print('blockcypher generated payment forwarding address', cypherParsed);
-            let icoAddress = cypherParsed.input_address;
-            print('icoAddress', icoAddress)
-            const meta = {
-                ico_address: icoAddress
-            }
+            //let print = getLogger('API - general').print
+            //let cypherParsed = JSON.parse(cypher.body);
+            //print('blockcypher generated payment forwarding address', cypherParsed);
+            //let icoAddress = cypherParsed.input_address;
+            //print('icoAddress', icoAddress)
+            const meta = {}
+              //  ico_address: icoAddress
+            //}
 
             const remote_ip = getRemoteIp(this.req);
 
@@ -133,7 +133,7 @@ export default function useGeneralApi(app) {
                 fee: config.registrar.fee,
                 creator: config.registrar.account,
                 new_account_name: account.name,
-                json_metadata: JSON.stringify(meta),
+                json_metadata: JSON.stringify(new Object()),
                 owner: account.owner_key,
                 active: account.active_key,
                 posting: account.posting_key,
@@ -157,20 +157,20 @@ export default function useGeneralApi(app) {
                     remote_ip,
                     referrer: this.session.r
                 })).then(instance => {
-                    let accountDoc = instance.dataValues;
-                    let print = getLogger('API - general - cb1').print;
-                    let address = meta.ico_address.toString();
-                    print("acc doc", accountDoc, true);
-                    print("account_name", accountDoc.name, true);
-                    print("btc_address", address);
-                    models.IcoAddress.create(escAttrs({
-                        account_id: accountDoc.id,
-                        account_name: accountDoc.name,
-                        btc_address: address
-                    })).then(ico_instance => {
-                        let print = getLogger('API - general - cb2').print
-                        print('ico', ico_instance)
-                    })
+                    //let accountDoc = instance.dataValues;
+                    //let print = getLogger('API - general - cb1').print;
+                    //let address = meta.ico_address.toString();
+                    //print("acc doc", accountDoc, true);
+                    //print("account_name", accountDoc.name, true);
+                    //print("btc_address", address);
+                    //models.IcoAddress.create(escAttrs({
+                      //  account_id: accountDoc.id,
+                      //  account_name: accountDoc.name,
+                      //  btc_address: address
+                    // })).then(ico_instance => {
+                      //  let print = getLogger('API - general - cb2').print
+                      //  print('ico', ico_instance)
+                    // })
                 })
                 .catch(error => {
                     console.error('!!! Can\'t create account model in /accounts api', this.session.uid, error);

@@ -119,10 +119,10 @@ class BuyGolos extends React.Component {
 		return 	<div id="buy_golos" className="row">
 
 					{/* ACTUAL COMPONENT */}
-					<div className="columns small-12">
+					{/* <div className="columns small-12">
 						<h2>Макет функционала</h2>
 						<hr />
-					</div>
+					</div> */}
 
 					<div className="columns small-12">
 						<h2>ПОКУПКА СИЛЫ ГОЛОСА</h2>
@@ -139,16 +139,16 @@ class BuyGolos extends React.Component {
 						? 	<form className="columns small-12" onSubmit={this.generateAddress}>
 								<div className="large-12 columns">
 									<label htmlFor="checkbox1">
-										<input id="checkbox1" type="checkbox" disabled={loading} required checked />
+										<input id="checkbox1" type="checkbox" disabled={loading} required />
 										Я прочитал и ознакомлен с условиями сообщества описанными в документе: <br />
 										Голос: <a href="https://wiki.golos.io/1-introduction/golos_whitepaper.html">Русскоязычная социально-медийная блокчейн-платформа</a>
 									</label>
 									<label htmlFor="checkbox2">
-										<input id="checkbox2" type="checkbox" disabled={loading} required checked />
+										<input id="checkbox2" type="checkbox" disabled={loading} required />
 										Я ознакомлен и принимаю условия <a href="/legal/sale_agreements.pdf">Договор купли-продажи токенов</a> "Голос"
 									</label>
 									<label htmlFor="checkbox3">
-										<input id="checkbox3" type="checkbox" disabled={loading} required checked />
+										<input id="checkbox3" type="checkbox" disabled={loading} required />
 										Я ознакомлен с <a href="/legal/risk_disclosure.pdf">рисками</a>
 									</label>
 									<div className="column small-12 text-center">
@@ -224,7 +224,7 @@ class BuyGolos extends React.Component {
 						: null
 					}
 
-					<div className="columns small-12">
+					{/* <div className="columns small-12">
 						<br />
 						<hr />
 						<h2>Test</h2>
@@ -250,7 +250,7 @@ class BuyGolos extends React.Component {
 						</button>
 					</form>
 
-					{/* TEST INFO */}
+					{/* TEST INFO
 					<div className="columns small-12">
 						<h2>Тестовая информация</h2>
 					</div>
@@ -297,7 +297,7 @@ class BuyGolos extends React.Component {
 								<span className="switch-inactive">Нет</span>
 							</label>
 						</div>
-					</div>
+					</div> */}
 				</div>
 	}
 }

@@ -8,7 +8,8 @@ import {PrivateKey} from 'shared/ecc'
 import {key_utils} from 'shared/ecc'
 import Apis from 'shared/api_client/ApiInstances'
 import { translate, translateHtml } from '../../Translator';
-
+import ClipboardButton from 'react-clipboard.js'
+import ClipboardIcon from 'react-clipboard-icon'
 import o2j from 'shared/clash/object2json'
 //import {test as o2jtest} from 'shared/clash/object2json'
 
@@ -28,28 +29,35 @@ class BuyGolos extends React.Component {
 		transactions: [],
         error: '',
 		loading: false,
-		checkboxesClicked: [false, false, false]
+		checkboxesClicked: [false, false, false],
+		checkboxClicked0: false,
+		checkboxClicked1: false,
+		checkboxClicked2: false,
 	}
 
-	handleCheckBoxClick(checkboxNumber, value, e) {
-		e.preventDefault()
-		console.log('value', value)
+	handleCheckBoxClick(checkboxNumber, e) {
+		// return
+		// e.preventDefault()
 		console.log('checkboxNumber', checkboxNumber)
-		const {checkboxesClicked} = this.state
-		checkboxesClicked[checkboxNumber] = !value
-		console.log('checkboxesClicked', checkboxesClicked)
-		this.setState({ checkboxesClicked })
+		const checkboxIdentifier = 'checkboxClicked' + checkboxNumber
+		const checkbox = this.state[checkboxIdentifier]
+		// checkboxesClicked[checkboxNumber] = !checkbox
+		// console.log('checkboxesClicked', checkboxesClicked)
+		this.setState({ [checkboxIdentifier]: !checkbox })
+		// this.generateAddress()
 	}
 
 	generateAddress = event => {
 		event && event.preventDefault()
 
-		function isTrue(item) {
-			console.log('true', true)
-			return item === true
-		}
-		console.log('this.state.checkboxesClicked.every(isTrue)', this.state.checkboxesClicked.every(isTrue))
-		if (!this.state.checkboxesClicked.every(isTrue)) {
+		const {checkboxClicked0, checkboxClicked1, checkboxClicked2} = this.state
+		// function isTrue(item) {
+		// 	console.log('true', true)
+		// 	return item === true
+		// }
+		// console.log('this.state.checkboxesClicked.every(isTrue)', this.state.checkboxesClicked.every(isTrue))
+		console.log('!(checkboxClicked0, checkboxClicked1, checkboxClicked2)', !(checkboxClicked0, checkboxClicked1, checkboxClicked2))
+		if (!(checkboxClicked0, checkboxClicked1, checkboxClicked2)) {
 			console.log('error will occure')
 			this.setState({
 				error: 'Чтобы продолжить, установите этот флажок. Просим Вас внимательно отнестиcь к данной информации во избежание недопонимания.'
@@ -167,6 +175,7 @@ class BuyGolos extends React.Component {
 		} = props
 		const { transactions } = state
 		let loading=this.state.loading
+
 		return 	<div id="buy_golos" className="row BuyGolos">
 
 					{/* ACTUAL COMPONENT */}
@@ -177,6 +186,7 @@ class BuyGolos extends React.Component {
 					<button className="button warning" onClick={this.removeIco}>REMOVE ICO ADDRESS</button>
 					<div className="columns small-12">
 						<h2>ПОКУПКА СИЛЫ ГОЛОСА</h2>
+						<hr style={{marginBottom: '50px'}} />
 					</div>
 
 					{/* GENERATE ADDRESS */}
@@ -184,31 +194,31 @@ class BuyGolos extends React.Component {
 						props.isOwnAccount && (!state.icoAddress && !props.icoAddress)
 						? 	<form className="columns small-12" onSubmit={this.generateAddress}>
 								<div className="large-12 columns">
-									<label onClick={this.handleCheckBoxClick.bind(this, 0, state.checkboxesClicked[0])} htmlFor="checkbox1">
-										<input id="checkbox1" type="checkbox" disabled={loading} checked={state.checkboxesClicked[0]} />
+									<label htmlFor="checkbox1">
+										<input onClick={this.handleCheckBoxClick.bind(this, 0)} id="checkbox1" type="checkbox" disabled={loading} />
 										Я прочитал и ознакомлен с условиями сообщества описанными в документе: <br />
 										Голос: <a href="https://wiki.golos.io/1-introduction/golos_whitepaper.html">Русскоязычная социально-медийная блокчейн-платформа</a>
 									</label>
 									{
-										state.checkboxesClicked[0]
+										state.checkboxClicked0
 										? null
 										: <small className="error">{state.error}</small>
 									}
-									<label onClick={this.handleCheckBoxClick.bind(this, 1, state.checkboxesClicked[1])} htmlFor="checkbox2">
-										<input id="checkbox2" type="checkbox" disabled={loading} checked={state.checkboxesClicked[1]} />
+									<label htmlFor="checkbox2">
+										<input onClick={this.handleCheckBoxClick.bind(this, 1)} id="checkbox2" type="checkbox" disabled={loading} />
 										Я ознакомлен и принимаю условия <a href="/legal/sale_agreements.pdf">Договор купли-продажи токенов "СИЛА ГОЛОСА"</a>
 									</label>
 									{
-										state.checkboxesClicked[1]
+										state.checkboxClicked1
 										? null
 										: <small className="error">{state.error}</small>
 									}
-									<label onClick={this.handleCheckBoxClick.bind(this, 2, state.checkboxesClicked[2])} htmlFor="checkbox3">
-										<input id="checkbox3" type="checkbox" disabled={loading} checked={state.checkboxesClicked[2]} />
+									<label htmlFor="checkbox3">
+										<input onClick={this.handleCheckBoxClick.bind(this, 2)} id="checkbox3" type="checkbox" disabled={loading} />
 										Я ознакомлен с <a href="/legal/risk_disclosure.pdf">рисками</a>
 									</label>
 									{
-										state.checkboxesClicked[2]
+										state.checkboxClicked2
 										? null
 										: <small className="error">{state.error}</small>
 									}
@@ -225,31 +235,46 @@ class BuyGolos extends React.Component {
 						// TODO change this checker to use 'else' of previous one?
 						props.isOwnAccount && (state.icoAddress || props.icoAddress)
 						? <div className="row">
-							<div className="column small-9 text-center">
-								<h3><strong>{props.icoAddress || state.icoAddress}</strong></h3>
+							<div className="column">
+								<div className="small-12 text-center">
+									<h3>
+										<strong>
+											{props.icoAddress || state.icoAddress}
+											{' '}
+											<ClipboardButton data-clipboard-text={props.icoAddress || state.icoAddress}>
+												<ClipboardIcon title="скопировать в буфер обмена" />
+											</ClipboardButton>
+										</strong>
+									</h3>
+								</div>
+							</div>
+							<div className="column small-12">
+								<img style={{display: 'block', margin: 'auto'}} src={`https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=${props.icoAddress || state.icoAddress}`} alt="QR код вашего bitcoin адреса" />
+							</div>
+							<div className="column small-12 text-center">
 								<table>
 									<thead>
 										<tr>
-											<th className="text-center" width="250">Максимальная Покупка</th>
-											<th className="text-center" width="150">Текущий Бонус</th>
+											<th className="text-center" width="150">Минимальная Покупка</th>
+											<th className="text-center" width="150">Максимальная Покупка</th>
+											<th className="text-center" width="100">Текущий Бонус</th>
 											<th className="text-center" width="100">До уменьшения бонуса</th>
 										</tr>
 									</thead>
 									<tbody>
 									<tr>
+										<td>0.001 биткоина</td>
 										<td>100 биткоинов</td>
 										<td>25%</td>
-										<td>25 дней 3 часа</td>
+										<td>25 дней</td>
 									</tr>
 									</tbody>
 								</table>
 							</div>
-							<div className="column small-3">
-								<img src={`https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=${props.icoAddress || state.icoAddress}`} alt="QR код вашего bitcoin адреса" />
-							</div>
+
 							<div className="column small-12">
 								<p><b>Сила Голоса</b> - неперемещаемые цифровые токены. Их оценка в Голосах увеличивается при долгосрочном хранении. Чем их больше, тем сильней вы влияете на вознаграждения за пост и тем больше зарабатываете за голосование. Также Сила Голоса дает право записывать любые данные в блокчейн Голоса. Чем больше Силы Голоса, тем большая доля в пропускной способности гарантируется Вам сетью Голос. Перевод Силы Голоса в Голоса занимает 104 недели равными частями.</p>
-								<p>Если у Вас нет биткоинов, то Вы можете их купить за любую национальную валюту на Localbitcoins.net. Также сообществом Голос организованы разные сервисы по участию в краудсейле. Инструкции по покупке можно найти по тэгу #КупитьБиткоин.</p>
+								<p>Если у Вас нет биткоинов, то Вы можете их купить за любую национальную валюту на <a href="https://localbitcoins.net/">Localbitcoins.net</a>. Также сообществом Голос организованы разные сервисы по участию в краудсейле. Инструкции по покупке можно найти по тэгу <a href="/trending/ru--kupitxbitkoin">#КупитьБиткоин</a>.</p>
 							</div>
 						</div>
 						: null

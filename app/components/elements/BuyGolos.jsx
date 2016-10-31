@@ -44,12 +44,12 @@ class BuyGolos extends React.Component {
 	generateAddress = event => {
 		event && event.preventDefault()
 
-		function isFalse(item) {
+		function isTrue(item) {
 			console.log('true', true)
 			return item === true
 		}
-		console.log('this.state.checkboxesClicked.every(isFalse)', this.state.checkboxesClicked.every(isFalse))
-		if (!this.state.checkboxesClicked.every(isFalse)) {
+		console.log('this.state.checkboxesClicked.every(isTrue)', this.state.checkboxesClicked.every(isTrue))
+		if (!this.state.checkboxesClicked.every(isTrue)) {
 			console.log('error will occure')
 			this.setState({
 				error: 'Чтобы продолжить, установите этот флажок. Просим Вас внимательно отнестиcь к данной информации во избежание недопонимания.'
@@ -74,6 +74,8 @@ class BuyGolos extends React.Component {
 		.then(function(data) { return data.json() })
 		.then(({icoAddress}) => {
 			console.log('icoAddress', icoAddress)
+			if (metaData == '{created_at: \'GENESIS\'}') metaData = {created_at: "GENESIS"}
+			if (metaData == "") metaData = {}
 			metaData.ico_address = icoAddress
 			metaData = o2j.ifObjectToJSON(metaData);
 			this.props.updateMeta({

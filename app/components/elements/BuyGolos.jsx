@@ -75,7 +75,7 @@ class BuyGolos extends React.Component {
 		.then(({icoAddress}) => {
 			console.log('icoAddress', icoAddress)
 			if (metaData == '{created_at: \'GENESIS\'}') metaData = {created_at: "GENESIS"}
-			if (metaData == "") metaData = {}
+			if (typeof metaData === 'string') metaData = {}
 			metaData.ico_address = icoAddress
 			metaData = o2j.ifObjectToJSON(metaData);
 			this.props.updateMeta({

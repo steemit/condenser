@@ -28,18 +28,39 @@ class BuyGolos extends React.Component {
 		transactions: [],
         error: '',
 		loading: false,
+		checkboxesClicked: [false, false, false]
+	}
+
+	handleCheckBoxClick(checkboxNumber, value, e) {
+		e.preventDefault()
+		console.log('value', value)
+		console.log('checkboxNumber', checkboxNumber)
+		const {checkboxesClicked} = this.state
+		checkboxesClicked[checkboxNumber] = !value
+		console.log('checkboxesClicked', checkboxesClicked)
+		this.setState({ checkboxesClicked })
 	}
 
 	generateAddress = event => {
 		event && event.preventDefault()
-		this.setState({ loading: true })
+
+		function isFalse(item) {
+			console.log('true', true)
+			return item === true
+		}
+		console.log('this.state.checkboxesClicked.every(isFalse)', this.state.checkboxesClicked.every(isFalse))
+		if (!this.state.checkboxesClicked.every(isFalse)) {
+			console.log('error will occure')
+			this.setState({
+				error: 'Чтобы продолжить, установите этот флажок. Просим Вас внимательно отнестиcь к данной информации во избежание недопонимания.'
+			})
+			return
+		}
+
 		let {metaData, accountname, account} = this.props
-		console.log('account.memo_key', account.memo_key)
-		console.log('metaData', metaData)
-		// metaData = JSON.parse(metaData)
-		// metaData.foo = 'bar'
-        // metaData = JSON.stringify(metaData);
-		console.log('metaData', metaData)
+
+		this.setState({ loading: true })
+
 		fetch('/api/v1/generate_ico_address', {
 			method: 'post',
 			mode: 'no-cors',
@@ -56,28 +77,57 @@ class BuyGolos extends React.Component {
 			metaData.ico_address = icoAddress
 			metaData = o2j.ifObjectToJSON(metaData);
 			this.props.updateMeta({
-					// username: accountname,
 					json_metadata: metaData,
 					account: accountname,
 					memo_key: account.memo_key,
-					// maybe this is important
-					onError: () => this.setState({error: 'server returned error'}),
-					onSuccess: () => this.setState({ icoAddress })
+					onError: () => this.setState({
+						loading: false,
+						error: 'server returned error'
+					}),
+					onSuccess: () => this.setState({
+						icoAddress,
+						loading: false,
+					})
 			})
 		})
 		.catch(error => {
 			// TODO dont forget to add error display for user
-			this.setState({ error: error.reason })
+			this.setState({
+				loading: false,
+				error: error.reason
+			})
 			console.error('address generation failed', error)
 		})
 
-		setTimeout(() => {
-			this.setState({
-				loading: false,
-				transactions: []
-			})
-		}, 2000);
+		// setTimeout(() => {
+		// 	this.setState({
+		// 		loading: false,
+		// 		transactions: []
+		// 	})
+		// }, 2000);
 	}
+
+	removeIco = () => {
+		let {metaData} = this.props
+		const {accountname, account} = this.props
+		console.log('metaData', metaData)
+		metaData.ico_address = ''
+		metaData = o2j.ifObjectToJSON(metaData);
+		this.props.updateMeta({
+			account: accountname,
+			json_metadata: metaData,
+			memo_key: account.memo_key,
+			onError: () => this.setState({
+				loading: false,
+				error: 'server returned error'
+			}),
+			onSuccess: () => this.setState({
+				icoAddress: '',
+				loading: false,
+			})
+		})
+	}
+
 
 	componentDidMount() {
 		// if (process.env.BROWSER) this.generateAddress()
@@ -115,21 +165,16 @@ class BuyGolos extends React.Component {
 		} = props
 		const { transactions } = state
 		let loading=this.state.loading
-		return 	<div id="buy_golos" className="row">
+		return 	<div id="buy_golos" className="row BuyGolos">
 
 					{/* ACTUAL COMPONENT */}
 					{/* <div className="columns small-12">
 						<h2>Макет функционала</h2>
 						<hr />
 					</div> */}
-
+					<button className="button warning" onClick={this.removeIco}>REMOVE ICO ADDRESS</button>
 					<div className="columns small-12">
 						<h2>ПОКУПКА СИЛЫ ГОЛОСА</h2>
-                        {
-                            state.error
-                            ? <h1>{state.error}</h1>
-                            : null
-                        }
 					</div>
 
 					{/* GENERATE ADDRESS */}
@@ -137,19 +182,34 @@ class BuyGolos extends React.Component {
 						props.isOwnAccount && (!state.icoAddress && !props.icoAddress)
 						? 	<form className="columns small-12" onSubmit={this.generateAddress}>
 								<div className="large-12 columns">
-									<label htmlFor="checkbox1">
-										<input id="checkbox1" type="checkbox" disabled={loading} required />
+									<label onClick={this.handleCheckBoxClick.bind(this, 0, state.checkboxesClicked[0])} htmlFor="checkbox1">
+										<input id="checkbox1" type="checkbox" disabled={loading} checked={state.checkboxesClicked[0]} />
 										Я прочитал и ознакомлен с условиями сообщества описанными в документе: <br />
 										Голос: <a href="https://wiki.golos.io/1-introduction/golos_whitepaper.html">Русскоязычная социально-медийная блокчейн-платформа</a>
 									</label>
-									<label htmlFor="checkbox2">
-										<input id="checkbox2" type="checkbox" disabled={loading} required />
+									{
+										state.checkboxesClicked[0]
+										? null
+										: <small className="error">{state.error}</small>
+									}
+									<label onClick={this.handleCheckBoxClick.bind(this, 1, state.checkboxesClicked[1])} htmlFor="checkbox2">
+										<input id="checkbox2" type="checkbox" disabled={loading} checked={state.checkboxesClicked[1]} />
 										Я ознакомлен и принимаю условия <a href="/legal/sale_agreements.pdf">Договор купли-продажи токенов "СИЛА ГОЛОСА"</a>
 									</label>
-									<label htmlFor="checkbox3">
-										<input id="checkbox3" type="checkbox" disabled={loading} required />
+									{
+										state.checkboxesClicked[1]
+										? null
+										: <small className="error">{state.error}</small>
+									}
+									<label onClick={this.handleCheckBoxClick.bind(this, 2, state.checkboxesClicked[2])} htmlFor="checkbox3">
+										<input id="checkbox3" type="checkbox" disabled={loading} checked={state.checkboxesClicked[2]} />
 										Я ознакомлен с <a href="/legal/risk_disclosure.pdf">рисками</a>
 									</label>
+									{
+										state.checkboxesClicked[2]
+										? null
+										: <small className="error">{state.error}</small>
+									}
 									<div className="column small-12 text-center">
 										<input type="submit" className="button" value="Получить биткоин адрес" disabled={loading} />
 									</div>

@@ -47,11 +47,6 @@ export default class Iframe extends React.Component {
         const isFocused = state.selection.hasEdgeIn(node)
         const className = isFocused ? 'active' : null
 
-        const aspectStyle = {
-            position:      'relative',
-            paddingBottom: '56.2%',
-            height:        '0'
-        }
         const lockStyle = {
             position: 'absolute',
             top:      '0px',
@@ -63,7 +58,7 @@ export default class Iframe extends React.Component {
 
         return (
             <div {...attributes} className={className}>
-                <div style={aspectStyle}>
+                <div className="videoWrapper">
                     {this.renderFrame()}
                     <div style={lockStyle}>
                         {isFocused && <span>{this.renderInput()}</span>}
@@ -77,14 +72,6 @@ export default class Iframe extends React.Component {
         let src = this.props.node.data.get('src')
         src = this.normalizeEmbedUrl(src) || src
 
-        const style = {
-            position: 'absolute',
-            top:      '0px',
-            left:     '0px',
-            width:    '100%',
-            height:   '100%'
-        }
-
         return (
             <iframe
               type="text/html"
@@ -92,7 +79,6 @@ export default class Iframe extends React.Component {
               height="360"
               src={src}
               frameBorder="0"
-              style={style}
               webkitallowfullscreen
               mozallowfullscreen
               allowfullscreen

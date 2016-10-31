@@ -98,8 +98,8 @@ class MarkdownViewer extends Component {
             if(/^[A-Za-z0-9\_\-]+ ~~~/.test(section)) {
                 const youTubeId = section.split(' ')[0]
                 section = section.substring(youTubeId.length + ' ~~~'.length)
-                const w = large ? 640 : 320,
-                      h = large ? 480 : 180
+                const w = large ? 640 : 480,
+                      h = large ? 360 : 270
                 sections.push(
                     <YoutubePreview key={idx++} width={w} height={h} youTubeId={youTubeId}
                         frameBorder="0" allowFullScreen="true" />

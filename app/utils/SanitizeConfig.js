@@ -70,9 +70,8 @@ export default ({large = true, highQualityPost = true, noImage = false, sanitize
                             webkitallowfullscreen: 'webkitallowfullscreen', // deprecated but required for vimeo : https://vimeo.com/forums/help/topic:278181
                             mozallowfullscreen: 'mozallowfullscreen',       // deprecated but required for vimeo
                             src,
-                            width: large ? '640' : '384',
-                            height: large ? '360' : '240',
-                            class: 'videoWrapper',
+                            width:  large ? '640' : '480',
+                            height: large ? '360' : '270',
                         },
                     }
                 }
@@ -99,7 +98,7 @@ export default ({large = true, highQualityPost = true, noImage = false, sanitize
         },
         div: (tagName, attribs) => {
             const attys = {}
-            const classWhitelist = ['pull-right', 'pull-left', 'text-justify', 'text-rtl', 'text-center', 'text-right']
+            const classWhitelist = ['pull-right', 'pull-left', 'text-justify', 'text-rtl', 'text-center', 'text-right', 'videoWrapper']
             const validClass = classWhitelist.find(e => attribs.class == e)
             if(validClass)
                 attys.class = validClass

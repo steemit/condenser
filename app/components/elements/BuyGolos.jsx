@@ -161,7 +161,8 @@ class BuyGolos extends React.Component {
 
 					{/* ADDRESS + CURRENT STAGE INFO + QR CODE */}
 					{
-						state.icoAddress || props.icoAddress
+						// TODO change this checker to use 'else' of previous one?
+						props.isOwnAccount && (state.icoAddress || props.icoAddress)
 						? <div className="row">
 							<div className="column small-9 text-center">
 								<h3><strong>{props.icoAddress || state.icoAddress}</strong></h3>
@@ -308,7 +309,7 @@ export default connect(
 		const current_user 	= 	state.user.get('current')
 		const username 		=	current_user ? current_user.get('username') : ''
 		const account 		= 	state.global.getIn(['accounts', accountname]).toJS()
-		const metaData 		=	account ? JSON.parse(account.json_metadata) : {}
+		const metaData 		=	account ? o2j.ifStringParseJSON(account.json_metadata) : {}
 
 		return {
 			account,

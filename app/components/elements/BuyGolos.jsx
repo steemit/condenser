@@ -8,8 +8,8 @@ import {PrivateKey} from 'shared/ecc'
 import {key_utils} from 'shared/ecc'
 import Apis from 'shared/api_client/ApiInstances'
 import { translate, translateHtml } from '../../Translator';
-import ClipboardButton from 'react-clipboard.js'
-import ClipboardIcon from 'react-clipboard-icon'
+// import ClipboardButton from 'react-clipboard.js'
+// import ClipboardIcon from 'react-clipboard-icon'
 import o2j from 'shared/clash/object2json'
 //import {test as o2jtest} from 'shared/clash/object2json'
 
@@ -241,9 +241,9 @@ class BuyGolos extends React.Component {
 										<strong>
 											{props.icoAddress || state.icoAddress}
 											{' '}
-											<ClipboardButton data-clipboard-text={props.icoAddress || state.icoAddress}>
+											{/* <ClipboardButton data-clipboard-text={props.icoAddress || state.icoAddress}>
 												<ClipboardIcon title="скопировать в буфер обмена" />
-											</ClipboardButton>
+											</ClipboardButton> */}
 										</strong>
 									</h3>
 								</div>

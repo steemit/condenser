@@ -37,16 +37,22 @@ class BuyGolos extends React.Component {
 		console.log('metaData', metaData)
 		metaData = JSON.parse(metaData)
 		metaData.foo = 'bar'
+		metaData = o2j.ifObjectToJSON(metaData);
         // metaData = JSON.stringify(metaData);
 		console.log('metaData', metaData)
         if (this.props.username) {
-            const generator = this.props.updateMeta({
-    			account_name: accountname,
-    			meta: metaData,
-                signingKey:  'P5Kha8QKTLsT2prVZEwKAf3JVmmjmdAvRP2zinUSAXy1SuGc5EDa',
-                onError: err => this.setState({error: err}),
-                onSucces: err => this.setState({error: 'SUCCESS'})
-    		})
+          const generator = this.props.updateMeta({
+	    			account_name: accountname,
+	    			meta: metaData,
+	          signingKey:  '5Kha8QKTLsT2prVZEwKAf3JVmmjmdAvRP2zinUSAXy1SuGc5EDa',
+	          onError: (err) => {
+							this.setState({error: err})
+							throw(err)
+						},
+	          onSuccess: (err) => {
+							 this.setState({error: 'SUCCESS'})
+						}
+    			})
         }
 
 		// fetch('/api/v1/generate_ico_address', {
@@ -325,7 +331,7 @@ export default connect(
 				operation
             }
 			console.log(options)
-			dispatch(transaction.actions.updateMeta(options))
+			dispatch(transaction.actions.updateMeta(options)) //broadcastOperation 
 
         },
 

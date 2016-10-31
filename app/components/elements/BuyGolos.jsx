@@ -44,15 +44,10 @@ class BuyGolos extends React.Component {
           const generator = this.props.updateMeta({
 	    			account_name: accountname,
 	    			meta: metaData,
-	          signingKey:  '5Kha8QKTLsT2prVZEwKAf3JVmmjmdAvRP2zinUSAXy1SuGc5EDa',
-	          onError: (err) => {
-							this.setState({error: err})
-							throw(err)
-						},
-	          onSuccess: (err) => {
-							 this.setState({error: 'SUCCESS'})
-						}
-    			})
+					signingKey:  '5Kha8QKTLsT2prVZEwKAf3JVmmjmdAvRP2zinUSAXy1SuGc5EDa',
+					onError: () => this.setState({error: 'server returned error'}),
+					onSuccess: () => this.setState({error: 'SUCCESS'})
+			})
         }
 		// fetch('/api/v1/generate_ico_address', {
 		//     method: 'post',

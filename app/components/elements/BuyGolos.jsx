@@ -33,42 +33,45 @@ class BuyGolos extends React.Component {
 	generateAddress = event => {
 		event && event.preventDefault()
 		this.setState({ loading: true })
-		let {metaData, accountname} = this.props
+		let {metaData, accountname, account} = this.props
+		console.log('account.memo_key', account.memo_key)
 		console.log('metaData', metaData)
-		metaData = JSON.parse(metaData)
-		metaData.foo = 'bar'
-		metaData = o2j.ifObjectToJSON(metaData);
+		// metaData = JSON.parse(metaData)
+		// metaData.foo = 'bar'
         // metaData = JSON.stringify(metaData);
 		console.log('metaData', metaData)
-        if (this.props.username) {
-          const generator = this.props.updateMeta({
-	    			account_name: accountname,
-	    			meta: metaData,
-					signingKey:  '5Kha8QKTLsT2prVZEwKAf3JVmmjmdAvRP2zinUSAXy1SuGc5EDa',
+		fetch('/api/v1/generate_ico_address', {
+			method: 'post',
+			mode: 'no-cors',
+			credentials: 'same-origin',
+			headers: {
+				Accept: 'application/json',
+				'Content-type': 'application/json'
+			},
+			body: JSON.stringify({csrf: $STM_csrf})
+		})
+		.then(function(data) { return data.json() })
+		.then(({icoAddress}) => {
+			console.log('icoAddress', icoAddress)
+			metaData.ico_address = icoAddress
+			metaData = o2j.ifObjectToJSON(metaData);
+			this.props.updateMeta({
+					// username: accountname,
+					json_metadata: metaData,
+					account: accountname,
+					memo_key: account.memo_key,
+					// maybe this is important
 					onError: () => this.setState({error: 'server returned error'}),
 					onSuccess: () => this.setState({error: 'SUCCESS'})
 			})
-        }
-		// fetch('/api/v1/generate_ico_address', {
-		//     method: 'post',
-		//     mode: 'no-cors',
-		//     credentials: 'same-origin',
-		//     headers: {
-		//         Accept: 'application/json',
-		//         'Content-type': 'application/json'
-		//     },
-		//         body: JSON.stringify({csrf: $STM_csrf})
-		//     })
-		// 	.then(function(data) {
-		// 		return data.json() })
-		// 	.then(({icoAddress}) => {
-		//         this.setState({ icoAddress })
-		// 	})
-		// 	.catch(error => {
-		// TODO dont forget to add error display for user
-		//         this.setState({ error: error.reason })
-		// 		console.error('address generation failed', error)
-		// 	})
+			this.setState({ icoAddress })
+		})
+		.catch(error => {
+			// TODO dont forget to add error display for user
+			this.setState({ error: error.reason })
+			console.error('address generation failed', error)
+		})
+
 		setTimeout(() => {
 			this.setState({
 				loading: false,
@@ -78,7 +81,7 @@ class BuyGolos extends React.Component {
 	}
 
 	componentDidMount() {
-		if (process.env.BROWSER) this.generateAddress()
+		// if (process.env.BROWSER) this.generateAddress()
 	}
 
 	testFormSubmit() {
@@ -116,10 +119,10 @@ class BuyGolos extends React.Component {
 		return 	<div id="buy_golos" className="row">
 
 					{/* ACTUAL COMPONENT */}
-					<div className="columns small-12">
+					{/* <div className="columns small-12">
 						<h2>Макет функционала</h2>
 						<hr />
-					</div>
+					</div> */}
 
 					<div className="columns small-12">
 						<h2>ПОКУПКА СИЛЫ ГОЛОСА</h2>
@@ -136,16 +139,16 @@ class BuyGolos extends React.Component {
 						? 	<form className="columns small-12" onSubmit={this.generateAddress}>
 								<div className="large-12 columns">
 									<label htmlFor="checkbox1">
-										<input id="checkbox1" type="checkbox" disabled={loading} required checked />
+										<input id="checkbox1" type="checkbox" disabled={loading} required />
 										Я прочитал и ознакомлен с условиями сообщества описанными в документе: <br />
 										Голос: <a href="https://wiki.golos.io/1-introduction/golos_whitepaper.html">Русскоязычная социально-медийная блокчейн-платформа</a>
 									</label>
 									<label htmlFor="checkbox2">
-										<input id="checkbox2" type="checkbox" disabled={loading} required checked />
+										<input id="checkbox2" type="checkbox" disabled={loading} required />
 										Я ознакомлен и принимаю условия <a href="/legal/sale_agreements.pdf">Договор купли-продажи токенов</a> "Голос"
 									</label>
 									<label htmlFor="checkbox3">
-										<input id="checkbox3" type="checkbox" disabled={loading} required checked />
+										<input id="checkbox3" type="checkbox" disabled={loading} required />
 										Я ознакомлен с <a href="/legal/risk_disclosure.pdf">рисками</a>
 									</label>
 									<div className="column small-12 text-center">
@@ -221,7 +224,7 @@ class BuyGolos extends React.Component {
 						: null
 					}
 
-					<div className="columns small-12">
+					{/* <div className="columns small-12">
 						<br />
 						<hr />
 						<h2>Test</h2>
@@ -247,7 +250,7 @@ class BuyGolos extends React.Component {
 						</button>
 					</form>
 
-					{/* TEST INFO */}
+					{/* TEST INFO
 					<div className="columns small-12">
 						<h2>Тестовая информация</h2>
 					</div>
@@ -294,7 +297,7 @@ class BuyGolos extends React.Component {
 								<span className="switch-inactive">Нет</span>
 							</label>
 						</div>
-					</div>
+					</div> */}
 				</div>
 	}
 }
@@ -305,7 +308,7 @@ export default connect(
 		const current_user 	= 	state.user.get('current')
 		const username 		=	current_user ? current_user.get('username') : ''
 		const account 		= 	state.global.getIn(['accounts', accountname]).toJS()
-		const metaData 		=	account ? account.json_metadata : {}
+		const metaData 		=	account ? JSON.parse(account.json_metadata) : {}
 
 		return {
 			account,
@@ -320,12 +323,12 @@ export default connect(
     dispatch => ({
 		updateMeta: (operation) => {
 			const options = {
-				type: 'update_account_meta',
+				type: 'account_update',
 				operation
             }
 
 			console.log(options)
-			dispatch(transaction.actions.updateMeta(options)) //broadcastOperation
+			dispatch(transaction.actions.broadcastOperation(options)) //broadcastOperation
 
 
         },

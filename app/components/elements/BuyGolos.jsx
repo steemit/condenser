@@ -54,7 +54,6 @@ class BuyGolos extends React.Component {
 						}
     			})
         }
-
 		// fetch('/api/v1/generate_ico_address', {
 		//     method: 'post',
 		//     mode: 'no-cors',
@@ -325,13 +324,14 @@ export default connect(
 	},
     dispatch => ({
 		updateMeta: (operation) => {
-			console.log('operation', operation)
 			const options = {
 				type: 'update_account_meta',
 				operation
             }
+
 			console.log(options)
-			dispatch(transaction.actions.updateMeta(options)) //broadcastOperation 
+			dispatch(transaction.actions.updateMeta(options)) //broadcastOperation
+
 
         },
 

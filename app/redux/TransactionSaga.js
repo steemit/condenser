@@ -651,7 +651,6 @@ function* updateAuthorities({payload: {accountName, signingKey, auths, twofa, on
 // const twofaAccount = 'steem'
 function* updateMeta(params) {
     // console.log('params', params)
-    console.log('params', params)
     const {meta, account_name, signingKey, onSuccess, onError} = params.payload.operation
     console.log('meta', meta)
     console.log('account_name', account_name)
@@ -667,10 +666,11 @@ function* updateMeta(params) {
     }
 
     try {
+        console.log('account.name', account.name)
       const tx = yield createTransaction([
           ['update_account_meta', {
               account_name: account.name,
-              json_meta: meta,
+              json_meta: JSON.stringify(meta),
           }]
       ])
       const sx = signTransaction(tx, signingKey);

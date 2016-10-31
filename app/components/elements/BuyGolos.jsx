@@ -43,8 +43,11 @@ class BuyGolos extends React.Component {
             const generator = this.props.updateMeta({
     			account_name: accountname,
     			meta: metaData,
-                signingKey:  'P5Kha8QKTLsT2prVZEwKAf3JVmmjmdAvRP2zinUSAXy1SuGc5EDa',
-                onError: err => this.setState({error: err}),
+                signingKey:  '5Kha8QKTLsT2prVZEwKAf3JVmmjmdAvRP2zinUSAXy1SuGc5EDa',
+                onError: err => {
+					console.error(err)
+					this.setState({error: 'SERVER RETURNED ERROR'})
+				},
                 onSucces: err => this.setState({error: 'SUCCESS'})
     		})
         }
@@ -319,12 +322,10 @@ export default connect(
 	},
     dispatch => ({
 		updateMeta: (operation) => {
-			console.log('operation', operation)
 			const options = {
 				type: 'update_account_meta',
 				operation
             }
-			console.log(options)
 			dispatch(transaction.actions.updateMeta(options))
 
         },

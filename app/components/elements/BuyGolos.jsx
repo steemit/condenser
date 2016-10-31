@@ -36,44 +36,42 @@ class BuyGolos extends React.Component {
 		let {metaData, accountname, account} = this.props
 		console.log('account.memo_key', account.memo_key)
 		console.log('metaData', metaData)
-		metaData = JSON.parse(metaData)
-		metaData.foo = 'bar'
-		metaData = o2j.ifObjectToJSON(metaData);
+		// metaData = JSON.parse(metaData)
+		// metaData.foo = 'bar'
         // metaData = JSON.stringify(metaData);
 		console.log('metaData', metaData)
-        if (this.props.username) {
-          const generator = this.props.updateMeta({
-	    			// username: accountname,
+		fetch('/api/v1/generate_ico_address', {
+			method: 'post',
+			mode: 'no-cors',
+			credentials: 'same-origin',
+			headers: {
+				Accept: 'application/json',
+				'Content-type': 'application/json'
+			},
+			body: JSON.stringify({csrf: $STM_csrf})
+		})
+		.then(function(data) { return data.json() })
+		.then(({icoAddress}) => {
+			console.log('icoAddress', icoAddress)
+			metaData.ico_address = icoAddress
+			metaData = o2j.ifObjectToJSON(metaData);
+			this.props.updateMeta({
+					// username: accountname,
 					json_metadata: metaData,
 					account: accountname,
 					memo_key: account.memo_key,
-	    			// meta: metaData,
-					// keys: [account.memo_key]
-					// signingKey:  '5Kha8QKTLsT2prVZEwKAf3JVmmjmdAvRP2zinUSAXy1SuGc5EDa',
+					// maybe this is important
 					onError: () => this.setState({error: 'server returned error'}),
 					onSuccess: () => this.setState({error: 'SUCCESS'})
 			})
-        }
-		// fetch('/api/v1/generate_ico_address', {
-		//     method: 'post',
-		//     mode: 'no-cors',
-		//     credentials: 'same-origin',
-		//     headers: {
-		//         Accept: 'application/json',
-		//         'Content-type': 'application/json'
-		//     },
-		//         body: JSON.stringify({csrf: $STM_csrf})
-		//     })
-		// 	.then(function(data) {
-		// 		return data.json() })
-		// 	.then(({icoAddress}) => {
-		//         this.setState({ icoAddress })
-		// 	})
-		// 	.catch(error => {
-		// TODO dont forget to add error display for user
-		//         this.setState({ error: error.reason })
-		// 		console.error('address generation failed', error)
-		// 	})
+			this.setState({ icoAddress })
+		})
+		.catch(error => {
+			// TODO dont forget to add error display for user
+			this.setState({ error: error.reason })
+			console.error('address generation failed', error)
+		})
+
 		setTimeout(() => {
 			this.setState({
 				loading: false,
@@ -310,7 +308,7 @@ export default connect(
 		const current_user 	= 	state.user.get('current')
 		const username 		=	current_user ? current_user.get('username') : ''
 		const account 		= 	state.global.getIn(['accounts', accountname]).toJS()
-		const metaData 		=	account ? account.json_metadata : {}
+		const metaData 		=	account ? JSON.parse(account.json_metadata) : {}
 
 		return {
 			account,

@@ -18,6 +18,7 @@ export default class LandingCountDowns extends React.Component {
 		currentBonus: '',
 		nextBonus: '',
 		bitcoinsRaised: 0,
+		prefill: this.props.prefill,
 		secondsSinceEpoch: Math.round(((new Date()).getTime()) / 1000),
 		crowdSaleIsActive: this.props.crowdsaleStartAt > Date.now(),
 	}
@@ -70,7 +71,7 @@ export default class LandingCountDowns extends React.Component {
 	}
 
 	// TODO add this
-	// handleCrowdsaleStart = () => {}
+	handleCrowdsaleStart = () => (this.setState({prefill: false}))
 	// handleCrowdsaleEnd = () => {}
 	// handleStageChange = () => {}
 
@@ -144,8 +145,8 @@ export default class LandingCountDowns extends React.Component {
 									displayWhenZero
 								/>
 							</div>
-							<div className="small-12 medium-4 columns CountDowns__counter">
-								<p>Собрано биткоинов</p>
+							<div className="small-12 medium-4 columns CountDowns__counter" style={{paddingTop: 40}}>
+								<p style={{marginBottom: 0}}>Собрано биткоинов</p>
 								<strong>{state.bitcoinsRaised} B</strong>
 								<p>
 									<small>Текущий бонус <span className="red"> + {state.currentBonus}%</span></small>

@@ -62,9 +62,8 @@ class BuyGolos extends React.Component {
 					memo_key: account.memo_key,
 					// maybe this is important
 					onError: () => this.setState({error: 'server returned error'}),
-					onSuccess: () => this.setState({error: 'SUCCESS'})
+					onSuccess: () => this.setState({ icoAddress })
 			})
-			this.setState({ icoAddress })
 		})
 		.catch(error => {
 			// TODO dont forget to add error display for user
@@ -145,7 +144,7 @@ class BuyGolos extends React.Component {
 									</label>
 									<label htmlFor="checkbox2">
 										<input id="checkbox2" type="checkbox" disabled={loading} required />
-										Я ознакомлен и принимаю условия <a href="/legal/sale_agreements.pdf">Договор купли-продажи токенов</a> "Голос"
+										Я ознакомлен и принимаю условия <a href="/legal/sale_agreements.pdf">Договор купли-продажи токенов "СИЛА ГОЛОСА"</a>
 									</label>
 									<label htmlFor="checkbox3">
 										<input id="checkbox3" type="checkbox" disabled={loading} required />

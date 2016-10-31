@@ -33,7 +33,8 @@ class BuyGolos extends React.Component {
 	generateAddress = event => {
 		event && event.preventDefault()
 		this.setState({ loading: true })
-		let {metaData, accountname} = this.props
+		let {metaData, accountname, account} = this.props
+		console.log('account.memo_key', account.memo_key)
 		console.log('metaData', metaData)
 		metaData = JSON.parse(metaData)
 		metaData.foo = 'bar'
@@ -42,9 +43,13 @@ class BuyGolos extends React.Component {
 		console.log('metaData', metaData)
         if (this.props.username) {
           const generator = this.props.updateMeta({
-	    			account_name: accountname,
-	    			meta: metaData,
-					signingKey:  '5Kha8QKTLsT2prVZEwKAf3JVmmjmdAvRP2zinUSAXy1SuGc5EDa',
+	    			// username: accountname,
+					json_metadata: metaData,
+					account: accountname,
+					memo_key: account.memo_key,
+	    			// meta: metaData,
+					// keys: [account.memo_key]
+					// signingKey:  '5Kha8QKTLsT2prVZEwKAf3JVmmjmdAvRP2zinUSAXy1SuGc5EDa',
 					onError: () => this.setState({error: 'server returned error'}),
 					onSuccess: () => this.setState({error: 'SUCCESS'})
 			})
@@ -78,7 +83,7 @@ class BuyGolos extends React.Component {
 	}
 
 	componentDidMount() {
-		if (process.env.BROWSER) this.generateAddress()
+		// if (process.env.BROWSER) this.generateAddress()
 	}
 
 	testFormSubmit() {
@@ -320,12 +325,12 @@ export default connect(
     dispatch => ({
 		updateMeta: (operation) => {
 			const options = {
-				type: 'update_account_meta',
+				type: 'account_update',
 				operation
             }
 
 			console.log(options)
-			dispatch(transaction.actions.updateMeta(options)) //broadcastOperation
+			dispatch(transaction.actions.broadcastOperation(options)) //broadcastOperation
 
 
         },

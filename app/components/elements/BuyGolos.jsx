@@ -375,7 +375,7 @@ class BuyGolos extends React.Component {
 															<td>{item.hash}<br />({item.confirmed}); {displayConfirmations(item.confirmations)}</td>
 															<td>{roundPrecision(transactionOutputsSum(item, icoDestinationAddress)/satoshiPerCoin, 8)}</td>
 															<td>{roundPrecision(golosAmount, 3)}</td>
-															<td>{roundPrecision(transactionOutputsSum(item, icoDestinationAddress)/state.confirmedBalance, 8)}</td>
+															<td>{roundPrecision(transactionOutputsSum(item, icoDestinationAddress)/state.confirmedBalance, 8) + ' %'}</td>
 														</tr>
 											})
 										}

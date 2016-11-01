@@ -214,23 +214,25 @@ class BuyGolos extends React.Component {
 		const { transactions } = state
 		let loading=this.state.loading
 
-		return 	<div id="buy_golos" className="row BuyGolos">
+		return 	<div id="buy_golos" className="BuyGolos">
 
 					{/* ACTUAL COMPONENT */}
 					{/* <div className="columns small-12">
 						<h2>Макет функционала</h2>
 						<hr />
 					</div> */}
-					<button className="button warning" onClick={this.removeIco}>REMOVE ICO ADDRESS</button>
-					<div className="columns small-12">
-						<h2>ПОКУПКА СИЛЫ ГОЛОСА</h2>
-						<hr style={{marginBottom: '50px'}} />
+					{/* <button className="button warning" onClick={this.removeIco}>REMOVE ICO ADDRESS</button> */}
+					<div className="row">
+						<div className="columns small-12">
+							<h2>ПОКУПКА СИЛЫ ГОЛОСА</h2>
+							<hr style={{marginBottom: '50px'}} />
+						</div>
 					</div>
 
 					{/* GENERATE ADDRESS */}
 					{
 						props.isOwnAccount && (!state.icoAddress && !props.icoAddress)
-						? 	<form className="columns small-12" onSubmit={this.generateAddress}>
+						? 	<form className="columns row" onSubmit={this.generateAddress}>
 								<div className="large-12 columns">
 									<label htmlFor="checkbox1">
 										<input onClick={this.handleCheckBoxClick.bind(this, 0)} id="checkbox1" type="checkbox" disabled={loading} />
@@ -328,30 +330,32 @@ class BuyGolos extends React.Component {
 					{/* TRANSACTION HISTORY */}
 					{
 						transactions.length
-						? <div className="column small-12">
-							<table>
-								<thead>
-									<tr>
-										<th width="200">ID Транзакции</th>
-										<th width="100">Перечислено биткоинов</th>
-										<th width="150">Вы получите</th>
-										<th width="50">Доля в Сети</th>
-									</tr>
-								</thead>
-								<tbody>
-									{
-										transactions.map((item, index) => {
-											return 	<tr key={index}>
-														<td>{item.address}</td>
-														<td>{item.amountBtc}</td>
-														<td>{item.amountGolos + ' Силы Голоса'}</td>
-														<td>{item.share + ' %'}</td>
-													</tr>
-										})
-									}
-								</tbody>
-							</table>
-							<p>Количество получаемых токенов Силы Голоса отображается исходя из полученных биткоинов на данный момент. Всего на краудсейле будет продано 27 072 000 токенов Силы Голоса (60% сети). Сила Голоса будет распределена пропорционально проинвестированным биткоинам с учетом бонусов. Чем больше биткоинов будет проинвестировано, тем меньше Силы Голоса вы получите, тем выше будет её цена.</p>
+						? <div className="row">
+							<div className="column small-12">
+								<table>
+									<thead>
+										<tr>
+											<th width="200">ID Транзакции</th>
+											<th width="100">Перечислено биткоинов</th>
+											<th width="150">Вы получите</th>
+											<th width="50">Доля в Сети</th>
+										</tr>
+									</thead>
+									<tbody>
+										{
+											transactions.map((item, index) => {
+												return 	<tr key={index}>
+															<td>{item.address}</td>
+															<td>{item.amountBtc}</td>
+															<td>{item.amountGolos + ' Силы Голоса'}</td>
+															<td>{item.share + ' %'}</td>
+														</tr>
+											})
+										}
+									</tbody>
+								</table>
+								<p>Количество получаемых токенов Силы Голоса отображается исходя из полученных биткоинов на данный момент. Всего на краудсейле будет продано 27 072 000 токенов Силы Голоса (60% сети). Сила Голоса будет распределена пропорционально проинвестированным биткоинам с учетом бонусов. Чем больше биткоинов будет проинвестировано, тем меньше Силы Голоса вы получите, тем выше будет её цена.</p>
+							</div>
 						</div>
 						: null
 					}

@@ -46,7 +46,7 @@ export default class LandingPress extends React.Component {
 					</div>
 					<div className="small-12 medium-6 columns">
 						<a href="http://sk.ru" target="blank">
-							<img className="Partners__skolkovo-logo" src="images/landing/skolkovo.jpg" alt="логотип Сколково" />
+							<img className="Partners__skolkovo-logo" src="images/landing/skolkovo2.jpg" alt="логотип Сколково" />
 						</a>
 					</div>
 				</div>

@@ -24,6 +24,8 @@ class Settings extends React.Component {
                               <select defaultValue={store.get('language')} onChange={this.handleLanguageChange}>
                                 <option value="ru">русский</option>
                                 <option value="en">english</option>
+                                {/* in react-intl they use 'uk' instead of 'ua' */}
+                                <option value="uk">українська</option>
                               </select>
                             </label>
                         </div>

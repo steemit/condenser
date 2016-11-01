@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import { browserHistory } from 'react-router';
 import { translate } from 'app/Translator';
 import { formatCoins } from 'app/utils/FormatCoins';
+import { detransliterate } from 'app/utils/ParsersAndFormatters';
 
 class TagsIndex extends React.Component {
     static propTypes = {
@@ -12,10 +13,7 @@ class TagsIndex extends React.Component {
         order: React.PropTypes.string,
     };
 
-    constructor(props) {
-        super(props);
-        this.state = {search: ''};
-    }
+    state = { search: '' }
 
     shouldComponentUpdate(nextProps, nextState) {
         const res = this.props.tagsList !== nextProps.tagsList ||
@@ -39,22 +37,21 @@ class TagsIndex extends React.Component {
         let tags = tagsAll;
         if (search) tags = tags.filter(tag => tag.get('name').indexOf(search.toLowerCase()) !== -1);
         tags.map((tag) => {console.log(tag.get('name'))})
-        tags = tags.filter(tag => tag.get('name')).sort((a,b) => {
+        tags = tags.filter(tag => tag.get('name')).sort((a, b) => {
             return a.get('name').localeCompare(b.get('name'));
         }).map(tag => {
             const name = tag.get('name');
-            console.log(name)
             const link = order ? `/${order}/${name}` : `/hot/${name}`;
             // const tag_info = tagsAll.get(tag);
             return (<tr key={name}>
                 <td>
-                    <Link to={link} activeClassName="active">{name}</Link>
+                    <Link to={link} activeClassName="active">{detransliterate(name)}</Link>
                 </td>
                 <td>{tag.get('discussions')}</td>
                 <td>{formatCoins(tag.get('total_payouts'))}</td>
             </tr>);
         }).toArray();
-        console.log(tags)
+
         return (
             <div className="TagsIndex row">
                 <div className="column">

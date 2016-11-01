@@ -15,7 +15,7 @@ export default class LandingFooter extends React.Component {
 			],
 			[
 				// {name: 'Условия проведения краудфандинга' },
-				{name: 'Политика конфиденциальности', url: 'https://golos.io/legal/privacy_policy.pdf'},
+				{name: 'Политика конфиденциальности', url: 'https://golos.io/ru--konfidenczialxnostx/@golos/politika-konfidencialnosti'},
 				{name: 'Правила пользования', url: 'https://golos.io/legal/tos.pdf'}
 			],
 			[

@@ -101,7 +101,7 @@ class SignUp extends React.Component {
                     <br />
                     <p className="secondary">
                         {translate("by_verifying_you_agree")}
-                        {' '}<a href="/legal/privacy_policy.pdf" target="_blank">
+                        {' '}<a href="/ru--konfidenczialxnostx/@golos/politika-konfidencialnosti" target="_blank">
                                 {translate("by_verifying_you_agree_terms_and_conditions")}
                             </a>.
                     </p>

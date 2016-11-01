@@ -62,6 +62,7 @@ export default class LandingCountDowns extends React.Component {
 		currentBonus: '',
 		bitcoinsRaised: false,
 		bitcoinsRaisedIncludingUnconfirmed: false,
+		unconfirmedNTx: false,
 		prefill: this.props.prefill,
 		secondsSinceEpoch: Math.round(((new Date()).getTime()) / 1000),
 		crowdSaleIsActive: this.props.crowdsaleStartAt > Date.now(),
@@ -91,13 +92,14 @@ export default class LandingCountDowns extends React.Component {
 		    return json.then(Promise.reject.bind(Promise));
 		  }
 		})
-		.then(object => {bitcoinsRaisedIncludingUnconfirmed
+		.then(object => {
 			const raised = object.balance;
 			const raisedWithUnconfirmed = object.final_balance
 			console.log('object', object)
 			this.setState({
 				bitcoinsRaised: raised / satoshiPerCoin,
-				bitcoinsRaisedIncludingUnconfirmed: raisedWithUnconfirmed / satoshiPerCoin
+				bitcoinsRaisedIncludingUnconfirmed: raisedWithUnconfirmed / satoshiPerCoin,
+				unconfirmedNTx: object.unconfirmed_n_tx || 0
 			})
 		})
 		.catch(error => {
@@ -197,8 +199,8 @@ export default class LandingCountDowns extends React.Component {
 									: <strong>{state.bitcoinsRaised} B</strong>
 								}
 								{
-									((state.bitcoinsRaised !== false) && (state.bitcoinsRaised === state.bitcoinsRaisedIncludingUnconfirmed))
-									? <span>({state.bitcoinsRaisedIncludingUnconfirmed} B включая неподтвержденные)</span> : null
+									(state.unconfirmedNTx)
+									? <span style={{display:'block'}}>({state.bitcoinsRaisedIncludingUnconfirmed} B включая {state.unconfirmedNTx} неподтвержденных транзакций)</span> : null
 								}
 
 								<p>

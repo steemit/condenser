@@ -107,9 +107,13 @@ export function* findSigningKey({opType, username, password}) {
 
     const currentUser = yield select(state => state.user.get('current'))
     const currentUsername = currentUser && currentUser.get('username')
+
     username = username || currentUsername
     if (!username) return null
+
     const private_keys = currentUsername === username ? currentUser.get('private_keys') : Map()
+    if(!private_keys) return null
+
     let account = yield select(state => state.global.getIn(['accounts', username]))
     if (!account) {
         [account] = yield call(Apis.db_api, 'get_accounts', [username])

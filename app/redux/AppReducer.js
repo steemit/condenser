@@ -10,13 +10,14 @@ const defaultState = Map({
         total: 0,
         feed: 0,
         reward: 0,
-        transfer: 0,
+        send: 0,
         mention: 0,
         follow: 0,
         vote: 0,
         reply: 0,
         key_update: 0,
-        message: 0
+        message: 0,
+        receive: 0
     }
 });
 

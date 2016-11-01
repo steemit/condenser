@@ -64,6 +64,26 @@ export default class LandingCountDowns extends React.Component {
 
 	componentWillMount() {
 		if(process.env.BROWSER) this.updateTime = setInterval(this.updateTime, 1000);
+		// fetch raised btc
+		fetch('https://cyber.fund/api03/crowdsale/Golos?pretty=1', {
+	   		method: 'get',
+	   		mode: 'no-cors',
+	   		credentials: 'same-origin',
+	   		headers: {
+	   			Accept: 'application/json',
+	   			'Content-type': 'application/json'
+	   		}
+	   	})
+		.then(function(data) {
+			console.log('data', data)
+			return data.json() })
+		.then(object => {
+			console.log('object', object)
+			this.setState({
+				bitcoinsRaised: object.currently_raised_full || object.btc_raised || 0
+			})
+		})
+		.catch(error => console.error(error))
 	}
 
 	componentWillUnmount() {

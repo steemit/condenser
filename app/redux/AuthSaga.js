@@ -112,7 +112,6 @@ export function* findSigningKey({opType, username, password}) {
     if (!username) return null
 
     const private_keys = currentUsername === username ? currentUser.get('private_keys') : Map()
-    if(!private_keys) return null
 
     let account = yield select(state => state.global.getIn(['accounts', username]))
     if (!account) {
@@ -130,7 +129,8 @@ export function* findSigningKey({opType, username, password}) {
                 private_key = PrivateKey.fromSeed(username + authType + password)
             }
         } else {
-            private_key = private_keys.get(authType + '_private')
+            if(private_keys)
+                private_key = private_keys.get(authType + '_private')
         }
         if (private_key) {
             const pubkey = private_key.toPublicKey().toString()

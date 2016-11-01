@@ -16,6 +16,7 @@ import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Tooltip from 'app/components/elements/Tooltip';
 //import {test as o2jtest} from 'shared/clash/object2json'
 
+import icoDestinationAddress from 'shared/icoAddress'
 /*
 	Логика компонента:
 	Если пользователь находится на своей странице, и если у него нет Btc адреса, то должна отображаться кнопка генерации адреса.
@@ -174,7 +175,10 @@ class BuyGolos extends React.Component {
 						</div>
 				</div>;
 		}
+
 		const {state, props} = this
+		console.log (icoDestinationAddress);
+		console.log (state.icoAddress);
 		const {
 			metaData,
 			icoAddress,
@@ -423,16 +427,7 @@ export default connect(
 	},
     dispatch => ({
 		updateMeta: (operation) => {
-			const options = {
-				type: 'account_update',
-				operation
-            }
-
-			console.log(options)
-			dispatch(transaction.actions.broadcastOperation(options)) //broadcastOperation
-
-
-        },
-
+			const options = {type: 'account_update', operation  }
+			dispatch(transaction.actions.broadcastOperation(options)) },
     })
 )(BuyGolos)

@@ -5,6 +5,7 @@ import {APP_ICON} from 'config/client_config'
 import 'whatwg-fetch';
 import icoDestinationAddress from 'shared/icoAddress'
 import roundPrecision from 'round-precision'
+import { translate } from 'app/Translator';
 // import { crowdsaleStartAt } from '../pages/Landing'
 
 const satoshiPerCoin = 100000000
@@ -216,7 +217,7 @@ export default class LandingCountDowns extends React.Component {
 								}
 								{
 									state.bitcoinsRaised !== state.bitcoinsRaisedIncludingUnconfirmed
-									? <span style={{display:'block'}}>({roundPrecision(state.bitcoinsRaisedIncludingUnconfirmed, 4)} включая {state.unconfirmedNTx} неподтвержденных транзакций)</span> : null
+									? <span style={{display: 'block'}}>({roundPrecision(state.bitcoinsRaisedIncludingUnconfirmed, 4)} включая {translate('unverified_transactions', {transactionsCount: state.unconfirmedNTx})})</span> : null
 								}
 
 								<p>

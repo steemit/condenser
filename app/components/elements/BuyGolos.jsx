@@ -14,6 +14,7 @@ import o2j from 'shared/clash/object2json'
 import { calculateCurrentStage, currentStage } from '../elements/LandingCountDowns.jsx';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Tooltip from 'app/components/elements/Tooltip';
+import roundPrecision from 'round-precision'
 //import {test as o2jtest} from 'shared/clash/object2json'
 
 const satoshiPerCoin=100000000;
@@ -361,11 +362,16 @@ class BuyGolos extends React.Component {
 										{
 											transactions.map((item, index) => {
 												return 	<tr key={index}>
-															<td>{item.hash}<br/>({item.confirmed}); {item.confirmations} подтверждений
+															<td>{item.hash}<br/>({
+																item.confirmed}); {
+																item.confirmations >= 8
+																? 'транзакция подтверждена'
+																: 'транзакция пока не подтверждена'
+															}
 															</td>
-															<td>{transactionOutputsSum(item, icoDestinationAddress)/satoshiPerCoin}</td>
-															<td>{27072000*transactionOutputsSum(item, icoDestinationAddress)/state.confirmedBalance}</td>
-															<td>{transactionOutputsSum(item, icoDestinationAddress)/state.confirmedBalance}}</td>
+															<td>{roundPrecision(transactionOutputsSum(item, icoDestinationAddress)/satoshiPerCoin, 8)}</td>
+															<td>{roundPrecision(27072000*transactionOutputsSum(item, icoDestinationAddress)/state.confirmedBalance, 3)}</td>
+															<td>{roundPrecision(transactionOutputsSum(item, icoDestinationAddress)/state.confirmedBalance, 8)}</td>
 														</tr>
 											})
 										}

@@ -36,7 +36,7 @@
   background-color: $white;
   border-bottom: 1px solid $light-gray;
   ul > li.Header__top-logo {
-    padding: 0;
+    padding: .35rem 0 .35rem 0;
   }
   ul > li.delim {
     color: $medium-gray;
@@ -131,8 +131,8 @@ ul > li > .button {
   margin-right: -22px;
   .beta {
     position: relative;
-    top: 18px;
-    right: 38px;
+    top: 14px;
+    right: 22px;
     font-size: 0.7rem;
     color: #4ba2f2;
   }

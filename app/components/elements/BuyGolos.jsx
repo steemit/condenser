@@ -372,11 +372,12 @@ class BuyGolos extends React.Component {
 										{
 											transactions.map((item, index) => {
 												const golosAmount = 43306176*transactionOutputsSum(item, icoDestinationAddress)/state.confirmedBalance
+												const sharePercentage = (golosAmount/43306176) * 100
 												return 	<tr key={index}>
 															<td>{item.hash}<br />({item.confirmed}); {displayConfirmations(item.confirmations)}</td>
 															<td>{roundPrecision(transactionOutputsSum(item, icoDestinationAddress)/satoshiPerCoin, 8)}</td>
 															<td>{roundPrecision(golosAmount, 3)}</td>
-															<td>{roundPrecision((transactionOutputsSum(item, icoDestinationAddress)/state.confirmedBalance) * 100, 6) + '%'}</td>
+															<td>{roundPrecision(sharePercentage, 6) + '%'}</td>
 														</tr>
 											})
 										}

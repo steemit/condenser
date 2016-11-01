@@ -209,14 +209,14 @@ export default class LandingCountDowns extends React.Component {
 										{
 											state.bitcoinsRaised === false
 											? <strong>загрузка...</strong>
-											: <strong><a href="https://blockchain.info/address/3CWicRKHQqcj1N6fT1pC9J3hUzHw1KyPv3" target="blank">{state.bitcoinsRaised} B</a></strong>
+											: <strong><a href="https://blockchain.info/address/3CWicRKHQqcj1N6fT1pC9J3hUzHw1KyPv3" target="blank">{roundPrecision(state.bitcoinsRaised, 4)} B</a></strong>
 										}
 									</div>
 									: null
 								}
 								{
 									state.bitcoinsRaised !== state.bitcoinsRaisedIncludingUnconfirmed
-									? <span style={{display:'block'}}>({state.bitcoinsRaisedIncludingUnconfirmed} включая {state.unconfirmedNTx} неподтвержденных транзакций)</span> : null
+									? <span style={{display:'block'}}>({roundPrecision(state.bitcoinsRaisedIncludingUnconfirmed, 4)} включая {state.unconfirmedNTx} неподтвержденных транзакций)</span> : null
 								}
 
 								<p>

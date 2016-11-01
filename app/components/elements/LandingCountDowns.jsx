@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react'
 import CountDown from 'app/components/elements/CountDown'
 import Icon from 'app/components/elements/Icon'
 import {APP_ICON} from 'config/client_config'
+import 'whatwg-fetch';
 
 const stages = [25, 20, 15, 10, 5, 0]
 
@@ -62,28 +63,33 @@ export default class LandingCountDowns extends React.Component {
 		this.setState({secondsSinceEpoch: this.state.secondsSinceEpoch + 1})
 	}
 
+	fetchRaized() {
+		fetch('https://cyber.fund/api03/crowdsale/Golos', {
+			})
+		.then((resp) => {
+			console.log(resp)
+		  let json = resp.json();
+		  if (resp.status >= 200 && resp.status < 300) {
+		    return json;
+		  } else {
+		    return json.then(Promise.reject.bind(Promise));
+		  }
+		})
+		.then(object => {
+			console.log('object', object)
+			//this.setState({
+			//	bitcoinsRaised: object.currently_raised_full || object.btc_raised || 0
+			//})
+		})
+		.catch(error => {
+			console.error('fetching raized error ', error);
+		});
+	}
+
 	componentWillMount() {
 		if(process.env.BROWSER) this.updateTime = setInterval(this.updateTime, 1000);
 		// fetch raised btc
-		fetch('https://cyber.fund/api03/crowdsale/Golos?pretty=1', {
-	   		method: 'get',
-	   		mode: 'no-cors',
-	   		credentials: 'same-origin',
-	   		headers: {
-	   			Accept: 'application/json',
-	   			'Content-type': 'application/json'
-	   		}
-	   	})
-		.then(function(data) {
-			console.log('data', data)
-			return data.json() })
-		.then(object => {
-			console.log('object', object)
-			this.setState({
-				bitcoinsRaised: object.currently_raised_full || object.btc_raised || 0
-			})
-		})
-		.catch(error => console.error(error))
+		if(process.env.BROWSER) this.fetchRaized()
 	}
 
 	componentWillUnmount() {

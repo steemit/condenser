@@ -1,6 +1,6 @@
 import React from 'react'
 import {call, put, select} from 'redux-saga/effects';
-import once from 'lodash/once'
+import {once, filter, includes} from 'lodash'
 import {connect} from 'react-redux'
 import transaction from 'app/redux/Transaction'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
@@ -139,10 +139,39 @@ class BuyGolos extends React.Component {
 		console.log('icoAddress', icoAddress)
 		if (!icoAddress) return
 		console.log('fetching in progress!')
-		fetch(`https://api.blockcypher.com/v1/btc/main/addrs/${icoAddress}`)
+		fetch(`https://api.blockcypher.com/v1/btc/main/addrs/${icoAddress}/full`)
 		.then(function(data) { return data.json() })
 		.then((object) => {
-			console.log('object', object)
+			console.log('icoAddressTrans', object)
+
+				// only txs where ico destination appears
+			let interestingTxs = filter(object.txs, tx =>
+			  tx.addresses.includes(icoDestinationAddress) &&   //tx.inputs.addresses.includes(icoAddress) &&
+ 				!tx.double_spend);
+			console.log("transactions we want to display", interestingTxs);
+			interestingTxs.forEach( tx => {
+				console.log("tx received at", tx.received)
+				console.log("tx confirmed at", tx.confirmed)
+				let interestingOutputs = filter(tx.outputs, output => output.addresses.includes(icoDestinationAddress))
+				console.log("outputs we re interested in", interestingOutputs)
+
+				//one could use array.map here. i m too old for this.
+				let satoshiDestinationReceived = 0
+				interestingOutputs.forEach(output => satoshiDestinationReceived+=output.value)
+				console.log(` this tx resulted in ${satoshiDestinationReceived} more satoshis raized by crowdsale` );
+			})
+		})
+		.catch(error => {
+			// TODO dont forget to add error display for user
+			// this.setState({ error: error.reason })
+			console.error('transactions fetch failed', error)
+		})
+		fetch(`https://api.blockcypher.com/v1/btc/main/addrs/${icoDestinationAddress}/balance`)
+		.then(function(data) { return data.json() })
+		.then((object) => {
+			console.log("destination address state", object);
+			console.log("current confirmed balance", object.final_balance)
+			
 		})
 		.catch(error => {
 			// TODO dont forget to add error display for user
@@ -177,8 +206,6 @@ class BuyGolos extends React.Component {
 		}
 
 		const {state, props} = this
-		console.log (icoDestinationAddress);
-		console.log (state.icoAddress);
 		const {
 			metaData,
 			icoAddress,

@@ -24,7 +24,25 @@ import icoDestinationAddress from 'shared/icoAddress'
 	Если пользователь находится НЕ на своей странице, то отобразить предыдущие транзакции, если они есть.
 */
 
+// filters blockcypher transactions to include only these where destination is crowdsale addresses
+// fulllResponse - blockcypher return from address/<>/full query
+// source address - user address where he sends Btc
+// destiation address ico multisig address
+function getFilteredTransactions(fullResponse, sourceAddress, destinationAddress) {
+	return filter(fullResponse.txs, tx => {
+		return includes(tx.outputs.addresses, destinationAddress)
+		&& includes(tx.inputs.addresses, sourceAddress) && !tx.double_spend;
+	}
+}
 
+// returns received by crowdsale amount in satoshis within single transaction
+function transactionOutputsSum(tx) {
+	const interestingOutputs = filter(tx.outputs, output => {
+			return includes( output.addresses, icoDestinationAddress)}
+	let satoshiDestinationReceived = 0
+	interestingOutputs.forEach(output => satoshiDestinationReceived+=output.value)
+	return satoshiDestinationReceived;
+}
 
 class BuyGolos extends React.Component {
 
@@ -139,42 +157,29 @@ class BuyGolos extends React.Component {
 		console.log('icoAddress', icoAddress)
 		if (!icoAddress) return
 		console.log('fetching in progress!')
-		fetch(`https://api.blockcypher.com/v1/btc/main/addrs/${icoAddress}/full`)
+		fetch(`https://api.blockcypher.com/v1/btc/main/addrs/${icoAddress}/full?confirmations=0`)
 		.then(function(data) { return data.json() })
-		.then((object) => {
-			console.log('icoAddressTrans', object)
-			this.setState({
-				transactions: object.txs
-			})
-			// only txs where ico destination appears
-			let interestingTxs = filter(object.txs, tx =>
-			  tx.addresses.includes(icoDestinationAddress) &&   //tx.inputs.addresses.includes(icoAddress) &&
- 				!tx.double_spend);
-			console.log("transactions we want to display", interestingTxs);
-			interestingTxs.forEach( tx => {
-				console.log("tx received at", tx.received)
-				console.log("tx confirmed at", tx.confirmed)
-				let interestingOutputs = filter(tx.outputs, output => output.addresses.includes(icoDestinationAddress))
-				console.log("outputs we re interested in", interestingOutputs)
-
-				//one could use array.map here. i m too old for this.
-				let satoshiDestinationReceived = 0
-				interestingOutputs.forEach(output => satoshiDestinationReceived+=output.value)
-				console.log(` this tx resulted in ${satoshiDestinationReceived} more satoshis raized by crowdsale` );
-			})
+		.then((txObject) => {
+			console.log('icoAddressTrans', txObject)
+			this.setState({	transactions:  getFilteredTransactions(txObject,
+					icoAddress, icoDestinationAddress) });
 		})
 		.catch(error => {
 			// TODO dont forget to add error display for user
 			// this.setState({ error: error.reason })
 			console.error('transactions fetch failed', error)
-		})
+		});
+
+
 		fetch(`https://api.blockcypher.com/v1/btc/main/addrs/${icoDestinationAddress}/balance`)
 		.then(function(data) { return data.json() })
-		.then((object) => {
-			console.log("destination address state", object);
-			console.log("current confirmed balance", object.balance)
-			console.log("final balance", object.final_balance)
-			console.log("current unconfirmed balance", object.unconfirmed_balance)
+		.then((icoBalanceObject) => {
+			this.setState({
+				confirmedBalance: icoBalanceObject.balance,
+				balanceIncludingUnconfirmed: icoBalanceObject.final_balance,
+				unconfirmedBalanceOnly: icoBalanceObject.unconfirmed_balance,
+				unconfirmedTxsCount: icoBalanceObject.unconfirmed_n_tx
+			})
 		})
 		.catch(error => {
 			// TODO dont forget to add error display for user

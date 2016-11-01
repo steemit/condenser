@@ -143,8 +143,10 @@ class BuyGolos extends React.Component {
 		.then(function(data) { return data.json() })
 		.then((object) => {
 			console.log('icoAddressTrans', object)
-
-				// only txs where ico destination appears
+			this.setState({
+				transactions: object.txs
+			})
+			// only txs where ico destination appears
 			let interestingTxs = filter(object.txs, tx =>
 			  tx.addresses.includes(icoDestinationAddress) &&   //tx.inputs.addresses.includes(icoAddress) &&
  				!tx.double_spend);
@@ -171,7 +173,7 @@ class BuyGolos extends React.Component {
 		.then((object) => {
 			console.log("destination address state", object);
 			console.log("current confirmed balance", object.final_balance)
-			
+
 		})
 		.catch(error => {
 			// TODO dont forget to add error display for user
@@ -246,7 +248,7 @@ class BuyGolos extends React.Component {
 									}
 									<label htmlFor="checkbox2">
 										<input onClick={this.handleCheckBoxClick.bind(this, 1)} id="checkbox2" type="checkbox" disabled={loading} />
-										Я ознакомлен и принимаю условия <a href="/legal/sale_agreements.pdf">Договор купли-продажи токенов "СИЛА ГОЛОСА"</a>
+										Я ознакомлен и принимаю условия <a href="https://golos.io/ru--golos/@golos/dogovor-kupli-prodazhi-tokenov-sila-golosa">Договор купли-продажи токенов "СИЛА ГОЛОСА"</a>
 									</label>
 									{
 										state.checkboxClicked1
@@ -255,7 +257,7 @@ class BuyGolos extends React.Component {
 									}
 									<label htmlFor="checkbox3">
 										<input onClick={this.handleCheckBoxClick.bind(this, 2)} id="checkbox3" type="checkbox" disabled={loading} />
-										Я ознакомлен с <a href="/legal/risk_disclosure.pdf">рисками</a>
+										Я ознакомлен с <a href="https://golos.io/ru--riski/@golos/raskrytie-riskov">рисками</a>
 									</label>
 									{
 										state.checkboxClicked2
@@ -345,10 +347,10 @@ class BuyGolos extends React.Component {
 										{
 											transactions.map((item, index) => {
 												return 	<tr key={index}>
-															<td>{item.address}</td>
+															<td>{item.hash}</td>
 															<td>{item.amountBtc}</td>
-															<td>{item.amountGolos + ' Силы Голоса'}</td>
-															<td>{item.share + ' %'}</td>
+															<td>будет подсчитана позже</td>
+															<td>будет подсчитана позже</td>
 														</tr>
 											})
 										}

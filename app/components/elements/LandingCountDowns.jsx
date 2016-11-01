@@ -208,7 +208,7 @@ export default class LandingCountDowns extends React.Component {
 										{
 											state.bitcoinsRaised === false
 											? <strong>загрузка...</strong>
-											: <strong>{state.bitcoinsRaised} B</strong>
+											: <strong><a href="https://blockchain.info/address/3CWicRKHQqcj1N6fT1pC9J3hUzHw1KyPv3" target="blank">{state.bitcoinsRaised} B</a></strong>
 										}
 									</div>
 									: null

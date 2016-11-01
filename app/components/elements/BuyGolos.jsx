@@ -192,7 +192,7 @@ class BuyGolos extends React.Component {
 						<h2>Макет функционала</h2>
 						<hr />
 					</div> */}
-					<button className="button warning" onClick={this.removeIco}>REMOVE ICO ADDRESS</button>
+					{/* <button className="button warning" onClick={this.removeIco}>REMOVE ICO ADDRESS</button> */}
 					<div className="row">
 						<div className="columns small-12">
 							<h2>ПОКУПКА СИЛЫ ГОЛОСА</h2>

@@ -164,8 +164,7 @@ export default class LandingCountDowns extends React.Component {
 					</div>
 				</div>
 				{
-					// state.prefill
-					false
+					state.prefill
 					? 	<div className="row text-center CountDowns__counters">
 							<CountDown
 								date={props.crowdsaleStartAt}
@@ -210,8 +209,7 @@ export default class LandingCountDowns extends React.Component {
 
 				{/* BUTTON */}
 				{
-					// state.prefill
-					false
+					state.prefill
 					? null
 					: <div className="row CountDowns__button">
 						<div className="small-12 columns">
@@ -223,8 +221,7 @@ export default class LandingCountDowns extends React.Component {
 
 				{/* FOOTER LINKS */}
 				{
-					// state.prefill
-					false
+					state.prefill
 					? 	<div className="row CountDowns__links">
 							<div className="small-12 columns text-center">
 								<a href="https://steemit.com/@golos" target="blank" className="CountDowns__button_small">блог</a>

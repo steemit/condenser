@@ -3,6 +3,8 @@ import CountDown from 'app/components/elements/CountDown'
 import Icon from 'app/components/elements/Icon'
 import {APP_ICON} from 'config/client_config'
 import 'whatwg-fetch';
+import icoDestinationAddress from 'shared/icoAddress'
+import roundPrecision from 'round-precision'
 // import { crowdsaleStartAt } from '../pages/Landing'
 
 // format date properly
@@ -13,9 +15,9 @@ function createDate(year, month, day, hours, minutes) {
 	return date
 }
 
-export const blockchainStartAt = createDate(2016, 9, 18, 11, 0)
-export const crowdsaleStartAt = createDate(2016, 10, 1, 11, 0)
-export const crowdsaleEndAt = createDate(2016, 11, 1, 11, 0)
+export const blockchainStartAt 	= createDate(2016, 9, 18, 11, 0)
+export const crowdsaleStartAt 	= createDate(2016, 10, 1, 11, 0)
+export const crowdsaleEndAt 	= createDate(2016, 11, 1, 11, 0)
 
 const stages = [25, 20, 15, 10, 5, 0]
 
@@ -62,6 +64,7 @@ export default class LandingCountDowns extends React.Component {
 		prefill: this.props.prefill,
 		secondsSinceEpoch: Math.round(((new Date()).getTime()) / 1000),
 		crowdSaleIsActive: this.props.crowdsaleStartAt > Date.now(),
+		showBitcoinsRaised: true
 	}
 
 	componentDidMount() {
@@ -77,6 +80,13 @@ export default class LandingCountDowns extends React.Component {
 	}
 
 	fetchRaized() {
+		// fetch(`https://api.blockcypher.com/v1/btc/main/addrs/${icoDestinationAddress}/balance`)
+		// .then(function(data) { return data.json() })
+		// .then((object) => {
+		// 	console.log("destination address state", object);
+		// 	console.log("current confirmed balance", object.final_balance)
+		//
+		// })
 		fetch('https://cyber.fund/api03/crowdsale/Golos', {
 			})
 		.then((resp) => {
@@ -91,11 +101,18 @@ export default class LandingCountDowns extends React.Component {
 		.then(object => {
 			console.log('object', object)
 			this.setState({
-				bitcoinsRaised: object.currently_raised_full || object.btc_raised || 0
+				bitcoinsRaised: roundPrecision(object.metrics.currently_raised || object.metrics.currently_raised_full.Bitcoin || 0, 4)
 			})
 		})
 		.catch(error => {
-			console.error('fetching raized error ', error);
+			this.setState({
+				bitcoinsRaised: 0,
+				showBitcoinsRaised: false,
+			})
+			try {
+				console.error('fetching raized error ', error);
+				console.error('fetching raized error ', error.reason);
+			} catch (e) {}
 		});
 	}
 
@@ -184,12 +201,17 @@ export default class LandingCountDowns extends React.Component {
 								/>
 							</div>
 							<div className="small-12 medium-4 columns CountDowns__counter" style={{paddingTop: 40}}>
-								<p style={{marginBottom: 0}}>Собрано биткоинов</p>
-
 								{
-									state.bitcoinsRaised === false
-									? <strong>загрузка...</strong>
-									: <strong>{state.bitcoinsRaised} B</strong>
+									state.showBitcoinsRaised
+									? <div>
+										<p style={{marginBottom: 0}}>Собрано биткоинов</p>
+										{
+											state.bitcoinsRaised === false
+											? <strong>загрузка...</strong>
+											: <strong>{state.bitcoinsRaised} B</strong>
+										}
+									</div>
+									: null
 								}
 								<p>
 									<small>Текущий бонус <span className="red"> + {state.currentBonus}%</span></small>

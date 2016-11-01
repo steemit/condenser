@@ -172,8 +172,9 @@ class BuyGolos extends React.Component {
 		.then(function(data) { return data.json() })
 		.then((object) => {
 			console.log("destination address state", object);
-			console.log("current confirmed balance", object.final_balance)
-
+			console.log("current confirmed balance", object.balance)
+			console.log("final balance", object.final_balance)
+			console.log("current unconfirmed balance", object.unconfirmed_balance)
 		})
 		.catch(error => {
 			// TODO dont forget to add error display for user

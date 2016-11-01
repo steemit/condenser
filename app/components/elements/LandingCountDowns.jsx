@@ -5,6 +5,8 @@ import {APP_ICON} from 'config/client_config'
 import 'whatwg-fetch';
 // import { crowdsaleStartAt } from '../pages/Landing'
 
+import icoDestinationAddress from 'shared/icoAddress'
+const satoshiPerCoin = 100000000
 // format date properly
 function createDate(year, month, day, hours, minutes) {
 	//const today = new Date()
@@ -59,6 +61,7 @@ export default class LandingCountDowns extends React.Component {
 		nextBonus: '',
 		currentBonus: '',
 		bitcoinsRaised: false,
+		bitcoinsRaisedIncludingUnconfirmed: false,
 		prefill: this.props.prefill,
 		secondsSinceEpoch: Math.round(((new Date()).getTime()) / 1000),
 		crowdSaleIsActive: this.props.crowdsaleStartAt > Date.now(),
@@ -77,7 +80,7 @@ export default class LandingCountDowns extends React.Component {
 	}
 
 	fetchRaized() {
-		fetch('https://cyber.fund/api03/crowdsale/Golos', {
+		fetch(`https://api.blockcypher.com/v1/btc/main/addrs/${icoDestinationAddress}/balance`, {
 			})
 		.then((resp) => {
 			console.log(resp)
@@ -88,10 +91,13 @@ export default class LandingCountDowns extends React.Component {
 		    return json.then(Promise.reject.bind(Promise));
 		  }
 		})
-		.then(object => {
+		.then(object => {bitcoinsRaisedIncludingUnconfirmed
+			const raised = object.balance;
+			const raisedWithUnconfirmed = object.final_balance
 			console.log('object', object)
 			this.setState({
-				bitcoinsRaised: object.currently_raised_full || object.btc_raised || 0
+				bitcoinsRaised: raised / satoshiPerCoin,
+				bitcoinsRaisedIncludingUnconfirmed: raisedWithUnconfirmed / satoshiPerCoin
 			})
 		})
 		.catch(error => {
@@ -185,12 +191,16 @@ export default class LandingCountDowns extends React.Component {
 							</div>
 							<div className="small-12 medium-4 columns CountDowns__counter" style={{paddingTop: 40}}>
 								<p style={{marginBottom: 0}}>Собрано биткоинов</p>
-
 								{
 									state.bitcoinsRaised === false
 									? <strong>загрузка...</strong>
 									: <strong>{state.bitcoinsRaised} B</strong>
 								}
+								{
+									((state.bitcoinsRaised !== false) && (state.bitcoinsRaised === state.bitcoinsRaisedIncludingUnconfirmed))
+									? <span>({state.bitcoinsRaisedIncludingUnconfirmed} B включая неподтвержденные)</span> : null
+								}
+
 								<p>
 									<small>Текущий бонус <span className="red"> + {state.currentBonus}%</span></small>
 								</p>

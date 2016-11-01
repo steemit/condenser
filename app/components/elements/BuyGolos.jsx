@@ -16,6 +16,8 @@ import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Tooltip from 'app/components/elements/Tooltip';
 //import {test as o2jtest} from 'shared/clash/object2json'
 
+const satoshiPerCoin=100000000;
+
 import icoDestinationAddress from 'shared/icoAddress'
 /*
 	Логика компонента:
@@ -29,16 +31,18 @@ import icoDestinationAddress from 'shared/icoAddress'
 // source address - user address where he sends Btc
 // destiation address ico multisig address
 function getFilteredTransactions(fullResponse, sourceAddress, destinationAddress) {
-	return filter(fullResponse.txs, tx => {
-		return includes(tx.outputs.addresses, destinationAddress)
-		&& includes(tx.inputs.addresses, sourceAddress) && !tx.double_spend;
-	}
+	const ret=  filter(fullResponse.txs, tx => {
+		return includes(tx.addresses, destinationAddress)
+		&& includes(tx.addresses, sourceAddress) && !tx.double_spend;
+	});
+	return ret;
 }
 
 // returns received by crowdsale amount in satoshis within single transaction
-function transactionOutputsSum(tx) {
+function transactionOutputsSum(tx, destinationAddress) {
+
 	const interestingOutputs = filter(tx.outputs, output => {
-			return includes( output.addresses, icoDestinationAddress)}
+			return includes( output.addresses, destinationAddress)});
 	let satoshiDestinationReceived = 0
 	interestingOutputs.forEach(output => satoshiDestinationReceived+=output.value)
 	return satoshiDestinationReceived;
@@ -55,6 +59,10 @@ class BuyGolos extends React.Component {
 		checkboxClicked0: false,
 		checkboxClicked1: false,
 		checkboxClicked2: false,
+		confirmedBalance: false,
+		balanceIncludingUnconfirmed: false,
+		unconfirmedBalanceOnly: false,
+		unconfirmedTxsCount: false,
 	}
 
 	handleCheckBoxClick(checkboxNumber, e) {
@@ -353,10 +361,11 @@ class BuyGolos extends React.Component {
 										{
 											transactions.map((item, index) => {
 												return 	<tr key={index}>
-															<td>{item.hash}</td>
-															<td>{item.amountBtc}</td>
-															<td>будет подсчитана позже</td>
-															<td>будет подсчитана позже</td>
+															<td>{item.hash}<br/>({item.confirmed}); {item.confirmations} подтверждений
+															</td>
+															<td>{transactionOutputsSum(item, icoDestinationAddress)/satoshiPerCoin}</td>
+															<td>{27072000*transactionOutputsSum(item, icoDestinationAddress)/state.confirmedBalance}</td>
+															<td>{transactionOutputsSum(item, icoDestinationAddress)/state.confirmedBalance}}</td>
 														</tr>
 											})
 										}

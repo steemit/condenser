@@ -355,7 +355,7 @@ class BuyGolos extends React.Component {
 
 					{/* TRANSACTION HISTORY */}
 					{
-						transactions.length
+						transactions.length && state.confirmedBalance
 						? <div className="row">
 							<div className="column small-12">
 								<table>
@@ -363,17 +363,18 @@ class BuyGolos extends React.Component {
 										<tr>
 											<th width="200">ID Транзакции</th>
 											<th width="100">Перечислено биткоинов</th>
-											<th width="150">Вы получите</th>
+											<th width="150">Вы получите Голосов</th>
 											<th width="50">Доля в Сети</th>
 										</tr>
 									</thead>
 									<tbody>
 										{
 											transactions.map((item, index) => {
+												const golosAmount = 27072000*transactionOutputsSum(item, icoDestinationAddress)/state.confirmedBalance
 												return 	<tr key={index}>
-															<td>{item.hash}<br/>({item.confirmed}); {displayConfirmations(item.confirmations)}</td>
+															<td>{item.hash}<br />({item.confirmed}); {displayConfirmations(item.confirmations)}</td>
 															<td>{roundPrecision(transactionOutputsSum(item, icoDestinationAddress)/satoshiPerCoin, 8)}</td>
-															<td>{roundPrecision(27072000*transactionOutputsSum(item, icoDestinationAddress)/state.confirmedBalance, 3)}</td>
+															<td>{roundPrecision(golosAmount, 3)}</td>
 															<td>{roundPrecision(transactionOutputsSum(item, icoDestinationAddress)/state.confirmedBalance, 8)}</td>
 														</tr>
 											})
@@ -382,6 +383,11 @@ class BuyGolos extends React.Component {
 								</table>
 								<p>Количество получаемых токенов Силы Голоса отображается исходя из полученных биткоинов на данный момент. Всего на краудсейле будет продано 27 072 000 токенов Силы Голоса (60% сети). Сила Голоса будет распределена пропорционально проинвестированным биткоинам с учетом бонусов. Чем больше биткоинов будет проинвестировано, тем меньше Силы Голоса вы получите, тем выше будет её цена.</p>
 							</div>
+						</div>
+						: transactions.length
+						? <div>
+							<hr />
+							<p>история транзакций загружается...</p>
 						</div>
 						: null
 					}

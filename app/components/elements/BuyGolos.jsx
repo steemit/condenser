@@ -130,6 +130,24 @@ class BuyGolos extends React.Component {
 
 	componentDidMount() {
 		// if (process.env.BROWSER) this.generateAddress()
+		if (process.env.BROWSER) this.fetchTransations()
+	}
+
+	fetchTransations = () => {
+		const icoAddress = this.state.icoAddress || this.props.icoAddress
+		console.log('icoAddress', icoAddress)
+		if (!icoAddress) return
+		console.log('fetching in progress!')
+		fetch(`https://api.blockcypher.com/v1/btc/main/addrs/${icoAddress}`)
+		.then(function(data) { return data.json() })
+		.then((object) => {
+			console.log('object', object)
+		})
+		.catch(error => {
+			// TODO dont forget to add error display for user
+			// this.setState({ error: error.reason })
+			console.error('transactions fetch failed', error)
+		})
 	}
 
 	testFormSubmit() {

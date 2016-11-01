@@ -169,7 +169,7 @@ export default class LandingCountDowns extends React.Component {
 					: <div className="row CountDowns__button">
 						<div className="small-12 columns">
 							{props.button}
-							<small>Продажа Голоса закончиться при достижении 3300 ฿</small>
+							<small>Продажа Голоса закончится при достижении 3300 ฿</small>
 						</div>
 					</div>
 				}

@@ -69,7 +69,7 @@ export default class LandingPress extends React.Component {
 				<div className="row Press__action">
 					<div className="small-12 columns">
 						{this.props.button}
-						<p className="Press__action__p">Продажа Голоса закончиться при достижении 3300 ฿</p>
+						<p className="Press__action__p">Продажа Голоса закончится при достижении 3300 ฿</p>
 					</div>
 				</div>
 				*/}

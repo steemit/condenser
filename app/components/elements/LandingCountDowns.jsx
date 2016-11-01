@@ -16,9 +16,9 @@ export default class LandingCountDowns extends React.Component {
 	}
 
 	state = {
-		currentBonus: '',
 		nextBonus: '',
-		bitcoinsRaised: 0,
+		currentBonus: '',
+		bitcoinsRaised: false,
 		prefill: this.props.prefill,
 		secondsSinceEpoch: Math.round(((new Date()).getTime()) / 1000),
 		crowdSaleIsActive: this.props.crowdsaleStartAt > Date.now(),
@@ -77,9 +77,9 @@ export default class LandingCountDowns extends React.Component {
 		})
 		.then(object => {
 			console.log('object', object)
-			//this.setState({
-			//	bitcoinsRaised: object.currently_raised_full || object.btc_raised || 0
-			//})
+			this.setState({
+				bitcoinsRaised: object.currently_raised_full || object.btc_raised || 0
+			})
 		})
 		.catch(error => {
 			console.error('fetching raized error ', error);
@@ -174,7 +174,12 @@ export default class LandingCountDowns extends React.Component {
 							</div>
 							<div className="small-12 medium-4 columns CountDowns__counter" style={{paddingTop: 40}}>
 								<p style={{marginBottom: 0}}>Собрано биткоинов</p>
-								<strong>{state.bitcoinsRaised} B</strong>
+
+								{
+									state.bitcoinsRaised === false
+									? <strong>загрузка...</strong>
+									: <strong>{state.bitcoinsRaised} B</strong>
+								}
 								<p>
 									<small>Текущий бонус <span className="red"> + {state.currentBonus}%</span></small>
 								</p>

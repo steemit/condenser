@@ -7,6 +7,7 @@ import icoDestinationAddress from 'shared/icoAddress'
 import roundPrecision from 'round-precision'
 // import { crowdsaleStartAt } from '../pages/Landing'
 
+const satoshiPerCoin = 100000000
 // format date properly
 function createDate(year, month, day, hours, minutes) {
 	//const today = new Date()
@@ -61,6 +62,8 @@ export default class LandingCountDowns extends React.Component {
 		nextBonus: '',
 		currentBonus: '',
 		bitcoinsRaised: false,
+		bitcoinsRaisedIncludingUnconfirmed: false,
+		unconfirmedNTx: false,
 		prefill: this.props.prefill,
 		secondsSinceEpoch: Math.round(((new Date()).getTime()) / 1000),
 		crowdSaleIsActive: this.props.crowdsaleStartAt > Date.now(),
@@ -80,14 +83,7 @@ export default class LandingCountDowns extends React.Component {
 	}
 
 	fetchRaized() {
-		// fetch(`https://api.blockcypher.com/v1/btc/main/addrs/${icoDestinationAddress}/balance`)
-		// .then(function(data) { return data.json() })
-		// .then((object) => {
-		// 	console.log("destination address state", object);
-		// 	console.log("current confirmed balance", object.final_balance)
-		//
-		// })
-		fetch('https://cyber.fund/api03/crowdsale/Golos', {
+		fetch(`https://api.blockcypher.com/v1/btc/main/addrs/${icoDestinationAddress}/balance`, {
 			})
 		.then((resp) => {
 			console.log(resp)
@@ -99,9 +95,13 @@ export default class LandingCountDowns extends React.Component {
 		  }
 		})
 		.then(object => {
+			const raised = object.balance;
+			const raisedWithUnconfirmed = object.final_balance
 			console.log('object', object)
 			this.setState({
-				bitcoinsRaised: roundPrecision(object.metrics.currently_raised || object.metrics.currently_raised_full.Bitcoin || 0, 4)
+				bitcoinsRaised: raised / satoshiPerCoin,
+				bitcoinsRaisedIncludingUnconfirmed: raisedWithUnconfirmed / satoshiPerCoin,
+				unconfirmedNTx: object.unconfirmed_n_tx || 0
 			})
 		})
 		.catch(error => {
@@ -153,6 +153,7 @@ export default class LandingCountDowns extends React.Component {
 		function calculateBlock(current_time) {
 		  return Math.round((current_time - (1476789457)) / 3);
 		}
+
 		return (
 			<section className="CountDowns" id="CountDowns">
 				{/* HEADERS */}
@@ -213,6 +214,11 @@ export default class LandingCountDowns extends React.Component {
 									</div>
 									: null
 								}
+								{
+									state.bitcoinsRaised !== state.bitcoinsRaisedIncludingUnconfirmed
+									? <span style={{display:'block'}}>({state.bitcoinsRaisedIncludingUnconfirmed} включая {state.unconfirmedNTx} неподтвержденных транзакций)</span> : null
+								}
+
 								<p>
 									<small>Текущий бонус <span className="red"> + {state.currentBonus}%</span></small>
 								</p>

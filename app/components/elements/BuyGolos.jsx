@@ -14,7 +14,10 @@ import o2j from 'shared/clash/object2json'
 import { calculateCurrentStage, currentStage } from '../elements/LandingCountDowns.jsx';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Tooltip from 'app/components/elements/Tooltip';
+import roundPrecision from 'round-precision'
 //import {test as o2jtest} from 'shared/clash/object2json'
+
+const satoshiPerCoin=100000000;
 
 import icoDestinationAddress from 'shared/icoAddress'
 /*
@@ -24,7 +27,36 @@ import icoDestinationAddress from 'shared/icoAddress'
 	Если пользователь находится НЕ на своей странице, то отобразить предыдущие транзакции, если они есть.
 */
 
+// filters blockcypher transactions to include only these where destination is crowdsale addresses
+// fulllResponse - blockcypher return from address/<>/full query
+// source address - user address where he sends Btc
+// destiation address ico multisig address
+function getFilteredTransactions(fullResponse, sourceAddress, destinationAddress) {
+	const ret=  filter(fullResponse.txs, tx => {
+		return includes(tx.addresses, destinationAddress)
+		&& includes(tx.addresses, sourceAddress) && !tx.double_spend;
+	});
+	return ret;
+}
 
+// returns received by crowdsale amount in satoshis within single transaction
+function transactionOutputsSum(tx, destinationAddress) {
+	const interestingOutputs = filter(tx.outputs, output => {
+			return includes( output.addresses, destinationAddress)});
+	let satoshiDestinationReceived = 0
+	interestingOutputs.forEach(output => satoshiDestinationReceived+=output.value)
+	return satoshiDestinationReceived;
+}
+
+function displayConfirmations(nConf) {
+	if (nConf == 0) return <span style={{color:'red'}}> транзакция не подтверждена </span>;
+	if (nConf == 1) return <span style={{color:'red'}}> 1 подтверждение </span>;
+	if (nConf == 2) return <span style={{color:'red'}}> 2 подтверждения </span>;
+	if (nConf == 3) return <span style={{color:'green'}}> 3 подтверждения </span>;
+	if (nConf == 4) return <span style={{color:'green'}}> 4 подтверждения </span>;
+	if (nConf == 5) return <span style={{color:'green'}}> 5 подтверждений </span>;
+	return <span> транзакция подтверждена </span>;
+}
 
 class BuyGolos extends React.Component {
 
@@ -37,6 +69,10 @@ class BuyGolos extends React.Component {
 		checkboxClicked0: false,
 		checkboxClicked1: false,
 		checkboxClicked2: false,
+		confirmedBalance: false,
+		balanceIncludingUnconfirmed: false,
+		unconfirmedBalanceOnly: false,
+		unconfirmedTxsCount: false,
 	}
 
 	handleCheckBoxClick(checkboxNumber, e) {
@@ -139,41 +175,29 @@ class BuyGolos extends React.Component {
 		console.log('icoAddress', icoAddress)
 		if (!icoAddress) return
 		console.log('fetching in progress!')
-		fetch(`https://api.blockcypher.com/v1/btc/main/addrs/${icoAddress}/full`)
+		fetch(`https://api.blockcypher.com/v1/btc/main/addrs/${icoAddress}/full?confirmations=0`)
 		.then(function(data) { return data.json() })
-		.then((object) => {
-			console.log('icoAddressTrans', object)
-			this.setState({
-				transactions: object.txs
-			})
-			// only txs where ico destination appears
-			let interestingTxs = filter(object.txs, tx =>
-			  tx.addresses.includes(icoDestinationAddress) &&   //tx.inputs.addresses.includes(icoAddress) &&
- 				!tx.double_spend);
-			console.log("transactions we want to display", interestingTxs);
-			interestingTxs.forEach( tx => {
-				console.log("tx received at", tx.received)
-				console.log("tx confirmed at", tx.confirmed)
-				let interestingOutputs = filter(tx.outputs, output => output.addresses.includes(icoDestinationAddress))
-				console.log("outputs we re interested in", interestingOutputs)
-
-				//one could use array.map here. i m too old for this.
-				let satoshiDestinationReceived = 0
-				interestingOutputs.forEach(output => satoshiDestinationReceived+=output.value)
-				console.log(` this tx resulted in ${satoshiDestinationReceived} more satoshis raized by crowdsale` );
-			})
+		.then((txObject) => {
+			console.log('icoAddressTrans', txObject)
+			this.setState({	transactions:  getFilteredTransactions(txObject,
+					icoAddress, icoDestinationAddress) });
 		})
 		.catch(error => {
 			// TODO dont forget to add error display for user
 			// this.setState({ error: error.reason })
 			console.error('transactions fetch failed', error)
-		})
+		});
+
+
 		fetch(`https://api.blockcypher.com/v1/btc/main/addrs/${icoDestinationAddress}/balance`)
 		.then(function(data) { return data.json() })
-		.then((object) => {
-			console.log("destination address state", object);
-			console.log("current confirmed balance", object.final_balance)
-
+		.then((icoBalanceObject) => {
+			this.setState({
+				confirmedBalance: icoBalanceObject.balance,
+				balanceIncludingUnconfirmed: icoBalanceObject.final_balance,
+				unconfirmedBalanceOnly: icoBalanceObject.unconfirmed_balance,
+				unconfirmedTxsCount: icoBalanceObject.unconfirmed_n_tx
+			})
 		})
 		.catch(error => {
 			// TODO dont forget to add error display for user
@@ -331,7 +355,7 @@ class BuyGolos extends React.Component {
 
 					{/* TRANSACTION HISTORY */}
 					{
-						transactions.length
+						transactions.length && state.confirmedBalance
 						? <div className="row">
 							<div className="column small-12">
 								<table>
@@ -339,18 +363,19 @@ class BuyGolos extends React.Component {
 										<tr>
 											<th width="200">ID Транзакции</th>
 											<th width="100">Перечислено биткоинов</th>
-											<th width="150">Вы получите</th>
+											<th width="150">Вы получите Голосов</th>
 											<th width="50">Доля в Сети</th>
 										</tr>
 									</thead>
 									<tbody>
 										{
 											transactions.map((item, index) => {
+												const golosAmount = 27072000*transactionOutputsSum(item, icoDestinationAddress)/state.confirmedBalance
 												return 	<tr key={index}>
-															<td>{item.hash}</td>
-															<td>{item.amountBtc}</td>
-															<td>будет подсчитана позже</td>
-															<td>будет подсчитана позже</td>
+															<td>{item.hash}<br />({item.confirmed}); {displayConfirmations(item.confirmations)}</td>
+															<td>{roundPrecision(transactionOutputsSum(item, icoDestinationAddress)/satoshiPerCoin, 8)}</td>
+															<td>{roundPrecision(golosAmount, 3)}</td>
+															<td>{roundPrecision(transactionOutputsSum(item, icoDestinationAddress)/state.confirmedBalance, 8)}</td>
 														</tr>
 											})
 										}
@@ -358,6 +383,11 @@ class BuyGolos extends React.Component {
 								</table>
 								<p>Количество получаемых токенов Силы Голоса отображается исходя из полученных биткоинов на данный момент. Всего на краудсейле будет продано 27 072 000 токенов Силы Голоса (60% сети). Сила Голоса будет распределена пропорционально проинвестированным биткоинам с учетом бонусов. Чем больше биткоинов будет проинвестировано, тем меньше Силы Голоса вы получите, тем выше будет её цена.</p>
 							</div>
+						</div>
+						: transactions.length
+						? <div>
+							<hr />
+							<p>история транзакций загружается...</p>
 						</div>
 						: null
 					}

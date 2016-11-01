@@ -479,12 +479,13 @@
 	h3 { margin-bottom: 50px; }
 	.Partners__law {
 		margin-bottom: 65px;
-		img { margin-top: 30px; }
-		// .Partners__law__h3 { margin-bottom: 50px; }
+		img {
+			margin-top: 30px;
+			max-height: 85px;
+		}
 	}
 	.Partners__info {
 		margin-bottom: 65px;
-		// h3 { margin-bottom: 40px; }
 		img { width: 160px; }
 	}
 	.Partners__skolkovo-logo { transform: translateY(-17%); }

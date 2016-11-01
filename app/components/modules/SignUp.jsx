@@ -98,11 +98,6 @@ class SignUp extends React.Component {
             </div>*/}
             <div className="row">
                 <div className="column">
-                      <br />
-                <i>Возможность регистрации через Facebook и другие социальные ожидается в ближайшее время.</i>
-            </div></div>
-            <div className="row">
-                <div className="column">
                     <br />
                     <p className="secondary">
                         {translate("by_verifying_you_agree")}

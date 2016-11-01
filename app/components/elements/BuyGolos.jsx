@@ -41,12 +41,21 @@ function getFilteredTransactions(fullResponse, sourceAddress, destinationAddress
 
 // returns received by crowdsale amount in satoshis within single transaction
 function transactionOutputsSum(tx, destinationAddress) {
-
 	const interestingOutputs = filter(tx.outputs, output => {
 			return includes( output.addresses, destinationAddress)});
 	let satoshiDestinationReceived = 0
 	interestingOutputs.forEach(output => satoshiDestinationReceived+=output.value)
 	return satoshiDestinationReceived;
+}
+
+function displayConfirmations(nConf) {
+	if (nConf == 0) return <span style={{color:'red'}}> транзакция не подтверждена </span>;
+	if (nConf == 1) return <span style={{color:'red'}}> 1 подтверждение </span>;
+	if (nConf == 2) return <span style={{color:'red'}}> 2 подтверждения </span>;
+	if (nConf == 3) return <span style={{color:'green'}}> 3 подтверждения </span>;
+	if (nConf == 4) return <span style={{color:'green'}}> 4 подтверждения </span>;
+	if (nConf == 5) return <span style={{color:'green'}}> 5 подтверждений </span>;
+	return <span> транзакция подтверждена </span>;
 }
 
 class BuyGolos extends React.Component {
@@ -362,13 +371,7 @@ class BuyGolos extends React.Component {
 										{
 											transactions.map((item, index) => {
 												return 	<tr key={index}>
-															<td>{item.hash}<br/>({
-																item.confirmed}); {
-																item.confirmations >= 8
-																? 'транзакция подтверждена'
-																: 'транзакция пока не подтверждена'
-															}
-															</td>
+															<td>{item.hash}<br/>({item.confirmed}); {displayConfirmations(item.confirmations)}</td>
 															<td>{roundPrecision(transactionOutputsSum(item, icoDestinationAddress)/satoshiPerCoin, 8)}</td>
 															<td>{roundPrecision(27072000*transactionOutputsSum(item, icoDestinationAddress)/state.confirmedBalance, 3)}</td>
 															<td>{roundPrecision(transactionOutputsSum(item, icoDestinationAddress)/state.confirmedBalance, 8)}</td>

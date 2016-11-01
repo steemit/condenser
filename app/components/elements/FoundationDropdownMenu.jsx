@@ -3,9 +3,10 @@ import Icon from 'app/components/elements/Icon';
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
 import VerticalMenu from 'app/components/elements/VerticalMenu';
 
-const FoundationDropdownMenu = ({menu, icon, label, dropdownPosition, dropdownAlignment}) => {
+const FoundationDropdownMenu = ({menu, icon, label, dropdownPosition, dropdownAlignment, className}) => {
     return <LinkWithDropdown
         closeOnClickOutside
+        dropdownClassName={className}
         dropdownPosition={dropdownPosition}
         dropdownAlignment={dropdownAlignment}
         dropdownContent={

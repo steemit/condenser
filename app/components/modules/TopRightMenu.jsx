@@ -31,12 +31,12 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
     const reset_password_link = `/@${username}/password`;
     if (loggedIn) { // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!
         const user_menu = [
-            {link: feed_link, value: 'Feed', addon: <NotifiCounter name="feed" />},
+            {link: feed_link, value: 'Feed', addon: <NotifiCounter fields="feed" />},
             {link: account_link, value: 'Blog'},
             {link: comments_link, value: 'Comments'},
-            {link: replies_link, value: 'Replies', addon: <NotifiCounter name="comment_reply" />},
-            {link: wallet_link, value: 'Wallet', addon: <NotifiCounter name="transfer" />},
-            {link: reset_password_link, value: 'Change Password', addon: <NotifiCounter name="key_update" />},
+            {link: replies_link, value: 'Replies', addon: <NotifiCounter fields="comment_reply" />},
+            {link: wallet_link, value: 'Wallet', addon: <NotifiCounter fields="follow,send,receive,account_update" />},
+            {link: reset_password_link, value: 'Change Password'},
             loggedIn ?
                 {link: '#', onClick: logout, value: 'Logout'} :
                 {link: '#', onClick: showLogin, value: 'Login'}
@@ -57,7 +57,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                         <a href={account_link} title={username} onClick={e => e.preventDefault()}>
                             <img src={userpic_src} width="36" height="36" />
                         </a>
-                        <div className="TopRightMenu__notificounter"><NotifiCounter name="total" /></div>
+                        <div className="TopRightMenu__notificounter"><NotifiCounter fields="total" /></div>
                     </li>}
                 </LinkWithDropdown>
                 {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>

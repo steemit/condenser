@@ -15,7 +15,7 @@ const defaultState = Map({
         follow: 0,
         vote: 0,
         reply: 0,
-        key_update: 0,
+        account_update: 0,
         message: 0,
         receive: 0
     }

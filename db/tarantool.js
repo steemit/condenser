@@ -5,7 +5,7 @@ let instance = null;
 class Tarantool {
     constructor() {
         console.log('-- Tarantool.constructor -->');
-        const connection = this.connection = new TarantoolDriver({port: 3301});
+        const connection = this.connection = new TarantoolDriver({port: 4301});
         this.ready_promise = new Promise((resolve, reject) => {
             connection.connect()
             .then(() => connection.auth('guest', ''))

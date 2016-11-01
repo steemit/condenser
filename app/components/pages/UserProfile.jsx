@@ -111,11 +111,14 @@ export default class UserProfile extends React.Component {
 
         let rewardsClass = "";
         if( section === 'transfers' ) {
-            tab_content = <UserWallet global={this.props.global}
+            tab_content = <div>
+                <UserWallet global={this.props.global}
                           account={account}
                           showTransfer={this.props.showTransfer}
                           current_user={current_user}
                           withdrawVesting={this.props.withdrawVesting} />
+                {isMyAccount && <div><MarkNotificationRead fields="send,receive" account={account.name} /></div>}
+                </div>;
         }
         else if( section === 'curation-rewards' ) {
             rewardsClass = "active";
@@ -138,7 +141,7 @@ export default class UserProfile extends React.Component {
                           title="Followers"
                           account={account}
                           users={followers} />
-                    {isMyAccount && <MarkNotificationRead nn="follow" account={account.name} />}
+                    {isMyAccount && <MarkNotificationRead fields="follow" account={account.name} />}
                     </div>
             }
         }
@@ -209,11 +212,14 @@ export default class UserProfile extends React.Component {
                   category="recent_replies"
                   loadMore={this.loadMore}
                   showSpam={false} />
-                  {isMyAccount && <MarkNotificationRead nn="comment_reply" account={account.name} />}
+                  {isMyAccount && <MarkNotificationRead fields="comment_reply" account={account.name} />}
               </div>;
         }
         else if( section === 'permissions' && isMyAccount ) {
-            tab_content = <UserKeys account={accountImm} />
+            tab_content = <div>
+                <UserKeys account={accountImm} />
+                {isMyAccount && <MarkNotificationRead fields="account_update" account={account.name} />}
+                </div>;
         } else if( section === 'password' ) {
             tab_content = <PasswordReset account={accountImm} />
         } else {
@@ -244,7 +250,7 @@ export default class UserProfile extends React.Component {
                 <ul className="menu" style={{flexWrap: "wrap"}}>
                     <li><Link to={`/@${accountname}`} activeClassName="active">Blog</Link></li>
                     <li><Link to={`/@${accountname}/comments`} activeClassName="active">Comments</Link></li>
-                    <li><Link to={`/@${accountname}/recent-replies`} activeClassName="active">Replies</Link></li>
+                    <li><Link to={`/@${accountname}/recent-replies`} activeClassName="active">Replies <NotifiCounter fields="comment_reply"/></Link></li>
                     {/*<li><Link to={`/@${accountname}/feed`} activeClassName="active">Feed</Link></li>*/}
                     <li>
                         <LinkWithDropdown
@@ -266,8 +272,12 @@ export default class UserProfile extends React.Component {
             </div>
             <div className="columns shrink">
                 <ul className="menu" style={{flexWrap: "wrap"}}>
-                    <li><Link to={`/@${accountname}/transfers`} activeClassName="active">Wallet</Link></li>
-                    {wallet_tab_active && isMyAccount && <li><Link to={`/@${account.name}/permissions`} activeClassName="active">Permissions</Link></li>}
+                    <li><Link to={`/@${accountname}/transfers`} activeClassName="active">
+                        Wallet <NotifiCounter fields="send,receive"/>
+                    </Link></li>
+                    {isMyAccount && <li><Link to={`/@${account.name}/permissions`} activeClassName="active">
+                        Permissions <NotifiCounter fields="account_update"/>
+                    </Link></li>}
                     {wallet_tab_active && isMyAccount && <li><Link to={`/@${account.name}/password`} activeClassName="active">Password</Link></li>}
                 </ul>
             </div>
@@ -288,8 +298,8 @@ export default class UserProfile extends React.Component {
 
                         <div>
                             <div className="UserProfile__stats">
-                                <span><Link to={`/@${accountname}/followers`}>{followerCount} followers</Link>
-                                    &nbsp; {isMyAccount && <NotifiCounter name="follow" />}
+                                <span>
+                                    <Link to={`/@${accountname}/followers`}>{followerCount} followers {isMyAccount && <NotifiCounter fields="follow" />}</Link>
                                 </span>
                                 <span>{account.post_count} posts</span>
                                 <span><Link to={`/@${accountname}/followed`}>{followingCount} followed</Link></span>

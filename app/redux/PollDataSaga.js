@@ -11,7 +11,7 @@ const wait = ms => (
 
 function* pollData() {
     while(true) {
-        yield call(wait, 30000);
+        yield call(wait, 10000);
 
         const username = yield select(state => state.user.getIn(['current', 'username']));
         if (username) {

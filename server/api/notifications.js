@@ -14,7 +14,7 @@ export default function useNotificationsApi(app) {
     // get all notifications for account
     router.get('/notifications/:account', function *() {
         // for debugging:
-        // this.body = [10, 1, 2, 3, 4, 0, 0, 0, 0, 0, 0];
+        // this.body = [254, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 0, 0, 0 ];
         // return;
         const account = this.params.account;
         // TODO: make sure account name matches session
@@ -31,19 +31,25 @@ export default function useNotificationsApi(app) {
     });
 
     // mark account's notification as read
-    router.put('/notifications/:account/:id', function *() {
-        const {account, id} = this.params;
-        if (!id || id < 0) {
+    router.put('/notifications/:account/:ids', function *() {
+        const {account, ids} = this.params;
+        if (!ids) {
             this.body = []; return;
         }
+        const fields = ids.split('-');
         // for debugging:
-        // this.body = [10, 1, 2, 3, 4, 0, 0, 0, 0, 0, 0];
-        // this.body[0] = this.body[0] - this.body[id];
-        // this.body[id] = 0;
+        // this.body = [254, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 0, 0, 0 ];
+        // for(const id of fields) {
+        //     this.body[0] = this.body[0] - this.body[id];
+        //     this.body[id] = 0;
+        // }
         // return;
         console.log('-- PUT /notifications/:account/:id -->', account, id);
         try {
-            const res = yield Tarantool.instance().call('notification_read', account, id);
+            let res;
+            for(const id of fields) {
+                res = yield Tarantool.instance().call('notification_read', account, id);
+            }
             this.body = toResArray(res);
         } catch (error) {
             console.error('-- /notifications/:account/:id error -->', error.message);

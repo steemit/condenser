@@ -76,7 +76,7 @@ class PostsIndex extends React.Component {
                     <Link to="/trending">Explore Steemit</Link><br />
                     <a href="/steemit/@thecryptofiend/the-missing-faq-a-beginners-guide-to-using-steemit">Read The Beginner's Guide</a>
                 </div>;
-                markNotificationRead = <MarkNotificationRead nn="feed" account={account_name} />
+                markNotificationRead = <MarkNotificationRead fields="feed" account={account_name} />
             } else {
                 emptyText = `Looks like ${account_name} hasn't followed anything yet!`;
             }

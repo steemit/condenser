@@ -5,7 +5,7 @@ import {markNotificationRead} from 'app/utils/ServerApiClient';
 class MarkNotificationRead extends React.Component {
 
     static propTypes = {
-        nn: React.PropTypes.string,
+        fields: React.PropTypes.string,
         account: React.PropTypes.string,
         update: React.PropTypes.func
     };
@@ -15,8 +15,9 @@ class MarkNotificationRead extends React.Component {
     }
 
     componentDidMount() {
-        const {account, nn, update} = this.props;
-        markNotificationRead(account, nn).then(nc => update(nc));
+        const {account, fields, update} = this.props;
+        const fields_array = fields.replace(/\s/g,'').split(',');
+        markNotificationRead(account, fields_array).then(nc => update(nc));
     }
 
     render() {

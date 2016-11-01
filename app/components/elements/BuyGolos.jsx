@@ -239,7 +239,7 @@ class BuyGolos extends React.Component {
 									<label htmlFor="checkbox1">
 										<input onClick={this.handleCheckBoxClick.bind(this, 0)} id="checkbox1" type="checkbox" disabled={loading} />
 										Я прочитал и ознакомлен с условиями сообщества описанными в документе: <br />
-										<span style={{marginLeft: 20}}>Голос: <a href="https://wiki.golos.io/1-introduction/golos_whitepaper.html">Русскоязычная социально-медийная блокчейн-платформа</a></span>
+										<span style={{marginLeft: 20}}>Голос: <a href="https://golos.io/ru--golos/@golos/golos-russkoyazychnaya-socialno-mediinaya-blokchein-platforma">Русскоязычная социально-медийная блокчейн-платформа</a></span>
 									</label>
 									{
 										state.checkboxClicked0

@@ -232,7 +232,7 @@ export default class LandingCountDowns extends React.Component {
 						</div>
 					: 	<div className="row CountDowns__links">
 							<div className="small-12 medium-6 columns text-left">
-								<a href="https://wiki.golos.io/1-introduction/golos_whitepaper.html" target="blank" className="CountDowns__button_small">White Paper</a>
+								<a href="https://golos.io/ru--golos/@golos/golos-russkoyazychnaya-socialno-mediinaya-blokchein-platforma" target="blank" className="CountDowns__button_small">White Paper</a>
 								<a href="https://wiki.golos.io/5-development/roadmap.html" target="blank" className="CountDowns__button_small">Дорожная карта</a>
 							</div>
 							<div className="small-12 medium-6 columns text-right CountDowns__social-links">

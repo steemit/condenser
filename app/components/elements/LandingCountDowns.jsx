@@ -3,8 +3,48 @@ import CountDown from 'app/components/elements/CountDown'
 import Icon from 'app/components/elements/Icon'
 import {APP_ICON} from 'config/client_config'
 import 'whatwg-fetch';
+// import { crowdsaleStartAt } from '../pages/Landing'
+
+// format date properly
+function createDate(year, month, day, hours, minutes) {
+	//const today = new Date()
+	//const mins = (minutes == 0 || !minutes) ? 0 : today.getMinutes()
+	const date = new Date(Date.UTC(year, month, day, hours || 0, minutes || 0, 0));
+	return date
+}
+
+export const blockchainStartAt = createDate(2016, 9, 18, 11, 0)
+export const crowdsaleStartAt = createDate(2016, 10, 1, 11, 0)
+export const crowdsaleEndAt = createDate(2016, 11, 1, 11, 0)
 
 const stages = [25, 20, 15, 10, 5, 0]
+
+export function addDays(days) {
+	const result = new Date(crowdsaleStartAt)
+	result.setDate(result.getDate() + days)
+	return result
+}
+
+// dates are calculated based on props.crowdsaleStartAt variable
+const dates = [
+		{ date: addDays(15), bonus: 25 },
+		{ date: addDays(18), bonus: 20 },
+		{ date: addDays(21), bonus: 15 },
+		{ date: addDays(24), bonus: 10 },
+		{ date: addDays(27), bonus: 5 },
+		{ date: addDays(18), bonus: 0 }
+	]
+
+export function calculateCurrentStage() {
+	if (crowdsaleStartAt < addDays(15)) return stages[0]
+	else if (crowdsaleStartAt < addDays(18)) return stages[1]
+	else if (crowdsaleStartAt < addDays(21)) return stages[2]
+	else if (crowdsaleStartAt < addDays(24)) return stages[3]
+	else if (crowdsaleStartAt < addDays(27)) return stages[4]
+	return stages[5]
+}
+
+export const currentStage = dates.find((item) => item.bonus == calculateCurrentStage())
 
 export default class LandingCountDowns extends React.Component {
 
@@ -25,38 +65,11 @@ export default class LandingCountDowns extends React.Component {
 	}
 
 	componentDidMount() {
-		const currentBonus = this.calculateCurrentStage()
+		const currentBonus = calculateCurrentStage()
 		this.setState({
 			currentBonus,
 			nextBonus: currentBonus != 0 ? currentBonus - 5 : 0
 		})
-	}
-
-	addDays = days => {
-		const result = new Date(this.props.crowdsaleStartAt)
-		result.setDate(result.getDate() + days)
-		return result
-	}
-
-	// dates are calculated based on props.crowdsaleStartAt variable
-	dates = [
-		{ date: this.addDays(15), bonus: 25 },
-		{ date: this.addDays(18), bonus: 20 },
-		{ date: this.addDays(21), bonus: 15 },
-		{ date: this.addDays(24), bonus: 10 },
-		{ date: this.addDays(27), bonus: 5 },
-		{ date: this.addDays(18), bonus: 0 }
-	]
-
-	calculateCurrentStage = () => {
-		const {crowdsaleStartAt} = this.props
-
-		if (crowdsaleStartAt < this.addDays(15)) return stages[0]
-		else if (crowdsaleStartAt < this.addDays(18)) return stages[1]
-		else if (crowdsaleStartAt < this.addDays(21)) return stages[2]
-		else if (crowdsaleStartAt < this.addDays(24)) return stages[3]
-		else if (crowdsaleStartAt < this.addDays(27)) return stages[4]
-		return stages[5]
 	}
 
 	updateTime = () => {
@@ -103,8 +116,8 @@ export default class LandingCountDowns extends React.Component {
 
 	render() {
 		const {state, props} = this
-		const currentStage = this.dates.find((item) => item.bonus == this.calculateCurrentStage())
-		const previousStage = this.dates.find((item) => item.bonus < this.calculateCurrentStage())
+		const currentStage = dates.find((item) => item.bonus == calculateCurrentStage())
+		const previousStage = dates.find((item) => item.bonus < calculateCurrentStage())
 
 		function strSplice(str1, str2, location) {
 		  return str1.slice(0, location) + str2 + str1.slice(location, str1.length);
@@ -123,7 +136,6 @@ export default class LandingCountDowns extends React.Component {
 		function calculateBlock(current_time) {
 		  return Math.round((current_time - (1476789457)) / 3);
 		}
-
 		return (
 			<section className="CountDowns" id="CountDowns">
 				{/* HEADERS */}

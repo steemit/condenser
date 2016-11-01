@@ -11,6 +11,9 @@ import { translate, translateHtml } from '../../Translator';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import ClipboardIcon from 'react-clipboard-icon'
 import o2j from 'shared/clash/object2json'
+import { calculateCurrentStage, currentStage } from '../elements/LandingCountDowns.jsx';
+import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
+import Tooltip from 'app/components/elements/Tooltip';
 //import {test as o2jtest} from 'shared/clash/object2json'
 
 /*
@@ -36,15 +39,10 @@ class BuyGolos extends React.Component {
 	}
 
 	handleCheckBoxClick(checkboxNumber, e) {
-		// return
 		// e.preventDefault()
-		console.log('checkboxNumber', checkboxNumber)
 		const checkboxIdentifier = 'checkboxClicked' + checkboxNumber
 		const checkbox = this.state[checkboxIdentifier]
-		// checkboxesClicked[checkboxNumber] = !checkbox
-		// console.log('checkboxesClicked', checkboxesClicked)
 		this.setState({ [checkboxIdentifier]: !checkbox })
-		// this.generateAddress()
 	}
 
 	generateAddress = event => {
@@ -55,8 +53,6 @@ class BuyGolos extends React.Component {
 		// 	console.log('true', true)
 		// 	return item === true
 		// }
-		// console.log('this.state.checkboxesClicked.every(isTrue)', this.state.checkboxesClicked.every(isTrue))
-		console.log('!(checkboxClicked0, checkboxClicked1, checkboxClicked2)', !(checkboxClicked0, checkboxClicked1, checkboxClicked2))
 		if (!(checkboxClicked0, checkboxClicked1, checkboxClicked2)) {
 			console.log('error will occure')
 			this.setState({
@@ -108,13 +104,6 @@ class BuyGolos extends React.Component {
 			})
 			console.error('address generation failed', error)
 		})
-
-		// setTimeout(() => {
-		// 	this.setState({
-		// 		loading: false,
-		// 		transactions: []
-		// 	})
-		// }, 2000);
 	}
 
 	removeIco = () => {
@@ -197,7 +186,7 @@ class BuyGolos extends React.Component {
 									<label htmlFor="checkbox1">
 										<input onClick={this.handleCheckBoxClick.bind(this, 0)} id="checkbox1" type="checkbox" disabled={loading} />
 										Я прочитал и ознакомлен с условиями сообщества описанными в документе: <br />
-										Голос: <a href="https://wiki.golos.io/1-introduction/golos_whitepaper.html">Русскоязычная социально-медийная блокчейн-платформа</a>
+										<span style={{marginLeft: 20}}>Голос: <a href="https://wiki.golos.io/1-introduction/golos_whitepaper.html">Русскоязычная социально-медийная блокчейн-платформа</a></span>
 									</label>
 									{
 										state.checkboxClicked0
@@ -260,15 +249,20 @@ class BuyGolos extends React.Component {
 											<th className="text-center" width="150">Минимальная Покупка</th>
 											<th className="text-center" width="150">Максимальная Покупка</th>
 											<th className="text-center" width="100">Текущий Бонус</th>
-											<th className="text-center" width="100">До уменьшения бонуса</th>
+											<th className="text-center" width="100">Бонус уменьшится</th>
 										</tr>
 									</thead>
 									<tbody>
 									<tr>
 										<td>0.001 биткоина</td>
 										<td>100 биткоинов</td>
-										<td>25%</td>
-										<td>25 дней</td>
+										<td>{calculateCurrentStage()}%</td>
+										<td>
+										<Tooltip t={new Date(currentStage.date).toLocaleString()}>
+											<span className="TimeAgo"><TimeAgoWrapper date={currentStage.date} /></span>
+										</Tooltip>
+										</td>
+										{/* 25 дней */}
 									</tr>
 									</tbody>
 								</table>

@@ -192,6 +192,7 @@ class BuyGolos extends React.Component {
 		fetch(`https://api.blockcypher.com/v1/btc/main/addrs/${icoDestinationAddress}/balance`)
 		.then(function(data) { return data.json() })
 		.then((icoBalanceObject) => {
+			console.log('icoBalanceObject.balance', icoBalanceObject.balance)
 			this.setState({
 				confirmedBalance: icoBalanceObject.balance,
 				balanceIncludingUnconfirmed: icoBalanceObject.final_balance,
@@ -370,12 +371,12 @@ class BuyGolos extends React.Component {
 									<tbody>
 										{
 											transactions.map((item, index) => {
-												const golosAmount = 27072000*transactionOutputsSum(item, icoDestinationAddress)/state.confirmedBalance
+												const golosAmount = 43306176*transactionOutputsSum(item, icoDestinationAddress)/state.confirmedBalance
 												return 	<tr key={index}>
 															<td>{item.hash}<br />({item.confirmed}); {displayConfirmations(item.confirmations)}</td>
 															<td>{roundPrecision(transactionOutputsSum(item, icoDestinationAddress)/satoshiPerCoin, 8)}</td>
 															<td>{roundPrecision(golosAmount, 3)}</td>
-															<td>{roundPrecision(transactionOutputsSum(item, icoDestinationAddress)/state.confirmedBalance, 8) + ' %'}</td>
+															<td>{roundPrecision(transactionOutputsSum(item, icoDestinationAddress)/state.confirmedBalance, 6) + '%'}</td>
 														</tr>
 											})
 										}

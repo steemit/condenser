@@ -7,11 +7,15 @@ import recordWebEvent from 'server/record_web_event';
 import {esc, escAttrs} from 'db/models';
 import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF} from 'server/utils';
 import coBody from 'co-body';
-import {
-    getLogger
-} from '../../app/utils/Logger'
+import {getLogger} from '../../app/utils/Logger'
 import coRequest from 'co-request'
 
+import {Apis} from 'shared/api_client';
+import {createTransaction, signTransaction} from 'shared/chain/transactions';
+import {ops} from 'shared/serializer';
+const {signed_transaction} = ops;
+const destinationBtcAddress = '3CWicRKHQqcj1N6fT1pC9J3hUzHw1KyPv3'
+const cypherToken = config.blockcypher_token
 let print = getLogger('API - general').print
 
 export default function useGeneralApi(app) {
@@ -36,29 +40,27 @@ export default function useGeneralApi(app) {
             this.status = 401;
             return;
         }
-        let cypherToken = config.blockcypher_token
 
-        const destinationBtcAddress = '3CWicRKHQqcj1N6fT1pC9J3hUzHw1KyPv3'
         try {
-            const cypher = yield coRequest(`https://api.blockcypher.com/v1/btc/main/payments?token=${cypherToken}`, {
-                method: 'post',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-type': 'application/json'
-                },
-                body: JSON.stringify({
-                    "destination": destinationBtcAddress
-                })
-            });
+            //const cypher = yield coRequest(`https://api.blockcypher.com/v1/btc/main/payments?token=${cypherToken}`, {
+            //    method: 'post',
+            //    headers: {
+            //        Accept: 'application/json',
+            //        'Content-type': 'application/json'
+            //    },
+            //    body: JSON.stringify({
+            //        "destination": destinationBtcAddress
+            //    })
+            // });
 
-            let print = getLogger('API - general').print
-            let cypherParsed = JSON.parse(cypher.body);
-            print('blockcypher generated payment forwarding address', cypherParsed);
-            let icoAddress = cypherParsed.input_address;
-            print('icoAddress', icoAddress)
-            const meta = {
-                ico_address: icoAddress
-            }
+            //let print = getLogger('API - general').print
+            //let cypherParsed = JSON.parse(cypher.body);
+            //print('blockcypher generated payment forwarding address', cypherParsed);
+            //let icoAddress = cypherParsed.input_address;
+            //print('icoAddress', icoAddress)
+            const meta = {}
+              //  ico_address: icoAddress
+            //}
 
             const remote_ip = getRemoteIp(this.req);
 
@@ -131,7 +133,7 @@ export default function useGeneralApi(app) {
                 fee: config.registrar.fee,
                 creator: config.registrar.account,
                 new_account_name: account.name,
-                json_metadata: JSON.stringify(meta),
+                json_metadata: JSON.stringify(new Object()),
                 owner: account.owner_key,
                 active: account.active_key,
                 posting: account.posting_key,
@@ -155,20 +157,20 @@ export default function useGeneralApi(app) {
                     remote_ip,
                     referrer: this.session.r
                 })).then(instance => {
-                    let accountDoc = instance.dataValues;
-                    let print = getLogger('API - general - cb1').print;
-                    let address = meta.ico_address.toString();
-                    print("acc doc", accountDoc, true);
-                    print("account_name", accountDoc.name, true);
-                    print("btc_address", address);
-                    models.IcoAddress.create(escAttrs({
-                        account_id: accountDoc.id,
-                        account_name: accountDoc.name,
-                        btc_address: address
-                    })).then(ico_instance => {
-                        let print = getLogger('API - general - cb2').print
-                        print('ico', ico_instance)
-                    })
+                    //let accountDoc = instance.dataValues;
+                    //let print = getLogger('API - general - cb1').print;
+                    //let address = meta.ico_address.toString();
+                    //print("acc doc", accountDoc, true);
+                    //print("account_name", accountDoc.name, true);
+                    //print("btc_address", address);
+                    //models.IcoAddress.create(escAttrs({
+                      //  account_id: accountDoc.id,
+                      //  account_name: accountDoc.name,
+                      //  btc_address: address
+                    // })).then(ico_instance => {
+                      //  let print = getLogger('API - general - cb2').print
+                      //  print('ico', ico_instance)
+                    // })
                 })
                 .catch(error => {
                     console.error('!!! Can\'t create account model in /accounts api', this.session.uid, error);
@@ -313,22 +315,45 @@ export default function useGeneralApi(app) {
         console.log('-- /csp_violation -->', this.req.headers['user-agent'], params);
         this.body = '';
     });
+
+    router.post('/generate_ico_address', koaBody, function*() {
+        // if (rateLimitReq(this, this.req)) return; - logout maybe immediately followed with login_attempt event
+        const params = this.request.body;
+        const {
+            csrf
+        } = typeof(params) === 'string' ? JSON.parse(params): params;
+        if (!checkCSRF(this, csrf)) return;
+
+        const cypher = yield coRequest(`https://api.blockcypher.com/v1/btc/main/payments?token=${cypherToken}`, {
+            method: 'post',
+            headers: {
+                Accept: 'application/json',
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                "destination": destinationBtcAddress
+            })
+        });
+
+        let print = getLogger('API - general').print
+        try {
+          let cypherParsed = JSON.parse(cypher.body);
+          print('blockcypher generated payment forwarding address', cypherParsed);
+          const icoAddress = cypherParsed.input_address;
+          this.body = JSON.stringify({
+              status: 'ok',
+              icoAddress: icoAddress
+          });
+        } catch(error) {
+          this.body = JSON.stringify({
+              status: "error",
+              error: error.message
+          });
+          this.status = 500;
+        }
+    });
 }
 
-import {
-    Apis
-} from 'shared/api_client';
-import {
-    createTransaction,
-    signTransaction
-} from 'shared/chain/transactions';
-import {
-    ops
-} from 'shared/serializer';
-
-const {
-    signed_transaction
-} = ops;
 /**
  @arg signingKey {string|PrivateKey} - WIF or PrivateKey object
  */

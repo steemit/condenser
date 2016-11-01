@@ -58,7 +58,7 @@ class CreateAccount extends React.Component {
         let public_keys;
         // try generating btc address via blockcypher
         // if no success - abort (redirect with try again)
-        let icoAddress = 'hey!'
+        let icoAddress = ''
         try {
             const pk = PrivateKey.fromWif(password);
             public_keys = [1, 2, 3, 4].map(() => pk.toPublicKey().toString());

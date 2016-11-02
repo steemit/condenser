@@ -18,7 +18,6 @@ require('module').Module._initPaths();
 // Load Intl polyfill
 // require('utils/intl-polyfill')(require('./config/init').locales);
 
-
 global.$STM_Config = {
     fb_app: config.grant.facebook.key,
     ws_connection_client: config.ws_connection_client,

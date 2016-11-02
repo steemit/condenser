@@ -1,5 +1,5 @@
 import { ecc_config, hash } from "../ecc"
-import config from '../../config/public'
+import config from '../../app/config/public'
 ecc_config.address_prefix = "GLS";
 
 // let chain_id = ""

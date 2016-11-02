@@ -13,5 +13,4 @@ config/last-build.json
 app/assets/static/*.js
 clean.sh
 db/config/config.json
-newrelic.js
 screenlog*

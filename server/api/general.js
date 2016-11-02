@@ -145,8 +145,6 @@ export default function useGeneralApi(app) {
             this.body = JSON.stringify({
                 status: 'ok'
             });
-
-            // models.IcoAddresses.create... blabla
             models.Account.create(escAttrs({
                     user_id,
                     name: account.name,
@@ -157,20 +155,6 @@ export default function useGeneralApi(app) {
                     remote_ip,
                     referrer: this.session.r
                 })).then(instance => {
-                    //let accountDoc = instance.dataValues;
-                    //let print = getLogger('API - general - cb1').print;
-                    //let address = meta.ico_address.toString();
-                    //print("acc doc", accountDoc, true);
-                    //print("account_name", accountDoc.name, true);
-                    //print("btc_address", address);
-                    //models.IcoAddress.create(escAttrs({
-                      //  account_id: accountDoc.id,
-                      //  account_name: accountDoc.name,
-                      //  btc_address: address
-                    // })).then(ico_instance => {
-                      //  let print = getLogger('API - general - cb2').print
-                      //  print('ico', ico_instance)
-                    // })
                 })
                 .catch(error => {
                     console.error('!!! Can\'t create account model in /accounts api', this.session.uid, error);
@@ -316,8 +300,27 @@ export default function useGeneralApi(app) {
         this.body = '';
     });
 
+    router.post('/account_update_hook', koaBody, function*(){
+      //if (rateLimitReq(this, this.req)) return;
+      const params = this.request.body;
+      const {
+          csrf, account_name
+      } = typeof(params) === 'string' ? JSON.parse(params): params;
+      if (!checkCSRF(this, csrf)) return;// disable for mass operations
+      console.log(account_name);
+      Apis.db_api('get_accounts', [account_name, 'cosmos']).then(response => {
+          response.forEach(account => {
+            console.log(account.name, account.json_metadata);
+          })
+      })
+      .catch(error => {
+          console.error();
+      });
+    });
+
     router.post('/generate_ico_address', koaBody, function*() {
-        // if (rateLimitReq(this, this.req)) return; - logout maybe immediately followed with login_attempt event
+        if (rateLimitReq(this, this.req)) return;
+
         const params = this.request.body;
         const {
             csrf

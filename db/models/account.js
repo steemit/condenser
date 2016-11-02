@@ -32,6 +32,7 @@ module.exports = function (sequelize, DataTypes) {
                     }
                 });
                 Account.hasOne(models.IcoAddress);
+                Account.hasMany(models.AccountMeta);
             }
         }
     });

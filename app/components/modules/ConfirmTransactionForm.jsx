@@ -26,7 +26,6 @@ class ConfirmTransactionForm extends Component {
     render() {
         const {onCancel, okClick} = this
         const {confirm, confirmBroadcastOperation} = this.props
-        debugger;
         const conf = typeof confirm === 'function' ? confirm() : confirm
         return (
            <div className="ConfirmTransactionForm">

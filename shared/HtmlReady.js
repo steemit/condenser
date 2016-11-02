@@ -93,13 +93,13 @@ function traverse(node, state, depth = 0) {
         const tag = child.tagName ? child.tagName.toLowerCase() : null
         if(tag) state.htmltags.add(tag)
 
-        if(tag == 'img')
+        if(tag === 'img')
             img(state, child)
-        else if(tag == 'iframe')
+        else if(tag === 'iframe')
             iframe(state, child)
-        else if(tag == 'a')
+        else if(tag === 'a')
             link(state, child)
-        else if(child.nodeName == '#text')
+        else if(child.nodeName === '#text')
             linkifyNode(child, state)
 
         traverse(child, state, depth + 1)
@@ -123,7 +123,8 @@ function iframe(state, child) {
     const {mutate} = state
     if(!mutate) return
 
-    if(child.parentNode.tagName == 'div' && child.parentNode.getAttribute('class') == 'videoWrapper') return;
+    const tag = child.parentNode.tagName ? child.parentNode.tagName.toLowerCase() : child.parentNode.tagName
+    if(tag == 'div' && child.parentNode.getAttribute('class') == 'videoWrapper') return;
     const html = XMLSerializer.serializeToString(child)
     child.parentNode.replaceChild(DOMParser.parseFromString(`<div class="videoWrapper">${html}</div>`), child)
 }
@@ -157,8 +158,9 @@ function proxifyImages(doc) {
 }
 
 function linkifyNode(child, state) {try{
-    if(/code/i.test(child.parentNode.tagName)) return
-    if(/a/i.test(child.parentNode.tagName)) return
+    const tag = child.parentNode.tagName ? child.parentNode.tagName.toLowerCase() : child.parentNode.tagName
+    if(tag === 'code') return
+    if(tag === 'a') return
 
     const {mutate} = state
     if(!child.data) return

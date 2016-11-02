@@ -6,7 +6,7 @@ const defaultState = Map({
     error: '',
     location: {},
     notifications: null,
-    notificounters: {
+    notificounters: Map({
         total: 0,
         feed: 0,
         reward: 0,
@@ -18,7 +18,7 @@ const defaultState = Map({
         account_update: 0,
         message: 0,
         receive: 0
-    }
+    })
 });
 
 export default function reducer(state = defaultState, action) {

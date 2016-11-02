@@ -4,11 +4,12 @@ let instance = null;
 
 class Tarantool {
     constructor() {
-        console.log('-- Tarantool.constructor -->');
-        const connection = this.connection = new TarantoolDriver({port: 4301});
+        const config = require('../config').default;
+        const {host, port, username, password} = config.tarantool || {host: 'localhost', port: 3301, username: 'guest', password: ''};
+        const connection = this.connection = new TarantoolDriver({host, port});
         this.ready_promise = new Promise((resolve, reject) => {
             connection.connect()
-            .then(() => connection.auth('guest', ''))
+            .then(() => connection.auth(username, password))
             .then(() => resolve())
             .catch(error => reject(error));
         });

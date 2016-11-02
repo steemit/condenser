@@ -8,3 +8,10 @@
 
 .UserWallet__dropdown {
 }
+
+// protect for foundation bug on collapsed mobile/tablet state for malformed wallet drop-downs
+@media only screen and (max-width: 40em) {
+    .dropdown-pane.is-open {
+        left: 5px!important;
+    }
+}

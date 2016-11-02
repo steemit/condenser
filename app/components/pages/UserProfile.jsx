@@ -299,9 +299,10 @@ export default class UserProfile extends React.Component {
                         <div>
                             <div className="UserProfile__stats">
                                 <span>
-                                    <Link to={`/@${accountname}/followers`}>{followerCount} followers {isMyAccount && <NotifiCounter fields="follow" />}</Link>
+                                    <Link to={`/@${accountname}/followers`}>{followerCount} followers</Link>
+                                    {isMyAccount && <NotifiCounter fields="follow" />}
                                 </span>
-                                <span>{account.post_count} posts</span>
+                                <span><Link to={`/@${accountname}`}>{account.post_count} posts</Link></span>
                                 <span><Link to={`/@${accountname}/followed`}>{followingCount} followed</Link></span>
                             </div>
                         </div>

@@ -36,6 +36,7 @@ export default function useNotificationsApi(app) {
         if (!ids) {
             this.body = []; return;
         }
+        console.log('-- PUT /notifications/:account/:id -->', account, ids);
         const fields = ids.split('-');
         // for debugging:
         // this.body = [254, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 0, 0, 0 ];
@@ -44,7 +45,6 @@ export default function useNotificationsApi(app) {
         //     this.body[id] = 0;
         // }
         // return;
-        console.log('-- PUT /notifications/:account/:id -->', account, id);
         try {
             let res;
             for(const id of fields) {

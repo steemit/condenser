@@ -1,7 +1,7 @@
 delete process.env.BROWSER;
 
 import config from '../config';
-if (config.newrelic.license_key) {
+if (config.newrelic && config.newrelic.license_key) {
   console.log(`Starting newrelic monitor. App name: ${config.newrelic.app_name}, log level: ${config.newrelic.log_level}`)
   require('newrelic');
 } else {

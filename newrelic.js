@@ -1,6 +1,6 @@
 'use strict'
 import config from './config'
-const newrelic = config.newrelic;
+const newrelic = config.newrelic || {};
 
 /**
  * New Relic agent configuration.

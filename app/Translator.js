@@ -21,23 +21,29 @@ import { DEFAULT_LANGUAGE } from 'config/client_config';
 // locale data is needed for various messages, ie 'N minutes ago'
 import enLocaleData from 'react-intl/locale-data/en';
 import ruLocaleData from 'react-intl/locale-data/ru';
-// in react-intl they use 'uk' instead of 'ua'
-import ukLocaleData from 'react-intl/locale-data/uk';
+import ukLocaleData from 'react-intl/locale-data/uk'; // in react-intl they use 'uk' instead of 'ua'
 addLocaleData([...enLocaleData, ...ruLocaleData, ...ukLocaleData]);
 
 // Our translated strings
-
 import { ru } from './locales/ru';
 import { en } from './locales/en';
-// in react-intl they use 'uk' instead of 'ua'
-import { ua as uk } from './locales/ua';
+import { ua as uk } from './locales/ua'; // in react-intl they use 'uk' instead of 'ua'
 const messages = {ru, en, uk}
 
 // exported function placeholders
 // this is needed for proper export before react-intl functions with locale data,
-// will be properly created (they depend on react props and context,
+// will be properly created (they depend on react props and context),
 // which is not available until component is being created
-let translate = () => {};
+//
+/*
+	this placeholder is needed for usage outside of react. In server side code and in static html files.
+	This function is very simple, it does NOT support dynamic values (for example: translate('your_email_is', {email: 'x@y.com'})). Use it carefully
+*/
+let translate = string => {
+	let language = DEFAULT_LANGUAGE
+	if (process.env.BROWSER) language = store.get('language') || DEFAULT_LANGUAGE
+	return messages[language][string]
+};
 let translateHtml = () => {};
 let translatePlural = () => {};
 
@@ -116,16 +122,23 @@ class Translator extends React.Component {
         //Split locales with a region code (ie. 'en-EN' to 'en')
         const languageWithoutRegionCode = language.toLowerCase().split(/[_-]+/)[0];
 
-		// to ensure dynamic language change, "key" property with same "locale" info must be added
-		// see: https://github.com/yahoo/react-intl/wiki/Components#multiple-intl-contexts
-		return 	<IntlProvider key={languageWithoutRegionCode} locale={languageWithoutRegionCode} messages={messages[languageWithoutRegionCode]}>
+		return 	<IntlProvider
+					// to ensure dynamic language change, "key" property with same "locale" info must be added
+					// see: https://github.com/yahoo/react-intl/wiki/Components#multiple-intl-contexts
+					key={languageWithoutRegionCode}
+					defaultLocale={DEFAULT_LANGUAGE}
+					locale={languageWithoutRegionCode}
+					messages={messages[languageWithoutRegionCode]}
+				>
 					<div>
+						{/* self explanatory */}
 						<DummyComponentToExportProps />
 						{/*
 							create hidden instance of LocalizedCurrency so data will be fetched and
 							localizedCurrency() would never be undefined
 						*/}
 						<LocalizedCurrency amount={0} hidden />
+						{/* render actual content */}
 						{this.props.children}
 					</div>
 				</IntlProvider>

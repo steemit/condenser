@@ -361,7 +361,6 @@ const ru = {
 	couldnt_create_account_server_returned_error: "Не получилось создать аккаунт. Сервер вернул эту ошибку",
 	form_requires_javascript_to_be_enabled: 'Эта форма требует активированный в браузере javascript',
 	our_records_indicate_you_already_have_account: 'Наши записи показывают что у вас уже есть ' + APP_NAME + ' аккант',
-	// TODO
 	to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user: 'Чтобы предотвратить злоупотребление (каждый зарегистрированный аккаунт стоит {amount} в ' + OWNERSHIP_TOKEN + ') ' + APP_NAME + ' может регистрировать только один аккаунт для каждого подтвержденного пользователя.',
 	// next 3 blocks are meant to be used together
 	you_can_either: 'Вы можете или', // context 'you can either login'
@@ -533,6 +532,26 @@ const ru = {
 	choose_currency: 'Выберите валюту',
 	crowdsale: 'Краудсейл',
 	followers: 'Подписчики',
+	// errors
+	vote_currently_exists_user_must_be_indicate_a_to_reject_witness: 'Голос уже существует, пользователь должен обозначить желание убрать делегата',
+	only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes: 'Только один Голос аккаунт разрешен с одного IP адреса каждые десять минут',
+	// enter_confirm_email.jsx
+	thank_you_for_providing_your_email_address: 'Благодарим вас за предоставление вашей электронной почты',
+	to_continue_please_click_on_the_link_in_the_email_weve_sent_you: 'Для продолжения, кликните ссылку в письме, которое мы вам прислали',
+	user_not_found: 'пользователь не найден',
+	please_provide_your_email_address_to_continue_the_registration_process: 'Пожалуйста, укажите адрес вашей электронной почты чтобы продолжить процесс регистрации',
+	this_information_allows_steemit_to_assist_with_account_recovery_in_case_your_account_is_ever_compormised: 'Эта информация позволяет Голосу помочь вам восстановить аккаунт, если он когда-нибудь будет украден',
+	email_address_cannot_be_changed_at_this_moment_sorry_for_inconvenience: 'Адрес электронной почты на данный момент не может быть изменен, извините за неудобства',
+	continue: 'продолжить',
+	email_address: 'Адрес электронной почты',
+	please_prove_an_email_address: 'Пожалуйста укажите адрес электронной почты',
+	failed_captcha_verification_please_try_again: 'Ошибка проверки капчи, попробуйте еще раз',
+	re_send_email: 'Повторная отправка электронной почты',
+	email_confirmation: 'Подтверждение электронной почты',
+	// next 3 strings are used together
+	by_verifying_you_agree_with: 'Подтверждая ваш аккаунт вы соглашаетесь с',
+	by_verifying_you_agree_with_privacy_policy: 'Политикой Конфиденциальности',
+	by_verifying_you_agree_with_privacy_policy_of_website_APP_URL: 'сайта ' + APP_URL,
 	cannot_increase_reward_of_post_within_the_last_minute_before_payout: 'Голосование возможно только в первые 24 часа с момента публикации',
 	unverified_transactions: `{transactionsCount, plural,
 		zero {0 неподтвержденных транзакций}

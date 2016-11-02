@@ -1,6 +1,7 @@
 import { call, put, select } from 'redux-saga/effects';
 import Apis from 'shared/api_client/ApiInstances';
 import GlobalReducer from './GlobalReducer';
+import {getNotifications} from 'app/utils/ServerApiClient';
 
 const wait = ms => (
     new Promise(resolve => {
@@ -10,7 +11,14 @@ const wait = ms => (
 
 function* pollData() {
     while(true) {
-        yield call(wait, 30000);
+        yield call(wait, 10000);
+
+        const username = yield select(state => state.user.getIn(['current', 'username']));
+        if (username) {
+            const nc = yield call(getNotifications, username);
+            yield put({type: 'UPDATE_NOTIFICOUNTERS', payload: nc});
+        }
+
         const ws_connection = yield select(state => state.app.get('ws_connection'));
         if (ws_connection && ws_connection.status !== 'open') {
             console.log('pollData: not connected, skipping');

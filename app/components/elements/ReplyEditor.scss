@@ -1,17 +1,14 @@
 .ReplyEditor {
-  max-width: 50rem;
+  max-width: 54rem;
   margin-bottom: 0.5rem;
-  .rte {
-    clear: right;
-  }
+}
 
-  .vframe {
-    display: block;
-    .public-DraftEditor-content {
-      height: 20em;
-      resize: vertical;
-    }
-  }
+.PostFull .ReplyEditor__body {
+  margin: 1rem 0 0;
+}
+
+.ReplyEditor form {
+  max-width: 52rem;
 }
 
 .ReplyEditor__title {
@@ -43,22 +40,14 @@
   opacity: 0;
 }
 
-.ReplyEditor .Markdown {
+.ReplyEditor .Preview .Markdown {
   border: 1px solid $light-gray;
   padding: 0 1rem;
 }
 
 .ReplyEditor__body {
   margin-top: 1rem;
-  border-radius: 4px;
   clear: both;
-  > div {
-    border: none;
-  }
-}
-
-.ReplyEditor__body.rte {
-  border: 1px solid $medium-gray;
 }
 
 .ReplyEditor__options {
@@ -74,34 +63,4 @@
     font-size: 100%;
     text-transform: none;
   }
-}
-
-.medium-editor-element {
-    background-color: inherit !important;
-}
-.medium-editor-toolbar-actions button {
-    margin-right: 0 !important;
-}
-// .medium-insert-images.medium-insert-images-grid.small-grid figure {
-//     width: 10%;
-// }
-// @media (max-width: 750px) {
-//     .medium-insert-images.medium-insert-images-grid.small-grid figure {
-//         width: 20%;
-//     }
-// }
-// @media (max-width: 450px) {
-//     .medium-insert-images.medium-insert-images-grid.small-grid figure {
-//         width: 25%;
-//     }
-// }
-// .editable {
-//     outline: none;
-//     min-height: 38px;
-//     margin: 0 0 20px 0;
-//     padding: 0 0 20px 0;
-// }
-
-.RichTextEditor__root___33zoV button {
-  margin-right: 0 !important;
 }

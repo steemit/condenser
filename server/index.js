@@ -1,6 +1,12 @@
 delete process.env.BROWSER;
 
-//require('newrelic')
+import config from '../config';
+if (config.newrelic && config.newrelic.license_key) {
+  console.log(`Starting newrelic monitor. App name: ${config.newrelic.app_name}, log level: ${config.newrelic.log_level}`)
+  require('newrelic');
+} else {
+  console.error('running withput newrelic monitoring, as it s not configured')
+}
 const path = require('path');
 const ROOT = path.join(__dirname, '..');
 
@@ -12,7 +18,6 @@ require('module').Module._initPaths();
 // Load Intl polyfill
 // require('utils/intl-polyfill')(require('./config/init').locales);
 
-import config from '../config';
 global.$STM_Config = {
     fb_app: config.grant.facebook.key,
     ws_connection_client: config.ws_connection_client,

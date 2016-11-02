@@ -19,7 +19,7 @@ function createDate(year, month, day, hours, minutes) {
 
 export const blockchainStartAt 	= createDate(2016, 9, 18, 11, 0)
 export const crowdsaleStartAt 	= createDate(2016, 10, 1, 11, 0)
-export const crowdsaleEndAt 	= createDate(2016, 11, 1, 11, 0)
+export const crowdsaleEndAt 	= createDate(2016, 11, 4, 11, 0)
 
 const stages = [25, 20, 15, 10, 5, 0]
 

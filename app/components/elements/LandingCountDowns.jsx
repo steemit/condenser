@@ -2,8 +2,53 @@ import React, { PropTypes } from 'react'
 import CountDown from 'app/components/elements/CountDown'
 import Icon from 'app/components/elements/Icon'
 import {APP_ICON} from 'config/client_config'
+import 'whatwg-fetch';
+import icoDestinationAddress from 'shared/icoAddress'
+import roundPrecision from 'round-precision'
+import { translate } from 'app/Translator';
+// import { crowdsaleStartAt } from '../pages/Landing'
+
+const satoshiPerCoin = 100000000
+// format date properly
+function createDate(year, month, day, hours, minutes) {
+	//const today = new Date()
+	//const mins = (minutes == 0 || !minutes) ? 0 : today.getMinutes()
+	const date = new Date(Date.UTC(year, month, day, hours || 0, minutes || 0, 0));
+	return date
+}
+
+export const blockchainStartAt 	= createDate(2016, 9, 18, 11, 0)
+export const crowdsaleStartAt 	= createDate(2016, 10, 1, 11, 0)
+export const crowdsaleEndAt 	= createDate(2016, 11, 4, 11, 0)
 
 const stages = [25, 20, 15, 10, 5, 0]
+
+export function addDays(days) {
+	const result = new Date(crowdsaleStartAt)
+	result.setDate(result.getDate() + days)
+	return result
+}
+
+// dates are calculated based on props.crowdsaleStartAt variable
+const dates = [
+		{ date: addDays(15), bonus: 25 },
+		{ date: addDays(18), bonus: 20 },
+		{ date: addDays(21), bonus: 15 },
+		{ date: addDays(24), bonus: 10 },
+		{ date: addDays(27), bonus: 5 },
+		{ date: addDays(18), bonus: 0 }
+	]
+
+export function calculateCurrentStage() {
+	if (crowdsaleStartAt < addDays(15)) return stages[0]
+	else if (crowdsaleStartAt < addDays(18)) return stages[1]
+	else if (crowdsaleStartAt < addDays(21)) return stages[2]
+	else if (crowdsaleStartAt < addDays(24)) return stages[3]
+	else if (crowdsaleStartAt < addDays(27)) return stages[4]
+	return stages[5]
+}
+
+export const currentStage = dates.find((item) => item.bonus == calculateCurrentStage())
 
 export default class LandingCountDowns extends React.Component {
 
@@ -15,54 +60,67 @@ export default class LandingCountDowns extends React.Component {
 	}
 
 	state = {
-		currentBonus: '',
 		nextBonus: '',
-		bitcoinsRaised: 0,
+		currentBonus: '',
+		bitcoinsRaised: false,
+		bitcoinsRaisedIncludingUnconfirmed: false,
+		unconfirmedNTx: false,
+		prefill: this.props.prefill,
 		secondsSinceEpoch: Math.round(((new Date()).getTime()) / 1000),
 		crowdSaleIsActive: this.props.crowdsaleStartAt > Date.now(),
+		showBitcoinsRaised: true
 	}
 
 	componentDidMount() {
-		const currentBonus = this.calculateCurrentStage()
+		const currentBonus = calculateCurrentStage()
 		this.setState({
 			currentBonus,
 			nextBonus: currentBonus != 0 ? currentBonus - 5 : 0
 		})
 	}
 
-	addDays = days => {
-		const result = new Date(this.props.crowdsaleStartAt)
-		result.setDate(result.getDate() + days)
-		return result
-	}
-
-	// dates are calculated based on props.crowdsaleStartAt variable
-	dates = [
-		{ date: this.addDays(15), bonus: 25 },
-		{ date: this.addDays(18), bonus: 20 },
-		{ date: this.addDays(21), bonus: 15 },
-		{ date: this.addDays(24), bonus: 10 },
-		{ date: this.addDays(27), bonus: 5 },
-		{ date: this.addDays(18), bonus: 0 }
-	]
-
-	calculateCurrentStage = () => {
-		const {crowdsaleStartAt} = this.props
-
-		if (crowdsaleStartAt < this.addDays(15)) return stages[0]
-		else if (crowdsaleStartAt < this.addDays(18)) return stages[1]
-		else if (crowdsaleStartAt < this.addDays(21)) return stages[2]
-		else if (crowdsaleStartAt < this.addDays(24)) return stages[3]
-		else if (crowdsaleStartAt < this.addDays(27)) return stages[4]
-		return stages[5]
-	}
-
 	updateTime = () => {
 		this.setState({secondsSinceEpoch: this.state.secondsSinceEpoch + 1})
 	}
 
+	fetchRaized() {
+		fetch(`https://api.blockcypher.com/v1/btc/main/addrs/${icoDestinationAddress}/balance`, {
+			})
+		.then((resp) => {
+			console.log(resp)
+		  let json = resp.json();
+		  if (resp.status >= 200 && resp.status < 300) {
+		    return json;
+		  } else {
+		    return json.then(Promise.reject.bind(Promise));
+		  }
+		})
+		.then(object => {
+			const raised = object.balance;
+			const raisedWithUnconfirmed = object.final_balance
+			console.log('object', object)
+			this.setState({
+				bitcoinsRaised: raised / satoshiPerCoin,
+				bitcoinsRaisedIncludingUnconfirmed: raisedWithUnconfirmed / satoshiPerCoin,
+				unconfirmedNTx: object.unconfirmed_n_tx || 0
+			})
+		})
+		.catch(error => {
+			this.setState({
+				bitcoinsRaised: 0,
+				showBitcoinsRaised: false,
+			})
+			try {
+				console.error('fetching raized error ', error);
+				console.error('fetching raized error ', error.reason);
+			} catch (e) {}
+		});
+	}
+
 	componentWillMount() {
 		if(process.env.BROWSER) this.updateTime = setInterval(this.updateTime, 1000);
+		// fetch raised btc
+		if(process.env.BROWSER) this.fetchRaized()
 	}
 
 	componentWillUnmount() {
@@ -70,14 +128,14 @@ export default class LandingCountDowns extends React.Component {
 	}
 
 	// TODO add this
-	// handleCrowdsaleStart = () => {}
+	handleCrowdsaleStart = () => (this.setState({prefill: false}))
 	// handleCrowdsaleEnd = () => {}
 	// handleStageChange = () => {}
 
 	render() {
 		const {state, props} = this
-		const currentStage = this.dates.find((item) => item.bonus == this.calculateCurrentStage())
-		const previousStage = this.dates.find((item) => item.bonus < this.calculateCurrentStage())
+		const currentStage = dates.find((item) => item.bonus == calculateCurrentStage())
+		const previousStage = dates.find((item) => item.bonus < calculateCurrentStage())
 
 		function strSplice(str1, str2, location) {
 		  return str1.slice(0, location) + str2 + str1.slice(location, str1.length);
@@ -125,10 +183,11 @@ export default class LandingCountDowns extends React.Component {
 					</div>
 				</div>
 				{
-					props.prefill
+					state.prefill
 					? 	<div className="row text-center CountDowns__counters">
 							<CountDown
 								date={props.crowdsaleStartAt}
+								onEnd={this.handleCrowdsaleStart}
 								countFrom={props.crowdsaleStartAt.getTime()}
 								title={<strong>До старта продажи Силы Голоса</strong>}
 								className="small-12 medium-6 columns CountDowns__counter"
@@ -143,9 +202,24 @@ export default class LandingCountDowns extends React.Component {
 									displayWhenZero
 								/>
 							</div>
-							<div className="small-12 medium-4 columns CountDowns__counter">
-								<p>Собрано биткоинов</p>
-								<strong>{state.bitcoinsRaised} B</strong>
+							<div className="small-12 medium-4 columns CountDowns__counter" style={{paddingTop: 40}}>
+								{
+									state.showBitcoinsRaised
+									? <div>
+										<p style={{marginBottom: 0}}>Собрано биткоинов</p>
+										{
+											state.bitcoinsRaised === false
+											? <strong>загрузка...</strong>
+											: <strong><a href="https://blockchain.info/address/3CWicRKHQqcj1N6fT1pC9J3hUzHw1KyPv3" target="blank">{roundPrecision(state.bitcoinsRaised, 4)} B</a></strong>
+										}
+									</div>
+									: null
+								}
+								{
+									state.bitcoinsRaised !== state.bitcoinsRaisedIncludingUnconfirmed
+									? <span style={{display: 'block'}}>({roundPrecision(state.bitcoinsRaisedIncludingUnconfirmed, 4)} включая {translate('unverified_transactions', {transactionsCount: state.unconfirmedNTx})})</span> : null
+								}
+
 								<p>
 									<small>Текущий бонус <span className="red"> + {state.currentBonus}%</span></small>
 								</p>
@@ -164,19 +238,19 @@ export default class LandingCountDowns extends React.Component {
 
 				{/* BUTTON */}
 				{
-					props.prefill
+					state.prefill
 					? null
 					: <div className="row CountDowns__button">
 						<div className="small-12 columns">
 							{props.button}
-							<small>Продажа Голоса закончиться при достижении 3300 ฿</small>
+							<small>Продажа Голоса закончится при достижении 5000 ฿</small>
 						</div>
 					</div>
 				}
 
 				{/* FOOTER LINKS */}
 				{
-					props.prefill
+					state.prefill
 					? 	<div className="row CountDowns__links">
 							<div className="small-12 columns text-center">
 								<a href="https://steemit.com/@golos" target="blank" className="CountDowns__button_small">блог</a>
@@ -187,7 +261,7 @@ export default class LandingCountDowns extends React.Component {
 						</div>
 					: 	<div className="row CountDowns__links">
 							<div className="small-12 medium-6 columns text-left">
-								<a href="https://wiki.golos.io/1-introduction/golos_whitepaper.html" target="blank" className="CountDowns__button_small">White Paper</a>
+								<a href="https://golos.io/ru--golos/@golos/golos-russkoyazychnaya-socialno-mediinaya-blokchein-platforma" target="blank" className="CountDowns__button_small">White Paper</a>
 								<a href="https://wiki.golos.io/5-development/roadmap.html" target="blank" className="CountDowns__button_small">Дорожная карта</a>
 							</div>
 							<div className="small-12 medium-6 columns text-right CountDowns__social-links">

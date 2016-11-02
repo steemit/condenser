@@ -7,7 +7,7 @@ const ru = {
 	// this variables mainly used in navigation section
 	about: "О проекте",
 	explore: "Исследовать",
-	APP_NAME_whitepaper: "Бумага о " + APP_NAME,
+	APP_NAME_whitepaper: "Бумага о " + APP_NAME + 'е',
 	buy_OWNERSHIP_TOKEN: 'Купить ' + OWNERSHIP_TOKEN,
 	sell_OWNERSHIP_TOKEN: 'Продать ' + OWNERSHIP_TOKEN,
 	market: "Биржа",
@@ -166,8 +166,8 @@ const ru = {
 	transfer_amount_to: "Перевод {amount} на счёт",
 	recieve_amount_from: "Получено {amount} от",
 	transfer_amount_from: "Перевод {amount} со счёта",
-  transfer_amount_steem_power_to: "Перевод {amount} "+OWNERSHIP_TICKER+" в Силу Голоса",
-	stop_power_down: "Остабление Силы Голоса остановлено",
+	transfer_amount_steem_power_to: "Перевод {amount} "+OWNERSHIP_TICKER+" в Силу Голоса",
+	stop_power_down: "Ослабление Силы Голоса остановлено",
 	start_power_down_of: "Ослабление Силы Голоса начато с",
 	curation_reward_of_INVEST_TOKEN_for: 'Кураторские вознаграждения {reward} ' + INVEST_TOKEN + ' за',
 	author_reward_of_INVEST_TOKEN_for: 'Авторские вознаграждения {payout} и {reward} ' + INVEST_TOKEN + ' за',
@@ -190,7 +190,7 @@ const ru = {
 	recover_account: 'Восстановить аккаунт',
 	new: 'Новое', // ex. 'Generated Password (new)', but not exclusively
 	backup_password_by_storing_it: 'Сделайте резервную копию в менеджере паролей или текстовом файле',
-	click_to_generate_password: 'Нажмите чтобы сгененировать пароль',
+	click_to_generate_password: 'Нажмите, чтобы сгененировать пароль',
 	re_enter_generate_password: 'Повторно введите пароль',
 	understand_that_APP_NAME_cannot_recover_password: 'Я понимаю что ' + APP_NAME + ' не сможет восстановить утраченный пароль',
 	i_saved_password: 'Я надежно сохранил сгенерированный пароль',
@@ -222,7 +222,7 @@ const ru = {
 	login_to_see_memo: 'войти чтобы увидеть заметку',
 	post: 'Пост', // places used: tooltip in MediumEditor
 	unknown: 'Неизвестный', // exp.: 'unknown error'
-	account_name_is_not_available: 'Имя аккаунта не доступно',
+	account_name_is_not_available: 'Имя аккаунта недоступно',
 	type: 'Тип',
 	price: 'Цена',
 	// Market.jsx
@@ -487,9 +487,9 @@ const ru = {
 	tradeable_tokens_that_may_be_transferred_anywhere_at_anytime: 'Перемещаемые цифровые токены, которые могут переданы куда угодно в любой момент.',
 	OWNERSHIP_TOKEN_can_be_converted_to_INVEST_TOKEN_in_a_process_called_powering_up: OWNERSHIP_TOKEN + ' может быть конвертирован в ' + INVEST_TOKEN + ', этот процесс называется "усиление голоса".',
 	tokens_worth_about_AMOUNT_of_OWNERSHIP_TOKEN: 'Перемещаемые цифровые токены, цена которых всегда равна ~1 мг золота в ' + OWNERSHIP_TOKEN + '.',
-	influence_tokens_which_earn_more_power_by_holding_long_term: 'Неперемещаемые цифровые токены, их количество увеличевается при долгосрочном хранении.',
+	influence_tokens_which_earn_more_power_by_holding_long_term: 'Неперемещаемые цифровые токены, их количество увеличивается при долгосрочном хранении.',
 	the_more_you_hold_the_more_you_influence_post_rewards: 'Чем их больше, тем сильней вы влияете на вознаграждения за пост и тем больше зарабатываете за голосование.',
-	the_estimated_value_is_based_on_a_7_day_average_value_of_OWNERSHIP_TOKEN_in_currency: 'Оценочная стоимость расчитывается из 7-ми дневной средней стоимости ' + OWNERSHIP_TOKEN + '.',
+	the_estimated_value_is_based_on_a_7_day_average_value_of_OWNERSHIP_TOKEN_in_currency: 'Оценочная стоимость рассчитывается из 7-ми дневной средней стоимости ' + OWNERSHIP_TOKEN + '.',
 	INVEST_TOKEN_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_OWNERSHIP_TOKEN: INVEST_TOKEN + ' нельзя передавать и потребуется 2 года и 104 выплаты чтобы перевести обратно в ' + OWNERSHIP_TOKEN + '.',
 	// TODO
 	converted_INVEST_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again: 'Конвертированная ' + INVEST_TOKEN + ' может быть отправлена себе или кому-то еще, но не может быть передана вновь без конвертирования назад в ' + OWNERSHIP_TOKEN + '.',
@@ -533,7 +533,6 @@ const ru = {
 	crowdsale: 'Краудсейл',
 	followers: 'Подписчики',
 	// errors
-	cannot_increase_reward_of_post_within_the_last_minute_before_payout: 'Награда за пост не может быть увеличена по истечении 24 часов с момента публикации',
 	vote_currently_exists_user_must_be_indicate_a_to_reject_witness: 'Голос уже существует, пользователь должен обозначить желание убрать делегата',
 	only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes: 'Только один Голос аккаунт разрешен с одного IP адреса каждые десять минут',
 	// enter_confirm_email.jsx
@@ -553,6 +552,13 @@ const ru = {
 	by_verifying_you_agree_with: 'Подтверждая ваш аккаунт вы соглашаетесь с',
 	by_verifying_you_agree_with_privacy_policy: 'Политикой Конфиденциальности',
 	by_verifying_you_agree_with_privacy_policy_of_website_APP_URL: 'сайта ' + APP_URL,
+	cannot_increase_reward_of_post_within_the_last_minute_before_payout: 'Голосование возможно только в первые 24 часа с момента публикации',
+	unverified_transactions: `{transactionsCount, plural,
+		zero {0 неподтвержденных транзакций}
+		one {# неподтвержденная транзакция}
+		few {# неподтвержденные транзакции}
+		many {# неподтвержденных транзакций}
+	}`,
 }
 
 export { ru }

@@ -63,10 +63,11 @@ export default class CountDown extends React.Component {
 		const d = days;
 
 		if(timeLeft < 0) {
+			console.log('timeLeft < 0!!!')
+			// make callback if provided
+			if (onEnd) onEnd()
 			// stop countdown
 			this.clearInterval()
-			// make callback if provided
-			if(onEnd == 'function') onEnd()
 			// hide component unless 'displayWhenZero' is specified
 			if(!displayWhenZero) return null
 		}

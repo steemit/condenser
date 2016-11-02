@@ -86,7 +86,7 @@ export function translateError(string) {
             return string
     }
 }
-
+//  Missing Active Authority gsteem
 // copypaste from https://gist.github.com/tamr/5fb00a1c6214f5cab4f6
 // (it have been modified: ий > iy and so on)
 // this have been done beecause we cannot use special symbols in url (`` and '')

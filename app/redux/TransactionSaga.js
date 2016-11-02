@@ -1,6 +1,5 @@
-import {takeEvery} from 'redux-saga';
 import {call, put, select} from 'redux-saga/effects';
-
+import {takeEvery} from 'redux-saga';
 import {Apis} from 'shared/api_client'
 import {createTransaction, signTransaction} from 'shared/chain/transactions'
 import {ops} from 'shared/serializer'
@@ -21,6 +20,7 @@ const {transaction} = ops
 export const transactionWatches = [
     watchForBroadcast,
     watchForUpdateAuthorities,
+    watchForUpdateMeta,
     watchForRecoverAccount,
 ]
 
@@ -29,6 +29,9 @@ export function* watchForBroadcast() {
 }
 export function* watchForUpdateAuthorities() {
     yield* takeEvery('transaction/UPDATE_AUTHORITIES', updateAuthorities);
+}
+export function* watchForUpdateMeta() {
+    yield* takeEvery('transaction/UPDATE_META', updateMeta);
 }
 export function* watchForRecoverAccount() {
     yield* takeEvery('transaction/RECOVER_ACCOUNT', recoverAccount);
@@ -642,4 +645,43 @@ function* updateAuthorities({payload: {accountName, signingKey, auths, twofa, on
     // console.log('sign key.toPublicKey().toString()', key.toPublicKey().toString())
     // console.log('payload', payload)
     yield call(broadcastOperation, {payload})
+}
+
+/** auths must start with most powerful key: owner for example */
+// const twofaAccount = 'steem'
+function* updateMeta(params) {
+    // console.log('params', params)
+    const {meta, account_name, signingKey, onSuccess, onError} = params.payload.operation
+    console.log('meta', meta)
+    console.log('account_name', account_name)
+    // Be sure this account is up-to-date (other required fields are sent in the update)
+    const [account] = yield call([Apis, Apis.db_api], 'get_accounts', [account_name])
+    if (!account) {
+        onError('Account not found')
+        return
+    }
+    if (!signingKey) {
+        onError(`Incorrect Password`)
+        throw new Error('Have to pass owner key in order to change meta')
+    }
+
+    try {
+        console.log('account.name', account.name)
+      const tx = yield createTransaction([
+          ['update_account_meta', {
+              account_name: account.name,
+              json_meta: JSON.stringify(meta),
+          }]
+      ])
+      const sx = signTransaction(tx, signingKey);
+      yield new Promise((resolve, reject) =>
+          Apis.broadcastTransaction(sx, () => {resolve()}).catch(e => {reject(e)})
+      )
+      if(onSuccess) onSuccess()
+      // console.log('sign key.toPublicKey().toString()', key.toPublicKey().toString())
+      // console.log('payload', payload)
+    } catch(e) {
+      console.error('Update meta', e)
+      if(onError) onError(e)
+    }
 }

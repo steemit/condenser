@@ -14,7 +14,7 @@ export const DEBT_TOKEN = 'Золотой' // 'STEEM DOLLAR'
 // export const DEBT_TOKEN_SHORT = 'GBG' // 'SD'
 export const CURRENCY_SIGN = '₽≈' // '$'
 export const LANDING_PAGE_URL = 'https://golos.io/ico'
-export const WHITEPAPER_URL = 'https://wiki.golos.io/1-introduction/golos_whitepaper.html'
+export const WHITEPAPER_URL = 'https://golos.io/ru--golos/@golos/golos-russkoyazychnaya-socialno-mediinaya-blokchein-platforma'
 export const SEGMENT_ANALYTICS_KEY = 'F7tldQJxt491gXYqDGi5TkTT4wFpSPps'
 // used on application internationalization bootstrap
 export const DEFAULT_LANGUAGE = 'ru' // 'en'

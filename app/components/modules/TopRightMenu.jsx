@@ -27,6 +27,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
     const feed_link = `/@${username}/feed`;
     const replies_link = `/@${username}/recent-replies`;
     const wallet_link = `/@${username}/transfers`;
+    const crowdsale_link = `/@${username}/crowdsale`;
     const settings_link = `/@${username}/settings`;
     const account_link = `/@${username}`;
     const posts_link = `/@${username}/posts`;
@@ -43,6 +44,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
             {link: replies_link, value: translate('replies')},
             {link: wallet_link, value: translate('wallet')},
             {link: reset_password_link, value: translate('change_password')},
+            {link: crowdsale_link, value: translate('crowdsale')},
             {link: settings_link, value: translate('settings')},
             loggedIn ?
                 {link: '#', onClick: logout, value: translate('logout')} :

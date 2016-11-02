@@ -100,11 +100,10 @@ class SignUp extends React.Component {
                 <div className="column">
                     <br />
                     <p className="secondary">
-                        {translate('by_verifying_you_agree_with') + ' '}
-                        <a href="/legal/privacy_policy.pdf" target="_blank">
-                            {translate('by_verifying_you_agree_with_privacy_policy')}
-                        </a>
-                        {' ' + translate('by_verifying_you_agree_with_privacy_policy_of_website_APP_URL')}.
+                        {translate("by_verifying_you_agree")}
+                        {' '}<a href="/ru--konfidenczialxnostx/@golos/politika-konfidencialnosti" target="_blank">
+                                {translate("by_verifying_you_agree_terms_and_conditions")}
+                            </a>.
                     </p>
                 </div>
             </div>

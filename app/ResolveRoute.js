@@ -63,7 +63,7 @@ export default function resolveRoute(path)
         return {page: 'PostsIndex', params: ['home', match[1]]};
     }
     match = path.match(/^\/(@[\w\.\d-]+)\/?$/) ||
-        path.match(/^\/(@[\w\.\d-]+)\/(blog|posts|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)\/?$/);
+        path.match(/^\/(@[\w\.\d-]+)\/(blog|posts|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings|crowdsale)\/?$/);
     if (match) {
         return {page: 'UserProfile', params: match.slice(1)};
     }

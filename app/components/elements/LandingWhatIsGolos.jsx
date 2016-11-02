@@ -18,8 +18,9 @@ export default class LandingWhatIsGolos extends React.Component {
 					</div>
 				</div>
 				<div className="row WhatIsGolos__action">
-					<div className="small-12 columns text-center">
-						{/* <a href="" className="button"> Купи Силу Голоса </a> */}
+					<div className="small-12 columns">
+						<a href="/create_account" className="button">Зарегистрируйся</a>
+						<p><small>Получи 5 ГОЛОСОВ бесплатно</small></p>
 					</div>
 				</div>
 				<hr />

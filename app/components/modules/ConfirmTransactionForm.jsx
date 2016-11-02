@@ -26,16 +26,11 @@ class ConfirmTransactionForm extends Component {
     render() {
         const {onCancel, okClick} = this
         const {confirm, confirmBroadcastOperation} = this.props
-        const id = confirmBroadcastOperation.get('operation').get('id')
+        debugger;
         const conf = typeof confirm === 'function' ? confirm() : confirm
-        let title = typeName(confirmBroadcastOperation)
-        // allow for custom confirm dialog titles
-        if(id === 'follow'){
-            title = "Resteem This Post"
-        }
         return (
            <div className="ConfirmTransactionForm">
-               <h4>{title}</h4>
+               <h4>{typeName(confirmBroadcastOperation)}</h4>
                <hr />
                <div>{conf}</div>
                <br />

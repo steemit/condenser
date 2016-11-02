@@ -83,9 +83,10 @@ export default connect(
         let privateKeys
         if (current)
             privateKeys = current.get('private_keys') // not bound to one account
-        else {
+
+        if(!privateKeys)
             privateKeys = emptyMap
-        }
+
         const auth = state.user.getIn(['authority', accountName])
         return {...ownProps, auth, authLogin, privateKeys}
     },

@@ -10,6 +10,7 @@ config/steem.json
 config/steem-dev.json
 config/process.json
 config/last-build.json
+config/public.json
 app/assets/static/*.js
 clean.sh
 db/config/config.json

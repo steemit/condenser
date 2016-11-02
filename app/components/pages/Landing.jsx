@@ -36,6 +36,8 @@ export const crowdsaleEndAt = createDate(2016, 11, 1, 11, 0)
 
 class Landing extends React.Component {
 
+	componentWillMount() { if (process.env.BROWSER) document.title = 'Голос - ICO' }
+
 	componentDidMount() { if (process.env.BROWSER && WOW) new WOW().init() }
 
     render() {

@@ -5,7 +5,6 @@ import {connect} from 'react-redux';
 import transaction from 'app/redux/Transaction';
 import user from 'app/redux/User';
 import Icon from 'app/components/elements/Icon'
-import PostSummary from 'app/components/cards/PostSummary';
 import UserKeys from 'app/components/elements/UserKeys';
 import PasswordReset from 'app/components/elements/PasswordReset';
 import UserWallet from 'app/components/modules/UserWallet';
@@ -20,6 +19,8 @@ import {repLog10} from 'app/utils/ParsersAndFormatters.js';
 import Tooltip from 'app/components/elements/Tooltip';
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
 import VerticalMenu from 'app/components/elements/VerticalMenu';
+import MarkNotificationRead from 'app/components/elements/MarkNotificationRead';
+import NotifiCounter from 'app/components/elements/NotifiCounter';
 
 export default class UserProfile extends React.Component {
     constructor() {
@@ -110,11 +111,14 @@ export default class UserProfile extends React.Component {
 
         let rewardsClass = "";
         if( section === 'transfers' ) {
-            tab_content = <UserWallet global={this.props.global}
+            tab_content = <div>
+                <UserWallet global={this.props.global}
                           account={account}
                           showTransfer={this.props.showTransfer}
                           current_user={current_user}
                           withdrawVesting={this.props.withdrawVesting} />
+                {isMyAccount && <div><MarkNotificationRead fields="send,receive" account={account.name} /></div>}
+                </div>;
         }
         else if( section === 'curation-rewards' ) {
             rewardsClass = "active";
@@ -132,11 +136,13 @@ export default class UserProfile extends React.Component {
         }
         else if( section === 'followers' ) {
             if (followers && followers.has('result')) {
-                tab_content = <UserList
+                tab_content = <div>
+                    <UserList
                           title="Followers"
                           account={account}
-                          users={followers}
-                          />
+                          users={followers} />
+                    {isMyAccount && <MarkNotificationRead fields="follow" account={account.name} />}
+                    </div>
             }
         }
         else if( section === 'followed' ) {
@@ -198,16 +204,22 @@ export default class UserProfile extends React.Component {
         //     }
         // }
         else if( (section === 'recent-replies') && account.recent_replies ) {
-              tab_content = <PostsList
+              tab_content = <div>
+                  <PostsList
                   emptyText={`${account.name} hasn't had any replies yet.`}
                   posts={account.recent_replies}
                   loading={fetching}
                   category="recent_replies"
                   loadMore={this.loadMore}
-                  showSpam={false} />;
+                  showSpam={false} />
+                  {isMyAccount && <MarkNotificationRead fields="comment_reply" account={account.name} />}
+              </div>;
         }
         else if( section === 'permissions' && isMyAccount ) {
-            tab_content = <UserKeys account={accountImm} />
+            tab_content = <div>
+                <UserKeys account={accountImm} />
+                {isMyAccount && <MarkNotificationRead fields="account_update" account={account.name} />}
+                </div>;
         } else if( section === 'password' ) {
             tab_content = <PasswordReset account={accountImm} />
         } else {
@@ -238,7 +250,7 @@ export default class UserProfile extends React.Component {
                 <ul className="menu" style={{flexWrap: "wrap"}}>
                     <li><Link to={`/@${accountname}`} activeClassName="active">Blog</Link></li>
                     <li><Link to={`/@${accountname}/comments`} activeClassName="active">Comments</Link></li>
-                    <li><Link to={`/@${accountname}/recent-replies`} activeClassName="active">Replies</Link></li>
+                    <li><Link to={`/@${accountname}/recent-replies`} activeClassName="active">Replies <NotifiCounter fields="comment_reply"/></Link></li>
                     {/*<li><Link to={`/@${accountname}/feed`} activeClassName="active">Feed</Link></li>*/}
                     <li>
                         <LinkWithDropdown
@@ -260,8 +272,12 @@ export default class UserProfile extends React.Component {
             </div>
             <div className="columns shrink">
                 <ul className="menu" style={{flexWrap: "wrap"}}>
-                    <li><Link to={`/@${accountname}/transfers`} activeClassName="active">Wallet</Link></li>
-                    {wallet_tab_active && isMyAccount && <li><Link to={`/@${account.name}/permissions`} activeClassName="active">Permissions</Link></li>}
+                    <li><Link to={`/@${accountname}/transfers`} activeClassName="active">
+                        Wallet <NotifiCounter fields="send,receive"/>
+                    </Link></li>
+                    {isMyAccount && <li><Link to={`/@${account.name}/permissions`} activeClassName="active">
+                        Permissions <NotifiCounter fields="account_update"/>
+                    </Link></li>}
                     {wallet_tab_active && isMyAccount && <li><Link to={`/@${account.name}/password`} activeClassName="active">Password</Link></li>}
                 </ul>
             </div>
@@ -282,8 +298,11 @@ export default class UserProfile extends React.Component {
 
                         <div>
                             <div className="UserProfile__stats">
-                                <span><Link to={`/@${accountname}/followers`}>{followerCount} followers</Link></span>
-                                <span>{account.post_count} posts</span>
+                                <span>
+                                    <Link to={`/@${accountname}/followers`}>{followerCount} followers</Link>
+                                    {isMyAccount && <NotifiCounter fields="follow" />}
+                                </span>
+                                <span><Link to={`/@${accountname}`}>{account.post_count} posts</Link></span>
                                 <span><Link to={`/@${accountname}/followed`}>{followingCount} followed</Link></span>
                             </div>
                         </div>

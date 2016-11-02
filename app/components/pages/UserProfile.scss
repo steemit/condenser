@@ -21,14 +21,14 @@
       padding-right: 0.7rem;
       color: $white;
       background-color: transparent;
-      @include hoverUnderline;
+      &:hover {
+          background-color: #555;
+      }
       &.active {
           background-color: $white;
           z-index: 2;
           color: $black;
           font-weight: bold;
-          border-top-left-radius: 3px;
-          border-top-right-radius: 3px;
         }
   }
 
@@ -85,8 +85,9 @@
         padding-bottom: 5px;
 
         a {
-          border-bottom: 1px dotted rgba(255,255,255,0.5);
-	}
+            @include hoverUnderline;
+            vertical-align: middle;
+	    }
 
         span {
             padding: 0px 10px;
@@ -95,6 +96,11 @@
         span:nth-child(2) {
             border-left: 1px solid grey;
             border-right: 1px solid grey;
+        }
+
+        .NotifiCounter {
+            position: relative;
+            top: -5px;
         }
     }
 }

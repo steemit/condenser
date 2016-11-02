@@ -12,6 +12,7 @@ import useRedirects from './redirects';
 import useOauthLogin from './api/oauth';
 import useGeneralApi from './api/general';
 import useAccountRecoveryApi from './api/account_recovery';
+import useNotificationsApi from './api/notifications';
 import useEnterAndConfirmEmailPages from './server_pages/enter_confirm_email';
 import useEnterAndConfirmMobilePages from './server_pages/enter_confirm_mobile';
 import isBot from 'koa-isbot';
@@ -112,6 +113,7 @@ if (env === 'production') {
 useAccountRecoveryApi(app);
 useOauthLogin(app);
 useGeneralApi(app);
+useNotificationsApi(app);
 
 app.use(favicon(path.join(__dirname, '../app/assets/images/favicons/favicon.ico')));
 app.use(isBot());

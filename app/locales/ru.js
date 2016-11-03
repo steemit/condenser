@@ -555,8 +555,8 @@ const ru = {
 	cannot_increase_reward_of_post_within_the_last_minute_before_payout: 'Голосование возможно только в первые 24 часа с момента публикации',
 	unverified_transactions: `{transactionsCount, plural,
 		zero {0 неподтвержденных транзакций}
-		one {# неподтвержденная транзакция}
-		few {# неподтвержденные транзакции}
+		one {# неподтвержденную транзакцию}
+		few {# неподтвержденныe транзакции}
 		many {# неподтвержденных транзакций}
 	}`,
 }

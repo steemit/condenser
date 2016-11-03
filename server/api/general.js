@@ -8,16 +8,38 @@ import {esc, escAttrs} from 'db/models';
 import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF} from 'server/utils';
 import coBody from 'co-body';
 import {getLogger} from '../../app/utils/Logger'
-import coRequest from 'co-request'
-import {toPairs} from 'lodash'
-
 import {Apis} from 'shared/api_client';
 import {createTransaction, signTransaction} from 'shared/chain/transactions';
 import {ops} from 'shared/serializer';
 const {signed_transaction} = ops;
-const destinationBtcAddress = '3CWicRKHQqcj1N6fT1pC9J3hUzHw1KyPv3'
-const cypherToken = config.blockcypher_token
-let print = getLogger('API - general').print
+const print = getLogger('API - general').print
+
+function dbStoreSingleMeta(name, k, v) {
+    models.AccountMeta.findOne({
+        attributes: [
+            'accname', 'k', 'v'
+        ],
+        where: {
+            accname: esc(name),
+            k: esc(k)
+        }
+    }).then(function(it) {
+        if (it) {
+            if (it.dataValues.v !== v)
+                models.AccountMeta.update({
+                    v: esc(v)
+                }, {
+                    where: {
+                        accname: esc(name),
+                        k: esc(k)
+                    }
+                });
+            }
+        else {
+            models.AccountMeta.create({accname: esc(name), k: esc(k), v: esc(v)});
+        }
+    });
+}
 
 export default function useGeneralApi(app) {
     const router = koa_router({
@@ -280,102 +302,40 @@ export default function useGeneralApi(app) {
         this.body = '';
     });
 
-    router.post('/account_update_hook', koaBody, function*(){
-      //if (rateLimitReq(this, this.req)) return;
-      const params = this.request.body;
-      const {
-          csrf, account_name
-      } = typeof(params) === 'string' ? JSON.parse(params): params;
-      if (!checkCSRF(this, csrf)) return;// disable for mass operations
-      console.log(account_name);
-      this.body = JSON.stringify({
-          status: 'in process'
-      });
-      Apis.db_api('get_accounts', [account_name]).then(function(response){
-        if (!response) return;
-        response.forEach(function(account) {
-          const json_metadata = account.json_metadata;
-          const accname = account.name;
-          var meta = null
-          console.log('testing acc '+ accname);
-          try {
-            meta = JSON.parse(json_metadata)
-          } catch(e) {
-            console.log(`account ${name} has invalid json_metadata`);
+router.post('/account_update_hook', koaBody, function * () {
+    //if (rateLimitReq(this, this.req)) return;
+    const params = this.request.body;
+    const {csrf, account_name} = typeof(params) === 'string'
+        ? JSON.parse(params)
+        : params;
+    if (!checkCSRF(this, csrf))
+        return; // disable for mass operations
+    console.log(account_name);
+    this.body = JSON.stringify({status: 'in process'});
+    Apis.db_api('get_accounts', [account_name, 'cosmos']).then(function(response) {
+        if (!response)
             return;
-          }
-          const pairs = toPairs(meta);
-          pairs.forEach(function(pair){
-            console.log(pair[0], pair[1]);
-            let k = pair[0].substring(0, 30);
-            let v = pair[1].toString().substring(0, 256);
-
-            models.AccountMeta.findOne({
-                accname: esc(accname),
-                k: esc(k)
-            }).then(function(it) {
-              if (it) {
-                  models.AccountMeta.update({
-                      v: esc(v)
-                  }, {
-                      where: {
-                        accname: esc(accname),
-                        k: esc(k)
-                      }
-                  });
-              } else {
-                  models.AccountMeta.create({
-                      accname: esc(accname),
-                      k: esc(k),
-                      v: esc(v)
-                  });
-              }
-            })
-          })
+        response.forEach(function(account) {
+            const json_metadata = account.json_metadata;
+            const name = account.name;
+            var meta = null
+            console.log('updating meta for acc ' + name);
+            try {
+                meta = JSON.parse(json_metadata)
+            } catch (e) {
+                console.log(`account ${name} has invalid json_metadata`);
+                return;
+            }
+            for (var p in meta) {
+                if (meta.hasOwnProperty(p)) {
+                    dbStoreSingleMeta(name, pair[0], pair[1]);
+                }
+            }
         })
-      })
-      .catch(function(error){
+    }).catch(function(error) {
         console.log("error when updating account meta table", error)
-      });
     });
-
-    router.post('/generate_ico_address', koaBody, function*() {
-        if (rateLimitReq(this, this.req)) return;
-
-        const params = this.request.body;
-        const {
-            csrf
-        } = typeof(params) === 'string' ? JSON.parse(params): params;
-        if (!checkCSRF(this, csrf)) return;
-
-        const cypher = yield coRequest(`https://api.blockcypher.com/v1/btc/main/payments?token=${cypherToken}`, {
-            method: 'post',
-            headers: {
-                Accept: 'application/json',
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify({
-                "destination": destinationBtcAddress
-            })
-        });
-
-        let print = getLogger('API - general').print
-        try {
-          let cypherParsed = JSON.parse(cypher.body);
-          print('blockcypher generated payment forwarding address', cypherParsed);
-          const icoAddress = cypherParsed.input_address;
-          this.body = JSON.stringify({
-              status: 'ok',
-              icoAddress: icoAddress
-          });
-        } catch(error) {
-          this.body = JSON.stringify({
-              status: "error",
-              error: error.message
-          });
-          this.status = 500;
-        }
-    });
+});
 }
 
 /**

@@ -21,6 +21,7 @@ import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdow
 import VerticalMenu from 'app/components/elements/VerticalMenu';
 import MarkNotificationRead from 'app/components/elements/MarkNotificationRead';
 import NotifiCounter from 'app/components/elements/NotifiCounter';
+import DateJoinWrapper from 'app/components/elements/DateJoinWrapper';
 
 export default class UserProfile extends React.Component {
     constructor() {
@@ -245,6 +246,9 @@ export default class UserProfile extends React.Component {
             {link: `/@${accountname}/author-rewards`, label: "Author rewards", value: "Author rewards"}
         ];
 
+        // set account join date
+        let accountjoin = account.created;
+
         const top_menu = <div className="row UserProfile__top-menu">
             <div className="columns small-10 medium-12 medium-expand">
                 <ul className="menu" style={{flexWrap: "wrap"}}>
@@ -295,7 +299,6 @@ export default class UserProfile extends React.Component {
                             </div>
                         </div>
                         <h2>{account.name} <Tooltip t={`This is ${accountname}'s reputation score.\n\nThe reputation score is based on the history of votes received by the account, and is used to hide low quality content.`}><span style={{fontSize: "80%"}}>({rep})</span></Tooltip></h2>
-
                         <div>
                             <div className="UserProfile__stats">
                                 <span>
@@ -306,6 +309,7 @@ export default class UserProfile extends React.Component {
                                 <span><Link to={`/@${accountname}/followed`}>{followingCount} followed</Link></span>
                             </div>
                         </div>
+                        <DateJoinWrapper date={accountjoin}></DateJoinWrapper>
                     </div>
                 </div>
                 <div className="UserProfile__top-nav row expanded noPrint">

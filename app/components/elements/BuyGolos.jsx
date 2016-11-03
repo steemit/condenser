@@ -205,28 +205,6 @@ class BuyGolos extends React.Component {
 		meta = o2j.ifObjectToJSON(meta);
 	}
 
-	removeMetaData = () => {
-		let {metaData} = this.props
-		const {accountname, account} = this.props
-		console.log('metaData', metaData)
-		metaData = {}
-		// metaData.ico_address = ''
-		metaData = o2j.ifObjectToJSON(metaData);
-		this.props.updateMeta({
-			account: accountname,
-			json_metadata: metaData,
-			memo_key: account.memo_key,
-			errorCallback: () => this.setState({
-				loading: false,
-				error: 'server returned error'
-			}),
-			successCallback: () => this.setState({
-				icoAddress: '',
-				loading: false,
-			})
-		})
-	}
-
 	render() {
 		if (!process.env.BROWSER) { // don't render this page on the server
 				return <div className="row">
@@ -245,11 +223,6 @@ class BuyGolos extends React.Component {
 		const { transactions } = state
 		let loading=this.state.loading
 		return 	<div id="buy_golos" className="BuyGolos">
-					<div className="row">
-						<div className="columns small-12 text-center">
-							<button className="button warnig" onClick={this.removeMetaData}>REMOVE METADATA!!!1</button>
-						</div>
-					</div>
 					<div className="row">
 						<div className="columns small-12">
 							<h2>ПОКУПКА СИЛЫ ГОЛОСА</h2>

@@ -8,6 +8,7 @@ import { browserHistory } from 'react-router';
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
 import VerticalMenu from 'app/components/elements/VerticalMenu';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+import NotifiCounter from 'app/components/elements/NotifiCounter';
 
 const defaultNavigate = (e) => {
     e.preventDefault();
@@ -30,11 +31,11 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
     const reset_password_link = `/@${username}/password`;
     if (loggedIn) { // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!
         const user_menu = [
-            {link: feed_link, value: 'Feed'},
+            {link: feed_link, value: 'Feed', addon: <NotifiCounter fields="feed" />},
             {link: account_link, value: 'Blog'},
             {link: comments_link, value: 'Comments'},
-            {link: replies_link, value: 'Replies'},
-            {link: wallet_link, value: 'Wallet'},
+            {link: replies_link, value: 'Replies', addon: <NotifiCounter fields="comment_reply" />},
+            {link: wallet_link, value: 'Wallet', addon: <NotifiCounter fields="follow,send,receive,account_update" />},
             {link: reset_password_link, value: 'Change Password'},
             loggedIn ?
                 {link: '#', onClick: logout, value: 'Logout'} :
@@ -56,6 +57,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                         <a href={account_link} title={username} onClick={e => e.preventDefault()}>
                             <img src={userpic_src} width="36" height="36" />
                         </a>
+                        <div className="TopRightMenu__notificounter"><NotifiCounter fields="total" /></div>
                     </li>}
                 </LinkWithDropdown>
                 {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>

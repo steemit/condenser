@@ -5,6 +5,7 @@ import {APP_ICON} from 'config/client_config'
 import 'whatwg-fetch';
 import icoDestinationAddress from 'shared/icoAddress'
 import roundPrecision from 'round-precision'
+import { FormattedMessage } from 'react-intl';
 import { translate } from 'app/Translator';
 // import { crowdsaleStartAt } from '../pages/Landing'
 
@@ -217,7 +218,9 @@ export default class LandingCountDowns extends React.Component {
 								}
 								{
 									state.bitcoinsRaised !== state.bitcoinsRaisedIncludingUnconfirmed
-									? <span style={{display: 'block'}}>({roundPrecision(state.bitcoinsRaisedIncludingUnconfirmed, 4)} включая {translate('unverified_transactions', {transactionsCount: state.unconfirmedNTx})})</span> : null
+									? <span style={{display: 'block'}}>({roundPrecision(state.bitcoinsRaisedIncludingUnconfirmed, 4)} включая
+									<FormattedMessage id="unverified_transactions" values={{transactionsCount: state.unconfirmedNTx}} />)</span> : null
+									// {translate('unverified_transactions', {transactionsCount: state.unconfirmedNTx})}
 								}
 
 								<p>

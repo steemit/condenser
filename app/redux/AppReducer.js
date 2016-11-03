@@ -60,7 +60,12 @@ export default function reducer(state = defaultState, action) {
         res = res.update('notifications', s => s.delete(action.payload.key));
     }
     if (action.type === 'UPDATE_NOTIFICOUNTERS' && action.payload) {
-        res = res.set('notificounters', Map(action.payload));
+        const nc = action.payload;
+        if (nc.follow > 0) {
+            nc.total -= nc.follow;
+            nc.follow = 0;
+        }
+        res = res.set('notificounters', Map(nc));
     }
     return res;
 }

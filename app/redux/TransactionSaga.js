@@ -246,7 +246,7 @@ function* accepted_account_update({operation}) {
           Accept: 'application/json',
           'Content-type': 'application/json'
       },
-      body: JSON.stringify({csrf: $STM_csrf, account_name: operation.account})
+      body: JSON.stringify({csrf: $STM_csrf, account_name: [operation.account]})
     })
     yield put(g.actions.receiveAccount({account}))
 

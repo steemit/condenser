@@ -10,8 +10,9 @@ import o2j from 'shared/clash/object2json'
 class Settings extends React.Component {
 
     state = {
-        userImage: '',
-        loading: false
+        errorMessage: '',
+        succesMessage: '',
+        userImage: this.props.userImage || '',
     }
 
     handleCurrencyChange(event) { store.set('currency', event.target.value) }
@@ -28,32 +29,43 @@ class Settings extends React.Component {
 
     handleUserImageSubmit = event => {
         event.preventDefault()
+        this.setState({loading: true})
 
-        const {account} = this.props
-        let metaData =	this.props
+        const {account, updateAccount} = this.props
+        let {metaData} = this.props
 
-        this.setState({loading: false})
-
-        console.log('this.state.userImage', this.state.userImage)
-        console.log('metaData', metaData)
+        if (!metaData) metaData = {}
         if (metaData == '{created_at: \'GENESIS\'}') metaData = {created_at: "GENESIS"}
-        // TODO check if this is normal in BuyGolos
-        if (typeof metaData === 'string') metaData = {}
-        metaData.user_image = this.state.user_image
-        metaData = o2j.ifObjectToJSON(metaData)
-        this.props.updateAccount({
-                json_metadata: metaData,
-                account: account.name,
-                memo_key: account.memo_key,
-                onError: () => this.setState({
+        metaData.user_image = this.state.userImage
+        metaData = JSON.stringify(metaData);
+
+        updateAccount({
+            json_metadata: metaData,
+            account: account.name,
+            memo_key: account.memo_key,
+            errorCallback: () => {
+                console.log('SUCCES')
+                this.setState({
                     loading: false,
-                    error: 'server returned error'
-                }),
-                onSuccess: () => this.setState({loading: false})
+                    errorMessage: translate('server_returned_error')
+                })
+            },
+            successCallback: () => {
+                console.log('SUCCES')
+                // clear form ad show succesMessage
+                this.setState({
+                    loading: false,
+                    errorMessage: '',
+                    succesMessage: translate('saved') + '!',
+                })
+                // remove succesMessage after a while
+                setTimeout(() => this.setState({succesMessage: ''}), 2000)
+            }
         })
     }
 
     render() {
+        const {state, props} = this
         return <div className="Settings">
                     <div className="row">
                         {/* currently language chooser is completely broken */}
@@ -83,9 +95,15 @@ class Settings extends React.Component {
                     </div>
                     <div className="row">
                         <form onSubmit={this.handleUserImageSubmit} className="small-12 medium-6 large-4 columns">
-                            <label>Добавьте юрл вашего изображения
-                            {/* {translate('choose_currency')} */}
-                                <input type="url" onChange={this.handleUrlChange} />
+                            <label>{translate('add_image_url')}
+                                <input type="url" onChange={this.handleUrlChange} value={state.userImage} disabled={!props.isOwnAccount || state.loading} required />
+                                {
+                                    state.errorMessage
+                                    ? <small className="error">{state.errorMessage}</small>
+                                    : state.succesMessage
+                                    ? <small className="success text-uppercase">{state.succesMessage}</small>
+                                    : null
+                                }
                             </label>
                         </form>
                     </div>
@@ -98,15 +116,16 @@ export default connect(
     (state, ownProps) => {
         const {accountname} = 	ownProps.routeParams
         const account 		= 	state.global.getIn(['accounts', accountname]).toJS()
+        const current_user 	= 	state.user.get('current')
+        const username 		=	current_user ? current_user.get('username') : ''
         const metaData 		=	account ? o2j.ifStringParseJSON(account.json_metadata) : {}
         const userImage     =   metaData ? metaData.user_image : ''
 
         return {
-            // TODO check this
-            loading: state.app.get('loading'),
             account,
             metaData,
             userImage,
+            isOwnAccount: username == accountname,
             ...ownProps
         }
     },
@@ -115,8 +134,8 @@ export default connect(
         changeLanguage: (language) => {
             dispatch(user.actions.changeLanguage(language))
         },
-        updateAccount: (operation) => {
-			const options = {type: 'account_update', operation}
+        updateAccount: ({successCallback, errorCallback, ...operation}) => {
+			const options = {type: 'account_update', operation, successCallback, errorCallback}
 			dispatch(transaction.actions.broadcastOperation(options))
         }
     })

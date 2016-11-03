@@ -523,6 +523,9 @@ const en = 	{
 	crowdsale: 'Crowdsale',
 	followers: 'Followers',
 	cannot_increase_reward_of_post_within_the_last_minute_before_payout: 'Cannot increase reward of post within the last minute before payout',
+	add_image_url: 'Add image url',
+	saved: 'Saved',
+	server_returned_error: 'server returned error',
 }
 
 export { en }

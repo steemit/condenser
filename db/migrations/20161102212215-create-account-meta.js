@@ -8,15 +8,19 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      account_name: {
+      accname: {
+        type: Sequelize.STRING,
+      },
+      k: {
         type: Sequelize.STRING
       },
-      key: {
-        type: Sequelize.STRING(30)
-      },
-      value: {
-        type: Sequelize.STRING(256)
+      v: {
+        type: Sequelize.STRING
       }
+    }).then(function(){
+      queryInterface.addIndex('ametas',  ['accname', 'k'], {
+        indicesType: 'UNIQUE'
+      })
     });
   },
   down: function(queryInterface, Sequelize) {

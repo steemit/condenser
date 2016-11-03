@@ -9,6 +9,7 @@ import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF} from 'server/utils';
 import coBody from 'co-body';
 import {getLogger} from '../../app/utils/Logger'
 import coRequest from 'co-request'
+import {toPairs} from 'lodash'
 
 import {Apis} from 'shared/api_client';
 import {createTransaction, signTransaction} from 'shared/chain/transactions';
@@ -42,28 +43,8 @@ export default function useGeneralApi(app) {
         }
 
         try {
-            //const cypher = yield coRequest(`https://api.blockcypher.com/v1/btc/main/payments?token=${cypherToken}`, {
-            //    method: 'post',
-            //    headers: {
-            //        Accept: 'application/json',
-            //        'Content-type': 'application/json'
-            //    },
-            //    body: JSON.stringify({
-            //        "destination": destinationBtcAddress
-            //    })
-            // });
-
-            //let print = getLogger('API - general').print
-            //let cypherParsed = JSON.parse(cypher.body);
-            //print('blockcypher generated payment forwarding address', cypherParsed);
-            //let icoAddress = cypherParsed.input_address;
-            //print('icoAddress', icoAddress)
             const meta = {}
-              //  ico_address: icoAddress
-            //}
-
             const remote_ip = getRemoteIp(this.req);
-
             const user_id = this.session.user;
             if (!user_id) { // require user to sign in with identity provider
                 this.body = JSON.stringify({
@@ -72,7 +53,6 @@ export default function useGeneralApi(app) {
                 this.status = 401;
                 return;
             }
-
 
             const user = yield models.User.findOne({
                 attributes: ['verified', 'waiting_list'],
@@ -308,13 +288,54 @@ export default function useGeneralApi(app) {
       } = typeof(params) === 'string' ? JSON.parse(params): params;
       if (!checkCSRF(this, csrf)) return;// disable for mass operations
       console.log(account_name);
-      Apis.db_api('get_accounts', [account_name, 'cosmos']).then(response => {
-          response.forEach(account => {
-            console.log(account.name, account.json_metadata);
+      this.body = JSON.stringify({
+          status: 'in process'
+      });
+      Apis.db_api('get_accounts', [account_name]).then(function(response){
+        if (!response) return;
+        response.forEach(function(account) {
+          const json_metadata = account.json_metadata;
+          const accname = account.name;
+          var meta = null
+          console.log('testing acc '+ accname);
+          try {
+            meta = JSON.parse(json_metadata)
+          } catch(e) {
+            console.log(`account ${name} has invalid json_metadata`);
+            return;
+          }
+          const pairs = toPairs(meta);
+          pairs.forEach(function(pair){
+            console.log(pair[0], pair[1]);
+            let k = pair[0].substring(0, 30);
+            let v = pair[1].toString().substring(0, 256);
+
+            models.AccountMeta.findOne({
+                accname: esc(accname),
+                k: esc(k)
+            }).then(function(it) {
+              if (it) {
+                  models.AccountMeta.update({
+                      v: esc(v)
+                  }, {
+                      where: {
+                        accname: esc(accname),
+                        k: esc(k)
+                      }
+                  });
+              } else {
+                  models.AccountMeta.create({
+                      accname: esc(accname),
+                      k: esc(k),
+                      v: esc(v)
+                  });
+              }
+            })
           })
+        })
       })
-      .catch(error => {
-          console.error();
+      .catch(function(error){
+        console.log("error when updating account meta table", error)
       });
     });
 

@@ -228,7 +228,7 @@ class App extends React.Component {
                       </a>
                   </li>
                   <li>
-                      <a href="/legal/privacy_policy.pdf" onClick={this.navigate} rel="nofollow">
+                      <a href="/ru--konfidenczialxnostx/@golos/politika-konfidencialnosti" onClick={this.navigate} rel="nofollow">
                           {translate("terms_of_service")}
                       </a>
                   </li>

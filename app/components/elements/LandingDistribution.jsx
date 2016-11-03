@@ -92,7 +92,8 @@ export default class LandingDistribution extends React.Component {
 				</div>
 				<div className="row Distribution__action">
 					<div className="small-12 columns text-center">
-						<a href="https://wiki.golos.io/" className="button button-blue">Узнай больше про Голос</a>
+						{this.props.button}
+						{/* <a href="https://wiki.golos.io/" className="button button-blue">Узнай больше про Голос</a> */}
 					</div>
 				</div>
 				<hr />

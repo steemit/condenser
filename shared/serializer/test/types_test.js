@@ -56,13 +56,13 @@ describe("types", function() {
     it("public_key sort", function() {
         let mapType = type.map(type.public_key, type.uint16)
         let map = mapType.fromObject([//not sorted
-            ["STM56ankGHKf6qUsQe7vPsXTSEqST6Dt1ff73aV3YQbedzRua8NLQ",0],
-            ["STM8me6d9PqzTgcoHxx6b4rnvWVTqz11kafidRAZwfacJkcJtfd75",0],
+            ["GLS56ankGHKf6qUsQe7vPsXTSEqST6Dt1ff73aV3YQbedzRua8NLQ",0],
+            ["GLS8me6d9PqzTgcoHxx6b4rnvWVTqz11kafidRAZwfacJkcJtfd75",0],
         ])
         let mapObject = mapType.toObject(map)
         assert.deepEqual(mapObject, [ // sorted (uppercase comes first)
-            ["STM8me6d9PqzTgcoHxx6b4rnvWVTqz11kafidRAZwfacJkcJtfd75",0],
-            ["STM56ankGHKf6qUsQe7vPsXTSEqST6Dt1ff73aV3YQbedzRua8NLQ",0],
+            ["GLS8me6d9PqzTgcoHxx6b4rnvWVTqz11kafidRAZwfacJkcJtfd75",0],
+            ["GLS56ankGHKf6qUsQe7vPsXTSEqST6Dt1ff73aV3YQbedzRua8NLQ",0],
         ])
     })
 

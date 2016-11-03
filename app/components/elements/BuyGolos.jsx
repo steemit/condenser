@@ -143,28 +143,6 @@ class BuyGolos extends React.Component {
 		})
 	}
 
-	removeIco = () => {
-		let {metaData} = this.props
-		const {accountname, account} = this.props
-		console.log('metaData', metaData)
-		metaData.ico_address = ''
-		metaData = o2j.ifObjectToJSON(metaData);
-		this.props.updateMeta({
-			account: accountname,
-			json_metadata: metaData,
-			memo_key: account.memo_key,
-			onError: () => this.setState({
-				loading: false,
-				error: 'server returned error'
-			}),
-			onSuccess: () => this.setState({
-				icoAddress: '',
-				loading: false,
-			})
-		})
-	}
-
-
 	componentDidMount() {
 		// if (process.env.BROWSER) this.generateAddress()
 		if (process.env.BROWSER) this.fetchTransations()
@@ -242,13 +220,7 @@ class BuyGolos extends React.Component {
 		let loading=this.state.loading
 
 		return 	<div id="buy_golos" className="BuyGolos">
-
 					{/* ACTUAL COMPONENT */}
-					{/* <div className="columns small-12">
-						<h2>Макет функционала</h2>
-						<hr />
-					</div> */}
-					{/* <button className="button warning" onClick={this.removeIco}>REMOVE ICO ADDRESS</button> */}
 					<div className="row">
 						<div className="columns small-12">
 							<h2>ПОКУПКА СИЛЫ ГОЛОСА</h2>
@@ -393,81 +365,6 @@ class BuyGolos extends React.Component {
 						</div>
 						: null
 					}
-
-					{/* <div className="columns small-12">
-						<br />
-						<hr />
-						<h2>Test</h2>
-					</div>
-					<form onSubmit={this.handleSubmit} className="columns small-12">
-						<label>
-								key
-								<br />
-								<input id="meta-key" type="text" disabled={loading} />
-						</label>
-						<label>
-								value
-								<br />
-								<input id="meta-value" type="text" disabled={loading} />
-						</label>
-						<label>
-								enter password here
-								<br />
-								<input id="meta-password" type="password" disabled={loading} />
-						</label>
-						<button type="submit" className="button" disabled={loading}>
-								change meta
-						</button>
-					</form>
-
-					{/* TEST INFO
-					<div className="columns small-12">
-						<h2>Тестовая информация</h2>
-					</div>
-					<div className="columns small-12">
-						<span>Юзер залогинен?</span>
-						{
-							metaData
-							? <div>
-								<small>metaData пользователя:</small>
-								<p>{JSON.stringify(metaData)}</p>
-							</div>
-							: null
-						}
-						<div className="switch large">
-							<input className="switch-input" id="isLoggedIn" type="checkbox" checked={props.current_user} />
-							<label className="switch-paddle" htmlFor="isLoggedIn">
-								<span className="switch-active">Да</span>
-								<span className="switch-inactive">Нет</span>
-							</label>
-						</div>
-						<span>Юзер смотрит свою страницу?</span>
-						<div className="switch large">
-							<input className="switch-input" id="isOwnPage" type="checkbox" checked={props.username == accountname} />
-							<label className="switch-paddle" htmlFor="isOwnPage">
-								<span className="switch-active">Да</span>
-								<span className="switch-inactive">Нет</span>
-							</label>
-						</div>
-						<span>Есть ли у юзера ico address?</span>
-						<p>{state.icoAddress}</p>
-						<p>{props.icoAddress}</p>
-						<div className="switch large">
-							<input className="switch-input" id="hasIco" type="checkbox" checked={Boolean(metaData && metaData.ico_address)} />
-							<label className="switch-paddle" htmlFor="hasIco">
-								<span className="switch-active">Да</span>
-								<span className="switch-inactive">Нет</span>
-							</label>
-						</div>
-						<span>Есть ли у юзера предыдущие транзакции?</span>
-						<div className="switch large">
-							<input className="switch-input" id="hasTransactions" type="checkbox" checked={false} />
-							<label className="switch-paddle" htmlFor="hasTransactions">
-								<span className="switch-active">Да</span>
-								<span className="switch-inactive">Нет</span>
-							</label>
-						</div>
-					</div> */}
 				</div>
 	}
 }

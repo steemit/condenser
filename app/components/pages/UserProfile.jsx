@@ -151,7 +151,7 @@ export default class UserProfile extends React.Component {
             }
         }
         else if( section === 'settings' ) {
-            tab_content = <Settings />
+            tab_content = <Settings routeParams={this.props.routeParams} />
         }
         else if( section === 'crowdsale' ) {
             tab_content = <BuyGolos routeParams={this.props.routeParams} account={account}/>

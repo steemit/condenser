@@ -115,22 +115,26 @@ class BuyGolos extends React.Component {
 		.then(function(data) { return data.json() })
 		.then(({icoAddress}) => {
 			console.log('icoAddress', icoAddress)
+			if (!metaData) metaData = {}
 			if (metaData == '{created_at: \'GENESIS\'}') metaData = {created_at: "GENESIS"}
-			if (typeof metaData === 'string') metaData = {}
 			metaData.ico_address = icoAddress
 			metaData = o2j.ifObjectToJSON(metaData);
 			this.props.updateMeta({
-					json_metadata: metaData,
-					account: accountname,
-					memo_key: account.memo_key,
-					onError: () => this.setState({
+				json_metadata: metaData,
+				account: accountname,
+				memo_key: account.memo_key,
+				errorCallback: () => {
+					this.setState({
 						loading: false,
 						error: 'server returned error'
-					}),
-					onSuccess: () => this.setState({
+					})
+				},
+				successCallback: () => {
+					this.setState({
 						icoAddress,
 						loading: false,
 					})
+				}
 			})
 		})
 		.catch(error => {
@@ -218,9 +222,7 @@ class BuyGolos extends React.Component {
 		} = props
 		const { transactions } = state
 		let loading=this.state.loading
-
 		return 	<div id="buy_golos" className="BuyGolos">
-					{/* ACTUAL COMPONENT */}
 					<div className="row">
 						<div className="columns small-12">
 							<h2>ПОКУПКА СИЛЫ ГОЛОСА</h2>
@@ -388,8 +390,9 @@ export default connect(
 		}
 	},
     dispatch => ({
-		updateMeta: (operation) => {
-			const options = {type: 'account_update', operation  }
-			dispatch(transaction.actions.broadcastOperation(options)) },
+		updateMeta: ({successCallback, errorCallback, ...operation}) => {
+			dispatch(transaction.actions.broadcastOperation(
+				{type: 'account_update', operation, successCallback, errorCallback}
+			))}
     })
 )(BuyGolos)

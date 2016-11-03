@@ -302,40 +302,42 @@ export default function useGeneralApi(app) {
         this.body = '';
     });
 
-router.post('/account_update_hook', koaBody, function * () {
-    //if (rateLimitReq(this, this.req)) return;
-    const params = this.request.body;
-    const {csrf, account_name} = typeof(params) === 'string'
-        ? JSON.parse(params)
-        : params;
-    if (!checkCSRF(this, csrf))
-        return; // disable for mass operations
-    console.log(account_name);
-    this.body = JSON.stringify({status: 'in process'});
-    Apis.db_api('get_accounts', [account_name, 'cosmos']).then(function(response) {
-        if (!response)
-            return;
-        response.forEach(function(account) {
-            const json_metadata = account.json_metadata;
-            const name = account.name;
-            var meta = null
-            console.log('updating meta for acc ' + name);
-            try {
-                meta = JSON.parse(json_metadata)
-            } catch (e) {
-                console.log(`account ${name} has invalid json_metadata`);
+    router.post('/account_update_hook', koaBody, function * () {
+        //if (rateLimitReq(this, this.req)) return;
+        const params = this.request.body;
+        let {csrf, account_name} = typeof(params) === 'string'
+            ? JSON.parse(params)
+            : params;
+        if (!checkCSRF(this, csrf))
+            return; // disable for mass operations
+        console.log(account_name);
+        // expect array
+        if (typeof account_name === 'string') account_name = [account_name]
+        this.body = JSON.stringify({status: 'in process'});
+        Apis.db_api('get_accounts', account_name).then(function(response) {
+            if (!response)
                 return;
-            }
-            for (var p in meta) {
-                if (meta.hasOwnProperty(p)) {
-                    dbStoreSingleMeta(name, p, meta[p]);
+            response.forEach(function(account) {
+                const json_metadata = account.json_metadata;
+                const name = account.name;
+                var meta = null
+                console.log('updating meta for acc ' + name);
+                try {
+                    meta = JSON.parse(json_metadata)
+                } catch (e) {
+                    console.log(`account ${name} has invalid json_metadata`);
+                    return;
                 }
-            }
-        })
-    }).catch(function(error) {
-        console.log("error when updating account meta table", error)
+                for (var p in meta) {
+                    if (meta.hasOwnProperty(p)) {
+                        dbStoreSingleMeta(name, p, meta[p]);
+                    }
+                }
+            })
+        }).catch(function(error) {
+            console.log("error when updating account meta table", error)
+        });
     });
-});
 }
 
 /**

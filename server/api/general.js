@@ -328,7 +328,7 @@ router.post('/account_update_hook', koaBody, function * () {
             }
             for (var p in meta) {
                 if (meta.hasOwnProperty(p)) {
-                    dbStoreSingleMeta(name, pair[0], pair[1]);
+                    dbStoreSingleMeta(name, p, meta[p]);
                 }
             }
         })

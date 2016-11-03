@@ -246,17 +246,6 @@ class BuyGolos extends React.Component {
 		const { transactions } = state
 		let loading=this.state.loading
 		return 	<div id="buy_golos" className="BuyGolos">
-
-					{/* ACTUAL COMPONENT */}
-					{/* <div className="columns small-12">
-						<h2>Макет функционала</h2>
-						<hr />
-					</div> */}
-					<div className="row">
-						<div className="columns small-12 text-center">
-							<button className="button warnig" onClick={this.removeIco}>REMOVE METADATA!!!1</button>
-						</div>
-					</div>
 					<div className="row">
 						<div className="columns small-12">
 							<h2>ПОКУПКА СИЛЫ ГОЛОСА</h2>

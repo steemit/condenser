@@ -28,7 +28,6 @@ export default function runTests() {
     it('create private key', () => {
         private_key = PrivateKey.fromSeed('1')
         assert.equal(private_key.toWif(), wif)
-        assert(private_key.toWif());
     })
     it('supports WIF format', () => {
 

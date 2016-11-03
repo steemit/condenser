@@ -30,13 +30,13 @@ export default function runTests() {
         assert.equal(private_key.toWif(), wif)
     })
     it('supports WIF format', () => {
-        assert(PrivateKey.fromWif(wif))
+        assert.equal(PrivateKey.fromWif(wif), private_key)
     })
     it('finds public from private key', () => {
         public_key = private_key.toPublicKey()
         // substring match ignore prefix
-        assert.equal(true, true, "fuck ")
-  //      assert.equal(public_key.toString(), pubkey, 'Public key did not match')
+  //      assert.equal(true, true, "fuck ")
+        assert.equal(public_key.toString(), pubkey, 'Public key did not match')
     })
     it('parses public key', () => {
         assert(PublicKey.fromString(public_key.toString()))

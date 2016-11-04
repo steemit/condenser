@@ -149,7 +149,7 @@
     "dev-ip": "^1.0.1",
     "dirty-chai": "^1.2.2",
     "enzyme": "^2.1.0",
-    "eslint": "^2.3.0",
+    "eslint": "^2.13.1",
     "eslint-config-airbnb": "^6.1.0",
     "eslint-plugin-babel": "^3.1.0",
     "eslint-plugin-react": "^4.2.0",
@@ -166,6 +166,7 @@
     "redbox-react": "^1.2.0",
     "sinon": "^1.17.3",
     "sinon-chai": "^2.8.0",
+    "standard": "^8.5.0",
     "supertest": "^1.2.0"
   },
   "engines": {

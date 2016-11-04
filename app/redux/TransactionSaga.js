@@ -238,6 +238,16 @@ function* accepted_withdraw_vesting({operation}) {
 function* accepted_account_update({operation}) {
     let [account] = yield call(Apis.db_api, 'get_accounts', [operation.account])
     account = fromJS(account)
+    fetch('/api/v1/account_update_hook', {
+      method: 'post',
+      mode: 'no-cors',
+      credentials: 'same-origin',
+      headers: {
+          Accept: 'application/json',
+          'Content-type': 'application/json'
+      },
+      body: JSON.stringify({csrf: $STM_csrf, account_name: [operation.account]})
+    })
     yield put(g.actions.receiveAccount({account}))
 
     // bug, fork, etc.. the folowing would be mis-leading

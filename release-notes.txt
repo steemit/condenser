@@ -2,10 +2,20 @@
 0.1.161104
 ---------------------------------------------------------------------
 
-* In-app notifications
-* UI fixes for user wallet views/actions
-* UI fixes rewards balances
-* New confirmation dialog for resteeming action
-* New Profile display user join steem date
-* New hyperlink on post timestamp for content
-* Inclusive of Steemit API docs sub menu
+New features and improvements
+--------
+- In app notifications #584
+- New confirmation dialog for resteeming action #572
+- New Profile display user join steem date #582
+- New hyperlink on post timestamp for content
+- Inclusive of Steemit API docs sub menu
+- Youtube preview improvements #588
+
+Bug fixes
+--------
+- fixes for user wallet views/actions #528
+- fixes rewards balances #528
+- TypeError: Cannot read property 'get' of undefined #238
+- remove ReplyEditor__title padding #570
+- Show message when no post results #571
+- do not display invalid cashout_time #532

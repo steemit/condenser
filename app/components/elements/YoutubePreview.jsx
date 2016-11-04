@@ -38,14 +38,14 @@ export default class YoutubePreview extends React.Component {
             // hqdefault.jpg (high quality version, 480px × 360px
             // sddefault.jpg (standard definition version, 640px × 480px)
             const thumbnail = width <= 320 ? 'mqdefault.jpg' : width <= 480 ? 'hqdefault.jpg' : '0.jpg'
-            const previewLink = `http://img.youtube.com/vi/${youTubeId}/${thumbnail}`
+            const previewLink = `https://img.youtube.com/vi/${youTubeId}/${thumbnail}`
             return (
                 <div className="videoWrapper youtube" onClick={this.onPlay} style={{backgroundImage: 'url(' + previewLink + ')'}}>
                     <div className="play"></div>
                 </div>
             )
         }
-        const autoPlaySrc = `//www.youtube.com/embed/${youTubeId}?autoplay=1&autohide=1&${dataParams}`
+        const autoPlaySrc = `https://www.youtube.com/embed/${youTubeId}?autoplay=1&autohide=1&${dataParams}`
         return <div className="videoWrapper">
                 <iframe width={width} height={height} src={autoPlaySrc} frameBorder="0" allowFullScreen="true"></iframe>
             </div>

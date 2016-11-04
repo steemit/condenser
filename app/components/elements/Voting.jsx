@@ -170,7 +170,8 @@ class Voting extends React.Component {
         if(promoted > 0) {
             payoutItems.push({value: 'Promotion Cost $' + formatDecimal(promoted).join('')});
         }
-        if (cashout_active) {
+        const hide_cashout_532 = cashout_time.indexOf('1969') === 0 // tmpfix for #532
+        if (cashout_active && !hide_cashout_532) {
             payoutItems.push({value: <TimeAgoWrapper date={cashout_time} />});
         }
 

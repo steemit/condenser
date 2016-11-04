@@ -38,7 +38,7 @@ export default connect(
         const currentUser = state.user.get('current')
         const myAccount = currentUser && ownProps.username === currentUser.get('username')
         const memo_private = myAccount && currentUser ?
-            currentUser.get('private_keys').get('memo_private') : null
+            currentUser.getIn(['private_keys', 'memo_private']) : null
         return {...ownProps, memo_private, myAccount}
     }
 )(Memo)

@@ -21,14 +21,14 @@
       padding-right: 0.7rem;
       color: $white;
       background-color: transparent;
-      @include hoverUnderline;
+      &:hover {
+          background-color: #555;
+      }
       &.active {
           background-color: $white;
           z-index: 2;
           color: $black;
           font-weight: bold;
-          border-top-left-radius: 3px;
-          border-top-right-radius: 3px;
         }
   }
 
@@ -62,7 +62,7 @@
         background: #23579d; /* for older browsers */
         background: linear-gradient(to bottom, #1a4072 0%, #23579d 100%);
 
-        height: 150px;
+        height: 155px;
     }
     h2 {
         padding-top: 20px;
@@ -85,8 +85,9 @@
         padding-bottom: 5px;
 
         a {
-          border-bottom: 1px dotted rgba(255,255,255,0.5);
-	}
+            @include hoverUnderline;
+            vertical-align: middle;
+	    }
 
         span {
             padding: 0px 10px;
@@ -95,6 +96,11 @@
         span:nth-child(2) {
             border-left: 1px solid grey;
             border-right: 1px solid grey;
+        }
+
+        .NotifiCounter {
+            position: relative;
+            top: -5px;
         }
     }
 }
@@ -109,7 +115,7 @@
 
     .UserProfile__banner {
         > div.column {
-            height: 110px;
+            height: 115px;
         }
     }
 

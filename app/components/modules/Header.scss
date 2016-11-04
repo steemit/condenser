@@ -36,7 +36,7 @@
   background-color: $white;
   border-bottom: 1px solid $light-gray;
   ul > li.Header__top-logo {
-    padding: 0;
+    padding: .35rem 0 .35rem 0;
   }
   ul > li.delim {
     color: $medium-gray;
@@ -147,6 +147,7 @@ ul > li > .button {
 .logo {
   padding-top: 10px!important;
   padding-bottom: 1px!important;
+  padding-right: 5px!important;
 }
 
 .ConnectionError {

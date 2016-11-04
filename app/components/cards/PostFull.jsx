@@ -20,6 +20,7 @@ import Author from 'app/components/elements/Author';
 import {Long} from 'bytebuffer'
 import {List} from 'immutable'
 import {repLog10, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
+import DMCAList from 'app/utils/DMCAList'
 
 function TimeAuthorCategory({content, authorRepLog10, showTags}) {
     return (
@@ -148,9 +149,14 @@ export default class PostFull extends React.Component {
         let link = `/@${content.author}/${content.permlink}`;
         if (content.category) link = `/${content.category}${link}`;
 
-        const content_body = content.body;
         const {category, title, body} = content;
         if (process.env.BROWSER && title) document.title = title + ' — Steemit';
+
+        let content_body = content.body;
+        const url = `/${category}/@${author}/${permlink}`
+        if(DMCAList.includes(url)) {
+            content_body = 'This post is not available due to a copyright claim.'
+        }
 
         const replyParams = {author, permlink, parent_author, parent_permlink, category, title, body}
 
@@ -233,16 +239,18 @@ export default class PostFull extends React.Component {
 
         return (
             <article className="PostFull hentry" itemScope itemType="http://schema.org/blogPost">
-                <div className="float-right"><Voting post={post} flag /></div>
-                <div className="PostFull__header">
-                    {post_header}
-                    <TimeAuthorCategory content={content} authorRepLog10={authorRepLog10} showTags />
-                </div>
                 {showEdit ?
                     renderedEditor :
-                    <div className="PostFull__body entry-content">
-                        <MarkdownViewer formId={formId + '-viewer'} text={content_body} jsonMetadata={jsonMetadata} large highQualityPost={high_quality_post} noImage={!content.stats.pictures} />
-                    </div>
+                    <span>
+                        <div className="float-right"><Voting post={post} flag /></div>
+                        <div className="PostFull__header">
+                            {post_header}
+                            <TimeAuthorCategory content={content} authorRepLog10={authorRepLog10} showTags />
+                        </div>
+                        <div className="PostFull__body entry-content">
+                            <MarkdownViewer formId={formId + '-viewer'} text={content_body} jsonMetadata={jsonMetadata} large highQualityPost={high_quality_post} noImage={!content.stats.pictures} />
+                        </div>
+                    </span>
                 }
 
                 {showPromote && <button className="float-right button hollow tiny" onClick={this.showPromotePost}>Promote</button>}

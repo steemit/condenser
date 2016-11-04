@@ -19,6 +19,7 @@ import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 const remarkable = new Remarkable({ html: true, linkify: false, breaks: true })
 const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
 const RTE_DEFAULT = false
+//var htmlclean = require('htmlclean');
 
 let saveEditorTimeout
 
@@ -49,9 +50,10 @@ function stateFromHtml(html = null) {
 
 function stateFromMarkdown(markdown) {
     let html
-    if(markdown.trim() !== '') {
+    if(markdown && markdown.trim() !== '') {
         html = remarkable.render(markdown)
-        html = HtmlReady(html).html // TODO: option to disable youtube conversion and @-links
+        html = HtmlReady(html).html // TODO: option to disable youtube conversion, @-links, img proxy
+        //html = htmlclean(html) // normalize whitespace
         console.log("markdown converted to:", html)
     }
     return stateFromHtml(html)
@@ -160,6 +162,7 @@ class ReplyEditor extends React.Component {
                 rte = isHtmlTest(raw)
             }
 
+            // console.log("initial reply body:", raw || '(empty)')
             body.onChange(raw)
             this.setState({
                 rte,
@@ -274,7 +277,7 @@ class ReplyEditor extends React.Component {
         // Be careful, autoVote can reset curation rewards.  Never autoVote on edit..
         const autoVoteValue = !isEdit && autoVote.value
         const replyParams = {
-            author, permlink, parent_author, parent_permlink, type, state, originalPost, isHtml,
+            author, permlink, parent_author, parent_permlink, type, state, originalPost, isHtml, isStory,
             jsonMetadata, autoVote: autoVoteValue, payoutType,
             successCallback: successCallbackWrapper, errorCallback
         }
@@ -288,6 +291,7 @@ class ReplyEditor extends React.Component {
             </div>
         }
 
+        // TODO: remove all references to these vframe classes. Removed from css and no longer needed.
         const vframe_class = isStory ? 'vframe' : '';
         const vframe_section_class = isStory ? 'vframe__section' : '';
         const vframe_section_shrink_class = isStory ? 'vframe__section--shrink' : '';
@@ -425,7 +429,7 @@ export default formId => reduxForm(
         setMetaData: (id, jsonMetadata) => {
             dispatch(g.actions.setMetaData({id, meta: jsonMetadata ? jsonMetadata.steem : null}))
         },
-        reply: ({category, title, body, author, permlink, parent_author, parent_permlink, isHtml,
+        reply: ({category, title, body, author, permlink, parent_author, parent_permlink, isHtml, isStory,
             type, originalPost, autoVote = false, payoutType = '50%',
             state, jsonMetadata,
             successCallback, errorCallback, loadingCallback
@@ -481,6 +485,11 @@ export default formId => reduxForm(
             if(rtags.usertags.size) meta.users = rtags.usertags; else delete meta.users
             if(rtags.images.size) meta.image = rtags.images; else delete meta.image
             if(rtags.links.size) meta.links = rtags.links; else delete meta.links
+
+            if(isStory) {
+                meta.app = "steemit/0.1"
+                meta.format = isHtml ? 'html' : 'markdown'
+            }
 
             // if(Object.keys(json_metadata.steem).length === 0) json_metadata = {}// keep json_metadata minimal
             const sanitizeErrors = []

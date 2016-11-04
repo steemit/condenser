@@ -1,7 +1,6 @@
 import React from "react";
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import Icon from 'app/components/elements/Icon';
-import SvgImage from 'app/components/elements/SvgImage';
 import {renderToString} from 'react-dom/server';
 
 if (!process.env.BROWSER) {
@@ -110,9 +109,6 @@ export default class HelpContent extends React.Component {
         value = this.setVars(value);
         value = value.replace(/<Icon name="([A-Za-z0-9\_\-]+)" \/>/gi, (match, name) => {
             return renderToString(<Icon name={name} />);
-        });
-        value = value.replace(/<SvgImage name="(.+)" width="(.+)" height="(.+)" \/>/gi, (match, name, width, height) => {
-            return renderToString(<SvgImage name={name} width={width} height={height} />);
         });
         return <MarkdownViewer className="HelpContent" text={value} />;
     }

@@ -177,7 +177,7 @@ export default class UserProfile extends React.Component {
                     Looks like you haven't posted anything yet.<br /><br />
                     <Link to="/submit.html">Submit a Story</Link><br />
                     <a href="/steemit/@thecryptofiend/the-missing-faq-a-beginners-guide-to-using-steemit">Read The Beginner's Guide</a><br />
-                    <a href="/welcome.html">Read The Steemit Welcome Guide</a>
+                    <a href="/welcome">Read The Steemit Welcome Guide</a>
                 </div>:
                     <div>Looks like {account.name} hasn't started blogging yet!</div>;
                 tab_content = <PostsList

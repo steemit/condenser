@@ -248,7 +248,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         yield put(user.actions.saveLogin());
 
     serverApiLogin(username);
-    if (afterLoginRedirectToWelcome) browserHistory.push('/welcome.html');
+    if (afterLoginRedirectToWelcome) browserHistory.push('/welcome');
 }
 
 function* saveLogin_localStorage() {

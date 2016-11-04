@@ -15,9 +15,9 @@ import {Set} from 'immutable'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import Remarkable from 'remarkable'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
+import SlateEditor, {serializeHtml, deserializeHtml, getDemoState} from 'app/components/elements/SlateEditor'
 
 const remarkable = new Remarkable({ html: true, linkify: false, breaks: true })
-const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
 const RTE_DEFAULT = false
 //var htmlclean = require('htmlclean');
 
@@ -33,7 +33,7 @@ function stripHtmlWrapper(text) {
 const isHtmlTest = text => /^<html>/.test(text)
 
 function stateToHtml(state) {
-    let html = state.toString('html');
+    let html = serializeHtml(state)
     if (html === '<p></p>') html = '';
     if (html === '<p><br></p>') html = '';
     if(html == '') return ''
@@ -41,11 +41,10 @@ function stateToHtml(state) {
 }
 
 function stateFromHtml(html = null) {
-    if(!RichTextEditor) return null;
     if(html) html = stripHtmlWrapper(html)
     if(html && html.trim() == '') html = null
-    return html ? RichTextEditor.createValueFromString(html, 'html')
-                : RichTextEditor.createEmptyValue()
+    return html ? deserializeHtml(html)
+                : getDemoState()
 }
 
 function stateFromMarkdown(markdown) {
@@ -118,7 +117,7 @@ class ReplyEditor extends React.Component {
             const {onCancel, resetForm} = this.props
             resetForm()
             this.setAutoVote()
-            this.setState({rte_value: stateFromHtml()})
+            if(this.refs.rte) this.refs.rte.setState({state: stateFromHtml()})
             if(onCancel) onCancel(e)
         }
         this.onChange = this.onChange.bind(this);
@@ -162,7 +161,7 @@ class ReplyEditor extends React.Component {
                 rte = isHtmlTest(raw)
             }
 
-            // console.log("initial reply body:", raw || '(empty)')
+            console.log("initial reply body:", raw || '(empty)')
             body.onChange(raw)
             this.setState({
                 rte,
@@ -214,7 +213,7 @@ class ReplyEditor extends React.Component {
 
     // As rte_editor is updated, keep the (invisible) 'body' field in sync.
     onChange(rte_value) {
-        this.setState({rte_value})
+        this.refs.rte.setState({state: rte_value})
         const html = stateToHtml(rte_value)
         const body = this.props.fields.body
         if(body.value !== html) body.onChange(html);
@@ -320,11 +319,10 @@ class ReplyEditor extends React.Component {
 
                         <div className={'ReplyEditor__body ' + (rte ? `rte ${vframe_section_class}` : vframe_section_shrink_class)}>
                             {process.env.BROWSER && rte ?
-                                <RichTextEditor ref="rte"
-                                    readOnly={loading}
-                                    value={this.state.rte_value}
-                                    onChange={this.onChange}
-                                    onBlur={body.onBlur} tabIndex={2} />
+                                <SlateEditor ref="rte"
+                                    placeholder={isStory ? 'Write your story...' : 'Reply'}
+                                    initialState={this.state.rte_value}
+                                    onChange={this.onChange} />
                                 :
                                 <textarea {...cleanReduxInput(body)} disabled={loading} rows={isStory ? 10 : 3} placeholder={isStory ? 'Write your story...' : 'Reply'} autoComplete="off" ref="postRef" tabIndex={2} />
                             }
@@ -489,7 +487,7 @@ export default formId => reduxForm(
             if(rtags.images.size) meta.image = rtags.images; else delete meta.image
             if(rtags.links.size) meta.links = rtags.links; else delete meta.links
 
-            meta.app = "steemit/0.1"
+            meta.app = "steemit/0.2"
             if(isStory) {
                 meta.format = isHtml ? 'html' : 'markdown'
             }

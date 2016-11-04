@@ -108,7 +108,7 @@ function* usernamePasswordLogin(action) {
 const clean = (value) => value == null || value === '' || /null|undefined/.test(value) ? undefined : value
 
 function* usernamePasswordLogin2({payload: {username, password, saveLogin,
-        operationType /*high security*/, afterLoginRedirectToAccount
+        operationType /*high security*/, afterLoginRedirectToWelcome
 }}) {
     // login, using saved password
     let autopost, memoWif, login_owner_pubkey, login_wif_owner_pubkey
@@ -248,7 +248,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         yield put(user.actions.saveLogin());
 
     serverApiLogin(username);
-    if (afterLoginRedirectToAccount) browserHistory.push('/@' + username);
+    if (afterLoginRedirectToWelcome) browserHistory.push('/welcome.html');
 }
 
 function* saveLogin_localStorage() {

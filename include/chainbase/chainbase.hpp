@@ -7,17 +7,25 @@
 #include <boost/interprocess/containers/deque.hpp>
 #include <boost/interprocess/containers/string.hpp>
 #include <boost/interprocess/allocators/allocator.hpp>
+#include <boost/interprocess/sync/interprocess_upgradable_mutex.hpp>
 
 #include <boost/multi_index_container.hpp>
 
+#include <boost/chrono.hpp>
 #include <boost/filesystem.hpp>
-#include <boost/lexical_cast.hpp> 
+#include <boost/lexical_cast.hpp>
+#include <boost/thread.hpp>
 #include <boost/throw_exception.hpp>
-#include <stdexcept>
 
-#include <typeindex>
+#include <array>
+#include <atomic>
 #include <fstream>
+#include <stdexcept>
+#include <typeindex>
 
+#ifndef CHAINBASE_DEFAULT_NUM_RW_LOCKS
+   #define CHAINBASE_DEFAULT_NUM_RW_LOCKS 10
+#endif
 
 namespace chainbase {
 
@@ -30,6 +38,10 @@ namespace chainbase {
    using allocator = bip::allocator<T, bip::managed_mapped_file::segment_manager>;
 
    typedef bip::basic_string< char, std::char_traits< char >, allocator< char > > shared_string;
+
+   typedef boost::interprocess::interprocess_upgradable_mutex read_write_mutex;
+   typedef boost::shared_lock< read_write_mutex > read_lock;
+   typedef boost::unique_lock< read_write_mutex > write_lock;
 
    class database;
 
@@ -69,7 +81,7 @@ namespace chainbase {
     *  This macro must be used at global scope and OBJECT_TYPE and INDEX_TYPE must be fully qualified
     */
    #define CHAINBASE_SET_INDEX_TYPE( OBJECT_TYPE, INDEX_TYPE )  \
-   namespace chainbase { template<> struct get_index_type<OBJECT_TYPE> { typedef INDEX_TYPE type; }; } 
+   namespace chainbase { template<> struct get_index_type<OBJECT_TYPE> { typedef INDEX_TYPE type; }; }
 
    #define CHAINBASE_DEFAULT_CONSTRUCTOR( OBJECT_TYPE ) \
    template<typename Constructor, typename Allocator> \
@@ -93,7 +105,7 @@ namespace chainbase {
          :_stack(a),_indices( a ),_size_of_value_type( sizeof(typename MultiIndexType::node_type) ),_size_of_this(sizeof(*this)){}
 
          void validate()const {
-            if( sizeof(typename MultiIndexType::node_type) != _size_of_value_type || sizeof(*this) != _size_of_this ) 
+            if( sizeof(typename MultiIndexType::node_type) != _size_of_value_type || sizeof(*this) != _size_of_this )
                BOOST_THROW_EXCEPTION( std::runtime_error("content of memory does not match data expected by executable") );
          }
 
@@ -113,7 +125,7 @@ namespace chainbase {
             auto insert_result = _indices.emplace( constructor, _indices.get_allocator() );
 
             if( !insert_result.second ) {
-               throw std::logic_error("could not insert object, most likely a uniqueness constraint was violated");
+               BOOST_THROW_EXCEPTION( std::logic_error("could not insert object, most likely a uniqueness constraint was violated") );
             }
 
             ++_next_id;
@@ -535,6 +547,33 @@ namespace chainbase {
    };
 
 
+   class read_write_mutex_manager
+   {
+      public:
+         read_write_mutex_manager()
+         {
+            _current_lock = 0;
+         }
+
+         ~read_write_mutex_manager(){}
+
+         void next_lock()
+         {
+            _current_lock++;
+            new( &_locks[ _current_lock ] ) read_write_mutex();
+         }
+
+         read_write_mutex& current_lock()
+         {
+            return _locks[ _current_lock ];
+         }
+
+      private:
+         std::array< read_write_mutex, 10 >        _locks;
+         std::atomic< uint32_t >                   _current_lock;
+   };
+
+
    /**
     *  This class
     */
@@ -639,7 +678,6 @@ namespace chainbase {
              auto new_index = new index<index_type>( *idx_ptr );
              _index_map[ type_id ].reset( new_index );
              _index_list.push_back( new_index );
-             _type_name_to_id.emplace( type_name, type_id );
          }
 
          auto get_segment_manager() -> decltype( ((bip::managed_mapped_file*)nullptr)->get_segment_manager()) {
@@ -696,7 +734,7 @@ namespace chainbase {
          }
 
          template< typename ObjectType >
-         const ObjectType& get( oid< ObjectType > key = oid< ObjectType >() )const
+         const ObjectType& get( const oid< ObjectType >& key = oid< ObjectType >() )const
          {
              auto obj = find< ObjectType >( key );
              if( !obj ) BOOST_THROW_EXCEPTION( std::out_of_range( "unknown key") );
@@ -724,22 +762,55 @@ namespace chainbase {
              return get_mutable_index<index_type>().emplace( std::forward<Constructor>(con) );
          }
 
+         template< typename Lambda >
+         void with_read_lock( Lambda&& callback, uint64_t wait_micro = 1000000 )
+         {
+            read_lock lock( _rw_manager->current_lock(), boost::defer_lock_t() );
+            if( !wait_micro )
+               lock.lock();
+            else
+               lock.try_lock_for( boost::chrono::microseconds( wait_micro ) );
+
+            if( lock.owns_lock() )
+               callback();
+         }
+
+         template< typename Lambda >
+         void with_write_lock( Lambda&& callback, uint64_t wait_micro = 1000000 )
+         {
+            write_lock lock( _rw_manager->current_lock() );
+            /*if( !wait_micro )
+               lock.lock();
+            else
+            {
+               lock.try_lock_for( boost::chrono::microseconds( wait_micro ) );
+               while( !lock.owns_lock() )
+               {
+                  _rw_manager->next_lock();
+                  lock = write_lock( _rw_manager->current_lock(), boost::defer_lock_t() );
+                  lock.try_lock_for( boost::chrono::microseconds( wait_micro ) );
+               }
+            }*/
+
+            callback();
+         }
+
       private:
-         unique_ptr<bip::managed_mapped_file>            _segment;
-         bool                                            _read_only = false;
+         unique_ptr<bip::managed_mapped_file>                        _segment;
+         read_write_mutex_manager*                                   _rw_manager;
+         bool                                                        _read_only = false;
 
          /**
           * This is a sparse list of known indicies kept to accelerate creation of undo sessions
           */
-         vector<abstract_index*>                        _index_list;
+         vector<abstract_index*>                                     _index_list;
+
          /**
           * This is a full map (size 2^16) of all possible index designed for constant time lookup
           */
-         vector<unique_ptr<abstract_index>>             _index_map;
+         vector<unique_ptr<abstract_index>>                          _index_map;
 
-         bfs::path                                       _data_dir;
-
-         boost::container::flat_map< std::string, uint16_t > _type_name_to_id;
+         bfs::path                                                   _data_dir;
    };
 
 

@@ -1,4 +1,4 @@
-#include <chainbase.hpp>
+#include <chainbase/chainbase.hpp>
 #include <boost/array.hpp>
 
 #include <iostream>
@@ -37,7 +37,7 @@ namespace chainbase {
       if( !bfs::exists( dir ) ) {
          if( !write ) BOOST_THROW_EXCEPTION( std::runtime_error( "database file not found at " + dir.native() ) );
       }
-      
+
       bfs::create_directories( dir );
       if( _data_dir != dir ) close();
 
@@ -46,7 +46,19 @@ namespace chainbase {
 
       if( bfs::exists( abs_path ) )
       {
-         if( write ) {
+         if( write )
+         {
+            auto existing_file_size = bfs::file_size( abs_path );
+            if( shared_file_size > existing_file_size )
+            {
+               if( !bip::managed_mapped_file::grow( abs_path.generic_string().c_str(), shared_file_size - existing_file_size ) )
+                  BOOST_THROW_EXCEPTION( std::runtime_error( "could not grow database file to requested size." ) );
+            }
+            else
+            {
+               shared_file_size = existing_file_size;
+            }
+
             _segment.reset( new bip::managed_mapped_file( bip::open_only,
                                                           abs_path.generic_string().c_str()
                                                           ) );
@@ -57,6 +69,7 @@ namespace chainbase {
             _read_only = true;
          }
 
+         _rw_manager = _segment->find< read_write_mutex_manager >( "rw_manager" ).first;
          auto env = _segment->find< environment_check >( "environment" );
          if( !env.first || !( *env.first == environment_check()) ) {
             BOOST_THROW_EXCEPTION( std::runtime_error( "database created by a different compiler, build, or operating system" ) );
@@ -65,6 +78,7 @@ namespace chainbase {
          _segment.reset( new bip::managed_mapped_file( bip::create_only,
                                                        abs_path.generic_string().c_str(), shared_file_size
                                                        ) );
+         _rw_manager = _segment->find_or_construct< read_write_mutex_manager >( "rw_manager" )();
          _segment->find_or_construct< environment_check >( "environment" )();
       }
    }
@@ -85,6 +99,8 @@ namespace chainbase {
       _segment.reset();
       bfs::remove_all( dir / "shared_memory" );
       _data_dir = bfs::path();
+      _index_list.clear();
+      _index_map.clear();
    }
 
    void database::undo()
@@ -94,6 +110,7 @@ namespace chainbase {
          item->undo();
       }
    }
+
    void database::squash()
    {
       for( auto& item : _index_list )
@@ -101,6 +118,7 @@ namespace chainbase {
          item->squash();
       }
    }
+
    void database::commit( int64_t revision )
    {
       for( auto& item : _index_list )

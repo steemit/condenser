@@ -1,7 +1,7 @@
 #define BOOST_TEST_MODULE chainbase test
 
 #include <boost/test/unit_test.hpp>
-#include <chainbase.hpp>
+#include <chainbase/chainbase.hpp>
 
 #include <boost/multi_index_container.hpp>
 #include <boost/multi_index/ordered_index.hpp>
@@ -15,12 +15,12 @@ using namespace boost::multi_index;
 //BOOST_TEST_SUITE( serialization_tests, clean_database_fixture )
 
 struct book : public chainbase::object<0, book> {
-    
+
    template<typename Constructor, typename Allocator>
     book(  Constructor&& c, Allocator&& a ) {
        c(*this);
     }
-   
+
     id_type id;
     int a = 0;
     int b = 1;

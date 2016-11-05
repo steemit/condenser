@@ -11,7 +11,7 @@ function addSiteMeta(metas) {
     metas.push({property: 'og:image', content: SHARE_IMAGE});
     metas.push({property: 'fb:app_id', content: $STM_Config.fb_app});
     metas.push({name: 'twitter:card', content: 'summary'});
-    metas.push({name: 'twitter:site', content: TWITTER_HANDLE}); //TODO
+    metas.push({name: 'twitter:site', content: TWITTER_HANDLE});
     metas.push({name: 'twitter:title', content: APP_NAME});
     metas.push({name: 'twitter:description', site_desc: SITE_DESCRIPTION});
     metas.push({name: 'twitter:image', content: SHARE_IMAGE});

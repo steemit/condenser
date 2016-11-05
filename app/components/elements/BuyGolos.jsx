@@ -345,7 +345,7 @@ class BuyGolos extends React.Component {
 									<tbody>
 										{
 											transactions.map((item, index) => {
-												const golosAmount = 43306176*transactionOutputsSum(item, icoDestinationAddress)/state.confirmedBalance
+												const golosAmount = 27072000*transactionOutputsSum(item, icoDestinationAddress)/state.confirmedBalance
 												const sharePercentage = (golosAmount/43306176) * 100
 												return 	<tr key={index}>
 															<td>{item.hash}<br />({item.confirmed}); {displayConfirmations(item.confirmations)}</td>

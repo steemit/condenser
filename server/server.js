@@ -19,6 +19,7 @@ import flash from 'koa-flash';
 import minimist from 'minimist';
 import Grant from 'grant-koa';
 import config from '../config';
+import {APP_NAME} from 'config/client_config'
 
 import {githash} from 'config/last-build';
 
@@ -26,7 +27,7 @@ const grant = new Grant(config.grant);
 // import uploadImage from 'server/upload-image' //medium-editor
 
 const app = new Koa();
-app.name = 'Голос';
+app.name = APP_NAME;
 
 const env = process.env.NODE_ENV || 'development';
 const cacheOpts = {maxAge: 86400000, gzip: true};

@@ -1,6 +1,6 @@
 import extractContent from 'app/utils/ExtractContent';
 import {objAccessor} from 'app/utils/Accessors';
-import { APP_NAME, SITE_DESCRIPTION } from 'config/client_config';
+import { APP_NAME, SITE_DESCRIPTION, TWITTER_HANDLE, SHARE_IMAGE, TWITTER_SHARE_IMAGE } from 'config/client_config';
 
 function addSiteMeta(metas) {
     metas.push({title: APP_NAME});
@@ -8,13 +8,13 @@ function addSiteMeta(metas) {
     metas.push({property: 'og:site_name', content: APP_NAME});
     metas.push({property: 'og:title', content: APP_NAME});
     metas.push({property: 'og:description', content: SITE_DESCRIPTION});
-    metas.push({property: 'og:image', content: 'https://golos.io/images/golos-share.png'});
+    metas.push({property: 'og:image', content: SHARE_IMAGE});
     metas.push({property: 'fb:app_id', content: $STM_Config.fb_app});
     metas.push({name: 'twitter:card', content: 'summary'});
-    metas.push({name: 'twitter:site', content: '@goloschain'}); //TODO
+    metas.push({name: 'twitter:site', content: TWITTER_HANDLE}); //TODO
     metas.push({name: 'twitter:title', content: APP_NAME});
     metas.push({name: 'twitter:description', site_desc: SITE_DESCRIPTION});
-    metas.push({name: 'twitter:image', content: 'https://golos.io/images/golos-share.png'});
+    metas.push({name: 'twitter:image', content: SHARE_IMAGE});
 }
 
 export default function extractMeta(chain_data, rp) {
@@ -26,8 +26,8 @@ export default function extractMeta(chain_data, rp) {
             const d = extractContent(objAccessor, content, false);
             const url = 'https://golos.io' + d.link;
             const title = d.title + ' — Голос';
-            const image = d.image_link ? d.image_link : 'https://golos.io/images/golos-share.png';
-            const twimage = d.image_link ? d.image_link : 'https://golos.io/images/golos-twshare.png';
+            const image = d.image_link ? d.image_link : SHARE_IMAGE;
+            const twimage = d.image_link ? d.image_link : TWITTER_SHARE_IMAGE;
             metas.push({title});
             metas.push({canonical: url});
             metas.push({name: 'description', content: d.desc});
@@ -39,7 +39,7 @@ export default function extractMeta(chain_data, rp) {
             metas.push({property: 'og:image', content: image});
             metas.push({property: 'fb:app_id', content: $STM_Config.fb_app});
             metas.push({name: 'twitter:card', content: 'summary'});
-            metas.push({name: 'twitter:site', content: '@goloschain'});
+            metas.push({name: 'twitter:site', content: TWITTER_HANDLE});
             metas.push({name: 'twitter:title', content: title});
             metas.push({name: 'twitter:description', content: d.desc});
             metas.push({name: 'twitter:image', content: twimage});

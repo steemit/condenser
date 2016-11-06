@@ -562,6 +562,8 @@ const ru = {
 	add_image_url: 'Добавьте url вашего изображения',
 	saved: 'Сохранено',
 	server_returned_error: 'ошибка сервера',
+	user_avatar: 'Аватар пользователя',
+	save_avatar: 'Сохранить аватар',
 }
 
 export { ru }

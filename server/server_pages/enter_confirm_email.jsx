@@ -11,6 +11,7 @@ import sendEmail from '../sendEmail';
 import {checkCSRF} from '../utils';
 import config from '../../config';
 import { APP_ICON, APP_NAME } from 'config/client_config';
+import { translate } from 'app/Translator';
 
 let assets;
 if (process.env.NODE_ENV === 'production') {
@@ -70,7 +71,7 @@ export default function useEnterAndConfirmEmailPages(app) {
     router.get('/enter_email', function *() {
         console.log('-- /enter_email -->', this.session.uid, this.session.user);
         const user_id = this.session.user;
-        if (!user_id) { this.body = 'user not found'; return; }
+        if (!user_id) { this.body = translate('user_not_found'); return; }
         const eid = yield models.Identity.findOne(
             {attributes: ['email'], where: {user_id, provider: 'email'}, order: 'id DESC'}
         );
@@ -80,34 +81,34 @@ export default function useEnterAndConfirmEmailPages(app) {
             <div className="row">
                 <form className="column small-4" action="/submit_email" method="POST">
                     <p>
-                        Please provide your email address to continue the registration process.<br />
-                        <span className="secondary">This information allows Steemit to assist with Account Recovery in case your account is ever compromised.</span>
+                        {translate('please_provide_your_email_address_to_continue_the_registration_process')}.<br />
+                        <span className="secondary">{translate('this_information_allows_steemit_to_assist_with_account_recovery_in_case_your_account_is_ever_compormised')}.</span>
                     </p>
                     <input type="hidden" name="csrf" value={this.csrf} />
                     <label>
-                        Email
+                        {translate('email')}
                         <input type="email" name="email" defaultValue={eid ? eid.email : ''} readOnly={eid && eid.email} />
                     </label>
-                    {eid && eid.email && <div className="secondary"><i>Email address cannot be changed at this moment, sorry for the inconvenience.</i></div>}
+                    {eid && eid.email && <div className="secondary"><i>{translate('email_address_cannot_be_changed_at_this_moment_sorry_for_inconvenience')}.</i></div>}
                     <br />
                     <div className="g-recaptcha" data-sitekey={config.recaptcha.site_key}></div>
                     <br />
                     <div className="error">{this.flash.error}</div>
-                    <input type="submit" className="button" value="CONTINUE" />
+                    <input type="submit" className="button" style={{textTransform: 'uppercase'}} value={translate("continue")} />
                 </form>
             </div>
         </div>);
-        const props = { body, title: 'Email Address', assets, meta: [] };
+        const props = { body, title: translate('email_address'), assets, meta: [] };
         this.body = '<!DOCTYPE html>' + renderToString(<ServerHTML { ...props } />);
     });
 
     router.post('/submit_email', koaBody, function *() {
         if (!checkCSRF(this, this.request.body.csrf)) return;
         const user_id = this.session.user;
-        if (!user_id) { this.body = 'user not found'; return; }
+        if (!user_id) { this.body = translate('user_not_found'); return; }
         const email = this.request.body.email;
         if (!email) {
-            this.flash = {error: 'Please provide an email address'};
+            this.flash = {error: translate('please_prove_an_email_address')};
             this.redirect('/enter_email');
             return;
         }
@@ -125,7 +126,7 @@ export default function useEnterAndConfirmEmailPages(app) {
         }
         if (captcha_failed) {
             console.log('-- /submit_email captcha verification failed -->', user_id, this.session.uid, email, this.req.connection.remoteAddress);
-            this.flash = {error: 'Failed captcha verification, please try again.'};
+            this.flash = {error: translate('failed_captcha_verification_please_try_again') + '.'};
             this.redirect('/enter_email');
             return;
         }
@@ -154,14 +155,14 @@ export default function useEnterAndConfirmEmailPages(app) {
             <br />
             <div className="row">
                 <div className="column">
-                    Thank you for providing your email address ({email}).<br />
-                    To continue please click on the link in the email we've sent you.
+                    {translate('thank_you_for_providing_your_email_address') + ' (' + email + ')'}.<br />
+                    {translate('to_continue_please_click_on_the_link_in_the_email_weve_sent_you')}.
                 </div>
             </div>
             <br />
             <div className="row">
                 <div className="column">
-                    <a href="/enter_email">Re-send email</a>
+                    <a href="/enter_email">{translate('re_send_email')}</a>
                 </div>
             </div>
             {/*<div className="row">
@@ -175,7 +176,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                 </form>
             </div>*/}
         </div>);
-        const props = { body, title: 'Email Confirmation', assets, meta: [] };
+        const props = { body, title: translate('email_confirmation'), assets, meta: [] };
         this.body = '<!DOCTYPE html>' + renderToString(<ServerHTML { ...props } />);
     });
 

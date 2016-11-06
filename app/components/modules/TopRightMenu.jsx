@@ -5,6 +5,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import Icon from 'app/components/elements/Icon';
 import user from 'app/redux/User';
+import Userpic from 'app/components/elements/Userpic';
 import { browserHistory } from 'react-router';
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
 import VerticalMenu from 'app/components/elements/VerticalMenu';
@@ -81,7 +82,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                     >
                         {!vertical && <li className={'Header__userpic '}>
                             <a href={account_link} title={username} onClick={e => e.preventDefault()}>
-                                <img src={userpic_src} width="36" height="36" />
+                                <Userpic account={username} width="36" height="36" />
                             </a>
                         </li>}
                     </LinkWithDropdown>
@@ -107,7 +108,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                                 <Link spy to="team" smooth offset={-110} duration={500}>Команда</Link>
                             </li>
                             <li className={lcn + ' image-wrapper'}>
-                                <a href="https://golos.io/login.html">
+                                <a href="/login.html">
                                     <img src="images/user.png" width="36" height="36" />
                                     <span>Вход</span>
                                 </a>
@@ -142,7 +143,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                 >
                     {!vertical && <li className={'Header__userpic '}>
                         <a href={account_link} title={username} onClick={e => e.preventDefault()}>
-                            <img src={userpic_src} width="36" height="36" />
+                            <Userpic account={username} width="36" height="36" />
                         </a>
                     </li>}
                 </LinkWithDropdown>
@@ -174,7 +175,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                                 <Link spy to="team" smooth offset={-110} duration={500}>Команда</Link>
                             </li>
                             <li className={lcn + ' image-wrapper'}>
-                                <a href="https://golos.io/login.html">
+                                <a href="/login.html">
                                     <img src="images/user.png" width="36" height="36" />
                                     <span>Вход</span>
                                 </a>
@@ -224,7 +225,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                         <Link spy to="team" smooth offset={-110} duration={500}>Команда</Link>
                     </li>
                     <li className={lcn + ' image-wrapper'}>
-                        <a href="https://golos.io/login.html">
+                        <a href="/login.html">
                             <img src="images/user.png" width="36" height="36" />
                             <span>Вход</span>
                         </a>

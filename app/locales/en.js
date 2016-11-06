@@ -376,7 +376,6 @@ const en = 	{
 	changing_to_an_upvote: 'Changing to an Up-Vote',
 	changing_to_a_downvote: 'Changing to a Down-Vote',
 	confirm_flag: 'Confirm Flag',
-	//  TODO
 	date_created: 'Date Created',
 	search: 'Search',
 	begin_recovery: "Begin Recovery",
@@ -522,7 +521,30 @@ const en = 	{
 	choose_currency: 'Choose currency',
 	crowdsale: 'Crowdsale',
 	followers: 'Followers',
+	// errors
 	cannot_increase_reward_of_post_within_the_last_minute_before_payout: 'Cannot increase reward of post within the last minute before payout',
+	vote_currently_exists_user_must_be_indicate_a_to_reject_witness: 'vote currently exists, user must be indicate a desire to reject witness',
+	only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes: 'Only one Steem account allowed per IP address every 10 minutes',
+	// enter_confirm_email.jsx
+	thank_you_for_providing_your_email_address: 'Thank you for providing your email address',
+	to_continue_please_click_on_the_link_in_the_email_weve_sent_you: 'To continue please click on the link in the email we\'ve sent you',
+	user_not_found: 'user not found',
+	please_provide_your_email_address_to_continue_the_registration_process: 'Please provide your email address to continue the registration process',
+	this_information_allows_steemit_to_assist_with_account_recovery_in_case_your_account_is_ever_compormised: 'This information allows Steemit to assist with Account Recovery in case your account is ever compromised',
+	email_address_cannot_be_changed_at_this_moment_sorry_for_inconvenience: 'Email address cannot be changed at this moment, sorry for the inconvenience',
+	continue: 'continue',
+	email_address: 'Email Address',
+	please_prove_an_email_address: 'Please provide an email address',
+	failed_captcha_verification_please_try_again: 'Failed captcha verification, please try again',
+	re_send_email: 'Re-send email',
+	email_confirmation: 'Email Confirmation',
+	// next 3 strings are used together
+	by_verifying_you_agree_with: 'By verifying your account you agree to the',
+	by_verifying_you_agree_with_privacy_policy: 'Privacy Policy',
+	by_verifying_you_agree_with_privacy_policy_of_website_APP_URL: 'of ' + APP_URL,
+	add_image_url: 'Add image url',
+	saved: 'Saved',
+	server_returned_error: 'server returned error',
 }
 
 export { en }

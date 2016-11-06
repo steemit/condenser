@@ -41,9 +41,9 @@ export const ua = {
 	show_less_low_value_posts: "Показати менше повідомлень низької вартості",
 	show_more_low_value_posts: "Показати більше повідомлень низької вартості",
 	select_topic: 'Вибрати топік',
-	tags_and_topics: "Теги і топікі",
+	tags_and_topics: "Теги і топіки",
 	filter: "Фільтр",
-	show_more_topics: "Показати більше топіків",
+	show_more_topics: "Показати більше топікив",
 	we_require_social_account: APP_NAME + ' спонсує кожен акаунт на суму близько {signup_bonus} в ' + INVEST_TOKEN + '; щоб запобігти зловживання, ми просимо нових користувачів реєструватися використовуючи соціальні мережі.',
 	personal_info_will_be_private: 'Ваша персональна інформація буде залишатися',
 	personal_info_will_be_private_link: 'приватною',
@@ -181,7 +181,7 @@ export const ua = {
 	reset_usernames_password: "Скинути пароль користувача {username}",
 	this_will_update_usernames_authtype_key: 'Це оновить {username} {authType} ключ',
 
-	the_rules_of_APP_NAME: "Перше правило мережі " + APP_NAME + ": не втрачайте свій пароль. <br /> Друге правило" + APP_NAME + ": <strong>Не</strong> втрачайте свій пароль. <br /> Третє правило " + APP_NAME + ": ми не можемо відновити ваш пароль. <br /> Четверте правило: якщо ви можете запам'ятати свій пароль, значить він не безпечний. <br /> П'яте правило: використовуйте тільки згенеровані випадковим чином паролі. <br /> Шосте правило: Нікому не кажіть свій пароль. <br /> Сьоме правило: Завжди надійно зберігайте свій пароль.",
+	the_rules_of_APP_NAME: "Перше правило мережі " + APP_NAME + ": не втрачайте свій пароль. <br /> Друге правило " + APP_NAME + ": <strong>Не</strong> втрачайте свій пароль. <br /> Третє правило " + APP_NAME + ": ми не можемо відновити ваш пароль. <br /> Четверте правило: якщо ви можете запам'ятати свій пароль, значить він не безпечний. <br /> П'яте правило: використовуйте тільки згенеровані випадковим чином паролі. <br /> Шосте правило: Нікому не кажіть свій пароль. <br /> Сьоме правило: Завжди надійно зберігайте свій пароль.",
 	account_name: 'Ім\'я облікового запису',
 	recover_password: 'Відновити акаунт',
 	current_password: 'Поточний пароль',
@@ -406,8 +406,7 @@ export const ua = {
 	trending_30_day: 'Популярне (30 дней)',
 	promoted: 'Прогресивне',
 	comments: 'Коментарі',
-	topics: 'Топікі',
-	// TODO
+	topics: 'Топіки',
 	this_password_is_bound_to_your_accounts_private_key: 'Цей пароль прив\'язаний до активного ключу вашого облікового запису і не може бути використаний для входу на цю сторінку. Ви можете використовувати його для входу на інші більш захищені сторінки як "гаманець" або "маркет".',
 	potential_payout: 'Потенційна виплата',
 	boost_payments: 'Платіж за просування',
@@ -465,7 +464,6 @@ export const ua = {
 	convert_to_OWNERSHIP_TOKEN: 'Перевести в ' + OWNERSHIP_TOKEN,
 	transfer_to_account: 'Передати користувачу',
 	buy_OWNERSHIP_TOKEN_or_INVEST_TOKEN: 'Купити ' + OWNERSHIP_TOKEN + ' чи ' + INVEST_TOKEN,
-	// TODO
 	version: 'Версія',
 	about_APP_NAME: 'О ' + APP_NAME,
 	APP_NAME_is_a_social_media_platform_where_everyone_gets_paid_for_creating_and_curating_content: APP_NAME + ' це соціальна медіа платформа в якій<strong>всі</strong>&nbsp;отримують <strong>гроші</strong> за створення і курирування контенту',
@@ -531,5 +529,23 @@ export const ua = {
 	account_name_should_have_only_letters_digits_or_dashes: 'Имя акаунта должно должно состоять только из букв, цифр или дефисов.',
 	choose_language: 'Виберіть мову',
 	choose_currency: 'Виберіть валюту',
-	crowdsale: 'Краудсейл'
+	crowdsale: 'Краудсейл',
+	followers: 'Подписчики',
+	// errors
+	cannot_increase_reward_of_post_within_the_last_minute_before_payout: 'Нагорода за пост не може бути збільшена після закінчення 24 годин з моменту публікації',
+	vote_currently_exists_user_must_be_indicate_a_to_reject_witness: 'Голос вже існує, користувач повинен позначити бажання прибрати делегата',
+	only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes: 'Тільки один Голос аккаунт дозволений з одного IP адресу кожні десять хвилин ',
+	// enter_confirm_email.jsx
+	thank_you_for_providing_your_email_address: 'Дякуємо вам за надання вашої електронної пошти ',
+	to_continue_please_click_on_the_link_in_the_email_weve_sent_you: 'Для продовження, натисніть на заслання в листі, яке ми вам надіслали',
+	user_not_found: 'користувач не знайдений',
+	please_provide_your_email_address_to_continue_the_registration_process: 'Будь ласка, вкажіть адресу вашої електронної пошти, щоб продовжити процес реєстрації',
+	this_information_allows_steemit_to_assist_with_account_recovery_in_case_your_account_is_ever_compormised: 'Ця інформація дозволяє Голосу допомогти вам відновити акаунт, якщо він коли-небудь буде вкрадений ',
+	email_address_cannot_be_changed_at_this_moment_sorry_for_inconvenience: 'Адреса електронної пошти на данний момент не може бути змінена, вибачте за незручності',
+	continue: 'продовжити',
+	email_address: 'Адреса електронної пошти',
+	please_prove_an_email_address: 'Будь ласка вкажіть адресу електронної пошти',
+	failed_captcha_verification_please_try_again: 'Помилка перевірки капчі, спробуйте ще раз',
+	re_send_email: 'Повторна відправка електронної пошти',
+	email_confirmation: 'Підтвердження електронної пошти',
 }

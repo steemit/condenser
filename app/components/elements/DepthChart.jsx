@@ -1,6 +1,11 @@
 import React from 'react';
 //import Highcharts from 'highcharts';
 const ReactHighcharts = require("react-highcharts/dist/ReactHighstock");
+import { translate } from 'app/Translator';
+import { localizedCurrency, localCurrencySymbol } from 'app/components/elements/LocalizedCurrency';
+import { LIQUID_TOKEN_UPPERCASE, DEBT_TOKEN_SHORT, LIQUID_TICKER } from 'config/client_config';
+
+
 
 //Highstock does not play well with decimal x values, so we need to
 // multiply the x values by a constant factor and divide by this factor for
@@ -71,7 +76,6 @@ class DepthChart extends React.Component {
             return null;
         }
         const depth_chart_config = generateDepthChart(bids, asks);
-
         return (
             <div className="DepthChart"><ReactHighcharts ref="depthChart" config={depth_chart_config} /></div>
         );
@@ -130,11 +134,11 @@ function generateDepthChart(bidsArray, asksArray) {
 
     if(process.env.BROWSER) {
         if(bids[0]) {
-            series.push({step: 'right', name: 'Bid', color: 'rgba(0,150,0,1.0)', fillColor: 'rgba(0,150,0,0.2)', tooltip: {valueSuffix: ' STEEM'},
+            series.push({step: 'right', name: translate('bid'), color: 'rgba(0,150,0,1.0)', fillColor: 'rgba(0,150,0,0.2)', tooltip: {valueSuffix: ' '+ LIQUID_TICKER},
              data:  bids})
         }
         if(asks[0]) {
-            series.push({step: 'left', name: 'Ask', color: 'rgba(150,0,0,1.0)', fillColor: 'rgba(150,0,0,0.2)', tooltip: {valueSuffix: ' STEEM'},
+            series.push({step: 'left', name: translate('ask'), color: 'rgba(150,0,0,1.0)', fillColor: 'rgba(150,0,0,0.2)', tooltip: {valueSuffix: ' '+ LIQUID_TICKER},
              data: asks})
         }
     }
@@ -162,9 +166,9 @@ function generateDepthChart(bidsArray, asksArray) {
                 align: "left",
                 formatter: function () {
                     let value = this.value / power;
-                    return "$" + (value > 10e6 ? (value / 10e6).toFixed(2) + "M" :
-                        value > 10000 ? (value / 10e3).toFixed(2) + "k" :
-                        value);
+                    return (value > 10e6 ? localizedCurrency((value / 10e6).toFixed(2)) + "M" :
+                        value > 10000 ? localizedCurrency((value / 10e3).toFixed(2)) + "k" :
+                        localizedCurrency(value));
                 }
             },
             gridLineWidth: 1,
@@ -189,7 +193,7 @@ function generateDepthChart(bidsArray, asksArray) {
             shared: false,
             backgroundColor: "rgba(0, 0, 0, 0.3)",
             formatter() {
-                return `<span>Price: ${(this.x / power).toFixed(6)} $/STEEM</span><br/><span>\u25CF</span>${this.series.name}: <b>${(this.y / 1000).toFixed(3)} SD ($)</b>`;
+                return `<span>${translate('price')}: ${localizedCurrency((this.x / power).toFixed(6))} / ${LIQUID_TOKEN_UPPERCASE}</span><br/><span>\u25CF</span>${this.series.name}: <b>${(this.y / 1000).toFixed(3)} ${DEBT_TOKEN_SHORT} ` + '(' + localCurrencySymbol + ')</b>';
             },
             style: {
                 color: "#FFFFFF"

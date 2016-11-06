@@ -7,6 +7,8 @@ import {key_utils} from 'shared/ecc'
 import Apis from 'shared/api_client/ApiInstances'
 import {validate_account_name} from 'app/utils/ChainValidation'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
+import { translate, translateHtml } from 'app/Translator';
+import { FormattedHTMLMessage } from 'react-intl';
 
 const {string, oneOf} = React.PropTypes
 
@@ -40,9 +42,8 @@ class ChangePassword extends React.Component {
         if (name.length > 0) {
             nameError = validate_account_name(name);
             if (!nameError) {
-                this.setState({nameError: ''});
                 promise = Apis.db_api('get_accounts', [name]).then(res => {
-                    return !(res && res.length > 0) ? 'Account not found' : '';
+                    return !(res && res.length > 0) ? translate('account_not_found') : '';
                 });
             }
         }
@@ -85,7 +86,7 @@ class ChangePassword extends React.Component {
         if (!process.env.BROWSER) { // don't render this page on the server
             return <div className="row">
                 <div className="column">
-                    Loading..
+                    {translate('loading')}..
                 </div>
             </div>;
         }
@@ -98,7 +99,7 @@ class ChangePassword extends React.Component {
             console.error('Missing priorAuthKey')
 
         const error2 = /Missing Owner Authority/.test(error) ?
-            <span>This is the wrong password.  Do you need to <a href="/recover_account_step_1">recover your account</a>?</span> :
+            <span>{translate('this_is_wrong_password')}. {translate('do_you_need_to') + ' '}<a href="/recover_account_step_1">{translate('recover_your_account')}</a>?</span> :
             error;
 
         const {accountName, nameError} = this.state;
@@ -107,34 +108,28 @@ class ChangePassword extends React.Component {
         return (
             <span className="ChangePassword">
                 <form onSubmit={handleSubmit(() => {this.dispatchSubmit()})}>
-                    {username && <h4>Reset {username}&apos;s Password</h4>}
+                    {username && <h4>{translate('reset_usernames_password', {username})}</h4>}
                     {authType ?
-                        <p>This will update {username}&apos; {authType} key.</p> :
+                        <p>{translate('this_will_update_usernames_authtype_key', {
+                                username, authType
+                            })}</p> :
                         <div className="ChangePassword__rules">
                             <hr />
-                            <p>
-                                The first rule of Steemit is: Do not lose your password.<br />
-                                The second rule of Steemit is: Do <strong>not</strong> lose your password.<br />
-                                The third rule of Steemit is: We cannot recover your password.<br />
-                                The fourth rule: If you can remember the password, it&apos;s not secure.<br />
-                                The fifth rule: Use only randomly-generated passwords.<br />
-                                The sixth rule: Do not tell anyone your password.<br />
-                                The seventh rule: Always back up your password.
-                            </p>
-                            <hr />
+                            <p> <FormattedHTMLMessage id="the_rules_of_APP_NAME" /> </p>
+                        <hr />
                         </div>
                     }
 
                     <div className={nameError ? 'error' : ''}>
-                        <label>Account Name
+                        <label>{translate('account_name')}
                             <input type="text" disabled={readOnlyAccountName} autoComplete="off" value={accountName} onChange={this.onNameChange} />
                         </label>
                         <p className="help-text">{nameError}</p>
                     </div>
                     <br />
                     <label>
-                        <div className="float-right"><a href="/recover_account_step_1">Recover Account</a></div>
-                        Current Password
+                        <div className="float-right"><a href="/recover_account_step_1">{translate('recover_password')}</a></div>
+                        {translate('current_password')}
                         <br />
                         <input {...cleanReduxInput(password)} type="password" disabled={loading} />
                     </label>
@@ -143,7 +138,7 @@ class ChangePassword extends React.Component {
                     <br></br>
 
                     <label>
-                        Generated Password <span className="secondary">(new)</span><br />
+                        {translate('generated_password') + ' ' } <span className="secondary">({translate('new')})</span><br />
                     </label>
                     {generated &&
                         <span>
@@ -152,17 +147,17 @@ class ChangePassword extends React.Component {
                                 <div className="overflow-ellipsis"><code style={{display: 'block', padding: '0.2rem 0.5rem', background: 'white', color: '#c7254e', wordWrap: 'break-word', fontSize: '100%', textAlign: 'center'}}>{newWif}</code></div>
                             </div>
                             <label className="ChangePassword__backup_text">
-                                Back it up by storing in your password manager or a text file.
+                                {translate('backup_password_by_storing_it')}.
                             </label>
                         </span>
                         ||
-                        <center><button type="button" className="button hollow" onClick={this.generateWif}>Click to generate password</button></center>
+                        <center><button type="button" className="button hollow" onClick={this.generateWif}>{translate('click_to_generate_password')}</button></center>
                     }
 
                     <br></br>
 
                     <label>
-                        Re-enter Generated Password
+                        {translate('re_enter_generate_password')}
                         <br />
                         <input {...cleanReduxInput(confirmPassword)} type="password" disabled={loading} />
                     </label>
@@ -170,20 +165,20 @@ class ChangePassword extends React.Component {
 
                     <br />
 
-                    <label><input {...cleanReduxInput(confirmCheck)} type="checkbox" /> I understand that Steemit cannot recover lost passwords.</label>
+                    <label><input {...cleanReduxInput(confirmCheck)} type="checkbox" /> {translate('understand_that_APP_NAME_cannot_recover_password')}.</label>
                     {confirmCheck.touched && confirmCheck.error && <div className="error">{confirmCheck.error}</div>}
 
-                    <label><input {...cleanReduxInput(confirmSaved)} type="checkbox" /> I have securely saved my generated password.</label>
+                    <label><input {...cleanReduxInput(confirmSaved)} type="checkbox" />{translate('i_saved_password')}.</label>
                     {confirmSaved.touched && confirmSaved.error && <div className="error">{confirmSaved.error}</div>}
                     <br />
                     {loading && <div><LoadingIndicator type="circle" /></div>}
                     {!loading && <div>
                         <div className="error">{error2}</div>
                         <button type="submit" className="button" disabled={loading}>
-                            Update Password
+                            {translate('update_password')}
                         </button>
                         {onClose && <button type="button" disabled={submitting} className="button hollow float-right" onClick={onClose}>
-                            Cancel
+                            {translate('cancel')}
                         </button>}
                     </div>}
                 </form>
@@ -206,13 +201,13 @@ class ChangePassword extends React.Component {
 import {PublicKey} from 'shared/ecc'
 let newWif = null
 const keyValidate = (values) => ({
-    password: ! values.password ? 'Required' :
-        PublicKey.fromString(values.password) ? 'You need a private password or key (not a public key)' :
+    password: ! values.password ? translate('required') :
+        PublicKey.fromString(values.password) ? translate('you_need_private_password_or_key_not_a_public_key') :
         null,
-    confirmPassword: ! values.confirmPassword ? 'Required' :
-        values.confirmPassword.trim() !== newWif ? 'Passwords do not match' : null,
-    confirmCheck: ! values.confirmCheck ? 'Required' : null,
-    confirmSaved: ! values.confirmSaved ? 'Required' : null,
+    confirmPassword: ! values.confirmPassword ? translate('required') :
+        values.confirmPassword.trim() !== newWif ? translate('passwords_do_not_match') : null,
+    confirmCheck: ! values.confirmCheck ? translate('required') : null,
+    confirmSaved: ! values.confirmSaved ? translate('required') : null,
 })
 
 import {reduxForm} from 'redux-form'

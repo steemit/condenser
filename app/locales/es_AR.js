@@ -1,4 +1,4 @@
-const es = 	{
+const es_AR = 	{
 	// this variables mainly used in navigation section
 	about: "Acerca de",
 	explore: "Explorar",

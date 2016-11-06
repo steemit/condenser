@@ -13,9 +13,9 @@ import Icon from 'app/components/elements/Icon';
 import Userpic from 'app/components/elements/Userpic';
 import transaction from 'app/redux/Transaction'
 import {List} from 'immutable'
-import pluralize from 'pluralize';
+import { translate } from 'app/Translator';
 
-export function sortComments( g, comments, sort_order ){
+export function sortComments( g, comments, sort_order ) {
 
   function netNegative(a)  {
       return a.get("net_rshares") < 0;
@@ -85,7 +85,7 @@ class CommentImpl extends React.Component {
         // html props
         global: React.PropTypes.object.isRequired,
         content: React.PropTypes.string.isRequired,
-        sort_order: React.PropTypes.oneOf(['active', 'update', 'created', 'trending']).isRequired,
+        sort_order: React.PropTypes.oneOf(['active', 'updated', 'created', 'trending']).isRequired,
         root: React.PropTypes.bool,
         showNegativeComments: React.PropTypes.bool,
         onHide: React.PropTypes.func,
@@ -166,7 +166,7 @@ class CommentImpl extends React.Component {
 
     /**
      * - `hide` is based on author reputation, and will hide the entire post on initial render.
-     * - `hide_body` is true when comment rshares OR author rep is negative. 
+     * - `hide_body` is true when comment rshares OR author rep is negative.
      *    it hides the comment body (but not the header) until the "reveal comment" link is clicked.
      */
     _checkHide(props) {
@@ -216,7 +216,7 @@ class CommentImpl extends React.Component {
         let g = this.props.global;
         const dis = g.get('content').get(this.props.content);
         if (!dis) {
-            return <div>Loading...</div>
+            return <div>{translate('loading')}...</div>
         }
         const comment = dis.toJS();
         if(!comment.stats) {
@@ -259,10 +259,10 @@ class CommentImpl extends React.Component {
             controls = <div>
                 <Voting post={post} />
                 {!readonly &&
-                    <span className="Comment__footer__controls">
-                        {depth < 6 && <a onClick={onShowReply}>Reply</a>}
-                        {' '}{showEditOption   && <a onClick={onShowEdit}>Edit</a>}
-                        {' '}{showDeleteOption && <a onClick={onDeletePost}>Delete</a>}
+                <span className="Comment__footer__controls">
+                        {depth < 6 && <a onClick={onShowReply}>translate('reply')</a>}
+                    {' '}{showEditOption   && <a onClick={onShowEdit}>translate('edit')</a>}
+                    {' '}{showDeleteOption && <a onClick={onDeletePost}>translate('delete')</a>}
                     </span>}
             </div>;
         }
@@ -311,7 +311,7 @@ class CommentImpl extends React.Component {
                     <div className="Comment__header">
                         <div className="Comment__header_collapse">
                             <Voting post={post} flag />
-                            <a title="Collapse/Expand" onClick={this.toggleCollapsed}>{ this.state.collapsed ? '[+]' : '[-]' }</a>
+                            <a title={translate('collapse_or_expand')} onClick={this.toggleCollapsed}>{ this.state.collapsed ? '[+]' : '[-]' }</a>
                         </div>
                         <span className="Comment__header-user">
                             <Icon name="user" className="Comment__Userpic-small" />
@@ -324,9 +324,9 @@ class CommentImpl extends React.Component {
                         { (this.state.collapsed || hide_body) &&
                           <Voting post={post} showList={false} /> }
                         { this.state.collapsed && comment.children > 0 &&
-                          <span className="marginLeft1rem">{pluralize('replies', comment.children, true)}</span>}
+                          <span className="marginLeft1rem">{translate('reply_count', {replyCount: comment.children})}</span>}
                         { !this.state.collapsed && hide_body &&
-                            <a className="marginLeft1rem" onClick={this.revealBody}>reveal comment</a>}
+                            <a className="marginLeft1rem" onClick={this.revealBody}>{translate('reveal_comment')}</a>}
                     </div>
                     <div className="Comment__body entry-content">
                         {showEdit ? renderedEditor : body}
@@ -378,7 +378,7 @@ const Comment = connect(
             dispatch(transaction.actions.broadcastOperation({
                 type: 'delete_comment',
                 operation: {author, permlink},
-                confirm: 'Are you sure?'
+                confirm: translate('are_you_sure'),
             }))
         },
     })

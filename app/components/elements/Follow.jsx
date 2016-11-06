@@ -5,6 +5,7 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import transaction from 'app/redux/Transaction';
 import g from 'app/redux/GlobalReducer';
 import {Set, Map} from 'immutable'
+import { translate } from 'app/Translator';
 
 const {string, object, bool, func, any} = PropTypes
 const followTypes = ['blog', 'posts']
@@ -48,7 +49,7 @@ export default class Follow extends React.Component {
     render() {
         const {follower, following, what, showFollow, showMute, fat, children} = this.props // html
         const {existingFollows, loading} = this.props // redux
-        if(loading) return <span><LoadingIndicator /> Loading&hellip;</span>
+        if(loading) return <span><LoadingIndicator /> {translate('loading')}&hellip;</span>
         if(!follower || !following || !what) return <span></span>
         if(follower === following) return <span></span> // don't follow self
         if(loading !== false) {
@@ -62,10 +63,10 @@ export default class Follow extends React.Component {
         const cnActive = 'button' + (fat ? '' : ' slim')
         const cnInactive = cnActive + ' hollow secondary'
         return <span>
-            {showFollow && !existingFollows.has(what) && <label className={cnInactive} onClick={this.follow}>Follow</label>}
-            {showFollow && existingFollows.has(what) && <label className={cnInactive} onClick={this.unfollow}>Unfollow</label>}
-            {showMute && !existingFollows.has('ignore') && <label className={cnInactive} onClick={this.ignore}>Mute</label>}
-            {showMute && existingFollows.has('ignore') && <label className={cnInactive} onClick={this.unignore}>Unmute</label>}
+            {showFollow && !existingFollows.has(what) && <label className={cnInactive} onClick={this.follow}>{translate('follow')}</label>}
+            {showFollow && existingFollows.has(what) && <label className={cnInactive} onClick={this.unfollow}>{translate('unfollow')}</label>}
+            {showMute && !existingFollows.has('ignore') && <label className={cnInactive} onClick={this.ignore}>{translate('mute')}</label>}
+            {showMute && existingFollows.has('ignore') && <label className={cnInactive} onClick={this.unignore}>{translate('unmute')}</label>}
             {children && <span>&nbsp;&nbsp;{children}</span>}
         </span>
     }

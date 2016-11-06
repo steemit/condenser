@@ -53,7 +53,8 @@ ChainTypes.operations= {
     liquidity_reward: 41,
     interest: 42,
     fill_vesting_withdraw: 43,
-    fill_order: 44
+    fill_order: 44,
+    update_account_meta: 0 // TODO: set correct number
 };
 
 //types.hpp

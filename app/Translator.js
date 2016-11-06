@@ -2,16 +2,19 @@ import React from 'react';
 import isString from 'lodash/isString';
 import isObject from 'lodash/isObject';
 import isUndefined from 'lodash/isUndefined';
+import { connect } from 'react-redux'
 import { IntlProvider, addLocaleData, injectIntl } from 'react-intl';
+import store from 'store';
+import { DEFAULT_LANGUAGE } from 'config/client_config';
 
 // most of this code creates a wrapper for i18n API.
 // this is needed to make i18n future proof
 
 /*
-module exports two functions: translate and translateHtml
-usage example:
-translate('reply_to_user', {username: 'undeadlol1') == 'Reply to undeadlol1'
-translateHtml works the same, expcept it renders string with html tags in it
+	module exports two functions: translate and translateHtml
+	usage example:
+	translate('reply_to_user', {username: 'undeadlol1') == 'Reply to undeadlol1'
+	translateHtml works the same, expcept it renders string with html tags in it
 */
 
 // locale data is needed for various messages, ie 'N minutes ago'
@@ -28,7 +31,7 @@ import { ru } from './locales/ru';
 import { fr } from './locales/fr';
 import { es } from './locales/es';
 import { it } from './locales/it';
-const translations = {
+const messages = {
 	en: en,
 	ru: ru,
 	fr: fr,
@@ -38,9 +41,18 @@ const translations = {
 
 // exported function placeholders
 // this is needed for proper export before react-intl functions with locale data,
-// will be properly created (they depend on react props and context,
-// which is not available until component is being created)
-let translate = () => {};
+// will be properly created (they depend on react props and context),
+// which is not available until component is being created
+//
+/*
+	this placeholder is needed for usage outside of react. In server side code and in static html files.
+	This function is very simple, it does NOT support dynamic values (for example: translate('your_email_is', {email: 'x@y.com'})). Use it carefully
+*/
+let translate = string => {
+	let language = DEFAULT_LANGUAGE
+	if (process.env.BROWSER) language = store.get('language') || DEFAULT_LANGUAGE
+	return messages[language][string]
+};
 let translateHtml = () => {};
 let translatePlural = () => {};
 
@@ -105,24 +117,30 @@ class Translator extends React.Component {
 		// Define user's language. Different browsers have the user locale defined
 		// on different fields on the `navigator` object, so we make sure to account
 		// for these different by checking all of them
-		let language = 'en';
-		// while Server Side Rendering is in process, 'navigator' is undefined
+		let language = this.props.locale; // usually 'en'
 		if (process.env.BROWSER) {
-			language = navigator ? (navigator.languages && navigator.languages[0])
-		                        || navigator.language
-		                        || navigator.userLanguage
-								: 'en';
+			const storredLanguage = store.get('language')
+			if (storredLanguage) language = storredLanguage
 		}
+		// let language = DEFAULT_LANGUAGE; // usually 'en'
+		// while Server Side Rendering is in process, 'navigator' is undefined
+		// currently commented out, because in golos we need only russian
+		// if (process.env.BROWSER) language = navigator
+		// 									? (navigator.languages && navigator.languages[0])
+		// 			                        || navigator.language
+		// 			                        || navigator.userLanguage
+		// 									: DEFAULT_LANGUAGE;
+        //Split locales with a region code (ie. 'en-EN' to 'en')
+        const languageWithoutRegionCode = language.toLowerCase().split(/[_-]+/)[0];
 
-	    //Split locales with a region code (ie. 'en-EN' to 'en')
-	    const languageWithoutRegionCode = language.toLowerCase().split(/[_-]+/)[0];
-
-		// TODO: don't forget to add Safari polyfill
-
-		// to ensure dynamic language change, "key" property with same "locale" info must be added
-		// see: https://github.com/yahoo/react-intl/wiki/Components#multiple-intl-contexts
-		let messages = translations[languageWithoutRegionCode]
-		return 	<IntlProvider locale={languageWithoutRegionCode} key={languageWithoutRegionCode} messages={messages}>
+		return 	<IntlProvider
+					// to ensure dynamic language change, "key" property with same "locale" info must be added
+					// see: https://github.com/yahoo/react-intl/wiki/Components#multiple-intl-contexts
+					key={languageWithoutRegionCode}
+					defaultLocale={DEFAULT_LANGUAGE}
+					locale={languageWithoutRegionCode}
+					messages={messages[languageWithoutRegionCode]}
+				>
 					<div>
 						<DummyComponentToExportProps />
 						{this.props.children}
@@ -133,4 +151,13 @@ class Translator extends React.Component {
 
 export { translate, translateHtml, translatePlural }
 
-export default Translator
+export default connect(
+    // mapStateToProps
+    (state, ownProps) => {
+		const locale = state.user.get('locale')
+        return {
+            ...ownProps,
+            locale
+        }
+    }
+)(Translator)

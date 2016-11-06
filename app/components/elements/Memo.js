@@ -2,11 +2,15 @@ import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {decode} from 'shared/chain/memo'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
+import { translate } from 'app/Translator';
 
 class Memo extends React.Component {
     static propTypes = {
         text: PropTypes.string,
         // username: PropTypes.string,
+        memo_private: PropTypes.object,
+        // redux props
+        myAccount: PropTypes.bool,
     }
     constructor() {
         super()
@@ -29,7 +33,7 @@ class Memo extends React.Component {
         if(!isEncoded) return <span>{text}</span>
         if(!myAccount) return <span></span>
         if(memo_private) return <span>{decodeMemo(memo_private, text)}</span>
-        return <span>login to see memo</span>
+        return <span>{translate('login_to_see_memo')}</span>
     }
 }
 

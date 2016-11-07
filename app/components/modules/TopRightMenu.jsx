@@ -1,8 +1,6 @@
 import Immutable from 'immutable';
-// import { Link } from 'react-scroll';
-import { Link } from 'react-router';
 import React from 'react';
-// import { Link } from 'react-router';
+import { Link } from 'react-router';
 import {connect} from 'react-redux';
 import Icon from 'app/components/elements/Icon';
 import user from 'app/redux/User';
@@ -60,19 +58,19 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                         <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
                     </li>
                     <li className={lcn}>
-                        <Link className="button success" spy to="CountDowns" smooth offset={-110} duration={500}>Краудсейл</Link>
+                        <a className="button success" href="#CountDowns">Краудсейл</a>
                     </li>
                     <li className={lcn}>
-                        <Link spy to="what-is-golos" smooth offset={-110} duration={500}>Видео</Link>
+                        <a href="#what-is-golos">Видео</a>
                     </li>
                     <li className={lcn}>
-                        <Link spy to="docs" smooth offset={-110} duration={500}>Документация</Link>
+                        <a href="#docs">Документация</a>
                     </li>
                     <li className={lcn}>
-                        <Link spy to="faq" smooth offset={-110} duration={500}>FAQ</Link>
+                        <a href="#faq">FAQ</a>
                     </li>
                     <li className={lcn}>
-                        <Link spy to="team" smooth offset={-110} duration={500}>Команда</Link>
+                        <a href="#team">Команда</a>
                     </li>
                     <LinkWithDropdown
                         closeOnClickOutside
@@ -97,16 +95,16 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                                 <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
                             </li>
                             <li className={lcn}>
-                                <Link spy to="what-is-golos" smooth offset={-110} duration={500}>Видео</Link>
+                                <a href="#what-is-golos">Видео</a>
                             </li>
                             <li className={lcn}>
-                                <Link spy to="docs" smooth offset={-110} duration={500}>Документация</Link>
+                                <a href="#docs">Документация</a>
                             </li>
                             <li className={lcn}>
-                                <Link spy to="faq" smooth offset={-110} duration={500}>FAQ</Link>
+                                <a href="#faq">FAQ</a>
                             </li>
                             <li className={lcn}>
-                                <Link spy to="team" smooth offset={-110} duration={500}>Команда</Link>
+                                <a href="#team">Команда</a>
                             </li>
                             <li className={lcn + ' image-wrapper'}>
                                 <a href="/login.html">
@@ -161,19 +159,19 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                                 <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
                             </li>
                             <li className={lcn}>
-                                <Link className="button success" spy to="CountDowns" smooth offset={-110} duration={500}>Краудсейл</Link>
+                                <a className="button success" href="#CountDowns">Краудсейл</a>
                             </li>
                             <li className={lcn}>
-                                <Link spy to="what-is-golos" smooth offset={-110} duration={500}>Видео</Link>
+                                <a href="#what-is-golos">Видео</a>
                             </li>
                             <li className={lcn}>
-                                <Link spy to="docs" smooth offset={-110} duration={500}>Документация</Link>
+                                <a href="#docs">Документация</a>
                             </li>
                             <li className={lcn}>
-                                <Link spy to="faq" smooth offset={-110} duration={500}>FAQ</Link>
+                                <a href="#faq">FAQ</a>
                             </li>
                             <li className={lcn}>
-                                <Link spy to="team" smooth offset={-110} duration={500}>Команда</Link>
+                                <a href="#team">Команда</a>
                             </li>
                             <li className={lcn + ' image-wrapper'}>
                                 <a href="/login.html">
@@ -211,19 +209,19 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                         <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
                     </li>
                     <li className={lcn}>
-                        <Link className="button success" spy to="CountDowns" smooth offset={-110} duration={500}>Краудсейл</Link>
+                        <a className="button success" href="#CountDowns">Краудсейл</a>
                     </li>
                     <li className={lcn}>
-                        <Link spy to="what-is-golos" smooth offset={-110} duration={500}>Видео</Link>
+                        <a href="#what-is-golos">Видео</a>
                     </li>
                     <li className={lcn}>
-                        <Link spy to="docs" smooth offset={-110} duration={500}>Документация</Link>
+                        <a href="#docs">Документация</a>
                     </li>
                     <li className={lcn}>
-                        <Link spy to="faq" smooth offset={-110} duration={500}>FAQ</Link>
+                        <a href="#faq">FAQ</a>
                     </li>
                     <li className={lcn}>
-                        <Link spy to="team" smooth offset={-110} duration={500}>Команда</Link>
+                        <a href="#team">Команда</a>
                     </li>
                     <li className={lcn + ' image-wrapper'}>
                         <a href="/login.html">

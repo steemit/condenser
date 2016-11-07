@@ -1,5 +1,8 @@
 // sometimes it's impossible to use html tags to style coin name, hence usage of _UPPERCASE modifier
 export const APP_NAME = 'Голос' // 'Steemit'
+// sometimes APP_NAME is written in non-latin characters, but they are needed for technical purposes
+// ie. "Голос" > "Golos"
+export const APP_NAME_LATIN = 'Golos' // 'Steemit'
 export const APP_NAME_UPPERCASE = 'Golos' // 'STEEMIT'
 export const APP_ICON = 'golos' // 'steem'
 export const APP_URL = 'golos.io' // 'steemit.com'

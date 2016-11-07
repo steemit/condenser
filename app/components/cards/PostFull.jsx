@@ -21,7 +21,7 @@ import {Long} from 'bytebuffer'
 import {List} from 'immutable'
 import {repLog10, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import { translate } from 'app/Translator';
-import { APP_NAME, APP_URL } from 'config/client_config';
+import { APP_NAME, APP_NAME_LATIN, APP_URL } from 'config/client_config';
 
 function TimeAuthorCategory({content, authorRepLog10, showTags}) {
     return (
@@ -127,7 +127,7 @@ class PostFull extends React.Component {
         const winTop = (screen.height / 2) - (winWidth / 2);
         const winLeft = (screen.width / 2) - (winHeight / 2);
         const s = this.share_params;
-        const q = 'title=' + encodeURIComponent(s.title) + '&url=' + encodeURIComponent(s.url) + '&source=Golos&mini=true';//TODO! was: &source=Steemit
+        const q = 'title=' + encodeURIComponent(s.title) + '&url=' + encodeURIComponent(s.url) + '&source=' + APP_NAME_LATIN + '&mini=true';
         window.open('https://www.linkedin.com/shareArticle?' + q, 'Share', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=' + winWidth + ',height=' + winHeight);
     }
 

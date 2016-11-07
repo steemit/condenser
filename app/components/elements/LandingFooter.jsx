@@ -1,9 +1,9 @@
 import React from 'react'
+import { PRIVACY_POLICY_URL, TERMS_OF_SERVICE_URL } from 'config/client_config'
 
 export default class LandingFooter extends React.Component {
 
 	render() {
-
 		const menuHeaders = ['Используем Голос', 'Правовые документы', 'Сообщества']
 		const columnsAlign = ['left', 'left', 'right']
 		const menuItems = [
@@ -15,8 +15,8 @@ export default class LandingFooter extends React.Component {
 			],
 			[
 				// {name: 'Условия проведения краудфандинга' },
-				{name: 'Политика конфиденциальности', url: 'https://golos.io/ru--konfidenczialxnostx/@golos/politika-konfidencialnosti'},
-				{name: 'Правила пользования', url: 'https://golos.io/legal/tos.pdf'}
+				{name: 'Политика конфиденциальности', url: PRIVACY_POLICY_URL},
+				{name: 'Правила пользования', url: TERMS_OF_SERVICE_URL}
 			],
 			[
 				{name: 'Chat', url: 'https://chat.golos.io/'},

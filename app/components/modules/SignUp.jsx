@@ -4,6 +4,7 @@ import SvgImage from 'app/components/elements/SvgImage';
 import AddToWaitingList from 'app/components/modules/AddToWaitingList';
 import { translate } from 'app/Translator';
 import { formatCoins } from 'app/utils/FormatCoins';
+import { PRIVACY_POLICY_URL, TERMS_OF_SERVICE_URL } from 'config/client_config';
 import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 
 class SignUp extends React.Component {
@@ -42,7 +43,7 @@ class SignUp extends React.Component {
                         <br />
                         {translate("personal_info_will_be_private")}
                         {' '}
-                        <a href="/legal/terms_of_service.pdf" target="_blank">
+                        <a href={TERMS_OF_SERVICE_URL} target="_blank">
                             {translate("personal_info_will_be_private_link")}
                         </a>.
                     </p>
@@ -101,7 +102,7 @@ class SignUp extends React.Component {
                     <br />
                     <p className="secondary">
                         {translate('by_verifying_you_agree_with') + ' '}
-                        <a href="/ru--konfidenczialxnostx/@golos/politika-konfidencialnosti" target="_blank">
+                        <a href={PRIVACY_POLICY_URL} target="_blank">
                             {translate('by_verifying_you_agree_with_privacy_policy')}
                         </a>
                         {' ' + translate('by_verifying_you_agree_with_privacy_policy_of_website_APP_URL')}.

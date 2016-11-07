@@ -16,7 +16,7 @@ import Modals from 'app/components/modules/Modals';
 import Icon from 'app/components/elements/Icon';
 import {key_utils} from 'shared/ecc'
 import { translate } from '../Translator.js';
-import { SEGMENT_ANALYTICS_KEY, LANDING_PAGE_URL, WHITEPAPER_URL, VEST_TICKER } from 'config/client_config';
+import { TERMS_OF_SERVICE_URL, PRIVACY_POLICY_URL, SEGMENT_ANALYTICS_KEY, LANDING_PAGE_URL, WHITEPAPER_URL, VEST_TICKER } from 'config/client_config';
 import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 import RocketChat from 'app/components/modules/RocketChat'
 import {githash} from 'config/last-build'
@@ -223,12 +223,12 @@ class App extends React.Component {
               </ul>
               <ul className="vertical menu">
                   <li>
-                      <a href="/legal/terms_of_service.pdf" onClick={this.navigate} rel="nofollow">
+                      <a href={TERMS_OF_SERVICE_URL} onClick={this.navigate} rel="nofollow">
                           {translate("privacy_policy")}
                       </a>
                   </li>
                   <li>
-                      <a href="/ru--konfidenczialxnostx/@golos/politika-konfidencialnosti" onClick={this.navigate} rel="nofollow">
+                      <a href={PRIVACY_POLICY_URL} onClick={this.navigate} rel="nofollow">
                           {translate("terms_of_service")}
                       </a>
                   </li>

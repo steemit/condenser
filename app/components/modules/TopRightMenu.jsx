@@ -131,7 +131,8 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                 <li className={lcn + ' buttons'}>
                     <a href="/ico" className="button success">Краудсейл</a>
                 </li>
-                <li className={lcn}><a href="/static/search.html" title={search}>{vertical ? <span>{search}</span> : <Icon name="search" />}</a></li>
+                {/* search is currently unavailable */}
+                {/* <li className={lcn}><a href="/static/search.html" title={search}>{vertical ? <span>{search}</span> : <Icon name="search" />}</a></li> */}
                 {submit_story}
                 <LinkWithDropdown
                     closeOnClickOutside
@@ -194,7 +195,8 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                 <li className={lcn + ' buttons'}>
                     <a href={`/ico`} className="button success">Краудсейл</a>
                 </li>
-                {!vertical && <li><a href="/static/search.html" title="Поиск"><Icon name="search" /></a></li>}
+                {/* search is currently unavailable */}
+                {/* {!vertical && <li><a href="/static/search.html" title="Поиск"><Icon name="search" /></a></li>} */}
                 <li className={lcn}><LoadingIndicator type="circle" inline /></li>
                 {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
                     <span className="hamburger" />
@@ -242,7 +244,8 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                 <li className={lcn + ' buttons'}>
                     <a href={`/ico`} className="button success">Краудсейл</a>
                 </li>
-                {!vertical && <li><a href="/static/search.html" title="Поиск"><Icon name="search" /></a></li>}
+                {/* search is currently unavailable */}
+                {/* {!vertical && <li><a href="/static/search.html" title="Поиск"><Icon name="search" /></a></li>} */}
                 <li className={lcn}><a href="/create_account" onClick={showSignUp}>{translate('sign_up')}</a></li>
                 <li className={lcn}><a href="/login.html" onClick={showLogin}>{translate('login')}</a></li>
                 {submit_story}

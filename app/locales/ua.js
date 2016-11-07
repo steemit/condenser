@@ -548,4 +548,5 @@ export const ua = {
 	failed_captcha_verification_please_try_again: 'Помилка перевірки капчі, спробуйте ще раз',
 	re_send_email: 'Повторна відправка електронної пошти',
 	email_confirmation: 'Підтвердження електронної пошти',
+	add_image_url: 'Додайте URL вашого зображення',
 }

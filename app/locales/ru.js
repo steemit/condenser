@@ -272,10 +272,10 @@ const ru = {
 	change_password: 'Сменить пароль',
 	// UserProfile
 	unknown_account: 'Неизвестный аккаунт',
-	user_hasnt_made_any_posts_yet: "Похоже что {name} еще не написал постов!",
-	user_hasnt_started_bloggin_yet: "Похоже что {name} еще не завёл блог!",
-	user_hasnt_followed_anything_yet: "Похоже что {name} еще никого ни на кого не подписан!",
-	user_hasnt_had_any_replies_yet: "{name} еще не получил ответов",
+	user_hasnt_made_any_posts_yet: "Похоже что {name} еще не написал(а) постов!",
+	user_hasnt_started_bloggin_yet: "Похоже что {name} еще не завёл(а) блог!",
+	user_hasnt_followed_anything_yet: "Похоже что {name} еще никого ни на кого не подписан(а)!",
+	user_hasnt_had_any_replies_yet: "{name} еще не получил(а) ответов",
 	users_blog: "блог {name}",
 	users_posts: "посты {name}",
 	users_wallet: "кошелек {name}",
@@ -562,6 +562,8 @@ const ru = {
 	add_image_url: 'Добавьте url вашего изображения',
 	saved: 'Сохранено',
 	server_returned_error: 'ошибка сервера',
+	user_avatar: 'Аватар пользователя',
+	save_avatar: 'Сохранить аватар',
 }
 
 export { ru }

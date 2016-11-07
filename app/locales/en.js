@@ -545,6 +545,8 @@ const en = 	{
 	add_image_url: 'Add image url',
 	saved: 'Saved',
 	server_returned_error: 'server returned error',
+	user_avatar: 'user\'s avatar',
+	save_avatar: 'save avatar',
 }
 
 export { en }

@@ -20,7 +20,8 @@ import Author from 'app/components/elements/Author';
 import {Long} from 'bytebuffer'
 import {List} from 'immutable'
 import {repLog10, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
-import { translate } from '../../Translator';
+import { translate } from 'app/Translator';
+import { APP_NAME, APP_URL } from 'config/client_config';
 
 function TimeAuthorCategory({content, authorRepLog10, showTags}) {
     return (
@@ -161,7 +162,7 @@ class PostFull extends React.Component {
 
         const content_body = content.body;
         const {category, title, body} = content;
-        if (process.env.BROWSER && title) document.title = title + ' — Голос';
+        if (process.env.BROWSER && title) document.title = title + ' — ' + APP_NAME;
 
         const replyParams = {author, permlink, parent_author, parent_permlink, category, title, body}
 
@@ -177,8 +178,8 @@ class PostFull extends React.Component {
             net_rshares.compare(Long.ZERO) <= 0
 
         this.share_params = {
-            url: 'https://golos.io' + link,
-            title: title + ' — Голос',
+            url: 'https://' + APP_URL + link,
+            title: title + ' — ' + APP_NAME,
             desc: p.desc
         };
 

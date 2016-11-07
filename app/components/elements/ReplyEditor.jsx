@@ -437,7 +437,9 @@ export default formId => reduxForm(
         if (/submit_/.test(type)) title = body = ''
 
         if(hasCategory && jsonMetadata && jsonMetadata.tags) {
-            category = Set([category, ...jsonMetadata.tags]).join(' ')
+            // detransletirate values to avoid disabled 'update post' button on load
+            const tags = jsonMetadata.tags.map(tag => detransliterate(tag))
+            category = Set([detransliterate(category), ...tags]).join(' ')
         }
 
         const metaLinkData = state.global.getIn(['metaLinkData', formId])
@@ -543,7 +545,7 @@ export default formId => reduxForm(
             }
 
             if(meta.tags.length > 5) {
-                const includingCategory = /edit/.test(type) ? translate('including_the_category', {rootCategory}) : ''
+                const includingCategory = /edit/.test(type) ? translate('including_the_category', {rootCategory: detransliterate(rootCategory)}) : ''
                 errorCallback(translate('use_limited_amount_of_tags', {tagsLength: meta.tags.length, includingCategory}))
                 return
             }

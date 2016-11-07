@@ -2,6 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import {connect} from 'react-redux';
+import { browserHistory } from 'react-router';
 import transaction from 'app/redux/Transaction';
 import user from 'app/redux/User';
 import Icon from 'app/components/elements/Icon'
@@ -24,6 +25,7 @@ import MarkNotificationRead from 'app/components/elements/MarkNotificationRead';
 import NotifiCounter from 'app/components/elements/NotifiCounter';
 import DateJoinWrapper from 'app/components/elements/DateJoinWrapper';
 import { translate } from 'app/Translator';
+import WalletSubMenu from 'app/components/elements/WalletSubMenu';
 
 export default class UserProfile extends React.Component {
     constructor() {
@@ -115,9 +117,9 @@ export default class UserProfile extends React.Component {
         // const sbd_balance = parseFloat(account.sbd_balance)
         // const sbd_balance_str = numberWithCommas('$' + sbd_balance.toFixed(2));
 
-        let rewardsClass = "";
-        console.log('-- UserProfile.render -->', section);
+        let rewardsClass = "", walletClass = "";
         if( section === 'transfers' ) {
+            walletClass = 'active'
             tab_content = <div>
                 <UserWallet global={this.props.global}
                           account={account}
@@ -200,19 +202,6 @@ export default class UserProfile extends React.Component {
                 tab_content = (<center><LoadingIndicator type="circle" /></center>);
             }
         }
-        // else if(!section || section === 'feed') {
-        //     if (account.feed) {
-        //         tab_content = <PostsList
-        //             emptyText={`Looks like ${account.name} hasn't followed anything yet!`}
-        //             posts={account.feed}
-        //             loading={fetching}
-        //             category="feed"
-        //             loadMore={this.loadMore}
-        //             showSpam />;
-        //     } else {
-        //         tab_content = (<center><LoadingIndicator type="circle" /></center>);
-        //     }
-        // }
         else if( (section === 'recent-replies') && account.recent_replies ) {
               tab_content = <div>
                   <PostsList
@@ -226,14 +215,38 @@ export default class UserProfile extends React.Component {
               </div>;
         }
         else if( section === 'permissions' && isMyAccount ) {
+            walletClass = 'active'
             tab_content = <div>
+                <div className="row">
+                    <div className="column">
+                        <WalletSubMenu account_name={account.name} />
+                    </div>
+                </div>
+                <br />
                 <UserKeys account={accountImm} />
                 {isMyAccount && <MarkNotificationRead fields="account_update" account={account.name} />}
                 </div>;
         } else if( section === 'password' ) {
-            tab_content = <PasswordReset account={accountImm} />
+            walletClass = 'active'
+            tab_content = <div>
+                    <div className="row">
+                        <div className="column">
+                            <WalletSubMenu account_name={account.name} />
+                        </div>
+                    </div>
+                    <br />
+                    <PasswordReset account={accountImm} />
+                </div>
         } else {
         //    console.log( "no matches" );
+        }
+
+        if (!(section === 'transfers' || section === 'permissions' || section === 'password')) {
+            tab_content = <div className="row">
+                <div className="UserProfile__tab_content column">
+                    {tab_content}
+                </div>
+            </div>;
         }
 
         let printLink = null;
@@ -277,19 +290,18 @@ export default class UserProfile extends React.Component {
                             </a>
                         </LinkWithDropdown>
                     </li>
-
                 </ul>
             </div>
             <div className="columns shrink">
                 <ul className="menu" style={{flexWrap: "wrap"}}>
-                    <li><Link to={`/@${accountname}/transfers`} activeClassName="active">
-                        {translate('wallet')} <NotifiCounter fields="send,receive"/>
-                    </Link></li>
-                    {isMyAccount && <li><Link to={`/@${account.name}/permissions`} activeClassName="active">
-                        {translate('permissions')} <NotifiCounter fields="account_update"/>
-                    </Link></li>}
-                    {wallet_tab_active && isMyAccount && <li><Link to={`/@${account.name}/password`} activeClassName="active">{translate('password')}</Link></li>}
-                    <li><Link to={`/@${accountname}/settings`} activeClassName="active">{translate('settings')}</Link></li>
+                    <li>
+                        <a href={`/@${accountname}/transfers`} className={walletClass} onClick={e => { e.preventDefault(); browserHistory.push(e.target.pathname); return false; }}>
+                            {translate('wallet')} <NotifiCounter fields="send,receive,account_update" />
+                        </a>
+                    </li>
+                    {isMyAccount && <li>
+                        <Link to={`/@${accountname}/settings`} activeClassName="active">{translate('settings')}</Link>
+                    </li>}
                 </ul>
             </div>
          </div>;
@@ -323,15 +335,11 @@ export default class UserProfile extends React.Component {
                 <div className="UserProfile__top-nav row expanded noPrint">
                     {top_menu}
                 </div>
-                <div className="row">
-                    <div className="column">
-                        {printLink}
-                    </div>
+                <div>
+                  {printLink}
                 </div>
-                <div className="row">
-                    <div className="column">
-                        {tab_content}
-                    </div>
+                <div>
+                  {tab_content}
                 </div>
             </div>
         );

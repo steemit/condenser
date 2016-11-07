@@ -383,7 +383,8 @@ const trStatus = stat => coalesce(statusNames[stat], stat)
 const trHashLink = (coin, hash) =>
     !hash ? null :
     coin === 'BTC' ? <a href={`https://blockchain.info/tx/${hash}`} target="_blank"><Icon name="extlink" /></a> :
-    /GOLOS|GESTS|GBG/.test(coin) ? <a href={`https://____golos.io/tx/${hash}`} target="_blank"><Icon name="extlink" /></a> :
+    /STEEM|VESTS|SBD/.test(coin) ? <a href={`https://steemd.com/tx/${hash}`} target="_blank"><Icon name="extlink" /></a> :
+    /GOLOS|GESTS|GBG/.test(coin) ? <a href={`http://golosd.com/tx/${hash}`} target="_blank"><Icon name="extlink" /></a> :
     <span t={hash}>hash.substring(0, 10) + '...'</span>
 
 /** Memory backed local storage.  Assumes this is the sole maintainer of this key.

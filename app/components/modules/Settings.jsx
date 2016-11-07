@@ -5,7 +5,6 @@ import {translate} from 'app/Translator';
 import {ALLOWED_CURRENCIES} from 'config/client_config'
 import store from 'store';
 import transaction from 'app/redux/Transaction'
-import o2j from 'shared/clash/object2json'
 
 class Settings extends React.Component {
 

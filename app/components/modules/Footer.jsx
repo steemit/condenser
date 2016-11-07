@@ -8,8 +8,8 @@ const Footer = props => (
         <div className="large-6 columns">
             <ul className="menu">
                <li><Link to="/about.html">{translate('about')}</Link></li>
-               <li><Link to="/legal/terms_of_service.pdf" rel="nofollow">{translate('privacy_policy')}</Link></li>
-               <li><Link to="/ru--konfidenczialxnostx/@golos/politika-konfidencialnosti" rel="nofollow">{translate('terms_of_service')}</Link></li>
+               <li><Link to="/privacy.html" rel="nofollow">{translate('privacy_policy')}</Link></li>
+               <li><Link to="/tos.html" rel="nofollow">{translate('terms_of_service')}</Link></li>
                <li><Link to="/~witnesses">{translate('witnesses')}</Link></li>
             </ul>
         </div>

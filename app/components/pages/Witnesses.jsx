@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import { Link } from 'react-router';
+import links from 'app/utils/Links'
 import Icon from 'app/components/elements/Icon';
 import transaction from 'app/redux/Transaction'
 import ByteBuffer from 'bytebuffer'
@@ -60,7 +61,11 @@ class Witnesses extends React.Component {
                 (myVote === true ? ' Voting__button--upvoted' : '');
             let witness_thread = ""
             if(thread) {
-                witness_thread = <Link to={thread}>{translate('witness_thread')}</Link>
+                if(links.remote.test(thread)) {
+                    witness_thread = <Link to={thread}>{translate('witness_thread')}&nbsp;<Icon name="extlink" /></Link>
+                } else {
+                    witness_thread = <Link to={thread}>{translate('witness_thread')}</Link>
+                }
             }
             return (
                     <tr key={owner}>

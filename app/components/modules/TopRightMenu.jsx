@@ -1,5 +1,6 @@
 import Immutable from 'immutable';
-import { Link } from 'react-scroll';
+// import { Link } from 'react-scroll';
+import { Link } from 'react-router';
 import React from 'react';
 // import { Link } from 'react-router';
 import {connect} from 'react-redux';

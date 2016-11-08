@@ -16,8 +16,6 @@ import {Map, Set} from 'immutable'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import Remarkable from 'remarkable'
 import { translate } from 'app/Translator.js';
-// TODO check and remove this
-import { transliterate } from 'transliteration';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
 
 const remarkable = new Remarkable({ html: true, linkify: false })

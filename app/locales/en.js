@@ -303,7 +303,7 @@ const en = 	{
 		other {{followerCount} followers}
 	}`,
 	followed_count: `{followingCount, plural,
-		=0 {no followed}
+		=0 {not followed anybody}
 		one {1 followed}
 		other {{followingCount} followed}
 	}`,
@@ -543,7 +543,7 @@ const en = 	{
 	by_verifying_you_agree_with: 'By verifying your account you agree to the',
 	by_verifying_you_agree_with_privacy_policy: 'Privacy Policy',
 	by_verifying_you_agree_with_privacy_policy_of_website_APP_URL: 'of ' + APP_URL,
-	add_image_url: 'Add image url',
+	add_image_url: 'Profile picture url',
 	saved: 'Saved',
 	server_returned_error: 'server returned error',
 }

@@ -16,9 +16,15 @@ class Userpic extends Component {
 		try { url = JSON.parse(account.json_metadata).user_image }
 		catch (e) { url = '' }
 
+        if (url && /(https?:)?\/\//.test(url)) {
+            url = $STM_Config.img_proxy_prefix + '48x48/' + url;
+        } else {
+            url = require('app/assets/images/user.png');
+        }
+
 		return 	<div className="Userpic">
 					<img
-						src={url || require('app/assets/images/user.png')}
+						src={url}
 						width="48px"
 						height="48px"
 						{...rest}

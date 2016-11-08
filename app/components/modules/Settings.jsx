@@ -13,6 +13,7 @@ class Settings extends React.Component {
         errorMessage: '',
         succesMessage: '',
         userImage: this.props.userImage || '',
+        changed: false
     }
 
     handleCurrencyChange(event) { store.set('currency', event.target.value) }
@@ -24,7 +25,7 @@ class Settings extends React.Component {
     }
 
     handleUrlChange = event => {
-        this.setState({userImage: event.target.value})
+        this.setState({userImage: event.target.value, changed: true})
     }
 
     handleUserImageSubmit = event => {
@@ -43,18 +44,25 @@ class Settings extends React.Component {
             json_metadata: metaData,
             account: account.name,
             memo_key: account.memo_key,
-            errorCallback: () => {
-                console.log('SUCCES')
-                this.setState({
-                    loading: false,
-                    errorMessage: translate('server_returned_error')
-                })
+            errorCallback: (e) => {
+                if (e === 'Canceled') {
+                    this.setState({
+                        loading: false,
+                        errorMessage: ''
+                    })
+                } else {
+                    console.log('updateAccount ERROR', e)
+                    this.setState({
+                        loading: false,
+                        changed: false,
+                        errorMessage: translate('server_returned_error')
+                    })
+                }
             },
             successCallback: () => {
-                console.log('SUCCES')
-                // clear form ad show succesMessage
                 this.setState({
                     loading: false,
+                    changed: false,
                     errorMessage: '',
                     succesMessage: translate('saved') + '!',
                 })
@@ -107,6 +115,8 @@ class Settings extends React.Component {
                                 : null
                         }
                     </label>
+                    <br />
+                    <input type="submit" className="button" value="Update" disabled={!state.userImage || !state.changed} />
                 </form>
             </div>
         </div>

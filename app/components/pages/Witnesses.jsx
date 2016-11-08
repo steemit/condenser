@@ -122,7 +122,7 @@ class Witnesses extends React.Component {
                     </div>
                 </div>
                 <div className="row small-collapse">
-                    <div className="column small-12">
+                    <div className="column">
                         <table>
                             <thead>
                                 <tr>
@@ -135,7 +135,10 @@ class Witnesses extends React.Component {
                                 {witnesses.toArray()}
                             </tbody>
                         </table>
-                        <hr/>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="column">
                         <p>{translate('if_you_want_to_vote_outside_of_top_enter_account_name')}.</p>
                         <form>
                             <input type="text" style={{float: "left", width: "75%"}} value={customUsername} onChange={onWitnessChange} />

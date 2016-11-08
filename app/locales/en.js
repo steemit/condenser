@@ -548,6 +548,8 @@ const en = 	{
 	user_avatar: 'user\'s avatar',
 	save_avatar: 'save avatar',
 	wiki: 'Wiki',
+	comment_is_nested_5_posts_deep: 'Comment is nested 5 posts deep, maximum depth is 5',
+	you_may_only_comment_once_every_20_seconds: 'You may only comment once every 20 seconds',
 }
 
 export { en }

@@ -565,6 +565,8 @@ const ru = {
 	user_avatar: 'Аватар пользователя',
 	save_avatar: 'Сохранить аватар',
 	wiki: 'Вики',
+	comment_is_nested_5_posts_deep: 'Комментарий слишком глубоко в цепочке. Максимум вложенности - 5',
+	you_may_only_comment_once_every_20_seconds: 'Вы можете комментировать не чаще каждых 20 секунд',
 }
 
 export { ru }

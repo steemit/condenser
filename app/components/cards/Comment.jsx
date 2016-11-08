@@ -260,9 +260,9 @@ class CommentImpl extends React.Component {
                 <Voting post={post} />
                 {!readonly &&
                     <span className="Comment__footer__controls">
-                        {depth < 6 && <a onClick={onShowReply}>translate('reply')</a>}
-                        {' '}{showEditOption   && <a onClick={onShowEdit}>translate('edit')</a>}
-                        {' '}{showDeleteOption && <a onClick={onDeletePost}>translate('delete')</a>}
+                        {depth < 6 && <a onClick={onShowReply}>{translate('reply')}</a>}
+                        {' '}{showEditOption   && <a onClick={onShowEdit}>{translate('edit')}</a>}
+                        {' '}{showDeleteOption && <a onClick={onDeletePost}>{translate('delete')}</a>}
                     </span>}
             </div>;
         }

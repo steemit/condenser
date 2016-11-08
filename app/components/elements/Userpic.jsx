@@ -1,15 +1,15 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux'
-const {oneOfType, string, number} = PropTypes
+const {oneOfType, string, object} = PropTypes
 
 class Userpic extends Component {
 	// you can pass either user object, or username string
 	static propTypes = {
-		account: oneOfType([string, number])
+		account: oneOfType([string, object])
 	}
 
 	render() {
-		const {account, ...rest} = this.props
+		const {account, width, height} = this.props
 		let url
 
 		// try to extract image url from users metaData
@@ -25,9 +25,8 @@ class Userpic extends Component {
 		return 	<div className="Userpic">
 					<img
 						src={url}
-						width="48px"
-						height="48px"
-						{...rest}
+						width={width || 48}
+						height={height || 48}
 					/>
 				</div>;
 	}

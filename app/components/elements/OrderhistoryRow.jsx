@@ -1,6 +1,5 @@
 var React = require("react");
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
-import { localizedCurrency, localCurrencySymbol } from 'app/components/elements/LocalizedCurrency';
 
 export default class OrderhistoryRow extends React.Component {
 
@@ -69,7 +68,7 @@ export default class OrderhistoryRow extends React.Component {
                 <td><TimeAgoWrapper date={order.date} /></td>
                 <td className={order.color}>{order.getStringPrice()}</td>
                 <td>{order.getSteemAmount().toFixed(3)}</td>
-                <td>{localizedCurrency(order.getSBDAmount().toFixed(3), {noSymbol: true})}</td>
+                <td>{order.getSBDAmount().toFixed(3)}</td>
             </tr>
         )
     }

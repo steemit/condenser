@@ -10,9 +10,6 @@ import Orderbook from "app/components/elements/Orderbook";
 import OrderHistory from "app/components/elements/OrderHistory";
 import {Order, TradeHistory} from "app/utils/MarketClasses";
 import {roundUp, roundDown} from "app/utils/MarketUtils";
-import { translate } from 'app/Translator.js';
-import { LIQUID_TOKEN, LIQUID_TOKEN_UPPERCASE, DEBT_TOKEN_SHORT, CURRENCY_SIGN, LIQUID_TICKER, DEBT_TICKER } from 'config/client_config';
-import { localizedCurrency, localCurrencySymbol } from 'app/components/elements/LocalizedCurrency';
 
 class Market extends React.Component {
     static propTypes = {
@@ -21,10 +18,14 @@ class Market extends React.Component {
         ticker: React.PropTypes.object,
         // redux PropTypes
         placeOrder: React.PropTypes.func.isRequired,
-        user: React.PropTypes.object,
+        user: React.PropTypes.string,
     };
 
     shouldComponentUpdate = (nextProps, nextState) => {
+      if( this.props.user !== nextProps.user && nextProps.user) {
+          this.props.reload(nextProps.user)
+      }
+
       if( nextState.buy_disabled != this.state.buy_disabled ||
           nextState.sell_disabled != this.state.sell_disabled) {
           return true
@@ -45,7 +46,7 @@ class Market extends React.Component {
 
       let oc = (typeof nextProps.open_orders !== undefined) && (
           typeof this.props.open_orders == 'undefined' ||
-          this.props.open_orders.length != nextProps.open_orders.length)
+          JSON.stringify(this.props.open_orders) != JSON.stringify(nextProps.open_orders))
 
       // Update if ticker info changed, order book changed size, or open orders length changed.
       //if(tc || bc || oc) console.log("tc?", tc, "bc?", bc, "oc?", oc)
@@ -56,36 +57,33 @@ class Market extends React.Component {
         e.preventDefault()
         const {placeOrder, user} = this.props
         if(!user) return
-        const owner = user.get('username')
         const amount_to_sell = parseFloat(ReactDOM.findDOMNode(this.refs.buySteem_total).value)
         const min_to_receive = parseFloat(ReactDOM.findDOMNode(this.refs.buySteem_amount).value)
         const price = (amount_to_sell / min_to_receive).toFixed(6)
-        placeOrder(owner, [amount_to_sell, DEBT_TICKER].join(" "),     [min_to_receive, LIQUID_TICKER].join(" "), ["$", price, "/", LIQUID_TICKER].join(""), (msg) => {
+        placeOrder(user, amount_to_sell + " SBD", min_to_receive + " STEEM", "$" + price + "/STEEM", (msg) => {
             this.props.notify(msg)
-            this.props.reload(owner)
+            this.props.reload(user)
         })
     }
     sellSteem = (e) => {
         e.preventDefault()
         const {placeOrder, user} = this.props
         if(!user) return
-        const owner = user.get('username')
         const min_to_receive = parseFloat(ReactDOM.findDOMNode(this.refs.sellSteem_total).value)
         const amount_to_sell = parseFloat(ReactDOM.findDOMNode(this.refs.sellSteem_amount).value)
         const price = (min_to_receive / amount_to_sell).toFixed(6)
-        placeOrder(owner, [amount_to_sell, LIQUID_TICKER].join(" "), [min_to_receive, DEBT_TICKER].join(" "), ["$", price, "/", LIQUID_TICKER].join(""), (msg) => {
+        placeOrder(user, amount_to_sell + " STEEM", min_to_receive + " SBD", "$" + price + "/STEEM", (msg) => {
             this.props.notify(msg)
-            this.props.reload(owner)
+            this.props.reload(user)
         })
     }
     cancelOrderClick = (e, orderid) => {
         e.preventDefault()
         const {cancelOrder, user} = this.props
         if(!user) return
-        const owner = user.get('username')
-        cancelOrder(owner, orderid, (msg) => {
+        cancelOrder(user, orderid, (msg) => {
             this.props.notify(msg)
-            this.props.reload(owner)
+            this.props.reload(user)
         })
     }
 
@@ -105,7 +103,10 @@ class Market extends React.Component {
         this.validateSellSteem()
     }
 
-    percentDiff = (a, b) => 200 * Math.abs(a - b) / (a + b)
+    percentDiff = (a, b) => {
+        console.log(200 * Math.abs(a - b) / (a + b))
+        return 200 * Math.abs(a - b) / (a + b)
+    }
 
     validateBuySteem = () => {
         const amount = parseFloat(this.refs.buySteem_amount.value)
@@ -216,7 +217,7 @@ class Market extends React.Component {
 
         function normalizeOpenOrders(open_orders) {
             return open_orders.map( o => {
-                const type = o.sell_price.base.indexOf(LIQUID_TICKER) > 0 ? 'ask' : 'bid'
+                const type = o.sell_price.base.indexOf('STEEM') > 0 ? 'ask' : 'bid'
                 //{orderid: o.orderid,
                 // created: o.created,
                 return {...o,
@@ -233,22 +234,22 @@ class Market extends React.Component {
             const rows = open_orders && normalizeOpenOrders(open_orders).map( o =>
               <tr key={o.orderid}>
                   <td>{o.created.replace('T', ' ')}</td>
-                  <td>{translate(o.type == 'ask' ? 'sell' : 'buy')}</td>
-                  <td>{localizedCurrency(o.price.toFixed(6))}</td>
+                  <td>{o.type == 'ask' ? 'Sell' : 'Buy'}</td>
+                  <td>${o.price.toFixed(6)}</td>
                   <td>{o.steem}</td>
-                  <td metaTask="//TODO">{localCurrencySymbol(o.sbd.replace('SBD', DEBT_TOKEN_SHORT), {noSymbol: true})}</td>
-                  <td><a href="#" onClick={e => cancelOrderClick(e, o.orderid)}>{translate('cancel')}</a></td>
+                  <td>{o.sbd.replace('SBD', 'SD')}</td>
+                  <td><a href="#" onClick={e => cancelOrderClick(e, o.orderid)}>Cancel</a></td>
               </tr> )
 
             return <table className="Market__open-orders">
                 <thead>
                     <tr>
-                        <th>{translate('date_created')}</th>
-                        <th>{translate('type')}</th>
-                        <th>{translate('price')}</th>
-                        <th className="uppercase">{LIQUID_TOKEN}</th>
-                        <th>{`${DEBT_TOKEN_SHORT} (${localCurrencySymbol})`}</th>
-                        <th>{translate('action')}</th>
+                        <th>Date Created</th>
+                        <th>Type</th>
+                        <th>Price</th>
+                        <th>STEEM</th>
+                        <th>SD ($)</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -278,14 +279,12 @@ class Market extends React.Component {
                 <div className="row">
                     <div className="column">
                         <ul className="Market__ticker">
-                            {/* .toFixed() modifiers are not neccesery, currencies are formatted properly behind the scene */}
-                            {/* i left them in place just incase, so you will not have to look them up */}
-                            <li><b>{translate('last_price')}</b> {localizedCurrency(ticker.latest.toFixed(6))} ({pct_change})</li>
-                            <li><b>{translate('24h_volume')}</b> {localizedCurrency(ticker.sbd_volume.toFixed(2))}</li>
-                            <li><b>{translate('bid')}</b> {localizedCurrency(ticker.highest_bid.toFixed(6))}</li>
-                            <li><b>{translate('ask')}</b> {localizedCurrency(ticker.lowest_ask.toFixed(6))}</li>
+                            <li><b>Last price</b> ${ticker.latest.toFixed(6)} ({pct_change})</li>
+                            <li><b>24h volume</b> ${ticker.sbd_volume.toFixed(2)}</li>
+                            <li><b>Bid</b> ${ticker.highest_bid.toFixed(6)}</li>
+                            <li><b>Ask</b> ${ticker.lowest_ask.toFixed(6)}</li>
                             {ticker.highest_bid > 0 &&
-                                <li><b>{translate('spread')}</b> {(200 * (ticker.lowest_ask - ticker.highest_bid) / (ticker.highest_bid + ticker.lowest_ask)).toFixed(3)}%</li>}
+                                <li><b>Spread</b> {(200 * (ticker.lowest_ask - ticker.highest_bid) / (ticker.highest_bid + ticker.lowest_ask)).toFixed(3)}%</li>}
                             {/*<li><b>Feed price</b> ${ticker.feed_price.toFixed(3)}</li>*/}
                         </ul>
                     </div>
@@ -305,30 +304,30 @@ class Market extends React.Component {
 
                 <div className="row">
                     <div className="small-12 medium-6 columns">
-                        <h4 className="buy-color uppercase">{translate('buy_LIQUID_TOKEN')}</h4>
+                        <h4 className="buy-color">BUY STEEM</h4>
                         <form className="Market__orderform" onSubmit={buySteem}>
 
                             <div className="row">
                                 <div className="column small-3 large-2">
-                                    <label>{translate('price')}</label>
+                                    <label>Price</label>
                                 </div>
                                 <div className="column small-9 large-8">
                                     <div className="input-group">
-                                        <input className={'input-group-field' + (buy_price_warning ? ' price_warning' : '')} type="text"
+                                        <input className={'input-group-field' + (buy_price_warning ? ' price_warning' : '')} type="text" 
                                           ref="buySteem_price" placeholder="0.0" onChange={e => {
                                             const amount = parseFloat(this.refs.buySteem_amount.value)
                                             const price  = parseFloat(this.refs.buySteem_price.value)
                                             if(amount >= 0 && price >= 0) this.refs.buySteem_total.value = roundUp(price * amount, 3)
                                             validateBuySteem()
                                         }} />
-                                    <span className="input-group-label uppercase">{`${DEBT_TOKEN_SHORT}/${LIQUID_TOKEN}`}</span>
+                                        <span className="input-group-label">SD/STEEM</span>
                                     </div>
                                 </div>
                             </div>
 
                             <div className="row">
                                 <div className="column small-3 large-2">
-                                    <label>{translate('amount')}</label>
+                                    <label>Amount</label>
                                 </div>
                                 <div className="column small-9 large-8">
                                     <div className="input-group">
@@ -338,14 +337,14 @@ class Market extends React.Component {
                                             if(price >= 0 && amount >= 0) this.refs.buySteem_total.value = roundUp(price * amount, 3)
                                             validateBuySteem()
                                         }} />
-                                    <span className="input-group-label uppercase"> {LIQUID_TOKEN}</span>
+                                        <span className="input-group-label">STEEM</span>
                                     </div>
                                 </div>
                             </div>
 
                             <div className="row">
                                 <div className="column small-3 large-2">
-                                    <label>{translate('total')}</label>
+                                    <label>Total</label>
                                 </div>
                                 <div className="column small-9 large-8">
                                     <div className="input-group">
@@ -355,7 +354,7 @@ class Market extends React.Component {
                                             if(total >= 0 && price >= 0) this.refs.buySteem_amount.value = roundUp(total / price, 3)
                                             validateBuySteem()
                                         }} />
-                                    <span className="input-group-label">{`${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}</span>
+                                        <span className="input-group-label">SD ($)</span>
                                     </div>
                                 </div>
                             </div>
@@ -364,7 +363,7 @@ class Market extends React.Component {
                                 <div className="column small-3 large-2">
                                 </div>
                                 <div className="column small-9 large-8">
-                                    {/* <input disabled={buy_disabled} type="submit" className="button hollow buy-color float-right uppercase" value={translate('buy_LIQUID_TOKEN')} /> */}
+                                    <input disabled={buy_disabled} type="submit" className="button hollow buy-color float-right" value="BUY STEEM" />
                                     {account &&
                                     <div><small>
                                         <a href="#" onClick={e => {
@@ -374,7 +373,7 @@ class Market extends React.Component {
                                                 this.refs.buySteem_total.value = total
                                                 if(price >= 0) this.refs.buySteem_amount.value = roundDown(parseFloat(total) / price, 3).toFixed(3)
                                                 validateBuySteem()
-                                            }}>{translate('available')}:</a> {account.sbd_balance.replace('SBD', DEBT_TOKEN_SHORT)}
+                                            }}>Available:</a> {account.sbd_balance.replace('SBD', 'SD')}
                                     </small></div>}
 
                                     <div><small>
@@ -385,7 +384,7 @@ class Market extends React.Component {
                                             this.refs.buySteem_price.value = ticker.lowest_ask
                                             if(amount >= 0) this.refs.buySteem_total.value = roundUp(amount * price, 3).toFixed(3)
                                             validateBuySteem()
-                                        }}>{translate('lowest_ask')}:</a> {ticker.lowest_ask.toFixed(6)}
+                                        }}>Lowest ask:</a> {ticker.lowest_ask.toFixed(6)}
                                     </small></div>
                                 </div>
                             </div>
@@ -395,30 +394,30 @@ class Market extends React.Component {
 
 
                     <div className="small-12 medium-6 columns">
-                        <h4 className="sell-color uppercase">{translate('sell_LIQUID_TOKEN')}</h4>
+                        <h4 className="sell-color">SELL STEEM</h4>
 
                         <form className="Market__orderform" onSubmit={sellSteem}>
                             <div className="row">
                                 <div className="column small-3 large-2">
-                                    <label>{translate('price')}</label>
+                                    <label>Price</label>
                                 </div>
                                 <div className="column small-9 large-8">
                                     <div className="input-group">
-                                        <input className={'input-group-field' + (sell_price_warning ? ' price_warning' : '')} type="text"
+                                        <input className={'input-group-field' + (sell_price_warning ? ' price_warning' : '')} type="text" 
                                           ref="sellSteem_price" placeholder="0.0" onChange={e => {
                                           const amount = parseFloat(this.refs.sellSteem_amount.value)
                                           const price  = parseFloat(this.refs.sellSteem_price.value)
                                           if(amount >= 0 && price >= 0) this.refs.sellSteem_total.value = roundDown(price * amount, 3)
                                           validateSellSteem()
                                         }} />
-                                    <span className="input-group-label uppercase">{`${DEBT_TOKEN_SHORT}/${LIQUID_TOKEN}`}</span>
+                                        <span className="input-group-label">SD/STEEM</span>
                                     </div>
                                 </div>
                             </div>
 
                             <div className="row">
                                 <div className="column small-3 large-2">
-                                    <label>{translate('amount')}</label>
+                                    <label>Amount</label>
                                 </div>
                                 <div className="column small-9 large-8">
                                     <div className="input-group">
@@ -428,14 +427,14 @@ class Market extends React.Component {
                                           if(price >= 0 && amount >= 0) this.refs.sellSteem_total.value = roundDown(price * amount, 3)
                                           validateSellSteem()
                                         }} />
-                                    <span className="input-group-label uppercase">{LIQUID_TOKEN}</span>
+                                        <span className="input-group-label">STEEM</span>
                                     </div>
                                 </div>
                             </div>
 
                             <div className="row">
                                 <div className="column small-3 large-2">
-                                    <label>{translate('total')}</label>
+                                    <label>Total</label>
                                 </div>
                                 <div className="column small-9 large-8">
                                     <div className="input-group">
@@ -445,7 +444,7 @@ class Market extends React.Component {
                                           if(price >= 0 && total >= 0) this.refs.sellSteem_amount.value = roundUp(total / price, 3)
                                           validateSellSteem()
                                       }} />
-                                      <span className="input-group-label">{`${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}</span>
+                                      <span className="input-group-label">SD ($)</span>
                                     </div>
                                 </div>
                             </div>
@@ -453,7 +452,7 @@ class Market extends React.Component {
                             <div className="row">
                                 <div className="column small-3 large-2"></div>
                                 <div className="column small-9 large-8">
-                                    {/* <input disabled={sell_disabled} type="submit" className="button hollow sell-color float-right uppercase" value={translate('sell_LIQUID_TOKEN')} /> */}
+                                    <input disabled={sell_disabled} type="submit" className="button hollow sell-color float-right" value="SELL STEEM" />
                                     {account &&
                                         <div><small><a href="#" onClick={e => {e.preventDefault()
                                             const price = parseFloat(this.refs.sellSteem_price.value)
@@ -461,14 +460,14 @@ class Market extends React.Component {
                                             this.refs.sellSteem_amount.value = amount
                                             if(price >= 0) this.refs.sellSteem_total.value = roundDown(price * parseFloat(amount), 3)
                                             validateSellSteem()
-                                        }}>{translate('available')}:</a> {account.balance.replace(LIQUID_TICKER, LIQUID_TOKEN_UPPERCASE)}</small></div>}
+                                        }}>Available:</a> {account.balance}</small></div>}
                                     <div><small><a href="#" onClick={e => {e.preventDefault()
                                         const amount = parseFloat(this.refs.sellSteem_amount.value)
                                         const price = ticker.highest_bid
                                         this.refs.sellSteem_price.value = price
                                         if(amount >= 0) this.refs.sellSteem_total.value = roundDown(parseFloat(price) * amount, 3)
                                         validateSellSteem()
-                                    }}>{translate('highest_bid')}:</a> {ticker.highest_bid.toFixed(6)}</small></div>
+                                    }}>Highest bid:</a> {ticker.highest_bid.toFixed(6)}</small></div>
                                 </div>
                             </div>
                         </form>
@@ -478,7 +477,7 @@ class Market extends React.Component {
                 <div className="row show-for-medium">
 
                     <div className="small-12 medium-6 large-4 columns">
-                        <h4>{translate('buy_orders')}</h4>
+                        <h4>Buy Orders</h4>
                         <Orderbook
                             side={"bids"}
                             orders={orderbook.bids}
@@ -489,7 +488,7 @@ class Market extends React.Component {
                     </div>
 
                     <div className="small-12 medium-6 large-4 columns">
-                        <h4>{translate('sell_orders')}</h4>
+                        <h4>Sell Orders</h4>
                         <Orderbook
                             side={"asks"}
                             orders={orderbook.asks}
@@ -500,7 +499,7 @@ class Market extends React.Component {
                     </div>
 
                     <div className="small-12 large-4 column">
-                        <h4>{translate('trade_history')}</h4>
+                        <h4>Trade History</h4>
                         {trade_history_table(this.props.history)}
                     </div>
                 </div>
@@ -508,7 +507,7 @@ class Market extends React.Component {
                 {account &&
                     <div className="row">
                         <div className="column">
-                            <h4>{translate('open_orders')}</h4>
+                            <h4>Open Orders</h4>
                             {open_orders_table(open_orders)}
                         </div>
                     </div>}
@@ -526,7 +525,7 @@ module.exports = {
         ticker:      state.market.get('ticker'),
         account:     state.market.get('account'),
         history:     state.market.get('history'),
-        user:        state.user.get('current'),
+        user:        state.user.get('current') ? state.user.get('current').get('username') : null,
         feed:        state.global.get('feed_price').toJS()
     }),
     dispatch => ({
@@ -561,15 +560,10 @@ module.exports = {
             min_to_receive = min_to_receive.replace(min_to_receive.split(' ')[0],
                 String(parseFloat(min_to_receive).toFixed(3)))
 
-            const confirmStr = translate(
-                                // which translated string to use
-                                /GOLOS/.test(amount_to_sell)
-                                ? 'sell_amount_for_atleast'
-                                : 'buy_atleast_amount_for',
-                                // with this values
-                                {amount_to_sell, min_to_receive, effectivePrice}
-                            )
-            const successMessage = translate('order_placed' + ': ' + confirmStr)
+            const confirmStr = /STEEM$/.test(amount_to_sell) ?
+                `Sell ${amount_to_sell} for at least ${min_to_receive} (${effectivePrice})` :
+                `Buy at least ${min_to_receive} for ${amount_to_sell} (${effectivePrice})`
+            const successMessage = `Order placed: ${confirmStr}`
             const confirm = confirmStr + '?'
             const orderid = Math.floor(Date.now() / 1000)
             dispatch(transaction.actions.broadcastOperation({

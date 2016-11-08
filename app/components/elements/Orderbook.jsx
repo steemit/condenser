@@ -1,8 +1,5 @@
 import React from "react";
 import OrderbookRow from "./OrderbookRow";
-import { translate } from 'app/Translator.js';
-import { localizedCurrency, localCurrencySymbol } from 'app/components/elements/LocalizedCurrency';
-import { LIQUID_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN } from 'config/client_config';
 
 export default class Orderbook extends React.Component {
 
@@ -50,10 +47,10 @@ export default class Orderbook extends React.Component {
         return (
             <thead>
                 <tr>
-                    <th>{translate(buy ? "total_DEBT_TOKEN_SHORT_CURRENCY_SIGN" : "price")}</th>
-                    <th>{buy ? `${DEBT_TOKEN_SHORT} (${localCurrencySymbol})` : LIQUID_TOKEN}</th>
-                    <th>{buy ? LIQUID_TOKEN : `${DEBT_TOKEN_SHORT} (${localCurrencySymbol})`}</th>
-                    <th>{translate(buy ? "price" : "total_DEBT_TOKEN_SHORT_CURRENCY_SIGN")}</th>
+                    <th>{buy ? "Total SD ($)" : "Price"}</th>
+                    <th>{buy ? "SD ($)" : "Steem"}</th>
+                    <th>{buy ? "Steem" : "SD ($)"}</th>
+                    <th>{buy ? "Price" : "Total SD ($)"}</th>
                 </tr>
             </thead>
         );
@@ -110,12 +107,12 @@ export default class Orderbook extends React.Component {
                   <ul className="pager">
                     <li>
                         <div className={"button tiny hollow " + (buy ? "float-left" : "float-left") + (currentIndex === 0 ? " disabled" : "")} onClick={this._setBuySellPage.bind(this, false)} aria-label="Previous">
-                            <span aria-hidden="true">&larr; {translate(buy ? "higher" : "lower")}</span>
+                            <span aria-hidden="true">&larr; {buy ? "Higher" : "Lower"}</span>
                         </div>
                     </li>
                     <li>
                         <div className={"button tiny hollow " + (buy ? "float-right" : "float-right") + (currentIndex >= (orders.length - 10) ? " disabled" : "")} onClick={this._setBuySellPage.bind(this, true)} aria-label="Next">
-                            <span aria-hidden="true">{translate(buy ? "lower" : "higher")} &rarr;</span>
+                            <span aria-hidden="true">{buy ? "Lower" : "Higher"} &rarr;</span>
                         </div>
                     </li>
                   </ul>

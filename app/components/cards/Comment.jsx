@@ -314,7 +314,9 @@ class CommentImpl extends React.Component {
                             <a title={translate('collapse_or_expand')} onClick={this.toggleCollapsed}>{ this.state.collapsed ? '[+]' : '[-]' }</a>
                         </div>
                         <span className="Comment__header-user">
-                            <Icon name="user" className="Comment__Userpic-small" />
+                            <div className="Comment__Userpic-small">
+                                <Userpic account={comment.author} />
+                            </div>
                             <Author author={comment.author} authorRepLog10={authorRepLog10} />
                         </span>
                         &nbsp; &middot; &nbsp;

@@ -6,6 +6,7 @@ import {ALLOWED_CURRENCIES} from 'config/client_config'
 import store from 'store';
 import transaction from 'app/redux/Transaction'
 import o2j from 'shared/clash/object2json'
+import Userpic from 'app/components/elements/Userpic';
 
 class Settings extends React.Component {
 
@@ -104,6 +105,7 @@ class Settings extends React.Component {
                 </div>
             </div>*/}
             <div className="row">
+                <Userpic account={this.props.account} />
                 <form onSubmit={this.handleUserImageSubmit} className="small-12 medium-6 large-4 columns">
                     <label>{translate('add_image_url')}
                         <input type="url" onChange={this.handleUrlChange} value={state.userImage} disabled={!props.isOwnAccount || state.loading} required />

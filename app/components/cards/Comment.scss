@@ -12,11 +12,13 @@
 }
 
 .Comment__Userpic-small {
-  position: relative;
-  left: -2px;
   @include hide-for(medium);
-  path {
-    fill: $dark_gray;
+  .Userpic {
+    padding-right: 0.2rem;
+    img {
+      width: 16px;
+      height: 16px;
+    }
   }
 }
 

@@ -17,13 +17,12 @@ const defaultNavigate = (e) => {
     browserHistory.push(a.pathname + a.search + a.hash);
 };
 
-function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpic, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn}) {
+function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn}) {
     const mcn = 'menu' + (vertical ? ' vertical show-for-small-only' : '');
     const mcl = vertical ? '' : ' sub-menu';
     const lcn = vertical ? '' : 'show-for-medium';
     const nav = navigate || defaultNavigate;
     const submit_story = $STM_Config.read_only_mode ? null : <li className={lcn + ' submit-story'}><a href="/submit.html" onClick={nav}>Submit a Story</a></li>;
-    const userpic_src = userpic || require('app/assets/images/user.png');
     const feed_link = `/@${username}/feed`;
     const replies_link = `/@${username}/recent-replies`;
     const wallet_link = `/@${username}/transfers`;
@@ -95,7 +94,6 @@ TopRightMenu.propTypes = {
     username: React.PropTypes.string,
     loggedIn: React.PropTypes.bool,
     probablyLoggedIn: React.PropTypes.bool,
-    userpic: React.PropTypes.string,
     showLogin: React.PropTypes.func.isRequired,
     showSignUp: React.PropTypes.func.isRequired,
     logout: React.PropTypes.func.isRequired,
@@ -109,7 +107,6 @@ export default connect(
         if (!process.env.BROWSER) {
             return {
                 username: null,
-                userpic: null,
                 loggedIn: false,
                 probablyLoggedIn: !!state.offchain.get('account')
             }
@@ -118,7 +115,6 @@ export default connect(
         const loggedIn = !!username;
         return {
             username,
-            userpic: null, // state.offchain.getIn(['user', 'picture']),
             loggedIn,
             probablyLoggedIn: false
         }

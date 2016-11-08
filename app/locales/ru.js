@@ -59,11 +59,11 @@ const ru = {
 	terms_and_conditions: 'Условия и Соглашения',
 	// this is from top-right dropdown menu
 	hot: 'Актуальное',
-	trending: 'Популярное',
+	trending: 'Лучшее', // до первых выплат изменено с "популярного"
 	payout_time: 'время выплаты',
 	active: 'Обсуждаемое',
 	responses: 'ответы',
-	popular: 'популярное',
+	popular: 'лучшее', // до первых выплат изменено с "популярного"
 	/* end dropdown menu */
 	loading: 'Загрузка',
 	cryptography_test_failed: 'Криптографический тест провален',
@@ -402,7 +402,7 @@ const ru = {
 	this_is_a_price_feed_conversion: 'Это котировка цены. Неделя отсрочки необходима чтобы предотвратить злоупотребление от игры на средней ценовой катировке.',
 	your_existing_DEBT_TOKEN_are_liquid_and_transferable: 'Ваши существующие ' + DEBT_TOKEN + ' ликвидны и перемещаемы. Возможно, вы хотите торговать ' + DEBT_TOKEN + ' напрямую на этом сайте в разделе {link} или перевести на внешний рынок.',
 	buy_or_sell: 'Купить или Продать',
-	trending_30_day: 'популярное (30 дней)',
+	trending_30_day: 'лучшее', // до первых выплат изменено с "популярного"
 	promoted: 'Продвигаемое',
 	comments: 'Комментарии',
 	topics: 'Топики',
@@ -477,7 +477,7 @@ const ru = {
 	sorry_your_reddit_account_doesnt_have_enough_karma: "Извините, у вашего Reddit аккаунта недостаточно Reddit кармы чтобы иметь возможность бесплатной регистрации. Пожалуйста, добавьте вашу электронную почту чтобы записаться в лист ожидания",
 	register_with_facebook: 'Регистрация с Facebook',
 	or_click_the_button_below_to_register_with_facebook: 'Или нажмите кнопку, чтобы зарегистрироваться с Facebook',
-	trending_24_hour: 'популярное (24 часа)',
+	trending_24_hour: 'лучшее', // до первых выплат изменено с "популярного"
 	home: 'Лента',
 	'24_hour': '24 часа',
 	'30_day': '30 дней',

@@ -1,4 +1,4 @@
-import { APP_NAME, APP_URL, LANDING_PAGE_URL, OWNERSHIP_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, INVEST_TOKEN, OWNERSHIP_TICKER } from 'config/client_config';
+import { APP_NAME, APP_URL, LANDING_PAGE_URL, SUPPORT_EMAIL, OWNERSHIP_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, INVEST_TOKEN, OWNERSHIP_TICKER } from 'config/client_config';
 /**
  * see: app/locales/README.md
  */
@@ -249,7 +249,7 @@ export const ua = {
 	account_name_is_not_found: 'Ім\'я облікового запису не знайдено',
 	unable_to_recover_account_not_change_ownership_recently: 'У нас не вийшло відновити цей акаунт, тому що він не змінював власника в недавні часи.',
 	password_not_used_in_last_days: 'Цей пароль не використовувався в цьому акаунті за останні 30 днів.',
-	request_already_submitted_contact_support: 'Ваш запит був відправлений, і ми працюємо над цим. Будь ласка, зв`яжіться з t@cyber.fund для отримання статусу вашого запиту.',
+	request_already_submitted_contact_support: 'Ваш запит був відправлений, і ми працюємо над цим. Будь ласка, зв`яжіться з ' + SUPPORT_EMAIL + ' для отримання статусу вашого запиту.',
 	recover_account_intro: "Іноді буває що ключ власника може бути скомпрометований. Відновлення вкраденого акаунта дає законному власнику 30 днів щоб повернути аккаунт з моменту зміни власного ключа шахраєм. Відновлення вкраденого акаунта в " + APP_URL + " можливо тільки якщо власник акаунта раніше вказав '" + APP_NAME + "' як довірена особа і погодився з Умовами Використання сайту " + APP_NAME + ".",
 	login_with_facebook_or_reddit_media_to_verify_identity: 'Будь ласка, увійдіть використовуючи Facebook або Reddit щоб підтвердити вашу особистість',
 	login_with_social_media_to_verify_identity: 'Будь ласка, зайдіть за допомогою {show_social_login} щоб підтвердити вашу особистість',

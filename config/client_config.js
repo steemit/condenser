@@ -43,5 +43,6 @@ export const TWITTER_SHARE_IMAGE = 'https://golos.io/images/golos-twshare.png'
 export const SITE_DESCRIPTION = 'Голос - социальная сеть, построенная на публичном блокчейне. Вознаграждение пользователей осуществляется за счет дополнительной эмиссии токенов. При этом распределением токенов управляют текущие пользователи сети через голосование за лучший контент.'
 
 // various
+export const SUPPORT_EMAIL = 't@cyber.fund'
 export const SEGMENT_ANALYTICS_KEY = 'F7tldQJxt491gXYqDGi5TkTT4wFpSPps'
 export const FIRST_DATE = new Date(Date.UTC(2016, 7, 1)); //1 september

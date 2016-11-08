@@ -1,5 +1,5 @@
 
-import { APP_NAME, APP_URL, LANDING_PAGE_URL, OWNERSHIP_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, INVEST_TOKEN, OWNERSHIP_TICKER } from 'config/client_config';
+import { APP_NAME, APP_URL, LANDING_PAGE_URL, OWNERSHIP_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, INVEST_TOKEN, OWNERSHIP_TICKER, SUPPORT_EMAIL } from 'config/client_config';
 /**
  * see: app/locales/README.md
  */
@@ -249,7 +249,7 @@ const ru = {
 	account_name_is_not_found: 'Имя аккаунта не найдено',
 	unable_to_recover_account_not_change_ownership_recently: 'У нас не получилось восстановить этот аккаунт, он не менял владельца в недавнее время.',
 	password_not_used_in_last_days: 'Этот пароль не использовался в этом аккаунте за последние 30 дней.',
-	request_already_submitted_contact_support: 'Ваш запрос был отправлен, и мы работаем над этим. Пожалуйста, свяжитесь с t@cyber.fund для получения статуса вашего запроса.',
+	request_already_submitted_contact_support: 'Ваш запрос был отправлен, и мы работаем над этим. Пожалуйста, свяжитесь с ' + SUPPORT_EMAIL + ' для получения статуса вашего запроса.',
 	recover_account_intro: "Иногда бывает что  ключ владельца может быть скомпрометирован. Восстановление украденного аккаунта дает законному владельцу 30 дней чтобы вернуть аккаунт с момента изменения владельческого ключа мошенником. Восстановление украденного аккаунта в " + APP_URL + " возможно только если владелец аккаунта ранее указал '" + APP_NAME + "' в качестве доверенного лица и согласился с Условиями Использования сайта  " + APP_NAME + ".",
 	login_with_facebook_or_reddit_media_to_verify_identity: 'Пожалуйста, войдите используя Facebook или Reddit чтобы подтвердить вашу личность',
 	login_with_social_media_to_verify_identity: 'Пожалуйста, зайдите с помощью {show_social_login} чтобы подтвердить вашу личность',

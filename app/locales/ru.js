@@ -564,6 +564,7 @@ const ru = {
 	server_returned_error: 'ошибка сервера',
 	user_avatar: 'Аватар пользователя',
 	save_avatar: 'Сохранить аватар',
+	wiki: 'Вики',
 }
 
 export { ru }

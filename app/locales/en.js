@@ -547,6 +547,7 @@ const en = 	{
 	server_returned_error: 'server returned error',
 	user_avatar: 'user\'s avatar',
 	save_avatar: 'save avatar',
+	wiki: 'Wiki',
 }
 
 export { en }

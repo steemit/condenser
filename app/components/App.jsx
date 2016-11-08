@@ -16,7 +16,7 @@ import Modals from 'app/components/modules/Modals';
 import Icon from 'app/components/elements/Icon';
 import {key_utils} from 'shared/ecc'
 import { translate } from '../Translator.js';
-import { TERMS_OF_SERVICE_URL, PRIVACY_POLICY_URL, SEGMENT_ANALYTICS_KEY, LANDING_PAGE_URL, WHITEPAPER_URL, VEST_TICKER } from 'config/client_config';
+import { TERMS_OF_SERVICE_URL, WIKI_URL, PRIVACY_POLICY_URL, SEGMENT_ANALYTICS_KEY, LANDING_PAGE_URL, WHITEPAPER_URL, VEST_TICKER } from 'config/client_config';
 import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 import RocketChat from 'app/components/modules/RocketChat'
 import {githash} from 'config/last-build'
@@ -175,6 +175,11 @@ class App extends React.Component {
           <SidePanel ref="side_panel" alignment="right">
               <TopRightMenu vertical navigate={this.navigate} />
               <ul className="vertical menu">
+                  <li>
+                      <a href={WIKI_URL} target="blank" onClick={this.navigate}>
+                            {translate('wiki')}
+                      </a>
+                  </li>
                   <li>
                       <a href={LANDING_PAGE_URL} onClick={this.navigate}>
                           {translate("about")}

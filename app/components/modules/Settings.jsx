@@ -38,7 +38,8 @@ class Settings extends React.Component {
 
         if (!metaData) metaData = {}
         if (metaData == '{created_at: \'GENESIS\'}') metaData = {created_at: "GENESIS"}
-        metaData.user_image = this.state.userImage
+        if(!metaData.profile) metaData.profile = {}
+        metaData.profile.profile_image = this.state.userImage
         metaData = JSON.stringify(metaData);
 
         updateAccount({
@@ -105,7 +106,7 @@ class Settings extends React.Component {
                 </div>
             </div>*/}
             <div className="row">
-                <Userpic account={this.props.account} />
+                <Userpic account={this.props.routeParams.accountname} />
                 <form onSubmit={this.handleUserImageSubmit} className="small-12 medium-6 large-4 columns">
                     <label>{translate('add_image_url')}
                         <input type="url" onChange={this.handleUrlChange} value={state.userImage} disabled={!props.isOwnAccount || state.loading} required />
@@ -133,7 +134,7 @@ export default connect(
         const current_user = state.user.get('current')
         const username = current_user ? current_user.get('username') : ''
         const metaData = account ? o2j.ifStringParseJSON(account.json_metadata) : {}
-        const userImage = metaData ? metaData.user_image : ''
+        const userImage = metaData && metaData.profile ? metaData.profile.profile_image : ''
 
         return {
             account,

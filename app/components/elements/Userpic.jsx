@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
-import {connect} from 'react-redux'
-const {oneOfType, string, object} = PropTypes
+import {connect} from 'react-redux';
+const {oneOfType, string, object} = PropTypes;
 
 class Userpic extends Component {
 	// you can pass either user object, or username string
@@ -10,11 +10,13 @@ class Userpic extends Component {
 
 	render() {
 		const {account, width, height} = this.props
-		let url
+		let url = null;
 
-		// try to extract image url from users metaData
-		try { url = JSON.parse(account.json_metadata).user_image }
-		catch (e) { url = '' }
+		try {
+		    url = account ? JSON.parse(account.json_metadata).user_image : null;
+		}
+		catch (e) {
+        }
 
         if (url && /(https?:)?\/\//.test(url)) {
             url = $STM_Config.img_proxy_prefix + '48x48/' + url;
@@ -34,8 +36,7 @@ class Userpic extends Component {
 
 export default connect(
 	(state, {account, ...restOfProps}) => {
-		// you can pass either user object, or username string
-		if (typeof account == 'string') account = state.global.getIn(['accounts', account]).toJS()
-		return { account, ...restOfProps }
+        const account_obj = state.global.getIn(['accounts', account]);
+		return { account: account_obj ? account_obj.toJS() : null, ...restOfProps }
 	}
 )(Userpic)

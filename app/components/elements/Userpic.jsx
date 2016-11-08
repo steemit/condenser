@@ -15,6 +15,11 @@ class Userpic extends Component {
 		// try to extract image url from users metaData
 		try { url = JSON.parse(account.json_metadata).user_image }
 		catch (e) { url = '' }
+		const prox = $STM_Config.img_proxy_prefix
+		if (prox) {
+			const size = '60x60'//TODO get from props?
+			url = prox + size + '/' + url;
+		}
 
 		return 	<div className="Userpic">
 					<img

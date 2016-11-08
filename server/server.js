@@ -15,7 +15,7 @@ import useAccountRecoveryApi from './api/account_recovery';
 import useEnterAndConfirmEmailPages from './server_pages/enter_confirm_email';
 import useEnterAndConfirmMobilePages from './server_pages/enter_confirm_mobile';
 import isBot from 'koa-isbot';
-import session from '@steem/koa-crypto-session';
+import session from '@steem/crypto-session';
 import csrf from 'koa-csrf';
 import flash from 'koa-flash';
 import minimist from 'minimist';

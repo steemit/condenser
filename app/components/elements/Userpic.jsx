@@ -9,6 +9,8 @@ class Userpic extends Component {
 
     render() {
         const {account, width, height} = this.props
+        const hideIfDefault = this.props.hideIfDefault || false
+
         let url = null;
 
         // try to extract image url from users metaData
@@ -20,6 +22,9 @@ class Userpic extends Component {
         if (url && /(https?:)\/\//.test(url)) {
             url = $STM_Config.img_proxy_prefix + '48x48/' + url;
         } else {
+            if(hideIfDefault) {
+                return null;
+            }
             url = require('app/assets/images/user.png');
         }
 

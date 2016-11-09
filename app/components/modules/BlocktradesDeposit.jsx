@@ -6,11 +6,10 @@ import Icon from 'app/components/elements/Icon'
 import DropdownMenu from 'app/components/elements/DropdownMenu'
 import g from 'app/redux/GlobalReducer'
 import QRCode from 'react-qr'
-import {steemTip, powerTip, powerTip2} from 'app/utils/Tips'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import { translate } from 'app/Translator.js';
 import { formatCoins } from 'app/utils/FormatCoins';
-import { APP_NAME, APP_ICON, DEBT_TOKEN, DEBT_TOKEN_SHORT, OWNERSHIP_TOKEN, CURRENCY_SIGN, INVEST_TOKEN, VEST_TICKER, OWNERSHIP_TICKER } from 'config/client_config';
+import { APP_URL, APP_ICON, OWNERSHIP_TOKEN, INVEST_TOKEN, VEST_TICKER, OWNERSHIP_TICKER, DEBT_TICKER } from 'config/client_config';
 
 const coinNames = {
     [OWNERSHIP_TICKER]: OWNERSHIP_TOKEN,
@@ -380,10 +379,11 @@ const toSteem = value => coalesce(coalesce(coinToTypes.find(v => v[1] === value)
 const toTrade = value => coalesce(coalesce(coinToTypes.find(v => v[0] === value), [])[1], value)
 const encodeParams = obj => Object.keys(obj).map(key => `${key}=${encodeURIComponent(obj[key])}`).join('&')
 const trStatus = stat => coalesce(statusNames[stat], stat)
+const coinTypes = new RegExp(`${OWNERSHIP_TICKER}|${VEST_TICKER}|${DEBT_TICKER}`)
 const trHashLink = (coin, hash) =>
     !hash ? null :
     coin === 'BTC' ? <a href={`https://blockchain.info/tx/${hash}`} target="_blank"><Icon name="extlink" /></a> :
-    /GOLOS|GESTS|GBG/.test(coin) ? <a href={`https://____golos.io/tx/${hash}`} target="_blank"><Icon name="extlink" /></a> :
+    coinTypes.test(coin) ? <a href={`https://____${APP_URL}/tx/${hash}`} target="_blank"><Icon name="extlink" /></a> :
     <span t={hash}>hash.substring(0, 10) + '...'</span>
 
 /** Memory backed local storage.  Assumes this is the sole maintainer of this key.

@@ -561,9 +561,10 @@ module.exports = {
             min_to_receive = min_to_receive.replace(min_to_receive.split(' ')[0],
                 String(parseFloat(min_to_receive).toFixed(3)))
 
+            const regex = new RegExp(OWNERSHIP_TICKER)
             const confirmStr = translate(
                                 // which translated string to use
-                                /GOLOS/.test(amount_to_sell)
+                                regex.test(amount_to_sell)
                                 ? 'sell_amount_for_atleast'
                                 : 'buy_atleast_amount_for',
                                 // with this values

@@ -1,4 +1,20 @@
 ---------------------------------------------------------------------
+0.1.161109
+---------------------------------------------------------------------
+
+New features and improvements
+--------
+- custom user profile images
+- show dynamic sbd interest in user's wallet
+- new submenu on the wallet page
+
+Bug fixes
+--------
+- remove estimates, just show 7-day summary #600
+- own reply notifications appear on other users' account pages #595
+
+
+---------------------------------------------------------------------
 0.1.161104
 ---------------------------------------------------------------------
 

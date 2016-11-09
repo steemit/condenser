@@ -7,16 +7,22 @@
 }
 
 .Comment__Userpic {
+  float: left;
   position: relative;
   top: 0.4rem;
+  padding-right: 0.6rem;
 }
 
 .Comment__Userpic-small {
-  position: relative;
-  left: -2px;
   @include hide-for(medium);
-  path {
-    fill: $dark_gray;
+  .Userpic {
+    float: left;
+    position: relative;
+    padding-right: 0.2rem;
+    img {
+      width: 16px;
+      height: 16px;
+    }
   }
 }
 

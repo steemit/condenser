@@ -12,6 +12,8 @@ import user from 'app/redux/User'
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
 import SvgImage from 'app/components/elements/SvgImage';
 import {List} from 'immutable'
+import { translate } from 'app/Translator';
+import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 
 class Post extends React.Component {
 
@@ -63,6 +65,7 @@ class Post extends React.Component {
             post = route_params.username + '/' + route_params.slug;
         }
         const dis = g.get('content').get(post);
+
         if (!dis) return null;
 
         if(!showAnyway) {
@@ -73,7 +76,7 @@ class Post extends React.Component {
                         <div className="row">
                             <div className="column">
                                 <div className="PostFull">
-                                    <p onClick={this.showAnywayClick}>This post was hidden due to low ratings. <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.showAnywayClick}>Show</button></p>
+                                    <p onClick={this.showAnywayClick}>{translate('this_post_was_hidden_due_to_low_ratings')}. <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.showAnywayClick}>{translate('show')}</button></p>
                                 </div>
                             </div>
                         </div>
@@ -112,15 +115,15 @@ class Post extends React.Component {
         const negativeGroup = !stuffHidden ? null :
             (<div className="hentry Comment root Comment__negative_group">
                 {this.state.showNegativeComments ?
-                    <p onClick={this.toggleNegativeReplies}>Now showing comments with low ratings: <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>Hide</button></p> :
-                    <p onClick={this.toggleNegativeReplies}>Comments were hidden due to low ratings. <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>Show</button></p>
+                    <p onClick={this.toggleNegativeReplies}>{translate('now_showing_comments_with_low_ratings')}: <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>{translate('hide')}</button></p> :
+                    <p onClick={this.toggleNegativeReplies}>{translate('comments_were_hidden_due_to_low_ratings')}. <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>{translate('show')}</button></p>
                 }
             </div>
         );
 
 
         let sort_orders = [ 'trending', 'active', 'created', 'updated' ];
-        let sort_labels = [ 'trending', 'active', 'new', 'updated' ];
+        let sort_labels = [ translate('trending'), translate('active'), translate('new'), translate('updated') ];
         let sort_menu = [];
 
         let selflink = `/${dis.get('category')}/@${post}`;
@@ -137,7 +140,6 @@ class Post extends React.Component {
                 <SvgImage name="404" width="640px" height="480px" />
             </center>
 
-
         return (
             <div className="Post">
                 <div className="row">
@@ -147,11 +149,14 @@ class Post extends React.Component {
                 </div>
                 {!current_user && <div className="row">
                     <div className="column">
-                      <div className="Post__promo">
-                          Authors get paid when people like you upvote their post. <br/>
-                          If you enjoyed what you read here, earn {signup_bonus} of Steem Power <br />
-                          when you <a onClick={showSignUp}>sign up</a> and vote for it.
-                      </div>
+                        <div className="Post__promo">
+                            {translate('authors_get_paid_when_people_like_you_upvote_their_post')}.
+                            <br /> {// remove '$' from signup_bonus before parsing it into local currency
+                                    translate('if_you_enjoyed_what_you_read_earn_amount', {amount: localizedCurrency(signup_bonus.substring(1))})}
+                            <br /> {translate('when_you') + ' '}
+                            <a onClick={showSignUp}>{translate('when_you_link_text')}</a>
+                            {' ' + translate('and_vote_for_it') + '.'}
+                        </div>
                     </div>
                 </div>}
                 <div id="comments" className="Post_comments row hfeed">
@@ -159,8 +164,8 @@ class Post extends React.Component {
                         <div className="Post_comments__content">
                             {positiveComments.length ?
                             (<div className="Post__comments_sort_order float-right">
-                                Sort Order: &nbsp;
-                                <FoundationDropdownMenu menu={sort_menu} label={sort_order} dropdownPosition="bottom" dropdownAlignment="right" />
+                                {translate('sort_order')}: &nbsp;
+                                <FoundationDropdownMenu menu={sort_menu} label={translate(sort_order)} dropdownPosition="bottom" dropdownAlignment="right" />
                             </div>) : null}
                             {positiveComments}
                             {negativeGroup}

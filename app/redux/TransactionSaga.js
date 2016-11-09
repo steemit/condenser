@@ -1,12 +1,10 @@
 import {takeEvery} from 'redux-saga';
 import {call, put, select} from 'redux-saga/effects';
-
 import {Apis} from 'shared/api_client'
 import {createTransaction, signTransaction} from 'shared/chain/transactions'
 import {ops} from 'shared/serializer'
 import {PublicKey, PrivateKey} from 'shared/ecc'
 import {fromJS} from 'immutable'
-
 import {getAccount} from 'app/redux/SagaShared'
 import {findSigningKey} from 'app/redux/AuthSaga'
 import {encode} from 'shared/chain/memo'
@@ -14,12 +12,14 @@ import g from 'app/redux/GlobalReducer'
 import user from 'app/redux/User'
 import tr from 'app/redux/Transaction'
 import getSlug from 'speakingurl'
+import {DEBT_TICKER} from 'config/client_config'
 
 const {transaction} = ops
 
 export const transactionWatches = [
     watchForBroadcast,
     watchForUpdateAuthorities,
+    watchForUpdateMeta,
     watchForRecoverAccount,
 ]
 
@@ -28,6 +28,9 @@ export function* watchForBroadcast() {
 }
 export function* watchForUpdateAuthorities() {
     yield* takeEvery('transaction/UPDATE_AUTHORITIES', updateAuthorities);
+}
+export function* watchForUpdateMeta() {
+    yield* takeEvery('transaction/UPDATE_META', updateMeta);
 }
 export function* watchForRecoverAccount() {
     yield* takeEvery('transaction/RECOVER_ACCOUNT', recoverAccount);
@@ -248,7 +251,7 @@ function* accepted_account_update({operation}) {
     // }
 }
 
-// TODO remove soon, this was replaced by the UserKeys edit running usernamePasswordLogin (on dialog close) 
+// TODO remove soon, this was replaced by the UserKeys edit running usernamePasswordLogin (on dialog close)
 // function* error_account_update({operation}) {
 //     const {account} = operation
 //     const stateUser = yield select(state => state.user)
@@ -311,7 +314,7 @@ function* preBroadcast_comment({operation, username}) {
 
     if(comment_options) {
         const {
-            max_accepted_payout = "1000000.000 SBD",
+            max_accepted_payout = ["1000000.000", DEBT_TICKER].join(" "),
             percent_steem_dollars = 10000, // 10000 === 100%
             allow_votes = true,
             allow_curation_rewards = true,
@@ -635,4 +638,43 @@ function* updateAuthorities({payload: {accountName, signingKey, auths, twofa, on
     // console.log('sign key.toPublicKey().toString()', key.toPublicKey().toString())
     // console.log('payload', payload)
     yield call(broadcastOperation, {payload})
+}
+
+/** auths must start with most powerful key: owner for example */
+// const twofaAccount = 'steem'
+function* updateMeta(params) {
+    // console.log('params', params)
+    const {meta, account_name, signingKey, onSuccess, onError} = params.payload.operation
+    console.log('meta', meta)
+    console.log('account_name', account_name)
+    // Be sure this account is up-to-date (other required fields are sent in the update)
+    const [account] = yield call([Apis, Apis.db_api], 'get_accounts', [account_name])
+    if (!account) {
+        onError('Account not found')
+        return
+    }
+    if (!signingKey) {
+        onError(`Incorrect Password`)
+        throw new Error('Have to pass owner key in order to change meta')
+    }
+
+    try {
+        console.log('account.name', account.name)
+      const tx = yield createTransaction([
+          ['update_account_meta', {
+              account_name: account.name,
+              json_meta: JSON.stringify(meta),
+          }]
+      ])
+      const sx = signTransaction(tx, signingKey);
+      yield new Promise((resolve, reject) =>
+          Apis.broadcastTransaction(sx, () => {resolve()}).catch(e => {reject(e)})
+      )
+      if(onSuccess) onSuccess()
+      // console.log('sign key.toPublicKey().toString()', key.toPublicKey().toString())
+      // console.log('payload', payload)
+    } catch(e) {
+      console.error('Update meta', e)
+      if(onError) onError(e)
+    }
 }

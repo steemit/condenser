@@ -2,10 +2,13 @@
     margin-top: -1.5rem;
 }
 
+.UserProfile__tab_content {
+    margin-top: 1.5rem;
+}
+
 .UserProfile__top-nav {
   background-color: #333333;
   padding: 0;
-  margin-bottom: 1.5rem;
   .row {
       .columns {
           overflow-x: auto;
@@ -66,6 +69,9 @@
     }
     h2 {
         padding-top: 20px;
+        .Userpic {
+            padding-right: 1rem;
+        }
     }
 
     .UserProfile__buttons {

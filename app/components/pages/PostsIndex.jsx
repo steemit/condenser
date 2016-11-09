@@ -8,6 +8,7 @@ import PostsList from 'app/components/cards/PostsList';
 import {isFetchingOrRecentlyUpdated} from 'app/utils/StateFunctions';
 import {Link} from 'react-router';
 import MarkNotificationRead from 'app/components/elements/MarkNotificationRead';
+import { translate } from 'app/Translator';
 
 class PostsIndex extends React.Component {
 
@@ -78,7 +79,7 @@ class PostsIndex extends React.Component {
                 </div>;
                 markNotificationRead = <MarkNotificationRead fields="feed" account={account_name} />
             } else {
-                emptyText = `Looks like ${account_name} hasn't followed anything yet!`;
+                emptyText = translate('user_hasnt_followed_anything_yet', {name: account_name});
             }
         } else {
             posts = this.getPosts(order, category);
@@ -108,7 +109,7 @@ class PostsIndex extends React.Component {
                 </div>
                 <div className="PostsIndex__topics column shrink show-for-large">
                     <Topics order={topics_order} current={category} compact={false} />
-                    <small><a onClick={this.onShowSpam}>{showSpam ? 'Show less' : 'Show more'}</a> low value posts</small>
+                    <small><a onClick={this.onShowSpam}>{translate(showSpam ? 'show_less' : 'show_more')}</a>{' ' + translate('value_posts')}</small>
                 </div>
             </div>
         );
@@ -134,4 +135,3 @@ module.exports = {
         }
     )(PostsIndex)
 };
-

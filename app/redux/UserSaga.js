@@ -322,7 +322,7 @@ function* lookupPreviousOwnerAuthority({payload: {}}) {
 
     const username = current.get('username')
     const key_auths = yield select(state => state.global.getIn(['accounts', username, 'owner', 'key_auths']))
-    if(key_auths.find(key => key.get(0) === login_owner_pubkey)) {
+    if (key_auths && key_auths.find(key => key.get(0) === login_owner_pubkey)) {
         // console.log('UserSaga ---> Login matches current account owner');
         return
     }
@@ -334,7 +334,7 @@ function* lookupPreviousOwnerAuthority({payload: {}}) {
         const bb = b.get('last_valid_time')
         return aa < bb ? -1 : aa > bb ? 1 : 0
     })
-    console.log('UserSaga ---> owner_history', owner_history.toJS())
+    // console.log('UserSaga ---> owner_history', owner_history.toJS())
     const previous_owner_authority = owner_history.find(o => {
         const auth = o.get('previous_owner_authority')
         const weight_threshold = auth.get('weight_threshold')
@@ -345,7 +345,7 @@ function* lookupPreviousOwnerAuthority({payload: {}}) {
         console.log('UserSaga ---> Login owner does not match owner history');
         return
     }
-    console.log('UserSage ---> previous_owner_authority', previous_owner_authority.toJS())
+    // console.log('UserSage ---> previous_owner_authority', previous_owner_authority.toJS())
     yield put(user.actions.setUser({previous_owner_authority}))
 }
 

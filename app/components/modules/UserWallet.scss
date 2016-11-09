@@ -3,10 +3,25 @@
 }
 
 .UserWallet__buysp {
-  margin-right: 0;
+  margin-right: 0 !important;
+  margin-top: 1rem;
 }
 
 .UserWallet__dropdown {
+}
+
+.WalletSubMenu {
+  > li > a {
+    color: $dark-gray;
+    &:hover {
+      color: $black;
+    }
+  }
+  > li > a.active {
+    color: $black;
+    font-weight: bold;
+  }
+  border-bottom: 1px solid $medium-gray;
 }
 
 // protect for foundation bug for collapsed state drop-downs

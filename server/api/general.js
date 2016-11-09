@@ -62,7 +62,7 @@ export default function useGeneralApi(app) {
                 order: 'id DESC'
             });
             if (existing_account) {
-                throw new Error("Only one Steem account per user is allowed in order to prevent abuse (Steemit, Inc. funds each new account with 3 STEEM)");
+                throw new Error("Only one Steem account per user is allowed in order to prevent abuse");
             }
 
             const same_ip_account = yield models.Account.findOne(

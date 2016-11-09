@@ -7,7 +7,10 @@ export default class VerticalMenu extends React.Component {
         items: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
         title: React.PropTypes.string,
         className: React.PropTypes.string,
-        hideValue: React.PropTypes.string,
+        hideValue: React.PropTypes.oneOfType([
+            React.PropTypes.string,
+            React.PropTypes.element
+        ]),
     };
 
     closeMenu = () => {

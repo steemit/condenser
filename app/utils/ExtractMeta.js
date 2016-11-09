@@ -1,6 +1,6 @@
 import extractContent from 'app/utils/ExtractContent';
 import {objAccessor} from 'app/utils/Accessors';
-import { APP_NAME, SITE_DESCRIPTION, TWITTER_HANDLE, SHARE_IMAGE, TWITTER_SHARE_IMAGE } from 'config/client_config';
+import { APP_NAME, APP_URL, SITE_DESCRIPTION, TWITTER_HANDLE, SHARE_IMAGE, TWITTER_SHARE_IMAGE } from 'config/client_config';
 
 function addSiteMeta(metas) {
     metas.push({title: APP_NAME});
@@ -24,8 +24,8 @@ export default function extractMeta(chain_data, rp) {
         const content = chain_data.content[post];
         if (content) {
             const d = extractContent(objAccessor, content, false);
-            const url = 'https://golos.io' + d.link;
-            const title = d.title + ' — Голос';
+            const url = 'https://' + APP_URL + d.link;
+            const title = d.title + ' — ' + APP_NAME;
             const image = d.image_link ? d.image_link : SHARE_IMAGE;
             const twimage = d.image_link ? d.image_link : TWITTER_SHARE_IMAGE;
             metas.push({title});

@@ -7,7 +7,7 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import {PrivateKey} from 'shared/ecc'
 import {key_utils} from 'shared/ecc'
 import Apis from 'shared/api_client/ApiInstances'
-import { translate, translateHtml } from '../../Translator';
+import { translate, translateHtml } from 'app/Translator';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import ClipboardIcon from 'react-clipboard-icon'
 import o2j from 'shared/clash/object2json'

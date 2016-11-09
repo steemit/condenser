@@ -72,6 +72,10 @@ export function translateError(string) {
             return translate('account_name_should_be_longer')
         case 'Account name should be shorter.':
             return translate('account_name_should_be_shorter')
+        case 'Comment is nested 5 posts deep, maximum depth is 5':
+            return translate('comment_is_nested_5_posts_deep')
+        case 'You may only comment once every 20 seconds':
+            return translate('you_may_only_comment_once_every_20_seconds')
         case 'Account name should start with a letter.':
             return translate('account_name_should_start_with_a_letter')
         case 'Account name should have only letters, digits, or dashes.':

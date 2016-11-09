@@ -6,7 +6,7 @@ import {PrivateKey} from 'shared/ecc'
 import {key_utils} from 'shared/ecc'
 import Apis from 'shared/api_client/ApiInstances'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
-import { translate, translateHtml } from '../../Translator';
+import { translate, translateHtml } from 'app/Translator';
 import { FormattedHTMLMessage } from 'react-intl';
 
 import

@@ -42,7 +42,7 @@ class ConvertToSteem extends React.Component {
             <form onSubmit={handleSubmit(data => {dispatchSubmit(data)})}>
                 <div className="row">
                     <div className="small-12 columns">
-                        <h1>{translate('convert_to_OWNERSHIP_TOKEN')}</h1>
+                        <h1>{translate('convert_to_LIQUID_TOKEN')}</h1>
                         <p>{translate('DEBT_TOKEN_will_be_unavailable')}.</p>
                         {/* using <FormattedMessage /> because nested html tag in values doesn't want to be rendered properly in translate() */}
                         <p><FormattedMessage id="your_existing_DEBT_TOKEN_are_liquid_and_transferable" values={{ link: <i>{translate("buy_or_sell")}</i> }} /></p>
@@ -104,7 +104,7 @@ export default reduxForm(
         convert: (owner, amt, success, error) => {
             const amount = [parseFloat(amt).toFixed(3), DEBT_TICKER].join(" ")
             const requestid = Math.floor(Date.now() / 1000)
-            const conf = translate('in_week_convert_DEBT_TOKEN_to_OWNERSHIP_TOKEN', { amount: amount.split(' ')[0] })
+            const conf = translate('in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN', { amount: amount.split(' ')[0] })
             dispatch(transaction.actions.broadcastOperation({
                 type: 'convert',
                 operation: {owner, requestid, amount},

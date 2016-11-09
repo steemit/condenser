@@ -15,10 +15,8 @@ import links from 'app/utils/Links'
 import {Map, Set} from 'immutable'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import Remarkable from 'remarkable'
-import { translate } from 'app/Translator.js';
-// TODO check and remove this
-import { transliterate } from 'transliteration';
-import { detransliterate } from 'app/utils/ParsersAndFormatters';
+import { translate } from 'app/Translator';
+import { detransliterate, translateError } from 'app/utils/ParsersAndFormatters';
 
 const remarkable = new Remarkable({ html: true, linkify: false })
 const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
@@ -367,7 +365,7 @@ class ReplyEditor extends React.Component {
                             </span>}
                         </div>
                         <div className={vframe_section_shrink_class}>
-                            {postError && <div className="error">{postError}</div>}
+                            {postError && <div className="error">{translateError(postError)}</div>}
                         </div>
                         <div className={vframe_section_shrink_class}>
                             {!loading && <button type="submit" className="button" disabled={submitting || invalid} tabIndex={4}>{isEdit ? translate('update_post') : postLabel}</button>}

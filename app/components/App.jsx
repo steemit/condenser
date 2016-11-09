@@ -15,8 +15,8 @@ import Dialogs from 'app/components/modules/Dialogs';
 import Modals from 'app/components/modules/Modals';
 import Icon from 'app/components/elements/Icon';
 import {key_utils} from 'shared/ecc'
-import { translate } from '../Translator.js';
-import { SEGMENT_ANALYTICS_KEY, LANDING_PAGE_URL, WHITEPAPER_URL, VEST_TICKER } from 'config/client_config';
+import { translate } from 'app/Translator';
+import { TERMS_OF_SERVICE_URL, WIKI_URL, PRIVACY_POLICY_URL, SEGMENT_ANALYTICS_KEY, LANDING_PAGE_URL, WHITEPAPER_URL, VEST_TICKER } from 'config/client_config';
 import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 import RocketChat from 'app/components/modules/RocketChat'
 import {githash} from 'config/last-build'
@@ -176,6 +176,11 @@ class App extends React.Component {
               <TopRightMenu vertical navigate={this.navigate} />
               <ul className="vertical menu">
                   <li>
+                      <a href={WIKI_URL} target="blank" onClick={this.navigate}>
+                            {translate('wiki')}
+                      </a>
+                  </li>
+                  <li>
                       <a href={LANDING_PAGE_URL} onClick={this.navigate}>
                           {translate("about")}
                       </a>
@@ -192,7 +197,7 @@ class App extends React.Component {
                   </li>
                   {/* <li>
                       <a onClick={() => depositSteem()}>
-                          {translate("buy_OWNERSHIP_TOKEN")}
+                          {translate("buy_LIQUID_TOKEN")}
                       </a>
                   </li> */}
                   <li>
@@ -223,12 +228,12 @@ class App extends React.Component {
               </ul>
               <ul className="vertical menu">
                   <li>
-                      <a href="/legal/terms_of_service.pdf" onClick={this.navigate} rel="nofollow">
+                      <a href={TERMS_OF_SERVICE_URL} onClick={this.navigate} rel="nofollow">
                           {translate("privacy_policy")}
                       </a>
                   </li>
                   <li>
-                      <a href="/ru--konfidenczialxnostx/@golos/politika-konfidencialnosti" onClick={this.navigate} rel="nofollow">
+                      <a href={PRIVACY_POLICY_URL} onClick={this.navigate} rel="nofollow">
                           {translate("terms_of_service")}
                       </a>
                   </li>

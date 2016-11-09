@@ -3,7 +3,7 @@ import React from 'react';
 const ReactHighcharts = require("react-highcharts/dist/ReactHighstock");
 import { translate } from 'app/Translator';
 import { localizedCurrency, localCurrencySymbol } from 'app/components/elements/LocalizedCurrency';
-import { OWNERSHIP_TOKEN_UPPERCASE, DEBT_TOKEN_SHORT, OWNERSHIP_TICKER } from 'config/client_config';
+import { LIQUID_TOKEN_UPPERCASE, DEBT_TOKEN_SHORT, OWNERSHIP_TICKER } from 'config/client_config';
 
 
 
@@ -193,7 +193,7 @@ function generateDepthChart(bidsArray, asksArray) {
             shared: false,
             backgroundColor: "rgba(0, 0, 0, 0.3)",
             formatter() {
-                return `<span>${translate('price')}: ${localizedCurrency((this.x / power).toFixed(6))} / ${OWNERSHIP_TOKEN_UPPERCASE}</span><br/><span>\u25CF</span>${this.series.name}: <b>${(this.y / 1000).toFixed(3)} ${DEBT_TOKEN_SHORT} ` + '(' + localCurrencySymbol + ')</b>';
+                return `<span>${translate('price')}: ${localizedCurrency((this.x / power).toFixed(6))} / ${LIQUID_TOKEN_UPPERCASE}</span><br/><span>\u25CF</span>${this.series.name}: <b>${(this.y / 1000).toFixed(3)} ${DEBT_TOKEN_SHORT} ` + '(' + localCurrencySymbol + ')</b>';
             },
             style: {
                 color: "#FFFFFF"

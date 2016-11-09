@@ -5,7 +5,7 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import transaction from 'app/redux/Transaction';
 import g from 'app/redux/GlobalReducer';
 import {Set, Map} from 'immutable'
-import { translate } from '../../Translator';
+import { translate } from 'app/Translator';
 
 const {string, object, bool, func, any} = PropTypes
 const followTypes = ['blog', 'posts']

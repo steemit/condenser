@@ -5,6 +5,7 @@ import findUser from 'db/utils/find_user';
 import {esc, escAttrs} from 'db/models';
 import request from 'request'
 import {getLogger} from '../../app/utils/Logger'
+import { APP_URL, SUPPORT_EMAIL } from 'config/client_config'
 
 const print = getLogger('oauth').print
 
@@ -116,12 +117,12 @@ function* handleFacebookCallback() {
                 } else {
                     console.log('-- arec: failed to confirm user for account (no account) -->', this.session.uid, provider, account_recovery_record.id, user.id, this.session.uid, account_recovery_record.owner_key);
                     account_recovery_record.update({user_id: user.id, status: 'account not found'});
-                    this.body = 'Мы не смогли верифицировать учётную запись. Пишите почту t@cyber.fund';
+                    this.body = 'Мы не смогли верифицировать учётную запись. Пишите почту ' + SUPPORT_EMAIL;
                 }
             } else {
                 console.log('-- arec: failed to confirm user for account (no user) -->', this.session.uid, provider, this.session.uid, this.session.email);
                 account_recovery_record.update({status: 'user not found'});
-                this.body = 'Мы не смогли верифицировать учётную запись. Пишите почту t@cyber.fund';
+                this.body = 'Мы не смогли верифицировать учётную запись. Пишите почту ' + SUPPORT_EMAIL;
             }
             return null;
         }
@@ -142,7 +143,7 @@ function* handleFacebookCallback() {
         });
         if (same_ip_bot) {
             console.log('-- /handle_facebook_callback same_ip_bot -->', this.session.uid, attrs.remote_ip, attrs.email);
-            this.flash = {alert: 'We are sorry, we cannot sign you up at this time because your IP address is associated with bots activity. Please contact support@steemit.com for more information.'};
+            this.flash = {alert: 'We are sorry, we cannot sign you up at this time because your IP address is associated with bots activity. Please contact ' + SUPPORT_EMAIL + ' for more information.'};
             this.redirect('/');
             return;
         }
@@ -155,7 +156,7 @@ function* handleFacebookCallback() {
         });
         if (blocked_email) {
             console.log('-- /handle_facebook_callback blocked_email -->', this.session.uid, u.email);
-            this.flash = {alert: 'Not supported email address: ' + u.email + '. Please make sure your you don\'t use any temporary email providers, contact support@steemit.com for more information.'};
+            this.flash = {alert: 'Not supported email address: ' + u.email + '. Please make sure your you don\'t use any temporary email providers, contact ' + SUPPORT_EMAIL + ' for more information.'};
             this.redirect('/');
             return;
         }
@@ -205,7 +206,7 @@ function retrieveRedditUserData(access_token) {
             .get('https://oauth.reddit.com/api/v1/me.json?raw_json=1')
             .headers({
                 Authorization: `bearer ${access_token}`,
-                'User-Agent': 'Steembot/1.0 (+http://golos.io)',
+                'User-Agent': 'Steembot/1.0 (+http://' + APP_URL + ')',
                 Accept: 'application/json',
                 'Content-type': 'application/json'
             })
@@ -253,12 +254,12 @@ function* handleRedditCallback() {
                 } else {
                     console.log('-- arec: failed to confirm user for account (no account) -->', this.session.uid, provider, account_recovery_record.id, user.id, this.session.uid, account_recovery_record.owner_key);
                     account_recovery_record.update({user_id: user.id, status: 'account not found'});
-                    this.body = 'Мы не смогли верифицировать учётную запись. Пишите почту t@cyber.fund';
+                    this.body = 'Мы не смогли верифицировать учётную запись. Пишите почту ' + SUPPORT_EMAIL;
                 }
             } else {
                 console.log('-- arec: failed to confirm user for account (no user) -->', this.session.uid, provider, this.session.arec, this.session.email);
                 account_recovery_record.update({status: 'user not found'});
-                this.body = 'Мы не смогли верифицировать учётную запись. Пишите почту t@cyber.fund';
+                this.body = 'Мы не смогли верифицировать учётную запись. Пишите почту ' + SUPPORT_EMAIL;
             }
             return null;
         }
@@ -405,12 +406,12 @@ function* handleVkCallback() {
                 } else {
                     console.log('-- arec: failed to confirm user for account (no account) -->', this.session.uid, provider, account_recovery_record.id, user.id, this.session.uid, account_recovery_record.owner_key);
                     account_recovery_record.update({user_id: user.id, status: 'account not found'});
-                    this.body = 'Мы не смогли верифицировать учётную запись. Пишите почту t@cyber.fund';
+                    this.body = 'Мы не смогли верифицировать учётную запись. Пишите почту ' + SUPPORT_EMAIL;
                 }
             } else {
                 console.log('-- arec: failed to confirm user for account (no user) -->', this.session.uid, provider, this.session.uid, this.session.email);
                 account_recovery_record.update({status: 'user not found'});
-                this.body = 'We cannot verify the user account. Please contact support@golos.io';
+                this.body = 'We cannot verify the user account. Please contact ' + SUPPORT_EMAIL
             }
             return null;
         }

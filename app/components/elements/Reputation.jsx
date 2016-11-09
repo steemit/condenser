@@ -1,5 +1,5 @@
 import React from 'react';
-import { translate } from '../../Translator';
+import { translate } from 'app/Translator';
 
 export default ({value}) => {
     if (isNaN(value)) {

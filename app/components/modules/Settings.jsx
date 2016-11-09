@@ -43,8 +43,8 @@ class Settings extends React.Component {
             json_metadata: metaData,
             account: account.name,
             memo_key: account.memo_key,
-            errorCallback: () => {
-                console.log('SUCCES')
+            errorCallback: err => {
+                console.error('updateAccount() error!', err)
                 this.setState({
                     loading: false,
                     errorMessage: translate('server_returned_error')
@@ -91,7 +91,7 @@ class Settings extends React.Component {
                             {/* CHOOSE USER IMAGE */}
                             <form onSubmit={this.handleUserImageSubmit}>
                                 <label>{translate('add_image_url')}
-                                    <input type="url" onChange={this.handleUrlChange} value={state.userImage} disabled={!props.isOwnAccount || state.loading} required />
+                                    <input type="url" onChange={this.handleUrlChange} value={state.userImage} disabled={!props.isOwnAccount || state.loading} />
                                     {
                                         state.errorMessage
                                         ? <small className="error">{state.errorMessage}</small>

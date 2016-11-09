@@ -7,7 +7,7 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import PostsList from 'app/components/cards/PostsList';
 import {isFetchingOrRecentlyUpdated} from 'app/utils/StateFunctions';
 import g from 'app/redux/GlobalReducer';
-import { translate } from '../../Translator';
+import { translate } from 'app/Translator';
 
 class PostsIndex extends React.Component {
 

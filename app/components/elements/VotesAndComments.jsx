@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import Icon from 'app/components/elements/Icon';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
-import { translate } from '../../Translator';
+import { translate } from 'app/Translator';
 
 class VotesAndComments extends React.Component {
 

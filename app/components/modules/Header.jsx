@@ -111,14 +111,16 @@ class Header extends React.Component {
 
         if (process.env.BROWSER && route.page !== 'Post') document.title = page_title + ' — ' + APP_NAME;
 
-        const logo_link = route.params && route.params.length > 1 && this.last_sort_order ? '/' + this.last_sort_order : '/trending';
-        let topic_link = topic ? <Link to={`/${this.last_sort_order || 'trending'}/${topic}`}>{detransliterate(topic)}</Link> : null;
+        const logo_link = route.params && route.params.length > 1 && this.last_sort_order ? '/' + this.last_sort_order : '/hot';
+        let topic_link = topic ? <Link to={`/${this.last_sort_order || 'hot'}/${topic}`}>{detransliterate(topic)}</Link> : null;
 
         const sort_orders = [
             ['created', translate('new')],
             ['hot', translate('hot')],
             ['trending', translate('trending_24_hour')],
-            ['trending30', translate('trending_30_day')],
+            // disabled until crowdsale starts
+            // ['trending30', translate('trending_30_day')],
+            // promotion functionality currently does not work
             // ['promoted', translate('promoted')],
             ['active', translate('active')]
         ];

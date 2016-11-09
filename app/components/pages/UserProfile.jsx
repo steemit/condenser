@@ -26,6 +26,7 @@ import NotifiCounter from 'app/components/elements/NotifiCounter';
 import DateJoinWrapper from 'app/components/elements/DateJoinWrapper';
 import { translate } from 'app/Translator';
 import WalletSubMenu from 'app/components/elements/WalletSubMenu';
+import Userpic from 'app/components/elements/Userpic';
 
 export default class UserProfile extends React.Component {
     constructor() {
@@ -319,7 +320,11 @@ export default class UserProfile extends React.Component {
                                 <Follow follower={username} following={accountname} what="blog" />
                             </div>
                         </div>
-                        <h2>{account.name} <Tooltip t={translate('this_is_users_reputations_score_it_is_based_on_history_of_votes', {name})}><span style={{fontSize: "80%"}}>({rep})</span></Tooltip></h2>
+                        <h2>
+                            <Userpic account={account.name} hideIfDefault />
+                            {account.name}{' '}
+                            <Tooltip t={translate('this_is_users_reputations_score_it_is_based_on_history_of_votes', {name})}><span style={{fontSize: "80%"}}>({rep})</span></Tooltip>
+                        </h2>
 
                         <div>
                             <div className="UserProfile__stats">

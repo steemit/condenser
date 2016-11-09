@@ -7,6 +7,7 @@
 }
 
 .Comment__Userpic {
+  float: left;
   position: relative;
   top: 0.4rem;
   padding-right: 0.6rem;
@@ -15,6 +16,8 @@
 .Comment__Userpic-small {
   @include hide-for(medium);
   .Userpic {
+    float: left;
+    position: relative;
     padding-right: 0.2rem;
     img {
       width: 16px;

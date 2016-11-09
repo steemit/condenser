@@ -7,7 +7,7 @@ import {key_utils} from 'shared/ecc'
 import Apis from 'shared/api_client/ApiInstances'
 import {validate_account_name} from 'app/utils/ChainValidation'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
-import { translate, translateHtml } from '../../Translator';
+import { translate, translateHtml } from 'app/Translator';
 import { FormattedHTMLMessage } from 'react-intl';
 
 const {string, oneOf} = React.PropTypes

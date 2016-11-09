@@ -1,7 +1,7 @@
 /* eslint react/prop-types: 0 */
 import React from 'react';
 import UserListRow from 'app/components/cards/UserListRow';
-import { translate } from '../../Translator';
+import { translate } from 'app/Translator';
 
 const PER_PAGE = 50;
 

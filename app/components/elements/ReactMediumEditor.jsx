@@ -11,7 +11,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import MediumEditor from 'medium-editor';
 import {connect} from 'react-redux';
-import { translate } from '../../Translator';
+import { translate } from 'app/Translator';
 
 const {uploadImage} = $STM_Config
 

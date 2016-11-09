@@ -15,7 +15,7 @@ import links from 'app/utils/Links'
 import {Map, Set} from 'immutable'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import Remarkable from 'remarkable'
-import { translate } from 'app/Translator.js';
+import { translate } from 'app/Translator';
 import { detransliterate, translateError } from 'app/utils/ParsersAndFormatters';
 
 const remarkable = new Remarkable({ html: true, linkify: false })

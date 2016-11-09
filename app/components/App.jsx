@@ -15,7 +15,7 @@ import Dialogs from 'app/components/modules/Dialogs';
 import Modals from 'app/components/modules/Modals';
 import Icon from 'app/components/elements/Icon';
 import {key_utils} from 'shared/ecc'
-import { translate } from '../Translator.js';
+import { translate } from 'app/Translator';
 import { TERMS_OF_SERVICE_URL, WIKI_URL, PRIVACY_POLICY_URL, SEGMENT_ANALYTICS_KEY, LANDING_PAGE_URL, WHITEPAPER_URL, VEST_TICKER } from 'config/client_config';
 import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 import RocketChat from 'app/components/modules/RocketChat'

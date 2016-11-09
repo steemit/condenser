@@ -3,7 +3,7 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import {reduxForm} from 'redux-form'
 import {PrivateKey} from 'shared/ecc'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
-import { translate } from '../../Translator';
+import { translate } from 'app/Translator';
 
 class KeyEdit extends Component {
     static propTypes = {

@@ -7,7 +7,7 @@ import DropdownMenu from 'app/components/elements/DropdownMenu'
 import g from 'app/redux/GlobalReducer'
 import QRCode from 'react-qr'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
-import { translate } from 'app/Translator.js';
+import { translate } from 'app/Translator';
 import { formatCoins } from 'app/utils/FormatCoins';
 import { APP_URL, APP_ICON, LIQUID_TOKEN, INVEST_TOKEN, VEST_TICKER, OWNERSHIP_TICKER, DEBT_TICKER } from 'config/client_config';
 

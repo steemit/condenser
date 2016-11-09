@@ -10,7 +10,7 @@ import Orderbook from "app/components/elements/Orderbook";
 import OrderHistory from "app/components/elements/OrderHistory";
 import {Order, TradeHistory} from "app/utils/MarketClasses";
 import {roundUp, roundDown} from "app/utils/MarketUtils";
-import { translate } from 'app/Translator.js';
+import { translate } from 'app/Translator';
 import { LIQUID_TOKEN, LIQUID_TOKEN_UPPERCASE, DEBT_TOKEN_SHORT, CURRENCY_SIGN, OWNERSHIP_TICKER, DEBT_TICKER } from 'config/client_config';
 import { localizedCurrency, localCurrencySymbol } from 'app/components/elements/LocalizedCurrency';
 

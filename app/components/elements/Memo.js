@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {decode} from 'shared/chain/memo'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
-import { translate } from '../../Translator';
+import { translate } from 'app/Translator';
 
 class Memo extends React.Component {
     static propTypes = {

@@ -664,6 +664,11 @@
       "from": "binary-extensions@>=1.0.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/binary-extensions/-/binary-extensions-1.5.0.tgz"
     },
+    "bitwise-xor": {
+      "version": "0.0.0",
+      "from": "bitwise-xor@0.0.0",
+      "resolved": "https://registry.npmjs.org/bitwise-xor/-/bitwise-xor-0.0.0.tgz"
+    },
     "bl": {
       "version": "1.1.2",
       "from": "bl@>=1.1.2 <1.2.0",
@@ -1081,6 +1086,11 @@
       "from": "ctype@0.5.3",
       "resolved": "https://registry.npmjs.org/ctype/-/ctype-0.5.3.tgz"
     },
+    "currency-symbol-map": {
+      "version": "3.1.0",
+      "from": "currency-symbol-map@>=3.1.0 <4.0.0",
+      "resolved": "https://registry.npmjs.org/currency-symbol-map/-/currency-symbol-map-3.1.0.tgz"
+    },
     "currently-unhandled": {
       "version": "0.4.1",
       "from": "currently-unhandled@>=0.4.1 <0.5.0",
@@ -1420,6 +1430,11 @@
       "version": "0.3.4",
       "from": "event-emitter@>=0.3.4 <0.4.0",
       "resolved": "https://registry.npmjs.org/event-emitter/-/event-emitter-0.3.4.tgz"
+    },
+    "event-lite": {
+      "version": "0.1.1",
+      "from": "event-lite@>=0.1.1 <0.2.0",
+      "resolved": "https://registry.npmjs.org/event-lite/-/event-lite-0.1.1.tgz"
     },
     "events": {
       "version": "1.1.1",
@@ -2765,6 +2780,11 @@
       "from": "ini@>=1.3.4 <2.0.0",
       "resolved": "https://registry.npmjs.org/ini/-/ini-1.3.4.tgz"
     },
+    "int64-buffer": {
+      "version": "0.1.9",
+      "from": "int64-buffer@>=0.1.9 <0.2.0",
+      "resolved": "https://registry.npmjs.org/int64-buffer/-/int64-buffer-0.1.9.tgz"
+    },
     "interpret": {
       "version": "1.0.1",
       "from": "interpret@>=1.0.0 <2.0.0",
@@ -3634,6 +3654,23 @@
       "from": "ms@0.7.1",
       "resolved": "https://registry.npmjs.org/ms/-/ms-0.7.1.tgz"
     },
+    "msgpack-lite": {
+      "version": "0.1.26",
+      "from": "msgpack-lite@>=0.1.20 <0.2.0",
+      "resolved": "https://registry.npmjs.org/msgpack-lite/-/msgpack-lite-0.1.26.tgz",
+      "dependencies": {
+        "ieee754": {
+          "version": "1.1.8",
+          "from": "ieee754@>=1.1.8 <2.0.0",
+          "resolved": "https://registry.npmjs.org/ieee754/-/ieee754-1.1.8.tgz"
+        }
+      }
+    },
+    "msgpack5": {
+      "version": "3.4.1",
+      "from": "msgpack5@>=3.3.0 <4.0.0",
+      "resolved": "https://registry.npmjs.org/msgpack5/-/msgpack5-3.4.1.tgz"
+    },
     "multipipe": {
       "version": "0.1.2",
       "from": "multipipe@>=0.1.2 <0.2.0",
@@ -3676,10 +3713,15 @@
       "from": "negotiator@0.6.1",
       "resolved": "https://registry.npmjs.org/negotiator/-/negotiator-0.6.1.tgz"
     },
+    "net": {
+      "version": "1.0.2",
+      "from": "net@>=1.0.2 <2.0.0",
+      "resolved": "https://registry.npmjs.org/net/-/net-1.0.2.tgz"
+    },
     "newrelic": {
-      "version": "1.30.4",
-      "from": "newrelic@latest",
-      "resolved": "https://registry.npmjs.org/newrelic/-/newrelic-1.30.4.tgz",
+      "version": "1.33.0",
+      "from": "newrelic@>=1.33.0 <2.0.0",
+      "resolved": "https://registry.npmjs.org/newrelic/-/newrelic-1.33.0.tgz",
       "dependencies": {
         "agent-base": {
           "version": "1.0.2",
@@ -3756,9 +3798,9 @@
           }
         },
         "semver": {
-          "version": "4.3.6",
-          "from": "semver@>=4.2.0 <5.0.0",
-          "resolved": "https://registry.npmjs.org/semver/-/semver-4.3.6.tgz"
+          "version": "5.3.0",
+          "from": "semver@>=5.3.0 <6.0.0",
+          "resolved": "https://registry.npmjs.org/semver/-/semver-5.3.0.tgz"
         },
         "string_decoder": {
           "version": "0.10.31",
@@ -4473,38 +4515,9 @@
       "resolved": "https://registry.npmjs.org/react-dom/-/react-dom-15.3.2.tgz"
     },
     "react-foundation-components": {
-      "version": "0.12.0",
+      "version": "0.11.1",
       "from": "git+https://github.com/valzav/react-foundation-components.git#lib",
-      "resolved": "git+https://github.com/valzav/react-foundation-components.git#d14362c7c8eee946a4acc3b18d70271d5a82813e",
-      "dependencies": {
-        "foundation-sites": {
-          "version": "6.2.3",
-          "from": "foundation-sites@>=6.2.3 <7.0.0",
-          "resolved": "https://registry.npmjs.org/foundation-sites/-/foundation-sites-6.2.3.tgz"
-        },
-        "lodash": {
-          "version": "4.16.2",
-          "from": "lodash@>=4.16.1 <5.0.0",
-          "resolved": "https://registry.npmjs.org/lodash/-/lodash-4.16.2.tgz"
-        },
-        "react-overlays": {
-          "version": "0.6.3",
-          "from": "react-overlays@0.6.3",
-          "resolved": "https://registry.npmjs.org/react-overlays/-/react-overlays-0.6.3.tgz",
-          "dependencies": {
-            "react-prop-types": {
-              "version": "0.2.2",
-              "from": "react-prop-types@>=0.2.1 <0.3.0",
-              "resolved": "https://registry.npmjs.org/react-prop-types/-/react-prop-types-0.2.2.tgz"
-            }
-          }
-        },
-        "uncontrollable": {
-          "version": "4.0.3",
-          "from": "uncontrollable@>=4.0.3 <5.0.0",
-          "resolved": "https://registry.npmjs.org/uncontrollable/-/uncontrollable-4.0.3.tgz"
-        }
-      }
+      "resolved": "git+https://github.com/valzav/react-foundation-components.git#3f7572ed791094104f79f04cf1ff359f53c54311"
     },
     "react-highcharts": {
       "version": "8.4.2",
@@ -4542,6 +4555,11 @@
           "resolved": "https://registry.npmjs.org/warning/-/warning-3.0.0.tgz"
         }
       }
+    },
+    "react-portal": {
+      "version": "2.2.1",
+      "from": "react-portal@>=2.2.1 <3.0.0",
+      "resolved": "https://registry.npmjs.org/react-portal/-/react-portal-2.2.1.tgz"
     },
     "react-prop-types": {
       "version": "0.3.2",
@@ -5105,6 +5123,11 @@
       "from": "statuses@>=1.2.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/statuses/-/statuses-1.3.0.tgz"
     },
+    "store": {
+      "version": "1.3.20",
+      "from": "store@>=1.3.20 <2.0.0",
+      "resolved": "https://registry.npmjs.org/store/-/store-1.3.20.tgz"
+    },
     "stream-browserify": {
       "version": "1.0.0",
       "from": "stream-browserify@>=1.0.0 <2.0.0",
@@ -5216,6 +5239,18 @@
       "version": "2.2.1",
       "from": "tar@>=2.0.0 <3.0.0",
       "resolved": "https://registry.npmjs.org/tar/-/tar-2.2.1.tgz"
+    },
+    "tarantool-driver": {
+      "version": "2.0.1",
+      "from": "tarantool-driver@latest",
+      "resolved": "https://registry.npmjs.org/tarantool-driver/-/tarantool-driver-2.0.1.tgz",
+      "dependencies": {
+        "underscore": {
+          "version": "1.8.3",
+          "from": "underscore@>=1.8.3 <2.0.0",
+          "resolved": "https://registry.npmjs.org/underscore/-/underscore-1.8.3.tgz"
+        }
+      }
     },
     "terraformer": {
       "version": "1.0.5",

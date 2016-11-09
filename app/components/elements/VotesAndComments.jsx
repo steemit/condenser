@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import Icon from 'app/components/elements/Icon';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
-import pluralize from 'pluralize';
+import { translate } from 'app/Translator';
 
 class VotesAndComments extends React.Component {
 
@@ -27,12 +27,12 @@ class VotesAndComments extends React.Component {
         const voters_count = votes.reduce((value, vote) => {
             return value + Math.sign(vote.get('percent'));
         }, 0);
-        let comments_tooltip = 'No responses yet. Click to respond.';
-        if (comments > 0) comments_tooltip = `${pluralize('Responses', comments, true)}. Click to respond.`;
+        let comments_tooltip = translate('no_responses_yet_click_to_respond');
+        if (comments > 0) comments_tooltip = `${translate('response_count', {responseCount: comments})}. ${translate('click_to_respond')}.`
 
         return (
             <span className="VotesAndComments">
-                <span className="VotesAndComments__votes" title={pluralize('Votes', voters_count, true)}>
+                <span className="VotesAndComments__votes" title={translate('vote_count', {voteCount: voters_count})}>
                     <Icon name={voters_count > 1 ? 'voters' : 'voter'} />&nbsp;{voters_count}
                 </span>
                 <span className={'VotesAndComments__comments' + (comments === 0 ? ' no-comments' : '')}>

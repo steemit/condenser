@@ -340,7 +340,7 @@ const it = 	{
 	couldnt_create_account_server_returned_error: "Non è possibile creare l'\account. Il Server ha riportato il seguente errore",
 	form_requires_javascript_to_be_enabled: 'Questo form necessita l\'abilitazione del javascript',
 	our_records_indicate_you_already_have_account: 'Hai già un account Steemit',
-	to_prevent_abuse_steemit_can_only_register_one_account_per_user: 'Per prevenire abusi, Steemit può registrare un solo account per utente per ogni utente verificato (ogni registrazione costa all\'incirca 3 STEEM).',
+	to_prevent_abuse_steemit_can_only_register_one_account_per_user: 'Per prevenire abusi, Steemit può registrare un solo account per utente per ogni utente verificato.',
 	you_can_either_login_or_send_us_email: 'è possibile fare il {loginLink} al tuo account esistente o se ne hai bisogno ad un nuovo account',
 	send_us_email: 'inviaci un\'email',
 	connection_lost_reconnecting: 'Connessione persa, riconnessione in corso',

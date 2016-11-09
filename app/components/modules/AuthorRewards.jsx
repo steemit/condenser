@@ -111,6 +111,20 @@ class AuthorRewards extends React.Component {
             </div>
             <div className="UserWallet__balance UserReward__row row">
                 <div className="column small-12 medium-8">
+                    Author rewards last 7 days:
+                </div>
+                <div className="column small-12 medium-4">
+                    {numberWithCommas(vestsToSp(this.props.state, rewardsWeekVests + " VESTS")) + " STEEM POWER"}
+                    <br />
+                    {rewardsWeekSteem.toFixed(3) + " STEEM"}
+                    <br />
+                    {rewardsWeekSBD.toFixed(3) + " SD"}
+                </div>
+            </div>
+
+            {/*  -- These estimates have been causing issus, see #600 --
+            <div className="UserWallet__balance UserReward__row row">
+                <div className="column small-12 medium-8">
                     Author rewards last 24 hours:
                 </div>
                 <div className="column small-12 medium-4">
@@ -146,6 +160,7 @@ class AuthorRewards extends React.Component {
                     {(hasFullWeek ? rewardsWeekSBD : averageCurationSBD * 7).toFixed(3) + " SD"}
                 </div>
             </div>
+            */}
 
             <div className="row">
                 <div className="column small-12">

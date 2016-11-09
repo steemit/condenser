@@ -9,7 +9,7 @@ export const APP_URL = 'golos.io' // 'steemit.com'
 export const LIQUID_TOKEN = 'Голос' // 'Steem'
 // sometimes it's impossible to use html tags to style coin name, hence usage of _UPPERCASE modifier
 export const LIQUID_TOKEN_UPPERCASE = 'ГОЛОС' // 'STEEM'
-export const INVEST_TOKEN = 'Сила Голоса' // 'Steem Power'
+export const VESTING_TOKEN = 'Сила Голоса' // 'Steem Power'
 export const INVEST_TOKEN_UPPERCASE = 'СИЛА ГОЛОСА' // 'STEEM POWER'
 export const INVEST_TOKEN_SHORT = 'СГ' // 'SP'
 export const DEBT_TOKEN = 'Золотой' // 'STEEM DOLLAR'

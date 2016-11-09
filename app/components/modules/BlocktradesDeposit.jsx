@@ -9,11 +9,11 @@ import QRCode from 'react-qr'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import { translate } from 'app/Translator';
 import { formatCoins } from 'app/utils/FormatCoins';
-import { APP_URL, APP_ICON, LIQUID_TOKEN, INVEST_TOKEN, VEST_TICKER, OWNERSHIP_TICKER, DEBT_TICKER } from 'config/client_config';
+import { APP_URL, APP_ICON, LIQUID_TOKEN, VESTING_TOKEN, VEST_TICKER, OWNERSHIP_TICKER, DEBT_TICKER } from 'config/client_config';
 
 const coinNames = {
     [OWNERSHIP_TICKER]: LIQUID_TOKEN,
-    [VEST_TICKER]: INVEST_TOKEN,
+    [VEST_TICKER]: VESTING_TOKEN,
     BTC: 'Bitcoin',
     BTS: 'Bitshares',
     ETH: 'Ether',
@@ -165,7 +165,7 @@ class BlocktradesDeposit extends React.Component {
         const selectOutputCoin = <span>
              <input type="radio" {...cleanReduxInput(outputCoin)} value={VEST_TICKER} checked={outputCoin.value === VEST_TICKER} id="powerCheck" />
              &nbsp;
-             <label htmlFor="powerCheck">{INVEST_TOKEN}</label>
+             <label htmlFor="powerCheck">{VESTING_TOKEN}</label>
 
              <input type="radio" {...cleanReduxInput(outputCoin)} value={OWNERSHIP_TICKER} checked={outputCoin.value === OWNERSHIP_TICKER} id="steemCheck" />
              &nbsp;

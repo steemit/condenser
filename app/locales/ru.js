@@ -1,5 +1,5 @@
 
-import { APP_NAME, APP_URL, LANDING_PAGE_URL, LIQUID_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, INVEST_TOKEN, OWNERSHIP_TICKER, SUPPORT_EMAIL } from 'config/client_config';
+import { APP_NAME, APP_URL, LANDING_PAGE_URL, LIQUID_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, VESTING_TOKEN, OWNERSHIP_TICKER, SUPPORT_EMAIL } from 'config/client_config';
 /**
  * see: app/locales/README.md
  */
@@ -21,7 +21,7 @@ const ru = {
 	/* end navigation */
 	buy: 'Купить',
 	sell: 'Продать',
-	buy_INVEST_TOKEN: 'Купить ' + INVEST_TOKEN,
+	buy_INVEST_TOKEN: 'Купить ' + VESTING_TOKEN,
 	transaction_history: 'История транзакций',
 	submit_a_story: 'Добавить пост',
 	nothing_yet: 'Пока ничего нет',
@@ -33,7 +33,7 @@ const ru = {
 	when_you: "Для этого",
 	when_you_link_text: 'зарегистрируйтесь',
 	and_vote_for_it: 'и проголосуйте за пост',
-	// post_promo_text: "Авторы получают вознаграждение, когда пользователи голосуют за их посты<br />Проголосовавшие также вознаграждаются. Если вам понравилось, то что вы прочитали здесь, заработайте {amount} в " + INVEST_TOKEN + "<br />. Для этого  {link} и проголосуете за пост.",
+	// post_promo_text: "Авторы получают вознаграждение, когда пользователи голосуют за их посты<br />Проголосовавшие также вознаграждаются. Если вам понравилось, то что вы прочитали здесь, заработайте {amount} в " + VESTING_TOKEN + "<br />. Для этого  {link} и проголосуете за пост.",
 	read_only_mode: 'Из-за технического обслуживания сервера мы работаем в режиме чтения. Извините за неудобство.',
 	membership_invitation_only: 'Стать пользователем Голоса сейчас возможно только по приглашению. Попросите ваших знакомых о приглашении', // желающих зарегистрироваться ?
 	submit_email_to_get_on_waiting_list: 'Добавьте ваш адрес электронной почты, чтобы попасть в список ожидания',
@@ -45,7 +45,7 @@ const ru = {
 	tags_and_topics: "Тэги и топики",
 	filter: "Фильтр",
 	show_more_topics: "Показать больше топиков",
-	we_require_social_account: APP_NAME + ' спонсирует каждый аккаунт на сумму около {signup_bonus} в ' + INVEST_TOKEN + '; чтобы предотвратить злоупотребление, мы просим новых пользователей регистрироваться используя социальные сети.',
+	we_require_social_account: APP_NAME + ' спонсирует каждый аккаунт на сумму около {signup_bonus} в ' + VESTING_TOKEN + '; чтобы предотвратить злоупотребление, мы просим новых пользователей регистрироваться используя социальные сети.',
 	personal_info_will_be_private: 'Ваша персональная информация будет оставаться',
 	personal_info_will_be_private_link: 'приватной',
 	continue_with_facebook: 'Продолжить с Facebook',
@@ -103,7 +103,7 @@ const ru = {
 	welcome_to_the_blockchain: 'Добро пожаловать в Blockchain!',
 	your_voice_is_worth_something: 'Твой голос чего-то стоит',
 	learn_more: 'Узнать больше',
-	get_INVEST_TOKEN_when_sign_up: 'Получи {signupBonus} ' + INVEST_TOKEN + ' подписавшись сегодня.',
+	get_INVEST_TOKEN_when_sign_up: 'Получи {signupBonus} ' + VESTING_TOKEN + ' подписавшись сегодня.',
 	all_accounts_refunded: 'Все потери по восстанавливаемым аккаунтам были полностью компенсированы',
 	APP_URL_is_now_open_source: APP_URL + ' теперь Open Source',
 	// this is mainly from ReplyEditor
@@ -159,18 +159,18 @@ const ru = {
 	share: 'Поделиться',
 	in_reply_to: 'в ответ на',
 	replied_to: 'ответил', // тоже что и 'by'
-	transfer_amount_to_INVEST_TOKEN: "Перевести {amount} в " + INVEST_TOKEN,
-	transfer_amount_INVEST_TOKEN_to: "Перевод {amount} " + INVEST_TOKEN + " в",
-	recieve_amount_INVEST_TOKEN_from: "Получение {amount} " + INVEST_TOKEN + " от",
-	transfer_amount_INVEST_TOKEN_from_to: "Передать {amount} " + INVEST_TOKEN + " от {from} к",
+	transfer_amount_to_INVEST_TOKEN: "Перевести {amount} в " + VESTING_TOKEN,
+	transfer_amount_INVEST_TOKEN_to: "Перевод {amount} " + VESTING_TOKEN + " в",
+	recieve_amount_INVEST_TOKEN_from: "Получение {amount} " + VESTING_TOKEN + " от",
+	transfer_amount_INVEST_TOKEN_from_to: "Передать {amount} " + VESTING_TOKEN + " от {from} к",
 	transfer_amount_to: "Перевод {amount} на счёт",
 	recieve_amount_from: "Получено {amount} от",
 	transfer_amount_from: "Перевод {amount} со счёта",
 	transfer_amount_steem_power_to: "Перевод {amount} "+OWNERSHIP_TICKER+" в Силу Голоса",
 	stop_power_down: "Ослабление Силы Голоса остановлено",
 	start_power_down_of: "Ослабление Силы Голоса начато с",
-	curation_reward_of_INVEST_TOKEN_for: 'Кураторские вознаграждения {reward} ' + INVEST_TOKEN + ' за',
-	author_reward_of_INVEST_TOKEN_for: 'Авторские вознаграждения {payout} и {reward} ' + INVEST_TOKEN + ' за',
+	curation_reward_of_INVEST_TOKEN_for: 'Кураторские вознаграждения {reward} ' + VESTING_TOKEN + ' за',
+	author_reward_of_INVEST_TOKEN_for: 'Авторские вознаграждения {payout} и {reward} ' + VESTING_TOKEN + ' за',
 	recieve_interest_of: 'Получены проценты в размере {interest}',
 	// TODO find where this is used and write an example
 	from: 'от',
@@ -206,7 +206,7 @@ const ru = {
 	deadline_for_recovery_is: 'Крайним сроком для восстановления является',
 	i_understand_dont_show_again: "Понимаю, больше не показывать",
 	ok: 'Ок', // Лучше использовать "хорошо" или "ладно"?
-	convert_to_INVEST_TOKEN: 'Перевести в ' + INVEST_TOKEN,
+	convert_to_INVEST_TOKEN: 'Перевести в ' + VESTING_TOKEN,
 	DEBT_TOKEN_will_be_unavailable: 'Эта операция будет проходить через неделю от настоящего момента и ее нельзя отменить. Эти ' + DEBT_TOKEN + ' мгновенно станут недоступны',
 	amount: 'Количество',
 	convert: 'Конвертировать',
@@ -463,7 +463,7 @@ const ru = {
 	advanced: 'Продвинутый',
 	convert_to_LIQUID_TOKEN: 'Перевести в ' + LIQUID_TOKEN,
 	transfer_to_account: 'Передать пользователю',
-	buy_LIQUID_TOKEN_or_INVEST_TOKEN: 'Купить ' + LIQUID_TOKEN + ' или ' + INVEST_TOKEN,
+	buy_LIQUID_TOKEN_or_INVEST_TOKEN: 'Купить ' + LIQUID_TOKEN + ' или ' + VESTING_TOKEN,
 	// TODO
 	version: 'Версия',
 	about_APP_NAME: 'О ' + APP_NAME,
@@ -485,14 +485,14 @@ const ru = {
 	promote: 'Продвинуть',
 	// Tips.js
 	tradeable_tokens_that_may_be_transferred_anywhere_at_anytime: 'Перемещаемые цифровые токены, которые могут переданы куда угодно в любой момент.',
-	LIQUID_TOKEN_can_be_converted_to_INVEST_TOKEN_in_a_process_called_powering_up: LIQUID_TOKEN + ' может быть конвертирован в ' + INVEST_TOKEN + ', этот процесс называется "усиление голоса".',
+	LIQUID_TOKEN_can_be_converted_to_INVEST_TOKEN_in_a_process_called_powering_up: LIQUID_TOKEN + ' может быть конвертирован в ' + VESTING_TOKEN + ', этот процесс называется "усиление голоса".',
 	tokens_worth_about_AMOUNT_of_LIQUID_TOKEN: 'Перемещаемые цифровые токены, цена которых всегда равна ~1 мг золота в ' + LIQUID_TOKEN + '.',
 	influence_tokens_which_earn_more_power_by_holding_long_term: 'Неперемещаемые цифровые токены, их количество увеличивается при долгосрочном хранении.',
 	the_more_you_hold_the_more_you_influence_post_rewards: 'Чем их больше, тем сильней вы влияете на вознаграждения за пост и тем больше зарабатываете за голосование.',
 	the_estimated_value_is_based_on_a_7_day_average_value_of_LIQUID_TOKEN_in_currency: 'Оценочная стоимость рассчитывается из 7-ми дневной средней стоимости ' + LIQUID_TOKEN + '.',
-	INVEST_TOKEN_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_LIQUID_TOKEN: INVEST_TOKEN + ' нельзя передавать и потребуется 2 года и 104 выплаты чтобы перевести обратно в ' + LIQUID_TOKEN + '.',
+	INVEST_TOKEN_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_LIQUID_TOKEN: VESTING_TOKEN + ' нельзя передавать и потребуется 2 года и 104 выплаты чтобы перевести обратно в ' + LIQUID_TOKEN + '.',
 	// TODO
-	converted_INVEST_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again: 'Конвертированная ' + INVEST_TOKEN + ' может быть отправлена себе или кому-то еще, но не может быть передана вновь без конвертирования назад в ' + LIQUID_TOKEN + '.',
+	converted_INVEST_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again: 'Конвертированная ' + VESTING_TOKEN + ' может быть отправлена себе или кому-то еще, но не может быть передана вновь без конвертирования назад в ' + LIQUID_TOKEN + '.',
 	profile: 'Профиль',
 	send_to_account: 'Отправить аккаунту',
 	confirm_email: 'Подтвердить электронную почту',
@@ -513,7 +513,7 @@ const ru = {
 	promote_post: 'Продвинуть пост',
 	spend_your_DEBT_TOKEN_to_advertise_this_post: 'Используйте ваши ' + DEBT_TOKEN + ' чтобы прорекламировать этот пост в секции продвигаемого контента',
 	you_successdully_promoted_this_post: 'Вы успешно продвинули этот пост',
-	pay_me_100_in_INVEST_TOKEN: 'Заплатите мне 100% в ' + INVEST_TOKEN,
+	pay_me_100_in_INVEST_TOKEN: 'Заплатите мне 100% в ' + VESTING_TOKEN,
 	requires_5_or_more_reddit_comment_karma: 'необходимо 5 или больше Reddit кармы комментирования',
 	this_post_was_hidden_due_to_low_ratings: 'Этот пост был скрыт из-за низкого рейтинга',
 	reblogged_by: 'Поделился',

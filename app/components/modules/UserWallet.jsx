@@ -13,7 +13,7 @@ import {steemTip, powerTip, dollarTip, valueTip} from 'app/utils/Tips'
 import {numberWithCommas, vestingSteem} from 'app/utils/StateFunctions'
 import { translate } from 'app/Translator';
 import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
-import { APP_NAME_LATIN, LIQUID_TOKEN, DEBT_TOKEN, CURRENCY_SIGN, INVEST_TOKEN, DEBT_TOKEN_SHORT, OWNERSHIP_TICKER, VEST_TICKER, DEBT_TICKER } from 'config/client_config';
+import { APP_NAME_LATIN, LIQUID_TOKEN, DEBT_TOKEN, CURRENCY_SIGN, VESTING_TOKEN, DEBT_TOKEN_SHORT, OWNERSHIP_TICKER, VEST_TICKER, DEBT_TICKER } from 'config/client_config';
 
 // normalize app name
 const appName = APP_NAME_LATIN.toLowerCase()
@@ -156,7 +156,7 @@ class UserWallet extends React.Component {
             </div>
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
-                    <span className="uppercase">{INVEST_TOKEN}</span>
+                    <span className="uppercase">{VESTING_TOKEN}</span>
                     <br />
                     <span className="secondary">
                         {/* not using steemTip because translate strings may be undefined on load */}

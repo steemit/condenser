@@ -10,7 +10,7 @@ import {browserTests} from 'shared/ecc/test/BrowserTests'
 import {validate_account_name} from 'app/utils/ChainValidation';
 import { translate } from 'app/Translator';
 import { formatCoins } from 'app/utils/FormatCoins';
-import { APP_NAME, LIQUID_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, INVEST_TOKEN,
+import { APP_NAME, LIQUID_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, VESTING_TOKEN,
 OWNERSHIP_TICKER, DEBT_TICKER, VEST_TICKER } from 'config/client_config';
 
 /** Warning .. This is used for Power UP too. */

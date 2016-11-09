@@ -9,7 +9,7 @@ import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import BlocktradesDeposit from 'app/components/modules/BlocktradesDeposit';
 import Reveal from 'react-foundation-components/lib/global/reveal'
 import CloseButton from 'react-foundation-components/lib/global/close-button';
-import {steemTip, powerTip, dollarTip, valueTip, savingsTip} from 'app/utils/Tips'
+import {steemTip, powerTip, valueTip, savingsTip} from 'app/utils/Tips'
 import {numberWithCommas, vestingSteem} from 'app/utils/StateFunctions'
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu'
 
@@ -153,6 +153,9 @@ class UserWallet extends React.Component {
         const savings_sbd_menu = [
             { value: 'Withdraw Steem Dollars', link: '#', onClick: showTransfer.bind( this, 'SBD', 'Savings Withdraw' ) },
         ]
+        // set dynamic secondary wallet values
+        const sbdInterest = this.props.sbd_interest / 100
+        const sbdMessage = <span>Tokens worth about $1.00 of STEEM, currently collecting {sbdInterest}% APR.</span>
 
         return (<div className="UserWallet">
             <div className="row">
@@ -186,7 +189,7 @@ class UserWallet extends React.Component {
             </div>
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
-                    STEEM DOLLARS<br /><span className="secondary">{dollarTip}</span>
+                    STEEM DOLLARS<br /><span className="secondary">{sbdMessage}</span>
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
@@ -271,10 +274,12 @@ export default connect(
                 price_per_steem = parseFloat(base.split(' ')[0])
         }
         const savings_withdraws = state.user.get('savings_withdraws')
+        const sbd_interest = state.global.get('props').get('sbd_interest_rate')
         return {
             ...ownProps,
             price_per_steem,
             savings_withdraws,
+            sbd_interest
         }
     },
     // mapDispatchToProps

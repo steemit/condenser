@@ -273,7 +273,9 @@ export default class UserProfile extends React.Component {
                 <ul className="menu" style={{flexWrap: "wrap"}}>
                     <li><Link to={`/@${accountname}`} activeClassName="active">{translate('blog')}</Link></li>
                     <li><Link to={`/@${accountname}/comments`} activeClassName="active">{translate('comments')}</Link></li>
-                    <li><Link to={`/@${accountname}/recent-replies`} activeClassName="active">{translate('replies')} <NotifiCounter fields="comment_reply"/></Link></li>
+                    <li><Link to={`/@${accountname}/recent-replies`} activeClassName="active">
+                        {translate('replies')} {isMyAccount && <NotifiCounter fields="comment_reply"/>}
+                    </Link></li>
                     {/*<li><Link to={`/@${accountname}/feed`} activeClassName="active">Feed</Link></li>*/}
                     <li>
                         <LinkWithDropdown
@@ -296,7 +298,7 @@ export default class UserProfile extends React.Component {
                 <ul className="menu" style={{flexWrap: "wrap"}}>
                     <li>
                         <a href={`/@${accountname}/transfers`} className={walletClass} onClick={e => { e.preventDefault(); browserHistory.push(e.target.pathname); return false; }}>
-                            {translate('wallet')} <NotifiCounter fields="send,receive,account_update" />
+                            {translate('wallet')} {isMyAccount && <NotifiCounter fields="send,receive,account_update" />}
                         </a>
                     </li>
                     {isMyAccount && <li>

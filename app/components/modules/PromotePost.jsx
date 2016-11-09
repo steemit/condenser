@@ -3,6 +3,8 @@ import {connect} from 'react-redux';
 import ReactDOM from 'react-dom';
 import transaction from 'app/redux/Transaction';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+import {DEBT_TOKEN_SHORT, CURRENCY_SIGN, DEBT_TICKER} from 'config/client_config';
+import { translate } from 'app/Translator';
 
 
 class PromotePost extends Component {
@@ -43,7 +45,7 @@ class PromotePost extends Component {
         const {amount} = this.state
         this.setState({loading: true});
         console.log('-- PromotePost.onSubmit -->');
-        this.props.dispatchSubmit({amount, asset: 'SBD', author, permlink, onClose,
+        this.props.dispatchSubmit({amount, asset: DEBT_TICKER, author, permlink, onClose,
             currentUser: this.props.currentUser, errorCallback: this.errorCallback});
     }
 
@@ -70,25 +72,25 @@ class PromotePost extends Component {
            <div className="PromotePost row">
                <div className="column small-12">
                    <form onSubmit={this.onSubmit} onChange={() => this.setState({trxError: ''})}>
-                       <h4>Promote Post</h4>
-                       <p>Spend your Steem Dollars to advertise this post in the promoted content section.</p>
+                       <h4>{translate('promote_post')}</h4>
+                       <p>{translate('spend_your_DEBT_TOKEN_to_advertise_this_post')}.</p>
                        <hr />
                        <div className="row">
                            <div className="column small-4">
-                               <label>Amount</label>
+                               <label>{translate('amount')}</label>
                                <div className="input-group">
-                                   <input className="input-group-field" type="text" placeholder="Amount" value={amount} ref="amount" autoComplete="off" disabled={loading} onChange={this.amountChange} />
-                                   <span className="input-group-label">SD ($)</span>
+                                   <input className="input-group-field" type="text" placeholder={translate('amount')} value={amount} ref="amount" autoComplete="off" disabled={loading} onChange={this.amountChange} />
+                                   <span className="input-group-label">{DEBT_TOKEN_SHORT + ' '} ({CURRENCY_SIGN})</span>
                                    <div className="error">{amountError}</div>
                                </div>
                            </div>
                        </div>
-                       <div>Balance: {balance} SD ($)</div>
+                       <div>{`${translate('balance')}: ${balance} ${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}</div>
                        <br />
                        {loading && <span><LoadingIndicator type="circle" /><br /></span>}
                        {!loading && <span>
                            {trxError && <div className="error">{trxError}</div>}
-                           <button type="submit" className="button" disabled={submitDisabled}>Promote</button>
+                           <button type="submit" className="button" disabled={submitDisabled}>{translate('promote')}</button>
                         </span>}
                    </form>
                </div>
@@ -119,7 +121,7 @@ export default connect(
                 from: username,
                 to: 'null', amount: parseFloat(amount, 10).toFixed(3) + ' ' + asset,
                 memo: `@${author}/${permlink}`,
-                __config: {successMessage: 'You successfully promoted this post.'}
+                __config: {successMessage: translate('you_successdully_promoted_this_post') + '.'}
             }
             dispatch(transaction.actions.broadcastOperation({
                 type: 'transfer',

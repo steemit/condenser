@@ -12,6 +12,7 @@ import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {steemTip, powerTip, valueTip, savingsTip} from 'app/utils/Tips'
 import {numberWithCommas, vestingSteem} from 'app/utils/StateFunctions'
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu'
+import WalletSubMenu from 'app/components/elements/WalletSubMenu'
 
 class UserWallet extends React.Component {
     constructor() {
@@ -155,18 +156,18 @@ class UserWallet extends React.Component {
         ]
         // set dynamic secondary wallet values
         const sbdInterest = this.props.sbd_interest / 100
+        //const sbdMessage = translate('tokens_worth_about_AMOUNT_of_LIQUID_TOKEN') //TODO: add APR param to xlation
         const sbdMessage = <span>Tokens worth about $1.00 of STEEM, currently collecting {sbdInterest}% APR.</span>
 
         return (<div className="UserWallet">
             <div className="row">
-                <div className="column small-12 medium-8">
-                    <h4>BALANCES</h4>
+                <div className="column">
+                    {isMyAccount ? <WalletSubMenu account_name={account.name} /> : <div><br /><h4>BALANCES</h4><br /></div>}
                 </div>
-                {isMyAccount && <div className="column small-12 medium-4">
-                    <button className="UserWallet__buysp button hollow float-right " onClick={this.onShowDepositSteem}>Buy Steem or Steem Power</button>
-                </div>}
+                <div className="column shrink">
+                    {isMyAccount && <button className="UserWallet__buysp button hollow" onClick={this.onShowDepositSteem}>Buy Steem or Steem Power</button>}
+                </div>
             </div>
-            <br />
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
                     STEEM<br /><span className="secondary">{steemTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})}</span>

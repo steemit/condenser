@@ -3,6 +3,9 @@ import React from 'react';
 import {connect} from 'react-redux'
 import TransferHistoryRow from 'app/components/cards/TransferHistoryRow';
 import {numberWithCommas, vestsToSp, assetFloat} from 'app/utils/StateFunctions'
+import { translate } from 'app/Translator';
+import { APP_NAME, DEBT_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TOKEN, CURRENCY_SIGN,
+VESTING_TOKEN, LIQUID_TICKER, VEST_TICKER } from 'config/client_config';
 
 class CurationRewards extends React.Component {
     constructor() {
@@ -10,10 +13,10 @@ class CurationRewards extends React.Component {
         this.state = {historyIndex: 0}
         this.onShowDeposit = () => {this.setState({showDeposit: !this.state.showDeposit})}
         this.onShowDepositSteem = () => {
-            this.setState({showDeposit: !this.state.showDeposit, depositType: 'STEEM'})
+            this.setState({showDeposit: !this.state.showDeposit, depositType: LIQUID_TICKER})
         }
         this.onShowDepositPower = () => {
-            this.setState({showDeposit: !this.state.showDeposit, depositType: 'VESTS'})
+            this.setState({showDeposit: !this.state.showDeposit, depositType: VEST_TICKER})
         }
         // this.onShowDeposit = this.onShowDeposit.bind(this)
     }
@@ -48,7 +51,7 @@ class CurationRewards extends React.Component {
                     finalDate = new Date(item[1].timestamp).getTime();
                 }
                 firstDate = new Date(item[1].timestamp).getTime();
-                const vest = assetFloat(item[1].op[1].reward, 'VESTS');
+                const vest = assetFloat(item[1].op[1].reward, VEST_TICKER);
                 if (new Date(item[1].timestamp).getTime() > yesterday) {
                     rewards24 += vest;
                     rewardsWeek += vest;
@@ -76,12 +79,12 @@ class CurationRewards extends React.Component {
                <ul className="pager">
                  <li>
                      <div className={"button tiny hollow float-left " + (historyIndex === 0 ? " disabled" : "")} onClick={this._setHistoryPage.bind(this, false)} aria-label="Previous">
-                         <span aria-hidden="true">&larr; Newer</span>
+                         <span aria-hidden="true">&larr; {translate('newer')}</span>
                      </div>
                  </li>
                  <li>
                      <div className={"button tiny hollow float-right " + (historyIndex >= (curationLength - 10) ? " disabled" : "")} onClick={historyIndex >= (curationLength - 10) ? null : this._setHistoryPage.bind(this, true)} aria-label="Next">
-                         <span aria-hidden="true">Older &rarr;</span>
+                         <span aria-hidden="true">{translate('older')} &rarr;</span>
                      </div>
                  </li>
                </ul>
@@ -94,7 +97,7 @@ class CurationRewards extends React.Component {
         return (<div className="UserWallet">
             <div className="row">
                 <div className="column small-12">
-                    <h4>CURATION REWARDS</h4>
+                    <h4 className="uppercase">{translate('curation_rewards')}</h4>
                 </div>
             </div>
             <div className="UserWallet__balance UserReward__row row">
@@ -102,33 +105,33 @@ class CurationRewards extends React.Component {
                     Curation rewards last 7 days:
                 </div>
                 <div className="column small-12 medium-4">
-                    {numberWithCommas(vestsToSp(this.props.state, rewardsWeek + " VESTS")) + " STEEM POWER"}
+                    {numberWithCommas(vestsToSp(this.props.state, rewardsWeek + " " + VEST_TICKER)) + " "+ VESTING_TOKEN}
                 </div>
             </div>
 
             {/*  -- These estimates have been causing issus, see #600 --
             <div className="UserWallet__balance UserReward__row row">
                 <div className="column small-12 medium-8">
-                    Curation rewards last 24 hours:
+                    {translate('curation_rewards_last_24_hours')}:
                 </div>
-                <div className="column small-12 medium-4">
-                    {numberWithCommas(vestsToSp(this.props.state, rewards24 + " VESTS")) + " STEEM POWER"}
-                </div>
-            </div>
-            <div className="UserWallet__balance UserReward__row row">
-                <div className="column small-12 medium-8">
-                    Daily average curation rewards:
-                </div>
-                <div className="column small-12 medium-4">
-                    {numberWithCommas(vestsToSp(this.props.state, averageCuration + " VESTS")) + " STEEM POWER"}
+                <div className="column small-12 medium-3">
+                    {numberWithCommas(vestsToSp(this.props.state, rewards24 + " " + VEST_TICKER)) + " "+ VESTING_TOKEN}
                 </div>
             </div>
             <div className="UserWallet__balance UserReward__row row">
                 <div className="column small-12 medium-8">
-                    {!hasFullWeek ? "Estimated curation rewards last week" : "Curation rewards last week"}
+                    {translate('daily_average_curation_rewards')}:
                 </div>
-                <div className="column small-12 medium-4">
-                    {numberWithCommas(vestsToSp(this.props.state, (hasFullWeek ? rewardsWeek : averageCuration * 7) + " VESTS")) + " STEEM POWER"}
+                <div className="column small-12 medium-3">
+                    {numberWithCommas(vestsToSp(this.props.state, averageCuration + " " + VEST_TICKER)) + " "+ VESTING_TOKEN}
+                </div>
+            </div>
+            <div className="UserWallet__balance UserReward__row row">
+                <div className="column small-12 medium-8">
+                    {translate(!hasFullWeek ? 'estimated_curation_rewards_last_week' : 'curation_rewards_last_week')}:
+                </div>
+                <div className="column small-12 medium-3">
+                    {numberWithCommas(vestsToSp(this.props.state, (hasFullWeek ? rewardsWeek : averageCuration * 7) + " " + VEST_TICKER)) + " "+ VESTING_TOKEN}
                 </div>
             </div>
             */}
@@ -141,7 +144,7 @@ class CurationRewards extends React.Component {
             <div className="row">
                 <div className="column small-12">
                     {/** history */}
-                    <h4>CURATION REWARDS HISTORY</h4>
+                    <h4 className="uppercase">{translate('curation_rewards_history')}</h4>
                     {navButtons}
                     <table>
                         <tbody>

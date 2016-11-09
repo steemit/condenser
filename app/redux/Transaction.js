@@ -39,6 +39,11 @@ export default createModule({
             reducer: (state) => state,
         },
         {
+            // An error will end up in QUEUE
+            action: 'UPDATE_META',
+            reducer: (state) => state,
+        },
+        {
             action: 'ERROR',
             reducer: (state, {payload: {operations, error, errorCallback}}) => {
                 let errorStr = error.toString()

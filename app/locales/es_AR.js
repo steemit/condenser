@@ -1,4 +1,4 @@
-const es = 	{
+const es_AR = 	{
 	// this variables mainly used in navigation section
 	about: "Acerca de",
 	explore: "Explorar",
@@ -340,7 +340,7 @@ const es = 	{
 	couldnt_create_account_server_returned_error: "No se pudo crear la cuenta. El servidor devolvió el siguiente error:",
 	form_requires_javascript_to_be_enabled: 'Este formulario necesita que tengas Javascript activado en tu navegador',
 	our_records_indicate_you_already_have_account: 'Los registros indican que ya tenés una cuenta en Steem',
-	to_prevent_abuse_steemit_can_only_register_one_account_per_user: 'Para prevenir abusos (cada cuenta registrada tiene un costo de 3 STEEM) Steemit puede registrar una sola cuenta por usuario verificado.',
+	to_prevent_abuse_steemit_can_only_register_one_account_per_user: 'Para prevenir abusos Steemit puede registrar una sola cuenta por usuario verificado.',
 	you_can_either_login_or_send_us_email: 'Podés {loginLink} a tu cuenta existente o {createAccount} si necesitas una cuenta nueva',
 	send_us_email: 'envianos un correo electrónico',
 	connection_lost_reconnecting: 'Conexión perdida, reconectando',

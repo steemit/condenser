@@ -167,7 +167,7 @@ class App extends React.Component {
                     </li>
                     <li>
                         <a href="https://steem.io/SteemWhitePaper.pdf" onClick={this.navigate}>
-                            {translate("whitepaper")}
+                            {translate("APP_NAME_whitepaper")}
                         </a>
                     </li>
                     <li>
@@ -177,12 +177,12 @@ class App extends React.Component {
                     </li>
                     <li>
                         <a onClick={() => depositSteem()}>
-                            {translate("buy_steem")}
+                            {translate("buy_LIQUID_TOKEN")}
                         </a>
                     </li>
                     <li>
                         <a href="http://steemtools.com/" onClick={this.navigate}>
-                            {translate('steem_app_center')}
+                            {translate('APP_NAME_app_center')}
                         </a>
                     </li>
                     <li>
@@ -202,7 +202,7 @@ class App extends React.Component {
                     </li>
                     <li>
                         <a href="https://steemit.chat/home" target="_blank" rel="noopener noreferrer">
-                            {translate("steemit_chat")}&nbsp;<Icon name="extlink" />
+                            {translate("APP_NAME_chat")}&nbsp;<Icon name="extlink" />
                         </a>
                     </li>
                     <li>

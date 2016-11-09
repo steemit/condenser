@@ -4,6 +4,8 @@ import SvgImage from 'app/components/elements/SvgImage';
 import PasswordInput from 'app/components/elements/PasswordInput';
 import constants from 'app/redux/constants';
 import {PrivateKey} from 'shared/ecc';
+import { translate } from 'app/Translator';
+import { FormattedHTMLMessage } from 'react-intl';
 
 const email_regex = /^([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22))*\x40([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d))*$/;
 
@@ -51,14 +53,14 @@ class RecoverAccountStep1 extends React.Component {
     onEmailChange(e) {
         const email = e.target.value.trim().toLowerCase();
         let email_error = '';
-        if (!email_regex.test(email.toLowerCase())) email_error = 'Not valid';
+        if (!email_regex.test(email.toLowerCase())) email_error = translate('not_valid');
         this.setState({email, email_error});
     }
 
     validateAccountName(name) {
         if (!name) return;
         Apis.db_api('get_accounts', [name]).then(res => {
-            this.setState({name_error: !res || res.length === 0 ? 'Account name is not found' : ''});
+            this.setState({name_error: !res || res.length === 0 ? translate('account_name_is_not_found') : ''});
             if(res.length) {
                 const [account] = res
                 // if your last owner key update is prior to July 14th then the old key will not be able to recover
@@ -66,7 +68,7 @@ class RecoverAccountStep1 extends React.Component {
                 const ownerUpdateTime = new Date(ownerUpdate).getTime()
                 const THIRTY_DAYS_AGO = new Date(Date.now() - (30 * 24 * 60 * 60 * 1000)).getTime()
                 if(ownerUpdateTime < Math.max(THIRTY_DAYS_AGO, constants.JULY_14_HACK))
-                    this.setState({name_error: 'We are unable to recover this account, it has not changed ownership recently.'})
+                    this.setState({name_error: translate('unable_to_recover_account_not_change_ownership_recently')})
             }
         })
     }
@@ -111,7 +113,7 @@ class RecoverAccountStep1 extends React.Component {
                     this.setState({show_social_login: provider});
                 });
             }
-            else this.setState({error: 'This password was not used on this account in the last 30 days.'});
+            else this.setState({error: translate('password_not_used_in_last_days')});
         });
     }
 
@@ -141,7 +143,7 @@ class RecoverAccountStep1 extends React.Component {
                     this.setState({email_submitted: true});
                 }
                 if (res.status === 'duplicate') {
-                    this.setState({email_error: 'Your request has been already submitted and we are working on it. Please contact support@steemit.com for the status of your request.'});
+                    this.setState({email_error: translate('request_already_submitted_contact_support')});
                 }
             }
         }).catch(error => {
@@ -160,27 +162,23 @@ class RecoverAccountStep1 extends React.Component {
             <div className="RestoreAccount SignUp">
                 {show_account_and_passwords && <div className="row">
                     <div className="column large-4">
-                        <h2>Stolen Account Recovery</h2>
+                        <h2>{translate('stolen_account_recovery')}</h2>
                         <p>
-                            From time to time, a Steemian’s owner key may be compromised.
-                            Stolen Account Recovery gives the rightful account owner 30 days
-                            to recover their account from the moment the thief changed their
-                            owner key.  Stolen Account Recovery can only be used on steemit.com
-                            if the account owner had perviously listed ‘Steemit’ as their
-                            account trustee and complied with Steemit’s Terms of Service.
+                            {translate('recover_account_intro')}
                         </p>
                         <form onSubmit={this.onSubmit} noValidate>
                             <div className={name_error ? 'error' : ''}>
-                                <label>Account Name
+                                <label>
+                                    {translate('account_name')}
                                     <input type="text" name="name" autoComplete="off" onChange={this.onNameChange} value={name} />
                                 </label>
                                 <p className="error">{name_error}</p>
                             </div>
-                            <PasswordInput passwordLabel="Recent Password" onChange={this.onPasswordsChange} />
+                            <PasswordInput passwordLabel={translate('recent_password')} onChange={this.onPasswordsChange} />
                             <br />
                             <div className="error">{error}</div>
                             {progress_status ? <span><LoadingIndicator type="circle" inline /> {progress_status}</span>
-                                : <input disabled={!valid} type="submit" className={submit_btn_class} value="Begin Recovery" />}
+                        : <input disabled={!valid} type="submit" className={submit_btn_class} value= {translate('begin_recovery')} />}
                         </form>
                     </div>
                 </div>}
@@ -192,8 +190,10 @@ class RecoverAccountStep1 extends React.Component {
                     <input type="hidden" name="owner_key" value={owner_key} />
                     <div className="row">
                         <div className="column large-4">
-                            {show_social_login === 'both' ? <p>Please login with Facebook or Reddit to verify your identity.</p>
-                                : <p>Please login with {show_social_login} to verify you identity.</p>}
+                            {show_social_login === 'both' ? <p>{translate('login_with_facebook_or_reddit_media_to_verify_identity')}.</p>
+                        : <p>{translate('login_with_social_media_to_verify_identity', {
+                            provider: show_social_login
+                        })}.</p>}
                         </div>
                     </div>
                     <div className="row">
@@ -226,22 +226,20 @@ class RecoverAccountStep1 extends React.Component {
                 {show_social_login && show_social_login === 'email' &&
                     <div className="row">
                         <div className="column large-4">
-                            {email_submitted ? <div>
-                                <p>Thanks for submitting your request for Account Recovery using Steem’s blockchain-based multi factor authentication.</p>
-                                <p>We will respond to you as quickly as possible, however, please expect there may be some delay in response due to high volume of emails.</p>
-                                <p>Please be prepared to verify your identity.</p>
-                                <p>Regards,</p>
-                                <p>Ned Scott</p>
-                                <p>CEO Steemit</p>
-                            </div>
+                            {
+                                email_submitted
+                                ?   <div>
+                                        {/* currently translateHtml() does not work, using <FormattedHTMLMessage /> instead */}
+                                        <FormattedHTMLMessage id="thanks_for_submitting_request_for_account_recovery" />
+                                    </div>
                                 : <form onSubmit={this.onSubmitEmail} noValidate>
-                                <p>We need to verify your identity. Please enter your email address below to begin the verification.</p>
+                                <p>{translate('enter_email_toverify_identity')}</p>
                                 <div className={email_error ? 'column large-4 shrink error' : 'column large-4 shrink'}>
-                                    <label>Email
+                                    <label>{translate('email')}
                                         <input type="text" name="email" autoComplete="off" onChange={this.onEmailChange} value={email} />
                                     </label>
                                     <p className="error">{email_error}</p>
-                                    <input type="submit" disabled={email_error || !email} className="button hollow" value="Continue with Email" />
+                                    <input type="submit" disabled={email_error || !email} className="button hollow" value={translate('continue_with_email')} />
                                 </div>
                             </form>
                             }

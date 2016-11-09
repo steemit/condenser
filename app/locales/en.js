@@ -1,4 +1,4 @@
-import { APP_NAME, APP_URL, LANDING_PAGE_URL, SUPPORT_EMAIL, DEBT_TOKEN, DEBT_TOKEN_SHORT, OWNERSHIP_TOKEN, CURRENCY_SIGN, INVEST_TOKEN } from 'config/client_config';
+import { APP_NAME, APP_URL, LANDING_PAGE_URL, SUPPORT_EMAIL, DEBT_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TOKEN, CURRENCY_SIGN, INVEST_TOKEN } from 'config/client_config';
 /**
  * see: app/locales/README.md
  */
@@ -7,8 +7,8 @@ const en = 	{
 	about: "About",
 	explore: "Explore",
 	APP_NAME_whitepaper: APP_NAME + " Whitepaper",
-	buy_OWNERSHIP_TOKEN: 'Buy ' + OWNERSHIP_TOKEN,
-	sell_OWNERSHIP_TOKEN: 'Sell ' + OWNERSHIP_TOKEN,
+	buy_LIQUID_TOKEN: 'Buy ' + LIQUID_TOKEN,
+	sell_LIQUID_TOKEN: 'Sell ' + LIQUID_TOKEN,
 	market: "Market",
 	stolen_account_recovery: "Stolen Accounts Recovery",
 	change_account_password: "Change Account Password",
@@ -203,13 +203,13 @@ const en = 	{
 	deadline_for_recovery_is: 'Deadline for recovery is',
 	i_understand_dont_show_again: "I understand, don't show me again",
 	ok: 'Ok',
-	convert_to_OWNERSHIP_TOKEN: 'Convert to ' + OWNERSHIP_TOKEN,
+	convert_to_LIQUID_TOKEN: 'Convert to ' + LIQUID_TOKEN,
 	DEBT_TOKEN_will_be_unavailable: 'This action will take place one week from now and can not be canceled. These ' + DEBT_TOKEN + ' will immediatly become unavailable',
 	amount: 'Amount',
 	convert: 'Convert',
 	invalid_amount: 'Invalid amount',
 	insufficent_balance: 'Insufficient balance',
-	in_week_convert_DEBT_TOKEN_to_OWNERSHIP_TOKEN: 'In one week, convert {amount} ' + DEBT_TOKEN + 's into ' + OWNERSHIP_TOKEN,
+	in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN: 'In one week, convert {amount} ' + DEBT_TOKEN + 's into ' + LIQUID_TOKEN,
 	order_placed: 'Order placed', // ex.: "Order placed: Sell {someamount_to_sell} for atleast {min_to_receive}"
 	follow: 'Follow',
 	unfollow: 'Unfollow',
@@ -352,7 +352,7 @@ const en = 	{
 	couldnt_create_account_server_returned_error: "Couldn't create account. Server returned the following error",
 	form_requires_javascript_to_be_enabled: 'This form requires javascript to be enabled in your browser',
 	our_records_indicate_you_already_have_account: 'Our records indicate that you already have ' + APP_NAME + ' account',
-	to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user: 'In order to prevent abuse (each registered account costs {amount} in ' + OWNERSHIP_TOKEN + ') ' + APP_NAME + ' can only register one account per verified user.',
+	to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user: 'In order to prevent abuse (each registered account costs {amount} in ' + LIQUID_TOKEN + ') ' + APP_NAME + ' can only register one account per verified user.',
 	// next 3 blocks are meant to be used together
 	you_can_either: 'You can either', // context 'you can either login'
 	to_your_existing_account_or: 'to your existing account or', // context: 'to your existing account or send us email'
@@ -454,11 +454,11 @@ const en = 	{
 	advanced: 'Advanced',
 	convert_to_INVEST_TOKEN: 'Convert to ' + INVEST_TOKEN,
 	transfer_to_account: 'Transfer to Account',
-	buy_OWNERSHIP_TOKEN_or_INVEST_TOKEN: 'Buy ' + OWNERSHIP_TOKEN + ' or ' + INVEST_TOKEN,
+	buy_LIQUID_TOKEN_or_INVEST_TOKEN: 'Buy ' + LIQUID_TOKEN + ' or ' + INVEST_TOKEN,
 	version: 'Version',
 	about_APP_NAME: 'About ' + APP_NAME,
 	APP_NAME_is_a_social_media_platform_where_everyone_gets_paid_for_creating_and_curating_content: APP_NAME + ' is a social media platform where <strong>everyone</strong>&nbsp;gets <strong>paid</strong> for creating and curating content',
-	APP_NAME_is_a_social_media_platform_where_everyone_gets_paid: APP_NAME + ' is a social media platform where everyone gets paid for creating and curating content. It leverages a robust digital points system, called ' + OWNERSHIP_TOKEN + ', that supports real value for digital rewards through market price discovery and liquidity.',
+	APP_NAME_is_a_social_media_platform_where_everyone_gets_paid: APP_NAME + ' is a social media platform where everyone gets paid for creating and curating content. It leverages a robust digital points system, called ' + LIQUID_TOKEN + ', that supports real value for digital rewards through market price discovery and liquidity.',
 	learn_more_at_LANDING_PAGE_URL: 'Learn more at ' + LANDING_PAGE_URL,
 	resources: 'Resources',
 	join_our_slack: 'Join our Slack',
@@ -475,13 +475,13 @@ const en = 	{
 	promote: 'Promote',
 	// Tips.js
 	tradeable_tokens_that_may_be_transferred_anywhere_at_anytime: 'Tradeable tokens that may be transferred anywhere at anytime.',
-	OWNERSHIP_TOKEN_can_be_converted_to_INVEST_TOKEN_in_a_process_called_powering_up: OWNERSHIP_TOKEN + ' can be converted to ' + INVEST_TOKEN + ' in a process called powering up.',
-	tokens_worth_about_AMOUNT_of_OWNERSHIP_TOKEN: 'Tokens worth about {amount} of ' + OWNERSHIP_TOKEN + '.',
+	LIQUID_TOKEN_can_be_converted_to_INVEST_TOKEN_in_a_process_called_powering_up: LIQUID_TOKEN + ' can be converted to ' + INVEST_TOKEN + ' in a process called powering up.',
+	tokens_worth_about_AMOUNT_of_LIQUID_TOKEN: 'Tokens worth about {amount} of ' + LIQUID_TOKEN + '.',
 	influence_tokens_which_earn_more_power_by_holding_long_term: 'Influence tokens which earn more power by holding long term.',
 	the_more_you_hold_the_more_you_influence_post_rewards: 'The more you hold the more you influence post rewards and earn for accurate voting.',
-	the_estimated_value_is_based_on_a_7_day_average_value_of_OWNERSHIP_TOKEN_in_currency: 'The estimated value is based on a 7 day average value of ' + OWNERSHIP_TOKEN + ' in US Dollars.',
-	INVEST_TOKEN_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_OWNERSHIP_TOKEN: INVEST_TOKEN + ' is non-transferrable and will require 2 years and 104 payments to convert back to ' + OWNERSHIP_TOKEN + '.',
-	converted_INVEST_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again: 'Converted ' + INVEST_TOKEN + ' can be sent to yourself or someone else but can not transfer again without converting back to ' + OWNERSHIP_TOKEN + '.',
+	the_estimated_value_is_based_on_a_7_day_average_value_of_LIQUID_TOKEN_in_currency: 'The estimated value is based on a 7 day average value of ' + LIQUID_TOKEN + ' in US Dollars.',
+	INVEST_TOKEN_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_LIQUID_TOKEN: INVEST_TOKEN + ' is non-transferrable and will require 2 years and 104 payments to convert back to ' + LIQUID_TOKEN + '.',
+	converted_INVEST_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again: 'Converted ' + INVEST_TOKEN + ' can be sent to yourself or someone else but can not transfer again without converting back to ' + LIQUID_TOKEN + '.',
 	profile: 'Profile',
 	send_to_account: "Send to account",
 	confirm_email: 'Confirm Email',

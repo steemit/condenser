@@ -197,7 +197,7 @@ class App extends React.Component {
                   </li>
                   {/* <li>
                       <a onClick={() => depositSteem()}>
-                          {translate("buy_OWNERSHIP_TOKEN")}
+                          {translate("buy_LIQUID_TOKEN")}
                       </a>
                   </li> */}
                   <li>

@@ -1,5 +1,5 @@
 
-import { APP_NAME, APP_URL, LANDING_PAGE_URL, OWNERSHIP_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, INVEST_TOKEN, OWNERSHIP_TICKER, SUPPORT_EMAIL } from 'config/client_config';
+import { APP_NAME, APP_URL, LANDING_PAGE_URL, LIQUID_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, INVEST_TOKEN, OWNERSHIP_TICKER, SUPPORT_EMAIL } from 'config/client_config';
 /**
  * see: app/locales/README.md
  */
@@ -8,8 +8,8 @@ const ru = {
 	about: "О проекте",
 	explore: "Исследовать",
 	APP_NAME_whitepaper: "Бумага о " + APP_NAME + 'е',
-	buy_OWNERSHIP_TOKEN: 'Купить ' + OWNERSHIP_TOKEN,
-	sell_OWNERSHIP_TOKEN: 'Продать ' + OWNERSHIP_TOKEN,
+	buy_LIQUID_TOKEN: 'Купить ' + LIQUID_TOKEN,
+	sell_LIQUID_TOKEN: 'Продать ' + LIQUID_TOKEN,
 	market: "Биржа",
 	stolen_account_recovery: "Возврат украденного аккаунта",
 	change_account_password: "Изменить пароль аккаунта",
@@ -212,7 +212,7 @@ const ru = {
 	convert: 'Конвертировать',
 	invalid_amount: 'Неверное количество',
 	insufficent_balance: 'Недостаточный баланс',
-	in_week_convert_DEBT_TOKEN_to_OWNERSHIP_TOKEN: 'За неделю перевести {amount} ' + DEBT_TOKEN + ' в ' + OWNERSHIP_TOKEN,
+	in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN: 'За неделю перевести {amount} ' + DEBT_TOKEN + ' в ' + LIQUID_TOKEN,
 	order_placed: 'Заказ размещен', // ex.: "Order placed: Sell {someamount_to_sell} for atleast {min_to_receive}"
 	follow: 'Подписаться',
 	unfollow: 'Отписаться',
@@ -361,7 +361,7 @@ const ru = {
 	couldnt_create_account_server_returned_error: "Не получилось создать аккаунт. Сервер вернул эту ошибку",
 	form_requires_javascript_to_be_enabled: 'Эта форма требует активированный в браузере javascript',
 	our_records_indicate_you_already_have_account: 'Наши записи показывают что у вас уже есть ' + APP_NAME + ' аккант',
-	to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user: 'Чтобы предотвратить злоупотребление (каждый зарегистрированный аккаунт стоит {amount} в ' + OWNERSHIP_TOKEN + ') ' + APP_NAME + ' может регистрировать только один аккаунт для каждого подтвержденного пользователя.',
+	to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user: 'Чтобы предотвратить злоупотребление (каждый зарегистрированный аккаунт стоит {amount} в ' + LIQUID_TOKEN + ') ' + APP_NAME + ' может регистрировать только один аккаунт для каждого подтвержденного пользователя.',
 	// next 3 blocks are meant to be used together
 	you_can_either: 'Вы можете или', // context 'you can either login'
 	to_your_existing_account_or: 'в ваш существующий аккаунт или', // context: 'to your existing account or send us email'
@@ -461,14 +461,14 @@ const ru = {
 	deposit: 'Купить',
 	basic: 'Базовый',
 	advanced: 'Продвинутый',
-	convert_to_OWNERSHIP_TOKEN: 'Перевести в ' + OWNERSHIP_TOKEN,
+	convert_to_LIQUID_TOKEN: 'Перевести в ' + LIQUID_TOKEN,
 	transfer_to_account: 'Передать пользователю',
-	buy_OWNERSHIP_TOKEN_or_INVEST_TOKEN: 'Купить ' + OWNERSHIP_TOKEN + ' или ' + INVEST_TOKEN,
+	buy_LIQUID_TOKEN_or_INVEST_TOKEN: 'Купить ' + LIQUID_TOKEN + ' или ' + INVEST_TOKEN,
 	// TODO
 	version: 'Версия',
 	about_APP_NAME: 'О ' + APP_NAME,
 	APP_NAME_is_a_social_media_platform_where_everyone_gets_paid_for_creating_and_curating_content: APP_NAME + ' это социальная медиа платформа в которой <strong>все</strong>&nbsp;получают <strong>деньги</strong> за создание и курирование контента',
-	APP_NAME_is_a_social_media_platform_where_everyone_gets_paid: APP_NAME + ' это социальная медиа платформа в которой каждый зарабатывает за создание и курирование контента. Он использует надежную систему цифровых очков под названием ' + OWNERSHIP_TOKEN + ', который поддерживает реальную ценность для цифровых наград через выявление рыночной цены и ликвидности.',
+	APP_NAME_is_a_social_media_platform_where_everyone_gets_paid: APP_NAME + ' это социальная медиа платформа в которой каждый зарабатывает за создание и курирование контента. Он использует надежную систему цифровых очков под названием ' + LIQUID_TOKEN + ', который поддерживает реальную ценность для цифровых наград через выявление рыночной цены и ликвидности.',
 	learn_more_at_LANDING_PAGE_URL: 'Узнать больше в ' + LANDING_PAGE_URL,
 	resources: 'Ресурсы',
 	join_our_slack: 'Присоединяйтесь к нашему Slack',
@@ -485,14 +485,14 @@ const ru = {
 	promote: 'Продвинуть',
 	// Tips.js
 	tradeable_tokens_that_may_be_transferred_anywhere_at_anytime: 'Перемещаемые цифровые токены, которые могут переданы куда угодно в любой момент.',
-	OWNERSHIP_TOKEN_can_be_converted_to_INVEST_TOKEN_in_a_process_called_powering_up: OWNERSHIP_TOKEN + ' может быть конвертирован в ' + INVEST_TOKEN + ', этот процесс называется "усиление голоса".',
-	tokens_worth_about_AMOUNT_of_OWNERSHIP_TOKEN: 'Перемещаемые цифровые токены, цена которых всегда равна ~1 мг золота в ' + OWNERSHIP_TOKEN + '.',
+	LIQUID_TOKEN_can_be_converted_to_INVEST_TOKEN_in_a_process_called_powering_up: LIQUID_TOKEN + ' может быть конвертирован в ' + INVEST_TOKEN + ', этот процесс называется "усиление голоса".',
+	tokens_worth_about_AMOUNT_of_LIQUID_TOKEN: 'Перемещаемые цифровые токены, цена которых всегда равна ~1 мг золота в ' + LIQUID_TOKEN + '.',
 	influence_tokens_which_earn_more_power_by_holding_long_term: 'Неперемещаемые цифровые токены, их количество увеличивается при долгосрочном хранении.',
 	the_more_you_hold_the_more_you_influence_post_rewards: 'Чем их больше, тем сильней вы влияете на вознаграждения за пост и тем больше зарабатываете за голосование.',
-	the_estimated_value_is_based_on_a_7_day_average_value_of_OWNERSHIP_TOKEN_in_currency: 'Оценочная стоимость рассчитывается из 7-ми дневной средней стоимости ' + OWNERSHIP_TOKEN + '.',
-	INVEST_TOKEN_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_OWNERSHIP_TOKEN: INVEST_TOKEN + ' нельзя передавать и потребуется 2 года и 104 выплаты чтобы перевести обратно в ' + OWNERSHIP_TOKEN + '.',
+	the_estimated_value_is_based_on_a_7_day_average_value_of_LIQUID_TOKEN_in_currency: 'Оценочная стоимость рассчитывается из 7-ми дневной средней стоимости ' + LIQUID_TOKEN + '.',
+	INVEST_TOKEN_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_LIQUID_TOKEN: INVEST_TOKEN + ' нельзя передавать и потребуется 2 года и 104 выплаты чтобы перевести обратно в ' + LIQUID_TOKEN + '.',
 	// TODO
-	converted_INVEST_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again: 'Конвертированная ' + INVEST_TOKEN + ' может быть отправлена себе или кому-то еще, но не может быть передана вновь без конвертирования назад в ' + OWNERSHIP_TOKEN + '.',
+	converted_INVEST_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again: 'Конвертированная ' + INVEST_TOKEN + ' может быть отправлена себе или кому-то еще, но не может быть передана вновь без конвертирования назад в ' + LIQUID_TOKEN + '.',
 	profile: 'Профиль',
 	send_to_account: 'Отправить аккаунту',
 	confirm_email: 'Подтвердить электронную почту',

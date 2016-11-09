@@ -13,7 +13,7 @@ import {steemTip, powerTip, dollarTip, valueTip} from 'app/utils/Tips'
 import {numberWithCommas, vestingSteem} from 'app/utils/StateFunctions'
 import { translate } from 'app/Translator';
 import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
-import { APP_NAME_LATIN, OWNERSHIP_TOKEN, DEBT_TOKEN, CURRENCY_SIGN, INVEST_TOKEN, DEBT_TOKEN_SHORT, OWNERSHIP_TICKER, VEST_TICKER, DEBT_TICKER } from 'config/client_config';
+import { APP_NAME_LATIN, LIQUID_TOKEN, DEBT_TOKEN, CURRENCY_SIGN, INVEST_TOKEN, DEBT_TOKEN_SHORT, OWNERSHIP_TICKER, VEST_TICKER, DEBT_TICKER } from 'config/client_config';
 
 // normalize app name
 const appName = APP_NAME_LATIN.toLowerCase()
@@ -114,7 +114,7 @@ class UserWallet extends React.Component {
         let dollar_menu = [
             { value: translate('transfer'), link: '#', onClick: showTransfer.bind( this, DEBT_TOKEN_SHORT ) },
             // { value: translate('buy_or_sell'), link: '/market' },
-            { value: translate('convert_to_OWNERSHIP_TOKEN'), link: '#', onClick: convertToSteem },
+            { value: translate('convert_to_LIQUID_TOKEN'), link: '#', onClick: convertToSteem },
         ]
         const isWithdrawScheduled = new Date(account.next_vesting_withdrawal + 'Z').getTime() > Date.now()
         const depositReveal = showDeposit && <div>
@@ -133,25 +133,25 @@ class UserWallet extends React.Component {
                     <h4 className="uppercase">{translate('balances')}</h4>
                 </div>
                 {/* {isMyAccount && <div className="column small-12 medium-4">
-                    <button className="UserWallet__buysp button hollow float-right" onClick={this.onShowDepositSteem}>{translate('buy_OWNERSHIP_TOKEN_or_INVEST_TOKEN')}</button>
+                    <button className="UserWallet__buysp button hollow float-right" onClick={this.onShowDepositSteem}>{translate('buy_LIQUID_TOKEN_or_INVEST_TOKEN')}</button>
                 </div>} */}
             </div>
             <br />
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
-                    <span className="uppercase">{OWNERSHIP_TOKEN}</span>
+                    <span className="uppercase">{LIQUID_TOKEN}</span>
                     <br />
                     <span className="secondary">
                         {/* not using steemTip because translate strings may be undefined on load */}
                         {/* {steemTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})} */}
                         <div>{translate('tradeable_tokens_that_may_be_transferred_anywhere_at_anytime')}</div>
-                        <div>{translate('OWNERSHIP_TOKEN_can_be_converted_to_INVEST_TOKEN_in_a_process_called_powering_up')}</div>
+                        <div>{translate('LIQUID_TOKEN_can_be_converted_to_INVEST_TOKEN_in_a_process_called_powering_up')}</div>
                     </span>
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
-                    <DropdownMenu onClick={this.trackAnalytics.bind(this, 'golos dropdown in user\'s profile clicked')} selected={<span className="uppercase">{steem_balance_str + ' ' + OWNERSHIP_TOKEN}</span>} className="Header__sort-order-menu" items={steem_menu} el="span" />
-                    : steem_balance_str + ' ' + OWNERSHIP_TOKEN}
+                    <DropdownMenu onClick={this.trackAnalytics.bind(this, 'golos dropdown in user\'s profile clicked')} selected={<span className="uppercase">{steem_balance_str + ' ' + LIQUID_TOKEN}</span>} className="Header__sort-order-menu" items={steem_menu} el="span" />
+                    : steem_balance_str + ' ' + LIQUID_TOKEN}
                 </div>
             </div>
             <div className="UserWallet__balance row">
@@ -167,15 +167,15 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
-                    <DropdownMenu onClick={this.trackAnalytics.bind(this, 'golos power dropdown in user\'s profile clicked')} selected={<span className="uppercase">{power_balance_str + ' ' + OWNERSHIP_TOKEN}</span>} className="Header__sort-order-menu" items={power_menu} el="span" />
-                    : power_balance_str + ' ' + OWNERSHIP_TOKEN}
+                    <DropdownMenu onClick={this.trackAnalytics.bind(this, 'golos power dropdown in user\'s profile clicked')} selected={<span className="uppercase">{power_balance_str + ' ' + LIQUID_TOKEN}</span>} className="Header__sort-order-menu" items={power_menu} el="span" />
+                    : power_balance_str + ' ' + LIQUID_TOKEN}
                 </div>
             </div>
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
                     <span className="uppercase">{DEBT_TOKEN}</span>
                     <br />
-                    <span className="secondary">{translate('tokens_worth_about_AMOUNT_of_OWNERSHIP_TOKEN', {amount: localizedCurrency(1)})}</span>
+                    <span className="secondary">{translate('tokens_worth_about_AMOUNT_of_LIQUID_TOKEN', {amount: localizedCurrency(1)})}</span>
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
@@ -191,7 +191,7 @@ class UserWallet extends React.Component {
             </div>
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
-                    {translate('estimate_account_value')}<br /><span className="secondary">{translate('the_estimated_value_is_based_on_a_7_day_average_value_of_OWNERSHIP_TOKEN_in_currency')}</span>
+                    {translate('estimate_account_value')}<br /><span className="secondary">{translate('the_estimated_value_is_based_on_a_7_day_average_value_of_LIQUID_TOKEN_in_currency')}</span>
                 </div>
                 <div className="column small-12 medium-4">
                     {localizedCurrency(total_value)}

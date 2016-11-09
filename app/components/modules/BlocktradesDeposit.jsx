@@ -9,10 +9,10 @@ import QRCode from 'react-qr'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import { translate } from 'app/Translator.js';
 import { formatCoins } from 'app/utils/FormatCoins';
-import { APP_URL, APP_ICON, OWNERSHIP_TOKEN, INVEST_TOKEN, VEST_TICKER, OWNERSHIP_TICKER, DEBT_TICKER } from 'config/client_config';
+import { APP_URL, APP_ICON, LIQUID_TOKEN, INVEST_TOKEN, VEST_TICKER, OWNERSHIP_TICKER, DEBT_TICKER } from 'config/client_config';
 
 const coinNames = {
-    [OWNERSHIP_TICKER]: OWNERSHIP_TOKEN,
+    [OWNERSHIP_TICKER]: LIQUID_TOKEN,
     [VEST_TICKER]: INVEST_TOKEN,
     BTC: 'Bitcoin',
     BTS: 'Bitshares',
@@ -155,10 +155,10 @@ class BlocktradesDeposit extends React.Component {
         const depositTip = outputCoin.value === OWNERSHIP_TICKER
             ? translate('tradeable_tokens_that_may_be_transferred_anywhere_at_anytime')
                 + ' ' +
-                translate('OWNERSHIP_TOKEN_can_be_converted_to_INVEST_TOKEN_in_a_process_called_powering_up')
+                translate('LIQUID_TOKEN_can_be_converted_to_INVEST_TOKEN_in_a_process_called_powering_up')
             : outputCoin.value === VEST_TICKER ? <div>
                 <p>{translate('influence_tokens_which_earn_more_power_by_holding_long_term') + ' ' + translate('the_more_you_hold_the_more_you_influence_post_rewards')}</p>
-                <p>{translate('INVEST_TOKEN_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_OWNERSHIP_TOKEN')}</p>
+                <p>{translate('INVEST_TOKEN_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_LIQUID_TOKEN')}</p>
             </div>
             : null
 
@@ -169,7 +169,7 @@ class BlocktradesDeposit extends React.Component {
 
              <input type="radio" {...cleanReduxInput(outputCoin)} value={OWNERSHIP_TICKER} checked={outputCoin.value === OWNERSHIP_TICKER} id="steemCheck" />
              &nbsp;
-             <label htmlFor="steemCheck">{OWNERSHIP_TOKEN}</label>
+             <label htmlFor="steemCheck">{LIQUID_TOKEN}</label>
         </span>
 
         const coin_menu = [

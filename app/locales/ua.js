@@ -1,4 +1,4 @@
-import { APP_NAME, APP_URL, LANDING_PAGE_URL, SUPPORT_EMAIL, OWNERSHIP_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, INVEST_TOKEN, OWNERSHIP_TICKER } from 'config/client_config';
+import { APP_NAME, APP_URL, LANDING_PAGE_URL, SUPPORT_EMAIL, LIQUID_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, INVEST_TOKEN, OWNERSHIP_TICKER } from 'config/client_config';
 /**
  * see: app/locales/README.md
  */
@@ -7,8 +7,8 @@ export const ua = {
 	about: "Про проект",
 	explore: "Досліджувати",
 	APP_NAME_whitepaper: "Папір про " + APP_NAME,
-	buy_OWNERSHIP_TOKEN: 'Купити ' + OWNERSHIP_TOKEN,
-	sell_OWNERSHIP_TOKEN: 'Продати ' + OWNERSHIP_TOKEN,
+	buy_LIQUID_TOKEN: 'Купити ' + LIQUID_TOKEN,
+	sell_LIQUID_TOKEN: 'Продати ' + LIQUID_TOKEN,
 	market: "Біржа",
 	stolen_account_recovery: "Повернення вкраденого акаунта",
 	change_account_password: "Змінити пароль акаунта",
@@ -212,7 +212,7 @@ export const ua = {
 	convert: 'Конвертувати',
 	invalid_amount: 'Неправильна кількість',
 	insufficent_balance: 'Недостатній баланс',
-	in_week_convert_DEBT_TOKEN_to_OWNERSHIP_TOKEN: 'За тиждень перевести {amount} ' + DEBT_TOKEN + ' в ' + OWNERSHIP_TOKEN,
+	in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN: 'За тиждень перевести {amount} ' + DEBT_TOKEN + ' в ' + LIQUID_TOKEN,
 	order_placed: 'Замовлення розміщенно', // ex.: "Order placed: Sell {someamount_to_sell} for atleast {min_to_receive}"
 	follow: 'Підписатися',
 	unfollow: 'Відписатися',
@@ -362,7 +362,7 @@ export const ua = {
 	form_requires_javascript_to_be_enabled: 'Ця форма вимагає активований в браузері javascript',
 	our_records_indicate_you_already_have_account: 'Наші записи показують що у вас вже є ' + APP_NAME + ' акаунт',
 	// TODO
-	to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user: 'Щоб запобігти зловживанню (кожен зареєстрований акаунт варто{amount} в ' + OWNERSHIP_TOKEN + ') ' + APP_NAME + ' може реєструвати тільки один акаунт для кожного підтвердженого користувача.',
+	to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user: 'Щоб запобігти зловживанню (кожен зареєстрований акаунт варто{amount} в ' + LIQUID_TOKEN + ') ' + APP_NAME + ' може реєструвати тільки один акаунт для кожного підтвердженого користувача.',
 	// next 3 blocks are meant to be used together
 	you_can_either: 'Ви можете або', // context 'you can either login'
 	to_your_existing_account_or: 'в ваш існуючий акаунт або', // context: 'to your existing account or send us email'
@@ -461,13 +461,13 @@ export const ua = {
 	deposit: 'Купити',
 	basic: 'Базовий',
 	advanced: 'Високий рівень',
-	convert_to_OWNERSHIP_TOKEN: 'Перевести в ' + OWNERSHIP_TOKEN,
+	convert_to_LIQUID_TOKEN: 'Перевести в ' + LIQUID_TOKEN,
 	transfer_to_account: 'Передати користувачу',
-	buy_OWNERSHIP_TOKEN_or_INVEST_TOKEN: 'Купити ' + OWNERSHIP_TOKEN + ' чи ' + INVEST_TOKEN,
+	buy_LIQUID_TOKEN_or_INVEST_TOKEN: 'Купити ' + LIQUID_TOKEN + ' чи ' + INVEST_TOKEN,
 	version: 'Версія',
 	about_APP_NAME: 'О ' + APP_NAME,
 	APP_NAME_is_a_social_media_platform_where_everyone_gets_paid_for_creating_and_curating_content: APP_NAME + ' це соціальна медіа платформа в якій<strong>всі</strong>&nbsp;отримують <strong>гроші</strong> за створення і курирування контенту',
-	APP_NAME_is_a_social_media_platform_where_everyone_gets_paid: APP_NAME + ' це соціальна медіа платформа в якій кожен заробляє за створення і курирування контенту. Він використовує надійну систему цифрових очок під назвою' + OWNERSHIP_TOKEN + ', який підтримує реальну цінність для цифрових нагород через виявлення ринкової ціни і ліквідності.',
+	APP_NAME_is_a_social_media_platform_where_everyone_gets_paid: APP_NAME + ' це соціальна медіа платформа в якій кожен заробляє за створення і курирування контенту. Він використовує надійну систему цифрових очок під назвою' + LIQUID_TOKEN + ', який підтримує реальну цінність для цифрових нагород через виявлення ринкової ціни і ліквідності.',
 	learn_more_at_LANDING_PAGE_URL: 'Дізнатись більше в ' + LANDING_PAGE_URL,
 	resources: 'Ресурси',
 	join_our_slack: 'Приєднуйтесь до нашого Slack',
@@ -484,14 +484,14 @@ export const ua = {
 	promote: 'Просунути',
 	// Tips.js
 	tradeable_tokens_that_may_be_transferred_anywhere_at_anytime: 'Переміщувані цифрові токени, які можуть бути передані куди завгодно в будь-який момент.',
-	OWNERSHIP_TOKEN_can_be_converted_to_INVEST_TOKEN_in_a_process_called_powering_up: OWNERSHIP_TOKEN + ' може бути конвертований в ' + INVEST_TOKEN + ', цей процес називається "посилення голосу".',
-	tokens_worth_about_AMOUNT_of_OWNERSHIP_TOKEN: 'Переміщувані цифрові токени, ціна яких завжди дорівнює ~1 мг золота в ' + OWNERSHIP_TOKEN + '.',
+	LIQUID_TOKEN_can_be_converted_to_INVEST_TOKEN_in_a_process_called_powering_up: LIQUID_TOKEN + ' може бути конвертований в ' + INVEST_TOKEN + ', цей процес називається "посилення голосу".',
+	tokens_worth_about_AMOUNT_of_LIQUID_TOKEN: 'Переміщувані цифрові токени, ціна яких завжди дорівнює ~1 мг золота в ' + LIQUID_TOKEN + '.',
 	influence_tokens_which_earn_more_power_by_holding_long_term: 'Непереміщуваними цифрові токени, їх кількість збільшується при довгостроковому зберіганні.',
 	the_more_you_hold_the_more_you_influence_post_rewards: 'Чим їх більше, тим сильніше ви впливаєте на винагороди за пост і тим більше заробляєте за голосування.',
-	the_estimated_value_is_based_on_a_7_day_average_value_of_OWNERSHIP_TOKEN_in_currency: 'Оціночна вартість розраховується з 7-ми денної середньої вартості ' + OWNERSHIP_TOKEN + '.',
-	INVEST_TOKEN_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_OWNERSHIP_TOKEN: INVEST_TOKEN + ' не можна передавати і буде потрібно 2 роки і 104 виплати щоб перевести назад в ' + OWNERSHIP_TOKEN + '.',
+	the_estimated_value_is_based_on_a_7_day_average_value_of_LIQUID_TOKEN_in_currency: 'Оціночна вартість розраховується з 7-ми денної середньої вартості ' + LIQUID_TOKEN + '.',
+	INVEST_TOKEN_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_LIQUID_TOKEN: INVEST_TOKEN + ' не можна передавати і буде потрібно 2 роки і 104 виплати щоб перевести назад в ' + LIQUID_TOKEN + '.',
 	// TODO
-	converted_INVEST_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again: 'Конвертированная ' + INVEST_TOKEN + ' може бути відправлена собі або комусь  ще, але не може бути передана знову без конвертації назад в ' + OWNERSHIP_TOKEN + '.',
+	converted_INVEST_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again: 'Конвертированная ' + INVEST_TOKEN + ' може бути відправлена собі або комусь  ще, але не може бути передана знову без конвертації назад в ' + LIQUID_TOKEN + '.',
 	profile: 'Профіль',
 	send_to_account: 'Надіслати акаунту',
 	confirm_email: 'Підтвердити електронну пошту',

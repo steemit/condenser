@@ -6,7 +6,7 @@ import Tooltip from 'app/components/elements/Tooltip';
 import Memo from 'app/components/elements/Memo'
 import {numberWithCommas, vestsToSp} from 'app/utils/StateFunctions'
 import { translate } from 'app/Translator';
-import { APP_NAME, DEBT_TOKEN, DEBT_TOKEN_SHORT, OWNERSHIP_TOKEN, CURRENCY_SIGN, INVEST_TOKEN, VEST_TICKER } from 'config/client_config';
+import { APP_NAME, DEBT_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TOKEN, CURRENCY_SIGN, INVEST_TOKEN, VEST_TICKER } from 'config/client_config';
 
 class TransferHistoryRow extends React.Component {
 

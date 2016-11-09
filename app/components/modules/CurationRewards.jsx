@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import TransferHistoryRow from 'app/components/cards/TransferHistoryRow';
 import {numberWithCommas, vestsToSp, assetFloat} from 'app/utils/StateFunctions'
 import { translate } from 'app/Translator';
-import { APP_NAME, DEBT_TOKEN, DEBT_TOKEN_SHORT, OWNERSHIP_TOKEN, CURRENCY_SIGN,
+import { APP_NAME, DEBT_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TOKEN, CURRENCY_SIGN,
 INVEST_TOKEN, OWNERSHIP_TICKER, VEST_TICKER } from 'config/client_config';
 
 class CurationRewards extends React.Component {

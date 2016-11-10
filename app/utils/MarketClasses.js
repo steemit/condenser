@@ -1,5 +1,5 @@
 import {roundDown, roundUp} from "./MarketUtils";
-import { OWNERSHIP_TICKER, DEBT_TICKER } from 'config/client_config'
+import { LIQUID_TICKER, DEBT_TICKER } from 'config/client_config'
 const precision = 1000;
 
 class Order {
@@ -68,10 +68,10 @@ class TradeHistory {
         this.color = this.type == "bid" ? "buy-color" : "sell-color";
         if (this.type === "bid") {
             this.sbd = parseFloat(fill.current_pays.split(" "+ DEBT_TICKER)[0]);
-            this.steem = parseFloat(fill.open_pays.split(" "+ OWNERSHIP_TICKER)[0]);
+            this.steem = parseFloat(fill.open_pays.split(" "+ LIQUID_TICKER)[0]);
         } else {
             this.sbd = parseFloat(fill.open_pays.split(" "+ DEBT_TICKER)[0]);
-            this.steem = parseFloat(fill.current_pays.split(" "+ OWNERSHIP_TICKER)[0]);
+            this.steem = parseFloat(fill.current_pays.split(" "+ LIQUID_TICKER)[0]);
         }
 
         this.price = this.sbd / this.steem;

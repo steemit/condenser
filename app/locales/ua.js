@@ -1,4 +1,4 @@
-import { APP_NAME, APP_URL, LANDING_PAGE_URL, SUPPORT_EMAIL, LIQUID_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, VESTING_TOKEN, OWNERSHIP_TICKER } from 'config/client_config';
+import { APP_NAME, APP_URL, LANDING_PAGE_URL, SUPPORT_EMAIL, LIQUID_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, VESTING_TOKEN, LIQUID_TICKER } from 'config/client_config';
 /**
  * see: app/locales/README.md
  */
@@ -165,7 +165,7 @@ export const ua = {
 	transfer_amount_to: "Переклад {amount} на рахунок",
 	recieve_amount_from: "Отримано {amount} від",
 	transfer_amount_from: "Переклад {amount} з рахунку",
-  transfer_amount_steem_power_to: "Переклад {amount} " + OWNERSHIP_TICKER + " в Силу Голосу",
+  transfer_amount_steem_power_to: "Переклад {amount} " + LIQUID_TICKER + " в Силу Голосу",
 	stop_power_down: "Ослаблення Сили Голосу зупинено",
 	start_power_down_of: "Ослаблення Сили Голосу розпочато з",
 	curation_reward_of_INVEST_TOKEN_for: 'Кураторські винагороди {reward} ' + VESTING_TOKEN + ' за',

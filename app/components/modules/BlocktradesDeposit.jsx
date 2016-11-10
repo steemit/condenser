@@ -9,10 +9,10 @@ import QRCode from 'react-qr'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import { translate } from 'app/Translator';
 import { formatCoins } from 'app/utils/FormatCoins';
-import { APP_URL, APP_ICON, LIQUID_TOKEN, VESTING_TOKEN, VEST_TICKER, OWNERSHIP_TICKER, DEBT_TICKER } from 'config/client_config';
+import { APP_URL, APP_ICON, LIQUID_TOKEN, VESTING_TOKEN, VEST_TICKER, LIQUID_TICKER, DEBT_TICKER } from 'config/client_config';
 
 const coinNames = {
-    [OWNERSHIP_TICKER]: LIQUID_TOKEN,
+    [LIQUID_TICKER]: LIQUID_TOKEN,
     [VEST_TICKER]: VESTING_TOKEN,
     BTC: 'Bitcoin',
     BTS: 'Bitshares',
@@ -20,7 +20,7 @@ const coinNames = {
 }
 
 const coinToTypes = [
-    [OWNERSHIP_TICKER, 'steem'],
+    [LIQUID_TICKER, 'steem'],
     [VEST_TICKER, 'steem_power'],
     ['BTC', 'btc'],
     ['BTS', 'bts'],
@@ -152,7 +152,7 @@ class BlocktradesDeposit extends React.Component {
             {/*{trHashLink(outputCoin.value, tr.outputTransactionHash)}&nbsp;*/}
         </div>)
 
-        const depositTip = outputCoin.value === OWNERSHIP_TICKER
+        const depositTip = outputCoin.value === LIQUID_TICKER
             ? translate('tradeable_tokens_that_may_be_transferred_anywhere_at_anytime')
                 + ' ' +
                 translate('LIQUID_TOKEN_can_be_converted_to_INVEST_TOKEN_in_a_process_called_powering_up')
@@ -167,7 +167,7 @@ class BlocktradesDeposit extends React.Component {
              &nbsp;
              <label htmlFor="powerCheck">{VESTING_TOKEN}</label>
 
-             <input type="radio" {...cleanReduxInput(outputCoin)} value={OWNERSHIP_TICKER} checked={outputCoin.value === OWNERSHIP_TICKER} id="steemCheck" />
+             <input type="radio" {...cleanReduxInput(outputCoin)} value={LIQUID_TICKER} checked={outputCoin.value === LIQUID_TICKER} id="steemCheck" />
              &nbsp;
              <label htmlFor="steemCheck">{LIQUID_TOKEN}</label>
         </span>
@@ -379,7 +379,7 @@ const toSteem = value => coalesce(coalesce(coinToTypes.find(v => v[1] === value)
 const toTrade = value => coalesce(coalesce(coinToTypes.find(v => v[0] === value), [])[1], value)
 const encodeParams = obj => Object.keys(obj).map(key => `${key}=${encodeURIComponent(obj[key])}`).join('&')
 const trStatus = stat => coalesce(statusNames[stat], stat)
-const coinTypes = new RegExp(`${OWNERSHIP_TICKER}|${VEST_TICKER}|${DEBT_TICKER}`)
+const coinTypes = new RegExp(`${LIQUID_TICKER}|${VEST_TICKER}|${DEBT_TICKER}`)
 const trHashLink = (coin, hash) =>
     !hash ? null :
     coin === 'BTC' ? <a href={`https://blockchain.info/tx/${hash}`} target="_blank"><Icon name="extlink" /></a> :

@@ -11,7 +11,7 @@ import {validate_account_name} from 'app/utils/ChainValidation';
 import { translate } from 'app/Translator';
 import { formatCoins } from 'app/utils/FormatCoins';
 import { APP_NAME, LIQUID_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, VESTING_TOKEN,
-LIQUID_TICKER, DEBT_TICKER, VEST_TICKER } from 'config/client_config';
+OWNERSHIP_TICKER, DEBT_TICKER, VEST_TICKER } from 'config/client_config';
 
 /** Warning .. This is used for Power UP too. */
 class TransferForm extends Component {
@@ -51,7 +51,7 @@ class TransferForm extends Component {
     initForm(props) {
         const insufficientFunds = (asset, amount) => {
             const balanceValue =
-                !asset || asset === LIQUID_TICKER ? props.currentAccount.get('balance') :
+                !asset || asset === OWNERSHIP_TICKER ? props.currentAccount.get('balance') :
                 asset === DEBT_TICKER ? props.currentAccount.get('sbd_balance') :
                 null
             if(!balanceValue) return false
@@ -90,7 +90,7 @@ class TransferForm extends Component {
     balanceValue() {
         const {currentAccount} = this.props
         const {asset} = this.state
-        return formatCoins(!asset || asset.value === LIQUID_TICKER ? currentAccount.get('balance') :
+        return formatCoins(!asset || asset.value === OWNERSHIP_TICKER ? currentAccount.get('balance') :
             asset.value === DEBT_TICKER ? currentAccount.get('sbd_balance') :
             null)
     }
@@ -156,7 +156,7 @@ class TransferForm extends Component {
                         {asset && <span>
                             <select {...asset.props} placeholder={translate('asset')} disabled={loading}>
                                 <option></option>
-                                <option value={LIQUID_TICKER}>{LIQUID_TOKEN}</option>
+                                <option value={OWNERSHIP_TICKER}>{LIQUID_TOKEN}</option>
                                 {/* TODO */}
                                 <option value={DEBT_TICKER}>{DEBT_TOKEN_SHORT}</option>
                             </select>
@@ -224,7 +224,7 @@ export default connect(
                 dispatch({type: 'global/GET_STATE', payload: {url: `@${username}/transfers`}}) // refresh transfer history
                 dispatch(user.actions.hideTransfer())
             }
-            const asset2 = toVesting ? LIQUID_TICKER : asset
+            const asset2 = toVesting ? OWNERSHIP_TICKER : asset
             const operation = {
                 from: username,
                 to, amount: parseFloat(amount, 10).toFixed(3) + ' ' + asset2,

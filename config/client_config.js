@@ -23,7 +23,8 @@ export const WHITEPAPER_URL = 'https://golos.io/ru--golos/@golos/golos-russkoyaz
 
 
 // these are dealing with asset types, not displaying to client, rather sending data over websocket
-export const LIQUID_TICKER = 'GOLOS'
+export const OWNERSHIP_TICKER = 'GOLOS'
+export const INVEST_TICKER = 'GP'
 export const VEST_TICKER = 'GESTS'
 export const DEBT_TICKER = 'GBG'
 export const DEBT_TOKEN_SHORT = 'GBG' // 'SD'

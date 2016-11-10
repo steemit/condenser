@@ -13,7 +13,7 @@ import {steemTip, powerTip, dollarTip, valueTip} from 'app/utils/Tips'
 import {numberWithCommas, vestingSteem} from 'app/utils/StateFunctions'
 import { translate } from 'app/Translator';
 import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
-import { APP_NAME_LATIN, LIQUID_TOKEN, DEBT_TOKEN, CURRENCY_SIGN, VESTING_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TICKER, VEST_TICKER, DEBT_TICKER } from 'config/client_config';
+import { APP_NAME_LATIN, LIQUID_TOKEN, DEBT_TOKEN, CURRENCY_SIGN, VESTING_TOKEN, DEBT_TOKEN_SHORT, OWNERSHIP_TICKER, VEST_TICKER, DEBT_TICKER } from 'config/client_config';
 
 // normalize app name
 const appName = APP_NAME_LATIN.toLowerCase()
@@ -26,7 +26,7 @@ class UserWallet extends React.Component {
         this.onShowDepositSteem = (e) => {
             e.preventDefault()
             this.trackAnalytics('buy golos button clicked in user\'s wallet')
-            this.setState({showDeposit: !this.state.showDeposit, depositType: LIQUID_TICKER})
+            this.setState({showDeposit: !this.state.showDeposit, depositType: OWNERSHIP_TICKER})
         }
         this.onShowDepositPower = (e) => {
             e.preventDefault()
@@ -96,7 +96,7 @@ class UserWallet extends React.Component {
         transfer_log.reverse();
 
         let steem_menu = [
-            { value: translate('transfer'), link: '#', onClick: showTransfer.bind( this, LIQUID_TICKER ) },
+            { value: translate('transfer'), link: '#', onClick: showTransfer.bind( this, OWNERSHIP_TICKER ) },
             { value: translate('power_up'), link: '#', onClick: showTransfer.bind( this, VEST_TICKER ) },
         ]
         let power_menu = [

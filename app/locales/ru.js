@@ -1,5 +1,5 @@
 
-import { APP_NAME, APP_URL, LANDING_PAGE_URL, LIQUID_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, VESTING_TOKEN, LIQUID_TICKER, SUPPORT_EMAIL } from 'config/client_config';
+import { APP_NAME, APP_URL, LANDING_PAGE_URL, LIQUID_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, VESTING_TOKEN, OWNERSHIP_TICKER, SUPPORT_EMAIL } from 'config/client_config';
 /**
  * see: app/locales/README.md
  */
@@ -166,7 +166,7 @@ const ru = {
 	transfer_amount_to: "Перевод {amount} на счёт",
 	recieve_amount_from: "Получено {amount} от",
 	transfer_amount_from: "Перевод {amount} со счёта",
-	transfer_amount_steem_power_to: "Перевод {amount} "+LIQUID_TICKER+" в Силу Голоса",
+	transfer_amount_steem_power_to: "Перевод {amount} "+OWNERSHIP_TICKER+" в Силу Голоса",
 	stop_power_down: "Ослабление Силы Голоса остановлено",
 	start_power_down_of: "Ослабление Силы Голоса начато с",
 	curation_reward_of_INVEST_TOKEN_for: 'Кураторские вознаграждения {reward} ' + VESTING_TOKEN + ' за',

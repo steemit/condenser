@@ -11,7 +11,7 @@ import OrderHistory from "app/components/elements/OrderHistory";
 import {Order, TradeHistory} from "app/utils/MarketClasses";
 import {roundUp, roundDown} from "app/utils/MarketUtils";
 import { translate } from 'app/Translator';
-import { LIQUID_TOKEN, LIQUID_TOKEN_UPPERCASE, DEBT_TOKEN_SHORT, CURRENCY_SIGN, LIQUID_TICKER, DEBT_TICKER } from 'config/client_config';
+import { LIQUID_TOKEN, LIQUID_TOKEN_UPPERCASE, DEBT_TOKEN_SHORT, CURRENCY_SIGN, OWNERSHIP_TICKER, DEBT_TICKER } from 'config/client_config';
 import { localizedCurrency, localCurrencySymbol } from 'app/components/elements/LocalizedCurrency';
 
 class Market extends React.Component {
@@ -60,7 +60,7 @@ class Market extends React.Component {
         const amount_to_sell = parseFloat(ReactDOM.findDOMNode(this.refs.buySteem_total).value)
         const min_to_receive = parseFloat(ReactDOM.findDOMNode(this.refs.buySteem_amount).value)
         const price = (amount_to_sell / min_to_receive).toFixed(6)
-        placeOrder(owner, [amount_to_sell, DEBT_TICKER].join(" "),     [min_to_receive, LIQUID_TICKER].join(" "), ["$", price, "/", LIQUID_TICKER].join(""), (msg) => {
+        placeOrder(owner, [amount_to_sell, DEBT_TICKER].join(" "),     [min_to_receive, OWNERSHIP_TICKER].join(" "), ["$", price, "/", OWNERSHIP_TICKER].join(""), (msg) => {
             this.props.notify(msg)
             this.props.reload(owner)
         })
@@ -73,7 +73,7 @@ class Market extends React.Component {
         const min_to_receive = parseFloat(ReactDOM.findDOMNode(this.refs.sellSteem_total).value)
         const amount_to_sell = parseFloat(ReactDOM.findDOMNode(this.refs.sellSteem_amount).value)
         const price = (min_to_receive / amount_to_sell).toFixed(6)
-        placeOrder(owner, [amount_to_sell, LIQUID_TICKER].join(" "), [min_to_receive, DEBT_TICKER].join(" "), ["$", price, "/", LIQUID_TICKER].join(""), (msg) => {
+        placeOrder(owner, [amount_to_sell, OWNERSHIP_TICKER].join(" "), [min_to_receive, DEBT_TICKER].join(" "), ["$", price, "/", OWNERSHIP_TICKER].join(""), (msg) => {
             this.props.notify(msg)
             this.props.reload(owner)
         })
@@ -216,7 +216,7 @@ class Market extends React.Component {
 
         function normalizeOpenOrders(open_orders) {
             return open_orders.map( o => {
-                const type = o.sell_price.base.indexOf(LIQUID_TICKER) > 0 ? 'ask' : 'bid'
+                const type = o.sell_price.base.indexOf(OWNERSHIP_TICKER) > 0 ? 'ask' : 'bid'
                 //{orderid: o.orderid,
                 // created: o.created,
                 return {...o,
@@ -461,7 +461,7 @@ class Market extends React.Component {
                                             this.refs.sellSteem_amount.value = amount
                                             if(price >= 0) this.refs.sellSteem_total.value = roundDown(price * parseFloat(amount), 3)
                                             validateSellSteem()
-                                        }}>{translate('available')}:</a> {account.balance.replace(LIQUID_TICKER, LIQUID_TOKEN_UPPERCASE)}</small></div>}
+                                        }}>{translate('available')}:</a> {account.balance.replace(OWNERSHIP_TICKER, LIQUID_TOKEN_UPPERCASE)}</small></div>}
                                     <div><small><a href="#" onClick={e => {e.preventDefault()
                                         const amount = parseFloat(this.refs.sellSteem_amount.value)
                                         const price = ticker.highest_bid
@@ -561,7 +561,7 @@ module.exports = {
             min_to_receive = min_to_receive.replace(min_to_receive.split(' ')[0],
                 String(parseFloat(min_to_receive).toFixed(3)))
 
-            const regex = new RegExp(LIQUID_TICKER)
+            const regex = new RegExp(OWNERSHIP_TICKER)
             const confirmStr = translate(
                                 // which translated string to use
                                 regex.test(amount_to_sell)

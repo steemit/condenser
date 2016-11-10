@@ -5,7 +5,7 @@ import TransferHistoryRow from 'app/components/cards/TransferHistoryRow';
 import {numberWithCommas, vestsToSp, assetFloat} from 'app/utils/StateFunctions'
 import { translate } from 'app/Translator';
 import { APP_NAME, DEBT_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TOKEN, CURRENCY_SIGN,
-VESTING_TOKEN, LIQUID_TICKER, VEST_TICKER } from 'config/client_config';
+VESTING_TOKEN, OWNERSHIP_TICKER, VEST_TICKER } from 'config/client_config';
 
 class CurationRewards extends React.Component {
     constructor() {
@@ -13,7 +13,7 @@ class CurationRewards extends React.Component {
         this.state = {historyIndex: 0}
         this.onShowDeposit = () => {this.setState({showDeposit: !this.state.showDeposit})}
         this.onShowDepositSteem = () => {
-            this.setState({showDeposit: !this.state.showDeposit, depositType: LIQUID_TICKER})
+            this.setState({showDeposit: !this.state.showDeposit, depositType: OWNERSHIP_TICKER})
         }
         this.onShowDepositPower = () => {
             this.setState({showDeposit: !this.state.showDeposit, depositType: VEST_TICKER})

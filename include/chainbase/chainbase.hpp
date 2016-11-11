@@ -773,42 +773,44 @@ namespace chainbase {
          template< typename Lambda >
          auto with_read_lock( Lambda&& callback, uint64_t wait_micro = 1000000 ) -> decltype( (*(Lambda*)nullptr)() )
          {
-            //if( !wait_micro )
-            {
-               read_lock lock( _rw_manager->current_lock() );
-               return callback();
-            }
-            /*else
-            {
-               read_lock lock( _rw_manager->current_lock(), bip::defer_lock_type() );
-               if( !lock.timed_lock( boost::chrono::system_clock::now() + boost::chrono::microseconds( wait_micro ) ) )
-                  BOOST_THROW_EXCEPTION( std::runtime_error( "unable to acquire lock" ) );
+            read_lock lock( _rw_manager->current_lock(), bip::defer_lock_type() );
 
-               return callback();
-            }*/
+            if( !wait_micro )
+            {
+               lock.lock();
+            }
+            else
+            {
+
+               if( !lock.timed_lock( boost::posix_time::microsec_clock::local_time() + boost::posix_time::microseconds( wait_micro ) ) )
+                  BOOST_THROW_EXCEPTION( std::runtime_error( "unable to acquire lock" ) );
+            }
+
+            return callback();
          }
 
          template< typename Lambda >
-         void with_write_lock( Lambda&& callback, uint64_t wait_micro = 1000000 )
+         auto with_write_lock( Lambda&& callback, uint64_t wait_micro = 1000000 ) -> decltype( (*(Lambda*)nullptr)() )
          {
             if( _read_only )
                BOOST_THROW_EXCEPTION( std::logic_error( "cannot acquire write lock on read-only process" ) );
 
-            write_lock lock( _rw_manager->current_lock() );
-            /*if( !wait_micro )
+            write_lock lock( _rw_manager->current_lock(), boost::defer_lock_t() );
+
+            if( !wait_micro )
+            {
                lock.lock();
+            }
             else
             {
-               lock.try_lock_for( boost::chrono::microseconds( wait_micro ) );
-               while( !lock.owns_lock() )
+               while( !lock.timed_lock( boost::posix_time::microsec_clock::local_time() + boost::posix_time::microseconds( wait_micro ) ) )
                {
                   _rw_manager->next_lock();
                   lock = write_lock( _rw_manager->current_lock(), boost::defer_lock_t() );
-                  lock.try_lock_for( boost::chrono::microseconds( wait_micro ) );
                }
-            }*/
+            }
 
-            callback();
+            return callback();
          }
 
       private:

@@ -13,8 +13,13 @@ const print = getLogger('API - ico').print
 export default function useIcoApi(app) {
   const router = koa_router();
   app.use(router.routes());
-
   const koaBody = koa_body();
+
+  router.get('/api/v1/get_raised_amounts', function * () {
+    console.log("HERE");
+    this.body = JSON.stringify({status: 'ok', 'Nov_09': 1, 'Nov_10': 2, 'Nov_11': 3});
+  })
+
   router.post('/api/v1/generate_ico_address', koaBody, function * () {
     console.log(destinationBtcAddress);
     if (rateLimitReq(this, this.req))

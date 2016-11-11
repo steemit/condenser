@@ -15,7 +15,6 @@ import { calculateCurrentStage, currentStage } from '../elements/LandingCountDow
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Tooltip from 'app/components/elements/Tooltip';
 import roundPrecision from 'round-precision'
-//import {test as o2jtest} from 'shared/clash/object2json'
 
 const satoshiPerCoin=100000000;
 
@@ -63,6 +62,7 @@ class BuyGolos extends React.Component {
 	state = {
 		icoAddress: '',
 		transactions: [],
+		fundsRaisedByDate: {},
         error: '',
 		loading: false,
 		checkboxesClicked: [false, false, false],
@@ -180,6 +180,22 @@ class BuyGolos extends React.Component {
 				balanceIncludingUnconfirmed: icoBalanceObject.final_balance,
 				unconfirmedBalanceOnly: icoBalanceObject.unconfirmed_balance,
 				unconfirmedTxsCount: icoBalanceObject.unconfirmed_n_tx
+			});
+			fetch('/api/v1/get_raised_amounts').then(function(d) { return d.json() })
+			.then((data) => {
+				console.log(data);
+				if (data.status !== 'ok') {
+					console.log("fetching intermediate raised amounts failed");
+					return;
+				}
+				let diffAmounts = {}
+				diffAmounts['Nov_09'] = data['Nov_09'];
+				diffAmounts['Nov_10'] = data['Nov_10'] - data['Nov_09'];
+				diffAmounts['Nov_11'] = data['Nov_11'] - data['Nov_10'];
+				console.log(diffAmounts);
+			})
+			.catch(error => {
+				console.log("fetching intermediate raised amounts failed")
 			})
 		})
 		.catch(error => {
@@ -187,22 +203,8 @@ class BuyGolos extends React.Component {
 			// this.setState({ error: error.reason })
 			console.error('transactions fetch failed', error)
 		})
-	}
 
-	testFormSubmit() {
-		console.log(this.icoAddress)
-		console.log(this.props)
-		console.log("is own: " + this.state.isOwnAccount)
 
-		const k = "foo"
-		const v = "bar"
-		const p = ""
-		const u = "tester"
-		let meta = o2j.ifStringParseJSON(this.props.metaData);
-    if (typeof meta==='string')
-      meta = {created_at: "Genesis"}
-		meta[k] = v;
-		meta = o2j.ifObjectToJSON(meta);
 	}
 
 	render() {

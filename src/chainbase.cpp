@@ -30,7 +30,7 @@ namespace chainbase {
       bool                    windows = false;
    };
 
-   void database::open( const bfs::path& dir, int flags, uint64_t shared_file_size ) {
+   void database::open( const bfs::path& dir, uint32_t flags, uint64_t shared_file_size ) {
 
       bool write = flags & database::read_write;
 
@@ -42,7 +42,7 @@ namespace chainbase {
       if( _data_dir != dir ) close();
 
       _data_dir = dir;
-      auto abs_path = bfs::absolute( dir / "shared_memory" );
+      auto abs_path = bfs::absolute( dir / "shared_memory.bin" );
 
       if( bfs::exists( abs_path ) )
       {
@@ -53,10 +53,6 @@ namespace chainbase {
             {
                if( !bip::managed_mapped_file::grow( abs_path.generic_string().c_str(), shared_file_size - existing_file_size ) )
                   BOOST_THROW_EXCEPTION( std::runtime_error( "could not grow database file to requested size." ) );
-            }
-            else
-            {
-               shared_file_size = existing_file_size;
             }
 
             _segment.reset( new bip::managed_mapped_file( bip::open_only,
@@ -69,7 +65,6 @@ namespace chainbase {
             _read_only = true;
          }
 
-         _rw_manager = _segment->find< read_write_mutex_manager >( "rw_manager" ).first;
          auto env = _segment->find< environment_check >( "environment" );
          if( !env.first || !( *env.first == environment_check()) ) {
             BOOST_THROW_EXCEPTION( std::runtime_error( "database created by a different compiler, build, or operating system" ) );
@@ -78,26 +73,58 @@ namespace chainbase {
          _segment.reset( new bip::managed_mapped_file( bip::create_only,
                                                        abs_path.generic_string().c_str(), shared_file_size
                                                        ) );
-         _rw_manager = _segment->find_or_construct< read_write_mutex_manager >( "rw_manager" )();
          _segment->find_or_construct< environment_check >( "environment" )();
+      }
+
+
+      abs_path = bfs::absolute( dir / "shared_memory.meta" );
+
+      if( bfs::exists( abs_path ) )
+      {
+         _meta.reset( new bip::managed_mapped_file( bip::open_only, abs_path.generic_string().c_str()
+                                                    ) );
+
+         _rw_manager = _meta->find< read_write_mutex_manager >( "rw_manager" ).first;
+         if( !_rw_manager )
+            BOOST_THROW_EXCEPTION( std::runtime_error( "could not find read write lock manager" ) );
+      }
+      else
+      {
+         _meta.reset( new bip::managed_mapped_file( bip::create_only,
+                                                    abs_path.generic_string().c_str(), sizeof( read_write_mutex_manager ) * 2
+                                                    ) );
+
+         _rw_manager = _meta->find_or_construct< read_write_mutex_manager >( "rw_manager" )();
+      }
+
+      if( write )
+      {
+         _flock = bip::file_lock( abs_path.generic_string().c_str() );
+         if( !_flock.try_lock() )
+            BOOST_THROW_EXCEPTION( std::runtime_error( "could not gain write access to the shared memory file" ) );
       }
    }
 
    void database::flush() {
       if( _segment )
          _segment->flush();
+      if( _meta )
+         _meta->flush();
    }
 
    void database::close()
    {
       _segment.reset();
+      _meta.reset();
       _data_dir = bfs::path();
    }
 
    void database::wipe( const bfs::path& dir )
    {
       _segment.reset();
-      bfs::remove_all( dir / "shared_memory" );
+      _meta.reset();
+      bfs::remove_all( dir / "shared_memory.bin" );
+      bfs::remove_all( dir / "shared_memory.meta" );
       _data_dir = bfs::path();
       _index_list.clear();
       _index_map.clear();

@@ -11,7 +11,7 @@ import Reveal from 'react-foundation-components/lib/global/reveal'
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {steemTip, powerTip, dollarTip, valueTip} from 'app/utils/Tips'
 import {numberWithCommas, vestingSteem} from 'app/utils/StateFunctions'
-import { translate } from 'app/Translator';
+import { translate, translateNumber } from 'app/Translator';
 import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 import { APP_NAME_LATIN, LIQUID_TOKEN, DEBT_TOKEN, CURRENCY_SIGN, VESTING_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TICKER, VEST_TICKER, DEBT_TICKER } from 'config/client_config';
 
@@ -124,9 +124,9 @@ class UserWallet extends React.Component {
             </Reveal>
         </div>
 
-        const steem_balance_str = numberWithCommas(balance_steem.toFixed(3)) // formatDecimal(balance_steem, 3)
-        const power_balance_str = numberWithCommas(vesting_steem) // formatDecimal(vesting_steem, 3)
-        const sbd_balance_str = numberWithCommas(sbd_balance.toFixed(3) + ' ' + DEBT_TICKER) // formatDecimal(account.sbd_balance, 3)
+        const steem_balance_str = translateNumber(balance_steem.toFixed(3)) // formatDecimal(balance_steem, 3)
+        const power_balance_str = translateNumber(vesting_steem) // formatDecimal(vesting_steem, 3)
+        const sbd_balance_str = translateNumber(sbd_balance.toFixed(3)) + ' ' + DEBT_TICKER // formatDecimal(account.sbd_balance, 3)
         return (<div className="UserWallet">
             <div className="row">
                 <div className="column small-12 medium-8">

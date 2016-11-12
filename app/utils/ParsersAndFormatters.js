@@ -59,6 +59,10 @@ export const repLog10 = rep2 => {
 }
 
 // this function searches for right translation of provided error (usually from back-end)
+/*
+    NOTE: some of the errors come from client (for example from UserSaga.js)
+    They are not removed because there may be duplicates of them coming from server
+*/
 export function translateError(string) {
     if (typeof(string) != 'string') return string
     switch (string) {

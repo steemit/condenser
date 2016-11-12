@@ -58,7 +58,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                         <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
                     </li>
                     <li className={lcn}>
-                        <a className="button success" href="#CountDowns">Краудсейл</a>
+                        <Link className="button success" to="/ico">Краудсейл</Link>
                     </li>
                     <li className={lcn}>
                         <a href="#what-is-golos">Видео</a>
@@ -129,7 +129,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                     <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
                 </li>
                 <li className={lcn + ' buttons'}>
-                    <a href="/ico" className="button success">Краудсейл</a>
+                    <Link to="/ico" className="button success">Краудсейл</Link>
                 </li>
                 {/* search is currently unavailable */}
                 {/* <li className={lcn}><a href="/static/search.html" title={search}>{vertical ? <span>{search}</span> : <Icon name="search" />}</a></li> */}
@@ -160,7 +160,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                                 <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
                             </li>
                             <li className={lcn}>
-                                <a className="button success" href="#CountDowns">Краудсейл</a>
+                                <Link className="button success" to="/ico">Краудсейл</Link>
                             </li>
                             <li className={lcn}>
                                 <a href="#what-is-golos">Видео</a>
@@ -193,7 +193,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                     <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
                 </li>
                 <li className={lcn + ' buttons'}>
-                    <a href={`/ico`} className="button success">Краудсейл</a>
+                    <Link to="/ico" className="button success">Краудсейл</Link>
                 </li>
                 {/* search is currently unavailable */}
                 {/* {!vertical && <li><a href="/static/search.html" title="Поиск"><Icon name="search" /></a></li>} */}
@@ -211,7 +211,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                         <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
                     </li>
                     <li className={lcn}>
-                        <a className="button success" href="#CountDowns">Краудсейл</a>
+                        <Link className="button success" to="/ico">Краудсейл</Link>
                     </li>
                     <li className={lcn}>
                         <a href="#what-is-golos">Видео</a>
@@ -242,7 +242,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                     <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
                 </li>
                 <li className={lcn + ' buttons'}>
-                    <a href={`/ico`} className="button success">Краудсейл</a>
+                    <Link to="/ico" className="button success">Краудсейл</Link>
                 </li>
                 {/* search is currently unavailable */}
                 {/* {!vertical && <li><a href="/static/search.html" title="Поиск"><Icon name="search" /></a></li>} */}

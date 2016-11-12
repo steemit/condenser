@@ -567,6 +567,9 @@ const ru = {
 	wiki: 'Вики',
 	comment_is_nested_5_posts_deep: 'Комментарий слишком глубоко в цепочке. Максимум вложенности - 5',
 	you_may_only_comment_once_every_20_seconds: 'Вы можете комментировать не чаще каждых 20 секунд',
+	// this is from UserSaga.js
+	hello_your_account_may_have_been_compromised_we_are_working_on_restoring_an_access: 'Здраствуйте. Ваш аккаунт был скомпромитирован. Мы работаем над восстановлением доступа к вашему аккаунту. Пожалуйста, отправьте имейл на ' + SUPPORT_EMAIL + '.',
+	this_login_gives_owner_or_active_permissions_and_should_not_be_used_here: 'Этот логин дает владельческие и активные разрешения, и не должен использоваться здесь. Пожалуйста, предоставьте логин только для постинга.',
 }
 
 export { ru }

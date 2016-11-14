@@ -29,6 +29,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, vertic
     const account_link = `/@${username}`;
     const comments_link = `/@${username}/comments`;
     const reset_password_link = `/@${username}/password`;
+    const settings_link = `/@${username}/settings`;
     if (loggedIn) { // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!
         const user_menu = [
             {link: feed_link, value: 'Feed', addon: <NotifiCounter fields="feed" />},
@@ -37,6 +38,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, vertic
             {link: replies_link, value: 'Replies', addon: <NotifiCounter fields="comment_reply" />},
             {link: wallet_link, value: 'Wallet', addon: <NotifiCounter fields="follow,send,receive,account_update" />},
             {link: reset_password_link, value: 'Change Password'},
+            {link: settings_link, value: 'Settings'},
             loggedIn ?
                 {link: '#', onClick: logout, value: 'Logout'} :
                 {link: '#', onClick: showLogin, value: 'Login'}

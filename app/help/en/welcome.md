@@ -114,7 +114,7 @@ These are various ways to sort blog posts.
 
 **Comments** - Here is where you go to see all of the comments you have made to other's posts and comments.
 
-**Replies** - Here is where you go to see all replies other users have made to your posts and comments. Check here often to see if anyone has responded to you. (There are currently no notifications to tell you when someone responds to you.)
+**Replies** - Here is where you go to see all replies other users have made to your posts and comments. Check here often to see if anyone has responded to you.
 
 **Wallet** - Here is where you go to see your wallet balances, make transfers, exchange STEEM/SBD, and Power Up.
 
@@ -191,10 +191,6 @@ You can see some examples of what other people have done [here](https://steemit.
 It is not required, but a lot of users will take a picture of themselves holding up a piece of paper that says "Steemit" with the current date, so we know you are a real person.
 
 It is not required either, but if you have other social media accounts (Twitter, Facebook, etc.) you can help the community verify that you are who you say you are, by posting the link to your introduceyourself post with those accounts. If you are claiming to be someone famous, this is pretty much expected.
-
-### 4. Remember to check your "Replies" page to see if there are any replies to your posts and comments.
-
-Currently there are no notifications when you get a message, so you will not know if you received any replies unless you check.
 
 ***
 

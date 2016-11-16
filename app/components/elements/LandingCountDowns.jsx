@@ -224,13 +224,14 @@ export default class LandingCountDowns extends React.Component {
 								}
 
 								<p>
-									<small>Текущий бонус <span className="red"> + {state.currentBonus}%</span></small>
+									<small>Текущий бонус <span className="red"> + {dates[1].bonus}%</span></small>
 								</p>
 							</div>
 							<div className="small-12 medium-4 columns">
 								<CountDown
-									title={`Бонус уменьшится: до ${state.nextBonus}%`}
-									date={currentStage.date}
+                  title={`Бонус уменьшится: до ${dates[2].bonus}%`}
+									// title={`Бонус уменьшится: до ${state.nextBonus}%`}
+									date={dates[1].date}
 									countFrom={previousStage.date.getTime()}
 									displayWhenZero
 								/>

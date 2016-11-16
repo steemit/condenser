@@ -140,6 +140,7 @@ async function universalRender({ location, initial_state, offchain }) {
         // to resolve data correctly
         if (url.indexOf('/curation-rewards') !== -1) url = url.replace(/\/curation-rewards$/, '/transfers');
         if (url.indexOf('/author-rewards') !== -1) url = url.replace(/\/author-rewards$/, '/transfers');
+        if (url.indexOf('/resteemed') !== -1) url = url.replace(/\/resteemed$/, '');
 
         onchain = await Apis.instance().db_api.exec('get_state', [url]);
 

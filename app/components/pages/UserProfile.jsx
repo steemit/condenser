@@ -43,6 +43,7 @@ export default class UserProfile extends React.Component {
     loadMore(last_post, category) {
         const {accountname} = this.props.routeParams
         if (!last_post) return;
+        if (category == 'resteemed') category = 'blog';
 
         let order;
         switch(category) {
@@ -183,7 +184,7 @@ export default class UserProfile extends React.Component {
            else {
               tab_content = (<center><LoadingIndicator type="circle" /></center>);
            }
-        } else if(!section || section === 'blog') {
+        } else if( section === 'blog' ) {
             if (account.blog) {
                 const emptyText = isMyAccount ? <div>
                     Looks like you haven't posted anything yet.<br />
@@ -197,6 +198,23 @@ export default class UserProfile extends React.Component {
                     posts={account.blog}
                     loading={fetching}
                     category="blog"
+                    loadMore={this.loadMore}
+                    showSpam />;
+            } else {
+                tab_content = (<center><LoadingIndicator type="circle" /></center>);
+            }
+        } else if( section === 'resteemed' ) {
+            if (account.blog) {
+                const emptyText = isMyAccount ? <div>
+                    Looks like you haven't resteemed anything yet.
+                </div>:
+                    <div>Looks like {account.name} hasn't resteemed anything yet.</div>;
+                tab_content = <PostsList
+                    emptyText={emptyText}
+                    account={account.name}
+                    posts={account.blog}
+                    loading={fetching}
+                    category="resteemed"
                     loadMore={this.loadMore}
                     showSpam />;
             } else {
@@ -273,6 +291,7 @@ export default class UserProfile extends React.Component {
             <div className="columns small-10 medium-12 medium-expand">
                 <ul className="menu" style={{flexWrap: "wrap"}}>
                     <li><Link to={`/@${accountname}`} activeClassName="active">{translate('blog')}</Link></li>
+                    <li><Link to={`/@${accountname}/resteemed`} activeClassName="active">Resteemed</Link></li>
                     <li><Link to={`/@${accountname}/comments`} activeClassName="active">{translate('comments')}</Link></li>
                     <li><Link to={`/@${accountname}/recent-replies`} activeClassName="active">
                         {translate('replies')} {isMyAccount && <NotifiCounter fields="comment_reply"/>}

@@ -272,7 +272,7 @@ export default class LandingCountDowns extends React.Component {
 								<p>Социальные сети: </p>
 								<ul>
 									<li>
-										<a href="facebook.com" target="blank"><img src="images/landing/fb.jpg" /></a>
+										<a href="https://www.facebook.com/golosru" target="blank"><img src="images/landing/fb.jpg" /></a>
 									</li>
 									<li>
 										<a href="https://twitter.com/goloschain" target="blank"><img src="images/landing/tw.jpg" /></a>

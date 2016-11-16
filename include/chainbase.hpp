@@ -31,6 +31,30 @@ namespace chainbase {
 
    typedef bip::basic_string< char, std::char_traits< char >, allocator< char > > shared_string;
 
+   struct strcmp_less
+   {
+      bool operator()( const shared_string& a, const shared_string& b )const
+      {
+         return less( a.c_str(), b.c_str() );
+      }
+
+      bool operator()( const shared_string& a, const std::string& b )const
+      {
+         return less( a.c_str(), b.c_str() );
+      }
+
+      bool operator()( const std::string& a, const shared_string& b )const
+      {
+         return less( a.c_str(), b.c_str() );
+      }
+      private:
+         inline bool less( const char* a, const char* b )const
+         {
+            return std::strcmp( a, b ) < 0;
+         }
+   };
+
+
    class database;
 
    /**

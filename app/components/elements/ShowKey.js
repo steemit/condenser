@@ -75,11 +75,11 @@ class ShowKey extends Component {
 
 
         return (<div className="row">
-            <div className="column small-10">
+            <div className="column small-12 medium-10">
                 {/* Keep this as wide as possible, check print preview makes sure WIF it not cut off */}
                 <span {...cmpProps}>{show ? wif : pubkey}</span>
             </div>
-            <div className="column small-2 noPrint">
+            <div className="column small-12 medium-2 noPrint">
                 {keyLink}
             </div>
             {/*<div className="column small-1">

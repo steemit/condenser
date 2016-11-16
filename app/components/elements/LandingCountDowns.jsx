@@ -224,7 +224,7 @@ export default class LandingCountDowns extends React.Component {
 								}
 
 								<p>
-									<small>Текущий бонус <span className="red"> + {state.currentBonus}%</span></small>
+									<small>Текущий бонус <span className="red"> + {/*state.currentBonus*/}20%</span></small>
 								</p>
 							</div>
 							<div className="small-12 medium-4 columns">

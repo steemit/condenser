@@ -19,7 +19,7 @@ export default function useIcoApi(app) {
     console.log("HERE");
     let responce = this;
     try {
-      const data = yield models.List.findAll({kk: {$like:"icoBalance_Nov_08"}});
+      const data = yield models.List.findAll({kk: {$like:"icoBalance_Nov"}});
       this.body = JSON.stringify({status: 'ok', data: data});
     } catch (error) {
         console.error('Error in /get_raised_amounts api call', this.session.uid, error.toString());

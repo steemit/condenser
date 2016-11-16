@@ -181,13 +181,13 @@ class App extends React.Component {
                         </a>
                     </li>
                     <li>
-                        <a href="http://steemtools.com/" onClick={this.navigate}>
-                            {translate('APP_NAME_app_center')}
+                        <a href="http://steemtools.com/" onClick={this.navigate} target="_blank" rel="noopener noreferrer">
+                            {translate('APP_NAME_app_center')}&nbsp;<Icon name="extlink" />
                         </a>
                     </li>
                     <li>
                         <a href="/market" onClick={this.navigate}>
-                            {translate("market")}
+                            {translate("currency_market")}
                         </a>
                     </li>
                     <li>
@@ -207,12 +207,12 @@ class App extends React.Component {
                     </li>
                     <li>
                         <a href="https://steemit.github.io/steemit-docs/" target="_blank" rel="noopener noreferrer">
-                            {translate("steemit_api_docs")}
+                            {translate("steemit_api_docs")}&nbsp;<Icon name="extlink" />
                         </a>
                     </li>
                     <li className="last">
                         <a href="/~witnesses" onClick={this.navigate}>
-                            {translate("witnesses")}
+                            {translate("vote_for_witnesses")}
                         </a>
                     </li>
                 </ul>

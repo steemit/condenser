@@ -139,7 +139,10 @@ class UserWallet extends React.Component {
             <br />
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
-                    <span className="uppercase">{LIQUID_TOKEN}</span>
+                    <span className="uppercase">
+                      <img src="/images/golos-badge.jpg" width="36px" height="36px" alt="символ Голоса" />
+                      {LIQUID_TOKEN}
+                    </span>
                     <br />
                     <span className="secondary">
                         {/* not using steemTip because translate strings may be undefined on load */}
@@ -156,7 +159,10 @@ class UserWallet extends React.Component {
             </div>
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
-                    <span className="uppercase">{VESTING_TOKEN}</span>
+                    <span className="uppercase">
+                      <img src="/images/golospower-badge.jpg" width="36px" height="36px" alt="символ Силы Голоса" />
+                      {VESTING_TOKEN}
+                    </span>
                     <br />
                     <span className="secondary">
                         {/* not using steemTip because translate strings may be undefined on load */}
@@ -173,7 +179,10 @@ class UserWallet extends React.Component {
             </div>
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
-                    <span className="uppercase">{DEBT_TOKEN}</span>
+                    <span className="uppercase">
+                      <img src="/images/zolotoy-badge.jpg" width="32px" height="32px" alt="символ Золотого" />
+                      {DEBT_TOKEN}
+                    </span>
                     <br />
                     <span className="secondary">{translate('tokens_worth_about_AMOUNT_of_LIQUID_TOKEN', {amount: localizedCurrency(1)})}</span>
                 </div>

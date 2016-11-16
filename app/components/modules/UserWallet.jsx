@@ -161,10 +161,10 @@ class UserWallet extends React.Component {
 
         return (<div className="UserWallet">
             <div className="row">
-                <div className="column">
+                <div className="columns small-10 medium-12 medium-expand">
                     {isMyAccount ? <WalletSubMenu account_name={account.name} /> : <div><br /><h4>BALANCES</h4><br /></div>}
                 </div>
-                <div className="column shrink">
+                <div className="columns shrink">
                     {isMyAccount && <button className="UserWallet__buysp button hollow" onClick={this.onShowDepositSteem}>Buy Steem or Steem Power</button>}
                 </div>
             </div>

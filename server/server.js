@@ -20,8 +20,6 @@ import minimist from 'minimist';
 import Grant from 'grant-koa';
 import config from '../config';
 
-import {githash} from 'config/last-build';
-
 const grant = new Grant(config.grant);
 // import uploadImage from 'server/upload-image' //medium-editor
 

@@ -19,7 +19,6 @@ import { translate } from '../Translator.js';
 import { SEGMENT_ANALYTICS_KEY, LANDING_PAGE_URL, WHITEPAPER_URL, VEST_TICKER } from 'config/client_config';
 import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 import RocketChat from 'app/components/modules/RocketChat'
-import {githash} from 'config/last-build'
 
 class App extends React.Component {
     constructor(props) {
@@ -256,7 +255,6 @@ class App extends React.Component {
                 {lp ? <LpFooter /> : null}
 
             </div>
-            <div style={{color: '#00ff00',position: 'fixed', bottom: '1px', left: '3px', fontSize: '70%'}}>git client# {githash} </div>
             <Dialogs />
             <Modals />
         </div>

@@ -181,21 +181,25 @@ class BuyGolos extends React.Component {
 				unconfirmedBalanceOnly: icoBalanceObject.unconfirmed_balance,
 				unconfirmedTxsCount: icoBalanceObject.unconfirmed_n_tx
 			});
+
 			fetch('/api/v1/get_raised_amounts').then(function(d) { return d.json() })
 			.then((data) => {
-				console.log(data);
+				console.log('received data', data);
 				if (data.status !== 'ok') {
 					console.log("fetching intermediate raised amounts failed");
 					return;
+				} else {
+					data = data.data;
 				}
-				let diffAmounts = {}
-				diffAmounts['Nov_09'] = data['Nov_09'];
-				diffAmounts['Nov_10'] = data['Nov_10'] - data['Nov_09'];
-				diffAmounts['Nov_11'] = data['Nov_11'] - data['Nov_10'];
-				console.log(diffAmounts);
+				data = data.map(function(item){
+					let ret = {}; ret[item.kk] = item;
+					return ret;
+				});
+				console.log('transformed data', data)
 			})
 			.catch(error => {
-				console.log("fetching intermediate raised amounts failed")
+				console.log("fetching intermediate raised amounts failed");
+				throw(error);
 			})
 		})
 		.catch(error => {

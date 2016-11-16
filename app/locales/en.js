@@ -305,9 +305,9 @@ const en = 	{
 		other {{followerCount} followers}
 	}`,
 	followed_count: `{followingCount, plural,
-		=0 {not followed anybody}
-		one {1 followed}
-		other {{followingCount} followed}
+		=0 {not following anybody}
+		one {1 following}
+		other {{followingCount} following}
 	}`,
 	vote_count: `{voteCount, plural,
 		=0 {no votes}
@@ -524,6 +524,7 @@ const en = 	{
 	choose_currency: 'Choose currency',
 	crowdsale: 'Crowdsale',
 	followers: 'Followers',
+	following: 'Following',
 	// errors
 	cannot_increase_reward_of_post_within_the_last_minute_before_payout: 'Cannot increase reward of post within the last minute before payout',
 	vote_currently_exists_user_must_be_indicate_a_to_reject_witness: 'vote currently exists, user must be indicate a desire to reject witness',

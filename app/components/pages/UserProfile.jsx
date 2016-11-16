@@ -186,9 +186,10 @@ export default class UserProfile extends React.Component {
         } else if(!section || section === 'blog') {
             if (account.blog) {
                 const emptyText = isMyAccount ? <div>
-                    Looks like you haven't posted anything yet.<br />
+                    Looks like you haven't posted anything yet.<br /><br />
                     <Link to="/submit.html">Submit a Story</Link><br />
-                    <a href="/steemit/@thecryptofiend/the-missing-faq-a-beginners-guide-to-using-steemit">Read The Beginner's Guide</a>
+                    <a href="/steemit/@thecryptofiend/the-missing-faq-a-beginners-guide-to-using-steemit">Read The Beginner's Guide</a><br />
+                    <a href="/welcome">Read The Steemit Welcome Guide</a>
                 </div>:
                     <div>{translate('user_hasnt_started_bloggin_yet', {name})}</div>;
                 tab_content = <PostsList

@@ -171,6 +171,11 @@ class App extends React.Component {
                         </a>
                     </li>
                     <li>
+                        <a href="/welcome" onClick={this.navigate}>
+                            Welcome
+                        </a>
+                    </li>
+                    <li>
                         <a href="/faq.html" onClick={this.navigate}>
                             FAQ
                         </a>

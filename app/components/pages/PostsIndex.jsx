@@ -73,9 +73,10 @@ class PostsIndex extends React.Component {
             const isMyAccount = this.props.current_user && this.props.current_user.get('username') === account_name;
             if (isMyAccount) {
                 emptyText = <div>
-                    Looks like you haven't followed anything yet.<br />
+                    Looks like you haven't followed anything yet.<br /><br />
                     <Link to="/trending">Explore Steemit</Link><br />
-                    <a href="/steemit/@thecryptofiend/the-missing-faq-a-beginners-guide-to-using-steemit">Read The Beginner's Guide</a>
+                    <a href="/steemit/@thecryptofiend/the-missing-faq-a-beginners-guide-to-using-steemit">Read The Beginner's Guide</a><br />
+                    <a href="/welcome">Read The Steemit Welcome Guide</a>
                 </div>;
                 markNotificationRead = <MarkNotificationRead fields="feed" account={account_name} />
             } else {

@@ -170,11 +170,11 @@ export default class UserProfile extends React.Component {
         else if( section === 'comments' && account.post_history ) {
            // NOTE: `posts` key will be renamed to `comments` (https://github.com/steemit/steem/issues/507)
            //   -- see also GlobalReducer.js
-           if( account.posts )
+           if( account.posts || account.comments )
            {
               tab_content = <PostsList
                   emptyText={translate('user_hasnt_made_any_posts_yet', {name})}
-                  posts={account.posts}
+                  posts={account.posts || account.comments}
                   loading={fetching}
                   category="comments"
                   loadMore={this.loadMore}

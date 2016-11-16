@@ -21,8 +21,6 @@ import Grant from 'grant-koa';
 import config from '../config';
 import {APP_NAME} from 'config/client_config'
 
-import {githash} from 'config/last-build';
-
 const grant = new Grant(config.grant);
 // import uploadImage from 'server/upload-image' //medium-editor
 
@@ -41,11 +39,6 @@ app.use(flash({key: 'flash'}));
 // redirect to home page if known account
 // remember ch, cn, r url params in the session and remove them from url
 app.use(function *(next) {
-    if (this.method === 'GET' && this.url === '/' && this.session.a) {
-        this.status = 301;
-        this.redirect('/ico'); // LANDING this.redirect(`/@${this.session.a}/feed`);
-        return;
-    }
     if (this.method === 'GET' && /\?[^\w]*(ch=|cn=|r=)/.test(this.url)) {
         let redir = this.url.replace(/((ch|cn|r)=[^&]+)/gi, r => {
             const p = r.split('=');

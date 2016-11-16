@@ -570,6 +570,12 @@ const ru = {
 	// this is from UserSaga.js
 	hello_your_account_may_have_been_compromised_we_are_working_on_restoring_an_access: 'Здраствуйте. Ваш аккаунт был скомпромитирован. Мы работаем над восстановлением доступа к вашему аккаунту. Пожалуйста, отправьте имейл на ' + SUPPORT_EMAIL + '.',
 	this_login_gives_owner_or_active_permissions_and_should_not_be_used_here: 'Этот логин дает владельческие и активные разрешения, и не должен использоваться здесь. Пожалуйста, предоставьте логин только для постинга.',
+	we_couldnt_verify_your_account_contact_us_at_SUPPORT_EMAIL: 'Мы не смогли верифицировать учётную запись. Пишите на почту ' + SUPPORT_EMAIL,
+  facebook_login_didnt_provide_any_email_addresses: 'Логин через Facebook не предоставил каких-либо имейл адресов. Пожалуйста, удостоверьтесь что Facebook аккаунт имеет главный имейл и попробуйте снова.',
+  we_are_sorry_we_cannot_sign_you_up_at_this_time_because_ip_associated_with_bots_activity: 'Извините, мы не можем зарегистрировать вас, потому что в настоящее время ваш IP адрес ассоциирован с активностью ботов. Пожалуйста, свяжитесь с ' + SUPPORT_EMAIL + ' для получения дальнейшей информации.',
+	successfully_authenticated_with: 'Успешная авторизация с', // 'Успешная авторизация с Facebook'
+  not_supported_email_address: 'Не поддерживаемый имейл адрес',
+  please_make_sure_you_dont_use_temporary_email_providers_contact_SUPPORT_URL: 'Пожалуйста, удостоверьтесь что вы не используете временный имейл адрес, свяжитесь с ' + SUPPORT_EMAIL + ' для получения информации.',
 }
 
 export { ru }

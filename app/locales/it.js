@@ -281,16 +281,14 @@ const it = 	{
 		many {# posts}
 	}`,
 	follower_count: `{followerCount, plural,
-		zero {0 followers}
-		one {# followers}
-		few {# followers}
-		many {# followers}
+		=0 {no followers}
+		one {1 follower}
+		other {{followerCount} followers}
 	}`,
 	followed_count: `{followingCount, plural,
-		zero {0 followed}
-		one {# followed}
-		few {# followed}
-		many {# followed}
+		=0 {not following anybody}
+		one {1 following}
+		other {{followingCount} following}
 	}`,
 	vote_count: `{voteCount, plural,
 		zero {0 votes}

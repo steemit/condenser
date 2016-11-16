@@ -23,7 +23,7 @@ export function* loadFollows(method, follower, type, start = '', limit = 100) {
                 })
                 return m2
             })
-            return m.merge({loading: true, error: null})
+            return m.merge({[type]: {loading: true, error: null}})
         }
     }})
     if(cnt === limit) {
@@ -31,7 +31,7 @@ export function* loadFollows(method, follower, type, start = '', limit = 100) {
     } else {
         yield put({type: 'global/UPDATE', payload: {
             key: ['follow', method, follower],
-            updater: m => m.merge({loading: false, error: null})
+            updater: m => m.merge({[type]: {loading: false, error: null}})
         }})
     }
 }

@@ -336,7 +336,7 @@ class ReplyEditor extends React.Component {
                         <div className={vframe_section_shrink_class} style={{marginTop: '0.5rem'}}>
                             {isStory && <span>
                                 <CategorySelector {...category} disabled={loading} isEdit={isEdit} tabIndex={3} />
-                                <div className="error">{category.touched && category.error}&nbsp;</div>
+                                <div className="error">{(category.touched || category.value) && category.error}&nbsp;</div>
                             </span>}
                         </div>
                         <div className={vframe_section_shrink_class}>

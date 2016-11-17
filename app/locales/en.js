@@ -311,7 +311,7 @@ const en = 	{
 	}`,
 	vote_count: `{voteCount, plural,
 		=0 {no votes}
-		one {1 votes}
+		one {1 vote}
 		other {{voteCount} votes}
 	}`,
 	response_count: `{responseCount, plural,
@@ -321,8 +321,8 @@ const en = 	{
 	}`,
 	reply_count: `{replyCount, plural,
 		=0 {no replies}
-		one {1 replies}
-		other {{responseCount} replies}
+		one {1 reply}
+		other {{replyCount} replies}
 	}`,
 	this_is_users_reputations_score_it_is_based_on_history_of_votes: "This is {name}'s reputation score.\n\nThe reputation score is based on the history of votes received by the account, and is used to hide low quality content.",
 	newer: 'Newer',

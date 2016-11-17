@@ -19,7 +19,6 @@ import { translate } from 'app/Translator';
 import { TERMS_OF_SERVICE_URL, WIKI_URL, PRIVACY_POLICY_URL, SEGMENT_ANALYTICS_KEY, LANDING_PAGE_URL, WHITEPAPER_URL, VEST_TICKER } from 'config/client_config';
 import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 import RocketChat from 'app/components/modules/RocketChat'
-import {githash} from 'config/last-build'
 
 class App extends React.Component {
     constructor(props) {
@@ -39,6 +38,23 @@ class App extends React.Component {
             analytics.load(SEGMENT_ANALYTICS_KEY);
             analytics.page()
             }}();
+
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-49238979-12', 'auto');
+            ga('send', 'pageview');
+
+            !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+            n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+            document,'script','https://connect.facebook.net/en_US/fbevents.js');
+
+            fbq('init', '1594659427507927');
+            fbq('track', "PageView");
         }
     }
 
@@ -259,9 +275,7 @@ class App extends React.Component {
                 {callout}
                 {children}
                 {lp ? <LpFooter /> : null}
-
             </div>
-            <div style={{color: '#00ff00',position: 'fixed', bottom: '1px', left: '3px', fontSize: '70%'}}>git client# {githash} </div>
             <Dialogs />
             <Modals />
         </div>

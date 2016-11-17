@@ -348,8 +348,9 @@ class BuyGolos extends React.Component {
 											<th width="200">ID Транзакции</th>
                       <th width="100">Перечислено биткоинов</th>
 											<th width="100">Бонус</th>
-											{/* <th width="150">Вы получите Голосов</th> */}
-											{/* <th width="50">Доля в Сети</th> */}
+											<th width="80">у.е.</th>
+											<th width="80">Голосов</th>
+											<th width="80">Доля в Сети</th>
 										</tr>
 									</thead>
 									<tbody>

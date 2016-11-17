@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Tooltip from 'app/components/elements/Tooltip';
 import Icon from 'app/components/elements/Icon';
-import { translate } from '../../Translator';
+import { translate } from 'app/Translator';
 
 export default class VoteHistoryRow extends React.Component {
 

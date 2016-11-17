@@ -13,6 +13,7 @@ import Team from 'app/components/elements/LandingTeam'
 import Press from 'app/components/elements/LandingPress'
 import Partners from 'app/components/elements/LandingPartners'
 import Footer from 'app/components/elements/LandingFooter'
+import { APP_NAME } from 'config/client_config';
 let WOW
 if (process.env.BROWSER) WOW = require('wowjs/dist/wow.js')
 
@@ -36,7 +37,7 @@ export const crowdsaleEndAt = createDate(2016, 11, 4, 11, 0)
 
 class Landing extends React.Component {
 
-	componentWillMount() { if (process.env.BROWSER) document.title = 'Голос - ICO' }
+	componentWillMount() { if (process.env.BROWSER) document.title = APP_NAME + ' - ICO' }
 
 	componentDidMount() { if (process.env.BROWSER && WOW) new WOW().init() }
 

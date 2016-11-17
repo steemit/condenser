@@ -4,7 +4,7 @@ import Keys from 'app/components/elements/Keys'
 import g from 'app/redux/GlobalReducer'
 import {connect} from 'react-redux';
 import QRCode from 'react-qr'
-import { translate } from '../../Translator';
+import { translate } from 'app/Translator';
 
 const keyTypes = ['Posting', 'Active', 'Owner', 'Memo']
 

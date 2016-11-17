@@ -5,7 +5,6 @@ import Header from 'app/components/modules/Header';
 import LpFooter from 'app/components/modules/lp/LpFooter';
 import user from 'app/redux/User';
 import g from 'app/redux/GlobalReducer';
-import { Route, Link } from 'react-router';
 import TopRightMenu from 'app/components/modules/TopRightMenu';
 import { browserHistory } from 'react-router';
 import classNames from 'classnames';
@@ -15,10 +14,9 @@ import Dialogs from 'app/components/modules/Dialogs';
 import Modals from 'app/components/modules/Modals';
 import Icon from 'app/components/elements/Icon';
 import {key_utils} from 'shared/ecc'
-import { translate } from '../Translator.js';
-import { SEGMENT_ANALYTICS_KEY, LANDING_PAGE_URL, WHITEPAPER_URL, VEST_TICKER } from 'config/client_config';
+import { translate } from 'app/Translator';
+import { TERMS_OF_SERVICE_URL, WIKI_URL, PRIVACY_POLICY_URL, SEGMENT_ANALYTICS_KEY, LANDING_PAGE_URL, WHITEPAPER_URL, VEST_TICKER } from 'config/client_config';
 import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
-import RocketChat from 'app/components/modules/RocketChat'
 
 class App extends React.Component {
     constructor(props) {
@@ -38,6 +36,23 @@ class App extends React.Component {
             analytics.load(SEGMENT_ANALYTICS_KEY);
             analytics.page()
             }}();
+
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-49238979-12', 'auto');
+            ga('send', 'pageview');
+
+            !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+            n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+            document,'script','https://connect.facebook.net/en_US/fbevents.js');
+
+            fbq('init', '1594659427507927');
+            fbq('track', "PageView");
         }
     }
 
@@ -175,6 +190,11 @@ class App extends React.Component {
               <TopRightMenu vertical navigate={this.navigate} />
               <ul className="vertical menu">
                   <li>
+                      <a href={WIKI_URL} target="blank" onClick={this.navigate}>
+                            {translate('wiki')}
+                      </a>
+                  </li>
+                  <li>
                       <a href={LANDING_PAGE_URL} onClick={this.navigate}>
                           {translate("about")}
                       </a>
@@ -191,7 +211,7 @@ class App extends React.Component {
                   </li>
                   {/* <li>
                       <a onClick={() => depositSteem()}>
-                          {translate("buy_OWNERSHIP_TOKEN")}
+                          {translate("buy_LIQUID_TOKEN")}
                       </a>
                   </li> */}
                   <li>
@@ -222,12 +242,12 @@ class App extends React.Component {
               </ul>
               <ul className="vertical menu">
                   <li>
-                      <a href="/legal/terms_of_service.pdf" onClick={this.navigate} rel="nofollow">
+                      <a href={TERMS_OF_SERVICE_URL} onClick={this.navigate} rel="nofollow">
                           {translate("privacy_policy")}
                       </a>
                   </li>
                   <li>
-                      <a href="/ru--konfidenczialxnostx/@golos/politika-konfidencialnosti" onClick={this.navigate} rel="nofollow">
+                      <a href={PRIVACY_POLICY_URL} onClick={this.navigate} rel="nofollow">
                           {translate("terms_of_service")}
                       </a>
                   </li>
@@ -253,7 +273,6 @@ class App extends React.Component {
                 {callout}
                 {children}
                 {lp ? <LpFooter /> : null}
-
             </div>
             <Dialogs />
             <Modals />

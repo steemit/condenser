@@ -5,7 +5,7 @@ import Icon from 'app/components/elements/Icon';
 import transaction from 'app/redux/Transaction'
 import ByteBuffer from 'bytebuffer'
 import {Set} from 'immutable'
-import { translate } from '../../Translator';
+import { translate } from 'app/Translator';
 
 const Long = ByteBuffer.Long
 const {string, func, object} = PropTypes

@@ -7,7 +7,7 @@
 3. translate it
 5. go to server-html.jsx
 6. add your locale data as it is done in https://cdn.polyfill.io script (add ',Intl.~locale.XX' at the end of url)
-7. add localeData and newly translated strings as it is done in Translator.jsx (read the comments)
+7. add localeData and newly translated strings as it is done in Translator.js (read the comments)
 
 ## Notes for hackers and translators
 

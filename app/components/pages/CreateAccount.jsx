@@ -14,6 +14,7 @@ import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInp
 import { translate } from 'app/Translator';
 import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 import { FormattedHTMLMessage } from 'react-intl';
+import { SUPPORT_EMAIL } from 'config/client_config';
 
 const PASSWORD_MIN_LENGTH = 32;
 
@@ -213,7 +214,7 @@ class CreateAccount extends React.Component {
                             {translate('you_can_either') + ' '}
                             <a href="/login.html">{translate('login')}</a>
                             {translate('to_your_existing_account_or') + ' '}
-                            <a href="mailto:t@cyber.fund">{translate('send_us_email')}</a>
+                            <a href={"mailto:" + SUPPORT_EMAIL}>{translate('send_us_email')}</a>
                             {' ' + translate('if_you_need_a_new_account')}.
                         </p>
                     </div>

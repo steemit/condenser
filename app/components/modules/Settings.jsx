@@ -43,8 +43,8 @@ class Settings extends React.Component {
             json_metadata: metaData,
             account: account.name,
             memo_key: account.memo_key,
-            errorCallback: () => {
-                console.log('SUCCES')
+            errorCallback: err => {
+                console.error('updateAccount() error!', err)
                 this.setState({
                     loading: false,
                     errorMessage: translate('server_returned_error')
@@ -68,8 +68,8 @@ class Settings extends React.Component {
         const {state, props} = this
         return <div className="Settings">
                     <div className="row">
-                        {/* currently language chooser is completely broken */}
                         <div className="small-12 medium-6 large-4 columns">
+                            {/* CHOOSE LANGUAGE */}
                             <label>{translate('choose_language')}
                               <select defaultValue={store.get('language')} onChange={this.handleLanguageChange}>
                                 <option value="ru">русский</option>
@@ -78,10 +78,7 @@ class Settings extends React.Component {
                                 <option value="uk">українська</option>
                               </select>
                             </label>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="small-12 medium-6 large-4 columns">
+                            {/* CHOOSE CURRENCY */}
                             <label>{translate('choose_currency')}
                                 <select defaultValue={store.get('currency')} onChange={this.handleCurrencyChange}>
                                     {
@@ -91,21 +88,30 @@ class Settings extends React.Component {
                                     }
                                 </select>
                             </label>
+                            {/* CHOOSE USER IMAGE */}
+                            <form onSubmit={this.handleUserImageSubmit}>
+                                <label>{translate('add_image_url')}
+                                    <input type="url" onChange={this.handleUrlChange} value={state.userImage} disabled={!props.isOwnAccount || state.loading} />
+                                    {
+                                        state.errorMessage
+                                        ? <small className="error">{state.errorMessage}</small>
+                                        : state.succesMessage
+                                        ? <small className="success">{state.succesMessage}</small>
+                                        : null
+                                    }
+                                </label>
+                                <p className="text-center" style={{marginTop: 16.8}}>
+                                    <input type="submit" className="button" value={translate('save_avatar')} />
+                                </p>
+                            </form>
                         </div>
-                    </div>
-                    <div className="row">
-                        <form onSubmit={this.handleUserImageSubmit} className="small-12 medium-6 large-4 columns">
-                            <label>{translate('add_image_url')}
-                                <input type="url" onChange={this.handleUrlChange} value={state.userImage} disabled={!props.isOwnAccount || state.loading} required />
-                                {
-                                    state.errorMessage
-                                    ? <small className="error">{state.errorMessage}</small>
-                                    : state.succesMessage
-                                    ? <small className="success text-uppercase">{state.succesMessage}</small>
-                                    : null
-                                }
-                            </label>
-                        </form>
+                        <div className="small-12 medium-6 large-8 columns text-center">
+                            {
+                                state.userImage
+                                ? <img src={state.userImage} alt={translate('user_avatar') + ' ' + props.account.name} />
+                                : null
+                            }
+                        </div>
                     </div>
                 </div>
     }

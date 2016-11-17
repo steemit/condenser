@@ -40,12 +40,12 @@ const dates = [
 		{ date: addDays(18), bonus: 0 }
 	]
 
-export function calculateCurrentStage() {
-	if (crowdsaleStartAt < addDays(15)) return stages[0]
-	else if (crowdsaleStartAt < addDays(18)) return stages[1]
-	else if (crowdsaleStartAt < addDays(21)) return stages[2]
-	else if (crowdsaleStartAt < addDays(24)) return stages[3]
-	else if (crowdsaleStartAt < addDays(27)) return stages[4]
+export function calculateCurrentStage(date = Date.now()) {
+	if (date < addDays(15).getTime()) return stages[0]
+  else if (date < addDays(18).getTime()) return stages[1]
+  else if (date < addDays(21).getTime()) return stages[2]
+  else if (date < addDays(24).getTime()) return stages[3]
+  else if (date < addDays(27).getTime()) return stages[4]
 	return stages[5]
 }
 
@@ -137,6 +137,7 @@ export default class LandingCountDowns extends React.Component {
 		const {state, props} = this
 		const currentStage = dates.find((item) => item.bonus == calculateCurrentStage())
 		const previousStage = dates.find((item) => item.bonus < calculateCurrentStage())
+    const nextStage = calculateCurrentStage() ? calculateCurrentStage() - 5 : 0
 
 		function strSplice(str1, str2, location) {
 		  return str1.slice(0, location) + str2 + str1.slice(location, str1.length);
@@ -224,13 +225,13 @@ export default class LandingCountDowns extends React.Component {
 								}
 
 								<p>
-									<small>Текущий бонус <span className="red"> + {state.currentBonus}%</span></small>
+									<small>Текущий бонус <span className="red"> + {calculateCurrentStage()}%</span></small>
 								</p>
 							</div>
 							<div className="small-12 medium-4 columns">
 								<CountDown
-									title={`Бонус уменьшится: до ${state.nextBonus}%`}
-									date={currentStage.date}
+                  title={`Бонус уменьшится: до ${nextStage}%`}
+									date={dates[1].date}
 									countFrom={previousStage.date.getTime()}
 									displayWhenZero
 								/>
@@ -271,7 +272,7 @@ export default class LandingCountDowns extends React.Component {
 								<p>Социальные сети: </p>
 								<ul>
 									<li>
-										<a href="facebook.com" target="blank"><img src="images/landing/fb.jpg" /></a>
+										<a href="https://www.facebook.com/golosru" target="blank"><img src="images/landing/fb.jpg" /></a>
 									</li>
 									<li>
 										<a href="https://twitter.com/goloschain" target="blank"><img src="images/landing/tw.jpg" /></a>

@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import Link from 'app/components/elements/Link'
 import g from 'app/redux/GlobalReducer'
 import links from 'app/utils/Links'
-import { translate } from '../../Translator';
+import { translate } from 'app/Translator';
 
 /** @deprecated */
 class CardView extends React.Component {

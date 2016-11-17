@@ -2,7 +2,7 @@ import React, {PropTypes, Component} from 'react'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import {connect} from 'react-redux'
 import user from 'app/redux/User'
-import { translate } from '../../Translator';
+import { translate } from 'app/Translator';
 
 /** Display a public key.  Offer to show a private key, but only if it matches the provided public key */
 class ShowKey extends Component {

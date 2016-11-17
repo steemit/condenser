@@ -105,10 +105,11 @@ class LoginForm extends Component {
                         <h4>{translate("cryptography_test_failed")}</h4>
                         <p>{translate("unable_to_log_you_in")}.</p>
                         <p>
-                            {translate('latest_browsers_do_work', {
-                                chromeLink: <a href="https://www.google.com/chrome/">Chrome</a>,
-                                mozillaLink: <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a>
-                            })}
+                            {translate('the_latest_versions_of') + ' '}
+                            <a href="https://www.google.com/chrome/">Chrome</a>
+                            {' ' + translate('and')}
+                            <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a>
+                            {' ' + translate('are_well_tested_and_known_to_work_with')}
                         </p>
                     </div>
                 </div>

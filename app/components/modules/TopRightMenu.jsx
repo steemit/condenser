@@ -1,7 +1,6 @@
 import Immutable from 'immutable';
-import { Link } from 'react-scroll';
 import React from 'react';
-// import { Link } from 'react-router';
+import { Link } from 'react-router';
 import {connect} from 'react-redux';
 import Icon from 'app/components/elements/Icon';
 import user from 'app/redux/User';
@@ -59,19 +58,19 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                         <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
                     </li>
                     <li className={lcn}>
-                        <Link className="button success" spy to="CountDowns" smooth offset={-110} duration={500}>Краудсейл</Link>
+                        <Link className="button success" to="/ico">Краудсейл</Link>
                     </li>
                     <li className={lcn}>
-                        <Link spy to="what-is-golos" smooth offset={-110} duration={500}>Видео</Link>
+                        <a href="#what-is-golos">Видео</a>
                     </li>
                     <li className={lcn}>
-                        <Link spy to="docs" smooth offset={-110} duration={500}>Документация</Link>
+                        <a href="#docs">Документация</a>
                     </li>
                     <li className={lcn}>
-                        <Link spy to="faq" smooth offset={-110} duration={500}>FAQ</Link>
+                        <a href="#faq">FAQ</a>
                     </li>
                     <li className={lcn}>
-                        <Link spy to="team" smooth offset={-110} duration={500}>Команда</Link>
+                        <a href="#team">Команда</a>
                     </li>
                     <LinkWithDropdown
                         closeOnClickOutside
@@ -96,16 +95,16 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                                 <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
                             </li>
                             <li className={lcn}>
-                                <Link spy to="what-is-golos" smooth offset={-110} duration={500}>Видео</Link>
+                                <a href="#what-is-golos">Видео</a>
                             </li>
                             <li className={lcn}>
-                                <Link spy to="docs" smooth offset={-110} duration={500}>Документация</Link>
+                                <a href="#docs">Документация</a>
                             </li>
                             <li className={lcn}>
-                                <Link spy to="faq" smooth offset={-110} duration={500}>FAQ</Link>
+                                <a href="#faq">FAQ</a>
                             </li>
                             <li className={lcn}>
-                                <Link spy to="team" smooth offset={-110} duration={500}>Команда</Link>
+                                <a href="#team">Команда</a>
                             </li>
                             <li className={lcn + ' image-wrapper'}>
                                 <a href="/login.html">
@@ -130,9 +129,10 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                     <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
                 </li>
                 <li className={lcn + ' buttons'}>
-                    <a href="/ico" className="button success">Краудсейл</a>
+                    <Link to="/ico" className="button success">Краудсейл</Link>
                 </li>
-                <li className={lcn}><a href="/static/search.html" title={search}>{vertical ? <span>{search}</span> : <Icon name="search" />}</a></li>
+                {/* search is currently unavailable */}
+                {/* <li className={lcn}><a href="/static/search.html" title={search}>{vertical ? <span>{search}</span> : <Icon name="search" />}</a></li> */}
                 {submit_story}
                 <LinkWithDropdown
                     closeOnClickOutside
@@ -160,19 +160,19 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                                 <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
                             </li>
                             <li className={lcn}>
-                                <Link className="button success" spy to="CountDowns" smooth offset={-110} duration={500}>Краудсейл</Link>
+                                <Link className="button success" to="/ico">Краудсейл</Link>
                             </li>
                             <li className={lcn}>
-                                <Link spy to="what-is-golos" smooth offset={-110} duration={500}>Видео</Link>
+                                <a href="#what-is-golos">Видео</a>
                             </li>
                             <li className={lcn}>
-                                <Link spy to="docs" smooth offset={-110} duration={500}>Документация</Link>
+                                <a href="#docs">Документация</a>
                             </li>
                             <li className={lcn}>
-                                <Link spy to="faq" smooth offset={-110} duration={500}>FAQ</Link>
+                                <a href="#faq">FAQ</a>
                             </li>
                             <li className={lcn}>
-                                <Link spy to="team" smooth offset={-110} duration={500}>Команда</Link>
+                                <a href="#team">Команда</a>
                             </li>
                             <li className={lcn + ' image-wrapper'}>
                                 <a href="/login.html">
@@ -193,9 +193,10 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                     <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
                 </li>
                 <li className={lcn + ' buttons'}>
-                    <a href={`/ico`} className="button success">Краудсейл</a>
+                    <Link to="/ico" className="button success">Краудсейл</Link>
                 </li>
-                {!vertical && <li><a href="/static/search.html" title="Поиск"><Icon name="search" /></a></li>}
+                {/* search is currently unavailable */}
+                {/* {!vertical && <li><a href="/static/search.html" title="Поиск"><Icon name="search" /></a></li>} */}
                 <li className={lcn}><LoadingIndicator type="circle" inline /></li>
                 {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
                     <span className="hamburger" />
@@ -210,19 +211,19 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                         <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
                     </li>
                     <li className={lcn}>
-                        <Link className="button success" spy to="CountDowns" smooth offset={-110} duration={500}>Краудсейл</Link>
+                        <Link className="button success" to="/ico">Краудсейл</Link>
                     </li>
                     <li className={lcn}>
-                        <Link spy to="what-is-golos" smooth offset={-110} duration={500}>Видео</Link>
+                        <a href="#what-is-golos">Видео</a>
                     </li>
                     <li className={lcn}>
-                        <Link spy to="docs" smooth offset={-110} duration={500}>Документация</Link>
+                        <a href="#docs">Документация</a>
                     </li>
                     <li className={lcn}>
-                        <Link spy to="faq" smooth offset={-110} duration={500}>FAQ</Link>
+                        <a href="#faq">FAQ</a>
                     </li>
                     <li className={lcn}>
-                        <Link spy to="team" smooth offset={-110} duration={500}>Команда</Link>
+                        <a href="#team">Команда</a>
                     </li>
                     <li className={lcn + ' image-wrapper'}>
                         <a href="/login.html">
@@ -241,9 +242,10 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                     <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
                 </li>
                 <li className={lcn + ' buttons'}>
-                    <a href={`/ico`} className="button success">Краудсейл</a>
+                    <Link to="/ico" className="button success">Краудсейл</Link>
                 </li>
-                {!vertical && <li><a href="/static/search.html" title="Поиск"><Icon name="search" /></a></li>}
+                {/* search is currently unavailable */}
+                {/* {!vertical && <li><a href="/static/search.html" title="Поиск"><Icon name="search" /></a></li>} */}
                 <li className={lcn}><a href="/create_account" onClick={showSignUp}>{translate('sign_up')}</a></li>
                 <li className={lcn}><a href="/login.html" onClick={showLogin}>{translate('login')}</a></li>
                 {submit_story}

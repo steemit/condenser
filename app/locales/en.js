@@ -442,7 +442,7 @@ const en = 	{
 	not_valid_email: 'Not valid email',
 	thank_you_for_being_an_early_visitor_to_APP_NAME: 'Thank you for being an early visitor to ' + APP_NAME + '. We will get back to you at the earliest possible opportunity.',
 	estimated_author_rewards_last_week: "Estimated author rewards last week",
-	author_rewards_last_week: "Estimated author rewards last week",
+	author_rewards_last_week: "Author rewards last week",
 	confirm: 'Confirm',
 	canceled: 'Canceled',
 	asset: "Asset",

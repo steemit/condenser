@@ -102,10 +102,10 @@ class CurationRewards extends React.Component {
             </div>
             <div className="UserWallet__balance UserReward__row row">
                 <div className="column small-12 medium-8">
-                    Curation rewards last 7 days:
+                    {translate('curation_rewards_last_week')}:
                 </div>
                 <div className="column small-12 medium-4">
-                    {numberWithCommas(vestsToSp(this.props.state, rewardsWeek + " " + VEST_TICKER)) + " "+ VESTING_TOKEN}
+                    {numberWithCommas(vestsToSp(this.props.state, rewardsWeek + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
                 </div>
             </div>
 
@@ -115,7 +115,7 @@ class CurationRewards extends React.Component {
                     {translate('curation_rewards_last_24_hours')}:
                 </div>
                 <div className="column small-12 medium-3">
-                    {numberWithCommas(vestsToSp(this.props.state, rewards24 + " " + VEST_TICKER)) + " "+ VESTING_TOKEN}
+                    {numberWithCommas(vestsToSp(this.props.state, rewards24 + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
                 </div>
             </div>
             <div className="UserWallet__balance UserReward__row row">
@@ -123,7 +123,7 @@ class CurationRewards extends React.Component {
                     {translate('daily_average_curation_rewards')}:
                 </div>
                 <div className="column small-12 medium-3">
-                    {numberWithCommas(vestsToSp(this.props.state, averageCuration + " " + VEST_TICKER)) + " "+ VESTING_TOKEN}
+                    {numberWithCommas(vestsToSp(this.props.state, averageCuration + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
                 </div>
             </div>
             <div className="UserWallet__balance UserReward__row row">
@@ -131,7 +131,7 @@ class CurationRewards extends React.Component {
                     {translate(!hasFullWeek ? 'estimated_curation_rewards_last_week' : 'curation_rewards_last_week')}:
                 </div>
                 <div className="column small-12 medium-3">
-                    {numberWithCommas(vestsToSp(this.props.state, (hasFullWeek ? rewardsWeek : averageCuration * 7) + " " + VEST_TICKER)) + " "+ VESTING_TOKEN}
+                    {numberWithCommas(vestsToSp(this.props.state, (hasFullWeek ? rewardsWeek : averageCuration * 7) + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
                 </div>
             </div>
             */}

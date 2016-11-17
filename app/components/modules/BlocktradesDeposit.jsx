@@ -25,7 +25,7 @@ const coinToTypes = [
     ['ETH', 'eth'],
 ]
 
-export default class BlocktradesDeposit extends React.Component {
+class BlocktradesDeposit extends React.Component {
     static propTypes = {
         // html
         inputCoinType: React.PropTypes.string,

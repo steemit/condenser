@@ -15,11 +15,11 @@ import { calculateCurrentStage, currentStage } from '../elements/LandingCountDow
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Tooltip from 'app/components/elements/Tooltip';
 import roundPrecision from 'round-precision'
-//import {test as o2jtest} from 'shared/clash/object2json'
+import icoDestinationAddress from 'shared/icoAddress'
+import { injectIntl } from 'react-intl';
 
 const satoshiPerCoin=100000000;
 
-import icoDestinationAddress from 'shared/icoAddress'
 /*
 	Логика компонента:
 	Если пользователь находится на своей странице, и если у него нет Btc адреса, то должна отображаться кнопка генерации адреса.
@@ -32,7 +32,7 @@ import icoDestinationAddress from 'shared/icoAddress'
 // source address - user address where he sends Btc
 // destiation address ico multisig address
 function getFilteredTransactions(fullResponse, sourceAddress, destinationAddress) {
-	const ret=  filter(fullResponse.txs, tx => {
+	const ret = filter(fullResponse.txs, tx => {
 		return includes(tx.addresses, destinationAddress)
 		&& includes(tx.addresses, sourceAddress) && !tx.double_spend;
 	});
@@ -49,15 +49,16 @@ function transactionOutputsSum(tx, destinationAddress) {
 }
 
 function displayConfirmations(nConf) {
-	if (nConf == 0) return <span style={{color:'red'}}> транзакция не подтверждена </span>;
-	if (nConf == 1) return <span style={{color:'red'}}> 1 подтверждение </span>;
-	if (nConf == 2) return <span style={{color:'red'}}> 2 подтверждения </span>;
-	if (nConf == 3) return <span style={{color:'green'}}> 3 подтверждения </span>;
-	if (nConf == 4) return <span style={{color:'green'}}> 4 подтверждения </span>;
-	if (nConf == 5) return <span style={{color:'green'}}> 5 подтверждений </span>;
+	if (nConf == 0) return <span style={{color: 'red'}}> транзакция не подтверждена </span>;
+	if (nConf == 1) return <span style={{color: 'red'}}> 1 подтверждение </span>;
+	if (nConf == 2) return <span style={{color: 'red'}}> 2 подтверждения </span>;
+	if (nConf == 3) return <span style={{color: 'green'}}> 3 подтверждения </span>;
+	if (nConf == 4) return <span style={{color: 'green'}}> 4 подтверждения </span>;
+	if (nConf == 5) return <span style={{color: 'green'}}> 5 подтверждений </span>;
 	return <span> транзакция подтверждена </span>;
 }
 
+@injectIntl
 class BuyGolos extends React.Component {
 
 	state = {
@@ -216,6 +217,7 @@ class BuyGolos extends React.Component {
 
 		const {state, props} = this
 		const {
+      intl,
 			metaData,
 			icoAddress,
 			routeParams: {accountname},
@@ -337,9 +339,10 @@ class BuyGolos extends React.Component {
 									<thead>
 										<tr>
 											<th width="200">ID Транзакции</th>
-											<th width="100">Перечислено биткоинов</th>
-											<th width="150">Вы получите Голосов</th>
-											<th width="50">Доля в Сети</th>
+                      <th width="100">Перечислено биткоинов</th>
+											<th width="100">Бонус</th>
+											{/* <th width="150">Вы получите Голосов</th> */}
+											{/* <th width="50">Доля в Сети</th> */}
 										</tr>
 									</thead>
 									<tbody>
@@ -347,11 +350,14 @@ class BuyGolos extends React.Component {
 											transactions.map((item, index) => {
 												const golosAmount = 27072000*transactionOutputsSum(item, icoDestinationAddress)/state.confirmedBalance
 												const sharePercentage = (golosAmount/43306176) * 100
+                        const localizedDate = intl.formatDate(item.confirmed)
+                        const confirmedDate = new Date(item.confirmed)
 												return 	<tr key={index}>
-															<td>{item.hash}<br />({item.confirmed}); {displayConfirmations(item.confirmations)}</td>
+															<td>{item.hash}<br />({localizedDate}); {displayConfirmations(item.confirmations)}</td>
 															<td>{roundPrecision(transactionOutputsSum(item, icoDestinationAddress)/satoshiPerCoin, 8)}</td>
-															<td>{roundPrecision(golosAmount, 3)}</td>
-															<td>{roundPrecision(sharePercentage, 6) + '%'}</td>
+                              <td>{calculateCurrentStage(confirmedDate)}%</td>
+															{/* <td>{roundPrecision(golosAmount, 3)}</td> */}
+															{/* <td>{roundPrecision(sharePercentage, 6) + '%'}</td> */}
 														</tr>
 											})
 										}

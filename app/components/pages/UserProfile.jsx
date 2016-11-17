@@ -85,7 +85,7 @@ export default class UserProfile extends React.Component {
         const followers = this.props.global.getIn( ['follow', 'get_followers', accountname] );
         const following = this.props.global.getIn( ['follow', 'get_following', accountname] );
 
-        if(followers) {
+        if(followers && followers.has('result') && followers.has('blog')) {
             const status_followers = followers.get('blog')
             const followers_loaded = status_followers.get('loading') === false && status_followers.get('error') == null
             if (followers_loaded) {
@@ -95,7 +95,7 @@ export default class UserProfile extends React.Component {
             }
         }
 
-        if (following) {
+        if (following && following.has('result') && following.has('blog')) {
             const status_following = following.get('blog')
             const following_loaded = status_following.get('loading') === false && status_following.get('error') == null
             if (following_loaded) {

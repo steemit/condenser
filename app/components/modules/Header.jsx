@@ -113,7 +113,7 @@ class Header extends React.Component {
             page_title = `Stolen Account Recovery`;
         } else if (route.page === 'UserProfile') {
             user_name = route.params[0].slice(1);
-            page_title = user_name;
+            page_title = user_name.toLowerCase();
             if(route.params[1] === "followers"){
                 page_title = `People following ${user_name} `;
             }
@@ -137,8 +137,13 @@ class Header extends React.Component {
             page_name = ''; //page_title = route.page.replace( /([a-z])([A-Z])/g, '$1 $2' ).toLowerCase();
         }
 
-        // Always format first letter of all titles capitalized for consistency & readability
-        page_title = page_title.charAt(0).toUpperCase() + page_title.slice(1);
+        // Format first letter of all titles and lowercase user name
+        if (route.page === 'UserProfile') {
+            page_title = page_title.charAt(0) + page_title.slice(1);
+        } else {
+            page_title = page_title.charAt(0).toUpperCase() + page_title.slice(1);
+        }
+
 
         if (process.env.BROWSER && route.page !== 'Post') document.title = page_title + ' — Steemit';
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { browserHistory } from 'react-router';
 import Icon from 'app/components/elements/Icon.jsx';
 import VerticalMenu from './VerticalMenu';
+import {findParent} from 'app/utils/DomUtils';
 
 export default class DropdownMenu extends React.Component {
     static propTypes = {
@@ -23,18 +24,28 @@ export default class DropdownMenu extends React.Component {
     }
 
     componentWillUnmount() {
-        document.removeEventListener('click', this.hide);
+        document.removeEventListener('mousedown', this.hide);
+    }
+
+    toggle = (e) => {
+        const {shown} = this.state
+        if(shown) this.hide(e)
+        else this.show(e)
     }
 
     show = (e) => {
         e.preventDefault();
         this.setState({shown: true});
-        document.addEventListener('click', this.hide);
+        document.addEventListener('mousedown', this.hide);
     };
 
-    hide = () => {
+    hide = (e) => {
+        // Do not hide the dropdown if there was a click within it.
+        const inside_dropdown = !!findParent(e.target, 'VerticalMenu');
+        if (inside_dropdown) return;
+
         this.setState({shown: false});
-        document.removeEventListener('click', this.hide);
+        document.removeEventListener('mousedown', this.hide);
     };
 
     navigate = (e) => {
@@ -60,7 +71,7 @@ export default class DropdownMenu extends React.Component {
                 {hasDropdown && <Icon name="dropdown-arrow" />}
             </span>
 
-        if(hasDropdown) entry = <a key="entry" href={href || '#'} onClick={this.show}>{entry}</a>
+        if(hasDropdown) entry = <a key="entry" href={href || '#'} onClick={this.toggle}>{entry}</a>
 
         const menu = <VerticalMenu key="menu" title={title} items={items} hideValue={selected} className="VerticalMenu" />;
         const cls = 'DropdownMenu' + (this.state.shown ? ' show' : '') + (className ? ` ${className}` : '')

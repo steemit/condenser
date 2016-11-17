@@ -34,10 +34,11 @@ export function parsePayoutAmount(amount) {
 /**
     This is a rough approximation of log10 that works with huge digit-strings.
     Warning: Math.log10(0) === NaN
+    The 0.00000001 offset fixes cases of Math.log(1000)/Math.LN10 = 2.99999999~
 */
 function log10(str) {
     const leadingDigits = parseInt(str.substring(0, 4));
-    const log = Math.log(leadingDigits) / Math.log(10)
+    const log = Math.log(leadingDigits) / Math.LN10 + 0.00000001
     const n = str.length - 1;
     return n + (log - parseInt(log));
 }

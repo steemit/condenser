@@ -72,7 +72,7 @@ app.use(mount('/static', staticCache(path.join(__dirname, '../app/assets/static'
 app.use(mount('/robots.txt', function* () {
     this.set('Cache-Control', 'public, max-age=86400000');
     this.type = 'text/plain';
-    this.body = "User-agent: *\nAllow: /";
+    this.body = "User-agent: *\nDisallow:  ";
 }));
 
 useRedirects(app);

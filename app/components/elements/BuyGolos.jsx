@@ -341,8 +341,8 @@ class BuyGolos extends React.Component {
 											<th width="200">ID Транзакции</th>
                       <th width="100">Перечислено биткоинов</th>
 											<th width="100">Бонус</th>
-											<th width="150">Вы получите Голосов</th>
-											<th width="50">Доля в Сети</th>
+											{/* <th width="150">Вы получите Голосов</th> */}
+											{/* <th width="50">Доля в Сети</th> */}
 										</tr>
 									</thead>
 									<tbody>
@@ -356,8 +356,8 @@ class BuyGolos extends React.Component {
 															<td>{item.hash}<br />({localizedDate}); {displayConfirmations(item.confirmations)}</td>
 															<td>{roundPrecision(transactionOutputsSum(item, icoDestinationAddress)/satoshiPerCoin, 8)}</td>
                               <td>{calculateCurrentStage(confirmedDate)}%</td>
-															<td>{roundPrecision(golosAmount, 3)}</td>
-															<td>{roundPrecision(sharePercentage, 6) + '%'}</td>
+															{/* <td>{roundPrecision(golosAmount, 3)}</td> */}
+															{/* <td>{roundPrecision(sharePercentage, 6) + '%'}</td> */}
 														</tr>
 											})
 										}

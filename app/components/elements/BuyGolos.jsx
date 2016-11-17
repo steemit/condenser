@@ -16,6 +16,7 @@ import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Tooltip from 'app/components/elements/Tooltip';
 import roundPrecision from 'round-precision'
 import icoDestinationAddress from 'shared/icoAddress'
+import { injectIntl } from 'react-intl';
 
 const satoshiPerCoin=100000000;
 
@@ -57,6 +58,7 @@ function displayConfirmations(nConf) {
 	return <span> транзакция подтверждена </span>;
 }
 
+@injectIntl
 class BuyGolos extends React.Component {
 
 	state = {
@@ -215,6 +217,7 @@ class BuyGolos extends React.Component {
 
 		const {state, props} = this
 		const {
+      intl,
 			metaData,
 			icoAddress,
 			routeParams: {accountname},
@@ -336,7 +339,8 @@ class BuyGolos extends React.Component {
 									<thead>
 										<tr>
 											<th width="200">ID Транзакции</th>
-											<th width="100">Перечислено биткоинов</th>
+                      <th width="100">Перечислено биткоинов</th>
+											<th width="100">Бонус</th>
 											<th width="150">Вы получите Голосов</th>
 											<th width="50">Доля в Сети</th>
 										</tr>
@@ -346,9 +350,12 @@ class BuyGolos extends React.Component {
 											transactions.map((item, index) => {
 												const golosAmount = 27072000*transactionOutputsSum(item, icoDestinationAddress)/state.confirmedBalance
 												const sharePercentage = (golosAmount/43306176) * 100
+                        const localizedDate = intl.formatDate(item.confirmed)
+                        const confirmedDate = new Date(item.confirmed)
 												return 	<tr key={index}>
-															<td>{item.hash}<br />({item.confirmed}); {displayConfirmations(item.confirmations)}</td>
+															<td>{item.hash}<br />({localizedDate}); {displayConfirmations(item.confirmations)}</td>
 															<td>{roundPrecision(transactionOutputsSum(item, icoDestinationAddress)/satoshiPerCoin, 8)}</td>
+                              <td>{calculateCurrentStage(confirmedDate)}%</td>
 															<td>{roundPrecision(golosAmount, 3)}</td>
 															<td>{roundPrecision(sharePercentage, 6) + '%'}</td>
 														</tr>

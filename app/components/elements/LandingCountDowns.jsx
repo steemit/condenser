@@ -37,7 +37,7 @@ const dates = [
 		{ date: addDays(21), bonus: 15 },
 		{ date: addDays(24), bonus: 10 },
 		{ date: addDays(27), bonus: 5 },
-		{ date: addDays(18), bonus: 0 }
+		{ date: addDays(33), bonus: 0 }
 	]
 
 export function calculateCurrentStage(date = Date.now()) {

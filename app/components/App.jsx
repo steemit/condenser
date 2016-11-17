@@ -5,7 +5,6 @@ import Header from 'app/components/modules/Header';
 import LpFooter from 'app/components/modules/lp/LpFooter';
 import user from 'app/redux/User';
 import g from 'app/redux/GlobalReducer';
-import { Route, Link } from 'react-router';
 import TopRightMenu from 'app/components/modules/TopRightMenu';
 import { browserHistory } from 'react-router';
 import classNames from 'classnames';
@@ -18,7 +17,6 @@ import {key_utils} from 'shared/ecc'
 import { translate } from 'app/Translator';
 import { TERMS_OF_SERVICE_URL, WIKI_URL, PRIVACY_POLICY_URL, SEGMENT_ANALYTICS_KEY, LANDING_PAGE_URL, WHITEPAPER_URL, VEST_TICKER } from 'config/client_config';
 import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
-import RocketChat from 'app/components/modules/RocketChat'
 
 class App extends React.Component {
     constructor(props) {

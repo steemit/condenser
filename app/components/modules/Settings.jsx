@@ -9,10 +9,6 @@ import o2j from 'shared/clash/object2json'
 import _urls from 'shared/clash/images/urls'
 import _btc from 'shared/clash/coins/btc'
 
-console.log(_urls.proxyImage, "PI 2")
-console.log(_btc.fromSatoshis, "2 PI 2")
-console.log("images/urls", _urls)
-
 class Settings extends React.Component {
 
     state = {

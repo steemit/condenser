@@ -74,7 +74,9 @@ class BuyGolos extends React.Component {
 	state = {
 		icoAddress: '',
 		transactions: [],
-		crowdsaleStats: [],
+		crowdSaleStats:[
+			crowdsaleStartAt, crowdsaleEndAt
+		],
     error: '',
 		loading: false,
 		checkboxesClicked: [false, false, false],
@@ -85,6 +87,9 @@ class BuyGolos extends React.Component {
 		balanceIncludingUnconfirmed: false,
 		unconfirmedBalanceOnly: false,
 		unconfirmedTxsCount: false,
+	}
+	supplyData = () => {
+		return this.state;
 	}
 
 	handleCheckBoxClick(checkboxNumber, e) {
@@ -201,75 +206,39 @@ class BuyGolos extends React.Component {
 				unconfirmedBalanceOnly: icoBalanceObject.unconfirmed_balance,
 				unconfirmedTxsCount: icoBalanceObject.unconfirmed_n_tx
 			});
+			console.log("SUUPLY DATA RETURNS", this.bind.supplyData(this));
 			console.log("balanceObject is: ", icoBalanceObject);
 			console.log('--            --'); console.log('');
 			fetch('/api/v1/get_raised_amounts').then(function(d) { return d.json() })
 			.then((data) => {
-				if (data.status !== 'ok') {
-					console.log("fetching intermediate raised amounts failed");
-					return;
-				} else {
-					data = data.data;
-				}
-				let results = new Object()
-				data.forEach(function(it){
-					let split = it.kk && it.kk.split && it.kk.split('_');
-					if (! split.length === 6) return false;
-					let ret = split[0] === 'icoBalance' && split[1] === 'Nov'
-
-
-					if (ret) { // side effect
-						let value = o2j.ifStringParseJSON(it.value);
-						results[split[2]] = value;
+					if (data.status !== 'ok') {
+						console.log("fetching intermediate raised amounts failed");
+						return;
+					} else {
+						data = data.data;
 					}
-
-					return ret
-				});
-				this.setState({crowdsaleStats: results});
-				console.log(results, "results and data", data)
+					this.setState({crowdSaleStats: data});
+					console.log(results, "results and data", data)
 			})
 			.catch(error => {
 				console.log("fetching intermediate raised amounts failed");
 				throw(error);
 			})
 		})
-		.catch(error => {
+		/*.catch(error => {
 			// TODO dont forget to add error display for user
 			// this.setState({ error: error.reason })
-			console.error('transactions fetch failed', error)
-		})
+			console.error('transactions fetch failed')
+			console.error(error)
+			throw(error)
+		})*/
 	}
-	gimmeSatoshisPerStage (item) {
+
+	gimmeSatoshisPerStage (item, printState) {
 		const dates = ['16', '19', '22', '25', '28']
-		//return this.state.balanceIncludingUnconfirmed;
-
-		if (!this.state.crowdsaleStats) return 0;
-
-		let crowdsaleStats = this.state.crowdsaleStats
-		console.log('crowdsaleStats', crowdsaleStats);
-
-		let state = this.state
-		console.log('current state', state); console.log();
-
-		let dateString= item && item.date && item.date.getDate().toString()
-		let idx = dates.indexOf(dateString)
-
-		if (!idx) {
-			console.log(this.state.balanceIncludingUnconfirmed)
-			return this.state.balanceIncludingUnconfirmed
-		}
-		let stat = crowdsaleStats[dateString];
-		if (!stat) return 22;
-		if (dateString == dates[0]) {
-			return stat.final_balance || 55;
-		}
-		else {
-			if (idx>0) {
-				let prev_stat = crowdsaleStats[dates[idx-1]]
-				return stat.final_balance - prev_stat
-			}
-			else return 77
-		}
+		console.log(this.state);
+		console.log(item);
+		return this.state.balanceIncludingUnconfirmed;
 	}
 
 
@@ -281,7 +250,6 @@ class BuyGolos extends React.Component {
 						</div>
 				</div>;
 		}
-		console.log(_urls)
 		const {state, props} = this
 		const {
       intl,
@@ -463,7 +431,7 @@ class BuyGolos extends React.Component {
 															<td>{item.hash}<br />({localizedDate}); {displayConfirmations(item.confirmations)}</td>
 
 															<td>{roundPrecision(
-																transactionOutputsSum(item, icoDestinationAddress)/_btc.satoshiPerCoin, 8)
+																this.state.balanceIncludingUnconfirmed || gimmeSatoshisPerStage()/_btc.satoshiPerCoin, 8)
 															}</td>
 
 															<td>{calculateCurrentStage(confirmedDate)}%</td>

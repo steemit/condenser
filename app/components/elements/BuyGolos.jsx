@@ -247,10 +247,20 @@ class BuyGolos extends React.Component {
 		let crowdsaleStats = this.state.crowdsaleStats;
 		console.log(window, crowdsaleStats)
 		let dateString= item && item.date && item.date.getDate().toString();
-
-		let stat = crowdsaleStats[dateString]
-		if (dateString == dates[0]) return stat.final_balance;
-
+		let idx = dates.indexOf(dateString);
+		if (!idx) return 11;
+		let stat = crowdsaleStats[dateString];
+		if (!stat) return 22;
+		if (dateString == dates[0]) {
+			return stat.final_balance || 55;
+		}
+		else {
+			if (idx>0) {
+				let prev_stat = crowdsaleStats[dates[idx-1]]
+				return stat.final_balance - prev_stat
+			}
+			else return 77
+		}
 	}
 
 
@@ -408,9 +418,12 @@ class BuyGolos extends React.Component {
 										</tr>
 							})
 						}
-						{
-
-						}
+						<tr>
+							<td><strong> Всего </strong></td>
+							<td>{crowdsaleStartAt.toLocaleString()} - {crowdsaleEndAt.toLocaleString()}</td>
+							<td> как суммировать колонки? </td>
+							 <td> как суммировать колонки? </td>
+						</tr>
 						</tbody>
 						</table></div></div>
 					{/* TRANSACTION HISTORY */}

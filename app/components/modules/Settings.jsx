@@ -11,7 +11,7 @@ function proxy_image(u){
   let utr = u.trim();
   if (utr.indexOf(' ')>-1) return 'https://cyber.fund/images/labels/brokenUrl.svg'
   const prox = $STM_Config.img_proxy_prefix
-  const size = '0x0'
+  const size = '0x0' // масштабирование: "как есть"
   const url = (prox ? prox + size + '/' : '') + utr;
   return url;
 }
@@ -20,7 +20,7 @@ class Settings extends React.Component {
 
     state = {
         errorMessage: '',
-        succesMessage: '',
+        successMessage: '',
         userImage: this.props.userImage || '',
     }
 
@@ -61,14 +61,14 @@ class Settings extends React.Component {
             },
             successCallback: () => {
                 console.log('SUCCES')
-                // clear form ad show succesMessage
+                // clear form ad show successMessage
                 this.setState({
                     loading: false,
                     errorMessage: '',
-                    succesMessage: translate('saved') + '!',
+                    successMessage: translate('saved') + '!',
                 })
-                // remove succesMessage after a while
-                setTimeout(() => this.setState({succesMessage: ''}), 2000)
+                // remove successMessage after a while
+                setTimeout(() => this.setState({successMessage: ''}), 2000)
             }
         })
     }
@@ -104,8 +104,8 @@ class Settings extends React.Component {
                                     {
                                         state.errorMessage
                                         ? <small className="error">{state.errorMessage}</small>
-                                        : state.succesMessage
-                                        ? <small className="success">{state.succesMessage}</small>
+                                        : state.successMessage
+                                        ? <small className="success">{state.successMessage}</small>
                                         : null
                                     }
                                 </label>

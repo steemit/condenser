@@ -90,7 +90,9 @@ export default class UserProfile extends React.Component {
             const followers_loaded = status_followers.get('loading') === false && status_followers.get('error') == null
             if (followers_loaded) {
                 followerCount = followers.get('result').filter(a => {
-                    return a.get(0) === "blog";
+                    // TODO: remove this check after shared-db upgrade. https://github.com/steemit/steem/pull/577
+                    if((typeof a) !== 'string') a = a.get(0);
+                    return a === "blog";
                 }).size;
             }
         }
@@ -100,7 +102,9 @@ export default class UserProfile extends React.Component {
             const following_loaded = status_following.get('loading') === false && status_following.get('error') == null
             if (following_loaded) {
                 followingCount = following.get('result').filter(a => {
-                    return a.get(0) === "blog";
+                    // TODO: remove this check after shared-db upgrade. https://github.com/steemit/steem/pull/577
+                    if((typeof a) !== 'string') a = a.get(0);
+                    return a === "blog";
                 }).size;
             }
         }

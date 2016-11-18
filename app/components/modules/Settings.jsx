@@ -6,15 +6,7 @@ import { ALLOWED_CURRENCIES } from 'config/client_config'
 import store from 'store';
 import transaction from 'app/redux/Transaction'
 import o2j from 'shared/clash/object2json'
-
-function proxy_image(u){
-  let utr = u.trim();
-  if (utr.indexOf(' ')>-1) return 'https://cyber.fund/images/labels/brokenUrl.svg'
-  const prox = $STM_Config.img_proxy_prefix
-  const size = '0x0' // масштабирование: "как есть"
-  const url = (prox ? prox + size + '/' : '') + utr;
-  return url;
-}
+import {proxyImage} from 'shared/clash/images/urls'
 
 class Settings extends React.Component {
 
@@ -117,7 +109,7 @@ class Settings extends React.Component {
                         <div className="small-12 medium-6 large-8 columns text-center">
                             {
                                 state.userImage
-                                ? <img src={proxy_image(state.userImage)} alt={translate('user_avatar') + ' ' + props.account.name} />
+                                ? <img src={proxyImage(state.userImage)} alt={translate('user_avatar') + ' ' + props.account.name} />
                                 : null
                             }
                         </div>

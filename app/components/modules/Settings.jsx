@@ -6,8 +6,10 @@ import { ALLOWED_CURRENCIES } from 'config/client_config'
 import store from 'store';
 import transaction from 'app/redux/Transaction'
 import o2j from 'shared/clash/object2json'
-import {proxyImage} from 'shared/clash/images/urls'
-
+import _urls from 'shared/clash/images/urls'
+import _btc from 'shared/clash/coins/btc'
+console.log(_urls.proxyImage, "PI 2")
+console.log(_btc.fromSatoshis, "2 PI 2")
 class Settings extends React.Component {
 
     state = {
@@ -109,7 +111,7 @@ class Settings extends React.Component {
                         <div className="small-12 medium-6 large-8 columns text-center">
                             {
                                 state.userImage
-                                ? <img src={proxyImage(state.userImage)} alt={translate('user_avatar') + ' ' + props.account.name} />
+                                ? <img src={_urls.proxyImage(state.userImage)} alt={translate('user_avatar') + ' ' + props.account.name} />
                                 : null
                             }
                         </div>

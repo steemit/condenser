@@ -18,10 +18,10 @@ import roundPrecision from 'round-precision'
 import icoDestinationAddress from 'shared/icoAddress'
 import { injectIntl } from 'react-intl';
 
-const satoshiPerCoin=100000000;
-function fromSatoshis (value_in_satoshis) {
-	return value_in_satoshis / satoshiPerCoin;
-}
+import _btc from 'shared/clash/coins/btc'
+import _urls from 'shared/clash/images/urls'
+
+
 /*
 	Логика компонента:
 	Если пользователь находится на своей странице, и если у него нет Btc адреса, то должна отображаться кнопка генерации адреса.
@@ -201,6 +201,8 @@ class BuyGolos extends React.Component {
 				unconfirmedBalanceOnly: icoBalanceObject.unconfirmed_balance,
 				unconfirmedTxsCount: icoBalanceObject.unconfirmed_n_tx
 			});
+			console.log("balanceObject is: ", icoBalanceObject);
+			console.log('--            --'); console.log('');
 			fetch('/api/v1/get_raised_amounts').then(function(d) { return d.json() })
 			.then((data) => {
 				if (data.status !== 'ok') {
@@ -237,18 +239,21 @@ class BuyGolos extends React.Component {
 			console.error('transactions fetch failed', error)
 		})
 	}
-	gimmeSatoshisPerStage = function(item){
+	gimmeSatoshisPerStage (item) {
 		const dates = ['16', '19', '22', '25', '28']
+		console.log(dates);
+		return this.state.balanceIncludingUnconfirmed;
 
-	//	console.log(this.state.crowdsaleStats)
-	//	console.log(this.state.balanceIncludingUnconfirmed)
-	//	console.log(item && item.date && item.date.getDate())
 		if (!this.state.crowdsaleStats) return 0;
-		let crowdsaleStats = this.state.crowdsaleStats;
+		let crowdsaleStats = this.state.crowdsaleStats
 		console.log(window, crowdsaleStats)
-		let dateString= item && item.date && item.date.getDate().toString();
-		let idx = dates.indexOf(dateString);
-		if (!idx) return 11;
+		let dateString= item && item.date && item.date.getDate().toString()
+		let idx = dates.indexOf(dateString)
+
+		if (!idx) {
+			console.log(this.state.balanceIncludingUnconfirmed)
+			return this.state.balanceIncludingUnconfirmed
+		}
 		let stat = crowdsaleStats[dateString];
 		if (!stat) return 22;
 		if (dateString == dates[0]) {
@@ -272,7 +277,7 @@ class BuyGolos extends React.Component {
 						</div>
 				</div>;
 		}
-
+		console.log(_urls)
 		const {state, props} = this
 		const {
       intl,
@@ -408,9 +413,9 @@ class BuyGolos extends React.Component {
 <td>{(index === 0) ? crowdsaleStartAt.toLocaleString() : collection[index-1].date.toLocaleString()} ---
 {item.date.toLocaleString()}
 </td>
-											<td>{fromSatoshis(this.gimmeSatoshisPerStage(item))}</td>
+											<td>{_btc.fromSatoshis(this.gimmeSatoshisPerStage(item))}</td>
 
-											<td>{roundPrecision((100 + calculateCurrentStage ((index === 0) ? crowdsaleStartAt : collection[index-1].date)) * fromSatoshis(this.gimmeSatoshisPerStage(item))/100, 8)}</td>
+											<td>{roundPrecision((100 + calculateCurrentStage ((index === 0) ? crowdsaleStartAt : collection[index-1].date)) * _btc.fromSatoshis(this.gimmeSatoshisPerStage(item))/100, 8)}</td>
 {/*}
 											<td>{100 + calculateCurrentStage(confirmedDate) }</td>
 											<td>{roundPrecision(golosAmount, 3)}</td>
@@ -421,8 +426,8 @@ class BuyGolos extends React.Component {
 						<tr>
 							<td><strong> Всего </strong></td>
 							<td>{crowdsaleStartAt.toLocaleString()} - {crowdsaleEndAt.toLocaleString()}</td>
+							<td> <strong>{_btc.fromSatoshis()}</strong> BTC </td>
 							<td> как суммировать колонки? </td>
-							 <td> как суммировать колонки? </td>
 						</tr>
 						</tbody>
 						</table></div></div>

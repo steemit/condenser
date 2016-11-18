@@ -241,12 +241,16 @@ class BuyGolos extends React.Component {
 	}
 	gimmeSatoshisPerStage (item) {
 		const dates = ['16', '19', '22', '25', '28']
-		console.log(dates);
-		return this.state.balanceIncludingUnconfirmed;
+		//return this.state.balanceIncludingUnconfirmed;
 
 		if (!this.state.crowdsaleStats) return 0;
+
 		let crowdsaleStats = this.state.crowdsaleStats
-		console.log(window, crowdsaleStats)
+		console.log('crowdsaleStats', crowdsaleStats);
+
+		let state = this.state
+		console.log('current state', state); console.log();
+
 		let dateString= item && item.date && item.date.getDate().toString()
 		let idx = dates.indexOf(dateString)
 
@@ -401,8 +405,8 @@ class BuyGolos extends React.Component {
 								<th width="200">Период действия бонуса</th>
 								<th width="120">Собрано биткоинов</th>
 								<th width="120">собрано у.е.</th>
-								<th width="120">текущая стоимость голоса без бонуса</th>
-								<th width="120">текущая стоимость покупки голоса</th>
+								<th width="120">стоимость голоса без бонуса</th>
+								<th width="120">стоимость покупки голоса</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -413,7 +417,7 @@ class BuyGolos extends React.Component {
 <td>{(index === 0) ? crowdsaleStartAt.toLocaleString() : collection[index-1].date.toLocaleString()} ---
 {item.date.toLocaleString()}
 </td>
-											<td>{_btc.fromSatoshis(this.gimmeSatoshisPerStage(item))}</td>
+											<td>{_btc.fromSatoshis(this.gimmeSatoshisPerStage(item))} --- {calculateCurrentStage(new Date())}</td>
 
 											<td>{roundPrecision((100 + calculateCurrentStage ((index === 0) ? crowdsaleStartAt : collection[index-1].date)) * _btc.fromSatoshis(this.gimmeSatoshisPerStage(item))/100, 8)}</td>
 {/*}
@@ -426,7 +430,7 @@ class BuyGolos extends React.Component {
 						<tr>
 							<td><strong> Всего </strong></td>
 							<td>{crowdsaleStartAt.toLocaleString()} - {crowdsaleEndAt.toLocaleString()}</td>
-							<td> <strong>{_btc.fromSatoshis()}</strong> BTC </td>
+							<td> {console.log(this.state, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!") && this.state.balanceIncludingUnconfirmed.toString()} ||<strong>| {_btc.fromSatoshis(this.state.balanceIncludingUnconfirmed)}</strong> BTC </td>
 							<td> как суммировать колонки? </td>
 						</tr>
 						</tbody>
@@ -458,7 +462,9 @@ class BuyGolos extends React.Component {
 												return 	<tr key={index}>
 															<td>{item.hash}<br />({localizedDate}); {displayConfirmations(item.confirmations)}</td>
 
-															<td>{roundPrecision(transactionOutputsSum(item, icoDestinationAddress)/satoshiPerCoin, 8)}</td>
+															<td>{roundPrecision(
+																transactionOutputsSum(item, icoDestinationAddress)/_btc.satoshiPerCoin, 8)
+															}</td>
 
 															<td>{calculateCurrentStage(confirmedDate)}%</td>
 

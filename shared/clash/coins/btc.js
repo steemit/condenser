@@ -1,5 +1,6 @@
 const satoshiPerCoin=100000000;
 const expo = {
+  satoshiPerCoin: function(){ return satoshiPerCoin },
   fromSatoshis: function (value_in_satoshis) {
   	return value_in_satoshis / satoshiPerCoin;
   }
@@ -20,8 +21,8 @@ exports.test = {
       console.log (`test${result?'+':'-'}'${description}'`, successes, failures);
     }
 
-    test ('expo is an object', typeof expo === 'object');
-
+    test ('expo is an object', typeof expo === 'object')
+    test (`satoshiPerCoin is huge, ${expo.satoshiPerCoin}`, expo.satoshiPerCoin > 45)
     console.log(```after passing all the tests:       successes: ${successes},     failures: ${failures}```)
   }
 }

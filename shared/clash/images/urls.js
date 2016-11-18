@@ -8,5 +8,5 @@ const expo = {
     return url;
   }
 }
-console.log("image/urls", expo)
+
 export {expo as default}

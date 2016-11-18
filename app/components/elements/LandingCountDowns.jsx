@@ -98,8 +98,8 @@ export default class LandingCountDowns extends React.Component {
 			const raisedWithUnconfirmed = object.final_balance
 			console.log('object', object)
 			this.setState({
-				bitcoinsRaised: raised / satoshiPerCoin,
-				bitcoinsRaisedIncludingUnconfirmed: raisedWithUnconfirmed / satoshiPerCoin,
+				bitcoinsRaised: raised, // [please apply formatters instead]
+				bitcoinsRaisedIncludingUnconfirmed: raisedWithUnconfirmed,
 				unconfirmedNTx: object.unconfirmed_n_tx || 0
 			})
 		})

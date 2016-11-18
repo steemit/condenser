@@ -11,7 +11,7 @@ import { translate, translateHtml } from 'app/Translator';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import ClipboardIcon from 'react-clipboard-icon'
 import o2j from 'shared/clash/object2json'
-import { calculateCurrentStage, currentStage } from '../elements/LandingCountDowns.jsx';
+import { calculateCurrentStage, currentStage, crowdsaleDates } from '../elements/LandingCountDowns.jsx';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Tooltip from 'app/components/elements/Tooltip';
 import roundPrecision from 'round-precision'
@@ -41,6 +41,14 @@ function getFilteredTransactions(fullResponse, sourceAddress, destinationAddress
 
 // returns received by crowdsale amount in satoshis within single transaction
 function transactionOutputsSum(tx, destinationAddress) {
+	const interestingOutputs = filter(tx.outputs, output => {
+			return includes( output.addresses, destinationAddress)});
+	let satoshiDestinationReceived = 0
+	interestingOutputs.forEach(output => satoshiDestinationReceived+=output.value)
+	return satoshiDestinationReceived;
+}
+
+function transactionOutputsSumWeighted(tx, destinationAddress) {
 	const interestingOutputs = filter(tx.outputs, output => {
 			return includes( output.addresses, destinationAddress)});
 	let satoshiDestinationReceived = 0
@@ -82,6 +90,17 @@ class BuyGolos extends React.Component {
 		const checkboxIdentifier = 'checkboxClicked' + checkboxNumber
 		const checkbox = this.state[checkboxIdentifier]
 		this.setState({ [checkboxIdentifier]: !checkbox })
+	}
+
+  mediacontentBlock1 = () => {
+		return (
+			<div className="column small-12">
+
+
+				<p><b>Сила Голоса</b> - неперемещаемые цифровые токены. Их оценка в Голосах увеличивается при долгосрочном хранении. Чем их больше, тем сильней вы влияете на вознаграждения за пост и тем больше зарабатываете за голосование. Также Сила Голоса дает право записывать любые данные в блокчейн Голоса. Чем больше Силы Голоса, тем большая доля в пропускной способности гарантируется Вам сетью Голос. Перевод Силы Голоса в Голоса занимает 104 недели равными частями.</p>
+				<p>Если у Вас нет биткоинов, то Вы можете их купить за любую национальную валюту на <a href="https://localbitcoins.net/">Localbitcoins.net</a>. Также сообществом Голос организованы разные сервисы по участию в краудсейле. Инструкции по покупке можно найти по тэгу <a href="/trending/ru--kupitxbitkoin">#КупитьБиткоин</a>.</p>
+			</div>
+		)
 	}
 
 	generateAddress = event => {
@@ -209,9 +228,9 @@ class BuyGolos extends React.Component {
 			// this.setState({ error: error.reason })
 			console.error('transactions fetch failed', error)
 		})
-
-
 	}
+
+	crowdsalePeriods = []
 
 	render() {
 		if (!process.env.BROWSER) { // don't render this page on the server
@@ -231,6 +250,9 @@ class BuyGolos extends React.Component {
 		} = props
 		const { transactions } = state
 		let loading=this.state.loading
+		let currentTime = null;
+		let periods = [];
+
 		return 	<div id="buy_golos" className="BuyGolos">
 					<div className="row">
 						<div className="columns small-12">
@@ -328,15 +350,50 @@ class BuyGolos extends React.Component {
 									</tbody>
 								</table>
 							</div>
-
-							<div className="column small-12">
-								<p><b>Сила Голоса</b> - неперемещаемые цифровые токены. Их оценка в Голосах увеличивается при долгосрочном хранении. Чем их больше, тем сильней вы влияете на вознаграждения за пост и тем больше зарабатываете за голосование. Также Сила Голоса дает право записывать любые данные в блокчейн Голоса. Чем больше Силы Голоса, тем большая доля в пропускной способности гарантируется Вам сетью Голос. Перевод Силы Голоса в Голоса занимает 104 недели равными частями.</p>
-								<p>Если у Вас нет биткоинов, то Вы можете их купить за любую национальную валюту на <a href="https://localbitcoins.net/">Localbitcoins.net</a>. Также сообществом Голос организованы разные сервисы по участию в краудсейле. Инструкции по покупке можно найти по тэгу <a href="/trending/ru--kupitxbitkoin">#КупитьБиткоин</a>.</p>
-							</div>
+								{this.mediacontentBlock1()}
 						</div>
 						: null
 					}
+					<div className="row">
+						<div className="column small-12">
+						<table>
+						<thead>
+							<tr>
+								<th width="80">Бонус</th>
+								<th width="200">Период действия бонуса</th>
+								<th width="120">Собрано биткоинов</th>
+								<th width="120">собрано у.е.</th>
+								<th width="120">текущая стоимость голоса без бонуса</th>
+								<th width="120">текущая стоимость покупки голоса</th>
+							</tr>
+						</thead>
+						<tbody>
+						{
+							crowdsaleDates.map((item, index) => {
+								console.log(item);
+								if (!this.crowdsalePeriods.length) {
+									console.log(this.crowdsalePeriods);
+									this.crowdsalePeriods[0] = [[item.date], [crowdsaleDates[1].bonus], [crowdsaleDates[1].date]]
+								}
+								console.log(this.crowdsalePeriods);
+								return <br />;
 
+
+								return 	<tr key={index}>
+											<td>{calculateCurrentStage(confirmedDate)}%</td>
+
+											<td>{roundPrecision(transactionOutputsSum(item, icoDestinationAddress)/satoshiPerCoin, 8)}</td>
+
+											<td>{calculateCurrentStage(confirmedDate)}%</td>
+
+											<td>{100 + calculateCurrentStage(confirmedDate) }</td>
+											<td>{roundPrecision(golosAmount, 3)}</td>
+											<td>{roundPrecision(sharePercentage, 6) + '%'}</td>
+										</tr>
+							})
+						}
+						</tbody>
+						</table></div></div>
 					{/* TRANSACTION HISTORY */}
 					{
 						transactions.length && state.confirmedBalance
@@ -356,16 +413,21 @@ class BuyGolos extends React.Component {
 									<tbody>
 										{
 											transactions.map((item, index) => {
+
 												const golosAmount = 27072000*transactionOutputsSum(item, icoDestinationAddress)/state.confirmedBalance
 												const sharePercentage = (golosAmount/43306176) * 100
                         const localizedDate = intl.formatDate(item.confirmed)
                         const confirmedDate = new Date(item.confirmed)
 												return 	<tr key={index}>
 															<td>{item.hash}<br />({localizedDate}); {displayConfirmations(item.confirmations)}</td>
+
 															<td>{roundPrecision(transactionOutputsSum(item, icoDestinationAddress)/satoshiPerCoin, 8)}</td>
-                              <td>{calculateCurrentStage(confirmedDate)}%</td>
-															{/* <td>{roundPrecision(golosAmount, 3)}</td> */}
-															{/* <td>{roundPrecision(sharePercentage, 6) + '%'}</td> */}
+
+															<td>{calculateCurrentStage(confirmedDate)}%</td>
+
+															<td>{(100 + calculateCurrentStage (confirmedDate)) * (transactionOutputsSum(item, icoDestinationAddress)) /100 }</td>
+															<td>{roundPrecision(golosAmount, 3)}</td>
+															<td>{roundPrecision(sharePercentage, 6) + '%'}</td>
 														</tr>
 											})
 										}

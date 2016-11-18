@@ -23,23 +23,6 @@ export const crowdsaleStartAt 	= createDate(2016, 10, 1, 11, 0)
 export const crowdsaleEndAt 	= createDate(2016, 11, 4, 11, 0)
 
 const stages = [25, 20, 15, 10, 5, 0]
-
-export function addDays(days) {
-	const result = new Date(crowdsaleStartAt)
-	result.setDate(result.getDate() + days)
-	return result
-}
-
-// dates are calculated based on props.crowdsaleStartAt variable
-const dates = [
-		{ date: addDays(15), bonus: 25 },
-		{ date: addDays(18), bonus: 20 },
-		{ date: addDays(21), bonus: 15 },
-		{ date: addDays(24), bonus: 10 },
-		{ date: addDays(27), bonus: 5 },
-		{ date: addDays(33), bonus: 0 }
-	]
-
 export function calculateCurrentStage(date = Date.now()) {
 	if (date < addDays(15).getTime()) return stages[0]
   else if (date < addDays(18).getTime()) return stages[1]
@@ -49,7 +32,21 @@ export function calculateCurrentStage(date = Date.now()) {
 	return stages[5]
 }
 
-export const currentStage = dates.find((item) => item.bonus == calculateCurrentStage())
+export function addDays(days) {
+	const result = new Date(crowdsaleStartAt)
+	result.setDate(result.getDate() + days)
+	return result
+}
+// crowdsaleDates are calculated based on props.crowdsaleStartAt variable
+export const crowdsaleDates = [
+		{ date: addDays(15), bonus: 25 },
+		{ date: addDays(18), bonus: 20 },
+		{ date: addDays(21), bonus: 15 },
+		{ date: addDays(24), bonus: 10 },
+		{ date: addDays(27), bonus: 5 },
+		{ date: addDays(33), bonus: 0 }
+	]
+export const currentStage = crowdsaleDates.find((item) => item.bonus == calculateCurrentStage())
 
 export default class LandingCountDowns extends React.Component {
 
@@ -135,8 +132,8 @@ export default class LandingCountDowns extends React.Component {
 
 	render() {
 		const {state, props} = this
-		const currentStage = dates.find((item) => item.bonus == calculateCurrentStage())
-		const previousStage = dates.find((item) => item.bonus < calculateCurrentStage())
+		const currentStage = crowdsaleDates.find((item) => item.bonus == calculateCurrentStage())
+		const previousStage = crowdsaleDates.find((item) => item.bonus < calculateCurrentStage())
     const nextStage = calculateCurrentStage() ? calculateCurrentStage() - 5 : 0
 
 		function strSplice(str1, str2, location) {
@@ -231,7 +228,7 @@ export default class LandingCountDowns extends React.Component {
 							<div className="small-12 medium-4 columns">
 								<CountDown
                   title={`Бонус уменьшится: до ${nextStage}%`}
-									date={dates[1].date}
+									date={crowdsaleDates[1].date}
 									countFrom={previousStage.date.getTime()}
 									displayWhenZero
 								/>

@@ -138,9 +138,7 @@ class Header extends React.Component {
         }
 
         // Format first letter of all titles and lowercase user name
-        if (route.page === 'UserProfile') {
-            page_title = page_title.charAt(0) + page_title.slice(1);
-        } else {
+        if (route.page !== 'UserProfile') {
             page_title = page_title.charAt(0).toUpperCase() + page_title.slice(1);
         }
 

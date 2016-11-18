@@ -11,7 +11,7 @@ import { translate, translateHtml } from 'app/Translator';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import ClipboardIcon from 'react-clipboard-icon'
 import o2j from 'shared/clash/object2json'
-import { calculateCurrentStage, currentStage, crowdsaleDates } from '../elements/LandingCountDowns.jsx';
+import { crowdsaleStartAt, crowdsaleEndAt, calculateCurrentStage, currentStage, crowdsaleDates } from '../elements/LandingCountDowns.jsx';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Tooltip from 'app/components/elements/Tooltip';
 import roundPrecision from 'round-precision'
@@ -19,7 +19,9 @@ import icoDestinationAddress from 'shared/icoAddress'
 import { injectIntl } from 'react-intl';
 
 const satoshiPerCoin=100000000;
-
+function fromSatoshis (value_in_satoshis) {
+	return value_in_satoshis / satoshiPerCoin;
+}
 /*
 	Логика компонента:
 	Если пользователь находится на своей странице, и если у него нет Btc адреса, то должна отображаться кнопка генерации адреса.
@@ -72,8 +74,8 @@ class BuyGolos extends React.Component {
 	state = {
 		icoAddress: '',
 		transactions: [],
-		fundsRaisedByDate: {},
-        error: '',
+		crowdsaleStats: [],
+    error: '',
 		loading: false,
 		checkboxesClicked: [false, false, false],
 		checkboxClicked0: false,
@@ -175,13 +177,11 @@ class BuyGolos extends React.Component {
 
 	fetchTransations = () => {
 		const icoAddress = this.state.icoAddress || this.props.icoAddress
-		console.log('icoAddress', icoAddress)
 		if (!icoAddress) return
 		console.log('fetching in progress!')
 		fetch(`https://api.blockcypher.com/v1/btc/main/addrs/${icoAddress}/full?confirmations=0`)
 		.then(function(data) { return data.json() })
 		.then((txObject) => {
-			console.log('icoAddressTrans', txObject)
 			this.setState({	transactions:  getFilteredTransactions(txObject,
 					icoAddress, icoDestinationAddress) });
 		})
@@ -195,28 +195,36 @@ class BuyGolos extends React.Component {
 		fetch(`https://api.blockcypher.com/v1/btc/main/addrs/${icoDestinationAddress}/balance`)
 		.then(function(data) { return data.json() })
 		.then((icoBalanceObject) => {
-			console.log('icoBalanceObject.balance', icoBalanceObject.balance)
 			this.setState({
 				confirmedBalance: icoBalanceObject.balance,
 				balanceIncludingUnconfirmed: icoBalanceObject.final_balance,
 				unconfirmedBalanceOnly: icoBalanceObject.unconfirmed_balance,
 				unconfirmedTxsCount: icoBalanceObject.unconfirmed_n_tx
 			});
-
 			fetch('/api/v1/get_raised_amounts').then(function(d) { return d.json() })
 			.then((data) => {
-				console.log('received data', data);
 				if (data.status !== 'ok') {
 					console.log("fetching intermediate raised amounts failed");
 					return;
 				} else {
 					data = data.data;
 				}
-				data = data.map(function(item){
-					let ret = {}; ret[item.kk] = item;
-					return ret;
+				let results = new Object()
+				data.forEach(function(it){
+					let split = it.kk && it.kk.split && it.kk.split('_');
+					if (! split.length === 6) return false;
+					let ret = split[0] === 'icoBalance' && split[1] === 'Nov'
+
+
+					if (ret) { // side effect
+						let value = o2j.ifStringParseJSON(it.value);
+						results[split[2]] = value;
+					}
+
+					return ret
 				});
-				console.log('transformed data', data)
+				this.setState({crowdsaleStats: results});
+				console.log(results, "results and data", data)
 			})
 			.catch(error => {
 				console.log("fetching intermediate raised amounts failed");
@@ -229,8 +237,22 @@ class BuyGolos extends React.Component {
 			console.error('transactions fetch failed', error)
 		})
 	}
+	gimmeSatoshisPerStage = function(item){
+		const dates = ['16', '19', '22', '25', '28']
 
-	crowdsalePeriods = []
+	//	console.log(this.state.crowdsaleStats)
+	//	console.log(this.state.balanceIncludingUnconfirmed)
+	//	console.log(item && item.date && item.date.getDate())
+		if (!this.state.crowdsaleStats) return 0;
+		let crowdsaleStats = this.state.crowdsaleStats;
+		console.log(window, crowdsaleStats)
+		let dateString= item && item.date && item.date.getDate().toString();
+
+		let stat = crowdsaleStats[dateString]
+		if (dateString == dates[0]) return stat.final_balance;
+
+	}
+
 
 	render() {
 		if (!process.env.BROWSER) { // don't render this page on the server
@@ -356,6 +378,7 @@ class BuyGolos extends React.Component {
 					}
 					<div className="row">
 						<div className="column small-12">
+
 						<table>
 						<thead>
 							<tr>
@@ -369,28 +392,24 @@ class BuyGolos extends React.Component {
 						</thead>
 						<tbody>
 						{
-							crowdsaleDates.map((item, index) => {
-								console.log(item);
-								if (!this.crowdsalePeriods.length) {
-									console.log(this.crowdsalePeriods);
-									this.crowdsalePeriods[0] = [[item.date], [crowdsaleDates[1].bonus], [crowdsaleDates[1].date]]
-								}
-								console.log(this.crowdsalePeriods);
-								return <br />;
-
-
+							crowdsaleDates.map((item, index, collection) => {
 								return 	<tr key={index}>
-											<td>{calculateCurrentStage(confirmedDate)}%</td>
+											<td>{item.bonus}%</td>
+<td>{(index === 0) ? crowdsaleStartAt.toLocaleString() : collection[index-1].date.toLocaleString()} ---
+{item.date.toLocaleString()}
+</td>
+											<td>{fromSatoshis(this.gimmeSatoshisPerStage(item))}</td>
 
-											<td>{roundPrecision(transactionOutputsSum(item, icoDestinationAddress)/satoshiPerCoin, 8)}</td>
-
-											<td>{calculateCurrentStage(confirmedDate)}%</td>
-
+											<td>{roundPrecision((100 + calculateCurrentStage ((index === 0) ? crowdsaleStartAt : collection[index-1].date)) * fromSatoshis(this.gimmeSatoshisPerStage(item))/100, 8)}</td>
+{/*}
 											<td>{100 + calculateCurrentStage(confirmedDate) }</td>
 											<td>{roundPrecision(golosAmount, 3)}</td>
-											<td>{roundPrecision(sharePercentage, 6) + '%'}</td>
+											<td>{roundPrecision(sharePercentage, 6) + '%'}</td>*/}
 										</tr>
 							})
+						}
+						{
+
 						}
 						</tbody>
 						</table></div></div>

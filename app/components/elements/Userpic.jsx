@@ -29,7 +29,7 @@ class Userpic extends Component {
 
 		return 	<div className="Userpic">
 					<img
-						src={url || '/app/assets/images/user.png'}
+						src={url || '/images/user.png'}
 						{...rest}
 					/>
 				</div>;

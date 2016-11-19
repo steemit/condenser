@@ -136,8 +136,8 @@ export default class LandingCountDowns extends React.Component {
 	render() {
 		const {state, props} = this
 		const currentStage = dates.find((item) => item.bonus == calculateCurrentStage())
-		const previousStage = dates.find((item) => item.bonus < calculateCurrentStage())
-    const nextStage = calculateCurrentStage() ? calculateCurrentStage() - 5 : 0
+    const previousStage = dates.find((item) => item.bonus < calculateCurrentStage())
+    const nextBonus = calculateCurrentStage() ? calculateCurrentStage() - 5 : 0
 
 		function strSplice(str1, str2, location) {
 		  return str1.slice(0, location) + str2 + str1.slice(location, str1.length);
@@ -230,8 +230,8 @@ export default class LandingCountDowns extends React.Component {
 							</div>
 							<div className="small-12 medium-4 columns">
 								<CountDown
-                  title={`Бонус уменьшится: до ${nextStage}%`}
-									date={dates[1].date}
+                  title={`Бонус уменьшится: до ${nextBonus}%`}
+                  date={currentStage.date}
 									countFrom={previousStage.date.getTime()}
 									displayWhenZero
 								/>

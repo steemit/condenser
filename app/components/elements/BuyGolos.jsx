@@ -21,7 +21,7 @@ import { injectIntl } from 'react-intl';
 import _btc from 'shared/clash/coins/btc'
 import _urls from 'shared/clash/images/urls'
 
-const dates = ['16', '19', '22', '25', '28']
+const dates = ['16', '19', '22', '25', '28', '4']
 /*
 	Логика компонента:
 	Если пользователь находится на своей странице, и если у него нет Btc адреса, то должна отображаться кнопка генерации адреса.
@@ -233,38 +233,30 @@ class BuyGolos extends React.Component {
 		let filtered = find(this.state.crowdSaleStats, (it) =>{
 			return it.kk.split('_')[2] === dateString
 		})
-		console.log(filtered, this.state.crowdSaleStats, dateString)
+
 		if (filtered) filtered = o2j.ifStringParseJSON(filtered.value);
-		return filtered && filtered.final_balance || 0;
+		return filtered && filtered.final_balance || this.state.balanceIncludingUnconfirmed;
 	}
 
-	gimmeSatoshisPerStage (date) {
-		//let filtr = ['icoBalance', 'Nov', dateString].join('_')
-
-		let dateString = date.getDate().toString();
-		let index = dates.indexOf(dateString);
-		let filtered, filtered2;
-		if (index) filtered = this.getIcoResultOnDate(dates[index]);
-		if (index>0) filtered2 = this.getIcoResultOnDate(dates[index-1]);
-
-		if (filtered) {
-			if (index===0) {
-				return filtered
-			}
-			if (index>0) {
-				if (filtered2) {
-					return filtered - filtered2
-				} else {
-					return filtered
-				}
-			}
-			if (index===-1) {
-				return 88
-			}
-		}
-		return 99;
+	getSumBonused() {
+		let crowdsale =
+		crowdsaleDates.map(
+		(item, index, collection) => {
+			const date = item.date
+			const dateString = date.getDate().toString()
+			const idx = dates.indexOf(dateString);
+			const totalS = this.state.balanceIncludingUnconfirmed
+			const k1 = this.getIcoResultOnDate(dateString);
+			const k0 = idx>0?this.getIcoResultOnDate(dates[idx-1]):0
+			const k = k1-k0
+			console.log(k, k*(100+item.bonus)/100)
+			return k*(100+item.bonus)/100
+		}).reduce(function(previousValue, currentValue, index, array) {
+			return previousValue + currentValue;
+		}, 0)
+		console.log(crowdsale);
+		return crowdsale;
 	}
-
 
 	render() {
 		if (!process.env.BROWSER) { // don't render this page on the server
@@ -404,18 +396,27 @@ class BuyGolos extends React.Component {
 						<tbody>
 						{
 							crowdsaleDates.map((item, index, collection) => {
+								const date = item.date
+								const dateString = date.getDate().toString()
+								const idx = dates.indexOf(dateString);
+								const totalS = this.state.balanceIncludingUnconfirmed
+								const k1 = this.getIcoResultOnDate(dateString);
+								const k0 = idx>0?this.getIcoResultOnDate(dates[idx-1]):0
+								const k = k1-k0
+
+
 								return 	<tr key={index}>
 											<td>{item.bonus}%</td>
 
-<td>{(index===0?crowdsaleStartAt:collection[index-1].date).toLocaleString()} - {(index===collection.length-1?crowdsaleEndAt:collection[index].date).toLocaleString()}
-</td>
+											<td>{(index===0?crowdsaleStartAt:collection[index-1].date).toLocaleString()} - {(index===collection.length-1?crowdsaleEndAt:collection[index].date).toLocaleString()}
+											</td>
 
-											<td>{roundPrecision( _btc.fromSatoshis( this.getIcoResultOnDate(item.date.getDate().toString())), 8) }</td>
+											<td>{roundPrecision( _btc.fromSatoshis( k ), 8) }</td>
 
-											<td>{ roundPrecision ( _btc.fromSatoshis((100 + item.bonus) * this.getIcoResultOnDate(item.date.getDate().toString()) ) /100, 8 ) }</td>
+											<td>{ roundPrecision ( _btc.fromSatoshis((100 + item.bonus) * k  /100), 8 ) }</td>
 
-											<td>{item.date.toLocaleString()}</td>
-											<td>{this.getIcoResultOnDate(item.date.getDate().toString())}</td>
+											<td></td>
+											<td></td>
 {/*}
 											<td>{100 + calculateCurrentStage(confirmedDate) }</td>
 											<td>{roundPrecision(golosAmount, 3)}</td>
@@ -427,7 +428,7 @@ class BuyGolos extends React.Component {
 							<td><strong> Всего </strong></td>
 							<td>{crowdsaleStartAt.toLocaleString()} - {crowdsaleEndAt.toLocaleString()}</td>
 							<td>{_btc.fromSatoshis(this.state.balanceIncludingUnconfirmed)} BTC </td>
-							<td> как суммировать колонки? </td>
+							<td> { roundPrecision(_btc.fromSatoshis(this.getSumBonused()), 8)} у.е. </td>
 						</tr>
 						</tbody>
 						</table></div></div>

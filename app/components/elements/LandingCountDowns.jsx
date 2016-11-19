@@ -4,7 +4,6 @@ import Icon from 'app/components/elements/Icon'
 import {APP_ICON} from 'config/client_config'
 import 'whatwg-fetch';
 import icoDestinationAddress from 'shared/icoAddress'
-import roundPrecision from 'round-precision'
 import { FormattedMessage } from 'react-intl';
 import { translate } from 'app/Translator';
 // import { crowdsaleStartAt } from '../pages/Landing'
@@ -134,7 +133,14 @@ export default class LandingCountDowns extends React.Component {
 		const {state, props} = this
 		const currentStage = crowdsaleDates.find((item) => item.bonus == calculateCurrentStage())
 		const previousStage = crowdsaleDates.find((item) => item.bonus < calculateCurrentStage())
-    const nextBonus = calculateCurrentStage() ? calculateCurrentStage() - 5 : 0
+    const nextStage = calculateCurrentStage() ? calculateCurrentStage() - 5 : 0
+
+    let {bitcoinsRaised} = state
+    bitcoinsRaised = String(bitcoinsRaised)
+    bitcoinsRaised = bitcoinsRaised.split('')
+    bitcoinsRaised.splice(-8, 0, '.');
+    bitcoinsRaised = bitcoinsRaised.join('')
+    bitcoinsRaised = Number(bitcoinsRaised)
 
 		function strSplice(str1, str2, location) {
 		  return str1.slice(0, location) + str2 + str1.slice(location, str1.length);
@@ -209,14 +215,14 @@ export default class LandingCountDowns extends React.Component {
 										{
 											state.bitcoinsRaised === false
 											? <strong>загрузка...</strong>
-											: <strong><a href="https://blockchain.info/address/3CWicRKHQqcj1N6fT1pC9J3hUzHw1KyPv3" target="blank">{roundPrecision(state.bitcoinsRaised, 4)} B</a></strong>
+											: <strong><a href="https://blockchain.info/address/3CWicRKHQqcj1N6fT1pC9J3hUzHw1KyPv3" target="blank">{bitcoinsRaised.toPrecision(7)} B</a></strong>
 										}
 									</div>
 									: null
 								}
 								{
 									state.bitcoinsRaised !== state.bitcoinsRaisedIncludingUnconfirmed
-									? <span style={{display: 'block'}}>({roundPrecision(state.bitcoinsRaisedIncludingUnconfirmed, 4)} включая{' '}
+									? <span style={{display: 'block'}}>({state.bitcoinsRaisedIncludingUnconfirmed.toPrecision(7)} включая{' '}
 									<FormattedMessage id="unverified_transactions" values={{transactionsCount: state.unconfirmedNTx}} />)</span> : null
 									// {translate('unverified_transactions', {transactionsCount: state.unconfirmedNTx})}
 								}
@@ -227,8 +233,8 @@ export default class LandingCountDowns extends React.Component {
 							</div>
 							<div className="small-12 medium-4 columns">
 								<CountDown
-                  title={`Бонус уменьшится: до ${nextBonus}%`}
-                  date={currentStage.date}
+                  title={`Бонус уменьшится: до ${nextStage}%`}
+									date={currentStage.date}
 									countFrom={previousStage.date.getTime()}
 									displayWhenZero
 								/>

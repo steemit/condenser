@@ -113,7 +113,7 @@ class AuthorRewards extends React.Component {
             </div>
             <div className="UserWallet__balance UserReward__row row">
                 <div className="column small-12 medium-8">
-                    {translate('author_rewards_last_week')}:
+                    {translate('estimated_author_rewards_last_week')}:
                 </div>
                 <div className="column small-12 medium-4">
                     {numberWithCommas(vestsToSp(this.props.state, rewardsWeekVests + " " + VEST_TICKER)) + " " + VESTING_TOKEN}

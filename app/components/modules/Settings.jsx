@@ -6,12 +6,14 @@ import { ALLOWED_CURRENCIES } from 'config/client_config'
 import store from 'store';
 import transaction from 'app/redux/Transaction'
 import o2j from 'shared/clash/object2json'
+import _urls from 'shared/clash/images/urls'
+import _btc from 'shared/clash/coins/btc'
 
 class Settings extends React.Component {
 
     state = {
         errorMessage: '',
-        succesMessage: '',
+        successMessage: '',
         userImage: this.props.userImage || '',
     }
 
@@ -52,14 +54,14 @@ class Settings extends React.Component {
             },
             successCallback: () => {
                 console.log('SUCCES')
-                // clear form ad show succesMessage
+                // clear form ad show successMessage
                 this.setState({
                     loading: false,
                     errorMessage: '',
-                    succesMessage: translate('saved') + '!',
+                    successMessage: translate('saved') + '!',
                 })
-                // remove succesMessage after a while
-                setTimeout(() => this.setState({succesMessage: ''}), 2000)
+                // remove successMessage after a while
+                setTimeout(() => this.setState({successMessage: ''}), 2000)
             }
         })
     }
@@ -95,8 +97,8 @@ class Settings extends React.Component {
                                     {
                                         state.errorMessage
                                         ? <small className="error">{state.errorMessage}</small>
-                                        : state.succesMessage
-                                        ? <small className="success">{state.succesMessage}</small>
+                                        : state.successMessage
+                                        ? <small className="success">{state.successMessage}</small>
                                         : null
                                     }
                                 </label>
@@ -108,7 +110,7 @@ class Settings extends React.Component {
                         <div className="small-12 medium-6 large-8 columns text-center">
                             {
                                 state.userImage
-                                ? <img src={state.userImage} alt={translate('user_avatar') + ' ' + props.account.name} />
+                                ? <img src={_urls.proxyImage(state.userImage)} alt={translate('user_avatar') + ' ' + props.account.name} />
                                 : null
                             }
                         </div>

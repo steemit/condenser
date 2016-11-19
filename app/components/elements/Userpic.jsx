@@ -4,9 +4,6 @@ const {oneOfType, string, number} = PropTypes
 
 class Userpic extends Component {
 	// you can pass either user object, or username string
-	static propTypes = {
-		account: oneOfType([string, object])
-	}
 
 	static defaultProps = {
 		width: 48,
@@ -17,7 +14,6 @@ class Userpic extends Component {
 
 		const {props} = this
 		const {dispatch, account, ...rest} = props
-		console.log(typeof account, account, 'userpic diags')
 		let url
 
 		// try to extract image url from users metaData

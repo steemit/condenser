@@ -57,6 +57,25 @@
   }
 }
 
+.PostsList__nav_container {
+  width: 100%;
+  position: fixed;
+  top: 50%;
+  .button {
+    margin: 0.5em;
+    padding: 0.5em;
+    background: tan;
+  }
+  .prev-button {
+    position: absolute;
+    left: 0;
+  }
+  .next-button {
+    position: absolute;
+    right: 0;
+  }
+}
+
 body.with-post-overlay {
   overflow: hidden;
 }

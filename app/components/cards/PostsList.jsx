@@ -4,6 +4,7 @@ import Post from 'app/components/pages/Post';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import debounce from 'lodash.debounce';
+import {find} from 'lodash';
 import Callout from 'app/components/elements/Callout';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {findParent} from 'app/utils/DomUtils';
@@ -45,6 +46,8 @@ class PostsList extends React.Component {
         this.onBackButton = this.onBackButton.bind(this);
         this.closeOnOutsideClick = this.closeOnOutsideClick.bind(this);
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'PostsList')
+        this.onNextClick = this.onNextClick.bind(this);
+        this.onPrevClick = this.onNextClick.bind(this);
     }
 
     componentDidMount() {
@@ -78,6 +81,9 @@ class PostsList extends React.Component {
                 post_overlay.focus();
             }
         }
+        if (this.state.showPost && prevState.showPost) {
+           console.log('meow')
+        }
         if (!this.state.showPost && prevState.showPost) {
             window.history.pushState({}, '', this.props.pathname);
             document.getElementsByTagName('body')[0].className = '';
@@ -96,7 +102,8 @@ class PostsList extends React.Component {
         const inside_post = findParent(e.target, 'PostsList__post_container');
         if (!inside_post) {
             const inside_top_bar = findParent(e.target, 'PostsList__post_top_bar');
-            if (!inside_top_bar) {
+            const inside_nav = findParent(e.target, 'PostsList__nav_container');
+            if (!inside_top_bar && !inside_nav) {
                 const post_overlay = document.getElementById('post_overlay');
                 if (post_overlay) post_overlay.removeEventListener('click', this.closeOnOutsideClick);
                 this.setState({showPost: null});
@@ -151,6 +158,30 @@ class PostsList extends React.Component {
         window.history.pushState({}, '', url);
     }
 
+    onNextClick(e) {
+      console.log('next', this.props);
+      console.log(this.post_url);
+      console.log(window.location.pathname);
+      let path = window.location.pathname.split('/@');
+      if (path.length>1) {
+        path = path[1].split('?')[0];
+        console.log('path', path);
+        let posts = this.props.posts
+        let comments = this.props.comments
+        console.log ('filter comments', find(comments, (comment)=>{
+          return path === comment.item;
+        }) );
+        console.log ('filter posts', find(posts, (post)=>{
+          return path === post;
+        }) );
+      }
+
+    }
+
+    onPrevClick(e) {
+      console.log('prev', this.state)
+    }
+
     render() {
         const {posts, loading, category, emptyText} = this.props;
         const {comments} = this.props
@@ -159,7 +190,7 @@ class PostsList extends React.Component {
             return <Callout body={emptyText} type="success" />;
         }
         const renderSummary = items => items.map(({item, ignore, netVoteSign, authorRepLog10}) => <li key={item}>
-            <PostSummary post={item} currentCategory={category} thumbSize={thumbSize} 
+            <PostSummary post={item} currentCategory={category} thumbSize={thumbSize}
                 ignore={ignore} netVoteSign={netVoteSign} authorRepLog10={authorRepLog10} onClick={this.onPostClick} />
         </li>)
         return (
@@ -179,6 +210,10 @@ class PostsList extends React.Component {
                     </div>
                     <div className="PostsList__post_container">
                         <Post post={showPost} />
+                    </div>
+                    <div className="PostsList__nav_container">
+                      <button className="button prev-button" type="button" title="previous" onClick={this.onPrevClick}>&lt;</button>
+                      <button className="button next-button" type="button" title="next" onClick={this.onNextClick}>&gt;</button>
                     </div>
                 </div>}
             </div>

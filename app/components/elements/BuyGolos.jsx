@@ -238,6 +238,30 @@ class BuyGolos extends React.Component {
 		return filtered && filtered.final_balance || this.state.balanceIncludingUnconfirmed;
 	}
 
+	getTransacionsSum(){
+		let sum = this.state.transactions.map(
+			(item, index, collection) => {
+				return transactionOutputsSum(item, icoDestinationAddress);
+			}
+		).reduce(function(previousValue, currentValue, index, array) {
+			return previousValue + currentValue;
+		}, 0)
+		return sum
+	}
+
+	getTransactionsSumWeighted(){
+		let weighted = this.state.transactions.map(
+			(item, index, collection) => {
+				const confirmedDate = new Date(item.confirmed)
+				const weight = (100+calculateCurrentStage(confirmedDate))/100
+				return weight*transactionOutputsSum(item, icoDestinationAddress);
+			}
+		).reduce(function(previousValue, currentValue, index, array) {
+			return previousValue + currentValue;
+		}, 0)
+		return weighted
+	}
+
 	getSumBonused() {
 		let crowdsale =
 		crowdsaleDates.map(
@@ -413,8 +437,12 @@ class BuyGolos extends React.Component {
 
 											<td>{ roundPrecision ( _btc.fromSatoshis((100 + item.bonus) * k  /100), 8 ) }</td>
 
-
-											<td></td>
+<td>
+	{roundPrecision(_btc.fromSatoshis(this.getSumBonused())/27072000, 8)}
+</td>
+											<td>
+												{roundPrecision(100*_btc.fromSatoshis(this.getSumBonused())/27072000/(100+item.bonus), 8)}
+											</td>
 {/*}
 											<td>{100 + calculateCurrentStage(confirmedDate) }</td>
 											<td>{roundPrecision(golosAmount, 3)}</td>
@@ -452,26 +480,44 @@ class BuyGolos extends React.Component {
 											transactions.map((item, index) => {
 
 
-												const confirmedDate = new Date(item.confirmed)
-												const weight = (100+calculateCurrentStage(confirmedDate))/100
-                        const localizedDate = intl.formatDate(item.confirmed)
-												const golosAmount = 27072000*transactionOutputsSum(item, icoDestinationAddress)*weight/this.state.confirmedBalance
-												const sharePercentage = (golosAmount/43306176) * 100
+											const confirmedDate = new Date(item.confirmed)
+											const weight = (100+calculateCurrentStage(confirmedDate))/100
+                      const localizedDate = intl.formatDate(item.confirmed)
+											const golosAmount = 27072000*transactionOutputsSum(item, icoDestinationAddress)*weight/this.getSumBonused()
+											const sharePercentage = (golosAmount/43306176) * 100
 												return 	<tr key={index}>
 															<td>{item.hash}<br />({localizedDate}); {displayConfirmations(item.confirmations)}</td>
 
 															<td>{roundPrecision(
-																 transactionOutputsSum(item, icoDestinationAddress)/_btc.satoshiPerCoin || this.state.balanceIncludingUnconfirmed, 8)
+																 transactionOutputsSum(item, icoDestinationAddress)/_btc.satoshiPerCoin, 8)
 															}</td>
 
 															<td>{calculateCurrentStage(confirmedDate)}%</td>
 
-															<td>{(100 + calculateCurrentStage (confirmedDate)) * (transactionOutputsSum(item, icoDestinationAddress)) /100 }</td>
+															<td>{roundPrecision( _btc.fromSatoshis((100 + calculateCurrentStage (confirmedDate)) * (transactionOutputsSum(item, icoDestinationAddress)) /100), 8) }</td>
+
 															<td>{roundPrecision(golosAmount, 3)}</td>
+
 															<td>{roundPrecision(sharePercentage, 6) + '%'}</td>
 														</tr>
 											})
 										}
+										<tr>
+											<td><strong>Всего</strong></td>
+
+											<td><strong>{roundPrecision( _btc.fromSatoshis( this.getTransacionsSum()), 8)} BTC</strong></td>
+
+											<td><strong>{ roundPrecision( 100*(this.getTransactionsSumWeighted()/this.getTransacionsSum()-1), 2) }%</strong></td>
+
+											<td><strong>{roundPrecision( _btc.fromSatoshis( this.getTransactionsSumWeighted()), 8)} </strong></td>
+
+											<td><strong>
+												{roundPrecision(this.getTransactionsSumWeighted()/this.getSumBonused()*27072000, 3)}</strong>
+											</td>
+											<td><strong>
+												{roundPrecision(this.getTransactionsSumWeighted()/this.getSumBonused()*27072000/43306176*100, 6)}%</strong>
+											</td>
+										</tr>
 									</tbody>
 								</table>
 								<p>Количество получаемых токенов Силы Голоса отображается исходя из полученных биткоинов на данный момент. Всего на краудсейле будет продано 27 072 000 токенов Силы Голоса (60% сети). Сила Голоса будет распределена пропорционально проинвестированным биткоинам с учетом бонусов. Чем больше биткоинов будет проинвестировано, тем меньше Силы Голоса вы получите, тем выше будет её цена.</p>

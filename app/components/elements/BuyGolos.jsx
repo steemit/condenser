@@ -1,6 +1,6 @@
 import React from 'react'
 import {call, put, select} from 'redux-saga/effects';
-import {once, filter, includes} from 'lodash'
+import {once, filter, includes, find} from 'lodash'
 import {connect} from 'react-redux'
 import transaction from 'app/redux/Transaction'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
@@ -74,9 +74,7 @@ class BuyGolos extends React.Component {
 	state = {
 		icoAddress: '',
 		transactions: [],
-		crowdSaleStats:[
-			crowdsaleStartAt, crowdsaleEndAt
-		],
+		crowdSaleStats: [],
     error: '',
 		loading: false,
 		checkboxesClicked: [false, false, false],
@@ -88,9 +86,7 @@ class BuyGolos extends React.Component {
 		unconfirmedBalanceOnly: false,
 		unconfirmedTxsCount: false,
 	}
-	supplyData = () => {
-		return this.state;
-	}
+
 
 	handleCheckBoxClick(checkboxNumber, e) {
 		// e.preventDefault()
@@ -200,25 +196,24 @@ class BuyGolos extends React.Component {
 		fetch(`https://api.blockcypher.com/v1/btc/main/addrs/${icoDestinationAddress}/balance`)
 		.then(function(data) { return data.json() })
 		.then((icoBalanceObject) => {
+
 			this.setState({
 				confirmedBalance: icoBalanceObject.balance,
 				balanceIncludingUnconfirmed: icoBalanceObject.final_balance,
 				unconfirmedBalanceOnly: icoBalanceObject.unconfirmed_balance,
 				unconfirmedTxsCount: icoBalanceObject.unconfirmed_n_tx
 			});
-			console.log("SUUPLY DATA RETURNS", this.bind.supplyData(this));
-			console.log("balanceObject is: ", icoBalanceObject);
-			console.log('--            --'); console.log('');
+
 			fetch('/api/v1/get_raised_amounts').then(function(d) { return d.json() })
 			.then((data) => {
+
 					if (data.status !== 'ok') {
 						console.log("fetching intermediate raised amounts failed");
 						return;
 					} else {
 						data = data.data;
 					}
-					this.setState({crowdSaleStats: data});
-					console.log(results, "results and data", data)
+					this.setState({'crowdSaleStats': data});
 			})
 			.catch(error => {
 				console.log("fetching intermediate raised amounts failed");
@@ -234,11 +229,46 @@ class BuyGolos extends React.Component {
 		})*/
 	}
 
-	gimmeSatoshisPerStage (item, printState) {
+	getIcoResultOnDate(dateString) {
+		let filtered = find(this.state.crowdSaleStats, (it) =>{
+			return it.kk.split('_')[2] === dates[dateString]
+		})
+		if (filtered) filtered = o2j.ifStringParseJSON(filtered.value);
+		return filtered && filtered.final_balance || 0;
+	}
+
+	gimmeSatoshisPerStage (date) {
+
 		const dates = ['16', '19', '22', '25', '28']
-		console.log(this.state);
-		console.log(item);
-		return this.state.balanceIncludingUnconfirmed;
+
+		//let filtr = ['icoBalance', 'Nov', dateString].join('_')
+
+		let dateString = date.getDate().toString();
+		let index = dates.indexOf(dateString);
+		let filtered, filtered2;
+		if (index) filtered = this.getIcoResultOnDate(dates[index]);
+		if (index>0) filtered2 = this.getIcoResultOnDate(dates[index-1]);
+
+		console.log(filtered, filtered2, 'filtered objects')
+		if (filtered) {
+			console.log(filtered, 'filtered')
+			if (index===0) {
+				return filtered
+			}
+			if (index>0) {
+				if (filtered2) {
+					return filtered - filtered2
+				} else {
+					return filtered
+				}
+			}
+			if (index===-1) {
+				return 88
+			}
+		}
+
+		console.log(77, 'default')//if (filtered) return o2j.ifStringParseJSON(filtered[0].value).final_balance;
+		return 99;
 	}
 
 
@@ -382,12 +412,13 @@ class BuyGolos extends React.Component {
 							crowdsaleDates.map((item, index, collection) => {
 								return 	<tr key={index}>
 											<td>{item.bonus}%</td>
-<td>{(index === 0) ? crowdsaleStartAt.toLocaleString() : collection[index-1].date.toLocaleString()} ---
-{item.date.toLocaleString()}
+<td>{(index===0?crowdsaleStartAt:collection[index-1].date).toLocaleString()} - {(index===collection.length-1?crowdsaleEndAt:collection[index].date).toLocaleString()}
 </td>
-											<td>{_btc.fromSatoshis(this.gimmeSatoshisPerStage(item))} --- {calculateCurrentStage(new Date())}</td>
+											<td>{this.gimmeSatoshisPerStage(item.date)}</td>
 
-											<td>{roundPrecision((100 + calculateCurrentStage ((index === 0) ? crowdsaleStartAt : collection[index-1].date)) * _btc.fromSatoshis(this.gimmeSatoshisPerStage(item))/100, 8)}</td>
+											<td>{ roundPrecision ( _btc.fromSatoshis((100 + item.bonus) * this.gimmeSatoshisPerStage(item.date) ) /100, 8 ) }</td>
+											<td>{item.date.toLocaleString()}</td>
+											<td>{calculateCurrentStage(item.date)}</td>
 {/*}
 											<td>{100 + calculateCurrentStage(confirmedDate) }</td>
 											<td>{roundPrecision(golosAmount, 3)}</td>
@@ -398,7 +429,7 @@ class BuyGolos extends React.Component {
 						<tr>
 							<td><strong> Всего </strong></td>
 							<td>{crowdsaleStartAt.toLocaleString()} - {crowdsaleEndAt.toLocaleString()}</td>
-							<td> {console.log(this.state, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!") && this.state.balanceIncludingUnconfirmed.toString()} ||<strong>| {_btc.fromSatoshis(this.state.balanceIncludingUnconfirmed)}</strong> BTC </td>
+							<td>{_btc.fromSatoshis(this.state.balanceIncludingUnconfirmed)} BTC </td>
 							<td> как суммировать колонки? </td>
 						</tr>
 						</tbody>
@@ -431,7 +462,7 @@ class BuyGolos extends React.Component {
 															<td>{item.hash}<br />({localizedDate}); {displayConfirmations(item.confirmations)}</td>
 
 															<td>{roundPrecision(
-																this.state.balanceIncludingUnconfirmed || gimmeSatoshisPerStage()/_btc.satoshiPerCoin, 8)
+																 transactionOutputsSum(item, icoDestinationAddress)/_btc.satoshiPerCoin || this.state.balanceIncludingUnconfirmed, 8)
 															}</td>
 
 															<td>{calculateCurrentStage(confirmedDate)}%</td>

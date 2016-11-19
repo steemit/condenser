@@ -1,12 +1,11 @@
 const satoshiPerCoin=100000000;
 const expo = {
-  satoshiPerCoin: function(){ return satoshiPerCoin },
+  satoshiPerCoin: satoshiPerCoin,
   fromSatoshis: function (value_in_satoshis) {
   	return value_in_satoshis / satoshiPerCoin;
   }
 }
 export {expo as default}
-console.log(expo)
 
 exports.test = {
   run: () => {

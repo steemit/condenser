@@ -60,10 +60,12 @@
 .PostsList__nav_container {
   width: 100%;
   position: fixed;
-  top: 50%;
+  bottom: 4rem;
   .button {
-    padding: 3em 1em;
-    background: tan;
+    font-weight: bold;
+    padding: 1.5rem 1.1rem;
+    margin: 0;
+    background: rgba(100,110,180,0.5);
   }
   .prev-button {
     position: absolute;

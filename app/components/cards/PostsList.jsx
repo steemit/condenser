@@ -176,6 +176,7 @@ class PostsList extends React.Component {
             if (loadMore && posts && posts.length > 0) loadMore(posts[posts.length - 1], category);
             this.props.loadMore()
           }
+          window.scrollTo(0, 0);
         }
         if (posts.length>postIndex+1) {
           postIndex += 1
@@ -184,8 +185,8 @@ class PostsList extends React.Component {
         let nextPost = posts[postIndex];
         let nextUrl = `/${category}/@${nextPost}`
         this.onPostClick(nextPost, nextUrl)
+        window.scrollTo(0, 0);
       }
-
     }
 
     onPrevClick(e) {
@@ -205,6 +206,9 @@ class PostsList extends React.Component {
         let nextPost = posts[postIndex];
         let nextUrl = `/${category}/@${nextPost}`
         this.onPostClick(nextPost, nextUrl)
+        $("html, body").animate({
+            scrollTop: 0
+        }, 600);
       }
     }
 
@@ -238,8 +242,8 @@ class PostsList extends React.Component {
                         <Post post={showPost} />
                     </div>
                     <div className="PostsList__nav_container">
-                      <button className="button prev-button" type="button" title="previous" onClick={this.onPrevClick}>&lt;</button>
-                      <button className="button next-button" type="button" title="next" onClick={this.onNextClick}>&gt;</button>
+                      <button className="button prev-button" type="button" title="предыдущий пост" onClick={this.onPrevClick}>&lt;</button>
+                      <button className="button next-button" type="button" title="следующий пост" onClick={this.onNextClick}>&gt;</button>
                     </div>
                 </div>}
             </div>

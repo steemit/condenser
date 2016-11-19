@@ -411,12 +411,12 @@ class BuyGolos extends React.Component {
 								<table>
 									<thead>
 										<tr>
-											<th width="200">ID Транзакции</th>
-                      <th width="100">Перечислено биткоинов</th>
-											<th width="60">Бонус</th>
-											<th width="80">у.е.</th>
-											<th width="80">Голосов</th>
-											<th width="80">Доля в Сети</th>
+											<th className="text-center" width="200">ID Транзакции</th>
+                      <th className="text-center" width="100">Перечислено биткоинов</th>
+											<th className="text-center" width="60">Бонус</th>
+											<th className="text-center" width="80">у.е.</th>
+											<th className="text-center" width="80">Голосов</th>
+											<th className="text-center" width="80">Доля в Сети</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -447,7 +447,7 @@ class BuyGolos extends React.Component {
 											})
 										}
 										<tr>
-											<td><strong>Всего</strong></td>
+											<td className="text-right"><strong>Всего</strong></td>
 
 											<td className="text-right"><strong>{roundPrecision( _btc.fromSatoshis( this.getTransacionsSum()), 8)} BTC</strong></td>
 
@@ -486,10 +486,10 @@ class BuyGolos extends React.Component {
 						<table>
 						<thead>
 							<tr>
-								<th width="40">Бонус</th>
-								<th width="160">Период действия бонуса</th>
-								<th width="80">Собрано биткоинов</th>
-								<th width="80">собрано у.е.</th>
+								<th className="text-center" width="30">Бонус</th>
+								<th className="text-center" width="120">Период действия бонуса</th>
+								<th className="text-center" width="60">Собрано биткоинов</th>
+								<th className="text-center" width="60">собрано у.е.</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -507,7 +507,7 @@ class BuyGolos extends React.Component {
 								return 	<tr key={index}>
 											<td className="text-right">{item.bonus}%</td>
 
-											<td>{(index===0?crowdsaleStartAt:collection[index-1].date).toLocaleString()} - {(index===collection.length-1?crowdsaleEndAt:collection[index].date).toLocaleString()}
+											<td className="text-right"> {(index===0?crowdsaleStartAt:collection[index-1].date).toLocaleString()} - {(index===collection.length-1?crowdsaleEndAt:collection[index].date).toLocaleString()}
 											</td>
 
 											<td className="text-right">{roundPrecision( _btc.fromSatoshis( k ), 8) }</td>

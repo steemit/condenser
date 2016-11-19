@@ -31,7 +31,7 @@ class LoadingIndicator extends React.Component {
                     </div>
                 );
             default:
-                var classes = 'LoadingIndicator loading-overlay';
+                var classes = 'LoadingIndicator';
                 if(this.progress > 0) { classes += ' with-progress'; }
                 return (
                     <div className={classes}>

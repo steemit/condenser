@@ -401,68 +401,12 @@ class BuyGolos extends React.Component {
 						</div>
 						: null
 					}
-					<div className="row">
-						<div className="column small-12">
 
-						<table>
-						<thead>
-							<tr>
-								<th width="80">Бонус</th>
-								<th width="200">Период действия бонуса</th>
-								<th width="120">Собрано биткоинов</th>
-								<th width="120">собрано у.е.</th>
-								<th width="120">стоимость голоса без бонуса</th>
-								<th width="120">стоимость покупки голоса</th>
-							</tr>
-						</thead>
-						<tbody>
-						{
-							crowdsaleDates.map((item, index, collection) => {
-								const date = item.date
-								const dateString = date.getDate().toString()
-								const idx = dates.indexOf(dateString);
-								const totalS = this.state.balanceIncludingUnconfirmed
-								const k1 = this.getIcoResultOnDate(dateString);
-								const k0 = idx>0?this.getIcoResultOnDate(dates[idx-1]):0
-								const k = k1-k0
-
-
-								return 	<tr key={index}>
-											<td>{item.bonus}%</td>
-
-											<td>{(index===0?crowdsaleStartAt:collection[index-1].date).toLocaleString()} - {(index===collection.length-1?crowdsaleEndAt:collection[index].date).toLocaleString()}
-											</td>
-
-											<td>{roundPrecision( _btc.fromSatoshis( k ), 8) }</td>
-
-											<td>{ roundPrecision ( _btc.fromSatoshis((100 + item.bonus) * k  /100), 8 ) }</td>
-
-<td>
-	{roundPrecision(_btc.fromSatoshis(this.getSumBonused())/27072000, 8)}
-</td>
-											<td>
-												{roundPrecision(100*_btc.fromSatoshis(this.getSumBonused())/27072000/(100+item.bonus), 8)}
-											</td>
-{/*}
-											<td>{100 + calculateCurrentStage(confirmedDate) }</td>
-											<td>{roundPrecision(golosAmount, 3)}</td>
-											<td>{roundPrecision(sharePercentage, 6) + '%'}</td>*/}
-										</tr>
-							})
-						}
-						<tr>
-							<td><strong> Всего </strong></td>
-							<td>{crowdsaleStartAt.toLocaleString()} - {crowdsaleEndAt.toLocaleString()}</td>
-							<td>{_btc.fromSatoshis(this.state.balanceIncludingUnconfirmed)} BTC </td>
-							<td> { roundPrecision(_btc.fromSatoshis(this.getSumBonused()), 8)} у.е. </td>
-							<td>{roundPrecision(_btc.fromSatoshis(this.getSumBonused())/27072000, 8)}</td>
-						</tr>
-						</tbody>
-						</table></div></div>
 					{/* TRANSACTION HISTORY */}
 					{
 						transactions.length && state.confirmedBalance
 						? <div className="row">
+						  <h4>Список моих транзакций</h4>
 							<div className="column small-12">
 								<table>
 									<thead>
@@ -521,6 +465,9 @@ class BuyGolos extends React.Component {
 									</tbody>
 								</table>
 								<p>Количество получаемых токенов Силы Голоса отображается исходя из полученных биткоинов на данный момент. Всего на краудсейле будет продано 27 072 000 токенов Силы Голоса (60% сети). Сила Голоса будет распределена пропорционально проинвестированным биткоинам с учетом бонусов. Чем больше биткоинов будет проинвестировано, тем меньше Силы Голоса вы получите, тем выше будет её цена.</p>
+								<p> Для промежуточных расчетов используются "учётные единицы". 1 биткоин, вложенный с бонусом 0%, становится равен 1 учётной единицей. 1
+								биткоин, вложенный с бонусом 20%, становится равен 1.2 учетных единиц.
+								</p>
 							</div>
 						</div>
 						: transactions.length
@@ -530,6 +477,55 @@ class BuyGolos extends React.Component {
 						</div>
 						: null
 					}
+
+					{/* результаты краудсейла  */}
+					<div className="row">
+						<h4>Результаты краудсейла</h4>
+						<div className="column small-12">
+
+						<table>
+						<thead>
+							<tr>
+								<th width="80">Бонус</th>
+								<th width="200">Период действия бонуса</th>
+								<th width="120">Собрано биткоинов</th>
+								<th width="120">собрано у.е.</th>
+							</tr>
+						</thead>
+						<tbody>
+						{
+							crowdsaleDates.map((item, index, collection) => {
+								const date = item.date
+								const dateString = date.getDate().toString()
+								const idx = dates.indexOf(dateString);
+								const totalS = this.state.balanceIncludingUnconfirmed
+								const k1 = this.getIcoResultOnDate(dateString);
+								const k0 = idx>0?this.getIcoResultOnDate(dates[idx-1]):0
+								const k = k1-k0
+
+
+								return 	<tr key={index}>
+											<td>{item.bonus}%</td>
+
+											<td>{(index===0?crowdsaleStartAt:collection[index-1].date).toLocaleString()} - {(index===collection.length-1?crowdsaleEndAt:collection[index].date).toLocaleString()}
+											</td>
+
+											<td>{roundPrecision( _btc.fromSatoshis( k ), 8) }</td>
+
+											<td>{ roundPrecision ( _btc.fromSatoshis((100 + item.bonus) * k  /100), 8 ) }</td>
+										</tr>
+							})
+						}
+						<tr>
+							<td><strong> Всего </strong></td>
+							<td>{crowdsaleStartAt.toLocaleString()} - {crowdsaleEndAt.toLocaleString()}</td>
+							<td>{_btc.fromSatoshis(this.state.balanceIncludingUnconfirmed)} BTC </td>
+							<td> { roundPrecision(_btc.fromSatoshis(this.getSumBonused()), 8)} у.е. </td>
+						</tr>
+						<tr></tr>
+						</tbody>
+						<tfoot><tr><td  colSpan="4">Текущая цена: {roundPrecision(_btc.fromSatoshis(this.getSumBonused())/27072000, 8)} учетных единиц за 1 Силу Голоса</td></tr></tfoot>
+						</table></div></div>
 				</div>
 	}
 }

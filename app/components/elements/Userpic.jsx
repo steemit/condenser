@@ -26,7 +26,7 @@ class Userpic extends Component {
 			const size = props.width + 'x' + props.height
 			url = proxy + size + '/' + url;
 		}
-
+		console.log({...rest})
 		return 	<div className="Userpic">
 					<img
 						src={url || '/images/user.png'}

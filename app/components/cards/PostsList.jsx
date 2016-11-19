@@ -160,15 +160,19 @@ class PostsList extends React.Component {
 
     onNextClick(e) {
       let posts = this.props.posts
-      let category = this.props.category
+      let category = this.props.category;
+      if (!category || category == 'blog') {
+        this.onBackButton(e); return;
+      }
       let currentPath = window.location.pathname.split('?')[0].split('/@');
-      console.log(posts, category, window.location.pathname, currentPath)
       if (currentPath.length>1) {
         currentPath = currentPath[1];
         let postIndex = findIndex(posts, (post)=>{
           return currentPath === post;
         })
-        if (postIndex < 0) return false;
+        if (postIndex < 0) {
+          this.onBackButton(e); return;
+        }
         if (postIndex >= posts.length - 2) {
           let loadMore = this.props.loadMore
           console.log(loadMore)
@@ -176,7 +180,7 @@ class PostsList extends React.Component {
             if (loadMore && posts && posts.length > 0) loadMore(posts[posts.length - 1], category);
             this.props.loadMore()
           }
-          window.scrollTo(0, 0);
+          setTimeout(function(){window.scrollTo(0, 0)}, 600);
         }
         if (posts.length>postIndex+1) {
           postIndex += 1
@@ -185,30 +189,33 @@ class PostsList extends React.Component {
         let nextPost = posts[postIndex];
         let nextUrl = `/${category}/@${nextPost}`
         this.onPostClick(nextPost, nextUrl)
-        window.scrollTo(0, 0);
+        setTimeout(function(){window.scrollTo(0, 0)}, 600);
       }
     }
 
     onPrevClick(e) {
       let posts = this.props.posts
       let category = this.props.category
+      if (!category || category == 'blog') {
+        this.onBackButton(e); return;
+      }
       let currentPath = window.location.pathname.split('?')[0].split('/@');
       if (currentPath.length>1) {
         currentPath = currentPath[1];
         let postIndex = findIndex(posts, (post)=>{
           return currentPath === post;
         })
-        if (postIndex < 0) return false;
+        if (postIndex < 0) {
+          this.onBackButton(e); return;
+        }
         if (postIndex == 0) {
-          postIndex = posts.length - 1
+          this.onBackButton(e); return;
         } else {postIndex -= 1}
         console.log('switching to post ', postIndex)
         let nextPost = posts[postIndex];
         let nextUrl = `/${category}/@${nextPost}`
         this.onPostClick(nextPost, nextUrl)
-        $("html, body").animate({
-            scrollTop: 0
-        }, 600);
+        setTimeout(function(){window.scrollTo(0, 0)}, 600);
       }
     }
 

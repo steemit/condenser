@@ -21,7 +21,7 @@ import { injectIntl } from 'react-intl';
 import _btc from 'shared/clash/coins/btc'
 import _urls from 'shared/clash/images/urls'
 
-
+const dates = ['16', '19', '22', '25', '28']
 /*
 	Логика компонента:
 	Если пользователь находится на своей странице, и если у него нет Btc адреса, то должна отображаться кнопка генерации адреса.
@@ -231,16 +231,14 @@ class BuyGolos extends React.Component {
 
 	getIcoResultOnDate(dateString) {
 		let filtered = find(this.state.crowdSaleStats, (it) =>{
-			return it.kk.split('_')[2] === dates[dateString]
+			return it.kk.split('_')[2] === dateString
 		})
+		console.log(filtered, this.state.crowdSaleStats, dateString)
 		if (filtered) filtered = o2j.ifStringParseJSON(filtered.value);
 		return filtered && filtered.final_balance || 0;
 	}
 
 	gimmeSatoshisPerStage (date) {
-
-		const dates = ['16', '19', '22', '25', '28']
-
 		//let filtr = ['icoBalance', 'Nov', dateString].join('_')
 
 		let dateString = date.getDate().toString();
@@ -249,9 +247,7 @@ class BuyGolos extends React.Component {
 		if (index) filtered = this.getIcoResultOnDate(dates[index]);
 		if (index>0) filtered2 = this.getIcoResultOnDate(dates[index-1]);
 
-		console.log(filtered, filtered2, 'filtered objects')
 		if (filtered) {
-			console.log(filtered, 'filtered')
 			if (index===0) {
 				return filtered
 			}
@@ -266,8 +262,6 @@ class BuyGolos extends React.Component {
 				return 88
 			}
 		}
-
-		console.log(77, 'default')//if (filtered) return o2j.ifStringParseJSON(filtered[0].value).final_balance;
 		return 99;
 	}
 
@@ -412,13 +406,16 @@ class BuyGolos extends React.Component {
 							crowdsaleDates.map((item, index, collection) => {
 								return 	<tr key={index}>
 											<td>{item.bonus}%</td>
+
 <td>{(index===0?crowdsaleStartAt:collection[index-1].date).toLocaleString()} - {(index===collection.length-1?crowdsaleEndAt:collection[index].date).toLocaleString()}
 </td>
-											<td>{this.gimmeSatoshisPerStage(item.date)}</td>
 
-											<td>{ roundPrecision ( _btc.fromSatoshis((100 + item.bonus) * this.gimmeSatoshisPerStage(item.date) ) /100, 8 ) }</td>
+											<td>{roundPrecision( _btc.fromSatoshis( this.getIcoResultOnDate(item.date.getDate().toString())), 8) }</td>
+
+											<td>{ roundPrecision ( _btc.fromSatoshis((100 + item.bonus) * this.getIcoResultOnDate(item.date.getDate().toString()) ) /100, 8 ) }</td>
+
 											<td>{item.date.toLocaleString()}</td>
-											<td>{calculateCurrentStage(item.date)}</td>
+											<td>{this.getIcoResultOnDate(item.date.getDate().toString())}</td>
 {/*}
 											<td>{100 + calculateCurrentStage(confirmedDate) }</td>
 											<td>{roundPrecision(golosAmount, 3)}</td>

@@ -4,7 +4,7 @@ import Post from 'app/components/pages/Post';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import debounce from 'lodash.debounce';
-import {find} from 'lodash';
+import {find, findIndex} from 'lodash';
 import Callout from 'app/components/elements/Callout';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {findParent} from 'app/utils/DomUtils';
@@ -47,7 +47,7 @@ class PostsList extends React.Component {
         this.closeOnOutsideClick = this.closeOnOutsideClick.bind(this);
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'PostsList')
         this.onNextClick = this.onNextClick.bind(this);
-        this.onPrevClick = this.onNextClick.bind(this);
+        this.onPrevClick = this.onPrevClick.bind(this);
     }
 
     componentDidMount() {
@@ -82,7 +82,7 @@ class PostsList extends React.Component {
             }
         }
         if (this.state.showPost && prevState.showPost) {
-           console.log('meow')
+
         }
         if (!this.state.showPost && prevState.showPost) {
             window.history.pushState({}, '', this.props.pathname);
@@ -159,27 +159,53 @@ class PostsList extends React.Component {
     }
 
     onNextClick(e) {
-      console.log('next', this.props);
-      console.log(this.post_url);
-      console.log(window.location.pathname);
-      let path = window.location.pathname.split('/@');
-      if (path.length>1) {
-        path = path[1].split('?')[0];
-        console.log('path', path);
-        let posts = this.props.posts
-        let comments = this.props.comments
-        console.log ('filter comments', find(comments, (comment)=>{
-          return path === comment.item;
-        }) );
-        console.log ('filter posts', find(posts, (post)=>{
-          return path === post;
-        }) );
+      let posts = this.props.posts
+      let category = this.props.category
+      let currentPath = window.location.pathname.split('?')[0].split('/@');
+
+      if (currentPath.length>1) {
+        currentPath = currentPath[1];
+        let postIndex = findIndex(posts, (post)=>{
+          return currentPath === post;
+        })
+        if (postIndex < 0) return false;
+        if (postIndex >= posts.length - 2) {
+          let loadMore = this.props.loadMore
+          console.log(loadMore)
+          if (this.props.loadMore) {
+            if (loadMore && posts && posts.length > 0) loadMore(posts[posts.length - 1], category);
+            this.props.loadMore()
+          }
+        }
+        if (posts.length>postIndex+1) {
+          postIndex += 1
+        } else {postIndex = 0}
+        console.log('switching to post ', postIndex)
+        let nextPost = posts[postIndex];
+        let nextUrl = `/${category}/@${nextPost}`
+        this.onPostClick(nextPost, nextUrl)
       }
 
     }
 
     onPrevClick(e) {
-      console.log('prev', this.state)
+      let posts = this.props.posts
+      let category = this.props.category
+      let currentPath = window.location.pathname.split('?')[0].split('/@');
+      if (currentPath.length>1) {
+        currentPath = currentPath[1];
+        let postIndex = findIndex(posts, (post)=>{
+          return currentPath === post;
+        })
+        if (postIndex < 0) return false;
+        if (postIndex == 0) {
+          postIndex = posts.length - 1
+        } else {postIndex -= 1}
+        console.log('switching to post ', postIndex)
+        let nextPost = posts[postIndex];
+        let nextUrl = `/${category}/@${nextPost}`
+        this.onPostClick(nextPost, nextUrl)
+      }
     }
 
     render() {

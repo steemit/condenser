@@ -413,7 +413,7 @@ class BuyGolos extends React.Component {
 										<tr>
 											<th width="200">ID Транзакции</th>
                       <th width="100">Перечислено биткоинов</th>
-											<th width="100">Бонус</th>
+											<th width="60">Бонус</th>
 											<th width="80">у.е.</th>
 											<th width="80">Голосов</th>
 											<th width="80">Доля в Сети</th>
@@ -432,33 +432,33 @@ class BuyGolos extends React.Component {
 												return 	<tr key={index}>
 															<td>{item.hash}<br />({localizedDate}); {displayConfirmations(item.confirmations)}</td>
 
-															<td>{roundPrecision(
+															<td className="text-right">{roundPrecision(
 																 transactionOutputsSum(item, icoDestinationAddress)/_btc.satoshiPerCoin, 8)
 															}</td>
 
-															<td>{calculateCurrentStage(confirmedDate)}%</td>
+															<td className="text-right">{calculateCurrentStage(confirmedDate)}%</td>
 
-															<td>{roundPrecision( _btc.fromSatoshis((100 + calculateCurrentStage (confirmedDate)) * (transactionOutputsSum(item, icoDestinationAddress)) /100), 8) }</td>
+															<td className="text-right">{roundPrecision( _btc.fromSatoshis((100 + calculateCurrentStage (confirmedDate)) * (transactionOutputsSum(item, icoDestinationAddress)) /100), 8) }</td>
 
-															<td>{roundPrecision(golosAmount, 3)}</td>
+															<td className="text-right">{roundPrecision(golosAmount, 3)}</td>
 
-															<td>{roundPrecision(sharePercentage, 6) + '%'}</td>
+															<td className="text-right">{roundPrecision(sharePercentage, 6) + '%'}</td>
 														</tr>
 											})
 										}
 										<tr>
 											<td><strong>Всего</strong></td>
 
-											<td><strong>{roundPrecision( _btc.fromSatoshis( this.getTransacionsSum()), 8)} BTC</strong></td>
+											<td className="text-right"><strong>{roundPrecision( _btc.fromSatoshis( this.getTransacionsSum()), 8)} BTC</strong></td>
 
-											<td><strong>{ roundPrecision( 100*(this.getTransactionsSumWeighted()/this.getTransacionsSum()-1), 2) }%</strong></td>
+											<td className="text-right"><strong>{ roundPrecision( 100*(this.getTransactionsSumWeighted()/this.getTransacionsSum()-1), 2) }%</strong></td>
 
-											<td><strong>{roundPrecision( _btc.fromSatoshis( this.getTransactionsSumWeighted()), 8)} </strong></td>
+											<td className="text-right"><strong>{roundPrecision( _btc.fromSatoshis( this.getTransactionsSumWeighted()), 8)} </strong></td>
 
-											<td><strong>
+											<td className="text-right"><strong>
 												{roundPrecision(this.getTransactionsSumWeighted()/this.getSumBonused()*27072000, 3)}</strong>
 											</td>
-											<td><strong>
+											<td className="text-right"><strong>
 												{roundPrecision(this.getTransactionsSumWeighted()/this.getSumBonused()*27072000/43306176*100, 6)}%</strong>
 											</td>
 										</tr>
@@ -486,10 +486,10 @@ class BuyGolos extends React.Component {
 						<table>
 						<thead>
 							<tr>
-								<th width="80">Бонус</th>
-								<th width="200">Период действия бонуса</th>
-								<th width="120">Собрано биткоинов</th>
-								<th width="120">собрано у.е.</th>
+								<th width="40">Бонус</th>
+								<th width="160">Период действия бонуса</th>
+								<th width="80">Собрано биткоинов</th>
+								<th width="80">собрано у.е.</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -505,22 +505,22 @@ class BuyGolos extends React.Component {
 
 
 								return 	<tr key={index}>
-											<td>{item.bonus}%</td>
+											<td className="text-right">{item.bonus}%</td>
 
 											<td>{(index===0?crowdsaleStartAt:collection[index-1].date).toLocaleString()} - {(index===collection.length-1?crowdsaleEndAt:collection[index].date).toLocaleString()}
 											</td>
 
-											<td>{roundPrecision( _btc.fromSatoshis( k ), 8) }</td>
+											<td className="text-right">{roundPrecision( _btc.fromSatoshis( k ), 8) }</td>
 
-											<td>{ roundPrecision ( _btc.fromSatoshis((100 + item.bonus) * k  /100), 8 ) }</td>
+											<td className="text-right">{ roundPrecision ( _btc.fromSatoshis((100 + item.bonus) * k  /100), 8 ) }</td>
 										</tr>
 							})
 						}
 						<tr>
 							<td><strong> Всего </strong></td>
 							<td>{crowdsaleStartAt.toLocaleString()} - {crowdsaleEndAt.toLocaleString()}</td>
-							<td>{_btc.fromSatoshis(this.state.balanceIncludingUnconfirmed)} BTC </td>
-							<td> { roundPrecision(_btc.fromSatoshis(this.getSumBonused()), 8)} у.е. </td>
+							<td className="text-right">{_btc.fromSatoshis(this.state.balanceIncludingUnconfirmed)} BTC </td>
+							<td className="text-right"> { roundPrecision(_btc.fromSatoshis(this.getSumBonused()), 8)} у.е. </td>
 						</tr>
 						<tr></tr>
 						</tbody>

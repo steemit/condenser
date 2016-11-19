@@ -162,7 +162,7 @@ class PostsList extends React.Component {
       let posts = this.props.posts
       let category = this.props.category
       let currentPath = window.location.pathname.split('?')[0].split('/@');
-
+      console.log(posts, category, window.location.pathname, currentPath)
       if (currentPath.length>1) {
         currentPath = currentPath[1];
         let postIndex = findIndex(posts, (post)=>{

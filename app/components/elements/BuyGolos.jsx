@@ -1,6 +1,6 @@
 import React from 'react'
 import {call, put, select} from 'redux-saga/effects';
-import {once, filter, includes} from 'lodash'
+import {once, filter, includes, find} from 'lodash'
 import {connect} from 'react-redux'
 import transaction from 'app/redux/Transaction'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
@@ -11,15 +11,17 @@ import { translate, translateHtml } from 'app/Translator';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import ClipboardIcon from 'react-clipboard-icon'
 import o2j from 'shared/clash/object2json'
-import { calculateCurrentStage, currentStage } from '../elements/LandingCountDowns.jsx';
+import { crowdsaleStartAt, crowdsaleEndAt, calculateCurrentStage, currentStage, crowdsaleDates } from '../elements/LandingCountDowns.jsx';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Tooltip from 'app/components/elements/Tooltip';
 import roundPrecision from 'round-precision'
 import icoDestinationAddress from 'shared/icoAddress'
 import { injectIntl } from 'react-intl';
 
-const satoshiPerCoin=100000000;
+import _btc from 'shared/clash/coins/btc'
+import _urls from 'shared/clash/images/urls'
 
+const dates = ['16', '19', '22', '25', '28', '4']
 /*
 	Логика компонента:
 	Если пользователь находится на своей странице, и если у него нет Btc адреса, то должна отображаться кнопка генерации адреса.
@@ -48,6 +50,14 @@ function transactionOutputsSum(tx, destinationAddress) {
 	return satoshiDestinationReceived;
 }
 
+function transactionOutputsSumWeighted(tx, destinationAddress) {
+	const interestingOutputs = filter(tx.outputs, output => {
+			return includes( output.addresses, destinationAddress)});
+	let satoshiDestinationReceived = 0
+	interestingOutputs.forEach(output => satoshiDestinationReceived+=output.value)
+	return satoshiDestinationReceived;
+}
+
 function displayConfirmations(nConf) {
 	if (nConf == 0) return <span style={{color: 'red'}}> транзакция не подтверждена </span>;
 	if (nConf == 1) return <span style={{color: 'red'}}> 1 подтверждение </span>;
@@ -64,7 +74,8 @@ class BuyGolos extends React.Component {
 	state = {
 		icoAddress: '',
 		transactions: [],
-        error: '',
+		crowdSaleStats: [],
+    error: '',
 		loading: false,
 		checkboxesClicked: [false, false, false],
 		checkboxClicked0: false,
@@ -76,11 +87,23 @@ class BuyGolos extends React.Component {
 		unconfirmedTxsCount: false,
 	}
 
+
 	handleCheckBoxClick(checkboxNumber, e) {
 		// e.preventDefault()
 		const checkboxIdentifier = 'checkboxClicked' + checkboxNumber
 		const checkbox = this.state[checkboxIdentifier]
 		this.setState({ [checkboxIdentifier]: !checkbox })
+	}
+
+  mediacontentBlock1 = () => {
+		return (
+			<div className="column small-12">
+
+
+				<p><b>Сила Голоса</b> - неперемещаемые цифровые токены. Их оценка в Голосах увеличивается при долгосрочном хранении. Чем их больше, тем сильней вы влияете на вознаграждения за пост и тем больше зарабатываете за голосование. Также Сила Голоса дает право записывать любые данные в блокчейн Голоса. Чем больше Силы Голоса, тем большая доля в пропускной способности гарантируется Вам сетью Голос. Перевод Силы Голоса в Голоса занимает 104 недели равными частями.</p>
+				<p>Если у Вас нет биткоинов, то Вы можете их купить за любую национальную валюту на <a href="https://localbitcoins.net/">Localbitcoins.net</a>. Также сообществом Голос организованы разные сервисы по участию в краудсейле. Инструкции по покупке можно найти по тэгу <a href="/trending/ru--kupitxbitkoin">#КупитьБиткоин</a>.</p>
+			</div>
+		)
 	}
 
 	generateAddress = event => {
@@ -155,13 +178,11 @@ class BuyGolos extends React.Component {
 
 	fetchTransations = () => {
 		const icoAddress = this.state.icoAddress || this.props.icoAddress
-		console.log('icoAddress', icoAddress)
 		if (!icoAddress) return
 		console.log('fetching in progress!')
 		fetch(`https://api.blockcypher.com/v1/btc/main/addrs/${icoAddress}/full?confirmations=0`)
 		.then(function(data) { return data.json() })
 		.then((txObject) => {
-			console.log('icoAddressTrans', txObject)
 			this.setState({	transactions:  getFilteredTransactions(txObject,
 					icoAddress, icoDestinationAddress) });
 		})
@@ -175,35 +196,88 @@ class BuyGolos extends React.Component {
 		fetch(`https://api.blockcypher.com/v1/btc/main/addrs/${icoDestinationAddress}/balance`)
 		.then(function(data) { return data.json() })
 		.then((icoBalanceObject) => {
-			console.log('icoBalanceObject.balance', icoBalanceObject.balance)
+
 			this.setState({
 				confirmedBalance: icoBalanceObject.balance,
 				balanceIncludingUnconfirmed: icoBalanceObject.final_balance,
 				unconfirmedBalanceOnly: icoBalanceObject.unconfirmed_balance,
 				unconfirmedTxsCount: icoBalanceObject.unconfirmed_n_tx
+			});
+
+			fetch('/api/v1/get_raised_amounts').then(function(d) { return d.json() })
+			.then((data) => {
+
+					if (data.status !== 'ok') {
+						console.log("fetching intermediate raised amounts failed");
+						return;
+					} else {
+						data = data.data;
+					}
+					this.setState({'crowdSaleStats': data});
+			})
+			.catch(error => {
+				console.log("fetching intermediate raised amounts failed");
+				throw(error);
 			})
 		})
-		.catch(error => {
+		/*.catch(error => {
 			// TODO dont forget to add error display for user
 			// this.setState({ error: error.reason })
-			console.error('transactions fetch failed', error)
-		})
+			console.error('transactions fetch failed')
+			console.error(error)
+			throw(error)
+		})*/
 	}
 
-	testFormSubmit() {
-		console.log(this.icoAddress)
-		console.log(this.props)
-		console.log("is own: " + this.state.isOwnAccount)
+	getIcoResultOnDate(dateString) {
+		let filtered = find(this.state.crowdSaleStats, (it) =>{
+			return it.kk.split('_')[2] === dateString
+		})
 
-		const k = "foo"
-		const v = "bar"
-		const p = ""
-		const u = "tester"
-		let meta = o2j.ifStringParseJSON(this.props.metaData);
-    if (typeof meta==='string')
-      meta = {created_at: "Genesis"}
-		meta[k] = v;
-		meta = o2j.ifObjectToJSON(meta);
+		if (filtered) filtered = o2j.ifStringParseJSON(filtered.value);
+		return filtered && filtered.final_balance || this.state.balanceIncludingUnconfirmed;
+	}
+
+	getTransacionsSum(){
+		let sum = this.state.transactions.map(
+			(item, index, collection) => {
+				return transactionOutputsSum(item, icoDestinationAddress);
+			}
+		).reduce(function(previousValue, currentValue, index, array) {
+			return previousValue + currentValue;
+		}, 0)
+		return sum
+	}
+
+	getTransactionsSumWeighted(){
+		let weighted = this.state.transactions.map(
+			(item, index, collection) => {
+				const confirmedDate = new Date(item.confirmed)
+				const weight = (100+calculateCurrentStage(confirmedDate))/100
+				return weight*transactionOutputsSum(item, icoDestinationAddress);
+			}
+		).reduce(function(previousValue, currentValue, index, array) {
+			return previousValue + currentValue;
+		}, 0)
+		return weighted
+	}
+
+	getSumBonused() {
+		let crowdsale =
+		crowdsaleDates.map(
+		(item, index, collection) => {
+			const date = item.date
+			const dateString = date.getDate().toString()
+			const idx = dates.indexOf(dateString);
+			const totalS = this.state.balanceIncludingUnconfirmed
+			const k1 = this.getIcoResultOnDate(dateString);
+			const k0 = idx>0?this.getIcoResultOnDate(dates[idx-1]):0
+			const k = k1-k0
+			return k*(100+item.bonus)/100
+		}).reduce(function(previousValue, currentValue, index, array) {
+			return previousValue + currentValue;
+		}, 0)
+		return crowdsale;
 	}
 
 	render() {
@@ -214,7 +288,6 @@ class BuyGolos extends React.Component {
 						</div>
 				</div>;
 		}
-
 		const {state, props} = this
 		const {
       intl,
@@ -224,6 +297,9 @@ class BuyGolos extends React.Component {
 		} = props
 		const { transactions } = state
 		let loading=this.state.loading
+		let currentTime = null;
+		let periods = [];
+
 		return 	<div id="buy_golos" className="BuyGolos">
 					<div className="row">
 						<div className="columns small-12">
@@ -321,15 +397,68 @@ class BuyGolos extends React.Component {
 									</tbody>
 								</table>
 							</div>
-
-							<div className="column small-12">
-								<p><b>Сила Голоса</b> - неперемещаемые цифровые токены. Их оценка в Голосах увеличивается при долгосрочном хранении. Чем их больше, тем сильней вы влияете на вознаграждения за пост и тем больше зарабатываете за голосование. Также Сила Голоса дает право записывать любые данные в блокчейн Голоса. Чем больше Силы Голоса, тем большая доля в пропускной способности гарантируется Вам сетью Голос. Перевод Силы Голоса в Голоса занимает 104 недели равными частями.</p>
-								<p>Если у Вас нет биткоинов, то Вы можете их купить за любую национальную валюту на <a href="https://localbitcoins.net/">Localbitcoins.net</a>. Также сообществом Голос организованы разные сервисы по участию в краудсейле. Инструкции по покупке можно найти по тэгу <a href="/trending/ru--kupitxbitkoin">#КупитьБиткоин</a>.</p>
-							</div>
+								{this.mediacontentBlock1()}
 						</div>
 						: null
 					}
+					<div className="row">
+						<div className="column small-12">
 
+						<table>
+						<thead>
+							<tr>
+								<th width="80">Бонус</th>
+								<th width="200">Период действия бонуса</th>
+								<th width="120">Собрано биткоинов</th>
+								<th width="120">собрано у.е.</th>
+								<th width="120">стоимость голоса без бонуса</th>
+								<th width="120">стоимость покупки голоса</th>
+							</tr>
+						</thead>
+						<tbody>
+						{
+							crowdsaleDates.map((item, index, collection) => {
+								const date = item.date
+								const dateString = date.getDate().toString()
+								const idx = dates.indexOf(dateString);
+								const totalS = this.state.balanceIncludingUnconfirmed
+								const k1 = this.getIcoResultOnDate(dateString);
+								const k0 = idx>0?this.getIcoResultOnDate(dates[idx-1]):0
+								const k = k1-k0
+
+
+								return 	<tr key={index}>
+											<td>{item.bonus}%</td>
+
+											<td>{(index===0?crowdsaleStartAt:collection[index-1].date).toLocaleString()} - {(index===collection.length-1?crowdsaleEndAt:collection[index].date).toLocaleString()}
+											</td>
+
+											<td>{roundPrecision( _btc.fromSatoshis( k ), 8) }</td>
+
+											<td>{ roundPrecision ( _btc.fromSatoshis((100 + item.bonus) * k  /100), 8 ) }</td>
+
+<td>
+	{roundPrecision(_btc.fromSatoshis(this.getSumBonused())/27072000, 8)}
+</td>
+											<td>
+												{roundPrecision(100*_btc.fromSatoshis(this.getSumBonused())/27072000/(100+item.bonus), 8)}
+											</td>
+{/*}
+											<td>{100 + calculateCurrentStage(confirmedDate) }</td>
+											<td>{roundPrecision(golosAmount, 3)}</td>
+											<td>{roundPrecision(sharePercentage, 6) + '%'}</td>*/}
+										</tr>
+							})
+						}
+						<tr>
+							<td><strong> Всего </strong></td>
+							<td>{crowdsaleStartAt.toLocaleString()} - {crowdsaleEndAt.toLocaleString()}</td>
+							<td>{_btc.fromSatoshis(this.state.balanceIncludingUnconfirmed)} BTC </td>
+							<td> { roundPrecision(_btc.fromSatoshis(this.getSumBonused()), 8)} у.е. </td>
+							<td>{roundPrecision(_btc.fromSatoshis(this.getSumBonused())/27072000, 8)}</td>
+						</tr>
+						</tbody>
+						</table></div></div>
 					{/* TRANSACTION HISTORY */}
 					{
 						transactions.length && state.confirmedBalance
@@ -341,26 +470,54 @@ class BuyGolos extends React.Component {
 											<th width="200">ID Транзакции</th>
                       <th width="100">Перечислено биткоинов</th>
 											<th width="100">Бонус</th>
-											{/* <th width="150">Вы получите Голосов</th> */}
-											{/* <th width="50">Доля в Сети</th> */}
+											<th width="80">у.е.</th>
+											<th width="80">Голосов</th>
+											<th width="80">Доля в Сети</th>
 										</tr>
 									</thead>
 									<tbody>
 										{
 											transactions.map((item, index) => {
-												const golosAmount = 27072000*transactionOutputsSum(item, icoDestinationAddress)/state.confirmedBalance
-												const sharePercentage = (golosAmount/43306176) * 100
-                        const localizedDate = intl.formatDate(item.confirmed)
-                        const confirmedDate = new Date(item.confirmed)
+
+
+											const confirmedDate = new Date(item.confirmed)
+											const weight = (100+calculateCurrentStage(confirmedDate))/100
+                      const localizedDate = intl.formatDate(item.confirmed)
+											const golosAmount = 27072000*transactionOutputsSum(item, icoDestinationAddress)*weight/this.getSumBonused()
+											const sharePercentage = (golosAmount/43306176) * 100
 												return 	<tr key={index}>
 															<td>{item.hash}<br />({localizedDate}); {displayConfirmations(item.confirmations)}</td>
-															<td>{roundPrecision(transactionOutputsSum(item, icoDestinationAddress)/satoshiPerCoin, 8)}</td>
-                              <td>{calculateCurrentStage(confirmedDate)}%</td>
-															{/* <td>{roundPrecision(golosAmount, 3)}</td> */}
-															{/* <td>{roundPrecision(sharePercentage, 6) + '%'}</td> */}
+
+															<td>{roundPrecision(
+																 transactionOutputsSum(item, icoDestinationAddress)/_btc.satoshiPerCoin, 8)
+															}</td>
+
+															<td>{calculateCurrentStage(confirmedDate)}%</td>
+
+															<td>{roundPrecision( _btc.fromSatoshis((100 + calculateCurrentStage (confirmedDate)) * (transactionOutputsSum(item, icoDestinationAddress)) /100), 8) }</td>
+
+															<td>{roundPrecision(golosAmount, 3)}</td>
+
+															<td>{roundPrecision(sharePercentage, 6) + '%'}</td>
 														</tr>
 											})
 										}
+										<tr>
+											<td><strong>Всего</strong></td>
+
+											<td><strong>{roundPrecision( _btc.fromSatoshis( this.getTransacionsSum()), 8)} BTC</strong></td>
+
+											<td><strong>{ roundPrecision( 100*(this.getTransactionsSumWeighted()/this.getTransacionsSum()-1), 2) }%</strong></td>
+
+											<td><strong>{roundPrecision( _btc.fromSatoshis( this.getTransactionsSumWeighted()), 8)} </strong></td>
+
+											<td><strong>
+												{roundPrecision(this.getTransactionsSumWeighted()/this.getSumBonused()*27072000, 3)}</strong>
+											</td>
+											<td><strong>
+												{roundPrecision(this.getTransactionsSumWeighted()/this.getSumBonused()*27072000/43306176*100, 6)}%</strong>
+											</td>
+										</tr>
 									</tbody>
 								</table>
 								<p>Количество получаемых токенов Силы Голоса отображается исходя из полученных биткоинов на данный момент. Всего на краудсейле будет продано 27 072 000 токенов Силы Голоса (60% сети). Сила Голоса будет распределена пропорционально проинвестированным биткоинам с учетом бонусов. Чем больше биткоинов будет проинвестировано, тем меньше Силы Голоса вы получите, тем выше будет её цена.</p>

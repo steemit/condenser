@@ -13,8 +13,25 @@ const print = getLogger('API - ico').print
 export default function useIcoApi(app) {
   const router = koa_router();
   app.use(router.routes());
-
   const koaBody = koa_body();
+
+  router.get('/api/v1/get_raised_amounts', function * () {
+    console.log("HERE");
+    let responce = this;
+    try {
+      const data = yield models.List.findAll({kk: {$like:"icoBalance_Nov"}});
+      this.body = JSON.stringify({status: 'ok', data: data});
+    } catch (error) {
+        console.error('Error in /get_raised_amounts api call', this.session.uid, error.toString());
+        this.body = JSON.stringify({
+            error: error.message
+        });
+        this.status = 500;
+    }
+
+  });
+
+
   router.post('/api/v1/generate_ico_address', koaBody, function * () {
     console.log(destinationBtcAddress);
     if (rateLimitReq(this, this.req))

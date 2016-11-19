@@ -6,12 +6,14 @@ import { ALLOWED_CURRENCIES } from 'config/client_config'
 import store from 'store';
 import transaction from 'app/redux/Transaction'
 import o2j from 'shared/clash/object2json'
+import _urls from 'shared/clash/images/urls'
+import _btc from 'shared/clash/coins/btc'
 
 class Settings extends React.Component {
 
     state = {
         errorMessage: '',
-        succesMessage: '',
+        successMessage: '',
         userImage: this.props.userImage || '',
     }
 
@@ -43,8 +45,8 @@ class Settings extends React.Component {
             json_metadata: metaData,
             account: account.name,
             memo_key: account.memo_key,
-            errorCallback: () => {
-                console.log('SUCCES')
+            errorCallback: err => {
+                console.error('updateAccount() error!', err)
                 this.setState({
                     loading: false,
                     errorMessage: translate('server_returned_error')
@@ -52,14 +54,14 @@ class Settings extends React.Component {
             },
             successCallback: () => {
                 console.log('SUCCES')
-                // clear form ad show succesMessage
+                // clear form ad show successMessage
                 this.setState({
                     loading: false,
                     errorMessage: '',
-                    succesMessage: translate('saved') + '!',
+                    successMessage: translate('saved') + '!',
                 })
-                // remove succesMessage after a while
-                setTimeout(() => this.setState({succesMessage: ''}), 2000)
+                // remove successMessage after a while
+                setTimeout(() => this.setState({successMessage: ''}), 2000)
             }
         })
     }
@@ -68,8 +70,8 @@ class Settings extends React.Component {
         const {state, props} = this
         return <div className="Settings">
                     <div className="row">
-                        {/* currently language chooser is completely broken */}
                         <div className="small-12 medium-6 large-4 columns">
+                            {/* CHOOSE LANGUAGE */}
                             <label>{translate('choose_language')}
                               <select defaultValue={store.get('language')} onChange={this.handleLanguageChange}>
                                 <option value="ru">русский</option>
@@ -78,10 +80,7 @@ class Settings extends React.Component {
                                 <option value="uk">українська</option>
                               </select>
                             </label>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="small-12 medium-6 large-4 columns">
+                            {/* CHOOSE CURRENCY */}
                             <label>{translate('choose_currency')}
                                 <select defaultValue={store.get('currency')} onChange={this.handleCurrencyChange}>
                                     {
@@ -91,21 +90,30 @@ class Settings extends React.Component {
                                     }
                                 </select>
                             </label>
+                            {/* CHOOSE USER IMAGE */}
+                            <form onSubmit={this.handleUserImageSubmit}>
+                                <label>{translate('add_image_url')}
+                                    <input type="url" onChange={this.handleUrlChange} value={state.userImage} disabled={!props.isOwnAccount || state.loading} />
+                                    {
+                                        state.errorMessage
+                                        ? <small className="error">{state.errorMessage}</small>
+                                        : state.successMessage
+                                        ? <small className="success">{state.successMessage}</small>
+                                        : null
+                                    }
+                                </label>
+                                <p className="text-center" style={{marginTop: 16.8}}>
+                                    <input type="submit" className="button" value={translate('save_avatar')} />
+                                </p>
+                            </form>
                         </div>
-                    </div>
-                    <div className="row">
-                        <form onSubmit={this.handleUserImageSubmit} className="small-12 medium-6 large-4 columns">
-                            <label>{translate('add_image_url')}
-                                <input type="url" onChange={this.handleUrlChange} value={state.userImage} disabled={!props.isOwnAccount || state.loading} required />
-                                {
-                                    state.errorMessage
-                                    ? <small className="error">{state.errorMessage}</small>
-                                    : state.succesMessage
-                                    ? <small className="success text-uppercase">{state.succesMessage}</small>
-                                    : null
-                                }
-                            </label>
-                        </form>
+                        <div className="small-12 medium-6 large-8 columns text-center">
+                            {
+                                state.userImage
+                                ? <img src={_urls.proxyImage(state.userImage)} alt={translate('user_avatar') + ' ' + props.account.name} />
+                                : null
+                            }
+                        </div>
                     </div>
                 </div>
     }

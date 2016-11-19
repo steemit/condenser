@@ -2,16 +2,11 @@ export default function resolveRoute(path)
 {
     // routes
     if (path === '/') {
-        return {page: 'Landing'}; // LANDING
-        //return {page: 'PostsIndex', params: ['trending']};
+        return {page: 'PostsIndex', params: ['trending']};
     }
     if (path === '/about.html') {
         return {page: 'About'};
     }
-    // golos.io ICO page
-    //if (path === '/ico.html') {
-    //    return {page: 'Ico'};
-    //}
     // golos.io landing page
     if (path === '/ico') {
         return {page: 'Landing'};

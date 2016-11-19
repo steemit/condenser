@@ -4,7 +4,6 @@ import Icon from 'app/components/elements/Icon'
 import {APP_ICON} from 'config/client_config'
 import 'whatwg-fetch';
 import icoDestinationAddress from 'shared/icoAddress'
-import roundPrecision from 'round-precision'
 import { FormattedMessage } from 'react-intl';
 import { translate } from 'app/Translator';
 // import { crowdsaleStartAt } from '../pages/Landing'
@@ -23,33 +22,30 @@ export const crowdsaleStartAt 	= createDate(2016, 10, 1, 11, 0)
 export const crowdsaleEndAt 	= createDate(2016, 11, 4, 11, 0)
 
 const stages = [25, 20, 15, 10, 5, 0]
+export function calculateCurrentStage(date = Date.now()) {
+	if (date < addDays(15).getTime()) return stages[0]
+  else if (date < addDays(18).getTime()) return stages[1]
+  else if (date < addDays(21).getTime()) return stages[2]
+  else if (date < addDays(24).getTime()) return stages[3]
+  else if (date < addDays(27).getTime()) return stages[4]
+	return stages[5]
+}
 
 export function addDays(days) {
 	const result = new Date(crowdsaleStartAt)
 	result.setDate(result.getDate() + days)
 	return result
 }
-
-// dates are calculated based on props.crowdsaleStartAt variable
-const dates = [
+// crowdsaleDates are calculated based on props.crowdsaleStartAt variable
+export const crowdsaleDates = [
 		{ date: addDays(15), bonus: 25 },
 		{ date: addDays(18), bonus: 20 },
 		{ date: addDays(21), bonus: 15 },
 		{ date: addDays(24), bonus: 10 },
 		{ date: addDays(27), bonus: 5 },
-		{ date: addDays(18), bonus: 0 }
+		{ date: addDays(33), bonus: 0 }
 	]
-
-export function calculateCurrentStage() {
-	if (crowdsaleStartAt < addDays(15)) return stages[0]
-	else if (crowdsaleStartAt < addDays(18)) return stages[1]
-	else if (crowdsaleStartAt < addDays(21)) return stages[2]
-	else if (crowdsaleStartAt < addDays(24)) return stages[3]
-	else if (crowdsaleStartAt < addDays(27)) return stages[4]
-	return stages[5]
-}
-
-export const currentStage = dates.find((item) => item.bonus == calculateCurrentStage())
+export const currentStage = crowdsaleDates.find((item) => item.bonus == calculateCurrentStage())
 
 export default class LandingCountDowns extends React.Component {
 
@@ -101,8 +97,8 @@ export default class LandingCountDowns extends React.Component {
 			const raisedWithUnconfirmed = object.final_balance
 			console.log('object', object)
 			this.setState({
-				bitcoinsRaised: raised / satoshiPerCoin,
-				bitcoinsRaisedIncludingUnconfirmed: raisedWithUnconfirmed / satoshiPerCoin,
+				bitcoinsRaised: raised, // [please apply formatters instead]
+				bitcoinsRaisedIncludingUnconfirmed: raisedWithUnconfirmed,
 				unconfirmedNTx: object.unconfirmed_n_tx || 0
 			})
 		})
@@ -135,8 +131,16 @@ export default class LandingCountDowns extends React.Component {
 
 	render() {
 		const {state, props} = this
-		const currentStage = dates.find((item) => item.bonus == calculateCurrentStage())
-		const previousStage = dates.find((item) => item.bonus < calculateCurrentStage())
+		const currentStage = crowdsaleDates.find((item) => item.bonus == calculateCurrentStage())
+		const previousStage = crowdsaleDates.find((item) => item.bonus < calculateCurrentStage())
+    const nextStage = calculateCurrentStage() ? calculateCurrentStage() - 5 : 0
+
+    let {bitcoinsRaised} = state
+    bitcoinsRaised = String(bitcoinsRaised)
+    bitcoinsRaised = bitcoinsRaised.split('')
+    bitcoinsRaised.splice(-8, 0, '.');
+    bitcoinsRaised = bitcoinsRaised.join('')
+    bitcoinsRaised = Number(bitcoinsRaised)
 
 		function strSplice(str1, str2, location) {
 		  return str1.slice(0, location) + str2 + str1.slice(location, str1.length);
@@ -211,25 +215,25 @@ export default class LandingCountDowns extends React.Component {
 										{
 											state.bitcoinsRaised === false
 											? <strong>загрузка...</strong>
-											: <strong><a href="https://blockchain.info/address/3CWicRKHQqcj1N6fT1pC9J3hUzHw1KyPv3" target="blank">{roundPrecision(state.bitcoinsRaised, 4)} B</a></strong>
+											: <strong><a href="https://blockchain.info/address/3CWicRKHQqcj1N6fT1pC9J3hUzHw1KyPv3" target="blank">{bitcoinsRaised.toPrecision(7)} B</a></strong>
 										}
 									</div>
 									: null
 								}
 								{
 									state.bitcoinsRaised !== state.bitcoinsRaisedIncludingUnconfirmed
-									? <span style={{display: 'block'}}>({roundPrecision(state.bitcoinsRaisedIncludingUnconfirmed, 4)} включая{' '}
+									? <span style={{display: 'block'}}>({state.bitcoinsRaisedIncludingUnconfirmed.toPrecision(7)} включая{' '}
 									<FormattedMessage id="unverified_transactions" values={{transactionsCount: state.unconfirmedNTx}} />)</span> : null
 									// {translate('unverified_transactions', {transactionsCount: state.unconfirmedNTx})}
 								}
 
 								<p>
-									<small>Текущий бонус <span className="red"> + {state.currentBonus}%</span></small>
+									<small>Текущий бонус <span className="red"> + {calculateCurrentStage()}%</span></small>
 								</p>
 							</div>
 							<div className="small-12 medium-4 columns">
 								<CountDown
-									title={`Бонус уменьшится: до ${state.nextBonus}%`}
+                  title={`Бонус уменьшится: до ${nextStage}%`}
 									date={currentStage.date}
 									countFrom={previousStage.date.getTime()}
 									displayWhenZero
@@ -271,7 +275,7 @@ export default class LandingCountDowns extends React.Component {
 								<p>Социальные сети: </p>
 								<ul>
 									<li>
-										<a href="facebook.com" target="blank"><img src="images/landing/fb.jpg" /></a>
+										<a href="https://www.facebook.com/golosru" target="blank"><img src="images/landing/fb.jpg" /></a>
 									</li>
 									<li>
 										<a href="https://twitter.com/goloschain" target="blank"><img src="images/landing/tw.jpg" /></a>

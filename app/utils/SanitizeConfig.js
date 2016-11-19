@@ -91,7 +91,7 @@ export default ({large = true, highQualityPost = true, noImage = false, sanitize
             }
 
             // replace http:// with // to force https when needed
-            // src = src.replace(/^http:\/\//i, '//')
+            src = src.replace(/^http:\/\//i, '//')
 
             return {tagName, attribs: {src}}
         },

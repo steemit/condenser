@@ -1,6 +1,6 @@
 import React from 'react';
 import {key_utils} from 'shared/ecc'
-import { translate } from '../../Translator';
+import { translate } from 'app/Translator';
 
 function allChecked(confirmCheckboxes) {
     return confirmCheckboxes.box1 && confirmCheckboxes.box2;

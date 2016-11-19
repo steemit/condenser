@@ -11,27 +11,34 @@ export default class LandingPress extends React.Component {
 					</div>
 				</div>
 				<div className="row Partners__logos">
-					<div className="small-6 medium-3">
+					<div className="small-6 medium-4">
 						<a href="http://satoshi.fund/" target="blank">
 							<img src="images/landing/satoshi_fund.png" alt="логотип satoshi.fund" />
 						</a>
 					</div>
-					<div className="small-6 medium-3">
-						<a href="https://liqui.io/" target="blank">
-							<img className="Partners__liqui-logo" src="images/landing/liqui.png" alt="логотип Liqui" />
-						</a>
-					</div>
-					<div className="small-6 medium-3">
+					<div className="small-6 medium-4">
 						<a href="http://kuna.com.ua/" target="blank">
-							<img src="images/landing/kuna.png" alt="логотип Bitup" />
+							<img className="Partners__kuna-logo" src="images/landing/kuna.png" alt="логотип Bitup" />
 						</a>
 					</div>
-					<div className="small-6 medium-3">
+          <div className="small-6 medium-4">
+            <a className="Partners__changebot-logo" href="https://changebot.info/" target="blank">
+              <img src="images/landing/changebot.png" alt="логотип changebot" />
+            </a>
+          </div>
+				</div>
+        <div className="row Partners__logos">
+          <div className="small-12 medium-6">
+            <a href="https://liqui.io/" target="blank">
+              <img className="Partners__liqui-logo" src="images/landing/liqui.png" alt="логотип Liqui" />
+            </a>
+          </div>
+					<div className="small-12 medium-6">
 						<a href="https://www.coinessa.com/" target="blank">
 							<img className="Partners__coinessa-logo" src="images/landing/coinessa.svg" alt="логотип Coinessa" />
 						</a>
 					</div>
-				</div>
+        </div>
 
 				<div className="row">
 					<div className="small-12 columns">
@@ -56,12 +63,17 @@ export default class LandingPress extends React.Component {
 					<div className="small-12 columns">
 						<h3>Информационные партнеры</h3>
 					</div>
-					<div className="small-12 medium-6 columns">
+					<div className="small-12 medium-4 columns">
 						<a href="http://www.coinfox.ru/" target="blank">
 							<img src="images/landing/coinfox.jpg" alt="логотип Coinfox" />
 						</a>
 					</div>
-					<div style={{marginTop: '5px'}} className="small-12 medium-6 columns">
+					<div className="small-12 medium-4 columns">
+						<a href="https://bits.media/" target="blank">
+							<img src="images/landing/bitsmedia.png" alt="логотип BitsMedia" />
+						</a>
+					</div>
+					<div style={{marginTop: '5px'}} className="small-12 medium-4 columns">
 						<a href="http://forklog.com/" target="blank">
 							<img className="Partners__forklog-logo" src="images/landing/forklog-logo.svg" alt="логотип Forklog" />
 						</a>

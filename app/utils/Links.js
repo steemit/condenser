@@ -1,4 +1,4 @@
-
+import { APP_URL } from 'config/client_config';
 const urlChar = '[^\\s"\'<>\\]\\[\\(\\)]'
 const imagePath = '(?:(?:\\.(?:tiff?|jpe?g|gif|png|svg|ico)|ipfs/[a-z\\d]{40,}))'
 const domainPath = '(?:[-a-zA-Z0-9\\._]+)'
@@ -13,8 +13,8 @@ const urlSet = ({domain = domainPath, path} = {}) => {
     Unless your using a 'g' (glob) flag you can store and re-use your regular expression.  Use the cache below.  If your using a glob (for example: replace all), the regex object becomes stateful and continues where it left off when called with the same string so naturally the regexp object can't be cached for long.
 */
 export const any = (flags = 'i') => new RegExp(urlSet(), flags)
-export const local = (flags = 'i') => new RegExp(urlSet({domain: '(?:localhost|(?:.*\\.)?golos.io)'}), flags)
-export const remote = (flags = 'i') => new RegExp(urlSet({domain: `(?!localhost|(?:.*\\.)?golos.io)${domainPath}`}), flags)
+export const local = (flags = 'i') => new RegExp(urlSet({domain: '(?:localhost|(?:.*\\.)?' + APP_URL + ')'}), flags)
+export const remote = (flags = 'i') => new RegExp(urlSet({domain: `(?!localhost|(?:.*\\.)?'${APP_URL}')${domainPath}`}), flags)
 export const youTube = (flags = 'i') => new RegExp(urlSet({domain: '(?:(?:.*\.)?youtube.com|youtu.be)'}), flags)
 export const image = (flags = 'i') => new RegExp(urlSet({path: imagePath}), flags)
 export const imageFile = (flags = 'i') => new RegExp(imagePath, flags)

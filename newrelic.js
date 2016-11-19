@@ -1,5 +1,6 @@
 'use strict'
 import config from './config'
+import { APP_URL } from 'module';
 const newrelic = config.newrelic || {};
 
 /**
@@ -12,7 +13,7 @@ exports.config = {
   /**
    * Array of application names.
    */
-  app_name: newrelic.app_name || ['Golos.io'],
+  app_name: newrelic.app_name || [APP_URL],
   /**
    * Your New Relic license key.
    */

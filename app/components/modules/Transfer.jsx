@@ -10,8 +10,8 @@ import {browserTests} from 'shared/ecc/test/BrowserTests'
 import {validate_account_name} from 'app/utils/ChainValidation';
 import { translate } from 'app/Translator';
 import { formatCoins } from 'app/utils/FormatCoins';
-import { APP_NAME, OWNERSHIP_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, INVEST_TOKEN,
-OWNERSHIP_TICKER, DEBT_TICKER, VEST_TICKER } from 'config/client_config';
+import { APP_NAME, LIQUID_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, VESTING_TOKEN,
+LIQUID_TICKER, DEBT_TICKER, VEST_TICKER } from 'config/client_config';
 
 /** Warning .. This is used for Power UP too. */
 class TransferForm extends Component {
@@ -51,7 +51,7 @@ class TransferForm extends Component {
     initForm(props) {
         const insufficientFunds = (asset, amount) => {
             const balanceValue =
-                !asset || asset === OWNERSHIP_TICKER ? props.currentAccount.get('balance') :
+                !asset || asset === LIQUID_TICKER ? props.currentAccount.get('balance') :
                 asset === DEBT_TICKER ? props.currentAccount.get('sbd_balance') :
                 null
             if(!balanceValue) return false
@@ -90,7 +90,7 @@ class TransferForm extends Component {
     balanceValue() {
         const {currentAccount} = this.props
         const {asset} = this.state
-        return formatCoins(!asset || asset.value === OWNERSHIP_TICKER ? currentAccount.get('balance') :
+        return formatCoins(!asset || asset.value === LIQUID_TICKER ? currentAccount.get('balance') :
             asset.value === DEBT_TICKER ? currentAccount.get('sbd_balance') :
             null)
     }
@@ -125,7 +125,7 @@ class TransferForm extends Component {
                 {toVesting && <div className="row">
                     <div className="column small-12">
                         <p>{translate('influence_tokens_which_earn_more_power_by_holding_long_term') + ' ' + translate('the_more_you_hold_the_more_you_influence_post_rewards')}</p>
-                        <p>{translate('INVEST_TOKEN_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_OWNERSHIP_TOKEN')}</p>
+                        <p>{translate('INVEST_TOKEN_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_LIQUID_TOKEN')}</p>
                     </div>
                 </div>}
 
@@ -156,7 +156,7 @@ class TransferForm extends Component {
                         {asset && <span>
                             <select {...asset.props} placeholder={translate('asset')} disabled={loading}>
                                 <option></option>
-                                <option value={OWNERSHIP_TICKER}>{OWNERSHIP_TOKEN}</option>
+                                <option value={LIQUID_TICKER}>{LIQUID_TOKEN}</option>
                                 {/* TODO */}
                                 <option value={DEBT_TICKER}>{DEBT_TOKEN_SHORT}</option>
                             </select>
@@ -224,7 +224,7 @@ export default connect(
                 dispatch({type: 'global/GET_STATE', payload: {url: `@${username}/transfers`}}) // refresh transfer history
                 dispatch(user.actions.hideTransfer())
             }
-            const asset2 = toVesting ? OWNERSHIP_TICKER : asset
+            const asset2 = toVesting ? LIQUID_TICKER : asset
             const operation = {
                 from: username,
                 to, amount: parseFloat(amount, 10).toFixed(3) + ' ' + asset2,

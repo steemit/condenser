@@ -13,7 +13,7 @@ import HtmlReady from 'shared/HtmlReady'
 import g from 'app/redux/GlobalReducer'
 import {Map, Set} from 'immutable'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
-import { translate } from '../../Translator';
+import { translate } from 'app/Translator';
 
 let RichTextEditor
 if(process.env.BROWSER) {

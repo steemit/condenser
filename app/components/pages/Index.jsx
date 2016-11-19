@@ -1,6 +1,7 @@
 import React from 'react';
 import SvgImage from 'app/components/elements/SvgImage';
 import { translateHtml } from 'app/Translator';
+import { APP_NAME_LATIN } from 'config/client_config';
 
 const mailchimp_form = `
 <!-- Begin MailChimp Signup Form -->
@@ -44,8 +45,7 @@ export default class Index extends React.Component {
         return (
             <div className="Index">
                 <div className="text-center">
-                    {/*<img src={require('app/assets/images/steemit.svg')} />*/}
-                    <SvgImage name="golos" width="480px" height="240px" />
+                    <SvgImage name={APP_NAME_LATIN.toLowerCase()} width="480px" height="240px" />
                 </div>
                 <h1 className="center text-center">
                     {translateHtml('APP_NAME_is_a_social_media_platform_where_everyone_gets_paid_for_creating_and_curating_content')}.
@@ -54,4 +54,4 @@ export default class Index extends React.Component {
                 <br />
             </div>);
     }
-};
+}

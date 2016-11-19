@@ -1,6 +1,7 @@
 /* eslint react/prop-types: 0 */
 import React from 'react'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
+import { APP_URL } from 'config/client_config';
 
 const {string, number} = React.PropTypes
 
@@ -16,7 +17,7 @@ export default class YoutubePreview extends React.Component {
     static defaultProps = {
         width: 640,
         height: 480,
-        dataParams: 'enablejsapi=0&rel=0&origin=https://golos.io'
+        dataParams: 'enablejsapi=0&rel=0&origin=https://' + APP_URL
     }
 
     constructor() {

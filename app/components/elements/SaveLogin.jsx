@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import Tooltip from 'app/components/elements/Tooltip'
 import {connect} from 'react-redux'
 import user from 'app/redux/User'
-import { translate } from '../../Translator';
+import { translate } from 'app/Translator';
 
 const {bool, func} = PropTypes
 

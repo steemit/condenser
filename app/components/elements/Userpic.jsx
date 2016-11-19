@@ -1,26 +1,35 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux'
-const {oneOfType, string, number} = PropTypes
+const {oneOfType, string, object} = PropTypes
 
 class Userpic extends Component {
 	// you can pass either user object, or username string
 	static propTypes = {
-		account: oneOfType([string, number])
+		account: oneOfType([string, object])
+	}
+
+	static defaultProps = {
+		width: 48,
+		height: 48
 	}
 
 	render() {
-		const {account, ...rest} = this.props
+		const {props} = this
+		const {account, dispatch, ...rest} = props
 		let url
 
 		// try to extract image url from users metaData
 		try { url = JSON.parse(account.json_metadata).user_image }
 		catch (e) { url = '' }
+		const proxy = $STM_Config.img_proxy_prefix
+		if (proxy && url) {
+			const size = props.width + 'x' + props.height
+			url = proxy + size + '/' + url;
+		}
 
 		return 	<div className="Userpic">
 					<img
-						src={url || require('app/assets/images/user.png')}
-						width="48px"
-						height="48px"
+						src={url || '/images/user.png'}
 						{...rest}
 					/>
 				</div>;

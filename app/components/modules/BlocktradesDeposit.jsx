@@ -6,22 +6,21 @@ import Icon from 'app/components/elements/Icon'
 import DropdownMenu from 'app/components/elements/DropdownMenu'
 import g from 'app/redux/GlobalReducer'
 import QRCode from 'react-qr'
-import {steemTip, powerTip, powerTip2} from 'app/utils/Tips'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
-import { translate } from 'app/Translator.js';
+import { translate } from 'app/Translator';
 import { formatCoins } from 'app/utils/FormatCoins';
-import { APP_NAME, APP_ICON, DEBT_TOKEN, DEBT_TOKEN_SHORT, OWNERSHIP_TOKEN, CURRENCY_SIGN, INVEST_TOKEN, VEST_TICKER, OWNERSHIP_TICKER } from 'config/client_config';
+import { APP_URL, APP_ICON, LIQUID_TOKEN, VESTING_TOKEN, VEST_TICKER, LIQUID_TICKER, DEBT_TICKER } from 'config/client_config';
 
 const coinNames = {
-    [OWNERSHIP_TICKER]: OWNERSHIP_TOKEN,
-    [VEST_TICKER]: INVEST_TOKEN,
+    [LIQUID_TICKER]: LIQUID_TOKEN,
+    [VEST_TICKER]: VESTING_TOKEN,
     BTC: 'Bitcoin',
     BTS: 'Bitshares',
     ETH: 'Ether',
 }
 
 const coinToTypes = [
-    [OWNERSHIP_TICKER, 'steem'],
+    [LIQUID_TICKER, 'steem'],
     [VEST_TICKER, 'steem_power'],
     ['BTC', 'btc'],
     ['BTS', 'bts'],
@@ -153,24 +152,24 @@ class BlocktradesDeposit extends React.Component {
             {/*{trHashLink(outputCoin.value, tr.outputTransactionHash)}&nbsp;*/}
         </div>)
 
-        const depositTip = outputCoin.value === OWNERSHIP_TICKER
+        const depositTip = outputCoin.value === LIQUID_TICKER
             ? translate('tradeable_tokens_that_may_be_transferred_anywhere_at_anytime')
                 + ' ' +
-                translate('OWNERSHIP_TOKEN_can_be_converted_to_INVEST_TOKEN_in_a_process_called_powering_up')
+                translate('LIQUID_TOKEN_can_be_converted_to_INVEST_TOKEN_in_a_process_called_powering_up')
             : outputCoin.value === VEST_TICKER ? <div>
                 <p>{translate('influence_tokens_which_earn_more_power_by_holding_long_term') + ' ' + translate('the_more_you_hold_the_more_you_influence_post_rewards')}</p>
-                <p>{translate('INVEST_TOKEN_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_OWNERSHIP_TOKEN')}</p>
+                <p>{translate('INVEST_TOKEN_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_LIQUID_TOKEN')}</p>
             </div>
             : null
 
         const selectOutputCoin = <span>
              <input type="radio" {...cleanReduxInput(outputCoin)} value={VEST_TICKER} checked={outputCoin.value === VEST_TICKER} id="powerCheck" />
              &nbsp;
-             <label htmlFor="powerCheck">{INVEST_TOKEN}</label>
+             <label htmlFor="powerCheck">{VESTING_TOKEN}</label>
 
-             <input type="radio" {...cleanReduxInput(outputCoin)} value={OWNERSHIP_TICKER} checked={outputCoin.value === OWNERSHIP_TICKER} id="steemCheck" />
+             <input type="radio" {...cleanReduxInput(outputCoin)} value={LIQUID_TICKER} checked={outputCoin.value === LIQUID_TICKER} id="steemCheck" />
              &nbsp;
-             <label htmlFor="steemCheck">{OWNERSHIP_TOKEN}</label>
+             <label htmlFor="steemCheck">{LIQUID_TOKEN}</label>
         </span>
 
         const coin_menu = [
@@ -380,10 +379,11 @@ const toSteem = value => coalesce(coalesce(coinToTypes.find(v => v[1] === value)
 const toTrade = value => coalesce(coalesce(coinToTypes.find(v => v[0] === value), [])[1], value)
 const encodeParams = obj => Object.keys(obj).map(key => `${key}=${encodeURIComponent(obj[key])}`).join('&')
 const trStatus = stat => coalesce(statusNames[stat], stat)
+const coinTypes = new RegExp(`${LIQUID_TICKER}|${VEST_TICKER}|${DEBT_TICKER}`)
 const trHashLink = (coin, hash) =>
     !hash ? null :
     coin === 'BTC' ? <a href={`https://blockchain.info/tx/${hash}`} target="_blank"><Icon name="extlink" /></a> :
-    /GOLOS|GESTS|GBG/.test(coin) ? <a href={`https://____golos.io/tx/${hash}`} target="_blank"><Icon name="extlink" /></a> :
+    coinTypes.test(coin) ? <a href={`https://____${APP_URL}/tx/${hash}`} target="_blank"><Icon name="extlink" /></a> :
     <span t={hash}>hash.substring(0, 10) + '...'</span>
 
 /** Memory backed local storage.  Assumes this is the sole maintainer of this key.

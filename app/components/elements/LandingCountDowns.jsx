@@ -134,7 +134,7 @@ export default class LandingCountDowns extends React.Component {
 		const {state, props} = this
 		const currentStage = crowdsaleDates.find((item) => item.bonus == calculateCurrentStage())
 		const previousStage = crowdsaleDates.find((item) => item.bonus < calculateCurrentStage())
-    const nextStage = calculateCurrentStage() ? calculateCurrentStage() - 5 : 0
+    const nextBonus = calculateCurrentStage() ? calculateCurrentStage() - 5 : 0
 
 		function strSplice(str1, str2, location) {
 		  return str1.slice(0, location) + str2 + str1.slice(location, str1.length);

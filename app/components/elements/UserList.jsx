@@ -29,7 +29,9 @@ class UserList extends React.Component {
         const title = this.props.title
 
         let user_list = users.map((item, index) => {
-            if(item.get(0) === "blog") {
+            // TODO: remove this check after shared-db upgrade. https://github.com/steemit/steem/pull/577
+            if((typeof item) !== 'string') item = item.get(0);
+            if(item === "blog") {
                 return <UserListRow account={account} user={index} key={index} />
             }
             return null;

@@ -249,12 +249,10 @@ class BuyGolos extends React.Component {
 			const k1 = this.getIcoResultOnDate(dateString);
 			const k0 = idx>0?this.getIcoResultOnDate(dates[idx-1]):0
 			const k = k1-k0
-			console.log(k, k*(100+item.bonus)/100)
 			return k*(100+item.bonus)/100
 		}).reduce(function(previousValue, currentValue, index, array) {
 			return previousValue + currentValue;
 		}, 0)
-		console.log(crowdsale);
 		return crowdsale;
 	}
 
@@ -415,7 +413,7 @@ class BuyGolos extends React.Component {
 
 											<td>{ roundPrecision ( _btc.fromSatoshis((100 + item.bonus) * k  /100), 8 ) }</td>
 
-											<td></td>
+
 											<td></td>
 {/*}
 											<td>{100 + calculateCurrentStage(confirmedDate) }</td>
@@ -429,6 +427,7 @@ class BuyGolos extends React.Component {
 							<td>{crowdsaleStartAt.toLocaleString()} - {crowdsaleEndAt.toLocaleString()}</td>
 							<td>{_btc.fromSatoshis(this.state.balanceIncludingUnconfirmed)} BTC </td>
 							<td> { roundPrecision(_btc.fromSatoshis(this.getSumBonused()), 8)} у.е. </td>
+							<td>{roundPrecision(_btc.fromSatoshis(this.getSumBonused())/27072000, 8)}</td>
 						</tr>
 						</tbody>
 						</table></div></div>
@@ -452,10 +451,12 @@ class BuyGolos extends React.Component {
 										{
 											transactions.map((item, index) => {
 
-												const golosAmount = 27072000*transactionOutputsSum(item, icoDestinationAddress)/state.confirmedBalance
-												const sharePercentage = (golosAmount/43306176) * 100
+
+												const confirmedDate = new Date(item.confirmed)
+												const weight = (100+calculateCurrentStage(confirmedDate))/100
                         const localizedDate = intl.formatDate(item.confirmed)
-                        const confirmedDate = new Date(item.confirmed)
+												const golosAmount = 27072000*transactionOutputsSum(item, icoDestinationAddress)*weight/this.state.confirmedBalance
+												const sharePercentage = (golosAmount/43306176) * 100
 												return 	<tr key={index}>
 															<td>{item.hash}<br />({localizedDate}); {displayConfirmations(item.confirmations)}</td>
 

@@ -229,7 +229,7 @@ console.log('state.bitcoinsRaised', state.bitcoinsRaised)
 							<div className="small-12 medium-4 columns">
 								<CountDown
                   title={`Бонус уменьшится: до ${nextStage}%`}
-									date={crowdsaleDates[1].date}
+									date={currentStage.date}
 									countFrom={previousStage.date.getTime()}
 									displayWhenZero
 								/>

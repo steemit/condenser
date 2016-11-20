@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
+const {oneOfType, object, array, string} = PropTypes
 
 export default class SidePanel extends React.Component {
     static propTypes = {
-        children: React.PropTypes.array,
-        alignment: React.PropTypes.string
+        children: oneOfType([object, array]),
+        alignment: string
     };
 
     constructor(props) {
@@ -38,4 +39,3 @@ export default class SidePanel extends React.Component {
         </div>;
     }
 }
-

@@ -57,10 +57,34 @@
   }
 }
 
+.PostsList__nav_container {
+  width: 100%;
+  position: fixed;
+  top: 20%;
+  .button {
+    font-weight: bold;
+    padding: 1.5rem 1.1rem;
+    height: 60vh;
+    background: rgba(100,110,240,0.9);
+  }
+  .prev-button {
+    position: absolute;
+    left: 0;
+  }
+  .next-button {
+    position: absolute;
+    right: 0;
+  }
+}
+
 body.with-post-overlay {
   overflow: hidden;
 }
-
+@media screen and (max-width: 40rem) {
+  .PostsList__nav_container {
+    display: none
+  }
+}
 @media screen and (min-width: 60rem) {
   .PostsList__post_overlay {
     background-color: rgba(150, 150, 150, 0.9);

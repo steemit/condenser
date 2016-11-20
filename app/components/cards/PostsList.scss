@@ -80,7 +80,11 @@
 body.with-post-overlay {
   overflow: hidden;
 }
-
+@media screen and (max-width: 40rem) {
+  .PostsList__nav_container {
+    display: none
+  }
+}
 @media screen and (min-width: 60rem) {
   .PostsList__post_overlay {
     background-color: rgba(150, 150, 150, 0.9);

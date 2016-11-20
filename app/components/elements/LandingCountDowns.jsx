@@ -7,6 +7,7 @@ import icoDestinationAddress from 'shared/icoAddress'
 import roundPrecision from 'round-precision'
 import { FormattedMessage } from 'react-intl';
 import { translate } from 'app/Translator';
+import _btc from 'shared/clash/coins/btc'
 // import { crowdsaleStartAt } from '../pages/Landing'
 
 const satoshiPerCoin = 100000000
@@ -209,14 +210,14 @@ export default class LandingCountDowns extends React.Component {
 										{
 											state.bitcoinsRaised === false
 											? <strong>загрузка...</strong>
-											: <strong><a href="https://blockchain.info/address/3CWicRKHQqcj1N6fT1pC9J3hUzHw1KyPv3" target="blank">{roundPrecision(state.bitcoinsRaised, 4)} B</a></strong>
+											: <strong><a href="https://blockchain.info/address/3CWicRKHQqcj1N6fT1pC9J3hUzHw1KyPv3" target="blank">{roundPrecision(_btc.fromSatoshis(state.bitcoinsRaised), 4)} B</a></strong>
 										}
 									</div>
 									: null
 								}
 								{
 									state.bitcoinsRaised !== state.bitcoinsRaisedIncludingUnconfirmed
-									? <span style={{display: 'block'}}>({roundPrecision(state.bitcoinsRaisedIncludingUnconfirmed, 4)} включая{' '}
+									? <span style={{display: 'block'}}>({roundPrecision(_btc.fromSatoshis(state.bitcoinsRaisedIncludingUnconfirmed), 4)} включая{' '}
 									<FormattedMessage id="unverified_transactions" values={{transactionsCount: state.unconfirmedNTx}} />)</span> : null
 									// {translate('unverified_transactions', {transactionsCount: state.unconfirmedNTx})}
 								}

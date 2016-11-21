@@ -12,6 +12,7 @@ import SidePanel from 'app/components/modules/SidePanel';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import Dialogs from 'app/components/modules/Dialogs';
 import Modals from 'app/components/modules/Modals';
+import RocketChat from 'app/components/modules/RocketChat';
 import Icon from 'app/components/elements/Icon';
 import {key_utils} from 'shared/ecc'
 import { translate } from 'app/Translator';
@@ -273,6 +274,7 @@ class App extends React.Component {
                 {callout}
                 {children}
                 {lp ? <LpFooter /> : null}
+                <RocketChat />
             </div>
             <Dialogs />
             <Modals />

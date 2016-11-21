@@ -111,7 +111,8 @@ function link(state, child) {
     if(url) {
         state.links.add(url)
         if(state.mutate) {
-            if(! /(https?:)?\/\//.test(url)) {
+            // If this link is not relative, http, or https -- add https.
+            if(! /^\/(?!\/)|(https?:)?\/\//.test(url)) {
                 child.setAttribute('href', "https://"+url)
             }
         }

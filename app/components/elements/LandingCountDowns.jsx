@@ -233,6 +233,7 @@ export default class LandingCountDowns extends React.Component {
 								}
 
 								<p>
+                  <p><i><a href="http://www.steeme.ru/golos-ico.html" target="blank">статистика краудсейла</a></i></p>
 									<small>Текущий бонус <span className="red"> + {calculateCurrentStage()}%</span></small>
 								</p>
 							</div>

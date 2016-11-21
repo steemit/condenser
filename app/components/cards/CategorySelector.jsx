@@ -89,7 +89,8 @@ export function validateCategory(category, required = true) {
     )
 }
 export default connect((state, ownProps) => {
-    const trending = state.global.get('category_idx').get('trending')
+    // TODO: use 'tag_idx' after shared-db upgrade
+    const trending = state.global.get('category_idx').get('trending') || state.global.get('tag_idx').get('trending')
     // apply translations
     // they are used here because default prop can't acces intl property
     const placeholder = translate('tag_your_story');

@@ -47,7 +47,7 @@ export function sortComments( g, comments, sort_order ) {
                 let bactive = Date.parse( bcontent.get('last_update') );
                 return bactive.getTime() - aactive.getTime();
               },
-      created:  (a,b) =>  {
+      new:  (a,b) =>  {
                 let acontent = g.get('content').get(a);
                 let bcontent = g.get('content').get(b);
                 if (netNegative(acontent)) {
@@ -85,7 +85,7 @@ class CommentImpl extends React.Component {
         // html props
         global: React.PropTypes.object.isRequired,
         content: React.PropTypes.string.isRequired,
-        sort_order: React.PropTypes.oneOf(['active', 'updated', 'created', 'trending']).isRequired,
+        sort_order: React.PropTypes.oneOf(['active', 'updated', 'new', 'trending']).isRequired,
         root: React.PropTypes.bool,
         showNegativeComments: React.PropTypes.bool,
         onHide: React.PropTypes.func,

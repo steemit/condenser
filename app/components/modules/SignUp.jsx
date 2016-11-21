@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import SvgImage from 'app/components/elements/SvgImage';
 import AddToWaitingList from 'app/components/modules/AddToWaitingList';
 
-export default class SignUp extends React.Component {
+class SignUp extends React.Component {
     constructor() {
         super();
         this.state = {waiting_list: false};

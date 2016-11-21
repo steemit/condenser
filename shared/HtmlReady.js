@@ -179,20 +179,22 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
         if(/#[\d]+$/.test(tag)) return tag // Don't allow numbers to be tags
         const space = /^\s/.test(tag) ? tag[0] : ''
         const tag2 = tag.trim().substring(1)
-        if(hashtags) hashtags.add(tag2)
+        const tagLower = tag2.toLowerCase()
+        if(hashtags) hashtags.add(tagLower)
         if(!mutate) return tag
-        return space + `<a href="/trending/${tag2.toLowerCase()}">${tag}</a>`
+        return space + `<a href="/trending/${tagLower}">${tag}</a>`
     })
 
     // usertag (mention)
     content = content.replace(/(^|\s)(@[a-z][-\.a-z\d]+[a-z\d])/ig, user => {
         const space = /^\s/.test(user) ? user[0] : ''
         const user2 = user.trim().substring(1)
-        const valid = validate_account_name(user2) == null
-        if(valid && usertags) usertags.add(user2)
+        const userLower = user2.toLowerCase()
+        const valid = validate_account_name(userLower) == null
+        if(valid && usertags) usertags.add(userLower)
         if(!mutate) return user
         return space + (valid ?
-            `<a href="/@${user2}">@${user2}</a>` :
+            `<a href="/@${userLower}">@${user2}</a>` :
             '@' + user2
         )
     })

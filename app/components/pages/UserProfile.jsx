@@ -85,22 +85,26 @@ export default class UserProfile extends React.Component {
         const followers = this.props.global.getIn( ['follow', 'get_followers', accountname] );
         const following = this.props.global.getIn( ['follow', 'get_following', accountname] );
 
-        if(followers) {
+        if(followers && followers.has('result') && followers.has('blog')) {
             const status_followers = followers.get('blog')
             const followers_loaded = status_followers.get('loading') === false && status_followers.get('error') == null
             if (followers_loaded) {
                 followerCount = followers.get('result').filter(a => {
-                    return a.get(0) === "blog";
+                    // TODO: remove this check after shared-db upgrade. https://github.com/steemit/steem/pull/577
+                    if((typeof a) !== 'string') a = a.get(0);
+                    return a === "blog";
                 }).size;
             }
         }
 
-        if (following) {
+        if (following && following.has('result') && following.has('blog')) {
             const status_following = following.get('blog')
             const following_loaded = status_following.get('loading') === false && status_following.get('error') == null
             if (following_loaded) {
                 followingCount = following.get('result').filter(a => {
-                    return a.get(0) === "blog";
+                    // TODO: remove this check after shared-db upgrade. https://github.com/steemit/steem/pull/577
+                    if((typeof a) !== 'string') a = a.get(0);
+                    return a === "blog";
                 }).size;
             }
         }
@@ -174,11 +178,11 @@ export default class UserProfile extends React.Component {
         else if( section === 'comments' && account.post_history ) {
            // NOTE: `posts` key will be renamed to `comments` (https://github.com/steemit/steem/issues/507)
            //   -- see also GlobalReducer.js
-           if( account.posts )
+           if( account.posts || account.comments )
            {
               tab_content = <PostsList
                   emptyText={translate('user_hasnt_made_any_posts_yet', {name})}
-                  posts={account.posts}
+                  posts={account.posts || account.comments}
                   loading={fetching}
                   category="comments"
                   loadMore={this.loadMore}

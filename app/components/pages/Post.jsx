@@ -122,7 +122,7 @@ class Post extends React.Component {
         );
 
 
-        let sort_orders = [ 'trending', 'active', 'created', 'updated' ];
+        let sort_orders = [ 'trending', 'active', 'new', 'updated' ];
         let sort_labels = [ translate('trending'), translate('active'), translate('new'), translate('updated') ];
         let sort_menu = [];
 

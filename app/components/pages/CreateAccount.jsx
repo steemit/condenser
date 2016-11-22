@@ -15,7 +15,6 @@ class CreateAccount extends React.Component {
 
     static propTypes = {
         loginUser: React.PropTypes.func.isRequired,
-        showSignUp: React.PropTypes.func.isRequired,
         serverBusy: React.PropTypes.bool
     };
 
@@ -82,7 +81,7 @@ class CreateAccount extends React.Component {
             if (res.error || res.status !== 'ok') {
                 console.error('CreateAccount server error', res.error);
                 if (res.error === 'Unauthorized') {
-                    this.props.showSignUp();
+                    window.location = '/enter_email';
                 }
                 this.setState({server_error: res.error || 'Unknown', loading: false});
             } else {
@@ -288,7 +287,6 @@ module.exports = {
         },
         dispatch => ({
             loginUser: (username, password) => dispatch(user.actions.usernamePasswordLogin({username, password, saveLogin: true})),
-            showSignUp: () => dispatch(user.actions.showSignUp()),
             logout: e => {
                 if (e) e.preventDefault();
                 dispatch(user.actions.logout())

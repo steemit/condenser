@@ -114,7 +114,7 @@ class Settings extends React.Component {
                             state.errorMessage
                                 ? <small className="error">{state.errorMessage}</small>
                                 : state.succesMessage
-                                ? <small className="success text-uppercase">{state.succesMessage}</small>
+                                ? <small className="success uppercase">{state.succesMessage}</small>
                                 : null
                         }
                     </label>

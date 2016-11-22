@@ -424,7 +424,7 @@ const es = 	{
 	not_valid_email: 'Not valid email',
 	thank_you_for_being_an_early_visitor_to_steemit: 'Thank you for being an early visitor to Steemit. We will get back to you at the earliest possible opportunity.',
 	estimated_author_rewards_last_week: "Estimated author rewards last week",
-	author_rewards_last_week: "Estimated author rewards last week",
+	author_rewards_last_week: "Author rewards last week",
 	confirm: 'Confirm',
 	canceled: 'Canceled',
 	asset: "Asset",

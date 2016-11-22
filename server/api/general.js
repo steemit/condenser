@@ -7,6 +7,7 @@ import recordWebEvent from 'server/record_web_event';
 import {esc, escAttrs} from 'db/models';
 import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF} from 'server/utils';
 import coBody from 'co-body';
+import Tarantool from 'db/tarantool';
 
 export default function useGeneralApi(app) {
     const router = koa_router({prefix: '/api/v1'});
@@ -34,6 +35,18 @@ export default function useGeneralApi(app) {
             this.status = 401;
             return;
         }
+
+        try {
+            const lock_entity_res = yield Tarantool.instance().call('lock_entity', user_id+'');
+            if (lock_entity_res[0][0] === false) {
+                this.body = JSON.stringify({error: 'Conflict'});
+                this.status = 409;
+                return;
+            }
+        } catch (e) {
+
+        }
+
         try {
             const user = yield models.User.findOne(
                 {attributes: ['verified', 'waiting_list'], where: {id: user_id}}

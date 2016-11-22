@@ -38,13 +38,19 @@ export default function useGeneralApi(app) {
 
         try {
             const lock_entity_res = yield Tarantool.instance().call('lock_entity', user_id+'');
-            if (lock_entity_res[0][0] === false) {
+            if (!lock_entity_res[0][0]) {
+                console.log('-- /accounts lock_entity -->', user_id, lock_entity_res[0][0]);
                 this.body = JSON.stringify({error: 'Conflict'});
                 this.status = 409;
                 return;
             }
         } catch (e) {
-
+            // tarantool is not available, fallback to another method
+            const rnd_wait_time = Math.random() * 10000;
+            console.log('-- /accounts rnd_wait_time -->', rnd_wait_time);
+            yield new Promise((resolve) =>
+                setTimeout(() => resolve(), rnd_wait_time)
+            )
         }
 
         try {
@@ -52,6 +58,7 @@ export default function useGeneralApi(app) {
                 {attributes: ['verified', 'waiting_list'], where: {id: user_id}}
             );
             if (!user) {
+                try { yield Tarantool.instance().call('unlock_entity', user_id + ''); } catch(e) {}
                 this.body = JSON.stringify({error: 'Unauthorized'});
                 this.status = 401;
                 return;
@@ -64,6 +71,7 @@ export default function useGeneralApi(app) {
             });
             if (same_ip_bot) {
                 console.log('-- /accounts same_ip_bot -->', user_id, this.session.uid, remote_ip, user.email);
+                try { yield Tarantool.instance().call('unlock_entity', user_id + ''); } catch(e) {}
                 this.body = JSON.stringify({error: 'We are sorry, we cannot sign you up at this time because your IP address is associated with bots activity. Please contact support@steemit.com for more information.'});
                 this.status = 401;
                 return;
@@ -143,6 +151,7 @@ export default function useGeneralApi(app) {
             this.body = JSON.stringify({error: error.message});
             this.status = 500;
         }
+        try { yield Tarantool.instance().call('unlock_entity', user_id + ''); } catch(e) {}
         recordWebEvent(this, 'api/accounts', account ? account.name : 'n/a');
     });
 

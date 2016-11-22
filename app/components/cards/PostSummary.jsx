@@ -31,7 +31,7 @@ function navigate(e, onClick, post, url) {
     else browserHistory.push(url);
 }
 
-export default class PostSummary extends React.Component {
+class PostSummary extends React.Component {
     static propTypes = {
         post: React.PropTypes.string.isRequired,
         pending_payout: React.PropTypes.string.isRequired,

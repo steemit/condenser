@@ -1,29 +1,37 @@
 ---------------------------------------------------------------------
-0.0.4
+0.1.161109
 ---------------------------------------------------------------------
 
-1a6285c | valzav | move process.json to config/:
-3019642 | James Calfee | fixed variable name:
-510e4ef | James Calfee | Splitting html viewer text to prevent excessive youtube iframe re-rendering:
-6d41855 | James Calfee | Changed post summary external link posts, title will open post:
-e3edde9 | valzav | don't display actions if not user's account:
-2a0ac25 | James Calfee | Reply editor saving:
-0905d6d | James Calfee | remove spam:
-5d48778 | valzav | show nsfw content only in its category:
-59be3d9 | valzav | login to server, not show the banner to logged in users
-1fbaa09 | James Calfee | allow localhost nodes to see ipfs images:
-3cd7db0 | James Calfee | null ptr fix:
-478576f | James Calfee | Update external card image to use json_metadata:
-9d115b8 | James Calfee | Revert "Prefix a hashtag with ! to hide it from rendering.":
-3c21f48 | James Calfee | Prefix a hashtag with ! to hide it from rendering.:
-7ffb3cf | James Calfee | Some clean up of reply permlink, with hard-length limit implementation.
-122a7e6 | valzav | read account registration params from config
-34c85e6 | James Calfee | Allow dash in hashtags.  Prevents local linking of hashtags and mentions if within a link. https://github.com/steemit/steemit.com/issues/11:
-0e7f946 | valzav | remember referrer when creating account
-29e57ee | James Calfee | Active login can change posting key
-dfcb2c9 | James Calfee | Comment edits will merge with existing json_metadata.:
-7decd2e | James Calfee | Remove image link from post summary (image is shown on the left):
-da25b52 | valzav | production deployment instruction
+New features and improvements
+--------
+- custom user profile images
+- show dynamic sbd interest in user's wallet
+- new submenu on the wallet page
+
+Bug fixes
+--------
+- remove estimates, just show 7-day summary #600
+- own reply notifications appear on other users' account pages #595
 
 
-# git log --pretty=format:'%h | %an | %s': --abbrev-commit 0.0.3..
+---------------------------------------------------------------------
+0.1.161104
+---------------------------------------------------------------------
+
+New features and improvements
+--------
+- In app notifications #584
+- New confirmation dialog for resteeming action #572
+- New Profile display user join steem date #582
+- New hyperlink on post timestamp for content
+- Inclusive of Steemit API docs sub menu
+- Youtube preview improvements #588
+
+Bug fixes
+--------
+- fixes for user wallet views/actions #528
+- fixes rewards balances #528
+- TypeError: Cannot read property 'get' of undefined #238
+- remove ReplyEditor__title padding #570
+- Show message when no post results #571
+- do not display invalid cashout_time #532

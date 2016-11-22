@@ -64,6 +64,8 @@ export default class UserProfile extends React.Component {
             onPrint
         } = this;
         let { accountname, section } = this.props.routeParams;
+        // normalize account from cased params
+        accountname = accountname.toLowerCase();
         const username = current_user ? current_user.get('username') : null
         // const gprops = this.props.global.getIn( ['props'] ).toJS();
         if( !section ) section = 'blog';

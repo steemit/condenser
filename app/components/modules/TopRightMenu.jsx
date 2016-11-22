@@ -57,7 +57,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
                 >
                     {!vertical && <li className={'Header__userpic '}>
                         <a href={account_link} title={username} onClick={e => e.preventDefault()}>
-                            <Userpic account={username} width="36" height="36" />
+                            <Userpic account={username} />
                         </a>
                         <div className="TopRightMenu__notificounter"><NotifiCounter fields="total" /></div>
                     </li>}

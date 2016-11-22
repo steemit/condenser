@@ -45,7 +45,7 @@ export default function useGeneralApi(app) {
                 return;
             }
         } catch (e) {
-            // tarantool is not available, fallback to another method
+            console.error('-- /accounts tarantool is not available, fallback to another method', e)
             const rnd_wait_time = Math.random() * 10000;
             console.log('-- /accounts rnd_wait_time -->', rnd_wait_time);
             yield new Promise((resolve) =>
@@ -58,7 +58,6 @@ export default function useGeneralApi(app) {
                 {attributes: ['verified', 'waiting_list'], where: {id: user_id}}
             );
             if (!user) {
-                try { yield Tarantool.instance().call('unlock_entity', user_id + ''); } catch(e) {}
                 this.body = JSON.stringify({error: 'Unauthorized'});
                 this.status = 401;
                 return;
@@ -71,7 +70,6 @@ export default function useGeneralApi(app) {
             });
             if (same_ip_bot) {
                 console.log('-- /accounts same_ip_bot -->', user_id, this.session.uid, remote_ip, user.email);
-                try { yield Tarantool.instance().call('unlock_entity', user_id + ''); } catch(e) {}
                 this.body = JSON.stringify({error: 'We are sorry, we cannot sign you up at this time because your IP address is associated with bots activity. Please contact support@steemit.com for more information.'});
                 this.status = 401;
                 return;
@@ -150,8 +148,10 @@ export default function useGeneralApi(app) {
             console.error('Error in /accounts api call', this.session.uid, error.toString());
             this.body = JSON.stringify({error: error.message});
             this.status = 500;
+        } finally {
+            // console.log('-- /accounts unlock_entity -->', user_id);
+            try { yield Tarantool.instance().call('unlock_entity', user_id + ''); } catch(e) {/* ram lock */}
         }
-        try { yield Tarantool.instance().call('unlock_entity', user_id + ''); } catch(e) {}
         recordWebEvent(this, 'api/accounts', account ? account.name : 'n/a');
     });
 

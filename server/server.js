@@ -46,6 +46,11 @@ app.use(function *(next) {
         this.redirect(`/@${this.session.a}/feed`);
         return;
     }
+    // normalize user name url
+    if (this.method === 'GET' && /^\/(@[\w\.\d-]+)\/?$/.test(this.url)) {
+        let normalized = this.originalUrl.toLowerCase()
+        this.path = normalized
+    }
     // start registration process if user get to create_account page and has no id in session yet
     if(this.url === '/create_account' && !this.session.user) {
         this.status = 302;

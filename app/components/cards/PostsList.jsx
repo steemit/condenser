@@ -195,7 +195,7 @@ import {connect} from 'react-redux'
 
 export default connect(
     (state, props) => {
-        const {posts, showSpam} = props;
+        const {posts, showSpam, account, category} = props;
         const comments = []
         const pathname = state.app.get('location').pathname;
         posts.forEach(item => {
@@ -210,7 +210,8 @@ export default connect(
             const key = ['follow', 'get_following', username, 'result', content.get('author')]
             const ignore = username ? state.global.getIn(key, List()).contains('ignore') : false
             const {hide, netVoteSign, authorRepLog10} = content.get('stats').toJS()
-            if(!(ignore || hide) || showSpam) // rephide
+            let filtered = (category == 'blog' && account != content.get('author')) || (category == 'resteemed' && account == content.get('author'))
+            if((!(ignore || hide) || showSpam) && !filtered) // rephide
                 comments.push({item, ignore, netVoteSign, authorRepLog10})
         })
         return {...props, comments, pathname};

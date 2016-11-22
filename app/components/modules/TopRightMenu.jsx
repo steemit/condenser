@@ -27,6 +27,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, vertic
     const replies_link = `/@${username}/recent-replies`;
     const wallet_link = `/@${username}/transfers`;
     const account_link = `/@${username}`;
+    const resteemed_link = `/@${username}/resteemed`;
     const comments_link = `/@${username}/comments`;
     const reset_password_link = `/@${username}/password`;
     const settings_link = `/@${username}/settings`;
@@ -34,6 +35,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, vertic
         const user_menu = [
             {link: feed_link, value: 'Feed', addon: <NotifiCounter fields="feed" />},
             {link: account_link, value: 'Blog'},
+            {link: resteemed_link, value: 'Resteemed'},
             {link: comments_link, value: 'Comments'},
             {link: replies_link, value: 'Replies', addon: <NotifiCounter fields="comment_reply" />},
             {link: wallet_link, value: 'Wallet', addon: <NotifiCounter fields="follow,send,receive,account_update" />},

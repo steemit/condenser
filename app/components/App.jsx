@@ -74,7 +74,7 @@ class App extends React.Component {
     }
 
     render() {
-        const {location, params, children, flash, showSignUp, new_visitor,
+        const {location, params, children, flash, new_visitor,
             depositSteem, signup_bonus} = this.props;
         const lp = false; //location.pathname === '/';
         const miniHeader = location.pathname === '/create_account';
@@ -271,10 +271,6 @@ export default connect(
     dispatch => ({
         loginUser: () =>
             dispatch(user.actions.usernamePasswordLogin()),
-        showSignUp: e => {
-            if (e) e.preventDefault();
-            dispatch(user.actions.showSignUp());
-        },
         depositSteem: () => {
             dispatch(g.actions.showDialog({name: 'blocktrades_deposit', params: {outputCoinType: 'VESTS'}}));
         },

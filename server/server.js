@@ -50,7 +50,6 @@ app.use(function *(next) {
     if (this.method === 'GET' && /^\/(@[\w\.\d-]+)\/?$/.test(this.url)) {
         const p = this.originalUrl.toLowerCase();
         if(p !== this.originalUrl) {
-            this.status = 301;
             this.redirect(p);
             return;
         }

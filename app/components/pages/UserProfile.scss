@@ -70,7 +70,8 @@
     h2 {
         padding-top: 20px;
         .Userpic {
-            padding-right: 1rem;
+            margin-right: 1rem;
+            vertical-align: middle;
         }
     }
 
@@ -126,6 +127,11 @@
     .UserProfile__top-menu > div.columns {
         padding-left: 0;
         padding-right: 0;
+    }
+
+    .UserProfile__banner h2 .Userpic {
+        width: 36px !important;
+        height: 36px !important;
     }
 
     .UserProfile__banner .UserProfile__buttons {

@@ -499,7 +499,7 @@ const en = 	{
 	// next 3 strings are used conditionally together
 	show_more: 'Show more',
 	show_less: 'Show less',
-	value_posts: 'value posts',
+	value_posts: 'low value posts',
 	// PormotePost.jsx
 	promote_post: 'Promote Post',
 	spend_your_DEBT_TOKEN_to_advertise_this_post: 'Spend your ' + DEBT_TOKEN + 's to advertise this post in the promoted content section',

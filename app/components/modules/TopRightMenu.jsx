@@ -17,7 +17,7 @@ const defaultNavigate = (e) => {
     browserHistory.push(a.pathname + a.search + a.hash);
 };
 
-function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn}) {
+function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn}) {
     const mcn = 'menu' + (vertical ? ' vertical show-for-small-only' : '');
     const mcl = vertical ? '' : ' sub-menu';
     const lcn = vertical ? '' : 'show-for-medium';
@@ -29,6 +29,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, vertic
     const account_link = `/@${username}`;
     const comments_link = `/@${username}/comments`;
     const reset_password_link = `/@${username}/password`;
+    const settings_link = `/@${username}/settings`;
     if (loggedIn) { // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!
         const user_menu = [
             {link: feed_link, value: 'Feed', addon: <NotifiCounter fields="feed" />},
@@ -37,6 +38,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, vertic
             {link: replies_link, value: 'Replies', addon: <NotifiCounter fields="comment_reply" />},
             {link: wallet_link, value: 'Wallet', addon: <NotifiCounter fields="follow,send,receive,account_update" />},
             {link: reset_password_link, value: 'Change Password'},
+            {link: settings_link, value: 'Settings'},
             loggedIn ?
                 {link: '#', onClick: logout, value: 'Logout'} :
                 {link: '#', onClick: showLogin, value: 'Login'}
@@ -55,7 +57,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, vertic
                 >
                     {!vertical && <li className={'Header__userpic '}>
                         <a href={account_link} title={username} onClick={e => e.preventDefault()}>
-                            <Userpic account={username} width="36" height="36" />
+                            <Userpic account={username} />
                         </a>
                         <div className="TopRightMenu__notificounter"><NotifiCounter fields="total" /></div>
                     </li>}
@@ -95,7 +97,6 @@ TopRightMenu.propTypes = {
     loggedIn: React.PropTypes.bool,
     probablyLoggedIn: React.PropTypes.bool,
     showLogin: React.PropTypes.func.isRequired,
-    showSignUp: React.PropTypes.func.isRequired,
     logout: React.PropTypes.func.isRequired,
     vertical: React.PropTypes.bool,
     navigate: React.PropTypes.func,
@@ -127,10 +128,6 @@ export default connect(
         logout: e => {
             if (e) e.preventDefault();
             dispatch(user.actions.logout())
-        },
-        showSignUp: e => {
-            if (e) e.preventDefault();
-            dispatch(user.actions.showSignUp())
         }
     })
 )(TopRightMenu);

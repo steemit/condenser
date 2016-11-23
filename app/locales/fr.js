@@ -6,11 +6,13 @@ const fr = 	{
 	buy_steem: "Acheter du Steem",
 	sell_steem: "Vendre du Steem",
 	market: "Marché",
+	currency_market: "Marché des devises",
 	stolen_account_recovery: "Récuperation de compte volé",
 	change_account_password: "Changer mot de passe du compte",
 	steemit_chat: "Steemit Chat",
     steemit_api_docs: "Steemit API Docs",
-	witnesses: "Witnesses",
+	witnesses: "Témoins",
+	vote_for_witnesses: "Votez pour les Témoins",
 	privacy_policy: "Politique de Confidentialité",
 	terms_of_service: "Conditions d'utilisation",
 	sign_up: "Inscription",
@@ -281,16 +283,14 @@ const fr = 	{
 		many {# posts}
 	}`,
 	follower_count: `{followerCount, plural,
-		zero {0 followers}
-		one {# followers}
-		few {# followers}
-		many {# followers}
+		=0 {no followers}
+		one {1 follower}
+		other {{followerCount} followers}
 	}`,
 	followed_count: `{followingCount, plural,
-		zero {0 followed}
-		one {# followed}
-		few {# followed}
-		many {# followed}
+		=0 {not following anybody}
+		one {1 following}
+		other {{followingCount} following}
 	}`,
 	vote_count: `{voteCount, plural,
 		zero {0 votes}
@@ -424,7 +424,7 @@ const fr = 	{
 	not_valid_email: 'Email non valide',
 	thank_you_for_being_an_early_visitor_to_steemit: 'Thank you for being an early visitor to Steemit. We will get back to you at the earliest possible opportunity.',
 	estimated_author_rewards_last_week: "Estimated author rewards last week",
-	author_rewards_last_week: "Estimated author rewards last week",
+	author_rewards_last_week: "Author rewards last week",
 	confirm: 'Confirm',
 	canceled: 'Canceled',
 	asset: "Asset",

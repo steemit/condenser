@@ -10,11 +10,13 @@ const en = 	{
 	buy_LIQUID_TOKEN: 'Buy ' + LIQUID_TOKEN,
 	sell_LIQUID_TOKEN: 'Sell ' + LIQUID_TOKEN,
 	market: "Market",
+	currency_market: "Currency Market",
 	stolen_account_recovery: "Stolen Accounts Recovery",
 	change_account_password: "Change Account Password",
 	steemit_api_docs: "Steemit API Docs",
 	APP_NAME_chat: APP_NAME + " Chat",
 	witnesses: "Witnesses",
+	vote_for_witnesses: "Vote for Witnesses",
 	privacy_policy: "Privacy Policy",
 	terms_of_service: "Terms of Service",
 	sign_up: "Sign Up",
@@ -303,13 +305,13 @@ const en = 	{
 		other {{followerCount} followers}
 	}`,
 	followed_count: `{followingCount, plural,
-		=0 {not followed anybody}
-		one {1 followed}
-		other {{followingCount} followed}
+		=0 {not following anybody}
+		one {1 following}
+		other {{followingCount} following}
 	}`,
 	vote_count: `{voteCount, plural,
 		=0 {no votes}
-		one {1 votes}
+		one {1 vote}
 		other {{voteCount} votes}
 	}`,
 	response_count: `{responseCount, plural,
@@ -319,8 +321,8 @@ const en = 	{
 	}`,
 	reply_count: `{replyCount, plural,
 		=0 {no replies}
-		one {1 replies}
-		other {{responseCount} replies}
+		one {1 reply}
+		other {{replyCount} replies}
 	}`,
 	this_is_users_reputations_score_it_is_based_on_history_of_votes: "This is {name}'s reputation score.\n\nThe reputation score is based on the history of votes received by the account, and is used to hide low quality content.",
 	newer: 'Newer',
@@ -440,7 +442,7 @@ const en = 	{
 	not_valid_email: 'Not valid email',
 	thank_you_for_being_an_early_visitor_to_APP_NAME: 'Thank you for being an early visitor to ' + APP_NAME + '. We will get back to you at the earliest possible opportunity.',
 	estimated_author_rewards_last_week: "Estimated author rewards last week",
-	author_rewards_last_week: "Estimated author rewards last week",
+	author_rewards_last_week: "Author rewards last week",
 	confirm: 'Confirm',
 	canceled: 'Canceled',
 	asset: "Asset",
@@ -522,6 +524,7 @@ const en = 	{
 	choose_currency: 'Choose currency',
 	crowdsale: 'Crowdsale',
 	followers: 'Followers',
+	following: 'Following',
 	// errors
 	cannot_increase_reward_of_post_within_the_last_minute_before_payout: 'Cannot increase reward of post within the last minute before payout',
 	vote_currently_exists_user_must_be_indicate_a_to_reject_witness: 'vote currently exists, user must be indicate a desire to reject witness',

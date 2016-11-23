@@ -18,11 +18,10 @@
   .Userpic {
     float: left;
     position: relative;
-    padding-right: 0.2rem;
-    img {
-      width: 16px;
-      height: 16px;
-    }
+    top: 3px;
+    margin-right: 0.2rem;
+    width: 16px !important;
+    height: 16px !important;
   }
 }
 
@@ -35,10 +34,8 @@
     top: 0;
     left: 26px;
     .Userpic {
-      img {
-        width: 24px;
-        height: 24px;
-      }
+      width: 24px !important;
+      height: 24px !important;
     }
   }
   .Comment__header {

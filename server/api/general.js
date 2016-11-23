@@ -7,6 +7,7 @@ import recordWebEvent from 'server/record_web_event';
 import {esc, escAttrs} from 'db/models';
 import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF} from 'server/utils';
 import coBody from 'co-body';
+import Tarantool from 'db/tarantool';
 
 export default function useGeneralApi(app) {
     const router = koa_router({prefix: '/api/v1'});
@@ -34,6 +35,24 @@ export default function useGeneralApi(app) {
             this.status = 401;
             return;
         }
+
+        try {
+            const lock_entity_res = yield Tarantool.instance().call('lock_entity', user_id+'');
+            if (!lock_entity_res[0][0]) {
+                console.log('-- /accounts lock_entity -->', user_id, lock_entity_res[0][0]);
+                this.body = JSON.stringify({error: 'Conflict'});
+                this.status = 409;
+                return;
+            }
+        } catch (e) {
+            console.error('-- /accounts tarantool is not available, fallback to another method', e)
+            const rnd_wait_time = Math.random() * 10000;
+            console.log('-- /accounts rnd_wait_time -->', rnd_wait_time);
+            yield new Promise((resolve) =>
+                setTimeout(() => resolve(), rnd_wait_time)
+            )
+        }
+
         try {
             const user = yield models.User.findOne(
                 {attributes: ['verified', 'waiting_list'], where: {id: user_id}}
@@ -129,6 +148,9 @@ export default function useGeneralApi(app) {
             console.error('Error in /accounts api call', this.session.uid, error.toString());
             this.body = JSON.stringify({error: error.message});
             this.status = 500;
+        } finally {
+            // console.log('-- /accounts unlock_entity -->', user_id);
+            try { yield Tarantool.instance().call('unlock_entity', user_id + ''); } catch(e) {/* ram lock */}
         }
         recordWebEvent(this, 'api/accounts', account ? account.name : 'n/a');
     });

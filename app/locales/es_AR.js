@@ -6,11 +6,13 @@ const es_AR = 	{
 	buy_steem: "Comprar Steem",
 	sell_steem: "Vender Steem",
 	market: "Mercado",
+	currency_market: "Mercado de Divisas",
 	stolen_account_recovery: "Recuperación de Cuentas Robadas",
 	change_account_password: "Cambiar Contraseña",
 	steemit_chat: "Chat de Steemit",
     steemit_api_docs: "Steemit API Docs",
 	witnesses: "Testigos",
+	vote_for_witnesses: "Votar por Testigos",
 	privacy_policy: "Política de Privacidad",
 	terms_of_service: "Términos de Servicio",
 	sign_up: "Registro",
@@ -281,16 +283,14 @@ const es_AR = 	{
 		many {# posts}
 	}`,
 	follower_count: `{followerCount, plural,
-		zero {0 followers}
-		one {# followers}
-		few {# followers}
-		many {# followers}
+		=0 {no followers}
+		one {1 follower}
+		other {{followerCount} followers}
 	}`,
 	followed_count: `{followingCount, plural,
-		zero {0 followed}
-		one {# followed}
-		few {# followed}
-		many {# followed}
+		=0 {not following anybody}
+		one {1 following}
+		other {{followingCount} following}
 	}`,
 	vote_count: `{voteCount, plural,
 		zero {0 votes}

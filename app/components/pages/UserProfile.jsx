@@ -64,6 +64,8 @@ export default class UserProfile extends React.Component {
             onPrint
         } = this;
         let { accountname, section } = this.props.routeParams;
+        // normalize account from cased params
+        accountname = accountname.toLowerCase();
         const username = current_user ? current_user.get('username') : null
         // const gprops = this.props.global.getIn( ['props'] ).toJS();
         if( !section ) section = 'blog';
@@ -81,26 +83,30 @@ export default class UserProfile extends React.Component {
             return <div><center>{translate('unknown_account')}</center></div>
         }
 
-        let followerCount = 0, followingCount = 0;
+        let followerCount, followingCount;
         const followers = this.props.global.getIn( ['follow', 'get_followers', accountname] );
         const following = this.props.global.getIn( ['follow', 'get_following', accountname] );
-        // let loadingFollowers = true, loadingFollowing = true;
 
-        if (followers && followers.has('result')) {
-            followerCount = followers.get('result').filter(a => {
-                return a.get(0) === "blog";
-            }).size;
-            // loadingFollowers = followers.get("loading");
+        if(followers && followers.has('result') && followers.has('blog')) {
+            const status_followers = followers.get('blog')
+            const followers_loaded = status_followers.get('loading') === false && status_followers.get('error') == null
+            if (followers_loaded) {
+                followerCount = followers.get('result').filter(a => {
+                    return a.get(0) === "blog";
+                }).size;
+            }
         }
 
-        if (following && following.has('result')) {
-            followingCount = following.get('result').filter(a => {
-                return a.get(0) === "blog";
-            }).size;
-            // loadingFollowing = following.get("loading");
+        if (following && following.has('result') && following.has('blog')) {
+            const status_following = following.get('blog')
+            const following_loaded = status_following.get('loading') === false && status_following.get('error') == null
+            if (following_loaded) {
+                followingCount = following.get('result').filter(a => {
+                    return a.get(0) === "blog";
+                }).size;
+            }
         }
 
-        // Reputation
         const rep = repLog10(account.reputation);
 
         const isMyAccount = username === account.name
@@ -170,11 +176,11 @@ export default class UserProfile extends React.Component {
         else if( section === 'comments' && account.post_history ) {
            // NOTE: `posts` key will be renamed to `comments` (https://github.com/steemit/steem/issues/507)
            //   -- see also GlobalReducer.js
-           if( account.posts )
+           if( account.posts || account.comments )
            {
               tab_content = <PostsList
                   emptyText={translate('user_hasnt_made_any_posts_yet', {name})}
-                  posts={account.posts}
+                  posts={account.posts || account.comments}
                   loading={fetching}
                   category="comments"
                   loadMore={this.loadMore}
@@ -186,9 +192,10 @@ export default class UserProfile extends React.Component {
         } else if(!section || section === 'blog') {
             if (account.blog) {
                 const emptyText = isMyAccount ? <div>
-                    Looks like you haven't posted anything yet.<br />
+                    Looks like you haven't posted anything yet.<br /><br />
                     <Link to="/submit.html">Submit a Story</Link><br />
-                    <a href="/steemit/@thecryptofiend/the-missing-faq-a-beginners-guide-to-using-steemit">Read The Beginner's Guide</a>
+                    <a href="/steemit/@thecryptofiend/the-missing-faq-a-beginners-guide-to-using-steemit">Read The Beginner's Guide</a><br />
+                    <a href="/welcome">Read The Steemit Welcome Guide</a>
                 </div>:
                     <div>{translate('user_hasnt_started_bloggin_yet', {name})}</div>;
                 tab_content = <PostsList
@@ -329,11 +336,11 @@ export default class UserProfile extends React.Component {
                         <div>
                             <div className="UserProfile__stats">
                                 <span>
-                                    <Link to={`/@${accountname}/followers`}>{translate('follower_count', {followerCount: followerCount || 0})}</Link>
+                                    <Link to={`/@${accountname}/followers`}>{followerCount ? translate('follower_count', {followerCount}) : translate('followers')}</Link>
                                     {isMyAccount && <NotifiCounter fields="follow" />}
                                 </span>
                                 <span><Link to={`/@${accountname}`}>{translate('post_count', {postCount: account.post_count || 0})}</Link></span>
-                                <span><Link to={`/@${accountname}/followed`}>{translate('followed_count', {followingCount: followingCount || 0})}</Link></span>
+                                <span><Link to={`/@${accountname}/followed`}>{followingCount ? translate('followed_count', {followingCount}) : translate('following')}</Link></span>
                             </div>
                         </div>
                         <DateJoinWrapper date={accountjoin}></DateJoinWrapper>

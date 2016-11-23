@@ -1,4 +1,38 @@
 ---------------------------------------------------------------------
+0.1.161123
+---------------------------------------------------------------------
+
+ - Add welcome page #585 (@timcliff, @bitcoiner)
+ - Fix joined date on mobile #629 (@bitcoiner)
+ - Add a "settings" link to the drop-down menu #618 (@bitcoiner)
+ - Fix wallet UI glitches on mobile #633 (@bitcoiner)
+ - Hide follow counts until loaded #632
+ - Hamburger menu clarifications #635 (@bitcoiner)
+ - Add support for renamed API key #637
+ - Do not hide dropdown menu on ctrl-click #641
+ - Strikethrough payout amount for declined payout posts #644
+ - Fix reputation (float) bug #643
+ - i18n: fix reply count var and singular counts #649
+ - Better support for non-lowercase tags and mentions #659
+ - Fix showing of category error #659
+ - Fix auto-vote + decline payout bug #650
+ - Remove dup exports #657
+ - Update follows api logic with backwards compat for share-db upgrade #669
+ - Fix react-addons-perf and update shrinkwrap #670
+ - Ensure lowercase user names for page titles #661
+ - Fix comment sort order label #671
+ - Properly handle relative links #603
+ - Support for new tags and tag_idx state #689
+ - Fix multiple account creation per verification issue #692
+ - Cleanup & i18n for awards pages #658 (@bitcoiner)
+ - Replace showSignUp with redirect to sign up's first step #694
+ - Fix follow loading status, invert shared-db follows api fix #695
+ - Replace showSignUp with redirect to sign up's first step #694
+ - Allow email verification resend if expired #691
+ - Fix sign up issue that could allow attacker to create up to 8 accounts per single verification #625
+
+
+---------------------------------------------------------------------
 0.1.161109
 ---------------------------------------------------------------------
 

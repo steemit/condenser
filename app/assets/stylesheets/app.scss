@@ -45,7 +45,11 @@ a, path, circle {
   clear: both;
 }
 
-label {
+.strikethrough {
+  text-decoration: line-through;
+}
+
+.uppercase, label {
   text-transform: uppercase;
 }
 

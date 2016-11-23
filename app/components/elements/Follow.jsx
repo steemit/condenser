@@ -46,6 +46,7 @@ export default class Follow extends React.Component {
         this.ignore = () => follow(follower, following, Set(['ignore']))
         this.unignore = () => follow(follower, following, Set())
     }
+
     render() {
         const {follower, following, what, showFollow, showMute, fat, children} = this.props // html
         const {existingFollows, loading} = this.props // redux
@@ -71,6 +72,7 @@ export default class Follow extends React.Component {
         </span>
     }
 }
+
 const emptyMap = Map()
 const emptySet = Set()
 module.exports = connect(
@@ -82,7 +84,7 @@ module.exports = connect(
             follower = current_user ? current_user.get('username') : null
         }
         const f = state.global.getIn(['follow', 'get_following', follower], emptyMap)
-        const loading = f.get('loading')
+        const loading = f.getIn(['blog', 'loading'], false) || f.getIn(['ignore', 'loading'], false)
         const existingFollows = Set(f.getIn(['result', following], emptySet))// Convert List to Set
         return {
             follower,

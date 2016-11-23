@@ -307,11 +307,7 @@ function* preBroadcast_comment({operation, username}) {
         ['comment', op],
     ]
 
-    if(autoVote) {
-        const vote = {voter: op.author, author: op.author, permlink: op.permlink, weight: 10000}
-        comment_op.push(['vote', vote])
-    }
-
+    // comment_options must come directly after comment
     if(comment_options) {
         const {
             max_accepted_payout = ["1000000.000", DEBT_TICKER].join(" "),
@@ -331,6 +327,12 @@ function* preBroadcast_comment({operation, username}) {
             }]
         )
     }
+
+    if(autoVote) {
+        const vote = {voter: op.author, author: op.author, permlink: op.permlink, weight: 10000}
+        comment_op.push(['vote', vote])
+    }
+
     return comment_op
 }
 

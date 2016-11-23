@@ -6,11 +6,13 @@ const jp = 	{
 	buy_steem: "Steemを買う",
 	sell_steem: "Steemを売る",
 	market: "マーケット",
+	currency_market: "通貨市場",
 	stolen_account_recovery: "盗まれたアカウントの復旧",
 	change_account_password: "パスワードの変更",
 	steemit_chat: "Steemitでチャット",
     steemit_api_docs: "Steemit API Docs",
 	witnesses: "Witnesses",
+	vote_for_witnesses: "Vote for Witnesses",
 	privacy_policy: "プライバシーポリシー",
 	terms_of_service: "利用規約",
 	sign_up: "サインアップ",
@@ -281,16 +283,14 @@ const jp = 	{
 		many {# posts}
 	}`,
 	follower_count: `{followerCount, plural,
-		zero {0 followers}
-		one {# followers}
-		few {# followers}
-		many {# followers}
+		=0 {no followers}
+		one {1 follower}
+		other {{followerCount} followers}
 	}`,
 	followed_count: `{followingCount, plural,
-		zero {0 followed}
-		one {# followed}
-		few {# followed}
-		many {# followed}
+		=0 {not following anybody}
+		one {1 following}
+		other {{followingCount} following}
 	}`,
 	vote_count: `{voteCount, plural,
 		zero {0 votes}

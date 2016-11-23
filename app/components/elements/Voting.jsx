@@ -187,7 +187,7 @@ class Voting extends React.Component {
         }
         const payoutEl = <DropdownMenu el="div" items={payoutItems}>
             <span style={payout_limit_hit ? {opacity: '0.5'} : {}}>
-                <FormattedAsset amount={payout} asset="$" />
+                <FormattedAsset amount={payout} asset="$" classname={max_payout === 0 ? 'strikethrough' : ''} />
                 {payoutItems.length > 0 && <Icon name="dropdown-arrow" />}
             </span>
         </DropdownMenu>;

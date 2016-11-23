@@ -22,7 +22,6 @@ class Post extends React.Component {
         post: React.PropTypes.string,
         routeParams: React.PropTypes.object,
         location: React.PropTypes.object,
-        showSignUp: React.PropTypes.func.isRequired,
         signup_bonus: React.PropTypes.string,
         current_user: React.PropTypes.object,
     };
@@ -31,7 +30,9 @@ class Post extends React.Component {
         this.state = {
             showNegativeComments: false
         }
-        this.showSignUp = () => {this.props.showSignUp()}
+        this.showSignUp = () => {
+            window.location = '/enter_email';
+        }
     }
     componentDidMount() {
         if (window.location.hash.indexOf('comments') !== -1) {
@@ -122,7 +123,7 @@ class Post extends React.Component {
         );
 
 
-        let sort_orders = [ 'trending', 'active', 'created', 'updated' ];
+        let sort_orders = [ 'trending', 'active', 'new', 'updated' ];
         let sort_labels = [ translate('trending'), translate('active'), translate('new'), translate('updated') ];
         let sort_menu = [];
 
@@ -191,11 +192,5 @@ export default connect(state => {
         current_user,
         following,
     }
-},
-dispatch => ({
-    showSignUp: () => {
-        localStorage.setItem('redirect', window.location.pathname);
-        dispatch(user.actions.showSignUp())
-    }
-})
+}
 )(Post);

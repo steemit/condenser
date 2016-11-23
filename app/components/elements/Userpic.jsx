@@ -19,7 +19,7 @@ class Userpic extends Component {
             if(md.profile) url = md.profile.profile_image;
         } catch (e) {}
 
-        if (url && /(https?:)\/\//.test(url)) {
+        if (url && /^(https?:)\/\//.test(url)) {
             url = $STM_Config.img_proxy_prefix + '48x48/' + url;
         } else {
             if(hideIfDefault) {
@@ -28,13 +28,11 @@ class Userpic extends Component {
             url = require('app/assets/images/user.png');
         }
 
-        return <div className="Userpic">
-                    <img
-                        src={url}
-                        width={width || 48}
-                        height={height || 48}
-                    />
-                </div>;
+        const style = {backgroundImage: 'url(' + url + ')',
+                       width: (width || 48) + 'px',
+                       height: (height || 48) + 'px'}
+
+        return <div className="Userpic" style={style} />;
     }
 }
 

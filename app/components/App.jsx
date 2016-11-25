@@ -55,13 +55,24 @@ class App extends React.Component {
             fbq('init', '1594659427507927');
             fbq('track', "PageView");
 
-            // LIVE CHAT
-            (function(w, d, s, u) {
-              w.RocketChat = function(c) { w.RocketChat._.push(c) }; w.RocketChat._ = []; w.RocketChat.url = u;
-              var h = d.getElementsByTagName(s)[0], j = d.createElement(s);
-              j.async = true; j.src = 'https://chat.golos.io/packages/rocketchat_livechat/assets/rocket-livechat.js';
-              h.parentNode.insertBefore(j, h);
-            })(window, document, 'script', 'https://chat.golos.io/livechat')
+            // REFORMAL.RU
+            window.reformalOptions = { // yes, it's must be declared as global variable
+                project_id: 975991,
+                project_host: "golosweb.reformal.ru",
+                tab_orientation: "bottom-right",
+                tab_indent: "100px",
+                tab_bg_color: "#2471b9",
+                tab_border_color: "#FFFFFF",
+                tab_image_url: "http://tab.reformal.ru/T9GC0LfRi9Cy0Ysg0Lgg0L%252FRgNC10LTQu9C%252B0LbQtdC90LjRjw==/FFFFFF/7fc3a43d72cbfa45531d9daeca6221b5/bottom-right/1/tab.png",
+                tab_border_width: 2
+            };
+
+            (function() {
+                var script = document.createElement('script');
+                script.type = 'text/javascript'; script.async = true;
+                script.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'media.reformal.ru/widgets/v3/reformal.js';
+                document.getElementsByTagName('head')[0].appendChild(script);
+            })();
         }
     }
 

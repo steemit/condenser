@@ -54,6 +54,14 @@ class App extends React.Component {
 
             fbq('init', '1594659427507927');
             fbq('track', "PageView");
+
+            // LIVE CHAT
+            (function(w, d, s, u) {
+              w.RocketChat = function(c) { w.RocketChat._.push(c) }; w.RocketChat._ = []; w.RocketChat.url = u;
+              var h = d.getElementsByTagName(s)[0], j = d.createElement(s);
+              j.async = true; j.src = 'https://chat.golos.io/packages/rocketchat_livechat/assets/rocket-livechat.js';
+              h.parentNode.insertBefore(j, h);
+            })(window, document, 'script', 'https://chat.golos.io/livechat')
         }
     }
 
@@ -274,7 +282,8 @@ class App extends React.Component {
                 {callout}
                 {children}
                 {lp ? <LpFooter /> : null}
-                <RocketChat />
+                {/* temporary disabled in favor of live chat */}
+                {/* <RocketChat /> */}
             </div>
             <Dialogs />
             <Modals />

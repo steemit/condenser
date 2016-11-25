@@ -294,7 +294,7 @@ class App extends React.Component {
                 {children}
                 {lp ? <LpFooter /> : null}
                 {/* temporary disabled in favor of live chat */}
-                {/* <RocketChat /> */}
+                <RocketChat /> 
             </div>
             <Dialogs />
             <Modals />

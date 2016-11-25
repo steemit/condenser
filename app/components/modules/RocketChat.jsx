@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default class Chatik extends React.Component {
+export default class RocketChat extends React.Component {
     state = {toggled: false, open: false};
 
     toggle() {

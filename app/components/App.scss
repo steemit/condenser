@@ -103,3 +103,10 @@
 .hidden {
   display: none;
 }
+
+/* live chat specific styles */
+@media #{$medium-only} {
+  .rocketchat-widget {
+    right: 0;
+  }
+}

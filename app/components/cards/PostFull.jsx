@@ -21,6 +21,7 @@ import {Long} from 'bytebuffer'
 import {List} from 'immutable'
 import {repLog10, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import DMCAList from 'app/utils/DMCAList'
+import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 
 function TimeAuthorCategory({content, authorRepLog10, showTags}) {
     return (
@@ -263,17 +264,20 @@ class PostFull extends React.Component {
                     </div>
                     <div className="column shrink">
                             {!readonly && <Reblog author={author} permlink={permlink} />}
+                            {!readonly &&
+                            <span className="PostFull__reply">
+                                    {showReplyOption && <a onClick={onShowReply}>Reply</a>}
+                            {' '}{showEditOption   && !showEdit  && <a onClick={onShowEdit}>Edit</a>}
+                            {' '}{showDeleteOption && !showReply && <a onClick={onDeletePost}>Delete</a>}
+                                </span>}
                             <span className="PostFull__responses">
                                 <Link to={link} title={pluralize('Responses', content.children, true)}>
                                     <Icon name="chatboxes" className="space-right" />{content.children}
                                 </Link>
                             </span>
-                            {!readonly &&
-                                <span className="PostFull__reply">
-                                    {showReplyOption && <a onClick={onShowReply}>Reply</a>}
-                                    {' '}{showEditOption   && !showEdit  && <a onClick={onShowEdit}>Edit</a>}
-                                    {' '}{showDeleteOption && !showReply && <a onClick={onDeletePost}>Delete</a>}
-                                </span>}
+                            <span className="PostFull__views">
+                                <PageViewsCounter page={post} />
+                            </span>
                             <FoundationDropdownMenu menu={share_menu} icon="share" label="Share" dropdownPosition="bottom" dropdownAlignment="right" />
                     </div>
                 </div>

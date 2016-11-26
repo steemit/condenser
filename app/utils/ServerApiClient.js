@@ -49,6 +49,15 @@ export function markNotificationRead(account, fields) {
     });
 }
 
+export function recordPageView(page) {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return Promise.resolve(null);
+    const request = Object.assign({}, request_base, {body: JSON.stringify({csrf: $STM_csrf, page})});
+    console.log('-- recordPageView -->', request);
+    return fetch(`/api/v1/page_view`, request).then(r => r.json()).then(res => {
+        return res.views;
+    });
+}
+
 if (process.env.BROWSER) {
     window.getNotifications = getNotifications;
     window.markNotificationRead = markNotificationRead;

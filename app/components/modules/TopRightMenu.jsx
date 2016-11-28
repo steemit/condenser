@@ -12,6 +12,9 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { translate } from 'app/Translator';
 
 const defaultNavigate = (e) => {
+    // do not navigate if middle mouse button is clicked
+    if (e && (e.which == 2 || e.button == 4)) return
+
     e.preventDefault();
     const a = e.target.nodeName.toLowerCase() === 'a' ? e.target : e.target.parentNode;
     browserHistory.push(a.pathname + a.search + a.hash);

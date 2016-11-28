@@ -563,7 +563,11 @@ const ru = {
 		few {# неподтвержденныe транзакции}
 		many {# неподтвержденных транзакций}
 	}`,
-	add_image_url: 'Добавьте url вашего изображения',
+	profile_image_url: 'Добавьте url вашего изображения',
+	profile_name: 'Display Name',
+	profile_about: 'About',
+	profile_location: 'Location',
+	profile_website: 'Website',
 	saved: 'Сохранено',
 	server_returned_error: 'ошибка сервера',
 }

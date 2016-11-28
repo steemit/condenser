@@ -225,14 +225,20 @@ class Voting extends React.Component {
 
         return (
             <span className="Voting">
-                <span className="Voting__inner">
-                    <span className={classUp}>
-                        {votingUpActive ? up : <a href="#" onClick={voteUpClick} title={translate(myVote > 0 ? 'remove_vote' : 'upvote')}>{up}</a>}
-                        {dropdown}
-                    </span>
-                    {payoutEl}
-                </span>
-                {voters_list}
+              { /* when component is not yet rendered in browser environment the info is missleading,
+                 because <LocalizedCurrency /> is not yet applied proper calculations */
+                process.env.BROWSER
+                ?
+                  <span className="Voting__inner">
+                      <span className={classUp}>
+                          {votingUpActive ? up : <a href="#" onClick={voteUpClick} title={translate(myVote > 0 ? 'remove_vote' : 'upvote')}>{up}</a>}
+                          {dropdown}
+                      </span>
+                      {payoutEl}
+                  </span>
+                : <i>{translate('loading')}...</i>
+              }
+              {voters_list}
             </span>
         );
     }

@@ -112,16 +112,16 @@ export function detransliterate(str, reverse) {
 
     // TODO rework this
     // (didnt placed this earlier because something is breaking and i am too lazy to figure it out ;( )
-    /*if(!reverse) {
-        str = str.replace(/j/g, 'ь')
-        str = str.replace(/w/g, 'ъ')
+    if(!reverse) {
+    //    str = str.replace(/j/g, 'ь')
+    //    str = str.replace(/w/g, 'ъ')
         str = str.replace(/yie/g, 'ые')
     }
     else {
-        str = str.replace(/ь/g, 'j')
-        str = str.replace(/ъ/g, 'w')
+    //    str = str.replace(/ь/g, 'j')
+    //    str = str.replace(/ъ/g, 'w')
         str = str.replace(/ые/g, 'yie')
-    }*/
+    }
 
     var i,
         s = /[^[\]]+(?=])/g, orig = str.match(s),

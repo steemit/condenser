@@ -201,7 +201,7 @@ export default class LandingCountDowns extends React.Component {
 							/>
 						</div>
 					: 	<div className="row text-center CountDowns__counters">
-							<div className="small-12 medium-4 columns CountDowns__counter">
+							<div className="small-12 medium-12 columns CountDowns__counter">
 								<CountDown
 									title="Продажа силы голоса закончится"
 									date={props.crowdsaleEndAt}
@@ -209,7 +209,7 @@ export default class LandingCountDowns extends React.Component {
 									displayWhenZero
 								/>
 							</div>
-							<div className="small-12 medium-4 columns CountDowns__counter" style={{paddingTop: 40}}>
+							<div className="small-12 medium-12 columns CountDowns__counter" style={{paddingTop: 40}}>
 								{
 									state.showBitcoinsRaised
 									? <div>
@@ -234,17 +234,17 @@ export default class LandingCountDowns extends React.Component {
 
 								<p>
                   <p><i><a href="http://www.steeme.ru/golos-ico.html" target="blank">статистика краудсейла</a></i></p>
-									<small>Текущий бонус <span className="red"> + {calculateCurrentStage()}%</span></small>
+									{/* <small>Текущий бонус <span className="red"> + {calculateCurrentStage()}%</span></small> */}
 								</p>
 							</div>
-							<div className="small-12 medium-4 columns">
+							{/* <div className="small-12 medium-4 columns">
 								<CountDown
                   title={`Бонус уменьшится: до ${nextStage}%`}
 									date={currentStage.date}
 									countFrom={previousStage.date.getTime()}
 									displayWhenZero
 								/>
-							</div>
+							</div> */}
 						</div>
 				}
 

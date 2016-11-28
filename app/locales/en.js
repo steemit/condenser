@@ -559,6 +559,8 @@ const en = 	{
 	successfully_authenticated_with: 'Successfully authenticated with', // 'Successfully authenticated with Facebook'
   not_supported_email_address: 'Not supported email address',
   please_make_sure_you_dont_use_temporary_email_providers_contact_SUPPORT_URL: 'Please make sure your you don\'t use any temporary email providers, contact ' + SUPPORT_EMAIL + ' for more information.',
+  images_were_hidden_due_to_low_ratings: 'Images were hidden due to low ratings',
+  image_not_shown_due_to_low_ratings: 'Image not shown due to low ratings',
 }
 
 export { en }

@@ -576,6 +576,8 @@ const ru = {
 	successfully_authenticated_with: 'Успешная авторизация с', // 'Успешная авторизация с Facebook'
   not_supported_email_address: 'Не поддерживаемый имейл адрес',
   please_make_sure_you_dont_use_temporary_email_providers_contact_SUPPORT_URL: 'Пожалуйста, удостоверьтесь что вы не используете временный имейл адрес, свяжитесь с ' + SUPPORT_EMAIL + ' для получения информации.',
+  images_were_hidden_due_to_low_ratings: 'Изображения были скрыты из-за низкого рейтинга',
+	image_not_shown_due_to_low_ratings: 'Изображение не отображено из-за низкого рейтинга',
 }
 
 export { ru }

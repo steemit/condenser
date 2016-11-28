@@ -180,7 +180,7 @@ class BuyGolos extends React.Component {
 		const icoAddress = this.state.icoAddress || this.props.icoAddress
 		if (!icoAddress) return
 		console.log('fetching in progress!')
-		fetch(`https://api.blockcypher.com/v1/btc/main/addrs/${icoAddress}/full?confirmations=0`)
+		fetch(`https://api.blockcypher.com/v1/btc/main/addrs/${icoAddress}/full?confirmations=0&limit=50`)
 		.then(function(data) { return data.json() })
 		.then((txObject) => {
 			this.setState({	transactions:  getFilteredTransactions(txObject,
@@ -406,7 +406,7 @@ class BuyGolos extends React.Component {
 					{
 						transactions.length && state.confirmedBalance
 						? <div className="row">
-						  <h4>Список моих транзакций</h4>
+						  <h4>Список моих транзакций <small>(последние 25)</small></h4>
 							<div className="column small-12">
 								<table>
 									<thead>

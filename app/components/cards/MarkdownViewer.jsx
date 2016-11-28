@@ -6,6 +6,7 @@ import Remarkable from 'remarkable'
 import YoutubePreview from 'app/components/elements/YoutubePreview'
 import sanitizeConfig, {noImageText} from 'app/utils/SanitizeConfig'
 import {renderToString} from 'react-dom/server';
+import {translate} from 'app/Translator';
 import sanitize from 'sanitize-html'
 import HtmlReady from 'shared/HtmlReady'
 
@@ -115,8 +116,8 @@ class MarkdownViewer extends Component {
             {sections}
             {noImageActive && allowNoImage &&
                 <div onClick={this.onAllowNoImage} className="MarkdownViewer__negative_group">
-                    Images were hidden due to low ratings.
-                    <button style={{marginBottom: 0}} className="button hollow tiny float-right">Show</button>
+                    {translate('images_were_hidden_due_to_low_ratings')}.
+                    <button style={{marginBottom: 0}} className="button hollow tiny float-right">{translate('show')}</button>
                 </div>
             }
         </div>)

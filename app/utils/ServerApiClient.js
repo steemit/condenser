@@ -49,12 +49,15 @@ export function markNotificationRead(account, fields) {
     });
 }
 
+let last_page, last_views;
 export function recordPageView(page) {
-    if (!process.env.BROWSER || window.$STM_ServerBusy) return Promise.resolve(null);
+    if (page === last_page) return Promise.resolve(last_views);
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return Promise.resolve(0);
     const request = Object.assign({}, request_base, {body: JSON.stringify({csrf: $STM_csrf, page})});
-    console.log('-- recordPageView -->', request);
     return fetch(`/api/v1/page_view`, request).then(r => r.json()).then(res => {
-        return res.views;
+        last_page = page;
+        last_views = res.views;
+        return last_views;
     });
 }
 

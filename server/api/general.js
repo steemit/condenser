@@ -244,13 +244,12 @@ export default function useGeneralApi(app) {
     router.post('/page_view', koaBody, function *() {
         const params = this.request.body;
         const {csrf, page, ref} = typeof(params) === 'string' ? JSON.parse(params) : params;
-        console.log('-- /page_view csrf -->', csrf);
         if (!checkCSRF(this, csrf)) return;
         console.log('-- /page_view -->', this.session.uid, page, ref);
         const remote_ip = getRemoteIp(this.req);
         try {
             const views = yield Tarantool.instance().call('page_view', page, remote_ip, this.session.uid, ref);
-            this.body = JSON.stringify({views});
+            this.body = JSON.stringify({views: views[0][0]});
         } catch (error) {
             console.error('Error in /page_view api call', this.session.uid, error.message);
             this.body = JSON.stringify({error: error.message});

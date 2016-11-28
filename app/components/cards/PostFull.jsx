@@ -276,7 +276,7 @@ class PostFull extends React.Component {
                                 </Link>
                             </span>
                             <span className="PostFull__views">
-                                <PageViewsCounter page={post} />
+                                <PageViewsCounter hidden={false} />
                             </span>
                             <FoundationDropdownMenu menu={share_menu} icon="share" label="Share" dropdownPosition="bottom" dropdownAlignment="right" />
                     </div>

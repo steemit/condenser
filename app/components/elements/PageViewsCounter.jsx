@@ -24,13 +24,15 @@ export default class PageViewsCounter extends React.Component {
     }
 
     componentDidUpdate() {
-        recordPageView(window.location.pathname).then(views => this.setState({views}));
+        let ref = document.referrer || '';
+        if (ref.match('://' + window.location.hostname)) ref = '';
+        recordPageView(window.location.pathname, ref).then(views => this.setState({views}));
         this.last_page = window.location.pathname;
     }
 
     render() {
-        if (this.props.hidden) return null;
         const views = this.state.views;
+        if (this.props.hidden || !views) return null;
         return <span className="PageViewsCounter" title={pluralize('Views', views, true)}>
             <Icon name="eye" /> {views}
         </span>;

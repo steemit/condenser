@@ -50,10 +50,10 @@ export function markNotificationRead(account, fields) {
 }
 
 let last_page, last_views;
-export function recordPageView(page) {
+export function recordPageView(page, ref) {
     if (page === last_page) return Promise.resolve(last_views);
     if (!process.env.BROWSER || window.$STM_ServerBusy) return Promise.resolve(0);
-    const request = Object.assign({}, request_base, {body: JSON.stringify({csrf: $STM_csrf, page})});
+    const request = Object.assign({}, request_base, {body: JSON.stringify({csrf: $STM_csrf, page, ref})});
     return fetch(`/api/v1/page_view`, request).then(r => r.json()).then(res => {
         last_page = page;
         last_views = res.views;

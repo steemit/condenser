@@ -102,13 +102,12 @@ class PostsList extends React.Component {
             if (!inside_top_bar) {
                 const post_overlay = document.getElementById('post_overlay');
                 if (post_overlay) post_overlay.removeEventListener('click', this.closeOnOutsideClick);
-                window.document.title = this.state.prevTitle;
-                this.setState({showPost: null, prevTitle: null});
+                this.closePostModal();
             }
         }
     }
 
-    closeOnButton = () => {
+    closePostModal = () => {
         window.document.title = this.state.prevTitle;
         this.setState({showPost: null, prevTitle: null});
     }
@@ -184,7 +183,7 @@ class PostsList extends React.Component {
                             <button className="back-button" type="button" title="Back" onClick={() => {this.setState({showPost: null})}}>
                                 <span aria-hidden="true"><Icon name="chevron-left" /></span>
                             </button>
-                            <CloseButton onClick={this.closeOnButton} />
+                            <CloseButton onClick={this.closePostModal} />
                         </div>
                     </div>
                     <div className="PostsList__post_container">

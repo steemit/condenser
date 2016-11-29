@@ -281,13 +281,9 @@ export default connect(
             let priceGOLOSperGBG = getPriceFromPair(feed_price.toJS(), 'GOLOS/GBG')
             console.log(priceGBGperGOLOS, "GBG/GOLOS :::: GOLOS/GBG", priceGOLOSperGBG)
 
-            base = base.split(' '); quote = quote.split(' ')
             console.log(feed_price.toJS(), "OOOOOO")
-            if(/ GBG/.test(base) && / GOLOS$/.test(quote)) {
-                price_per_steem = parseFloat(base.split(' ')[0])
-                console.log (price_per_steem, " set price per steem")
-            }
-
+            price_per_steem = priceGBGperGOLOS;
+            console.log (price_per_steem, " set price per steem")
         }
         return {
             ...ownProps,

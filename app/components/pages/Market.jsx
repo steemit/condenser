@@ -60,7 +60,8 @@ class Market extends React.Component {
         const amount_to_sell = parseFloat(ReactDOM.findDOMNode(this.refs.buySteem_total).value)
         const min_to_receive = parseFloat(ReactDOM.findDOMNode(this.refs.buySteem_amount).value)
         const price = (amount_to_sell / min_to_receive).toFixed(6)
-        placeOrder(user, amount_to_sell + " SBD", min_to_receive + " STEEM", "$" + price + "/STEEM", (msg) => {
+        const {lowest_ask} = this.props.ticker;
+        placeOrder(user, amount_to_sell + " SBD", min_to_receive + " STEEM", "$" + price + "/STEEM", !!this.state.buy_price_warning, lowest_ask, (msg) => {
             this.props.notify(msg)
             this.props.reload(user)
         })
@@ -72,7 +73,8 @@ class Market extends React.Component {
         const min_to_receive = parseFloat(ReactDOM.findDOMNode(this.refs.sellSteem_total).value)
         const amount_to_sell = parseFloat(ReactDOM.findDOMNode(this.refs.sellSteem_amount).value)
         const price = (min_to_receive / amount_to_sell).toFixed(6)
-        placeOrder(user, amount_to_sell + " STEEM", min_to_receive + " SBD", "$" + price + "/STEEM", (msg) => {
+        const {highest_bid} = this.props.ticker;
+        placeOrder(user, amount_to_sell + " STEEM", min_to_receive + " SBD", "$" + price + "/STEEM", !!this.state.sell_price_warning, highest_bid, (msg) => {
             this.props.notify(msg)
             this.props.reload(user)
         })
@@ -103,9 +105,9 @@ class Market extends React.Component {
         this.validateSellSteem()
     }
 
-    percentDiff = (a, b) => {
-        console.log(200 * Math.abs(a - b) / (a + b))
-        return 200 * Math.abs(a - b) / (a + b)
+    percentDiff = (marketPrice, userPrice) => {
+        marketPrice = parseFloat(marketPrice);
+        return 100 * (userPrice - marketPrice) / (marketPrice)
     }
 
     validateBuySteem = () => {
@@ -113,7 +115,8 @@ class Market extends React.Component {
         const price = parseFloat(this.refs.buySteem_price.value)
         const total = parseFloat(this.refs.buySteem_total.value)
         const valid = (amount > 0 && price > 0 && total > 0)
-        this.setState({buy_disabled: !valid, buy_price_warning: valid && this.percentDiff(total/amount, price) > 1 });
+        const {lowest_ask} = this.props.ticker;
+        this.setState({buy_disabled: !valid, buy_price_warning: valid && this.percentDiff(lowest_ask, price) > 15 });
     }
 
     validateSellSteem = () => {
@@ -121,7 +124,8 @@ class Market extends React.Component {
         const price = parseFloat(this.refs.sellSteem_price.value)
         const total = parseFloat(this.refs.sellSteem_total.value)
         const valid = (amount > 0 && price > 0 && total > 0)
-        this.setState({sell_disabled: !valid, sell_price_warning: valid && this.percentDiff(total/amount, price) > 1 });
+        const {highest_bid} = this.props.ticker;
+        this.setState({sell_disabled: !valid, sell_price_warning: valid && this.percentDiff(highest_bid, price) < -15 });
     }
 
     constructor(props) {
@@ -313,7 +317,7 @@ class Market extends React.Component {
                                 </div>
                                 <div className="column small-9 large-8">
                                     <div className="input-group">
-                                        <input className={'input-group-field' + (buy_price_warning ? ' price_warning' : '')} type="text" 
+                                        <input className={'input-group-field' + (buy_price_warning ? ' price_warning' : '')} type="text"
                                           ref="buySteem_price" placeholder="0.0" onChange={e => {
                                             const amount = parseFloat(this.refs.buySteem_amount.value)
                                             const price  = parseFloat(this.refs.buySteem_price.value)
@@ -403,7 +407,7 @@ class Market extends React.Component {
                                 </div>
                                 <div className="column small-9 large-8">
                                     <div className="input-group">
-                                        <input className={'input-group-field' + (sell_price_warning ? ' price_warning' : '')} type="text" 
+                                        <input className={'input-group-field' + (sell_price_warning ? ' price_warning' : '')} type="text"
                                           ref="sellSteem_price" placeholder="0.0" onChange={e => {
                                           const amount = parseFloat(this.refs.sellSteem_amount.value)
                                           const price  = parseFloat(this.refs.sellSteem_price.value)
@@ -551,7 +555,7 @@ module.exports = {
                 //successCallback
             }))
         },
-        placeOrder: (owner, amount_to_sell, min_to_receive, effectivePrice, successCallback, fill_or_kill = false, expiration = DEFAULT_EXPIRE) => {
+        placeOrder: (owner, amount_to_sell, min_to_receive, effectivePrice, priceWarning, marketPrice, successCallback, fill_or_kill = false, expiration = DEFAULT_EXPIRE) => {
             // create_order jsc 12345 "1.000 SBD" "100.000 STEEM" true 1467122240 false
 
             // Padd amounts to 3 decimal places
@@ -560,17 +564,20 @@ module.exports = {
             min_to_receive = min_to_receive.replace(min_to_receive.split(' ')[0],
                 String(parseFloat(min_to_receive).toFixed(3)))
 
-            const confirmStr = /STEEM$/.test(amount_to_sell) ?
+            const isSell = /STEEM$/.test(amount_to_sell);
+            const confirmStr = isSell ?
                 `Sell ${amount_to_sell} for at least ${min_to_receive} (${effectivePrice})` :
                 `Buy at least ${min_to_receive} for ${amount_to_sell} (${effectivePrice})`
             const successMessage = `Order placed: ${confirmStr}`
             const confirm = confirmStr + '?'
+            const warning = priceWarning ? "This price is well " + (isSell ? "below" : "above") + " the current market price of $" + parseFloat(marketPrice).toFixed(4) + "/STEEM, are you sure?" : null;
             const orderid = Math.floor(Date.now() / 1000)
             dispatch(transaction.actions.broadcastOperation({
                 type: 'limit_order_create',
                 operation: {owner, amount_to_sell, min_to_receive, fill_or_kill, expiration, orderid}, //,
                     //__config: {successMessage}},
                 confirm,
+                warning,
                 successCallback: () => {successCallback(successMessage);}
             }))
         }

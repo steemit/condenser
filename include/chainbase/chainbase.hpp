@@ -709,6 +709,11 @@ namespace chainbase {
             return _segment->get_segment_manager();
          }
 
+         size_t get_free_memory()const
+         {
+            return _segment->get_segment_manager()->get_free_memory();
+         }
+
          template<typename MultiIndexType>
          const generic_index<MultiIndexType>& get_index()const {
             typedef generic_index<MultiIndexType> index_type;

@@ -96,19 +96,32 @@ class MarkdownViewer extends Component {
         // In addition to inserting the youtube compoennt, this allows react to compare separately preventing excessive re-rendering.
         let idx = 0
         const sections = []
-        // HtmlReady inserts ~~~ youtube:${id} ~~~
-        for(let section of cleanText.split('~~~ youtube:')) {
-            if(/^[A-Za-z0-9\_\-]+ ~~~/.test(section)) {
-                const youTubeId = section.split(' ')[0]
-                section = section.substring(youTubeId.length + ' ~~~'.length)
+
+        // HtmlReady inserts ~~~ embed:${id} youtube ~~~
+        for(let section of cleanText.split('~~~ embed:')) {
+            const match = section.match(/^([A-Za-z0-9\_\-]+) (youtube|vimeo) ~~~/)
+            if(match && match.length >= 3) {
+                const id = match[1]
+                const type = match[2]
                 const w = large ? 640 : 480,
                       h = large ? 360 : 270
-                sections.push(
-                    <YoutubePreview key={idx++} width={w} height={h} youTubeId={youTubeId}
-                        frameBorder="0" allowFullScreen="true" />
-                )
+                if(type === 'youtube') {
+                    sections.push(
+                        <YoutubePreview key={idx++} width={w} height={h} youTubeId={id}
+                            frameBorder="0" allowFullScreen="true" />
+                    )
+                } else if(type === 'vimeo') {
+                    const url = `https://player.vimeo.com/video/${id}`
+                    sections.push(
+                        <iframe key={idx++} src={url} width={w} height={h} frameBorder="0"
+                            webkitallowfullscreen mozallowfullscreen allowFullScreen></iframe>
+                    )
+                } else {
+                    console.error('MarkdownViewer unknown embed type', type);
+                }
+                section = section.substring(`${id} ${type} ~~~`.length)
+                if(section === '') continue
             }
-            if(section === '') continue
             sections.push(<div key={idx++} dangerouslySetInnerHTML={{__html: section}} />)
         }
 

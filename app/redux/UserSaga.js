@@ -300,10 +300,29 @@ function* saveLogin_localStorage() {
 }
 
 function* logout() {
+    console.log('logout...');
     yield put(user.actions.saveLoginConfirm(false)) // Just incase it is still showing
-    if (process.env.BROWSER)
+    if (process.env.BROWSER) {
         localStorage.removeItem('autopost2')
+        localStorage.logout_event = String(Date.now())
+    }
     serverApiLogout();
+}
+
+function* logoutAction() {
+    yield put(user.actions.logout())
+}
+
+export function logoutStorageHandler(storageEvent) {
+    console.log('storageEvent', storageEvent)
+    if(storageEvent.key === 'logout_event') {
+        const iterator = logoutAction()
+        let ret
+        do {
+            ret = iterator.next()
+            console.log('ret', ret)
+        } while(!ret.done)
+    }
 }
 
 function* loginError({payload: {/*error*/}}) {

@@ -7,10 +7,16 @@ import Iso from 'iso';
 import universalRender from 'shared/UniversalRender';
 import ConsoleExports from './utils/ConsoleExports';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
+import {logoutStorageHandler} from 'app/redux/UserSaga'
 
 window.onerror = error => {
     serverApiRecordEvent('client_error', error);
 };
+
+if(process.env.BROWSER) {
+    // You must trigger a storage event from another tab or window..
+    window.addEventListener('storage', logoutStorageHandler, false)
+}
 
 Iso.bootstrap(initial_state => {
     console.log('Initial state', initial_state);

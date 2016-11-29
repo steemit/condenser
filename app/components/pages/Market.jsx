@@ -21,6 +21,24 @@ class Market extends React.Component {
         user: React.PropTypes.string,
     };
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            buy_disabled: true,
+            sell_disabled: true,
+            buy_price_warning: false,
+            sell_price_warning: false,
+        };
+    }
+
+    componentWillReceiveProps(np) {
+        if (!this.props.ticker && np.ticker) {
+            const {lowest_ask, highest_bid} = np.ticker;
+            if (this.refs.buySteem_price) this.refs.buySteem_price.value = parseFloat(lowest_ask).toFixed(6);
+            if (this.refs.sellSteem_price) this.refs.sellSteem_price.value = parseFloat(highest_bid).toFixed(6);
+        }
+    }
+
     shouldComponentUpdate = (nextProps, nextState) => {
       if( this.props.user !== nextProps.user && nextProps.user) {
           this.props.reload(nextProps.user)
@@ -127,17 +145,6 @@ class Market extends React.Component {
         const {highest_bid} = this.props.ticker;
         this.setState({sell_disabled: !valid, sell_price_warning: valid && this.percentDiff(highest_bid, price) < -15 });
     }
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            buy_disabled: true,
-            sell_disabled: true,
-            buy_price_warning: false,
-            sell_price_warning: false,
-        };
-    }
-
 
     render() {
         const {sellSteem, buySteem, cancelOrderClick, setFormPrice,

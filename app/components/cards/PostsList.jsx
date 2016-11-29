@@ -102,9 +102,14 @@ class PostsList extends React.Component {
             if (!inside_top_bar) {
                 const post_overlay = document.getElementById('post_overlay');
                 if (post_overlay) post_overlay.removeEventListener('click', this.closeOnOutsideClick);
-                this.setState({showPost: null});
+                this.closePostModal();
             }
         }
+    }
+
+    closePostModal = () => {
+        window.document.title = this.state.prevTitle;
+        this.setState({showPost: null, prevTitle: null});
     }
 
     fetchIfNeeded() {
@@ -150,7 +155,7 @@ class PostsList extends React.Component {
     onPostClick(post, url) {
         this.post_url = url;
         this.props.fetchState(url);
-        this.setState({showPost: post});
+        this.setState({showPost: post, prevTitle: window.document.title});
         window.history.pushState({}, '', url);
     }
 
@@ -178,7 +183,7 @@ class PostsList extends React.Component {
                             <button className="back-button" type="button" title="Back" onClick={() => {this.setState({showPost: null})}}>
                                 <span aria-hidden="true"><Icon name="chevron-left" /></span>
                             </button>
-                            <CloseButton onClick={() => {this.setState({showPost: null})}} />
+                            <CloseButton onClick={this.closePostModal} />
                         </div>
                     </div>
                     <div className="PostsList__post_container">

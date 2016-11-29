@@ -113,8 +113,10 @@ class MarkdownViewer extends Component {
                 } else if(type === 'vimeo') {
                     const url = `https://player.vimeo.com/video/${id}`
                     sections.push(
-                        <iframe key={idx++} src={url} width={w} height={h} frameBorder="0"
-                            webkitallowfullscreen mozallowfullscreen allowFullScreen></iframe>
+                        <div className="videoWrapper">
+                            <iframe key={idx++} src={url} width={w} height={h} frameBorder="0"
+                                webkitallowfullscreen mozallowfullscreen allowFullScreen></iframe>
+                        </div>
                     )
                 } else {
                     console.error('MarkdownViewer unknown embed type', type);

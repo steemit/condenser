@@ -36,7 +36,7 @@ class Author extends React.Component {
         if(!username || !(follow || mute) || username === author)
             return author_link
 
-        const {name, about} = normalizeProfile(this.props.account.toJS())
+        const {name, about} = this.props.account ? normalizeProfile(this.props.account.toJS()) : {}
 
         const dropdown = <div className="Author__dropdown">
 

@@ -317,6 +317,7 @@ export default class UserProfile extends React.Component {
          </div>;
 
         const {name, location, about, website} = normalizeProfile(account);
+        const website_label = website ? website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '') : null
 
         return (
             <div className="UserProfile">
@@ -350,7 +351,7 @@ export default class UserProfile extends React.Component {
                             </div>
                             <p className="UserProfile__info">
                                 {location && <span><Icon name="location" /> {location}</span>}
-                                {website && <span><Icon name="link" /> <Link to={website}>{website.replace(/^https?:\/\//, '')}</Link></span>}
+                                {website && <span><Icon name="link" /> <a href={website}>{website_label}</a></span>}
                                 <Icon name="calendar" /> <DateJoinWrapper date={accountjoin}></DateJoinWrapper>
                             </p>
                         </div>

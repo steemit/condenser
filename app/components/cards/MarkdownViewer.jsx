@@ -28,11 +28,13 @@ class MarkdownViewer extends Component {
         jsonMetadata: React.PropTypes.object,
         highQualityPost: React.PropTypes.bool,
         noImage: React.PropTypes.bool,
+        allowDangerousHTML: React.PropTypes.bool,
     }
 
     static defaultProps = {
         className: '',
         large: false,
+        allowDangerousHTML: false,
     }
 
     constructor() {
@@ -81,7 +83,9 @@ class MarkdownViewer extends Component {
         // Complete removal of javascript and other dangerous tags..
         // The must remain as close as possible to dangerouslySetInnerHTML
         let cleanText = renderedText
-        if (this.props.className !== 'HelpContent') {
+        if (this.props.allowDangerousHTML === true) {
+            console.log('WARN\tMarkdownViewer rendering unsanitized content')
+        } else {
             cleanText = sanitize(renderedText, sanitizeConfig({large, highQualityPost, noImage: noImage && allowNoImage}))
         }
 

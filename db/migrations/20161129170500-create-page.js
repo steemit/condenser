@@ -15,7 +15,7 @@ module.exports = {
         type: Sequelize.DATE
       }
     }).then(function () {
-      queryInterface.addIndex('pages', ['permlink']);
+      queryInterface.addIndex('pages', ['permlink'], {indicesType: 'UNIQUE'});
     });
   },
   down: function (queryInterface, Sequelize) {

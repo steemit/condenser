@@ -1,0 +1,20 @@
+.shareMenu {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.shareItems {
+    list-style: none;
+    display: inline;
+    margin-left: 0.01em;
+    li {
+        float: left;
+        padding-left: 3px;
+    }
+    li > a:hover {
+        color: #ffffff;
+    }
+    li > a:link {
+        text-decoration: none;
+    }
+}

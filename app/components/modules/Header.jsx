@@ -10,6 +10,7 @@ import { translate } from 'app/Translator';
 import HorizontalMenu from 'app/components/elements/HorizontalMenu';
 import { APP_NAME, APP_ICON } from 'config/client_config';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
+import capitalizeFirstLetter from 'capitalize'
 
 function sortOrderToLink(so, topic, account) {
     if (so === 'home') return '/@' + account + '/feed';
@@ -87,16 +88,16 @@ class Header extends React.Component {
         if (route.page === 'PostsIndex') {
             sort_order = route.params[0];
             if (sort_order === 'home') {
-                page_title = "Лента"
+                page_title = capitalizeFirstLetter(translate('feed'))
                 const account_name = route.params[1];
                 if (current_account_name && account_name.indexOf(current_account_name) === 1)
                     home_account = true;
             } else {
                 if (route.params.length > 1) {
                     topic = route.params[1];
-                    page_title = `${topic}/${sort_order}`;
+                    page_title = `${detransliterate(topic)}/${translate(sort_order).toLowerCase()}`;
                 } else {
-                    page_title = `${sort_order}`;
+                    page_title = `${capitalizeFirstLetter(translate(sort_order))}`;
                 }
             }
         } else if (route.page === 'Post') {

@@ -32,7 +32,6 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        require('fastclick').attach(document.body);
         // setTimeout(() => this.setState({showCallout: false}), 15000);
     }
 

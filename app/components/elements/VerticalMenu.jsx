@@ -13,7 +13,11 @@ export default class VerticalMenu extends React.Component {
         ]),
     };
 
-    closeMenu = () => {
+    closeMenu = (e) => {
+        // If this was not a left click, or if CTRL or CMD were held, do not close the menu.
+        if(e.button !== 0 || e.ctrlKey || e.metaKey) return;
+
+        // Simulate clicking of document body which will close any open menus
         document.body.click();
     }
 

@@ -97,7 +97,7 @@ class MarkdownViewer extends Component {
         let idx = 0
         const sections = []
 
-        // HtmlReady inserts ~~~ embed:${id} youtube ~~~
+        // HtmlReady inserts ~~~ embed:${id} type ~~~
         for(let section of cleanText.split('~~~ embed:')) {
             const match = section.match(/^([A-Za-z0-9\_\-]+) (youtube|vimeo) ~~~/)
             if(match && match.length >= 3) {

@@ -88,26 +88,73 @@ class Header extends React.Component {
         if (route.page === 'PostsIndex') {
             sort_order = route.params[0];
             if (sort_order === 'home') {
-                page_title = capitalizeFirstLetter(translate('feed'))
+                page_title = translate('home')
                 const account_name = route.params[1];
                 if (current_account_name && account_name.indexOf(current_account_name) === 1)
                     home_account = true;
             } else {
                 if (route.params.length > 1) {
                     topic = route.params[1];
-                    page_title = `${detransliterate(topic)}/${translate(sort_order).toLowerCase()}`;
+                    // Overwrite default created for more human readable title
+                    if (route.params[0] === "created") {
+                        page_title = `New ${topic} posts`;
+                    }
+                    else {
+                        page_title = `${sort_order} ${topic} posts`;
+                    }
                 } else {
-                    page_title = `${capitalizeFirstLetter(translate(sort_order))}`;
+                    if (route.params[0] === "created") {
+                        page_title = `New posts`;
+                    }
+                    else {
+                        page_title = `${sort_order} posts`;
+                    }
                 }
             }
         } else if (route.page === 'Post') {
             sort_order = '';
             topic = route.params[0];
+        } else if (route.page == 'SubmitPost') {
+            page_title = `Create a Post`;
+        } else if (route.page == 'Privacy') {
+            page_title = `Privacy Policy`;
+        } else if (route.page == 'Tos') {
+            page_title = `Terms of Service`;
+        } else if (route.page == 'ChangePassword') {
+            page_title = `Change Account Password`;
+        } else if (route.page == 'CreateAccount') {
+            page_title = `Create Account`;
+        } else if (route.page == 'RecoverAccountStep1' || route.page == 'RecoverAccountStep2') {
+            page_title = `Stolen Account Recovery`;
         } else if (route.page === 'UserProfile') {
             user_name = route.params[0].slice(1);
             page_title = user_name;
+            if(route.params[1] === "followers"){
+                page_title = `People following ${user_name} `;
+            }
+            if(route.params[1] === "followed"){
+                page_title = `People followed by ${user_name} `;
+            }
+            if(route.params[1] === "curation-rewards"){
+                page_title = `Curation rewards by ${user_name} `;
+            }
+            if(route.params[1] === "author-rewards"){
+                page_title = `Author rewards by ${user_name} `;
+            }
+            if(route.params[1] === "recent-replies"){
+                page_title = `Replies by ${user_name} `;
+            }
+            // @user/"posts" is deprecated in favor of "comments" as of oct-2016 (#443)
+            if(route.params[1] === "posts" || route.params[1] === "comments"){
+                page_title = `Comments by ${user_name} `;
+            }
         } else {
             page_name = ''; //page_title = route.page.replace( /([a-z])([A-Z])/g, '$1 $2' ).toLowerCase();
+        }
+
+        // Format first letter of all titles and lowercase user name
+        if (route.page !== 'UserProfile') {
+            page_title = page_title.charAt(0).toUpperCase() + page_title.slice(1);
         }
 
         if (process.env.BROWSER && route.page !== 'Post') document.title = page_title + ' — ' + APP_NAME;

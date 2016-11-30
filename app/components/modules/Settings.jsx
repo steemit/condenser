@@ -178,7 +178,7 @@ export default reduxForm(
         const current_user = state.user.get('current')
         const username = current_user ? current_user.get('username') : ''
         const metaData = account ? o2j.ifStringParseJSON(account.json_metadata) : {}
-        const profile_image = metaData && metaData.profile ? metaData.profile.profile_image : ''
+        const profile = metaData && metaData.profile ? metaData.profile : {}
 
         const validate = values => ({
             profile_image: values.profile_image && !/^https?:\/\//.test(values.profile_image) ? 'Invalid URL' : null,
@@ -192,10 +192,9 @@ export default reduxForm(
         return {
             account,
             metaData,
-            profile_image,
             isOwnAccount: username == accountname,
             validate,
-            initialValues: {profile_image},
+            initialValues: profile,
             ...ownProps
         }
     },

@@ -27,6 +27,7 @@ import DateJoinWrapper from 'app/components/elements/DateJoinWrapper';
 import { translate } from 'app/Translator';
 import WalletSubMenu from 'app/components/elements/WalletSubMenu';
 import Userpic from 'app/components/elements/Userpic';
+import Immutable from "immutable";
 
 export default class UserProfile extends React.Component {
     constructor() {
@@ -180,7 +181,7 @@ export default class UserProfile extends React.Component {
            {
               tab_content = <PostsList
                   emptyText={translate('user_hasnt_made_any_posts_yet', {name})}
-                  posts={account.posts || account.comments}
+                  posts={Immutable.List(account.posts || account.comments)}
                   loading={fetching}
                   category="comments"
                   loadMore={this.loadMore}
@@ -201,7 +202,7 @@ export default class UserProfile extends React.Component {
                 tab_content = <PostsList
                     emptyText={emptyText}
                     account={account.name}
-                    posts={account.blog}
+                    posts={Immutable.List(account.blog)}
                     loading={fetching}
                     category="blog"
                     loadMore={this.loadMore}
@@ -214,7 +215,7 @@ export default class UserProfile extends React.Component {
               tab_content = <div>
                   <PostsList
                   emptyText={translate('user_hasnt_had_any_replies_yet', {name}) + '.'}
-                  posts={account.recent_replies}
+                  posts={Immutable.List(account.recent_replies)}
                   loading={fetching}
                   category="recent_replies"
                   loadMore={this.loadMore}

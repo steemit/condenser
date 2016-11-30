@@ -8,6 +8,7 @@ import Callout from 'app/components/elements/Callout';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {findParent} from 'app/utils/DomUtils';
 import Icon from 'app/components/elements/Icon';
+import Immutable from "immutable";
 
 function topPosition(domElt) {
     if (!domElt) {
@@ -19,7 +20,8 @@ function topPosition(domElt) {
 class PostsList extends React.Component {
 
     static propTypes = {
-        posts: PropTypes.array.isRequired,
+        posts: PropTypes.object.isRequired,
+        postsInfo: PropTypes.object.isRequired,
         loading: PropTypes.bool.isRequired,
         category: PropTypes.string,
         loadMore: PropTypes.func,
@@ -47,7 +49,20 @@ class PostsList extends React.Component {
         this.onPostClick = this.onPostClick.bind(this);
         this.onBackButton = this.onBackButton.bind(this);
         this.closeOnOutsideClick = this.closeOnOutsideClick.bind(this);
-        this.shouldComponentUpdate = shouldComponentUpdate(this, 'PostsList')
+        // this.shouldComponentUpdate = shouldComponentUpdate(this, 'PostsList')
+    }
+
+    shouldComponentUpdate(np, ns) {
+        // console.log("np.postsInfo !== this.props.postsInfo", !Immutable.is(np.postsInfo, this.props.postsInfo));
+        return (
+            !Immutable.is(np.postsInfo, this.props.postsInfo) ||
+            np.loadMore !== this.props.loadMore ||
+            np.showSpam !== this.props.showSpam ||
+            np.loading !== this.props.loading ||
+            np.category !== this.props.category ||
+            ns.showNegativeComments !== this.state.showNegativeComments ||
+            ns.showPost !== this.state.showPost
+        );
     }
 
     componentDidMount() {
@@ -124,11 +139,11 @@ class PostsList extends React.Component {
             (document.documentElement || document.body.parentNode || document.body).scrollTop;
         if (topPosition(el) + el.offsetHeight - scrollTop - window.innerHeight < 10) {
             const {loadMore, posts, category} = this.props;
-            if (loadMore && posts && posts.length > 0) loadMore(posts[posts.length - 1], category);
+            if (loadMore && posts && posts.size) loadMore(posts.last(), category);
         }
 
         // Detect if we're in mobile mode (renders larger preview imgs)
-        var mq = window.matchMedia('screen and (max-width: 39.9375em)');
+        const mq = window.matchMedia('screen and (max-width: 39.9375em)');
         if(mq.matches) {
             this.setState({thumbSize: 'mobile'})
         } else {
@@ -155,21 +170,21 @@ class PostsList extends React.Component {
     }
 
     render() {
-        const {posts, loading, category, emptyText} = this.props;
-        const {comments} = this.props
+        const {posts, loading, category, emptyText, postsInfo} = this.props;
         const {account} = this.props
         const {thumbSize, showPost} = this.state
-        if (!loading && !posts.length && emptyText) {
+
+        if (!loading && (posts && !posts.size) && emptyText) {
             return <Callout>{emptyText}</Callout>;
         }
-        const renderSummary = items => items.map(({item, ignore, netVoteSign, authorRepLog10}) => <li key={item}>
-            <PostSummary account={account} post={item} currentCategory={category} thumbSize={thumbSize}
-                ignore={ignore} netVoteSign={netVoteSign} authorRepLog10={authorRepLog10} onClick={this.onPostClick} />
+        const renderSummary = items => items.map(item => <li key={item.get("item")}>
+            <PostSummary account={account} post={item.get("item")} currentCategory={category} thumbSize={thumbSize}
+                ignore={item.get("ignore")} netVoteSign={item.get("netVoteSign")} authorRepLog10={item.get("authorRepLog10")} onClick={this.onPostClick} />
         </li>)
         return (
             <div id="posts_list" className="PostsList">
                 <ul className="PostsList__summaries hfeed" itemScope itemType="http://schema.org/blogPosts">
-                    {renderSummary(comments)}
+                    {renderSummary(postsInfo)}
                 </ul>
                 {loading && <center><LoadingIndicator type="circle" /></center>}
                 {showPost && <div id="post_overlay" className="PostsList__post_overlay" tabIndex={0}>
@@ -196,7 +211,7 @@ import {connect} from 'react-redux'
 export default connect(
     (state, props) => {
         const {posts, showSpam} = props;
-        const comments = []
+        let postsInfo = Immutable.List();
         const pathname = state.app.get('location').pathname;
         posts.forEach(item => {
             const content = state.global.get('content').get(item);
@@ -211,9 +226,10 @@ export default connect(
             const ignore = username ? state.global.getIn(key, List()).contains('ignore') : false
             const {hide, netVoteSign, authorRepLog10} = content.get('stats').toJS()
             if(!(ignore || hide) || showSpam) // rephide
-                comments.push({item, ignore, netVoteSign, authorRepLog10})
+                postsInfo = postsInfo.push(Immutable.fromJS({item, ignore, netVoteSign, authorRepLog10}))
         })
-        return {...props, comments, pathname};
+
+        return {...props, postsInfo, pathname};
     },
     dispatch => ({
         fetchState: (pathname) => {

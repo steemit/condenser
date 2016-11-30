@@ -38,8 +38,17 @@ export default function reducer(state = defaultState, action) {
     let res = state;
     if (action.type === 'RPC_REQUEST_STATUS') {
         const request_id = action.payload.id + '';
+        // console.log(new Date().getTime(), "RPC_REQUEST_STATUS:", action.payload.method);
         if (action.payload.event === 'BEGIN') {
-            res = state.mergeDeep({loading: true, requests: {[request_id]: Date.now()}});
+            const noLoadingMethods = [
+                "get_dynamic_global_properties",
+                "get_api_by_name",
+                "get_followers"
+            ];
+            res = state.mergeDeep({
+                loading: noLoadingMethods.indexOf(action.payload.method) !== -1 ? false : true,
+                requests: {[request_id]: Date.now()}
+            });
         }
         if (action.payload.event === 'END' || action.payload.event === 'ERROR') {
             res = res.deleteIn(['requests', request_id]);

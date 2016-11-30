@@ -7,7 +7,7 @@ import recordWebEvent from 'server/record_web_event';
 import {esc, escAttrs} from 'db/models';
 import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF} from 'server/utils';
 import coBody from 'co-body';
-import Tarantool from 'db/tarantool';
+// import Tarantool from 'db/tarantool';
 
 export default function useGeneralApi(app) {
     const router = koa_router({prefix: '/api/v1'});
@@ -245,11 +245,21 @@ export default function useGeneralApi(app) {
         const params = this.request.body;
         const {csrf, page, ref} = typeof(params) === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
-        console.log('-- /page_view -->', this.session.uid, page, ref);
+        console.log('-- /page_view -->', this.session.uid, page);
         const remote_ip = getRemoteIp(this.req);
         try {
-            const views = yield Tarantool.instance().call('page_view', page, remote_ip, this.session.uid, ref);
-            this.body = JSON.stringify({views: views[0][0]});
+            let views = 1;
+            // const views = yield Tarantool.instance().call('page_view', page, remote_ip, this.session.uid, ref);
+            const page_model = yield models.Page.findOne(
+                {attributes: ['id', 'views'], where: {permlink: esc(page)}}
+            );
+            if (page_model) {
+                views = page_model.views + 1;
+                yield yield models.Page.update({views}, {where: {id: page_model.id}});
+            } else {
+                yield models.Page.create(escAttrs({permlink: page, views}));
+            }
+            this.body = JSON.stringify({views});
         } catch (error) {
             console.error('Error in /page_view api call', this.session.uid, error.message);
             this.body = JSON.stringify({error: error.message});

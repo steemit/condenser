@@ -6,6 +6,7 @@ const ReactHighcharts = require("react-highcharts/dist/ReactHighstock");
 // multiply the x values by a constant factor and divide by this factor for
 // display purposes (tooltip, x-axis)
 const power = 100;
+const precision = 1000;
 
 function orderEqual(a, b) {
     return (
@@ -161,7 +162,7 @@ function generateDepthChart(bidsArray, asksArray) {
             labels: {
                 align: "left",
                 formatter: function () {
-                    let value = this.value / power;
+                    let value = this.value / precision;
                     return "$" + (value > 10e6 ? (value / 10e6).toFixed(2) + "M" :
                         value > 10000 ? (value / 10e3).toFixed(2) + "k" :
                         value);

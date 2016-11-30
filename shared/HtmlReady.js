@@ -166,6 +166,7 @@ function linkifyNode(child, state) {try{
     const {mutate} = state
     if(!child.data) return
     if(embedYouTubeNode(child, state.links, state.images)) return
+    if(embedVimeoNode(child, state.links, state.images)) return
 
     const data = XMLSerializer.serializeToString(child)
     const content = linkify(data, state.mutate, state.hashtags, state.usertags, state.images, state.links)
@@ -229,12 +230,33 @@ function embedYouTubeNode(child, links, images) {try{
     }
     if(!id) return false
 
-    const v = DOMParser.parseFromString(`~~~ youtube:${id} ~~~`)
+    const v = DOMParser.parseFromString(`~~~ embed:${id} youtube ~~~`)
     child.parentNode.replaceChild(v, child)
     if(links) links.add(url)
     if(images) images.add('https://img.youtube.com/vi/' + id + '/0.jpg')
     return true
+} catch(error) {console.log(error); return false}}
 
+function embedVimeoNode(child, links, /*images*/) {try{
+    if(!child.data) return false
+    const data = child.data
+
+    let id
+    {
+        const m = data.match(linksRe.vimeoId)
+        id = m && m.length >= 2 ? m[1] : null
+    }
+    if(!id) return false;
+
+    const url = `https://player.vimeo.com/video/${id}`
+    const v = DOMParser.parseFromString(`~~~ embed:${id} vimeo ~~~`)
+    child.parentNode.replaceChild(v, child)
+    if(links) links.add(url)
+
+    // Preview image requires a callback.. http://stackoverflow.com/questions/1361149/get-img-thumbnails-from-vimeo
+    // if(images) images.add('https://.../vi/' + id + '/0.jpg')
+
+    return true
 } catch(error) {console.log(error); return false}}
 
 function ipfsPrefix(url) {

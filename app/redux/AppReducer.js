@@ -43,7 +43,8 @@ export default function reducer(state = defaultState, action) {
             const noLoadingMethods = [
                 "get_dynamic_global_properties",
                 "get_api_by_name",
-                "get_followers"
+                "get_followers",
+                "get_following"
             ];
             res = state.mergeDeep({
                 loading: noLoadingMethods.indexOf(action.payload.method) !== -1 ? false : true,

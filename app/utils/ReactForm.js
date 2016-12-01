@@ -16,18 +16,25 @@ export default function reactForm({name, instance, fields, initialValues, valida
     const formState = instance.state = instance.state || {}
     formState[name] = {
         // validate: () => setFormState(instance, fields, validation),
-        handleSubmit: (fn) => (e) => {
-            e.preventDefault()
+        handleSubmit: submitCallback => event => {
+            event.preventDefault()
             const {valid} = setFormState(name, instance, fields, validation)
             if(!valid) return
             const data = getData(fields, instance.state)
             let formValid = true
             const fs = instance.state[name] || {}
             fs.submitting = true
+
+            // User can call this function upon successful submission
+            const updateInitialValues = () => {
+                setInitialValuesFromForm(name, instance, fields, initialValues)
+                formState[name].resetForm()
+            }
+
             instance.setState(
                 {[name]: fs},
                 () => {
-                    const ret = fn(data, e) || {}
+                    const ret = submitCallback({data, event, updateInitialValues}) || {}
                     for(const fieldName of Object.keys(ret)) {
                         const error = ret[fieldName]
                         if(!error) continue
@@ -73,22 +80,24 @@ export default function reactForm({name, instance, fields, initialValues, valida
         // Caution: fs.props is expanded <input {...fieldName.props} />, so only add valid props for the component
         fs.props = {name: fieldName}
 
-        const initialValue = initialValues[fieldName]
-
-        if(fieldType === 'checked') {
-            fs.value = toString(initialValue)
-            fs.props.checked = toBoolean(initialValue)
-        } else if(fieldType === 'selected') {
-            fs.props.selected = toString(initialValue)
-            fs.value = fs.props.selected
-        } else {
-            fs.props.value = toString(initialValue)
-            fs.value = fs.props.value
+        {
+            const initialValue = initialValues[fieldName]
+            if(fieldType === 'checked') {
+                fs.value = toString(initialValue)
+                fs.props.checked = toBoolean(initialValue)
+            } else if(fieldType === 'selected') {
+                fs.props.selected = toString(initialValue)
+                fs.value = fs.props.selected
+            } else {
+                fs.props.value = toString(initialValue)
+                fs.value = fs.props.value
+            }
         }
 
         fs.props.onChange = e => {
             const value = e && e.target ? e.target.value : e // API may pass value directly
             const v = {...(instance.state[fieldName] || {})}
+            const initialValue = initialValues[fieldName]
 
             if(fieldType === 'checked') {
                 v.touched = toString(value) !== toString(initialValue)
@@ -136,6 +145,14 @@ function setFormState(name, instance, fields, validation) {
     fs.touched = formTouched
     instance.setState({[name]: fs})
     return fs
+}
+
+function setInitialValuesFromForm(name, instance, fields, initialValues) {
+    const data = getData(fields, instance.state)
+    for(const field of fields) {
+        const fieldName = n(field)
+        initialValues[fieldName] = data[fieldName]
+    }
 }
 
 function getData(fields, state) {

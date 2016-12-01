@@ -97,17 +97,17 @@ class Header extends React.Component {
                     topic = route.params[1];
                     // Overwrite default created for more human readable title
                     if (route.params[0] === "created") {
-                        page_title = `New ${topic} posts`;
+                        page_title = translate('new_topic_posts', {topic});
                     }
                     else {
-                        page_title = `${sort_order} ${topic} posts`;
+                        page_title = translate('sort_order_topic_posts', {sort_order, topic});
                     }
                 } else {
                     if (route.params[0] === "created") {
-                        page_title = `New posts`;
+                        page_title = translate('new_posts');
                     }
                     else {
-                        page_title = `${sort_order} posts`;
+                        page_title = translate('sort_order_posts', {sort_order});
                     }
                 }
             }
@@ -115,38 +115,39 @@ class Header extends React.Component {
             sort_order = '';
             topic = route.params[0];
         } else if (route.page == 'SubmitPost') {
-            page_title = `Create a Post`;
+            page_title = translate('create_a_post');
         } else if (route.page == 'Privacy') {
-            page_title = `Privacy Policy`;
+            page_title = translate('privacy_policy');
         } else if (route.page == 'Tos') {
-            page_title = `Terms of Service`;
+            page_title = translate('terms_of_service');
         } else if (route.page == 'ChangePassword') {
-            page_title = `Change Account Password`;
+            page_title = translate('change_account_password');
         } else if (route.page == 'CreateAccount') {
-            page_title = `Create Account`;
+            page_title = translate('create_account');
         } else if (route.page == 'RecoverAccountStep1' || route.page == 'RecoverAccountStep2') {
-            page_title = `Stolen Account Recovery`;
+            page_title = translate('stolen_account_recovery');
         } else if (route.page === 'UserProfile') {
             user_name = route.params[0].slice(1);
             page_title = user_name;
-            if(route.params[1] === "followers"){
-                page_title = `People following ${user_name} `;
+            // TODO
+            if(route.params[1] === "followers") {
+                page_title = translate('people_following_user_name', {user_name}) + ' ';
             }
-            if(route.params[1] === "followed"){
-                page_title = `People followed by ${user_name} `;
+            if(route.params[1] === "followed") {
+                page_title = translate('people_followed_by_user_name', {user_name}) + ' ';
             }
-            if(route.params[1] === "curation-rewards"){
-                page_title = `Curation rewards by ${user_name} `;
+            if(route.params[1] === "curation-rewards") {
+                page_title = translate('curation_rewards_by_user_name', {user_name}) + ' ';
             }
-            if(route.params[1] === "author-rewards"){
-                page_title = `Author rewards by ${user_name} `;
+            if(route.params[1] === "author-rewards") {
+                page_title = translate('author_rewards_by_user_name', {user_name}) + ' ';
             }
-            if(route.params[1] === "recent-replies"){
-                page_title = `Replies by ${user_name} `;
+            if(route.params[1] === "recent-replies") {
+                page_title = translate('replies_by_user_name', {user_name}) + ' ';
             }
             // @user/"posts" is deprecated in favor of "comments" as of oct-2016 (#443)
-            if(route.params[1] === "posts" || route.params[1] === "comments"){
-                page_title = `Comments by ${user_name} `;
+            if(route.params[1] === "posts" || route.params[1] === "comments") {
+                page_title = translate('comments_by_user_name', {user_name}) + ' ';
             }
         } else {
             page_name = ''; //page_title = route.page.replace( /([a-z])([A-Z])/g, '$1 $2' ).toLowerCase();

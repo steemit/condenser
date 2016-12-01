@@ -8,6 +8,7 @@ import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {findParent} from 'app/utils/DomUtils';
 import Icon from 'app/components/elements/Icon';
 import {List} from "immutable";
+import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 
 function topPosition(domElt) {
     if (!domElt) {
@@ -47,37 +48,28 @@ class PostsList extends React.Component {
         this.onPostClick = this.onPostClick.bind(this);
         this.onBackButton = this.onBackButton.bind(this);
         this.closeOnOutsideClick = this.closeOnOutsideClick.bind(this);
-        // this.shouldComponentUpdate = shouldComponentUpdate(this, 'PostsList')
+        this.shouldComponentUpdate = shouldComponentUpdate(this, 'PostsList')
     }
 
     componentDidMount() {
         this.attachScrollListener();
     }
 
-    shouldComponentUpdate(np, ns) {
-        return (
-            np.posts !== this.props.posts ||
-            np.ignoreLoading !== this.props.ignoreLoading ||
-            np.loadMore !== this.props.loadMore ||
-            np.showSpam !== this.props.showSpam ||
-            np.loading !== this.props.loading ||
-            np.category !== this.props.category ||
-            ns.showNegativeComments !== this.state.showNegativeComments ||
-            ns.showPost !== this.state.showPost ||
-            ns.thumbSize !== this.state.thumbSize
-        );
-    }
+    // shouldComponentUpdate(np, ns) {
+    //     return (
+    //         np.posts !== this.props.posts ||
+    //         np.ignoreLoading !== this.props.ignoreLoading ||
+    //         np.loadMore !== this.props.loadMore ||
+    //         np.showSpam !== this.props.showSpam ||
+    //         np.loading !== this.props.loading ||
+    //         np.category !== this.props.category ||
+    //         ns.showNegativeComments !== this.state.showNegativeComments ||
+    //         ns.showPost !== this.state.showPost ||
+    //         ns.thumbSize !== this.state.thumbSize
+    //     );
+    // }
 
-    componentWillUnmount() {
-        this.detachScrollListener();
-        window.removeEventListener('popstate', this.onBackButton);
-        window.removeEventListener('keydown', this.onBackButton);
-        const post_overlay = document.getElementById('post_overlay');
-        if (post_overlay) post_overlay.removeEventListener('click', this.closeOnOutsideClick);
-        document.getElementsByTagName('body')[0].className = "";
-    }
-
-    componentWillUpdate(nextProps) {
+    componentWillUpdate() {
         const location = `${window.location.pathname}${window.location.search}${window.location.hash}`;
         if (this.state.showPost && (location !== this.post_url)) {
             this.setState({showPost: null});
@@ -100,6 +92,15 @@ class PostsList extends React.Component {
             document.getElementsByTagName('body')[0].className = '';
             this.post_url = null;
         }
+    }
+
+    componentWillUnmount() {
+        this.detachScrollListener();
+        window.removeEventListener('popstate', this.onBackButton);
+        window.removeEventListener('keydown', this.onBackButton);
+        const post_overlay = document.getElementById('post_overlay');
+        if (post_overlay) post_overlay.removeEventListener('click', this.closeOnOutsideClick);
+        document.getElementsByTagName('body')[0].className = "";
     }
 
     onBackButton(e) {
@@ -170,7 +171,7 @@ class PostsList extends React.Component {
 
     render() {
         const {posts, showSpam, loading, category, emptyText, content,
-            username, get_following, account} = this.props;
+            follow, account} = this.props;
         const {thumbSize, showPost} = this.state
 
         if (!loading && (posts && !posts.size) && emptyText) {
@@ -185,8 +186,8 @@ class PostsList extends React.Component {
                 console.error('PostsList --> Missing cont key', item)
                 return
             }
-            const key = ['result', cont.get('author')]
-            const ignore = get_following ? get_following.getIn(key, List()).contains('ignore') : false
+            const key = [cont.get('author')]
+            const ignore = follow ? follow.getIn(key, List()).contains('ignore') : false
             const {hide, netVoteSign, authorRepLog10} = cont.get('stats').toJS()
             if(!(ignore || hide) || showSpam) // rephide
                 postsInfo.push({item, ignore, netVoteSign, authorRepLog10})
@@ -239,10 +240,8 @@ export default connect(
         const current = state.user.get('current')
         const username = current ? current.get('username') : null
         const content = state.global.get('content');
-        const get_following = state.global.getIn(['follow', 'get_following', username]);
-        const ignoreLoading = !get_following ? false : get_following.getIn(['ignore', 'loading']);
-        // console.log("get_following:", get_following ? get_following.toJS() : null);
-        return {...props, content, ignoreLoading, get_following, pathname};
+        const follow = state.global.getIn(['follow', 'follow', username, 'result']);
+        return {...props, content, follow, pathname};
     },
     dispatch => ({
         fetchState: (pathname) => {

@@ -86,7 +86,7 @@ class Header extends React.Component {
         let page_name = null;
 
         if (route.page === 'PostsIndex') {
-            sort_order = route.params[0];
+            sort_order = route.params[0] ? translate(route.params[0]) : '';
             if (sort_order === 'home') {
                 page_title = translate('home')
                 const account_name = route.params[1];
@@ -94,7 +94,7 @@ class Header extends React.Component {
                     home_account = true;
             } else {
                 if (route.params.length > 1) {
-                    topic = route.params[1];
+                    topic = detransliterate(route.params[1]);
                     // Overwrite default created for more human readable title
                     if (route.params[0] === "created") {
                         page_title = translate('new_topic_posts', {topic});

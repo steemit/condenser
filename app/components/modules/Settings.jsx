@@ -96,7 +96,7 @@ class Settings extends React.Component {
                     successMessage: translate('saved') + '!',
                 })
                 // remove successMessage after a while
-                setTimeout(() => this.setState({successMessage: ''}), 2000)
+                setTimeout(() => this.setState({successMessage: ''}), 4000)
                 updateInitialValues()
             }
         })

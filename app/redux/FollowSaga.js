@@ -33,7 +33,7 @@ export function* loadFollows(method, account, type, start = '', limit = 100) {
         yield put({type: 'global/UPDATE', payload: {
             key: ['follow', method, account],
             updater: m => {
-                const result = m.get('result_loading')
+                const result = m.get('result_loading', m.get('result'))
                 const count = !result ? 0 : result.filter(a => a.get(0) === "blog").size
                 m = m.delete('result_loading')
                 m = m.set('result', result)

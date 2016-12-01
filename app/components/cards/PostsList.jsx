@@ -52,9 +52,8 @@ class PostsList extends React.Component {
     }
 
     shouldComponentUpdate(np, ns) {
-        // console.log("np.postsInfo !== this.props.postsInfo", !Immutable.is(np.postsInfo, this.props.postsInfo));
         return (
-            !Immutable.is(np.postsInfo, this.props.postsInfo) ||
+            np.posts !== this.props.posts ||
             np.loadMore !== this.props.loadMore ||
             np.showSpam !== this.props.showSpam ||
             np.loading !== this.props.loading ||
@@ -170,6 +169,7 @@ class PostsList extends React.Component {
     }
 
     render() {
+        console.log('PostsList render')
         const {posts, loading, category, emptyText, postsInfo} = this.props;
         const {account} = this.props
         const {thumbSize, showPost} = this.state
@@ -177,10 +177,19 @@ class PostsList extends React.Component {
         if (!loading && (posts && !posts.size) && emptyText) {
             return <Callout>{emptyText}</Callout>;
         }
-        const renderSummary = items => items.map(item => <li key={item.get("item")}>
-            <PostSummary account={account} post={item.get("item")} currentCategory={category} thumbSize={thumbSize}
-                ignore={item.get("ignore")} netVoteSign={item.get("netVoteSign")} authorRepLog10={item.get("authorRepLog10")} onClick={this.onPostClick} />
+        const renderSummary = items => items.map(item => <li key={item.item}>
+            <PostSummary
+                account={account}
+                post={item.item}
+                currentCategory={category}
+                thumbSize={thumbSize}
+                ignore={item.ignore}
+                netVoteSign={item.netVoteSign}
+                authorRepLog10={item.authorRepLog10}
+                onClick={this.onPostClick}
+            />
         </li>)
+
         return (
             <div id="posts_list" className="PostsList">
                 <ul className="PostsList__summaries hfeed" itemScope itemType="http://schema.org/blogPosts">
@@ -211,22 +220,24 @@ import {connect} from 'react-redux'
 export default connect(
     (state, props) => {
         const {posts, showSpam} = props;
-        let postsInfo = Immutable.List();
+        const postsInfo = [];
         const pathname = state.app.get('location').pathname;
+
+        const current = state.user.get('current')
+        const username = current ? current.get('username') : null
+        const content = state.global.get('content');
+
         posts.forEach(item => {
-            const content = state.global.get('content').get(item);
-            if(!content) {
-                console.error('PostsList --> Missing content key', item)
+            const cont = content.get(item);
+            if(!cont) {
+                console.error('PostsList --> Missing cont key', item)
                 return
             }
-            // let total_payout = 0;
-            const current = state.user.get('current')
-            const username = current ? current.get('username') : null
-            const key = ['follow', 'get_following', username, 'result', content.get('author')]
+            const key = ['follow', 'get_following', username, 'result', cont.get('author')]
             const ignore = username ? state.global.getIn(key, List()).contains('ignore') : false
-            const {hide, netVoteSign, authorRepLog10} = content.get('stats').toJS()
+            const {hide, netVoteSign, authorRepLog10} = cont.get('stats').toJS()
             if(!(ignore || hide) || showSpam) // rephide
-                postsInfo = postsInfo.push(Immutable.fromJS({item, ignore, netVoteSign, authorRepLog10}))
+                postsInfo.push({item, ignore, netVoteSign, authorRepLog10})
         })
 
         return {...props, postsInfo, pathname};

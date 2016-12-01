@@ -13,14 +13,14 @@ export default function (instance, name) {
     return (nextProps, nextState) => {
         const upd = mixin(nextProps, nextState)
         if (upd && process.env.BROWSER && window.steemDebug_shouldComponentUpdate) {
-            cmp(name, 'props', instance.props, nextProps)
-            cmp(name, 'state', instance.state, nextState)
+            cmp(name, instance.props, nextProps)
+            cmp(name, instance.state, nextState)
         }
         return upd
     }
 }
 
-function cmp(name, type, a, b) {
+export function cmp(name, a, b) {
     const aKeys = new Set(a && Object.keys(a))
     const bKeys = new Set(b && Object.keys(b))
     const ab = new Set([...aKeys, ...aKeys])

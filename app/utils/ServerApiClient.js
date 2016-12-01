@@ -25,7 +25,7 @@ export function serverApiLogout() {
 let last_call;
 export function serverApiRecordEvent(type, val) {
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;
-    if (last_call && (new Date() - last_call < 60000)) return;
+    if (last_call && (new Date() - last_call < 5000)) return;
     last_call = new Date();
     const value = val && val.stack ? `${val.toString()} | ${val.stack}` : val;
     const request = Object.assign({}, request_base, {body: JSON.stringify({csrf: $STM_csrf, type, value})});
@@ -52,6 +52,10 @@ export function markNotificationRead(account, fields) {
 let last_page, last_views;
 export function recordPageView(page, ref) {
     if (page === last_page) return Promise.resolve(last_views);
+    if (window.ga) { // virtual pageview
+        window.ga('set', 'page', page);
+        window.ga('send', 'pageview');
+    }
     if (!process.env.BROWSER || window.$STM_ServerBusy) return Promise.resolve(0);
     const request = Object.assign({}, request_base, {body: JSON.stringify({csrf: $STM_csrf, page, ref})});
     return fetch(`/api/v1/page_view`, request).then(r => r.json()).then(res => {

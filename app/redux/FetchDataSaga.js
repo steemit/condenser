@@ -26,13 +26,6 @@ export function* fetchState(location_change_action) {
     const server_location = yield select(state => state.offchain.get('server_location'));
     if (pathname === server_location) return;
 
-    // virtual pageview
-    const {ga} = window
-    if(ga) {
-        ga('set', 'page', pathname);
-        ga('send', 'pageview');
-    }
-
     let url = `${pathname}`;
     if (url === '/') url = 'trending';
     // Replace /curation-rewards and /author-rewards with /transfers for UserProfile

@@ -7,6 +7,7 @@ const defaultState = Map({
     error: '',
     location: {},
     notifications: null,
+    noLoadingRequests: 0,
     notificounters: Map({
         total: 0,
         feed: 0,
@@ -38,23 +39,29 @@ export default function reducer(state = defaultState, action) {
     let res = state;
     if (action.type === 'RPC_REQUEST_STATUS') {
         const request_id = action.payload.id + '';
-        // console.log(new Date().getTime(), "RPC_REQUEST_STATUS:", action.payload.method);
+        const noLoadingMethods = [
+            'get_dynamic_global_properties',
+            'get_api_by_name',
+            'get_followers',
+            'get_following'
+        ];
+        const noLoadMethod = noLoadingMethods.indexOf(action.payload.method) !== -1;
         if (action.payload.event === 'BEGIN') {
-            const noLoadingMethods = [
-                "get_dynamic_global_properties",
-                "get_api_by_name",
-                "get_followers",
-                "get_following"
-            ];
             res = state.mergeDeep({
-                loading: noLoadingMethods.indexOf(action.payload.method) !== -1 ? false : true,
-                requests: {[request_id]: Date.now()}
+                loading: noLoadMethod ? false : true,
+                requests: {[request_id]: Date.now()},
+                noLoadingRequests: state.get('noLoadingRequests') + (noLoadMethod ? 1 : 0)
             });
         }
         if (action.payload.event === 'END' || action.payload.event === 'ERROR') {
+            const noLoadCount = state.get('noLoadingRequests') - (noLoadMethod ? 1 : 0);
             res = res.deleteIn(['requests', request_id]);
-            const loading = res.get('requests').size > 0;
-            res = res.set('loading', loading);
+            // console.log("RPC_REQUEST END:", action.payload.method, res.get('requests').size, "noLoadCount", noLoadCount);
+            const loading = (res.get('requests').size - noLoadCount) > 0;
+            res = res.mergeDeep({
+                loading,
+                noLoadingRequests: noLoadCount
+            });
         }
     }
     if (action.type === 'ADD_NOTIFICATION') {

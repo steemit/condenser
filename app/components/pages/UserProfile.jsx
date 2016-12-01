@@ -38,12 +38,27 @@ export default class UserProfile extends React.Component {
     }
 
     shouldComponentUpdate(np) {
+        const {follow} = this.props;
+        let followersLoading = false, npFollowersLoading = false;
+        let followingLoading = false, npFollowingLoading = false;
+
+        const account = np.routeParams.accountname.toLowerCase();
+        if (follow) {
+            followersLoading = follow.getIn(['get_followers', account, 'blog', 'loading'], false);
+            followingLoading = follow.getIn(['get_following', account, 'blog', 'loading'], false);
+        }
+        if (np.follow) {
+            npFollowersLoading = np.follow.getIn(['get_followers', account, 'blog', 'loading'], false);
+            npFollowingLoading = np.follow.getIn(['get_following', account, 'blog', 'loading'], false);
+        }
+
         return (
             np.current_user !== this.props.current_user ||
-            np.accounts !== this.props.accounts ||
+            np.accounts.get(account) !== this.props.accounts.get(account) ||
             np.wifShown !== this.props.wifShown ||
             np.global_status !== this.props.global_status ||
-            np.follow !== this.props.follow ||
+            ((npFollowersLoading !== followersLoading) && !npFollowersLoading) ||
+            ((npFollowingLoading !== followingLoading) && !npFollowingLoading) ||
             np.loading !== this.props.loading ||
             np.location.pathname !== this.props.location.pathname ||
             np.routeParams.accountname !== this.props.routeParams.accountname
@@ -219,7 +234,8 @@ export default class UserProfile extends React.Component {
                 tab_content = (<center><LoadingIndicator type="circle" /></center>);
             }
         }
-        else if( (section === 'recent-replies') && account.recent_replies ) {
+        else if( (section === 'recent-replies')) {
+            if (account.recent_replies) {
               tab_content = <div>
                   <PostsList
                   emptyText={translate('user_hasnt_had_any_replies_yet', {name}) + '.'}
@@ -230,6 +246,9 @@ export default class UserProfile extends React.Component {
                   showSpam={false} />
                   {isMyAccount && <MarkNotificationRead fields="comment_reply" account={account.name} />}
               </div>;
+          } else {
+              tab_content = (<center><LoadingIndicator type="circle" /></center>);
+          }
         }
         else if( section === 'permissions' && isMyAccount ) {
             walletClass = 'active'

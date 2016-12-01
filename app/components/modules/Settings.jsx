@@ -6,6 +6,7 @@ import {ALLOWED_CURRENCIES} from 'config/client_config'
 import store from 'store';
 import transaction from 'app/redux/Transaction'
 import o2j from 'shared/clash/object2json'
+import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import Userpic from 'app/components/elements/Userpic';
 import reactForm from 'app/utils/ReactForm'
 
@@ -143,36 +144,37 @@ class Settings extends React.Component {
                 <form onSubmit={this.handleSubmitForm} className="small-12 medium-6 large-4 columns">
                     <label>
                         {translate('profile_image_url')}
-                        <input type="url" {...profile_image.props} />
+                        <input type="url" {...profile_image.props} autoComplete="off" />
                     </label>
                     <div className="error">{profile_image.blur && profile_image.touched && profile_image.error}</div>
 
                     <label>
                         {translate('profile_name')}
-                        <input type="text" {...name.props} maxLength="20" />
+                        <input type="text" {...name.props} maxLength="20" autoComplete="off" />
                     </label>
                     <div className="error">{name.touched && name.error}</div>
 
                     <label>
                         {translate('profile_about')}
-                        <input type="text" {...about.props} maxLength="160" />
+                        <input type="text" {...about.props} maxLength="160" autoComplete="off" />
                     </label>
                     <div className="error">{about.touched && about.error}</div>
 
                     <label>
                         {translate('profile_location')}
-                        <input type="text" {...location.props} maxLength="30" />
+                        <input type="text" {...location.props} maxLength="30" autoComplete="off" />
                     </label>
                     <div className="error">{location.touched && location.error}</div>
 
                     <label>
                         {translate('profile_website')}
-                        <input type="text" {...website.props} maxLength="100" />
+                        <input type="text" {...website.props} maxLength="100" autoComplete="off" />
                     </label>
                     <div className="error">{website.touched && website.error}</div>
 
                     <br />
-                    <input type="submit" className="button" value="Update" disabled={disabled} />
+                    {state.loading && <span><LoadingIndicator type="circle" /><br /></span>}
+                    {!state.loading && <input type="submit" className="button" value="Update" disabled={disabled} />}
                     {' '}{
                             state.errorMessage
                                 ? <small className="error">{state.errorMessage}</small>

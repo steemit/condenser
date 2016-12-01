@@ -54,6 +54,14 @@ app.use(function *(next) {
             return;
         }
     }
+    // normalize top category filtering from cased params
+    if (this.method === 'GET' && /(hot|created|trending|active)/ig.test(this.url)) {
+        const p = this.originalUrl.toLowerCase();
+        if(p !== this.originalUrl) {
+            this.redirect(p);
+            return;
+        }
+    }
     // start registration process if user get to create_account page and has no id in session yet
     if(this.url === '/create_account' && !this.session.user) {
         this.status = 302;

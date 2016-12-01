@@ -27,7 +27,7 @@ export default function reactForm({name, instance, fields, initialValues, valida
             instance.setState(
                 {[name]: fs},
                 () => {
-                    const ret = fn(data) || {}
+                    const ret = fn(data, e) || {}
                     for(const fieldName of Object.keys(ret)) {
                         const error = ret[fieldName]
                         if(!error) continue

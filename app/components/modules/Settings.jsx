@@ -7,25 +7,45 @@ import store from 'store';
 import transaction from 'app/redux/Transaction'
 import o2j from 'shared/clash/object2json'
 import Userpic from 'app/components/elements/Userpic';
-import {reduxForm} from 'redux-form'
-import {cleanReduxInput} from 'app/utils/ReduxForms'
+import reactForm from 'app/utils/ReactForm'
 
 class Settings extends React.Component {
+
+    constructor(props) {
+        super()
+        this.initForm(props)
+    }
 
     state = {
         errorMessage: '',
         successMessage: '',
     }
 
-    handleSubmit = event => {
-        event.preventDefault()
+    initForm(props) {
+        reactForm({
+            instance: this,
+            name: 'accountSettings',
+            fields: ['profile_image', 'name', 'about', 'location', 'website'],
+            initialValues: props.profile,
+            validation: values => ({
+                profile_image: values.profile_image && !/^https?:\/\//.test(values.profile_image) ? 'Invalid URL' : null,
+                name: values.name && values.name.length > 20 ? 'Name is too long' : null,
+                about: values.about && values.about.length > 160 ? 'About is too long' : null,
+                location: values.location && values.location.length > 30 ? 'Location is too long' : null,
+                website: values.website && values.website.length > 100 ? 'Website URL is too long' : null,
+            })
+        })
+        this.handleSubmitForm =
+            this.state.accountSettings.handleSubmit((data, event) => this.handleSubmit(data, event))
+    }
 
+    handleSubmit = () => {
         let {metaData} = this.props
         if (!metaData) metaData = {}
         if(!metaData.profile) metaData.profile = {}
         delete metaData.user_image; // old field... cleanup
 
-        const {profile_image, name, about, location, website} = this.props.fields
+        const {profile_image, name, about, location, website} = this.state
 
         // Update relevant fields
         metaData.profile.profile_image = profile_image.value
@@ -83,10 +103,10 @@ class Settings extends React.Component {
     render() {
         const {state, props} = this
 
-        const {invalid} = this.props
-        const disabled = !props.isOwnAccount || state.loading || invalid
+        const {submitting, valid} = this.state.accountSettings
+        const disabled = !props.isOwnAccount || state.loading || submitting || !valid
 
-        const {profile_image, name, about, location, website} = this.props.fields
+        const {profile_image, name, about, location, website} = this.state
 
         return <div className="Settings">
 
@@ -118,36 +138,35 @@ class Settings extends React.Component {
                     </label>
                 </div>
             </div>*/}
-
             <div className="row">
-                <form onSubmit={this.handleSubmit} className="small-12 medium-6 large-4 columns">
+                <form onSubmit={this.handleSubmitForm} className="small-12 medium-6 large-4 columns">
                     <label>
                         {translate('profile_image_url')}
-                        <input type="url" {...cleanReduxInput(profile_image)} />
+                        <input type="url" {...profile_image.props} />
                     </label>
-                    <div className="error">{profile_image.touched && profile_image.error}</div>
+                    <div className="error">{profile_image.blur && profile_image.touched && profile_image.error}</div>
 
                     <label>
                         {translate('profile_name')}
-                        <input type="text" {...cleanReduxInput(name)} maxLength="20" />
+                        <input type="text" {...name.props} maxLength="20" />
                     </label>
                     <div className="error">{name.touched && name.error}</div>
 
                     <label>
                         {translate('profile_about')}
-                        <input type="text" {...cleanReduxInput(about)} maxLength="160" />
+                        <input type="text" {...about.props} maxLength="160" />
                     </label>
                     <div className="error">{about.touched && about.error}</div>
 
                     <label>
                         {translate('profile_location')}
-                        <input type="text" {...cleanReduxInput(location)} maxLength="30" />
+                        <input type="text" {...location.props} maxLength="30" />
                     </label>
                     <div className="error">{location.touched && location.error}</div>
 
                     <label>
                         {translate('profile_website')}
-                        <input type="text" {...cleanReduxInput(website)} maxLength="100" />
+                        <input type="text" {...website.props} maxLength="100" />
                     </label>
                     <div className="error">{website.touched && website.error}</div>
 
@@ -166,35 +185,21 @@ class Settings extends React.Component {
     }
 }
 
-export default reduxForm(
-    {
-        form: 'accountSettings',
-        fields: ['profile_image', 'name', 'about', 'location', 'website']
-    },
+export default connect(
     // mapStateToProps
     (state, ownProps) => {
-        const {accountname} =    ownProps.routeParams
+        const {accountname} = ownProps.routeParams
         const account = state.global.getIn(['accounts', accountname]).toJS()
         const current_user = state.user.get('current')
         const username = current_user ? current_user.get('username') : ''
         const metaData = account ? o2j.ifStringParseJSON(account.json_metadata) : {}
         const profile = metaData && metaData.profile ? metaData.profile : {}
 
-        const validate = values => ({
-            profile_image: values.profile_image && !/^https?:\/\//.test(values.profile_image) ? 'Invalid URL' : null,
-            name: values.name && values.name.length > 20 ? 'Name is too long' : null,
-            about: values.about && values.about.length > 160 ? 'About is too long' : null,
-            location: values.location && values.location.length > 30 ? 'Location is too long' : null,
-            website: values.website && values.website.length > 100 ? 'Website URL is too long' : null,
-        })
-
-
         return {
             account,
             metaData,
             isOwnAccount: username == accountname,
-            validate,
-            initialValues: profile,
+            profile,
             ...ownProps
         }
     },

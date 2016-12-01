@@ -127,7 +127,6 @@ class TransferForm extends Component {
         const isMemoPrivate = memo && /^#/.test(memo.value)
         const form = (
             <form onSubmit={handleSubmit(data => {
-                // bind redux-form to react-redux
                 this.setState({loading: true})
                 dispatchSubmit({...data, errorCallback: this.errorCallback, currentUser, toVesting, transferType})
             })}

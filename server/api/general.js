@@ -251,13 +251,13 @@ export default function useGeneralApi(app) {
             let views = 1;
             // const views = yield Tarantool.instance().call('page_view', page, remote_ip, this.session.uid, ref);
             const page_model = yield models.Page.findOne(
-                {attributes: ['id', 'views'], where: {permlink: esc(page)}}
+                {attributes: ['id', 'views'], where: {permlink: esc(page)}, logging: false}
             );
             if (page_model) {
                 views = page_model.views + 1;
-                yield yield models.Page.update({views}, {where: {id: page_model.id}});
+                yield yield models.Page.update({views}, {where: {id: page_model.id}, logging: false});
             } else {
-                yield models.Page.create(escAttrs({permlink: page, views}));
+                yield models.Page.create(escAttrs({permlink: page, views}), {logging: false});
             }
             this.body = JSON.stringify({views});
         } catch (error) {

@@ -73,12 +73,12 @@
     }
 
     .Icon {
-        margin-left: 0.5rem;
+        margin-left: 1rem;
         svg {fill: #def;}
     }
 
     .Userpic {
-        margin-right: 1rem;
+        margin-right: 0.75rem;
         vertical-align: middle;
     }
 
@@ -103,6 +103,7 @@
         margin: -0.4rem auto 0.5rem;
         font-size: 95%;
         max-width: 420px;
+        line-height: 1.4;
     }
     .UserProfile__info {
         font-size: 90%;

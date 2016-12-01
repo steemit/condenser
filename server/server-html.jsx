@@ -8,6 +8,7 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
         <head>
             <meta charSet="utf-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <meta name="verify-reformal" content="be927bca44610c3531b44df8" />
             {
                 meta && meta.map(m => {
                     if (m.title) {

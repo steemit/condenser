@@ -578,6 +578,19 @@ const ru = {
   please_make_sure_you_dont_use_temporary_email_providers_contact_SUPPORT_URL: 'Пожалуйста, удостоверьтесь что вы не используете временный имейл адрес, свяжитесь с ' + SUPPORT_EMAIL + ' для получения информации.',
   images_were_hidden_due_to_low_ratings: 'Изображения были скрыты из-за низкого рейтинга',
 	image_not_shown_due_to_low_ratings: 'Изображение не отображено из-за низкого рейтинга',
+	// page titles
+	create_a_post: 'Написать пост',
+	create_account: 'Создать аккаунт',
+	new_topic_posts: 'Новые "{topic}" посты',
+	sort_order_topic_posts: '{sort_order} "{topic}" посты',
+	new_posts: 'Новые посты',
+	sort_order_posts: '{sort_order} посты',
+	people_following_user_name: 'Подписчики {user_name}',
+	people_followed_by_user_name: '{user_name} подписан',
+	curation_rewards_by_user_name: 'Кураторские награды {user_name}',
+	author_rewards_by_user_name: 'Авторские награды {user_name}',
+	replies_by_user_name: 'Ответы {user_name}',
+	curation_rewards_by_user_name: 'Комментарии {user_name}',
 }
 
 export { ru }

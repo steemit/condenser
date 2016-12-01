@@ -22,6 +22,7 @@ import {List} from 'immutable'
 import {repLog10, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import DMCAList from 'app/utils/DMCAList'
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
+import ShareMenu from 'app/components/elements/ShareMenu';
 
 function TimeAuthorCategory({content, authorRepLog10, showTags}) {
     return (
@@ -266,9 +267,9 @@ class PostFull extends React.Component {
                             {!readonly && <Reblog author={author} permlink={permlink} />}
                             {!readonly &&
                             <span className="PostFull__reply">
-                                    {showReplyOption && <a onClick={onShowReply}>Reply</a>}
-                            {' '}{showEditOption   && !showEdit  && <a onClick={onShowEdit}>Edit</a>}
-                            {' '}{showDeleteOption && !showReply && <a onClick={onDeletePost}>Delete</a>}
+                                {showReplyOption && <a onClick={onShowReply}>Reply</a>}
+                                {' '}{showEditOption   && !showEdit  && <a onClick={onShowEdit}>Edit</a>}
+                                {' '}{showDeleteOption && !showReply && <a onClick={onDeletePost}>Delete</a>}
                                 </span>}
                             <span className="PostFull__responses">
                                 <Link to={link} title={pluralize('Responses', content.children, true)}>
@@ -278,7 +279,7 @@ class PostFull extends React.Component {
                             <span className="PostFull__views">
                                 <PageViewsCounter hidden={false} />
                             </span>
-                            <FoundationDropdownMenu menu={share_menu} icon="share" label="Share" dropdownPosition="bottom" dropdownAlignment="right" />
+                            <ShareMenu menu={share_menu} />
                     </div>
                 </div>
                 <div className="row">

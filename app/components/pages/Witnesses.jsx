@@ -62,7 +62,7 @@ class Witnesses extends React.Component {
             let witness_thread = ""
             if(thread) {
                 if(links.remote.test(thread)) {
-                    witness_thread = <Link to={thread}>{translate('witness_thread')}&nbsp;<Icon name="extlink" /></Link>
+                    witness_thread = <a href={thread}>{translate('witness_thread')}&nbsp;<Icon name="extlink" /></a>
                 } else {
                     witness_thread = <Link to={thread}>{translate('witness_thread')}</Link>
                 }

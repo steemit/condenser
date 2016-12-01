@@ -48,7 +48,6 @@ export function sortComments( cont, comments, sort_order ) {
               },
       new:  (a,b) =>  {
                 let acontent = cont.get(a);
-                console.log("acontent", acontent);
                 let bcontent = cont.get(b);
                 if (netNegative(acontent)) {
                     return 1;

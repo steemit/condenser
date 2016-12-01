@@ -60,7 +60,8 @@ class PostsList extends React.Component {
             np.loading !== this.props.loading ||
             np.category !== this.props.category ||
             ns.showNegativeComments !== this.state.showNegativeComments ||
-            ns.showPost !== this.state.showPost
+            ns.showPost !== this.state.showPost ||
+            ns.thumbSize !== this.state.thumbSize
         );
     }
 

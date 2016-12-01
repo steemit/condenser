@@ -242,15 +242,48 @@ class UserWallet extends React.Component {
     }
 }
 
+function getPriceFromPair(_price_, _tokensPair_){
+  let price = [_price_.base.split(' '), _price_.quote.split(' ')]
+  if (price[0].length !== 2 || price[1].length !== 2) return;
+  try {
+    if (typeof price[0][0] === 'string') price[0][0] = parseFloat(price[0][0]);
+    if (typeof price[1][0] === 'string') price[1][0] = parseFloat(price[1][0]);
+  } catch(e) {
+    console.error("could not calculate from ", _price_)
+    return false;
+  }
+
+  let tokensPair = Array.isArray(_tokensPair_) ? _tokensPair_ : _tokensPair_.split('/')
+  if (tokensPair.length !== 2) return false;
+
+  let pair = new Array(2)
+  pair[0] = price.find((item) => {return tokensPair[0] === item[1]})
+  pair[1] = price.find((item) => {return tokensPair[1] === item[1]})
+  console.log(pair);
+  try {
+    return parseFloat(pair[0][0])/parseFloat(pair[1][0])
+  } catch(e) {
+    console.log(error);
+    return 0
+  }
+}
+
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
         let price_per_steem = undefined
         const feed_price = state.global.get('feed_price')
         if(feed_price && feed_price.has('base') && feed_price.has('quote')) {
-            const {base, quote} = feed_price.toJS()
-            if(/ GBG/.test(base) && / GOLOS$/.test(quote))
-                price_per_steem = parseFloat(base.split(' ')[0])
+            let price
+            let {base, quote} = feed_price.toJS()
+
+            let priceGBGperGOLOS = getPriceFromPair(feed_price.toJS(), 'GBG/GOLOS')
+            let priceGOLOSperGBG = getPriceFromPair(feed_price.toJS(), 'GOLOS/GBG')
+            console.log(priceGBGperGOLOS, "GBG/GOLOS :::: GOLOS/GBG", priceGOLOSperGBG)
+
+            console.log(feed_price.toJS(), "OOOOOO")
+            price_per_steem = priceGBGperGOLOS;
+            console.log (price_per_steem, " set price per steem")
         }
         return {
             ...ownProps,

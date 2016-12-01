@@ -561,6 +561,20 @@ const en = 	{
   please_make_sure_you_dont_use_temporary_email_providers_contact_SUPPORT_URL: 'Please make sure your you don\'t use any temporary email providers, contact ' + SUPPORT_EMAIL + ' for more information.',
   images_were_hidden_due_to_low_ratings: 'Images were hidden due to low ratings',
   image_not_shown_due_to_low_ratings: 'Image not shown due to low ratings',
+  // page titles
+  create_a_post: 'Create a Post',
+  create_account: `Create Account`,
+  new_topic_posts: 'New {topic} posts',
+  sort_order_topic_posts: '{sort_order} {topic} posts',
+  new_posts: `New posts`,
+  sort_order_posts: '{sort_order} posts',
+  people_following_user_name: 'People following {user_name}',
+  people_followed_by_user_name: 'People followed by {user_name}',
+  curation_rewards_by_user_name: 'Curation rewards by {user_name}',
+  author_rewards_by_user_name: 'Author rewards by {user_name}',
+  replies_by_user_name: 'Replies by {user_name}',
+  curation_rewards_by_user_name: 'Comments by {user_name}',
+
 }
 
 export { en }

@@ -8,6 +8,7 @@ import { FormattedMessage } from 'react-intl';
 import { translate } from 'app/Translator';
 import _btc from 'shared/clash/coins/btc'
 import roundPrecision from 'round-precision'
+import LandingCrowdsaleStats from './LandingCrowdsaleStats'
 // import { crowdsaleStartAt } from '../pages/Landing'
 
 const satoshiPerCoin = 100000000
@@ -66,7 +67,7 @@ export default class LandingCountDowns extends React.Component {
 		unconfirmedNTx: false,
 		prefill: this.props.prefill,
 		secondsSinceEpoch: Math.round(((new Date()).getTime()) / 1000),
-		crowdSaleIsActive: this.props.crowdsaleStartAt > Date.now(),
+		crowdSaleIsActive: this.props.crowdsaleEndAt > new Date(),
 		showBitcoinsRaised: true
 	}
 
@@ -128,8 +129,7 @@ export default class LandingCountDowns extends React.Component {
 
 	// TODO add this
 	handleCrowdsaleStart = () => (this.setState({prefill: false}))
-	// handleCrowdsaleEnd = () => {}
-	// handleStageChange = () => {}
+	handleCrowdsaleEnd = () => (this.setState({crowdSaleIsActive: false}))
 
 	render() {
 		const {state, props} = this
@@ -202,12 +202,17 @@ export default class LandingCountDowns extends React.Component {
 						</div>
 					: 	<div className="row text-center CountDowns__counters">
 							<div className="small-12 medium-12 columns CountDowns__counter">
-								<CountDown
-									title="Продажа силы голоса закончится"
-									date={props.crowdsaleEndAt}
-									countFrom={props.crowdsaleEndAt.getTime() - props.crowdsaleStartAt.getTime()}
-									displayWhenZero
-								/>
+								{
+                  state.crowdSaleIsActive
+                  ? <CountDown
+    									title="Продажа силы голоса закончится"
+    									date={props.crowdsaleEndAt}
+                      onEnd={this.handleCrowdsaleEnd}
+    									countFrom={props.crowdsaleEndAt.getTime() - props.crowdsaleStartAt.getTime()}
+    									displayWhenZero
+    								/>
+                  : <LandingCrowdsaleStats />
+                }
 							</div>
 							<div className="small-12 medium-12 columns CountDowns__counter" style={{paddingTop: 40}}>
 								{

@@ -24,9 +24,9 @@ export function* loadFollows(method, account, type, start = '', limit = 100) {
                 })
                 return m2
             })
-            const count = m.get('result').filter(a => {
+            const count = m.get('result') ? m.get('result').filter(a => {
                 return a.get(0) === "blog";
-            }).size;
+            }).size : 0;
             return m.merge({count, [type]: {loading: true, error: null}})
         }
     }})

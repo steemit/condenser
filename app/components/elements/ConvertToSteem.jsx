@@ -1,7 +1,7 @@
 /* eslint react/prop-types: 0 */
 import React from 'react'
 import ReactDOM from 'react-dom';
-import {reduxForm} from 'redux-form';
+import {reduxForm} from 'redux-form'; // @deprecated, instead use: app/utils/ReactForm.js
 import transaction from 'app/redux/Transaction'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import TransactionError from 'app/components/elements/TransactionError'

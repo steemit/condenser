@@ -160,7 +160,7 @@ class LoginForm extends Component {
             null
 
         const form = (
-            <form onSubmit={handleSubmit(data => {
+            <form onSubmit={handleSubmit(({data}) => {
                 // bind redux-form to react-redux
                 console.log('Login\tdispatchSubmit');
                 return dispatchSubmit(data, loginBroadcastOperation, afterLoginRedirectToWelcome)

@@ -546,7 +546,11 @@ const en = 	{
 	by_verifying_you_agree_with: 'By verifying your account you agree to the',
 	by_verifying_you_agree_with_privacy_policy: 'Privacy Policy',
 	by_verifying_you_agree_with_privacy_policy_of_website_APP_URL: 'of ' + APP_URL,
-	add_image_url: 'Profile picture url',
+	profile_image_url: 'Profile picture url',
+	profile_name: 'Display Name',
+	profile_about: 'About',
+	profile_location: 'Location',
+	profile_website: 'Website',
 	saved: 'Saved',
 	server_returned_error: 'server returned error',
 }

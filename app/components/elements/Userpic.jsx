@@ -20,7 +20,8 @@ class Userpic extends Component {
         } catch (e) {}
 
         if (url && /^(https?:)\/\//.test(url)) {
-            url = $STM_Config.img_proxy_prefix + '48x48/' + url;
+            const size = width && width > 48 ? '320x320' : '72x72'
+            url = $STM_Config.img_proxy_prefix + size + '/' + url;
         } else {
             if(hideIfDefault) {
                 return null;

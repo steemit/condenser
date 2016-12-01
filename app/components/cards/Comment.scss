@@ -75,7 +75,7 @@
   visibility: hidden;
   //width: 1rem;
   float: right;
-  a {
+  > a {
     color: $dark-gray;
     letter-spacing: 0.1rem;
     padding: 0 0.5rem;

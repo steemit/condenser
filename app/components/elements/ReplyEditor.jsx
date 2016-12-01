@@ -1,5 +1,5 @@
 import React from 'react';
-import {reduxForm} from 'redux-form'
+import {reduxForm} from 'redux-form' // @deprecated, instead use: app/utils/ReactForm.js
 import transaction from 'app/redux/Transaction';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer'
 import CategorySelector from 'app/components/cards/CategorySelector'

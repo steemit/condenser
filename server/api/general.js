@@ -7,7 +7,11 @@ import recordWebEvent from 'server/record_web_event';
 import {esc, escAttrs} from 'db/models';
 import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF} from 'server/utils';
 import coBody from 'co-body';
+import Mixpanel from 'mixpanel';
 // import Tarantool from 'db/tarantool';
+
+const mixpanel = config.mixpanel ? Mixpanel.init(config.mixpanel) : null;
+
 
 export default function useGeneralApi(app) {
     const router = koa_router({prefix: '/api/v1'});
@@ -144,6 +148,13 @@ export default function useGeneralApi(app) {
             })).catch(error => {
                 console.error('!!! Can\'t create account model in /accounts api', this.session.uid, error);
             });
+            if (mixpanel) {
+                mixpanel.track('Signup', {
+                    distinct_id: this.session.uid,
+                    ip: remote_ip
+                });
+                mixpanel.people.set(this.session.uid, {ip: remote_ip});
+            }
         } catch (error) {
             console.error('Error in /accounts api call', this.session.uid, error.toString());
             this.body = JSON.stringify({error: error.message});
@@ -193,6 +204,11 @@ export default function useGeneralApi(app) {
             );
             if (db_account) this.session.user = db_account.user_id;
             this.body = JSON.stringify({status: 'ok'});
+            const remote_ip = getRemoteIp(this.req);
+            if (mixpanel) {
+                mixpanel.people.set(this.session.uid, {ip: remote_ip, $ip: remote_ip});
+                mixpanel.people.increment(this.session.uid, 'Visits', 1);
+            }
         } catch (error) {
             console.error('Error in /login_account api call', this.session.uid, error.message);
             this.body = JSON.stringify({error: error.message});
@@ -260,6 +276,22 @@ export default function useGeneralApi(app) {
                 yield models.Page.create(escAttrs({permlink: page, views}), {logging: false});
             }
             this.body = JSON.stringify({views});
+            if (mixpanel) {
+                let referring_domain = '';
+                if (ref) {
+                    const matches = ref.match(/^https?\:\/\/([^\/?#]+)(?:[\/?#]|$)/i);
+                    referring_domain = matches && matches[1];
+                }
+                mixpanel.track('PageView', {
+                    distinct_id: this.session.uid,
+                    Page: page,
+                    ip: remote_ip,
+                    $referrer: ref,
+                    $referring_domain: referring_domain
+                });
+                mixpanel.people.set_once(this.session.uid, '$referrer', ref);
+                mixpanel.people.set_once(this.session.uid, 'FirstPage', page);
+            }
         } catch (error) {
             console.error('Error in /page_view api call', this.session.uid, error.message);
             this.body = JSON.stringify({error: error.message});

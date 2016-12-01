@@ -15,10 +15,10 @@ export default function reactForm({name, instance, fields, initialValues, valida
 
     const formState = instance.state = instance.state || {}
     formState[name] = {
-        // validate: () => isValid(instance, fields, validation),
+        // validate: () => setFormState(instance, fields, validation),
         handleSubmit: (fn) => (e) => {
             e.preventDefault()
-            const valid = isValid(name, instance, fields, validation)
+            const {valid} = setFormState(name, instance, fields, validation)
             if(!valid) return
             const data = getData(fields, instance.state)
             let formValid = true
@@ -104,7 +104,7 @@ export default function reactForm({name, instance, fields, initialValues, valida
 
             instance.setState(
                 {[fieldName]: v},
-                () => {isValid(name, instance, fields, validation)}
+                () => {setFormState(name, instance, fields, validation)}
             )
         }
 
@@ -117,8 +117,9 @@ export default function reactForm({name, instance, fields, initialValues, valida
     }
 }
 
-function isValid(name, instance, fields, validation) {
+function setFormState(name, instance, fields, validation) {
     let formValid = true
+    let formTouched = false
     const v = validation(getData(fields, instance.state))
     for(const field of fields) {
         const fieldName = n(field)
@@ -126,13 +127,15 @@ function isValid(name, instance, fields, validation) {
         const error = validate ? validate : null
         const value = {...(instance.state[fieldName] || {})}
         value.error = error
+        formTouched = formTouched || value.touched
         if(error) formValid = false
         instance.setState({[fieldName]: value})
     }
     const fs = {...(instance.state[name] || {})}
     fs.valid = formValid
+    fs.touched = formTouched
     instance.setState({[name]: fs})
-    return formValid
+    return fs
 }
 
 function getData(fields, state) {

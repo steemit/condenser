@@ -36,10 +36,10 @@ class Settings extends React.Component {
             })
         })
         this.handleSubmitForm =
-            this.state.accountSettings.handleSubmit((data, event) => this.handleSubmit(data, event))
+            this.state.accountSettings.handleSubmit(args => this.handleSubmit(args))
     }
 
-    handleSubmit = () => {
+    handleSubmit = ({updateInitialValues}) => {
         let {metaData} = this.props
         if (!metaData) metaData = {}
         if(!metaData.profile) metaData.profile = {}
@@ -96,6 +96,7 @@ class Settings extends React.Component {
                 })
                 // remove successMessage after a while
                 setTimeout(() => this.setState({successMessage: ''}), 2000)
+                updateInitialValues()
             }
         })
     }

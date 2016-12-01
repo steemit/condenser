@@ -82,12 +82,12 @@ class PostsIndex extends React.Component {
                 </div>;
                 markNotificationRead = <MarkNotificationRead fields="feed" account={account_name} />
             } else {
-                emptyText = translate('user_hasnt_followed_anything_yet', {name: account_name});
+                emptyText = <div>{translate('user_hasnt_followed_anything_yet', {name: account_name})}</div>;
             }
         } else {
             posts = this.getPosts(order, category);
             if (posts !== null && posts.size === 0) {
-                emptyText = `No ` + topics_order + (category ? ` #` + category : '') +  ` posts found`;
+                emptyText = <div>{`No ` + topics_order + (category ? ` #` + category : '') +  ` posts found`}</div>;
             }
         }
 
@@ -102,14 +102,15 @@ class PostsIndex extends React.Component {
                         <Topics order={topics_order} current={category} compact />
                     </div>
                     {markNotificationRead}
-                    <PostsList
-                        ref="list"
-                        posts={posts ? posts : Immutable.List()}
-                        loading={fetching}
-                        category={category}
-                        loadMore={this.loadMore}
-                        emptyText = {emptyText}
-                        showSpam={showSpam} />
+                    {(!fetching && (posts && !posts.size)) ? emptyText :
+                        <PostsList
+                            ref="list"
+                            posts={posts ? posts : Immutable.List()}
+                            loading={fetching}
+                            category={category}
+                            loadMore={this.loadMore}
+                            showSpam={showSpam}
+                        />}
                 </div>
                 <div className="PostsIndex__topics column shrink show-for-large">
                     <Topics order={topics_order} current={category} compact={false} />

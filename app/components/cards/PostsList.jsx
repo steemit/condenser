@@ -24,10 +24,6 @@ class PostsList extends React.Component {
         loading: PropTypes.bool.isRequired,
         category: PropTypes.string,
         loadMore: PropTypes.func,
-        emptyText: PropTypes.oneOfType([
-            PropTypes.string,
-            PropTypes.node,
-        ]),
         showSpam: PropTypes.bool,
         fetchState: PropTypes.func.isRequired,
         pathname: PropTypes.string,
@@ -54,20 +50,6 @@ class PostsList extends React.Component {
     componentDidMount() {
         this.attachScrollListener();
     }
-
-    // shouldComponentUpdate(np, ns) {
-    //     return (
-    //         np.posts !== this.props.posts ||
-    //         np.ignoreLoading !== this.props.ignoreLoading ||
-    //         np.loadMore !== this.props.loadMore ||
-    //         np.showSpam !== this.props.showSpam ||
-    //         np.loading !== this.props.loading ||
-    //         np.category !== this.props.category ||
-    //         ns.showNegativeComments !== this.state.showNegativeComments ||
-    //         ns.showPost !== this.state.showPost ||
-    //         ns.thumbSize !== this.state.thumbSize
-    //     );
-    // }
 
     componentWillUpdate() {
         const location = `${window.location.pathname}${window.location.search}${window.location.hash}`;
@@ -170,16 +152,10 @@ class PostsList extends React.Component {
     }
 
     render() {
-        const {posts, showSpam, loading, category, emptyText, content,
+        const {posts, showSpam, loading, category, content,
             follow, account} = this.props;
         const {thumbSize, showPost} = this.state
-
-        if (!loading && (posts && !posts.size) && emptyText) {
-            return <Callout>{emptyText}</Callout>;
-        }
-
         const postsInfo = [];
-
         posts.forEach(item => {
             const cont = content.get(item);
             if(!cont) {
@@ -236,12 +212,11 @@ import {connect} from 'react-redux'
 export default connect(
     (state, props) => {
         const pathname = state.app.get('location').pathname;
-
         const current = state.user.get('current')
         const username = current ? current.get('username') : null
         const content = state.global.get('content');
         const follow = state.global.getIn(['follow', 'follow', username, 'result']);
-        return {...props, content, follow, pathname};
+        return {...props, username, content, follow, pathname};
     },
     dispatch => ({
         fetchState: (pathname) => {

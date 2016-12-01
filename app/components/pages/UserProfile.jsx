@@ -27,7 +27,6 @@ import DateJoinWrapper from 'app/components/elements/DateJoinWrapper';
 import { translate } from 'app/Translator';
 import WalletSubMenu from 'app/components/elements/WalletSubMenu';
 import Userpic from 'app/components/elements/Userpic';
-import Immutable from "immutable";
 
 export default class UserProfile extends React.Component {
     constructor() {
@@ -202,19 +201,27 @@ export default class UserProfile extends React.Component {
            //   -- see also GlobalReducer.js
            if( account.posts || account.comments )
            {
-              tab_content = <PostsList
-                  emptyText={translate('user_hasnt_made_any_posts_yet', {name})}
-                  posts={accountImm.get('posts') || accountImm.get('comments')}
-                  loading={fetching}
-                  category="comments"
-                  loadMore={this.loadMore}
-                  showSpam />;
+                let posts = accountImm.get('posts') || accountImm.get('comments');
+                if (!fetching && (posts && !posts.size)) {
+                    tab_content = <div>{translate('user_hasnt_made_any_posts_yet', {name})}</div>;
+                } else {
+                  tab_content = (
+                        <PostsList
+                            posts={posts}
+                            loading={fetching}
+                            category="comments"
+                            loadMore={this.loadMore}
+                            showSpam
+                        />
+                    );
+                }
            }
            else {
               tab_content = (<center><LoadingIndicator type="circle" /></center>);
            }
         } else if(!section || section === 'blog') {
             if (account.blog) {
+                let posts = accountImm.get('blog');
                 const emptyText = isMyAccount ? <div>
                     Looks like you haven't posted anything yet.<br /><br />
                     <Link to="/submit.html">Submit a Story</Link><br />
@@ -222,30 +229,44 @@ export default class UserProfile extends React.Component {
                     <a href="/welcome">Read The Steemit Welcome Guide</a>
                 </div>:
                     <div>{translate('user_hasnt_started_bloggin_yet', {name})}</div>;
-                tab_content = <PostsList
-                    emptyText={emptyText}
-                    account={account.name}
-                    posts={accountImm.get('blog')}
-                    loading={fetching}
-                    category="blog"
-                    loadMore={this.loadMore}
-                    showSpam />;
+
+                if (!fetching && (posts && !posts.size)) {
+                    tab_content = emptyText;
+                } else {
+                    tab_content = (
+                        <PostsList
+                            account={account.name}
+                            posts={posts}
+                            loading={fetching}
+                            category="blog"
+                            loadMore={this.loadMore}
+                            showSpam
+                        />
+                    );
+                }
             } else {
                 tab_content = (<center><LoadingIndicator type="circle" /></center>);
             }
         }
         else if( (section === 'recent-replies')) {
             if (account.recent_replies) {
-              tab_content = <div>
-                  <PostsList
-                  emptyText={translate('user_hasnt_had_any_replies_yet', {name}) + '.'}
-                  posts={accountImm.get('recent_replies')}
-                  loading={fetching}
-                  category="recent_replies"
-                  loadMore={this.loadMore}
-                  showSpam={false} />
-                  {isMyAccount && <MarkNotificationRead fields="comment_reply" account={account.name} />}
-              </div>;
+                let posts = accountImm.get('recent_replies');
+                if (!fetching && (posts && !posts.size)) {
+                    tab_content = <div>{translate('user_hasnt_had_any_replies_yet', {name}) + '.'}</div>;
+                } else {
+                    tab_content = (
+                        <div>
+                            <PostsList
+                                posts={posts}
+                                loading={fetching}
+                                category="recent_replies"
+                                loadMore={this.loadMore}
+                                showSpam={false}
+                            />
+                            {isMyAccount && <MarkNotificationRead fields="comment_reply" account={account.name} />}
+                        </div>
+                    );
+                }
           } else {
               tab_content = (<center><LoadingIndicator type="circle" /></center>);
           }

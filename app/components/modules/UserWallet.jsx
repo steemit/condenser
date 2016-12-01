@@ -263,7 +263,7 @@ function getPriceFromPair(_price_, _tokensPair_){
   try {
     return parseFloat(pair[0][0])/parseFloat(pair[1][0])
   } catch(e) {
-    console.log(error);
+    console.log(e);
     return 0
   }
 }

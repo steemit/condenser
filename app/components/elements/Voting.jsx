@@ -249,6 +249,7 @@ export default connect(
     (state, ownProps) => {
         const post = state.global.getIn(['content', ownProps.post]) || 0
         if (!post) return ownProps
+
         const author = post.get('author')
         const permlink = post.get('permlink')
         const last_payout = post.get('last_payout')
@@ -263,6 +264,7 @@ export default connect(
         const username = current_account ? current_account.get('username') : null;
         const vesting_shares = current_account ? current_account.get('vesting_shares') : 0.0;
         const voting = state.global.get(`transaction_vote_active_${author}_${permlink}`)
+        
         let myVote = null;
         if (username && active_votes) {
             const vote = active_votes.find(el => el.get('voter') === username)

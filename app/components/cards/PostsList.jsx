@@ -7,7 +7,7 @@ import Callout from 'app/components/elements/Callout';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {findParent} from 'app/utils/DomUtils';
 import Icon from 'app/components/elements/Icon';
-import Immutable from "immutable";
+import {List} from "immutable";
 
 function topPosition(domElt) {
     if (!domElt) {
@@ -20,7 +20,6 @@ class PostsList extends React.Component {
 
     static propTypes = {
         posts: PropTypes.object.isRequired,
-        postsInfo: PropTypes.object.isRequired,
         loading: PropTypes.bool.isRequired,
         category: PropTypes.string,
         loadMore: PropTypes.func,
@@ -51,9 +50,14 @@ class PostsList extends React.Component {
         // this.shouldComponentUpdate = shouldComponentUpdate(this, 'PostsList')
     }
 
+    componentDidMount() {
+        this.attachScrollListener();
+    }
+
     shouldComponentUpdate(np, ns) {
         return (
             np.posts !== this.props.posts ||
+            np.ignoreLoading !== this.props.ignoreLoading ||
             np.loadMore !== this.props.loadMore ||
             np.showSpam !== this.props.showSpam ||
             np.loading !== this.props.loading ||
@@ -62,10 +66,6 @@ class PostsList extends React.Component {
             ns.showPost !== this.state.showPost ||
             ns.thumbSize !== this.state.thumbSize
         );
-    }
-
-    componentDidMount() {
-        this.attachScrollListener();
     }
 
     componentWillUnmount() {
@@ -169,14 +169,29 @@ class PostsList extends React.Component {
     }
 
     render() {
-        console.log('PostsList render')
-        const {posts, loading, category, emptyText, postsInfo} = this.props;
-        const {account} = this.props
+        const {posts, showSpam, loading, category, emptyText, content,
+            username, get_following, account} = this.props;
         const {thumbSize, showPost} = this.state
 
         if (!loading && (posts && !posts.size) && emptyText) {
             return <Callout>{emptyText}</Callout>;
         }
+
+        const postsInfo = [];
+
+        posts.forEach(item => {
+            const cont = content.get(item);
+            if(!cont) {
+                console.error('PostsList --> Missing cont key', item)
+                return
+            }
+            const key = ['result', cont.get('author')]
+            const ignore = get_following ? get_following.getIn(key, List()).contains('ignore') : false
+            const {hide, netVoteSign, authorRepLog10} = cont.get('stats').toJS()
+            if(!(ignore || hide) || showSpam) // rephide
+                postsInfo.push({item, ignore, netVoteSign, authorRepLog10})
+        });
+
         const renderSummary = items => items.map(item => <li key={item.item}>
             <PostSummary
                 account={account}
@@ -214,33 +229,20 @@ class PostsList extends React.Component {
     }
 }
 
-import {List} from 'immutable'
+// import {List, Map} from 'immutable'
 import {connect} from 'react-redux'
 
 export default connect(
     (state, props) => {
-        const {posts, showSpam} = props;
-        const postsInfo = [];
         const pathname = state.app.get('location').pathname;
 
         const current = state.user.get('current')
         const username = current ? current.get('username') : null
         const content = state.global.get('content');
-
-        posts.forEach(item => {
-            const cont = content.get(item);
-            if(!cont) {
-                console.error('PostsList --> Missing cont key', item)
-                return
-            }
-            const key = ['follow', 'get_following', username, 'result', cont.get('author')]
-            const ignore = username ? state.global.getIn(key, List()).contains('ignore') : false
-            const {hide, netVoteSign, authorRepLog10} = cont.get('stats').toJS()
-            if(!(ignore || hide) || showSpam) // rephide
-                postsInfo.push({item, ignore, netVoteSign, authorRepLog10})
-        })
-
-        return {...props, postsInfo, pathname};
+        const get_following = state.global.getIn(['follow', 'get_following', username]);
+        const ignoreLoading = !get_following ? false : get_following.getIn(['ignore', 'loading']);
+        // console.log("get_following:", get_following ? get_following.toJS() : null);
+        return {...props, content, ignoreLoading, get_following, pathname};
     },
     dispatch => ({
         fetchState: (pathname) => {

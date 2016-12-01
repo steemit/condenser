@@ -37,6 +37,19 @@ export default class UserProfile extends React.Component {
         this.loadMore = this.loadMore.bind(this);
     }
 
+    shouldComponentUpdate(np) {
+        return (
+            np.current_user !== this.props.current_user ||
+            np.accounts !== this.props.accounts ||
+            np.wifShown !== this.props.wifShown ||
+            np.global_status !== this.props.global_status ||
+            np.follow !== this.props.follow ||
+            np.loading !== this.props.loading ||
+            np.location.pathname !== this.props.location.pathname ||
+            np.routeParams.accountname !== this.props.routeParams.accountname
+        )
+    }
+
     componentWillUnmount() {
         this.props.clearTransferDefaults()
     }
@@ -54,14 +67,14 @@ export default class UserProfile extends React.Component {
           default: console.log('unhandled category:', category);
         }
 
-        if (isFetchingOrRecentlyUpdated(this.props.global.get('status'), order, category)) return;
+        if (isFetchingOrRecentlyUpdated(this.props.global_status, order, category)) return;
         const [author, permlink] = last_post.split('/');
         this.props.requestData({author, permlink, order, category, accountname});
     }
 
     render() {
         const {
-            props: {current_user, wifShown},
+            props: {current_user, wifShown, global_status, follow},
             onPrint
         } = this;
         let { accountname, section } = this.props.routeParams;
@@ -76,7 +89,7 @@ export default class UserProfile extends React.Component {
 
         // const isMyAccount = current_user ? current_user.get('username') === accountname : false;
         let account
-        let accountImm = this.props.global.getIn(['accounts', accountname]);
+        let accountImm = this.props.accounts.get(accountname);
         if( accountImm ) {
             account = accountImm.toJS();
         }
@@ -85,16 +98,13 @@ export default class UserProfile extends React.Component {
         }
 
         let followerCount, followingCount;
-        const followers = this.props.global.getIn( ['follow', 'get_followers', accountname] );
-        const following = this.props.global.getIn( ['follow', 'get_following', accountname] );
-
+        const followers = follow ? follow.getIn( ['get_followers', accountname] ) : null;
+        const following = follow ? follow.getIn( ['get_following', accountname] ) : null;
         if(followers && followers.has('result') && followers.has('blog')) {
             const status_followers = followers.get('blog')
             const followers_loaded = status_followers.get('loading') === false && status_followers.get('error') == null
             if (followers_loaded) {
-                followerCount = followers.get('result').filter(a => {
-                    return a.get(0) === "blog";
-                }).size;
+                followerCount = followers.get('count');
             }
         }
 
@@ -102,9 +112,7 @@ export default class UserProfile extends React.Component {
             const status_following = following.get('blog')
             const following_loaded = status_following.get('loading') === false && status_following.get('error') == null
             if (following_loaded) {
-                followingCount = following.get('result').filter(a => {
-                    return a.get(0) === "blog";
-                }).size;
+                followingCount = following.get('count');
             }
         }
 
@@ -114,7 +122,7 @@ export default class UserProfile extends React.Component {
         const name = account.name;
         let tab_content = null;
 
-        const global_status = this.props.global.get('status');
+        // const global_status = this.props.global.get('status');
         const status = global_status ? global_status.getIn([section, 'by_author']) : null;
         const fetching = (status && status.fetching) || this.props.loading;
 
@@ -129,8 +137,8 @@ export default class UserProfile extends React.Component {
         if( section === 'transfers' ) {
             walletClass = 'active'
             tab_content = <div>
-                <UserWallet global={this.props.global}
-                          account={account}
+                <UserWallet
+                          account={accountImm}
                           showTransfer={this.props.showTransfer}
                           current_user={current_user}
                           withdrawVesting={this.props.withdrawVesting} />
@@ -139,14 +147,14 @@ export default class UserProfile extends React.Component {
         }
         else if( section === 'curation-rewards' ) {
             rewardsClass = "active";
-            tab_content = <CurationRewards global={this.props.global}
+            tab_content = <CurationRewards
                           account={account}
                           current_user={current_user}
                           />
         }
         else if( section === 'author-rewards' ) {
             rewardsClass = "active";
-            tab_content = <AuthorRewards global={this.props.global}
+            tab_content = <AuthorRewards
                           account={account}
                           current_user={current_user}
                           />
@@ -370,11 +378,13 @@ module.exports = {
             // const current_account = current_user && state.global.getIn(['accounts', current_user.get('username')])
             return {
                 discussions: state.global.get('discussion_idx'),
-                global: state.global,
                 current_user,
                 // current_account,
                 wifShown,
-                loading: state.app.get('loading')
+                loading: state.app.get('loading'),
+                global_status: state.global.get('status'),
+                accounts: state.global.get('accounts'),
+                follow: state.global.get('follow')
             };
         },
         dispatch => ({

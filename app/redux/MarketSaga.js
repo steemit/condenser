@@ -73,7 +73,7 @@ export function* fetchOpenOrders(set_user_action) {
        if(account) {
            account = fromJS(account)
            yield put(MarketReducer.actions.receiveAccount({ account }))
-           yield put(g.actions.receiveAccount({ account }))
+           yield put(g.actions.receiveAccount({ account })) // TODO: move out of MarketSaga. See notes in #741
        }
     } catch (error) {
         console.error('~~ Saga fetchOpenOrders error ~~>', error);

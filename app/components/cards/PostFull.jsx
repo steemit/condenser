@@ -21,6 +21,7 @@ import {Long} from 'bytebuffer'
 import {List} from 'immutable'
 import {repLog10, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import DMCAList from 'app/utils/DMCAList'
+import ShareMenu from 'app/components/elements/ShareMenu';
 
 function TimeAuthorCategory({content, authorRepLog10, showTags}) {
     return (
@@ -274,7 +275,7 @@ class PostFull extends React.Component {
                                     {' '}{showEditOption   && !showEdit  && <a onClick={onShowEdit}>Edit</a>}
                                     {' '}{showDeleteOption && !showReply && <a onClick={onDeletePost}>Delete</a>}
                                 </span>}
-                            <FoundationDropdownMenu menu={share_menu} icon="share" label="Share" dropdownPosition="bottom" dropdownAlignment="right" />
+                            <ShareMenu menu={share_menu} />
                     </div>
                 </div>
                 <div className="row">

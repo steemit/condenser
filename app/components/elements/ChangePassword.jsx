@@ -210,7 +210,7 @@ const keyValidate = (values) => ({
     confirmSaved: ! values.confirmSaved ? translate('required') : null,
 })
 
-import {reduxForm} from 'redux-form'
+import {reduxForm} from 'redux-form' // @deprecated, instead use: app/utils/ReactForm.js
 export default reduxForm(
     { form: 'changePassword', fields: ['password', 'confirmPassword', 'confirmCheck', 'confirmSaved', 'twofa'] },
     // mapStateToProps

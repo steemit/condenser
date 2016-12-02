@@ -1,8 +1,14 @@
 .Comment {
   clear: both;
   margin-bottom: 2.4rem;
-  .Markdown p {
-    margin: 0.1rem 0 0.6rem 0;
+  .Markdown {
+    p {
+      margin: 0.1rem 0 0.6rem 0;
+    }
+
+    p:last-child {
+      margin-bottom: 0.2rem;
+    }
   }
 }
 
@@ -69,7 +75,7 @@
   visibility: hidden;
   //width: 1rem;
   float: right;
-  a {
+  > a {
     color: $dark-gray;
     letter-spacing: 0.1rem;
     padding: 0 0.5rem;
@@ -90,7 +96,6 @@
 
 .Comment__footer {
   margin-left: 62px;
-  margin-top: -0.4rem;
   color: $dark-gray;
   a {
     color: $dark-gray;

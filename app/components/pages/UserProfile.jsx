@@ -28,6 +28,7 @@ import { translate } from 'app/Translator';
 import WalletSubMenu from 'app/components/elements/WalletSubMenu';
 import Userpic from 'app/components/elements/Userpic';
 import Callout from 'app/components/elements/Callout';
+import normalizeProfile from 'app/utils/NormalizeProfile';
 
 export default class UserProfile extends React.Component {
     constructor() {
@@ -134,7 +135,6 @@ export default class UserProfile extends React.Component {
         const rep = repLog10(account.reputation);
 
         const isMyAccount = username === account.name
-        const name = account.name;
         let tab_content = null;
 
         // const global_status = this.props.global.get('status');
@@ -204,7 +204,7 @@ export default class UserProfile extends React.Component {
            {
                 let posts = accountImm.get('posts') || accountImm.get('comments');
                 if (!fetching && (posts && !posts.size)) {
-                    tab_content = <Callout>{translate('user_hasnt_made_any_posts_yet', {name})}</Callout>;
+                    tab_content = <Callout>{translate('user_hasnt_made_any_posts_yet', {name: accountname})}</Callout>;
                 } else {
                   tab_content = (
                         <PostsList
@@ -229,7 +229,7 @@ export default class UserProfile extends React.Component {
                     <a href="/steemit/@thecryptofiend/the-missing-faq-a-beginners-guide-to-using-steemit">Read The Beginner's Guide</a><br />
                     <a href="/welcome">Read The Steemit Welcome Guide</a>
                 </div>:
-                    translate('user_hasnt_started_bloggin_yet', {name});
+                    translate('user_hasnt_started_bloggin_yet', {name: accountname});
 
                 if (!fetching && (posts && !posts.size)) {
                     tab_content = <Callout>{emptyText}</Callout>;
@@ -253,7 +253,7 @@ export default class UserProfile extends React.Component {
             if (account.recent_replies) {
                 let posts = accountImm.get('recent_replies');
                 if (!fetching && (posts && !posts.size)) {
-                    tab_content = <Callout>{translate('user_hasnt_had_any_replies_yet', {name}) + '.'}</Callout>;
+                    tab_content = <Callout>{translate('user_hasnt_had_any_replies_yet', {name: accountname}) + '.'}</Callout>;
                 } else {
                     tab_content = (
                         <div>
@@ -366,6 +366,9 @@ export default class UserProfile extends React.Component {
             </div>
          </div>;
 
+        const {name, location, about, website} = normalizeProfile(account);
+        const website_label = website ? website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '') : null
+
         return (
             <div className="UserProfile">
 
@@ -377,13 +380,17 @@ export default class UserProfile extends React.Component {
                                 <Follow follower={username} following={accountname} what="blog" />
                             </div>
                         </div>
-                        <h2>
+
+                        <h3>
                             <Userpic account={account.name} hideIfDefault />
-                            {account.name}{' '}
-                            <Tooltip t={translate('this_is_users_reputations_score_it_is_based_on_history_of_votes', {name})}><span style={{fontSize: "80%"}}>({rep})</span></Tooltip>
-                        </h2>
+                            {name || account.name}{' '}
+                            <Tooltip t={translate('this_is_users_reputations_score_it_is_based_on_history_of_votes', {name: accountname})}>
+                                <span className="UserProfile__rep">({rep})</span>
+                            </Tooltip>
+                        </h3>
 
                         <div>
+                            {about && <p className="UserProfile__bio">{about}</p>}
                             <div className="UserProfile__stats">
                                 <span>
                                     <Link to={`/@${accountname}/followers`}>{followerCount ? translate('follower_count', {followerCount}) : translate('followers')}</Link>
@@ -392,8 +399,12 @@ export default class UserProfile extends React.Component {
                                 <span><Link to={`/@${accountname}`}>{translate('post_count', {postCount: account.post_count || 0})}</Link></span>
                                 <span><Link to={`/@${accountname}/followed`}>{followingCount ? translate('followed_count', {followingCount}) : translate('following')}</Link></span>
                             </div>
+                            <p className="UserProfile__info">
+                                {location && <span><Icon name="location" /> {location}</span>}
+                                {website && <span><Icon name="link" /> <a href={website}>{website_label}</a></span>}
+                                <Icon name="calendar" /> <DateJoinWrapper date={accountjoin}></DateJoinWrapper>
+                            </p>
                         </div>
-                        <DateJoinWrapper date={accountjoin}></DateJoinWrapper>
                     </div>
                 </div>
                 <div className="UserProfile__top-nav row expanded noPrint">
@@ -417,6 +428,7 @@ module.exports = {
             const wifShown = state.global.get('UserKeys_wifShown')
             const current_user = state.user.get('current')
             // const current_account = current_user && state.global.getIn(['accounts', current_user.get('username')])
+
             return {
                 discussions: state.global.get('discussion_idx'),
                 current_user,

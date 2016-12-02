@@ -110,6 +110,6 @@ export default class HelpContent extends React.Component {
         value = value.replace(/<Icon name="([A-Za-z0-9\_\-]+)" \/>/gi, (match, name) => {
             return renderToString(<Icon name={name} />);
         });
-        return <MarkdownViewer className="HelpContent" text={value} />;
+        return <MarkdownViewer className="HelpContent" text={value} allowDangerousHTML />;
     }
 }

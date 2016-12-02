@@ -52,6 +52,14 @@ ul.PostsList__summaries {
     > a:visited {
       color: #777;
     }
+    .Icon {
+      margin: 0 0.25rem;
+      svg {
+        width: 0.85rem;
+        height: 0.85rem;
+        vertical-align: 5%;
+      }
+    }
   }
 }
 .PostSummary__collapse {

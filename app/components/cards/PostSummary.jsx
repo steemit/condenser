@@ -97,7 +97,7 @@ class PostSummary extends React.Component {
         let content_title = <h1 className="entry-title">
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>
                 {title_text}
-                {full_power && <Icon name="steem" />}
+                {full_power && <span title="Powered Up 100%"><Icon name="steem" /></span>}
             </a>
         </h1>;
 

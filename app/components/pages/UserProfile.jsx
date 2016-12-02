@@ -355,7 +355,7 @@ export default class UserProfile extends React.Component {
                                 <Icon name="calendar" /> <DateJoinWrapper date={accountjoin}></DateJoinWrapper>
                             </p>
                         </div>
-                        <div className="UserProfile__buttons show-for-small-only">
+                        <div className="UserProfile__buttons_mobile show-for-small-only">
                             <Follow follower={username} following={accountname} what="blog" />
                         </div>
                     </div>

@@ -211,7 +211,7 @@ class Market extends React.Component {
             }, {})
         }
 
-        let account     = this.props.account
+        let account     = this.props.account ? this.props.account.toJS() : null;
         let open_orders = this.props.open_orders;
         let orderbook   = aggOrders(normalizeOrders(this.props.orderbook));
 

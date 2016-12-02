@@ -1,41 +1,62 @@
-import {fromJS, Map} from 'immutable'
+import {fromJS, Map, Set, List} from 'immutable'
 import {call, put} from 'redux-saga/effects';
 import {Apis} from 'shared/api_client';
-import {List} from 'immutable'
+
+/**
+    This loadFollows both 'blog' and 'ignore'
+*/
 
 // Test limit with 2 (not 1, infinate looping)
 export function* loadFollows(method, account, type, start = '', limit = 100) {
     const res = fromJS(yield Apis.follow(method, account, start, type, limit))
     // console.log('res.toJS()', res.toJS())
+
     let cnt = 0
-    let lastFollowing = null
-    const key = method === "get_following" ? "following" : "follower";
+    let lastAccountName = null
+    const accountNameKey = method === "get_following" ? "following" : "follower";
+
     yield put({type: 'global/UPDATE', payload: {
         key: ['follow', method, account],
         notSet: Map(),
         updater: m => {
-            m = m.update('result', Map(), m2 => {
-                res.forEach(value => {
-                    cnt++
-                    let what = value.get('what')
-                    if(typeof what === 'string') what = new List([what]) // TODO: after shared-db upgrade, this line can be removed
-                    const following = lastFollowing = value.get(key)
-                    m2 = m2.set(following, what)
+            m = m.asMutable()
+            res.forEach(value => {
+                cnt++
+
+                let whatList = value.get('what')
+                if(typeof whatList === 'string')
+                    whatList = new List([whatList]) // TODO: after shared-db upgrade, this line can be removed
+
+                const accountName = lastAccountName = value.get(accountNameKey)
+                whatList.forEach(what => {
+                    //currently this is always true: what === type
+                    m.update(what + '_loading', Set(), s => s.add(accountName))
                 })
-                return m2
             })
-            const count = m.get('result') ? m.get('result').filter(a => {
-                return a.get(0) === "blog";
-            }).size : 0;
-            return m.merge({count, [type]: {loading: true, error: null}})
+            m.merge({[type]: {loading: true, error: null}})
+            return m.asImmutable()
         }
     }})
+
     if(cnt === limit) {
-        yield call(loadFollows, method, account, type, lastFollowing)
+        // This is paging each block of up to limit results
+        yield call(loadFollows, method, account, type, lastAccountName)
     } else {
+        // This condition happens only once at the very end of the list.
+        // Every account has a different followers and following list for: blog, ignore
         yield put({type: 'global/UPDATE', payload: {
             key: ['follow', method, account],
-            updater: m => m.merge({[type]: {loading: false, error: null}})
+            updater: m => {
+                m = m.asMutable()
+                const result = m.get(type + '_loading')
+                m.delete(type + '_loading')
+                m.merge({
+                    [type + '_count']: result.size,
+                    [type + '_result']: result,
+                    [type]: {loading: false, error: null},
+                })
+                return m.asImmutable()
+            }
         }})
     }
 }

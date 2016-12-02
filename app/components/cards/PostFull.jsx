@@ -266,10 +266,10 @@ class PostFull extends React.Component {
                     <div className="column shrink">
                             {!readonly && <Reblog author={author} permlink={permlink} />}
                             {!readonly &&
-                            <span className="PostFull__reply">
-                                {showReplyOption && <a onClick={onShowReply}>Reply</a>}
-                                {' '}{showEditOption   && !showEdit  && <a onClick={onShowEdit}>Edit</a>}
-                                {' '}{showDeleteOption && !showReply && <a onClick={onDeletePost}>Delete</a>}
+                                <span className="PostFull__reply">
+                                    {showReplyOption && <a onClick={onShowReply}>Reply</a>}
+                                    {' '}{showEditOption   && !showEdit  && <a onClick={onShowEdit}>Edit</a>}
+                                    {' '}{showDeleteOption && !showReply && <a onClick={onDeletePost}>Delete</a>}
                                 </span>}
                             <span className="PostFull__responses">
                                 <Link to={link} title={pluralize('Responses', content.children, true)}>

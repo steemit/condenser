@@ -19,15 +19,23 @@ export default class PageViewsCounter extends React.Component {
         this.last_page = null;
     }
 
+    pageView() {
+        let ref = document.referrer || '';
+        if (ref.match('://' + window.location.hostname)) ref = '';
+        recordPageView(window.location.pathname, ref).then(views => this.setState({views}));
+        this.last_page = window.location.pathname;
+    }
+
+    componentDidMount() {
+        this.pageView();
+    }
+
     shouldComponentUpdate(nextProps, nextState) {
         return nextState.views !== this.state.views || window.location.pathname !== this.last_page;
     }
 
     componentDidUpdate() {
-        let ref = document.referrer || '';
-        if (ref.match('://' + window.location.hostname)) ref = '';
-        recordPageView(window.location.pathname, ref).then(views => this.setState({views}));
-        this.last_page = window.location.pathname;
+        this.pageView();
     }
 
     render() {

@@ -8,7 +8,7 @@ import {esc, escAttrs} from 'db/models';
 import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF} from 'server/utils';
 import coBody from 'co-body';
 import Mixpanel from 'mixpanel';
-// import Tarantool from 'db/tarantool';
+import Tarantool from 'db/tarantool';
 
 const mixpanel = config.mixpanel ? Mixpanel.init(config.mixpanel) : null;
 
@@ -269,14 +269,15 @@ export default function useGeneralApi(app) {
         console.log('-- /page_view -->', this.session.uid, page);
         const remote_ip = getRemoteIp(this.req);
         try {
-            let views = 1;
+            let views = 1, unique = true;
             if (config.tarantool) {
-                yield Tarantool.instance().call('page_view', page, remote_ip, this.session.uid, ref);
+                const res = yield Tarantool.instance().call('page_view', page, remote_ip, this.session.uid, ref);
+                unique = res[0][0];
             }
             const page_model = yield models.Page.findOne(
                 {attributes: ['id', 'views'], where: {permlink: esc(page)}, logging: false}
             );
-            if (page_model) {
+            if (page_model && unique) {
                 views = page_model.views + 1;
                 yield yield models.Page.update({views}, {where: {id: page_model.id}, logging: false});
             } else {

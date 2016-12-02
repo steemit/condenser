@@ -5,7 +5,7 @@ import Icon from 'app/components/elements/Icon.jsx';
 export default class ShareMenu extends React.Component {
 
     static propTypes = {
-        items: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
+        menu: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
         title: React.PropTypes.string
     };
 

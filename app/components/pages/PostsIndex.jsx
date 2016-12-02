@@ -9,11 +9,14 @@ import {isFetchingOrRecentlyUpdated} from 'app/utils/StateFunctions';
 import {Link} from 'react-router';
 import MarkNotificationRead from 'app/components/elements/MarkNotificationRead';
 import { translate } from 'app/Translator';
+import Immutable from "immutable";
+import Callout from 'app/components/elements/Callout';
 
 class PostsIndex extends React.Component {
 
     static propTypes = {
         discussions: PropTypes.object,
+        accounts: PropTypes.object,
         status: PropTypes.object,
         routeParams: PropTypes.object,
         requestData: PropTypes.func,
@@ -69,7 +72,7 @@ class PostsIndex extends React.Component {
             const account_name = order.slice(1);
             order = 'by_feed';
             topics_order = 'trending';
-            posts = this.props.global.getIn(['accounts', account_name, 'feed']);
+            posts = this.props.accounts.getIn([account_name, 'feed']);
             const isMyAccount = this.props.current_user && this.props.current_user.get('username') === account_name;
             if (isMyAccount) {
                 emptyText = <div>
@@ -80,12 +83,12 @@ class PostsIndex extends React.Component {
                 </div>;
                 markNotificationRead = <MarkNotificationRead fields="feed" account={account_name} />
             } else {
-                emptyText = translate('user_hasnt_followed_anything_yet', {name: account_name});
+                emptyText = <div>{translate('user_hasnt_followed_anything_yet', {name: account_name})}</div>;
             }
         } else {
             posts = this.getPosts(order, category);
             if (posts !== null && posts.size === 0) {
-                emptyText = `No ` + topics_order + (category ? ` #` + category : '') +  ` posts found`;
+                emptyText = <div>{`No ` + topics_order + (category ? ` #` + category : '') +  ` posts found`}</div>;
             }
         }
 
@@ -100,13 +103,15 @@ class PostsIndex extends React.Component {
                         <Topics order={topics_order} current={category} compact />
                     </div>
                     {markNotificationRead}
-                    <PostsList ref="list"
-                        posts={posts ? posts.toArray() : []}
-                        loading={fetching}
-                        category={category}
-                        loadMore={this.loadMore}
-                        emptyText = {emptyText}
-                        showSpam={showSpam} />
+                    {(!fetching && (posts && !posts.size)) ? <Callout>{emptyText}</Callout> :
+                        <PostsList
+                            ref="list"
+                            posts={posts ? posts : Immutable.List()}
+                            loading={fetching}
+                            category={category}
+                            loadMore={this.loadMore}
+                            showSpam={showSpam}
+                        />}
                 </div>
                 <div className="PostsIndex__topics column shrink show-for-large">
                     <Topics order={topics_order} current={category} compact={false} />
@@ -125,7 +130,7 @@ module.exports = {
                 discussions: state.global.get('discussion_idx'),
                 status: state.global.get('status'),
                 loading: state.app.get('loading'),
-                global: state.global,
+                accounts: state.global.get('accounts'),
                 current_user: state.user.get('current')
             };
         },

@@ -219,7 +219,7 @@ export default connect(
         const current = state.user.get('current')
         const username = current ? current.get('username') : null
         const content = state.global.get('content');
-        const follow = state.global.getIn(['follow', 'follow', username, 'result']);
+        const follow = state.global.getIn(['follow', 'get_following', username, 'result']);
         return {...props, username, content, follow, pathname};
     },
     dispatch => ({

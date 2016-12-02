@@ -112,6 +112,30 @@ namespace chainbase {
    template<typename Constructor, typename Allocator> \
    OBJECT_TYPE( Constructor&& c, Allocator&&  ) { c(*this); }
 
+   template< typename value_type >
+   class undo_state
+   {
+      public:
+         typedef typename value_type::id_type                      id_type;
+         typedef allocator< std::pair<const id_type, value_type> > id_value_allocator_type;
+         typedef allocator< id_type >                              id_allocator_type;
+
+         template<typename T>
+         undo_state( allocator<T> al )
+         :old_values( id_value_allocator_type( al.get_segment_manager() ) ),
+          removed_values( id_value_allocator_type( al.get_segment_manager() ) ),
+          new_ids( id_allocator_type( al.get_segment_manager() ) ){}
+
+         typedef boost::interprocess::map< id_type, value_type, std::less<id_type>, id_value_allocator_type >  id_value_type_map;
+         typedef boost::interprocess::set< id_type, std::less<id_type>, id_allocator_type >                    id_type_set;
+
+         id_value_type_map            old_values;
+         id_value_type_map            removed_values;
+         id_type_set                  new_ids;
+         id_type                      old_next_id = 0;
+         int64_t                      revision = 0;
+   };
+
    /**
     *  The value_type stored in the multiindex container must have a integer field with the name 'id'.  This will
     *  be the primary key and it will be assigned and managed by generic_index.
@@ -119,12 +143,14 @@ namespace chainbase {
     *  Additionally, the constructor for value_type must take an allocator
     */
    template<typename MultiIndexType>
-   class generic_index {
+   class generic_index
+   {
       public:
          typedef bip::managed_mapped_file::segment_manager             segment_manager_type;
          typedef MultiIndexType                                        index_type;
          typedef typename index_type::value_type                       value_type;
          typedef bip::allocator< generic_index, segment_manager_type > allocator_type;
+         typedef undo_state< value_type >                              undo_state_type;
 
          generic_index( allocator<value_type> a )
          :_stack(a),_indices( a ),_size_of_value_type( sizeof(typename MultiIndexType::node_type) ),_size_of_this(sizeof(*this)){}
@@ -185,28 +211,6 @@ namespace chainbase {
          }
 
          const index_type& indices()const { return _indices; }
-
-         class undo_state {
-            public:
-               typedef typename value_type::id_type                      id_type;
-               typedef allocator< std::pair<const id_type, value_type> > id_value_allocator_type;
-               typedef allocator< id_type >                              id_allocator_type;
-
-               template<typename T>
-               undo_state( allocator<T> al )
-               :old_values( id_value_allocator_type( al.get_segment_manager() ) ),
-                removed_values( id_value_allocator_type( al.get_segment_manager() ) ),
-                new_ids( id_allocator_type( al.get_segment_manager() ) ){}
-
-
-               typedef boost::interprocess::map< id_type, value_type, std::less<id_type>,  id_value_allocator_type > id_value_type_map;
-
-               id_value_type_map                                                           old_values;
-               id_value_type_map                                                           removed_values;
-               boost::interprocess::set< id_type, std::less<id_type>, id_allocator_type>   new_ids;
-               id_type                                                                     old_next_id = 0;
-               int64_t                                                                     revision = 0;
-         };
 
          class session {
             public:
@@ -483,7 +487,7 @@ namespace chainbase {
             head.new_ids.insert( v.id );
          }
 
-         boost::interprocess::deque< undo_state, allocator<undo_state> > _stack;
+         boost::interprocess::deque< undo_state_type, allocator<undo_state_type> > _stack;
 
          /**
           *  Each new session increments the revision, a squash will decrement the revision by combining

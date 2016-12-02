@@ -390,7 +390,7 @@ export default formId => reduxForm(
         const fields = ['body', 'autoVote']
         const {type, parent_author, jsonMetadata} = ownProps
         const isStory = /submit_story/.test(type) || (
-            /edit/.test(type) && parent_author === ''
+            type === 'edit' && parent_author === ''
         )
         if (isStory) fields.push('title')
         if (isStory) fields.push('category')
@@ -437,7 +437,7 @@ export default formId => reduxForm(
             // const post = state.global.getIn(['content', author + '/' + permlink])
             const username = state.user.getIn(['current', 'username'])
 
-            const isEdit = /edit/.test(type)
+            const isEdit = type === 'edit'
             const isNew = /^submit_/.test(type)
 
             // Wire up the current and parent props for either an Edit or a Submit (new post)

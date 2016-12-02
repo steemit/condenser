@@ -195,7 +195,7 @@ class UserWallet extends React.Component {
                     {isMyAccount ?
                     <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={steem_balance_str + ' STEEM'} menu={steem_menu} />
                     : steem_balance_str + ' STEEM'}
-                    {steemOrders ? <div style={{paddingRight: "0.85rem"}}><Link to="/market"><Tooltip t={translate('open_orders')}>({steem_orders_balance_str} STEEM)</Tooltip></Link></div> : null}
+                    {steemOrders ? <div style={{paddingRight: "0.85rem"}}><Link to="/market"><Tooltip t={translate('open_orders')}>(+{steem_orders_balance_str} STEEM)</Tooltip></Link></div> : null}
                 </div>
             </div>
             <div className="UserWallet__balance row">
@@ -216,7 +216,7 @@ class UserWallet extends React.Component {
                     {isMyAccount ?
                     <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={sbd_balance_str} menu={dollar_menu} />
                     : sbd_balance_str}
-                    {sbdOrders ? <div style={{paddingRight: "0.85rem"}}><Link to="/market"><Tooltip t={translate('open_orders')}>({sbd_orders_balance_str})</Tooltip></Link></div> : null}
+                    {sbdOrders ? <div style={{paddingRight: "0.85rem"}}><Link to="/market"><Tooltip t={translate('open_orders')}>(+{sbd_orders_balance_str})</Tooltip></Link></div> : null}
                 </div>
             </div>
             <div className="UserWallet__balance row">

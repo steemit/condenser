@@ -242,6 +242,7 @@ export default function useGeneralApi(app) {
             console.log('-- /record_event -->', this.session.uid, type, value);
             if (type.match(/^[A-Z]/)) {
                 mixpanel.track(type, {distinct_id: this.session.uid});
+                mixpanel.people.increment(this.session.uid, type, 1);
             } else {
                 const str_value = typeof value === 'string' ? value : JSON.stringify(value);
                 recordWebEvent(this, type, str_value);
@@ -269,7 +270,9 @@ export default function useGeneralApi(app) {
         const remote_ip = getRemoteIp(this.req);
         try {
             let views = 1;
-            // const views = yield Tarantool.instance().call('page_view', page, remote_ip, this.session.uid, ref);
+            if (config.tarantool) {
+                yield Tarantool.instance().call('page_view', page, remote_ip, this.session.uid, ref);
+            }
             const page_model = yield models.Page.findOne(
                 {attributes: ['id', 'views'], where: {permlink: esc(page)}, logging: false}
             );
@@ -293,8 +296,9 @@ export default function useGeneralApi(app) {
                     $referrer: ref,
                     $referring_domain: referring_domain
                 });
-                mixpanel.people.set_once(this.session.uid, '$referrer', ref);
+                if (ref) mixpanel.people.set_once(this.session.uid, '$referrer', ref);
                 mixpanel.people.set_once(this.session.uid, 'FirstPage', page);
+                mixpanel.people.increment(this.session.uid, 'PageView', 1);
             }
         } catch (error) {
             console.error('Error in /page_view api call', this.session.uid, error.message);

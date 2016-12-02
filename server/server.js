@@ -55,10 +55,12 @@ app.use(function *(next) {
         }
     }
     // normalize top category filtering from cased params
-    if (this.method === 'GET' && /(hot|created|trending|active)/ig.test(this.url)) {
-        const p = this.originalUrl.toLowerCase();
-        if(p !== this.originalUrl) {
-            this.redirect(p);
+    if (this.method === 'GET' && /^\/(hot|created|trending|active)\//.test(this.url)) {
+        const segments = this.url.split('/')
+        const category = segments[2]
+        if(category !== category.toLowerCase()) {
+            segments[2] = category.toLowerCase()
+            this.redirect(segments.join('/'));
             return;
         }
     }

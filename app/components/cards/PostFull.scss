@@ -38,7 +38,7 @@
     border-right: none;
     .Icon.clock {
       top: 5px;
-      path {
+      svg {
         fill: $dark-gray;
       }
     }
@@ -54,7 +54,7 @@
   clear: right;
   line-height: 2rem;
   font-size: 94%;
-  svg path, svg polygon {
+  svg {
     fill: $dark-gray;
   }
   a, .FoundationDropdownMenu__label {

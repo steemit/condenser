@@ -162,6 +162,15 @@
         }
     }
 
+    .UserProfile__banner .UserProfile__buttons_mobile {
+        position: inherit;
+        margin-bottom: .5rem;
+        .button {
+            background-color: $white;
+            color: $black;
+        }
+    }
+
     .UserWallet__balance {
         > div:last-of-type {
             text-align: left;

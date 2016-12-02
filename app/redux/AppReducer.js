@@ -7,7 +7,7 @@ const defaultState = Map({
     error: '',
     location: {},
     notifications: null,
-    noLoadingRequests: 0,
+    ignoredLoadingRequestCount: 0,
     notificounters: Map({
         total: 0,
         feed: 0,
@@ -39,28 +39,28 @@ export default function reducer(state = defaultState, action) {
     let res = state;
     if (action.type === 'RPC_REQUEST_STATUS') {
         const request_id = action.payload.id + '';
-        const noLoadingMethods = [
+        const loadingBlacklist = [
             'get_dynamic_global_properties',
             'get_api_by_name',
             'get_followers',
             'get_following'
         ];
-        const noLoadMethod = noLoadingMethods.indexOf(action.payload.method) !== -1;
+        const loadingIgnored = loadingBlacklist.indexOf(action.payload.method) !== -1;
         if (action.payload.event === 'BEGIN') {
             res = state.mergeDeep({
-                loading: noLoadMethod ? false : true,
+                loading: loadingIgnored ? false : true,
                 requests: {[request_id]: Date.now()},
-                noLoadingRequests: state.get('noLoadingRequests') + (noLoadMethod ? 1 : 0)
+                ignoredLoadingRequestCount: state.get('ignoredLoadingRequestCount') + (loadingIgnored ? 1 : 0)
             });
         }
         if (action.payload.event === 'END' || action.payload.event === 'ERROR') {
-            const noLoadCount = state.get('noLoadingRequests') - (noLoadMethod ? 1 : 0);
+            const ignoredLoadingRequestCount = state.get('ignoredLoadingRequestCount') - (loadingIgnored ? 1 : 0);
             res = res.deleteIn(['requests', request_id]);
-            // console.log("RPC_REQUEST END:", action.payload.method, res.get('requests').size, "noLoadCount", noLoadCount);
-            const loading = (res.get('requests').size - noLoadCount) > 0;
+            // console.log("RPC_REQUEST END:", action.payload.method, res.get('requests').size, "ignoredLoadingRequestCount", ignoredLoadingRequestCount);
+            const loading = (res.get('requests').size - ignoredLoadingRequestCount) > 0;
             res = res.mergeDeep({
                 loading,
-                noLoadingRequests: noLoadCount
+                ignoredLoadingRequestCount
             });
         }
     }

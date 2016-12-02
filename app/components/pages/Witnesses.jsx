@@ -5,7 +5,7 @@ import links from 'app/utils/Links'
 import Icon from 'app/components/elements/Icon';
 import transaction from 'app/redux/Transaction'
 import ByteBuffer from 'bytebuffer'
-import {Set} from 'immutable'
+import {Set, is} from 'immutable'
 import { translate } from 'app/Translator';
 
 const Long = ByteBuffer.Long
@@ -16,7 +16,7 @@ class Witnesses extends React.Component {
         // HTML properties
 
         // Redux connect properties
-        global: object.isRequired,
+        witnesses: object.isRequired,
         accountWitnessVote: func.isRequired,
         username: string,
         witness_votes: object,
@@ -36,20 +36,20 @@ class Witnesses extends React.Component {
         }
     }
 
+    shouldComponentUpdate(np, ns) {
+            return (
+                !is(np.witness_votes, this.props.witness_votes) ||
+                np.witnesses !== this.props.witnesses ||
+                np.username !== this.props.username ||
+                ns.customUsername !== this.state.customUsername
+            );
+    }
+
    render() {
-       const {props: {global, witness_votes}, state: {customUsername}, accountWitnessVote, onWitnessChange} = this
-       const sorted_witnesses = global.getIn(['witnesses'])
+       const {props: {witness_votes}, state: {customUsername}, accountWitnessVote, onWitnessChange} = this
+       const sorted_witnesses = this.props.witnesses
             .sort((a, b) => Long.fromString(String(b.get('votes'))).subtract(Long.fromString(String(a.get('votes'))).toString()));
 
-        const header =
-            <div className="row">
-                <div className="column small-1">
-                    <label>{translate('vote')}</label>
-                </div>
-                <div className="column small-4">
-                    <label>{translate('witness')}</label>
-                </div>
-            </div>
         const up = <Icon name="chevron-up-circle" />;
         let witness_vote_count = 30
         let rank = 1
@@ -62,7 +62,7 @@ class Witnesses extends React.Component {
             let witness_thread = ""
             if(thread) {
                 if(links.remote.test(thread)) {
-                    witness_thread = <Link to={thread}>{translate('witness_thread')}&nbsp;<Icon name="extlink" /></Link>
+                    witness_thread = <a href={thread}>{translate('witness_thread')}&nbsp;<Icon name="extlink" /></a>
                 } else {
                     witness_thread = <Link to={thread}>{translate('witness_thread')}</Link>
                 }
@@ -164,7 +164,7 @@ module.exports = {
             const current_account = current_user && state.global.getIn(['accounts', username])
             const witness_votes = current_account && Set(current_account.get('witness_votes'))
             return {
-                global: state.global,
+                witnesses: state.global.get('witnesses'),
                 username,
                 witness_votes,
             };

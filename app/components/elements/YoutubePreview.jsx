@@ -37,7 +37,7 @@ export default class YoutubePreview extends React.Component {
             // mqdefault.jpg (medium quality version, 320px × 180px)
             // hqdefault.jpg (high quality version, 480px × 360px
             // sddefault.jpg (standard definition version, 640px × 480px)
-            const thumbnail = width <= 320 ? 'mqdefault.jpg' : width <= 480 ? 'hqdefault.jpg' : '0.jpg'
+            const thumbnail = width <= 320 ? 'mqdefault.jpg' : width <= 480 ? 'hqdefault.jpg' : 'maxresdefault.jpg'
             const previewLink = `https://img.youtube.com/vi/${youTubeId}/${thumbnail}`
             return (
                 <div className="videoWrapper youtube" onClick={this.onPlay} style={{backgroundImage: 'url(' + previewLink + ')'}}>

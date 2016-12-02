@@ -24,6 +24,10 @@
   > h1 {
     overflow: hidden;
     font: 700 200% "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Arial, sans-serif;
+    .Icon {
+      margin: 0 0 0 0.5rem;
+      vertical-align: -30%;
+    }
   }
   a {
     color: $dark-gray;
@@ -34,7 +38,7 @@
     border-right: none;
     .Icon.clock {
       top: 5px;
-      path {
+      svg {
         fill: $dark-gray;
       }
     }
@@ -50,7 +54,7 @@
   clear: right;
   line-height: 2rem;
   font-size: 94%;
-  svg path, svg polygon {
+  svg {
     fill: $dark-gray;
   }
   a, .FoundationDropdownMenu__label {
@@ -82,7 +86,16 @@
 
 .PostFull__responses {
   padding-right: 1rem;
+  //margin-right: 1rem;
+  //border-right: 1px solid $medium-gray;
+}
+
+.PostFull__views {
+  padding-right: 1rem;
   margin-right: 1rem;
+  color: $dark-gray;
+  font-size: 94%;
+  font-weight: 600;
   border-right: 1px solid $medium-gray;
 }
 

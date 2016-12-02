@@ -3,22 +3,20 @@ import React from 'react';
 import Comment from 'app/components/cards/Comment';
 import PostFull from 'app/components/cards/PostFull';
 import {connect} from 'react-redux';
-import { Link } from 'react-router';
 
 import {sortComments} from 'app/components/cards/Comment';
-import DropdownMenu from 'app/components/elements/DropdownMenu';
-import user from 'app/redux/User'
 // import { Link } from 'react-router';
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
 import SvgImage from 'app/components/elements/SvgImage';
 import {List} from 'immutable'
 import { translate } from 'app/Translator';
 import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
+import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 
 class Post extends React.Component {
 
     static propTypes = {
-        global: React.PropTypes.object.isRequired,
+        content: React.PropTypes.object.isRequired,
         post: React.PropTypes.string,
         routeParams: React.PropTypes.object,
         location: React.PropTypes.object,
@@ -33,7 +31,9 @@ class Post extends React.Component {
         this.showSignUp = () => {
             window.location = '/enter_email';
         }
+        this.shouldComponentUpdate = shouldComponentUpdate(this, 'Post')
     }
+
     componentDidMount() {
         if (window.location.hash.indexOf('comments') !== -1) {
             const comments_el = document.getElementById('comments');
@@ -57,15 +57,14 @@ class Post extends React.Component {
 
     render() {
         const {showSignUp} = this
-        const {current_user, following, signup_bonus} = this.props
+        const {current_user, following, signup_bonus, content} = this.props
         const {showNegativeComments, commentHidden, showAnyway} = this.state
-        let g = this.props.global;
         let post = this.props.post;
         if (!post) {
             const route_params = this.props.routeParams;
             post = route_params.username + '/' + route_params.slug;
         }
-        const dis = g.get('content').get(post);
+        const dis = content.get(post);
 
         if (!dis) return null;
 
@@ -92,9 +91,9 @@ class Post extends React.Component {
         if( this.props.location && this.props.location.query.sort )
            sort_order = this.props.location.query.sort;
 
-        sortComments( g, replies, sort_order );
+        sortComments( content, replies, sort_order );
         const keep = a => {
-            const c = g.getIn(['content', a])
+            const c = content.get(a);
             const hide = c.getIn(['stats', 'hide'])
             let ignore = false
             if(following) {
@@ -103,15 +102,35 @@ class Post extends React.Component {
             return !hide && !ignore
         }
         const positiveComments = replies.filter(a => keep(a))
-            .map(reply => <Comment root key={post + reply} content={reply} global={g}
-                sort_order={sort_order} showNegativeComments={showNegativeComments} onHide={this.onHideComment} />);
+            .map(reply => (
+                <Comment
+                    root
+                    key={post + reply}
+                    content={reply}
+                    cont={content}
+                    sort_order={sort_order}
+                    showNegativeComments={showNegativeComments}
+                    onHide={this.onHideComment}
+                />)
+            );
 
         // Not the complete hidding logic, just move to the bottom, the rest hide in-place
         const negativeReplies = replies.filter(a => !keep(a));
         const stuffHidden = negativeReplies.length > 0 || commentHidden
 
         const negativeComments =
-            negativeReplies.map(reply => <Comment root key={post + reply} content={reply} global={g} sort_order={sort_order} showNegativeComments onHide={this.onHideComment} noImage />);
+            negativeReplies.map(reply => (
+                <Comment
+                    root
+                    key={post + reply}
+                    content={reply}
+                    cont={content}
+                    sort_order={sort_order}
+                    showNegativeComments
+                    onHide={this.onHideComment}
+                    noImage
+                />)
+            );
 
         const negativeGroup = !stuffHidden ? null :
             (<div className="hentry Comment root Comment__negative_group">
@@ -145,7 +164,7 @@ class Post extends React.Component {
             <div className="Post">
                 <div className="row">
                     <div className="column">
-                        <PostFull post={post} global={g} />
+                        <PostFull post={post} cont={content} />
                     </div>
                 </div>
                 {!current_user && <div className="row">
@@ -187,7 +206,7 @@ export default connect(state => {
         following = state.global.getIn(key, List())
     }
     return {
-        global: state.global,
+        content: state.global.get('content'),
         signup_bonus: state.offchain.get('signup_bonus'),
         current_user,
         following,

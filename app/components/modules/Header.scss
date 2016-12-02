@@ -51,6 +51,11 @@
     display: flex;
     text-transform: lowercase;
   }
+  @media screen and (max-width: 39.9375em) {
+      .shrink {
+          padding: .3rem 1rem;
+      }
+  }
 }
 
 ul > li.Header__top-logo > a {

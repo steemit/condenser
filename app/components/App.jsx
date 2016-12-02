@@ -16,6 +16,7 @@ import Icon from 'app/components/elements/Icon';
 import {key_utils} from 'shared/ecc';
 import MiniHeader from 'app/components/modules/MiniHeader';
 import { translate } from '../Translator.js';
+import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 
 class App extends React.Component {
     constructor(props) {
@@ -31,7 +32,6 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        require('fastclick').attach(document.body);
         // setTimeout(() => this.setState({showCallout: false}), 15000);
     }
 
@@ -243,6 +243,7 @@ class App extends React.Component {
             </div>
             <Dialogs />
             <Modals />
+            <PageViewsCounter />
         </div>
     }
 }

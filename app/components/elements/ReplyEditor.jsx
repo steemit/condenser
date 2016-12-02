@@ -1,5 +1,5 @@
 import React from 'react';
-import {reduxForm} from 'redux-form'
+import {reduxForm} from 'redux-form' // @deprecated, instead use: app/utils/ReactForm.js
 import transaction from 'app/redux/Transaction';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer'
 import CategorySelector from 'app/components/cards/CategorySelector'
@@ -390,7 +390,7 @@ export default formId => reduxForm(
         const fields = ['body', 'autoVote']
         const {type, parent_author, jsonMetadata} = ownProps
         const isStory = /submit_story/.test(type) || (
-            /edit/.test(type) && parent_author === ''
+            type === 'edit' && parent_author === ''
         )
         if (isStory) fields.push('title')
         if (isStory) fields.push('category')
@@ -437,17 +437,20 @@ export default formId => reduxForm(
             // const post = state.global.getIn(['content', author + '/' + permlink])
             const username = state.user.getIn(['current', 'username'])
 
+            const isEdit = type === 'edit'
+            const isNew = /^submit_/.test(type)
+
             // Wire up the current and parent props for either an Edit or a Submit (new post)
             //'submit_story', 'submit_comment', 'edit'
             const linkProps =
-                /^submit_/.test(type) ? { // submit new
+                isNew ? { // submit new
                     parent_author: author,
                     parent_permlink: permlink,
                     author: username,
                     // permlink,  assigned in TransactionSaga
                 } :
                 // edit existing
-                /^edit$/.test(type) ? {author, permlink, parent_author, parent_permlink}
+                isEdit ? {author, permlink, parent_author, parent_permlink}
                 : null
 
             if (!linkProps) throw new Error('Unknown type: ' + type)
@@ -480,7 +483,7 @@ export default formId => reduxForm(
             if(rootTag) allCategories = allCategories.add(rootTag)
 
             // merge
-            const meta = /edit/.test(type) ? jsonMetadata : {}
+            const meta = isEdit ? jsonMetadata : {}
             if(allCategories.size) meta.tags = allCategories.toJS(); else delete meta.tags
             if(rtags.usertags.size) meta.users = rtags.usertags; else delete meta.users
             if(rtags.images.size) meta.image = rtags.images; else delete meta.image
@@ -500,28 +503,31 @@ export default formId => reduxForm(
             }
 
             if(meta.tags.length > 5) {
-                const includingCategory = /edit/.test(type) ? ` (including the category '${rootCategory}')` : ''
+                const includingCategory = isEdit ? ` (including the category '${rootCategory}')` : ''
                 errorCallback(`You have ${meta.tags.length} tags total${includingCategory}.  Please use only 5 in your post and category line.`)
                 return
             }
             // loadingCallback starts the loading indicator
             loadingCallback()
 
-            const originalBody = /edit/.test(type) ? originalPost.body : null
+            const originalBody = isEdit ? originalPost.body : null
             const __config = {originalBody, autoVote}
 
-            switch(payoutType) {
-                case '0%': // decline payout
-                    __config.comment_options = {
-                        max_accepted_payout: '0.000 SBD',
-                    }
-                    break;
-                case '100%': // 100% steem power payout
-                    __config.comment_options = {
-                        percent_steem_dollars: 0, // 10000 === 100% (of 50%)
-                    }
-                    break;
-                default: // 50% steem power, 50% sd+steem
+            // Avoid changing payout option during edits #735
+            if(!isEdit) {
+                switch(payoutType) {
+                    case '0%': // decline payout
+                        __config.comment_options = {
+                            max_accepted_payout: '0.000 SBD',
+                        }
+                        break;
+                    case '100%': // 100% steem power payout
+                        __config.comment_options = {
+                            percent_steem_dollars: 0, // 10000 === 100% (of 50%)
+                        }
+                        break;
+                    default: // 50% steem power, 50% sd+steem
+                }
             }
 
             const operation = {

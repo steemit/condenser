@@ -111,7 +111,7 @@ class Voting extends React.Component {
     }
 
     render() {
-        const {myVote, active_votes, showList, voting, flag, vesting_shares} = this.props;
+        const {myVote, active_votes, showList, voting, flag, vesting_shares, is_comment} = this.props;
         const {username} = this.props;
         const {votingUp, votingDown, showWeight, weight} = this.state;
         // console.log('-- Voting.render -->', myVote, votingUp, votingDown);
@@ -161,7 +161,9 @@ class Voting extends React.Component {
         const up = <Icon name={votingUpActive ? 'empty' : 'chevron-up-circle'} />;
         const classUp = 'Voting__button Voting__button-up' + (myVote > 0 ? ' Voting__button--upvoted' : '') + (votingUpActive ? ' votingUp' : '');
 
-        const cashout_active = pending_payout > 0 || (cashout_time && cashout_time.indexOf('1969') !== 0 && cashout_time.indexOf('1970') !== 0)
+        // TODO: clean up the date logic after shared-db upgrade
+        // There is an "active cashout" if: (a) there is a pending payout, OR (b) there is a valid cashout_time AND (it's a top level post OR a comment with at least 1 vote)
+        const cashout_active = pending_payout > 0 || (cashout_time && cashout_time.indexOf('1969') !== 0 && cashout_time.indexOf('1970') !== 0 && (active_votes.size > 0 || !is_comment))
         const payoutItems = [];
 
         if(cashout_active) {
@@ -170,7 +172,7 @@ class Voting extends React.Component {
         if(promoted > 0) {
             payoutItems.push({value: 'Promotion Cost $' + formatDecimal(promoted).join('')});
         }
-        const hide_cashout_532 = cashout_time.indexOf('1969') === 0 // tmpfix for #532
+        const hide_cashout_532 = cashout_time.indexOf('1969') === 0 // tmpfix for #532. TODO: remove after shared-db
         if (cashout_active && !hide_cashout_532) {
             payoutItems.push({value: <TimeAgoWrapper date={cashout_time} />});
         }

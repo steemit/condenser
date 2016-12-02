@@ -82,7 +82,16 @@
 
 .PostFull__responses {
   padding-right: 1rem;
+  //margin-right: 1rem;
+  //border-right: 1px solid $medium-gray;
+}
+
+.PostFull__views {
+  padding-right: 1rem;
   margin-right: 1rem;
+  color: $dark-gray;
+  font-size: 94%;
+  font-weight: 600;
   border-right: 1px solid $medium-gray;
 }
 

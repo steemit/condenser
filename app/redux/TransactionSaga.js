@@ -13,6 +13,7 @@ import user from 'app/redux/User'
 import tr from 'app/redux/Transaction'
 import getSlug from 'speakingurl'
 import {DEBT_TICKER} from 'config/client_config'
+import {serverApiRecordEvent} from 'app/utils/ServerApiClient'
 
 const {transaction} = ops
 
@@ -117,6 +118,8 @@ function* broadcastOperation({payload:
             }
         }
         yield call(broadcast, {payload})
+        const eventType = type.replace(/^([a-z])/, g => g.toUpperCase()).replace(/_([a-z])/g, g => g[1].toUpperCase());
+        serverApiRecordEvent(eventType, '')
     } catch(error) {
         console.error('TransactionSage', error)
         if(errorCallback) errorCallback(error.toString())

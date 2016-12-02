@@ -1,6 +1,7 @@
 /* eslint react/prop-types: 0 */
 import React from 'react';
 import {connect} from 'react-redux'
+import {Link} from 'react-router'
 import g from 'app/redux/GlobalReducer'
 import SavingsWithdrawHistory from 'app/components/elements/SavingsWithdrawHistory';
 import TransferHistoryRow from 'app/components/cards/TransferHistoryRow';
@@ -14,6 +15,10 @@ import {numberWithCommas, vestingSteem} from 'app/utils/StateFunctions'
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu'
 import WalletSubMenu from 'app/components/elements/WalletSubMenu'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+import Tooltip from 'app/components/elements/Tooltip'
+import { translate } from 'app/Translator';
+
+const assetPrecision = 1000;
 
 class UserWallet extends React.Component {
     constructor() {
@@ -35,7 +40,7 @@ class UserWallet extends React.Component {
         const {state: {showDeposit, depositType, toggleDivestError},
             onShowDeposit, onShowDepositSteem, onShowDepositPower} = this
         const {convertToSteem, price_per_steem, savings_withdraws, account,
-            current_user} = this.props
+            current_user, open_orders} = this.props
         const gprops = this.props.gprops.toJS();
 
         if (!account) return null;
@@ -89,6 +94,18 @@ class UserWallet extends React.Component {
         const sbd_balance = parseFloat(account.get('sbd_balance'))
         const sbd_balance_savings = parseFloat(savings_sbd_balance.split(' ')[0]);
         const total_sbd = sbd_balance + sbd_balance_savings + savings_sbd_pending
+        const sbdOrders = (!open_orders || !isMyAccount) ? 0 : open_orders.reduce((o, order) => {
+            if (order.sell_price.base.indexOf("SBD") !== -1) {
+                o += order.for_sale;
+            }
+            return o;
+        }, 0) / assetPrecision;
+        const steemOrders = (!open_orders || !isMyAccount) ? 0 : open_orders.reduce((o, order) => {
+            if (order.sell_price.base.indexOf("STEEM") !== -1) {
+                o += order.for_sale;
+            }
+            return o;
+        }, 0) / assetPrecision;
 
         // set displayed estimated value
         let total_value = '$' + numberWithCommas(
@@ -150,8 +167,10 @@ class UserWallet extends React.Component {
         </div>
 
         const steem_balance_str = numberWithCommas(balance_steem.toFixed(3)) // formatDecimal(balance_steem, 3)
+        const steem_orders_balance_str = numberWithCommas(steemOrders.toFixed(3))
         const power_balance_str = numberWithCommas(vesting_steem) // formatDecimal(vesting_steem, 3)
         const sbd_balance_str = numberWithCommas('$' + sbd_balance.toFixed(3)) // formatDecimal(account.sbd_balance, 3)
+        const sbd_orders_balance_str = numberWithCommas('$' + sbdOrders.toFixed(3))
         const savings_balance_str = numberWithCommas(saving_balance_steem.toFixed(3) + ' STEEM')
         const savings_sbd_balance_str = numberWithCommas('$' + sbd_balance_savings.toFixed(3))
 
@@ -183,6 +202,7 @@ class UserWallet extends React.Component {
                     {isMyAccount ?
                     <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={steem_balance_str + ' STEEM'} menu={steem_menu} />
                     : steem_balance_str + ' STEEM'}
+                    {steemOrders ? <div style={{paddingRight: "0.85rem"}}><Link to="/market"><Tooltip t={translate('open_orders')}>(+{steem_orders_balance_str} STEEM)</Tooltip></Link></div> : null}
                 </div>
             </div>
             <div className="UserWallet__balance row">
@@ -203,6 +223,7 @@ class UserWallet extends React.Component {
                     {isMyAccount ?
                     <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={sbd_balance_str} menu={dollar_menu} />
                     : sbd_balance_str}
+                    {sbdOrders ? <div style={{paddingRight: "0.85rem"}}><Link to="/market"><Tooltip t={translate('open_orders')}>(+{sbd_orders_balance_str})</Tooltip></Link></div> : null}
                 </div>
             </div>
             <div className="UserWallet__balance row">
@@ -286,6 +307,7 @@ export default connect(
         const sbd_interest = gprops.get('sbd_interest_rate')
         return {
             ...ownProps,
+            open_orders: state.market.get('open_orders'),
             price_per_steem,
             savings_withdraws,
             sbd_interest,

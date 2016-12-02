@@ -32,6 +32,7 @@ const icons = [
     'photo',
     'line',
     'video',
+    'eye',
     'location',
     'calendar',
 ];

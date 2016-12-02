@@ -120,7 +120,11 @@ class UserWallet extends React.Component {
 
         /// transfer log
         let idx = 0
-        const transfer_log = account.get('transfer_history').map(item => {
+        const transfer_log = account.get('transfer_history')
+        .sort((a, b) => {
+            return new Date(b.getIn([1, 'timestamp'])) - new Date(a.getIn([1, 'timestamp']))
+        })
+        .map(item => {
             const data = item.getIn([1, 'op', 1]);
             const type = item.getIn([1, 'op', 0]);
 

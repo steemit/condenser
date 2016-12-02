@@ -368,7 +368,7 @@ const Comment = connect(
         }
         const current = state.user.get('current')
         const username = current ? current.get('username') : null
-        const key = ['follow', 'get_following', username, 'ignore', 'result', c.get('author')]
+        const key = ['follow', 'get_following', username, 'result', c.get('author')]
         const ignore = username ? state.global.getIn(key, List()).contains('ignore') : false
         return {
             ...ownProps,

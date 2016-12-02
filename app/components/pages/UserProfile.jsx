@@ -114,19 +114,17 @@ export default class UserProfile extends React.Component {
         }
 
         let followerCount, followingCount;
-        const followers = follow ? follow.getIn( ['get_followers', accountname] ) : null;
-        const following = follow ? follow.getIn( ['get_following', accountname] ) : null;
-        if(followers && followers.has('result') && followers.has('blog')) {
-            const status_followers = followers.get('blog')
-            const followers_loaded = status_followers.get('loading') === false && status_followers.get('error') == null
+        const followers = follow ? follow.getIn( ['get_followers', accountname, 'blog'] ) : null;
+        const following = follow ? follow.getIn( ['get_following', accountname, 'blog'] ) : null;
+        if(followers && followers.has('result')) {
+            const followers_loaded = followers.get('loading') === false && followers.get('error') == null
             if (followers_loaded) {
                 followerCount = followers.get('count');
             }
         }
 
-        if (following && following.has('result') && following.has('blog')) {
-            const status_following = following.get('blog')
-            const following_loaded = status_following.get('loading') === false && status_following.get('error') == null
+        if (following && following.has('result')) {
+            const following_loaded = following.get('loading') === false && following.get('error') == null
             if (following_loaded) {
                 followingCount = following.get('count');
             }

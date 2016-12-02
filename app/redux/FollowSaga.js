@@ -14,7 +14,7 @@ export function* loadFollows(method, account, type, start = '', limit = 100) {
         key: ['follow', method, account],
         notSet: Map(),
         updater: m => {
-            m = m.update('result', Map(), m2 => {
+            m = m.updateIn([type, 'result'], Map(), m2 => {
                 res.forEach(value => {
                     cnt++
                     let what = value.get('what')
@@ -24,10 +24,7 @@ export function* loadFollows(method, account, type, start = '', limit = 100) {
                 })
                 return m2
             })
-            const count = m.get('result') ? m.get('result').filter(a => {
-                return a.get(0) === "blog";
-            }).size : 0;
-            return m.merge({count, [type]: {loading: true, error: null}})
+            return m.mergeDeep({[type]: {loading: true, error: null}})
         }
     }})
     if(cnt === limit) {
@@ -35,7 +32,13 @@ export function* loadFollows(method, account, type, start = '', limit = 100) {
     } else {
         yield put({type: 'global/UPDATE', payload: {
             key: ['follow', method, account],
-            updater: m => m.merge({[type]: {loading: false, error: null}})
+            updater: m => {
+                const count = m.getIn([type, 'result']) ? m.getIn([type, 'result']).filter(a => {
+                    return a.get(0) === type;
+                }).size : 0;
+                m = m.mergeDeep({[type]: {count, loading: false, error: null}})
+                return m;
+            }
         }})
     }
 }

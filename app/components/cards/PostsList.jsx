@@ -157,7 +157,7 @@ class PostsList extends React.Component {
 
     render() {
         const {posts, showSpam, loading, category, content,
-            follow, account} = this.props;
+            ignoredAccounts, account} = this.props;
         const {thumbSize, showPost} = this.state
         const postsInfo = [];
         posts.forEach(item => {
@@ -167,7 +167,8 @@ class PostsList extends React.Component {
                 return
             }
             const key = [cont.get('author')]
-            const ignore = follow ? follow.getIn(key, List()).contains('ignore') : false
+            const ignore = ignoredAccounts ? ignoredAccounts.getIn(key, List()).contains('ignore') : false
+            // console.log('ignoredAccounts:', ignoredAccounts ? ignoredAccounts.toJS() : ignoredAccounts, 'key', key, 'ignore', ignore)
             const {hide, netVoteSign, authorRepLog10} = cont.get('stats').toJS()
             if(!(ignore || hide) || showSpam) // rephide
                 postsInfo.push({item, ignore, netVoteSign, authorRepLog10})
@@ -219,8 +220,9 @@ export default connect(
         const current = state.user.get('current')
         const username = current ? current.get('username') : null
         const content = state.global.get('content');
-        const follow = state.global.getIn(['follow', 'follow', username, 'result']);
-        return {...props, username, content, follow, pathname};
+        // console.log(username, state.global.getIn(['follow']) ? state.global.getIn(['follow']).toJS() : null);
+        const ignoredAccounts = state.global.getIn(['follow', 'get_following', username, 'ignore', 'result']);
+        return {...props, username, content, ignoredAccounts, pathname};
     },
     dispatch => ({
         fetchState: (pathname) => {

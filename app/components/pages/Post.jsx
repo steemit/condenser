@@ -57,7 +57,7 @@ class Post extends React.Component {
 
     render() {
         const {showSignUp} = this
-        const {current_user, following, signup_bonus, content} = this.props
+        const {current_user, ignoredAccounts, signup_bonus, content} = this.props
         const {showNegativeComments, commentHidden, showAnyway} = this.state
         let post = this.props.post;
         if (!post) {
@@ -96,8 +96,8 @@ class Post extends React.Component {
             const c = content.get(a);
             const hide = c.getIn(['stats', 'hide'])
             let ignore = false
-            if(following) {
-                ignore = following.get(c.get('author'), List()).contains('ignore')
+            if(ignoredAccounts) {
+                ignore = ignoredAccounts.get(c.get('author'), List()).contains('ignore')
             }
             return !hide && !ignore
         }
@@ -200,16 +200,16 @@ class Post extends React.Component {
 
 export default connect(state => {
     const current_user = state.user.get('current')
-    let following
+    let ignoredAccounts
     if(current_user) {
-        const key = ['follow', 'get_following', current_user.get('username'), 'result']
-        following = state.global.getIn(key, List())
+        const key = ['follow', 'get_following', current_user.get('username'), 'ignore', 'result']
+        ignoredAccounts = state.global.getIn(key, List())
     }
     return {
         content: state.global.get('content'),
         signup_bonus: state.offchain.get('signup_bonus'),
         current_user,
-        following,
+        ignoredAccounts
     }
 }
 )(Post);

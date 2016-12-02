@@ -85,18 +85,18 @@ module.exports = connect(
         }
         const f = state.global.getIn(['follow', 'get_following', follower], emptyMap)
         const loading = f.getIn(['blog', 'loading'], false) || f.getIn(['ignore', 'loading'], false)
-        const existingFollows = Set(f.getIn(['result', following], emptySet))// Convert List to Set
+        const existingFollows = Set(f.getIn(['blog', 'result', following], emptySet))// Convert List to Set
         return {
             follower,
             existingFollows,
-            loading,
+            loading
         };
     },
     dispatch => ({
         follow: (follower, following, what) => {
             const json = ['follow', {follower, following, what: what.toJS()}]
             dispatch(g.actions.update({
-                key: ['follow', 'get_following', follower, 'result', following],
+                key: ['follow', 'get_following', follower, 'blog', 'result', following],
                 notSet: Set(),
                 updater: () => what
             }))

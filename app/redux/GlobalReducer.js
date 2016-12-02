@@ -23,7 +23,6 @@ export default createModule({
         {
             action: 'RECEIVE_STATE',
             reducer: (state, action) => {
-                // console.log('RECEIVE_STATE', action, state.toJS());
                 let payload = fromJS(action.payload)
                 if(payload.has('content')) {
                     const content = payload.get('content').withMutations(c => {

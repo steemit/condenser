@@ -326,7 +326,7 @@ export default class UserProfile extends React.Component {
 
                     <div className="column">
                         <div style={{position: "relative"}}>
-                            <div className="UserProfile__buttons">
+                            <div className="UserProfile__buttons hide-for-small-only">
                                 <Follow follower={username} following={accountname} what="blog" />
                             </div>
                         </div>
@@ -354,6 +354,9 @@ export default class UserProfile extends React.Component {
                                 {website && <span><Icon name="link" /> <a href={website}>{website_label}</a></span>}
                                 <Icon name="calendar" /> <DateJoinWrapper date={accountjoin}></DateJoinWrapper>
                             </p>
+                        </div>
+                        <div className="UserProfile__buttons show-for-small-only">
+                            <Follow follower={username} following={accountname} what="blog" />
                         </div>
                     </div>
                 </div>

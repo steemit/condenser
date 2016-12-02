@@ -2,6 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import {connect} from 'react-redux';
+import { browserHistory } from 'react-router';
 import transaction from 'app/redux/Transaction';
 import user from 'app/redux/User';
 import Icon from 'app/components/elements/Icon'
@@ -22,6 +23,12 @@ import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdow
 import VerticalMenu from 'app/components/elements/VerticalMenu';
 import { translate } from 'app/Translator';
 import BuyGolos from 'app/components/elements/BuyGolos'
+import MarkNotificationRead from 'app/components/elements/MarkNotificationRead';
+import NotifiCounter from 'app/components/elements/NotifiCounter';
+import DateJoinWrapper from 'app/components/elements/DateJoinWrapper';
+import { translate } from 'app/Translator';
+import WalletSubMenu from 'app/components/elements/WalletSubMenu';
+import Userpic from 'app/components/elements/Userpic';
 
 export default class UserProfile extends React.Component {
     constructor() {
@@ -58,7 +65,8 @@ export default class UserProfile extends React.Component {
             onPrint
         } = this;
         let { accountname, section } = this.props.routeParams;
-
+        // normalize account from cased params
+        accountname = accountname.toLowerCase();
         const username = current_user ? current_user.get('username') : null
         // const gprops = this.props.global.getIn( ['props'] ).toJS();
         if( !section ) section = 'blog';
@@ -73,30 +81,34 @@ export default class UserProfile extends React.Component {
             return <div><center>{translate('unknown_account')}</center></div>
         }
 
-        let followerCount = 0, followingCount = 0;
+        let followerCount, followingCount;
         const followers = this.props.global.getIn( ['follow', 'get_followers', accountname] );
         const following = this.props.global.getIn( ['follow', 'get_following', accountname] );
-        // let loadingFollowers = true, loadingFollowing = true;
 
-        if (followers && followers.has('result')) {
-            followerCount = followers.get('result').filter(a => {
-                return a.get(0) === "blog";
-            }).size;
-            // loadingFollowers = followers.get("loading");
+        if(followers && followers.has('result') && followers.has('blog')) {
+            const status_followers = followers.get('blog')
+            const followers_loaded = status_followers.get('loading') === false && status_followers.get('error') == null
+            if (followers_loaded) {
+                followerCount = followers.get('result').filter(a => {
+                    return a.get(0) === "blog";
+                }).size;
+            }
         }
 
-        if (following && following.has('result')) {
-            followingCount = following.get('result').filter(a => {
-                return a.get(0) === "blog";
-            }).size;
-            // loadingFollowing = following.get("loading");
+        if (following && following.has('result') && following.has('blog')) {
+            const status_following = following.get('blog')
+            const following_loaded = status_following.get('loading') === false && status_following.get('error') == null
+            if (following_loaded) {
+                followingCount = following.get('result').filter(a => {
+                    return a.get(0) === "blog";
+                }).size;
+            }
         }
 
-        // Reputation
         const rep = repLog10(account.reputation);
 
         const isMyAccount = username === account.name
-        const {name} = account
+        const name = account.name;
         let tab_content = null;
 
         const global_status = this.props.global.get('status');
@@ -110,13 +122,17 @@ export default class UserProfile extends React.Component {
         // const sbd_balance = parseFloat(account.sbd_balance)
         // const sbd_balance_str = numberWithCommas('$' + sbd_balance.toFixed(2));
 
-        let rewardsClass = "";
+        let rewardsClass = "", walletClass = "";
         if( section === 'transfers' ) {
-            tab_content = <UserWallet global={this.props.global}
+            walletClass = 'active'
+            tab_content = <div>
+                <UserWallet global={this.props.global}
                           account={account}
                           showTransfer={this.props.showTransfer}
                           current_user={current_user}
                           withdrawVesting={this.props.withdrawVesting} />
+                {isMyAccount && <div><MarkNotificationRead fields="send,receive" account={account.name} /></div>}
+                </div>;
         }
         else if( section === 'curation-rewards' ) {
             rewardsClass = "active";
@@ -134,11 +150,13 @@ export default class UserProfile extends React.Component {
         }
         else if( section === 'followers' ) {
             if (followers && followers.has('result')) {
-                tab_content = <UserList
+                tab_content = <div>
+                    <UserList
                           title={translate('followers')}
                           account={account}
-                          users={followers}
-                          />
+                          users={followers} />
+                    {isMyAccount && <MarkNotificationRead fields="follow" account={account.name} />}
+                    </div>
             }
         }
         else if( section === 'followed' ) {
@@ -156,12 +174,14 @@ export default class UserProfile extends React.Component {
         else if( section === 'crowdsale' ) {
             tab_content = <BuyGolos routeParams={this.props.routeParams} account={account}/>
         }
-        else if( section === 'posts' && account.post_history ) {
-           if( account.posts )
+        else if( section === 'comments' && account.post_history ) {
+           // NOTE: `posts` key will be renamed to `comments` (https://github.com/steemit/steem/issues/507)
+           //   -- see also GlobalReducer.js
+           if( account.posts || account.comments )
            {
               tab_content = <PostsList
                   emptyText={translate('user_hasnt_made_any_posts_yet', {name})}
-                  posts={account.posts.map(p => `${account.name}/${p}`)}
+                  posts={account.posts || account.comments}
                   loading={fetching}
                   category="posts"
                   loadMore={null}
@@ -172,6 +192,13 @@ export default class UserProfile extends React.Component {
            }
         } else if(!section || section === 'blog') {
             if (account.blog) {
+                const emptyText = isMyAccount ? <div>
+                    {translate('looks_like_you_havent_posted_anything_yet')}.<br /><br />
+                    <Link to="/submit.html">{translate('submit_a_story')}</Link><br />
+                    <a href="/steemit/@thecryptofiend/the-missing-faq-a-beginners-guide-to-using-steemit">{translate('read_the_beginners_guide')}</a><br />
+                    <a href="/welcome">{translate('read_the_beginners_guide')}</a>
+                </div>:
+                    <div>{translate('user_hasnt_started_bloggin_yet', {name})}</div>;
                 tab_content = <PostsList
                     emptyText={translate('user_hasnt_started_bloggin_yet', {name})}
                     posts={account.blog}
@@ -184,34 +211,51 @@ export default class UserProfile extends React.Component {
                 tab_content = (<center><LoadingIndicator type="circle" /></center>);
             }
         }
-        // else if(!section || section === 'feed') {
-        //     if (account.feed) {
-        //         tab_content = <PostsList
-        //             emptyText={`Looks like ${account.name} hasn't followed anything yet!`}
-        //             posts={account.feed}
-        //             loading={fetching}
-        //             category="feed"
-        //             loadMore={this.loadMore}
-        //             showSpam />;
-        //     } else {
-        //         tab_content = (<center><LoadingIndicator type="circle" /></center>);
-        //     }
-        // }
         else if( (section === 'recent-replies') && account.recent_replies ) {
-              tab_content = <PostsList
+              tab_content = <div>
+                  <PostsList
                   emptyText={translate('user_hasnt_had_any_replies_yet', {name}) + '.'}
                   posts={account.recent_replies}
                   loading={fetching}
-                  category="recent-replies"
-                  loadMore={null}
-                  showSpam={false} />;
+                  category="recent_replies"
+                  loadMore={this.loadMore}
+                  showSpam={false} />
+                  {isMyAccount && <MarkNotificationRead fields="comment_reply" account={account.name} />}
+              </div>;
         }
         else if( section === 'permissions' && isMyAccount ) {
-            tab_content = <UserKeys account={accountImm} />
+            walletClass = 'active'
+            tab_content = <div>
+                <div className="row">
+                    <div className="column">
+                        <WalletSubMenu account_name={account.name} />
+                    </div>
+                </div>
+                <br />
+                <UserKeys account={accountImm} />
+                {isMyAccount && <MarkNotificationRead fields="account_update" account={account.name} />}
+                </div>;
         } else if( section === 'password' ) {
-            tab_content = <PasswordReset account={accountImm} />
+            walletClass = 'active'
+            tab_content = <div>
+                    <div className="row">
+                        <div className="column">
+                            <WalletSubMenu account_name={account.name} />
+                        </div>
+                    </div>
+                    <br />
+                    <PasswordReset account={accountImm} />
+                </div>
         } else {
         //    console.log( "no matches" );
+        }
+
+        if (!(section === 'transfers' || section === 'permissions' || section === 'password')) {
+            tab_content = <div className="row">
+                <div className="UserProfile__tab_content column">
+                    {tab_content}
+                </div>
+            </div>;
         }
 
         let printLink = null;
@@ -229,11 +273,9 @@ export default class UserProfile extends React.Component {
         } else if( section === 'permissions' ) {
            section_title = account.name + translate('users_permissions', {name})
            if(isMyAccount && wifShown) {
-
                printLink = <div><a className="float-right noPrint" onClick={onPrint}>
-                   <Icon name="printer" />&nbsp;{translate('print')}&nbsp;&nbsp;
-               </a></div>
-
+                       <Icon name="printer" />&nbsp;{translate('print')}&nbsp;&nbsp;
+                   </a></div>
            }
         } else if( section === 'posts' ) {
            section_title = translate('users_posts', {name});
@@ -248,13 +290,18 @@ export default class UserProfile extends React.Component {
             {link: `/@${accountname}/author-rewards`, label: translate('author_rewards'), value: translate('author_rewards')}
         ];
 
+        // set account join date
+        let accountjoin = account.created;
+
         const top_menu = <div className="row UserProfile__top-menu">
             <div className="columns small-10 medium-12 medium-expand">
                 <ul className="menu" style={{flexWrap: "wrap"}}>
                     <li><Link to={`/@${accountname}`} activeClassName="active">{translate('blog')}</Link></li>
-                    <li><Link to={`/@${accountname}/posts`} activeClassName="active">{translate('comments')}</Link></li>
-                    <li><Link to={`/@${accountname}/recent-replies`} activeClassName="active">{translate('replies')}</Link></li>
-                    {/*<li><Link to={`/@${accountname}/feed`} activeClassName="active">{translate('feeds')}</Link></li>*/}
+                    <li><Link to={`/@${accountname}/comments`} activeClassName="active">{translate('comments')}</Link></li>
+                    <li><Link to={`/@${accountname}/recent-replies`} activeClassName="active">
+                        {translate('replies')} {isMyAccount && <NotifiCounter fields="comment_reply"/>}
+                    </Link></li>
+                    {/*<li><Link to={`/@${accountname}/feed`} activeClassName="active">Feed</Link></li>*/}
                     <li>
                         <LinkWithDropdown
                             closeOnClickOutside
@@ -270,16 +317,18 @@ export default class UserProfile extends React.Component {
                             </a>
                         </LinkWithDropdown>
                     </li>
-
                 </ul>
             </div>
             <div className="columns shrink">
                 <ul className="menu" style={{flexWrap: "wrap"}}>
-                    <li><Link to={`/@${accountname}/crowdsale`} activeClassName="active">{translate('crowdsale')}</Link></li>
-                    <li><Link to={`/@${accountname}/transfers`} activeClassName="active">{translate('wallet')}</Link></li>
-                    {wallet_tab_active && isMyAccount && <li><Link to={`/@${account.name}/permissions`} activeClassName="active">{translate('permissions')}</Link></li>}
-                    {wallet_tab_active && isMyAccount && <li><Link to={`/@${account.name}/password`} activeClassName="active">{translate('password')}</Link></li>}
-                    <li><Link to={`/@${accountname}/settings`} activeClassName="active">{translate('settings')}</Link></li>
+                    <li>
+                        <a href={`/@${accountname}/transfers`} className={walletClass} onClick={e => { e.preventDefault(); browserHistory.push(e.target.pathname); return false; }}>
+                            {translate('wallet')} {isMyAccount && <NotifiCounter fields="send,receive,account_update" />}
+                        </a>
+                    </li>
+                    {isMyAccount && <li>
+                        <Link to={`/@${accountname}/settings`} activeClassName="active">{translate('settings')}</Link>
+                    </li>}
                 </ul>
             </div>
          </div>;
@@ -295,30 +344,33 @@ export default class UserProfile extends React.Component {
                                 <Follow follower={username} following={accountname} what="blog" />
                             </div>
                         </div>
-                        <h2>{account.name} <Tooltip t={translate('this_is_users_reputations_score_it_is_based_on_history_of_votes', {name})}><span style={{fontSize: "80%"}}>({rep})</span></Tooltip></h2>
+                        <h2>
+                            <Userpic account={account.name} hideIfDefault />
+                            {account.name}{' '}
+                            <Tooltip t={translate('this_is_users_reputations_score_it_is_based_on_history_of_votes', {name})}><span style={{fontSize: "80%"}}>({rep})</span></Tooltip>
+                        </h2>
 
                         <div>
                             <div className="UserProfile__stats">
-                                <span><Link to={`/@${accountname}/followers`}>{translate('follower_count', {followerCount: followerCount || 0})}</Link></span>
-                                <span>{translate('post_count', {postCount: account.post_count || 0})}</span>
-                                <span><Link to={`/@${accountname}/followed`}>{translate('followed_count', {followingCount: followingCount || 0})}</Link></span>
+                                <span>
+                                    <Link to={`/@${accountname}/followers`}>{followerCount ? translate('follower_count', {followerCount}) : translate('followers')}</Link>
+                                    {isMyAccount && <NotifiCounter fields="follow" />}
+                                </span>
+                                <span><Link to={`/@${accountname}`}>{translate('post_count', {postCount: account.post_count || 0})}</Link></span>
+                                <span><Link to={`/@${accountname}/followed`}>{followingCount ? translate('followed_count', {followingCount}) : translate('following')}</Link></span>
                             </div>
                         </div>
+                        <DateJoinWrapper date={accountjoin}></DateJoinWrapper>
                     </div>
                 </div>
                 <div className="UserProfile__top-nav row expanded noPrint">
                     {top_menu}
                 </div>
-                <div className="row">
-                    <div className="column">
-                        {printLink}
-                    </div>
+                <div>
+                  {printLink}
                 </div>
-                <div className="row">
-                    <div className="column">
-                        {/*section_title && <h2 className="UserProfile__section-title">{section_title}</h2>*/}
-                        {tab_content}
-                    </div>
+                <div>
+                  {tab_content}
                 </div>
             </div>
         );

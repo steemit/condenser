@@ -9,6 +9,7 @@ import { browserHistory } from 'react-router';
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
 import VerticalMenu from 'app/components/elements/VerticalMenu';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+import NotifiCounter from 'app/components/elements/NotifiCounter';
 import { translate } from 'app/Translator';
 
 const defaultNavigate = (e) => {
@@ -34,6 +35,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
     const settings_link = `/@${username}/settings`;
     const account_link = `/@${username}`;
     const posts_link = `/@${username}/posts`;
+    const settings_link = `/@${username}/settings`;
     const reset_password_link = `/@${username}/password`;
     function trackAnalytics(eventType) {
         console.log(eventType)
@@ -41,11 +43,11 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
     }
     if (loggedIn) { // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!
         const user_menu = [
-            {link: feed_link, value: translate('feed')},
+            {link: feed_link, value: translate('feed'), addon: <NotifiCounter fields="feed" />},
             {link: account_link, value: translate('blog')},
             {link: posts_link, value: translate('comments')},
-            {link: replies_link, value: translate('replies')},
-            {link: wallet_link, value: translate('wallet')},
+            {link: replies_link, value: translate('replies'), addon: <NotifiCounter fields="comment_reply" />},
+            {link: wallet_link, value: translate('wallet'), addon: <NotifiCounter fields="follow,send,receive,account_update" />},
             {link: reset_password_link, value: translate('change_password')},
             {link: crowdsale_link, value: translate('crowdsale')},
             {link: settings_link, value: translate('settings')},
@@ -145,8 +147,9 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                 >
                     {!vertical && <li className={'Header__userpic '}>
                         <a href={account_link} title={username} onClick={e => e.preventDefault()}>
-                            <Userpic account={username} width="36" height="36" />
+                            <Userpic account={username} />
                         </a>
+                        <div className="TopRightMenu__notificounter"><NotifiCounter fields="total" /></div>
                     </li>}
                 </LinkWithDropdown>
                 {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
@@ -260,9 +263,7 @@ TopRightMenu.propTypes = {
     username: React.PropTypes.string,
     loggedIn: React.PropTypes.bool,
     probablyLoggedIn: React.PropTypes.bool,
-    userpic: React.PropTypes.string,
     showLogin: React.PropTypes.func.isRequired,
-    showSignUp: React.PropTypes.func.isRequired,
     logout: React.PropTypes.func.isRequired,
     vertical: React.PropTypes.bool,
     navigate: React.PropTypes.func,
@@ -274,7 +275,6 @@ export default connect(
         if (!process.env.BROWSER) {
             return {
                 username: null,
-                userpic: null,
                 loggedIn: false,
                 probablyLoggedIn: !!state.offchain.get('account')
             }
@@ -283,7 +283,6 @@ export default connect(
         const loggedIn = !!username;
         return {
             username,
-            userpic: null, // state.offchain.getIn(['user', 'picture']),
             loggedIn,
             probablyLoggedIn: false
         }
@@ -296,10 +295,6 @@ export default connect(
         logout: e => {
             if (e) e.preventDefault();
             dispatch(user.actions.logout())
-        },
-        showSignUp: e => {
-            if (e) e.preventDefault();
-            dispatch(user.actions.showSignUp())
         }
     })
 )(TopRightMenu);

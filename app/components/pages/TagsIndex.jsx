@@ -76,15 +76,17 @@ class TagsIndex extends React.Component {
     }
 }
 
+// TODO: use just 'tag_idx' and 'tags' after shared-db upgrade
+
 export default connect(state => ({
-    tagsList: state.global.get('category_idx'),
-    tagsAll: state.global.get('categories')
+    tagsList: state.global.get('tag_idx') || state.global.get('category_idx'),
+    tagsAll: state.global.get('tags') || state.global.get('categories')
 }))(TagsIndex);
 
 module.exports = {
     path: 'tags.html(/:order)',
     component: connect(state => ({
-        tagsList: state.global.get('category_idx'),
-        tagsAll: state.global.get('categories')
+        tagsList: state.global.get('tag_idx') || state.global.get('category_idx'),
+        tagsAll: state.global.get('tags') || state.global.get('categories')
     }))(TagsIndex)
 };

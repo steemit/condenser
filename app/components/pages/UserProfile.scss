@@ -2,10 +2,13 @@
     margin-top: -1.5rem;
 }
 
+.UserProfile__tab_content {
+    margin-top: 1.5rem;
+}
+
 .UserProfile__top-nav {
   background-color: #333333;
   padding: 0;
-  margin-bottom: 1.5rem;
   .row {
       .columns {
           overflow-x: auto;
@@ -21,14 +24,14 @@
       padding-right: 0.7rem;
       color: $white;
       background-color: transparent;
-      @include hoverUnderline;
+      &:hover {
+          background-color: #555;
+      }
       &.active {
           background-color: $white;
           z-index: 2;
           color: $black;
           font-weight: bold;
-          border-top-left-radius: 3px;
-          border-top-right-radius: 3px;
         }
   }
 
@@ -62,10 +65,14 @@
         background: #23579d; /* for older browsers */
         background: linear-gradient(to bottom, #1a4072 0%, #23579d 100%);
 
-        height: 150px;
+        height: 155px;
     }
     h2 {
         padding-top: 20px;
+        .Userpic {
+            margin-right: 1rem;
+            vertical-align: middle;
+        }
     }
 
     .UserProfile__buttons {
@@ -85,8 +92,9 @@
         padding-bottom: 5px;
 
         a {
-          border-bottom: 1px dotted rgba(255,255,255,0.5);
-	}
+            @include hoverUnderline;
+            vertical-align: middle;
+	    }
 
         span {
             padding: 0px 10px;
@@ -95,6 +103,11 @@
         span:nth-child(2) {
             border-left: 1px solid grey;
             border-right: 1px solid grey;
+        }
+
+        .NotifiCounter {
+            position: relative;
+            top: -5px;
         }
     }
 }
@@ -107,12 +120,6 @@
 
 @media screen and (max-width: 39.9375em) {
 
-    .UserProfile__banner {
-        > div.column {
-            height: 110px;
-        }
-    }
-
     div.UserProfile__top-nav .menu li>a {
         padding: 8px;
     }
@@ -120,6 +127,11 @@
     .UserProfile__top-menu > div.columns {
         padding-left: 0;
         padding-right: 0;
+    }
+
+    .UserProfile__banner h2 .Userpic {
+        width: 36px !important;
+        height: 36px !important;
     }
 
     .UserProfile__banner .UserProfile__buttons {

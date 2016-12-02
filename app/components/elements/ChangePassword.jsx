@@ -111,7 +111,6 @@ class ChangePassword extends React.Component {
                             })}</p> :
                         <div className="ChangePassword__rules">
                             <hr />
-                            {/* currently translateHtml() does not work, using <FormattedHTMLMessage /> instead */}
                             <p> <FormattedHTMLMessage id="the_rules_of_APP_NAME" /> </p>
                         <hr />
                         </div>
@@ -199,7 +198,6 @@ import {PublicKey} from 'shared/ecc'
 let newWif = null
 const keyValidate = (values) => ({
     password: ! values.password ? translate('required') :
-        values.password.length < 16 ? translate('password_must_be_characters_or_more', {amount: 16}) :
         PublicKey.fromString(values.password) ? translate('you_need_private_password_or_key_not_a_public_key') :
         null,
     confirmPassword: ! values.confirmPassword ? translate('required') :

@@ -48,7 +48,7 @@ export function sortComments( g, comments, sort_order ) {
                 let bactive = Date.parse( bcontent.get('last_update') );
                 return bactive.getTime() - aactive.getTime();
               },
-      created:  (a,b) =>  {
+      new:  (a,b) =>  {
                 let acontent = g.get('content').get(a);
                 let bcontent = g.get('content').get(b);
                 if (netNegative(acontent)) {
@@ -86,7 +86,7 @@ class CommentImpl extends React.Component {
         // html props
         global: React.PropTypes.object.isRequired,
         content: React.PropTypes.string.isRequired,
-        sort_order: React.PropTypes.oneOf(['active', 'updated', 'created', 'trending']).isRequired,
+        sort_order: React.PropTypes.oneOf(['active', 'updated', 'new', 'trending']).isRequired,
         root: React.PropTypes.bool,
         showNegativeComments: React.PropTypes.bool,
         onHide: React.PropTypes.func,
@@ -258,16 +258,13 @@ class CommentImpl extends React.Component {
                 noImage={noImage || !pictures} jsonMetadata={jsonMetadata} />);
             controls = (<div>
                 <Voting post={post} />
-                {!$STM_Config.read_only_mode && depth < 6 && <a onClick={onShowReply}>{translate('reply')}</a>}
-                {showEditOption && <span>
-                    &nbsp;&nbsp;
-                    <a onClick={onShowEdit}>{translate('edit')}</a>
-                </span>}
-                {showDeleteOption && <span>
-                    &nbsp;&nbsp;
-                    <a onClick={onDeletePost}>{translate('delete')}</a>
-                </span>}
-            </div>);
+                {!readonly &&
+                    <span className="Comment__footer__controls">
+                        {depth < 6 && <a onClick={onShowReply}>{translate('reply')}</a>}
+                        {' '}{showEditOption   && <a onClick={onShowEdit}>{translate('edit')}</a>}
+                        {' '}{showDeleteOption && <a onClick={onDeletePost}>{translate('delete')}</a>}
+                    </span>}
+            </div>;
         }
 
         if(!this.state.collapsed) {
@@ -317,9 +314,10 @@ class CommentImpl extends React.Component {
                             <a title={translate('collapse_or_expand')} onClick={this.toggleCollapsed}>{ this.state.collapsed ? '[+]' : '[-]' }</a>
                         </div>
                         <span className="Comment__header-user">
-                            <Icon name="user" className="Comment__Userpic-small" />
-                            <span itemProp="author" itemScope itemType="http://schema.org/Person">
-                                <Author author={comment.author} authorRepLog10={authorRepLog10} /></span>
+                            <div className="Comment__Userpic-small">
+                                <Userpic account={comment.author} />
+                            </div>
+                            <Author author={comment.author} authorRepLog10={authorRepLog10} />
                         </span>
                         &nbsp; &middot; &nbsp;
                         <Link to={comment_link} className="PlainLink">

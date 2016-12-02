@@ -37,6 +37,7 @@ export default createModule({
             if(!state.hasIn(['current', 'private_keys'])) return state
             let empty = false
             state = state.updateIn(['current', 'private_keys'], private_keys => {
+                if(!private_keys) return null
                 if(private_keys.has('active_private'))
                     console.log('removeHighSecurityKeys')
                 private_keys = private_keys.delete('active_private')

@@ -21,6 +21,14 @@ export default {
         // golos.io landing page
         } else if (route.page === 'Landing') {
             cb(null, [require('app/components/pages/Landing')]);
+        } else if (route.page === 'Welcome') {
+            //require.ensure([], (require) => {
+            cb(null, [require('app/components/pages/Welcome')]);
+            //});
+        } else if (route.page === 'Faq') {
+            //require.ensure([], (require) => {
+            cb(null, [require('app/components/pages/Faq')]);
+            //});
         } else if (route.page === 'Login') {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/Login')]);

@@ -34,10 +34,11 @@ export function parsePayoutAmount(amount) {
 /**
     This is a rough approximation of log10 that works with huge digit-strings.
     Warning: Math.log10(0) === NaN
+    The 0.00000001 offset fixes cases of Math.log(1000)/Math.LN10 = 2.99999999~
 */
 function log10(str) {
     const leadingDigits = parseInt(str.substring(0, 4));
-    const log = Math.log(leadingDigits) / Math.log(10)
+    const log = Math.log(leadingDigits) / Math.LN10 + 0.00000001
     const n = str.length - 1;
     return n + (log - parseInt(log));
 }
@@ -56,6 +57,13 @@ export const repLog10 = rep2 => {
     // base-line 0 to darken and < 0 to auto hide (grep rephide)
     out = parseInt(out)
     return out
+}
+
+export function countDecimals(amount) {
+    if(amount == null) return amount
+    amount = String(amount).match(/[\d\.]+/g).join('') // just dots and digits
+    const parts = amount.split('.')
+    return parts.length > 2 ? undefined : parts.length === 1 ? 0 : parts[1].length
 }
 
 // this function searches for right translation of provided error (usually from back-end)

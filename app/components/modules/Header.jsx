@@ -158,6 +158,7 @@ class Header extends React.Component {
             page_title = page_title.charAt(0).toUpperCase() + page_title.slice(1);
         }
 
+
         if (process.env.BROWSER && route.page !== 'Post') document.title = page_title + ' — ' + APP_NAME;
 
         const logo_link = route.params && route.params.length > 1 && this.last_sort_order ? '/' + this.last_sort_order : '/hot';
@@ -170,7 +171,7 @@ class Header extends React.Component {
             // disabled until crowdsale starts
             // ['trending30', translate('trending_30_day')],
             // promotion functionality currently does not work
-            // ['promoted', translate('promoted')],
+            // ['promoted', translate('promoted')], //TODO: reenable after shared-db upgrade
             ['active', translate('active')]
         ];
         if (current_account_name) sort_orders.unshift(['home', translate('home')]);
@@ -182,7 +183,7 @@ class Header extends React.Component {
             ['created', translate('new')],
             ['hot', translate('hot')],
             ['trending', translate('trending')],
-            // ['promoted', translate('promoted')],
+            // ['promoted', translate('promoted')], //TODO: reenable after shared-db upgrade
             ['active', translate('active')]
         ];
         if (current_account_name) sort_orders_horizontal.unshift(['home', translate('home')]);

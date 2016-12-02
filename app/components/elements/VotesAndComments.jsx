@@ -27,12 +27,8 @@ class VotesAndComments extends React.Component {
         const voters_count = votes.reduce((value, vote) => {
             return value + Math.sign(vote.get('percent'));
         }, 0);
-        // console.warn('voters_count', voters_count)
-        // console.warn('response_count', comments)
         let comments_tooltip = translate('no_responses_yet_click_to_respond');
         if (comments > 0) comments_tooltip = `${translate('response_count', {responseCount: comments})}. ${translate('click_to_respond')}.`
-        // console.warn(comments_tooltip)
-        // console.warn(translate('followed_count', {followingCount: 44}))
 
         return (
             <span className="VotesAndComments">

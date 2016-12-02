@@ -56,6 +56,12 @@
     "site_key": "",
     "secret_key": ""
   },
+  "tarantool": {
+    "host": "localhost",
+    "port": 3301,
+    "username": "guest",
+    "password": ""
+  },
   "img_proxy_prefix": "",
   "ipfs_prefix": "",
   "google_analytics_id": "",

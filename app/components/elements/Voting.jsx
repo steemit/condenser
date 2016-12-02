@@ -169,9 +169,16 @@ class Voting extends React.Component {
 
         const payoutItems = [
 
-            {value: translate('potential_payout') + ' ' + localizedCurrency(formatDecimal(pending_payout).join(''))},
-            // after merging update
-            {value: translate('boost_payments') + ' ' + localizedCurrency(formatDecimal(promoted).join(''))}
+        if(cashout_active) {
+            payoutItems.push({value: translate('potential_payout') + ' ' + localizedCurrency(formatDecimal(pending_payout).join(''))});
+        }
+        if(promoted > 0) {
+            payoutItems.push({value: translate('promotion_cost') + ' ' + localizedCurrency(formatDecimal(promoted).join(''))});
+        }
+        const hide_cashout_532 = cashout_time.indexOf('1969') === 0 // tmpfix for #532
+        if (cashout_active && !hide_cashout_532) {
+            payoutItems.push({value: <TimeAgoWrapper date={cashout_time} />});
+        }
 
         ];
         if (cashout_time && cashout_time.indexOf('1969') !== 0 && cashout_time.indexOf('1970') !== 0) {
@@ -183,11 +190,11 @@ class Voting extends React.Component {
             payoutItems.push({value: ' - ' + translate('curators') + ': ' + localizedCurrency(formatDecimal(total_curator_payout).join(''))});
         }
         const payoutEl = <DropdownMenu el="div" items={payoutItems} onClick={this.trackAnalytics.bind(this, 'rewards dropdown clicked')}>
-            <span>
+            <span style={payout_limit_hit ? {opacity: '0.5'} : {}}>
                 {/* <FormattedAsset amount={payout} asset="$" /> */}
                 {/* TODO check FormattedAsset and it's possible replacememnt with LocalizedCurrency */}
-                <LocalizedCurrency amount={payout} />
-                <Icon name="dropdown-arrow" />
+                <LocalizedCurrency amount={payout} classname={max_payout === 0 ? 'strikethrough' : ''} />
+                {payoutItems.length > 0 && <Icon name="dropdown-arrow" />}
             </span>
         </DropdownMenu>;
 

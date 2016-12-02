@@ -1,6 +1,5 @@
 import React from 'react';
 import store from 'store';
-// import cc from 'currency-codes';
 import { injectIntl } from 'react-intl';
 import { getSymbolFromCurrency } from 'currency-symbol-map';
 import { FRACTION_DIGITS, DEFAULT_CURRENCY } from 'config/client_config';

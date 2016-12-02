@@ -1,4 +1,4 @@
-import { APP_NAME, APP_URL, LANDING_PAGE_URL, SUPPORT_EMAIL, DEBT_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TOKEN, CURRENCY_SIGN, VESTING_TOKEN } from 'config/client_config';
+import { APP_NAME, APP_URL, LANDING_PAGE_URL, SUPPORT_EMAIL, DEBT_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TOKEN, CURRENCY_SIGN, VESTING_TOKEN, LIQUID_TOKEN_UPPERCASE } from 'config/client_config';
 /**
  * see: app/locales/README.md
  */
@@ -10,17 +10,20 @@ const en = 	{
 	buy_LIQUID_TOKEN: 'Buy ' + LIQUID_TOKEN,
 	sell_LIQUID_TOKEN: 'Sell ' + LIQUID_TOKEN,
 	market: "Market",
+	currency_market: "Currency Market",
 	stolen_account_recovery: "Stolen Accounts Recovery",
 	change_account_password: "Change Account Password",
+	steemit_api_docs: "Steemit API Docs",
 	APP_NAME_chat: APP_NAME + " Chat",
 	witnesses: "Witnesses",
+	vote_for_witnesses: "Vote for Witnesses",
 	privacy_policy: "Privacy Policy",
 	terms_of_service: "Terms of Service",
 	sign_up: "Sign Up",
 	/* end navigation */
 	buy: 'Buy',
 	sell: 'Sell',
-	buy_INVEST_TOKEN: 'Buy ' + VESTING_TOKEN,
+	buy_VESTING_TOKEN: 'Buy ' + VESTING_TOKEN,
 	transaction_history: 'Transaction History',
 	submit_a_story: 'Submit a Story',
 	nothing_yet: 'Nothing yet',
@@ -157,17 +160,17 @@ const en = 	{
 	share: 'Share',
 	in_reply_to: 'in reply to',
 	replied_to: 'replied to',
-	transfer_amount_to_INVEST_TOKEN: "Transfer {amount} to " + VESTING_TOKEN,
-	transfer_amount_INVEST_TOKEN_to: "Transfer {amount} " + VESTING_TOKEN + " to",
-	recieve_amount_INVEST_TOKEN_from: "Receive {amount} " + VESTING_TOKEN + " from",
-	transfer_amount_INVEST_TOKEN_from_to: "Transfer {amount} " + VESTING_TOKEN + " from {from} to",
+	transfer_amount_to_VESTING_TOKEN: "Transfer {amount} to " + VESTING_TOKEN,
+	transfer_amount_VESTING_TOKEN_to: "Transfer {amount} " + VESTING_TOKEN + " to",
+	recieve_amount_VESTING_TOKEN_from: "Receive {amount} " + VESTING_TOKEN + " from",
+	transfer_amount_VESTING_TOKEN_from_to: "Transfer {amount} " + VESTING_TOKEN + " from {from} to",
 	transfer_amount_to: "Transfer {amount} to",
 	recieve_amount_from: "Receive {amount} from",
 	transfer_amount_from: "Transfer {amount} from",
 	stop_power_down: "Stop power down",
 	start_power_down_of: "Start power down of",
-	curation_reward_of_INVEST_TOKEN_for: 'Curation reward of {reward} ' + VESTING_TOKEN + ' for',
-	author_reward_of_INVEST_TOKEN_for: 'Author reward of {payout} and {reward} ' + VESTING_TOKEN + ' for',
+	curation_reward_of_VESTING_TOKEN_for: 'Curation reward of {reward} ' + VESTING_TOKEN + ' for',
+	author_reward_of_VESTING_TOKEN_for: 'Author reward of {payout} and {reward} ' + VESTING_TOKEN + ' for',
 	recieve_interest_of: 'Receive interest of {interest}',
 	// TODO find where this is used and write an example
 	from: 'from',
@@ -302,13 +305,13 @@ const en = 	{
 		other {{followerCount} followers}
 	}`,
 	followed_count: `{followingCount, plural,
-		=0 {no followed}
-		one {1 followed}
-		other {{followingCount} followed}
+		=0 {not following anybody}
+		one {1 following}
+		other {{followingCount} following}
 	}`,
 	vote_count: `{voteCount, plural,
 		=0 {no votes}
-		one {1 votes}
+		one {1 vote}
 		other {{voteCount} votes}
 	}`,
 	response_count: `{responseCount, plural,
@@ -318,8 +321,8 @@ const en = 	{
 	}`,
 	reply_count: `{replyCount, plural,
 		=0 {no replies}
-		one {1 replies}
-		other {{responseCount} replies}
+		one {1 reply}
+		other {{replyCount} replies}
 	}`,
 	this_is_users_reputations_score_it_is_based_on_history_of_votes: "This is {name}'s reputation score.\n\nThe reputation score is based on the history of votes received by the account, and is used to hide low quality content.",
 	newer: 'Newer',
@@ -439,7 +442,7 @@ const en = 	{
 	not_valid_email: 'Not valid email',
 	thank_you_for_being_an_early_visitor_to_APP_NAME: 'Thank you for being an early visitor to ' + APP_NAME + '. We will get back to you at the earliest possible opportunity.',
 	estimated_author_rewards_last_week: "Estimated author rewards last week",
-	author_rewards_last_week: "Estimated author rewards last week",
+	author_rewards_last_week: "Author rewards last week",
 	confirm: 'Confirm',
 	canceled: 'Canceled',
 	asset: "Asset",
@@ -452,9 +455,9 @@ const en = 	{
 	deposit: 'Deposit',
 	basic: 'Basic',
 	advanced: 'Advanced',
-	convert_to_INVEST_TOKEN: 'Convert to ' + VESTING_TOKEN,
+	convert_to_VESTING_TOKEN: 'Convert to ' + VESTING_TOKEN,
 	transfer_to_account: 'Transfer to Account',
-	buy_LIQUID_TOKEN_or_INVEST_TOKEN: 'Buy ' + LIQUID_TOKEN + ' or ' + VESTING_TOKEN,
+	buy_LIQUID_TOKEN_or_VESTING_TOKEN: 'Buy ' + LIQUID_TOKEN + ' or ' + VESTING_TOKEN,
 	version: 'Version',
 	about_APP_NAME: 'About ' + APP_NAME,
 	APP_NAME_is_a_social_media_platform_where_everyone_gets_paid_for_creating_and_curating_content: APP_NAME + ' is a social media platform where <strong>everyone</strong>&nbsp;gets <strong>paid</strong> for creating and curating content',
@@ -475,13 +478,13 @@ const en = 	{
 	promote: 'Promote',
 	// Tips.js
 	tradeable_tokens_that_may_be_transferred_anywhere_at_anytime: 'Tradeable tokens that may be transferred anywhere at anytime.',
-	LIQUID_TOKEN_can_be_converted_to_INVEST_TOKEN_in_a_process_called_powering_up: LIQUID_TOKEN + ' can be converted to ' + VESTING_TOKEN + ' in a process called powering up.',
+	LIQUID_TOKEN_can_be_converted_to_VESTING_TOKEN_in_a_process_called_powering_up: LIQUID_TOKEN + ' can be converted to ' + VESTING_TOKEN + ' in a process called powering up.',
 	tokens_worth_about_AMOUNT_of_LIQUID_TOKEN: 'Tokens worth about {amount} of ' + LIQUID_TOKEN + '.',
 	influence_tokens_which_earn_more_power_by_holding_long_term: 'Influence tokens which earn more power by holding long term.',
 	the_more_you_hold_the_more_you_influence_post_rewards: 'The more you hold the more you influence post rewards and earn for accurate voting.',
 	the_estimated_value_is_based_on_a_7_day_average_value_of_LIQUID_TOKEN_in_currency: 'The estimated value is based on a 7 day average value of ' + LIQUID_TOKEN + ' in US Dollars.',
-	INVEST_TOKEN_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_LIQUID_TOKEN: VESTING_TOKEN + ' is non-transferrable and will require 2 years and 104 payments to convert back to ' + LIQUID_TOKEN + '.',
-	converted_INVEST_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again: 'Converted ' + VESTING_TOKEN + ' can be sent to yourself or someone else but can not transfer again without converting back to ' + LIQUID_TOKEN + '.',
+	VESTING_TOKEN_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_LIQUID_TOKEN: VESTING_TOKEN + ' is non-transferrable and will require 2 years and 104 payments to convert back to ' + LIQUID_TOKEN + '.',
+	converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again: 'Converted ' + VESTING_TOKEN + ' can be sent to yourself or someone else but can not transfer again without converting back to ' + LIQUID_TOKEN + '.',
 	profile: 'Profile',
 	send_to_account: "Send to account",
 	confirm_email: 'Confirm Email',
@@ -496,13 +499,13 @@ const en = 	{
 	// next 3 strings are used conditionally together
 	show_more: 'Show more',
 	show_less: 'Show less',
-	value_posts: 'value posts',
+	value_posts: 'low value posts',
 	// PormotePost.jsx
 	promote_post: 'Promote Post',
 	spend_your_DEBT_TOKEN_to_advertise_this_post: 'Spend your ' + DEBT_TOKEN + 's to advertise this post in the promoted content section',
 	you_successdully_promoted_this_post: 'You successfully promoted this post',
 	leave_this_unchecked_to_receive_half_your_reward: "Leave this unchecked to receive 1/2 your reward in " + VESTING_TOKEN + " and 1/2 in " + DEBT_TOKEN,
-	pay_me_100_in_INVEST_TOKEN: 'Pay me 100% in ' + VESTING_TOKEN,
+	pay_me_100_in_VESTING_TOKEN: 'Pay me 100% in ' + VESTING_TOKEN,
 	requires_5_or_more_reddit_comment_karma: 'requires 5 or more Reddit comment karma',
 	this_post_was_hidden_due_to_low_ratings: 'This post was hidden due to low ratings',
 	reblogged_by: 'Resteemed by',
@@ -521,6 +524,7 @@ const en = 	{
 	choose_currency: 'Choose currency',
 	crowdsale: 'Crowdsale',
 	followers: 'Followers',
+	following: 'Following',
 	// errors
 	cannot_increase_reward_of_post_within_the_last_minute_before_payout: 'Cannot increase reward of post within the last minute before payout',
 	vote_currently_exists_user_must_be_indicate_a_to_reject_witness: 'vote currently exists, user must be indicate a desire to reject witness',
@@ -573,8 +577,21 @@ const en = 	{
   curation_rewards_by_user_name: 'Curation rewards by {user_name}',
   author_rewards_by_user_name: 'Author rewards by {user_name}',
   replies_by_user_name: 'Replies by {user_name}',
-  curation_rewards_by_user_name: 'Comments by {user_name}',
-
+  // TODO
+  looks_like_you_havent_posted_anything_yet: 'Looks like you haven\'t posted anything yet',
+  read_the_beginners_guide: 'Read The Beginner\'s Guide',
+  read_the_APP_NAME_welcome_guide: 'Read The Steemit Welcome Guide',
+  markdown_styling_guide: 'Markdown Styling Guide',
+  in_order_to_prevent_abuse_APP_NAME_can_only_register_one_account_per_verified_user: 'In order to prevent abuse Steemit can only register one account per verified user',
+  promotion_cost: 'Promotion Cost',
+  looks_like_you_havent_followed_anything_yet: 'Looks like you haven\'t followed anything yet',
+  explore_APP_NAME: 'Explore ' + APP_NAME,
+  no_topics_order_category_posts_found: 'No {topics_order} {category} posts found',
+  balance_subject_to_3_day_withdraw_waiting_period: 'Balance subject to 3 day withdraw waiting period.',
+  withdraw_LIQUID_TOKEN: 'Withdraw ' + LIQUID_TOKEN,
+  witdhdraw_DEBT_TOKEN: 'Withdraw ' + DEBT_TOKEN,
+  tokens_worth_about_AMOUNT_of_LIQUID_TOKEN_currenlty_collecting_sbdinterest_apr: 'Tokens worth about {amount} of ' + LIQUID_TOKEN_UPPERCASE + ', currently collecting {sbdInterest}% APR',
+  savings: 'savings',
 }
 
 export { en }

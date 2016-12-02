@@ -82,6 +82,7 @@ class Topics extends React.Component {
     }
 }
 
-export default  connect(state => ({
-                            categories: state.global.get('category_idx')
-                        }))(Topics);
+export default connect(state => ({
+    // TODO: use 'tag_idx' after shared-db upgrade
+    categories: state.global.get('tag_idx') || state.global.get('category_idx')
+}))(Topics);

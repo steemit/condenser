@@ -8,13 +8,15 @@ import transaction from 'app/redux/Transaction'
 import o2j from 'shared/clash/object2json'
 import _urls from 'shared/clash/images/urls'
 import _btc from 'shared/clash/coins/btc'
+import Userpic from 'app/components/elements/Userpic';
 
 class Settings extends React.Component {
 
     state = {
         errorMessage: '',
-        successMessage: '',
+        succesMessage: '',
         userImage: this.props.userImage || '',
+        changed: false
     }
 
     handleCurrencyChange(event) { store.set('currency', event.target.value) }
@@ -26,7 +28,7 @@ class Settings extends React.Component {
     }
 
     handleUrlChange = event => {
-        this.setState({userImage: event.target.value})
+        this.setState({userImage: event.target.value, changed: true})
     }
 
     handleUserImageSubmit = event => {
@@ -38,7 +40,8 @@ class Settings extends React.Component {
 
         if (!metaData) metaData = {}
         if (metaData == '{created_at: \'GENESIS\'}') metaData = {created_at: "GENESIS"}
-        metaData.user_image = this.state.userImage
+        if(!metaData.profile) metaData.profile = {}
+        metaData.profile.profile_image = this.state.userImage
         metaData = JSON.stringify(metaData);
 
         updateAccount({
@@ -122,12 +125,12 @@ class Settings extends React.Component {
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
-        const {accountname} = 	ownProps.routeParams
-        const account 		= 	state.global.getIn(['accounts', accountname]).toJS()
-        const current_user 	= 	state.user.get('current')
-        const username 		=	current_user ? current_user.get('username') : ''
-        const metaData 		=	account ? o2j.ifStringParseJSON(account.json_metadata) : {}
-        const userImage     =   metaData ? metaData.user_image : ''
+        const {accountname} =    ownProps.routeParams
+        const account = state.global.getIn(['accounts', accountname]).toJS()
+        const current_user = state.user.get('current')
+        const username = current_user ? current_user.get('username') : ''
+        const metaData = account ? o2j.ifStringParseJSON(account.json_metadata) : {}
+        const userImage = metaData && metaData.profile ? metaData.profile.profile_image : ''
 
         return {
             account,
@@ -143,8 +146,8 @@ export default connect(
             dispatch(user.actions.changeLanguage(language))
         },
         updateAccount: ({successCallback, errorCallback, ...operation}) => {
-			const options = {type: 'account_update', operation, successCallback, errorCallback}
-			dispatch(transaction.actions.broadcastOperation(options))
+            const options = {type: 'account_update', operation, successCallback, errorCallback}
+            dispatch(transaction.actions.broadcastOperation(options))
         }
     })
 )(Settings)

@@ -56,8 +56,16 @@ class AuthorRewards extends React.Component {
                 const vest = assetFloat(item[1].op[1].vesting_payout, VEST_TICKER);
                 const sbd = assetFloat(item[1].op[1].sbd_payout, DEBT_TICKER);
 
-                if (new Date(item[1].timestamp).getTime() > yesterday) {
-                    rewards24Vests += vest;
+                const vest  = assetFloat(item[1].op[1].vesting_payout, VEST_TICKER);
+                const steem = assetFloat(item[1].op[1].steem_payout, LIQUID_TICKER);
+                const sbd   = assetFloat(item[1].op[1].sbd_payout, DEBT_TICKER);
+
+                if (new Date(item[1].timestamp).getTime() > lastWeek) {
+                    if (new Date(item[1].timestamp).getTime() > yesterday) {
+                        rewards24Vests += vest;
+                        rewards24Steem += steem;
+                        rewards24SBD   += sbd;
+                    }
                     rewardsWeekVests += vest;
                     rewards24SBD += sbd;
                     rewardsWeekSBD += sbd;
@@ -88,12 +96,12 @@ class AuthorRewards extends React.Component {
              <nav>
                <ul className="pager">
                  <li>
-                     <div className={"button tiny hollow float-left " + (historyIndex === 0 ? " disabled" : "")} onClick={this._setHistoryPage.bind(this, false)} aria-label={translate('newer')}>
+                     <div className={"button tiny hollow float-left " + (historyIndex === 0 ? " disabled" : "")} onClick={this._setHistoryPage.bind(this, false)} aria-label={translate('previous')}>
                          <span aria-hidden="true">&larr; {translate('newer')}</span>
                      </div>
                  </li>
                  <li>
-                     <div className={"button tiny hollow float-right " + (historyIndex >= (curationLength - 10) ? " disabled" : "")} onClick={historyIndex >= (curationLength - 10) ? null : this._setHistoryPage.bind(this, true)} aria-label={translate('older')}>
+                     <div className={"button tiny hollow float-right " + (historyIndex >= (curationLength - 10) ? " disabled" : "")} onClick={historyIndex >= (curationLength - 10) ? null : this._setHistoryPage.bind(this, true)} aria-label={translate('next')}>
                          <span aria-hidden="true">{translate('older')} &rarr;</span>
                      </div>
                  </li>
@@ -108,10 +116,26 @@ class AuthorRewards extends React.Component {
             </div>
             <div className="UserWallet__balance UserReward__row row">
                 <div className="column small-12 medium-8">
+                    {translate('estimated_author_rewards_last_week')}:
+                </div>
+                <div className="column small-12 medium-4">
+                    {numberWithCommas(vestsToSp(this.props.state, rewardsWeekVests + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
+                    <br />
+                    {rewardsWeekSteem.toFixed(3) + " " + LIQUID_TICKER}
+                    <br />
+                    {rewardsWeekSBD.toFixed(3) + " " + DEBT_TOKEN_SHORT}
+                </div>
+            </div>
+
+            {/*  -- These estimates have been causing issus, see #600 --
+            <div className="UserWallet__balance UserReward__row row">
+                <div className="column small-12 medium-8">
                     {translate('author_rewards_last_24_hours')}:
                 </div>
-                <div className="column small-12 medium-3">
-                    {numberWithCommas(vestsToSp(this.props.state, [rewards24Vests, VEST_TICKER].join(" "))) + " " + VESTING_TOKEN}
+                <div className="column small-12 medium-4">
+                    {numberWithCommas(vestsToSp(this.props.state, rewards24Vests + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
+                    <br />
+                    {rewards24Steem.toFixed(3) + " " + LIQUID_TICKER}
                     <br />
                     {rewards24SBD.toFixed(3) + " " + DEBT_TOKEN_SHORT}
                 </div>
@@ -119,10 +143,12 @@ class AuthorRewards extends React.Component {
 
             <div className="UserWallet__balance UserReward__row row">
                 <div className="column small-12 medium-8">
-                    {translate('daily_average_author_rewards')}:
+                    translate('daily_average_author_rewards')}:
                 </div>
-                <div className="column small-12 medium-3">
-                    {numberWithCommas(vestsToSp(this.props.state, [averageCurationVests, VEST_TICKER].join(" ") )) + " " + VESTING_TOKEN}
+                <div className="column small-12 medium-4">
+                    {numberWithCommas(vestsToSp(this.props.state, averageCurationVests + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
+                    <br />
+                    {averageCurationSteem.toFixed(3) + " " + LIQUID_TICKER}
                     <br />
                     {averageCurationSBD.toFixed(3) + " " + DEBT_TOKEN_SHORT}
                 </div>
@@ -131,12 +157,15 @@ class AuthorRewards extends React.Component {
                 <div className="column small-12 medium-8">
                     {translate(!hasFullWeek ? 'estimated_author_rewards_last_week' : 'author_rewards_last_week')}:
                 </div>
-                <div className="column small-12 medium-3">
-                    {numberWithCommas(vestsToSp(this.props.state, [(hasFullWeek ? rewardsWeekVests : averageCurationVests * 7), VEST_TICKER].join(" ") )) + " " + VESTING_TOKEN}
+                <div className="column small-12 medium-4">
+                    {numberWithCommas(vestsToSp(this.props.state, (hasFullWeek ? rewardsWeekVests : averageCurationVests * 7) + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
+                    <br />
+                    {(hasFullWeek ? rewardsWeekSteem : averageCurationSteem * 7).toFixed(3) + " " + LIQUID_TICKER}
                     <br />
                     {(hasFullWeek ? rewardsWeekSBD : averageCurationSBD * 7).toFixed(3) + " " + DEBT_TOKEN_SHORT}
                 </div>
             </div>
+            */}
 
             <div className="row">
                 <div className="column small-12">

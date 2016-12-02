@@ -22,6 +22,7 @@ import {List} from 'immutable'
 import {repLog10, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import { translate } from 'app/Translator';
 import { APP_NAME, APP_NAME_LATIN, APP_URL } from 'config/client_config';
+import DMCAList from 'app/utils/DMCAList'
 
 function TimeAuthorCategory({content, authorRepLog10, showTags}) {
     return (
@@ -160,9 +161,14 @@ class PostFull extends React.Component {
         let link = `/@${content.author}/${content.permlink}`;
         if (content.category) link = `/${content.category}${link}`;
 
-        const content_body = content.body;
         const {category, title, body} = content;
         if (process.env.BROWSER && title) document.title = title + ' — ' + APP_NAME;
+
+        let content_body = content.body;
+        const url = `/${category}/@${author}/${permlink}`
+        if(DMCAList.includes(url)) {
+            content_body = 'This post is not available due to a copyright claim.'
+        }
 
         const replyParams = {author, permlink, parent_author, parent_permlink, category, title, body}
 
@@ -238,22 +244,27 @@ class PostFull extends React.Component {
             </div>
         }
 
-        const archived    = post_content.get('mode') === 'archived'
-        const firstPayout = post_content.get('mode') === "first_payout"
-        const rootComment = post_content.get('depth') == 0
+        const readonly = post_content.get('mode') === 'archived' || $STM_Config.read_only_mode
+        //const showPromote = username && post_content.get('mode') === "first_payout" && post_content.get('depth') == 0
+        const showPromote = false // TODO: revert when nodes are updated with https://github.com/steemit/steem/pull/550
+        const showReplyOption = post_content.get('depth') < 6
+        const showEditOption = username === author
+        const authorRepLog10 = repLog10(content.author_reputation)
 
         return (
-            <article className="PostFull hentry" itemScope itemType ="http://schema.org/blogPost">
-                <div className="float-right"><Voting post={post} flag /></div>
-                <div className="PostFull__header">
-                    {post_header}
-                    <TimeAuthorCategory content={content} authorRepLog10={authorRepLog10} showTags />
-                </div>
+            <article className="PostFull hentry" itemScope itemType="http://schema.org/blogPost">
                 {showEdit ?
                     renderedEditor :
-                    <div className="PostFull__body entry-content">
-                        <MarkdownViewer formId={formId + '-viewer'} text={content_body} jsonMetadata={jsonMetadata} large highQualityPost={high_quality_post} noImage={!content.stats.pictures} />
-                    </div>
+                    <span>
+                        <div className="float-right"><Voting post={post} flag /></div>
+                        <div className="PostFull__header">
+                            {post_header}
+                            <TimeAuthorCategory content={content} authorRepLog10={authorRepLog10} showTags />
+                        </div>
+                        <div className="PostFull__body entry-content">
+                            <MarkdownViewer formId={formId + '-viewer'} text={content_body} jsonMetadata={jsonMetadata} large highQualityPost={high_quality_post} noImage={!content.stats.pictures} />
+                        </div>
+                    </span>
                 }
 
                 {/* {username && firstPayout && rootComment && <div className="float-right">

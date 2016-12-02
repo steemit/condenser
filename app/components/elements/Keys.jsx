@@ -64,12 +64,7 @@ class Keys extends Component {
                 <div className="row">
 
                     <div className="column small-12">
-                        {/* authType will mosts likely will be one of the following: ['Posting', 'Active', 'Owner', 'Memo'] */}
-                        {/* string id is always lowercased, hence usage of .toLowerCase() */}
                         <label>{translate(authType.toLowerCase())}</label>
-
-                        <label>{authType}</label>
-
                         {auths}
                     </div>
                 </div>
@@ -91,9 +86,10 @@ export default connect(
         let privateKeys
         if (current)
             privateKeys = current.get('private_keys') // not bound to one account
-        else {
+
+        if(!privateKeys)
             privateKeys = emptyMap
-        }
+
         const auth = state.user.getIn(['authority', accountName])
         return {...ownProps, auth, authLogin, privateKeys}
     },

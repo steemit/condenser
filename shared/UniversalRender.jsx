@@ -30,6 +30,8 @@ import extractMeta from 'app/utils/ExtractMeta';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import Translator from 'app/Translator';
 import { APP_NAME } from 'config/client_config';
+import Tarantool from 'db/tarantool';
+import {notificationsArrayToMap} from 'app/utils/Notifications';
 
 const sagaMiddleware = createSagaMiddleware(
     ...userWatches, // keep first to remove keys early when a page change happens
@@ -159,6 +161,14 @@ async function universalRender({ location, initial_state, offchain }) {
         offchain.server_location = location;
         server_store = createStore(rootReducer, { global: onchain, offchain});
         server_store.dispatch({type: '@@router/LOCATION_CHANGE', payload: {pathname: location}});
+        if (offchain.account) {
+            try {
+                const notifications = await Tarantool.instance().select('notifications', 0, 1, 0, 'eq', offchain.account);
+                server_store.dispatch({type: 'UPDATE_NOTIFICOUNTERS', payload: notificationsArrayToMap(notifications)});
+            } catch(e) {
+                console.log('universalRender Tarantool error :', e.message);
+            }
+        }
     } catch (e) {
         const msg = (e.toString && e.toString()) || e.message || e;
         const stack_trace = e.stack || '[no stack]';

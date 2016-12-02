@@ -22,7 +22,6 @@ class CreateAccount extends React.Component {
 
     static propTypes = {
         loginUser: React.PropTypes.func.isRequired,
-        showSignUp: React.PropTypes.func.isRequired,
         serverBusy: React.PropTypes.bool
     };
 
@@ -91,7 +90,7 @@ class CreateAccount extends React.Component {
             if (res.error || res.status !== 'ok') {
                 console.error('CreateAccount server error', res.error);
                 if (res.error === 'Unauthorized') {
-                    this.props.showSignUp();
+                    window.location = '/enter_email';
                 }
                 this.setState({server_error: res.error || translate('unknown'), loading: false});
             } else {
@@ -209,7 +208,7 @@ class CreateAccount extends React.Component {
                 <div className="column">
                     <div className="callout alert">
                         <p>{translate('our_records_indicate_you_already_have_account')}: <strong>{existingUserAccount}</strong></p>
-                        <p>{translate('to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user', {amount: localizedCurrency(3)})}</p>
+                        <p>{translate('in_order_to_prevent_abuse_APP_NAME_can_only_register_one_account_per_verified_user')}.</p>
                         <p>
                             {translate('you_can_either') + ' '}
                             <a href="/login.html">{translate('login')}</a>
@@ -273,7 +272,6 @@ module.exports = {
         },
         dispatch => ({
             loginUser: (username, password) => dispatch(user.actions.usernamePasswordLogin({username, password, saveLogin: true})),
-            showSignUp: () => dispatch(user.actions.showSignUp()),
             logout: e => {
                 if (e) e.preventDefault();
                 dispatch(user.actions.logout())

@@ -11,6 +11,7 @@ import useOauthLogin from './api/oauth';
 import useGeneralApi from './api/general';
 import useAccountRecoveryApi from './api/account_recovery';
 import useIcoApi from './api/ico'
+import useNotificationsApi from './api/notifications';
 import useEnterAndConfirmEmailPages from './server_pages/enter_confirm_email';
 import isBot from 'koa-isbot';
 import session from 'koa-session';
@@ -39,6 +40,27 @@ app.use(flash({key: 'flash'}));
 // redirect to home page if known account
 // remember ch, cn, r url params in the session and remove them from url
 app.use(function *(next) {
+    // redirect to home page/feed if known account
+    if (this.method === 'GET' && this.url === '/' && this.session.a) {
+        this.status = 302;
+        this.redirect(`/@${this.session.a}/feed`);
+        return;
+    }
+    // normalize user name url from cased params
+    if (this.method === 'GET' && /^\/(@[\w\.\d-]+)\/?$/.test(this.url)) {
+        const p = this.originalUrl.toLowerCase();
+        if(p !== this.originalUrl) {
+            this.redirect(p);
+            return;
+        }
+    }
+    // start registration process if user get to create_account page and has no id in session yet
+    if(this.url === '/create_account' && !this.session.user) {
+        this.status = 302;
+        this.redirect('/enter_email');
+        return;
+    }
+    // remember ch, cn, r url params in the session and remove them from url
     if (this.method === 'GET' && /\?[^\w]*(ch=|cn=|r=)/.test(this.url)) {
         let redir = this.url.replace(/((ch|cn|r)=[^&]+)/gi, r => {
             const p = r.split('=');
@@ -86,6 +108,7 @@ useAccountRecoveryApi(app);
 useOauthLogin(app);
 useGeneralApi(app);
 useIcoApi(app);
+useNotificationsApi(app);
 
 app.use(favicon(path.join(__dirname, '../app/assets/images/favicons/favicon.ico')));
 app.use(isBot());

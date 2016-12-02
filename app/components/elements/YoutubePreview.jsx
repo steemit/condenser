@@ -16,7 +16,7 @@ export default class YoutubePreview extends React.Component {
 
     static defaultProps = {
         width: 640,
-        height: 480,
+        height: 360,
         dataParams: 'enablejsapi=0&rel=0&origin=https://' + APP_URL
     }
 
@@ -39,15 +39,16 @@ export default class YoutubePreview extends React.Component {
             // hqdefault.jpg (high quality version, 480px × 360px
             // sddefault.jpg (standard definition version, 640px × 480px)
             const thumbnail = width <= 320 ? 'mqdefault.jpg' : width <= 480 ? 'hqdefault.jpg' : '0.jpg'
-            const previewLink = `http://img.youtube.com/vi/${youTubeId}/${thumbnail}`
+            const previewLink = `https://img.youtube.com/vi/${youTubeId}/${thumbnail}`
             return (
-                <div className="youtube" onClick={this.onPlay}>
+                <div className="videoWrapper youtube" onClick={this.onPlay} style={{backgroundImage: 'url(' + previewLink + ')'}}>
                     <div className="play"></div>
-                    <img src={previewLink} style={{width, maxWidth: width, height, maxHeight: height}} />
                 </div>
             )
         }
-        const autoPlaySrc = `//www.youtube.com/embed/${youTubeId}?autoplay=1&autohide=1&${dataParams}`
-        return <iframe width={width} height={height} src={autoPlaySrc} frameBorder="0" allowFullScreen="true"></iframe>
+        const autoPlaySrc = `https://www.youtube.com/embed/${youTubeId}?autoplay=1&autohide=1&${dataParams}`
+        return <div className="videoWrapper">
+                <iframe width={width} height={height} src={autoPlaySrc} frameBorder="0" allowFullScreen="true"></iframe>
+            </div>
     }
 }

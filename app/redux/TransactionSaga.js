@@ -5,7 +5,6 @@ import {createTransaction, signTransaction} from 'shared/chain/transactions'
 import {ops} from 'shared/serializer'
 import {PublicKey, PrivateKey} from 'shared/ecc'
 import {fromJS} from 'immutable'
-
 import {getAccount} from 'app/redux/SagaShared'
 import {findSigningKey} from 'app/redux/AuthSaga'
 import {encode} from 'shared/chain/memo'
@@ -285,7 +284,7 @@ import secureRandom from 'secure-random'
 function* preBroadcast_comment({operation, username}) {
     if (!operation.author) operation.author = username
     let permlink = operation.permlink
-    const {author, __config: {originalPost, autoVote, comment_options}} = operation
+    const {author, __config: {originalBody, autoVote, comment_options}} = operation
     const {parent_author = '', parent_permlink = operation.category } = operation
     const {title} = operation
     let {body} = operation
@@ -295,17 +294,11 @@ function* preBroadcast_comment({operation, username}) {
     // TODO Slightly smaller blockchain comments: if body === json_metadata.steem.link && Object.keys(steem).length > 1 remove steem.link ..This requires an adjust of get_state and the API refresh of the comment to put the steem.link back if Object.keys(steem).length >= 1
 
     let body2
-    if (originalPost) {
-        if (originalPost.body) {
-            const patch = createPatch(originalPost.body, body)
-            // Putting body into buffer will expand Unicode characters into their true length
-            if (patch && patch.length < new Buffer(body, 'utf-8').length)
-                body2 = patch
-        }
-        // permlink can not change
-        if (originalPost.permlink) {
-            permlink = originalPost.permlink
-        }
+    if (originalBody) {
+        const patch = createPatch(originalBody, body)
+        // Putting body into buffer will expand Unicode characters into their true length
+        if (patch && patch.length < new Buffer(body, 'utf-8').length)
+            body2 = patch
     }
     if (!body2) body2 = body
     if (!permlink) permlink = yield createPermlink(title, author, parent_author, parent_permlink)
@@ -324,11 +317,7 @@ function* preBroadcast_comment({operation, username}) {
         ['comment', op],
     ]
 
-    if(autoVote) {
-        const vote = {voter: op.author, author: op.author, permlink: op.permlink, weight: 10000}
-        comment_op.push(['vote', vote])
-    }
-
+    // comment_options must come directly after comment
     if(comment_options) {
         const {
             max_accepted_payout = ["1000000.000", DEBT_TICKER].join(" "),
@@ -348,6 +337,12 @@ function* preBroadcast_comment({operation, username}) {
             }]
         )
     }
+
+    if(autoVote) {
+        const vote = {voter: op.author, author: op.author, permlink: op.permlink, weight: 10000}
+        comment_op.push(['vote', vote])
+    }
+
     return comment_op
 }
 

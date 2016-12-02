@@ -92,7 +92,6 @@ class App extends React.Component {
         const p = this.props;
         const n = nextProps;
         return p.location !== n.location ||
-                  p.loading !== n.loading ||
                   p.visitor !== n.visitor ||
                   p.flash !== n.flash || this.state !== nextState;
     }
@@ -122,7 +121,7 @@ class App extends React.Component {
             console.log('onEntropyEvent Unknown', e.type, e)
     }
     render() {
-        const {location, params, children, loading, flash, showSignUp, new_visitor,
+        const {location, params, children, flash, new_visitor,
             depositSteem, signup_bonus} = this.props;
         const lp = false; //location.pathname === '/';
         const params_keys = Object.keys(params);
@@ -175,7 +174,7 @@ class App extends React.Component {
         }
 
         let welcome_screen = null;
-        if (new_visitor && this.state.showBanner
+        if (ip && new_visitor && this.state.showBanner
                   && !/^\/ico$/.test(location.pathname) && !/^\/$/.test(location.pathname)  // LANDING
             ) {
             welcome_screen = (
@@ -200,101 +199,103 @@ class App extends React.Component {
             );
         }
 
-        let header_bar = null
-        // if (!/^\/ico$/.test(location.pathname) && !/^\/$/.test(location.pathname)) {
-        if (location.pathname.indexOf("/ico")) {
-          header_bar = (
-          <div>
-
-          <SidePanel ref="side_panel" alignment="right">
-              <TopRightMenu vertical navigate={this.navigate} />
-              <ul className="vertical menu">
-                  <li>
-                      <a href={WIKI_URL} target="blank" onClick={this.navigate}>
-                            {translate('wiki')}
-                      </a>
-                  </li>
-                  <li>
-                      <a href={LANDING_PAGE_URL} onClick={this.navigate}>
-                          {translate("about")}
-                      </a>
-                  </li>
-                  <li>
-                      <a href="/tags.html/hot" onClick={this.navigate}>
-                          {translate("explore")}
-                      </a>
-                  </li>
-                  <li>
-                      <a href={WHITEPAPER_URL} onClick={this.navigate}>
-                          {translate("APP_NAME_whitepaper")}
-                      </a>
-                  </li>
-                  {/* <li>
-                      <a onClick={() => depositSteem()}>
-                          {translate("buy_LIQUID_TOKEN")}
-                      </a>
-                  </li> */}
-                  <li>
-                      <a href="/market" onClick={this.navigate}>
-                          {translate("market")}
-                      </a>
-                  </li>
-                  <li>
-                      <a href="/recover_account_step_1" onClick={this.navigate}>
-                      {translate("stolen_account_recovery")}
-                      </a>
-                  </li>
-                  <li>
-                      <a href="/change_password" onClick={this.navigate}>
-                          {translate("change_account_password")}
-                      </a>
-                  </li>
-                  <li>
-                      <a href="https://chat.golos.io" target="_blank">
-                          {translate("APP_NAME_chat")}&nbsp;<Icon name="extlink" />
-                      </a>
-                  </li>
-                  <li className="last">
-                      <a href="/~witnesses" onClick={this.navigate}>
-                          {translate("witnesses")}
-                      </a>
-                  </li>
-              </ul>
-              <ul className="vertical menu">
-                  <li>
-                      <a href={TERMS_OF_SERVICE_URL} onClick={this.navigate} rel="nofollow">
-                          {translate("privacy_policy")}
-                      </a>
-                  </li>
-                  <li>
-                      <a href={PRIVACY_POLICY_URL} onClick={this.navigate} rel="nofollow">
-                          {translate("terms_of_service")}
-                      </a>
-                  </li>
-              </ul>
-          </SidePanel>
-          <Header toggleOffCanvasMenu={this.toggleOffCanvasMenu} menuOpen={this.state.open} /></div>);
-        }
-        else {
-            header_bar = (
-                <div>
-                    <SidePanel ref="side_panel" alignment="right">
-                        <TopRightMenu vertical navigate={this.navigate} />
-                    </SidePanel>
-                    <Header toggleOffCanvasMenu={this.toggleOffCanvasMenu} menuOpen={this.state.open} />
-                </div>
-            );
-        }
-
-        return <div className={'App' + (lp ? ' LP' : '') + (ip ? ' index-page' : '')} onMouseMove={this.onEntropyEvent}>
-                {header_bar}
+        return <div className={'App' + (lp ? ' LP' : '') + (ip ? ' index-page' : '') + (miniHeader ? ' mini-header' : '')}
+                    onMouseMove={this.onEntropyEvent}>
+            <SidePanel ref="side_panel" alignment="right">
+                <TopRightMenu vertical navigate={this.navigate} />
+                <ul className="vertical menu">
+                    <li>
+                        <a href={LANDING_PAGE_URL} onClick={this.navigate}>
+                            {translate("about")}
+                        </a>
+                    </li>
+                    <li>
+                        <a href={WIKI_URL} target="blank" onClick={this.navigate}>
+                              {translate('wiki')}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/tags.html/hot" onClick={this.navigate}>
+                            {translate("explore")}
+                        </a>
+                    </li>
+                    <li>
+                        <a href={WHITEPAPER_URL} onClick={this.navigate}>
+                            {translate("APP_NAME_whitepaper")}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/welcome" onClick={this.navigate}>
+                            Welcome
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/faq.html" onClick={this.navigate}>
+                            FAQ
+                        </a>
+                    </li>
+                    // <li>
+                    //     <a onClick={() => depositSteem()}>
+                    //         {translate("buy_LIQUID_TOKEN")}
+                    //     </a>
+                    // </li>
+                    <li>
+                        <a href="http://steemtools.com/" onClick={this.navigate} target="_blank" rel="noopener noreferrer">
+                            {translate('APP_NAME_app_center')}&nbsp;<Icon name="extlink" />
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/market" onClick={this.navigate}>
+                            {translate("currency_market")}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/recover_account_step_1" onClick={this.navigate}>
+                        {translate("stolen_account_recovery")}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/change_password" onClick={this.navigate}>
+                            {translate("change_account_password")}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://chat.golos.io" target="_blank" rel="noopener noreferrer">
+                            {translate("APP_NAME_chat")}&nbsp;<Icon name="extlink" />
+                        </a>
+                    </li>
+                    // <li>
+                    //     <a href="https://steemit.github.io/steemit-docs/" target="_blank" rel="noopener noreferrer">
+                    //         {translate("steemit_api_docs")}&nbsp;<Icon name="extlink" />
+                    //     </a>
+                    // </li>
+                    <li className="last">
+                        <a href="/~witnesses" onClick={this.navigate}>
+                            {translate("vote_for_witnesses")}
+                        </a>
+                    </li>
+                </ul>
+                <ul className="vertical menu">
+                    <li>
+                        <a href={PRIVACY_POLICY_URL} onClick={this.navigate} rel="nofollow">
+                            {translate("privacy_policy")}
+                        </a>
+                    </li>
+                    <li>
+                        <a href={TERMS_OF_SERVICE_URL} onClick={this.navigate} rel="nofollow">
+                            {translate("terms_of_service")}
+                        </a>
+                    </li>
+                </ul>
+            </SidePanel>
+            {miniHeader ? <MiniHeader /> : <Header toggleOffCanvasMenu={this.toggleOffCanvasMenu} menuOpen={this.state.open} />}
             <div className="App__content">
                 {welcome_screen}
                 {callout}
                 {children}
                 {lp ? <LpFooter /> : null}
                 {/* temporary disabled in favor of live chat */}
-                <RocketChat /> 
+                <RocketChat />
             </div>
             <Dialogs />
             <Modals />
@@ -328,10 +329,6 @@ export default connect(
     dispatch => ({
         loginUser: () =>
             dispatch(user.actions.usernamePasswordLogin()),
-        showSignUp: e => {
-            if (e) e.preventDefault();
-            dispatch(user.actions.showSignUp());
-        },
         depositSteem: () => {
             dispatch(g.actions.showDialog({name: 'blocktrades_deposit', params: {outputCoinType: VEST_TICKER}}));
         },

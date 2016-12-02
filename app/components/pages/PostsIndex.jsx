@@ -7,6 +7,8 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import PostsList from 'app/components/cards/PostsList';
 import {isFetchingOrRecentlyUpdated} from 'app/utils/StateFunctions';
 import g from 'app/redux/GlobalReducer';
+import {Link} from 'react-router';
+import MarkNotificationRead from 'app/components/elements/MarkNotificationRead';
 import { translate } from 'app/Translator';
 
 class PostsIndex extends React.Component {
@@ -46,7 +48,7 @@ class PostsIndex extends React.Component {
         if (!last_post) return;
         let {accountname} = this.props.routeParams
         let {category, order = constants.DEFAULT_SORT_ORDER} = this.props.routeParams;
-        if (category === 'feed'){
+        if (category === 'feed') {
             accountname = order.slice(1);
             order = 'by_feed';
         }
@@ -62,19 +64,35 @@ class PostsIndex extends React.Component {
         let topics_order = order;
         let posts = [];
         let emptyText = '';
+        let markNotificationRead = null;
         if (category === 'feed') {
             const account_name = order.slice(1);
             order = 'by_feed';
             topics_order = 'trending';
             posts = this.props.global.getIn(['accounts', account_name, 'feed']);
-            emptyText = translate('user_hasnt_followed_anything_yet', {name: account_name});
+            const isMyAccount = this.props.current_user && this.props.current_user.get('username') === account_name;
+            if (isMyAccount) {
+                emptyText = <div>
+                    {translate('looks_like_you_havent_followed_anything_yet')}.<br /><br />
+                    <Link to="/trending">{translate('explore_APP_NAME')}</Link><br />
+                    <a href="/steemit/@thecryptofiend/the-missing-faq-a-beginners-guide-to-using-steemit">{translate('read_the_beginners_guide')}</a><br />
+                    <a href="/welcome">{translate('read_the_APP_NAME_welcome_guide')}</a>
+                </div>;
+                markNotificationRead = <MarkNotificationRead fields="feed" account={account_name} />
+            } else {
+                emptyText = translate('user_hasnt_followed_anything_yet', {name: account_name});
+            }
         } else {
             posts = this.getPosts(order, category);
+            if (posts !== null && posts.size === 0) {
+                // TODO
+                emptyText = translate('no_topics_order_category_posts_found', {topics_order, category: (category ? ` #` + category : '')});
+            }
         }
 
         const status = this.props.status ? this.props.status.getIn([category || '', order]) : null;
         const fetching = (status && status.fetching) || this.props.loading;
-        const {showSpam} = this.state
+        const {showSpam} = this.state;
 
         return (
             <div className={'PostsIndex row' + (fetching ? ' fetching' : '')}>
@@ -82,6 +100,7 @@ class PostsIndex extends React.Component {
                     <div className="PostsIndex__topics_compact show-for-small hide-for-large">
                         <Topics order={topics_order} current={category} compact />
                     </div>
+                    {markNotificationRead}
                     <PostsList ref="list"
                         posts={posts ? posts.toArray() : []}
                         loading={fetching}

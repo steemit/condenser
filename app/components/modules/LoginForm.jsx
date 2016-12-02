@@ -21,7 +21,7 @@ class LoginForm extends Component {
     };
 
     static defaultProps = {
-        afterLoginRedirectToAccount: false
+        afterLoginRedirectToWelcome: false
     }
 
     constructor(props) {
@@ -126,7 +126,7 @@ class LoginForm extends Component {
                     </div>;
         }
 
-        const {loginBroadcastOperation, dispatchSubmit, afterLoginRedirectToAccount, msg} = this.props;
+        const {loginBroadcastOperation, dispatchSubmit, afterLoginRedirectToWelcome, msg} = this.props;
         const {username, password, saveLogin} = this.state
         const {submitting, valid, handleSubmit} = this.state.login
         const {usernameOnChange, onCancel, /*qrReader*/} = this
@@ -276,17 +276,17 @@ export default connect(
 
     // mapDispatchToProps
     dispatch => ({
-        dispatchSubmit: (data, loginBroadcastOperation, afterLoginRedirectToAccount) => {
+        dispatchSubmit: (data, loginBroadcastOperation, afterLoginRedirectToWelcome) => {
             const {password, saveLogin} = data
             const username = data.username.trim().toLowerCase()
             if (loginBroadcastOperation) {
                 const {type, operation, successCallback, errorCallback} = loginBroadcastOperation.toJS()
                 dispatch(transaction.actions.broadcastOperation({type, operation, username, password, successCallback, errorCallback}))
                 // Avoid saveLogin, this could be a user-provided content page and the login might be an active key.  Security will reject that...
-                dispatch(user.actions.usernamePasswordLogin({username, password, saveLogin: false, afterLoginRedirectToAccount, operationType: type}))
+                dispatch(user.actions.usernamePasswordLogin({username, password, saveLogin: false, afterLoginRedirectToWelcome, operationType: type}))
                 dispatch(user.actions.closeLogin())
             } else {
-                dispatch(user.actions.usernamePasswordLogin({username, password, saveLogin, afterLoginRedirectToAccount}))
+                dispatch(user.actions.usernamePasswordLogin({username, password, saveLogin, afterLoginRedirectToWelcome}))
             }
         },
         clearError: () => { if (hasError) dispatch(user.actions.loginError({error: null})) },

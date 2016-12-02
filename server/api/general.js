@@ -11,6 +11,7 @@ import {getLogger} from '../../app/utils/Logger'
 import {Apis} from 'shared/api_client';
 import {createTransaction, signTransaction} from 'shared/chain/transactions';
 import {ops} from 'shared/serializer';
+import Tarantool from 'db/tarantool';
 const {signed_transaction} = ops;
 const print = getLogger('API - general').print
 
@@ -64,6 +65,32 @@ export default function useGeneralApi(app) {
             return;
         }
 
+        const remote_ip = getRemoteIp(this.req);
+
+        const user_id = this.session.user;
+        if (!user_id) { // require user to sign in with identity provider
+            this.body = JSON.stringify({error: 'Unauthorized'});
+            this.status = 401;
+            return;
+        }
+
+        try {
+            const lock_entity_res = yield Tarantool.instance().call('lock_entity', user_id+'');
+            if (!lock_entity_res[0][0]) {
+                console.log('-- /accounts lock_entity -->', user_id, lock_entity_res[0][0]);
+                this.body = JSON.stringify({error: 'Conflict'});
+                this.status = 409;
+                return;
+            }
+        } catch (e) {
+            console.error('-- /accounts tarantool is not available, fallback to another method', e)
+            const rnd_wait_time = Math.random() * 10000;
+            console.log('-- /accounts rnd_wait_time -->', rnd_wait_time);
+            yield new Promise((resolve) =>
+                setTimeout(() => resolve(), rnd_wait_time)
+            )
+        }
+
         try {
             const meta = {}
             const remote_ip = getRemoteIp(this.req);
@@ -95,8 +122,8 @@ export default function useGeneralApi(app) {
                 where: {user_id, ignored: false},
                 order: 'id DESC'
             });
-            if (existing_account) { //TODO
-                throw new Error("Only one Steem account per user is allowed in order to prevent abuse (Steemit, Inc. funds each new account with 3 STEEM)");
+            if (existing_account) {
+                throw new Error("Only one Steem account per user is allowed in order to prevent abuse");
             }
 
             const same_ip_account = yield models.Account.findOne({
@@ -167,6 +194,9 @@ export default function useGeneralApi(app) {
                 error: error.message
             });
             this.status = 500;
+        } finally {
+            // console.log('-- /accounts unlock_entity -->', user_id);
+            try { yield Tarantool.instance().call('unlock_entity', user_id + ''); } catch(e) {/* ram lock */}
         }
         recordWebEvent(this, 'api/accounts', account ? account.name : 'n/a');
     });
@@ -239,10 +269,8 @@ export default function useGeneralApi(app) {
                 status: 'ok'
             });
         } catch (error) {
-            console.error('Error in /login_account api call', this.session.uid, error);
-            this.body = JSON.stringify({
-                error: error.message
-            });
+            console.error('Error in /login_account api call', this.session.uid, error.message);
+            this.body = JSON.stringify({error: error.message});
             this.status = 500;
         }
         recordWebEvent(this, 'api/login_account', account);
@@ -287,10 +315,8 @@ export default function useGeneralApi(app) {
             });
             recordWebEvent(this, type, str_value);
         } catch (error) {
-            console.error('Error in /record_event api call', error);
-            this.body = JSON.stringify({
-                error: error.message
-            });
+            console.error('Error in /record_event api call', error.message);
+            this.body = JSON.stringify({error: error.message});
             this.status = 500;
         }
     });

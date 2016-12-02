@@ -60,7 +60,11 @@ class Witnesses extends React.Component {
                 (myVote === true ? ' Voting__button--upvoted' : '');
             let witness_thread = ""
             if(thread) {
-                witness_thread = <Link to={thread}>{translate('witness_thread')}</Link>
+                if(links.remote.test(thread)) {
+                    witness_thread = <Link to={thread}>{translate('witness_thread')}&nbsp;<Icon name="extlink" /></Link>
+                } else {
+                    witness_thread = <Link to={thread}>{translate('witness_thread')}</Link>
+                }
             }
             return (
                     <tr key={owner}>
@@ -117,7 +121,7 @@ class Witnesses extends React.Component {
                     </div>
                 </div>
                 <div className="row small-collapse">
-                    <div className="column small-12">
+                    <div className="column">
                         <table>
                             <thead>
                                 <tr>
@@ -130,7 +134,10 @@ class Witnesses extends React.Component {
                                 {witnesses.toArray()}
                             </tbody>
                         </table>
-                        <hr/>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="column">
                         <p>{translate('if_you_want_to_vote_outside_of_top_enter_account_name')}.</p>
                         <form>
                             <input type="text" style={{float: "left", width: "75%"}} value={customUsername} onChange={onWitnessChange} />

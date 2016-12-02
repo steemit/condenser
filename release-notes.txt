@@ -1,4 +1,36 @@
 ---------------------------------------------------------------------
+0.1.161202
+---------------------------------------------------------------------
+
+New features
+--------
+ - views counter #744
+ - profile customization #737
+ - full power badge #748
+ - add current open orders to wallet balances #740
+
+Bug fixes
+--------
+ - various market bug fixes and price warning #728
+ - performance tweaks: minimize rendering and API calls #738
+ - fix witness votes not appearing for logged in user #741
+ - add support for vimeo auto embed #731
+ - fix obscure bug which causes certain keys to trigger back event #754
+ - fix follow mute button alignment for mobile display #753
+ - do not show dropdown for comments with 0 votes #747
+ - fix bug preventing declined payout post from being edited #743
+ - handle malformed categories in url #742
+ - fix share menu scrolling behavior #739
+ - adjust password data-entry error wording #736
+ - clarify dangerous-html flag usage #733
+ - remove fastclick for JS dropdown conflicts #727
+ - allow links to open in new tab without closing menu #726
+ - add padding for avatar on collapsed state #717
+ - display previous title when closing post modal #709
+ - remove negative top margin on comment footer #714
+
+
+---------------------------------------------------------------------
 0.1.161123
 ---------------------------------------------------------------------
 

@@ -284,6 +284,8 @@ export default function useGeneralApi(app) {
                 } else {
                     yield models.Page.create(escAttrs({permlink: page, views}), {logging: false});
                 }
+            } else {
+                if (page_model) views = page_model.views;
             }
             this.body = JSON.stringify({views});
             if (mixpanel) {

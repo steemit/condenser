@@ -10,6 +10,7 @@ import {Link} from 'react-router';
 import MarkNotificationRead from 'app/components/elements/MarkNotificationRead';
 import { translate } from 'app/Translator';
 import Immutable from "immutable";
+import Callout from 'app/components/elements/Callout';
 
 class PostsIndex extends React.Component {
 
@@ -102,7 +103,7 @@ class PostsIndex extends React.Component {
                         <Topics order={topics_order} current={category} compact />
                     </div>
                     {markNotificationRead}
-                    {(!fetching && (posts && !posts.size)) ? emptyText :
+                    {(!fetching && (posts && !posts.size)) ? <Callout>{emptyText}</Callout> :
                         <PostsList
                             ref="list"
                             posts={posts ? posts : Immutable.List()}

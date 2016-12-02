@@ -27,6 +27,7 @@ import DateJoinWrapper from 'app/components/elements/DateJoinWrapper';
 import { translate } from 'app/Translator';
 import WalletSubMenu from 'app/components/elements/WalletSubMenu';
 import Userpic from 'app/components/elements/Userpic';
+import Callout from 'app/components/elements/Callout';
 
 export default class UserProfile extends React.Component {
     constructor() {
@@ -203,7 +204,7 @@ export default class UserProfile extends React.Component {
            {
                 let posts = accountImm.get('posts') || accountImm.get('comments');
                 if (!fetching && (posts && !posts.size)) {
-                    tab_content = <div>{translate('user_hasnt_made_any_posts_yet', {name})}</div>;
+                    tab_content = <Callout>{translate('user_hasnt_made_any_posts_yet', {name})}</Callout>;
                 } else {
                   tab_content = (
                         <PostsList
@@ -228,10 +229,10 @@ export default class UserProfile extends React.Component {
                     <a href="/steemit/@thecryptofiend/the-missing-faq-a-beginners-guide-to-using-steemit">Read The Beginner's Guide</a><br />
                     <a href="/welcome">Read The Steemit Welcome Guide</a>
                 </div>:
-                    <div>{translate('user_hasnt_started_bloggin_yet', {name})}</div>;
+                    translate('user_hasnt_started_bloggin_yet', {name});
 
                 if (!fetching && (posts && !posts.size)) {
-                    tab_content = emptyText;
+                    tab_content = <Callout>{emptyText}</Callout>;
                 } else {
                     tab_content = (
                         <PostsList
@@ -252,7 +253,7 @@ export default class UserProfile extends React.Component {
             if (account.recent_replies) {
                 let posts = accountImm.get('recent_replies');
                 if (!fetching && (posts && !posts.size)) {
-                    tab_content = <div>{translate('user_hasnt_had_any_replies_yet', {name}) + '.'}</div>;
+                    tab_content = <Callout>{translate('user_hasnt_had_any_replies_yet', {name}) + '.'}</Callout>;
                 } else {
                     tab_content = (
                         <div>

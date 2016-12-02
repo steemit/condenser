@@ -121,9 +121,6 @@ class UserWallet extends React.Component {
         /// transfer log
         let idx = 0
         const transfer_log = account.get('transfer_history')
-        .sort((a, b) => {
-            return new Date(b.getIn([1, 'timestamp'])) - new Date(a.getIn([1, 'timestamp']))
-        })
         .map(item => {
             const data = item.getIn([1, 'op', 1]);
             const type = item.getIn([1, 'op', 0]);
@@ -136,8 +133,7 @@ class UserWallet extends React.Component {
             if(data.sbd_payout === '0.000 SBD' && data.vesting_payout === '0.000000 VESTS')
                 return null
             return <TransferHistoryRow key={idx++} op={item.toJS()} context={account.get('name')} />;
-        }).filter(el => !!el);
-        transfer_log.reverse();
+        }).filter(el => !!el).reverse();
 
         let steem_menu = [
             { value: 'Transfer', link: '#', onClick: showTransfer.bind( this, 'STEEM', 'Transfer to Account' ) },

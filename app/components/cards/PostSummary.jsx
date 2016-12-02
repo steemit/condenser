@@ -52,7 +52,6 @@ class PostSummary extends React.Component {
     render() {
         const {currentCategory, thumbSize, ignore, onClick} = this.props;
         const {post, content, pending_payout, total_payout} = this.props;
-        const {account} = this.props;
         if (!content) return null;
 
         const archived = content.get('mode') === 'archived'
@@ -64,11 +63,12 @@ class PostSummary extends React.Component {
                          </div>
         }
 
-        if(account && account != content.get('author')) {
-          reblogged_by = <div className="PostSummary__reblogged_by">
-                             <Icon name="reblog" /> Resteemed
-                         </div>
-        }
+        // const {account} = this.props;
+        // if(account && account != content.get('author')) {
+        //   reblogged_by = <div className="PostSummary__reblogged_by">
+        //                      <Icon name="reblog" /> Resteemed
+        //                  </div>
+        // }
 
         const {gray, pictures, authorRepLog10, hasFlag} = content.get('stats', Map()).toJS()
         const p = extractContent(immutableAccessor, content);

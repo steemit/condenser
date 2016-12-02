@@ -21,7 +21,8 @@ class PostsList extends React.Component {
     static propTypes = {
         posts: PropTypes.array.isRequired,
         loading: PropTypes.bool.isRequired,
-        category: PropTypes.string,
+        category: PropTypes.string.isRequired,
+        account: PropTypes.string,
         loadMore: PropTypes.func,
         emptyText: PropTypes.oneOfType([
             PropTypes.string,
@@ -34,6 +35,7 @@ class PostsList extends React.Component {
 
     static defaultProps = {
         showSpam: false,
+        account: null,
     }
 
     constructor() {
@@ -200,7 +202,7 @@ import {connect} from 'react-redux'
 
 export default connect(
     (state, props) => {
-        const {posts, showSpam} = props;
+        const {posts, showSpam, account, category} = props;
         const comments = []
         const pathname = state.app.get('location').pathname;
         posts.forEach(item => {
@@ -215,7 +217,9 @@ export default connect(
             const key = ['follow', 'get_following', username, 'result', content.get('author')]
             const ignore = username ? state.global.getIn(key, List()).contains('ignore') : false
             const {hide, netVoteSign, authorRepLog10} = content.get('stats').toJS()
-            if(!(ignore || hide) || showSpam) // rephide
+            const filtered = (category === 'blog' && account !== content.get('author')) || (category === 'resteemed' && account === content.get('author'))
+            const rephide = ignore || hide
+            if((!rephide || showSpam) && !filtered)
                 comments.push({item, ignore, netVoteSign, authorRepLog10})
         })
         return {...props, comments, pathname};

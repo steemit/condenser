@@ -32,6 +32,7 @@ export function* fetchState(location_change_action) {
     // to resolve data correctly
     if (url.indexOf("/curation-rewards") !== -1) url = url.replace("/curation-rewards", "/transfers");
     if (url.indexOf("/author-rewards") !== -1) url = url.replace("/author-rewards", "/transfers");
+    if (url.indexOf("/resteemed") !== -1) url = url.replace(/\/resteemed$/, "");
 
     try {
         const db_api = Apis.instance().db_api;

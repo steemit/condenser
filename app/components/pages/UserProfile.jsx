@@ -113,24 +113,10 @@ export default class UserProfile extends React.Component {
             return <div><center>{translate('unknown_account')}</center></div>
         }
 
-        let followerCount, followingCount;
-        const followers = follow ? follow.getIn( ['get_followers', accountname] ) : null;
-        const following = follow ? follow.getIn( ['get_following', accountname] ) : null;
-        if(followers && followers.has('result') && followers.has('blog')) {
-            const status_followers = followers.get('blog')
-            const followers_loaded = status_followers.get('loading') === false && status_followers.get('error') == null
-            if (followers_loaded) {
-                followerCount = followers.get('count');
-            }
-        }
-
-        if (following && following.has('result') && following.has('blog')) {
-            const status_following = following.get('blog')
-            const following_loaded = status_following.get('loading') === false && status_following.get('error') == null
-            if (following_loaded) {
-                followingCount = following.get('count');
-            }
-        }
+        const followers = this.props.global.getIn(['follow', 'get_followers', accountname]);
+        const following = this.props.global.getIn(['follow', 'get_following', accountname]);
+        const followerCount = followers && followers.get('blog_count')
+        const followingCount = following && following.get('blog_count')
 
         const rep = repLog10(account.reputation);
 
@@ -152,46 +138,46 @@ export default class UserProfile extends React.Component {
         if( section === 'transfers' ) {
             walletClass = 'active'
             tab_content = <div>
-                <UserWallet
-                          account={accountImm}
-                          showTransfer={this.props.showTransfer}
-                          current_user={current_user}
-                          withdrawVesting={this.props.withdrawVesting} />
+                <UserWallet global={this.props.global}
+                    account={accountImm}
+                    showTransfer={this.props.showTransfer}
+                    current_user={current_user}
+                    withdrawVesting={this.props.withdrawVesting} />
                 {isMyAccount && <div><MarkNotificationRead fields="send,receive" account={account.name} /></div>}
                 </div>;
         }
         else if( section === 'curation-rewards' ) {
             rewardsClass = "active";
             tab_content = <CurationRewards
-                          account={account}
-                          current_user={current_user}
-                          />
+                account={account}
+                current_user={current_user}
+                />
         }
         else if( section === 'author-rewards' ) {
             rewardsClass = "active";
             tab_content = <AuthorRewards
-                          account={account}
-                          current_user={current_user}
-                          />
+                account={account}
+                current_user={current_user}
+                />
         }
         else if( section === 'followers' ) {
-            if (followers && followers.has('result')) {
+            if (followers && followers.has('blog_result')) {
                 tab_content = <div>
                     <UserList
-                          title={translate('followers')}
-                          account={account}
-                          users={followers} />
+                        title={translate('followers')}
+                        account={account}
+                        users={followers.get('blog_result')} />
                     {isMyAccount && <MarkNotificationRead fields="follow" account={account.name} />}
                     </div>
             }
         }
         else if( section === 'followed' ) {
-            if (following && following.has('result')) {
+            if (following && following.has('blog_result')) {
                 tab_content = <UserList
-                          title="Followed"
-                          account={account}
-                          users={following}
-                          />
+                    title="Followed"
+                    account={account}
+                    users={following.get('blog_result')}
+                    />
             }
         }
         else if( section === 'settings' ) {
@@ -316,7 +302,7 @@ export default class UserProfile extends React.Component {
            }
         }
 
-        const wallet_tab_active = section === 'transfers' || section === 'password' || section === 'permissions' ? 'active' : ''; // className={wallet_tab_active}
+        // const wallet_tab_active = section === 'transfers' || section === 'password' || section === 'permissions' ? 'active' : ''; // className={wallet_tab_active}
 
         let rewardsMenu = [
             {link: `/@${accountname}/curation-rewards`, label: translate('curation_rewards'), value: translate('curation_rewards')},
@@ -332,7 +318,7 @@ export default class UserProfile extends React.Component {
                     <li><Link to={`/@${accountname}`} activeClassName="active">{translate('blog')}</Link></li>
                     <li><Link to={`/@${accountname}/comments`} activeClassName="active">{translate('comments')}</Link></li>
                     <li><Link to={`/@${accountname}/recent-replies`} activeClassName="active">
-                        {translate('replies')} {isMyAccount && <NotifiCounter fields="comment_reply"/>}
+                        {translate('replies')} {isMyAccount && <NotifiCounter fields="comment_reply" />}
                     </Link></li>
                     {/*<li><Link to={`/@${accountname}/feed`} activeClassName="active">Feed</Link></li>*/}
                     <li>
@@ -377,7 +363,7 @@ export default class UserProfile extends React.Component {
                     <div className="column">
                         <div style={{position: "relative"}}>
                             <div className="UserProfile__buttons hide-for-small-only">
-                                <Follow follower={username} following={accountname} what="blog" />
+                                <Follow follower={username} following={accountname} />
                             </div>
                         </div>
 
@@ -402,7 +388,7 @@ export default class UserProfile extends React.Component {
                             <p className="UserProfile__info">
                                 {location && <span><Icon name="location" /> {location}</span>}
                                 {website && <span><Icon name="link" /> <a href={website}>{website_label}</a></span>}
-                                <Icon name="calendar" /> <DateJoinWrapper date={accountjoin}></DateJoinWrapper>
+                                <Icon name="calendar" /> <DateJoinWrapper date={accountjoin} />
                             </p>
                         </div>
                         <div className="UserProfile__buttons_mobile show-for-small-only">

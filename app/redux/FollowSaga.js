@@ -30,10 +30,10 @@ export function* loadFollows(method, account, type, start = '', limit = 100) {
                 const accountName = lastAccountName = value.get(accountNameKey)
                 whatList.forEach(what => {
                     //currently this is always true: what === type
-                    m.update(what + '_loading', Set(), s => s.add(accountName))
+                    m.update(what + '_inprogress', Set(), s => s.add(accountName))
                 })
             })
-            m.merge({[type]: {loading: true, error: null}})
+            m.merge({[type + '_loading']: true})
             return m.asImmutable()
         }
     }})
@@ -48,12 +48,15 @@ export function* loadFollows(method, account, type, start = '', limit = 100) {
             key: ['follow', method, account],
             updater: m => {
                 m = m.asMutable()
-                const result = m.get(type + '_loading')
-                m.delete(type + '_loading')
+
+                const result = m.get(type + '_inprogress', Set())
+
+                m.delete(type + '_inprogress')
                 m.merge({
+                    // Count may be set separately without loading the full xxx_result set
                     [type + '_count']: result.size,
-                    [type + '_result']: result,
-                    [type]: {loading: false, error: null},
+                    [type + '_result']: result.sort().reverse(),
+                    [type + '_loading']: false,
                 })
                 return m.asImmutable()
             }

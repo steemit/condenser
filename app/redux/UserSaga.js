@@ -1,4 +1,4 @@
-import {fromJS, Set} from 'immutable'
+import {fromJS, Set, List} from 'immutable'
 import {takeLatest} from 'redux-saga';
 import {call, put, select, fork} from 'redux-saga/effects';
 import {accountAuthLookup} from 'app/redux/AuthSaga'
@@ -43,9 +43,33 @@ function* loginErrorWatch() {
     yield* takeLatest('user/LOGIN_ERROR', loginError);
 }
 
+function* watchLoadSavingsWithdraw() {
+    yield* takeLatest('user/LOAD_SAVINGS_WITHDRAW', loadSavingsWithdraw);
+}
+
 export function* watchRemoveHighSecurityKeys() {
     yield* takeLatest('@@router/LOCATION_CHANGE', removeHighSecurityKeys);
 }
+
+function* loadSavingsWithdraw() {
+    const username = yield select(state => state.user.getIn(['current', 'username']))
+    const to = yield call(Apis.db_api, 'get_savings_withdraw_to', username)
+    const fro = yield call(Apis.db_api, 'get_savings_withdraw_from', username)
+
+    const m = {}
+    for(const v of to) m[v.id] = v
+    for(const v of fro) m[v.id] = v
+
+    const withdraws = List(fromJS(m).values())
+        .sort((a, b) => strCmp(a.get('complete'), b.get('complete')))
+
+    yield put(user.actions.set({
+        key: 'savings_withdraws',
+        value: withdraws,
+    }))
+}
+
+const strCmp = (a, b) => a > b ? 1 : a < b ? -1 : 0
 
 // function* getCurrentAccountWatch() {
 //     // yield* takeLatest('user/SHOW_TRANSFER', getCurrentAccount);

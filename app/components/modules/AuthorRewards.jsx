@@ -53,8 +53,6 @@ class AuthorRewards extends React.Component {
                     finalDate = new Date(item[1].timestamp).getTime();
                 }
                 firstDate = new Date(item[1].timestamp).getTime();
-                const vest = assetFloat(item[1].op[1].vesting_payout, VEST_TICKER);
-                const sbd = assetFloat(item[1].op[1].sbd_payout, DEBT_TICKER);
 
                 const vest  = assetFloat(item[1].op[1].vesting_payout, VEST_TICKER);
                 const steem = assetFloat(item[1].op[1].steem_payout, LIQUID_TICKER);

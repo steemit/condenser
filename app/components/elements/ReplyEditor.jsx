@@ -150,8 +150,12 @@ class ReplyEditor extends React.Component {
     componentWillMount() {
         const {setMetaData, formId, jsonMetadata} = this.props
         if(process.env.BROWSER) {
+            // Check for rte editor preference
+            let rte = this.props.isStory && JSON.parse(localStorage.getItem('replyEditorData-rte') || RTE_DEFAULT);
+            let raw = null;
+
             let editorData = localStorage.getItem('replyEditorData-' + formId)
-            let rte_value = RichTextEditor.createEmptyValue();
+
             if(editorData) {
                 editorData = JSON.parse(editorData)
                 if(editorData.formId === formId) {
@@ -169,7 +173,6 @@ class ReplyEditor extends React.Component {
             }
             this.setAutoVote()
             const {body} = this.props.fields
-            let rte = false
             if(process.env.BROWSER) {
                 const {isStory} = this.props
                 if(isStory) {
@@ -327,7 +330,7 @@ class ReplyEditor extends React.Component {
             author, permlink, parent_author, parent_permlink, type, jsonMetadata,
             state, successCallback, handleSubmit, submitting, invalid,
         } = this.props
-        const {postError, markdownViewerText, loading, titleWarn, rte, allSteemPower} = this.state
+        const {postError, markdownViewerText, loading, titleWarn, rte, allSteemPower, payoutType} = this.state
         const {onTitleChange} = this
         const errorCallback = estr => { this.setState({ postError: estr, loading: false }) }
         const successCallbackWrapper = (...args) => {
@@ -417,7 +420,7 @@ class ReplyEditor extends React.Component {
                             }
                             {!loading && !this.props.onCancel && <button className="button hollow no-border uppercase" tabIndex={5} disabled={submitting} onClick={onCancel}>{translate("clear")}</button>}
                             {isStory && !isEdit && <div className="float-right">
-                                <small onClick={this.toggleAllSteemPower} title={translate('leave_this_unchecked_to_receive_half_your_reward')}>{translate('pay_me_100_in_INVEST_TOKEN')}</small>
+                                <small onClick={this.toggleAllSteemPower} title={translate('leave_this_unchecked_to_receive_half_your_reward')}>{translate('pay_me_100_in_VESTING_TOKEN')}</small>
                                 &nbsp;&nbsp;
                                 <input type="checkbox" onChange={this.toggleAllSteemPower} checked={allSteemPower} />
 

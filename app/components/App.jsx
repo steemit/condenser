@@ -18,6 +18,7 @@ import {key_utils} from 'shared/ecc'
 import { translate } from 'app/Translator';
 import { TERMS_OF_SERVICE_URL, WIKI_URL, PRIVACY_POLICY_URL, SEGMENT_ANALYTICS_KEY, LANDING_PAGE_URL, WHITEPAPER_URL, VEST_TICKER } from 'config/client_config';
 import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
+import MiniHeader from 'app/components/modules/MiniHeader';
 
 class App extends React.Component {
     constructor(props) {
@@ -125,6 +126,7 @@ class App extends React.Component {
             depositSteem, signup_bonus} = this.props;
         const lp = false; //location.pathname === '/';
         const params_keys = Object.keys(params);
+        const miniHeader = location.pathname === '/create_account';
         const ip = location.pathname === '/' || (params_keys.length === 2 && params_keys[0] === 'order' && params_keys[1] === 'category');
         const alert = this.props.error || flash.get('alert');
         const warning = flash.get('warning');

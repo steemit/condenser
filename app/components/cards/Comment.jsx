@@ -248,6 +248,7 @@ class CommentImpl extends React.Component {
 
         const showDeleteOption = username === author && !hasReplies && netVoteSign <= 0
         const showEditOption = username === author && comment.mode == 'first_payout'
+        const readonly = comment.mode == 'archived' || $STM_Config.read_only_mode
 
         let replies = null;
         let body = null;
@@ -264,7 +265,7 @@ class CommentImpl extends React.Component {
                         {' '}{showEditOption   && <a onClick={onShowEdit}>{translate('edit')}</a>}
                         {' '}{showDeleteOption && <a onClick={onDeletePost}>{translate('delete')}</a>}
                     </span>}
-            </div>;
+            </div>);
         }
 
         if(!this.state.collapsed) {

@@ -43,6 +43,10 @@ export default {
             {
                test: require.resolve('wowjs/dist/wow.js'),
                loader: 'exports?this.WOW'
+            },
+            {
+                test: /\.md/,
+                loader: 'raw'
             }
         ]
     },

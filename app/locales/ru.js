@@ -1,5 +1,5 @@
 
-import { APP_NAME, APP_URL, LANDING_PAGE_URL, LIQUID_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, VESTING_TOKEN, LIQUID_TICKER, SUPPORT_EMAIL } from 'config/client_config';
+import { APP_NAME, APP_URL, LANDING_PAGE_URL, LIQUID_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, VESTING_TOKEN, LIQUID_TICKER, SUPPORT_EMAIL, LIQUID_TOKEN_UPPERCASE } from 'config/client_config';
 /**
  * see: app/locales/README.md
  */
@@ -598,7 +598,18 @@ const ru = {
     looks_like_you_havent_posted_anything_yet: 'Looks like you haven\'t posted anything yet',
     read_the_beginners_guide: 'Read The Beginner\'s Guide',
     read_the_APP_NAME_welcome_guide: 'Read The Steemit Welcome Guide',
-
+    markdown_styling_guide: 'Markdown Styling Guide',
+    in_order_to_prevent_abuse_APP_NAME_can_only_register_one_account_per_verified_user: 'In order to prevent abuse Steemit can only register one account per verified user',
+    promotion_cost: 'Promotion Cost',
+    looks_like_you_havent_followed_anything_yet: 'Looks like you haven\'t followed anything yet',
+    explore_APP_NAME: 'Explore ' + APP_NAME,
+    no_topics_order_category_posts_found: 'No {topics_order} {category} posts found',
+    balance_subject_to_3_day_withdraw_waiting_period: 'Balance subject to 3 day withdraw waiting period.',
+    withdraw_LIQUID_TOKEN: 'Withdraw ' + LIQUID_TOKEN,
+    witdhdraw_DEBT_TOKEN: 'Withdraw ' + DEBT_TOKEN,
+    tokens_worth_about_AMOUNT_of_LIQUID_TOKEN_currenlty_collecting_sbdinterest_apr: 'Tokens worth about {amount} of ' + LIQUID_TOKEN_UPPERCASE + ', currently collecting {sbdInterest}% APR',
+    savings: 'savings',
+	following: 'подписан'
 }
 
 export { ru }

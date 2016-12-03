@@ -214,8 +214,6 @@ class PostFull extends React.Component {
         const pending_payout = parsePayoutAmount(content.pending_payout_value);
         const total_payout = parsePayoutAmount(content.total_payout_value);
         const high_quality_post = pending_payout + total_payout > 10.0;
-        const showEditOption = username === author && post_content.get('mode') != 'archived'
-        const authorRepLog10 = repLog10(content.author_reputation)
 
         let post_header = <h1 className="entry-title">{content.title}</h1>
         if(content.depth > 0) {
@@ -248,7 +246,7 @@ class PostFull extends React.Component {
         //const showPromote = username && post_content.get('mode') === "first_payout" && post_content.get('depth') == 0
         const showPromote = false // TODO: revert when nodes are updated with https://github.com/steemit/steem/pull/550
         const showReplyOption = post_content.get('depth') < 6
-        const showEditOption = username === author
+        const showEditOption = username === author && post_content.get('mode') != 'archived'
         const authorRepLog10 = repLog10(content.author_reputation)
 
         return (

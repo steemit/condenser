@@ -35,7 +35,6 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
     const settings_link = `/@${username}/settings`;
     const account_link = `/@${username}`;
     const posts_link = `/@${username}/posts`;
-    const settings_link = `/@${username}/settings`;
     const reset_password_link = `/@${username}/password`;
     function trackAnalytics(eventType) {
         console.log(eventType)

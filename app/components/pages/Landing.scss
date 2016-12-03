@@ -388,14 +388,14 @@
 
 	}
 	.Team__member__sergey .Team__member__img {
-		width: 217px;
-	    left: 56%;
+		width: 350px;
+	    left: 83%;
 	    max-width: none;
 	}
 	.Team__member__roman .Team__member__img {
-		width: 350px;
-		left: 84%;
-		max-width: none;
+        width: 217px;
+	    left: 56%;
+	    max-width: none;
 	}
 	@media #{$small-only} {
 		.Team__members__image-wrapper {

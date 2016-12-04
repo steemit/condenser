@@ -259,7 +259,6 @@ function getPriceFromPair(_price_, _tokensPair_){
   let pair = new Array(2)
   pair[0] = price.find((item) => {return tokensPair[0] === item[1]})
   pair[1] = price.find((item) => {return tokensPair[1] === item[1]})
-  console.log(pair);
   try {
     return parseFloat(pair[0][0])/parseFloat(pair[1][0])
   } catch(e) {

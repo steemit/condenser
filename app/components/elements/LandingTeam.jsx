@@ -110,6 +110,16 @@ export default class LandingTeam extends React.Component {
 							<li><a href="https://github.com/valzav"><img src="images/landing/github_icon.jpg" /></a></li>
 						</ul>
 					</div>
+					<div data-wow-delay="1s" className="wow fadeIn small-6 medium-4 large-12 small-centered medium-centered large-centered columns Team__member Team__member__roman">
+						<div className="Team__members__image-wrapper">
+							<a href="https://www.linkedin.com/in/roman-moiseyev-a971279a"><img className="Team__member__img" src="images/landing/roman.jpg" /></a>
+						</div>
+						<strong>Роман Моисеев</strong>
+						<p>Монетизация</p>
+						<ul>
+							<li><a href="https://www.linkedin.com/in/roman-moiseyev-a971279a"><img src="images/landing/linkedin_icon.jpg" /></a></li>
+						</ul>
+					</div>
 				</div>
 				<h2 className="Team__header" id="team">Делегаты</h2>
 				<div className="row center Team__partners">

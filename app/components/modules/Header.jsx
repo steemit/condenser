@@ -143,7 +143,7 @@ class Header extends React.Component {
         }
 
 
-        if (process.env.BROWSER && route.page !== 'Post') document.title = page_title + ' — Steemit';
+        if (process.env.BROWSER && (route.page !== 'Post' && route.page !== 'PostNoCategory')) document.title = page_title + ' — Steemit';
 
         const logo_link = route.params && route.params.length > 1 && this.last_sort_order ? '/' + this.last_sort_order : (current_account_name ? `/@${current_account_name}/feed` : '/');
         let topic_link = topic ? <Link to={`/${this.last_sort_order || 'trending'}/${topic}`}>{topic}</Link> : null;

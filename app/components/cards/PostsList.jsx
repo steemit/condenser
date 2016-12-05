@@ -166,7 +166,7 @@ class PostsList extends React.Component {
                 return
             }
             const ignore = ignore_result && ignore_result.has(cont.get('author'))
-            if(ignore) console.log('ignored post by', content.get('author'), '\t', item)
+            // if(ignore) console.log('ignored post by', cont.get('author'), '\t', item)
 
             const {hide, netVoteSign, authorRepLog10} = cont.get('stats').toJS()
             if(!(ignore || hide) || showSpam) // rephide

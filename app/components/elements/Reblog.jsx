@@ -18,7 +18,7 @@ export default class Reblog extends React.Component {
     constructor(props) {
         super(props)
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Reblog')
-        this.state = {active: false, loading: false}
+        this.setState({active: false, loading: false})
     }
 
     componentWillMount() {

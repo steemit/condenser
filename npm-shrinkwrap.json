@@ -4117,6 +4117,11 @@
       "from": "minimist@>=1.2.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/minimist/-/minimist-1.2.0.tgz"
     },
+    "mixpanel": {
+      "version": "0.5.0",
+      "from": "mixpanel@>=0.5.0 <0.6.0",
+      "resolved": "https://registry.npmjs.org/mixpanel/-/mixpanel-0.5.0.tgz"
+    },
     "mkdirp": {
       "version": "0.5.1",
       "from": "mkdirp@>=0.5.1 <0.6.0",
@@ -5122,10 +5127,15 @@
       "resolved": "https://registry.npmjs.org/react-notification/-/react-notification-5.0.7.tgz"
     },
     "react-overlays": {
-      "version": "0.6.4",
-      "from": "react-overlays@0.6.4",
-      "resolved": "https://registry.npmjs.org/react-overlays/-/react-overlays-0.6.4.tgz",
+      "version": "0.6.10",
+      "from": "react-overlays@0.6.10",
+      "resolved": "https://registry.npmjs.org/react-overlays/-/react-overlays-0.6.10.tgz",
       "dependencies": {
+        "react-prop-types": {
+          "version": "0.4.0",
+          "from": "react-prop-types@>=0.4.0 <0.5.0",
+          "resolved": "https://registry.npmjs.org/react-prop-types/-/react-prop-types-0.4.0.tgz"
+        },
         "warning": {
           "version": "3.0.0",
           "from": "warning@>=3.0.0 <4.0.0",

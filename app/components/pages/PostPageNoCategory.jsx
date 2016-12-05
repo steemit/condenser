@@ -30,7 +30,7 @@ class PostWrapper extends React.Component {
         } else if (dis.get("id") === "0.0.0") { // non-existing post
             this.setState({loading: false});
         } else {
-            browserHistory.replace(`/${dis.get('category')}/@${post}`)
+            if (browserHistory) browserHistory.replace(`/${dis.get('category')}/@${post}`)
         }
     }
 

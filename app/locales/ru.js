@@ -516,7 +516,7 @@ const ru = {
   leave_this_unchecked_to_receive_half_your_reward: 'не пытайтесь покинуть Омск',
 	promote_post: 'Продвинуть пост',
 	spend_your_DEBT_TOKEN_to_advertise_this_post: 'Используйте ваши ' + DEBT_TOKEN + ' чтобы прорекламировать этот пост в секции продвигаемого контента',
-	you_successdully_promoted_this_post: 'Вы успешно продвинули этот пост',
+	you_successfully_promoted_this_post: 'Вы успешно продвинули этот пост',
 	pay_me_100_in_VESTING_TOKEN: 'Заплатите мне 100% в ' + VESTING_TOKEN,
 	requires_5_or_more_reddit_comment_karma: 'необходимо 5 или больше Reddit кармы комментирования',
 	this_post_was_hidden_due_to_low_ratings: 'Этот пост был скрыт из-за низкого рейтинга',

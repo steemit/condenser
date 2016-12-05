@@ -503,7 +503,7 @@ const en = 	{
 	// PormotePost.jsx
 	promote_post: 'Promote Post',
 	spend_your_DEBT_TOKEN_to_advertise_this_post: 'Spend your ' + DEBT_TOKEN + 's to advertise this post in the promoted content section',
-	you_successdully_promoted_this_post: 'You successfully promoted this post',
+	you_successfully_promoted_this_post: 'You successfully promoted this post',
 	leave_this_unchecked_to_receive_half_your_reward: "Leave this unchecked to receive 1/2 your reward in " + VESTING_TOKEN + " and 1/2 in " + DEBT_TOKEN,
 	pay_me_100_in_VESTING_TOKEN: 'Pay me 100% in ' + VESTING_TOKEN,
 	requires_5_or_more_reddit_comment_karma: 'requires 5 or more Reddit comment karma',

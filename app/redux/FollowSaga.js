@@ -18,6 +18,12 @@ export function* loadFollows(method, account, type, start = '', limit = 100) {
     yield put({type: 'global/UPDATE', payload: {
         key: ['follow', method, account],
         notSet: Map(),
+        updater: m => m.set(type + '_loading', true),
+    }})
+
+    yield put({type: 'global/UPDATE', payload: {
+        key: ['follow_inprogress', method, account],
+        notSet: Map(),
         updater: m => {
             m = m.asMutable()
             res.forEach(value => {
@@ -30,10 +36,9 @@ export function* loadFollows(method, account, type, start = '', limit = 100) {
                 const accountName = lastAccountName = value.get(accountNameKey)
                 whatList.forEach(what => {
                     //currently this is always true: what === type
-                    m.update(what + '_inprogress', Set(), s => s.add(accountName))
+                    m.update(what, Set(), s => s.add(accountName))
                 })
             })
-            m.merge({[type + '_loading']: true})
             return m.asImmutable()
         }
     }})
@@ -45,19 +50,18 @@ export function* loadFollows(method, account, type, start = '', limit = 100) {
         // This condition happens only once at the very end of the list.
         // Every account has a different followers and following list for: blog, ignore
         yield put({type: 'global/UPDATE', payload: {
-            key: ['follow', method, account],
+            key: [],
             updater: m => {
                 m = m.asMutable()
 
-                const result = m.get(type + '_inprogress', Set())
-
-                m.delete(type + '_inprogress')
-                m.merge({
+                const result = m.getIn(['follow_inprogress', method, account, type], Set())
+                m.deleteIn(['follow_inprogress', method, account, type])
+                m.updateIn(['follow', method, account], Map(), mm => mm.merge({
                     // Count may be set separately without loading the full xxx_result set
                     [type + '_count']: result.size,
                     [type + '_result']: result.sort().reverse(),
                     [type + '_loading']: false,
-                })
+                }))
                 return m.asImmutable()
             }
         }})

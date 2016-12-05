@@ -6,7 +6,6 @@ import debounce from 'lodash.debounce';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {findParent} from 'app/utils/DomUtils';
 import Icon from 'app/components/elements/Icon';
-import {List} from "immutable";
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 
 function topPosition(domElt) {
@@ -166,7 +165,7 @@ class PostsList extends React.Component {
                 console.error('PostsList --> Missing cont key', item)
                 return
             }
-            const ignore = ignore_result.has(cont.get('author'))
+            const ignore = ignore_result && ignore_result.has(cont.get('author'))
             if(ignore) console.log('ignored post by', content.get('author'), '\t', item)
 
             const {hide, netVoteSign, authorRepLog10} = cont.get('stats').toJS()

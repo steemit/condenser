@@ -45,12 +45,12 @@ export default class UserProfile extends React.Component {
 
         const account = np.routeParams.accountname.toLowerCase();
         if (follow) {
-            followersLoading = follow.getIn(['get_followers', account, 'blog', 'loading'], false);
-            followingLoading = follow.getIn(['get_following', account, 'blog', 'loading'], false);
+            followersLoading = follow.getIn(['get_followers', account, 'blog_loading'], false);
+            followingLoading = follow.getIn(['get_following', account, 'blog_loading'], false);
         }
         if (np.follow) {
-            npFollowersLoading = np.follow.getIn(['get_followers', account, 'blog', 'loading'], false);
-            npFollowingLoading = np.follow.getIn(['get_following', account, 'blog', 'loading'], false);
+            npFollowersLoading = np.follow.getIn(['get_followers', account, 'blog_loading'], false);
+            npFollowingLoading = np.follow.getIn(['get_following', account, 'blog_loading'], false);
         }
 
         return (
@@ -113,8 +113,8 @@ export default class UserProfile extends React.Component {
             return <div><center>{translate('unknown_account')}</center></div>
         }
 
-        const followers = this.props.global.getIn(['follow', 'get_followers', accountname]);
-        const following = this.props.global.getIn(['follow', 'get_following', accountname]);
+        const followers = follow && follow.getIn(['get_followers', accountname]);
+        const following = follow && follow.getIn(['get_following', accountname]);
         const followerCount = followers && followers.get('blog_count')
         const followingCount = following && following.get('blog_count')
 

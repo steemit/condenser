@@ -58,11 +58,11 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
         if (location && location.pathname.indexOf("/ico") != -1) {
             return (
                 <ul className={mcn + ' landing'}>
-                    <li className={lcn + ' buttons'}>
+                    {/* <li className={lcn + ' buttons'}>
                         <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
-                    </li>
+                    </li> */}
                     <li className={lcn}>
-                        <Link className="button success" to="/ico">Краудсейл</Link>
+                        <Link className="button success" to="/ico">Выплаты авторам</Link>
                     </li>
                     <li className={lcn}>
                         <a href="#what-is-golos">Видео</a>
@@ -95,9 +95,9 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                 </ul>
             );
             return      <ul className={mcn + mcl + ' landing'}>
-                            <li className={lcn + ' buttons'}>
+                            {/* <li className={lcn + ' buttons'}>
                                 <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
-                            </li>
+                            </li> */}
                             <li className={lcn}>
                                 <a href="#what-is-golos">Видео</a>
                             </li>
@@ -129,11 +129,11 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
 */
         return (
             <ul className={mcn}>
-                <li className={lcn + ' buttons'}>
+                {/* <li className={lcn + ' buttons'}>
                     <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
-                </li>
+                </li> */}
                 <li className={lcn + ' buttons'}>
-                    <Link to="/ico" className="button success">Краудсейл</Link>
+                    <Link to="/ico" className="button success">Выплаты авторам</Link>
                 </li>
                 <li className={lcn}><a href="/static/search.html" title={search}>{vertical ? <span>{search}</span> : <Icon name="search" />}</a></li>
                 {submit_story}
@@ -160,11 +160,11 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
     if (probablyLoggedIn) {
         if (location && location.pathname.indexOf("/ico") != -1) {
             return      <ul className={mcn + mcl + ' landing'}>
-                            <li className={lcn + ' buttons'}>
+                            {/* <li className={lcn + ' buttons'}>
                                 <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
-                            </li>
+                            </li> */}
                             <li className={lcn}>
-                                <Link className="button success" to="/ico">Краудсейл</Link>
+                                <Link className="button success" to="/ico">Выплаты авторам</Link>
                             </li>
                             <li className={lcn}>
                                 <a href="#what-is-golos">Видео</a>
@@ -193,11 +193,11 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
 
         return (
             <ul className={mcn + mcl}>
-                <li className={lcn + ' buttons'}>
+                {/* <li className={lcn + ' buttons'}>
                     <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
-                </li>
+                </li> */}
                 <li className={lcn + ' buttons'}>
-                    <Link to="/ico" className="button success">Краудсейл</Link>
+                    <Link to="/ico" className="button success">Выплаты авторам</Link>
                 </li>
                 {!vertical && <li><a href="/static/search.html" title="Поиск"><Icon name="search" /></a></li>}
                 <li className={lcn}><LoadingIndicator type="circle" inline /></li>
@@ -210,11 +210,11 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
 
     if (location && location.pathname.indexOf("/ico") != -1) {
         return  <ul className={mcn + mcl + ' landing'}>
-                    <li className={lcn + ' buttons'}>
+                    {/* <li className={lcn + ' buttons'}>
                         <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
-                    </li>
+                    </li> */}
                     <li className={lcn}>
-                        <Link className="button success" to="/ico">Краудсейл</Link>
+                        <Link className="button success" to="/ico">Выплаты авторам</Link>
                     </li>
                     <li className={lcn}>
                         <a href="#what-is-golos">Видео</a>
@@ -241,11 +241,11 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
     }
     return (
             <ul className={mcn + mcl}>
+                {/*<li className={lcn + ' buttons'}>
+                     <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
+                </li>*/}
                 <li className={lcn + ' buttons'}>
-                    <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
-                </li>
-                <li className={lcn + ' buttons'}>
-                    <Link to="/ico" className="button success">Краудсейл</Link>
+                    <Link to="/ico" className="button success">Выплаты авторам</Link>
                 </li>
                 {!vertical && <li><a href="/static/search.html" title="Поиск"><Icon name="search" /></a></li>}
                 <li className={lcn}><a href="/create_account" onClick={showSignUp}>{translate('sign_up')}</a></li>

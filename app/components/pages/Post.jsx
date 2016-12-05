@@ -98,7 +98,7 @@ class Post extends React.Component {
             let ignore = false
             if(ignoring) {
                 ignore = ignoring.has(c.get('author'))
-                if(ignore) console.log(current_user && current_user.get('username'), 'is ignoring post author', c.get('author'), '\t', a)
+                // if(ignore) console.log(current_user && current_user.get('username'), 'is ignoring post author', c.get('author'), '\t', a)
             }
             return !hide && !ignore
         }

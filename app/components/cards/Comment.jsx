@@ -371,7 +371,7 @@ const Comment = connect(
 
         const key = ['follow', 'get_following', username, 'ignore_result', c.get('author')]
         const ignore = username ? state.global.hasIn(key) : false
-        if(ignore) console.log(username, 'ignored comment by', c.get('author'), '\t', comment_link)
+        // if(ignore) console.log(username, 'ignored comment by', c.get('author'), '\t', comment_link)
 
         return {
             ...ownProps,

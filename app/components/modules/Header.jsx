@@ -13,6 +13,8 @@ import { detransliterate } from 'app/utils/ParsersAndFormatters';
 import capitalizeFirstLetter from 'capitalize'
 
 function sortOrderToLink(so, topic, account) {
+    // to prevent probmes check if topic is not the same as account name
+    if ('@' + account == topic) topic = ''
     if (so === 'home') return '/@' + account + '/feed';
     if (topic) return `/${so}/${topic}`;
     return `/${so}`;
@@ -82,6 +84,7 @@ class Header extends React.Component {
 
         let sort_order = '';
         let topic = '';
+        let topic_original_link = '';
         let user_name = null;
         let page_name = null;
 
@@ -95,6 +98,7 @@ class Header extends React.Component {
             } else {
                 if (route.params.length > 1) {
                     topic = detransliterate(route.params[1]);
+                    topic_original_link = (route.params[1])
                     // Overwrite default created for more human readable title
                     if (route.params[0] === "created") {
                         page_title = translate('new_topic_posts', {topic});
@@ -174,7 +178,7 @@ class Header extends React.Component {
             ['active', translate('active')]
         ];
         if (current_account_name) sort_orders.unshift(['home', translate('home')]);
-        const sort_order_menu = sort_orders.filter(so => so[0] !== sort_order).map(so => ({link: sortOrderToLink(so[0], topic, current_account_name), value: so[1]}));
+        const sort_order_menu = sort_orders.filter(so => so[0] !== sort_order).map(so => ({link: sortOrderToLink(so[0], topic_original_link, current_account_name), value: so[1]}));
         // there were a problem when in root route ('/') when header menu didn't
         // had any active links. Thats why selected_sort_order falls down to 'trending' if undefined
         const selected_sort_order = sort_orders.find(so => so[0] === sort_order) || sort_orders[2];
@@ -189,7 +193,7 @@ class Header extends React.Component {
         const sort_order_menu_horizontal = sort_orders_horizontal.map(so => {
                 let active = (so[0] === sort_order) || (so[0] === 'trending' && sort_order === 'trending30');
                 if (so[0] === 'home' && sort_order === 'home' && !home_account) active = false;
-                return {link: sortOrderToLink(so[0], topic, current_account_name), value: so[1], active};
+                return {link: sortOrderToLink(so[0], topic_original_link, current_account_name), value: so[1], active};
             });
 
         let sort_order_extra_menu = null;

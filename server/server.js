@@ -48,7 +48,7 @@ app.use(function *(next) {
         redir = redir.replace(/&&&?/, '');
         redir = redir.replace(/\?&?$/, '');
         console.log(`server redirect ${this.url} -> ${redir}`);
-        this.status = 301;
+        this.status = 302;
         this.redirect(redir);
     } else {
         yield next;

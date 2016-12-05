@@ -138,7 +138,7 @@ export default class UserProfile extends React.Component {
         if( section === 'transfers' ) {
             walletClass = 'active'
             tab_content = <div>
-                <UserWallet global={this.props.global}
+                <UserWallet
                     account={accountImm}
                     showTransfer={this.props.showTransfer}
                     current_user={current_user}

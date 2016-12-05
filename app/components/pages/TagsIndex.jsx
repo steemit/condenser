@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import {connect} from 'react-redux';
 import { browserHistory } from 'react-router';
 
-class TagsIndex extends React.Component {
+export default class TagsIndex extends React.Component {
     static propTypes = {
         tagsList: React.PropTypes.object.isRequired,
         tagsAll: React.PropTypes.object.isRequired,
@@ -74,17 +74,10 @@ class TagsIndex extends React.Component {
     }
 }
 
-// TODO: use just 'tag_idx' and 'tags' after shared-db upgrade
-
-export default connect(state => ({
-    tagsList: state.global.get('tag_idx') || state.global.get('category_idx'),
-    tagsAll: state.global.get('tags') || state.global.get('categories')
-}))(TagsIndex);
-
 module.exports = {
     path: 'tags.html(/:order)',
     component: connect(state => ({
-        tagsList: state.global.get('tag_idx') || state.global.get('category_idx'),
-        tagsAll: state.global.get('tags') || state.global.get('categories')
+        tagsList: state.global.get('tag_idx'),
+        tagsAll: state.global.get('tags')
     }))(TagsIndex)
 };

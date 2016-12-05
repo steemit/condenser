@@ -1,4 +1,4 @@
-import {fromJS, Map, Set, List} from 'immutable'
+import {fromJS, Map, Set} from 'immutable'
 import {call, put} from 'redux-saga/effects';
 import {Apis} from 'shared/api_client';
 
@@ -29,10 +29,7 @@ export function* loadFollows(method, account, type, start = '', limit = 100) {
             res.forEach(value => {
                 cnt++
 
-                let whatList = value.get('what')
-                if(typeof whatList === 'string')
-                    whatList = new List([whatList]) // TODO: after shared-db upgrade, this line can be removed
-
+                const whatList = value.get('what')
                 const accountName = lastAccountName = value.get(accountNameKey)
                 whatList.forEach(what => {
                     //currently this is always true: what === type

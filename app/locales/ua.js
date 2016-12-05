@@ -160,7 +160,7 @@ export const ua = {
 	replied_to: 'відповів', // теж що і 'by'
 	transfer_amount_to_INVEST_TOKEN: "Перекласти {amount} у " + VESTING_TOKEN,
 	transfer_amount_INVEST_TOKEN_to: "Переклад {amount} " + VESTING_TOKEN + " у",
-	recieve_amount_INVEST_TOKEN_from: "Отримання {amount} " + VESTING_TOKEN + " від",
+	recieve_amount_VESTING_TOKEN_from: "Отримання {amount} " + VESTING_TOKEN + " від",
 	transfer_amount_INVEST_TOKEN_from_to: "Передати{amount} " + VESTING_TOKEN + " від {from} до",
 	transfer_amount_to: "Переклад {amount} на рахунок",
 	recieve_amount_from: "Отримано {amount} від",
@@ -484,7 +484,7 @@ export const ua = {
 	promote: 'Просунути',
 	// Tips.js
 	tradeable_tokens_that_may_be_transferred_anywhere_at_anytime: 'Переміщувані цифрові токени, які можуть бути передані куди завгодно в будь-який момент.',
-	LIQUID_TOKEN_can_be_converted_to_INVEST_TOKEN_in_a_process_called_powering_up: LIQUID_TOKEN + ' може бути конвертований в ' + VESTING_TOKEN + ', цей процес називається "посилення голосу".',
+	LIQUID_TOKEN_can_be_converted_to_VESTING_TOKEN_in_a_process_called_powering_up: LIQUID_TOKEN + ' може бути конвертований в ' + VESTING_TOKEN + ', цей процес називається "посилення голосу".',
 	tokens_worth_about_AMOUNT_of_LIQUID_TOKEN: 'Переміщувані цифрові токени, ціна яких завжди дорівнює ~1 мг золота в ' + LIQUID_TOKEN + '.',
 	influence_tokens_which_earn_more_power_by_holding_long_term: 'Непереміщуваними цифрові токени, їх кількість збільшується при довгостроковому зберіганні.',
 	the_more_you_hold_the_more_you_influence_post_rewards: 'Чим їх більше, тим сильніше ви впливаєте на винагороди за пост і тим більше заробляєте за голосування.',

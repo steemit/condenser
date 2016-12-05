@@ -11,7 +11,7 @@ const ru = {
 	buy_LIQUID_TOKEN: 'Купить ' + LIQUID_TOKEN,
 	sell_LIQUID_TOKEN: 'Продать ' + LIQUID_TOKEN,
 	market: "Биржа",
-	currency_market: "валютный рынок",
+	currency_market: "Валютный рынок",
 	stolen_account_recovery: "Возврат украденного аккаунта",
 	change_account_password: "Изменить пароль аккаунта",
 	steemit_chat: "Steemit чат",
@@ -536,6 +536,7 @@ const ru = {
 	choose_currency: 'Выберите валюту',
 	crowdsale: 'Краудсейл',
 	followers: 'Подписчики',
+    following: 'подписан',
 	// errors
 	vote_currently_exists_user_must_be_indicate_a_to_reject_witness: 'Голос уже существует, пользователь должен обозначить желание убрать делегата',
 	only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes: 'Только один Голос аккаунт разрешен с одного IP адреса каждые десять минут',
@@ -609,7 +610,7 @@ const ru = {
     witdhdraw_DEBT_TOKEN: 'Withdraw ' + DEBT_TOKEN,
     tokens_worth_about_AMOUNT_of_LIQUID_TOKEN_currenlty_collecting_sbdinterest_apr: 'Tokens worth about {amount} of ' + LIQUID_TOKEN_UPPERCASE + ', currently collecting {sbdInterest}% APR',
     savings: 'savings',
-	following: 'подписан'
+    welcome: 'Добро пожаловать',
 }
 
 export { ru }

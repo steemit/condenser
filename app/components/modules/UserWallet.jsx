@@ -9,13 +9,11 @@ import DropdownMenu from 'app/components/elements/DropdownMenu';
 import BlocktradesDeposit from 'app/components/modules/BlocktradesDeposit';
 import Reveal from 'react-foundation-components/lib/global/reveal'
 import CloseButton from 'react-foundation-components/lib/global/close-button';
+import {steemTip, powerTip, dollarTip, valueTip} from 'app/utils/Tips'
+import {numberWithCommas, vestingSteem} from 'app/utils/StateFunctions'
 import { translate, translateNumber } from 'app/Translator';
 import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 import { APP_NAME_LATIN, LIQUID_TOKEN, DEBT_TOKEN, CURRENCY_SIGN, VESTING_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TICKER, VEST_TICKER, DEBT_TICKER } from 'config/client_config';
-import {steemTip, powerTip, valueTip, savingsTip} from 'app/utils/Tips'
-import {numberWithCommas, vestingSteem} from 'app/utils/StateFunctions'
-import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu'
-import WalletSubMenu from 'app/components/elements/WalletSubMenu'
 
 // normalize app name
 const appName = APP_NAME_LATIN.toLowerCase()
@@ -128,29 +126,17 @@ class UserWallet extends React.Component {
 
         const steem_balance_str = translateNumber(balance_steem.toFixed(3)) // formatDecimal(balance_steem, 3)
         const power_balance_str = translateNumber(vesting_steem) // formatDecimal(vesting_steem, 3)
-        const sbd_balance_str = localizedCurrency(sbd_balance.toFixed(3)) // formatDecimal(account.sbd_balance, 3)
-        const savings_balance_str = translateNumber(saving_balance_steem.toFixed(3)) + ' ' + LIQUID_TOKEN
-        const savings_sbd_balance_str = localizedCurrency(sbd_balance_savings.toFixed(3))
-
-        const savings_menu = [
-            { value: translate('withdraw_LIQUID_TOKEN'), link: '#', onClick: showTransfer.bind( this, 'STEEM', 'Savings Withdraw' ) },
-        ]
-        const savings_sbd_menu = [
-            { value: translate('witdhdraw_DEBT_TOKEN'), link: '#', onClick: showTransfer.bind( this, 'SBD', 'Savings Withdraw' ) },
-        ]
-        // set dynamic secondary wallet values
-        const sbdInterest = this.props.sbd_interest / 100
-        const sbdMessage = <span>{translate('tokens_worth_about_AMOUNT_of_LIQUID_TOKEN_currenlty_collecting_sbdinterest_apr', {amount: localizedCurrency(1), sbdInterest})}.</span>
-
+        const sbd_balance_str = translateNumber(sbd_balance.toFixed(3)) + ' ' + DEBT_TICKER // formatDecimal(account.sbd_balance, 3)
         return (<div className="UserWallet">
             <div className="row">
-                <div className="columns small-10 medium-12 medium-expand">
-                    {isMyAccount ? <WalletSubMenu account_name={account.name} /> : <div><br /><h4 className="uppercase">translate('balances')</h4><br /></div>}
+                <div className="column small-12 medium-8">
+                    <h4 className="uppercase">{translate('balances')}</h4>
                 </div>
-                <div className="columns shrink">
-                    {isMyAccount && <button className="UserWallet__buysp button hollow" onClick={this.onShowDepositSteem}>{translate('buy_LIQUID_TOKEN_or_VESTING_TOKEN')}</button>}
-                </div>
+                {/* {isMyAccount && <div className="column small-12 medium-4">
+                    <button className="UserWallet__buysp button hollow float-right" onClick={this.onShowDepositSteem}>{translate('buy_LIQUID_TOKEN_or_INVEST_TOKEN')}</button>
+                </div>} */}
             </div>
+            <br />
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
                     <span className="uppercase">
@@ -162,12 +148,12 @@ class UserWallet extends React.Component {
                         {/* not using steemTip because translate strings may be undefined on load */}
                         {/* {steemTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})} */}
                         <div>{translate('tradeable_tokens_that_may_be_transferred_anywhere_at_anytime')}</div>
-                        <div>{translate('LIQUID_TOKEN_can_be_converted_to_INVEST_TOKEN_in_a_process_called_powering_up')}</div>
+                        <div>{translate('LIQUID_TOKEN_can_be_converted_to_VESTING_TOKEN_in_a_process_called_powering_up')}</div>
                     </span>
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
-                    <FoundationDropdownMenu onClick={this.trackAnalytics.bind(this, 'golos dropdown in user\'s profile clicked')} className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={steem_balance_str + ' ' + LIQUID_TOKEN} menu={steem_menu} />
+                    <DropdownMenu onClick={this.trackAnalytics.bind(this, 'golos dropdown in user\'s profile clicked')} selected={<span className="uppercase">{steem_balance_str + ' ' + LIQUID_TOKEN}</span>} className="Header__sort-order-menu" items={steem_menu} el="span" />
                     : steem_balance_str + ' ' + LIQUID_TOKEN}
                 </div>
             </div>
@@ -187,7 +173,7 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
-                    <FoundationDropdownMenu onClick={this.trackAnalytics.bind(this, 'golos power dropdown in user\'s profile clicked')} className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={power_balance_str + ' ' + LIQUID_TOKEN} menu={power_menu} />
+                    <DropdownMenu onClick={this.trackAnalytics.bind(this, 'golos power dropdown in user\'s profile clicked')} selected={<span className="uppercase">{power_balance_str + ' ' + LIQUID_TOKEN}</span>} className="Header__sort-order-menu" items={power_menu} el="span" />
                     : power_balance_str + ' ' + LIQUID_TOKEN}
                 </div>
             </div>
@@ -200,17 +186,10 @@ class UserWallet extends React.Component {
                     <br />
                     <span className="secondary">{translate('tokens_worth_about_AMOUNT_of_LIQUID_TOKEN', {amount: localizedCurrency(1)})}</span>
                 </div>
-                <div className="column small-12 medium-8">
-                    <span className="uppercase">{translate('savings')}</span>SAVINGS<br /><span className="secondary">{savingsTip}</span>
-                </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
-                    <FoundationDropdownMenu onClick={this.trackAnalytics.bind(this, 'gbg dropdown in user\'s profile clicked')} className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={savings_balance_str} menu={savings_menu} />
-                    : savings_balance_str}
-                    <br />
-                    {isMyAccount ?
-                    <FoundationDropdownMenu onClick={this.trackAnalytics.bind(this, 'gbg dropdown in user\'s profile clicked')} className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={savings_sbd_balance_str} menu={savings_sbd_menu} />
-                    : savings_sbd_balance_str}
+                    <DropdownMenu onClick={this.trackAnalytics.bind(this, 'gbg dropdown in user\'s profile clicked')} selected={sbd_balance_str} items={dollar_menu} el="span" className="Header__sort-order-menu" />
+                    : sbd_balance_str}
                 </div>
             </div>
             <div className="row">
@@ -224,7 +203,11 @@ class UserWallet extends React.Component {
                     {translate('estimate_account_value')}<br /><span className="secondary">{translate('the_estimated_value_is_based_on_a_7_day_average_value_of_LIQUID_TOKEN_in_currency')}</span>
                 </div>
                 <div className="column small-12 medium-4">
-                    {localizedCurrency(total_value)}
+                    {
+                        process.env.BROWSER
+                        ? localizedCurrency(total_value)
+                        : translate('loading') + '...'
+                    }
                 </div>
             </div>
             <div className="UserWallet__balance row">
@@ -280,10 +263,9 @@ function getPriceFromPair(_price_, _tokensPair_){
   let pair = new Array(2)
   pair[0] = price.find((item) => {return tokensPair[0] === item[1]})
   pair[1] = price.find((item) => {return tokensPair[1] === item[1]})
-  console.log(pair);
   try {
     return parseFloat(pair[0][0])/parseFloat(pair[1][0])
-  } catch(error) {
+  } catch(e) {
     console.log(error);
     return 0
   }
@@ -300,19 +282,12 @@ export default connect(
 
             let priceGBGperGOLOS = getPriceFromPair(feed_price.toJS(), 'GBG/GOLOS')
             let priceGOLOSperGBG = getPriceFromPair(feed_price.toJS(), 'GOLOS/GBG')
-            console.log(priceGBGperGOLOS, "GBG/GOLOS :::: GOLOS/GBG", priceGOLOSperGBG)
 
-            console.log(feed_price.toJS(), "OOOOOO")
             price_per_steem = priceGBGperGOLOS;
-            console.log (price_per_steem, " set price per steem")
         }
-        const savings_withdraws = state.user.get('savings_withdraws')
-        const sbd_interest = state.global.get('props').get('sbd_interest_rate')
         return {
             ...ownProps,
-            price_per_steem,
-            savings_withdraws,
-            sbd_interest
+            price_per_steem
         }
     },
     // mapDispatchToProps

@@ -275,7 +275,7 @@ class PostFull extends React.Component {
                         <Voting post={post} />
                     </div>
                     <div className="column shrink">
-                            {!archived && <Reblog author={author} permlink={permlink} />}
+                            {!readonly && <Reblog author={author} permlink={permlink} />}
                             <span className="PostFull__responses">
                                 <Link to={link} title={translate('response_count', {responseCount: content.children})}>
                                     <Icon name="chatboxes" className="space-right" />{content.children}

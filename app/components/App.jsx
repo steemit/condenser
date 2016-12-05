@@ -228,7 +228,7 @@ class App extends React.Component {
                     </li>
                     <li>
                         <a href="/welcome" onClick={this.navigate}>
-                            Welcome
+                            {translate('welcome')}
                         </a>
                     </li>
                     <li>
@@ -236,16 +236,16 @@ class App extends React.Component {
                             FAQ
                         </a>
                     </li>
-                    // <li>
-                    //     <a onClick={() => depositSteem()}>
-                    //         {translate("buy_LIQUID_TOKEN")}
-                    //     </a>
-                    // </li>
-                    <li>
+                    {/* <li>
+                        <a onClick={() => depositSteem()}>
+                            {translate("buy_LIQUID_TOKEN")}
+                        </a>
+                    </li> */}
+                    {/* <li>
                         <a href="http://steemtools.com/" onClick={this.navigate} target="_blank" rel="noopener noreferrer">
                             {translate('APP_NAME_app_center')}&nbsp;<Icon name="extlink" />
                         </a>
-                    </li>
+                    </li> */}
                     <li>
                         <a href="/market" onClick={this.navigate}>
                             {translate("currency_market")}
@@ -266,11 +266,11 @@ class App extends React.Component {
                             {translate("APP_NAME_chat")}&nbsp;<Icon name="extlink" />
                         </a>
                     </li>
-                    // <li>
-                    //     <a href="https://steemit.github.io/steemit-docs/" target="_blank" rel="noopener noreferrer">
-                    //         {translate("steemit_api_docs")}&nbsp;<Icon name="extlink" />
-                    //     </a>
-                    // </li>
+                    {/* <li>
+                        <a href="https://steemit.github.io/steemit-docs/" target="_blank" rel="noopener noreferrer">
+                            {translate("steemit_api_docs")}&nbsp;<Icon name="extlink" />
+                        </a>
+                    </li> */}
                     <li className="last">
                         <a href="/~witnesses" onClick={this.navigate}>
                             {translate("vote_for_witnesses")}

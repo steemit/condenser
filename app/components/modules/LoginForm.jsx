@@ -177,7 +177,8 @@ class LoginForm extends Component {
         const form = (
             <form onSubmit={handleSubmit(data => {
                 // bind redux-form to react-redux
-                return dispatchSubmit(data, loginBroadcastOperation, afterLoginRedirectToAccount)
+                console.log('Login\tdispatchSubmit');
+                return dispatchSubmit(data, loginBroadcastOperation, afterLoginRedirectToWelcome)
             })}
                 onChange={this.props.clearError}
                 method="post"

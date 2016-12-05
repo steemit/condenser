@@ -43,7 +43,7 @@ class TransferHistoryRow extends React.Component {
                 }
             }
             else if( data.to === context ) {
-                description_start += translate('recieve_amount_INVEST_TOKEN_from', { amount }) + ' ';
+                description_start += translate('recieve_amount_VESTING_TOKEN_from', { amount }) + ' ';
                 other_account = data.from;
             } else {
                 description_start += translate('transfer_amount_steem_power_from_to', {

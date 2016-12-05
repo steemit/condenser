@@ -101,7 +101,7 @@ class BuyGolos extends React.Component {
 
 
 				<p><b>Сила Голоса</b> - неперемещаемые цифровые токены. Их оценка в Голосах увеличивается при долгосрочном хранении. Чем их больше, тем сильней вы влияете на вознаграждения за пост и тем больше зарабатываете за голосование. Также Сила Голоса дает право записывать любые данные в блокчейн Голоса. Чем больше Силы Голоса, тем большая доля в пропускной способности гарантируется Вам сетью Голос. Перевод Силы Голоса в Голоса занимает 104 недели равными частями.</p>
-				<p>Если у Вас нет биткоинов, то Вы можете их купить за любую национальную валюту на <a href="https://localbitcoins.net/">Localbitcoins.net</a>. Также сообществом Голос организованы разные сервисы по участию в краудсейле. Инструкции по покупке можно найти по тэгу <a href="/trending/ru--kupitxbitkoin">#КупитьБиткоин</a>.</p>
+				{/*<p>Если у Вас нет биткоинов, то Вы можете их купить за любую национальную валюту на <a href="https://localbitcoins.net/">Localbitcoins.net</a>. Также сообществом Голос организованы разные сервисы по участию в краудсейле. Инструкции по покупке можно найти по тэгу <a href="/trending/ru--kupitxbitkoin">#КупитьБиткоин</a>.</p>*/}
 			</div>
 		)
 	}
@@ -309,7 +309,7 @@ class BuyGolos extends React.Component {
 					</div>
 
 					{/* GENERATE ADDRESS */}
-					{
+					{/*
 						props.isOwnAccount && (!state.icoAddress && !props.icoAddress)
 						? 	<form className="columns row" onSubmit={this.generateAddress}>
 								<div className="large-12 columns">
@@ -347,14 +347,14 @@ class BuyGolos extends React.Component {
 								</div>
 							</form>
 						: 	null
-					}
+					*/}
 
 					{/* ADDRESS + CURRENT STAGE INFO + QR CODE */}
 					{
 						// TODO change this checker to use 'else' of previous one?
 						props.isOwnAccount && (state.icoAddress || props.icoAddress)
 						? <div className="row">
-							<div className="column">
+							{/* <div className="column">
 								<div className="small-12 text-center">
 									<h3>
 										<strong>
@@ -362,9 +362,6 @@ class BuyGolos extends React.Component {
 											<CopyToClipboard text={props.icoAddress || state.icoAddress}>
 												<a><ClipboardIcon title="скопировать в буфер обмена" /></a>
 											</CopyToClipboard>
-											{/* <ClipboardButton data-clipboard-text={props.icoAddress || state.icoAddress}>
-												<ClipboardIcon title="скопировать в буфер обмена" />
-											</ClipboardButton> */}
 										</strong>
 									</h3>
 								</div>
@@ -392,11 +389,10 @@ class BuyGolos extends React.Component {
 											<span className="TimeAgo"><TimeAgoWrapper date={currentStage.date} /></span>
 										</Tooltip>
 										</td>
-										{/* 25 дней */}
 									</tr>
 									</tbody>
 								</table>
-							</div>
+							</div> */}
 								{this.mediacontentBlock1()}
 						</div>
 						: null

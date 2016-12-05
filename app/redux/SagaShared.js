@@ -74,3 +74,13 @@ function* showTransactionErrorNotification() {
         yield put({type: 'transaction/DELETE_ERROR', payload: {key}});
     }
 }
+
+export function* getContent({author, permlink, resolve, reject}) {
+    const content = yield call([Apis, Apis.db_api], 'get_content', author, permlink);
+    yield put(g.actions.receiveContent({content}))
+    if (resolve && content) {
+        resolve(content);
+    } else if (reject && !content) {
+        reject();
+    }
+}

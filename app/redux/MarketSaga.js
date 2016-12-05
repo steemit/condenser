@@ -2,9 +2,7 @@ import {takeLatest} from 'redux-saga';
 import {call, put} from 'redux-saga/effects';
 import Apis from 'shared/api_client/ApiInstances';
 import MarketReducer from './MarketReducer';
-import g from 'app/redux/GlobalReducer'
-// import constants from './constants';
-import {fromJS} from 'immutable'
+import {getAccount} from './SagaShared';
 
 export const marketWatches = [watchLocationChange, watchUserLogin, watchMarketUpdate];
 
@@ -68,13 +66,7 @@ export function* fetchOpenOrders(set_user_action) {
         const db_api = Apis.instance().db_api;
         const state = yield call([db_api, db_api.exec], 'get_open_orders', [username]);
         yield put(MarketReducer.actions.receiveOpenOrders(state));
-
-       let [account] = yield call(Apis.db_api, 'get_accounts', [username])
-       if(account) {
-           account = fromJS(account)
-           yield put(MarketReducer.actions.receiveAccount({ account }))
-           yield put(g.actions.receiveAccount({ account })) // TODO: move out of MarketSaga. See notes in #741
-       }
+        yield call(getAccount, username, true);
     } catch (error) {
         console.error('~~ Saga fetchOpenOrders error ~~>', error);
         yield put({type: 'global/STEEM_API_ERROR', error: error.message});

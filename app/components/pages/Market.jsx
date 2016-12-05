@@ -530,15 +530,18 @@ class Market extends React.Component {
 const DEFAULT_EXPIRE = 0xFFFFFFFF//Math.floor((Date.now() / 1000) + (60 * 60 * 24)) // 24 hours
 module.exports = {
     path: 'market',
-    component: connect(state => ({
-        orderbook:   state.market.get('orderbook'),
-        open_orders: process.env.BROWSER ? state.market.get('open_orders') : [],
-        ticker:      state.market.get('ticker'),
-        account:     state.market.get('account'),
-        history:     state.market.get('history'),
-        user:        state.user.get('current') ? state.user.get('current').get('username') : null,
-        feed:        state.global.get('feed_price').toJS()
-    }),
+    component: connect(state => {
+        const username = state.user.get('current') ? state.user.get('current').get('username') : null;
+        return {
+            orderbook:   state.market.get('orderbook'),
+            open_orders: process.env.BROWSER ? state.market.get('open_orders') : [],
+            ticker:      state.market.get('ticker'),
+            account:     state.global.getIn(['accounts', username]),
+            history:     state.market.get('history'),
+            user:        username,
+            feed:        state.global.get('feed_price').toJS()
+        }
+    },
     dispatch => ({
         notify: (message) => {
             dispatch({type: 'ADD_NOTIFICATION', payload:

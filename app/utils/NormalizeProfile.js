@@ -1,6 +1,9 @@
 function truncate(str, len) {
-    if(str && str.length > len) {
-        return str.substring(0, len - 1) + '...'
+    if(str) {
+        str = str.trim()
+        if(str.length > len) {
+            str = str.substring(0, len - 1) + '...'
+        }
     }
     return str
 }
@@ -32,6 +35,7 @@ export default function normalizeProfile(account) {
     about = truncate(about, 160)
     location = truncate(location, 30)
 
+    if(/^@/.test(name)) name = null;
     if(website && website.length > 100) website = null;
     if(profile_image && !/^https?:\/\//.test(profile_image)) profile_image = null;
 

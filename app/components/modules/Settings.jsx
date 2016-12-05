@@ -30,7 +30,7 @@ class Settings extends React.Component {
             initialValues: props.profile,
             validation: values => ({
                 profile_image: values.profile_image && !/^https?:\/\//.test(values.profile_image) ? 'Invalid URL' : null,
-                name: values.name && values.name.length > 20 ? 'Name is too long' : null,
+                name: values.name && values.name.length > 20 ? 'Name is too long' : values.name && /^\s*@/.test(values.name) ? 'Name must not begin with @' : null,
                 about: values.about && values.about.length > 160 ? 'About is too long' : null,
                 location: values.location && values.location.length > 30 ? 'Location is too long' : null,
                 website: values.website && values.website.length > 100 ? 'Website URL is too long' : null,

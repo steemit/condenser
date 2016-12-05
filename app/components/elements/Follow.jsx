@@ -7,67 +7,72 @@ import g from 'app/redux/GlobalReducer';
 import {Set, Map} from 'immutable'
 import { translate } from 'app/Translator';
 
-const {string, object, bool, func, any} = PropTypes
-const followTypes = ['blog', 'posts']
-const followTypeSet = Set(followTypes)
+const {string, bool, any} = PropTypes
 
 export default class Follow extends React.Component {
     static propTypes = {
         following: string,
         follower: string, // OPTIONAL default to current user
-        what: string, // see followTypes
         showFollow: bool,
         showMute: bool,
         fat: bool,
         children: any,
-
-        // redux
-        follow: func,
-        loading: bool,
-        existingFollows: object,
     }
+
     static defaultProps = {
         showFollow: true,
         showMute: true,
         fat: false,
     }
+
     constructor(props) {
         super()
         this.initEvents(props)
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Follow')
     }
+
     componentWillUpdate(nextProps) {
         this.initEvents(nextProps)
     }
+
     initEvents(props) {
-        const {follow, follower, following, existingFollows, what} = props
-        this.follow = () => follow(follower, following, existingFollows.remove('ignore').add(what))
-        this.unfollow = () => follow(follower, following, existingFollows.remove(what))
-        this.ignore = () => follow(follower, following, Set(['ignore']))
-        this.unignore = () => follow(follower, following, Set())
+        const {updateFollow, follower, following} = props
+        this.follow = () => {updateFollow(follower, following, 'blog')}
+        this.unfollow = () => {updateFollow(follower, following)}
+        this.ignore = () => {updateFollow(follower, following, 'ignore')}
+        this.unignore = () => {updateFollow(follower, following)}
     }
 
     render() {
-        const {follower, following, what, showFollow, showMute, fat, children} = this.props // html
-        const {existingFollows, loading} = this.props // redux
+        const {loading} = this.props
         if(loading) return <span><LoadingIndicator /> {translate('loading')}&hellip;</span>
-        if(!follower || !following || !what) return <span></span>
-        if(follower === following) return <span></span> // don't follow self
         if(loading !== false) {
             // must know what the user is already following before any update can happen
             return <span></span>
         }
-        if(!followTypeSet.has(what)) {
-            console.log('Unknown follow type:', what)
-            return <span></span>
-        }
+
+        const {follower, following} = this.props // html
+        if(!follower || !following) return <span></span>
+        if(follower === following) return <span></span> // Can't follow or ignore self
+
+        const {followingWhat} = this.props // redux
+        const {showFollow, showMute, fat, children} = this.props // html
+
         const cnActive = 'button' + (fat ? '' : ' slim')
         const cnInactive = cnActive + ' hollow secondary'
         return <span>
-            {showFollow && !existingFollows.has(what) && <label className={cnInactive} onClick={this.follow}>{translate('follow')}</label>}
-            {showFollow && existingFollows.has(what) && <label className={cnInactive} onClick={this.unfollow}>{translate('unfollow')}</label>}
-            {showMute && !existingFollows.has('ignore') && <label className={cnInactive} onClick={this.ignore}>{translate('mute')}</label>}
-            {showMute && existingFollows.has('ignore') && <label className={cnInactive} onClick={this.unignore}>{translate('unmute')}</label>}
+            {showFollow && followingWhat !== 'blog' &&
+                <label className={cnInactive} onClick={this.follow}>{translate('follow')}</label>}
+
+            {showFollow && followingWhat === 'blog' &&
+                <label className={cnInactive} onClick={this.unfollow}>{translate('unfollow')}</label>}
+
+            {showMute && followingWhat !== 'ignore' &&
+                <label className={cnInactive} onClick={this.ignore}>{translate('mute')}</label>}
+
+            {showMute && followingWhat === 'ignore' &&
+                <label className={cnInactive} onClick={this.unignore}>{translate('unmute')}</label>}
+
             {children && <span>&nbsp;&nbsp;{children}</span>}
         </span>
     }
@@ -75,31 +80,34 @@ export default class Follow extends React.Component {
 
 const emptyMap = Map()
 const emptySet = Set()
+
 module.exports = connect(
     (state, ownProps) => {
         let {follower} = ownProps
-        const {following} = ownProps
         if(!follower) {
             const current_user = state.user.get('current')
             follower = current_user ? current_user.get('username') : null
         }
+
+        const {following} = ownProps
         const f = state.global.getIn(['follow', 'get_following', follower], emptyMap)
-        const loading = f.getIn(['blog', 'loading'], false) || f.getIn(['ignore', 'loading'], false)
-        const existingFollows = Set(f.getIn(['result', following], emptySet))// Convert List to Set
+        const loading = f.get('blog_loading', false) || f.get('ignore_loading', false)
+        const followingWhat =
+            f.get('blog_result', emptySet).contains(following) ? 'blog' :
+            f.get('ignore_result', emptySet).contains(following) ? 'ignore' :
+            null
+
         return {
             follower,
-            existingFollows,
+            following,
+            followingWhat,
             loading,
         };
     },
     dispatch => ({
-        follow: (follower, following, what) => {
-            const json = ['follow', {follower, following, what: what.toJS()}]
-            dispatch(g.actions.update({
-                key: ['follow', 'get_following', follower, 'result', following],
-                notSet: Set(),
-                updater: () => what
-            }))
+        updateFollow: (follower, following, action) => {
+            const what = action ? [action] : []
+            const json = ['follow', {follower, following, what}]
             dispatch(transaction.actions.broadcastOperation({
                 type: 'custom_json',
                 operation: {

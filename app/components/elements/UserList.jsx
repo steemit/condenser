@@ -25,15 +25,14 @@ class UserList extends React.Component {
     render() {
         const {state: {historyIndex}} = this
         const account = this.props.account
-        const users = this.props.users.get('result')
+        const users = this.props.users
         const title = this.props.title
 
-        let user_list = users.map((item, index) => {
-            if(item.get(0) === "blog") {
-                return <UserListRow account={account} user={index} key={index} />
-            }
-            return null;
-        }).filter(el => !!el).toArray();
+        let idx = 0
+        let user_list = users.map(user =>
+            <UserListRow account={account} user={user} key={idx++} />
+        )
+        user_list = user_list.toArray();
 
         let currentIndex = -1;
         const usersLength = users.size;

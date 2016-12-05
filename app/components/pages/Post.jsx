@@ -8,7 +8,7 @@ import {sortComments} from 'app/components/cards/Comment';
 // import { Link } from 'react-router';
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
 import SvgImage from 'app/components/elements/SvgImage';
-import {List} from 'immutable'
+import {Set} from 'immutable'
 import { translate } from 'app/Translator';
 import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
@@ -57,7 +57,7 @@ class Post extends React.Component {
 
     render() {
         const {showSignUp} = this
-        const {current_user, following, signup_bonus, content} = this.props
+        const {current_user, ignoring, signup_bonus, content} = this.props
         const {showNegativeComments, commentHidden, showAnyway} = this.state
         let post = this.props.post;
         if (!post) {
@@ -96,8 +96,9 @@ class Post extends React.Component {
             const c = content.get(a);
             const hide = c.getIn(['stats', 'hide'])
             let ignore = false
-            if(following) {
-                ignore = following.get(c.get('author'), List()).contains('ignore')
+            if(ignoring) {
+                ignore = ignoring.has(c.get('author'))
+                // if(ignore) console.log(current_user && current_user.get('username'), 'is ignoring post author', c.get('author'), '\t', a)
             }
             return !hide && !ignore
         }
@@ -198,18 +199,20 @@ class Post extends React.Component {
     }
 }
 
+const emptySet = Set()
+
 export default connect(state => {
     const current_user = state.user.get('current')
-    let following
+    let ignoring
     if(current_user) {
-        const key = ['follow', 'get_following', current_user.get('username'), 'result']
-        following = state.global.getIn(key, List())
+        const key = ['follow', 'get_following', current_user.get('username'), 'ignore_result']
+        ignoring = state.global.getIn(key, emptySet)
     }
     return {
         content: state.global.get('content'),
         signup_bonus: state.offchain.get('signup_bonus'),
         current_user,
-        following,
+        ignoring,
     }
 }
 )(Post);

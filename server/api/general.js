@@ -266,6 +266,10 @@ export default function useGeneralApi(app) {
         const params = this.request.body;
         const {csrf, page, ref} = typeof(params) === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
+        if (page.match(/\/feed$/)) {
+            this.body = JSON.stringify({views: 0});
+            return;
+        }
         console.log('-- /page_view -->', this.session.uid, page);
         const remote_ip = getRemoteIp(this.req);
         try {
@@ -294,13 +298,18 @@ export default function useGeneralApi(app) {
                     const matches = ref.match(/^https?\:\/\/([^\/?#]+)(?:[\/?#]|$)/i);
                     referring_domain = matches && matches[1];
                 }
-                mixpanel.track('PageView', {
+                const mp_params = {
                     distinct_id: this.session.uid,
                     Page: page,
                     ip: remote_ip,
                     $referrer: ref,
                     $referring_domain: referring_domain
-                });
+                };
+                mixpanel.track('PageView', mp_params);
+                if (!this.session.mp) {
+                    mixpanel.track('FirstVisit', mp_params);
+                    this.session.mp = 1;
+                }
                 if (ref) mixpanel.people.set_once(this.session.uid, '$referrer', ref);
                 mixpanel.people.set_once(this.session.uid, 'FirstPage', page);
                 mixpanel.people.increment(this.session.uid, 'PageView', 1);

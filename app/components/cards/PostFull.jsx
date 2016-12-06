@@ -282,7 +282,7 @@ class PostFull extends React.Component {
                                 </Link>
                             </span>
                             <span className="PostFull__views">
-                                <PageViewsCounter hidden={false} sinceDate={isPreViewCount && 'Dec 2016'} />
+                                <PageViewsCounter hidden={false} sinceDate={isPreViewCount ? 'Dec 2016' : null} />
                             </span>
                             <ShareMenu menu={share_menu} />
                     </div>

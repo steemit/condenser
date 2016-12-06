@@ -180,11 +180,11 @@ class App extends React.Component {
                             FAQ
                         </a>
                     </li>
-                    <li>
+                    {/*<li>
                         <a onClick={() => depositSteem()}>
                             {translate("buy_LIQUID_TOKEN")}
                         </a>
-                    </li>
+                    </li>*/}
                     <li>
                         <a href="http://steemtools.com/" onClick={this.navigate} target="_blank" rel="noopener noreferrer">
                             {translate('APP_NAME_app_center')}&nbsp;<Icon name="extlink" />

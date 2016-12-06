@@ -19,6 +19,7 @@ import Tooltip from 'app/components/elements/Tooltip'
 import { translate } from 'app/Translator';
 
 const assetPrecision = 1000;
+const BLOCKTRADES_ENABLED = false;
 
 class UserWallet extends React.Component {
     constructor() {
@@ -144,9 +145,9 @@ class UserWallet extends React.Component {
             { value: 'Power Down', link: '#', onClick: powerDown.bind(this, false) }
         ]
         if(isMyAccount) {
-            steem_menu.push({ value: 'Deposit', link: '#', onClick: onShowDepositSteem })
+            if(BLOCKTRADES_ENABLED) steem_menu.push({ value: 'Deposit', link: '#', onClick: onShowDepositSteem })
             steem_menu.push({ value: 'Buy or Sell', link: '/market' })
-            power_menu.push({ value: 'Deposit', link: '#', onClick: onShowDepositPower })
+            if(BLOCKTRADES_ENABLED) power_menu.push({ value: 'Deposit', link: '#', onClick: onShowDepositPower })
         }
         if( divesting ) {
             power_menu.push( { value: 'Cancel Power Down', link:'#', onClick: powerDown.bind(this,true) } );
@@ -191,7 +192,7 @@ class UserWallet extends React.Component {
                     {isMyAccount ? <WalletSubMenu account_name={account.get('name')} /> : <div><br /><h4>BALANCES</h4><br /></div>}
                 </div>
                 <div className="columns shrink">
-                    {isMyAccount && <button className="UserWallet__buysp button hollow" onClick={this.onShowDepositSteem}>Buy Steem or Steem Power</button>}
+                    {isMyAccount && BLOCKTRADES_ENABLED && <button className="UserWallet__buysp button hollow" onClick={this.onShowDepositSteem}>Buy Steem or Steem Power</button>}
                 </div>
             </div>
             <div className="UserWallet__balance row">

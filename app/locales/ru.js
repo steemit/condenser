@@ -211,12 +211,12 @@ const ru = {
 	i_understand_dont_show_again: "Понимаю, больше не показывать",
 	ok: 'Ок', // Лучше использовать "хорошо" или "ладно"?
 	convert_to_VESTING_TOKEN: 'Перевести в ' + VESTING_TOKEN,
-	DEBT_TOKEN_will_be_unavailable: 'Эта операция будет проходить через неделю от настоящего момента и ее нельзя отменить. Эти ' + DEBT_TOKEN + ' мгновенно станут недоступны',
+	DEBT_TOKEN_will_be_unavailable: 'Эта операция будет проходить 3,5 дней от настоящего момента и ее нельзя отменить. Эти ' + DEBT_TOKEN + ' мгновенно станут недоступны',
 	amount: 'Количество',
 	convert: 'Конвертировать',
 	invalid_amount: 'Неверное количество',
 	insufficent_balance: 'Недостаточный баланс',
-	in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN: 'За неделю перевести {amount} ' + DEBT_TOKEN + ' в ' + LIQUID_TOKEN,
+	in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN: 'В 3,5 дня перевести {amount} ' + DEBT_TOKEN + ' в ' + LIQUID_TOKEN,
 	order_placed: 'Заказ размещен', // ex.: "Order placed: Sell {someamount_to_sell} for atleast {min_to_receive}"
 	follow: 'Подписаться',
 	unfollow: 'Отписаться',
@@ -403,7 +403,7 @@ const ru = {
 	view_the_direct_parent: 'Просмотр прямого родителя',
 	you_are_viewing_single_comments_thread_from: 'Вы читаете одну нить комментариев от',
 	view_the_full_context: 'Показать полный контекст',
-	this_is_a_price_feed_conversion: 'Это котировка цены. Неделя отсрочки необходима чтобы предотвратить злоупотребление от игры на средней ценовой катировке.',
+	this_is_a_price_feed_conversion: 'Это котировка цены. Отсрочка 3,5 день необходима чтобы предотвратить злоупотребление от игры на средней ценовой катировке.',
 	your_existing_DEBT_TOKEN_are_liquid_and_transferable: 'Ваши существующие ' + DEBT_TOKEN + ' ликвидны и перемещаемы. Возможно, вы хотите торговать ' + DEBT_TOKEN + ' напрямую на этом сайте в разделе {link} или перевести на внешний рынок.',
 	buy_or_sell: 'Купить или Продать',
 	trending_30_day: 'популярное (30 дней)',

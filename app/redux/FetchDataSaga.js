@@ -1,15 +1,24 @@
 import {takeLatest, takeEvery} from 'redux-saga';
 import {call, put, select, fork} from 'redux-saga/effects';
 import {loadFollows} from 'app/redux/FollowSaga';
+import {getContent} from 'app/redux/SagaShared';
 import Apis from 'shared/api_client/ApiInstances';
 import GlobalReducer from './GlobalReducer';
 import constants from './constants';
 import {fromJS, Map} from 'immutable'
 
-export const fetchDataWatches = [watchLocationChange, watchDataRequests, watchApiRequests, watchFetchJsonRequests, watchFetchState];
+export const fetchDataWatches = [watchLocationChange, watchDataRequests, watchApiRequests, watchFetchJsonRequests, watchFetchState, watchGetContent];
 
 export function* watchDataRequests() {
     yield* takeLatest('REQUEST_DATA', fetchData);
+}
+
+export function* watchGetContent() {
+    yield* takeEvery('GET_CONTENT', getContentCaller);
+}
+
+export function* getContentCaller(action) {
+    yield getContent(action.payload);
 }
 
 export function* fetchState(location_change_action) {

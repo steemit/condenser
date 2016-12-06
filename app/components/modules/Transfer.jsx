@@ -151,7 +151,7 @@ class TransferForm extends Component {
                 <div className="row">
                     <div className="column small-2" style={{paddingTop: 5}}>From</div>
                     <div className="column small-10">
-                        <div className="input-group">
+                        <div className="input-group" style={{marginBottom: "1.25rem"}}>
                             <span className="input-group-label">@</span>
                             <input
                                 className="input-group-field bold"
@@ -163,12 +163,10 @@ class TransferForm extends Component {
                     </div>
                 </div>
 
-                <br />
-
                 {advanced && <div className="row">
                     <div className="column small-2" style={{paddingTop: 5}}>To</div>
                     <div className="column small-10">
-                        <div className="input-group">
+                        <div className="input-group" style={{marginBottom: "1.25rem"}}>
                             <span className="input-group-label">@</span>
                             <input
                                 className="input-group-field"
@@ -191,7 +189,7 @@ class TransferForm extends Component {
                 <div className="row">
                     <div className="column small-2" style={{paddingTop: 5}}>Amount</div>
                     <div className="column small-10">
-                        <div className="input-group">
+                        <div className="input-group" style={{marginBottom: 5}}>
                             <input type="text" placeholder="Amount" {...amount.props} ref="amount" autoComplete="off" disabled={loading} />
                             {asset && <span className="input-group-label" style={{paddingLeft: 0, paddingRight: 0}}>
                                 <select {...asset.props} placeholder="Asset" disabled={loading} style={{minWidth: "5rem", height: "inherit", backgroundColor: "transparent", border: "none"}}>
@@ -200,9 +198,10 @@ class TransferForm extends Component {
                                 </select>
                             </span>}
                         </div>
-                        <AssetBalance balanceValue={this.balanceValue()} onClick={this.assetBalanceClick} />
-
-                        {(asset && asset.touched) || (amount.touched && amount.error && asset.error) ?
+                        <div style={{marginBottom: "0.6rem"}}>
+                            <AssetBalance balanceValue={this.balanceValue()} onClick={this.assetBalanceClick} />
+                        </div>
+                        {(asset && asset.touched && asset.error ) || (amount.touched && amount.error) ?
                         <div className="error">
                             {asset && asset.touched && asset.error && asset.error}&nbsp;
                             {amount.touched && amount.error && amount.error}&nbsp;

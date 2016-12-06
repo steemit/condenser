@@ -1,17 +1,10 @@
-// bold medium regular
-// @font-face {
-//     font-family: "ProximaNova";
-//     // font-style: normal;
-//     // font-weight: bold;
-//     src: url("../../assets/fonts/Proxima Nova Regular.otf") format("otf")
-// }
 // TODO change pixels to rems
 // TODO add common supporting text styles
 // http://foundation.zurb.com/sites/docs/v/5.5.3/media-queries.html
 .Landing {
 	font-family: Verdana, Geneva, sans-serif;
 	/* COMMON ELEMENTS */
-	.blue 	{ color: #6191cf; } // font-family: ProximaNova;
+	.blue 	{ color: #6191cf; }
 	.red 	{ color: #f12b24; }
 	.Landing__button_big { font-size: 47px; }
 	h2 {

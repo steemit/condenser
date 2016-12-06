@@ -150,6 +150,7 @@ class PostsList extends React.Component {
     onPostClick(post, url) {
         this.post_url = url;
         this.props.fetchState(url);
+        this.props.removeHighSecurityKeys();
         this.setState({showPost: post, prevTitle: window.document.title});
         window.history.pushState({}, '', url);
     }
@@ -224,6 +225,9 @@ export default connect(
     dispatch => ({
         fetchState: (pathname) => {
             dispatch({type: 'FETCH_STATE', payload: {pathname}})
+        },
+        removeHighSecurityKeys: () => {
+            dispatch({type: 'user/REMOVE_HIGH_SECURITY_KEYS'})
         }
     })
 )(PostsList)

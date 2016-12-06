@@ -352,11 +352,9 @@ export default class UserProfile extends React.Component {
             </div>
          </div>;
 
-        let {name, location, about, website} = normalizeProfile(account);
-        if (website && website.indexOf("http") === -1) {
-            website = 'http://' + website;
-        }
+        const {name, location, about, website} = normalizeProfile(account);
         const website_label = website ? website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '') : null
+
         return (
             <div className="UserProfile">
 
@@ -389,7 +387,7 @@ export default class UserProfile extends React.Component {
                             </div>
                             <p className="UserProfile__info">
                                 {location && <span><Icon name="location" /> {location}</span>}
-                                {website && <span><Icon name="link" /> <a target="_blank" href={website}>{website_label}</a></span>}
+                                {website && <span><Icon name="link" /> <a href={website}>{website_label}</a></span>}
                                 <Icon name="calendar" /> <DateJoinWrapper date={accountjoin} />
                             </p>
                         </div>

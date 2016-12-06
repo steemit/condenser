@@ -199,7 +199,6 @@ export default function useGeneralApi(app) {
         if (!checkCSRF(this, csrf)) return;
         console.log('-- /login_account -->', this.session.uid, account);
         try {
-            this.session.a = account;
             const db_account = yield models.Account.findOne(
                 {attributes: ['user_id'], where: {name: esc(account)}, logging: false}
             );
@@ -207,18 +206,18 @@ export default function useGeneralApi(app) {
 
             if(signatures) {
                 if(!this.session.auth || !this.session.auth.login_challenge) {
-                    console.error('general.js missing this.session.auth.login_challenge');
+                    console.error('/login_account missing this.session.auth.login_challenge');
                 } else {
                     const [chainAccount] = yield Apis.db_api('get_accounts', [account])
                     if(!chainAccount) {
-                        console.error('general.js missing blockchain account', account);
+                        console.error('/login_account missing blockchain account', account);
                     } else {
                         const auth = {username: account, active: false, posting: false}
                         const bufSha = hash.sha256(this.session.auth.login_challenge)
                         const verify = (type, sigHex, pubkey, weight, weight_threshold) => {
                             if(!sigHex) return
                             if(weight !== 1 || weight_threshold !== 1) {
-                                console.error(`general.js::login_challenge unsupported ${type} auth configuration: ${account}`);
+                                console.error(`/login_account login_challenge unsupported ${type} auth configuration: ${account}`);
                             } else {
                                 const sig = parseSig(sigHex)
                                 const public_key = PublicKey.fromString(pubkey)
@@ -233,8 +232,9 @@ export default function useGeneralApi(app) {
                             const {active: {key_auths: [[active_pubkey, weight]], weight_threshold}} = chainAccount
                             verify('active', signatures.active, active_pubkey, weight, weight_threshold)
                         }
-                        console.log('-- general.js --> username, auth', account, auth)
+                        // console.log('-- general.js --> username, auth', account, auth)
                         this.session.auth = auth
+                        if (auth['posting'] || auth['active']) this.session.a = account;
                     }
                 }
             }

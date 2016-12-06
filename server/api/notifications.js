@@ -16,6 +16,9 @@ export default function useNotificationsApi(app) {
         const account = this.params.account;
         // TODO: make sure account name matches session
         console.log('-- GET /notifications/:account -->', account);
+        if (account !== this.session.a) {
+            this.body = []; return;
+        }
         try {
             const res = yield Tarantool.instance().select('notifications', 0, 1, 0, 'eq', account);
             this.body = toResArray(res);
@@ -29,10 +32,10 @@ export default function useNotificationsApi(app) {
     // mark account's notification as read
     router.put('/notifications/:account/:ids', function *() {
         const {account, ids} = this.params;
-        if (!ids) {
+        console.log('-- PUT /notifications/:account/:id -->', account, ids);
+        if (!ids || account !== this.session.a) {
             this.body = []; return;
         }
-        console.log('-- PUT /notifications/:account/:id -->', account, ids);
         const fields = ids.split('-');
         try {
             let res;

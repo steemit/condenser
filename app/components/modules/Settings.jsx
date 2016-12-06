@@ -33,7 +33,7 @@ class Settings extends React.Component {
                 name: values.name && values.name.length > 20 ? 'Name is too long' : values.name && /^\s*@/.test(values.name) ? 'Name must not begin with @' : null,
                 about: values.about && values.about.length > 160 ? 'About is too long' : null,
                 location: values.location && values.location.length > 30 ? 'Location is too long' : null,
-                website: values.website && values.website.length > 100 ? 'Website URL is too long' : null,
+                website: values.website && values.website.length > 100 ? 'Website URL is too long' : values.website && !/^https?:\/\//.test(values.website) ? 'Invalid URL' : null,
             })
         })
         this.handleSubmitForm =
@@ -168,9 +168,9 @@ class Settings extends React.Component {
 
                     <label>
                         {translate('profile_website')}
-                        <input type="text" {...website.props} maxLength="100" autoComplete="off" />
+                        <input type="url" {...website.props} maxLength="100" autoComplete="off" />
                     </label>
-                    <div className="error">{website.touched && website.error}</div>
+                    <div className="error">{website.blur && website.touched && website.error}</div>
 
                     <br />
                     {state.loading && <span><LoadingIndicator type="circle" /><br /></span>}

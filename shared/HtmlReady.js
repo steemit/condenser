@@ -8,6 +8,52 @@ const DOMParser = new xmldom.DOMParser({
 })
 const XMLSerializer = new xmldom.XMLSerializer()
 
+/**
+ * Functions performed by HTMLReady
+ *
+ * State reporting
+ *  - hashtags: collect all #tags in content
+ *  - usertags: collect all @mentions in content
+ *  - htmltags: collect all html <tags> used (for validation)
+ *  - images: collect all image URLs in content
+ *  - links: collect all href URLs in content
+ *
+ * Mutations
+ *  - link()
+ *    - ensure all <a> href's begin with a protocol. prepend https:// otherwise.
+ *  - iframe()
+ *    - wrap all <iframe>s in <div class="videoWrapper"> for responsive sizing
+ *  - img()
+ *    - convert any <img> src IPFS prefixes to standard URL
+ *    - change relative protocol to https://
+ *  - linkifyNode()
+ *    - scans text content to be turned into rich content
+ *    - embedYouTubeNode()
+ *      - identify plain youtube URLs and prep them for "rich embed"
+ *    - linkify()
+ *      - scan text for:
+ *        - #tags, convert to <a> links
+ *        - @mentions, convert to <a> links
+ *        - naked URLs
+ *          - if img URL, normalize URL and convert to <img> tag
+ *          - otherwise, normalize URL and convert to <a> link
+ *  - proxifyImages()
+ *    - prepend proxy URL to any non-local <img> src's
+ *
+ * We could implement 2 levels of HTML mutation for maximum reuse:
+ *  1. Normalization of HTML - non-proprietary, pre-rendering cleanup/normalization
+ *    - (state reporting done at this level)
+ *    - normalize URL protocols
+ *    - convert naked URLs to images/links
+ *    - convert embeddable URLs to <iframe>s
+ *    - basic sanitization?
+ *  2. Steemit.com Rendering - add in proprietary Steemit.com functions/links
+ *    - convert <iframe>s to custom objects
+ *    - linkify #tags and @mentions
+ *    - proxify images
+ *
+ */
+
 /** Split the HTML on top-level elements. This allows react to compare separately, preventing excessive re-rendering.
  * Used in MarkdownViewer.jsx
  */
@@ -39,20 +85,24 @@ export default function (html, {mutate = true} = {}) {
         return {html}
     }
 }
+
 function traverse(node, state, depth = 0) {
     if(!node || !node.childNodes) return
     Array(...node.childNodes).forEach(child => {
         // console.log(depth, 'child.tag,data', child.tagName, child.data)
-        if(child.tagName)
-            state.htmltags.add(child.tagName.trim().toLowerCase())
+        const tag = child.tagName ? child.tagName.toLowerCase() : null
+        if(tag) state.htmltags.add(tag)
 
-        if(/img/i.test(child.tagName))
+        if(tag === 'img')
             img(state, child)
-        else if(/a/i.test(child.tagName))
+        else if(tag === 'iframe')
+            iframe(state, child)
+        else if(tag === 'a')
             link(state, child)
-        else if(!embedYouTubeNode(child, state.links, state.images))
+        else if(child.nodeName === '#text')
             linkifyNode(child, state)
-        traverse(child, state, ++depth)
+
+        traverse(child, state, depth + 1)
     })
 }
 
@@ -61,15 +111,26 @@ function link(state, child) {
     if(url) {
         state.links.add(url)
         if(state.mutate) {
-            if(! /(https?:)?\/\//.test(url)) {
+            // If this link is not relative, http, or https -- add https.
+            if(! /^\/(?!\/)|(https?:)?\/\//.test(url)) {
                 child.setAttribute('href', "https://"+url)
             }
         }
     }
 }
 
+// wrap iframes in div.videoWrapper to control size/aspect ratio
+function iframe(state, child) {
+    const {mutate} = state
+    if(!mutate) return
+
+    const tag = child.parentNode.tagName ? child.parentNode.tagName.toLowerCase() : child.parentNode.tagName
+    if(tag == 'div' && child.parentNode.getAttribute('class') == 'videoWrapper') return;
+    const html = XMLSerializer.serializeToString(child)
+    child.parentNode.replaceChild(DOMParser.parseFromString(`<div class="videoWrapper">${html}</div>`), child)
+}
+
 function img(state, child) {
-    // atty(child, 'src', a => state.images.add(a.value))
     const url = child.getAttribute('src')
     if(url) {
         state.images.add(url)
@@ -98,11 +159,16 @@ function proxifyImages(doc) {
 }
 
 function linkifyNode(child, state) {try{
+    const tag = child.parentNode.tagName ? child.parentNode.tagName.toLowerCase() : child.parentNode.tagName
+    if(tag === 'code') return
+    if(tag === 'a') return
+
     const {mutate} = state
     if(!child.data) return
+    if(embedYouTubeNode(child, state.links, state.images)) return
+    if(embedVimeoNode(child, state.links, state.images)) return
+
     const data = XMLSerializer.serializeToString(child)
-    if(/code/i.test(child.parentNode.tagName)) return
-    if(/a/i.test(child.parentNode.tagName)) return
     const content = linkify(data, state.mutate, state.hashtags, state.usertags, state.images, state.links)
     if(mutate && content !== data) {
         child.parentNode.replaceChild(DOMParser.parseFromString(`<span>${content}</span>`), child)
@@ -115,27 +181,25 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
         if(/#[\d]+$/.test(tag)) return tag // Don't allow numbers to be tags
         const space = /^\s/.test(tag) ? tag[0] : ''
         const tag2 = tag.trim().substring(1)
-        if(hashtags) hashtags.add(tag2)
+        const tagLower = tag2.toLowerCase()
+        if(hashtags) hashtags.add(tagLower)
         if(!mutate) return tag
-        return space + `<a href="/trending/${tag2.toLowerCase()}">${tag}</a>`
+        return space + `<a href="/trending/${tagLower}">${tag}</a>`
     })
+
     // usertag (mention)
     content = content.replace(/(^|\s)(@[a-z][-\.a-z\d]+[a-z\d])/ig, user => {
         const space = /^\s/.test(user) ? user[0] : ''
         const user2 = user.trim().substring(1)
-        const valid = validate_account_name(user2) == null
-        if(valid && usertags) usertags.add(user2)
+        const userLower = user2.toLowerCase()
+        const valid = validate_account_name(userLower) == null
+        if(valid && usertags) usertags.add(userLower)
         if(!mutate) return user
         return space + (valid ?
-            `<a href="/@${user2}">@${user2}</a>` :
+            `<a href="/@${userLower}">@${user2}</a>` :
             '@' + user2
         )
     })
-
-    // Was causing broken thumnails.
-    // unescapted ipfs links (temp, until the reply editor categorizes the image)
-    // if(mutate && config.ipfs_prefix)
-    //     content = content.replace(linksRe.ipfsPrefix, config.ipfs_prefix)
 
     content = content.replace(linksRe.any, ln => {
         if(linksRe.image.test(ln)) {
@@ -151,22 +215,48 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
 function embedYouTubeNode(child, links, images) {try{
     if(!child.data) return false
     const data = child.data
-    if(/code/i.test(child.parentNode.tagName)) return false
-    let replaced = false
-    data.replace(linksRe.youTube, url => {
-        const match = url.match(linksRe.youTubeId)
-        if(match && match.length >= 2) {
-            const id = match[1]
-            const v = DOMParser.parseFromString(`~~~ youtube:${id} ~~~`)
-            child.parentNode.replaceChild(v, child)
-            replaced = true
-            if(links) links.add(url)
-            if(images) images.add('https://img.youtube.com/vi/' + id + '/0.jpg')
-            return
-        }
-        console.log("Youtube link without ID?", url);
-    })
-    return replaced
+
+    let url
+    {
+        const m = data.match(linksRe.youTube)
+        url = m ? m[0] : null
+    }
+    if(!url) return false;
+
+    let id
+    {
+        const m = url.match(linksRe.youTubeId)
+        id = m && m.length >=2 ? m[1] : null
+    }
+    if(!id) return false
+
+    const v = DOMParser.parseFromString(`~~~ embed:${id} youtube ~~~`)
+    child.parentNode.replaceChild(v, child)
+    if(links) links.add(url)
+    if(images) images.add('https://img.youtube.com/vi/' + id + '/0.jpg')
+    return true
+} catch(error) {console.log(error); return false}}
+
+function embedVimeoNode(child, links, /*images*/) {try{
+    if(!child.data) return false
+    const data = child.data
+
+    let id
+    {
+        const m = data.match(linksRe.vimeoId)
+        id = m && m.length >= 2 ? m[1] : null
+    }
+    if(!id) return false;
+
+    const url = `https://player.vimeo.com/video/${id}`
+    const v = DOMParser.parseFromString(`~~~ embed:${id} vimeo ~~~`)
+    child.parentNode.replaceChild(v, child)
+    if(links) links.add(url)
+
+    // Preview image requires a callback.. http://stackoverflow.com/questions/1361149/get-img-thumbnails-from-vimeo
+    // if(images) images.add('https://.../vi/' + id + '/0.jpg')
+
+    return true
 } catch(error) {console.log(error); return false}}
 
 function ipfsPrefix(url) {
@@ -179,10 +269,4 @@ function ipfsPrefix(url) {
         }
     }
     return url
-}
-
-function atty(node, attributeName, set) {
-    const attribute = Array(...node.attributes)
-        .find(a => a.name.toLowerCase() === attributeName)
-    if(attribute) set(attribute)
 }

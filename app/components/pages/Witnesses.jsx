@@ -5,7 +5,8 @@ import links from 'app/utils/Links'
 import Icon from 'app/components/elements/Icon';
 import transaction from 'app/redux/Transaction'
 import ByteBuffer from 'bytebuffer'
-import {Set} from 'immutable'
+import {Set, is} from 'immutable'
+import { translate } from 'app/Translator';
 
 const Long = ByteBuffer.Long
 const {string, func, object} = PropTypes
@@ -15,7 +16,7 @@ class Witnesses extends React.Component {
         // HTML properties
 
         // Redux connect properties
-        global: object.isRequired,
+        witnesses: object.isRequired,
         accountWitnessVote: func.isRequired,
         username: string,
         witness_votes: object,
@@ -35,13 +36,22 @@ class Witnesses extends React.Component {
         }
     }
 
+    shouldComponentUpdate(np, ns) {
+            return (
+                !is(np.witness_votes, this.props.witness_votes) ||
+                np.witnesses !== this.props.witnesses ||
+                np.username !== this.props.username ||
+                ns.customUsername !== this.state.customUsername
+            );
+    }
+
    render() {
-       const {props: {global, witness_votes}, state: {customUsername}, accountWitnessVote, onWitnessChange} = this
-       const sorted_witnesses = global.getIn(['witnesses'])
-            .sort((a, b) => Long.fromString(b.get('votes')).subtract(Long.fromString(a.get('votes')).toString()));
+       const {props: {witness_votes}, state: {customUsername}, accountWitnessVote, onWitnessChange} = this
+       const sorted_witnesses = this.props.witnesses
+            .sort((a, b) => Long.fromString(String(b.get('votes'))).subtract(Long.fromString(String(a.get('votes'))).toString()));
 
         const up = <Icon name="chevron-up-circle" />;
-        let witness_votes_count = 30
+        let witness_vote_count = 30
         let rank = 1
         const witnesses = sorted_witnesses.map(item => {
             const owner = item.get('owner')
@@ -52,9 +62,9 @@ class Witnesses extends React.Component {
             let witness_thread = ""
             if(thread) {
                 if(links.remote.test(thread)) {
-                    witness_thread = <Link to={thread}>witness thread&nbsp;<Icon name="extlink" /></Link>
+                    witness_thread = <a href={thread}>{translate('witness_thread')}&nbsp;<Icon name="extlink" /></a>
                 } else {
-                    witness_thread = <Link to={thread}>witness thread</Link>
+                    witness_thread = <Link to={thread}>{translate('witness_thread')}</Link>
                 }
             }
             return (
@@ -63,7 +73,7 @@ class Witnesses extends React.Component {
                             {(rank < 10) && '0'}{rank++}
                             &nbsp;&nbsp;
                             <span className={classUp}>
-                                <a href="#" onClick={accountWitnessVote.bind(this, owner, !myVote)} title="Vote">{up}</a>
+                                <a href="#" onClick={accountWitnessVote.bind(this, owner, !myVote)} title={translate('vote')}>{up}</a>
                             </span>
                         </td>
                         <td>
@@ -78,7 +88,7 @@ class Witnesses extends React.Component {
 
         let addl_witnesses = false;
         if(witness_votes) {
-            witness_votes_count -= witness_votes.size
+            witness_vote_count -= witness_votes.size
             addl_witnesses = witness_votes.filter(function(item) {
                 return !sorted_witnesses.has(item)
             }).map(item => {
@@ -88,7 +98,7 @@ class Witnesses extends React.Component {
                               <span>{/*className="Voting"*/}
                                   <span className="Voting__button Voting__button-up space-right Voting__button--upvoted">
                                       <a href="#" onClick={accountWitnessVote.bind(this, item, false)}
-                                          title="Vote">{up}</a>
+                                          title={translate('vote')}>{up}</a>
                                       &nbsp;
                                   </span>
                               </span>
@@ -104,32 +114,35 @@ class Witnesses extends React.Component {
             <div>
                 <div className="row">
                     <div className="column">
-                        <h2>Top Witnesses</h2>
+                        <h2>{translate('top_witnesses')}</h2>
                         <p>
-                            <strong>You have {witness_votes_count} votes remaining.</strong>
-                            &nbsp;You can vote for a maximum of 30 witnesses.
+                            <strong>{translate('you_have_votes_remaining', {votesCount: witness_vote_count})}.</strong>{' '}
+                            {translate('you_can_vote_for_maximum_of_witnesses')}.
                         </p>
                     </div>
                 </div>
                 <div className="row small-collapse">
-                    <div className="column small-12">
+                    <div className="column">
                         <table>
                             <thead>
                                 <tr>
                                     <th></th>
-                                    <th>Witness</th>
-                                    <th>Information</th>
+                                    <th>{translate('witness')}</th>
+                                    <th>{translate('information')}</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {witnesses.toArray()}
                             </tbody>
                         </table>
-                        <hr/>
-                        <p>If you would like to vote for a witness outside of the top 50, enter the account name below to cast a vote.</p>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="column">
+                        <p>{translate('if_you_want_to_vote_outside_of_top_enter_account_name')}.</p>
                         <form>
                             <input type="text" style={{float: "left", width: "75%"}} value={customUsername} onChange={onWitnessChange} />
-                            <button className="darkbtn" onClick={accountWitnessVote.bind(this, customUsername, !(witness_votes ? witness_votes.has(customUsername) : null))}>Vote</button>
+                            <button className="darkbtn" onClick={accountWitnessVote.bind(this, customUsername, !(witness_votes ? witness_votes.has(customUsername) : null))}>{translate('vote')}</button>
                         </form>
                         <br/>
                         {addl_witnesses}
@@ -151,7 +164,7 @@ module.exports = {
             const current_account = current_user && state.global.getIn(['accounts', username])
             const witness_votes = current_account && Set(current_account.get('witness_votes'))
             return {
-                global: state.global,
+                witnesses: state.global.get('witnesses'),
                 username,
                 witness_votes,
             };

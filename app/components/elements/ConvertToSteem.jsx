@@ -1,12 +1,15 @@
 /* eslint react/prop-types: 0 */
 import React from 'react'
 import ReactDOM from 'react-dom';
-import {reduxForm} from 'redux-form';
+import {reduxForm} from 'redux-form'; // @deprecated, instead use: app/utils/ReactForm.js
 import transaction from 'app/redux/Transaction'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import TransactionError from 'app/components/elements/TransactionError'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
+import { translate } from 'app/Translator';
+import { FormattedMessage, FormattedHTMLMessage } from 'react-intl';
+import { DEBT_TOKEN, DEBT_TICKER } from 'config/client_config';
 
 class ConvertToSteem extends React.Component {
     constructor() {
@@ -39,18 +42,19 @@ class ConvertToSteem extends React.Component {
             <form onSubmit={handleSubmit(data => {dispatchSubmit(data)})}>
                 <div className="row">
                     <div className="small-12 columns">
-                        <h1>Convert to Steem</h1>
-                        <p>This action will take place one week from now and can not be canceled. These Steem Dollars will immediately become unavailable.</p>
-                        <p>Your existing Steem Dollars are liquid and transferable.  Instead you may wish to trade Steem Dollars directly on this site under <i>Buy or Sell</i> or transfer to an external market.</p>
-                        <p>This is a price feed conversion. The one week delay is necessary to prevent abuse from gaming the price feed average.</p>
+                        <h1>{translate('convert_to_LIQUID_TOKEN')}</h1>
+                        <p>{translate('DEBT_TOKEN_will_be_unavailable')}.</p>
+                        {/* using <FormattedMessage /> because nested html tag in values doesn't want to be rendered properly in translate() */}
+                        <p><FormattedMessage id="your_existing_DEBT_TOKEN_are_liquid_and_transferable" values={{ link: <i>{translate("buy_or_sell")}</i> }} /></p>
+                        <p>{translate('this_is_a_price_feed_conversion')}.</p>
                     </div>
                 </div>
                 <div className="row">
                     <div className="small-12 columns">
-                        <label>Amount</label>
+                        <label>{translate('amount')}</label>
                         <input type="amount" ref="amt" {...cleanReduxInput(amount)} autoComplete="off" disabled={loading} />
                         &nbsp;
-                        STEEM DOLLARS
+                        {DEBT_TOKEN}
                         <br />
                         <div className="error">{amount.touched && amount.error && amount.error}&nbsp;</div>
                     </div>
@@ -62,10 +66,10 @@ class ConvertToSteem extends React.Component {
                         <br />
                         <div>
                             <button type="submit" className="button" disabled={loading}>
-                                Convert
+                                {translate('convert')}
                             </button>
                             <button type="button" disabled={submitting} className="button hollow float-right" onClick={onClose}>
-                                Cancel
+                                {translate('cancel')}
                             </button>
                         </div>
                     </div>
@@ -84,9 +88,9 @@ export default reduxForm(
         const sbd_balance = account.get('sbd_balance')
         const max = sbd_balance.split(' ')[0]
         const validate = values => ({
-            amount: ! values.amount ? 'Required' :
-                isNaN(values.amount) || parseFloat(values.amount) <= 0 ? 'Invalid amount' :
-                parseFloat(values.amount) > parseFloat(max) ? 'Insufficient balance' :
+            amount: ! values.amount ? translate('required') :
+                isNaN(values.amount) || parseFloat(values.amount) <= 0 ? translate('invalid_amount') :
+                parseFloat(values.amount) > parseFloat(max) ? translate('insufficient_balance') :
                 null,
         })
         return {
@@ -98,9 +102,9 @@ export default reduxForm(
     // mapDispatchToProps
     dispatch => ({
         convert: (owner, amt, success, error) => {
-            const amount = String(parseFloat(amt).toFixed(3)) + ' SBD'
+            const amount = [parseFloat(amt).toFixed(3), DEBT_TICKER].join(" ")
             const requestid = Math.floor(Date.now() / 1000)
-            const conf = `In one week, convert ${amount.split(' ')[0]} STEEM DOLLARS into STEEM`
+            const conf = translate('in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN', { amount: amount.split(' ')[0] })
             dispatch(transaction.actions.broadcastOperation({
                 type: 'convert',
                 operation: {owner, requestid, amount},
@@ -109,7 +113,7 @@ export default reduxForm(
                     success()
                     dispatch({type: 'ADD_NOTIFICATION', payload:
                         {key: "convert_sd_to_steem_" + Date.now(),
-                         message: `Order placed: ${conf}`,
+                         message: translate('order_placed') + ': ' + conf,
                          dismissAfter: 5000}
                     })
                 },

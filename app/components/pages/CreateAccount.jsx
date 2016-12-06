@@ -15,7 +15,6 @@ class CreateAccount extends React.Component {
 
     static propTypes = {
         loginUser: React.PropTypes.func.isRequired,
-        showSignUp: React.PropTypes.func.isRequired,
         serverBusy: React.PropTypes.bool
     };
 
@@ -82,7 +81,7 @@ class CreateAccount extends React.Component {
             if (res.error || res.status !== 'ok') {
                 console.error('CreateAccount server error', res.error);
                 if (res.error === 'Unauthorized') {
-                    this.props.showSignUp();
+                    window.location = '/enter_email';
                 }
                 this.setState({server_error: res.error || 'Unknown', loading: false});
             } else {
@@ -198,7 +197,7 @@ class CreateAccount extends React.Component {
                 <div className="column">
                     <div className="callout alert">
                         <p>Our records indicate that you already have steem account: <strong>{existingUserAccount}</strong></p>
-                        <p>In order to prevent abuse (each registered account costs 3 STEEM) Steemit can only register one account per verified user.</p>
+                        <p>In order to prevent abuse Steemit can only register one account per verified user.</p>
                         <p>You can either <a href="/login.html">login</a> to your existing account
                             or <a href="mailto:support@steemit.com">send us email</a> if you need a new account.</p>
                     </div>
@@ -288,7 +287,6 @@ module.exports = {
         },
         dispatch => ({
             loginUser: (username, password) => dispatch(user.actions.usernamePasswordLogin({username, password, saveLogin: true})),
-            showSignUp: () => dispatch(user.actions.showSignUp()),
             logout: e => {
                 if (e) e.preventDefault();
                 dispatch(user.actions.logout())

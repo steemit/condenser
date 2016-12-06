@@ -6,10 +6,13 @@ const fr = 	{
 	buy_steem: "Acheter du Steem",
 	sell_steem: "Vendre du Steem",
 	market: "Marché",
+	currency_market: "Marché des devises",
 	stolen_account_recovery: "Récuperation de compte volé",
 	change_account_password: "Changer mot de passe du compte",
 	steemit_chat: "Steemit Chat",
-	witnesses: "Witnesses",
+    steemit_api_docs: "Steemit API Docs",
+	witnesses: "Témoins",
+	vote_for_witnesses: "Votez pour les Témoins",
 	privacy_policy: "Politique de Confidentialité",
 	terms_of_service: "Conditions d'utilisation",
 	sign_up: "Inscription",
@@ -280,16 +283,14 @@ const fr = 	{
 		many {# posts}
 	}`,
 	follower_count: `{followerCount, plural,
-		zero {0 followers}
-		one {# followers}
-		few {# followers}
-		many {# followers}
+		=0 {no followers}
+		one {1 follower}
+		other {{followerCount} followers}
 	}`,
 	followed_count: `{followingCount, plural,
-		zero {0 followed}
-		one {# followed}
-		few {# followed}
-		many {# followed}
+		=0 {not following anybody}
+		one {1 following}
+		other {{followingCount} following}
 	}`,
 	vote_count: `{voteCount, plural,
 		zero {0 votes}
@@ -339,7 +340,7 @@ const fr = 	{
 	couldnt_create_account_server_returned_error: "Couldn't create account. Server returned the following error",
 	form_requires_javascript_to_be_enabled: 'This form requires javascript to be enabled in your browser',
 	our_records_indicate_you_already_have_account: 'Our records indicate that you already have steem account',
-	to_prevent_abuse_steemit_can_only_register_one_account_per_user: 'In order to prevent abuse (each registered account costs 3 STEEM) Steemit can only register one account per verified user.',
+	to_prevent_abuse_steemit_can_only_register_one_account_per_user: 'In order to prevent abuse Steemit can only register one account per verified user.',
 	you_can_either_login_or_send_us_email: 'You can either {loginLink} to your existing account or  if you need a new account',
 	send_us_email: 'send us email',
 	connection_lost_reconnecting: 'Connection lost, reconnecting',
@@ -376,7 +377,7 @@ const fr = 	{
 	view_the_direct_parent: 'View the direct parent',
 	you_are_viewing_single_comments_thread_from: 'You are viewing a single comment&#39;s thread from',
 	view_the_full_context: 'View the full context',
-	this_is_a_price_feed_conversion: 'This is a price feed conversion. The one week day delay is necessary to prevent abuse from gaming the price feed average',
+	this_is_a_price_feed_conversion: 'This is a price feed conversion. The 3.5 day delay is necessary to prevent abuse from gaming the price feed average',
 	your_existing_SD_are_liquid_and_transferable: 'Your existing Steem Dollars are liquid and transferable.  Instead you may wish to trade Steem Dollars directly in this site under {link} or transfer to an external market.',
 	buy_or_sell: 'Buy or Sells',
 	trending_30_day: 'trending (30 day)',
@@ -423,7 +424,7 @@ const fr = 	{
 	not_valid_email: 'Email non valide',
 	thank_you_for_being_an_early_visitor_to_steemit: 'Thank you for being an early visitor to Steemit. We will get back to you at the earliest possible opportunity.',
 	estimated_author_rewards_last_week: "Estimated author rewards last week",
-	author_rewards_last_week: "Estimated author rewards last week",
+	author_rewards_last_week: "Author rewards last week",
 	confirm: 'Confirm',
 	canceled: 'Canceled',
 	asset: "Asset",

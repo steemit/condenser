@@ -47,7 +47,7 @@ You should also update the login_challenge_description.
 (note: it's steem.json in production)
 
 #### Install mysql server
- 
+
 OS X :
 
 ```bash
@@ -65,12 +65,23 @@ sudo apt-get update
 sudo apt-get install mysql-server
 ```
 
+On Ubuntu 16.04+ you may be unable to connect to mysql without root access, if
+so update the mysql root user as follows::
+
+```
+sudo mysql -u root
+DROP USER 'root'@'localhost';
+CREATE USER 'root'@'%' IDENTIFIED BY '';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';
+FLUSH PRIVILEGES;
+```
+
 Now launch mysql client and create steemit_dev database:
 ```bash
 mysql -u root
 > create database steemit_dev;
 ```
- 
+
 Install `sequelize-cli` globally:
 
 ```bash

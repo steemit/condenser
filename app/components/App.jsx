@@ -16,6 +16,7 @@ import Icon from 'app/components/elements/Icon';
 import {key_utils} from 'shared/ecc';
 import MiniHeader from 'app/components/modules/MiniHeader';
 import { translate } from '../Translator.js';
+import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 
 class App extends React.Component {
     constructor(props) {
@@ -31,7 +32,6 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        require('fastclick').attach(document.body);
         // setTimeout(() => this.setState({showCallout: false}), 15000);
     }
 
@@ -45,7 +45,7 @@ class App extends React.Component {
     shouldComponentUpdate(nextProps, nextState) {
         const p = this.props;
         const n = nextProps;
-        return p.location !== n.location || 
+        return p.location !== n.location ||
                   p.visitor !== n.visitor ||
                   p.flash !== n.flash || this.state !== nextState;
     }
@@ -74,7 +74,7 @@ class App extends React.Component {
     }
 
     render() {
-        const {location, params, children, flash, showSignUp, new_visitor,
+        const {location, params, children, flash, new_visitor,
             depositSteem, signup_bonus} = this.props;
         const lp = false; //location.pathname === '/';
         const miniHeader = location.pathname === '/create_account';
@@ -127,7 +127,7 @@ class App extends React.Component {
         }
 
         let welcome_screen = null;
-        if (new_visitor && this.state.showBanner) {
+        if (ip && new_visitor && this.state.showBanner) {
             welcome_screen = (
                 <div className="welcomeWrapper">
                     <div className="welcomeBanner">
@@ -167,7 +167,12 @@ class App extends React.Component {
                     </li>
                     <li>
                         <a href="https://steem.io/SteemWhitePaper.pdf" onClick={this.navigate}>
-                            {translate("whitepaper")}
+                            {translate("APP_NAME_whitepaper")}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/welcome" onClick={this.navigate}>
+                            Welcome
                         </a>
                     </li>
                     <li>
@@ -175,19 +180,19 @@ class App extends React.Component {
                             FAQ
                         </a>
                     </li>
-                    <li>
+                    {/*<li>
                         <a onClick={() => depositSteem()}>
-                            {translate("buy_steem")}
+                            {translate("buy_LIQUID_TOKEN")}
                         </a>
-                    </li>
+                    </li>*/}
                     <li>
-                        <a href="http://steemtools.com/" onClick={this.navigate}>
-                            {translate('steem_app_center')}
+                        <a href="http://steemtools.com/" onClick={this.navigate} target="_blank" rel="noopener noreferrer">
+                            {translate('APP_NAME_app_center')}&nbsp;<Icon name="extlink" />
                         </a>
                     </li>
                     <li>
                         <a href="/market" onClick={this.navigate}>
-                            {translate("market")}
+                            {translate("currency_market")}
                         </a>
                     </li>
                     <li>
@@ -202,12 +207,17 @@ class App extends React.Component {
                     </li>
                     <li>
                         <a href="https://steemit.chat/home" target="_blank" rel="noopener noreferrer">
-                            {translate("steemit_chat")}&nbsp;<Icon name="extlink" />
+                            {translate("APP_NAME_chat")}&nbsp;<Icon name="extlink" />
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://steemit.github.io/steemit-docs/" target="_blank" rel="noopener noreferrer">
+                            {translate("steemit_api_docs")}&nbsp;<Icon name="extlink" />
                         </a>
                     </li>
                     <li className="last">
                         <a href="/~witnesses" onClick={this.navigate}>
-                            {translate("witnesses")}
+                            {translate("vote_for_witnesses")}
                         </a>
                     </li>
                 </ul>
@@ -233,6 +243,7 @@ class App extends React.Component {
             </div>
             <Dialogs />
             <Modals />
+            <PageViewsCounter />
         </div>
     }
 }
@@ -261,10 +272,6 @@ export default connect(
     dispatch => ({
         loginUser: () =>
             dispatch(user.actions.usernamePasswordLogin()),
-        showSignUp: e => {
-            if (e) e.preventDefault();
-            dispatch(user.actions.showSignUp());
-        },
         depositSteem: () => {
             dispatch(g.actions.showDialog({name: 'blocktrades_deposit', params: {outputCoinType: 'VESTS'}}));
         },

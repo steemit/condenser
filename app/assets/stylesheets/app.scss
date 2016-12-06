@@ -45,7 +45,11 @@ a, path, circle {
   clear: both;
 }
 
-label {
+.strikethrough {
+  text-decoration: line-through;
+}
+
+.uppercase, label {
   text-transform: uppercase;
 }
 
@@ -74,27 +78,6 @@ label {
   }
   100% {
     transform: rotate(360deg);
-  }
-}
-
-.vframe {
-  display: flex;
-  position: relative;
-  overflow: hidden;
-  backface-visibility: hidden;
-  flex-flow: column nowrap;
-  align-items: stretch;
-  justify-content: flex-start;
-  min-height: 90vh;
-
-  > .vframe__section {
-    flex-shrink: 0;
-    flex-grow: 1;
-  }
-
-  > .vframe__section--shrink {
-    flex-shrink: 1;
-    flex-grow: 0;
   }
 }
 

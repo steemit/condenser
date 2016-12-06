@@ -1,5 +1,6 @@
 import {fromJS} from 'immutable';
 import createModule from 'redux-modules';
+import { DEFAULT_LANGUAGE } from 'config/client_config';
 
 const defaultState = fromJS({
     current: null,
@@ -7,7 +8,8 @@ const defaultState = fromJS({
     show_transfer_modal: false,
     show_promote_post_modal: false,
     show_signup_modal: false,
-    pub_keys_used: null
+    pub_keys_used: null,
+    locale: DEFAULT_LANGUAGE
 });
 
 export default createModule({
@@ -35,6 +37,7 @@ export default createModule({
             if(!state.hasIn(['current', 'private_keys'])) return state
             let empty = false
             state = state.updateIn(['current', 'private_keys'], private_keys => {
+                if(!private_keys) return null
                 if(private_keys.has('active_private'))
                     console.log('removeHighSecurityKeys')
                 private_keys = private_keys.delete('active_private')
@@ -51,6 +54,9 @@ export default createModule({
             state = state.setIn(['authority', username, 'owner'], 'none')
             return state
         }},
+        { action: 'CHANGE_LANGUAGE', reducer: (state, {payload}) => {
+            return state.set('locale', payload)}
+        },
         { action: 'SHOW_TRANSFER', reducer: state => state.set('show_transfer_modal', true) },
         { action: 'HIDE_TRANSFER', reducer: state => state.set('show_transfer_modal', false) },
         { action: 'SHOW_PROMOTE_POST', reducer: state => state.set('show_promote_post_modal', true) },
@@ -121,4 +127,3 @@ export default createModule({
         },
     ]
 });
-

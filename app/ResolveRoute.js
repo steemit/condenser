@@ -6,6 +6,9 @@ export default function resolveRoute(path)
     if (path === '/about.html') {
         return {page: 'About'};
     }
+    if (path === '/welcome') {
+        return {page: 'Welcome'};
+    }
     if (path === '/faq.html') {
         return {page: 'Faq'};
     }
@@ -57,7 +60,7 @@ export default function resolveRoute(path)
     }
     match = path.match(/^\/(@[\w\.\d-]+)\/?$/) ||
         // @user/"posts" is deprecated in favor of "comments" as of oct-2016 (#443)
-        path.match(/^\/(@[\w\.\d-]+)\/(blog|posts|comments|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers)\/?$/);
+        path.match(/^\/(@[\w\.\d-]+)\/(blog|posts|comments|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)\/?$/);
     if (match) {
         return {page: 'UserProfile', params: match.slice(1)};
     }

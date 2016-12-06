@@ -5,6 +5,7 @@ import {connect} from 'react-redux'
 import user from 'app/redux/User'
 import g from 'app/redux/GlobalReducer'
 import ShowKey from 'app/components/elements/ShowKey'
+import { translate } from 'app/Translator';
 
 class Keys extends Component {
     static propTypes = {
@@ -61,7 +62,7 @@ class Keys extends Component {
             <span>
                 <div className="row">
                     <div className="column small-12">
-                        <label>{authType}</label>
+                        <label>{translate(authType.toLowerCase())}</label>
                         {auths}
                     </div>
                 </div>
@@ -83,9 +84,10 @@ export default connect(
         let privateKeys
         if (current)
             privateKeys = current.get('private_keys') // not bound to one account
-        else {
+
+        if(!privateKeys)
             privateKeys = emptyMap
-        }
+
         const auth = state.user.getIn(['authority', accountName])
         return {...ownProps, auth, authLogin, privateKeys}
     },

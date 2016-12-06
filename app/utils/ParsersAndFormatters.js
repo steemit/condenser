@@ -1,3 +1,5 @@
+import { translate } from 'app/Translator';
+
 function fractional_part_len(value) {
     const parts = (Number(value) + '').split('.');
     return parts.length < 2 ? 0 : parts[1].length;
@@ -32,10 +34,11 @@ export function parsePayoutAmount(amount) {
 /**
     This is a rough approximation of log10 that works with huge digit-strings.
     Warning: Math.log10(0) === NaN
+    The 0.00000001 offset fixes cases of Math.log(1000)/Math.LN10 = 2.99999999~
 */
 function log10(str) {
     const leadingDigits = parseInt(str.substring(0, 4));
-    const log = Math.log(leadingDigits) / Math.log(10)
+    const log = Math.log(leadingDigits) / Math.LN10 + 0.00000001
     const n = str.length - 1;
     return n + (log - parseInt(log));
 }
@@ -61,4 +64,33 @@ export function countDecimals(amount) {
     amount = String(amount).match(/[\d\.]+/g).join('') // just dots and digits
     const parts = amount.split('.')
     return parts.length > 2 ? undefined : parts.length === 1 ? 0 : parts[1].length
+}
+
+// this function searches for right translation of provided error (usually from back-end)
+export function translateError(string) {
+    if (typeof(string) != 'string') return string
+    switch (string) {
+        case 'Account not found':
+            return translate('account_not_found')
+        case 'Incorrect Password':
+            return translate('incorrect_password')
+        case 'Username does not exist':
+            return translate('username_does_not_exist')
+        case 'Account name should be longer.':
+            return translate('account_name_should_be_longer')
+        case 'Account name should be shorter.':
+            return translate('account_name_should_be_shorter')
+        case 'Account name should start with a letter.':
+            return translate('account_name_should_start_with_a_letter')
+        case 'Account name should have only letters, digits, or dashes.':
+            return translate('account_name_should_have_only_letters_digits_or_dashes')
+        case 'vote currently exists, user must be indicate a desire to reject witness':
+            return translate('vote_currently_exists_user_must_be_indicate_a_to_reject_witness')
+        case 'Only one Steem account allowed per IP address every 10 minutes':
+            return translate('only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes')
+        case 'Cannot increase reward of post within the last minute before payout':
+            return translate('cannot_increase_reward_of_post_within_the_last_minute_before_payout')
+        default:
+            return string
+    }
 }

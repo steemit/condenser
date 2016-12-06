@@ -1,0 +1,160 @@
+.SlateEditor > div[contenteditable="true"] {
+  min-height: 12rem;
+}
+
+.SlateEditor.Markdown {
+  a {
+    border-bottom: 1px dotted #00f;
+    position: relative;
+    img {border: 1px dotted #00f}
+  }
+  div.active {box-shadow: 0 0 4px 2px #48C;}
+  img.active {box-shadow: 0 0 2px 1px #48C;}
+  hr.active  {box-shadow: 0 0 2px 1px #48C;}
+
+  a:hover:after{
+    font-family: Arial;
+    border-radius: 3px;
+    padding: 1px 3px;
+    background: #eee;
+    content: attr(href);
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 110%;
+    line-height: 1;
+    white-space: nowrap;
+    font-size: 9pt;
+    font-weight: normal;
+    z-index: 99999;
+    padding: 4px 8px;
+    color: #ddd;
+    transition: opacity .75s;
+    background-image: linear-gradient(180deg,#464646,#151515);
+  }
+}
+
+
+.SlateEditor__sidebar {
+  opacity: 0.25;
+  font-size: 110%;
+  padding: 1px;
+  position: absolute;
+  z-index: 1;
+  top: -10000px;
+  left: -10000px;
+  margin-left: -10px;
+  background-color: #222;
+  border-radius: 4px;
+  transition: opacity .75s;
+  background-image: linear-gradient(180deg,#464646,#151515);
+
+  &:hover {opacity: 1;}
+  &:after {
+    top: 0.6rem;
+    left: 100%;
+    border: transparent solid;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-left-color: #464646;
+    border-width: 5px;
+    margin-left: 0px;
+  }
+}
+
+.SlateEditor__sidebar-button {
+  display: block;
+  color: white;
+  padding: 1px 2px;
+  min-width: 1.75rem;
+  text-align: center;
+  svg {fill: white}
+  &:hover {svg {fill: #32cd32;}}
+}
+
+
+.SlateEditor__menu {
+  font-size: 110%;
+  padding: 1px;
+  position: absolute;
+  z-index: 1;
+  top: -10000px;
+  left: -10000px;
+  margin-top: -6px;
+  opacity: 0.9;
+  background-color: #222;
+  border-radius: 4px;
+  transition: opacity .75s;
+  background-image: linear-gradient(180deg,#464646,#151515);
+
+  &:hover {opacity: 1}
+  &:after {
+    top: 100%;
+    left: 50%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-top-color: #151515;
+    border-width: 5px;
+    margin-left: -5px;
+  }
+  > * {display: inline-block;}
+}
+
+.SlateEditor__menu-button {
+  font-family: 'Georgia', serif;
+  color: #FFF;
+  cursor: pointer;
+  display: inline-block;
+  width: 2rem;
+  height: 1.75rem;
+  text-align: center;
+  background: rgba(0,0,0,0.1);
+  border-radius: 2px;
+  > span {
+    path {fill: white}
+  }
+}
+
+.SlateEditor__menu-button[data-active="false"]:hover,
+.SlateEditor__menu-button[data-active="true"] {
+  color: #32cd32;
+  background: rgba(0,0,0,0.5);
+  > span {
+    path {fill: #32cd32;}
+  }
+}
+
+.SlateEditor__menu-button-code > span > code {
+  border: none;
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  font-size: 90%;
+  vertical-align: top;
+}
+
+.SlateEditor__menu-button-sup > span > span ,
+.SlateEditor__menu-button-sub > span > span {
+  font-family: Arial;
+  font-size: 80%;
+  vertical-align: 4%;
+}
+
+.SlateEditor__menu-button-link {
+  .Icon,
+  .Icon > svg {width: 1rem; height: 1rem;}
+}
+
+.SlateEditor__menu-button-block-quote > span > span {
+  font-size: 220%;
+  vertical-align: -45%;
+  line-height: 1;
+}
+

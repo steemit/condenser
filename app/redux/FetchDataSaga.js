@@ -14,7 +14,7 @@ export function* watchDataRequests() {
 
 export function* fetchState(location_change_action) {
     const {pathname} = location_change_action.payload;
-    const m = pathname.match(/@([a-z0-9\.-]+)/)
+    const m = pathname.match(/^\/@([a-z0-9\.-]+)/)
     if(m && m.length === 2) {
         const username = m[1]
         const hasFollows = yield select(state => state.global.hasIn(['follow', 'get_followers', username]))
@@ -25,13 +25,6 @@ export function* fetchState(location_change_action) {
     }
     const server_location = yield select(state => state.offchain.get('server_location'));
     if (pathname === server_location) return;
-
-    // virtual pageview
-    const {ga} = window
-    if(ga) {
-        ga('set', 'page', pathname);
-        ga('send', 'pageview');
-    }
 
     let url = `${pathname}`;
     if (url === '/') url = 'trending';

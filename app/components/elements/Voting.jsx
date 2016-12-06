@@ -111,7 +111,7 @@ class Voting extends React.Component {
     }
 
     render() {
-        const {myVote, active_votes, showList, voting, flag, vesting_shares} = this.props;
+        const {myVote, active_votes, showList, voting, flag, vesting_shares, is_comment} = this.props;
         const {username} = this.props;
         const {votingUp, votingDown, showWeight, weight} = this.state;
         // console.log('-- Voting.render -->', myVote, votingUp, votingDown);
@@ -161,7 +161,8 @@ class Voting extends React.Component {
         const up = <Icon name={votingUpActive ? 'empty' : 'chevron-up-circle'} />;
         const classUp = 'Voting__button Voting__button-up' + (myVote > 0 ? ' Voting__button--upvoted' : '') + (votingUpActive ? ' votingUp' : '');
 
-        const cashout_active = pending_payout > 0 || (cashout_time && cashout_time.indexOf('1969') !== 0 && cashout_time.indexOf('1970') !== 0)
+        // There is an "active cashout" if: (a) there is a pending payout, OR (b) there is a valid cashout_time AND it's NOT a comment with 0 votes.
+        const cashout_active = pending_payout > 0 || (cashout_time.indexOf('1969') !== 0 && !(is_comment && active_votes.size == 0))
         const payoutItems = [];
 
         if(cashout_active) {
@@ -170,7 +171,7 @@ class Voting extends React.Component {
         if(promoted > 0) {
             payoutItems.push({value: 'Promotion Cost $' + formatDecimal(promoted).join('')});
         }
-        if (cashout_active) {
+        if(cashout_active) {
             payoutItems.push({value: <TimeAgoWrapper date={cashout_time} />});
         }
 
@@ -186,7 +187,7 @@ class Voting extends React.Component {
         }
         const payoutEl = <DropdownMenu el="div" items={payoutItems}>
             <span style={payout_limit_hit ? {opacity: '0.5'} : {}}>
-                <FormattedAsset amount={payout} asset="$" />
+                <FormattedAsset amount={payout} asset="$" classname={max_payout === 0 ? 'strikethrough' : ''} />
                 {payoutItems.length > 0 && <Icon name="dropdown-arrow" />}
             </span>
         </DropdownMenu>;

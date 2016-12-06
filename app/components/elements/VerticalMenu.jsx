@@ -7,10 +7,17 @@ export default class VerticalMenu extends React.Component {
         items: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
         title: React.PropTypes.string,
         className: React.PropTypes.string,
-        hideValue: React.PropTypes.string,
+        hideValue: React.PropTypes.oneOfType([
+            React.PropTypes.string,
+            React.PropTypes.element
+        ]),
     };
 
-    closeMenu = () => {
+    closeMenu = (e) => {
+        // If this was not a left click, or if CTRL or CMD were held, do not close the menu.
+        if(e.button !== 0 || e.ctrlKey || e.metaKey) return;
+
+        // Simulate clicking of document body which will close any open menus
         document.body.click();
     }
 
@@ -23,6 +30,7 @@ export default class VerticalMenu extends React.Component {
                 return <li key={i.value} onClick={this.closeMenu}>
                     {i.link ? <Link to={i.link} onClick={i.onClick}>
                         {i.icon && <Icon name={i.icon} />}{i.label ? i.label : i.value}
+                        &nbsp; {i.addon}
                     </Link> :
                     <span>
                         {i.icon && <Icon name={i.icon} />}{i.label ? i.label : i.value}

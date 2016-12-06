@@ -79,5 +79,5 @@ class Topics extends React.Component {
 }
 
 export default connect(state => ({
-    categories: state.global.get('category_idx')
+    categories: state.global.get('tag_idx')
 }))(Topics);

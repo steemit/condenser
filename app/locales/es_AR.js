@@ -1,4 +1,4 @@
-const es = 	{
+const es_AR = 	{
 	// this variables mainly used in navigation section
 	about: "Acerca de",
 	explore: "Explorar",
@@ -6,10 +6,13 @@ const es = 	{
 	buy_steem: "Comprar Steem",
 	sell_steem: "Vender Steem",
 	market: "Mercado",
+	currency_market: "Mercado de Divisas",
 	stolen_account_recovery: "Recuperación de Cuentas Robadas",
 	change_account_password: "Cambiar Contraseña",
 	steemit_chat: "Chat de Steemit",
+    steemit_api_docs: "Steemit API Docs",
 	witnesses: "Testigos",
+	vote_for_witnesses: "Votar por Testigos",
 	privacy_policy: "Política de Privacidad",
 	terms_of_service: "Términos de Servicio",
 	sign_up: "Registro",
@@ -185,7 +188,7 @@ const es = 	{
 	i_understand_dont_show_again: "I understand, don't show me again",
 	ok: 'Ok',
 	convert_to_steem: 'Convertir a Steem',
-	steem_dollars_will_be_unavailable: 'This action will take place one week from now and can not be canceled. These Steem Dollars will immediatly become unavailable',
+	steem_dollars_will_be_unavailable: 'This action will take place 3.5 days from now and can not be canceled. These Steem Dollars will immediatly become unavailable',
 	amount: 'Cantidad',
 	steem_dollars: 'STEEM DOLLARS',
 	convert: 'Convertir',
@@ -280,16 +283,14 @@ const es = 	{
 		many {# posts}
 	}`,
 	follower_count: `{followerCount, plural,
-		zero {0 followers}
-		one {# followers}
-		few {# followers}
-		many {# followers}
+		=0 {no followers}
+		one {1 follower}
+		other {{followerCount} followers}
 	}`,
 	followed_count: `{followingCount, plural,
-		zero {0 followed}
-		one {# followed}
-		few {# followed}
-		many {# followed}
+		=0 {not following anybody}
+		one {1 following}
+		other {{followingCount} following}
 	}`,
 	vote_count: `{voteCount, plural,
 		zero {0 votes}
@@ -339,7 +340,7 @@ const es = 	{
 	couldnt_create_account_server_returned_error: "No se pudo crear la cuenta. El servidor devolvió el siguiente error:",
 	form_requires_javascript_to_be_enabled: 'Este formulario necesita que tengas Javascript activado en tu navegador',
 	our_records_indicate_you_already_have_account: 'Los registros indican que ya tenés una cuenta en Steem',
-	to_prevent_abuse_steemit_can_only_register_one_account_per_user: 'Para prevenir abusos (cada cuenta registrada tiene un costo de 3 STEEM) Steemit puede registrar una sola cuenta por usuario verificado.',
+	to_prevent_abuse_steemit_can_only_register_one_account_per_user: 'Para prevenir abusos Steemit puede registrar una sola cuenta por usuario verificado.',
 	you_can_either_login_or_send_us_email: 'Podés {loginLink} a tu cuenta existente o {createAccount} si necesitas una cuenta nueva',
 	send_us_email: 'envianos un correo electrónico',
 	connection_lost_reconnecting: 'Conexión perdida, reconectando',
@@ -376,7 +377,7 @@ const es = 	{
 	view_the_direct_parent: 'Vista directa del padre',
 	you_are_viewing_single_comments_thread_from: 'Estás viendo un comentario individual de',
 	view_the_full_context: 'Ver todo el contexto',
-	this_is_a_price_feed_conversion: 'This is a price feed conversion. The one week day delay is necessary to prevent abuse from gaming the price feed average',
+	this_is_a_price_feed_conversion: 'This is a price feed conversion. The 3.5 day delay is necessary to prevent abuse from gaming the price feed average',
 	your_existing_SD_are_liquid_and_transferable: 'Your existing Steem Dollars are liquid and transferable.  Instead you may wish to trade Steem Dollars directly in this site under {link} or transfer to an external market.',
 	buy_or_sell: 'Comprar o vender',
 	trending_30_day: 'Popular (30 dias)',

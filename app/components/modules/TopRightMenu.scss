@@ -11,5 +11,21 @@
 }
 
 li.Header__userpic {
-    padding: 0;
+  padding: 0;
+  position: relative;
+
+  .Userpic {
+    width: 36px !important;
+    height: 36px !important;
+    border: 1px solid #e0e0e0;
+  }
+}
+
+.TopRightMenu__notificounter {
+    position: absolute;
+    top: -2px;
+    right: 0;
+    > .NotifiCounter {
+        display: block;
+    }
 }

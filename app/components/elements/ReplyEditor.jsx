@@ -1,5 +1,5 @@
 import React from 'react';
-import {reduxForm} from 'redux-form'
+import {reduxForm} from 'redux-form' // @deprecated, instead use: app/utils/ReactForm.js
 import transaction from 'app/redux/Transaction';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer'
 import CategorySelector from 'app/components/cards/CategorySelector'
@@ -16,46 +16,47 @@ import {cleanReduxInput} from 'app/utils/ReduxForms'
 import Remarkable from 'remarkable'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 
-const remarkable = new Remarkable({ html: true, linkify: false })
+const remarkable = new Remarkable({ html: true, linkify: false, breaks: true })
 const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
 const RTE_DEFAULT = false
+//var htmlclean = require('htmlclean');
 
 let saveEditorTimeout
 
 // removes <html></html> wrapper if exists
 function stripHtmlWrapper(text) {
-    const m = text.match(/<html>\n?([\S\s]+?)\n?<\/html>/m);
+    const m = text.match(/<html>\n*([\S\s]+?)?\n*<\/html>/m);
     return m && m.length === 2 ? m[1] : text;
 }
 
-function addHtmlWrapper(body) {
-    if(/^<html>/.test(body)) {
-        const err = "Error: content passed to addHtmlWrapper is already wrapped";
-        serverApiRecordEvent('assert_error', err);
-        console.log(err);
-        return body
-    }
-    if(!body || body.trim() === '') body = '';
-    return `<html>\n${body}\n</html>`;
-}
-
 // See also MarkdownViewer render
-const isHtmlTest = text =>
-    /^<html>/.test(text) ||
-    /^<p>[\S\s]*<\/p>/.test(text)
+const isHtmlTest = text => /^<html>/.test(text)
 
 function stateToHtml(state) {
     let html = state.toString('html');
     if (html === '<p></p>') html = '';
     if (html === '<p><br></p>') html = '';
-    return html
+    if(html == '') return ''
+    return `<html>\n${html}\n</html>`;
 }
 
 function stateFromHtml(html = null) {
     if(!RichTextEditor) return null;
+    if(html) html = stripHtmlWrapper(html)
     if(html && html.trim() == '') html = null
     return html ? RichTextEditor.createValueFromString(html, 'html')
                 : RichTextEditor.createEmptyValue()
+}
+
+function stateFromMarkdown(markdown) {
+    let html
+    if(markdown && markdown.trim() !== '') {
+        html = remarkable.render(markdown)
+        html = HtmlReady(html).html // TODO: option to disable youtube conversion, @-links, img proxy
+        //html = htmlclean(html) // normalize whitespace
+        console.log("markdown converted to:", html)
+    }
+    return stateFromHtml(html)
 }
 
 class ReplyEditor extends React.Component {
@@ -82,7 +83,6 @@ class ReplyEditor extends React.Component {
         clearMetaData: React.PropTypes.func.isRequired,
         setMetaData: React.PropTypes.func.isRequired,
         state: React.PropTypes.object.isRequired,
-        hasCategory: React.PropTypes.bool.isRequired,
         isStory: React.PropTypes.bool.isRequired,
         username: React.PropTypes.string,
 
@@ -138,13 +138,13 @@ class ReplyEditor extends React.Component {
         if(process.env.BROWSER) {
 
             // Check for rte editor preference
-            let rte  = this.props.isStory && JSON.parse(localStorage.getItem('replyEditorData-rte') || RTE_DEFAULT);
-            let html = null;
+            let rte = this.props.isStory && JSON.parse(localStorage.getItem('replyEditorData-rte') || RTE_DEFAULT);
+            let raw = null;
 
             // Process initial body value (if this is an edit)
             const {body} = this.props.fields
             if (body.value) {
-                html = body.value
+                raw = body.value
             }
 
             // Check for draft data
@@ -154,19 +154,19 @@ class ReplyEditor extends React.Component {
                 const {category, title} = this.props.fields
                 if(category) category.onChange(draft.category)
                 if(title) title.onChange(draft.title)
-                html = draft.body
+                raw = draft.body
             }
 
             // If we have an initial body, check if it's html or markdown
-            if(html) {
-                rte = isHtmlTest(html)
-                if(rte) html = stripHtmlWrapper(html)
+            if(raw) {
+                rte = isHtmlTest(raw)
             }
 
-            body.onChange(html)
+            // console.log("initial reply body:", raw || '(empty)')
+            body.onChange(raw)
             this.setState({
                 rte,
-                rte_value: rte ? stateFromHtml(html) : null
+                rte_value: rte ? stateFromHtml(raw) : null
             })
             this.setAutoVote()
             this.setState({payoutType: this.props.isStory ? (localStorage.getItem('defaultPayoutType') || '50%') : '50%'})
@@ -195,14 +195,15 @@ class ReplyEditor extends React.Component {
                     formId,
                     title: title ? title.value : undefined,
                     category: category ? category.value : undefined,
-                    body: this.state.rte ? addHtmlWrapper(body.value) : body.value,
+                    body: body.value,
                 }
 
                 clearTimeout(saveEditorTimeout)
                 saveEditorTimeout = setTimeout(() => {
-                    // console.log('save formId', formId, JSON.stringify(data, null, 0))
+                    // console.log('save formId', formId, body.value)
                     localStorage.setItem('replyEditorData-' + formId, JSON.stringify(data, null, 0))
-                }, 350)
+                    this.showDraftSaved()
+                }, 500)
             }
         }
     }
@@ -232,10 +233,17 @@ class ReplyEditor extends React.Component {
         e.preventDefault();
         const state = {rte: !this.state.rte};
         if (state.rte) {
-            state.rte_value = stateFromHtml(this.props.fields.body.value);
+            const body = this.props.fields.body.value
+            state.rte_value = isHtmlTest(body) ? stateFromHtml(body) : stateFromMarkdown(body)
         }
         this.setState(state);
         localStorage.setItem('replyEditorData-rte', !this.state.rte)
+    }
+    showDraftSaved() {
+        const {draft} = this.refs
+        draft.className = 'ReplyEditor__draft'
+        void draft.offsetWidth; // reset animation
+        draft.className = 'ReplyEditor__draft ReplyEditor__draft-saved'
     }
 
     onPayoutTypeChange = (e) => {
@@ -247,16 +255,15 @@ class ReplyEditor extends React.Component {
     render() {
         // NOTE title, category, and body are UI form fields ..
         const originalPost = {
-            title: this.props.title,
             category: this.props.category,
             body: this.props.body,
         }
         const {onCancel, autoVoteOnChange} = this
         const {title, category, body, autoVote} = this.props.fields
         const {
-            reply, username, hasCategory, isStory, formId, noImage,
+            reply, username, isStory, formId, noImage,
             author, permlink, parent_author, parent_permlink, type, jsonMetadata,
-            state, successCallback, handleSubmit, submitting, invalid, //lastComment,
+            state, successCallback, handleSubmit, submitting, invalid,
         } = this.props
         const {postError, loading, titleWarn, rte, payoutType} = this.state
         const {onTitleChange} = this
@@ -266,10 +273,11 @@ class ReplyEditor extends React.Component {
             if (successCallback) successCallback(args)
         }
         const isEdit = type === 'edit'
+        const isHtml = rte || isHtmlTest(body.value)
         // Be careful, autoVote can reset curation rewards.  Never autoVote on edit..
         const autoVoteValue = !isEdit && autoVote.value
         const replyParams = {
-            author, permlink, parent_author, parent_permlink, type, state, originalPost, isHtml: rte,
+            author, permlink, parent_author, parent_permlink, type, state, originalPost, isHtml, isStory,
             jsonMetadata, autoVote: autoVoteValue, payoutType,
             successCallback: successCallbackWrapper, errorCallback
         }
@@ -283,6 +291,7 @@ class ReplyEditor extends React.Component {
             </div>
         }
 
+        // TODO: remove all references to these vframe classes. Removed from css and no longer needed.
         const vframe_class = isStory ? 'vframe' : '';
         const vframe_section_class = isStory ? 'vframe__section' : '';
         const vframe_section_shrink_class = isStory ? 'vframe__section--shrink' : '';
@@ -290,6 +299,7 @@ class ReplyEditor extends React.Component {
         return (
             <div className="ReplyEditor row">
                 <div className="column small-12">
+                    <div ref="draft" className="ReplyEditor__draft ReplyEditor__draft-hide">Draft saved.</div>
                     <form className={vframe_class}
                         onSubmit={handleSubmit(data => {
                             const loadingCallback = () => this.setState({loading: true, postError: undefined})
@@ -299,18 +309,16 @@ class ReplyEditor extends React.Component {
                     >
                         <div className={vframe_section_shrink_class}>
                             {isStory && <span>
-                                <input type="text" {...cleanReduxInput(title)} onChange={onTitleChange} disabled={loading} placeholder="Title" autoComplete="off" ref="titleRef" tabIndex={1} />
+                                <input type="text" className="ReplyEditor__title" {...cleanReduxInput(title)} onChange={onTitleChange} disabled={loading} placeholder="Title" autoComplete="off" ref="titleRef" tabIndex={1} />
+                                <div className="float-right secondary" style={{marginRight: '1rem'}}>
+                                    {rte && <a href="#" onClick={this.toggleRte}>{body.value ? 'Raw HTML' : 'Markdown'}</a>}
+                                    {!rte && (isHtml || !body.value) && <a href="#" onClick={this.toggleRte}>Editor</a>}
+                                </div>
                                 {titleError}
                             </span>}
                         </div>
 
                         <div className={'ReplyEditor__body ' + (rte ? `rte ${vframe_section_class}` : vframe_section_shrink_class)}>
-                            {!body.value && isStory &&
-                                <div className="float-right secondary" style={{marginRight: '1rem'}}>
-                                    {rte && <a href="#" onClick={this.toggleRte}>Markdown</a>}
-                                    {!rte && <a href="#" onClick={this.toggleRte}>Editor</a>}
-                                </div>
-                            }
                             {process.env.BROWSER && rte ?
                                 <RichTextEditor ref="rte"
                                     readOnly={loading}
@@ -326,9 +334,9 @@ class ReplyEditor extends React.Component {
                         </div>
 
                         <div className={vframe_section_shrink_class} style={{marginTop: '0.5rem'}}>
-                            {hasCategory && <span>
+                            {isStory && <span>
                                 <CategorySelector {...category} disabled={loading} isEdit={isEdit} tabIndex={3} />
-                                <div className="error">{category.touched && category.error && category.error}&nbsp;</div>
+                                <div className="error">{(category.touched || category.value) && category.error}&nbsp;</div>
                             </span>}
                         </div>
                         <div className={vframe_section_shrink_class}>
@@ -359,7 +367,7 @@ class ReplyEditor extends React.Component {
                             </div>}
                         </div>
                         {!loading && !rte && body.value && <div className={'Preview ' + vframe_section_shrink_class}>
-                            {<div className="float-right"><a target="_blank" href="https://guides.github.com/features/mastering-markdown/">Styling with Markdown is supported.</a></div>}
+                            {!isHtml && <div className="float-right"><a target="_blank" href="https://guides.github.com/features/mastering-markdown/">Markdown Styling Guide</a></div>}
                             <h6>Preview</h6>
                             <MarkdownViewer formId={formId} text={body.value} canEdit jsonMetadata={jsonMetadata} large={isStory} noImage={noImage} />
                         </div>}
@@ -382,13 +390,10 @@ export default formId => reduxForm(
         const fields = ['body', 'autoVote']
         const {type, parent_author, jsonMetadata} = ownProps
         const isStory = /submit_story/.test(type) || (
-            /edit/.test(type) && parent_author === ''
+            type === 'edit' && parent_author === ''
         )
-        const hasCategory = isStory // /submit_story/.test(type)
-        if (isStory) {
-            fields.push('title')
-        }
-        if (hasCategory) fields.push('category')
+        if (isStory) fields.push('title')
+        if (isStory) fields.push('category')
         const isEdit = type === 'edit'
         const maxKb = isStory ? 100 : 16
         const validate = values => ({
@@ -397,22 +402,20 @@ export default formId => reduxForm(
                 values.title.length > 255 ? 'Shorten title' :
                 null
             ),
-            category: hasCategory && validateCategory(values.category, !isEdit),
+            category: isStory && validateCategory(values.category, !isEdit),
             body: !values.body ? 'Required' :
                   values.body.length > maxKb * 1024 ? 'Exceeds maximum length ('+maxKb+'KB)' : null,
         })
+
         let {category, title, body} = ownProps
-
         if (/submit_/.test(type)) title = body = ''
-
-        if(hasCategory && jsonMetadata && jsonMetadata.tags) {
+        if(isStory && jsonMetadata && jsonMetadata.tags) {
             category = Set([category, ...jsonMetadata.tags]).join(' ')
         }
         const ret = {
             ...ownProps,
-            fields, validate, isStory, hasCategory, username,
+            fields, validate, isStory, username,
             initialValues: {title, body, category}, state,
-            // lastComment: current.get('lastComment'),
             formId,
         }
         return ret
@@ -426,7 +429,7 @@ export default formId => reduxForm(
         setMetaData: (id, jsonMetadata) => {
             dispatch(g.actions.setMetaData({id, meta: jsonMetadata ? jsonMetadata.steem : null}))
         },
-        reply: ({category, title, body, author, permlink, parent_author, parent_permlink, isHtml,
+        reply: ({category, title, body, author, permlink, parent_author, parent_permlink, isHtml, isStory,
             type, originalPost, autoVote = false, payoutType = '50%',
             state, jsonMetadata,
             successCallback, errorCallback, loadingCallback
@@ -434,17 +437,20 @@ export default formId => reduxForm(
             // const post = state.global.getIn(['content', author + '/' + permlink])
             const username = state.user.getIn(['current', 'username'])
 
+            const isEdit = type === 'edit'
+            const isNew = /^submit_/.test(type)
+
             // Wire up the current and parent props for either an Edit or a Submit (new post)
             //'submit_story', 'submit_comment', 'edit'
             const linkProps =
-                /^submit_/.test(type) ? { // submit new
+                isNew ? { // submit new
                     parent_author: author,
                     parent_permlink: permlink,
                     author: username,
                     // permlink,  assigned in TransactionSaga
                 } :
                 // edit existing
-                /^edit$/.test(type) ? {author, permlink, parent_author, parent_permlink}
+                isEdit ? {author, permlink, parent_author, parent_permlink}
                 : null
 
             if (!linkProps) throw new Error('Unknown type: ' + type)
@@ -454,8 +460,11 @@ export default formId => reduxForm(
                 originalPost.category : formCategories.first()
             const rootTag = /^[-a-z\d]+$/.test(rootCategory) ? rootCategory : null
 
-            // If this is an HTML post, add <html> wrapper to mark it as so
-            if(isHtml) body = addHtmlWrapper(body)
+            // If this is an HTML post, it MUST begin and end with the tag
+            if(isHtml && !body.match(/^<html>[\s\S]*<\/html>$/)) {
+                errorCallback('HTML posts must begin with <html> and end with </html>')
+                return
+            }
 
             let rtags
             {
@@ -464,9 +473,9 @@ export default formId => reduxForm(
             }
 
             allowedTags.forEach(tag => { rtags.htmltags.delete(tag) })
-            rtags.htmltags.delete('html')
+            if(isHtml) rtags.htmltags.delete('html') // html tag allowed only in HTML mode
             if(rtags.htmltags.size) {
-                errorCallback('Please remove the following HTML elements from your post: ' + Array(...rtags.htmltags).join(', '))
+                errorCallback('Please remove the following HTML elements from your post: ' + Array(...rtags.htmltags).map(tag => `<${tag}>`).join(', '))
                 return
             }
 
@@ -474,11 +483,16 @@ export default formId => reduxForm(
             if(rootTag) allCategories = allCategories.add(rootTag)
 
             // merge
-            const meta = /edit/.test(type) ? jsonMetadata : {}
+            const meta = isEdit ? jsonMetadata : {}
             if(allCategories.size) meta.tags = allCategories.toJS(); else delete meta.tags
             if(rtags.usertags.size) meta.users = rtags.usertags; else delete meta.users
             if(rtags.images.size) meta.image = rtags.images; else delete meta.image
             if(rtags.links.size) meta.links = rtags.links; else delete meta.links
+
+            if(isStory) {
+                meta.app = "steemit/0.1"
+                meta.format = isHtml ? 'html' : 'markdown'
+            }
 
             // if(Object.keys(json_metadata.steem).length === 0) json_metadata = {}// keep json_metadata minimal
             const sanitizeErrors = []
@@ -489,27 +503,31 @@ export default formId => reduxForm(
             }
 
             if(meta.tags.length > 5) {
-                const includingCategory = /edit/.test(type) ? ` (including the category '${rootCategory}')` : ''
+                const includingCategory = isEdit ? ` (including the category '${rootCategory}')` : ''
                 errorCallback(`You have ${meta.tags.length} tags total${includingCategory}.  Please use only 5 in your post and category line.`)
                 return
             }
             // loadingCallback starts the loading indicator
             loadingCallback()
 
-            const __config = {originalPost, autoVote}
+            const originalBody = isEdit ? originalPost.body : null
+            const __config = {originalBody, autoVote}
 
-            switch(payoutType) {
-                case '0%': // decline payout
-                    __config.comment_options = {
-                        max_accepted_payout: '0.000 SBD',
-                    }
-                    break;
-                case '100%': // 100% steem power payout
-                    __config.comment_options = {
-                        percent_steem_dollars: 0, // 10000 === 100% (of 50%)
-                    }
-                    break;
-                default: // 50% steem power, 50% sd+steem
+            // Avoid changing payout option during edits #735
+            if(!isEdit) {
+                switch(payoutType) {
+                    case '0%': // decline payout
+                        __config.comment_options = {
+                            max_accepted_payout: '0.000 SBD',
+                        }
+                        break;
+                    case '100%': // 100% steem power payout
+                        __config.comment_options = {
+                            percent_steem_dollars: 0, // 10000 === 100% (of 50%)
+                        }
+                        break;
+                    default: // 50% steem power, 50% sd+steem
+                }
             }
 
             const operation = {

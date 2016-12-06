@@ -6,7 +6,7 @@ export default createModule({
     initialState: fromJS({
         operations: [],
         status: { key: '', error: false, busy: false, },
-        errors: null,
+        errors: null
     }),
     transformations: [
         {
@@ -14,11 +14,13 @@ export default createModule({
             reducer: (state, {payload}) => {
                 const operation = fromJS(payload.operation)
                 const confirm = payload.confirm
+                const warning = payload.warning
                 return state.merge({
                     show_confirm_modal: true,
                     confirmBroadcastOperation: operation,
                     confirmErrorCallback: payload.errorCallback,
                     confirm,
+                    warning
                 })
             }
         },
@@ -36,6 +38,11 @@ export default createModule({
         {
             // An error will end up in QUEUE
             action: 'UPDATE_AUTHORITIES',
+            reducer: (state) => state,
+        },
+        {
+            // An error will end up in QUEUE
+            action: 'UPDATE_META',
             reducer: (state) => state,
         },
         {

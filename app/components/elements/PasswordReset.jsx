@@ -4,7 +4,7 @@ import g from 'app/redux/GlobalReducer'
 import {connect} from 'react-redux';
 import ChangePassword from 'app/components/elements/ChangePassword'
 
-export default class PasswordReset extends Component {
+class PasswordReset extends Component {
     static propTypes = {
         // HTML
         account: PropTypes.object.isRequired,

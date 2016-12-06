@@ -12,6 +12,7 @@ import useRedirects from './redirects';
 import useOauthLogin from './api/oauth';
 import useGeneralApi from './api/general';
 import useAccountRecoveryApi from './api/account_recovery';
+import useNotificationsApi from './api/notifications';
 import useEnterAndConfirmEmailPages from './server_pages/enter_confirm_email';
 import useEnterAndConfirmMobilePages from './server_pages/enter_confirm_mobile';
 import isBot from 'koa-isbot';
@@ -32,10 +33,8 @@ const env = process.env.NODE_ENV || 'development';
 const cacheOpts = {maxAge: 86400000, gzip: true};
 
 app.keys = [config.session_key];
-
 const crypto_key = config.server_session_secret;
-session(app, {maxAge: 1000 * 3600 * 24 * 7, crypto_key});
-
+session(app, {maxAge: 1000 * 3600 * 24 * 60, crypto_key});
 csrf(app);
 
 app.use(mount(grant));
@@ -48,6 +47,24 @@ app.use(function *(next) {
         this.status = 302;
         this.redirect(`/@${this.session.a}/feed`);
         return;
+    }
+    // normalize user name url from cased params
+    if (this.method === 'GET' && /^\/(@[\w\.\d-]+)\/?$/.test(this.url)) {
+        const p = this.originalUrl.toLowerCase();
+        if(p !== this.originalUrl) {
+            this.redirect(p);
+            return;
+        }
+    }
+    // normalize top category filtering from cased params
+    if (this.method === 'GET' && /^\/(hot|created|trending|active)\//.test(this.url)) {
+        const segments = this.url.split('/')
+        const category = segments[2]
+        if(category !== category.toLowerCase()) {
+            segments[2] = category.toLowerCase()
+            this.redirect(segments.join('/'));
+            return;
+        }
     }
     // start registration process if user get to create_account page and has no id in session yet
     if(this.url === '/create_account' && !this.session.user) {
@@ -116,6 +133,7 @@ if (env === 'production') {
 useAccountRecoveryApi(app);
 useOauthLogin(app);
 useGeneralApi(app);
+useNotificationsApi(app);
 
 app.use(favicon(path.join(__dirname, '../app/assets/images/favicons/favicon.ico')));
 app.use(isBot());

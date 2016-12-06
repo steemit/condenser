@@ -9,6 +9,10 @@ import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF} from 'server/utils';
 import coBody from 'co-body';
 import secureRandom from 'secure-random'
 import {PublicKey, Signature, hash} from 'shared/ecc'
+import Mixpanel from 'mixpanel';
+import Tarantool from 'db/tarantool';
+
+const mixpanel = config.mixpanel ? Mixpanel.init(config.mixpanel) : null;
 
 export default function useGeneralApi(app) {
     const router = koa_router({prefix: '/api/v1'});
@@ -36,6 +40,24 @@ export default function useGeneralApi(app) {
             this.status = 401;
             return;
         }
+
+        try {
+            const lock_entity_res = yield Tarantool.instance().call('lock_entity', user_id+'');
+            if (!lock_entity_res[0][0]) {
+                console.log('-- /accounts lock_entity -->', user_id, lock_entity_res[0][0]);
+                this.body = JSON.stringify({error: 'Conflict'});
+                this.status = 409;
+                return;
+            }
+        } catch (e) {
+            console.error('-- /accounts tarantool is not available, fallback to another method', e)
+            const rnd_wait_time = Math.random() * 10000;
+            console.log('-- /accounts rnd_wait_time -->', rnd_wait_time);
+            yield new Promise((resolve) =>
+                setTimeout(() => resolve(), rnd_wait_time)
+            )
+        }
+
         try {
             const user = yield models.User.findOne(
                 {attributes: ['verified', 'waiting_list'], where: {id: user_id}}
@@ -64,7 +86,7 @@ export default function useGeneralApi(app) {
                 order: 'id DESC'
             });
             if (existing_account) {
-                throw new Error("Only one Steem account per user is allowed in order to prevent abuse (Steemit, Inc. funds each new account with 3 STEEM)");
+                throw new Error("Only one Steem account per user is allowed in order to prevent abuse");
             }
 
             const same_ip_account = yield models.Account.findOne(
@@ -127,10 +149,20 @@ export default function useGeneralApi(app) {
             })).catch(error => {
                 console.error('!!! Can\'t create account model in /accounts api', this.session.uid, error);
             });
+            if (mixpanel) {
+                mixpanel.track('Signup', {
+                    distinct_id: this.session.uid,
+                    ip: remote_ip
+                });
+                mixpanel.people.set(this.session.uid, {ip: remote_ip});
+            }
         } catch (error) {
             console.error('Error in /accounts api call', this.session.uid, error.toString());
             this.body = JSON.stringify({error: error.message});
             this.status = 500;
+        } finally {
+            // console.log('-- /accounts unlock_entity -->', user_id);
+            try { yield Tarantool.instance().call('unlock_entity', user_id + ''); } catch(e) {/* ram lock */}
         }
         recordWebEvent(this, 'api/accounts', account ? account.name : 'n/a');
     });
@@ -169,7 +201,7 @@ export default function useGeneralApi(app) {
         try {
             this.session.a = account;
             const db_account = yield models.Account.findOne(
-                {attributes: ['user_id'], where: {name: esc(account)}}
+                {attributes: ['user_id'], where: {name: esc(account)}, logging: false}
             );
             if (db_account) this.session.user = db_account.user_id;
 
@@ -208,8 +240,13 @@ export default function useGeneralApi(app) {
             }
 
             this.body = JSON.stringify({status: 'ok'});
+            const remote_ip = getRemoteIp(this.req);
+            if (mixpanel) {
+                mixpanel.people.set(this.session.uid, {ip: remote_ip, $ip: remote_ip});
+                mixpanel.people.increment(this.session.uid, 'Visits', 1);
+            }
         } catch (error) {
-            console.error('Error in /login_account api call', this.session.uid, error);
+            console.error('Error in /login_account api call', this.session.uid, error.message);
             this.body = JSON.stringify({error: error.message});
             this.status = 500;
         }
@@ -240,11 +277,16 @@ export default function useGeneralApi(app) {
             const {csrf, type, value} = typeof(params) === 'string' ? JSON.parse(params) : params;
             if (!checkCSRF(this, csrf)) return;
             console.log('-- /record_event -->', this.session.uid, type, value);
-            const str_value = typeof value === 'string' ? value : JSON.stringify(value);
+            if (type.match(/^[A-Z]/)) {
+                mixpanel.track(type, {distinct_id: this.session.uid});
+                mixpanel.people.increment(this.session.uid, type, 1);
+            } else {
+                const str_value = typeof value === 'string' ? value : JSON.stringify(value);
+                recordWebEvent(this, type, str_value);
+            }
             this.body = JSON.stringify({status: 'ok'});
-            recordWebEvent(this, type, str_value);
         } catch (error) {
-            console.error('Error in /record_event api call', error);
+            console.error('Error in /record_event api call', error.message);
             this.body = JSON.stringify({error: error.message});
             this.status = 500;
         }
@@ -258,16 +300,75 @@ export default function useGeneralApi(app) {
     });
 
     router.get('/login_challenge', function *() {
-        // Don't make anything that could be a valid transaction.
-        // The client should not trust this when signing.  If the format changes,
-        // you'll need to update the client's validation in /api/v1/login_challenge ..
+    // Don't make anything that could be a valid transaction.
+    // The client should not trust this when signing.  If the format changes,
+    // you'll need to update the client's validation in /api/v1/login_challenge ..
         const login_challenge = JSON.stringify({
             description: config.login_challenge_description,
             token: secureRandom.randomBuffer(16).toString('hex'),
-        }, null, 0)
+            }, null, 0)
 
         this.session.auth = {login_challenge}
         this.body = login_challenge
+    });
+
+    router.post('/page_view', koaBody, function *() {
+        const params = this.request.body;
+        const {csrf, page, ref} = typeof(params) === 'string' ? JSON.parse(params) : params;
+        if (!checkCSRF(this, csrf)) return;
+        if (page.match(/\/feed$/)) {
+            this.body = JSON.stringify({views: 0});
+            return;
+        }
+        console.log('-- /page_view -->', this.session.uid, page);
+        const remote_ip = getRemoteIp(this.req);
+        try {
+            let views = 1, unique = true;
+            if (config.tarantool) {
+                const res = yield Tarantool.instance().call('page_view', page, remote_ip, this.session.uid, ref);
+                unique = res[0][0];
+            }
+            const page_model = yield models.Page.findOne(
+                {attributes: ['id', 'views'], where: {permlink: esc(page)}, logging: false}
+            );
+            if (unique) {
+                if (page_model) {
+                    views = page_model.views + 1;
+                    yield yield models.Page.update({views}, {where: {id: page_model.id}, logging: false});
+                } else {
+                    yield models.Page.create(escAttrs({permlink: page, views}), {logging: false});
+                }
+            } else {
+                if (page_model) views = page_model.views;
+            }
+            this.body = JSON.stringify({views});
+            if (mixpanel) {
+                let referring_domain = '';
+                if (ref) {
+                    const matches = ref.match(/^https?\:\/\/([^\/?#]+)(?:[\/?#]|$)/i);
+                    referring_domain = matches && matches[1];
+                }
+                const mp_params = {
+                    distinct_id: this.session.uid,
+                    Page: page,
+                    ip: remote_ip,
+                    $referrer: ref,
+                    $referring_domain: referring_domain
+                };
+                mixpanel.track('PageView', mp_params);
+                if (!this.session.mp) {
+                    mixpanel.track('FirstVisit', mp_params);
+                    this.session.mp = 1;
+                }
+                if (ref) mixpanel.people.set_once(this.session.uid, '$referrer', ref);
+                mixpanel.people.set_once(this.session.uid, 'FirstPage', page);
+                mixpanel.people.increment(this.session.uid, 'PageView', 1);
+            }
+        } catch (error) {
+            console.error('Error in /page_view api call', this.session.uid, error.message);
+            this.body = JSON.stringify({error: error.message});
+            this.status = 500;
+        }
     });
 }
 

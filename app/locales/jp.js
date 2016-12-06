@@ -6,10 +6,13 @@ const jp = 	{
 	buy_steem: "Steemを買う",
 	sell_steem: "Steemを売る",
 	market: "マーケット",
+	currency_market: "通貨市場",
 	stolen_account_recovery: "盗まれたアカウントの復旧",
 	change_account_password: "パスワードの変更",
 	steemit_chat: "Steemitでチャット",
+    steemit_api_docs: "Steemit API Docs",
 	witnesses: "Witnesses",
+	vote_for_witnesses: "Vote for Witnesses",
 	privacy_policy: "プライバシーポリシー",
 	terms_of_service: "利用規約",
 	sign_up: "サインアップ",
@@ -280,16 +283,14 @@ const jp = 	{
 		many {# posts}
 	}`,
 	follower_count: `{followerCount, plural,
-		zero {0 followers}
-		one {# followers}
-		few {# followers}
-		many {# followers}
+		=0 {no followers}
+		one {1 follower}
+		other {{followerCount} followers}
 	}`,
 	followed_count: `{followingCount, plural,
-		zero {0 followed}
-		one {# followed}
-		few {# followed}
-		many {# followed}
+		=0 {not following anybody}
+		one {1 following}
+		other {{followingCount} following}
 	}`,
 	vote_count: `{voteCount, plural,
 		zero {0 votes}
@@ -376,7 +377,7 @@ const jp = 	{
 	view_the_direct_parent: 'View the direct parent',
 	you_are_viewing_single_comments_thread_from: 'You are viewing a single comment&#39;s thread from',
 	view_the_full_context: 'View the full context',
-	this_is_a_price_feed_conversion: 'This is a price feed conversion. The one week day delay is necessary to prevent abuse from gaming the price feed average',
+	this_is_a_price_feed_conversion: 'This is a price feed conversion. The 3.5 day delay is necessary to prevent abuse from gaming the price feed average',
 	your_existing_SD_are_liquid_and_transferable: 'Your existing Steem Dollars are liquid and transferable.  Instead you may wish to trade Steem Dollars directly in this site under {link} or transfer to an external market.',
 	buy_or_sell: '買い/売り',
 	trending_30_day: '30日間のトレンド',

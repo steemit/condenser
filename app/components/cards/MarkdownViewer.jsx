@@ -28,11 +28,13 @@ class MarkdownViewer extends Component {
         jsonMetadata: React.PropTypes.object,
         highQualityPost: React.PropTypes.bool,
         noImage: React.PropTypes.bool,
+        allowDangerousHTML: React.PropTypes.bool,
     }
 
     static defaultProps = {
         className: '',
         large: false,
+        allowDangerousHTML: false,
     }
 
     constructor() {
@@ -80,7 +82,12 @@ class MarkdownViewer extends Component {
 
         // Complete removal of javascript and other dangerous tags..
         // The must remain as close as possible to dangerouslySetInnerHTML
-        const cleanText = sanitize(renderedText, sanitizeConfig({large, highQualityPost, noImage: noImage && allowNoImage}))
+        let cleanText = renderedText
+        if (this.props.allowDangerousHTML === true) {
+            console.log('WARN\tMarkdownViewer rendering unsanitized content')
+        } else {
+            cleanText = sanitize(renderedText, sanitizeConfig({large, highQualityPost, noImage: noImage && allowNoImage}))
+        }
 
         if(/<\s*script/ig.test(cleanText)) {
             // Not meant to be complete checking, just a secondary trap and red flag (code can change)
@@ -93,19 +100,34 @@ class MarkdownViewer extends Component {
         // In addition to inserting the youtube compoennt, this allows react to compare separately preventing excessive re-rendering.
         let idx = 0
         const sections = []
-        // HtmlReady inserts ~~~ youtube:${id} ~~~
-        for(let section of cleanText.split('~~~ youtube:')) {
-            if(/^[A-Za-z0-9\_\-]+ ~~~/.test(section)) {
-                const youTubeId = section.split(' ')[0]
-                section = section.substring(youTubeId.length + ' ~~~'.length)
-                const w = large ? 640 : 320,
-                      h = large ? 480 : 180
-                sections.push(
-                    <YoutubePreview key={idx++} width={w} height={h} youTubeId={youTubeId}
-                        frameBorder="0" allowFullScreen="true" />
-                )
+
+        // HtmlReady inserts ~~~ embed:${id} type ~~~
+        for(let section of cleanText.split('~~~ embed:')) {
+            const match = section.match(/^([A-Za-z0-9\_\-]+) (youtube|vimeo) ~~~/)
+            if(match && match.length >= 3) {
+                const id = match[1]
+                const type = match[2]
+                const w = large ? 640 : 480,
+                      h = large ? 360 : 270
+                if(type === 'youtube') {
+                    sections.push(
+                        <YoutubePreview key={idx++} width={w} height={h} youTubeId={id}
+                            frameBorder="0" allowFullScreen="true" />
+                    )
+                } else if(type === 'vimeo') {
+                    const url = `https://player.vimeo.com/video/${id}`
+                    sections.push(
+                        <div className="videoWrapper">
+                            <iframe key={idx++} src={url} width={w} height={h} frameBorder="0"
+                                webkitallowfullscreen mozallowfullscreen allowFullScreen></iframe>
+                        </div>
+                    )
+                } else {
+                    console.error('MarkdownViewer unknown embed type', type);
+                }
+                section = section.substring(`${id} ${type} ~~~`.length)
+                if(section === '') continue
             }
-            if(section === '') continue
             sections.push(<div key={idx++} dangerouslySetInnerHTML={{__html: section}} />)
         }
 

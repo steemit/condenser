@@ -9,7 +9,7 @@ import user from './User';
 // import auth from './AuthSaga';
 import transaction from './Transaction';
 import offchain from './Offchain';
-import {reducer as formReducer} from 'redux-form';
+import {reducer as formReducer} from 'redux-form'; // @deprecated, instead use: app/utils/ReactForm.js
 import {contentStats} from 'app/utils/StateFunctions'
 
 function initReducer(reducer, type) {

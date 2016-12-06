@@ -4,7 +4,7 @@ import {Apis} from 'shared/api_client'
 import {createTransaction, signTransaction} from 'shared/chain/transactions'
 import {ops} from 'shared/serializer'
 import {PublicKey, PrivateKey} from 'shared/ecc'
-import {fromJS} from 'immutable'
+import {fromJS, Set, Map} from 'immutable'
 import {getAccount, getContent} from 'app/redux/SagaShared'
 import {findSigningKey} from 'app/redux/AuthSaga'
 import {encode} from 'shared/chain/memo'
@@ -41,16 +41,17 @@ const hook = {
     preBroadcast_comment,
     preBroadcast_transfer,
     preBroadcast_vote,
+    preBroadcast_account_witness_vote,
+    preBroadcast_custom_json,
+    error_vote,
+    error_custom_json,
+    // error_account_update,
+    error_account_witness_vote,
     accepted_comment,
     accepted_delete_comment,
     accepted_vote,
-    error_vote,
-    error_custom_json,
-    preBroadcast_account_witness_vote,
-    error_account_witness_vote,
     accepted_account_update,
     accepted_withdraw_vesting,
-    // error_account_update,
 }
 
 function* preBroadcast_transfer({operation}) {
@@ -88,6 +89,41 @@ function* preBroadcast_account_witness_vote({operation, username}) {
     yield put(g.actions.updateAccountWitnessVote({account, witness, approve}))
     return operation
 }
+
+function* preBroadcast_custom_json({operation}) {
+    const json = JSON.parse(operation.json)
+    if(operation.id === 'follow') {
+        try {
+            if(json[0] === 'follow') {
+                const {follower, following, what: [action]} = json[1]
+                yield put(g.actions.update({
+                    key: ['follow', 'get_following', follower],
+                    notSet: Map(),
+                    updater: m => {
+                        //m = m.asMutable()
+                        if(action == null) {
+                            m = m.update('blog_result', Set(), r => r.delete(following))
+                            m = m.update('ignore_result', Set(), r => r.delete(following))
+                        } else if(action === 'blog') {
+                            m = m.update('blog_result', Set(), r => r.add(following))
+                            m = m.update('ignore_result', Set(), r => r.delete(following))
+                        } else if(action === 'ignore') {
+                            m = m.update('ignore_result', Set(), r => r.add(following))
+                            m = m.update('blog_result', Set(), r => r.delete(following))
+                        }
+                        m = m.set('blog_count', m.get('blog_result', Set()).size)
+                        m = m.set('ignore_count', m.get('ignore_result', Set()).size)
+                        return m//.asImmutable()
+                    }
+                }))
+            }
+        } catch(e) {
+            console.error('TransactionSaga unrecognized follow custom_json format', operation.json);
+        }
+    }
+    return operation
+}
+
 function* error_account_witness_vote({operation: {account, witness, approve}}) {
     yield put(g.actions.updateAccountWitnessVote({account, witness, approve: !approve}))
 }

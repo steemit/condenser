@@ -6,7 +6,6 @@ import debounce from 'lodash.debounce';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {findParent} from 'app/utils/DomUtils';
 import Icon from 'app/components/elements/Icon';
-import {List} from "immutable";
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 
 function topPosition(domElt) {
@@ -157,7 +156,7 @@ class PostsList extends React.Component {
 
     render() {
         const {posts, showSpam, loading, category, content,
-            follow, account} = this.props;
+            ignore_result, account} = this.props;
         const {thumbSize, showPost} = this.state
         const postsInfo = [];
         posts.forEach(item => {
@@ -166,13 +165,13 @@ class PostsList extends React.Component {
                 console.error('PostsList --> Missing cont key', item)
                 return
             }
-            const key = [cont.get('author')]
-            const ignore = follow ? follow.getIn(key, List()).contains('ignore') : false
+            const ignore = ignore_result && ignore_result.has(cont.get('author'))
+            // if(ignore) console.log('ignored post by', cont.get('author'), '\t', item)
+
             const {hide, netVoteSign, authorRepLog10} = cont.get('stats').toJS()
             if(!(ignore || hide) || showSpam) // rephide
                 postsInfo.push({item, ignore, netVoteSign, authorRepLog10})
         });
-
         const renderSummary = items => items.map(item => <li key={item.item}>
             <PostSummary
                 account={account}
@@ -219,8 +218,8 @@ export default connect(
         const current = state.user.get('current')
         const username = current ? current.get('username') : null
         const content = state.global.get('content');
-        const follow = state.global.getIn(['follow', 'get_following', username, 'result']);
-        return {...props, username, content, follow, pathname};
+        const ignore_result = state.global.getIn(['follow', 'get_following', username, 'ignore_result']);
+        return {...props, username, content, ignore_result, pathname};
     },
     dispatch => ({
         fetchState: (pathname) => {

@@ -357,7 +357,6 @@ export default class UserProfile extends React.Component {
             website = 'http://' + website;
         }
         const website_label = website ? website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '') : null
-        console.log('website_label', website_label);
         return (
             <div className="UserProfile">
 

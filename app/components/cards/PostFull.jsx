@@ -238,8 +238,7 @@ class PostFull extends React.Component {
         }
 
         const readonly = post_content.get('mode') === 'archived' || $STM_Config.read_only_mode
-        //const showPromote = username && post_content.get('mode') === "first_payout" && post_content.get('depth') == 0
-        const showPromote = false // TODO: revert when nodes are updated with https://github.com/steemit/steem/pull/550
+        const showPromote = username && post_content.get('mode') === "first_payout" && post_content.get('depth') == 0
         const showReplyOption = post_content.get('depth') < 6
         const showEditOption = username === author
         const authorRepLog10 = repLog10(content.author_reputation)

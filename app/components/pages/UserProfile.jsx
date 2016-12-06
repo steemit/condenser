@@ -184,9 +184,7 @@ export default class UserProfile extends React.Component {
             tab_content = <Settings routeParams={this.props.routeParams} />
         }
         else if( section === 'comments' && account.post_history ) {
-           // NOTE: `posts` key will be renamed to `comments` (https://github.com/steemit/steem/issues/507)
-           //   -- see also GlobalReducer.js
-           if( account.posts || account.comments )
+           if( account.comments )
            {
                 let posts = accountImm.get('posts') || accountImm.get('comments');
                 if (!fetching && (posts && !posts.size)) {

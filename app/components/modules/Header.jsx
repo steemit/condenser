@@ -153,7 +153,7 @@ class Header extends React.Component {
             ['hot', 'hot'],
             ['trending', 'trending (24 hour)'],
             ['trending30', 'trending (30 day)'],
-            //['promoted', 'promoted'], //TODO: reenable after shared-db upgrade
+            ['promoted', 'promoted'],
             ['active', 'active']
         ];
         if (current_account_name) sort_orders.unshift(['home', 'home']);
@@ -164,7 +164,7 @@ class Header extends React.Component {
             ['created', 'new'],
             ['hot', 'hot'],
             ['trending', 'trending'],
-            //['promoted', 'promoted'], //TODO: reenable after shared-db upgrade
+            ['promoted', 'promoted'],
             ['active', 'active']
         ];
         if (current_account_name) sort_orders_horizontal.unshift(['home', 'home']);

@@ -514,6 +514,8 @@ export default formId => reduxForm(
             // const post = state.global.getIn(['content', author + '/' + permlink])
             const username = state.user.getIn(['current', 'username'])
 
+            const isEdit = type === 'edit'
+            const isNew = /^submit_/.test(type)
 
             // Parse categories:
             // if category string starts with russian symbol, add 'ru-' prefix to it
@@ -593,11 +595,23 @@ export default formId => reduxForm(
             const originalBody = /edit/.test(type) ? originalPost.body : null
             const __config = {originalBody, autoVote}
 
-            if(allSteemPower) {
-                __config.comment_options = {
-                    percent_steem_dollars: 0, // 10000 === 100%
+            // Avoid changing payout option during edits #735
+            if(!isEdit) {
+                switch(payoutType) {
+                    case '0%': // decline payout
+                        __config.comment_options = {
+                            max_accepted_payout: '0.000 SBD',
+                        }
+                        break;
+                    case '100%': // 100% steem power payout
+                        __config.comment_options = {
+                            percent_steem_dollars: 0, // 10000 === 100% (of 50%)
+                        }
+                        break;
+                    default: // 50% steem power, 50% sd+steem
                 }
             }
+
             const operation = {
                 ...linkProps,
                 category: rootCategory, title, body,

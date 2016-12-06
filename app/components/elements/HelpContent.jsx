@@ -2,6 +2,7 @@ import React from "react";
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import Icon from 'app/components/elements/Icon';
 import {renderToString} from 'react-dom/server';
+import { injectIntl } from 'react-intl';
 
 if (!process.env.BROWSER) {
     // please note we don't need to define require.context for client side rendering because it's defined by webpack
@@ -53,6 +54,7 @@ function split_into_sections(str) {
     }, {});
 }
 
+@injectIntl
 export default class HelpContent extends React.Component {
 
     static propTypes = {
@@ -66,14 +68,15 @@ export default class HelpContent extends React.Component {
     }
 
     componentWillMount() {
-        const md_file_path_regexp = new RegExp(`\/${this.locale}\/(.+)\.md$`)
+        const {locale} = this.props.intl
+        const md_file_path_regexp = new RegExp(`\/${locale}\/(.+)\.md$`)
         req.keys().filter(a => {
-            return a.indexOf(`/${this.locale}/`) !== -1;
+            return a.indexOf(`/${locale}/`) !== -1;
         }).forEach(filename => {
             var res = filename.match(md_file_path_regexp);
             let key = res[1];
-            let help_locale = HelpData[this.locale];
-            if (!help_locale) HelpData[this.locale] = help_locale = {};
+            let help_locale = HelpData[locale];
+            if (!help_locale) HelpData[locale] = help_locale = {};
             let content = req(filename);
             help_locale[key] = split_into_sections(content);
         });
@@ -88,17 +91,19 @@ export default class HelpContent extends React.Component {
     }
 
     render() {
-        if (!HelpData[this.locale]) {
-            console.error(`missing locale '${this.locale}' help files`);
+        const {locale} = this.props.intl
+        console.log('locale', locale)
+        if (!HelpData[locale]) {
+            console.error(`missing locale '${locale}' help files`);
             return null;
         }
-        let value = HelpData[this.locale][this.props.path];
-        if (!value && this.locale !== "en") {
-            console.warn(`missing path '${this.props.path}' for locale '${this.locale}' help files, rolling back to 'en'`);
-            value = HelpData['en'][this.props.path];
+        let value = HelpData[locale][this.props.path];
+        if (!value && locale !== "en") {
+            console.warn(`missing path '${this.props.path}' for locale '${locale}' help files, rolling back to 'en'`);
+            value = HelpData[locale][this.props.path];
         }
         if (!value) {
-            console.error(`help file not found '${this.props.path}' for locale '${this.locale}'`);
+            console.error(`help file not found '${this.props.path}' for locale '${locale}'`);
             return null;
         }
         if (this.props.section) value = value[this.props.section];

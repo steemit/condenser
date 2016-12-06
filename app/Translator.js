@@ -118,11 +118,6 @@ class Translator extends React.Component {
 		*/
 		if (process.env.BROWSER) {
 			const storredLanguage = store.get('language')
-			let browsersLanguage = 	navigator
-															? (navigator.languages && navigator.languages[0])
-																|| navigator.language
-																|| navigator.userLanguage
-															: ''
 			if (storredLanguage) language = storredLanguage
 			else {
 				// Different browsers have the user locale defined
@@ -136,6 +131,7 @@ class Translator extends React.Component {
 				// Split locales with a region code (ie. 'en-EN' to 'en')
 			  const languageWithoutRegionCode = browsersLanguage.toLowerCase().split(/[_-]+/)[0];
 				if (!messages.hasOwnProperty(languageWithoutRegionCode)) language = DEFAULT_LANGUAGE
+				else language = languageWithoutRegionCode
 			}
 		}
 

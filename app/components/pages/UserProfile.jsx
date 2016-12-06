@@ -361,7 +361,7 @@ export default class UserProfile extends React.Component {
                                 <span><Link to={`/@${accountname}/followed`}>{followingCount ? translate('followed_count', {followingCount}) : translate('following')}</Link></span>
                             </div>
                         </div>
-                        <DateJoinWrapper date={accountjoin}></DateJoinWrapper>
+                        <DateJoinWrapper date={accountjoin} />
                     </div>
                 </div>
                 <div className="UserProfile__top-nav row expanded noPrint">

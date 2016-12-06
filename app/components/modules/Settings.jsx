@@ -130,7 +130,9 @@ export default connect(
         const current_user = state.user.get('current')
         const username = current_user ? current_user.get('username') : ''
         const metaData = account ? o2j.ifStringParseJSON(account.json_metadata) : {}
-        const userImage = metaData && metaData.profile ? metaData.profile.profile_image : ''
+        // someday we will move from json_metadata to user.profile, so our variables are same as steemit's
+        // const userImage = metaData && metaData.profile ? metaData.profile.profile_image : ''
+        const userImage = metaData ? metaData.user_image : ''
 
         return {
             account,

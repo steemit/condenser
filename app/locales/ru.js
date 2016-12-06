@@ -484,7 +484,7 @@ const ru = {
 	flag: "Голосовать против",
 	promote: 'Продвинуть',
 	// Tips.js
-	tradeable_tokens_that_may_be_transferred_anywhere_at_anytime: 'Перемещаемые цифровые токены, которые могут переданы куда угодно в любой момент.',
+	tradeable_tokens_that_may_be_transferred_anywhere_at_anytime: 'Перемещаемые цифровые токены, которые могут быть переданы куда угодно в любой момент.',
 	LIQUID_TOKEN_can_be_converted_to_INVEST_TOKEN_in_a_process_called_powering_up: LIQUID_TOKEN + ' может быть конвертирован в ' + VESTING_TOKEN + ', этот процесс называется "усиление голоса".',
 	tokens_worth_about_AMOUNT_of_LIQUID_TOKEN: 'Перемещаемые цифровые токены, цена которых всегда равна ~1 мг золота в ' + LIQUID_TOKEN + '.',
 	influence_tokens_which_earn_more_power_by_holding_long_term: 'Неперемещаемые цифровые токены, их количество увеличивается при долгосрочном хранении.',

@@ -494,7 +494,7 @@ const ru = {
 	influence_tokens_which_earn_more_power_by_holding_long_term: 'Неперемещаемые цифровые токены, их количество увеличивается при долгосрочном хранении.',
 	the_more_you_hold_the_more_you_influence_post_rewards: 'Чем их больше, тем сильней вы влияете на вознаграждения за пост и тем больше зарабатываете за голосование.',
 	the_estimated_value_is_based_on_a_7_day_average_value_of_LIQUID_TOKEN_in_currency: 'Оценочная стоимость рассчитывается из 7-ми дневной средней стоимости ' + LIQUID_TOKEN + '.',
-	VESTING_TOKEN_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_LIQUID_TOKEN: VESTING_TOKEN + ' нельзя передавать и потребуется 2 года и 104 выплаты чтобы перевести обратно в ' + LIQUID_TOKEN + '.',
+	VESTING_TOKEN_is_non_transferrable_and_requires_convert_back_to_LIQUID_TOKEN: VESTING_TOKEN + ' нельзя передавать и потребуется 3 месяца и 13 выплаты чтобы перевести обратно в ' + LIQUID_TOKEN + '.',
 	// TODO
 	converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again: 'Конвертированная ' + VESTING_TOKEN + ' может быть отправлена себе или кому-то еще, но не может быть передана вновь без конвертирования назад в ' + LIQUID_TOKEN + '.',
 	profile: 'Профиль',

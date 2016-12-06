@@ -72,7 +72,7 @@
     "koa-route": "^2.4.2",
     "koa-router": "^5.4.0",
     "koa-session": "^3.3.1",
-    "@steem/crypto-session": "git+https://github.com/steemit/crypto-session.git#v1.0.3",
+    "@steem/crypto-session": "git+https://github.com/steemit/crypto-session.git",
     "koa-static-cache": "^3.1.2",
     "lodash.debounce": "^4.0.7",
     "medium-editor-insert-plugin": "^2.3.2",

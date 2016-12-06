@@ -364,8 +364,6 @@ function* lookupPreviousOwnerAuthority({payload: {}}) {
     yield put(user.actions.setUser({previous_owner_authority}))
 }
 
-import {Signature, hash} from 'shared/ecc'
-
 function* uploadImageWatch() {
     yield* takeLatest('user/UPLOAD_IMAGE', uploadImage);
 }

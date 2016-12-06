@@ -33,6 +33,9 @@ export default function normalizeProfile(account) {
     location = truncate(location, 30)
 
     if(website && website.length > 100) website = null;
+    if (website && website.indexOf("http") === -1) {
+        website = 'http://' + website;
+    }
     if(profile_image && !/^https?:\/\//.test(profile_image)) profile_image = null;
 
     return {

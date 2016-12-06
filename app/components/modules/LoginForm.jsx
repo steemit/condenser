@@ -1,6 +1,5 @@
 /* eslint react/prop-types: 0 */
 import React, { PropTypes, Component } from 'react';
-import ReactDOM from 'react-dom';
 import {PublicKey, PrivateKey} from 'shared/ecc'
 import transaction from 'app/redux/Transaction'
 import g from 'app/redux/GlobalReducer'
@@ -50,15 +49,9 @@ class LoginForm extends Component {
         this.initForm(props)
     }
 
-    componentWillMount() {
-        // Use username.value as the defult (input types should not contain both value and defaultValue)
-        const username = {...this.state.username}
-        username.value = this.props.initialUsername
-        this.setState({username})
-    }
-
     componentDidMount() {
-        if (this.refs.username) ReactDOM.findDOMNode(this.refs.username).focus()
+        if (this.refs.username && !this.refs.username.value) this.refs.username.focus();
+        if (this.refs.username && this.refs.username.value) this.refs.pw.focus();
     }
 
     shouldComponentUpdate = shouldComponentUpdate(this, 'LoginForm')
@@ -168,11 +161,13 @@ class LoginForm extends Component {
                 onChange={this.props.clearError}
                 method="post"
             >
-                <div>
-                    <input type="text" required placeholder="Enter your username" ref="username"
-                        {...username.props} onChange={usernameOnChange} autoComplete="on" disabled={submitting} />
-                    <div className="error">{username.touched && username.blur && username.error}&nbsp;</div>
+                <div className="input-group">
+                    <span className="input-group-label">@</span>
+                    <input className="input-group-field" type="text" required placeholder="Enter your username" ref="username"
+                        {...username.props} onChange={usernameOnChange} autoComplete="on" disabled={submitting}
+                    />
                 </div>
+                {username.touched && username.blur && username.error ? <div className="error">{username.error}&nbsp;</div> : null}
 
                 <div>
                     <input type="password" required ref="pw" placeholder="Password or WIF" {...password.props} autoComplete="on" disabled={submitting} />
@@ -251,12 +246,13 @@ export default connect(
         }
 
         // The username input has a value prop, so it should not use initialValues
-         const initialUsername = currentUser && currentUser.has('username') ? currentUser.get('username') : urlAccountName()
-
+        const initialUsername = currentUser && currentUser.has('username') ? currentUser.get('username') : urlAccountName()
         const loginDefault = state.user.get('loginDefault')
         if(loginDefault) {
             const {username, authType} = loginDefault.toJS()
             if(username && authType) initialValues.username = username + '/' + authType
+        } else if (initialUsername) {
+            initialValues.username = initialUsername;
         }
         let msg = '';
         const msg_match = window.location.hash.match(/msg\=([\w]+)/);

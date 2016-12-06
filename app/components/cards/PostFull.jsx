@@ -243,6 +243,7 @@ class PostFull extends React.Component {
         const showReplyOption = post_content.get('depth') < 6
         const showEditOption = username === author
         const authorRepLog10 = repLog10(content.author_reputation)
+        const isPreViewCount = Date.parse(post_content.get('created')) < 1480723200000 // check if post was created before view-count tracking began (2016-12-03)
 
         return (
             <article className="PostFull hentry" itemScope itemType="http://schema.org/blogPost">
@@ -281,7 +282,7 @@ class PostFull extends React.Component {
                                 </Link>
                             </span>
                             <span className="PostFull__views">
-                                <PageViewsCounter hidden={false} />
+                                <PageViewsCounter hidden={false} sinceDate={isPreViewCount ? 'Dec 2016' : null} />
                             </span>
                             <ShareMenu menu={share_menu} />
                     </div>

@@ -41,7 +41,8 @@ export default class PageViewsCounter extends React.Component {
     render() {
         const views = this.state.views;
         if (this.props.hidden || !views) return null;
-        return <span className="PageViewsCounter" title={pluralize('Views', views, true)}>
+        const suffix = this.props.sinceDate ? ' since ' + this.props.sinceDate : ''
+        return <span className="PageViewsCounter" title={pluralize('Views', views, true) + suffix}>
             <Icon name="eye" /> {views}
         </span>;
     }

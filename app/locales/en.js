@@ -593,6 +593,7 @@ const en = 	{
   tokens_worth_about_AMOUNT_of_LIQUID_TOKEN_currenlty_collecting_sbdinterest_apr: 'Tokens worth about {amount} of ' + LIQUID_TOKEN_UPPERCASE + ', currently collecting {sbdInterest}% APR',
   savings: 'savings',
   welcome: 'Welcome',
+  joined: 'Joined' // ex: "Joined September, 2016"
 }
 
 export { en }

@@ -291,6 +291,8 @@ export default class UserProfile extends React.Component {
 
         // set account join date
         let accountjoin = account.created;
+        // after transferring users form steemit to golos join date was not set properly
+        if (accountjoin === '1970-01-01T00:00:00') accountjoin = new Date(2016, 9, 18)
 
         const top_menu = <div className="row UserProfile__top-menu">
             <div className="columns small-10 medium-12 medium-expand">

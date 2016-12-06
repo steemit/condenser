@@ -6,6 +6,7 @@ import transaction from 'app/redux/Transaction'
 import ByteBuffer from 'bytebuffer'
 import {Set} from 'immutable'
 import { translate } from 'app/Translator';
+import links from 'app/utils/Links'
 
 const Long = ByteBuffer.Long
 const {string, func, object} = PropTypes

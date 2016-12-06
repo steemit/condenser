@@ -121,7 +121,7 @@ export default connect(
                 from: username,
                 to: 'null', amount: parseFloat(amount, 10).toFixed(3) + ' ' + asset,
                 memo: `@${author}/${permlink}`,
-                __config: {successMessage: translate('you_successdully_promoted_this_post') + '.'}
+                __config: {successMessage: translate('you_successfully_promoted_this_post') + '.'}
             }
             dispatch(transaction.actions.broadcastOperation({
                 type: 'transfer',

@@ -23,9 +23,8 @@ export default function extractMeta(chain_data, rp) {
     if (rp.username && rp.slug) { // post
         const post = `${rp.username}/${rp.slug}`;
         const content = chain_data.content[post];
-        if (content) {
+        if (content && content.id !== '0.0.0') { // API currently returns 'false' data with id 0.0.0 for posts that do not exist
             const d = extractContent(objAccessor, content, false);
-
             const url   = 'https://steemit.com' + d.link;
             const title = d.title + ' — Steemit';
             const desc  = d.desc + " by " + d.author;
@@ -54,7 +53,6 @@ export default function extractMeta(chain_data, rp) {
             metas.push({name: 'twitter:title',       content: title});
             metas.push({name: 'twitter:description', content: desc});
             metas.push({name: 'twitter:image',       content: image || 'https://steemit.com/images/steemit-twshare.png'});
-
         } else {
             addSiteMeta(metas);
         }

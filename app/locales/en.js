@@ -386,7 +386,11 @@ const en = 	{
 	action: 'Action',
 	APP_NAME_app_center: APP_NAME + ' App Center',
 	witness_thread: 'witness thread',
-	you_have_votes_remaining: 'You have {votesCount} votes remaining',
+	you_have_votes_remaining: `You have {votesCount, plural,
+		=0 {no votes}
+		one {1 vote}
+		other {{votesCount} votes}
+	} remaining`,
 	you_can_vote_for_maximum_of_witnesses: 'You can vote for a maximum of 30 witnesses',
 	information: 'Information',
 	if_you_want_to_vote_outside_of_top_enter_account_name: 'If you would like to vote for a witness outside of the top 50, enter the account name below to cast a vote',

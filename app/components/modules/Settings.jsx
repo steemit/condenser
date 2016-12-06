@@ -8,7 +8,9 @@ import transaction from 'app/redux/Transaction'
 import o2j from 'shared/clash/object2json'
 import _urls from 'shared/clash/images/urls'
 import _btc from 'shared/clash/coins/btc'
+import { injectIntl } from 'react-intl'
 
+@injectIntl
 class Settings extends React.Component {
 
     state = {
@@ -68,12 +70,14 @@ class Settings extends React.Component {
 
     render() {
         const {state, props} = this
+        const {locale} = props.intl
+
         return <div className="Settings">
                     <div className="row">
                         <div className="small-12 medium-6 large-4 columns">
                             {/* CHOOSE LANGUAGE */}
                             <label>{translate('choose_language')}
-                              <select defaultValue={store.get('language')} onChange={this.handleLanguageChange}>
+                              <select defaultValue={locale} onChange={this.handleLanguageChange}>
                                 <option value="ru">русский</option>
                                 <option value="en">english</option>
                                 {/* in react-intl they use 'uk' instead of 'ua' */}

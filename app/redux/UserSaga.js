@@ -84,8 +84,6 @@ function* removeHighSecurityKeys({payload: {pathname}}) {
         yield put(user.actions.removeHighSecurityKeys())
 }
 
-
-
 /**
     @arg {object} action.username - Unless a WIF is provided, this is hashed with the password and key_type to create private keys.
     @arg {object} action.password - Password or WIF private key.  A WIF becomes the posting key, a password can create all three

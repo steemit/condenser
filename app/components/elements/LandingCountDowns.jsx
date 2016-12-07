@@ -226,13 +226,12 @@ export default class LandingCountDowns extends React.Component {
 								{
 									state.showBitcoinsRaised
 									? <div>
-										<p style={{marginBottom: 0}}>Собрано биткоинов</p>
+										<div style={{marginBottom: 0}}>Собрано биткоинов</div>
 										{
 											state.bitcoinsRaised === false
 											? <strong>загрузка...</strong>
-
-											: <strong><a href="https://blockchain.info/address/3CWicRKHQqcj1N6fT1pC9J3hUzHw1KyPv3" target="blank">{roundPrecision(_btc.fromSatoshis(state.bitcoinsRaised), 4)} B</a></strong>
-
+											: <strong><a href="https://blockchain.info/address/3CWicRKHQqcj1N6fT1pC9J3hUzHw1KyPv3" target="blank">600 B</a></strong>
+										// roundPrecision(_btc.fromSatoshis(state.bitcoinsRaised), 4)
 										}
 									</div>
 									: null

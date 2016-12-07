@@ -383,7 +383,7 @@ function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress
     const username = stateUser.getIn(['current', 'username'])
     const d = stateUser.getIn(['current', 'private_keys', 'posting_private'])
     if(!username) {
-        progress({error: 'Not logged in'})
+        progress({error: 'Please logged first.'})
         return
     }
     if(!d) {

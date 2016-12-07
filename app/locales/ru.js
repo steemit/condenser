@@ -564,7 +564,11 @@ const ru = {
 		few {# неподтвержденныe транзакции}
 		many {# неподтвержденных транзакций}
 	}`,
-	add_image_url: 'Добавьте url вашего изображения',
+	profile_image_url: 'Добавьте url вашего изображения',
+	profile_name: 'Display Name',
+	profile_about: 'About',
+	profile_location: 'Location',
+	profile_website: 'Website',
 	saved: 'Сохранено',
 	server_returned_error: 'ошибка сервера',
 	user_avatar: 'Аватар пользователя',
@@ -611,7 +615,9 @@ const ru = {
     tokens_worth_about_AMOUNT_of_LIQUID_TOKEN_currenlty_collecting_sbdinterest_apr: 'Tokens worth about {amount} of ' + LIQUID_TOKEN_UPPERCASE + ', currently collecting {sbdInterest}% APR',
     savings: 'savings',
     welcome: 'Добро пожаловать',
-	joined: 'Присоединился' // ex: "Joined September, 2016"
+	joined: 'Присоединился', // ex: "Joined September, 2016"
+    // TODO
+    this_post_is_not_available_due_to_a_copyright_claim: 'This post is not available due to a copyright claim.',
 }
 
 export { ru }

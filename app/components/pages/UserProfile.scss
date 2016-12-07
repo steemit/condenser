@@ -65,14 +65,26 @@
         background: #23579d; /* for older browsers */
         background: linear-gradient(to bottom, #1a4072 0%, #23579d 100%);
 
-        height: 155px;
+        min-height: 155px;
     }
-    h2 {
+    h3 {
         padding-top: 20px;
-        .Userpic {
-            margin-right: 1rem;
-            vertical-align: middle;
-        }
+        font-weight: 600;
+    }
+
+    .Icon {
+        margin-left: 1rem;
+        svg {fill: #def;}
+    }
+
+    .Userpic {
+        margin-right: 0.75rem;
+        vertical-align: middle;
+    }
+
+    .UserProfile__rep {
+        font-size: 80%;
+        font-weight: 200;
     }
 
     .UserProfile__buttons {
@@ -87,22 +99,30 @@
         }
     }
 
+    .UserProfile__bio {
+        margin: -0.4rem auto 0.5rem;
+        font-size: 95%;
+        max-width: 420px;
+        line-height: 1.4;
+    }
+    .UserProfile__info {
+        font-size: 90%;
+    }
+
     .UserProfile__stats {
         margin-bottom: 5px;
         padding-bottom: 5px;
+        font-size: 90%;
 
         a {
             @include hoverUnderline;
             vertical-align: middle;
 	    }
 
-        span {
+        > span {
             padding: 0px 10px;
-        }
-
-        span:nth-child(2) {
-            border-left: 1px solid grey;
-            border-right: 1px solid grey;
+            border-left: 1px solid #CCC;
+            &:first-child {border-left: none;}
         }
 
         .NotifiCounter {
@@ -129,7 +149,7 @@
         padding-right: 0;
     }
 
-    .UserProfile__banner h2 .Userpic {
+    .UserProfile__banner .Userpic {
         width: 36px !important;
         height: 36px !important;
     }
@@ -139,6 +159,15 @@
 
         label.button {
             display: block;
+        }
+    }
+
+    .UserProfile__banner .UserProfile__buttons_mobile {
+        position: inherit;
+        margin-bottom: .5rem;
+        .button {
+            background-color: $white;
+            color: $black;
         }
     }
 

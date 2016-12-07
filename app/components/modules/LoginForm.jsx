@@ -174,8 +174,12 @@ class LoginForm extends Component {
                 </div>;
             }
         }
+        const password_info = checkPasswordChecksum(password.value) === false
+                                ? translate('this_password_or_private_key_was_entered_incorrectly_there_is_probably_a_handwriting_or_data_entry_error')
+                                : null
+
         const form = (
-            <form onSubmit={handleSubmit(data => {
+            <form onSubmit={handleSubmit(({data}) => {
                 // bind redux-form to react-redux
                 console.log('Login\tdispatchSubmit');
                 return dispatchSubmit(data, loginBroadcastOperation, afterLoginRedirectToWelcome)
@@ -191,7 +195,8 @@ class LoginForm extends Component {
 
                 <div>
                     <input type="password" required ref="pw" placeholder={translate('password_or_wif')} {...password.props} autoComplete="on" disabled={submitting} />
-                    <div className="error">{translateError(error)}&nbsp;</div>
+                    {error && <div className="error">{error}&nbsp;</div>}
+                    {error && password_info && <div className="warning">{password_info}&nbsp;</div>}
                 </div>
                 {loginBroadcastOperation && <div>
                     <div className="info">
@@ -238,6 +243,20 @@ function urlAccountName() {
     const account_match = window.location.hash.match(/account\=([\w\d\-\.]+)/);
     if (account_match && account_match.length > 1) suggestedAccountName = account_match[1];
     return suggestedAccountName
+}
+
+function checkPasswordChecksum(password) {
+    // A Steemit generated password is a WIF prefixed with a P ..
+    // It is possible to login directly with a WIF
+    // TODO check if this properly works with Golos. Maybe change "P" to "G"?
+    const wif = /^P/.test(password) ? password.substring(1) : password
+
+    if(!/^5[HJK].{45,}/i.test(wif)) {// 51 is the wif length
+        // not even close
+        return undefined
+    }
+
+    return PrivateKey.isWif(wif)
 }
 
 import {connect} from 'react-redux'

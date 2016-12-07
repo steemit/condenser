@@ -24,16 +24,8 @@ export function *serverApiLoginChallenge() {
         .then(challengeString => {
             // challengeString should not be trusted.
             // Don't allow anything that could be a valid transaction.
-            const challengeInConfig = $STM_Config.login_challenge_description
-
-            // Make sure we have challenge description to validate
-            if(!challengeInConfig || challengeInConfig.trim() === '')
-                throw new Error('Missing required value: config.login_challenge_description')
 
             const o = JSON.parse(challengeString)
-            const discriptionMatches = o.description === challengeInConfig
-            if(!discriptionMatches)
-                throw new Error(`Expecting login challenge '${challengeInConfig}', instead got '${o.login_challenge_description}'`)
 
             if(!o.token)
                 throw new Error('Missing login challenge token')

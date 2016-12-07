@@ -21,7 +21,6 @@ global.$STM_Config = {
     disable_signups: config.disable_signups,
     read_only_mode: config.read_only_mode,
     registrar_fee: config.registrar.fee,
-    login_challenge_description: config.login_challenge_description,
     uploadImage: config.uploadImage,
 };
 

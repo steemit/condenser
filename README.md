@@ -42,8 +42,6 @@ node
 > crypto.randomBytes(32).toString('base64')
 ```
 
-You should also update the login_challenge_description.
-
 (note: it's steem.json in production)
 
 #### Install mysql server

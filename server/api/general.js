@@ -304,7 +304,6 @@ export default function useGeneralApi(app) {
     // The client should not trust this when signing.  If the format changes,
     // you'll need to update the client's validation in /api/v1/login_challenge ..
         const login_challenge = JSON.stringify({
-            description: config.login_challenge_description,
             token: secureRandom.randomBuffer(16).toString('hex'),
             }, null, 0)
 

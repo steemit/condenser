@@ -32,13 +32,6 @@
     }
   },
   "server_session_secret": "",
-  /*
-   Wallet signing plugins should display login_challenge_description to the
-   end user.  If a site obtains the user's private key, the value in
-   login_challenge_description is meaningful for verification and for wallet
-   plugins but does not need to be displayed by the underlying site.
-  */
-  "login_challenge_description": "Example.com Steem Authentication",
   "helmet": {},
   "registrar": {
     "account": "-",

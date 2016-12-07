@@ -13,29 +13,29 @@ const request_base = {
 /**
  @return {string} parsable JSON login challenge.  A string is returned for accurate signing purposes.
  */
-export function *serverApiLoginChallenge() {
-    if (!process.env.BROWSER || window.$STM_ServerBusy) return undefined;
-    return yield fetch('/api/v1/login_challenge', {
-        method: 'get',
-        mode: 'no-cors',
-        credentials: 'same-origin',
-    })
-        .then(r => r.text())
-        .then(challengeString => {
-            // challengeString should not be trusted.
-            // Don't allow anything that could be a valid transaction.
-
-            const o = JSON.parse(challengeString)
-
-            if(!o.token)
-                throw new Error('Missing login challenge token')
-
-            if(Object.keys(o).length !== 2)
-                throw new Error('Login challenge object should have only two properties')
-
-            return challengeString // return string for signing purposes
-        })
-}
+// export function *serverApiLoginChallenge() {
+//     if (!process.env.BROWSER || window.$STM_ServerBusy) return undefined;
+//     return yield fetch('/api/v1/login_challenge', {
+//         method: 'get',
+//         mode: 'no-cors',
+//         credentials: 'same-origin',
+//     })
+//         .then(r => r.text())
+//         .then(challengeString => {
+//             // challengeString should not be trusted.
+//             // Don't allow anything that could be a valid transaction.
+//
+//             const o = JSON.parse(challengeString)
+//
+//             if(!o.token)
+//                 throw new Error('Missing login challenge token')
+//
+//             if(Object.keys(o).length !== 1)
+//                 throw new Error('Login challenge object should have only one property')
+//
+//             return challengeString // return string for signing purposes
+//         })
+// }
 
 export function serverApiLogin(account, signatures) {
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;

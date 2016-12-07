@@ -6,7 +6,7 @@ import {PrivateKey, Signature, hash} from 'shared/ecc'
 import user from 'app/redux/User'
 import {getAccount} from 'app/redux/SagaShared'
 import {browserHistory} from 'react-router'
-import {serverApiLoginChallenge, serverApiLogin, serverApiLogout} from 'app/utils/ServerApiClient';
+import {serverApiLogin, serverApiLogout} from 'app/utils/ServerApiClient';
 import {Apis} from 'shared/api_client';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import {loadFollows} from 'app/redux/FollowSaga'
@@ -250,20 +250,28 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
 
     const signatures = {}
     try {
-        const challengeString = yield serverApiLoginChallenge()
-        const bufSha = hash.sha256(challengeString)
-        const sign = (role, d) => {
-            if(!d) return
-            const sig = Signature.signBufferSha256(bufSha, d)
-            signatures[role] = sig.toHex()
+        // const challengeString = yield serverApiLoginChallenge()
+        const challengeString = yield select(state => state.offchain.get('login_challenge'))
+        if (challengeString) {
+            const challenge = JSON.parse(challengeString)
+            if (!challenge.token)
+                throw new Error('Missing login challenge token')
+            if (Object.keys(challenge).length !== 1)
+                throw new Error('Login challenge object should have only one property')
+            const bufSha = hash.sha256(challenge)
+            const sign = (role, d) => {
+                if (!d) return
+                const sig = Signature.signBufferSha256(bufSha, d)
+                signatures[role] = sig.toHex()
+            }
+            sign('posting', private_keys.get('posting_private'))
+            sign('active', private_keys.get('active_private'))
+            serverApiLogin(username, signatures);
         }
-        sign('posting', private_keys.get('posting_private'))
-        sign('active', private_keys.get('active_private'))
     } catch(error) {
         // Does not need to be fatal
         console.error('Server Login Error', error);
     }
-    serverApiLogin(username, signatures);
     if (afterLoginRedirectToWelcome) browserHistory.push('/welcome');
 }
 

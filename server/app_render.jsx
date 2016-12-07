@@ -3,18 +3,27 @@ import { renderToString } from 'react-dom/server';
 import ServerHTML from './server-html';
 import universalRender from '../shared/UniversalRender';
 import models from 'db/models';
+import secureRandom from 'secure-random'
 
 const DB_RECONNECT_TIMEOUT = process.env.NODE_ENV === 'development' ? 1000 * 60 * 60 : 1000 * 60 * 10;
 
 async function appRender(ctx) {
     const store = {};
     try {
+        let login_challenge = null;
+        if (!ctx.session.a) {
+            login_challenge = JSON.stringify({
+                token: secureRandom.randomBuffer(16).toString('hex'),
+            }, null, 0)
+            ctx.session.auth = {login_challenge}
+        }
         const offchain = {
             csrf: ctx.csrf,
             flash: ctx.flash,
             new_visit: ctx.session.new_visit,
             account: ctx.session.a,
-            config: $STM_Config
+            config: $STM_Config,
+            login_challenge
         };
         const user_id = ctx.session.user;
         if (user_id) {

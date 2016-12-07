@@ -262,28 +262,28 @@ class PostFull extends React.Component {
 
                 {showPromote && <button className="float-right button hollow tiny" onClick={this.showPromotePost}>Promote</button>}
                 <TagList post={content} horizontal />
-                <div className="PostFull__footer row align-middle">
+                <div className="PostFull__footer row">
                     <div className="column">
                         <TimeAuthorCategory content={content} authorRepLog10={authorRepLog10} />
                         <Voting post={post} />
                     </div>
-                    <div className="column shrink">
-                            {!readonly && <Reblog author={author} permlink={permlink} />}
-                            {!readonly &&
-                                <span className="PostFull__reply">
-                                    {showReplyOption && <a onClick={onShowReply}>Reply</a>}
-                                    {' '}{showEditOption   && !showEdit  && <a onClick={onShowEdit}>Edit</a>}
-                                    {' '}{showDeleteOption && !showReply && <a onClick={onDeletePost}>Delete</a>}
-                                </span>}
-                            <span className="PostFull__responses">
-                                <Link to={link} title={pluralize('Responses', content.children, true)}>
-                                    <Icon name="chatboxes" className="space-right" />{content.children}
-                                </Link>
-                            </span>
-                            <span className="PostFull__views">
-                                <PageViewsCounter hidden={false} sinceDate={isPreViewCount ? 'Dec 2016' : null} />
-                            </span>
-                            <ShareMenu menu={share_menu} />
+                    <div className="right-sub-menu small-10 medium-5 large-5 columns text-right">
+                        {!readonly && <Reblog author={author} permlink={permlink} />}
+                        {!readonly &&
+                            <span className="PostFull__reply">
+                                {showReplyOption && <a onClick={onShowReply}>Reply</a>}
+                                {' '}{showEditOption   && !showEdit  && <a onClick={onShowEdit}>Edit</a>}
+                                {' '}{showDeleteOption && !showReply && <a onClick={onDeletePost}>Delete</a>}
+                            </span>}
+                        <span className="PostFull__responses">
+                            <Link to={link} title={pluralize('Responses', content.children, true)}>
+                                <Icon name="chatboxes" className="space-right" />{content.children}
+                            </Link>
+                        </span>
+                        <span className="PostFull__views">
+                            <PageViewsCounter hidden={false} sinceDate={isPreViewCount ? 'Dec 2016' : null} />
+                        </span>
+                        <ShareMenu menu={share_menu} />
                     </div>
                 </div>
                 <div className="row">

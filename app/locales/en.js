@@ -592,7 +592,13 @@ const en = 	{
   tokens_worth_about_AMOUNT_of_LIQUID_TOKEN_currenlty_collecting_sbdinterest_apr: 'Tokens worth about {amount} of ' + LIQUID_TOKEN_UPPERCASE + ', currently collecting {sbdInterest}% APR',
   savings: 'savings',
   welcome: 'Welcome',
-  joined: 'Joined' // ex: "Joined September, 2016"
+  joined: 'Joined', // ex: "Joined September, 2016"
+  markdown_is_not_supported_here: 'Markdown is not supported here',
+  draft_saved: 'Draft saved',
+  default: 'Default',
+  decline_payout: 'Decline Payout',
+  check_this_to_auto_upvote_your_post: 'Check this to auto-upvote your post',
+  html_posts_must_begin_with_html_and_end_with_html: 'HTML posts must begin with <html> and end with </html>',
 }
 
 export { en }

@@ -423,7 +423,7 @@ const ru = {
 	paste_a_youtube_or_vimeo_and_press_enter: 'Вставьте YouTube или Vimeo ссылку и нажмите Enter',
 	there_was_an_error_uploading_your_image: 'Произошла ошибка во время загрузки изображения',
 	raw_html: 'HTML код',
-	please_remove_following_html_elements: 'Пожалуйста удалите эти HTML элементы из вашего поста:',
+	please_remove_following_html_elements: 'Пожалуйста удалите эти HTML элементы из вашего поста: ',
 	reputation: "Репутация",
 	remember_voting_and_posting_key: "Запомнить голос и постинг ключ",
 	// example usage: 'Autologin? yes/no'
@@ -610,7 +610,13 @@ const ru = {
     tokens_worth_about_AMOUNT_of_LIQUID_TOKEN_currenlty_collecting_sbdinterest_apr: 'Токены стоимостью около {amount} в ' + LIQUID_TOKEN_UPPERCASE + ', годовая процентная ставка которых в текущее время {sbdInterest}%',
     savings: 'сбережения',
     welcome: 'Добро пожаловать',
-	joined: 'Присоединился' // ex: "Joined September, 2016"
+	joined: 'Присоединился', // ex: "Joined September, 2016"
+	markdown_is_not_supported_here: 'Markdown здесь не поддерживается',
+    draft_saved: 'Черновик сохранен',
+    default: 'По умолчанию',
+    decline_payout: 'Отклонить выплату',
+    check_this_to_auto_upvote_your_post: 'Отметить это чтобы автоматически голосовать за свой пост',
+    html_posts_must_begin_with_html_and_end_with_html: 'HTML посты должны начинаться с <html> и заканчиваться с </html>',
 }
 
 export { ru }

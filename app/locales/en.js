@@ -31,7 +31,7 @@ const en = 	{
 	// next 5 strings were supposed to be sinngle block of text, but due large size,
 	// code erros they were splitted.
 	authors_get_paid_when_people_like_you_upvote_their_post: 'Authors get paid when people like you upvote their post',
-	if_you_enjoyed_what_you_read_earn_amount: 'If you enjoyed what you read here, earn {amount} ' + VESTING_TOKEN,
+	if_you_enjoyed_what_you_read_earn_amount: 'If you enjoyed what you read here, earn {amount} of ' + VESTING_TOKEN,
 	when_you: "when you",
 	when_you_link_text: 'Sign Up',
 	and_vote_for_it: 'and vote for it',

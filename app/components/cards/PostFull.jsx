@@ -267,7 +267,7 @@ class PostFull extends React.Component {
                         <TimeAuthorCategory content={content} authorRepLog10={authorRepLog10} />
                         <Voting post={post} />
                     </div>
-                    <div className="right-sub-menu small-10 medium-6 large-5 columns text-right">
+                    <div className="right-sub-menu small-10 medium-5 large-5 columns text-right">
                         {!readonly && <Reblog author={author} permlink={permlink} />}
                         {!readonly &&
                             <span className="PostFull__reply">

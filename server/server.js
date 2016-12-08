@@ -96,7 +96,8 @@ app.use(mount('/legal', staticCache(path.join(__dirname, '../app/assets/legal'),
 app.use(mount('/google01836be5bad501ce.html', staticCache(path.join(__dirname, '../app/assets/google01836be5bad501ce.html'), cacheOpts)));
 // Yandex Webmaster verification page (required by Yandex Webmaster)
 app.use(mount('/yandex_dc913847e717bca6.html', staticCache(path.join(__dirname, '../app/assets/yandex_dc913847e717bca6.html'), cacheOpts)));
-
+// postmaster.mail.ru verification page (required by postmaster.mail.ru)
+app.use(mount('/mailru-verification92b53816046791c4.html', staticCache(path.join(__dirname, '../app/assets/mailru-verification92b53816046791c4.html'), cacheOpts)));
 
 // Proxy asset folder to webpack development server in development mode
 console.log (env)

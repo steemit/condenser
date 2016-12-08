@@ -78,6 +78,7 @@ export default class UserProfile extends React.Component {
         switch(category) {
           case 'feed': order = 'by_feed'; break;
           case 'blog': order = 'by_author'; break;
+          case 'resteemed': order = 'by_resteemed'; break;
           case 'comments': order = 'by_comments'; break;
           case 'recent_replies': order = 'by_replies'; break;
           default: console.log('unhandled category:', category);
@@ -209,7 +210,7 @@ export default class UserProfile extends React.Component {
            else {
               tab_content = (<center><LoadingIndicator type="circle" /></center>);
            }
-        } else if(!section || section === 'blog') {
+        } else if( section === 'blog' ) {
             if (account.blog) {
                 let posts = accountImm.get('blog');
                 const emptyText = isMyAccount ? <div>
@@ -229,6 +230,34 @@ export default class UserProfile extends React.Component {
                             posts={posts}
                             loading={fetching}
                             category="blog"
+                            loadMore={this.loadMore}
+                            showSpam
+                        />
+                    );
+                }
+            } else {
+                tab_content = (<center><LoadingIndicator type="circle" /></center>);
+            }
+        } else if( section === 'resteemed' ) {
+            if (account.resteemed) {
+                let posts = accountImm.get('resteemed');
+                const emptyText = isMyAccount ? <div>
+                    Looks like you haven't resteemed anything yet.<br /><br />
+                    <Link to="/submit.html">Submit a Story</Link><br />
+                    <a href="/steemit/@thecryptofiend/the-missing-faq-a-beginners-guide-to-using-steemit">Read The Beginner's Guide</a><br />
+                    <a href="/welcome">Read The Steemit Welcome Guide</a>
+                </div>:
+                    <div>Looks like {accountname} hasn't resteemed anything yet.</div>;
+
+                if (!fetching && (posts && !posts.size)) {
+                    tab_content = <Callout>{emptyText}</Callout>;
+                } else {
+                    tab_content = (
+                        <PostsList
+                            account={account.name}
+                            posts={posts}
+                            loading={fetching}
+                            category="resteemed"
                             loadMore={this.loadMore}
                             showSpam
                         />
@@ -319,6 +348,7 @@ export default class UserProfile extends React.Component {
             <div className="columns small-10 medium-12 medium-expand">
                 <ul className="menu" style={{flexWrap: "wrap"}}>
                     <li><Link to={`/@${accountname}`} activeClassName="active">{translate('blog')}</Link></li>
+                    <li><Link to={`/@${accountname}/resteemed`} activeClassName="active">Resteemed</Link></li>
                     <li><Link to={`/@${accountname}/comments`} activeClassName="active">{translate('comments')}</Link></li>
                     <li><Link to={`/@${accountname}/recent-replies`} activeClassName="active">
                         {translate('replies')} {isMyAccount && <NotifiCounter fields="comment_reply" />}

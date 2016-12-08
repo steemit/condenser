@@ -21,6 +21,7 @@ class PostsList extends React.Component {
         posts: PropTypes.object.isRequired,
         loading: PropTypes.bool.isRequired,
         category: PropTypes.string,
+        account: PropTypes.string,
         loadMore: PropTypes.func,
         showSpam: PropTypes.bool,
         fetchState: PropTypes.func.isRequired,
@@ -29,6 +30,7 @@ class PostsList extends React.Component {
 
     static defaultProps = {
         showSpam: false,
+        account: null,
     }
 
     constructor() {

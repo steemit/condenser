@@ -141,6 +141,8 @@ async function universalRender({ location, initial_state, offchain }) {
         // to resolve data correctly
         if (url.indexOf('/curation-rewards') !== -1) url = url.replace(/\/curation-rewards$/, '/transfers');
         if (url.indexOf('/author-rewards') !== -1) url = url.replace(/\/author-rewards$/, '/transfers');
+        let match = url.match(routeRegex.UserProfile1);
+        if (match) url = match[1] + "/blog";
 
         onchain = await Apis.instance().db_api.exec('get_state', [url]);
 

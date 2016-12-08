@@ -6,6 +6,7 @@ import Apis from 'shared/api_client/ApiInstances';
 import GlobalReducer from './GlobalReducer';
 import constants from './constants';
 import {fromJS, Map} from 'immutable'
+import {routeRegex} from "app/ResolveRoute";
 
 export const fetchDataWatches = [watchLocationChange, watchDataRequests, watchApiRequests, watchFetchJsonRequests, watchFetchState, watchGetContent];
 
@@ -38,6 +39,8 @@ export function* fetchState(location_change_action) {
     // to resolve data correctly
     if (url.indexOf("/curation-rewards") !== -1) url = url.replace("/curation-rewards", "/transfers");
     if (url.indexOf("/author-rewards") !== -1) url = url.replace("/author-rewards", "/transfers");
+    let match = url.match(routeRegex.UserProfile1);
+    if (match) url = match[1] + "/blog";
 
     try {
         const db_api = Apis.instance().db_api;
@@ -150,6 +153,15 @@ export function* fetchData(action) {
         args = [
         { tag: accountname,
           limit: constants.FETCH_DATA_BATCH_SIZE,
+          hide: 'resteemed',
+          start_author: author,
+          start_permlink: permlink}];
+    } else if( order === 'by_resteemed' ) {
+        call_name = 'get_discussions_by_blog';
+        args = [
+        { tag: accountname,
+          limit: constants.FETCH_DATA_BATCH_SIZE,
+          hide: 'authored',
           start_author: author,
           start_permlink: permlink}];
     } else if( order === 'by_comments' ) {

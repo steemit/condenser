@@ -17,13 +17,22 @@ import {key_utils} from 'shared/ecc';
 import MiniHeader from 'app/components/modules/MiniHeader';
 import { translate } from '../Translator.js';
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
+import Joyride from 'react-joyride';
 
 class App extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {open: null, showCallout: true, showBanner: true, expandCallout: false};
+        this.state = {
+            open: null,
+            showCallout: true,
+            showBanner: true,
+            expandCallout: false,
+            steps: [],
+            ready: false
+        };
         this.toggleOffCanvasMenu = this.toggleOffCanvasMenu.bind(this);
         // this.shouldComponentUpdate = shouldComponentUpdate(this, 'App')
+        this.addSteps = this.addSteps.bind(this);
     }
 
     componentWillMount() {
@@ -31,14 +40,15 @@ class App extends React.Component {
         this.props.loginUser();
     }
 
-    componentDidMount() {
+    componentDidUpdate(prevProps, prevState) {
         // setTimeout(() => this.setState({showCallout: false}), 15000);
-    }
-
-    componentDidUpdate(nextProps) {
-        // setTimeout(() => this.setState({showCallout: false}), 15000);
-        if (nextProps.location.pathname !== this.props.location.pathname) {
+        if (prevProps.location.pathname !== this.props.location.pathname) {
             this.setState({showBanner: false, showCallout: false})
+        }
+
+        console.log('didUpdate', this.state, prevState);
+        if (this.state.ready && !prevState.ready) {
+            this.joyride.start();
         }
     }
 
@@ -48,6 +58,26 @@ class App extends React.Component {
         return p.location !== n.location ||
                   p.visitor !== n.visitor ||
                   p.flash !== n.flash || this.state !== nextState;
+    }
+
+    addSteps(steps) {
+        if (!Array.isArray(steps)) {
+            steps = [steps];
+        }
+
+        if (!steps.length) {
+            return false;
+        }
+
+        this.setState((currentState) => {
+            currentState.steps = currentState.steps.concat(this.joyride.parseSteps(steps));
+            currentState.ready = true;
+            return currentState;
+        });
+    }
+
+    addTooltip(data) {
+        this.joyride.addTooltip(data);
     }
 
     toggleOffCanvasMenu(e) {
@@ -234,7 +264,7 @@ class App extends React.Component {
                     </li>
                 </ul>
             </SidePanel>
-            {miniHeader ? <MiniHeader /> : <Header toggleOffCanvasMenu={this.toggleOffCanvasMenu} menuOpen={this.state.open} />}
+            {miniHeader ? <MiniHeader /> : <Header addSteps={this.addSteps} toggleOffCanvasMenu={this.toggleOffCanvasMenu} menuOpen={this.state.open} />}
             <div className="App__content">
                 {welcome_screen}
                 {callout}
@@ -244,6 +274,21 @@ class App extends React.Component {
             <Dialogs />
             <Modals />
             <PageViewsCounter />
+            <Joyride
+                ref={c => (this.joyride = c)}
+                steps={this.state.steps}
+                debug
+                type="continuous"
+                showOverlay
+                showSkipButton
+                locale={{
+                    back: (<span>Back</span>),
+                    close: (<span>Close</span>),
+                    last: (<span>Finish</span>),
+                    next: (<span>Next</span>),
+                    skip: (<span>Skip</span>)
+                }}
+            />
         </div>
     }
 }

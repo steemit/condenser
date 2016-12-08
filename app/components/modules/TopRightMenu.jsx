@@ -55,14 +55,14 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
                                 <VerticalMenu items={user_menu} title={username} />
                               }
                 >
-                    {!vertical && <li className={'Header__userpic '}>
+                    {!vertical && <li id="Header__userpic" className={'Header__userpic '}>
                         <a href={account_link} title={username} onClick={e => e.preventDefault()}>
                             <Userpic account={username} />
                         </a>
                         <div className="TopRightMenu__notificounter"><NotifiCounter fields="total" /></div>
                     </li>}
                 </LinkWithDropdown>
-                {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
+                {toggleOffCanvasMenu && <li id="Header__dropdown" className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
                     <span className="hamburger" />
                 </a></li>}
             </ul>

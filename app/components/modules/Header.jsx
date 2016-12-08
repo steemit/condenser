@@ -53,6 +53,32 @@ class Header extends React.Component {
 
     componentDidMount() {
         window.addEventListener('scroll', this.hideSubheader);
+
+        setTimeout(() => {
+            this.props.addSteps([
+                {
+                    title: 'Home button',
+                    text: 'Click here to take you back to your feed.',
+                    selector: '#Header__top-logo',
+                    position: 'bottom-right',
+                    type: 'hover'
+                },
+                {
+                    title: 'User options',
+                    text: 'Click here to see options related to your account',
+                    selector: '#Header__userpic',
+                    position: 'bottom-left',
+                    type: 'hover'
+                },
+                {
+                    title: 'Menu',
+                    text: 'Click here to see more options',
+                    selector: '#Header__dropdown',
+                    position: 'bottom-right',
+                    type: 'hover'
+                }
+            ])
+        }, 1000);
     }
 
     componentWillUnmount() {
@@ -188,7 +214,7 @@ class Header extends React.Component {
                     <div className="expanded row">
                         <div className="columns">
                             <ul className="menu">
-                                <li className="Header__top-logo">
+                                <li className="Header__top-logo" id="Header__top-logo">
                                     <Link to={logo_link}>
                                         <Icon name="steem" size="2x" />
                                     </Link>

@@ -4117,6 +4117,11 @@
       "from": "minimist@>=1.2.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/minimist/-/minimist-1.2.0.tgz"
     },
+    "mixpanel": {
+      "version": "0.5.0",
+      "from": "mixpanel@>=0.5.0 <0.6.0",
+      "resolved": "https://registry.npmjs.org/mixpanel/-/mixpanel-0.5.0.tgz"
+    },
     "mkdirp": {
       "version": "0.5.1",
       "from": "mkdirp@>=0.5.1 <0.6.0",
@@ -4207,6 +4212,11 @@
       "version": "0.6.1",
       "from": "negotiator@0.6.1",
       "resolved": "https://registry.npmjs.org/negotiator/-/negotiator-0.6.1.tgz"
+    },
+    "nested-property": {
+      "version": "0.0.7",
+      "from": "nested-property@>=0.0.7 <0.0.8",
+      "resolved": "https://registry.npmjs.org/nested-property/-/nested-property-0.0.7.tgz"
     },
     "net": {
       "version": "1.0.2",
@@ -5024,6 +5034,11 @@
       "from": "querystring-es3@>=0.2.0 <0.3.0",
       "resolved": "https://registry.npmjs.org/querystring-es3/-/querystring-es3-0.2.1.tgz"
     },
+    "rafl": {
+      "version": "1.2.2",
+      "from": "rafl@>=1.2.1 <1.3.0",
+      "resolved": "https://registry.npmjs.org/rafl/-/rafl-1.2.2.tgz"
+    },
     "ramda": {
       "version": "0.19.1",
       "from": "ramda@>=0.19.1 <0.20.0",
@@ -5081,6 +5096,11 @@
       "from": "react-addons-test-utils@>=15.3.1 <16.0.0",
       "resolved": "https://registry.npmjs.org/react-addons-test-utils/-/react-addons-test-utils-15.3.2.tgz"
     },
+    "react-autobind": {
+      "version": "1.0.6",
+      "from": "react-autobind@>=1.0.0 <2.0.0",
+      "resolved": "https://registry.npmjs.org/react-autobind/-/react-autobind-1.0.6.tgz"
+    },
     "react-deep-force-update": {
       "version": "1.0.1",
       "from": "react-deep-force-update@>=1.0.0 <2.0.0",
@@ -5105,6 +5125,11 @@
       "version": "2.1.5",
       "from": "react-intl@>=2.1.3 <3.0.0",
       "resolved": "https://registry.npmjs.org/react-intl/-/react-intl-2.1.5.tgz"
+    },
+    "react-joyride": {
+      "version": "1.5.2",
+      "from": "react-joyride@latest",
+      "resolved": "https://registry.npmjs.org/react-joyride/-/react-joyride-1.5.2.tgz"
     },
     "react-lazy-cache": {
       "version": "3.0.1",
@@ -5499,6 +5524,11 @@
       "version": "1.2.1",
       "from": "sax@>=1.2.1 <1.3.0",
       "resolved": "https://registry.npmjs.org/sax/-/sax-1.2.1.tgz"
+    },
+    "scroll": {
+      "version": "2.0.0",
+      "from": "scroll@>=2.0.0 <3.0.0",
+      "resolved": "https://registry.npmjs.org/scroll/-/scroll-2.0.0.tgz"
     },
     "scroll-behavior": {
       "version": "0.7.0",

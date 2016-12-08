@@ -104,6 +104,11 @@ export default createModule({
                 state.updateIn(['accounts', account, 'witness_votes'], Set(),
                     votes => (approve ? Set(votes).add(witness) : Set(votes).remove(witness)))
         },
+        { // works...
+            action: 'UPDATE_ACCOUNT_WITNESS_PROXY',
+            reducer: (state, {payload: {account, proxy}}) =>
+                    state.setIn(['accounts', account, 'proxy'], proxy)
+        },
         {
             action: 'DELETE_CONTENT',
             reducer: (state, {payload: {author, permlink}}) => {

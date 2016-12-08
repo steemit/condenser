@@ -372,6 +372,11 @@ const fr = 	{
 	witness_thread: 'witness thread',
 	you_have_votes_remaining: 'You have {votesCount} votes remaining',
 	you_can_vote_for_maximum_of_witnesses: 'You can vote for a maximum of 30 witnesses',
+	set_witness_proxy: "You can also choose a proxy that will vote for witnesses for you. This will reset your current witness selection.", // FIXME
+	witness_set: "You have set a voting proxy. If you would like to reenable manual voting, please clear your proxy.", // FIXME
+	witness_proxy_current: "Your current proxy is", // FIXME
+	witness_proxy_set: "Set proxy", // FIXME
+	witness_proxy_clear: "Clear proxy", // FIXME
 	information: 'Information',
 	if_you_want_to_vote_outside_of_top_enter_account_name: 'If you would like to vote for a witness outside of the top 50, enter the account name below to cast a vote',
 	view_the_direct_parent: 'View the direct parent',

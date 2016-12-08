@@ -372,6 +372,12 @@ const es_AR = 	{
 	witness_thread: 'hilo de testigo',
 	you_have_votes_remaining: 'Te quedan {votesCount} votos disponibles',
 	you_can_vote_for_maximum_of_witnesses: 'Podés votar un máximo de 30 testigos',
+	set_witness_proxy: "You can also choose a proxy that will vote for witnesses for you. This will reset your current witness selection.", // FIXME
+	witness_set: "You have set a voting proxy. If you would like to reenable manual voting, please clear your proxy.", // FIXME
+	witness_proxy_current: "Your current proxy is", // FIXME
+	witness_proxy_set: "Set proxy", // FIXME
+	witness_proxy_clear: "Clear proxy", // FIXME
+	proxy_update_error: "Your proxy was not updated",
 	information: 'Información',
 	if_you_want_to_vote_outside_of_top_enter_account_name: 'Si te gustaría votar un testigo fuera del top 50, ingresá el nombre de su cuenta abajo para emitir tu voto.',
 	view_the_direct_parent: 'Vista directa del padre',

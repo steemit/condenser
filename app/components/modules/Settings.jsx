@@ -29,11 +29,11 @@ class Settings extends React.Component {
             fields: ['profile_image', 'name', 'about', 'location', 'website'],
             initialValues: props.profile,
             validation: values => ({
-                profile_image: values.profile_image && !/^https?:\/\//.test(values.profile_image) ? 'Invalid URL' : null,
-                name: values.name && values.name.length > 20 ? 'Name is too long' : null,
-                about: values.about && values.about.length > 160 ? 'About is too long' : null,
-                location: values.location && values.location.length > 30 ? 'Location is too long' : null,
-                website: values.website && values.website.length > 100 ? 'Website URL is too long' : null,
+                profile_image: values.profile_image && !/^https?:\/\//.test(values.profile_image) ? translate('invalid_url') : null,
+                name: values.name && values.name.length > 20 ? translate('name_is_too_long') : null,
+                about: values.about && values.about.length > 160 ? translate('about_is_too_long') : null,
+                location: values.location && values.location.length > 30 ? translate('location_is_too_long') : null,
+                website: values.website && values.website.length > 100 ? translate('website_url_is_too_long') : null,
             })
         })
         this.handleSubmitForm =
@@ -184,7 +184,7 @@ class Settings extends React.Component {
 
                     <br />
                     {state.loading && <span><LoadingIndicator type="circle" /><br /></span>}
-                    {!state.loading && <input type="submit" className="button" value="Update" disabled={disabled} />}
+                    {!state.loading && <p className="text-center"><input type="submit" className="button" value={translate('update')} disabled={disabled} /></p>}
                     {' '}{
                             state.errorMessage
                                 ? <small className="error">{state.errorMessage}</small>

@@ -92,6 +92,8 @@ app.use(isBot());
 app.use(mount('/favicons', staticCache(path.join(__dirname, '../app/assets/images/favicons'), cacheOpts)));
 app.use(mount('/images', staticCache(path.join(__dirname, '../app/assets/images'), cacheOpts)));
 app.use(mount('/legal', staticCache(path.join(__dirname, '../app/assets/legal'), cacheOpts)));
+// google analytics verification page (required by google analytics)
+app.use(mount('/google01836be5bad501ce.html', staticCache(path.join(__dirname, '../app/assets/google01836be5bad501ce.html'), cacheOpts)));
 // Proxy asset folder to webpack development server in development mode
 console.log (env)
 

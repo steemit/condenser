@@ -301,18 +301,6 @@ export default function useGeneralApi(app) {
         this.body = '';
     });
 
-    // router.get('/login_challenge', function *() {
-    // // Don't make anything that could be a valid transaction.
-    // // The client should not trust this when signing.  If the format changes,
-    // // you'll need to update the client's validation in /api/v1/login_challenge ..
-    //     const login_challenge = JSON.stringify({
-    //         token: secureRandom.randomBuffer(16).toString('hex'),
-    //         }, null, 0)
-    //
-    //     this.session.auth = {login_challenge}
-    //     this.body = login_challenge
-    // });
-
     router.post('/page_view', koaBody, function *() {
         const params = this.request.body;
         const {csrf, page, ref} = typeof(params) === 'string' ? JSON.parse(params) : params;

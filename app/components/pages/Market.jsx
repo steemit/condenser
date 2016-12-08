@@ -248,7 +248,7 @@ class Market extends React.Component {
               <tr key={o.orderid}>
                   <td>{o.created.replace('T', ' ')}</td>
                   <td>{translate(o.type == 'ask' ? 'sell' : 'buy')}</td>
-                  <td>{o.price.toFixed(6)}</td>
+                  <td>{CURRENCY_SIGN}{o.price.toFixed(6)}</td>
                   <td>{o.steem}</td>
                   <td>{o.sbd.replace('SBD', DEBT_TOKEN_SHORT)}</td>
                   <td><a href="#" onClick={e => cancelOrderClick(e, o.orderid)}>{translate('cancel')}</a></td>
@@ -352,7 +352,7 @@ class Market extends React.Component {
                                             if(price >= 0 && amount >= 0) this.refs.buySteem_total.value = roundUp(price * amount, 3)
                                             validateBuySteem()
                                         }} />
-                                    <span className="input-group-label uppercase"> {LIQUID_TOKEN}</span>
+                                        <span className="input-group-label uppercase"> {LIQUID_TOKEN}</span>
                                     </div>
                                 </div>
                             </div>
@@ -378,7 +378,7 @@ class Market extends React.Component {
                                 <div className="column small-3 large-2">
                                 </div>
                                 <div className="column small-9 large-8">
-                                    {/* <input disabled={buy_disabled} type="submit" className="button hollow buy-color float-right uppercase" value={translate('buy_LIQUID_TOKEN')} /> */}
+                                    <input disabled={buy_disabled} type="submit" className="button hollow buy-color float-right uppercase" value={translate('buy_LIQUID_TOKEN')} />
                                     {account &&
                                     <div><small>
                                         <a href="#" onClick={e => {
@@ -425,7 +425,7 @@ class Market extends React.Component {
                                           if(amount >= 0 && price >= 0) this.refs.sellSteem_total.value = roundDown(price * amount, 3)
                                           validateSellSteem()
                                         }} />
-                                    <span className="input-group-label uppercase">{`${DEBT_TOKEN_SHORT}/${LIQUID_TOKEN}`}</span>
+                                        <span className="input-group-label uppercase">{`${DEBT_TOKEN_SHORT}/${LIQUID_TOKEN}`}</span>
                                     </div>
                                 </div>
                             </div>
@@ -442,7 +442,7 @@ class Market extends React.Component {
                                           if(price >= 0 && amount >= 0) this.refs.sellSteem_total.value = roundDown(price * amount, 3)
                                           validateSellSteem()
                                         }} />
-                                    <span className="input-group-label uppercase">{LIQUID_TOKEN}</span>
+                                        <span className="input-group-label uppercase">{LIQUID_TOKEN}</span>
                                     </div>
                                 </div>
                             </div>
@@ -467,7 +467,7 @@ class Market extends React.Component {
                             <div className="row">
                                 <div className="column small-3 large-2"></div>
                                 <div className="column small-9 large-8">
-                                    {/* <input disabled={sell_disabled} type="submit" className="button hollow sell-color float-right uppercase" value={translate('sell_LIQUID_TOKEN')} /> */}
+                                    <input disabled={sell_disabled} type="submit" className="button hollow sell-color float-right uppercase" value={translate('sell_LIQUID_TOKEN')} />
                                     {account &&
                                         <div><small><a href="#" onClick={e => {e.preventDefault()
                                             const price = parseFloat(this.refs.sellSteem_price.value)
@@ -578,7 +578,7 @@ module.exports = {
             min_to_receive = min_to_receive.replace(min_to_receive.split(' ')[0],
                 String(parseFloat(min_to_receive).toFixed(3)))
 
-            const isSell = /STEEM|GOLOS$/.test(amount_to_sell);
+            const isSell = amount_to_sell.indexOf(LIQUID_TICKER) > 0;
             const confirmStr = translate(isSell
                                 ? 'sell_amount_for_atleast'
                                 : 'buy_atleast_amount_for',

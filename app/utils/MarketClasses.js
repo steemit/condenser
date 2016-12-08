@@ -67,11 +67,11 @@ class TradeHistory {
         this.type = fill.current_pays.indexOf(DEBT_TICKER) !== -1 ? "bid" : "ask";
         this.color = this.type == "bid" ? "buy-color" : "sell-color";
         if (this.type === "bid") {
-            this.sbd = parseFloat(fill.current_pays.split(" "+ DEBT_TICKER)[0]);
-            this.steem = parseFloat(fill.open_pays.split(" "+ LIQUID_TICKER)[0]);
+            this.sbd = parseFloat(fill.current_pays.split(" " + DEBT_TICKER)[0]);
+            this.steem = parseFloat(fill.open_pays.split(" " + LIQUID_TICKER)[0]);
         } else {
-            this.sbd = parseFloat(fill.open_pays.split(" "+ DEBT_TICKER)[0]);
-            this.steem = parseFloat(fill.current_pays.split(" "+ LIQUID_TICKER)[0]);
+            this.sbd = parseFloat(fill.open_pays.split(" " + DEBT_TICKER)[0]);
+            this.steem = parseFloat(fill.current_pays.split(" " + LIQUID_TICKER)[0]);
         }
 
         this.price = this.sbd / this.steem;

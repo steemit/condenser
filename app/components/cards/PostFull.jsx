@@ -282,9 +282,9 @@ class PostFull extends React.Component {
                             {!readonly && <Reblog author={author} permlink={permlink} />}
                             {!readonly &&
                                 <span className="PostFull__reply">
-                                    {showReplyOption && <a onClick={onShowReply}>Reply</a>}
-                                    {' '}{showEditOption   && !showEdit  && <a onClick={onShowEdit}>Edit</a>}
-                                    {' '}{showDeleteOption && !showReply && <a onClick={onDeletePost}>Delete</a>}
+                                    {showReplyOption && <a onClick={onShowReply}>{translate('reply')}</a>}
+                                    {' '}{showEditOption   && !showEdit  && <a onClick={onShowEdit}>{translate('edit')}</a>}
+                                    {' '}{showDeleteOption && !showReply && <a onClick={onDeletePost}>{translate('delete')}</a>}
                                 </span>}
                             <span className="PostFull__responses">
                                 <Link to={link} title={translate('response_count', {responseCount: content.children})}>

@@ -12,7 +12,6 @@ import {Order, TradeHistory} from "app/utils/MarketClasses";
 import {roundUp, roundDown} from "app/utils/MarketUtils";
 import { translate } from 'app/Translator.js';
 import { LIQUID_TOKEN, LIQUID_TOKEN_UPPERCASE, DEBT_TOKEN_SHORT, CURRENCY_SIGN, LIQUID_TICKER, DEBT_TICKER } from 'config/client_config';
-import { localizedCurrency, localCurrencySymbol } from 'app/components/elements/LocalizedCurrency';
 
 class Market extends React.Component {
     static propTypes = {
@@ -21,7 +20,7 @@ class Market extends React.Component {
         ticker: React.PropTypes.object,
         // redux PropTypes
         placeOrder: React.PropTypes.func.isRequired,
-        user: React.PropTypes.object,
+        user: React.PropTypes.string,
     };
 
     constructor(props) {
@@ -43,6 +42,10 @@ class Market extends React.Component {
     }
 
     shouldComponentUpdate = (nextProps, nextState) => {
+      if( this.props.user !== nextProps.user && nextProps.user) {
+          this.props.reload(nextProps.user)
+      }
+
       if( nextState.buy_disabled != this.state.buy_disabled ||
           nextState.sell_disabled != this.state.sell_disabled) {
           return true
@@ -63,7 +66,7 @@ class Market extends React.Component {
 
       let oc = (typeof nextProps.open_orders !== undefined) && (
           typeof this.props.open_orders == 'undefined' ||
-          this.props.open_orders.length != nextProps.open_orders.length)
+          JSON.stringify(this.props.open_orders) != JSON.stringify(nextProps.open_orders))
 
       // Update if ticker info changed, order book changed size, or open orders length changed.
       //if(tc || bc || oc) console.log("tc?", tc, "bc?", bc, "oc?", oc)
@@ -245,9 +248,9 @@ class Market extends React.Component {
               <tr key={o.orderid}>
                   <td>{o.created.replace('T', ' ')}</td>
                   <td>{translate(o.type == 'ask' ? 'sell' : 'buy')}</td>
-                  <td>{localizedCurrency(o.price.toFixed(6))}</td>
+                  <td>{o.price.toFixed(6)}</td>
                   <td>{o.steem}</td>
-                  <td metaTask="//TODO">{localCurrencySymbol(o.sbd.replace('SBD', DEBT_TOKEN_SHORT), {noSymbol: true})}</td>
+                  <td>{o.sbd.replace('SBD', DEBT_TOKEN_SHORT)}</td>
                   <td><a href="#" onClick={e => cancelOrderClick(e, o.orderid)}>{translate('cancel')}</a></td>
               </tr> )
 
@@ -258,7 +261,7 @@ class Market extends React.Component {
                         <th>{translate('type')}</th>
                         <th>{translate('price')}</th>
                         <th className="uppercase">{LIQUID_TOKEN}</th>
-                        <th>{`${DEBT_TOKEN_SHORT} (${localCurrencySymbol})`}</th>
+                        <th>{`${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}</th>
                         <th>{translate('action')}</th>
                     </tr>
                 </thead>
@@ -291,10 +294,10 @@ class Market extends React.Component {
                         <ul className="Market__ticker">
                             {/* .toFixed() modifiers are not neccesery, currencies are formatted properly behind the scene */}
                             {/* i left them in place just incase, so you will not have to look them up */}
-                            <li><b>{translate('last_price')}</b> {localizedCurrency(ticker.latest.toFixed(6))} ({pct_change})</li>
-                            <li><b>{translate('24h_volume')}</b> {localizedCurrency(ticker.sbd_volume.toFixed(2))}</li>
-                            <li><b>{translate('bid')}</b> {localizedCurrency(ticker.highest_bid.toFixed(6))}</li>
-                            <li><b>{translate('ask')}</b> {localizedCurrency(ticker.lowest_ask.toFixed(6))}</li>
+                            <li><b>{translate('last_price')}</b> {CURRENCY_SIGN}{ticker.latest.toFixed(6)} ({pct_change})</li>
+                            <li><b>{translate('24h_volume')}</b> {CURRENCY_SIGN}{ticker.sbd_volume.toFixed(2)}</li>
+                            <li><b>{translate('bid')}</b> {CURRENCY_SIGN}{ticker.highest_bid.toFixed(6)}</li>
+                            <li><b>{translate('ask')}</b> {CURRENCY_SIGN}{ticker.lowest_ask.toFixed(6)}</li>
                             {ticker.highest_bid > 0 &&
                                 <li><b>{translate('spread')}</b> {(200 * (ticker.lowest_ask - ticker.highest_bid) / (ticker.highest_bid + ticker.lowest_ask)).toFixed(3)}%</li>}
                             {/*<li><b>Feed price</b> ${ticker.feed_price.toFixed(3)}</li>*/}
@@ -332,7 +335,7 @@ class Market extends React.Component {
                                             if(amount >= 0 && price >= 0) this.refs.buySteem_total.value = roundUp(price * amount, 3)
                                             validateBuySteem()
                                         }} />
-                                    <span className="input-group-label uppercase">{`${DEBT_TOKEN_SHORT}/${LIQUID_TOKEN}`}</span>
+                                        <span className="input-group-label uppercase">{`${DEBT_TOKEN_SHORT}/${LIQUID_TOKEN}`}</span>
                                     </div>
                                 </div>
                             </div>
@@ -366,7 +369,7 @@ class Market extends React.Component {
                                             if(total >= 0 && price >= 0) this.refs.buySteem_amount.value = roundUp(total / price, 3)
                                             validateBuySteem()
                                         }} />
-                                    <span className="input-group-label">{`${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}</span>
+                                        <span className="input-group-label">{`${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}</span>
                                     </div>
                                 </div>
                             </div>

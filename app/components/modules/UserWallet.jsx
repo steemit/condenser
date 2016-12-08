@@ -224,7 +224,7 @@ class UserWallet extends React.Component {
                     {steemOrders ? <div style={{paddingRight: isMyAccount ? "0.85rem" : null}}><Link to="/market"><Tooltip t={translate('open_orders')}>(+{steem_orders_balance_str} STEEM)</Tooltip></Link></div> : null}
                 </div>
             </div>
-            <div className="UserWallet__balance row">
+            <div className="UserWallet__balance row zebra">
                 <div className="column small-12 medium-8">
                     STEEM POWER<br /><span className="secondary">{powerTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})}</span>
                 </div>
@@ -246,7 +246,7 @@ class UserWallet extends React.Component {
                     {conversions}
                 </div>
             </div>
-            <div className="UserWallet__balance row">
+            <div className="UserWallet__balance row zebra">
                 <div className="column small-12 medium-8">
                     SAVINGS<br /><span className="secondary">{savingsTip}</span>
                 </div>
@@ -258,12 +258,6 @@ class UserWallet extends React.Component {
                     {isMyAccount ?
                     <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={savings_sbd_balance_str} menu={savings_sbd_menu} />
                     : savings_sbd_balance_str}
-                </div>
-            </div>
-            <div className="row">
-                <div className="column small-12">
-                    <div style={{borderTop: '1px solid #eee', paddingTop: '0.25rem', marginTop: '0.25rem'}}>
-                    </div>
                 </div>
             </div>
             <div className="UserWallet__balance row">

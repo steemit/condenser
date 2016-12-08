@@ -245,8 +245,8 @@ const ru = {
 	open_orders: 'Открытые сделки',
 	sell_amount_for_atleast: 'Продать {amount_to_sell} за {min_to_receive} по цене  ({effectivePrice})',
 	buy_atleast_amount_for: 'Купить {min_to_receive} за {amount_to_sell} ({effectivePrice})',
-    price_warning_above: 'This price is well above the current market price of {marketPrice}, are you sure?', //FIXME
-    price_warning_below: 'This price is well below the current market price of {marketPrice}, are you sure?', //FIXME
+	price_warning_above: 'This price is well above the current market price of {marketPrice}, are you sure?', //FIXME
+	price_warning_below: 'This price is well below the current market price of {marketPrice}, are you sure?', //FIXME
 	higher: 'Дороже', // context is about prices
 	lower: 'Дешевле', // context is about prices
 	total_DEBT_TOKEN_SHORT_CURRENCY_SIGN: "Сумма " + DEBT_TOKEN_SHORT + ' (' + CURRENCY_SIGN + ')',

@@ -10,7 +10,7 @@ const es_AR = 	{
 	stolen_account_recovery: "Recuperación de Cuentas Robadas",
 	change_account_password: "Cambiar Contraseña",
 	steemit_chat: "Chat de Steemit",
-    steemit_api_docs: "Steemit API Docs",
+	steemit_api_docs: "Steemit API Docs",
 	witnesses: "Testigos",
 	vote_for_witnesses: "Votar por Testigos",
 	privacy_policy: "Política de Privacidad",
@@ -223,8 +223,8 @@ const es_AR = 	{
 	open_orders: 'Ordenes abiertas',
 	sell_amount_for_atleast: 'Sell {amount_to_sell} for at least {min_to_receive} ({effectivePrice})',
 	buy_atleast_amount_for: 'Buy at least {min_to_receive} for {amount_to_sell} ({effectivePrice})',
-    price_warning_above: 'This price is well above the current market price of {marketPrice}, are you sure?', //FIXME
-    price_warning_below: 'This price is well below the current market price of {marketPrice}, are you sure?', //FIXME
+	price_warning_above: 'This price is well above the current market price of {marketPrice}, are you sure?', //FIXME
+	price_warning_below: 'This price is well below the current market price of {marketPrice}, are you sure?', //FIXME
 	higher: 'Más alto', // context is about prices
 	lower: 'Más bajo', // context is about prices
 	total_sd_dollars: "Total SD ($)",

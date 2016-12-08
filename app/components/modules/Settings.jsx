@@ -114,6 +114,7 @@ class Settings extends React.Component {
                     <div className="row">
                         {/* PROFILE SETTINGS */}
                         <form onSubmit={this.handleSubmitForm} className="small-12 medium-6 large-4 columns">
+                            <strong>Настройки профиля</strong>
                             <label>
                                 {translate('profile_image_url')}
                                 <input type="url" {...profile_image.props} autoComplete="off" />
@@ -157,6 +158,7 @@ class Settings extends React.Component {
                         </form>
                         {/* WEBSITE SETTINGS */}
                         <div className="small-12 medium-6 large-4 columns">
+                            <strong>Настройки сайта</strong>
                             {/* CHOOSE LANGUAGE */}
                             <label>{translate('choose_language')}
                               <select defaultValue={store.get('language')} onChange={this.handleLanguageChange}>

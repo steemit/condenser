@@ -2,8 +2,7 @@ import React from 'react';
 //import Highcharts from 'highcharts';
 const ReactHighcharts = require("react-highcharts/dist/ReactHighstock");
 import { translate } from 'app/Translator';
-import { localizedCurrency, localCurrencySymbol } from 'app/components/elements/LocalizedCurrency';
-import { LIQUID_TOKEN_UPPERCASE, DEBT_TOKEN_SHORT, LIQUID_TICKER } from 'config/client_config';
+import { LIQUID_TOKEN_UPPERCASE, DEBT_TOKEN_SHORT, LIQUID_TICKER, CURRENCY_SIGN } from 'config/client_config';
 
 //Highstock does not play well with decimal x values, so we need to
 // multiply the x values by a constant factor and divide by this factor for
@@ -166,9 +165,9 @@ function generateDepthChart(bidsArray, asksArray) {
                 align: "left",
                 formatter: function () {
                     let value = this.value / precision;
-                    return '$' + (value > 10e6 ? localizedCurrency((value / 10e6).toFixed(2)) + "M" :
-                        value > 10000 ? localizedCurrency((value / 10e3).toFixed(2)) + "k" :
-                        localizedCurrency(value));
+                    return '$' + (value > 10e6 ? (value / 10e6).toFixed(2) + "M" :
+                        value > 10000 ? (value / 10e3).toFixed(2) + "k" :
+                        value);
                 }
             },
             gridLineWidth: 1,
@@ -193,7 +192,7 @@ function generateDepthChart(bidsArray, asksArray) {
             shared: false,
             backgroundColor: "rgba(0, 0, 0, 0.3)",
             formatter() {
-                return `<span>${translate('price')}: ${localizedCurrency((this.x / power).toFixed(6))} ${localCurrencySymbol}/${LIQUID_TOKEN_UPPERCASE}</span><br/><span>\u25CF</span>${this.series.name}: <b>${(this.y / 1000).toFixed(3)} ${DEBT_TOKEN_SHORT} ` + '(' + localCurrencySymbol + ')</b>';
+                return `<span>${translate('price')}: ${(this.x / power).toFixed(6)} ${CURRENCY_SIGN}/${LIQUID_TOKEN_UPPERCASE}</span><br/><span>\u25CF</span>${this.series.name}: <b>${(this.y / 1000).toFixed(3)} ${DEBT_TOKEN_SHORT} ` + '(' + CURRENCY_SIGN + ')</b>';
             },
             style: {
                 color: "#FFFFFF"

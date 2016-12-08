@@ -565,10 +565,10 @@ const ru = {
 		many {# неподтвержденных транзакций}
 	}`,
 	profile_image_url: 'Добавьте url вашего изображения',
-	profile_name: 'Display Name',
-	profile_about: 'About',
-	profile_location: 'Location',
-	profile_website: 'Website',
+	profile_name: 'Отоброжаемое имя',
+	profile_about: 'О себе',
+	profile_location: 'Место нахождения',
+	profile_website: 'Веб-сайт',
 	saved: 'Сохранено',
 	server_returned_error: 'ошибка сервера',
 	user_avatar: 'Аватар пользователя',
@@ -618,6 +618,7 @@ const ru = {
 	joined: 'Присоединился', // ex: "Joined September, 2016"
     // TODO
     this_post_is_not_available_due_to_a_copyright_claim: 'This post is not available due to a copyright claim.',
+    add_image_url: 'Добавьте url вашего изображения', // TODO remove this in the future
 }
 
 export { ru }

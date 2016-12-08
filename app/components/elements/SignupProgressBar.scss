@@ -1,0 +1,73 @@
+.SignupProgressBar__container {
+  background-color: transparent;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid $light-gray;
+}
+
+.SignupProgressBar {
+  width: 100%;
+  margin: 0 auto 50px 0;
+
+  > ul {
+    counter-reset: step;
+  }
+  > ul > li {
+    list-style-type: none;
+    width: 33%;
+    float: left;
+    font-size: 12px;
+    position: relative;
+    text-align: center;
+    text-transform: uppercase;
+    color: #7d7d7d;
+  }
+  > ul > li:before {
+    width: 30px;
+    height: 30px;
+    content: counter(step);
+    counter-increment: step;
+    line-height: 26px;
+    border: 2px solid #7d7d7d;
+    display: block;
+    text-align: center;
+    margin: 0 auto 10px auto;
+    border-radius: 50%;
+    background-color: white;
+  }
+  > ul > li:after {
+    width: 100%;
+    height: 2px;
+    content: '';
+    position: absolute;
+    background-color: #7d7d7d;
+    top: 15px;
+    left: -50%;
+    z-index: -1;
+  }
+  > ul > li:first-child:after {
+    content: none;
+  }
+  > ul > li.done {
+    color: #1A5099;
+  }
+  > ul > li.done:before {
+    content: "\2713";
+    color: $white;
+    border-color: #1A5099;
+    background-color: #1A5099;
+  }
+  > ul > li.done:after {
+    background-color: #1A5099;
+  }
+  > ul > li.current {
+    color: #1A5099;
+  }
+  > ul > li.current:before {
+    color: $white;
+    border-color: #4ba2f2;
+    background-color: #4ba2f2;
+  }
+  > ul > li.current:after {
+    background-color: #1A5099;
+  }
+}

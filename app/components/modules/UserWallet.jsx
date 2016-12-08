@@ -47,7 +47,6 @@ class UserWallet extends React.Component {
         const {convertToSteem, price_per_steem, savings_withdraws, account,
             current_user, open_orders} = this.props
         const gprops = this.props.gprops.toJS();
-        const {convertToSteem, price_per_steem} = this.props
 
         if (!account) return null;
 
@@ -112,7 +111,7 @@ class UserWallet extends React.Component {
             estimate_output = <p>{total_value}&nbsp; &nbsp; &nbsp;</p>;
         }
 
-        const total_value = (((vesting_steemf + balance_steem) * price_per_steem) + sbd_balance) || 0
+        // const total_value = (((vesting_steemf + balance_steem) * price_per_steem) + sbd_balance) || 0
         /// transfer log
         let idx = 0
         const transfer_log = account.get('transfer_history')

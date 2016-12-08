@@ -253,7 +253,6 @@ class PostFull extends React.Component {
         const showReplyOption = post_content.get('depth') < 6
         const showEditOption = username === author && post_content.get('mode') != 'archived'
         const authorRepLog10 = repLog10(content.author_reputation)
-
         return (
             <article className="PostFull hentry" itemScope itemType="http://schema.org/blogPost">
                 {showEdit ?
@@ -288,7 +287,7 @@ class PostFull extends React.Component {
                                     {' '}{showDeleteOption && !showReply && <a onClick={onDeletePost}>Delete</a>}
                                 </span>}
                             <span className="PostFull__responses">
-                                <Link to={link} title={pluralize('Responses', content.children, true)}>
+                                <Link to={link} title={translate('response_count', {responseCount: content.children})}>
                                     <Icon name="chatboxes" className="space-right" />{content.children}
                                 </Link>
                             </span>

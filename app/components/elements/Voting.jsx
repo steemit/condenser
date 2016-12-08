@@ -159,7 +159,11 @@ class Voting extends React.Component {
             </span>
         }
 
+        const {max_payout, pending_payout, total_author_payout, total_curator_payout, cashout_time, promoted} = this.props;
+        let payout = pending_payout + total_author_payout + total_curator_payout;
         if (payout < 0.0) payout = 0.0;
+        if (payout > max_payout) payout = max_payout;
+        const payout_limit_hit = payout >= max_payout;
 
         const up = <Icon name={votingUpActive ? 'empty' : 'chevron-up-circle'} />;
         const classUp = 'Voting__button Voting__button-up' + (myVote > 0 ? ' Voting__button--upvoted' : '') + (votingUpActive ? ' votingUp' : '');

@@ -376,7 +376,6 @@ export default function useGeneralApi(app) {
             this.status = 500;
         }
     });
-}
 
     router.post('/account_update_hook', koaBody, function * () {
         //if (rateLimitReq(this, this.req)) return;
@@ -414,7 +413,6 @@ export default function useGeneralApi(app) {
             console.log("error when updating account meta table", error)
         });
     });
-}
 
 /**
  @arg signingKey {string|PrivateKey} - WIF or PrivateKey object
@@ -471,4 +469,5 @@ function* createAccount({
             reject(e)
         })
     )
+}
 }

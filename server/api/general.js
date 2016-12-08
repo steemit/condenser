@@ -235,7 +235,6 @@ export default function useGeneralApi(app) {
                         //     const {active: {key_auths: [[active_pubkey, weight]], weight_threshold}} = chainAccount
                         //     verify('active', signatures.active, active_pubkey, weight, weight_threshold)
                         // }
-                        console.log('-- /login_account auth -->', this.session.uid, account, auth)
                         this.session.auth = auth
                         if (auth['posting']) this.session.a = account;
                     }

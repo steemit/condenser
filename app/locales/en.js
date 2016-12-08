@@ -212,7 +212,7 @@ const en = 	{
 	convert: 'Convert',
 	invalid_amount: 'Invalid amount',
 	insufficent_balance: 'Insufficient balance',
-	in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN: 'In 3.5 days, convert {amount} ' + DEBT_TOKEN + 's into ' + LIQUID_TOKEN,
+	in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN: 'In 3.5 days, convert {amount} ' + DEBT_TOKEN + ' into ' + LIQUID_TOKEN,
 	in_conversion: "{amount} in conversion",
 	conversion_complete_tip: "Will complete on",
 	order_placed: 'Order placed', // ex.: "Order placed: Sell {someamount_to_sell} for atleast {min_to_receive}"

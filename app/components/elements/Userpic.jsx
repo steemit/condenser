@@ -19,19 +19,23 @@ class Userpic extends Component {
 		let url
 
 		// try to extract image url from users metaData
-		try { url = JSON.parse(account.json_metadata).user_image }
+		try {
+            /*
+                steemit uses 'json_metadata.profile.profile image insteand of 'json_metadata.user_image' as we do in golos
+                in future we will move to "json_metadata.profile" as well
+             */
+            const metaData = JSON.parse(account.json_metadata);
+            url = metaData.user_image || metaData.profile ? metaData.profile.profile_image : ''
+        }
 		catch (e) { url = '' }
 		const proxy = $STM_Config.img_proxy_prefix
 		if (proxy && url) {
 			const size = props.width + 'x' + props.height
 			url = proxy + size + '/' + url;
 		}
-		// как это сделать средствами react?
+
 		return 	<div className="Userpic">
-					<img
-						src={url || '/images/user.png'}
-						{...rest}
-					/>
+					<img src={url || '/images/user.png'} {...rest} />
 				</div>;
 	}
 }

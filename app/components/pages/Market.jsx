@@ -292,8 +292,6 @@ class Market extends React.Component {
                 <div className="row">
                     <div className="column">
                         <ul className="Market__ticker">
-                            {/* .toFixed() modifiers are not neccesery, currencies are formatted properly behind the scene */}
-                            {/* i left them in place just incase, so you will not have to look them up */}
                             <li><b>{translate('last_price')}</b> {CURRENCY_SIGN}{ticker.latest.toFixed(6)} ({pct_change})</li>
                             <li><b>{translate('24h_volume')}</b> {CURRENCY_SIGN}{ticker.sbd_volume.toFixed(2)}</li>
                             <li><b>{translate('bid')}</b> {CURRENCY_SIGN}{ticker.highest_bid.toFixed(6)}</li>
@@ -584,7 +582,7 @@ module.exports = {
                                 : 'buy_atleast_amount_for',
                                 {amount_to_sell, min_to_receive, effectivePrice}
                             )
-            const successMessage = translate('order_placed' + ': ' + confirmStr)
+            const successMessage = translate('order_placed') + ': ' + confirmStr
             const confirm = confirmStr + '?'
             const warning = priceWarning ? "This price is well " + (isSell ? "below" : "above") + " the current market price of $" + parseFloat(marketPrice).toFixed(4) + "/STEEM, are you sure?" : null;
             const orderid = Math.floor(Date.now() / 1000)

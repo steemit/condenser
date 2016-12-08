@@ -429,12 +429,11 @@ function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress
     const sig = Signature.signBufferSha256(bufSha, d)
     const postUrl = `${$STM_Config.uploadImage}/${username}/${sig.toHex()}`
 
-    fetch(postUrl, {
-        method: 'post',
-        body: formData
-    })
-    .then(r => r.json())
-    .then(res => {
+    const xhr = new XMLHttpRequest()
+    xhr.open('POST', postUrl)
+    xhr.onload = function () {
+        console.log(xhr.status, xhr.responseText)
+        const res = JSON.parse(xhr.responseText)
         const {error} = res
         if(error) {
             progress({error: 'Error: ' + error})
@@ -442,12 +441,19 @@ function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress
         }
         const {url} = res
         progress({url})
-    })
-    .catch(error => {
+    }
+    xhr.onerror = function (error) {
         console.error(filename, error)
         progress({error: 'Unable to contact the server.'})
-        return
-    })
+    }
+    xhr.upload.onprogress = function (event) {
+        if (event.lengthComputable) {
+            const percent = Math.round((event.loaded / event.total) * 100)
+            progress({message: `Uploading ${percent}%`})
+            // console.log('Upload', percent)
+        }
+    }
+    xhr.send(formData)
 }
 
 

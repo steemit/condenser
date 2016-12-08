@@ -252,6 +252,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     try {
         // const challengeString = yield serverApiLoginChallenge()
         const challengeString = yield select(state => state.offchain.get('login_challenge'))
+        console.log('-- usernamePasswordLogin2 -->', challengeString);
         if (challengeString) {
             const challenge = JSON.parse(challengeString)
             if (!challenge.token)

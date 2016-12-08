@@ -212,7 +212,8 @@ export default function useGeneralApi(app) {
                     if(!chainAccount) {
                         console.error('/login_account missing blockchain account', account);
                     } else {
-                        const auth = {username: account, active: false, posting: false}
+                        const auth = {username: account, posting: false}
+                        console.log('-- this.session.auth.login_challenge -->', this.session.auth.login_challenge);
                         const bufSha = hash.sha256(this.session.auth.login_challenge)
                         const verify = (type, sigHex, pubkey, weight, weight_threshold) => {
                             if(!sigHex) return
@@ -221,20 +222,22 @@ export default function useGeneralApi(app) {
                             } else {
                                 const sig = parseSig(sigHex)
                                 const public_key = PublicKey.fromString(pubkey)
-                                auth[type] = sig.verifyHash(bufSha, public_key)
+                                const verified = sig.verifyHash(bufSha, public_key)
+                                if (!verified) {
+                                    console.error('/login_account verification failed', this.session.uid, account, pubkey)
+                                }
+                                auth[type] = verified
                             }
                         }
-                        {
-                            const {posting: {key_auths: [[posting_pubkey, weight]], weight_threshold}} = chainAccount
-                            verify('posting', signatures.posting, posting_pubkey, weight, weight_threshold)
-                        }
-                        {
-                            const {active: {key_auths: [[active_pubkey, weight]], weight_threshold}} = chainAccount
-                            verify('active', signatures.active, active_pubkey, weight, weight_threshold)
-                        }
+                        const {posting: {key_auths: [[posting_pubkey, weight]], weight_threshold}} = chainAccount
+                        verify('posting', signatures.posting, posting_pubkey, weight, weight_threshold)
+                        // {
+                        //     const {active: {key_auths: [[active_pubkey, weight]], weight_threshold}} = chainAccount
+                        //     verify('active', signatures.active, active_pubkey, weight, weight_threshold)
+                        // }
                         console.log('-- /login_account auth -->', this.session.uid, account, auth)
                         this.session.auth = auth
-                        if (auth['posting'] || auth['active']) this.session.a = account;
+                        if (auth['posting']) this.session.a = account;
                     }
                 }
             }

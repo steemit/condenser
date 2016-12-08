@@ -1,6 +1,6 @@
 import React, {PropTypes, Component} from 'react'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
-import {reduxForm} from 'redux-form'
+import {reduxForm} from 'redux-form' // @deprecated, instead use: app/utils/ReactForm.js
 import {PrivateKey} from 'shared/ecc'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import { translate } from 'app/Translator';

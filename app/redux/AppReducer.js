@@ -8,6 +8,7 @@ const defaultState = Map({
     error: '',
     location: {},
     notifications: null,
+    ignoredLoadingRequestCount: 0,
     notificounters: Map({
         total: 0,
         feed: 0,
@@ -39,13 +40,29 @@ export default function reducer(state = defaultState, action) {
     let res = state;
     if (action.type === 'RPC_REQUEST_STATUS') {
         const request_id = action.payload.id + '';
+        const loadingBlacklist = [
+            'get_dynamic_global_properties',
+            'get_api_by_name',
+            'get_followers',
+            'get_following'
+        ];
+        const loadingIgnored = loadingBlacklist.indexOf(action.payload.method) !== -1;
         if (action.payload.event === 'BEGIN') {
-            res = state.mergeDeep({loading: true, requests: {[request_id]: Date.now()}});
+            res = state.mergeDeep({
+                loading: loadingIgnored ? false : true,
+                requests: {[request_id]: Date.now()},
+                ignoredLoadingRequestCount: state.get('ignoredLoadingRequestCount') + (loadingIgnored ? 1 : 0)
+            });
         }
         if (action.payload.event === 'END' || action.payload.event === 'ERROR') {
+            const ignoredLoadingRequestCount = state.get('ignoredLoadingRequestCount') - (loadingIgnored ? 1 : 0);
             res = res.deleteIn(['requests', request_id]);
-            const loading = res.get('requests').size > 0;
-            res = res.set('loading', loading);
+            // console.log("RPC_REQUEST END:", action.payload.method, res.get('requests').size, "ignoredLoadingRequestCount", ignoredLoadingRequestCount);
+            const loading = (res.get('requests').size - ignoredLoadingRequestCount) > 0;
+            res = res.mergeDeep({
+                loading,
+                ignoredLoadingRequestCount
+            });
         }
     }
     if (action.type === 'ADD_NOTIFICATION') {

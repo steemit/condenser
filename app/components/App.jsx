@@ -19,6 +19,7 @@ import { translate } from 'app/Translator';
 import { TERMS_OF_SERVICE_URL, WIKI_URL, PRIVACY_POLICY_URL, SEGMENT_ANALYTICS_KEY, LANDING_PAGE_URL, WHITEPAPER_URL, VEST_TICKER } from 'config/client_config';
 import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 import MiniHeader from 'app/components/modules/MiniHeader';
+import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 
 class App extends React.Component {
     constructor(props) {
@@ -78,7 +79,6 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        require('fastclick').attach(document.body);
         // setTimeout(() => this.setState({showCallout: false}), 15000);
     }
 
@@ -301,6 +301,7 @@ class App extends React.Component {
             </div>
             <Dialogs />
             <Modals />
+            <PageViewsCounter />
         </div>
     }
 }

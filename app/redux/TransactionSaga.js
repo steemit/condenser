@@ -13,6 +13,7 @@ import user from 'app/redux/User'
 import tr from 'app/redux/Transaction'
 import getSlug from 'speakingurl'
 import {DEBT_TICKER} from 'config/client_config'
+import {serverApiRecordEvent} from 'app/utils/ServerApiClient'
 
 const {transaction} = ops
 
@@ -93,12 +94,12 @@ function* error_account_witness_vote({operation: {account, witness, approve}}) {
 
 /** Keys, username, and password are not needed for the initial call.  This will check the login and may trigger an action to prompt for the password / key. */
 function* broadcastOperation({payload:
-    {type, operation, confirm, keys, username, password, successCallback, errorCallback}
+    {type, operation, confirm, warning, keys, username, password, successCallback, errorCallback}
 }) {
     const operationParam = {type, operation, keys, username, password, successCallback, errorCallback}
     const conf = typeof confirm === 'function' ? confirm() : confirm
     if(conf) {
-        yield put(tr.actions.confirmOperation({confirm, operation: operationParam, errorCallback}))
+        yield put(tr.actions.confirmOperation({confirm, warning, operation: operationParam, errorCallback}))
         return
     }
     const payload = {operations: [[type, operation]], keys, username, successCallback, errorCallback}
@@ -117,6 +118,8 @@ function* broadcastOperation({payload:
             }
         }
         yield call(broadcast, {payload})
+        const eventType = type.replace(/^([a-z])/, g => g.toUpperCase()).replace(/_([a-z])/g, g => g[1].toUpperCase());
+        serverApiRecordEvent(eventType, '')
     } catch(error) {
         console.error('TransactionSage', error)
         if(errorCallback) errorCallback(error.toString())

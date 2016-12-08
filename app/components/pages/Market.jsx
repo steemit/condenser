@@ -24,6 +24,24 @@ class Market extends React.Component {
         user: React.PropTypes.object,
     };
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            buy_disabled: true,
+            sell_disabled: true,
+            buy_price_warning: false,
+            sell_price_warning: false,
+        };
+    }
+
+    componentWillReceiveProps(np) {
+        if (!this.props.ticker && np.ticker) {
+            const {lowest_ask, highest_bid} = np.ticker;
+            if (this.refs.buySteem_price) this.refs.buySteem_price.value = parseFloat(lowest_ask).toFixed(6);
+            if (this.refs.sellSteem_price) this.refs.sellSteem_price.value = parseFloat(highest_bid).toFixed(6);
+        }
+    }
+
     shouldComponentUpdate = (nextProps, nextState) => {
       if( nextState.buy_disabled != this.state.buy_disabled ||
           nextState.sell_disabled != this.state.sell_disabled) {
@@ -60,7 +78,8 @@ class Market extends React.Component {
         const amount_to_sell = parseFloat(ReactDOM.findDOMNode(this.refs.buySteem_total).value)
         const min_to_receive = parseFloat(ReactDOM.findDOMNode(this.refs.buySteem_amount).value)
         const price = (amount_to_sell / min_to_receive).toFixed(6)
-        placeOrder(owner, [amount_to_sell, DEBT_TICKER].join(" "),     [min_to_receive, LIQUID_TICKER].join(" "), ["$", price, "/", LIQUID_TICKER].join(""), (msg) => {
+        const {lowest_ask} = this.props.ticker;
+        placeOrder(user, amount_to_sell + " SBD", min_to_receive + " STEEM", "$" + price + "/STEEM", !!this.state.buy_price_warning, lowest_ask, (msg) => {
             this.props.notify(msg)
             this.props.reload(owner)
         })
@@ -73,7 +92,8 @@ class Market extends React.Component {
         const min_to_receive = parseFloat(ReactDOM.findDOMNode(this.refs.sellSteem_total).value)
         const amount_to_sell = parseFloat(ReactDOM.findDOMNode(this.refs.sellSteem_amount).value)
         const price = (min_to_receive / amount_to_sell).toFixed(6)
-        placeOrder(owner, [amount_to_sell, LIQUID_TICKER].join(" "), [min_to_receive, DEBT_TICKER].join(" "), ["$", price, "/", LIQUID_TICKER].join(""), (msg) => {
+        const {highest_bid} = this.props.ticker;
+        placeOrder(user, amount_to_sell + " STEEM", min_to_receive + " SBD", "$" + price + "/STEEM", !!this.state.sell_price_warning, highest_bid, (msg) => {
             this.props.notify(msg)
             this.props.reload(owner)
         })
@@ -105,14 +125,18 @@ class Market extends React.Component {
         this.validateSellSteem()
     }
 
-    percentDiff = (a, b) => 200 * Math.abs(a - b) / (a + b)
+    percentDiff = (marketPrice, userPrice) => {
+        marketPrice = parseFloat(marketPrice);
+        return 100 * (userPrice - marketPrice) / (marketPrice)
+    }
 
     validateBuySteem = () => {
         const amount = parseFloat(this.refs.buySteem_amount.value)
         const price = parseFloat(this.refs.buySteem_price.value)
         const total = parseFloat(this.refs.buySteem_total.value)
         const valid = (amount > 0 && price > 0 && total > 0)
-        this.setState({buy_disabled: !valid, buy_price_warning: valid && this.percentDiff(total/amount, price) > 1 });
+        const {lowest_ask} = this.props.ticker;
+        this.setState({buy_disabled: !valid, buy_price_warning: valid && this.percentDiff(lowest_ask, price) > 15 });
     }
 
     validateSellSteem = () => {
@@ -120,19 +144,9 @@ class Market extends React.Component {
         const price = parseFloat(this.refs.sellSteem_price.value)
         const total = parseFloat(this.refs.sellSteem_total.value)
         const valid = (amount > 0 && price > 0 && total > 0)
-        this.setState({sell_disabled: !valid, sell_price_warning: valid && this.percentDiff(total/amount, price) > 1 });
+        const {highest_bid} = this.props.ticker;
+        this.setState({sell_disabled: !valid, sell_price_warning: valid && this.percentDiff(highest_bid, price) < -15 });
     }
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            buy_disabled: true,
-            sell_disabled: true,
-            buy_price_warning: false,
-            sell_price_warning: false,
-        };
-    }
-
 
     render() {
         const {sellSteem, buySteem, cancelOrderClick, setFormPrice,
@@ -199,7 +213,7 @@ class Market extends React.Component {
             }, {})
         }
 
-        let account     = this.props.account
+        let account     = this.props.account ? this.props.account.toJS() : null;
         let open_orders = this.props.open_orders;
         let orderbook   = aggOrders(normalizeOrders(this.props.orderbook));
 
@@ -552,7 +566,7 @@ module.exports = {
                 //successCallback
             }))
         },
-        placeOrder: (owner, amount_to_sell, min_to_receive, effectivePrice, successCallback, fill_or_kill = false, expiration = DEFAULT_EXPIRE) => {
+        placeOrder: (owner, amount_to_sell, min_to_receive, effectivePrice, priceWarning, marketPrice, successCallback, fill_or_kill = false, expiration = DEFAULT_EXPIRE) => {
             // create_order jsc 12345 "1.000 SBD" "100.000 STEEM" true 1467122240 false
 
             // Padd amounts to 3 decimal places
@@ -561,10 +575,10 @@ module.exports = {
             min_to_receive = min_to_receive.replace(min_to_receive.split(' ')[0],
                 String(parseFloat(min_to_receive).toFixed(3)))
 
-            const regex = new RegExp(LIQUID_TICKER)
+
             const confirmStr = translate(
                                 // which translated string to use
-                                regex.test(amount_to_sell)
+                                regex.test(isSell)
                                 ? 'sell_amount_for_atleast'
                                 : 'buy_atleast_amount_for',
                                 // with this values
@@ -572,12 +586,14 @@ module.exports = {
                             )
             const successMessage = translate('order_placed' + ': ' + confirmStr)
             const confirm = confirmStr + '?'
+            const warning = priceWarning ? "This price is well " + (isSell ? "below" : "above") + " the current market price of $" + parseFloat(marketPrice).toFixed(4) + "/STEEM, are you sure?" : null;
             const orderid = Math.floor(Date.now() / 1000)
             dispatch(transaction.actions.broadcastOperation({
                 type: 'limit_order_create',
                 operation: {owner, amount_to_sell, min_to_receive, fill_or_kill, expiration, orderid}, //,
                     //__config: {successMessage}},
                 confirm,
+                warning,
                 successCallback: () => {successCallback(successMessage);}
             }))
         }

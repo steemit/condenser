@@ -8,7 +8,7 @@ class ConfirmTransactionForm extends Component {
     static propTypes = {
         //Steemit
         onCancel: PropTypes.func,
-
+        warning: PropTypes.string,
         // redux-form
         confirm: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
         confirmBroadcastOperation: PropTypes.object,
@@ -26,13 +26,14 @@ class ConfirmTransactionForm extends Component {
     }
     render() {
         const {onCancel, okClick} = this
-        const {confirm, confirmBroadcastOperation} = this.props
+        const {confirm, confirmBroadcastOperation, warning} = this.props
         const conf = typeof confirm === 'function' ? confirm() : confirm
         return (
            <div className="ConfirmTransactionForm">
                <h4>{typeName(confirmBroadcastOperation)}</h4>
                <hr />
                <div>{conf}</div>
+               {warning ? <div style={{paddingTop: 10}} className="error">{warning}</div> : null}
                <br />
                <button className="button" onClick={okClick}>{translate('ok')}</button>
                <button type="button hollow" className="button hollow" onClick={onCancel}>{translate('cancel')}</button>
@@ -57,10 +58,12 @@ export default connect(
         const confirmBroadcastOperation = state.transaction.get('confirmBroadcastOperation')
         const confirmErrorCallback = state.transaction.get('confirmErrorCallback')
         const confirm = state.transaction.get('confirm')
+        const warning = state.transaction.get('warning')
         return {
             confirmBroadcastOperation,
             confirmErrorCallback,
             confirm,
+            warning
         }
     },
     // mapDispatchToProps

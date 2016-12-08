@@ -27,7 +27,7 @@ export default class DropdownMenu extends React.Component {
     }
 
     componentWillUnmount() {
-        document.removeEventListener('mousedown', this.hide);
+        document.removeEventListener('click', this.hide);
     }
 
     toggle = (e) => {
@@ -39,7 +39,7 @@ export default class DropdownMenu extends React.Component {
     show = (e) => {
         e.preventDefault();
         this.setState({shown: true});
-        document.addEventListener('mousedown', this.hide);
+        document.addEventListener('click', this.hide);
     };
 
     hide = (e) => {
@@ -47,8 +47,9 @@ export default class DropdownMenu extends React.Component {
         const inside_dropdown = !!findParent(e.target, 'VerticalMenu');
         if (inside_dropdown) return;
 
+        e.preventDefault()
         this.setState({shown: false});
-        document.removeEventListener('mousedown', this.hide);
+        document.removeEventListener('click', this.hide);
     };
 
     navigate = (e) => {
@@ -73,7 +74,7 @@ export default class DropdownMenu extends React.Component {
                 {hasDropdown && <Icon name="dropdown-arrow" />}
             </span>
 
-        if(hasDropdown) entry = <a key="entry" href={href || '#'} onMouseDown={this.toggle} onClick={e => {e.preventDefault()}}>{entry}</a>
+        if(hasDropdown) entry = <a key="entry" href={href || '#'} onClick={this.toggle}>{entry}</a>
 
         const menu = <VerticalMenu key="menu" title={title} items={items} hideValue={selected} className="VerticalMenu" />;
         const cls = 'DropdownMenu' + (this.state.shown ? ' show' : '') + (className ? ` ${className}` : '')

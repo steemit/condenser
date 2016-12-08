@@ -99,6 +99,7 @@ const ru = {
 	cancel: 'Отмена',
 	clear: 'Очистить',
 	save: 'Сохранить',
+    update: 'Обновить',
 	upvote_post: 'Проголосовать за пост',
 	update_post: 'Обновить пост',
 	markdown_is_supported: 'Поддерживается стилизация с Markdown',
@@ -564,7 +565,11 @@ const ru = {
 		few {# неподтвержденныe транзакции}
 		many {# неподтвержденных транзакций}
 	}`,
-	add_image_url: 'Добавьте url вашего изображения',
+	profile_image_url: 'Добавьте url вашего изображения',
+	profile_name: 'Отоброжаемое имя',
+	profile_about: 'О себе',
+	profile_location: 'Место нахождения',
+	profile_website: 'Веб-сайт',
 	saved: 'Сохранено',
 	server_returned_error: 'ошибка сервера',
 	user_avatar: 'Аватар пользователя',
@@ -617,6 +622,16 @@ const ru = {
     decline_payout: 'Отклонить выплату',
     check_this_to_auto_upvote_your_post: 'Отметить это чтобы автоматически голосовать за свой пост',
     html_posts_must_begin_with_html_and_end_with_html: 'HTML посты должны начинаться с <html> и заканчиваться с </html>',
+	// TODO
+    this_post_is_not_available_due_to_a_copyright_claim: 'This post is not available due to a copyright claim.',
+    add_image_url: 'Добавьте url вашего изображения', // TODO remove this in the future
+	// Settings.jsx
+    invalid_url: 'Неверный URL',
+    name_is_too_long: 'Имя слишком длинное',
+    about_is_too_long: 'Текст "о себе" слишком длинный',
+    location_is_too_long: 'Место нахождение слишком длинное',
+    website_url_is_too_long: 'URL веб-сайта слишком длинный',
+    powered_up_100: 'Выплата на 100% в Сила Голоса',
 }
 
 export { ru }

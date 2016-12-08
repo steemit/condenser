@@ -4,15 +4,14 @@ import {Apis} from 'shared/api_client';
 import {List} from 'immutable'
 
 // Test limit with 2 (not 1, infinate looping)
-export function* loadFollows(method, follower, type, start = '', limit = 100) {
-    const res = fromJS(yield Apis.follow(method, follower, start, type, limit))
+export function* loadFollows(method, account, type, start = '', limit = 100) {
+    const res = fromJS(yield Apis.follow(method, account, start, type, limit))
     // console.log('res.toJS()', res.toJS())
     let cnt = 0
     let lastFollowing = null
     const key = method === "get_following" ? "following" : "follower";
-
     yield put({type: 'global/UPDATE', payload: {
-        key: ['follow', method, follower],
+        key: ['follow', method, account],
         notSet: Map(),
         updater: m => {
             m = m.update('result', Map(), m2 => {
@@ -25,14 +24,17 @@ export function* loadFollows(method, follower, type, start = '', limit = 100) {
                 })
                 return m2
             })
-            return m.merge({[type]: {loading: true, error: null}})
+            const count = m.get('result') ? m.get('result').filter(a => {
+                return a.get(0) === "blog";
+            }).size : 0;
+            return m.merge({count, [type]: {loading: true, error: null}})
         }
     }})
     if(cnt === limit) {
-        yield call(loadFollows, method, follower, type, lastFollowing)
+        yield call(loadFollows, method, account, type, lastFollowing)
     } else {
         yield put({type: 'global/UPDATE', payload: {
-            key: ['follow', method, follower],
+            key: ['follow', method, account],
             updater: m => m.merge({[type]: {loading: false, error: null}})
         }})
     }

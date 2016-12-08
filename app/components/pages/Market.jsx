@@ -557,8 +557,8 @@ module.exports = {
           dispatch({type: 'market/UPDATE_MARKET', payload: {username: username}})
         },
         cancelOrder: (owner, orderid, successCallback) => {
-            const confirm = `Cancel order #${orderid} from ${owner}?`
-            const successMessage = `Order #${orderid} cancelled.`
+            const confirm = translate('order_cancel_confirm', {order_id: orderid, user: owner})
+            const successMessage = translate('order_cancelled', {order_id: orderid})
             dispatch(transaction.actions.broadcastOperation({
                 type: 'limit_order_cancel',
                 operation: {owner, orderid/*, __config: {successMessage}*/},

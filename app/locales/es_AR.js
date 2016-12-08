@@ -225,6 +225,8 @@ const es_AR = 	{
 	buy_atleast_amount_for: 'Buy at least {min_to_receive} for {amount_to_sell} ({effectivePrice})',
 	price_warning_above: 'This price is well above the current market price of {marketPrice}, are you sure?', //FIXME
 	price_warning_below: 'This price is well below the current market price of {marketPrice}, are you sure?', //FIXME
+	order_cancel_confirm: 'Cancel order {order_id} from {user}?', //FIXME
+	order_cancelled: 'Order {order_id} cancelled.', //FIXME
 	higher: 'Más alto', // context is about prices
 	lower: 'Más bajo', // context is about prices
 	total_sd_dollars: "Total SD ($)",

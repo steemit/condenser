@@ -1,5 +1,10 @@
 .UserWallet__balance {
   padding-bottom: 1rem;
+  padding-top: 1rem;
+
+  &.UserWallet__balance.zebra {
+      background: #f2f2f2;
+  }
 }
 
 .UserWallet__buysp {

@@ -5,8 +5,6 @@ import { translate } from 'app/Translator';
 import { localizedCurrency, localCurrencySymbol } from 'app/components/elements/LocalizedCurrency';
 import { LIQUID_TOKEN_UPPERCASE, DEBT_TOKEN_SHORT, LIQUID_TICKER } from 'config/client_config';
 
-
-
 //Highstock does not play well with decimal x values, so we need to
 // multiply the x values by a constant factor and divide by this factor for
 // display purposes (tooltip, x-axis)
@@ -77,6 +75,7 @@ class DepthChart extends React.Component {
             return null;
         }
         const depth_chart_config = generateDepthChart(bids, asks);
+
         return (
             <div className="DepthChart"><ReactHighcharts ref="depthChart" config={depth_chart_config} /></div>
         );
@@ -135,11 +134,11 @@ function generateDepthChart(bidsArray, asksArray) {
 
     if(process.env.BROWSER) {
         if(bids[0]) {
-            series.push({step: 'right', name: translate('bid'), color: 'rgba(0,150,0,1.0)', fillColor: 'rgba(0,150,0,0.2)', tooltip: {valueSuffix: ' '+ LIQUID_TICKER},
+            series.push({step: 'right', name: translate('bid'), color: 'rgba(0,150,0,1.0)', fillColor: 'rgba(0,150,0,0.2)', tooltip: {valueSuffix: ' ' + LIQUID_TICKER},
              data:  bids})
         }
         if(asks[0]) {
-            series.push({step: 'left', name: translate('ask'), color: 'rgba(150,0,0,1.0)', fillColor: 'rgba(150,0,0,0.2)', tooltip: {valueSuffix: ' '+ LIQUID_TICKER},
+            series.push({step: 'left', name: translate('ask'), color: 'rgba(150,0,0,1.0)', fillColor: 'rgba(150,0,0,0.2)', tooltip: {valueSuffix: ' ' + LIQUID_TICKER},
              data: asks})
         }
     }
@@ -194,7 +193,7 @@ function generateDepthChart(bidsArray, asksArray) {
             shared: false,
             backgroundColor: "rgba(0, 0, 0, 0.3)",
             formatter() {
-                return `<span>${translate('price')}: ${localizedCurrency((this.x / power).toFixed(6))} / ${LIQUID_TOKEN_UPPERCASE}</span><br/><span>\u25CF</span>${this.series.name}: <b>${(this.y / 1000).toFixed(3)} ${DEBT_TOKEN_SHORT} ` + '(' + localCurrencySymbol + ')</b>';
+                return `<span>${translate('price')}: ${localizedCurrency((this.x / power).toFixed(6))} ${localCurrencySymbol}/${LIQUID_TOKEN_UPPERCASE}</span><br/><span>\u25CF</span>${this.series.name}: <b>${(this.y / 1000).toFixed(3)} ${DEBT_TOKEN_SHORT} ` + '(' + localCurrencySymbol + ')</b>';
             },
             style: {
                 color: "#FFFFFF"

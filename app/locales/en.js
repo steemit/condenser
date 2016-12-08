@@ -40,7 +40,7 @@ const en = 	{
 	submit_email_to_get_on_waiting_list: 'Submit your email to get on the waiting list',
 	login: 'Login',
 	logout: 'Logout',
-	show_less_low_value_posts: "Show less low value posts",
+	show_less_low_value_posts: "Show fewer low value posts",
 	show_more_low_value_posts: "Show more low value posts",
 	select_topic: 'Select Topic',
 	tags_and_topics: "Tags and Topics",
@@ -504,7 +504,7 @@ const en = 	{
 	dismiss: 'Dismiss',
 	// next 3 strings are used conditionally together
 	show_more: 'Show more',
-	show_less: 'Show less',
+	show_less: 'Show fewer',
 	value_posts: 'low value posts',
 	// PormotePost.jsx
 	promote_post: 'Promote Post',

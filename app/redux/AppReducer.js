@@ -48,7 +48,7 @@ export default function reducer(state = defaultState, action) {
         const loadingIgnored = loadingBlacklist.indexOf(action.payload.method) !== -1;
         if (action.payload.event === 'BEGIN') {
             res = state.mergeDeep({
-                loading: loadingIgnored ? false : true,
+                loading: loadingIgnored ? state.get('loading') : true, // reuse current loading state if the method is blacklisted
                 requests: {[request_id]: Date.now()},
                 ignoredLoadingRequestCount: state.get('ignoredLoadingRequestCount') + (loadingIgnored ? 1 : 0)
             });
@@ -56,7 +56,6 @@ export default function reducer(state = defaultState, action) {
         if (action.payload.event === 'END' || action.payload.event === 'ERROR') {
             const ignoredLoadingRequestCount = state.get('ignoredLoadingRequestCount') - (loadingIgnored ? 1 : 0);
             res = res.deleteIn(['requests', request_id]);
-            // console.log("RPC_REQUEST END:", action.payload.method, res.get('requests').size, "ignoredLoadingRequestCount", ignoredLoadingRequestCount);
             const loading = (res.get('requests').size - ignoredLoadingRequestCount) > 0;
             res = res.mergeDeep({
                 loading,

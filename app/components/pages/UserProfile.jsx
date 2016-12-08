@@ -104,12 +104,18 @@ export default class UserProfile extends React.Component {
         if( section == 'posts' ) section = 'comments';
 
         // const isMyAccount = current_user ? current_user.get('username') === accountname : false;
+
+        // Loading status
+        const status = global_status ? global_status.getIn([section, 'by_author']) : null;
+        const fetching = (status && status.fetching) || this.props.loading;
+
         let account
         let accountImm = this.props.accounts.get(accountname);
         if( accountImm ) {
             account = accountImm.toJS();
-        }
-        else {
+        } else if (fetching) {
+            return <center><LoadingIndicator type="circle" /></center>;
+        } else {
             return <div><center>{translate('unknown_account')}</center></div>
         }
 
@@ -124,8 +130,7 @@ export default class UserProfile extends React.Component {
         let tab_content = null;
 
         // const global_status = this.props.global.get('status');
-        const status = global_status ? global_status.getIn([section, 'by_author']) : null;
-        const fetching = (status && status.fetching) || this.props.loading;
+
 
         // let balance_steem = parseFloat(account.balance.split(' ')[0]);
         // let vesting_steem = vestingSteem(account, gprops).toFixed(2);

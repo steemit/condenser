@@ -375,7 +375,7 @@ function* uploadImageWatch() {
 function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress}}) {
     const _progress = progress
     progress = msg => {
-        console.log('Upload image progress', msg)
+        // console.log('Upload image progress', msg)
         _progress(msg)
     }
 

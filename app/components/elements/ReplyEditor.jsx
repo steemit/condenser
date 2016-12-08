@@ -233,7 +233,10 @@ class ReplyEditor extends React.Component {
 
     onDrop = (acceptedFiles, rejectedFiles) => {
         if(!acceptedFiles.length) {
-            console.log('onDrop Rejected files: ', rejectedFiles);
+            if(rejectedFiles.length) {
+                this.setState({progress: {error: 'Please insert only image files.'}})
+                console.log('onDrop Rejected files: ', rejectedFiles);
+            }
             return
         }
         const file = acceptedFiles[0]

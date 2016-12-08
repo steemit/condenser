@@ -81,7 +81,7 @@ class Market extends React.Component {
         const min_to_receive = parseFloat(ReactDOM.findDOMNode(this.refs.buySteem_amount).value)
         const price = (amount_to_sell / min_to_receive).toFixed(6)
         const {lowest_ask} = this.props.ticker;
-        placeOrder(user, [amount_to_sell, DEBT_TICKER].join(" "),     [min_to_receive, LIQUID_TICKER].join(" "), ["$", price, "/", LIQUID_TICKER].join(""), !!this.state.buy_price_warning, lowest_ask, (msg) => {
+        placeOrder(user, `${amount_to_sell} ${DEBT_TICKER}`,`${min_to_receive} ${LIQUID_TICKER}`, `${CURRENCY_SIGN}${price}/${LIQUID_TICKER}`, !!this.state.buy_price_warning, lowest_ask, (msg) => {
             this.props.notify(msg)
             this.props.reload(user)
         })
@@ -94,7 +94,7 @@ class Market extends React.Component {
         const amount_to_sell = parseFloat(ReactDOM.findDOMNode(this.refs.sellSteem_amount).value)
         const price = (min_to_receive / amount_to_sell).toFixed(6)
         const {highest_bid} = this.props.ticker;
-        placeOrder(user, [amount_to_sell, LIQUID_TICKER].join(" "), [min_to_receive, DEBT_TICKER].join(" "), ["$", price, "/", LIQUID_TICKER].join(""), !!this.state.sell_price_warning, highest_bid, (msg) => {
+        placeOrder(user, `${amount_to_sell} ${LIQUID_TICKER}`, `${min_to_receive} ${DEBT_TICKER}`, `${CURRENCY_SIGN}${price}/${LIQUID_TICKER}`, !!this.state.sell_price_warning, highest_bid, (msg) => {
             this.props.notify(msg)
             this.props.reload(user)
         })

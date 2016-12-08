@@ -265,7 +265,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
                 signatures[role] = sig.toHex()
             }
             sign('posting', private_keys.get('posting_private'))
-            sign('active', private_keys.get('active_private'))
+            // sign('active', private_keys.get('active_private'))
             serverApiLogin(username, signatures);
         }
     } catch(error) {

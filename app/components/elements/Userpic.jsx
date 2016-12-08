@@ -25,7 +25,8 @@ class Userpic extends Component {
                 in future we will move to "json_metadata.profile" as well
              */
             const metaData = JSON.parse(account.json_metadata);
-            url = metaData.user_image || metaData.profile ? metaData.profile.profile_image : ''
+            const profile_image = metaData.profile ? metaData.profile.profile_image : '';
+            url = metaData.user_image || profile_image
         }
 		catch (e) { url = '' }
 		const proxy = $STM_Config.img_proxy_prefix

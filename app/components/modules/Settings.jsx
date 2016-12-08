@@ -94,6 +94,14 @@ class Settings extends React.Component {
         })
     }
 
+    handleCurrencyChange(event) { store.set('currency', event.target.value) }
+
+    handleLanguageChange = (event) => {
+        const language = event.target.value
+        store.set('language', language)
+        this.props.changeLanguage(language)
+    }
+
     render() {
         const {state, props} = this
 

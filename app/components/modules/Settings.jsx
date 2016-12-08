@@ -7,7 +7,6 @@ import store from 'store';
 import transaction from 'app/redux/Transaction'
 import o2j from 'shared/clash/object2json'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
-import Userpic from 'app/components/elements/Userpic';
 import reactForm from 'app/utils/ReactForm'
 
 class Settings extends React.Component {
@@ -105,6 +104,50 @@ class Settings extends React.Component {
 
         return <div className="Settings">
                     <div className="row">
+                        {/* PROFILE SETTINGS */}
+                        <form onSubmit={this.handleSubmitForm} className="small-12 medium-6 large-4 columns">
+                            <label>
+                                {translate('profile_image_url')}
+                                <input type="url" {...profile_image.props} autoComplete="off" />
+                            </label>
+                            <div className="error">{profile_image.blur && profile_image.touched && profile_image.error}</div>
+
+                            <label>
+                                {translate('profile_name')}
+                                <input type="text" {...name.props} maxLength="20" autoComplete="off" />
+                            </label>
+                            <div className="error">{name.touched && name.error}</div>
+
+                            <label>
+                                {translate('profile_about')}
+                                <input type="text" {...about.props} maxLength="160" autoComplete="off" />
+                            </label>
+                            <div className="error">{about.touched && about.error}</div>
+
+                            <label>
+                                {translate('profile_location')}
+                                <input type="text" {...location.props} maxLength="30" autoComplete="off" />
+                            </label>
+                            <div className="error">{location.touched && location.error}</div>
+
+                            <label>
+                                {translate('profile_website')}
+                                <input type="text" {...website.props} maxLength="100" autoComplete="off" />
+                            </label>
+                            <div className="error">{website.touched && website.error}</div>
+
+                            <br />
+                            {state.loading && <span><LoadingIndicator type="circle" /><br /></span>}
+                            {!state.loading && <p className="text-center"><input type="submit" className="button" value={translate('update')} disabled={disabled} /></p>}
+                            {' '}{
+                                    state.errorMessage
+                                        ? <small className="error">{state.errorMessage}</small>
+                                        : state.successMessage
+                                        ? <small className="success uppercase">{state.successMessage}</small>
+                                        : null
+                                }
+                        </form>
+                        {/* WEBSITE SETTINGS */}
                         <div className="small-12 medium-6 large-4 columns">
                             {/* CHOOSE LANGUAGE */}
                             <label>{translate('choose_language')}
@@ -125,76 +168,9 @@ class Settings extends React.Component {
                                     }
                                 </select>
                             </label>
-                            {/* CHOOSE USER IMAGE */}
-                            <form onSubmit={this.handleUserImageSubmit}>
-                                <label>{translate('add_image_url')}
-                                    <input type="url" onChange={this.handleUrlChange} value={state.userImage} disabled={!props.isOwnAccount || state.loading} />
-                                    {
-                                        state.errorMessage
-                                        ? <small className="error">{state.errorMessage}</small>
-                                        : state.successMessage
-                                        ? <small className="success">{state.successMessage}</small>
-                                        : null
-                                    }
-                                </label>
-                                <p className="text-center" style={{marginTop: 16.8}}>
-                                    <input type="submit" className="button" value={translate('save_avatar')} />
-                                </p>
-                            </form>
-                        </div>
-                        <div className="small-12 medium-6 large-8 columns text-center">
-                            {
-                                state.userImage
-                                ? <img src={_urls.proxyImage(state.userImage)} alt={translate('user_avatar') + ' ' + props.account.name} />
-                                : null
-                            }
                         </div>
                     </div>
-            <div className="row">
-                <form onSubmit={this.handleSubmitForm} className="small-12 medium-6 large-4 columns">
-                    <label>
-                        {translate('profile_image_url')}
-                        <input type="url" {...profile_image.props} autoComplete="off" />
-                    </label>
-                    <div className="error">{profile_image.blur && profile_image.touched && profile_image.error}</div>
-
-                    <label>
-                        {translate('profile_name')}
-                        <input type="text" {...name.props} maxLength="20" autoComplete="off" />
-                    </label>
-                    <div className="error">{name.touched && name.error}</div>
-
-                    <label>
-                        {translate('profile_about')}
-                        <input type="text" {...about.props} maxLength="160" autoComplete="off" />
-                    </label>
-                    <div className="error">{about.touched && about.error}</div>
-
-                    <label>
-                        {translate('profile_location')}
-                        <input type="text" {...location.props} maxLength="30" autoComplete="off" />
-                    </label>
-                    <div className="error">{location.touched && location.error}</div>
-
-                    <label>
-                        {translate('profile_website')}
-                        <input type="text" {...website.props} maxLength="100" autoComplete="off" />
-                    </label>
-                    <div className="error">{website.touched && website.error}</div>
-
-                    <br />
-                    {state.loading && <span><LoadingIndicator type="circle" /><br /></span>}
-                    {!state.loading && <p className="text-center"><input type="submit" className="button" value={translate('update')} disabled={disabled} /></p>}
-                    {' '}{
-                            state.errorMessage
-                                ? <small className="error">{state.errorMessage}</small>
-                                : state.successMessage
-                                ? <small className="success uppercase">{state.successMessage}</small>
-                                : null
-                        }
-                </form>
-            </div>
-        </div>
+                </div>
     }
 }
 

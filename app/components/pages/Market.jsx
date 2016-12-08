@@ -584,7 +584,7 @@ module.exports = {
                             )
             const successMessage = translate('order_placed') + ': ' + confirmStr
             const confirm = confirmStr + '?'
-            const warning = priceWarning ? "This price is well " + (isSell ? "below" : "above") + " the current market price of $" + parseFloat(marketPrice).toFixed(4) + "/STEEM, are you sure?" : null;
+            const warning = priceWarning ? translate('price_warning_'+(isSell ? "below" : "above"), {marketPrice: CURRENCY_SIGN + parseFloat(marketPrice).toFixed(4) + "/" + LIQUID_TOKEN_UPPERCASE}) : null;
             const orderid = Math.floor(Date.now() / 1000)
             dispatch(transaction.actions.broadcastOperation({
                 type: 'limit_order_create',

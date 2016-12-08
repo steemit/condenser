@@ -12,7 +12,7 @@ import { DEFAULT_LANGUAGE } from 'config/client_config';
 // this is needed to make i18n future proof
 
 /*
-	module exports two functions: translate and translateHtml
+	module exports bunch of functions: translate, translateHtml and so on
 	usage example:
 	translate('reply_to_user', {username: 'undeadlol1') == 'Reply to undeadlol1'
 	translateHtml works the same, expcept it renders string with html tags in it
@@ -30,11 +30,12 @@ import { en } from './locales/en';
 import { ua as uk } from './locales/ua'; // in react-intl they use 'uk' instead of 'ua'
 const messages = {ru, en, uk}
 
-// exported function placeholders
-// this is needed for proper export before react-intl functions with locale data,
-// will be properly created (they depend on react props and context),
-// which is not available until component is being created
-//
+/*
+	exported function placeholders
+ 	this is needed for proper export before react-intl functions with locale data,
+	will be properly created (they depend on react props and context),
+	which is not available until component is being created
+*/
 /*
 	this placeholder is needed for usage outside of react. In server side code and in static html files.
 	This function is very simple, it does NOT support dynamic values (for example: translate('your_email_is', {email: 'x@y.com'})). Use it carefully
@@ -44,7 +45,7 @@ let translate = string => {
 	if (process.env.BROWSER) language = store.get('language') || DEFAULT_LANGUAGE
 	return messages[language][string]
 };
-let translateHtml = () => {};
+let translateHtml = () => {}; // NOTE: translateHtml() rarely works properly, prefer using translate()
 let translatePlural = () => {};
 let translateNumber = () => {};
 

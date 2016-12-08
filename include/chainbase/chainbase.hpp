@@ -68,8 +68,6 @@ namespace chainbase {
    typedef boost::interprocess::sharable_lock< read_write_mutex > read_lock;
    typedef boost::unique_lock< read_write_mutex > write_lock;
 
-   class database;
-
    /**
     *  Object ID type that includes the type of the object it references
     */
@@ -77,7 +75,6 @@ namespace chainbase {
    class oid {
       public:
          oid( int64_t i = 0 ):_id(i){}
-         const T& operator()( const database& db )const;
 
          oid& operator++() { ++_id; return *this; }
 
@@ -860,10 +857,6 @@ namespace chainbase {
 
          bfs::path                                                   _data_dir;
    };
-
-
-   template<typename T>
-   const T& oid<T>::operator()( const database& db )const { return db.get<T>( _id ); }
 
    template<typename Object, typename... Args>
    using shared_multi_index_container = boost::multi_index_container<Object,Args..., chainbase::allocator<Object> >;

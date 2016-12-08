@@ -259,7 +259,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
                 throw new Error('Missing login challenge token')
             if (Object.keys(challenge).length !== 1)
                 throw new Error('Login challenge object should have only one property')
-            const bufSha = hash.sha256(challenge)
+            const bufSha = hash.sha256(challengeString)
             const sign = (role, d) => {
                 if (!d) return
                 const sig = Signature.signBufferSha256(bufSha, d)

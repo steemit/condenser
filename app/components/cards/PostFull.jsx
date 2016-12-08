@@ -21,7 +21,7 @@ import {Long} from 'bytebuffer'
 import {List} from 'immutable'
 import {repLog10, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import { translate } from 'app/Translator';
-import { APP_NAME, APP_NAME_LATIN, APP_URL } from 'config/client_config';
+import { APP_NAME, APP_NAME_LATIN, APP_URL, APP_ICON } from 'config/client_config';
 import DMCAList from 'app/utils/DMCAList'
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import ShareMenu from 'app/components/elements/ShareMenu';
@@ -219,7 +219,7 @@ class PostFull extends React.Component {
 
         let post_header = <h1 className="entry-title">
                 {content.title}
-                {full_power && <span title="Powered Up 100%"><Icon name="steem" /></span>}
+                {full_power && <span title={translate('powered_up_100')}><Icon name={APP_ICON} /></span>}
             </h1>
         if(content.depth > 0) {
             let parent_link = `/${content.category}/@${content.parent_author}/${content.parent_permlink}`;

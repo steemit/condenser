@@ -19,6 +19,7 @@ import Reputation from 'app/components/elements/Reputation';
 import Author from 'app/components/elements/Author';
 import { translate } from 'app/Translator';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
+import { APP_ICON } from 'config/client_config';
 
 function TimeAuthorCategory({post, links, authorRepLog10, gray}) {
     const author = <strong>{post.author}</strong>;
@@ -112,7 +113,7 @@ class PostSummary extends React.Component {
         let content_title = <h1 className="entry-title">
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>
                 {title_text}
-                {full_power && <span title="Powered Up 100%"><Icon name="steem" /></span>}
+                {full_power && <span title={translate('powered_up_100')}><Icon name={APP_ICON} /></span>}
             </a>
         </h1>;
 

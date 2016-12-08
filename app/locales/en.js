@@ -609,6 +609,7 @@ const en = 	{
   about_is_too_long: 'About is too long',
   location_is_too_long: 'Location is too long',
   website_url_is_too_long: 'Website URL is too long',
+  powered_up_100: 'Powered Up 100%',
 }
 
 export { en }

@@ -626,6 +626,7 @@ const ru = {
     about_is_too_long: 'Текст "о себе" слишком длинный',
     location_is_too_long: 'Место нахождение слишком длинное',
     website_url_is_too_long: 'URL веб-сайта слишком длинный',
+    powered_up_100: 'Выплата на 100% в Сила Голоса',
 }
 
 export { ru }

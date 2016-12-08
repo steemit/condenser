@@ -39,6 +39,7 @@ class AuthorRewards extends React.Component {
 
         /// transfer log
         let rewards24Vests = 0, rewardsWeekVests = 0, totalRewardsVests = 0;
+        let rewards24Steem = 0, rewardsWeekSteem = 0, totalRewardsSteem = 0;
         let rewards24SBD = 0, rewardsWeekSBD = 0, totalRewardsSBD = 0;
         const today = new Date();
         const oneDay = 86400 * 1000;

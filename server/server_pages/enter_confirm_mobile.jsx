@@ -42,6 +42,7 @@ function *confirmMobileHandler() {
         return;
     }
     yield mid.update({verified: true});
+    if (mixpanel) mixpanel.track('SignupStep3', {distinct_id: this.session.uid});
     this.redirect('/create_account');
 }
 export default function useEnterAndConfirmMobilePages(app) {
@@ -59,6 +60,7 @@ export default function useEnterAndConfirmMobilePages(app) {
         );
         if (mid && mid.verified) {
             this.flash = {success: 'Phone number has already been verified'};
+            if (mixpanel) mixpanel.track('SignupStep3', {distinct_id: this.session.uid});
             this.redirect('/create_account');
             return;
         }
@@ -149,6 +151,7 @@ export default function useEnterAndConfirmMobilePages(app) {
             if (mid.verified) {
                 if(mid.phone === phone) {
                     this.flash = {success: 'Phone number has been verified'};
+                    if (mixpanel) mixpanel.track('SignupStep3', {distinct_id: this.session.uid});
                     this.redirect('/create_account');
                     return;
                 }

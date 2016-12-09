@@ -294,9 +294,16 @@ export default class UserProfile extends React.Component {
 
                         <div>
                             <div className="UserProfile__stats">
-                                <span><Link to={`/@${accountname}/followers`}>{translate('follower_count', {followerCount: followerCount || 0})}</Link></span>
-                                <span>{translate('post_count', {postCount: account.post_count || 0})}</span>
-                                <span><Link to={`/@${accountname}/followed`}>{translate('followed_count', {followingCount: followingCount || 0})}</Link></span>
+                                {
+                                    // before react-intl is properly loaded in browser, translated strings can contain errors
+                                    process.env.BROWSER
+                                    ?   <span>
+                                            <span><Link to={`/@${accountname}/followers`}>{translate('follower_count', {followerCount: followerCount || 0})}</Link></span>
+                                            <span>{translate('post_count', {postCount: account.post_count || 0})}</span>
+                                            <span><Link to={`/@${accountname}/followed`}>{translate('followed_count', {followingCount: followingCount || 0})}</Link></span>
+                                        </span>
+                                    : <LoadingIndicator type="circle" inline />
+                                }
                             </div>
                         </div>
                     </div>

@@ -251,14 +251,12 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     const signatures = {}
     try {
         // const challengeString = yield serverApiLoginChallenge()
-        const challengeString = yield select(state => state.offchain.get('login_challenge'))
-        if (challengeString) {
-            const challenge = JSON.parse(challengeString)
-            if (!challenge.token)
-                throw new Error('Missing login challenge token')
-            if (Object.keys(challenge).length !== 1)
-                throw new Error('Login challenge object should have only one property')
-            const bufSha = hash.sha256(challengeString)
+        const offchainData = yield select(state => state.offchain)
+        const serverAccount = offchainData.get('account')
+        const challengeString = offchainData.offchain.get('login_challenge')
+        if (!serverAccount && challengeString) {
+            const challenge = {token: challengeString}
+            const bufSha = hash.sha256(JSON.stringify(challenge, null, 0))
             const sign = (role, d) => {
                 if (!d) return
                 const sig = Signature.signBufferSha256(bufSha, d)

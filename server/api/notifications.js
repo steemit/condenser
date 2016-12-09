@@ -15,8 +15,8 @@ export default function useNotificationsApi(app) {
     router.get('/notifications/:account', function *() {
         const account = this.params.account;
         // TODO: make sure account name matches session
-        console.log('-- GET /notifications/:account -->', account);
-        if (account !== this.session.a) {
+        console.log('-- GET /notifications/:account -->', account, account !== this.session.a ? 'wrong account' : '');
+        if (!account || account !== this.session.a) {
             this.body = []; return;
         }
         try {
@@ -32,8 +32,8 @@ export default function useNotificationsApi(app) {
     // mark account's notification as read
     router.put('/notifications/:account/:ids', function *() {
         const {account, ids} = this.params;
-        console.log('-- PUT /notifications/:account/:id -->', account, ids);
-        if (!ids || account !== this.session.a) {
+        console.log('-- PUT /notifications/:account/:id -->', account, account !== this.session.a ? 'wrong account' : '');
+        if (!ids || !account || account !== this.session.a) {
             this.body = []; return;
         }
         const fields = ids.split('-');

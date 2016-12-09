@@ -205,16 +205,15 @@ export default function useGeneralApi(app) {
             if (db_account) this.session.user = db_account.user_id;
 
             if(signatures) {
-                if(!this.session.auth || !this.session.auth.login_challenge) {
-                    console.error('/login_account missing this.session.auth.login_challenge');
+                if(!this.session.login_challenge) {
+                    console.error('/login_account missing this.session.login_challenge');
                 } else {
                     const [chainAccount] = yield Apis.db_api('get_accounts', [account])
                     if(!chainAccount) {
                         console.error('/login_account missing blockchain account', account);
                     } else {
                         const auth = {username: account, posting: false}
-                        console.log('-- this.session.auth.login_challenge -->', this.session.auth.login_challenge);
-                        const bufSha = hash.sha256(this.session.auth.login_challenge)
+                        const bufSha = hash.sha256(JSON.stringify({token: this.session.login_challenge}, null, 0))
                         const verify = (type, sigHex, pubkey, weight, weight_threshold) => {
                             if(!sigHex) return
                             if(weight !== 1 || weight_threshold !== 1) {
@@ -231,11 +230,6 @@ export default function useGeneralApi(app) {
                         }
                         const {posting: {key_auths: [[posting_pubkey, weight]], weight_threshold}} = chainAccount
                         verify('posting', signatures.posting, posting_pubkey, weight, weight_threshold)
-                        // {
-                        //     const {active: {key_auths: [[active_pubkey, weight]], weight_threshold}} = chainAccount
-                        //     verify('active', signatures.active, active_pubkey, weight, weight_threshold)
-                        // }
-                        this.session.auth = auth
                         if (auth['posting']) this.session.a = account;
                     }
                 }
@@ -263,7 +257,6 @@ export default function useGeneralApi(app) {
         console.log('-- /logout_account -->', this.session.uid);
         try {
             this.session.a = null;
-            this.session.auth = null;
             this.body = JSON.stringify({status: 'ok'});
         } catch (error) {
             console.error('Error in /logout_account api call', this.session.uid, error);

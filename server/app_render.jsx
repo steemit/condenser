@@ -10,12 +10,10 @@ const DB_RECONNECT_TIMEOUT = process.env.NODE_ENV === 'development' ? 1000 * 60 
 async function appRender(ctx) {
     const store = {};
     try {
-        let login_challenge = null;
-        if (!ctx.session.a) {
-            login_challenge = JSON.stringify({
-                token: secureRandom.randomBuffer(16).toString('hex'),
-            }, null, 0)
-            ctx.session.auth = {login_challenge}
+        let login_challenge = ctx.session.login_challenge;
+        if (!login_challenge) {
+            login_challenge = secureRandom.randomBuffer(16).toString('hex');
+            ctx.session.login_challenge = login_challenge;
         }
         const offchain = {
             csrf: ctx.csrf,

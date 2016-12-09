@@ -212,7 +212,7 @@ export default function useGeneralApi(app) {
                     if(!chainAccount) {
                         console.error('/login_account missing blockchain account', account);
                     } else {
-                        const auth = {username: account, posting: false}
+                        const auth = {posting: false}
                         const bufSha = hash.sha256(JSON.stringify({token: this.session.login_challenge}, null, 0))
                         const verify = (type, sigHex, pubkey, weight, weight_threshold) => {
                             if(!sigHex) return
@@ -230,7 +230,7 @@ export default function useGeneralApi(app) {
                         }
                         const {posting: {key_auths: [[posting_pubkey, weight]], weight_threshold}} = chainAccount
                         verify('posting', signatures.posting, posting_pubkey, weight, weight_threshold)
-                        if (auth['posting']) this.session.a = account;
+                        if (auth.posting) this.session.a = account;
                     }
                 }
             }

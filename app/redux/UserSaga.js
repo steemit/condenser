@@ -253,7 +253,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         // const challengeString = yield serverApiLoginChallenge()
         const offchainData = yield select(state => state.offchain)
         const serverAccount = offchainData.get('account')
-        const challengeString = offchainData.offchain.get('login_challenge')
+        const challengeString = offchainData.get('login_challenge')
         if (!serverAccount && challengeString) {
             const challenge = {token: challengeString}
             const bufSha = hash.sha256(JSON.stringify(challenge, null, 0))

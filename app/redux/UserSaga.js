@@ -248,13 +248,13 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     if (!autopost && saveLogin)
         yield put(user.actions.saveLogin());
 
-    const signatures = {}
     try {
         // const challengeString = yield serverApiLoginChallenge()
         const offchainData = yield select(state => state.offchain)
         const serverAccount = offchainData.get('account')
         const challengeString = offchainData.get('login_challenge')
         if (!serverAccount && challengeString) {
+            const signatures = {}
             const challenge = {token: challengeString}
             const bufSha = hash.sha256(JSON.stringify(challenge, null, 0))
             const sign = (role, d) => {

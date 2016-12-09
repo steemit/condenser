@@ -10,7 +10,10 @@ import {checkCSRF, getRemoteIp} from '../utils';
 import config from '../../config';
 import SignupProgressBar from 'app/components/elements/SignupProgressBar';
 import MiniHeader from 'app/components/modules/MiniHeader';
-import secureRandom from 'secure-random'
+import secureRandom from 'secure-random';
+import Mixpanel from 'mixpanel';
+
+const mixpanel = config.mixpanel ? Mixpanel.init(config.mixpanel) : null;
 
 const assets_file = process.env.NODE_ENV === 'production' ? 'tmp/webpack-stats-prod.json' : 'tmp/webpack-stats-dev.json';
 const assets = Object.assign({}, require(assets_file), {script: []});
@@ -95,6 +98,7 @@ export default function useEnterAndConfirmEmailPages(app) {
         </div>);
         const props = {body, title: 'Email Address', assets, meta: []};
         this.body = '<!DOCTYPE html>' + renderToString(<ServerHTML { ...props } />);
+        if (mixpanel) mixpanel.track('SignupStep1', {distinct_id: this.session.uid});
     });
 
     router.post('/submit_email', koaBody, function *() {

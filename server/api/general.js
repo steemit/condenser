@@ -7,11 +7,12 @@ import recordWebEvent from 'server/record_web_event';
 import {esc, escAttrs} from 'db/models';
 import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF} from 'server/utils';
 import coBody from 'co-body';
+import secureRandom from 'secure-random'
+import {PublicKey, Signature, hash} from 'shared/ecc'
 import Mixpanel from 'mixpanel';
 import Tarantool from 'db/tarantool';
 
 const mixpanel = config.mixpanel ? Mixpanel.init(config.mixpanel) : null;
-
 
 export default function useGeneralApi(app) {
     const router = koa_router({prefix: '/api/v1'});
@@ -194,20 +195,51 @@ export default function useGeneralApi(app) {
     router.post('/login_account', koaBody, function *() {
         if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;
-        const {csrf, account} = typeof(params) === 'string' ? JSON.parse(params) : params;
+        const {csrf, account, signatures} = typeof(params) === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
         console.log('-- /login_account -->', this.session.uid, account);
         try {
-            this.session.a = account;
             const db_account = yield models.Account.findOne(
                 {attributes: ['user_id'], where: {name: esc(account)}, logging: false}
             );
             if (db_account) this.session.user = db_account.user_id;
+
+            if(signatures) {
+                if(!this.session.login_challenge) {
+                    console.error('/login_account missing this.session.login_challenge');
+                } else {
+                    const [chainAccount] = yield Apis.db_api('get_accounts', [account])
+                    if(!chainAccount) {
+                        console.error('/login_account missing blockchain account', account);
+                    } else {
+                        const auth = {posting: false}
+                        const bufSha = hash.sha256(JSON.stringify({token: this.session.login_challenge}, null, 0))
+                        const verify = (type, sigHex, pubkey, weight, weight_threshold) => {
+                            if(!sigHex) return
+                            if(weight !== 1 || weight_threshold !== 1) {
+                                console.error(`/login_account login_challenge unsupported ${type} auth configuration: ${account}`);
+                            } else {
+                                const sig = parseSig(sigHex)
+                                const public_key = PublicKey.fromString(pubkey)
+                                const verified = sig.verifyHash(bufSha, public_key)
+                                if (!verified) {
+                                    console.error('/login_account verification failed', this.session.uid, account, pubkey)
+                                }
+                                auth[type] = verified
+                            }
+                        }
+                        const {posting: {key_auths: [[posting_pubkey, weight]], weight_threshold}} = chainAccount
+                        verify('posting', signatures.posting, posting_pubkey, weight, weight_threshold)
+                        if (auth.posting) this.session.a = account;
+                    }
+                }
+            }
+
             this.body = JSON.stringify({status: 'ok'});
             const remote_ip = getRemoteIp(this.req);
             if (mixpanel) {
                 mixpanel.people.set(this.session.uid, {ip: remote_ip, $ip: remote_ip});
-                mixpanel.people.increment(this.session.uid, 'Visits', 1);
+                mixpanel.people.increment(this.session.uid, 'Logins', 1);
             }
         } catch (error) {
             console.error('Error in /login_account api call', this.session.uid, error.message);
@@ -348,3 +380,5 @@ function* createAccount({
         Apis.broadcastTransaction(sx, () => {resolve()}).catch(e => {reject(e)})
     )
 }
+
+const parseSig = hexSig => {try {return Signature.fromHex(hexSig)} catch(e) {return null}}

@@ -1,12 +1,13 @@
 import Immutable from 'immutable';
-import createModule from 'redux-modules';
 import {PropTypes} from 'react';
 
-const {string, object, shape, oneOf} = PropTypes;
 const defaultState = Immutable.fromJS({user: {}});
 
-export default createModule({
-    name: 'offchain',
-    initialState: defaultState,
-    transformations: []
-});
+export default function reducer(state = defaultState, action) {
+    if (action.type === 'user/SAVE_LOGIN_CONFIRM') {
+        if (!action.payload) {
+            state = state.set('account', null);
+        }
+    }
+    return state;
+}

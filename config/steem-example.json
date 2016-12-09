@@ -31,6 +31,7 @@
       ]
     }
   },
+  "server_session_secret": "",
   "helmet": {},
   "registrar": {
     "account": "-",

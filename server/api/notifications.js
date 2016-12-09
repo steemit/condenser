@@ -14,8 +14,11 @@ export default function useNotificationsApi(app) {
     // get all notifications for account
     router.get('/notifications/:account', function *() {
         const account = this.params.account;
-        // TODO: make sure account name matches session
-        console.log('-- GET /notifications/:account -->', account);
+        console.log('-- GET /notifications/:account -->', account, status(this, account));
+
+        if (!account || account !== this.session.a) {
+            this.body = []; return;
+        }
         try {
             const res = yield Tarantool.instance().select('notifications', 0, 1, 0, 'eq', account);
             this.body = toResArray(res);
@@ -29,10 +32,11 @@ export default function useNotificationsApi(app) {
     // mark account's notification as read
     router.put('/notifications/:account/:ids', function *() {
         const {account, ids} = this.params;
-        if (!ids) {
+        console.log('-- PUT /notifications/:account/:id -->', account, status(this, account));
+
+        if (!ids || !account || account !== this.session.a) {
             this.body = []; return;
         }
-        console.log('-- PUT /notifications/:account/:id -->', account, ids);
         const fields = ids.split('-');
         try {
             let res;
@@ -47,3 +51,8 @@ export default function useNotificationsApi(app) {
         return;
     });
 }
+
+const status = (ctx, account) =>
+    ctx.session.a == null ? 'not logged in' :
+    account !== ctx.session.a ? 'wrong account' + ctx.session.a :
+    ''

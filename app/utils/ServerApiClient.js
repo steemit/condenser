@@ -10,9 +10,9 @@ const request_base = {
     }
 };
 
-export function serverApiLogin(account) {
+export function serverApiLogin(account, signatures) {
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;
-    const request = Object.assign({}, request_base, {body: JSON.stringify({csrf: $STM_csrf, account})});
+    const request = Object.assign({}, request_base, {body: JSON.stringify({account, signatures, csrf: $STM_csrf})});
     fetch('/api/v1/login_account', request);
 }
 
@@ -69,3 +69,4 @@ if (process.env.BROWSER) {
     window.getNotifications = getNotifications;
     window.markNotificationRead = markNotificationRead;
 }
+

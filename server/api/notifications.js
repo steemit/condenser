@@ -14,10 +14,9 @@ export default function useNotificationsApi(app) {
     // get all notifications for account
     router.get('/notifications/:account', function *() {
         const account = this.params.account;
-        // TODO: make sure account name matches session
-        console.log('-- GET /notifications/:account -->', account, account !== this.session.a ? 'wrong account' : '');
+        console.log('-- GET /notifications/:account -->', account, status(this, account));
+
         if (!account || account !== this.session.a) {
-            console.log('-- /notifications/:account', this.session.a ? 'wrong account: ' + this.session.a : 'not logged in');
             this.body = []; return;
         }
         try {
@@ -33,7 +32,8 @@ export default function useNotificationsApi(app) {
     // mark account's notification as read
     router.put('/notifications/:account/:ids', function *() {
         const {account, ids} = this.params;
-        console.log('-- PUT /notifications/:account/:id -->', account, account !== this.session.a ? 'wrong account' : '');
+        console.log('-- PUT /notifications/:account/:id -->', account, status(this, account));
+
         if (!ids || !account || account !== this.session.a) {
             this.body = []; return;
         }
@@ -51,3 +51,8 @@ export default function useNotificationsApi(app) {
         return;
     });
 }
+
+const status = (ctx, account) =>
+    ctx.session.a == null ? 'not logged in' :
+    account !== ctx.session.a ? 'wrong account' + ctx.session.a :
+    ''

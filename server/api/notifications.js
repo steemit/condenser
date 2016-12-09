@@ -17,6 +17,7 @@ export default function useNotificationsApi(app) {
         // TODO: make sure account name matches session
         console.log('-- GET /notifications/:account -->', account, account !== this.session.a ? 'wrong account' : '');
         if (!account || account !== this.session.a) {
+            console.log('-- /notifications/:account', this.session.a ? 'wrong account: ' + this.session.a : 'not logged in');
             this.body = []; return;
         }
         try {

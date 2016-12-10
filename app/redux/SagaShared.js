@@ -3,7 +3,7 @@ import {call, put, select} from 'redux-saga/effects';
 import Apis from 'shared/api_client/ApiInstances';
 import g from 'app/redux/GlobalReducer'
 import {takeEvery} from 'redux-saga';
-import { translate } from '../Translator.js';
+import { translate } from 'app/Translator';
 
 const wait = ms => (
     new Promise(resolve => {

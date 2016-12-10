@@ -17,10 +17,11 @@
     @media screen and (min-width: 64.063em) {
         margin-top: 3.5rem;
     }
+
 }
 
-.mini-header .App__content {
-  margin-top: 0;
+#reformal_tab {
+z-index: 101 !important
 }
 
 .welcomeWrapper {
@@ -101,4 +102,15 @@
 
 .App__announcement {
   padding-right: 40px;
+}
+
+.hidden {
+  display: none;
+}
+
+/* live chat specific styles */
+@media #{$medium-only} {
+  .rocketchat-widget {
+    right: 0;
+  }
 }

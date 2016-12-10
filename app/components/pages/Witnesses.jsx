@@ -1,12 +1,12 @@
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import { Link } from 'react-router';
-import links from 'app/utils/Links'
 import Icon from 'app/components/elements/Icon';
 import transaction from 'app/redux/Transaction'
 import ByteBuffer from 'bytebuffer'
 import {Set, is} from 'immutable'
 import { translate } from 'app/Translator';
+import links from 'app/utils/Links'
 
 const Long = ByteBuffer.Long
 const {string, func, object} = PropTypes

@@ -1,19 +1,21 @@
 import React from 'react';
+import { translate } from 'app/Translator';
+import { LANDING_PAGE_URL, WHITEPAPER_URL } from 'config/client_config';
 
 class About extends React.Component {
     render() {
         return (
             <div className="row">
                 <div className="column">
-                    <div className="float-right"><a href="#" onClick={e => {e.preventDefault(); alert(process.env.VERSION)}}>Version</a></div>
-                    <h2>About Steemit</h2>
+                    <div className="float-right"><a href="#" onClick={e => {e.preventDefault(); alert(process.env.VERSION)}}>{translate('version')}</a></div>
+                <h2>{translate('about_APP_NAME')}</h2>
                     <p>
-                        Steemit is a social media platform where everyone gets paid for creating and curating content. It leverages a robust digital points system, called Steem, that supports real value for digital rewards through market price discovery and liquidity.
-                        <a href="https://steem.io/">Learn more at steem.io</a>.
+                        {translate('APP_NAME_is_a_social_media_platform_where_everyone_gets_paid')}
+                        <a href={LANDING_PAGE_URL}>{translate('learn_more_at_LANDING_PAGE_URL')}</a>.
                     </p>
-                    <h2>Resources</h2>
-                    <h3><a href="https://steem.io/SteemWhitePaper.pdf" onClick={this.navigate}>Steem Whitepaper</a> <small>[PDF]</small></h3>
-                    <h3><a href="http://steem.herokuapp.com" target="_blank">Join our Slack</a></h3>
+                    <h2>{translate('resources')}</h2>
+                <h3><a href={WHITEPAPER_URL} onClick={this.navigate}>{translate('APP_NAME_whitepaper')}</a> <small>[PDF]</small></h3>
+            <h3><a href="http://steem.herokuapp.com" target="_blank">{translate('join_our_slack')}</a></h3>
                 </div>
             </div>
         );

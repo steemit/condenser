@@ -64,7 +64,7 @@ const es = 	{
 	password_update_succes: 'The password for {accountName} was successfully updated',
 	password_is_bound_to_account: "This password is bound to your account\'s owner key and can not be used to login to this site. \nHowever, you can use it to {changePasswordLink} to obtain a more secure set of keys.",
 	update_your_password: 'actualiza tu contraseña',
-	enter_username: 'Ingresa tu nombre de usuario',
+	enter_your_username: 'Ingresa tu nombre de usuario',
 	password_or_wif: 'Contraseña o WIF',
 	requires_auth_key: 'This operation requires your {authType} key (or use your master password)',
 	keep_me_logged_in: 'Mantenme firmado',

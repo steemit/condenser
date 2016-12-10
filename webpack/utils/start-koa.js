@@ -1,5 +1,6 @@
 import cp from 'child_process';
 import path from 'path';
+import browserSync from 'browser-sync';
 import watch from 'node-watch';
 
 let server;
@@ -30,6 +31,14 @@ const startServer = () => {
             if (!started) {
                 started = true;
 
+                // Start browserSync
+                //browserSync({
+                //    port: parseInt(process.env.PORT, 10) + 2 || 3002,
+                //    proxy: `0.0.0.0:${parseInt(process.env.PORT, 10) || 3000}`,
+                //    open: false,
+                //    ui: false
+                //});
+
                 // Listen for `rs` in stdin to restart server
                 console.log('type `rs` in console for restarting koa application');
                 process.stdin.setEncoding('utf8');
@@ -39,9 +48,7 @@ const startServer = () => {
                 });
 
                 // Start watcher on server files and restart server on change
-                const server_path = path.join(__dirname, '../../server');
-                // const app_path = path.join(__dirname, '../../app');
-                watch([server_path], () => restartServer());
+                watch(path.join(__dirname, '../../server'), () => restartServer());
             }
         }
     });

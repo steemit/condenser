@@ -31,6 +31,7 @@ module.exports = function (sequelize, DataTypes) {
                         allowNull: false
                     }
                 });
+                //Account.hasMany(models.AccountMeta);
             }
         }
     });

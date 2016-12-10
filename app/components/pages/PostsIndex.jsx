@@ -6,6 +6,7 @@ import constants from 'app/redux/constants';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import PostsList from 'app/components/cards/PostsList';
 import {isFetchingOrRecentlyUpdated} from 'app/utils/StateFunctions';
+import g from 'app/redux/GlobalReducer';
 import {Link} from 'react-router';
 import MarkNotificationRead from 'app/components/elements/MarkNotificationRead';
 import { translate } from 'app/Translator';
@@ -20,8 +21,7 @@ class PostsIndex extends React.Component {
         status: PropTypes.object,
         routeParams: PropTypes.object,
         requestData: PropTypes.func,
-        loading: PropTypes.bool,
-        current_user: PropTypes.object
+        loading: PropTypes.bool
     };
 
     static defaultProps = {
@@ -76,10 +76,10 @@ class PostsIndex extends React.Component {
             const isMyAccount = this.props.current_user && this.props.current_user.get('username') === account_name;
             if (isMyAccount) {
                 emptyText = <div>
-                    Looks like you haven't followed anything yet.<br /><br />
-                    <Link to="/trending">Explore Steemit</Link><br />
-                    <a href="/steemit/@thecryptofiend/the-missing-faq-a-beginners-guide-to-using-steemit">Read The Beginner's Guide</a><br />
-                    <a href="/welcome">Read The Steemit Welcome Guide</a>
+                    {translate('looks_like_you_havent_followed_anything_yet')}.<br /><br />
+                    <Link to="/trending">{translate('explore_APP_NAME')}</Link><br />
+                    <a href="/steemit/@thecryptofiend/the-missing-faq-a-beginners-guide-to-using-steemit">{translate('read_the_beginners_guide')}</a><br />
+                    <a href="/welcome">{translate('read_the_APP_NAME_welcome_guide')}</a>
                 </div>;
                 markNotificationRead = <MarkNotificationRead fields="feed" account={account_name} />
             } else {
@@ -88,7 +88,7 @@ class PostsIndex extends React.Component {
         } else {
             posts = this.getPosts(order, category);
             if (posts && posts.size === 0) {
-                emptyText = <div>{`No ` + topics_order + (category ? ` #` + category : '') +  ` posts found`}</div>;
+                emptyText = translate('no_topics_order_category_posts_found', {topics_order, category: (category ? ` #` + category : '')});
             }
         }
 

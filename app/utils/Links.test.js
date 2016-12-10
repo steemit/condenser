@@ -1,4 +1,4 @@
-
+import { APP_URL } from 'config/client_config';
 import assert from 'assert'
 import secureRandom from 'secure-random'
 import links, * as linksRe from 'app/utils/Links'
@@ -13,10 +13,6 @@ describe('Links', () => {
         match(linksRe.any(), 'https://example.com\n', 'https://example.com')
         match(linksRe.any(), ' https://example.com ', 'https://example.com')
         match(linksRe.any(), 'https://example.com ', 'https://example.com')
-        match(linksRe.any(), 'https://example.com.', 'https://example.com')
-        match(linksRe.any(), 'https://example.com/page.', 'https://example.com/page')
-        match(linksRe.any(), 'https://example.com,', 'https://example.com')
-        match(linksRe.any(), 'https://example.com/page,', 'https://example.com/page')
     })
     it('multiple matches', () => {
         const all = linksRe.any('ig')
@@ -26,7 +22,7 @@ describe('Links', () => {
         assert.equal(match[0], 'https://example.com/2')
     })
     it('by domain', () => {
-        const locals = ['https://localhost/', 'http://steemit.com', 'http://steemit.com/group']
+        const locals = ['https://localhost/', 'http://' + APP_URL, 'http://' + APP_URL + '/group']
         match(linksRe.local(), locals)
         matchNot(linksRe.remote(), locals)
 

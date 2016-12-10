@@ -1,9 +1,8 @@
 import models from '../db/models';
 import sendEmail from '../server/sendEmail';
-import secureRandom from 'secure-random'
 
 function inviteUser(u, email, number) {
-    const confirmation_code = secureRandom.randomBuffer(13).toString('hex');
+    const confirmation_code = Math.random().toString(36).slice(2);
     console.log(`\n***** invite #${number} ***** `, u.id, email, confirmation_code);
     const i_attrs = {
         provider: 'email',
@@ -19,7 +18,7 @@ function inviteUser(u, email, number) {
 
 models.User.findAll({
     attributes: ['id', 'email'],
-    where: {waiting_list: true, email: {$ne: null}, id: {$gt: 0}},
+    where: {waiting_list: true,  email: {$ne: null}, id: {$gt: 0}},
     order: 'id',
     limit: 1000
 }).then(users => {

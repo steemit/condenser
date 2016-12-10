@@ -12,10 +12,12 @@ import RootRoute from 'app/RootRoute';
 import ErrorPage from 'server/server-error';
 import {createStore, applyMiddleware, compose} from 'redux';
 import { browserHistory } from 'react-router';
+//import useScroll from 'scroll-behavior/lib/useStandardScroll';
 import useScroll from 'react-router-scroll';
 import createSagaMiddleware from 'redux-saga';
 import { syncHistoryWithStore } from 'react-router-redux';
 import rootReducer from 'app/redux/RootReducer';
+// import DevTools from 'app/redux/DevTools';
 import {fetchDataWatches} from 'app/redux/FetchDataSaga';
 import {marketWatches} from 'app/redux/MarketSaga';
 import {sharedWatches} from 'app/redux/SagaShared';
@@ -27,6 +29,7 @@ import {component as NotFound} from 'app/components/pages/NotFound';
 import extractMeta from 'app/utils/ExtractMeta';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import Translator from 'app/Translator';
+import { APP_NAME } from 'config/client_config';
 import Tarantool from 'db/tarantool';
 import {notificationsArrayToMap} from 'app/utils/Notifications';
 import {routeRegex} from "app/ResolveRoute";
@@ -45,6 +48,7 @@ let middleware;
 if (process.env.BROWSER && process.env.NODE_ENV === 'development') {
     middleware = compose(
         applyMiddleware(sagaMiddleware)
+        // DevTools.instrument()
     );
 } else {
     middleware = applyMiddleware(sagaMiddleware);
@@ -66,7 +70,7 @@ async function universalRender({ location, initial_state, offchain }) {
     } catch (e) {
         console.error('Router error:', e.toString(), location);
         return {
-            title: 'Server error (500) - Steemit',
+            title: 'Server error (500) - ' + APP_NAME,
             statusCode: 500,
             body: renderToString(<ErrorPage />)
         };
@@ -74,7 +78,7 @@ async function universalRender({ location, initial_state, offchain }) {
     if (error || !renderProps) {
         // debug('error')('Router error', error);
         return {
-            title: 'Page Not Found (404) - Steemit',
+            title: 'Page Not Found (404) - ' + APP_NAME,
             statusCode: 404,
             body: renderToString(<NotFound />)
         };
@@ -120,15 +124,15 @@ async function universalRender({ location, initial_state, offchain }) {
             console.log('%c%s','color: black; font-size: 16px;', 'This is a developer console, you must read and understand anything you paste or type here or you could compromise your account and your private keys.');
         }
         return render(
-            <Provider store={store}>
+                <Provider store={store}>
                     <Translator>
-                <Router
-                    routes={RootRoute}
-                    history={history}
-                    onError={onRouterError}
-                    render={applyRouterMiddleware(scroll)} />
+                        <Router
+                            routes={RootRoute}
+                            history={history}
+                            onError={onRouterError}
+                            render={applyRouterMiddleware(scroll)} />
                     </Translator>
-            </Provider>,
+                </Provider>,
             document.getElementById('content')
         );
     }
@@ -158,8 +162,9 @@ async function universalRender({ location, initial_state, offchain }) {
         const sd = fee * feed,
               sdInt = parseInt(sd),
               sdDec = (sd - sdInt),
-              sdDisp = '$' + sdInt + (sdInt < 5 && sdDec >= 0.5 ? '.50' : '');
-
+              // TODO check where this variable is used and find if something is breaking
+              // sdDisp = '$' + sdInt + (sdInt < 5 && sdDec >= 0.5 ? '.50' : '');
+              sdDisp = sdInt + (sdInt < 5 && sdDec >= 0.5 ? '.50' : '');
         offchain.signup_bonus = sdDisp;
         offchain.server_location = location;
         server_store = createStore(rootReducer, { global: onchain, offchain});
@@ -177,7 +182,7 @@ async function universalRender({ location, initial_state, offchain }) {
         const stack_trace = e.stack || '[no stack]';
         console.error('State/store error: ', msg, stack_trace);
         return {
-            title: 'Server error (500) - Steemit',
+            title: 'Server error (500) - ' + APP_NAME,
             statusCode: 500,
             body: renderToString(<ErrorPage />)
         };
@@ -188,7 +193,7 @@ async function universalRender({ location, initial_state, offchain }) {
         app = renderToString(
             <Provider store={server_store}>
                 <Translator>
-                <RouterContext { ...renderProps } />
+                    <RouterContext { ...renderProps } />
                 </Translator>
             </Provider>
         );
@@ -201,8 +206,8 @@ async function universalRender({ location, initial_state, offchain }) {
     }
 
     return {
-        title: 'Steemit',
-        titleBase: 'Steemit - ',
+        title: APP_NAME,
+        titleBase: APP_NAME + ' - ',
         meta,
         statusCode: status,
         body: Iso.render(app, server_store.getState())

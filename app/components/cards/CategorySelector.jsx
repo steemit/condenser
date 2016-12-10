@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
-import { translate } from '../../Translator.js';
+import { translate } from 'app/Translator';
 
 class CategorySelector extends React.Component {
     static propTypes = {
@@ -81,10 +81,11 @@ export function validateCategory(category, required = true) {
         cats.find(c => c.length > 24)           ? translate('maximum_tag_length_is_24_characters') :
         cats.find(c => c.split('-').length > 2) ? translate('use_one_dash') :
         cats.find(c => c.indexOf(',') >= 0)     ? translate('use_spaces_to_separate_tags') :
-        cats.find(c => /[A-Z]/.test(c))      ? translate('use_only_lowercase_letters') :
-        cats.find(c => !/^[a-z0-9-#]+$/.test(c)) ? translate('use_only_allowed_characters') :
-        cats.find(c => !/^[a-z-#]/.test(c)) ? translate('must_start_with_a_letter') :
-        cats.find(c => !/[a-z0-9]$/.test(c)) ? translate('must_end_with_a_letter_or_number') :
+        cats.find(c => /[A-ZА-ЯЁ]/.test(c))      ? translate('use_only_lowercase_letters') :
+        // check for russian or english symbols
+        cats.find(c => !/^[a-zа-яё0-9-]+$/.test(c)) ? translate('use_only_allowed_characters') :
+        cats.find(c => !/^[a-zа-яё-]/.test(c)) ? translate('must_start_with_a_letter') :
+        cats.find(c => !/[a-zа-яё0-9]$/.test(c)) ? translate('must_end_with_a_letter_or_number') :
         null
     )
 }

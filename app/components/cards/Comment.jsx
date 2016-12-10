@@ -244,7 +244,7 @@ class CommentImpl extends React.Component {
         // const steem_supply = this.props.global.getIn(['props','current_supply']);
 
         const showDeleteOption = username === author && !hasReplies && netVoteSign <= 0
-        const showEditOption = username === author
+        const showEditOption = username === author && comment.mode == 'first_payout'
         const readonly = comment.mode == 'archived' || $STM_Config.read_only_mode
 
         let replies = null;
@@ -254,7 +254,7 @@ class CommentImpl extends React.Component {
         if (!this.state.collapsed && !hide_body) {
             body = (<MarkdownViewer formId={post + '-viewer'} text={comment.body}
                 noImage={noImage || !pictures} jsonMetadata={jsonMetadata} />);
-            controls = <div>
+            controls = (<div>
                 <Voting post={post} />
                 {!readonly &&
                     <span className="Comment__footer__controls">
@@ -262,7 +262,7 @@ class CommentImpl extends React.Component {
                         {' '}{showEditOption   && <a onClick={onShowEdit}>{translate('edit')}</a>}
                         {' '}{showDeleteOption && <a onClick={onDeletePost}>{translate('delete')}</a>}
                     </span>}
-            </div>;
+            </div>);
         }
 
         if(!this.state.collapsed) {
@@ -312,7 +312,7 @@ class CommentImpl extends React.Component {
         return (
             <div className={commentClasses.join(' ')} id={anchor_link} itemScope itemType ="http://schema.org/comment">
                 <div className="Comment__Userpic show-for-medium">
-                    <Userpic account={comment.author} />
+                    <Userpic account={comment.author||''} />
                 </div>
                 <div className={innerCommentClass}>
                     <div className="Comment__header">
@@ -328,7 +328,7 @@ class CommentImpl extends React.Component {
                         </span>
                         &nbsp; &middot; &nbsp;
                         <Link to={comment_link} className="PlainLink">
-                            <TimeAgoWrapper date={comment.created} className="updated" />
+                            <TimeAgoWrapper date={comment.created} />
                         </Link>
                         { (this.state.collapsed || hide_body) &&
                           <Voting post={post} showList={false} /> }

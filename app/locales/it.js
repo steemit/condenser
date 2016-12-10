@@ -64,7 +64,7 @@ const it = 	{
 	password_update_succes: 'La password dell\'account {accountName} è stata aggiornata',
 	password_is_bound_to_account: "Questa password è legata alla chiave proprietaria del tuo account e non può essere usata per effettuare il login a questo sito. \nPerò, puoi utilizzarla per {changePasswordLink} ottenere un set più sicuro di chiavi.",
 	update_your_password: 'Aggiorna password',
-	enter_username: 'Inserisci username',
+	enter_your_username: 'Inserisci username',
 	password_or_wif: 'Password o WIF',
 	requires_auth_key: 'Questa operazione necessita l\'uso della chiave {authType} (o l\'utilizzo della tua master password)',
 	keep_me_logged_in: 'Mantieni l\'accesso',

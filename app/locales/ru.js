@@ -1,5 +1,5 @@
 
-import { APP_NAME, APP_URL, LANDING_PAGE_URL, LIQUID_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, VESTING_TOKEN, LIQUID_TICKER } from 'config/client_config';
+import { APP_NAME, APP_URL, LANDING_PAGE_URL, LIQUID_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, VESTING_TOKEN, LIQUID_TICKER, SUPPORT_EMAIL, LIQUID_TOKEN_UPPERCASE } from 'config/client_config';
 /**
  * see: app/locales/README.md
  */
@@ -11,14 +11,14 @@ const ru = {
 	buy_LIQUID_TOKEN: 'Купить ' + LIQUID_TOKEN,
 	sell_LIQUID_TOKEN: 'Продать ' + LIQUID_TOKEN,
 	market: "Биржа",
-	currency_market: "валютный рынок",
+	currency_market: "Валютный рынок",
 	stolen_account_recovery: "Возврат украденного аккаунта",
 	change_account_password: "Изменить пароль аккаунта",
 	steemit_chat: "Steemit чат",
 	steemit_api_docs: "Steemit API Docs",
 	APP_NAME_chat: APP_NAME + " чат",
 	witnesses: "Делегаты",
-	vote_for_witnesses: "Проголосовать за свидетелей",
+	vote_for_witnesses: "Проголосовать за делегатов",
 	privacy_policy: "Политика Конфиденциальности",
 	terms_of_service: "Условия пользования",
 	sign_up: "Регистрация",
@@ -63,11 +63,11 @@ const ru = {
 	terms_and_conditions: 'Условия и Соглашения',
 	// this is from top-right dropdown menu
 	hot: 'Актуальное',
-	trending: 'Популярное',
+	trending: 'Лучшее', // до первых выплат изменено с "популярного"
 	payout_time: 'время выплаты',
 	active: 'Обсуждаемое',
 	responses: 'ответы',
-	popular: 'популярное',
+	popular: 'лучшее', // до первых выплат изменено с "популярного"
 	/* end dropdown menu */
 	loading: 'Загрузка',
 	cryptography_test_failed: 'Криптографический тест провален',
@@ -85,7 +85,7 @@ const ru = {
 	however_you_can_use_it_to: "Тем не менее его можно использовать чтобы",
 	to_obtaion_a_more_secure_set_of_keys: "для получения более безопасного набора ключей",
 	update_your_password: 'обновить твой пароль',
-	enter_username: 'Введи свое имя пользователя',
+	enter_your_username: 'Введи свое имя пользователя',
 	password_or_wif: 'Пароль или WIF',
 	requires_auth_key: 'Эта операция требует вашего {authType} ключа (или используйте главный пароль)',
 	keep_me_logged_in: 'Оставлять меня залогиненным',
@@ -99,6 +99,7 @@ const ru = {
 	cancel: 'Отмена',
 	clear: 'Очистить',
 	save: 'Сохранить',
+    update: 'Обновить',
 	upvote_post: 'Проголосовать за пост',
 	update_post: 'Обновить пост',
 	markdown_is_supported: 'Поддерживается стилизация с Markdown',
@@ -253,7 +254,7 @@ const ru = {
 	account_name_is_not_found: 'Имя аккаунта не найдено',
 	unable_to_recover_account_not_change_ownership_recently: 'У нас не получилось восстановить этот аккаунт, он не менял владельца в недавнее время.',
 	password_not_used_in_last_days: 'Этот пароль не использовался в этом аккаунте за последние 30 дней.',
-	request_already_submitted_contact_support: 'Ваш запрос был отправлен, и мы работаем над этим. Пожалуйста, свяжитесь с t@cyber.fund для получения статуса вашего запроса.',
+	request_already_submitted_contact_support: 'Ваш запрос был отправлен, и мы работаем над этим. Пожалуйста, свяжитесь с ' + SUPPORT_EMAIL + ' для получения статуса вашего запроса.',
 	recover_account_intro: "Иногда бывает что  ключ владельца может быть скомпрометирован. Восстановление украденного аккаунта дает законному владельцу 30 дней чтобы вернуть аккаунт с момента изменения владельческого ключа мошенником. Восстановление украденного аккаунта в " + APP_URL + " возможно только если владелец аккаунта ранее указал '" + APP_NAME + "' в качестве доверенного лица и согласился с Условиями Использования сайта  " + APP_NAME + ".",
 	login_with_facebook_or_reddit_media_to_verify_identity: 'Пожалуйста, войдите используя Facebook или Reddit чтобы подтвердить вашу личность',
 	login_with_social_media_to_verify_identity: 'Пожалуйста, зайдите с помощью {show_social_login} чтобы подтвердить вашу личность',
@@ -276,10 +277,10 @@ const ru = {
 	change_password: 'Сменить пароль',
 	// UserProfile
 	unknown_account: 'Неизвестный аккаунт',
-	user_hasnt_made_any_posts_yet: "Похоже что {name} еще не написал постов!",
-	user_hasnt_started_bloggin_yet: "Похоже что {name} еще не завёл блог!",
-	user_hasnt_followed_anything_yet: "Похоже что {name} еще никого ни на кого не подписан!",
-	user_hasnt_had_any_replies_yet: "{name} еще не получил ответов",
+	user_hasnt_made_any_posts_yet: "Похоже что {name} еще не написал(а) постов!",
+	user_hasnt_started_bloggin_yet: "Похоже что {name} еще не завёл(а) блог!",
+	user_hasnt_followed_anything_yet: "Похоже что {name} еще никого ни на кого не подписан(а)!",
+	user_hasnt_had_any_replies_yet: "{name} еще не получил(а) ответов",
 	users_blog: "блог {name}",
 	users_posts: "посты {name}",
 	users_wallet: "кошелек {name}",
@@ -406,7 +407,7 @@ const ru = {
 	this_is_a_price_feed_conversion: 'Это котировка цены. Отсрочка 3,5 день необходима чтобы предотвратить злоупотребление от игры на средней ценовой катировке.',
 	your_existing_DEBT_TOKEN_are_liquid_and_transferable: 'Ваши существующие ' + DEBT_TOKEN + ' ликвидны и перемещаемы. Возможно, вы хотите торговать ' + DEBT_TOKEN + ' напрямую на этом сайте в разделе {link} или перевести на внешний рынок.',
 	buy_or_sell: 'Купить или Продать',
-	trending_30_day: 'популярное (30 дней)',
+	trending_30_day: 'лучшее', // до первых выплат изменено с "популярного"
 	promoted: 'Продвигаемое',
 	comments: 'Комментарии',
 	topics: 'Топики',
@@ -423,7 +424,7 @@ const ru = {
 	paste_a_youtube_or_vimeo_and_press_enter: 'Вставьте YouTube или Vimeo ссылку и нажмите Enter',
 	there_was_an_error_uploading_your_image: 'Произошла ошибка во время загрузки изображения',
 	raw_html: 'HTML код',
-	please_remove_following_html_elements: 'Пожалуйста удалите эти HTML элементы из вашего поста:',
+	please_remove_following_html_elements: 'Пожалуйста удалите эти HTML элементы из вашего поста: ',
 	reputation: "Репутация",
 	remember_voting_and_posting_key: "Запомнить голос и постинг ключ",
 	// example usage: 'Autologin? yes/no'
@@ -481,7 +482,7 @@ const ru = {
 	sorry_your_reddit_account_doesnt_have_enough_karma: "Извините, у вашего Reddit аккаунта недостаточно Reddit кармы чтобы иметь возможность бесплатной регистрации. Пожалуйста, добавьте вашу электронную почту чтобы записаться в лист ожидания",
 	register_with_facebook: 'Регистрация с Facebook',
 	or_click_the_button_below_to_register_with_facebook: 'Или нажмите кнопку, чтобы зарегистрироваться с Facebook',
-	trending_24_hour: 'популярное (24 часа)',
+	trending_24_hour: 'лучшее', // до первых выплат изменено с "популярного"
 	home: 'Лента',
 	'24_hour': '24 часа',
 	'30_day': '30 дней',
@@ -536,6 +537,7 @@ const ru = {
 	choose_currency: 'Выберите валюту',
 	crowdsale: 'Краудсейл',
 	followers: 'Подписчики',
+    following: 'подписан',
 	// errors
 	vote_currently_exists_user_must_be_indicate_a_to_reject_witness: 'Голос уже существует, пользователь должен обозначить желание убрать делегата',
 	only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes: 'Только один Голос аккаунт разрешен с одного IP адреса каждые десять минут',
@@ -564,12 +566,73 @@ const ru = {
 		many {# неподтвержденных транзакций}
 	}`,
 	profile_image_url: 'Добавьте url вашего изображения',
-	profile_name: 'Display Name',
-	profile_about: 'About',
-	profile_location: 'Location',
-	profile_website: 'Website',
+	profile_name: 'Отоброжаемое имя',
+	profile_about: 'О себе',
+	profile_location: 'Место нахождения',
+	profile_website: 'Веб-сайт',
 	saved: 'Сохранено',
 	server_returned_error: 'ошибка сервера',
+	user_avatar: 'Аватар пользователя',
+	save_avatar: 'Сохранить аватар',
+	wiki: 'Вики',
+	comment_is_nested_5_posts_deep: 'Комментарий слишком глубоко в цепочке. Максимум вложенности - 5',
+	you_may_only_comment_once_every_20_seconds: 'Вы можете комментировать не чаще каждых 20 секунд',
+	// this is from UserSaga.js
+	hello_your_account_may_have_been_compromised_we_are_working_on_restoring_an_access: 'Здраствуйте. Ваш аккаунт был скомпромитирован. Мы работаем над восстановлением доступа к вашему аккаунту. Пожалуйста, отправьте имейл на ' + SUPPORT_EMAIL + '.',
+	this_login_gives_owner_or_active_permissions_and_should_not_be_used_here: 'Этот логин дает владельческие и активные разрешения, и не должен использоваться здесь. Пожалуйста, предоставьте логин только для постинга.',
+	we_couldnt_verify_your_account_contact_us_at_SUPPORT_EMAIL: 'Мы не смогли верифицировать учётную запись. Пишите на почту ' + SUPPORT_EMAIL,
+  facebook_login_didnt_provide_any_email_addresses: 'Логин через Facebook не предоставил каких-либо имейл адресов. Пожалуйста, удостоверьтесь что Facebook аккаунт имеет главный имейл и попробуйте снова.',
+  we_are_sorry_we_cannot_sign_you_up_at_this_time_because_ip_associated_with_bots_activity: 'Извините, мы не можем зарегистрировать вас, потому что в настоящее время ваш IP адрес ассоциирован с активностью ботов. Пожалуйста, свяжитесь с ' + SUPPORT_EMAIL + ' для получения дальнейшей информации.',
+	successfully_authenticated_with: 'Успешная авторизация с', // 'Успешная авторизация с Facebook'
+  not_supported_email_address: 'Не поддерживаемый имейл адрес',
+  please_make_sure_you_dont_use_temporary_email_providers_contact_SUPPORT_URL: 'Пожалуйста, удостоверьтесь что вы не используете временный имейл адрес, свяжитесь с ' + SUPPORT_EMAIL + ' для получения информации.',
+  images_were_hidden_due_to_low_ratings: 'Изображения были скрыты из-за низкого рейтинга',
+	image_not_shown_due_to_low_ratings: 'Изображение не отображено из-за низкого рейтинга',
+	// page titles
+	create_a_post: 'Написать пост',
+	create_account: 'Создать аккаунт',
+	new_topic_posts: 'Новые "{topic}" посты',
+	sort_order_topic_posts: '{sort_order} "{topic}" посты',
+	new_posts: 'Новые посты',
+	sort_order_posts: '{sort_order} посты',
+	people_following_user_name: 'Подписчики {user_name}',
+	people_followed_by_user_name: '{user_name} подписан',
+	curation_rewards_by_user_name: 'Кураторские награды {user_name}',
+	author_rewards_by_user_name: 'Авторские награды {user_name}',
+	replies_by_user_name: 'Ответы {user_name}',
+    looks_like_you_havent_posted_anything_yet: 'Похоже, что вы еще ничего не постили',
+    read_the_beginners_guide: 'Читать гайд для новичков',
+    read_the_APP_NAME_welcome_guide: 'Читать привететственное руководство ' + APP_NAME,
+    markdown_styling_guide: 'Гайд Markdown',
+    in_order_to_prevent_abuse_APP_NAME_can_only_register_one_account_per_verified_user: 'Чтобы предотвратить злоупотребление, ' + APP_NAME + ' может регистрировать только один аккаунт для каждого подтвержденного пользователя',
+    promotion_cost: 'Стоимость продвижения',
+    looks_like_you_havent_followed_anything_yet: 'Похоже, что вы еще ни на кого не подписаны',
+    explore_APP_NAME: 'Исследовать ' + APP_NAME,
+    no_topics_order_category_posts_found: 'Нет найдено постов "{topics_order}" в "{category}"',
+    balance_subject_to_3_day_withdraw_waiting_period: 'Баланс, который может быть снят в течении 3 дней.',
+    withdraw_LIQUID_TOKEN: 'Вывести ' + LIQUID_TOKEN,
+    witdhdraw_DEBT_TOKEN: 'Вывести ' + DEBT_TOKEN,
+    tokens_worth_about_AMOUNT_of_LIQUID_TOKEN_currenlty_collecting_sbdinterest_apr: 'Токены стоимостью около {amount} в ' + LIQUID_TOKEN_UPPERCASE + ', годовая процентная ставка которых в текущее время {sbdInterest}%',
+    savings: 'сбережения',
+    welcome: 'Добро пожаловать',
+	joined: 'Присоединился', // ex: "Joined September, 2016"
+	markdown_is_not_supported_here: 'Markdown здесь не поддерживается',
+    draft_saved: 'Черновик сохранен',
+    default: 'По умолчанию',
+    decline_payout: 'Отклонить выплату',
+    check_this_to_auto_upvote_your_post: 'Отметить это чтобы автоматически голосовать за свой пост',
+    html_posts_must_begin_with_html_and_end_with_html: 'HTML посты должны начинаться с <html> и заканчиваться с </html>',
+	// TODO
+    this_post_is_not_available_due_to_a_copyright_claim: 'This post is not available due to a copyright claim.',
+    add_image_url: 'Добавьте url вашего изображения', // TODO remove this in the future
+	// Settings.jsx
+    invalid_url: 'Неверный URL',
+    name_is_too_long: 'Имя слишком длинное',
+    about_is_too_long: 'Текст "о себе" слишком длинный',
+    location_is_too_long: 'Место нахождение слишком длинное',
+    website_url_is_too_long: 'URL веб-сайта слишком длинный',
+    powered_up_100: 'Выплата на 100% в Сила Голоса',
+	name_must_not_begin_with: 'Имя не должно начинаться с @',
 }
 
 export { ru }

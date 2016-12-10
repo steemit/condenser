@@ -15,7 +15,7 @@ const icons = [
     'clock',
     'extlink',
     'steem',
-    'halloween',
+    'golos',
     'ether',
     'bitcoin',
     'bitshares',
@@ -49,6 +49,12 @@ export default class Icon extends React.Component {
         inverse: React.PropTypes.bool,
         className: React.PropTypes.string
     };
+
+    /* sometimes when you use same Icon in different components (or pages?),
+    and it's get unmounted, Icon gets unmounted everywhere */
+    shouldComponentUpdate(nextProps) {
+      return this.props.name == nextProps.name
+    }
 
     render() {
         const {name, size, className} = this.props;

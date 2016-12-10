@@ -90,7 +90,7 @@ class PromotePost extends Component {
                        {loading && <span><LoadingIndicator type="circle" /><br /></span>}
                        {!loading && <span>
                            {trxError && <div className="error">{trxError}</div>}
-                           <button type="submit" className="button" disabled={submitDisabled}>{translate('promote')}</button>
+                           {/* <button type="submit" className="button" disabled={submitDisabled}>{translate('promote')}</button> */}
                         </span>}
                    </form>
                </div>

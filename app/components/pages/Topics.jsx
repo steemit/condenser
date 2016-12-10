@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router';
 import {connect} from 'react-redux';
 import { browserHistory } from 'react-router';
+import { translate } from 'app/Translator';
+import { detransliterate } from 'app/utils/ParsersAndFormatters';
 
 class Topics extends React.Component {
     static propTypes = {
@@ -35,13 +37,14 @@ class Topics extends React.Component {
     };
 
     render() {
-        // console.log('Topics');
         const {
             props: {order, current, compact, className},
             state: {expanded, search},
             onChangeSearch, expand
         } = this;
+
         let categories = this.props.categories.get('trending');
+
         if (!(expanded || search) || compact) categories = categories.take(50);
 
         const cn = 'Topics' + (className ? ` ${className}` : '');
@@ -49,10 +52,10 @@ class Topics extends React.Component {
 
         if (compact) {
             return <select className={cn} onChange={(e) => browserHistory.push(e.target.value)} value={currentValue}>
-                <option key={'*'} value={'/' + order}>Topics...</option>
+                <option key={'*'} value={'/' + order}>{translate('topics')}...</option>
                 {categories.map(cat => {
                     const link = order ? `/${order}/${cat}` : `/${cat}`;
-                    return <option key={cat} value={link}>{cat}</option>
+                    return <option key={cat} value={link}>{detransliterate(cat)}</option>
                 })}
             </select>;
         }
@@ -61,17 +64,18 @@ class Topics extends React.Component {
         categories = categories.map(cat => {
             const link = order ? `/${order}/${cat}` : `/hot/${cat}`;
             return (<li key={cat}>
-                        <Link to={link} activeClassName="active">{cat}</Link>
+                        <Link to={link} activeClassName="active">{detransliterate(cat)}</Link>
                     </li>);
         });
+
         return (
             <ul className={cn}>
-                <li className="Topics__title" key={'*'}>Tags and Topics</li>
-                <li className="Topics__filter"><input type="text" placeholder="Filter" value={search} onChange={onChangeSearch} /></li>
+                <li className="Topics__title" key={'*'}>{translate("tags_and_topics")}</li>
+                <li className="Topics__filter hidden"><input type="text" placeholder={translate('filter')} value={detransliterate(search)} onChange={onChangeSearch} /></li>
                {categories}
                {!expanded && !search && <li className="show-more">
                    {/*<a href="#" onClick={expand}>Show more topics..</a>*/}
-                   <Link to={`/tags.html/${order}`}>Show more topics..</Link>
+                   <Link to={`/tags.html/${order}`}>{translate("show_more_topics")}..</Link>
                </li>}
             </ul>
         );

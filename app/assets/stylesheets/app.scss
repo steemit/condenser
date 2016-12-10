@@ -37,10 +37,6 @@ a, path, circle {
   clear: right;
 }
 
-.clear-left {
-  clear: left;
-}
-
 .clear-both {
   clear: both;
 }
@@ -89,9 +85,11 @@ a, path, circle {
   width: 640px;
 }
 
+
+.uppercase {text-transform: uppercase}
+
 @media print {
   .noPrint {
-    display: none;
+    display:none;
   }
 }
-

@@ -1,8 +1,8 @@
 {
-  "name": "Steemit.com",
+  "name": "golos.io",
   "repository": {
     "type": "git",
-    "url": "https://github.com/steemit/steemit.com.git"
+    "url": "https://github.com/GolosChain/webclient"
   },
   "version": "1.0.0",
   "description": "Steemit.com is the koa web server & middleware and react.js in-browser code for the world's first blockchain content + social media monetization platform!",
@@ -26,7 +26,6 @@
     "babel-core": "^6.8.0",
     "babel-eslint": "^6.0.4",
     "babel-loader": "^6.2.1",
-    "babel-plugin-react-intl": "^2.2.0",
     "babel-plugin-transform-runtime": "^6.8.0",
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-react": "^6.3.13",
@@ -37,6 +36,7 @@
     "bs58": "^3.0.0",
     "bytebuffer": "^5.0.0",
     "bytes": "^2.4.0",
+    "capitalize": "^1.0.0",
     "classnames": "^2.2.5",
     "co-body": "^4.2.0",
     "crypto-js": "^3.1.6",
@@ -53,7 +53,9 @@
     "highcharts": "^4.2.5",
     "history": "^2.0.0-rc2",
     "humanize-number": "0.0.2",
+    "i": "^0.3.5",
     "imports-loader": "^0.6.5",
+    "install": "^0.8.2",
     "iso": "^5.1.0",
     "json-loader": "^0.5.4",
     "koa": "^1.1.2",
@@ -81,13 +83,16 @@
     "net": "^1.0.2",
     "newrelic": "^1.33.0",
     "node-sass": "^3.4.2",
+    "npm": "^3.10.9",
     "pluralize": "^2.0.0",
     "purest": "^2.0.1",
-    "raw-loader": "^0.5.1",
+    "rc-progress": "^2.0.1",
     "react": "^15.3.2",
-    "react-addons-pure-render-mixin": "^15.3.2",
-    "react-addons-test-utils": "^15.3.2",
-    "react-dom": "^15.3.2",
+    "react-addons-pure-render-mixin": "^15.3.1",
+    "react-clipboard-icon": "^0.2.1",
+    "react-copy-to-clipboard": "^4.2.3",
+    "react-countdown-clock": "^1.0.9",
+    "react-dom": "^15.3.1",
     "react-foundation-components": "git+https://github.com/valzav/react-foundation-components.git#lib",
     "react-highcharts": "^8.3.3",
     "react-intl": "^2.1.3",
@@ -109,6 +114,7 @@
     "redux-modules": "0.0.5",
     "redux-saga": "^0.9.5",
     "remarkable": "1.6.2",
+    "round-precision": "^1.0.0",
     "sanitize-html": "^1.11.4",
     "sass-loader": "^3.1.2",
     "secure-random": "^1.1.1",
@@ -129,11 +135,14 @@
     "webpack-isomorphic-tools": "^2.2.31",
     "websocket": "^1.0.22",
     "whatwg-fetch": "^0.11.1",
+    "wowjs": "^1.1.3",
     "xmldom": "^0.1.22"
   },
   "devDependencies": {
     "babel-cli": "^6.11.4",
     "babel-plugin-react-transform": "^2.0.2",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "browser-sync": "^2.11.1",
     "chai": "^3.5.0",
     "chai-immutable": "^1.5.3",
     "co-mocha": "^1.1.2",
@@ -145,8 +154,8 @@
     "eslint-config-airbnb": "^6.1.0",
     "eslint-plugin-babel": "^3.1.0",
     "eslint-plugin-react": "^4.2.0",
+    "exports-loader": "^0.6.3",
     "extract-text-webpack-plugin": "^1.0.1",
-    "jsdom": "^9.8.0",
     "koa-webpack-dev-middleware": "^1.1.0",
     "koa-webpack-hot-middleware": "^1.0.3",
     "mocha": "^2.4.5",
@@ -158,9 +167,10 @@
     "redbox-react": "^1.2.0",
     "sinon": "^1.17.3",
     "sinon-chai": "^2.8.0",
+    "standard": "^8.5.0",
     "supertest": "^1.2.0"
   },
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=6.4.0"
   }
 }

@@ -1,5 +1,6 @@
 import {Map, OrderedMap} from 'immutable';
 import { translate } from 'app/Translator';
+import { translateError } from 'app/utils/ParsersAndFormatters';
 
 const defaultState = Map({
     requests: {},
@@ -67,7 +68,8 @@ export default function reducer(state = defaultState, action) {
         const n = {
             action: translate('dismiss'),
             dismissAfter: 10000,
-            ...action.payload
+            key: action.payload.key,
+            message: translateError(action.payload.message)
         };
         res = res.update('notifications', s => {
             return s ? s.set(n.key, n) : OrderedMap({[n.key]: n});

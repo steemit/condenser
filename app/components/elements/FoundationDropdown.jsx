@@ -41,7 +41,7 @@ export default class FoundationDropdown extends React.Component {
 
     render() {
         if (!this.state.show) return null;
-        const {className} = this.props;
-        return <Dropdown className={`FoundationDropdown ${className}`}>{this.props.children}</Dropdown>;
+        const {className, onClick} = this.props;
+        return <Dropdown className={`FoundationDropdown ${className}`} onClick={onClick}>{this.props.children}</Dropdown>;
     }
 }

@@ -3,9 +3,16 @@ import Purest from 'purest';
 import models from 'db/models';
 import findUser from 'db/utils/find_user';
 import {esc, escAttrs} from 'db/models';
+import request from 'request'
+import {getLogger} from '../../app/utils/Logger'
+import { translate } from 'app/Translator';
+import { APP_URL, SUPPORT_EMAIL } from 'config/client_config'
+
+const print = getLogger('oauth').print
 
 const facebook = new Purest({provider: 'facebook'});
 const reddit = new Purest({provider: 'reddit'});
+const vk = new Purest({provider: 'vk'})
 
 function logErrorAndRedirect(ctx, where, error) {
     const s = ctx.session;
@@ -42,13 +49,13 @@ function retrieveFacebookUserData(access_token) {
 
 function* handleFacebookCallback() {
     console.log('-- /handle_facebook_callback -->', this.session.uid, this.query);
-    let email = null;
+    let verified_email = false;
     try {
         if (this.query['error[error][message]']) {
             return logErrorAndRedirect(this, 'facebook:1', this.query['error[error][message]']);
         }
         const u = yield retrieveFacebookUserData(this.query.access_token);
-        email = u.email;
+        verified_email = false; // verified_email = !!(u.verified && u.email);
         const attrs = {
             uid: this.session.uid,
             name: u.name,
@@ -75,17 +82,17 @@ function* handleFacebookCallback() {
             verified: u.verified,
             provider_user_id: u.id
         };
-        // const i_attrs_email = {
-        //     provider: 'email',
-        //     email: u.email,
-        //     verified: false
-        // };
+        const i_attrs_email = {
+            provider: 'email',
+            email: u.email,
+            verified: verified_email
+        };
 
         let user = yield findUser({email: u.email, provider_user_id: u.id});
         console.log('-- /handle_facebook_callback user id -->', this.session.uid, user ? user.id : 'not found');
 
         let account_recovery_record = null;
-        const provider = this.session.prv = 'facebook';
+        const provider = 'facebook';
         if (this.session.arec) {
             const arec = yield models.AccountRecoveryRequest.findOne({
                 attributes: ['id', 'created_at', 'account_name', 'owner_key'],
@@ -111,49 +118,86 @@ function* handleFacebookCallback() {
                 } else {
                     console.log('-- arec: failed to confirm user for account (no account) -->', this.session.uid, provider, account_recovery_record.id, user.id, this.session.uid, account_recovery_record.owner_key);
                     account_recovery_record.update({user_id: user.id, status: 'account not found'});
-                    this.body = 'We cannot verify the user account. Please contact support@steemit.com';
+                    this.body = translate('we_couldnt_verify_your_account_contact_us_at_SUPPORT_EMAIL');
                 }
             } else {
                 console.log('-- arec: failed to confirm user for account (no user) -->', this.session.uid, provider, this.session.uid, this.session.email);
                 account_recovery_record.update({status: 'user not found'});
-                this.body = 'We cannot verify the user account. Please contact support@steemit.com';
+                this.body = translate('we_couldnt_verify_your_account_contact_us_at_SUPPORT_EMAIL');
             }
             return null;
         }
-        // no longer necessary since there is phone verification now
-        // if (!u.email) {
-        //     console.log('-- /handle_facebook_callback no email -->', this.session.uid, u);
-        //     this.flash = {alert: 'Facebook login didn\'t provide any email addresses. Please make sure your Facebook account has a primary email address and try again.'};
-        //     this.redirect('/');
-        //     return;
-        // }
-        // if (!u.verified) {
-        //     throw new Error('Not verified Facebook account. Please verify your Facebook account and try again to sign up to Steemit.');
-        // }
+        if (!u.email) {
+            console.log('-- /handle_facebook_callback no email -->', this.session.uid, u);
+            this.flash = {alert: translate('facebook_login_didnt_provide_any_email_addresses')};
+            this.redirect('/');
+            return;
+        }
+
+        if (!u.verified) {
+            throw new Error('Not verified Facebook account. Please verify your Facebook account and try again to sign up to Steemit.');
+        }
+
+        const same_ip_bot = yield models.User.findOne({
+            attributes: ['id', 'created_at'],
+            where: {remote_ip: attrs.remote_ip, bot: true}
+        });
+        if (same_ip_bot) {
+            console.log('-- /handle_facebook_callback same_ip_bot -->', this.session.uid, attrs.remote_ip, attrs.email);
+            this.flash = {alert: translate('we_are_sorry_we_cannot_sign_you_up_at_this_time_because_ip_associated_with_bots_activity')};
+            this.redirect('/');
+            return;
+        }
+
+        const email_provider = u.email.match(/([\w\d-]+\.\w+)$/)[1];
+        if (!email_provider) throw new Error('Incorrect email format');
+        const blocked_email = yield models.List.findOne({
+            attributes: ['id'],
+            where: {kk: 'block-email-provider', value: email_provider}
+        });
+        if (blocked_email) {
+            console.log('-- /handle_facebook_callback blocked_email -->', this.session.uid, u.email);
+            this.flash = {alert: translate('not_supported_email_address') + ': ' + u.email + '. ' + translate('please_make_sure_you_dont_use_temporary_email_providers_contact_SUPPORT_URL')};
+            this.redirect('/');
+            return;
+        }
 
         if (user) {
-            attrs.id = user.id;
+            i_attrs_email.user_id = attrs.id = user.id;
             yield models.User.update(attrs, {where: {id: user.id}});
             yield models.Identity.update(i_attrs, {where: {user_id: user.id, provider: 'facebook'}});
+            if (verified_email) {
+                const eid = yield models.Identity.findOne(
+                    {attributes: ['id', 'verified'], where: {user_id: user.id, provider: 'email'}, order: 'id DESC'}
+                );
+                if (eid) {
+                    if (!eid.verified) yield eid.update({email: u.email, verified: true});
+                } else {
+                    yield models.Identity.create(i_attrs_email);
+                }
+            }
             console.log('-- fb updated user -->', this.session.uid, user.id, u.name, u.email);
         } else {
             user = yield models.User.create(attrs);
-            i_attrs.user_id = user.id;
+            i_attrs_email.user_id = i_attrs.user_id = user.id;
             console.log('-- fb created user -->', user.id, u.name, u.email);
             const identity = yield models.Identity.create(i_attrs);
             console.log('-- fb created identity -->', this.session.uid, identity.id);
-            // if (i_attrs_email.email) {
-            //     i_attrs_email.user_id = user.id
-            //     const email_identity = yield models.Identity.create(i_attrs_email);
-            //     console.log('-- fb created email identity -->', this.session.uid, email_identity.id);
-            // }
+            if (i_attrs_email.email) {
+                const email_identity = yield models.Identity.create(i_attrs_email);
+                console.log('-- fb created email identity -->', this.session.uid, email_identity.id);
+            }
         }
         this.session.user = user.id;
     } catch (error) {
         return logErrorAndRedirect(this, 'facebook:2', error);
     }
-    this.flash = {success: 'Successfully authenticated with Facebook'};
-    this.redirect('/enter_email' + (email ? `?email=${email}` : ''));
+    this.flash = {success: translate('successfully_authenticated_with') + ' Facebook'};
+    if (verified_email) {
+        this.redirect('/create_account');
+    } else {
+        this.redirect('/enter_email');
+    }
     return null;
 }
 
@@ -163,7 +207,7 @@ function retrieveRedditUserData(access_token) {
             .get('https://oauth.reddit.com/api/v1/me.json?raw_json=1')
             .headers({
                 Authorization: `bearer ${access_token}`,
-                'User-Agent': 'Steembot/1.0 (+http://steemit.com)',
+                'User-Agent': 'Steembot/1.0 (+http://' + APP_URL + ')',
                 Accept: 'application/json',
                 'Content-type': 'application/json'
             })
@@ -186,7 +230,7 @@ function* handleRedditCallback() {
         console.log('-- /handle_reddit_callback user id -->', this.session.uid, user ? user.id : 'not found');
 
         let account_recovery_record = null;
-        const provider = this.session.prv = 'reddit';
+        const provider = 'reddit';
         if (this.session.arec) {
             const arec = yield models.AccountRecoveryRequest.findOne({
                 attributes: ['id', 'created_at', 'account_name', 'owner_key'],
@@ -211,12 +255,12 @@ function* handleRedditCallback() {
                 } else {
                     console.log('-- arec: failed to confirm user for account (no account) -->', this.session.uid, provider, account_recovery_record.id, user.id, this.session.uid, account_recovery_record.owner_key);
                     account_recovery_record.update({user_id: user.id, status: 'account not found'});
-                    this.body = 'We cannot verify the user account. Please contact support@steemit.com';
+                    this.body = translate('we_couldnt_verify_your_account_contact_us_at_SUPPORT_EMAIL');
                 }
             } else {
                 console.log('-- arec: failed to confirm user for account (no user) -->', this.session.uid, provider, this.session.arec, this.session.email);
                 account_recovery_record.update({status: 'user not found'});
-                this.body = 'We cannot verify the user account. Please contact support@steemit.com';
+                this.body = translate('we_couldnt_verify_your_account_contact_us_at_SUPPORT_EMAIL');
             }
             return null;
         }
@@ -238,7 +282,7 @@ function* handleRedditCallback() {
         if (user) {
             if (!waiting_list) attrs.waiting_list = false;
             yield models.User.update(attrs, {where: {id: user.id}});
-            yield models.Identity.update(i_attrs, {where: {user_id: user.id, provider: 'reddit'}});
+            yield models.Identity.update(i_attrs, {where: {user_id: user.id}});
             console.log('-- reddit updated user -->', this.session.uid, user.id, u.name);
         } else {
             attrs.waiting_list = waiting_list;
@@ -260,7 +304,164 @@ function* handleRedditCallback() {
     return null;
 }
 
+
+function retrieveVkUserData(access_token, userId) {
+    console.log('https://api.vk.com/method/account.getProfileInfo?v=5.53&user_ids='+userId)
+    return new Promise((resolve, reject) => {
+       vk.query().get('https://api.vk.com/method/users.get?v=5.53&user_ids='+userId+'&fields=verified,sex,bdate,city,country,timezone,screen_name')
+       .request((err, res) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(res.body);
+                }
+            });
+    });
+}
+
+function* handleVkCallback() {
+    let print = getLogger('oauth - vk').print;
+    print ('session id', this.session.uid);
+    print ('query', this.query)
+    //console.log('-- /handle_facebook_callback -->', this.session.uid, this.query);
+    let verified_email = false;
+    let vkData = this.query;
+    try {
+      //const u = yield retrieveVkUserData(this.query.access_token);
+      //print ('received data', u)
+      //if (!vkData['raw[email]']) {
+        //  return logErrorAndRedirect(this, 'Ошибка регистрации через vkontakte:', 'нам нужен ваш email, на случай если вы забудете пароль');
+      //}
+      const provider = 'vkontakte'
+      let providerId = vkData['raw[user_id]']
+      let email = vkData['raw[email]'] || null;
+
+      const u = yield retrieveVkUserData(vkData.access_token, providerId);
+      print ('user dara', u);
+      const userData = u.response[0]
+      let country = userData.country && userData.country.title || '';
+      let city = userData.city && userData.city.title || '';
+      let birthday = (userData.bdate && userData.bdate.split && userData.bdate.split('.').length == 3) ? userData.bdate.split('.') : null;
+      if (birthday) birthday = new Date(birthday[2], birthday[1], birthday[0]);
+
+      const attrs = {
+          uid: this.session.uid,
+          name: [userData.first_name, userData.last_name].join(' '),
+          email: email,
+          first_name: userData.first_name,
+          last_name: userData.last_name,
+          birthday: birthday,
+          gender: userData.gender,
+          location_id: null,
+          location_name: [country, city].join(', '),
+          locale: userData.locale,
+          timezone: userData.timezone,
+          remote_ip: getRemoteIp(this.request.req),
+          verified: !!userData.verified,
+          waiting_list: false,
+          vk_id: userData.id
+      };
+      verified_email = !!(userData.verified && email);
+
+        const i_attrs = {
+            provider: provider,
+            uid: userData.id,
+            name: attrs.name,
+            email: email,
+            verified: !!userData.verified,
+            provider_user_id: userData.id
+        };
+        const i_attrs_email = {
+            provider: 'email',
+            email: email,
+            verified: verified_email
+        };
+
+        let user = yield findUser({email: email, provider_user_id: userData.id});
+        console.log('-- /handle_vk_callback user id -->', this.session.uid, user ? user.id : 'not found');
+
+        let account_recovery_record = null;
+        if (this.session.arec) {
+            const arec = yield models.AccountRecoveryRequest.findOne({
+                attributes: ['id', 'created_at', 'account_name', 'owner_key'],
+                where: {id: this.session.arec}
+            });
+            if (arec) {
+                const seconds_ago = (Date.now() - arec.created_at) / 1000;
+                console.log('-- /handle_vk_callback arec -->', this.session.uid, seconds_ago, arec.created_at);
+                if (seconds_ago < 600) account_recovery_record = arec;
+            }
+        }
+
+        if (account_recovery_record) {
+            if (user) {
+                const existing_account = yield models.Account.findOne({
+                    attributes: ['id'],
+                    where: {user_id: user.id, name: account_recovery_record.account_name},
+                    order: 'id DESC'
+                });
+                if (existing_account) {
+                    console.log('-- arec: confirmed user for account -->', this.session.uid, provider, account_recovery_record.id, existing_account.name, this.session.uid, account_recovery_record.owner_key);
+                    account_recovery_record.update({user_id: user.id, status: 'confirmed'});
+                    this.redirect('/recover_account_step_2');
+                } else {
+                    console.log('-- arec: failed to confirm user for account (no account) -->', this.session.uid, provider, account_recovery_record.id, user.id, this.session.uid, account_recovery_record.owner_key);
+                    account_recovery_record.update({user_id: user.id, status: 'account not found'});
+                    this.body = translate('we_couldnt_verify_your_account_contact_us_at_SUPPORT_EMAIL');
+                }
+            } else {
+                console.log('-- arec: failed to confirm user for account (no user) -->', this.session.uid, provider, this.session.uid, this.session.email);
+                account_recovery_record.update({status: 'user not found'});
+                this.body = translate('we_couldnt_verify_your_account_contact_us_at_SUPPORT_EMAIL');
+            }
+            return null;
+        }
+
+        if (user) {
+            i_attrs_email.user_id = attrs.id = user.id;
+            yield models.User.update(attrs, {where: {id: user.id}});
+            yield models.Identity.update(i_attrs, {where: {user_id: user.id, provider: provider}});
+            if (verified_email) {
+                const eid = yield models.Identity.findOne(
+                    {attributes: ['id', 'verified'], where: {user_id: user.id, provider: 'email'}, order: 'id DESC'}
+                );
+                if (eid) {
+                    if (!eid.verified) yield eid.update({email: email, verified: true});
+                } else {
+                    yield models.Identity.create(i_attrs_email);
+                }
+            }
+            console.log('-- vk updated user -->', this.session.uid, user.id, userData.name, email);
+        } else {
+            user = yield models.User.create(attrs);
+            i_attrs_email.user_id = i_attrs.user_id = user.id;
+            console.log('-- vk created user -->', user.id, userData.name, email);
+            const identity = yield models.Identity.create(i_attrs);
+            console.log('-- vk created identity -->', this.session.uid, identity.id);
+            if (i_attrs_email.email) {
+                const email_identity = yield models.Identity.create(i_attrs_email);
+                console.log('-- vk created email identity -->', this.session.uid, email_identity.id);
+            }
+        }
+        this.session.user = user.id;
+    } catch (error) {
+        return logErrorAndRedirect(this, 'vk:2', JSON.stringify(error));
+    }
+    this.flash = {success: translate('successfully_authenticated_with' + ' Vkontakte')};
+    this.redirect('/')
+
+    if (verified_email) {
+        this.redirect('/create_account');
+    } else {
+        this.redirect('/enter_email');
+    }
+    return null;
+}
+
+
 export default function useOauthLogin(app) {
     app.use(route.get('/handle_facebook_callback', handleFacebookCallback));
     app.use(route.get('/handle_reddit_callback', handleRedditCallback));
+    app.use(route.get('/handle_vk_callback', handleVkCallback));
+
 }

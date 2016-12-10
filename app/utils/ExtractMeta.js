@@ -1,21 +1,20 @@
 import extractContent from 'app/utils/ExtractContent';
 import {objAccessor} from 'app/utils/Accessors';
-
-const site_desc = 'Steemit is a social media platform where everyone gets paid for creating and curating content. It leverages a robust digital points system, called Steem, that supports real value for digital rewards through market price discovery and liquidity';
+import { APP_NAME, APP_URL, SITE_DESCRIPTION, TWITTER_HANDLE, SHARE_IMAGE, TWITTER_SHARE_IMAGE } from 'config/client_config';
 
 function addSiteMeta(metas) {
-    metas.push({title: 'Steemit'});
+    metas.push({title: APP_NAME});
     metas.push({property: 'og:type', content: 'website'});
-    metas.push({property: 'og:site_name', content: 'Steemit'});
-    metas.push({property: 'og:title', content: 'Steemit'});
-    metas.push({property: 'og:description', content: site_desc});
-    metas.push({property: 'og:image', content: 'https://steemit.com/images/steemit-share.png'});
+    metas.push({property: 'og:site_name', content: APP_NAME});
+    metas.push({property: 'og:title', content: APP_NAME});
+    metas.push({property: 'og:description', content: SITE_DESCRIPTION});
+    metas.push({property: 'og:image', content: SHARE_IMAGE});
     metas.push({property: 'fb:app_id', content: $STM_Config.fb_app});
     metas.push({name: 'twitter:card', content: 'summary'});
-    metas.push({name: 'twitter:site', content: '@steemit'});
-    metas.push({name: 'twitter:title', content: 'Steemit'});
-    metas.push({name: 'twitter:description', site_desc});
-    metas.push({name: 'twitter:image', content: 'https://steemit.com/images/steemit-share.png'});
+    metas.push({name: 'twitter:site', content: TWITTER_HANDLE});
+    metas.push({name: 'twitter:title', content: APP_NAME});
+    metas.push({name: 'twitter:description', site_desc: SITE_DESCRIPTION});
+    metas.push({name: 'twitter:image', content: SHARE_IMAGE});
 }
 
 export default function extractMeta(chain_data, rp) {

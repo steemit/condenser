@@ -21,10 +21,11 @@ import {repLog10} from 'app/utils/ParsersAndFormatters.js';
 import Tooltip from 'app/components/elements/Tooltip';
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
 import VerticalMenu from 'app/components/elements/VerticalMenu';
+import { translate } from 'app/Translator';
+import BuyGolos from 'app/components/elements/BuyGolos'
 import MarkNotificationRead from 'app/components/elements/MarkNotificationRead';
 import NotifiCounter from 'app/components/elements/NotifiCounter';
 import DateJoinWrapper from 'app/components/elements/DateJoinWrapper';
-import { translate } from 'app/Translator';
 import WalletSubMenu from 'app/components/elements/WalletSubMenu';
 import Userpic from 'app/components/elements/Userpic';
 import Callout from 'app/components/elements/Callout';
@@ -76,11 +77,9 @@ export default class UserProfile extends React.Component {
 
         let order;
         switch(category) {
-          case 'feed': order = 'by_feed'; break;
-          case 'blog': order = 'by_author'; break;
-          case 'comments': order = 'by_comments'; break;
-          case 'recent_replies': order = 'by_replies'; break;
-          default: console.log('unhandled category:', category);
+          case "feed": order = 'by_feed'; break;
+          case "blog": order = 'by_author'; break;
+          default: console.log("unhandled category:", category);
         }
 
         if (isFetchingOrRecentlyUpdated(this.props.global_status, order, category)) return;
@@ -99,9 +98,6 @@ export default class UserProfile extends React.Component {
         const username = current_user ? current_user.get('username') : null
         // const gprops = this.props.global.getIn( ['props'] ).toJS();
         if( !section ) section = 'blog';
-
-        // @user/"posts" is deprecated in favor of "comments" as of oct-2016 (#443)
-        if( section == 'posts' ) section = 'comments';
 
         // const isMyAccount = current_user ? current_user.get('username') === accountname : false;
 
@@ -188,6 +184,9 @@ export default class UserProfile extends React.Component {
         else if( section === 'settings' ) {
             tab_content = <Settings routeParams={this.props.routeParams} />
         }
+        else if( section === 'crowdsale' ) {
+            tab_content = <BuyGolos routeParams={this.props.routeParams} account={account}/>
+        }
         else if( section === 'comments' && account.post_history ) {
            if( account.comments )
            {
@@ -213,10 +212,10 @@ export default class UserProfile extends React.Component {
             if (account.blog) {
                 let posts = accountImm.get('blog');
                 const emptyText = isMyAccount ? <div>
-                    Looks like you haven't posted anything yet.<br /><br />
-                    <Link to="/submit.html">Submit a Story</Link><br />
-                    <a href="/steemit/@thecryptofiend/the-missing-faq-a-beginners-guide-to-using-steemit">Read The Beginner's Guide</a><br />
-                    <a href="/welcome">Read The Steemit Welcome Guide</a>
+                    {translate('looks_like_you_havent_posted_anything_yet')}.<br /><br />
+                    <Link to="/submit.html">{translate('submit_a_story')}</Link><br />
+                    <a href="/steemit/@thecryptofiend/the-missing-faq-a-beginners-guide-to-using-steemit">{translate('read_the_beginners_guide')}</a><br />
+                    <a href="/welcome">{translate('read_the_beginners_guide')}</a>
                 </div>:
                     translate('user_hasnt_started_bloggin_yet', {name: accountname});
 
@@ -297,12 +296,28 @@ export default class UserProfile extends React.Component {
         }
 
         let printLink = null;
-        if( section === 'permissions' ) {
+        let section_title = account.name + ' / ' + section;
+        if( section === 'blog' ) {
+           section_title = translate('users_blog', {name});
+        } else if( section === 'transfers' ) {
+           section_title = account.name + translate('users_wallet', {name});
+        } else if( section === 'curation-rewards' ) {
+          section_title = account.name + translate('users_curation_rewards', {name});
+      } else if( section === 'author-rewards' ) {
+        section_title = account.name + translate('users_author_rewards', {name});
+        } else if( section === 'password' ) {
+           section_title = ''
+        } else if( section === 'permissions' ) {
+           section_title = account.name + translate('users_permissions', {name})
            if(isMyAccount && wifShown) {
                printLink = <div><a className="float-right noPrint" onClick={onPrint}>
                        <Icon name="printer" />&nbsp;{translate('print')}&nbsp;&nbsp;
                    </a></div>
            }
+        } else if( section === 'posts' ) {
+           section_title = translate('users_posts', {name});
+        } else if( section === 'recent-replies' ) {
+           section_title = translate('recent_replies_to_users_posts', {name});
         }
 
         // const wallet_tab_active = section === 'transfers' || section === 'password' || section === 'permissions' ? 'active' : ''; // className={wallet_tab_active}
@@ -314,6 +329,8 @@ export default class UserProfile extends React.Component {
 
         // set account join date
         let accountjoin = account.created;
+        // after transferring users form steemit to golos join date was not set properly
+        if (accountjoin === '1970-01-01T00:00:00') accountjoin = new Date(2016, 9, 18)
 
         const top_menu = <div className="row UserProfile__top-menu">
             <div className="columns small-10 medium-12 medium-expand">

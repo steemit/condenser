@@ -1,5 +1,3 @@
-if(process.env.NEW_RELIC_APP_NAME) require('newrelic');
-
 import path from 'path';
 import Koa from 'koa';
 import mount from 'koa-mount';
@@ -12,9 +10,9 @@ import useRedirects from './redirects';
 import useOauthLogin from './api/oauth';
 import useGeneralApi from './api/general';
 import useAccountRecoveryApi from './api/account_recovery';
+import useIcoApi from './api/ico'
 import useNotificationsApi from './api/notifications';
 import useEnterAndConfirmEmailPages from './server_pages/enter_confirm_email';
-import useEnterAndConfirmMobilePages from './server_pages/enter_confirm_mobile';
 import isBot from 'koa-isbot';
 import session from 'koa-session';
 import csrf from 'koa-csrf';
@@ -22,13 +20,14 @@ import flash from 'koa-flash';
 import minimist from 'minimist';
 import Grant from 'grant-koa';
 import config from '../config';
-import secureRandom from 'secure-random'
+import {APP_NAME} from 'config/client_config'
 
 const grant = new Grant(config.grant);
 // import uploadImage from 'server/upload-image' //medium-editor
 
 const app = new Koa();
-app.name = 'Steemit app';
+app.name = APP_NAME;
+
 const env = process.env.NODE_ENV || 'development';
 const cacheOpts = {maxAge: 86400000, gzip: true};
 
@@ -38,7 +37,8 @@ csrf(app);
 app.use(mount(grant));
 app.use(flash({key: 'flash'}));
 
-// some redirects
+// redirect to home page if known account
+// remember ch, cn, r url params in the session and remove them from url
 app.use(function *(next) {
     // redirect to home page/feed if known account
     if (this.method === 'GET' && this.url === '/' && this.session.a) {
@@ -104,25 +104,11 @@ app.use(mount('/static', staticCache(path.join(__dirname, '../app/assets/static'
 app.use(mount('/robots.txt', function* () {
     this.set('Cache-Control', 'public, max-age=86400000');
     this.type = 'text/plain';
-    this.body = "User-agent: *\nAllow: /";
+    this.body = "User-agent: *\nDisallow:  ";
 }));
-
-// set user's uid - used to identify users in logs and some other places
-app.use(function* (next) {
-    const last_visit = this.session.last_visit;
-    this.session.last_visit = (new Date()).getTime() / 1000 | 0;
-    if (!this.session.uid) {
-        this.session.uid = secureRandom.randomBuffer(13).toString('hex');
-        this.session.new_visit = true;
-    } else {
-        this.session.new_visit = this.session.last_visit - last_visit > 1800;
-    }
-    yield next;
-});
 
 useRedirects(app);
 useEnterAndConfirmEmailPages(app);
-useEnterAndConfirmMobilePages(app);
 
 if (env === 'production') {
     app.use(helmet.contentSecurityPolicy(config.helmet));
@@ -131,13 +117,17 @@ if (env === 'production') {
 useAccountRecoveryApi(app);
 useOauthLogin(app);
 useGeneralApi(app);
+useIcoApi(app);
 useNotificationsApi(app);
 
 app.use(favicon(path.join(__dirname, '../app/assets/images/favicons/favicon.ico')));
 app.use(isBot());
 app.use(mount('/favicons', staticCache(path.join(__dirname, '../app/assets/images/favicons'), cacheOpts)));
 app.use(mount('/images', staticCache(path.join(__dirname, '../app/assets/images'), cacheOpts)));
+app.use(mount('/legal', staticCache(path.join(__dirname, '../app/assets/legal'), cacheOpts)));
 // Proxy asset folder to webpack development server in development mode
+console.log (env)
+
 if (env === 'development') {
     const PORT = parseInt(process.env.PORT, 10) + 1 || 3001;
     const proxy = require('koa-proxy')({
@@ -152,6 +142,16 @@ if (env === 'development') {
 if (env !== 'test') {
     const appRender = require('./app_render');
     app.use(function* () {
+        this.first_visit = false;
+        this.last_visit = this.session.last_visit;
+        this.session.last_visit = (new Date()).getTime() / 1000 | 0;
+        if (!this.session.uid) {
+            this.session.uid = Math.random().toString(36).slice(2);
+            this.first_visit = true;
+            this.session.new_visit = true;
+        } else {
+            this.session.new_visit = this.session.last_visit - this.last_visit > 1800;
+        }
         yield appRender(this);
         // if (app_router.dbStatus.ok) recordWebEvent(this, 'page_load');
         const bot = this.state.isBot;
@@ -161,7 +161,8 @@ if (env !== 'test') {
     });
 
     const argv = minimist(process.argv.slice(2));
-    const port = parseInt(argv.port, 10) || parseInt(process.env.PORT, 10) || 3002;
+    const configPort = config.PORT || 3002;
+    const port = parseInt(argv.port, 10) || parseInt(process.env.PORT, 10) || configPort;
     app.listen(port);
 
     // Tell parent process koa-server is started

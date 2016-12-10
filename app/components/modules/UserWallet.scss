@@ -7,6 +7,16 @@
   margin-top: 1rem;
 }
 
+// fix DropdownMenu going off page's width
+.UserWallet {
+    .Header__sort-order-menu {
+        display: block;
+        .VerticalMenu {
+            left: 50%;
+            display: block;
+        }
+    }
+}
 .UserWallet__dropdown {
 }
 

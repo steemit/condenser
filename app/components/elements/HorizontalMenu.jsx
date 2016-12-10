@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router'
+import {connect} from 'react-redux';
 import Icon from 'app/components/elements/Icon.jsx';
 
-export default class HorizontalMenu extends React.Component {
+class HorizontalMenu extends React.Component {
     static propTypes = {
         items: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
         title: React.PropTypes.string,
@@ -11,6 +12,8 @@ export default class HorizontalMenu extends React.Component {
     };
 
     render() {
+        // if this is ico page hide this section
+        if (this.props.location && this.props.location.pathname.indexOf("/ico") != -1) return null
         const {items, title, className, hideValue} = this.props;
         return <ul className={'HorizontalMenu menu' + (className ? ' ' + className : '')}>
             {title && <li className="title">{title}</li>}
@@ -29,3 +32,11 @@ export default class HorizontalMenu extends React.Component {
         </ul>;
     }
 }
+export default connect(
+    (state, props) => {
+        return {
+            ...props,
+            location: state.app.get('location')
+        }
+    }
+)(HorizontalMenu);

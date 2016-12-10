@@ -10,6 +10,7 @@ import {serverApiLogin, serverApiLogout} from 'app/utils/ServerApiClient';
 import {Apis} from 'shared/api_client';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import {loadFollows} from 'app/redux/FollowSaga'
+import { translate } from 'app/Translator';
 
 export const userWatches = [
     watchRemoveHighSecurityKeys, // keep first to remove keys early when a page change happens
@@ -144,7 +145,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
 
     const account = yield call(getAccount, username)
     if (!account) {
-        yield put(user.actions.loginError({ error: 'Username does not exist' }))
+        yield put(user.actions.loginError({ error: translate('username_does_not_exist') }))
         return
     }
 
@@ -184,7 +185,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         // const pub_keys = yield select(state => state.user.get('pub_keys_used'))
         // serverApiRecordEvent('login_attempt', JSON.stringify({name: username, ...pub_keys, cur_owner: owner_pub_key}))
         if (owner_pub_key === 'STM7sw22HqsXbz7D2CmJfmMwt9rimtk518dRzsR1f8Cgw52dQR1pR') {
-            yield put(user.actions.loginError({ error: 'Hello. Your account may have been compromised. We are working on restoring an access to your account. Please send an email to support@steemit.com.' }))
+            yield put(user.actions.loginError({ error: translate('hello_your_account_may_have_been_compromised_we_are_working_on_restoring_an_access') }))
             return
         }
         if(login_owner_pubkey === owner_pub_key || login_wif_owner_pubkey === owner_pub_key) {
@@ -194,7 +195,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         } else {
             const generated_type = password[0] === 'P' && password.length > 40;
             serverApiRecordEvent('login_attempt', JSON.stringify({name: username, login_owner_pubkey, owner_pub_key, generated_type}))
-            yield put(user.actions.loginError({ error: 'Incorrect Password' }))
+            yield put(user.actions.loginError({ error: translate('incorrect_password') }))
         }
         return
     }
@@ -219,7 +220,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
             posting_pubkey === owner_pubkey ||
             posting_pubkey === active_pubkey
         ) {
-            yield put(user.actions.loginError({ error: 'This login gives owner or active permissions and should not be used here.  Please provide a posting only login.' }))
+            yield put(user.actions.loginError({ error: translate('this_login_gives_owner_or_active_permissions_and_should_not_be_used_here') }))
             localStorage.removeItem('autopost2')
             return
         }

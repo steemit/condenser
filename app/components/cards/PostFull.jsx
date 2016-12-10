@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
-import pluralize from 'pluralize';
 import Icon from 'app/components/elements/Icon';
 import { connect } from 'react-redux';
 // import FormattedAsset from 'app/components/elements/FormattedAsset';
@@ -10,6 +9,7 @@ import user from 'app/redux/User';
 import transaction from 'app/redux/Transaction'
 import Voting from 'app/components/elements/Voting';
 import Reblog from 'app/components/elements/Reblog';
+import Tooltip from 'app/components/elements/Tooltip';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import ReplyEditor from 'app/components/elements/ReplyEditor';
 import {immutableAccessor} from 'app/utils/Accessors';
@@ -20,6 +20,8 @@ import Author from 'app/components/elements/Author';
 import {Long} from 'bytebuffer'
 import {List} from 'immutable'
 import {repLog10, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
+import { translate } from 'app/Translator';
+import { APP_NAME, APP_NAME_LATIN, APP_URL, APP_ICON } from 'config/client_config';
 import DMCAList from 'app/utils/DMCAList'
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import ShareMenu from 'app/components/elements/ShareMenu';
@@ -27,10 +29,12 @@ import ShareMenu from 'app/components/elements/ShareMenu';
 function TimeAuthorCategory({content, authorRepLog10, showTags}) {
     return (
         <span className="PostFull__time_author_category vcard">
-            <Icon name="clock" className="space-right" />
-            <TimeAgoWrapper date={content.created} className="updated" />
-            {} by <Author author={content.author} authorRepLog10={authorRepLog10} />
-            {showTags && <span> in <TagList post={content} single /></span>}
+            <Tooltip t={new Date(content.created).toLocaleString()}>
+                <Icon name="clock" className="space-right" />
+                <span className="TimeAgo"><TimeAgoWrapper date={content.created} /></span>
+            </Tooltip>
+            <span> {translate('by')} <Author author={content.author} authorRepLog10={authorRepLog10} /></span>
+            {showTags && <span> {translate('in')}&nbsp;<TagList post={content} /></span>}
         </span>
      );
 }
@@ -126,7 +130,7 @@ class PostFull extends React.Component {
         const winTop = (screen.height / 2) - (winWidth / 2);
         const winLeft = (screen.width / 2) - (winHeight / 2);
         const s = this.share_params;
-        const q = 'title=' + encodeURIComponent(s.title) + '&url=' + encodeURIComponent(s.url) + '&source=Steemit&mini=true';
+        const q = 'title=' + encodeURIComponent(s.title) + '&url=' + encodeURIComponent(s.url) + '&source=' + APP_NAME_LATIN + '&mini=true';
         window.open('https://www.linkedin.com/shareArticle?' + q, 'Share', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=' + winWidth + ',height=' + winHeight);
     }
 
@@ -136,6 +140,12 @@ class PostFull extends React.Component {
         const author = post_content.get('author')
         const permlink = post_content.get('permlink')
         this.props.showPromotePost(author, permlink)
+        analytics.track('promote button clicked')
+    }
+
+    trackAnalytics = eventType => {
+        console.log(eventType)
+        analytics.track(eventType)
     }
 
     render() {
@@ -145,6 +155,7 @@ class PostFull extends React.Component {
         if (!post_content) return null;
         const p = extractContent(immutableAccessor, post_content);
         const content = post_content.toJS();
+        // console.log(content)
         const {author, permlink, parent_author, parent_permlink} = content
         const jsonMetadata = this.state.showReply ? null : p.json_metadata
         // let author_link = '/@' + content.author;
@@ -152,12 +163,12 @@ class PostFull extends React.Component {
         if (content.category) link = `/${content.category}${link}`;
 
         const {category, title, body} = content;
-        if (process.env.BROWSER && title) document.title = title + ' — Steemit';
+        if (process.env.BROWSER && title) document.title = title + ' — ' + APP_NAME;
 
         let content_body = content.body;
         const url = `/${category}/@${author}/${permlink}`
         if(DMCAList.includes(url)) {
-            content_body = 'This post is not available due to a copyright claim.'
+            content_body = translate('this_post_is_not_available_due_to_a_copyright_claim')
         }
 
         const replyParams = {author, permlink, parent_author, parent_permlink, category, title, body}
@@ -174,8 +185,8 @@ class PostFull extends React.Component {
             net_rshares.compare(Long.ZERO) <= 0
 
         this.share_params = {
-            url: 'https://steemit.com' + link,
-            title: title + ' — Steemit',
+            url: 'https://' + APP_URL + link,
+            title: title + ' — ' + APP_NAME,
             desc: p.desc
         };
 
@@ -208,7 +219,7 @@ class PostFull extends React.Component {
 
         let post_header = <h1 className="entry-title">
                 {content.title}
-                {full_power && <span title="Powered Up 100%"><Icon name="steem" /></span>}
+                {full_power && <span title={translate('powered_up_100')}><Icon name={APP_ICON} /></span>}
             </h1>
         if(content.depth > 0) {
             let parent_link = `/${content.category}/@${content.parent_author}/${content.parent_permlink}`;
@@ -216,20 +227,19 @@ class PostFull extends React.Component {
             if(content.depth > 1) {
                 direct_parent_link = <li>
                     <Link to={parent_link}>
-                        View the direct parent
+                        {translate('view_the_direct_parent')}
                     </Link>
                 </li>
             }
             post_header = <div className="callout">
-                <h3 className="entry-title">RE: {content.root_title}</h3>
-                <h5>You are viewing a single comment&#39;s thread from:</h5>
+                <h5>{translate('you_are_viewing_single_comments_thread_from')}:</h5>
                 <p>
                     {content.root_title}
                 </p>
                 <ul>
                     <li>
                         <Link to={content.url}>
-                            View the full context
+                            {translate('view_the_full_context')}
                         </Link>
                     </li>
                     {direct_parent_link}
@@ -240,7 +250,7 @@ class PostFull extends React.Component {
         const readonly = post_content.get('mode') === 'archived' || $STM_Config.read_only_mode
         const showPromote = username && post_content.get('mode') === "first_payout" && post_content.get('depth') == 0
         const showReplyOption = post_content.get('depth') < 6
-        const showEditOption = username === author
+        const showEditOption = username === author && post_content.get('mode') != 'archived'
         const authorRepLog10 = repLog10(content.author_reputation)
         const isPreViewCount = Date.parse(post_content.get('created')) < 1480723200000 // check if post was created before view-count tracking began (2016-12-03)
 
@@ -260,7 +270,9 @@ class PostFull extends React.Component {
                     </span>
                 }
 
-                {showPromote && <button className="float-right button hollow tiny" onClick={this.showPromotePost}>Promote</button>}
+                {/* {username && firstPayout && rootComment && <div className="float-right">
+                    <button className="button hollow tiny" onClick={this.showPromotePost}>{translate('promote')}</button>
+                </div>} */}
                 <TagList post={content} horizontal />
                 <div className="PostFull__footer row">
                     <div className="column">
@@ -271,12 +283,12 @@ class PostFull extends React.Component {
                         {!readonly && <Reblog author={author} permlink={permlink} />}
                         {!readonly &&
                             <span className="PostFull__reply">
-                                {showReplyOption && <a onClick={onShowReply}>Reply</a>}
-                                {' '}{showEditOption   && !showEdit  && <a onClick={onShowEdit}>Edit</a>}
-                                {' '}{showDeleteOption && !showReply && <a onClick={onDeletePost}>Delete</a>}
+                                {showReplyOption && <a onClick={onShowReply}>{translate('reply')}</a>}
+                                {' '}{showEditOption   && !showEdit  && <a onClick={onShowEdit}>{translate('edit')}</a>}
+                                {' '}{showDeleteOption && !showReply && <a onClick={onDeletePost}>{translate('delete')}</a>}
                             </span>}
                         <span className="PostFull__responses">
-                            <Link to={link} title={pluralize('Responses', content.children, true)}>
+                            <Link to={link} title={translate('response_count', {responseCount: content.children})}>
                                 <Icon name="chatboxes" className="space-right" />{content.children}
                             </Link>
                         </span>
@@ -312,7 +324,7 @@ export default connect(
             dispatch(transaction.actions.broadcastOperation({
                 type: 'delete_comment',
                 operation: {author, permlink},
-                confirm: 'Are you sure?'
+                confirm: translate('are_you_sure')
             }));
         },
         showPromotePost: (author, permlink) => {

@@ -22,19 +22,15 @@
 }
 
 .Markdown, .ReplyEditor__body.rte {
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  word-break: break-word;
-  hyphens: auto;
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Source Serif Pro', serif;
+    font-family: 'Roboto', serif;
     font-weight: 600;
   }
 
   h1 {
     margin: 2rem 0 1rem 0;
-    font-size: 160%
+    font-size: 160%;
   }
   h2 {
     margin: 2rem 0 1rem 0;
@@ -48,18 +44,21 @@
     margin: 1rem 0 0.5rem 0;
     font-size: 100%;
   }
-  h6 {
+  h5 {
     margin: 1rem 0 0.5rem 0;
     font-size: 90%;
   }
+  h6 {
+    margin: 1rem 0 0.5rem 0;
+    font-size: 80%;
+  }
 
   code {
-    padding: 0.2rem;
-    font-size: 85%;
-    border-radius: 3px;
-    border: none;
-    background-color: #F4F4F4;
-    font-weight: inherit;
+    padding: 0.25rem 0.5rem;
+    font-size: 84%;
+    border-radius: 2px;
+    border-color: $light-gray;
+    background-color: #efefef;
   }
 
   pre > code {
@@ -74,29 +73,13 @@
     font-weight: 600;
   }
 
-  ol, ul {
-    margin-left: 2rem;
-  }
-
-  table td {
-    word-break: normal; // issue #146
-  }
-
-  p {
-    font-size: 100%;
-    line-height: 150%;
-  }
-
   img {
-    width: auto;
-    max-width: 100%;
-    height: auto;
-    max-height: none;
+      max-width: 400px;
+      max-height: 400px;
   }
-
-  iframe {
-    max-width: 100%;
-    max-height: 75vw;
+  .Card {
+      border-radius: 2px;
+      border-color: $light-gray;
   }
 
   div.pull-right {

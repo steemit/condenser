@@ -95,7 +95,8 @@
 }
 
 .Voting .DropdownMenu ul {
-  width: 240px;
+  min-width: 240px;
+  width: auto;
 
   li > a {
     padding: 0 0.5rem;
@@ -126,9 +127,6 @@
   padding-right: .8rem;
   margin-right: .6rem;
   position: relative;
-  .DropdownMenu .Icon.dropdown-arrow {
-    margin-right: -0.5rem
-  }
   .cancel {
     font-size: 80%;
     padding: 0 0.4em;

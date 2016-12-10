@@ -6,15 +6,39 @@ import { connect } from 'react-redux';
 import user from 'app/redux/User';
 import Reblog from 'app/components/elements/Reblog';
 import Voting from 'app/components/elements/Voting';
+import Tooltip from 'app/components/elements/Tooltip';
 import {immutableAccessor} from 'app/utils/Accessors';
 import extractContent from 'app/utils/ExtractContent';
 import { browserHistory } from 'react-router';
 import VotesAndComments from 'app/components/elements/VotesAndComments';
+import TagList from 'app/components/elements/TagList';
 import {authorNameAndRep} from 'app/utils/ComponentFormatters';
 import {Map} from 'immutable';
 import Reputation from 'app/components/elements/Reputation';
+
 import Author from 'app/components/elements/Author';
-import TagList from 'app/components/elements/TagList';
+import { translate } from 'app/Translator';
+import { detransliterate } from 'app/utils/ParsersAndFormatters';
+import { APP_ICON } from 'config/client_config';
+
+function TimeAuthorCategory({post, links, authorRepLog10, gray}) {
+    const author = <strong>{post.author}</strong>;
+    return (
+        <span className="vcard">
+            <Tooltip t={new Date(post.created).toLocaleString()}>
+                <span className="TimeAgo"><TimeAgoWrapper date={post.created} /></span>
+            </Tooltip>
+            <span>{' ' + translate('by')}&nbsp;
+                <span itemProp="author" itemScope itemType="http://schema.org/Person">
+                    {links ? <Link to={post.author_link}>{author}</Link> :
+                        <strong>{author}</strong>}&nbsp;
+                    <Reputation value={authorRepLog10} />
+                </span>
+            </span>
+            <span>{' ' + translate('in')}&nbsp;{links ? <TagList post={post} /> : <strong>{detransliterate(post.category)}</strong>}</span>
+        </span>
+    );
+}
 
 function isLeftClickEvent(event) {
     return event.button === 0
@@ -51,22 +75,14 @@ class PostSummary extends React.Component {
 
     render() {
         const {currentCategory, thumbSize, ignore, onClick} = this.props;
-        const {post, content, pending_payout, total_payout} = this.props;
-        const {account} = this.props;
+        const {post, content, pending_payout, total_payout, cashout_time} = this.props;
         if (!content) return null;
 
         const archived = content.get('mode') === 'archived'
-
         let reblogged_by = content.get('first_reblogged_by')
         if(reblogged_by) {
           reblogged_by = <div className="PostSummary__reblogged_by">
-                             <Icon name="reblog" /> Resteemed by <Link to={'/@'+reblogged_by}>{reblogged_by}</Link>
-                         </div>
-        }
-
-        if(account && account != content.get('author')) {
-          reblogged_by = <div className="PostSummary__reblogged_by">
-                             <Icon name="reblog" /> Resteemed
+                             <Icon name="reblog" /> {translate('reblogged_by') + ' '} <Link to={'/@'+reblogged_by}>{reblogged_by}</Link>
                          </div>
         }
 
@@ -97,15 +113,15 @@ class PostSummary extends React.Component {
         let content_title = <h1 className="entry-title">
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>
                 {title_text}
-                {full_power && <span title="Powered Up 100%"><Icon name="steem" /></span>}
+                {full_power && <span title={translate('powered_up_100')}><Icon name={APP_ICON} /></span>}
             </a>
         </h1>;
 
         // author and category
         let author_category = <span className="vcard">
-            <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}><TimeAgoWrapper date={p.created} className="updated" /></a>
-            {} by <Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
-            {} in <TagList post={p} single />
+            <TimeAgoWrapper date={p.created} className="updated" />
+            {} {translate('by')} <Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
+            {} {translate('in')} <TagList post={p} single />
         </span>
 
         if( !(currentCategory && currentCategory.match( /nsfw/ )) ) {
@@ -131,15 +147,14 @@ class PostSummary extends React.Component {
         return (
             <article className={'PostSummary hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')} itemScope itemType ="http://schema.org/blogPost">
                 <div className={hasFlag ? '' : 'PostSummary__collapse'}>
-                    <div className="float-right"><Voting post={post} flag /></div>
+                    <div className="float-right"><Voting pending_payout={pending_payout} total_payout={total_payout} showList={false} cashout_time={cashout_time} post={post} flag /></div>
                 </div>
                 {reblogged_by}
                 <div className="PostSummary__header show-for-small-only">
                     {content_title}
                 </div>
                 <div className="PostSummary__time_author_category_small show-for-small-only">
-                    {author_category}
-
+                    <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}><TimeAuthorCategory post={p} links={false} authorRepLog10={authorRepLog10} gray={gray} /></a>
                 </div>
                 {thumb}
                 <div className="PostSummary__content">
@@ -148,12 +163,12 @@ class PostSummary extends React.Component {
                     </div>
                     {content_body}
                     <div className="PostSummary__footer">
-                        <Voting post={post} showList={false} />
-                        <VotesAndComments post={post} commentsLink={comments_link} />
+                        <Voting pending_payout={pending_payout} total_payout={total_payout} showList={false} cashout_time={cashout_time} post={post} showList={false} />
                         <span className="PostSummary__time_author_category show-for-medium">
-                            {!archived && <Reblog author={p.author} permlink={p.permlink} />}
                             {author_category}
+                            {!archived && <Reblog author={p.author} permlink={p.permlink} />}
                         </span>
+                        <VotesAndComments post={post} commentsLink={comments_link} />
                     </div>
                 </div>
             </article>

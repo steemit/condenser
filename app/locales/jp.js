@@ -64,7 +64,7 @@ const jp = 	{
 	password_update_succes: '{accountName} さんのアカウントは更新されました',
 	password_is_bound_to_account: "This password is bound to your account\'s owner key and can not be used to login to this site. \nHowever, you can use it to {changePasswordLink} to obtain a more secure set of keys.",
 	update_your_password: 'パスワードを更新',
-	enter_username: 'ユーザーネームを記入',
+	enter_your_username: 'ユーザーネームを記入',
 	password_or_wif: 'Password または WIF',
 	requires_auth_key: 'この処理はあなたの {authType} キーを要求します (もしくはあなたのパスワード)',
 	keep_me_logged_in: 'ログインし続ける',

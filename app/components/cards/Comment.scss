@@ -92,6 +92,8 @@
 .Comment__body {
   margin-left: 62px;
   max-width: 50rem;
+  font-size: 110%;
+  word-wrap: break-word;
 }
 
 .Comment__footer {
@@ -101,13 +103,10 @@
     color: $dark-gray;
     @include hoverUnderline;
   }
-  .Voting__voters_list {
+  .Voting {
     border-right: 1px solid $medium-gray;
     padding-right: 1rem;
     margin-right: 1rem;
-  }
-  .Comment__footer__controls {
-    a {margin: 0 0.2rem;}
   }
 }
 

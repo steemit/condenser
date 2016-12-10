@@ -1,13 +1,12 @@
 import React from 'react';
 import {connect} from 'react-redux'
 import user from 'app/redux/User';
-import {translate} from 'app/Translator';
-import {ALLOWED_CURRENCIES} from 'config/client_config'
+import { translate } from 'app/Translator';
+import { ALLOWED_CURRENCIES } from 'config/client_config'
 import store from 'store';
 import transaction from 'app/redux/Transaction'
 import o2j from 'shared/clash/object2json'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
-import Userpic from 'app/components/elements/Userpic';
 import reactForm from 'app/utils/ReactForm'
 
 class Settings extends React.Component {
@@ -29,11 +28,11 @@ class Settings extends React.Component {
             fields: ['profile_image', 'name', 'about', 'location', 'website'],
             initialValues: props.profile,
             validation: values => ({
-                profile_image: values.profile_image && !/^https?:\/\//.test(values.profile_image) ? 'Invalid URL' : null,
-                name: values.name && values.name.length > 20 ? 'Name is too long' : values.name && /^\s*@/.test(values.name) ? 'Name must not begin with @' : null,
-                about: values.about && values.about.length > 160 ? 'About is too long' : null,
-                location: values.location && values.location.length > 30 ? 'Location is too long' : null,
-                website: values.website && values.website.length > 100 ? 'Website URL is too long' : values.website && !/^https?:\/\//.test(values.website) ? 'Invalid URL' : null,
+                profile_image: values.profile_image && !/^https?:\/\//.test(values.profile_image) ? translate('invalid_url') : null,
+                name: values.name && values.name.length > 20 ? translate('name_is_too_long') : values.name && /^\s*@/.test(values.name) ? translate('name_must_not_begin_with') : null,
+                about: values.about && values.about.length > 160 ? translate('about_is_too_long') : null,
+                location: values.location && values.location.length > 30 ? translate('location_is_too_long') : null,
+                website: values.website && values.website.length > 100 ? translate('website_url_is_too_long') : values.website && !/^https?:\/\//.test(values.website) ? translate('invalid_url') : null,
             })
         })
         this.handleSubmitForm =
@@ -73,25 +72,18 @@ class Settings extends React.Component {
             json_metadata: JSON.stringify(metaData),
             account: account.name,
             memo_key: account.memo_key,
-            errorCallback: (e) => {
-                if (e === 'Canceled') {
-                    this.setState({
-                        loading: false,
-                        errorMessage: ''
-                    })
-                } else {
-                    console.log('updateAccount ERROR', e)
-                    this.setState({
-                        loading: false,
-                        changed: false,
-                        errorMessage: translate('server_returned_error')
-                    })
-                }
-            },
-            successCallback: () => {
+            errorCallback: err => {
+                console.error('updateAccount() error!', err)
                 this.setState({
                     loading: false,
-                    changed: false,
+                    errorMessage: translate('server_returned_error')
+                })
+            },
+            successCallback: () => {
+                console.log('SUCCES')
+                // clear form ad show successMessage
+                this.setState({
+                    loading: false,
                     errorMessage: '',
                     successMessage: translate('saved') + '!',
                 })
@@ -100,6 +92,14 @@ class Settings extends React.Component {
                 updateInitialValues()
             }
         })
+    }
+
+    handleCurrencyChange(event) { store.set('currency', event.target.value) }
+
+    handleLanguageChange = (event) => {
+        const language = event.target.value
+        store.set('language', language)
+        this.props.changeLanguage(language)
     }
 
     render() {
@@ -111,80 +111,76 @@ class Settings extends React.Component {
         const {profile_image, name, about, location, website} = this.state
 
         return <div className="Settings">
+                    <div className="row">
+                        {/* PROFILE SETTINGS */}
+                        <form onSubmit={this.handleSubmitForm} className="small-12 medium-6 large-4 columns">
+                            <strong>Настройки профиля</strong>
+                            <label>
+                                {translate('profile_image_url')}
+                                <input type="url" {...profile_image.props} autoComplete="off" />
+                            </label>
+                            <div className="error">{profile_image.blur && profile_image.touched && profile_image.error}</div>
 
-            {/*<div className="row">
-                <div className="small-12 medium-6 large-4 columns">
-                    <label>{translate('choose_language')}
-                        <select defaultValue={store.get('language')} onChange={this.handleLanguageChange}>
-                            <option value="en">English</option>
-                            <option value="ru">Russian</option>
-                            <option value="es">Spanish</option>
-                            <option value="es-AR">Spanish (Argentina)</option>
-                            <option value="fr">French</option>
-                            <option value="it">Italian</option>
-                            <option value="jp">Japanese</option>
-                        </select>
-                    </label>
+                            <label>
+                                {translate('profile_name')}
+                                <input type="text" {...name.props} maxLength="20" autoComplete="off" />
+                            </label>
+                            <div className="error">{name.touched && name.error}</div>
+
+                            <label>
+                                {translate('profile_about')}
+                                <input type="text" {...about.props} maxLength="160" autoComplete="off" />
+                            </label>
+                            <div className="error">{about.touched && about.error}</div>
+
+                            <label>
+                                {translate('profile_location')}
+                                <input type="text" {...location.props} maxLength="30" autoComplete="off" />
+                            </label>
+                            <div className="error">{location.touched && location.error}</div>
+
+                            <label>
+                                {translate('profile_website')}
+                                <input type="text" {...website.props} maxLength="100" autoComplete="off" />
+                            </label>
+                            <div className="error">{website.touched && website.error}</div>
+
+                            <br />
+                            {state.loading && <span><LoadingIndicator type="circle" /><br /></span>}
+                            {!state.loading && <p className="text-center"><input type="submit" className="button" value={translate('update')} disabled={disabled} /></p>}
+                            {' '}{
+                                    state.errorMessage
+                                        ? <small className="error">{state.errorMessage}</small>
+                                        : state.successMessage
+                                        ? <small className="success uppercase">{state.successMessage}</small>
+                                        : null
+                                }
+                        </form>
+                        {/* WEBSITE SETTINGS */}
+                        <div className="small-12 medium-6 large-4 columns">
+                            <strong>Настройки сайта</strong>
+                            {/* CHOOSE LANGUAGE */}
+                            <label>{translate('choose_language')}
+                              <select defaultValue={store.get('language')} onChange={this.handleLanguageChange}>
+                                <option value="ru">русский</option>
+                                <option value="en">english</option>
+                                {/* in react-intl they use 'uk' instead of 'ua' */}
+                                <option value="uk">українська</option>
+                              </select>
+                            </label>
+                            {/* CHOOSE CURRENCY */}
+                            <label>{translate('choose_currency')}
+                                <select defaultValue={store.get('currency')} onChange={this.handleCurrencyChange}>
+                                    {
+                                        ALLOWED_CURRENCIES.map(i => {
+                                            return <option key={i} value={i}>{i}</option>
+                                        })
+                                    }
+                                </select>
+                            </label>
+                        </div>
+                    </div>
                 </div>
-            </div>*/}
-            {/*<div className="row">
-                <div className="small-12 medium-6 large-4 columns">
-                    <label>{translate('choose_currency')}
-                        <select defaultValue={store.get('currency')} onChange={this.handleCurrencyChange}>
-                            {
-                                ALLOWED_CURRENCIES.map(i => {
-                                    return <option key={i} value={i}>{i}</option>
-                                })
-                            }
-                        </select>
-                    </label>
-                </div>
-            </div>*/}
-            <div className="row">
-                <form onSubmit={this.handleSubmitForm} className="small-12 medium-6 large-4 columns">
-                    <label>
-                        {translate('profile_image_url')}
-                        <input type="url" {...profile_image.props} autoComplete="off" />
-                    </label>
-                    <div className="error">{profile_image.blur && profile_image.touched && profile_image.error}</div>
-
-                    <label>
-                        {translate('profile_name')}
-                        <input type="text" {...name.props} maxLength="20" autoComplete="off" />
-                    </label>
-                    <div className="error">{name.touched && name.error}</div>
-
-                    <label>
-                        {translate('profile_about')}
-                        <input type="text" {...about.props} maxLength="160" autoComplete="off" />
-                    </label>
-                    <div className="error">{about.touched && about.error}</div>
-
-                    <label>
-                        {translate('profile_location')}
-                        <input type="text" {...location.props} maxLength="30" autoComplete="off" />
-                    </label>
-                    <div className="error">{location.touched && location.error}</div>
-
-                    <label>
-                        {translate('profile_website')}
-                        <input type="url" {...website.props} maxLength="100" autoComplete="off" />
-                    </label>
-                    <div className="error">{website.blur && website.touched && website.error}</div>
-
-                    <br />
-                    {state.loading && <span><LoadingIndicator type="circle" /><br /></span>}
-                    {!state.loading && <input type="submit" className="button" value="Update" disabled={disabled} />}
-                    {' '}{
-                            state.errorMessage
-                                ? <small className="error">{state.errorMessage}</small>
-                                : state.successMessage
-                                ? <small className="success uppercase">{state.successMessage}</small>
-                                : null
-                        }
-                </form>
-            </div>
-        </div>
     }
 }
 
@@ -196,6 +192,10 @@ export default connect(
         const current_user = state.user.get('current')
         const username = current_user ? current_user.get('username') : ''
         const metaData = account ? o2j.ifStringParseJSON(account.json_metadata) : {}
+        // TODO remove userImage variable (user profile.user_image)
+        // someday we will move from json_metadata to user.profile, so our variables are same as steemit's
+        // const userImage = metaData && metaData.profile ? metaData.profile.profile_image : ''
+        const userImage = metaData ? metaData.user_image : ''
         const profile = metaData && metaData.profile ? metaData.profile : {}
 
         return {

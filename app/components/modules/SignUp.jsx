@@ -2,6 +2,10 @@ import React from 'react';
 import {connect} from 'react-redux';
 import SvgImage from 'app/components/elements/SvgImage';
 import AddToWaitingList from 'app/components/modules/AddToWaitingList';
+import { translate } from 'app/Translator';
+import { formatCoins } from 'app/utils/FormatCoins';
+import { PRIVACY_POLICY_URL, TERMS_OF_SERVICE_URL } from 'config/client_config';
+import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 
 class SignUp extends React.Component {
     constructor() {
@@ -13,16 +17,18 @@ class SignUp extends React.Component {
             return <div className="row">
                 <div className="column">
                     <div className="callout alert">
-                        <p>Due to server maintenance we are running in read only mode. We are sorry for the inconvenience.</p></div>
+                        <p>{translate("read_only_mode")}</p>
+                    </div>
                 </div>
             </div>;
         }
-        
+
         if (this.props.serverBusy || $STM_Config.disable_signups) {
             return <div className="row">
                 <div className="column callout" style={{margin: '20px', padding: '40px'}}>
-                    <p>Membership to Steemit.com is now under invitation only because of unexpectedly high sign up rate.
-                        Submit your email to get on the waiting list.</p>
+                    <p>
+                        {translate("membership_invitation_only") + ' ' + translate("submit_email_to_get_on_waiting_list")}
+                    </p>
                     <AddToWaitingList />
                 </div>
             </div>;
@@ -31,46 +37,76 @@ class SignUp extends React.Component {
         return <div className="SignUp">
             <div className="row">
                 <div className="column">
-                    <h3>Sign Up</h3>
-                    <p>Steemit funds each account with over {this.props.signup_bonus} worth of Steem Power; to prevent abuse, we
-                        require new users to login via social media.<br />
-                        Your personal information will be kept <a href="/privacy.html" target="_blank">private</a>.
+                    <h3>{translate("sign_up")}</h3>
+                    <p>
+                        {translate("we_require_social_account", {signup_bonus: localizedCurrency(this.props.signup_bonus)})}
+                        <br />
+                        {translate("personal_info_will_be_private")}
+                        {' '}
+                        <a href={TERMS_OF_SERVICE_URL} target="_blank">
+                            {translate("personal_info_will_be_private_link")}
+                        </a>.
                     </p>
                 </div>
             </div>
             <div className="row">
                 <div className="column large-4 shrink">
-                    <SvgImage name="facebook" width="64px" height="64px" />
+                    <SvgImage name="vk" width="64px" height="64px" />
                 </div>
                 <div className="column large-8">
-                    <a href="/connect/facebook" className="button SignUp--fb-button">Continue with Facebook</a>
+                    <a href="/connect/vk" className="button SignUp--vk-button">
+                        {translate("continue_with_vk")}
+                    </a>
                 </div>
+                &nbsp;
             </div>
             <div className="row">
-            &nbsp;
+              </div>
+              <div className="row">
+                  <div className="column large-4 shrink">
+                      <SvgImage name="facebook" width="64px" height="64px" />
+                  </div>
+                  <div className="column large-8">
+                      <a href="/connect/facebook" className="button SignUp--fb-button">{translate("continue_with_facebook")}</a>
+                  </div>
+              </div>
+              <div className="row">
+              &nbsp;
             </div>
-            <div className="row">
+            {/*<div className="row">
                 <div className="column large-4 shrink">
                     <SvgImage name="reddit" width="64px" height="64px" />
                 </div>
                 <div className="column large-8">
-                    <a href="/connect/reddit" className="button SignUp--reddit-button">Continue with Reddit</a>
-                    <br /><span className="secondary">(requires 5 or more Reddit comment karma)</span>
+                    <a href="/connect/reddit" className="button SignUp--reddit-button">
+                        {translate("continue_with_reddit")}
+                    </a>
+                    <br />
+                    <span className="secondary">
+                        ({translate("requires_5_or_more_reddit_comment_karma")})
+                    </span>
                 </div>
-            </div>
-            <div className="row">
+            </div>*/}
+
+            {/*<div className="row">
                 <div className="column">
                       <br />
-                    Don't have a Facebook or Reddit account? <br />
+                    translate("dont_have_facebook") <br />
                     {this.state.waiting_list ? <AddToWaitingList /> : <a href="#" onClick={() => this.setState({waiting_list: true})}>
-                        <strong> Subscribe to get a notification when SMS confirmation is available.</strong>
+                        <strong> {translate("subscribe_to_get_sms_confirm")}.</strong>
                     </a>}
                 </div>
-            </div>
+            </div>*/}
             <div className="row">
                 <div className="column">
-                      <br />
-                    <p className="secondary">By verifying your account you agree to the Steemit <a href="/tos.html" target="_blank">terms and conditions</a>.</p>
+                    <br />
+                    <p className="secondary">
+                        {translate('by_verifying_you_agree_with') + ' '}
+                        <a href={PRIVACY_POLICY_URL} target="_blank">
+                            {translate('by_verifying_you_agree_with_privacy_policy')}
+                        </a>
+                        {' ' + translate('by_verifying_you_agree_with_privacy_policy_of_website_APP_URL')}.
+                    </p>
                 </div>
             </div>
         </div>

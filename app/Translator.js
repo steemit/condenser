@@ -4,6 +4,7 @@ import isObject from 'lodash/isObject';
 import isUndefined from 'lodash/isUndefined';
 import { connect } from 'react-redux'
 import { IntlProvider, addLocaleData, injectIntl } from 'react-intl';
+import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
 import store from 'store';
 import { DEFAULT_LANGUAGE } from 'config/client_config';
 
@@ -20,24 +21,14 @@ import { DEFAULT_LANGUAGE } from 'config/client_config';
 // locale data is needed for various messages, ie 'N minutes ago'
 import enLocaleData from 'react-intl/locale-data/en';
 import ruLocaleData from 'react-intl/locale-data/ru';
-import frLocaleData from 'react-intl/locale-data/fr';
-import esLocaleData from 'react-intl/locale-data/es';
-import itLocaleData from 'react-intl/locale-data/it';
-addLocaleData([...enLocaleData, ...ruLocaleData, ...frLocaleData, ...esLocaleData, ...itLocaleData]);
+import ukLocaleData from 'react-intl/locale-data/uk'; // in react-intl they use 'uk' instead of 'ua'
+addLocaleData([...enLocaleData, ...ruLocaleData, ...ukLocaleData]);
 
 // Our translated strings
-import { en } from './locales/en';
 import { ru } from './locales/ru';
-import { fr } from './locales/fr';
-import { es } from './locales/es';
-import { it } from './locales/it';
-const messages = {
-	en: en,
-	ru: ru,
-	fr: fr,
-	es: es,
-	it: it
-}
+import { en } from './locales/en';
+import { ua as uk } from './locales/ua'; // in react-intl they use 'uk' instead of 'ua'
+const messages = {ru, en, uk}
 
 // exported function placeholders
 // this is needed for proper export before react-intl functions with locale data,
@@ -55,6 +46,7 @@ let translate = string => {
 };
 let translateHtml = () => {};
 let translatePlural = () => {};
+let translateNumber = () => {};
 
 // react-intl's formatMessage and formatHTMLMessage functions depend on context(this is where strings are stored)
 // thats why we:
@@ -64,24 +56,26 @@ let translatePlural = () => {};
 // all of this shenanigans are needed because many times translations are needed outside of components(in reducers and redux "connect" functions)
 // but since react-intl functions depends on components context it would be not possible
 
+@injectIntl // inject translation functions through 'intl' prop
 class DummyComponentToExportProps extends React.Component {
 
 	render() { // render hidden placeholder
 		return <span hidden>{' '}</span>
 	}
 
-	// IMPORTANT
+	// ⚠️ IMPORTANT
 	// use 'componentWillMount' instead of 'componentDidMount',
-	// or there will be all sorts of partially renddered components
+	// or there will be all sorts of partially rendered components
 	componentWillMount() {
 		// assign functions after component is created (context is picked up)
 		translate = 	(...params) => this.translateHandler('string', ...params)
 		translateHtml = (...params) => this.translateHandler('html', ...params)
 		translatePlural = (...params) => this.translateHandler('plural', ...params)
+		translateNumber = (...params) => this.translateHandler('number', ...params)
 	}
 
 	translateHandler(translateType, id, values, options) {
-		const 	{ formatMessage, formatHTMLMessage, formatPlural } = this.props.intl
+		const 	{ formatMessage, formatHTMLMessage, formatPlural, formatNumber } = this.props.intl
 		// choose which method of rendering to choose: normal string or string with html
 		// handler = translateType === 'string' ? formatMessage : formatHTMLMessage
 		let handler
@@ -92,72 +86,88 @@ class DummyComponentToExportProps extends React.Component {
 				handler = formatHTMLMessage; break
 			case 'plural':
 				handler = formatPlural; break
+			case 'number':
+				handler = formatNumber; break
 			default:
 				throw new Error('unknown translate handler type')
 		}
 		// check if right parameters were used before running function
 		if (isString(id)) {
 			if (!isUndefined(values) && !isObject(values)) throw new Error('translating function second parameter must be an object!');
-			// map parameters for react-intl,
-			// which uses formatMessage({id: 'stringId', values: {some: 'values'}, options: {}}) structure
+			/* map parameters for react-intl */
+			// 'formatNumber' uses formatNumber(value: number) structure
+			else if (translateType == 'number') return handler(Number(id))
+			// everything else uses formatMessage({id: 'stringId', values: {some: 'values'}, options: {}}) structure
 			else return handler({id}, values, options)
 		}
 		else throw new Error('translating function first parameter must be a string!');
 	}
 }
 
-// inject translation functions through 'intl' prop (not using decorator)
-DummyComponentToExportProps = injectIntl(DummyComponentToExportProps)
-
 // actual wrapper for application
 class Translator extends React.Component {
 	render() {
         /* LANGUAGE PICKER */
 
-		// Define user's language. Different browsers have the user locale defined
-		// on different fields on the `navigator` object, so we make sure to account
-		// for these different by checking all of them
-		let language = this.props.locale; // usually 'en'
+		let language = this.props.locale; //  usually 'en'
+		/*
+			logic: if user has not picked language (storred in LocalStorage),
+			pick browsers language,
+			and match it agains our supported languages ('messages' constant),
+			if language is unsupported use DEFAULT_LANGUAGE
+		*/
 		if (process.env.BROWSER) {
 			const storredLanguage = store.get('language')
+			let browsersLanguage = 	navigator
+															? (navigator.languages && navigator.languages[0])
+																|| navigator.language
+																|| navigator.userLanguage
+															: ''
 			if (storredLanguage) language = storredLanguage
+			else {
+				// Different browsers have the user locale defined
+				// on different fields on the `navigator` object, so we make sure to account
+				// for these different by checking all of them
+				const browsersLanguage = 	navigator
+																? (navigator.languages && navigator.languages[0])
+										              || navigator.language
+										              || navigator.userLanguage
+																: ''
+				// Split locales with a region code (ie. 'en-EN' to 'en')
+			  const languageWithoutRegionCode = browsersLanguage.toLowerCase().split(/[_-]+/)[0];
+				if (!messages.hasOwnProperty(languageWithoutRegionCode)) language = DEFAULT_LANGUAGE
+			}
 		}
-		// let language = DEFAULT_LANGUAGE; // usually 'en'
-		// while Server Side Rendering is in process, 'navigator' is undefined
-		// currently commented out, because in golos we need only russian
-		// if (process.env.BROWSER) language = navigator
-		// 									? (navigator.languages && navigator.languages[0])
-		// 			                        || navigator.language
-		// 			                        || navigator.userLanguage
-		// 									: DEFAULT_LANGUAGE;
-        //Split locales with a region code (ie. 'en-EN' to 'en')
-        const languageWithoutRegionCode = language.toLowerCase().split(/[_-]+/)[0];
 
 		return 	<IntlProvider
 					// to ensure dynamic language change, "key" property with same "locale" info must be added
 					// see: https://github.com/yahoo/react-intl/wiki/Components#multiple-intl-contexts
-					key={languageWithoutRegionCode}
+					key={language}
+					locale={language}
+					messages={messages[language]}
 					defaultLocale={DEFAULT_LANGUAGE}
-					locale={languageWithoutRegionCode}
-					messages={messages[languageWithoutRegionCode]}
 				>
 					<div>
+						{/* self explanatory */}
 						<DummyComponentToExportProps />
+						{/*
+							create hidden instance of LocalizedCurrency so data will be fetched and
+							localizedCurrency() would never be undefined
+						*/}
+						<LocalizedCurrency amount={0} hidden />
+						{/* render actual content */}
 						{this.props.children}
 					</div>
 				</IntlProvider>
 	}
 }
 
-export { translate, translateHtml, translatePlural }
+export { translate, translateHtml, translatePlural, translateNumber }
 
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
-		const locale = state.user.get('locale')
-        return {
-            ...ownProps,
-            locale
-        }
+				const locale = state.user.get('locale')
+        return {...ownProps, locale}
     }
 )(Translator)

@@ -64,7 +64,7 @@ const fr = 	{
 	password_update_succes: 'Le mot de passe de {accountName} a bien été changé',
 	password_is_bound_to_account: "This password is bound to your account\'s owner key and can not be used to login to this site. \nHowever, you can use it to {changePasswordLink} to obtain a more secure set of keys.",
 	update_your_password: 'mettre à jour votre mot de passe',
-	enter_username: 'Entrez votre nom d\'utilisateur',
+	enter_your_username: 'Entrez votre nom d\'utilisateur',
 	password_or_wif: 'Mot de passe ou WIF',
 	requires_auth_key: 'Ce opération necessite une clé de type {authType} (ou utilisez votre mot de passe)',
 	keep_me_logged_in: 'Rester connecté',

@@ -1,7 +1,18 @@
-# Steemit.com
 
-========
+## Установка
+
+### Установка зависимостей
+
+#### Установка node.js
+
+Варианты расписаны [тут](https://nodejs.org/en/download/)
+
+#### Установка последней версии node.js
+
+=======
+# Steemit.com
 Steemit.com is the react.js web interface to the world's first and best blockchain-based social media platform.  It uses [STEEM](https://github.com/steemit/steem), a blockchain powered by Graphene 2.0 technology to store JSON-based content for a plethora of web applications.   
+========
 
 ## Why would I want to use Steemit.com?
 * Learning how to build blockchain-based web applications using STEEM as a content storage mechanism in react.js
@@ -12,33 +23,39 @@ Steemit.com is the react.js web interface to the world's first and best blockcha
 
 #### Clone the repository and make a tmp folder
 ```bash
-git clone https://github.com/steemit/steemit.com
-cd steemit.com
-mkdir tmp
+# Ставим n - менеджер версий ноды
+sudo npm install -g n
+# Ставим последнюю версию ноды
+sudo n latest
 ```
 
-#### Install dependencies
+#### Установка зависимостей проекта
 
 ```bash
-# Install at least Node v6.3 if you don't already have it ([NVM](https://github.com/creationix/nvm) recommended)
-nvm install v6
-
 npm install
-npm install -g babel-cli
 ```
 
-#### Create config file
+#### Редактирование файла конфигурации
+
+В настоящий момент Вам придётся связаться с командой запуска, чтобы получить внятные инструкции.
+
 
 ```bash
 cd config
 cp steem-example.json steem-dev.json
 ```
-
 (note: it's steem.json in production)
 
-#### Install mysql server
+#### Установка базы данных (mysql)
 
-OS X :
+_на проекте используется (sequelize)[http://docs.sequelizejs.com],
+поэтому можно использовать например postgres вместо mysql, подправив настройки_
+
+Настройки базы данных дублируются: `db/config/config.json` - используется для
+создания и синхронизации таблиц; `config/steem.json`/`config/steem-dev.json` -
+используется вебклиентом для работы с базой
+
+##### OS X:
 
 ```bash
 brew update
@@ -48,46 +65,38 @@ brew install mysql
 mysql.server restart
 ```
 
-Debian based Linux:
+##### Debian:
 
 ```bash
 sudo apt-get update
 sudo apt-get install mysql-server
 ```
 
-On Ubuntu 16.04+ you may be unable to connect to mysql without root access, if
-so update the mysql root user as follows::
+ Подключаемся к mysql и создаём базу данных steemit_dev:
 
-```
-sudo mysql -u root
-DROP USER 'root'@'localhost';
-CREATE USER 'root'@'%' IDENTIFIED BY '';
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';
-FLUSH PRIVILEGES;
-```
-
-Now launch mysql client and create steemit_dev database:
 ```bash
 mysql -u root
 > create database steemit_dev;
 ```
 
-Install `sequelize-cli` globally:
+Ставим `sequelize-cli` для всех пользователей:
 
 ```bash
-npm install -g sequelize sequelize-cli pm2 mysql
+npm install -g sequelize-cli pm2 mysql
 ```
 
-Run `sequelize db:migrate` in `db/` directory.
+Чтоы создать таблицы (а позже запустить миграцию) - запускаем `sequelize db:migrate`
+из папки `db/`.
 
 
-### Development
+### Разработка
 
+Запуск клиента в режиме разработки -
 ```bash
 npm start
 ```
 
-You now have your development front end running at localhost:3002, connected to the main public steem blockchain. You don't need to run ```steemd``` locally, by default you will connect to ```ws://node.steem.ws```.  Use your regular account name and credentials to login -- there is no separate dev login.
+В этом режиме вебклиент берёт настройки из файла `config/steem-dev.json`
 
 #### Style Guides
 
@@ -134,11 +143,18 @@ npm -i -g pm2 # one time
 pm2 start config/process.json
 ```
 
+Команда `npm run build` запускает сборку и минификацию проекта.
+Команда `npm run prod` стартует собранный проект. В этом режиме вебклиент берёт
+настройки из файла `config/steem.json`
+
+Также, есть скрипт `build_n_run_webclient.sh`, который устанавливает зависимости npm,
+запускает сборку, и стартует собранный проект в терминале screen.
+
 
 ## Issues
 
 To report a non-critical issue, please file an issue on this GitHub project.
 
-If you find a security issue please report details to: security@steemit.com
+If you find a security issue please report details to: secure[at]steemit[dot]com
 
 We will evaluate the risk and make a patch available before filing the issue.

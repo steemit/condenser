@@ -12,10 +12,13 @@ import SidePanel from 'app/components/modules/SidePanel';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import Dialogs from 'app/components/modules/Dialogs';
 import Modals from 'app/components/modules/Modals';
+import RocketChat from 'app/components/modules/RocketChat';
 import Icon from 'app/components/elements/Icon';
-import {key_utils} from 'shared/ecc';
+import {key_utils} from 'shared/ecc'
+import { translate } from 'app/Translator';
+import { TERMS_OF_SERVICE_URL, WIKI_URL, PRIVACY_POLICY_URL, SEGMENT_ANALYTICS_KEY, LANDING_PAGE_URL, WHITEPAPER_URL, VEST_TICKER } from 'config/client_config';
+import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 import MiniHeader from 'app/components/modules/MiniHeader';
-import { translate } from '../Translator.js';
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 
 class App extends React.Component {
@@ -27,8 +30,52 @@ class App extends React.Component {
     }
 
     componentWillMount() {
+
         if (process.env.BROWSER) localStorage.removeItem('autopost') // July 14 '16 compromise, renamed to autopost2
         this.props.loginUser();
+        // SEGMENT.COM ANALYTICS INITIALIZATION
+    	if (process.env.BROWSER) {
+            !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
+            analytics.load(SEGMENT_ANALYTICS_KEY);
+            analytics.page()
+            }}();
+
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-49238979-12', 'auto');
+            ga('send', 'pageview');
+
+            !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+            n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+            document,'script','https://connect.facebook.net/en_US/fbevents.js');
+
+            fbq('init', '1594659427507927');
+            fbq('track', "PageView");
+
+            // REFORMAL.RU
+            window.reformalOptions = { // yes, it's must be declared as global variable
+                project_id: 975991,
+                project_host: "golosweb.reformal.ru",
+                tab_orientation: "bottom-right",
+                tab_indent: "100px",
+                tab_bg_color: "#2471b9",
+                tab_border_color: "#FFFFFF",
+                tab_image_url: "http://tab.reformal.ru/T9GC0LfRi9Cy0Ysg0Lgg0L%252FRgNC10LTQu9C%252B0LbQtdC90LjRjw==/FFFFFF/7fc3a43d72cbfa45531d9daeca6221b5/bottom-right/1/tab.png",
+                tab_border_width: 2
+            };
+
+            (function() {
+                var script = document.createElement('script');
+                script.type = 'text/javascript'; script.async = true;
+                script.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'media.reformal.ru/widgets/v3/reformal.js';
+                document.getElementsByTagName('head')[0].appendChild(script);
+            })();
+        }
     }
 
     componentDidMount() {
@@ -54,6 +101,8 @@ class App extends React.Component {
         e.preventDefault();
         // this.setState({open: this.state.open ? null : 'left'});
         this.refs.side_panel.show();
+        console.log('sidebar menu toggled')
+        analytics.track('sidebar menu toggled')
     }
 
     handleClose = () => this.setState({open: null});
@@ -72,17 +121,17 @@ class App extends React.Component {
         else
             console.log('onEntropyEvent Unknown', e.type, e)
     }
-
     render() {
         const {location, params, children, flash, new_visitor,
             depositSteem, signup_bonus} = this.props;
         const lp = false; //location.pathname === '/';
-        const miniHeader = location.pathname === '/create_account';
         const params_keys = Object.keys(params);
+        const miniHeader = location.pathname === '/create_account';
         const ip = location.pathname === '/' || (params_keys.length === 2 && params_keys[0] === 'order' && params_keys[1] === 'category');
         const alert = this.props.error || flash.get('alert');
         const warning = flash.get('warning');
         const success = flash.get('success');
+
         let callout = null;
         if (this.state.showCallout && (alert || warning || success)) {
             callout = <div className="App__announcement row">
@@ -102,7 +151,7 @@ class App extends React.Component {
                         <ul>
                             <li>
                                 <a href="https://steemit.com/steemit/@steemitblog/steemit-com-is-now-open-source">
-                                    {translate('steemit_is_now_open_source')}
+                                    {translate('APP_URL_is_now_open_source')}
                                 </a>
                             </li>
                             <li>
@@ -127,7 +176,9 @@ class App extends React.Component {
         }
 
         let welcome_screen = null;
-        if (ip && new_visitor && this.state.showBanner) {
+        if (ip && new_visitor && this.state.showBanner
+                  && !/^\/ico$/.test(location.pathname) && !/^\/$/.test(location.pathname)  // LANDING
+            ) {
             welcome_screen = (
                 <div className="welcomeWrapper">
                     <div className="welcomeBanner">
@@ -136,13 +187,13 @@ class App extends React.Component {
                             <h2>{translate("welcome_to_the_blockchain")}</h2>
                             <h4>{translate("your_voice_is_worth_something")}</h4>
                             <br />
-                            <a className="button" href="/enter_email"> <b>{translate("sign_up")}</b> </a>
+                            <a className="button" href="/create_account" onClick={showSignUp}> <b>{translate("sign_up")}</b> </a>
                             &nbsp; &nbsp; &nbsp;
-                            <a className="button hollow uppercase" href="https://steem.io" target="_blank"> <b>{translate("learn_more")}</b> </a>
+                            <a className="button hollow uppercase" href={LANDING_PAGE_URL} target="_blank"> <b>{translate("learn_more")}</b> </a>
                             <br />
                             <br />
                             <div className="tag3">
-                                <b>{translate("get_sp_when_sign_up", {signupBonus: signup_bonus})}</b>
+                                <b>{translate("get_INVEST_TOKEN_when_sign_up", {signupBonus: localizedCurrency(signup_bonus)})}</b>
                             </div>
                         </div>
                     </div>
@@ -156,8 +207,13 @@ class App extends React.Component {
                 <TopRightMenu vertical navigate={this.navigate} />
                 <ul className="vertical menu">
                     <li>
-                        <a href="https://steem.io" onClick={this.navigate}>
+                        <a href={LANDING_PAGE_URL} onClick={this.navigate}>
                             {translate("about")}
+                        </a>
+                    </li>
+                    <li>
+                        <a href={WIKI_URL} target="blank" onClick={this.navigate}>
+                              {translate('wiki')}
                         </a>
                     </li>
                     <li>
@@ -166,13 +222,13 @@ class App extends React.Component {
                         </a>
                     </li>
                     <li>
-                        <a href="https://steem.io/SteemWhitePaper.pdf" onClick={this.navigate}>
+                        <a href={WHITEPAPER_URL} onClick={this.navigate}>
                             {translate("APP_NAME_whitepaper")}
                         </a>
                     </li>
                     <li>
                         <a href="/welcome" onClick={this.navigate}>
-                            Welcome
+                            {translate('welcome')}
                         </a>
                     </li>
                     <li>
@@ -180,16 +236,16 @@ class App extends React.Component {
                             FAQ
                         </a>
                     </li>
-                    <li>
+                    {/* <li>
                         <a onClick={() => depositSteem()}>
                             {translate("buy_LIQUID_TOKEN")}
                         </a>
-                    </li>
-                    <li>
+                    </li> */}
+                    {/* <li>
                         <a href="http://steemtools.com/" onClick={this.navigate} target="_blank" rel="noopener noreferrer">
                             {translate('APP_NAME_app_center')}&nbsp;<Icon name="extlink" />
                         </a>
-                    </li>
+                    </li> */}
                     <li>
                         <a href="/market" onClick={this.navigate}>
                             {translate("currency_market")}
@@ -206,15 +262,15 @@ class App extends React.Component {
                         </a>
                     </li>
                     <li>
-                        <a href="https://steemit.chat/home" target="_blank" rel="noopener noreferrer">
+                        <a href="https://chat.golos.io" target="_blank" rel="noopener noreferrer">
                             {translate("APP_NAME_chat")}&nbsp;<Icon name="extlink" />
                         </a>
                     </li>
-                    <li>
+                    {/* <li>
                         <a href="https://steemit.github.io/steemit-docs/" target="_blank" rel="noopener noreferrer">
                             {translate("steemit_api_docs")}&nbsp;<Icon name="extlink" />
                         </a>
-                    </li>
+                    </li> */}
                     <li className="last">
                         <a href="/~witnesses" onClick={this.navigate}>
                             {translate("vote_for_witnesses")}
@@ -223,12 +279,12 @@ class App extends React.Component {
                 </ul>
                 <ul className="vertical menu">
                     <li>
-                        <a href="/privacy.html" onClick={this.navigate} rel="nofollow">
+                        <a href={PRIVACY_POLICY_URL} onClick={this.navigate} rel="nofollow">
                             {translate("privacy_policy")}
                         </a>
                     </li>
                     <li>
-                        <a href="/tos.html" onClick={this.navigate} rel="nofollow">
+                        <a href={TERMS_OF_SERVICE_URL} onClick={this.navigate} rel="nofollow">
                             {translate("terms_of_service")}
                         </a>
                     </li>
@@ -240,6 +296,8 @@ class App extends React.Component {
                 {callout}
                 {children}
                 {lp ? <LpFooter /> : null}
+                {/* temporary disabled in favor of live chat */}
+                <RocketChat />
             </div>
             <Dialogs />
             <Modals />
@@ -253,6 +311,7 @@ App.propTypes = {
     children: AppPropTypes.Children,
     location: React.PropTypes.object,
     signup_bonus: React.PropTypes.string,
+    loading: React.PropTypes.bool,
     loginUser: React.PropTypes.func.isRequired,
     depositSteem: React.PropTypes.func.isRequired,
 };
@@ -263,6 +322,7 @@ export default connect(
             error: state.app.get('error'),
             flash: state.offchain.get('flash'),
             signup_bonus: state.offchain.get('signup_bonus'),
+            loading: state.app.get('loading'),
             new_visitor: !state.user.get('current') &&
                 !state.offchain.get('user') &&
                 !state.offchain.get('account') &&
@@ -273,7 +333,7 @@ export default connect(
         loginUser: () =>
             dispatch(user.actions.usernamePasswordLogin()),
         depositSteem: () => {
-            dispatch(g.actions.showDialog({name: 'blocktrades_deposit', params: {outputCoinType: 'VESTS'}}));
+            dispatch(g.actions.showDialog({name: 'blocktrades_deposit', params: {outputCoinType: VEST_TICKER}}));
         },
     })
 )(App);

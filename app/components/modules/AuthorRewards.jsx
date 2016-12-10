@@ -4,7 +4,9 @@ import {connect} from 'react-redux'
 import TransferHistoryRow from 'app/components/cards/TransferHistoryRow';
 import {numberWithCommas, vestsToSp, assetFloat} from 'app/utils/StateFunctions'
 import { translate } from 'app/Translator';
-import { VESTING_TOKEN, LIQUID_TICKER, VEST_TICKER, DEBT_TICKER, DEBT_TOKEN_SHORT } from 'config/client_config';
+import { APP_NAME, DEBT_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TOKEN, CURRENCY_SIGN, VESTING_TOKEN,
+LIQUID_TICKER, VEST_TICKER, DEBT_TICKER } from 'config/client_config';
+
 
 class AuthorRewards extends React.Component {
     constructor() {
@@ -64,13 +66,14 @@ class AuthorRewards extends React.Component {
                         rewards24SBD   += sbd;
                     }
                     rewardsWeekVests += vest;
-                    rewardsWeekSteem += steem;
-                    rewardsWeekSBD   += sbd;
+                    rewards24SBD += sbd;
+                    rewardsWeekSBD += sbd;
+                } else if (new Date(item[1].timestamp).getTime() > lastWeek) {
+                    rewardsWeekVests += vest;
+                    rewardsWeekSBD += sbd;
                 }
                 totalRewardsVests += vest;
-                totalRewardsSteem += steem;
-                totalRewardsSBD   += sbd;
-
+                totalRewardsSBD += sbd;
                 return <TransferHistoryRow key={index} op={item} context={account.name} />
             }
             return null;
@@ -80,8 +83,7 @@ class AuthorRewards extends React.Component {
         const curationLength = author_log.length;
         const daysOfCuration = (firstDate - finalDate) / oneDay || 1;
         const averageCurationVests = !daysOfCuration ? 0 : totalRewardsVests / daysOfCuration;
-        const averageCurationSteem = !daysOfCuration ? 0 : totalRewardsSteem / daysOfCuration;
-        const averageCurationSBD   = !daysOfCuration ? 0 : totalRewardsSBD   / daysOfCuration;
+        const averageCurationSBD = !daysOfCuration ? 0 : totalRewardsSBD / daysOfCuration;
         const hasFullWeek = daysOfCuration >= 7;
         const limitedIndex = Math.min(historyIndex, curationLength - 10);
         author_log = author_log.reverse().filter(() => {
@@ -93,12 +95,12 @@ class AuthorRewards extends React.Component {
              <nav>
                <ul className="pager">
                  <li>
-                     <div className={"button tiny hollow float-left " + (historyIndex === 0 ? " disabled" : "")} onClick={this._setHistoryPage.bind(this, false)} aria-label="Previous">
+                     <div className={"button tiny hollow float-left " + (historyIndex === 0 ? " disabled" : "")} onClick={this._setHistoryPage.bind(this, false)} aria-label={translate('previous')}>
                          <span aria-hidden="true">&larr; {translate('newer')}</span>
                      </div>
                  </li>
                  <li>
-                     <div className={"button tiny hollow float-right " + (historyIndex >= (curationLength - 10) ? " disabled" : "")} onClick={historyIndex >= (curationLength - 10) ? null : this._setHistoryPage.bind(this, true)} aria-label="Next">
+                     <div className={"button tiny hollow float-right " + (historyIndex >= (curationLength - 10) ? " disabled" : "")} onClick={historyIndex >= (curationLength - 10) ? null : this._setHistoryPage.bind(this, true)} aria-label={translate('next')}>
                          <span aria-hidden="true">{translate('older')} &rarr;</span>
                      </div>
                  </li>

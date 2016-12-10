@@ -1,5 +1,5 @@
-import {takeEvery} from 'redux-saga';
 import {call, put, select} from 'redux-saga/effects';
+import {takeEvery} from 'redux-saga';
 import {Apis} from 'shared/api_client'
 import {createTransaction, signTransaction} from 'shared/chain/transactions'
 import {ops} from 'shared/serializer'
@@ -276,6 +276,16 @@ function* accepted_withdraw_vesting({operation}) {
 function* accepted_account_update({operation}) {
     let [account] = yield call(Apis.db_api, 'get_accounts', [operation.account])
     account = fromJS(account)
+    fetch('/api/v1/account_update_hook', {
+      method: 'post',
+      mode: 'no-cors',
+      credentials: 'same-origin',
+      headers: {
+          Accept: 'application/json',
+          'Content-type': 'application/json'
+      },
+      body: JSON.stringify({csrf: $STM_csrf, account_name: [operation.account]})
+    })
     yield put(g.actions.receiveAccount({account}))
 
     // bug, fork, etc.. the folowing would be mis-leading
@@ -442,7 +452,7 @@ function* error_vote({operation: {author, permlink}}) {
 // }
 
 function slug(text) {
-    return getSlug(text.replace(/[<>]/g, ''), {truncate: 128})
+    return getSlug(text, {truncate: 128})
     //const shorten = txt => {
     //    let t = ''
     //    let words = 0

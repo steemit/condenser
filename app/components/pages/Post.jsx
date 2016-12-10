@@ -11,6 +11,7 @@ import SvgImage from 'app/components/elements/SvgImage';
 import {Set} from 'immutable'
 import { translate } from 'app/Translator';
 import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
+import capitalizeFirstLetter from 'capitalize'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 
 class Post extends React.Component {
@@ -143,11 +144,14 @@ class Post extends React.Component {
         );
 
 
-        let sort_orders = [ 'trending', 'active', 'new', 'updated' ];
-        let sort_labels = [ translate('trending'), translate('active'), translate('new'), translate('updated') ];
+        const sort_orders = ['trending', 'active', 'created', 'updated'];
+        let sort_labels = [translate('trending'), translate('active'), translate('new'), translate('updated')];
+        // capitalize first letter of sorting labels
+        sort_labels = sort_labels.map(label => capitalizeFirstLetter(label))
+
         let sort_menu = [];
 
-        let selflink = `/${dis.get('category')}/@${post}`;
+        const selflink = `/${dis.get('category')}/@${post}`;
         for( let o = 0; o < sort_orders.length; ++o ){
             sort_menu.push({
                 value: sort_orders[o],
@@ -186,7 +190,7 @@ class Post extends React.Component {
                             {positiveComments.length ?
                             (<div className="Post__comments_sort_order float-right">
                                 {translate('sort_order')}: &nbsp;
-                                <FoundationDropdownMenu menu={sort_menu} label={translate(sort_order)} dropdownPosition="bottom" dropdownAlignment="right" />
+                                <FoundationDropdownMenu menu={sort_menu} label={capitalizeFirstLetter(translate(sort_order))} dropdownPosition="bottom" dropdownAlignment="right" />
                             </div>) : null}
                             {positiveComments}
                             {negativeGroup}

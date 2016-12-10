@@ -7,7 +7,10 @@ import {findParent} from 'app/utils/DomUtils';
 export default class DropdownMenu extends React.Component {
     static propTypes = {
         items: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-        selected: React.PropTypes.string,
+        selected: React.PropTypes.oneOfType([
+            React.PropTypes.string,
+            React.PropTypes.element
+        ]),
         children: React.PropTypes.object,
         className: React.PropTypes.string,
         title: React.PropTypes.string,
@@ -64,9 +67,8 @@ export default class DropdownMenu extends React.Component {
     }
 
     render() {
-        const {el, items, selected, children, className, title, href} = this.props;
+        const {el, items, selected, children, className, title, href, onClick} = this.props;
         const hasDropdown = items.length > 0
-
         let entry = children || <span>
                 {this.getSelectedLabel(items, selected)}
                 {hasDropdown && <Icon name="dropdown-arrow" />}
@@ -76,7 +78,6 @@ export default class DropdownMenu extends React.Component {
 
         const menu = <VerticalMenu key="menu" title={title} items={items} hideValue={selected} className="VerticalMenu" />;
         const cls = 'DropdownMenu' + (this.state.shown ? ' show' : '') + (className ? ` ${className}` : '')
-        return React.createElement(el, {className: cls}, [entry, menu]);
+        return React.createElement(el, {className: cls, onClick}, [entry, menu]);
     }
 }
-

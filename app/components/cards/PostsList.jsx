@@ -3,6 +3,7 @@ import PostSummary from 'app/components/cards/PostSummary';
 import Post from 'app/components/pages/Post';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import debounce from 'lodash.debounce';
+import {findIndex} from 'lodash';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {findParent} from 'app/utils/DomUtils';
 import Icon from 'app/components/elements/Icon';
@@ -43,6 +44,8 @@ class PostsList extends React.Component {
         this.onBackButton = this.onBackButton.bind(this);
         this.closeOnOutsideClick = this.closeOnOutsideClick.bind(this);
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'PostsList')
+        this.onNextClick = this.onNextClick.bind(this);
+        this.onPrevClick = this.onPrevClick.bind(this);
     }
 
     componentDidMount() {
@@ -66,6 +69,9 @@ class PostsList extends React.Component {
                 post_overlay.addEventListener('click', this.closeOnOutsideClick);
                 post_overlay.focus();
             }
+        }
+        if (this.state.showPost && prevState.showPost) {
+
         }
         if (!this.state.showPost && prevState.showPost) {
             window.history.pushState({}, '', this.props.pathname);
@@ -94,7 +100,8 @@ class PostsList extends React.Component {
         const inside_post = findParent(e.target, 'PostsList__post_container');
         if (!inside_post) {
             const inside_top_bar = findParent(e.target, 'PostsList__post_top_bar');
-            if (!inside_top_bar) {
+            const inside_nav = findParent(e.target, 'PostsList__nav_container');
+            if (!inside_top_bar && !inside_nav) {
                 const post_overlay = document.getElementById('post_overlay');
                 if (post_overlay) post_overlay.removeEventListener('click', this.closeOnOutsideClick);
                 this.closePostModal();
@@ -155,6 +162,67 @@ class PostsList extends React.Component {
         window.history.pushState({}, '', url);
     }
 
+    onNextClick(e) {
+      let posts = this.props.posts
+      let category = this.props.category;
+      if (!category || category == 'blog') {
+        this.onBackButton(e); return;
+      }
+      let currentPath = window.location.pathname.split('?')[0].split('/@');
+      if (currentPath.length>1) {
+        currentPath = currentPath[1];
+        let postIndex = findIndex(posts, (post)=>{
+          return currentPath === post;
+        })
+        if (postIndex < 0) {
+          this.onBackButton(e); return;
+        }
+        if (postIndex >= posts.length - 2) {
+          let loadMore = this.props.loadMore
+          console.log(loadMore)
+          if (this.props.loadMore) {
+            if (loadMore && posts && posts.length > 0) loadMore(posts[posts.length - 1], category);
+            this.props.loadMore()
+          }
+          setTimeout(function(){window.scrollTo(0, 0)}, 600);
+        }
+        if (posts.length>postIndex+1) {
+          postIndex += 1
+        } else {postIndex = 0}
+        console.log('switching to post ', postIndex)
+        let nextPost = posts[postIndex];
+        let nextUrl = `/${category}/@${nextPost}`
+        this.onPostClick(nextPost, nextUrl)
+        setTimeout(function(){window.scrollTo(0, 0)}, 600);
+      }
+    }
+
+    onPrevClick(e) {
+      let posts = this.props.posts
+      let category = this.props.category
+      if (!category || category == 'blog') {
+        this.onBackButton(e); return;
+      }
+      let currentPath = window.location.pathname.split('?')[0].split('/@');
+      if (currentPath.length>1) {
+        currentPath = currentPath[1];
+        let postIndex = findIndex(posts, (post)=>{
+          return currentPath === post;
+        })
+        if (postIndex < 0) {
+          this.onBackButton(e); return;
+        }
+        if (postIndex == 0) {
+          this.onBackButton(e); return;
+        } else {postIndex -= 1}
+        console.log('switching to post ', postIndex)
+        let nextPost = posts[postIndex];
+        let nextUrl = `/${category}/@${nextPost}`
+        this.onPostClick(nextPost, nextUrl)
+        setTimeout(function(){window.scrollTo(0, 0)}, 600);
+      }
+    }
+
     render() {
         const {posts, showSpam, loading, category, content,
             ignore_result, account} = this.props;
@@ -195,7 +263,7 @@ class PostsList extends React.Component {
                 {showPost && <div id="post_overlay" className="PostsList__post_overlay" tabIndex={0}>
                     <div className="PostsList__post_top_overlay">
                         <div className="PostsList__post_top_bar">
-                            <button className="back-button" type="button" title="Back" onClick={() => {this.setState({showPost: null})}}>
+                            <button className="back-button" type="button" title="Назад" onClick={() => {this.setState({showPost: null})}}>
                                 <span aria-hidden="true"><Icon name="chevron-left" /></span>
                             </button>
                             <CloseButton onClick={this.closePostModal} />
@@ -203,6 +271,10 @@ class PostsList extends React.Component {
                     </div>
                     <div className="PostsList__post_container">
                         <Post post={showPost} />
+                    </div>
+                    <div className="PostsList__nav_container">
+                      <button className="button prev-button" type="button" title="предыдущий пост" onClick={this.onPrevClick}>&lt;</button>
+                      <button className="button next-button" type="button" title="следующий пост" onClick={this.onNextClick}>&gt;</button>
                     </div>
                 </div>}
             </div>
@@ -215,6 +287,25 @@ import {connect} from 'react-redux'
 
 export default connect(
     (state, props) => {
+        /* if content fails, use the code below
+
+        let content = state.global.get('content').get(item);
+        // when you go to 'blog' tab in user profile content is not getting picked up properly,
+        // due to bad content key (it's 'sometitle' instead of 'username/sometitle')
+        // no idead how this did happanen. But this workaround fixes the issue
+
+        // if there is no content add username to content key
+        if(!content) {
+            item = props.accountName + '/' + item
+            content = state.global.get('content').get(item)
+            // only if content is still missing throw actual error
+            if(!content) {
+                console.error('PostsList --> Missing content key', item)
+                return
+            }
+        }
+
+         */
         const pathname = state.app.get('location').pathname;
         const current = state.user.get('current')
         const username = current ? current.get('username') : null

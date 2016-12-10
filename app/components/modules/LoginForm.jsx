@@ -8,6 +8,8 @@ import {validate_account_name} from 'app/utils/ChainValidation';
 import runTests from 'shared/ecc/test/BrowserTests';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import reactForm from 'app/utils/ReactForm'
+import { translate } from 'app/Translator';
+import { translateError } from 'app/utils/ParsersAndFormatters';
 
 class LoginForm extends Component {
 
@@ -38,7 +40,7 @@ class LoginForm extends Component {
             if(e.preventDefault) e.preventDefault()
             const {onCancel, loginBroadcastOperation} = this.props
             const errorCallback = loginBroadcastOperation && loginBroadcastOperation.get('errorCallback')
-            if (errorCallback) errorCallback('Canceled')
+            if (errorCallback) errorCallback(translate('canceled'))
             if (onCancel) onCancel()
         }
         this.qrReader = () => {
@@ -60,12 +62,12 @@ class LoginForm extends Component {
         reactForm({
             name: 'login',
             instance: this,
-            fields: ['username', 'password', 'saveLogin:checked'],
+            fields: ['username', 'password', 'saveLogin:bool'],
             initialValues: props.initialValues,
             validation: values => ({
-                username: ! values.username ? 'Required' : validate_account_name(values.username.split('/')[0]),
-                password: ! values.password ? 'Required' :
-                    PublicKey.fromString(values.password) ? 'You need a private password or key (not a public key)' :
+                username: ! values.username ? translate('required') : validate_account_name(values.username.split('/')[0]),
+                password: ! values.password ? translate('required') :
+                    PublicKey.fromString(values.password) ? translate('you_need_private_password_or_key_not_a_public_key') :
                     null,
             })
         })
@@ -84,18 +86,24 @@ class LoginForm extends Component {
     render() {
         if (!process.env.BROWSER) {
             return <div className="row">
-                <div className="column">
-                    <p>Loading..</p>
-                </div>
-            </div>;
+                        <div className="column">
+                            <p>{translate("loading")}..</p>
+                        </div>
+                    </div>;
         }
         if (this.state.cryptographyFailure) {
             return <div className="row">
                 <div className="column">
                     <div className="callout alert">
-                        <h4>Cryptography test failed</h4>
-                        <p>We will be unable to log you in with this browser.</p>
-                        <p>The latest versions of <a href="https://www.google.com/chrome/">Chrome</a> and <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a> are well tested and known to work with steemit.com.</p>
+                        <h4>{translate("cryptography_test_failed")}</h4>
+                        <p>{translate("unable_to_log_you_in")}.</p>
+                        <p>
+                            {translate('the_latest_versions_of') + ' '}
+                            <a href="https://www.google.com/chrome/">Chrome</a>
+                            {' ' + translate('and')}
+                            <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a>
+                            {' ' + translate('are_well_tested_and_known_to_work_with')}
+                        </p>
                     </div>
                 </div>
             </div>;
@@ -103,11 +111,12 @@ class LoginForm extends Component {
 
         if ($STM_Config.read_only_mode) {
             return <div className="row">
-                <div className="column">
-                    <div className="callout alert">
-                        <p>Due to server maintenance we are running in read only mode. We are sorry for the inconvenience.</p></div>
-                </div>
-            </div>;
+                        <div className="column">
+                            <div className="callout alert">
+                                <p>{translate("read_only_mode")}</p>
+                            </div>
+                        </div>
+                    </div>;
         }
 
         const {loginBroadcastOperation, dispatchSubmit, afterLoginRedirectToWelcome, msg} = this.props;
@@ -117,40 +126,50 @@ class LoginForm extends Component {
         const disabled = submitting || !valid;
 
         const title = loginBroadcastOperation ?
-            'Authenticate for this transaction' :
-            'Login to your Steem Account';
+            translate('authenticate_for_this_transaction') :
+            translate('login_to_your_APP_NAME_account');
         const opType = loginBroadcastOperation ? loginBroadcastOperation.get('type') : null
-        const authType = /^vote|comment/.test(opType) ? 'Posting' : 'Active or Owner'
-        const submitLabel = loginBroadcastOperation ? 'Sign' : 'Login';
+        const authType = translate(/^vote|comment/.test(opType) ? 'posting' : 'active_or_owner')
+
+        const submitLabel = translate(loginBroadcastOperation ? 'sign' : 'login');
         let error = password.touched && password.error ? password.error : this.props.login_error
         if (error === 'owner_login_blocked') {
-            error = <span>This password is bound to your account&apos;s owner key and can not be used to login to this site.
-                However, you can use it to <a onClick={this.showChangePassword}>update your password</a> to obtain a more secure set of keys.</span>
-        } else if (error === 'active_login_blocked') {
-            error = <span>This password is bound to your account&apos;s active key and can not be used to login to this page.  You may use this
-                active key on other more secure pages like the Wallet or Market pages.</span>
+            error = <span>
+                        {translate("password_is_bound_to_account", {
+                                changePasswordLink: <a onClick={this.showChangePassword} >
+                                                        {translate('update_your_password')}
+                                                    </a>
+                            })} />
+                        {translate('password_is_bound_to_your_accounts_owner_key')}.
+                        <br />
+                        {translate('however_you_can_use_it_to') + ' '}
+                        <a onClick={this.showChangePassword}>{translate('update_your_password')}</a>
+                        {' ' + translate('to_obtaion_a_more_secure_set_of_keys')}.
+                    </span>
+                } else if (error === 'active_login_blocked') {
+                    error = <span>{translate('this_password_is_bound_to_your_accounts_private_key')}</span>
         }
         let message = null;
         if (msg) {
             if (msg === 'accountcreated') {
                 message =<div className="callout primary">
-                        <p>You account has been successfully created!</p>
+                        <p>{translate("account_creation_succes")}</p>
                     </div>;
             }
             else if (msg === 'accountrecovered') {
                 message =<div className="callout primary">
-                    <p>You account has been successfully recovered!</p>
+                    <p>{translate("account_recovery_succes")}</p>
                 </div>;
             }
             else if (msg === 'passwordupdated') {
                 message = <div className="callout primary">
-                    <p>The password for `{username.value}` was successfully updated.</p>
+                    <p>{translate("password_update_succes", { accountName: username.value })}.</p>
                 </div>;
             }
         }
-        const password_info = checkPasswordChecksum(password.value) === false ?
-            'This password or private key was entered incorrectly.  There is probably a handwriting or data-entry error.  Hint: A password or private key generated by Steemit will never contain 0 (zero), O (capital o), I (capital i) and l (lower case L) characters.' :
-            null
+        const password_info = checkPasswordChecksum(password.value) === false
+                                ? translate('this_password_or_private_key_was_entered_incorrectly_there_is_probably_a_handwriting_or_data_entry_error')
+                                : null
 
         const form = (
             <form onSubmit={handleSubmit(({data}) => {
@@ -163,23 +182,25 @@ class LoginForm extends Component {
             >
                 <div className="input-group">
                     <span className="input-group-label">@</span>
-                    <input className="input-group-field" type="text" required placeholder="Enter your username" ref="username"
+                    <input className="input-group-field" type="text" required placeholder={translate('enter_your_username')} ref="username"
                         {...username.props} onChange={usernameOnChange} autoComplete="on" disabled={submitting}
                     />
                 </div>
-                {username.touched && username.blur && username.error ? <div className="error">{username.error}&nbsp;</div> : null}
+                {username.touched && username.blur && username.error ? <div className="error">{translateError(username.error)}&nbsp;</div> : null}
 
                 <div>
-                    <input type="password" required ref="pw" placeholder="Password or WIF" {...password.props} autoComplete="on" disabled={submitting} />
+                    <input type="password" required ref="pw" placeholder={translate('password_or_wif')} {...password.props} autoComplete="on" disabled={submitting} />
                     {error && <div className="error">{error}&nbsp;</div>}
                     {error && password_info && <div className="warning">{password_info}&nbsp;</div>}
                 </div>
                 {loginBroadcastOperation && <div>
-                    <div className="info">This operation requires your {authType} key (or use your master password).</div>
+                    <div className="info">
+                        {translate("requires_auth_key", { authType })}.
+                    </div>
                 </div>}
                 {!loginBroadcastOperation && <div>
                     <label htmlFor="saveLogin">
-                        Keep me logged in &nbsp;
+                        {translate("keep_me_logged_in") + ' '}
                         <input id="saveLogin" type="checkbox" ref="pw" {...saveLogin.props} onChange={this.saveLoginToggle} disabled={submitting} /></label>
                 </div>}
                 <br />
@@ -188,7 +209,7 @@ class LoginForm extends Component {
                         {submitLabel}
                     </button>
                     {this.props.onCancel && <button type="button float-right" disabled={submitting} className="button hollow" onClick={onCancel}>
-                        Cancel
+                        {translate("cancel")}
                     </button>}
                 </div>
             </form>
@@ -222,6 +243,7 @@ function urlAccountName() {
 function checkPasswordChecksum(password) {
     // A Steemit generated password is a WIF prefixed with a P ..
     // It is possible to login directly with a WIF
+    // TODO check if this properly works with Golos. Maybe change "P" to "G"?
     const wif = /^P/.test(password) ? password.substring(1) : password
 
     if(!/^5[HJK].{45,}/i.test(wif)) {// 51 is the wif length

@@ -15,6 +15,9 @@ import {Set} from 'immutable'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import Remarkable from 'remarkable'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
+import { translate } from 'app/Translator';
+import { detransliterate, translateError } from 'app/utils/ParsersAndFormatters';
+import { APP_NAME, DEBT_TICKER } from 'config/client_config';
 
 const remarkable = new Remarkable({ html: true, linkify: false, breaks: true })
 const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
@@ -108,9 +111,8 @@ class ReplyEditor extends React.Component {
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'ReplyEditor')
         this.onTitleChange = e => {
             const value = e.target.value
-            // TODO block links in title (the do not make good permlinks)
             const hasMarkdown = /(?:\*[\w\s]*\*|\#[\w\s]*\#|_[\w\s]*_|~[\w\s]*~|\]\s*\(|\]\s*\[)/.test(value)
-            this.setState({ titleWarn: hasMarkdown ? 'Markdown is not supported here' : '' })
+            this.setState({ titleWarn: hasMarkdown ? translate('markdown_is_not_supported_here') : '' })
             this.props.fields.title.onChange(e)
         }
         this.onCancel = e => {
@@ -281,7 +283,7 @@ class ReplyEditor extends React.Component {
             jsonMetadata, autoVote: autoVoteValue, payoutType,
             successCallback: successCallbackWrapper, errorCallback
         }
-        const postLabel = username ? <Tooltip t={'Post as “' + username + '”'}>Post</Tooltip> : 'Post'
+        const postLabel = username ? <Tooltip t={`${translate('post_as')} “${username}”`}>{translate('post')}</Tooltip> : translate('post')
         const hasTitleError = title && title.touched && title.error
         let titleError = null
         // The Required title error (triggered onBlur) can shift the form making it hard to click on things..
@@ -299,7 +301,7 @@ class ReplyEditor extends React.Component {
         return (
             <div className="ReplyEditor row">
                 <div className="column small-12">
-                    <div ref="draft" className="ReplyEditor__draft ReplyEditor__draft-hide">Draft saved.</div>
+                    <div ref="draft" className="ReplyEditor__draft ReplyEditor__draft-hide">{translate('draft_saved')}.</div>
                     <form className={vframe_class}
                         onSubmit={handleSubmit(data => {
                             const loadingCallback = () => this.setState({loading: true, postError: undefined})
@@ -309,10 +311,10 @@ class ReplyEditor extends React.Component {
                     >
                         <div className={vframe_section_shrink_class}>
                             {isStory && <span>
-                                <input type="text" className="ReplyEditor__title" {...cleanReduxInput(title)} onChange={onTitleChange} disabled={loading} placeholder="Title" autoComplete="off" ref="titleRef" tabIndex={1} />
+                                <input type="text" className="ReplyEditor__title" {...cleanReduxInput(title)} onChange={onTitleChange} disabled={loading} placeholder={translate('title')} autoComplete="off" ref="titleRef" tabIndex={1} />
                                 <div className="float-right secondary" style={{marginRight: '1rem'}}>
-                                    {rte && <a href="#" onClick={this.toggleRte}>{body.value ? 'Raw HTML' : 'Markdown'}</a>}
-                                    {!rte && (isHtml || !body.value) && <a href="#" onClick={this.toggleRte}>Editor</a>}
+                                    {rte && <a href="#" onClick={this.toggleRte}>{body.value ? translate('raw_html') : 'Markdown'}</a>}
+                                    {!rte && (isHtml || !body.value) && <a href="#" onClick={this.toggleRte}>{translate('editor')}</a>}
                                 </div>
                                 {titleError}
                             </span>}
@@ -326,7 +328,7 @@ class ReplyEditor extends React.Component {
                                     onChange={this.onChange}
                                     onBlur={body.onBlur} tabIndex={2} />
                                 :
-                                <textarea {...cleanReduxInput(body)} disabled={loading} rows={isStory ? 10 : 3} placeholder={isStory ? 'Write your story...' : 'Reply'} autoComplete="off" ref="postRef" tabIndex={2} />
+                                <textarea {...cleanReduxInput(body)} disabled={loading} rows={isStory ? 10 : 3} placeholder={isStory ? translate('write_your_story') + '...' : translate('reply')} autoComplete="off" ref="postRef" tabIndex={2} />
                             }
                         </div>
                         <div className={vframe_section_shrink_class}>
@@ -343,32 +345,32 @@ class ReplyEditor extends React.Component {
                             {postError && <div className="error">{postError}</div>}
                         </div>
                         <div className={vframe_section_shrink_class}>
-                            {!loading && <button type="submit" className="button" disabled={submitting || invalid} tabIndex={4}>{isEdit ? 'Update Post' : postLabel}</button>}
+                            {!loading && <button type="submit" className="button" disabled={submitting || invalid} tabIndex={4}>{isEdit ? translate('update_post') : postLabel}</button>}
                             {loading && <span><br /><LoadingIndicator type="circle" /></span>}
                             &nbsp; {!loading && this.props.onCancel &&
-                                <button type="button" className="secondary hollow button no-border" tabIndex={5} onClick={(e) => {e.preventDefault(); onCancel()}}>Cancel</button>
+                                <button type="button" className="secondary hollow button no-border" tabIndex={5} onClick={(e) => {e.preventDefault(); onCancel()}}>{translate('cancel')}</button>
                             }
-                            {!loading && !this.props.onCancel && <button className="button hollow no-border" tabIndex={5} disabled={submitting} onClick={onCancel}>Clear</button>}
+                            {!loading && !this.props.onCancel && <button className="button hollow no-border" tabIndex={5} disabled={submitting} onClick={onCancel}>{translate('clear')}</button>}
 
                             {isStory && !isEdit && <div className="ReplyEditor__options float-right text-right">
 
-                                Rewards:&nbsp;
+                                {translate('rewards')}:&nbsp;
                                 <select value={this.state.payoutType} onChange={this.onPayoutTypeChange} style={{color: this.state.payoutType == '0%' ? 'orange' : 'inherit'}}>
-                                    <option value="100%">Power Up 100%</option>
-                                    <option value="50%">Default (50% / 50%)</option>
-                                    <option value="0%">Decline Payout</option>
+                                    <option value="100%">{translate('power_up')} 100%</option>
+                                    <option value="50%">{translate('default')} (50% / 50%)</option>
+                                    <option value="0%">{translate('decline_payout')}</option>
                                 </select>
 
                                 <br />
-                                <label title="Check this to auto-upvote your post">
-                                  Upvote post&nbsp;
+                                <label title={translate('check_this_to_auto_upvote_your_post')}>
+                                  {translate('upvote_post')}&nbsp;
                                   <input type="checkbox" checked={autoVote.value} onChange={autoVoteOnChange} />
                                 </label>
                             </div>}
                         </div>
                         {!loading && !rte && body.value && <div className={'Preview ' + vframe_section_shrink_class}>
-                            {!isHtml && <div className="float-right"><a target="_blank" href="https://guides.github.com/features/mastering-markdown/">Markdown Styling Guide</a></div>}
-                            <h6>Preview</h6>
+                            {!isHtml && <div className="float-right"><a target="_blank" href="https://guides.github.com/features/mastering-markdown/">{translate('markdown_styling_guide')}</a></div>}
+                            <h6>{translate('preview')}</h6>
                             <MarkdownViewer formId={formId} text={body.value} canEdit jsonMetadata={jsonMetadata} large={isStory} noImage={noImage} />
                         </div>}
                     </form>
@@ -398,19 +400,21 @@ export default formId => reduxForm(
         const maxKb = isStory ? 100 : 16
         const validate = values => ({
             title: isStory && (
-                !values.title || values.title.trim() === '' ? 'Required' :
-                values.title.length > 255 ? 'Shorten title' :
+                !values.title || values.title.trim() === '' ? translate('required') :
+                values.title.length > 255 ? translate('shorten_title') :
                 null
             ),
             category: isStory && validateCategory(values.category, !isEdit),
-            body: !values.body ? 'Required' :
-                  values.body.length > maxKb * 1024 ? 'Exceeds maximum length ('+maxKb+'KB)' : null,
+            body: !values.body ? translate('required') :
+                  values.body.length > maxKb * 1024 ? translate('exceeds_maximum_length', { maxKb }) : null,
         })
 
         let {category, title, body} = ownProps
         if (/submit_/.test(type)) title = body = ''
         if(isStory && jsonMetadata && jsonMetadata.tags) {
-            category = Set([category, ...jsonMetadata.tags]).join(' ')
+            // detransletirate values to avoid disabled 'update post' button on load
+            const tags = jsonMetadata.tags.map(tag => detransliterate(tag))
+            category = Set([detransliterate(category), ...tags]).join(' ')
         }
         const ret = {
             ...ownProps,
@@ -437,6 +441,17 @@ export default formId => reduxForm(
             // const post = state.global.getIn(['content', author + '/' + permlink])
             const username = state.user.getIn(['current', 'username'])
 
+            // Parse categories:
+            // if category string starts with russian symbol, add 'ru-' prefix to it
+            // when transletirate it
+            // This is needed to be able to detransletirate it back to russian in future (to show russian categories to user)
+            // (all of this is needed because blockchain does not allow russian symbols in category)
+            if (category) {
+                category = category.split(' ')
+                                    .map(item => /^[а-яё]/.test(item) ? 'ru--' + detransliterate(item, true) : item)
+                                    .join(' ')
+            }
+
             const isEdit = type === 'edit'
             const isNew = /^submit_/.test(type)
 
@@ -455,14 +470,14 @@ export default formId => reduxForm(
 
             if (!linkProps) throw new Error('Unknown type: ' + type)
 
-            const formCategories = Set(category ? category.trim().replace(/#/g,"").split(/ +/) : [])
+            const formCategories = Set(category ? category.trim().replace(/#/g, "").split(/ +/) : [])
             const rootCategory = originalPost && originalPost.category ?
                 originalPost.category : formCategories.first()
             const rootTag = /^[-a-z\d]+$/.test(rootCategory) ? rootCategory : null
 
             // If this is an HTML post, it MUST begin and end with the tag
             if(isHtml && !body.match(/^<html>[\s\S]*<\/html>$/)) {
-                errorCallback('HTML posts must begin with <html> and end with </html>')
+                errorCallback(translate('html_posts_must_begin_with_html_and_end_with_html'))
                 return
             }
 
@@ -475,7 +490,7 @@ export default formId => reduxForm(
             allowedTags.forEach(tag => { rtags.htmltags.delete(tag) })
             if(isHtml) rtags.htmltags.delete('html') // html tag allowed only in HTML mode
             if(rtags.htmltags.size) {
-                errorCallback('Please remove the following HTML elements from your post: ' + Array(...rtags.htmltags).map(tag => `<${tag}>`).join(', '))
+                errorCallback(translate('please_remove_following_html_elements') + Array(...rtags.htmltags).map(tag => `<${tag}>`).join(', '))
                 return
             }
 
@@ -490,7 +505,7 @@ export default formId => reduxForm(
             if(rtags.links.size) meta.links = rtags.links; else delete meta.links
 
             if(isStory) {
-                meta.app = "steemit/0.1"
+                meta.app = APP_NAME + "/0.1"
                 meta.format = isHtml ? 'html' : 'markdown'
             }
 
@@ -503,8 +518,8 @@ export default formId => reduxForm(
             }
 
             if(meta.tags.length > 5) {
-                const includingCategory = isEdit ? ` (including the category '${rootCategory}')` : ''
-                errorCallback(`You have ${meta.tags.length} tags total${includingCategory}.  Please use only 5 in your post and category line.`)
+                const includingCategory = isEdit ? translate('including_the_category', {rootCategory: detransliterate(rootCategory)}) : ''
+                errorCallback(translate('use_limited_amount_of_tags', {tagsLength: meta.tags.length, includingCategory}))
                 return
             }
             // loadingCallback starts the loading indicator
@@ -518,7 +533,7 @@ export default formId => reduxForm(
                 switch(payoutType) {
                     case '0%': // decline payout
                         __config.comment_options = {
-                            max_accepted_payout: '0.000 SBD',
+                            max_accepted_payout: '0.000 ' + DEBT_TICKER,
                         }
                         break;
                     case '100%': // 100% steem power payout
@@ -545,4 +560,3 @@ export default formId => reduxForm(
         },
     })
 )(ReplyEditor)
-

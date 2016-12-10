@@ -122,7 +122,7 @@
             /** The number of milliseconds to delay before attempting to reconnect. */
             reconnectInterval: 2000,
             /** The maximum number of milliseconds to delay a reconnection attempt. */
-            maxReconnectInterval: 300000,
+            maxReconnectInterval: 30000,
             /** The rate of increase of the reconnect delay. Allows reconnect attempts to back off when problems persist. */
             reconnectDecay: 1.5,
 

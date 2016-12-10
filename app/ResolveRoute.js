@@ -7,11 +7,16 @@ export const routeRegex = {
 
 export default function resolveRoute(path)
 {
+    // routes
     if (path === '/') {
         return {page: 'PostsIndex', params: ['trending']};
     }
     if (path === '/about.html') {
         return {page: 'About'};
+    }
+    // golos.io landing page
+    if (path === '/ico') {
+        return {page: 'Landing'};
     }
     if (path === '/welcome') {
         return {page: 'Welcome'};

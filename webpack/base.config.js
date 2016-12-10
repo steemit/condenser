@@ -41,6 +41,10 @@ export default {
                 loader: ExtractTextPlugin.extract('style', 'css!autoprefixer!sass?outputStyle=expanded')
             },
             {
+               test: require.resolve('wowjs/dist/wow.js'),
+               loader: 'exports?this.WOW'
+            },
+            {
                 test: /\.md/,
                 loader: 'raw'
             }
@@ -57,9 +61,6 @@ export default {
         ],
         extensions: ['', '.js', '.json', '.jsx'],
         modulesDirectories: ['node_modules']
-    },
-    externals: {
-        newrelic: true
     }
 };
 /* medium-editor, add to plugins[]

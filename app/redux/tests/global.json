@@ -8,14 +8,14 @@
     "current_witness": "mottler-5",
     "total_pow": "18446744048449238345",
     "num_pow_witnesses": 79,
-    "virtual_supply": "156738.000 STEEM",
-    "current_supply": "156738.000 STEEM",
-    "confidential_supply": "0.000 STEEM",
-    "current_sbd_supply": "0.000 SBD",
-    "confidential_sbd_supply": "0.000 SBD",
-    "total_vesting_fund_steem": "274.000 STEEM",
-    "total_vesting_shares": "274.000000 VESTS",
-    "total_reward_fund_steem": "77794.000 STEEM",
+    "virtual_supply": "156738.000 GOLOS",
+    "current_supply": "156738.000 GOLOS",
+    "confidential_supply": "0.000 GOLOS",
+    "current_sbd_supply": "0.000 GBG",
+    "confidential_sbd_supply": "0.000 GBG",
+    "total_vesting_fund_steem": "274.000 GOLOS",
+    "total_vesting_shares": "274.000000 GESTS",
+    "total_reward_fund_steem": "77794.000 GOLOS",
     "total_reward_shares2": "0",
     "sbd_interest_rate": 1000,
     "average_block_size": 117,
@@ -64,7 +64,7 @@
       "woot"
     ],
     "median_props": {
-      "account_creation_fee": "100.000 STEEM",
+      "account_creation_fee": "100.000 GOLOS",
       "maximum_block_size": 131072,
       "sbd_interest_rate": 1000
     }

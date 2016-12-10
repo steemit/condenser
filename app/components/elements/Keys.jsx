@@ -58,9 +58,11 @@ class Keys extends Component {
                 </div>
             </div>
         ))
+
         return (
             <span>
                 <div className="row">
+
                     <div className="column small-12">
                         <label>{translate(authType.toLowerCase())}</label>
                         {auths}

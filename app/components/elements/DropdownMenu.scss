@@ -19,7 +19,8 @@
     position: absolute;
     top: 100%;
 
-    // width: auto;
+    width: auto;
+    text-align: left;
     transform: translateY(10%);
     transition: all 0.3s ease 0s, visibility 0s linear 0.3s;
     box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.75);

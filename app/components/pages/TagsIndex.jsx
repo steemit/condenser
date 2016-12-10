@@ -2,6 +2,9 @@ import React from 'react';
 import { Link } from 'react-router';
 import {connect} from 'react-redux';
 import { browserHistory } from 'react-router';
+import { translate } from 'app/Translator';
+import { formatCoins } from 'app/utils/FormatCoins';
+import { detransliterate } from 'app/utils/ParsersAndFormatters';
 
 export default class TagsIndex extends React.Component {
     static propTypes = {
@@ -10,10 +13,7 @@ export default class TagsIndex extends React.Component {
         order: React.PropTypes.string,
     };
 
-    constructor(props) {
-        super(props);
-        this.state = {search: ''};
-    }
+    state = { search: '' }
 
     shouldComponentUpdate(nextProps, nextState) {
         const res = this.props.tagsList !== nextProps.tagsList ||
@@ -47,26 +47,27 @@ export default class TagsIndex extends React.Component {
             // const tag_info = tagsAll.get(tag);
             return (<tr key={name}>
                 <td>
-                    <Link to={link} activeClassName="active">{name}</Link>
+                    <Link to={link} activeClassName="active">{detransliterate(name)}</Link>
                 </td>
                 <td>{tag.get('top_posts')}</td>
                 <td>{tag.get('comments')}</td>
                 <td>{tag.get('total_payouts')}</td>
             </tr>);
         }).toArray();
+
         return (
             <div className="TagsIndex row">
                 <div className="column">
-                    <div className="medium-2 medium-offset-10">
-                        <input type="text" placeholder="Filter" value={search} onChange={this.onChangeSearch} />
+                    <div className="medium-2 medium-offset-10 hidden">
+                        <input type="text" placeholder={translate('filter')} value={search} onChange={this.onChangeSearch} />
                     </div>
                     <table>
                         <thead>
                         <tr>
-                            <th>Tag</th>
-                            <th>Posts</th>
-                            <th>Comments</th>
-                            <th>Payouts</th>
+                            <th>{translate("tag")}</th>
+                            <th>{translate("posts")}</th>
+                            <th>{translate("comments")}</th>
+                            <th>{translate("payouts")}</th>
                         </tr>
                         </thead>
                         <tbody>

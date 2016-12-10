@@ -99,11 +99,10 @@ export default function reactForm({name, instance, fields, initialValues, valida
             const v = {...(instance.state[fieldName] || {})}
             const initialValue = initialValues[fieldName]
 
-            if(fieldType === 'checked') {
-                v.touched = toString(value) !== toString(initialValue)
-                v.value = v.props.checked = toBoolean(value)
-                v.value = value
-            } else if(fieldType === 'selected') {
+            if(fieldType === 'bool') {
+                v.touched = toBool(value) !== toBool(initialValue)
+                v.value = v.props.checked = toBool(value)
+            } else if(fieldType === 'option') {
                 v.touched = toString(value) !== toString(initialValue)
                 v.value = v.props.selected = toString(value)
             } else {
@@ -167,25 +166,23 @@ function getData(fields, state) {
 /*
     @arg {string} field - field:type
     <pre>
-        type = checked (for checkbox or radio)
-        type = selected (for seelct option)
+        type = bool,checkbox,radio
+        type = option,select
         type = string
     </pre>
-    @return {string} type
 */
 function t(field) {
-    const [, type = 'string'] = field.split(':')
+    let [, type = 'string'] = field.split(':')
+    if(/checkbox|radio/.test(type)) type = 'bool'
+    if(/select|option/.test(type)) type = 'option'
     return type
 }
 
-/**
-    @return {string} name
-*/
 function n(field) {
     const [name] = field.split(':')
     return name
 }
 
 const hasValue = v => v == null ? false : (typeof v === 'string' ? v.trim() : v) === '' ? false : true
+const toBool = v => hasValue(v) ? JSON.parse(v) : false
 const toString = v => hasValue(v) ? v : ''
-const toBoolean = v => hasValue(v) ? JSON.parse(v) : ''

@@ -23,33 +23,37 @@ export default function runTests() {
 
     let private_key, public_key, encodedMemo
     const wif = '5JdeC9P7Pbd1uGdFVEsJ41EkEnADbbHGq6p1BwFxm6txNBsQnsw'
-    const pubkey = 'STM8m5UgaFAAYQRuaNejYdS8FVLVp9Ss3K1qAVk5de6F8s3HnVbvA'
-
+    const pubkey = 'GLS8m5UgaFAAYQRuaNejYdS8FVLVp9Ss3K1qAVk5de6F8s3HnVbvA'
+    const _memo = "#memo";
     it('create private key', () => {
         private_key = PrivateKey.fromSeed('1')
         assert.equal(private_key.toWif(), wif)
     })
     it('supports WIF format', () => {
-        assert(PrivateKey.fromWif(wif))
+
+        assert.deepEqual(PrivateKey.fromWif(wif), private_key)
     })
     it('finds public from private key', () => {
         public_key = private_key.toPublicKey()
-        // substring match ignore prefix
         assert.equal(public_key.toString(), pubkey, 'Public key did not match')
     })
     it('parses public key', () => {
         assert(PublicKey.fromString(public_key.toString()))
     })
     it('encrypts memo', () => {
-        encodedMemo = encode(private_key, public_key, '#memo')
+        encodedMemo = encode(private_key, public_key, _memo)
+          console.log(encodedMemo)
         assert(encodedMemo)
     })
     it('decripts memo', () => {
         const dec = decode(private_key, encodedMemo)
+        console.log(dec);
+        console.log(_memo);
         if(dec !== '#memo') {
             console.error('Decoded memo did not match (memo encryption is unavailable)')
             browserTests.memo_encryption = false
         }
+        // TODO: FIX!  assert.equal(dec, _memo, 'decoded memo did not match original');
     })
     if(!pass) return rpt
 }

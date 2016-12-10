@@ -7,26 +7,65 @@ import recordWebEvent from 'server/record_web_event';
 import {esc, escAttrs} from 'db/models';
 import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF} from 'server/utils';
 import coBody from 'co-body';
-import Mixpanel from 'mixpanel';
+import {getLogger} from '../../app/utils/Logger'
+import {Apis} from 'shared/api_client';
+import {createTransaction, signTransaction} from 'shared/chain/transactions';
+import {ops} from 'shared/serializer';
 import Tarantool from 'db/tarantool';
+import Mixpanel from 'mixpanel';
+
+const {signed_transaction} = ops;
+const print = getLogger('API - general').print
+
+function dbStoreSingleMeta(name, k, v) {
+    models.AccountMeta.findOne({
+        attributes: [
+            'accname', 'k', 'v'
+        ],
+        where: {
+            accname: esc(name),
+            k: esc(k)
+        }
+    }).then(function(it) {
+        if (it) {
+            if (it.dataValues.v !== v)
+                models.AccountMeta.update({
+                    v: esc(v)
+                }, {
+                    where: {
+                        accname: esc(name),
+                        k: esc(k)
+                    }
+                });
+            }
+        else {
+            models.AccountMeta.create({accname: esc(name), k: esc(k), v: esc(v)});
+        }
+    });
+}
 
 const mixpanel = config.mixpanel ? Mixpanel.init(config.mixpanel) : null;
 
 
 export default function useGeneralApi(app) {
-    const router = koa_router({prefix: '/api/v1'});
+    const router = koa_router({
+        prefix: '/api/v1'
+    });
     app.use(router.routes());
     const koaBody = koa_body();
 
-    router.post('/accounts', koaBody, function *() {
+    router.post('/accounts', koaBody, function*() {
         if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;
+        print('params', params)
         const account = typeof(params) === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, account.csrf)) return;
         console.log('-- /accounts -->', this.session.uid, this.session.user, account);
 
         if ($STM_Config.disable_signups) {
-            this.body = JSON.stringify({error: 'New signups are temporary disabled.'});
+            this.body = JSON.stringify({
+                error: 'New signups are temporary disabled.'
+            });
             this.status = 401;
             return;
         }
@@ -58,23 +97,27 @@ export default function useGeneralApi(app) {
         }
 
         try {
-            const user = yield models.User.findOne(
-                {attributes: ['verified', 'waiting_list'], where: {id: user_id}}
-            );
-            if (!user) {
-                this.body = JSON.stringify({error: 'Unauthorized'});
+            const meta = {}
+            const remote_ip = getRemoteIp(this.req);
+            const user_id = this.session.user;
+            if (!user_id) { // require user to sign in with identity provider
+                this.body = JSON.stringify({
+                    error: 'Unauthorized'
+                });
                 this.status = 401;
                 return;
             }
 
-            // check if user's ip is associated with any bot
-            const same_ip_bot = yield models.User.findOne({
-                attributes: ['id', 'created_at'],
-                where: {remote_ip, bot: true}
+            const user = yield models.User.findOne({
+                attributes: ['verified', 'waiting_list'],
+                where: {
+                    id: user_id
+                }
             });
-            if (same_ip_bot) {
-                console.log('-- /accounts same_ip_bot -->', user_id, this.session.uid, remote_ip, user.email);
-                this.body = JSON.stringify({error: 'We are sorry, we cannot sign you up at this time because your IP address is associated with bots activity. Please contact support@steemit.com for more information.'});
+            if (!user) {
+                this.body = JSON.stringify({
+                    error: 'Unauthorized'
+                });
                 this.status = 401;
                 return;
             }
@@ -88,9 +131,13 @@ export default function useGeneralApi(app) {
                 throw new Error("Only one Steem account per user is allowed in order to prevent abuse");
             }
 
-            const same_ip_account = yield models.Account.findOne(
-                {attributes: ['created_at'], where: {remote_ip: esc(remote_ip)}, order: 'id DESC'}
-            );
+            const same_ip_account = yield models.Account.findOne({
+                attributes: ['created_at'],
+                where: {
+                    remote_ip: esc(remote_ip)
+                },
+                order: 'id DESC'
+            });
             if (same_ip_account) {
                 const minutes = (Date.now() - same_ip_account.created_at) / 60000;
                 if (minutes < 10) {
@@ -102,30 +149,25 @@ export default function useGeneralApi(app) {
                 console.log(`api /accounts: waiting_list user ${this.session.uid} #${user_id}`);
                 throw new Error('You are on the waiting list. We will get back to you at the earliest possible opportunity.');
             }
-
-            // check email
-            const eid = yield models.Identity.findOne(
-                {attributes: ['id'], where: {user_id, provider: 'email', verified: true}, order: 'id DESC'}
-            );
+            const eid = yield models.Identity.findOne({
+                attributes: ['id'],
+                where: {
+                    user_id,
+                    provider: 'email',
+                    verified: true
+                },
+                order: 'id DESC'
+            });
             if (!eid) {
                 console.log(`api /accounts: not confirmed email for user ${this.session.uid} #${user_id}`);
                 throw new Error('Email address is not confirmed');
             }
-
-            // check phone
-            const mid = yield models.Identity.findOne(
-                {attributes: ['id'], where: {user_id, provider: 'phone', verified: true}, order: 'id DESC'}
-            );
-            if (!mid) {
-                console.log(`api /accounts: not confirmed sms for user ${this.session.uid} #${user_id}`);
-                throw new Error('Phone number is not confirmed');
-            }
-
             yield createAccount({
                 signingKey: config.registrar.signing_key,
                 fee: config.registrar.fee,
                 creator: config.registrar.account,
                 new_account_name: account.name,
+                json_metadata: JSON.stringify(new Object()),
                 owner: account.owner_key,
                 active: account.active_key,
                 posting: account.posting_key,
@@ -134,19 +176,8 @@ export default function useGeneralApi(app) {
             });
             console.log('-- create_account_with_keys created -->', this.session.uid, account.name, user.id, account.owner_key);
 
-            this.body = JSON.stringify({status: 'ok'});
-
-            models.Account.create(escAttrs({
-                user_id,
-                name: account.name,
-                owner_key: account.owner_key,
-                active_key: account.active_key,
-                posting_key: account.posting_key,
-                memo_key: account.memo_key,
-                remote_ip,
-                referrer: this.session.r
-            })).catch(error => {
-                console.error('!!! Can\'t create account model in /accounts api', this.session.uid, error);
+            this.body = JSON.stringify({
+                status: 'ok'
             });
             if (mixpanel) {
                 mixpanel.track('Signup', {
@@ -157,7 +188,9 @@ export default function useGeneralApi(app) {
             }
         } catch (error) {
             console.error('Error in /accounts api call', this.session.uid, error.toString());
-            this.body = JSON.stringify({error: error.message});
+            this.body = JSON.stringify({
+                error: error.message
+            });
             this.status = 500;
         } finally {
             // console.log('-- /accounts unlock_entity -->', user_id);
@@ -166,35 +199,59 @@ export default function useGeneralApi(app) {
         recordWebEvent(this, 'api/accounts', account ? account.name : 'n/a');
     });
 
-    router.post('/update_email', koaBody, function *() {
+    router.post('/update_email', koaBody, function*() {
         if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;
-        const {csrf, email} = typeof(params) === 'string' ? JSON.parse(params) : params;
+        const {
+            csrf,
+            email
+        } = typeof(params) === 'string' ? JSON.parse(params): params;
         if (!checkCSRF(this, csrf)) return;
         console.log('-- /update_email -->', this.session.uid, email);
         try {
             if (!emailRegex.test(email.toLowerCase())) throw new Error('not valid email: ' + email);
             // TODO: limit by 1/min/ip
-            let user = yield findUser({user_id: this.session.user, email: esc(email), uid: this.session.uid});
+            let user = yield findUser({
+                user_id: this.session.user,
+                email: esc(email),
+                uid: this.session.uid
+            });
             if (user) {
-                user = yield models.User.update({email: esc(email), waiting_list: true}, {where: {id: user.id}});
+                user = yield models.User.update({
+                    email: esc(email),
+                    waiting_list: true
+                }, {
+                    where: {
+                        id: user.id
+                    }
+                });
             } else {
-                user = yield models.User.create({email: esc(email), waiting_list: true});
+                user = yield models.User.create({
+                    email: esc(email),
+                    waiting_list: true
+                });
             }
             this.session.user = user.id;
-            this.body = JSON.stringify({status: 'ok'});
+            this.body = JSON.stringify({
+                status: 'ok'
+            });
         } catch (error) {
             console.error('Error in /update_email api call', this.session.uid, error);
-            this.body = JSON.stringify({error: error.message});
+            this.body = JSON.stringify({
+                error: error.message
+            });
             this.status = 500;
         }
         recordWebEvent(this, 'api/update_email', email);
     });
 
-    router.post('/login_account', koaBody, function *() {
+    router.post('/login_account', koaBody, function*() {
         if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;
-        const {csrf, account} = typeof(params) === 'string' ? JSON.parse(params) : params;
+        const {
+            csrf,
+            account
+        } = typeof(params) === 'string' ? JSON.parse(params): params;
         if (!checkCSRF(this, csrf)) return;
         console.log('-- /login_account -->', this.session.uid, account);
         try {
@@ -217,27 +274,37 @@ export default function useGeneralApi(app) {
         recordWebEvent(this, 'api/login_account', account);
     });
 
-    router.post('/logout_account', koaBody, function *() {
+    router.post('/logout_account', koaBody, function*() {
         // if (rateLimitReq(this, this.req)) return; - logout maybe immediately followed with login_attempt event
         const params = this.request.body;
-        const {csrf} = typeof(params) === 'string' ? JSON.parse(params) : params;
+        const {
+            csrf
+        } = typeof(params) === 'string' ? JSON.parse(params): params;
         if (!checkCSRF(this, csrf)) return;
         console.log('-- /logout_account -->', this.session.uid);
         try {
             this.session.a = null;
-            this.body = JSON.stringify({status: 'ok'});
+            this.body = JSON.stringify({
+                status: 'ok'
+            });
         } catch (error) {
             console.error('Error in /logout_account api call', this.session.uid, error);
-            this.body = JSON.stringify({error: error.message});
+            this.body = JSON.stringify({
+                error: error.message
+            });
             this.status = 500;
         }
     });
 
-    router.post('/record_event', koaBody, function *() {
+    router.post('/record_event', koaBody, function*() {
         if (rateLimitReq(this, this.req)) return;
         try {
             const params = this.request.body;
-            const {csrf, type, value} = typeof(params) === 'string' ? JSON.parse(params) : params;
+            const {
+                csrf,
+                type,
+                value
+            } = typeof(params) === 'string' ? JSON.parse(params): params;
             if (!checkCSRF(this, csrf)) return;
             console.log('-- /record_event -->', this.session.uid, type, value);
             if (type.match(/^[A-Z]/)) {
@@ -255,7 +322,7 @@ export default function useGeneralApi(app) {
         }
     });
 
-    router.post('/csp_violation', function *() {
+    router.post('/csp_violation', function*() {
         if (rateLimitReq(this, this.req)) return;
         const params = yield coBody.json(this);
         console.log('-- /csp_violation -->', this.req.headers['user-agent'], params);
@@ -320,31 +387,98 @@ export default function useGeneralApi(app) {
             this.status = 500;
         }
     });
-}
 
-import {Apis} from 'shared/api_client';
-import {createTransaction, signTransaction} from 'shared/chain/transactions';
-import {ops} from 'shared/serializer';
+    router.post('/account_update_hook', koaBody, function * () {
+        //if (rateLimitReq(this, this.req)) return;
+        const params = this.request.body;
+        let {csrf, account_name} = typeof(params) === 'string'
+            ? JSON.parse(params)
+            : params;
+        if (!checkCSRF(this, csrf))
+            return; // disable for mass operations
+        console.log(account_name);
+        // expect array
+        if (typeof account_name === 'string') account_name = [account_name]
+        this.body = JSON.stringify({status: 'in process'});
+        Apis.db_api('get_accounts', account_name).then(function(response) {
+            if (!response)
+                return;
+            response.forEach(function(account) {
+                const json_metadata = account.json_metadata;
+                const name = account.name;
+                var meta = null
+                console.log('updating meta for acc ' + name);
+                try {
+                    meta = JSON.parse(json_metadata)
+                } catch (e) {
+                    console.log(`account ${name} has invalid json_metadata`);
+                    return;
+                }
+                for (var p in meta) {
+                    if (meta.hasOwnProperty(p)) {
+                        dbStoreSingleMeta(name, p, meta[p]);
+                    }
+                }
+            })
+        }).catch(function(error) {
+            console.log("error when updating account meta table", error)
+        });
+    });
 
-const {signed_transaction} = ops;
 /**
  @arg signingKey {string|PrivateKey} - WIF or PrivateKey object
  */
 function* createAccount({
-    signingKey, fee, creator, new_account_name, json_metadata = '',
-    owner, active, posting, memo, broadcast = false,
+    signingKey,
+    fee,
+    creator,
+    new_account_name,
+    json_metadata = '',
+    owner,
+    active,
+    posting,
+    memo,
+    broadcast = false,
 }) {
-    const operations = [['account_create', {
-        fee, creator, new_account_name, json_metadata,
-        owner: {weight_threshold: 1, account_auths: [], key_auths: [[owner, 1]]},
-        active: {weight_threshold: 1, account_auths: [], key_auths: [[active, 1]]},
-        posting: {weight_threshold: 1, account_auths: [], key_auths: [[posting, 1]]},
-        memo_key: memo,
-    }]]
+    const operations = [
+        ['account_create', {
+            fee,
+            creator,
+            new_account_name,
+            json_metadata,
+            owner: {
+                weight_threshold: 1,
+                account_auths: [],
+                key_auths: [
+                    [owner, 1]
+                ]
+            },
+            active: {
+                weight_threshold: 1,
+                account_auths: [],
+                key_auths: [
+                    [active, 1]
+                ]
+            },
+            posting: {
+                weight_threshold: 1,
+                account_auths: [],
+                key_auths: [
+                    [posting, 1]
+                ]
+            },
+            memo_key: memo,
+        }]
+    ]
     const tx = yield createTransaction(operations)
     const sx = signTransaction(tx, signingKey)
     if (!broadcast) return signed_transaction.toObject(sx)
     return yield new Promise((resolve, reject) =>
-        Apis.broadcastTransaction(sx, () => {resolve()}).catch(e => {reject(e)})
+        Apis.broadcastTransaction(sx, () => {
+            resolve()
+        }).catch(e => {
+            reject(e)
+        })
     )
+}
 }

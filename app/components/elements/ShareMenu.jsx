@@ -9,10 +9,10 @@ export default class ShareMenu extends React.Component {
         title: React.PropTypes.string
     };
 
-    render(){
-        const title = this.props.title;
+    render() {
+        const {title, onClick} = this.props
         const items = this.props.menu;
-        return <span className={"shareMenu"}>
+        return <span className={"shareMenu"} onClick={onClick}>
             <ul className={'shareItems'}>
             {title && <li className="title">{title}</li>}
                 {items.map(i => {

@@ -48,11 +48,7 @@ class ChangePassword extends React.Component {
             }
         }
         if (promise) {
-            promise
-                .then(nameError => this.setState({nameError}))
-                .catch(() => this.setState({
-                    nameError: "Account name can't be verified right now due to server failure. Please try again later."
-                }));
+            promise.then(error => this.setState({nameError: error}));
         } else {
             this.setState({nameError});
         }

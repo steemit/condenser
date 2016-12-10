@@ -1,3 +1,4 @@
+import { translate } from 'app/Translator';
 
 const iframeWhitelist = [
     {
@@ -28,7 +29,7 @@ const iframeWhitelist = [
         }
     }
 ];
-export const noImageText = '(Image not shown due to low ratings)'
+export const noImageText = '(' + translate('image_not_shown_due_to_low_ratings') + ')'
 export const allowedTags = `
     div, iframe, del,
     a, p, b, q, br, ul, li, ol, img, h1, h2, h3, h4, h5, h6, hr,
@@ -52,7 +53,7 @@ export default ({large = true, highQualityPost = true, noImage = false, sanitize
 
         // style is subject to attack, filtering more below
         td: ['style'],
-        img: ['src', 'alt'],
+        img: ['src'],
         a: ['href', 'rel'],
     },
     transformTags: {
@@ -82,7 +83,7 @@ export default ({large = true, highQualityPost = true, noImage = false, sanitize
         img: (tagName, attribs) => {
             if(noImage) return {tagName: 'div', text: noImageText}
             //See https://github.com/punkave/sanitize-html/issues/117
-            let {src, alt} = attribs
+            let {src} = attribs
             if(!/^(https?:)?\/\//i.test(src)) {
                 console.log('Blocked, image tag src does not appear to be a url', tagName, attribs)
                 sanitizeErrors.push('An image in this post did not save properly.')
@@ -92,9 +93,7 @@ export default ({large = true, highQualityPost = true, noImage = false, sanitize
             // replace http:// with // to force https when needed
             src = src.replace(/^http:\/\//i, '//')
 
-            let atts = {src}
-            if(alt && alt !== '') atts.alt = alt
-            return {tagName, attribs: atts}
+            return {tagName, attribs: {src}}
         },
         div: (tagName, attribs) => {
             const attys = {}
@@ -122,7 +121,7 @@ export default ({large = true, highQualityPost = true, noImage = false, sanitize
             href = href.trim()
             const attys = {href}
             // If it's not a (relative or absolute) steemit URL...
-            if (!href.match(/^(\/(?!\/)|https:\/\/steemit.com)/)) {
+            if (!href.match(/^(\/(?!\/)|https:\/\/golos.io)/)) {
                 // attys.target = '_blank' // pending iframe impl https://mathiasbynens.github.io/rel-noopener/
                 attys.rel = highQualityPost ? 'noopener' : 'nofollow noopener'
             }

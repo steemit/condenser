@@ -14,13 +14,6 @@ export default {
             //require.ensure([], (require) => {
                 cb(null, [require('app/components/pages/About')]);
             //});
-        // golos.io ICO page
-        // вот бы кто определился с названиями страниц, а то у нас 2 ico
-        } else if (route.page === 'Ico') {
-            cb(null, [require('app/components/pages/Ico')]);
-        // golos.io landing page
-        } else if (route.page === 'Landing') {
-            cb(null, [require('app/components/pages/Landing')]);
         } else if (route.page === 'Welcome') {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/Welcome')]);

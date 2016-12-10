@@ -22,7 +22,6 @@ import Tooltip from 'app/components/elements/Tooltip';
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
 import VerticalMenu from 'app/components/elements/VerticalMenu';
 import { translate } from 'app/Translator';
-import BuyGolos from 'app/components/elements/BuyGolos'
 import MarkNotificationRead from 'app/components/elements/MarkNotificationRead';
 import NotifiCounter from 'app/components/elements/NotifiCounter';
 import DateJoinWrapper from 'app/components/elements/DateJoinWrapper';
@@ -183,9 +182,6 @@ export default class UserProfile extends React.Component {
         }
         else if( section === 'settings' ) {
             tab_content = <Settings routeParams={this.props.routeParams} />
-        }
-        else if( section === 'crowdsale' ) {
-            tab_content = <BuyGolos routeParams={this.props.routeParams} account={account}/>
         }
         else if( section === 'comments' && account.post_history ) {
            if( account.comments )

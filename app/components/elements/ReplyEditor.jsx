@@ -366,23 +366,25 @@ class ReplyEditor extends React.Component {
                                     onBlur={body.onBlur} tabIndex={2} />
                                 : <span>
                                     <Dropzone onDrop={this.onDrop}
-                                        className="dropzone"
+                                        className={type === 'submit_story' ? 'dropzone' : 'none'}
                                         disableClick multiple={false} accept="image/*"
                                         ref={(node) => { this.dropzone = node; }}>
                                         <textarea {...body.props}
                                             ref="postRef"
                                             onPasteCapture={this.onPasteCapture}
-                                            className="upload-enabled"
+                                            className={type === 'submit_story' ? 'upload-enabled' : ''}
                                             disabled={loading} rows={isStory ? 10 : 3}
                                             placeholder={isStory ? 'Write your story...' : 'Reply'}
                                             autoComplete="off"
                                             tabIndex={2} />
                                     </Dropzone>
-                                    <p className="drag-and-drop">
-                                        Insert images by dragging &amp; dropping,&nbsp;
-                                        {noClipboardData ? '' : 'pasting from the clipboard, '}
-                                        or by <a onClick={this.onOpenClick}>selecting them</a>.
-                                    </p>
+                                    {type === 'submit_story' &&
+                                        <p className="drag-and-drop">
+                                            Insert images by dragging &amp; dropping,&nbsp;
+                                            {noClipboardData ? '' : 'pasting from the clipboard, '}
+                                            or by <a onClick={this.onOpenClick}>selecting them</a>.
+                                        </p>
+                                    }
                                     {progress.message && <div className="info">{progress.message}</div>}
                                     {progress.error && <div className="error">Image upload: {progress.error}</div>}
                                 </span>

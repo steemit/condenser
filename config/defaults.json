@@ -60,7 +60,7 @@
   },
   "sendgrid": {
     "key": "",
-    "from": "noreply@steemit.com",
+    "from": "noreply@example.com",
     "templates": {
       "confirm_email": "",
       "waiting_list_invite": ""
@@ -74,13 +74,11 @@
     "site_key": "",
     "secret_key": ""
   },
-  "ws_connection_client": "wss://node.steem.ws",
-  "ws_connection_server": [
-    "wss://node.steem.ws"
-  ],
+  "ws_connection_client": "wss://example.com",
+  "ws_connection_server": [ "wss://example.com" ],
   "cli_wallet_connection": "",
-  "img_proxy_prefix": "https://img1.steemit.com/",
-  "ipfs_prefix": "https://steemit.com/ipfs",
+  "img_proxy_prefix": "https://images.example.com/",
+  "ipfs_prefix": "https://ipfs.example.com/",
   "uploadImage": "",
   "disable_signups": false,
   "read_only_mode": false,

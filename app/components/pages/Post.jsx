@@ -3,24 +3,23 @@ import React from 'react';
 import Comment from 'app/components/cards/Comment';
 import PostFull from 'app/components/cards/PostFull';
 import {connect} from 'react-redux';
-import { Link } from 'react-router';
 
 import {sortComments} from 'app/components/cards/Comment';
-import DropdownMenu from 'app/components/elements/DropdownMenu';
-import user from 'app/redux/User'
 // import { Link } from 'react-router';
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
 import SvgImage from 'app/components/elements/SvgImage';
 import {List} from 'immutable'
+import { translate } from 'app/Translator';
+import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
+import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 
 class Post extends React.Component {
 
     static propTypes = {
-        global: React.PropTypes.object.isRequired,
+        content: React.PropTypes.object.isRequired,
         post: React.PropTypes.string,
         routeParams: React.PropTypes.object,
         location: React.PropTypes.object,
-        showSignUp: React.PropTypes.func.isRequired,
         signup_bonus: React.PropTypes.string,
         current_user: React.PropTypes.object,
     };
@@ -29,8 +28,12 @@ class Post extends React.Component {
         this.state = {
             showNegativeComments: false
         }
-        this.showSignUp = () => {this.props.showSignUp()}
+        this.showSignUp = () => {
+            window.location = '/enter_email';
+        }
+        this.shouldComponentUpdate = shouldComponentUpdate(this, 'Post')
     }
+
     componentDidMount() {
         if (window.location.hash.indexOf('comments') !== -1) {
             const comments_el = document.getElementById('comments');
@@ -54,15 +57,15 @@ class Post extends React.Component {
 
     render() {
         const {showSignUp} = this
-        const {current_user, following, signup_bonus} = this.props
+        const {current_user, following, signup_bonus, content} = this.props
         const {showNegativeComments, commentHidden, showAnyway} = this.state
-        let g = this.props.global;
         let post = this.props.post;
         if (!post) {
             const route_params = this.props.routeParams;
             post = route_params.username + '/' + route_params.slug;
         }
-        const dis = g.get('content').get(post);
+        const dis = content.get(post);
+
         if (!dis) return null;
 
         if(!showAnyway) {
@@ -73,7 +76,7 @@ class Post extends React.Component {
                         <div className="row">
                             <div className="column">
                                 <div className="PostFull">
-                                    <p onClick={this.showAnywayClick}>This post was hidden due to low ratings. <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.showAnywayClick}>Show</button></p>
+                                    <p onClick={this.showAnywayClick}>{translate('this_post_was_hidden_due_to_low_ratings')}. <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.showAnywayClick}>{translate('show')}</button></p>
                                 </div>
                             </div>
                         </div>
@@ -88,9 +91,9 @@ class Post extends React.Component {
         if( this.props.location && this.props.location.query.sort )
            sort_order = this.props.location.query.sort;
 
-        sortComments( g, replies, sort_order );
+        sortComments( content, replies, sort_order );
         const keep = a => {
-            const c = g.getIn(['content', a])
+            const c = content.get(a);
             const hide = c.getIn(['stats', 'hide'])
             let ignore = false
             if(following) {
@@ -99,28 +102,48 @@ class Post extends React.Component {
             return !hide && !ignore
         }
         const positiveComments = replies.filter(a => keep(a))
-            .map(reply => <Comment root key={post + reply} content={reply} global={g}
-                sort_order={sort_order} showNegativeComments={showNegativeComments} onHide={this.onHideComment} />);
+            .map(reply => (
+                <Comment
+                    root
+                    key={post + reply}
+                    content={reply}
+                    cont={content}
+                    sort_order={sort_order}
+                    showNegativeComments={showNegativeComments}
+                    onHide={this.onHideComment}
+                />)
+            );
 
         // Not the complete hidding logic, just move to the bottom, the rest hide in-place
         const negativeReplies = replies.filter(a => !keep(a));
         const stuffHidden = negativeReplies.length > 0 || commentHidden
 
         const negativeComments =
-            negativeReplies.map(reply => <Comment root key={post + reply} content={reply} global={g} sort_order={sort_order} showNegativeComments onHide={this.onHideComment} noImage />);
+            negativeReplies.map(reply => (
+                <Comment
+                    root
+                    key={post + reply}
+                    content={reply}
+                    cont={content}
+                    sort_order={sort_order}
+                    showNegativeComments
+                    onHide={this.onHideComment}
+                    noImage
+                />)
+            );
 
         const negativeGroup = !stuffHidden ? null :
             (<div className="hentry Comment root Comment__negative_group">
                 {this.state.showNegativeComments ?
-                    <p onClick={this.toggleNegativeReplies}>Now showing comments with low ratings: <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>Hide</button></p> :
-                    <p onClick={this.toggleNegativeReplies}>Comments were hidden due to low ratings. <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>Show</button></p>
+                    <p onClick={this.toggleNegativeReplies}>{translate('now_showing_comments_with_low_ratings')}: <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>{translate('hide')}</button></p> :
+                    <p onClick={this.toggleNegativeReplies}>{translate('comments_were_hidden_due_to_low_ratings')}. <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>{translate('show')}</button></p>
                 }
             </div>
         );
 
 
-        let sort_orders = [ 'trending', 'active', 'created', 'updated' ];
-        let sort_labels = [ 'trending', 'active', 'new', 'updated' ];
+        let sort_orders = [ 'trending', 'active', 'new', 'updated' ];
+        let sort_labels = [ translate('trending'), translate('active'), translate('new'), translate('updated') ];
         let sort_menu = [];
 
         let selflink = `/${dis.get('category')}/@${post}`;
@@ -137,21 +160,23 @@ class Post extends React.Component {
                 <SvgImage name="404" width="640px" height="480px" />
             </center>
 
-
         return (
             <div className="Post">
                 <div className="row">
                     <div className="column">
-                        <PostFull post={post} global={g} />
+                        <PostFull post={post} cont={content} />
                     </div>
                 </div>
                 {!current_user && <div className="row">
                     <div className="column">
-                      <div className="Post__promo">
-                          Authors get paid when people like you upvote their post. <br/>
-                          If you enjoyed what you read here, earn {signup_bonus} of Steem Power <br />
-                          when you <a onClick={showSignUp}>sign up</a> and vote for it.
-                      </div>
+                        <div className="Post__promo">
+                            {translate('authors_get_paid_when_people_like_you_upvote_their_post')}.
+                            <br /> {// remove '$' from signup_bonus before parsing it into local currency
+                                    translate('if_you_enjoyed_what_you_read_earn_amount', {amount: localizedCurrency(signup_bonus.substring(1))})}
+                            <br /> {translate('when_you') + ' '}
+                            <a onClick={showSignUp}>{translate('when_you_link_text')}</a>
+                            {' ' + translate('and_vote_for_it') + '.'}
+                        </div>
                     </div>
                 </div>}
                 <div id="comments" className="Post_comments row hfeed">
@@ -159,8 +184,8 @@ class Post extends React.Component {
                         <div className="Post_comments__content">
                             {positiveComments.length ?
                             (<div className="Post__comments_sort_order float-right">
-                                Sort Order: &nbsp;
-                                <FoundationDropdownMenu menu={sort_menu} label={sort_order} dropdownPosition="bottom" dropdownAlignment="right" />
+                                {translate('sort_order')}: &nbsp;
+                                <FoundationDropdownMenu menu={sort_menu} label={translate(sort_order)} dropdownPosition="bottom" dropdownAlignment="right" />
                             </div>) : null}
                             {positiveComments}
                             {negativeGroup}
@@ -181,16 +206,10 @@ export default connect(state => {
         following = state.global.getIn(key, List())
     }
     return {
-        global: state.global,
+        content: state.global.get('content'),
         signup_bonus: state.offchain.get('signup_bonus'),
         current_user,
         following,
     }
-},
-dispatch => ({
-    showSignUp: () => {
-        localStorage.setItem('redirect', window.location.pathname);
-        dispatch(user.actions.showSignUp())
-    }
-})
+}
 )(Post);

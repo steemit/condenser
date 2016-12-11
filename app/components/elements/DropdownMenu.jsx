@@ -2,6 +2,7 @@ import React from 'react';
 import { browserHistory } from 'react-router';
 import Icon from 'app/components/elements/Icon.jsx';
 import VerticalMenu from './VerticalMenu';
+import {findParent} from 'app/utils/DomUtils';
 
 export default class DropdownMenu extends React.Component {
     static propTypes = {
@@ -26,13 +27,24 @@ export default class DropdownMenu extends React.Component {
         document.removeEventListener('click', this.hide);
     }
 
+    toggle = (e) => {
+        const {shown} = this.state
+        if(shown) this.hide(e)
+        else this.show(e)
+    }
+
     show = (e) => {
         e.preventDefault();
         this.setState({shown: true});
         document.addEventListener('click', this.hide);
     };
 
-    hide = () => {
+    hide = (e) => {
+        // Do not hide the dropdown if there was a click within it.
+        const inside_dropdown = !!findParent(e.target, 'VerticalMenu');
+        if (inside_dropdown) return;
+
+        e.preventDefault()
         this.setState({shown: false});
         document.removeEventListener('click', this.hide);
     };
@@ -45,17 +57,23 @@ export default class DropdownMenu extends React.Component {
         browserHistory.push(a.pathname + a.search);
     };
 
-    render() {
-        const {el, items, selected, children, className, title, href} = this.props;
+    getSelectedLabel = (items, selected) => {
         const selectedEntry = items.find(i => i.value === selected)
         const selectedLabel = selectedEntry && selectedEntry.label ? selectedEntry.label : selected
-        const entry = <a key="entry" href={href || '#'} onClick={this.show}>
-            {children || <span>
-                {/*selectedEntry && selectedEntry.icon && <Icon name={selectedEntry.icon} />*/}{/*looks bad on the deposit screen*/}
-                {selectedLabel}
-                <Icon name="dropdown-arrow" />
-            </span>}
-        </a>;
+        return selectedLabel
+    }
+
+    render() {
+        const {el, items, selected, children, className, title, href} = this.props;
+        const hasDropdown = items.length > 0
+
+        let entry = children || <span>
+                {this.getSelectedLabel(items, selected)}
+                {hasDropdown && <Icon name="dropdown-arrow" />}
+            </span>
+
+        if(hasDropdown) entry = <a key="entry" href={href || '#'} onClick={this.toggle}>{entry}</a>
+
         const menu = <VerticalMenu key="menu" title={title} items={items} hideValue={selected} className="VerticalMenu" />;
         const cls = 'DropdownMenu' + (this.state.shown ? ' show' : '') + (className ? ` ${className}` : '')
         return React.createElement(el, {className: cls}, [entry, menu]);

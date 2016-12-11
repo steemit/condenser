@@ -12,12 +12,10 @@ import RootRoute from 'app/RootRoute';
 import ErrorPage from 'server/server-error';
 import {createStore, applyMiddleware, compose} from 'redux';
 import { browserHistory } from 'react-router';
-//import useScroll from 'scroll-behavior/lib/useStandardScroll';
 import useScroll from 'react-router-scroll';
 import createSagaMiddleware from 'redux-saga';
 import { syncHistoryWithStore } from 'react-router-redux';
 import rootReducer from 'app/redux/RootReducer';
-// import DevTools from 'app/redux/DevTools';
 import {fetchDataWatches} from 'app/redux/FetchDataSaga';
 import {marketWatches} from 'app/redux/MarketSaga';
 import {sharedWatches} from 'app/redux/SagaShared';
@@ -28,6 +26,9 @@ import PollDataSaga from 'app/redux/PollDataSaga';
 import {component as NotFound} from 'app/components/pages/NotFound';
 import extractMeta from 'app/utils/ExtractMeta';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
+import Translator from 'app/Translator';
+import Tarantool from 'db/tarantool';
+import {notificationsArrayToMap} from 'app/utils/Notifications';
 
 const sagaMiddleware = createSagaMiddleware(
     ...userWatches, // keep first to remove keys early when a page change happens
@@ -43,7 +44,6 @@ let middleware;
 if (process.env.BROWSER && process.env.NODE_ENV === 'development') {
     middleware = compose(
         applyMiddleware(sagaMiddleware)
-        // DevTools.instrument()
     );
 } else {
     middleware = applyMiddleware(sagaMiddleware);
@@ -110,9 +110,9 @@ async function universalRender({ location, initial_state, offchain }) {
         // Bump transaction (for live UI testing).. Put 0 in now (no effect),
         // to enable browser's autocomplete and help prevent typos.
         window.bump = parseInt(localStorage.getItem('bump') || 0);
-        const scroll = useScroll((prevLocation, newLocation) => {
-            return !newLocation.location.hash;
-            return !prevLocation || prevLocation.location.pathname !== newLocation.location.pathname;
+        const scroll = useScroll((prevLocation, {location}) => {
+            if (location.hash || location.action === 'POP') return false;
+            return !prevLocation || prevLocation.location.pathname !== location.pathname;
         });
         if (process.env.NODE_ENV === 'production') {
             console.log('%c%s','color: red; background: yellow; font-size: 24px;', 'WARNING!');
@@ -120,11 +120,13 @@ async function universalRender({ location, initial_state, offchain }) {
         }
         return render(
             <Provider store={store}>
+                    <Translator>
                 <Router
                     routes={RootRoute}
                     history={history}
                     onError={onRouterError}
                     render={applyRouterMiddleware(scroll)} />
+                    </Translator>
             </Provider>,
             document.getElementById('content')
         );
@@ -154,6 +156,14 @@ async function universalRender({ location, initial_state, offchain }) {
         offchain.server_location = location;
         server_store = createStore(rootReducer, { global: onchain, offchain});
         server_store.dispatch({type: '@@router/LOCATION_CHANGE', payload: {pathname: location}});
+        if (offchain.account) {
+            try {
+                const notifications = await Tarantool.instance().select('notifications', 0, 1, 0, 'eq', offchain.account);
+                server_store.dispatch({type: 'UPDATE_NOTIFICOUNTERS', payload: notificationsArrayToMap(notifications)});
+            } catch(e) {
+                console.log('universalRender Tarantool error :', e.message);
+            }
+        }
     } catch (e) {
         const msg = (e.toString && e.toString()) || e.message || e;
         const stack_trace = e.stack || '[no stack]';
@@ -169,7 +179,9 @@ async function universalRender({ location, initial_state, offchain }) {
     try {
         app = renderToString(
             <Provider store={server_store}>
+                <Translator>
                 <RouterContext { ...renderProps } />
+                </Translator>
             </Provider>
         );
         meta = extractMeta(onchain, renderProps.params);

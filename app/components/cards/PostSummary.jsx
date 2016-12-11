@@ -14,16 +14,7 @@ import {authorNameAndRep} from 'app/utils/ComponentFormatters';
 import {Map} from 'immutable';
 import Reputation from 'app/components/elements/Reputation';
 import Author from 'app/components/elements/Author';
-
-function TimeAuthorCategory({post, authorRepLog10}) {
-    return (
-        <span className="vcard">
-            <TimeAgoWrapper date={post.created} className="updated" />
-            {} by <Author author={post.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
-            {} in <strong>{post.category}</strong>
-        </span>
-    );
-}
+import TagList from 'app/components/elements/TagList';
 
 function isLeftClickEvent(event) {
     return event.button === 0
@@ -40,7 +31,7 @@ function navigate(e, onClick, post, url) {
     else browserHistory.push(url);
 }
 
-export default class PostSummary extends React.Component {
+class PostSummary extends React.Component {
     static propTypes = {
         post: React.PropTypes.string.isRequired,
         pending_payout: React.PropTypes.string.isRequired,
@@ -61,6 +52,7 @@ export default class PostSummary extends React.Component {
     render() {
         const {currentCategory, thumbSize, ignore, onClick} = this.props;
         const {post, content, pending_payout, total_payout} = this.props;
+        const {account} = this.props;
         if (!content) return null;
 
         const archived = content.get('mode') === 'archived'
@@ -69,6 +61,12 @@ export default class PostSummary extends React.Component {
         if(reblogged_by) {
           reblogged_by = <div className="PostSummary__reblogged_by">
                              <Icon name="reblog" /> Resteemed by <Link to={'/@'+reblogged_by}>{reblogged_by}</Link>
+                         </div>
+        }
+
+        if(account && account != content.get('author')) {
+          reblogged_by = <div className="PostSummary__reblogged_by">
+                             <Icon name="reblog" /> Resteemed
                          </div>
         }
 
@@ -81,6 +79,7 @@ export default class PostSummary extends React.Component {
         let title_text = p.title;
         let comments_link;
         let is_comment = false;
+        let full_power = content.get('percent_steem_dollars') === 0;
 
         if( content.get( 'parent_author') !== "" ) {
            title_text = "Re: " + content.get('root_title');
@@ -96,8 +95,18 @@ export default class PostSummary extends React.Component {
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>{desc}</a>
         </div>;
         let content_title = <h1 className="entry-title">
-            <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>{title_text}</a>
+            <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>
+                {title_text}
+                {full_power && <span title="Powered Up 100%"><Icon name="steem" /></span>}
+            </a>
         </h1>;
+
+        // author and category
+        let author_category = <span className="vcard">
+            <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}><TimeAgoWrapper date={p.created} className="updated" /></a>
+            {} by <Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
+            {} in <TagList post={p} single />
+        </span>
 
         if( !(currentCategory && currentCategory.match( /nsfw/ )) ) {
            if (currentCategory !== '-' && currentCategory !== p.category && p.category.match(/nsfw/) ) {
@@ -118,6 +127,7 @@ export default class PostSummary extends React.Component {
         }
         const commentClasses = []
         if(gray || ignore) commentClasses.push('downvoted') // rephide
+
         return (
             <article className={'PostSummary hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')} itemScope itemType ="http://schema.org/blogPost">
                 <div className={hasFlag ? '' : 'PostSummary__collapse'}>
@@ -128,7 +138,8 @@ export default class PostSummary extends React.Component {
                     {content_title}
                 </div>
                 <div className="PostSummary__time_author_category_small show-for-small-only">
-                    <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}><TimeAuthorCategory post={p} authorRepLog10={authorRepLog10} /></a>
+                    {author_category}
+
                 </div>
                 {thumb}
                 <div className="PostSummary__content">
@@ -138,11 +149,11 @@ export default class PostSummary extends React.Component {
                     {content_body}
                     <div className="PostSummary__footer">
                         <Voting post={post} showList={false} />
-                        <span className="PostSummary__time_author_category show-for-medium">
-                            <TimeAuthorCategory post={p} authorRepLog10={authorRepLog10} />
-                            {!archived && <Reblog author={p.author} permlink={p.permlink} />}
-                        </span>
                         <VotesAndComments post={post} commentsLink={comments_link} />
+                        <span className="PostSummary__time_author_category show-for-medium">
+                            {!archived && <Reblog author={p.author} permlink={p.permlink} />}
+                            {author_category}
+                        </span>
                     </div>
                 </div>
             </article>

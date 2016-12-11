@@ -5,7 +5,7 @@
   border-bottom: 1px solid $light-gray;
 
   .ReplyEditor {
-    margin-top: 2rem;
+    margin-top: 1rem;
   }
 }
 
@@ -21,11 +21,13 @@
 }
 
 .PostFull__header {
-  > h1, > h6 {
-    overflow: hidden;
-  }
   > h1 {
+    overflow: hidden;
     font: 700 200% "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Arial, sans-serif;
+    .Icon {
+      margin: 0 0 0 0.5rem;
+      vertical-align: -30%;
+    }
   }
   a {
     color: $dark-gray;
@@ -36,7 +38,7 @@
     border-right: none;
     .Icon.clock {
       top: 5px;
-      path {
+      svg {
         fill: $dark-gray;
       }
     }
@@ -46,43 +48,13 @@
 .PostFull__body {
   padding: 1rem 0 2rem 0;
   clear: left;
-
-  font-family: 'Source Serif Pro', serif;
-  font-size: 120%;
-  line-height: 150%;
-
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  word-break: break-word;
-  hyphens: auto;
-
-  table td {
-    word-break: normal; // issue #146
-  }
-
-  p {
-    font-size: 100%;
-    line-height: 150%;
-  }
-
-  img {
-    width: auto;
-    max-width: 100%;
-    height: auto;
-    max-height: none;
-  }
-
-  iframe {
-    max-width: 100%;
-    max-height: 75vw;
-  }
 }
 
 .PostFull__footer {
   clear: right;
   line-height: 2rem;
   font-size: 94%;
-  svg path, svg polygon {
+  svg {
     fill: $dark-gray;
   }
   a, .FoundationDropdownMenu__label {
@@ -114,7 +86,16 @@
 
 .PostFull__responses {
   padding-right: 1rem;
+  //margin-right: 1rem;
+  //border-right: 1px solid $medium-gray;
+}
+
+.PostFull__views {
+  padding-right: 1rem;
   margin-right: 1rem;
+  color: $dark-gray;
+  font-size: 94%;
+  font-weight: 600;
   border-right: 1px solid $medium-gray;
 }
 

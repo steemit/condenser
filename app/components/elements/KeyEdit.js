@@ -1,8 +1,9 @@
 import React, {PropTypes, Component} from 'react'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
-import {reduxForm} from 'redux-form'
+import {reduxForm} from 'redux-form' // @deprecated, instead use: app/utils/ReactForm.js
 import {PrivateKey} from 'shared/ecc'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
+import { translate } from 'app/Translator';
 
 class KeyEdit extends Component {
     static propTypes = {
@@ -75,7 +76,7 @@ class KeyEdit extends Component {
                         <span className="error">{password.touched && password.error && password.error}&nbsp;</span>
                     </div>
                     <div className={'column small-12' + (confirm.touched && confirm.error ? ' error' : '')}>
-                        <label>Confirm Password</label>
+                        <label>{translate('confirm_password')}</label>
                         <input ref="keyConfirm" type="password" {...cleanReduxInput(confirm)} disabled={isWif}
                             placeholder="Confirm Password" autoComplete="off" />
                         <div className="error">{confirm.touched && confirm.error && confirm.error}&nbsp;</div>
@@ -84,18 +85,18 @@ class KeyEdit extends Component {
                         {error && <div className="error">{error}</div>}
                         {submitting && <LoadingIndicator type="circle" />}
                         {accountChanged && <span>
-                            <div className="success">Account Updated</div>
+                            <div className="success">{translate('account_updated')}</div>
                             <br />
                             <button className="button" type="button" onClick={onCancel}>
-                                Close
+                                {translate('close')}
                             </button>
                         </span>}
                         {!accountChanged && <span>
                             <button className="button" type="submit" disabled={submitting}>
-                                Save
+                                {translate('save')}
                             </button>
                             <button className="button" type="button" disabled={submitting} onClick={onCancel}>
-                                Cancel
+                                {translate('cancel')}
                             </button>
                         </span>}
                     </div>
@@ -108,11 +109,11 @@ class KeyEdit extends Component {
 import {PublicKey} from 'shared/ecc'
 
 const keyValidate = values => ({
-    password: ! values.password ? 'Required' :
-        values.password.length < 32 ? 'Password must be 32 characters or more' :
-        PublicKey.fromString(values.password) ? 'You need a private password or key (not a public key)' :
+    password: ! values.password ? translate('required') :
+        values.password.length < 32 ? translate('password_must_be_characters_or_more', {amount: 32}) :
+        PublicKey.fromString(values.password) ? translate('need_password_or_key') :
         null,
-    confirm: values.confirm !== values.password ? 'Passwords do not match' : null,
+    confirm: values.confirm !== values.password ? translate('passwords_do_not_match') : null,
 })
 
 export default reduxForm(

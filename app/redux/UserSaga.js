@@ -1,4 +1,4 @@
-import {fromJS, Set} from 'immutable'
+import {fromJS, Set, List} from 'immutable'
 import {takeLatest} from 'redux-saga';
 import {call, put, select, fork} from 'redux-saga/effects';
 import {accountAuthLookup} from 'app/redux/AuthSaga'
@@ -19,6 +19,8 @@ export const userWatches = [
     // getCurrentAccountWatch,
     loginErrorWatch,
     lookupPreviousOwnerAuthorityWatch,
+    watchLoadSavingsWithdraw,
+    uploadImageWatch,
 ]
 
 const highSecurityPages = Array(/\/market/, /\/@.+\/(transfers|permissions|password)/, /\/~witnesses/)
@@ -40,9 +42,33 @@ function* loginErrorWatch() {
     yield* takeLatest('user/LOGIN_ERROR', loginError);
 }
 
+function* watchLoadSavingsWithdraw() {
+    yield* takeLatest('user/LOAD_SAVINGS_WITHDRAW', loadSavingsWithdraw);
+}
+
 export function* watchRemoveHighSecurityKeys() {
     yield* takeLatest('@@router/LOCATION_CHANGE', removeHighSecurityKeys);
 }
+
+function* loadSavingsWithdraw() {
+    const username = yield select(state => state.user.getIn(['current', 'username']))
+    const to = yield call(Apis.db_api, 'get_savings_withdraw_to', username)
+    const fro = yield call(Apis.db_api, 'get_savings_withdraw_from', username)
+
+    const m = {}
+    for(const v of to) m[v.id] = v
+    for(const v of fro) m[v.id] = v
+
+    const withdraws = List(fromJS(m).values())
+        .sort((a, b) => strCmp(a.get('complete'), b.get('complete')))
+
+    yield put(user.actions.set({
+        key: 'savings_withdraws',
+        value: withdraws,
+    }))
+}
+
+const strCmp = (a, b) => a > b ? 1 : a < b ? -1 : 0
 
 // function* getCurrentAccountWatch() {
 //     // yield* takeLatest('user/SHOW_TRANSFER', getCurrentAccount);
@@ -57,6 +83,8 @@ function* removeHighSecurityKeys({payload: {pathname}}) {
     if(!highSecurityPage)
         yield put(user.actions.removeHighSecurityKeys())
 }
+
+
 
 /**
     @arg {object} action.username - Unless a WIF is provided, this is hashed with the password and key_type to create private keys.
@@ -81,7 +109,7 @@ function* usernamePasswordLogin(action) {
 const clean = (value) => value == null || value === '' || /null|undefined/.test(value) ? undefined : value
 
 function* usernamePasswordLogin2({payload: {username, password, saveLogin,
-        operationType /*high security*/, afterLoginRedirectToAccount
+        operationType /*high security*/, afterLoginRedirectToWelcome
 }}) {
     // login, using saved password
     let autopost, memoWif, login_owner_pubkey, login_wif_owner_pubkey
@@ -221,7 +249,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         yield put(user.actions.saveLogin());
 
     serverApiLogin(username);
-    if (afterLoginRedirectToAccount) browserHistory.push('/@' + username);
+    if (afterLoginRedirectToWelcome) browserHistory.push('/welcome');
 }
 
 function* saveLogin_localStorage() {
@@ -294,7 +322,7 @@ function* lookupPreviousOwnerAuthority({payload: {}}) {
 
     const username = current.get('username')
     const key_auths = yield select(state => state.global.getIn(['accounts', username, 'owner', 'key_auths']))
-    if(key_auths.find(key => key.get(0) === login_owner_pubkey)) {
+    if (key_auths && key_auths.find(key => key.get(0) === login_owner_pubkey)) {
         // console.log('UserSaga ---> Login matches current account owner');
         return
     }
@@ -306,7 +334,7 @@ function* lookupPreviousOwnerAuthority({payload: {}}) {
         const bb = b.get('last_valid_time')
         return aa < bb ? -1 : aa > bb ? 1 : 0
     })
-    console.log('UserSaga ---> owner_history', owner_history.toJS())
+    // console.log('UserSaga ---> owner_history', owner_history.toJS())
     const previous_owner_authority = owner_history.find(o => {
         const auth = o.get('previous_owner_authority')
         const weight_threshold = auth.get('weight_threshold')
@@ -317,9 +345,94 @@ function* lookupPreviousOwnerAuthority({payload: {}}) {
         console.log('UserSaga ---> Login owner does not match owner history');
         return
     }
-    console.log('UserSage ---> previous_owner_authority', previous_owner_authority.toJS())
+    // console.log('UserSage ---> previous_owner_authority', previous_owner_authority.toJS())
     yield put(user.actions.setUser({previous_owner_authority}))
 }
+
+import {Signature, hash} from 'shared/ecc'
+
+function* uploadImageWatch() {
+    yield* takeLatest('user/UPLOAD_IMAGE', uploadImage);
+}
+
+function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress}}) {
+    const _progress = progress
+    progress = msg => {
+        console.log('Upload image progress', msg)
+        _progress(msg)
+    }
+
+    const stateUser = yield select(state => state.user)
+    const username = stateUser.getIn(['current', 'username'])
+    const d = stateUser.getIn(['current', 'private_keys', 'posting_private'])
+    if(!username) {
+        progress({error: 'Not logged in'})
+        return
+    }
+    if(!d) {
+        progress({error: 'Login with your posting key'})
+        return
+    }
+
+    if(!file && !dataUrl) {
+        console.error('uploadImage required: file or dataUrl')
+        return
+    }
+
+    let data, dataBs64
+    if(file) {
+        // drag and drop
+        const reader = new FileReader()
+        data = yield new Promise(resolve => {
+            reader.addEventListener('load', () => {
+                const result = new Buffer(reader.result, 'binary')
+                resolve(result)
+            })
+            reader.readAsBinaryString(file)
+        })
+    } else {
+        // recover from preview
+        const commaIdx = dataUrl.indexOf(',')
+        dataBs64 = dataUrl.substring(commaIdx + 1)
+        data = new Buffer(dataBs64, 'base64')
+    }
+
+    const bufSha = hash.sha256(data)
+
+    const formData = new FormData()
+    if(file) {
+        formData.append('file', file)
+    } else {
+        // formData.append('file', file, filename) <- Failed to add filename=xxx to Content-Disposition
+        // Can't easily make this look like a file so this relies on the server supporting: filename and filebinary
+        formData.append('filename', filename)
+        formData.append('filebase64', dataBs64)
+    }
+
+    const sig = Signature.signBufferSha256(bufSha, d)
+    const postUrl = `${$STM_Config.uploadImage}/${username}/${sig.toHex()}`
+
+    fetch(postUrl, {
+        method: 'post',
+        body: formData
+    })
+    .then(r => r.json())
+    .then(res => {
+        const {error} = res
+        if(error) {
+            progress({error: 'Error: ' + error})
+            return
+        }
+        const {url} = res
+        progress({url})
+    })
+    .catch(error => {
+        console.error(filename, error)
+        progress({error: 'Unable to contact the server.'})
+        return
+    })
+}
+
 
 // function* getCurrentAccount() {
 //     const current = yield select(state => state.user.get('current'))

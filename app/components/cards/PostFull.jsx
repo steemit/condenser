@@ -20,6 +20,9 @@ import Author from 'app/components/elements/Author';
 import {Long} from 'bytebuffer'
 import {List} from 'immutable'
 import {repLog10, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
+import DMCAList from 'app/utils/DMCAList'
+import PageViewsCounter from 'app/components/elements/PageViewsCounter';
+import ShareMenu from 'app/components/elements/ShareMenu';
 
 function TimeAuthorCategory({content, authorRepLog10, showTags}) {
     return (
@@ -32,11 +35,11 @@ function TimeAuthorCategory({content, authorRepLog10, showTags}) {
      );
 }
 
-export default class PostFull extends React.Component {
+class PostFull extends React.Component {
     static propTypes = {
         // html props
         /* Show extra options (component is being viewed alone) */
-        global: React.PropTypes.object.isRequired,
+        cont: React.PropTypes.object.isRequired,
         post: React.PropTypes.string.isRequired,
 
         // connector props
@@ -64,7 +67,7 @@ export default class PostFull extends React.Component {
         }
         this.onDeletePost = () => {
             const {props: {deletePost}} = this
-            const content = this.props.global.get('content').get(this.props.post);
+            const content = this.props.cont.get(this.props.post);
             deletePost(content.get('author'), content.get('permlink'))
         }
     }
@@ -92,7 +95,7 @@ export default class PostFull extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        const names = 'global, post, username'.split(', ')
+        const names = 'cont, post, username'.split(', ')
         return names.findIndex(name => this.props[name] !== nextProps[name]) !== -1 ||
             this.state !== nextState
     }
@@ -128,7 +131,7 @@ export default class PostFull extends React.Component {
     }
 
     showPromotePost = () => {
-        const post_content = this.props.global.get('content').get(this.props.post);
+        const post_content = this.props.cont.get(this.props.post);
         if (!post_content) return
         const author = post_content.get('author')
         const permlink = post_content.get('permlink')
@@ -138,7 +141,7 @@ export default class PostFull extends React.Component {
     render() {
         const {props: {username, post}, state: {PostFullReplyEditor, PostFullEditEditor, formId, showReply, showEdit},
             onShowReply, onShowEdit, onDeletePost} = this
-        const post_content = this.props.global.get('content').get(this.props.post);
+        const post_content = this.props.cont.get(this.props.post);
         if (!post_content) return null;
         const p = extractContent(immutableAccessor, post_content);
         const content = post_content.toJS();
@@ -148,9 +151,14 @@ export default class PostFull extends React.Component {
         let link = `/@${content.author}/${content.permlink}`;
         if (content.category) link = `/${content.category}${link}`;
 
-        const content_body = content.body;
         const {category, title, body} = content;
         if (process.env.BROWSER && title) document.title = title + ' — Steemit';
+
+        let content_body = content.body;
+        const url = `/${category}/@${author}/${permlink}`
+        if(DMCAList.includes(url)) {
+            content_body = 'This post is not available due to a copyright claim.'
+        }
 
         const replyParams = {author, permlink, parent_author, parent_permlink, category, title, body}
 
@@ -196,8 +204,12 @@ export default class PostFull extends React.Component {
         const pending_payout = parsePayoutAmount(content.pending_payout_value);
         const total_payout = parsePayoutAmount(content.total_payout_value);
         const high_quality_post = pending_payout + total_payout > 10.0;
+        const full_power = post_content.get('percent_steem_dollars') === 0;
 
-        let post_header = <h1 className="entry-title">{content.title}</h1>
+        let post_header = <h1 className="entry-title">
+                {content.title}
+                {full_power && <span title="Powered Up 100%"><Icon name="steem" /></span>}
+            </h1>
         if(content.depth > 0) {
             let parent_link = `/${content.category}/@${content.parent_author}/${content.parent_permlink}`;
             let direct_parent_link
@@ -226,22 +238,26 @@ export default class PostFull extends React.Component {
         }
 
         const readonly = post_content.get('mode') === 'archived' || $STM_Config.read_only_mode
-        const showPromote = username && post_content.get('mode') === "first_payout" && post_content.get('depth') == 0
+        //const showPromote = username && post_content.get('mode') === "first_payout" && post_content.get('depth') == 0
+        const showPromote = false // TODO: revert when nodes are updated with https://github.com/steemit/steem/pull/550
+        const showReplyOption = post_content.get('depth') < 6
         const showEditOption = username === author
         const authorRepLog10 = repLog10(content.author_reputation)
 
         return (
             <article className="PostFull hentry" itemScope itemType="http://schema.org/blogPost">
-                <div className="float-right"><Voting post={post} flag /></div>
-                <div className="PostFull__header">
-                    {post_header}
-                    <TimeAuthorCategory content={content} authorRepLog10={authorRepLog10} showTags />
-                </div>
                 {showEdit ?
                     renderedEditor :
-                    <div className="PostFull__body entry-content">
-                        <MarkdownViewer formId={formId + '-viewer'} text={content_body} jsonMetadata={jsonMetadata} large highQualityPost={high_quality_post} noImage={!content.stats.pictures} />
-                    </div>
+                    <span>
+                        <div className="float-right"><Voting post={post} flag /></div>
+                        <div className="PostFull__header">
+                            {post_header}
+                            <TimeAuthorCategory content={content} authorRepLog10={authorRepLog10} showTags />
+                        </div>
+                        <div className="PostFull__body entry-content">
+                            <MarkdownViewer formId={formId + '-viewer'} text={content_body} jsonMetadata={jsonMetadata} large highQualityPost={high_quality_post} noImage={!content.stats.pictures} />
+                        </div>
+                    </span>
                 }
 
                 {showPromote && <button className="float-right button hollow tiny" onClick={this.showPromotePost}>Promote</button>}
@@ -253,18 +269,21 @@ export default class PostFull extends React.Component {
                     </div>
                     <div className="column shrink">
                             {!readonly && <Reblog author={author} permlink={permlink} />}
+                            {!readonly &&
+                                <span className="PostFull__reply">
+                                    {showReplyOption && <a onClick={onShowReply}>Reply</a>}
+                                    {' '}{showEditOption   && !showEdit  && <a onClick={onShowEdit}>Edit</a>}
+                                    {' '}{showDeleteOption && !showReply && <a onClick={onDeletePost}>Delete</a>}
+                                </span>}
                             <span className="PostFull__responses">
                                 <Link to={link} title={pluralize('Responses', content.children, true)}>
                                     <Icon name="chatboxes" className="space-right" />{content.children}
                                 </Link>
                             </span>
-                            {!readonly &&
-                                <span className="PostFull__reply">
-                                    <a onClick={onShowReply}>Reply</a>
-                                    {' '}{showEditOption   && !showEdit  && <a onClick={onShowEdit}>Edit</a>}
-                                    {' '}{showDeleteOption && !showReply && <a onClick={onDeletePost}>Delete</a>}
-                                </span>}
-                            <FoundationDropdownMenu menu={share_menu} icon="share" label="Share" dropdownPosition="bottom" dropdownAlignment="right" />
+                            <span className="PostFull__views">
+                                <PageViewsCounter hidden={false} />
+                            </span>
+                            <ShareMenu menu={share_menu} />
                     </div>
                 </div>
                 <div className="row">

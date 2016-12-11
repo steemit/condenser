@@ -6,16 +6,22 @@ import constants from 'app/redux/constants';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import PostsList from 'app/components/cards/PostsList';
 import {isFetchingOrRecentlyUpdated} from 'app/utils/StateFunctions';
-import g from 'app/redux/GlobalReducer';
+import {Link} from 'react-router';
+import MarkNotificationRead from 'app/components/elements/MarkNotificationRead';
+import { translate } from 'app/Translator';
+import Immutable from "immutable";
+import Callout from 'app/components/elements/Callout';
 
 class PostsIndex extends React.Component {
 
     static propTypes = {
         discussions: PropTypes.object,
+        accounts: PropTypes.object,
         status: PropTypes.object,
         routeParams: PropTypes.object,
         requestData: PropTypes.func,
-        loading: PropTypes.bool
+        loading: PropTypes.bool,
+        current_user: PropTypes.object
     };
 
     static defaultProps = {
@@ -45,7 +51,7 @@ class PostsIndex extends React.Component {
         if (!last_post) return;
         let {accountname} = this.props.routeParams
         let {category, order = constants.DEFAULT_SORT_ORDER} = this.props.routeParams;
-        if (category === 'feed'){
+        if (category === 'feed') {
             accountname = order.slice(1);
             order = 'by_feed';
         }
@@ -61,19 +67,34 @@ class PostsIndex extends React.Component {
         let topics_order = order;
         let posts = [];
         let emptyText = '';
+        let markNotificationRead = null;
         if (category === 'feed') {
             const account_name = order.slice(1);
             order = 'by_feed';
             topics_order = 'trending';
-            posts = this.props.global.getIn(['accounts', account_name, 'feed']);
-            emptyText = `Looks like ${account_name} hasn't followed anything yet!`;
+            posts = this.props.accounts.getIn([account_name, 'feed']);
+            const isMyAccount = this.props.current_user && this.props.current_user.get('username') === account_name;
+            if (isMyAccount) {
+                emptyText = <div>
+                    Looks like you haven't followed anything yet.<br /><br />
+                    <Link to="/trending">Explore Steemit</Link><br />
+                    <a href="/steemit/@thecryptofiend/the-missing-faq-a-beginners-guide-to-using-steemit">Read The Beginner's Guide</a><br />
+                    <a href="/welcome">Read The Steemit Welcome Guide</a>
+                </div>;
+                markNotificationRead = <MarkNotificationRead fields="feed" account={account_name} />
+            } else {
+                emptyText = <div>{translate('user_hasnt_followed_anything_yet', {name: account_name})}</div>;
+            }
         } else {
             posts = this.getPosts(order, category);
+            if (posts !== null && posts.size === 0) {
+                emptyText = <div>{`No ` + topics_order + (category ? ` #` + category : '') +  ` posts found`}</div>;
+            }
         }
 
         const status = this.props.status ? this.props.status.getIn([category || '', order]) : null;
         const fetching = (status && status.fetching) || this.props.loading;
-        const {showSpam} = this.state
+        const {showSpam} = this.state;
 
         return (
             <div className={'PostsIndex row' + (fetching ? ' fetching' : '')}>
@@ -81,17 +102,20 @@ class PostsIndex extends React.Component {
                     <div className="PostsIndex__topics_compact show-for-small hide-for-large">
                         <Topics order={topics_order} current={category} compact />
                     </div>
-                    <PostsList ref="list"
-                        posts={posts ? posts.toArray() : []}
-                        loading={fetching}
-                        category={category}
-                        loadMore={this.loadMore}
-                        emptyText = {emptyText}
-                        showSpam={showSpam} />
+                    {markNotificationRead}
+                    {(!fetching && (posts && !posts.size)) ? <Callout>{emptyText}</Callout> :
+                        <PostsList
+                            ref="list"
+                            posts={posts ? posts : Immutable.List()}
+                            loading={fetching}
+                            category={category}
+                            loadMore={this.loadMore}
+                            showSpam={showSpam}
+                        />}
                 </div>
                 <div className="PostsIndex__topics column shrink show-for-large">
                     <Topics order={topics_order} current={category} compact={false} />
-                    <small><a onClick={this.onShowSpam}>{showSpam ? 'Show less' : 'Show more'}</a> low value posts</small>
+                    <small><a onClick={this.onShowSpam}>{translate(showSpam ? 'show_less' : 'show_more')}</a>{' ' + translate('value_posts')}</small>
                 </div>
             </div>
         );
@@ -106,7 +130,8 @@ module.exports = {
                 discussions: state.global.get('discussion_idx'),
                 status: state.global.get('status'),
                 loading: state.app.get('loading'),
-                global: state.global
+                accounts: state.global.get('accounts'),
+                current_user: state.user.get('current')
             };
         },
         (dispatch) => {
@@ -116,4 +141,3 @@ module.exports = {
         }
     )(PostsIndex)
 };
-

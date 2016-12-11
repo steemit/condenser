@@ -1,6 +1,6 @@
 import React from 'react';
 import {Map} from 'immutable'
-import {reduxForm} from 'redux-form'
+import {reduxForm} from 'redux-form' // @deprecated, instead use: app/utils/ReactForm.js
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper'
 import Icon from 'app/components/elements/Icon'
 import DropdownMenu from 'app/components/elements/DropdownMenu'
@@ -25,7 +25,7 @@ const coinToTypes = [
     ['ETH', 'eth'],
 ]
 
-export default class BlocktradesDeposit extends React.Component {
+class BlocktradesDeposit extends React.Component {
     static propTypes = {
         // html
         inputCoinType: React.PropTypes.string,

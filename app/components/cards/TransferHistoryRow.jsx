@@ -46,32 +46,42 @@ class TransferHistoryRow extends React.Component {
                 other_account = data.to;
             }
         }
-        else if( type === 'transfer' ) {
+        else if(/^transfer$|^transfer_to_savings$|^transfer_from_savings$/.test(type)) {
+            // transfer_to_savings
+            const fromWhere =
+                type === 'transfer_to_savings' ? `to savings ` :
+                type === 'transfer_from_savings' ? `from savings ` :
+                ''
+
             if( data.from === context ) {
-                description_start += "Transfer " + data.amount + " to ";
+                description_start += `Transfer ${fromWhere}${data.amount} to `;
                 other_account = data.to;
             }
             else if( data.to === context ) {
-                description_start += "Receive " + data.amount + " from ";
+                description_start += `Receive ${fromWhere}${data.amount} from `;
                 other_account = data.from;
             } else {
-                description_start += "Transfer " + data.amount + " from ";
+                description_start += `Transfer ${fromWhere}${data.amount} from `;
                 other_account = data.from;
                 description_end += " to " + data.to;
             }
-        } else if( type === 'withdraw_vesting' ){
+            if(data.request_id != null)
+                description_end += ` (request ${data.request_id})`
+        } else if (type === 'cancel_transfer_from_savings') {
+            description_start += `Cancel transfer from savings (request ${data.request_id})`;
+        } else if( type === 'withdraw_vesting' ) {
             if( data.vesting_shares === '0.000000 VESTS' )
                 description_start += "Stop power down";
             else
                 description_start += "Start power down of " + data.vesting_shares;
         } else if( type === 'curation_reward' ) {
-            description_start += `Curation reward of ${curation_reward} STEEM POWER for `;
+            description_start += `${curation_reward} STEEM POWER for `;
             other_account = data.comment_author;
             description_end = `/${data.comment_permlink}`;
         } else if (type === 'author_reward') {
             let steem_payout = ""
             if(data.steem_payout !== '0.000 STEEM') steem_payout = ", " + data.steem_payout;
-            description_start += `Author reward of ${renameToSd(data.sbd_payout)}${steem_payout} and ${author_reward} STEEM POWER for ${data.author}/${data.permlink}`;
+            description_start += `${renameToSd(data.sbd_payout)}${steem_payout}, and ${author_reward} STEEM POWER for ${data.author}/${data.permlink}`;
             // other_account = ``;
             description_end = '';
         } else if (type === 'interest') {

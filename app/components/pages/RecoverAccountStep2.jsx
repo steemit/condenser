@@ -4,6 +4,7 @@ import Apis from 'shared/api_client/ApiInstances';
 import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInput';
 import {PrivateKey} from 'shared/ecc';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+import { translate } from 'app/Translator';
 import Callout from 'app/components/elements/Callout';
 
 function passwordToOwnerPubKey(account_name, password) {
@@ -84,9 +85,9 @@ class RecoverAccountStep2 extends React.Component {
         }).then(r => r.json()).then(res => {
             if (res.error) {
                 console.error('request_account_recovery server error (1)', res.error);
-                this.setState({error: res.error || 'Unknown', progress_status: ''});
+                this.setState({error: res.error || translate('unknown'), progress_status: ''});
             } else {
-                this.setState({error: '', progress_status: 'Recovering account..'});
+                this.setState({error: '', progress_status: translate('recovering_account') + '..'});
                 this.props.recoverAccount(name, oldPassword, newPassword, this.onRecoverFailed, this.onRecoverSuccess);
             }
         }).catch(error => {
@@ -100,13 +101,13 @@ class RecoverAccountStep2 extends React.Component {
         const {oldPassword, newPassword} = this.state;
         const name = this.props.account_to_recover;
         const oldOwner = passwordToOwnerPubKey(name, oldPassword);
-        this.setState({progress_status: 'Checking account owner..'});
+        this.setState({progress_status: translate('checking_account_owner') + '..'});
         this.checkOldOwner(name, oldOwner).then(res => {
             if (res) {
-                this.setState({progress_status: 'Sending recovery request..'});
+                this.setState({progress_status: translate('sending_recovery_request') + '..'});
                 this.requestAccountRecovery(name, oldPassword, newPassword);
             } else {
-                this.setState({error: 'We can\'t confirm account ownership. Check your password', progress_status: ''});
+                this.setState({error: translate('cant_confirm_account_ownership'), progress_status: ''});
             }
         });
     }
@@ -115,13 +116,13 @@ class RecoverAccountStep2 extends React.Component {
         if (!process.env.BROWSER) { // don't render this page on the server
             return <div className="row">
                 <div className="column">
-                    Loading..
+                    {translate('loading')}..
                 </div>
             </div>;
         }
         const {account_to_recover} = this.props;
         if (!account_to_recover) {
-            return <Callout body="Account recovery request is not confirmed yes, please get back later, thank you for your patience." />;
+            return <Callout body={translate('account_recovery_request_not_confirmed')} />;
         }
         const {oldPassword, valid, error, progress_status, name_error, success} = this.state;
         const submit_btn_class = 'button action' + (!valid || !oldPassword ? ' disabled' : '');
@@ -143,17 +144,17 @@ class RecoverAccountStep2 extends React.Component {
             <div className="RestoreAccount SignUp">
                 <div className="row">
                     <div className="column large-6">
-                        <h2>Recover account</h2>
+                        <h2>{translate('recover_account')}</h2>
                         <form onSubmit={this.onSubmit} autoComplete="off" noValidate>
                             <div className={name_error ? 'error' : ''}>
-                                <label>Account Name
+                                <label>{translate('account_name')}
                                     <input type="text" disabled="true" autoComplete="off" value={account_to_recover} />
                                 </label>
                                 <p className="help-text">{name_error}</p>
                             </div>
                             <br />
                             <div>
-                                <label>Recent Password
+                                <label>{translate('recent_password')}
                                     <input type="password"
                                            disabled={disable_password_input}
                                            autoComplete="off"
@@ -194,4 +195,3 @@ module.exports = {
         })
     )(RecoverAccountStep2)
 };
-

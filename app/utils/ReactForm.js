@@ -15,19 +15,26 @@ export default function reactForm({name, instance, fields, initialValues, valida
 
     const formState = instance.state = instance.state || {}
     formState[name] = {
-        // validate: () => isValid(instance, fields, validation),
-        handleSubmit: (fn) => (e) => {
-            e.preventDefault()
-            const valid = isValid(name, instance, fields, validation)
+        // validate: () => setFormState(instance, fields, validation),
+        handleSubmit: submitCallback => event => {
+            event.preventDefault()
+            const {valid} = setFormState(name, instance, fields, validation)
             if(!valid) return
             const data = getData(fields, instance.state)
             let formValid = true
             const fs = instance.state[name] || {}
             fs.submitting = true
+
+            // User can call this function upon successful submission
+            const updateInitialValues = () => {
+                setInitialValuesFromForm(name, instance, fields, initialValues)
+                formState[name].resetForm()
+            }
+
             instance.setState(
                 {[name]: fs},
                 () => {
-                    const ret = fn(data) || {}
+                    const ret = submitCallback({data, event, updateInitialValues}) || {}
                     for(const fieldName of Object.keys(ret)) {
                         const error = ret[fieldName]
                         if(!error) continue
@@ -73,27 +80,30 @@ export default function reactForm({name, instance, fields, initialValues, valida
         // Caution: fs.props is expanded <input {...fieldName.props} />, so only add valid props for the component
         fs.props = {name: fieldName}
 
-        const initialValue = initialValues[fieldName]
-
-        if(fieldType === 'bool') {
-            fs.props.checked = toBool(initialValue)
-            fs.value = fs.props.checked
-        } else if(fieldType === 'option') {
-            fs.props.selected = toString(initialValue)
-            fs.value = fs.props.selected
-        } else {
-            fs.props.value = toString(initialValue)
-            fs.value = fs.props.value
+        {
+            const initialValue = initialValues[fieldName]
+            if(fieldType === 'checked') {
+                fs.value = toString(initialValue)
+                fs.props.checked = toBoolean(initialValue)
+            } else if(fieldType === 'selected') {
+                fs.props.selected = toString(initialValue)
+                fs.value = fs.props.selected
+            } else {
+                fs.props.value = toString(initialValue)
+                fs.value = fs.props.value
+            }
         }
 
         fs.props.onChange = e => {
             const value = e && e.target ? e.target.value : e // API may pass value directly
             const v = {...(instance.state[fieldName] || {})}
+            const initialValue = initialValues[fieldName]
 
-            if(fieldType === 'bool') {
-                v.touched = toBool(value) !== toBool(initialValue)
-                v.value = v.props.checked = toBool(value)
-            } else if(fieldType === 'option') {
+            if(fieldType === 'checked') {
+                v.touched = toString(value) !== toString(initialValue)
+                v.value = v.props.checked = toBoolean(value)
+                v.value = value
+            } else if(fieldType === 'selected') {
                 v.touched = toString(value) !== toString(initialValue)
                 v.value = v.props.selected = toString(value)
             } else {
@@ -103,7 +113,7 @@ export default function reactForm({name, instance, fields, initialValues, valida
 
             instance.setState(
                 {[fieldName]: v},
-                () => {isValid(name, instance, fields, validation)}
+                () => {setFormState(name, instance, fields, validation)}
             )
         }
 
@@ -116,8 +126,9 @@ export default function reactForm({name, instance, fields, initialValues, valida
     }
 }
 
-function isValid(name, instance, fields, validation) {
+function setFormState(name, instance, fields, validation) {
     let formValid = true
+    let formTouched = false
     const v = validation(getData(fields, instance.state))
     for(const field of fields) {
         const fieldName = n(field)
@@ -125,13 +136,23 @@ function isValid(name, instance, fields, validation) {
         const error = validate ? validate : null
         const value = {...(instance.state[fieldName] || {})}
         value.error = error
+        formTouched = formTouched || value.touched
         if(error) formValid = false
         instance.setState({[fieldName]: value})
     }
     const fs = {...(instance.state[name] || {})}
     fs.valid = formValid
+    fs.touched = formTouched
     instance.setState({[name]: fs})
-    return formValid
+    return fs
+}
+
+function setInitialValuesFromForm(name, instance, fields, initialValues) {
+    const data = getData(fields, instance.state)
+    for(const field of fields) {
+        const fieldName = n(field)
+        initialValues[fieldName] = data[fieldName]
+    }
 }
 
 function getData(fields, state) {
@@ -146,23 +167,25 @@ function getData(fields, state) {
 /*
     @arg {string} field - field:type
     <pre>
-        type = bool,checkbox,radio
-        type = option,select
+        type = checked (for checkbox or radio)
+        type = selected (for seelct option)
         type = string
     </pre>
+    @return {string} type
 */
 function t(field) {
-    let [, type = 'string'] = field.split(':')
-    if(/checkbox|radio/.test(type)) type = 'bool'
-    if(/select|option/.test(type)) type = 'option'
+    const [, type = 'string'] = field.split(':')
     return type
 }
 
+/**
+    @return {string} name
+*/
 function n(field) {
     const [name] = field.split(':')
     return name
 }
 
 const hasValue = v => v == null ? false : (typeof v === 'string' ? v.trim() : v) === '' ? false : true
-const toBool = v => hasValue(v) ? JSON.parse(v) : false
 const toString = v => hasValue(v) ? v : ''
+const toBoolean = v => hasValue(v) ? JSON.parse(v) : ''

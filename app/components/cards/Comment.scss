@@ -1,22 +1,33 @@
 .Comment {
   clear: both;
   margin-bottom: 2.4rem;
-  .Markdown p {
-    margin: 0.1rem 0 0.6rem 0;
+  .Markdown {
+    p {
+      margin: 0.1rem 0 0.6rem 0;
+    }
+
+    p:last-child {
+      margin-bottom: 0.2rem;
+    }
   }
 }
 
 .Comment__Userpic {
+  float: left;
   position: relative;
   top: 0.4rem;
+  padding-right: 0.6rem;
 }
 
 .Comment__Userpic-small {
-  position: relative;
-  left: -2px;
   @include hide-for(medium);
-  path {
-    fill: $dark_gray;
+  .Userpic {
+    float: left;
+    position: relative;
+    top: 3px;
+    margin-right: 0.2rem;
+    width: 16px !important;
+    height: 16px !important;
   }
 }
 
@@ -29,10 +40,8 @@
     top: 0;
     left: 26px;
     .Userpic {
-      img {
-        width: 24px;
-        height: 24px;
-      }
+      width: 24px !important;
+      height: 24px !important;
     }
   }
   .Comment__header {
@@ -66,7 +75,7 @@
   visibility: hidden;
   //width: 1rem;
   float: right;
-  a {
+  > a {
     color: $dark-gray;
     letter-spacing: 0.1rem;
     padding: 0 0.5rem;
@@ -83,13 +92,10 @@
 .Comment__body {
   margin-left: 62px;
   max-width: 50rem;
-  font-size: 110%;
-  word-wrap: break-word;
 }
 
 .Comment__footer {
   margin-left: 62px;
-  margin-top: -0.4rem;
   color: $dark-gray;
   a {
     color: $dark-gray;

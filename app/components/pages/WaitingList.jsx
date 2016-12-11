@@ -1,5 +1,6 @@
 import React from 'react';
 import AddToWaitingList from 'app/components/modules/AddToWaitingList';
+import { translate } from 'app/Translator';
 
 class WaitingList extends React.Component {
     render() {
@@ -7,14 +8,13 @@ class WaitingList extends React.Component {
             <div className="row">
                 <div className="column large-4 medium-6 small-12">
                     <p>
-                        Sorry, your Reddit account doesn't have enough Reddit Karma to qualify for a free sign up.
-                        Please add your email for a place on the waiting list
+                        {translate('sorry_your_reddit_account_doesnt_have_enough_karma')}
                     </p>
                     <AddToWaitingList />
                     <br />
                     <hr />
-                    <p>Or click the button below to register with Facebook</p>
-                    <a href="/connect/facebook" className="button SignUp--fb-button">Register with Facebook</a>
+                <p>{translate('or_click_the_button_below_to_register_with_facebook')}</p>
+                    <a href="/connect/facebook" className="button SignUp--fb-button">{translate('register_with_facebook')}</a>
                 </div>
             </div>
         );

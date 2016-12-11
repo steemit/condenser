@@ -1,12 +1,10 @@
 import {takeEvery} from 'redux-saga';
 import {call, put, select} from 'redux-saga/effects';
-
 import {Apis} from 'shared/api_client'
 import {createTransaction, signTransaction} from 'shared/chain/transactions'
 import {ops} from 'shared/serializer'
 import {PublicKey, PrivateKey} from 'shared/ecc'
 import {fromJS} from 'immutable'
-
 import {getAccount} from 'app/redux/SagaShared'
 import {findSigningKey} from 'app/redux/AuthSaga'
 import {encode} from 'shared/chain/memo'
@@ -14,12 +12,15 @@ import g from 'app/redux/GlobalReducer'
 import user from 'app/redux/User'
 import tr from 'app/redux/Transaction'
 import getSlug from 'speakingurl'
+import {DEBT_TICKER} from 'config/client_config'
+import {serverApiRecordEvent} from 'app/utils/ServerApiClient'
 
 const {transaction} = ops
 
 export const transactionWatches = [
     watchForBroadcast,
     watchForUpdateAuthorities,
+    watchForUpdateMeta,
     watchForRecoverAccount,
 ]
 
@@ -28,6 +29,9 @@ export function* watchForBroadcast() {
 }
 export function* watchForUpdateAuthorities() {
     yield* takeEvery('transaction/UPDATE_AUTHORITIES', updateAuthorities);
+}
+export function* watchForUpdateMeta() {
+    yield* takeEvery('transaction/UPDATE_META', updateMeta);
 }
 export function* watchForRecoverAccount() {
     yield* takeEvery('transaction/RECOVER_ACCOUNT', recoverAccount);
@@ -90,12 +94,12 @@ function* error_account_witness_vote({operation: {account, witness, approve}}) {
 
 /** Keys, username, and password are not needed for the initial call.  This will check the login and may trigger an action to prompt for the password / key. */
 function* broadcastOperation({payload:
-    {type, operation, confirm, keys, username, password, successCallback, errorCallback}
+    {type, operation, confirm, warning, keys, username, password, successCallback, errorCallback}
 }) {
     const operationParam = {type, operation, keys, username, password, successCallback, errorCallback}
     const conf = typeof confirm === 'function' ? confirm() : confirm
     if(conf) {
-        yield put(tr.actions.confirmOperation({confirm, operation: operationParam, errorCallback}))
+        yield put(tr.actions.confirmOperation({confirm, warning, operation: operationParam, errorCallback}))
         return
     }
     const payload = {operations: [[type, operation]], keys, username, successCallback, errorCallback}
@@ -114,6 +118,8 @@ function* broadcastOperation({payload:
             }
         }
         yield call(broadcast, {payload})
+        const eventType = type.replace(/^([a-z])/, g => g.toUpperCase()).replace(/_([a-z])/g, g => g[1].toUpperCase());
+        serverApiRecordEvent(eventType, '')
     } catch(error) {
         console.error('TransactionSage', error)
         if(errorCallback) errorCallback(error.toString())
@@ -248,7 +254,7 @@ function* accepted_account_update({operation}) {
     // }
 }
 
-// TODO remove soon, this was replaced by the UserKeys edit running usernamePasswordLogin (on dialog close) 
+// TODO remove soon, this was replaced by the UserKeys edit running usernamePasswordLogin (on dialog close)
 // function* error_account_update({operation}) {
 //     const {account} = operation
 //     const stateUser = yield select(state => state.user)
@@ -271,7 +277,7 @@ import secureRandom from 'secure-random'
 function* preBroadcast_comment({operation, username}) {
     if (!operation.author) operation.author = username
     let permlink = operation.permlink
-    const {author, __config: {originalPost, autoVote, comment_options}} = operation
+    const {author, __config: {originalBody, autoVote, comment_options}} = operation
     const {parent_author = '', parent_permlink = operation.category } = operation
     const {title} = operation
     let {body} = operation
@@ -281,17 +287,11 @@ function* preBroadcast_comment({operation, username}) {
     // TODO Slightly smaller blockchain comments: if body === json_metadata.steem.link && Object.keys(steem).length > 1 remove steem.link ..This requires an adjust of get_state and the API refresh of the comment to put the steem.link back if Object.keys(steem).length >= 1
 
     let body2
-    if (originalPost) {
-        if (originalPost.body) {
-            const patch = createPatch(originalPost.body, body)
-            // Putting body into buffer will expand Unicode characters into their true length
-            if (patch && patch.length < new Buffer(body, 'utf-8').length)
-                body2 = patch
-        }
-        // permlink can not change
-        if (originalPost.permlink) {
-            permlink = originalPost.permlink
-        }
+    if (originalBody) {
+        const patch = createPatch(originalBody, body)
+        // Putting body into buffer will expand Unicode characters into their true length
+        if (patch && patch.length < new Buffer(body, 'utf-8').length)
+            body2 = patch
     }
     if (!body2) body2 = body
     if (!permlink) permlink = yield createPermlink(title, author, parent_author, parent_permlink)
@@ -310,14 +310,10 @@ function* preBroadcast_comment({operation, username}) {
         ['comment', op],
     ]
 
-    if(autoVote) {
-        const vote = {voter: op.author, author: op.author, permlink: op.permlink, weight: 10000}
-        comment_op.push(['vote', vote])
-    }
-
+    // comment_options must come directly after comment
     if(comment_options) {
         const {
-            max_accepted_payout = "1000000.000 SBD",
+            max_accepted_payout = ["1000000.000", DEBT_TICKER].join(" "),
             percent_steem_dollars = 10000, // 10000 === 100%
             allow_votes = true,
             allow_curation_rewards = true,
@@ -334,6 +330,12 @@ function* preBroadcast_comment({operation, username}) {
             }]
         )
     }
+
+    if(autoVote) {
+        const vote = {voter: op.author, author: op.author, permlink: op.permlink, weight: 10000}
+        comment_op.push(['vote', vote])
+    }
+
     return comment_op
 }
 
@@ -404,7 +406,7 @@ function* error_vote({operation: {author, permlink}}) {
 // }
 
 function slug(text) {
-    return getSlug(text, {truncate: 128})
+    return getSlug(text.replace(/[<>]/g, ''), {truncate: 128})
     //const shorten = txt => {
     //    let t = ''
     //    let words = 0
@@ -641,4 +643,43 @@ function* updateAuthorities({payload: {accountName, signingKey, auths, twofa, on
     // console.log('sign key.toPublicKey().toString()', key.toPublicKey().toString())
     // console.log('payload', payload)
     yield call(broadcastOperation, {payload})
+}
+
+/** auths must start with most powerful key: owner for example */
+// const twofaAccount = 'steem'
+function* updateMeta(params) {
+    // console.log('params', params)
+    const {meta, account_name, signingKey, onSuccess, onError} = params.payload.operation
+    console.log('meta', meta)
+    console.log('account_name', account_name)
+    // Be sure this account is up-to-date (other required fields are sent in the update)
+    const [account] = yield call([Apis, Apis.db_api], 'get_accounts', [account_name])
+    if (!account) {
+        onError('Account not found')
+        return
+    }
+    if (!signingKey) {
+        onError(`Incorrect Password`)
+        throw new Error('Have to pass owner key in order to change meta')
+    }
+
+    try {
+        console.log('account.name', account.name)
+      const tx = yield createTransaction([
+          ['update_account_meta', {
+              account_name: account.name,
+              json_meta: JSON.stringify(meta),
+          }]
+      ])
+      const sx = signTransaction(tx, signingKey);
+      yield new Promise((resolve, reject) =>
+          Apis.broadcastTransaction(sx, () => {resolve()}).catch(e => {reject(e)})
+      )
+      if(onSuccess) onSuccess()
+      // console.log('sign key.toPublicKey().toString()', key.toPublicKey().toString())
+      // console.log('payload', payload)
+    } catch(e) {
+      console.error('Update meta', e)
+      if(onError) onError(e)
+    }
 }

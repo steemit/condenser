@@ -51,22 +51,11 @@
     display: flex;
     text-transform: lowercase;
   }
-}
-
-.Header__userpic {
-  position: relative;
-  top: -3px;
-  img {
-    width: 36px;
-    height: 36px;
-    border: 1px solid #e0e0e0;
-    border-radius: 50%;
-    margin-right: 0 !important;
+  @media screen and (max-width: 39.9375em) {
+      .shrink {
+          padding: .3rem 1rem;
+      }
   }
-}
-
-.menu > li.Header__userpic > a {
-  padding: 0.4rem 0 0 0;
 }
 
 ul > li.Header__top-logo > a {
@@ -142,6 +131,12 @@ ul > li > .button {
   .VerticalMenu {
     left: 0;
   }
+}
+
+.logo {
+  padding-top: 10px!important;
+  padding-bottom: 1px!important;
+  padding-right: 5px!important;
 }
 
 .ConnectionError {

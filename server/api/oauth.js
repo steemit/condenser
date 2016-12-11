@@ -42,13 +42,13 @@ function retrieveFacebookUserData(access_token) {
 
 function* handleFacebookCallback() {
     console.log('-- /handle_facebook_callback -->', this.session.uid, this.query);
-    let verified_email = false;
+    let email = null;
     try {
         if (this.query['error[error][message]']) {
             return logErrorAndRedirect(this, 'facebook:1', this.query['error[error][message]']);
         }
         const u = yield retrieveFacebookUserData(this.query.access_token);
-        verified_email = false; // verified_email = !!(u.verified && u.email);
+        email = u.email;
         const attrs = {
             uid: this.session.uid,
             name: u.name,
@@ -75,17 +75,17 @@ function* handleFacebookCallback() {
             verified: u.verified,
             provider_user_id: u.id
         };
-        const i_attrs_email = {
-            provider: 'email',
-            email: u.email,
-            verified: verified_email
-        };
+        // const i_attrs_email = {
+        //     provider: 'email',
+        //     email: u.email,
+        //     verified: false
+        // };
 
         let user = yield findUser({email: u.email, provider_user_id: u.id});
         console.log('-- /handle_facebook_callback user id -->', this.session.uid, user ? user.id : 'not found');
 
         let account_recovery_record = null;
-        const provider = 'facebook';
+        const provider = this.session.prv = 'facebook';
         if (this.session.arec) {
             const arec = yield models.AccountRecoveryRequest.findOne({
                 attributes: ['id', 'created_at', 'account_name', 'owner_key'],
@@ -120,49 +120,40 @@ function* handleFacebookCallback() {
             }
             return null;
         }
-        if (!u.email) {
-            console.log('-- /handle_facebook_callback no email -->', this.session.uid, u);
-            this.flash = {alert: 'Facebook login didn\'t provide any email addresses. Please make sure your Facebook account has a primary email address and try again.'};
-            this.redirect('/');
-            return;
-        }
+        // no longer necessary since there is phone verification now
+        // if (!u.email) {
+        //     console.log('-- /handle_facebook_callback no email -->', this.session.uid, u);
+        //     this.flash = {alert: 'Facebook login didn\'t provide any email addresses. Please make sure your Facebook account has a primary email address and try again.'};
+        //     this.redirect('/');
+        //     return;
+        // }
+        // if (!u.verified) {
+        //     throw new Error('Not verified Facebook account. Please verify your Facebook account and try again to sign up to Steemit.');
+        // }
 
         if (user) {
-            i_attrs_email.user_id = attrs.id = user.id;
+            attrs.id = user.id;
             yield models.User.update(attrs, {where: {id: user.id}});
             yield models.Identity.update(i_attrs, {where: {user_id: user.id, provider: 'facebook'}});
-            if (verified_email) {
-                const eid = yield models.Identity.findOne(
-                    {attributes: ['id', 'verified'], where: {user_id: user.id, provider: 'email'}, order: 'id DESC'}
-                );
-                if (eid) {
-                    if (!eid.verified) yield eid.update({email: u.email, verified: true});
-                } else {
-                    yield models.Identity.create(i_attrs_email);
-                }
-            }
             console.log('-- fb updated user -->', this.session.uid, user.id, u.name, u.email);
         } else {
             user = yield models.User.create(attrs);
-            i_attrs_email.user_id = i_attrs.user_id = user.id;
+            i_attrs.user_id = user.id;
             console.log('-- fb created user -->', user.id, u.name, u.email);
             const identity = yield models.Identity.create(i_attrs);
             console.log('-- fb created identity -->', this.session.uid, identity.id);
-            if (i_attrs_email.email) {
-                const email_identity = yield models.Identity.create(i_attrs_email);
-                console.log('-- fb created email identity -->', this.session.uid, email_identity.id);
-            }
+            // if (i_attrs_email.email) {
+            //     i_attrs_email.user_id = user.id
+            //     const email_identity = yield models.Identity.create(i_attrs_email);
+            //     console.log('-- fb created email identity -->', this.session.uid, email_identity.id);
+            // }
         }
         this.session.user = user.id;
     } catch (error) {
         return logErrorAndRedirect(this, 'facebook:2', error);
     }
     this.flash = {success: 'Successfully authenticated with Facebook'};
-    if (verified_email) {
-        this.redirect('/create_account');
-    } else {
-        this.redirect('/enter_email');
-    }
+    this.redirect('/enter_email' + (email ? `?email=${email}` : ''));
     return null;
 }
 
@@ -195,7 +186,7 @@ function* handleRedditCallback() {
         console.log('-- /handle_reddit_callback user id -->', this.session.uid, user ? user.id : 'not found');
 
         let account_recovery_record = null;
-        const provider = 'reddit';
+        const provider = this.session.prv = 'reddit';
         if (this.session.arec) {
             const arec = yield models.AccountRecoveryRequest.findOne({
                 attributes: ['id', 'created_at', 'account_name', 'owner_key'],
@@ -247,7 +238,7 @@ function* handleRedditCallback() {
         if (user) {
             if (!waiting_list) attrs.waiting_list = false;
             yield models.User.update(attrs, {where: {id: user.id}});
-            yield models.Identity.update(i_attrs, {where: {user_id: user.id}});
+            yield models.Identity.update(i_attrs, {where: {user_id: user.id, provider: 'reddit'}});
             console.log('-- reddit updated user -->', this.session.uid, user.id, u.name);
         } else {
             attrs.waiting_list = waiting_list;

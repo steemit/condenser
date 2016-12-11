@@ -111,7 +111,7 @@ class Voting extends React.Component {
     }
 
     render() {
-        const {myVote, active_votes, showList, voting, flag, vesting_shares} = this.props;
+        const {myVote, active_votes, showList, voting, flag, vesting_shares, is_comment} = this.props;
         const {username} = this.props;
         const {votingUp, votingDown, showWeight, weight} = this.state;
         // console.log('-- Voting.render -->', myVote, votingUp, votingDown);
@@ -152,19 +152,35 @@ class Voting extends React.Component {
             </span>
         }
 
-        const {pending_payout, total_author_payout, total_curator_payout, cashout_time, promoted} = this.props;
+        const {max_payout, pending_payout, total_author_payout, total_curator_payout, cashout_time, promoted} = this.props;
         let payout = pending_payout + total_author_payout + total_curator_payout;
         if (payout < 0.0) payout = 0.0;
+        if (payout > max_payout) payout = max_payout;
+        const payout_limit_hit = payout >= max_payout;
 
         const up = <Icon name={votingUpActive ? 'empty' : 'chevron-up-circle'} />;
         const classUp = 'Voting__button Voting__button-up' + (myVote > 0 ? ' Voting__button--upvoted' : '') + (votingUpActive ? ' votingUp' : '');
 
-        const payoutItems = [
-            {value: 'Potential Payout $' + formatDecimal(pending_payout).join('')},
-            {value: 'Boost Payments $' + formatDecimal(promoted).join('')}
-        ];
-        if (cashout_time && cashout_time.indexOf('1969') !== 0 && cashout_time.indexOf('1970') !== 0) {
+        // TODO: clean up the date logic after shared-db upgrade
+        // There is an "active cashout" if: (a) there is a pending payout, OR (b) there is a valid cashout_time AND (it's a top level post OR a comment with at least 1 vote)
+        const cashout_active = pending_payout > 0 || (cashout_time && cashout_time.indexOf('1969') !== 0 && cashout_time.indexOf('1970') !== 0 && (active_votes.size > 0 || !is_comment))
+        const payoutItems = [];
+
+        if(cashout_active) {
+            payoutItems.push({value: 'Potential Payout $' + formatDecimal(pending_payout).join('')});
+        }
+        if(promoted > 0) {
+            payoutItems.push({value: 'Promotion Cost $' + formatDecimal(promoted).join('')});
+        }
+        const hide_cashout_532 = cashout_time.indexOf('1969') === 0 // tmpfix for #532. TODO: remove after shared-db
+        if (cashout_active && !hide_cashout_532) {
             payoutItems.push({value: <TimeAgoWrapper date={cashout_time} />});
+        }
+
+        if(max_payout == 0) {
+            payoutItems.push({value: 'Payout Declined'})
+        } else if (max_payout < 1000000) {
+            payoutItems.push({value: 'Max Accepted Payout $' + formatDecimal(max_payout).join('')})
         }
         if(total_author_payout > 0) {
             payoutItems.push({value: 'Past Payouts $' + formatDecimal(total_author_payout + total_curator_payout).join('')});
@@ -172,9 +188,9 @@ class Voting extends React.Component {
             payoutItems.push({value: ' - Curators: $' + formatDecimal(total_curator_payout).join('')});
         }
         const payoutEl = <DropdownMenu el="div" items={payoutItems}>
-            <span>
-                <FormattedAsset amount={payout} asset="$" />
-                <Icon name="dropdown-arrow" />
+            <span style={payout_limit_hit ? {opacity: '0.5'} : {}}>
+                <FormattedAsset amount={payout} asset="$" classname={max_payout === 0 ? 'strikethrough' : ''} />
+                {payoutItems.length > 0 && <Icon name="dropdown-arrow" />}
             </span>
         </DropdownMenu>;
 
@@ -192,7 +208,7 @@ class Voting extends React.Component {
         if (count > MAX_VOTES_DISPLAY) voters.push({value: <span>&hellip; and {(count - MAX_VOTES_DISPLAY)} more</span>});
 
         let voters_list = null;
-        if (showList) {
+        if (showList && count > 0) {
             voters_list = <DropdownMenu selected={pluralize('votes', count, true)} className="Voting__voters_list" items={voters} el="div" />;
         }
 
@@ -236,6 +252,7 @@ export default connect(
         const is_comment = post.get('parent_author') !== ''
         const current_account = state.user.get('current')
         const cashout_time = post.get('cashout_time')
+        const max_payout           = parsePayoutAmount(post.get('max_accepted_payout'))
         const pending_payout       = parsePayoutAmount(post.get('pending_payout_value'))
         const promoted             = parsePayoutAmount(post.get('promoted'))
         const total_author_payout  = parsePayoutAmount(post.get('total_payout_value'))
@@ -252,7 +269,7 @@ export default connect(
         return {
             ...ownProps,
             myVote, author, permlink, username, active_votes, vesting_shares, is_comment,
-            pending_payout, promoted, total_author_payout, total_curator_payout, cashout_time,
+            max_payout, pending_payout, promoted, total_author_payout, total_curator_payout, cashout_time,
             loggedin: username != null,
             voting
         }

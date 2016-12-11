@@ -1,9 +1,16 @@
-Steemit
+# Steemit.com
+
 ========
+Steemit.com is the react.js web interface to the world's first and best blockchain-based social media platform.  It uses [STEEM](https://github.com/steemit/steem), a blockchain powered by Graphene 2.0 technology to store JSON-based content for a plethora of web applications.   
+
+## Why would I want to use Steemit.com?
+* Learning how to build blockchain-based web applications using STEEM as a content storage mechanism in react.js
+* Reviewing the inner workings of the steemit.com social media platform
+* Assisting with software development for steemit.com
 
 ## Installation
 
-# Clone the repository and make the tmp folder
+#### Clone the repository and make a tmp folder
 ```bash
 git clone https://github.com/steemit/steemit.com
 cd steemit.com
@@ -31,7 +38,7 @@ cp config/steem-example.sh config/steem-dev.sh
 ```
 
 #### Install mysql server
- 
+
 OS X :
 
 ```bash
@@ -49,12 +56,23 @@ sudo apt-get update
 sudo apt-get install mysql-server
 ```
 
+On Ubuntu 16.04+ you may be unable to connect to mysql without root access, if
+so update the mysql root user as follows::
+
+```
+sudo mysql -u root
+DROP USER 'root'@'localhost';
+CREATE USER 'root'@'%' IDENTIFIED BY '';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';
+FLUSH PRIVILEGES;
+```
+
 Now launch mysql client and create steemit_dev database:
 ```bash
 mysql -u root
 > create database steemit_dev;
 ```
- 
+
 Install `sequelize-cli` globally:
 
 ```bash

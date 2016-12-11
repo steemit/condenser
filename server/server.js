@@ -12,7 +12,9 @@ import useRedirects from './redirects';
 import useOauthLogin from './api/oauth';
 import useGeneralApi from './api/general';
 import useAccountRecoveryApi from './api/account_recovery';
+import useNotificationsApi from './api/notifications';
 import useEnterAndConfirmEmailPages from './server_pages/enter_confirm_email';
+import useEnterAndConfirmMobilePages from './server_pages/enter_confirm_mobile';
 import isBot from 'koa-isbot';
 import session from 'koa-session';
 import csrf from 'koa-csrf';
@@ -20,6 +22,7 @@ import flash from 'koa-flash';
 import minimist from 'minimist';
 import Grant from 'grant-koa';
 import config from '../config';
+import secureRandom from 'secure-random'
 
 const grant = new Grant(config.grant);
 // import uploadImage from 'server/upload-image' //medium-editor
@@ -35,14 +38,39 @@ csrf(app);
 app.use(mount(grant));
 app.use(flash({key: 'flash'}));
 
-// redirect to home page if known account
-// remember ch, cn, r url params in the session and remove them from url
+// some redirects
 app.use(function *(next) {
+    // redirect to home page/feed if known account
     if (this.method === 'GET' && this.url === '/' && this.session.a) {
-        this.status = 301;
+        this.status = 302;
         this.redirect(`/@${this.session.a}/feed`);
         return;
     }
+    // normalize user name url from cased params
+    if (this.method === 'GET' && /^\/(@[\w\.\d-]+)\/?$/.test(this.url)) {
+        const p = this.originalUrl.toLowerCase();
+        if(p !== this.originalUrl) {
+            this.redirect(p);
+            return;
+        }
+    }
+    // normalize top category filtering from cased params
+    if (this.method === 'GET' && /^\/(hot|created|trending|active)\//.test(this.url)) {
+        const segments = this.url.split('/')
+        const category = segments[2]
+        if(category !== category.toLowerCase()) {
+            segments[2] = category.toLowerCase()
+            this.redirect(segments.join('/'));
+            return;
+        }
+    }
+    // start registration process if user get to create_account page and has no id in session yet
+    if(this.url === '/create_account' && !this.session.user) {
+        this.status = 302;
+        this.redirect('/enter_email');
+        return;
+    }
+    // remember ch, cn, r url params in the session and remove them from url
     if (this.method === 'GET' && /\?[^\w]*(ch=|cn=|r=)/.test(this.url)) {
         let redir = this.url.replace(/((ch|cn|r)=[^&]+)/gi, r => {
             const p = r.split('=');
@@ -52,7 +80,7 @@ app.use(function *(next) {
         redir = redir.replace(/&&&?/, '');
         redir = redir.replace(/\?&?$/, '');
         console.log(`server redirect ${this.url} -> ${redir}`);
-        this.status = 301;
+        this.status = 302;
         this.redirect(redir);
     } else {
         yield next;
@@ -79,8 +107,22 @@ app.use(mount('/robots.txt', function* () {
     this.body = "User-agent: *\nAllow: /";
 }));
 
+// set user's uid - used to identify users in logs and some other places
+app.use(function* (next) {
+    const last_visit = this.session.last_visit;
+    this.session.last_visit = (new Date()).getTime() / 1000 | 0;
+    if (!this.session.uid) {
+        this.session.uid = secureRandom.randomBuffer(13).toString('hex');
+        this.session.new_visit = true;
+    } else {
+        this.session.new_visit = this.session.last_visit - last_visit > 1800;
+    }
+    yield next;
+});
+
 useRedirects(app);
 useEnterAndConfirmEmailPages(app);
+useEnterAndConfirmMobilePages(app);
 
 if (env === 'production') {
     app.use(helmet.contentSecurityPolicy(config.helmet));
@@ -89,6 +131,7 @@ if (env === 'production') {
 useAccountRecoveryApi(app);
 useOauthLogin(app);
 useGeneralApi(app);
+useNotificationsApi(app);
 
 app.use(favicon(path.join(__dirname, '../app/assets/images/favicons/favicon.ico')));
 app.use(isBot());
@@ -109,16 +152,6 @@ if (env === 'development') {
 if (env !== 'test') {
     const appRender = require('./app_render');
     app.use(function* () {
-        this.first_visit = false;
-        this.last_visit = this.session.last_visit;
-        this.session.last_visit = (new Date()).getTime() / 1000 | 0;
-        if (!this.session.uid) {
-            this.session.uid = Math.random().toString(36).slice(2);
-            this.first_visit = true;
-            this.session.new_visit = true;
-        } else {
-            this.session.new_visit = this.session.last_visit - this.last_visit > 1800;
-        }
         yield appRender(this);
         // if (app_router.dbStatus.ok) recordWebEvent(this, 'page_load');
         const bot = this.state.isBot;

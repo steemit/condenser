@@ -49,6 +49,9 @@ module.exports = {
             verified: {
                 type: Sequelize.BOOLEAN
             },
+            bot: {
+                type: Sequelize.BOOLEAN
+            },
             created_at: {
                 allowNull: false,
                 type: Sequelize.DATE

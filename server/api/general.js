@@ -7,6 +7,11 @@ import recordWebEvent from 'server/record_web_event';
 import {esc, escAttrs} from 'db/models';
 import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF} from 'server/utils';
 import coBody from 'co-body';
+import Mixpanel from 'mixpanel';
+import Tarantool from 'db/tarantool';
+
+const mixpanel = config.mixpanel ? Mixpanel.init(config.mixpanel) : null;
+
 
 export default function useGeneralApi(app) {
     const router = koa_router({prefix: '/api/v1'});
@@ -34,6 +39,24 @@ export default function useGeneralApi(app) {
             this.status = 401;
             return;
         }
+
+        try {
+            const lock_entity_res = yield Tarantool.instance().call('lock_entity', user_id+'');
+            if (!lock_entity_res[0][0]) {
+                console.log('-- /accounts lock_entity -->', user_id, lock_entity_res[0][0]);
+                this.body = JSON.stringify({error: 'Conflict'});
+                this.status = 409;
+                return;
+            }
+        } catch (e) {
+            console.error('-- /accounts tarantool is not available, fallback to another method', e)
+            const rnd_wait_time = Math.random() * 10000;
+            console.log('-- /accounts rnd_wait_time -->', rnd_wait_time);
+            yield new Promise((resolve) =>
+                setTimeout(() => resolve(), rnd_wait_time)
+            )
+        }
+
         try {
             const user = yield models.User.findOne(
                 {attributes: ['verified', 'waiting_list'], where: {id: user_id}}
@@ -44,13 +67,25 @@ export default function useGeneralApi(app) {
                 return;
             }
 
+            // check if user's ip is associated with any bot
+            const same_ip_bot = yield models.User.findOne({
+                attributes: ['id', 'created_at'],
+                where: {remote_ip, bot: true}
+            });
+            if (same_ip_bot) {
+                console.log('-- /accounts same_ip_bot -->', user_id, this.session.uid, remote_ip, user.email);
+                this.body = JSON.stringify({error: 'We are sorry, we cannot sign you up at this time because your IP address is associated with bots activity. Please contact support@steemit.com for more information.'});
+                this.status = 401;
+                return;
+            }
+
             const existing_account = yield models.Account.findOne({
                 attributes: ['id', 'created_at'],
                 where: {user_id, ignored: false},
                 order: 'id DESC'
             });
             if (existing_account) {
-                throw new Error("Only one Steem account per user is allowed in order to prevent abuse (Steemit, Inc. funds each new account with 3 STEEM)");
+                throw new Error("Only one Steem account per user is allowed in order to prevent abuse");
             }
 
             const same_ip_account = yield models.Account.findOne(
@@ -67,12 +102,23 @@ export default function useGeneralApi(app) {
                 console.log(`api /accounts: waiting_list user ${this.session.uid} #${user_id}`);
                 throw new Error('You are on the waiting list. We will get back to you at the earliest possible opportunity.');
             }
+
+            // check email
             const eid = yield models.Identity.findOne(
                 {attributes: ['id'], where: {user_id, provider: 'email', verified: true}, order: 'id DESC'}
             );
             if (!eid) {
                 console.log(`api /accounts: not confirmed email for user ${this.session.uid} #${user_id}`);
                 throw new Error('Email address is not confirmed');
+            }
+
+            // check phone
+            const mid = yield models.Identity.findOne(
+                {attributes: ['id'], where: {user_id, provider: 'phone', verified: true}, order: 'id DESC'}
+            );
+            if (!mid) {
+                console.log(`api /accounts: not confirmed sms for user ${this.session.uid} #${user_id}`);
+                throw new Error('Phone number is not confirmed');
             }
 
             yield createAccount({
@@ -102,10 +148,20 @@ export default function useGeneralApi(app) {
             })).catch(error => {
                 console.error('!!! Can\'t create account model in /accounts api', this.session.uid, error);
             });
+            if (mixpanel) {
+                mixpanel.track('Signup', {
+                    distinct_id: this.session.uid,
+                    ip: remote_ip
+                });
+                mixpanel.people.set(this.session.uid, {ip: remote_ip});
+            }
         } catch (error) {
             console.error('Error in /accounts api call', this.session.uid, error.toString());
             this.body = JSON.stringify({error: error.message});
             this.status = 500;
+        } finally {
+            // console.log('-- /accounts unlock_entity -->', user_id);
+            try { yield Tarantool.instance().call('unlock_entity', user_id + ''); } catch(e) {/* ram lock */}
         }
         recordWebEvent(this, 'api/accounts', account ? account.name : 'n/a');
     });
@@ -144,12 +200,17 @@ export default function useGeneralApi(app) {
         try {
             this.session.a = account;
             const db_account = yield models.Account.findOne(
-                {attributes: ['user_id'], where: {name: esc(account)}}
+                {attributes: ['user_id'], where: {name: esc(account)}, logging: false}
             );
             if (db_account) this.session.user = db_account.user_id;
             this.body = JSON.stringify({status: 'ok'});
+            const remote_ip = getRemoteIp(this.req);
+            if (mixpanel) {
+                mixpanel.people.set(this.session.uid, {ip: remote_ip, $ip: remote_ip});
+                mixpanel.people.increment(this.session.uid, 'Visits', 1);
+            }
         } catch (error) {
-            console.error('Error in /login_account api call', this.session.uid, error);
+            console.error('Error in /login_account api call', this.session.uid, error.message);
             this.body = JSON.stringify({error: error.message});
             this.status = 500;
         }
@@ -179,11 +240,16 @@ export default function useGeneralApi(app) {
             const {csrf, type, value} = typeof(params) === 'string' ? JSON.parse(params) : params;
             if (!checkCSRF(this, csrf)) return;
             console.log('-- /record_event -->', this.session.uid, type, value);
-            const str_value = typeof value === 'string' ? value : JSON.stringify(value);
+            if (type.match(/^[A-Z]/)) {
+                mixpanel.track(type, {distinct_id: this.session.uid});
+                mixpanel.people.increment(this.session.uid, type, 1);
+            } else {
+                const str_value = typeof value === 'string' ? value : JSON.stringify(value);
+                recordWebEvent(this, type, str_value);
+            }
             this.body = JSON.stringify({status: 'ok'});
-            recordWebEvent(this, type, str_value);
         } catch (error) {
-            console.error('Error in /record_event api call', error);
+            console.error('Error in /record_event api call', error.message);
             this.body = JSON.stringify({error: error.message});
             this.status = 500;
         }
@@ -194,6 +260,54 @@ export default function useGeneralApi(app) {
         const params = yield coBody.json(this);
         console.log('-- /csp_violation -->', this.req.headers['user-agent'], params);
         this.body = '';
+    });
+
+    router.post('/page_view', koaBody, function *() {
+        const params = this.request.body;
+        const {csrf, page, ref} = typeof(params) === 'string' ? JSON.parse(params) : params;
+        if (!checkCSRF(this, csrf)) return;
+        console.log('-- /page_view -->', this.session.uid, page);
+        const remote_ip = getRemoteIp(this.req);
+        try {
+            let views = 1, unique = true;
+            if (config.tarantool) {
+                const res = yield Tarantool.instance().call('page_view', page, remote_ip, this.session.uid, ref);
+                unique = res[0][0];
+            }
+            const page_model = yield models.Page.findOne(
+                {attributes: ['id', 'views'], where: {permlink: esc(page)}, logging: false}
+            );
+            if (unique) {
+                if (page_model) {
+                    views = page_model.views + 1;
+                    yield yield models.Page.update({views}, {where: {id: page_model.id}, logging: false});
+                } else {
+                    yield models.Page.create(escAttrs({permlink: page, views}), {logging: false});
+                }
+            }
+            this.body = JSON.stringify({views});
+            if (mixpanel) {
+                let referring_domain = '';
+                if (ref) {
+                    const matches = ref.match(/^https?\:\/\/([^\/?#]+)(?:[\/?#]|$)/i);
+                    referring_domain = matches && matches[1];
+                }
+                mixpanel.track('PageView', {
+                    distinct_id: this.session.uid,
+                    Page: page,
+                    ip: remote_ip,
+                    $referrer: ref,
+                    $referring_domain: referring_domain
+                });
+                if (ref) mixpanel.people.set_once(this.session.uid, '$referrer', ref);
+                mixpanel.people.set_once(this.session.uid, 'FirstPage', page);
+                mixpanel.people.increment(this.session.uid, 'PageView', 1);
+            }
+        } catch (error) {
+            console.error('Error in /page_view api call', this.session.uid, error.message);
+            this.body = JSON.stringify({error: error.message});
+            this.status = 500;
+        }
     });
 }
 

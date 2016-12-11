@@ -99,6 +99,18 @@ class Header extends React.Component {
         } else if (route.page === 'Post') {
             sort_order = '';
             topic = route.params[0];
+        } else if (route.page == 'SubmitPost') {
+            page_title = `Create a Post`;
+        } else if (route.page == 'Privacy') {
+            page_title = `Privacy Policy`;
+        } else if (route.page == 'Tos') {
+            page_title = `Terms of Service`;
+        } else if (route.page == 'ChangePassword') {
+            page_title = `Change Account Password`;
+        } else if (route.page == 'CreateAccount') {
+            page_title = `Create Account`;
+        } else if (route.page == 'RecoverAccountStep1' || route.page == 'RecoverAccountStep2') {
+            page_title = `Stolen Account Recovery`;
         } else if (route.page === 'UserProfile') {
             user_name = route.params[0].slice(1);
             page_title = user_name;
@@ -117,15 +129,19 @@ class Header extends React.Component {
             if(route.params[1] === "recent-replies"){
                 page_title = `Replies by ${user_name} `;
             }
-            if(route.params[1] === "posts"){
+            // @user/"posts" is deprecated in favor of "comments" as of oct-2016 (#443)
+            if(route.params[1] === "posts" || route.params[1] === "comments"){
                 page_title = `Comments by ${user_name} `;
             }
         } else {
             page_name = ''; //page_title = route.page.replace( /([a-z])([A-Z])/g, '$1 $2' ).toLowerCase();
         }
 
-        // Always format first letter of all titles capitalized for consistency & readability
-        page_title = page_title.charAt(0).toUpperCase() + page_title.slice(1);
+        // Format first letter of all titles and lowercase user name
+        if (route.page !== 'UserProfile') {
+            page_title = page_title.charAt(0).toUpperCase() + page_title.slice(1);
+        }
+
 
         if (process.env.BROWSER && route.page !== 'Post') document.title = page_title + ' — Steemit';
 
@@ -137,7 +153,7 @@ class Header extends React.Component {
             ['hot', 'hot'],
             ['trending', 'trending (24 hour)'],
             ['trending30', 'trending (30 day)'],
-            ['promoted', 'promoted'],
+            //['promoted', 'promoted'], //TODO: reenable after shared-db upgrade
             ['active', 'active']
         ];
         if (current_account_name) sort_orders.unshift(['home', 'home']);
@@ -148,7 +164,7 @@ class Header extends React.Component {
             ['created', 'new'],
             ['hot', 'hot'],
             ['trending', 'trending'],
-            ['promoted', 'promoted'],
+            //['promoted', 'promoted'], //TODO: reenable after shared-db upgrade
             ['active', 'active']
         ];
         if (current_account_name) sort_orders_horizontal.unshift(['home', 'home']);
@@ -167,7 +183,7 @@ class Header extends React.Component {
             sort_order_extra_menu = <HorizontalMenu items={items} />
         }
         return (
-            <header className="Header">
+            <header className="Header noPrint">
                 <div className="Header__top header">
                     <div className="expanded row">
                         <div className="columns">
@@ -177,7 +193,7 @@ class Header extends React.Component {
                                         <Icon name="steem" size="2x" />
                                     </Link>
                                 </li>
-                                <li className="Header__top-steemit show-for-medium"><Link to={logo_link}>steemit<span className="beta">beta</span></Link></li>
+                                <li className="Header__top-steemit show-for-medium noPrint"><Link to={logo_link}>steemit<span className="beta">beta</span></Link></li>
                                 {(topic_link || user_name || page_name) && <li className="delim show-for-medium">|</li>}
                                 {topic_link && <li className="Header__top-topic">{topic_link}</li>}
                                 {user_name && <li><Link to={`/@${user_name}`}>{user_name}</Link></li>}

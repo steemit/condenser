@@ -75,13 +75,13 @@ By analogy, Steem is a game system for content, where the rewards people earn ar
 
 **Steem** - Steem is the most liquid form of currency in the platform. Steem can be converted into Steem Power, Steem Dollars, or traded. 
 
-**Steem Power** - Steem Power is a measurement of how much influence a user can wield via Steemit. The more Steem Power a user holds, the more they may influence the value of the content on the network. It is important to note when a user decides to “Power Down” Steem Power, they will receive equal distributions of the Steem Power as Steem over 104 weeks. 
+**Steem Power** - Steem Power is a measurement of how much influence a user can wield via Steemit. The more Steem Power a user holds, the more they may influence the value of the content on the network. It is important to note when a user decides to “Power Down” Steem Power, they will receive equal distributions of the Steem Power as Steem over 13 weeks.
 
 **Steem Dollars** - Steem Dollars are a blockchain and market powered token designed to be pegged to $1 USD. Steem Dollars may be turned into STEEM before they can be “Powered Up” into Steem Power. Steem Dollars may also be used to buy things in marketplaces, such as Steemit.com and PeerHub.com.
 
 ## What is Powering Down and Powering Up?
 
-**Powering Down** - If you have Steem Power, you can begin to Power Down to obtain Steem. The system will transfer 1/104 of your Steem Power, to Steem each week for two years (104 weeks). 
+**Powering Down** - If you have Steem Power, you can begin to Power Down to obtain Steem. The system will transfer 1/13 of your Steem Power, to Steem each week for three months (13 weeks).
 
 **Powering Up** - If you wish to gain more influence in the Steem network, you must increase your Steem Power. Powering Up is the process of instantaneously turning your Steem into Steem Power.
 
@@ -115,7 +115,7 @@ http://steemtools.com/
 
 ## Are my Steem and Steem Dollar tokens insured in the event of a hack or if someone takes over my account?
 
-No, it is not. If your money is in Steem Power, however, it is impossible for a hacker to take out more than 1/104 per week.
+No, it is not. If your money is in Steem Power, however, it is impossible for a hacker to take out more than 1/13 per week.
 
 ## How do I set my recovery account? 
 

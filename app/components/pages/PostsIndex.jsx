@@ -87,7 +87,7 @@ class PostsIndex extends React.Component {
             }
         } else {
             posts = this.getPosts(order, category);
-            if (posts !== null && posts.size === 0) {
+            if (posts && posts.size === 0) {
                 emptyText = <div>{`No ` + topics_order + (category ? ` #` + category : '') +  ` posts found`}</div>;
             }
         }

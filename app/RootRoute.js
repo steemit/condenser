@@ -88,6 +88,8 @@ export default {
             //require.ensure([], (require) => {
                 cb(null, [require('app/components/pages/PostPage')]);
             //});
+        } else if (route.page === 'PostNoCategory') {
+                cb(null, [require('app/components/pages/PostPageNoCategory')]);
         } else if (route.page === 'PostsIndex') {
             //require.ensure([], (require) => {
                 //cb(null, [require('app/components/pages/PostsIndex')]);

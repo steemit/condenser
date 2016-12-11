@@ -16,7 +16,7 @@ import useNotificationsApi from './api/notifications';
 import useEnterAndConfirmEmailPages from './server_pages/enter_confirm_email';
 import useEnterAndConfirmMobilePages from './server_pages/enter_confirm_mobile';
 import isBot from 'koa-isbot';
-import session from 'koa-session';
+import session from '@steem/crypto-session';
 import csrf from 'koa-csrf';
 import flash from 'koa-flash';
 import minimist from 'minimist';
@@ -33,8 +33,10 @@ const env = process.env.NODE_ENV || 'development';
 const cacheOpts = {maxAge: 86400000, gzip: true};
 
 app.keys = [config.session_key];
-app.use(session({maxAge: 1000 * 3600 * 24 * 7}, app));
+const crypto_key = config.server_session_secret;
+session(app, {maxAge: 1000 * 3600 * 24 * 60, crypto_key});
 csrf(app);
+
 app.use(mount(grant));
 app.use(flash({key: 'flash'}));
 

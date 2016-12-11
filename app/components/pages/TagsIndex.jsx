@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import {connect} from 'react-redux';
 import { browserHistory } from 'react-router';
 
-class TagsIndex extends React.Component {
+export default class TagsIndex extends React.Component {
     static propTypes = {
         tagsList: React.PropTypes.object.isRequired,
         tagsAll: React.PropTypes.object.isRequired,
@@ -36,7 +36,10 @@ class TagsIndex extends React.Component {
         const order = this.props.routeParams.order;
         let tags = tagsAll;
         if (search) tags = tags.filter(tag => tag.get('name').indexOf(search.toLowerCase()) !== -1);
-        tags = tags.filter(tag => tag.get('name')).sort((a,b) => {
+        tags = tags.filter(
+            // there is a blank tag present, as well as some starting with #. filter them out.
+            tag => /^[a-z]/.test(tag.get('name'))
+        ).sort((a,b) => {
             return a.get('name').localeCompare(b.get('name'));
         }).map(tag => {
             const name = tag.get('name');
@@ -46,7 +49,8 @@ class TagsIndex extends React.Component {
                 <td>
                     <Link to={link} activeClassName="active">{name}</Link>
                 </td>
-                <td>{tag.get('discussions')}</td>
+                <td>{tag.get('top_posts')}</td>
+                <td>{tag.get('comments')}</td>
                 <td>{tag.get('total_payouts')}</td>
             </tr>);
         }).toArray();
@@ -60,7 +64,8 @@ class TagsIndex extends React.Component {
                         <thead>
                         <tr>
                             <th>Tag</th>
-                            <th>Replies</th>
+                            <th>Posts</th>
+                            <th>Comments</th>
                             <th>Payouts</th>
                         </tr>
                         </thead>
@@ -74,17 +79,10 @@ class TagsIndex extends React.Component {
     }
 }
 
-// TODO: use just 'tag_idx' and 'tags' after shared-db upgrade
-
-export default connect(state => ({
-    tagsList: state.global.get('tag_idx') || state.global.get('category_idx'),
-    tagsAll: state.global.get('tags') || state.global.get('categories')
-}))(TagsIndex);
-
 module.exports = {
     path: 'tags.html(/:order)',
     component: connect(state => ({
-        tagsList: state.global.get('tag_idx') || state.global.get('category_idx'),
-        tagsAll: state.global.get('tags') || state.global.get('categories')
+        tagsList: state.global.get('tag_idx'),
+        tagsAll: state.global.get('tags')
     }))(TagsIndex)
 };

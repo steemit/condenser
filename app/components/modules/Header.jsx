@@ -35,15 +35,6 @@ class Header extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.location.pathname !== this.props.location.pathname) {
-            /**
-             * To track page changes analytics for segment.io in SPA we need to
-             * specifically track route changes
-             * (we are not doing it somewhere in router because react-router does multiple
-             * route iterations and it is hard to track only one page change event)
-             */
-            try {
-                if(process.env.BROWSER) analytics.page(nextProps.location.pathname);
-            } catch (e) { console.warn(e) }
             const route = resolveRoute(nextProps.location.pathname);
             if (route && route.page === 'PostsIndex' && route.params && route.params.length > 0) {
                 const sort_order = route.params[0] !== 'home' ? route.params[0] : null;
@@ -68,8 +59,6 @@ class Header extends React.Component {
 
     componentDidMount() {
         window.addEventListener('scroll', this.hideSubheader);
-        // identify user for proper segment.io analytics data
-        analytics.identify(this.props.current_account_name);
     }
 
     componentWillUnmount() {

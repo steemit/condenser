@@ -26,11 +26,6 @@ class Author extends React.Component {
     }
     shouldComponentUpdate = shouldComponentUpdate(this, 'Author')
 
-    trackAnalytics = eventType => {
-        console.log(eventType)
-        analytics.track(eventType)
-    }
-
     render() {
         const {author, follow, mute, authorRepLog10} = this.props // html
         const {username} = this.props // redux
@@ -74,7 +69,6 @@ class Author extends React.Component {
                     dropdownPosition="bottom"
                     dropdownAlignment="left"
                     dropdownContent={dropdown}
-                    onClick={this.trackAnalytics.bind(this, 'author dropdown clicked')}
                 >
                     <span className="FoundationDropdownMenu__label">
                         <span itemProp="author" itemScope itemType="http://schema.org/Person">

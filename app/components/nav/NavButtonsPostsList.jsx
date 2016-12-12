@@ -8,10 +8,6 @@ import {find, findIndex} from 'lodash';
 import Icon from 'app/components/elements/Icon';
 
 class NavButtons extends React.Component {
-  trackAnalytics = eventType => {
-      console.log(eventType, 'analytics track')
-      analytics.track(eventType)
-  }
 
   onNextClick(e) {console.log(this, e, " IN onNextClick Handler function. ");
     if (!this.props.flag) return console.log('false props.flag found')
@@ -51,7 +47,6 @@ class NavButtons extends React.Component {
       let nextUrl = `/${category}/@${nextPost}`
 
       this.onPostClick(nextPost, nextUrl)
-      trackAnalytics('next article clicked')
     }
   }
 
@@ -78,10 +73,6 @@ class NavButtons extends React.Component {
       let nextPost = posts[postIndex];
       let nextUrl = `/${category}/@${nextPost}`
       this.onPostClick(nextPost, nextUrl)
-
-        // setTimeout(function(){window.scrollTo(0, 0)}, 600);
-      // send "'post switched to next' event"
-      analytics.track
     }
   }
   render (){

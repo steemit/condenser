@@ -102,10 +102,6 @@ class Voting extends React.Component {
         };
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Voting')
 
-        this.trackAnalytics = eventType => {
-            console.log(eventType)
-            analytics.track(eventType)
-        }
     }
 
     render() {
@@ -191,7 +187,7 @@ class Voting extends React.Component {
             payoutItems.push({value: ' - ' + translate('authors') + ': ' + localizedCurrency(formatDecimal(total_author_payout).join(''))});
             payoutItems.push({value: ' - ' + translate('curators') + ': ' + localizedCurrency(formatDecimal(total_curator_payout).join(''))});
         }
-        const payoutEl = <DropdownMenu el="div" items={payoutItems} onClick={this.trackAnalytics.bind(this, 'rewards dropdown clicked')}>
+        const payoutEl = <DropdownMenu el="div" items={payoutItems}>
             <span style={payout_limit_hit ? {opacity: '0.5'} : {}}>
                 {/* <FormattedAsset amount={payout} asset="$" /> */}
                 {/* TODO check FormattedAsset and it's possible replacememnt with LocalizedCurrency */}
@@ -215,7 +211,7 @@ class Voting extends React.Component {
 
         let voters_list = null;
         if (showList) {
-            voters_list = <DropdownMenu selected={translate('vote_count', {voteCount: count})} onClick={this.trackAnalytics.bind(this, 'votes dropdown clicked')} className="Voting__voters_list" items={voters} el="div" />;
+            voters_list = <DropdownMenu selected={translate('vote_count', {voteCount: count})} className="Voting__voters_list" items={voters} el="div" />;
         }
 
         let voteUpClick = this.voteUp;

@@ -140,12 +140,6 @@ class PostFull extends React.Component {
         const author = post_content.get('author')
         const permlink = post_content.get('permlink')
         this.props.showPromotePost(author, permlink)
-        analytics.track('promote button clicked')
-    }
-
-    trackAnalytics = eventType => {
-        console.log(eventType)
-        analytics.track(eventType)
     }
 
     render() {

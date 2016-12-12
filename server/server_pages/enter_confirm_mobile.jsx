@@ -9,7 +9,11 @@ import SignupProgressBar from 'app/components/elements/SignupProgressBar';
 import CountryCode from 'app/components/elements/CountryCode';
 import {getRemoteIp, checkCSRF} from 'server/utils';
 import MiniHeader from 'app/components/modules/MiniHeader';
-import secureRandom from 'secure-random'
+import secureRandom from 'secure-random';
+import config from '../../config';
+import Mixpanel from 'mixpanel';
+
+const mixpanel = config.mixpanel ? Mixpanel.init(config.mixpanel) : null;
 
 const assets_file = process.env.NODE_ENV === 'production' ? 'tmp/webpack-stats-prod.json' : 'tmp/webpack-stats-dev.json';
 const assets = Object.assign({}, require(assets_file), {script: []});
@@ -38,6 +42,7 @@ function *confirmMobileHandler() {
         return;
     }
     yield mid.update({verified: true});
+    if (mixpanel) mixpanel.track('SignupStep3', {distinct_id: this.session.uid});
     this.redirect('/create_account');
 }
 export default function useEnterAndConfirmMobilePages(app) {
@@ -55,6 +60,7 @@ export default function useEnterAndConfirmMobilePages(app) {
         );
         if (mid && mid.verified) {
             this.flash = {success: 'Phone number has already been verified'};
+            if (mixpanel) mixpanel.track('SignupStep3', {distinct_id: this.session.uid});
             this.redirect('/create_account');
             return;
         }
@@ -92,6 +98,7 @@ export default function useEnterAndConfirmMobilePages(app) {
         </div>);
         const props = { body, title: 'Phone Number', assets, meta: [] };
         this.body = '<!DOCTYPE html>' + renderToString(<ServerHTML { ...props } />);
+        if (mixpanel) mixpanel.track('SignupStep2', {distinct_id: this.session.uid});
     });
 
     router.post('/submit_mobile', koaBody, function *() {
@@ -144,6 +151,7 @@ export default function useEnterAndConfirmMobilePages(app) {
             if (mid.verified) {
                 if(mid.phone === phone) {
                     this.flash = {success: 'Phone number has been verified'};
+                    if (mixpanel) mixpanel.track('SignupStep3', {distinct_id: this.session.uid});
                     this.redirect('/create_account');
                     return;
                 }

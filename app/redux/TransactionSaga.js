@@ -154,7 +154,8 @@ function* broadcastOperation({payload:
             }
         }
         yield call(broadcast, {payload})
-        const eventType = type.replace(/^([a-z])/, g => g.toUpperCase()).replace(/_([a-z])/g, g => g[1].toUpperCase());
+        let eventType = type.replace(/^([a-z])/, g => g.toUpperCase()).replace(/_([a-z])/g, g => g[1].toUpperCase());
+        if (eventType === 'Comment' && !operation.parent_author) eventType = 'Post';
         serverApiRecordEvent(eventType, '')
     } catch(error) {
         console.error('TransactionSage', error)

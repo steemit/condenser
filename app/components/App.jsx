@@ -32,49 +32,6 @@ class App extends React.Component {
 
         if (process.env.BROWSER) localStorage.removeItem('autopost') // July 14 '16 compromise, renamed to autopost2
         this.props.loginUser();
-        // SEGMENT.COM ANALYTICS INITIALIZATION
-    	if (process.env.BROWSER) {
-            !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
-            analytics.load(SEGMENT_ANALYTICS_KEY);
-            analytics.page()
-            }}();
-
-            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-            ga('create', 'UA-49238979-12', 'auto');
-            ga('send', 'pageview');
-
-            !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-            n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-            n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-            t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-            document,'script','https://connect.facebook.net/en_US/fbevents.js');
-
-            fbq('init', '1594659427507927');
-            fbq('track', "PageView");
-
-            // REFORMAL.RU
-            window.reformalOptions = { // yes, it's must be declared as global variable
-                project_id: 975991,
-                project_host: "golosweb.reformal.ru",
-                tab_orientation: "bottom-right",
-                tab_indent: "100px",
-                tab_bg_color: "#2471b9",
-                tab_border_color: "#FFFFFF",
-                tab_image_url: "http://tab.reformal.ru/T9GC0LfRi9Cy0Ysg0Lgg0L%252FRgNC10LTQu9C%252B0LbQtdC90LjRjw==/FFFFFF/7fc3a43d72cbfa45531d9daeca6221b5/bottom-right/1/tab.png",
-                tab_border_width: 2
-            };
-
-            (function() {
-                var script = document.createElement('script');
-                script.type = 'text/javascript'; script.async = true;
-                script.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'media.reformal.ru/widgets/v3/reformal.js';
-                document.getElementsByTagName('head')[0].appendChild(script);
-            })();
-        }
     }
 
     componentDidMount() {
@@ -100,8 +57,6 @@ class App extends React.Component {
         e.preventDefault();
         // this.setState({open: this.state.open ? null : 'left'});
         this.refs.side_panel.show();
-        console.log('sidebar menu toggled')
-        analytics.track('sidebar menu toggled')
     }
 
     handleClose = () => this.setState({open: null});
@@ -204,78 +159,73 @@ class App extends React.Component {
                     onMouseMove={this.onEntropyEvent}>
             <SidePanel ref="side_panel" alignment="right">
                 <TopRightMenu vertical navigate={this.navigate} />
-                <ul className="vertical menu">
-                    <li>
-                        <a href={LANDING_PAGE_URL} onClick={this.navigate}>
-                            {translate("about")}
-                        </a>
-                    </li>
-                    <li>
-                        <a href={WIKI_URL} target="blank" onClick={this.navigate}>
-                              {translate('wiki')}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/tags.html/hot" onClick={this.navigate}>
-                            {translate("explore")}
-                        </a>
-                    </li>
-                    <li>
-                        <a href={WHITEPAPER_URL} onClick={this.navigate}>
-                            {translate("APP_NAME_whitepaper")}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/welcome" onClick={this.navigate}>
-                            {translate('welcome')}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/faq.html" onClick={this.navigate}>
-                            FAQ
-                        </a>
-                    </li>
-                    {/* <li>
-                        <a onClick={() => depositSteem()}>
-                            {translate("buy_LIQUID_TOKEN")}
-                        </a>
-                    </li> */}
-                    {/* <li>
-                        <a href="http://steemtools.com/" onClick={this.navigate} target="_blank" rel="noopener noreferrer">
-                            {translate('APP_NAME_app_center')}&nbsp;<Icon name="extlink" />
-                        </a>
-                    </li> */}
-                    <li>
-                        <a href="/market" onClick={this.navigate}>
-                            {translate("currency_market")}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/recover_account_step_1" onClick={this.navigate}>
-                        {translate("stolen_account_recovery")}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/change_password" onClick={this.navigate}>
-                            {translate("change_account_password")}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://chat.golos.io" target="_blank" rel="noopener noreferrer">
-                            {translate("APP_NAME_chat")}&nbsp;<Icon name="extlink" />
-                        </a>
-                    </li>
-                    {/* <li>
-                        <a href="https://steemit.github.io/steemit-docs/" target="_blank" rel="noopener noreferrer">
-                            {translate("steemit_api_docs")}&nbsp;<Icon name="extlink" />
-                        </a>
-                    </li> */}
-                    <li className="last">
-                        <a href="/~witnesses" onClick={this.navigate}>
-                            {translate("vote_for_witnesses")}
-                        </a>
-                    </li>
-                </ul>
+                    <ul className="vertical menu">
+                        <li>
+                            <a href={LANDING_PAGE_URL} onClick={this.navigate}>
+                                {translate("about")}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/tags.html/hot" onClick={this.navigate}>
+                                {translate("explore")}
+                            </a>
+                        </li>
+                        <li>
+                            <a href={WHITEPAPER_URL} onClick={this.navigate}>
+                                {translate("APP_NAME_whitepaper")}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/welcome" onClick={this.navigate}>
+                                {translate('welcome')}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/faq.html" onClick={this.navigate}>
+                                FAQ
+                            </a>
+                        </li>
+                        <li>
+                            <a onClick={() => depositSteem()}>
+                                {translate("buy_LIQUID_TOKEN")}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="http://steemtools.com/" onClick={this.navigate} target="_blank" rel="noopener noreferrer">
+                                {translate('APP_NAME_app_center')}&nbsp;<Icon name="extlink" />
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/market" onClick={this.navigate}>
+                                {translate("currency_market")}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/recover_account_step_1" onClick={this.navigate}>
+                            {translate("stolen_account_recovery")}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/change_password" onClick={this.navigate}>
+                                {translate("change_account_password")}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://steemit.chat/home" target="_blank" rel="noopener noreferrer">
+                                {translate("APP_NAME_chat")}&nbsp;<Icon name="extlink" />
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://steemit.github.io/steemit-docs/" target="_blank" rel="noopener noreferrer">
+                                {translate("steemit_api_docs")}&nbsp;<Icon name="extlink" />
+                            </a>
+                        </li>
+                        <li className="last">
+                            <a href="/~witnesses" onClick={this.navigate}>
+                                {translate("vote_for_witnesses")}
+                            </a>
+                        </li>
+                    </ul>
                 <ul className="vertical menu">
                     <li>
                         <a href={PRIVACY_POLICY_URL} onClick={this.navigate} rel="nofollow">

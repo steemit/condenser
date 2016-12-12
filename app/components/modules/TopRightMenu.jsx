@@ -26,6 +26,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
     const mcl = vertical ? '' : ' sub-menu';
     const lcn = vertical ? '' : 'show-for-medium';
     const nav = navigate || defaultNavigate;
+    const search = translate('search')
     const submit_story = $STM_Config.read_only_mode ? null : <li className={lcn + ' submit-story'}><a href="/submit.html" onClick={nav}>{translate("submit_a_story")}</a></li>;
     const userpic_src = userpic || '/images/user.png';
     const feed_link = `/@${username}/feed`;
@@ -36,10 +37,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
     const account_link = `/@${username}`;
     const posts_link = `/@${username}/posts`;
     const reset_password_link = `/@${username}/password`;
-    function trackAnalytics(eventType) {
-        console.log(eventType)
-        analytics.track(eventType)
-    }
+
     if (loggedIn) { // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!
         const user_menu = [
             {link: feed_link, value: translate('feed'), addon: <NotifiCounter fields="feed" />},
@@ -48,93 +46,13 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
             {link: replies_link, value: translate('replies'), addon: <NotifiCounter fields="comment_reply" />},
             {link: wallet_link, value: translate('wallet'), addon: <NotifiCounter fields="follow,send,receive,account_update" />},
             {link: reset_password_link, value: translate('change_password')},
-            {link: crowdsale_link, value: translate('crowdsale')},
             {link: settings_link, value: translate('settings')},
             loggedIn ?
                 {link: '#', onClick: logout, value: translate('logout')} :
                 {link: '#', onClick: showLogin, value: translate('login')}
         ];
-        const search = translate('search')
-        if (location && location.pathname.indexOf("/ico") != -1) {
-            return (
-                <ul className={mcn + ' landing'}>
-                    {/* <li className={lcn + ' buttons'}>
-                        <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
-                    </li> */}
-                    <li className={lcn}>
-                        <Link className="button success" to="/ico">Выплаты авторам</Link>
-                    </li>
-                    <li className={lcn}>
-                        <a href="#what-is-golos">Видео</a>
-                    </li>
-                    <li className={lcn}>
-                        <a href="#docs">Документация</a>
-                    </li>
-                    <li className={lcn}>
-                        <a href="#faq">FAQ</a>
-                    </li>
-                    <li className={lcn}>
-                        <a href="#team">Команда</a>
-                    </li>
-                    <LinkWithDropdown
-                        closeOnClickOutside
-                        dropdownPosition="bottom"
-                        dropdownAlignment="right"
-                        dropdownContent={<VerticalMenu items={user_menu} title={username} />}
-                        onClick={trackAnalytics.bind(this, 'user dropdown menu clicked')}
-                    >
-                        {!vertical && <li className={'Header__userpic '}>
-                            <a href={account_link} title={username} onClick={e => e.preventDefault()}>
-                                <Userpic account={username} width="36" height="36" />
-                            </a>
-                        </li>}
-                    </LinkWithDropdown>
-                    {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
-                        <span className="hamburger" />
-                    </a></li>}
-                </ul>
-            );
-            return      <ul className={mcn + mcl + ' landing'}>
-                            {/* <li className={lcn + ' buttons'}>
-                                <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
-                            </li> */}
-                            <li className={lcn}>
-                                <a href="#what-is-golos">Видео</a>
-                            </li>
-                            <li className={lcn}>
-                                <a href="#docs">Документация</a>
-                            </li>
-                            <li className={lcn}>
-                                <a href="#faq">FAQ</a>
-                            </li>
-                            <li className={lcn}>
-                                <a href="#team">Команда</a>
-                            </li>
-                            <li className={lcn + ' image-wrapper'}>
-                                <a href="/login.html">
-                                    <img src="images/user.png" width="36" height="36" />
-                                    <span>Вход</span>
-                                </a>
-                            </li>
-                            <li className={lcn}><LoadingIndicator type="circle" inline /></li>
-                            {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
-                                <span className="hamburger" />
-                            </a></li>}
-                        </ul>
-        }
-
-/*
-                <li><a href={`/@${username}/transfers#buy_golos`} className="button alert">купить голоса</a></li>
-                   move down on ICO start....
-*/
         return (
             <ul className={mcn}>
-                {/* <li className={lcn + ' buttons'}>
-                    <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
-                </li> */}
-                <li className={lcn + ' buttons'}>
-                    <Link to="/ico" className="button success">Выплаты авторам</Link>
-                </li>
                 <li className={lcn}><a href="/static/search.html" title={search}>{vertical ? <span>{search}</span> : <Icon name="search" />}</a></li>
                 {submit_story}
                 <LinkWithDropdown
@@ -142,7 +60,6 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                     dropdownPosition="bottom"
                     dropdownAlignment="right"
                     dropdownContent={<VerticalMenu items={user_menu} title={username} />}
-                    onClick={trackAnalytics.bind(this, 'user dropdown menu clicked')}
                 >
                     {!vertical && <li className={'Header__userpic '}>
                         <a href={account_link} title={username} onClick={e => e.preventDefault()}>
@@ -158,48 +75,9 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
         );
     }
     if (probablyLoggedIn) {
-        if (location && location.pathname.indexOf("/ico") != -1) {
-            return      <ul className={mcn + mcl + ' landing'}>
-                            {/* <li className={lcn + ' buttons'}>
-                                <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
-                            </li> */}
-                            <li className={lcn}>
-                                <Link className="button success" to="/ico">Выплаты авторам</Link>
-                            </li>
-                            <li className={lcn}>
-                                <a href="#what-is-golos">Видео</a>
-                            </li>
-                            <li className={lcn}>
-                                <a href="#docs">Документация</a>
-                            </li>
-                            <li className={lcn}>
-                                <a href="#faq">FAQ</a>
-                            </li>
-                            <li className={lcn}>
-                                <a href="#team">Команда</a>
-                            </li>
-                            <li className={lcn + ' image-wrapper'}>
-                                <a href="/login.html">
-                                    <img src="images/user.png" width="36" height="36" />
-                                    <span>Вход</span>
-                                </a>
-                            </li>
-                            <li className={lcn}><LoadingIndicator type="circle" inline /></li>
-                            {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
-                                <span className="hamburger" />
-                            </a></li>}
-                        </ul>
-        }
-
         return (
             <ul className={mcn + mcl}>
-                {/* <li className={lcn + ' buttons'}>
-                    <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
-                </li> */}
-                <li className={lcn + ' buttons'}>
-                    <Link to="/ico" className="button success">Выплаты авторам</Link>
-                </li>
-                {!vertical && <li><a href="/static/search.html" title="Поиск"><Icon name="search" /></a></li>}
+                {!vertical && <li><a href="/static/search.html" title={search}><Icon name="search" /></a></li>}
                 <li className={lcn}><LoadingIndicator type="circle" inline /></li>
                 {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
                     <span className="hamburger" />
@@ -208,46 +86,9 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
         );
     }
 
-    if (location && location.pathname.indexOf("/ico") != -1) {
-        return  <ul className={mcn + mcl + ' landing'}>
-                    {/* <li className={lcn + ' buttons'}>
-                        <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
-                    </li> */}
-                    <li className={lcn}>
-                        <Link className="button success" to="/ico">Выплаты авторам</Link>
-                    </li>
-                    <li className={lcn}>
-                        <a href="#what-is-golos">Видео</a>
-                    </li>
-                    <li className={lcn}>
-                        <a href="#docs">Документация</a>
-                    </li>
-                    <li className={lcn}>
-                        <a href="#faq">FAQ</a>
-                    </li>
-                    <li className={lcn}>
-                        <a href="#team">Команда</a>
-                    </li>
-                    <li className={lcn + ' image-wrapper'}>
-                        <a href="/login.html">
-                            <img src="images/user.png" width="36" height="36" />
-                            <span>Вход</span>
-                        </a>
-                    </li>
-                    {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
-                        <span className="hamburger" />
-                    </a></li>}
-                </ul>
-    }
     return (
             <ul className={mcn + mcl}>
-                {/*<li className={lcn + ' buttons'}>
-                     <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
-                </li>*/}
-                <li className={lcn + ' buttons'}>
-                    <Link to="/ico" className="button success">Выплаты авторам</Link>
-                </li>
-                {!vertical && <li><a href="/static/search.html" title="Поиск"><Icon name="search" /></a></li>}
+                {!vertical && <li><a href="/static/search.html" title={search}><Icon name="search" /></a></li>}
                 <li className={lcn}><a href="/create_account" onClick={showSignUp}>{translate('sign_up')}</a></li>
                 <li className={lcn}><a href="/login.html" onClick={showLogin}>{translate('login')}</a></li>
                 {submit_story}

@@ -68,7 +68,9 @@ export default class HelpContent extends React.Component {
     }
 
     componentWillMount() {
-        const {locale} = this.props.intl
+        // NOTE proper selector of files based on locale is to be done
+        // const {locale} = this.props.intl
+        const locale = "en"
         const md_file_path_regexp = new RegExp(`\/${locale}\/(.+)\.md$`)
         req.keys().filter(a => {
             return a.indexOf(`/${locale}/`) !== -1;
@@ -91,8 +93,9 @@ export default class HelpContent extends React.Component {
     }
 
     render() {
-        const {locale} = this.props.intl
-        console.log('locale', locale)
+        // NOTE proper selector of files based on locale is to be done
+        // const {locale} = this.props.intl
+        const locale = "en"
         if (!HelpData[locale]) {
             console.error(`missing locale '${locale}' help files`);
             return null;

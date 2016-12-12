@@ -21,6 +21,23 @@ const assets = Object.assign({}, require(assets_file), {script: []});
 function *confirmMobileHandler() {
     const confirmation_code = this.params && this.params.code ? this.params.code : this.request.body.code;
     console.log('-- /confirm_mobile -->', this.session.uid, this.session.user, confirmation_code);
+
+    const phone = yield models.Identity.findOne(
+        {attributes: ['id', 'phone'], where: {confirmation_code, provider: 'phone'}}
+    );
+    if (!phone) {
+        this.flash = {error: 'Wrong confirmation code.'};
+        this.redirect('/enter_mobile');
+        return;
+    }
+    const verified_phone = yield models.Identity.findOne(
+        {attributes: ['id'], where: {phone: phone.phone, provider: 'phone', verified: true}}
+    );
+    if (verified_phone) {
+        this.flash = {success: 'Phone number has already been verified'};
+        this.redirect('/create_account');
+        return;
+    }
     const mid = yield models.Identity.findOne(
         {attributes: ['id', 'user_id', 'verified', 'updated_at'], where: {user_id: this.session.user, confirmation_code, provider: 'phone'}, order: 'id DESC'}
     );

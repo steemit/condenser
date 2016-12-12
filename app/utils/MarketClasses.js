@@ -1,4 +1,5 @@
 import {roundDown, roundUp} from "./MarketUtils";
+import { LIQUID_TICKER, DEBT_TICKER } from 'config/client_config'
 const precision = 1000;
 
 class Order {
@@ -63,14 +64,14 @@ class TradeHistory {
           zdate = zdate + 'Z'
 
         this.date = new Date(zdate);
-        this.type = fill.current_pays.indexOf("SBD") !== -1 ? "bid" : "ask";
+        this.type = fill.current_pays.indexOf(DEBT_TICKER) !== -1 ? "bid" : "ask";
         this.color = this.type == "bid" ? "buy-color" : "sell-color";
         if (this.type === "bid") {
-            this.sbd = parseFloat(fill.current_pays.split(" SBD")[0]);
-            this.steem = parseFloat(fill.open_pays.split(" STEEM")[0]);
+            this.sbd = parseFloat(fill.current_pays.split(" " + DEBT_TICKER)[0]);
+            this.steem = parseFloat(fill.open_pays.split(" " + LIQUID_TICKER)[0]);
         } else {
-            this.sbd = parseFloat(fill.open_pays.split(" SBD")[0]);
-            this.steem = parseFloat(fill.current_pays.split(" STEEM")[0]);
+            this.sbd = parseFloat(fill.open_pays.split(" " + DEBT_TICKER)[0]);
+            this.steem = parseFloat(fill.current_pays.split(" " + LIQUID_TICKER)[0]);
         }
 
         this.price = this.sbd / this.steem;

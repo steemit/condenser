@@ -243,6 +243,10 @@ const en = 	{
 	open_orders: 'Open Orders',
 	sell_amount_for_atleast: 'Sell {amount_to_sell} for at least {min_to_receive} ({effectivePrice})',
 	buy_atleast_amount_for: 'Buy at least {min_to_receive} for {amount_to_sell} ({effectivePrice})',
+	price_warning_above: 'This price is well above the current market price of {marketPrice}, are you sure?',
+	price_warning_below: 'This price is well below the current market price of {marketPrice}, are you sure?',
+	order_cancel_confirm: 'Cancel order {order_id} from {user}?',
+	order_cancelled: 'Order {order_id} cancelled.',
 	higher: 'Higher', // context is about prices
 	lower: 'Lower', // context is about prices
 	total_DEBT_TOKEN_SHORT_CURRENCY_SIGN: "Total " + DEBT_TOKEN_SHORT + ' (' + CURRENCY_SIGN + ')',

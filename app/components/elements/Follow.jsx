@@ -39,6 +39,7 @@ export default class Follow extends React.Component {
     initEvents(props) {
         const {updateFollow, follower, following} = props
         const upd = type => {
+            if(this.state.busy) return;
             this.setState({busy: true})
             const done = () => {this.setState({busy: false})}
             updateFollow(follower, following, type, done)

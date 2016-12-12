@@ -72,11 +72,9 @@
 }
 
 .Comment__header_collapse {
-  visibility: hidden;
-  //width: 1rem;
   float: right;
   > a {
-    color: $dark-gray;
+    color: $medium-gray;
     letter-spacing: 0.1rem;
     padding: 0 0.5rem;
   }
@@ -85,7 +83,11 @@
   }
 }
 
-.Comment:hover .Comment__header .Comment__header_collapse {
+.Comment > div > .Comment__header > .Comment__header_collapse > .Voting {
+  visibility: hidden;
+}
+
+.Comment:hover > div > .Comment__header > .Comment__header_collapse > .Voting {
   visibility: visible;
 }
 

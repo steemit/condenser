@@ -9,6 +9,7 @@ import o2j from 'shared/clash/object2json'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import Userpic from 'app/components/elements/Userpic';
 import reactForm from 'app/utils/ReactForm'
+import UserList from 'app/components/elements/UserList';
 
 class Settings extends React.Component {
 
@@ -110,6 +111,10 @@ class Settings extends React.Component {
 
         const {profile_image, name, about, location, website} = this.state
 
+        const {follow, account, isOwnAccount} = this.props
+        const following = follow && follow.getIn(['get_following', account.name]);
+        const ignores = isOwnAccount && following && following.get('ignore_result')
+
         return <div className="Settings">
 
             {/*<div className="row">
@@ -184,6 +189,13 @@ class Settings extends React.Component {
                         }
                 </form>
             </div>
+            {ignores && ignores.size > 0 &&
+                <div className="row">
+                    <div className="small-12 columns">
+                        <br /><br />
+                        <UserList title="Muted Users" account={account} users={ignores} />
+                    </div>
+                </div>}
         </div>
     }
 }
@@ -203,6 +215,7 @@ export default connect(
             metaData,
             isOwnAccount: username == accountname,
             profile,
+            follow: state.global.get('follow'),
             ...ownProps
         }
     },

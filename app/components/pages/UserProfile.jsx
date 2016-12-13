@@ -38,12 +38,21 @@ export default class UserProfile extends React.Component {
         this.loadMore = this.loadMore.bind(this);
     }
 
+    componentWillMount() {
+        let userName = this.props.routeParams.accountname.toLowerCase();
+        this.props.requestFollowCount(userName);
+    }
+
     shouldComponentUpdate(np) {
+
         const {follow} = this.props;
+        const {follow_count} = this.props;
+
         let followersLoading = false, npFollowersLoading = false;
         let followingLoading = false, npFollowingLoading = false;
 
         const account = np.routeParams.accountname.toLowerCase();
+
         if (follow) {
             followersLoading = follow.getIn(['get_followers', account, 'blog_loading'], false);
             followingLoading = follow.getIn(['get_following', account, 'blog_loading'], false);
@@ -89,6 +98,7 @@ export default class UserProfile extends React.Component {
     }
 
     render() {
+
         const {
             props: {current_user, wifShown, global_status, follow},
             onPrint
@@ -429,7 +439,8 @@ module.exports = {
                 loading: state.app.get('loading'),
                 global_status: state.global.get('status'),
                 accounts: state.global.get('accounts'),
-                follow: state.global.get('follow')
+                follow: state.global.get('follow'),
+                follow_count: state.global.get('follow_count')
             };
         },
         dispatch => ({
@@ -452,6 +463,7 @@ module.exports = {
                 }))
             },
             requestData: (args) => dispatch({type: 'REQUEST_DATA', payload: args}),
+            requestFollowCount: (account) => dispatch({type: 'REQUEST_FOLLOW_COUNT', payload: account}),
         })
     )(UserProfile)
 };

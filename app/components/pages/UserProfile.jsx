@@ -38,11 +38,6 @@ export default class UserProfile extends React.Component {
         this.loadMore = this.loadMore.bind(this);
     }
 
-    componentWillMount() {
-        let userName = this.props.routeParams.accountname.toLowerCase();
-        this.props.requestFollowCount(userName);
-    }
-
     shouldComponentUpdate(np) {
         const {follow} = this.props;
         const {follow_count} = this.props;
@@ -136,10 +131,13 @@ export default class UserProfile extends React.Component {
         let followerCount = "";
         let followingCount = "";
 
-        if (totalCounts) {
-            totalCounts = totalCounts.get(accountname).toJS();
-            followerCount = totalCounts.follower_count;
-            followingCount = totalCounts.following_count;
+        if (totalCounts && accountname) {
+            totalCounts = totalCounts.get(accountname);
+            if (totalCounts) {
+                totalCounts    = totalCounts.toJS();
+                followerCount  = totalCounts.follower_count;
+                followingCount = totalCounts.following_count;
+            }
         }
 
         const rep = repLog10(account.reputation);

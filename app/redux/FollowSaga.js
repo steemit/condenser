@@ -1,10 +1,28 @@
 import {fromJS, Map, Set} from 'immutable'
 import {call, put, select} from 'redux-saga/effects';
 import {Apis} from 'shared/api_client';
+import {takeLatest, takeEvery} from 'redux-saga';
+import g from 'app/redux/GlobalReducer'
 
 /**
     This loadFollows both 'blog' and 'ignore'
 */
+
+export const followWatches = [watchFollowCount]
+
+//watcher saga for follower count
+export function* watchFollowCount() {
+    yield* takeEvery('REQUEST_FOLLOW_COUNT', fetchFollowCount);
+}
+
+//fetch for follow/following count
+export function* fetchFollowCount(account) {
+    const counts = yield call(Apis.follow, 'get_follow_count', account.payload)
+    yield put({type: 'global/UPDATE', payload: {
+        key: ['follow_count', account.payload],
+        updater: m => m.set({'totals': counts})
+    }})
+}
 
 // Test limit with 2 (not 1, infinate looping)
 export function* loadFollows(method, account, type, force = false) {

@@ -44,7 +44,6 @@ export default class UserProfile extends React.Component {
     }
 
     shouldComponentUpdate(np) {
-
         const {follow} = this.props;
         const {follow_count} = this.props;
 
@@ -71,7 +70,8 @@ export default class UserProfile extends React.Component {
             ((npFollowingLoading !== followingLoading) && !npFollowingLoading) ||
             np.loading !== this.props.loading ||
             np.location.pathname !== this.props.location.pathname ||
-            np.routeParams.accountname !== this.props.routeParams.accountname
+            np.routeParams.accountname !== this.props.routeParams.accountname ||
+            np.follow_count !== this.props.follow_count
         )
     }
 
@@ -128,11 +128,19 @@ export default class UserProfile extends React.Component {
         } else {
             return <div><center>{translate('unknown_account')}</center></div>
         }
-
         const followers = follow && follow.getIn(['get_followers', accountname]);
         const following = follow && follow.getIn(['get_following', accountname]);
-        const followerCount = followers && followers.get('blog_count')
-        const followingCount = following && following.get('blog_count')
+
+        // instantiate following items
+        let totalCounts = this.props.follow_count;
+        let followerCount = "";
+        let followingCount = "";
+
+        if (totalCounts) {
+            totalCounts = totalCounts.get(accountname).toJS();
+            followerCount = totalCounts.follower_count;
+            followingCount = totalCounts.following_count;
+        }
 
         const rep = repLog10(account.reputation);
 
@@ -392,11 +400,11 @@ export default class UserProfile extends React.Component {
                             {about && <p className="UserProfile__bio">{about}</p>}
                             <div className="UserProfile__stats">
                                 <span>
-                                    <Link to={`/@${accountname}/followers`}>{followerCount ? translate('follower_count', {followerCount}) : translate('followers')}</Link>
+                                    <Link to={`/@${accountname}/followers`}>{totalCounts ? translate('follower_count', {followerCount}) : translate('followers')}</Link>
                                     {isMyAccount && <NotifiCounter fields="follow" />}
                                 </span>
                                 <span><Link to={`/@${accountname}`}>{translate('post_count', {postCount: account.post_count || 0})}</Link></span>
-                                <span><Link to={`/@${accountname}/followed`}>{followingCount ? translate('followed_count', {followingCount}) : translate('following')}</Link></span>
+                                <span><Link to={`/@${accountname}/followed`}>{totalCounts ? translate('followed_count', {followingCount}) : translate('following')}</Link></span>
                             </div>
                             <p className="UserProfile__info">
                                 {location && <span><Icon name="location" /> {location}</span>}

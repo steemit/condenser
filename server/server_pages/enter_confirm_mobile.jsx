@@ -22,24 +22,8 @@ function *confirmMobileHandler() {
     const confirmation_code = this.params && this.params.code ? this.params.code : this.request.body.code;
     console.log('-- /confirm_mobile -->', this.session.uid, this.session.user, confirmation_code);
 
-    const phone = yield models.Identity.findOne(
-        {attributes: ['id', 'phone'], where: {confirmation_code, provider: 'phone'}}
-    );
-    if (!phone) {
-        this.flash = {error: 'Wrong confirmation code.'};
-        this.redirect('/enter_mobile');
-        return;
-    }
-    const verified_phone = yield models.Identity.findOne(
-        {attributes: ['id'], where: {phone: phone.phone, provider: 'phone', verified: true}}
-    );
-    if (verified_phone) {
-        this.flash = {success: 'Phone number has already been verified'};
-        this.redirect('/create_account');
-        return;
-    }
     const mid = yield models.Identity.findOne(
-        {attributes: ['id', 'user_id', 'verified', 'updated_at'], where: {user_id: this.session.user, confirmation_code, provider: 'phone'}, order: 'id DESC'}
+        {attributes: ['id', 'user_id', 'verified', 'updated_at', 'phone'], where: {user_id: this.session.user, confirmation_code, provider: 'phone'}, order: 'id DESC'}
     );
     if (!mid) {
         this.flash = {error: 'Wrong confirmation code.'};
@@ -51,11 +35,19 @@ function *confirmMobileHandler() {
         this.redirect('/create_account');
         return;
     }
-    this.session.user = mid.user_id;
+
+    const used_phone = yield models.sequelize.query(`SELECT a.id FROM accounts a JOIN identities i ON i.user_id=a.user_id WHERE i.phone='${mid.phone}'`, { type: models.Sequelize.QueryTypes.SELECT})
+    if (used_phone && used_phone.length > 0) {
+        this.flash = {error: 'This phone number has already been used'};
+        this.redirect('/enter_mobile');
+        return;
+    }
+
     const hours_ago = (Date.now() - mid.updated_at) / 1000.0 / 3600.0;
     if (hours_ago > 24.0) {
         this.status = 401;
-        this.body = 'Confirmation code has been expired';
+        this.flash = {error: 'Confirmation code has been expired'};
+        this.redirect('/enter_mobile');
         return;
     }
     yield mid.update({verified: true});

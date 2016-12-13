@@ -46,7 +46,6 @@ export default class UserProfile extends React.Component {
         let followingLoading = false, npFollowingLoading = false;
 
         const account = np.routeParams.accountname.toLowerCase();
-
         if (follow) {
             followersLoading = follow.getIn(['get_followers', account, 'blog_loading'], false);
             followingLoading = follow.getIn(['get_following', account, 'blog_loading'], false);
@@ -93,7 +92,6 @@ export default class UserProfile extends React.Component {
     }
 
     render() {
-
         const {
             props: {current_user, wifShown, global_status, follow},
             onPrint

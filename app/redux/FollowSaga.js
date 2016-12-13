@@ -20,7 +20,8 @@ export function* fetchFollowCount(account) {
     const counts = yield call(Apis.follow, 'get_follow_count', account.payload)
     yield put({type: 'global/UPDATE', payload: {
         key: ['follow_count', account.payload],
-        updater: m => m.set({'totals': counts})
+        updater: m => m.mergeDeep({'follower_count': counts.follower_count,
+        'following_count': counts.following_count})
     }})
 }
 

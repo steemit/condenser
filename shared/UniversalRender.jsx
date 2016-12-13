@@ -21,6 +21,7 @@ import {marketWatches} from 'app/redux/MarketSaga';
 import {sharedWatches} from 'app/redux/SagaShared';
 import {userWatches} from 'app/redux/UserSaga';
 import {authWatches} from 'app/redux/AuthSaga';
+import {followWatches} from 'app/redux/FollowSaga';
 import {transactionWatches} from 'app/redux/TransactionSaga';
 import PollDataSaga from 'app/redux/PollDataSaga';
 import {component as NotFound} from 'app/components/pages/NotFound';
@@ -37,7 +38,8 @@ const sagaMiddleware = createSagaMiddleware(
     ...sharedWatches,
     ...authWatches,
     ...transactionWatches,
-    ...marketWatches
+    ...marketWatches,
+    ...followWatches
 );
 
 let middleware;

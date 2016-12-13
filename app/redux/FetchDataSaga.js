@@ -1,6 +1,6 @@
 import {takeLatest, takeEvery} from 'redux-saga';
 import {call, put, select, fork} from 'redux-saga/effects';
-import {loadFollows} from 'app/redux/FollowSaga';
+import {loadFollows, fetchFollowCount} from 'app/redux/FollowSaga';
 import {getContent} from 'app/redux/SagaShared';
 import Apis from 'shared/api_client/ApiInstances';
 import GlobalReducer from './GlobalReducer';
@@ -26,6 +26,7 @@ export function* fetchState(location_change_action) {
     const m = pathname.match(/^\/@([a-z0-9\.-]+)/)
     if(m && m.length === 2) {
         const username = m[1]
+        yield fork(fetchFollowCount, username)
         yield fork(loadFollows, "get_followers", username, 'blog')
         yield fork(loadFollows, "get_following", username, 'blog')
     }

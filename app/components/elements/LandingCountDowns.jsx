@@ -23,6 +23,7 @@ function createDate(year, month, day, hours, minutes) {
 export const blockchainStartAt 	= createDate(2016, 9, 18, 11, 0)
 export const crowdsaleStartAt 	= createDate(2016, 10, 1, 11, 0)
 export const crowdsaleEndAt 	= createDate(2016, 11, 4, 11, 0)
+export const paymentsStartAt 	= createDate(2017, 0, 15, 11, 0)
 
 const stages = [25, 20, 15, 10, 5, 0]
 export function calculateCurrentStage(date = Date.now()) {
@@ -214,17 +215,23 @@ export default class LandingCountDowns extends React.Component {
                   : <LandingCrowdsaleStats />
                 }
 							</div>
+							<div className="small-12 medium-12 columns">
+								<CountDown
+									date={paymentsStartAt}
+									countFrom={crowdsaleEndAt.getTime()}
+									title={`До первых выплат осталось:`}
+								/>
+							</div>
 							<div className="small-12 medium-12 columns CountDowns__counter" style={{paddingTop: 40}}>
 								{
 									state.showBitcoinsRaised
 									? <div>
-										<p style={{marginBottom: 0}}>Собрано биткоинов</p>
+										<div style={{marginBottom: 0}}>Собрано биткоинов</div>
 										{
 											state.bitcoinsRaised === false
 											? <strong>загрузка...</strong>
-
-											: <strong><a href="https://blockchain.info/address/3CWicRKHQqcj1N6fT1pC9J3hUzHw1KyPv3" target="blank">{roundPrecision(_btc.fromSatoshis(state.bitcoinsRaised), 4)} B</a></strong>
-
+											: <strong><a href="https://blockchain.info/address/3CWicRKHQqcj1N6fT1pC9J3hUzHw1KyPv3" target="blank">600 B</a></strong>
+										// roundPrecision(_btc.fromSatoshis(state.bitcoinsRaised), 4)
 										}
 									</div>
 									: null
@@ -242,21 +249,13 @@ export default class LandingCountDowns extends React.Component {
 									{/* <small>Текущий бонус <span className="red"> + {calculateCurrentStage()}%</span></small> */}
 								</p>
 							</div>
-							{/* <div className="small-12 medium-4 columns">
-								<CountDown
-                  title={`Бонус уменьшится: до ${nextStage}%`}
-									date={currentStage.date}
-									countFrom={previousStage.date.getTime()}
-									displayWhenZero
-								/>
-							</div> */}
 						</div>
 				}
 
 
 				{/* BUTTON */}
 				{
-					state.prefill
+					true // disabled after crowdsale end
 					? null
 					: <div className="row CountDowns__button">
 						<div className="small-12 columns">

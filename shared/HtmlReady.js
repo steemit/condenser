@@ -1,6 +1,7 @@
 import xmldom from 'xmldom'
 import linksRe from 'app/utils/Links'
 import {validate_account_name} from 'app/utils/ChainValidation'
+import { detransliterate } from 'app/utils/ParsersAndFormatters'
 
 const noop = () => {}
 const DOMParser = new xmldom.DOMParser({
@@ -111,10 +112,16 @@ function linkifyNode(child, state) {try{
 
 function linkify(content, mutate, hashtags, usertags, images, links) {
     // hashtag
-    content = content.replace(/(^|\s)(#[-a-z\d]+)/ig, tag => {
+    content = content.replace(/(^|\s)(#[-a-zа-я\d]+)/ig, tag => {
         if(/#[\d]+$/.test(tag)) return tag // Don't allow numbers to be tags
         const space = /^\s/.test(tag) ? tag[0] : ''
-        const tag2 = tag.trim().substring(1)
+        let tag2 = tag.trim().substring(1)
+        // Parse tags:
+        // if tag string starts with russian symbol, add 'ru-' prefix to it
+        // when transletirate it
+        // This is needed to be able to detransletirate it back to russian in future (to show russian categories to user)
+        // (all of this is needed because blockchain does not allow russian symbols in category)
+        if(/^[а-яё]/.test(tag2)) tag2 = 'ru--' + detransliterate(tag2, true)
         if(hashtags) hashtags.add(tag2)
         if(!mutate) return tag
         return space + `<a href="/trending/${tag2.toLowerCase()}">${tag}</a>`

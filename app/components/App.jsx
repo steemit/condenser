@@ -256,6 +256,11 @@ class App extends React.Component {
                           {translate("APP_NAME_chat")}&nbsp;<Icon name="extlink" />
                       </a>
                   </li>
+                  <li>
+                      <a href="http://golostools.com/" onClick={this.navigate} target="_blank" rel="noopener noreferrer">
+                          {translate('APP_NAME_app_center')}&nbsp;<Icon name="extlink" />
+                      </a>
+                  </li>
                   <li className="last">
                       <a href="/~witnesses" onClick={this.navigate}>
                           {translate("witnesses")}

@@ -203,7 +203,11 @@ class UserWallet extends React.Component {
                     {translate('estimate_account_value')}<br /><span className="secondary">{translate('the_estimated_value_is_based_on_a_7_day_average_value_of_LIQUID_TOKEN_in_currency')}</span>
                 </div>
                 <div className="column small-12 medium-4">
-                    {localizedCurrency(total_value)}
+                    {
+                        process.env.BROWSER
+                        ? localizedCurrency(total_value)
+                        : translate('loading') + '...'
+                    }
                 </div>
             </div>
             <div className="UserWallet__balance row">
@@ -278,11 +282,8 @@ export default connect(
 
             let priceGBGperGOLOS = getPriceFromPair(feed_price.toJS(), 'GBG/GOLOS')
             let priceGOLOSperGBG = getPriceFromPair(feed_price.toJS(), 'GOLOS/GBG')
-            console.log(priceGBGperGOLOS, "GBG/GOLOS :::: GOLOS/GBG", priceGOLOSperGBG)
 
-            console.log(feed_price.toJS(), "OOOOOO")
             price_per_steem = priceGBGperGOLOS;
-            console.log (price_per_steem, " set price per steem")
         }
         return {
             ...ownProps,

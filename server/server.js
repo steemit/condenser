@@ -1,4 +1,4 @@
-if(process.env.NEW_RELIC_APP_NAME) require('newrelic');
+// newrelic is not working with latest npm if(process.env.NEW_RELIC_APP_NAME) require('newrelic');
 
 import path from 'path';
 import Koa from 'koa';

@@ -76,5 +76,16 @@ export function contentStats(content) {
     const hide = authorRepLog10 < 0 && !hasPendingPayout && !hasReplies // rephide
     const pictures = !gray
 
-    return {hide, gray, pictures, netVoteSign, hasPendingPayout, authorRepLog10, hasReplies, hasFlag}
+    // Combine tags+category to check nsfw status
+    let json = content.get('json_metadata')
+    let tags = []
+    try {
+        tags = json && JSON.parse(json).tags || [];
+    } catch(e) {
+        tags = []
+    }
+    tags.push(content.get('category'))
+    const isNsfw = tags.filter(tag => tag.match(/^nsfw$/i)).length > 0;
+
+    return {hide, gray, pictures, netVoteSign, hasPendingPayout, authorRepLog10, hasReplies, hasFlag, isNsfw}
 }

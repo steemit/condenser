@@ -61,6 +61,14 @@ ul.PostsList__summaries {
       }
     }
   }
+  .nsfw-flag {
+     color: #C00;
+     border: 1px solid #C00;
+     font-size: 65%;
+     border-radius: 3px;
+     font-weight: normal;
+     margin-right: 0.2rem;
+  }
 }
 .PostSummary__collapse {
   visibility: hidden;

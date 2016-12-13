@@ -70,7 +70,7 @@ class PostSummary extends React.Component {
                          </div>
         }
 
-        const {gray, pictures, authorRepLog10, hasFlag} = content.get('stats', Map()).toJS()
+        const {gray, pictures, authorRepLog10, hasFlag, isNsfw} = content.get('stats', Map()).toJS()
         const p = extractContent(immutableAccessor, content);
         let desc = p.desc
         if(p.image_link)// image link is already shown in the preview
@@ -96,6 +96,7 @@ class PostSummary extends React.Component {
         </div>;
         let content_title = <h1 className="entry-title">
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>
+                {isNsfw && <span className="nsfw-flag">nsfw</span>}
                 {title_text}
                 {full_power && <span title="Powered Up 100%"><Icon name="steem" /></span>}
             </a>

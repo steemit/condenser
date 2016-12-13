@@ -1,7 +1,6 @@
 import {fromJS, Map, Set} from 'immutable'
 import {call, put, select} from 'redux-saga/effects';
 import {Apis} from 'shared/api_client';
-import g from 'app/redux/GlobalReducer'
 
 /**
     This loadFollows both 'blog' and 'ignore'

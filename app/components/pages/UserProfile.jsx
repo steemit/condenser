@@ -467,7 +467,6 @@ module.exports = {
                 }))
             },
             requestData: (args) => dispatch({type: 'REQUEST_DATA', payload: args}),
-            requestFollowCount: (account) => dispatch({type: 'REQUEST_FOLLOW_COUNT', payload: account}),
         })
     )(UserProfile)
 };

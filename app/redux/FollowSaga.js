@@ -1,25 +1,17 @@
 import {fromJS, Map, Set} from 'immutable'
 import {call, put, select} from 'redux-saga/effects';
 import {Apis} from 'shared/api_client';
-import {takeLatest, takeEvery} from 'redux-saga';
 import g from 'app/redux/GlobalReducer'
 
 /**
     This loadFollows both 'blog' and 'ignore'
 */
 
-export const followWatches = [watchFollowCount]
-
-//watcher saga for follower count
-export function* watchFollowCount() {
-    yield* takeEvery('REQUEST_FOLLOW_COUNT', fetchFollowCount);
-}
-
 //fetch for follow/following count
 export function* fetchFollowCount(account) {
-    const counts = yield call(Apis.follow, 'get_follow_count', account.payload)
+    const counts = yield call(Apis.follow, 'get_follow_count', account)
     yield put({type: 'global/UPDATE', payload: {
-        key: ['follow_count', account.payload],
+        key: ['follow_count', account],
         updater: m => m.mergeDeep({'follower_count': counts.follower_count,
         'following_count': counts.following_count})
     }})

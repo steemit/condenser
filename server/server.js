@@ -50,17 +50,19 @@ app.use(function *(next) {
         this.redirect(`/@${this.session.a}/feed`);
         return;
     }
-    // normalize user routes & handle for non-existing endpoints with 404
-    if (this.method === 'GET' && /^(@[\w\.\d//-]+)?/.test(this.url)) {
-        const segments = this.url.split('/');
-        // 404 non-existing user endpoints
-        if(!userEndpoints.test(segments[2])) {
-            this.status = 404;
-            return;
-        }
+    // normalize user name url from cased params
+    if (this.method === 'GET' && /^\/(@[\w\.\d-]+)\/?$/.test(this.url)) {
         const p = this.originalUrl.toLowerCase();
         if(p !== this.originalUrl) {
             this.redirect(p);
+            return;
+        }
+    }
+    // handle non-existing users endpoints with 404
+    if (this.method === 'GET' && /^\/(@[\w\.\d-]+)\/([\w\.\d-]+)$/.test(this.url)) {
+        const segments = this.url.split('/');
+        if(segments[2] && !userEndpoints.test(segments[2])) {
+            this.status = 404;
             return;
         }
     }

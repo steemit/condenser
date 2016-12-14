@@ -158,6 +158,9 @@
     "sinon-chai": "^2.8.0",
     "supertest": "^1.2.0"
   },
+  "optionalDependencies": {
+    "fsevents": "*"
+  },
   "engines": {
     "node": ">=6.0.0"
   }

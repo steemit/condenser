@@ -37,6 +37,8 @@ const crypto_key = config.server_session_secret;
 session(app, {maxAge: 1000 * 3600 * 24 * 60, crypto_key});
 csrf(app);
 
+const userEndpoints = /^(blog|posts|comments|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)$/;
+
 app.use(mount(grant));
 app.use(flash({key: 'flash'}));
 
@@ -48,8 +50,14 @@ app.use(function *(next) {
         this.redirect(`/@${this.session.a}/feed`);
         return;
     }
-    // normalize user name url from cased params
-    if (this.method === 'GET' && /^\/(@[\w\.\d-]+)\/?$/.test(this.url)) {
+    // normalize user routes & handle for non-existing endpoints with 404
+    if (this.method === 'GET' && /^(@[\w\.\d//-]+)?/.test(this.url)) {
+        const segments = this.url.split('/');
+        // 404 non-existing user endpoints
+        if(!userEndpoints.test(segments[2])) {
+            this.status = 404;
+            return;
+        }
         const p = this.originalUrl.toLowerCase();
         if(p !== this.originalUrl) {
             this.redirect(p);

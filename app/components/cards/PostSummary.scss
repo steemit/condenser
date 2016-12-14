@@ -8,6 +8,23 @@ ul.PostsList__summaries {
   background-color: #fff;
   clear: left;
   @include clearfix;
+
+  .PostSummary__nsfw-warning {
+    border: 1px solid $medium-gray;
+    border-radius: 0.5rem;
+    padding: 0.5rem 2rem;
+  }
+
+  .nsfw-flag {
+     color: #C00;
+     border: 1px solid #C00;
+     font-size: 75%;
+     border-radius: 3px;
+     font-weight: normal;
+     font-family: Arial;
+     margin: 0 0.1rem;
+     padding: 0 0.2rem;
+  }
 }
 
 .PostSummary__image {
@@ -62,12 +79,7 @@ ul.PostsList__summaries {
     }
   }
   .nsfw-flag {
-     color: #C00;
-     border: 1px solid #C00;
-     font-size: 65%;
-     border-radius: 3px;
-     font-weight: normal;
-     margin-right: 0.2rem;
+    margin-right: 0.25rem;
   }
 }
 .PostSummary__collapse {

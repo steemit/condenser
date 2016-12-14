@@ -40,13 +40,26 @@ class PostSummary extends React.Component {
         netVoteSign: React.PropTypes.number,
         currentCategory: React.PropTypes.string,
         thumbSize: React.PropTypes.string,
+        nsfwPref: React.PropTypes.string,
         onClick: React.PropTypes.func
     };
 
-    shouldComponentUpdate(props) {
+    constructor() {
+        super();
+        this.state = {revealNsfw: false}
+        this.onRevealNsfw = this.onRevealNsfw.bind(this)
+    }
+
+    shouldComponentUpdate(props, state) {
         return props.thumbSize !== this.props.thumbSize ||
                props.pending_payout !== this.props.pending_payout ||
-               props.total_payout !== this.props.total_payout;
+               props.total_payout !== this.props.total_payout ||
+               state.revealNsfw !== this.state.revealNsfw;
+    }
+
+    onRevealNsfw(e) {
+        e.preventDefault();
+        this.setState({revealNsfw: true})
     }
 
     render() {
@@ -109,10 +122,26 @@ class PostSummary extends React.Component {
             {} in <TagList post={p} single />
         </span>
 
-        if( !(currentCategory && currentCategory.match( /nsfw/ )) ) {
-           if (currentCategory !== '-' && currentCategory !== p.category && p.category.match(/nsfw/) ) {
-               return null;
-           }
+        const {nsfwPref, username} = this.props
+        const {revealNsfw} = this.state
+
+        if(isNsfw) {
+            if(nsfwPref === 'hide') {
+                // user wishes to hide these posts entirely
+                return null;
+            } else if(!revealNsfw && nsfwPref !== 'show') {
+                // warn the user, unless they have chosen to reveal this post or have their preference set to "show always"
+                return (
+                    <article className={'PostSummary hentry'} itemScope itemType ="http://schema.org/blogPost">
+                        <div className="PostSummary__nsfw-warning">
+                            This post is <span className="nsfw-flag">nsfw</span>.
+                            You can <a href="#" onClick={this.onRevealNsfw}>reveal it</a> or{' '}
+                            {username ? <span>adjust your <Link to={`/@${username}/settings`}>display preferences</Link>.</span>
+                                      : <span><Link to="/enter_email">create an account</Link> to save your preferences.</span>}
+                        </div>
+                    </article>
+                )
+            }
         }
 
         let thumb = null;
@@ -140,7 +169,6 @@ class PostSummary extends React.Component {
                 </div>
                 <div className="PostSummary__time_author_category_small show-for-small-only">
                     {author_category}
-
                 </div>
                 {thumb}
                 <div className="PostSummary__content">
@@ -172,7 +200,10 @@ export default connect(
             pending_payout = content.get('pending_payout_value');
             total_payout = content.get('total_payout_value');
         }
-        return {post, content, pending_payout, total_payout};
+        return {
+            post, content, pending_payout, total_payout,
+            username: state.user.getIn(['current', 'username']) || state.offchain.get('account')
+        };
     },
 
     (dispatch) => ({

@@ -87,7 +87,7 @@
     "react": "^15.4.1",
     "react-addons-pure-render-mixin": "^15.4.1",
     "react-dom": "^15.4.1",
-    "react-foundation-components": "git+https://github.com/valzav/react-foundation-components.git#0bccbd96f5313b5b7517cc9de97925016ed67d45",
+    "react-foundation-components": "git+https://github.com/valzav/react-foundation-components.git#d14362c7c8eee946a4acc3b18d70271d5a82813e",
     "react-highcharts": "^8.3.3",
     "react-intl": "^2.1.3",
     "react-medium-editor": "^1.8.0",

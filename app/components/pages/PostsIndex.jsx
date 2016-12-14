@@ -21,7 +21,7 @@ class PostsIndex extends React.Component {
         routeParams: PropTypes.object,
         requestData: PropTypes.func,
         loading: PropTypes.bool,
-        current_user: PropTypes.object
+        username: PropTypes.string
     };
 
     static defaultProps = {
@@ -73,7 +73,7 @@ class PostsIndex extends React.Component {
             order = 'by_feed';
             topics_order = 'trending';
             posts = this.props.accounts.getIn([account_name, 'feed']);
-            const isMyAccount = this.props.current_user && this.props.current_user.get('username') === account_name;
+            const isMyAccount = this.props.username === account_name;
             if (isMyAccount) {
                 emptyText = <div>
                     Looks like you haven't followed anything yet.<br /><br />
@@ -131,7 +131,7 @@ module.exports = {
                 status: state.global.get('status'),
                 loading: state.app.get('loading'),
                 accounts: state.global.get('accounts'),
-                current_user: state.user.get('current')
+                username: state.user.getIn(['current', 'username']) || state.offchain.get('account'),
             };
         },
         (dispatch) => {

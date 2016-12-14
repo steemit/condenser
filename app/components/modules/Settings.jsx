@@ -204,9 +204,11 @@ class Settings extends React.Component {
                         }
                 </form>
             </div>
+
             {isOwnAccount &&
                 <div className="row">
                     <div className="small-12 columns">
+                        <br /><br />
                         <h3>Content Preferences</h3>
                         NSFW:
                         <select value={this.state.nsfwPref} onChange={this.onNsfwPrefChange}>

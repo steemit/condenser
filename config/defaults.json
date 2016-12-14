@@ -1,0 +1,86 @@
+{
+  "db": {
+    "username": "root",
+    "password": "null",
+    "database": "steemit_dev",
+    "host": "127.0.0.1",
+    "port": 3306,
+    "dialect": "mysql"
+  },
+  "session_key": "grant",
+  "grant": {
+    "server": {
+      "protocol": "https",
+      "host": "localhost:3002"
+    },
+    "facebook": {
+      "key": "",
+      "secret": "",
+      "callback": "/handle_facebook_callback",
+      "scope": [
+        "email",
+        "user_location"
+      ]
+    },
+    "reddit": {
+      "key": "",
+      "secret": "",
+      "callback": "/handle_reddit_callback",
+      "custom_params": {"state": "void", "duration": "temporary"},
+      "scope": [
+        "identity"
+      ]
+    }
+  },
+  "helmet": {
+    "directives": {
+      "defaultSrc": [],
+      "childSrc": [],
+      "scriptSrc": [],
+      "styleSrc": [],
+      "imgSrc": [],
+      "fontSrc": [],
+      "connectSrc": [],
+      "reportUri": "/api/v1/csp_violation",
+      "pluginTypes": [],
+      "objectSrc": [],
+      "frameAncestors": []
+    },
+    "reportOnly": false,
+    "setAllHeaders": true
+  },
+  "registrar": {
+    "account": "",
+    "signing_key": "",
+    "fee": "10.000 STEEM"
+  },
+  "requestAccountRecovery": {
+    "signing_key": "",
+    "recovery_account": ""
+  },
+  "sendgrid": {
+    "key": "",
+    "from": "noreply@example.com",
+    "templates": {
+      "confirm_email": "",
+      "waiting_list_invite": ""
+    }
+  },
+  "telesign": {
+      "customer_id": "",
+      "rest_api_key": ""
+  },
+  "recaptcha": {
+    "site_key": "",
+    "secret_key": ""
+  },
+  "ws_connection_client": "wss://example.com",
+  "ws_connection_server": [ "wss://example.com" ],
+  "cli_wallet_connection": "",
+  "img_proxy_prefix": "https://images.example.com/",
+  "ipfs_prefix": "https://ipfs.example.com/",
+  "uploadImage": "",
+  "disable_signups": false,
+  "read_only_mode": false,
+  "js_plugins_path": "/static/plugins.js"
+}

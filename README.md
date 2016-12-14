@@ -29,12 +29,10 @@ npm install -g babel-cli
 
 #### Create config file
 
+If you need to configure something:
+=======
 
-```bash
-cd config
-cp steem-example.json steem-dev.json
-```
-
+=======
 Generate a new crypto_key and save under server_session_secret in ./steem-dev.json.
 
 ```bash
@@ -44,6 +42,7 @@ node
 
 (note: it's steem.json in production)
 
+>>>>>>> origin/develop
 #### Install mysql server
 
 OS X :

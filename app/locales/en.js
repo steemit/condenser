@@ -207,7 +207,7 @@ const en = 	{
 	i_understand_dont_show_again: "I understand, don't show me again",
 	ok: 'Ok',
 	convert_to_LIQUID_TOKEN: 'Convert to ' + LIQUID_TOKEN,
-	DEBT_TOKEN_will_be_unavailable: 'This action will take place 3.5 days from now and can not be canceled. These ' + DEBT_TOKEN + ' will immediatly become unavailable',
+	DEBT_TOKEN_will_be_unavailable: 'This action will take place 3.5 days from now and can not be canceled. These ' + DEBT_TOKEN + ' will immediately become unavailable',
 	amount: 'Amount',
 	convert: 'Convert',
 	invalid_amount: 'Invalid amount',

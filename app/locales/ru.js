@@ -590,7 +590,7 @@ const ru = {
 	curation_rewards_by_user_name: 'Кураторские награды {user_name}',
 	author_rewards_by_user_name: 'Авторские награды {user_name}',
 	replies_by_user_name: 'Ответы {user_name}',
-	curation_rewards_by_user_name: 'Комментарии {user_name}',
+	comments_by_user_name: 'Комментарии {user_name}',
 }
 
 export { ru }

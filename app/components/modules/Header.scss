@@ -150,6 +150,12 @@ ul > li > .button {
   color: #ec5840;
 }
 
+@media #{$medium-only} {
+    .Header {
+        .buttons {margin-right: 0;}
+        .success {font-size: 0.8rem;}
+    }
+}
 // golos.io ico special navbar styles
 .landing {
     a { color: black; }

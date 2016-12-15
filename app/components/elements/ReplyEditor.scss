@@ -20,6 +20,9 @@
   > div {
     border: none;
   }
+  > textarea {
+      min-height: 35rem;
+  }
 }
 
 .ReplyEditor__body.rte {

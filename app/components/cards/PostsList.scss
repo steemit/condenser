@@ -5,12 +5,12 @@
   width: 100%;
   height: 100%;
   z-index: 300;
-  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: scroll;
   background-color: $white;
   // padding: 0 .9rem;
+  -webkit-overflow-scrolling: touch;
 }
-
-
 
 .PostsList__post_top_overlay {
   position: fixed;
@@ -19,7 +19,8 @@
   width: 100%;
   z-index: 310;
   height: 2.5rem;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: scroll;
   border-bottom: 1px solid $light-gray;
 }
 
@@ -47,10 +48,10 @@
 }
 
 .PostsList__post_container {
-    position: relative;
-    background-color: $white;
-    margin: 1rem auto;
-    padding: 2rem 0.9rem 0 0.9rem;
+  position: relative;
+  background-color: $white;
+  margin: 1rem auto;
+  padding: 2rem 0.9rem 0 0.9rem;
   .PostFull {
     background-color: $white;
   }
@@ -84,21 +85,7 @@ body.with-post-overlay {
   }
 }
 
-@media screen and (max-width: 66rem) {
-    .PostsList__post_container {
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-        height: 100%;
-    }
-}
-
 @media screen and (min-width: 67rem) {
-
-    .PostsList__post_overlay {
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-
   .PostsList__post_container {
     width: 62rem;
   }

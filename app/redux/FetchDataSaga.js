@@ -21,6 +21,7 @@ export function* getContentCaller(action) {
     yield getContent(action.payload);
 }
 
+let is_initial_state = true;
 export function* fetchState(location_change_action) {
     const {pathname} = location_change_action.payload;
     const m = pathname.match(/^\/@([a-z0-9\.-]+)/)
@@ -29,8 +30,13 @@ export function* fetchState(location_change_action) {
         yield fork(loadFollows, "get_followers", username, 'blog')
         yield fork(loadFollows, "get_following", username, 'blog')
     }
+
+    // `ignore_fetch` case should only trigger on initial page load. No need to call
+    // fetchState immediately after loading fresh state from the server. Details: #593
     const server_location = yield select(state => state.offchain.get('server_location'));
-    if (pathname === server_location) return;
+    const ignore_fetch = (pathname === server_location && is_initial_state)
+    is_initial_state = false;
+    if(ignore_fetch) return;
 
     let url = `${pathname}`;
     if (url === '/') url = 'trending';

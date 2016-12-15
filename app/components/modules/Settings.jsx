@@ -10,6 +10,7 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import Userpic from 'app/components/elements/Userpic';
 import reactForm from 'app/utils/ReactForm'
 import UserList from 'app/components/elements/UserList';
+import Tooltip from 'app/components/elements/Tooltip';
 
 class Settings extends React.Component {
 
@@ -210,12 +211,15 @@ class Settings extends React.Component {
                     <div className="small-12 columns">
                         <br /><br />
                         <h3>Content Preferences</h3>
-                        NSFW:
+                        <div>
+                            Not safe for work (NSFW)
+                        </div>
                         <select value={this.state.nsfwPref} onChange={this.onNsfwPrefChange}>
                             <option value="hide">Always hide</option>
                             <option value="warn">Always warn</option>
                             <option value="show">Always show</option>
                         </select>
+                        <small>You may automatically hide, show, or warn posts with a <b>nsfw</b> category.  Note, this setting is specific to each device and account you use.</small>
                     </div>
                 </div>}
             {ignores && ignores.size > 0 &&

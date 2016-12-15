@@ -10,7 +10,6 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import Userpic from 'app/components/elements/Userpic';
 import reactForm from 'app/utils/ReactForm'
 import UserList from 'app/components/elements/UserList';
-import Tooltip from 'app/components/elements/Tooltip';
 
 class Settings extends React.Component {
 

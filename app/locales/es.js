@@ -188,7 +188,7 @@ const es = 	{
 	i_understand_dont_show_again: "I understand, don't show me again",
 	ok: 'Ok',
 	convert_to_steem: 'Convertir a Steem',
-	steem_dollars_will_be_unavailable: 'This action will take place 3.5 days from now and can not be canceled. These Steem Dollars will immediatly become unavailable',
+	steem_dollars_will_be_unavailable: 'This action will take place 3.5 days from now and can not be canceled. These Steem Dollars will immediately become unavailable',
 	amount: 'Cantidad',
 	steem_dollars: 'STEEM DOLLARS',
 	convert: 'Convertir',

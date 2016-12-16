@@ -8,7 +8,7 @@ export default ({post, horizontal, single}) => {
 
     if (single) return <strong><Link to={`/${sort_order}/${post.category}`}>{post.category}</Link></strong>;
 
-    let json = post.json_metadata;
+    const json = post.json_metadata;
     let tags = []
 
     try {
@@ -18,6 +18,9 @@ export default ({post, horizontal, single}) => {
             tags = json && JSON.parse(json).tags || [];
         }
         if(typeof tags == 'string') tags = tags.split(' ');
+        if(!Array.isArray(tags)) {
+            tags = [];
+        }
     } catch(e) {
         tags = []
     }

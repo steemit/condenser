@@ -15,6 +15,7 @@ import useAccountRecoveryApi from './api/account_recovery';
 import useNotificationsApi from './api/notifications';
 import useEnterAndConfirmEmailPages from './server_pages/enter_confirm_email';
 import useEnterAndConfirmMobilePages from './server_pages/enter_confirm_mobile';
+import useUserJson from './json/user_json';
 import isBot from 'koa-isbot';
 import session from '@steem/crypto-session';
 import csrf from 'koa-csrf';
@@ -125,6 +126,8 @@ app.use(function* (next) {
 useRedirects(app);
 useEnterAndConfirmEmailPages(app);
 useEnterAndConfirmMobilePages(app);
+useUserJson(app);
+
 
 if (env === 'production') {
     app.use(helmet.contentSecurityPolicy(config.helmet));

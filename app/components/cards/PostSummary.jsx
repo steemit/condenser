@@ -54,6 +54,8 @@ class PostSummary extends React.Component {
         return props.thumbSize !== this.props.thumbSize ||
                props.pending_payout !== this.props.pending_payout ||
                props.total_payout !== this.props.total_payout ||
+               props.username !== this.props.username ||
+               props.nsfwPref !== this.props.nsfwPref ||
                state.revealNsfw !== this.state.revealNsfw;
     }
 

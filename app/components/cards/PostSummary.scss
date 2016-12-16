@@ -12,7 +12,8 @@ ul.PostsList__summaries {
   .PostSummary__nsfw-warning {
     border: 1px solid $medium-gray;
     border-radius: 0.5rem;
-    padding: 0.5rem 2rem;
+    padding: 1.5rem 2rem;
+    min-height: 80px;
   }
 
   .nsfw-flag {

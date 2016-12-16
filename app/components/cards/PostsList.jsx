@@ -47,6 +47,10 @@ class PostsList extends React.Component {
     }
 
     componentWillMount() {
+        this.readNsfwPref()
+    }
+
+    readNsfwPref() {
         if(!process.env.BROWSER) return
         const {username} = this.props
         const key = 'nsfwPref' + (username ? '-' + username : '')
@@ -63,6 +67,7 @@ class PostsList extends React.Component {
         if (this.state.showPost && (location !== this.post_url)) {
             this.setState({showPost: null});
         }
+        this.readNsfwPref();
     }
 
     componentDidUpdate(prevProps, prevState) {

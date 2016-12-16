@@ -83,14 +83,6 @@
   }
 }
 
-.Comment > div > .Comment__header > .Comment__header_collapse > .Voting {
-  visibility: hidden;
-}
-
-.Comment:hover > div > .Comment__header > .Comment__header_collapse > .Voting {
-  visibility: visible;
-}
-
 .Comment__body {
   margin-left: 62px;
   max-width: 50rem;

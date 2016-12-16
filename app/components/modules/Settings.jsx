@@ -218,7 +218,6 @@ class Settings extends React.Component {
                             <option value="warn">Always warn</option>
                             <option value="show">Always show</option>
                         </select>
-                        <small>You may automatically hide, show, or warn posts with a <b>nsfw</b> category.  Note, this setting is specific to each device and account you use.</small>
                     </div>
                 </div>}
             {ignores && ignores.size > 0 &&

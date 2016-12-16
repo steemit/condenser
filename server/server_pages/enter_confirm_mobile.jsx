@@ -9,7 +9,11 @@ import SignupProgressBar from 'app/components/elements/SignupProgressBar';
 import CountryCode from 'app/components/elements/CountryCode';
 import {getRemoteIp, checkCSRF} from 'server/utils';
 import MiniHeader from 'app/components/modules/MiniHeader';
-import secureRandom from 'secure-random'
+import secureRandom from 'secure-random';
+import config from '../../config';
+import Mixpanel from 'mixpanel';
+
+const mixpanel = config.mixpanel ? Mixpanel.init(config.mixpanel) : null;
 
 const assets_file = process.env.NODE_ENV === 'production' ? 'tmp/webpack-stats-prod.json' : 'tmp/webpack-stats-dev.json';
 const assets = Object.assign({}, require(assets_file), {script: []});
@@ -17,8 +21,9 @@ const assets = Object.assign({}, require(assets_file), {script: []});
 function *confirmMobileHandler() {
     const confirmation_code = this.params && this.params.code ? this.params.code : this.request.body.code;
     console.log('-- /confirm_mobile -->', this.session.uid, this.session.user, confirmation_code);
+
     const mid = yield models.Identity.findOne(
-        {attributes: ['id', 'user_id', 'verified', 'updated_at'], where: {user_id: this.session.user, confirmation_code, provider: 'phone'}, order: 'id DESC'}
+        {attributes: ['id', 'user_id', 'verified', 'updated_at', 'phone'], where: {user_id: this.session.user, confirmation_code, provider: 'phone'}, order: 'id DESC'}
     );
     if (!mid) {
         this.flash = {error: 'Wrong confirmation code.'};
@@ -30,14 +35,23 @@ function *confirmMobileHandler() {
         this.redirect('/create_account');
         return;
     }
-    this.session.user = mid.user_id;
+
+    const used_phone = yield models.sequelize.query(`SELECT a.id FROM accounts a JOIN identities i ON i.user_id=a.user_id WHERE i.phone='${mid.phone}'`, { type: models.Sequelize.QueryTypes.SELECT})
+    if (used_phone && used_phone.length > 0) {
+        this.flash = {error: 'This phone number has already been used'};
+        this.redirect('/enter_mobile');
+        return;
+    }
+
     const hours_ago = (Date.now() - mid.updated_at) / 1000.0 / 3600.0;
     if (hours_ago > 24.0) {
         this.status = 401;
-        this.body = 'Confirmation code has been expired';
+        this.flash = {error: 'Confirmation code has been expired'};
+        this.redirect('/enter_mobile');
         return;
     }
     yield mid.update({verified: true});
+    if (mixpanel) mixpanel.track('SignupStep3', {distinct_id: this.session.uid});
     this.redirect('/create_account');
 }
 export default function useEnterAndConfirmMobilePages(app) {
@@ -55,6 +69,7 @@ export default function useEnterAndConfirmMobilePages(app) {
         );
         if (mid && mid.verified) {
             this.flash = {success: 'Phone number has already been verified'};
+            if (mixpanel) mixpanel.track('SignupStep3', {distinct_id: this.session.uid});
             this.redirect('/create_account');
             return;
         }
@@ -92,6 +107,7 @@ export default function useEnterAndConfirmMobilePages(app) {
         </div>);
         const props = { body, title: 'Phone Number', assets, meta: [] };
         this.body = '<!DOCTYPE html>' + renderToString(<ServerHTML { ...props } />);
+        if (mixpanel) mixpanel.track('SignupStep2', {distinct_id: this.session.uid});
     });
 
     router.post('/submit_mobile', koaBody, function *() {
@@ -144,6 +160,7 @@ export default function useEnterAndConfirmMobilePages(app) {
             if (mid.verified) {
                 if(mid.phone === phone) {
                     this.flash = {success: 'Phone number has been verified'};
+                    if (mixpanel) mixpanel.track('SignupStep3', {distinct_id: this.session.uid});
                     this.redirect('/create_account');
                     return;
                 }

@@ -10,7 +10,7 @@ const fr = 	{
 	stolen_account_recovery: "Récuperation de compte volé",
 	change_account_password: "Changer mot de passe du compte",
 	steemit_chat: "Steemit Chat",
-    steemit_api_docs: "Steemit API Docs",
+	steemit_api_docs: "Steemit API Docs",
 	witnesses: "Témoins",
 	vote_for_witnesses: "Votez pour les Témoins",
 	privacy_policy: "Politique de Confidentialité",
@@ -223,6 +223,10 @@ const fr = 	{
 	open_orders: 'Open Orders',
 	sell_amount_for_atleast: 'Sell {amount_to_sell} for at least {min_to_receive} ({effectivePrice})',
 	buy_atleast_amount_for: 'Buy at least {min_to_receive} for {amount_to_sell} ({effectivePrice})',
+	price_warning_above: 'This price is well above the current market price of {marketPrice}, are you sure?', //FIXME
+	price_warning_below: 'This price is well below the current market price of {marketPrice}, are you sure?', //FIXME
+	order_cancel_confirm: 'Cancel order {order_id} from {user}?', //FIXME
+	order_cancelled: 'Order {order_id} cancelled.', //FIXME
 	higher: 'Higher', // context is about prices
 	lower: 'Lower', // context is about prices
 	total_sd_dollars: "Total SD ($)",
@@ -372,12 +376,17 @@ const fr = 	{
 	witness_thread: 'witness thread',
 	you_have_votes_remaining: 'You have {votesCount} votes remaining',
 	you_can_vote_for_maximum_of_witnesses: 'You can vote for a maximum of 30 witnesses',
+	set_witness_proxy: "You can also choose a proxy that will vote for witnesses for you. This will reset your current witness selection.", // FIXME
+	witness_set: "You have set a voting proxy. If you would like to reenable manual voting, please clear your proxy.", // FIXME
+	witness_proxy_current: "Your current proxy is", // FIXME
+	witness_proxy_set: "Set proxy", // FIXME
+	witness_proxy_clear: "Clear proxy", // FIXME
 	information: 'Information',
 	if_you_want_to_vote_outside_of_top_enter_account_name: 'If you would like to vote for a witness outside of the top 50, enter the account name below to cast a vote',
 	view_the_direct_parent: 'View the direct parent',
 	you_are_viewing_single_comments_thread_from: 'You are viewing a single comment&#39;s thread from',
 	view_the_full_context: 'View the full context',
-	this_is_a_price_feed_conversion: 'This is a price feed conversion. The one week day delay is necessary to prevent abuse from gaming the price feed average',
+	this_is_a_price_feed_conversion: 'This is a price feed conversion. The 3.5 day delay is necessary to prevent abuse from gaming the price feed average',
 	your_existing_SD_are_liquid_and_transferable: 'Your existing Steem Dollars are liquid and transferable.  Instead you may wish to trade Steem Dollars directly in this site under {link} or transfer to an external market.',
 	buy_or_sell: 'Buy or Sells',
 	trending_30_day: 'trending (30 day)',

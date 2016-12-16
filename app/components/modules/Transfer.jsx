@@ -149,19 +149,36 @@ class TransferForm extends Component {
                 </div>}
 
                 <div className="row">
-                    <div className="column small-2">From</div>
+                    <div className="column small-2" style={{paddingTop: 5}}>From</div>
                     <div className="column small-10">
-                        <b>{currentUser.get('username')}</b>
+                        <div className="input-group" style={{marginBottom: "1.25rem"}}>
+                            <span className="input-group-label">@</span>
+                            <input
+                                className="input-group-field bold"
+                                type="text"
+                                disabled
+                                value={currentUser.get('username')}
+                            />
+                        </div>
                     </div>
                 </div>
 
-                <br />
-
                 {advanced && <div className="row">
-                    <div className="column small-2">To</div>
+                    <div className="column small-2" style={{paddingTop: 5}}>To</div>
                     <div className="column small-10">
-                        <input type="text" placeholder="Send to account" {...to.props}
-                            onChange={this.onChangeTo} ref="to" autoComplete="off" disabled={loading} />
+                        <div className="input-group" style={{marginBottom: "1.25rem"}}>
+                            <span className="input-group-label">@</span>
+                            <input
+                                className="input-group-field"
+                                ref="to"
+                                type="text"
+                                placeholder="Send to account"
+                                onChange={this.onChangeTo}
+                                autoComplete="off"
+                                disabled={loading}
+                                {...to.props}
+                            />
+                        </div>
                         {to.touched && to.blur && to.error ?
                             <div className="error">{to.error}&nbsp;</div> :
                             <p>{toVesting && powerTip3}</p>
@@ -170,24 +187,30 @@ class TransferForm extends Component {
                 </div>}
 
                 <div className="row">
-                    <div className="column small-2">Amount</div>
+                    <div className="column small-2" style={{paddingTop: 5}}>Amount</div>
                     <div className="column small-10">
-                        {asset && <span>
-                            <select {...asset.props} placeholder="Asset" disabled={loading}>
-                                <option></option>
-                                <option value="STEEM">STEEM</option>
-                                <option value="SBD">SBD</option>
-                            </select>
-                        </span>}
-                        <AssetBalance balanceValue={this.balanceValue()} onClick={this.assetBalanceClick} />
-                        <div className="error">{asset && asset.touched && asset.error && asset.error}&nbsp;</div>
-                        <input type="text" placeholder="Amount" {...amount.props} ref="amount" autoComplete="off" disabled={loading} />
-                        <div className="error">{amount.touched && amount.error && amount.error}&nbsp;</div>
+                        <div className="input-group" style={{marginBottom: 5}}>
+                            <input type="text" placeholder="Amount" {...amount.props} ref="amount" autoComplete="off" disabled={loading} />
+                            {asset && <span className="input-group-label" style={{paddingLeft: 0, paddingRight: 0}}>
+                                <select {...asset.props} placeholder="Asset" disabled={loading} style={{minWidth: "5rem", height: "inherit", backgroundColor: "transparent", border: "none"}}>
+                                    <option value="STEEM">STEEM</option>
+                                    <option value="SBD">SBD</option>
+                                </select>
+                            </span>}
+                        </div>
+                        <div style={{marginBottom: "0.6rem"}}>
+                            <AssetBalance balanceValue={this.balanceValue()} onClick={this.assetBalanceClick} />
+                        </div>
+                        {(asset && asset.touched && asset.error ) || (amount.touched && amount.error) ?
+                        <div className="error">
+                            {asset && asset.touched && asset.error && asset.error}&nbsp;
+                            {amount.touched && amount.error && amount.error}&nbsp;
+                        </div> : null}
                     </div>
                 </div>
 
                 {memo && <div className="row">
-                    <div className="column small-2">Memo</div>
+                    <div className="column small-2" style={{paddingTop: 33}}>Memo</div>
                     <div className="column small-10">
                         <small>This Memo is {isMemoPrivate ? 'Private' : 'Public'}</small>
                         <input type="text" placeholder="Memo" {...memo.props}

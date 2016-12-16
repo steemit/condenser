@@ -1,4 +1,49 @@
 ---------------------------------------------------------------------
+0.1.161214
+---------------------------------------------------------------------
+
+ - ability to set witness proxy voter #797
+ - add muted user list on Settings page #834
+ - add zebra stripes to wallet page #818
+ - allow votes dropdown to expand past post modal #836
+ - always show comment collapser #835
+ - fix phone verification issue #839
+ - clarify power down error message #838
+ - disable follow buttons while pending #832
+ - translation of markets #604
+ - mixpanel - track more events #828
+ - add contributors.md #825
+ - support for secure server sessions #823
+ - fix post footer promo text #822
+ - translation of blocktrades deposit #821
+ - display pending conversions & add them to account value #804
+ - fix follow counts #802
+ - fix unknown account flashing #801
+ - login/transfer updates, autofill username #798
+ - prevent post footer wrapping #781
+
+
+---------------------------------------------------------------------
+0.1.161205
+---------------------------------------------------------------------
+
+ - proper inflection for vote count #794
+ - update econ rules copy #793
+ - remove high security key in overlay #791
+ - @author/permlink redirect #786
+ - normalize profile url #785
+ - enforce display names not starting with `@` #780
+ - show 'since date' for view counts on old posts #779
+ - handle off screen click on resteem confirm #778
+ - revert youtube previews to lower resolution #777
+ - remove 0.15.0 compat layer, re-enable Promoted posts #776
+ - refactor follow data structure #774
+ - fix prop warnings - npm cleanup #773
+ - fix potential firefox bug - not able to scroll a post #767
+ - refactoring of market state #758
+
+
+---------------------------------------------------------------------
 0.1.161202
 ---------------------------------------------------------------------
 

@@ -4,7 +4,7 @@ import Apis from 'shared/api_client/ApiInstances'
 import {Set, Map, fromJS, List} from 'immutable'
 import {PrivateKey} from 'shared/ecc'
 import user from 'app/redux/User'
-import g from 'app/redux/GlobalReducer'
+import {getAccount} from 'app/redux/SagaShared'
 
 // operations that require only posting authority
 const postingOps = Set(`vote, comment, delete_comment, custom_json`.trim().split(/,\s*/))
@@ -113,13 +113,9 @@ export function* findSigningKey({opType, username, password}) {
 
     const private_keys = currentUsername === username ? currentUser.get('private_keys') : Map()
 
-    let account = yield select(state => state.global.getIn(['accounts', username]))
-    if (!account) {
-        [account] = yield call(Apis.db_api, 'get_accounts', [username])
-        if (!account) throw new Error('Account not found')
-        account = fromJS(account)
-        yield put(g.actions.receiveAccount({account}))
-    }
+    const account = yield call(getAccount, username);
+    if (!account) throw new Error('Account not found')
+
     for (const authType of authTypes) {
         let private_key
         if (password) {

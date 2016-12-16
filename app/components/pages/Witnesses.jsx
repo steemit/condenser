@@ -5,7 +5,8 @@ import links from 'app/utils/Links'
 import Icon from 'app/components/elements/Icon';
 import transaction from 'app/redux/Transaction'
 import ByteBuffer from 'bytebuffer'
-import {Set, is} from 'immutable'
+import {is} from 'immutable'
+import g from 'app/redux/GlobalReducer';
 import { translate } from 'app/Translator';
 
 const Long = ByteBuffer.Long
@@ -23,7 +24,7 @@ class Witnesses extends React.Component {
     }
     constructor() {
         super()
-        this.state = {customUsername: ""}
+        this.state = {customUsername: "", proxy: "", proxyFailed: false}
         this.accountWitnessVote = (accountName, approve, e) => {
             e.preventDefault();
             const {username, accountWitnessVote} = this.props
@@ -34,22 +35,32 @@ class Witnesses extends React.Component {
             const customUsername = e.target.value;
             this.setState({customUsername});
         }
+        this.accountWitnessProxy = (e) => {
+            e.preventDefault();
+            const {username, accountWitnessProxy} = this.props;
+            accountWitnessProxy(username, this.state.proxy, (state) => {
+                this.setState(state);
+            });
+        }
     }
 
     shouldComponentUpdate(np, ns) {
             return (
                 !is(np.witness_votes, this.props.witness_votes) ||
                 np.witnesses !== this.props.witnesses ||
+                np.current_proxy !== this.props.current_proxy ||
                 np.username !== this.props.username ||
-                ns.customUsername !== this.state.customUsername
+                ns.customUsername !== this.state.customUsername ||
+                ns.proxy !== this.state.proxy ||
+                ns.proxyFailed !== this.state.proxyFailed
             );
     }
 
    render() {
-       const {props: {witness_votes}, state: {customUsername}, accountWitnessVote, onWitnessChange} = this
-       const sorted_witnesses = this.props.witnesses
+        const {props: {witness_votes, current_proxy}, state: {customUsername, proxy}, accountWitnessVote,
+            accountWitnessProxy, onWitnessChange} = this
+        const sorted_witnesses = this.props.witnesses
             .sort((a, b) => Long.fromString(String(b.get('votes'))).subtract(Long.fromString(String(a.get('votes'))).toString()));
-
         const up = <Icon name="chevron-up-circle" />;
         let witness_vote_count = 30
         let rank = 1
@@ -89,7 +100,7 @@ class Witnesses extends React.Component {
         let addl_witnesses = false;
         if(witness_votes) {
             witness_vote_count -= witness_votes.size
-            addl_witnesses = witness_votes.filter(function(item) {
+            addl_witnesses = witness_votes.filter(item => {
                 return !sorted_witnesses.has(item)
             }).map(item => {
                 return (
@@ -115,12 +126,44 @@ class Witnesses extends React.Component {
                 <div className="row">
                     <div className="column">
                         <h2>{translate('top_witnesses')}</h2>
-                        <p>
+                        {current_proxy && current_proxy.length ? null :
+                            <p>
                             <strong>{translate('you_have_votes_remaining', {votesCount: witness_vote_count})}.</strong>{' '}
                             {translate('you_can_vote_for_maximum_of_witnesses')}.
-                        </p>
+                        </p>}
                     </div>
                 </div>
+
+                <div className="row">
+                    <div className="column">
+                        <p>{translate(current_proxy && current_proxy.length ? 'witness_set' : 'set_witness_proxy', {proxy: current_proxy})}</p>
+                        {current_proxy && current_proxy.length ?
+                        <div>
+                            <div style={{paddingBottom: 10}}>{translate("witness_proxy_current")}: <strong>{}</strong></div>
+
+                            <form>
+                                <div className="input-group">
+                                    <input className="input-group-field bold" disabled type="text" style={{float: "left", width: "75%", maxWidth: "20rem"}} value={current_proxy} />
+                                    <div className="input-group-button">
+                                        <button style={{marginBottom: 0}} className="button" onClick={accountWitnessProxy}>{translate('witness_proxy_clear')}</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div> :
+                        <form>
+                            <div className="input-group">
+                                <input className="input-group-field bold" type="text" style={{float: "left", width: "75%", maxWidth: "20rem"}} value={proxy} onChange={(e) => {this.setState({proxy: e.target.value});}} />
+                                <div className="input-group-button">
+                                    <button style={{marginBottom: 0}} className="button" onClick={accountWitnessProxy}>{translate('witness_proxy_set')}</button>
+                                </div>
+                            </div>
+                        </form>}
+                        {this.state.proxyFailed && <p className="error">{translate("proxy_update_error")}.</p>}
+                        <br />
+                     </div>
+                </div>
+
+                {current_proxy && current_proxy.length ? null :
                 <div className="row small-collapse">
                     <div className="column">
                         <table>
@@ -136,19 +179,25 @@ class Witnesses extends React.Component {
                             </tbody>
                         </table>
                     </div>
-                </div>
+                </div>}
+
+                {current_proxy && current_proxy.length ? null :
                 <div className="row">
                     <div className="column">
                         <p>{translate('if_you_want_to_vote_outside_of_top_enter_account_name')}.</p>
                         <form>
-                            <input type="text" style={{float: "left", width: "75%"}} value={customUsername} onChange={onWitnessChange} />
-                            <button className="darkbtn" onClick={accountWitnessVote.bind(this, customUsername, !(witness_votes ? witness_votes.has(customUsername) : null))}>{translate('vote')}</button>
+                            <div className="input-group">
+                                <input className="input-group-field" type="text" style={{float: "left", width: "75%", maxWidth: "20rem"}} value={customUsername} onChange={onWitnessChange} />
+                                <div className="input-group-button">
+                                    <button className="button" onClick={accountWitnessVote.bind(this, customUsername, !(witness_votes ? witness_votes.has(customUsername) : null))}>{translate('vote')}</button>
+                                </div>
+                            </div>
                         </form>
-                        <br/>
+                        <br />
                         {addl_witnesses}
-                        <br/><br/>
+                        <br /><br />
                      </div>
-                </div>
+                </div>}
             </div>
         );
     }
@@ -162,22 +211,38 @@ module.exports = {
             const current_user = state.user.get('current');
             const username = current_user && current_user.get('username')
             const current_account = current_user && state.global.getIn(['accounts', username])
-            const witness_votes = current_account && Set(current_account.get('witness_votes'))
+            const witness_votes = current_account && current_account.get('witness_votes').toSet();
+            const current_proxy = current_account && current_account.get('proxy');
             return {
                 witnesses: state.global.get('witnesses'),
                 username,
                 witness_votes,
+                current_proxy
             };
         },
         (dispatch) => {
             return {
-                // requestData: (args) => dispatch({type: 'REQUEST_DATA', payload: args}),
                 accountWitnessVote: (username, witness, approve) => {
                     dispatch(transaction.actions.broadcastOperation({
                         type: 'account_witness_vote',
                         operation: {account: username, witness, approve},
                     }))
                 },
+                accountWitnessProxy: (account, proxy, stateCallback) => {
+                    dispatch(transaction.actions.broadcastOperation({
+                        type: 'account_witness_proxy',
+                        operation: {account, proxy},
+                        confirm: proxy.length ? "Set proxy to: " + proxy : "You are about to remove your proxy.",
+                        successCallback: () => {
+                            dispatch(g.actions.updateAccountWitnessProxy({account, proxy}));
+                            stateCallback({proxyFailed: false, proxy: ""});
+                        },
+                        errorCallback: (e) => {
+                            console.log('error:', e);
+                            stateCallback({proxyFailed: true});
+                        }
+                    }))
+                }
             }
         }
     )(Witnesses)

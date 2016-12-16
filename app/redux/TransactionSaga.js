@@ -4,8 +4,8 @@ import {Apis} from 'shared/api_client'
 import {createTransaction, signTransaction} from 'shared/chain/transactions'
 import {ops} from 'shared/serializer'
 import {PublicKey, PrivateKey} from 'shared/ecc'
-import {fromJS} from 'immutable'
-import {getAccount} from 'app/redux/SagaShared'
+import {fromJS, Set, Map} from 'immutable'
+import {getAccount, getContent} from 'app/redux/SagaShared'
 import {findSigningKey} from 'app/redux/AuthSaga'
 import {encode} from 'shared/chain/memo'
 import g from 'app/redux/GlobalReducer'
@@ -41,16 +41,17 @@ const hook = {
     preBroadcast_comment,
     preBroadcast_transfer,
     preBroadcast_vote,
+    preBroadcast_account_witness_vote,
+    preBroadcast_custom_json,
+    error_vote,
+    error_custom_json,
+    // error_account_update,
+    error_account_witness_vote,
     accepted_comment,
     accepted_delete_comment,
     accepted_vote,
-    error_vote,
-    error_custom_json,
-    preBroadcast_account_witness_vote,
-    error_account_witness_vote,
     accepted_account_update,
     accepted_withdraw_vesting,
-    // error_account_update,
 }
 
 function* preBroadcast_transfer({operation}) {
@@ -88,6 +89,41 @@ function* preBroadcast_account_witness_vote({operation, username}) {
     yield put(g.actions.updateAccountWitnessVote({account, witness, approve}))
     return operation
 }
+
+function* preBroadcast_custom_json({operation}) {
+    const json = JSON.parse(operation.json)
+    if(operation.id === 'follow') {
+        try {
+            if(json[0] === 'follow') {
+                const {follower, following, what: [action]} = json[1]
+                yield put(g.actions.update({
+                    key: ['follow', 'get_following', follower],
+                    notSet: Map(),
+                    updater: m => {
+                        //m = m.asMutable()
+                        if(action == null) {
+                            m = m.update('blog_result', Set(), r => r.delete(following))
+                            m = m.update('ignore_result', Set(), r => r.delete(following))
+                        } else if(action === 'blog') {
+                            m = m.update('blog_result', Set(), r => r.add(following))
+                            m = m.update('ignore_result', Set(), r => r.delete(following))
+                        } else if(action === 'ignore') {
+                            m = m.update('ignore_result', Set(), r => r.add(following))
+                            m = m.update('blog_result', Set(), r => r.delete(following))
+                        }
+                        m = m.set('blog_count', m.get('blog_result', Set()).size)
+                        m = m.set('ignore_count', m.get('ignore_result', Set()).size)
+                        return m//.asImmutable()
+                    }
+                }))
+            }
+        } catch(e) {
+            console.error('TransactionSaga unrecognized follow custom_json format', operation.json);
+        }
+    }
+    return operation
+}
+
 function* error_account_witness_vote({operation: {account, witness, approve}}) {
     yield put(g.actions.updateAccountWitnessVote({account, witness, approve: !approve}))
 }
@@ -118,7 +154,8 @@ function* broadcastOperation({payload:
             }
         }
         yield call(broadcast, {payload})
-        const eventType = type.replace(/^([a-z])/, g => g.toUpperCase()).replace(/_([a-z])/g, g => g[1].toUpperCase());
+        let eventType = type.replace(/^([a-z])/, g => g.toUpperCase()).replace(/_([a-z])/g, g => g[1].toUpperCase());
+        if (eventType === 'Comment' && !operation.parent_author) eventType = 'Post';
         serverApiRecordEvent(eventType, '')
     } catch(error) {
         console.error('TransactionSage', error)
@@ -435,14 +472,6 @@ function slug(text) {
     //    .replace(/[^a-zA-Z0-9-_]+/g, '') // only letters and numbers _ and -
     //    .replace(/--/g, '-')
     //    .toLowerCase()
-}
-
-function* getContent({author, permlink}) {
-    const content = yield call([Apis, Apis.db_api], 'get_content', author, permlink)
-    yield put(g.actions.receiveContent({content}))
-    // const update = {content: {}}
-    // update.content[author + '/' + permlink] = content
-    // yield put(g.actions.receiveState(update))
 }
 
 function* recoverAccount({payload: {account_to_recover, old_password, new_password, onError, onSuccess}}) {

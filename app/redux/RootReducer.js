@@ -45,7 +45,7 @@ function initReducer(reducer, type) {
 export default combineReducers({
     global: initReducer(globalReducerModule.reducer, 'global'),
     market: initReducer(marketReducerModule.reducer),
-    offchain: initReducer(offchain.reducer),
+    offchain: initReducer(offchain),
     user: initReducer(user.reducer),
     // auth: initReducer(auth.reducer),
     transaction: initReducer(transaction.reducer),

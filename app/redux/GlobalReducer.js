@@ -23,7 +23,6 @@ export default createModule({
         {
             action: 'RECEIVE_STATE',
             reducer: (state, action) => {
-                // console.log('RECEIVE_STATE', action, state.toJS());
                 let payload = fromJS(action.payload)
                 if(payload.has('content')) {
                     const content = payload.get('content').withMutations(c => {
@@ -105,6 +104,11 @@ export default createModule({
                 state.updateIn(['accounts', account, 'witness_votes'], Set(),
                     votes => (approve ? Set(votes).add(witness) : Set(votes).remove(witness)))
         },
+        { // works...
+            action: 'UPDATE_ACCOUNT_WITNESS_PROXY',
+            reducer: (state, {payload: {account, proxy}}) =>
+                    state.setIn(['accounts', account, 'proxy'], proxy)
+        },
         {
             action: 'DELETE_CONTENT',
             reducer: (state, {payload: {author, permlink}}) => {
@@ -153,9 +157,7 @@ export default createModule({
                 let new_state;
                 if (order === 'by_author' || order === 'by_feed' || order === 'by_comments' || order === 'by_replies') {
                     // category is either "blog", "feed", "comments", or "recent_replies" (respectively) -- and all posts are keyed under current profile
-                    // one exception: "comments" category is keyed as "posts" in get_state (https://github.com/steemit/steem/issues/507)
-                    const _legacy_compat = state.getIn(['accounts', accountname]).has("posts") //TODO: remove after switching to shared-db
-                    const key = ['accounts', accountname, (_legacy_compat && category == "comments") ? "posts" : category]
+                    const key = ['accounts', accountname, category]
                     new_state = state.updateIn(key, List(), list => {
                         return list.withMutations(posts => {
                             data.forEach(value => {

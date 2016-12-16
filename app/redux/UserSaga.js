@@ -2,7 +2,7 @@ import {fromJS, Set, List} from 'immutable'
 import {takeLatest} from 'redux-saga';
 import {call, put, select, fork} from 'redux-saga/effects';
 import {accountAuthLookup} from 'app/redux/AuthSaga'
-import {PrivateKey} from 'shared/ecc'
+import {PrivateKey, Signature, hash} from 'shared/ecc'
 import user from 'app/redux/User'
 import {getAccount} from 'app/redux/SagaShared'
 import {browserHistory} from 'react-router'
@@ -83,8 +83,6 @@ function* removeHighSecurityKeys({payload: {pathname}}) {
     if(!highSecurityPage)
         yield put(user.actions.removeHighSecurityKeys())
 }
-
-
 
 /**
     @arg {object} action.username - Unless a WIF is provided, this is hashed with the password and key_type to create private keys.
@@ -248,7 +246,28 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     if (!autopost && saveLogin)
         yield put(user.actions.saveLogin());
 
-    serverApiLogin(username);
+    try {
+        // const challengeString = yield serverApiLoginChallenge()
+        const offchainData = yield select(state => state.offchain)
+        const serverAccount = offchainData.get('account')
+        const challengeString = offchainData.get('login_challenge')
+        if (!serverAccount && challengeString) {
+            const signatures = {}
+            const challenge = {token: challengeString}
+            const bufSha = hash.sha256(JSON.stringify(challenge, null, 0))
+            const sign = (role, d) => {
+                if (!d) return
+                const sig = Signature.signBufferSha256(bufSha, d)
+                signatures[role] = sig.toHex()
+            }
+            sign('posting', private_keys.get('posting_private'))
+            // sign('active', private_keys.get('active_private'))
+            serverApiLogin(username, signatures);
+        }
+    } catch(error) {
+        // Does not need to be fatal
+        console.error('Server Login Error', error);
+    }
     if (afterLoginRedirectToWelcome) browserHistory.push('/welcome');
 }
 
@@ -348,8 +367,6 @@ function* lookupPreviousOwnerAuthority({payload: {}}) {
     // console.log('UserSage ---> previous_owner_authority', previous_owner_authority.toJS())
     yield put(user.actions.setUser({previous_owner_authority}))
 }
-
-import {Signature, hash} from 'shared/ecc'
 
 function* uploadImageWatch() {
     yield* takeLatest('user/UPLOAD_IMAGE', uploadImage);

@@ -10,7 +10,7 @@ const it = 	{
 	stolen_account_recovery: "Recupera Account Perso",
 	change_account_password: "Modifica Password Account",
 	steemit_chat: "Steemit Chat",
-    steemit_api_docs: "Steemit API Docs",
+	steemit_api_docs: "Steemit API Docs",
 	witnesses: "Testimoni",
 	vote_for_witnesses: "Vota per Testimoni",
 	privacy_policy: "Privacy Policy",
@@ -223,6 +223,10 @@ const it = 	{
 	open_orders: 'Open Orders',
 	sell_amount_for_atleast: 'Vendi {amount_to_sell} per almeno {min_to_receive} ({effectivePrice})',
 	buy_atleast_amount_for: 'Buy at least {min_to_receive} for {amount_to_sell} ({effectivePrice})',
+	price_warning_above: 'This price is well above the current market price of {marketPrice}, are you sure?', //FIXME
+	price_warning_below: 'This price is well below the current market price of {marketPrice}, are you sure?', //FIXME
+	order_cancel_confirm: 'Cancel order {order_id} from {user}?', //FIXME
+	order_cancelled: 'Order {order_id} cancelled.', //FIXME
 	higher: 'Higher', // context is about prices
 	lower: 'Lower', // context is about prices
 	total_sd_dollars: "Total SD ($)",
@@ -372,12 +376,17 @@ const it = 	{
 	witness_thread: 'witness thread',
 	you_have_votes_remaining: 'Hai ancora {votesCount} upvote rimasti',
 	you_can_vote_for_maximum_of_witnesses: 'puoi votare per un massimo di 30 witnesses',
+	set_witness_proxy: "You can also choose a proxy that will vote for witnesses for you. This will reset your current witness selection.", // FIXME
+	witness_set: "You have set a voting proxy. If you would like to reenable manual voting, please clear your proxy.", // FIXME
+	witness_proxy_current: "Your current proxy is", // FIXME
+	witness_proxy_set: "Set proxy", // FIXME
+	witness_proxy_clear: "Clear proxy", // FIXME
 	information: 'Informationi',
 	if_you_want_to_vote_outside_of_top_enter_account_name: 'Se vuoi votare per un witness al di fuori della top 50, scrivine il nome account ed esegui un upvote',
 	view_the_direct_parent: 'Visualizza cartella principale',
 	you_are_viewing_single_comments_thread_from: 'You are viewing a single comment&#39;s thread from',
 	view_the_full_context: 'Visualizza tutto il contesto',
-	this_is_a_price_feed_conversion: 'This is a price feed conversion. The one week day delay is necessary to prevent abuse from gaming the price feed average',
+	this_is_a_price_feed_conversion: 'This is a price feed conversion. The 3.5 day delay is necessary to prevent abuse from gaming the price feed average',
 	your_existing_SD_are_liquid_and_transferable: 'I tuoi Steem Dollars esistenti sono liquidi and trasferibili.  Instead you may wish to trade Steem Dollars directly in this site under {link} or transfer to an external market.',
 	buy_or_sell: 'Compra or Vendi',
 	trending_30_day: 'trending (30 day)',
@@ -416,7 +425,7 @@ const it = 	{
 	posting_key_is_required_it_should_be_different: 'La posting key è utilizzata per creare e votare post. Dovrebbe essere differente dalla active key e dalla owner key.',
 	the_active_key_is_used_to_make_transfers_and_place_orders: 'L\'active key è utilizzata per trasferire e piazzare ordini nel mercato interno.',
 	the_owner_key_is_required_to_change_other_keys: 'L\'owner key è la chiave master dell\'account e viene utilizzata per modificare tutte le altre.',
-	the_private_key_or_password_should_be_kept_offline: 'La private key o la password proprietaria dovrebbero essere tenute offline il più possibile.', 
+	the_private_key_or_password_should_be_kept_offline: 'La private key o la password proprietaria dovrebbero essere tenute offline il più possibile.',
 	the_memo_key_is_used_to_create_and_read_memos: 'La memo key è utilizzata per creare e visualizzare memo.',
 	previous: 'Precedente',
 	next: 'Prossimo',

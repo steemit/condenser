@@ -70,8 +70,8 @@ export default createModule({
                         }
                         break
                     case 'withdraw_vesting':
-                        if(/Account registered by another account requires 10x account creation fee worth of Steem Power before it can power down/.test(errorStr))
-                            errorKey = 'Account registered by another account requires 10x account creation fee worth of Steem Power before it can power down'
+                        if(/Account registered by another account requires 10x account creation fee worth of Steem Power/.test(errorStr))
+                            errorKey = 'Account requires 10x the account creation fee in Steem Power (approximately 300 SP) before it can power down.'
                         break
                     default:
                         break

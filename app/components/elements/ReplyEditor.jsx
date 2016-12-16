@@ -473,7 +473,6 @@ export default formId => reduxForm(
             // const post = state.global.getIn(['content', author + '/' + permlink])
             const username = state.user.getIn(['current', 'username'])
 
-
             // Parse categories:
             // if category string starts with russian symbol, add 'ru-' prefix to it
             // when transletirate it
@@ -483,9 +482,10 @@ export default formId => reduxForm(
                 category = category.split(' ')
                                     .map(item => /^[а-яё]/.test(item) ? 'ru--' + detransliterate(item, true) : item)
                                     .join(' ')
+                                    .trim()
             }
 
-            if (category){console.log(category);}else{console.log(author);}
+            if (category) {console.log(category);}else{console.log(author);}
             // Wire up the current and parent props for either an Edit or a Submit (new post)
             //'submit_story', 'submit_comment', 'edit'
             const linkProps =

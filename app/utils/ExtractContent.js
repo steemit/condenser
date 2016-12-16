@@ -37,18 +37,17 @@ export default function extractContent(get, content) {
     if (category) link = `/${category}${link}`;
     const body = get(content, 'body');
     let jsonMetadata = {}
+    let image_link
     try {
         jsonMetadata = JSON.parse(json_metadata)
+        // First, attempt to find an image url in the json metadata
+        if(jsonMetadata) {
+            if(jsonMetadata.image && Array.isArray(jsonMetadata.image)) {
+                [image_link] = jsonMetadata.image
+            }
+        }
     } catch(error) {
         // console.error('Invalid json metadata string', json_metadata, 'in post', author, permlink);
-    }
-
-    // First, attempt to find an image url in the json metadata
-    let image_link
-    if(jsonMetadata) {
-        if(jsonMetadata.image) {
-            [image_link] = jsonMetadata.image
-        }
     }
 
     // If nothing found in json metadata, parse body and check images/links

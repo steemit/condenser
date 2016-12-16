@@ -77,10 +77,15 @@ export function contentStats(content) {
     const pictures = !gray
 
     // Combine tags+category to check nsfw status
-    let json = content.get('json_metadata')
+    const json = content.get('json_metadata')
     let tags = []
     try {
         tags = json && JSON.parse(json).tags || [];
+        if(typeof tags == 'string') {
+            tags = [tags];
+        } if(!Array.isArray(tags)) {
+            tags = [];
+        }
     } catch(e) {
         tags = []
     }

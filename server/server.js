@@ -110,6 +110,7 @@ app.use(mount('/yandex_dc913847e717bca6.html', staticCache(path.join(__dirname, 
 // postmaster.mail.ru verification page (required by postmaster.mail.ru)
 app.use(mount('/mailru-verification92b53816046791c4.html', staticCache(path.join(__dirname, '../app/assets/mailru-verification92b53816046791c4.html'), cacheOpts)));
 app.use(mount('/mailru-verification2f585ac3784b45be.html', staticCache(path.join(__dirname, '../app/assets/mailru-verification2f585ac3784b45be.html'), cacheOpts)));
+app.use(mount('/mailru-verification9a42734aa5b7e274.html', staticCache(path.join(__dirname, '../app/assets/mailru-verification9a42734aa5b7e274.html'), cacheOpts)));
 
 // Proxy asset folder to webpack development server in development mode
 console.log (env)

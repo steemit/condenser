@@ -32,14 +32,12 @@ export default ({post, horizontal, single}) => {
     tags = tags.filter( (value, index, self) => value && (self.indexOf(value) === index) )
 
     if (horizontal) { // show it as a dropdown in Preview
-        const list = tags.map( (tag,idx) => <Link to={`/${sort_order}/${tag}`} key={idx}> {tag} </Link>)
+        const list = tags.map( (tag, idx) => <Link to={`/${sort_order}/${tag}`} key={idx}> {tag} </Link>)
         return <div className="TagList__horizontal">{list}</div>;
-    } else {
-        if(tags.length == 1) {
-            return <Link to={`/${sort_order}/${tags[0]}`}>{tags[0]}</Link>
-        } else {
-            const list = tags.map(function (tag) {return {value: tag, link: `/${sort_order}/${tag}`}});
-            return <DropdownMenu selected={' '+tags[0]} className="TagList" items={list} el="div" />;
-        }
     }
+    if(tags.length == 1) {
+        return <Link to={`/${sort_order}/${tags[0]}`}>{tags[0]}</Link>
+    }
+    const list = tags.map(tag => {return {value: tag, link: `/${sort_order}/${tag}`}});
+    return <DropdownMenu selected={' '+tags[0]} className="TagList" items={list} el="div" />;
 }

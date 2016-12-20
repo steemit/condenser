@@ -294,6 +294,10 @@ export default function useGeneralApi(app) {
         this.body = '';
     });
 
+    router.post('/track_social_action', koaBody, function *() {
+        mixpanel.track('social_event', {distinct_id: this.session.uid});
+    });
+
     router.post('/page_view', koaBody, function *() {
         const params = this.request.body;
         const {csrf, page, ref} = typeof(params) === 'string' ? JSON.parse(params) : params;

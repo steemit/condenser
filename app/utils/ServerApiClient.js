@@ -65,6 +65,11 @@ export function recordPageView(page, ref) {
     });
 }
 
+export function recordSocialShare(page, ref, action) {
+    const request = Object.assign({}, request_base, {method: 'post', mode: 'cors'});
+    fetch(`/api/v1/track_social_action`, request)
+}
+
 if (process.env.BROWSER) {
     window.getNotifications = getNotifications;
     window.markNotificationRead = markNotificationRead;

@@ -102,7 +102,7 @@ class PostFull extends React.Component {
     }
 
     fbShare(e) {
-        recordSocialShare({event:'fbShare',url: this.share_params.url});
+        recordSocialShare({event:'fbShare',url: this.share_params.link});
         e.preventDefault();
         window.FB.ui({
             method: 'share',
@@ -111,7 +111,7 @@ class PostFull extends React.Component {
     }
 
     twitterShare(e) {
-        recordSocialShare({event:'twitterShare',url: this.share_params.url});
+        recordSocialShare({event:'twitterShare',url: this.share_params.link});
         e.preventDefault();
         const winWidth = 640;
         const winHeight = 320;
@@ -123,7 +123,7 @@ class PostFull extends React.Component {
     }
 
     linkedInShare(e) {
-        recordSocialShare({event:'linkedInShare',url: this.share_params.url});
+        recordSocialShare({event:'linkedInShare',url: this.share_params.link});
         e.preventDefault();
         const winWidth = 720;
         const winHeight = 480;
@@ -178,6 +178,7 @@ class PostFull extends React.Component {
             net_rshares.compare(Long.ZERO) <= 0
 
         this.share_params = {
+            link,
             url: 'https://steemit.com' + link,
             title: title + ' — Steemit',
             desc: p.desc

@@ -303,6 +303,7 @@ export default function useGeneralApi(app) {
         catch (error) {
             console.error('Error in /track_social_action', error.message);
         }
+        this.body = '';
     });
 
     router.post('/page_view', koaBody, function *() {

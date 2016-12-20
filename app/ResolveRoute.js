@@ -2,7 +2,6 @@ export const routeRegex = {
     PostsIndex: /^\/(@[\w\.\d-]+)\/feed\/?$/,
     UserProfile1: /^\/(@[\w\.\d-]+)\/?$/,
     UserProfile2: /^\/(@[\w\.\d-]+)\/(blog|posts|comments|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)\/?$/,
-    UserRoute: /^(@[\w\.\d//-]+)/,
     UserEndPoints: /^(blog|posts|comments|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)$/,
     CategoryFilters: /^\/(hot|created|trending|active|promoted)\/?$/ig,
     PostNoCategory: /^\/(@[\w\.\d-]+)\/([\w\d-]+)/,

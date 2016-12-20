@@ -59,7 +59,7 @@ app.use(function *(next) {
         }
     }
     // // handle non-existing users endpoints with 404
-    if (this.method === 'GET' && routeRegex.UserRoute.test(this.url)) {
+    if (this.method === 'GET' && routeRegex.PostNoCategory.test(this.url)) {
         const segments = this.url.split('/');
         if(segments[2] && !routeRegex.UserEndPoints.test(segments[2])) {
             this.status = 404;

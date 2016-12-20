@@ -23,7 +23,8 @@ import flash from 'koa-flash';
 import minimist from 'minimist';
 import Grant from 'grant-koa';
 import config from '../config';
-import secureRandom from 'secure-random'
+import {routeRegex} from 'app/ResolveRoute';
+import secureRandom from 'secure-random';
 
 const grant = new Grant(config.grant);
 // import uploadImage from 'server/upload-image' //medium-editor
@@ -50,20 +51,26 @@ app.use(function *(next) {
         return;
     }
     // normalize user name url from cased params
-    if (this.method === 'GET' && /^\/(@[\w\.\d-]+)\/?$/.test(this.url)) {
+    if (this.method === 'GET' && routeRegex.UserProfile1.test(this.url)) {
         const p = this.originalUrl.toLowerCase();
         if(p !== this.originalUrl) {
             this.redirect(p);
             return;
         }
     }
+    // // handle non-existing users endpoints with 404
+    if (this.method === 'GET' && routeRegex.UserRoute.test(this.url)) {
+        const segments = this.url.split('/');
+        if(segments[2] && !routeRegex.UserEndPoints.test(segments[2])) {
+            this.status = 404;
+            return;
+        }
+    }
     // normalize top category filtering from cased params
-    if (this.method === 'GET' && /^\/(hot|created|trending|active)\//.test(this.url)) {
-        const segments = this.url.split('/')
-        const category = segments[2]
-        if(category !== category.toLowerCase()) {
-            segments[2] = category.toLowerCase()
-            this.redirect(segments.join('/'));
+    if (this.method === 'GET' && routeRegex.CategoryFilters.test(this.url)) {
+        const p = this.originalUrl.toLowerCase();
+        if(p !== this.originalUrl) {
+            this.redirect(p);
             return;
         }
     }

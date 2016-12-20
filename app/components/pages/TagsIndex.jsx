@@ -80,7 +80,7 @@ export default class TagsIndex extends React.Component {
 }
 
 module.exports = {
-    path: 'tags.html(/:order)',
+    path: 'tags(/:order)',
     component: connect(state => ({
         tagsList: state.global.get('tag_idx'),
         tagsAll: state.global.get('tags')

@@ -102,7 +102,7 @@ class PostFull extends React.Component {
     }
 
     fbShare(e) {
-        recordSocialShare();
+        recordSocialShare({event:'fbShare',url: this.share_params.url});
         e.preventDefault();
         window.FB.ui({
             method: 'share',
@@ -111,7 +111,7 @@ class PostFull extends React.Component {
     }
 
     twitterShare(e) {
-        recordSocialShare();
+        recordSocialShare({event:'twitterShare',url: this.share_params.url});
         e.preventDefault();
         const winWidth = 640;
         const winHeight = 320;
@@ -123,7 +123,7 @@ class PostFull extends React.Component {
     }
 
     linkedInShare(e) {
-        recordSocialShare();
+        recordSocialShare({event:'linkedInShare',url: this.share_params.url});
         e.preventDefault();
         const winWidth = 720;
         const winHeight = 480;

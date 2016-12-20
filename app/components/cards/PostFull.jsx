@@ -23,6 +23,7 @@ import {repLog10, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import DMCAList from 'app/utils/DMCAList'
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import ShareMenu from 'app/components/elements/ShareMenu';
+import {recordSocialShare} from 'app/utils/ServerApiClient';
 
 function TimeAuthorCategory({content, authorRepLog10, showTags}) {
     return (
@@ -101,6 +102,7 @@ class PostFull extends React.Component {
     }
 
     fbShare(e) {
+        recordSocialShare();
         e.preventDefault();
         window.FB.ui({
             method: 'share',
@@ -109,6 +111,7 @@ class PostFull extends React.Component {
     }
 
     twitterShare(e) {
+        recordSocialShare();
         e.preventDefault();
         const winWidth = 640;
         const winHeight = 320;
@@ -120,6 +123,7 @@ class PostFull extends React.Component {
     }
 
     linkedInShare(e) {
+        recordSocialShare();
         e.preventDefault();
         const winWidth = 720;
         const winHeight = 480;

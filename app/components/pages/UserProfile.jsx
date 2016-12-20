@@ -40,6 +40,8 @@ export default class UserProfile extends React.Component {
 
     shouldComponentUpdate(np) {
         const {follow} = this.props;
+        const {follow_count} = this.props;
+
         let followersLoading = false, npFollowersLoading = false;
         let followingLoading = false, npFollowingLoading = false;
 
@@ -62,7 +64,8 @@ export default class UserProfile extends React.Component {
             ((npFollowingLoading !== followingLoading) && !npFollowingLoading) ||
             np.loading !== this.props.loading ||
             np.location.pathname !== this.props.location.pathname ||
-            np.routeParams.accountname !== this.props.routeParams.accountname
+            np.routeParams.accountname !== this.props.routeParams.accountname ||
+            np.follow_count !== this.props.follow_count
         )
     }
 
@@ -118,11 +121,22 @@ export default class UserProfile extends React.Component {
         } else {
             return <div><center>{translate('unknown_account')}</center></div>
         }
-
         const followers = follow && follow.getIn(['get_followers', accountname]);
         const following = follow && follow.getIn(['get_following', accountname]);
-        const followerCount = followers && followers.get('blog_count')
-        const followingCount = following && following.get('blog_count')
+
+        // instantiate following items
+        let totalCounts = this.props.follow_count;
+        let followerCount = "";
+        let followingCount = "";
+
+        if (totalCounts && accountname) {
+            totalCounts = totalCounts.get(accountname);
+            if (totalCounts) {
+                totalCounts    = totalCounts.toJS();
+                followerCount  = totalCounts.follower_count;
+                followingCount = totalCounts.following_count;
+            }
+        }
 
         const rep = repLog10(account.reputation);
 
@@ -429,7 +443,8 @@ module.exports = {
                 loading: state.app.get('loading'),
                 global_status: state.global.get('status'),
                 accounts: state.global.get('accounts'),
-                follow: state.global.get('follow')
+                follow: state.global.get('follow'),
+                follow_count: state.global.get('follow_count')
             };
         },
         dispatch => ({

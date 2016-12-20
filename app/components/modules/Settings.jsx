@@ -16,6 +16,7 @@ class Settings extends React.Component {
     constructor(props) {
         super()
         this.initForm(props)
+        this.onNsfwPrefChange = this.onNsfwPrefChange.bind(this)
     }
 
     state = {
@@ -39,6 +40,19 @@ class Settings extends React.Component {
         })
         this.handleSubmitForm =
             this.state.accountSettings.handleSubmit(args => this.handleSubmit(args))
+    }
+
+    componentWillMount() {
+        const {accountname} = this.props
+        const nsfwPref = (process.env.BROWSER ? localStorage.getItem('nsfwPref-' + accountname) : null) || 'warn'
+        this.setState({nsfwPref})
+    }
+
+    onNsfwPrefChange(e) {
+        const nsfwPref = e.currentTarget.value;
+        const {accountname} = this.props;
+        localStorage.setItem('nsfwPref-'+accountname, nsfwPref)
+        this.setState({nsfwPref})
     }
 
     handleSubmit = ({updateInitialValues}) => {
@@ -147,6 +161,7 @@ class Settings extends React.Component {
             </div>*/}
             <div className="row">
                 <form onSubmit={this.handleSubmitForm} className="small-12 medium-6 large-4 columns">
+                    <h3>Profile</h3>
                     <label>
                         {translate('profile_image_url')}
                         <input type="url" {...profile_image.props} autoComplete="off" />
@@ -189,6 +204,22 @@ class Settings extends React.Component {
                         }
                 </form>
             </div>
+
+            {isOwnAccount &&
+                <div className="row">
+                    <div className="small-12 columns">
+                        <br /><br />
+                        <h3>Content Preferences</h3>
+                        <div>
+                            Not safe for work (NSFW)
+                        </div>
+                        <select value={this.state.nsfwPref} onChange={this.onNsfwPrefChange}>
+                            <option value="hide">Always hide</option>
+                            <option value="warn">Always warn</option>
+                            <option value="show">Always show</option>
+                        </select>
+                    </div>
+                </div>}
             {ignores && ignores.size > 0 &&
                 <div className="row">
                     <div className="small-12 columns">
@@ -213,6 +244,7 @@ export default connect(
         return {
             account,
             metaData,
+            accountname,
             isOwnAccount: username == accountname,
             profile,
             follow: state.global.get('follow'),

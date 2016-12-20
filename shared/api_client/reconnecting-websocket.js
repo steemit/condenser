@@ -277,7 +277,7 @@
             }
 
             console.log('connecting to', surl);
-            ws = process.env.BROWSER ? new WebSocket(surl) : new WebSocket(surl, protocols || [], null, null, null, {maxReceivedFrameSize: 0x300000});
+            ws = process.env.BROWSER ? new WebSocket(surl) : new WebSocket(surl, protocols || [], null, null, null, {maxReceivedFrameSize: 0x600000});
             ws.binaryType = this.binaryType;
 
             if (self.debug || ReconnectingWebSocket.debugAll) {

@@ -15,6 +15,7 @@ import useAccountRecoveryApi from './api/account_recovery';
 import useNotificationsApi from './api/notifications';
 import useEnterAndConfirmEmailPages from './server_pages/enter_confirm_email';
 import useEnterAndConfirmMobilePages from './server_pages/enter_confirm_mobile';
+import useUserJson from './json/user_json';
 import isBot from 'koa-isbot';
 import session from '@steem/crypto-session';
 import csrf from 'koa-csrf';
@@ -35,7 +36,7 @@ const cacheOpts = {maxAge: 86400000, gzip: true};
 
 app.keys = [config.session_key];
 const crypto_key = config.server_session_secret;
-session(app, {maxAge: 1000 * 3600 * 24 * 60, crypto_key});
+session(app, {maxAge: 1000 * 3600 * 24 * 60, crypto_key, key: config.session_cookie_key});
 csrf(app);
 
 app.use(mount(grant));
@@ -132,6 +133,8 @@ app.use(function* (next) {
 useRedirects(app);
 useEnterAndConfirmEmailPages(app);
 useEnterAndConfirmMobilePages(app);
+useUserJson(app);
+
 
 if (env === 'production') {
     app.use(helmet.contentSecurityPolicy(config.helmet));

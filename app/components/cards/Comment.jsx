@@ -22,29 +22,12 @@ export function sortComments( cont, comments, sort_order ) {
 
   let sort_orders = {
   /** sort replies by active */
-      active: (a,b) => {
+      votes: (a,b) => {
                 let acontent = cont.get(a);
                 let bcontent = cont.get(b);
-                if (netNegative(acontent)) {
-                    return 1;
-                } else if (netNegative(bcontent)) {
-                    return -1;
-                }
-                let aactive = Date.parse( acontent.get('active') );
-                let bactive = Date.parse( bcontent.get('active') );
+                let aactive = acontent.get('active_votes').size;
+                let bactive = bcontent.get('active_votes').size;
                 return bactive - aactive;
-              },
-      update: (a,b) => {
-                let acontent = cont.get(a);
-                let bcontent = cont.get(b);
-                if (netNegative(acontent)) {
-                    return 1;
-                } else if (netNegative(bcontent)) {
-                    return -1;
-                }
-                let aactive = Date.parse( acontent.get('last_update') );
-                let bactive = Date.parse( bcontent.get('last_update') );
-                return bactive.getTime() - aactive.getTime();
               },
       new:  (a,b) =>  {
                 let acontent = cont.get(a);
@@ -84,7 +67,7 @@ class CommentImpl extends React.Component {
         // html props
         cont: React.PropTypes.object.isRequired,
         content: React.PropTypes.string.isRequired,
-        sort_order: React.PropTypes.oneOf(['active', 'updated', 'new', 'trending']).isRequired,
+        sort_order: React.PropTypes.oneOf(['votes', 'new', 'trending']).isRequired,
         root: React.PropTypes.bool,
         showNegativeComments: React.PropTypes.bool,
         onHide: React.PropTypes.func,

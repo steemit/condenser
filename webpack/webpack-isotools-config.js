@@ -1,8 +1,7 @@
 const webpack_isomorphic_tools_plugin = require('webpack-isomorphic-tools/plugin');
 
 module.exports = {
-    webpack_assets_file_path: 'tmp/webpack-isotools-assets.json',
-    webpack_stats_file_path: 'tmp/webpack-isotools-stats.json',
+    webpack_assets_file_path: process.env.NODE_ENV === 'production' ? 'tmp/webpack-isotools-assets-prod.json' : 'tmp/webpack-isotools-assets-dev.json',
     assets: {
         images:
         {

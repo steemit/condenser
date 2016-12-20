@@ -23,6 +23,10 @@ export default function normalizeProfile(account) {
             if(md.profile) {
                 profile = md.profile;
             }
+            if(!(typeof profile == 'object')) {
+                console.error('Expecting object in account.json_metadata.profile:', profile);
+                profile = {};
+            }
         } catch (e) {
             console.error('Invalid json metadata string', account.json_metadata, 'in account', account.name);
         }

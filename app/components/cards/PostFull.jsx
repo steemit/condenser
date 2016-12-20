@@ -23,6 +23,7 @@ import {repLog10, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import DMCAList from 'app/utils/DMCAList'
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import ShareMenu from 'app/components/elements/ShareMenu';
+import {recordSocialShare} from 'app/utils/ServerApiClient';
 
 function TimeAuthorCategory({content, authorRepLog10, showTags}) {
     return (
@@ -101,6 +102,7 @@ class PostFull extends React.Component {
     }
 
     fbShare(e) {
+        recordSocialShare({event:'fbShare',url: this.share_params.link});
         e.preventDefault();
         window.FB.ui({
             method: 'share',
@@ -109,6 +111,7 @@ class PostFull extends React.Component {
     }
 
     twitterShare(e) {
+        recordSocialShare({event:'twitterShare',url: this.share_params.link});
         e.preventDefault();
         const winWidth = 640;
         const winHeight = 320;
@@ -120,6 +123,7 @@ class PostFull extends React.Component {
     }
 
     linkedInShare(e) {
+        recordSocialShare({event:'linkedInShare',url: this.share_params.link});
         e.preventDefault();
         const winWidth = 720;
         const winHeight = 480;
@@ -174,6 +178,7 @@ class PostFull extends React.Component {
             net_rshares.compare(Long.ZERO) <= 0
 
         this.share_params = {
+            link,
             url: 'https://steemit.com' + link,
             title: title + ' — Steemit',
             desc: p.desc
@@ -260,14 +265,14 @@ class PostFull extends React.Component {
                     </span>
                 }
 
-                {showPromote && <button className="float-right button hollow tiny" onClick={this.showPromotePost}>Promote</button>}
+                {showPromote && <button className="Promote__button float-right button hollow tiny" onClick={this.showPromotePost}>Promote</button>}
                 <TagList post={content} horizontal />
                 <div className="PostFull__footer row">
                     <div className="column">
                         <TimeAuthorCategory content={content} authorRepLog10={authorRepLog10} />
                         <Voting post={post} />
                     </div>
-                    <div className="right-sub-menu small-10 medium-5 large-5 columns text-right">
+                    <div className="RightShare__Menu small-10 medium-5 large-5 columns text-right">
                         {!readonly && <Reblog author={author} permlink={permlink} />}
                         {!readonly &&
                             <span className="PostFull__reply">

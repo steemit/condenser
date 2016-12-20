@@ -294,6 +294,18 @@ export default function useGeneralApi(app) {
         this.body = '';
     });
 
+    router.post('/track_social_action', koaBody, function *() {
+        const params = this.request.body;
+        try {
+            console.log('-- /track_social_action -->', this.session.uid, params['socialAction'], params['socialUrl']);
+            mixpanel.track(params['socialAction'], {distinct_id: this.session.uid, url: params['socialUrl']});
+        }
+        catch (error) {
+            console.error('Error in /track_social_action', error.message);
+        }
+        this.body = '';
+    });
+
     router.post('/page_view', koaBody, function *() {
         const params = this.request.body;
         const {csrf, page, ref} = typeof(params) === 'string' ? JSON.parse(params) : params;

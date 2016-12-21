@@ -46,7 +46,8 @@ app.use(flash({key: 'flash'}));
 app.use(function *(next) {
     // redirect to home page/feed if known account
     if (this.method === 'GET' && this.url === '/' && this.session.a) {
-        this.status = 302;
+        // ensure redirect moved permanently for best SEO
+        this.status = 301;
         this.redirect(`/@${this.session.a}/feed`);
         return;
     }
@@ -54,11 +55,13 @@ app.use(function *(next) {
     if (this.method === 'GET' && routeRegex.UserProfile1.test(this.url)) {
         const p = this.originalUrl.toLowerCase();
         if(p !== this.originalUrl) {
+            // ensure redirect moved permanently for best SEO
+            this.status = 301;
             this.redirect(p);
             return;
         }
     }
-    // // handle non-existing users endpoints with 404/allow JSON for user
+    // handle non-existing users endpoints with 404/allow JSON for user
     if (this.method === 'GET' && routeRegex.PostNoCategory.test(this.url) && !routeRegex.UserJson.test(this.url)) {
         const segments = this.url.split('/');
         if(segments[2] && !routeRegex.UserEndPoints.test(segments[2])) {
@@ -68,6 +71,7 @@ app.use(function *(next) {
     }
     // normalize top category filtering from cased params
     if (this.method === 'GET' && routeRegex.CategoryFilters.test(this.url)) {
+        console.log('made it here')
         const p = this.originalUrl.toLowerCase();
         if(p !== this.originalUrl) {
             this.redirect(p);
@@ -76,7 +80,7 @@ app.use(function *(next) {
     }
     // start registration process if user get to create_account page and has no id in session yet
     if(this.url === '/create_account' && !this.session.user) {
-        this.status = 302;
+        this.status = 301;
         this.redirect('/enter_email');
         return;
     }
@@ -90,7 +94,7 @@ app.use(function *(next) {
         redir = redir.replace(/&&&?/, '');
         redir = redir.replace(/\?&?$/, '');
         console.log(`server redirect ${this.url} -> ${redir}`);
-        this.status = 302;
+        this.status = 301;
         this.redirect(redir);
     } else {
         yield next;

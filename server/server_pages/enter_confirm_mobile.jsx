@@ -19,13 +19,20 @@ const assets_file = process.env.NODE_ENV === 'production' ? 'tmp/webpack-stats-p
 const assets = Object.assign({}, require(assets_file), {script: []});
 
 function *confirmMobileHandler() {
+    if (!checkCSRF(this, this.request.body.csrf)) return;
     const confirmation_code = this.params && this.params.code ? this.params.code : this.request.body.code;
     console.log('-- /confirm_mobile -->', this.session.uid, this.session.user, confirmation_code);
 
-    const mid = yield models.Identity.findOne(
+    let mid = yield models.Identity.findOne(
         {attributes: ['id', 'user_id', 'verified', 'updated_at', 'phone'], where: {user_id: this.session.user, confirmation_code, provider: 'phone'}, order: 'id DESC'}
     );
     if (!mid) {
+        mid = yield models.Identity.findOne(
+            {attributes: ['id'], where: {user_id: this.session.user, provider: 'phone'}, order: 'id DESC'}
+        );
+        if (mid) {
+            yield mid.destroy({force: true});
+        }
         this.flash = {error: 'Wrong confirmation code.'};
         this.redirect('/enter_mobile');
         return;
@@ -207,6 +214,7 @@ export default function useEnterAndConfirmMobilePages(app) {
             <br />
             <div className="row" style={{maxWidth: '32rem'}}>
                 <form className="column" action="/confirm_mobile" method="POST">
+                    <input type="hidden" name="csrf" value={this.csrf} />
                     <label>
                         Confirmation code
                         <input type="text" name="code" />

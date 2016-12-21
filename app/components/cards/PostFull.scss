@@ -118,6 +118,10 @@
   }
 }
 
+.Promote__button {
+  margin-right: 0px!important;
+}
+
 /* Small only */
 @media screen and (max-width: 39.9375em) {
   .Post {
@@ -129,7 +133,7 @@
     -ms-flex: 0 0 100%;
     flex: 0 0 100%;
   }
-  .PostFull__footer > .right-sub-menu {
+  .PostFull__footer > .RightShare__Menu {
     text-align: left;
   }
 }

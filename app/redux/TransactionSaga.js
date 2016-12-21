@@ -156,7 +156,8 @@ function* broadcastOperation({payload:
         yield call(broadcast, {payload})
         let eventType = type.replace(/^([a-z])/, g => g.toUpperCase()).replace(/_([a-z])/g, g => g[1].toUpperCase());
         if (eventType === 'Comment' && !operation.parent_author) eventType = 'Post';
-        serverApiRecordEvent(eventType, '')
+        const page = eventType === 'Vote' ? `@${operation.author}/${operation.permlink}` : '';
+        serverApiRecordEvent(eventType, page);
     } catch(error) {
         console.error('TransactionSage', error)
         if(errorCallback) errorCallback(error.toString())

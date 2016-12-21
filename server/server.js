@@ -15,6 +15,7 @@ import useAccountRecoveryApi from './api/account_recovery';
 import useNotificationsApi from './api/notifications';
 import useEnterAndConfirmEmailPages from './server_pages/enter_confirm_email';
 import useEnterAndConfirmMobilePages from './server_pages/enter_confirm_mobile';
+import useUserJson from './json/user_json';
 import isBot from 'koa-isbot';
 import session from '@steem/crypto-session';
 import csrf from 'koa-csrf';
@@ -22,7 +23,8 @@ import flash from 'koa-flash';
 import minimist from 'minimist';
 import Grant from 'grant-koa';
 import config from '../config';
-import secureRandom from 'secure-random'
+import {routeRegex} from 'app/ResolveRoute';
+import secureRandom from 'secure-random';
 
 const grant = new Grant(config.grant);
 // import uploadImage from 'server/upload-image' //medium-editor
@@ -49,20 +51,20 @@ app.use(function *(next) {
         return;
     }
     // normalize user name url from cased params
-    if (this.method === 'GET' && /^\/(@[\w\.\d-]+)\/?$/.test(this.url)) {
+    if (this.method === 'GET' && (routeRegex.UserProfile1.test(this.url) || routeRegex.PostNoCategory.test(this.url))) {
         const p = this.originalUrl.toLowerCase();
         if(p !== this.originalUrl) {
+            this.status = 301;
             this.redirect(p);
             return;
         }
     }
     // normalize top category filtering from cased params
-    if (this.method === 'GET' && /^\/(hot|created|trending|active)\//.test(this.url)) {
-        const segments = this.url.split('/')
-        const category = segments[2]
-        if(category !== category.toLowerCase()) {
-            segments[2] = category.toLowerCase()
-            this.redirect(segments.join('/'));
+    if (this.method === 'GET' && routeRegex.CategoryFilters.test(this.url)) {
+        const p = this.originalUrl.toLowerCase();
+        if(p !== this.originalUrl) {
+            this.status = 301;
+            this.redirect(p);
             return;
         }
     }
@@ -125,6 +127,8 @@ app.use(function* (next) {
 useRedirects(app);
 useEnterAndConfirmEmailPages(app);
 useEnterAndConfirmMobilePages(app);
+useUserJson(app);
+
 
 if (env === 'production') {
     app.use(helmet.contentSecurityPolicy(config.helmet));

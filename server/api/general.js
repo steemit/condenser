@@ -272,11 +272,11 @@ export default function useGeneralApi(app) {
             const {csrf, type, value} = typeof(params) === 'string' ? JSON.parse(params) : params;
             if (!checkCSRF(this, csrf)) return;
             console.log('-- /record_event -->', this.session.uid, type, value);
+            const str_value = typeof value === 'string' ? value : JSON.stringify(value);
             if (type.match(/^[A-Z]/)) {
-                mixpanel.track(type, {distinct_id: this.session.uid});
+                mixpanel.track(type, {distinct_id: this.session.uid, Page: str_value});
                 mixpanel.people.increment(this.session.uid, type, 1);
             } else {
-                const str_value = typeof value === 'string' ? value : JSON.stringify(value);
                 recordWebEvent(this, type, str_value);
             }
             this.body = JSON.stringify({status: 'ok'});

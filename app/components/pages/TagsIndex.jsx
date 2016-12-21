@@ -45,7 +45,8 @@ export default class TagsIndex extends React.Component {
         const {search, order} = this.state;
         let tags = tagsAll;
         if (search) tags = tags.filter(tag => tag.get('name').indexOf(search.toLowerCase()) !== -1);
-        tags = tags.filter(
+
+        const rows = tags.filter(
             // there is a blank tag present, as well as some starting with #. filter them out.
             tag => /^[a-z]/.test(tag.get('name'))
         ).sort((a,b) => {
@@ -62,6 +63,20 @@ export default class TagsIndex extends React.Component {
                 <td>{numberWithCommas(tag.get('total_payouts'))}</td>
             </tr>);
         }).toArray();
+
+        const cols = [
+            ['name', 'Tag'],
+            ['posts', 'Posts'],
+            ['comments', 'Comments'],
+            ['payouts', 'Payouts']
+        ].map( col => {
+            return <th key={col[0]}>
+                    {order === col[0]
+                        ? <strong>{col[1]}</strong>
+                        : <Link to="#" onClick={e => this.onChangeSort(e, col[0])}>{col[1]}</Link>}
+                </th>
+        })
+
         return (
             <div className="TagsIndex row">
                 <div className="column">
@@ -71,14 +86,11 @@ export default class TagsIndex extends React.Component {
                     <table>
                         <thead>
                         <tr>
-                            <th><Link to="#" onClick={e => this.onChangeSort(e, 'name')}>Tag</Link></th>
-                            <th><Link to="#" onClick={e => this.onChangeSort(e, 'posts')}>Posts</Link></th>
-                            <th><Link to="#" onClick={e => this.onChangeSort(e, 'comments')}>Comments</Link></th>
-                            <th><Link to="#" onClick={e => this.onChangeSort(e, 'payouts')}>Payouts</Link></th>
+                            {cols}
                         </tr>
                         </thead>
                         <tbody>
-                        {tags}
+                            {rows}
                         </tbody>
                     </table>
                 </div>

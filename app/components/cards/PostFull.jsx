@@ -4,8 +4,6 @@ import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import pluralize from 'pluralize';
 import Icon from 'app/components/elements/Icon';
 import { connect } from 'react-redux';
-// import FormattedAsset from 'app/components/elements/FormattedAsset';
-// import Userpic from 'app/components/elements/Userpic';
 import user from 'app/redux/User';
 import transaction from 'app/redux/Transaction'
 import Voting from 'app/components/elements/Voting';
@@ -23,7 +21,7 @@ import {repLog10, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import DMCAList from 'app/utils/DMCAList'
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import ShareMenu from 'app/components/elements/ShareMenu';
-import {recordSocialShare} from 'app/utils/ServerApiClient';
+import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 
 function TimeAuthorCategory({content, authorRepLog10, showTags}) {
     return (
@@ -102,7 +100,7 @@ class PostFull extends React.Component {
     }
 
     fbShare(e) {
-        recordSocialShare({event:'fbShare',url: this.share_params.link});
+        serverApiRecordEvent('FbShare', this.share_params.link);
         e.preventDefault();
         window.FB.ui({
             method: 'share',
@@ -111,7 +109,7 @@ class PostFull extends React.Component {
     }
 
     twitterShare(e) {
-        recordSocialShare({event:'twitterShare',url: this.share_params.link});
+        serverApiRecordEvent('TwitterShare', this.share_params.link);
         e.preventDefault();
         const winWidth = 640;
         const winHeight = 320;
@@ -123,7 +121,7 @@ class PostFull extends React.Component {
     }
 
     linkedInShare(e) {
-        recordSocialShare({event:'linkedInShare',url: this.share_params.link});
+        serverApiRecordEvent('LinkedInShare', this.share_params.link);
         e.preventDefault();
         const winWidth = 720;
         const winHeight = 480;

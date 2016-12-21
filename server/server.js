@@ -51,18 +51,11 @@ app.use(function *(next) {
         return;
     }
     // normalize user name url from cased params
-    if (this.method === 'GET' && routeRegex.UserProfile1.test(this.url)) {
+    if (this.method === 'GET' && (routeRegex.UserProfile1.test(this.url) || routeRegex.PostNoCategory.test(this.url))) {
         const p = this.originalUrl.toLowerCase();
         if(p !== this.originalUrl) {
+            this.status = 301;
             this.redirect(p);
-            return;
-        }
-    }
-    // // handle non-existing users endpoints with 404
-    if (this.method === 'GET' && routeRegex.PostNoCategory.test(this.url)) {
-        const segments = this.url.split('/');
-        if(segments[2] && !routeRegex.UserEndPoints.test(segments[2])) {
-            this.status = 404;
             return;
         }
     }
@@ -70,6 +63,7 @@ app.use(function *(next) {
     if (this.method === 'GET' && routeRegex.CategoryFilters.test(this.url)) {
         const p = this.originalUrl.toLowerCase();
         if(p !== this.originalUrl) {
+            this.status = 301;
             this.redirect(p);
             return;
         }

@@ -1,4 +1,33 @@
 ---------------------------------------------------------------------
+0.1.161221
+---------------------------------------------------------------------
+
+New features
+--------
+ - Mixpanel Social Sharing Tracking #881
+ - Json route user #869
+ - nsfw handling #861
+ - ability to sort comments by upvotes #808
+ - username routes 404 #851
+ - utilize new get follow count #845
+ - update react & babel #843
+ - never hide flags #858
+ - allow refetching of pages #593
+ - make cookie name configurable #852
+
+Bug fixes
+--------
+ - Patch route user #883
+ - Increase nodejs framesize #873
+ - should fix some inconsistent post overlay scrolling behavior #863
+ - mark fsevents as optional dep (fixes linux instal issue with npm ~4.0.3) #850
+ - phone is considered to be used only if there is account created with it #841
+ - username should appear in header prefixed with #855
+ - typesafe json metadata #868
+ - Refactor class name for best practice conventional naming #871
+
+ 
+---------------------------------------------------------------------
 0.1.161214
 ---------------------------------------------------------------------
 

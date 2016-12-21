@@ -58,8 +58,8 @@ app.use(function *(next) {
             return;
         }
     }
-    // // handle non-existing users endpoints with 404
-    if (this.method === 'GET' && routeRegex.PostNoCategory.test(this.url)) {
+    // // handle non-existing users endpoints with 404/allow JSON for user
+    if (this.method === 'GET' && routeRegex.PostNoCategory.test(this.url) && !routeRegex.UserJson.test(this.url)) {
         const segments = this.url.split('/');
         if(segments[2] && !routeRegex.UserEndPoints.test(segments[2])) {
             this.status = 404;

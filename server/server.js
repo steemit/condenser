@@ -46,8 +46,7 @@ app.use(flash({key: 'flash'}));
 app.use(function *(next) {
     // redirect to home page/feed if known account
     if (this.method === 'GET' && this.url === '/' && this.session.a) {
-        // ensure redirect moved permanently for best SEO
-        this.status = 301;
+        this.status = 302;
         this.redirect(`/@${this.session.a}/feed`);
         return;
     }
@@ -55,7 +54,6 @@ app.use(function *(next) {
     if (this.method === 'GET' && (routeRegex.UserProfile1.test(this.url) || routeRegex.PostNoCategory.test(this.url))) {
         const p = this.originalUrl.toLowerCase();
         if(p !== this.originalUrl) {
-            // ensure redirect moved permanently for best SEO
             this.status = 301;
             this.redirect(p);
             return;
@@ -65,7 +63,6 @@ app.use(function *(next) {
     if (this.method === 'GET' && routeRegex.CategoryFilters.test(this.url)) {
         const p = this.originalUrl.toLowerCase();
         if(p !== this.originalUrl) {
-            // ensure redirect moved permanently for best SEO
             this.status = 301;
             this.redirect(p);
             return;
@@ -73,8 +70,7 @@ app.use(function *(next) {
     }
     // start registration process if user get to create_account page and has no id in session yet
     if(this.url === '/create_account' && !this.session.user) {
-        // ensure redirect moved permanently for best SEO
-        this.status = 301;
+        this.status = 302;
         this.redirect('/enter_email');
         return;
     }
@@ -89,8 +85,7 @@ app.use(function *(next) {
         redir = redir.replace(/\?&?$/, '');
         console.log('adsf')
         console.log(`server redirect ${this.url} -> ${redir}`);
-        // ensure redirect moved permanently for best SEO
-        this.status = 301;
+        this.status = 302;
         this.redirect(redir);
     } else {
         yield next;

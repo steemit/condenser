@@ -80,10 +80,8 @@ app.use(function *(next) {
             const p = r.split('=');
             if (p.length === 2) this.session[p[0]] = p[1];
             return '';
-        });
         redir = redir.replace(/&&&?/, '');
         redir = redir.replace(/\?&?$/, '');
-        console.log('adsf')
         console.log(`server redirect ${this.url} -> ${redir}`);
         this.status = 302;
         this.redirect(redir);

@@ -396,11 +396,11 @@ export default class UserProfile extends React.Component {
                             {about && <p className="UserProfile__bio">{about}</p>}
                             <div className="UserProfile__stats">
                                 <span>
-                                    <Link to={`/@${accountname}/followers`}>{followerCount ? translate('follower_count', {followerCount}) : translate('followers')}</Link>
+                                    <Link to={`/@${accountname}/followers`}>{translate('follower_count', {followerCount})}</Link>
                                     {isMyAccount && <NotifiCounter fields="follow" />}
                                 </span>
                                 <span><Link to={`/@${accountname}`}>{translate('post_count', {postCount: account.post_count || 0})}</Link></span>
-                                <span><Link to={`/@${accountname}/followed`}>{followingCount ? translate('followed_count', {followingCount}) : translate('following')}</Link></span>
+                                <span><Link to={`/@${accountname}/followed`}>{translate('followed_count', {followingCount})}</Link></span>
                             </div>
                             <p className="UserProfile__info">
                                 {location && <span><Icon name="location" /> {location}</span>}

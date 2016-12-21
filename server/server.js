@@ -52,7 +52,7 @@ app.use(function *(next) {
         return;
     }
     // normalize user name url from cased params
-    if (this.method === 'GET' && routeRegex.UserProfile1.test(this.url)) {
+    if (this.method === 'GET' && (routeRegex.UserProfile1.test(this.url) || routeRegex.PostNoCategory.test(this.url))) {
         const p = this.originalUrl.toLowerCase();
         if(p !== this.originalUrl) {
             // ensure redirect moved permanently for best SEO

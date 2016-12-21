@@ -61,14 +61,6 @@ app.use(function *(next) {
             return;
         }
     }
-    // handle non-existing users endpoints with 404/allow JSON for user
-    if (this.method === 'GET' && routeRegex.PostNoCategory.test(this.url) && !routeRegex.UserJson.test(this.url)) {
-        const segments = this.url.split('/');
-        if(segments[2] && !routeRegex.UserEndPoints.test(segments[2])) {
-            this.status = 404;
-            return;
-        }
-    }
     // normalize top category filtering from cased params
     if (this.method === 'GET' && routeRegex.CategoryFilters.test(this.url)) {
         const p = this.originalUrl.toLowerCase();
@@ -95,6 +87,7 @@ app.use(function *(next) {
         });
         redir = redir.replace(/&&&?/, '');
         redir = redir.replace(/\?&?$/, '');
+        console.log('adsf')
         console.log(`server redirect ${this.url} -> ${redir}`);
         // ensure redirect moved permanently for best SEO
         this.status = 301;

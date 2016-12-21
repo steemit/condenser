@@ -66,14 +66,6 @@ export function recordPageView(page, ref) {
     return last_page_promise;
 }
 
-export function recordSocialShare(shared) {
-    // build share object and post track
-    const socialAction = shared['event'];
-    const socialUrl = shared['url'];
-    const request = Object.assign({}, request_base, {method: 'post', mode: 'cors', body: JSON.stringify({socialAction: socialAction, socialUrl: socialUrl})});
-    fetch(`/api/v1/track_social_action/`, request)
-}
-
 if (process.env.BROWSER) {
     window.getNotifications = getNotifications;
     window.markNotificationRead = markNotificationRead;

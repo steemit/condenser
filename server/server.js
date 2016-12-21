@@ -71,15 +71,17 @@ app.use(function *(next) {
     }
     // normalize top category filtering from cased params
     if (this.method === 'GET' && routeRegex.CategoryFilters.test(this.url)) {
-        console.log('made it here')
         const p = this.originalUrl.toLowerCase();
         if(p !== this.originalUrl) {
+            // ensure redirect moved permanently for best SEO
+            this.status = 301;
             this.redirect(p);
             return;
         }
     }
     // start registration process if user get to create_account page and has no id in session yet
     if(this.url === '/create_account' && !this.session.user) {
+        // ensure redirect moved permanently for best SEO
         this.status = 301;
         this.redirect('/enter_email');
         return;
@@ -94,6 +96,7 @@ app.use(function *(next) {
         redir = redir.replace(/&&&?/, '');
         redir = redir.replace(/\?&?$/, '');
         console.log(`server redirect ${this.url} -> ${redir}`);
+        // ensure redirect moved permanently for best SEO
         this.status = 301;
         this.redirect(redir);
     } else {

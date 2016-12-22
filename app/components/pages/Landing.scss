@@ -397,6 +397,9 @@
 	    left: 56%;
 	    max-width: none;
 	}
+	.Team__member__anton .Team__member__img {
+		top: 67%;
+	}
 	@media #{$small-only} {
 		.Team__members__image-wrapper {
 			width: 150px;

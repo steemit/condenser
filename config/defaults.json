@@ -7,6 +7,7 @@
     "port": 3306,
     "dialect": "mysql"
   },
+  "server_session_secret": "exiKdyF+IwRIXJDmtGIl4vWUz4i3eVSISpfZoeYc0s4=",
   "session_key": "grant",
   "grant": {
     "server": {
@@ -34,16 +35,16 @@
   },
   "helmet": {
     "directives": {
-      "defaultSrc": [],
-      "childSrc": [],
-      "scriptSrc": [],
-      "styleSrc": [],
-      "imgSrc": [],
-      "fontSrc": [],
-      "connectSrc": [],
+      "defaultSrc": ["'self'", "www.youtube.com", "staticxx.facebook.com", "player.vimeo.com"],
+      "childSrc": ["'self'", "www.youtube.com", "staticxx.facebook.com", "w.soundcloud.com", "player.vimeo.com"],
+      "scriptSrc": ["'self'", "www.google-analytics.com", "connect.facebook.net" ],
+      "styleSrc": ["'self'", "'unsafe-inline'", "fonts.googleapis.com"],
+      "imgSrc": ["'self'", "*"],
+      "fontSrc": ["'self'", "fonts.gstatic.com"],
+      "connectSrc": ["'self'", "wss://node.steem.ws"],
       "reportUri": "/api/v1/csp_violation",
-      "pluginTypes": [],
-      "objectSrc": [],
+      "pluginTypes": ["'self'"],
+      "objectSrc": ["'self'"],
       "frameAncestors": []
     },
     "reportOnly": false,
@@ -74,8 +75,8 @@
     "site_key": "",
     "secret_key": ""
   },
-  "ws_connection_client": "wss://example.com",
-  "ws_connection_server": [ "wss://example.com" ],
+  "ws_connection_client": "wss://node.steem.ws",
+  "ws_connection_server": [ "wss://node.steem.ws" ],
   "cli_wallet_connection": "",
   "img_proxy_prefix": "https://images.example.com/",
   "ipfs_prefix": "https://ipfs.example.com/",

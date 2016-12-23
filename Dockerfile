@@ -1,17 +1,18 @@
 FROM node:6.7
 
 # yarn > npm
-RUN npm install --global yarn
+#RUN npm install --global yarn
+
+WORKDIR /var/app
+RUN mkdir -p /var/app
+ADD package.json /var/app/package.json
+RUN npm install
 
 COPY . /var/app
 
-WORKDIR /var/app
-
-RUN yarn install
-
 RUN mkdir tmp && \
-  mv config/steem-example.json config/steem.json && \
   npm test && \
+  ./node_modules/.bin/eslint . && \
   npm run build
 
 ENV PORT 8080

@@ -3,8 +3,7 @@ machine:
         - docker
 
 dependencies:
-    override:
-        - true
+    override: []
 
 test:
     override:

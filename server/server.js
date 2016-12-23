@@ -103,6 +103,8 @@ app.use(mount('/legal', staticCache(path.join(__dirname, '../app/assets/legal'),
 // google analytics verification page (required by google analytics)
 app.use(mount('/google01836be5bad501ce.html', staticCache(path.join(__dirname, '../app/assets/google01836be5bad501ce.html'), cacheOpts)));
 app.use(mount('/googlee59d4af4f1222cd7.html', staticCache(path.join(__dirname, '../app/assets/googlee59d4af4f1222cd7.html'), cacheOpts)));
+app.use(mount('/googleb1863376a961eb3b.html', staticCache(path.join(__dirname, '../app/assets/googleb1863376a961eb3b.html'), cacheOpts)));
+
 // Yandex Webmaster verification page (required by Yandex Webmaster)
 app.use(mount('/yandex_dc913847e717bca6.html', staticCache(path.join(__dirname, '../app/assets/yandex_dc913847e717bca6.html'), cacheOpts)));
 // postmaster.mail.ru verification page (required by postmaster.mail.ru)

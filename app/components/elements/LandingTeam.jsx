@@ -150,7 +150,7 @@ export default class LandingTeam extends React.Component {
 							<a href="https://www.facebook.com/serejandmyself"><img className="Team__member__img" src="images/landing/sergey.jpg" /></a>
 						</div>
 						<strong>Сергей Симановский</strong>
-						<p>Проджект менеджер</p>
+						<p>Project Manager</p>
 						<ul>
 							<li><a href="https://www.linkedin.com/in/sergey-simanovsky-87b5ab100"><img src="images/landing/linkedin_icon.jpg" /></a></li>
 							<li><a href="https://www.facebook.com/serejandmyself"><img className="Team__facebook-logo" src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-facebook-512.png" /></a></li>

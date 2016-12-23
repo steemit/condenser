@@ -5,7 +5,7 @@ import findUser from 'db/utils/find_user';
 import config from 'config';
 import recordWebEvent from 'server/record_web_event';
 import {esc, escAttrs} from 'db/models';
-import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF} from 'server/utils';
+import {emailRegex, getRemoteIp, checkCSRF} from 'server/utils';
 import coBody from 'co-body';
 import secureRandom from 'secure-random'
 import {PublicKey, Signature, hash} from 'shared/ecc'
@@ -20,7 +20,6 @@ export default function useGeneralApi(app) {
     const koaBody = koa_body();
 
     router.post('/accounts', koaBody, function *() {
-        if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;
         const account = typeof(params) === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, account.csrf)) return;
@@ -168,7 +167,6 @@ export default function useGeneralApi(app) {
     });
 
     router.post('/update_email', koaBody, function *() {
-        if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;
         const {csrf, email} = typeof(params) === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
@@ -193,7 +191,6 @@ export default function useGeneralApi(app) {
     });
 
     router.post('/login_account', koaBody, function *() {
-        if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;
         const {csrf, account, signatures} = typeof(params) === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
@@ -250,7 +247,7 @@ export default function useGeneralApi(app) {
     });
 
     router.post('/logout_account', koaBody, function *() {
-        // if (rateLimitReq(this, this.req)) return; - logout maybe immediately followed with login_attempt event
+        // don't rate limit: logout maybe immediately followed with login_attempt event
         const params = this.request.body;
         const {csrf} = typeof(params) === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
@@ -266,7 +263,6 @@ export default function useGeneralApi(app) {
     });
 
     router.post('/record_event', koaBody, function *() {
-        if (rateLimitReq(this, this.req)) return;
         try {
             const params = this.request.body;
             const {csrf, type, value} = typeof(params) === 'string' ? JSON.parse(params) : params;
@@ -288,7 +284,6 @@ export default function useGeneralApi(app) {
     });
 
     router.post('/csp_violation', function *() {
-        if (rateLimitReq(this, this.req)) return;
         const params = yield coBody.json(this);
         console.log('-- /csp_violation -->', this.req.headers['user-agent'], params);
         this.body = '';

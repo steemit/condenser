@@ -3,7 +3,7 @@ import koa_body from 'koa-body';
 import models from 'db/models';
 import config from 'config';
 import {esc, escAttrs} from 'db/models';
-import {getRemoteIp, rateLimitReq, checkCSRF} from '../utils';
+import {getRemoteIp, checkCSRF} from '../utils';
 
 export default function useAccountRecoveryApi(app) {
     const router = koa_router();
@@ -11,7 +11,6 @@ export default function useAccountRecoveryApi(app) {
     const koaBody = koa_body();
 
     router.post('/initiate_account_recovery', koaBody, function *() {
-        if (rateLimitReq(this, this.req)) return;
         let params = this.request.body;
         params = typeof(params) === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, params.csrf)) return;
@@ -31,7 +30,6 @@ export default function useAccountRecoveryApi(app) {
     });
 
     router.get('/account_recovery_confirmation/:code', function *() {
-        if (rateLimitReq(this, this.req)) return;
         const code = this.params.code;
         if (!code) return this.throw('no confirmation code', 404);
         const arec = yield models.AccountRecoveryRequest.findOne({
@@ -52,7 +50,6 @@ export default function useAccountRecoveryApi(app) {
     });
 
     router.post('/api/v1/request_account_recovery', koaBody, function *() {
-        if (rateLimitReq(this, this.req)) return;
         let params = this.request.body;
         params = typeof(params) === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, params.csrf)) return;
@@ -111,7 +108,6 @@ export default function useAccountRecoveryApi(app) {
     });
 
     router.post('/api/v1/account_identity_providers', koaBody, function *() {
-        if (rateLimitReq(this, this.req)) return;
         try {
             const params = this.request.body;
             const {csrf, name, owner_key} = typeof(params) === 'string' ? JSON.parse(params) : params;

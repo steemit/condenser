@@ -1,19 +1,12 @@
 {
   "cli_wallet_connection": "",
   "db": {
-    "define": {
-      "charset": "utf8",
-      "collate": "utf8_general_ci",
-      "syncOnAssociation": true
-    },
     "dialect": "sqlite",
     "language": "en",
-    "password": "null",
     "storage": "/tmp/db.sqlite",
     "sync": {
       "force": true
-    },
-    "username": "null"
+    }
   },
   "db-prod-example": {
     "database": "steemit_dev",
@@ -63,7 +56,8 @@
       ],
       "connectSrc": [
         "'self'",
-        "wss://steemit.com/wspa"
+        "wss://steemit.com/wspa",
+        "api.blocktrades.us"
       ],
       "defaultSrc": [
         "'self'",
@@ -73,18 +67,18 @@
       ],
       "fontSrc": [
         "'self'",
+        "data:",
         "fonts.gstatic.com"
       ],
       "frameAncestors": [],
       "imgSrc": [
         "'self'",
+        "data:",
         "*"
       ],
-      "objectSrc": [
-        "'self'"
-      ],
+      "objectSrc": [],
       "pluginTypes": [
-        "'self'"
+        "application/pdf"
       ],
       "reportUri": "/api/v1/csp_violation",
       "scriptSrc": [

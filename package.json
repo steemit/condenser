@@ -13,8 +13,8 @@
     "test": "npm run mocha -- app/**/*.test.js shared/**/*.test.js shared/*/test/*",
     "test:watch:all": "npm test -- --watch --watch-extensions jsx",
     "test:watch": "npm run mocha -- --watch --watch-extensions jsx",
-    "start": "./node_modules/babel-cli/bin/babel-node.js server/index.js",
-    "devserver": "babel-node ./webpack/dev-server.js",
+    "production": "./node_modules/babel-cli/bin/babel-node.js server/index.js",
+    "start": "babel-node ./webpack/dev-server.js",
     "db": "babel-node ./db/console.js"
   },
   "author": "Steemit, Inc.",

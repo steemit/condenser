@@ -1,5 +1,9 @@
 delete process.env.BROWSER;
 
+// this is the entrypoint for the prod server
+// but mode can be overridden by specifying in environment.
+process.env.NODE_ENV = process.env.NODE_ENV || 'production'
+
 const path = require('path');
 const ROOT = path.join(__dirname, '..');
 
@@ -31,7 +35,6 @@ const WebpackIsomorphicToolsConfig = require('../webpack/webpack-isotools-config
 global.webpackIsomorphicTools = new WebpackIsomorphicTools(WebpackIsomorphicToolsConfig);
 
 global.webpackIsomorphicTools
-    .development(process.env.NODE_ENV === 'development')
     .server(ROOT, () => {
         const SteemClient = require('shared/api_client/ApiInstances').default;
         const connect_promises = [SteemClient.instance().connect_promise()];

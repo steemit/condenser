@@ -2,6 +2,10 @@ machine:
     services:
         - docker
 
+dependencies:
+    override:
+        - true
+
 test:
     override:
         - docker build -t steemit/steemit.com .

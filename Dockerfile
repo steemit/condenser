@@ -1,4 +1,4 @@
-FROM node:6.7
+FROM node:7.3
 
 # yarn > npm
 #RUN npm install --global yarn
@@ -22,6 +22,8 @@ RUN mkdir tmp && \
   npm run-script build
 
 ENV PORT 8080
+ENV NODE_ENV production
+
 EXPOSE 8080
 
 CMD [ "npm", "start" ]

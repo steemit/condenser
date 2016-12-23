@@ -1,87 +1,141 @@
 {
+  "cli_wallet_connection": "",
   "db": {
-    "username": "root",
-    "password": "null",
-    "database": "steemit_dev",
-    "host": "127.0.0.1",
-    "port": 3306,
-    "dialect": "mysql"
-  },
-  "server_session_secret": "exiKdyF+IwRIXJDmtGIl4vWUz4i3eVSISpfZoeYc0s4=",
-  "session_key": "grant",
-  "grant": {
-    "server": {
-      "protocol": "https",
-      "host": "localhost:3002"
+    "define": {
+      "charset": "utf8",
+      "collate": "utf8_general_ci",
+      "syncOnAssociation": true
     },
+    "dialect": "sqlite",
+    "language": "en",
+    "password": "null",
+    "storage": "/tmp/db.sqlite",
+    "sync": {
+      "force": true
+    },
+    "username": "null"
+  },
+  "db-prod-example": {
+    "database": "steemit_dev",
+    "dialect": "mysql",
+    "host": "127.0.0.1",
+    "language": "en",
+    "password": "null",
+    "port": 3306,
+    "username": "root"
+  },
+  "disable_signups": false,
+  "grant": {
     "facebook": {
-      "key": "",
-      "secret": "",
       "callback": "/handle_facebook_callback",
+      "key": "",
       "scope": [
         "email",
         "user_location"
-      ]
+      ],
+      "secret": ""
     },
     "reddit": {
-      "key": "",
-      "secret": "",
       "callback": "/handle_reddit_callback",
-      "custom_params": {"state": "void", "duration": "temporary"},
+      "custom_params": {
+        "duration": "temporary",
+        "state": "void"
+      },
+      "key": "",
       "scope": [
         "identity"
-      ]
+      ],
+      "secret": ""
+    },
+    "server": {
+      "host": "localhost:3002",
+      "protocol": "https"
     }
   },
   "helmet": {
     "directives": {
-      "defaultSrc": ["'self'", "www.youtube.com", "staticxx.facebook.com", "player.vimeo.com"],
-      "childSrc": ["'self'", "www.youtube.com", "staticxx.facebook.com", "w.soundcloud.com", "player.vimeo.com"],
-      "scriptSrc": ["'self'", "www.google-analytics.com", "connect.facebook.net", "cdn.polyfill.io" ],
-      "styleSrc": ["'self'", "'unsafe-inline'", "fonts.googleapis.com"],
-      "imgSrc": ["'self'", "*"],
-      "fontSrc": ["'self'", "fonts.gstatic.com"],
-      "connectSrc": ["'self'", "wss://steemit.com/wspa"],
+      "childSrc": [
+        "'self'",
+        "www.youtube.com",
+        "staticxx.facebook.com",
+        "w.soundcloud.com",
+        "player.vimeo.com"
+      ],
+      "connectSrc": [
+        "'self'",
+        "wss://steemit.com/wspa"
+      ],
+      "defaultSrc": [
+        "'self'",
+        "www.youtube.com",
+        "staticxx.facebook.com",
+        "player.vimeo.com"
+      ],
+      "fontSrc": [
+        "'self'",
+        "fonts.gstatic.com"
+      ],
+      "frameAncestors": [],
+      "imgSrc": [
+        "'self'",
+        "*"
+      ],
+      "objectSrc": [
+        "'self'"
+      ],
+      "pluginTypes": [
+        "'self'"
+      ],
       "reportUri": "/api/v1/csp_violation",
-      "pluginTypes": ["'self'"],
-      "objectSrc": ["'self'"],
-      "frameAncestors": []
+      "scriptSrc": [
+        "'self'",
+        "www.google-analytics.com",
+        "connect.facebook.net",
+        "cdn.polyfill.io"
+      ],
+      "styleSrc": [
+        "'self'",
+        "'unsafe-inline'",
+        "fonts.googleapis.com"
+      ]
     },
     "reportOnly": false,
     "setAllHeaders": true
   },
+  "img_proxy_prefix": "",
+  "ipfs_prefix": "",
+  "js_plugins_path": "",
+  "read_only_mode": false,
+  "recaptcha": {
+    "secret_key": "",
+    "site_key": ""
+  },
   "registrar": {
     "account": "",
-    "signing_key": "",
-    "fee": "10.000 STEEM"
+    "fee": "10.000 STEEM",
+    "signing_key": ""
   },
   "requestAccountRecovery": {
-    "signing_key": "",
-    "recovery_account": ""
+    "recovery_account": "",
+    "signing_key": ""
   },
   "sendgrid": {
-    "key": "",
     "from": "noreply@example.com",
+    "key": "",
     "templates": {
       "confirm_email": "",
       "waiting_list_invite": ""
     }
   },
+  "server_session_secret": "exiKdyF+IwRIXJDmtGIl4vWUz4i3eVSISpfZoeYc0s4=",
+  "session_key": "grant",
   "telesign": {
-      "customer_id": "",
-      "rest_api_key": ""
+    "customer_id": "",
+    "rest_api_key": ""
   },
-  "recaptcha": {
-    "site_key": "",
-    "secret_key": ""
-  },
-  "ws_connection_client": "wss://steemit.com/wspa",
-  "ws_connection_server": [ "wss://steemit.com/wspa" ],
-  "cli_wallet_connection": "",
-  "img_proxy_prefix": "",
-  "ipfs_prefix": "",
   "uploadImage": "",
-  "disable_signups": false,
-  "read_only_mode": false,
-  "js_plugins_path": "/static/plugins.js"
+  "ws_connection_client": "wss://steemit.com/wspa",
+  "ws_connection_server": [
+    "wss://steemit.com/wspa"
+  ]
 }

@@ -79,11 +79,9 @@ app.use(helmet());
 
 app.use(mount('/static', staticCache(path.join(__dirname, '../app/assets/static'), cacheOpts)));
 
-app.use(mount('/robots.txt', function* () {
-    this.set('Cache-Control', 'public, max-age=86400000');
-    this.type = 'text/plain';
-    this.body = "User-agent: *\nDisallow:  ";
-}));
+app.use(mount('/robots.txt', staticCache(path.join(__dirname, '../app/assets/robots.txt'), cacheOpts)));
+app.use(mount('/sitemap.xml', staticCache(path.join(__dirname, '../app/assets/sitemap.xml'), cacheOpts)));
+
 
 useRedirects(app);
 useEnterAndConfirmEmailPages(app);

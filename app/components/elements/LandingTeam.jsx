@@ -110,7 +110,7 @@ export default class LandingTeam extends React.Component {
 							<li><a href="https://github.com/valzav"><img src="images/landing/github_icon.jpg" /></a></li>
 						</ul>
 					</div>
-					<div data-wow-delay="1s" className="wow fadeIn small-6 medium-4 large-6 small-centered medium-centered large-centered columns Team__member Team__member__roman">
+					<div data-wow-delay="1s" className="wow fadeIn small-6 medium-4 large-4 small-centered medium-centered large-centered columns Team__member Team__member__roman">
 						<div className="Team__members__image-wrapper">
 							<a href="https://www.linkedin.com/in/roman-moiseyev-a971279a"><img className="Team__member__img" src="images/landing/roman.jpg" /></a>
 						</div>
@@ -120,7 +120,7 @@ export default class LandingTeam extends React.Component {
 							<li><a href="https://www.linkedin.com/in/roman-moiseyev-a971279a"><img src="images/landing/linkedin_icon.jpg" /></a></li>
 						</ul>
 					</div>
-                    <div data-wow-delay="1s" className="wow fadeIn small-6 medium-4 large-6 small-centered medium-centered large-centered columns Team__member Team__member__anton">
+                    <div data-wow-delay="1s" className="wow fadeIn small-6 medium-4 large-4 small-centered medium-centered large-centered columns Team__member Team__member__anton">
                         <div className="Team__members__image-wrapper">
                             <a href="https://www.linkedin.com/in/solodikov"><img className="Team__member__img" src="images/landing/anton.jpg" /></a>
                         </div>
@@ -132,20 +132,7 @@ export default class LandingTeam extends React.Component {
 "><img className="Team__facebook-logo" src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-facebook-512.png" /></a></li>
                         </ul>
                     </div>
-				</div>
-				<h2 className="Team__header" id="team">Делегаты</h2>
-				<div className="row center Team__partners">
-					<div data-wow-delay="1s" className="wow fadeIn small-6 medium-4 large-3 small-centered medium-centered large-centered columns Team__member">
-						<div className="Team__members__image-wrapper">
-							<a href="https://www.facebook.com/mike.chobanyan.7"><img className="Team__member__img" src="images/landing/chobonyan.jpg" /></a>
-						</div>
-						<strong>Михаил Чобанян</strong>
-						<p>Информационная поддержка в Украине</p>
-						<ul>
-							<li><a href="https://www.facebook.com/mike.chobanyan.7"><img className="Team__facebook-logo" src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-facebook-512.png" /></a></li>
-						</ul>
-					</div>
-					<div data-wow-delay="1s" className="wow fadeIn small-6 medium-4 large-3 small-centered medium-centered large-centered columns Team__member Team__member__sergey">
+					<div data-wow-delay="1s" className="wow fadeIn small-6 medium-4 large-4 small-centered medium-centered large-centered columns Team__member Team__member__sergey">
 						<div className="Team__members__image-wrapper">
 							<a href="https://www.facebook.com/serejandmyself"><img className="Team__member__img" src="images/landing/sergey.jpg" /></a>
 						</div>
@@ -154,6 +141,19 @@ export default class LandingTeam extends React.Component {
 						<ul>
 							<li><a href="https://www.linkedin.com/in/sergey-simanovsky-87b5ab100"><img src="images/landing/linkedin_icon.jpg" /></a></li>
 							<li><a href="https://www.facebook.com/serejandmyself"><img className="Team__facebook-logo" src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-facebook-512.png" /></a></li>
+						</ul>
+					</div>
+				</div>
+				<h2 className="Team__header" id="team">Делегаты</h2>
+				<div className="row center Team__partners">
+					<div data-wow-delay="1s" className="wow fadeIn small-12 medium-12 large-12 small-centered medium-centered large-centered columns Team__member">
+						<div className="Team__members__image-wrapper">
+							<a href="https://www.facebook.com/mike.chobanyan.7"><img className="Team__member__img" src="images/landing/chobonyan.jpg" /></a>
+						</div>
+						<strong>Михаил Чобанян</strong>
+						<p>Информационная поддержка в Украине</p>
+						<ul>
+							<li><a href="https://www.facebook.com/mike.chobanyan.7"><img className="Team__facebook-logo" src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-facebook-512.png" /></a></li>
 						</ul>
 					</div>
 				</div>

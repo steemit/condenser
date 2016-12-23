@@ -5,3 +5,5 @@ machine:
 test:
     override:
         - docker build -t steemit/steemit.com .
+
+

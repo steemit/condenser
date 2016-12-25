@@ -1,0 +1,47 @@
+{
+  "db": {
+    "username": "root",
+    "password": null,
+    "database": "steemit",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "grant": {
+    "server": {
+      "protocol": "http",
+      "host": "localhost:3002"
+    },
+    "facebook": {
+      "key": "1402769343355132",
+      "secret": "9dada11c7c5625cf4772105071a012ed",
+      "callback": "/handle_facebook_callback",
+      "scope": [
+        "email",
+        "user_location"
+      ]
+    },
+    "reddit": {
+      "key": "IUUVCVS1_v5XTQ",
+      "secret": "9iaFypG8W6YUhtS3GfVhnbxZS4c",
+      "callback": "/handle_reddit_callback",
+      "custom_params": {"state": "void", "duration": "temporary"},
+      "scope": [
+        "identity"
+      ]
+    }
+  },
+  "registrar": {
+    "account": "faddy",
+    "signing_key": "STM7hPCd4bN8FzpqJ2mLNCyppnTYZ7j32JpzUYHSGVgoRBFv8QD3g",
+    "fee": "5.000 STEEM"
+  },
+  "ws_connection_client": "wss://steemit.com/wstmp3",
+  "ws_connection_server": [
+    "ws://localhost:8090",
+    "ws://localhost:8090",
+    "ws://localhost:8092"
+  ],
+  "cli_wallet_connection": "ws://localhost:9092",
+  "img_proxy_prefix": "https://img0.steemit.com/0x0/",
+  "ipfs_prefix": "https://steemit.com/ipfs"
+}

@@ -239,7 +239,7 @@ const jp = 	{
 	request_already_submitted_contact_support: 'あなたの要望はすでに提出されており、ただいまSteemitメンバーで対応中です。状況を確認したい場合は、support@steemit.com にコンタクトをしてください。',
 	recover_account_intro: "From time to time, a Steemian’s owner key may be compromised. Stolen Account Recovery gives the rightful account owner 30 days to recover their account from the moment the thief changed their owner key. Stolen Account Recovery can only be used on steemit.com if the account owner had perviously listed ‘Steemit’ as their account trustee and complied with Steemit’s Terms of Service.",
 	login_with_facebook_or_reddit_media_to_verify_identity: '認証のため、FaccebookまたはRedditアカウントでログインしてください。',
-	login_with_social_media_to_verify_identity: '認証のため、 {show_social_login} でログインしてください。',
+	login_with_social_media_to_verify_identity: '認証のため、 {provider} でログインしてください。',
 	enter_email_toverify_identity: '認証する必要があります。認証を開始する為に、下記にメールアドレスを記入してください。',
 	email: 'Email',
 	continue_with_email: "メールアドレスで続行",

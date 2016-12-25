@@ -38,8 +38,6 @@ global.webpackIsomorphicTools
     .server(ROOT, () => {
         const SteemClient = require('shared/api_client/ApiInstances').default;
         const connect_promises = [SteemClient.instance().connect_promise()];
-        // const CliWalletClient = require('shared/api_client/CliWalletClient').default;
-        // if (process.env.NODE_ENV === 'production') connect_promises.push(CliWalletClient.instance().connect_promise());
         Promise.all(connect_promises).then(() => {
             try {
                 require('./server');

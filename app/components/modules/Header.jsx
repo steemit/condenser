@@ -190,7 +190,7 @@ class Header extends React.Component {
                             <ul className="menu">
                                 <li className="Header__top-logo">
                                     <Link to={logo_link}>
-                                        <Icon name="steem" size="2x" />
+                                        <Icon name="christmassteem" size="2x" />
                                     </Link>
                                 </li>
                                 <li className="Header__top-steemit show-for-medium noPrint"><Link to={logo_link}>steemit<span className="beta">beta</span></Link></li>

@@ -8,7 +8,7 @@ large contributions to the Steemit.com codebase.
 
 
 ## Internationalization
- - @hipster
+ - @Undeadlol1 (Mihail Paley)
  - @ekitcho
  - @heimindanger
  - @fernando-sanz

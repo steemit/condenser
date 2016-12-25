@@ -239,7 +239,7 @@ const fr = 	{
 	request_already_submitted_contact_support: 'Votre demande a déjà été soumise et nous travaillons dessus. Veuillez contacter support@steemit.com à propos du status de votre demande.',
 	recover_account_intro: "From time to time, a Steemian’s owner key may be compromised. Stolen Account Recovery gives the rightful account owner 30 days to recover their account from the moment the thief changed their owner key. Stolen Account Recovery can only be used on steemit.com if the account owner had perviously listed ‘Steemit’ as their account trustee and complied with Steemit’s Terms of Service.",
 	login_with_facebook_or_reddit_media_to_verify_identity: 'Veuillez vous connecter avec Facebook ou Reddit pour verifier votre identité',
-	login_with_social_media_to_verify_identity: 'Veuillez vous connecter avec {show_social_login} pour verifier votre identité',
+	login_with_social_media_to_verify_identity: 'Veuillez vous connecter avec {provider} pour verifier votre identité',
 	enter_email_toverify_identity: 'Nous devons verifier votre identité. Veuillez entrer votre addresse email ci-dessous pour commencer la verification.',
 	email: 'Email',
 	continue_with_email: "Continuer par Email",

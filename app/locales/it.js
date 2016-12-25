@@ -239,7 +239,7 @@ const it = 	{
 	request_already_submitted_contact_support: 'La tua richiesta è stata aggiunta e ci stiamo lavorando. Per cortesia contatta support@steemit.com per richiede lo stato della tua richiesta.',
 	recover_account_intro: "Di volta in volta, una chiave proprietaria di uno Steemian’s può essere compromessa. Stolen Account Recovery dà al proprietario dell'account legittimo 30 giorni per recuperarlo dal momento in cui il ladro ha cambiato la chiave proprietaria. Stolen Account Recovery può essere usata su steemit.com if se il proprietario dell\'account ha precedentemente legato ‘Steemit’ tramite account fiduciario e rispettato i termini di servizio.",
 	login_with_facebook_or_reddit_media_to_verify_identity: 'Per cortesia effettua un login con Facebook o Reddit per verificare la tua identità',
-	login_with_social_media_to_verify_identity: 'Per cortesia effettua un login con {show_social_login} per verificare la tua identità',
+	login_with_social_media_to_verify_identity: 'Per cortesia effettua un login con {provider} per verificare la tua identità',
 	enter_email_toverify_identity: 'Abbiamo bisogono di verificare la tua identità. Per cortesia inserisci il tuo indirizzo email di seguito per iniziare la procedura di verifica.',
 	email: 'Email',
 	continue_with_email: "Continua con Email",

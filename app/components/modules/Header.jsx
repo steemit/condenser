@@ -216,7 +216,7 @@ class Header extends React.Component {
                                 <li className="Header__top-logo">
                                     <Link to={logo_link}>
                                         {/* <Icon name={APP_ICON} size="2x" /> */}
-                                        <img style={{display: 'inline-block', width: '2rem', height: '2rem'}} src="/images/golos-NG.png" />
+                                        <img style={{display: 'inline-block', width: '2rem', height: '2rem'}} src="/images/golos-NG.png" alt="Новогодний логотип Голоса" />
                                     </Link>
                                 </li>
 

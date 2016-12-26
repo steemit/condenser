@@ -75,6 +75,22 @@ class App extends React.Component {
                 script.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'media.reformal.ru/widgets/v3/reformal.js';
                 document.getElementsByTagName('head')[0].appendChild(script);
             })();
+
+            window.fbAsyncInit = function() {
+              FB.init({
+                appId      : '150154408771266',
+                xfbml      : true,
+                version    : 'v2.8'
+              });
+            };
+
+            (function(d, s, id){
+               var js, fjs = d.getElementsByTagName(s)[0];
+               if (d.getElementById(id)) {return;}
+               js = d.createElement(s); js.id = id;
+               js.src = "//connect.facebook.net/en_US/sdk.js";
+               fjs.parentNode.insertBefore(js, fjs);
+             }(document, 'script', 'facebook-jssdk'));
         }
     }
 

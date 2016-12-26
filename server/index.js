@@ -1,7 +1,11 @@
+// 4567891123456789212345678931234567894123456789512345678961234567897123456789$
+
 delete process.env.BROWSER;
 
 const path = require('path');
 const ROOT = path.join(__dirname, '..');
+
+const log = require('../log');
 
 // Tell `require` calls to look into `/app` also
 // it will avoid `../../../../../` require strings
@@ -40,11 +44,11 @@ global.webpackIsomorphicTools
             try {
                 require('./server');
             } catch (error) {
-                console.error(error);
+                log.error(error);
                 process.exit(1);
             }
         }).catch(error => {
-            console.error('Web socket client init error', error);
+            log.error('Web socket client init error', error);
             process.exit(1);
         });
     });

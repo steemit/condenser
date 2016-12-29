@@ -55,27 +55,6 @@ class App extends React.Component {
             fbq('init', '1594659427507927');
             fbq('track', "PageView");
 
-            // REFORMAL.RU
-            window.reformalOptions = { // yes, it's must be declared as global variable
-                project_id: 975991,
-                project_host: "golosweb.reformal.ru",
-                tab_orientation: "right",
-                force_new_window: true,
-                tab_indent: "50%",
-                tab_bg_color: "#2471b9",
-                tab_border_color: "#FFFFFF",
-                tab_image_url: "http://tab.reformal.ru/T9GC0LfRi9Cy0Ysg0Lgg0L%252FRgNC10LTQu9C%252B0LbQtdC90LjRjw==/FFFFFF/a08a7c60392f68cb33f77d4f56cf8c6f/right/1/tab.png",
-                tab_border_width: 2
-            };
-
-
-            (function() {
-                var script = document.createElement('script');
-                script.type = 'text/javascript'; script.async = true;
-                script.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'media.reformal.ru/widgets/v3/reformal.js';
-                document.getElementsByTagName('head')[0].appendChild(script);
-            })();
-
             window.fbAsyncInit = function() {
               FB.init({
                 appId      : '150154408771266',

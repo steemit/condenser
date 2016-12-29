@@ -122,6 +122,15 @@ export default function useGeneralApi(app) {
                 throw new Error('Phone number is not confirmed');
             }
 
+            // no account yet
+            const aid = yield models.Account.findOne(
+                {attributes: ['id'], where: {user_id}}
+            );
+            if (aid) {
+                console.log(`api /accounts: user_id ${user_id} has account`);
+                throw new Error('This phone number is taken');
+            }
+
             yield createAccount({
                 signingKey: config.registrar.signing_key,
                 fee: config.registrar.fee,

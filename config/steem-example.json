@@ -41,9 +41,9 @@
     "signing_key": "5J.....",
     "recovery_account": "cyberfounder"
   },
-  "ws_connection_client": "wss://node.steem.ws",
+  "ws_connection_client": "wss://ws.golos.io",
   "ws_connection_server": [
-    "wss://node.steem.ws"
+    "wss://ws.golos.io"
   ],
   "sendgrid": {
     "key": "SG.xxx_yyyy",

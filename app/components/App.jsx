@@ -91,6 +91,33 @@ class App extends React.Component {
                js.src = "//connect.facebook.net/en_US/sdk.js";
                fjs.parentNode.insertBefore(js, fjs);
              }(document, 'script', 'facebook-jssdk'));
+
+            /* Yandex.Metrika counter */
+            /* NOTE dont't forget to remove <img /> tag of yandex metrika (down below) */
+            (function (d, w, c) {
+             (w[c] = w[c] || []).push(function() {
+                 try {
+                     w.yaCounter41829924 = new Ya.Metrika({
+                         id:41829924,
+                         clickmap:true,
+                         trackLinks:true,
+                         accurateTrackBounce:true
+                     });
+                 } catch(e) { }
+             });
+
+             var n = d.getElementsByTagName("script")[0],
+                 s = d.createElement("script"),
+                 f = function () { n.parentNode.insertBefore(s, n); };
+             s.type = "text/javascript";
+             s.async = true;
+             s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+             if (w.opera == "[object Opera]") {
+                 d.addEventListener("DOMContentLoaded", f, false);
+             } else { f(); }
+             })(window.document, window, "yandex_metrika_callbacks")
+            /* /Yandex.Metrika counter */
         }
     }
 
@@ -321,6 +348,8 @@ class App extends React.Component {
             </div>
             <Dialogs />
             <Modals />
+            {/* Yandex.Metrika counter */}
+            <noscript><div><img src="https://mc.yandex.ru/watch/41829924" style={{position: 'absolute', left: '-9999px'}} alt="" /></div></noscript>
         </div>
     }
 }

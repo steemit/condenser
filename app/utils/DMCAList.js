@@ -29,5 +29,6 @@ export default `
 /food/@outchemy/5-top-countries-you-need-to-visit-if-you-are-a-chocolate-addict
 /travel/@outchemy/broken-relationships-the-museum-of-zagreb-that-celebrates-heartache
 /travel/@outchemy/get-rid-of-the-toxins-see-these-amazing-detox-vacations
+/photography/@maxmalini/the-dark-hedges
 
 `.trim().split("\n")

@@ -45,11 +45,16 @@ function *confirmMobileHandler() {
 
     // const used_phone = yield models.sequelize.query(`SELECT a.id FROM accounts a JOIN identities i ON i.user_id=a.user_id WHERE i.phone='${mid.phone}'`, { type: models.Sequelize.QueryTypes.SELECT})
     const used_phone = yield models.Identity.findOne(
-        {attributes: ['id'], where: {phone: mid.phone, provider: 'phone', verified: true}, order: 'id DESC'}
+        {attributes: ['id', 'user_id'], where: {phone: mid.phone, provider: 'phone', verified: true}, order: 'id DESC'}
     );
     if (used_phone) {
-        this.flash = {error: 'This phone number has already been used'};
-        this.redirect('/enter_mobile');
+        if (used_phone.user_id === this.session.user) {
+            this.flash = {success: 'Phone number has already been verified'};
+            this.redirect('/create_account');
+        } else {
+            this.flash = {error: 'This phone number has already been used'};
+            this.redirect('/enter_mobile');
+        }
         return;
     }
 

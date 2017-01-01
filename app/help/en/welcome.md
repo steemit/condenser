@@ -184,7 +184,7 @@ A lot of users hang out and chat when they are not posting or browsing Steemit. 
 
 There is a link to sign up in the main menu in the upper right corner.
 
-Your steemit.chat account is a separate account from your Steem account.
+Your [steemit.chat](https://steemit.chat/home) account is a separate account from your Steem account.
 
 Some channels allow you to share links, but others don't. For instance, [general](https://steemit.chat/channel/general) is for discussion without link promotion, while [postpromotion](https://steemit.chat/channel/postpromotion) is for promoting your Steemit posts.
 
@@ -218,52 +218,52 @@ It is not required either, but if you have other social media accounts (Twitter,
 
 ## Helpful Posts from Steemit Users
 
-[Beginners Guide To Using Steemit](https://steemit.com/steemit/@thecryptofiend/the-missing-faq-a-beginners-guide-to-using-steemit)
-[Steemit Etiquette Guide](https://steemit.com/steemit/@thecryptofiend/the-complete-steemit-etiquette-guide-revision-2-0)
-[The Official Steemit FAQ](https://steemit.com/steemit/@shenanigator/thanks-to-your-help-the-official-steemit-faq-is-now-complete)
-[How to Publish an Article Tutorial](https://steemit.com/howto/@future24/tutorial-how-to-publish-an-article-at-steemit-quick-and-easy-guide-english-german)
-[Steemit Chat Guide](https://steemit.com/steemit/@firepower/dummies-guide-to-using-steemit-chat-effectively-everyday)
-[Professional Formatting Tutorial](https://steemit.com/writing/@minion/professional-tutorial-for-post-formatting-both-for-beginners-and-advanced-users)
-[Advice on using Tags](https://steemit.com/steemit/@rok-sivante/the-top-3-reasons-to-tag-your-steemit-posts-a-simple-quick-strategy-for-long-term-profits-and-success)
-[Steem Dollars (SBD) to Cash (USD) Tutorial](https://steemit.com/how-to/@blueorgy/how-to-convert-your-steemdollars-sbd-to-cash-usd-transfer-it-into-your-bank-account)
-[SBD to bitcoin (BTC) using Blocktrades, then BTC to Euro or USD Using CEX.io](https://steemit.com/howto/@future24/blocktrades-tutorial-part-2-how-to-exchange-sbd-to-btc-and-sell-them-for-euro-or-usd-english-german)
-[How to Buy STEEM Guide](https://steemit.com/steem/@timcliff/newbie-guide-how-to-buy-steem)
-[How to Add Images to Your Posts](https://steemit.com/steem/@billbutler/adding-images-to-your-steem-posts)
-[Steemit Markdown Basics](https://steemit.com/steemit/@thecryptofiend/markdown-basics-for-beginners)
-[Emojis for Steemit](https://steemit.com/emojis/@blueorgy/steemit-emojis-master-list)
-[5 Markdown Tips](https://steemit.com/steemit/@steemitguide/markdown-and-html-code-guide-for-beginners-that-includes-5-useful-tips-to-edit-posts-and-comments-using-the-raw-editor)
-[Advice on How To Build a Following](https://steemit.com/steemit/@allasyummyfood/how-i-build-a-following-of-160-k-from-scratch)
-[Ways to Find Free and Legal Images](https://steemit.com/steem-help/@mindover/don-t-plagiarize-images-here-are-13-free-and-legal-ways-to-find-high-quality-photos-you-can-use-on-steemit)
-[Steem Keys and Passwords Guide](https://steemit.com/steemit-guides/@pfunk/a-user-s-guide-to-the-different-steem-keys-or-passwords)
-[Unwritten Rules of Steemit](https://steemit.com/steem-help/@beanz/the-unwritten-rules-of-steemit)
-[Witness Voting Guide](https://steemit.com/witness-category/@timcliff/witness-voting-guide)
-[Steemit Succeeds if We Make it Succeed](https://steemit.com/steemit/@krnel/steemit-succeeds-if-we-make-it-succeed)
-[Advice on How to Succeed on Steemit: Come to Give, Not to Take](https://steemit.com/psychology/@shenanigator/come-to-give-not-take-the-power-of-reciprocity)
-[Best Practices for Steemit Artists](https://steemit.com/art/@merej99/best-practices-for-steemit-newbie-artists-by-merej99-a-100-power-up-post)
-[The Steemit Newbie's Comprehensive Guide To Understanding Your Wallet](https://steemit.com/steemit-help/@merej99/the-steemit-newbie-s-comprehensive-guide-to-understanding-your-wallet-by-merej99)
-[How to use Blocktrades to exchange STEEM/SBD for BTC](https://steemit.com/steem/@thecryptofiend/how-to-use-blocktrades-the-fastest-and-easiest-way-to-buy-and-sell-steem-sd-and-my-review-of-the-experience)
-[How to Get Noticed if You Are a New User on Steemit](https://steemit.com/steemit/@thecryptofiend/how-to-get-noticed-if-you-are-a-new-user-on-steemit)
+- [Beginners Guide To Using Steemit](https://steemit.com/steemit/@thecryptofiend/the-missing-faq-a-beginners-guide-to-using-steemit)
+- [Steemit Etiquette Guide](https://steemit.com/steemit/@thecryptofiend/the-complete-steemit-etiquette-guide-revision-2-0)
+- [The Official Steemit FAQ](https://steemit.com/steemit/@shenanigator/thanks-to-your-help-the-official-steemit-faq-is-now-complete)
+- [How to Publish an Article Tutorial](https://steemit.com/howto/@future24/tutorial-how-to-publish-an-article-at-steemit-quick-and-easy-guide-english-german)
+- [Steemit Chat Guide](https://steemit.com/steemit/@firepower/dummies-guide-to-using-steemit-chat-effectively-everyday)
+- [Professional Formatting Tutorial](https://steemit.com/writing/@minion/professional-tutorial-for-post-formatting-both-for-beginners-and-advanced-users)
+- [Advice on using Tags](https://steemit.com/steemit/@rok-sivante/the-top-3-reasons-to-tag-your-steemit-posts-a-simple-quick-strategy-for-long-term-profits-and-success)
+- [Steem Dollars (SBD) to Cash (USD) Tutorial](https://steemit.com/how-to/@blueorgy/how-to-convert-your-steemdollars-sbd-to-cash-usd-transfer-it-into-your-bank-account)
+- [SBD to bitcoin (BTC) using Blocktrades, then BTC to Euro or USD Using CEX.io](https://steemit.com/howto/@future24/blocktrades-tutorial-part-2-how-to-exchange-sbd-to-btc-and-sell-them-for-euro-or-usd-english-german)
+- [How to Buy STEEM Guide](https://steemit.com/steem/@timcliff/newbie-guide-how-to-buy-steem)
+- [How to Add Images to Your Posts](https://steemit.com/steem/@billbutler/adding-images-to-your-steem-posts)
+- [Steemit Markdown Basics](https://steemit.com/steemit/@thecryptofiend/markdown-basics-for-beginners)
+- [Emojis for Steemit](https://steemit.com/emojis/@blueorgy/steemit-emojis-master-list)
+- [5 Markdown Tips](https://steemit.com/steemit/@steemitguide/markdown-and-html-code-guide-for-beginners-that-includes-5-useful-tips-to-edit-posts-and-comments-using-the-raw-editor)
+- [Advice on How To Build a Following](https://steemit.com/steemit/@allasyummyfood/how-i-build-a-following-of-160-k-from-scratch)
+- [Ways to Find Free and Legal Images](https://steemit.com/steem-help/@mindover/don-t-plagiarize-images-here-are-13-free-and-legal-ways-to-find-high-quality-photos-you-can-use-on-steemit)
+- [Steem Keys and Passwords Guide](https://steemit.com/steemit-guides/@pfunk/a-user-s-guide-to-the-different-steem-keys-or-passwords)
+- [Unwritten Rules of Steemit](https://steemit.com/steem-help/@beanz/the-unwritten-rules-of-steemit)
+- [Witness Voting Guide](https://steemit.com/witness-category/@timcliff/witness-voting-guide)
+- [Steemit Succeeds if We Make it Succeed](https://steemit.com/steemit/@krnel/steemit-succeeds-if-we-make-it-succeed)
+- [Advice on How to Succeed on Steemit: Come to Give, Not to Take](https://steemit.com/psychology/@shenanigator/come-to-give-not-take-the-power-of-reciprocity)
+- [Best Practices for Steemit Artists](https://steemit.com/art/@merej99/best-practices-for-steemit-newbie-artists-by-merej99-a-100-power-up-post)
+- [The Steemit Newbie's Comprehensive Guide To Understanding Your Wallet](https://steemit.com/steemit-help/@merej99/the-steemit-newbie-s-comprehensive-guide-to-understanding-your-wallet-by-merej99)
+- [How to use Blocktrades to exchange STEEM/SBD for BTC](https://steemit.com/steem/@thecryptofiend/how-to-use-blocktrades-the-fastest-and-easiest-way-to-buy-and-sell-steem-sd-and-my-review-of-the-experience)
+- [How to Get Noticed if You Are a New User on Steemit](https://steemit.com/steemit/@thecryptofiend/how-to-get-noticed-if-you-are-a-new-user-on-steemit)
 
 ## Users to Follow
 
-@dantheman - Daniel Larimer, CTO and Co-Founder of Steemit
-@ned - Ned Scott, CEO and Co-Founder of Steemit
-@steemitblog - Official Steemit Announcements
+- @dantheman - Daniel Larimer, CTO and Co-Founder of Steemit
+- @ned - Ned Scott, CEO and Co-Founder of Steemit
+- @steemitblog - Official Steemit Announcements
 
 ## Other Resources
 
-[Steemit Help](https://www.steemithelp.net/)
-[Website FAQ](https://steemit.com/faq.html)
-[The Steem Whitepaper](https://steem.io/SteemWhitePaper.pdf)
-[Steem App Center](http://steemtools.com/)
-[Steem Block Explorer](https://steemd.com/)
-[Steem Blockchain Explorer](https://steemdb.com/)
+- [Steemit Help](https://www.steemithelp.net/)
+- [Website FAQ](https://steemit.com/faq.html)
+- [The Steem Whitepaper](https://steem.io/SteemWhitePaper.pdf)
+- [Steem App Center](http://steemtools.com/)
+- [Steem Block Explorer](https://steemd.com/)
+- [Steem Blockchain Explorer](https://steemdb.com/)
 
 ## Live Help
 
-Ask your general questions in the [help](https://steemit.chat/channel/help) steemit.chat channel.
+Ask your general questions in the [help](https://steemit.chat/channel/help) channel of [steemit.chat](https://steemit.chat/home).
 
-Steemprentice is a group of people dedicated to helping new users find their way around Steemit. You can find them in the [steemprentice](https://steemit.chat/channel/steemprentice) steemit.chat channel.
+Steemprentice is a group of people dedicated to helping new users find their way around Steemit. You can find them in the [steemprentice](https://steemit.chat/channel/steemprentice) channel of [steemit.chat](https://steemit.chat/home).
 
 ## Third Party References
 

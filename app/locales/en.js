@@ -258,7 +258,7 @@ const en = 	{
 	request_already_submitted_contact_support: 'Your request has been already submitted and we are working on it. Please contact t@cyber.fund for the status of your request.',
 	recover_account_intro: "From time to time, a Steemian’s owner key may be compromised. Stolen Account Recovery gives the rightful account owner 30 days to recover their account from the moment the thief changed their owner key. Stolen Account Recovery can only be used on " + APP_URL + " if the account owner had perviously listed ‘" + APP_NAME + "’ as their account trustee and complied with " + APP_NAME + "’s Terms of Service.",
 	login_with_facebook_or_reddit_media_to_verify_identity: 'Please login with Facebook or Reddit to verify your identity',
-	login_with_social_media_to_verify_identity: 'Please login with {show_social_login} to verify you identity',
+	login_with_social_media_to_verify_identity: 'Please login with {provider} to verify your identity',
 	enter_email_toverify_identity: 'We need to verify your identity. Please enter your email address below to begin the verification.',
 	email: 'Email',
 	continue_with_email: "Continue with Email",

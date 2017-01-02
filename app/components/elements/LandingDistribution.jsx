@@ -91,10 +91,10 @@ export default class LandingDistribution extends React.Component {
 					</div>
 				</div>
 				<div className="row Distribution__action">
-					<div className="small-12 columns text-center">
+					{/* disabled after crowdsale end
+						<div className="small-12 columns text-center">
 						{this.props.button}
-						{/* <a href="https://wiki.golos.io/" className="button button-blue">Узнай больше про Голос</a> */}
-					</div>
+					</div> */}
 				</div>
 				<hr />
 			</section>

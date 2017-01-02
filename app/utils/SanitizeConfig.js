@@ -1,3 +1,4 @@
+import { translate } from 'app/Translator';
 
 const iframeWhitelist = [
     {
@@ -28,12 +29,12 @@ const iframeWhitelist = [
         }
     }
 ];
-export const noImageText = '(Image not shown due to low ratings)'
+export const noImageText = '(' + translate('image_not_shown_due_to_low_ratings') + ')'
 export const allowedTags = `
     div, iframe, del,
     a, p, b, q, br, ul, li, ol, img, h1, h2, h3, h4, h5, h6, hr,
     blockquote, pre, code, em, strong, center, table, thead, tbody, tr, th, td,
-    strike, sup, sub
+    strike, sup, sub, del, ins
 `.trim().split(/,\s*/)
 
 // Medium insert plugin uses: div, figure, figcaption, iframe

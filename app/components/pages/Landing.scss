@@ -388,9 +388,17 @@
 
 	}
 	.Team__member__sergey .Team__member__img {
-	    width: 350px;
-		left: 84%;
-		max-width: none;
+		width: 350px;
+	    left: 83%;
+	    max-width: none;
+	}
+	.Team__member__roman .Team__member__img {
+        width: 217px;
+	    left: 56%;
+	    max-width: none;
+	}
+	.Team__member__anton .Team__member__img {
+		top: 67%;
 	}
 	@media #{$small-only} {
 		.Team__members__image-wrapper {
@@ -489,7 +497,13 @@
 		img { width: 160px; }
 	}
 	.Partners__skolkovo-logo { transform: translateY(-17%); }
-	.Partners__forklog-logo { transform: translateY(0%); }
+  .Partners__forklog-logo { transform: translateY(0%); }
+  .Partners__liqui-logo { margin-top: 70px; }
+  .Partners__coinessa-logo { margin-top: 0 !important; }
+	.Partners__changebot-logo img {
+    margin-top: 10px;
+    max-height: 150px;
+  }
 	.Partners__tolkachev-logo {
 		transform: translateY(5%);
 		img { max-height: 65px; }

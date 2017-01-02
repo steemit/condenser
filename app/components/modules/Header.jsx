@@ -10,8 +10,11 @@ import { translate } from 'app/Translator';
 import HorizontalMenu from 'app/components/elements/HorizontalMenu';
 import { APP_NAME, APP_ICON } from 'config/client_config';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
+import capitalizeFirstLetter from 'capitalize'
 
 function sortOrderToLink(so, topic, account) {
+    // to prevent probmes check if topic is not the same as account name
+    if ('@' + account == topic) topic = ''
     if (so === 'home') return '/@' + account + '/feed';
     if (topic) return `/${so}/${topic}`;
     return `/${so}`;
@@ -81,38 +84,88 @@ class Header extends React.Component {
 
         let sort_order = '';
         let topic = '';
+        let topic_original_link = '';
         let user_name = null;
         let page_name = null;
 
         if (route.page === 'PostsIndex') {
-            sort_order = route.params[0];
+            sort_order = route.params[0] ? translate(route.params[0]) : '';
             if (sort_order === 'home') {
-                page_title = "Лента"
+                page_title = translate('home')
                 const account_name = route.params[1];
                 if (current_account_name && account_name.indexOf(current_account_name) === 1)
                     home_account = true;
             } else {
                 if (route.params.length > 1) {
-                    topic = route.params[1];
-                    page_title = `${topic}/${sort_order}`;
+                    topic = detransliterate(route.params[1]);
+                    topic_original_link = (route.params[1])
+                    // Overwrite default created for more human readable title
+                    if (route.params[0] === "created") {
+                        page_title = translate('new_topic_posts', {topic});
+                    }
+                    else {
+                        page_title = translate('sort_order_topic_posts', {sort_order, topic});
+                    }
                 } else {
-                    page_title = `${sort_order}`;
+                    if (route.params[0] === "created") {
+                        page_title = translate('new_posts');
+                    }
+                    else {
+                        page_title = translate('sort_order_posts', {sort_order});
+                    }
                 }
             }
         } else if (route.page === 'Post') {
             sort_order = '';
             topic = route.params[0];
+        } else if (route.page == 'SubmitPost') {
+            page_title = translate('create_a_post');
+        } else if (route.page == 'Privacy') {
+            page_title = translate('privacy_policy');
+        } else if (route.page == 'Tos') {
+            page_title = translate('terms_of_service');
+        } else if (route.page == 'ChangePassword') {
+            page_title = translate('change_account_password');
+        } else if (route.page == 'CreateAccount') {
+            page_title = translate('create_account');
+        } else if (route.page == 'RecoverAccountStep1' || route.page == 'RecoverAccountStep2') {
+            page_title = translate('stolen_account_recovery');
         } else if (route.page === 'UserProfile') {
             user_name = route.params[0].slice(1);
             page_title = user_name;
+            // TODO
+            if(route.params[1] === "followers") {
+                page_title = translate('people_following_user_name', {user_name}) + ' ';
+            }
+            if(route.params[1] === "followed") {
+                page_title = translate('people_followed_by_user_name', {user_name}) + ' ';
+            }
+            if(route.params[1] === "curation-rewards") {
+                page_title = translate('curation_rewards_by_user_name', {user_name}) + ' ';
+            }
+            if(route.params[1] === "author-rewards") {
+                page_title = translate('author_rewards_by_user_name', {user_name}) + ' ';
+            }
+            if(route.params[1] === "recent-replies") {
+                page_title = translate('replies_by_user_name', {user_name}) + ' ';
+            }
+            // @user/"posts" is deprecated in favor of "comments" as of oct-2016 (#443)
+            if(route.params[1] === "posts" || route.params[1] === "comments") {
+                page_title = translate('comments_by_user_name', {user_name}) + ' ';
+            }
         } else {
             page_name = ''; //page_title = route.page.replace( /([a-z])([A-Z])/g, '$1 $2' ).toLowerCase();
+        }
+
+        // Format first letter of all titles and lowercase user name
+        if (route.page !== 'UserProfile') {
+            page_title = page_title.charAt(0).toUpperCase() + page_title.slice(1);
         }
 
         if (process.env.BROWSER && route.page !== 'Post') document.title = page_title + ' — ' + APP_NAME;
 
         const logo_link = route.params && route.params.length > 1 && this.last_sort_order ? '/' + this.last_sort_order : '/hot';
-        let topic_link = topic ? <Link to={`/${this.last_sort_order || 'hot'}/${topic}`}>{detransliterate(topic)}</Link> : null;
+        let topic_link = topic ? <Link to={`/${this.last_sort_order || 'hot'}/${topic_original_link}`}>{detransliterate(topic)}</Link> : null;
 
         const sort_orders = [
             ['created', translate('new')],
@@ -125,7 +178,7 @@ class Header extends React.Component {
             ['active', translate('active')]
         ];
         if (current_account_name) sort_orders.unshift(['home', translate('home')]);
-        const sort_order_menu = sort_orders.filter(so => so[0] !== sort_order).map(so => ({link: sortOrderToLink(so[0], topic, current_account_name), value: so[1]}));
+        const sort_order_menu = sort_orders.filter(so => so[0] !== sort_order).map(so => ({link: sortOrderToLink(so[0], topic_original_link, current_account_name), value: capitalizeFirstLetter(so[1])}));
         // there were a problem when in root route ('/') when header menu didn't
         // had any active links. Thats why selected_sort_order falls down to 'trending' if undefined
         const selected_sort_order = sort_orders.find(so => so[0] === sort_order) || sort_orders[2];
@@ -138,9 +191,10 @@ class Header extends React.Component {
         ];
         if (current_account_name) sort_orders_horizontal.unshift(['home', translate('home')]);
         const sort_order_menu_horizontal = sort_orders_horizontal.map(so => {
+                sort_order = route.params && route.params[0] !== 'home' ? route.params[0] : null;
                 let active = (so[0] === sort_order) || (so[0] === 'trending' && sort_order === 'trending30');
                 if (so[0] === 'home' && sort_order === 'home' && !home_account) active = false;
-                return {link: sortOrderToLink(so[0], topic, current_account_name), value: so[1], active};
+                return {link: sortOrderToLink(so[0], topic_original_link, current_account_name), value: so[1], active};
             });
 
         let sort_order_extra_menu = null;
@@ -161,7 +215,8 @@ class Header extends React.Component {
                             <ul className="menu">
                                 <li className="Header__top-logo">
                                     <Link to={logo_link}>
-                                        <Icon name={APP_ICON} size="2x" />
+                                        {/* <Icon name={APP_ICON} size="2x" /> */}
+                                        <img style={{display: 'inline-block', width: '2rem', height: '2rem'}} src="/images/golos-NG.png" alt="Новогодний логотип Голоса" />
                                     </Link>
                                 </li>
 

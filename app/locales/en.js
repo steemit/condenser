@@ -553,6 +553,28 @@ const en = 	{
 	// this is from UserSaga.js
 	hello_your_account_may_have_been_compromised_we_are_working_on_restoring_an_access: 'Hello. Your account may have been compromised. We are working on restoring an access to your account. Please send an email to ' + SUPPORT_EMAIL + '.',
 	this_login_gives_owner_or_active_permissions_and_should_not_be_used_here: 'This login gives owner or active permissions and should not be used here.  Please provide a posting only login.',
+  we_couldnt_verify_your_account_contact_us_at_SUPPORT_EMAIL: 'We couldn\'t verify your account. Contact us at ' + SUPPORT_EMAIL,
+	facebook_login_didnt_provide_any_email_addresses: 'Facebook login didn\'t provide any email addresses. Please make sure your Facebook account has a primary email address and try again.',
+  we_are_sorry_we_cannot_sign_you_up_at_this_time_because_ip_associated_with_bots_activity: 'We are sorry, we cannot sign you up at this time because your IP address is associated with bots activity. Please contact ' + SUPPORT_EMAIL + ' for more information.',
+	successfully_authenticated_with: 'Successfully authenticated with', // 'Successfully authenticated with Facebook'
+  not_supported_email_address: 'Not supported email address',
+  please_make_sure_you_dont_use_temporary_email_providers_contact_SUPPORT_URL: 'Please make sure your you don\'t use any temporary email providers, contact ' + SUPPORT_EMAIL + ' for more information.',
+  images_were_hidden_due_to_low_ratings: 'Images were hidden due to low ratings',
+  image_not_shown_due_to_low_ratings: 'Image not shown due to low ratings',
+  // page titles
+  create_a_post: 'Create a Post',
+  create_account: `Create Account`,
+  new_topic_posts: 'New {topic} posts',
+  sort_order_topic_posts: '{sort_order} {topic} posts',
+  new_posts: `New posts`,
+  sort_order_posts: '{sort_order} posts',
+  people_following_user_name: 'People following {user_name}',
+  people_followed_by_user_name: 'People followed by {user_name}',
+  curation_rewards_by_user_name: 'Curation rewards by {user_name}',
+  author_rewards_by_user_name: 'Author rewards by {user_name}',
+  replies_by_user_name: 'Replies by {user_name}',
+  comments_by_user_name: 'Comments by {user_name}',
+
 }
 
 export { en }

@@ -2,16 +2,11 @@ export default function resolveRoute(path)
 {
     // routes
     if (path === '/') {
-        return {page: 'Landing'}; // LANDING
-        //return {page: 'PostsIndex', params: ['trending']};
+        return {page: 'PostsIndex', params: ['trending']};
     }
     if (path === '/about.html') {
         return {page: 'About'};
     }
-    // golos.io ICO page
-    //if (path === '/ico.html') {
-    //    return {page: 'Ico'};
-    //}
     // golos.io landing page
     if (path === '/ico') {
         return {page: 'Landing'};
@@ -63,7 +58,7 @@ export default function resolveRoute(path)
         return {page: 'PostsIndex', params: ['home', match[1]]};
     }
     match = path.match(/^\/(@[\w\.\d-]+)\/?$/) ||
-        path.match(/^\/(@[\w\.\d-]+)\/(blog|posts|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings|crowdsale)\/?$/);
+        path.match(/^\/(@[\w\.\d-]+)\/(blog|posts|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)\/?$/);
     if (match) {
         return {page: 'UserProfile', params: match.slice(1)};
     }

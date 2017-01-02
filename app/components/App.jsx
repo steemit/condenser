@@ -5,7 +5,6 @@ import Header from 'app/components/modules/Header';
 import LpFooter from 'app/components/modules/lp/LpFooter';
 import user from 'app/redux/User';
 import g from 'app/redux/GlobalReducer';
-import { Route, Link } from 'react-router';
 import TopRightMenu from 'app/components/modules/TopRightMenu';
 import { browserHistory } from 'react-router';
 import classNames from 'classnames';
@@ -13,13 +12,12 @@ import SidePanel from 'app/components/modules/SidePanel';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import Dialogs from 'app/components/modules/Dialogs';
 import Modals from 'app/components/modules/Modals';
+import RocketChat from 'app/components/modules/RocketChat';
 import Icon from 'app/components/elements/Icon';
 import {key_utils} from 'shared/ecc'
 import { translate } from 'app/Translator';
 import { TERMS_OF_SERVICE_URL, WIKI_URL, PRIVACY_POLICY_URL, SEGMENT_ANALYTICS_KEY, LANDING_PAGE_URL, WHITEPAPER_URL, VEST_TICKER } from 'config/client_config';
 import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
-import RocketChat from 'app/components/modules/RocketChat'
-import {githash} from 'config/last-build'
 
 class App extends React.Component {
     constructor(props) {
@@ -39,6 +37,87 @@ class App extends React.Component {
             analytics.load(SEGMENT_ANALYTICS_KEY);
             analytics.page()
             }}();
+
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-49238979-12', 'auto');
+            ga('send', 'pageview');
+
+            !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+            n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+            document,'script','https://connect.facebook.net/en_US/fbevents.js');
+
+            fbq('init', '1594659427507927');
+            fbq('track', "PageView");
+
+            // REFORMAL.RU
+            window.reformalOptions = { // yes, it's must be declared as global variable
+                project_id: 975991,
+                project_host: "golosweb.reformal.ru",
+                tab_orientation: "right",
+                force_new_window: true,
+                tab_indent: "50%",
+                tab_bg_color: "#2471b9",
+                tab_border_color: "#FFFFFF",
+                tab_image_url: "http://tab.reformal.ru/T9GC0LfRi9Cy0Ysg0Lgg0L%252FRgNC10LTQu9C%252B0LbQtdC90LjRjw==/FFFFFF/a08a7c60392f68cb33f77d4f56cf8c6f/right/1/tab.png",
+                tab_border_width: 2
+            };
+
+
+            (function() {
+                var script = document.createElement('script');
+                script.type = 'text/javascript'; script.async = true;
+                script.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'media.reformal.ru/widgets/v3/reformal.js';
+                document.getElementsByTagName('head')[0].appendChild(script);
+            })();
+
+            window.fbAsyncInit = function() {
+              FB.init({
+                appId      : '150154408771266',
+                xfbml      : true,
+                version    : 'v2.8'
+              });
+            };
+
+            (function(d, s, id){
+               var js, fjs = d.getElementsByTagName(s)[0];
+               if (d.getElementById(id)) {return;}
+               js = d.createElement(s); js.id = id;
+               js.src = "//connect.facebook.net/en_US/sdk.js";
+               fjs.parentNode.insertBefore(js, fjs);
+             }(document, 'script', 'facebook-jssdk'));
+
+            /* Yandex.Metrika counter */
+            /* NOTE dont't forget to remove <img /> tag of yandex metrika (down below) */
+            (function (d, w, c) {
+             (w[c] = w[c] || []).push(function() {
+                 try {
+                     w.yaCounter41829924 = new Ya.Metrika({
+                         id:41829924,
+                         clickmap:true,
+                         trackLinks:true,
+                         accurateTrackBounce:true
+                     });
+                 } catch(e) { }
+             });
+
+             var n = d.getElementsByTagName("script")[0],
+                 s = d.createElement("script"),
+                 f = function () { n.parentNode.insertBefore(s, n); };
+             s.type = "text/javascript";
+             s.async = true;
+             s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+             if (w.opera == "[object Opera]") {
+                 d.addEventListener("DOMContentLoaded", f, false);
+             } else { f(); }
+             })(window.document, window, "yandex_metrika_callbacks")
+            /* /Yandex.Metrika counter */
         }
     }
 
@@ -220,6 +299,11 @@ class App extends React.Component {
                           {translate("APP_NAME_chat")}&nbsp;<Icon name="extlink" />
                       </a>
                   </li>
+                  <li>
+                      <a href="http://golostools.com/" onClick={this.navigate} target="_blank" rel="noopener noreferrer">
+                          {translate('APP_NAME_app_center')}&nbsp;<Icon name="extlink" />
+                      </a>
+                  </li>
                   <li className="last">
                       <a href="/~witnesses" onClick={this.navigate}>
                           {translate("witnesses")}
@@ -259,11 +343,13 @@ class App extends React.Component {
                 {callout}
                 {children}
                 {lp ? <LpFooter /> : null}
-
+                {/* temporary disabled in favor of live chat */}
+                <RocketChat />
             </div>
-            <div style={{color: '#00ff00',position: 'fixed', bottom: '1px', left: '3px', fontSize: '70%'}}>git client# {githash} </div>
             <Dialogs />
             <Modals />
+            {/* Yandex.Metrika counter */}
+            <noscript><div><img src="https://mc.yandex.ru/watch/41829924" style={{position: 'absolute', left: '-9999px'}} alt="" /></div></noscript>
         </div>
     }
 }

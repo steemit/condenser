@@ -139,7 +139,10 @@ class UserWallet extends React.Component {
             <br />
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
-                    <span className="uppercase">{LIQUID_TOKEN}</span>
+                    <span className="uppercase">
+                      <img src="/images/golos-badge.jpg" width="36px" height="36px" alt="символ Голоса" />
+                      {LIQUID_TOKEN}
+                    </span>
                     <br />
                     <span className="secondary">
                         {/* not using steemTip because translate strings may be undefined on load */}
@@ -156,7 +159,10 @@ class UserWallet extends React.Component {
             </div>
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
-                    <span className="uppercase">{VESTING_TOKEN}</span>
+                    <span className="uppercase">
+                      <img src="/images/golospower-badge.jpg" width="36px" height="36px" alt="символ Силы Голоса" />
+                      {VESTING_TOKEN}
+                    </span>
                     <br />
                     <span className="secondary">
                         {/* not using steemTip because translate strings may be undefined on load */}
@@ -173,13 +179,16 @@ class UserWallet extends React.Component {
             </div>
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
-                    <span className="uppercase">{DEBT_TOKEN}</span>
+                    <span className="uppercase">
+                      <img src="/images/zolotoy-badge.jpg" width="32px" height="32px" alt="символ Золотого" />
+                      {DEBT_TOKEN}
+                    </span>
                     <br />
                     <span className="secondary">{translate('tokens_worth_about_AMOUNT_of_LIQUID_TOKEN', {amount: localizedCurrency(1)})}</span>
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
-                    <DropdownMenu onClick={this.trackAnalytics.bind(this, 'gbg dropdown in user\'s profile clicked')} selected={sbd_balance_str} items={dollar_menu} el="span" />
+                    <DropdownMenu onClick={this.trackAnalytics.bind(this, 'gbg dropdown in user\'s profile clicked')} selected={sbd_balance_str} items={dollar_menu} el="span" className="Header__sort-order-menu" />
                     : sbd_balance_str}
                 </div>
             </div>
@@ -194,7 +203,11 @@ class UserWallet extends React.Component {
                     {translate('estimate_account_value')}<br /><span className="secondary">{translate('the_estimated_value_is_based_on_a_7_day_average_value_of_LIQUID_TOKEN_in_currency')}</span>
                 </div>
                 <div className="column small-12 medium-4">
-                    {localizedCurrency(total_value)}
+                    {
+                        process.env.BROWSER
+                        ? localizedCurrency(total_value)
+                        : translate('loading') + '...'
+                    }
                 </div>
             </div>
             <div className="UserWallet__balance row">
@@ -233,15 +246,44 @@ class UserWallet extends React.Component {
     }
 }
 
+function getPriceFromPair(_price_, _tokensPair_){
+  let price = [_price_.base.split(' '), _price_.quote.split(' ')]
+  if (price[0].length !== 2 || price[1].length !== 2) return;
+  try {
+    if (typeof price[0][0] === 'string') price[0][0] = parseFloat(price[0][0]);
+    if (typeof price[1][0] === 'string') price[1][0] = parseFloat(price[1][0]);
+  } catch(e) {
+    console.error("could not calculate from ", _price_)
+    return false;
+  }
+
+  let tokensPair = Array.isArray(_tokensPair_) ? _tokensPair_ : _tokensPair_.split('/')
+  if (tokensPair.length !== 2) return false;
+
+  let pair = new Array(2)
+  pair[0] = price.find((item) => {return tokensPair[0] === item[1]})
+  pair[1] = price.find((item) => {return tokensPair[1] === item[1]})
+  try {
+    return parseFloat(pair[0][0])/parseFloat(pair[1][0])
+  } catch(e) {
+    console.log(e);
+    return 0
+  }
+}
+
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
         let price_per_steem = undefined
         const feed_price = state.global.get('feed_price')
         if(feed_price && feed_price.has('base') && feed_price.has('quote')) {
-            const {base, quote} = feed_price.toJS()
-            if(/ GBG/.test(base) && / GOLOS$/.test(quote))
-                price_per_steem = parseFloat(base.split(' ')[0])
+            let price
+            let {base, quote} = feed_price.toJS()
+
+            let priceGBGperGOLOS = getPriceFromPair(feed_price.toJS(), 'GBG/GOLOS')
+            let priceGOLOSperGBG = getPriceFromPair(feed_price.toJS(), 'GOLOS/GBG')
+
+            price_per_steem = priceGBGperGOLOS;
         }
         return {
             ...ownProps,

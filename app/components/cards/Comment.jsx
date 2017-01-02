@@ -308,7 +308,7 @@ class CommentImpl extends React.Component {
         return (
             <div className={commentClasses.join(' ')} id={anchor_link} itemScope itemType ="http://schema.org/comment">
                 <div className="Comment__Userpic show-for-medium">
-                    <Userpic account={comment.author} />
+                    <Userpic account={comment.author||''} />
                 </div>
                 <div className={innerCommentClass}>
                     <div className="Comment__header">

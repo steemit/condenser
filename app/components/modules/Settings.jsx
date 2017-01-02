@@ -6,12 +6,16 @@ import { ALLOWED_CURRENCIES } from 'config/client_config'
 import store from 'store';
 import transaction from 'app/redux/Transaction'
 import o2j from 'shared/clash/object2json'
+import _urls from 'shared/clash/images/urls'
+import _btc from 'shared/clash/coins/btc'
+import { injectIntl } from 'react-intl'
 
+@injectIntl
 class Settings extends React.Component {
 
     state = {
         errorMessage: '',
-        succesMessage: '',
+        successMessage: '',
         userImage: this.props.userImage || '',
     }
 
@@ -52,26 +56,28 @@ class Settings extends React.Component {
             },
             successCallback: () => {
                 console.log('SUCCES')
-                // clear form ad show succesMessage
+                // clear form ad show successMessage
                 this.setState({
                     loading: false,
                     errorMessage: '',
-                    succesMessage: translate('saved') + '!',
+                    successMessage: translate('saved') + '!',
                 })
-                // remove succesMessage after a while
-                setTimeout(() => this.setState({succesMessage: ''}), 2000)
+                // remove successMessage after a while
+                setTimeout(() => this.setState({successMessage: ''}), 2000)
             }
         })
     }
 
     render() {
         const {state, props} = this
+        const {locale} = props.intl
+
         return <div className="Settings">
                     <div className="row">
                         <div className="small-12 medium-6 large-4 columns">
                             {/* CHOOSE LANGUAGE */}
                             <label>{translate('choose_language')}
-                              <select defaultValue={store.get('language')} onChange={this.handleLanguageChange}>
+                              <select defaultValue={locale} onChange={this.handleLanguageChange}>
                                 <option value="ru">русский</option>
                                 <option value="en">english</option>
                                 {/* in react-intl they use 'uk' instead of 'ua' */}
@@ -95,8 +101,8 @@ class Settings extends React.Component {
                                     {
                                         state.errorMessage
                                         ? <small className="error">{state.errorMessage}</small>
-                                        : state.succesMessage
-                                        ? <small className="success">{state.succesMessage}</small>
+                                        : state.successMessage
+                                        ? <small className="success">{state.successMessage}</small>
                                         : null
                                     }
                                 </label>
@@ -108,7 +114,7 @@ class Settings extends React.Component {
                         <div className="small-12 medium-6 large-8 columns text-center">
                             {
                                 state.userImage
-                                ? <img src={state.userImage} alt={translate('user_avatar') + ' ' + props.account.name} />
+                                ? <img src={_urls.proxyImage(state.userImage)} alt={translate('user_avatar') + ' ' + props.account.name} />
                                 : null
                             }
                         </div>

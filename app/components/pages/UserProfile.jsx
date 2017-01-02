@@ -5,7 +5,6 @@ import {connect} from 'react-redux';
 import transaction from 'app/redux/Transaction';
 import user from 'app/redux/User';
 import Icon from 'app/components/elements/Icon'
-import PostSummary from 'app/components/cards/PostSummary';
 import UserKeys from 'app/components/elements/UserKeys';
 import PasswordReset from 'app/components/elements/PasswordReset';
 import UserWallet from 'app/components/modules/UserWallet';
@@ -22,7 +21,6 @@ import Tooltip from 'app/components/elements/Tooltip';
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
 import VerticalMenu from 'app/components/elements/VerticalMenu';
 import { translate } from 'app/Translator';
-import BuyGolos from 'app/components/elements/BuyGolos'
 
 export default class UserProfile extends React.Component {
     constructor() {
@@ -48,7 +46,8 @@ export default class UserProfile extends React.Component {
         }
 
         if (isFetchingOrRecentlyUpdated(this.props.global.get('status'), order, category)) return;
-        const [author, permlink] = last_post.split('/');
+        let [permlink, author] = last_post.split('/'); // destructuring assignment is a bullshit.
+        if (!author) author = accountname; // crutch
         this.props.requestData({author, permlink, order, category, accountname});
     }
 
@@ -152,9 +151,6 @@ export default class UserProfile extends React.Component {
         }
         else if( section === 'settings' ) {
             tab_content = <Settings routeParams={this.props.routeParams} />
-        }
-        else if( section === 'crowdsale' ) {
-            tab_content = <BuyGolos routeParams={this.props.routeParams} account={account}/>
         }
         else if( section === 'posts' && account.post_history ) {
            if( account.posts )
@@ -275,7 +271,6 @@ export default class UserProfile extends React.Component {
             </div>
             <div className="columns shrink">
                 <ul className="menu" style={{flexWrap: "wrap"}}>
-                    <li><Link to={`/@${accountname}/crowdsale`} activeClassName="active">{translate('crowdsale')}</Link></li>
                     <li><Link to={`/@${accountname}/transfers`} activeClassName="active">{translate('wallet')}</Link></li>
                     {wallet_tab_active && isMyAccount && <li><Link to={`/@${account.name}/permissions`} activeClassName="active">{translate('permissions')}</Link></li>}
                     {wallet_tab_active && isMyAccount && <li><Link to={`/@${account.name}/password`} activeClassName="active">{translate('password')}</Link></li>}
@@ -299,9 +294,16 @@ export default class UserProfile extends React.Component {
 
                         <div>
                             <div className="UserProfile__stats">
-                                <span><Link to={`/@${accountname}/followers`}>{translate('follower_count', {followerCount: followerCount || 0})}</Link></span>
-                                <span>{translate('post_count', {postCount: account.post_count || 0})}</span>
-                                <span><Link to={`/@${accountname}/followed`}>{translate('followed_count', {followingCount: followingCount || 0})}</Link></span>
+                                {
+                                    // before react-intl is properly loaded in browser, translated strings can contain errors
+                                    process.env.BROWSER
+                                    ?   <span>
+                                            <span><Link to={`/@${accountname}/followers`}>{translate('follower_count', {followerCount: followerCount || 0})}</Link></span>
+                                            <span>{translate('post_count', {postCount: account.post_count || 0})}</span>
+                                            <span><Link to={`/@${accountname}/followed`}>{translate('followed_count', {followingCount: followingCount || 0})}</Link></span>
+                                        </span>
+                                    : <LoadingIndicator type="circle" inline />
+                                }
                             </div>
                         </div>
                     </div>

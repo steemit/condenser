@@ -484,7 +484,7 @@ const ru = {
 	flag: "Голосовать против",
 	promote: 'Продвинуть',
 	// Tips.js
-	tradeable_tokens_that_may_be_transferred_anywhere_at_anytime: 'Перемещаемые цифровые токены, которые могут переданы куда угодно в любой момент.',
+	tradeable_tokens_that_may_be_transferred_anywhere_at_anytime: 'Перемещаемые цифровые токены, которые могут быть переданы куда угодно в любой момент.',
 	LIQUID_TOKEN_can_be_converted_to_INVEST_TOKEN_in_a_process_called_powering_up: LIQUID_TOKEN + ' может быть конвертирован в ' + VESTING_TOKEN + ', этот процесс называется "усиление голоса".',
 	tokens_worth_about_AMOUNT_of_LIQUID_TOKEN: 'Перемещаемые цифровые токены, цена которых всегда равна ~1 мг золота в ' + LIQUID_TOKEN + '.',
 	influence_tokens_which_earn_more_power_by_holding_long_term: 'Неперемещаемые цифровые токены, их количество увеличивается при долгосрочном хранении.',
@@ -570,6 +570,27 @@ const ru = {
 	// this is from UserSaga.js
 	hello_your_account_may_have_been_compromised_we_are_working_on_restoring_an_access: 'Здраствуйте. Ваш аккаунт был скомпромитирован. Мы работаем над восстановлением доступа к вашему аккаунту. Пожалуйста, отправьте имейл на ' + SUPPORT_EMAIL + '.',
 	this_login_gives_owner_or_active_permissions_and_should_not_be_used_here: 'Этот логин дает владельческие и активные разрешения, и не должен использоваться здесь. Пожалуйста, предоставьте логин только для постинга.',
+	we_couldnt_verify_your_account_contact_us_at_SUPPORT_EMAIL: 'Мы не смогли верифицировать учётную запись. Пишите на почту ' + SUPPORT_EMAIL,
+  facebook_login_didnt_provide_any_email_addresses: 'Логин через Facebook не предоставил каких-либо имейл адресов. Пожалуйста, удостоверьтесь что Facebook аккаунт имеет главный имейл и попробуйте снова.',
+  we_are_sorry_we_cannot_sign_you_up_at_this_time_because_ip_associated_with_bots_activity: 'Извините, мы не можем зарегистрировать вас, потому что в настоящее время ваш IP адрес ассоциирован с активностью ботов. Пожалуйста, свяжитесь с ' + SUPPORT_EMAIL + ' для получения дальнейшей информации.',
+	successfully_authenticated_with: 'Успешная авторизация с', // 'Успешная авторизация с Facebook'
+  not_supported_email_address: 'Не поддерживаемый имейл адрес',
+  please_make_sure_you_dont_use_temporary_email_providers_contact_SUPPORT_URL: 'Пожалуйста, удостоверьтесь что вы не используете временный имейл адрес, свяжитесь с ' + SUPPORT_EMAIL + ' для получения информации.',
+  images_were_hidden_due_to_low_ratings: 'Изображения были скрыты из-за низкого рейтинга',
+	image_not_shown_due_to_low_ratings: 'Изображение не отображено из-за низкого рейтинга',
+	// page titles
+	create_a_post: 'Написать пост',
+	create_account: 'Создать аккаунт',
+	new_topic_posts: 'Новые "{topic}" посты',
+	sort_order_topic_posts: '{sort_order} "{topic}" посты',
+	new_posts: 'Новые посты',
+	sort_order_posts: '{sort_order} посты',
+	people_following_user_name: 'Подписчики {user_name}',
+	people_followed_by_user_name: '{user_name} подписан',
+	curation_rewards_by_user_name: 'Кураторские награды {user_name}',
+	author_rewards_by_user_name: 'Авторские награды {user_name}',
+	replies_by_user_name: 'Ответы {user_name}',
+	comments_by_user_name: 'Комментарии {user_name}',
 }
 
 export { ru }

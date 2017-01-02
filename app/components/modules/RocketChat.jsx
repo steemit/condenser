@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default class Chatik extends React.Component {
+export default class RocketChat extends React.Component {
     state = {toggled: false, open: false};
 
     toggle() {
@@ -36,7 +36,7 @@ export default class Chatik extends React.Component {
 
     render() {
         return <div className={this.chatikClass() + this.stateClass()}>
-            <button className={this.stateClass()} onClick={this.toggle.bind(this)}><img src={this.iconUrl()}/></button>
+            <button className={this.stateClass()} onClick={this.toggle.bind(this)}><img src={this.iconUrl()} alt="Наш чат в RocketChat" /></button>
             <div className="sidebar" style={{
 
             }}>

@@ -4,9 +4,11 @@ import Icon from 'app/components/elements/Icon'
 import {APP_ICON} from 'config/client_config'
 import 'whatwg-fetch';
 import icoDestinationAddress from 'shared/icoAddress'
-import roundPrecision from 'round-precision'
 import { FormattedMessage } from 'react-intl';
 import { translate } from 'app/Translator';
+import _btc from 'shared/clash/coins/btc'
+import roundPrecision from 'round-precision'
+import LandingCrowdsaleStats from './LandingCrowdsaleStats'
 // import { crowdsaleStartAt } from '../pages/Landing'
 
 const satoshiPerCoin = 100000000
@@ -21,35 +23,33 @@ function createDate(year, month, day, hours, minutes) {
 export const blockchainStartAt 	= createDate(2016, 9, 18, 11, 0)
 export const crowdsaleStartAt 	= createDate(2016, 10, 1, 11, 0)
 export const crowdsaleEndAt 	= createDate(2016, 11, 4, 11, 0)
+export const paymentsStartAt 	= createDate(2017, 0, 15, 11, 0)
 
 const stages = [25, 20, 15, 10, 5, 0]
+export function calculateCurrentStage(date = Date.now()) {
+	if (date < addDays(15).getTime()) return stages[0]
+  else if (date < addDays(18).getTime()) return stages[1]
+  else if (date < addDays(21).getTime()) return stages[2]
+  else if (date < addDays(24).getTime()) return stages[3]
+  else if (date < addDays(27).getTime()) return stages[4]
+	return stages[5]
+}
 
 export function addDays(days) {
 	const result = new Date(crowdsaleStartAt)
 	result.setDate(result.getDate() + days)
 	return result
 }
-
-// dates are calculated based on props.crowdsaleStartAt variable
-const dates = [
+// crowdsaleDates are calculated based on props.crowdsaleStartAt variable
+export const crowdsaleDates = [
 		{ date: addDays(15), bonus: 25 },
 		{ date: addDays(18), bonus: 20 },
 		{ date: addDays(21), bonus: 15 },
 		{ date: addDays(24), bonus: 10 },
 		{ date: addDays(27), bonus: 5 },
-		{ date: addDays(18), bonus: 0 }
+		{ date: addDays(33), bonus: 0 }
 	]
-
-export function calculateCurrentStage() {
-	if (crowdsaleStartAt < addDays(15)) return stages[0]
-	else if (crowdsaleStartAt < addDays(18)) return stages[1]
-	else if (crowdsaleStartAt < addDays(21)) return stages[2]
-	else if (crowdsaleStartAt < addDays(24)) return stages[3]
-	else if (crowdsaleStartAt < addDays(27)) return stages[4]
-	return stages[5]
-}
-
-export const currentStage = dates.find((item) => item.bonus == calculateCurrentStage())
+export const currentStage = crowdsaleDates.find((item) => item.bonus == calculateCurrentStage())
 
 export default class LandingCountDowns extends React.Component {
 
@@ -68,7 +68,7 @@ export default class LandingCountDowns extends React.Component {
 		unconfirmedNTx: false,
 		prefill: this.props.prefill,
 		secondsSinceEpoch: Math.round(((new Date()).getTime()) / 1000),
-		crowdSaleIsActive: this.props.crowdsaleStartAt > Date.now(),
+		crowdSaleIsActive: this.props.crowdsaleEndAt > new Date(),
 		showBitcoinsRaised: true
 	}
 
@@ -101,8 +101,8 @@ export default class LandingCountDowns extends React.Component {
 			const raisedWithUnconfirmed = object.final_balance
 			console.log('object', object)
 			this.setState({
-				bitcoinsRaised: raised / satoshiPerCoin,
-				bitcoinsRaisedIncludingUnconfirmed: raisedWithUnconfirmed / satoshiPerCoin,
+				bitcoinsRaised: raised, // [please apply formatters instead]
+				bitcoinsRaisedIncludingUnconfirmed: raisedWithUnconfirmed,
 				unconfirmedNTx: object.unconfirmed_n_tx || 0
 			})
 		})
@@ -130,13 +130,20 @@ export default class LandingCountDowns extends React.Component {
 
 	// TODO add this
 	handleCrowdsaleStart = () => (this.setState({prefill: false}))
-	// handleCrowdsaleEnd = () => {}
-	// handleStageChange = () => {}
+	handleCrowdsaleEnd = () => (this.setState({crowdSaleIsActive: false}))
 
 	render() {
 		const {state, props} = this
-		const currentStage = dates.find((item) => item.bonus == calculateCurrentStage())
-		const previousStage = dates.find((item) => item.bonus < calculateCurrentStage())
+		const currentStage = crowdsaleDates.find((item) => item.bonus == calculateCurrentStage())
+		const previousStage = crowdsaleDates.find((item) => item.bonus < calculateCurrentStage())
+    const nextStage = calculateCurrentStage() ? calculateCurrentStage() - 5 : 0
+
+    let {bitcoinsRaised} = state
+    bitcoinsRaised = String(bitcoinsRaised)
+    bitcoinsRaised = bitcoinsRaised.split('')
+    bitcoinsRaised.splice(-8, 0, '.');
+    bitcoinsRaised = bitcoinsRaised.join('')
+    bitcoinsRaised = Number(bitcoinsRaised)
 
 		function strSplice(str1, str2, location) {
 		  return str1.slice(0, location) + str2 + str1.slice(location, str1.length);
@@ -195,45 +202,52 @@ export default class LandingCountDowns extends React.Component {
 							/>
 						</div>
 					: 	<div className="row text-center CountDowns__counters">
-							<div className="small-12 medium-4 columns CountDowns__counter">
+							<div className="small-12 medium-12 columns CountDowns__counter">
+								{
+                  state.crowdSaleIsActive
+                  ? <CountDown
+    									title="Продажа силы голоса закончится"
+    									date={props.crowdsaleEndAt}
+                      onEnd={this.handleCrowdsaleEnd}
+    									countFrom={props.crowdsaleEndAt.getTime() - props.crowdsaleStartAt.getTime()}
+    									displayWhenZero
+    								/>
+                  : <LandingCrowdsaleStats />
+                }
+							</div>
+							<div className="small-12 medium-12 columns">
 								<CountDown
-									title="Продажа силы голоса закончится"
-									date={props.crowdsaleEndAt}
-									countFrom={props.crowdsaleEndAt.getTime() - props.crowdsaleStartAt.getTime()}
-									displayWhenZero
+									date={paymentsStartAt}
+									countFrom={crowdsaleEndAt.getTime()}
+									title={`До первых выплат осталось:`}
 								/>
 							</div>
-							<div className="small-12 medium-4 columns CountDowns__counter" style={{paddingTop: 40}}>
+							<div className="small-12 medium-12 columns CountDowns__counter" style={{paddingTop: 40}}>
 								{
 									state.showBitcoinsRaised
 									? <div>
-										<p style={{marginBottom: 0}}>Собрано биткоинов</p>
+										<div style={{marginBottom: 0}}>Собрано биткоинов</div>
 										{
 											state.bitcoinsRaised === false
 											? <strong>загрузка...</strong>
-											: <strong><a href="https://blockchain.info/address/3CWicRKHQqcj1N6fT1pC9J3hUzHw1KyPv3" target="blank">{roundPrecision(state.bitcoinsRaised, 4)} B</a></strong>
+											: <strong><a href="https://blockchain.info/address/3CWicRKHQqcj1N6fT1pC9J3hUzHw1KyPv3" target="blank">600 B</a></strong>
+										// roundPrecision(_btc.fromSatoshis(state.bitcoinsRaised), 4)
 										}
 									</div>
 									: null
 								}
 								{
 									state.bitcoinsRaised !== state.bitcoinsRaisedIncludingUnconfirmed
-									? <span style={{display: 'block'}}>({roundPrecision(state.bitcoinsRaisedIncludingUnconfirmed, 4)} включая{' '}
+									? <span style={{display: 'block'}}>({roundPrecision(_btc.fromSatoshis(state.bitcoinsRaisedIncludingUnconfirmed), 4)} включая{' '}
+
 									<FormattedMessage id="unverified_transactions" values={{transactionsCount: state.unconfirmedNTx}} />)</span> : null
 									// {translate('unverified_transactions', {transactionsCount: state.unconfirmedNTx})}
 								}
 
 								<p>
-									<small>Текущий бонус <span className="red"> + {state.currentBonus}%</span></small>
+                  <p><i><a href="http://www.steeme.ru/golos-ico.html" target="blank">статистика краудсейла</a></i></p>
+									{/* <small>Текущий бонус <span className="red"> + {calculateCurrentStage()}%</span></small> */}
 								</p>
-							</div>
-							<div className="small-12 medium-4 columns">
-								<CountDown
-									title={`Бонус уменьшится: до ${state.nextBonus}%`}
-									date={currentStage.date}
-									countFrom={previousStage.date.getTime()}
-									displayWhenZero
-								/>
 							</div>
 						</div>
 				}
@@ -241,7 +255,7 @@ export default class LandingCountDowns extends React.Component {
 
 				{/* BUTTON */}
 				{
-					state.prefill
+					true // disabled after crowdsale end
 					? null
 					: <div className="row CountDowns__button">
 						<div className="small-12 columns">
@@ -271,7 +285,7 @@ export default class LandingCountDowns extends React.Component {
 								<p>Социальные сети: </p>
 								<ul>
 									<li>
-										<a href="facebook.com" target="blank"><img src="images/landing/fb.jpg" /></a>
+										<a href="https://www.facebook.com/golosru" target="blank"><img src="images/landing/fb.jpg" /></a>
 									</li>
 									<li>
 										<a href="https://twitter.com/goloschain" target="blank"><img src="images/landing/tw.jpg" /></a>

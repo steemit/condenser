@@ -12,7 +12,7 @@ import { DEFAULT_LANGUAGE } from 'config/client_config';
 // this is needed to make i18n future proof
 
 /*
-	module exports two functions: translate and translateHtml
+	module exports bunch of functions: translate, translateHtml and so on
 	usage example:
 	translate('reply_to_user', {username: 'undeadlol1') == 'Reply to undeadlol1'
 	translateHtml works the same, expcept it renders string with html tags in it
@@ -30,11 +30,12 @@ import { en } from './locales/en';
 import { ua as uk } from './locales/ua'; // in react-intl they use 'uk' instead of 'ua'
 const messages = {ru, en, uk}
 
-// exported function placeholders
-// this is needed for proper export before react-intl functions with locale data,
-// will be properly created (they depend on react props and context),
-// which is not available until component is being created
-//
+/*
+	exported function placeholders
+ 	this is needed for proper export before react-intl functions with locale data,
+	will be properly created (they depend on react props and context),
+	which is not available until component is being created
+*/
 /*
 	this placeholder is needed for usage outside of react. In server side code and in static html files.
 	This function is very simple, it does NOT support dynamic values (for example: translate('your_email_is', {email: 'x@y.com'})). Use it carefully
@@ -44,7 +45,7 @@ let translate = string => {
 	if (process.env.BROWSER) language = store.get('language') || DEFAULT_LANGUAGE
 	return messages[language][string]
 };
-let translateHtml = () => {};
+let translateHtml = () => {}; // NOTE: translateHtml() rarely works properly, prefer using translate()
 let translatePlural = () => {};
 let translateNumber = () => {};
 
@@ -63,9 +64,9 @@ class DummyComponentToExportProps extends React.Component {
 		return <span hidden>{' '}</span>
 	}
 
-	// IMPORTANT
+	// ⚠️ IMPORTANT
 	// use 'componentWillMount' instead of 'componentDidMount',
-	// or there will be all sorts of partially renddered components
+	// or there will be all sorts of partially rendered components
 	componentWillMount() {
 		// assign functions after component is created (context is picked up)
 		translate = 	(...params) => this.translateHandler('string', ...params)
@@ -109,32 +110,39 @@ class Translator extends React.Component {
 	render() {
         /* LANGUAGE PICKER */
 
-		// Define user's language. Different browsers have the user locale defined
-		// on different fields on the `navigator` object, so we make sure to account
-		// for these different by checking all of them
-		let language = this.props.locale; // usually 'en'
+		let language = this.props.locale; //  usually 'en'
+		/*
+			logic: if user has not picked language (storred in LocalStorage),
+			pick browsers language,
+			and match it agains our supported languages ('messages' constant),
+			if language is unsupported use DEFAULT_LANGUAGE
+		*/
 		if (process.env.BROWSER) {
 			const storredLanguage = store.get('language')
 			if (storredLanguage) language = storredLanguage
+			else {
+				// Different browsers have the user locale defined
+				// on different fields on the `navigator` object, so we make sure to account
+				// for these different by checking all of them
+				const browsersLanguage = 	navigator
+																? (navigator.languages && navigator.languages[0])
+										              || navigator.language
+										              || navigator.userLanguage
+																: ''
+				// Split locales with a region code (ie. 'en-EN' to 'en')
+			  const languageWithoutRegionCode = browsersLanguage.toLowerCase().split(/[_-]+/)[0];
+				if (!messages.hasOwnProperty(languageWithoutRegionCode)) language = DEFAULT_LANGUAGE
+				else language = languageWithoutRegionCode
+			}
 		}
-		// let language = DEFAULT_LANGUAGE; // usually 'en'
-		// while Server Side Rendering is in process, 'navigator' is undefined
-		// currently commented out, because in golos we need only russian
-		// if (process.env.BROWSER) language = navigator
-		// 									? (navigator.languages && navigator.languages[0])
-		// 			                        || navigator.language
-		// 			                        || navigator.userLanguage
-		// 									: DEFAULT_LANGUAGE;
-        //Split locales with a region code (ie. 'en-EN' to 'en')
-        const languageWithoutRegionCode = language.toLowerCase().split(/[_-]+/)[0];
 
 		return 	<IntlProvider
 					// to ensure dynamic language change, "key" property with same "locale" info must be added
 					// see: https://github.com/yahoo/react-intl/wiki/Components#multiple-intl-contexts
-					key={languageWithoutRegionCode}
+					key={language}
+					locale={language}
+					messages={messages[language]}
 					defaultLocale={DEFAULT_LANGUAGE}
-					locale={languageWithoutRegionCode}
-					messages={messages[languageWithoutRegionCode]}
 				>
 					<div>
 						{/* self explanatory */}
@@ -156,10 +164,7 @@ export { translate, translateHtml, translatePlural, translateNumber }
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
-		const locale = state.user.get('locale')
-        return {
-            ...ownProps,
-            locale
-        }
+				const locale = state.user.get('locale')
+        return {...ownProps, locale}
     }
 )(Translator)

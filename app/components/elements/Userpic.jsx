@@ -1,12 +1,10 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux'
-const {oneOfType, string, number} = PropTypes
+const {oneOfType, string, object} = PropTypes
 
 class Userpic extends Component {
 	// you can pass either user object, or username string
-	static propTypes = {
-		account: oneOfType([string, number])
-	}
+
 
 	static defaultProps = {
 		width: 48,
@@ -14,8 +12,10 @@ class Userpic extends Component {
 	}
 
 	render() {
+
 		const {props} = this
-		const {account, ...rest} = props
+		const {dispatch, account, ...rest} = props
+
 		let url
 
 		// try to extract image url from users metaData
@@ -26,10 +26,10 @@ class Userpic extends Component {
 			const size = props.width + 'x' + props.height
 			url = proxy + size + '/' + url;
 		}
-
+		// как это сделать средствами react?
 		return 	<div className="Userpic">
 					<img
-						src={url || require('app/assets/images/user.png')}
+						src={url || '/images/user.png'}
 						{...rest}
 					/>
 				</div>;

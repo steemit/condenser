@@ -5,6 +5,7 @@ import findUser from 'db/utils/find_user';
 import {esc, escAttrs} from 'db/models';
 import request from 'request'
 import {getLogger} from '../../app/utils/Logger'
+import { translate } from 'app/Translator';
 import { APP_URL, SUPPORT_EMAIL } from 'config/client_config'
 
 const print = getLogger('oauth').print
@@ -117,18 +118,18 @@ function* handleFacebookCallback() {
                 } else {
                     console.log('-- arec: failed to confirm user for account (no account) -->', this.session.uid, provider, account_recovery_record.id, user.id, this.session.uid, account_recovery_record.owner_key);
                     account_recovery_record.update({user_id: user.id, status: 'account not found'});
-                    this.body = 'Мы не смогли верифицировать учётную запись. Пишите почту ' + SUPPORT_EMAIL;
+                    this.body = translate('we_couldnt_verify_your_account_contact_us_at_SUPPORT_EMAIL');
                 }
             } else {
                 console.log('-- arec: failed to confirm user for account (no user) -->', this.session.uid, provider, this.session.uid, this.session.email);
                 account_recovery_record.update({status: 'user not found'});
-                this.body = 'Мы не смогли верифицировать учётную запись. Пишите почту ' + SUPPORT_EMAIL;
+                this.body = translate('we_couldnt_verify_your_account_contact_us_at_SUPPORT_EMAIL');
             }
             return null;
         }
         if (!u.email) {
             console.log('-- /handle_facebook_callback no email -->', this.session.uid, u);
-            this.flash = {alert: 'Facebook login didn\'t provide any email addresses. Please make sure your Facebook account has a primary email address and try again.'};
+            this.flash = {alert: translate('facebook_login_didnt_provide_any_email_addresses')};
             this.redirect('/');
             return;
         }
@@ -143,7 +144,7 @@ function* handleFacebookCallback() {
         });
         if (same_ip_bot) {
             console.log('-- /handle_facebook_callback same_ip_bot -->', this.session.uid, attrs.remote_ip, attrs.email);
-            this.flash = {alert: 'We are sorry, we cannot sign you up at this time because your IP address is associated with bots activity. Please contact ' + SUPPORT_EMAIL + ' for more information.'};
+            this.flash = {alert: translate('we_are_sorry_we_cannot_sign_you_up_at_this_time_because_ip_associated_with_bots_activity')};
             this.redirect('/');
             return;
         }
@@ -156,7 +157,7 @@ function* handleFacebookCallback() {
         });
         if (blocked_email) {
             console.log('-- /handle_facebook_callback blocked_email -->', this.session.uid, u.email);
-            this.flash = {alert: 'Not supported email address: ' + u.email + '. Please make sure your you don\'t use any temporary email providers, contact ' + SUPPORT_EMAIL + ' for more information.'};
+            this.flash = {alert: translate('not_supported_email_address') + ': ' + u.email + '. ' + translate('please_make_sure_you_dont_use_temporary_email_providers_contact_SUPPORT_URL')};
             this.redirect('/');
             return;
         }
@@ -191,7 +192,7 @@ function* handleFacebookCallback() {
     } catch (error) {
         return logErrorAndRedirect(this, 'facebook:2', error);
     }
-    this.flash = {success: 'Successfully authenticated with Facebook'};
+    this.flash = {success: translate('successfully_authenticated_with') + ' Facebook'};
     if (verified_email) {
         this.redirect('/create_account');
     } else {
@@ -254,12 +255,12 @@ function* handleRedditCallback() {
                 } else {
                     console.log('-- arec: failed to confirm user for account (no account) -->', this.session.uid, provider, account_recovery_record.id, user.id, this.session.uid, account_recovery_record.owner_key);
                     account_recovery_record.update({user_id: user.id, status: 'account not found'});
-                    this.body = 'Мы не смогли верифицировать учётную запись. Пишите почту ' + SUPPORT_EMAIL;
+                    this.body = translate('we_couldnt_verify_your_account_contact_us_at_SUPPORT_EMAIL');
                 }
             } else {
                 console.log('-- arec: failed to confirm user for account (no user) -->', this.session.uid, provider, this.session.arec, this.session.email);
                 account_recovery_record.update({status: 'user not found'});
-                this.body = 'Мы не смогли верифицировать учётную запись. Пишите почту ' + SUPPORT_EMAIL;
+                this.body = translate('we_couldnt_verify_your_account_contact_us_at_SUPPORT_EMAIL');
             }
             return null;
         }
@@ -406,12 +407,12 @@ function* handleVkCallback() {
                 } else {
                     console.log('-- arec: failed to confirm user for account (no account) -->', this.session.uid, provider, account_recovery_record.id, user.id, this.session.uid, account_recovery_record.owner_key);
                     account_recovery_record.update({user_id: user.id, status: 'account not found'});
-                    this.body = 'Мы не смогли верифицировать учётную запись. Пишите почту ' + SUPPORT_EMAIL;
+                    this.body = translate('we_couldnt_verify_your_account_contact_us_at_SUPPORT_EMAIL');
                 }
             } else {
                 console.log('-- arec: failed to confirm user for account (no user) -->', this.session.uid, provider, this.session.uid, this.session.email);
                 account_recovery_record.update({status: 'user not found'});
-                this.body = 'We cannot verify the user account. Please contact ' + SUPPORT_EMAIL
+                this.body = translate('we_couldnt_verify_your_account_contact_us_at_SUPPORT_EMAIL');
             }
             return null;
         }
@@ -446,7 +447,7 @@ function* handleVkCallback() {
     } catch (error) {
         return logErrorAndRedirect(this, 'vk:2', JSON.stringify(error));
     }
-    this.flash = {success: 'Successfully authenticated with Vkontakte'};
+    this.flash = {success: translate('successfully_authenticated_with' + ' Vkontakte')};
     this.redirect('/')
 
     if (verified_email) {

@@ -1,5 +1,4 @@
 {
-  "cli_wallet_connection": "",
   "db": {
     "dialect": "sqlite",
     "language": "en",

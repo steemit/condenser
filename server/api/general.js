@@ -4,7 +4,7 @@ import models from 'db/models';
 import findUser from 'db/utils/find_user';
 import config from 'config';
 import recordWebEvent from 'server/record_web_event';
-import {esc, escAttrs} from 'db/models';
+import {esc, escAttrs, sequelize, Sequelize} from 'db/models';
 import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF} from 'server/utils';
 import coBody from 'co-body';
 import secureRandom from 'secure-random'
@@ -58,9 +58,14 @@ export default function useGeneralApi(app) {
             )
         }
 
+        const transaction = yield sequelize.transaction({
+            autocommit: true,
+            type: Sequelize.Transaction.IMMEDIATE,
+        })
+
         try {
             const user = yield models.User.findOne(
-                {attributes: ['verified', 'waiting_list'], where: {id: user_id}}
+                {attributes: ['verified', 'waiting_list'], where: {id: user_id}, transaction}
             );
             if (!user) {
                 this.body = JSON.stringify({error: 'Unauthorized'});
@@ -71,7 +76,8 @@ export default function useGeneralApi(app) {
             // check if user's ip is associated with any bot
             const same_ip_bot = yield models.User.findOne({
                 attributes: ['id', 'created_at'],
-                where: {remote_ip, bot: true}
+                where: {remote_ip, bot: true},
+                transaction
             });
             if (same_ip_bot) {
                 console.log('-- /accounts same_ip_bot -->', user_id, this.session.uid, remote_ip, user.email);
@@ -83,14 +89,15 @@ export default function useGeneralApi(app) {
             const existing_account = yield models.Account.findOne({
                 attributes: ['id', 'created_at'],
                 where: {user_id, ignored: false},
-                order: 'id DESC'
+                order: 'id DESC',
+                transaction
             });
             if (existing_account) {
                 throw new Error("Only one Steem account per user is allowed in order to prevent abuse");
             }
 
             const same_ip_account = yield models.Account.findOne(
-                {attributes: ['created_at'], where: {remote_ip: esc(remote_ip)}, order: 'id DESC'}
+                {attributes: ['created_at'], where: {remote_ip: esc(remote_ip)}, order: 'id DESC', transaction}
             );
             if (same_ip_account) {
                 const minutes = (Date.now() - same_ip_account.created_at) / 60000;
@@ -106,7 +113,7 @@ export default function useGeneralApi(app) {
 
             // check email
             const eid = yield models.Identity.findOne(
-                {attributes: ['id'], where: {user_id, provider: 'email', verified: true}, order: 'id DESC'}
+                {attributes: ['id'], where: {user_id, provider: 'email', verified: true}, order: 'id DESC', transaction}
             );
             if (!eid) {
                 console.log(`api /accounts: not confirmed email for user ${this.session.uid} #${user_id}`);
@@ -115,7 +122,7 @@ export default function useGeneralApi(app) {
 
             // check phone
             const mid = yield models.Identity.findOne(
-                {attributes: ['id'], where: {user_id, provider: 'phone', verified: true}, order: 'id DESC'}
+                {attributes: ['id'], where: {user_id, provider: 'phone', verified: true}, order: 'id DESC', transaction}
             );
             if (!mid) {
                 console.log(`api /accounts: not confirmed sms for user ${this.session.uid} #${user_id}`);
@@ -146,7 +153,7 @@ export default function useGeneralApi(app) {
                 memo_key: account.memo_key,
                 remote_ip,
                 referrer: this.session.r
-            })).catch(error => {
+            }, {transaction})).catch(error => {
                 console.error('!!! Can\'t create account model in /accounts api', this.session.uid, error);
             });
             if (mixpanel) {

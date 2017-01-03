@@ -170,6 +170,7 @@ const jp = 	{
 	generated_password: '生成するパスワード',
 	recover_account: 'アカウントの復元',
 	new: 'new', // ex. 'Generated Password (new)', but not exclusively
+	age: 'age',
 	backup_password_by_storing_it: 'パスワードマネジャーやテキストファイルでパスワードのバックアップを取ろう',
 	click_to_generate_password: 'パスワードを生成する',
 	re_enter_generate_password: '生成されたパスワードで入室する',

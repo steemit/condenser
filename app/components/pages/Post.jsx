@@ -144,11 +144,13 @@ class Post extends React.Component {
 
 
         let sort_orders = [ 'trending', 'votes', 'new'];
-        let sort_labels = [ translate('trending'), translate('votes'), translate('new') ];
+        let sort_labels = [ translate('trending'), translate('votes'), translate('age') ];
         let sort_menu = [];
+        let sort_label;
 
         let selflink = `/${dis.get('category')}/@${post}`;
         for( let o = 0; o < sort_orders.length; ++o ){
+            if(sort_orders[o] == sort_order) sort_label = sort_labels[o];
             sort_menu.push({
                 value: sort_orders[o],
                 label: sort_labels[o],
@@ -186,7 +188,7 @@ class Post extends React.Component {
                             {positiveComments.length ?
                             (<div className="Post__comments_sort_order float-right">
                                 {translate('sort_order')}: &nbsp;
-                                <FoundationDropdownMenu menu={sort_menu} label={translate(sort_order)} dropdownPosition="bottom" dropdownAlignment="right" />
+                                <FoundationDropdownMenu menu={sort_menu} label={sort_label} dropdownPosition="bottom" dropdownAlignment="right" />
                             </div>) : null}
                             {positiveComments}
                             {negativeGroup}

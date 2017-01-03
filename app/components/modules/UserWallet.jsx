@@ -17,6 +17,7 @@ import WalletSubMenu from 'app/components/elements/WalletSubMenu'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Tooltip from 'app/components/elements/Tooltip'
 import { translate } from 'app/Translator';
+import {List} from 'immutable'
 
 const assetPrecision = 1000;
 
@@ -90,8 +91,8 @@ class UserWallet extends React.Component {
         // Sum conversions
         let conversionValue = 0;
         const currentTime = (new Date()).getTime();
-        const conversions = account.get('other_history').reduce( (out, item) => {
-            if(item.getIn([1, 'op', 0]) !== 'convert') return out;
+        const conversions = account.get('other_history', List()).reduce( (out, item) => {
+            if(item.getIn([1, 'op', 0], "") !== 'convert') return out;
 
             const timestamp = new Date(item.getIn([1, 'timestamp'])).getTime();
             const finishTime = timestamp + (86400000 * 3.5); // add 3.5day conversion delay

@@ -34,7 +34,7 @@ export default function resolveRoute(path)
     if (path === '/xss/test' && process.env.NODE_ENV === 'development') {
         return {page: 'XSSTest'};
     }
-    if (path.match(/^\/tags\.html/)) {
+    if (path.match(/^\/tags\/?/)) {
         return {page: 'Tags'};
     }
     if (path === '/tos.html') {

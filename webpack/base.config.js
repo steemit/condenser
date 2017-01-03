@@ -4,8 +4,7 @@ import writeStats from './utils/write-stats';
 
 const Webpack_isomorphic_tools_plugin = require('webpack-isomorphic-tools/plugin');
 const webpack_isomorphic_tools_plugin =
-    new Webpack_isomorphic_tools_plugin(require('./webpack-isotools-config'))
-        .development();
+    new Webpack_isomorphic_tools_plugin(require('./webpack-isotools-config'));
 
 export default {
     entry: {

@@ -30,6 +30,18 @@ Object.keys(db).forEach(function (modelName) {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
+// if syncing is set to force (hopefully not in prod!)
+// then sync all models (create/update tables)
+// the sync: force key is supposed to do this via sequelize automatically
+// but for some reason it's not so i'm calling sync() here.
+//
+// the net effect of this is that you can run without an external db server
+// and it will just use a sqlite file (based on the dialect in
+// defaults.json) and this will create the necessary tables.
+if(config.sync.force) {
+    sequelize.sync();
+}
+
 function esc(value, max_length = 256) {
     if (!value) return '';
     if (typeof value === 'number') return value;

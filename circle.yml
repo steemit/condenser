@@ -1,7 +1,11 @@
 machine:
-    node:
-        version: 6.4.0
+    services:
+        - docker
+
+dependencies:
+    override:
+        - echo "Ignore CircleCI detected dependencies"
 
 test:
-    pre:
-        - cp config/steem-example.json config/steem-dev.json
+    override:
+        - docker build -t steemit/steemit.com .

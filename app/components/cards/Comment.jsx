@@ -26,13 +26,13 @@ export function sortComments( cont, comments, sort_order ) {
              + parsePayoutAmount(a.get('curator_payout_value'));
   }
 
+  /** sorts replies by upvotes, age, or payout */
   let sort_orders = {
-  /** sort replies by active */
       votes: (a,b) => {
                 let acontent = cont.get(a);
                 let bcontent = cont.get(b);
-                let aactive = acontent.get('active_votes').size;
-                let bactive = bcontent.get('active_votes').size;
+                let aactive = acontent.get('active_votes').filter(vote => vote.get('percent') > 0).size;
+                let bactive = bcontent.get('active_votes').filter(vote => vote.get('percent') > 0).size;
                 return bactive - aactive;
               },
       new:  (a,b) =>  {

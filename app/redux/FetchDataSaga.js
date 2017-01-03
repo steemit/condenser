@@ -48,6 +48,7 @@ export function* fetchState(location_change_action) {
 
     try {
         const db_api = Apis.instance().db_api;
+        console.log('trying');
         const state = yield call([db_api, db_api.exec], 'get_state', [url]);
         yield put(GlobalReducer.actions.receiveState(state));
     } catch (error) {

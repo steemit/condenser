@@ -9,9 +9,8 @@ class ServerError extends Component {
                 <a href="/">
                     <SvgImage name="500" width="640px" height="480px" />
                     <div style={{width: '300px', position: 'relative', left: '400px', top: '-400px', textAlign: 'left'}}>
-                        <h4>An error occurred processing your request.</h4>
-                        <p>We're sorry for the trouble. We've been notified of the error and will correct it as soon as possible.<br />
-                        Please try your request again in a moment.</p>
+                        <h4>Sorry, this page isn't available.</h4>
+                        <p>The link you followed may be broken, or the page may have been removed. Go back to <a href="https://steemit.com">Steemit</a></p>
                     </div>
                 </a>
             </div>

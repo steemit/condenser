@@ -173,6 +173,7 @@ async function universalRender({ location, initial_state, offchain }) {
             }
         }
     } catch (e) {
+        offchain.server_location = "/"
         const msg = (e.toString && e.toString()) || e.message || e;
         const stack_trace = e.stack || '[no stack]';
         console.error('State/store error: ', msg, stack_trace);

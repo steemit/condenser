@@ -13,11 +13,17 @@ import Userpic from 'app/components/elements/Userpic';
 import transaction from 'app/redux/Transaction'
 import {List} from 'immutable'
 import { translate } from 'app/Translator';
+import {parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 
 export function sortComments( cont, comments, sort_order ) {
 
   function netNegative(a)  {
       return a.get("net_rshares") < 0;
+  }
+  function totalPayout(a) {
+      return parsePayoutAmount(a.get('pending_payout_value'))
+             + parsePayoutAmount(a.get('total_payout_value'))
+             + parsePayoutAmount(a.get('curator_payout_value'));
   }
 
   let sort_orders = {
@@ -49,13 +55,9 @@ export function sortComments( cont, comments, sort_order ) {
                 } else if (netNegative(bcontent)) {
                     return -1;
                 }
-                let aactive = acontent.get('children_rshares2');
-                let bactive = bcontent.get('children_rshares2');
-                aactive = ("0").repeat( 100 - aactive.length ) + aactive;
-                bactive = ("0").repeat( 100 - bactive.length ) + bactive;
-                if( bactive < aactive ) return -1;
-                if( bactive > aactive ) return 1;
-                return 0;
+                let apayout = totalPayout(acontent)
+                let bpayout = totalPayout(bcontent)
+                return bpayout - apayout;
               }
   }
   comments.sort( sort_orders[sort_order] );

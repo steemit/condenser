@@ -133,7 +133,7 @@ class UserWallet extends React.Component {
                     <h4 className="uppercase">{translate('balances')}</h4>
                 </div>
                 {/* {isMyAccount && <div className="column small-12 medium-4">
-                    <button className="UserWallet__buysp button hollow float-right" onClick={this.onShowDepositSteem}>{translate('buy_LIQUID_TOKEN_or_INVEST_TOKEN')}</button>
+                    <button className="UserWallet__buysp button hollow float-right" onClick={this.onShowDepositSteem}>{translate('buy_LIQUID_TOKEN_or_VESTING_TOKEN')}</button>
                 </div>} */}
             </div>
             <br />
@@ -148,7 +148,7 @@ class UserWallet extends React.Component {
                         {/* not using steemTip because translate strings may be undefined on load */}
                         {/* {steemTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})} */}
                         <div>{translate('tradeable_tokens_that_may_be_transferred_anywhere_at_anytime')}</div>
-                        <div>{translate('LIQUID_TOKEN_can_be_converted_to_INVEST_TOKEN_in_a_process_called_powering_up')}</div>
+                        <div>{translate('LIQUID_TOKEN_can_be_converted_to_VESTING_TOKEN_in_a_process_called_powering_up')}</div>
                     </span>
                 </div>
                 <div className="column small-12 medium-4">

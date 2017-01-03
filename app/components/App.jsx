@@ -216,7 +216,7 @@ class App extends React.Component {
                             <br />
                             <br />
                             <div className="tag3">
-                                <b>{translate("get_INVEST_TOKEN_when_sign_up", {signupBonus: localizedCurrency(signup_bonus)})}</b>
+                                <b>{translate("get_VESTING_TOKEN_when_sign_up", {signupBonus: localizedCurrency(signup_bonus)})}</b>
                             </div>
                         </div>
                     </div>

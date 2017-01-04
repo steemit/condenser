@@ -294,8 +294,16 @@ class CommentImpl extends React.Component {
             </div>
         }
 
+        let depth_indicator = [];
+        if (depth > 1) {
+            for (let i = 1; i < depth; ++i) {
+                depth_indicator.push(<div key={i} className={`depth di-${i}`}>&middot;</div>);
+            }
+        }
+
         return (
             <div className={commentClasses.join(' ')} id={anchor_link} itemScope itemType ="http://schema.org/comment">
+                {depth_indicator}
                 <div className="Comment__Userpic show-for-medium">
                     <Userpic account={comment.author} />
                 </div>

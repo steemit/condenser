@@ -95,6 +95,28 @@ a, path, circle {
   }
 }
 
+.NotFound__menu {
+ text-align: center;
+    li {
+        float: none;
+        display: inline-block;
+        text-align: center;
+        margin-right: 1%;
+        list-style: none;
+        font-weight: 400;
+    }
+    li:after {
+        content: " |";
+    }
+    li:last-child:after {
+        content: "";
+    }
+}
+
+.NotFound__header {
+  margin-top: 1em;
+}
+
 @media print {
   .noPrint {
     display: none;

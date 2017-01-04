@@ -170,6 +170,7 @@ const fr = 	{
 	generated_password: 'Mot de Passe Généré',
 	recover_account: 'Récuperer Compte',
 	new: 'nouveau', // ex. 'Generated Password (new)', but not exclusively
+	age: 'nouveau',
 	backup_password_by_storing_it: 'Gardez une copie de votre mot de passe dans votre gestionnaire de mot de passe ou dans un fichier texte',
 	click_to_generate_password: 'Cliquez pour génerer un mot de passe',
 	re_enter_generate_password: 'Retaper le Mot de Passe Généré',

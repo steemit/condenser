@@ -591,6 +591,10 @@ const ru = {
 	author_rewards_by_user_name: 'Авторские награды {user_name}',
 	replies_by_user_name: 'Ответы {user_name}',
 	comments_by_user_name: 'Комментарии {user_name}',
+	account_registered_by_anoter_account_requires_10x_creation_fee_worth_of_VESTING_TOKEN_before_it_can_power_down: "Учетная запись должна набрать количество " + VESTING_TOKEN + " в 10 раз большее чем значение которое было заплачено за её создание, прежде чем она сможет начать понижение",
+	you_may_only_post_once_per_minute: 'Вы можете создавать посты только раз в минуту.',
+	you_already_voted_for_this_post: 'Вы уже голосовали за этот пост',
+	transaction_failed_error: 'Неудачная транзакция: {error}',
 }
 
 export { ru }

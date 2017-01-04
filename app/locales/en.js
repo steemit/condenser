@@ -574,7 +574,10 @@ const en = 	{
   author_rewards_by_user_name: 'Author rewards by {user_name}',
   replies_by_user_name: 'Replies by {user_name}',
   comments_by_user_name: 'Comments by {user_name}',
-
+  account_registered_by_anoter_account_requires_10x_creation_fee_worth_of_VESTING_TOKEN_before_it_can_power_down: 'Account registered by another account requires 10x account creation fee worth of ' + VESTING_TOKEN + ' before it can power down',
+  you_may_only_post_once_per_minute: 'You may only post once per minute.',
+  you_already_voted_for_this_post: 'You already voted for this post',
+  transaction_failed_error: 'Transaction failed: {error}',
 }
 
 export { en }

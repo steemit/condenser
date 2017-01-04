@@ -87,6 +87,12 @@ a, path, circle {
 
 .NotFound {
   width: 640px;
+  margin-top: 2em;
+  text-align: center;
+  // small only
+  @media screen and (max-width: 39.9375em) {
+      width: 340px;
+  }
 }
 
 @media print {

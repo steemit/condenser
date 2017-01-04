@@ -92,6 +92,10 @@ class PostFull extends React.Component {
                     this.setState({showEdit: true})
                 }
             }
+            // Facebook Pixel events #200
+            if (post == "natasha/znakomstvo-s-platformoi-golos-tokeny-registraciya-i-lichnyi-kabinet") {
+                fbq('track', 'ViewContent');
+            }
         }
     }
 

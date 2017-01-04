@@ -52,8 +52,9 @@ class App extends React.Component {
             t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
             document,'script','https://connect.facebook.net/en_US/fbevents.js');
 
-            fbq('init', '1594659427507927');
-            fbq('track', "PageView");
+            // disabled to avoid facebbok warning of multiple pixel id's
+            // fbq('init', '1594659427507927');
+            // fbq('track', "PageView");
 
             window.fbAsyncInit = function() {
               FB.init({
@@ -97,6 +98,19 @@ class App extends React.Component {
              } else { f(); }
              })(window.document, window, "yandex_metrika_callbacks")
             /* /Yandex.Metrika counter */
+
+            /* Facebook Pixel Code */
+            /* NOTE dont't forget to remove <img /> tag of facebook pixel (down below) */
+            !function(f,b,e,v,n,t,s)
+            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+            n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t,s)}(window,document,'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', '136063983553382');
+            fbq('track', 'PageView');
         }
     }
 
@@ -216,7 +230,7 @@ class App extends React.Component {
                             <br />
                             <br />
                             <div className="tag3">
-                                <b>{translate("get_INVEST_TOKEN_when_sign_up", {signupBonus: localizedCurrency(signup_bonus)})}</b>
+                                <b>{translate("get_VESTING_TOKEN_when_sign_up", {signupBonus: localizedCurrency(signup_bonus)})}</b>
                             </div>
                         </div>
                     </div>
@@ -328,7 +342,10 @@ class App extends React.Component {
             <Dialogs />
             <Modals />
             {/* Yandex.Metrika counter */}
-            <noscript><div><img src="https://mc.yandex.ru/watch/41829924" style={{position: 'absolute', left: '-9999px'}} alt="" /></div></noscript>
+            <noscript><div><img src="https://mc.yandex.ru/watch/41829924" style={{position: 'absolute', left: '-9999px'}} alt="" /></div>
+            {/* Facebook Pixel Code */}
+            <img height="1" width="1" src="https://www.facebook.com/tr?id=136063983553382&ev=PageView&noscript=1" />
+            </noscript>
         </div>
     }
 }

@@ -35,7 +35,7 @@ class TransferHistoryRow extends React.Component {
             const amount = data.amount && data.amount.split && data.amount.split(' ')[0]
             if( data.from === context ) {
                 if( data.to === "" ) {
-                    description_start += translate('transfer_amount_to_INVEST_TOKEN', { amount });
+                    description_start += translate('transfer_amount_to_VESTING_TOKEN', { amount });
                 }
                 else {
                     description_start += translate('transfer_amount_steem_power_to', { amount }) + ' ';
@@ -43,7 +43,7 @@ class TransferHistoryRow extends React.Component {
                 }
             }
             else if( data.to === context ) {
-                description_start += translate('recieve_amount_INVEST_TOKEN_from', { amount }) + ' ';
+                description_start += translate('recieve_amount_VESTING_TOKEN_from', { amount }) + ' ';
                 other_account = data.from;
             } else {
                 description_start += translate('transfer_amount_steem_power_from_to', {
@@ -74,11 +74,11 @@ class TransferHistoryRow extends React.Component {
             else
                 description_start += translate('start_power_down_of') + " " + data.vesting_shares;
         } else if( type === 'curation_reward' ) {
-            description_start += translate('curation_reward_of_INVEST_TOKEN_for', { reward: curation_reward }) + ' ';
+            description_start += translate('curation_reward_of_VESTING_TOKEN_for', { reward: curation_reward }) + ' ';
             other_account = data.comment_author;
             description_end = `/${data.comment_permlink}`;
         } else if (type === 'author_reward') {
-            description_start += translate('author_reward_of_INVEST_TOKEN_for', {
+            description_start += translate('author_reward_of_VESTING_TOKEN_for', {
                 payout: renameToSd(data.sbd_payout),
                 reward: author_reward
             }) + ` ${data.author}/${data.permlink}`;

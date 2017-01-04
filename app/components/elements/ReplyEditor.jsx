@@ -375,7 +375,7 @@ class ReplyEditor extends React.Component {
                             }
                             {!loading && !this.props.onCancel && <button className="button hollow no-border uppercase" tabIndex={5} disabled={submitting} onClick={onCancel}>{translate("clear")}</button>}
                             {isStory && !isEdit && <div className="float-right">
-                                <small onClick={this.toggleAllSteemPower} title={translate('leave_this_unchecked_to_receive_half_your_reward')}>{translate('pay_me_100_in_INVEST_TOKEN')}</small>
+                                <small onClick={this.toggleAllSteemPower} title={translate('leave_this_unchecked_to_receive_half_your_reward')}>{translate('pay_me_100_in_VESTING_TOKEN')}</small>
                                 &nbsp;&nbsp;
                                 <input type="checkbox" onChange={this.toggleAllSteemPower} checked={allSteemPower} />
 

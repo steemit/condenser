@@ -44,7 +44,7 @@ The first tag in the list will be the main category that the post is in.
 
 The tags should all be relevant to the content in the post.
 
-You can browse content by tags, as well as see a list of popular tags that other users have used in their posts [here](https://steemit.com/tags.html/hot).
+You can browse content by tags, as well as see a list of popular tags that other users have used in their posts [here](https://steemit.com/tags).
 
 ### Followers/Feeds
 

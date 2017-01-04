@@ -2,23 +2,22 @@ import React from 'react';
 import { Link } from 'react-router';
 import {connect} from 'react-redux';
 import { browserHistory } from 'react-router';
+import { numberWithCommas } from 'app/utils/StateFunctions';
 
 export default class TagsIndex extends React.Component {
     static propTypes = {
-        tagsList: React.PropTypes.object.isRequired,
         tagsAll: React.PropTypes.object.isRequired,
-        order: React.PropTypes.string,
     };
 
     constructor(props) {
         super(props);
-        this.state = {search: ''};
+        this.state = {search: '', order: props.order || 'name'};
+        this.onChangeSort = this.onChangeSort.bind(this)
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        const res = this.props.tagsList !== nextProps.tagsList ||
-            this.props.tagsAll !== nextProps.tagsAll ||
-            this.props.order !== nextProps.order || this.state !== nextState;
+        const res = this.props.tagsAll !== nextProps.tagsAll ||
+            this.state !== nextState;
         return res;
     }
 
@@ -26,34 +25,58 @@ export default class TagsIndex extends React.Component {
         this.setState({search: e.target.value})
     }
 
+    onChangeSort = (e, order) => {
+        e.preventDefault()
+        this.setState({order})
+    }
+
+    compareTags = (a, b, type) => {
+        switch(type) {
+            case 'name': return a.get('name').localeCompare(b.get('name'));
+            case 'posts': return parseInt(a.get('top_posts')) <=  parseInt(b.get('top_posts')) ? 1 : -1;
+            case 'comments': return parseInt(a.get('comments')) <=  parseInt(b.get('comments')) ? 1 : -1;
+            case 'payouts': return parseInt(a.get('total_payouts')) <=  parseInt(b.get('total_payouts')) ? 1 : -1;
+        }
+    }
+
     render() {
         const {tagsAll} = this.props;
         //console.log('-- TagsIndex.render -->', tagsAll.toJS());
-        //tagsAll.map(v => {
-        //    console.log('-- map -->', v.toJS());
-        //});
-        const {search} = this.state;
-        const order = this.props.routeParams.order;
+        const {search, order} = this.state;
         let tags = tagsAll;
         if (search) tags = tags.filter(tag => tag.get('name').indexOf(search.toLowerCase()) !== -1);
-        tags = tags.filter(
+
+        const rows = tags.filter(
             // there is a blank tag present, as well as some starting with #. filter them out.
             tag => /^[a-z]/.test(tag.get('name'))
         ).sort((a,b) => {
-            return a.get('name').localeCompare(b.get('name'));
+            return this.compareTags(a, b, order)
         }).map(tag => {
             const name = tag.get('name');
-            const link = order ? `/${order}/${name}` : `/hot/${name}`;
-            // const tag_info = tagsAll.get(tag);
+            const link = `/trending/${name}`;
             return (<tr key={name}>
                 <td>
                     <Link to={link} activeClassName="active">{name}</Link>
                 </td>
-                <td>{tag.get('top_posts')}</td>
-                <td>{tag.get('comments')}</td>
-                <td>{tag.get('total_payouts')}</td>
+                <td>{numberWithCommas(tag.get('top_posts').toString())}</td>
+                <td>{numberWithCommas(tag.get('comments').toString())}</td>
+                <td>{numberWithCommas(tag.get('total_payouts'))}</td>
             </tr>);
         }).toArray();
+
+        const cols = [
+            ['name', 'Tag'],
+            ['posts', 'Posts'],
+            ['comments', 'Comments'],
+            ['payouts', 'Payouts']
+        ].map( col => {
+            return <th key={col[0]}>
+                    {order === col[0]
+                        ? <strong>{col[1]}</strong>
+                        : <Link to="#" onClick={e => this.onChangeSort(e, col[0])}>{col[1]}</Link>}
+                </th>
+        })
+
         return (
             <div className="TagsIndex row">
                 <div className="column">
@@ -63,14 +86,11 @@ export default class TagsIndex extends React.Component {
                     <table>
                         <thead>
                         <tr>
-                            <th>Tag</th>
-                            <th>Posts</th>
-                            <th>Comments</th>
-                            <th>Payouts</th>
+                            {cols}
                         </tr>
                         </thead>
                         <tbody>
-                        {tags}
+                            {rows}
                         </tbody>
                     </table>
                 </div>
@@ -80,9 +100,8 @@ export default class TagsIndex extends React.Component {
 }
 
 module.exports = {
-    path: 'tags.html(/:order)',
+    path: 'tags(/:order)',
     component: connect(state => ({
-        tagsList: state.global.get('tag_idx'),
         tagsAll: state.global.get('tags')
     }))(TagsIndex)
 };

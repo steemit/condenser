@@ -189,6 +189,7 @@ const en = 	{
 	generated_password: 'Generated Password',
 	recover_account: 'Recover Account',
 	new: 'new', // ex. 'Generated Password (new)', but not exclusively
+	age: 'age',
 	backup_password_by_storing_it: 'Back it up by storing in your password manager or a text file',
 	click_to_generate_password: 'Click to generate password',
 	re_enter_generate_password: 'Re-enter Generated Password',
@@ -498,7 +499,7 @@ const en = 	{
 	tokens_worth_about_AMOUNT_of_LIQUID_TOKEN: 'Tokens worth about {amount} of ' + LIQUID_TOKEN + '.',
 	influence_tokens_which_earn_more_power_by_holding_long_term: 'Influence tokens which earn more power by holding long term.',
 	the_more_you_hold_the_more_you_influence_post_rewards: 'The more you hold the more you influence post rewards and earn for accurate voting.',
-    the_estimated_value_is_based_on_an_average_value_of_steem_in_US_dollars: 'The estimated value is based on an average value of ' + LIQUID_TOKEN +  ' in US dollars.',
+	the_estimated_value_is_based_on_an_average_value_of_steem_in_US_dollars: 'The estimated value is based on an average value of ' + LIQUID_TOKEN +  ' in US dollars.',
 	VESTING_TOKEN_is_non_transferrable_and_requires_convert_back_to_LIQUID_TOKEN: VESTING_TOKEN + ' is non-transferrable and requires 3 months (13 payments) to convert back to ' + LIQUID_TOKEN + '.',
 	converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again: 'Converted ' + VESTING_TOKEN + ' can be sent to yourself or someone else but can not transfer again without converting back to ' + LIQUID_TOKEN + '.',
 	profile: 'Profile',

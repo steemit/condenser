@@ -181,9 +181,11 @@ class PostSummary extends React.Component {
                     <div className="PostSummary__footer">
                         <Voting post={post} showList={false} />
                         <VotesAndComments post={post} commentsLink={comments_link} />
-                        <span className="PostSummary__time_author_category show-for-medium">
+                        <span className="PostSummary__time_author_category">
                             {!archived && <Reblog author={p.author} permlink={p.permlink} />}
-                            {author_category}
+                            <span className="show-for-medium">
+                                {author_category}
+                            </span>
                         </span>
                     </div>
                 </div>

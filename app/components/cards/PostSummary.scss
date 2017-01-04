@@ -204,4 +204,13 @@ ul.PostsList__summaries {
   .PostSummary__footer .Voting, .PostSummary__footer .Voting__inner {
     border-right: none;
   }
+  .PostSummary__time_author_category {
+    margin-left: 0;
+    border-left: 1px solid #cacaca;
+    .Reblog__button {
+        margin-right: 1rem;
+        padding-right: 1rem;
+        border-right: none;
+    }
+  }
 }

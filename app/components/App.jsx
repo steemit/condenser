@@ -52,8 +52,9 @@ class App extends React.Component {
             t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
             document,'script','https://connect.facebook.net/en_US/fbevents.js');
 
-            fbq('init', '1594659427507927');
-            fbq('track', "PageView");
+            // disabled to avoid facebbok warning of multiple pixel id's
+            // fbq('init', '1594659427507927');
+            // fbq('track', "PageView");
 
             window.fbAsyncInit = function() {
               FB.init({

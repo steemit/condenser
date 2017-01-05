@@ -108,9 +108,9 @@ class PostSummary extends React.Component {
         let content_body = <div className="PostSummary__body entry-content">
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>{desc}</a>
         </div>;
-        let content_title = <h1 className="entry-title">
+        let content_title = <h2 className="entry-title">
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>{title_text}</a>
-        </h1>;
+        </h2>;
 
         // author and category
         let author_category = <span className="vcard">

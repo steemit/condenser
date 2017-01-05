@@ -92,13 +92,13 @@ const fr = 	{
 	all_accounts_refunded: 'Vous les comptes récupérés ont été remboursés.',
 	steemit_is_now_open_source: 'Steemit.com est maintenant Open Source',
 	// this is mainly from ReplyEditor
-	tag_your_story: 'Tag (jusqu\'à 5 tags), le premier tag est votre catégorie principale.',
+	tag_your_story: 'Tag (jusqu\'à 4 tags), le premier tag est votre catégorie principale.',
 	select_a_tag: 'Choisir un tag',
 	required: 'Obligatoire',
 	shorten_title: 'Raccourcir le titre',
 	exceeds_maximum_length: 'Depasse la taille maximum ({maxKb}KB)',
 	including_the_category: "(y compris la catégorie '{rootCategory}')",
-	use_limited_amount_of_tags: 'Vous avez {tagsLength} tags en tout{includingCategory}. Veuillez n\'utiliser que 5 tags en tout.',
+	use_limited_amount_of_tags: 'Vous avez {tagsLength} tags en tout{includingCategory}. Veuillez n\'utiliser que 4 tags en tout.',
 	// this is mainly used in CategorySelector
 	use_limitied_amount_of_categories: 'S\'il vous plait, n\'utilisez que {amount} catégories',
 	use_one_dash: 'N\'utilisez qu\'un seul signe dièse',

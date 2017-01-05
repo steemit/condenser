@@ -1,4 +1,7 @@
 .Icon {
+  width: 1.12rem;
+  height: 1.12rem;
+  display: inline-block;
   vertical-align: middle;
 
   > svg, span.icon {
@@ -23,8 +26,8 @@
 }
 
 .Icon_3x > svg, span.Icon_3x {
-  width: 3rem;
-  height: 3rem;
+  width: 3.45rem;
+  height: 3.45rem;
 }
 
 .Icon_4x > svg, span.Icon_4x {

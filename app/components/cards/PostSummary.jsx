@@ -133,7 +133,7 @@ class PostSummary extends React.Component {
           if(thumbSize == 'mobile') {
             thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image-mobile"><img src={url} /></a>
           } else {
-            thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image" style={{backgroundImage: 'url(' + url + ')'}}></a>
+            thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)}><img src={url} className="PostSummary__image" /></a>
           }
         }
         const commentClasses = []

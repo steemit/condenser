@@ -190,6 +190,7 @@ const en = 	{
 	recover_account: 'Recover Account',
 	new: 'new', // ex. 'Generated Password (new)', but not exclusively
 	age: 'age',
+	votes: 'votes',
 	backup_password_by_storing_it: 'Back it up by storing in your password manager or a text file',
 	click_to_generate_password: 'Click to generate password',
 	re_enter_generate_password: 'Re-enter Generated Password',

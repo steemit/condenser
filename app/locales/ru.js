@@ -194,6 +194,7 @@ const ru = {
 	recover_account: 'Восстановить аккаунт',
 	new: 'Новое', // ex. 'Generated Password (new)', but not exclusively
 	age: 'Новое',
+	votes: 'votes',
 	backup_password_by_storing_it: 'Сделайте резервную копию в менеджере паролей или текстовом файле',
 	click_to_generate_password: 'Нажмите, чтобы сгененировать пароль',
 	re_enter_generate_password: 'Повторно введите пароль',

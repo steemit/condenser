@@ -171,6 +171,7 @@ const it = 	{
 	recover_account: 'Recupera Account',
 	new: 'nuovo', // ex. 'Generated Password (new)', but not exclusively
 	age: 'nuovo',
+	votes: 'votes',
 	backup_password_by_storing_it: 'Fai un backup della tua password o scrivila su un foglio di carta',
 	click_to_generate_password: 'Clicca per generare una password',
 	re_enter_generate_password: 'Riscrivi la Password generata',

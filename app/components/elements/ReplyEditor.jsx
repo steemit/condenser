@@ -389,12 +389,12 @@ export default formId => reduxForm(
         const username = state.user.getIn(['current', 'username'])
         const fields = ['body', 'autoVote']
         const {type, parent_author, jsonMetadata} = ownProps
+        const isEdit = type === 'edit'
         const isStory = /submit_story/.test(type) || (
-            type === 'edit' && parent_author === ''
+            isEdit && parent_author === ''
         )
         if (isStory) fields.push('title')
         if (isStory) fields.push('category')
-        const isEdit = type === 'edit'
         const maxKb = isStory ? 100 : 16
         const validate = values => ({
             title: isStory && (
@@ -489,8 +489,8 @@ export default formId => reduxForm(
             if(rtags.images.size) meta.image = rtags.images; else delete meta.image
             if(rtags.links.size) meta.links = rtags.links; else delete meta.links
 
+            meta.app = "steemit/0.1"
             if(isStory) {
-                meta.app = "steemit/0.1"
                 meta.format = isHtml ? 'html' : 'markdown'
             }
 

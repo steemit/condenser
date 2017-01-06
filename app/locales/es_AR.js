@@ -171,6 +171,7 @@ const es_AR = 	{
 	recover_account: 'Recuperar cuenta',
 	new: 'nueva', // ex. 'Generated Password (new)', but not exclusively
 	age: 'nueva',
+	votes: 'votes',
 	backup_password_by_storing_it: 'Asegurá esta contraseña almacenándola en un gestor de contraseñas, en un papel, y/o en un archivo de texto seguro',
 	click_to_generate_password: 'Click para generar contraseña',
 	re_enter_generate_password: 'Re-ingresar constaseña generada',

@@ -380,7 +380,7 @@ const ru = {
 	// Voting.jsx
 	stop_seeing_content_from_this_user: 'Перестать видеть контент от этого пользователя',
 	flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following: 'Голос против может снять вознаграждения и сделать пост менее видимым. Голосование против должно основываться на',
-    inappropriate_rewards_distribution: 'Распределение неуместные награды',
+    inappropriate_rewards_distribution: 'Вознаграждение выходит за рамки разумного',
     fraud_or_plagiarism: 'Мошенничество или плагиат',
 	hate_speech_or_internet_trolling: 'Разжигание ненависти или интернет троллинг',
 	intentional_miss_categorized_content_or_spam: 'Преднамеренная неправильная категоризация контента или спам',

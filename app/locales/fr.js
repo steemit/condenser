@@ -352,7 +352,8 @@ const fr = 	{
 	// Voting.jsx
 	stop_seeing_content_from_this_user: 'Stop seeing content from this user',
 	flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following: 'Flagging a post can remove rewards and make this material less visible. Some common reasons to flag',
-	fraud_or_plagiarism: 'Fraud or Plagiarism',
+    inappropriate_rewards_distribution: 'Répartition inappropriée des récompenses',
+    fraud_or_plagiarism: 'Fraud or Plagiarism',
 	hate_speech_or_internet_trolling: 'Hate Speech or Internet Trolling',
 	intentional_miss_categorized_content_or_spam: 'Intentional miss-categorized content or Spam',
 	downvote: 'Downvote',

@@ -352,7 +352,8 @@ const it = 	{
 	// Voting.jsx
 	stop_seeing_content_from_this_user: 'Smetti di visualizzare il contentuto da questo utente',
 	flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following: 'Flaggare un post ne riduce il valore e lo rende meno visibile. Il flag dovrebbe essere utilizzato per le seguenti categorie',
-	fraud_or_plagiarism: 'post Fraudolento o Plagio',
+    inappropriate_rewards_distribution: 'Distribuzione di ricompense inappropriate',
+    fraud_or_plagiarism: 'post Fraudolento o Plagio',
 	hate_speech_or_internet_trolling: 'Pessimi discorsi o Internet Trolling',
 	intentional_miss_categorized_content_or_spam: 'Contenuto non categorizzato o Spam',
 	downvote: 'Downvote',

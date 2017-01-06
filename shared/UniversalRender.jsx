@@ -66,7 +66,7 @@ async function universalRender({ location, initial_state, offchain }) {
     } catch (e) {
         console.error('Router error:', e.toString(), location);
         return {
-            title: 'Server error (500) - Steemit',
+            title: 'Server error - Steemit',
             statusCode: 500,
             body: renderToString(<ErrorPage />)
         };
@@ -74,7 +74,7 @@ async function universalRender({ location, initial_state, offchain }) {
     if (error || !renderProps) {
         // debug('error')('Router error', error);
         return {
-            title: 'Page Not Found (404) - Steemit',
+            title: 'Page Not Found - Steemit',
             statusCode: 404,
             body: renderToString(<NotFound />)
         };
@@ -173,14 +173,25 @@ async function universalRender({ location, initial_state, offchain }) {
             }
         }
     } catch (e) {
-        const msg = (e.toString && e.toString()) || e.message || e;
-        const stack_trace = e.stack || '[no stack]';
-        console.error('State/store error: ', msg, stack_trace);
-        return {
-            title: 'Server error (500) - Steemit',
-            statusCode: 500,
-            body: renderToString(<ErrorPage />)
-        };
+        // Ensure 404 page when username not found
+        if (location.match(routeRegex.UserProfile1)) {
+            console.error('User/not found: ', location);
+            return {
+                title: 'Page Not Found - Steemit',
+                statusCode: 404,
+                body: renderToString(<NotFound />)
+            };
+        // Ensure error page on state exception
+        } else {
+            const msg = (e.toString && e.toString()) || e.message || e;
+            const stack_trace = e.stack || '[no stack]';
+            console.error('State/store error: ', msg, stack_trace);
+            return {
+                title: 'Server error - Steemit',
+                statusCode: 500,
+                body: renderToString(<ErrorPage />)
+            };
+        }
     }
 
     let app, status, meta;

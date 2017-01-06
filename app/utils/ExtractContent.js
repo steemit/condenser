@@ -72,7 +72,8 @@ export default function extractContent(get, content) {
         // Short description.
         // Remove bold and header, etc.
         // Stripping removes links with titles (so we got the links above)..
-        const body2 = remarkableStripper.render(body)
+        // Remove block quotes if detected comment preview
+        const body2 = remarkableStripper.render(content.get('depth') > 1 ? body.replace(/>([\s\S]*?).*\s*/g,'') : body);
         desc = sanitize(body2, {allowedTags: []})// remove all html, leaving text
         desc = htmlDecode(desc)
 

@@ -43,10 +43,18 @@ function *confirmMobileHandler() {
         return;
     }
 
-    const used_phone = yield models.sequelize.query(`SELECT a.id FROM accounts a JOIN identities i ON i.user_id=a.user_id WHERE i.phone='${mid.phone}'`, { type: models.Sequelize.QueryTypes.SELECT})
-    if (used_phone && used_phone.length > 0) {
-        this.flash = {error: 'This phone number has already been used'};
-        this.redirect('/enter_mobile');
+    // const used_phone = yield models.sequelize.query(`SELECT a.id FROM accounts a JOIN identities i ON i.user_id=a.user_id WHERE i.phone='${mid.phone}'`, { type: models.Sequelize.QueryTypes.SELECT})
+    const used_phone = yield models.Identity.findOne(
+        {attributes: ['id', 'user_id'], where: {phone: mid.phone, provider: 'phone', verified: true}, order: 'id DESC'}
+    );
+    if (used_phone) {
+        if (used_phone.user_id === this.session.user) {
+            this.flash = {success: 'Phone number has already been verified'};
+            this.redirect('/create_account');
+        } else {
+            this.flash = {error: 'This phone number has already been used'};
+            this.redirect('/enter_mobile');
+        }
         return;
     }
 
@@ -61,8 +69,8 @@ function *confirmMobileHandler() {
     if (mixpanel) mixpanel.track('SignupStep3', {distinct_id: this.session.uid});
     this.redirect('/create_account');
 }
-export default function useEnterAndConfirmMobilePages(app) {
 
+export default function useEnterAndConfirmMobilePages(app) {
     const router = koa_router();
     app.use(router.routes());
     const koaBody = koa_body();

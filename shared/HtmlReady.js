@@ -147,7 +147,7 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
     content = content.replace(linksRe.any, ln => {
         if(linksRe.image.test(ln)) {
             if(images) images.add(ln)
-            return `<img src="${ipfsPrefix(ln)}" />`
+            return `<center><img src="${ipfsPrefix(ln)}" /></center>`
         }
         if(links) links.add(ln)
         return `<a href="${ipfsPrefix(ln)}">${ln}</a>`

@@ -31,8 +31,8 @@ class App extends React.Component {
 
         if (process.env.BROWSER) localStorage.removeItem('autopost') // July 14 '16 compromise, renamed to autopost2
         this.props.loginUser();
-        // SEGMENT.COM ANALYTICS INITIALIZATION
     	if (process.env.BROWSER) {
+            // SEGMENT.COM ANALYTICS INITIALIZATION
             !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
             analytics.load(SEGMENT_ANALYTICS_KEY);
             analytics.page()
@@ -46,13 +46,14 @@ class App extends React.Component {
             ga('create', 'UA-49238979-12', 'auto');
             ga('send', 'pageview');
 
+            // FACEBOOK CONNECT
             !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
             n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
             n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
             t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
             document,'script','https://connect.facebook.net/en_US/fbevents.js');
 
-            // disabled to avoid facebbok warning of multiple pixel id's
+            /* disabled to avoid facebbok warning of multiple pixel id's */
             // fbq('init', '1594659427507927');
             // fbq('track', "PageView");
 
@@ -101,15 +102,7 @@ class App extends React.Component {
 
             /* Facebook Pixel Code */
             /* NOTE dont't forget to remove <img /> tag of facebook pixel (down below) */
-            !function(f,b,e,v,n,t,s)
-            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-            n.queue=[];t=b.createElement(e);t.async=!0;
-            t.src=v;s=b.getElementsByTagName(e)[0];
-            s.parentNode.insertBefore(t,s)}(window,document,'script',
-            'https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', '136063983553382');
+            fbq('init', '217726192019770'); // Insert your pixel ID here.
             fbq('track', 'PageView');
         }
     }
@@ -342,10 +335,9 @@ class App extends React.Component {
             <Dialogs />
             <Modals />
             {/* Yandex.Metrika counter */}
-            <noscript><div><img src="https://mc.yandex.ru/watch/41829924" style={{position: 'absolute', left: '-9999px'}} alt="" /></div>
+            <noscript><div><img src="https://mc.yandex.ru/watch/41829924" style={{position: 'absolute', left: '-9999px'}} alt="" /></div></noscript>
             {/* Facebook Pixel Code */}
-            <img height="1" width="1" src="https://www.facebook.com/tr?id=136063983553382&ev=PageView&noscript=1" />
-            </noscript>
+            <noscript><img height="1" width="1" style={{display: 'none'}} src="https://www.facebook.com/tr?id=217726192019770&ev=PageView&noscript=1" /></noscript>
         </div>
     }
 }

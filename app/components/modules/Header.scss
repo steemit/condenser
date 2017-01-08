@@ -170,13 +170,13 @@ ul > li > .button {
     .show-for-medium a { font-size: 1rem; }
     // different resollutions
     @media #{$small-only} {
-        .toggle-menu { padding: .7rem 1rem !important; }
+    //     .toggle-menu { padding: .7rem 1rem !important; }
     }
     @media #{$medium-only} {
-        li.show-for-medium { padding: .7rem 1rem .7rem 0rem; }
+    //     li.show-for-medium { padding: .7rem 1rem .7rem 0rem; }
     }
     @media #{$medium-up} {
-        .toggle-menu { display: none; }
+        // .toggle-menu { display: none; }
     }
     @media #{$large-up} {
         .show-for-medium a { font-size: 1.1rem; }

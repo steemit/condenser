@@ -233,7 +233,7 @@ class App extends React.Component {
 
         let header_bar = null
         // if (!/^\/ico$/.test(location.pathname) && !/^\/$/.test(location.pathname)) {
-        if (location.pathname.indexOf("/ico")) {
+        if (!/^\/$/.test(location.pathname)) {
           header_bar = (
           <div>
 

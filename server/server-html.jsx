@@ -28,7 +28,7 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
             }
             {/* this is 'intl' polyfill for safari browser */}
             {/* it is must be loaded before main javascript file */}
-            <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Intl.~locale.en,Intl.~locale.ru,Intl.~locale.ua"></script>
+            <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Intl.~locale.en,Intl.~locale.ru,Intl.~locale.ua" async />
             {/* old steemit favicons (keep them here as placeholder to make sure new ones work properly) */}
             {/* <link rel="icon" type="image/x-icon" href="/favicon.ico" />
             <link rel="apple-touch-icon-precomposed" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png" type="image/png" />
@@ -61,18 +61,18 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
             <link rel="mask-icon" href="/images/favicons/safari-pinned-tab.svg" color="#5bbad5" />
             <meta name="theme-color" content="#ffffff" />
 
-            <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" />
-            {/* animate.css were added for landing page */}
-            <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css" rel="stylesheet" />
-
-            { assets.style.map((href, idx) =>
-                <link href={href} key={idx} rel="stylesheet" type="text/css" />) }
             <title>{page_title}</title>
         </head>
         <body>
         <div id="content" dangerouslySetInnerHTML={ { __html: body } }></div>
-        {assets.script.map((href, idx) => <script key={ idx } src={ href }></script>) }
-        {config.js_plugins_path && <script src={config.js_plugins_path}></script>}
+        {assets.script.map((href, idx) => <script key={ idx } src={ href } async defer />) }
+        {config.js_plugins_path && <script src={config.js_plugins_path} async defer />}
+        {/* styles moved to bottom to prevent css blocking page rendering which is bad for SEO */}
+        {assets.style.map((href, idx) =>
+            <link href={href} key={idx} rel="stylesheet" type="text/css" />)}
+        {<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" />}
+        {/* animate.css were added for landing page */}
+        {<link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css" rel="stylesheet" />}
         </body>
         </html>
     );

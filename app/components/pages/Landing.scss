@@ -302,6 +302,7 @@
 
 .Team {
 	.Team__members { margin-bottom: 150px; }
+    > .Team__members { margin-bottom: 50px; }
 	.Team__partners {
 		margin: 50px auto;
 		.columns {

@@ -353,7 +353,7 @@ const es = 	{
 	// Voting.jsx
 	stop_seeing_content_from_this_user: 'Stop seeing content from this user',
 	flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following: 'Flagging a post can remove rewards and make this material less visible. Some common reasons to flag',
-    inappropriate_rewards_distribution: 'Distribución inapropiada de recompensas',
+    disagreement_on_rewards: 'Desacuerdo sobre las recompensas',
     fraud_or_plagiarism: 'Fraude o plagio',
 	hate_speech_or_internet_trolling: 'Hate Speech o Internet Trolling',
 	intentional_miss_categorized_content_or_spam: 'Contenido mal categorizado intencional o Spam',

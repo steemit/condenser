@@ -32,9 +32,6 @@ class VotesAndComments extends React.Component {
 
         return (
             <span className="VotesAndComments">
-                <span className="VotesAndComments__votes" title={translate('vote_count', {voteCount: voters_count})}>
-                    <Icon name={voters_count > 1 ? 'voters' : 'voter'} />&nbsp;{voters_count}
-                </span>
                 <span className={'VotesAndComments__comments' + (comments === 0 ? ' no-comments' : '')}>
                      <Link to={commentsLink} title={comments_tooltip}>
                         <Icon name={comments > 1 ? 'chatboxes' : 'chatbox'} />&nbsp;{comments}

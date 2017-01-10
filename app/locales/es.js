@@ -263,7 +263,7 @@ const es = 	{
 	unknown_account: 'Cuenta no conocida',
 	user_hasnt_made_any_posts_yet: "Looks like {name} hasn't made any posts yet!",
 	user_hasnt_started_bloggin_yet: "Looks like {name} hasn't started blogging yet!",
-	user_hasnt_followed_anything_yet: "Looks like {name} hasn't followed anything yet!",
+	user_hasnt_followed_anything_yet: "Looks like {name} hasn't followed anything yet!, Si {name} agregó recientemente nuevos usuarios a seguir, su feed personalizado se rellenará una vez que el nuevo contenido esté disponible.",
 	user_hasnt_had_any_replies_yet: "{name} hasn't had any replies yet",
 	users_blog: "Blog de {name}",
 	users_posts: "Publicaciones de {name}",

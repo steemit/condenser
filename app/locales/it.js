@@ -263,7 +263,7 @@ const it = 	{
 	unknown_account: 'Account Sconosciuto',
 	user_hasnt_made_any_posts_yet: "Sembra che {name} non ha ancora scritto nessun post!",
 	user_hasnt_started_bloggin_yet: "Sembra che {name} non ha ancora scritto nessun articolo!",
-	user_hasnt_followed_anything_yet: "Sembra che {name} non ha ancora seguito nessuno!",
+	user_hasnt_followed_anything_yet: "Sembra che {name} non ha ancora seguito nessuno! Se {name} aggiunte di recente nuovi utenti da seguire, la loro alimentazione personalizzata popolerà una volta nuovi contenuti è disponibile",
 	user_hasnt_had_any_replies_yet: "{name} non ha avuto ancora nessuna risposta",
 	users_blog: "{name}'s blog",
 	users_posts: "{name}'s posts",

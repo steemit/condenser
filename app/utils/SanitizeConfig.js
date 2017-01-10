@@ -28,7 +28,7 @@ const iframeWhitelist = [
         }
     }
 ];
-export const noImageText = '(Image not shown due to low ratings)'
+export const noImageText = '(Media not shown due to low ratings)'
 export const allowedTags = `
     div, iframe, del,
     a, p, b, q, br, ul, li, ol, img, h1, h2, h3, h4, h5, h6, hr,
@@ -57,6 +57,7 @@ export default ({large = true, highQualityPost = true, noImage = false, sanitize
     },
     transformTags: {
         iframe: (tagName, attribs) => {
+            if(noImage) return {tagName: 'div', text: noImageText}
             const srcAtty = attribs.src;
             for(const item of iframeWhitelist)
                 if(item.re.test(srcAtty)) {

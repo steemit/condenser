@@ -66,6 +66,12 @@ export function recordPageView(page, ref) {
     return last_page_promise;
 }
 
+export function webPushRegister(account, webpush_params) {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    const request = Object.assign({}, request_base, {body: JSON.stringify({csrf: $STM_csrf, account, webpush_params})});
+    fetch('/api/v1/notifications/register', request);
+}
+
 if (process.env.BROWSER) {
     window.getNotifications = getNotifications;
     window.markNotificationRead = markNotificationRead;

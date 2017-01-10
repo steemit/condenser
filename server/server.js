@@ -1,6 +1,7 @@
 // newrelic is not working with latest npm if(process.env.NEW_RELIC_APP_NAME) require('newrelic');
 
 import path from 'path';
+import fs from 'fs';
 import Koa from 'koa';
 import mount from 'koa-mount';
 import helmet from 'koa-helmet';
@@ -109,6 +110,12 @@ app.use(mount('/robots.txt', function* () {
     this.set('Cache-Control', 'public, max-age=86400000');
     this.type = 'text/plain';
     this.body = "User-agent: *\nAllow: /";
+}));
+
+app.use(mount('/service-worker.js', function* () {
+    this.set('Cache-Control', 'public, max-age=86400000');
+    this.type = 'application/javascript';
+    this.body = fs.readFileSync(path.join(__dirname, './service-worker.js'));
 }));
 
 // set user's uid - used to identify users in logs and some other places

@@ -4,7 +4,7 @@ import config from 'config';
 export default function ServerHTML({ body, assets, locale, title, meta }) {
     let page_title = title;
     return (
-        <html lang="en">
+        <html lang="ru">
         <head>
             <meta charSet="utf-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -61,18 +61,18 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
             <link rel="mask-icon" href="/images/favicons/safari-pinned-tab.svg" color="#5bbad5" />
             <meta name="theme-color" content="#ffffff" />
 
+            <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" />
+            {/* animate.css were added for landing page */}
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css" rel="stylesheet" />
+
+            { assets.style.map((href, idx) =>
+                <link href={href} key={idx} rel="stylesheet" type="text/css" />) }
             <title>{page_title}</title>
         </head>
         <body>
         <div id="content" dangerouslySetInnerHTML={ { __html: body } }></div>
         {assets.script.map((href, idx) => <script key={ idx } src={ href } async defer />) }
         {config.js_plugins_path && <script src={config.js_plugins_path} async defer />}
-        {/* styles moved to bottom to prevent css blocking page rendering which is bad for SEO */}
-        {assets.style.map((href, idx) =>
-            <link href={href} key={idx} rel="stylesheet" type="text/css" />)}
-        {<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" />}
-        {/* animate.css were added for landing page */}
-        {<link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css" rel="stylesheet" />}
         </body>
         </html>
     );

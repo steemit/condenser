@@ -11,40 +11,49 @@ export default class LandingTeam extends React.Component {
 				</div>
 
 				<div className="row Team__members">
-                    <div data-wow-delay="1s" className="wow fadeIn small-6 medium-4 large-4 small-centered medium-centered large-centered columns Team__member Team__member__sergey">
+                    <div data-wow-delay="1s" className="wow fadeIn small-6 medium-4 large-3 small-centered medium-centered large-centered columns Team__member Team__member__sergey">
                         <div className="Team__members__image-wrapper">
                             <a href="https://www.facebook.com/serejandmyself"><img className="Team__member__img" src="images/landing/sergey.jpg" /></a>
                         </div>
                         <strong>Сергей Симановский</strong>
-                        <p>Проджект менеджер</p>
+                        <p>Project Manager</p>
                         <ul>
                             <li><a href="https://www.linkedin.com/in/sergey-simanovsky-87b5ab100"><img src="images/landing/linkedin_icon.jpg" /></a></li>
                             <li><a href="https://www.facebook.com/serejandmyself"><img className="Team__facebook-logo" src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-facebook-512.png" /></a></li>
                         </ul>
                     </div>
-                    <div data-wow-delay="1s" className="wow fadeIn small-6 medium-4 large-4 small-centered medium-centered large-centered columns Team__member Team__member__anton">
+                    <div data-wow-delay="1s" className="wow fadeIn small-6 medium-4 large-3 small-centered medium-centered large-centered columns Team__member Team__member__anton">
                         <div className="Team__members__image-wrapper">
                             <a href="https://www.linkedin.com/in/solodikov"><img className="Team__member__img" src="images/landing/anton.jpg" /></a>
                         </div>
                         <strong>Антон Солодиков</strong>
                         <p>СМО</p>
                         <ul>
-                            <li><a href="https://www.linkedin.com/in/solodikov"><img src="images/landing/linkedin_icon.jpg" /></a></li>
+                            <li><a href="https://www.linkedin.com/in/solodikov"><img src="images/landing/linkedin_icon.jpg" alt="фотография Антона Солодикова" /></a></li>
                             <li><a href="https://www.facebook.com/solodikov
 "><img className="Team__facebook-logo" src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-facebook-512.png" /></a></li>
                         </ul>
                     </div>
-                    <div data-wow-delay="1s" className="wow fadeIn small-12 medium-4 large-4 columns small-centered Team__member Team__member__misha">
+                    <div data-wow-delay="1s" className="wow fadeIn small-6 medium-4 large-3 columns small-centered Team__member Team__member__misha">
                         <div className="Team__members__image-wrapper">
                             <img className="Team__member__img" src="https://pp.vk.me/c637427/v637427379/6319/yNXcC70HrLA.jpg" alt="фотография Михаила Палей" />
                         </div>
                         <strong>Михаил Палей</strong>
                         <p>Front-end разработка</p>
                         <ul>
-                            {/* <li><a href="https://www.vk.com/paleyblog">vk</a></li> */}
                             <li><a href="https://www.github.com/Undeadlol1"><img src="images/landing/github_icon.jpg" /></a></li>
                         </ul>
                     </div>
+					<div data-wow-delay="1s" className="wow fadeIn small-6 medium-12 large-3 columns small-centered Team__member Team__member__mihail">
+						<div className="Team__members__image-wrapper">
+							<img className="Team__member__img" src="https://s23.postimg.org/ju1d2msuz/2765860.png" alt="фотография Михаила Комарова" />
+						</div>
+						<strong>Михаил Комаров</strong>
+						<p>Блокчейн разработка</p>
+						<ul>
+							<li><a href="https://github.com/Nemo1369"><img src="images/landing/github_icon.jpg" /></a></li>
+						</ul>
+					</div>
                 </div>
 
 				<div className="row text-center">

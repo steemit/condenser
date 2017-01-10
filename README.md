@@ -1,3 +1,7 @@
+=======
+# Golos.io
+Golos.io это веб-клиент блокчейна golos.
+========
 
 ## Установка
 
@@ -9,19 +13,6 @@
 
 #### Установка последней версии node.js
 
-=======
-# Steemit.com
-Steemit.com is the react.js web interface to the world's first and best blockchain-based social media platform.  It uses [STEEM](https://github.com/steemit/steem), a blockchain powered by Graphene 2.0 technology to store JSON-based content for a plethora of web applications.   
-========
-
-## Why would I want to use Steemit.com?
-* Learning how to build blockchain-based web applications using STEEM as a content storage mechanism in react.js
-* Reviewing the inner workings of the steemit.com social media platform
-* Assisting with software development for steemit.com
-
-## Installation
-
-#### Clone the repository and make a tmp folder
 ```bash
 # Ставим n - менеджер версий ноды
 sudo npm install -g n
@@ -37,14 +28,25 @@ npm install
 
 #### Редактирование файла конфигурации
 
-В настоящий момент Вам придётся связаться с командой запуска, чтобы получить внятные инструкции.
-
-
 ```bash
 cd config
 cp steem-example.json steem-dev.json
 ```
+
+Generate a new crypto_key and save under server_session_secret in ./steem-dev.json.
+
+```bash
+node
+> crypto.randomBytes(32).toString('base64')
+```
 (note: it's steem.json in production)
+
+Afterwards create front-end public config file
+
+```bash
+cd app/config
+cp public-example.json public.json
+```
 
 #### Установка базы данных (mysql)
 

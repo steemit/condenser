@@ -108,7 +108,7 @@ const en = 	{
 	all_accounts_refunded: 'All Recovered Accounts have been fully Refunded',
 	APP_URL_is_now_open_source: APP_URL + ' is now Open Source',
 	// this is mainly from ReplyEditor
-	tag_your_story: 'Tag (up to 4 tags), the first tag is your main category.',
+	tag_your_story: 'Tag (up to 5 tags), the first tag is your main category.',
 	select_a_tag: 'Select a tag',
 	required: 'Required',
 	shorten_title: 'Shorten title',

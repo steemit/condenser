@@ -92,7 +92,7 @@ const it = 	{
 	all_accounts_refunded: 'Tutti gli account recuperati sono stati rimborsati pienamente',
 	steemit_is_now_open_source: 'Steemit.com è ora Open Source',
 	// this is mainly from ReplyEditor
-	tag_your_story: 'Tag (massimo 4 tags), il primo tag rappresenta la categoria principale.',
+	tag_your_story: 'Tag (massimo 5 tags), il primo tag rappresenta la categoria principale.',
 	select_a_tag: 'Seleziona un tag',
 	required: 'Richiesto',
 	shorten_title: 'Titoletto',

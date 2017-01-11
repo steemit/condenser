@@ -92,7 +92,7 @@ const es = 	{
 	all_accounts_refunded: 'All Recovered Accounts have been fully Refunded',
 	steemit_is_now_open_source: 'Steemit.com es ahora Software Libre',
 	// this is mainly from ReplyEditor
-	tag_your_story: 'Tag (up to 4 tags), the first tag is your main category.',
+	tag_your_story: 'Tag (up to 5 tags), the first tag is your main category.',
 	select_a_tag: 'Selecciona una etiqueta',
 	required: 'Requerido',
 	shorten_title: 'Acortar título!',

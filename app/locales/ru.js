@@ -193,6 +193,8 @@ const ru = {
 	generated_password: 'Сгенерированный пароль',
 	recover_account: 'Восстановить аккаунт',
 	new: 'Новое', // ex. 'Generated Password (new)', but not exclusively
+	age: 'Новое',
+	votes: 'votes',
 	backup_password_by_storing_it: 'Сделайте резервную копию в менеджере паролей или текстовом файле',
 	click_to_generate_password: 'Нажмите, чтобы сгененировать пароль',
 	re_enter_generate_password: 'Повторно введите пароль',
@@ -282,7 +284,7 @@ const ru = {
 	unknown_account: 'Неизвестный аккаунт',
 	user_hasnt_made_any_posts_yet: "Похоже что {name} еще не написал постов!",
 	user_hasnt_started_bloggin_yet: "Похоже что {name} еще не завёл блог!",
-	user_hasnt_followed_anything_yet: "Похоже что {name} еще никого ни на кого не подписан!",
+	user_hasnt_followed_anything_yet: "Похоже что {name} еще никого ни на кого не подписан! Если {name} недавно добавили новые пользователи следовать, их персонализированный канал будет заполнить один раз новый контент доступен",
 	user_hasnt_had_any_replies_yet: "{name} еще не получил ответов",
 	users_blog: "блог {name}",
 	users_posts: "посты {name}",
@@ -379,7 +381,8 @@ const ru = {
 	// Voting.jsx
 	stop_seeing_content_from_this_user: 'Перестать видеть контент от этого пользователя',
 	flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following: 'Голос против может снять вознаграждения и сделать пост менее видимым. Голосование против должно основываться на',
-	fraud_or_plagiarism: 'Мошенничество или плагиат',
+    disagreement_on_rewards: 'Несогласие на награды',
+    fraud_or_plagiarism: 'Мошенничество или плагиат',
 	hate_speech_or_internet_trolling: 'Разжигание ненависти или интернет троллинг',
 	intentional_miss_categorized_content_or_spam: 'Преднамеренная неправильная категоризация контента или спам',
 	downvote: 'Голосовать против',
@@ -502,7 +505,7 @@ const ru = {
 	tokens_worth_about_AMOUNT_of_LIQUID_TOKEN: 'Перемещаемые цифровые токены, цена которых всегда равна ~1 мг золота в ' + LIQUID_TOKEN + '.',
 	influence_tokens_which_earn_more_power_by_holding_long_term: 'Неперемещаемые цифровые токены, их количество увеличивается при долгосрочном хранении.',
 	the_more_you_hold_the_more_you_influence_post_rewards: 'Чем их больше, тем сильней вы влияете на вознаграждения за пост и тем больше зарабатываете за голосование.',
-	the_estimated_value_is_based_on_a_7_day_average_value_of_LIQUID_TOKEN_in_currency: 'Оценочная стоимость рассчитывается из 7-ми дневной средней стоимости ' + LIQUID_TOKEN + '.',
+	the_estimated_value_is_based_on_an_average_value_of_steem_in_US_dollars: 'Сметная стоимость основана на среднем значении ' + LIQUID_TOKEN +  ' в долларах США',
 	VESTING_TOKEN_is_non_transferrable_and_requires_convert_back_to_LIQUID_TOKEN: VESTING_TOKEN + ' нельзя передавать и потребуется 3 месяца и 13 выплаты чтобы перевести обратно в ' + LIQUID_TOKEN + '.',
 	// TODO
 	converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again: 'Конвертированная ' + VESTING_TOKEN + ' может быть отправлена себе или кому-то еще, но не может быть передана вновь без конвертирования назад в ' + LIQUID_TOKEN + '.',

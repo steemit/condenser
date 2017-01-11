@@ -14,8 +14,9 @@ import FoundationDropdown from 'app/components/elements/FoundationDropdown';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 
 const ABOUT_FLAG = <div>
-    <p>Flagging a post can remove rewards and make this material less visible.  The flag should be used for the following:</p>
+    <p>Flagging a post can remove rewards and make this material less visible.  Some common reasons to flag:</p>
     <ul>
+        <li>Disagreement on rewards</li>
         <li>Fraud or Plagiarism</li>
         <li>Hate Speech or Internet Trolling</li>
         <li>Intentional miscategorized content or Spam</li>
@@ -157,7 +158,8 @@ class Voting extends React.Component {
         if (payout < 0.0) payout = 0.0;
         if (payout > max_payout) payout = max_payout;
         const payout_limit_hit = payout >= max_payout;
-
+        // Show pending payout amount for declined payment posts
+        if (max_payout === 0) payout = pending_payout;
         const up = <Icon name={votingUpActive ? 'empty' : 'chevron-up-circle'} />;
         const classUp = 'Voting__button Voting__button-up' + (myVote > 0 ? ' Voting__button--upvoted' : '') + (votingUpActive ? ' votingUp' : '');
 

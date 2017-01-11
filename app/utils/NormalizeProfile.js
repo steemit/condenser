@@ -1,3 +1,5 @@
+import linksRe from 'app/utils/Links'
+
 function truncate(str, len) {
     if(str) {
         str = str.trim()
@@ -44,6 +46,14 @@ export default function normalizeProfile(account) {
     if (website && website.indexOf("http") === -1) {
         website = 'http://' + website;
     }
+    if(website) {
+        // enforce that the url regex matches, and fully
+        const m = website.match(linksRe.any)
+        if(!m || m[0] !== website) {
+            website = null;
+        }
+    }
+
     if(profile_image && !/^https?:\/\//.test(profile_image)) profile_image = null;
 
     return {

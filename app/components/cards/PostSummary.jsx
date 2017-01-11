@@ -124,6 +124,17 @@ class PostSummary extends React.Component {
             {} in <TagList post={p} single />
         </span>
 
+        const content_footer = <div className="PostSummary__footer">
+            <Voting post={post} showList={false} />
+            <VotesAndComments post={post} commentsLink={comments_link} />
+            <span className="PostSummary__time_author_category">
+                {!archived && <Reblog author={p.author} permlink={p.permlink} />}
+                <span className="show-for-medium">
+                    {author_category}
+                </span>
+            </span>
+        </div>
+
         const {nsfwPref, username} = this.props
         const {revealNsfw} = this.state
 
@@ -131,15 +142,19 @@ class PostSummary extends React.Component {
             if(nsfwPref === 'hide') {
                 // user wishes to hide these posts entirely
                 return null;
-            } else if(!revealNsfw && nsfwPref !== 'show') {
-                // warn the user, unless they have chosen to reveal this post or have their preference set to "show always"
+            } else if(nsfwPref === 'warn' && !revealNsfw) {
+                // user wishes to be warned, and has not revealed this post
                 return (
                     <article className={'PostSummary hentry'} itemScope itemType ="http://schema.org/blogPost">
                         <div className="PostSummary__nsfw-warning">
+                            <div className="PostSummary__time_author_category_small show-for-small-only">
+                                {author_category}
+                            </div>
                             This post is <span className="nsfw-flag">nsfw</span>.
                             You can <a href="#" onClick={this.onRevealNsfw}>reveal it</a> or{' '}
                             {username ? <span>adjust your <Link to={`/@${username}/settings`}>display preferences</Link>.</span>
                                       : <span><Link to="/enter_email">create an account</Link> to save your preferences.</span>}
+                            {content_footer}
                         </div>
                     </article>
                 )
@@ -149,7 +164,7 @@ class PostSummary extends React.Component {
         let thumb = null;
         if(pictures && p.image_link) {
           const prox = $STM_Config.img_proxy_prefix
-          const size = (thumbSize == 'mobile') ? '640x480' : '128x256'
+          const size = (thumbSize == 'mobile') ? '640x480' : '256x512';
           const url = (prox ? prox + size + '/' : '') + p.image_link
           if(thumbSize == 'mobile') {
             thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image-mobile"><img src={url} /></a>
@@ -178,14 +193,7 @@ class PostSummary extends React.Component {
                         {content_title}
                     </div>
                     {content_body}
-                    <div className="PostSummary__footer">
-                        <Voting post={post} showList={false} />
-                        <VotesAndComments post={post} commentsLink={comments_link} />
-                        <span className="PostSummary__time_author_category show-for-medium">
-                            {!archived && <Reblog author={p.author} permlink={p.permlink} />}
-                            {author_category}
-                        </span>
-                    </div>
+                    {content_footer}
                 </div>
             </article>
         )

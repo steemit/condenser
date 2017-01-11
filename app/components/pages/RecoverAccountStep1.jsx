@@ -192,7 +192,7 @@ class RecoverAccountStep1 extends React.Component {
                         <div className="column large-4">
                             {show_social_login === 'both' ? <p>{translate('login_with_facebook_or_reddit_media_to_verify_identity')}.</p>
                         : <p>{translate('login_with_social_media_to_verify_identity', {
-                            provider: show_social_login
+                            provider: show_social_login.charAt(0).toUpperCase() + show_social_login.slice(1)
                         })}.</p>}
                         </div>
                     </div>
@@ -211,7 +211,7 @@ class RecoverAccountStep1 extends React.Component {
                         &nbsp;
                     </div>
                     {(show_social_login === 'both' || show_social_login === 'reddit') && <div className="row">
-                        <div className="column large-4">
+                        <div className="column large-4 shrink">
                             <SvgImage name="reddit" width="64px" height="64px" />
                         </div>
                         <div className="column large-8">

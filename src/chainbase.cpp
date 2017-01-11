@@ -130,6 +130,7 @@ namespace chainbase {
       _index_map.clear();
    }
 
+#ifdef CHAINBASE_CHECK_LOCKING
    void database::set_require_locking( bool enable_require_locking )
    {
       _enable_require_locking = enable_require_locking;
@@ -141,6 +142,7 @@ namespace chainbase {
       std::cerr << err_msg << std::endl;
       BOOST_THROW_EXCEPTION( std::runtime_error( err_msg ) );
    }
+#endif
 
    void database::undo()
    {

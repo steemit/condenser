@@ -23,6 +23,7 @@
 #include <array>
 #include <atomic>
 #include <fstream>
+#include <iostream>
 #include <stdexcept>
 #include <typeindex>
 
@@ -644,6 +645,7 @@ namespace chainbase {
          void close();
          void flush();
          void wipe( const bfs::path& dir );
+#ifdef CHAINBASE_CHECK_LOCKING
          void set_require_locking( bool enable_require_locking );
 
          void require_lock_fail( const char* lock_type )const;
@@ -659,6 +661,7 @@ namespace chainbase {
             if( BOOST_UNLIKELY( _enable_require_locking & (_write_lock_count <= 0) ) )
                require_lock_fail("write");
          }
+#endif
 
          struct session {
             public:
@@ -860,9 +863,11 @@ namespace chainbase {
          template< typename Lambda >
          auto with_read_lock( Lambda&& callback, uint64_t wait_micro = 1000000 ) -> decltype( (*(Lambda*)nullptr)() )
          {
+#ifdef CHAINBASE_CHECK_LOCKING
             read_lock lock( _rw_manager->current_lock(), bip::defer_lock_type() );
             BOOST_ATTRIBUTE_UNUSED
             int_incrementer ii( _read_lock_count );
+#endif
 
             if( !wait_micro )
             {
@@ -884,9 +889,11 @@ namespace chainbase {
             if( _read_only )
                BOOST_THROW_EXCEPTION( std::logic_error( "cannot acquire write lock on read-only process" ) );
 
+#ifdef CHAINBASE_CHECK_LOCKING
             write_lock lock( _rw_manager->current_lock(), boost::defer_lock_t() );
             BOOST_ATTRIBUTE_UNUSED
             int_incrementer ii( _write_lock_count );
+#endif
 
             if( !wait_micro )
             {

@@ -16,7 +16,7 @@ import CloseButton from 'react-foundation-components/lib/global/close-button';
 const ABOUT_FLAG = <div>
     <p>Flagging a post can remove rewards and make this material less visible.  Some common reasons to flag:</p>
     <ul>
-        <li>Inappropriate rewards distribution</li>
+        <li>Disagreement on rewards</li>
         <li>Fraud or Plagiarism</li>
         <li>Hate Speech or Internet Trolling</li>
         <li>Intentional miscategorized content or Spam</li>

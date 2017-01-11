@@ -130,6 +130,13 @@ namespace chainbase {
       _index_map.clear();
    }
 
+   void database::require_lock_fail( const char* lock_type )const
+   {
+      std::string err_msg = "require_" + std::string( lock_type ) + "_lock() failed";
+      std::cerr << err_msg << std::endl;
+      BOOST_THROW_EXCEPTION( std::runtime_error( err_msg ) );
+   }
+
    void database::undo()
    {
       for( auto& item : _index_list )

@@ -59,6 +59,10 @@ export default class SlateEditor extends React.Component {
         this.setState({state: this.props.initialState})
     }
 
+    _focus = () => {
+        this.refs.editor.focus()
+    }
+
     componentDidMount = () => {
         this.updateMenu()
         this.updateSidebar()
@@ -96,7 +100,7 @@ export default class SlateEditor extends React.Component {
     hasBlock = (type) => {
         const { state } = this.state
         const { document } = state
-        return state.blocks.some(node => (node.type == type) || !!document.getClosest(node, parent => parent.type == type) )
+        return state.blocks.some(node => (node.type == type) || !!document.getClosest(node.key, parent => parent.type == type) )
     }
 
     // Check if the current selection has an inline of `type`.
@@ -480,6 +484,7 @@ export default class SlateEditor extends React.Component {
         return (
             <div className="SlateEditor Markdown">
                 <Editor
+                    ref="editor"
                     schema={schema}
                     placeholder={this.props.placeholder || 'Enter some text...'}
                     plugins={plugins}

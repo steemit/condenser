@@ -115,8 +115,8 @@ class ReplyEditor extends React.Component {
         }
         this.onCancel = e => {
             if(e) e.preventDefault()
-            const {onCancel, resetForm} = this.props
-            if(confirm("Are you sure you want to clear this form?")) {
+            const {onCancel, resetForm, fields} = this.props
+            if(!fields.body.value || confirm("Are you sure you want to clear this form?")) {
                 resetForm()
                 this.setAutoVote()
                 this.setState({rte_value: stateFromHtml()})

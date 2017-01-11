@@ -5,6 +5,7 @@
 New features
 --------
  - Strict checking of profile url #979
+ - TagsIndex revamp #806
  - Parse block quote from text if preview text is rendered as comment #955
  - Prepend nested comments with dots #942
  - Welcome Page Copyedit Changes for #923

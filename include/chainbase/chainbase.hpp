@@ -618,6 +618,11 @@ namespace chainbase {
             return _locks[ _current_lock % CHAINBASE_NUM_RW_LOCKS ];
          }
 
+         uint32_t current_lock_num()
+         {
+            return _current_lock;
+         }
+
       private:
          std::array< read_write_mutex, CHAINBASE_NUM_RW_LOCKS >     _locks;
          std::atomic< uint32_t >                                    _current_lock;
@@ -856,8 +861,8 @@ namespace chainbase {
          auto with_read_lock( Lambda&& callback, uint64_t wait_micro = 1000000 ) -> decltype( (*(Lambda*)nullptr)() )
          {
             read_lock lock( _rw_manager->current_lock(), bip::defer_lock_type() );
+            BOOST_ATTRIBUTE_UNUSED
             int_incrementer ii( _read_lock_count );
-            ii.get(); // prevent unused variable warning
 
             if( !wait_micro )
             {
@@ -880,8 +885,8 @@ namespace chainbase {
                BOOST_THROW_EXCEPTION( std::logic_error( "cannot acquire write lock on read-only process" ) );
 
             write_lock lock( _rw_manager->current_lock(), boost::defer_lock_t() );
+            BOOST_ATTRIBUTE_UNUSED
             int_incrementer ii( _write_lock_count );
-            ii.get(); // prevent unused variable warning
 
             if( !wait_micro )
             {
@@ -892,6 +897,7 @@ namespace chainbase {
                while( !lock.timed_lock( boost::posix_time::microsec_clock::local_time() + boost::posix_time::microseconds( wait_micro ) ) )
                {
                   _rw_manager->next_lock();
+                  std::cerr << "Lock timeout, moving to lock " << _rw_manager->current_lock_num() << std::endl;
                   lock = write_lock( _rw_manager->current_lock(), boost::defer_lock_t() );
                }
             }

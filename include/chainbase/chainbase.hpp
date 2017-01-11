@@ -14,6 +14,7 @@
 #include <boost/multi_index_container.hpp>
 
 #include <boost/chrono.hpp>
+#include <boost/config.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/thread.hpp>
@@ -638,18 +639,19 @@ namespace chainbase {
          void close();
          void flush();
          void wipe( const bfs::path& dir );
+         void set_require_locking( bool enable_require_locking );
 
          void require_lock_fail( const char* lock_type )const;
 
          void require_read_lock()const
          {
-            if( _read_only && (_read_lock_count <= 0) )
+            if( _enable_require_locking && _read_only && (_read_lock_count <= 0) )
                require_lock_fail("read");
          }
 
          void require_write_lock()
          {
-            if( _write_lock_count <= 0 )
+            if( _enable_require_locking && (_write_lock_count <= 0) )
                require_lock_fail("write");
          }
 
@@ -918,6 +920,7 @@ namespace chainbase {
 
          int32_t                                                     _read_lock_count = 0;
          int32_t                                                     _write_lock_count = 0;
+         bool                                                        _enable_require_locking = false;
    };
 
    template<typename Object, typename... Args>

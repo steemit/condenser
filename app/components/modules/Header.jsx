@@ -177,8 +177,9 @@ class Header extends React.Component {
         let sort_order_extra_menu = null;
         if (sort_order === 'trending' || sort_order === 'trending30') {
             const items = [
-                {link: `/trending/${topic}`, value: '24 hour', active: sort_order === 'trending'},
-                {link: `/trending30/${topic}`, value: '30 day', active: sort_order === 'trending30'}
+                // Remove sub filters for time being
+                // {link: `/trending/${topic}`, value: '24 hour', active: sort_order === 'trending'},
+                // {link: `/trending30/${topic}`, value: '30 day', active: sort_order === 'trending30'}
             ];
             sort_order_extra_menu = <HorizontalMenu items={items} />
         }

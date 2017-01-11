@@ -643,7 +643,7 @@ namespace chainbase {
 
          void require_read_lock()const
          {
-            if( _read_lock_count <= 0 )
+            if( _read_only && (_read_lock_count <= 0) )
                require_lock_fail("read");
          }
 

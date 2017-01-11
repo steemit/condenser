@@ -26,8 +26,8 @@
 #include <stdexcept>
 #include <typeindex>
 
-#ifndef CHAINBASE_DEFAULT_NUM_RW_LOCKS
-   #define CHAINBASE_DEFAULT_NUM_RW_LOCKS 10
+#ifndef CHAINBASE_NUM_RW_LOCKS
+   #define CHAINBASE_NUM_RW_LOCKS 10
 #endif
 
 namespace chainbase {
@@ -610,17 +610,17 @@ namespace chainbase {
          void next_lock()
          {
             _current_lock++;
-            new( &_locks[ _current_lock % 10 ] ) read_write_mutex();
+            new( &_locks[ _current_lock % CHAINBASE_NUM_RW_LOCKS ] ) read_write_mutex();
          }
 
          read_write_mutex& current_lock()
          {
-            return _locks[ _current_lock % 10 ];
+            return _locks[ _current_lock % CHAINBASE_NUM_RW_LOCKS ];
          }
 
       private:
-         std::array< read_write_mutex, 10 >        _locks;
-         std::atomic< uint32_t >                   _current_lock;
+         std::array< read_write_mutex, CHAINBASE_NUM_RW_LOCKS >     _locks;
+         std::atomic< uint32_t >                                    _current_lock;
    };
 
 

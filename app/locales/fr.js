@@ -263,7 +263,7 @@ const fr = 	{
 	unknown_account: 'Compte Inconnu',
 	user_hasnt_made_any_posts_yet: "Il s\'emble que {name} n\'a pas encore publié d\'articles!",
 	user_hasnt_started_bloggin_yet: "Il s\'emble que {name} n\'a pas encore commencé à blogger!",
-	user_hasnt_followed_anything_yet: "Il s\'emble que {name} ne suit personne pour l\'instant!",
+	user_hasnt_followed_anything_yet: "Il s\'emble que {name} ne suit personne pour l\'instant! Si {name} a récemment ajouté de nouveaux utilisateurs, son flux personnalisé s'affiche une fois le nouveau contenu disponible ",
 	user_hasnt_had_any_replies_yet: "{name} n\'a pas eu de réponses pour l\'instant",
 	users_blog: "Le blog de {name}",
 	users_posts: "Les articles de {name}",

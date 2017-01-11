@@ -282,7 +282,7 @@ const en = 	{
 	unknown_account: 'Unknown Account',
 	user_hasnt_made_any_posts_yet: "Looks like {name} hasn't made any posts yet!",
 	user_hasnt_started_bloggin_yet: "Looks like {name} hasn't started blogging yet!",
-	user_hasnt_followed_anything_yet: "Looks like {name} hasn't followed anything yet!",
+	user_hasnt_followed_anything_yet: "Looks like {name} might not be following anyone yet! If {name} recently added new users to follow, their personalized feed will populate once new content is available.",
 	user_hasnt_had_any_replies_yet: "{name} hasn't had any replies yet",
 	users_blog: "{name}'s blog",
 	users_posts: "{name}'s posts",

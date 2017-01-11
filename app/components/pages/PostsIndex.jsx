@@ -77,6 +77,7 @@ class PostsIndex extends React.Component {
             if (isMyAccount) {
                 emptyText = <div>
                     Looks like you haven't followed anything yet.<br /><br />
+                    If you recently added new users to follow, your personalized feed will populate once new content is available.<br /><br />
                     <Link to="/trending">Explore Steemit</Link><br />
                     <a href="/steemit/@thecryptofiend/the-missing-faq-a-beginners-guide-to-using-steemit">Read The Beginner's Guide</a><br />
                     <a href="/welcome">Read The Steemit Welcome Guide</a>

@@ -3,12 +3,12 @@ var ChainTypes;
 module.exports = ChainTypes = {};
 
 ChainTypes.reserved_spaces = {
-  relative_protocol_ids: 0,
-  protocol_ids: 1,
-  implementation_ids: 2
+    relative_protocol_ids: 0,
+    protocol_ids: 1,
+    implementation_ids: 2
 };
 
-ChainTypes.operations= {
+ChainTypes.operations = {
     vote: 0,
     comment: 1,
     transfer: 2,
@@ -57,7 +57,4 @@ ChainTypes.operations= {
 };
 
 //types.hpp
-ChainTypes.object_type = {
-  "null": 0,
-  base: 1,
-};
+ChainTypes.object_type = { "null": 0, base: 1 };

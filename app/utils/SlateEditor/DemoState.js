@@ -1,14 +1,9 @@
 export default {
-  "nodes": [
-    {
-      "kind": "block",
-      "type": "paragraph",
-      "nodes": [
+    "nodes": [
         {
-          "kind": "text",
-          "text": ""
-        },
-      ]
-    }
-  ]
+            "kind": "block",
+            "type": "paragraph",
+            "nodes": [ { "kind": "text", "text": "" } ]
+        }
+    ]
 }

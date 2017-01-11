@@ -1,30 +1,30 @@
-import { PublicKey } from "../../ecc"
+import {PublicKey} from "../../ecc";
 
 class FastParser {
-
     static fixed_data(b, len, buffer) {
         if (!b) {
             return;
         }
         if (buffer) {
-            let data = buffer.slice(0, len).toString('binary');
-            b.append(data, 'binary');
+            let data = buffer.slice(0, len).toString("binary");
+            b.append(data, "binary");
             while (len-- > data.length) {
                 b.writeUint8(0);
             }
         } else {
             let b_copy = b.copy(b.offset, b.offset + len);
             b.skip(len);
-            return new Buffer(b_copy.toBinary(), 'binary');
+            return new Buffer(b_copy.toBinary(), "binary");
         }
     }
 
-
     static public_key(b, public_key) {
-        if (!b) { return; }
+        if (!b) {
+            return;
+        }
         if (public_key) {
             var buffer = public_key.toBuffer();
-            b.append(buffer.toString('binary'), 'binary');
+            b.append(buffer.toString("binary"), "binary");
             return;
         } else {
             buffer = FastParser.fixed_data(b, 33);
@@ -33,7 +33,9 @@ class FastParser {
     }
 
     static ripemd160(b, ripemd160) {
-        if (!b) { return; }
+        if (!b) {
+            return;
+        }
         if (ripemd160) {
             FastParser.fixed_data(b, 20, ripemd160);
             return;
@@ -48,7 +50,8 @@ class FastParser {
             b.writeInt32(epoch);
             return;
         } else {
-            epoch = b.readInt32(); // fc::time_point_sec
+            epoch = b.readInt32();
+            // fc::time_point_sec
             return new Date(epoch * 1000);
         }
     }

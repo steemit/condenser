@@ -1,26 +1,19 @@
-import webpack from 'webpack';
-import git from 'git-rev-sync';
-import baseConfig from './base.config';
+import webpack from "webpack";
+import git from "git-rev-sync";
+import baseConfig from "./base.config";
 
 export default {
     ...baseConfig,
-    module: {
-        loaders: [
-            ...baseConfig.module.loaders
-        ]
-    },
+    module: { loaders: [ ...baseConfig.module.loaders ] },
     plugins: [
         new webpack.DefinePlugin({
-            'process.env': {
+            "process.env": {
                 BROWSER: JSON.stringify(true),
-                NODE_ENV: JSON.stringify('production'),
+                NODE_ENV: JSON.stringify("production"),
                 VERSION: JSON.stringify(git.tag())
             },
-            global: {
-                TYPED_ARRAY_SUPPORT: JSON.stringify(false)
-            }
+            global: { TYPED_ARRAY_SUPPORT: JSON.stringify(false) }
         }),
-
         // optimizations
         new webpack.optimize.DedupePlugin(),
         new webpack.optimize.OccurenceOrderPlugin(),
@@ -40,13 +33,11 @@ export default {
                 hoist_funs: true,
                 if_return: true,
                 join_vars: true,
-                cascade: true,
                 //drop_console: true
+                cascade: true
             },
-            output: {
-                comments: false
-            }
+            output: { comments: false }
         }),
         ...baseConfig.plugins
     ]
-};
+}

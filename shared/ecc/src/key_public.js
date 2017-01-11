@@ -1,22 +1,23 @@
-var BigInteger = require('bigi');
-var ecurve = require('ecurve');
-var secp256k1 = ecurve.getCurveByName('secp256k1');
-BigInteger = require('bigi');
-var base58 = require('bs58');
-var hash = require('./hash');
-var config = require('../config');
-var assert = require('assert');
+var BigInteger = require("bigi");
+var ecurve = require("ecurve");
+var secp256k1 = ecurve.getCurveByName("secp256k1");
+BigInteger = require("bigi");
+var base58 = require("bs58");
+var hash = require("./hash");
+var config = require("../config");
+var assert = require("assert");
 
-var G = secp256k1.G
-var n = secp256k1.n
+var G = secp256k1.G;
+var n = secp256k1.n;
 
 class PublicKey {
-
     /** @param {ecurve.Point} public key */
-    constructor(Q) { this.Q = Q; }
+    constructor(Q) {
+        this.Q = Q;
+    }
 
     static fromBinary(bin) {
-        return PublicKey.fromBuffer(new Buffer(bin, 'binary'));
+        return PublicKey.fromBuffer(new Buffer(bin, "binary"));
     }
 
     static fromBuffer(buffer) {
@@ -45,7 +46,7 @@ class PublicKey {
     }
 
     toString(address_prefix = config.address_prefix) {
-        return this.toPublicKeyString(address_prefix)
+        return this.toPublicKeyString(address_prefix);
     }
 
     /**
@@ -53,11 +54,12 @@ class PublicKey {
         {return} string
     */
     toPublicKeyString(address_prefix = config.address_prefix) {
-        if(this.pubdata) return address_prefix + this.pubdata
+        if (this.pubdata)
+            return address_prefix + this.pubdata;
         const pub_buf = this.toBuffer();
         const checksum = hash.ripemd160(pub_buf);
-        const addy = Buffer.concat([pub_buf, checksum.slice(0, 4)]);
-        this.pubdata = base58.encode(addy)
+        const addy = Buffer.concat([ pub_buf, checksum.slice(0, 4) ]);
+        this.pubdata = base58.encode(addy);
         return address_prefix + this.pubdata;
     }
 
@@ -69,7 +71,7 @@ class PublicKey {
     */
     static fromString(public_key, address_prefix = config.address_prefix) {
         try {
-            return PublicKey.fromStringOrThrow(public_key, address_prefix)
+            return PublicKey.fromStringOrThrow(public_key, address_prefix);
         } catch (e) {
             return null;
         }
@@ -81,19 +83,24 @@ class PublicKey {
         @throws {Error} if public key is invalid
         @return PublicKey
     */
-    static fromStringOrThrow(public_key, address_prefix = config.address_prefix) {
+    static fromStringOrThrow(
+        public_key,
+        address_prefix = config.address_prefix
+    ) {
         var prefix = public_key.slice(0, address_prefix.length);
         assert.equal(
-            address_prefix, prefix,
-            `Expecting key to begin with ${address_prefix}, instead got ${prefix}`);
-            public_key = public_key.slice(address_prefix.length);
+            address_prefix,
+            prefix,
+            `Expecting key to begin with ${address_prefix}, instead got ${prefix}`
+        );
+        public_key = public_key.slice(address_prefix.length);
 
-        public_key = new Buffer(base58.decode(public_key), 'binary');
+        public_key = new Buffer(base58.decode(public_key), "binary");
         var checksum = public_key.slice(-4);
         public_key = public_key.slice(0, -4);
         var new_checksum = hash.ripemd160(public_key);
         new_checksum = new_checksum.slice(0, 4);
-        assert.deepEqual(checksum, new_checksum, 'Checksum did not match');
+        assert.deepEqual(checksum, new_checksum, "Checksum did not match");
         return PublicKey.fromBuffer(public_key);
     }
 
@@ -102,7 +109,7 @@ class PublicKey {
         var pub_sha = hash.sha512(pub_buf);
         var addy = hash.ripemd160(pub_sha);
         var checksum = hash.ripemd160(addy);
-        addy = Buffer.concat([addy, checksum.slice(0, 4)]);
+        addy = Buffer.concat([ addy, checksum.slice(0, 4) ]);
         return address_prefix + base58.encode(addy);
     }
 
@@ -110,60 +117,60 @@ class PublicKey {
         var pub_buf = this.toBuffer();
         var pub_sha = hash.sha256(pub_buf);
         var addy = hash.ripemd160(pub_sha);
-        addy = Buffer.concat([new Buffer([0x38]), addy]); //version 56(decimal)
-
+        addy = Buffer.concat([ new Buffer([ 56 ]), addy ]);
+        //version 56(decimal)
         var checksum = hash.sha256(addy);
         checksum = hash.sha256(checksum);
 
-        addy = Buffer.concat([addy, checksum.slice(0, 4)]);
+        addy = Buffer.concat([ addy, checksum.slice(0, 4) ]);
         return base58.encode(addy);
     }
 
-    child( offset ) {
+    child(offset) {
+        assert(Buffer.isBuffer(offset), "Buffer required: offset");
+        assert.equal(offset.length, 32, "offset length");
 
-        assert(Buffer.isBuffer(offset), "Buffer required: offset")
-        assert.equal(offset.length, 32, "offset length")
+        offset = Buffer.concat([ this.toBuffer(), offset ]);
+        offset = hash.sha256(offset);
 
-        offset = Buffer.concat([ this.toBuffer(), offset ])
-        offset = hash.sha256( offset )
-
-        let c = BigInteger.fromBuffer( offset )
+        let c = BigInteger.fromBuffer(offset);
 
         if (c.compareTo(n) >= 0)
-            throw new Error("Child offset went out of bounds, try again")
+            throw new Error("Child offset went out of bounds, try again");
 
+        let cG = G.multiply(c);
+        let Qprime = this.Q.add(cG);
 
-        let cG = G.multiply(c)
-        let Qprime = this.Q.add(cG)
+        if (secp256k1.isInfinity(Qprime))
+            throw new Error(
+                "Child offset derived to an invalid key, try again"
+            );
 
-        if( secp256k1.isInfinity(Qprime) )
-            throw new Error("Child offset derived to an invalid key, try again")
-
-        return PublicKey.fromPoint(Qprime)
+        return PublicKey.fromPoint(Qprime);
     }
 
     /* <HEX> */
-
     toByteBuffer() {
-        var b = new ByteBuffer(ByteBuffer.DEFAULT_CAPACITY, ByteBuffer.LITTLE_ENDIAN);
+        var b = new ByteBuffer(
+            ByteBuffer.DEFAULT_CAPACITY,
+            ByteBuffer.LITTLE_ENDIAN
+        );
         this.appendByteBuffer(b);
         return b.copy(0, b.offset);
     }
 
     static fromHex(hex) {
-        return PublicKey.fromBuffer(new Buffer(hex, 'hex'));
+        return PublicKey.fromBuffer(new Buffer(hex, "hex"));
     }
 
     toHex() {
-        return this.toBuffer().toString('hex');
+        return this.toBuffer().toString("hex");
     }
 
     static fromStringHex(hex) {
-        return PublicKey.fromString(new Buffer(hex, 'hex'));
+        return PublicKey.fromString(new Buffer(hex, "hex"));
     }
-
     /* </HEX> */
 }
-
 
 module.exports = PublicKey;

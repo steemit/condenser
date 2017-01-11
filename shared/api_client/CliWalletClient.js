@@ -1,10 +1,12 @@
 // deprecated, will be removed soon
 
-import WebSocketClient from './WebSocketClient';
+import WebSocketClient from "./WebSocketClient";
 
 class Api {
     connect(connection_string = config.cli_wallet_connection) {
-        if (this.ws_rpc) return; // already connected
+        if (this.ws_rpc)
+            return;
+        // already connected
         console.log(`connecting to cli_wallet ${connection_string}`);
         this.ws_rpc = new WebSocketClient(connection_string, connection_string);
     }
@@ -15,7 +17,7 @@ class Api {
     }
 
     exec(method, params = []) {
-        console.log('CliWalletClient exec', method, '(', params, ')');
+        console.log("CliWalletClient exec", method, "(", params, ")");
         return this.ws_rpc.call(0, method, params);
     }
 
@@ -34,4 +36,4 @@ export default {
         }
         return api_instance;
     }
-};
+}

@@ -1,34 +1,30 @@
-
-const PrivateKey = require('./key_private');
-const hash = require('./hash');
-const secureRandom = require('secure-random');
+const PrivateKey = require("./key_private");
+const hash = require("./hash");
+const secureRandom = require("secure-random");
 
 // hash for .25 second
 const HASH_POWER_MILLS = 250;
 
-let entropyPos = 0, entropyCount = 0
-const entropyArray = secureRandom.randomBuffer(101)
+let entropyPos = 0, entropyCount = 0;
+const entropyArray = secureRandom.randomBuffer(101);
 
 module.exports = {
-
     addEntropy(...ints) {
-        entropyCount++
-        for(const i of ints) {
-            const pos = entropyPos++ % 101
-            const i2 = entropyArray[pos] += i
-            if(i2 > 9007199254740991)
-                entropyArray[pos] = 0
+        entropyCount++;
+        for (const i of ints) {
+            const pos = entropyPos++ % 101;
+            const i2 = entropyArray[pos] += i;
+            if (i2 > 9007199254740991)
+                entropyArray[pos] = 0;
         }
     },
-
     /**
         A week random number generator can run out of entropy.  This should ensure even the worst random number implementation will be reasonably safe.
 
         @param1 string entropy of at least 32 bytes
     */
     random32ByteBuffer(entropy = this.browserEntropy()) {
-
-        if (!(typeof entropy === 'string')) {
+        if (!(typeof entropy === "string")) {
             throw new Error("string required for entropy");
         }
 
@@ -49,11 +45,9 @@ module.exports = {
 
         return hash.sha256(Buffer.concat(hash_array));
     },
-
     get_random_key(entropy) {
         return PrivateKey.fromBuffer(this.random32ByteBuffer(entropy));
     },
-
     // Turn invisible space like characters into a single space
     // normalize_brain_key(brain_key){
     //     if (!(typeof brain_key === 'string')) {
@@ -62,27 +56,45 @@ module.exports = {
     //     brain_key = brain_key.trim();
     //     return brain_key.split(/[\t\n\v\f\r ]+/).join(' ');
     // },
-
     browserEntropy() {
-        let entropyStr = Array(entropyArray).join()
+        let entropyStr = Array(entropyArray).join();
         try {
-            entropyStr += (new Date()).toString() + " " + window.screen.height + " " + window.screen.width + " " +
-                window.screen.colorDepth + " " + " " + window.screen.availHeight + " " + window.screen.availWidth + " " +
-                window.screen.pixelDepth + navigator.language + " " + window.location + " " + window.history.length;
+            entropyStr += new Date().toString() + " " + window.screen.height +
+                " " +
+                window.screen.width +
+                " " +
+                window.screen.colorDepth +
+                " " +
+                " " +
+                window.screen.availHeight +
+                " " +
+                window.screen.availWidth +
+                " " +
+                window.screen.pixelDepth +
+                navigator.language +
+                " " +
+                window.location +
+                " " +
+                window.history.length;
 
             for (let i = 0, mimeType; i < navigator.mimeTypes.length; i++) {
                 mimeType = navigator.mimeTypes[i];
-                entropyStr += mimeType.description + " " + mimeType.type + " " + mimeType.suffixes + " ";
+                entropyStr += mimeType.description + " " + mimeType.type + " " +
+                    mimeType.suffixes +
+                    " ";
             }
-            console.log("INFO\tbrowserEntropy gathered", entropyCount, 'events')
-        } catch(error) {
+            console.log(
+                "INFO\tbrowserEntropy gathered",
+                entropyCount,
+                "events"
+            );
+        } catch (error) {
             //nodejs:ReferenceError: window is not defined
-            entropyStr += hash.sha256((new Date()).toString())
+            entropyStr += hash.sha256(new Date().toString());
         }
 
         const b = new Buffer(entropyStr);
-        entropyStr += b.toString('binary') + " " + (new Date()).toString();
+        entropyStr += b.toString("binary") + " " + new Date().toString();
         return entropyStr;
-    },
-
+    }
 };

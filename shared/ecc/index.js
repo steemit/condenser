@@ -1,4 +1,3 @@
-
 module.exports = {
     Address: require("./src/address"),
     Aes: require("./src/aes"),
@@ -9,4 +8,4 @@ module.exports = {
     key_utils: require("./src/key_utils"),
     hash: require("./src/hash"),
     ecc_config: require("./config")
-}
+};

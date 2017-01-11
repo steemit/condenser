@@ -1,56 +1,61 @@
 function truncate(str, len) {
-    if(str) {
-        str = str.trim()
-        if(str.length > len) {
-            str = str.substring(0, len - 1) + '...'
+    if (str) {
+        str = str.trim();
+        if (str.length > len) {
+            str = str.substring(0, len - 1) + "...";
         }
     }
-    return str
+    return str;
 }
 
 /**
  * Enforce profile data length & format standards.
  */
 export default function normalizeProfile(account) {
-
-    if(! account) return {}
+    if (!account)
+        return {};
 
     // Parse
     let profile = {};
-    if(account.json_metadata) {
+    if (account.json_metadata) {
         try {
             const md = JSON.parse(account.json_metadata);
-            if(md.profile) {
+            if (md.profile) {
                 profile = md.profile;
             }
-            if(!(typeof profile == 'object')) {
-                console.error('Expecting object in account.json_metadata.profile:', profile);
+            if (!(typeof profile == "object")) {
+                console.error(
+                    "Expecting object in account.json_metadata.profile:",
+                    profile
+                );
                 profile = {};
             }
         } catch (e) {
-            console.error('Invalid json metadata string', account.json_metadata, 'in account', account.name);
+            console.error(
+                "Invalid json metadata string",
+                account.json_metadata,
+                "in account",
+                account.name
+            );
         }
     }
 
     // Read & normalize
-    let {name, about, location, website, profile_image} = profile
+    let { name, about, location, website, profile_image } = profile;
 
-    name = truncate(name, 20)
-    about = truncate(about, 160)
-    location = truncate(location, 30)
+    name = truncate(name, 20);
+    about = truncate(about, 160);
+    location = truncate(location, 30);
 
-    if(/^@/.test(name)) name = null;
-    if(website && website.length > 100) website = null;
+    if (/^@/.test(name))
+        name = null;
+    if (website && website.length > 100)
+        website = null;
     if (website && website.indexOf("http") === -1) {
-        website = 'http://' + website;
+        website = "http://" + website;
     }
-    if(profile_image && !/^https?:\/\//.test(profile_image)) profile_image = null;
+    if (profile_image && !/^https?:\/\//.test(profile_image))
+        profile_image = null;
 
-    return {
-        name,
-        about,
-        location,
-        website,
-        profile_image,
-    };
+    return { name, about, location, website, profile_image };
 }

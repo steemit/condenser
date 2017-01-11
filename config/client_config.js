@@ -22,6 +22,7 @@ export const WHITEPAPER_URL = 'https://steem.io/SteemWhitePaper.pdf'
 
 // these are dealing with asset types, not displaying to client, rather sending data over websocket
 export const LIQUID_TICKER = 'STEEM'
+export const VEST_TICKER = 'VESTS'
 export const DEBT_TICKER = 'SBD'
 export const DEBT_TOKEN_SHORT = 'SD'
 

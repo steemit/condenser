@@ -645,13 +645,13 @@ namespace chainbase {
 
          void require_read_lock()const
          {
-            if( _enable_require_locking && _read_only && (_read_lock_count <= 0) )
+            if( BOOST_UNLIKELY( _enable_require_locking & _read_only & (_read_lock_count <= 0) ) )
                require_lock_fail("read");
          }
 
          void require_write_lock()
          {
-            if( _enable_require_locking && (_write_lock_count <= 0) )
+            if( BOOST_UNLIKELY( _enable_require_locking & (_write_lock_count <= 0) ) )
                require_lock_fail("write");
          }
 

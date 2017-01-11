@@ -66,7 +66,7 @@ export default function useNotificationsApi(app) {
             if (!account || account !== this.session.a) {
                 this.body = ''; return;
             }
-            yield Tarantool.instance().call('webpush_register', account, webpush_params);
+            yield Tarantool.instance().call('webpush_subscribe', account, webpush_params);
         } catch (error) {
             console.error('-- POST /notifications/register error -->', this.session.uid, error.message);
         }

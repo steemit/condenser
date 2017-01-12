@@ -113,7 +113,7 @@ class Header extends React.Component {
             page_title = `Stolen Account Recovery`;
         } else if (route.page === 'UserProfile') {
             user_name = route.params[0].slice(1);
-            page_title = user_name;
+            page_title = ` @${user_name}`;
             if(route.params[1] === "followers"){
                 page_title = `People following ${user_name} `;
             }

@@ -109,13 +109,13 @@ class PostSummary extends React.Component {
         let content_body = <div className="PostSummary__body entry-content">
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>{desc}</a>
         </div>;
-        let content_title = <h1 className="entry-title">
+        let content_title = <h3 className="entry-title">
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>
                 {isNsfw && <span className="nsfw-flag">nsfw</span>}
                 {title_text}
                 {full_power && <span title="Powered Up 100%"><Icon name="steem" /></span>}
             </a>
-        </h1>;
+        </h3>;
 
         // author and category
         let author_category = <span className="vcard">

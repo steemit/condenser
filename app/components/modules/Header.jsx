@@ -166,7 +166,7 @@ class Header extends React.Component {
         ];
         if (current_account_name) sort_orders_horizontal.unshift(['home', 'home']);
         const sort_order_menu_horizontal = sort_orders_horizontal.map(so => {
-                let active = (so[0] === sort_order) || (so[0] === 'trending');
+                let active = (so[0] === sort_order);
                 if (so[0] === 'home' && sort_order === 'home' && !home_account) active = false;
                 return {link: sortOrderToLink(so[0], topic, current_account_name), value: so[1], active};
             });

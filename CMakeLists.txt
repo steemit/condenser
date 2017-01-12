@@ -32,7 +32,7 @@ if( APPLE )
 else( APPLE )
   # Linux Specific Options Here
   message( STATUS "Configuring ChainBase on Linux" )
-  set( CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -std=c++11 -Wall" )
+  set( CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -pthread -std=c++11 -Wall" )
   set( rt_library rt )
   set( pthread_library pthread)
   if ( FULL_STATIC_BUILD )

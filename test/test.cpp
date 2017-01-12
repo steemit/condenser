@@ -130,10 +130,30 @@ BOOST_AUTO_TEST_CASE( open_and_create ) {
 
       BOOST_REQUIRE_EQUAL( new_book.a, copy_new_book.a );
       BOOST_REQUIRE_EQUAL( new_book.b, copy_new_book.b );
+
+      db.wipe( temp );
+      BOOST_REQUIRE( !bfs::exists( temp / "shared_memory.bin") );
+
    } catch ( ... ) {
       bfs::remove_all( temp );
       throw;
    }
+}
+
+BOOST_AUTO_TEST_CASE( lock_test ) {
+  boost::filesystem::path temp = boost::filesystem::unique_path();
+
+  try {
+    std::cerr << temp.native() << " \n";
+
+    BOOST_TEST_MESSAGE( "Creating Databases");
+    chainbase::database db, db2;
+    db.open( temp, database::read_write, 1024*1024*8 );
+    BOOST_CHECK_THROW(db2.open( temp, database::read_write ), bip::interprocess_exception)3221;
+  } catch ( ... ) {
+      bfs::remove_all ( temp );
+      throw;
+  }
 }
 
 // BOOST_AUTO_TEST_SUITE_END()

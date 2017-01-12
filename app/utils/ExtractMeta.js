@@ -5,7 +5,7 @@ const site_desc = 'Steemit is a social media platform where everyone gets paid f
 
 function addSiteMeta(metas) {
     metas.push({title: 'Steemit'});
-    metas.push({property: 'description', content: site_desc});
+    metas.push({name: 'description', content: site_desc});
     metas.push({property: 'og:type', content: 'website'});
     metas.push({property: 'og:site_name', content: 'Steemit'});
     metas.push({property: 'og:title', content: 'Steemit'});

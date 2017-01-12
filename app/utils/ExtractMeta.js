@@ -6,6 +6,7 @@ const site_desc = 'Steemit is a social media platform where everyone gets paid f
 function addSiteMeta(metas) {
     metas.push({title: 'Steemit'});
     metas.push({name: 'description', content: site_desc});
+    metas.push({name: 'keywords', content: "steem, steemit, blockchain, news, posts"});
     metas.push({property: 'og:type', content: 'website'});
     metas.push({property: 'og:site_name', content: 'Steemit'});
     metas.push({property: 'og:title', content: 'Steemit'});
@@ -35,7 +36,8 @@ export default function extractMeta(chain_data, rp) {
             // Standard meta
             metas.push({title});
             metas.push({canonical: url});
-            metas.push({name: 'description',         content: desc});
+            metas.push({name: 'description', content: desc});
+            metas.push({name: 'keywords', content: "steem steemit posts news"});
 
             // Open Graph data
             metas.push({property: 'og:title',        content: title});
@@ -57,6 +59,25 @@ export default function extractMeta(chain_data, rp) {
         } else {
             addSiteMeta(metas);
         }
+    } else if (rp.accountname && chain_data.accounts) { // user profile
+        const account = chain_data.accounts[rp.accountname];
+        const jsonMetadata = JSON.parse(account.json_metadata);
+
+        // Set profile tags
+        const title = `@${account.name}`;
+        const desc  = `The latest posts by ${jsonMetadata.profile.name} (@${account.name}). ${jsonMetadata.profile.about}`;
+        const image = jsonMetadata.profile.profile_image;
+
+        // Standard meta
+        metas.push({name: 'description', content: desc});
+        metas.push({name: 'keywords', content: `@${account.name}, ${jsonMetadata.profile.name}, ${jsonMetadata.profile.about}, steem, steemit`});
+
+        // Twitter card data
+        metas.push({name: 'twitter:card',        content: 'summary'});
+        metas.push({name: 'twitter:site',        content: '@steemit'});
+        metas.push({name: 'twitter:title',       content: title});
+        metas.push({name: 'twitter:description', content: desc});
+        metas.push({name: 'twitter:image',       content: image || 'https://steemit.com/images/steemit-twshare.png'});
     } else { // site
         addSiteMeta(metas);
     }

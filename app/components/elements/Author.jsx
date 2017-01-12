@@ -33,7 +33,7 @@ class Author extends React.Component {
             <Link to={'/@' + author}><strong>{author}</strong></Link> <Reputation value={authorRepLog10} />
         </span>
 
-        if(!username || !(follow || mute) || username === author)
+        if(!(follow || mute) || username === author)
             return author_link
 
         const {name, about} = this.props.account ? normalizeProfile(this.props.account.toJS()) : {}

@@ -135,6 +135,15 @@ class PostFull extends React.Component {
         window.open('https://www.linkedin.com/shareArticle?' + q, 'Share', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=' + winWidth + ',height=' + winHeight);
     }
 
+    vkShare = (e) => {
+        e.preventDefault();
+        const winWidth = 720;
+        const winHeight = 480;
+        const winTop = (screen.height / 2) - (winWidth / 2);
+        const winLeft = (screen.width / 2) - (winHeight / 2);
+        window.open('https://vk.com/share.php?url=' + this.share_params.url, this.share_params, 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=' + winWidth + ',height=' + winHeight)
+    }
+
     showPromotePost = () => {
         const post_content = this.props.global.get('content').get(this.props.post);
         if (!post_content) return
@@ -188,9 +197,10 @@ class PostFull extends React.Component {
         };
 
         const share_menu = [
+            {link: '#', onClick: this.vkShare, value: 'VK', icon: 'vk'},
             {link: '#', onClick: this.fbShare, value: 'Facebook', icon: 'facebook'},
             {link: '#', onClick: this.twitterShare, value: 'Twitter', icon: 'twitter'},
-            {link: '#', onClick: this.linkedInShare, value: 'LinkedIn', icon: 'linkedin'},
+            // {link: '#', onClick: this.linkedInShare, value: 'LinkedIn', icon: 'linkedin'}, // blocked in russia
         ];
         const Editor = this.state.showReply ? PostFullReplyEditor : PostFullEditEditor
         let renderedEditor = null;

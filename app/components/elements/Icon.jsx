@@ -11,6 +11,7 @@ const icons = [
     'facebook',
     'twitter',
     'linkedin',
+    'vk',
     'link',
     'clock',
     'extlink',

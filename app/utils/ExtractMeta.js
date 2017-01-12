@@ -1,7 +1,7 @@
 import extractContent from 'app/utils/ExtractContent';
 import {objAccessor} from 'app/utils/Accessors';
 
-const site_desc = 'Steemit is a social media platform where everyone gets paid for creating and curating content. It leverages a robust digital points system, called Steem, that supports real value for digital rewards through market price discovery and liquidity';
+const site_desc = 'Steemit the social media platform where everyone gets paid for creating and curating content. It leverages the robust digital points system Steem for digital rewards.';
 
 function addSiteMeta(metas) {
     metas.push({title: 'Steemit'});

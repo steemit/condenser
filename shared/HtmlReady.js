@@ -52,6 +52,11 @@ const XMLSerializer = new xmldom.XMLSerializer()
  *    - linkify #tags and @mentions
  *    - proxify images
  *
+ * TODO:
+ *  - change ipfsPrefix(url) to normalizeUrl(url)
+ *    - rewrite IPFS prefixes to valid URLs
+ *    - schema normalization
+ *    - gracefully handle protocols like ftp, mailto
  */
 
 /** Split the HTML on top-level elements. This allows react to compare separately, preventing excessive re-rendering.

@@ -67,11 +67,14 @@
 
         min-height: 155px;
     }
-    h3 {
+    h1 {
         padding-top: 20px;
         font-weight: 600;
+        font-size: 1.84524rem!important;
+        @media screen and (max-width: 39.9375em) {
+            font-size: 1.13095rem!important;
+        }
     }
-
     .Icon {
         margin-left: 1rem;
         svg {fill: #def;}

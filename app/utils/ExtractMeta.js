@@ -37,7 +37,7 @@ export default function extractMeta(chain_data, rp) {
             metas.push({title});
             metas.push({canonical: url});
             metas.push({name: 'description', content: desc});
-            metas.push({name: 'keywords', content: "steem steemit posts news"});
+            metas.push({name: 'keywords', content: "steem, steemit, posts, news"});
 
             // Open Graph data
             metas.push({property: 'og:title',        content: title});

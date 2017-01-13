@@ -14,7 +14,7 @@ class Topics extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {expanded: false, search: ''};
+        this.state = {};
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -24,25 +24,13 @@ class Topics extends React.Component {
         return res;
     }
 
-    onChangeSearch = e => {
-        this.setState({search: e.target.value})
-    }
-
-    expand = (e) => {
-        e.preventDefault();
-        this.setState({expanded: true});
-        return false;
-    };
-
     render() {
         // console.log('Topics');
         const {
             props: {order, current, compact, className},
-            state: {expanded, search},
-            onChangeSearch, expand
         } = this;
         let categories = this.props.categories.get('trending');
-        if (!(expanded || search) || compact) categories = categories.take(50);
+        categories = categories.take(50);
 
         const cn = 'Topics' + (className ? ` ${className}` : '');
         const currentValue = `/${order}/${current}`;
@@ -57,7 +45,6 @@ class Topics extends React.Component {
             </select>;
         }
 
-        if (search) categories = categories.filter(val => val.indexOf(search.toLowerCase()) !== -1);
         categories = categories.map(cat => {
             const link = order ? `/${order}/${cat}` : `/hot/${cat}`;
             return (<li key={cat}>
@@ -67,13 +54,11 @@ class Topics extends React.Component {
         return (
             <ul className={cn}>
                 <li className="Topics__title" key={'*'}>Tags and Topics</li>
-                {/* Issue #997 <li className="Topics__filter"><input type="text" placeholder="Filter" value={search} onChange={onChangeSearch} /></li> */}
                 <hr />
                {categories}
-               {!expanded && !search && <li className="show-more">
-                   {/*<a href="#" onClick={expand}>Show more topics..</a>*/}
+               <li className="show-more">
                    <Link to={`/tags`}>Show more topics..</Link>
-               </li>}
+               </li>
             </ul>
         );
     }

@@ -115,11 +115,13 @@ class ReplyEditor extends React.Component {
         }
         this.onCancel = e => {
             if(e) e.preventDefault()
-            const {onCancel, resetForm} = this.props
-            resetForm()
-            this.setAutoVote()
-            this.setState({rte_value: stateFromHtml()})
-            if(onCancel) onCancel(e)
+            const {onCancel, resetForm, fields} = this.props
+            if(!fields.body.value || confirm("Are you sure you want to clear this form?")) {
+                resetForm()
+                this.setAutoVote()
+                this.setState({rte_value: stateFromHtml()})
+                if(onCancel) onCancel(e)
+            }
         }
         this.onChange = this.onChange.bind(this);
         this.toggleRte = this.toggleRte.bind(this);
@@ -502,9 +504,9 @@ export default formId => reduxForm(
                 return
             }
 
-            if(meta.tags.length > 4) {
+            if(meta.tags.length > 5) {
                 const includingCategory = isEdit ? ` (including the category '${rootCategory}')` : ''
-                errorCallback(`You have ${meta.tags.length} tags total${includingCategory}.  Please use only 4 in your post and category line.`)
+                errorCallback(`You have ${meta.tags.length} tags total${includingCategory}.  Please use only 5 in your post and category line.`)
                 return
             }
             // loadingCallback starts the loading indicator

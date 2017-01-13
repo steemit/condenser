@@ -284,7 +284,7 @@ const ru = {
 	unknown_account: 'Неизвестный аккаунт',
 	user_hasnt_made_any_posts_yet: "Похоже что {name} еще не написал постов!",
 	user_hasnt_started_bloggin_yet: "Похоже что {name} еще не завёл блог!",
-	user_hasnt_followed_anything_yet: "Похоже что {name} еще никого ни на кого не подписан!",
+	user_hasnt_followed_anything_yet: "Похоже что {name} еще никого ни на кого не подписан! Если {name} недавно добавили новые пользователи следовать, их персонализированный канал будет заполнить один раз новый контент доступен",
 	user_hasnt_had_any_replies_yet: "{name} еще не получил ответов",
 	users_blog: "блог {name}",
 	users_posts: "посты {name}",
@@ -381,7 +381,7 @@ const ru = {
 	// Voting.jsx
 	stop_seeing_content_from_this_user: 'Перестать видеть контент от этого пользователя',
 	flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following: 'Голос против может снять вознаграждения и сделать пост менее видимым. Голосование против должно основываться на',
-    inappropriate_rewards_distribution: 'Вознаграждение выходит за рамки разумного',
+    disagreement_on_rewards: 'Несогласие на награды',
     fraud_or_plagiarism: 'Мошенничество или плагиат',
 	hate_speech_or_internet_trolling: 'Разжигание ненависти или интернет троллинг',
 	intentional_miss_categorized_content_or_spam: 'Преднамеренная неправильная категоризация контента или спам',

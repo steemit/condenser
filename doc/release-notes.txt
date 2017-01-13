@@ -1,4 +1,33 @@
 ---------------------------------------------------------------------
+0.1.161261
+---------------------------------------------------------------------
+
+New features
+--------
+ - Strict checking of profile url #979
+ - TagsIndex revamp #806
+ - Parse block quote from text if preview text is rendered as comment #955
+ - Prepend nested comments with dots #942
+ - Welcome Page Copyedit Changes for #923
+ - Update default wallet estimated balance tip message, update en and ru… #921
+ - Add a last-minute check to ensure one phone per account #917
+ - Add 3x support for thumbnail previews for post previews to remove fuz… #940
+ - 914 user thumbnails #934
+ - 915 resteem button feeds mobile #937
+ - Add metadata to nsfw post summaries #956
+ - Update verbiage for flag tooltip for distribution/rewards, update loc… #957
+
+Bug fixes
+--------
+ - Fix phone verification issue #922
+ - Fix translation issue on account recovery page #908
+ - Patch route user #883
+ - Fix account page 500 error #897
+ - Comment edit bug 895 #954
+ - Confirm clearing of post form. fix #970
+
+
+---------------------------------------------------------------------
 0.1.161221
 ---------------------------------------------------------------------
 
@@ -26,7 +55,7 @@ Bug fixes
  - typesafe json metadata #868
  - Refactor class name for best practice conventional naming #871
 
- 
+
 ---------------------------------------------------------------------
 0.1.161214
 ---------------------------------------------------------------------

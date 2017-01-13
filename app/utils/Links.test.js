@@ -5,6 +5,8 @@ import links, * as linksRe from 'app/utils/Links'
 
 describe('Links', () => {
     it('all', () => {
+        match(linksRe.any(), 'https://example.com/wiki/Poe\'s_law', 'https://example.com/wiki/Poe\'s_law')
+        match(linksRe.any(), 'https://example.com\'', 'https://example.com')
         match(linksRe.any(), '"https://example.com', 'https://example.com')
         match(linksRe.any(), 'https://example.com\"', 'https://example.com')
         match(linksRe.any(), 'https://example.com\'', 'https://example.com')

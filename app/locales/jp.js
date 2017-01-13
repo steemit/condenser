@@ -263,7 +263,7 @@ const jp = 	{
 	unknown_account: '正体不明のアカウント',
 	user_hasnt_made_any_posts_yet: " {name} さんはまだ投稿をしたことがないようです！",
 	user_hasnt_started_bloggin_yet: "{name} さんはまだブログを始めていないようです！",
-	user_hasnt_followed_anything_yet: " {name} さんはまだ誰のフォローもしていないようです！",
+	user_hasnt_followed_anything_yet: " {name} さんはまだ誰のフォローもしていないようです！{name} さんが最近新しいユーザーを追加すると、新しいコンテンツが利用できるようになったらパーソナライズされたフィードが追加されます",
 	user_hasnt_had_any_replies_yet: "{name} さんはまだ返信していないようです！",
 	users_blog: "{name}さんのブログ",
 	users_posts: "{name}さんの投稿",

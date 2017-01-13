@@ -92,13 +92,13 @@ const fr = 	{
 	all_accounts_refunded: 'Vous les comptes récupérés ont été remboursés.',
 	steemit_is_now_open_source: 'Steemit.com est maintenant Open Source',
 	// this is mainly from ReplyEditor
-	tag_your_story: 'Tag (jusqu\'à 4 tags), le premier tag est votre catégorie principale.',
+	tag_your_story: 'Tag (jusqu\'à 5 tags), le premier tag est votre catégorie principale.',
 	select_a_tag: 'Choisir un tag',
 	required: 'Obligatoire',
 	shorten_title: 'Raccourcir le titre',
 	exceeds_maximum_length: 'Depasse la taille maximum ({maxKb}KB)',
 	including_the_category: "(y compris la catégorie '{rootCategory}')",
-	use_limited_amount_of_tags: 'Vous avez {tagsLength} tags en tout{includingCategory}. Veuillez n\'utiliser que 4 tags en tout.',
+	use_limited_amount_of_tags: 'Vous avez {tagsLength} tags en tout{includingCategory}. Veuillez n\'utiliser que 5 tags en tout.',
 	// this is mainly used in CategorySelector
 	use_limitied_amount_of_categories: 'S\'il vous plait, n\'utilisez que {amount} catégories',
 	use_one_dash: 'N\'utilisez qu\'un seul signe dièse',
@@ -263,7 +263,7 @@ const fr = 	{
 	unknown_account: 'Compte Inconnu',
 	user_hasnt_made_any_posts_yet: "Il s\'emble que {name} n\'a pas encore publié d\'articles!",
 	user_hasnt_started_bloggin_yet: "Il s\'emble que {name} n\'a pas encore commencé à blogger!",
-	user_hasnt_followed_anything_yet: "Il s\'emble que {name} ne suit personne pour l\'instant!",
+	user_hasnt_followed_anything_yet: "Il s\'emble que {name} ne suit personne pour l\'instant! Si {name} a récemment ajouté de nouveaux utilisateurs, son flux personnalisé s'affiche une fois le nouveau contenu disponible ",
 	user_hasnt_had_any_replies_yet: "{name} n\'a pas eu de réponses pour l\'instant",
 	users_blog: "Le blog de {name}",
 	users_posts: "Les articles de {name}",
@@ -353,7 +353,7 @@ const fr = 	{
 	// Voting.jsx
 	stop_seeing_content_from_this_user: 'Stop seeing content from this user',
 	flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following: 'Flagging a post can remove rewards and make this material less visible. Some common reasons to flag',
-    inappropriate_rewards_distribution: 'Répartition inappropriée des récompenses',
+    disagreement_on_rewards: 'Désaccord sur les récompenses',
     fraud_or_plagiarism: 'Fraud or Plagiarism',
 	hate_speech_or_internet_trolling: 'Hate Speech or Internet Trolling',
 	intentional_miss_categorized_content_or_spam: 'Intentional miss-categorized content or Spam',

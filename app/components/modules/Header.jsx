@@ -151,10 +151,8 @@ class Header extends React.Component {
         const sort_orders = [
             ['created', 'new'],
             ['hot', 'hot'],
-            ['trending', 'trending (24 hour)'],
-            ['trending30', 'trending (30 day)'],
+            ['trending', 'trending'],
             ['promoted', 'promoted'],
-            ['active', 'active']
         ];
         if (current_account_name) sort_orders.unshift(['home', 'home']);
         const sort_order_menu = sort_orders.filter(so => so[0] !== sort_order).map(so => ({link: sortOrderToLink(so[0], topic, current_account_name), value: so[1]}));
@@ -165,23 +163,14 @@ class Header extends React.Component {
             ['hot', 'hot'],
             ['trending', 'trending'],
             ['promoted', 'promoted'],
-            ['active', 'active']
         ];
         if (current_account_name) sort_orders_horizontal.unshift(['home', 'home']);
         const sort_order_menu_horizontal = sort_orders_horizontal.map(so => {
-                let active = (so[0] === sort_order) || (so[0] === 'trending' && sort_order === 'trending30');
+                let active = (so[0] === sort_order);
                 if (so[0] === 'home' && sort_order === 'home' && !home_account) active = false;
                 return {link: sortOrderToLink(so[0], topic, current_account_name), value: so[1], active};
             });
 
-        let sort_order_extra_menu = null;
-        if (sort_order === 'trending' || sort_order === 'trending30') {
-            const items = [
-                {link: `/trending/${topic}`, value: '24 hour', active: sort_order === 'trending'},
-                {link: `/trending30/${topic}`, value: '30 day', active: sort_order === 'trending30'}
-            ];
-            sort_order_extra_menu = <HorizontalMenu items={items} />
-        }
         return (
             <header className="Header noPrint">
                 <div className="Header__top header">
@@ -210,9 +199,6 @@ class Header extends React.Component {
                 <div className={'Header__sub-nav expanded show-for-medium row' + (this.state.subheader_hidden ? ' hidden' : '')}>
                     <div className="columns">
                         <HorizontalMenu items={sort_order_menu_horizontal} />
-                    </div>
-                    <div className="columns shrink">
-                        {sort_order_extra_menu}
                     </div>
                 </div>
             </header>

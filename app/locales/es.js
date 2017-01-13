@@ -92,7 +92,7 @@ const es = 	{
 	all_accounts_refunded: 'All Recovered Accounts have been fully Refunded',
 	steemit_is_now_open_source: 'Steemit.com es ahora Software Libre',
 	// this is mainly from ReplyEditor
-	tag_your_story: 'Tag (up to 4 tags), the first tag is your main category.',
+	tag_your_story: 'Tag (up to 5 tags), the first tag is your main category.',
 	select_a_tag: 'Selecciona una etiqueta',
 	required: 'Requerido',
 	shorten_title: 'Acortar título!',
@@ -263,7 +263,7 @@ const es = 	{
 	unknown_account: 'Cuenta no conocida',
 	user_hasnt_made_any_posts_yet: "Looks like {name} hasn't made any posts yet!",
 	user_hasnt_started_bloggin_yet: "Looks like {name} hasn't started blogging yet!",
-	user_hasnt_followed_anything_yet: "Looks like {name} hasn't followed anything yet!",
+	user_hasnt_followed_anything_yet: "Looks like {name} hasn't followed anything yet!, Si {name} agregó recientemente nuevos usuarios a seguir, su feed personalizado se rellenará una vez que el nuevo contenido esté disponible.",
 	user_hasnt_had_any_replies_yet: "{name} hasn't had any replies yet",
 	users_blog: "Blog de {name}",
 	users_posts: "Publicaciones de {name}",
@@ -353,7 +353,7 @@ const es = 	{
 	// Voting.jsx
 	stop_seeing_content_from_this_user: 'Stop seeing content from this user',
 	flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following: 'Flagging a post can remove rewards and make this material less visible. Some common reasons to flag',
-    inappropriate_rewards_distribution: 'Distribución inapropiada de recompensas',
+    disagreement_on_rewards: 'Desacuerdo sobre las recompensas',
     fraud_or_plagiarism: 'Fraude o plagio',
 	hate_speech_or_internet_trolling: 'Hate Speech o Internet Trolling',
 	intentional_miss_categorized_content_or_spam: 'Contenido mal categorizado intencional o Spam',

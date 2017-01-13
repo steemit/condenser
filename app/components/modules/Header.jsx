@@ -17,7 +17,8 @@ function sortOrderToLink(so, topic, account) {
 class Header extends React.Component {
     static propTypes = {
         location: React.PropTypes.object.isRequired,
-        current_account_name: React.PropTypes.string
+        current_account_name: React.PropTypes.string,
+        account_meta: React.PropTypes.object
     };
 
     constructor() {
@@ -69,7 +70,6 @@ class Header extends React.Component {
         let topic = '';
         let user_name = null;
         let page_name = null;
-
         if (route.page === 'PostsIndex') {
             sort_order = route.params[0];
             if (sort_order === 'home') {
@@ -113,25 +113,27 @@ class Header extends React.Component {
             page_title = `Stolen Account Recovery`;
         } else if (route.page === 'UserProfile') {
             user_name = route.params[0].slice(1);
-            page_title = ` @${user_name}`;
+            const meta_data = this.props.account_meta.getIn([user_name, 'json_metadata']);
+            const meta_name = meta_data ? JSON.parse(meta_data).profile.name : "";
+            page_title = `${meta_name ? meta_name : ""} (@${user_name}) `;
             if(route.params[1] === "followers"){
-                page_title = `People following ${user_name} `;
+                page_title = `People following ${meta_name ? meta_name : ""} (@${user_name}) `;
             }
             if(route.params[1] === "followed"){
-                page_title = `People followed by ${user_name} `;
+                page_title = `People followed by ${meta_name ? meta_name : ""} (@${user_name}) `;
             }
             if(route.params[1] === "curation-rewards"){
-                page_title = `Curation rewards by ${user_name} `;
+                page_title = `Curation rewards by ${meta_name ? meta_name : ""} (@${user_name}) `;
             }
             if(route.params[1] === "author-rewards"){
-                page_title = `Author rewards by ${user_name} `;
+                page_title = `Author rewards by ${meta_name ? meta_name : ""} (@${user_name}) `;
             }
             if(route.params[1] === "recent-replies"){
-                page_title = `Replies to ${user_name} `;
+                page_title = `Replies to ${meta_name ? meta_name : ""} (@${user_name}) `;
             }
             // @user/"posts" is deprecated in favor of "comments" as of oct-2016 (#443)
             if(route.params[1] === "posts" || route.params[1] === "comments"){
-                page_title = `Comments by ${user_name} `;
+                page_title = `Comments by ${meta_name ? meta_name : ""} (@${user_name}) `;
             }
         } else {
             page_name = ''; //page_title = route.page.replace( /([a-z])([A-Z])/g, '$1 $2' ).toLowerCase();
@@ -211,10 +213,12 @@ export {Header as _Header_};
 export default connect(
     state => {
         const current_user = state.user.get('current');
+        const account_user = state.global.get('accounts');
         const current_account_name = current_user ? current_user.get('username') : state.offchain.get('account');
         return {
             location: state.app.get('location'),
-            current_account_name
+            current_account_name,
+            account_meta: account_user
         }
     }
 )(Header);

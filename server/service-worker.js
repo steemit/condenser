@@ -16,10 +16,14 @@ self.addEventListener('push', function(event) {
   );
 });
 self.addEventListener('notificationclick', function(event) {
-  console.log('notificationclick', event);
   event.waitUntil(
     self.clients.matchAll().then(function(clientList) {
-      if (clientList.length > 0) return clientList[0].focus();
+      if (clientList.length > 0) {
+          if ('navigate' in clientList[0]) {
+              clientList[0].navigate(clickUrl);
+          }
+          return clientList[0].focus();
+      }
       return self.clients.openWindow(clickUrl);
     })
   );

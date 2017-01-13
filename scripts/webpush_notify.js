@@ -25,11 +25,12 @@ async function process_queue() {
     try {
         const queue = await Tarantool.instance().call('webpush_get_delivery_queue');
         for (const n of queue) {
-            const [account, body, url, nparams_array] = n;
+            if (n.length === 0) return;
+            const [account, nparams_array, title, body, url] = n;
             console.log('-- notification -->', account, body, url);
             for (const nparams of nparams_array) {
                 try {
-                    await notify(account, nparams, 'Steemit', body, url);
+                    await notify(account, nparams, title, body, url);
                 } catch (err) {
                     console.error('-- error in notify -->', account, err);
                 }

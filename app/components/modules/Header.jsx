@@ -7,6 +7,7 @@ import resolveRoute from 'app/ResolveRoute';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import HorizontalMenu from 'app/components/elements/HorizontalMenu';
+import normalizeProfile from 'app/utils/NormalizeProfile';
 
 function sortOrderToLink(so, topic, account) {
     if (so === 'home') return '/@' + account + '/feed';
@@ -113,27 +114,27 @@ class Header extends React.Component {
             page_title = `Stolen Account Recovery`;
         } else if (route.page === 'UserProfile') {
             user_name = route.params[0].slice(1);
-            const meta_data = this.props.account_meta.getIn([user_name, 'json_metadata']);
-            const meta_name = meta_data ? JSON.parse(meta_data).profile.name : "";
-            page_title = `${meta_name ? meta_name : ""} (@${user_name}) `;
+            const {name} = normalizeProfile(this.props.account_meta.getIn([user_name]).toJS());
+            const user_title = name ? `${name} (@${user_name}) ` : `@${user_name} `;
+            page_title = user_title;
             if(route.params[1] === "followers"){
-                page_title = `People following ${meta_name ? meta_name : ""} (@${user_name}) `;
+                page_title = "People following " + user_title;
             }
             if(route.params[1] === "followed"){
-                page_title = `People followed by ${meta_name ? meta_name : ""} (@${user_name}) `;
+                page_title = "People followed " + user_title;
             }
             if(route.params[1] === "curation-rewards"){
-                page_title = `Curation rewards by ${meta_name ? meta_name : ""} (@${user_name}) `;
+                page_title = "Curation rewards " + user_title;
             }
             if(route.params[1] === "author-rewards"){
-                page_title = `Author rewards by ${meta_name ? meta_name : ""} (@${user_name}) `;
+                page_title = "Author rewards by " + user_title;
             }
             if(route.params[1] === "recent-replies"){
-                page_title = `Replies to ${meta_name ? meta_name : ""} (@${user_name}) `;
+                page_title = "Replies to " + user_title;
             }
             // @user/"posts" is deprecated in favor of "comments" as of oct-2016 (#443)
             if(route.params[1] === "posts" || route.params[1] === "comments"){
-                page_title = `Comments by ${meta_name ? meta_name : ""} (@${user_name}) `;
+                page_title = "Comments by " + user_title;
             }
         } else {
             page_name = ''; //page_title = route.page.replace( /([a-z])([A-Z])/g, '$1 $2' ).toLowerCase();

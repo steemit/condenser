@@ -80,9 +80,11 @@ export default class TagsIndex extends React.Component {
         return (
             <div className="TagsIndex row">
                 <div className="column">
-                    <div className="medium-2 medium-offset-10">
+                    {/* Issue #997 <div className="medium-2 medium-offset-10">
                         <input type="text" placeholder="Filter" value={search} onChange={this.onChangeSearch} />
-                    </div>
+                    </div>*/}
+                    <br />
+                    <h4>Trending Topics</h4>
                     <table>
                         <thead>
                         <tr>

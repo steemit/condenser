@@ -59,18 +59,18 @@ export default function extractMeta(chain_data, rp) {
         } else {
             addSiteMeta(metas);
         }
-    } else if (rp.accountname && chain_data.accounts) { // user profile
+    } else if (rp.accountname) { // user profile root
         const account = chain_data.accounts[rp.accountname];
         const jsonMetadata = JSON.parse(account.json_metadata);
 
         // Set profile tags
         const title = `@${account.name}`;
-        const desc  = `The latest posts by ${jsonMetadata.profile.name} (@${account.name}). ${jsonMetadata.profile.about}`;
+        const desc  = `${jsonMetadata.profile.name} (@${account.name}). ${jsonMetadata.profile.about}`;
         const image = jsonMetadata.profile.profile_image;
 
         // Standard meta
-        metas.push({name: 'description', content: desc});
-        metas.push({name: 'keywords', content: `@${account.name}, ${jsonMetadata.profile.name}, ${jsonMetadata.profile.about}, steem, steemit`});
+        metas.push({name: 'description', content: desc.substring(0,170)});
+        metas.push({name: 'keywords', content: `@${account.name}, ${jsonMetadata.profile.name}, steem, steemit, profile`});
 
         // Twitter card data
         metas.push({name: 'twitter:card',        content: 'summary'});

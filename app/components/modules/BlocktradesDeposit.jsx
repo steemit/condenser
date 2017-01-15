@@ -124,8 +124,6 @@ class BlocktradesDeposit extends React.Component {
         setTimeout(() => {this.refs.amountRef.focus()}, 300)
     }
     render() {
-        // disabled untill we fix buying of currency
-        return null
         const {fetchInputAddress, fetchEstimate, onFlip} = this
         const {paymentQr, paymentLink, flip} = this.state // inputEstimate
         const {depositLimit, inputAddress, inputAddressMemo, userTradeError, username, transactions, onClose} = this.props

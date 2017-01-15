@@ -364,7 +364,7 @@ class Market extends React.Component {
                                 <div className="column small-3 large-2">
                                 </div>
                                 <div className="column small-9 large-8">
-                                    {/* <input disabled={buy_disabled} type="submit" className="button hollow buy-color float-right uppercase" value={translate('buy_LIQUID_TOKEN')} /> */}
+                                    <input disabled={buy_disabled} type="submit" className="button hollow buy-color float-right uppercase" value={translate('buy_LIQUID_TOKEN')} />
                                     {account &&
                                     <div><small>
                                         <a href="#" onClick={e => {
@@ -453,7 +453,7 @@ class Market extends React.Component {
                             <div className="row">
                                 <div className="column small-3 large-2"></div>
                                 <div className="column small-9 large-8">
-                                    {/* <input disabled={sell_disabled} type="submit" className="button hollow sell-color float-right uppercase" value={translate('sell_LIQUID_TOKEN')} /> */}
+                                    <input disabled={sell_disabled} type="submit" className="button hollow sell-color float-right uppercase" value={translate('sell_LIQUID_TOKEN')} />
                                     {account &&
                                         <div><small><a href="#" onClick={e => {e.preventDefault()
                                             const price = parseFloat(this.refs.sellSteem_price.value)

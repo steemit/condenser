@@ -149,11 +149,41 @@ BOOST_AUTO_TEST_CASE( lock_test ) {
     BOOST_TEST_MESSAGE( "Creating Databases");
     chainbase::database db, db2;
     db.open( temp, database::read_write, 1024*1024*8 );
-    BOOST_CHECK_THROW(db2.open( temp, database::read_write ), bip::interprocess_exception)3221;
+    BOOST_CHECK_THROW(db2.open( temp, database::read_write ), bip::interprocess_exception);
   } catch ( ... ) {
       bfs::remove_all ( temp );
       throw;
   }
 }
 
+BOOST_AUTO_TEST_CASE( schema_test ) {
+  boost::filesystem::path temp = boost::filesystem::unique_path();
+
+  try {
+    std::cerr << temp.native() << " \n";
+    auto abs_path = bfs::absolute( temp / "shared_memory.bin" );
+    BOOST_TEST_MESSAGE( "Creating Databases");
+    class database2 : chainbase::database
+    {
+      public:
+        void ruin_segments(boost::filesystem::absolute path) {
+          _segment.reset( new bip::managed_mapped_file( bip::create_only,
+                                                        path.generic_string().c_str(), shared_file_size
+                                                        ) );
+        }
+    };
+
+    database2 db;
+    db.open( temp, database::read_write, 1024*1024*8 );
+    db.ruin_segments(abs_path);
+    db.commit();
+    db.close();
+    BOOST_CHECK_THROW(db.open( temp, database::read_write), std::runtime_error);
+
+
+  } catch ( ... ) {
+      bfs::remove_all ( temp );
+      throw;
+  }
+}
 // BOOST_AUTO_TEST_SUITE_END()

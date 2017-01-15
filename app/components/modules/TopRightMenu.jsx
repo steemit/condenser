@@ -118,7 +118,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
         return (
             <ul className={mcn}>
                 <li className={lcn + ' buttons'}>
-                    <Link to="/ico" className="button success">Выплаты авторам</Link>
+                    <Link to="/ico" className="button success">Информация для пользователя</Link>
                 </li>
                 <li className={lcn}><a href="/static/search.html" title={search}>{vertical ? <span>{search}</span> : <Icon name="search" />}</a></li>
                 {submit_story}
@@ -172,7 +172,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
         return (
             <ul className={mcn + mcl}>
                 <li className={lcn + ' buttons'}>
-                    <Link to="/ico" className="button success">Выплаты авторам</Link>
+                    <Link to="/ico" className="button success">Информация для пользователя</Link>
                 </li>
                 {!vertical && <li><a href="/static/search.html" title="Поиск"><Icon name="search" /></a></li>}
                 <li className={lcn}><LoadingIndicator type="circle" inline /></li>
@@ -211,7 +211,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
     return (
             <ul className={mcn + mcl}>
                 <li className={lcn + ' buttons'}>
-                    <Link to="/ico" className="button success">Выплаты авторам</Link>
+                    <Link to="/ico" className="button success">Информация для пользователя</Link>
                 </li>
                 {!vertical && <li><a href="/static/search.html" title="Поиск"><Icon name="search" /></a></li>}
                 <li className={lcn}><a href="/create_account" onClick={showSignUp}>{translate('sign_up')}</a></li>

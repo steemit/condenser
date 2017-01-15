@@ -220,7 +220,7 @@ class Header extends React.Component {
                                 </li>
 
                                 <li className="Header__top-steemit show-for-medium noPrint">
-                                    <Link to={logo_link}>{APP_NAME}<span className="beta">alpha</span></Link>
+                                    <Link to={logo_link}>{APP_NAME}<span className="beta">beta</span></Link>
                                 </li>
 
                                 {(topic_link || user_name || page_name) && <li className="delim show-for-medium">|</li>}

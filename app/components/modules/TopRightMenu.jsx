@@ -55,12 +55,6 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
         if (location && location.pathname.indexOf("/ico") != -1) {
             return (
                 <ul className={mcn + ' landing'}>
-                    {/* <li className={lcn + ' buttons'}>
-                        <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
-                    </li> */}
-                    <li className={lcn}>
-                        <Link className="button success" to="/ico">Выплаты авторам</Link>
-                    </li>
                     <li className={lcn}>
                         <a href="#what-is-golos">Видео</a>
                     </li>
@@ -92,9 +86,6 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                 </ul>
             );
             return      <ul className={mcn + mcl + ' landing'}>
-                            {/* <li className={lcn + ' buttons'}>
-                                <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
-                            </li> */}
                             <li className={lcn}>
                                 <a href="#what-is-golos">Видео</a>
                             </li>
@@ -126,9 +117,6 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
 */
         return (
             <ul className={mcn}>
-                {/* <li className={lcn + ' buttons'}>
-                    <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
-                </li> */}
                 <li className={lcn + ' buttons'}>
                     <Link to="/ico" className="button success">Выплаты авторам</Link>
                 </li>
@@ -156,12 +144,6 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
     if (probablyLoggedIn) {
         if (location && location.pathname.indexOf("/ico") != -1) {
             return      <ul className={mcn + mcl + ' landing'}>
-                            {/* <li className={lcn + ' buttons'}>
-                                <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
-                            </li> */}
-                            <li className={lcn}>
-                                <Link className="button success" to="/ico">Выплаты авторам</Link>
-                            </li>
                             <li className={lcn}>
                                 <a href="#what-is-golos">Видео</a>
                             </li>
@@ -189,9 +171,6 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
 
         return (
             <ul className={mcn + mcl}>
-                {/* <li className={lcn + ' buttons'}>
-                    <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
-                </li> */}
                 <li className={lcn + ' buttons'}>
                     <Link to="/ico" className="button success">Выплаты авторам</Link>
                 </li>
@@ -206,12 +185,6 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
 
     if (location && location.pathname.indexOf("/ico") != -1) {
         return  <ul className={mcn + mcl + ' landing'}>
-                    {/* <li className={lcn + ' buttons'}>
-                        <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
-                    </li> */}
-                    <li className={lcn}>
-                        <Link className="button success" to="/ico">Выплаты авторам</Link>
-                    </li>
                     <li className={lcn}>
                         <a href="#what-is-golos">Видео</a>
                     </li>
@@ -224,7 +197,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                     <li className={lcn}>
                         <a href="#team">Команда</a>
                     </li>
-                    <li className={lcn + ' image-wrapper'}>
+                    <li className={'image-wrapper'}>
                         <a href="/login.html">
                             <img src="images/user.png" width="36" height="36" />
                             <span>Вход</span>
@@ -237,9 +210,6 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
     }
     return (
             <ul className={mcn + mcl}>
-                {/*<li className={lcn + ' buttons'}>
-                     <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
-                </li>*/}
                 <li className={lcn + ' buttons'}>
                     <Link to="/ico" className="button success">Выплаты авторам</Link>
                 </li>

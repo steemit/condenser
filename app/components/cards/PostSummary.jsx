@@ -108,9 +108,9 @@ class PostSummary extends React.Component {
         let content_body = <div className="PostSummary__body entry-content">
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>{desc}</a>
         </div>;
-        let content_title = <h1 className="entry-title">
+        let content_title = <h2 className="entry-title">
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>{title_text}</a>
-        </h1>;
+        </h2>;
 
         // author and category
         let author_category = <span className="vcard">
@@ -133,7 +133,7 @@ class PostSummary extends React.Component {
           if(thumbSize == 'mobile') {
             thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image-mobile"><img src={url} /></a>
           } else {
-            thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image" style={{backgroundImage: 'url(' + url + ')'}}></a>
+            thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)}><img src={url} className="PostSummary__image" /></a>
           }
         }
         const commentClasses = []

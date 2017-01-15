@@ -1,5 +1,6 @@
 import {fromJS, Map} from 'immutable';
 import createModule from 'redux-modules';
+import { translate } from 'app/Translator';
 
 export default createModule({
     name: 'transaction',
@@ -52,24 +53,24 @@ export default createModule({
                     switch (type) {
                     case 'vote':
                         if (/uniqueness constraint/.test(errorStr)) {
-                            errorKey = 'You already voted for this post'
+                            errorKey = translate('you_already_voted_for_this_post')
                             console.error('You already voted for this post.')
                         }
                         break
                     case 'comment':
                         if (/You may only post once per minute/.test(errorStr)) {
-                            errorKey = 'You may only post once per minute.'
+                            errorKey = translate('you_may_only_post_once_per_minute')
                         } else if (errorStr === 'Testing, fake error')
                             errorKey = 'Testing, fake error'
                         break;
                     case 'transfer':
                         if (/get_balance/.test(errorStr)) {
-                            errorKey = 'Insufficient balance.'
+                            errorKey = translate('insufficient_balance')
                         }
                         break
                     case 'withdraw_vesting':
                         if(/Account registered by another account requires 10x account creation fee worth of Steem Power before it can power down/.test(errorStr))
-                            errorKey = 'Account registered by another account requires 10x account creation fee worth of Steem Power before it can power down'
+                            errorKey = translate('account_registered_by_anoter_account_requires_10x_creation_fee_worth_of_VESTING_TOKEN_before_it_can_power_down')
                         break
                     default:
                         break
@@ -87,7 +88,7 @@ export default createModule({
                                 if(txt.length && txt[txt.length - 1].trim() !== '') {
                                     errorKey = errorStr = txt[txt.length - 1]
                                 } else
-                                    errorStr = `Transaction failed: ${err_lines[1]}`;
+                                    errorStr = translate('transaction_failed_error', {error: err_lines[1]});
                             }
                         }
                         if (errorStr.length > 200) errorStr = errorStr.substring(0, 200);

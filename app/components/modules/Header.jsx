@@ -215,8 +215,7 @@ class Header extends React.Component {
                             <ul className="menu">
                                 <li className="Header__top-logo">
                                     <Link to={logo_link}>
-                                        {/* <Icon name={APP_ICON} size="2x" /> */}
-                                        <img style={{display: 'inline-block', width: '2rem', height: '2rem'}} src="/images/golos-NG.png" alt="Новогодний логотип Голоса" />
+                                        <Icon name={APP_ICON} size="2x" />
                                     </Link>
                                 </li>
 
@@ -229,7 +228,7 @@ class Header extends React.Component {
                                 {user_name && <li><Link to={`/@${user_name}`}>{user_name}</Link></li>}
                                 {page_name && <li><span>{page_name}</span></li>}
                                 {(topic_link || user_name || page_name) && sort_order && <li className="delim show-for-small-only">|</li>}
-                                {selected_sort_order && <DropdownMenu className="Header__sort-order-menu show-for-small-only" items={sort_order_menu} selected={selected_sort_order[1]} el="li" />}
+                                {selected_sort_order && route && route.page !== 'Landing' && <DropdownMenu className="Header__sort-order-menu show-for-small-only" items={sort_order_menu} selected={selected_sort_order[1]} el="li" />}
                             </ul>
                         </div>
                         <div className="columns shrink">

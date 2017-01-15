@@ -20,8 +20,8 @@ export default class LandingFooter extends React.Component {
 			],
 			[
 				{name: 'Chat', url: 'https://chat.golos.io/'},
-				{name: 'Facebook', url: 'https://www.facebook.com/golosru'},
-				{name: 'VK', url: 'https://vk.com/rgolos'},
+				{name: 'Facebook', url: 'https://www.facebook.com/www.golos.io'},
+				{name: 'VK', url: 'https://vk.com/goloschain'},
 				{name: 'Twitter', url: 'https://twitter.com/goloschain'},
 				{name: 'Bitcointalk', url: 'https://bitcointalk.org/index.php?topic=1624364.0'}
 			]

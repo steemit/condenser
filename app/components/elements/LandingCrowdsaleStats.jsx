@@ -6,7 +6,7 @@ export default class LandingCrowdsaleStats extends React.Component {
 			<div>
         <strong>Краудсейл закончен!</strong>
         <p>
-          <a href="https://golos.io/ru--golos/@marina/golos-puteshestvie-tolko-nachinaetsya-priglashaem-obsudit-plany-na-budushee">
+          <a href="https://docs.google.com/document/d/1WQF1xxmCMxzEA95Gnxw4FHViX_6pjVoUlBnItCepOmE/edit">
           планы на будущее
           </a>
         </p>

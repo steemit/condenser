@@ -48,6 +48,8 @@ class CreateAccount extends React.Component {
             console.error('CreateAccount - cryptoTestResult: ', cryptoTestResult);
             this.setState({cryptographyFailure: true});
         }
+        // Facebook Pixel events #200
+        if (process.env.BROWSER) fbq('track', 'Lead');
     }
 
     onSubmit(e) {
@@ -95,6 +97,8 @@ class CreateAccount extends React.Component {
                 }
                 this.setState({server_error: res.error || translate('unknown'), loading: false});
             } else {
+                // Facebook Pixel events #200
+                fbq('track', 'CompleteRegistration');
                 window.location = `/login.html#account=${name}&msg=accountcreated`;
                 // this.props.loginUser(name, password);
                 // const redirect_page = localStorage.getItem('redirect');

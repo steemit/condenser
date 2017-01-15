@@ -31,8 +31,8 @@ class App extends React.Component {
 
         if (process.env.BROWSER) localStorage.removeItem('autopost') // July 14 '16 compromise, renamed to autopost2
         this.props.loginUser();
-        // SEGMENT.COM ANALYTICS INITIALIZATION
     	if (process.env.BROWSER) {
+            // SEGMENT.COM ANALYTICS INITIALIZATION
             !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
             analytics.load(SEGMENT_ANALYTICS_KEY);
             analytics.page()
@@ -46,35 +46,16 @@ class App extends React.Component {
             ga('create', 'UA-49238979-12', 'auto');
             ga('send', 'pageview');
 
+            // FACEBOOK CONNECT
             !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
             n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
             n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
             t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
             document,'script','https://connect.facebook.net/en_US/fbevents.js');
 
-            fbq('init', '1594659427507927');
-            fbq('track', "PageView");
-
-            // REFORMAL.RU
-            window.reformalOptions = { // yes, it's must be declared as global variable
-                project_id: 975991,
-                project_host: "golosweb.reformal.ru",
-                tab_orientation: "right",
-                force_new_window: true,
-                tab_indent: "50%",
-                tab_bg_color: "#2471b9",
-                tab_border_color: "#FFFFFF",
-                tab_image_url: "http://tab.reformal.ru/T9GC0LfRi9Cy0Ysg0Lgg0L%252FRgNC10LTQu9C%252B0LbQtdC90LjRjw==/FFFFFF/a08a7c60392f68cb33f77d4f56cf8c6f/right/1/tab.png",
-                tab_border_width: 2
-            };
-
-
-            (function() {
-                var script = document.createElement('script');
-                script.type = 'text/javascript'; script.async = true;
-                script.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'media.reformal.ru/widgets/v3/reformal.js';
-                document.getElementsByTagName('head')[0].appendChild(script);
-            })();
+            /* disabled to avoid facebbok warning of multiple pixel id's */
+            // fbq('init', '1594659427507927');
+            // fbq('track', "PageView");
 
             window.fbAsyncInit = function() {
               FB.init({
@@ -118,6 +99,11 @@ class App extends React.Component {
              } else { f(); }
              })(window.document, window, "yandex_metrika_callbacks")
             /* /Yandex.Metrika counter */
+
+            /* Facebook Pixel Code */
+            /* NOTE dont't forget to remove <img /> tag of facebook pixel (down below) */
+            fbq('init', '217726192019770'); // Insert your pixel ID here.
+            fbq('track', 'PageView');
         }
     }
 
@@ -237,7 +223,7 @@ class App extends React.Component {
                             <br />
                             <br />
                             <div className="tag3">
-                                <b>{translate("get_INVEST_TOKEN_when_sign_up", {signupBonus: localizedCurrency(signup_bonus)})}</b>
+                                <b>{translate("get_VESTING_TOKEN_when_sign_up", {signupBonus: localizedCurrency(signup_bonus)})}</b>
                             </div>
                         </div>
                     </div>
@@ -247,7 +233,7 @@ class App extends React.Component {
 
         let header_bar = null
         // if (!/^\/ico$/.test(location.pathname) && !/^\/$/.test(location.pathname)) {
-        if (location.pathname.indexOf("/ico")) {
+        if (!/^\/$/.test(location.pathname)) {
           header_bar = (
           <div>
 
@@ -274,11 +260,11 @@ class App extends React.Component {
                           {translate("APP_NAME_whitepaper")}
                       </a>
                   </li>
-                  {/* <li>
+                  <li>
                       <a onClick={() => depositSteem()}>
                           {translate("buy_LIQUID_TOKEN")}
                       </a>
-                  </li> */}
+                  </li>
                   <li>
                       <a href="/market" onClick={this.navigate}>
                           {translate("market")}
@@ -350,6 +336,8 @@ class App extends React.Component {
             <Modals />
             {/* Yandex.Metrika counter */}
             <noscript><div><img src="https://mc.yandex.ru/watch/41829924" style={{position: 'absolute', left: '-9999px'}} alt="" /></div></noscript>
+            {/* Facebook Pixel Code */}
+            <noscript><img height="1" width="1" style={{display: 'none'}} src="https://www.facebook.com/tr?id=217726192019770&ev=PageView&noscript=1" /></noscript>
         </div>
     }
 }

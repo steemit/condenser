@@ -1,5 +1,6 @@
 
 import { APP_NAME, APP_URL, LANDING_PAGE_URL, LIQUID_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, VESTING_TOKEN, LIQUID_TICKER, SUPPORT_EMAIL } from 'config/client_config';
+import {localCurrencySymbol} from 'app/components/elements/LocalizedCurrency'
 /**
  * see: app/locales/README.md
  */
@@ -243,7 +244,7 @@ const ru = {
 	buy_atleast_amount_for: 'Купить {min_to_receive} за {amount_to_sell} ({effectivePrice})',
 	higher: 'Дороже', // context is about prices
 	lower: 'Дешевле', // context is about prices
-	total_DEBT_TOKEN_SHORT_CURRENCY_SIGN: "Сумма " + DEBT_TOKEN_SHORT + ' (' + CURRENCY_SIGN + ')',
+	total_DEBT_TOKEN_SHORT_CURRENCY_SIGN: "Сумма " + DEBT_TOKEN_SHORT + ' (' + localCurrencySymbol + ')',
 	// RecoverAccountStep1.jsx // recover account stuff
 	not_valid: 'Недействительно',
 	account_name_is_not_found: 'Имя аккаунта не найдено',

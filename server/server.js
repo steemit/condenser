@@ -107,13 +107,13 @@ app.use(helmet());
 app.use(mount('/static', staticCache(path.join(__dirname, '../app/assets/static'), cacheOpts)));
 
 app.use(mount('/robots.txt', function* () {
-    this.set('Cache-Control', 'public, max-age=7200000');
+    this.set('Cache-Control', 'public, max-age=86400000');
     this.type = 'text/plain';
     this.body = "User-agent: *\nAllow: /";
 }));
 
 app.use(mount('/service-worker.js', function* () {
-    this.set('Cache-Control', 'public, max-age=1');
+    this.set('Cache-Control', 'public, max-age=7200000');
     this.type = 'application/javascript';
     this.body = fs.readFileSync(path.join(__dirname, './service-worker.js'));
 }));

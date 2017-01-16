@@ -72,26 +72,6 @@ export default function useNotificationsApi(app) {
         }
         this.body = '';
     });
-
-    // TODO: finish the call below. It should allow request only from whitelisted IPs.
-    // router.post('/notifications/send', koaBody, function *() {
-    //     try {
-    //         const params = this.request.body;
-    //         const {nparams, title, body, url} = typeof(params) === 'string' ? JSON.parse(params) : params;
-    //         console.log('-- POST /notifications/send -->', nparams, title, body, url);
-    //         const payload = JSON.stringify({
-    //             title: title,
-    //             icon: 'https://steemit.com/favicon.ico',
-    //             body: body,
-    //             url: url
-    //         });
-    //         yield webPush.sendNotification(nparams, payload);
-    //     } catch (error) {
-    //         console.error('-- POST /notifications/send error -->', error.message);
-    //     }
-    //     this.body = '';
-    // });
-
 }
 
 const status = (ctx, account) =>

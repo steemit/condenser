@@ -394,6 +394,7 @@ const en = 	{
 	your_existing_DEBT_TOKEN_are_liquid_and_transferable: 'Your existing ' + DEBT_TOKEN + ' are liquid and transferable. Instead you may wish to trade ' + DEBT_TOKEN + ' directly in this site under {link} or transfer to an external market.',
 	buy_or_sell: 'Buy or Sell',
 	trending_30_day: 'trending (30 day)',
+    trending30: 'trending of last 30 days',
 	promoted: 'promoted',
 	comments: 'Comments',
 	topics: 'Topics',

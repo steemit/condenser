@@ -1,4 +1,5 @@
 import { APP_NAME, APP_URL, LANDING_PAGE_URL, SUPPORT_EMAIL, DEBT_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TOKEN, CURRENCY_SIGN, VESTING_TOKEN } from 'config/client_config';
+import {localCurrencySymbol} from 'app/components/elements/LocalizedCurrency'
 /**
  * see: app/locales/README.md
  */
@@ -240,7 +241,7 @@ const en = 	{
 	buy_atleast_amount_for: 'Buy at least {min_to_receive} for {amount_to_sell} ({effectivePrice})',
 	higher: 'Higher', // context is about prices
 	lower: 'Lower', // context is about prices
-	total_DEBT_TOKEN_SHORT_CURRENCY_SIGN: "Total " + DEBT_TOKEN_SHORT + ' (' + CURRENCY_SIGN + ')',
+	total_DEBT_TOKEN_SHORT_CURRENCY_SIGN: "Total " + DEBT_TOKEN_SHORT + ' (' + localCurrencySymbol + ')',
 	// RecoverAccountStep1.jsx // recover account stuff
 	not_valid: 'Not valid',
 	account_name_is_not_found: 'Account name is not found',

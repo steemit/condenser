@@ -5,8 +5,8 @@ import { injectIntl } from 'react-intl';
 import { getSymbolFromCurrency } from 'currency-symbol-map';
 import { FRACTION_DIGITS, DEFAULT_CURRENCY } from 'config/client_config';
 
-let localCurrencySymbol
 let localizedCurrency = () => {}
+const localCurrencySymbol = process.env.BROWSER ? getSymbolFromCurrency(store.get('currency') || DEFAULT_CURRENCY) : ''
 
 // TODO refactor. This is a mess
 // TODO add comments on what this code does

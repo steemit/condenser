@@ -247,7 +247,7 @@ class Market extends React.Component {
                         <th>{translate('type')}</th>
                         <th>{translate('price')}</th>
                         <th className="uppercase">{LIQUID_TOKEN}</th>
-                        <th>{`${DEBT_TOKEN_SHORT} (${localCurrencySymbol})`}</th>
+                        <th>{`${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}</th>
                         <th>{translate('action')}</th>
                     </tr>
                 </thead>

@@ -39,6 +39,12 @@ app.use(flash({key: 'flash'}));
 // redirect to home page if known account
 // remember ch, cn, r url params in the session and remove them from url
 app.use(function *(next) {
+    // redirect to home page/feed if known account
+    if (this.method === 'GET' && this.url === '/' && this.session.a) {
+        this.status = 302;
+        this.redirect(`/@${this.session.a}/feed`);
+        return;
+    }
     if (this.method === 'GET' && /\?[^\w]*(ch=|cn=|r=)/.test(this.url)) {
         let redir = this.url.replace(/((ch|cn|r)=[^&]+)/gi, r => {
             const p = r.split('=');
@@ -50,16 +56,6 @@ app.use(function *(next) {
         console.log(`server redirect ${this.url} -> ${redir}`);
         this.status = 302;
         this.redirect(redir);
-    } else {
-        yield next;
-    }
-});
-
-// redirect to "hot"
-app.use(function *(next) {
-    if (this.method === 'GET' && this.url == '/') {
-        this.status = 302;
-        this.redirect('/hot');
     } else {
         yield next;
     }

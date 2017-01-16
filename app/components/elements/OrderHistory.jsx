@@ -73,7 +73,7 @@ export default class OrderHistory extends React.Component {
                             <th>{translate('date')}</th>
                             <th>{translate('price')}</th>
                             <th>{LIQUID_TOKEN}</th>
-                            <th>{`${LIQUID_TOKEN} (${localCurrencySymbol})`}</th>
+                            <th>{`${LIQUID_TOKEN} (${CURRENCY_SIGN})`}</th>
                         </tr>
                     </thead>
                     <tbody>

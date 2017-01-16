@@ -89,7 +89,7 @@ class Header extends React.Component {
         let page_name = null;
 
         if (route.page === 'PostsIndex') {
-            sort_order = route.params[0] ? translate(route.params[0]) : '';
+            sort_order = route.params[0] ? route.params[0] : '';
             if (sort_order === 'home') {
                 page_title = translate('home')
                 const account_name = route.params[1];
@@ -111,7 +111,7 @@ class Header extends React.Component {
                         page_title = translate('new_posts');
                     }
                     else {
-                        page_title = translate('sort_order_posts', {sort_order});
+                        page_title = translate('sort_order_posts', {sort_order: translate(sort_order)});
                     }
                 }
             }
@@ -164,7 +164,7 @@ class Header extends React.Component {
 
         if (process.env.BROWSER && route.page !== 'Post') document.title = page_title + ' — ' + APP_NAME;
 
-        const logo_link = route.params && route.params.length > 1 && this.last_sort_order ? '/' + this.last_sort_order : '/hot';
+        const logo_link = route.params && route.params.length > 1 && this.last_sort_order ? '/' + this.last_sort_order : (current_account_name ? `/@${current_account_name}/feed` : '/');
         let topic_link = topic ? <Link to={`/${this.last_sort_order || 'hot'}/${topic_original_link}`}>{detransliterate(topic)}</Link> : null;
 
         const sort_orders = [
@@ -190,10 +190,9 @@ class Header extends React.Component {
         ];
         if (current_account_name) sort_orders_horizontal.unshift(['home', translate('home')]);
         const sort_order_menu_horizontal = sort_orders_horizontal.map(so => {
-                sort_order = route.params && route.params[0] !== 'home' ? route.params[0] : null;
                 let active = (so[0] === sort_order) || (so[0] === 'trending' && sort_order === 'trending30');
                 if (so[0] === 'home' && sort_order === 'home' && !home_account) active = false;
-                return {link: sortOrderToLink(so[0], topic_original_link, current_account_name), value: so[1], active};
+                return {link: sortOrderToLink(so[0], topic, current_account_name), value: so[1], active};
             });
 
         let sort_order_extra_menu = null;

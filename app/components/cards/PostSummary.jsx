@@ -38,7 +38,6 @@ class PostSummary extends React.Component {
         pending_payout: React.PropTypes.string.isRequired,
         total_payout: React.PropTypes.string.isRequired,
         content: React.PropTypes.object.isRequired,
-        netVoteSign: React.PropTypes.number,
         currentCategory: React.PropTypes.string,
         thumbSize: React.PropTypes.string,
         nsfwPref: React.PropTypes.string,

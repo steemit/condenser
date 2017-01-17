@@ -71,6 +71,7 @@ class Header extends React.Component {
         let topic = '';
         let user_name = null;
         let page_name = null;
+
         if (route.page === 'PostsIndex') {
             sort_order = route.params[0];
             if (sort_order === 'home') {
@@ -115,16 +116,16 @@ class Header extends React.Component {
         } else if (route.page === 'UserProfile') {
             user_name = route.params[0].slice(1);
             const {name} = normalizeProfile(this.props.account_meta.getIn([user_name]).toJS());
-            const user_title = name ? `${name} (@${user_name}) ` : `@${user_name} `;
+            const user_title = name ? `${name} (@${user_name})` : user_name;
             page_title = user_title;
             if(route.params[1] === "followers"){
                 page_title = "People following " + user_title;
             }
             if(route.params[1] === "followed"){
-                page_title = "People followed " + user_title;
+                page_title = "People followed by " + user_title;
             }
             if(route.params[1] === "curation-rewards"){
-                page_title = "Curation rewards " + user_title;
+                page_title = "Curation rewards by " + user_title;
             }
             if(route.params[1] === "author-rewards"){
                 page_title = "Author rewards by " + user_title;

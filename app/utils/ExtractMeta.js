@@ -62,15 +62,15 @@ export default function extractMeta(chain_data, rp) {
         const account = chain_data.accounts[rp.accountname];
         let {name, about, profile_image} = normalizeProfile(account);
         if(name == null) name = account.name;
-        if(about == null) about = " Steemit";
+        if(about == null) about = " Join thousands on steemit who share, post and earn rewards.";
         if(profile_image == null) profile_image = 'https://steemit.com/images/steemit-twshare.png';
         // Set profile tags
         const title = `@${account.name}`;
-        const desc  = `The latest posts from ${name}. Follow me at @${account.name}. ${about}`;
+        const desc  = `The latest posts from ${name}. Follow me at @${account.name}. ${about}.`;
         const image = profile_image;
 
         // Standard meta
-        metas.push({name: 'description', content: desc.substring(0,170)});
+        metas.push({name: 'description', content: desc});
 
         // Twitter card data
         metas.push({name: 'twitter:card',        content: 'summary'});

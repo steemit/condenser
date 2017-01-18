@@ -50,8 +50,8 @@ export default class Orderbook extends React.Component {
             <thead>
                 <tr>
                     <th>{translate(buy ? "total_DEBT_TOKEN_SHORT_CURRENCY_SIGN" : "price")}</th>
-                    <th>{buy ? `${DEBT_TOKEN_SHORT} (${localCurrencySymbol})` : LIQUID_TOKEN}</th>
-                    <th>{buy ? LIQUID_TOKEN : `${DEBT_TOKEN_SHORT} (${localCurrencySymbol})`}</th>
+                    <th>{buy ? `${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})` : LIQUID_TOKEN}</th>
+                    <th>{buy ? LIQUID_TOKEN : `${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}</th>
                     <th>{translate(buy ? "price" : "total_DEBT_TOKEN_SHORT_CURRENCY_SIGN")}</th>
                 </tr>
             </thead>

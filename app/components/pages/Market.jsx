@@ -234,9 +234,9 @@ class Market extends React.Component {
               <tr key={o.orderid}>
                   <td>{o.created.replace('T', ' ')}</td>
                   <td>{translate(o.type == 'ask' ? 'sell' : 'buy')}</td>
-                  <td>{CURRENCY_SIGN + ' ' + o.price.toFixed(6)}</td>
+                  <td>{o.price.toFixed(6)}</td>
                   <td>{o.steem}</td>
-                  <td metaTask="//TODO">{CURRENCY_SIGN + ' ' + o.sbd.replace('SBD', DEBT_TOKEN_SHORT)}</td>
+                  <td metaTask="//TODO">{o.sbd.replace('SBD', DEBT_TOKEN_SHORT)}</td>
                   <td><a href="#" onClick={e => cancelOrderClick(e, o.orderid)}>{translate('cancel')}</a></td>
               </tr> )
 
@@ -247,7 +247,7 @@ class Market extends React.Component {
                         <th>{translate('type')}</th>
                         <th>{translate('price')}</th>
                         <th className="uppercase">{LIQUID_TOKEN}</th>
-                        <th>{`${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}</th>
+                        <th>{`${DEBT_TOKEN_SHORT}`}</th>
                         <th>{translate('action')}</th>
                     </tr>
                 </thead>
@@ -280,10 +280,10 @@ class Market extends React.Component {
                         <ul className="Market__ticker">
                             {/* .toFixed() modifiers are not neccesery, currencies are formatted properly behind the scene */}
                             {/* i left them in place just incase, so you will not have to look them up */}
-                            <li><b>{translate('last_price')}</b> {CURRENCY_SIGN + ' ' + (ticker.latest.toFixed(6))} ({pct_change})</li>
-                            <li><b>{translate('24h_volume')}</b> {CURRENCY_SIGN + ' ' + (ticker.sbd_volume.toFixed(2))}</li>
-                            <li><b>{translate('bid')}</b> {CURRENCY_SIGN + ' ' + (ticker.highest_bid.toFixed(6))}</li>
-                            <li><b>{translate('ask')}</b> {CURRENCY_SIGN + ' ' + (ticker.lowest_ask.toFixed(6))}</li>
+                            <li><b>{translate('last_price')}</b> {DEBT_TOKEN_SHORT + ' ' + (ticker.latest.toFixed(6))} ({pct_change})</li>
+                            <li><b>{translate('24h_volume')}</b> {DEBT_TOKEN_SHORT + ' ' + (ticker.sbd_volume.toFixed(2))}</li>
+                            <li><b>{translate('bid')}</b> {DEBT_TOKEN_SHORT + ' ' + (ticker.highest_bid.toFixed(6))}</li>
+                            <li><b>{translate('ask')}</b> {DEBT_TOKEN_SHORT + ' ' + (ticker.lowest_ask.toFixed(6))}</li>
                             {ticker.highest_bid > 0 &&
                                 <li><b>{translate('spread')}</b> {(200 * (ticker.lowest_ask - ticker.highest_bid) / (ticker.highest_bid + ticker.lowest_ask)).toFixed(3)}%</li>}
                             {/*<li><b>Feed price</b> ${ticker.feed_price.toFixed(3)}</li>*/}
@@ -355,7 +355,7 @@ class Market extends React.Component {
                                             if(total >= 0 && price >= 0) this.refs.buySteem_amount.value = roundUp(total / price, 3)
                                             validateBuySteem()
                                         }} />
-                                    <span className="input-group-label">{`${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}</span>
+                                    <span className="input-group-label">{`${DEBT_TOKEN_SHORT}`}</span>
                                     </div>
                                 </div>
                             </div>
@@ -445,7 +445,7 @@ class Market extends React.Component {
                                           if(price >= 0 && total >= 0) this.refs.sellSteem_amount.value = roundUp(total / price, 3)
                                           validateSellSteem()
                                       }} />
-                                      <span className="input-group-label">{`${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}</span>
+                                      <span className="input-group-label">{`${DEBT_TOKEN_SHORT}`}</span>
                                     </div>
                                 </div>
                             </div>

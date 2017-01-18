@@ -1,5 +1,6 @@
 import React from "react";
 import { localizedCurrency, localCurrencySymbol } from 'app/components/elements/LocalizedCurrency';
+import { CURRENCY_SIGN } from 'config/client_config';
 
 export default class OrderRow extends React.Component {
 
@@ -64,8 +65,8 @@ export default class OrderRow extends React.Component {
         const {order, side, total} = this.props;
         const bid = side === "bids";
 
-        const totalTD = <td>{localizedCurrency(total.toFixed(3), {noSymbol: true})}</td>;
-        const sbd = <td>{localizedCurrency(order.getStringSBD(), {noSymbol: true})}</td>;
+        const totalTD = <td>{CURRENCY_SIGN + ' ' + total.toFixed(3)}</td>;
+        const sbd = <td>{CURRENCY_SIGN + ' ' + order.getStringSBD()}</td>;
         const steem = <td>{order.getStringSteem()}</td>;
         const price = <td><strong>{order.getStringPrice()}</strong></td>;
 

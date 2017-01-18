@@ -80,8 +80,7 @@ class CommentImpl extends React.Component {
 
         // redux props
         username: React.PropTypes.string,
-        rootComment: React.PropTypes.string.isRequired,
-        comment_link: React.PropTypes.string.isRequired,
+        rootComment: React.PropTypes.string,
         anchor_link: React.PropTypes.string.isRequired,
         deletePost: React.PropTypes.func.isRequired,
     };
@@ -208,12 +207,19 @@ class CommentImpl extends React.Component {
         }
         const {netVoteSign, hasReplies, authorRepLog10, hide, pictures, gray} = comment.stats
         const {author, json_metadata} = comment
-        const {username, depth, rootComment, comment_link, anchor_link,
-            showNegativeComments, ignore, noImage} = this.props
+        const {username, depth, anchor_link,
+            showNegativeComments, ignore_list, noImage} = this.props
         const {onShowReply, onShowEdit, onDeletePost} = this
         const post = comment.author + '/' + comment.permlink
         const {PostReplyEditor, PostEditEditor, showReply, showEdit, hide_body} = this.state
         const Editor = showReply ? PostReplyEditor : PostEditEditor
+
+        let {rootComment} = this.props
+        if(!rootComment && depth === 1) {
+            rootComment = comment.parent_author + '/' + comment.parent_permlink;
+        }
+        const comment_link = `/${comment.category}/@${rootComment}#@${comment.author}/${comment.permlink}`
+        const ignore = ignore_list && ignore_list.has(comment.author)
 
         if(!showNegativeComments && (hide || ignore)) {
             return null;
@@ -349,30 +355,16 @@ class CommentImpl extends React.Component {
 const Comment = connect(
     // mapStateToProps
     (state, ownProps) => {
-        const {content, cont} = ownProps
-        let {depth} = ownProps
-        if(depth == null) depth = 1
-        const c = cont.get(content);
-        let comment_link = null
-        let rc = ownProps.rootComment
-        if(c) {
-            if(depth === 1) rc = c.get('parent_author') + '/' + c.get('parent_permlink')
-            comment_link = `/${c.get('category')}/@${rc}#@${c.get('author')}/${c.get('permlink')}`
-        }
-        const current = state.user.get('current')
-        const username = current ? current.get('username') : null
+        const {content} = ownProps
 
-        const key = ['follow', 'get_following', username, 'ignore_result', c.get('author')]
-        const ignore = username ? state.global.hasIn(key) : false
-        // if(ignore) console.log(username, 'ignored comment by', c.get('author'), '\t', comment_link)
+        const username = state.user.getIn(['current', 'username'])
+        const ignore_list = username ? state.global.getIn(['follow', 'get_following', username, 'ignore_result']) : null
 
         return {
             ...ownProps,
-            comment_link,
             anchor_link: '#@' + content, // Using a hash here is not standard but intentional; see issue #124 for details
-            rootComment: rc,
             username,
-            ignore
+            ignore_list
         }
     },
 

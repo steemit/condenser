@@ -2,7 +2,7 @@ import React from "react";
 import HistoryRow from "./OrderhistoryRow.jsx";
 import { translate } from 'app/Translator';
 import { localizedCurrency, localCurrencySymbol } from 'app/components/elements/LocalizedCurrency';
-import { LIQUID_TOKEN, CURRENCY_SIGN } from 'config/client_config';
+import { LIQUID_TOKEN, CURRENCY_SIGN, DEBT_TOKEN_SHORT } from 'config/client_config';
 
 export default class OrderHistory extends React.Component {
 
@@ -73,7 +73,7 @@ export default class OrderHistory extends React.Component {
                             <th>{translate('date')}</th>
                             <th>{translate('price')}</th>
                             <th>{LIQUID_TOKEN}</th>
-                            <th>{`${LIQUID_TOKEN} (${CURRENCY_SIGN})`}</th>
+                            <th>{`${DEBT_TOKEN_SHORT}`}</th>
                         </tr>
                     </thead>
                     <tbody>

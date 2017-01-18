@@ -1,21 +1,26 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
+import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 
 class Userpic extends Component {
-    // account is specified as string, but converted to object in connect
     static propTypes = {
-        account: PropTypes.object
+        account: PropTypes.string
+    }
+
+    constructor(props) {
+        super(props);
+        this.shouldComponentUpdate = shouldComponentUpdate(this, 'Userpic')
     }
 
     render() {
-        const {account, width, height} = this.props
+        const {json_metadata, width, height} = this.props
         const hideIfDefault = this.props.hideIfDefault || false
 
         let url = null;
 
         // try to extract image url from users metaData
         try {
-            const md = JSON.parse(account.toJS().json_metadata);
+            const md = JSON.parse(json_metadata);
             if(md.profile) url = md.profile.profile_image;
         } catch (e) {}
 
@@ -38,10 +43,13 @@ class Userpic extends Component {
 }
 
 export default connect(
-    (state, {account, ...restOfProps}) => {
+    (state, ownProps) => {
+        const {account, width, height, hideIfDefault} = ownProps
         return {
-            account: state.global.getIn(['accounts', account]),
-            ...restOfProps
+            json_metadata: state.global.getIn(['accounts', account, 'json_metadata']),
+            width,
+            height,
+            hideIfDefault,
         }
     }
 )(Userpic)

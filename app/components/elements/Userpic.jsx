@@ -7,10 +7,7 @@ class Userpic extends Component {
         account: PropTypes.string
     }
 
-    constructor(props) {
-        super(props);
-        this.shouldComponentUpdate = shouldComponentUpdate(this, 'Userpic')
-    }
+    shouldComponentUpdate = shouldComponentUpdate(this, 'Userpic')
 
     render() {
         const {json_metadata, width, height} = this.props

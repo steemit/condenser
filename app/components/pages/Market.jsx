@@ -236,7 +236,7 @@ class Market extends React.Component {
                   <td>{translate(o.type == 'ask' ? 'sell' : 'buy')}</td>
                   <td>{localizedCurrency(o.price.toFixed(6))}</td>
                   <td>{o.steem}</td>
-                  <td metaTask="//TODO">{localCurrencySymbol(o.sbd.replace('SBD', DEBT_TOKEN_SHORT), {noSymbol: true})}</td>
+                  <td metaTask="//TODO">{localCurrencySymbol + ' ' + o.sbd.replace('SBD', DEBT_TOKEN_SHORT)}</td>
                   <td><a href="#" onClick={e => cancelOrderClick(e, o.orderid)}>{translate('cancel')}</a></td>
               </tr> )
 

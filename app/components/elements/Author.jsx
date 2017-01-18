@@ -39,7 +39,6 @@ class Author extends React.Component {
         const {name, about} = this.props.account ? normalizeProfile(this.props.account.toJS()) : {}
 
         const dropdown = <div className="Author__dropdown">
-
             <Link to={'/@' + author}>
                 <Userpic account={author} width="75" height="75" />
             </Link>
@@ -58,8 +57,6 @@ class Author extends React.Component {
                 {about}
             </div>
         </div>
-
-
 
         return (
             <span className="Author">
@@ -85,20 +82,13 @@ class Author extends React.Component {
 import {connect} from 'react-redux'
 export default connect(
     (state, ownProps) => {
-        const current = state.user.get('current')
-        const username = current && current.get('username')
-        const account = state.global.getIn(['accounts', ownProps.author]);
+        const {author, follow, mute, authorRepLog10} = ownProps;
+        const username = state.user.getIn(['current', 'username']);
+        const account = state.global.getIn(['accounts', author]);
         return {
-            ...ownProps,
+            author, follow, mute, authorRepLog10,
             username,
             account,
         }
     },
-    // dispatch => ({
-    //     vote: (abc) => {
-    //         dispatch(transaction.actions.broadcastOperation({
-    //             abc
-    //         }))
-    //     },
-    // })
 )(Author)

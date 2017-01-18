@@ -69,8 +69,8 @@ class Post extends React.Component {
         if (!dis) return null;
 
         if(!showAnyway) {
-            const {authorRepLog10, netVoteSign} = dis.get('stats').toJS()
-            if(authorRepLog10 < 1 || netVoteSign < 0) {
+            const {gray} = dis.get('stats').toJS()
+            if(gray) {
                 return (
                     <div className="Post">
                         <div className="row">

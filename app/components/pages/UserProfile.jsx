@@ -384,13 +384,13 @@ export default class UserProfile extends React.Component {
                             </div>
                         </div>
 
-                        <h3>
+                        <h1>
                             <Userpic account={account.name} hideIfDefault />
                             {name || account.name}{' '}
                             <Tooltip t={translate('this_is_users_reputations_score_it_is_based_on_history_of_votes', {name: accountname})}>
                                 <span className="UserProfile__rep">({rep})</span>
                             </Tooltip>
-                        </h3>
+                        </h1>
 
                         <div>
                             {about && <p className="UserProfile__bio">{about}</p>}

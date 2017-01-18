@@ -156,12 +156,13 @@ class CommentImpl extends React.Component {
         const content = props.cont.get(props.content);
         if (content) {
             const hide = content.getIn(['stats', 'hide'])
+            const gray = content.getIn(['stats', 'gray'])
             if(hide) {
                 const {onHide} = this.props
                 // console.log('Comment --> onHide')
                 if(onHide) onHide()
             }
-            this.setState({hide_body: hide || content.getIn(['stats', 'netVoteSign']) == -1})
+            this.setState({hide_body: hide || gray})
         }
     }
 

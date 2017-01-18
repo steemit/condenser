@@ -15,6 +15,7 @@ import {Map} from 'immutable';
 import Reputation from 'app/components/elements/Reputation';
 import Author from 'app/components/elements/Author';
 import TagList from 'app/components/elements/TagList';
+import UserNames from 'app/components/elements/UserNames';
 
 function isLeftClickEvent(event) {
     return event.button === 0
@@ -37,7 +38,6 @@ class PostSummary extends React.Component {
         pending_payout: React.PropTypes.string.isRequired,
         total_payout: React.PropTypes.string.isRequired,
         content: React.PropTypes.object.isRequired,
-        netVoteSign: React.PropTypes.number,
         currentCategory: React.PropTypes.string,
         thumbSize: React.PropTypes.string,
         nsfwPref: React.PropTypes.string,
@@ -74,8 +74,9 @@ class PostSummary extends React.Component {
 
         let reblogged_by = content.get('first_reblogged_by')
         if(reblogged_by) {
+          if(typeof reblogged_by === 'string') reblogged_by = [reblogged_by] // TODO: this line is backwards-compat for 0.16.1. remove after upgrading.
           reblogged_by = <div className="PostSummary__reblogged_by">
-                             <Icon name="reblog" /> Resteemed by <Link to={'/@'+reblogged_by}>{reblogged_by}</Link>
+                             <Icon name="reblog" /> Resteemed by <UserNames names={reblogged_by} />
                          </div>
         }
 

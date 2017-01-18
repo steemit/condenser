@@ -11,7 +11,7 @@ export default class TagsIndex extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {search: '', order: props.order || 'name'};
+        this.state = {order: props.order || 'name'};
         this.onChangeSort = this.onChangeSort.bind(this)
     }
 
@@ -19,10 +19,6 @@ export default class TagsIndex extends React.Component {
         const res = this.props.tagsAll !== nextProps.tagsAll ||
             this.state !== nextState;
         return res;
-    }
-
-    onChangeSearch = e => {
-        this.setState({search: e.target.value})
     }
 
     onChangeSort = (e, order) => {
@@ -42,9 +38,8 @@ export default class TagsIndex extends React.Component {
     render() {
         const {tagsAll} = this.props;
         //console.log('-- TagsIndex.render -->', tagsAll.toJS());
-        const {search, order} = this.state;
+        const {order} = this.state;
         let tags = tagsAll;
-        if (search) tags = tags.filter(tag => tag.get('name').indexOf(search.toLowerCase()) !== -1);
 
         const rows = tags.filter(
             // there is a blank tag present, as well as some starting with #. filter them out.
@@ -80,9 +75,8 @@ export default class TagsIndex extends React.Component {
         return (
             <div className="TagsIndex row">
                 <div className="column">
-                    <div className="medium-2 medium-offset-10">
-                        <input type="text" placeholder="Filter" value={search} onChange={this.onChangeSearch} />
-                    </div>
+                    <br />
+                    <h4>Trending Topics</h4>
                     <table>
                         <thead>
                         <tr>

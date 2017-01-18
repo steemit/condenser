@@ -15,7 +15,7 @@ class Userpic extends Component {
 
         // try to extract image url from users metaData
         try {
-            const md = JSON.parse(account.json_metadata);
+            const md = JSON.parse(account.toJS().json_metadata);
             if(md.profile) url = md.profile.profile_image;
         } catch (e) {}
 
@@ -39,7 +39,9 @@ class Userpic extends Component {
 
 export default connect(
     (state, {account, ...restOfProps}) => {
-        const account_obj = state.global.getIn(['accounts', account]);
-        return { account: account_obj ? account_obj.toJS() : null, ...restOfProps }
+        return {
+            account: state.global.getIn(['accounts', account]),
+            ...restOfProps
+        }
     }
 )(Userpic)

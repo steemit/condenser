@@ -148,6 +148,18 @@ export default function useEnterAndConfirmMobilePages(app) {
 
         const phone = digits(parseInt(country) + localPhone)
 
+        const blocked_prefixes = yield models.List.findAll({
+            attributes: ['id', 'value'],
+            where: {kk: 'block-phone-prefix'}
+        });
+        for (let bp of blocked_prefixes) {
+            if (phone.match(new RegExp('^' + bp.value))) {
+                this.flash = {error: "Unfortunately, we don't yet have support to send SMS to your carrier, please try again later."};
+                this.redirect('/enter_mobile');
+                return;
+            }
+        }
+
         const eid = yield models.Identity.findOne(
             {attributes: ['id'], where: {user_id, provider: 'email', verified: true}, order: 'id DESC'}
         );

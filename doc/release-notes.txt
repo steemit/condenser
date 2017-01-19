@@ -1,4 +1,29 @@
 ---------------------------------------------------------------------
+0.1.190121
+---------------------------------------------------------------------
+
+New features
+--------
+ - Add plain description meta tag #982
+ - Remove filtering of trending options for time being #983
+ - Do not confirm clearing of reply form when body is empty #985
+ - Meta description should be name, not property #989
+ - Show Author dropdown for non-logged in users #991
+ - Adjust rephide -- add threshold #1010
+ - Update profile header for semantic upgrade, adjust styling to match old #1001
+ - #844 protect for invalid user pages allow for short post urls #1011
+ - 958 web push notifications #1007
+ - Add profile pics support to notifications #1017
+ - Support blacklisted phone prefixes #1015
+
+Bug fixes
+--------
+ - Save json_metadata youtube preview image url for iframe embedds. fix #995
+ - Clarify wording of wallet actions, fix #990
+ - Usernames element for reblogged_by array compat #994
+
+
+---------------------------------------------------------------------
 0.1.161261
 ---------------------------------------------------------------------
 

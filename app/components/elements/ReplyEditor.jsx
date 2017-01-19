@@ -274,9 +274,9 @@ class ReplyEditor extends React.Component {
                 this.setState({ progress: {} })
                 const {url} = progress
                 const image_md = `![${name}](${url})`
-                const {body} = this.props.fields
+                const {body} = this.state
                 const {selectionStart, selectionEnd} = this.refs.postRef
-                body.onChange(
+                body.props.onChange(
                     body.value.substring(0, selectionStart) +
                     image_md +
                     body.value.substring(selectionEnd, body.value.length)

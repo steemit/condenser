@@ -115,8 +115,8 @@ class ReplyEditor extends React.Component {
         }
         this.onCancel = e => {
             if(e) e.preventDefault()
-            const {onCancel, resetForm} = this.props
-            if(confirm("Are you sure you want to clear this form?")) {
+            const {onCancel, resetForm, fields} = this.props
+            if(!fields.body.value || confirm("Are you sure you want to clear this form?")) {
                 resetForm()
                 this.setAutoVote()
                 this.setState({rte_value: stateFromHtml()})
@@ -457,11 +457,6 @@ export default formId => reduxForm(
 
             if (!linkProps) throw new Error('Unknown type: ' + type)
 
-            const formCategories = Set(category ? category.trim().replace(/#/g,"").split(/ +/) : [])
-            const rootCategory = originalPost && originalPost.category ?
-                originalPost.category : formCategories.first()
-            const rootTag = /^[-a-z\d]+$/.test(rootCategory) ? rootCategory : null
-
             // If this is an HTML post, it MUST begin and end with the tag
             if(isHtml && !body.match(/^<html>[\s\S]*<\/html>$/)) {
                 errorCallback('HTML posts must begin with <html> and end with </html>')
@@ -481,8 +476,10 @@ export default formId => reduxForm(
                 return
             }
 
+            const formCategories = Set(category ? category.trim().replace(/#/g,"").split(/ +/) : [])
+            const rootCategory = originalPost && originalPost.category ? originalPost.category : formCategories.first()
             let allCategories = Set([...formCategories.toJS(), ...rtags.hashtags])
-            if(rootTag) allCategories = allCategories.add(rootTag)
+            if(/^[-a-z\d]+$/.test(rootCategory)) allCategories = allCategories.add(rootCategory)
 
             // merge
             const meta = isEdit ? jsonMetadata : {}

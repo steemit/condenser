@@ -168,9 +168,9 @@ class UserWallet extends React.Component {
             { value: 'Power Down', link: '#', onClick: powerDown.bind(this, false) }
         ]
         if(isMyAccount) {
-            steem_menu.push({ value: 'Deposit', link: '#', onClick: onShowDepositSteem })
-            steem_menu.push({ value: 'Buy or Sell', link: '/market' })
-            power_menu.push({ value: 'Deposit', link: '#', onClick: onShowDepositPower })
+            steem_menu.push({ value: 'Buy', link: '#', onClick: onShowDepositSteem })
+            steem_menu.push({ value: 'Market', link: '/market' })
+            power_menu.push({ value: 'Buy', link: '#', onClick: onShowDepositPower })
         }
         if( divesting ) {
             power_menu.push( { value: 'Cancel Power Down', link:'#', onClick: powerDown.bind(this,true) } );
@@ -179,7 +179,7 @@ class UserWallet extends React.Component {
         let dollar_menu = [
             { value: 'Transfer', link: '#', onClick: showTransfer.bind( this, 'SBD', 'Transfer to Account' ) },
             { value: 'Transfer to Savings', link: '#', onClick: showTransfer.bind( this, 'SBD', 'Transfer to Savings' ) },
-            { value: 'Buy or Sell', link: '/market' },
+            { value: 'Market', link: '/market' },
             { value: 'Convert to STEEM', link: '#', onClick: convertToSteem },
         ]
         const isWithdrawScheduled = new Date(account.get('next_vesting_withdrawal') + 'Z').getTime() > Date.now()

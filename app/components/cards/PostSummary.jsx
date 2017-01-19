@@ -15,6 +15,7 @@ import {Map} from 'immutable';
 import Reputation from 'app/components/elements/Reputation';
 import Author from 'app/components/elements/Author';
 import TagList from 'app/components/elements/TagList';
+import UserNames from 'app/components/elements/UserNames';
 
 function isLeftClickEvent(event) {
     return event.button === 0
@@ -37,7 +38,6 @@ class PostSummary extends React.Component {
         pending_payout: React.PropTypes.string.isRequired,
         total_payout: React.PropTypes.string.isRequired,
         content: React.PropTypes.object.isRequired,
-        netVoteSign: React.PropTypes.number,
         currentCategory: React.PropTypes.string,
         thumbSize: React.PropTypes.string,
         nsfwPref: React.PropTypes.string,
@@ -74,8 +74,9 @@ class PostSummary extends React.Component {
 
         let reblogged_by = content.get('first_reblogged_by')
         if(reblogged_by) {
+          if(typeof reblogged_by === 'string') reblogged_by = [reblogged_by] // TODO: this line is backwards-compat for 0.16.1. remove after upgrading.
           reblogged_by = <div className="PostSummary__reblogged_by">
-                             <Icon name="reblog" /> Resteemed by <Link to={'/@'+reblogged_by}>{reblogged_by}</Link>
+                             <Icon name="reblog" /> Resteemed by <UserNames names={reblogged_by} />
                          </div>
         }
 
@@ -109,13 +110,13 @@ class PostSummary extends React.Component {
         let content_body = <div className="PostSummary__body entry-content">
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>{desc}</a>
         </div>;
-        let content_title = <h1 className="entry-title">
+        let content_title = <h3 className="entry-title">
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>
                 {isNsfw && <span className="nsfw-flag">nsfw</span>}
                 {title_text}
                 {full_power && <span title="Powered Up 100%"><Icon name="steem" /></span>}
             </a>
-        </h1>;
+        </h3>;
 
         // author and category
         let author_category = <span className="vcard">

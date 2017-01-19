@@ -7,6 +7,7 @@ import resolveRoute from 'app/ResolveRoute';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import HorizontalMenu from 'app/components/elements/HorizontalMenu';
+import normalizeProfile from 'app/utils/NormalizeProfile';
 
 function sortOrderToLink(so, topic, account) {
     if (so === 'home') return '/@' + account + '/feed';
@@ -17,7 +18,8 @@ function sortOrderToLink(so, topic, account) {
 class Header extends React.Component {
     static propTypes = {
         location: React.PropTypes.object.isRequired,
-        current_account_name: React.PropTypes.string
+        current_account_name: React.PropTypes.string,
+        account_meta: React.PropTypes.object
     };
 
     constructor() {
@@ -113,25 +115,27 @@ class Header extends React.Component {
             page_title = `Stolen Account Recovery`;
         } else if (route.page === 'UserProfile') {
             user_name = route.params[0].slice(1);
-            page_title = user_name;
+            const {name} = normalizeProfile(this.props.account_meta.getIn([user_name]).toJS());
+            const user_title = name ? `${name} (@${user_name})` : user_name;
+            page_title = user_title;
             if(route.params[1] === "followers"){
-                page_title = `People following ${user_name} `;
+                page_title = "People following " + user_title;
             }
             if(route.params[1] === "followed"){
-                page_title = `People followed by ${user_name} `;
+                page_title = "People followed by " + user_title;
             }
             if(route.params[1] === "curation-rewards"){
-                page_title = `Curation rewards by ${user_name} `;
+                page_title = "Curation rewards by " + user_title;
             }
             if(route.params[1] === "author-rewards"){
-                page_title = `Author rewards by ${user_name} `;
+                page_title = "Author rewards by " + user_title;
             }
             if(route.params[1] === "recent-replies"){
-                page_title = `Replies to ${user_name} `;
+                page_title = "Replies to " + user_title;
             }
             // @user/"posts" is deprecated in favor of "comments" as of oct-2016 (#443)
             if(route.params[1] === "posts" || route.params[1] === "comments"){
-                page_title = `Comments by ${user_name} `;
+                page_title = "Comments by " + user_title;
             }
         } else {
             page_name = ''; //page_title = route.page.replace( /([a-z])([A-Z])/g, '$1 $2' ).toLowerCase();
@@ -151,10 +155,8 @@ class Header extends React.Component {
         const sort_orders = [
             ['created', 'new'],
             ['hot', 'hot'],
-            ['trending', 'trending (24 hour)'],
-            ['trending30', 'trending (30 day)'],
+            ['trending', 'trending'],
             ['promoted', 'promoted'],
-            ['active', 'active']
         ];
         if (current_account_name) sort_orders.unshift(['home', 'home']);
         const sort_order_menu = sort_orders.filter(so => so[0] !== sort_order).map(so => ({link: sortOrderToLink(so[0], topic, current_account_name), value: so[1]}));
@@ -165,23 +167,14 @@ class Header extends React.Component {
             ['hot', 'hot'],
             ['trending', 'trending'],
             ['promoted', 'promoted'],
-            ['active', 'active']
         ];
         if (current_account_name) sort_orders_horizontal.unshift(['home', 'home']);
         const sort_order_menu_horizontal = sort_orders_horizontal.map(so => {
-                let active = (so[0] === sort_order) || (so[0] === 'trending' && sort_order === 'trending30');
+                let active = (so[0] === sort_order);
                 if (so[0] === 'home' && sort_order === 'home' && !home_account) active = false;
                 return {link: sortOrderToLink(so[0], topic, current_account_name), value: so[1], active};
             });
 
-        let sort_order_extra_menu = null;
-        if (sort_order === 'trending' || sort_order === 'trending30') {
-            const items = [
-                {link: `/trending/${topic}`, value: '24 hour', active: sort_order === 'trending'},
-                {link: `/trending30/${topic}`, value: '30 day', active: sort_order === 'trending30'}
-            ];
-            sort_order_extra_menu = <HorizontalMenu items={items} />
-        }
         return (
             <header className="Header noPrint">
                 <div className="Header__top header">
@@ -211,9 +204,6 @@ class Header extends React.Component {
                     <div className="columns">
                         <HorizontalMenu items={sort_order_menu_horizontal} />
                     </div>
-                    <div className="columns shrink">
-                        {sort_order_extra_menu}
-                    </div>
                 </div>
             </header>
         );
@@ -225,10 +215,12 @@ export {Header as _Header_};
 export default connect(
     state => {
         const current_user = state.user.get('current');
+        const account_user = state.global.get('accounts');
         const current_account_name = current_user ? current_user.get('username') : state.offchain.get('account');
         return {
             location: state.app.get('location'),
-            current_account_name
+            current_account_name,
+            account_meta: account_user
         }
     }
 )(Header);

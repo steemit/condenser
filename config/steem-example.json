@@ -69,6 +69,7 @@
     "username": "guest",
     "password": ""
   },
+  "gcm_key": null,
   "mixpanel": "",
   "img_proxy_prefix": "",
   "ipfs_prefix": "",

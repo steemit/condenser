@@ -52,6 +52,11 @@ const XMLSerializer = new xmldom.XMLSerializer()
  *    - linkify #tags and @mentions
  *    - proxify images
  *
+ * TODO:
+ *  - change ipfsPrefix(url) to normalizeUrl(url)
+ *    - rewrite IPFS prefixes to valid URLs
+ *    - schema normalization
+ *    - gracefully handle protocols like ftp, mailto
  */
 
 /** Split the HTML on top-level elements. This allows react to compare separately, preventing excessive re-rendering.
@@ -121,6 +126,16 @@ function link(state, child) {
 
 // wrap iframes in div.videoWrapper to control size/aspect ratio
 function iframe(state, child) {
+    const url = child.getAttribute('src')
+    if(url) {
+        const {images, links} = state
+        const yt = youTubeId(url)
+        if(yt && images && links) {
+            links.add(yt.url)
+            images.add('https://img.youtube.com/vi/' + yt.id + '/0.jpg')
+        }
+    }
+
     const {mutate} = state
     if(!mutate) return
 
@@ -215,27 +230,30 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
 function embedYouTubeNode(child, links, images) {try{
     if(!child.data) return false
     const data = child.data
+    const yt = youTubeId(data)
+    if(!yt) return false
 
-    let url
-    {
-        const m = data.match(linksRe.youTube)
-        url = m ? m[0] : null
-    }
-    if(!url) return false;
-
-    let id
-    {
-        const m = url.match(linksRe.youTubeId)
-        id = m && m.length >=2 ? m[1] : null
-    }
-    if(!id) return false
-
-    const v = DOMParser.parseFromString(`~~~ embed:${id} youtube ~~~`)
+    const v = DOMParser.parseFromString(`~~~ embed:${yt.id} youtube ~~~`)
     child.parentNode.replaceChild(v, child)
-    if(links) links.add(url)
-    if(images) images.add('https://img.youtube.com/vi/' + id + '/0.jpg')
+    if(links) links.add(yt.url)
+    if(images) images.add('https://img.youtube.com/vi/' + yt.id + '/0.jpg')
     return true
 } catch(error) {console.log(error); return false}}
+
+/** @return {id, url} or <b>null</b> */
+function youTubeId(data) {
+    if(!data) return null
+
+    const m1 = data.match(linksRe.youTube)
+    const url = m1 ? m1[0] : null
+    if(!url) return null
+
+    const m2 = url.match(linksRe.youTubeId)
+    const id = m2 && m2.length >= 2 ? m2[1] : null
+    if(!id) return null
+
+    return {id, url}
+}
 
 function embedVimeoNode(child, links, /*images*/) {try{
     if(!child.data) return false

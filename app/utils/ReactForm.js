@@ -34,7 +34,9 @@ export default function reactForm({name, instance, fields, initialValues, valida
             instance.setState(
                 {[name]: fs},
                 () => {
+                    // TODO, support promise ret
                     const ret = submitCallback({data, event, updateInitialValues}) || {}
+                    // Look for field level errors
                     for(const fieldName of Object.keys(ret)) {
                         const error = ret[fieldName]
                         if(!error) continue

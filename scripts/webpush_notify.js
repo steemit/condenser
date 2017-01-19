@@ -21,13 +21,13 @@ function notify(account, nparams, title, body, url, pic) {
 }
 
 async function process_queue() {
-    console.log('-- processing web push notifications queue -->');
     try {
         const queue = await Tarantool.instance().call('webpush_get_delivery_queue');
+        console.log('processing web push notifications queue, length: ', queue.length);
         for (const n of queue) {
             if (n.length === 0) return;
             const [account, nparams_array, title, body, url, pic] = n;
-            console.log('-- notification -->', account, body, url, pic);
+            console.log('notification: ', account, body, url, pic);
             for (const nparams of nparams_array) {
                 try {
                     await notify(account, nparams, title, body, url, pic);
@@ -35,7 +35,6 @@ async function process_queue() {
                     console.error('-- error in notify -->', account, err);
                 }
             }
-            break;
         }
         // console.log('-- run.run -->', queue);
     } catch (error) {

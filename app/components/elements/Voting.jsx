@@ -56,6 +56,7 @@ class Voting extends React.Component {
         super(props);
         this.state = {
             showWeight: false,
+            myVote: null,
             weight: 10000
         }
 

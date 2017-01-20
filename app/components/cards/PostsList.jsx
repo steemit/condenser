@@ -7,6 +7,7 @@ import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {findParent} from 'app/utils/DomUtils';
 import Icon from 'app/components/elements/Icon';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+import { Link } from 'react-router';
 
 function topPosition(domElt) {
     if (!domElt) {
@@ -212,6 +213,9 @@ class PostsList extends React.Component {
                             <button className="back-button" type="button" title="Back" onClick={() => {this.setState({showPost: null})}}>
                                 <span aria-hidden="true"><Icon name="chevron-left" /></span>
                             </button>
+                            <Link to="#" className="PostsList_logo_link">
+                                <Icon name="steem" size="2x" />
+                            </Link>
                             <CloseButton onClick={this.closePostModal} />
                         </div>
                     </div>

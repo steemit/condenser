@@ -50,7 +50,6 @@ export function isFetchingOrRecentlyUpdated(global_status, order, category) {
 export function contentStats(content) {
     if(!content) return {}
     let votes = Long.ZERO
-    let hasFlag = false
     content.get('active_votes').forEach(v => {
         const rshares = String(v.get('rshares'))
         const voterRepLog10 = repLog10(v.get('reputation'))
@@ -60,7 +59,6 @@ export function contentStats(content) {
                 return
         }
         const neg = rshares.substring(0, 1) === '-'
-        if(neg) hasFlag = true
         // Prevent tiny downvotes (less than 9 digits) from hiding content
         if(neg && rshares.length < 10) return
         votes = votes.add(rshares)
@@ -92,5 +90,5 @@ export function contentStats(content) {
     tags.push(content.get('category'))
     const isNsfw = tags.filter(tag => tag && tag.match(/^nsfw$/i)).length > 0;
 
-    return {hide, gray, pictures, netVoteSign, hasPendingPayout, authorRepLog10, hasReplies, hasFlag, isNsfw}
+    return {hide, gray, pictures, netVoteSign, hasPendingPayout, authorRepLog10, hasReplies, isNsfw}
 }

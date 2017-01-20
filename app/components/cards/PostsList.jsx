@@ -183,9 +183,9 @@ class PostsList extends React.Component {
             const ignore = ignore_result && ignore_result.has(cont.get('author'))
             // if(ignore) console.log('ignored post by', cont.get('author'), '\t', item)
 
-            const {hide, authorRepLog10} = cont.get('stats').toJS()
+            const {hide} = cont.get('stats').toJS()
             if(!(ignore || hide) || showSpam) // rephide
-                postsInfo.push({item, ignore, authorRepLog10})
+                postsInfo.push({item, ignore})
         });
         const renderSummary = items => items.map(item => <li key={item.item}>
             <PostSummary
@@ -194,7 +194,6 @@ class PostsList extends React.Component {
                 currentCategory={category}
                 thumbSize={thumbSize}
                 ignore={item.ignore}
-                authorRepLog10={item.authorRepLog10}
                 onClick={this.onPostClick}
                 nsfwPref={nsfwPref}
             />

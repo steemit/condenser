@@ -5,6 +5,7 @@ import Tarantool from '../db/tarantool';
 webPush.setGCMAPIKey(config.gcm_key);
 
 function notify(account, nparams, title, body, url, pic) {
+    if (!nparams.keys || !nparams.keys.auth) return Promise.resolve(false);
      var payload = JSON.stringify({
         title,
         body,
@@ -32,11 +33,13 @@ async function process_queue() {
                 try {
                     await notify(account, nparams, title, body, url, pic);
                 } catch (err) {
-                    console.error('-- error in notify -->', account, err);
+                    console.error('-- error in notify -->', account, nparams, err);
+                    if (err.statusCode && err.statusCode == 410) {
+                        await Tarantool.instance().call('webpush_unsubscribe', account, nparams.keys.auth);
+                    }
                 }
             }
         }
-        // console.log('-- run.run -->', queue);
     } catch (error) {
         console.error('-- process_queue error -->', error);
     }

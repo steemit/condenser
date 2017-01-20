@@ -58,19 +58,19 @@ export default function useNotificationsApi(app) {
     });
 
     router.post('/notifications/register', koaBody, function *() {
+        this.body = '';
         try {
             const params = this.request.body;
             const {csrf, account, webpush_params} = typeof(params) === 'string' ? JSON.parse(params) : params;
             if (!checkCSRF(this, csrf)) return;
             console.log('-- POST /notifications/register -->', this.session.uid, account, webpush_params);
-            if (!account || account !== this.session.a) {
-                this.body = ''; return;
-            }
+            if (!account || account !== this.session.a) return;
+            if (!webpush_params || !webpush_params.endpoint || !webpush_params.endpoint.match(/^https:\/\/android\.googleapis\.com/)) return;
+            if (!webpush_params.keys || !webpush_params.keys.auth) return;
             yield Tarantool.instance().call('webpush_subscribe', account, webpush_params);
         } catch (error) {
             console.error('-- POST /notifications/register error -->', this.session.uid, error.message);
         }
-        this.body = '';
     });
 }
 

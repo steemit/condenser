@@ -92,7 +92,7 @@ class PostSummary extends React.Component {
                          </div>
         }
 
-        const {gray, pictures, authorRepLog10, hasFlag, isNsfw} = content.get('stats', Map()).toJS()
+        const {gray, pictures, authorRepLog10, isNsfw} = content.get('stats', Map()).toJS()
         const p = extractContent(immutableAccessor, content);
         let desc = p.desc
         if(p.image_link)// image link is already shown in the preview

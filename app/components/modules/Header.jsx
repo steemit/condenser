@@ -115,7 +115,8 @@ class Header extends React.Component {
             page_title = `Stolen Account Recovery`;
         } else if (route.page === 'UserProfile') {
             user_name = route.params[0].slice(1);
-            const {name} = normalizeProfile(this.props.account_meta.getIn([user_name]).toJS());
+            const acct_meta = this.props.account_meta.getIn([user_name]);
+            const name = acct_meta ? normalizeProfile(acct_meta.toJS()).name : null;
             const user_title = name ? `${name} (@${user_name})` : user_name;
             page_title = user_title;
             if(route.params[1] === "followers"){

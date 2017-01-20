@@ -228,7 +228,7 @@ class Voting extends React.Component {
         if (count > MAX_VOTES_DISPLAY) voters.push({value: <span>&hellip; and {(count - MAX_VOTES_DISPLAY)} more</span>});
 
         let voters_list = null;
-        if (showList && count > 0) {
+        if (showList) {
             voters_list = <DropdownMenu selected={pluralize('votes', count, true)} className="Voting__voters_list" items={voters} el="div" />;
         }
 

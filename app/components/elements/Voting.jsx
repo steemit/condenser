@@ -146,7 +146,6 @@ class Voting extends React.Component {
             const flagClickAction = myVote === null || myVote === 0 ? this.toggleWeightDown : this.voteDown
             return <span className="Voting">
                 <span className={classDown}>
-                    {down_votes > 0 && <span className="Voting__button-downvotes">{down_votes}</span>}
                     {votingDownActive ? down : <a href="#" onClick={flagClickAction} title="Flag">{down}</a>}
                     {dropdown}
                 </span>

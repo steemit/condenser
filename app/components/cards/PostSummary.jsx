@@ -178,7 +178,7 @@ class PostSummary extends React.Component {
 
         return (
             <article className={'PostSummary hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')} itemScope itemType ="http://schema.org/blogPost">
-                <div className={hasFlag ? '' : 'PostSummary__collapse'}>
+                <div className="PostSummary__collapse">
                     <div className="float-right"><Voting post={post} flag /></div>
                 </div>
                 {reblogged_by}

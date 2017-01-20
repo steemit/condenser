@@ -49,28 +49,19 @@ export function isFetchingOrRecentlyUpdated(global_status, order, category) {
 
 export function contentStats(content) {
     if(!content) return {}
-    let votes = Long.ZERO
-    content.get('active_votes').forEach(v => {
-        const rshares = String(v.get('rshares'))
-        const voterRepLog10 = repLog10(v.get('reputation'))
-        if(voterRepLog10) {
-            // Don't allow low rep users to gray out everyone's posts.
-            if(voterRepLog10 < 25)
-                return
-        }
-        const neg = rshares.substring(0, 1) === '-'
-        // Prevent tiny downvotes (less than 9 digits) from hiding content
-        if(neg && rshares.length < 10) return
-        votes = votes.add(rshares)
-    })
-    const netVoteSign = votes.compare(Long.ZERO)
+
+    // post must have non-trivial negative rshares to be grayed out. TODO: ignore neg-rshares contributed from low-rep users.
+    const grayThreshold = -999999999
+
+    const net_rshares = Long.fromString(String(content.get('net_rshares')))
+    const netVoteSign = net_rshares.compare(Long.ZERO)
     const pending_payout = content.get('pending_payout_value');
     const hasPendingPayout = parsePayoutAmount(pending_payout) >= 0.02
 
     const authorRepLog10 = repLog10(content.get('author_reputation'))
     const hasReplies = content.get('replies').size !== 0
 
-    const gray = authorRepLog10 < 1 || (authorRepLog10 < 60 && netVoteSign < 0)
+    const gray = authorRepLog10 < 1 || (authorRepLog10 < 60 && net_rshares.compare(grayThreshold) < 0)
     const hide = authorRepLog10 < 0 && !hasPendingPayout && !hasReplies // rephide
     const pictures = !gray
 
@@ -90,5 +81,5 @@ export function contentStats(content) {
     tags.push(content.get('category'))
     const isNsfw = tags.filter(tag => tag && tag.match(/^nsfw$/i)).length > 0;
 
-    return {hide, gray, pictures, netVoteSign, hasPendingPayout, authorRepLog10, hasReplies, isNsfw}
+    return {hide, gray, pictures, netVoteSign, authorRepLog10, hasReplies, isNsfw}
 }

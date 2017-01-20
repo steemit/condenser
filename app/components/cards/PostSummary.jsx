@@ -72,9 +72,15 @@ class PostSummary extends React.Component {
 
         const archived = content.get('mode') === 'archived'
 
-        let reblogged_by = content.get('first_reblogged_by')
+        let reblogged_by;
+        if(content.get('reblogged_by') && content.get('reblogged_by').size > 0) {
+            reblogged_by = content.get('reblogged_by').toJS()
+        } else if(content.get('first_reblogged_by')) {
+            // TODO: this case is backwards-compat for 0.16.1. remove after upgrading.
+            reblogged_by = [content.get('first_reblogged_by')]
+        }
+
         if(reblogged_by) {
-          if(typeof reblogged_by === 'string') reblogged_by = [reblogged_by] // TODO: this line is backwards-compat for 0.16.1. remove after upgrading.
           reblogged_by = <div className="PostSummary__reblogged_by">
                              <Icon name="reblog" /> Resteemed by <UserNames names={reblogged_by} />
                          </div>

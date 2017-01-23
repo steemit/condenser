@@ -562,6 +562,7 @@ module.exports = {
                 String(parseFloat(min_to_receive).toFixed(3)))
 
             const regex = new RegExp(LIQUID_TICKER)
+            effectivePrice = effectivePrice.replace('$', '')
             const confirmStr = translate(
                                 // which translated string to use
                                 regex.test(amount_to_sell)

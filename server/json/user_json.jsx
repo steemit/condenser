@@ -18,7 +18,11 @@ export default function useUserJson(app) {
 
         if(chainAccount) {
             user = chainAccount;
-            user.json_metadata = user.json_metadata ? JSON.parse(user.json_metadata) : "";
+            try {
+               user.json_metadata = JSON.parse(user.json_metadata);
+            } catch(e) {
+               user.json_metadata = "";
+            }
             status = "200";
         } else {
             user = "No account found";

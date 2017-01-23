@@ -82,6 +82,8 @@ export function translateError(string) {
             return translate('you_may_only_comment_once_every_20_seconds')
         case 'Account name should start with a letter.':
             return translate('account_name_should_start_with_a_letter')
+        case 'You can like a post only after 3 esc after the last post':
+            return translate('you_can_like_a_post_only_after_3_sec_after_last_post')
         case 'Account name should have only letters, digits, or dashes.':
             return translate('account_name_should_have_only_letters_digits_or_dashes')
         case 'vote currently exists, user must be indicate a desire to reject witness':

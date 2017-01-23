@@ -22,6 +22,7 @@ import DMCAList from 'app/utils/DMCAList'
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import ShareMenu from 'app/components/elements/ShareMenu';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
+import Userpic from 'app/components/elements/Userpic';
 
 function TimeAuthorCategory({content, authorRepLog10, showTags}) {
     return (
@@ -32,6 +33,20 @@ function TimeAuthorCategory({content, authorRepLog10, showTags}) {
             {showTags && <span> in <TagList post={content} single /></span>}
         </span>
      );
+}
+
+function TimeAuthorCategoryLarge({content, authorRepLog10}) {
+    return (
+        <span className="PostFull__time_author_category_large vcard">
+            <Userpic account={content.author} />
+            <div className="right-side">
+                <Author author={content.author} authorRepLog10={authorRepLog10} />
+                <br />
+                <TimeAgoWrapper date={content.created} className="updated" />
+                <span> in <TagList post={content} single /></span>
+            </div>
+        </span>
+    );
 }
 
 class PostFull extends React.Component {
@@ -255,7 +270,7 @@ class PostFull extends React.Component {
                         <div className="float-right"><Voting post={post} flag /></div>
                         <div className="PostFull__header">
                             {post_header}
-                            <TimeAuthorCategory content={content} authorRepLog10={authorRepLog10} showTags />
+                            <TimeAuthorCategoryLarge content={content} authorRepLog10={authorRepLog10} />
                         </div>
                         <div className="PostFull__body entry-content">
                             <MarkdownViewer formId={formId + '-viewer'} text={content_body} jsonMetadata={jsonMetadata} large highQualityPost={high_quality_post} noImage={!content.stats.pictures} />

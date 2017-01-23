@@ -12,7 +12,6 @@ import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import ReplyEditor from 'app/components/elements/ReplyEditor';
 import {immutableAccessor} from 'app/utils/Accessors';
 import extractContent from 'app/utils/ExtractContent';
-import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
 import TagList from 'app/components/elements/TagList';
 import Author from 'app/components/elements/Author';
 import {Long} from 'bytebuffer'
@@ -22,6 +21,28 @@ import DMCAList from 'app/utils/DMCAList'
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import ShareMenu from 'app/components/elements/ShareMenu';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
+import { APP_DOMAIN } from 'config/client_config';
+
+function loadFbSdk(d, s, id){
+    return new Promise(resolve => {
+        window.fbAsyncInit = function () {
+            window.FB.init({
+                appId: $STM_Config.fb_app,
+                xfbml: false,
+                version: 'v2.6',
+                status: true
+            });
+            resolve(window.FB);
+        };
+
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {return;}
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    });
+}
 
 function TimeAuthorCategory({content, authorRepLog10, showTags}) {
     return (
@@ -100,12 +121,17 @@ class PostFull extends React.Component {
     }
 
     fbShare(e) {
-        serverApiRecordEvent('FbShare', this.share_params.link);
+        const href = this.share_params.url;
         e.preventDefault();
-        window.FB.ui({
-            method: 'share',
-            href: this.share_params.url
-        }, () => {});
+        loadFbSdk(document, 'script', 'facebook-jssdk').then(fb => {
+            fb.ui({
+                method: 'share',
+                href
+            }, response => {
+                if (response && !response.error_message)
+                    serverApiRecordEvent('FbShare', this.share_params.link);
+            });
+        });
     }
 
     twitterShare(e) {
@@ -177,7 +203,7 @@ class PostFull extends React.Component {
 
         this.share_params = {
             link,
-            url: 'https://steemit.com' + link,
+            url: 'https://' + APP_DOMAIN + link,
             title: title + ' — Steemit',
             desc: p.desc
         };

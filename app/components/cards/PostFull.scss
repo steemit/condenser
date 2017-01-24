@@ -20,6 +20,19 @@
   }
 }
 
+.PostFull__time_author_category_large {
+  margin-top: 1.2rem;
+  color: $dark-gray;
+  font-weight: 400;
+  > .Userpic {
+    margin-top: 4px;
+    float: left;
+  }
+  > .right-side {
+    margin-left: 60px;
+  }
+}
+
 .PostFull__header {
   > h1 {
     overflow: hidden;

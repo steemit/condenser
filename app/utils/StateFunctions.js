@@ -3,6 +3,7 @@ import constants from 'app/redux/constants';
 import {parsePayoutAmount, repLog10} from 'app/utils/ParsersAndFormatters';
 import {Long} from 'bytebuffer';
 import {VEST_TICKER, LIQUID_TICKER} from 'config/client_config'
+import {fromJS} from 'immutable';
 
 export const numberWithCommas = (x) => x.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 
@@ -49,6 +50,25 @@ export function isFetchingOrRecentlyUpdated(global_status, order, category) {
 
 export function contentStats(content) {
     if(!content) return {}
+    if(!(content instanceof Map)) content = fromJS(content);
+
+    let net_rshares_adj = Long.ZERO
+    let total_votes = 0;
+    let up_votes = 0;
+
+    content.get('active_votes').forEach(v => {
+        const sign = Math.sign(v.get('percent'))
+        if(sign === 0) return;
+        total_votes += 1
+        if(sign > 0) up_votes += 1
+
+        // Sums up total rshares from voters with non-neg reputation.
+        if(String(v.get('reputation')).substring(0, 1) !== '-') {
+            net_rshares_adj = net_rshares_adj.add(v.get('rshares'))
+        }
+    });
+
+    net_rshares_adj = String(net_rshares_adj)
 
     // post must have non-trivial negative rshares to be grayed out. TODO: ignore neg-rshares contributed from low-rep users.
     const grayThreshold = -999999999
@@ -81,5 +101,5 @@ export function contentStats(content) {
     tags.push(content.get('category'))
     const isNsfw = tags.filter(tag => tag && tag.match(/^nsfw$/i)).length > 0;
 
-    return {hide, gray, pictures, netVoteSign, authorRepLog10, hasReplies, isNsfw}
+    return {hide, gray, pictures, netVoteSign, authorRepLog10, hasReplies, isNsfw, net_rshares_adj, total_votes, up_votes}
 }

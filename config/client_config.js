@@ -9,7 +9,7 @@ export const APP_URL = 'steemit.com'
 export const LIQUID_TOKEN = 'Steem'
 // sometimes it's impossible to use html tags to style coin name, hence usage of _UPPERCASE modifier
 export const LIQUID_TOKEN_UPPERCASE = 'STEEM'
-export const VESTING_TOKEN = 'Steem Power'
+export const VESTING_TOKEN = 'STEEM Power'
 export const INVEST_TOKEN_UPPERCASE = 'STEEM POWER'
 export const INVEST_TOKEN_SHORT = 'SP'
 export const DEBT_TOKEN = 'STEEM DOLLAR'

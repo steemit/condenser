@@ -40,8 +40,13 @@
     position: relative;
     line-height: 1;
     cursor: pointer;
-    path {
-      fill: map-get($foundation-palette, 'primary');
+    .back-chevron {
+        path {
+            fill: map-get($foundation-palette, 'primary');
+        }
+    }
+    .back-logo {
+        margin-left: 1em;
     }
   }
 }

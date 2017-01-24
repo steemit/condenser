@@ -17,6 +17,7 @@ class Settings extends React.Component {
         super()
         this.initForm(props)
         this.onNsfwPrefChange = this.onNsfwPrefChange.bind(this)
+        this.onNsfwPrefSubmit = this.onNsfwPrefSubmit.bind(this)
     }
 
     state = {
@@ -45,14 +46,19 @@ class Settings extends React.Component {
     componentWillMount() {
         const {accountname} = this.props
         const nsfwPref = (process.env.BROWSER ? localStorage.getItem('nsfwPref-' + accountname) : null) || 'warn'
-        this.setState({nsfwPref})
+        this.setState({nsfwPref, oldNsfwPref: nsfwPref})
     }
 
     onNsfwPrefChange(e) {
         const nsfwPref = e.currentTarget.value;
+        this.setState({nsfwPref: nsfwPref})
+    }
+
+    onNsfwPrefSubmit(e) {
         const {accountname} = this.props;
+        const {nsfwPref} = this.state;
         localStorage.setItem('nsfwPref-'+accountname, nsfwPref)
-        this.setState({nsfwPref})
+        this.setState({oldNsfwPref: nsfwPref})
     }
 
     handleSubmit = ({updateInitialValues}) => {
@@ -161,7 +167,7 @@ class Settings extends React.Component {
             </div>*/}
             <div className="row">
                 <form onSubmit={this.handleSubmitForm} className="small-12 medium-6 large-4 columns">
-                    <h3>Profile</h3>
+                    <h3>Public Profile Settings</h3>
                     <label>
                         {translate('profile_image_url')}
                         <input type="url" {...profile_image.props} autoComplete="off" />
@@ -209,15 +215,17 @@ class Settings extends React.Component {
                 <div className="row">
                     <div className="small-12 columns">
                         <br /><br />
-                        <h3>Content Preferences</h3>
+                        <h3>Private Post Display Settings</h3>
                         <div>
-                            Not safe for work (NSFW)
+                            Not safe for work (NSFW) content
                         </div>
                         <select value={this.state.nsfwPref} onChange={this.onNsfwPrefChange}>
                             <option value="hide">Always hide</option>
                             <option value="warn">Always warn</option>
                             <option value="show">Always show</option>
                         </select>
+                        <br /><br />
+                        <input type="submit" onClick={this.onNsfwPrefSubmit} className="button" value="Update" disabled={this.state.nsfwPref == this.state.oldNsfwPref} />
                     </div>
                 </div>}
             {ignores && ignores.size > 0 &&

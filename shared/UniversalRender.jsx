@@ -30,6 +30,7 @@ import Translator from 'app/Translator';
 import Tarantool from 'db/tarantool';
 import {notificationsArrayToMap} from 'app/utils/Notifications';
 import {routeRegex} from "app/ResolveRoute";
+import {contentStats} from 'app/utils/StateFunctions'
 
 const sagaMiddleware = createSagaMiddleware(
     ...userWatches, // keep first to remove keys early when a page change happens
@@ -150,6 +151,16 @@ async function universalRender({ location, initial_state, offchain }) {
                 statusCode: 404,
                 body: renderToString(<NotFound />)
             };
+        }
+
+        // If we are not loading a post, truncate state data to bring response size down.
+        if (!url.match(routeRegex.Post)) {
+            for (var key in onchain.content) {
+                //onchain.content[key]['body'] = onchain.content[key]['body'].substring(0, 1024) // TODO: can be removed. will be handled by steemd
+                // Count some stats then remove voting data. But keep current user's votes. (#1040)
+                onchain.content[key]['vote_stats'] = contentStats(onchain.content[key])
+                onchain.content[key]['active_votes'] = onchain.content[key]['active_votes'].filter(vote => vote.voter === offchain.account)
+            }
         }
 
         if (!url.match(routeRegex.PostsIndex) && !url.match(routeRegex.UserProfile1) && !url.match(routeRegex.UserProfile2) && url.match(routeRegex.PostNoCategory)) {

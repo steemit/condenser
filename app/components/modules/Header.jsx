@@ -198,8 +198,8 @@ class Header extends React.Component {
         let sort_order_extra_menu = null;
         if (sort_order === 'trending' || sort_order === 'trending30') {
             const items = [
-                {link: `/trending/${topic}`, value: translate('24_hour'), active: sort_order === 'trending'},
-                {link: `/trending30/${topic}`, value: translate('30_day'), active: sort_order === 'trending30'}
+                {link: `/trending/${topic_original_link}`, value: translate('24_hour'), active: sort_order === 'trending'},
+                {link: `/trending30/${topic_original_link}`, value: translate('30_day'), active: sort_order === 'trending30'}
             ];
             // hide extra menu until crowdsale start because they make no sense
             sort_order_extra_menu = <HorizontalMenu items={items} />

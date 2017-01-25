@@ -414,7 +414,9 @@ function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress
         data = new Buffer(dataBs64, 'base64')
     }
 
-    const bufSha = hash.sha256(data)
+    // The challenge needs to be prefixed with a constant (both on the server and checked on the client) to make sure the server can't easily make the client sign a transaction doing something else.
+    const prefix = new Buffer('ImageSigningChallenge')
+    const bufSha = hash.sha256(Buffer.concat([prefix, data]))
 
     const formData = new FormData()
     if(file) {

@@ -21,6 +21,7 @@ import {repLog10, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import DMCAList from 'app/utils/DMCAList'
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import ShareMenu from 'app/components/elements/ShareMenu';
+import DropdownMenu from 'app/components/elements/DropdownMenu';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 
 function TimeAuthorCategory({content, authorRepLog10, showTags}) {
@@ -132,6 +133,18 @@ class PostFull extends React.Component {
         window.open('https://www.linkedin.com/shareArticle?' + q, 'Share', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=' + winWidth + ',height=' + winHeight);
     }
 
+    Steemd(e) {
+       serverApiRecordEvent('Steemd view', this.to);
+       e.preventDefault();
+       window.location = this.to
+    }
+
+    Steemdb(e) {
+       serverApiRecordEvent('Steemdb view', this.to);
+       e.preventDefault();
+       window.location = this.to
+    }
+
     showPromotePost = () => {
         const post_content = this.props.cont.get(this.props.post);
         if (!post_content) return
@@ -187,6 +200,12 @@ class PostFull extends React.Component {
             {link: '#', onClick: this.twitterShare, value: 'Twitter', icon: 'twitter'},
             {link: '#', onClick: this.linkedInShare, value: 'LinkedIn', icon: 'linkedin'},
         ];
+        const explore_menu = [
+            {link: 'http://steemd.com' + link, onClick: this.Steemd, value: 'Steemd', href: link, icon: 'steemd'},
+            {link: 'http://steemdb.com' + link, onClick: this.Steemdb, value: 'Steemdb', href: link, icon: 'steemdb'}
+        ];
+
+        let explore_list = <DropdownMenu selected="View on" title="External Viewers" className="External_viewers_menu" items={explore_menu} el="div" />;
         const Editor = this.state.showReply ? PostFullReplyEditor : PostFullEditEditor
         let renderedEditor = null;
         if (showReply || showEdit) {
@@ -270,7 +289,7 @@ class PostFull extends React.Component {
                         <TimeAuthorCategory content={content} authorRepLog10={authorRepLog10} />
                         <Voting post={post} />
                     </div>
-                    <div className="RightShare__Menu small-10 medium-5 large-5 columns text-right">
+                    <div className="RightShare__Menu small-11 medium-5 large-5 columns text-right">
                         {!readonly && <Reblog author={author} permlink={permlink} />}
                         {!readonly &&
                             <span className="PostFull__reply">
@@ -287,6 +306,9 @@ class PostFull extends React.Component {
                             <PageViewsCounter hidden={false} sinceDate={isPreViewCount ? 'Dec 2016' : null} />
                         </span>
                         <ShareMenu menu={share_menu} />
+                        <span className="PostFull__explore">
+                            {explore_list}
+                        </span>
                     </div>
                 </div>
                 <div className="row">

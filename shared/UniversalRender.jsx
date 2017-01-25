@@ -144,6 +144,14 @@ async function universalRender({ location, initial_state, offchain }) {
 
         onchain = await Apis.instance().db_api.exec('get_state', [url]);
 
+        if (Object.getOwnPropertyNames(onchain.accounts).length === 0 && (url.match(routeRegex.UserProfile1) || url.match(routeRegex.UserProfile3))) { // protect for invalid account
+            return {
+                title: 'User Not Found - Steemit',
+                statusCode: 404,
+                body: renderToString(<NotFound />)
+            };
+        }
+
         if (!url.match(routeRegex.PostsIndex) && !url.match(routeRegex.UserProfile1) && !url.match(routeRegex.UserProfile2) && url.match(routeRegex.PostNoCategory)) {
             const params = url.substr(2, url.length - 1).split("/");
             const content = await Apis.instance().db_api.exec('get_content', [params[0], params[1]]);

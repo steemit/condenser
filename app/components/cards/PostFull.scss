@@ -81,21 +81,21 @@
   }
 
   .Reblog__button {
-    padding-right: .6rem;
-    margin-right: .6rem;
+    padding-right: .4rem;
+    margin-right: .4rem;
     border-right: 1px solid $medium-gray;
   }
 }
 
 .PostFull__responses {
-  padding-right: .6rem;
+  padding-right: .4rem;
   //margin-right: 1rem;
   //border-right: 1px solid $medium-gray;
 }
 
 .PostFull__views {
-  padding-right: .6rem;
-  margin-right: .6rem;
+  padding-right: .4rem;
+  margin-right: .4rem;
   color: $dark-gray;
   font-size: 94%;
   font-weight: 600;
@@ -103,8 +103,8 @@
 }
 
 .PostFull__reply {
-  padding-right: .6rem;
-  margin-right: .6rem;
+  padding-right: .4rem;
+  margin-right: .4rem;
   border-right: 1px solid $medium-gray;
   a {margin: 0 0.15rem;}
 }
@@ -126,7 +126,8 @@
 }
 
 .PostFull__explore {
-  margin-left: .6rem;
+  margin-left: .4rem;
+  padding-left: .6rem;
   border-left: 1px solid #cacaca;
 }
 

@@ -205,7 +205,7 @@ class PostFull extends React.Component {
             {link: 'http://steemdb.com' + link, onClick: this.Steemdb, value: 'Steemdb', href: link, icon: 'steemdb'}
         ];
 
-        let explore_list = <DropdownMenu selected="View on" title="External Viewers" className="External_viewers_menu" items={explore_menu} el="div" />;
+        let explore_list = <FoundationDropdownMenu menu={explore_menu} label="View on" dropdownPosition="bottom" dropdownAlignment="right" />;
         const Editor = this.state.showReply ? PostFullReplyEditor : PostFullEditEditor
         let renderedEditor = null;
         if (showReply || showEdit) {

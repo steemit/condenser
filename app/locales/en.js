@@ -580,6 +580,7 @@ const en = 	{
   you_may_only_post_once_per_minute: 'You may only post once per minute.',
   you_already_voted_for_this_post: 'You already voted for this post',
   transaction_failed_error: 'Transaction failed: {error}',
+  you_can_like_a_post_only_after_3_sec_after_last_post: 'You can like a post only after 3 seconds after the last post',
 }
 
 export { en }

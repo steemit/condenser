@@ -135,13 +135,13 @@ class PostFull extends React.Component {
     Steemd(e) {
        serverApiRecordEvent('Steemd view', this.to);
        e.preventDefault();
-       window.location = this.to
+       window.open(this.to,'_blank');
     }
 
     Steemdb(e) {
        serverApiRecordEvent('Steemdb view', this.to);
        e.preventDefault();
-       window.location = this.to
+       window.open(this.to,'_blank');
     }
 
     showPromotePost = () => {

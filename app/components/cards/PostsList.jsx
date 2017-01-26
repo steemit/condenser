@@ -92,7 +92,7 @@ class PostsList extends React.Component {
     }
 
     onBackButton(e) {
-        if (e.keyCode && e.keyCode !== 27) return;
+        if (e.keyCode && e.keyCode !== 27 || ('бюжэхъёєїґБЮЖЭХЪЁЄЇҐ'.indexOf(e.key)>=0) ) return;
         window.removeEventListener('popstate', this.onBackButton);
         window.removeEventListener('keydown', this.onBackButton);
         this.setState({showPost: null});

@@ -128,7 +128,7 @@ class PostSummary extends React.Component {
         let thumb = null;
         if(pictures && p.image_link) {
           const prox = $STM_Config.img_proxy_prefix
-          const size = (thumbSize == 'mobile') ? '640x480' : '128x256'
+          const size = (thumbSize == 'mobile') ? '640x480' : '256x128'
           const url = (prox ? prox + size + '/' : '') + p.image_link
           if(thumbSize == 'mobile') {
             thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image-mobile"><img src={url} /></a>

@@ -22,27 +22,37 @@ export default function extractMeta(chain_data, rp) {
     if (rp.username && rp.slug) { // post
         const post = `${rp.username}/${rp.slug}`;
         const content = chain_data.content[post];
-        if (content) {
+        if (content && content.id !== '0.0.0') { // API currently returns 'false' data with id 0.0.0 for posts that do not exist
             const d = extractContent(objAccessor, content, false);
-            const url = 'https://' + APP_URL + d.link;
+
+            const url   = 'https://' + APP_URL + d.link;
             const title = d.title + ' — ' + APP_NAME;
-            const image = d.image_link ? d.image_link : SHARE_IMAGE;
-            const twimage = d.image_link ? d.image_link : TWITTER_SHARE_IMAGE;
+            const desc  = d.desc + ' ' + translate('by') + ' ' + d.author;
+            const image = d.image_link
+            const {category, created} = d
+
+            // Standard meta
             metas.push({title});
             metas.push({canonical: url});
-            metas.push({name: 'description', content: d.desc});
-            metas.push({property: 'og:type', content: 'article'});
-            metas.push({property: 'og:url', content: url});
-            metas.push({property: 'og:site_name', content: APP_NAME});
-            metas.push({property: 'og:title', content: title});
-            metas.push({property: 'og:description', content: d.desc});
-            metas.push({property: 'og:image', content: image});
-            metas.push({property: 'fb:app_id', content: $STM_Config.fb_app});
-            metas.push({name: 'twitter:card', content: 'summary'});
-            metas.push({name: 'twitter:site', content: TWITTER_HANDLE});
-            metas.push({name: 'twitter:title', content: title});
-            metas.push({name: 'twitter:description', content: d.desc});
-            metas.push({name: 'twitter:image', content: twimage});
+            metas.push({name: 'description',         content: desc});
+
+            // Open Graph data
+            metas.push({property: 'og:title',        content: title});
+            metas.push({property: 'og:type',         content: 'article'});
+            metas.push({property: 'og:url',          content: url});
+            metas.push({property: 'og:image',        content: image || SHARE_IMAGE});
+            metas.push({property: 'og:description',  content: desc});
+            metas.push({property: 'og:site_name',    content: APP_NAME});
+            metas.push({property: 'fb:app_id',       content: $STM_Config.fb_app});
+            metas.push({property: 'article:tag',     content: category});
+            metas.push({property: 'article:published_time', content: created});
+
+            // Twitter card data
+            metas.push({name: 'twitter:card',        content: 'summary'});
+            metas.push({name: 'twitter:site',        content: TWITTER_HANDLE});
+            metas.push({name: 'twitter:title',       content: title});
+            metas.push({name: 'twitter:description', content: desc});
+            metas.push({name: 'twitter:image',       content: image || TWITTER_SHARE_IMAGE});
         } else {
             addSiteMeta(metas);
         }

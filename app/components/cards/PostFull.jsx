@@ -195,9 +195,9 @@ class PostFull extends React.Component {
         };
 
         const share_menu = [
-            {link: '#', onClick: this.fbShare, value: 'Facebook', icon: 'facebook'},
-            {link: '#', onClick: this.twitterShare, value: 'Twitter', icon: 'twitter'},
-            {link: '#', onClick: this.linkedInShare, value: 'LinkedIn', icon: 'linkedin'},
+            {link: '#', onClick: this.fbShare, value: 'Facebook', title: 'Share on Facebook', icon: 'facebook'},
+            {link: '#', onClick: this.twitterShare, value: 'Twitter', title: 'Share on Twitter', icon: 'twitter'},
+            {link: '#', onClick: this.linkedInShare, value: 'LinkedIn', title: 'Share on Linkedin', icon: 'linkedin'},
         ];
         const explore_menu = [
             {link: 'http://steemd.com' + link, onClick: this.Steemd, value: 'Steemd', href: link, icon: 'steemd'},

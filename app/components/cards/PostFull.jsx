@@ -46,6 +46,7 @@ class PostFull extends React.Component {
         unlock: React.PropTypes.func.isRequired,
         deletePost: React.PropTypes.func.isRequired,
         showPromotePost: React.PropTypes.func.isRequired,
+        showExplorePost: React.PropTypes.func.isRequired,
     };
 
     constructor() {
@@ -54,6 +55,7 @@ class PostFull extends React.Component {
         this.fbShare = this.fbShare.bind(this);
         this.twitterShare = this.twitterShare.bind(this);
         this.linkedInShare = this.linkedInShare.bind(this);
+        this.showExplorePost = this.showExplorePost.bind(this);
         this.onShowReply = () => {
             const {state: {showReply, formId}} = this
             this.setState({showReply: !showReply, showEdit: false})
@@ -132,25 +134,18 @@ class PostFull extends React.Component {
         window.open('https://www.linkedin.com/shareArticle?' + q, 'Share', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=' + winWidth + ',height=' + winHeight);
     }
 
-    Steemd(e) {
-       serverApiRecordEvent('Steemd view', this.to);
-       e.preventDefault();
-       window.open(this.to,'_blank');
-    }
-
-    Steemdb(e) {
-       serverApiRecordEvent('Steemdb view', this.to);
-       e.preventDefault();
-       window.open(this.to,'_blank');
-    }
-
     showPromotePost = () => {
         const post_content = this.props.cont.get(this.props.post);
         if (!post_content) return
         const author = post_content.get('author')
         const permlink = post_content.get('permlink')
         this.props.showPromotePost(author, permlink)
-    }
+    };
+
+    showExplorePost = () => {
+        const permlink = this.share_params.link;
+        this.props.showExplorePost(permlink)
+    };
 
     render() {
         const {props: {username, post}, state: {PostFullReplyEditor, PostFullEditEditor, formId, showReply, showEdit},
@@ -199,12 +194,6 @@ class PostFull extends React.Component {
             {link: '#', onClick: this.twitterShare, value: 'Twitter', title: 'Share on Twitter', icon: 'twitter'},
             {link: '#', onClick: this.linkedInShare, value: 'LinkedIn', title: 'Share on Linkedin', icon: 'linkedin'},
         ];
-        const explore_menu = [
-            {link: 'http://steemd.com' + link, onClick: this.Steemd, value: 'Steemd', href: link, icon: 'steemd'},
-            {link: 'http://steemdb.com' + link, onClick: this.Steemdb, value: 'Steemdb', href: link, icon: 'steemdb'}
-        ];
-
-        let explore_list = <FoundationDropdownMenu menu={explore_menu} label="View on" dropdownPosition="bottom" dropdownAlignment="right" />;
         const Editor = this.state.showReply ? PostFullReplyEditor : PostFullEditEditor
         let renderedEditor = null;
         if (showReply || showEdit) {
@@ -305,9 +294,9 @@ class PostFull extends React.Component {
                             <PageViewsCounter hidden={false} sinceDate={isPreViewCount ? 'Dec 2016' : null} />
                         </span>
                         <ShareMenu menu={share_menu} />
-                        <span className="PostFull__explore">
-                            {explore_list}
-                        </span>
+                        <button className="explore-post" title="Share this post" onClick={this.showExplorePost}>
+                            <Icon name="chain" className="chain-right" />
+                        </button>
                     </div>
                 </div>
                 <div className="row">
@@ -341,6 +330,9 @@ export default connect(
         },
         showPromotePost: (author, permlink) => {
             dispatch({type: 'global/SHOW_DIALOG', payload: {name: 'promotePost', params: {author, permlink}}});
+        },
+        showExplorePost: (permlink) => {
+            dispatch({type: 'global/SHOW_DIALOG', payload: {name: 'explorePost', params: {permlink}}});
         },
     })
 )(PostFull)

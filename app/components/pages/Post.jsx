@@ -9,7 +9,7 @@ import {sortComments} from 'app/components/cards/Comment';
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
 import SvgImage from 'app/components/elements/SvgImage';
 import {Set} from 'immutable'
-import { translate } from 'app/Translator';
+import tt from 'counterpart';
 import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 
@@ -76,7 +76,7 @@ class Post extends React.Component {
                         <div className="row">
                             <div className="column">
                                 <div className="PostFull">
-                                    <p onClick={this.showAnywayClick}>{translate('this_post_was_hidden_due_to_low_ratings')}. <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.showAnywayClick}>{translate('show')}</button></p>
+                                    <p onClick={this.showAnywayClick}>{tt('this_post_was_hidden_due_to_low_ratings')}. <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.showAnywayClick}>{tt('show')}</button></p>
                                 </div>
                             </div>
                         </div>
@@ -136,15 +136,15 @@ class Post extends React.Component {
         const negativeGroup = !stuffHidden ? null :
             (<div className="hentry Comment root Comment__negative_group">
                 {this.state.showNegativeComments ?
-                    <p onClick={this.toggleNegativeReplies}>{translate('now_showing_comments_with_low_ratings')}: <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>{translate('hide')}</button></p> :
-                    <p onClick={this.toggleNegativeReplies}>{translate('comments_were_hidden_due_to_low_ratings')}. <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>{translate('show')}</button></p>
+                    <p onClick={this.toggleNegativeReplies}>{tt('now_showing_comments_with_low_ratings')}: <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>{tt('hide')}</button></p> :
+                    <p onClick={this.toggleNegativeReplies}>{tt('comments_were_hidden_due_to_low_ratings')}. <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>{tt('show')}</button></p>
                 }
             </div>
         );
 
 
         let sort_orders = [ 'trending', 'votes', 'new'];
-        let sort_labels = [ translate('trending'), translate('votes'), translate('age') ];
+        let sort_labels = [ tt('trending'), tt('votes'), tt('age') ];
         let sort_menu = [];
         let sort_label;
 
@@ -173,12 +173,12 @@ class Post extends React.Component {
                 {!current_user && <div className="row">
                     <div className="column">
                         <div className="Post__promo">
-                            {translate('authors_get_paid_when_people_like_you_upvote_their_post')}.
+                            {tt('authors_get_paid_when_people_like_you_upvote_their_post')}.
                             <br /> {// remove '$' from signup_bonus before parsing it into local currency
-                                    translate('if_you_enjoyed_what_you_read_earn_amount', {amount: '$'+localizedCurrency(signup_bonus.substring(1))})}
-                            <br /> {translate('when_you') + ' '}
-                            <a onClick={showSignUp}>{translate('when_you_link_text')}</a>
-                            {' ' + translate('and_vote_for_it') + '.'}
+                                    tt('if_you_enjoyed_what_you_read_earn_amount', {amount: '$'+localizedCurrency(signup_bonus.substring(1))})}
+                            <br /> {tt('when_you') + ' '}
+                            <a onClick={showSignUp}>{tt('when_you_link_text')}</a>
+                            {' ' + tt('and_vote_for_it') + '.'}
                         </div>
                     </div>
                 </div>}
@@ -187,7 +187,7 @@ class Post extends React.Component {
                         <div className="Post_comments__content">
                             {positiveComments.length ?
                             (<div className="Post__comments_sort_order float-right">
-                                {translate('sort_order')}: &nbsp;
+                                {tt('sort_order')}: &nbsp;
                                 <FoundationDropdownMenu menu={sort_menu} label={sort_label} dropdownPosition="bottom" dropdownAlignment="right" />
                             </div>) : null}
                             {positiveComments}

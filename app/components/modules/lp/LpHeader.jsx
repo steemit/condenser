@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { translate } from 'app/Translator';
+import tt from 'counterpart';
 
 export default class LpHeader extends React.Component {
     render() {
@@ -11,7 +11,7 @@ export default class LpHeader extends React.Component {
                     </div>
                     <div className="top-bar-right">
                         <ul className="menu">
-                            <li><Link to="/trending" activeClassName="active">{translate('browse')}</Link></li>
+                            <li><Link to="/trending" activeClassName="active">{tt('browse')}</Link></li>
                         </ul>
                     </div>
                 </div>

@@ -7,7 +7,7 @@ import transaction from 'app/redux/Transaction'
 import ByteBuffer from 'bytebuffer'
 import {is} from 'immutable'
 import g from 'app/redux/GlobalReducer';
-import { translate } from 'app/Translator';
+import tt from 'counterpart';
 
 const Long = ByteBuffer.Long
 const {string, func, object} = PropTypes
@@ -73,9 +73,9 @@ class Witnesses extends React.Component {
             let witness_thread = ""
             if(thread) {
                 if(links.remote.test(thread)) {
-                    witness_thread = <a href={thread}>{translate('witness_thread')}&nbsp;<Icon name="extlink" /></a>
+                    witness_thread = <a href={thread}>{tt('witness_thread')}&nbsp;<Icon name="extlink" /></a>
                 } else {
-                    witness_thread = <Link to={thread}>{translate('witness_thread')}</Link>
+                    witness_thread = <Link to={thread}>{tt('witness_thread')}</Link>
                 }
             }
             return (
@@ -84,7 +84,7 @@ class Witnesses extends React.Component {
                             {(rank < 10) && '0'}{rank++}
                             &nbsp;&nbsp;
                             <span className={classUp}>
-                                <a href="#" onClick={accountWitnessVote.bind(this, owner, !myVote)} title={translate('vote')}>{up}</a>
+                                <a href="#" onClick={accountWitnessVote.bind(this, owner, !myVote)} title={tt('vote')}>{up}</a>
                             </span>
                         </td>
                         <td>
@@ -109,7 +109,7 @@ class Witnesses extends React.Component {
                               <span>{/*className="Voting"*/}
                                   <span className="Voting__button Voting__button-up space-right Voting__button--upvoted">
                                       <a href="#" onClick={accountWitnessVote.bind(this, item, false)}
-                                          title={translate('vote')}>{up}</a>
+                                          title={tt('vote')}>{up}</a>
                                       &nbsp;
                                   </span>
                               </span>
@@ -125,11 +125,11 @@ class Witnesses extends React.Component {
             <div>
                 <div className="row">
                     <div className="column">
-                        <h2>{translate('top_witnesses')}</h2>
+                        <h2>{tt('top_witnesses')}</h2>
                         {current_proxy && current_proxy.length ? null :
                             <p>
-                            <strong>{translate('you_have_votes_remaining', {votesCount: witness_vote_count})}.</strong>{' '}
-                            {translate('you_can_vote_for_maximum_of_witnesses')}.
+                            <strong>{tt('you_have_votes_remaining', {votesCount: witness_vote_count})}.</strong>{' '}
+                            {tt('you_can_vote_for_maximum_of_witnesses')}.
                         </p>}
                     </div>
                 </div>
@@ -139,13 +139,13 @@ class Witnesses extends React.Component {
                         <p>{translate(current_proxy && current_proxy.length ? 'witness_set' : 'set_witness_proxy', {proxy: current_proxy})}</p>
                         {current_proxy && current_proxy.length ?
                         <div>
-                            <div style={{paddingBottom: 10}}>{translate("witness_proxy_current")}: <strong>{}</strong></div>
+                            <div style={{paddingBottom: 10}}>{tt("witness_proxy_current")}: <strong>{}</strong></div>
 
                             <form>
                                 <div className="input-group">
                                     <input className="input-group-field bold" disabled type="text" style={{float: "left", width: "75%", maxWidth: "20rem"}} value={current_proxy} />
                                     <div className="input-group-button">
-                                        <button style={{marginBottom: 0}} className="button" onClick={accountWitnessProxy}>{translate('witness_proxy_clear')}</button>
+                                        <button style={{marginBottom: 0}} className="button" onClick={accountWitnessProxy}>{tt('witness_proxy_clear')}</button>
                                     </div>
                                 </div>
                             </form>
@@ -154,11 +154,11 @@ class Witnesses extends React.Component {
                             <div className="input-group">
                                 <input className="input-group-field bold" type="text" style={{float: "left", width: "75%", maxWidth: "20rem"}} value={proxy} onChange={(e) => {this.setState({proxy: e.target.value});}} />
                                 <div className="input-group-button">
-                                    <button style={{marginBottom: 0}} className="button" onClick={accountWitnessProxy}>{translate('witness_proxy_set')}</button>
+                                    <button style={{marginBottom: 0}} className="button" onClick={accountWitnessProxy}>{tt('witness_proxy_set')}</button>
                                 </div>
                             </div>
                         </form>}
-                        {this.state.proxyFailed && <p className="error">{translate("proxy_update_error")}.</p>}
+                        {this.state.proxyFailed && <p className="error">{tt("proxy_update_error")}.</p>}
                         <br />
                      </div>
                 </div>
@@ -170,8 +170,8 @@ class Witnesses extends React.Component {
                             <thead>
                                 <tr>
                                     <th></th>
-                                    <th>{translate('witness')}</th>
-                                    <th>{translate('information')}</th>
+                                    <th>{tt('witness')}</th>
+                                    <th>{tt('information')}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -184,12 +184,12 @@ class Witnesses extends React.Component {
                 {current_proxy && current_proxy.length ? null :
                 <div className="row">
                     <div className="column">
-                        <p>{translate('if_you_want_to_vote_outside_of_top_enter_account_name')}.</p>
+                        <p>{tt('if_you_want_to_vote_outside_of_top_enter_account_name')}.</p>
                         <form>
                             <div className="input-group">
                                 <input className="input-group-field" type="text" style={{float: "left", width: "75%", maxWidth: "20rem"}} value={customUsername} onChange={onWitnessChange} />
                                 <div className="input-group-button">
-                                    <button className="button" onClick={accountWitnessVote.bind(this, customUsername, !(witness_votes ? witness_votes.has(customUsername) : null))}>{translate('vote')}</button>
+                                    <button className="button" onClick={accountWitnessVote.bind(this, customUsername, !(witness_votes ? witness_votes.has(customUsername) : null))}>{tt('vote')}</button>
                                 </div>
                             </div>
                         </form>

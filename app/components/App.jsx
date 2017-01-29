@@ -15,7 +15,7 @@ import Modals from 'app/components/modules/Modals';
 import Icon from 'app/components/elements/Icon';
 import {key_utils} from 'shared/ecc';
 import MiniHeader from 'app/components/modules/MiniHeader';
-import { translate } from '../Translator.js';
+import tt from 'counterpart';
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 
 class App extends React.Component {
@@ -102,12 +102,12 @@ class App extends React.Component {
                         <ul>
                             <li>
                                 <a href="https://steemit.com/steemit/@steemitblog/steemit-com-is-now-open-source">
-                                    {translate('steemit_is_now_open_source')}
+                                    {tt('steemit_is_now_open_source')}
                                 </a>
                             </li>
                             <li>
                                 <a href="https://steemit.com/steemit/@steemitblog/all-recovered-accounts-have-been-fully-refunded">
-                                    {translate("all_accounts_refunded")}
+                                    {tt("all_accounts_refunded")}
                                 </a>
                             </li>
                         </ul>
@@ -120,7 +120,7 @@ class App extends React.Component {
                 <div className="column">
                     <div className={classNames('callout warning', {alert}, {warning}, {success})}>
                         <CloseButton onClick={() => this.setState({showCallout: false})} />
-                        <p>{translate("read_only_mode")}</p>
+                        <p>{tt("read_only_mode")}</p>
                     </div>
                 </div>
             </div>;
@@ -133,16 +133,16 @@ class App extends React.Component {
                     <div className="welcomeBanner">
                         <CloseButton onClick={() => this.setState({showBanner: false})} />
                         <div className="text-center">
-                            <h2>{translate("welcome_to_the_blockchain")}</h2>
-                            <h4>{translate("your_voice_is_worth_something")}</h4>
+                            <h2>{tt("welcome_to_the_blockchain")}</h2>
+                            <h4>{tt("your_voice_is_worth_something")}</h4>
                             <br />
-                            <a className="button" href="/enter_email"> <b>{translate("sign_up")}</b> </a>
+                            <a className="button" href="/enter_email"> <b>{tt("sign_up")}</b> </a>
                             &nbsp; &nbsp; &nbsp;
-                            <a className="button hollow uppercase" href="https://steem.io" target="_blank"> <b>{translate("learn_more")}</b> </a>
+                            <a className="button hollow uppercase" href="https://steem.io" target="_blank"> <b>{tt("learn_more")}</b> </a>
                             <br />
                             <br />
                             <div className="tag3">
-                                <b>{translate("get_sp_when_sign_up", {signupBonus: signup_bonus})}</b>
+                                <b>{tt("get_sp_when_sign_up", {signupBonus: signup_bonus})}</b>
                             </div>
                         </div>
                     </div>
@@ -157,17 +157,17 @@ class App extends React.Component {
                 <ul className="vertical menu">
                     <li>
                         <a href="https://steem.io" onClick={this.navigate}>
-                            {translate("about")}
+                            {tt("navigation.about")}
                         </a>
                     </li>
                     <li>
                         <a href="/tags" onClick={this.navigate}>
-                            {translate("explore")}
+                            {tt("explore")}
                         </a>
                     </li>
                     <li>
                         <a href="https://steem.io/SteemWhitePaper.pdf" onClick={this.navigate}>
-                            {translate("APP_NAME_whitepaper")}
+                            {tt("APP_NAME_whitepaper")}
                         </a>
                     </li>
                     <li>
@@ -182,54 +182,54 @@ class App extends React.Component {
                     </li>
                     <li>
                         <a onClick={() => depositSteem()}>
-                            {translate("buy_LIQUID_TOKEN")}
+                            {tt("buy_LIQUID_TOKEN")}
                         </a>
                     </li>
                     <li>
                         <a href="http://steemtools.com/" onClick={this.navigate} target="_blank" rel="noopener noreferrer">
-                            {translate('APP_NAME_app_center')}&nbsp;<Icon name="extlink" />
+                            {tt('APP_NAME_app_center')}&nbsp;<Icon name="extlink" />
                         </a>
                     </li>
                     <li>
                         <a href="/market" onClick={this.navigate}>
-                            {translate("currency_market")}
+                            {tt("currency_market")}
                         </a>
                     </li>
                     <li>
                         <a href="/recover_account_step_1" onClick={this.navigate}>
-                        {translate("stolen_account_recovery")}
+                        {tt("stolen_account_recovery")}
                         </a>
                     </li>
                     <li>
                         <a href="/change_password" onClick={this.navigate}>
-                            {translate("change_account_password")}
+                            {tt("change_account_password")}
                         </a>
                     </li>
                     <li>
                         <a href="https://steemit.chat/home" target="_blank" rel="noopener noreferrer">
-                            {translate("APP_NAME_chat")}&nbsp;<Icon name="extlink" />
+                            {tt("APP_NAME_chat")}&nbsp;<Icon name="extlink" />
                         </a>
                     </li>
                     <li>
                         <a href="https://steemit.github.io/steemit-docs/" target="_blank" rel="noopener noreferrer">
-                            {translate("steemit_api_docs")}&nbsp;<Icon name="extlink" />
+                            {tt("steemit_api_docs")}&nbsp;<Icon name="extlink" />
                         </a>
                     </li>
                     <li className="last">
                         <a href="/~witnesses" onClick={this.navigate}>
-                            {translate("vote_for_witnesses")}
+                            {tt("vote_for_witnesses")}
                         </a>
                     </li>
                 </ul>
                 <ul className="vertical menu">
                     <li>
                         <a href="/privacy.html" onClick={this.navigate} rel="nofollow">
-                            {translate("privacy_policy")}
+                            {tt("privacy_policy")}
                         </a>
                     </li>
                     <li>
                         <a href="/tos.html" onClick={this.navigate} rel="nofollow">
-                            {translate("terms_of_service")}
+                            {tt("terms_of_service")}
                         </a>
                     </li>
                 </ul>

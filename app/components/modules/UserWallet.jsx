@@ -16,7 +16,7 @@ import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMe
 import WalletSubMenu from 'app/components/elements/WalletSubMenu'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Tooltip from 'app/components/elements/Tooltip'
-import { translate } from 'app/Translator';
+import tt from 'counterpart';
 import {List} from 'immutable'
 
 const assetPrecision = 1000;
@@ -103,8 +103,8 @@ class UserWallet extends React.Component {
 
             return out.concat([
                 <div key={item.get(0)}>
-                    <Tooltip t={translate('conversion_complete_tip') + ": " + new Date(finishTime).toLocaleString()}>
-                        <span>(+{translate('in_conversion', {amount: numberWithCommas('$' + amount.toFixed(3))})})</span>
+                    <Tooltip t={tt('conversion_complete_tip') + ": " + new Date(finishTime).toLocaleString()}>
+                        <span>(+{tt('in_conversion', {amount: numberWithCommas('$' + amount.toFixed(3))})})</span>
                     </Tooltip>
                 </div>
             ]);
@@ -206,7 +206,7 @@ class UserWallet extends React.Component {
         ]
         // set dynamic secondary wallet values
         const sbdInterest = this.props.sbd_interest / 100
-        //const sbdMessage = translate('tokens_worth_about_AMOUNT_of_LIQUID_TOKEN') //TODO: add APR param to xlation
+        //const sbdMessage = tt('tokens_worth_about_AMOUNT_of_LIQUID_TOKEN') //TODO: add APR param to xlation
         const sbdMessage = <span>Tokens worth about $1.00 of STEEM, currently collecting {sbdInterest}% APR.</span>
 
         return (<div className="UserWallet">
@@ -226,7 +226,7 @@ class UserWallet extends React.Component {
                     {isMyAccount ?
                     <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={steem_balance_str + ' STEEM'} menu={steem_menu} />
                     : steem_balance_str + ' STEEM'}
-                    {steemOrders ? <div style={{paddingRight: isMyAccount ? "0.85rem" : null}}><Link to="/market"><Tooltip t={translate('open_orders')}>(+{steem_orders_balance_str} STEEM)</Tooltip></Link></div> : null}
+                    {steemOrders ? <div style={{paddingRight: isMyAccount ? "0.85rem" : null}}><Link to="/market"><Tooltip t={tt('open_orders')}>(+{steem_orders_balance_str} STEEM)</Tooltip></Link></div> : null}
                 </div>
             </div>
             <div className="UserWallet__balance row zebra">
@@ -247,7 +247,7 @@ class UserWallet extends React.Component {
                     {isMyAccount ?
                     <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={sbd_balance_str} menu={dollar_menu} />
                     : sbd_balance_str}
-                    {sbdOrders ? <div style={{paddingRight: isMyAccount ? "0.85rem" : null}}><Link to="/market"><Tooltip t={translate('open_orders')}>(+{sbd_orders_balance_str})</Tooltip></Link></div> : null}
+                    {sbdOrders ? <div style={{paddingRight: isMyAccount ? "0.85rem" : null}}><Link to="/market"><Tooltip t={tt('open_orders')}>(+{sbd_orders_balance_str})</Tooltip></Link></div> : null}
                     {conversions}
                 </div>
             </div>

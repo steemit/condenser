@@ -3,7 +3,7 @@ import {call, put, select} from 'redux-saga/effects';
 import Apis from 'shared/api_client/ApiInstances';
 import g from 'app/redux/GlobalReducer'
 import {takeEvery} from 'redux-saga';
-import { translate } from '../Translator.js';
+import tt from 'counterpart';
 
 const wait = ms => (
     new Promise(resolve => {
@@ -56,7 +56,7 @@ function* showConnectionErrorNotification({payload: {status}}) {
         if (ws_connection && ws_connection.status !== 'open') {
             yield put({type: 'ADD_NOTIFICATION', payload:
                 {key: 'ws:connection:error',
-                 message: translate('connection_lost_reconnecting') + '..',
+                 message: tt('connection_lost_reconnecting') + '..',
                  dismissAfter: 15000}
             });
         }

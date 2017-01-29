@@ -2,7 +2,7 @@ import React, {PropTypes, Component} from 'react'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import {connect} from 'react-redux'
 import user from 'app/redux/User'
-import { translate } from 'app/Translator';
+import tt from 'counterpart';
 
 /** Display a public key.  Offer to show a private key, but only if it matches the provided public key */
 class ShowKey extends Component {
@@ -61,9 +61,9 @@ class ShowKey extends Component {
         const {onShow, showLogin, props: {pubkey, cmpProps, children, authType}} = this
         const {show, wif} = this.state
 
-        const keyIcon = <span style={{fontSize: '100%'}}>{translate('hide_private_key')}</span>
+        const keyIcon = <span style={{fontSize: '100%'}}>{tt('hide_private_key')}</span>
         // Tooltip is trigggering a setState on unmounted component exception
-        const showTip = translate('show_private_key')//<Tooltip t="Show private key (WIF)">show</Tooltip>
+        const showTip = tt('show_private_key')//<Tooltip t="Show private key (WIF)">show</Tooltip>
 
 
         const keyLink = wif ?
@@ -71,7 +71,7 @@ class ShowKey extends Component {
             authType === 'memo' ? null :
             authType === 'owner' ? null :
 
-            <div style={{marginBottom: 0}} className="hollow tiny button slim"><a onClick={showLogin}>{translate('login_to_show')}</a></div>;
+            <div style={{marginBottom: 0}} className="hollow tiny button slim"><a onClick={showLogin}>{tt('login_to_show')}</a></div>;
 
 
         return (<div className="row">

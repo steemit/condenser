@@ -4,7 +4,7 @@ import Reveal from 'react-foundation-components/lib/global/reveal';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import {browserHistory} from 'react-router';
-import { translate } from 'app/Translator';
+import tt from 'counterpart';
 
 class CheckLoginOwner extends React.Component {
     constructor() {
@@ -64,21 +64,21 @@ class CheckLoginOwner extends React.Component {
         return <span>
             <Reveal show>
                 <CloseButton onClick={this.hide} />
-                <h3>{translate('account_updated')}</h3>
+                <h3>{tt('account_updated')}</h3>
                 <p>
-                    <span className="warning uppercase">{translate('warning')}:</span> {translate('your_password_permissions_were_reduced')} <TimeAgoWrapper date={last_valid_time} />. {translate('if_you_did_not_make_this_change') + ' '} <a onClick={this.recover}>{translate('recover_your_account')}</a>.
+                    <span className="warning uppercase">{tt('warning')}:</span> {tt('your_password_permissions_were_reduced')} <TimeAgoWrapper date={last_valid_time} />. {tt('if_you_did_not_make_this_change') + ' '} <a onClick={this.recover}>{tt('recover_your_account')}</a>.
                 </p>
                 <p>
-                    {translate('owhership_changed_on')}: {last_valid_date.toString()}
+                    {tt('owhership_changed_on')}: {last_valid_date.toString()}
                 </p>
                 <p>
-                    {translate('deadline_for_recovery_is' + ' ')} <u><TimeAgoWrapper date={deadline} /></u>.
+                    {tt('deadline_for_recovery_is' + ' ')} <u><TimeAgoWrapper date={deadline} /></u>.
                 </p>
                 <p>
                     <input type="checkbox" onChange={this.onUnderstood} />&nbsp;&nbsp;
-                    {translate('i_understand_dont_show_again')}.
+                    {tt('i_understand_dont_show_again')}.
                 </p>
-                <div className="button" onClick={this.hide}>{translate('ok')}</div>
+                <div className="button" onClick={this.hide}>{tt('ok')}</div>
             </Reveal>
         </span>
     }

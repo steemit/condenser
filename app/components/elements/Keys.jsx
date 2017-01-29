@@ -5,7 +5,7 @@ import {connect} from 'react-redux'
 import user from 'app/redux/User'
 import g from 'app/redux/GlobalReducer'
 import ShowKey from 'app/components/elements/ShowKey'
-import { translate } from 'app/Translator';
+import tt from 'counterpart';
 
 class Keys extends Component {
     static propTypes = {

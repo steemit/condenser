@@ -1,6 +1,6 @@
 import React from 'react';
 import {key_utils} from 'shared/ecc'
-import { translate } from 'app/Translator';
+import tt from 'counterpart';
 
 function allChecked(confirmCheckboxes) {
     return confirmCheckboxes.box1 && confirmCheckboxes.box2;
@@ -38,7 +38,7 @@ export default class GeneratedPasswordInput extends React.Component {
         const confirmPassword = e.target.value.trim();
         const {generatedPassword, confirmCheckboxes} = this.state;
         let confirmPasswordError = '';
-        if (confirmPassword && confirmPassword !== generatedPassword) confirmPasswordError = translate('passwords_do_not_match');
+        if (confirmPassword && confirmPassword !== generatedPassword) confirmPasswordError = tt('passwords_do_not_match');
         this.setState({confirmPassword, confirmPasswordError});
         this.props.onChange(confirmPassword, confirmPassword && confirmPassword === generatedPassword && allChecked(confirmCheckboxes));
     }
@@ -49,26 +49,26 @@ export default class GeneratedPasswordInput extends React.Component {
         return (
             <div className="GeneratedPasswordInput">
                 <div className="GeneratedPasswordInput__field">
-                    <label className="uppercase">{translate('generated_password')}<br />
+                    <label className="uppercase">{tt('generated_password')}<br />
                         <code className="GeneratedPasswordInput__generated_password">{showPasswordString ? generatedPassword : '-'}</code>
                         <div className="GeneratedPasswordInput__backup_text">
-                            {translate('backup_password_by_storing_it')}
+                            {tt('backup_password_by_storing_it')}
                         </div>
                     </label>
                 </div>
                 <div className="GeneratedPasswordInput__field">
                     <label className="uppercase">
-                        {translate('re_enter_generate_password')}
+                        {tt('re_enter_generate_password')}
                         <input type="password" name="confirmPassword" autoComplete="off" onChange={this.confirmPasswordChange} value={confirmPassword} disabled={disabled} />
                     </label>
                     <div className="error">{confirmPasswordError}</div>
                 </div>
                 <div className="GeneratedPasswordInput__checkboxes">
                     <label><input type="checkbox" name="box1" onChange={this.confirmCheckChange} checked={confirmCheckboxes.box1} />
-                        {translate('understand_that_APP_NAME_cannot_recover_password')}.
+                        {tt('understand_that_APP_NAME_cannot_recover_password')}.
                     </label>
                     <label><input type="checkbox" name="box2" onChange={this.confirmCheckChange} checked={confirmCheckboxes.box2} />
-                        {translate('i_saved_password')}.
+                        {tt('i_saved_password')}.
                     </label>
                 </div>
             </div>

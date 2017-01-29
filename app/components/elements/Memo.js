@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {decode} from 'shared/chain/memo'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
-import { translate } from 'app/Translator';
+import tt from 'counterpart';
 
 class Memo extends React.Component {
     static propTypes = {
@@ -33,7 +33,7 @@ class Memo extends React.Component {
         if(!isEncoded) return <span>{text}</span>
         if(!myAccount) return <span></span>
         if(memo_private) return <span>{decodeMemo(memo_private, text)}</span>
-        return <span>{translate('login_to_see_memo')}</span>
+        return <span>{tt('login_to_see_memo')}</span>
     }
 }
 

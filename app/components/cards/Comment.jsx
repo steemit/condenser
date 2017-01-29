@@ -11,7 +11,7 @@ import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Userpic from 'app/components/elements/Userpic';
 import transaction from 'app/redux/Transaction'
 import {List} from 'immutable'
-import { translate } from 'app/Translator';
+import tt from 'counterpart';
 import {parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 
 export function sortComments( cont, comments, sort_order ) {
@@ -198,7 +198,7 @@ class CommentImpl extends React.Component {
         const {cont} = this.props;
         const dis = cont.get(this.props.content);
         if (!dis) {
-            return <div>{translate('loading')}...</div>
+            return <div>{tt('loading')}...</div>
         }
         const comment = dis.toJS();
         if(!comment.stats) {
@@ -249,9 +249,9 @@ class CommentImpl extends React.Component {
                 <Voting post={post} />
                 {!readonly &&
                     <span className="Comment__footer__controls">
-                        {depth < 6 && <a onClick={onShowReply}>{translate('reply')}</a>}
-                        {' '}{showEditOption   && <a onClick={onShowEdit}>{translate('edit')}</a>}
-                        {' '}{showDeleteOption && <a onClick={onDeletePost}>{translate('delete')}</a>}
+                        {depth < 6 && <a onClick={onShowReply}>{tt('reply')}</a>}
+                        {' '}{showEditOption   && <a onClick={onShowEdit}>{tt('edit')}</a>}
+                        {' '}{showDeleteOption && <a onClick={onDeletePost}>{tt('delete')}</a>}
                     </span>}
             </div>;
         }
@@ -317,7 +317,7 @@ class CommentImpl extends React.Component {
                     <div className="Comment__header">
                         <div className="Comment__header_collapse">
                             <Voting post={post} flag />
-                            <a title={translate('collapse_or_expand')} onClick={this.toggleCollapsed}>{ this.state.collapsed ? '[+]' : '[-]' }</a>
+                            <a title={tt('collapse_or_expand')} onClick={this.toggleCollapsed}>{ this.state.collapsed ? '[+]' : '[-]' }</a>
                         </div>
                         <span className="Comment__header-user">
                             <div className="Comment__Userpic-small">
@@ -332,9 +332,9 @@ class CommentImpl extends React.Component {
                         { (this.state.collapsed || hide_body) &&
                           <Voting post={post} showList={false} /> }
                         { this.state.collapsed && comment.children > 0 &&
-                          <span className="marginLeft1rem">{translate('reply_count', {replyCount: comment.children})}</span>}
+                          <span className="marginLeft1rem">{tt('reply_count', {replyCount: comment.children})}</span>}
                         { !this.state.collapsed && hide_body &&
-                            <a className="marginLeft1rem" onClick={this.revealBody}>{translate('reveal_comment')}</a>}
+                            <a className="marginLeft1rem" onClick={this.revealBody}>{tt('reveal_comment')}</a>}
                     </div>
                     <div className="Comment__body entry-content">
                         {showEdit ? renderedEditor : body}
@@ -375,7 +375,7 @@ const Comment = connect(
             dispatch(transaction.actions.broadcastOperation({
                 type: 'delete_comment',
                 operation: {author, permlink},
-                confirm: translate('are_you_sure'),
+                confirm: tt('are_you_sure'),
             }))
         },
     })

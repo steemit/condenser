@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux'
 import user from 'app/redux/User';
-import {translate} from 'app/Translator';
+import tt from 'counterpart';
 import {ALLOWED_CURRENCIES} from 'config/client_config'
 import store from 'store';
 import transaction from 'app/redux/Transaction'
@@ -105,7 +105,7 @@ class Settings extends React.Component {
                     this.setState({
                         loading: false,
                         changed: false,
-                        errorMessage: translate('server_returned_error')
+                        errorMessage: tt('server_returned_error')
                     })
                 }
             },
@@ -114,7 +114,7 @@ class Settings extends React.Component {
                     loading: false,
                     changed: false,
                     errorMessage: '',
-                    successMessage: translate('saved') + '!',
+                    successMessage: tt('saved') + '!',
                 })
                 // remove successMessage after a while
                 setTimeout(() => this.setState({successMessage: ''}), 4000)
@@ -139,7 +139,7 @@ class Settings extends React.Component {
 
             {/*<div className="row">
                 <div className="small-12 medium-6 large-4 columns">
-                    <label>{translate('choose_language')}
+                    <label>{tt('choose_language')}
                         <select defaultValue={store.get('language')} onChange={this.handleLanguageChange}>
                             <option value="en">English</option>
                             <option value="ru">Russian</option>
@@ -154,7 +154,7 @@ class Settings extends React.Component {
             </div>*/}
             {/*<div className="row">
                 <div className="small-12 medium-6 large-4 columns">
-                    <label>{translate('choose_currency')}
+                    <label>{tt('choose_currency')}
                         <select defaultValue={store.get('currency')} onChange={this.handleCurrencyChange}>
                             {
                                 ALLOWED_CURRENCIES.map(i => {
@@ -169,31 +169,31 @@ class Settings extends React.Component {
                 <form onSubmit={this.handleSubmitForm} className="small-12 medium-6 large-4 columns">
                     <h3>Public Profile Settings</h3>
                     <label>
-                        {translate('profile_image_url')}
+                        {tt('profile_image_url')}
                         <input type="url" {...profile_image.props} autoComplete="off" />
                     </label>
                     <div className="error">{profile_image.blur && profile_image.touched && profile_image.error}</div>
 
                     <label>
-                        {translate('profile_name')}
+                        {tt('profile_name')}
                         <input type="text" {...name.props} maxLength="20" autoComplete="off" />
                     </label>
                     <div className="error">{name.touched && name.error}</div>
 
                     <label>
-                        {translate('profile_about')}
+                        {tt('profile_about')}
                         <input type="text" {...about.props} maxLength="160" autoComplete="off" />
                     </label>
                     <div className="error">{about.touched && about.error}</div>
 
                     <label>
-                        {translate('profile_location')}
+                        {tt('profile_location')}
                         <input type="text" {...location.props} maxLength="30" autoComplete="off" />
                     </label>
                     <div className="error">{location.touched && location.error}</div>
 
                     <label>
-                        {translate('profile_website')}
+                        {tt('profile_website')}
                         <input type="url" {...website.props} maxLength="100" autoComplete="off" />
                     </label>
                     <div className="error">{website.blur && website.touched && website.error}</div>

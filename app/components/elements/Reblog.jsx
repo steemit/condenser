@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import transaction from 'app/redux/Transaction';
 import Icon from 'app/components/elements/Icon';
-import { translate } from 'app/Translator';
+import tt from 'counterpart';
 
 const {string, func} = PropTypes
 
@@ -68,7 +68,7 @@ export default class Reblog extends React.Component {
         const state = this.state.active ? 'active' : 'inactive'
         const loading = this.state.loading ? ' loading' : ''
         return <span className={'Reblog__button Reblog__button-'+state + loading}>
-            <a href="#" onClick={this.reblog} title={translate('reblog')}><Icon name="reblog" /></a>
+            <a href="#" onClick={this.reblog} title={tt('reblog')}><Icon name="reblog" /></a>
         </span>
     }
 }

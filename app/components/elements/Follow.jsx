@@ -5,7 +5,7 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import transaction from 'app/redux/Transaction';
 import g from 'app/redux/GlobalReducer';
 import {Set, Map} from 'immutable'
-import { translate } from 'app/Translator';
+import tt from 'counterpart';
 
 const {string, bool, any} = PropTypes
 
@@ -52,7 +52,7 @@ export default class Follow extends React.Component {
 
     render() {
         const {loading} = this.props
-        if(loading) return <span><LoadingIndicator /> {translate('loading')}&hellip;</span>
+        if(loading) return <span><LoadingIndicator /> {tt('loading')}&hellip;</span>
         if(loading !== false) {
             // must know what the user is already following before any update can happen
             return <span></span>
@@ -71,16 +71,16 @@ export default class Follow extends React.Component {
         const cnInactive = cnActive + ' hollow secondary ' + cnBusy
         return <span>
             {showFollow && followingWhat !== 'blog' &&
-                <label className={cnInactive} onClick={this.follow}>{translate('follow')}</label>}
+                <label className={cnInactive} onClick={this.follow}>{tt('follow')}</label>}
 
             {showFollow && followingWhat === 'blog' &&
-                <label className={cnInactive} onClick={this.unfollow}>{translate('unfollow')}</label>}
+                <label className={cnInactive} onClick={this.unfollow}>{tt('unfollow')}</label>}
 
             {showMute && followingWhat !== 'ignore' &&
-                <label className={cnInactive} onClick={this.ignore}>{translate('mute')}</label>}
+                <label className={cnInactive} onClick={this.ignore}>{tt('mute')}</label>}
 
             {showMute && followingWhat === 'ignore' &&
-                <label className={cnInactive} onClick={this.unignore}>{translate('unmute')}</label>}
+                <label className={cnInactive} onClick={this.unignore}>{tt('unmute')}</label>}
 
             {children && <span>&nbsp;&nbsp;{children}</span>}
         </span>

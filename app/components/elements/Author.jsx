@@ -8,7 +8,7 @@ import { Link } from 'react-router';
 import {authorNameAndRep} from 'app/utils/ComponentFormatters';
 import Reputation from 'app/components/elements/Reputation';
 import Userpic from 'app/components/elements/Userpic';
-import { translate } from 'app/Translator';
+import tt from 'counterpart';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 
 const {string, bool, number} = React.PropTypes

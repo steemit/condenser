@@ -1,6 +1,6 @@
 import React from "react";
 import OrderbookRow from "./OrderbookRow";
-import { translate } from 'app/Translator.js';
+import tt from 'counterpart';
 import { LIQUID_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN } from 'config/client_config';
 
 export default class Orderbook extends React.Component {

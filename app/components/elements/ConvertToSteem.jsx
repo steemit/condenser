@@ -7,7 +7,7 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import TransactionError from 'app/components/elements/TransactionError'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
-import { translate } from 'app/Translator';
+import tt from 'counterpart';
 import { FormattedMessage, FormattedHTMLMessage } from 'react-intl';
 import { DEBT_TOKEN, DEBT_TICKER } from 'config/client_config';
 
@@ -42,16 +42,16 @@ class ConvertToSteem extends React.Component {
             <form onSubmit={handleSubmit(data => {dispatchSubmit(data)})}>
                 <div className="row">
                     <div className="small-12 columns">
-                        <h1>{translate('convert_to_LIQUID_TOKEN')}</h1>
-                        <p>{translate('DEBT_TOKEN_will_be_unavailable')}.</p>
+                        <h1>{tt('convert_to_LIQUID_TOKEN')}</h1>
+                        <p>{tt('DEBT_TOKEN_will_be_unavailable')}.</p>
                         {/* using <FormattedMessage /> because nested html tag in values doesn't want to be rendered properly in translate() */}
-                        <p><FormattedMessage id="your_existing_DEBT_TOKEN_are_liquid_and_transferable" values={{ link: <i>{translate("buy_or_sell")}</i> }} /></p>
-                        <p>{translate('this_is_a_price_feed_conversion')}.</p>
+                        <p><FormattedMessage id="your_existing_DEBT_TOKEN_are_liquid_and_transferable" values={{ link: <i>{tt("buy_or_sell")}</i> }} /></p>
+                        <p>{tt('this_is_a_price_feed_conversion')}.</p>
                     </div>
                 </div>
                 <div className="row">
                     <div className="small-12 columns">
-                        <label>{translate('amount')}</label>
+                        <label>{tt('amount')}</label>
                         <input type="amount" ref="amt" {...cleanReduxInput(amount)} autoComplete="off" disabled={loading} />
                         &nbsp;
                         {DEBT_TOKEN}
@@ -66,10 +66,10 @@ class ConvertToSteem extends React.Component {
                         <br />
                         <div>
                             <button type="submit" className="button" disabled={loading}>
-                                {translate('convert')}
+                                {tt('convert')}
                             </button>
                             <button type="button" disabled={submitting} className="button hollow float-right" onClick={onClose}>
-                                {translate('cancel')}
+                                {tt('cancel')}
                             </button>
                         </div>
                     </div>
@@ -88,9 +88,9 @@ export default reduxForm(
         const sbd_balance = account.get('sbd_balance')
         const max = sbd_balance.split(' ')[0]
         const validate = values => ({
-            amount: ! values.amount ? translate('required') :
-                isNaN(values.amount) || parseFloat(values.amount) <= 0 ? translate('invalid_amount') :
-                parseFloat(values.amount) > parseFloat(max) ? translate('insufficient_balance') :
+            amount: ! values.amount ? tt('required') :
+                isNaN(values.amount) || parseFloat(values.amount) <= 0 ? tt('invalid_amount') :
+                parseFloat(values.amount) > parseFloat(max) ? tt('insufficient_balance') :
                 null,
         })
         return {
@@ -104,7 +104,7 @@ export default reduxForm(
         convert: (owner, amt, success, error) => {
             const amount = [parseFloat(amt).toFixed(3), DEBT_TICKER].join(" ")
             const requestid = Math.floor(Date.now() / 1000)
-            const conf = translate('in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN', { amount: amount.split(' ')[0] })
+            const conf = tt('in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN', { amount: amount.split(' ')[0] })
             dispatch(transaction.actions.broadcastOperation({
                 type: 'convert',
                 operation: {owner, requestid, amount},
@@ -113,7 +113,7 @@ export default reduxForm(
                     success()
                     dispatch({type: 'ADD_NOTIFICATION', payload:
                         {key: "convert_sd_to_steem_" + Date.now(),
-                         message: translate('order_placed') + ': ' + conf,
+                         message: tt('order_placed') + ': ' + conf,
                          dismissAfter: 5000}
                     })
                 },

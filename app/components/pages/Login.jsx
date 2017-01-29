@@ -1,13 +1,13 @@
 import React from 'react';
 import LoginForm from 'app/components/modules/LoginForm';
-import { translate } from 'app/Translator';
+import tt from 'counterpart';
 
 class Login extends React.Component {
     render() {
         if (!process.env.BROWSER) { // don't render this page on the server
             return <div className="row">
                 <div className="column">
-                    {translate('loading')}..
+                    {tt('loading')}..
                 </div>
             </div>;
         }

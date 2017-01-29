@@ -8,8 +8,8 @@ import ServerHTML from '../server-html';
 import sendEmail from '../sendEmail';
 import {checkCSRF, getRemoteIp} from '../utils';
 import config from '../../config';
-import SignupProgressBar from 'app/components/elements/SignupProgressBar';
-import MiniHeader from 'app/components/modules/MiniHeader';
+import SignupProgressBar from 'ui-patterns/components/elements/SignupProgressBar';
+import MiniHeader from 'ui-patterns/components/modules/MiniHeader';
 import secureRandom from 'secure-random';
 import Mixpanel from 'mixpanel';
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import SvgImage from 'app/components/elements/SvgImage';
+import SvgImage from 'ui-patterns/components/elements/SvgImage';
 
 class ServerError extends Component {
 

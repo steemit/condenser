@@ -19,12 +19,12 @@ self.addEventListener('notificationclick', function(event) {
   event.waitUntil(
     self.clients.matchAll().then(function(clientList) {
       if (clientList.length > 0) {
-          if ('navigate' in clientList[0]) {
+          if (clickUrl && 'navigate' in clientList[0]) {
               clientList[0].navigate(clickUrl);
           }
           return clientList[0].focus();
       }
-      return self.clients.openWindow(clickUrl);
+      return self.clients.openWindow(clickUrl || '{DEFAULT_URL}');
     })
   );
 });

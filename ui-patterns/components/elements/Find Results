@@ -1,0 +1,831 @@
+Searching 43704 files for "app/components"
+
+/Users/pkattera/Developer/2017/steemit.com/app/RootRoute.js:
+    2  //if (typeof require.ensure !== 'function') require.ensure = (d, c) => c(require);
+    3  
+    4: import App from 'app/components/App';
+    5: import PostsIndex from 'app/components/pages/PostsIndex';
+    6  import resolveRoute from './ResolveRoute';
+    7  
+    .
+   13          if (route.page === 'About') {
+   14              //require.ensure([], (require) => {
+   15:                 cb(null, [require('app/components/pages/About')]);
+   16              //});
+   17          } else if (route.page === 'Welcome') {
+   18              //require.ensure([], (require) => {
+   19:             cb(null, [require('app/components/pages/Welcome')]);
+   20              //});
+   21          } else if (route.page === 'Faq') {
+   22              //require.ensure([], (require) => {
+   23:             cb(null, [require('app/components/pages/Faq')]);
+   24              //});
+   25          } else if (route.page === 'Login') {
+   26              //require.ensure([], (require) => {
+   27:             cb(null, [require('app/components/pages/Login')]);
+   28              //});
+   29          } else if (route.page === 'Privacy') {
+   30              //require.ensure([], (require) => {
+   31:                 cb(null, [require('app/components/pages/Privacy')]);
+   32              //});
+   33          } else if (route.page === 'Support') {
+   34              //require.ensure([], (require) => {
+   35:                 cb(null, [require('app/components/pages/Support')]);
+   36              //});
+   37          } else if (route.page === 'XSSTest' && process.env.NODE_ENV === 'development') {
+   38              //require.ensure([], (require) => {
+   39:             cb(null, [require('app/components/pages/XSS')]);
+   40              //});
+   41          } else if (route.page === 'Tags') {
+   42              //require.ensure([], (require) => {
+   43:             cb(null, [require('app/components/pages/TagsIndex')]);
+   44              //});
+   45          } else if (route.page === 'Tos') {
+   46              //require.ensure([], (require) => {
+   47:                 cb(null, [require('app/components/pages/Tos')]);
+   48              //});
+   49          } else if (route.page === 'ChangePassword') {
+   50              //require.ensure([], (require) => {
+   51:             cb(null, [require('app/components/pages/ChangePasswordPage')]);
+   52              //});
+   53          } else if (route.page === 'CreateAccount') {
+   54              //require.ensure([], (require) => {
+   55:                 cb(null, [require('app/components/pages/CreateAccount')]);
+   56              //});
+   57          } else if (route.page === 'RecoverAccountStep1') {
+   58              //require.ensure([], (require) => {
+   59:             cb(null, [require('app/components/pages/RecoverAccountStep1')]);
+   60              //});
+   61          } else if (route.page === 'RecoverAccountStep2') {
+   62              //require.ensure([], (require) => {
+   63:             cb(null, [require('app/components/pages/RecoverAccountStep2')]);
+   64              //});
+   65          } else if (route.page === 'WaitingList') {
+   66              //require.ensure([], (require) => {
+   67:             cb(null, [require('app/components/pages/WaitingList')]);
+   68              //});
+   69          } else if (route.page === 'Witnesses') {
+   70              //require.ensure([], (require) => {
+   71:                 cb(null, [require('app/components/pages/Witnesses')]);
+   72              //});
+   73          } else if (route.page === 'SubmitPost') {
+   74              //require.ensure([], (require) => {
+   75              if (process.env.BROWSER)
+   76:                 cb(null, [require('app/components/pages/SubmitPost')]);
+   77              else
+   78:                 cb(null, [require('app/components/pages/SubmitPostServerRender')]);
+   79          } else if (route.page === 'UserProfile') {
+   80              //require.ensure([], (require) => {
+   81:                 cb(null, [require('app/components/pages/UserProfile')]);
+   82              //});
+   83          } else if (route.page === 'Market') {
+   84              //require.ensure([], (require) => {
+   85:                 cb(null, [require('app/components/pages/Market')]);
+   86              //});
+   87          } else if (route.page === 'Post') {
+   88              //require.ensure([], (require) => {
+   89:                 cb(null, [require('app/components/pages/PostPage')]);
+   90              //});
+   91          } else if (route.page === 'PostNoCategory') {
+   92:                 cb(null, [require('app/components/pages/PostPageNoCategory')]);
+   93          } else if (route.page === 'PostsIndex') {
+   94              //require.ensure([], (require) => {
+   95:                 //cb(null, [require('app/components/pages/PostsIndex')]);
+   96                  cb(null, [PostsIndex]);
+   97              //});
+   98          } else {
+   99              //require.ensure([], (require) => {
+  100:                 cb(process.env.BROWSER ? null : Error(404), [require('app/components/pages/NotFound')]);
+  101              //});
+  102          }
+
+/Users/pkattera/Developer/2017/steemit.com/app/assets/stylesheets/app.scss:
+   10  @import "./markdown";
+   11  @import "./notifications";
+   12: @import "app/components/all";
+   13  
+   14  /* Small only */
+
+/Users/pkattera/Developer/2017/steemit.com/server/server-error.jsx:
+    1  import React, { Component } from 'react';
+    2: import SvgImage from 'app/components/elements/SvgImage';
+    3  
+    4  class ServerError extends Component {
+
+/Users/pkattera/Developer/2017/steemit.com/server/server_pages/enter_confirm_email.jsx:
+    9  import {checkCSRF, getRemoteIp} from '../utils';
+   10  import config from '../../config';
+   11: import SignupProgressBar from 'app/components/elements/SignupProgressBar';
+   12: import MiniHeader from 'app/components/modules/MiniHeader';
+   13  import secureRandom from 'secure-random';
+   14  import Mixpanel from 'mixpanel';
+
+/Users/pkattera/Developer/2017/steemit.com/server/server_pages/enter_confirm_mobile.jsx:
+    6  import ServerHTML from 'server/server-html';
+    7  import {verify} from 'server/teleSign';
+    8: import SignupProgressBar from 'app/components/elements/SignupProgressBar';
+    9: import CountryCode from 'app/components/elements/CountryCode';
+   10  import {getRemoteIp, checkCSRF} from 'server/utils';
+   11: import MiniHeader from 'app/components/modules/MiniHeader';
+   12  import secureRandom from 'secure-random';
+   13  import config from '../../config';
+
+/Users/pkattera/Developer/2017/steemit.com/shared/UniversalRender.jsx:
+   24  import {transactionWatches} from 'app/redux/TransactionSaga';
+   25  import PollDataSaga from 'app/redux/PollDataSaga';
+   26: import {component as NotFound} from 'app/components/pages/NotFound';
+   27  import extractMeta from 'app/utils/ExtractMeta';
+   28  import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/App.jsx:
+    2  import {connect} from 'react-redux';
+    3  import AppPropTypes from 'app/utils/AppPropTypes';
+    4: import Header from 'app/components/modules/Header';
+    5: import LpFooter from 'app/components/modules/lp/LpFooter';
+    6  import user from 'app/redux/User';
+    7  import g from 'app/redux/GlobalReducer';
+    8: import TopRightMenu from 'app/components/modules/TopRightMenu';
+    9  import { browserHistory } from 'react-router';
+   10  import classNames from 'classnames';
+   11: import SidePanel from 'app/components/modules/SidePanel';
+   12  import CloseButton from 'react-foundation-components/lib/global/close-button';
+   13: import Dialogs from 'app/components/modules/Dialogs';
+   14: import Modals from 'app/components/modules/Modals';
+   15: import Icon from 'app/components/elements/Icon';
+   16  import {key_utils} from 'shared/ecc';
+   17: import MiniHeader from 'app/components/modules/MiniHeader';
+   18  import { translate } from '../Translator.js';
+   19: import PageViewsCounter from 'app/components/elements/PageViewsCounter';
+   20  
+   21  class App extends React.Component {
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/cards/CardView.js:
+    1  import React from 'react';
+    2  import {connect} from 'react-redux'
+    3: import Link from 'app/components/elements/Link'
+    4  import g from 'app/redux/GlobalReducer'
+    5  import links from 'app/utils/Links'
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/cards/Comment.jsx:
+    1  import React from 'react';
+    2: import Author from 'app/components/elements/Author';
+    3: import ReplyEditor from 'app/components/elements/ReplyEditor';
+    4: import MarkdownViewer from 'app/components/cards/MarkdownViewer';
+    5  import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
+    6: import Voting from 'app/components/elements/Voting';
+    7  import { connect } from 'react-redux';
+    8  import { Link } from 'react-router';
+    9  import user from 'app/redux/User';
+   10: import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
+   11: import Userpic from 'app/components/elements/Userpic';
+   12  import transaction from 'app/redux/Transaction'
+   13  import {List} from 'immutable'
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/cards/MarkdownViewer.jsx:
+    3  import {Component} from 'react'
+    4  import Remarkable from 'remarkable'
+    5: import YoutubePreview from 'app/components/elements/YoutubePreview'
+    6  import sanitizeConfig, {noImageText} from 'app/utils/SanitizeConfig'
+    7  import {renderToString} from 'react-dom/server';
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/cards/PostFull.jsx:
+    1  import React from 'react';
+    2  import { Link } from 'react-router';
+    3: import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
+    4  import pluralize from 'pluralize';
+    5: import Icon from 'app/components/elements/Icon';
+    6  import { connect } from 'react-redux';
+    7  import user from 'app/redux/User';
+    8  import transaction from 'app/redux/Transaction'
+    9: import Voting from 'app/components/elements/Voting';
+   10: import Reblog from 'app/components/elements/Reblog';
+   11: import MarkdownViewer from 'app/components/cards/MarkdownViewer';
+   12: import ReplyEditor from 'app/components/elements/ReplyEditor';
+   13  import {immutableAccessor} from 'app/utils/Accessors';
+   14  import extractContent from 'app/utils/ExtractContent';
+   15: import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
+   16: import TagList from 'app/components/elements/TagList';
+   17: import Author from 'app/components/elements/Author';
+   18  import {Long} from 'bytebuffer'
+   19  import {List} from 'immutable'
+   20  import {repLog10, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
+   21  import DMCAList from 'app/utils/DMCAList'
+   22: import PageViewsCounter from 'app/components/elements/PageViewsCounter';
+   23: import ShareMenu from 'app/components/elements/ShareMenu';
+   24  import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
+   25: import Userpic from 'app/components/elements/Userpic';
+   26  
+   27  function TimeAuthorCategory({content, authorRepLog10, showTags}) {
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/cards/PostHistoryRow.jsx:
+    1  import React from 'react';
+    2  import { Link } from 'react-router';
+    3: import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
+    4: import Icon from 'app/components/elements/Icon';
+    5  import { translate } from 'app/Translator';
+    6  
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/cards/PostsList.jsx:
+    1  import React, {PropTypes} from 'react';
+    2: import PostSummary from 'app/components/cards/PostSummary';
+    3: import Post from 'app/components/pages/Post';
+    4: import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+    5  import debounce from 'lodash.debounce';
+    6  import CloseButton from 'react-foundation-components/lib/global/close-button';
+    7  import {findParent} from 'app/utils/DomUtils';
+    8: import Icon from 'app/components/elements/Icon';
+    9  import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+   10  
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/cards/PostSummary.jsx:
+    1  import React from 'react';
+    2  import { Link } from 'react-router';
+    3: import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
+    4: import Icon from 'app/components/elements/Icon';
+    5  import { connect } from 'react-redux';
+    6  import user from 'app/redux/User';
+    7: import Reblog from 'app/components/elements/Reblog';
+    8: import Voting from 'app/components/elements/Voting';
+    9  import {immutableAccessor} from 'app/utils/Accessors';
+   10  import extractContent from 'app/utils/ExtractContent';
+   11  import { browserHistory } from 'react-router';
+   12: import VotesAndComments from 'app/components/elements/VotesAndComments';
+   13  import {authorNameAndRep} from 'app/utils/ComponentFormatters';
+   14  import {Map} from 'immutable';
+   15: import Reputation from 'app/components/elements/Reputation';
+   16: import Author from 'app/components/elements/Author';
+   17: import TagList from 'app/components/elements/TagList';
+   18: import UserNames from 'app/components/elements/UserNames';
+   19  
+   20  function isLeftClickEvent(event) {
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/cards/TransferHistoryRow.jsx:
+    1  import React from 'react';
+    2  import { Link } from 'react-router';
+    3: import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
+    4: // import Icon from 'app/components/elements/Icon';
+    5: import Memo from 'app/components/elements/Memo'
+    6  import {numberWithCommas, vestsToSp} from 'app/utils/StateFunctions'
+    7  
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/cards/UserListRow.jsx:
+    1  import React from 'react';
+    2  import { Link } from 'react-router';
+    3: import Follow from 'app/components/elements/Follow';
+    4  
+    5  class UserListRow extends React.Component {
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/cards/VoteHistoryRow.jsx:
+    1  import React from 'react';
+    2  import { Link } from 'react-router';
+    3: import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
+    4: import Icon from 'app/components/elements/Icon';
+    5  import { translate } from 'app/Translator';
+    6  
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/elements/Author.jsx:
+    3  import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
+    4  import {LinkWithDropdown} from 'react-foundation-components/lib/global/dropdown'
+    5: import Follow from 'app/components/elements/Follow';
+    6: import Icon from 'app/components/elements/Icon';
+    7  import { Link } from 'react-router';
+    8  import {authorNameAndRep} from 'app/utils/ComponentFormatters';
+    9: import Reputation from 'app/components/elements/Reputation';
+   10: import Userpic from 'app/components/elements/Userpic';
+   11  import { translate } from 'app/Translator';
+   12  import normalizeProfile from 'app/utils/NormalizeProfile';
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/elements/ChangePassword.jsx:
+    2  import React from 'react'
+    3  import transaction from 'app/redux/Transaction'
+    4: import LoadingIndicator from 'app/components/elements/LoadingIndicator'
+    5  import {PrivateKey} from 'shared/ecc'
+    6  import {key_utils} from 'shared/ecc'
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/elements/CheckLoginOwner.jsx:
+    3  import Reveal from 'react-foundation-components/lib/global/reveal';
+    4  import CloseButton from 'react-foundation-components/lib/global/close-button';
+    5: import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
+    6  import {browserHistory} from 'react-router';
+    7  import { translate } from 'app/Translator';
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/elements/ConvertToSteem.jsx:
+    5  import transaction from 'app/redux/Transaction'
+    6  import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
+    7: import TransactionError from 'app/components/elements/TransactionError'
+    8: import LoadingIndicator from 'app/components/elements/LoadingIndicator'
+    9  import {cleanReduxInput} from 'app/utils/ReduxForms'
+   10  import { translate } from 'app/Translator';
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/elements/DropdownMenu.jsx:
+    1  import React from 'react';
+    2  import { browserHistory } from 'react-router';
+    3: import Icon from 'app/components/elements/Icon.jsx';
+    4  import VerticalMenu from './VerticalMenu';
+    5  import {findParent} from 'app/utils/DomUtils';
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/elements/Follow.jsx:
+    1  import React, {PropTypes} from 'react';
+    2  import {connect} from 'react-redux';
+    3: import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+    4  import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
+    5  import transaction from 'app/redux/Transaction';
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/elements/FoundationDropdownMenu.jsx:
+    1  import React from 'react';
+    2: import Icon from 'app/components/elements/Icon';
+    3  import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
+    4: import VerticalMenu from 'app/components/elements/VerticalMenu';
+    5  
+    6  const FoundationDropdownMenu = ({menu, icon, label, dropdownPosition, dropdownAlignment, className, onClick}) => {
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/elements/HelpContent.jsx:
+    1  import React from "react";
+    2: import MarkdownViewer from 'app/components/cards/MarkdownViewer';
+    3: import Icon from 'app/components/elements/Icon';
+    4  import {renderToString} from 'react-dom/server';
+    5  
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/elements/HorizontalMenu.jsx:
+    1  import React from 'react';
+    2  import { Link } from 'react-router'
+    3: import Icon from 'app/components/elements/Icon.jsx';
+    4  
+    5  export default class HorizontalMenu extends React.Component {
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/elements/KeyEdit.js:
+    1  import React, {PropTypes, Component} from 'react'
+    2: import LoadingIndicator from 'app/components/elements/LoadingIndicator'
+    3  import {reduxForm} from 'redux-form' // @deprecated, instead use: app/utils/ReactForm.js
+    4  import {PrivateKey} from 'shared/ecc'
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/elements/Keys.jsx:
+    5  import user from 'app/redux/User'
+    6  import g from 'app/redux/GlobalReducer'
+    7: import ShowKey from 'app/components/elements/ShowKey'
+    8  import { translate } from 'app/Translator';
+    9  
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/elements/OrderhistoryRow.jsx:
+    1  var React = require("react");
+    2: import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
+    3  
+    4  export default class OrderhistoryRow extends React.Component {
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/elements/PageViewsCounter.jsx:
+    1  import React from 'react';
+    2  import {recordPageView} from 'app/utils/ServerApiClient';
+    3: import Icon from 'app/components/elements/Icon';
+    4  import pluralize from 'pluralize';
+    5  
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/elements/PasswordReset.jsx:
+    3  import g from 'app/redux/GlobalReducer'
+    4  import {connect} from 'react-redux';
+    5: import ChangePassword from 'app/components/elements/ChangePassword'
+    6  
+    7  class PasswordReset extends Component {
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/elements/Reblog.jsx:
+    1  import React, {PropTypes} from 'react';
+    2  import {connect} from 'react-redux';
+    3: // import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+    4  import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
+    5  import transaction from 'app/redux/Transaction';
+    6: import Icon from 'app/components/elements/Icon';
+    7  import { translate } from 'app/Translator';
+    8  
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/elements/ReplyEditor.jsx:
+    2  import reactForm from 'app/utils/ReactForm'
+    3  import transaction from 'app/redux/Transaction';
+    4: import MarkdownViewer from 'app/components/cards/MarkdownViewer'
+    5: import CategorySelector from 'app/components/cards/CategorySelector'
+    6: import {validateCategory} from 'app/components/cards/CategorySelector'
+    7: import LoadingIndicator from 'app/components/elements/LoadingIndicator'
+    8  import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
+    9: import Tooltip from 'app/components/elements/Tooltip'
+   10  import sanitizeConfig, {allowedTags} from 'app/utils/SanitizeConfig'
+   11  import sanitize from 'sanitize-html'
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/elements/SaveLogin.jsx:
+    1  import React, {Component, PropTypes} from 'react'
+    2: import Tooltip from 'app/components/elements/Tooltip'
+    3  import {connect} from 'react-redux'
+    4  import user from 'app/redux/User'
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/elements/SavingsWithdrawHistory.jsx:
+    2  import React from 'react'
+    3  import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
+    4: import LoadingIndicator from 'app/components/elements/LoadingIndicator'
+    5: import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper'
+    6  import transaction from 'app/redux/Transaction'
+    7: import Memo from 'app/components/elements/Memo'
+    8  
+    9  class SavingsWithdrawHistory extends React.Component {
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/elements/ShareMenu.jsx:
+    1  import React from 'react'
+    2  import { Link } from 'react-router'
+    3: import Icon from 'app/components/elements/Icon.jsx';
+    4  
+    5  export default class ShareMenu extends React.Component {
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/elements/SlateEditor.jsx:
+    3  import Portal from 'react-portal'
+    4  import position from 'selection-position'
+    5: import Icon from 'app/components/elements/Icon';
+    6  import ReactDOMServer from 'react-dom/server'
+    7  
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/elements/SuggestPassword.jsx:
+    5  import g from 'app/redux/GlobalReducer'
+    6  import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
+    7: import Icon from 'app/components/elements/Icon'
+    8  import {key_utils} from 'shared/ecc'
+    9  import { translate } from 'app/Translator';
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/elements/TagList.jsx:
+    1  import React from 'react';
+    2  import { Link } from 'react-router';
+    3: import DropdownMenu from 'app/components/elements/DropdownMenu';
+    4  
+    5  export default ({post, horizontal, single}) => {
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/elements/TimeAgoWrapper.js:
+    2  import React from 'react';
+    3  import { FormattedRelative } from 'react-intl';
+    4: import Tooltip from 'app/components/elements/Tooltip';
+    5  
+    6  export default class TimeAgoWrapper extends React.Component {
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/elements/UserKeys.jsx:
+    1  import React, {PropTypes, Component} from 'react'
+    2  import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
+    3: import Keys from 'app/components/elements/Keys'
+    4  import g from 'app/redux/GlobalReducer'
+    5  import {connect} from 'react-redux';
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/elements/UserList.jsx:
+    1  /* eslint react/prop-types: 0 */
+    2  import React from 'react';
+    3: import UserListRow from 'app/components/cards/UserListRow';
+    4  import { translate } from 'app/Translator';
+    5  
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/elements/UserNames.jsx:
+    1  import React, {Component, PropTypes} from 'react';
+    2  import {connect} from 'react-redux';
+    3: import DropdownMenu from 'app/components/elements/DropdownMenu';
+    4  import { Link } from 'react-router';
+    5  
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/elements/VerticalMenu.jsx:
+    1  import React from 'react';
+    2  import { Link } from 'react-router'
+    3: import Icon from 'app/components/elements/Icon.jsx';
+    4  
+    5  export default class VerticalMenu extends React.Component {
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/elements/VotesAndComments.jsx:
+    2  import { Link } from 'react-router';
+    3  import { connect } from 'react-redux';
+    4: import Icon from 'app/components/elements/Icon';
+    5  import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
+    6  import { translate } from 'app/Translator';
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/elements/Voting.jsx:
+    3  import transaction from 'app/redux/Transaction';
+    4  import Slider from 'react-rangeslider';
+    5: import Icon from 'app/components/elements/Icon';
+    6: import Follow from 'app/components/elements/Follow';
+    7: import FormattedAsset from 'app/components/elements/FormattedAsset';
+    8  import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+    9  import pluralize from 'pluralize';
+   10  import {formatDecimal, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
+   11: import DropdownMenu from 'app/components/elements/DropdownMenu';
+   12: import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
+   13: import FoundationDropdown from 'app/components/elements/FoundationDropdown';
+   14  import CloseButton from 'react-foundation-components/lib/global/close-button';
+   15  
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/elements/WalletSubMenu.jsx:
+    1  import React from 'react';
+    2  import { Link } from 'react-router';
+    3: import NotifiCounter from 'app/components/elements/NotifiCounter';
+    4  import { translate } from 'app/Translator';
+    5  
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/modules/AuthorRewards.jsx:
+    2  import React from 'react';
+    3  import {connect} from 'react-redux'
+    4: import TransferHistoryRow from 'app/components/cards/TransferHistoryRow';
+    5  import {numberWithCommas, vestsToSp, assetFloat} from 'app/utils/StateFunctions'
+    6  import { translate } from 'app/Translator';
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/modules/BlocktradesDeposit.jsx:
+    2  import {Map} from 'immutable'
+    3  import {reduxForm} from 'redux-form' // @deprecated, instead use: app/utils/ReactForm.js
+    4: import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper'
+    5: import Icon from 'app/components/elements/Icon'
+    6: import DropdownMenu from 'app/components/elements/DropdownMenu'
+    7  import g from 'app/redux/GlobalReducer'
+    8  import QRCode from 'react-qr'
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/modules/CurationRewards.jsx:
+    2  import React from 'react';
+    3  import {connect} from 'react-redux'
+    4: import TransferHistoryRow from 'app/components/cards/TransferHistoryRow';
+    5  import {numberWithCommas, vestsToSp, assetFloat} from 'app/utils/StateFunctions'
+    6  import { translate } from 'app/Translator';
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/modules/Dialogs.jsx:
+    6  import {Map, List} from 'immutable'
+    7  import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+    8: import BlocktradesDeposit from 'app/components/modules/BlocktradesDeposit'
+    9: import QrReader from 'app/components/elements/QrReader'
+   10: import ConvertToSteem from 'app/components/elements/ConvertToSteem'
+   11: import SuggestPassword from 'app/components/elements/SuggestPassword'
+   12: import ChangePassword from 'app/components/elements/ChangePassword'
+   13: import CheckLoginOwner from 'app/components/elements/CheckLoginOwner'
+   14: import PromotePost from 'app/components/modules/PromotePost';
+   15  
+   16  class Dialogs extends React.Component {
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/modules/Header.jsx:
+    2  import { Link } from 'react-router';
+    3  import {connect} from 'react-redux';
+    4: import TopRightMenu from 'app/components/modules/TopRightMenu';
+    5: import Icon from 'app/components/elements/Icon.jsx';
+    6  import resolveRoute from 'app/ResolveRoute';
+    7: import DropdownMenu from 'app/components/elements/DropdownMenu';
+    8  import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+    9: import HorizontalMenu from 'app/components/elements/HorizontalMenu';
+   10  import normalizeProfile from 'app/utils/NormalizeProfile';
+   11  
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/modules/MiniHeader.jsx:
+    1  import React from 'react';
+    2: import Icon from 'app/components/elements/Icon.jsx';
+    3  
+    4  export default function MiniHeader() {
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/modules/Modals.jsx:
+    3  import CloseButton from 'react-foundation-components/lib/global/close-button';
+    4  import Reveal from 'react-foundation-components/lib/global/reveal';
+    5: import LoginForm from 'app/components/modules/LoginForm';
+    6: import ConfirmTransactionForm from 'app/components/modules/ConfirmTransactionForm';
+    7: import Transfer from 'app/components/modules/Transfer';
+    8: import SignUp from 'app/components/modules/SignUp';
+    9  import user from 'app/redux/User';
+   10  import tr from 'app/redux/Transaction';
+   11: import BottomPanel from 'app/components/modules/BottomPanel';
+   12: import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+   13  import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+   14  import {NotificationStack} from 'react-notification';
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/modules/PromotePost.jsx:
+    3  import ReactDOM from 'react-dom';
+    4  import transaction from 'app/redux/Transaction';
+    5: import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+    6  import {DEBT_TOKEN_SHORT, CURRENCY_SIGN, DEBT_TICKER} from 'config/client_config';
+    7  import { translate } from 'app/Translator';
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/modules/Settings.jsx:
+    7  import transaction from 'app/redux/Transaction'
+    8  import o2j from 'shared/clash/object2json'
+    9: import LoadingIndicator from 'app/components/elements/LoadingIndicator'
+   10: import Userpic from 'app/components/elements/Userpic';
+   11  import reactForm from 'app/utils/ReactForm'
+   12: import UserList from 'app/components/elements/UserList';
+   13  
+   14  class Settings extends React.Component {
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/modules/SignUp.jsx:
+    1  import React from 'react';
+    2  import {connect} from 'react-redux';
+    3: import SvgImage from 'app/components/elements/SvgImage';
+    4: import AddToWaitingList from 'app/components/modules/AddToWaitingList';
+    5  
+    6  class SignUp extends React.Component {
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/modules/TopRightMenu.jsx:
+    3  import { Link } from 'react-router';
+    4  import {connect} from 'react-redux';
+    5: import Icon from 'app/components/elements/Icon';
+    6  import user from 'app/redux/User';
+    7: import Userpic from 'app/components/elements/Userpic';
+    8  import { browserHistory } from 'react-router';
+    9  import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
+   10: import VerticalMenu from 'app/components/elements/VerticalMenu';
+   11: import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+   12: import NotifiCounter from 'app/components/elements/NotifiCounter';
+   13  
+   14  const defaultNavigate = (e) => {
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/modules/Transfer.jsx:
+    5  import transaction from 'app/redux/Transaction';
+    6  import user from 'app/redux/User';
+    7: import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+    8  import {transferTips} from 'app/utils/Tips'
+    9  import {powerTip, powerTip2, powerTip3} from 'app/utils/Tips'
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/modules/UserWallet.jsx:
+    4  import {Link} from 'react-router'
+    5  import g from 'app/redux/GlobalReducer'
+    6: import SavingsWithdrawHistory from 'app/components/elements/SavingsWithdrawHistory';
+    7: import TransferHistoryRow from 'app/components/cards/TransferHistoryRow';
+    8: import TransactionError from 'app/components/elements/TransactionError';
+    9: import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
+   10: import BlocktradesDeposit from 'app/components/modules/BlocktradesDeposit';
+   11  import Reveal from 'react-foundation-components/lib/global/reveal'
+   12  import CloseButton from 'react-foundation-components/lib/global/close-button';
+   13  import {steemTip, powerTip, valueTip, savingsTip} from 'app/utils/Tips'
+   14  import {numberWithCommas, vestingSteem} from 'app/utils/StateFunctions'
+   15: import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu'
+   16: import WalletSubMenu from 'app/components/elements/WalletSubMenu'
+   17  import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+   18: import Tooltip from 'app/components/elements/Tooltip'
+   19  import { translate } from 'app/Translator';
+   20  import {List} from 'immutable'
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/pages/ChangePasswordPage.jsx:
+    1  import React from 'react';
+    2: import ChangePassword from 'app/components/elements/ChangePassword';
+    3  import { translate } from 'app/Translator';
+    4  
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/pages/CreateAccount.jsx:
+    2  import React from 'react';
+    3  import {connect} from 'react-redux';
+    4: import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+    5  import Apis from 'shared/api_client/ApiInstances';
+    6  import {PrivateKey} from 'shared/ecc';
+    7  import user from 'app/redux/User';
+    8  import {validate_account_name} from 'app/utils/ChainValidation';
+    9: import SignUp from 'app/components/modules/SignUp';
+   10  import runTests from 'shared/ecc/test/BrowserTests';
+   11: import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInput';
+   12: import SignupProgressBar from 'app/components/elements/SignupProgressBar';
+   13  
+   14  class CreateAccount extends React.Component {
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/pages/Faq.jsx:
+    1  import React from 'react';
+    2: import HelpContent from 'app/components/elements/HelpContent';
+    3  
+    4  class Faq extends React.Component {
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/pages/Index.jsx:
+    1  import React from 'react';
+    2: import SvgImage from 'app/components/elements/SvgImage';
+    3  import { translateHtml } from 'app/Translator';
+    4  
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/pages/Login.jsx:
+    1  import React from 'react';
+    2: import LoginForm from 'app/components/modules/LoginForm';
+    3  import { translate } from 'app/Translator';
+    4  
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/pages/Market.jsx:
+    5  
+    6  import transaction from 'app/redux/Transaction'
+    7: import TransactionError from 'app/components/elements/TransactionError'
+    8: import DepthChart from 'app/components/elements/DepthChart';
+    9: import Orderbook from "app/components/elements/Orderbook";
+   10: import OrderHistory from "app/components/elements/OrderHistory";
+   11  import {Order, TradeHistory} from "app/utils/MarketClasses";
+   12  import {roundUp, roundDown} from "app/utils/MarketUtils";
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/pages/NotFound.jsx:
+    1  import React from 'react';
+    2: import SvgImage from 'app/components/elements/SvgImage';
+    3  import { Link } from 'react-router';
+    4: import Icon from 'app/components/elements/Icon.jsx';
+    5  
+    6  class NotFound extends React.Component {
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/pages/Post.jsx:
+    1  import React from 'react';
+    2  // import ReactMarkdown from 'react-markdown';
+    3: import Comment from 'app/components/cards/Comment';
+    4: import PostFull from 'app/components/cards/PostFull';
+    5  import {connect} from 'react-redux';
+    6  
+    7: import {sortComments} from 'app/components/cards/Comment';
+    8  // import { Link } from 'react-router';
+    9: import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
+   10: import SvgImage from 'app/components/elements/SvgImage';
+   11  import {Set} from 'immutable'
+   12  import { translate } from 'app/Translator';
+   13: import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
+   14  import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+   15  
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/pages/PostPage.jsx:
+    1: import Post from 'app/components/pages/Post';
+    2  
+    3  module.exports = {
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/pages/PostPageNoCategory.jsx:
+    1  import React from 'react';
+    2: import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+    3: import SvgImage from 'app/components/elements/SvgImage';
+    4  import { browserHistory } from 'react-router';
+    5  import {connect} from 'react-redux';
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/pages/PostsIndex.jsx:
+    5  import constants from 'app/redux/constants';
+    6  import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+    7: import PostsList from 'app/components/cards/PostsList';
+    8  import {isFetchingOrRecentlyUpdated} from 'app/utils/StateFunctions';
+    9  import {Link} from 'react-router';
+   10: import MarkNotificationRead from 'app/components/elements/MarkNotificationRead';
+   11  import { translate } from 'app/Translator';
+   12  import Immutable from "immutable";
+   13: import Callout from 'app/components/elements/Callout';
+   14  
+   15  class PostsIndex extends React.Component {
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/pages/RecoverAccountStep1.jsx:
+    1  import React from 'react';
+    2  import Apis from 'shared/api_client/ApiInstances';
+    3: import SvgImage from 'app/components/elements/SvgImage';
+    4: import PasswordInput from 'app/components/elements/PasswordInput';
+    5  import constants from 'app/redux/constants';
+    6  import {PrivateKey} from 'shared/ecc';
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/pages/RecoverAccountStep2.jsx:
+    2  import {connect} from 'react-redux';
+    3  import Apis from 'shared/api_client/ApiInstances';
+    4: import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInput';
+    5  import {PrivateKey} from 'shared/ecc';
+    6: import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+    7  import { translate } from 'app/Translator';
+    8: import Callout from 'app/components/elements/Callout';
+    9  
+   10  function passwordToOwnerPubKey(account_name, password) {
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/pages/SubmitPost.jsx:
+    2  // import {connect} from 'react-redux';
+    3  import { browserHistory } from 'react-router';
+    4: import ReplyEditor from 'app/components/elements/ReplyEditor'
+    5  
+    6  const formId = 'submitStory'
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/pages/UserProfile.jsx:
+    6  import transaction from 'app/redux/Transaction';
+    7  import user from 'app/redux/User';
+    8: import Icon from 'app/components/elements/Icon'
+    9: import UserKeys from 'app/components/elements/UserKeys';
+   10: import PasswordReset from 'app/components/elements/PasswordReset';
+   11: import UserWallet from 'app/components/modules/UserWallet';
+   12: import Settings from 'app/components/modules/Settings';
+   13: import CurationRewards from 'app/components/modules/CurationRewards';
+   14: import AuthorRewards from 'app/components/modules/AuthorRewards';
+   15: import UserList from 'app/components/elements/UserList';
+   16: import Follow from 'app/components/elements/Follow';
+   17: import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+   18: import PostsList from 'app/components/cards/PostsList';
+   19  import {isFetchingOrRecentlyUpdated} from 'app/utils/StateFunctions';
+   20  import {repLog10} from 'app/utils/ParsersAndFormatters.js';
+   21: import Tooltip from 'app/components/elements/Tooltip';
+   22  import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
+   23: import VerticalMenu from 'app/components/elements/VerticalMenu';
+   24: import MarkNotificationRead from 'app/components/elements/MarkNotificationRead';
+   25: import NotifiCounter from 'app/components/elements/NotifiCounter';
+   26: import DateJoinWrapper from 'app/components/elements/DateJoinWrapper';
+   27  import { translate } from 'app/Translator';
+   28: import WalletSubMenu from 'app/components/elements/WalletSubMenu';
+   29: import Userpic from 'app/components/elements/Userpic';
+   30: import Callout from 'app/components/elements/Callout';
+   31  import normalizeProfile from 'app/utils/NormalizeProfile';
+   32  
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/pages/WaitingList.jsx:
+    1  import React from 'react';
+    2: import AddToWaitingList from 'app/components/modules/AddToWaitingList';
+    3  import { translate } from 'app/Translator';
+    4  
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/pages/Welcome.jsx:
+    1  import React from 'react';
+    2: import HelpContent from 'app/components/elements/HelpContent';
+    3  
+    4  class Welcome extends React.Component {
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/pages/Witnesses.jsx:
+    3  import { Link } from 'react-router';
+    4  import links from 'app/utils/Links'
+    5: import Icon from 'app/components/elements/Icon';
+    6  import transaction from 'app/redux/Transaction'
+    7  import ByteBuffer from 'bytebuffer'
+
+/Users/pkattera/Developer/2017/steemit.com/ui-patterns/components/pages/XSS.jsx:
+    1  import React from 'react'
+    2: import MarkdownViewer from 'app/components/cards/MarkdownViewer'
+    3  
+    4  class XSS extends React.Component {
+
+229 matches across 79 files

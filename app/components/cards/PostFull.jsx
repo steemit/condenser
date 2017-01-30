@@ -190,10 +190,6 @@ class PostFull extends React.Component {
 
         const replyParams = {author, permlink, parent_author, parent_permlink, category, title, body}
 
-        const showDeleteOption = username === author &&
-            post_content.get('replies', List()).size === 0 &&
-            content.stats.netVoteSign <= 0
-
         this.share_params = {
             link,
             url: 'https://steemit.com' + link,
@@ -269,6 +265,8 @@ class PostFull extends React.Component {
         const showPromote = username && post_content.get('mode') === "first_payout" && post_content.get('depth') == 0
         const showReplyOption = post_content.get('depth') < 6
         const showEditOption = username === author
+        const showDeleteOption = username === author && post_content.get('children') === 0 && content.stats.netVoteSign <= 0
+
         const authorRepLog10 = repLog10(content.author_reputation)
         const isPreViewCount = Date.parse(post_content.get('created')) < 1480723200000 // check if post was created before view-count tracking began (2016-12-03)
 

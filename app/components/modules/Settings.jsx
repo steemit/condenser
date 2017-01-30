@@ -166,7 +166,7 @@ class Settings extends React.Component {
                 </div>
             </div>*/}
             <div className="row">
-                <form onSubmit={this.handleSubmitForm} className="small-12 medium-6 large-4 columns">
+                <form onSubmit={this.handleSubmitForm} className="small-12 medium-5 large-5 columns">
                     <h3>Public Profile Settings</h3>
                     <label>
                         {translate('profile_image_url')}
@@ -209,13 +209,10 @@ class Settings extends React.Component {
                                 : null
                         }
                 </form>
-            </div>
-
-            {isOwnAccount &&
-                <div className="row">
-                    <div className="small-12 columns">
-                        <br /><br />
-                        <h3>Private Post Display Settings</h3>
+                <div className="small-12 medium-1 large-1 columns">&nbsp;</div>
+                {isOwnAccount &&
+                    <form className="small-12 medium-5 large-5 columns">
+                        <h3>Private Settings</h3>
                         <div>
                             Not safe for work (NSFW) content
                         </div>
@@ -226,8 +223,10 @@ class Settings extends React.Component {
                         </select>
                         <br /><br />
                         <input type="submit" onClick={this.onNsfwPrefSubmit} className="button" value="Update" disabled={this.state.nsfwPref == this.state.oldNsfwPref} />
-                    </div>
-                </div>}
+                    </form>
+                }
+            </div>
+
             {ignores && ignores.size > 0 &&
                 <div className="row">
                     <div className="small-12 columns">

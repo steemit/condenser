@@ -15,15 +15,17 @@ class ExplorePost extends Component {
         this.state = {
             copied: false
         };
-        this.onCopy = this.onCopy.bind(this);
+        this.onCopy  = this.onCopy.bind(this);
+        this.Steemd  = this.Steemd.bind(this);
+        this.Steemdb = this.Steemdb.bind(this);
     }
 
     Steemd(e) {
-        serverApiRecordEvent('Steemdb view', this.to);
+        serverApiRecordEvent('Steemdb view', this.props.permlink);
     }
 
     Steemdb(e) {
-        serverApiRecordEvent('Steemdb view', this.to);
+        serverApiRecordEvent('Steemdb view', this.props.permlink);
     }
 
     onCopy() {

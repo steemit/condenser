@@ -126,11 +126,27 @@
 }
 
 input.share-box {
-  width: 90%!important;
+  width: 75%!important;
+  display: inline;
 }
 
 button.copy {
   margin-top: 1em;
+  font-size: .8em!important;
+}
+
+.share-reveal {
+  span.extlink {
+    vertical-align: top;
+  }
+}
+
+.chain-right {
+    -webkit-transform: rotate(120deg);
+    -moz-transform: rotate(120deg);
+    -ms-transform: rotate(120deg);
+    -o-transform: rotate(120deg);
+    transform: rotate(120deg);
 }
 
 /* Small only */

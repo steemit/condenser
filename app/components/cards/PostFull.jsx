@@ -295,7 +295,7 @@ class PostFull extends React.Component {
                         </span>
                         <ShareMenu menu={share_menu} />
                         <button className="explore-post" title="Share this post" onClick={this.showExplorePost}>
-                            <Icon name="chain" className="chain-right" />
+                            <Icon name="link" className="chain-right" />
                         </button>
                     </div>
                 </div>

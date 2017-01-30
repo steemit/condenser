@@ -15,6 +15,7 @@ class ExplorePost extends Component {
         this.state = {
             copied: false
         };
+        this.onCopy = this.onCopy.bind(this);
     }
 
     Steemd(e) {
@@ -26,7 +27,9 @@ class ExplorePost extends Component {
     }
 
     onCopy() {
-        this.setState({copied: true});
+        this.setState({
+            copied: true
+        });
     }
 
     render() {
@@ -34,21 +37,19 @@ class ExplorePost extends Component {
         const steemd  = 'http://steemd.com' + link;
         const steemdb = 'http://steemdb.com' + link;
         const steemit = 'https://steemit.com' + link;
-        let text = this.state.copied === true ? "copied" : "copy";
+        let text = this.state.copied == true ? "copied!" : "copy";
         return (
-            <span>
+            <span className="share-reveal">
                 <h4>Share this post</h4>
                 <hr></hr>
-                    <input className="input-group-field share-box" type="text" placeholder={steemit}></input>
                     <CopyToClipboard text={steemit} onCopy={this.onCopy}>
                       <button className="button tiny copy">{text}</button>
                     </CopyToClipboard>
+                    <input className="input-group-field share-box" type="text" placeholder={steemit}></input>
                 <h5>Alternative Sources</h5>
-                <Icon name="steemd" />
-                    <a href={steemd} onClick={this.Steemd} target="_blank"> {steemd}</a>
+                    <a href={steemd} onClick={this.Steemd} target="_blank"> {steemd}</a><Icon name="extlink" />
                 <br></br>
-                <Icon name="steemdb" />
-                    <a href={steemdb} onClick={this.Steemdb} target="_blank"> {steemdb}</a>
+                    <a href={steemdb} onClick={this.Steemdb} target="_blank"> {steemdb}</a><Icon name="extlink" />
             </span>
         )
     }

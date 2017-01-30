@@ -2,6 +2,7 @@ import React from 'react';
 import AddToWaitingList from 'app/components/modules/AddToWaitingList';
 import { translate } from 'app/Translator';
 
+// currently not in use
 class WaitingList extends React.Component {
     render() {
         return (

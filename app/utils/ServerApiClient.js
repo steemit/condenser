@@ -72,6 +72,12 @@ export function webPushRegister(account, webpush_params) {
     fetch('/api/v1/notifications/register', request);
 }
 
+export function updateUserSettings(settings) {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    const request = Object.assign({}, request_base, {body: JSON.stringify({csrf: $STM_csrf, settings})});
+    fetch('/api/v1/update_user_settings', request);
+}
+
 if (process.env.BROWSER) {
     window.getNotifications = getNotifications;
     window.markNotificationRead = markNotificationRead;

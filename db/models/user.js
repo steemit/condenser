@@ -16,7 +16,8 @@ module.exports = function (sequelize, DataTypes) {
         remote_ip: DataTypes.STRING,
         verified: DataTypes.BOOLEAN,
         waiting_list: DataTypes.BOOLEAN,
-        bot: DataTypes.BOOLEAN
+        bot: DataTypes.BOOLEAN,
+        settings: DataTypes.TEXT
     }, {
         tableName: 'users',
         createdAt   : 'created_at',

@@ -167,29 +167,41 @@ export default function useGeneralApi(app) {
         recordWebEvent(this, 'api/accounts', account ? account.name : 'n/a');
     });
 
-    router.post('/update_email', koaBody, function *() {
+    router.post('/update_user_settings', koaBody, function *() {
         if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;
-        const {csrf, email} = typeof(params) === 'string' ? JSON.parse(params) : params;
+        const {csrf, settings} = typeof(params) === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
-        console.log('-- /update_email -->', this.session.uid, email);
+        console.log('-- /update_user_settings -->', this.session.user, this.session.uid, settings);
+        if (!this.session.user) {
+            this.body = 'missing user id';
+            this.status = 500;
+            return;
+        }
         try {
-            if (!emailRegex.test(email.toLowerCase())) throw new Error('not valid email: ' + email);
-            // TODO: limit by 1/min/ip
-            let user = yield findUser({user_id: this.session.user, email: esc(email), uid: this.session.uid});
-            if (user) {
-                user = yield models.User.update({email: esc(email), waiting_list: true}, {where: {id: user.id}});
-            } else {
-                user = yield models.User.create({email: esc(email), waiting_list: true});
+            const attrs = {};
+            if (settings.email) {
+                const email = settings.email;
+                delete settings.email;
+                if (email.length > 256 || !emailRegex.test(email.toLowerCase())) throw new Error('not valid email: ' + email);
+                attrs.email = email;
             }
-            this.session.user = user.id;
+            attrs.settings = JSON.stringify(settings);
+            if (attrs.settings.length > 1024) throw new Error('data too long');
+            const user = yield models.User.findOne({
+                attributes: ['id', 'email'],
+                where: {id: this.session.user}
+            });
+            if (user) {
+                if (user.email) delete attrs.email;
+                yield models.User.update(attrs, {where: {id: this.session.user}});
+            }
             this.body = JSON.stringify({status: 'ok'});
         } catch (error) {
-            console.error('Error in /update_email api call', this.session.uid, error);
+            console.error('Error in /update_user_settings api call', this.session.uid, error);
             this.body = JSON.stringify({error: error.message});
             this.status = 500;
         }
-        recordWebEvent(this, 'api/update_email', email);
     });
 
     router.post('/login_account', koaBody, function *() {

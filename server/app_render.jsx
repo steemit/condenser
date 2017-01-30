@@ -29,7 +29,7 @@ async function appRender(ctx) {
             if (appRender.dbStatus.ok || (new Date() - appRender.dbStatus.lastAttempt) > DB_RECONNECT_TIMEOUT) {
                 try {
                     user = await models.User.findOne({
-                        attributes: ['name', 'email', 'picture_small'],
+                        attributes: ['name', 'email', 'picture_small', 'settings'],
                         where: {id: user_id},
                         include: [{model: models.Account, attributes: ['name', 'ignored']}],
                         logging: false
@@ -53,10 +53,9 @@ async function appRender(ctx) {
                 }
                 offchain.user = {
                     id: user_id,
-                    name: user.name,
                     email: user.email,
-                    picture: user.picture_small,
                     prv: ctx.session.prv,
+                    settings: user.settings,
                     account
                 }
             }

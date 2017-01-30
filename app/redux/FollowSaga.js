@@ -40,7 +40,7 @@ export function* loadFollows(method, account, type, force = false) {
     yield loadFollowsLoop(method, account, type)
 }
 
-function* loadFollowsLoop(method, account, type, start = '', limit = 100) {
+function* loadFollowsLoop(method, account, type, start = '', limit = 1000) {
     const res = fromJS(yield Apis.follow(method, account, start, type, limit))
     // console.log('res.toJS()', res.toJS())
 

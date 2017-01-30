@@ -199,11 +199,6 @@ export default function useGeneralApi(app) {
         if (!checkCSRF(this, csrf)) return;
         console.log('-- /login_account -->', this.session.uid, account);
         try {
-            const db_account = yield models.Account.findOne(
-                {attributes: ['user_id'], where: {name: esc(account)}, logging: false}
-            );
-            if (db_account) this.session.user = db_account.user_id;
-
             if(signatures) {
                 if(!this.session.login_challenge) {
                     console.error('/login_account missing this.session.login_challenge');
@@ -228,9 +223,37 @@ export default function useGeneralApi(app) {
                                 auth[type] = verified
                             }
                         }
-                        const {posting: {key_auths: [[posting_pubkey, weight]], weight_threshold}} = chainAccount
-                        verify('posting', signatures.posting, posting_pubkey, weight, weight_threshold)
-                        if (auth.posting) this.session.a = account;
+                        const {posting: {key_auths: [[posting_key, weight]], weight_threshold}} = chainAccount
+                        verify('posting', signatures.posting, posting_key, weight, weight_threshold)
+                        if (auth.posting) {
+                            this.session.a = account;
+                            const db_account = yield models.Account.findOne(
+                                {attributes: ['user_id'], where: {name: esc(account)}, logging: false}
+                            );
+                            if (db_account) {
+                                this.session.user = db_account.user_id;
+                            } else {
+                                // let's create user and account
+                                const {owner: {key_auths: [[owner_key]]}} = chainAccount
+                                const {active: {key_auths: [[active_key]]}} = chainAccount
+                                const memo_key = chainAccount.memo_key
+                                const remote_ip = getRemoteIp(this.request.req);
+                                const user = yield models.User.create({
+                                    uid: this.session.uid,
+                                    remote_ip
+                                });
+                                this.session.user = user.id;
+                                yield models.Account.create(escAttrs({
+                                    user_id: user.id,
+                                    name: account,
+                                    owner_key,
+                                    active_key,
+                                    posting_key,
+                                    memo_key,
+                                    remote_ip
+                                }))
+                            }
+                        }
                     }
                 }
             }

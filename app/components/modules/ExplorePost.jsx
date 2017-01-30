@@ -47,9 +47,9 @@ class ExplorePost extends Component {
                     </CopyToClipboard>
                     <input className="input-group-field share-box" type="text" placeholder={steemit}></input>
                 <h5>Alternative Sources</h5>
-                    <a href={steemd} onClick={this.Steemd} target="_blank"> {steemd}</a><Icon name="extlink" />
+                <a href={steemd} onClick={this.Steemd} target="_blank"> steemd.com</a><Icon name="extlink" />
                 <br></br>
-                    <a href={steemdb} onClick={this.Steemdb} target="_blank"> {steemdb}</a><Icon name="extlink" />
+                <a href={steemdb} onClick={this.Steemdb} target="_blank"> steemdb.com</a><Icon name="extlink" />
             </span>
         )
     }

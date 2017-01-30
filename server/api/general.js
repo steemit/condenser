@@ -122,9 +122,24 @@ export default function useGeneralApi(app) {
                 throw new Error('Phone number is not confirmed');
             }
 
+            const [fee_value, fee_currency] = config.registrar.fee.split(' ');
+            let fee = parseFloat(fee_value);
+            try {
+                const chain_properties = yield Apis.instance().db_api.exec('get_chain_properties', []);
+                const chain_fee = parseFloat(chain_properties.account_creation_fee);
+                if (chain_fee && chain_fee > fee) {
+                    if (fee / chain_fee > 0.5) { // just a sanity check - chain fee shouldn't be a way larger
+                        console.log('-- /accounts warning: chain_fee is larger than config fee -->', this.session.uid, fee, chain_fee);
+                        fee = chain_fee;
+                    }
+                }
+            } catch (error) {
+                console.error('Error in /accounts get_chain_properties', error);
+            }
+
             yield createAccount({
                 signingKey: config.registrar.signing_key,
-                fee: config.registrar.fee,
+                fee: `${fee.toFixed(3)} ${fee_currency}`,
                 creator: config.registrar.account,
                 new_account_name: account.name,
                 owner: account.owner_key,

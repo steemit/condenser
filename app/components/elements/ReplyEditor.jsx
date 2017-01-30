@@ -50,7 +50,6 @@ class ReplyEditor extends React.Component {
         successCallback: React.PropTypes.func, // indicator that the editor is done and can be hidden
         onCancel: React.PropTypes.func, // hide editor when cancel button clicked
         jsonMetadata: React.PropTypes.object, // An existing comment has its own meta data
-        categoryDisabled: React.PropTypes.bool, // disable changing of category input
 
         category: React.PropTypes.string, // initial value
         title: React.PropTypes.string, // initial value
@@ -82,7 +81,6 @@ class ReplyEditor extends React.Component {
         parent_permlink: '',
         type: 'submit_comment',
         metaLinkData: Map(),
-        categoryDisabled: false,
     }
 
     constructor() {
@@ -287,7 +285,7 @@ class ReplyEditor extends React.Component {
         const {
             reply, username, hasCategory, isStory, formId, noImage,
             author, permlink, parent_author, parent_permlink, type, jsonMetadata, metaLinkData,
-            state, successCallback, handleSubmit, submitting, invalid, categoryDisabled, //lastComment,
+            state, successCallback, handleSubmit, submitting, invalid, //lastComment,
         } = this.props
         const {postError, markdownViewerText, loading, titleWarn, rte, allSteemPower} = this.state
         const {onTitleChange} = this
@@ -362,7 +360,7 @@ class ReplyEditor extends React.Component {
 
                         <div className={vframe_section_shrink_class} style={{marginTop: '0.5rem'}}>
                             {hasCategory && <span>
-                                <CategorySelector {...category} disabled={loading || categoryDisabled} isEdit={isEdit} tabIndex={3} />
+                                <CategorySelector {...category} disabled={loading} isEdit={isEdit} tabIndex={3} />
                                 <div className="error">{category.touched && category.error && category.error}&nbsp;</div>
                             </span>}
                         </div>
@@ -503,11 +501,9 @@ export default formId => reduxForm(
 
             if (!linkProps) throw new Error('Unknown type: ' + type)
 
-            const formCategories = Set(category ? category.replace(/#/g, "").split(/ +/) : [])
-            let rootCategory = originalPost && originalPost.category ?
+            const formCategories = Set(category ? category.replace(/#/g,"").split(/ +/) : [])
+            const rootCategory = originalPost && originalPost.category ?
                 originalPost.category : formCategories.first()
-            // check for cyrilic categories
-            if (/^[а-яё]/.test(rootCategory)) rootCategory = 'ru--' + detransliterate(rootCategory, true)
             const rootTag = /^[-a-z\d]+$/.test(rootCategory) ? rootCategory : null
 
             let rtags

@@ -75,12 +75,6 @@ export default {
                 cb(null, [require('app/components/pages/SubmitPost')]);
             else
                 cb(null, [require('app/components/pages/SubmitPostServerRender')]);
-        } else if (route.page === 'Feedback') {
-            //require.ensure([], (require) => {
-            if (process.env.BROWSER)
-                cb(null, [require('app/components/pages/Feedback')]);
-            else
-                cb(null, [require('app/components/pages/FeedbackServerRender')]);
         } else if (route.page === 'UserProfile') {
             //require.ensure([], (require) => {
                 cb(null, [require('app/components/pages/UserProfile')]);

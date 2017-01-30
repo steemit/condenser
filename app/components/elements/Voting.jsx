@@ -164,7 +164,7 @@ class Voting extends React.Component {
             </span>
         }
 
-        const total_votes = post_obj.getIn(['vote_stats', 'total_votes']);
+        const total_votes = post_obj.getIn(['stats', 'total_votes']);
 
         const cashout_time = post_obj.get('cashout_time')
         const max_payout           = parsePayoutAmount(post_obj.get('max_accepted_payout'))
@@ -224,8 +224,8 @@ class Voting extends React.Component {
                 if(sign === 0) continue
                 voters.push({value: (sign > 0 ? '+ ' : '- ') + voter, link: '/@' + voter})
             }
-            if (total_votes > MAX_VOTES_DISPLAY) {
-                voters.push({value: <span>&hellip; and {(total_votes - MAX_VOTES_DISPLAY)} more</span>});
+            if (total_votes > voters.length) {
+                voters.push({value: <span>&hellip; and {(total_votes - voters.length)} more</span>});
             }
             voters_list = <DropdownMenu selected={pluralize('votes', total_votes, true)} className="Voting__voters_list" items={voters} el="div" />;
         }

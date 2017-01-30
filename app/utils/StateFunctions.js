@@ -64,13 +64,15 @@ export function contentStats(content) {
 
         // Sums up total rshares from voters with non-neg reputation.
         if(String(v.get('reputation')).substring(0, 1) !== '-') {
-            net_rshares_adj = net_rshares_adj.add(v.get('rshares'))
+            const rshares = String(v.get('rshares'))
+            // And also ignore tiny downvotes
+            if(! (rshares.substring(0, 1) === '-' && rshares.length < 10)) {
+                net_rshares_adj = net_rshares_adj.add(rshares)
+            }
         }
     });
 
-    net_rshares_adj = String(net_rshares_adj)
-
-    // post must have non-trivial negative rshares to be grayed out. TODO: ignore neg-rshares contributed from low-rep users.
+    // post must have non-trivial negative rshares to be grayed out.
     const grayThreshold = -999999999
 
     const net_rshares = Long.fromString(String(content.get('net_rshares')))
@@ -81,7 +83,7 @@ export function contentStats(content) {
     const authorRepLog10 = repLog10(content.get('author_reputation'))
     const hasReplies = content.get('replies').size !== 0
 
-    const gray = authorRepLog10 < 1 || (authorRepLog10 < 60 && net_rshares.compare(grayThreshold) < 0)
+    const gray = authorRepLog10 < 1 || (authorRepLog10 < 60 && net_rshares_adj.compare(grayThreshold) < 0)
     const hide = authorRepLog10 < 0 && !hasPendingPayout && !hasReplies // rephide
     const pictures = !gray
 
@@ -101,5 +103,5 @@ export function contentStats(content) {
     tags.push(content.get('category'))
     const isNsfw = tags.filter(tag => tag && tag.match(/^nsfw$/i)).length > 0;
 
-    return {hide, gray, pictures, netVoteSign, authorRepLog10, hasReplies, isNsfw, net_rshares_adj, total_votes, up_votes}
+    return {hide, gray, pictures, netVoteSign, authorRepLog10, hasReplies, isNsfw, total_votes, up_votes}
 }

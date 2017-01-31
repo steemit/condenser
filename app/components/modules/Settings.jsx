@@ -10,14 +10,13 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import Userpic from 'app/components/elements/Userpic';
 import reactForm from 'app/utils/ReactForm'
 import UserList from 'app/components/elements/UserList';
+import PrivateUserSettings from 'app/components/modules/PrivateUserSettings';
 
 class Settings extends React.Component {
 
     constructor(props) {
         super()
         this.initForm(props)
-        this.onNsfwPrefChange = this.onNsfwPrefChange.bind(this)
-        this.onNsfwPrefSubmit = this.onNsfwPrefSubmit.bind(this)
     }
 
     state = {
@@ -41,25 +40,10 @@ class Settings extends React.Component {
         })
         this.handleSubmitForm =
             this.state.accountSettings.handleSubmit(args => this.handleSubmit(args));
-        this.submitUserSettings = this.submitUserSettings.bind(this);
     }
 
     componentWillMount() {
         const {accountname} = this.props
-        const nsfwPref = (process.env.BROWSER ? localStorage.getItem('nsfwPref-' + accountname) : null) || 'warn'
-        this.setState({nsfwPref, oldNsfwPref: nsfwPref})
-    }
-
-    onNsfwPrefChange(e) {
-        const nsfwPref = e.currentTarget.value;
-        this.setState({nsfwPref: nsfwPref})
-    }
-
-    onNsfwPrefSubmit(e) {
-        const {accountname} = this.props;
-        const {nsfwPref} = this.state;
-        localStorage.setItem('nsfwPref-'+accountname, nsfwPref)
-        this.setState({oldNsfwPref: nsfwPref})
     }
 
     handleSubmit = ({updateInitialValues}) => {
@@ -124,11 +108,6 @@ class Settings extends React.Component {
         })
     }
 
-    submitUserSettings(e) {
-        e.preventDefault();
-        this.props.updateUserSettings({s1: 'test1'});
-    }
-
     render() {
         const {state, props} = this
 
@@ -142,35 +121,6 @@ class Settings extends React.Component {
         const ignores = isOwnAccount && following && following.get('ignore_result')
 
         return <div className="Settings">
-
-            {/*<div className="row">
-                <div className="small-12 medium-6 large-4 columns">
-                    <label>{translate('choose_language')}
-                        <select defaultValue={store.get('language')} onChange={this.handleLanguageChange}>
-                            <option value="en">English</option>
-                            <option value="ru">Russian</option>
-                            <option value="es">Spanish</option>
-                            <option value="es-AR">Spanish (Argentina)</option>
-                            <option value="fr">French</option>
-                            <option value="it">Italian</option>
-                            <option value="jp">Japanese</option>
-                        </select>
-                    </label>
-                </div>
-            </div>*/}
-            {/*<div className="row">
-                <div className="small-12 medium-6 large-4 columns">
-                    <label>{translate('choose_currency')}
-                        <select defaultValue={store.get('currency')} onChange={this.handleCurrencyChange}>
-                            {
-                                ALLOWED_CURRENCIES.map(i => {
-                                    return <option key={i} value={i}>{i}</option>
-                                })
-                            }
-                        </select>
-                    </label>
-                </div>
-            </div>*/}
             <div className="row">
                 <form onSubmit={this.handleSubmitForm} className="small-12 medium-5 large-5 columns">
                     <h3>Public Profile Settings</h3>
@@ -217,19 +167,9 @@ class Settings extends React.Component {
                 </form>
                 <div className="small-12 medium-1 large-1 columns">&nbsp;</div>
                 {isOwnAccount &&
-                    <form onSubmit={this.submitUserSettings} className="small-12 medium-5 large-5 columns">
-                        <h3>Private Settings</h3>
-                        <div>
-                            Not safe for work (NSFW) content
-                        </div>
-                        <select value={this.state.nsfwPref} onChange={this.onNsfwPrefChange}>
-                            <option value="hide">Always hide</option>
-                            <option value="warn">Always warn</option>
-                            <option value="show">Always show</option>
-                        </select>
-                        <br /><br />
-                        <input type="submit" className="button" value="Update" disabled={this.state.nsfwPref == this.state.oldNsfwPref} />
-                    </form>
+                    <div className="small-12 medium-5 large-5 columns">
+                        <PrivateUserSettings />
+                    </div>
                 }
             </div>
 
@@ -261,7 +201,6 @@ export default connect(
             isOwnAccount: username == accountname,
             profile,
             follow: state.global.get('follow'),
-            user_settings: state.app.get('user_settings'),
             ...ownProps
         }
     },
@@ -273,9 +212,6 @@ export default connect(
         updateAccount: ({successCallback, errorCallback, ...operation}) => {
             const options = {type: 'account_update', operation, successCallback, errorCallback}
             dispatch(transaction.actions.broadcastOperation(options))
-        },
-        updateUserSettings: (settings) => {
-            dispatch({type: 'UPDATE_USER_SETTINGS', payload: settings});
         }
     })
 )(Settings)

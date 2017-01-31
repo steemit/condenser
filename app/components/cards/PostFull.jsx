@@ -15,7 +15,6 @@ import extractContent from 'app/utils/ExtractContent';
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
 import TagList from 'app/components/elements/TagList';
 import Author from 'app/components/elements/Author';
-import {Long} from 'bytebuffer'
 import {List} from 'immutable'
 import {repLog10, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import DMCAList from 'app/utils/DMCAList'
@@ -191,17 +190,6 @@ class PostFull extends React.Component {
 
         const replyParams = {author, permlink, parent_author, parent_permlink, category, title, body}
 
-        let net_rshares = Long.ZERO
-        post_content.get('active_votes', List()).forEach(v => {
-            // ? Remove negative votes unless full power -1000 (we had downvoting spam)
-            const percent = v.get('percent')
-            if(percent < 0 /*&& percent !== -1000*/) return
-            net_rshares = net_rshares.add(Long.fromString(String(v.get('rshares'))))
-        })
-        const showDeleteOption = username === author &&
-            post_content.get('replies', List()).size === 0 &&
-            net_rshares.compare(Long.ZERO) <= 0
-
         this.share_params = {
             link,
             url: 'https://steemit.com' + link,
@@ -277,6 +265,8 @@ class PostFull extends React.Component {
         const showPromote = username && post_content.get('mode') === "first_payout" && post_content.get('depth') == 0
         const showReplyOption = post_content.get('depth') < 6
         const showEditOption = username === author
+        const showDeleteOption = username === author && post_content.get('children') === 0 && content.stats.netVoteSign <= 0
+
         const authorRepLog10 = repLog10(content.author_reputation)
         const isPreViewCount = Date.parse(post_content.get('created')) < 1480723200000 // check if post was created before view-count tracking began (2016-12-03)
 

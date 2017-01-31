@@ -53,6 +53,7 @@ export function contentStats(content) {
     if(!(content instanceof Map)) content = fromJS(content);
 
     let net_rshares_adj = Long.ZERO
+    let neg_rshares = Long.ZERO
     let total_votes = 0;
     let up_votes = 0;
 
@@ -62,9 +63,15 @@ export function contentStats(content) {
         total_votes += 1
         if(sign > 0) up_votes += 1
 
-        // Sums up total rshares from voters with non-neg reputation.
+        const rshares = String(v.get('rshares'))
+
+        // For flag weight: count total neg rshares
+        if(sign < 0) {
+            neg_rshares = neg_rshares.add(rshares)
+        }
+
+        // For graying: sum up total rshares from voters with non-neg reputation.
         if(String(v.get('reputation')).substring(0, 1) !== '-') {
-            const rshares = String(v.get('rshares'))
             // And also ignore tiny downvotes
             if(! (rshares.substring(0, 1) === '-' && rshares.length < 10)) {
                 net_rshares_adj = net_rshares_adj.add(rshares)
@@ -72,8 +79,12 @@ export function contentStats(content) {
         }
     });
 
+    // take negative rshares, divide by 2, truncate 10 digits (plus neg sign), count digits.
+    // creates a cheap log10, stake-based flag weight. 1 = approx $400 of downvoting stake; 2 = $4,000; etc
+    const flagWeight = Math.max(String(neg_rshares.div(2)).length - 11, 0)
+
     // post must have non-trivial negative rshares to be grayed out.
-    const grayThreshold = -999999999
+    const grayThreshold = -9999999999
 
     const net_rshares = Long.fromString(String(content.get('net_rshares')))
     const netVoteSign = net_rshares.compare(Long.ZERO)
@@ -83,7 +94,7 @@ export function contentStats(content) {
     const authorRepLog10 = repLog10(content.get('author_reputation'))
     const hasReplies = content.get('replies').size !== 0
 
-    const gray = authorRepLog10 < 1 || (authorRepLog10 < 60 && net_rshares_adj.compare(grayThreshold) < 0)
+    const gray = authorRepLog10 < 1 || (authorRepLog10 < 65 && net_rshares_adj.compare(grayThreshold) < 0)
     const hide = authorRepLog10 < 0 && !hasPendingPayout && !hasReplies // rephide
     const pictures = !gray
 
@@ -103,5 +114,5 @@ export function contentStats(content) {
     tags.push(content.get('category'))
     const isNsfw = tags.filter(tag => tag && tag.match(/^nsfw$/i)).length > 0;
 
-    return {hide, gray, pictures, netVoteSign, authorRepLog10, hasReplies, isNsfw, total_votes, up_votes}
+    return {hide, gray, pictures, netVoteSign, authorRepLog10, hasReplies, isNsfw, flagWeight, total_votes, up_votes}
 }

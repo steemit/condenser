@@ -72,8 +72,8 @@ export function contentStats(content) {
 
         // For graying: sum up total rshares from voters with non-neg reputation.
         if(String(v.get('reputation')).substring(0, 1) !== '-') {
-            // And also ignore tiny downvotes
-            if(! (rshares.substring(0, 1) === '-' && rshares.length < 10)) {
+            // And also ignore tiny downvotes (9 digits or less)
+            if(! (rshares.substring(0, 1) === '-' && rshares.length < 11)) {
                 net_rshares_adj = net_rshares_adj.add(rshares)
             }
         }
@@ -83,7 +83,7 @@ export function contentStats(content) {
     // creates a cheap log10, stake-based flag weight. 1 = approx $400 of downvoting stake; 2 = $4,000; etc
     const flagWeight = Math.max(String(neg_rshares.div(2)).length - 11, 0)
 
-    // post must have non-trivial negative rshares to be grayed out.
+    // post must have non-trivial negative rshares to be grayed out. (more than 10 digits)
     const grayThreshold = -9999999999
 
     const net_rshares = Long.fromString(String(content.get('net_rshares')))

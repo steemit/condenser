@@ -131,16 +131,16 @@ class Voting extends React.Component {
         const {username} = this.props;
         const {votingUp, votingDown, showWeight, weight, myVote} = this.state;
         // console.log('-- Voting.render -->', myVote, votingUp, votingDown);
-        if(!active_votes) return <span></span>
         if(flag && !username) return null
-        // if( payout[0] == '-' ) payout = "0.000 SBD";
+
         const votingUpActive = voting && votingUp
         const votingDownActive = voting && votingDown
 
-        const down = <Icon name={votingDownActive ? 'empty' : (myVote < 0 ? 'flag2' : 'flag1')} />;
-        const classDown = 'Voting__button Voting__button-down' + (myVote < 0 ? ' Voting__button--downvoted' : '') + (votingDownActive ? ' votingDown' : '');
-
         if (flag) {
+            const down = <Icon name={votingDownActive ? 'empty' : (myVote < 0 ? 'flag2' : 'flag1')} />;
+            const classDown = 'Voting__button Voting__button-down' + (myVote < 0 ? ' Voting__button--downvoted' : '') + (votingDownActive ? ' votingDown' : '');
+            const flagWeight = post_obj.getIn(['stats', 'flagWeight']);
+
             // myVote === current vote
             const dropdown = <FoundationDropdown show={showWeight} className="Voting__adjust_weight_down">
                 {(myVote == null || myVote === 0) && vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD &&
@@ -156,16 +156,17 @@ class Voting extends React.Component {
                 </div>
             </FoundationDropdown>
 
-            // ? Remove negative votes unless full power -1000 (we had downvoting spam)
-            const down_votes = active_votes.filter( v => v.get('percent') < 0 /*=== -1000*/).size
             const flagClickAction = myVote === null || myVote === 0 ? this.toggleWeightDown : this.voteDown
             return <span className="Voting">
                 <span className={classDown}>
+                    {flagWeight > 0 && <span className="Voting__button-downvotes">{"•".repeat(flagWeight)}</span>}
                     {votingDownActive ? down : <a href="#" onClick={flagClickAction} title="Flag">{down}</a>}
                     {dropdown}
                 </span>
             </span>
         }
+
+        const total_votes = post_obj.getIn(['stats', 'total_votes']);
 
         const cashout_time = post_obj.get('cashout_time')
         const max_payout           = parsePayoutAmount(post_obj.get('max_accepted_payout'))
@@ -184,7 +185,7 @@ class Voting extends React.Component {
         const classUp = 'Voting__button Voting__button-up' + (myVote > 0 ? ' Voting__button--upvoted' : '') + (votingUpActive ? ' votingUp' : '');
 
         // There is an "active cashout" if: (a) there is a pending payout, OR (b) there is a valid cashout_time AND it's NOT a comment with 0 votes.
-        const cashout_active = pending_payout > 0 || (cashout_time.indexOf('1969') !== 0 && !(is_comment && active_votes.size == 0))
+        const cashout_active = pending_payout > 0 || (cashout_time.indexOf('1969') !== 0 && !(is_comment && total_votes == 0))
         const payoutItems = [];
 
         if(cashout_active) {
@@ -214,22 +215,21 @@ class Voting extends React.Component {
             </span>
         </DropdownMenu>;
 
-        const avotes = active_votes.toJS();
-        avotes.sort((a, b) => Math.abs(parseInt(a.rshares)) > Math.abs(parseInt(b.rshares)) ? -1 : 1)
-        let count = 0;
-        let voters = [];
-        for( let v = 0; v < avotes.length; ++v ) {
-            const pct = avotes[v].percent
-            const cnt = Math.sign(pct)
-            if(cnt === 0) continue
-            count += 1
-            if (showList && voters.length < MAX_VOTES_DISPLAY) voters.push({value: (cnt > 0 ? '+ ' : '- ') + avotes[v].voter, link: '/@' + avotes[v].voter})
-        }
-        if (count > MAX_VOTES_DISPLAY) voters.push({value: <span>&hellip; and {(count - MAX_VOTES_DISPLAY)} more</span>});
-
         let voters_list = null;
-        if (showList && count > 0) {
-            voters_list = <DropdownMenu selected={pluralize('votes', count, true)} className="Voting__voters_list" items={voters} el="div" />;
+        if (showList && total_votes > 0 && active_votes) {
+            const avotes = active_votes.toJS();
+            avotes.sort((a, b) => Math.abs(parseInt(a.rshares)) > Math.abs(parseInt(b.rshares)) ? -1 : 1)
+            let voters = [];
+            for( let v = 0; v < avotes.length && voters.length < MAX_VOTES_DISPLAY; ++v ) {
+                const {percent, voter} = avotes[v]
+                const sign = Math.sign(percent)
+                if(sign === 0) continue
+                voters.push({value: (sign > 0 ? '+ ' : '- ') + voter, link: '/@' + voter})
+            }
+            if (total_votes > voters.length) {
+                voters.push({value: <span>&hellip; and {(total_votes - voters.length)} more</span>});
+            }
+            voters_list = <DropdownMenu selected={pluralize('votes', total_votes, true)} className="Voting__voters_list" items={voters} el="div" />;
         }
 
         let voteUpClick = this.voteUp;

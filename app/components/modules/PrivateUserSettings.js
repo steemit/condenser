@@ -1,49 +1,55 @@
 import React from 'react';
 import {connect} from 'react-redux'
+import reactForm from 'app/utils/ReactForm'
 
 class PrivateUserSettings extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            nsfwPref: 'hide',
-            oldNsfwPref: 'hide'
-        }
-        this.submitUserSettings = this.submitUserSettings.bind(this);
+        this.state = {}
+        this.initForm()
     }
 
-    onNsfwPrefChange(e) {
-        const nsfwPref = e.currentTarget.value;
-        this.setState({nsfwPref})
+    initForm() {
+        reactForm({
+            instance: this,
+            name: 'settingForm',
+            initialValues: {nsfwPref: 'hide'},
+            fields: ['nsfwPref:select'],
+            validation: values => ({}),
+        })
     }
 
-    // onNsfwPrefSubmit(e) {
-    //     this.setState({oldNsfwPref: nsfwPref})
-    // }
-
-    submitUserSettings(e) {
+    submitUserSettings = e => {
         e.preventDefault();
-        this.props.updateUserSettings({s1: 'test1'});
+        const {handleSubmit} = this.state.settingForm
+        handleSubmit(({data}) => {
+            console.log('data', data)
+            this.props.updateUserSettings({s1: 'test1'});
+        })
     }
 
     render() {
+        const {nsfwPref, settingForm: {submitting, valid}} = this.state
+        const disabled = submitting || !valid;
+
         return <form onSubmit={this.submitUserSettings} className="PrivateUserSettings">
             <h3>Private Settings</h3>
             <div>
                 Not safe for work (NSFW) content
             </div>
-            <select value={this.state.nsfwPref} onChange={this.onNsfwPrefChange}>
+            <select {...nsfwPref.props}>
                 <option value="hide">Always hide</option>
                 <option value="warn">Always warn</option>
                 <option value="show">Always show</option>
             </select>
             <br /><br />
-            <input type="submit" className="button" value="Update" disabled={this.state.nsfwPref == this.state.oldNsfwPref} />
+            <input type="submit" className="button" value="Update" disabled={disabled} />
         </form>;
     }
 }
 
 export default connect(
-    (state, ownProps) => {
+    (state) => {
         return {
             user_settings: state.app.get('user_settings'),
         }

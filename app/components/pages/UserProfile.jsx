@@ -46,8 +46,11 @@ export default class UserProfile extends React.Component {
         }
 
         if (isFetchingOrRecentlyUpdated(this.props.global.get('status'), order, category)) return;
-        let [permlink, author] = last_post.split('/'); // destructuring assignment is a bullshit.
-        if (!author) author = accountname; // crutch
+        let [author, permlink] = last_post.split('/'); // destructuring assignment is a bullshit.
+        if (!permlink) {  // crutch
+          permlink = author;
+          author = accountname;
+        }
         this.props.requestData({author, permlink, order, category, accountname});
     }
 

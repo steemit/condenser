@@ -61,9 +61,9 @@ class TagsIndex extends React.Component {
                     <table>
                         <thead>
                         <tr>
-                            <th>{translate("tag")}</th>
-                            <th>{translate("replies")}</th>
-                            <th>{translate("payouts")}</th>
+                            <th>{translate("tag_tbl")}</th>
+                            <th>{translate("replies_tbl")}</th>
+                            <th>{translate("payouts_tbl")}</th>
                         </tr>
                         </thead>
                         <tbody>

@@ -158,7 +158,7 @@ class PostSummary extends React.Component {
                     </div>
                     {content_body}
                     <div className="PostSummary__footer">
-                        <Voting pending_payout={pending_payout} total_payout={total_payout} showList={false} cashout_time={cashout_time} post={post} showList={false} />
+                        <Voting pending_payout={pending_payout} total_payout={total_payout} showList={false} cashout_time={cashout_time} post={post} />
                         <span className="PostSummary__time_author_category show-for-medium">
                             {author_category}
                             {!archived && <Reblog author={p.author} permlink={p.permlink} />}

@@ -124,8 +124,8 @@ class TransferForm extends Component {
             >
                 {toVesting && <div className="row">
                     <div className="column small-12">
-                        <p>{translate('influence_tokens_which_earn_more_power_by_holding_long_term') + ' ' + translate('the_more_you_hold_the_more_you_influence_post_rewards')}</p>
-                        <p>{translate('VESTING_TOKEN_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_LIQUID_TOKEN')}</p>
+                        <p>{translate('influence_tokens_which_earn_more_power_by_holding_long_term_transfer') + ' ' + translate('the_more_you_hold_the_more_you_influence_post_rewards')}</p>
+                        <p>{translate('VESTING_TOKEN_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_LIQUID_TOKEN_transfer')}</p>
                     </div>
                 </div>}
 

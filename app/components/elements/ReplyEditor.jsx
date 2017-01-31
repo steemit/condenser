@@ -381,7 +381,7 @@ class ReplyEditor extends React.Component {
 
                                 <br />
 
-                                <small onClick={autoVoteOnChange}>{translate("upvote_post")}</small>
+                                <small onClick={autoVoteOnChange}>{translate("upvote_own_post")}</small>
                                 &nbsp;&nbsp;
                                 <input type="checkbox" {...cleanReduxInput(autoVote)} onChange={autoVoteOnChange} />
                             </div>}

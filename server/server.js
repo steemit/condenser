@@ -115,7 +115,8 @@ app.use(mount('/robots.txt', function* () {
 app.use(mount('/service-worker.js', function* () {
     this.set('Cache-Control', 'public, max-age=7200000');
     this.type = 'application/javascript';
-    this.body = fs.readFileSync(path.join(__dirname, './service-worker.js'));
+    const file_content = fs.readFileSync(path.join(__dirname, './service-worker.js')).toString();
+    this.body = file_content.replace(/\{DEFAULT_URL\}/i, 'https://' + this.request.header.host); // TODO: use APP_URL from client_config.js
 }));
 
 // set user's uid - used to identify users in logs and some other places

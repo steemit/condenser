@@ -40,7 +40,8 @@ class Settings extends React.Component {
             })
         })
         this.handleSubmitForm =
-            this.state.accountSettings.handleSubmit(args => this.handleSubmit(args))
+            this.state.accountSettings.handleSubmit(args => this.handleSubmit(args));
+        this.submitUserSettings = this.submitUserSettings.bind(this);
     }
 
     componentWillMount() {
@@ -121,6 +122,11 @@ class Settings extends React.Component {
                 updateInitialValues()
             }
         })
+    }
+
+    submitUserSettings(e) {
+        e.preventDefault();
+        this.props.updateUserSettings({s1: 'test1'});
     }
 
     render() {
@@ -211,7 +217,7 @@ class Settings extends React.Component {
                 </form>
                 <div className="small-12 medium-1 large-1 columns">&nbsp;</div>
                 {isOwnAccount &&
-                    <form className="small-12 medium-5 large-5 columns">
+                    <form onSubmit={this.submitUserSettings} className="small-12 medium-5 large-5 columns">
                         <h3>Private Settings</h3>
                         <div>
                             Not safe for work (NSFW) content
@@ -222,7 +228,7 @@ class Settings extends React.Component {
                             <option value="show">Always show</option>
                         </select>
                         <br /><br />
-                        <input type="submit" onClick={this.onNsfwPrefSubmit} className="button" value="Update" disabled={this.state.nsfwPref == this.state.oldNsfwPref} />
+                        <input type="submit" className="button" value="Update" disabled={this.state.nsfwPref == this.state.oldNsfwPref} />
                     </form>
                 }
             </div>
@@ -255,6 +261,7 @@ export default connect(
             isOwnAccount: username == accountname,
             profile,
             follow: state.global.get('follow'),
+            user_settings: state.app.get('user_settings'),
             ...ownProps
         }
     },
@@ -266,6 +273,9 @@ export default connect(
         updateAccount: ({successCallback, errorCallback, ...operation}) => {
             const options = {type: 'account_update', operation, successCallback, errorCallback}
             dispatch(transaction.actions.broadcastOperation(options))
+        },
+        updateUserSettings: (settings) => {
+            dispatch({type: 'UPDATE_USER_SETTINGS', payload: settings});
         }
     })
 )(Settings)

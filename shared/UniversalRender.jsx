@@ -186,6 +186,9 @@ async function universalRender({ location, initial_state, offchain }) {
                 console.log('universalRender Tarantool error :', e.message);
             }
         }
+        if (offchain.user) {
+            server_store.dispatch({type: 'UPDATE_USER_SETTINGS', payload: offchain.user.settings});
+        }
     } catch (e) {
         // Ensure 404 page when username not found
         if (location.match(routeRegex.UserProfile1)) {

@@ -55,7 +55,7 @@ async function appRender(ctx) {
                     id: user_id,
                     email: user.email,
                     prv: ctx.session.prv,
-                    settings: user.settings,
+                    settings: user.settings ? JSON.parse(user.settings) : {},
                     account
                 }
             }

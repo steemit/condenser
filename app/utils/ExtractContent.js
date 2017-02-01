@@ -91,7 +91,7 @@ export default function extractContent(get, content) {
           desc = desc.substring(0, 140).trim();
 
           const dotSpace = desc.lastIndexOf('. ')
-          if(dotSpace > 80) {
+          if(dotSpace > 80 && !get(content, 'depth') > 1) {
               desc = desc.substring(0, dotSpace + 1)
           } else {
             // Truncate, remove the last (likely partial) word (along with random punctuation), and add ellipses

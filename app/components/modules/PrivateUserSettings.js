@@ -12,25 +12,25 @@ class PrivateUserSettings extends React.Component {
     initForm() {
         reactForm({
             instance: this,
-            name: 'settingForm',
+            name: 'form',
             initialValues: {nsfwPref: 'hide'},
             fields: ['nsfwPref:select'],
-            validation: values => ({}),
+            // validation: values => ({}),
         })
     }
 
     submitUserSettings = e => {
         e.preventDefault();
-        const {handleSubmit} = this.state.settingForm
-        handleSubmit(({data}) => {
+        const {form} = this.state
+        form.handleSubmit(({data}) => {
             console.log('data', data)
             this.props.updateUserSettings({s1: 'test1'});
         })
     }
 
     render() {
-        const {nsfwPref, settingForm: {submitting, valid}} = this.state
-        const disabled = submitting || !valid;
+        const {nsfwPref, form} = this.state
+        const disabled = !form.touched || form.submitting || !form.valid;
 
         return <form onSubmit={this.submitUserSettings} className="PrivateUserSettings">
             <h3>Private Settings</h3>

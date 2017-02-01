@@ -14,7 +14,6 @@ import {immutableAccessor} from 'app/utils/Accessors';
 import extractContent from 'app/utils/ExtractContent';
 import TagList from 'app/components/elements/TagList';
 import Author from 'app/components/elements/Author';
-import {List} from 'immutable'
 import {repLog10, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import DMCAList from 'app/utils/DMCAList'
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
@@ -23,7 +22,7 @@ import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import Userpic from 'app/components/elements/Userpic';
 import { APP_DOMAIN } from 'config/client_config';
 
-function loadFbSdk(d, s, id){
+function loadFbSdk(d, s, id) {
     return new Promise(resolve => {
         window.fbAsyncInit = function () {
             window.FB.init({
@@ -177,13 +176,13 @@ class PostFull extends React.Component {
     Steemd(e) {
        serverApiRecordEvent('Steemd view', this.to);
        e.preventDefault();
-       window.open(this.to,'_blank');
+       window.open(this.to, '_blank');
     }
 
     Steemdb(e) {
        serverApiRecordEvent('Steemdb view', this.to);
        e.preventDefault();
-       window.open(this.to,'_blank');
+       window.open(this.to, '_blank');
     }
 
     showPromotePost = () => {
@@ -240,7 +239,6 @@ class PostFull extends React.Component {
             {link: 'http://steemdb.com' + link, onClick: this.Steemdb, value: 'Steemdb', href: link, icon: 'steemdb'}
         ];
 
-        let explore_list = <FoundationDropdownMenu menu={explore_menu} label="View on" dropdownPosition="bottom" dropdownAlignment="right" />;
         const Editor = this.state.showReply ? PostFullReplyEditor : PostFullEditEditor
         let renderedEditor = null;
         if (showReply || showEdit) {
@@ -331,7 +329,7 @@ class PostFull extends React.Component {
                         {!readonly &&
                             <span className="PostFull__reply">
                                 {showReplyOption && <a onClick={onShowReply}>Reply</a>}
-                                {' '}{showEditOption   && !showEdit  && <a onClick={onShowEdit}>Edit</a>}
+                                {' '}{showEditOption && !showEdit && <a onClick={onShowEdit}>Edit</a>}
                                 {' '}{showDeleteOption && !showReply && <a onClick={onDeletePost}>Delete</a>}
                             </span>}
                         <span className="PostFull__responses">

@@ -25,6 +25,7 @@ class PostsList extends React.Component {
         showSpam: PropTypes.bool,
         fetchState: PropTypes.func.isRequired,
         pathname: PropTypes.string,
+        nsfwPref: PropTypes.string,
     };
 
     static defaultProps = {
@@ -36,7 +37,6 @@ class PostsList extends React.Component {
         this.state = {
             thumbSize: 'desktop',
             showNegativeComments: false,
-            nsfwPref: 'warn',
             showPost: null
         }
         this.scrollListener = this.scrollListener.bind(this);
@@ -44,18 +44,6 @@ class PostsList extends React.Component {
         this.onBackButton = this.onBackButton.bind(this);
         this.closeOnOutsideClick = this.closeOnOutsideClick.bind(this);
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'PostsList')
-    }
-
-    componentWillMount() {
-        this.readNsfwPref()
-    }
-
-    readNsfwPref() {
-        if(!process.env.BROWSER) return
-        const {username} = this.props
-        const key = 'nsfwPref' + (username ? '-' + username : '')
-        const nsfwPref = localStorage.getItem(key) || 'warn'
-        this.setState({nsfwPref})
     }
 
     componentDidMount() {
@@ -67,7 +55,6 @@ class PostsList extends React.Component {
         if (this.state.showPost && (location !== this.post_url)) {
             this.setState({showPost: null});
         }
-        this.readNsfwPref();
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -171,8 +158,8 @@ class PostsList extends React.Component {
 
     render() {
         const {posts, showSpam, loading, category, content,
-            ignore_result, account} = this.props;
-        const {thumbSize, showPost, nsfwPref} = this.state
+            ignore_result, account, nsfwPref} = this.props;
+        const {thumbSize, showPost} = this.state;
         const postsInfo = [];
         posts.forEach(item => {
             const cont = content.get(item);
@@ -234,7 +221,8 @@ export default connect(
         const username = current ? current.get('username') : state.offchain.get('account')
         const content = state.global.get('content');
         const ignore_result = state.global.getIn(['follow', 'get_following', username, 'ignore_result']);
-        return {...props, username, content, ignore_result, pathname};
+        const nsfwPref = state.app.getIn(['user_settings', 'nsfwPref']);
+        return {...props, username, content, ignore_result, pathname, nsfwPref};
     },
     dispatch => ({
         fetchState: (pathname) => {

@@ -5,35 +5,34 @@ import reactForm from 'app/utils/ReactForm'
 class PrivateUserSettings extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {}
-        this.initForm()
+        this.state = {};
+        this.initForm(props);
     }
 
-    initForm() {
+    initForm(props) {
+        console.log('-- PrivateUserSettings.initForm -->', this.props.user_settings);
         reactForm({
             name: 'form',
             instance: this,
-            initialValues: {nsfwPref: 'hide'},
+            initialValues: this.props.user_settings,
             fields: ['nsfwPref:select'],
             // validation: values => ({}),
-        })
+        });
         this.handleSubmitForm = this.state.form.handleSubmit(args => this.handleSubmit(args))
     }
 
 
     handleSubmit = ({updateInitialValues, data}) => {
         console.log('data', data)
-        this.props.updateUserSettings({s1: 'test1'});
+        this.props.updateUserSettings(data);
         return new Promise((resolve, reject) => {
-            resolve()
-            setTimeout(() => {updateInitialValues()}, 500)
-            // setTimeout(() => {reject({nsfwPref: 'I see you, you are at work'})}, 500)
-            // setTimeout(() => {reject('Connection error, try again')}, 500)
+            resolve();
+            setTimeout(() => {updateInitialValues()}, 500);
         })
     }
 
     render() {
-        const {nsfwPref, form} = this.state
+        const {nsfwPref, form} = this.state;
         const disabled = !form.touched || form.submitting || !form.valid;
 
         return <form onSubmit={this.handleSubmitForm} className="PrivateUserSettings">
@@ -57,7 +56,7 @@ class PrivateUserSettings extends React.Component {
 export default connect(
     (state) => {
         return {
-            user_settings: state.app.get('user_settings'),
+            user_settings: state.app.get('user_settings').toJS(),
         }
     },
     dispatch => ({

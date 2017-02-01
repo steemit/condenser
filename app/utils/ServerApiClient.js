@@ -12,13 +12,13 @@ const request_base = {
 
 export function serverApiLogin(account, signatures) {
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;
-    const request = Object.assign({}, request_base, {body: JSON.stringify({account, signatures, csrf: $STM_csrf})});
+    const request = Object.assign({}, request_base, {body: JSON.stringify({account, signatures, csrf: window.$STM_csrf})});
     fetch('/api/v1/login_account', request);
 }
 
 export function serverApiLogout() {
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;
-    const request = Object.assign({}, request_base, {body: JSON.stringify({csrf: $STM_csrf})});
+    const request = Object.assign({}, request_base, {body: JSON.stringify({csrf: window.$STM_csrf})});
     fetch('/api/v1/logout_account', request);
 }
 
@@ -28,7 +28,7 @@ export function serverApiRecordEvent(type, val) {
     if (last_call && (new Date() - last_call < 5000)) return;
     last_call = new Date();
     const value = val && val.stack ? `${val.toString()} | ${val.stack}` : val;
-    const request = Object.assign({}, request_base, {body: JSON.stringify({csrf: $STM_csrf, type, value})});
+    const request = Object.assign({}, request_base, {body: JSON.stringify({csrf: window.$STM_csrf, type, value})});
     fetch('/api/v1/record_event', request);
 }
 
@@ -57,7 +57,7 @@ export function recordPageView(page, ref) {
         window.ga('send', 'pageview');
     }
     if (!process.env.BROWSER || window.$STM_ServerBusy) return Promise.resolve(0);
-    const request = Object.assign({}, request_base, {body: JSON.stringify({csrf: $STM_csrf, page, ref})});
+    const request = Object.assign({}, request_base, {body: JSON.stringify({csrf: window.$STM_csrf, page, ref})});
     last_page_promise = fetch(`/api/v1/page_view`, request).then(r => r.json()).then(res => {
         last_views = res.views;
         return last_views;
@@ -67,15 +67,15 @@ export function recordPageView(page, ref) {
 }
 
 export function webPushRegister(account, webpush_params) {
-    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
-    const request = Object.assign({}, request_base, {body: JSON.stringify({csrf: $STM_csrf, account, webpush_params})});
-    fetch('/api/v1/notifications/register', request);
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return Promise.resolve();
+    const request = Object.assign({}, request_base, {body: JSON.stringify({csrf: window.$STM_csrf, account, webpush_params})});
+    return fetch('/api/v1/notifications/register', request);
 }
 
 export function updateUserSettings(settings) {
-    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
-    const request = Object.assign({}, request_base, {body: JSON.stringify({csrf: $STM_csrf, settings})});
-    fetch('/api/v1/update_user_settings', request);
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return Promise.resolve();
+    const request = Object.assign({}, request_base, {body: JSON.stringify({csrf: window.$STM_csrf, settings})});
+    return fetch('/api/v1/update_user_settings', request);
 }
 
 if (process.env.BROWSER) {

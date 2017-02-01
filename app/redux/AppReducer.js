@@ -21,7 +21,9 @@ const defaultState = Map({
         message: 0,
         receive: 0
     }),
-    user_settings: Map({})
+    user_settings: Map({
+        nsfwPref: 'warn'
+    })
 });
 
 export default function reducer(state = defaultState, action) {

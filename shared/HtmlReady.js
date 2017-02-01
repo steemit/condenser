@@ -94,6 +94,13 @@ export default function (html, {mutate = true} = {}) {
 function traverse(node, state, depth = 0) {
     if(!node || !node.childNodes) return
     Array(...node.childNodes).forEach(child => {
+
+        // If this is a text node, try to linkify.
+        if(child.nodeName === '#text') {
+            // If change was made, update child node ref
+            child = linkifyNode(child, state) || child
+        }
+
         // console.log(depth, 'child.tag,data', child.tagName, child.data)
         const tag = child.tagName ? child.tagName.toLowerCase() : null
         if(tag) state.htmltags.add(tag)
@@ -104,8 +111,6 @@ function traverse(node, state, depth = 0) {
             iframe(state, child)
         else if(tag === 'a')
             link(state, child)
-        else if(child.nodeName === '#text')
-            linkifyNode(child, state)
 
         traverse(child, state, depth + 1)
     })
@@ -116,8 +121,12 @@ function link(state, child) {
     if(url) {
         state.links.add(url)
         if(state.mutate) {
+            if(/.(zip|exe)$/.test(url)) {
+                child.parentNode.replaceChild(DOMParser.parseFromString(`<span>${child.data} (${url})</span>`), child)
+            }
+
             // If this link is not relative, http, or https -- add https.
-            if(! /^\/(?!\/)|(https?:)?\/\//.test(url)) {
+            else if(! /^\/(?!\/)|(https?:)?\/\//.test(url)) {
                 child.setAttribute('href', "https://"+url)
             }
         }
@@ -186,7 +195,9 @@ function linkifyNode(child, state) {try{
     const data = XMLSerializer.serializeToString(child)
     const content = linkify(data, state.mutate, state.hashtags, state.usertags, state.images, state.links)
     if(mutate && content !== data) {
-        child.parentNode.replaceChild(DOMParser.parseFromString(`<span>${content}</span>`), child)
+        const newchild = DOMParser.parseFromString(`<span>${content}</span>`)
+        child.parentNode.replaceChild(newchild, child)
+        return newchild;
     }
 } catch(error) {console.log(error)}}
 

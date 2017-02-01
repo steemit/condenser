@@ -12,16 +12,36 @@ import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import ReplyEditor from 'app/components/elements/ReplyEditor';
 import {immutableAccessor} from 'app/utils/Accessors';
 import extractContent from 'app/utils/ExtractContent';
-import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
 import TagList from 'app/components/elements/TagList';
 import Author from 'app/components/elements/Author';
-import {Long} from 'bytebuffer'
-import {List} from 'immutable'
 import {repLog10, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import DMCAList from 'app/utils/DMCAList'
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import ShareMenu from 'app/components/elements/ShareMenu';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
+import Userpic from 'app/components/elements/Userpic';
+import { APP_DOMAIN } from 'config/client_config';
+
+function loadFbSdk(d, s, id) {
+    return new Promise(resolve => {
+        window.fbAsyncInit = function () {
+            window.FB.init({
+                appId: $STM_Config.fb_app,
+                xfbml: false,
+                version: 'v2.6',
+                status: true
+            });
+            resolve(window.FB);
+        };
+
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {return;}
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    });
+}
 
 function TimeAuthorCategory({content, authorRepLog10, showTags}) {
     return (
@@ -32,6 +52,20 @@ function TimeAuthorCategory({content, authorRepLog10, showTags}) {
             {showTags && <span> in <TagList post={content} single /></span>}
         </span>
      );
+}
+
+function TimeAuthorCategoryLarge({content, authorRepLog10}) {
+    return (
+        <span className="PostFull__time_author_category_large vcard">
+            <Userpic account={content.author} />
+            <div className="right-side">
+                <Author author={content.author} authorRepLog10={authorRepLog10} />
+                <br />
+                <TimeAgoWrapper date={content.created} className="updated" />
+                <span> in <TagList post={content} single /></span>
+            </div>
+        </span>
+    );
 }
 
 class PostFull extends React.Component {
@@ -46,6 +80,7 @@ class PostFull extends React.Component {
         unlock: React.PropTypes.func.isRequired,
         deletePost: React.PropTypes.func.isRequired,
         showPromotePost: React.PropTypes.func.isRequired,
+        showExplorePost: React.PropTypes.func.isRequired,
     };
 
     constructor() {
@@ -54,6 +89,7 @@ class PostFull extends React.Component {
         this.fbShare = this.fbShare.bind(this);
         this.twitterShare = this.twitterShare.bind(this);
         this.linkedInShare = this.linkedInShare.bind(this);
+        this.showExplorePost = this.showExplorePost.bind(this);
         this.onShowReply = () => {
             const {state: {showReply, formId}} = this
             this.setState({showReply: !showReply, showEdit: false})
@@ -94,18 +130,23 @@ class PostFull extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        const names = 'cont, post, username'.split(', ')
+        const names = 'cont, post, username'.split(', ');
         return names.findIndex(name => this.props[name] !== nextProps[name]) !== -1 ||
             this.state !== nextState
     }
 
     fbShare(e) {
-        serverApiRecordEvent('FbShare', this.share_params.link);
+        const href = this.share_params.url;
         e.preventDefault();
-        window.FB.ui({
-            method: 'share',
-            href: this.share_params.url
-        }, () => {});
+        loadFbSdk(document, 'script', 'facebook-jssdk').then(fb => {
+            fb.ui({
+                method: 'share',
+                href
+            }, response => {
+                if (response && !response.error_message)
+                    serverApiRecordEvent('FbShare', this.share_params.link);
+            });
+        });
     }
 
     twitterShare(e) {
@@ -138,7 +179,12 @@ class PostFull extends React.Component {
         const author = post_content.get('author')
         const permlink = post_content.get('permlink')
         this.props.showPromotePost(author, permlink)
-    }
+    };
+
+    showExplorePost = () => {
+        const permlink = this.share_params.link;
+        this.props.showExplorePost(permlink)
+    };
 
     render() {
         const {props: {username, post}, state: {PostFullReplyEditor, PostFullEditEditor, formId, showReply, showEdit},
@@ -164,36 +210,26 @@ class PostFull extends React.Component {
 
         const replyParams = {author, permlink, parent_author, parent_permlink, category, title, body}
 
-        let net_rshares = Long.ZERO
-        post_content.get('active_votes', List()).forEach(v => {
-            // ? Remove negative votes unless full power -1000 (we had downvoting spam)
-            const percent = v.get('percent')
-            if(percent < 0 /*&& percent !== -1000*/) return
-            net_rshares = net_rshares.add(Long.fromString(String(v.get('rshares'))))
-        })
-        const showDeleteOption = username === author &&
-            post_content.get('replies', List()).size === 0 &&
-            net_rshares.compare(Long.ZERO) <= 0
-
         this.share_params = {
             link,
-            url: 'https://steemit.com' + link,
+            url: 'https://' + APP_DOMAIN + link,
             title: title + ' — Steemit',
             desc: p.desc
         };
 
         const share_menu = [
-            {link: '#', onClick: this.fbShare, value: 'Facebook', icon: 'facebook'},
-            {link: '#', onClick: this.twitterShare, value: 'Twitter', icon: 'twitter'},
-            {link: '#', onClick: this.linkedInShare, value: 'LinkedIn', icon: 'linkedin'},
+            {link: '#', onClick: this.fbShare, value: 'Facebook', title: 'Share on Facebook', icon: 'facebook'},
+            {link: '#', onClick: this.twitterShare, value: 'Twitter', title: 'Share on Twitter', icon: 'twitter'},
+            {link: '#', onClick: this.linkedInShare, value: 'LinkedIn', title: 'Share on Linkedin', icon: 'linkedin'},
         ];
-        const Editor = this.state.showReply ? PostFullReplyEditor : PostFullEditEditor
+
+        const Editor = this.state.showReply ? PostFullReplyEditor : PostFullEditEditor;
         let renderedEditor = null;
         if (showReply || showEdit) {
             renderedEditor = <div key="editor">
                 <Editor {...replyParams} type={this.state.showReply ? 'submit_comment' : 'edit'}
                                          successCallback={() => {
-                                                this.setState({showReply: false, showEdit: false})
+                                                this.setState({showReply: false, showEdit: false});
                                                 saveOnShow(formId, null)
                                             }}
                                          onCancel={() => {
@@ -212,10 +248,10 @@ class PostFull extends React.Component {
         let post_header = <h1 className="entry-title">
                 {content.title}
                 {full_power && <span title="Powered Up 100%"><Icon name="steem" /></span>}
-            </h1>
+            </h1>;
         if(content.depth > 0) {
             let parent_link = `/${content.category}/@${content.parent_author}/${content.parent_permlink}`;
-            let direct_parent_link
+            let direct_parent_link;
             if(content.depth > 1) {
                 direct_parent_link = <li>
                     <Link to={parent_link}>
@@ -244,6 +280,8 @@ class PostFull extends React.Component {
         const showPromote = username && post_content.get('mode') === "first_payout" && post_content.get('depth') == 0
         const showReplyOption = post_content.get('depth') < 6
         const showEditOption = username === author
+        const showDeleteOption = username === author && post_content.get('children') === 0 && content.stats.netVoteSign <= 0
+
         const authorRepLog10 = repLog10(content.author_reputation)
         const isPreViewCount = Date.parse(post_content.get('created')) < 1480723200000 // check if post was created before view-count tracking began (2016-12-03)
 
@@ -255,7 +293,7 @@ class PostFull extends React.Component {
                         <div className="float-right"><Voting post={post} flag /></div>
                         <div className="PostFull__header">
                             {post_header}
-                            <TimeAuthorCategory content={content} authorRepLog10={authorRepLog10} showTags />
+                            <TimeAuthorCategoryLarge content={content} authorRepLog10={authorRepLog10} />
                         </div>
                         <div className="PostFull__body entry-content">
                             <MarkdownViewer formId={formId + '-viewer'} text={content_body} jsonMetadata={jsonMetadata} large highQualityPost={high_quality_post} noImage={!content.stats.pictures} />
@@ -270,12 +308,12 @@ class PostFull extends React.Component {
                         <TimeAuthorCategory content={content} authorRepLog10={authorRepLog10} />
                         <Voting post={post} />
                     </div>
-                    <div className="RightShare__Menu small-10 medium-5 large-5 columns text-right">
+                    <div className="RightShare__Menu small-11 medium-5 large-5 columns text-right">
                         {!readonly && <Reblog author={author} permlink={permlink} />}
                         {!readonly &&
                             <span className="PostFull__reply">
                                 {showReplyOption && <a onClick={onShowReply}>Reply</a>}
-                                {' '}{showEditOption   && !showEdit  && <a onClick={onShowEdit}>Edit</a>}
+                                {' '}{showEditOption && !showEdit && <a onClick={onShowEdit}>Edit</a>}
                                 {' '}{showDeleteOption && !showReply && <a onClick={onDeletePost}>Delete</a>}
                             </span>}
                         <span className="PostFull__responses">
@@ -287,6 +325,9 @@ class PostFull extends React.Component {
                             <PageViewsCounter hidden={false} sinceDate={isPreViewCount ? 'Dec 2016' : null} />
                         </span>
                         <ShareMenu menu={share_menu} />
+                        <button className="explore-post" title="Share this post" onClick={this.showExplorePost}>
+                            <Icon name="link" className="chain-right" />
+                        </button>
                     </div>
                 </div>
                 <div className="row">
@@ -321,6 +362,9 @@ export default connect(
         showPromotePost: (author, permlink) => {
             dispatch({type: 'global/SHOW_DIALOG', payload: {name: 'promotePost', params: {author, permlink}}});
         },
+        showExplorePost: (permlink) => {
+            dispatch({type: 'global/SHOW_DIALOG', payload: {name: 'explorePost', params: {permlink}}});
+        },
     })
 )(PostFull)
 
@@ -335,4 +379,4 @@ const saveOnShow = (formId, type) => {
             localStorage.removeItem('replyEditorData-' + formId + '-edit')
         }
     }
-}
+};

@@ -5,7 +5,7 @@
     @arg {object} initialValues required for checkboxes {save: false, ...}
     @arg {function} validation - values => ({ username: ! values.username ? 'Required' : null, ... })
 */
-export default function reactForm({name, instance, fields, initialValues, validation = () => {}}) {
+export default function reactForm({name, instance, fields, initialValues, validation = () => ({})}) {
     if(typeof instance !== 'object') throw new TypeError('instance is a required object')
     if(!Array.isArray(fields)) throw new TypeError('fields is a required array')
     if(typeof initialValues !== 'object') throw new TypeError('initialValues is a required object')

@@ -122,7 +122,11 @@ function link(state, child) {
         state.links.add(url)
         if(state.mutate) {
             if(/.(zip|exe)$/.test(url)) {
-                child.parentNode.replaceChild(DOMParser.parseFromString(`<span>${child.data} (${url})</span>`), child)
+                // unlinkify URLs ending with zip or exe. pull out the link html (if != url)
+                const linkText = XMLSerializer.serializeToString(child.childNodes);
+                const newText = linkText === url ? `${url}` : `${linkText} (${url})`;
+                const newChild = DOMParser.parseFromString(`<span>${newText}</span>`);
+                child.parentNode.replaceChild(newChild, child);
             }
 
             // If this link is not relative, http, or https -- add https.

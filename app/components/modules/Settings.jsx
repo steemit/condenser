@@ -24,6 +24,10 @@ class Settings extends React.Component {
         successMessage: '',
     }
 
+    // componentWillMount() {
+    //     const {accountname} = this.props
+    // }
+
     initForm(props) {
         reactForm({
             instance: this,
@@ -40,10 +44,6 @@ class Settings extends React.Component {
         })
         this.handleSubmitForm =
             this.state.accountSettings.handleSubmit(args => this.handleSubmit(args));
-    }
-
-    componentWillMount() {
-        const {accountname} = this.props
     }
 
     handleSubmit = ({updateInitialValues}) => {

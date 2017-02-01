@@ -11,20 +11,24 @@ class PrivateUserSettings extends React.Component {
 
     initForm() {
         reactForm({
-            instance: this,
             name: 'form',
+            instance: this,
             initialValues: {nsfwPref: 'hide'},
             fields: ['nsfwPref:select'],
             // validation: values => ({}),
         })
+        this.handleSubmitForm = this.state.form.handleSubmit(args => this.handleSubmit(args))
     }
 
-    submitUserSettings = e => {
-        e.preventDefault();
-        const {form} = this.state
-        form.handleSubmit(({data}) => {
-            console.log('data', data)
-            this.props.updateUserSettings({s1: 'test1'});
+
+    handleSubmit = ({updateInitialValues, data}) => {
+        console.log('data', data)
+        this.props.updateUserSettings({s1: 'test1'});
+        return new Promise((resolve, reject) => {
+            resolve()
+            setTimeout(() => {updateInitialValues()}, 500)
+            // setTimeout(() => {reject({nsfwPref: 'I see you, you are at work'})}, 500)
+            // setTimeout(() => {reject('Connection error, try again')}, 500)
         })
     }
 
@@ -32,7 +36,7 @@ class PrivateUserSettings extends React.Component {
         const {nsfwPref, form} = this.state
         const disabled = !form.touched || form.submitting || !form.valid;
 
-        return <form onSubmit={this.submitUserSettings} className="PrivateUserSettings">
+        return <form onSubmit={this.handleSubmitForm} className="PrivateUserSettings">
             <h3>Private Settings</h3>
             <div>
                 Not safe for work (NSFW) content
@@ -42,8 +46,10 @@ class PrivateUserSettings extends React.Component {
                 <option value="warn">Always warn</option>
                 <option value="show">Always show</option>
             </select>
+            {nsfwPref.error ? <div className="error">{nsfwPref.error}&nbsp;</div> : null}
             <br /><br />
             <input type="submit" className="button" value="Update" disabled={disabled} />
+            {form.error ? <div className="error">{form.error}&nbsp;</div> : null}
         </form>;
     }
 }

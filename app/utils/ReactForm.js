@@ -24,6 +24,7 @@ export default function reactForm({name, instance, fields, initialValues, valida
             let formValid = true
             const fs = instance.state[name] || {}
             fs.submitting = true
+            fs.error = undefined
 
             // User can call this function upon successful submission
             const updateInitialValues = () => {
@@ -34,21 +35,31 @@ export default function reactForm({name, instance, fields, initialValues, valida
             instance.setState(
                 {[name]: fs},
                 () => {
-                    // TODO, support promise ret
-                    const ret = submitCallback({data, event, updateInitialValues}) || {}
-                    // Look for field level errors
-                    for(const fieldName of Object.keys(ret)) {
-                        const error = ret[fieldName]
-                        if(!error) continue
-                        const value = instance.state[fieldName] || {}
-                        value.error = error
-                        value.touched = true
-                        if(error) formValid = false
-                        instance.setState({[fieldName]: value})
-                    }
-                    fs.submitting = false
-                    fs.valid = formValid
-                    instance.setState({[name]: fs})
+                    Promise.resolve()
+                    .then(() => submitCallback({data, event, updateInitialValues}))
+                    .catch(ret => {
+                        if(typeof ret === 'object') {
+                            // Look for field level errors
+                            for(const fieldName of Object.keys(ret)) {
+                                const error = ret[fieldName]
+                                if(!error) continue
+                                const value = instance.state[fieldName] || {}
+                                value.error = error
+                                value.touched = true
+                                value.blur = true
+                                if(error) formValid = false
+                                instance.setState({[fieldName]: value})
+                            }
+                        } else if(typeof ret === 'string') {
+                            formValid = false
+                            fs.error = ret
+                        }
+                    })
+                    .then(() => {// Success return message? (string)
+                        fs.submitting = false
+                        fs.valid = formValid
+                        instance.setState({[name]: fs})
+                    })
                 }
             )
         },

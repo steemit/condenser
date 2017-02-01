@@ -36,8 +36,8 @@ class ExplorePost extends Component {
 
     render() {
         const link = this.props.permlink;
-        const steemd = 'http://steemd.com' + link;
-        const steemdb = 'http://steemdb.com' + link;
+        const steemd = 'https://steemd.com' + link;
+        const steemdb = 'https://steemdb.com' + link;
         const steemit = 'https://steemit.com' + link;
         let text = this.state.copied == true ? 'Copied!' : 'COPY';
         return (

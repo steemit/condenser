@@ -134,18 +134,33 @@
   }
 }
 
-.Promote__button {
+.explore-post {
   margin-right: 0px!important;
 }
 
-.PostFull__explore {
-  margin-left: .4rem;
-  padding-left: .6rem;
-  border-left: 1px solid #cacaca;
+input.share-box {
+  width: 75%!important;
+  display: inline;
 }
 
-.External_viewers_menu {
-  margin-left: 0.6em;
+.ExplorePost {
+  span.extlink {
+    vertical-align: text-bottom;
+  }
+  h5 {
+    margin-top: 1em;
+  }
+  .ExplorePost__copy-button {
+    cursor: pointer;
+  }
+}
+
+.chain-right {
+    -webkit-transform: rotate(120deg);
+    -moz-transform: rotate(120deg);
+    -ms-transform: rotate(120deg);
+    -o-transform: rotate(120deg);
+    transform: rotate(120deg);
 }
 
 /* Small only */
@@ -161,5 +176,17 @@
   }
   .PostFull__footer > .RightShare__Menu {
     text-align: left;
+  }
+  input.share-box {
+    height: 2.8em;
+    font-size: .8em;
+  }
+}
+
+/* Medium only */
+@media screen and (min-width: 40em) and (max-width: 63.9375em) {
+  input.share-box {
+    height: 2.8em;
+    font-size: .8em;
   }
 }

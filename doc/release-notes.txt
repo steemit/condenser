@@ -1,4 +1,32 @@
 ---------------------------------------------------------------------
+0.1.170201
+---------------------------------------------------------------------
+
+New features
+--------
+ - show author's userpic below the title on post page #1051
+ - smaller server response size & flag refactor #1054
+ - remove flag count on posts #1039
+ - post performance #1016
+ - lighten post link color #1044
+ - setting page consistency #1056
+ - load fb sdk only when needed #1049
+ - link to block explorer from post #1063, #1077
+ - Parse metadata when returning user JSON #1037
+ - use large twitter card, fallback to profile image #1053
+
+Bug fixes
+--------
+ - fix web push notifications undefined url issue on Android #1079
+ - fix scrollable close sign on post modal #1078
+ - cannot read property bug #1060
+ - fix Comments tab truncation #1085
+ - use on chain account reg fee instead of config if larger #1069
+ - fix upvote slider positioning on mobile & state #1068
+ - capitalized steem verbiage for consistency #1048
+
+
+---------------------------------------------------------------------
 0.1.170121
 ---------------------------------------------------------------------
 

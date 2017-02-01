@@ -130,7 +130,7 @@ class PostFull extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        const names = 'cont, post, username'.split(', ')
+        const names = 'cont, post, username'.split(', ');
         return names.findIndex(name => this.props[name] !== nextProps[name]) !== -1 ||
             this.state !== nextState
     }
@@ -171,18 +171,6 @@ class PostFull extends React.Component {
         const s = this.share_params;
         const q = 'title=' + encodeURIComponent(s.title) + '&url=' + encodeURIComponent(s.url) + '&source=Steemit&mini=true';
         window.open('https://www.linkedin.com/shareArticle?' + q, 'Share', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=' + winWidth + ',height=' + winHeight);
-    }
-
-    Steemd(e) {
-       serverApiRecordEvent('Steemd view', this.to);
-       e.preventDefault();
-       window.open(this.to, '_blank');
-    }
-
-    Steemdb(e) {
-       serverApiRecordEvent('Steemdb view', this.to);
-       e.preventDefault();
-       window.open(this.to, '_blank');
     }
 
     showPromotePost = () => {
@@ -234,18 +222,14 @@ class PostFull extends React.Component {
             {link: '#', onClick: this.twitterShare, value: 'Twitter', title: 'Share on Twitter', icon: 'twitter'},
             {link: '#', onClick: this.linkedInShare, value: 'LinkedIn', title: 'Share on Linkedin', icon: 'linkedin'},
         ];
-        const explore_menu = [
-            {link: 'http://steemd.com' + link, onClick: this.Steemd, value: 'Steemd', href: link, icon: 'steemd'},
-            {link: 'http://steemdb.com' + link, onClick: this.Steemdb, value: 'Steemdb', href: link, icon: 'steemdb'}
-        ];
 
-        const Editor = this.state.showReply ? PostFullReplyEditor : PostFullEditEditor
+        const Editor = this.state.showReply ? PostFullReplyEditor : PostFullEditEditor;
         let renderedEditor = null;
         if (showReply || showEdit) {
             renderedEditor = <div key="editor">
                 <Editor {...replyParams} type={this.state.showReply ? 'submit_comment' : 'edit'}
                                          successCallback={() => {
-                                                this.setState({showReply: false, showEdit: false})
+                                                this.setState({showReply: false, showEdit: false});
                                                 saveOnShow(formId, null)
                                             }}
                                          onCancel={() => {
@@ -264,10 +248,10 @@ class PostFull extends React.Component {
         let post_header = <h1 className="entry-title">
                 {content.title}
                 {full_power && <span title="Powered Up 100%"><Icon name="steem" /></span>}
-            </h1>
+            </h1>;
         if(content.depth > 0) {
             let parent_link = `/${content.category}/@${content.parent_author}/${content.parent_permlink}`;
-            let direct_parent_link
+            let direct_parent_link;
             if(content.depth > 1) {
                 direct_parent_link = <li>
                     <Link to={parent_link}>
@@ -395,4 +379,4 @@ const saveOnShow = (formId, type) => {
             localStorage.removeItem('replyEditorData-' + formId + '-edit')
         }
     }
-}
+};

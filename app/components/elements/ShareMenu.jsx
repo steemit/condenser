@@ -17,7 +17,7 @@ export default class ShareMenu extends React.Component {
             {title && <li className="title">{title}</li>}
                 {items.map(i => {
                     return <li key={i.value}>
-                        {i.link ? <Link to={i.link} onClick={i.onClick}>
+                        {i.link ? <Link to={i.link} onClick={i.onClick} title={i.title}>
                             {i.icon && <Icon name={i.icon} />}{}
                             &nbsp; {i.addon}
                         </Link> :

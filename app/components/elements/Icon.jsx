@@ -36,7 +36,6 @@ const icons = [
     'location',
     'calendar',
     'steemd',
-    'steemdb',
     'chain'
 ];
 const icons_map = {};

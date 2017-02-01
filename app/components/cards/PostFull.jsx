@@ -12,16 +12,37 @@ import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import ReplyEditor from 'app/components/elements/ReplyEditor';
 import {immutableAccessor} from 'app/utils/Accessors';
 import extractContent from 'app/utils/ExtractContent';
-import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
 import TagList from 'app/components/elements/TagList';
 import Author from 'app/components/elements/Author';
-import {Long} from 'bytebuffer'
 import {List} from 'immutable'
 import {repLog10, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import DMCAList from 'app/utils/DMCAList'
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import ShareMenu from 'app/components/elements/ShareMenu';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
+import Userpic from 'app/components/elements/Userpic';
+import { APP_DOMAIN } from 'config/client_config';
+
+function loadFbSdk(d, s, id){
+    return new Promise(resolve => {
+        window.fbAsyncInit = function () {
+            window.FB.init({
+                appId: $STM_Config.fb_app,
+                xfbml: false,
+                version: 'v2.6',
+                status: true
+            });
+            resolve(window.FB);
+        };
+
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {return;}
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    });
+}
 
 function TimeAuthorCategory({content, authorRepLog10, showTags}) {
     return (
@@ -32,6 +53,20 @@ function TimeAuthorCategory({content, authorRepLog10, showTags}) {
             {showTags && <span> in <TagList post={content} single /></span>}
         </span>
      );
+}
+
+function TimeAuthorCategoryLarge({content, authorRepLog10}) {
+    return (
+        <span className="PostFull__time_author_category_large vcard">
+            <Userpic account={content.author} />
+            <div className="right-side">
+                <Author author={content.author} authorRepLog10={authorRepLog10} />
+                <br />
+                <TimeAgoWrapper date={content.created} className="updated" />
+                <span> in <TagList post={content} single /></span>
+            </div>
+        </span>
+    );
 }
 
 class PostFull extends React.Component {
@@ -102,12 +137,17 @@ class PostFull extends React.Component {
     }
 
     fbShare(e) {
-        serverApiRecordEvent('FbShare', this.share_params.link);
+        const href = this.share_params.url;
         e.preventDefault();
-        window.FB.ui({
-            method: 'share',
-            href: this.share_params.url
-        }, () => {});
+        loadFbSdk(document, 'script', 'facebook-jssdk').then(fb => {
+            fb.ui({
+                method: 'share',
+                href
+            }, response => {
+                if (response && !response.error_message)
+                    serverApiRecordEvent('FbShare', this.share_params.link);
+            });
+        });
     }
 
     twitterShare(e) {
@@ -132,6 +172,18 @@ class PostFull extends React.Component {
         const s = this.share_params;
         const q = 'title=' + encodeURIComponent(s.title) + '&url=' + encodeURIComponent(s.url) + '&source=Steemit&mini=true';
         window.open('https://www.linkedin.com/shareArticle?' + q, 'Share', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=' + winWidth + ',height=' + winHeight);
+    }
+
+    Steemd(e) {
+       serverApiRecordEvent('Steemd view', this.to);
+       e.preventDefault();
+       window.open(this.to,'_blank');
+    }
+
+    Steemdb(e) {
+       serverApiRecordEvent('Steemdb view', this.to);
+       e.preventDefault();
+       window.open(this.to,'_blank');
     }
 
     showPromotePost = () => {
@@ -171,20 +223,9 @@ class PostFull extends React.Component {
 
         const replyParams = {author, permlink, parent_author, parent_permlink, category, title, body}
 
-        let net_rshares = Long.ZERO
-        post_content.get('active_votes', List()).forEach(v => {
-            // ? Remove negative votes unless full power -1000 (we had downvoting spam)
-            const percent = v.get('percent')
-            if(percent < 0 /*&& percent !== -1000*/) return
-            net_rshares = net_rshares.add(Long.fromString(String(v.get('rshares'))))
-        })
-        const showDeleteOption = username === author &&
-            post_content.get('replies', List()).size === 0 &&
-            net_rshares.compare(Long.ZERO) <= 0
-
         this.share_params = {
             link,
-            url: 'https://steemit.com' + link,
+            url: 'https://' + APP_DOMAIN + link,
             title: title + ' — Steemit',
             desc: p.desc
         };
@@ -194,6 +235,12 @@ class PostFull extends React.Component {
             {link: '#', onClick: this.twitterShare, value: 'Twitter', title: 'Share on Twitter', icon: 'twitter'},
             {link: '#', onClick: this.linkedInShare, value: 'LinkedIn', title: 'Share on Linkedin', icon: 'linkedin'},
         ];
+        const explore_menu = [
+            {link: 'http://steemd.com' + link, onClick: this.Steemd, value: 'Steemd', href: link, icon: 'steemd'},
+            {link: 'http://steemdb.com' + link, onClick: this.Steemdb, value: 'Steemdb', href: link, icon: 'steemdb'}
+        ];
+
+        let explore_list = <FoundationDropdownMenu menu={explore_menu} label="View on" dropdownPosition="bottom" dropdownAlignment="right" />;
         const Editor = this.state.showReply ? PostFullReplyEditor : PostFullEditEditor
         let renderedEditor = null;
         if (showReply || showEdit) {
@@ -251,6 +298,8 @@ class PostFull extends React.Component {
         const showPromote = username && post_content.get('mode') === "first_payout" && post_content.get('depth') == 0
         const showReplyOption = post_content.get('depth') < 6
         const showEditOption = username === author
+        const showDeleteOption = username === author && post_content.get('children') === 0 && content.stats.netVoteSign <= 0
+
         const authorRepLog10 = repLog10(content.author_reputation)
         const isPreViewCount = Date.parse(post_content.get('created')) < 1480723200000 // check if post was created before view-count tracking began (2016-12-03)
 
@@ -262,7 +311,7 @@ class PostFull extends React.Component {
                         <div className="float-right"><Voting post={post} flag /></div>
                         <div className="PostFull__header">
                             {post_header}
-                            <TimeAuthorCategory content={content} authorRepLog10={authorRepLog10} showTags />
+                            <TimeAuthorCategoryLarge content={content} authorRepLog10={authorRepLog10} />
                         </div>
                         <div className="PostFull__body entry-content">
                             <MarkdownViewer formId={formId + '-viewer'} text={content_body} jsonMetadata={jsonMetadata} large highQualityPost={high_quality_post} noImage={!content.stats.pictures} />

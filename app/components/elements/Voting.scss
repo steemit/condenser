@@ -125,7 +125,6 @@
   border-right: 1px solid #cacaca;
   padding-right: .8rem;
   margin-right: .6rem;
-  position: relative;
   .DropdownMenu .Icon.dropdown-arrow {
     margin-right: -0.5rem
   }
@@ -239,7 +238,8 @@
   .Voting__button-up {
     .dropdown-pane {
       margin-top: -36px;
-      margin-left: -10px;
+      position: absolute;
+      left: 1rem;
     }
   }
 }

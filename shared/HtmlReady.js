@@ -121,11 +121,11 @@ function link(state, child) {
     if(url) {
         state.links.add(url)
         if(state.mutate) {
-            if(/.(zip|exe)$/.test(url)) {
+            if(/\.(zip|exe)$/i.test(url)) {
                 // unlinkify URLs ending with zip or exe. pull out the link html (if != url)
                 const linkText = XMLSerializer.serializeToString(child.childNodes);
                 const newText = linkText === url ? `${url}` : `${linkText} (${url})`;
-                const newChild = DOMParser.parseFromString(`<span>${newText}</span>`);
+                const newChild = DOMParser.parseFromString(newText);
                 child.parentNode.replaceChild(newChild, child);
             }
 
@@ -199,7 +199,7 @@ function linkifyNode(child, state) {try{
     const data = XMLSerializer.serializeToString(child)
     const content = linkify(data, state.mutate, state.hashtags, state.usertags, state.images, state.links)
     if(mutate && content !== data) {
-        const newchild = DOMParser.parseFromString(`<span>${content}</span>`)
+        const newchild = DOMParser.parseFromString(content)
         child.parentNode.replaceChild(newchild, child)
         return newchild;
     }

@@ -9,7 +9,7 @@ class PrivateUserSettings extends React.Component {
         this.initForm(props);
     }
 
-    initForm(props) {
+    initForm() {
         console.log('-- PrivateUserSettings.initForm -->', this.props.user_settings);
         reactForm({
             name: 'form',
@@ -22,14 +22,15 @@ class PrivateUserSettings extends React.Component {
     }
 
 
-    handleSubmit = ({updateInitialValues, data}) => {
+    handleSubmit = ({data}) => {
         console.log('data', data)
         this.props.updateUserSettings(data);
-        return new Promise((resolve, reject) => {
-            resolve(); updateInitialValues()
-            // reject({nsfwPref: 'I see you, you are at work'})
-            // reject('Connection error, try again')
-        })
+        return true
+        // return new Promise((resolve, reject) => {
+        //     resolve();
+        //     // reject({nsfwPref: 'I see you, you are at work'})
+        //     // reject('Connection error, try again')
+        // })
     }
 
     render() {

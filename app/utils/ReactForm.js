@@ -17,7 +17,15 @@ export default function reactForm({name, instance, fields, initialValues, valida
     formState[name] = {
         // validate: () => setFormState(instance, fields, validation), // using continous validation instead
 
-        /** @arg {object} event if passed, event.preventDefault is called. */
+        /**
+            HINT: If the user does not navigate away from this form, you'll want to return <b>true</b> or <b>Promise.resolve(true)</b> after saving to update the forms default values.
+
+            @arg {function} submitCallback handleSubmit calls only if the form is valid
+            @arg {object} submitCallback.data form values
+            @arg {object} submitCallback.event if passed, event.preventDefault is called
+            @arg {function} submitCallback.updateInitialValues for callback or sync implementations, call upon success
+            @return {Promise<boolean|string|object>|boolean|string|object} submitCallback - A success boolean (true updates the forms default values), or an error string (sets form.error = error_string), or object with form field names as keys and the error_string as the value.
+        */
         handleSubmit: submitCallback => event => {
             if(event) event.preventDefault()
             const {valid} = setFormState(name, instance, fields, validation)
@@ -28,9 +36,9 @@ export default function reactForm({name, instance, fields, initialValues, valida
             form.submitting = true
             form.error = undefined
 
-            // User can call this function upon successful submission
+            // Called upon successful submission
             const updateInitialValues = () => {
-                setInitialValuesFromForm(name, instance, fields, initialValues)
+                setInitialValuesFromForm(name, instance, fields, initialValues, data)
                 formState[name].resetForm()
             }
 
@@ -57,8 +65,9 @@ export default function reactForm({name, instance, fields, initialValues, valida
                             formValid = false
                             formError = ret
                         }
+                        return ret
                     })
-                    .then(() => {// Success return message? (string)
+                    .then(ret => {
                         instance.setState(prevState => {
                             const nextForm = {...prevState[name]}
                             nextForm.submitting = false
@@ -66,6 +75,9 @@ export default function reactForm({name, instance, fields, initialValues, valida
                             nextForm.error = formError
                             return {[name]: nextForm}
                         })
+                        if(typeof ret === 'boolean' && ret) {
+                            updateInitialValues()
+                        }
                     })
                 }
             )
@@ -187,8 +199,7 @@ function setFormState(name, instance, fields, validation) {
     return {valid: formValid}
 }
 
-function setInitialValuesFromForm(name, instance, fields, initialValues) {
-    const data = getData(fields, instance.state)
+function setInitialValuesFromForm(name, instance, fields, initialValues, data) {
     for(const field of fields) {
         const fieldName = n(field)
         initialValues[fieldName] = data[fieldName]

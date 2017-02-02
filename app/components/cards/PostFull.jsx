@@ -22,26 +22,26 @@ import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import Userpic from 'app/components/elements/Userpic';
 import { APP_DOMAIN } from 'config/client_config';
 
-function loadFbSdk(d, s, id) {
-    return new Promise(resolve => {
-        window.fbAsyncInit = function () {
-            window.FB.init({
-                appId: $STM_Config.fb_app,
-                xfbml: false,
-                version: 'v2.6',
-                status: true
-            });
-            resolve(window.FB);
-        };
-
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) {return;}
-        js = d.createElement(s);
-        js.id = id;
-        js.src = "//connect.facebook.net/en_US/sdk.js";
-        fjs.parentNode.insertBefore(js, fjs);
-    });
-}
+// function loadFbSdk(d, s, id) {
+//     return new Promise(resolve => {
+//         window.fbAsyncInit = function () {
+//             window.FB.init({
+//                 appId: $STM_Config.fb_app,
+//                 xfbml: false,
+//                 version: 'v2.6',
+//                 status: true
+//             });
+//             resolve(window.FB);
+//         };
+//
+//         var js, fjs = d.getElementsByTagName(s)[0];
+//         if (d.getElementById(id)) {return;}
+//         js = d.createElement(s);
+//         js.id = id;
+//         js.src = "//connect.facebook.net/en_US/sdk.js";
+//         fjs.parentNode.insertBefore(js, fjs);
+//     });
+// }
 
 function TimeAuthorCategory({content, authorRepLog10, showTags}) {
     return (
@@ -138,15 +138,15 @@ class PostFull extends React.Component {
     fbShare(e) {
         const href = this.share_params.url;
         e.preventDefault();
-        loadFbSdk(document, 'script', 'facebook-jssdk').then(fb => {
-            fb.ui({
+        // loadFbSdk(document, 'script', 'facebook-jssdk').then(fb => {
+            window.FB.ui({
                 method: 'share',
                 href
             }, response => {
                 if (response && !response.error_message)
                     serverApiRecordEvent('FbShare', this.share_params.link);
             });
-        });
+        // });
     }
 
     twitterShare(e) {

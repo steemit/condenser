@@ -26,8 +26,9 @@ class PrivateUserSettings extends React.Component {
         console.log('data', data)
         this.props.updateUserSettings(data);
         return new Promise((resolve, reject) => {
-            resolve();
-            setTimeout(() => {updateInitialValues()}, 500);
+            resolve(); updateInitialValues()
+            // reject({nsfwPref: 'I see you, you are at work'})
+            // reject('Connection error, try again')
         })
     }
 

@@ -10,21 +10,23 @@ export default function reactForm({name, instance, fields, initialValues, valida
     if(!Array.isArray(fields)) throw new TypeError('fields is a required array')
     if(typeof initialValues !== 'object') throw new TypeError('initialValues is a required object')
 
-    // Give API users access to this.props, this.state, this.etc..
+    // Gives validation function access to everything in the compoent: this.props, this.state, this.etc..
     validation = validation.bind(instance)
 
     const formState = instance.state = instance.state || {}
     formState[name] = {
-        // validate: () => setFormState(instance, fields, validation),
+        // validate: () => setFormState(instance, fields, validation), // using continous validation instead
+
+        /** @arg {object} event if passed, event.preventDefault is called. */
         handleSubmit: submitCallback => event => {
-            event.preventDefault()
+            if(event) event.preventDefault()
             const {valid} = setFormState(name, instance, fields, validation)
             if(!valid) return
             const data = getData(fields, instance.state)
             let formValid = true
-            const fs = instance.state[name] || {}
-            fs.submitting = true
-            fs.error = undefined
+            const form = {...instance.state[name]}
+            form.submitting = true
+            form.error = undefined
 
             // User can call this function upon successful submission
             const updateInitialValues = () => {
@@ -33,8 +35,9 @@ export default function reactForm({name, instance, fields, initialValues, valida
             }
 
             instance.setState(
-                {[name]: fs},
+                {[name]: form},
                 () => {
+                    let formError
                     Promise.resolve()
                     .then(() => submitCallback({data, event, updateInitialValues}))
                     .catch(ret => {
@@ -43,7 +46,7 @@ export default function reactForm({name, instance, fields, initialValues, valida
                             for(const fieldName of Object.keys(ret)) {
                                 const error = ret[fieldName]
                                 if(!error) continue
-                                const value = instance.state[fieldName] || {}
+                                const value = {...instance.state[fieldName]}
                                 value.error = error
                                 value.touched = true
                                 value.blur = true
@@ -52,30 +55,36 @@ export default function reactForm({name, instance, fields, initialValues, valida
                             }
                         } else if(typeof ret === 'string') {
                             formValid = false
-                            fs.error = ret
+                            formError = ret
                         }
                     })
                     .then(() => {// Success return message? (string)
-                        fs.submitting = false
-                        fs.valid = formValid
-                        instance.setState({[name]: fs})
+                        instance.setState(prevState => {
+                            const nextForm = {...prevState[name]}
+                            nextForm.submitting = false
+                            nextForm.valid = formValid
+                            nextForm.error = formError
+                            return {[name]: nextForm}
+                        })
                     })
                 }
             )
         },
         resetForm: () => {
+            let count = 0
             for(const field of fields) {
                 const fieldName = n(field)
                 const f = instance.state[fieldName]
                 const def = initialValues[fieldName]
-                f.props.onChange(def)
+                f.props.onChange(def, () => ++count !== fields.length)
             }
         },
         clearForm: () => {
+            let count = 0
             for(const field of fields) {
                 const fieldName = n(field)
                 const f = instance.state[fieldName]
-                f.props.onChange()
+                f.props.onChange(undefined, () => ++count !== fields.length)
             }
         },
     }
@@ -107,7 +116,12 @@ export default function reactForm({name, instance, fields, initialValues, valida
             }
         }
 
-        fs.props.onChange = e => {
+        /**
+            @arg {event|string} event e.target.value or string or null / undefined
+            @arg {function} done - @private optional callback, return keepStale
+                boolean (true) when looping to suppress global form update.
+        */
+        fs.props.onChange = (e, done) => {
             const value = e && e.target ? e.target.value : e // API may pass value directly
             const v = {...(instance.state[fieldName] || {})}
             const initialValue = initialValues[fieldName]
@@ -126,7 +140,13 @@ export default function reactForm({name, instance, fields, initialValues, valida
 
             instance.setState(
                 {[fieldName]: v},
-                () => {setFormState(name, instance, fields, validation)}
+                () => {
+                    // The callback may return true to defer a full form state update
+                    const keepStale = done ? done() : false
+                    if(!keepStale) {
+                        setFormState(name, instance, fields, validation)
+                    }
+                }
             )
         }
 
@@ -143,21 +163,28 @@ function setFormState(name, instance, fields, validation) {
     let formValid = true
     let formTouched = false
     const v = validation(getData(fields, instance.state))
+    let cnt = 0
     for(const field of fields) {
         const fieldName = n(field)
         const validate = v[fieldName]
         const error = validate ? validate : null
-        const value = {...(instance.state[fieldName] || {})}
-        value.error = error
-        formTouched = formTouched || value.touched
         if(error) formValid = false
-        instance.setState({[fieldName]: value})
+        instance.setState(prevState => {
+            const value = {...(prevState[fieldName] || {})}
+            value.error = error
+            const nextState = {[fieldName]: value}
+
+            formTouched = formTouched || value.touched
+            if(++cnt === fields.length) {
+                const form = {...prevState[name]}
+                form.valid = formValid
+                form.touched = formTouched
+                nextState[name] = form
+            }
+            return nextState
+        })
     }
-    const fs = {...(instance.state[name] || {})}
-    fs.valid = formValid
-    fs.touched = formTouched
-    instance.setState({[name]: fs})
-    return fs
+    return {valid: formValid}
 }
 
 function setInitialValuesFromForm(name, instance, fields, initialValues) {

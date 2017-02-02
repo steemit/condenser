@@ -128,31 +128,31 @@ class Settings extends React.Component {
                         {translate('profile_image_url')}
                         <input type="url" {...profile_image.props} autoComplete="off" />
                     </label>
-                    <div className="error">{profile_image.blur && profile_image.touched && profile_image.error}</div>
+                    <div className="error help-text">{profile_image.blur && profile_image.touched && profile_image.error}</div>
 
                     <label>
                         {translate('profile_name')}
                         <input type="text" {...name.props} maxLength="20" autoComplete="off" />
                     </label>
-                    <div className="error">{name.touched && name.error}</div>
+                    <div className="error help-text">{name.touched && name.error}</div>
 
                     <label>
                         {translate('profile_about')}
                         <input type="text" {...about.props} maxLength="160" autoComplete="off" />
                     </label>
-                    <div className="error">{about.touched && about.error}</div>
+                    <div className="error help-text">{about.touched && about.error}</div>
 
                     <label>
                         {translate('profile_location')}
                         <input type="text" {...location.props} maxLength="30" autoComplete="off" />
                     </label>
-                    <div className="error">{location.touched && location.error}</div>
+                    <div className="error help-text">{location.touched && location.error}</div>
 
                     <label>
                         {translate('profile_website')}
                         <input type="url" {...website.props} maxLength="100" autoComplete="off" />
                     </label>
-                    <div className="error">{website.blur && website.touched && website.error}</div>
+                    <div className="error help-text">{website.blur && website.touched && website.error}</div>
 
                     <br />
                     {state.loading && <span><LoadingIndicator type="circle" /><br /></span>}

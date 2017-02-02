@@ -2,6 +2,8 @@ import React from 'react';
 import {connect} from 'react-redux'
 import reactForm from 'app/utils/ReactForm'
 
+const emailRegex = /^([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22))*\x40([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d))*$/;
+
 class PrivateUserSettings extends React.Component {
     constructor(props) {
         super(props);
@@ -10,13 +12,14 @@ class PrivateUserSettings extends React.Component {
     }
 
     initForm() {
-        console.log('-- PrivateUserSettings.initForm -->', this.props.user_settings);
         reactForm({
             name: 'form',
             instance: this,
             initialValues: this.props.user_settings,
-            fields: ['nsfwPref:select'],
-            // validation: values => ({}),
+            fields: ['email', 'nsfwPref:select'],
+            validation: values => ({
+                email: !values.email || !emailRegex.test(values.email) ? 'Invalid Email' : null,
+            }),
         });
         this.handleSubmitForm = this.state.form.handleSubmit(args => this.handleSubmit(args))
     }
@@ -34,21 +37,27 @@ class PrivateUserSettings extends React.Component {
     }
 
     render() {
-        const {nsfwPref, form} = this.state;
+        const {email, nsfwPref, form} = this.state;
         const disabled = !form.touched || form.submitting || !form.valid;
 
         return <form onSubmit={this.handleSubmitForm} className="PrivateUserSettings">
             <h3>Private Settings</h3>
-            <div>
-                Not safe for work (NSFW) content
-            </div>
-            <select {...nsfwPref.props}>
-                <option value="hide">Always hide</option>
-                <option value="warn">Always warn</option>
-                <option value="show">Always show</option>
-            </select>
+            <label>
+                Email
+                <input type="email" {...email.props} placeholder="name@example.com" />
+            </label>
+            {email.touched && email.error ? <div className="error help-text">{email.touched && email.error}</div>
+                : <div className="help-text">Maybe used to notify about account password changes</div>}
+            <label>
+                NSFW content
+                <select {...nsfwPref.props}>
+                    <option value="hide">Always hide</option>
+                    <option value="warn">Always warn</option>
+                    <option value="show">Always show</option>
+                </select>
+            </label>
             {nsfwPref.error ? <div className="error">{nsfwPref.error}&nbsp;</div> : null}
-            <br /><br />
+            <br />
             <input type="submit" className="button" value="Update" disabled={disabled} />
             {form.error ? <div className="error">{form.error}&nbsp;</div> : null}
         </form>;

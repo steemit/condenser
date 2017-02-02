@@ -51,11 +51,12 @@ async function appRender(ctx) {
                         break;
                     }
                 }
+                const settings = user.settings ? JSON.parse(user.settings) : {};
+                if (user.email) settings.email = user.email;
                 offchain.user = {
                     id: user_id,
-                    email: user.email,
                     prv: ctx.session.prv,
-                    settings: user.settings ? JSON.parse(user.settings) : {},
+                    settings,
                     account
                 }
             }

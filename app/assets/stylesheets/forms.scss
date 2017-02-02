@@ -1,13 +1,14 @@
 form {
+  .help-text {
+    margin-top: 0.1rem;
+    margin-bottom: 0.2rem;
+  }
   .error {
     input, input:active, input:focus {
       border-color: $alert-color;
     }
     label, .help-text {
       color: $alert-color;
-    }
-    .help-text {
-      margin-top: 0.4rem;
     }
   }
   .success {

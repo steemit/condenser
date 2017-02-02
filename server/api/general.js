@@ -193,7 +193,6 @@ export default function useGeneralApi(app) {
                 where: {id: this.session.user}
             });
             if (user) {
-                if (user.email) delete attrs.email;
                 yield models.User.update(attrs, {where: {id: this.session.user}});
             }
             this.body = JSON.stringify({status: 'ok'});

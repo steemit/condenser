@@ -34,33 +34,33 @@ export function sortComments( cont, comments, sort_order ) {
 
   /** sorts replies by upvotes, age, or payout */
   let sort_orders = {
-      votes: (a,b) => {
-                let aactive = countUpvotes(cont.get(a))
-                let bactive = countUpvotes(cont.get(b))
+      votes: (a, b) => {
+                const aactive = countUpvotes(cont.get(a))
+                const bactive = countUpvotes(cont.get(b))
                 return bactive - aactive;
               },
-      new:  (a,b) =>  {
-                let acontent = cont.get(a);
-                let bcontent = cont.get(b);
+      new: (a, b) =>  {
+                const acontent = cont.get(a);
+                const bcontent = cont.get(b);
                 if (netNegative(acontent)) {
                     return 1;
                 } else if (netNegative(bcontent)) {
                     return -1;
                 }
-                let aactive = Date.parse( acontent.get('created') );
-                let bactive = Date.parse( bcontent.get('created') );
+                const aactive = Date.parse( acontent.get('created') );
+                const bactive = Date.parse( bcontent.get('created') );
                 return bactive - aactive;
               },
-      trending:  (a,b) => {
-                let acontent = cont.get(a);
-                let bcontent = cont.get(b);
+      trending: (a, b) => {
+                const acontent = cont.get(a);
+                const bcontent = cont.get(b);
                 if (netNegative(acontent)) {
                     return 1;
                 } else if (netNegative(bcontent)) {
                     return -1;
                 }
-                let apayout = totalPayout(acontent)
-                let bpayout = totalPayout(bcontent)
+                const apayout = totalPayout(acontent)
+                const bpayout = totalPayout(bcontent)
                 if(apayout !== bpayout) {
                     return bpayout - apayout;
                 }
@@ -296,20 +296,20 @@ class CommentImpl extends React.Component {
         if (showReply || showEdit) {
             renderedEditor = <div key="editor">
                 <Editor {...comment} type={showReply ? 'submit_comment' : 'edit'}
-                                     successCallback={() => {
-                                this.setState({showReply: false, showEdit: false})
-                                this.saveOnShow(null)
-                            }}
-                                     onCancel={() => {
-                                this.setState({showReply: false, showEdit: false})
-                                this.saveOnShow(null)
-                            }}
-                                     jsonMetadata={jsonMetadata}
+                    successCallback={() => {
+                        this.setState({showReply: false, showEdit: false})
+                        this.saveOnShow(null)
+                    }}
+                    onCancel={() => {
+                        this.setState({showReply: false, showEdit: false})
+                        this.saveOnShow(null)
+                    }}
+                    jsonMetadata={jsonMetadata}
                 />
             </div>
         }
 
-        let depth_indicator = [];
+        const depth_indicator = [];
         if (depth > 1) {
             for (let i = 1; i < depth; ++i) {
                 depth_indicator.push(<div key={i} className={`depth di-${i}`}>&middot;</div>);
@@ -317,7 +317,7 @@ class CommentImpl extends React.Component {
         }
 
         return (
-            <div className={commentClasses.join(' ')} id={anchor_link} itemScope itemType ="http://schema.org/comment">
+            <div className={commentClasses.join(' ')} id={anchor_link} itemScope itemType="http://schema.org/comment">
                 {depth_indicator}
                 <div className="Comment__Userpic show-for-medium">
                     <Userpic account={comment.author} />

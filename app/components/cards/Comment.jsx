@@ -13,6 +13,7 @@ import transaction from 'app/redux/Transaction'
 import {List} from 'immutable'
 import { translate } from 'app/Translator';
 import {parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
+import {Long} from 'bytebuffer';
 
 export function sortComments( cont, comments, sort_order ) {
 
@@ -23,6 +24,9 @@ export function sortComments( cont, comments, sort_order ) {
       return parsePayoutAmount(a.get('pending_payout_value'))
              + parsePayoutAmount(a.get('total_payout_value'))
              + parsePayoutAmount(a.get('curator_payout_value'));
+  }
+  function netRshares(a) {
+      return Long.fromString(String(a.get('net_rshares')))
   }
   function countUpvotes(a) {
       return a.get('active_votes').filter(vote => vote.get('percent') > 0).size
@@ -57,7 +61,11 @@ export function sortComments( cont, comments, sort_order ) {
                 }
                 let apayout = totalPayout(acontent)
                 let bpayout = totalPayout(bcontent)
-                return bpayout - apayout;
+                if(apayout !== bpayout) {
+                    return bpayout - apayout;
+                }
+                // If SBD payouts were equal, fall back to rshares sorting
+                return netRshares(bcontent).compare(netRshares(acontent))
               }
   }
   comments.sort( sort_orders[sort_order] );

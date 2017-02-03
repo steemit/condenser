@@ -41,7 +41,8 @@ export function* loadFollows(method, account, type, force = false) {
 }
 
 function* loadFollowsLoop(method, account, type, start = '', limit = 100) {
-    const res = fromJS(yield Apis.follow(method, account, start, type, limit))
+    method == "get_followers" ? limit = 1000 : limit;
+    const res = fromJS(yield Apis.follow(method, account, start, type, limit));
     // console.log('res.toJS()', res.toJS())
 
     let cnt = 0

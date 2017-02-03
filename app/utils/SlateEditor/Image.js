@@ -81,7 +81,7 @@ class Image extends React.Component {
         const isFocused = state.selection.hasEdgeIn(node)
         const className = isFocused ? 'active' : null
 
-        const prefix = $STM_Config.img_proxy_prefix ? ($STM_Config.img_proxy_prefix + '0x0/') : ''
+        const prefix = $STM_Config.img_proxy_prefix ? ($STM_Config.img_proxy_prefix + '1680x8400/') : ''
 
         const alt = node.data.get('alt')
         const src = node.data.get('src')

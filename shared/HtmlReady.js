@@ -162,14 +162,14 @@ function img(state, child) {
     }
 }
 
-// For all img elements with non-local URLs, prepend the proxy URL (e.g. `https://img0.steemit.com/0x0/`)
+// For all img elements with non-local URLs, prepend the proxy URL (e.g. `https://img0.steemit.com/1680x8400/`)
 function proxifyImages(doc) {
     if (!$STM_Config.img_proxy_prefix) return
     if (!doc) return;
     [...doc.getElementsByTagName('img')].forEach(node => {
         const url = node.getAttribute('src')
         if(! linksRe.local.test(url))
-            node.setAttribute('src', $STM_Config.img_proxy_prefix + '0x0/' + url)
+            node.setAttribute('src', $STM_Config.img_proxy_prefix + '1680x8400/' + url)
     })
 }
 

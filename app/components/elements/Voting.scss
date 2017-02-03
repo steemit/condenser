@@ -28,16 +28,28 @@
   > a {
     padding-right: 0.5rem;
   }
+  path {
+    fill: #4BA2F2;
+  }
+  .Icon:hover {
+    box-shadow: 0 0 0 rgba(75, 162, 242, 1);
+    animation: pulse 2s infinite;
+    border-radius: 50%;
+  }
 }
 
 .Voting__button-up > a:hover, a.confirm_weight:hover {
-  path {
-    fill: #333;
-  }
-  circle {
-    fill: #fff;
-    stroke: #333;
-  }
+    path {
+        fill: #fff;
+    }
+    circle {
+        fill: #4BA2F2;
+        stroke: #4BA2F2;
+    }
+    svg {
+        background-size: contain;
+        border-radius: 50%;
+    }
 }
 
 .Voting__button-up.votingUp {
@@ -166,6 +178,9 @@
   margin-right: 10px;
   width: 350px;
   overflow: hidden;
+  .Icon:hover {
+    animation: none!important;
+  }
   .weight-display {
     width: 3rem;
     float: left;
@@ -254,4 +269,31 @@
       left: -28px;
     }
   }
+}
+
+/* Pulse for upvote action */
+@-webkit-keyframes pulse {
+    0% {
+        -webkit-box-shadow: 0 0 0 0 rgba(75, 162, 242, 2);
+    }
+    70% {
+        -webkit-box-shadow: 0 0 0 10px rgba(75, 162, 242, 1);
+    }
+    100% {
+        -webkit-box-shadow: 0 0 0 0 rgba(75, 162, 242, 1);
+    }
+}
+@keyframes pulse {
+    0% {
+        -moz-box-shadow: 0 0 0 0 rgba(75, 162, 242, 2);
+        box-shadow: 0 0 0 0 rgba(75, 162, 242, 2);
+    }
+    70% {
+        -moz-box-shadow: 0 0 0 10px rgba(204,169,44, 0);
+        box-shadow: 0 0 0 10px rgba(204,169,44, 0);
+    }
+    100% {
+        -moz-box-shadow: 0 0 0 0 rgba(204,169,44, 0);
+        box-shadow: 0 0 0 0 rgba(204,169,44, 0);
+    }
 }

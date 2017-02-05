@@ -10,3 +10,6 @@ config/steem.json
 config/steem-dev.json
 config/process.json
 app/assets/static/*.js
+run/config/client/steem.json
+run/config/client/steem-dev.json
+run/config/pm2/process.json

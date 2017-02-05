@@ -1,0 +1,11 @@
+Host: https://golos.io
+User-agent: *
+Disallow: /favicons
+Disallow: /xss/test
+Disallow: /yandex_dc913847e717bca6.html
+Disallow: /mailru-verification9a42734aa5b7e274.html
+Disallow: /googlee59d4af4f1222cd7.html
+Disallow: /google01836be5bad501ce.html
+Disallow: /mailru-verification92b53816046791c4.html
+Disallow: /mailru-verification2f585ac3784b45be.html
+Sitemap: https://golos.io/sitemap.xml

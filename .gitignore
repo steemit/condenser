@@ -1,0 +1,12 @@
+.DS_Store
+.idea
+coverage
+node_modules
+*.log
+dist
+vendor/*
+tmp/*
+config/steem.json
+config/steem-dev.json
+config/process.json
+app/assets/static/*.js

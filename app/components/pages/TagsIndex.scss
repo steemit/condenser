@@ -1,0 +1,13 @@
+.TagsIndex {
+  input {
+    margin-bottom: 0.5rem!important;
+  }
+
+  table tr {
+    td, th {
+      text-align: right;
+      &:first-child {text-align: left;}
+    }
+  }
+}
+

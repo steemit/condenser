@@ -1,0 +1,64 @@
+/*
+# Airbnb is putting everything on error which makes it hard to spot JavaScript errors: https://github.com/airbnb/javascript/issues/853
+# Work-around, move everything from error to warn:
+find node_modules/eslint-config-airbnb -name '*.js'|xargs sed -i 's/\[2,/\[1,/'
+find node_modules/eslint-config-airbnb -name '*.js'|xargs sed -i "s/': 2/': 1/"
+*/
+{
+  "extends": "airbnb",
+  "parser": "babel-eslint",
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true
+  },
+  "ecmaFeatures": {
+    "blockBindings": true,
+    "forOf": true,
+    "jsx": true
+  },
+  "rules": {
+    "max-len": 0, /*[1, 160, 4],*/
+    "comma-dangle": 0,
+    "semi": [0],
+    "curly": [0],
+    "one-var": [0],
+    "eqeqeq": 0,
+    "no-cond-assign": 0,
+    "react/wrap-multilines": [0],
+    "one-var-declaration-per-line": [0],
+    "no-param-reassign": [0],
+    "no-nested-ternary": [0],
+    "no-undef": 2,
+    "camelcase": [0],
+    "no-console": [0],
+    "object-curly-spacing": [0],
+    "react/jsx-indent-props": [1,4],
+    "react/jsx-closing-bracket-location": [0],
+    "no-use-before-define": [0, {"functions": false, "classes": false}],
+    "spaced-comment": [0],
+    "prefer-template": [0],
+    "new-cap": [0],
+    "arrow-body-style": [0],
+    "func-names": [0],
+    "no-return-assign": 0,
+    "no-redeclare": 1,
+    "eol-last": 0,
+    "no-loop-func": 0,
+    "no-unneeded-ternary": 0, // false trigger const b = b ? b : a
+
+    /* Nice to haves */
+    /*"quotes": [1, "single", "avoid-escape"],*/ "quotes": 0,
+    /*"indent", [1,4], */ "indent": 0,
+    "brace-style": 0,
+    "space-infix-ops": 0,
+    "keyword-spacing": 0,
+    "no-confusing-arrow": 0,
+    "space-in-parens": 0,
+    "no-throw-literal": 0,
+    "react/sort-comp": [1, { "order": [ 'lifecycle' ] }],
+    "react/prefer-stateless-function": 0,
+    "react/prop-types": 0,
+    "radix": 0,
+  }
+}

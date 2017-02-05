@@ -1,0 +1,144 @@
+.Markdown {
+  font-family: 'Source Serif Pro', serif;
+  font-size: 120%;
+
+  line-height: 150%;
+}
+
+// used for comments
+.Markdown.MarkdownViewer--small {
+  font-family: inherit;
+  font-size: 110%;
+
+  img {
+    max-width: 400px;
+    max-height: 400px;
+  }
+
+  div.videoWrapper {
+    max-width: 480px;
+    padding-bottom: 270px;
+  }
+}
+
+.Markdown, .ReplyEditor__body.rte {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Source Serif Pro', serif;
+    font-weight: 600;
+  }
+
+  h1 {
+    margin: 2rem 0 1rem 0;
+    font-size: 160%
+  }
+  h2 {
+    margin: 2rem 0 1rem 0;
+    font-size: 140%;
+  }
+  h3 {
+    margin: 1.72rem 0 0.87rem 0;
+    font-size: 120%;
+  }
+  h4 {
+    margin: 1rem 0 0.5rem 0;
+    font-size: 100%;
+  }
+  h6 {
+    margin: 1rem 0 0.5rem 0;
+    font-size: 90%;
+  }
+
+  code {
+    padding: 0.2rem;
+    font-size: 85%;
+    border-radius: 3px;
+    border: none;
+    background-color: #F4F4F4;
+    font-weight: inherit;
+  }
+
+  pre > code {
+    display: block;
+  }
+
+  p {
+    margin: 0.5rem 0 1rem 0;
+  }
+
+  strong {
+    font-weight: 600;
+  }
+
+  ol, ul {
+    margin-left: 2rem;
+  }
+
+  table td {
+    word-break: normal; // issue #146
+  }
+
+  p {
+    font-size: 100%;
+    line-height: 150%;
+  }
+
+  img {
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: none;
+  }
+
+  iframe {
+    max-width: 100%;
+    max-height: 75vw;
+  }
+
+  div.pull-right {
+    float: right;
+    padding-left: 1rem;
+    max-width: 50%;
+  }
+
+  div.pull-left {
+    float: left;
+    padding-right: 1rem;
+    max-width: 50%;
+  }
+
+  div.text-justify {
+    text-align: justify;
+  }
+
+  div.text-right {
+    text-align: right;
+  }
+
+  div.text-center {
+    text-align: center;
+  }
+
+  div.text-rtl {
+    direction: rtl;
+  }
+
+  div.videoWrapper {
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.2%;
+    position: relative;
+
+    iframe {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+    }
+  }
+}

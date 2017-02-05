@@ -1,0 +1,27 @@
+.Post__comments_sort_order {
+  margin: 0.5rem 0;
+  color: $dark-gray;
+  font-size: 94%;
+  svg polygon {
+    fill: $dark-gray;
+  }
+  > span {
+    font-weight: bold;
+  }
+}
+
+.Post__promo {
+  text-align: center;
+  font-style: italic;
+  font-weight: bold;
+  max-width: 50rem;
+  margin: 0 auto;
+  padding: 1rem 0;
+  border-bottom: 1px solid $light-gray;
+}
+
+.Post_comments__content {
+  max-width: 50rem;
+  margin: 0 auto 3.5rem;
+  font-size: 92%;
+}

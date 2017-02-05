@@ -1,0 +1,26 @@
+.shareMenu {
+    display: inline-block;
+    vertical-align: middle;
+    height: 2em;
+}
+
+.shareItems {
+    list-style: none;
+    display: inline;
+    margin-left: 0.01em;
+    li {
+        float: left;
+        padding-left: 4px;
+    }
+    li > a:hover {
+        color: #ffffff;
+        svg {fill: #1A5099;}
+    }
+    li > a:link {
+        text-decoration: none;
+    }
+}
+
+.RightShare__Menu {
+    padding-right: 0.6rem!important;
+}

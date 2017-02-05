@@ -1,0 +1,49 @@
+version: '3'
+
+# volumes configuration : https://docs.docker.com/compose/compose-file/#volume-configuration-reference
+# network configuration : https://docs.docker.com/compose/networking/
+
+services:
+  
+    # mysql:
+    #     image: goloschain/mysql:5.7
+    #     volumes:
+    #         - mysql-data:/var/lib/mysql/
+    #         - mysql-log:/var/log/mysql/
+    
+    #     # ports:
+    #     #     - "127.0.0.1:3306:3306"
+    #     environment:
+    #         MYSQL_ROOT_PASSWORD :  "4757"  #"${MYSQL_ROOT_PASSWORD}"
+    #         MYSQL_DATABASE      :  "golos_prod" #"${MYSQL_DATABASE}"
+    #     restart: always
+
+    # notify:
+    #     image: goloschain/tarantool-notify
+    # build:
+    #     context: .
+    #     dockerfile: Dockerfile-datastore
+    # ports:
+    #   - "127.0.0.1:3301:3301"
+    # volumes:
+    #   - ./:/home/src
+    #   - tarantool-data:/var/lib/tarantool/
+    #   - tarantool-log:/var/log/tarantool/
+
+
+#     # imageproxy:
+#     #     image: goloschain/imageproxy:latest
+
+    tolstoy:
+        image: goloschain/webclient-tolstoy:0.16.1rc3
+        # ports:
+        #     - "127.0.0.1:3002:3002"
+        # command: ["./wait-for-it.sh", "mysql:3306", "--",
+        #           "./wait-for-it.sh", "notify:3301", "--",   
+                   # "/bin/bash", "--login", "-c", "./start.sh"]
+        command: ["/bin/bash", "--login", "-c", "./start.sh"]
+
+# volumes:
+  
+#     mysql-data:
+#     mysql-log:

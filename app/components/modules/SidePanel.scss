@@ -1,0 +1,65 @@
+$menu-width: 250px;
+
+.SidePanel {
+  display: block;
+
+  .menu > li.last {
+    border-bottom: 1px solid #777;
+  }
+
+  > div {
+    background-color: #555;
+    color: #fff;
+    padding-top: 3rem;
+    .close-button {
+      color: #fff;
+    }
+    .menu > li {
+      > a {
+        color: #fff;
+        border-top: 1px solid #777;
+      }
+      > a:hover {
+        background-color: #666;
+      }
+      path {
+        fill: #fff;
+      }
+    }
+
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    width: $menu-width;
+    height: 100%;
+    min-height: 100vh;
+    box-sizing: border-box;
+    transition: visibility 250ms, transform ease 250ms;
+
+    &.left {
+      left: -$menu-width;
+    }
+
+    &.visible.left {
+      transform: translate3d($menu-width, 0, 0);
+    }
+
+    &.right {
+      right: -$menu-width;
+      visibility: hidden;
+      overflow-y: auto;
+    }
+
+    &.visible.right {
+      transform: translate3d(-$menu-width, 0, 0);
+      visibility: visible;
+    }
+  }
+}
+
+/* Small only */
+@media screen and (max-width: 39.9375em) {
+  .SidePanel > div > .menu > li > a {
+    padding: 0.3rem 1rem;
+  }
+}

@@ -1,0 +1,27 @@
+.VotesAndComments {
+  path {
+    fill: $medium-gray;
+  }
+  a {
+    font-weight: normal;
+  }
+  white-space: nowrap;
+}
+
+.VotesAndComments__votes {
+  padding-right: 1rem;
+  border-right: 1px solid $medium-gray;
+}
+
+.VotesAndComments__comments {
+  padding-left: 1rem;
+}
+
+/* Small only */
+@media screen and (max-width: 39.9375em) {
+  .VotesAndComments {
+    display: block;
+    width: auto;
+    float: right;
+  }
+}

@@ -1,0 +1,79 @@
+.ReplyEditor {
+  max-width: 54rem;
+  margin-bottom: 0.5rem;
+  .vframe {
+    display: block;
+    .public-DraftEditor-content {
+      height: 20em;
+      resize: vertical;
+    }
+  }
+}
+
+.PostFull .ReplyEditor__body {
+  margin: 1rem 0 0;
+}
+
+.ReplyEditor form {
+  max-width: 52rem;
+}
+
+.ReplyEditor__title {
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 0.5rem;
+  height: auto;
+}
+
+.ReplyEditor__draft {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  background: rgba(255,255,255,0.9);
+  border-radius: 5px;
+  color: #BBB;
+  font-size: 1.2em;
+  text-align: center;
+  z-index: 1;
+  padding: 0.5rem 1rem;
+}
+.ReplyEditor__draft-hide {
+  opacity: 0;
+}
+.ReplyEditor__draft-saved {
+  -webkit-transition: opacity 3s ease-in-out;
+  -moz-transition: opacity 3s ease-in-out;
+  -ms-transition: opacity 3s ease-in-out;
+  -o-transition: opacity 3s ease-in-out;
+  transition: opacity 3s ease-in-out;
+  opacity: 0;
+}
+
+.ReplyEditor .Preview .Markdown {
+  border: 1px solid $light-gray;
+  padding: 0 1rem;
+}
+
+.ReplyEditor__body {
+  margin-top: 1rem;
+  clear: both;
+}
+
+.ReplyEditor__options {
+  font-size: 85%;
+  select {
+    font-size: 100%;
+    width: 10rem;
+    height: auto;
+    padding: 0.25rem 0.5rem;
+    margin-left: 0.25rem;
+  }
+  label {
+    font-size: 100%;
+    text-transform: none;
+  }
+}
+
+.RichTextEditor__root___33zoV button {
+  margin-right: 0 !important;
+}

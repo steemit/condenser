@@ -10,9 +10,9 @@ COPY ./start.sh ./
 
 
 
-# RUN npm run build
+RUN npm run build
 
-# EXPOSE 3002
+EXPOSE 3002
 
 # CMD ["/bin/bash", "--login"]
 

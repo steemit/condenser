@@ -7,6 +7,7 @@ import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {findParent} from 'app/utils/DomUtils';
 import Icon from 'app/components/elements/Icon';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+import { Link } from 'react-router';
 
 function topPosition(domElt) {
     if (!domElt) {
@@ -209,7 +210,8 @@ class PostsList extends React.Component {
                     <div className="PostsList__post_top_overlay">
                         <div className="PostsList__post_top_bar">
                             <button className="back-button" type="button" title="Back" onClick={() => {this.setState({showPost: null})}}>
-                                <span aria-hidden="true"><Icon name="chevron-left" /></span>
+                                <span className="back-chevron" aria-hidden="true"><Icon name="chevron-left" /></span>
+                                <span className="back-logo" aria-hidden="true"><Icon name="steem" size="2x"/></span>
                             </button>
                             <CloseButton onClick={this.closePostModal} />
                         </div>

@@ -39,11 +39,15 @@
   }
   > .back-button {
     position: relative;
-    font-size: 2em;
     line-height: 1;
     cursor: pointer;
-    path {
-      fill: map-get($foundation-palette, 'primary');
+    .back-chevron {
+        path {
+            fill: map-get($foundation-palette, 'primary');
+        }
+    }
+    .back-logo {
+        margin-left: 1em;
     }
   }
 }
@@ -60,6 +64,10 @@
 
 body.with-post-overlay {
   overflow: hidden;
+}
+
+.PostsList_logo_link {
+  visibility: hidden;
 }
 
 @media screen and (min-width: 60rem) {
@@ -92,5 +100,12 @@ body.with-post-overlay {
   }
   .PostsList__post_top_bar {
     width: 62rem;
+  }
+}
+
+@media screen and (max-width: 60rem) {
+  .PostsList_logo_link {
+    visibility: visible;
+    padding: .35rem 0 .35rem 0;
   }
 }

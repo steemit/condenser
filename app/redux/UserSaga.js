@@ -183,6 +183,9 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         const owner_pub_key = account.getIn(['owner', 'key_auths', 0, 0]);
         // const pub_keys = yield select(state => state.user.get('pub_keys_used'))
         // serverApiRecordEvent('login_attempt', JSON.stringify({name: username, ...pub_keys, cur_owner: owner_pub_key}))
+        // FIXME pls parameterize opaque things like this into a constants file
+        // code like this requires way too much historical knowledge to
+        // understand.
         if (owner_pub_key === 'STM7sw22HqsXbz7D2CmJfmMwt9rimtk518dRzsR1f8Cgw52dQR1pR') {
             yield put(user.actions.loginError({ error: 'Hello. Your account may have been compromised. We are working on restoring an access to your account. Please send an email to support@steemit.com.' }))
             return
@@ -427,7 +430,7 @@ function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress
     }
 
     const sig = Signature.signBufferSha256(bufSha, d)
-    const postUrl = `${$STM_Config.uploadImage}/${username}/${sig.toHex()}`
+    const postUrl = `${$STM_Config.upload_image}/${username}/${sig.toHex()}`
 
     fetch(postUrl, {
         method: 'post',

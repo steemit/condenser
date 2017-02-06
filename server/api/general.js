@@ -12,7 +12,7 @@ import {PublicKey, Signature, hash} from 'shared/ecc'
 import Mixpanel from 'mixpanel';
 import Tarantool from 'db/tarantool';
 
-const mixpanel = config.mixpanel ? Mixpanel.init(config.mixpanel) : null;
+const mixpanel = config.get('mixpanel') ? Mixpanel.init(config.get('mixpanel')) : null;
 
 export default function useGeneralApi(app) {
     const router = koa_router({prefix: '/api/v1'});
@@ -122,7 +122,7 @@ export default function useGeneralApi(app) {
                 throw new Error('Phone number is not confirmed');
             }
 
-            const [fee_value, fee_currency] = config.registrar.fee.split(' ');
+            const [fee_value, fee_currency] = config.get('registrar.fee').split(' ');
             let fee = parseFloat(fee_value);
             try {
                 const chain_properties = yield Apis.instance().db_api.exec('get_chain_properties', []);
@@ -138,7 +138,7 @@ export default function useGeneralApi(app) {
             }
 
             yield createAccount({
-                signingKey: config.registrar.signing_key,
+                signingKey: config.get('registrar.signing_key'),
                 fee: `${fee.toFixed(3)} ${fee_currency}`,
                 creator: config.registrar.account,
                 new_account_name: account.name,
@@ -321,7 +321,7 @@ export default function useGeneralApi(app) {
         const remote_ip = getRemoteIp(this.req);
         try {
             let views = 1, unique = true;
-            if (config.tarantool) {
+            if (config.has('tarantool')) {
                 const res = yield Tarantool.instance().call('page_view', page, remote_ip, this.session.uid, ref);
                 unique = res[0][0];
             }

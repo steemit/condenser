@@ -143,6 +143,12 @@ async function universalRender({ location, initial_state, offchain }) {
         if (url.indexOf('/curation-rewards') !== -1) url = url.replace(/\/curation-rewards$/, '/transfers');
         if (url.indexOf('/author-rewards') !== -1) url = url.replace(/\/author-rewards$/, '/transfers');
 
+        // Remove query params from url on fronend side.
+        // https://github.com/steemit/steem/blob/master/libraries/app/database_api.cpp#L2075
+        // Backend doesn't prepare query params and result is broken
+        if (url.split('/').length == 4 && url.indexOf('?'))
+            url = url.split('?')[0]
+        
         onchain = await Apis.instance().db_api.exec('get_state', [url]);
 
         // Calculate signup bonus

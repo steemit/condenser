@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-docker rmi -f goloschain/webclient-tolstoy-bootstrap:0.1.161221
+docker rmi -f goloschain/webclient-tolstoy-bootstrap-deps:0.1.161221
 
 set -euo pipefail
 

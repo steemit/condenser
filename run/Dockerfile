@@ -1,4 +1,4 @@
-FROM goloschain/webclient-tolstoy-bootstrap:0.1.161221
+FROM goloschain/webclient-tolstoy-bootstrap-content:0.1.161221
 
 
 

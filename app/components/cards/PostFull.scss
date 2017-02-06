@@ -21,14 +21,13 @@
 }
 
 .PostFull__time_author_category_large {
-  margin: 1.5rem 1.5rem 1.2rem 0;
+  margin: 1.75rem 1.5rem 1.2rem 0;
   color: #aaa;
   strong, a {color: #999}
-  font-size: 135%;
+  font-size: 130%;
   display: block;
-  line-height: 50px;
   > .Userpic {
-    margin-top: 4px;
+    margin-top: -4px;
     float: left;
   }
   > .right-side {

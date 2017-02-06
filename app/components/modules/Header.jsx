@@ -6,7 +6,11 @@ import Icon from 'app/components/elements/Icon.jsx';
 import resolveRoute from 'app/ResolveRoute';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+//import { translate } from 'app/Translator';
 import HorizontalMenu from 'app/components/elements/HorizontalMenu';
+import { APP_NAME, APP_ICON } from 'config/client_config';
+//import { detransliterate } from 'app/utils/ParsersAndFormatters';
+//import capitalizeFirstLetter from 'capitalize'
 
 function sortOrderToLink(so, topic, account) {
     if (so === 'home') return '/@' + account + '/feed';
@@ -190,10 +194,14 @@ class Header extends React.Component {
                             <ul className="menu">
                                 <li className="Header__top-logo">
                                     <Link to={logo_link}>
-                                        <Icon name="steem" size="2x" />
+                                        <Icon name={APP_ICON} size="2x" />
                                     </Link>
                                 </li>
-                                <li className="Header__top-steemit show-for-medium noPrint"><Link to={logo_link}>steemit<span className="beta">beta</span></Link></li>
+
+                                <li className="Header__top-steemit show-for-medium noPrint">
+                                    <Link to={logo_link}>{APP_NAME}<span className="beta">beta</span></Link>
+                                </li>
+
                                 {(topic_link || user_name || page_name) && <li className="delim show-for-medium">|</li>}
                                 {topic_link && <li className="Header__top-topic">{topic_link}</li>}
                                 {user_name && <li><Link to={`/@${user_name}`}>@{user_name}</Link></li>}

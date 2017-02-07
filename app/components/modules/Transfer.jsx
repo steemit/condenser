@@ -72,16 +72,16 @@ class TransferForm extends Component {
             initialValues: props.initialValues,
             validation: values => ({
                 to:
-                    ! values.to ? 'Required' : validate_account_name(values.to),
+                    ! values.to ? translate('required') : validate_account_name(values.to),
                 amount:
-                    ! values.amount ? 'Required' :
-                    ! /^[0-9]*\.?[0-9]*/.test(values.amount) ? 'Amount is in the form 99999.999' :
-                    insufficientFunds(values.asset, values.amount) ? 'Insufficient funds' :
+                    ! values.amount ? translate('required') :
+                    ! /^[0-9]*\.?[0-9]*/.test(values.amount) ? translate('amount_is_in_form') :
+                    insufficientFunds(values.asset, values.amount) ? translate('insufficent_funds') :
                     countDecimals(values.amount) > 3 ? 'Use only 3 digits of precison' :
                     null,
                 asset:
                     props.toVesting ? null :
-                    ! values.asset ? 'Required' : null,
+                    ! values.asset ? translate('required') : null,
                 memo:
                     values.memo && (!browserTests.memo_encryption && /^#/.test(values.memo)) ?
                     'Encrypted memos are temporarily unavailable (issue #98)' :
@@ -149,7 +149,7 @@ class TransferForm extends Component {
                 </div>}
 
                 <div className="row">
-                    <div className="column small-2" style={{paddingTop: 5}}>From</div>
+                    <div className="column small-2" style={{paddingTop: 5}}>{translate('from')}</div>
                     <div className="column small-10">
                         <div className="input-group" style={{marginBottom: "1.25rem"}}>
                             <span className="input-group-label">@</span>
@@ -164,7 +164,7 @@ class TransferForm extends Component {
                 </div>
 
                 {advanced && <div className="row">
-                    <div className="column small-2" style={{paddingTop: 5}}>To</div>
+                    <div className="column small-2" style={{paddingTop: 5}}>{translate('to')}</div>
                     <div className="column small-10">
                         <div className="input-group" style={{marginBottom: "1.25rem"}}>
                             <span className="input-group-label">@</span>
@@ -172,7 +172,7 @@ class TransferForm extends Component {
                                 className="input-group-field"
                                 ref="to"
                                 type="text"
-                                placeholder="Send to account"
+                                placeholder={translate('send_to_account')}
                                 onChange={this.onChangeTo}
                                 autoComplete="off"
                                 disabled={loading}
@@ -187,14 +187,15 @@ class TransferForm extends Component {
                 </div>}
 
                 <div className="row">
-                    <div className="column small-2" style={{paddingTop: 5}}>Amount</div>
+                    <div className="column small-2" style={{paddingTop: 5}}>{translate('amount')}</div>
                     <div className="column small-10">
                         <div className="input-group" style={{marginBottom: 5}}>
-                            <input type="text" placeholder="Amount" {...amount.props} ref="amount" autoComplete="off" disabled={loading} />
+                            <input type="text" placeholder={translate('amount')} {...amount.props} ref="amount" autoComplete="off" disabled={loading} />
                             {asset && <span className="input-group-label" style={{paddingLeft: 0, paddingRight: 0}}>
-                                <select {...asset.props} placeholder="Asset" disabled={loading} style={{minWidth: "5rem", height: "inherit", backgroundColor: "transparent", border: "none"}}>
-                                    <option value="STEEM">STEEM</option>
-                                    <option value="SBD">SBD</option>
+                                <select {...asset.props} placeholder={translate('asset')} disabled={loading} style={{minWidth: "5rem", height: "inherit", backgroundColor: "transparent", border: "none"}}>
+                                    <option value={LIQUID_TICKER}>{LIQUID_TOKEN}</option>
+                                    {/* TODO */}
+                                    <option value={DEBT_TICKER}>{DEBT_TOKEN_SHORT}</option>
                                 </select>
                             </span>}
                         </div>
@@ -210,10 +211,10 @@ class TransferForm extends Component {
                 </div>
 
                 {memo && <div className="row">
-                    <div className="column small-2" style={{paddingTop: 33}}>Memo</div>
+                    <div className="column small-2" style={{paddingTop: 33}}>{translate('memo')}</div>
                     <div className="column small-10">
-                        <small>This Memo is {isMemoPrivate ? 'Private' : 'Public'}</small>
-                        <input type="text" placeholder="Memo" {...memo.props}
+                        <small>{translate(isMemoPrivate ? 'this_memo_is_private' : 'this_memo_is_public')}</small>
+                        <input type="text" placeholder={translate('memo')} {...memo.props}
                             ref="memo" autoComplete="on" disabled={loading} />
                         <div className="error">{memo.touched && memo.error && memo.error}&nbsp;</div>
                     </div>
@@ -222,15 +223,15 @@ class TransferForm extends Component {
                 {!loading && <span>
                     {trxError && <div className="error">{trxError}</div>}
                     <button type="submit" disabled={submitting || !valid} className="button">
-                        {toVesting ? 'Power Up' : 'Submit'}
+                        {translate(toVesting ? 'power_up' : 'transfer')}
                     </button>
-                    {transferToSelf && <button className="button hollow no-border" disabled={submitting} onClick={this.onAdvanced}>{advanced ? 'Basic' : 'Advanced'}</button>}
+                    {transferToSelf && <button className="button hollow no-border" disabled={submitting} onClick={this.onAdvanced}>{translate(advanced ? 'basic' : 'advanced')}</button>}
                 </span>}
             </form>
         )
         return (
            <div>
-               <h3>{toVesting ? 'Convert to Steem Power' : transferType}</h3>
+               <h3>{translate(toVesting ? 'convert_to_VESTING_TOKEN' : 'transfer_to_account')}</h3>
                <div className="row">
                    <div className="column small-12">
                        {form}
@@ -242,7 +243,7 @@ class TransferForm extends Component {
 }
 
 const AssetBalance = ({onClick, balanceValue}) =>
-    <a onClick={onClick} style={{borderBottom: '#A09F9F 1px dotted', cursor: 'pointer'}}>Balance: {balanceValue}</a>
+    <a onClick={onClick} style={{borderBottom: '#A09F9F 1px dotted', cursor: 'pointer'}}>{translate('balance') + ': ' + balanceValue}</a>
 
 import {connect} from 'react-redux'
 

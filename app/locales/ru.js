@@ -107,6 +107,7 @@ const ru = {
 	welcome_to_the_blockchain: 'Добро пожаловать в Blockchain!',
 	your_voice_is_worth_something: 'Твой голос чего-то стоит',
 	learn_more: 'Узнать больше',
+	get_sp_when_sign_up: 'Получи {signupBonus} ' + VESTING_TOKEN + ' подписавшись сегодня.',
 	get_VESTING_TOKEN_when_sign_up: 'Получи {signupBonus} ' + VESTING_TOKEN + ' подписавшись сегодня.',
 	all_accounts_refunded: 'Все потери по восстанавливаемым аккаунтам были полностью компенсированы',
 	APP_URL_is_now_open_source: APP_URL + ' теперь Open Source',
@@ -273,11 +274,16 @@ const ru = {
 	vote: 'Проголосовать', // context: to vote? (title attribute on voting button)
 	witness: 'Делегаты',
 	top_witnesses: 'Топ делегатов',
-	// user's navigational menu
+	// user's navigation menu
 	feed: 'Лента',
 	wallet: 'Кошелек',
 	blog: 'Блог',
 	change_password: 'Сменить пароль',
+	information_for_user: 'Информация для пользователя',
+	video: 'Видео',
+	documentation: 'Документация',
+	faq: 'FAQ',
+	team: 'Команда',
 	// UserProfile
 	unknown_account: 'Неизвестный аккаунт',
 	user_hasnt_made_any_posts_yet: "Похоже что {name} еще не написал постов!",

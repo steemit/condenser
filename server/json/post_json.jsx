@@ -12,7 +12,6 @@ export default function usePostJson(app) {
         const author = this.url.match(/(\@[\w\d\.-]+)/)[0].replace('@', '');
         const permalink = this.url.match(/(\@[\w\d\.-]+)\/?([\w\d-]+)/)[2];
         let status = "";
-
         let post = yield Apis.db_api('get_content', author, permalink);
 
         if (post.author) {

@@ -9,26 +9,25 @@ export default function usePostJson(app) {
 
     router.get(routeRegex.PostJson, function *() {
         // validate and build post details in JSON
-        const segments = this.url.split('/');
-        const user_name = segments[1].match(routeRegex.UserNameJson)[0].replace('@', '');
-        let user = "";
+        const author = this.url.match(/(\@[\w\d\.-]+)/)[0].replace('@', '');
+        const permalink = this.url.match(/(\@[\w\d\.-]+)\/?([\w\d-]+)/)[2];
         let status = "";
 
-        const [chainAccount] = yield Apis.db_api('get_accounts', [user_name]);
+        let post = yield Apis.db_api('get_content', author, permalink);
 
-        if (chainAccount) {
-            user = chainAccount;
-            try {
-                user.json_metadata = JSON.parse(user.json_metadata);
-            } catch (e) {
-                user.json_metadata = "";
-            }
+        if (post.author) {
             status = "200";
+            // try parse for post metadata
+            try {
+                post.json_metadata = JSON.parse(post.json_metadata);
+            } catch(e) {
+                post.json_metadata = "";
+            }
         } else {
-            user = "No account found";
+            post = "No post found";
             status = "404";
         }
         // return response and status code
-        this.body = {user, status};
+        this.body = {post, status};
     });
 }

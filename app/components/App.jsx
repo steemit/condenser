@@ -181,6 +181,11 @@ class App extends React.Component {
                         </a>
                     </li>
                     <li>
+                        <a href="https://steemit.chat/home" target="_blank" rel="noopener noreferrer">
+                            {translate("APP_NAME_chat")}&nbsp;<Icon name="extlink" />
+                        </a>
+                    </li>
+                    <li>
                         <a onClick={() => depositSteem()}>
                             {translate("buy_LIQUID_TOKEN")}
                         </a>
@@ -203,11 +208,6 @@ class App extends React.Component {
                     <li>
                         <a href="/change_password" onClick={this.navigate}>
                             {translate("change_account_password")}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://steemit.chat/home" target="_blank" rel="noopener noreferrer">
-                            {translate("APP_NAME_chat")}&nbsp;<Icon name="extlink" />
                         </a>
                     </li>
                     <li>

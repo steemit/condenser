@@ -20,7 +20,7 @@ const ABOUT_FLAG = <div>
         <li>Hate Speech or Internet Trolling</li>
         <li>Intentional miscategorized content or Spam</li>
     </ul>
-</div>
+</div>;
 
 const MAX_VOTES_DISPLAY = 20;
 const VOTE_WEIGHT_DROPDOWN_THRESHOLD = 1.0 * 1000.0 * 1000.0;
@@ -68,17 +68,17 @@ class Voting extends React.Component {
             this.voteUpOrDown(false)
         };
         this.voteUpOrDown = (up) => {
-            if(this.props.voting) return
-            this.setState({votingUp: up, votingDown: !up})
-            const {myVote} = this.state
-            const {author, permlink, username, is_comment} = this.props
+            if(this.props.voting) return;
+            this.setState({votingUp: up, votingDown: !up});
+            const {myVote} = this.state;
+            const {author, permlink, username, is_comment} = this.props;
             if (this.props.vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD) {
                 localStorage.setItem('voteWeight' + (up ? '' : 'Down') + '-'+username+(is_comment ? '-comment' : ''),
                     this.state.weight);
             }
             // already voted Up, remove the vote
-            const weight = up ? (myVote > 0 ? 0 : this.state.weight) : (myVote < 0 ? 0 : -1 * this.state.weight)
-            if (this.state.showWeight) this.setState({showWeight: false})
+            const weight = up ? (myVote > 0 ? 0 : this.state.weight) : (myVote < 0 ? 0 : -1 * this.state.weight);
+            if (this.state.showWeight) this.setState({showWeight: false});
             this.props.vote(weight, {author, permlink, username, myVote})
         };
 
@@ -95,7 +95,7 @@ class Voting extends React.Component {
             this.toggleWeightUpOrDown(false)
         };
         this.toggleWeightUpOrDown = up => {
-            const {username, is_comment} = this.props
+            const {username, is_comment} = this.props;
             // Upon opening dialog, read last used weight (this works accross tabs)
             if(! this.state.showWeight) {
                 localStorage.removeItem('vote_weight'); // deprecated. remove this line after 8/31
@@ -119,7 +119,7 @@ class Voting extends React.Component {
 
     _checkMyVote(username, active_votes) {
         if (username && active_votes) {
-            const vote = active_votes.find(el => el.get('voter') === username)
+            const vote = active_votes.find(el => el.get('voter') === username);
             // weigth warning, the API may send a string or a number (when zero)
             if(vote) this.setState({myVote: parseInt(vote.get('percent') || 0, 10)})
         }
@@ -132,8 +132,8 @@ class Voting extends React.Component {
         // console.log('-- Voting.render -->', myVote, votingUp, votingDown);
         if(flag && !username) return null
 
-        const votingUpActive = voting && votingUp
-        const votingDownActive = voting && votingDown
+        const votingUpActive = voting && votingUp;
+        const votingDownActive = voting && votingDown;
 
         if (flag) {
             const down = <Icon name={votingDownActive ? 'empty' : (myVote < 0 ? 'flag2' : 'flag1')} />;
@@ -153,7 +153,7 @@ class Voting extends React.Component {
                     <p>{ABOUT_FLAG}</p>
                     <a href="#" onClick={this.voteDown} className="button outline" title="Flag">Flag</a>
                 </div>
-            </FoundationDropdown>
+            </FoundationDropdown>;
 
             const flagClickAction = myVote === null || myVote === 0 ? this.toggleWeightDown : this.voteDown
             return <span className="Voting">

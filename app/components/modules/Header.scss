@@ -43,6 +43,9 @@
   }
   ul > li > a {
     font-size: 1.1rem;
+    @media #{$small-only} {
+      font-size: 1em;
+    }
   }
   ul > li > span {
     font-size: 1.1rem;
@@ -50,6 +53,9 @@
     padding: 0.7rem 1rem;
     display: flex;
     text-transform: lowercase;
+    @media #{$small-only} {
+      font-size: 1em;
+    }
   }
   @media screen and (max-width: 39.9375em) {
       .shrink {

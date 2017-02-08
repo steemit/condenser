@@ -1,5 +1,5 @@
 
-import { APP_NAME, APP_URL, LANDING_PAGE_URL, LIQUID_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, VESTING_TOKEN, LIQUID_TICKER } from 'config/client_config';
+import { APP_NAME, APP_URL, LANDING_PAGE_URL, LIQUID_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, VESTING_TOKEN, LIQUID_TICKER, SUPPORT_EMAIL } from 'config/client_config';
 /**
  * see: app/locales/README.md
  */
@@ -107,6 +107,7 @@ const ru = {
 	welcome_to_the_blockchain: 'Добро пожаловать в Blockchain!',
 	your_voice_is_worth_something: 'Твой голос чего-то стоит',
 	learn_more: 'Узнать больше',
+	get_sp_when_sign_up: 'Получи {signupBonus} ' + VESTING_TOKEN + ' подписавшись сегодня.',
 	get_VESTING_TOKEN_when_sign_up: 'Получи {signupBonus} ' + VESTING_TOKEN + ' подписавшись сегодня.',
 	all_accounts_refunded: 'Все потери по восстанавливаемым аккаунтам были полностью компенсированы',
 	APP_URL_is_now_open_source: APP_URL + ' теперь Open Source',
@@ -273,11 +274,16 @@ const ru = {
 	vote: 'Проголосовать', // context: to vote? (title attribute on voting button)
 	witness: 'Делегаты',
 	top_witnesses: 'Топ делегатов',
-	// user's navigational menu
+	// user's navigation menu
 	feed: 'Лента',
 	wallet: 'Кошелек',
 	blog: 'Блог',
 	change_password: 'Сменить пароль',
+	information_for_user: 'Информация для пользователя',
+	video: 'Видео',
+	documentation: 'Документация',
+	faq: 'FAQ',
+	team: 'Команда',
 	// UserProfile
 	unknown_account: 'Неизвестный аккаунт',
 	user_hasnt_made_any_posts_yet: "Похоже что {name} еще не написал постов!",
@@ -346,7 +352,7 @@ const ru = {
 	author_rewards_history: 'История авторских наград',
 	balance: 'Баланс',
 	balances: 'Балансы',
-	estimate_account_value: 'Оценка стоимости аккаунта',
+	estimated_account_value: 'Оценка стоимости аккаунта',
 	next_power_down_is_scheduled_to_happen_at: 'Следующее понижение Силы Голоса запланировано на',
 	transfers_are_temporary_disabled: 'Переводы временно отключены',
 	history: 'История',
@@ -467,6 +473,9 @@ const ru = {
 	asset: 'Актив',
 	this_memo_is_private: 'Эта заметка является приватной',
 	this_memo_is_public: 'Эта заметка является публичной',
+	steem_power: 'Сила голоса',
+	steem_dollar: LIQUID_TOKEN,
+	power_up: 'Усилить силу голоса',
 	power_up: 'Усилить силу голоса',
 	power_down: 'Уменьшить силу голоса',
 	cancel_power_down: 'Отменить понижение силы голоса',
@@ -476,6 +485,11 @@ const ru = {
 	advanced: 'Продвинутый',
 	convert_to_LIQUID_TOKEN: 'Перевести в ' + LIQUID_TOKEN,
 	transfer_to_account: 'Передать пользователю',
+	savings: 'Вклад',
+	savings_withdraw: 'Вывод со счета',
+	withdraw_steem: 'Вывод ' + LIQUID_TOKEN,
+	withdraw_steem_dollars: 'Вывод ' + VESTING_TOKEN,
+	transfer_to_savings: 'Отправить на счет',
 	buy_LIQUID_TOKEN_or_VESTING_TOKEN: 'Купить ' + LIQUID_TOKEN + ' или ' + VESTING_TOKEN,
 	// TODO
 	version: 'Версия',
@@ -522,7 +536,7 @@ const ru = {
 	show_less: 'Показать меньше',
 	value_posts: 'сообщений низкой стоимости',
 	// PormotePost.jsx
-  leave_this_unchecked_to_receive_half_your_reward: 'не пытайтесь покинуть Омск',
+	leave_this_unchecked_to_receive_half_your_reward: 'не пытайтесь покинуть Омск',
 	promote_post: 'Продвинуть пост',
 	spend_your_DEBT_TOKEN_to_advertise_this_post: 'Используйте ваши ' + DEBT_TOKEN + ' чтобы прорекламировать этот пост в секции продвигаемого контента',
 	you_successfully_promoted_this_post: 'Вы успешно продвинули этот пост',
@@ -579,6 +593,42 @@ const ru = {
 	profile_website: 'Website',
 	saved: 'Сохранено',
 	server_returned_error: 'ошибка сервера',
+	user_avatar: 'Аватар пользователя',
+	save_avatar: 'Сохранить аватар',
+	wiki: 'Вики',
+	comment_is_nested_5_posts_deep: 'Комментарий слишком глубоко в цепочке. Максимум вложенности - 5',
+	you_may_only_comment_once_every_20_seconds: 'Вы можете комментировать не чаще каждых 20 секунд',
+	// this is from UserSaga.js
+	hello_your_account_may_have_been_compromised_we_are_working_on_restoring_an_access: 'Здравствуйте. Ваш аккаунт был скомпрометирован. Мы работаем над восстановлением доступа к вашему аккаунту. Пожалуйста, отправьте имейл на ' + SUPPORT_EMAIL + '.',
+	this_login_gives_owner_or_active_permissions_and_should_not_be_used_here: 'Этот логин дает владельческие и активные разрешения, и не должен использоваться здесь. Пожалуйста, предоставьте логин только для постинга.',
+	we_couldnt_verify_your_account_contact_us_at_SUPPORT_EMAIL: 'Мы не смогли верифицировать учётную запись. Пишите на почту ' + SUPPORT_EMAIL,
+    facebook_login_didnt_provide_any_email_addresses: 'Логин через Facebook не предоставил каких-либо имейл адресов. Пожалуйста, удостоверьтесь что Facebook аккаунт имеет главный имейл и попробуйте снова.',
+    we_are_sorry_we_cannot_sign_you_up_at_this_time_because_ip_associated_with_bots_activity: 'Извините, мы не можем зарегистрировать вас, потому что в настоящее время ваш IP адрес ассоциирован с активностью ботов. Пожалуйста, свяжитесь с ' + SUPPORT_EMAIL + ' для получения дальнейшей информации.',
+	successfully_authenticated_with: 'Успешная авторизация с', // 'Успешная авторизация с Facebook'
+    not_supported_email_address: 'Не поддерживаемый имейл адрес',
+    please_make_sure_you_dont_use_temporary_email_providers_contact_SUPPORT_URL: 'Пожалуйста, удостоверьтесь что вы не используете временный имейл адрес, свяжитесь с ' + SUPPORT_EMAIL + ' для получения информации.',
+    images_were_hidden_due_to_low_ratings: 'Изображения были скрыты из-за низкого рейтинга',
+	image_not_shown_due_to_low_ratings: 'Изображение не отображено из-за низкого рейтинга',
+	// page titles
+	create_a_post: 'Написать пост',
+	create_account: 'Создать аккаунт',
+	new_topic_posts: 'Новые "{topic}" посты',
+	sort_order_topic_posts: '{sort_order} "{topic}" посты',
+	new_posts: 'Новые посты',
+	sort_order_posts: '{sort_order} посты',
+	people_following_user_name: 'Подписчики {user_name}',
+	people_followed_by_user_name: '{user_name} подписан',
+	curation_rewards_by_user_name: 'Кураторские награды {user_name}',
+	author_rewards_by_user_name: 'Авторские награды {user_name}',
+	replies_by_user_name: 'Ответы {user_name}',
+	comments_by_user_name: 'Комментарии {user_name}',
+	account_registered_by_anoter_account_requires_10x_creation_fee_worth_of_VESTING_TOKEN_before_it_can_power_down: "Учетная запись должна набрать количество " + VESTING_TOKEN + " в 10 раз большее чем значение которое было заплачено за её создание, прежде чем она сможет начать понижение",
+	you_may_only_post_once_per_minute: 'Вы можете создавать посты только раз в минуту.',
+	you_already_voted_for_this_post: 'Вы уже голосовали за этот пост',
+	transaction_failed_error: 'Неудачная транзакция: {error}',
+    you_can_like_a_post_only_after_3_sec_after_last_post: 'Вы можете лайкать посты не чаще одного раза в три секунды',
+
+    password_info: 'This password or private key was entered incorrectly.  There is probably a handwriting or data-entry error.  Hint: A password or private key generated by Steemit will never contain 0 (zero), O (capital o), I (capital i) and l (lower case L) characters.',
 }
 
 export { ru }

@@ -9,6 +9,7 @@ import { browserHistory } from 'react-router';
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
 import VerticalMenu from 'app/components/elements/VerticalMenu';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+import NotifiCounter from 'app/components/elements/NotifiCounter';
 import { translate } from 'app/Translator';
 
 const defaultNavigate = (e) => {
@@ -20,11 +21,12 @@ const defaultNavigate = (e) => {
     browserHistory.push(a.pathname + a.search + a.hash);
 };
 
-function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpic, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn, location}) {
+function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn, location, showSignUp, userpic}) {
     const mcn = 'menu' + (vertical ? ' vertical show-for-small-only' : '');
     const mcl = vertical ? '' : ' sub-menu';
     const lcn = vertical ? '' : 'show-for-medium';
     const nav = navigate || defaultNavigate;
+    const user_information_button = <li className={lcn + ' buttons'}><Link to="/ico" className="button success">{translate('information_for_user')}</Link></li>;
     const submit_story = $STM_Config.read_only_mode ? null : <li className={lcn + ' submit-story'}><a href="/submit.html" onClick={nav}>{translate("submit_a_story")}</a></li>;
     const userpic_src = userpic || '/images/user.png';
     const feed_link = `/@${username}/feed`;
@@ -34,94 +36,36 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
     const account_link = `/@${username}`;
     const posts_link = `/@${username}/posts`;
     const reset_password_link = `/@${username}/password`;
+    const inIco = location && location.pathname.indexOf("/ico") == 0;
+    const ico_menu = [
+        {link: '#what-is-golos', value: translate('video')},
+        {link: '#docs', value: translate('documentation')},
+        {link: '#faq', value: translate('faq')},
+        {link: '#team', value: translate('team')},
+    ];
     function trackAnalytics(eventType) {
-        console.log(eventType)
         analytics.track(eventType)
     }
+
     if (loggedIn) { // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!
         const user_menu = [
-            {link: feed_link, value: translate('feed')},
+            {link: feed_link, value: translate('feed'), addon: <NotifiCounter fields="feed" />},
             {link: account_link, value: translate('blog')},
             {link: posts_link, value: translate('comments')},
-            {link: replies_link, value: translate('replies')},
-            {link: wallet_link, value: translate('wallet')},
+            {link: replies_link, value: translate('replies'), addon: <NotifiCounter fields="comment_reply" />},
+            {link: wallet_link, value: translate('wallet'), addon: <NotifiCounter fields="follow,send,receive,account_update" />},
             {link: reset_password_link, value: translate('change_password')},
             {link: settings_link, value: translate('settings')},
             loggedIn ?
                 {link: '#', onClick: logout, value: translate('logout')} :
                 {link: '#', onClick: showLogin, value: translate('login')}
         ];
-        const search = translate('search')
-        if (location && location.pathname.indexOf("/ico") != -1) {
         return (
-                <ul className={mcn + ' landing'}>
-                    <li className={lcn}>
-                        <a href="#what-is-golos">?????</a>
-                    </li>
-                    <li className={lcn}>
-                        <a href="#docs">????????????</a>
-                    </li>
-                    <li className={lcn}>
-                        <a href="#faq">FAQ</a>
-                    </li>
-                    <li className={lcn}>
-                        <a href="#team">???????</a>
-                    </li>
-                <LinkWithDropdown
-                    closeOnClickOutside
-                    dropdownPosition="bottom"
-                    dropdownAlignment="right"
-                        dropdownContent={<VerticalMenu items={user_menu} title={username} />}
-                        onClick={trackAnalytics.bind(this, 'user dropdown menu clicked')}
-                    >
-                        {!vertical && <li className={'Header__userpic '}>
-                            <a href={account_link} title={username} onClick={e => e.preventDefault()}>
-                                <Userpic account={username} width="36" height="36" />
-                            </a>
-                        </li>}
-                    </LinkWithDropdown>
-                    {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
-                        <span className="hamburger" />
-                    </a></li>}
-                </ul>
-            );
-            return      <ul className={mcn + mcl + ' landing'}>
-                            <li className={lcn}>
-                                <a href="#what-is-golos">?????</a>
-                            </li>
-                            <li className={lcn}>
-                                <a href="#docs">????????????</a>
-                            </li>
-                            <li className={lcn}>
-                                <a href="#faq">FAQ</a>
-                            </li>
-                            <li className={lcn}>
-                                <a href="#team">???????</a>
-                            </li>
-                            <li className={lcn + ' image-wrapper'}>
-                                <a href="/login.html">
-                                    <img src="images/user.png" width="36" height="36" />
-                                    <span>????</span>
-                                </a>
-                            </li>
-                            <li className={lcn}><LoadingIndicator type="circle" inline /></li>
-                            {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
-                                <span className="hamburger" />
-                            </a></li>}
-                        </ul>
-                              }
-
-/*
-                <li><a href={`/@${username}/transfers#buy_golos`} className="button alert">?????? ??????</a></li>
-                   move down on ICO start....
-*/
-        return (
-            <ul className={mcn}>
-                <li className={lcn + ' buttons'}>
-                    <Link to="/ico" className="button success">?????????? ??? ????????????</Link>
-                </li>
-                <li className={lcn}><a href="/static/search.html" title={search}>{vertical ? <span>{search}</span> : <Icon name="search" />}</a></li>
-                {submit_story}
+            <ul className={mcn + mcl}>
+                {inIco ? ico_menu.map((o,i) => {return <li key={i} className={lcn}><a href="{o.link}">{o.value}</a></li>}) :
+                    <li className={lcn}><a href="/static/search.html" title="Search">{vertical ? <span>{translate('search')}</span> : <Icon name="search" />}</a></li>
+                }
+                {!inIco && submit_story}
                 <LinkWithDropdown
                     closeOnClickOutside
                     dropdownPosition="bottom"
@@ -133,6 +77,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                         <a href={account_link} title={username} onClick={e => e.preventDefault()}>
                             <Userpic account={username} width="36" height="36" />
                         </a>
+                        <div className="TopRightMenu__notificounter"><NotifiCounter fields="total" /></div>
                     </li>}
                 </LinkWithDropdown>
                 {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
@@ -141,82 +86,14 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
             </ul>
         );
     }
-    if (probablyLoggedIn) {
-        if (location && location.pathname.indexOf("/ico") != -1) {
-            return      <ul className={mcn + mcl + ' landing'}>
-                            <li className={lcn}>
-                                <a href="#what-is-golos">?????</a>
-                            </li>
-                            <li className={lcn}>
-                                <a href="#docs">????????????</a>
-                            </li>
-                            <li className={lcn}>
-                                <a href="#faq">FAQ</a>
-                            </li>
-                            <li className={lcn}>
-                                <a href="#team">???????</a>
-                            </li>
-                            <li className={lcn + ' image-wrapper'}>
-                                <a href="/login.html">
-                                    <img src="images/user.png" width="36" height="36" />
-                                    <span>????</span>
-                                </a>
-                            </li>
-                            <li className={lcn}><LoadingIndicator type="circle" inline /></li>
-                            {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
-                                <span className="hamburger" />
-                            </a></li>}
-                        </ul>
-        }
-
-        return (
-            <ul className={mcn + mcl}>
-                <li className={lcn + ' buttons'}>
-                    <Link to="/ico" className="button success">?????????? ??? ????????????</Link>
-                </li>
-                {!vertical && <li><a href="/static/search.html" title="?????"><Icon name="search" /></a></li>}
-                <li className={lcn}><LoadingIndicator type="circle" inline /></li>
-                {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
-                    <span className="hamburger" />
-                </a></li>}
-            </ul>
-        );
-    }
-
-    if (location && location.pathname.indexOf("/ico") != -1) {
-        return  <ul className={mcn + mcl + ' landing'}>
-                    <li className={lcn}>
-                        <a href="#what-is-golos">?????</a>
-                    </li>
-                    <li className={lcn}>
-                        <a href="#docs">????????????</a>
-                    </li>
-                    <li className={lcn}>
-                        <a href="#faq">FAQ</a>
-                    </li>
-                    <li className={lcn}>
-                        <a href="#team">???????</a>
-                    </li>
-                    <li className={'image-wrapper'}>
-                        <a href="/login.html">
-                            <img src="images/user.png" width="36" height="36" />
-                            <span>????</span>
-                        </a>
-                    </li>
-                    {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
-                        <span className="hamburger" />
-                    </a></li>}
-                </ul>
-    }
     return (
         <ul className={mcn + mcl}>
-                <li className={lcn + ' buttons'}>
-                    <Link to="/ico" className="button success">?????????? ??? ????????????</Link>
-                </li>
-                {!vertical && <li><a href="/static/search.html" title="?????"><Icon name="search" /></a></li>}
-                <li className={lcn}><a href="/create_account" onClick={showSignUp}>{translate('sign_up')}</a></li>
-                <li className={lcn}><a href="/login.html" onClick={showLogin}>{translate('login')}</a></li>
-            {submit_story}
+            {inIco ? ico_menu.map((o,i) => {return <li key={i} className={lcn}><a href="{o.link}">{o.value}</a></li>}) : user_information_button }
+            {!inIco && !vertical && <li><a href="/static/search.html" title="{translate('search')}"><Icon name="search" /></a></li>}
+            {!inIco && !probablyLoggedIn && <li className={lcn}><a href="/enter_email">{translate('sign_up')}</a></li>}
+            {!inIco && !probablyLoggedIn && <li className={lcn}><a href="/login.html" onClick={showLogin}>{translate('login')}</a></li>}
+            {!inIco && !probablyLoggedIn && submit_story}            
+            {probablyLoggedIn && <li className={lcn}><LoadingIndicator type="circle" inline /></li>}
             {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
                 <span className="hamburger" />
             </a></li>}
@@ -228,13 +105,13 @@ TopRightMenu.propTypes = {
     username: React.PropTypes.string,
     loggedIn: React.PropTypes.bool,
     probablyLoggedIn: React.PropTypes.bool,
-    userpic: React.PropTypes.string,
     showLogin: React.PropTypes.func.isRequired,
-    showSignUp: React.PropTypes.func.isRequired,
     logout: React.PropTypes.func.isRequired,
     vertical: React.PropTypes.bool,
     navigate: React.PropTypes.func,
-    toggleOffCanvasMenu: React.PropTypes.func
+    toggleOffCanvasMenu: React.PropTypes.func,
+    userpic: React.PropTypes.string,
+    showSignUp: React.PropTypes.func.isRequired
 };
 
 export default connect(
@@ -261,13 +138,13 @@ export default connect(
             if (e) e.preventDefault();
             dispatch(user.actions.showLogin())
         },
-        logout: e => {
-            if (e) e.preventDefault();
-            dispatch(user.actions.logout())
-        },
         showSignUp: e => {
             if (e) e.preventDefault();
             dispatch(user.actions.showSignUp())
+        },
+        logout: e => {
+            if (e) e.preventDefault();
+            dispatch(user.actions.logout())
         }
     })
 )(TopRightMenu);

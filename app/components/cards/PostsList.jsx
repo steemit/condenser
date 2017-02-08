@@ -101,7 +101,7 @@ class PostsList extends React.Component {
         if ('keyCode' in e && e.keyCode !== 27) return;
         window.removeEventListener('popstate', this.onBackButton);
         window.removeEventListener('keydown', this.onBackButton);
-        this.setState({showPost: null});
+        this.closePostModal();
     }
 
     closeOnOutsideClick(e) {

@@ -94,7 +94,7 @@ export function contentStats(content) {
     const authorRepLog10 = repLog10(content.get('author_reputation'))
     const hasReplies = content.get('replies').size !== 0
 
-    const gray = authorRepLog10 < 1 || (authorRepLog10 < 65 && net_rshares_adj.compare(grayThreshold) < 0)
+    const gray = (authorRepLog10 < 1 && !hasPendingPayout) || (authorRepLog10 < 65 && net_rshares_adj.compare(grayThreshold) < 0)
     const hide = authorRepLog10 < 0 && !hasPendingPayout && !hasReplies // rephide
     const pictures = !gray
 

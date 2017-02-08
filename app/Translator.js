@@ -55,6 +55,7 @@ let translate = string => {
 };
 let translateHtml = () => {};
 let translatePlural = () => {};
+let translateNumber = () => {};
 
 // react-intl's formatMessage and formatHTMLMessage functions depend on context(this is where strings are stored)
 // thats why we:
@@ -78,10 +79,11 @@ class DummyComponentToExportProps extends React.Component {
 		translate = 	(...params) => this.translateHandler('string', ...params)
 		translateHtml = (...params) => this.translateHandler('html', ...params)
 		translatePlural = (...params) => this.translateHandler('plural', ...params)
+		translateNumber = (...params) => this.translateHandler('number', ...params)
 	}
 
 	translateHandler(translateType, id, values, options) {
-		const 	{ formatMessage, formatHTMLMessage, formatPlural } = this.props.intl
+		const 	{ formatMessage, formatHTMLMessage, formatPlural, formatNumber } = this.props.intl
 		// choose which method of rendering to choose: normal string or string with html
 		// handler = translateType === 'string' ? formatMessage : formatHTMLMessage
 		let handler
@@ -92,6 +94,8 @@ class DummyComponentToExportProps extends React.Component {
 				handler = formatHTMLMessage; break
 			case 'plural':
 				handler = formatPlural; break
+			case 'number':
+				handler = formatNumber; break
 			default:
 				throw new Error('unknown translate handler type')
 		}
@@ -100,6 +104,9 @@ class DummyComponentToExportProps extends React.Component {
 			if (!isUndefined(values) && !isObject(values)) throw new Error('translating function second parameter must be an object!');
 			// map parameters for react-intl,
 			// which uses formatMessage({id: 'stringId', values: {some: 'values'}, options: {}}) structure
+			// 'formatNumber' uses formatNumber(value: number) structure
+			else if (translateType == 'number') return handler(Number(id))
+			// everything else uses formatMessage({id: 'stringId', values: {some: 'values'}, options: {}}) structure
 			else return handler({id}, values, options)
 		}
 		else throw new Error('translating function first parameter must be a string!');
@@ -149,7 +156,7 @@ class Translator extends React.Component {
 	}
 }
 
-export { translate, translateHtml, translatePlural }
+export { translate, translateHtml, translatePlural, translateNumber }
 
 export default connect(
     // mapStateToProps

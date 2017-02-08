@@ -177,8 +177,8 @@ class Header extends React.Component {
             ['trending', translate('trending_24_hour')],
             ['trending30', translate('trending_30_day')],
             // promotion functionality currently does not work
-            // ['promoted', translate('promoted')],
-            ['active', translate('active')]
+            ['promoted', translate('promoted')],
+            // ['active', translate('active')]
         ];
         if (current_account_name) sort_orders.unshift(['home', translate('home')]);
         const sort_order_menu = sort_orders.filter(so => so[0] !== sort_order).map(so => ({link: sortOrderToLink(so[0], topic_original_link, current_account_name), value: capitalizeFirstLetter(so[1])}));
@@ -190,8 +190,8 @@ class Header extends React.Component {
             ['created', translate('new')],
             ['hot', translate('hot')],
             ['trending', translate('trending')],
-            // ['promoted', translate('promoted')],
-            ['active', translate('active')]
+            ['promoted', translate('promoted')],
+            // ['active', translate('active')]
         ];
         if (current_account_name) sort_orders_horizontal.unshift(['home', translate('home')]);
         const sort_order_menu_horizontal = sort_orders_horizontal.map(so => {

@@ -90,7 +90,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
         <ul className={mcn + mcl}>
             {inIco ? ico_menu.map((o,i) => {return <li key={i} className={lcn}><a href="{o.link}">{o.value}</a></li>}) : user_information_button }
             {!inIco && !vertical && <li><a href="/static/search.html" title="{translate('search')}"><Icon name="search" /></a></li>}
-            {!inIco && !probablyLoggedIn && <li className={lcn}><a href="/enter_email">{translate('sign_up')}</a></li>}
+            {!inIco && !probablyLoggedIn && <li className={lcn}><a href="/create_account" onClick={showSignUp}>{translate('sign_up')}</a></li>}
             {!inIco && !probablyLoggedIn && <li className={lcn}><a href="/login.html" onClick={showLogin}>{translate('login')}</a></li>}
             {!inIco && !probablyLoggedIn && submit_story}            
             {probablyLoggedIn && <li className={lcn}><LoadingIndicator type="circle" inline /></li>}

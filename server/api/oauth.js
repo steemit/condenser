@@ -3,9 +3,16 @@ import Purest from 'purest';
 import models from 'db/models';
 import findUser from 'db/utils/find_user';
 import {esc, escAttrs} from 'db/models';
+import request from 'request'
+import {getLogger} from '../../app/utils/Logger'
+import { translate } from 'app/Translator';
+import { APP_URL, SUPPORT_EMAIL } from 'config/client_config'
+
+const print = getLogger('oauth').print
 
 const facebook = new Purest({provider: 'facebook'});
 const reddit = new Purest({provider: 'reddit'});
+const vk = new Purest({provider: 'vk'})
 
 function logErrorAndRedirect(ctx, where, error) {
     const s = ctx.session;
@@ -42,13 +49,13 @@ function retrieveFacebookUserData(access_token) {
 
 function* handleFacebookCallback() {
     console.log('-- /handle_facebook_callback -->', this.session.uid, this.query);
-    let email = null;
+    let verified_email = false;
     try {
         if (this.query['error[error][message]']) {
             return logErrorAndRedirect(this, 'facebook:1', this.query['error[error][message]']);
         }
         const u = yield retrieveFacebookUserData(this.query.access_token);
-        email = u.email;
+        verified_email = false; // verified_email = !!(u.verified && u.email);
         const attrs = {
             uid: this.session.uid,
             name: u.name,
@@ -75,11 +82,11 @@ function* handleFacebookCallback() {
             verified: u.verified,
             provider_user_id: u.id
         };
-        // const i_attrs_email = {
-        //     provider: 'email',
-        //     email: u.email,
-        //     verified: false
-        // };
+        const i_attrs_email = {
+            provider: 'email',
+            email: u.email,
+            verified: verified_email
+        };
 
         let user = yield findUser({email: u.email, provider_user_id: u.id});
         console.log('-- /handle_facebook_callback user id -->', this.session.uid, user ? user.id : 'not found');
@@ -111,49 +118,86 @@ function* handleFacebookCallback() {
                 } else {
                     console.log('-- arec: failed to confirm user for account (no account) -->', this.session.uid, provider, account_recovery_record.id, user.id, this.session.uid, account_recovery_record.owner_key);
                     account_recovery_record.update({user_id: user.id, status: 'account not found'});
-                    this.body = 'We cannot verify the user account. Please contact support@steemit.com';
+                    this.body = translate('we_couldnt_verify_your_account_contact_us_at_SUPPORT_EMAIL');
                 }
             } else {
                 console.log('-- arec: failed to confirm user for account (no user) -->', this.session.uid, provider, this.session.uid, this.session.email);
                 account_recovery_record.update({status: 'user not found'});
-                this.body = 'We cannot verify the user account. Please contact support@steemit.com';
+                this.body = translate('we_couldnt_verify_your_account_contact_us_at_SUPPORT_EMAIL');
             }
             return null;
         }
-        // no longer necessary since there is phone verification now
-        // if (!u.email) {
-        //     console.log('-- /handle_facebook_callback no email -->', this.session.uid, u);
-        //     this.flash = {alert: 'Facebook login didn\'t provide any email addresses. Please make sure your Facebook account has a primary email address and try again.'};
-        //     this.redirect('/');
-        //     return;
-        // }
-        // if (!u.verified) {
-        //     throw new Error('Not verified Facebook account. Please verify your Facebook account and try again to sign up to Steemit.');
-        // }
+        if (!u.email) {
+            console.log('-- /handle_facebook_callback no email -->', this.session.uid, u);
+            this.flash = {alert: translate('facebook_login_didnt_provide_any_email_addresses')};
+            this.redirect('/');
+            return;
+        }
+
+        if (!u.verified) {
+            throw new Error('Not verified Facebook account. Please verify your Facebook account and try again to sign up to Steemit.');
+        }
+
+        const same_ip_bot = yield models.User.findOne({
+            attributes: ['id', 'created_at'],
+            where: {remote_ip: attrs.remote_ip, bot: true}
+        });
+        if (same_ip_bot) {
+            console.log('-- /handle_facebook_callback same_ip_bot -->', this.session.uid, attrs.remote_ip, attrs.email);
+            this.flash = {alert: translate('we_are_sorry_we_cannot_sign_you_up_at_this_time_because_ip_associated_with_bots_activity')};
+            this.redirect('/');
+            return;
+        }
+
+        const email_provider = u.email.match(/([\w\d-]+\.\w+)$/)[1];
+        if (!email_provider) throw new Error('Incorrect email format');
+        const blocked_email = yield models.List.findOne({
+            attributes: ['id'],
+            where: {kk: 'block-email-provider', value: email_provider}
+        });
+        if (blocked_email) {
+            console.log('-- /handle_facebook_callback blocked_email -->', this.session.uid, u.email);
+            this.flash = {alert: translate('not_supported_email_address') + ': ' + u.email + '. ' + translate('please_make_sure_you_dont_use_temporary_email_providers_contact_SUPPORT_URL')};
+            this.redirect('/');
+            return;
+        }
 
         if (user) {
-            attrs.id = user.id;
+            i_attrs_email.user_id = attrs.id = user.id;
             yield models.User.update(attrs, {where: {id: user.id}});
             yield models.Identity.update(i_attrs, {where: {user_id: user.id, provider: 'facebook'}});
+            if (verified_email) {
+                const eid = yield models.Identity.findOne(
+                    {attributes: ['id', 'verified'], where: {user_id: user.id, provider: 'email'}, order: 'id DESC'}
+                );
+                if (eid) {
+                    if (!eid.verified) yield eid.update({email: u.email, verified: true});
+                } else {
+                    yield models.Identity.create(i_attrs_email);
+                }
+            }
             console.log('-- fb updated user -->', this.session.uid, user.id, u.name, u.email);
         } else {
             user = yield models.User.create(attrs);
-            i_attrs.user_id = user.id;
+            i_attrs_email.user_id = i_attrs.user_id = user.id;
             console.log('-- fb created user -->', user.id, u.name, u.email);
             const identity = yield models.Identity.create(i_attrs);
             console.log('-- fb created identity -->', this.session.uid, identity.id);
-            // if (i_attrs_email.email) {
-            //     i_attrs_email.user_id = user.id
-            //     const email_identity = yield models.Identity.create(i_attrs_email);
-            //     console.log('-- fb created email identity -->', this.session.uid, email_identity.id);
-            // }
+            if (i_attrs_email.email) {
+                const email_identity = yield models.Identity.create(i_attrs_email);
+                console.log('-- fb created email identity -->', this.session.uid, email_identity.id);
+            }
         }
         this.session.user = user.id;
     } catch (error) {
         return logErrorAndRedirect(this, 'facebook:2', error);
     }
-    this.flash = {success: 'Successfully authenticated with Facebook'};
-    this.redirect('/enter_email' + (email ? `?email=${email}` : ''));
+    this.flash = {success: translate('successfully_authenticated_with') + ' Facebook'};
+    //if (verified_email) {
+        this.redirect('/create_account');
+//    } else {
+        //this.redirect('/enter_email');
+//    }
     return null;
 }
 
@@ -163,7 +207,7 @@ function retrieveRedditUserData(access_token) {
             .get('https://oauth.reddit.com/api/v1/me.json?raw_json=1')
             .headers({
                 Authorization: `bearer ${access_token}`,
-                'User-Agent': 'Steembot/1.0 (+http://steemit.com)',
+                'User-Agent': 'Steembot/1.0 (+http://' + APP_URL + ')',
                 Accept: 'application/json',
                 'Content-type': 'application/json'
             })

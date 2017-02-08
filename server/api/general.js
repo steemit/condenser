@@ -104,23 +104,23 @@ export default function useGeneralApi(app) {
                 throw new Error('You are on the waiting list. We will get back to you at the earliest possible opportunity.');
             }
 
-            // check email
-            const eid = yield models.Identity.findOne(
-                {attributes: ['id'], where: {user_id, provider: 'email', verified: true}, order: 'id DESC'}
-            );
-            if (!eid) {
-                console.log(`api /accounts: not confirmed email for user ${this.session.uid} #${user_id}`);
-                throw new Error('Email address is not confirmed');
-            }
+            // // check email
+            // const eid = yield models.Identity.findOne(
+            //     {attributes: ['id'], where: {user_id, provider: 'email', verified: true}, order: 'id DESC'}
+            // );
+            // if (!eid) {
+            //     console.log(`api /accounts: not confirmed email for user ${this.session.uid} #${user_id}`);
+            //     throw new Error('Email address is not confirmed');
+            // }
 
-            // check phone
-            const mid = yield models.Identity.findOne(
-                {attributes: ['id'], where: {user_id, provider: 'phone', verified: true}, order: 'id DESC'}
-            );
-            if (!mid) {
-                console.log(`api /accounts: not confirmed sms for user ${this.session.uid} #${user_id}`);
-                throw new Error('Phone number is not confirmed');
-            }
+            // // check phone
+            // const mid = yield models.Identity.findOne(
+            //     {attributes: ['id'], where: {user_id, provider: 'phone', verified: true}, order: 'id DESC'}
+            // );
+            // if (!mid) {
+            //     console.log(`api /accounts: not confirmed sms for user ${this.session.uid} #${user_id}`);
+            //     throw new Error('Phone number is not confirmed');
+            // }
 
             yield createAccount({
                 signingKey: config.registrar.signing_key,

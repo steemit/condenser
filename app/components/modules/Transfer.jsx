@@ -52,7 +52,7 @@ class TransferForm extends Component {
             const {currentAccount} = props
             const isWithdraw = transferType && transferType === 'Savings Withdraw'
             const balanceValue =
-                !asset || asset === 'STEEM' ?
+                !asset || asset === 'GOLOS' ?
                     isWithdraw ? currentAccount.get('savings_balance') : currentAccount.get('balance') :
                 asset === 'SBD' ?
                     isWithdraw ? currentAccount.get('savings_sbd_balance') : currentAccount.get('sbd_balance') :
@@ -100,7 +100,7 @@ class TransferForm extends Component {
         const {asset} = this.state
         const isWithdraw = transferType && transferType === 'Savings Withdraw'
         return !asset ||
-            asset.value === 'STEEM' ?
+            asset.value === 'GOLOS' ?
                 isWithdraw ? currentAccount.get('savings_balance') : currentAccount.get('balance') :
             asset.value === 'SBD' ?
                 isWithdraw ? currentAccount.get('savings_sbd_balance') : currentAccount.get('sbd_balance') :
@@ -193,7 +193,7 @@ class TransferForm extends Component {
                             <input type="text" placeholder="Amount" {...amount.props} ref="amount" autoComplete="off" disabled={loading} />
                             {asset && <span className="input-group-label" style={{paddingLeft: 0, paddingRight: 0}}>
                                 <select {...asset.props} placeholder="Asset" disabled={loading} style={{minWidth: "5rem", height: "inherit", backgroundColor: "transparent", border: "none"}}>
-                                    <option value="STEEM">STEEM</option>
+                                    <option value="GOLOS">GOLOS</option>
                                     <option value="SBD">SBD</option>
                                 </select>
                             </span>}
@@ -285,7 +285,7 @@ export default connect(
                 }
                 dispatch(user.actions.hideTransfer())
             }
-            const asset2 = toVesting ? 'STEEM' : asset
+            const asset2 = toVesting ? 'GOLOS' : asset
             const operation = {
                 from: username,
                 to, amount: parseFloat(amount, 10).toFixed(3) + ' ' + asset2,

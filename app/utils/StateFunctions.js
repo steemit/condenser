@@ -85,6 +85,7 @@ export function contentStats(content) {
 
     // post must have non-trivial negative rshares to be grayed out. (more than 10 digits)
     const grayThreshold = -9999999999
+    const meetsGrayThreshold = net_rshares_adj.compare(grayThreshold) < 0
 
     const net_rshares = Long.fromString(String(content.get('net_rshares')))
     const netVoteSign = net_rshares.compare(Long.ZERO)
@@ -94,8 +95,8 @@ export function contentStats(content) {
     const authorRepLog10 = repLog10(content.get('author_reputation'))
     const hasReplies = content.get('replies').size !== 0
 
-    const gray = (authorRepLog10 < 1 && !hasPendingPayout) || (authorRepLog10 < 65 && net_rshares_adj.compare(grayThreshold) < 0)
-    const hide = authorRepLog10 < 0 && !hasPendingPayout && !hasReplies // rephide
+    const gray = !hasPendingPayout && (authorRepLog10 < 1 || (authorRepLog10 < 65 && meetsGrayThreshold))
+    const hide = !hasPendingPayout && (authorRepLog10 < 0) // rephide
     const pictures = !gray
 
     // Combine tags+category to check nsfw status

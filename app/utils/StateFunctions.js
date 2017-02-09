@@ -57,7 +57,7 @@ export function contentStats(content) {
     let total_votes = 0;
     let up_votes = 0;
 
-    content.get('active_votes').forEach(v => {
+    content.get('active_votes').forEach((v) => {
         const sign = Math.sign(v.get('percent'))
         if(sign === 0) return;
         total_votes += 1
@@ -73,7 +73,7 @@ export function contentStats(content) {
         // For graying: sum up total rshares from voters with non-neg reputation.
         if(String(v.get('reputation')).substring(0, 1) !== '-') {
             // And also ignore tiny downvotes (9 digits or less)
-            if(! (rshares.substring(0, 1) === '-' && rshares.length < 11)) {
+            if(!(rshares.substring(0, 1) === '-' && rshares.length < 11)) {
                 net_rshares_adj = net_rshares_adj.add(rshares)
             }
         }
@@ -103,7 +103,7 @@ export function contentStats(content) {
     const json = content.get('json_metadata')
     let tags = []
     try {
-        tags = json && JSON.parse(json).tags || [];
+        tags = (json && JSON.parse(json).tags) || [];
         if(typeof tags == 'string') {
             tags = [tags];
         } if(!Array.isArray(tags)) {

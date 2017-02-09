@@ -7,6 +7,7 @@ import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {findParent} from 'app/utils/DomUtils';
 import Icon from 'app/components/elements/Icon';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+import {connect} from 'react-redux'
 
 function topPosition(domElt) {
     if (!domElt) {
@@ -174,16 +175,14 @@ class PostsList extends React.Component {
             ignore_result, account} = this.props;
         const {thumbSize, showPost, nsfwPref} = this.state
         const postsInfo = [];
-        posts.forEach(item => {
+        posts.forEach((item) => {
             const cont = content.get(item);
             if(!cont) {
                 console.error('PostsList --> Missing cont key', item)
                 return
             }
             const ignore = ignore_result && ignore_result.has(cont.get('author'))
-            // if(ignore) console.log('ignored post by', cont.get('author'), '\t', item)
-
-            const {hide} = cont.get('stats').toJS()
+            const hide = cont.getIn(['stats', 'hide'])
             if(!(ignore || hide) || showSpam) // rephide
                 postsInfo.push({item, ignore})
         });
@@ -208,7 +207,7 @@ class PostsList extends React.Component {
                 {showPost && <div id="post_overlay" className="PostsList__post_overlay" tabIndex={0}>
                     <div className="PostsList__post_top_overlay">
                         <div className="PostsList__post_top_bar">
-                            <button className="back-button" type="button" title="Back" onClick={() => {this.setState({showPost: null})}}>
+                            <button className="back-button" type="button" title="Back" onClick={() => { this.setState({showPost: null}) }}>
                                 <span aria-hidden="true"><Icon name="chevron-left" /></span>
                             </button>
                             <CloseButton onClick={this.closePostModal} />
@@ -222,9 +221,6 @@ class PostsList extends React.Component {
         );
     }
 }
-
-// import {List, Map} from 'immutable'
-import {connect} from 'react-redux'
 
 export default connect(
     (state, props) => {

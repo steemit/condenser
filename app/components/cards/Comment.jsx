@@ -15,18 +15,22 @@ import { translate } from 'app/Translator';
 import {parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import {Long} from 'bytebuffer';
 
-// returns true if the comment subtree has any non-garbage comments.
-//   avoids hiding downvoted nodes when descendants have positive payouts,
-//   while allowing us to prune entire garbage subtrees
-function hasPositive(c) {
-    if(!c.getIn(['stats', 'hide'])) {
+// returns true if the comment has a 'hide' flag AND has no descendants w/ positive payout
+function hideSubtree(cont, c) {
+    return cont.getIn([c, 'stats', 'hide']) && !hasPositivePayout(cont, c)
+}
+
+function hasPositivePayout(cont, c) {
+    const post = cont.get(c)
+    if(post.getIn(['stats', 'hasPendingPayout'])) {
         return true;
     }
-    if(c.get('replies').includes(reply => hasPositive(reply))) {
+    if(post.get('replies').find(reply => hasPositivePayout(cont, reply))) {
         return true;
     }
     return false;
 }
+
 
 export function sortComments( cont, comments, sort_order ) {
 
@@ -176,7 +180,7 @@ class CommentImpl extends React.Component {
     _checkHide(props) {
         const content = props.cont.get(props.content);
         if (content) {
-            const hide = !hasPositive(content)
+            const hide = hideSubtree(props.cont, props.content)
             const gray = content.getIn(['stats', 'gray'])
             if(hide) {
                 const {onHide} = this.props

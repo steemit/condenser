@@ -115,5 +115,5 @@ export function contentStats(content) {
     tags.push(content.get('category'))
     const isNsfw = tags.filter(tag => tag && tag.match(/^nsfw$/i)).length > 0;
 
-    return {hide, gray, pictures, netVoteSign, authorRepLog10, hasReplies, isNsfw, flagWeight, total_votes, up_votes}
+    return {hide, gray, pictures, netVoteSign, authorRepLog10, hasReplies, isNsfw, flagWeight, total_votes, up_votes, hasPendingPayout}
 }

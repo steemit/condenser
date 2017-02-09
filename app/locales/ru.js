@@ -1,12 +1,22 @@
 
-import { APP_NAME, APP_URL, LANDING_PAGE_URL, LIQUID_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, VESTING_TOKEN, LIQUID_TICKER, SUPPORT_EMAIL } from 'config/client_config';
+import {
+	APP_NAME, 
+	APP_URL, 
+	LANDING_PAGE_URL, 
+	LIQUID_TOKEN, 
+	DEBT_TOKEN, 
+	DEBT_TOKEN_SHORT, 
+	CURRENCY_SIGN, 
+	VESTING_TOKEN, 
+	VESTING_TOKEN1, 
+	VESTING_TOKEN2, 
+	VESTING_TOKEN3, 
+	VESTING_TOKENS, 
+	LIQUID_TICKER, 
+	SUPPORT_EMAIL } from 'config/client_config';
 /**
  * see: app/locales/README.md
  */
-const VESTING_TOKEN1 = 'Сил Голоса'
-const VESTING_TOKEN2 = 'Силу Голоса'
-const VESTING_TOKEN3 = 'Силах Голоса'
-const VESTING_TOKENS = 'Силы Голоса'
 const ru = {
 	// this variables mainly used in navigation section
 	about: "О проекте",

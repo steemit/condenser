@@ -43,7 +43,7 @@ function log10(str) {
 }
 
 export const repLog10 = reputation => {
-    let out = Math.log10((Math.abs(parseInt(reputation) || 0))
+    let out = Math.log10((Math.abs(parseInt(reputation) || 0)))
     out = Math.max(out - 9, 0) * Math.sign(reputation)
     out = (out * 9) + 25 // 9 points per magnitude. center at 25
     // base-line 0 to darken and < 0 to auto hide (grep rephide)

@@ -437,7 +437,7 @@ const ru = {
 	your_existing_DEBT_TOKEN_are_liquid_and_transferable: 'Ваши существующие ' + DEBT_TOKEN + ' ликвидны и перемещаемы. Возможно, вы хотите торговать ' + DEBT_TOKEN + ' напрямую на этом сайте в разделе {link} или перевести на внешний рынок.',
 	buy_or_sell: 'Купить или Продать',
 	trending_30_day: 'популярное (30 дней)',
-	promoted: 'Продвигаемое',
+	promoted: 'Промо',
 	comments: 'Комментарии',
 	topics: 'Топики',
 	// TODO

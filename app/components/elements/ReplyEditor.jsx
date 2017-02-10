@@ -11,7 +11,7 @@ import sanitizeConfig, {allowedTags} from 'app/utils/SanitizeConfig'
 import sanitize from 'sanitize-html'
 import HtmlReady from 'shared/HtmlReady'
 import g from 'app/redux/GlobalReducer'
-import {Set} from 'immutable'
+import {Map, Set} from 'immutable'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import Remarkable from 'remarkable'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
@@ -102,6 +102,7 @@ class ReplyEditor extends React.Component {
         parent_author: '',
         parent_permlink: '',
         type: 'submit_comment',
+        metaLinkData: Map(),
     }
 
     constructor() {
@@ -257,6 +258,7 @@ class ReplyEditor extends React.Component {
     render() {
         // NOTE title, category, and body are UI form fields ..
         const originalPost = {
+            title: this.props.title,
             category: this.props.category,
             body: this.props.body,
         }
@@ -267,7 +269,7 @@ class ReplyEditor extends React.Component {
             author, permlink, parent_author, parent_permlink, type, jsonMetadata,
             state, successCallback, handleSubmit, submitting, invalid,
         } = this.props
-        const {postError, loading, titleWarn, rte, payoutType} = this.state
+        const {postError, markdownViewerText, loading, titleWarn, rte, allSteemPower} = this.state
         const {onTitleChange} = this
         const errorCallback = estr => { this.setState({ postError: estr, loading: false }) }
         const successCallbackWrapper = (...args) => {
@@ -279,8 +281,8 @@ class ReplyEditor extends React.Component {
         // Be careful, autoVote can reset curation rewards.  Never autoVote on edit..
         const autoVoteValue = !isEdit && autoVote.value
         const replyParams = {
-            author, permlink, parent_author, parent_permlink, type, state, originalPost, isHtml, isStory,
-            jsonMetadata, autoVote: autoVoteValue, payoutType,
+            author, permlink, parent_author, parent_permlink, type, state, originalPost,
+            jsonMetadata, autoVote: autoVoteValue, allSteemPower,
             successCallback: successCallbackWrapper, errorCallback
         }
         const postLabel = username ? <Tooltip t={translate('post_as') + ' “' + username + '”'}>{translate('post')}</Tooltip> : translate('post')
@@ -301,7 +303,7 @@ class ReplyEditor extends React.Component {
         return (
             <div className="ReplyEditor row">
                 <div className="column small-12">
-                    <div ref="draft" className="ReplyEditor__draft ReplyEditor__draft-hide">Draft saved.</div>
+                    <div ref="draft" className="ReplyEditor__draft ReplyEditor__draft-hide">{translate('draft_saved')}.</div>
                     <form className={vframe_class}
                         onSubmit={handleSubmit(data => {
                             const loadingCallback = () => this.setState({loading: true, postError: undefined})
@@ -354,7 +356,7 @@ class ReplyEditor extends React.Component {
 
                             {isStory && !isEdit && <div className="ReplyEditor__options float-right text-right">
 
-                                Rewards:&nbsp;
+                                {translate('rewards')}:&nbsp;
                                 <select value={this.state.payoutType} onChange={this.onPayoutTypeChange} style={{color: this.state.payoutType == '0%' ? 'orange' : 'inherit'}}>
                                     <option value="100%">{translate('power_up_on')} 100%</option>
                                     <option value="50%">{translate('default')} (50% / 50%)</option>
@@ -412,7 +414,8 @@ export default formId => reduxForm(
         let {category, title, body} = ownProps
         if (/submit_/.test(type)) title = body = ''
         if(isStory && jsonMetadata && jsonMetadata.tags) {
-            category = Set([category, ...jsonMetadata.tags]).join(' ')
+            const detags = jsonMetadata.tags.map(tag => detransliterate(tag))
+            category = Set([detransliterate(category), ...detags]).join(' ')
         }
         const ret = {
             ...ownProps,
@@ -438,6 +441,19 @@ export default formId => reduxForm(
         }) => {
             // const post = state.global.getIn(['content', author + '/' + permlink])
             const username = state.user.getIn(['current', 'username'])
+
+            // Parse categories:
+            // if category string starts with russian symbol, add 'ru-' prefix to it
+            // when transletirate it
+            // This is needed to be able to detransletirate it back to russian in future (to show russian categories to user)
+            // (all of this is needed because blockchain does not allow russian symbols in category)
+            if (category) {
+                category = category
+                    .split(' ')
+                    .map(item => /^[а-яё]/.test(item) ? 'ru--' + detransliterate(item, true) : item)
+                    .join(' ')
+                    .trim()
+            }
 
             const isEdit = type === 'edit'
             const isNew = /^submit_/.test(type)

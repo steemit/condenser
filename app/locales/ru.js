@@ -115,6 +115,7 @@ const ru = {
 	clear: 'Очистить',
 	save: 'Сохранить',
 	upvote_post: 'Проголосовать за пост',
+    upvote_own_post: 'Проголосовать за свой пост',
 	update_post: 'Обновить пост',
 	markdown_is_supported: 'Поддерживается стилизация с Markdown',
 	preview: 'Предварительный просмотр',
@@ -677,6 +678,8 @@ const ru = {
     // Voting.jsx
     payout_declined: 'Вывод отменен',
     max_accepted_payout: 'Максимально возможная сумма',
+
+    draft_saved: 'Сохранено в черновик',
 }
 
 export { ru }

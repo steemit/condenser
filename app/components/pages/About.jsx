@@ -1,7 +1,7 @@
 import React from 'react';
 import HelpContent from 'app/components/elements/HelpContent';
 
-class Welcome extends React.Component {
+class About extends React.Component {
     render() {
         return (
             <div className="row">
@@ -15,5 +15,5 @@ class Welcome extends React.Component {
 
 module.exports = {
     path: 'about.html',
-    component: Welcome
+    component: About
 };

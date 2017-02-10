@@ -88,7 +88,7 @@ class PostSummary extends React.Component {
 
     render() {
         const {currentCategory, thumbSize, ignore, onClick} = this.props;
-        const {post, content, pending_payout, total_payout} = this.props;
+        const {post, content, pending_payout, total_payout, cashout_time} = this.props;
         const {account} = this.props;
         if (!content) return null;
 

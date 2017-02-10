@@ -14,8 +14,9 @@ import Dialogs from 'app/components/modules/Dialogs';
 import Modals from 'app/components/modules/Modals';
 import Icon from 'app/components/elements/Icon';
 import {key_utils} from 'shared/ecc';
-import MiniHeader from 'app/components/modules/MiniHeader';
 import { translate } from '../Translator.js';
+import {WIKI_URL, LANDING_PAGE_URL, WHITEPAPER_URL, TERMS_OF_SERVICE_URL, PRIVACY_POLICY_URL} from 'config/client_config';
+import MiniHeader from 'app/components/modules/MiniHeader';
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 
 class App extends React.Component {
@@ -155,81 +156,66 @@ class App extends React.Component {
             <SidePanel ref="side_panel" alignment="right">
                 <TopRightMenu vertical navigate={this.navigate} />
                 <ul className="vertical menu">
-                    <li>
-                        <a href="https://steem.io" onClick={this.navigate}>
-                            {translate("about")}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/tags.html/hot" onClick={this.navigate}>
-                            {translate("explore")}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://steem.io/SteemWhitePaper.pdf" onClick={this.navigate}>
-                            {translate("APP_NAME_whitepaper")}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/welcome" onClick={this.navigate}>
-                            Welcome
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/faq.html" onClick={this.navigate}>
-                            FAQ
-                        </a>
-                    </li>
-                    <li>
-                        <a onClick={() => depositSteem()}>
-                            {translate("buy_LIQUID_TOKEN")}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="http://steemtools.com/" onClick={this.navigate} target="_blank" rel="noopener noreferrer">
-                            {translate('APP_NAME_app_center')}&nbsp;<Icon name="extlink" />
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/market" onClick={this.navigate}>
-                            {translate("currency_market")}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/recover_account_step_1" onClick={this.navigate}>
-                        {translate("stolen_account_recovery")}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/change_password" onClick={this.navigate}>
-                            {translate("change_account_password")}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://steemit.chat/home" target="_blank" rel="noopener noreferrer">
-                            {translate("APP_NAME_chat")}&nbsp;<Icon name="extlink" />
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://steemit.github.io/steemit-docs/" target="_blank" rel="noopener noreferrer">
-                            {translate("steemit_api_docs")}&nbsp;<Icon name="extlink" />
-                        </a>
-                    </li>
-                    <li className="last">
-                        <a href="/~witnesses" onClick={this.navigate}>
-                            {translate("vote_for_witnesses")}
-                        </a>
-                    </li>
+                  <li>
+                      <a href={WIKI_URL} target="blank" onClick={this.navigate}>
+                            {translate('wiki')}
+                      </a>
+                  </li>
+                  <li>
+                      <a href={LANDING_PAGE_URL} onClick={this.navigate}>
+                          {translate("about")}
+                      </a>
+                  </li>
+                  <li>
+                      <a href="/tags.html/hot" onClick={this.navigate}>
+                          {translate("payouts_by_tag")}
+                      </a>
+                  </li>
+                  <li>
+                      <a href={WHITEPAPER_URL} onClick={this.navigate}>
+                          {translate("APP_NAME_whitepaper")}
+                      </a>
+                  </li>
+                  <li>
+                      <a href="/market" onClick={this.navigate}>
+                          {translate("currency_market")}
+                      </a>
+                  </li>
+                  <li>
+                      <a href="/recover_account_step_1" onClick={this.navigate}>
+                          {translate("stolen_account_recovery")}
+                      </a>
+                  </li>
+                  <li>
+                      <a href="/change_password" onClick={this.navigate}>
+                          {translate("change_account_password")}
+                      </a>
+                  </li>
+                  <li>
+                      <a href="https://chat.golos.io" target="_blank">
+                          {translate("APP_NAME_chat")}&nbsp;<Icon name="extlink" />
+                      </a>
+                  </li>
+                  <li>
+                      <a href="http://golostools.com/" onClick={this.navigate} target="_blank" rel="noopener noreferrer">
+                          {translate('APP_NAME_app_center')}&nbsp;<Icon name="extlink" />
+                      </a>
+                  </li>
+                  <li className="last">
+                      <a href="/~witnesses" onClick={this.navigate}>
+                          {translate("witnesses")}
+                      </a>
+                  </li>
                 </ul>
                 <ul className="vertical menu">
                     <li>
-                        <a href="/privacy.html" onClick={this.navigate} rel="nofollow">
-                            {translate("privacy_policy")}
+                      <a href={TERMS_OF_SERVICE_URL} onClick={this.navigate} rel="nofollow">
+                            {translate("terms_of_service")}
                         </a>
                     </li>
                     <li>
-                        <a href="/tos.html" onClick={this.navigate} rel="nofollow">
-                            {translate("terms_of_service")}
+                      <a href={PRIVACY_POLICY_URL} onClick={this.navigate} rel="nofollow">
+                            {translate("privacy_policy")}                            
                         </a>
                     </li>
                 </ul>

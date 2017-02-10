@@ -4,7 +4,9 @@ import { APP_NAME, APP_URL, LANDING_PAGE_URL, DEBT_TOKEN, DEBT_TOKEN_SHORT, LIQU
  */
 const en = 	{
 	// this variables mainly used in navigation section
-	about: "About",
+	wiki					: 'Вики',
+	about					: "About",
+	payouts_by_tag			: 'Выплаты по тэгам', // TODO : translate to English
 	explore: "Explore",
 	APP_NAME_whitepaper: APP_NAME + " Whitepaper",
 	buy_LIQUID_TOKEN: 'Buy ' + LIQUID_TOKEN,

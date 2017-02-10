@@ -62,7 +62,7 @@ export default class HelpContent extends React.Component {
 
     constructor(props) {
         super(props);
-        this.locale = 'en';
+        this.locale = 'ru';
     }
 
     componentWillMount() {

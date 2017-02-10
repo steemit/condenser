@@ -181,6 +181,8 @@ const ru = {
 	adjust_your: 'откорректировать',
 	display_preferences: 'настройки отображения',
 	// PostFull.jsx
+	re: 'ОТ',
+	// PostFull.jsx
 	by: ' ', // здеcь специально ничего нет, пример: "posted by 'Vitya'" > "добавил 'Vitya'"
 	in: 'в',
 	share: 'Поделиться',
@@ -386,6 +388,7 @@ const ru = {
 	curation_rewards_last_week: "Кураторские награды за последнюю неделю",
 	curation_rewards_history: 'История кураторских наград',
 	// Post.jsx
+	votes: 'Голоса',
 	now_showing_comments_with_low_ratings: 'Отображаем комментарии с низким рейтингом',
 	hide: 'Скрыть',
 	show: 'Показать',

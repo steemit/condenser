@@ -173,6 +173,13 @@ const ru = {
 	collapse_or_expand: "Свернуть/Развернуть",
 	reveal_comment: 'Показать комментарий',
 	are_you_sure: 'Вы уверены?',
+	// PostSummary.jsx
+	to_save_your_preferences: 'для того чтобы сохранить настройки.',
+	this_post_is: 'Данный пост –',
+	you_can: 'Вы можете',
+	reveal_it: 'посмотреть',
+	adjust_your: 'откорректировать',
+	display_preferences: 'настройки отображения',
 	// PostFull.jsx
 	by: ' ', // здеcь специально ничего нет, пример: "posted by 'Vitya'" > "добавил 'Vitya'"
 	in: 'в',

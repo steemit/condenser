@@ -23,6 +23,8 @@ export const DEBT_TOKEN = 'Золотой' // 'STEEM DOLLAR'
 // export const DEBT_TOKEN_UPPERCASE = 'Golos Backed Gold' // 'STEEM DOLLAR'
 export const CURRENCY_SIGN = '₽≈' // '$'
 export const WIKI_URL = 'https://wiki.golos.io/'
+//export const WELCOME_PAGE_URL       = 'https://golos.io/welcome'
+
 export const LANDING_PAGE_URL       = 'https://golos.io/ico'
 export const TERMS_OF_SERVICE_URL   = 'https://golos.io/legal/terms_of_service.pdf'
 export const PRIVACY_POLICY_URL     = 'https://golos.io/ru--konfidenczialxnostx/@golos/politika-konfidencialnosti'

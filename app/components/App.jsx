@@ -15,7 +15,7 @@ import Modals from 'app/components/modules/Modals';
 import Icon from 'app/components/elements/Icon';
 import {key_utils} from 'shared/ecc';
 import { translate } from '../Translator.js';
-import {WIKI_URL, LANDING_PAGE_URL, WHITEPAPER_URL, TERMS_OF_SERVICE_URL, PRIVACY_POLICY_URL} from 'config/client_config';
+import {WIKI_URL, LANDING_PAGE_URL, ABOUT_PAGE_URL, WHITEPAPER_URL, TERMS_OF_SERVICE_URL, PRIVACY_POLICY_URL} from 'config/client_config';
 import MiniHeader from 'app/components/modules/MiniHeader';
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 
@@ -162,8 +162,8 @@ class App extends React.Component {
                       </a>
                   </li>
                   <li>
-                      <a href={LANDING_PAGE_URL} onClick={this.navigate}>
-                          {translate("about")}
+                      <a href="/welcome" onClick={this.navigate}>
+                          Добро пожаловать
                       </a>
                   </li>
                   <li>

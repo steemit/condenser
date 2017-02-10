@@ -20,23 +20,14 @@ import { DEFAULT_LANGUAGE } from 'config/client_config';
 // locale data is needed for various messages, ie 'N minutes ago'
 import enLocaleData from 'react-intl/locale-data/en';
 import ruLocaleData from 'react-intl/locale-data/ru';
-import frLocaleData from 'react-intl/locale-data/fr';
-import esLocaleData from 'react-intl/locale-data/es';
-import itLocaleData from 'react-intl/locale-data/it';
-addLocaleData([...enLocaleData, ...ruLocaleData, ...frLocaleData, ...esLocaleData, ...itLocaleData]);
+addLocaleData([...enLocaleData, ...ruLocaleData]);
 
 // Our translated strings
 import { en } from './locales/en';
 import { ru } from './locales/ru';
-import { fr } from './locales/fr';
-import { es } from './locales/es';
-import { it } from './locales/it';
 const messages = {
 	en: en,
-	ru: ru,
-	fr: fr,
-	es: es,
-	it: it
+	ru: ru
 }
 
 // exported function placeholders

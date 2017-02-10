@@ -86,7 +86,7 @@ class ChangePassword extends React.Component {
         if (!process.env.BROWSER) { // don't render this page on the server
             return <div className="row">
                 <div className="column">
-                    {translate('loading')}..
+                    {translate('loading')}...
                 </div>
             </div>;
         }

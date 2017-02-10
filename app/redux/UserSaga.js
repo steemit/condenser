@@ -375,7 +375,7 @@ function* uploadImageWatch() {
 function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress}}) {
     const _progress = progress
     progress = msg => {
-        console.log('Upload image progress', msg)
+        // console.log('Upload image progress', msg)
         _progress(msg)
     }
 
@@ -383,7 +383,7 @@ function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress
     const username = stateUser.getIn(['current', 'username'])
     const d = stateUser.getIn(['current', 'private_keys', 'posting_private'])
     if(!username) {
-        progress({error: 'Not logged in'})
+        progress({error: 'Please logged first.'})
         return
     }
     if(!d) {
@@ -414,7 +414,9 @@ function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress
         data = new Buffer(dataBs64, 'base64')
     }
 
-    const bufSha = hash.sha256(data)
+    // The challenge needs to be prefixed with a constant (both on the server and checked on the client) to make sure the server can't easily make the client sign a transaction doing something else.
+    const prefix = new Buffer('ImageSigningChallenge')
+    const bufSha = hash.sha256(Buffer.concat([prefix, data]))
 
     const formData = new FormData()
     if(file) {
@@ -427,14 +429,13 @@ function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress
     }
 
     const sig = Signature.signBufferSha256(bufSha, d)
-    const postUrl = `${$STM_Config.uploadImage}/${username}/${sig.toHex()}`
+    const postUrl = `${$STM_Config.upload_image}/${username}/${sig.toHex()}`
 
-    fetch(postUrl, {
-        method: 'post',
-        body: formData
-    })
-    .then(r => r.json())
-    .then(res => {
+    const xhr = new XMLHttpRequest()
+    xhr.open('POST', postUrl)
+    xhr.onload = function () {
+        console.log(xhr.status, xhr.responseText)
+        const res = JSON.parse(xhr.responseText)
         const {error} = res
         if(error) {
             progress({error: 'Error: ' + error})
@@ -442,12 +443,19 @@ function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress
         }
         const {url} = res
         progress({url})
-    })
-    .catch(error => {
+    }
+    xhr.onerror = function (error) {
         console.error(filename, error)
         progress({error: 'Unable to contact the server.'})
-        return
-    })
+    }
+    xhr.upload.onprogress = function (event) {
+        if (event.lengthComputable) {
+            const percent = Math.round((event.loaded / event.total) * 100)
+            progress({message: `Uploading ${percent}%`})
+            // console.log('Upload', percent)
+        }
+    }
+    xhr.send(formData)
 }
 
 

@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import transaction from 'app/redux/Transaction';
 import Slider from 'react-rangeslider';
 import Icon from 'app/components/elements/Icon';
-import Follow from 'app/components/elements/Follow';
 import FormattedAsset from 'app/components/elements/FormattedAsset';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import pluralize from 'pluralize';
@@ -21,7 +20,7 @@ const ABOUT_FLAG = <div>
         <li>Hate Speech or Internet Trolling</li>
         <li>Intentional miscategorized content or Spam</li>
     </ul>
-</div>
+</div>;
 
 const MAX_VOTES_DISPLAY = 20;
 const VOTE_WEIGHT_DROPDOWN_THRESHOLD = 1.0 * 1000.0 * 1000.0;
@@ -58,28 +57,28 @@ class Voting extends React.Component {
             showWeight: false,
             myVote: null,
             weight: 10000
-        }
+        };
 
         this.voteUp = e => {
             e.preventDefault();
             this.voteUpOrDown(true)
-        }
+        };
         this.voteDown = e => {
             e.preventDefault();
             this.voteUpOrDown(false)
-        }
+        };
         this.voteUpOrDown = (up) => {
-            if(this.props.voting) return
-            this.setState({votingUp: up, votingDown: !up})
-            const {myVote} = this.state
-            const {author, permlink, username, is_comment} = this.props
+            if(this.props.voting) return;
+            this.setState({votingUp: up, votingDown: !up});
+            const {myVote} = this.state;
+            const {author, permlink, username, is_comment} = this.props;
             if (this.props.vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD) {
                 localStorage.setItem('voteWeight' + (up ? '' : 'Down') + '-'+username+(is_comment ? '-comment' : ''),
                     this.state.weight);
             }
             // already voted Up, remove the vote
-            const weight = up ? (myVote > 0 ? 0 : this.state.weight) : (myVote < 0 ? 0 : -1 * this.state.weight)
-            if (this.state.showWeight) this.setState({showWeight: false})
+            const weight = up ? (myVote > 0 ? 0 : this.state.weight) : (myVote < 0 ? 0 : -1 * this.state.weight);
+            if (this.state.showWeight) this.setState({showWeight: false});
             this.props.vote(weight, {author, permlink, username, myVote})
         };
 
@@ -90,13 +89,13 @@ class Voting extends React.Component {
         this.toggleWeightUp = e => {
             e.preventDefault();
             this.toggleWeightUpOrDown(true)
-        }
+        };
         this.toggleWeightDown = e => {
             e.preventDefault();
             this.toggleWeightUpOrDown(false)
-        }
+        };
         this.toggleWeightUpOrDown = up => {
-            const {username, is_comment} = this.props
+            const {username, is_comment} = this.props;
             // Upon opening dialog, read last used weight (this works accross tabs)
             if(! this.state.showWeight) {
                 localStorage.removeItem('vote_weight'); // deprecated. remove this line after 8/31
@@ -120,7 +119,7 @@ class Voting extends React.Component {
 
     _checkMyVote(username, active_votes) {
         if (username && active_votes) {
-            const vote = active_votes.find(el => el.get('voter') === username)
+            const vote = active_votes.find(el => el.get('voter') === username);
             // weigth warning, the API may send a string or a number (when zero)
             if(vote) this.setState({myVote: parseInt(vote.get('percent') || 0, 10)})
         }
@@ -133,8 +132,8 @@ class Voting extends React.Component {
         // console.log('-- Voting.render -->', myVote, votingUp, votingDown);
         if(flag && !username) return null
 
-        const votingUpActive = voting && votingUp
-        const votingDownActive = voting && votingDown
+        const votingUpActive = voting && votingUp;
+        const votingDownActive = voting && votingDown;
 
         if (flag) {
             const down = <Icon name={votingDownActive ? 'empty' : (myVote < 0 ? 'flag2' : 'flag1')} />;
@@ -154,7 +153,7 @@ class Voting extends React.Component {
                     <p>{ABOUT_FLAG}</p>
                     <a href="#" onClick={this.voteDown} className="button outline" title="Flag">Flag</a>
                 </div>
-            </FoundationDropdown>
+            </FoundationDropdown>;
 
             const flagClickAction = myVote === null || myVote === 0 ? this.toggleWeightDown : this.voteDown
             return <span className="Voting">
@@ -168,12 +167,12 @@ class Voting extends React.Component {
 
         const total_votes = post_obj.getIn(['stats', 'total_votes']);
 
-        const cashout_time = post_obj.get('cashout_time')
-        const max_payout           = parsePayoutAmount(post_obj.get('max_accepted_payout'))
-        const pending_payout       = parsePayoutAmount(post_obj.get('pending_payout_value'))
-        const promoted             = parsePayoutAmount(post_obj.get('promoted'))
-        const total_author_payout  = parsePayoutAmount(post_obj.get('total_payout_value'))
-        const total_curator_payout = parsePayoutAmount(post_obj.get('curator_payout_value'))
+        const cashout_time = post_obj.get('cashout_time');
+        const max_payout = parsePayoutAmount(post_obj.get('max_accepted_payout'));
+        const pending_payout = parsePayoutAmount(post_obj.get('pending_payout_value'));
+        const promoted = parsePayoutAmount(post_obj.get('promoted'));
+        const total_author_payout = parsePayoutAmount(post_obj.get('total_payout_value'));
+        const total_curator_payout = parsePayoutAmount(post_obj.get('curator_payout_value'));
 
         let payout = pending_payout + total_author_payout + total_curator_payout;
         if (payout < 0.0) payout = 0.0;
@@ -185,7 +184,7 @@ class Voting extends React.Component {
         const classUp = 'Voting__button Voting__button-up' + (myVote > 0 ? ' Voting__button--upvoted' : '') + (votingUpActive ? ' votingUp' : '');
 
         // There is an "active cashout" if: (a) there is a pending payout, OR (b) there is a valid cashout_time AND it's NOT a comment with 0 votes.
-        const cashout_active = pending_payout > 0 || (cashout_time.indexOf('1969') !== 0 && !(is_comment && total_votes == 0))
+        const cashout_active = pending_payout > 0 || (cashout_time.indexOf('1969') !== 0 && !(is_comment && total_votes == 0));
         const payoutItems = [];
 
         if(cashout_active) {

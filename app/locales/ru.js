@@ -556,6 +556,8 @@ const ru = {
 	show_more: 'Показать больше',
 	show_less: 'Показать меньше',
 	value_posts: 'сообщений низкой стоимости',
+	// PostsIndex.jsx
+	no_topics_by_order_found: "В разделе [{order}] пока нет постов!",
 	// PormotePost.jsx
 	leave_this_unchecked_to_receive_half_your_reward: 'не пытайтесь покинуть Омск',
 	promote_post: 'Продвинуть пост',

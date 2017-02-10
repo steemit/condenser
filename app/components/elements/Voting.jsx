@@ -12,13 +12,15 @@ import DropdownMenu from 'app/components/elements/DropdownMenu';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import FoundationDropdown from 'app/components/elements/FoundationDropdown';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
+import { translate } from 'app/Translator';
+import LocalizedCurrency, {localizedCurrency} from 'app/components/elements/LocalizedCurrency';
 
 const ABOUT_FLAG = <div>
-    <p>Flagging a post can remove rewards and make this material less visible.  The flag should be used for the following:</p>
+    <p>{translate('flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following')}:</p>
     <ul>
-        <li>Fraud or Plagiarism</li>
-        <li>Hate Speech or Internet Trolling</li>
-        <li>Intentional miscategorized content or Spam</li>
+        <li>{translate('fraud_or_plagiarism')}</li>
+        <li>{translate('hate_speech_or_internet_trolling')}</li>
+        <li>{translate('intentional_miss_categorized_content_or_spam')}</li>
     </ul>
 </div>
 
@@ -136,7 +138,7 @@ class Voting extends React.Component {
                 <CloseButton onClick={() => this.setState({showWeight: false})} />
                 <div className="clear Voting__about-flag">
                     <p>{ABOUT_FLAG}</p>
-                    <a href="#" onClick={this.voteDown} className="button outline" title="Flag">Flag</a>
+                    <a href="#" onClick={this.voteDown} className="button outline" title={translate('flag')}>{translate('flag')}</a>
                 </div>
             </FoundationDropdown>
 
@@ -146,7 +148,7 @@ class Voting extends React.Component {
             return <span className="Voting">
                 <span className={classDown}>
                     {down_votes > 0 && <span className="Voting__button-downvotes">{down_votes}</span>}
-                    {votingDownActive ? down : <a href="#" onClick={flagClickAction} title="Flag">{down}</a>}
+                    {votingDownActive ? down : <a href="#" onClick={flagClickAction} title={translate('flag')}>{down}</a>}
                     {dropdown}
                 </span>
             </span>
@@ -166,24 +168,24 @@ class Voting extends React.Component {
         const payoutItems = [];
 
         if(cashout_active) {
-            payoutItems.push({value: 'Potential Payout $' + formatDecimal(pending_payout).join('')});
+            payoutItems.push({value: translate('potential_payout') + ' ' + localizedCurrency(formatDecimal(pending_payout).join(''))});
         }
         if(promoted > 0) {
-            payoutItems.push({value: 'Promotion Cost $' + formatDecimal(promoted).join('')});
+            payoutItems.push({value: translate('boost_payments') + ' ' + localizedCurrency(formatDecimal(promoted).join(''))});
         }
         if(cashout_active) {
             payoutItems.push({value: <TimeAgoWrapper date={cashout_time} />});
         }
 
         if(max_payout == 0) {
-            payoutItems.push({value: 'Payout Declined'})
+            payoutItems.push({value: translate('past_payouts')})
         } else if (max_payout < 1000000) {
-            payoutItems.push({value: 'Max Accepted Payout $' + formatDecimal(max_payout).join('')})
+            payoutItems.push({value: translate('max_accepted_payout') + localizedCurrency(formatDecimal(max_payout).join(''))})
         }
         if(total_author_payout > 0) {
-            payoutItems.push({value: 'Past Payouts $' + formatDecimal(total_author_payout + total_curator_payout).join('')});
-            payoutItems.push({value: ' - Author: $' + formatDecimal(total_author_payout).join('')});
-            payoutItems.push({value: ' - Curators: $' + formatDecimal(total_curator_payout).join('')});
+            payoutItems.push({value: translate('past_payouts') + ' ' + localizedCurrency(formatDecimal(total_author_payout + total_curator_payout).join(''))});
+            payoutItems.push({value: ' - ' + translate('authors') + ': ' + localizedCurrency(formatDecimal(total_author_payout).join(''))});
+            payoutItems.push({value: ' - ' + translate('curators') + ': ' + localizedCurrency(formatDecimal(total_curator_payout).join(''))});
         }
         const payoutEl = <DropdownMenu el="div" items={payoutItems}>
             <span style={payout_limit_hit ? {opacity: '0.5'} : {}}>
@@ -203,11 +205,11 @@ class Voting extends React.Component {
             count += 1
             if (showList && voters.length < MAX_VOTES_DISPLAY) voters.push({value: (cnt > 0 ? '+ ' : '- ') + avotes[v].voter, link: '/@' + avotes[v].voter})
         }
-        if (count > MAX_VOTES_DISPLAY) voters.push({value: <span>&hellip; and {(count - MAX_VOTES_DISPLAY)} more</span>});
+        if (count > MAX_VOTES_DISPLAY) voters.push({value: <span>&hellip; {' ' + translate('and') + ' '} {(count - MAX_VOTES_DISPLAY)} {' ' + translate('more')}</span>});
 
         let voters_list = null;
         if (showList && count > 0) {
-            voters_list = <DropdownMenu selected={pluralize('votes', count, true)} className="Voting__voters_list" items={voters} el="div" />;
+            voters_list = <DropdownMenu selected={translate('vote_count', {voteCount: count})} className="Voting__voters_list" items={voters} el="div" />;
         }
 
         let voteUpClick = this.voteUp;
@@ -216,7 +218,7 @@ class Voting extends React.Component {
             voteUpClick = this.toggleWeightUp;
             dropdown = <FoundationDropdown show={showWeight}>
                 <div className="Voting__adjust_weight">
-                    <a href="#" onClick={this.voteUp} className="confirm_weight" title="Upvote"><Icon size="2x" name="chevron-up-circle" /></a>
+                    <a href="#" onClick={this.voteUp} className="confirm_weight" title={translate('upvote')}><Icon size="2x" name="chevron-up-circle" /></a>
                     <div className="weight-display">{weight / 100}%</div>
                     <Slider min={100} max={10000} step={100} value={weight} onChange={this.handleWeightChange} />
                     <CloseButton className="Voting__adjust_weight_close" onClick={() => this.setState({showWeight: false})} />
@@ -227,7 +229,7 @@ class Voting extends React.Component {
             <span className="Voting">
                 <span className="Voting__inner">
                     <span className={classUp}>
-                        {votingUpActive ? up : <a href="#" onClick={voteUpClick} title={myVote > 0 ? 'Remove Vote' : 'Upvote'}>{up}</a>}
+                        {votingUpActive ? up : <a href="#" onClick={voteUpClick} title={translate(myVote > 0 ? 'remove_vote' : 'upvote')}>{up}</a>}
                         {dropdown}
                     </span>
                     {payoutEl}
@@ -278,16 +280,16 @@ export default connect(
         vote: (weight, {author, permlink, username, myVote}) => {
             const confirm = () => {
                 if(myVote == null) return
-                const t = ' will reset your curation rewards for this post.'
-                if(weight === 0) return 'Removing your vote' + t
-                if(weight > 0) return 'Changing to an Up-Vote' + t
-                if(weight < 0) return 'Changing to a Down-Vote' + t
+                const t = ' ' + translate('we_will_reset_curation_rewards_for_this_post') + '.'
+                if(weight === 0) return translate('removing_your_vote') + t
+                if(weight > 0) return translate('changing_to_an_upvote') + t
+                if(weight < 0) return translate('changing_to_a_downvote') + t
                 return null
             }
             dispatch(transaction.actions.broadcastOperation({
                 type: 'vote',
                 operation: {voter: username, author, permlink, weight,
-                    __config: {title: weight < 0 ? 'Confirm Flag' : null},
+                    __config: {title: weight < 0 ? translate('confirm_flag') : null},
                 },
                 confirm,
             }))

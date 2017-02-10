@@ -72,8 +72,8 @@ class Header extends React.Component {
     componentDidMount() {
         window.addEventListener('scroll', this.hideSubheader);
         // identify user for proper segment.io analytics data
-        try { if (process.env.BROWSER) analytics.identify(this.props.current_account_name) }
-        catch (e) { console.warn(e) }
+        // try { if (process.env.BROWSER) analytics.identify(this.props.current_account_name) }
+        // catch (e) { console.warn(e) }
     }
 
     componentWillUnmount() {

@@ -158,6 +158,7 @@ class Header extends React.Component {
             ['hot', 'hot'],
             ['trending', 'trending'],
             ['promoted', 'promoted'],
+            ['payout', 'payout'],
         ];
         if (current_account_name) sort_orders.unshift(['home', 'home']);
         const sort_order_menu = sort_orders.filter(so => so[0] !== sort_order).map(so => ({link: sortOrderToLink(so[0], topic, current_account_name), value: so[1]}));
@@ -168,6 +169,7 @@ class Header extends React.Component {
             ['hot', 'hot'],
             ['trending', 'trending'],
             ['promoted', 'promoted'],
+            ['payout', 'payout'],
         ];
         if (current_account_name) sort_orders_horizontal.unshift(['home', 'home']);
         const sort_order_menu_horizontal = sort_orders_horizontal.map(so => {

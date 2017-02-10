@@ -26,7 +26,8 @@ class LoginForm extends Component {
 
     constructor(props) {
         super()
-        const cryptoTestResult = runTests();
+        const cryptoTestResult = undefined; // temporary switch BrowserTests off
+        //const cryptoTestResult = runTests();
         let cryptographyFailure = false;
         if (cryptoTestResult !== undefined) {
             console.error('CreateAccount - cryptoTestResult: ', cryptoTestResult);

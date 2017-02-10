@@ -45,7 +45,8 @@ class CreateAccount extends React.Component {
     }
 
     componentDidMount() {
-        const cryptoTestResult = runTests();
+        const cryptoTestResult = undefined;
+        //const cryptoTestResult = runTests();
         if (cryptoTestResult !== undefined) {
             console.error('CreateAccount - cryptoTestResult: ', cryptoTestResult);
             this.setState({cryptographyFailure: true}); // TODO: do not use setState in componentDidMount

@@ -429,7 +429,7 @@ function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress
     }
 
     const sig = Signature.signBufferSha256(bufSha, d)
-    const postUrl = `${$STM_Config.uploadImage}/${username}/${sig.toHex()}`
+    const postUrl = `${$STM_Config.upload_image}/${username}/${sig.toHex()}`
 
     const xhr = new XMLHttpRequest()
     xhr.open('POST', postUrl)

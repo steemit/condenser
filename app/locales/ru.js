@@ -674,6 +674,9 @@ const ru = {
     pending_savings_withdrawals: 'В ОЖИДАНИИ СБЕРЕГАТЕЛЬНЫХ ВЫПЛАТ',
     // StateEditor.jsx
     enter_some_text: 'Введите текст...',
+    // Voting.jsx
+    payout_declined: 'Вывод отменен',
+    max_accepted_payout: 'Максимально возможная сумма',
 }
 
 export { ru }

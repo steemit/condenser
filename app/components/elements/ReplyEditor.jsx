@@ -371,7 +371,7 @@ class ReplyEditor extends React.Component {
                             </div>}
                         </div>
                         {!loading && !rte && body.value && <div className={'Preview ' + vframe_section_shrink_class}>
-                            {!isHtml && <div className="float-right"><a target="_blank" href="https://guides.github.com/features/mastering-markdown/">Markdown Styling Guide</a></div>}
+                            {!isHtml && <div className="float-right"><a target="_blank" href="https://golos.io/ru--golos/@on0tole/osnovy-oformleniya-postov-na-golose-polnyi-kurs-po-rabote-s-markdown">Полный курс по работе с Markdown</a></div>}
                             <h6>{translate("preview")}</h6>
                             <MarkdownViewer formId={formId} text={body.value} canEdit jsonMetadata={jsonMetadata} large={isStory} noImage={noImage} />
                         </div>}

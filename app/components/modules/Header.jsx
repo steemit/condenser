@@ -175,7 +175,8 @@ class Header extends React.Component {
             ['created', translate('new')],
             ['hot', translate('hot')],
             ['trending', translate('trending_24_hour')],
-            ['trending30', translate('trending_30_day')],
+            //['trending30', translate('trending_30_day')],
+            ['trending30', translate('trending30')],
             // promotion functionality currently does not work
             ['promoted', translate('promoted')],
             // ['active', translate('active')]

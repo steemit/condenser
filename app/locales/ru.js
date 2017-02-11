@@ -377,6 +377,13 @@ const ru = {
 		few {# ответа}
 		many {# ответов}
 	}`,
+	view_count: `{viewCount, plural,
+		zero {0 просмотров}
+		one {# просмотр}
+		few {# просмотра}
+		many {# просмотров}
+	}`,
+
 	this_is_users_reputations_score_it_is_based_on_history_of_votes: "Это количество очков репутации пользователя {name}.\n\nКоличество очков подсчитывается на основе истории полученных голосов и на его голосах против контента.",
 	newer: 'Новее',
 	older: 'Старее',

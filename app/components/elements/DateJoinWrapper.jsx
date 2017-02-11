@@ -10,7 +10,7 @@ export default class DateJoinWrapper extends React.Component {
         let joinMonth = monthNames[date.getMonth()];
         let joinYear = date.getFullYear();
         return (
-                <span>translate('joined') {joinMonth} {joinYear}</span>
+                <span>{translate('joined')} {joinMonth} {joinYear}</span>
             )
     }
 }

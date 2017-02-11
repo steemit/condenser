@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import {connect} from 'react-redux';
 import { browserHistory } from 'react-router';
+import { translate } from 'app/Translator';
 
 export default class TagsIndex extends React.Component {
     static propTypes = {
@@ -58,15 +59,15 @@ export default class TagsIndex extends React.Component {
             <div className="TagsIndex row">
                 <div className="column">
                     <div className="medium-2 medium-offset-10">
-                        <input type="text" placeholder="Filter" value={search} onChange={this.onChangeSearch} />
+                        <input type="text" placeholder={translate('filter')} value={search} onChange={this.onChangeSearch} />
                     </div>
                     <table>
                         <thead>
                         <tr>
-                            <th>Tag</th>
-                            <th>Posts</th>
-                            <th>Comments</th>
-                            <th>Payouts</th>
+                            <th>{translate('tag')}</th>
+                            <th>{translate('posts')}</th>
+                            <th>{translate('comments')}</th>
+                            <th>{translate('payouts')}</th>
                         </tr>
                         </thead>
                         <tbody>

@@ -692,6 +692,11 @@ const ru = {
     max_accepted_payout: 'Максимально возможная сумма',
 
     draft_saved: 'Сохранено в черновик',
+    content_preferences: 'Настройки контента',
+    not_safe_for_work: 'Небезопасно для работы',
+    always_hide: 'Всегда скрывать',
+    always_warn: 'Всегда предупреждать',
+    always_show: 'Всегда показывать',
 }
 
 export { ru }

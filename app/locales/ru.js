@@ -24,6 +24,7 @@ const ru = {
 	payouts_by_tag			: 'Выплаты по тэгам',
 	currency_market			: "Внутренний рынок",
 	witnesses				: 'Голосовать за делегатов',
+	upvote_own_post			: 'Проголосовать за свой пост',
 
 
 	explore: "Исследовать",
@@ -188,9 +189,9 @@ const ru = {
 	// PostFull.jsx
 	re: 'ОТ',
 	// ReplyEditor.jsx
-	power_up_on: 'Усилить на',
+	power_up_on: 'Заплатить ',
 	default: 'По умолчанию',
-	decline_payout: 'Отменить выплату',
+	decline_payout: 'Отказаться от выплаты',
 	// PostFull.jsx
 	by: ' ', // здеcь специально ничего нет, пример: "posted by 'Vitya'" > "добавил 'Vitya'"
 	in: 'в',

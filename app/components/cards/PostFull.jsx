@@ -8,6 +8,7 @@ import user from 'app/redux/User';
 import transaction from 'app/redux/Transaction'
 import Voting from 'app/components/elements/Voting';
 import Reblog from 'app/components/elements/Reblog';
+import Tooltip from 'app/components/elements/Tooltip';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import ReplyEditor from 'app/components/elements/ReplyEditor';
 import {immutableAccessor} from 'app/utils/Accessors';
@@ -22,14 +23,18 @@ import DMCAList from 'app/utils/DMCAList'
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import ShareMenu from 'app/components/elements/ShareMenu';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
+import { translate } from 'app/Translator';
+import { APP_NAME, APP_NAME_LATIN, APP_URL } from 'config/client_config';
 
 function TimeAuthorCategory({content, authorRepLog10, showTags}) {
     return (
         <span className="PostFull__time_author_category vcard">
+            <Tooltip t={new Date(content.created).toLocaleString()}>
             <Icon name="clock" className="space-right" />
             <TimeAgoWrapper date={content.created} className="updated" />
-            {} by <Author author={content.author} authorRepLog10={authorRepLog10} />
-            {showTags && <span> in <TagList post={content} single /></span>}
+            </Tooltip>
+            {translate('by')} <Author author={content.author} authorRepLog10={authorRepLog10} />
+            {showTags && <span> {translate('in')} <TagList post={content} single /></span>}
         </span>
      );
 }
@@ -219,20 +224,20 @@ class PostFull extends React.Component {
             if(content.depth > 1) {
                 direct_parent_link = <li>
                     <Link to={parent_link}>
-                        View the direct parent
+                        {translate('view_the_direct_parent')}
                     </Link>
                 </li>
             }
             post_header = <div className="callout">
-                <h3 className="entry-title">RE: {content.root_title}</h3>
-                <h5>You are viewing a single comment&#39;s thread from:</h5>
+                <h3 className="entry-title">{translate('re')}: {content.root_title}</h3>
+                <h5>{translate('you_are_viewing_single_comments_thread_from')}:</h5>
                 <p>
                     {content.root_title}
                 </p>
                 <ul>
                     <li>
                         <Link to={content.url}>
-                            View the full context
+                            {translate('view_the_full_context')}
                         </Link>
                     </li>
                     {direct_parent_link}
@@ -263,7 +268,7 @@ class PostFull extends React.Component {
                     </span>
                 }
 
-                {showPromote && <button className="Promote__button float-right button hollow tiny" onClick={this.showPromotePost}>Promote</button>}
+                {showPromote && <button className="Promote__button float-right button hollow tiny" onClick={this.showPromotePost}>{translate('promote')}</button>}
                 <TagList post={content} horizontal />
                 <div className="PostFull__footer row">
                     <div className="column">
@@ -275,11 +280,11 @@ class PostFull extends React.Component {
                         {!readonly &&
                             <span className="PostFull__reply">
                                 {showReplyOption && <a onClick={onShowReply}>Reply</a>}
-                                {' '}{showEditOption   && !showEdit  && <a onClick={onShowEdit}>Edit</a>}
-                                {' '}{showDeleteOption && !showReply && <a onClick={onDeletePost}>Delete</a>}
+                                {' '}{showEditOption   && !showEdit  && <a onClick={onShowEdit}>{translate('edit')}</a>}
+                                {' '}{showDeleteOption && !showReply && <a onClick={onDeletePost}>{translate('delete')}</a>}
                             </span>}
                         <span className="PostFull__responses">
-                            <Link to={link} title={pluralize('Responses', content.children, true)}>
+                            <Link to={link} title={translate('response_count', {responseCount: content.children})}>
                                 <Icon name="chatboxes" className="space-right" />{content.children}
                             </Link>
                         </span>

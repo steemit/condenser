@@ -88,7 +88,8 @@ class PostsIndex extends React.Component {
         } else {
             posts = this.getPosts(order, category);
             if (posts && posts.size === 0) {
-                emptyText = <div>{`No ` + topics_order + (category ? ` #` + category : '') +  ` posts found`}</div>;
+                // emptyText = <div>{`No ` + topics_order + (category ? ` #` + category : '') +  ` posts found`}</div>;
+                emptyText = <div>{translate('no_topics_by_order_found', {order: translate(topics_order) + (category ? ` #` + category : '')})}</div>;
             }
         }
 

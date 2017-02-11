@@ -203,7 +203,7 @@ class App extends React.Component {
                   </li>
                   <li className="last">
                       <a href="/~witnesses" onClick={this.navigate}>
-                          {translate("witnesses")}
+                            {translate("witnesses")}
                       </a>
                   </li>
                 </ul>

@@ -8,7 +8,7 @@ class UserListRow extends React.Component {
         return(
             <tr>
                 {loggedIn && <td width="250">
-                    <Follow following={user} />
+                    <Follow following={user} what="blog" />
                 </td>}
                 <td>
                     <Link to={'/@' + user}><strong>{user}</strong></Link>

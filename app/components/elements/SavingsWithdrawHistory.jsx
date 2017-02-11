@@ -5,6 +5,7 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper'
 import transaction from 'app/redux/Transaction'
 import Memo from 'app/components/elements/Memo'
+import { translate } from 'app/Translator';
 
 class SavingsWithdrawHistory extends React.Component {
 
@@ -61,10 +62,10 @@ class SavingsWithdrawHistory extends React.Component {
             return <tr key={idx++}>
                 <td><TimeAgoWrapper date={complete} /></td>
                 <td>
-                    Withdraw {amount} {dest}
+                    {translate('withdraw')} {amount} {dest}
                     &nbsp;
                     {/* A cancel link puts the action very close to the info stating what is being canceled */}
-                    {!loading && <span>(<a onClick={this['cancel_' + request_id]}>cancel</a>)</span>}
+                    {!loading && <span>(<a onClick={this['cancel_' + request_id]}>{translate('cancel')}</a>)</span>}
                     {loading && <span><LoadingIndicator type="circle" /></span>}
                 </td>
                 <td><Memo text={memo} /></td>
@@ -73,7 +74,7 @@ class SavingsWithdrawHistory extends React.Component {
         return <div className="SavingsWithdrawHistory">
             <div className="row">
                 <div className="column small-12">
-                    <h4>PENDING SAVINGS WITHDRAWS</h4>
+                    <h4>{translate('pending_savings_withdrawals')}</h4>
                     <table>
                         <tbody>
                             {rows}
@@ -105,7 +106,7 @@ export default connect(
             })
         },
         cancelWithdraw: (fro, request_id, success, errorCallback) => {
-            const confirm = 'Cancel this withdraw request?'
+            const confirm = translate('cancel_this_withdraw_request')
             const successCallback = () => {
                 // refresh transfer history
                 dispatch({type: 'global/GET_STATE', payload: {url: `@${fro}/transfers`}})

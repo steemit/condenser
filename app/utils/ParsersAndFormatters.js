@@ -43,13 +43,30 @@ function log10(str) {
     return n + (log - parseInt(log));
 }
 
-export const repLog10 = reputation => {
-    let out = Math.log10((Math.abs(parseInt(reputation) || 0)))
-    out = Math.max(out - 9, 0) * Math.sign(reputation)
+export const repLog10 = rep2 => {
+    if(rep2 == null) return rep2
+    let rep = String(rep2)
+    const neg = rep.charAt(0) === '-'
+    rep = neg ? rep.substring(1) : rep
+
+    let out = log10(rep)
+    if(isNaN(out)) out = 0
+    out = Math.max(out - 9, 0); // @ -9, $0.50 earned is approx magnitude 1
+    out = (neg ? -1 : 1) * out
     out = (out * 9) + 25 // 9 points per magnitude. center at 25
     // base-line 0 to darken and < 0 to auto hide (grep rephide)
-    // trunc float numbers %)
-    return out | 0
+    out = parseInt(out)
+    return out
+}
+
+// var calculate = reputation => {return 0 | Math.max(Math.log10(Math.abs(reputation)) - 9, 0) * Math.sign(reputation) * 9 + 25}
+// console.warn(calculate('123456789012345678901234567890123456789012345678901234567890'))
+export const calculateReputation = value => {
+    // parseInt doesn't work on BigInt
+    // const reputation = parseInt(value, 10) || 0
+    // but Number work's fine and Math lib work fine too
+    const reputation = value && !(/^[0-9]*$/.test(value)) ? 0 : Number(value)
+    return 0 | (Math.max(Math.log10(Math.abs(reputation)) - 9, 0) * Math.sign(reputation) * 9 + 25)
 }
 
 export function countDecimals(amount) {
@@ -90,7 +107,7 @@ export function translateError(string) {
 
 //  Missing Active Authority gsteem
 // copypaste from https://gist.github.com/tamr/5fb00a1c6214f5cab4f6
-// (it have been modified: ий > iy and so on)
+// (it have been modified: Ð¸Ð¹ > iy and so on)
 // this have been done beecause we cannot use special symbols in url (`` and '')
 // and url seems to be the only source of thruth
 var d = /\s+/g,

@@ -11,10 +11,12 @@ import sanitizeConfig, {allowedTags} from 'app/utils/SanitizeConfig'
 import sanitize from 'sanitize-html'
 import HtmlReady from 'shared/HtmlReady'
 import g from 'app/redux/GlobalReducer'
-import {Set} from 'immutable'
+import {Map, Set} from 'immutable'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import Remarkable from 'remarkable'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
+import { translate } from 'app/Translator';
+import { detransliterate, translateError } from 'app/utils/ParsersAndFormatters';
 
 const remarkable = new Remarkable({ html: true, linkify: false, breaks: true })
 const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
@@ -100,6 +102,7 @@ class ReplyEditor extends React.Component {
         parent_author: '',
         parent_permlink: '',
         type: 'submit_comment',
+        metaLinkData: Map(),
     }
 
     constructor() {
@@ -110,7 +113,7 @@ class ReplyEditor extends React.Component {
             const value = e.target.value
             // TODO block links in title (the do not make good permlinks)
             const hasMarkdown = /(?:\*[\w\s]*\*|\#[\w\s]*\#|_[\w\s]*_|~[\w\s]*~|\]\s*\(|\]\s*\[)/.test(value)
-            this.setState({ titleWarn: hasMarkdown ? 'Markdown is not supported here' : '' })
+            this.setState({ titleWarn: hasMarkdown ? translate('markdown_not_supported') : '' })
             this.props.fields.title.onChange(e)
         }
         this.onCancel = e => {
@@ -255,6 +258,7 @@ class ReplyEditor extends React.Component {
     render() {
         // NOTE title, category, and body are UI form fields ..
         const originalPost = {
+            title: this.props.title,
             category: this.props.category,
             body: this.props.body,
         }
@@ -265,7 +269,7 @@ class ReplyEditor extends React.Component {
             author, permlink, parent_author, parent_permlink, type, jsonMetadata,
             state, successCallback, handleSubmit, submitting, invalid,
         } = this.props
-        const {postError, loading, titleWarn, rte, payoutType} = this.state
+        const {postError, markdownViewerText, loading, titleWarn, rte, allSteemPower} = this.state
         const {onTitleChange} = this
         const errorCallback = estr => { this.setState({ postError: estr, loading: false }) }
         const successCallbackWrapper = (...args) => {
@@ -277,11 +281,11 @@ class ReplyEditor extends React.Component {
         // Be careful, autoVote can reset curation rewards.  Never autoVote on edit..
         const autoVoteValue = !isEdit && autoVote.value
         const replyParams = {
-            author, permlink, parent_author, parent_permlink, type, state, originalPost, isHtml, isStory,
-            jsonMetadata, autoVote: autoVoteValue, payoutType,
+            author, permlink, parent_author, parent_permlink, type, state, originalPost,
+            jsonMetadata, autoVote: autoVoteValue, allSteemPower,
             successCallback: successCallbackWrapper, errorCallback
         }
-        const postLabel = username ? <Tooltip t={'Post as “' + username + '”'}>Post</Tooltip> : 'Post'
+        const postLabel = username ? <Tooltip t={translate('post_as') + ' “' + username + '”'}>{translate('post')}</Tooltip> : translate('post')
         const hasTitleError = title && title.touched && title.error
         let titleError = null
         // The Required title error (triggered onBlur) can shift the form making it hard to click on things..
@@ -299,7 +303,7 @@ class ReplyEditor extends React.Component {
         return (
             <div className="ReplyEditor row">
                 <div className="column small-12">
-                    <div ref="draft" className="ReplyEditor__draft ReplyEditor__draft-hide">Draft saved.</div>
+                    <div ref="draft" className="ReplyEditor__draft ReplyEditor__draft-hide">{translate('draft_saved')}.</div>
                     <form className={vframe_class}
                         onSubmit={handleSubmit(data => {
                             const loadingCallback = () => this.setState({loading: true, postError: undefined})
@@ -309,10 +313,10 @@ class ReplyEditor extends React.Component {
                     >
                         <div className={vframe_section_shrink_class}>
                             {isStory && <span>
-                                <input type="text" className="ReplyEditor__title" {...cleanReduxInput(title)} onChange={onTitleChange} disabled={loading} placeholder="Title" autoComplete="off" ref="titleRef" tabIndex={1} />
+                                <input type="text" className="ReplyEditor__title" {...cleanReduxInput(title)} onChange={onTitleChange} disabled={loading} placeholder={translate('title')} autoComplete="off" ref="titleRef" tabIndex={1} />
                                 <div className="float-right secondary" style={{marginRight: '1rem'}}>
-                                    {rte && <a href="#" onClick={this.toggleRte}>{body.value ? 'Raw HTML' : 'Markdown'}</a>}
-                                    {!rte && (isHtml || !body.value) && <a href="#" onClick={this.toggleRte}>Editor</a>}
+                                    {rte && <a href="#" onClick={this.toggleRte}>{body.value ? translate('raw_html') : 'Markdown'}</a>}
+                                    {!rte && (isHtml || !body.value) && <a href="#" onClick={this.toggleRte}>{translate('editor')}</a>}
                                 </div>
                                 {titleError}
                             </span>}
@@ -326,7 +330,7 @@ class ReplyEditor extends React.Component {
                                     onChange={this.onChange}
                                     onBlur={body.onBlur} tabIndex={2} />
                                 :
-                                <textarea {...cleanReduxInput(body)} disabled={loading} rows={isStory ? 10 : 3} placeholder={isStory ? 'Write your story...' : 'Reply'} autoComplete="off" ref="postRef" tabIndex={2} />
+                                <textarea {...cleanReduxInput(body)} disabled={loading} rows={isStory ? 10 : 3} placeholder={translate(isStory ? 'write_your_story' : 'reply')} autoComplete="off" ref="postRef" tabIndex={2} />
                             }
                         </div>
                         <div className={vframe_section_shrink_class}>
@@ -340,35 +344,35 @@ class ReplyEditor extends React.Component {
                             </span>}
                         </div>
                         <div className={vframe_section_shrink_class}>
-                            {postError && <div className="error">{postError}</div>}
+                            {postError && <div className="error">{translateError(postError)}</div>}
                         </div>
                         <div className={vframe_section_shrink_class}>
-                            {!loading && <button type="submit" className="button" disabled={submitting || invalid} tabIndex={4}>{isEdit ? 'Update Post' : postLabel}</button>}
+                            {!loading && <button type="submit" className="button" disabled={submitting || invalid} tabIndex={4}>{isEdit ? translate('update_post') : postLabel}</button>}
                             {loading && <span><br /><LoadingIndicator type="circle" /></span>}
                             &nbsp; {!loading && this.props.onCancel &&
-                                <button type="button" className="secondary hollow button no-border" tabIndex={5} onClick={(e) => {e.preventDefault(); onCancel()}}>Cancel</button>
+                                <button type="button" className="secondary hollow button no-border" tabIndex={5} onClick={(e) => {e.preventDefault(); onCancel()}}>{translate("cancel")}</button>
                             }
-                            {!loading && !this.props.onCancel && <button className="button hollow no-border" tabIndex={5} disabled={submitting} onClick={onCancel}>Clear</button>}
+                            {!loading && !this.props.onCancel && <button className="button hollow no-border" tabIndex={5} disabled={submitting} onClick={onCancel}>{translate("clear")}</button>}
 
                             {isStory && !isEdit && <div className="ReplyEditor__options float-right text-right">
 
-                                Rewards:&nbsp;
+                                {translate('rewards')}:&nbsp;
                                 <select value={this.state.payoutType} onChange={this.onPayoutTypeChange} style={{color: this.state.payoutType == '0%' ? 'orange' : 'inherit'}}>
-                                    <option value="100%">Power Up 100%</option>
-                                    <option value="50%">Default (50% / 50%)</option>
-                                    <option value="0%">Decline Payout</option>
+                                    <option value="100%">{translate('power_up_on')} 100%</option>
+                                    <option value="50%">{translate('default')} (50% / 50%)</option>
+                                    <option value="0%">{translate('decline_payout')}</option>
                                 </select>
 
                                 <br />
                                 <label title="Check this to auto-upvote your post">
-                                  Upvote post&nbsp;
+                                  {translate("upvote_own_post")}&nbsp;
                                   <input type="checkbox" checked={autoVote.value} onChange={autoVoteOnChange} />
                                 </label>
                             </div>}
                         </div>
                         {!loading && !rte && body.value && <div className={'Preview ' + vframe_section_shrink_class}>
                             {!isHtml && <div className="float-right"><a target="_blank" href="https://guides.github.com/features/mastering-markdown/">Markdown Styling Guide</a></div>}
-                            <h6>Preview</h6>
+                            <h6>{translate("preview")}</h6>
                             <MarkdownViewer formId={formId} text={body.value} canEdit jsonMetadata={jsonMetadata} large={isStory} noImage={noImage} />
                         </div>}
                     </form>
@@ -410,7 +414,8 @@ export default formId => reduxForm(
         let {category, title, body} = ownProps
         if (/submit_/.test(type)) title = body = ''
         if(isStory && jsonMetadata && jsonMetadata.tags) {
-            category = Set([category, ...jsonMetadata.tags]).join(' ')
+            const detags = jsonMetadata.tags.map(tag => detransliterate(tag))
+            category = Set([detransliterate(category), ...detags]).join(' ')
         }
         const ret = {
             ...ownProps,
@@ -436,6 +441,19 @@ export default formId => reduxForm(
         }) => {
             // const post = state.global.getIn(['content', author + '/' + permlink])
             const username = state.user.getIn(['current', 'username'])
+
+            // Parse categories:
+            // if category string starts with russian symbol, add 'ru-' prefix to it
+            // when transletirate it
+            // This is needed to be able to detransletirate it back to russian in future (to show russian categories to user)
+            // (all of this is needed because blockchain does not allow russian symbols in category)
+            if (category) {
+                category = category
+                    .split(' ')
+                    .map(item => /^[а-яё]/.test(item) ? 'ru--' + detransliterate(item, true) : item)
+                    .join(' ')
+                    .trim()
+            }
 
             const isEdit = type === 'edit'
             const isNew = /^submit_/.test(type)

@@ -8,6 +8,7 @@ import ReactDOMServer from 'react-dom/server'
 import {getCollapsedClientRect} from 'app/utils/SlateEditor/Helpers'
 import demoState from 'app/utils/SlateEditor/DemoState'
 import {HtmlRules, schema, getMarkdownType} from 'app/utils/SlateEditor/Schema'
+import { translate } from 'app/Translator';
 
 const serializer = new Html({rules: HtmlRules})
 export const serializeHtml   = (state) => serializer.serialize(state, {render: false}).map(el => ReactDOMServer.renderToStaticMarkup(el)).join("\n")
@@ -183,7 +184,7 @@ export default class SlateEditor extends React.Component {
         }
 
         else if (state.isExpanded) {
-            const href = window.prompt('Enter the URL of the link:', 'http://steemit.com')
+            const href = window.prompt('Enter the URL of the link:', 'http://golos.io')
             if(href) {
                 state = state
                     .transform()
@@ -481,7 +482,7 @@ export default class SlateEditor extends React.Component {
             <div className="SlateEditor Markdown">
                 <Editor
                     schema={schema}
-                    placeholder={this.props.placeholder || 'Enter some text...'}
+                    placeholder={this.props.placeholder || translate(\'enter_some_text\')'}
                     plugins={plugins}
                     state={this.state.state}
                     onChange={this.onChange}

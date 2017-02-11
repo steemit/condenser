@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
+import Tooltip from 'app/components/elements/Tooltip';
 import Icon from 'app/components/elements/Icon';
 import { translate } from 'app/Translator';
 
@@ -36,8 +37,10 @@ export default class VoteHistoryRow extends React.Component {
             </div>
             <div className="row">
                 <div className="column small-12" >
+                    <Tooltip t={new Date(op[1].timestamp).toLocaleString()}>
                     <Icon name="clock" className="space-right" />
                     <TimeAgoWrapper date={op[1].timestamp} /> {in_reply_to}
+                    </Tooltip>
                 </div>
             </div>
 

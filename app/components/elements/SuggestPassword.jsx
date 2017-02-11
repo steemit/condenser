@@ -42,7 +42,7 @@ class SuggestPassword extends React.Component {
                 <br />
                 <div>
                     {print && <div>
-                        <label>Username</label>
+                        <label>{translate('username')}</label>
                         <div>
                             <code><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></code>
                         </div>

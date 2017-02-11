@@ -30,6 +30,7 @@ import Translator from 'app/Translator';
 import Tarantool from 'db/tarantool';
 import {notificationsArrayToMap} from 'app/utils/Notifications';
 import {routeRegex} from "app/ResolveRoute";
+import {APP_NAME} from 'config/client_config';
 
 const sagaMiddleware = createSagaMiddleware(
     ...userWatches, // keep first to remove keys early when a page change happens
@@ -66,7 +67,7 @@ async function universalRender({ location, initial_state, offchain }) {
     } catch (e) {
         console.error('Router error:', e.toString(), location);
         return {
-            title: 'Server error (500) - Steemit',
+            title: 'Server error (500) - ' + APP_NAME,
             statusCode: 500,
             body: renderToString(<ErrorPage />)
         };
@@ -74,7 +75,7 @@ async function universalRender({ location, initial_state, offchain }) {
     if (error || !renderProps) {
         // debug('error')('Router error', error);
         return {
-            title: 'Page Not Found (404) - Steemit',
+            title: 'Page Not Found (404) - ' + APP_NAME,
             statusCode: 404,
             body: renderToString(<NotFound />)
         };
@@ -177,7 +178,7 @@ async function universalRender({ location, initial_state, offchain }) {
         const stack_trace = e.stack || '[no stack]';
         console.error('State/store error: ', msg, stack_trace);
         return {
-            title: 'Server error (500) - Steemit',
+            title: 'Server error (500) - ' + APP_NAME,
             statusCode: 500,
             body: renderToString(<ErrorPage />)
         };
@@ -201,8 +202,8 @@ async function universalRender({ location, initial_state, offchain }) {
     }
 
     return {
-        title: 'Steemit',
-        titleBase: 'Steemit - ',
+        title: APP_NAME,
+        titleBase: APP_NAME + ' - ',
         meta,
         statusCode: status,
         body: Iso.render(app, server_store.getState())

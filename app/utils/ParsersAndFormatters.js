@@ -107,7 +107,7 @@ export function translateError(string) {
 
 //  Missing Active Authority gsteem
 // copypaste from https://gist.github.com/tamr/5fb00a1c6214f5cab4f6
-// (it have been modified: ий > iy and so on)
+// (it have been modified: Ð¸Ð¹ > iy and so on)
 // this have been done beecause we cannot use special symbols in url (`` and '')
 // and url seems to be the only source of thruth
 var d = /\s+/g,

@@ -19,19 +19,23 @@ import {
  */
 const ru = {
 	// this variables mainly used in navigation section
-	about: "О проекте",
+	wiki					: 'Вики',
+	about					: "О проекте",
+	payouts_by_tag			: 'Выплаты по тэгам',
+	currency_market			: "Внутренний рынок",
+	witnesses				: 'Голосовать за делегатов',
+
+
 	explore: "Исследовать",
 	APP_NAME_whitepaper: "Бумага о " + APP_NAME + 'е',
 	buy_LIQUID_TOKEN: 'Купить ' + LIQUID_TOKEN,
 	sell_LIQUID_TOKEN: 'Продать ' + LIQUID_TOKEN,
 	market: "Внутренний рынок",
-	currency_market: "валютный рынок",
 	stolen_account_recovery: "Возврат украденного аккаунта",
 	change_account_password: "Изменить пароль аккаунта",
 	steemit_chat: "Steemit чат",
 	steemit_api_docs: "Steemit API Docs",
 	APP_NAME_chat: APP_NAME + " чат",
-	witnesses: "Делегаты",
 	vote_for_witnesses: "Проголосовать за свидетелей",
 	privacy_policy: "Политика Конфиденциальности",
 	terms_of_service: "Условия пользования",
@@ -374,6 +378,13 @@ const ru = {
 		few {# ответа}
 		many {# ответов}
 	}`,
+	view_count: `{viewCount, plural,
+		zero {0 просмотров}
+		one {# просмотр}
+		few {# просмотра}
+		many {# просмотров}
+	}`,
+
 	this_is_users_reputations_score_it_is_based_on_history_of_votes: "Это количество очков репутации пользователя {name}.\n\nКоличество очков подсчитывается на основе истории полученных голосов и на его голосах против контента.",
 	newer: 'Новее',
 	older: 'Старее',
@@ -633,7 +644,6 @@ const ru = {
 	server_returned_error: 'ошибка сервера',
 	user_avatar: 'Аватар пользователя',
 	save_avatar: 'Сохранить аватар',
-	wiki: 'Вики',
 	comment_is_nested_5_posts_deep: 'Комментарий слишком глубоко в цепочке. Максимум вложенности - 5',
 	you_may_only_comment_once_every_20_seconds: 'Вы можете комментировать не чаще каждых 20 секунд',
 	// this is from UserSaga.js

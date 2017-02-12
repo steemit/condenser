@@ -209,14 +209,14 @@ class Settings extends React.Component {
                 <div className="row">
                     <div className="small-12 columns">
                         <br /><br />
-                        <h3>Content Preferences</h3>
+                        <h3>{translate('content_preferences')}</h3>
                         <div>
-                            Not safe for work (NSFW)
+                            {translate('not_safe_for_work')} (Not safe for work – NSFW)
                         </div>
                         <select value={this.state.nsfwPref} onChange={this.onNsfwPrefChange}>
-                            <option value="hide">Always hide</option>
-                            <option value="warn">Always warn</option>
-                            <option value="show">Always show</option>
+                            <option value="hide">{translate('always_hide')}</option>
+                            <option value="warn">{translate('always_warn')}</option>
+                            <option value="show">{translate('always_show')}</option>
                         </select>
                     </div>
                 </div>}

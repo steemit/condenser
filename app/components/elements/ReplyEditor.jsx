@@ -291,7 +291,7 @@ class ReplyEditor extends React.Component {
         // The Required title error (triggered onBlur) can shift the form making it hard to click on things..
         if ((hasTitleError && (title.error !== 'Required' || body.value !== '')) || titleWarn) {
             titleError = <div className={hasTitleError ? 'error' : 'warning'}>
-                {hasTitleError ? title.error : titleWarn}&nbsp;
+                {hasTitleError ? translate(title.error.toLowerCase()) : titleWarn}&nbsp;
             </div>
         }
 

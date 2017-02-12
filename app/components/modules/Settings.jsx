@@ -161,7 +161,7 @@ class Settings extends React.Component {
             </div>*/}
             <div className="row">
                 <form onSubmit={this.handleSubmitForm} className="small-12 medium-6 large-4 columns">
-                    <h3>Profile</h3>
+                    <h3>{translate('profile')}</h3>
                     <label>
                         {translate('profile_image_url')}
                         <input type="url" {...profile_image.props} autoComplete="off" />

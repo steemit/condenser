@@ -1,0 +1,34 @@
+.Accordion {
+	text-align: left;
+	.Accordion__item { margin-bottom: 50px; }
+	.Accordion__icon {
+		margin-left: 45px;
+		transform: translateY(-16%);
+	}
+	@media #{$small-only} {
+		.Accordion__icon {
+			margin-left: 5px;
+		}
+	}
+	.Accordion__content {
+		transition: visibility 0s, opacity 0.5s linear;
+		margin-top: 20px;
+		// margin-left: 84px;
+	}
+	@media #{$medium-up} {
+		.Accordion__icon { margin-left: 17px; }
+		.Accordion__content { margin-right: 20px; }
+	}
+	.Accordion__content_active {
+		visibility: visible;
+		height: auto;
+		// transition: visibility 0s, opacity 0.5s linear;
+		opacity: 1;
+	}
+	.Accordion__content_hidden {
+		visibility: hidden;
+		height: 0;
+		opacity: 0;
+	    // transition: visibility 0s, opacity 0.5s linear;
+	}
+}

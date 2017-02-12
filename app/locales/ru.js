@@ -188,9 +188,9 @@ const ru = {
 	// PostFull.jsx
 	re: 'ОТ',
 	// ReplyEditor.jsx
-	power_up_on: 'Заплатить ',
-	default: 'По умолчанию',
-	decline_payout: 'Отказаться от выплаты',
+	power_up_on: ' ',
+	default: ' ',
+	decline_payout: 'Отказаться',
 	// PostFull.jsx
 	by: ' ', // здеcь специально ничего нет, пример: "posted by 'Vitya'" > "добавил 'Vitya'"
 	in: 'в',

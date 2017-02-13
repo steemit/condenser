@@ -10,6 +10,8 @@ import {powerTip, powerTip2, powerTip3} from 'app/utils/Tips'
 import {browserTests} from 'shared/ecc/test/BrowserTests'
 import {validate_account_name} from 'app/utils/ChainValidation';
 import {countDecimals} from 'app/utils/ParsersAndFormatters'
+import {translate} from 'app/Translator';
+import { LIQUID_TOKEN, DEBT_TOKEN, VESTING_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TICKER, VEST_TICKER, DEBT_TICKER } from 'config/client_config';
 
 /** Warning .. This is used for Power UP too. */
 class TransferForm extends Component {

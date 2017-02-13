@@ -271,11 +271,11 @@ class PostFull extends React.Component {
                 {showPromote && <button className="Promote__button float-right button hollow tiny" onClick={this.showPromotePost}>{translate('promote')}</button>}
                 <TagList post={content} horizontal />
                 <div className="PostFull__footer row">
-                    <div className="column">
+                    <div className="column small-12 medium-6 large-6">
                         <TimeAuthorCategory content={content} authorRepLog10={authorRepLog10} />
                         <Voting post={post} />
                     </div>
-                    <div className="RightShare__Menu small-10 medium-5 large-5 columns text-right">
+                    <div className="RightShare__Menu small-12 medium-6 large-6 columns text-right">
                         {!readonly && <Reblog author={author} permlink={permlink} />}
                         {!readonly &&
                             <span className="PostFull__reply">

@@ -159,7 +159,7 @@ class PostSummary extends React.Component {
                     <article className={'PostSummary hentry'} itemScope itemType ="http://schema.org/blogPost">
                         <div className="PostSummary__nsfw-warning">
                             {translate('this_post_is')} <span className="nsfw-flag">nsfw</span>. 
-                            {translate('you_can')} <a href="#" onClick={this.onRevealNsfw}>{translate('reveal_it')}</a> {translate('or')} 
+                            {translate('you_can')} <a href="#" onClick={this.onRevealNsfw}>{translate('reveal_it')}</a>{' '+translate('or')+' '}
                             {username ? <span>{translate('adjust_your')} <Link to={`/@${username}/settings`}>{translate('display_preferences')}</Link>.</span>
                                       : <span><Link to="/create_account">{translate('sign_up')}</Link> {translate('to_save_your_preferences')}</span>}
                         </div>

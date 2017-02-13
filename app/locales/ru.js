@@ -638,10 +638,10 @@ const ru = {
 		many {# неподтвержденных транзакций}
 	}`,
 	profile_image_url: 'Добавьте url вашего изображения',
-	profile_name: 'Display Name',
-	profile_about: 'About',
-	profile_location: 'Location',
-	profile_website: 'Website',
+	profile_name: 'Отображаемое имя',
+	profile_about: 'О себе',
+	profile_location: 'Место нахождения',
+	profile_website: 'Сайт',
 	saved: 'Сохранено',
 	server_returned_error: 'ошибка сервера',
 	user_avatar: 'Аватар пользователя',
@@ -699,6 +699,8 @@ const ru = {
     always_show: 'Всегда показывать',
 
     resteem_this_post: 'Поделиться этим постом',
+    or: 'или',
+    you: 'Вы',
 }
 
 export { ru }

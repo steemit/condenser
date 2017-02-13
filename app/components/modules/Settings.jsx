@@ -227,6 +227,7 @@ class Settings extends React.Component {
                         <UserList title="Muted Users" account={account} users={ignores} />
                     </div>
                 </div>}
+                <br /><br />
         </div>
     }
 }

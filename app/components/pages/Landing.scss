@@ -1,0 +1,583 @@
+// bold medium regular
+// @font-face {
+//     font-family: "ProximaNova";
+//     // font-style: normal;
+//     // font-weight: bold;
+//     src: url("../../assets/fonts/Proxima Nova Regular.otf") format("otf")
+// }
+// TODO change pixels to rems
+// TODO add common supporting text styles
+// http://foundation.zurb.com/sites/docs/v/5.5.3/media-queries.html
+.Landing {
+	font-family: Verdana, Geneva, sans-serif;
+	/* COMMON ELEMENTS */
+	.blue 	{ color: #6191cf; } // font-family: ProximaNova;
+	.red 	{ color: #f12b24; }
+	.Landing__button_big { font-size: 47px; }
+	h2 {
+		font-weight: bold;
+		margin-top: 3rem;
+	}
+	hr {
+		margin: 0;
+		max-width: 100%;
+		background-color: #e0dfdf;
+	}
+	.button {
+		padding: 23px 63px;
+		text-transform: none;
+		font-weight: bold;
+	}
+	.button-blue { background-color: #1A5099; }
+	.Landing__supporting-text { color: #d2d2d2; }
+	@media #{$small-only} {
+		h2 { font-size: 2.38095rem; }
+	}
+}
+
+/* SECTIONS */
+.LandingHeader {
+	height: 80px;
+	img { height: 36px; }
+	.LandingHeader__logo { line-height: 2.5; }
+	.LandingHeader__menu {
+		margin: 0;
+		float: right;
+	}
+	.LandingHeader__menu__li {
+		float: left;
+		line-height: 3;
+		font-style: 27px;
+		font-weight: bold;
+		margin: 0 23px;
+		display: inline;
+		list-style-type: none;
+		a { color: black; }
+	}
+	.LandingHeader__menu__li:last-of-type img { margin-right: 12px; }
+}
+
+.CountDowns {
+	.CountDowns__headers {
+		position: relative;
+		background-image: url('../../assets/images/landing/coundowns_background.png');
+	    background-repeat: round;
+		.CountDowns__slogan {
+			color: #6191cf;
+			display: block;
+			margin-top: 1.5rem;
+			margin-bottom: 1.5rem;
+		}
+		.Icon_2x > svg, span.Icon_2x {
+			width: 7rem;
+			height: 7rem;
+		}
+		.CountDowns__logo {
+			right: 5%;
+			position: relative;
+		}
+		h1 { margin: 90px auto 40px; }
+	}
+	.CountDowns__blocks {
+		p { font-size: 24px; };
+	}
+	.CountDowns__counters { margin-bottom: 70px; }
+	.CountDowns__counter {
+		margin-left: auto;
+		margin-right: auto;
+	}
+	.CountDowns__button {
+		margin-bottom: 80px;
+		small {
+			display: block;
+		}
+	}
+	.CountDowns__links {
+		margin-bottom: 90px;
+		.CountDowns__button_small {
+			font-size: 15px;
+			color: #535353;
+			border: 2px #d1e1f0 solid;
+			padding: 7px 10px;
+			margin-right: 10px;
+			border-radius: 5px;
+		}
+		.CountDowns__social-links {
+			p { display: inline-block; }
+			ul { display: inline; }
+			li {
+				display: inline-block;
+				float: right;
+				text-align: left;
+				list-style-type: none;
+			}
+		}
+	}
+
+	@media #{$small-up} {
+		//.CountDowns__counter { margin-top: 60px; }
+	}
+
+	@media #{$small-only} {
+		h1 { margin-bottom: 80px; }
+		.CountDowns__slogan { font-size: 17px; }
+		//.CountDowns__counter { margin-top: 30px; }
+		.CountDown .CountDown__single { margin-right: 10px; }
+	}
+
+	@media #{$medium-up} {
+		.CountDowns__slogan { font-size: 37px; }
+	}
+}
+
+.Distribution {
+	.Distribution__headers {
+		margin-bottom: 95px;
+		.Distribution__supporting-text {
+			font-size: 27px;
+			color: #d2d2d2;
+		}
+	}
+	img { max-width: 75%; }
+	.Distribution__list {
+		margin-top: 20px;
+	}
+	.Distribution__item {
+		text-align: left;
+		list-style-type: none;
+		font-size: 24px;
+		.Distribution__strong {
+			font-size: 37px;
+		}
+		.Distribution__strong_extra-margin { margin-right: 26px; }
+		.Distribution__dot {
+			display: inline-block;
+			margin: 0 15px;
+			width: 15px;
+			height: 15px;
+			border-radius: 15px;
+		}
+	}
+	.Distribution__action {
+		margin: 105px auto 85px;
+		.button {
+			color: white;
+			border-radius: 4px;
+			background-color: #1A5099;
+			// border: 2px solid #c0c0bf;
+		}
+	}
+}
+
+.WhatIsGolos {
+	background-color: #f2f2f2;
+	.WhatIsGolos__header {
+		margin-bottom: 80px;
+	}
+	.WhatIsGolos__video {
+		margin-left: auto;
+		margin-right: auto;
+		iframe { max-width: 100%; }
+	}
+	.WhatIsGolos__action {
+		margin-top: 65px;
+		margin-bottom: 100px;
+	}
+}
+
+.JoinUs {
+	h2 {
+		color: #f12b24;
+	}
+	.JoinUs__support-text {
+		color: #d2d2d2;
+		font-size: 27px;
+	}
+	.JoinUs__support-text-2{
+		color: #d2d2ef;
+		font-size: 21px
+	}
+	.JoinUs__reasons {
+		margin: 40px auto 40px;
+		.JoinUs__item {
+			margin-bottom: 65px;
+			img {
+				float: left;
+				margin-top: 8px;
+				margin-right: 40px;
+				margin-bottom: 40px;
+			}
+			strong {
+				font-size: 18px; // 27px
+				color: #1a1a1a;
+			}
+			p {
+				color: #717171;
+				font-size: 14px;
+			}
+		}
+	}
+	.JoinUs__action { margin-bottom: 100px; }
+	@media #{$small-only} {
+		.JoinUs__item img { margin-bottom: 60px; }
+	}
+}
+
+.BlockchainRevolution {
+	.BlockchainRevolution__header {
+		h2 { margin-bottom: 55px; }
+		p { margin-bottom: 50px; }
+		margin-bottom: 120px;
+	}
+	.BlockchainRevolution__supporting-text {
+		color: #d2d2d2;
+	}
+	.BlockchainRevolution__table {
+		margin-bottom: 60px;
+		// overide foundation table styles
+		table, thead, tbody { border: none; }
+		table thead, table tfoot { background-color: transparent; }
+		table tbody tr:nth-child(even) { background-color: transparent; }
+		// add our own
+		thead {
+			margin-bottom: 25px;
+			padding-bottom: 25px;
+			border-bottom: 1px solid #d1d1d1;
+		}
+		thead th:first-child { color: #d1d1d1; }
+		tr { padding: 0 90px;}
+		tr > td, tr > th { padding-left: 90px; }
+		tr td:last-child, tr th:last-child { padding-right: 90px; }
+
+	}
+	.BlockchainRevolution__action {
+		margin-bottom: 115px;
+		.button {
+			border: 1px solid #c0c0bf;
+			color: #707070;
+			font-size: 27px;
+			background-color: white;
+		}
+	}
+	@media #{$small-only} {
+		.BlockchainRevolution__table {
+			width: 100%;
+			overflow-y: scroll;
+			tr { padding: 0 10px;}
+			tr > td, tr > th { padding-left: 10px; }
+			tr td:last-child, tr th:last-child { padding-right: 10px; }
+			th, strong { font-size: 13px; }
+		}
+	}
+	@media #{$medium-only} {
+		.BlockchainRevolution__table {
+			width: 100%;
+			overflow-y: scroll;
+			tr { padding: 0 40px;}
+			tr > td, tr > th { padding-left: 40px; }
+			tr td:last-child, tr th:last-child { padding-right: 40px; }
+			th, strong { font-size: 15px; }
+		}
+	}
+}
+
+.Faq {
+	.Faq__headers {
+		margin-bottom: 80px;
+		.Faq__supporting-text {
+			color: #d2d2d2;
+			font-size: 27px;
+		}
+	}
+	.Faq__accordion { margin-bottom: 100px;}
+	.Faq__action {
+		margin-bottom: 80px;
+		.Faq__p {
+			font-size: 17px;
+			color: #656565;
+		}
+		.button { margin-right: 0 !important; }
+	}
+}
+
+.Team {
+	.Team__members { margin-bottom: 150px; }
+    > .Team__members { margin-bottom: 50px; }
+	.Team__partners {
+		margin: 50px auto;
+		.columns {
+			margin-left: auto;
+			margin-right: auto;
+		}
+	}
+	.Team__member {
+		margin-top: 50px;
+		strong { display: block; }
+		ul { margin-left: 0; }
+		li {
+			display: inline;
+			padding: 0 10px;
+			list-style-type: none;
+		}
+	}
+	.Team__facebook-logo {
+		width: 33px;
+	    height: 30px;
+	    margin-bottom: 1px;
+	}
+	.Team__cyberfund-logo {
+		color: red;
+		font-size: 42px;
+		display: inline-block;
+		transform: translateY(11%);
+	}
+	.Team__members__image-wrapper {
+		width: 180px;
+		height: 180px;
+		position: relative;
+		overflow: hidden;
+		border-radius: 50%;
+		margin: 0 auto 25px;
+		border: 2px solid #d7d7d7;
+	}
+	.Team__member__img {
+		width: 180px;
+		position: absolute;
+	    left: 50%;
+	    top: 50%;
+	    transform: translate(-50%, -50%);
+		// height: 180px;
+	}
+	// individual stles
+	.Team__member__marina .Team__member__img  {
+		width: 300px;
+		max-width: 200%;
+	}
+	.Team__member__alexey .Team__member__img {
+		left: 56.5%;
+		width: 200px;
+		max-width: 115%;
+	}
+	.Team__member__kostya .Team__member__img  {
+		left: 52%;
+		width: 190px;
+		max-width: 110%;
+	}
+	.Team__member__vitaly{
+		p { margin-bottom: -12px; }
+
+	}
+	.Team__member__misha .Team__member__img {
+		// first picture
+		// left: 54%;
+		// width: 190px;
+		// max-width: 120%;
+
+		// left: 55%;
+		// width: 197px;
+		// max-width: 200%;
+		// second picture
+		left: 53%;
+		width: 320px;
+		max-width: 200%;
+
+		// third picture (the Kozel)
+		// left: 6%;
+		// top: 13%;
+		// width: 580px;
+		// max-width: 334%;
+
+	}
+	.Team__member__sergey .Team__member__img {
+		width: 350px;
+	    left: 83%;
+	    max-width: none;
+	}
+	.Team__member__roman .Team__member__img {
+        width: 217px;
+	    left: 56%;
+	    max-width: none;
+	}
+	.Team__member__anton .Team__member__img {
+		top: 67%;
+	}
+	@media #{$small-only} {
+		.Team__members__image-wrapper {
+			width: 150px;
+			height: 150px;
+		}
+		// .Team__member__misha {
+		// 	flex: 100%;
+		// 	max-width: 100%;
+		// }
+	}
+	// @media #{$medium-only} {
+	// 	.Team__member__misha {
+	// 		flex: 100%;
+	// 		max-width: 100%;
+	// 	}
+	// }
+}
+
+.Documentation {
+	// .Landing__supporting-text {
+	// 	margin-bottom: 30px;
+	// }
+	.Documentation__image {
+		margin-top: 30px;
+		margin-bottom: 65px;
+	}
+	.Documentation__buttons {
+		margin-top: 50px;
+		margin-bottom: 120px;
+		.alert { margin-right: 30px; }
+		@media #{$small-only} {
+			.alert { margin-right: 0; }
+		}
+	}
+}
+
+.WhyGolos {
+	h2 { color: #6191cf; }
+	.Landing__supporting-text { margin-bottom: 65px; }
+	.WhyGolos__image { margin: 65px auto; }
+	.WhyGolos__reasons {
+		margin: 65px auto;
+		strong { display: block; }
+		p { font-size: 13px; }
+		@media #{$small-up} {
+			.WhyGolos__reason { margin-bottom: 30px; }
+			strong { margin-bottom: 8px; }
+		}
+		@media #{$large-up} {
+			strong { margin-bottom: 50px; }
+		}
+	}
+}
+
+.WhoWeAre {
+	.WhoWeAre__headers { margin-bottom: 65px; }
+	.WhoWeAre__images {
+		img {
+			width: 200px;
+			height: 200px;
+		}
+		margin-bottom: 75px;
+	}
+	.WhoWeAre__texts {
+		margin-bottom: 95px;
+		span {
+			display: block;
+			margin-top: 50px;
+			margin-bottom: 100px;
+		}
+	}
+}
+
+.Partners {
+	.Partners__logos {
+		margin: 90px auto;
+		// margin-top: 90px;
+		// margin-bottom: 80px;
+		h2 { margin-bottom: 20px; }
+		img {
+			max-height: 100px;
+			margin-top: 30px;
+		}
+	}
+	h3 { margin-bottom: 50px; }
+	.Partners__law {
+		margin-bottom: 65px;
+		img {
+			margin-top: 30px;
+			max-height: 85px;
+		}
+	}
+	.Partners__info {
+		margin-bottom: 65px;
+		img { width: 160px; }
+	}
+	.Partners__skolkovo-logo { transform: translateY(-17%); }
+  .Partners__forklog-logo { transform: translateY(0%); }
+  .Partners__liqui-logo { margin-top: 70px; }
+  .Partners__coinessa-logo { margin-top: 0 !important; }
+	.Partners__changebot-logo img {
+    margin-top: 10px;
+    max-height: 150px;
+  }
+	.Partners__tolkachev-logo {
+		transform: translateY(5%);
+		img { max-height: 65px; }
+	}
+	@media #{$small-up} {
+		.Partners__coinessa-logo { transform: translateY(50%); }
+	}
+	// @media #{$medium-up} {
+	// 	.Partners__liqui-logo { transform: translateY(50%); }
+	// 	.Partners__coinessa-logo { transform: translateY(86%); }
+	// }
+}
+
+.Press {
+	.Press__logos { margin-bottom: 85px; }
+	.Press__header { margin-bottom: 100px; }
+	.Press__article {
+		margin-bottom: 20px;
+		p { color: black; }
+	}
+	.Press__article:last-of-type { margin-bottom: 100px; }
+	.Press__action { margin-bottom: 100px; }
+	.Press__action__p {
+		color: #505050;
+		font-size: 15px;
+		font-weight: bold;
+	}
+	.Press__action {
+		margin-top: 100px;
+		margin-bottom: 80px;
+		small {
+			display: block;
+		}
+	}
+}
+
+.LandingFooter {
+	padding-top: 90px;
+	strong {
+		display: block;
+		margin-bottom: 25px;
+	}
+	ul { margin-left: 0; }
+	li {
+		color: black;
+		list-style-type: none;
+		a { color: black; }
+	}
+	.LandingFooter__description {
+		color: #c5c5c5;
+		font-size: 17px;
+		margin: 30px auto;
+		word-break: break-all;
+	}
+	@media #{$small-only} {
+		.LandingFooter__menus {
+			strong { margin: 25px auto;}
+			strong, ul { text-align: center; }
+		}
+		.LandingFooter__description {
+			strong { text-align: center; }
+			li { text-align: center; }
+			span {
+				display: block;
+				text-align: center;
+			}
+		}
+	}
+	@media #{$medium-up} {
+		.LandingFooter__description {
+			span { display: inline; }
+			.left { text-align: left; }
+			.right { float: right; }
+		}
+	}
+}

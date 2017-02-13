@@ -251,7 +251,7 @@ export default connect(
     // mapStateToProps
     (state, ownProps) => {
         const initialValues = state.user.get('transfer_defaults', Map()).toJS()
-        const toVesting = initialValues.asset === 'VESTS'
+        const toVesting = initialValues.asset === 'GESTS'
         const currentUser = state.user.getIn(['current'])
         const currentAccount = state.global.getIn(['accounts', currentUser.get('username')])
 

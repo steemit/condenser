@@ -259,7 +259,7 @@ export default connect(
         loginUser: () =>
             dispatch(user.actions.usernamePasswordLogin()),
         depositSteem: () => {
-            dispatch(g.actions.showDialog({name: 'blocktrades_deposit', params: {outputCoinType: 'VESTS'}}));
+            dispatch(g.actions.showDialog({name: 'blocktrades_deposit', params: {outputCoinType: 'GESTS'}}));
         },
     })
 )(App);

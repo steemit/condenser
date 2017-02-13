@@ -8,7 +8,7 @@ export const routeRegex = {
     PostNoCategory: /^\/(@[\w\.\d-]+)\/([\w\d-]+)/,
     Post: /^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)\/?($|\?)/,
     PostJson: /^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)(\.json)$/,
-    UserJson: /^\/(@[\w\.jso\d-]+)(\.json)$/,
+    UserJson: /^\/(@[\w\.\d-]+)(\.json)$/,
     UserNameJson: /^.*(?=(\.json))/,
 };
 

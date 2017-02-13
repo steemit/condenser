@@ -1,4 +1,3 @@
-
 import {
 	APP_NAME, 
 	APP_URL, 
@@ -97,8 +96,8 @@ const ru = {
 	the_latest_versions_of: 'Последние версии',
 	and: 'и',
 	are_well_tested_and_known_to_work_with: 'хорошо тестированы и работают с ' + APP_URL + '.',
-	account_creation_succes: 'Твой аккаунт успешно создан!',
-	account_recovery_succes: 'Твой аккаунт успено восстановлен!',
+	account_creation_succes: 'Ваш аккаунт успешно создан!',
+	account_recovery_succes: 'Ваш аккаунт успено восстановлен!',
 	password_update_succes: 'Пароль для {accountName} был успешно обновлен',
 	password_is_bound_to_your_accounts_owner_key: "Этот пароль привязан к главному ключу аккаунта и не может быть использован для логинации на сайте",
 	however_you_can_use_it_to: "Тем не менее его можно использовать чтобы",
@@ -180,10 +179,10 @@ const ru = {
 	are_you_sure: 'Вы уверены?',
 	// PostSummary.jsx
 	to_save_your_preferences: 'для того чтобы сохранить настройки.',
-	this_post_is: 'Данный пост –',
-	you_can: 'Вы можете',
-	reveal_it: 'посмотреть',
-	adjust_your: 'откорректировать',
+	this_post_is: 'Данный пост содержит тэг –',
+	you_can: 'Нажмите чтобы',
+	reveal_it: 'посмотреть пост',
+	adjust_your: 'откорректируйте свои',
 	display_preferences: 'настройки отображения',
 	// PostFull.jsx
 	re: 'ОТ',
@@ -692,10 +691,12 @@ const ru = {
 
     draft_saved: 'Сохранено в черновик',
     content_preferences: 'Настройки контента',
-    not_safe_for_work: 'Небезопасно для работы',
+    not_safe_for_work: 'Взрослый контент',
     always_hide: 'Всегда скрывать',
     always_warn: 'Всегда предупреждать',
     always_show: 'Всегда показывать',
+
+    resteem_this_post: 'Поделиться этим постом',
 }
 
 export { ru }

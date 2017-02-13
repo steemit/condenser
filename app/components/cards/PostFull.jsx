@@ -30,8 +30,8 @@ function TimeAuthorCategory({content, authorRepLog10, showTags}) {
     return (
         <span className="PostFull__time_author_category vcard">
             <Tooltip t={new Date(content.created).toLocaleString()}>
-            <Icon name="clock" className="space-right" />
-            <TimeAgoWrapper date={content.created} className="updated" />
+                <Icon name="clock" className="space-right" />
+                <TimeAgoWrapper date={content.created} className="updated" />
             </Tooltip>
             {translate('by')} <Author author={content.author} authorRepLog10={authorRepLog10} />
             {showTags && <span> {translate('in')} <TagList post={content} single /></span>}
@@ -279,7 +279,7 @@ class PostFull extends React.Component {
                         {!readonly && <Reblog author={author} permlink={permlink} />}
                         {!readonly &&
                             <span className="PostFull__reply">
-                                {showReplyOption && <a onClick={onShowReply}>Reply</a>}
+                                {showReplyOption && <a onClick={onShowReply}>{translate('reply')}</a>}
                                 {' '}{showEditOption   && !showEdit  && <a onClick={onShowEdit}>{translate('edit')}</a>}
                                 {' '}{showDeleteOption && !showReply && <a onClick={onDeletePost}>{translate('delete')}</a>}
                             </span>}

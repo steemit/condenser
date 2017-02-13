@@ -699,6 +699,7 @@ const ru = {
 
     resteem_this_post: 'Поделиться этим постом',
     or: 'или',
+    you: 'Вы',
 }
 
 export { ru }

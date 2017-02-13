@@ -1,25 +1,28 @@
 // sometimes it's impossible to use html tags to style coin name, hence usage of _UPPERCASE modifier
-export const APP_NAME = 'Голос' // 'Steemit'
+export const APP_NAME   = 'Голос' // 'Steemit'
 // sometimes APP_NAME is written in non-latin characters, but they are needed for technical purposes
 // ie. "Голос" > "Golos"
-export const APP_NAME_LATIN = 'Golos' // 'Steemit'
-export const APP_NAME_UPPERCASE = 'Golos' // 'STEEMIT'
-export const APP_ICON = 'golos' // 'steem'
-export const APP_URL = 'golos.io' // 'steemit.com'
-export const LIQUID_TOKEN = 'Голос' // 'Steem'
-// sometimes it's impossible to use html tags to style coin name, hence usage of _UPPERCASE modifier
-export const LIQUID_TOKEN_UPPERCASE = 'ГОЛОС' // 'STEEM'
-export const VESTING_TOKEN = 'Сила Голоса' // 'Steem Power'
+export const APP_NAME_LATIN         = 'Golos' // 'Steemit'
+export const APP_NAME_UPPERCASE     = 'Golos' // 'STEEMIT'
+export const APP_ICON               = 'golos' // 'steem'
+export const APP_URL                = 'golos.io' // 'steemit.com'
 
-export const VESTING_TOKEN1 = 'Сил Голоса'
-export const VESTING_TOKEN2 = 'Силу Голоса'
-export const VESTING_TOKEN3 = 'Силах Голоса'
-export const VESTING_TOKENS = 'Силы Голоса'
+export const LIQUID_TOKEN               = 'Голос' // 'Steem'
+export const LIQUID_TOKEN_UPPERCASE     = 'ГОЛОС' // sometimes it's impossible to use html tags to style coin name, hence usage of _UPPERCASE modifier
 
 
-export const VESTING_TOKEN_UPPERCASE = 'СИЛА ГОЛОСА' // 'STEEM POWER'
-export const VESTING_TOKEN_SHORT = 'СГ' // 'SP'
-export const DEBT_TOKEN = 'Золотой' // 'STEEM DOLLAR'
+export const VESTING_TOKEN              = 'Сила Голоса' // 'Steem Power'
+export const VESTING_TOKEN_UPPERCASE    = 'СИЛА ГОЛОСА' // 'STEEM POWER'
+export const VESTING_TOKEN_SHORT        = 'СГ' // 'SP'
+
+export const VESTING_TOKEN1             = 'Сил Голоса'
+export const VESTING_TOKEN2             = 'Силу Голоса'
+export const VESTING_TOKEN3             = 'Силах Голоса'
+export const VESTING_TOKENS             = 'Силы Голоса'
+
+
+export const DEBT_TOKEN                 = 'Золотой'
+
 // export const DEBT_TOKEN_UPPERCASE = 'Golos Backed Gold' // 'STEEM DOLLAR'
 export const CURRENCY_SIGN = '₽≈' // '$'
 export const WIKI_URL = 'https://wiki.golos.io/'

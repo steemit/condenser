@@ -25,6 +25,9 @@ const ru = {
 	witnesses				: 'Голосовать за делегатов',
 	upvote_own_post			: 'Проголосовать за свой пост',
 
+	steem_power				: LIQUID_TOKEN,
+
+
 
 	explore: "Исследовать",
 	APP_NAME_whitepaper: "Бумага о " + APP_NAME + 'е',
@@ -517,7 +520,6 @@ const ru = {
 	asset: 'Актив',
 	this_memo_is_private: 'Эта заметка является приватной',
 	this_memo_is_public: 'Эта заметка является публичной',
-	steem_power: LIQUID_TOKEN,
 	steem_dollar: DEBT_TOKEN,
 	power_up: 'Увеличить ' + VESTING_TOKEN2,
 	power_down: 'Уменьшить ' + VESTING_TOKEN2,

@@ -15,6 +15,23 @@ import { translate } from 'app/Translator';
 import {parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import {Long} from 'bytebuffer';
 
+// returns true if the comment has a 'hide' flag AND has no descendants w/ positive payout
+function hideSubtree(cont, c) {
+    return cont.getIn([c, 'stats', 'hide']) && !hasPositivePayout(cont, c)
+}
+
+function hasPositivePayout(cont, c) {
+    const post = cont.get(c)
+    if(post.getIn(['stats', 'hasPendingPayout'])) {
+        return true;
+    }
+    if(post.get('replies').find(reply => hasPositivePayout(cont, reply))) {
+        return true;
+    }
+    return false;
+}
+
+
 export function sortComments( cont, comments, sort_order ) {
 
   function netNegative(a)  {
@@ -163,14 +180,14 @@ class CommentImpl extends React.Component {
     _checkHide(props) {
         const content = props.cont.get(props.content);
         if (content) {
-            const hide = content.getIn(['stats', 'hide'])
+            const hide = hideSubtree(props.cont, props.content)
             const gray = content.getIn(['stats', 'gray'])
             if(hide) {
                 const {onHide} = this.props
                 // console.log('Comment --> onHide')
                 if(onHide) onHide()
             }
-            this.setState({hide_body: hide || gray})
+            this.setState({hide, hide_body: hide || gray})
         }
     }
 
@@ -214,13 +231,13 @@ class CommentImpl extends React.Component {
             console.error('Comment -- missing stats object')
             comment.stats = {}
         }
-        const {netVoteSign, hasReplies, authorRepLog10, hide, pictures, gray} = comment.stats
+        const {netVoteSign, hasReplies, authorRepLog10, pictures, gray} = comment.stats
         const {author, json_metadata} = comment
         const {username, depth, anchor_link,
             showNegativeComments, ignore_list, noImage} = this.props
         const {onShowReply, onShowEdit, onDeletePost} = this
         const post = comment.author + '/' + comment.permlink
-        const {PostReplyEditor, PostEditEditor, showReply, showEdit, hide_body} = this.state
+        const {PostReplyEditor, PostEditEditor, showReply, showEdit, hide, hide_body} = this.state
         const Editor = showReply ? PostReplyEditor : PostEditEditor
 
         let {rootComment} = this.props
@@ -269,7 +286,7 @@ class CommentImpl extends React.Component {
             replies = comment.replies;
             sortComments( cont, replies, this.props.sort_order );
             // When a comment has hidden replies and is collapsed, the reply count is off
-            //console.log("replies:", replies.length, "num_visible:", replies.filter( reply => !g.get('content').get(reply).getIn(['stats', 'hide'])).length)
+            //console.log("replies:", replies.length, "num_visible:", replies.filter( reply => !cont.get(reply).getIn(['stats', 'hide'])).length)
             replies = replies.map((reply, idx) => (
                 <Comment
                     key={idx}
@@ -279,6 +296,7 @@ class CommentImpl extends React.Component {
                     depth={depth + 1}
                     rootComment={rootComment}
                     showNegativeComments={showNegativeComments}
+                    onHide={this.props.onHide}
                 />)
             );
         }

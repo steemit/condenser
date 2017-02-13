@@ -115,9 +115,11 @@
 }
 
 .Comment__negative_group {
-    color: crimson;
+    color: #888;
     border-top: 1px solid $medium-gray;
     padding-top: 1rem;
+    clear: none;
+    background: white;
 }
 
 .depth {

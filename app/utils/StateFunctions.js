@@ -57,7 +57,7 @@ export function contentStats(content) {
     let total_votes = 0;
     let up_votes = 0;
 
-    content.get('active_votes').forEach(v => {
+    content.get('active_votes').forEach((v) => {
         const sign = Math.sign(v.get('percent'))
         if(sign === 0) return;
         total_votes += 1
@@ -73,7 +73,7 @@ export function contentStats(content) {
         // For graying: sum up total rshares from voters with non-neg reputation.
         if(String(v.get('reputation')).substring(0, 1) !== '-') {
             // And also ignore tiny downvotes (9 digits or less)
-            if(! (rshares.substring(0, 1) === '-' && rshares.length < 11)) {
+            if(!(rshares.substring(0, 1) === '-' && rshares.length < 11)) {
                 net_rshares_adj = net_rshares_adj.add(rshares)
             }
         }
@@ -85,6 +85,7 @@ export function contentStats(content) {
 
     // post must have non-trivial negative rshares to be grayed out. (more than 10 digits)
     const grayThreshold = -9999999999
+    const meetsGrayThreshold = net_rshares_adj.compare(grayThreshold) < 0
 
     const net_rshares = Long.fromString(String(content.get('net_rshares')))
     const netVoteSign = net_rshares.compare(Long.ZERO)
@@ -94,15 +95,15 @@ export function contentStats(content) {
     const authorRepLog10 = repLog10(content.get('author_reputation'))
     const hasReplies = content.get('replies').size !== 0
 
-    const gray = authorRepLog10 < 1 || (authorRepLog10 < 65 && net_rshares_adj.compare(grayThreshold) < 0)
-    const hide = authorRepLog10 < 0 && !hasPendingPayout && !hasReplies // rephide
+    const gray = !hasPendingPayout && (authorRepLog10 < 1 || (authorRepLog10 < 65 && meetsGrayThreshold))
+    const hide = !hasPendingPayout && (authorRepLog10 < 0) // rephide
     const pictures = !gray
 
     // Combine tags+category to check nsfw status
     const json = content.get('json_metadata')
     let tags = []
     try {
-        tags = json && JSON.parse(json).tags || [];
+        tags = (json && JSON.parse(json).tags) || [];
         if(typeof tags == 'string') {
             tags = [tags];
         } if(!Array.isArray(tags)) {
@@ -114,5 +115,5 @@ export function contentStats(content) {
     tags.push(content.get('category'))
     const isNsfw = tags.filter(tag => tag && tag.match(/^nsfw$/i)).length > 0;
 
-    return {hide, gray, pictures, netVoteSign, authorRepLog10, hasReplies, isNsfw, flagWeight, total_votes, up_votes}
+    return {hide, gray, pictures, netVoteSign, authorRepLog10, hasReplies, isNsfw, flagWeight, total_votes, up_votes, hasPendingPayout}
 }

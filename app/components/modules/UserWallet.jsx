@@ -17,7 +17,7 @@ import WalletSubMenu from 'app/components/elements/WalletSubMenu'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Tooltip from 'app/components/elements/Tooltip'
 import { translate, translateNumber } from 'app/Translator';
-import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
+import { localizedCurrency, localCurrencySymbol } from 'app/components/elements/LocalizedCurrency';
 import { APP_NAME_LATIN, LIQUID_TOKEN, LIQUID_TOKEN_UPPERCASE, DEBT_TOKEN, CURRENCY_SIGN, VESTING_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TICKER, VEST_TICKER, DEBT_TICKER } from 'config/client_config';
 
 const assetPrecision = 1000;
@@ -101,7 +101,7 @@ class UserWallet extends React.Component {
             return (
                 <div key={c.get(0)}>
                     <Tooltip t={translate('conversion_complete_tip') + ": " + new Date(finishTime).toLocaleString()}>
-                        <span>(+{translate('in_conversion', {amount: numberWithCommas('$' + amount.toFixed(3))})})</span>
+                        <span>(+{translate('in_conversion', {amount: numberWithCommas(localCurrencySymbol + amount.toFixed(3))})})</span>
                     </Tooltip>
                 </div>
             );
@@ -133,13 +133,12 @@ class UserWallet extends React.Component {
         //     ((total_steem * price_per_steem) + total_sbd
         // ).toFixed(2))
         const total_value = (((vesting_steemf + balance_steem) * price_per_steem) + sbd_balance) || 0
-        console.warn(total_value)
-        console.warn('vesting_steemf='+vesting_steemf, 'balance_steem='+balance_steem, 'price_per_steem='+price_per_steem, 'sbd_balance='+sbd_balance)
         // format spacing on estimated value based on account state
-        let estimate_output = <p>{localizedCurrency(total_value)}</p>;
-        if (isMyAccount) {
-            estimate_output = <p>{localizedCurrency(total_value)}&nbsp; &nbsp; &nbsp;</p>;
-        }
+        // const estimate_output = <p>{localizedCurrency(total_value)}</p>;
+        const estimate_output = <p>{localCurrencySymbol+' '+total_value}</p>;
+        // if (isMyAccount) {
+        //     estimate_output = <p>{localizedCurrency(total_value)}&nbsp; &nbsp; &nbsp;</p>;
+        // }
 
         /// transfer log
         let idx = 0

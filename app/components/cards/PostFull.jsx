@@ -159,7 +159,7 @@ class PostFull extends React.Component {
         if (content.category) link = `/${content.category}${link}`;
 
         const {category, title, body} = content;
-        if (process.env.BROWSER && title) document.title = title + ' — Steemit';
+        if (process.env.BROWSER && title) document.title = title + ' — ' + APP_NAME;
 
         let content_body = content.body;
         const url = `/${category}/@${author}/${permlink}`

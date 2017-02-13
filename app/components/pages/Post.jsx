@@ -109,9 +109,11 @@ class Post extends React.Component {
 
         const negativeGroup = commentHidden &&
             (<div className="hentry Comment root Comment__negative_group">
-                <p onClick={e => this.toggleNegativeReplies(e)}>
+                <p>
                     {translate(showNegativeComments ? 'now_showing_comments_with_low_ratings' : 'comments_were_hidden_due_to_low_ratings')}.{' '}
-                    <button className="button hollow tiny float-right" onClick={e => this.toggleNegativeReplies(e)}>{translate(showNegativeComments ? 'hide' :'show')}</button>
+                    <button className="button hollow tiny float-right" onClick={e => this.toggleNegativeReplies(e)}>
+                        {translate(showNegativeComments ? 'hide' :'show')}
+                    </button>
                 </p>
             </div>);
 

@@ -28,11 +28,11 @@ class UserWallet extends React.Component {
         this.onShowDeposit = () => {this.setState({showDeposit: !this.state.showDeposit})}
         this.onShowDepositSteem = (e) => {
             e.preventDefault()
-            this.setState({showDeposit: !this.state.showDeposit, depositType: 'STEEM'})
+            this.setState({showDeposit: !this.state.showDeposit, depositType: 'GOLOS'})
         }
         this.onShowDepositPower = (e) => {
             e.preventDefault()
-            this.setState({showDeposit: !this.state.showDeposit, depositType: 'VESTS'})
+            this.setState({showDeposit: !this.state.showDeposit, depositType: 'GESTS'})
         }
         // this.onShowDeposit = this.onShowDeposit.bind(this)
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'UserWallet');
@@ -67,7 +67,7 @@ class UserWallet extends React.Component {
         const powerDown = (cancel, e) => {
             e.preventDefault()
             const name = account.get('name');
-            const vesting_shares = cancel ? '0.000000 VESTS' : account.get('vesting_shares')
+            const vesting_shares = cancel ? '0.000000 GESTS' : account.get('vesting_shares')
             this.setState({toggleDivestError: null})
             const errorCallback = e2 => {this.setState({toggleDivestError: e2.toString()})}
             const successCallback = () => {this.setState({toggleDivestError: null})}
@@ -150,15 +150,15 @@ class UserWallet extends React.Component {
                 return null;
             }
 
-            if(data.sbd_payout === '0.000 SBD' && data.vesting_payout === '0.000000 VESTS')
+            if(data.sbd_payout === '0.000 GBG' && data.vesting_payout === '0.000000 GESTS')
                 return null
             return <TransferHistoryRow key={idx++} op={item.toJS()} context={account.get('name')} />;
         }).filter(el => !!el).reverse();
 
         let steem_menu = [
-            { value: translate('transfer'), link: '#', onClick: showTransfer.bind( this, 'STEEM', translate('transfer_to_account') ) },
-            { value: translate('transfer_to_savings'), link: '#', onClick: showTransfer.bind( this, 'STEEM', translate('transfer_to_savings') ) },
-            { value: translate('power_up'), link: '#', onClick: showTransfer.bind( this, 'VESTS', translate('transfer_to_account') ) },
+            { value: translate('transfer'), link: '#', onClick: showTransfer.bind( this, 'GOLOS', translate('transfer_to_account') ) },
+            { value: translate('transfer_to_savings'), link: '#', onClick: showTransfer.bind( this, 'GOLOS', translate('transfer_to_savings') ) },
+            { value: translate('power_up'), link: '#', onClick: showTransfer.bind( this, 'GESTS', translate('transfer_to_account') ) },
         ]
         let power_menu = [
             { value: 'Power Down', link: '#', onClick: powerDown.bind(this, false) }

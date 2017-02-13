@@ -62,9 +62,8 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
         ];
         return (
             <ul className={mcn + mcl}>
-                {inIco ? ico_menu.map((o,i) => {return <li key={i} className={lcn}><a href="{o.link}">{o.value}</a></li>}) :
-                    <li className={lcn}><a href="/static/search.html" title="Search">{vertical ? <span>{translate('search')}</span> : <Icon name="search" />}</a></li>
-                }
+                {inIco ? ico_menu.map((o,i) => {return <li key={i} className={lcn}><a href="{o.link}">{o.value}</a></li>}) : user_information_button}
+                {!inIco && <li className={lcn}><a href="/static/search.html" title="Search">{vertical ? <span>{translate('search')}</span> : <Icon name="search" />}</a></li>}
                 {!inIco && submit_story}
                 <LinkWithDropdown
                     closeOnClickOutside

@@ -698,6 +698,7 @@ const ru = {
     always_show: 'Всегда показывать',
 
     resteem_this_post: 'Поделиться этим постом',
+    or: 'или',
 }
 
 export { ru }

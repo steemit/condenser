@@ -1,5 +1,3 @@
-var config = require('config');
-
 var fs = require('fs');
 if(!fs.existsSync('tmp'))
     fs.mkdirSync('tmp');

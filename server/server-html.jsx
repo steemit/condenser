@@ -1,5 +1,4 @@
 import React from 'react';
-import config from 'config';
 
 export default function ServerHTML({ body, assets, locale, title, meta }) {
     let page_title = title;

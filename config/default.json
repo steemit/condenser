@@ -28,6 +28,7 @@
       "protocol": "http"
     }
   },
+  "google_analytics_id": "123456",
   "helmet": {
     "directives": {
       "childSrc": "'self' www.youtube.com staticxx.facebook.com w.soundcloud.com player.vimeo.com",

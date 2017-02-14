@@ -59,8 +59,5 @@ export default {
         ],
         extensions: ['', '.js', '.json', '.jsx'],
         modulesDirectories: ['node_modules']
-    },
-    externals: {
-        config: 'config'
     }
 };

@@ -7,10 +7,6 @@ const webpack_isomorphic_tools_plugin =
     new Webpack_isomorphic_tools_plugin(require('./webpack-isotools-config'))
         .development();
 
-import webpack from 'webpack';
-
-var ignorePlugin = new webpack.IgnorePlugin(/^config$/)
-
 export default {
     entry: {
         app: ['babel-polyfill', './app/Main.js'],
@@ -53,8 +49,7 @@ export default {
     plugins: [
         function () { this.plugin('done', writeStats); },
         webpack_isomorphic_tools_plugin,
-        new ExtractTextPlugin('[name]-[chunkhash].css'),
-        ignorePlugin
+        new ExtractTextPlugin('[name]-[chunkhash].css')
     ],
     resolve: {
         root: [
@@ -64,6 +59,7 @@ export default {
         modulesDirectories: ['node_modules']
     },
     externals: {
+        config: 'config'
     }
 };
 /* medium-editor, add to plugins[]

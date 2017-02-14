@@ -11,3 +11,7 @@ build:
 
 clean:
 	rm -rf node_modules *.log tmp npm-debug.log.*
+
+vagrant:
+	vagrant destroy -f
+	vagrant up

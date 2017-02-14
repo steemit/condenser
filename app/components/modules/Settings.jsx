@@ -139,8 +139,6 @@ class Settings extends React.Component {
         const following = follow && follow.getIn(['get_following', account.name]);
         const ignores = isOwnAccount && following && following.get('ignore_result')
 
-        const {locale} = props.intl
-
         return <div className="Settings">
 
             {/*<div className="row">
@@ -177,7 +175,7 @@ class Settings extends React.Component {
                     {/* CHOOSE LANGUAGE */}
                     <label>
                         {translate('choose_language')}
-                            <select defaultValue={locale} onChange={this.handleLanguageChange}>
+                            <select defaultValue={store.get('language')} onChange={this.handleLanguageChange}>
                                 <option value="ru">Русский</option>
                                 <option value="en">English</option>
                                 {/* in react-intl they use 'uk' instead of 'ua' */}

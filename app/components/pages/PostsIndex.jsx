@@ -75,10 +75,6 @@ class PostsIndex extends React.Component {
             posts = this.props.accounts.getIn([account_name, 'feed']);
             const isMyAccount = this.props.username === account_name;
             if (isMyAccount) {
-                emptyText = <div>{translate('user_hasnt_followed_anything_yet', {name: account_name})}</div>;
-                markNotificationRead = <MarkNotificationRead fields="feed" account={account_name} />
-            } else {
-                // emptyText = <div>{translate('user_hasnt_followed_anything_yet', {name: account_name})}</div>;
                 emptyText = <div>
                     {translate('user_hasnt_followed_anything_yet', {name: account_name})}
                     <br /><br />
@@ -86,7 +82,10 @@ class PostsIndex extends React.Component {
                     <a href="/trending">{translate('research_it')}</a>
                     <a href="/welcome">{translate('full_faq')}</a>
                     <a href="/ru--golos/@bitcoinfo/samyi-polnyi-f-a-q-o-golose-spisok-luchshykh-postov-raskryvayushikh-vse-aspekty-proekta-bonusy-v-vide-kreativa">{translate('welcome_to_the_blockchain')}</a>
-                </div>
+                </div>;
+                markNotificationRead = <MarkNotificationRead fields="feed" account={account_name} />
+            } else {
+                // emptyText = <div>{translate('user_hasnt_followed_anything_yet', {name: account_name})}</div>;
             }
         } else {
             posts = this.getPosts(order, category);

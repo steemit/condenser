@@ -12,7 +12,7 @@ import g from 'app/redux/GlobalReducer'
 import user from 'app/redux/User'
 import tr from 'app/redux/Transaction'
 import getSlug from 'speakingurl'
-import {DEBT_TICKER} from 'config/client_config'
+import {DEBT_TICKER} from 'app/client_config'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient'
 
 const {transaction} = ops

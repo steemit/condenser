@@ -7,7 +7,7 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import Icon from 'app/components/elements/Icon'
 import {key_utils} from 'shared/ecc'
 import { translate } from 'app/Translator';
-import { APP_NAME, APP_ICON } from 'config/client_config';
+import { APP_NAME, APP_ICON } from 'app/client_config';
 
 const {bool} = React.PropTypes
 export const steemitCannotRecoverPasswords = translate('APP_NAME_cannot_recover_passwords_keep_this_page_in_a_secure_location')

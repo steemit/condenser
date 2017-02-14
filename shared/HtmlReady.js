@@ -186,7 +186,9 @@ function linkifyNode(child, state) {try{
     const data = XMLSerializer.serializeToString(child)
     const content = linkify(data, state.mutate, state.hashtags, state.usertags, state.images, state.links)
     if(mutate && content !== data) {
-        child.parentNode.replaceChild(DOMParser.parseFromString(`<span>${content}</span>`), child)
+        const newChild = DOMParser.parseFromString(content)
+        child.parentNode.replaceChild(newChild, child)
+        return newChild;
     }
 } catch(error) {console.log(error)}}
 
@@ -221,13 +223,17 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
             if(images) images.add(ln)
             return `<img src="${ipfsPrefix(ln)}" />`
         }
+
+        // do not linkify .exe or .zip urls
+        if(/\.(zip|exe)$/i.test(ln)) return ln;
+
         if(links) links.add(ln)
         return `<a href="${ipfsPrefix(ln)}">${ln}</a>`
     })
     return content
 }
 
-function embedYouTubeNode(child, links, images) {try{
+function embedYouTubeNode(child, links, images) { try {
     if(!child.data) return false
     const data = child.data
     const yt = youTubeId(data)
@@ -238,7 +244,7 @@ function embedYouTubeNode(child, links, images) {try{
     if(links) links.add(yt.url)
     if(images) images.add('https://img.youtube.com/vi/' + yt.id + '/0.jpg')
     return true
-} catch(error) {console.log(error); return false}}
+} catch(error) { console.log(error); return false } }
 
 /** @return {id, url} or <b>null</b> */
 function youTubeId(data) {

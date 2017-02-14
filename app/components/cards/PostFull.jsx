@@ -57,11 +57,10 @@ function TimeAuthorCategory({content, authorRepLog10, showTags}) {
 function TimeAuthorCategoryLarge({content, authorRepLog10}) {
     return (
         <span className="PostFull__time_author_category_large vcard">
+            <TimeAgoWrapper date={content.created} className="updated float-right" />
             <Userpic account={content.author} />
             <div className="right-side">
                 <Author author={content.author} authorRepLog10={authorRepLog10} />
-                <br />
-                <TimeAgoWrapper date={content.created} className="updated" />
                 <span> in <TagList post={content} single /></span>
             </div>
         </span>
@@ -142,7 +141,7 @@ class PostFull extends React.Component {
             window.FB.ui({
                 method: 'share',
                 href
-            }, response => {
+            }, (response) => {
                 if (response && !response.error_message)
                     serverApiRecordEvent('FbShare', this.share_params.link);
             });
@@ -226,40 +225,42 @@ class PostFull extends React.Component {
         const Editor = this.state.showReply ? PostFullReplyEditor : PostFullEditEditor;
         let renderedEditor = null;
         if (showReply || showEdit) {
-            renderedEditor = <div key="editor">
-                <Editor {...replyParams} type={this.state.showReply ? 'submit_comment' : 'edit'}
-                                         successCallback={() => {
-                                                this.setState({showReply: false, showEdit: false});
-                                                saveOnShow(formId, null)
-                                            }}
-                                         onCancel={() => {
-                                                this.setState({showReply: false, showEdit: false});
-                                                saveOnShow(formId, null)
-                                            }}
-                                         jsonMetadata={jsonMetadata}
+            renderedEditor = (<div key="editor">
+                <Editor
+                    {...replyParams}
+                    type={this.state.showReply ? 'submit_comment' : 'edit'}
+                    successCallback={() => {
+                        this.setState({showReply: false, showEdit: false});
+                        saveOnShow(formId, null)
+                    }}
+                    onCancel={() => {
+                        this.setState({showReply: false, showEdit: false});
+                        saveOnShow(formId, null)
+                    }}
+                    jsonMetadata={jsonMetadata}
                 />
-            </div>
+            </div>)
         }
         const pending_payout = parsePayoutAmount(content.pending_payout_value);
         const total_payout = parsePayoutAmount(content.total_payout_value);
         const high_quality_post = pending_payout + total_payout > 10.0;
         const full_power = post_content.get('percent_steem_dollars') === 0;
 
-        let post_header = <h1 className="entry-title">
+        let post_header = (<h1 className="entry-title">
                 {content.title}
                 {full_power && <span title="Powered Up 100%"><Icon name="steem" /></span>}
-            </h1>;
+            </h1>);
         if(content.depth > 0) {
-            let parent_link = `/${content.category}/@${content.parent_author}/${content.parent_permlink}`;
+            const parent_link = `/${content.category}/@${content.parent_author}/${content.parent_permlink}`;
             let direct_parent_link;
             if(content.depth > 1) {
-                direct_parent_link = <li>
+                direct_parent_link = (<li>
                     <Link to={parent_link}>
                         View the direct parent
                     </Link>
-                </li>
+                </li>)
             }
-            post_header = <div className="callout">
+            post_header = (<div className="callout">
                 <h3 className="entry-title">RE: {content.root_title}</h3>
                 <h5>You are viewing a single comment&#39;s thread from:</h5>
                 <p>
@@ -273,7 +274,7 @@ class PostFull extends React.Component {
                     </li>
                     {direct_parent_link}
                 </ul>
-            </div>
+            </div>)
         }
 
         const readonly = post_content.get('mode') === 'archived' || $STM_Config.read_only_mode
@@ -349,7 +350,7 @@ export default connect(
 
     // mapDispatchToProps
     (dispatch) => ({
-        dispatchSubmit: data => { dispatch(user.actions.usernamePasswordLogin({...data})) },
+        dispatchSubmit: (data) => { dispatch(user.actions.usernamePasswordLogin({...data})) },
         clearError: () => { dispatch(user.actions.loginError({error: null})) },
         unlock: () => { dispatch(user.actions.showLogin()) },
         deletePost: (author, permlink) => {

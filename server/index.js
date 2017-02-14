@@ -35,8 +35,7 @@ global.webpackIsomorphicTools = new WebpackIsomorphicTools(
     WebpackIsomorphicToolsConfig
 );
 
-if (process.env.NODE_ENV === 'development') {
-    global.webpackIsomorphicTools.server(ROOT, () => {
+global.webpackIsomorphicTools.server(ROOT, () => {
         const SteemClient = require('shared/api_client/ApiInstances').default;
         const connect_promises = [SteemClient.instance().connect_promise()];
         // const CliWalletClient = require('shared/api_client/CliWalletClient').default;
@@ -54,5 +53,4 @@ if (process.env.NODE_ENV === 'development') {
                 console.error('Web socket client init error', error);
                 process.exit(1);
             });
-    });
-}
+});

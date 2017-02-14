@@ -25,12 +25,13 @@ import Grant from 'grant-koa';
 import config from '../config';
 import {routeRegex} from 'app/ResolveRoute';
 import secureRandom from 'secure-random';
+import { APP_NAME_LATIN } from 'config/client_config';
 
 const grant = new Grant(config.grant);
 // import uploadImage from 'server/upload-image' //medium-editor
 
 const app = new Koa();
-app.name = 'Steemit app';
+app.name = APP_NAME_LATIN + ' app';
 const env = process.env.NODE_ENV || 'development';
 const cacheOpts = {maxAge: 86400000, gzip: true};
 

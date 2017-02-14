@@ -166,9 +166,9 @@ class UserWallet extends React.Component {
             { value: translate('power_down'), link: '#', onClick: powerDown.bind(this, false) }
         ]
         if(isMyAccount) {
-            steem_menu.push({ value: translate('deposit'), link: '#', onClick: onShowDepositSteem })
+            // steem_menu.push({ value: translate('deposit'), link: '#', onClick: onShowDepositSteem })
             steem_menu.push({ value: translate('buy_or_sell'), link: '/market' })
-            power_menu.push({ value: translate('deposit'), link: '#', onClick: onShowDepositPower })
+            // power_menu.push({ value: translate('deposit'), link: '#', onClick: onShowDepositPower })
         }
         if( divesting ) {
             power_menu.push( { value: translate('cancel_power_down'), link:'#', onClick: powerDown.bind(this,true) } );

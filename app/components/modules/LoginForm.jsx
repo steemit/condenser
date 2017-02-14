@@ -191,7 +191,7 @@ class LoginForm extends Component {
                     {error && password_info && <div className="warning">{password_info}&nbsp;</div>}
                 </div>
                 {loginBroadcastOperation && <div>
-                    <div className="info">{translate("requires_auth_key", { authType })}.</div>
+                    <div className="info">{translate("requires_auth_key")}.</div>
                 </div>}
                 {!loginBroadcastOperation && <div>
                     <label htmlFor="saveLogin">

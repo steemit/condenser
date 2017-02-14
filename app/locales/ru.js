@@ -109,7 +109,7 @@ const ru = {
 	enter_username: 'Введи свое имя пользователя',
 	password_or_wif: 'Пароль или WIF',
 	// Эта операция требует ввода Вашего активный ключа или ввода Вашего ключа владельца (или используйте главный пароль).
-	requires_auth_key: 'Эта операция требует ввода Вашего {authType} ключа или ввода Вашего ключа владельца (используйте главный пароль)',
+	requires_auth_key: 'Эта операция требует ввода Вашего ключа владельца или ввода Вашего активного ключа (используйте главный пароль)',
 	keep_me_logged_in: 'Оставлять меня залогиненным',
 	// this are used mainly in "submit a story" form
 	title: "Заголовок",
@@ -422,7 +422,7 @@ const ru = {
 	to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user: 'Чтобы предотвратить злоупотребление (каждый зарегистрированный аккаунт стоит {amount} в ' + LIQUID_TOKEN + ') ' + APP_NAME + ' может регистрировать только один аккаунт для каждого подтвержденного пользователя.',
 	// next 3 blocks are meant to be used together
 	you_can_either: 'Вы можете или', // context 'you can either login'
-	to_your_existing_account_or: 'в ваш существующий аккаунт или', // context: 'to your existing account or send us email'
+	to_your_existing_account_or: ' в ваш существующий аккаунт или', // context: 'to your existing account or send us email'
 	if_you_need_a_new_account: 'если вам нужен новый аккаунт',
 	send_us_email: 'отправьте нам электронную почту',
 	connection_lost_reconnecting: 'Связь потеряна, переподключаемся',
@@ -557,18 +557,18 @@ const ru = {
 	promote: 'Продвинуть',
 	// Tips.js
 	tradeable_tokens_that_may_be_transferred_anywhere_at_anytime: 'Перемещаемые цифровые токены, которые могут переданы куда угодно в любой момент.',
-	LIQUID_TOKEN_can_be_converted_to_VESTING_TOKEN_in_a_process_called_powering_up: LIQUID_TOKEN + ' может быть конвертирован в ' + VESTING_TOKEN2 + ', этот процесс называется "усиление голоса".',
-	tokens_worth_about_AMOUNT_of_LIQUID_TOKEN: 'Перемещаемые цифровые токены, цена которых всегда равна ~1 мг золота в ' + LIQUID_TOKEN + '.',
-	influence_tokens_which_earn_more_power_by_holding_long_term: 'Неперемещаемые цифровые токены, их количество увеличивается при долгосрочном хранении.',
-	the_more_you_hold_the_more_you_influence_post_rewards: 'Чем их больше, тем сильней вы влияете на вознаграждения за пост и тем больше зарабатываете за голосование.',
+	LIQUID_TOKEN_can_be_converted_to_VESTING_TOKEN_in_a_process_called_powering_up: LIQUID_TOKEN + ' может быть конвертирован в ' + VESTING_TOKEN2 + ', этот процесс называется "увеличение Силы Голоса".',
+	tokens_worth_about_AMOUNT_of_LIQUID_TOKEN: 'Перемещаемые цифровые токены, цена которых равна ~1 мг золота в ' + LIQUID_TOKEN + '.',
+	influence_tokens_which_earn_more_power_by_holding_long_term: 'Сила Голоса неперемещаемая, её количество увеличивается при долгосрочном хранении.',
+	the_more_you_hold_the_more_you_influence_post_rewards: 'Чем больше у Вас ' + VESTING_TOKENS + ', тем сильней вы влияете на вознаграждения за пост и тем больше зарабатываете за голосование.',
 	the_estimated_value_is_based_on_a_7_day_average_value_of_LIQUID_TOKEN_in_currency: 'Оценочная стоимость рассчитывается из 7-ми дневной средней стоимости ' + LIQUID_TOKEN + '.',
-	VESTING_TOKEN_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_LIQUID_TOKEN: VESTING_TOKEN + ' нельзя передавать и потребуется 2 года и 104 выплаты чтобы перевести обратно в ' + LIQUID_TOKEN + '.',
+	VESTING_TOKEN_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_LIQUID_TOKEN: VESTING_TOKEN2 + ' нельзя передать и потребуется 20 недель чтобы перевести её обратно ' + LIQUID_TOKEN + '.',
 	move_funds_to_another_account: 'Move funds to another Steemit account.',
 	protect_funds_by_requiring_a_3_day_withdraw_waiting_period: 'Protect funds by requiring a 3 day withdraw waiting period.',
 	withdraw_funds_after_the_required_3_day_waiting_period: 'Withdraw funds after the required 3 day waiting period.',
-	balance_subject_to_3_day_withdraw_waiting_period: 'Balance subject to 3 day withdraw waiting period.',
+	balance_subject_to_3_day_withdraw_waiting_period: 'Вывод баланса из сберегательных счетов на обычные, занимает 3 дня',
 	// TODO
-	converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again: 'Конвертированная ' + VESTING_TOKENS + ' может быть отправлена себе или кому-то еще, но не может быть передана вновь без конвертирования назад в ' + LIQUID_TOKEN + '.',
+	converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again: 'Конвертированная ' + VESTING_TOKEN + ' может быть отправлена себе или кому-то еще, но не может быть передана вновь без конвертирования назад в ' + LIQUID_TOKEN + '.',
 	profile: 'Профиль',
 	send_to_account: 'Отправить аккаунту',
 	confirm_email: 'Подтвердить электронную почту',
@@ -708,6 +708,14 @@ const ru = {
     url_is_too_long: 'Слишком длинный адрес URL',
     name_must_not_begin_with_at: 'Имя должно начинаться с символа @',
     update: 'Обновить',
+
+    full_faq: 'Самый полный F.A.Q о Голосе',
+    research_it: 'Иследуйте Голос',
+
+    // backend errors translate
+    comment_once_20_seconds: 'You may only comment once every 20 seconds.',
+    post_once_5_minutes: 'You may only post once every 5 minutes',
+    post_once_per_minute: 'You may only post once per minute',
 }
 
 export { ru }

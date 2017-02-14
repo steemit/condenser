@@ -133,7 +133,7 @@ class PostFull extends React.Component {
         const winTop = (screen.height / 2) - (winWidth / 2);
         const winLeft = (screen.width / 2) - (winHeight / 2);
         const s = this.share_params;
-        const q = 'title=' + encodeURIComponent(s.title) + '&url=' + encodeURIComponent(s.url) + '&source=Steemit&mini=true';
+        const q = 'title=' + encodeURIComponent(s.title) + '&url=' + encodeURIComponent(s.url) + '&source='+APP_NAME_LATIN+'&mini=true';
         window.open('https://www.linkedin.com/shareArticle?' + q, 'Share', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=' + winWidth + ',height=' + winHeight);
     }
 
@@ -159,7 +159,7 @@ class PostFull extends React.Component {
         if (content.category) link = `/${content.category}${link}`;
 
         const {category, title, body} = content;
-        if (process.env.BROWSER && title) document.title = title + ' — ' + APP_NAME;
+        if (process.env.BROWSER && title) document.title = title + ' — ' + APP_NAME_LATIN;
 
         let content_body = content.body;
         const url = `/${category}/@${author}/${permlink}`
@@ -182,8 +182,8 @@ class PostFull extends React.Component {
 
         this.share_params = {
             link,
-            url: 'https://steemit.com' + link,
-            title: title + ' — Steemit',
+            url: 'https://' + APP_URL + link,
+            title: title + ' — '+ APP_NAME_LATIN,
             desc: p.desc
         };
 

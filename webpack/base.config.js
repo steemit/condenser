@@ -47,7 +47,9 @@ export default {
         ]
     },
     plugins: [
-        function () { this.plugin('done', writeStats); },
+        function () {
+            this.plugin('done', writeStats);
+        },
         webpack_isomorphic_tools_plugin,
         new ExtractTextPlugin('[name]-[chunkhash].css')
     ],
@@ -62,9 +64,3 @@ export default {
         config: 'config'
     }
 };
-/* medium-editor, add to plugins[]
-
-        new webpack.ProvidePlugin({
-            $: 'jquery'
-        })
-*/

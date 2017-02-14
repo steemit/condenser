@@ -47,6 +47,7 @@ session(app, {
     crypto_key,
     key: config.get('session_cookie_key')
 });
+csrf(app);
 
 app.use(mount(grant));
 app.use(flash({ key: 'flash' }));

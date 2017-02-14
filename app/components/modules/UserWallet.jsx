@@ -223,7 +223,6 @@ class UserWallet extends React.Component {
 
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
-                    <img src="/images/golos-badge.jpg" width="36px" height="36px" alt="символ Голоса" />&nbsp;
                     {LIQUID_TOKEN.toUpperCase()}<br /><span className="secondary">{steemTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})}</span>
                 </div>
                 <div className="column small-12 medium-4">
@@ -237,7 +236,6 @@ class UserWallet extends React.Component {
 
             <div className="UserWallet__balance row zebra">
                 <div className="column small-12 medium-8">
-                    <img src="/images/golospower-badge.jpg" width="36px" height="36px" alt="символ Силы Голоса" />&nbsp;
                     {VESTING_TOKEN.toUpperCase()}<br /><span className="secondary">{powerTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})}</span>
                 </div>
                 <div className="column small-12 medium-4">
@@ -250,7 +248,6 @@ class UserWallet extends React.Component {
 
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
-                    <img src="/images/zolotoy-badge.jpg" width="32px" height="32px" alt="символ Золотого" />&nbsp;
                     {DEBT_TOKEN.toUpperCase()}<br /><span className="secondary">{sbdMessage}</span>
                 </div>
                 <div className="column small-12 medium-4">

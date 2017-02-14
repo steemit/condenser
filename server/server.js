@@ -51,6 +51,13 @@ session(app, {
 app.use(mount(grant));
 app.use(flash({ key: 'flash' }));
 
+function convertEntriesToArrays(obj) {
+    return Object.keys(obj).reduce((result, key) => {
+        result[key] = obj[key].split(/\s+/);
+        return result;
+    }, {});
+}
+
 // some redirects
 app.use(function*(next) {
     // redirect to home page/feed if known account
@@ -176,32 +183,14 @@ useNotificationsApi(app);
 
 // helmet wants some things as bools and some as lists, makes config difficult.
 // our config uses strings, this splits them to lists on whitespace.
+
 if (env === 'production') {
     const helmetConfig = {
-        directives: {
-            defaultSrc: config
-                .get('helmet.directives.defaultSrc')
-                .split('/\s+/'),
-            childSrc: config.get('helmet.directives.childSrc').split('/\s+/'),
-            scriptSrc: config.get('helmet.directives.scriptSrc').split('/\s+/'),
-            styleSrc: config.get('helmet.directives.styleSrc').split('/\s+/'),
-            imgSrc: config.get('helmet.directives.imgSrc').split('/\s+/'),
-            fontSrc: config.get('helmet.directives.fontSrc').split('/\s+/'),
-            connectSrc: config
-                .get('helmet.directives.connectSrc')
-                .split('/\s+/'),
-            reportUri: config.get('helmet.directives.reportUri'),
-            pluginTypes: config
-                .get('helmet.directives.pluginTypes')
-                .split('/\s+/'),
-            objectSrc: config.get('helmet.directives.objectSrc').split('/\s+/'),
-            frameAncestors: config
-                .get('helmet.directives.frameAncestors')
-                .split('/\s+/')
-        },
+        directives: convertEntriesToArrays(config.get('helmet.directives')),
         reportOnly: config.get('helmet.reportOnly'),
         setAllHeaders: config.get('helmet.setAllHeaders')
     };
+    helmetConfig.directives.reportUri = '/api/v1/csp_violation';
     app.use(helmet.contentSecurityPolicy(helmetConfig));
 }
 

@@ -36,9 +36,8 @@
       "fontSrc": "data: fonts.gstatic.com",
       "frameAncestors": "'none'",
       "imgSrc": "* data:",
-      "objectSrc": "",
+      "objectSrc": "'none'",
       "pluginTypes": "application/pdf",
-      "reportUri": "/api/v1/csp_violation",
       "scriptSrc": "'self' www.google-analytics.com connect.facebook.net",
       "styleSrc": "'self' 'unsafe-inline' fonts.googleapis.com"
     },

@@ -701,6 +701,13 @@ const ru = {
     resteem_this_post: 'Поделиться этим постом',
     or: 'или',
     you: 'Вы',
+    invalid_url: 'Неверный URL ',
+    name_is_too_long: 'Слишком длинное имя',
+    about_is_too_long: 'Слишком много о себе',
+    location_is_too_long: 'Слишком длинное местоположение',
+    url_is_too_long: 'Слишком длинный адрес URL',
+    name_must_not_begin_with_at: 'Имя должно начинаться с символа @',
+    update: 'Обновить',
 }
 
 export { ru }

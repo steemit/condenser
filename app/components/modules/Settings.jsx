@@ -31,11 +31,11 @@ class Settings extends React.Component {
             fields: ['profile_image', 'name', 'about', 'location', 'website'],
             initialValues: props.profile,
             validation: values => ({
-                profile_image: values.profile_image && !/^https?:\/\//.test(values.profile_image) ? 'Invalid URL' : null,
-                name: values.name && values.name.length > 20 ? 'Name is too long' : values.name && /^\s*@/.test(values.name) ? 'Name must not begin with @' : null,
-                about: values.about && values.about.length > 160 ? 'About is too long' : null,
-                location: values.location && values.location.length > 30 ? 'Location is too long' : null,
-                website: values.website && values.website.length > 100 ? 'Website URL is too long' : values.website && !/^https?:\/\//.test(values.website) ? 'Invalid URL' : null,
+                profile_image: values.profile_image && !/^https?:\/\//.test(values.profile_image) ? translate('invalid_url') : null,
+                name: values.name && values.name.length > 20 ? translate('name_is_too_long') : values.name && /^\s*@/.test(values.name) ? translate('') : null,
+                about: values.about && values.about.length > 160 ? translate('about_is_too_long') : null,
+                location: values.location && values.location.length > 30 ? translate('location_is_too_long') : null,
+                website: values.website && values.website.length > 100 ? translate('url_is_too_long') : values.website && !/^https?:\/\//.test(values.website) ? translate('invalid_url') : null,
             })
         })
         this.handleSubmitForm =
@@ -194,7 +194,7 @@ class Settings extends React.Component {
 
                     <br />
                     {state.loading && <span><LoadingIndicator type="circle" /><br /></span>}
-                    {!state.loading && <input type="submit" className="button" value="Update" disabled={disabled} />}
+                    {!state.loading && <input type="submit" className="button" value={translate('update')} disabled={disabled} />}
                     {' '}{
                             state.errorMessage
                                 ? <small className="error">{state.errorMessage}</small>

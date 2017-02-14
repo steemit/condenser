@@ -17,7 +17,8 @@ import WalletSubMenu from 'app/components/elements/WalletSubMenu'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Tooltip from 'app/components/elements/Tooltip'
 import { translate, translateNumber } from 'app/Translator';
-import { APP_NAME_LATIN, LIQUID_TOKEN, DEBT_TOKEN, CURRENCY_SIGN, VESTING_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TICKER, VEST_TICKER, DEBT_TICKER } from 'config/client_config';
+import { localizedCurrency, localCurrencySymbol } from 'app/components/elements/LocalizedCurrency';
+import { APP_NAME_LATIN, LIQUID_TOKEN, LIQUID_TOKEN_UPPERCASE, DEBT_TOKEN, CURRENCY_SIGN, VESTING_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TICKER, VEST_TICKER, DEBT_TICKER } from 'config/client_config';
 
 const assetPrecision = 1000;
 
@@ -28,11 +29,11 @@ class UserWallet extends React.Component {
         this.onShowDeposit = () => {this.setState({showDeposit: !this.state.showDeposit})}
         this.onShowDepositSteem = (e) => {
             e.preventDefault()
-            this.setState({showDeposit: !this.state.showDeposit, depositType: 'GOLOS'})
+            this.setState({showDeposit: !this.state.showDeposit, depositType: LIQUID_TICKER})
         }
         this.onShowDepositPower = (e) => {
             e.preventDefault()
-            this.setState({showDeposit: !this.state.showDeposit, depositType: 'GESTS'})
+            this.setState({showDeposit: !this.state.showDeposit, depositType: VEST_TICKER})
         }
         // this.onShowDeposit = this.onShowDeposit.bind(this)
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'UserWallet');
@@ -79,10 +80,10 @@ class UserWallet extends React.Component {
         if(savings_withdraws) {
             savings_withdraws.forEach(withdraw => {
                 const [amount, asset] = withdraw.get('amount').split(' ')
-                if(asset === 'STEEM')
+                if(asset === LIQUID_TICKER)
                     savings_pending += parseFloat(amount)
                 else {
-                    if(asset === 'SBD')
+                    if(asset === DEBT_TICKER)
                         savings_sbd_pending += parseFloat(amount)
                 }
             })
@@ -95,12 +96,12 @@ class UserWallet extends React.Component {
         }).map(c => {
             const timestamp = new Date(c.getIn([1, 'timestamp'])).getTime();
             const finishTime = timestamp + (86400000 * (timestamp <= 1481040000000 ? 7 : 3.5)); // add conversion delay before/after hardfork change
-            const amount = parseFloat(c.getIn([1, 'op', 1, 'amount']).replace(" SBD", ""));
+            const amount = parseFloat(c.getIn([1, 'op', 1, 'amount']).replace(' ' + DEBT_TICKER, ""));
             conversionValue += amount;
             return (
                 <div key={c.get(0)}>
                     <Tooltip t={translate('conversion_complete_tip') + ": " + new Date(finishTime).toLocaleString()}>
-                        <span>(+{translate('in_conversion', {amount: numberWithCommas('$' + amount.toFixed(3))})})</span>
+                        <span>(+{translate('in_conversion', {amount: numberWithCommas(localCurrencySymbol + amount.toFixed(3))})})</span>
                     </Tooltip>
                 </div>
             );
@@ -112,14 +113,14 @@ class UserWallet extends React.Component {
         const sbd_balance = parseFloat(account.get('sbd_balance'))
         const sbd_balance_savings = parseFloat(savings_sbd_balance.split(' ')[0]);
         const sbdOrders = (!open_orders || !isMyAccount) ? 0 : open_orders.reduce((o, order) => {
-            if (order.sell_price.base.indexOf("SBD") !== -1) {
+            if (order.sell_price.base.indexOf(DEBT_TICKER) !== -1) {
                 o += order.for_sale;
             }
             return o;
         }, 0) / assetPrecision;
 
         const steemOrders = (!open_orders || !isMyAccount) ? 0 : open_orders.reduce((o, order) => {
-            if (order.sell_price.base.indexOf("STEEM") !== -1) {
+            if (order.sell_price.base.indexOf(LIQUID_TICKER) !== -1) {
                 o += order.for_sale;
             }
             return o;
@@ -128,15 +129,16 @@ class UserWallet extends React.Component {
         // set displayed estimated value
         const total_sbd = sbd_balance + sbd_balance_savings + savings_sbd_pending + sbdOrders + conversionValue;
         const total_steem = vesting_steemf + balance_steem + saving_balance_steem + savings_pending + steemOrders;
-        let total_value = '$' + numberWithCommas(
-            ((total_steem * price_per_steem) + total_sbd
-        ).toFixed(2))
-
+        // let total_value = '$' + numberWithCommas(
+        //     ((total_steem * price_per_steem) + total_sbd
+        // ).toFixed(2))
+        const total_value = (((vesting_steemf + balance_steem) * price_per_steem) + sbd_balance) || 0
         // format spacing on estimated value based on account state
-        let estimate_output = <p>{total_value}</p>;
-        if (isMyAccount) {
-            estimate_output = <p>{total_value}&nbsp; &nbsp; &nbsp;</p>;
-        }
+        // const estimate_output = <p>{localizedCurrency(total_value)}</p>;
+        const estimate_output = <p>{localCurrencySymbol+' '+total_value}</p>;
+        // if (isMyAccount) {
+        //     estimate_output = <p>{localizedCurrency(total_value)}&nbsp; &nbsp; &nbsp;</p>;
+        // }
 
         /// transfer log
         let idx = 0
@@ -156,12 +158,12 @@ class UserWallet extends React.Component {
         }).filter(el => !!el).reverse();
 
         let steem_menu = [
-            { value: translate('transfer'), link: '#', onClick: showTransfer.bind( this, 'GOLOS', translate('transfer_to_account') ) },
-            { value: translate('transfer_to_savings'), link: '#', onClick: showTransfer.bind( this, 'GOLOS', translate('transfer_to_savings') ) },
-            { value: translate('power_up'), link: '#', onClick: showTransfer.bind( this, 'GESTS', translate('transfer_to_account') ) },
+            { value: translate('transfer'), link: '#', onClick: showTransfer.bind( this, LIQUID_TICKER, translate('transfer_to_account') ) },
+            { value: translate('transfer_to_savings'), link: '#', onClick: showTransfer.bind( this, LIQUID_TICKER, translate('transfer_to_savings') ) },
+            { value: translate('power_up'), link: '#', onClick: showTransfer.bind( this, VEST_TICKER, translate('transfer_to_account') ) },
         ]
         let power_menu = [
-            { value: 'Power Down', link: '#', onClick: powerDown.bind(this, false) }
+            { value: translate('power_down'), link: '#', onClick: powerDown.bind(this, false) }
         ]
         if(isMyAccount) {
             steem_menu.push({ value: translate('deposit'), link: '#', onClick: onShowDepositSteem })
@@ -173,8 +175,8 @@ class UserWallet extends React.Component {
         }
 
         let dollar_menu = [
-            { value: translate('transfer'), link: '#', onClick: showTransfer.bind( this, 'SBD', translate('transfer_to_account') ) },
-            { value: translate('transfer_to_savings'), link: '#', onClick: showTransfer.bind( this, 'SBD', translate('transfer_to_savings') ) },
+            { value: translate('transfer'), link: '#', onClick: showTransfer.bind( this, DEBT_TICKER, translate('transfer_to_account') ) },
+            { value: translate('transfer_to_savings'), link: '#', onClick: showTransfer.bind( this, DEBT_TICKER, translate('transfer_to_savings') ) },
             { value: translate('buy_or_sell'), link: '/market' },
             { value: translate('convert_to_LIQUID_TOKEN'), link: '#', onClick: convertToSteem },
         ]
@@ -189,21 +191,24 @@ class UserWallet extends React.Component {
         const steem_balance_str = translateNumber(balance_steem.toFixed(3)) // formatDecimal(balance_steem, 3)
         const steem_orders_balance_str = translateNumber(steemOrders.toFixed(3))
         const power_balance_str = translateNumber(vesting_steem) // formatDecimal(vesting_steem, 3)
-        const sbd_balance_str = translateNumber('$' + sbd_balance.toFixed(3)) // formatDecimal(account.sbd_balance, 3)
-        const sbd_orders_balance_str = translateNumber('$' + sbdOrders.toFixed(3))
-        const savings_balance_str = translateNumber(saving_balance_steem.toFixed(3) + ' ' + DEBT_TICKER)
-        const savings_sbd_balance_str = translateNumber('$' + sbd_balance_savings.toFixed(3))
+        const savings_balance_str = translateNumber(saving_balance_steem.toFixed(3)) + ' ' + LIQUID_TOKEN_UPPERCASE
+        
+        // const sbd_balance_str = translateNumber('$' + sbd_balance.toFixed(3)) // formatDecimal(account.sbd_balance, 3)
+        const sbd_balance_str = translateNumber(sbd_balance.toFixed(3)) + ' ' + DEBT_TICKER // formatDecimal(account.sbd_balance, 3)
+        // const sbd_orders_balance_str = translateNumber('$' + sbdOrders.toFixed(3))
+        const sbd_orders_balance_str = translateNumber(sbdOrders.toFixed(3)) + ' ' + DEBT_TICKER // formatDecimal(account.sbd_balance, 3)
+        // const savings_sbd_balance_str = translateNumber('$' + sbd_balance_savings.toFixed(3))
+        const savings_sbd_balance_str = translateNumber(sbd_balance_savings.toFixed(3)) + ' ' + DEBT_TICKER // formatDecimal(account.sbd_balance, 3)
 
         const savings_menu = [
-            { value: translate('withdraw_steem'), link: '#', onClick: showTransfer.bind( this, 'STEEM', translate('savings_withdraw') ) },
+            { value: translate('withdraw_steem'), link: '#', onClick: showTransfer.bind( this, LIQUID_TICKER, translate('savings_withdraw') ) },
         ]
         const savings_sbd_menu = [
-            { value: translate('withdraw_steem_dollars'), link: '#', onClick: showTransfer.bind( this, 'SBD', translate('savings_withdraw') ) },
+            { value: translate('withdraw_steem_dollars'), link: '#', onClick: showTransfer.bind( this, DEBT_TICKER, translate('savings_withdraw') ) },
         ]
         // set dynamic secondary wallet values
         const sbdInterest = this.props.sbd_interest / 100
-        //const sbdMessage = translate('tokens_worth_about_AMOUNT_of_LIQUID_TOKEN') //TODO: add APR param to xlation
-        const sbdMessage = <span>Tokens worth about $1.00 of STEEM, currently collecting {sbdInterest}% APR.</span>
+        const sbdMessage = translate('tokens_worth_about_AMOUNT_of_LIQUID_TOKEN') //TODO: add APR param to xlation
 
         return (<div className="UserWallet">
             <div className="row">
@@ -214,30 +219,39 @@ class UserWallet extends React.Component {
                     {/* isMyAccount && <button className="UserWallet__buysp button hollow" onClick={this.onShowDepositSteem}>{translate('buy_LIQUID_TOKEN_or_VESTING_TOKEN')}</button> */}
                 </div>
             </div>
+
+
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
-                    STEEM<br /><span className="secondary">{steemTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})}</span>
+                    <img src="/images/golos-badge.jpg" width="36px" height="36px" alt="символ Голоса" />&nbsp;
+                    {LIQUID_TOKEN.toUpperCase()}<br /><span className="secondary">{steemTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})}</span>
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
-                    <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={steem_balance_str + ' ' + DEBT_TICKER} menu={steem_menu} />
-                    : steem_balance_str + ' ' + DEBT_TICKER}
-                    {steemOrders ? <div style={{paddingRight: isMyAccount ? "0.85rem" : null}}><Link to="/market"><Tooltip t={translate('open_orders')}>(+{steem_orders_balance_str + ' ' + DEBT_TICKER})</Tooltip></Link></div> : null}
+                    <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={steem_balance_str + ' ' + LIQUID_TOKEN_UPPERCASE} menu={steem_menu} />
+                    : steem_balance_str + ' ' + LIQUID_TOKEN_UPPERCASE}
+                    {steemOrders ? <div style={{paddingRight: isMyAccount ? "0.85rem" : null}}><Link to="/market"><Tooltip t={translate('open_orders')}>(+{steem_orders_balance_str + ' ' + LIQUID_TOKEN_UPPERCASE})</Tooltip></Link></div> : null}
                 </div>
             </div>
+
+
             <div className="UserWallet__balance row zebra">
                 <div className="column small-12 medium-8">
-                    {translate('steem_power').toUpperCase()}<br /><span className="secondary">{powerTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})}</span>
+                    <img src="/images/golospower-badge.jpg" width="36px" height="36px" alt="символ Силы Голоса" />&nbsp;
+                    {VESTING_TOKEN.toUpperCase()}<br /><span className="secondary">{powerTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})}</span>
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
-                    <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={power_balance_str + ' ' + DEBT_TICKER} menu={power_menu} />
-                    : power_balance_str + ' ' + DEBT_TICKER}
+                    <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={power_balance_str + ' ' + LIQUID_TOKEN_UPPERCASE} menu={power_menu} />
+                    : power_balance_str + ' ' + LIQUID_TOKEN_UPPERCASE}
                 </div>
             </div>
+
+
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
-                    {translate('steem_dollar').toUpperCase()}<br /><span className="secondary">{sbdMessage}</span>
+                    <img src="/images/zolotoy-badge.jpg" width="32px" height="32px" alt="символ Золотого" />&nbsp;
+                    {DEBT_TOKEN.toUpperCase()}<br /><span className="secondary">{sbdMessage}</span>
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
@@ -247,6 +261,8 @@ class UserWallet extends React.Component {
                     {conversions}
                 </div>
             </div>
+
+
             <div className="UserWallet__balance row zebra">
                 <div className="column small-12 medium-8">
                     {translate('savings').toUpperCase()}<br /><span className="secondary">{savingsTip}</span>
@@ -314,7 +330,7 @@ export default connect(
         const feed_price = state.global.get('feed_price')
         if(feed_price && feed_price.has('base') && feed_price.has('quote')) {
             const {base, quote} = feed_price.toJS()
-            if(/ SBD$/.test(base) && / STEEM$/.test(quote))
+            if(/ GBG$/.test(base) && / GOLOS$/.test(quote))
                 price_per_steem = parseFloat(base.split(' ')[0])
         }
         const savings_withdraws = state.user.get('savings_withdraws')

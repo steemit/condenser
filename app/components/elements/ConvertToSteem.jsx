@@ -102,7 +102,7 @@ export default reduxForm(
     // mapDispatchToProps
     dispatch => ({
         convert: (owner, amt, success, error) => {
-            const amount = [parseFloat(amt).toFixed(3), DEBT_TICKER].join(" ")
+            const amount = [parseFloat(amt).toFixed(2), DEBT_TICKER].join(" ")
             const requestid = Math.floor(Date.now() / 1000)
             const conf = translate('in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN', { amount: amount.split(' ')[0] })
             dispatch(transaction.actions.broadcastOperation({

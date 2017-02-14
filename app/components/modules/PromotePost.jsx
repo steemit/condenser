@@ -119,7 +119,7 @@ export default connect(
             }
             const operation = {
                 from: username,
-                to: 'null', amount: parseFloat(amount, 10).toFixed(3) + ' ' + asset,
+                to: 'null', amount: parseFloat(amount, 10).toFixed(2) + ' ' + asset,
                 memo: `@${author}/${permlink}`,
                 __config: {successMessage: translate('you_successfully_promoted_this_post') + '.'}
             }

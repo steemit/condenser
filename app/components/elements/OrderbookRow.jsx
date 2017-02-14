@@ -63,7 +63,7 @@ export default class OrderRow extends React.Component {
         const {order, side, total} = this.props;
         const bid = side === "bids";
 
-        const totalTD = <td>{total.toFixed(3)}</td>;
+        const totalTD = <td>{total.toFixed(2)}</td>;
         const sbd = <td>{order.getStringSBD()}</td>;
         const steem = <td>{order.getStringSteem()}</td>;
         const price = <td><strong>{order.getStringPrice()}</strong></td>;

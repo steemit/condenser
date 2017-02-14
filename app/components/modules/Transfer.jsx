@@ -291,7 +291,7 @@ export default connect(
             const asset2 = toVesting ? 'GOLOS' : asset
             const operation = {
                 from: username,
-                to, amount: parseFloat(amount, 10).toFixed(3) + ' ' + asset2,
+                to, amount: parseFloat(amount, 10).toFixed(2) + ' ' + asset2,
                 memo: toVesting ? undefined : (memo ? memo : '')
             }
 

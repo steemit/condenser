@@ -120,17 +120,17 @@
             automaticOpen: true,
 
             /** The number of milliseconds to delay before attempting to reconnect. */
-            reconnectInterval: 2000,
+            reconnectInterval: 2,
             /** The maximum number of milliseconds to delay a reconnection attempt. */
-            maxReconnectInterval: 300000,
+            maxReconnectInterval: 100000,
             /** The rate of increase of the reconnect delay. Allows reconnect attempts to back off when problems persist. */
-            reconnectDecay: 1.5,
+            reconnectDecay: 2,
 
             /** The maximum time in milliseconds to wait for a connection to succeed before closing and retrying. */
-            timeoutInterval: 2000,
+            timeoutInterval: 1000,
 
             /** The maximum number of reconnection attempts to make. Unlimited if null. */
-            maxReconnectAttempts: 100,
+            maxReconnectAttempts: 1000,
 
             /** The binary type, possible values 'blob' or 'arraybuffer', default 'blob'. */
             binaryType: 'arraybuffer',
@@ -254,7 +254,9 @@
         this.reconnect = function () {
             var timeout = self.reconnectInterval * Math.pow(self.reconnectDecay, self.reconnectAttempts);
             timeout = timeout > self.maxReconnectInterval ? self.maxReconnectInterval : timeout;
-            console.log('WebSocket: will try to reconnect in ' + parseInt(timeout/1000) + ' sec, attempt #' + (self.reconnectAttempts + 1));
+            if (self.reconnectAttempts > 0) {
+                console.log('WebSocket: will try to reconnect in ' + parseInt(timeout) + ' ms, attempt #' + (self.reconnectAttempts + 1));
+            }
             setTimeout(function () {
                 self.reconnectAttempts++;
                 self.open(true);
@@ -276,7 +278,7 @@
                 surl = self.url[this.reconnectAttempts % self.url.length];
             }
 
-            console.log('connecting to', surl);
+            if (this.reconnectAttempts > 0) console.log('connecting to', surl);
             ws = process.env.BROWSER ? new WebSocket(surl) : new WebSocket(surl, protocols || [], null, null, null, {maxReceivedFrameSize: 0x600000});
             ws.binaryType = this.binaryType;
 
@@ -299,6 +301,7 @@
                 if (self.debug || ReconnectingWebSocket.debugAll) {
                     console.debug('ReconnectingWebSocket**', 'onopen', self.url);
                 }
+                console.log('connected to', surl);
                 self.protocol = ws.protocol;
                 self.readyState = WebSocket.OPEN;
                 self.reconnectAttempts = 0;

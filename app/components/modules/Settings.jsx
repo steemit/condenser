@@ -182,6 +182,7 @@ class Settings extends React.Component {
                                 <option value="uk">Українська</option>
                             </select>
                     </label>
+                    <div className="error"></div>
                     {/* CHOOSE CURRENCY */}
                     <label>{translate('choose_currency')}
                         <select defaultValue={store.get('currency')} onChange={this.handleCurrencyChange}>
@@ -192,6 +193,7 @@ class Settings extends React.Component {
                             }
                         </select>
                     </label>
+                    <div className="error"></div>
                     <label>
                         {translate('profile_image_url')}
                         <input type="url" {...profile_image.props} autoComplete="off" />

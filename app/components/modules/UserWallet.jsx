@@ -17,6 +17,7 @@ import WalletSubMenu from 'app/components/elements/WalletSubMenu'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Tooltip from 'app/components/elements/Tooltip'
 import { translate, translateNumber } from 'app/Translator';
+import {prettyDigit} from 'app/utils/ParsersAndFormatters';
 import { localizedCurrency, localCurrencySymbol } from 'app/components/elements/LocalizedCurrency';
 import { APP_NAME_LATIN, LIQUID_TOKEN, LIQUID_TOKEN_UPPERCASE, DEBT_TOKEN, CURRENCY_SIGN, VESTING_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TICKER, VEST_TICKER, DEBT_TICKER } from 'config/client_config';
 
@@ -158,9 +159,9 @@ class UserWallet extends React.Component {
         }).filter(el => !!el).reverse();
 
         let steem_menu = [
-            { value: translate('transfer'), link: '#', onClick: showTransfer.bind( this, LIQUID_TICKER, translate('transfer_to_account') ) },
-            { value: translate('transfer_to_savings'), link: '#', onClick: showTransfer.bind( this, LIQUID_TICKER, translate('transfer_to_savings') ) },
-            { value: translate('power_up'), link: '#', onClick: showTransfer.bind( this, VEST_TICKER, translate('transfer_to_account') ) },
+            { value: translate('transfer'), link: '#', onClick: showTransfer.bind( this, LIQUID_TICKER, 'Transfer to Account' ) },
+            { value: translate('transfer_to_savings'), link: '#', onClick: showTransfer.bind( this, LIQUID_TICKER, 'Transfer to Savings' ) },
+            { value: translate('power_up'), link: '#', onClick: showTransfer.bind( this, VEST_TICKER, 'Transfer to Account' ) },
         ]
         let power_menu = [
             { value: translate('power_down'), link: '#', onClick: powerDown.bind(this, false) }
@@ -175,8 +176,8 @@ class UserWallet extends React.Component {
         }
 
         let dollar_menu = [
-            { value: translate('transfer'), link: '#', onClick: showTransfer.bind( this, DEBT_TICKER, translate('transfer_to_account') ) },
-            { value: translate('transfer_to_savings'), link: '#', onClick: showTransfer.bind( this, DEBT_TICKER, translate('transfer_to_savings') ) },
+            { value: translate('transfer'), link: '#', onClick: showTransfer.bind( this, DEBT_TICKER, 'Transfer to Account' ) },
+            { value: translate('transfer_to_savings'), link: '#', onClick: showTransfer.bind( this, DEBT_TICKER, 'Transfer to Savings' ) },
             { value: translate('buy_or_sell'), link: '/market' },
             { value: translate('convert_to_LIQUID_TOKEN'), link: '#', onClick: convertToSteem },
         ]
@@ -188,23 +189,23 @@ class UserWallet extends React.Component {
             </Reveal>
         </div>
 
-        const steem_balance_str = translateNumber(balance_steem.toFixed(2)) // formatDecimal(balance_steem, 3)
-        const steem_orders_balance_str = translateNumber(steemOrders.toFixed(2))
-        const power_balance_str = translateNumber(vesting_steem) // formatDecimal(vesting_steem, 3)
-        const savings_balance_str = translateNumber(saving_balance_steem.toFixed(2)) + ' ' + LIQUID_TOKEN_UPPERCASE
+        const steem_balance_str = prettyDigit(balance_steem.toFixed(2)) // translateNumber(balance_steem.toFixed(2)) // formatDecimal(balance_steem, 3)
+        const steem_orders_balance_str = prettyDigit(steemOrders.toFixed(2)) // translateNumber(steemOrders.toFixed(2))
+        const power_balance_str = prettyDigit(vesting_steem) // translateNumber(vesting_steem) // formatDecimal(vesting_steem, 3)
+        const savings_balance_str = prettyDigit(saving_balance_steem.toFixed(2)) // translateNumber(saving_balance_steem.toFixed(2)) + ' ' + LIQUID_TOKEN_UPPERCASE
         
         // const sbd_balance_str = translateNumber('$' + sbd_balance.toFixed(2)) // formatDecimal(account.sbd_balance, 3)
-        const sbd_balance_str = translateNumber(sbd_balance.toFixed(2)) + ' ' + DEBT_TICKER // formatDecimal(account.sbd_balance, 3)
+        const sbd_balance_str = prettyDigit(sbd_balance.toFixed(2)) // translateNumber(sbd_balance.toFixed(2)) + ' ' + DEBT_TICKER // formatDecimal(account.sbd_balance, 3)
         // const sbd_orders_balance_str = translateNumber('$' + sbdOrders.toFixed(2))
-        const sbd_orders_balance_str = translateNumber(sbdOrders.toFixed(2)) + ' ' + DEBT_TICKER // formatDecimal(account.sbd_balance, 3)
+        const sbd_orders_balance_str = prettyDigit(sbdOrders.toFixed(2)) // translateNumber(sbdOrders.toFixed(2)) + ' ' + DEBT_TICKER // formatDecimal(account.sbd_balance, 3)
         // const savings_sbd_balance_str = translateNumber('$' + sbd_balance_savings.toFixed(2))
-        const savings_sbd_balance_str = translateNumber(sbd_balance_savings.toFixed(2)) + ' ' + DEBT_TICKER // formatDecimal(account.sbd_balance, 3)
+        const savings_sbd_balance_str = prettyDigit(sbd_balance_savings.toFixed(2)) // translateNumber(sbd_balance_savings.toFixed(2)) + ' ' + DEBT_TICKER // formatDecimal(account.sbd_balance, 3)
 
         const savings_menu = [
-            { value: translate('withdraw_steem'), link: '#', onClick: showTransfer.bind( this, LIQUID_TICKER, translate('savings_withdraw') ) },
+            { value: translate('withdraw_steem'), link: '#', onClick: showTransfer.bind( this, LIQUID_TICKER, 'Savings Withdraw' ) },
         ]
         const savings_sbd_menu = [
-            { value: translate('withdraw_steem_dollars'), link: '#', onClick: showTransfer.bind( this, DEBT_TICKER, translate('savings_withdraw') ) },
+            { value: translate('withdraw_steem_dollars'), link: '#', onClick: showTransfer.bind( this, DEBT_TICKER, 'Savings Withdraw' ) },
         ]
         // set dynamic secondary wallet values
         const sbdInterest = this.props.sbd_interest / 100
@@ -252,7 +253,7 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
-                    <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={sbd_balance_str} menu={dollar_menu} />
+                    <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={sbd_balance_str + ' ' + DEBT_TICKER} menu={dollar_menu} />
                     : sbd_balance_str}
                     {sbdOrders ? <div style={{paddingRight: isMyAccount ? "0.85rem" : null}}><Link to="/market"><Tooltip t={translate('open_orders')}>(+{sbd_orders_balance_str})</Tooltip></Link></div> : null}
                     {conversions}

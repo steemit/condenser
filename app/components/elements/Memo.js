@@ -14,21 +14,21 @@ class Memo extends React.Component {
     }
     constructor() {
         super()
-        this.shouldComponentUpdate = shouldComponentUpdate(this, 'Memo')
+        this.shouldComponentUpdate = shouldComponentUpdate(this, 'Memo');
         this.decodeMemo = (memo_private, text) => {
             try {
                 return decode(memo_private, text)
             } catch(e) {
                 // if(/Invalid key/i.test(e.toString())) {
-                console.error('memo decryption error', text, e)
+                console.error('memo decryption error', text, e);
                 return 'Invalid memo'
             }
         }
     }
     render() {
         const {decodeMemo} = this
-        const {memo_private, text, myAccount} = this.props
-        const isEncoded = /^#/.test(text)
+        const {memo_private, text, myAccount} = this.props;
+        const isEncoded = /^#/.test(text);
 
         if(!isEncoded) return <span>{text}</span>
         if(!myAccount) return <span></span>

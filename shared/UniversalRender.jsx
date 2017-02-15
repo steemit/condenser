@@ -9,7 +9,6 @@ import { Router, RouterContext, match, applyRouterMiddleware } from 'react-route
 import Apis from './api_client/ApiInstances';
 import { Provider } from 'react-redux';
 import RootRoute from 'app/RootRoute';
-import ErrorPage from 'server/server-error';
 import {createStore, applyMiddleware, compose} from 'redux';
 import { browserHistory } from 'react-router';
 import useScroll from 'react-router-scroll';
@@ -60,16 +59,16 @@ const onRouterError = (error) => {
     console.error('onRouterError', error);
 };
 
-async function universalRender({ location, initial_state, offchain }) {
+async function universalRender({ location, initial_state, offchain, ErrorPage }) {
     let error, redirect, renderProps;
     try {
         [error, redirect, renderProps] = await runRouter(location, RootRoute);
     } catch (e) {
-        console.error('Router error:', e.toString(), location);
+        console.error('Routing error:', e.toString(), location);
         return {
-            title: 'Server error - Steemit',
+            title: 'Routing error - Steemit',
             statusCode: 500,
-            body: renderToString(<ErrorPage />)
+            body: renderToString(ErrorPage ? <ErrorPage /> : <span>Routing error</span>)
         };
     }
     if (error || !renderProps) {

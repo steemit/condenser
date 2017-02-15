@@ -16,7 +16,7 @@ class Tarantool {
             connection.connect()
             .then(() => connection.auth(username, password))
             .then(() => resolve())
-            .catch(error => reject(error));
+            .catch(error => resolve(false));
         });
     }
 
@@ -24,7 +24,6 @@ class Tarantool {
         return this.ready_promise
             .then(() => this.connection[call_name].apply(this.connection, args))
             .catch(error => {
-                console.error('Tarantool error', error.message);
                 if (error.message.indexOf('connect') >= 0)
                     instance = null;
                 return Promise.reject(error);

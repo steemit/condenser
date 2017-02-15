@@ -321,9 +321,11 @@ export default function useGeneralApi(app) {
         const remote_ip = getRemoteIp(this.req);
         try {
             let views = 1, unique = true;
-            if (config.has('tarantool')) {
-                const res = yield Tarantool.instance().call('page_view', page, remote_ip, this.session.uid, ref);
-                unique = res[0][0];
+            if (config.has('tarantool') && config.has('tarantool.host')) {
+                try {
+                    const res = yield Tarantool.instance().call('page_view', page, remote_ip, this.session.uid, ref);
+                    unique = res[0][0];
+                } catch (e) {}
             }
             const page_model = yield models.Page.findOne(
                 {attributes: ['id', 'views'], where: {permlink: esc(page)}, logging: false}

@@ -192,7 +192,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
                 const notifications = await tarantool.select('notifications', 0, 1, 0, 'eq', offchain.account);
                 server_store.dispatch({type: 'UPDATE_NOTIFICOUNTERS', payload: notificationsArrayToMap(notifications)});
             } catch(e) {
-                console.log('universalRender Tarantool error :', e.message);
+                console.warn('WARNING! cannot retrieve notifications from tarantool in universalRender:', e.message);
             }
         }
     } catch (e) {

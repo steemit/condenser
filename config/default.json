@@ -1,6 +1,7 @@
 {
   "database_url": "sqlite:///tmp/sqlite.db",
   "disable_signups": false,
+  "facebook_app_id": false,
   "grant": {
     "facebook": {
       "callback": "/handle_facebook_callback",
@@ -28,6 +29,7 @@
       "protocol": "http"
     }
   },
+  "google_analytics_id": false,
   "helmet": {
     "directives": {
       "childSrc": "'self' www.youtube.com staticxx.facebook.com w.soundcloud.com player.vimeo.com",

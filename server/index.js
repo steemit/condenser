@@ -23,7 +23,9 @@ global.$STM_Config = {
     read_only_mode: config.get('read_only_mode'),
     registrar_fee: config.get('registrar.fee'),
     upload_image: config.get('upload_image'),
-    site_domain: config.get('site_domain')
+    site_domain: config.get('site_domain'),
+    facebook_app_id: config.get('facebook_app_id'),
+    google_analytics_id: config.get('google_analytics_id')
 };
 
 const WebpackIsomorphicTools = require('webpack-isomorphic-tools');

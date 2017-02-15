@@ -2,7 +2,6 @@ import React from 'react';
 
 export default function ServerHTML({ body, assets, locale, title, meta }) {
     let page_title = title;
-    let js_plugins_path = "/static/plugins.js";
     return (
         <html lang="en">
         <head>
@@ -56,7 +55,6 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
         <body>
         <div id="content" dangerouslySetInnerHTML={ { __html: body } }></div>
         {assets.script.map((href, idx) => <script key={ idx } src={ href }></script>) }
-        {js_plugins_path && <script src={js_plugins_path}></script>}
         </body>
         </html>
     );

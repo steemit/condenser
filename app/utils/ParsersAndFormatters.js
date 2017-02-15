@@ -6,7 +6,7 @@ function fractional_part_len(value) {
 }
 
 export function prettyDigit(value) {
-    return value && value.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1 ')
+    return value && String(value).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1 ')
 }
 
 // FIXME this should be unit tested.. here is one bug: 501,695,.505

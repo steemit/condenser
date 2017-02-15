@@ -96,7 +96,8 @@ class DummyComponentToExportProps extends React.Component {
 			// map parameters for react-intl,
 			// which uses formatMessage({id: 'stringId', values: {some: 'values'}, options: {}}) structure
 			// 'formatNumber' uses formatNumber(value: number) structure
-			else if (translateType == 'number') return handler(Number(id))
+			// else if (translateType == 'number') return handler(Number(id))
+			else if (translateType == 'number') return Number(id).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 			// everything else uses formatMessage({id: 'stringId', values: {some: 'values'}, options: {}}) structure
 			else return handler({id}, values, options)
 		}

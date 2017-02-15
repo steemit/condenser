@@ -168,10 +168,10 @@ class Voting extends React.Component {
         const payoutItems = [];
 
         if(cashout_active) {
-            payoutItems.push({value: translate('potential_payout') + ' ' + localizedCurrency(formatDecimal(pending_payout).join(''))});
+            payoutItems.push({value: translate('potential_payout') + ' ' + localizedCurrency(pending_payout)});
         }
         if(promoted > 0) {
-            payoutItems.push({value: translate('boost_payments') + ' ' + localizedCurrency(formatDecimal(promoted).join(''))});
+            payoutItems.push({value: translate('boost_payments') + ' ' + localizedCurrency(promoted)});
         }
         if(cashout_active) {
             payoutItems.push({value: <TimeAgoWrapper date={cashout_time} />});
@@ -180,12 +180,12 @@ class Voting extends React.Component {
         if(max_payout == 0) {
             payoutItems.push({value: translate('past_payouts')})
         } else if (max_payout < 1000000) {
-            payoutItems.push({value: translate('max_accepted_payout') + localizedCurrency(formatDecimal(max_payout).join(''))})
+            payoutItems.push({value: translate('max_accepted_payout') + localizedCurrency(max_payout)})
         }
         if(total_author_payout > 0) {
-            payoutItems.push({value: translate('past_payouts') + ' ' + localizedCurrency(formatDecimal(total_author_payout + total_curator_payout).join(''))});
-            payoutItems.push({value: ' - ' + translate('authors') + ': ' + localizedCurrency(formatDecimal(total_author_payout).join(''))});
-            payoutItems.push({value: ' - ' + translate('curators') + ': ' + localizedCurrency(formatDecimal(total_curator_payout).join(''))});
+            payoutItems.push({value: translate('past_payouts') + ' ' + localizedCurrency(total_author_payout + total_curator_payout)});
+            payoutItems.push({value: ' - ' + translate('authors') + ': ' + localizedCurrency(total_author_payout)});
+            payoutItems.push({value: ' - ' + translate('curators') + ': ' + localizedCurrency(total_curator_payout)});
         }
         const payoutEl = <DropdownMenu el="div" items={payoutItems}>
             <span style={payout_limit_hit ? {opacity: '0.5'} : {}}>

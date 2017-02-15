@@ -189,17 +189,17 @@ class UserWallet extends React.Component {
             </Reveal>
         </div>
 
-        const steem_balance_str = prettyDigit(balance_steem.toFixed(2)) // translateNumber(balance_steem.toFixed(2)) // formatDecimal(balance_steem, 3)
-        const steem_orders_balance_str = prettyDigit(steemOrders.toFixed(2)) // translateNumber(steemOrders.toFixed(2))
-        const power_balance_str = prettyDigit(vesting_steem) // translateNumber(vesting_steem) // formatDecimal(vesting_steem, 3)
-        const savings_balance_str = prettyDigit(saving_balance_steem.toFixed(2)) // translateNumber(saving_balance_steem.toFixed(2)) + ' ' + LIQUID_TOKEN_UPPERCASE
+        const steem_balance_str = translateNumber(balance_steem.toFixed(2)) // formatDecimal(balance_steem, 3)
+        const steem_orders_balance_str = translateNumber(steemOrders.toFixed(2))
+        const power_balance_str = translateNumber(vesting_steem) // formatDecimal(vesting_steem, 3)
+        const savings_balance_str = translateNumber(saving_balance_steem.toFixed(2)) + ' ' + LIQUID_TOKEN_UPPERCASE
         
         // const sbd_balance_str = translateNumber('$' + sbd_balance.toFixed(2)) // formatDecimal(account.sbd_balance, 3)
-        const sbd_balance_str = prettyDigit(sbd_balance.toFixed(2)) // translateNumber(sbd_balance.toFixed(2)) + ' ' + DEBT_TICKER // formatDecimal(account.sbd_balance, 3)
+        const sbd_balance_str = translateNumber(sbd_balance.toFixed(2)) + ' ' + DEBT_TICKER // formatDecimal(account.sbd_balance, 3)
         // const sbd_orders_balance_str = translateNumber('$' + sbdOrders.toFixed(2))
-        const sbd_orders_balance_str = prettyDigit(sbdOrders.toFixed(2)) // translateNumber(sbdOrders.toFixed(2)) + ' ' + DEBT_TICKER // formatDecimal(account.sbd_balance, 3)
+        const sbd_orders_balance_str = translateNumber(sbdOrders.toFixed(2)) + ' ' + DEBT_TICKER // formatDecimal(account.sbd_balance, 3)
         // const savings_sbd_balance_str = translateNumber('$' + sbd_balance_savings.toFixed(2))
-        const savings_sbd_balance_str = prettyDigit(sbd_balance_savings.toFixed(2)) // translateNumber(sbd_balance_savings.toFixed(2)) + ' ' + DEBT_TICKER // formatDecimal(account.sbd_balance, 3)
+        const savings_sbd_balance_str = translateNumber(sbd_balance_savings.toFixed(2)) + ' ' + DEBT_TICKER // formatDecimal(account.sbd_balance, 3)
 
         const savings_menu = [
             { value: translate('withdraw_steem'), link: '#', onClick: showTransfer.bind( this, LIQUID_TICKER, 'Savings Withdraw' ) },

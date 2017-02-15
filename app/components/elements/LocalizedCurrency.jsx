@@ -125,13 +125,19 @@ export default class LocalizedCurrency extends React.Component {
 		 */
 		// depending on exchange rates data parse local currency or default one
 		localizedCurrency = (number, options) => {
-			const currencyAmount = 	formatNumber(
+			// const currencyAmount = 	formatNumber(
+			// 							exchangeRate
+			// 							// вознаграждение руб = Сумма Золотых х (Биржевая цена унции в USD / 31103.4768) * курс USD ЦБ РФ (или любая другая валюта)
+			// 							? number * (goldExchangeRate / 31103.4768) * exchangeRate
+			// 							: number,
+			// 							options
+			// 						)
+			const currencyAmount = 	Number(
 										exchangeRate
 										// вознаграждение руб = Сумма Золотых х (Биржевая цена унции в USD / 31103.4768) * курс USD ЦБ РФ (или любая другая валюта)
 										? number * (goldExchangeRate / 31103.4768) * exchangeRate
-										: number,
-										options
-									)
+										: number
+									).toLocaleString('en')
 			// if noSymbol is specified return only amount of digits
 			return 	noSymbol
 					? currencyAmount
@@ -145,3 +151,22 @@ export default class LocalizedCurrency extends React.Component {
 }
 
 export { localizedCurrency, localCurrencySymbol }
+
+// PEACE OF SHEET
+// import store from 'store';
+// import { FRACTION_DIGITS, DEFAULT_CURRENCY, } from 'config/client_config';
+
+// currencies_symbols = {
+// 	RUB: '₽',
+// 	UAH: '₴',
+// 	BYN: 'BYN',
+// 	USD: '$',
+// 	EUR: '€',
+// 	CNY: 'CN¥',
+// 	GEL: 'GEL',
+// 	KZT: 'тңг.',
+// }
+// let localCurrencySymbol = currencies_symbols[store.get('currency') || DEFAULT_CURRENCY];
+// let localizedCurrency = (value) => Number(value).toLocaleString('en');
+
+// export { localizedCurrency, localCurrencySymbol }

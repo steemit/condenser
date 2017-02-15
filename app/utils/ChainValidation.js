@@ -15,7 +15,7 @@ export function validate_account_name(value) {
         return suffix + translate('be_shorter');
     }
     if (/\./.test(value)) {
-        suffix = translate('Each_account_segment_should');
+        suffix = translate('each_account_segment_should');
     }
     ref = value.split('.');
     for (i = 0, len = ref.length; i < len; i++) {

@@ -44,9 +44,9 @@ class Header extends React.Component {
              * (we are not doing it somewhere in router because react-router does multiple
              * route iterations and it is hard to track only one page change event)
              */
-            try {
-                if(process.env.BROWSER) analytics.page(nextProps.location.pathname);
-            } catch (e) { console.warn(e) }
+            // try {
+            //     if(process.env.BROWSER) analytics.page(nextProps.location.pathname);
+            // } catch (e) { console.warn(e) }
             const route = resolveRoute(nextProps.location.pathname);
             if (route && route.page === 'PostsIndex' && route.params && route.params.length > 0) {
                 const sort_order = route.params[0] !== 'home' ? route.params[0] : null;

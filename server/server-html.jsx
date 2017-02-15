@@ -1,33 +1,4 @@
 import React from 'react';
-import config from 'config';
-
-let GA, FB;
-
-if (process.env.NODE_ENV === 'production') {
-    GA = config.get('google_analytics_id') ? `(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-      ga('create', '${config.get('google_analytics_id')}', 'auto');
-      ga('send', 'pageview');` : null;
-
-    FB = config.get('grant.facebook.key') ? `
-      window.fbAsyncInit = function() {
-        FB.init({
-          appId      : '${config.get('grant.facebook.key')}',
-          xfbml      : true,
-          version    : 'v2.6'
-        });
-      };
-      (function(d, s, id){
-         var js, fjs = d.getElementsByTagName(s)[0];
-         if (d.getElementById(id)) {return;}
-         js = d.createElement(s); js.id = id;
-         js.src = "//connect.facebook.net/en_US/sdk.js";
-         fjs.parentNode.insertBefore(js, fjs);
-       }(document, 'script', 'facebook-jssdk'));
-    ` : null;
-}
 
 export default function ServerHTML({ body, assets, locale, title, meta }) {
     let page_title = title;
@@ -85,8 +56,7 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
         <body>
         <div id="content" dangerouslySetInnerHTML={ { __html: body } }></div>
         {assets.script.map((href, idx) => <script key={ idx } src={ href }></script>) }
-        {GA && <script dangerouslySetInnerHTML={ { __html: GA } }></script>}
-        {FB && <script dangerouslySetInnerHTML={ { __html: FB } }></script>}
+        {js_plugins_path && <script src={js_plugins_path}></script>}
         </body>
         </html>
     );

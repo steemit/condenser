@@ -563,9 +563,9 @@ const ru = {
 	the_more_you_hold_the_more_you_influence_post_rewards: 'Чем больше у Вас ' + VESTING_TOKENS + ', тем сильней вы влияете на вознаграждения за пост и тем больше зарабатываете за голосование.',
 	the_estimated_value_is_based_on_a_7_day_average_value_of_LIQUID_TOKEN_in_currency: 'Оценочная стоимость рассчитывается из 7-ми дневной средней стоимости ' + LIQUID_TOKEN + '.',
 	VESTING_TOKEN_is_non_transferrable_and_will_require_2_years_and_104_payments_to_convert_back_to_LIQUID_TOKEN: VESTING_TOKEN2 + ' нельзя передать и потребуется 20 недель чтобы перевести её обратно ' + LIQUID_TOKEN + '.',
-	move_funds_to_another_account: 'Move funds to another Steemit account.',
-	protect_funds_by_requiring_a_3_day_withdraw_waiting_period: 'Protect funds by requiring a 3 day withdraw waiting period.',
-	withdraw_funds_after_the_required_3_day_waiting_period: 'Withdraw funds after the required 3 day waiting period.',
+	move_funds_to_another_account: 'Отправить средства на другой аккаунт.',
+	protect_funds_by_requiring_a_3_day_withdraw_waiting_period: 'Защитите средства от вывода 3-х дневным периодом ожидания.',
+	withdraw_funds_after_the_required_3_day_waiting_period: 'Вывод средств возможен по истечении 3-х дневного периода ожидания.',
 	balance_subject_to_3_day_withdraw_waiting_period: 'Вывод баланса из сберегательных счетов на обычные, занимает 3 дня',
 	// TODO
 	converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again: 'Конвертированная ' + VESTING_TOKEN + ' может быть отправлена себе или кому-то еще, но не может быть передана вновь без конвертирования назад в ' + LIQUID_TOKEN + '.',
@@ -716,6 +716,17 @@ const ru = {
     comment_once_20_seconds: 'You may only comment once every 20 seconds.',
     post_once_5_minutes: 'You may only post once every 5 minutes',
     post_once_per_minute: 'You may only post once per minute',
+    canceled: 'Отменено',
+    use_only_2_digits_of_precison: 'Вводите не более 2-х цифр в дробной части',
+    account_name_should: 'Account name should ',
+    not_be_empty: 'not be empty.',
+    be_longer: 'be longer.',
+    be_shorter: 'be shorter.',
+    each_account_segment_should: 'Each account segment should ',
+    start_with_a_letter: 'start with a letter.',
+    have_only_letters_digits_or_dashes: 'have only letters, digits, or dashes.',
+    have_only_one_dash_in_a_row: 'иметь только тире.',
+    end_with_a_letter_or_digit: 'заканчиваться на букву или цифру.',
 }
 
 export { ru }

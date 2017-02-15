@@ -1,38 +1,39 @@
+import {translate} from 'app/Translator';
 
 export function validate_account_name(value) {
     let i, label, len, length, ref, suffix;
 
-    suffix = 'Account name should ';
+    suffix = translate('account_name_should');
     if (!value) {
-        return suffix + 'not be empty.';
+        return suffix + translate('not_be_empty');
     }
     length = value.length;
     if (length < 3) {
-        return suffix + 'be longer.';
+        return suffix + translate('be_longer');
     }
     if (length > 16) {
-        return suffix + 'be shorter.';
+        return suffix + translate('be_shorter');
     }
     if (/\./.test(value)) {
-        suffix = 'Each account segment should ';
+        suffix = translate('Each_account_segment_should');
     }
     ref = value.split('.');
     for (i = 0, len = ref.length; i < len; i++) {
         label = ref[i];
         if (!/^[a-z]/.test(label)) {
-            return suffix + 'start with a letter.';
+            return suffix + translate('start_with_a_letter');
         }
         if (!/^[a-z0-9-]*$/.test(label)) {
-            return suffix + 'have only letters, digits, or dashes.';
+            return suffix + translate('have_only_letters_digits_or_dashes');
         }
         if (/--/.test(label)) {
-            return suffix + 'have only one dash in a row.';
+            return suffix + translate('have_only_one_dash_in_a_row');
         }
         if (!/[a-z0-9]$/.test(label)) {
-            return suffix + 'end with a letter or digit.';
+            return suffix + translate('end_with_a_letter_or_digit');
         }
         if (!(label.length >= 3)) {
-            return suffix + 'be longer';
+            return suffix + translate('be_longer');
         }
     }
     return null;

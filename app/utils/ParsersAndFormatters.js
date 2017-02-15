@@ -5,6 +5,10 @@ function fractional_part_len(value) {
     return parts.length < 2 ? 0 : parts[1].length;
 }
 
+export function prettyDigit(value) {
+    return value && value.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1 ')
+}
+
 // FIXME this should be unit tested.. here is one bug: 501,695,.505
 export function formatDecimal(value, decPlaces = 2, truncate0s = true) {
     let decSeparator, fl, i, j, sign, thouSeparator, abs_value;

@@ -24,6 +24,7 @@
 .Voting__button-up {
   .Icon {
     margin-left: 0;
+    border-radius: 50%;
   }
   > a {
     padding-right: 0.5rem;
@@ -34,7 +35,6 @@
   .Icon:hover {
     box-shadow: 0 0 0 rgba(75, 162, 242, 1);
     animation: pulse 2s infinite;
-    border-radius: 60%;
   }
 }
 

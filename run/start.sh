@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 cd ./db
-sequelize --env production db:migrate
+sequelize --env development db:migrate
 cd ..
-npm run prod
+#npm run prod
+npm start

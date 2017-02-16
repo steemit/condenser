@@ -713,20 +713,17 @@ const ru = {
     research_it: 'Иследуйте Голос',
 
     // backend errors translate
-    comment_once_20_seconds: 'You may only comment once every 20 seconds.',
-    post_once_5_minutes: 'You may only post once every 5 minutes',
-    post_once_per_minute: 'You may only post once per minute',
     canceled: 'Отменено',
     use_only_2_digits_of_precison: 'Вводите не более 2-х цифр в дробной части',
-    account_name_should: 'Account name should ',
-    not_be_empty: 'not be empty.',
-    be_longer: 'be longer.',
-    be_shorter: 'be shorter.',
-    each_account_segment_should: 'Each account segment should ',
-    start_with_a_letter: 'start with a letter.',
-    have_only_letters_digits_or_dashes: 'have only letters, digits, or dashes.',
-    have_only_one_dash_in_a_row: 'иметь только тире.',
-    end_with_a_letter_or_digit: 'заканчиваться на букву или цифру.',
+    account_name_should: 'Имя пользователя ',
+    not_be_empty: 'не может быть пустым.',
+    be_longer: 'должно быть длиннее.',
+    be_shorter: 'должно быть короче.',
+    each_account_segment_should: 'Имя пользователя ',
+    start_with_a_letter: 'должно начинаться с буквы.',
+    have_only_letters_digits_or_dashes: 'может содержать только буквы, цифры и тире.',
+    have_only_one_dash_in_a_row: ' может иметь только одно тире.',
+    end_with_a_letter_or_digit: 'может заканчиваться на букву или цифру.',
 }
 
 export { ru }

@@ -5,9 +5,9 @@ import baseConfig from './base.config';
 import startKoa from './utils/start-koa';
 
 const LOCAL_IP = require('dev-ip')();
-const PORT = parseInt(process.env.PORT, 10) + 1 || 3001;
-const HOST = (isArray(LOCAL_IP) && LOCAL_IP[0]) || LOCAL_IP || 'localhost';
-const PUBLIC_PATH = `//${HOST}:${PORT}/assets/`;
+const PORT = parseInt(process.env.PORT, 10) + 1 || 3000;
+const HOST = `sandbox.golos.io`;//(isArray(LOCAL_IP) && LOCAL_IP[0]) || LOCAL_IP || 'localhost';
+const PUBLIC_PATH = `//${HOST}/assets/`//`//${HOST}:${PORT}/assets/`;
 
 export default {
     server: {

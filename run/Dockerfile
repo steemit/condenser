@@ -10,7 +10,7 @@ COPY ./start.sh ./
 
 
 
-RUN npm run build
+#RUN npm run build
 
 EXPOSE 3002
 

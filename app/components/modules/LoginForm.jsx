@@ -8,6 +8,7 @@ import {validate_account_name} from 'app/utils/ChainValidation';
 import runTests from 'shared/ecc/test/BrowserTests';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import reactForm from 'app/utils/ReactForm'
+import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 
 class LoginForm extends Component {
 
@@ -25,6 +26,7 @@ class LoginForm extends Component {
         super()
         const cryptoTestResult = runTests();
         let cryptographyFailure = false;
+        this.SignUp = this.SignUp.bind(this);
         if (cryptoTestResult !== undefined) {
             console.error('CreateAccount - cryptoTestResult: ', cryptoTestResult);
             cryptographyFailure = true
@@ -71,16 +73,23 @@ class LoginForm extends Component {
         })
     }
 
+    SignUp(title) {
+        serverApiRecordEvent('Free Money SignUp', title);
+        window.location = "/enter_email";
+    }
+
     saveLoginToggle = () => {
         const {saveLogin} = this.state
         saveLoginDefault = !saveLoginDefault
         localStorage.setItem('saveLogin', saveLoginDefault ? 'yes' : 'no')
         saveLogin.props.onChange(saveLoginDefault) // change UI
-    }
+    };
+
     showChangePassword = () => {
         const {username, password} = this.state
         this.props.showChangePassword(username.value, password.value)
-    }
+    };
+
     render() {
         if (!process.env.BROWSER) {
             return <div className="row">
@@ -157,6 +166,7 @@ class LoginForm extends Component {
             null
 
         const form = (
+            <center>
             <form onSubmit={handleSubmit(({data}) => {
                 // bind redux-form to react-redux
                 console.log('Login\tdispatchSubmit');
@@ -179,14 +189,13 @@ class LoginForm extends Component {
                     {error && password_info && <div className="warning">{password_info}&nbsp;</div>}
                 </div>
                 {loginBroadcastOperation && <div>
-                    <div className="info">This operation requires your {authType} key (or use your master password).</div>
+                    <div className="info">This operation requires your {authType} key or Master password.</div>
                 </div>}
                 {!loginBroadcastOperation && <div>
                     <label htmlFor="saveLogin">
                         Keep me logged in &nbsp;
                         <input id="saveLogin" type="checkbox" ref="pw" {...saveLogin.props} onChange={this.saveLoginToggle} disabled={submitting} /></label>
                 </div>}
-                <br />
                 <div>
                     <button type="submit" disabled={submitting || disabled} className="button">
                         {submitLabel}
@@ -196,16 +205,20 @@ class LoginForm extends Component {
                     </button>}
                 </div>
                 <hr />
-                <ul className="menu sub-menu sign-up">
-                    <li className="menu">Don't have a steemit account?&nbsp;<a href="/enter_email">Sign Up</a></li>
-                </ul>
+                <div>
+                    <p>Join our <span className="free-slogan">amazing community</span> to comment and reward others.</p>
+                    <button type="button" className="button sign-up" onClick={this.SignUp(title)}>Sign up now to receive <span className="free-money">FREE MONEY!</span></button>
+                </div>
             </form>
+        </center>
         );
 
         return (
            <div className="LoginForm">
                {message}
-               <h3>{title}</h3>
+               <center>
+                   <h3>Returning Users: {title}</h3>
+               </center>
                <br />
                {form}
            </div>

@@ -1,14 +1,27 @@
 .LoginForm {
-  padding-left: 1rem;
   label {
     text-transform: none;
   }
   form {
-    max-width: 400px;
+    max-width: 440px;
   }
-  .sign-up {
-    li:last-child {
-        padding: 0px;
-    }
+  .button.sign-up {
+      background-color: #4078C0 !important;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+      font-size: 1.2rem;
+      text-transform: none;
+  }
+  .free-slogan {
+      font-weight: bold;
+  }
+  .free-money {
+      font-weight: bold;
+  }
+  hr {
+      margin: 2.5rem auto 2rem auto;
+  }
+  p {
+      margin-bottom: 2rem;
   }
 }

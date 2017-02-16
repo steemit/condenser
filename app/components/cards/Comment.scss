@@ -133,6 +133,10 @@
   color: $dark-gray;
 }
 
+.Comment.collapsed > .depth {
+  top: 2px;
+}
+
 .depth.di-1 {
   left: -38px;
 }

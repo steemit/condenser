@@ -2,6 +2,7 @@ import 'babel-core/register';
 import 'babel-polyfill';
 import 'whatwg-fetch';
 import './assets/stylesheets/app.scss';
+import plugins from 'app/utils/JsPlugins';
 import Iso from 'iso';
 import universalRender from 'shared/UniversalRender';
 import ConsoleExports from './utils/ConsoleExports';
@@ -22,6 +23,7 @@ try {
 
 function runApp(initial_state) {
     console.log('Initial state', initial_state);
+    plugins(initial_state.offchain.config);
     window.$STM_Config = initial_state.offchain.config;
     if (initial_state.offchain.serverBusy) {
         window.$STM_ServerBusy = true;

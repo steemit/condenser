@@ -20,7 +20,7 @@ import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import ShareMenu from 'app/components/elements/ShareMenu';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import Userpic from 'app/components/elements/Userpic';
-import { APP_DOMAIN } from 'config/client_config';
+import { APP_DOMAIN } from 'app/client_config';
 
 // function loadFbSdk(d, s, id) {
 //     return new Promise(resolve => {

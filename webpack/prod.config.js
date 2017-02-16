@@ -14,6 +14,7 @@ export default {
             'process.env': {
                 BROWSER: JSON.stringify(true),
                 NODE_ENV: JSON.stringify('production'),
+                // FIXME this requires we put .git into the docker image :(
                 VERSION: JSON.stringify(git.tag())
             },
             global: {

@@ -1,0 +1,68 @@
+{
+  "database_url": "SDC_DATABASE_URL",
+  "disable_signups": "SDC_DISABLE_SIGNUPS",
+  "grant": {
+    "facebook": {
+      "key": "SDC_FB_API_KEY",
+      "secret": "SDC_FB_API_SECRET"
+    },
+    "reddit": {
+      "key": "SDC_REDDIT_API_KEY",
+      "secret": "SDC_REDDIT_API_SECRET"
+    }
+  },
+  "helmet": {
+    "directives": {
+      "childSrc": "SDC_HELMET_CHILDSRC",
+      "connectSrc": "SDC_HELMET_CONNECTSRC",
+      "defaultSrc": "SDC_HELMET_DEFAULTSRC",
+      "fontSrc": "SDC_HELMET_FONTSRC",
+      "frameAncestors": "SDC_HELMET_FRAMEANCESTORS",
+      "imgSrc": "SDC_HELMET_IMGSRC",
+      "objectSrc": "SDC_HELMET_OBJECTSRC",
+      "scriptSrc": "SDC_HELMET_SCRIPTSRC",
+      "styleSrc": "SDC_HELMET_STYLESRC"
+    }
+  },
+  "img_proxy_prefix": "SDC_IMAGE_PROXY_PREFIX",
+  "mixpanel": "SDC_MIXPANEL",
+  "notify": {
+    "gcm_key": "SDC_NOTIFY_GCM_KEY"
+  },
+  "read_only_mode": "SDC_READONLY_MODE",
+  "recaptcha": {
+    "secret_key": "SDC_RECAPTCHA_SECRET_KEY",
+    "site_key": "SDC_RECAPTCHA_SITE_KEY"
+  },
+  "registrar": {
+    "account": "SDC_REGISTRAR_ACCOUNT",
+    "fee": "SDC_REGISTRAR_AMOUNT",
+    "signing_key": "SDC_REGISTRAR_SIGNINGKEY"
+  },
+  "requestAccountRecovery": {
+    "recovery_account": "SDC_RECOVERY_ACCOUNT",
+    "signing_key": "SDC_RECOVERY_SIGNINGKEY"
+  },
+  "sendgrid": {
+    "from": "SDC_SENDGRID_FROM",
+    "key": "SDC_SENDGRID_API_KEY",
+    "templates": {
+      "confirm_email": "SDC_SENDGRID_CONFIRMTEMPLATE",
+      "waiting_list_invite": "SDC_SENDGRID_WAITINGTEMPLATE"
+    }
+  },
+  "server_session_secret": "SDC_SESSION_SECRETKEY",
+  "site_domain": "SDC_SITE_DOMAIN",
+  "tarantool": {
+    "host": "SDC_TARANTOOL_HOSTNAME",
+    "password": "SDC_TARANTOOL_PASSWORD",
+    "port": "SDC_TARANTOOL_PORT",
+    "username": "SDC_TARANTOOL_USERNAME"
+  },
+  "telesign": {
+    "customer_id": "SDC_TELESIGN_CUSTOMER_ID",
+    "rest_api_key": "SDC_TELESIGN_API_KEY"
+  },
+  "ws_connection_client": "SDC_CLIENT_WEBSOCKET_URL",
+  "ws_connection_server": "SDC_SERVER_WEBSOCKET_URL"
+}

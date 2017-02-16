@@ -2,7 +2,7 @@ import React from 'react';
 //import Highcharts from 'highcharts';
 const ReactHighcharts = require("react-highcharts/dist/ReactHighstock");
 import { translate } from 'app/Translator';
-import { LIQUID_TOKEN_UPPERCASE, DEBT_TOKEN_SHORT, LIQUID_TICKER, CURRENCY_SIGN } from 'config/client_config';
+import { LIQUID_TOKEN_UPPERCASE, DEBT_TOKEN_SHORT, LIQUID_TICKER, CURRENCY_SIGN } from 'app/client_config';
 
 //Highstock does not play well with decimal x values, so we need to
 // multiply the x values by a constant factor and divide by this factor for

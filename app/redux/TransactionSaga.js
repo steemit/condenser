@@ -429,8 +429,8 @@ function* error_custom_json({operation: {id, required_posting_auths}}) {
     }
 }
 function* error_vote({operation: {author, permlink}}) {
-    yield put(g.actions.remove({key: `transaction_vote_active_${author}_${permlink}`}))
-    yield call(getContent, {author, permlink}) // unvote
+    yield put(g.actions.remove({key: `transaction_vote_active_${author}_${permlink}`}));
+    yield call(getContent, {author, permlink}); // unvote
 }
 
 // function* error_comment({operation}) {

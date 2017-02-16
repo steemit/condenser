@@ -21,7 +21,7 @@ global.$STM_Config = {
     disable_signups: config.disable_signups,
     read_only_mode: config.read_only_mode,
     registrar_fee: config.registrar.fee,
-    uploadImage: config.uploadImage,
+    upload_image: config.upload_image,
 };
 
 const WebpackIsomorphicTools = require('webpack-isomorphic-tools');

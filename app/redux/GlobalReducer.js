@@ -133,11 +133,12 @@ export default createModule({
                 const idx = active_votes.findIndex(v => v.get('voter') === username)
                 // steemd flips weight into percent
                 if(idx === -1)
-                    active_votes = active_votes.push(Map({voter: username, percent: weight}))
+                    active_votes = active_votes.push(Map({voter: username, percent: weight}));
                 else {
-                    active_votes = active_votes.set(idx, Map({voter: username, percent: weight}))
+                    active_votes = active_votes.set(idx, Map({voter: username, percent: weight}));
                 }
-                return state.setIn(key, active_votes)
+                state.setIn(key, active_votes);
+                return state;
             }
         },
         {

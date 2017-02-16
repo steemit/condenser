@@ -75,5 +75,5 @@
   "ipfs_prefix": "",
   "disable_signups": false,
   "read_only_mode": false,
-  "uploadImage": "https://..."
+  "upload_image": "https://..."
 }

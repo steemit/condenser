@@ -41,10 +41,11 @@ class Post extends React.Component {
         }
     }
 
-    toggleNegativeReplies = () => {
+    toggleNegativeReplies = (e) => {
         this.setState({
             showNegativeComments: !this.state.showNegativeComments
         });
+        e.preventDefault();
     }
 
     onHideComment = () => {
@@ -57,7 +58,7 @@ class Post extends React.Component {
 
     render() {
         const {showSignUp} = this
-        const {current_user, ignoring, signup_bonus, content} = this.props
+        const {current_user, signup_bonus, content} = this.props
         const {showNegativeComments, commentHidden, showAnyway} = this.state
         let post = this.props.post;
         if (!post) {
@@ -76,7 +77,8 @@ class Post extends React.Component {
                         <div className="row">
                             <div className="column">
                                 <div className="PostFull">
-                                    <p onClick={this.showAnywayClick}>{translate('this_post_was_hidden_due_to_low_ratings')}. <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.showAnywayClick}>{translate('show')}</button></p>
+                                    <p onClick={this.showAnywayClick}>{translate('this_post_was_hidden_due_to_low_ratings')}.{' '}
+                                    <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.showAnywayClick}>{translate('show')}</button></p>
                                 </div>
                             </div>
                         </div>
@@ -92,17 +94,7 @@ class Post extends React.Component {
            sort_order = this.props.location.query.sort;
 
         sortComments( content, replies, sort_order );
-        const keep = a => {
-            const c = content.get(a);
-            const hide = c.getIn(['stats', 'hide'])
-            let ignore = false
-            if(ignoring) {
-                ignore = ignoring.has(c.get('author'))
-                // if(ignore) console.log(current_user && current_user.get('username'), 'is ignoring post author', c.get('author'), '\t', a)
-            }
-            return !hide && !ignore
-        }
-        const positiveComments = replies.filter(a => keep(a))
+        const positiveComments = replies
             .map(reply => (
                 <Comment
                     root
@@ -115,32 +107,13 @@ class Post extends React.Component {
                 />)
             );
 
-        // Not the complete hidding logic, just move to the bottom, the rest hide in-place
-        const negativeReplies = replies.filter(a => !keep(a));
-        const stuffHidden = negativeReplies.length > 0 || commentHidden
-
-        const negativeComments =
-            negativeReplies.map(reply => (
-                <Comment
-                    root
-                    key={post + reply}
-                    content={reply}
-                    cont={content}
-                    sort_order={sort_order}
-                    showNegativeComments
-                    onHide={this.onHideComment}
-                    noImage
-                />)
-            );
-
-        const negativeGroup = !stuffHidden ? null :
+        const negativeGroup = commentHidden &&
             (<div className="hentry Comment root Comment__negative_group">
-                {this.state.showNegativeComments ?
-                    <p onClick={this.toggleNegativeReplies}>{translate('now_showing_comments_with_low_ratings')}: <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>{translate('hide')}</button></p> :
-                    <p onClick={this.toggleNegativeReplies}>{translate('comments_were_hidden_due_to_low_ratings')}. <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>{translate('show')}</button></p>
-                }
-            </div>
-        );
+                <p onClick={e => this.toggleNegativeReplies(e)}>
+                    {translate(showNegativeComments ? 'now_showing_comments_with_low_ratings' : 'comments_were_hidden_due_to_low_ratings')}.{' '}
+                    <button className="button hollow tiny float-right" onClick={e => this.toggleNegativeReplies(e)}>{translate(showNegativeComments ? 'hide' :'show')}</button>
+                </p>
+            </div>);
 
 
         let sort_orders = [ 'trending', 'votes', 'new'];
@@ -160,7 +133,21 @@ class Post extends React.Component {
         const emptyPost = dis.get('created') === '1970-01-01T00:00:00' && dis.get('body') === ''
         if(emptyPost)
             return <center>
-                <SvgImage name="404" width="640px" height="480px" />
+                <div className="NotFound float-center">
+                    <div>
+                        <h4 className="NotFound__header">Sorry! This page doesn't exist.</h4>
+                        <p>Not to worry. You can head back to <a style={{fontWeight: 800}} href="/">our homepage</a>,
+                            or check out some great posts.
+                        </p>
+                        <ul className="NotFound__menu">
+                            <li><a href="/created">new posts</a></li>
+                            <li><a href="/hot">hot posts</a></li>
+                            <li><a href="/trending">trending posts</a></li>
+                            <li><a href="/promoted">promoted posts</a></li>
+                            <li><a href="/active">active posts</a></li>
+                        </ul>
+                    </div>
+                </div>
             </center>
 
         return (
@@ -192,7 +179,6 @@ class Post extends React.Component {
                             </div>) : null}
                             {positiveComments}
                             {negativeGroup}
-                            {showNegativeComments && negativeComments}
                         </div>
                     </div>
                 </div>

@@ -13,6 +13,7 @@ import HtmlReady from 'shared/HtmlReady'
 import g from 'app/redux/GlobalReducer'
 import {Set} from 'immutable'
 import Remarkable from 'remarkable'
+import Dropzone from 'react-dropzone'
 
 const remarkable = new Remarkable({ html: true, linkify: false, breaks: true })
 const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
@@ -49,7 +50,7 @@ class ReplyEditor extends React.Component {
 
     constructor(props) {
         super()
-        this.state = {}
+        this.state = {progress: {}}
         this.initForm(props)
     }
 
@@ -178,6 +179,7 @@ class ReplyEditor extends React.Component {
             replyForm.resetForm()
             this.setAutoVote()
             this.setState({rte_value: stateFromHtml()})
+            this.setState({progress: {}})
             if(onCancel) onCancel(e)
         }
     }
@@ -229,6 +231,63 @@ class ReplyEditor extends React.Component {
         if(payoutType !== '0%') localStorage.setItem('defaultPayoutType', payoutType)
     }
 
+    onDrop = (acceptedFiles, rejectedFiles) => {
+        if(!acceptedFiles.length) {
+            if(rejectedFiles.length) {
+                this.setState({progress: {error: 'Please insert only image files.'}})
+                console.log('onDrop Rejected files: ', rejectedFiles);
+            }
+            return
+        }
+        const file = acceptedFiles[0]
+        this.upload(file, file.name)
+    }
+
+    onOpenClick = () => {
+        this.dropzone.open();
+    }
+
+    onPasteCapture = e => {
+        try {
+            if(e.clipboardData) {
+                for(const item of e.clipboardData.items) {
+                    if(item.kind === 'file' && /^image\//.test(item.type)) {
+                        const blob = item.getAsFile()
+                        this.upload(blob)
+                    }
+                }
+            } else {
+                // http://joelb.me/blog/2011/code-snippet-accessing-clipboard-images-with-javascript/
+                // contenteditable element that catches all pasted data
+                this.setState({noClipboardData: true})
+            }
+        } catch(error) {
+            console.error('Error analyzing clipboard event', error);
+        }
+    }
+
+    upload = (file, name = '') => {
+        const {uploadImage} = this.props
+        this.setState({progress: {message: 'Uploading...'}})
+        uploadImage(file, progress => {
+            if(progress.url) {
+                this.setState({ progress: {} })
+                const {url} = progress
+                const image_md = `![${name}](${url})`
+                const {body} = this.state
+                const {selectionStart, selectionEnd} = this.refs.postRef
+                body.props.onChange(
+                    body.value.substring(0, selectionStart) +
+                    image_md +
+                    body.value.substring(selectionEnd, body.value.length)
+                )
+            } else {
+                this.setState({ progress })
+            }
+            setTimeout(() => { this.setState({ progress: {} }) }, 4000) // clear message
+        })
+    }
+
     render() {
         const originalPost = {
             category: this.props.category,
@@ -243,6 +302,7 @@ class ReplyEditor extends React.Component {
         } = this.props
         const {submitting, valid, handleSubmit} = this.state.replyForm
         const {postError, titleWarn, rte, payoutType} = this.state
+        const {progress, noClipboardData} = this.state
         const disabled = submitting || !valid
         const loading = submitting || this.state.loading
 
@@ -304,8 +364,30 @@ class ReplyEditor extends React.Component {
                                     value={this.state.rte_value}
                                     onChange={this.onChange}
                                     onBlur={body.onBlur} tabIndex={2} />
-                                :
-                                <textarea {...body.props} disabled={loading} rows={isStory ? 10 : 3} placeholder={isStory ? 'Write your story...' : 'Reply'} autoComplete="off" ref="postRef" tabIndex={2} />
+                                : <span>
+                                    <Dropzone onDrop={this.onDrop}
+                                        className={type === 'submit_story' ? 'dropzone' : 'none'}
+                                        disableClick multiple={false} accept="image/*"
+                                        ref={(node) => { this.dropzone = node; }}>
+                                        <textarea {...body.props}
+                                            ref="postRef"
+                                            onPasteCapture={this.onPasteCapture}
+                                            className={type === 'submit_story' ? 'upload-enabled' : ''}
+                                            disabled={loading} rows={isStory ? 10 : 3}
+                                            placeholder={isStory ? 'Write your story...' : 'Reply'}
+                                            autoComplete="off"
+                                            tabIndex={2} />
+                                    </Dropzone>
+                                    {type === 'submit_story' &&
+                                        <p className="drag-and-drop">
+                                            Insert images by dragging &amp; dropping,&nbsp;
+                                            {noClipboardData ? '' : 'pasting from the clipboard, '}
+                                            or by <a onClick={this.onOpenClick}>selecting them</a>.
+                                        </p>
+                                    }
+                                    {progress.message && <div className="info">{progress.message}</div>}
+                                    {progress.error && <div className="error">Image upload: {progress.error}</div>}
+                                </span>
                             }
                         </div>
                         <div className={vframe_section_shrink_class}>
@@ -433,6 +515,12 @@ export default formId => connect(
         },
         setMetaData: (id, jsonMetadata) => {
             dispatch(g.actions.setMetaData({id, meta: jsonMetadata ? jsonMetadata.steem : null}))
+        },
+        uploadImage: (file, progress) => {
+            dispatch({
+                type: 'user/UPLOAD_IMAGE',
+                payload: {file, progress},
+            })
         },
         reply: ({category, title, body, author, permlink, parent_author, parent_permlink, isHtml, isStory,
             type, originalPost, autoVote = false, payoutType = '50%',

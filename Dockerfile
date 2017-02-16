@@ -28,4 +28,8 @@ ENV NODE_ENV production
 
 EXPOSE 8080
 
-CMD [ "npm", "run", "production" ]
+CMD [ "yarn", "run", "production" ]
+
+# uncomment the line below to run it in development mode
+# ENV NODE_ENV development
+# CMD [ "yarn", "run", "start" ]

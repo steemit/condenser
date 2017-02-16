@@ -15,7 +15,8 @@
     "test:watch": "npm run mocha -- --watch --watch-extensions jsx",
     "production": "NODE_ENV=production ./node_modules/babel-cli/bin/babel-node.js server/index.js",
     "start": "./node_modules/babel-cli/bin/babel-node.js ./webpack/dev-server.js",
-    "db": "./node_modules/babel-cli/bin/babel-node.js ./db/console.js"
+    "db": "./node_modules/babel-cli/bin/babel-node.js ./db/console.js",
+    "webpush": "./node_modules/babel-cli/bin/babel-node.js ./scripts/webpush_notify.js"
   },
   "author": "Steemit, Inc.",
   "license": "MIT",

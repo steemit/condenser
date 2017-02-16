@@ -186,7 +186,7 @@ function linkifyNode(child, state) {try{
     const data = XMLSerializer.serializeToString(child)
     const content = linkify(data, state.mutate, state.hashtags, state.usertags, state.images, state.links)
     if(mutate && content !== data) {
-        const newChild = DOMParser.parseFromString(content)
+        const newChild = DOMParser.parseFromString(`<span>${content}</span>`)
         child.parentNode.replaceChild(newChild, child)
         return newChild;
     }

@@ -192,7 +192,7 @@ function generateDepthChart(bidsArray, asksArray) {
             shared: false,
             backgroundColor: "rgba(0, 0, 0, 0.3)",
             formatter() {
-                return `<span>${translate('price')}: ${(this.x / power).toFixed(6)} ${CURRENCY_SIGN}/${LIQUID_TOKEN_UPPERCASE}</span><br/><span>\u25CF</span>${this.series.name}: <b>${(this.y / 1000).toFixed(3)} ${DEBT_TOKEN_SHORT} ` + '(' + CURRENCY_SIGN + ')</b>';
+                return `<span>${translate('price')}: ${(this.x / power).toFixed(6)} ${CURRENCY_SIGN}/${LIQUID_TOKEN_UPPERCASE}</span><br/><span>\u25CF</span>${this.series.name}: <b>${(this.y / 1000).toFixed(2)} ${DEBT_TOKEN_SHORT} ` + '(' + CURRENCY_SIGN + ')</b>';
             },
             style: {
                 color: "#FFFFFF"

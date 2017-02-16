@@ -48,6 +48,16 @@ class Settings extends React.Component {
         this.setState({nsfwPref})
     }
 
+    handleCurrencyChange(event) {
+        store.set('currency', event.target.value)
+    }
+
+    handleLanguageChange = (event) => {
+        const language = event.target.value
+        store.set('language', language)
+        this.props.changeLanguage(language)
+    }
+
     onNsfwPrefChange(e) {
         const nsfwPref = e.currentTarget.value;
         const {accountname} = this.props;
@@ -162,6 +172,28 @@ class Settings extends React.Component {
             <div className="row">
                 <form onSubmit={this.handleSubmitForm} className="small-12 medium-6 large-4 columns">
                     <h3>{translate('profile')}</h3>
+                    {/* CHOOSE LANGUAGE */}
+                    <label>
+                        {translate('choose_language')}
+                            <select defaultValue={store.get('language')} onChange={this.handleLanguageChange}>
+                                <option value="ru">Русский</option>
+                                <option value="en">English</option>
+                                {/* in react-intl they use 'uk' instead of 'ua' */}
+                                <option value="uk">Українська</option>
+                            </select>
+                    </label>
+                    <div className="error"></div>
+                    {/* CHOOSE CURRENCY */}
+                    <label>{translate('choose_currency')}
+                        <select defaultValue={store.get('currency')} onChange={this.handleCurrencyChange}>
+                            {
+                                ALLOWED_CURRENCIES.map(i => {
+                                    return <option key={i} value={i}>{i}</option>
+                                })
+                            }
+                        </select>
+                    </label>
+                    <div className="error"></div>
                     <label>
                         {translate('profile_image_url')}
                         <input type="url" {...profile_image.props} autoComplete="off" />
@@ -207,7 +239,7 @@ class Settings extends React.Component {
 
             {isOwnAccount &&
                 <div className="row">
-                    <div className="small-12 columns">
+                    <div className="small-12 medium-6 large-4 columns">
                         <br /><br />
                         <h3>{translate('content_preferences')}</h3>
                         <div>

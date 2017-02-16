@@ -297,8 +297,8 @@ class Market extends React.Component {
                             <li><b>{translate('bid')}</b> {CURRENCY_SIGN}{ticker.highest_bid.toFixed(6)}</li>
                             <li><b>{translate('ask')}</b> {CURRENCY_SIGN}{ticker.lowest_ask.toFixed(6)}</li>
                             {ticker.highest_bid > 0 &&
-                                <li><b>{translate('spread')}</b> {(200 * (ticker.lowest_ask - ticker.highest_bid) / (ticker.highest_bid + ticker.lowest_ask)).toFixed(3)}%</li>}
-                            {/*<li><b>Feed price</b> ${ticker.feed_price.toFixed(3)}</li>*/}
+                                <li><b>{translate('spread')}</b> {(200 * (ticker.lowest_ask - ticker.highest_bid) / (ticker.highest_bid + ticker.lowest_ask)).toFixed(2)}%</li>}
+                            {/*<li><b>Feed price</b> ${ticker.feed_price.toFixed(2)}</li>*/}
                         </ul>
                     </div>
                 </div>
@@ -384,7 +384,7 @@ class Market extends React.Component {
                                                 const price = parseFloat(this.refs.buySteem_price.value)
                                                 const total = account.sbd_balance.split(' ')[0]
                                                 this.refs.buySteem_total.value = total
-                                                if(price >= 0) this.refs.buySteem_amount.value = roundDown(parseFloat(total) / price, 3).toFixed(3)
+                                                if(price >= 0) this.refs.buySteem_amount.value = roundDown(parseFloat(total) / price, 3).toFixed(2)
                                                 validateBuySteem()
                                             }}>{translate('available')}:</a> {account.sbd_balance.replace('SBD', DEBT_TOKEN_SHORT)}
                                     </small></div>}
@@ -395,7 +395,7 @@ class Market extends React.Component {
                                             const amount = parseFloat(this.refs.buySteem_amount.value)
                                             const price = parseFloat(ticker.lowest_ask)
                                             this.refs.buySteem_price.value = ticker.lowest_ask
-                                            if(amount >= 0) this.refs.buySteem_total.value = roundUp(amount * price, 3).toFixed(3)
+                                            if(amount >= 0) this.refs.buySteem_total.value = roundUp(amount * price, 3).toFixed(2)
                                             validateBuySteem()
                                         }}>{translate('lowest_ask')}:</a> {ticker.lowest_ask.toFixed(6)}
                                     </small></div>
@@ -572,9 +572,9 @@ module.exports = {
 
             // Padd amounts to 3 decimal places
             amount_to_sell = amount_to_sell.replace(amount_to_sell.split(' ')[0],
-                String(parseFloat(amount_to_sell).toFixed(3)))
+                String(parseFloat(amount_to_sell).toFixed(2)))
             min_to_receive = min_to_receive.replace(min_to_receive.split(' ')[0],
-                String(parseFloat(min_to_receive).toFixed(3)))
+                String(parseFloat(min_to_receive).toFixed(2)))
 
             const isSell = amount_to_sell.indexOf(LIQUID_TICKER) > 0;
             const confirmStr = translate(isSell

@@ -12,6 +12,7 @@ import {validate_account_name} from 'app/utils/ChainValidation';
 import {countDecimals} from 'app/utils/ParsersAndFormatters'
 import {translate} from 'app/Translator';
 import { LIQUID_TOKEN, DEBT_TOKEN, VESTING_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TICKER, VEST_TICKER, DEBT_TICKER } from 'config/client_config';
+import {prettyDigit} from 'app/utils/ParsersAndFormatters';
 
 /** Warning .. This is used for Power UP too. */
 class TransferForm extends Component {
@@ -79,7 +80,7 @@ class TransferForm extends Component {
                     ! values.amount ? translate('required') :
                     ! /^[0-9]*\.?[0-9]*/.test(values.amount) ? translate('amount_is_in_form') :
                     insufficientFunds(values.asset, values.amount) ? translate('insufficent_funds') :
-                    countDecimals(values.amount) > 3 ? 'Use only 3 digits of precison' :
+                    countDecimals(values.amount) > 2 ? translate('use_only_2_digits_of_precison') :
                     null,
                 asset:
                     props.toVesting ? null :
@@ -245,7 +246,7 @@ class TransferForm extends Component {
 }
 
 const AssetBalance = ({onClick, balanceValue}) =>
-    <a onClick={onClick} style={{borderBottom: '#A09F9F 1px dotted', cursor: 'pointer'}}>{translate('balance') + ': ' + balanceValue}</a>
+    <a onClick={onClick} style={{borderBottom: '#A09F9F 1px dotted', cursor: 'pointer'}}>{translate('balance') + ': ' + prettyDigit(balanceValue)}</a>
 
 import {connect} from 'react-redux'
 

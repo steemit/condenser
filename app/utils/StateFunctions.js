@@ -12,7 +12,7 @@ export function vestsToSp(state, vesting_shares) {
     const total_vests = assetFloat(global.getIn(['props', 'total_vesting_shares']), VEST_TICKER)
     const total_vest_steem = assetFloat(global.getIn(['props', 'total_vesting_fund_steem']), LIQUID_TICKER)
     const vesting_steemf = total_vest_steem * (vests / total_vests);
-    const steem_power = vesting_steemf.toFixed(3)
+    const steem_power = vesting_steemf.toFixed(2)
     return steem_power
 }
 

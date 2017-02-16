@@ -18,7 +18,7 @@ class Order {
     }
 
     getStringSteem() {
-        return this.getSteemAmount().toFixed(3);
+        return this.getSteemAmount().toFixed(2);
     }
 
     getPrice() {
@@ -30,7 +30,7 @@ class Order {
     }
 
     getStringSBD() {
-        return this.getSBDAmount().toFixed(3);
+        return this.getSBDAmount().toFixed(2);
     }
 
     getSBDAmount() {
@@ -84,7 +84,7 @@ class TradeHistory {
     }
 
     getStringSteem() {
-        return this.getSteemAmount().toFixed(3);
+        return this.getSteemAmount().toFixed(2);
     }
 
     getSBDAmount() {
@@ -92,7 +92,7 @@ class TradeHistory {
     }
 
     getStringSBD() {
-        return this.getSBDAmount().toFixed(3);
+        return this.getSBDAmount().toFixed(2);
     }
 
     getPrice() {

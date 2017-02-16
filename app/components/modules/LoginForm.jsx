@@ -73,20 +73,21 @@ class LoginForm extends Component {
         })
     }
 
-    SignUp(title) {
-        serverApiRecordEvent('Free Money SignUp', title);
-        window.location = "/enter_email";
+    SignUp() {
+        const onType = document.getElementsByClassName("OpAction")[0].textContent;
+        serverApiRecordEvent('Free Money SignUp', onType);
+        window.location.href = "/enter_email";
     }
 
     saveLoginToggle = () => {
-        const {saveLogin} = this.state
-        saveLoginDefault = !saveLoginDefault
-        localStorage.setItem('saveLogin', saveLoginDefault ? 'yes' : 'no')
-        saveLogin.props.onChange(saveLoginDefault) // change UI
+        const {saveLogin} = this.state;
+        saveLoginDefault = !saveLoginDefault;
+        localStorage.setItem('saveLogin', saveLoginDefault ? 'yes' : 'no');
+        saveLogin.props.onChange(saveLoginDefault); // change UI
     };
 
     showChangePassword = () => {
-        const {username, password} = this.state
+        const {username, password} = this.state;
         this.props.showChangePassword(username.value, password.value)
     };
 
@@ -120,9 +121,9 @@ class LoginForm extends Component {
         }
 
         const {loginBroadcastOperation, dispatchSubmit, afterLoginRedirectToWelcome, msg} = this.props;
-        const {username, password, saveLogin} = this.state
-        const {submitting, valid, handleSubmit} = this.state.login
-        const {usernameOnChange, onCancel, /*qrReader*/} = this
+        const {username, password, saveLogin} = this.state;
+        const {submitting, valid, handleSubmit} = this.state.login;
+        const {usernameOnChange, onCancel, /*qrReader*/} = this;
         const disabled = submitting || !valid;
         const opType = loginBroadcastOperation ? loginBroadcastOperation.get('type') : null;
         let postType = "";
@@ -135,7 +136,7 @@ class LoginForm extends Component {
         const title = postType ? postType : 'Login to your Steem Account';
         const authType = /^vote|comment/.test(opType) ? 'Posting' : 'Active or Owner';
         const submitLabel = loginBroadcastOperation ? 'Sign In' : 'Login';
-        let error = password.touched && password.error ? password.error : this.props.login_error
+        let error = password.touched && password.error ? password.error : this.props.login_error;
         if (error === 'owner_login_blocked') {
             error = <span>This password is bound to your account&apos;s owner key and can not be used to login to this site.
                 However, you can use it to <a onClick={this.showChangePassword}>update your password</a> to obtain a more secure set of keys.</span>
@@ -207,7 +208,7 @@ class LoginForm extends Component {
                 <hr />
                 <div>
                     <p>Join our <span className="free-slogan">amazing community</span> to comment and reward others.</p>
-                    <button type="button" className="button sign-up" onClick={this.SignUp(title)}>Sign up now to receive <span className="free-money">FREE MONEY!</span></button>
+                    <button type="button" className="button sign-up" onClick={this.SignUp}>Sign up now to receive <span className="free-money">FREE MONEY!</span></button>
                 </div>
             </form>
         </center>
@@ -217,7 +218,7 @@ class LoginForm extends Component {
            <div className="LoginForm">
                {message}
                <center>
-                   <h3>Returning Users: {title}</h3>
+                   <h3>Returning Users: <span className="OpAction">{title}</span></h3>
                </center>
                <br />
                {form}

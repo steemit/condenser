@@ -137,7 +137,7 @@ export default class LocalizedCurrency extends React.Component {
 										// вознаграждение руб = Сумма Золотых х (Биржевая цена унции в USD / 31103.4768) * курс USD ЦБ РФ (или любая другая валюта)
 										? number * (goldExchangeRate / 31103.4768) * exchangeRate
 										: number
-									).toLocaleString('en')
+									).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 			// if noSymbol is specified return only amount of digits
 			return 	noSymbol
 					? currencyAmount

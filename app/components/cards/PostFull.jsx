@@ -277,10 +277,10 @@ class PostFull extends React.Component {
             </div>)
         }
 
-        const readonly = post_content.get('mode') === 'archived' || $STM_Config.read_only_mode
+        const readonly = (post_content.get('mode') === 'archived' || $STM_Config.read_only_mode) && !(process.env.NODE_ENV === 'development')
         const showPromote = username && post_content.get('mode') === "first_payout" && post_content.get('depth') == 0
         const showReplyOption = post_content.get('depth') < 6
-        const showEditOption = username === author
+        const showEditOption = username === author || (process.env.NODE_ENV === 'development')
         const showDeleteOption = username === author && post_content.get('children') === 0 && content.stats.netVoteSign <= 0
 
         const authorRepLog10 = repLog10(content.author_reputation)

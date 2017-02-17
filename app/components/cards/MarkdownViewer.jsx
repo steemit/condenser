@@ -16,6 +16,13 @@ const remarkable = new Remarkable({
     quotes: '“”‘’'
 })
 
+function escapeHtml(html) {
+    return document.createElement('div')
+        .appendChild(document.createTextNode(html))
+        .parentNode
+        .innerHTML
+}
+
 class MarkdownViewer extends Component {
 
     static propTypes = {
@@ -40,6 +47,14 @@ class MarkdownViewer extends Component {
     constructor() {
         super()
         this.state = {allowNoImage: true}
+    }
+
+    showRaw(e, html) {
+        e.preventDefault();
+        var x=window.open();
+        x.document.open();
+        x.document.write('<pre>' + escapeHtml(html) + '</pre>');
+        x.document.close();
     }
 
     shouldComponentUpdate(np, ns) {
@@ -140,6 +155,7 @@ class MarkdownViewer extends Component {
                     <button style={{marginBottom: 0}} className="button hollow tiny float-right">Show</button>
                 </div>
             }
+            <center><small><a href="#" onClick={e => this.showRaw(e, this.props.text)}>[raw {html ? 'html' : 'markdown'}]</a></small></center>
         </div>)
     }
 }

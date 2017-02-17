@@ -1,6 +1,7 @@
 {
   "database_url": "SDC_DATABASE_URL",
   "disable_signups": "SDC_DISABLE_SIGNUPS",
+  "facebook_app_id": "SDC_FACEBOOK_APP_ID",
   "grant": {
     "facebook": {
       "key": "SDC_FB_API_KEY",
@@ -11,6 +12,7 @@
       "secret": "SDC_REDDIT_API_SECRET"
     }
   },
+  "google_analytics_id": "SDC_GOOGLE_ANALYTICS_ID",
   "helmet": {
     "directives": {
       "childSrc": "SDC_HELMET_CHILDSRC",

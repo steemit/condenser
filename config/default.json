@@ -89,6 +89,6 @@
     "rest_api_key": false
   },
   "upload_image": false,
-  "ws_connection_client": "wss://steemit.com/wspa",
-  "ws_connection_server": "wss://steemit.com/wspa"
+  "ws_connection_client": "wss://steemd.steemit.com",
+  "ws_connection_server": "wss://steemd.steemit.com"
 }

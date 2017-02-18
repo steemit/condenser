@@ -3,7 +3,7 @@ import config from 'config';
 import crypto from 'crypto';
 import secureRandom from 'secure-random';
 
-const { customer_id } = config.get('telesign.customer_id');
+const customer_id = config.get('telesign.customer_id');
 
 let api_key = '';
 

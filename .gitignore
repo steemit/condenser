@@ -6,10 +6,14 @@ node_modules
 dist
 vendor/*
 tmp/*
+config/client_config.js
 config/steem.json
 config/steem-dev.json
 config/process.json
+config/process-dev.json
+config/process-prod.json
 app/assets/static/*.js
 run/config/client/steem.json
 run/config/client/steem-dev.json
 run/config/pm2/process.json
+db/config/config.json

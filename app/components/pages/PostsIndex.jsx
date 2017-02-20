@@ -80,9 +80,9 @@ class PostsIndex extends React.Component {
                     <br /><br />
                     <a href="/trending">{translate('research_it')}</a>
                     <br />
-                    <a href="/welcome">{translate('full_faq')}</a>
+                    <a href="/welcome">{translate('welcome_to_the_blockchain')}</a>
                     <br />
-                    <a href="https://golos.io/ru--golos/@bitcoinfo/samyi-polnyi-f-a-q-o-golose-spisok-luchshykh-postov-raskryvayushikh-vse-aspekty-proekta-bonusy-v-vide-kreativa">{translate('welcome_to_the_blockchain')}</a>
+                    <a href="https://golos.io/ru--golos/@bitcoinfo/samyi-polnyi-f-a-q-o-golose-spisok-luchshykh-postov-raskryvayushikh-vse-aspekty-proekta-bonusy-v-vide-kreativa">{translate('full_faq')}</a>
                 </div>;
                 markNotificationRead = <MarkNotificationRead fields="feed" account={account_name} />
             } else {

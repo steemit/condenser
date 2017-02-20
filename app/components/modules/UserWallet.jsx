@@ -136,7 +136,7 @@ class UserWallet extends React.Component {
         const total_value = (((vesting_steemf + balance_steem) * price_per_steem) + sbd_balance) || 0
         // format spacing on estimated value based on account state
         // const estimate_output = <p>{localizedCurrency(total_value)}</p>;
-        const estimate_output = <p>{localCurrencySymbol+' '+total_value}</p>;
+        const estimate_output = <p>{localCurrencySymbol + ' ' + translateNumber(total_value.toFixed(2)) }</p>;
         // if (isMyAccount) {
         //     estimate_output = <p>{localizedCurrency(total_value)}&nbsp; &nbsp; &nbsp;</p>;
         // }

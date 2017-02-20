@@ -168,7 +168,7 @@ if (env !== 'test') {
     });
 
     const argv = minimist(process.argv.slice(2));
-    const port = parseInt(argv.port, 10) || parseInt(process.env.PORT, 10) || 3002;
+    const port = parseInt(argv.port, 10) || parseInt(process.env.PORT, 10) || 3001;
     app.listen(port);
 
     // Tell parent process koa-server is started

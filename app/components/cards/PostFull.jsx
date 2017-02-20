@@ -24,7 +24,7 @@ import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import ShareMenu from 'app/components/elements/ShareMenu';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import { translate } from 'app/Translator';
-import { APP_NAME, APP_NAME_LATIN, APP_URL } from 'config/client_config';
+import { APP_NAME, APP_ICON, APP_NAME_LATIN, APP_URL } from 'config/client_config';
 
 function TimeAuthorCategory({content, authorRepLog10, showTags}) {
     return (
@@ -216,7 +216,7 @@ class PostFull extends React.Component {
 
         let post_header = <h1 className="entry-title">
                 {content.title}
-                {full_power && <span title="Powered Up 100%"><Icon name="steem" /></span>}
+                {full_power && <span title="Powered Up 100%"><Icon name={APP_ICON} /></span>}
             </h1>
         if(content.depth > 0) {
             let parent_link = `/${content.category}/@${content.parent_author}/${content.parent_permlink}`;

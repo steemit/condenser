@@ -191,7 +191,7 @@ class Voting extends React.Component {
             <span style={payout_limit_hit ? {opacity: '0.5'} : {}}>
                 {/* <FormattedAsset amount={payout} asset={DEFAULT_CURRENCY} classname={max_payout === 0 ? 'strikethrough' : ''} /> */}
                 {/* TODO check FormattedAsset and it's possible replacememnt with LocalizedCurrency */}
-                <LocalizedCurrency amount={payout} />
+                <LocalizedCurrency amount={payout} className={max_payout === 0 ? 'strikethrough' : ''} />
                 {payoutItems.length > 0 && <Icon name="dropdown-arrow" />}
             </span>
         </DropdownMenu>;

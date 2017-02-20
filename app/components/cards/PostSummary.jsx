@@ -18,6 +18,7 @@ import Reputation from 'app/components/elements/Reputation';
 import Author from 'app/components/elements/Author';
 import { translate } from 'app/Translator';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
+import { APP_ICON } from 'config/client_config';
 
 function TimeAuthorCategory({post, links, authorRepLog10, gray}) {
     const author = <strong>{post.author}</strong>;
@@ -135,7 +136,7 @@ class PostSummary extends React.Component {
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>
                 {isNsfw && <span className="nsfw-flag">nsfw</span>}
                 {title_text}
-                {full_power && <span title="Powered Up 100%"><Icon name="steem" /></span>}
+                {full_power && <span title="Powered Up 100%"><Icon name={APP_ICON} /></span>}
             </a>
         </h1>;
 
@@ -143,7 +144,7 @@ class PostSummary extends React.Component {
         let author_category = <span className="vcard">
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}><TimeAgoWrapper date={p.created} className="updated" /></a>
             {translate('by')} <Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
-            {translate('in')} <TagList post={p} single />
+            {' ' + translate('in')} <TagList post={p} single />
         </span>
 
         const {nsfwPref, username} = this.props

@@ -190,8 +190,8 @@ const ru = {
 	// PostFull.jsx
 	re: 'ОТ',
 	// ReplyEditor.jsx
-	power_up_on: ' ',
-	default: ' ',
+	power_up_on: '100% в Силе Голоса',
+	default50_50: '50% / 50%',
 	decline_payout: 'Отказаться',
 	// PostFull.jsx
 	by: ' ', // здеcь специально ничего нет, пример: "posted by 'Vitya'" > "добавил 'Vitya'"

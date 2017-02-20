@@ -17,6 +17,7 @@ import Remarkable from 'remarkable'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import { translate } from 'app/Translator';
 import { detransliterate, translateError } from 'app/utils/ParsersAndFormatters';
+import {DEBT_TICKER} from 'config/client_config';
 
 const remarkable = new Remarkable({ html: true, linkify: false, breaks: true })
 const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
@@ -203,7 +204,6 @@ class ReplyEditor extends React.Component {
 
                 clearTimeout(saveEditorTimeout)
                 saveEditorTimeout = setTimeout(() => {
-                    // console.log('save formId', formId, body.value)
                     localStorage.setItem('replyEditorData-' + formId, JSON.stringify(data, null, 0))
                     this.showDraftSaved()
                 }, 500)
@@ -269,7 +269,7 @@ class ReplyEditor extends React.Component {
             author, permlink, parent_author, parent_permlink, type, jsonMetadata,
             state, successCallback, handleSubmit, submitting, invalid,
         } = this.props
-        const {postError, markdownViewerText, loading, titleWarn, rte, allSteemPower} = this.state
+        const {postError, markdownViewerText, loading, titleWarn, rte, payoutType} = this.state
         const {onTitleChange} = this
         const errorCallback = estr => { this.setState({ postError: estr, loading: false }) }
         const successCallbackWrapper = (...args) => {
@@ -281,9 +281,8 @@ class ReplyEditor extends React.Component {
         // Be careful, autoVote can reset curation rewards.  Never autoVote on edit..
         const autoVoteValue = !isEdit && autoVote.value
         const replyParams = {
-            author, permlink, parent_author, parent_permlink, type, state, originalPost,
-            jsonMetadata, autoVote: autoVoteValue, allSteemPower,
-            successCallback: successCallbackWrapper, errorCallback
+            author, permlink, parent_author, parent_permlink, type, state, originalPost, isHtml, isStory,
+            jsonMetadata, autoVote: autoVoteValue, payoutType,
         }
         const postLabel = username ? <Tooltip t={translate('post_as') + ' “' + username + '”'}>{translate('post')}</Tooltip> : translate('post')
         const hasTitleError = title && title.touched && title.error
@@ -358,8 +357,8 @@ class ReplyEditor extends React.Component {
 
                                 {translate('rewards')}:&nbsp;
                                 <select value={this.state.payoutType} onChange={this.onPayoutTypeChange} style={{color: this.state.payoutType == '0%' ? 'orange' : 'inherit'}}>
-                                    <option value="100%">{translate('power_up_on')}100% в Силе Голоса</option>
-                                    <option value="50%">{translate('default')}50% / 50%</option>
+                                    <option value="100%">{translate('power_up_on')}</option>
+                                    <option value="50%">{translate('default50_50')}</option>
                                     <option value="0%">{translate('decline_payout')}</option>
                                 </select>
 
@@ -536,7 +535,7 @@ export default formId => reduxForm(
                 switch(payoutType) {
                     case '0%': // decline payout
                         __config.comment_options = {
-                            max_accepted_payout: '0.000 SBD',
+                            max_accepted_payout: '0.000 ' + DEBT_TICKER,
                         }
                         break;
                     case '100%': // 100% steem power payout

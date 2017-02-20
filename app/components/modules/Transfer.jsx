@@ -55,9 +55,9 @@ class TransferForm extends Component {
             const {currentAccount} = props
             const isWithdraw = transferType && transferType === 'Savings Withdraw'
             const balanceValue =
-                !asset || asset === LIQUID_TICKER ?
+                !asset || asset === 'GOLOS' ?
                     isWithdraw ? currentAccount.get('savings_balance') : currentAccount.get('balance') :
-                asset === DEBT_TICKER ?
+                asset === 'GBG' ?
                     isWithdraw ? currentAccount.get('savings_sbd_balance') : currentAccount.get('sbd_balance') :
                 null
             if(!balanceValue) return false
@@ -103,9 +103,9 @@ class TransferForm extends Component {
         const {asset} = this.state
         const isWithdraw = transferType && transferType === 'Savings Withdraw'
         return !asset ||
-            asset.value === LIQUID_TICKER ?
+            asset.value === 'GOLOS' ?
                 isWithdraw ? currentAccount.get('savings_balance') : currentAccount.get('balance') :
-            asset.value === DEBT_TICKER ?
+            asset.value === 'GBG' ?
                 isWithdraw ? currentAccount.get('savings_sbd_balance') : currentAccount.get('sbd_balance') :
             null
     }

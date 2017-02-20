@@ -320,6 +320,9 @@ import secureRandom from 'secure-random'
 // function* preBroadcast_account_witness_vote({operation, username}) {
 // }
 function* preBroadcast_comment({operation, username}) {
+
+    console.log(`<--------- preBroadcast_comment - operation : `, operation);
+
     if (!operation.author) operation.author = username
     let permlink = operation.permlink
     const {author, __config: {originalBody, autoVote, comment_options}} = operation

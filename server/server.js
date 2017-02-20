@@ -29,6 +29,7 @@ import { APP_NAME_LATIN } from 'config/client_config';
 
 const grant = new Grant(config.grant);
 // import uploadImage from 'server/upload-image' //medium-editor
+// lksdjflskj
 
 const app = new Koa();
 app.name = APP_NAME_LATIN + ' app';
@@ -146,9 +147,9 @@ app.use(mount('/favicons', staticCache(path.join(__dirname, '../app/assets/image
 app.use(mount('/images', staticCache(path.join(__dirname, '../app/assets/images'), cacheOpts)));
 // Proxy asset folder to webpack development server in development mode
 if (env === 'development') {
-    const PORT = parseInt(process.env.PORT, 10) + 1 || 3001;
+    const PORT = parseInt(process.env.PORT, 10) + 1 || 3000;
     const proxy = require('koa-proxy')({
-        host: 'http://0.0.0.0:' + PORT,
+        host: 'http://127.0.0.1:' + PORT,
         map: (filePath) => 'assets/' + filePath
     });
     app.use(mount('/assets', proxy));
@@ -168,7 +169,7 @@ if (env !== 'test') {
     });
 
     const argv = minimist(process.argv.slice(2));
-    const port = parseInt(argv.port, 10) || parseInt(process.env.PORT, 10) || 3002;
+    const port = parseInt(argv.port, 10) || parseInt(process.env.PORT, 10) || 3001;
     app.listen(port);
 
     // Tell parent process koa-server is started

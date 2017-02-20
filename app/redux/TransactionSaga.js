@@ -78,6 +78,13 @@ const toStringUtf8 = o => (o ? Buffer.isBuffer(o) ? o.toString('utf-8') : o.toSt
 function* preBroadcast_vote({operation, username}) {
     if (!operation.voter) operation.voter = username
     const {voter, author, permlink, weight} = operation
+
+    console.log(`<------------ preBroadcast_vote : voter : `, voter);
+    console.log(`<------------ preBroadcast_vote : author : `, author);
+    console.log(`<------------ preBroadcast_vote : permlink : `, permlink);
+    console.log(`<------------ preBroadcast_vote : weight : `, weight);
+
+
     // give immediate feedback
     yield put(g.actions.set({key: `transaction_vote_active_${author}_${permlink}`, value: true}))
     yield put(g.actions.voted({username: voter, author, permlink, weight}))

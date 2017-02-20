@@ -86,7 +86,7 @@ class PostsIndex extends React.Component {
                 </div>;
                 markNotificationRead = <MarkNotificationRead fields="feed" account={account_name} />
             } else {
-                // emptyText = <div>{translate('user_hasnt_followed_anything_yet', {name: account_name})}</div>;
+                emptyText = <div>{translate('user_hasnt_followed_anything_yet', {name: account_name})}</div>;
             }
         } else {
             posts = this.getPosts(order, category);

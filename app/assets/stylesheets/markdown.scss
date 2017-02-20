@@ -19,6 +19,11 @@
     max-width: 480px;
     padding-bottom: 270px;
   }
+
+  blockquote > p {
+    color: rgba(0,0,0,.6);
+    font-size: inherit !important;
+  }
 }
 
 .Markdown, .ReplyEditor__body.rte {
@@ -144,6 +149,6 @@
 
   blockquote > p {
     color: rgba(0,0,0,.6);
-    font-size: 125%;
+    font-size: 122%;
   }
 }

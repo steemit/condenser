@@ -11,7 +11,7 @@ import sanitizeConfig, {allowedTags} from 'app/utils/SanitizeConfig'
 import sanitize from 'sanitize-html'
 import HtmlReady from 'shared/HtmlReady'
 import g from 'app/redux/GlobalReducer'
-import {Map, Set} from 'immutable'
+import {Set} from 'immutable'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import Remarkable from 'remarkable'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
@@ -103,7 +103,6 @@ class ReplyEditor extends React.Component {
         parent_author: '',
         parent_permlink: '',
         type: 'submit_comment',
-        metaLinkData: Map(),
     }
 
     constructor() {
@@ -258,7 +257,6 @@ class ReplyEditor extends React.Component {
     render() {
         // NOTE title, category, and body are UI form fields ..
         const originalPost = {
-            title: this.props.title,
             category: this.props.category,
             body: this.props.body,
         }
@@ -269,7 +267,7 @@ class ReplyEditor extends React.Component {
             author, permlink, parent_author, parent_permlink, type, jsonMetadata,
             state, successCallback, handleSubmit, submitting, invalid,
         } = this.props
-        const {postError, markdownViewerText, loading, titleWarn, rte, payoutType} = this.state
+        const {postError, loading, titleWarn, rte, payoutType} = this.state
         const {onTitleChange} = this
         const errorCallback = estr => { this.setState({ postError: estr, loading: false }) }
         const successCallbackWrapper = (...args) => {
@@ -283,6 +281,7 @@ class ReplyEditor extends React.Component {
         const replyParams = {
             author, permlink, parent_author, parent_permlink, type, state, originalPost, isHtml, isStory,
             jsonMetadata, autoVote: autoVoteValue, payoutType,
+            successCallback: successCallbackWrapper, errorCallback
         }
         const postLabel = username ? <Tooltip t={translate('post_as') + ' “' + username + '”'}>{translate('post')}</Tooltip> : translate('post')
         const hasTitleError = title && title.touched && title.error

@@ -530,7 +530,7 @@ const ru = {
 	advanced: 'Расширенные опции',
 	convert_to_LIQUID_TOKEN: 'Перевести в ' + LIQUID_TOKEN,
 	transfer_to_account: 'Передать пользователю',
-	savings: 'Сберегательный счет',
+	savings: 'Сейф',
 	savings_withdraw: 'Вывести со счета',
 	withdraw_steem: 'Вывести ' + LIQUID_TOKEN + ' на текущий баланс',
 	withdraw_steem_dollars: 'Вывести ' + VESTING_TOKEN2 + ' на текущий баланс',
@@ -566,7 +566,7 @@ const ru = {
 	move_funds_to_another_account: 'Отправить средства на другой аккаунт.',
 	protect_funds_by_requiring_a_3_day_withdraw_waiting_period: 'Защитите средства от вывода 3-х дневным периодом ожидания.',
 	withdraw_funds_after_the_required_3_day_waiting_period: 'Вывод средств возможен по истечении 3-х дневного периода ожидания.',
-	balance_subject_to_3_day_withdraw_waiting_period: 'Вывод баланса из сберегательных счетов на обычные, занимает 3 дня',
+	balance_subject_to_3_day_withdraw_waiting_period: 'Вывод баланса из сейфа на обычный счет, занимает 3 дня',
 	// TODO
 	converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again: 'Конвертированная ' + VESTING_TOKEN + ' может быть отправлена себе или кому-то еще, но не может быть передана вновь без конвертирования назад в ' + LIQUID_TOKEN + '.',
 	profile: 'Профиль',

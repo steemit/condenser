@@ -38,8 +38,8 @@ export default class PostHistoryRow extends React.Component {
             <div className="row">
                 <div className="column small-12" >
                     <Tooltip t={new Date(op[1].timestamp).toLocaleString()}>
-                    <Icon name="clock" className="space-right" />
-                    <TimeAgoWrapper date={op[1].timestamp} /> {in_reply_to}
+                        <Icon name="clock" className="space-right" />
+                        <TimeAgoWrapper date={op[1].timestamp} /> {in_reply_to}
                     </Tooltip>
                 </div>
             </div>

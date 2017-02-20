@@ -44,66 +44,66 @@ class App extends React.Component {
           // ga('create', 'UA-49238979-12', 'auto');
           // ga('send', 'pageview');
 
-            // FACEBOOK CONNECT
-            !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-            n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-            n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-            t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-            document,'script','https://connect.facebook.net/en_US/fbevents.js');
+          // FACEBOOK CONNECT
+          !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+          n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+          n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+          t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+          document,'script','https://connect.facebook.net/en_US/fbevents.js');
 
-            /* disabled to avoid facebbok warning of multiple pixel id's */
-            fbq('init', '1594659427507927');
-            fbq('track', "PageView");
+          /* disabled to avoid facebbok warning of multiple pixel id's */
+          fbq('init', '1594659427507927');
+          fbq('track', "PageView");
 
-            window.fbAsyncInit = function() {
-              FB.init({
-                appId      : '150154408771266',
-                xfbml      : true,
-                version    : 'v2.8'
-              });
-            };
+          window.fbAsyncInit = function() {
+            FB.init({
+              appId      : '150154408771266',
+              xfbml      : true,
+              version    : 'v2.8'
+            });
+          };
 
-            (function(d, s, id){
-               var js, fjs = d.getElementsByTagName(s)[0];
-               if (d.getElementById(id)) {return;}
-               js = d.createElement(s); js.id = id;
-               js.src = "//connect.facebook.net/en_US/sdk.js";
-               fjs.parentNode.insertBefore(js, fjs);
-             }(document, 'script', 'facebook-jssdk'));
+          (function(d, s, id){
+             var js, fjs = d.getElementsByTagName(s)[0];
+             if (d.getElementById(id)) {return;}
+              js = d.createElement(s); js.id = id;
+             js.src = "//connect.facebook.net/en_US/sdk.js";
+             fjs.parentNode.insertBefore(js, fjs);
+           }(document, 'script', 'facebook-jssdk'));
 
-            /* Yandex.Metrika counter */
-            /* NOTE dont't forget to remove <img /> tag of yandex metrika (down below) */
-            (function (d, w, c) {
-             (w[c] = w[c] || []).push(function() {
-                 try {
-                     w.yaCounter41829924 = new Ya.Metrika({
-                         id:41829924,
-                         clickmap:true,
-                         trackLinks:true,
-                         accurateTrackBounce:true
-                     });
-                 } catch(e) { }
-             });
+          /* Yandex.Metrika counter */
+          /* NOTE dont't forget to remove <img /> tag of yandex metrika (down below) */
+          (function (d, w, c) {
+           (w[c] = w[c] || []).push(function() {
+               try {
+                   w.yaCounter41829924 = new Ya.Metrika({
+                       id:41829924,
+                       clickmap:true,
+                       trackLinks:true,
+                       accurateTrackBounce:true
+                   });
+               } catch(e) { }
+           });
 
-             var n = d.getElementsByTagName("script")[0],
-                 s = d.createElement("script"),
-                 f = function () { n.parentNode.insertBefore(s, n); };
-             s.type = "text/javascript";
-             s.async = true;
-             s.src = "https://mc.yandex.ru/metrika/watch.js";
+           var n = d.getElementsByTagName("script")[0],
+               s = d.createElement("script"),
+               f = function () { n.parentNode.insertBefore(s, n); };
+           s.type = "text/javascript";
+           s.async = true;
+           s.src = "https://mc.yandex.ru/metrika/watch.js";
 
-             if (w.opera == "[object Opera]") {
-                 d.addEventListener("DOMContentLoaded", f, false);
-             } else { f(); }
-             })(window.document, window, "yandex_metrika_callbacks")
-            /* /Yandex.Metrika counter */
+           if (w.opera == "[object Opera]") {
+               d.addEventListener("DOMContentLoaded", f, false);
+           } else { f(); }
+           })(window.document, window, "yandex_metrika_callbacks")
+          /* /Yandex.Metrika counter */
 
-            /* Facebook Pixel Code */
-            /* NOTE dont't forget to remove <img /> tag of facebook pixel (down below) */
-            fbq('init', '217726192019770'); // Insert your pixel ID here.
-            fbq('track', 'PageView');
+          /* Facebook Pixel Code */
+          /* NOTE dont't forget to remove <img /> tag of facebook pixel (down below) */
+          fbq('init', '217726192019770'); // Insert your pixel ID here.
+          fbq('track', 'PageView');
         }      
-        }
+    }
     
     componentWillMount() {
         if (process.env.BROWSER) localStorage.removeItem('autopost') // July 14 '16 compromise, renamed to autopost2

@@ -133,7 +133,7 @@ class Witnesses extends React.Component {
                         </p>}
                     </div>
                 </div>
-
+                {/*
                 <div className="row">
                     <div className="column">
                         <p>{translate(current_proxy && current_proxy.length ? 'witness_set' : 'set_witness_proxy', {proxy: current_proxy})}</p>
@@ -162,6 +162,7 @@ class Witnesses extends React.Component {
                         <br />
                      </div>
                 </div>
+                */}
 
                 {current_proxy && current_proxy.length ? null :
                 <div className="row small-collapse">

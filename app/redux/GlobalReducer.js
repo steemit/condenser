@@ -53,22 +53,24 @@ export default createModule({
         {
             action: 'RECEIVE_COMMENT',
             reducer: (state, {payload: op}) => {
+
+
                 const {author, permlink, parent_author = '', parent_permlink = '', title = '', body} = op
                 const key = author + '/' + permlink
 
                 let updatedState = state.updateIn(['content', key], Map(emptyContent), r => r.merge({
                     author, permlink, parent_author, parent_permlink,
-                    title: title.toString('utf-8'),
+                    title: title.toString('utf-8'), 
                     body: body.toString('utf-8'),
                 }))
-                // console.log('updatedState content', updatedState.getIn(['content', key]).toJS())
+                // console.log('<----------- updatedState content :', updatedState.getIn(['content', key]).toJS())
 
                 if (parent_author !== '' && parent_permlink !== '') {
                     const parent_key = parent_author + '/' + parent_permlink
                     updatedState = updatedState.updateIn(['content', parent_key, 'replies'], List(), r => r.insert(0, key))
                     // console.log('updatedState parent', updatedState.toJS())
                 }
-                return updatedState
+                return updatedState 
             }
         },
         {
@@ -89,6 +91,9 @@ export default createModule({
         { // works...
             action: 'LINK_REPLY',
             reducer: (state, {payload: op}) => {
+                console.log('<----------- LINK_REPLY', payload);
+
+
                 const {author, permlink, parent_author = '', parent_permlink = ''} = op
                 if (parent_author === '' || parent_permlink === '') return state
                 const key = author + '/' + permlink

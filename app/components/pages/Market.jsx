@@ -386,7 +386,7 @@ class Market extends React.Component {
                                                 this.refs.buySteem_total.value = total
                                                 if(price >= 0) this.refs.buySteem_amount.value = roundDown(parseFloat(total) / price, 3).toFixed(2)
                                                 validateBuySteem()
-                                            }}>{translate('available')}:</a> {account.sbd_balance.replace('SBD', DEBT_TOKEN_SHORT)}
+                                            }}>{translate('available')}:</a> {account.sbd_balance.replace('GBG', DEBT_TOKEN_SHORT)}
                                     </small></div>}
 
                                     <div><small>

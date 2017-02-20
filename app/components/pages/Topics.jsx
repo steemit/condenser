@@ -43,6 +43,9 @@ class Topics extends React.Component {
             onChangeSearch, expand
         } = this;
 
+        if (!this.props.categories)
+            return
+
         let categories = this.props.categories.get('trending');
 
         if (!(expanded || search) || compact) categories = categories.take(50);
@@ -82,5 +85,5 @@ class Topics extends React.Component {
 }
 
 export default connect(state => ({
-    categories: state.global.get('tag_idx')
+    categories: state.global.get('tag_idx') || null
 }))(Topics);

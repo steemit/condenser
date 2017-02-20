@@ -688,7 +688,7 @@ const ru = {
     // StateEditor.jsx
     enter_some_text: 'Введите текст...',
     // Voting.jsx
-    payout_declined: 'Вывод отменен',
+    payouts_declined: 'Выплаты отключены',
     max_accepted_payout: 'Максимально возможная сумма',
 
     draft_saved: 'Сохранено в черновик',

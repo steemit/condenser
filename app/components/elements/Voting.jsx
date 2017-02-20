@@ -178,7 +178,7 @@ class Voting extends React.Component {
         }
 
         if(max_payout == 0) {
-            payoutItems.push({value: translate('past_payouts')})
+            payoutItems.push({value: translate('payouts_declined')})
         } else if (max_payout < 1000000) {
             payoutItems.push({value: translate('max_accepted_payout') + localizedCurrency(max_payout)})
         }

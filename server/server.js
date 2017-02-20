@@ -29,6 +29,7 @@ import { APP_NAME_LATIN } from 'config/client_config';
 
 const grant = new Grant(config.grant);
 // import uploadImage from 'server/upload-image' //medium-editor
+// lksdjflskj
 
 const app = new Koa();
 app.name = APP_NAME_LATIN + ' app';
@@ -148,7 +149,7 @@ app.use(mount('/images', staticCache(path.join(__dirname, '../app/assets/images'
 if (env === 'development') {
     const PORT = parseInt(process.env.PORT, 10) + 1 || 3000;
     const proxy = require('koa-proxy')({
-        host: 'http://0.0.0.0:' + PORT,
+        host: 'http://127.0.0.1:' + PORT,
         map: (filePath) => 'assets/' + filePath
     });
     app.use(mount('/assets', proxy));

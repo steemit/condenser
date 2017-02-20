@@ -136,7 +136,7 @@ class UserWallet extends React.Component {
         const total_value = (((vesting_steemf + balance_steem) * price_per_steem) + sbd_balance) || 0
         // format spacing on estimated value based on account state
         // const estimate_output = <p>{localizedCurrency(total_value)}</p>;
-        const estimate_output = <p>{localCurrencySymbol+' '+total_value}</p>;
+        const estimate_output = <p>{localCurrencySymbol + ' ' + translateNumber(total_value.toFixed(2)) }</p>;
         // if (isMyAccount) {
         //     estimate_output = <p>{localizedCurrency(total_value)}&nbsp; &nbsp; &nbsp;</p>;
         // }
@@ -189,9 +189,9 @@ class UserWallet extends React.Component {
             </Reveal>
         </div>
 
-        const steem_balance_str = translateNumber(balance_steem.toFixed(2)) // formatDecimal(balance_steem, 3)
-        const steem_orders_balance_str = translateNumber(steemOrders.toFixed(2))
-        const power_balance_str = translateNumber(vesting_steem) // formatDecimal(vesting_steem, 3)
+        const steem_balance_str = translateNumber(balance_steem.toFixed(2)) + ' ' + LIQUID_TOKEN_UPPERCASE // formatDecimal(balance_steem, 3)
+        const steem_orders_balance_str = translateNumber(steemOrders.toFixed(2)) + ' ' + LIQUID_TOKEN_UPPERCASE
+        const power_balance_str = translateNumber(vesting_steem) + ' ' + LIQUID_TOKEN_UPPERCASE // formatDecimal(vesting_steem, 3)
         const savings_balance_str = translateNumber(saving_balance_steem.toFixed(2)) + ' ' + LIQUID_TOKEN_UPPERCASE
         
         // const sbd_balance_str = translateNumber('$' + sbd_balance.toFixed(2)) // formatDecimal(account.sbd_balance, 3)
@@ -228,9 +228,9 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
-                    <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={steem_balance_str + ' ' + LIQUID_TOKEN_UPPERCASE} menu={steem_menu} />
-                    : steem_balance_str + ' ' + LIQUID_TOKEN_UPPERCASE}
-                    {steemOrders ? <div style={{paddingRight: isMyAccount ? "0.85rem" : null}}><Link to="/market"><Tooltip t={translate('open_orders')}>(+{steem_orders_balance_str + ' ' + LIQUID_TOKEN_UPPERCASE})</Tooltip></Link></div> : null}
+                    <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={steem_balance_str} menu={steem_menu} />
+                    : steem_balance_str}
+                    {steemOrders ? <div style={{paddingRight: isMyAccount ? "0.85rem" : null}}><Link to="/market"><Tooltip t={translate('open_orders')}>(+{steem_orders_balance_str})</Tooltip></Link></div> : null}
                 </div>
             </div>
 
@@ -241,8 +241,8 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
-                    <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={power_balance_str + ' ' + LIQUID_TOKEN_UPPERCASE} menu={power_menu} />
-                    : power_balance_str + ' ' + LIQUID_TOKEN_UPPERCASE}
+                    <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={power_balance_str} menu={power_menu} />
+                    : power_balance_str}
                 </div>
             </div>
 
@@ -253,7 +253,7 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
-                    <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={sbd_balance_str + ' ' + DEBT_TICKER} menu={dollar_menu} />
+                    <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={sbd_balance_str} menu={dollar_menu} />
                     : sbd_balance_str}
                     {sbdOrders ? <div style={{paddingRight: isMyAccount ? "0.85rem" : null}}><Link to="/market"><Tooltip t={translate('open_orders')}>(+{sbd_orders_balance_str})</Tooltip></Link></div> : null}
                     {conversions}

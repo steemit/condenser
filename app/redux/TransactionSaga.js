@@ -79,10 +79,10 @@ function* preBroadcast_vote({operation, username}) {
     if (!operation.voter) operation.voter = username
     const {voter, author, permlink, weight} = operation
 
-    console.log(`<------------ preBroadcast_vote : voter : `, voter);
-    console.log(`<------------ preBroadcast_vote : author : `, author);
-    console.log(`<------------ preBroadcast_vote : permlink : `, permlink);
-    console.log(`<------------ preBroadcast_vote : weight : `, weight);
+    // console.log(`<------------ preBroadcast_vote : voter : `, voter);
+    // console.log(`<------------ preBroadcast_vote : author : `, author);
+    // console.log(`<------------ preBroadcast_vote : permlink : `, permlink);
+    // console.log(`<------------ preBroadcast_vote : weight : `, weight);
 
 
     // give immediate feedback
@@ -257,6 +257,9 @@ function* broadcast({payload: {operations, keys, username, successCallback, erro
 }
 
 function* accepted_comment({operation}) {
+
+    console.log('<|----------- transaction saga accepted_comment : operation', operation);
+
     const {author, permlink} = operation
     // update again with new $$ amount from the steemd node
     yield call(getContent, {author, permlink})

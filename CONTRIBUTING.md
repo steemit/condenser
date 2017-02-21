@@ -6,9 +6,9 @@ Please read these instructions before submitting issues to the Steemit.com GitHu
 
 If there is an existing feature that is not working correctly, or a glitch in the website that is impacting user behaviour - please open an issue to report variance. Include as much relevant information as you can, including screen shots and steps to reproduce the issue.
 
-## Technical Support and Login Issues
+## Technical Support and Signup/Login Issues
 
-If you are having trouble using the website but it is not an error with the website (this includes login issues), do **not** open a GitHub issue. Please request help from the users in the [steemit.chat help](https://steemit.chat/channel/help) channel.
+If you are having trouble using the website but it is not an error with the website (this includes signup/login issues), do **not** open a GitHub issue. Please request help from the users in the [steemit.chat help](https://steemit.chat/channel/help) channel.
 
 ## Enhancement Suggestions
 
@@ -21,6 +21,10 @@ The developers frequently open issues to discuss changes that are being worked o
 Issues opened that devolve into lengthy discussion of minor site features will be closed or locked.  The issue tracker is not a general purpose discussion forum.
 
 This is not the place to make suggestions for product improvement (please see the Enhancement Suggestions section above for this). If you are not planning to work on the change yourself - do not open an issue for it.
+
+## Duplicate Issues
+
+Please do a keyword search to see if there is already an existing issue before opening a new one.
 
 ## Steemit.com vs. Steem Blockchain
 

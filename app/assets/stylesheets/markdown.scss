@@ -28,28 +28,32 @@
   hyphens: auto;
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Source Serif Pro', serif;
+    font-family: $body-font-family;
     font-weight: 600;
   }
 
   h1 {
-    margin: 2rem 0 1rem 0;
+    margin: 2rem 0 1rem;
     font-size: 160%
   }
   h2 {
-    margin: 2rem 0 1rem 0;
+    margin: 2rem 0 1rem;
     font-size: 140%;
   }
   h3 {
-    margin: 1.72rem 0 0.87rem 0;
+    margin: 1.5rem 0 0.75rem;
     font-size: 120%;
   }
   h4 {
-    margin: 1rem 0 0.5rem 0;
+    margin: 1rem 0 0.5rem;
+    font-size: 110%;
+  }
+  h5 {
+    margin: 1rem 0 0.5rem;
     font-size: 100%;
   }
   h6 {
-    margin: 1rem 0 0.5rem 0;
+    margin: 1rem 0 0.5rem;
     font-size: 90%;
   }
 

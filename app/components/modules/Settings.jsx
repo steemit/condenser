@@ -243,7 +243,7 @@ class Settings extends React.Component {
                         <br /><br />
                         <h3>{translate('content_preferences')}</h3>
                         <div>
-                            {translate('not_safe_for_work')} (Not safe for work – NSFW)
+                            {translate('not_safe_for_work')}
                         </div>
                         <select value={this.state.nsfwPref} onChange={this.onNsfwPrefChange}>
                             <option value="hide">{translate('always_hide')}</option>

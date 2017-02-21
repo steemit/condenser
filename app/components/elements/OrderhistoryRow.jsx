@@ -67,8 +67,8 @@ export default class OrderhistoryRow extends React.Component {
             <tr className={className}>
                 <td><TimeAgoWrapper date={order.date} /></td>
                 <td className={order.color}>{order.getStringPrice()}</td>
-                <td>{order.getSteemAmount().toFixed(2)}</td>
-                <td>{order.getSBDAmount().toFixed(2)}</td>
+                <td>{order.getSteemAmount().toFixed(3)}</td>
+                <td>{order.getSBDAmount().toFixed(3)}</td>
             </tr>
         )
     }

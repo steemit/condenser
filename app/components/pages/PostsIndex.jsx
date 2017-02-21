@@ -43,7 +43,7 @@ class PostsIndex extends React.Component {
 
     getPosts(order, category) {
         const topic_discussions = this.props.discussions.get(category || '');
-        console.log('<----------- getPosts topic_discussions :', topic_discussions);
+        // console.log('<----------- getPosts topic_discussions :', topic_discussions);
         if (!topic_discussions) return null;
         return topic_discussions.get(order);
     }

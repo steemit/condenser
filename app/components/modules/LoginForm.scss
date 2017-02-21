@@ -6,4 +6,9 @@
   form {
     max-width: 400px;
   }
+  .sign-up {
+    li:last-child {
+        padding: 0px;
+    }
+  }
 }

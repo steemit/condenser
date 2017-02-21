@@ -115,13 +115,17 @@ class LoginForm extends Component {
         const {submitting, valid, handleSubmit} = this.state.login
         const {usernameOnChange, onCancel, /*qrReader*/} = this
         const disabled = submitting || !valid;
-
-        const title = loginBroadcastOperation ?
-            'Authenticate for this transaction' :
-            'Login to your Steem Account';
-        const opType = loginBroadcastOperation ? loginBroadcastOperation.get('type') : null
-        const authType = /^vote|comment/.test(opType) ? 'Posting' : 'Active or Owner'
-        const submitLabel = loginBroadcastOperation ? 'Sign' : 'Login';
+        const opType = loginBroadcastOperation ? loginBroadcastOperation.get('type') : null;
+        let postType = "";
+        if (opType === "vote") {
+            postType = 'Login to Vote'
+        } else {
+            // check for post or comment in operation
+            postType = loginBroadcastOperation.getIn(['operation', 'title']) ? 'Login to Post' : 'Login to Comment';
+        }
+        const title = postType ? postType : 'Login to your Steem Account';
+        const authType = /^vote|comment/.test(opType) ? 'Posting' : 'Active or Owner';
+        const submitLabel = loginBroadcastOperation ? 'Sign In' : 'Login';
         let error = password.touched && password.error ? password.error : this.props.login_error
         if (error === 'owner_login_blocked') {
             error = <span>This password is bound to your account&apos;s owner key and can not be used to login to this site.
@@ -191,8 +195,12 @@ class LoginForm extends Component {
                         Cancel
                     </button>}
                 </div>
+                <hr />
+                <ul className="menu sub-menu sign-up">
+                    <li className="menu">Don't have a steemit account?&nbsp;<a href="/enter_email">Sign Up</a></li>
+                </ul>
             </form>
-        )
+        );
 
         return (
            <div className="LoginForm">

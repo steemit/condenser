@@ -110,6 +110,13 @@ class PostSummary extends React.Component {
 
         const {gray, pictures, authorRepLog10, hasFlag, isNsfw} = content.get('stats', Map()).toJS()
         const p = extractContent(immutableAccessor, content);
+        const nsfwTags = ['nsfw', 'ru--mat', '18+']
+        let nsfwTitle = nsfwTags[0]
+        let currentNsfw = []
+        if (isNsfw && p.json_metadata && p.json_metadata.tags)
+            currentNsfw = p.json_metadata.tags.filter(function(n) { return nsfwTags.indexOf(n) >= 0 })
+        if (currentNsfw)
+            nsfwTitle = currentNsfw[0]
         let desc = p.desc
         if(p.image_link)// image link is already shown in the preview
             desc = desc.replace(p.image_link, '')
@@ -134,7 +141,7 @@ class PostSummary extends React.Component {
         </div>;
         let content_title = <h1 className="entry-title">
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>
-                {isNsfw && <span className="nsfw-flag">nsfw</span>}
+                {isNsfw && <span className="nsfw-flag">{detransliterate(nsfwTitle)}</span>}
                 {title_text}
                 {full_power && <span title="Powered Up 100%"><Icon name={APP_ICON} /></span>}
             </a>
@@ -159,7 +166,7 @@ class PostSummary extends React.Component {
                 return (
                     <article className={'PostSummary hentry'} itemScope itemType ="http://schema.org/blogPost">
                         <div className="PostSummary__nsfw-warning">
-                            {translate('this_post_is')} <span className="nsfw-flag">nsfw</span>. 
+                            {translate('this_post_is')} <span className="nsfw-flag">{detransliterate(nsfwTitle)}</span>. 
                             {translate('you_can')} <a href="#" onClick={this.onRevealNsfw}>{translate('reveal_it')}</a>{' '+translate('or')+' '}
                             {username ? <span>{translate('adjust_your')} <Link to={`/@${username}/settings`}>{translate('display_preferences')}</Link>.</span>
                                       : <span><Link to="/create_account">{translate('sign_up')}</Link> {translate('to_save_your_preferences')}</span>}

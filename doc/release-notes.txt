@@ -1,4 +1,37 @@
 ---------------------------------------------------------------------
+0.1.170216
+---------------------------------------------------------------------
+
+New features
+--------
+ - markdown image upload #1026
+ - create CONTRIBUTING.md #1141
+ - dockerization, config module, node 7.5 #1108
+ - add phist to alternative post viewers #1150
+ - do not linkify exe and zip urls #1087
+
+Bug fixes
+--------
+ - fetch more followers in batch #1097
+ - fall back to rshares sort for comments #1099
+ - adjust author heading #1101
+ - move the "Steemit Chat" link higher in the main menu #1102
+ - adjust graying and post collapsing rules #1124
+ - move witness proxy to bottom of page #1104
+ - restore page title when closing modal with ESC #1123
+ - cleanup unused import, eslint #1125
+ - improve byline handling in mobile view #1112
+ - FollowSaga: fix ternary op, eslint #1111
+ - update json profile #1120
+ - rollback to loading fb plugin on page load #1151
+ - disable autocorrect on wallet page #1143
+ - address large svgs problem #1152
+ - fix HtmlReady regression #1157
+ - wrap transfer memo text properly #1156
+ - fix invalid vote state bug #1154
+
+
+---------------------------------------------------------------------
 0.1.170201
 ---------------------------------------------------------------------
 

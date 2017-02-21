@@ -115,11 +115,15 @@
 }
 
 .Comment__negative_group {
-    color: #888;
-    border-top: 1px solid $medium-gray;
+    color: $medium-gray;
+    border-top: 1px solid $light-gray;
     padding-top: 1rem;
     clear: none;
     background: white;
+    button {
+      opacity: 0.35;
+      &:hover {opacity: 0.5;}
+    }
 }
 
 .depth {
@@ -127,6 +131,10 @@
   top: 20px;
   left: 0;
   color: $dark-gray;
+}
+
+.Comment.collapsed > .depth {
+  top: 2px;
 }
 
 .depth.di-1 {

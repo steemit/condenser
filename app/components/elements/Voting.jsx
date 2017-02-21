@@ -120,7 +120,7 @@ class Voting extends React.Component {
     _checkMyVote(username, active_votes) {
         if (username && active_votes) {
             const vote = active_votes.find(el => el.get('voter') === username);
-            // weigth warning, the API may send a string or a number (when zero)
+            // weight warning, the API may send a string or a number (when zero)
             if(vote) this.setState({myVote: parseInt(vote.get('percent') || 0, 10)})
         }
     }

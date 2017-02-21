@@ -9,7 +9,6 @@ import { Router, RouterContext, match, applyRouterMiddleware } from 'react-route
 import Apis from './api_client/ApiInstances';
 import { Provider } from 'react-redux';
 import RootRoute from 'app/RootRoute';
-import ErrorPage from 'server/server-error';
 import {createStore, applyMiddleware, compose} from 'redux';
 import { browserHistory } from 'react-router';
 import useScroll from 'react-router-scroll';
@@ -27,7 +26,6 @@ import {component as NotFound} from 'app/components/pages/NotFound';
 import extractMeta from 'app/utils/ExtractMeta';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import Translator from 'app/Translator';
-import Tarantool from 'db/tarantool';
 import {notificationsArrayToMap} from 'app/utils/Notifications';
 import {routeRegex} from "app/ResolveRoute";
 import {contentStats} from 'app/utils/StateFunctions'
@@ -60,16 +58,16 @@ const onRouterError = (error) => {
     console.error('onRouterError', error);
 };
 
-async function universalRender({ location, initial_state, offchain }) {
+async function universalRender({ location, initial_state, offchain, ErrorPage, tarantool }) {
     let error, redirect, renderProps;
     try {
         [error, redirect, renderProps] = await runRouter(location, RootRoute);
     } catch (e) {
-        console.error('Router error:', e.toString(), location);
+        console.error('Routing error:', e.toString(), location);
         return {
-            title: 'Server error - Steemit',
+            title: 'Routing error - Steemit',
             statusCode: 500,
-            body: renderToString(<ErrorPage />)
+            body: renderToString(ErrorPage ? <ErrorPage /> : <span>Routing error</span>)
         };
     }
     if (error || !renderProps) {
@@ -191,10 +189,10 @@ async function universalRender({ location, initial_state, offchain }) {
         server_store.dispatch({type: '@@router/LOCATION_CHANGE', payload: {pathname: location}});
         if (offchain.account) {
             try {
-                const notifications = await Tarantool.instance().select('notifications', 0, 1, 0, 'eq', offchain.account);
+                const notifications = await tarantool.select('notifications', 0, 1, 0, 'eq', offchain.account);
                 server_store.dispatch({type: 'UPDATE_NOTIFICOUNTERS', payload: notificationsArrayToMap(notifications)});
             } catch(e) {
-                console.log('universalRender Tarantool error :', e.message);
+                console.warn('WARNING! cannot retrieve notifications from tarantool in universalRender:', e.message);
             }
         }
     } catch (e) {

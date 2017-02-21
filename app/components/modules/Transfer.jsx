@@ -175,6 +175,8 @@ class TransferForm extends Component {
                                 placeholder="Send to account"
                                 onChange={this.onChangeTo}
                                 autoComplete="off"
+                                autoCorrect="off"
+                                autoCapitalize="off"
                                 disabled={loading}
                                 {...to.props}
                             />
@@ -190,7 +192,7 @@ class TransferForm extends Component {
                     <div className="column small-2" style={{paddingTop: 5}}>Amount</div>
                     <div className="column small-10">
                         <div className="input-group" style={{marginBottom: 5}}>
-                            <input type="text" placeholder="Amount" {...amount.props} ref="amount" autoComplete="off" disabled={loading} />
+                            <input type="text" placeholder="Amount" {...amount.props} ref="amount" autoComplete="off" autoCorrect="off" autoCapitalize="off" disabled={loading} />
                             {asset && <span className="input-group-label" style={{paddingLeft: 0, paddingRight: 0}}>
                                 <select {...asset.props} placeholder="Asset" disabled={loading} style={{minWidth: "5rem", height: "inherit", backgroundColor: "transparent", border: "none"}}>
                                     <option value="STEEM">STEEM</option>
@@ -214,7 +216,7 @@ class TransferForm extends Component {
                     <div className="column small-10">
                         <small>This Memo is {isMemoPrivate ? 'Private' : 'Public'}</small>
                         <input type="text" placeholder="Memo" {...memo.props}
-                            ref="memo" autoComplete="on" disabled={loading} />
+                            ref="memo" autoComplete="on" autoCorrect="off" autoCapitalize="off" disabled={loading} />
                         <div className="error">{memo.touched && memo.error && memo.error}&nbsp;</div>
                     </div>
                 </div>}

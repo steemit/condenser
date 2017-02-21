@@ -41,6 +41,7 @@ function template(op) {
 
     // sample json
     let obj = op.toObject({}, {use_default: true, annotate: false})
-    console.log(" ", op.operation_name, "\t", JSON.stringify(obj), "\n")
+    // don't spam console with raw test data
+    //console.log(" ", op.operation_name, "\t", JSON.stringify(obj), "\n")
 
 }

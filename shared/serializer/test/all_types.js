@@ -108,8 +108,13 @@ describe("all types", ()=> {
     })
 
     // keep last
-    it("visual check", ()=> {
-        console.log(toObject(fromObject(allTypes)))
-    })
+    // FIXME no no no no no no no no no no
+    // the whole point of automated tests is because they are automated.
+    // any time a human has to check something with their eyes, whatever
+    // checks they are performing should be documented and implemented in code.
+    // AUTOMATE.
+    //it("visual check", ()=> {
+    //    console.log(toObject(fromObject(allTypes)))
+    //})
 
 })

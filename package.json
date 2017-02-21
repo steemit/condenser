@@ -134,7 +134,7 @@
     "webpack-isomorphic-tools": "^2.2.31",
     "websocket": "^1.0.22",
     "whatwg-fetch": "^0.11.1",
-    "xmldom": "^0.1.22"
+    "xmldom": "0.1.22"
   },
   "devDependencies": {
     "babel-plugin-react-transform": "^2.0.2",

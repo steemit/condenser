@@ -19,12 +19,14 @@ import { translate } from '../Translator.js';
 import {WIKI_URL, LANDING_PAGE_URL, ABOUT_PAGE_URL, WHITEPAPER_URL, SEGMENT_ANALYTICS_KEY, TERMS_OF_SERVICE_URL, PRIVACY_POLICY_URL} from 'config/client_config';
 import MiniHeader from 'app/components/modules/MiniHeader';
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
+import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
 
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {open: null, showCallout: true, showBanner: true, expandCallout: false};
         this.toggleOffCanvasMenu = this.toggleOffCanvasMenu.bind(this);
+        this.showSignUp = this.props.showSignUp.bind(this);
         // this.shouldComponentUpdate = shouldComponentUpdate(this, 'App')
     }
 
@@ -216,13 +218,18 @@ class App extends React.Component {
                             <h2>{translate("welcome_to_the_blockchain")}</h2>
                             <h4>{translate("your_voice_is_worth_something")}</h4>
                             <br />
-                            <a className="button" href="/enter_email"> <b>{translate("sign_up")}</b> </a>
+                            <a className="button" href="/create_account" onClick={this.showSignUp}> <b>{translate("sign_up")}</b> </a>
                             &nbsp; &nbsp; &nbsp;
-                            <a className="button hollow uppercase" href="https://steem.io" target="_blank"> <b>{translate("learn_more")}</b> </a>
+                            <a className="button hollow uppercase" href="/welcome" target="_blank"> <b>{translate("learn_more")}</b> </a>
                             <br />
                             <br />
                             <div className="tag3">
-                                <b>{translate("get_sp_when_sign_up", {signupBonus: signup_bonus})}</b>
+                              <b>
+                                {translate("get_sp_when_sign_up1")}
+                                <LocalizedCurrency amount={signup_bonus} />
+                                {translate("get_sp_when_sign_up2")}
+                              </b>
+                              
                             </div>
                         </div>
                     </div>
@@ -322,6 +329,7 @@ App.propTypes = {
     signup_bonus: React.PropTypes.string,
     loginUser: React.PropTypes.func.isRequired,
     depositSteem: React.PropTypes.func.isRequired,
+    showSignUp: React.PropTypes.func.isRequired
 };
 
 export default connect(
@@ -341,6 +349,10 @@ export default connect(
             dispatch(user.actions.usernamePasswordLogin()),
         depositSteem: () => {
             dispatch(g.actions.showDialog({name: 'blocktrades_deposit', params: {outputCoinType: 'GESTS'}}));
+        },
+        showSignUp: e => {
+            if (e) e.preventDefault();
+            dispatch(user.actions.showSignUp())
         },
     })
 )(App);

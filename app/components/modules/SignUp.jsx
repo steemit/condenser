@@ -5,7 +5,7 @@ import AddToWaitingList from 'app/components/modules/AddToWaitingList';
 import { translate } from 'app/Translator';
 import { formatCoins } from 'app/utils/FormatCoins';
 import { PRIVACY_POLICY_URL, TERMS_OF_SERVICE_URL } from 'config/client_config';
-import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
+import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
 
 class SignUp extends React.Component {
     constructor() {
@@ -39,7 +39,9 @@ class SignUp extends React.Component {
                 <div className="column">
                     <h3>{translate("sign_up")}</h3>
                     <p>
-                        {translate("we_require_social_account", {signup_bonus: localizedCurrency(this.props.signup_bonus)})}
+                        {translate("we_require_social_account1")}
+                        <LocalizedCurrency amount={this.props.signup_bonus} />
+                        {translate("we_require_social_account2")}
                         <br />
                         {translate("personal_info_will_be_private")}
                         {' '}

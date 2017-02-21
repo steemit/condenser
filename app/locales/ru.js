@@ -402,7 +402,7 @@ const ru = {
 	transfers_are_temporary_disabled: 'Переводы временно отключены',
 	history: 'История',
 	// CurationRewards.jsx
-	curation_rewards_last_24_hours: 'Кураторские награды за полседние 24 часа',
+	curation_rewards_last_24_hours: 'Кураторские награды за последние 24 часа',
 	daily_average_curation_rewards: 'Среднесуточные кураторские награды',
 	estimated_curation_rewards_last_week: "Оценочные кураторские награды за последнюю неделю",
 	curation_rewards_last_week: "Кураторские награды за последнюю неделю",

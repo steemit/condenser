@@ -174,6 +174,9 @@ class PostsList extends React.Component {
             ignore_result, account} = this.props;
         const {thumbSize, showPost, nsfwPref} = this.state
         const postsInfo = [];
+        // ignore special tags
+        const ignoreTags = ['test', 'bm-open']
+        let isIgonedBySpecialTags = []
         posts.forEach(item => {
             const cont = content.get(item);
             if(!cont) {
@@ -182,9 +185,12 @@ class PostsList extends React.Component {
             }
             const ignore = ignore_result && ignore_result.has(cont.get('author'))
             // if(ignore) console.log('ignored post by', cont.get('author'), '\t', item)
+            const json_metadata = JSON.parse(cont.get('json_metadata') || '{}')
+            if (json_metadata.tags)
+                isIgonedBySpecialTags = json_metadata.tags.filter(function(n) { return ignoreTags.indexOf(n) >= 0 })
 
             const {hide, netVoteSign, authorRepLog10} = cont.get('stats').toJS()
-            if(!(ignore || hide) || showSpam) // rephide
+            if(!(ignore || hide || isIgonedBySpecialTags.length) || showSpam) // rephide
                 postsInfo.push({item, ignore, netVoteSign, authorRepLog10})
         });
         const renderSummary = items => items.map(item => <li key={item.item}>

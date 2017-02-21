@@ -695,7 +695,7 @@ const ru = {
 
     draft_saved: 'Сохранено в черновик',
     content_preferences: 'Настройки контента',
-    not_safe_for_work: 'Взрослый контент',
+    not_safe_for_work: 'Контент для взрослых',
     always_hide: 'Всегда скрывать',
     always_warn: 'Всегда предупреждать',
     always_show: 'Всегда показывать',

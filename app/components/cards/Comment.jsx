@@ -262,6 +262,7 @@ class CommentImpl extends React.Component {
 
         const showDeleteOption = username === author && !hasReplies && netVoteSign <= 0
         const showEditOption = username === author
+        const showReplyOption = comment.depth < 6
         const readonly = comment.mode == 'archived' || $STM_Config.read_only_mode
 
         let replies = null;
@@ -275,7 +276,7 @@ class CommentImpl extends React.Component {
                 <Voting post={post} />
                 {!readonly &&
                     <span className="Comment__footer__controls">
-                        {depth < 6 && <a onClick={onShowReply}>{translate('reply')}</a>}
+                        {showReplyOption && <a onClick={onShowReply}>{translate('reply')}</a>}
                         {' '}{showEditOption   && <a onClick={onShowEdit}>{translate('edit')}</a>}
                         {' '}{showDeleteOption && <a onClick={onDeletePost}>{translate('delete')}</a>}
                     </span>}

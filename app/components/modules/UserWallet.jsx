@@ -48,7 +48,7 @@ class UserWallet extends React.Component {
 
         if (!account) return null;
         let vesting_steemf = vestingSteem(account.toJS(), gprops);
-        let vesting_steem = vesting_steemf.toFixed(2);
+        let vesting_steem = vesting_steemf.toFixed(3);
 
         let isMyAccount = current_user && current_user.get('username') === account.get('name');
 
@@ -102,7 +102,7 @@ class UserWallet extends React.Component {
             return (
                 <div key={c.get(0)}>
                     <Tooltip t={translate('conversion_complete_tip') + ": " + new Date(finishTime).toLocaleString()}>
-                        <span>(+{translate('in_conversion', {amount: numberWithCommas(localCurrencySymbol + amount.toFixed(2))})})</span>
+                        <span>(+{translate('in_conversion', {amount: numberWithCommas(localCurrencySymbol + amount.toFixed(3))})})</span>
                     </Tooltip>
                 </div>
             );
@@ -132,11 +132,11 @@ class UserWallet extends React.Component {
         const total_steem = vesting_steemf + balance_steem + saving_balance_steem + savings_pending + steemOrders;
         // let total_value = '$' + numberWithCommas(
         //     ((total_steem * price_per_steem) + total_sbd
-        // ).toFixed(2))
+        // ).toFixed(3))
         const total_value = (((vesting_steemf + balance_steem) * price_per_steem) + sbd_balance) || 0
         // format spacing on estimated value based on account state
         // const estimate_output = <p>{localizedCurrency(total_value)}</p>;
-        const estimate_output = <p>{localCurrencySymbol + ' ' + translateNumber(total_value.toFixed(2)) }</p>;
+        const estimate_output = <p>{localCurrencySymbol + ' ' + translateNumber(total_value.toFixed(3)) }</p>;
         // if (isMyAccount) {
         //     estimate_output = <p>{localizedCurrency(total_value)}&nbsp; &nbsp; &nbsp;</p>;
         // }
@@ -190,17 +190,17 @@ class UserWallet extends React.Component {
             </Reveal>
         </div>
 
-        const steem_balance_str = translateNumber(balance_steem.toFixed(2)) + ' ' + LIQUID_TOKEN_UPPERCASE // formatDecimal(balance_steem, 3)
-        const steem_orders_balance_str = translateNumber(steemOrders.toFixed(2)) + ' ' + LIQUID_TOKEN_UPPERCASE
+        const steem_balance_str = translateNumber(balance_steem.toFixed(3)) + ' ' + LIQUID_TOKEN_UPPERCASE // formatDecimal(balance_steem, 3)
+        const steem_orders_balance_str = translateNumber(steemOrders.toFixed(3)) + ' ' + LIQUID_TOKEN_UPPERCASE
         const power_balance_str = translateNumber(vesting_steem) + ' ' + LIQUID_TOKEN_UPPERCASE // formatDecimal(vesting_steem, 3)
-        const savings_balance_str = translateNumber(saving_balance_steem.toFixed(2)) + ' ' + LIQUID_TOKEN_UPPERCASE
+        const savings_balance_str = translateNumber(saving_balance_steem.toFixed(3)) + ' ' + LIQUID_TOKEN_UPPERCASE
         
-        // const sbd_balance_str = translateNumber('$' + sbd_balance.toFixed(2)) // formatDecimal(account.sbd_balance, 3)
-        const sbd_balance_str = translateNumber(sbd_balance.toFixed(2)) + ' ' + DEBT_TICKER // formatDecimal(account.sbd_balance, 3)
-        // const sbd_orders_balance_str = translateNumber('$' + sbdOrders.toFixed(2))
-        const sbd_orders_balance_str = translateNumber(sbdOrders.toFixed(2)) + ' ' + DEBT_TICKER // formatDecimal(account.sbd_balance, 3)
-        // const savings_sbd_balance_str = translateNumber('$' + sbd_balance_savings.toFixed(2))
-        const savings_sbd_balance_str = translateNumber(sbd_balance_savings.toFixed(2)) + ' ' + DEBT_TICKER // formatDecimal(account.sbd_balance, 3)
+        // const sbd_balance_str = translateNumber('$' + sbd_balance.toFixed(3)) // formatDecimal(account.sbd_balance, 3)
+        const sbd_balance_str = translateNumber(sbd_balance.toFixed(3)) + ' ' + DEBT_TICKER // formatDecimal(account.sbd_balance, 3)
+        // const sbd_orders_balance_str = translateNumber('$' + sbdOrders.toFixed(3))
+        const sbd_orders_balance_str = translateNumber(sbdOrders.toFixed(3)) + ' ' + DEBT_TICKER // formatDecimal(account.sbd_balance, 3)
+        // const savings_sbd_balance_str = translateNumber('$' + sbd_balance_savings.toFixed(3))
+        const savings_sbd_balance_str = translateNumber(sbd_balance_savings.toFixed(3)) + ' ' + DEBT_TICKER // formatDecimal(account.sbd_balance, 3)
 
         const savings_menu = [
             { value: translate('withdraw_steem'), link: '#', onClick: showTransfer.bind( this, LIQUID_TICKER, 'Savings Withdraw' ) },

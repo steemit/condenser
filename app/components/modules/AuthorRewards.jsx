@@ -118,9 +118,9 @@ class AuthorRewards extends React.Component {
                 <div className="column small-12 medium-4">
                     {numberWithCommas(vestsToSp(this.props.state, rewardsWeekVests + " " + VEST_TICKER)) + " " + VESTING_TOKENS}
                     <br />
-                    {rewardsWeekSteem.toFixed(2) + " " + LIQUID_TICKER}
+                    {rewardsWeekSteem.toFixed(3) + " " + LIQUID_TICKER}
                     <br />
-                    {rewardsWeekSBD.toFixed(2) + " " + DEBT_TOKEN_SHORT}
+                    {rewardsWeekSBD.toFixed(3) + " " + DEBT_TOKEN_SHORT}
                 </div>
             </div>
 
@@ -132,9 +132,9 @@ class AuthorRewards extends React.Component {
                 <div className="column small-12 medium-4">
                     {numberWithCommas(vestsToSp(this.props.state, rewards24Vests + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
                     <br />
-                    {rewards24Steem.toFixed(2) + " " + LIQUID_TICKER}
+                    {rewards24Steem.toFixed(3) + " " + LIQUID_TICKER}
                     <br />
-                    {rewards24SBD.toFixed(2) + " " + DEBT_TOKEN_SHORT}
+                    {rewards24SBD.toFixed(3) + " " + DEBT_TOKEN_SHORT}
                 </div>
             </div>
 
@@ -145,9 +145,9 @@ class AuthorRewards extends React.Component {
                 <div className="column small-12 medium-4">
                     {numberWithCommas(vestsToSp(this.props.state, averageCurationVests + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
                     <br />
-                    {averageCurationSteem.toFixed(2) + " " + LIQUID_TICKER}
+                    {averageCurationSteem.toFixed(3) + " " + LIQUID_TICKER}
                     <br />
-                    {averageCurationSBD.toFixed(2) + " " + DEBT_TOKEN_SHORT}
+                    {averageCurationSBD.toFixed(3) + " " + DEBT_TOKEN_SHORT}
                 </div>
             </div>
             <div className="UserWallet__balance UserReward__row row">
@@ -157,9 +157,9 @@ class AuthorRewards extends React.Component {
                 <div className="column small-12 medium-4">
                     {numberWithCommas(vestsToSp(this.props.state, (hasFullWeek ? rewardsWeekVests : averageCurationVests * 7) + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
                     <br />
-                    {(hasFullWeek ? rewardsWeekSteem : averageCurationSteem * 7).toFixed(2) + " " + LIQUID_TICKER}
+                    {(hasFullWeek ? rewardsWeekSteem : averageCurationSteem * 7).toFixed(3) + " " + LIQUID_TICKER}
                     <br />
-                    {(hasFullWeek ? rewardsWeekSBD : averageCurationSBD * 7).toFixed(2) + " " + DEBT_TOKEN_SHORT}
+                    {(hasFullWeek ? rewardsWeekSBD : averageCurationSBD * 7).toFixed(3) + " " + DEBT_TOKEN_SHORT}
                 </div>
             </div>
             */}

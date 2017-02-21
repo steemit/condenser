@@ -298,7 +298,7 @@ class Market extends React.Component {
                             <li><b>{translate('ask')}</b> {CURRENCY_SIGN}{ticker.lowest_ask.toFixed(6)}</li>
                             {ticker.highest_bid > 0 &&
                                 <li><b>{translate('spread')}</b> {(200 * (ticker.lowest_ask - ticker.highest_bid) / (ticker.highest_bid + ticker.lowest_ask)).toFixed(3)}%</li>}
-                            {/*<li><b>Feed price</b> ${ticker.feed_price.toFixed(2)}</li>*/}
+                            {/*<li><b>Feed price</b> ${ticker.feed_price.toFixed(3)}</li>*/}
                         </ul>
                     </div>
                 </div>

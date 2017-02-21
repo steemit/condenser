@@ -83,9 +83,9 @@ export function validateCategory(category, required = true) {
         cats.find(c => c.indexOf(',') >= 0)     ? translate('use_spaces_to_separate_tags') :
         cats.find(c => /[A-ZА-ЯЁҐЄІЇ]/.test(c))      ? translate('use_only_lowercase_letters') :
         // check for russian or english symbols
-        cats.find(c => !/^[a-zа-яё0-9-ґєії]+$/.test(c)) ? translate('use_only_allowed_characters') :
-        cats.find(c => !/^[a-zа-яё-ґєії]/.test(c)) ? translate('must_start_with_a_letter') :
-        cats.find(c => !/[a-zа-яё0-9ґєії]$/.test(c)) ? translate('must_end_with_a_letter_or_number') :
+        cats.find(c => '18+' !== c && !/^[a-zа-яё0-9-ґєії]+$/.test(c)) ? translate('use_only_allowed_characters') :
+        cats.find(c => '18+' !== c && !/^[a-zа-яё-ґєії]/.test(c)) ? translate('must_start_with_a_letter') :
+        cats.find(c => '18+' !== c && !/[a-zа-яё0-9ґєії]$/.test(c)) ? translate('must_end_with_a_letter_or_number') :
         null
     )
 }

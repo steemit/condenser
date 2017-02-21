@@ -10,7 +10,6 @@ import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMe
 import SvgImage from 'app/components/elements/SvgImage';
 import {Set} from 'immutable'
 import { translate } from 'app/Translator';
-import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 
 class Post extends React.Component {
@@ -173,7 +172,7 @@ class Post extends React.Component {
                         <div className="Post__promo">
                             {translate('authors_get_paid_when_people_like_you_upvote_their_post')}.
                             <br /> {// remove '$' from signup_bonus before parsing it into local currency
-                                    translate('if_you_enjoyed_what_you_read_earn_amount', {amount: '$'+localizedCurrency(signup_bonus.substring(1))})}
+                                    translate('if_you_enjoyed_what_you_read_earn_amount')}
                             <br /> {translate('when_you') + ' '}
                             <a onClick={showSignUp}>{translate('when_you_link_text')}</a>
                             {' ' + translate('and_vote_for_it') + '.'}

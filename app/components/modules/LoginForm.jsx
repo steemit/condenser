@@ -75,8 +75,13 @@ class LoginForm extends Component {
 
     SignUp() {
         const onType = document.getElementsByClassName("OpAction")[0].textContent;
-        serverApiRecordEvent('Free Money SignUp', onType);
+        serverApiRecordEvent('FreeMoneySignUp', onType);
         window.location.href = "/enter_email";
+    }
+
+    SignIn() {
+        const onType = document.getElementsByClassName("OpAction")[0].textContent;
+        serverApiRecordEvent('SignIn', onType);
     }
 
     saveLoginToggle = () => {
@@ -129,7 +134,7 @@ class LoginForm extends Component {
         let postType = "";
         if (opType === "vote") {
             postType = 'Login to Vote'
-        } else {
+        } else if (loginBroadcastOperation) {
             // check for post or comment in operation
             postType = loginBroadcastOperation.getIn(['operation', 'title']) ? 'Login to Post' : 'Login to Comment';
         }
@@ -198,7 +203,7 @@ class LoginForm extends Component {
                         <input id="saveLogin" type="checkbox" ref="pw" {...saveLogin.props} onChange={this.saveLoginToggle} disabled={submitting} /></label>
                 </div>}
                 <div>
-                    <button type="submit" disabled={submitting || disabled} className="button">
+                    <button type="submit" disabled={submitting || disabled} className="button" onClick={this.SignIn}>
                         {submitLabel}
                     </button>
                     {this.props.onCancel && <button type="button float-right" disabled={submitting} className="button hollow" onClick={onCancel}>

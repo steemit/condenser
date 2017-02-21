@@ -40,12 +40,10 @@ export default class PageViewsCounter extends React.Component {
 
     render() {
         const views = this.state.views;
-        let viewsWithCommas = "";
-        if (views) viewsWithCommas = views.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         if (this.props.hidden || !views) return null;
         const suffix = this.props.sinceDate ? ' since ' + this.props.sinceDate : '';
         return <span className="PageViewsCounter" title={pluralize('Views', views, true) + suffix}>
-            <Icon name="eye" /> {viewsWithCommas}
+            <Icon name="eye" /> {views.toLocaleString()}
         </span>;
     }
 }

@@ -186,6 +186,7 @@ class PostsList extends React.Component {
             const ignore = ignore_result && ignore_result.has(cont.get('author'))
             // if(ignore) console.log('ignored post by', cont.get('author'), '\t', item)
             const json_metadata = JSON.parse(cont.get('json_metadata') || '{}')
+            // TODO: check tags is string or null
             if (json_metadata.tags)
                 isIgonedBySpecialTags = json_metadata.tags.filter(function(n) { return ignoreTags.indexOf(n) >= 0 })
 

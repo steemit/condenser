@@ -102,7 +102,7 @@ class UserWallet extends React.Component {
             return (
                 <div key={c.get(0)}>
                     <Tooltip t={translate('conversion_complete_tip') + ": " + new Date(finishTime).toLocaleString()}>
-                        <span>(+{translate('in_conversion', {amount: numberWithCommas(localCurrencySymbol + amount.toFixed(3))})})</span>
+                        <span>(+{translate('in_conversion', {amount: translateNumber(amount.toFixed(3)) + ' ' + DEBT_TICKER})})</span>
                     </Tooltip>
                 </div>
             );

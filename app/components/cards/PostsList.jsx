@@ -295,7 +295,7 @@ export default connect(
             // example of ignored tags
             const ignored_tags = ['bm-open'] // ('bm-open' is ignored on purpose, do not remove)
             const postMetadata = JSON.parse(content.get('json_metadata') || '{}')
-            const postTags = postMetadata.tags || []
+            const postTags = Array.isArray(postMetadata.tags) ? postMetadata.tags : typeof postMetadata.tags === 'string' ? [postMetadata.tags] : []
                   postTags.push(content.get('category'))
             const post_has_ignored_tags = Boolean(intersection(postTags, ignored_tags).length)
 

@@ -256,6 +256,7 @@ const ru = {
 	invalid_amount: 'Неверное количество',
 	insufficent_balance: 'Недостаточный баланс',
 	in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN: 'В 3,5 дня перевести {amount} ' + DEBT_TOKEN + ' в ' + LIQUID_TOKEN,
+	in_conversion: "{amount} на конвертации",
 	order_placed: 'Заказ размещен', // ex.: "Order placed: Sell {someamount_to_sell} for atleast {min_to_receive}"
 	follow: 'Подписаться',
 	unfollow: 'Отписаться',

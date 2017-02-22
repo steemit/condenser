@@ -293,7 +293,7 @@ export default connect(
             }
 
             // example of ignored tags
-            const ignored_tags = ['bm-open'] // ('bm-open' is ignored on purpose, do not remove)
+            const ignored_tags = ['bm-open', 'bm-ceh23', 'bm-tasks'] // ('bm-open' is ignored on purpose, do not remove)
             const postMetadata = JSON.parse(content.get('json_metadata') || '{}')
             const postTags = Array.isArray(postMetadata.tags) ? postMetadata.tags : typeof postMetadata.tags === 'string' ? [postMetadata.tags] : []
                   postTags.push(content.get('category'))

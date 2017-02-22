@@ -103,12 +103,11 @@ function generateBidAsk(bidsArray, asksArray) {
 
     let bids = aggregateOrders(bidsArray);
     // Insert a 0 entry to make sure the chart is centered properly
-    bids.unshift([0, bids[0][1]]);
+    bids.length && bids.unshift([0, bids[0][1]]);
 
     let asks = aggregateOrders(asksArray);
     // Insert a final entry to make sure the chart is centered properly
-    // TODO BUG FIX
-    asks.push([asks[asks.length - 1][0] * 4, asks[asks.length - 1][1]]);
+    asks.length && asks.push([asks[asks.length - 1][0] * 4, asks[asks.length - 1][1]]);
 
     return {bids, asks};
 }
@@ -117,11 +116,14 @@ function getMinMax(bids, asks) {
     const highestBid = bids.length ? bids[bids.length-1][0] : 0;
     const lowestAsk = asks.length ? asks[0][0] : 1;
 
+    const firstBid = bids.length ? bids[0][0] : 0;
+    const lastAsk  = asks.length ? asks[asks.length-1][0] : 0;
+
     const middle = (highestBid + lowestAsk) / 2;
 
     return {
-        min: Math.max(middle * 0.65, bids[0][0]),
-        max: Math.min(middle * 1.35, asks[asks.length-1][0])
+        min: Math.max(middle * 0.65, firstBid),
+        max: Math.min(middle * 1.35, lastAsk)
     }
 }
 
@@ -166,8 +168,8 @@ function generateDepthChart(bidsArray, asksArray) {
                 align: "left",
                 formatter: function () {
                     let value = this.value / precision;
-                    return '$' + (value > 10e6 ? (value / 10e6).toFixed(3) + "M" :
-                        value > 10000 ? (value / 10e3).toFixed(3) + "k" :
+                    return '$' + (value > 10e6 ? (value / 10e6).toFixed(2) + "M" :
+                        value > 10000 ? (value / 10e3).toFixed(2) + "k" :
                         value);
                 }
             },

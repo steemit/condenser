@@ -7,11 +7,11 @@ import {connect} from 'react-redux';
 import {sortComments} from 'app/components/cards/Comment';
 // import { Link } from 'react-router';
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
-import SvgImage from 'app/components/elements/SvgImage';
 import {Set} from 'immutable'
 import { translate } from 'app/Translator';
 import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 
 class Post extends React.Component {
 
@@ -27,10 +27,11 @@ class Post extends React.Component {
         super();
         this.state = {
             showNegativeComments: false
-        }
+        };
         this.showSignUp = () => {
+            serverApiRecordEvent('SignUp', 'Post Promo');
             window.location = '/enter_email';
-        }
+        };
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Post')
     }
 
@@ -46,7 +47,7 @@ class Post extends React.Component {
             showNegativeComments: !this.state.showNegativeComments
         });
         e.preventDefault();
-    }
+    };
 
     onHideComment = () => {
         this.setState({commentHidden: true})
@@ -165,9 +166,8 @@ class Post extends React.Component {
                             {translate('authors_get_paid_when_people_like_you_upvote_their_post')}.
                             <br /> {// remove '$' from signup_bonus before parsing it into local currency
                                     translate('if_you_enjoyed_what_you_read_earn_amount', {amount: '$'+localizedCurrency(signup_bonus.substring(1))})}
-                            <br /> {translate('when_you') + ' '}
-                            <a onClick={showSignUp}>{translate('when_you_link_text')}</a>
-                            {' ' + translate('and_vote_for_it') + '.'}
+                            <br />
+                            <button type="button" className="button sign-up" onClick={showSignUp}>Sign up now to receive <span className="free-money">FREE MONEY!</span></button>
                         </div>
                     </div>
                 </div>}

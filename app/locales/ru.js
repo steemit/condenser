@@ -285,9 +285,9 @@ const ru = {
 	open_orders: 'Открытые сделки',
 	sell_amount_for_atleast: 'Продать {amount_to_sell} за {min_to_receive} по цене  ({effectivePrice})',
 	buy_atleast_amount_for: 'Купить {min_to_receive} за {amount_to_sell} ({effectivePrice})',
-	price_warning_above: 'This price is well above the current market price of {marketPrice}, are you sure?', //FIXME
-	price_warning_below: 'This price is well below the current market price of {marketPrice}, are you sure?', //FIXME
-	order_cancel_confirm: 'Cancel order {order_id} from {user}?', //FIXME
+	price_warning_above: 'Эта цена значительно выше текущей рыночной цены {marketPrice}, Вы уверены?', //FIXME
+	price_warning_below: 'Эта цена значительно ниже текущей рыночной цены {marketPrice}, Вы уверены?', //FIXME
+	order_cancel_confirm: 'Отменить ордер {order_id} от {user}?', //FIXME
 	order_cancelled: 'Order {order_id} cancelled.', //FIXME
 	higher: 'Дороже', // context is about prices
 	lower: 'Дешевле', // context is about prices
@@ -536,7 +536,7 @@ const ru = {
 	savings: 'Сейф',
 	savings_withdraw: 'Вывести со счета',
 	withdraw_steem: 'Вывести ' + LIQUID_TOKEN + ' на текущий баланс',
-	withdraw_steem_dollars: 'Вывести ' + VESTING_TOKEN2 + ' на текущий баланс',
+	withdraw_steem_dollars: 'Вывести ' + DEBT_TOKEN_SHORT + ' на текущий баланс',
 	transfer_to_savings: 'Отправить на счет',
 	buy_LIQUID_TOKEN_or_VESTING_TOKEN: 'Купить ' + LIQUID_TOKEN + ' или ' + VESTING_TOKEN2,
 	// TODO
@@ -728,6 +728,7 @@ const ru = {
     have_only_one_dash_in_a_row: ' может иметь только одно тире.',
     end_with_a_letter_or_digit: 'может заканчиваться на букву или цифру.',
     сancel_transfer_from_savings: 'Отмена перевода из сейфа (id запроса {request})',
+    conversion_complete_tip: "Завершается",
 }
 
 export { ru }

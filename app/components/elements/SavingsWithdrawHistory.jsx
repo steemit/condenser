@@ -57,7 +57,7 @@ class SavingsWithdrawHistory extends React.Component {
         let idx = 0
         const rows = savings_withdraws.map(withdraw => {
             const {complete, amount, to, from, memo, request_id} = withdraw.toJS()
-            const dest = to === from ? `to ${to}` : `from ${from} to ${to}`
+            const dest = to === from ? translate('to') + ` ${to}` : translate('from') + ` ${from} ` + translate('to') + ` ${to}`
             const loading = this.state['loading_' + request_id]
             return <tr key={idx++}>
                 <td><TimeAgoWrapper date={complete} /></td>

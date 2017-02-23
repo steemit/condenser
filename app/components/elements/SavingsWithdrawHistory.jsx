@@ -74,7 +74,7 @@ class SavingsWithdrawHistory extends React.Component {
         return <div className="SavingsWithdrawHistory">
             <div className="row">
                 <div className="column small-12">
-                    <h4>{translate('pending_savings_withdrawals')}</h4>
+                    <h4>{translate('pending_savings_withdrawals').toUpperCase()}</h4>
                     <table>
                         <tbody>
                             {rows}

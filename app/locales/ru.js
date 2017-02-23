@@ -687,7 +687,7 @@ const ru = {
     // SavingsWithdrawHistory.jsx
     withdraw: 'Выплатить',
     cancel_this_withdraw_request: 'Отменить запрос вывода средств?',
-    pending_savings_withdrawals: 'В ОЖИДАНИИ СБЕРЕГАТЕЛЬНЫХ ВЫПЛАТ',
+    pending_savings_withdrawals: 'Выплаты из сейфа',
     // StateEditor.jsx
     enter_some_text: 'Введите текст...',
     // Voting.jsx

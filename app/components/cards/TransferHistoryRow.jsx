@@ -86,7 +86,7 @@ class TransferHistoryRow extends React.Component {
                 description_end += ` ${translate('to')} ${data.to}`;
             }
         } else if (type === 'cancel_transfer_from_savings') {
-            description_start += `Cancel transfer from savings (request ${data.request_id})`;
+            description_start += translate('сancel_transfer_from_savings', { request: data.request_id });
         } else if( type === 'withdraw_vesting' ) {
             // if( data.vesting_shares === '0.000000 VESTS' )
             //     description_start += "Stop power down";

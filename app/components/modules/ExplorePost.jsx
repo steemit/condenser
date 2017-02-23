@@ -18,6 +18,7 @@ class ExplorePost extends Component {
         this.onCopy = this.onCopy.bind(this);
         this.Steemd = this.Steemd.bind(this);
         this.Steemdb = this.Steemdb.bind(this);
+        this.Busy = this.Busy.bind(this);
         this.Phist = this.Phist.bind(this);
     }
 
@@ -27,6 +28,10 @@ class ExplorePost extends Component {
 
     Steemdb() {
         serverApiRecordEvent('Steemdb view', this.props.permlink);
+    }
+
+    Busy() {
+        serverApiRecordEvent('Busy view', this.props.permlink);
     }
 
     Phist() {
@@ -43,6 +48,7 @@ class ExplorePost extends Component {
         const link = this.props.permlink;
         const steemd = 'https://steemd.com' + link;
         const steemdb = 'https://steemdb.com' + link;
+        const busy = 'https://busy.org' + link;
         const steemit = 'https://steemit.com' + link;
         const phist = 'https://phist.steemdata.com/history?identifier=steemit.com' + link;
         let text = this.state.copied == true ? 'Copied!' : 'COPY';
@@ -60,6 +66,7 @@ class ExplorePost extends Component {
                 <ul>
                     <li><a href={steemd} onClick={this.Steemd} target="_blank">steemd.com <Icon name="extlink" /></a></li>
                     <li><a href={steemdb} onClick={this.Steemdb} target="_blank">steemdb.com <Icon name="extlink" /></a></li>
+                    <li><a href={busy} onClick={this.Busy} target="_blank">busy.org <Icon name="extlink" /></a></li>
                     <li><a href={phist} onClick={this.Phist} target="_blank">phist.steemdata.com <Icon name="extlink" /></a></li>
                 </ul>
             </span>

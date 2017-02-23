@@ -18,6 +18,14 @@
   margin: 0 auto;
   padding: 1rem 0;
   border-bottom: 1px solid $light-gray;
+  .sign-up {
+      background-color: #4078C0;
+      margin-top: 1rem;
+      text-transform: none;
+  }
+  .free-money {
+      font-weight: bold;
+  }
 }
 
 .Post_comments__content {

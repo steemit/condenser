@@ -7,8 +7,10 @@ export const routeRegex = {
     CategoryFilters: /^\/(hot|created|trending|active|promoted)\/?$/ig,
     PostNoCategory: /^\/(@[\w\.\d-]+)\/([\w\d-]+)/,
     Post: /^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)\/?($|\?)/,
-    UserJson: /^\/(@[\w\.\d-]+)(\/json)$/
-}
+    PostJson: /^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)(\.json)$/,
+    UserJson: /^\/(@[\w\.\d-]+)(\.json)$/,
+    UserNameJson: /^.*(?=(\.json))/,
+};
 
 export default function resolveRoute(path)
 {

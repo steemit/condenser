@@ -1,4 +1,5 @@
-// newrelic is not working with latest npm if(process.env.NEW_RELIC_APP_NAME) require('newrelic');
+// newrelic is not working with latest npm
+//if(config.has('newrelic')) require('newrelic');
 
 import path from 'path';
 import fs from 'fs';
@@ -17,15 +18,18 @@ import useNotificationsApi from './api/notifications';
 import useEnterAndConfirmEmailPages from './server_pages/enter_confirm_email';
 import useEnterAndConfirmMobilePages from './server_pages/enter_confirm_mobile';
 import useUserJson from './json/user_json';
+import usePostJson from './json/post_json';
 import isBot from 'koa-isbot';
 import session from '@steem/crypto-session';
 import csrf from 'koa-csrf';
 import flash from 'koa-flash';
 import minimist from 'minimist';
 import Grant from 'grant-koa';
-import config from '../config';
-import {routeRegex} from 'app/ResolveRoute';
+import config from 'config';
+import { routeRegex } from 'app/ResolveRoute';
 import secureRandom from 'secure-random';
+
+console.log('application server starting, please wait.');
 
 const grant = new Grant(config.grant);
 // import uploadImage from 'server/upload-image' //medium-editor
@@ -33,18 +37,31 @@ const grant = new Grant(config.grant);
 const app = new Koa();
 app.name = 'Steemit app';
 const env = process.env.NODE_ENV || 'development';
-const cacheOpts = {maxAge: 86400000, gzip: true};
+// cache of a thousand days
+const cacheOpts = { maxAge: 86400000, gzip: true };
 
-app.keys = [config.session_key];
-const crypto_key = config.server_session_secret;
-session(app, {maxAge: 1000 * 3600 * 24 * 60, crypto_key, key: config.session_cookie_key});
+app.keys = [config.get('session_key')];
+
+const crypto_key = config.get('server_session_secret');
+session(app, {
+    maxAge: 1000 * 3600 * 24 * 60,
+    crypto_key,
+    key: config.get('session_cookie_key')
+});
 csrf(app);
 
 app.use(mount(grant));
-app.use(flash({key: 'flash'}));
+app.use(flash({ key: 'flash' }));
+
+function convertEntriesToArrays(obj) {
+    return Object.keys(obj).reduce((result, key) => {
+        result[key] = obj[key].split(/\s+/);
+        return result;
+    }, {});
+}
 
 // some redirects
-app.use(function *(next) {
+app.use(function*(next) {
     // redirect to home page/feed if known account
     if (this.method === 'GET' && this.url === '/' && this.session.a) {
         this.status = 302;
@@ -52,9 +69,13 @@ app.use(function *(next) {
         return;
     }
     // normalize user name url from cased params
-    if (this.method === 'GET' && (routeRegex.UserProfile1.test(this.url) || routeRegex.PostNoCategory.test(this.url))) {
+    if (
+        this.method === 'GET' &&
+            (routeRegex.UserProfile1.test(this.url) ||
+                routeRegex.PostNoCategory.test(this.url))
+    ) {
         const p = this.originalUrl.toLowerCase();
-        if(p !== this.originalUrl) {
+        if (p !== this.originalUrl) {
             this.status = 301;
             this.redirect(p);
             return;
@@ -63,14 +84,14 @@ app.use(function *(next) {
     // normalize top category filtering from cased params
     if (this.method === 'GET' && routeRegex.CategoryFilters.test(this.url)) {
         const p = this.originalUrl.toLowerCase();
-        if(p !== this.originalUrl) {
+        if (p !== this.originalUrl) {
             this.status = 301;
             this.redirect(p);
             return;
         }
     }
     // start registration process if user get to create_account page and has no id in session yet
-    if(this.url === '/create_account' && !this.session.user) {
+    if (this.url === '/create_account' && !this.session.user) {
         this.status = 302;
         this.redirect('/enter_email');
         return;
@@ -92,11 +113,15 @@ app.use(function *(next) {
     }
 });
 
+// load production middleware
 if (env === 'production') {
-    // load production middleware
     app.use(require('koa-conditional-get')());
     app.use(require('koa-etag')());
     app.use(require('koa-compressor')());
+}
+
+// Logging
+if (env === 'production') {
     app.use(prod_logger());
 } else {
     app.use(koa_logger());
@@ -104,25 +129,42 @@ if (env === 'production') {
 
 app.use(helmet());
 
-app.use(mount('/static', staticCache(path.join(__dirname, '../app/assets/static'), cacheOpts)));
+app.use(
+    mount(
+        '/static',
+        staticCache(path.join(__dirname, '../app/assets/static'), cacheOpts)
+    )
+);
 
-app.use(mount('/robots.txt', function* () {
-    this.set('Cache-Control', 'public, max-age=86400000');
-    this.type = 'text/plain';
-    this.body = "User-agent: *\nAllow: /";
-}));
+app.use(
+    mount('/robots.txt', function*() {
+        this.set('Cache-Control', 'public, max-age=86400000');
+        this.type = 'text/plain';
+        this.body = 'User-agent: *\nAllow: /';
+    })
+);
 
-app.use(mount('/service-worker.js', function* () {
-    this.set('Cache-Control', 'public, max-age=7200000');
-    this.type = 'application/javascript';
-    const file_content = fs.readFileSync(path.join(__dirname, './service-worker.js')).toString();
-    this.body = file_content.replace(/\{DEFAULT_URL\}/i, 'https://' + this.request.header.host); // TODO: use APP_URL from client_config.js
-}));
+app.use(
+    mount('/service-worker.js', function*() {
+        this.set('Cache-Control', 'public, max-age=7200000');
+        this.type = 'application/javascript';
+        const file_content = fs
+            .readFileSync(path.join(__dirname, './service-worker.js'))
+            .toString();
+        // TODO: use APP_URL from client_config.js
+        // actually use a config value for it
+        this.body = file_content.replace(
+            /\{DEFAULT_URL\}/i,
+            'https://' + this.request.header.host
+        );
+    })
+);
 
 // set user's uid - used to identify users in logs and some other places
-app.use(function* (next) {
+// FIXME SECURITY PRIVACY cycle this uid after a period of time
+app.use(function*(next) {
     const last_visit = this.session.last_visit;
-    this.session.last_visit = (new Date()).getTime() / 1000 | 0;
+    this.session.last_visit = new Date().getTime() / 1000 | 0;
     if (!this.session.uid) {
         this.session.uid = secureRandom.randomBuffer(13).toString('hex');
         this.session.new_visit = true;
@@ -136,46 +178,83 @@ useRedirects(app);
 useEnterAndConfirmEmailPages(app);
 useEnterAndConfirmMobilePages(app);
 useUserJson(app);
-
-
-if (env === 'production') {
-    app.use(helmet.contentSecurityPolicy(config.helmet));
-}
+usePostJson(app);
 
 useAccountRecoveryApi(app);
 useOauthLogin(app);
 useGeneralApi(app);
 useNotificationsApi(app);
 
-app.use(favicon(path.join(__dirname, '../app/assets/images/favicons/favicon.ico')));
+// helmet wants some things as bools and some as lists, makes config difficult.
+// our config uses strings, this splits them to lists on whitespace.
+
+if (env === 'production') {
+    const helmetConfig = {
+        directives: convertEntriesToArrays(config.get('helmet.directives')),
+        reportOnly: config.get('helmet.reportOnly'),
+        setAllHeaders: config.get('helmet.setAllHeaders')
+    };
+    helmetConfig.directives.reportUri = '/api/v1/csp_violation';
+    app.use(helmet.contentSecurityPolicy(helmetConfig));
+}
+
+app.use(
+    favicon(path.join(__dirname, '../app/assets/images/favicons/favicon.ico'))
+);
 app.use(isBot());
-app.use(mount('/favicons', staticCache(path.join(__dirname, '../app/assets/images/favicons'), cacheOpts)));
-app.use(mount('/images', staticCache(path.join(__dirname, '../app/assets/images'), cacheOpts)));
+app.use(
+    mount(
+        '/favicons',
+        staticCache(
+            path.join(__dirname, '../app/assets/images/favicons'),
+            cacheOpts
+        )
+    )
+);
+app.use(
+    mount(
+        '/images',
+        staticCache(path.join(__dirname, '../app/assets/images'), cacheOpts)
+    )
+);
 // Proxy asset folder to webpack development server in development mode
 if (env === 'development') {
-    const PORT = parseInt(process.env.PORT, 10) + 1 || 3001;
+    const webpack_dev_port = process.env.PORT
+        ? parseInt(process.env.PORT) + 1
+        : 8081;
+    const proxyhost = 'http://0.0.0.0:' + webpack_dev_port;
+    console.log('proxying to webpack dev server at ' + proxyhost);
     const proxy = require('koa-proxy')({
-        host: 'http://0.0.0.0:' + PORT,
-        map: (filePath) => 'assets/' + filePath
+        host: proxyhost,
+        map: filePath => 'assets/' + filePath
     });
     app.use(mount('/assets', proxy));
 } else {
-    app.use(mount('/assets', staticCache(path.join(__dirname, '../dist'), cacheOpts)));
+    app.use(
+        mount(
+            '/assets',
+            staticCache(path.join(__dirname, '../dist'), cacheOpts)
+        )
+    );
 }
 
 if (env !== 'test') {
     const appRender = require('./app_render');
-    app.use(function* () {
+    app.use(function*() {
         yield appRender(this);
         // if (app_router.dbStatus.ok) recordWebEvent(this, 'page_load');
         const bot = this.state.isBot;
         if (bot) {
-            console.log(`  --> ${this.method} ${this.originalUrl} ${this.status} (BOT '${bot}')`);
+            console.log(
+                `  --> ${this.method} ${this.originalUrl} ${this.status} (BOT '${bot}')`
+            );
         }
     });
 
     const argv = minimist(process.argv.slice(2));
-    const port = parseInt(argv.port, 10) || parseInt(process.env.PORT, 10) || 3002;
+
+    const port = process.env.PORT ? parseInt(process.env.PORT) : 8080;
+
     app.listen(port);
 
     // Tell parent process koa-server is started

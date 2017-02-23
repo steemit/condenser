@@ -9,7 +9,7 @@ export default class ShareMenu extends React.Component {
         title: React.PropTypes.string
     };
 
-    render(){
+    render() {
         const title = this.props.title;
         const items = this.props.menu;
         return <span className={"shareMenu"}>

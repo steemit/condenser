@@ -1,5 +1,6 @@
 .PostFull {
   padding-bottom: 1rem;
+  padding-top: 2rem;
   margin: 0 auto;
   max-width: 50rem;
   border-bottom: 1px solid $light-gray;
@@ -21,14 +22,13 @@
 }
 
 .PostFull__time_author_category_large {
-  margin: 1.5rem 1.5rem 1.2rem 0;
+  margin: 1.75rem 1.5rem 1.2rem 0;
   color: #aaa;
   strong, a {color: #999}
-  font-size: 135%;
+  font-size: 120%;
   display: block;
-  line-height: 50px;
   > .Userpic {
-    margin-top: 4px;
+    margin-top: -4px;
     float: left;
   }
   > .right-side {
@@ -81,9 +81,6 @@
     font-size: 94%;
     font-weight: 600;
     @include hoverUnderline;
-  }
-  .FormattedAsset {
-    font-size: 110%;
   }
   .Voting {
     //padding-right: 1rem;

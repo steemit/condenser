@@ -5,7 +5,7 @@ import isUndefined from 'lodash/isUndefined';
 import { connect } from 'react-redux'
 import { IntlProvider, addLocaleData, injectIntl } from 'react-intl';
 import store from 'store';
-import { DEFAULT_LANGUAGE } from 'config/client_config';
+import { DEFAULT_LANGUAGE } from 'app/client_config';
 
 // most of this code creates a wrapper for i18n API.
 // this is needed to make i18n future proof

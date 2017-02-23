@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import ReactDOM from 'react-dom';
 import transaction from 'app/redux/Transaction';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import {DEBT_TOKEN_SHORT, CURRENCY_SIGN, DEBT_TICKER} from 'config/client_config';
+import {DEBT_TOKEN_SHORT, CURRENCY_SIGN, DEBT_TICKER} from 'app/client_config';
 import { translate } from 'app/Translator';
 
 

@@ -50,7 +50,6 @@ class Modals extends React.Component {
         return (
             <div>
                 {show_login_modal && <Reveal onHide={hideLogin} show={show_login_modal}>
-                    <CloseButton onClick={hideLogin} />
                     <LoginForm onCancel={hideLogin} />
                 </Reveal>}
                 {show_confirm_modal && <Reveal onHide={hideConfirm} show={show_confirm_modal}>

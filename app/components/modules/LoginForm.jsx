@@ -8,6 +8,7 @@ import {validate_account_name} from 'app/utils/ChainValidation';
 import runTests from 'shared/ecc/test/BrowserTests';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import reactForm from 'app/utils/ReactForm'
+import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 
 class LoginForm extends Component {
 
@@ -25,6 +26,7 @@ class LoginForm extends Component {
         super()
         const cryptoTestResult = runTests();
         let cryptographyFailure = false;
+        this.SignUp = this.SignUp.bind(this);
         if (cryptoTestResult !== undefined) {
             console.error('CreateAccount - cryptoTestResult: ', cryptoTestResult);
             cryptographyFailure = true
@@ -71,16 +73,29 @@ class LoginForm extends Component {
         })
     }
 
+    SignUp() {
+        const onType = document.getElementsByClassName("OpAction")[0].textContent;
+        serverApiRecordEvent('FreeMoneySignUp', onType);
+        window.location.href = "/enter_email";
+    }
+
+    SignIn() {
+        const onType = document.getElementsByClassName("OpAction")[0].textContent;
+        serverApiRecordEvent('SignIn', onType);
+    }
+
     saveLoginToggle = () => {
-        const {saveLogin} = this.state
-        saveLoginDefault = !saveLoginDefault
-        localStorage.setItem('saveLogin', saveLoginDefault ? 'yes' : 'no')
-        saveLogin.props.onChange(saveLoginDefault) // change UI
-    }
+        const {saveLogin} = this.state;
+        saveLoginDefault = !saveLoginDefault;
+        localStorage.setItem('saveLogin', saveLoginDefault ? 'yes' : 'no');
+        saveLogin.props.onChange(saveLoginDefault); // change UI
+    };
+
     showChangePassword = () => {
-        const {username, password} = this.state
+        const {username, password} = this.state;
         this.props.showChangePassword(username.value, password.value)
-    }
+    };
+
     render() {
         if (!process.env.BROWSER) {
             return <div className="row">
@@ -111,18 +126,22 @@ class LoginForm extends Component {
         }
 
         const {loginBroadcastOperation, dispatchSubmit, afterLoginRedirectToWelcome, msg} = this.props;
-        const {username, password, saveLogin} = this.state
-        const {submitting, valid, handleSubmit} = this.state.login
-        const {usernameOnChange, onCancel, /*qrReader*/} = this
+        const {username, password, saveLogin} = this.state;
+        const {submitting, valid, handleSubmit} = this.state.login;
+        const {usernameOnChange, onCancel, /*qrReader*/} = this;
         const disabled = submitting || !valid;
-
-        const title = loginBroadcastOperation ?
-            'Authenticate for this transaction' :
-            'Login to your Steem Account';
-        const opType = loginBroadcastOperation ? loginBroadcastOperation.get('type') : null
-        const authType = /^vote|comment/.test(opType) ? 'Posting' : 'Active or Owner'
-        const submitLabel = loginBroadcastOperation ? 'Sign' : 'Login';
-        let error = password.touched && password.error ? password.error : this.props.login_error
+        const opType = loginBroadcastOperation ? loginBroadcastOperation.get('type') : null;
+        let postType = "";
+        if (opType === "vote") {
+            postType = 'Login to Vote'
+        } else if (loginBroadcastOperation) {
+            // check for post or comment in operation
+            postType = loginBroadcastOperation.getIn(['operation', 'title']) ? 'Login to Post' : 'Login to Comment';
+        }
+        const title = postType ? postType : 'Login to your Steem Account';
+        const authType = /^vote|comment/.test(opType) ? 'Posting' : 'Active or Owner';
+        const submitLabel = loginBroadcastOperation ? 'Sign In' : 'Login';
+        let error = password.touched && password.error ? password.error : this.props.login_error;
         if (error === 'owner_login_blocked') {
             error = <span>This password is bound to your account&apos;s owner key and can not be used to login to this site.
                 However, you can use it to <a onClick={this.showChangePassword}>update your password</a> to obtain a more secure set of keys.</span>
@@ -153,6 +172,7 @@ class LoginForm extends Component {
             null
 
         const form = (
+            <center>
             <form onSubmit={handleSubmit(({data}) => {
                 // bind redux-form to react-redux
                 console.log('Login\tdispatchSubmit');
@@ -175,29 +195,36 @@ class LoginForm extends Component {
                     {error && password_info && <div className="warning">{password_info}&nbsp;</div>}
                 </div>
                 {loginBroadcastOperation && <div>
-                    <div className="info">This operation requires your {authType} key (or use your master password).</div>
+                    <div className="info">This operation requires your {authType} key or Master password.</div>
                 </div>}
                 {!loginBroadcastOperation && <div>
                     <label htmlFor="saveLogin">
                         Keep me logged in &nbsp;
                         <input id="saveLogin" type="checkbox" ref="pw" {...saveLogin.props} onChange={this.saveLoginToggle} disabled={submitting} /></label>
                 </div>}
-                <br />
                 <div>
-                    <button type="submit" disabled={submitting || disabled} className="button">
+                    <button type="submit" disabled={submitting || disabled} className="button" onClick={this.SignIn}>
                         {submitLabel}
                     </button>
                     {this.props.onCancel && <button type="button float-right" disabled={submitting} className="button hollow" onClick={onCancel}>
                         Cancel
                     </button>}
                 </div>
+                <hr />
+                <div>
+                    <p>Join our <span className="free-slogan">amazing community</span> to comment and reward others.</p>
+                    <button type="button" className="button sign-up" onClick={this.SignUp}>Sign up now to receive <span className="free-money">FREE MONEY!</span></button>
+                </div>
             </form>
-        )
+        </center>
+        );
 
         return (
            <div className="LoginForm">
                {message}
-               <h3>{title}</h3>
+               <center>
+                   <h3>Returning Users: <span className="OpAction">{title}</span></h3>
+               </center>
                <br />
                {form}
            </div>

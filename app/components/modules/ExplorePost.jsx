@@ -23,11 +23,11 @@ class ExplorePost extends Component {
     }
 
     Steemd() {
-        serverApiRecordEvent('Steemdb view', this.props.permlink);
+        serverApiRecordEvent('SteemdView', this.props.permlink);
     }
 
     Steemdb() {
-        serverApiRecordEvent('Steemdb view', this.props.permlink);
+        serverApiRecordEvent('SteemdbView', this.props.permlink);
     }
 
     Busy() {
@@ -35,7 +35,7 @@ class ExplorePost extends Component {
     }
 
     Phist() {
-        serverApiRecordEvent('Phist view', this.props.permlink);
+        serverApiRecordEvent('PhistView', this.props.permlink);
     }
 
     onCopy() {

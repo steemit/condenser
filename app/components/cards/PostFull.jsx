@@ -56,9 +56,9 @@ class PostFull extends React.Component {
     constructor() {
         super();
         this.state = {};
+        this.vkShare = this.vkShare.bind(this);
         this.fbShare = this.fbShare.bind(this);
         this.twitterShare = this.twitterShare.bind(this);
-        this.linkedInShare = this.linkedInShare.bind(this);
         this.onShowReply = () => {
             const {state: {showReply, formId}} = this
             this.setState({showReply: !showReply, showEdit: false})
@@ -125,16 +125,13 @@ class PostFull extends React.Component {
         window.open('http://twitter.com/share?' + q, 'Share', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=' + winWidth + ',height=' + winHeight);
     }
 
-    linkedInShare(e) {
-        serverApiRecordEvent('LinkedInShare', this.share_params.link);
+    vkShare = (e) => {
         e.preventDefault();
         const winWidth = 720;
         const winHeight = 480;
         const winTop = (screen.height / 2) - (winWidth / 2);
         const winLeft = (screen.width / 2) - (winHeight / 2);
-        const s = this.share_params;
-        const q = 'title=' + encodeURIComponent(s.title) + '&url=' + encodeURIComponent(s.url) + '&source='+APP_NAME_LATIN+'&mini=true';
-        window.open('https://www.linkedin.com/shareArticle?' + q, 'Share', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=' + winWidth + ',height=' + winHeight);
+        window.open('https://vk.com/share.php?url=' + this.share_params.url, this.share_params, 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=' + winWidth + ',height=' + winHeight)
     }
 
     showPromotePost = () => {
@@ -188,9 +185,9 @@ class PostFull extends React.Component {
         };
 
         const share_menu = [
+            {link: '#', onClick: this.vkShare, value: 'VK', icon: 'vk'},
             {link: '#', onClick: this.fbShare, value: 'Facebook', icon: 'facebook'},
             {link: '#', onClick: this.twitterShare, value: 'Twitter', icon: 'twitter'},
-            {link: '#', onClick: this.linkedInShare, value: 'LinkedIn', icon: 'linkedin'},
         ];
         const Editor = this.state.showReply ? PostFullReplyEditor : PostFullEditEditor
         let renderedEditor = null;

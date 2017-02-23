@@ -65,10 +65,10 @@ ul.PostsList__summaries {
     margin: 0;
     overflow: hidden;
     > a {
-      color: #333;
+      color: #000;
     }
     > a:visited {
-      color: #777;
+      color: #999;
     }
     .Icon {
       margin: 0 0.25rem;
@@ -95,7 +95,7 @@ ul.PostsList__summaries {
   width: auto;
   padding: 0.3rem 0.1rem 0.15rem;
   font-family: "Helvetica Neue", Helvetica, Verdana, Arial, sans-serif;
-  color: #666;
+  color: #3f3f3f;
   overflow: hidden;
   line-height: 1.4;
   white-space: nowrap;
@@ -104,6 +104,9 @@ ul.PostsList__summaries {
   a {
     color: inherit;
     display: inline;
+  }
+  > a:visited {
+    color: #6f6f6f;
   }
 }
 

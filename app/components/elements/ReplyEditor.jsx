@@ -314,7 +314,7 @@ class ReplyEditor extends React.Component {
                                 <input type="text" className="ReplyEditor__title" {...cleanReduxInput(title)} onChange={onTitleChange} disabled={loading} placeholder={translate('title')} autoComplete="off" ref="titleRef" tabIndex={1} />
                                 <div className="float-right secondary" style={{marginRight: '1rem'}}>
                                     {rte && <a href="#" onClick={this.toggleRte}>{body.value ? translate('raw_html') : 'Markdown'}</a>}
-                                    {!rte && (isHtml || !body.value) && <a href="#" onClick={this.toggleRte}>{translate('editor')}</a>}
+                                    {!rte && <a href="#" onClick={this.toggleRte}>{translate('editor')}</a>}
                                 </div>
                                 {titleError}
                             </span>}

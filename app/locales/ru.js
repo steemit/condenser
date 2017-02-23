@@ -727,6 +727,7 @@ const ru = {
     have_only_letters_digits_or_dashes: 'может содержать только буквы, цифры и тире.',
     have_only_one_dash_in_a_row: ' может иметь только одно тире.',
     end_with_a_letter_or_digit: 'может заканчиваться на букву или цифру.',
+    сancel_transfer_from_savings: 'Отмена перевода из сейфа (id запроса {request})',
 }
 
 export { ru }

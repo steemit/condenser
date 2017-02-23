@@ -17,12 +17,15 @@ import {key_utils} from 'shared/ecc';
 import MiniHeader from 'app/components/modules/MiniHeader';
 import { translate } from '../Translator.js';
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
+import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {open: null, showCallout: true, showBanner: true, expandCallout: false};
         this.toggleOffCanvasMenu = this.toggleOffCanvasMenu.bind(this);
+        this.signUp = this.signUp.bind(this);
+        this.learnMore = this.learnMore.bind(this);
         // this.shouldComponentUpdate = shouldComponentUpdate(this, 'App')
     }
 
@@ -71,6 +74,14 @@ class App extends React.Component {
             key_utils.addEntropy(e.pageX, e.pageY, e.screenX, e.screenY)
         else
             console.log('onEntropyEvent Unknown', e.type, e)
+    }
+
+    signUp() {
+        serverApiRecordEvent('Sign up', 'Hero banner');
+    }
+
+    learnMore() {
+        serverApiRecordEvent('Learn more', 'Hero banner');
     }
 
     render() {
@@ -136,9 +147,9 @@ class App extends React.Component {
                             <h2>{translate("welcome_to_the_blockchain")}</h2>
                             <h4>{translate("your_voice_is_worth_something")}</h4>
                             <br />
-                            <a className="button" href="/enter_email"> <b>{translate("sign_up")}</b> </a>
+                            <a className="button" href="/enter_email" onClick={this.signUp}> <b>{translate("sign_up")}</b> </a>
                             &nbsp; &nbsp; &nbsp;
-                            <a className="button hollow uppercase" href="https://steem.io" target="_blank"> <b>{translate("learn_more")}</b> </a>
+                            <a className="button hollow uppercase" href="https://steem.io" target="_blank" onClick={this.learnMore}> <b>{translate("learn_more")}</b> </a>
                             <br />
                             <br />
                             <div className="tag3">

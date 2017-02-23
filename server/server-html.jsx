@@ -39,7 +39,7 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
             <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32" />
             <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16" />
             <link rel="icon" type="image/png" href="/images/favicons/favicon-128.png" sizes="128x128" />
-            <meta name="application-name" content="Steemit" />
+            <meta name="application-name" content="Голос" />
             <meta name="msapplication-TileColor" content="#FFFFFF" />
             <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png" />
             <meta name="msapplication-square70x70logo" content="/images/favicons/mstile-70x70.png" />

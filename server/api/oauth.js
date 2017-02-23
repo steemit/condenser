@@ -193,11 +193,11 @@ function* handleFacebookCallback() {
         return logErrorAndRedirect(this, 'facebook:2', error);
     }
     this.flash = {success: translate('successfully_authenticated_with') + ' Facebook'};
-    //if (verified_email) {
+    if (verified_email) {
         this.redirect('/create_account');
-//    } else {
-        //this.redirect('/enter_email');
-//    }
+    } else {
+        this.redirect('/enter_email');
+    }
     return null;
 }
 

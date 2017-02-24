@@ -12,8 +12,8 @@ Steemit.com is the react.js web interface to the world's first and best blockcha
 
 #### Clone the repository and make a tmp folder
 ```bash
-git clone https://github.com/steemit/steemit.com
-cd steemit.com
+git clone https://github.com/steemit/condenser
+cd condenser
 mkdir tmp
 ```
 

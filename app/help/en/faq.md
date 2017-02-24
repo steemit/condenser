@@ -3,8 +3,6 @@
 <a class="anchor" name="Table_of_Contents"></a>
 ## Table of Contents
 
-### Sample Category 1
-
 - <a href="/faq.html#What_is_Steemit_com">What is Steemit.com?</a>
 - <a href="/faq.html#What_is_the_Steem_blockchain">What is the Steem blockchain?</a>
 - <a href="/faq.html#What_can_users_upload_to_Steemit">What can users upload to Steemit?</a>
@@ -14,9 +12,6 @@
 - <a href="/faq.html#Can_I_earn_digital_points_on_Steemit_How">Can I earn digital points on Steemit? How?</a>
 - <a href="/faq.html#Is_Steemit_a_scam">Is Steemit a scam?</a>
 - <a href="/faq.html#How_does_Steemit_respond_to_public_criticism">How does Steemit respond to public criticism?</a>
-
-### Sample Category 2
-
 - <a href="/faq.html#Where_does_the_value_come_from">Where does the value come from?</a>
 - <a href="/faq.html#What_is_the_difference_between_Steem__Steem_Power__and_Steem_Dollars">What is the difference between Steem, Steem Power, and Steem Dollars?</a>
 - <a href="/faq.html#What_is_Powering_Down_and_Powering_Up">What is Powering Down and Powering Up?</a>
@@ -24,9 +19,6 @@
 - <a href="/faq.html#Will_I_get_a_1099_from_Steemit">Will I get a 1099 from Steemit?</a>
 - <a href="/faq.html#Is_Steemit_decentralized_What_about_Steem">Is Steemit decentralized? What about Steem?</a>
 - <a href="/faq.html#Is_Steem_open_source_and_is_there_an_API">Is Steem open-source and is there an API?</a>
-
-### Sample Category 3
-
 - <a href="/faq.html#What_is_available_for_developers_interested_in_Steem_and_Steemit">What is available for developers interested in Steem and Steemit?</a>
 - <a href="/faq.html#What_third_party_tools_are_there_for_Steemit">What third-party tools are there for Steemit?</a>
 - <a href="/faq.html#Are_my_Steem_and_Steem_Dollar_tokens_insured_in_the_event_of_a_hack_or_if_someone_takes_over_my_account">Are my Steem and Steem Dollar tokens insured in the event of a hack or if someone takes over my account?</a>

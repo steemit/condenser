@@ -78,13 +78,6 @@ const toStringUtf8 = o => (o ? Buffer.isBuffer(o) ? o.toString('utf-8') : o.toSt
 function* preBroadcast_vote({operation, username}) {
     if (!operation.voter) operation.voter = username
     const {voter, author, permlink, weight} = operation
-
-    // console.log(`<------------ preBroadcast_vote : voter : `, voter);
-    // console.log(`<------------ preBroadcast_vote : author : `, author);
-    // console.log(`<------------ preBroadcast_vote : permlink : `, permlink);
-    // console.log(`<------------ preBroadcast_vote : weight : `, weight);
-
-
     // give immediate feedback
     yield put(g.actions.set({key: `transaction_vote_active_${author}_${permlink}`, value: true}))
     yield put(g.actions.voted({username: voter, author, permlink, weight}))
@@ -257,9 +250,6 @@ function* broadcast({payload: {operations, keys, username, successCallback, erro
 }
 
 function* accepted_comment({operation}) {
-
-    console.log('<|----------- transaction saga accepted_comment : operation', operation);
-
     const {author, permlink} = operation
     // update again with new $$ amount from the steemd node
     yield call(getContent, {author, permlink})
@@ -268,6 +258,7 @@ function* accepted_comment({operation}) {
     // mark the time (can only post 1 per min)
     // yield put(user.actions.acceptedComment())
 }
+
 function* accepted_delete_comment({operation}) {
     yield put(g.actions.deleteContent(operation))
 }
@@ -323,9 +314,6 @@ import secureRandom from 'secure-random'
 // function* preBroadcast_account_witness_vote({operation, username}) {
 // }
 function* preBroadcast_comment({operation, username}) {
-
-    console.log(`<--------- preBroadcast_comment - operation : `, operation);
-
     if (!operation.author) operation.author = username
     let permlink = operation.permlink
     const {author, __config: {originalBody, autoVote, comment_options}} = operation

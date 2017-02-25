@@ -53,10 +53,6 @@ export default createModule({
         {
             action: 'RECEIVE_COMMENT',
             reducer: (state, {payload: op}) => {
-
-                console.log('<----------- RECEIVE_COMMENT', payload);
-
-
                 const {author, permlink, parent_author = '', parent_permlink = '', title = '', body} = op
                 const key = author + '/' + permlink
 
@@ -93,9 +89,6 @@ export default createModule({
         { // works...
             action: 'LINK_REPLY',
             reducer: (state, {payload: op}) => {
-                console.log('<|----------- LINK_REPLY', payload);
-
-
                 const {author, permlink, parent_author = '', parent_permlink = ''} = op
                 if (parent_author === '' || parent_permlink === '') return state
                 const key = author + '/' + permlink
@@ -159,12 +152,6 @@ export default createModule({
         {
             action: 'RECEIVE_DATA',
             reducer: (state, {payload: {data, order, category, author, accountname, /*permlink*/}}) => {
-                // console.log('-- RECEIVE_DATA reducer -->', order, category, author, permlink, data);
-                // console.log('-- RECEIVE_DATA state -->', state.toJS());
-
-                console.log('<|----------- GlobalReducer RECEIVE_DATA -- order: ', fromJS(state.get('discussion_idx')));
-
-
                 let new_state;
                 if (order === 'by_author' || order === 'by_feed' || order === 'by_comments' || order === 'by_replies') {
                     // category is either "blog", "feed", "comments", or "recent_replies" (respectively) -- and all posts are keyed under current profile
@@ -181,7 +168,6 @@ export default createModule({
                     new_state = state.updateIn(['discussion_idx', category || '', order], list => {
                         return list.withMutations(posts => {
                             data.forEach(value => {
-                                console.log('<|----------- GlobalReducer RECEIVE_DATA -- data -- value : ', value);
                                 const entry = `${value.author}/${value.permlink}`;
                                 if (!posts.includes(entry)) posts.push(entry);
                             });
@@ -218,7 +204,6 @@ export default createModule({
                     if (!list) list = List();
                     return list.withMutations(posts => {
                         data.forEach(value => {
-                            console.log('<|----------- GlobalReducer RECEIVE_RECENT_POSTS -- data -- value : ', value);
                             const entry = `${value.author}/${value.permlink}`;
                             if (!posts.includes(entry)) posts.unshift(entry);
                         });

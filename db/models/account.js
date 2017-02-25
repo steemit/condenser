@@ -3,22 +3,22 @@ module.exports = function (sequelize, DataTypes) {
         UserId: {
             type: DataTypes.INTEGER,
             references: {
-                model: 'users',
-                key: 'id'
+                model   : 'users',
+                key     : 'id'
             },
             field: 'user_id'
         },
-        name: {type: DataTypes.STRING, unique: true},
-        owner_key: {type: DataTypes.STRING, unique: true},
-        active_key: {type: DataTypes.STRING, unique: true},
-        posting_key: {type: DataTypes.STRING, unique: true},
-        memo_key: {type: DataTypes.STRING, unique: true},
-        referrer: DataTypes.STRING,
-        refcode: DataTypes.STRING,
-        remote_ip: DataTypes.STRING,
-        ignored: {type: DataTypes.BOOLEAN},
+        name        : {type: DataTypes.STRING, unique: true},
+        owner_key   : {type: DataTypes.STRING, unique: true},
+        active_key  : {type: DataTypes.STRING, unique: true},
+        posting_key : {type: DataTypes.STRING, unique: true},
+        memo_key    : {type: DataTypes.STRING, unique: true},
+        referrer    : DataTypes.STRING,
+        refcode     : DataTypes.STRING,
+        remote_ip   : DataTypes.STRING,
+        ignored     : {type: DataTypes.BOOLEAN},
     }, {
-        tableName: 'accounts',
+        tableName   : 'accounts',
         createdAt   : 'created_at',
         updatedAt   : 'updated_at',
         timestamps  : true,

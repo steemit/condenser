@@ -77,10 +77,7 @@ function* showTransactionErrorNotification() {
 
 export function* getContent({author, permlink, resolve, reject}) {
     const content = yield call([Apis, Apis.db_api], 'get_content', author, permlink);
-    console.log('<|----------- SagaShared getContent : content', content);
     yield put(g.actions.receiveContent({content}))
-    console.log('<|----------- put(g.actions.receiveContent({content}))');
-
     if (resolve && content) {
         resolve(content);
     } else if (reject && !content) {

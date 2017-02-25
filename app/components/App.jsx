@@ -243,6 +243,11 @@ class App extends React.Component {
                 <TopRightMenu vertical navigate={this.navigate} />
                 <ul className="vertical menu">
                   <li>
+                      <a href="/submit.html?type=submit_feedback" target="blank" onClick={this.navigate}>
+                          {translate('feedback')}
+                      </a>
+                  </li>
+                  <li>
                       <a href={WIKI_URL} target="blank" onClick={this.navigate}>
                             {translate('wiki')}
                       </a>

@@ -116,3 +116,36 @@
 .App__announcement {
   padding-right: 40px;
 }
+
+.Feedback {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 101;
+  margin-top: 6.5rem;
+  transform: rotate(-90deg);
+  transform-origin: left top 0;
+  a {
+    bottom: 0;
+    position: absolute;
+    width: 140px;
+    height: 30px;
+    left: -140px;
+    text-align: center;
+    background-color: rgba(58, 219, 118, .8);
+    color: #fefefe;
+    border-radius: 3px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+  a:hover {
+    height: 36px;
+    background-color: rgba(58, 219, 118, 1);
+  }
+}
+
+@media screen and (max-width: 660px) {
+  .Feedback {
+    display: none;
+  }
+}

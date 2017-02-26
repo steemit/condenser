@@ -319,6 +319,11 @@ class App extends React.Component {
                 {lp ? <LpFooter /> : null}
                 {/* temporary disabled in favor of live chat */}
                 <RocketChat />
+                <div className="Feedback">
+                  <a href="/submit.html?type=submit_feedback" target="blank" onClick={this.navigate}>
+                    {translate('feedback')}
+                  </a>
+                </div>
             </div>
             <Dialogs />
             <Modals />

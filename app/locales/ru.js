@@ -315,7 +315,7 @@ const ru = {
 	top_witnesses: 'Топ делегатов',
 	// user's navigation menu
 	feed: 'Лента',
-	feedback: 'Отзывы и предложения',
+	feedback: 'Обратная связь',
 	wallet: 'Кошелек',
 	blog: 'Блог',
 	change_password: 'Сменить пароль',

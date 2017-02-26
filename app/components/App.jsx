@@ -258,7 +258,7 @@ class App extends React.Component {
                       </a>
                   </li>
                   <li>
-                      <a href="/tags.html/hot" onClick={this.navigate}>
+                      <a href="/tags/hot" onClick={this.navigate}>
                           {translate("payouts_by_tag")}
                       </a>
                   </li>

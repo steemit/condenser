@@ -77,7 +77,7 @@ class Topics extends React.Component {
                {categories}
                {!expanded && !search && <li className="show-more">
                    {/*<a href="#" onClick={expand}>Show more topics..</a>*/}
-                   <Link to={`/tags.html/${order}`}>{translate("show_more_topics")}...</Link>
+                   <Link to={`/tags/${order}`}>{translate("show_more_topics")}...</Link>
                </li>}
             </ul>
         );

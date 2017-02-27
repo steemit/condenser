@@ -31,6 +31,21 @@ export default function useIcoApi(app) {
     }
   })
 
+  router.get('/api/v1/get_current_gbg_supply', function * () {
+    try {
+      const data = yield Apis.instance().db_api.exec( 'get_dynamic_global_properties', []);
+      //this.body = JSON.stringify({status: 'ok', data: data});
+      this.body = data.current_sbd_supply.split(' ')[0];
+    } catch (error) {
+        console.error('Error in /api/v1/get_current_supply', error);
+        this.body = JSON.stringify({
+            error: error.message
+        });
+        this.status = 500;
+    }
+  })
+
+
   router.get('/api/v1/get_raised_amounts', function * () {
     let responce = this;
     try {

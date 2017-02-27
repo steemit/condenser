@@ -319,7 +319,7 @@ const ru = {
 	wallet: 'Кошелек',
 	blog: 'Блог',
 	change_password: 'Сменить пароль',
-	information_for_user: 'Информация для пользователя',
+	information_for_user: 'О проекте',
 	video: 'Видео',
 	documentation: 'Документация',
 	faq: 'FAQ',

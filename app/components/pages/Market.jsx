@@ -333,7 +333,7 @@ class Market extends React.Component {
                                             if(amount >= 0 && price >= 0) this.refs.buySteem_total.value = roundUp(price * amount, 3)
                                             validateBuySteem()
                                         }} />
-                                        <span className="input-group-label uppercase">{`${DEBT_TOKEN_SHORT}/${LIQUID_TOKEN}`}</span>
+                                        <span className="input-group-label uppercase">{DEBT_TOKEN_SHORT}</span>
                                     </div>
                                 </div>
                             </div>
@@ -423,7 +423,7 @@ class Market extends React.Component {
                                           if(amount >= 0 && price >= 0) this.refs.sellSteem_total.value = roundDown(price * amount, 3)
                                           validateSellSteem()
                                         }} />
-                                        <span className="input-group-label uppercase">{`${DEBT_TOKEN_SHORT}/${LIQUID_TOKEN}`}</span>
+                                        <span className="input-group-label uppercase">{DEBT_TOKEN_SHORT}</span>
                                     </div>
                                 </div>
                             </div>

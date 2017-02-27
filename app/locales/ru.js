@@ -587,7 +587,7 @@ const ru = {
 	// next 3 strings are used conditionally together
 	show_more: 'Показать больше',
 	show_less: 'Показать меньше',
-	value_posts: 'сообщений низкой стоимости',
+	value_posts: 'постов с более низким вознаграждением',
 	// PostsIndex.jsx
 	no_topics_by_order_found: "В разделе [{order}] пока нет постов!",
 	// PormotePost.jsx

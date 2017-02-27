@@ -18,7 +18,7 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Tooltip from 'app/components/elements/Tooltip'
 import { translate, translateNumber } from 'app/Translator';
 import {prettyDigit} from 'app/utils/ParsersAndFormatters';
-import { localizedCurrency, localCurrencySymbol } from 'app/components/elements/LocalizedCurrency';
+import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
 import { APP_NAME_LATIN, LIQUID_TOKEN, LIQUID_TOKEN_UPPERCASE, DEBT_TOKEN, CURRENCY_SIGN, VESTING_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TICKER, VEST_TICKER, DEBT_TICKER } from 'config/client_config';
 
 const assetPrecision = 1000;
@@ -136,10 +136,11 @@ class UserWallet extends React.Component {
         const total_value = (((vesting_steemf + balance_steem) * price_per_steem) + sbd_balance) || 0
         // format spacing on estimated value based on account state
         // const estimate_output = <p>{localizedCurrency(total_value)}</p>;
-        const estimate_output = <p>{localCurrencySymbol + ' ' + translateNumber(total_value.toFixed(3)) }</p>;
+        // const estimate_output = <p>{localCurrencySymbol + ' ' + translateNumber(total_value.toFixed(3)) }</p>;
         // if (isMyAccount) {
         //     estimate_output = <p>{localizedCurrency(total_value)}&nbsp; &nbsp; &nbsp;</p>;
         // }
+        const estimate_output = <LocalizedCurrency amount={total_value} />
 
         /// transfer log
         let idx = 0

@@ -31,7 +31,7 @@ export default function useIcoApi(app) {
     }
   })
 
-  router.get('/api/v1/get_current_gbg_supply', function * () {
+  router.get('/api/v1/get_gbg_current_supply', function * () {
     try {
       const data = yield Apis.instance().db_api.exec( 'get_dynamic_global_properties', []);
       //this.body = JSON.stringify({status: 'ok', data: data});

@@ -34,18 +34,16 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
             <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/images/favicons/apple-icon-120x120.png" type="image/png" />
             <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/images/favicons/apple-icon-76x76.png" type="image/png" />
             <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/images/favicons/apple-icon-152x152.png" type="image/png" />
-            <link rel="icon" type="image/png" href="/images/favicons/favicon-196x196.png" sizes="196x196" />
             <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96" />
             <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32" />
             <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16" />
-            <link rel="icon" type="image/png" href="/images/favicons/favicon-128.png" sizes="128x128" />
             <meta name="application-name" content="Голос" />
             <meta name="msapplication-TileColor" content="#FFFFFF" />
-            <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png" />
-            <meta name="msapplication-square70x70logo" content="/images/favicons/mstile-70x70.png" />
-            <meta name="msapplication-square150x150logo" content="/images/favicons/mstile-150x150.png" />
-            <meta name="msapplication-wide310x150logo" content="/images/favicons/mstile-310x150.png" />
-            <meta name="msapplication-square310x310logo" content="/images/favicons/mstile-310x310.png" />
+            <meta name="msapplication-TileImage" content="/images/favicons/ms-icon-144x144.png" />
+            <meta name="msapplication-square70x70logo" content="/images/favicons/ms-icon-70x70.png" />
+            <meta name="msapplication-square150x150logo" content="/images/favicons/ms-icon-150x150.png" />
+            <meta name="msapplication-wide310x150logo" content="/images/favicons/ms-icon-310x150.png" />
+            <meta name="msapplication-square310x310logo" content="/images/favicons/ms-icon-310x310.png" />
             <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600" rel="stylesheet" type="text/css" />
             <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,600" rel="stylesheet" type="text/css" />
             { assets.style.map((href, idx) =>

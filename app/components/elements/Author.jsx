@@ -11,7 +11,7 @@ import Userpic from 'app/components/elements/Userpic';
 import { translate } from 'app/Translator';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 
-const {string, bool, number} = React.PropTypes
+const {string, bool, number} = React.PropTypes;
 
 class Author extends React.Component {
     static propTypes = {
@@ -19,24 +19,24 @@ class Author extends React.Component {
         follow: bool,
         mute: bool,
         authorRepLog10: number,
-    }
+    };
     static defaultProps = {
         follow: true,
         mute: true,
-    }
-    shouldComponentUpdate = shouldComponentUpdate(this, 'Author')
+    };
+    shouldComponentUpdate = shouldComponentUpdate(this, 'Author');
     render() {
-        const {author, follow, mute, authorRepLog10} = this.props // html
-        const {username} = this.props // redux
+        const {author, follow, mute, authorRepLog10} = this.props; // html
+        const {username} = this.props; // redux
 
         const author_link = <span className="author" itemProp="author" itemScope itemType="http://schema.org/Person">
             <Link to={'/@' + author}><strong>{author}</strong></Link> <Reputation value={authorRepLog10} />
-        </span>
+        </span>;
 
         if(!(follow || mute) || username === author)
-            return author_link
+            return author_link;
 
-        const {name, about} = this.props.account ? normalizeProfile(this.props.account.toJS()) : {}
+        const {name, about} = this.props.account ? normalizeProfile(this.props.account.toJS()) : {};
 
         const dropdown = <div className="Author__dropdown">
             <Link to={'/@' + author}>
@@ -56,7 +56,7 @@ class Author extends React.Component {
             <div className="Author__bio">
                 {about}
             </div>
-        </div>
+        </div>;
 
         return (
             <span className="Author">

@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import {connect} from 'react-redux';
 import { browserHistory } from 'react-router';
+import { detransliterate } from 'app/utils/ParsersAndFormatters';
 import { translate } from 'app/Translator';
 
 export default class TagsIndex extends React.Component {
@@ -48,7 +49,7 @@ export default class TagsIndex extends React.Component {
             // const tag_info = tagsAll.get(tag);
             return (<tr key={name}>
                 <td>
-                    <Link to={link} activeClassName="active">{name}</Link>
+                    <Link to={link} activeClassName="active">{detransliterate(name)}</Link>
                 </td>
                 <td>{tag.get('top_posts')}</td>
                 <td>{tag.get('comments')}</td>

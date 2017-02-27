@@ -643,7 +643,7 @@ const ru = {
 	}`,
 	profile_image_url: 'Добавьте url вашего изображения',
 	profile_name: 'Отображаемое имя',
-	profile_about: 'О себе',
+	profile_about: 'Информация о Вашем блоге',
 	profile_location: 'Место нахождения',
 	profile_website: 'Сайт',
 	saved: 'Сохранено',

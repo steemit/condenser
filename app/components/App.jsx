@@ -59,7 +59,7 @@ class App extends React.Component {
 
           window.fbAsyncInit = function() {
             FB.init({
-              appId      : '150154408771266',
+              appId      : '150164015436972',
               xfbml      : true,
               version    : 'v2.8'
             });
@@ -110,7 +110,7 @@ class App extends React.Component {
     componentWillMount() {
         if (process.env.BROWSER) localStorage.removeItem('autopost') // July 14 '16 compromise, renamed to autopost2
         this.props.loginUser();
-        // this.initVendorScripts()
+        this.initVendorScripts()
     }
 
     componentDidMount() {

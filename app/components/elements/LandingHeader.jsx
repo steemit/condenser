@@ -7,7 +7,7 @@ export default class LandingHeader extends React.Component {
 			<section className="LandingHeader">
 				<div className="row">
 					<div className="small-2 columns">
-						<a href="/ico" className="LandingHeader__logo" id="header">
+						<a href="/about" className="LandingHeader__logo" id="header">
 							<img src="images/landing/golos.png" />
 						</a>
 					</div>

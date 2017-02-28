@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import CountDowns from 'app/components/elements/LandingCountDowns'
 import Distribution from 'app/components/elements/LandingDistribution'
 import WhatIsGolos from 'app/components/elements/LandingWhatIsGolos'
-import JoinUs from 'app/components/elements/LandingJoinUs'
+import Tools from 'app/components/elements/LandingTools'
 import Documentation from 'app/components/elements/LandingDocumentation'
 import WhoWeAre from 'app/components/elements/LandingWhoWeAre'
 import BlockchainRevolution from 'app/components/elements/LandingBlockchainRevolution'
@@ -49,7 +49,7 @@ class Landing extends React.Component {
 		const prefill = crowdsaleStartAt > Date.now()
 
         return (
-            <div className="Landing text-center">
+            <div className="Landing">
 				<CountDowns
 					prefill={prefill}
 					crowdsaleStartAt={crowdsaleStartAt}
@@ -58,24 +58,27 @@ class Landing extends React.Component {
 					button={buyGolosButton}
 				/>
 				<WhatIsGolos />
+				<Faq />
+				<Distribution button={buyGolosButton} />
+				<Tools />
+				<Team />
+				<Partners />
+				<Footer />
+				{/*
 				<WhyGolos />
 				<JoinUs />
 				<BlockchainRevolution />
 				<Documentation />
-				<Faq />
-				<Distribution button={buyGolosButton} />
 				<WhoWeAre />
-				<Team />
-				<Partners />
 				<Press button={buyGolosButton} />
-				<Footer />
+				*/}
             </div>
         )
     }
 }
 
 module.exports = {
-    path: 'ico',
+    path: 'about',
     component: connect(
 	    state => {
 	        const current_user = state.user.get('current');

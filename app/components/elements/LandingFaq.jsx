@@ -81,13 +81,13 @@ export default class LandingFaq extends React.Component {
 				</div>
 				<div className="row Faq__accordion">
 					<div className="small-12 columns">
-						<Accordion elements={this.elements} />
+						{/* <Accordion elements={this.elements} /> */}
 					</div>
 				</div>
-				<div className="row Faq__action">
+				<div className="row Faq__action text-center">
 					<div className="small-12 columns">
-						<p className="Faq__p">Остались вопросы?</p>
-						<a href="https://chat.golos.io/" target="blank" className="button">Получи ответы</a>
+						<p className="Faq__p">Если у Вас остались вопросы, то</p>
+						<a href="mailto:support@golos.io" target="blank" className="button">Напишите нам и получите ответы</a>
 					</div>
 				</div>
 				<hr />

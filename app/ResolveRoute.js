@@ -19,7 +19,7 @@ export default function resolveRoute(path)
     if (path === '/welcome') {
         return {page: 'Welcome'};
     }
-    if (path === '/ico') {
+    if (path === '/about') {
         return {page: 'Landing'};
     }
     if (path === '/faq.html') {

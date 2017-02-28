@@ -3,13 +3,7 @@ import React from 'react'
 export default class LandingWhatIsGolos extends React.Component {
 	render() {
 		return (
-			<section className="WhatIsGolos">
-				<div className="row text-center">
-					<div className="   small-12 columns WhatIsGolos__header">
-						<h2 id="what-is-golos">Что такое Голос?</h2>
-						<span className="  ">Децентрализованная социальная сеть для блоггеров и журналистов</span>
-					</div>
-				</div>
+			<section className="WhatIsGolos text-center" id="what-is-golos">
 				<div className="row">
 					<div className="small-12 medium-12 large-centered columns columns WhatIsGolos__video">
 						<div>

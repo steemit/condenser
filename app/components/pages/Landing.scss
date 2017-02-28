@@ -29,7 +29,7 @@
 		font-weight: bold;
 	}
 	.button-blue { background-color: #1A5099; }
-	.Landing__supporting-text { color: #d2d2d2; }
+	.Landing__supporting-text { color: #a8a8a8; }
 	@media #{$small-only} {
 		h2 { font-size: 2.38095rem; }
 	}
@@ -69,12 +69,12 @@
 			margin-bottom: 1.5rem;
 		}
 		.Icon_2x > svg, span.Icon_2x {
-			width: 7rem;
-			height: 7rem;
+			// width: 7rem;
+			// height: 7rem;
 		}
 		.CountDowns__logo {
-			right: 5%;
-			position: relative;
+			// right: 5%;
+			// position: relative;
 		}
 		h1 { margin: 90px auto 40px; }
 	}
@@ -113,6 +113,20 @@
 			}
 		}
 	}
+	.Documentation__buttons {
+		margin-top: 50px;
+		.button {
+			padding: 20px 30px;
+			margin-right: 30px;
+		}
+		@media #{$small-only} {
+			.button {
+				margin-right: 0;
+				padding: 15px 0;
+				width: 100%;
+			}
+		}
+	}
 
 	@media #{$small-up} {
 		//.CountDowns__counter { margin-top: 60px; }
@@ -135,7 +149,7 @@
 		margin-bottom: 95px;
 		.Distribution__supporting-text {
 			font-size: 27px;
-			color: #d2d2d2;
+			color: #a8a8a8;
 		}
 	}
 	img { max-width: 75%; }
@@ -170,11 +184,13 @@
 }
 
 .WhatIsGolos {
-	background-color: #f2f2f2;
+	// background-color: #f2f2f2;
 	.WhatIsGolos__header {
-		margin-bottom: 80px;
+		
 	}
 	.WhatIsGolos__video {
+		margin-top: 80px;
+		margin-bottom: 80px;
 		margin-left: auto;
 		margin-right: auto;
 		iframe { max-width: 100%; }
@@ -190,8 +206,8 @@
 		color: #f12b24;
 	}
 	.JoinUs__support-text {
-		color: #d2d2d2;
-		font-size: 27px;
+		color: #a8a8a8;
+		// font-size: 27px;
 	}
 	.JoinUs__support-text-2{
 		color: #d2d2ef;
@@ -230,7 +246,7 @@
 		margin-bottom: 120px;
 	}
 	.BlockchainRevolution__supporting-text {
-		color: #d2d2d2;
+		color: #a8a8a8;
 	}
 	.BlockchainRevolution__table {
 		margin-bottom: 60px;
@@ -285,8 +301,8 @@
 	.Faq__headers {
 		margin-bottom: 80px;
 		.Faq__supporting-text {
-			color: #d2d2d2;
-			font-size: 27px;
+			color: #a8a8a8;
+			// font-size: 27px;
 		}
 	}
 	.Faq__accordion { margin-bottom: 100px;}
@@ -332,16 +348,16 @@
 		transform: translateY(11%);
 	}
 	.Team__members__image-wrapper {
-		width: 180px;
-		height: 180px;
+		width: 164px;
+		height: 164px;
 		position: relative;
 		overflow: hidden;
 		border-radius: 50%;
 		margin: 0 auto 25px;
-		border: 2px solid #d7d7d7;
+		border: 5px solid rgba(200,200,200,.25);
 	}
 	.Team__member__img {
-		width: 180px;
+		width: 164px;
 		position: absolute;
 	    left: 50%;
 	    top: 50%;
@@ -350,7 +366,7 @@
 	}
 	// individual stles
 	.Team__member__marina .Team__member__img  {
-		width: 300px;
+		width: 260px;
 		max-width: 200%;
 	}
 	.Team__member__alexey .Team__member__img {
@@ -365,27 +381,6 @@
 	}
 	.Team__member__vitaly{
 		p { margin-bottom: -12px; }
-
-	}
-	.Team__member__misha .Team__member__img {
-		// first picture
-		// left: 54%;
-		// width: 190px;
-		// max-width: 120%;
-
-		// left: 55%;
-		// width: 197px;
-		// max-width: 200%;
-		// second picture
-		left: 53%;
-		width: 320px;
-		max-width: 200%;
-
-		// third picture (the Kozel)
-		// left: 6%;
-		// top: 13%;
-		// width: 580px;
-		// max-width: 334%;
 
 	}
 	.Team__member__sergey .Team__member__img {
@@ -501,7 +496,7 @@
   .Partners__forklog-logo { transform: translateY(0%); }
   .Partners__liqui-logo { margin-top: 70px; }
   .Partners__coinessa-logo { margin-top: 0 !important; }
-	.Partners__changebot-logo img {
+	.Partners__mapala-logo img {
     margin-top: 10px;
     max-height: 150px;
   }
@@ -553,9 +548,16 @@
 		list-style-type: none;
 		a { color: black; }
 	}
+	.social-icons {
+		a {
+			img {
+				width: 32px;
+				margin-left: 10px;
+			}
+		}
+	}
 	.LandingFooter__description {
-		color: #c5c5c5;
-		font-size: 17px;
+		color: #a8a8a8;
 		margin: 30px auto;
 		word-break: break-all;
 	}

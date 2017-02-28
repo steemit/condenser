@@ -26,7 +26,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
     const mcl = vertical ? '' : ' sub-menu';
     const lcn = vertical ? '' : 'show-for-medium';
     const nav = navigate || defaultNavigate;
-    const user_information_button = <li className={lcn + ' buttons'}><Link to="/ico" className="button success">{translate('information_for_user')}</Link></li>;
+    const user_information_button = <li className={lcn + ' buttons'}><Link to="/about" className="button success">{translate('information_for_user')}</Link></li>;
     const submit_story = $STM_Config.read_only_mode ? null : <li className={lcn + ' submit-story'}><a href="/submit.html" onClick={nav}>{translate("submit_a_story")}</a></li>;
     const userpic_src = userpic || '/images/user.png';
     const feed_link = `/@${username}/feed`;
@@ -36,7 +36,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
     const account_link = `/@${username}`;
     const posts_link = `/@${username}/posts`;
     const reset_password_link = `/@${username}/password`;
-    const inIco = location && location.pathname.indexOf("/ico") == 0;
+    const inIco = location && location.pathname.indexOf("/about") == 0;
     const ico_menu = [
         {link: '#what-is-golos', value: translate('video')},
         {link: '#docs', value: translate('documentation')},

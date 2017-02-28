@@ -5,6 +5,7 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import transaction from 'app/redux/Transaction';
 import {Set, Map} from 'immutable'
 import { translate } from 'app/Translator';
+import user from 'app/redux/User';
 
 const {string, bool, any} = PropTypes;
 
@@ -16,6 +17,7 @@ export default class Follow extends React.Component {
         showMute: bool,
         fat: bool,
         children: any,
+        showLogin: React.PropTypes.func.isRequired,
     };
 
     static defaultProps = {
@@ -28,6 +30,7 @@ export default class Follow extends React.Component {
         super();
         this.state = {};
         this.initEvents(props);
+        this.followLoggedOut = this.followLoggedOut.bind(this);
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Follow');
     }
 
@@ -46,15 +49,15 @@ export default class Follow extends React.Component {
         this.follow = () => {upd('blog')};
         this.unfollow = () => {upd()};
         this.ignore = () => {upd('ignore')};
-        this.unignore = () => {upd()}
+        this.unignore = () => {upd()};
     }
 
-    followLoggedOut() {
+    followLoggedOut(e) {
         // close author preview if present
         const author_preview = document.querySelector('.dropdown-pane.is-open');
         if(author_preview) author_preview.remove();
         // resume authenticate modal
-        this.follow();
+        this.props.showLogin(e);
     }
 
     render() {
@@ -138,6 +141,10 @@ module.exports = connect(
                 successCallback: done,
                 errorCallback: done,
             }))
+        },
+        showLogin: e => {
+            if (e) e.preventDefault();
+            dispatch(user.actions.showLogin())
         },
     })
 )(Follow);

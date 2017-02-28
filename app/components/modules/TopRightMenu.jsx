@@ -12,7 +12,11 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import NotifiCounter from 'app/components/elements/NotifiCounter';
 
 const defaultNavigate = (e) => {
-    e.preventDefault();
+    if (e.metaKey || e.ctrlKey) {
+        // prevent breaking anchor tags
+    } else {
+        e.preventDefault();
+    }
     const a = e.target.nodeName.toLowerCase() === 'a' ? e.target : e.target.parentNode;
     browserHistory.push(a.pathname + a.search + a.hash);
 };

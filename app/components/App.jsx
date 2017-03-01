@@ -59,7 +59,7 @@ class App extends React.Component {
 
           window.fbAsyncInit = function() {
             FB.init({
-              appId      : '150164015436972',
+              appId      : '150154408771266',
               xfbml      : true,
               version    : 'v2.8'
             });

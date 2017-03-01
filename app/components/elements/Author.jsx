@@ -19,24 +19,50 @@ class Author extends React.Component {
         follow: bool,
         mute: bool,
         authorRepLog10: number,
-    }
+    };
     static defaultProps = {
         follow: true,
         mute: true,
+    };
+
+    constructor() {
+        super();
+        this.showProfileCtrl = this.showProfileCtrl.bind(this);
     }
-    shouldComponentUpdate = shouldComponentUpdate(this, 'Author')
+
+    componentDidMount() {
+        const element = document.querySelector('.FoundationDropdownMenu__label');
+        if (element) element.addEventListener("click", this.showProfileCtrl, false);
+    }
+
+    componentWillUnmount() {
+        const element = document.querySelector('.FoundationDropdownMenu__label');
+        if (element) element.removeEventListener("click", this.showProfileCtrl, false);
+    }
+
+    showProfileCtrl(e) {
+        // handle edge case for ctrl clicks
+        if (e.metaKey || e.ctrlKey) {
+            e.stopPropagation();
+            window.location = '/@' + this.props.author;
+        } else {
+            // show default author preview
+        }
+    }
+
+    shouldComponentUpdate = shouldComponentUpdate(this, 'Author');
     render() {
-        const {author, follow, mute, authorRepLog10} = this.props // html
-        const {username} = this.props // redux
+        const {author, follow, mute, authorRepLog10} = this.props; // html
+        const {username} = this.props; // redux
 
         const author_link = <span className="author" itemProp="author" itemScope itemType="http://schema.org/Person">
             <Link to={'/@' + author}><strong>{author}</strong></Link> <Reputation value={authorRepLog10} />
-        </span>
+        </span>;
 
         if(!(follow || mute) || username === author)
-            return author_link
+            return author_link;
 
-        const {name, about} = this.props.account ? normalizeProfile(this.props.account.toJS()) : {}
+        const {name, about} = this.props.account ? normalizeProfile(this.props.account.toJS()) : {};
 
         const dropdown = <div className="Author__dropdown">
             <Link to={'/@' + author}>

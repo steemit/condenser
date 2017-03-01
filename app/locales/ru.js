@@ -730,6 +730,7 @@ const ru = {
     end_with_a_letter_or_digit: 'может заканчиваться на букву или цифру.',
     сancel_transfer_from_savings: 'Отмена перевода из сейфа (id запроса {request})',
     conversion_complete_tip: "Завершается",
+    muted_users: 'Заблокированные пользователи',
 }
 
 export { ru }

@@ -256,7 +256,7 @@ class Settings extends React.Component {
                 <div className="row">
                     <div className="small-12 columns">
                         <br /><br />
-                        <UserList title="Muted Users" account={account} users={ignores} />
+                        <UserList title={translate('muted_users')} account={account} users={ignores} />
                     </div>
                 </div>}
                 <br /><br />

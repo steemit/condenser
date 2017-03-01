@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import { browserHistory } from 'react-router';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
 import { translate } from 'app/Translator';
+import { IGNORE_TAGS } from 'config/client_config';
 
 export default class TagsIndex extends React.Component {
     static propTypes = {
@@ -37,6 +38,8 @@ export default class TagsIndex extends React.Component {
         const {search} = this.state;
         const order = this.props.routeParams.order;
         let tags = tagsAll;
+
+        if (IGNORE_TAGS) tags = tags.filter(tag => IGNORE_TAGS.indexOf(tag.get('name')) === -1);
         if (search) tags = tags.filter(tag => tag.get('name').indexOf(search.toLowerCase()) !== -1);
         tags = tags.filter(
             // there is a blank tag present, as well as some starting with #. filter them out.

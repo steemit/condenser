@@ -7,6 +7,7 @@ import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {findParent} from 'app/utils/DomUtils';
 import Icon from 'app/components/elements/Icon';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+import { IGNORE_TAGS } from 'config/client_config';
 
 function topPosition(domElt) {
     if (!domElt) {
@@ -174,8 +175,6 @@ class PostsList extends React.Component {
             ignore_result, account} = this.props;
         const {thumbSize, showPost, nsfwPref} = this.state
         const postsInfo = [];
-        // ignore special tags
-        const ignoreTags = ['test', 'bm-open', 'bm-ceh23', 'bm-tasks']
         
         posts.forEach(item => {
             const cont = content.get(item);
@@ -189,7 +188,7 @@ class PostsList extends React.Component {
             const postTags = Array.isArray(json_metadata.tags) ? json_metadata.tags : typeof json_metadata.tags === 'string' ? [json_metadata.tags] : []
                   postTags.push(cont.get('category'))
             // TODO: check tags is string or null
-            let igonedPostTags = postTags.filter(function(n) { return ignoreTags.indexOf(n) >= 0 })
+            let igonedPostTags = IGNORE_TAGS && postTags.filter(function(n) { return IGNORE_TAGS.indexOf(n) >= 0 }) || []
 
             const {hide, netVoteSign, authorRepLog10} = cont.get('stats').toJS()
             if(!(ignore || hide || igonedPostTags.length) || showSpam) // rephide

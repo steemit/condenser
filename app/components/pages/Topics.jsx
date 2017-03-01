@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import { browserHistory } from 'react-router';
 import { translate } from 'app/Translator';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
+import { IGNORE_TAGS } from 'config/client_config';
 
 class Topics extends React.Component {
     static propTypes = {
@@ -63,6 +64,7 @@ class Topics extends React.Component {
             </select>;
         }
 
+        if (IGNORE_TAGS) categories = categories.filter(val => IGNORE_TAGS.indexOf(val) === -1);
         if (search) categories = categories.filter(val => val.indexOf(search.toLowerCase()) !== -1);
         categories = categories.map(cat => {
             const link = order ? `/${order}/${cat}` : `/hot/${cat}`;

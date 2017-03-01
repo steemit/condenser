@@ -57,3 +57,6 @@ export const SITE_DESCRIPTION = 'Голос - социальная сеть, п�
 export const SUPPORT_EMAIL = 't@cyber.fund'
 export const SEGMENT_ANALYTICS_KEY = 'F7tldQJxt491gXYqDGi5TkTT4wFpSPps'
 export const FIRST_DATE = new Date(Date.UTC(2016, 7, 1)); //1 september
+
+// ignore special tags, dev-tags, partners tags
+export const IGNORE_TAGS = ['test', 'bm-open', 'bm-ceh23', 'bm-tasks', 'bm-taskceh1']

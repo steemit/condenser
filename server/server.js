@@ -38,7 +38,7 @@ const cacheOpts = {maxAge: 86400000, gzip: true};
 
 app.keys = [config.session_key];
 const crypto_key = config.server_session_secret;
-session(app, {maxAge: 1000 * 3600 * 24 * 60, crypto_key, key: config.session_cookie_key});
+session(app, {maxAge: 1000 * 3600 * 24 * 60, crypto_key, key: 'golos:sess'});
 csrf(app);
 
 app.use(mount(grant));

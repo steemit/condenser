@@ -11,7 +11,7 @@ import Userpic from 'app/components/elements/Userpic';
 import { translate } from 'app/Translator';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 
-const {string, bool, number} = React.PropTypes
+const {string, bool, number} = React.PropTypes;
 
 class Author extends React.Component {
     static propTypes = {
@@ -41,12 +41,10 @@ class Author extends React.Component {
     }
 
     showProfileCtrl(e) {
-        // handle edge case for ctrl clicks
-        if (e.metaKey || e.ctrlKey) {
+        if (e.metaKey || e.ctrlKey) { // handle edge case for ctrl clicks
             e.stopPropagation();
             window.location = '/@' + this.props.author;
-        } else {
-            // show default author preview
+        } else { // show default author preview
         }
     }
 
@@ -82,7 +80,7 @@ class Author extends React.Component {
             <div className="Author__bio">
                 {about}
             </div>
-        </div>
+        </div>;
 
         return (
             <span className="Author">

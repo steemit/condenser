@@ -20,15 +20,14 @@ import { DEFAULT_LANGUAGE } from 'config/client_config';
 // locale data is needed for various messages, ie 'N minutes ago'
 import enLocaleData from 'react-intl/locale-data/en';
 import ruLocaleData from 'react-intl/locale-data/ru';
-addLocaleData([...enLocaleData, ...ruLocaleData]);
+import ukLocaleData from 'react-intl/locale-data/uk'; // in react-intl they use 'uk' instead of 'ua'
+addLocaleData([...enLocaleData, ...ruLocaleData, ...ukLocaleData]);
 
 // Our translated strings
 import { en } from './locales/en';
 import { ru } from './locales/ru';
-const messages = {
-	en: en,
-	ru: ru
-}
+import { ua as uk } from './locales/ua';
+const messages = { en, ru, uk }
 
 // exported function placeholders
 // this is needed for proper export before react-intl functions with locale data,

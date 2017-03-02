@@ -104,9 +104,9 @@ class App extends React.Component {
           /* NOTE dont't forget to remove <img /> tag of facebook pixel (down below) */
           fbq('init', '217726192019770'); // Insert your pixel ID here.
           fbq('track', 'PageView');
-        }      
+        }
     }
-    
+
     componentWillMount() {
         if (process.env.BROWSER) localStorage.removeItem('autopost') // July 14 '16 compromise, renamed to autopost2
         this.props.loginUser();
@@ -229,7 +229,7 @@ class App extends React.Component {
                                 <LocalizedCurrency amount={signup_bonus} />
                                 {translate("get_sp_when_sign_up2")}
                               </b>
-                              
+
                             </div>
                         </div>
                     </div>
@@ -254,7 +254,7 @@ class App extends React.Component {
                   </li>
                   <li>
                       <a href="/welcome" onClick={this.navigate}>
-                          Добро пожаловать
+                          {translate("welcome")}
                       </a>
                   </li>
                   <li>
@@ -306,7 +306,7 @@ class App extends React.Component {
                     </li>
                     <li>
                       <a href={PRIVACY_POLICY_URL} onClick={this.navigate} rel="nofollow">
-                            {translate("privacy_policy")}                            
+                            {translate("privacy_policy")}
                         </a>
                     </li>
                 </ul>

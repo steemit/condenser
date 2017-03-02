@@ -1,7 +1,5 @@
 import React from 'react'
 
-// БМ (https://platform.molodost.bz/hot/bm-open),
-
 export default class LandingPress extends React.Component {
 	render() {
 		return (

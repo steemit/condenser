@@ -131,7 +131,7 @@ const ru = {
 	your_voice_is_worth_something: 'Твоя ' + VESTING_TOKEN + ' на вес золота!',
 	learn_more: 'Узнать больше',
 	get_sp_when_sign_up1: 'Получи ',
-	get_sp_when_sign_up2: ' подписавшись сегодня.',
+	get_sp_when_sign_up2: ' зарегистрировавшись сегодня.',
 	get_VESTING_TOKEN_when_sign_up: 'Получи {signupBonus} ' + VESTING_TOKENS + ' подписавшись сегодня.',
 	all_accounts_refunded: 'Все потери по восстанавливаемым аккаунтам были полностью компенсированы',
 	APP_URL_is_now_open_source: APP_URL + ' теперь Open Source',

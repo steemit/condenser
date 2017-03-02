@@ -44,8 +44,7 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
             <meta name="msapplication-square150x150logo" content="/images/favicons/ms-icon-150x150.png" />
             <meta name="msapplication-wide310x150logo" content="/images/favicons/ms-icon-310x150.png" />
             <meta name="msapplication-square310x310logo" content="/images/favicons/ms-icon-310x310.png" />
-            <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600" rel="stylesheet" type="text/css" />
-            <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,600" rel="stylesheet" type="text/css" />
+            <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" />
             { assets.style.map((href, idx) =>
                 <link href={href} key={idx} rel="stylesheet" type="text/css" />) }
             <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Intl.~locale.en"></script>

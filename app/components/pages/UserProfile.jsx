@@ -327,6 +327,10 @@ export default class UserProfile extends React.Component {
 
         // set account join date
         let accountjoin = account.created;
+        const transferFromSteemToGolosDate = '2016-09-29T12:00:00';
+        if (new Date(accountjoin) < new Date()) {
+          accountjoin = transferFromSteemToGolosDate;
+        }
 
         const top_menu = <div className="row UserProfile__top-menu">
             <div className="columns small-10 medium-12 medium-expand">

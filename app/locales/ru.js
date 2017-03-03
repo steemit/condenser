@@ -55,7 +55,7 @@ const ru = {
   action: 'Действие',
   active: 'Обсуждаемое',
   active_or_owner: 'активный или владельца',
-  add_image_url: 'Додайте URL вашого зображення',
+  add_image_url: 'Добавьте URL вашего изображення',
   adjust_your: 'откорректируйте свои',
   advanced: 'Расширенные опции',
   after_printing_write_down_your_user_name: 'После печати запишите ваше имя пользователя',

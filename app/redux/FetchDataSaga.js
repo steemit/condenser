@@ -6,6 +6,7 @@ import Apis from 'shared/api_client/ApiInstances';
 import GlobalReducer from './GlobalReducer';
 import constants from './constants';
 import {fromJS, Map} from 'immutable'
+import {IGNORE_TAGS} from 'config/client_config';
 
 export const fetchDataWatches = [watchLocationChange, watchDataRequests, watchApiRequests, watchFetchJsonRequests, watchFetchState, watchGetContent];
 
@@ -77,6 +78,7 @@ export function* fetchData(action) {
         args = [
         { tag: category,
           limit: constants.FETCH_DATA_BATCH_SIZE,
+          filter_tags: IGNORE_TAGS,
           start_author: author,
           start_permlink: permlink}];
     } else if (order === 'trending30') {
@@ -84,6 +86,7 @@ export function* fetchData(action) {
         args = [
         { tag: category,
           limit: constants.FETCH_DATA_BATCH_SIZE,
+          filter_tags: IGNORE_TAGS,
           start_author: author,
           start_permlink: permlink}];
     } else if (order === 'promoted') {
@@ -91,6 +94,7 @@ export function* fetchData(action) {
         args = [
         { tag: category,
           limit: constants.FETCH_DATA_BATCH_SIZE,
+          filter_tags: IGNORE_TAGS,
           start_author: author,
           start_permlink: permlink}];
     } else if( order === 'active' ) {
@@ -98,6 +102,7 @@ export function* fetchData(action) {
         args = [
         { tag: category,
           limit: constants.FETCH_DATA_BATCH_SIZE,
+          filter_tags: IGNORE_TAGS,
           start_author: author,
           start_permlink: permlink}];
     } else if( order === 'cashout' ) {
@@ -105,6 +110,7 @@ export function* fetchData(action) {
         args = [
         { tag: category,
           limit: constants.FETCH_DATA_BATCH_SIZE,
+          filter_tags: IGNORE_TAGS,
           start_author: author,
           start_permlink: permlink}];
     } else if( order === 'updated' ) {
@@ -112,6 +118,7 @@ export function* fetchData(action) {
         args = [
         { tag: category,
           limit: constants.FETCH_DATA_BATCH_SIZE,
+          filter_tags: IGNORE_TAGS,
           start_author: author,
           start_permlink: permlink}];
     } else if( order === 'created' || order === 'recent' ) {
@@ -119,16 +126,18 @@ export function* fetchData(action) {
         args = [
         { tag: category,
           limit: constants.FETCH_DATA_BATCH_SIZE,
+          filter_tags: IGNORE_TAGS,
           start_author: author,
           start_permlink: permlink}];
     } else if( order === 'by_replies' ) {
         call_name = 'get_replies_by_last_update';
-        args = [author, permlink, constants.FETCH_DATA_BATCH_SIZE];
+        args = [author, permlink, filter_tags: IGNORE_TAGS, constants.FETCH_DATA_BATCH_SIZE];
     } else if( order === 'responses' ) {
         call_name = 'get_discussions_by_children';
         args = [
         { tag: category,
           limit: constants.FETCH_DATA_BATCH_SIZE,
+          filter_tags: IGNORE_TAGS,
           start_author: author,
           start_permlink: permlink}];
     } else if( order === 'votes' ) {
@@ -136,6 +145,7 @@ export function* fetchData(action) {
         args = [
         { tag: category,
           limit: constants.FETCH_DATA_BATCH_SIZE,
+          filter_tags: IGNORE_TAGS,
           start_author: author,
           start_permlink: permlink}];
     } else if( order === 'hot' ) {
@@ -143,6 +153,7 @@ export function* fetchData(action) {
         args = [
         { tag: category,
           limit: constants.FETCH_DATA_BATCH_SIZE,
+          filter_tags: IGNORE_TAGS,
           start_author: author,
           start_permlink: permlink}];
     } else if( order === 'by_feed' ) { // https://github.com/steemit/steem/issues/249
@@ -150,6 +161,7 @@ export function* fetchData(action) {
         args = [
         { tag: accountname,
           limit: constants.FETCH_DATA_BATCH_SIZE,
+          filter_tags: IGNORE_TAGS,
           start_author: author,
           start_permlink: permlink}];
     } else if( order === 'by_author' ) {
@@ -157,12 +169,14 @@ export function* fetchData(action) {
         args = [
         { tag: accountname,
           limit: constants.FETCH_DATA_BATCH_SIZE,
+          filter_tags: IGNORE_TAGS,
           start_author: author,
           start_permlink: permlink}];
     } else if( order === 'by_comments' ) {
         call_name = 'get_discussions_by_comments';
         args = [
         { limit: constants.FETCH_DATA_BATCH_SIZE,
+          filter_tags: IGNORE_TAGS,
           start_author: author,
           start_permlink: permlink}];
     } else {
@@ -170,6 +184,7 @@ export function* fetchData(action) {
         args = [{
             tag: category,
             limit: constants.FETCH_DATA_BATCH_SIZE,
+            filter_tags: IGNORE_TAGS,
             start_author: author,
             start_permlink: permlink}];
     }

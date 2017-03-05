@@ -343,7 +343,7 @@ class ReplyEditor extends React.Component {
                             </span>}
                             {isStory && isFeedback && <span>
                               <div className="TagList__horizontal">
-                                <a>Обратная-связь</a>
+                                <a href="/created/ru--obratnaya-svyazx">{translate('feedback').split(' ').join('-')}</a>
                               </div>
                             </span>}
                         </div>

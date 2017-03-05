@@ -227,7 +227,7 @@ export default class UserProfile extends React.Component {
             if (account.blog) {
                 let posts = accountImm.get('blog');
                 const emptyText = isMyAccount ? <div>
-                    {translate('user_hasnt_started_bloggin_yet', {name: translate('you')})}<br /><br />
+                    {translate('you_hasnt_started_bloggin_yet')}<br /><br />
                     <Link to="/submit.html">{translate('submit_a_story')}</Link><br />
                     <a href="/welcome">{translate('welcome_to_the_blockchain')}</a>
                 </div>:

@@ -568,6 +568,7 @@ const en =  {
   user_hasnt_had_any_replies_yet: "{name} hasn\'t had any replies yet",
   user_hasnt_made_any_posts_yet: "Looks like {name} hasn\'t made any posts yet!",
   user_hasnt_started_bloggin_yet: "Looks like {name} hasn\'t started blogging yet!",
+  you_hasnt_started_bloggin_yet:  "Looks like you hasn\'t started blogging yet!",
   user_not_found: 'user not found',
   username: 'Username',
   username_does_not_exist: 'Username does not exist',

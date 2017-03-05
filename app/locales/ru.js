@@ -568,6 +568,7 @@ const ru = {
   user_hasnt_had_any_replies_yet: "{name} еще не получил ответов",
   user_hasnt_made_any_posts_yet: "Похоже что {name} еще не написал постов!",
   user_hasnt_started_bloggin_yet: "Похоже что {name} еще не завёл блог!",
+  you_hasnt_started_bloggin_yet: "Похоже что Вы еще не завели блог!",
   user_not_found: 'пользователь не найден',
   username: 'Имя пользователя',
   username_does_not_exist: 'Такого имени не существует',

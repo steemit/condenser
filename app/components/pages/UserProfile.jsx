@@ -328,7 +328,7 @@ export default class UserProfile extends React.Component {
         // set account join date
         let accountjoin = account.created;
         const transferFromSteemToGolosDate = '2016-09-29T12:00:00';
-        if (new Date(accountjoin) < new Date()) {
+        if (new Date(accountjoin) < new Date(transferFromSteemToGolosDate)) {
           accountjoin = transferFromSteemToGolosDate;
         }
 

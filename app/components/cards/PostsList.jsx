@@ -175,7 +175,7 @@ class PostsList extends React.Component {
             ignore_result, account} = this.props;
         const {thumbSize, showPost, nsfwPref} = this.state
         const postsInfo = [];
-        
+
         posts.forEach(item => {
             const cont = content.get(item);
             if(!cont) {
@@ -191,7 +191,7 @@ class PostsList extends React.Component {
             let igonedPostTags = IGNORE_TAGS && postTags.filter(function(n) { return IGNORE_TAGS.indexOf(n) >= 0 }) || []
 
             const {hide, netVoteSign, authorRepLog10} = cont.get('stats').toJS()
-            if(!(ignore || hide || igonedPostTags.length) || showSpam) // rephide
+            if( (!(ignore || hide) || showSpam) && !igonedPostTags.length) // rephide
                 postsInfo.push({item, ignore, netVoteSign, authorRepLog10})
         });
         const renderSummary = items => items.map(item => <li key={item.item}>

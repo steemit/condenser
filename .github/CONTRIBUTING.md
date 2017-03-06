@@ -1,6 +1,6 @@
 # Contributing to Golos.io
 
-Love golos and want to help? Thanks so much, there's something to do for everybody!
+Love Golos.io and want to help? Thanks so much, there's something to do for everybody!
 
 Please take a moment to review this document in order to make the contribution process easy and effective for everyone involved.
 

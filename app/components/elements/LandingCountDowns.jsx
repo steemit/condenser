@@ -181,6 +181,9 @@ export default class LandingCountDowns extends React.Component {
         <div className="row CountDowns__blocks">
           {/* number of blocks */}
           <div className="small-12 columns">
+            <div className="CountDowns__links">
+              <a href="https://golos.io/ru--golos/@golos/golos-russkoyazychnaya-socialno-mediinaya-blokchein-platforma" target="blank" className="CountDowns__button_small text-left">White Paper</a>
+            </div>
             <center>
               <p>Текущий блок: {addCommas(calculateBlock(state.secondsSinceEpoch))}</p>
             </center>

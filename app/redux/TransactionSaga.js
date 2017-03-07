@@ -12,7 +12,7 @@ import g from 'app/redux/GlobalReducer'
 import user from 'app/redux/User'
 import tr from 'app/redux/Transaction'
 import getSlug from 'speakingurl'
-import {DEBT_TICKER} from 'config/client_config'
+import {DEBT_TICKER} from 'app/client_config'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient'
 
 const {transaction} = ops
@@ -429,8 +429,8 @@ function* error_custom_json({operation: {id, required_posting_auths}}) {
     }
 }
 function* error_vote({operation: {author, permlink}}) {
-    yield put(g.actions.remove({key: `transaction_vote_active_${author}_${permlink}`}))
-    yield call(getContent, {author, permlink}) // unvote
+    yield put(g.actions.remove({key: `transaction_vote_active_${author}_${permlink}`}));
+    yield call(getContent, {author, permlink}); // unvote
 }
 
 // function* error_comment({operation}) {

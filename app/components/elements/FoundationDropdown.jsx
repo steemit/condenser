@@ -7,6 +7,7 @@ export default class FoundationDropdown extends React.Component {
         show: React.PropTypes.bool.isRequired,
         className: React.PropTypes.string,
         children: React.PropTypes.any,
+        onHide: React.PropTypes.func,
     };
 
     constructor(props) {
@@ -36,8 +37,11 @@ export default class FoundationDropdown extends React.Component {
     closeOnOutsideClick(e) {
         const inside_dropdown = findParent(e.target, 'FoundationDropdown');
         // console.log('-- closeOnOutsideClick -->', e.target, inside_dropdown);
-        if (!inside_dropdown) this.setState({show: false});
-    };
+        if (!inside_dropdown) {
+            this.setState({show: false});
+            if (this.props.onHide) this.props.onHide();
+        }
+    }
 
     render() {
         if (!this.state.show) return null;

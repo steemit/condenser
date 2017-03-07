@@ -12,8 +12,8 @@ Steemit.com is the react.js web interface to the world's first and best blockcha
 
 #### Clone the repository and make a tmp folder
 ```bash
-git clone https://github.com/steemit/steemit.com
-cd steemit.com
+git clone https://github.com/steemit/condenser
+cd condenser
 mkdir tmp
 ```
 
@@ -46,7 +46,7 @@ node
 
 #### Install mysql server
 
-OS X :
+OS X:
 
 ```bash
 brew update
@@ -88,6 +88,25 @@ npm install -g sequelize sequelize-cli pm2 mysql
 
 Run `sequelize db:migrate` in `db/` directory.
 
+#### Install Tarantool
+
+OS X:
+
+```bash
+brew install tarantool
+```
+
+Debian based Linux:
+
+```bash
+sudo apt-get install tarantool
+```
+
+Test the interactive console:
+
+```bash
+user@example:~$ tarantool
+```
 
 ### Development
 

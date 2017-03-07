@@ -17,12 +17,15 @@ import {key_utils} from 'shared/ecc';
 import MiniHeader from 'app/components/modules/MiniHeader';
 import tt from 'counterpart';
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
+import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {open: null, showCallout: true, showBanner: true, expandCallout: false};
         this.toggleOffCanvasMenu = this.toggleOffCanvasMenu.bind(this);
+        this.signUp = this.signUp.bind(this);
+        this.learnMore = this.learnMore.bind(this);
         // this.shouldComponentUpdate = shouldComponentUpdate(this, 'App')
     }
 
@@ -71,6 +74,14 @@ class App extends React.Component {
             key_utils.addEntropy(e.pageX, e.pageY, e.screenX, e.screenY)
         else
             console.log('onEntropyEvent Unknown', e.type, e)
+    }
+
+    signUp() {
+        serverApiRecordEvent('Sign up', 'Hero banner');
+    }
+
+    learnMore() {
+        serverApiRecordEvent('Learn more', 'Hero banner');
     }
 
     render() {
@@ -138,7 +149,7 @@ class App extends React.Component {
                             <br />
                             <a className="button" href="/enter_email"> <b>{tt("sign_up")}</b> </a>
                             &nbsp; &nbsp; &nbsp;
-                            <a className="button hollow uppercase" href="https://steem.io" target="_blank"> <b>{tt("learn_more")}</b> </a>
+                            <a className="button hollow uppercase" href="https://steem.io" target="_blank" onClick={this.learnMore}> <b>{tt("learn_more")}</b> </a>
                             <br />
                             <br />
                             <div className="tag3">
@@ -181,6 +192,11 @@ class App extends React.Component {
                         </a>
                     </li>
                     <li>
+                        <a href="https://steemit.chat/home" target="_blank" rel="noopener noreferrer">
+                            {translate("APP_NAME_chat")}&nbsp;<Icon name="extlink" />
+                        </a>
+                    </li>
+                    <li>
                         <a onClick={() => depositSteem()}>
                             {tt("buy_LIQUID_TOKEN")}
                         </a>
@@ -203,11 +219,6 @@ class App extends React.Component {
                     <li>
                         <a href="/change_password" onClick={this.navigate}>
                             {tt("change_account_password")}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://steemit.chat/home" target="_blank" rel="noopener noreferrer">
-                            {tt("APP_NAME_chat")}&nbsp;<Icon name="extlink" />
                         </a>
                     </li>
                     <li>

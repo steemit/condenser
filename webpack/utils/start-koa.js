@@ -8,6 +8,7 @@ let serverReload;
 const KOA_PATH = path.join(__dirname, '../../server/index');
 
 const startServer = () => {
+
     // Define `restartServer`
     const restartServer = () => {
         console.log('restarting koa application');

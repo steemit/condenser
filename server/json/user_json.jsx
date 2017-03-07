@@ -10,18 +10,18 @@ export default function useUserJson(app) {
     router.get(routeRegex.UserJson, function *() {
         // validate and build user details in JSON
         const segments = this.url.split('/');
-        const user_name = segments[1].replace('@','');
+        const user_name = segments[1].match(routeRegex.UserNameJson)[0].replace('@', '');
         let user = "";
         let status = "";
 
         const [chainAccount] = yield Apis.db_api('get_accounts', [user_name]);
 
-        if(chainAccount) {
+        if (chainAccount) {
             user = chainAccount;
             try {
-               user.json_metadata = JSON.parse(user.json_metadata);
-            } catch(e) {
-               user.json_metadata = "";
+                user.json_metadata = JSON.parse(user.json_metadata);
+            } catch (e) {
+                user.json_metadata = "";
             }
             status = "200";
         } else {
@@ -31,5 +31,4 @@ export default function useUserJson(app) {
         // return response and status code
         this.body = {user, status};
     });
-
 }

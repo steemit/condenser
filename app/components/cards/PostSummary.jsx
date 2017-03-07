@@ -92,7 +92,7 @@ class PostSummary extends React.Component {
                          </div>
         }
 
-        const {gray, pictures, authorRepLog10, hasFlag, isNsfw} = content.get('stats', Map()).toJS()
+        const {gray, pictures, authorRepLog10, flagWeight, isNsfw} = content.get('stats', Map()).toJS()
         const p = extractContent(immutableAccessor, content);
         let desc = p.desc
         if(p.image_link)// image link is already shown in the preview
@@ -184,7 +184,7 @@ class PostSummary extends React.Component {
 
         return (
             <article className={'PostSummary hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')} itemScope itemType ="http://schema.org/blogPost">
-                <div className="PostSummary__collapse">
+                <div className={flagWeight > 0 ? '' : 'PostSummary__collapse'}>
                     <div className="float-right"><Voting post={post} flag /></div>
                 </div>
                 {reblogged_by}

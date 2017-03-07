@@ -4,7 +4,7 @@ var secp256k1 = ecurve.getCurveByName('secp256k1');
 BigInteger = require('bigi');
 var base58 = require('bs58');
 var hash = require('./hash');
-var config = require('../config');
+var config = require('../ecc_config');
 var assert = require('assert');
 
 var G = secp256k1.G

@@ -1,5 +1,6 @@
 .PostFull {
   padding-bottom: 1rem;
+  padding-top: 2rem;
   margin: 0 auto;
   max-width: 50rem;
   border-bottom: 1px solid $light-gray;
@@ -21,11 +22,13 @@
 }
 
 .PostFull__time_author_category_large {
-  margin-top: 1.2rem;
-  color: $dark-gray;
-  font-weight: 400;
+  margin: 1.75rem 1.5rem 1.2rem 0;
+  color: #aaa;
+  strong, a {color: #999}
+  font-size: 120%;
+  display: block;
   > .Userpic {
-    margin-top: 4px;
+    margin-top: -4px;
     float: left;
   }
   > .right-side {
@@ -79,9 +82,6 @@
     font-weight: 600;
     @include hoverUnderline;
   }
-  .FormattedAsset {
-    font-size: 110%;
-  }
   .Voting {
     //padding-right: 1rem;
     //margin-right: 1rem;
@@ -134,18 +134,33 @@
   }
 }
 
-.Promote__button {
+.explore-post {
   margin-right: 0px!important;
 }
 
-.PostFull__explore {
-  margin-left: .4rem;
-  padding-left: .6rem;
-  border-left: 1px solid #cacaca;
+input.share-box {
+  width: 75%!important;
+  display: inline;
 }
 
-.External_viewers_menu {
-  margin-left: 0.6em;
+.ExplorePost {
+  span.extlink {
+    vertical-align: text-bottom;
+  }
+  h5 {
+    margin-top: 1em;
+  }
+  .ExplorePost__copy-button {
+    cursor: pointer;
+  }
+}
+
+.chain-right {
+    -webkit-transform: rotate(120deg);
+    -moz-transform: rotate(120deg);
+    -ms-transform: rotate(120deg);
+    -o-transform: rotate(120deg);
+    transform: rotate(120deg);
 }
 
 /* Small only */
@@ -161,5 +176,17 @@
   }
   .PostFull__footer > .RightShare__Menu {
     text-align: left;
+  }
+  input.share-box {
+    height: 2.8em;
+    font-size: .8em;
+  }
+}
+
+/* Medium only */
+@media screen and (min-width: 40em) and (max-width: 63.9375em) {
+  input.share-box {
+    height: 2.8em;
+    font-size: .8em;
   }
 }

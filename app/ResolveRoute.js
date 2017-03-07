@@ -6,8 +6,11 @@ export const routeRegex = {
     UserEndPoints: /^(blog|posts|comments|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)$/,
     CategoryFilters: /^\/(hot|created|trending|active|promoted)\/?$/ig,
     PostNoCategory: /^\/(@[\w\.\d-]+)\/([\w\d-]+)/,
-    UserJson: /^\/(@[\w\.\d-]+)(\/json)$/
-}
+    Post: /^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)\/?($|\?)/,
+    PostJson: /^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)(\.json)$/,
+    UserJson: /^\/(@[\w\.\d-]+)(\.json)$/,
+    UserNameJson: /^.*(?=(\.json))/,
+};
 
 export default function resolveRoute(path)
 {
@@ -79,9 +82,7 @@ export default function resolveRoute(path)
     if (match) {
         return {page: 'PostNoCategory', params: match.slice(1)};
     }
-    match = path.match(/^\/(\@[\w\d-]+)\/([\w\d-]+)\/?$/) ||
-        path.match(/^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)\/?$/) ||
-        path.match(/^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)\/?\?sort=(\w+)$/);
+    match = path.match(routeRegex.Post);
     if (match) {
         return {page: 'Post', params: match.slice(1)};
     }

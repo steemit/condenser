@@ -133,36 +133,6 @@ class Witnesses extends React.Component {
                         </p>}
                     </div>
                 </div>
-
-                <div className="row">
-                    <div className="column">
-                        <p>{translate(current_proxy && current_proxy.length ? 'witness_set' : 'set_witness_proxy', {proxy: current_proxy})}</p>
-                        {current_proxy && current_proxy.length ?
-                        <div>
-                            <div style={{paddingBottom: 10}}>{tt("witness_proxy_current")}: <strong>{}</strong></div>
-
-                            <form>
-                                <div className="input-group">
-                                    <input className="input-group-field bold" disabled type="text" style={{float: "left", width: "75%", maxWidth: "20rem"}} value={current_proxy} />
-                                    <div className="input-group-button">
-                                        <button style={{marginBottom: 0}} className="button" onClick={accountWitnessProxy}>{tt('witness_proxy_clear')}</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div> :
-                        <form>
-                            <div className="input-group">
-                                <input className="input-group-field bold" type="text" style={{float: "left", width: "75%", maxWidth: "20rem"}} value={proxy} onChange={(e) => {this.setState({proxy: e.target.value});}} />
-                                <div className="input-group-button">
-                                    <button style={{marginBottom: 0}} className="button" onClick={accountWitnessProxy}>{tt('witness_proxy_set')}</button>
-                                </div>
-                            </div>
-                        </form>}
-                        {this.state.proxyFailed && <p className="error">{tt("proxy_update_error")}.</p>}
-                        <br />
-                     </div>
-                </div>
-
                 {current_proxy && current_proxy.length ? null :
                 <div className="row small-collapse">
                     <div className="column">
@@ -198,6 +168,35 @@ class Witnesses extends React.Component {
                         <br /><br />
                      </div>
                 </div>}
+
+                <div className="row">
+                    <div className="column">
+                        <p>{tt(current_proxy && current_proxy.length ? 'witness_set' : 'set_witness_proxy', {proxy: current_proxy})}</p>
+                        {current_proxy && current_proxy.length ?
+                        <div>
+                            <div style={{paddingBottom: 10}}>{translate("witness_proxy_current")}: <strong>{}</strong></div>
+
+                            <form>
+                                <div className="input-group">
+                                    <input className="input-group-field bold" disabled type="text" style={{float: "left", width: "75%", maxWidth: "20rem"}} value={current_proxy} />
+                                    <div className="input-group-button">
+                                        <button style={{marginBottom: 0}} className="button" onClick={accountWitnessProxy}>{translate('witness_proxy_clear')}</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div> :
+                        <form>
+                            <div className="input-group">
+                                <input className="input-group-field bold" type="text" style={{float: "left", width: "75%", maxWidth: "20rem"}} value={proxy} onChange={(e) => {this.setState({proxy: e.target.value});}} />
+                                <div className="input-group-button">
+                                    <button style={{marginBottom: 0}} className="button" onClick={accountWitnessProxy}>{translate('witness_proxy_set')}</button>
+                                </div>
+                            </div>
+                        </form>}
+                        {this.state.proxyFailed && <p className="error">{translate("proxy_update_error")}.</p>}
+                        <br />
+                     </div>
+                </div>
             </div>
         );
     }

@@ -1,9 +1,11 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
+import Tarantool from 'db/tarantool';
 import ServerHTML from './server-html';
 import universalRender from '../shared/UniversalRender';
 import models from 'db/models';
-import secureRandom from 'secure-random'
+import secureRandom from 'secure-random';
+import ErrorPage from 'server/server-error';
 
 const DB_RECONNECT_TIMEOUT = process.env.NODE_ENV === 'development' ? 1000 * 60 * 60 : 1000 * 60 * 10;
 
@@ -70,7 +72,8 @@ async function appRender(ctx) {
                 offchain.recover_account = account_recovery_record.account_name;
             }
         }
-        const { body, title, statusCode, meta } = await universalRender({location: ctx.request.url, store, offchain});
+
+        const { body, title, statusCode, meta } = await universalRender({location: ctx.request.url, store, offchain, ErrorPage, tarantool: Tarantool.instance()});
 
         // Assets name are found in `webpack-stats` file
         const assets_filename = process.env.NODE_ENV === 'production' ? 'tmp/webpack-stats-prod.json' : 'tmp/webpack-stats-dev.json';

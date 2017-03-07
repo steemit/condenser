@@ -1,5 +1,4 @@
 import React from 'react';
-import config from 'config';
 
 export default function ServerHTML({ body, assets, locale, title, meta }) {
     let page_title = title;
@@ -56,7 +55,6 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
         <body>
         <div id="content" dangerouslySetInnerHTML={ { __html: body } }></div>
         {assets.script.map((href, idx) => <script key={ idx } src={ href }></script>) }
-        {config.js_plugins_path && <script src={config.js_plugins_path}></script>}
         </body>
         </html>
     );

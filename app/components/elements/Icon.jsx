@@ -15,7 +15,6 @@ const icons = [
     'clock',
     'extlink',
     'steem',
-    'halloween',
     'ether',
     'bitcoin',
     'bitshares',
@@ -36,7 +35,7 @@ const icons = [
     'location',
     'calendar',
     'steemd',
-    'steemdb'
+    'chain'
 ];
 const icons_map = {};
 for (const i of icons) icons_map[i] = require(`app/assets/icons/${i}.svg`);

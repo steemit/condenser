@@ -5,13 +5,13 @@ import baseConfig from './base.config';
 import startKoa from './utils/start-koa';
 
 const LOCAL_IP = require('dev-ip')();
-const PORT = parseInt(process.env.PORT, 10) + 1 || 3001;
+const WEBPACK_PORT = process.env.PORT ? parseInt(process.env.PORT)+1 : 8081;
 const HOST = (isArray(LOCAL_IP) && LOCAL_IP[0]) || LOCAL_IP || 'localhost';
-const PUBLIC_PATH = `//${HOST}:${PORT}/assets/`;
+const PUBLIC_PATH = "/assets/";
 
 export default {
     server: {
-        port: PORT,
+        port: WEBPACK_PORT,
         options: {
             publicPath: PUBLIC_PATH,
             hot: true,
@@ -59,7 +59,11 @@ export default {
             new webpack.optimize.DedupePlugin(),
             new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js'),
             ...baseConfig.plugins,
-            function () { this.plugin('done', startKoa); }
+            function () {
+                console.log("Please wait for app server startup (~60s)" +
+                    " after webpack server startup...");
+                this.plugin('done', startKoa);
+            }
         ]
     }
 };

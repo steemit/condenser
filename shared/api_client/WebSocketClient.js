@@ -23,8 +23,6 @@ export default class WebSocketClient {
             ws_connection = ws_connection_server;
             options.WebSocket = require("websocket").w3cwebsocket;
             options.server = true;
-            options.reconnectInterval = 1000;
-            options.reconnectDecay = 1.2;
         }
         this.web_socket = new RWebSocket(ws_connection, [], options);
         this.current_reject = null;

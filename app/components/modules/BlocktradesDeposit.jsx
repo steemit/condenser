@@ -10,7 +10,7 @@ import {steemTip, powerTip, powerTip2} from 'app/utils/Tips'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import tt from 'counterpart';
 import { formatCoins } from 'app/utils/FormatCoins';
-import { APP_NAME, APP_ICON, DEBT_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TOKEN, CURRENCY_SIGN, VESTING_TOKEN, VEST_TICKER, LIQUID_TICKER } from 'config/client_config';
+import { APP_NAME, APP_ICON, DEBT_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TOKEN, CURRENCY_SIGN, VESTING_TOKEN, VEST_TICKER, LIQUID_TICKER } from 'app/client_config';
 
 const coinNames = {
     [LIQUID_TICKER]: LIQUID_TOKEN,

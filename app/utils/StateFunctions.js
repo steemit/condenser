@@ -2,7 +2,8 @@ import assert from 'assert';
 import constants from 'app/redux/constants';
 import {parsePayoutAmount, repLog10} from 'app/utils/ParsersAndFormatters';
 import {Long} from 'bytebuffer';
-import {VEST_TICKER, LIQUID_TICKER} from 'config/client_config'
+import {VEST_TICKER, LIQUID_TICKER} from 'app/client_config'
+import {fromJS} from 'immutable';
 
 export const numberWithCommas = (x) => x.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 
@@ -49,38 +50,60 @@ export function isFetchingOrRecentlyUpdated(global_status, order, category) {
 
 export function contentStats(content) {
     if(!content) return {}
-    let votes = Long.ZERO
-    let hasFlag = false
-    content.get('active_votes').forEach(v => {
+    if(!(content instanceof Map)) content = fromJS(content);
+
+    let net_rshares_adj = Long.ZERO
+    let neg_rshares = Long.ZERO
+    let total_votes = 0;
+    let up_votes = 0;
+
+    content.get('active_votes').forEach((v) => {
+        const sign = Math.sign(v.get('percent'))
+        if(sign === 0) return;
+        total_votes += 1
+        if(sign > 0) up_votes += 1
+
         const rshares = String(v.get('rshares'))
-        const voterRepLog10 = repLog10(v.get('reputation'))
-        if(voterRepLog10) {
-            // Don't allow low rep users to gray out everyone's posts.
-            if(voterRepLog10 < 25)
-                return
+
+        // For flag weight: count total neg rshares
+        if(sign < 0) {
+            neg_rshares = neg_rshares.add(rshares)
         }
-        const neg = rshares.substring(0, 1) === '-'
-        if(neg) hasFlag = true
-        // Prevent tiny downvotes (less than 9 digits) from hiding content
-        if(neg && rshares.length < 10) return
-        votes = votes.add(rshares)
-    })
-    const netVoteSign = votes.compare(Long.ZERO)
+
+        // For graying: sum up total rshares from voters with non-neg reputation.
+        if(String(v.get('reputation')).substring(0, 1) !== '-') {
+            // And also ignore tiny downvotes (9 digits or less)
+            if(!(rshares.substring(0, 1) === '-' && rshares.length < 11)) {
+                net_rshares_adj = net_rshares_adj.add(rshares)
+            }
+        }
+    });
+
+    // take negative rshares, divide by 2, truncate 10 digits (plus neg sign), count digits.
+    // creates a cheap log10, stake-based flag weight. 1 = approx $400 of downvoting stake; 2 = $4,000; etc
+    const flagWeight = Math.max(String(neg_rshares.div(2)).length - 11, 0)
+
+    // post must have non-trivial negative rshares to be grayed out. (more than 10 digits)
+    const grayThreshold = -9999999999
+    const meetsGrayThreshold = net_rshares_adj.compare(grayThreshold) < 0
+
+    const net_rshares = Long.fromString(String(content.get('net_rshares')))
+    const netVoteSign = net_rshares.compare(Long.ZERO)
     const pending_payout = content.get('pending_payout_value');
     const hasPendingPayout = parsePayoutAmount(pending_payout) >= 0.02
 
     const authorRepLog10 = repLog10(content.get('author_reputation'))
     const hasReplies = content.get('replies').size !== 0
 
-    const gray = authorRepLog10 < 1 || (authorRepLog10 < 60 && netVoteSign < 0)
-    const hide = authorRepLog10 < 0 && !hasPendingPayout && !hasReplies // rephide
+    const gray = !hasPendingPayout && (authorRepLog10 < 1 || (authorRepLog10 < 65 && meetsGrayThreshold))
+    const hide = !hasPendingPayout && (authorRepLog10 < 0) // rephide
     const pictures = !gray
 
     // Combine tags+category to check nsfw status
     const json = content.get('json_metadata')
     let tags = []
     try {
-        tags = json && JSON.parse(json).tags || [];
+        tags = (json && JSON.parse(json).tags) || [];
         if(typeof tags == 'string') {
             tags = [tags];
         } if(!Array.isArray(tags)) {
@@ -92,5 +115,5 @@ export function contentStats(content) {
     tags.push(content.get('category'))
     const isNsfw = tags.filter(tag => tag && tag.match(/^nsfw$/i)).length > 0;
 
-    return {hide, gray, pictures, netVoteSign, hasPendingPayout, authorRepLog10, hasReplies, hasFlag, isNsfw}
+    return {hide, gray, pictures, netVoteSign, authorRepLog10, hasReplies, isNsfw, flagWeight, total_votes, up_votes, hasPendingPayout}
 }

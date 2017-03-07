@@ -13,6 +13,24 @@ import transaction from 'app/redux/Transaction'
 import {List} from 'immutable'
 import tt from 'counterpart';
 import {parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
+import {Long} from 'bytebuffer';
+
+// returns true if the comment has a 'hide' flag AND has no descendants w/ positive payout
+function hideSubtree(cont, c) {
+    return cont.getIn([c, 'stats', 'hide']) && !hasPositivePayout(cont, c)
+}
+
+function hasPositivePayout(cont, c) {
+    const post = cont.get(c)
+    if(post.getIn(['stats', 'hasPendingPayout'])) {
+        return true;
+    }
+    if(post.get('replies').find(reply => hasPositivePayout(cont, reply))) {
+        return true;
+    }
+    return false;
+}
+
 
 export function sortComments( cont, comments, sort_order ) {
 
@@ -24,39 +42,47 @@ export function sortComments( cont, comments, sort_order ) {
              + parsePayoutAmount(a.get('total_payout_value'))
              + parsePayoutAmount(a.get('curator_payout_value'));
   }
+  function netRshares(a) {
+      return Long.fromString(String(a.get('net_rshares')))
+  }
+  function countUpvotes(a) {
+      return a.get('active_votes').filter(vote => vote.get('percent') > 0).size
+  }
 
   /** sorts replies by upvotes, age, or payout */
   let sort_orders = {
-      votes: (a,b) => {
-                let acontent = cont.get(a);
-                let bcontent = cont.get(b);
-                let aactive = acontent.get('active_votes').filter(vote => vote.get('percent') > 0).size;
-                let bactive = bcontent.get('active_votes').filter(vote => vote.get('percent') > 0).size;
+      votes: (a, b) => {
+                const aactive = countUpvotes(cont.get(a))
+                const bactive = countUpvotes(cont.get(b))
                 return bactive - aactive;
               },
-      new:  (a,b) =>  {
-                let acontent = cont.get(a);
-                let bcontent = cont.get(b);
+      new: (a, b) =>  {
+                const acontent = cont.get(a);
+                const bcontent = cont.get(b);
                 if (netNegative(acontent)) {
                     return 1;
                 } else if (netNegative(bcontent)) {
                     return -1;
                 }
-                let aactive = Date.parse( acontent.get('created') );
-                let bactive = Date.parse( bcontent.get('created') );
+                const aactive = Date.parse( acontent.get('created') );
+                const bactive = Date.parse( bcontent.get('created') );
                 return bactive - aactive;
               },
-      trending:  (a,b) => {
-                let acontent = cont.get(a);
-                let bcontent = cont.get(b);
+      trending: (a, b) => {
+                const acontent = cont.get(a);
+                const bcontent = cont.get(b);
                 if (netNegative(acontent)) {
                     return 1;
                 } else if (netNegative(bcontent)) {
                     return -1;
                 }
-                let apayout = totalPayout(acontent)
-                let bpayout = totalPayout(bcontent)
-                return bpayout - apayout;
+                const apayout = totalPayout(acontent)
+                const bpayout = totalPayout(bcontent)
+                if(apayout !== bpayout) {
+                    return bpayout - apayout;
+                }
+                // If SBD payouts were equal, fall back to rshares sorting
+                return netRshares(bcontent).compare(netRshares(acontent))
               }
   }
   comments.sort( sort_orders[sort_order] );
@@ -154,14 +180,14 @@ class CommentImpl extends React.Component {
     _checkHide(props) {
         const content = props.cont.get(props.content);
         if (content) {
-            const hide = content.getIn(['stats', 'hide'])
+            const hide = hideSubtree(props.cont, props.content)
             const gray = content.getIn(['stats', 'gray'])
             if(hide) {
                 const {onHide} = this.props
                 // console.log('Comment --> onHide')
                 if(onHide) onHide()
             }
-            this.setState({hide_body: hide || gray})
+            this.setState({hide, hide_body: hide || gray})
         }
     }
 
@@ -205,13 +231,13 @@ class CommentImpl extends React.Component {
             console.error('Comment -- missing stats object')
             comment.stats = {}
         }
-        const {netVoteSign, hasReplies, authorRepLog10, hide, pictures, gray} = comment.stats
+        const {netVoteSign, hasReplies, authorRepLog10, pictures, gray} = comment.stats
         const {author, json_metadata} = comment
         const {username, depth, anchor_link,
             showNegativeComments, ignore_list, noImage} = this.props
         const {onShowReply, onShowEdit, onDeletePost} = this
         const post = comment.author + '/' + comment.permlink
-        const {PostReplyEditor, PostEditEditor, showReply, showEdit, hide_body} = this.state
+        const {PostReplyEditor, PostEditEditor, showReply, showEdit, hide, hide_body} = this.state
         const Editor = showReply ? PostReplyEditor : PostEditEditor
 
         let {rootComment} = this.props
@@ -236,6 +262,7 @@ class CommentImpl extends React.Component {
 
         const showDeleteOption = username === author && !hasReplies && netVoteSign <= 0
         const showEditOption = username === author
+        const showReplyOption = comment.depth < 6
         const readonly = comment.mode == 'archived' || $STM_Config.read_only_mode
 
         let replies = null;
@@ -249,7 +276,7 @@ class CommentImpl extends React.Component {
                 <Voting post={post} />
                 {!readonly &&
                     <span className="Comment__footer__controls">
-                        {depth < 6 && <a onClick={onShowReply}>{tt('reply')}</a>}
+                        {showReplyOption && <a onClick={onShowReply}>{tt('reply')}</a>}
                         {' '}{showEditOption   && <a onClick={onShowEdit}>{tt('edit')}</a>}
                         {' '}{showDeleteOption && <a onClick={onDeletePost}>{tt('delete')}</a>}
                     </span>}
@@ -260,7 +287,7 @@ class CommentImpl extends React.Component {
             replies = comment.replies;
             sortComments( cont, replies, this.props.sort_order );
             // When a comment has hidden replies and is collapsed, the reply count is off
-            //console.log("replies:", replies.length, "num_visible:", replies.filter( reply => !g.get('content').get(reply).getIn(['stats', 'hide'])).length)
+            //console.log("replies:", replies.length, "num_visible:", replies.filter( reply => !cont.get(reply).getIn(['stats', 'hide'])).length)
             replies = replies.map((reply, idx) => (
                 <Comment
                     key={idx}
@@ -270,6 +297,7 @@ class CommentImpl extends React.Component {
                     depth={depth + 1}
                     rootComment={rootComment}
                     showNegativeComments={showNegativeComments}
+                    onHide={this.props.onHide}
                 />)
             );
         }
@@ -287,20 +315,20 @@ class CommentImpl extends React.Component {
         if (showReply || showEdit) {
             renderedEditor = <div key="editor">
                 <Editor {...comment} type={showReply ? 'submit_comment' : 'edit'}
-                                     successCallback={() => {
-                                this.setState({showReply: false, showEdit: false})
-                                this.saveOnShow(null)
-                            }}
-                                     onCancel={() => {
-                                this.setState({showReply: false, showEdit: false})
-                                this.saveOnShow(null)
-                            }}
-                                     jsonMetadata={jsonMetadata}
+                    successCallback={() => {
+                        this.setState({showReply: false, showEdit: false})
+                        this.saveOnShow(null)
+                    }}
+                    onCancel={() => {
+                        this.setState({showReply: false, showEdit: false})
+                        this.saveOnShow(null)
+                    }}
+                    jsonMetadata={jsonMetadata}
                 />
             </div>
         }
 
-        let depth_indicator = [];
+        const depth_indicator = [];
         if (depth > 1) {
             for (let i = 1; i < depth; ++i) {
                 depth_indicator.push(<div key={i} className={`depth di-${i}`}>&middot;</div>);
@@ -308,7 +336,7 @@ class CommentImpl extends React.Component {
         }
 
         return (
-            <div className={commentClasses.join(' ')} id={anchor_link} itemScope itemType ="http://schema.org/comment">
+            <div className={commentClasses.join(' ')} id={anchor_link} itemScope itemType="http://schema.org/comment">
                 {depth_indicator}
                 <div className="Comment__Userpic show-for-medium">
                     <Userpic account={comment.author} />

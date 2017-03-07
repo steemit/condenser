@@ -9,7 +9,7 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import tt from 'counterpart';
 import { FormattedMessage, FormattedHTMLMessage } from 'react-intl';
-import { DEBT_TOKEN, DEBT_TICKER } from 'config/client_config';
+import { DEBT_TOKEN, DEBT_TICKER } from 'app/client_config';
 
 class ConvertToSteem extends React.Component {
     constructor() {

@@ -9,7 +9,6 @@ import { Router, RouterContext, match, applyRouterMiddleware } from 'react-route
 import Apis from './api_client/ApiInstances';
 import { Provider } from 'react-redux';
 import RootRoute from 'app/RootRoute';
-import ErrorPage from 'server/server-error';
 import {createStore, applyMiddleware, compose} from 'redux';
 import { browserHistory } from 'react-router';
 import useScroll from 'react-router-scroll';
@@ -27,9 +26,9 @@ import {component as NotFound} from 'app/components/pages/NotFound';
 import extractMeta from 'app/utils/ExtractMeta';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import Translator from 'app/Translator';
-import Tarantool from 'db/tarantool';
 import {notificationsArrayToMap} from 'app/utils/Notifications';
 import {routeRegex} from "app/ResolveRoute";
+import {contentStats} from 'app/utils/StateFunctions'
 
 const sagaMiddleware = createSagaMiddleware(
     ...userWatches, // keep first to remove keys early when a page change happens
@@ -59,16 +58,16 @@ const onRouterError = (error) => {
     console.error('onRouterError', error);
 };
 
-async function universalRender({ location, initial_state, offchain }) {
+async function universalRender({ location, initial_state, offchain, ErrorPage, tarantool }) {
     let error, redirect, renderProps;
     try {
         [error, redirect, renderProps] = await runRouter(location, RootRoute);
     } catch (e) {
-        console.error('Router error:', e.toString(), location);
+        console.error('Routing error:', e.toString(), location);
         return {
-            title: 'Server error - Steemit',
+            title: 'Routing error - Steemit',
             statusCode: 500,
-            body: renderToString(<ErrorPage />)
+            body: renderToString(ErrorPage ? <ErrorPage /> : <span>Routing error</span>)
         };
     }
     if (error || !renderProps) {
@@ -152,6 +151,16 @@ async function universalRender({ location, initial_state, offchain }) {
             };
         }
 
+        // If we are not loading a post, truncate state data to bring response size down.
+        if (!url.match(routeRegex.Post)) {
+            for (var key in onchain.content) {
+                //onchain.content[key]['body'] = onchain.content[key]['body'].substring(0, 1024) // TODO: can be removed. will be handled by steemd
+                // Count some stats then remove voting data. But keep current user's votes. (#1040)
+                onchain.content[key]['stats'] = contentStats(onchain.content[key])
+                onchain.content[key]['active_votes'] = onchain.content[key]['active_votes'].filter(vote => vote.voter === offchain.account)
+            }
+        }
+
         if (!url.match(routeRegex.PostsIndex) && !url.match(routeRegex.UserProfile1) && !url.match(routeRegex.UserProfile2) && url.match(routeRegex.PostNoCategory)) {
             const params = url.substr(2, url.length - 1).split("/");
             const content = await Apis.instance().db_api.exec('get_content', [params[0], params[1]]);
@@ -180,10 +189,10 @@ async function universalRender({ location, initial_state, offchain }) {
         server_store.dispatch({type: '@@router/LOCATION_CHANGE', payload: {pathname: location}});
         if (offchain.account) {
             try {
-                const notifications = await Tarantool.instance().select('notifications', 0, 1, 0, 'eq', offchain.account);
+                const notifications = await tarantool.select('notifications', 0, 1, 0, 'eq', offchain.account);
                 server_store.dispatch({type: 'UPDATE_NOTIFICOUNTERS', payload: notificationsArrayToMap(notifications)});
             } catch(e) {
-                console.log('universalRender Tarantool error :', e.message);
+                console.warn('WARNING! cannot retrieve notifications from tarantool in universalRender:', e.message);
             }
         }
     } catch (e) {

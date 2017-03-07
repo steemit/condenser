@@ -1,5 +1,5 @@
 
-import { APP_NAME, APP_URL, LANDING_PAGE_URL, LIQUID_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, VESTING_TOKEN, LIQUID_TICKER } from 'config/client_config';
+import { APP_NAME, APP_DOMAIN, LANDING_PAGE_URL, LIQUID_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, VESTING_TOKEN, LIQUID_TICKER } from 'app/client_config';
 /**
  * see: app/locales/README.md
  */
@@ -33,10 +33,8 @@ const ru = {
 	// next 5 strings were supposed to be sinngle block of text, but due large size,
 	// code erros they were splitted.
 	authors_get_paid_when_people_like_you_upvote_their_post: 'В сети Голос авторы получают вознаграждение, когда пользователи голосуют за их посты.',
-	if_you_enjoyed_what_you_read_earn_amount: "Проголосовавшие читатели также вознаграждаются. Если вам понравился данный пост Вы можете вознаградить автора",
-	when_you: "Для этого",
+	if_you_enjoyed_what_you_read_earn_amount: "Присоединяйтесь к нашему сообществу удивительное комментировать и наградить других",
 	when_you_link_text: 'зарегистрируйтесь',
-	and_vote_for_it: 'и проголосуйте за пост',
 	// post_promo_text: "Авторы получают вознаграждение, когда пользователи голосуют за их посты<br />Проголосовавшие также вознаграждаются. Если вам понравилось, то что вы прочитали здесь, заработайте {amount} в " + VESTING_TOKEN + "<br />. Для этого  {link} и проголосуете за пост.",
 	read_only_mode: 'Из-за технического обслуживания сервера мы работаем в режиме чтения. Извините за неудобство.',
 	membership_invitation_only: 'Стать пользователем Голоса сейчас возможно только по приглашению. Попросите ваших знакомых о приглашении', // желающих зарегистрироваться ?
@@ -77,7 +75,7 @@ const ru = {
 	'The latest versions of <a href="https://www.google.com/chrome/">Chrome</a> and <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a> are well tested and known to work with steemit.com.' */
 	the_latest_versions_of: 'Последние версии',
 	and: 'и',
-	are_well_tested_and_known_to_work_with: 'хорошо тестированы и работают с ' + APP_URL + '.',
+	are_well_tested_and_known_to_work_with: 'хорошо тестированы и работают с ' + APP_DOMAIN + '.',
 	account_creation_succes: 'Твой аккаунт успешно создан!',
 	account_recovery_succes: 'Твой аккаунт успено восстановлен!',
 	password_update_succes: 'Пароль для {accountName} был успешно обновлен',
@@ -109,7 +107,7 @@ const ru = {
 	learn_more: 'Узнать больше',
 	get_VESTING_TOKEN_when_sign_up: 'Получи {signupBonus} ' + VESTING_TOKEN + ' подписавшись сегодня.',
 	all_accounts_refunded: 'Все потери по восстанавливаемым аккаунтам были полностью компенсированы',
-	APP_URL_is_now_open_source: APP_URL + ' теперь Open Source',
+	APP_URL_is_now_open_source: APP_DOMAIN + ' теперь Open Source',
 	// this is mainly from ReplyEditor
 	tag_your_story: 'Добавь тэги (до 5 штук), первый тэг станет основной категорией.',
 	select_a_tag: 'Выбрать тэг',
@@ -260,7 +258,7 @@ const ru = {
 	unable_to_recover_account_not_change_ownership_recently: 'У нас не получилось восстановить этот аккаунт, он не менял владельца в недавнее время.',
 	password_not_used_in_last_days: 'Этот пароль не использовался в этом аккаунте за последние 30 дней.',
 	request_already_submitted_contact_support: 'Ваш запрос был отправлен, и мы работаем над этим. Пожалуйста, свяжитесь с t@cyber.fund для получения статуса вашего запроса.',
-	recover_account_intro: "Иногда бывает что  ключ владельца может быть скомпрометирован. Восстановление украденного аккаунта дает законному владельцу 30 дней чтобы вернуть аккаунт с момента изменения владельческого ключа мошенником. Восстановление украденного аккаунта в " + APP_URL + " возможно только если владелец аккаунта ранее указал '" + APP_NAME + "' в качестве доверенного лица и согласился с Условиями Использования сайта  " + APP_NAME + ".",
+	recover_account_intro: "Иногда бывает что  ключ владельца может быть скомпрометирован. Восстановление украденного аккаунта дает законному владельцу 30 дней чтобы вернуть аккаунт с момента изменения владельческого ключа мошенником. Восстановление украденного аккаунта в " + APP_DOMAIN + " возможно только если владелец аккаунта ранее указал '" + APP_NAME + "' в качестве доверенного лица и согласился с Условиями Использования сайта  " + APP_NAME + ".",
 	login_with_facebook_or_reddit_media_to_verify_identity: 'Пожалуйста, войдите используя Facebook или Reddit чтобы подтвердить вашу личность',
 	login_with_social_media_to_verify_identity: 'Пожалуйста, зайдите с помощью {show_social_login} чтобы подтвердить вашу личность',
 	enter_email_toverify_identity: 'Нам нужно подтвердить вашу личность. Пожалуйста укажите вашу электронную почту ниже, чтобы начать проверку.',
@@ -567,7 +565,7 @@ const ru = {
 	// next 3 strings are used together
 	by_verifying_you_agree_with: 'Подтверждая ваш аккаунт вы соглашаетесь с',
 	by_verifying_you_agree_with_privacy_policy: 'Политикой Конфиденциальности',
-	by_verifying_you_agree_with_privacy_policy_of_website_APP_URL: 'сайта ' + APP_URL,
+	by_verifying_you_agree_with_privacy_policy_of_website_APP_URL: 'сайта ' + APP_DOMAIN,
 	cannot_increase_reward_of_post_within_the_last_minute_before_payout: 'Голосование возможно только в первые 24 часа с момента публикации',
 	unverified_transactions: `{transactionsCount, plural,
 		zero {0 неподтвержденных транзакций}

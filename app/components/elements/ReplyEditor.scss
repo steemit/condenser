@@ -10,6 +10,25 @@
   }
 }
 
+.upload-enabled {
+    border-bottom: 1px dashed #ddd;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.drag-and-drop {
+    font-size: 85%;
+    padding: 3px 8px;
+    margin: 0;
+    color: #767676;
+    background-color: #fafafa;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-bottom-right-radius: 3;
+    border-bottom-left-radius: 3;
+}
+
 .PostFull .ReplyEditor__body {
   margin: 1rem 0 0;
 }
@@ -51,7 +70,7 @@
 
 .ReplyEditor .Preview .Markdown {
   border: 1px solid $light-gray;
-  padding: 0 1rem;
+  padding: 0.5rem 1rem;
 }
 
 .ReplyEditor__body {

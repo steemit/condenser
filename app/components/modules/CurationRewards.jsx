@@ -5,7 +5,7 @@ import TransferHistoryRow from 'app/components/cards/TransferHistoryRow';
 import {numberWithCommas, vestsToSp, assetFloat} from 'app/utils/StateFunctions'
 import tt from 'counterpart';
 import { APP_NAME, DEBT_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TOKEN, CURRENCY_SIGN,
-VESTING_TOKEN, LIQUID_TICKER, VEST_TICKER } from 'config/client_config';
+VESTING_TOKEN, LIQUID_TICKER, VEST_TICKER } from 'app/client_config';
 
 class CurationRewards extends React.Component {
     constructor() {

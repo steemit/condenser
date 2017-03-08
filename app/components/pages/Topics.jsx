@@ -75,7 +75,7 @@ class Topics extends React.Component {
         return (
             <ul className={cn}>
                 <li className="Topics__title" key={'*'}>{translate("tags_and_topics")}</li>
-                <li className="Topics__filter"><input type="text" placeholder={translate('filter')} value={detransliterate(search)} onChange={onChangeSearch} /></li>
+                {/*<li className="Topics__filter"><input type="text" placeholder={translate('filter')} value={detransliterate(search)} onChange={onChangeSearch} /></li>*/}
                {categories}
                {!expanded && !search && <li className="show-more">
                    {/*<a href="#" onClick={expand}>Show more topics..</a>*/}

@@ -115,7 +115,7 @@ class PostSummary extends React.Component {
         let currentNsfw = []
         if (isNsfw && p.json_metadata && p.json_metadata.tags)
             currentNsfw = p.json_metadata.tags.filter(function(n) { return nsfwTags.indexOf(n) >= 0 })
-        if (currentNsfw)
+        if (currentNsfw && currentNsfw.length)
             nsfwTitle = currentNsfw[0]
         let desc = p.desc
         if(p.image_link)// image link is already shown in the preview
@@ -166,7 +166,7 @@ class PostSummary extends React.Component {
                 return (
                     <article className={'PostSummary hentry'} itemScope itemType ="http://schema.org/blogPost">
                         <div className="PostSummary__nsfw-warning">
-                            {translate('this_post_is')} <span className="nsfw-flag">{detransliterate(nsfwTitle)}</span>. 
+                            {translate('this_post_is')} <span className="nsfw-flag">{detransliterate(nsfwTitle)}</span>.
                             {translate('you_can')} <a href="#" onClick={this.onRevealNsfw}>{translate('reveal_it')}</a>{' '+translate('or')+' '}
                             {username ? <span>{translate('adjust_your')} <Link to={`/@${username}/settings`}>{translate('display_preferences')}</Link>.</span>
                                       : <span><Link to="/create_account">{translate('sign_up')}</Link> {translate('to_save_your_preferences')}</span>}

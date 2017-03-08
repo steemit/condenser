@@ -112,6 +112,7 @@ var d = /\s+/g,
     eng = "shch sh ch cz ij yo ye yu ya kh zh a b v g d e z i k l m n o p r s t u f xx y x g e i i".split(d);
 
 export function detransliterate(str, reverse) {
+  if (!str) return str
     if (!reverse && str.substring(0, 4) !== 'ru--') return str
     if (!reverse) str = str.substring(4)
 

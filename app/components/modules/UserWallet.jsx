@@ -20,6 +20,7 @@ import { translate, translateNumber } from 'app/Translator';
 import {prettyDigit} from 'app/utils/ParsersAndFormatters';
 import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
 import { APP_NAME_LATIN, LIQUID_TOKEN, LIQUID_TOKEN_UPPERCASE, DEBT_TOKEN, CURRENCY_SIGN, VESTING_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TICKER, VEST_TICKER, DEBT_TICKER } from 'config/client_config';
+import {List} from 'immutable'
 
 const assetPrecision = 1000;
 
@@ -91,22 +92,29 @@ class UserWallet extends React.Component {
         }
 
         // Sum conversions
+        // Sum conversions
         let conversionValue = 0;
-        const conversions = account.get('other_history').filter(a => {
-            return a.getIn([1, 'op', 0]) === 'convert';
-        }).map(c => {
-            const timestamp = new Date(c.getIn([1, 'timestamp'])).getTime();
+        const currentTime = (new Date()).getTime();
+        const conversions = account.get('other_history', List()).reduce( (out, item) => {
+            if(item.getIn([1, 'op', 0], "") !== 'convert') return out;
+
+            const timestamp = new Date(item.getIn([1, 'timestamp'])).getTime();
             const finishTime = timestamp + (86400000 * (timestamp <= 1481040000000 ? 7 : 3.5)); // add conversion delay before/after hardfork change
-            const amount = parseFloat(c.getIn([1, 'op', 1, 'amount']).replace(' ' + DEBT_TICKER, ""));
+            // const finishTime = timestamp + (86400000 * 3.5); // add 3.5day conversion delay
+            if(finishTime < currentTime) return out;
+
+            const amount = parseFloat(item.getIn([1, 'op', 1, 'amount']).replace(' ' + DEBT_TICKER, ""));
             conversionValue += amount;
-            return (
-                <div key={c.get(0)}>
+
+            return out.concat([
+                <div key={item.get(0)}>
                     <Tooltip t={translate('conversion_complete_tip') + ": " + new Date(finishTime).toLocaleString()}>
                         <span>(+{translate('in_conversion', {amount: translateNumber(amount.toFixed(3)) + ' ' + DEBT_TICKER})})</span>
                     </Tooltip>
                 </div>
-            );
-        })
+            ]);
+        }, [])
+
 
         const balance_steem = parseFloat(account.get('balance').split(' ')[0]);
         const saving_balance_steem = parseFloat(savings_balance.split(' ')[0]);
@@ -195,7 +203,7 @@ class UserWallet extends React.Component {
         const steem_orders_balance_str = translateNumber(steemOrders.toFixed(3)) + ' ' + LIQUID_TOKEN_UPPERCASE
         const power_balance_str = translateNumber(vesting_steem) + ' ' + LIQUID_TOKEN_UPPERCASE // formatDecimal(vesting_steem, 3)
         const savings_balance_str = translateNumber(saving_balance_steem.toFixed(3)) + ' ' + LIQUID_TOKEN_UPPERCASE
-        
+
         // const sbd_balance_str = translateNumber('$' + sbd_balance.toFixed(3)) // formatDecimal(account.sbd_balance, 3)
         const sbd_balance_str = translateNumber(sbd_balance.toFixed(3)) + ' ' + DEBT_TICKER // formatDecimal(account.sbd_balance, 3)
         // const sbd_orders_balance_str = translateNumber('$' + sbdOrders.toFixed(3))

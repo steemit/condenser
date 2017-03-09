@@ -6,7 +6,7 @@ import { renderToString } from "react-dom/server";
 import models from "db/models";
 import ServerHTML from "../server-html";
 import sendEmail from "../sendEmail";
-import { checkCSRF, getRemoteIp } from "../utils";
+import { checkCSRF, getRemoteIp } from "server/utils/misc";
 import config from "config";
 import SignupProgressBar from "app/components/elements/SignupProgressBar";
 import MiniHeader from "app/components/modules/MiniHeader";

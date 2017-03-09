@@ -16,11 +16,11 @@ const use_case_code = 'BACS'; // Use Case: avoid bulk attack and spammers
 // Testing, always blocked: 1-310-555-0100
 
 /** @return {object} - {reference_id} or {error} */
-export default function* verify({ mobile, confirmation_code, ip }) {
+export default function* verify({ mobile, confirmation_code, ip, ignore_score }) {
     try {
         const result = yield getScore(mobile);
         const { recommendation, score } = result.risk;
-        if (recommendation !== 'allow') {
+        if (!ignore_score && recommendation !== 'allow') {
             console.log(
                 `TeleSign did not allow phone ${mobile} ip ${ip}. TeleSign responded: ${recommendation}`
             );

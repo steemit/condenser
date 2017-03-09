@@ -3,7 +3,7 @@ import koa_body from 'koa-body';
 import models from 'db/models';
 import config from 'config';
 import {esc, escAttrs} from 'db/models';
-import {getRemoteIp, rateLimitReq, checkCSRF} from '../utils';
+import {getRemoteIp, rateLimitReq, checkCSRF} from 'server/utils/misc';
 
 export default function useAccountRecoveryApi(app) {
     const router = koa_router();

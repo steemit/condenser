@@ -4,10 +4,10 @@ import React from "react";
 import { renderToString } from "react-dom/server";
 import models from "db/models";
 import ServerHTML from "server/server-html";
-import { verify } from "server/teleSign";
+import teleSignVerify from "server/utils/teleSign";
 import SignupProgressBar from "app/components/elements/SignupProgressBar";
 import CountryCode from "app/components/elements/CountryCode";
-import { getRemoteIp, checkCSRF } from "server/utils";
+import { getRemoteIp, checkCSRF } from "server/utils/misc";
 import MiniHeader from "app/components/modules/MiniHeader";
 import secureRandom from "secure-random";
 import config from "config";
@@ -321,7 +321,7 @@ export default function useEnterAndConfirmMobilePages(app) {
         );
         const ip = getRemoteIp(this.req);
 
-        const verifyResult = yield verify({
+        const verifyResult = yield teleSignVerify({
             mobile: phone,
             confirmation_code,
             ip

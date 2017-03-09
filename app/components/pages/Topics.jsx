@@ -67,7 +67,8 @@ class Topics extends React.Component {
         if (IGNORE_TAGS) categories = categories.filter(val => IGNORE_TAGS.indexOf(val) === -1);
         if (search) categories = categories.filter(val => val.indexOf(search.toLowerCase()) !== -1);
         categories = categories.map(cat => {
-            const link = order ? `/${order}/${cat}` : `/hot/${cat}`;
+            const localisedCat = /[а-яёґєії]/.test(cat.toLowerCase()) ? 'ru--'+detransliterate(cat.toLowerCase(), true) : cat
+            const link = order ? `/${order}/${localisedCat}` : `/${localisedCat}`;
             return (<li key={cat}>
                         <Link to={link} activeClassName="active">{detransliterate(cat)}</Link>
                     </li>);
@@ -75,7 +76,7 @@ class Topics extends React.Component {
         return (
             <ul className={cn}>
                 <li className="Topics__title" key={'*'}>{translate("tags_and_topics")}</li>
-                <li className="Topics__filter"><input type="text" placeholder={translate('filter')} value={detransliterate(search)} onChange={onChangeSearch} /></li>
+                {/*<li className="Topics__filter"><input type="text" placeholder={translate('filter')} value={detransliterate(search)} onChange={onChangeSearch} /></li>*/}
                {categories}
                {!expanded && !search && <li className="show-more">
                    {/*<a href="#" onClick={expand}>Show more topics..</a>*/}

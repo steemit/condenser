@@ -67,7 +67,8 @@ class Topics extends React.Component {
         if (IGNORE_TAGS) categories = categories.filter(val => IGNORE_TAGS.indexOf(val) === -1);
         if (search) categories = categories.filter(val => val.indexOf(search.toLowerCase()) !== -1);
         categories = categories.map(cat => {
-            const link = order ? `/${order}/${cat}` : `/hot/${cat}`;
+            const localisedCat = /[а-яёґєії]/.test(cat.toLowerCase()) ? 'ru--'+detransliterate(cat.toLowerCase(), true) : cat
+            const link = order ? `/${order}/${localisedCat}` : `/${localisedCat}`;
             return (<li key={cat}>
                         <Link to={link} activeClassName="active">{detransliterate(cat)}</Link>
                     </li>);

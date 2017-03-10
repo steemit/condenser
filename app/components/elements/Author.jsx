@@ -24,6 +24,30 @@ class Author extends React.Component {
         follow: true,
         mute: true,
     };
+
+    constructor() {
+        super();
+        this.showProfileCtrl = this.showProfileCtrl.bind(this);
+    }
+
+    componentDidMount() {
+        const element = document.querySelector('.FoundationDropdownMenu__label');
+        if (element) element.addEventListener("click", this.showProfileCtrl, false);
+    }
+
+    componentWillUnmount() {
+        const element = document.querySelector('.FoundationDropdownMenu__label');
+        if (element) element.removeEventListener("click", this.showProfileCtrl, false);
+    }
+
+    showProfileCtrl(e) {
+        if (e.metaKey || e.ctrlKey) { // handle edge case for ctrl clicks
+            e.stopPropagation();
+            window.location = '/@' + this.props.author;
+        } else { // show default author preview
+        }
+    }
+
     shouldComponentUpdate = shouldComponentUpdate(this, 'Author');
     render() {
         const {author, follow, mute, authorRepLog10} = this.props; // html

@@ -1,6 +1,6 @@
 import { translate } from 'app/Translator';
 
-export const savingsTip = 'Balance subject to 3 day withdraw waiting period.'
+export const savingsTip = 'Balance subject to 3 day withdraw waiting period,';
 export const transferTips = {
     'Transfer to Account': 'Move funds to another Steemit account.',
     'Transfer to Savings': 'Protect funds by requiring a 3 day withdraw waiting period.',

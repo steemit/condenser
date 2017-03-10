@@ -31,23 +31,23 @@ class LoginForm extends Component {
             console.error('CreateAccount - cryptoTestResult: ', cryptoTestResult);
             cryptographyFailure = true
         }
-        this.state = {cryptographyFailure}
+        this.state = {cryptographyFailure};
         this.usernameOnChange = e => {
-            const value = e.target.value.toLowerCase()
+            const value = e.target.value.toLowerCase();
             this.state.username.props.onChange(value)
-        }
+        };
         this.onCancel = (e) => {
             if(e.preventDefault) e.preventDefault()
-            const {onCancel, loginBroadcastOperation} = this.props
-            const errorCallback = loginBroadcastOperation && loginBroadcastOperation.get('errorCallback')
-            if (errorCallback) errorCallback('Canceled')
+            const {onCancel, loginBroadcastOperation} = this.props;
+            const errorCallback = loginBroadcastOperation && loginBroadcastOperation.get('errorCallback');
+            if (errorCallback) errorCallback('Canceled');
             if (onCancel) onCancel()
-        }
+        };
         this.qrReader = () => {
             const {qrReader} = props
             const {password} = this.state
             qrReader(data => {password.props.onChange(data)})
-        }
+        };
         this.initForm(props)
     }
 
@@ -56,7 +56,7 @@ class LoginForm extends Component {
         if (this.refs.username && this.refs.username.value) this.refs.pw.focus();
     }
 
-    shouldComponentUpdate = shouldComponentUpdate(this, 'LoginForm')
+    shouldComponentUpdate = shouldComponentUpdate(this, 'LoginForm');
 
     initForm(props) {
         reactForm({
@@ -134,6 +134,8 @@ class LoginForm extends Component {
         let postType = "";
         if (opType === "vote") {
             postType = 'Login to Vote'
+        } else if (opType === "custom_json" && loginBroadcastOperation.getIn(['operation', 'id']) === "follow") {
+            postType = 'Login to Follow Users'
         } else if (loginBroadcastOperation) {
             // check for post or comment in operation
             postType = loginBroadcastOperation.getIn(['operation', 'title']) ? 'Login to Post' : 'Login to Comment';

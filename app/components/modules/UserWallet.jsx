@@ -23,17 +23,17 @@ const assetPrecision = 1000;
 
 class UserWallet extends React.Component {
     constructor() {
-        super()
-        this.state = {}
-        this.onShowDeposit = () => {this.setState({showDeposit: !this.state.showDeposit})}
+        super();
+        this.state = {};
+        this.onShowDeposit = () => {this.setState({showDeposit: !this.state.showDeposit})};
         this.onShowDepositSteem = (e) => {
             e.preventDefault()
             this.setState({showDeposit: !this.state.showDeposit, depositType: 'STEEM'})
-        }
+        };
         this.onShowDepositPower = (e) => {
             e.preventDefault()
             this.setState({showDeposit: !this.state.showDeposit, depositType: 'VESTS'})
-        }
+        };
         // this.onShowDeposit = this.onShowDeposit.bind(this)
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'UserWallet');
     }
@@ -67,20 +67,20 @@ class UserWallet extends React.Component {
         const powerDown = (cancel, e) => {
             e.preventDefault()
             const name = account.get('name');
-            const vesting_shares = cancel ? '0.000000 VESTS' : account.get('vesting_shares')
-            this.setState({toggleDivestError: null})
-            const errorCallback = e2 => {this.setState({toggleDivestError: e2.toString()})}
+            const vesting_shares = cancel ? '0.000000 VESTS' : account.get('vesting_shares');
+            this.setState({toggleDivestError: null});
+            const errorCallback = e2 => {this.setState({toggleDivestError: e2.toString()})};
             const successCallback = () => {this.setState({toggleDivestError: null})}
             this.props.withdrawVesting({account: name, vesting_shares, errorCallback, successCallback})
         }
 
         // Sum savings withrawals
-        let savings_pending = 0, savings_sbd_pending = 0
+        let savings_pending = 0, savings_sbd_pending = 0;
         if(savings_withdraws) {
             savings_withdraws.forEach(withdraw => {
-                const [amount, asset] = withdraw.get('amount').split(' ')
+                const [amount, asset] = withdraw.get('amount').split(' ');
                 if(asset === 'STEEM')
-                    savings_pending += parseFloat(amount)
+                    savings_pending += parseFloat(amount);
                 else {
                     if(asset === 'SBD')
                         savings_sbd_pending += parseFloat(amount)
@@ -168,8 +168,8 @@ class UserWallet extends React.Component {
             { value: 'Power Down', link: '#', onClick: powerDown.bind(this, false) }
         ]
         if(isMyAccount) {
-            steem_menu.push({ value: 'Buy', link: '#', onClick: onShowDepositSteem })
-            steem_menu.push({ value: 'Market', link: '/market' })
+            steem_menu.push({ value: 'Buy', link: '#', onClick: onShowDepositSteem });
+            steem_menu.push({ value: 'Market', link: '/market' });
             power_menu.push({ value: 'Buy', link: '#', onClick: onShowDepositPower })
         }
         if( divesting ) {
@@ -253,7 +253,7 @@ class UserWallet extends React.Component {
             </div>
             <div className="UserWallet__balance row zebra">
                 <div className="column small-12 medium-8">
-                    SAVINGS<br /><span className="secondary">{savingsTip}</span>
+                    SAVINGS<br /><span className="secondary">{savingsTip} currently collecting {sbdInterest}% APR.</span>
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?

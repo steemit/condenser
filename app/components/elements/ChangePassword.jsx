@@ -4,11 +4,11 @@ import transaction from 'app/redux/Transaction'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import {PrivateKey} from 'shared/ecc'
 import {key_utils} from 'shared/ecc'
-import Apis from 'shared/api_client/ApiInstances'
 import {validate_account_name} from 'app/utils/ChainValidation'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import { translate, translateHtml } from 'app/Translator';
 import { FormattedHTMLMessage } from 'react-intl';
+import {api} from 'steem';
 
 const {string, oneOf} = React.PropTypes
 
@@ -42,7 +42,7 @@ class ChangePassword extends React.Component {
         if (name.length > 0) {
             nameError = validate_account_name(name);
             if (!nameError) {
-                promise = Apis.db_api('get_accounts', [name]).then(res => {
+                promise = api.getAccountsAsync([name]).then(res => {
                     return !(res && res.length > 0) ? translate('account_not_found') : '';
                 });
             }

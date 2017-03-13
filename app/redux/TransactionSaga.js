@@ -14,6 +14,7 @@ import tr from 'app/redux/Transaction'
 import getSlug from 'speakingurl'
 import {DEBT_TICKER} from 'app/client_config'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient'
+import * as steem from 'steem'
 
 const {transaction} = ops
 
@@ -186,8 +187,6 @@ function* broadcast({payload: {operations, keys, username, successCallback, erro
         }
         operations = newOps
     }
-    const tx = yield createTransaction(operations)
-    const sx = signTransaction(tx, keys)
 
     // status: broadcasting
     const broadcastedEvent = () => {
@@ -201,18 +200,26 @@ function* broadcast({payload: {operations, keys, username, successCallback, erro
             }
         }
     }
+
     try {
         yield new Promise((resolve, reject) => {
             if (process.env.BROWSER && window.bump === 1) { // for testing
-                console.log('TransactionSaga bump(no broadcast) and reject', transaction.toObject(tx))
+                console.log('TransactionSaga bump(no broadcast) and reject', JSON.stringify(operations, null, 2))
                 setTimeout(() => {reject(new Error('Testing, fake error'))}, 2000)
             } else if (process.env.BROWSER && window.bump === 2) { // also for testing
-                console.log('TransactionSaga bump(no broadcast) and resolve', transaction.toObject(tx))
+                console.log('TransactionSaga bump(no broadcast) and resolve', JSON.stringify(operations, null, 2))
                 setTimeout(() => {resolve(); broadcastedEvent()}, 2000)
-            } else
-                Apis.broadcastTransaction(sx, () => {resolve()})
-                    .then(() => {broadcastedEvent()})
-                    .catch(e => {reject(e)})
+            } else {
+                steem.broadcast.send({ extensions: [], operations }, keys, (err) => {
+                    if(err) {
+                        console.error(err);
+                        reject(err)
+                    } else {
+                        broadcastedEvent()
+                        resolve()
+                    }
+                })
+            }
         })
         // status: accepted
         for (const [type, operation] of operations) {

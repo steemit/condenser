@@ -2,13 +2,12 @@ import {takeLatest, takeEvery} from 'redux-saga';
 import {call, put, select, fork} from 'redux-saga/effects';
 import {loadFollows, fetchFollowCount} from 'app/redux/FollowSaga';
 import {getContent} from 'app/redux/SagaShared';
-import Apis from 'shared/api_client/ApiInstances';
 import GlobalReducer from './GlobalReducer';
 import constants from './constants';
 import {fromJS, Map} from 'immutable'
 import {api} from 'steem';
 
-export const fetchDataWatches = [watchLocationChange, watchDataRequests, watchApiRequests, watchFetchJsonRequests, watchFetchState, watchGetContent];
+export const fetchDataWatches = [watchLocationChange, watchDataRequests, watchFetchJsonRequests, watchFetchState, watchGetContent];
 
 export function* watchDataRequests() {
     yield* takeLatest('REQUEST_DATA', fetchData);
@@ -179,29 +178,6 @@ export function* fetchData(action) {
     } catch (error) {
         console.error('~~ Saga fetchData error ~~>', call_name, args, error);
         yield put({type: 'global/STEEM_API_ERROR', error: error.message});
-    }
-}
-
-export function* watchApiRequests() {
-    yield* takeEvery('global/FETCH_API', fetchApi);
-}
-export function* fetchApi({payload: {exec, key, reducer, skipLoading = false}}) {
-    const [api, method, ...args] = exec
-    try {
-        const apiInst = Apis.instance()[api];
-        yield put(GlobalReducer.actions.update({key, notSet: Map(),
-            updater: m => m.mergeDeep({loading: true})
-        }))
-        const value = yield skipLoading ? apiInst.exec(method, args) :
-            call([apiInst, apiInst.exec], method, args)
-        let v = fromJS(value)
-        if(reducer) v = v.reduce(...reducer)
-        yield put(GlobalReducer.actions.update({key, notSet: Map(),
-            updater: m => m.mergeDeep({result: v, error: null, loading: false})
-        }))
-    } catch (error) {
-        console.error('~~ Saga fetchApi error ~~>', method, args, error);
-        yield put(GlobalReducer.actions.set({key, value: {error, result: undefined, loading: false}}))
     }
 }
 

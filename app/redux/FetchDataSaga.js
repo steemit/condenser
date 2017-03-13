@@ -6,6 +6,7 @@ import Apis from 'shared/api_client/ApiInstances';
 import GlobalReducer from './GlobalReducer';
 import constants from './constants';
 import {fromJS, Map} from 'immutable'
+import {api} from 'steem';
 
 export const fetchDataWatches = [watchLocationChange, watchDataRequests, watchApiRequests, watchFetchJsonRequests, watchFetchState, watchGetContent];
 
@@ -47,8 +48,7 @@ export function* fetchState(location_change_action) {
     if (url.indexOf("/author-rewards") !== -1) url = url.replace("/author-rewards", "/transfers");
 
     try {
-        const db_api = Apis.instance().db_api;
-        const state = yield call([db_api, db_api.exec], 'get_state', [url]);
+        const state = yield call([api, api.getStateAsync], url)
         yield put(GlobalReducer.actions.receiveState(state));
     } catch (error) {
         console.error('~~ Saga fetchState error ~~>', url, error);

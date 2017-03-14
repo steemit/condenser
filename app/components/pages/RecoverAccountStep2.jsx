@@ -1,11 +1,11 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import Apis from 'shared/api_client/ApiInstances';
 import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInput';
 import {PrivateKey} from 'shared/ecc';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { translate } from 'app/Translator';
 import Callout from 'app/components/elements/Callout';
+import {api} from 'steem'
 
 function passwordToOwnerPubKey(account_name, password) {
     let pub_key;
@@ -60,7 +60,7 @@ class RecoverAccountStep2 extends React.Component {
     }
 
     checkOldOwner(name, oldOwner) {
-        return Apis.db_api('get_owner_history', name).then(history => {
+        return api.getOwnerHistoryAsync(name).then(history => {
             const res = history.filter(a => {
                 const owner = a.previous_owner_authority.key_auths[0][0];
                 return owner === oldOwner;

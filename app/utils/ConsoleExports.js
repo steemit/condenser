@@ -1,4 +1,3 @@
-import Apis from 'shared/api_client/ApiInstances'
 import { PrivateKey, PublicKey, Aes, key_utils } from 'shared/ecc'
 
 // import secureRandom from 'secure-random'
@@ -7,7 +6,6 @@ import { PrivateKey, PublicKey, Aes, key_utils } from 'shared/ecc'
 
 module.exports = {
 
-    Apis,
     PrivateKey, PublicKey, Aes, key_utils,
 
     // Run once to start, then again to stop and print a report

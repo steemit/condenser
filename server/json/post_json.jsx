@@ -1,7 +1,7 @@
 import koa_router from 'koa-router';
 import React from 'react';
 import {routeRegex} from "app/ResolveRoute";
-import Apis from 'shared/api_client/ApiInstances'
+import {api} from 'steem'
 
 export default function usePostJson(app) {
     const router = koa_router();
@@ -12,7 +12,7 @@ export default function usePostJson(app) {
         const author = this.url.match(/(\@[\w\d\.-]+)/)[0].replace('@', '');
         const permalink = this.url.match(/(\@[\w\d\.-]+)\/?([\w\d-]+)/)[2];
         let status = "";
-        let post = yield Apis.db_api('get_content', author, permalink);
+        let post = yield api.getContentAsync(author, permalink);
 
         if (post.author) {
             status = "200";

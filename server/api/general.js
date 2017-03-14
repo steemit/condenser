@@ -11,6 +11,7 @@ import secureRandom from 'secure-random'
 import {PublicKey, Signature, hash} from 'shared/ecc'
 import Mixpanel from 'mixpanel';
 import Tarantool from 'db/tarantool';
+import {api} from 'steem';
 
 const mixpanel = config.get('mixpanel') ? Mixpanel.init(config.get('mixpanel')) : null;
 
@@ -125,7 +126,7 @@ export default function useGeneralApi(app) {
             const [fee_value, fee_currency] = config.get('registrar.fee').split(' ');
             let fee = parseFloat(fee_value);
             try {
-                const chain_properties = yield Apis.instance().db_api.exec('get_chain_properties', []);
+                const chain_properties = yield api.getChainPropertiesAsync();
                 const chain_fee = parseFloat(chain_properties.account_creation_fee);
                 if (chain_fee && chain_fee > fee) {
                     if (fee / chain_fee > 0.5) { // just a sanity check - chain fee shouldn't be a way larger
@@ -223,7 +224,7 @@ export default function useGeneralApi(app) {
                 if(!this.session.login_challenge) {
                     console.error('/login_account missing this.session.login_challenge');
                 } else {
-                    const [chainAccount] = yield Apis.db_api('get_accounts', [account])
+                    const [chainAccount] = yield api.getAccountsAsync([account])
                     if(!chainAccount) {
                         console.error('/login_account missing blockchain account', account);
                     } else {

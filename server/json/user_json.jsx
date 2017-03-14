@@ -1,7 +1,7 @@
 import koa_router from 'koa-router';
 import React from 'react';
 import {routeRegex} from "app/ResolveRoute";
-import Apis from 'shared/api_client/ApiInstances'
+import {api} from 'steem'
 
 export default function useUserJson(app) {
     const router = koa_router();
@@ -14,7 +14,7 @@ export default function useUserJson(app) {
         let user = "";
         let status = "";
 
-        const [chainAccount] = yield Apis.db_api('get_accounts', [user_name]);
+        const [chainAccount] = yield api.getAccountsAsync([user_name]);
 
         if (chainAccount) {
             user = chainAccount;

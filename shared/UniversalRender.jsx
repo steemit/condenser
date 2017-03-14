@@ -30,6 +30,8 @@ import {notificationsArrayToMap} from 'app/utils/Notifications';
 import {routeRegex} from "app/ResolveRoute";
 import {contentStats} from 'app/utils/StateFunctions'
 
+import {api} from 'steem';
+
 const sagaMiddleware = createSagaMiddleware(
     ...userWatches, // keep first to remove keys early when a page change happens
     ...fetchDataWatches,
@@ -141,7 +143,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
         if (url.indexOf('/curation-rewards') !== -1) url = url.replace(/\/curation-rewards$/, '/transfers');
         if (url.indexOf('/author-rewards') !== -1) url = url.replace(/\/author-rewards$/, '/transfers');
 
-        onchain = await Apis.instance().db_api.exec('get_state', [url]);
+        onchain = await api.getStateAsync(url);
 
         if (Object.getOwnPropertyNames(onchain.accounts).length === 0 && (url.match(routeRegex.UserProfile1) || url.match(routeRegex.UserProfile3))) { // protect for invalid account
             return {
@@ -163,7 +165,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
 
         if (!url.match(routeRegex.PostsIndex) && !url.match(routeRegex.UserProfile1) && !url.match(routeRegex.UserProfile2) && url.match(routeRegex.PostNoCategory)) {
             const params = url.substr(2, url.length - 1).split("/");
-            const content = await Apis.instance().db_api.exec('get_content', [params[0], params[1]]);
+            const content = await api.getContentAsync(params[0], params[1]);
             if (content.author && content.permlink) { // valid short post url
                 onchain.content[url.substr(2, url.length - 1)] = content;
             } else { // protect on invalid user pages (i.e /user/transferss)

@@ -14,7 +14,7 @@ import tr from 'app/redux/Transaction'
 import getSlug from 'speakingurl'
 import {DEBT_TICKER} from 'app/client_config'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient'
-import * as steem from 'steem'
+import {api, broadcast} from 'steem';
 
 const {transaction} = ops
 
@@ -154,7 +154,7 @@ function* broadcastOperation({payload:
                 }
             }
         }
-        yield call(broadcast, {payload})
+        yield call(broadcastPayload, {payload})
         let eventType = type.replace(/^([a-z])/, g => g.toUpperCase()).replace(/_([a-z])/g, g => g[1].toUpperCase());
         if (eventType === 'Comment' && !operation.parent_author) eventType = 'Post';
         const page = eventType === 'Vote' ? `@${operation.author}/${operation.permlink}` : '';
@@ -165,8 +165,8 @@ function* broadcastOperation({payload:
     }
 }
 
-function* broadcast({payload: {operations, keys, username, successCallback, errorCallback}}) {
-    // console.log('broadcast')
+function* broadcastPayload({payload: {operations, keys, username, successCallback, errorCallback}}) {
+    // console.log('broadcastPayload')
     if ($STM_Config.read_only_mode) return;
     for (const [type] of operations) // see also transaction/ERROR
         yield put(tr.actions.remove({key: ['TransactionError', type]}))
@@ -210,7 +210,7 @@ function* broadcast({payload: {operations, keys, username, successCallback, erro
                 console.log('TransactionSaga bump(no broadcast) and resolve', JSON.stringify(operations, null, 2))
                 setTimeout(() => {resolve(); broadcastedEvent()}, 2000)
             } else {
-                steem.broadcast.send({ extensions: [], operations }, keys, (err) => {
+                broadcast.send({ extensions: [], operations }, keys, (err) => {
                     if(err) {
                         console.error(err);
                         reject(err)
@@ -241,7 +241,7 @@ function* broadcast({payload: {operations, keys, username, successCallback, erro
         }
         if (successCallback) try { successCallback() } catch (error) { console.error(error) }
     } catch (error) {
-        console.error('TransactionSaga\tbroadcast', error)
+        console.error('TransactionSaga\tbroadcastPayload', error)
         // status: error
         yield put(tr.actions.error({operations, error, errorCallback}))
         for (const [type, operation] of operations) {
@@ -277,13 +277,13 @@ function* accepted_vote({operation: {author, permlink, weight}}) {
 }
 
 function* accepted_withdraw_vesting({operation}) {
-    let [account] = yield call(Apis.db_api, 'get_accounts', [operation.account])
+    let [account] = yield call([api, api.getAccountsAsync], [operation.account])
     account = fromJS(account)
     yield put(g.actions.receiveAccount({account}))
 }
 
 function* accepted_account_update({operation}) {
-    let [account] = yield call(Apis.db_api, 'get_accounts', [operation.account])
+    let [account] = yield call([api, api.getAccountsAsync], [operation.account])
     account = fromJS(account)
     yield put(g.actions.receiveAccount({account}))
 
@@ -392,7 +392,7 @@ function* createPermlink(title, author, parent_author, parent_permlink) {
             s = base58.encode(secureRandom.randomBuffer(4))
         }
         // ensure the permlink(slug) is unique
-        const slugState = yield call([Apis, Apis.db_api], 'get_content', author, s)
+        const slugState = yield call([api, api.getContentAsync], author, s)
         let prefix
         if (slugState.body !== '') {
             // make sure slug is unique
@@ -483,7 +483,7 @@ function slug(text) {
 }
 
 function* recoverAccount({payload: {account_to_recover, old_password, new_password, onError, onSuccess}}) {
-    const [account] = yield call([Apis, Apis.db_api], 'get_accounts', [account_to_recover])
+    const [account] = yield call([api, api.getAccountsAsync], [account_to_recover])
     if(!account) {
         onError('Unknown account ' + account)
         return
@@ -557,7 +557,7 @@ function* recoverAccount({payload: {account_to_recover, old_password, new_passwo
 // const twofaAccount = 'steem'
 function* updateAuthorities({payload: {accountName, signingKey, auths, twofa, onSuccess, onError}}) {
     // Be sure this account is up-to-date (other required fields are sent in the update)
-    const [account] = yield call([Apis, Apis.db_api], 'get_accounts', [accountName])
+    const [account] = yield call([api, api.getAccountsAsync], [accountName])
     if (!account) {
         onError('Account not found')
         return
@@ -690,7 +690,7 @@ function* updateMeta(params) {
     console.log('meta', meta)
     console.log('account_name', account_name)
     // Be sure this account is up-to-date (other required fields are sent in the update)
-    const [account] = yield call([Apis, Apis.db_api], 'get_accounts', [account_name])
+    const [account] = yield call([api, api.getAccountsAsync], [account_name])
     if (!account) {
         onError('Account not found')
         return

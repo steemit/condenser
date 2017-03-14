@@ -1,6 +1,6 @@
-import { ecc_config, hash } from "../ecc"
+import * as steem from 'steem'
 
-ecc_config.address_prefix = "STM";
+steem.config.set('address_prefix', 'STM')
 
 let chain_id = ""
 for(let i = 0; i < 32; i++) chain_id += "00"

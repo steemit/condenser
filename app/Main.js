@@ -7,6 +7,7 @@ import Iso from 'iso';
 import universalRender from 'shared/UniversalRender';
 import ConsoleExports from './utils/ConsoleExports';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
+import * as steem from 'steem';
 
 window.onerror = error => {
     if (window.$STM_csrf) serverApiRecordEvent('client_error', error);
@@ -23,8 +24,10 @@ try {
 
 function runApp(initial_state) {
     console.log('Initial state', initial_state);
-    plugins(initial_state.offchain.config);
-    window.$STM_Config = initial_state.offchain.config;
+    const config = initial_state.offchain.config
+    steem.config.set('websocket', config.ws_connection_client);
+    window.$STM_Config = config;
+    plugins(config);
     if (initial_state.offchain.serverBusy) {
         window.$STM_ServerBusy = true;
     }
@@ -32,6 +35,7 @@ function runApp(initial_state) {
         window.$STM_csrf = initial_state.offchain.csrf;
         delete initial_state.offchain.csrf;
     }
+
     const location = `${window.location.pathname}${window.location.search}${window.location.hash}`;
     universalRender({history, location, initial_state})
     .catch(error => {
@@ -50,5 +54,3 @@ if (!window.Intl) {
 else {
     Iso.bootstrap(runApp);
 }
-
-

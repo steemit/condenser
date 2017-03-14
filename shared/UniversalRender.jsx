@@ -6,7 +6,6 @@ import React from 'react';
 import { render } from 'react-dom';
 import { renderToString } from 'react-dom/server';
 import { Router, RouterContext, match, applyRouterMiddleware } from 'react-router';
-import Apis from './api_client/ApiInstances';
 import { Provider } from 'react-redux';
 import RootRoute from 'app/RootRoute';
 import {createStore, applyMiddleware, compose} from 'redux';
@@ -86,23 +85,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
         sagaMiddleware.run(PollDataSaga).done
             .then(() => console.log('PollDataSaga is finished'))
             .catch(err => console.log('PollDataSaga is finished with error', err));
-        const ws_connection_status_cb = status => {
-            store.dispatch({type: 'WS_CONNECTION_STATUS', payload: {status}});
-        };
-        const ws_request_status_cb = payload => {
-            store.dispatch({type: 'RPC_REQUEST_STATUS', payload});
-        };
-        try {
-            await Apis.instance(ws_connection_status_cb, ws_request_status_cb).init();
-        } catch (e) {
-            console.error('Api init error: ', e);
-            if (e.toString && e.toString().match(/ReferenceError.+WebSocket/)) {
-                const message = 'Warning! This browser does not support web sockets communication, some elements of the website may not be displayed properly. Please upgrade your browser.';
-                store.dispatch({type: 'ADD_NOTIFICATION', payload: {key: 'websocket', message}});
-            } else {
-                serverApiRecordEvent('client_error', e);
-            }
-        }
+
         const history = syncHistoryWithStore(browserHistory, store);
         // const scrollHistory = useScroll(() => history)();
 

@@ -58,7 +58,7 @@ function TimeAuthorCategoryLarge({content, authorRepLog10}) {
     return (
         <span className="PostFull__time_author_category_large vcard">
             <TimeAgoWrapper date={content.created} className="updated float-right" />
-            <Userpic account={content.author} />
+            <Userpic account={content.author} onClick={this.showAuthorPreview} />
             <div className="right-side">
                 <Author author={content.author} authorRepLog10={authorRepLog10} />
                 <span> in <TagList post={content} single /></span>
@@ -132,16 +132,6 @@ class PostFull extends React.Component {
         const names = 'cont, post, username'.split(', ');
         return names.findIndex(name => this.props[name] !== nextProps[name]) !== -1 ||
             this.state !== nextState
-    }
-
-    componentDidMount() {
-        const headerPic = document.querySelector('.PostFull__header .Userpic');
-        if (headerPic) headerPic.addEventListener("click", this.showAuthorPreview, false);
-    }
-
-    componentWillUnmount() {
-        const headerPic = document.querySelector('.PostFull__header .Userpic');
-        if (headerPic) headerPic.removeEventListener("click", this.showAuthorPreview, false);
     }
 
     showAuthorPreview() {

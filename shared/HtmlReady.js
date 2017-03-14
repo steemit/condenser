@@ -188,13 +188,13 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
     })
 
     // usertag (mention)
-    content = content.replace(/(^|[^\w\/]|\s)@([a-z][-\.a-z\d]+[a-z\d])(^|[^\w\/]|\s)/ig, (match, symbol, user) => {
+    content = content.replace(/(^|["\(]|\s)@([a-z][-\.a-z\d]+[a-z\d])($|^|[^\w\/]|\s)/ig, (match, symbol, user, tail) => {
         // console.log('['+match+']', '['+symbol+']', '['+user+']')
         const userLower = user.toLowerCase()
         const valid = validate_account_name(userLower) == null
         if(valid && usertags) usertags.add(userLower)
         if(!mutate) return match
-        return valid ? `${symbol}<a href="/@${userLower}">@${user}</a>` : symbol + '@' + user
+        return valid ? `${symbol}<a href="/@${userLower}">@${user}</a>` + tail : symbol + '@' + user + tail
     })
 
     content = content.replace(linksRe.any, ln => {

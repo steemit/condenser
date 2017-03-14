@@ -42,10 +42,11 @@ export default function reducer(state = defaultState, action) {
         const loadingBlacklist = [
             'get_dynamic_global_properties',
             'get_api_by_name',
-            'get_followers',
-            'get_following'
+            'getFollowersAsync',
+            'getFollowingAsync'
         ];
         const loadingIgnored = loadingBlacklist.indexOf(action.payload.method) !== -1;
+        console.log('loadingBlacklist', loadingIgnored, action.payload.method)
         if (action.payload.event === 'BEGIN') {
             res = state.mergeDeep({
                 loading: loadingIgnored ? state.get('loading') : true, // reuse current loading state if the method is blacklisted

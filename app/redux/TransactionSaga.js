@@ -98,7 +98,7 @@ function* preBroadcast_custom_json({operation}) {
             if(json[0] === 'follow') {
                 const {follower, following, what: [action]} = json[1]
                 yield put(g.actions.update({
-                    key: ['follow', 'get_following', follower],
+                    key: ['follow', 'getFollowingAsync', follower],
                     notSet: Map(),
                     updater: m => {
                         //m = m.asMutable()
@@ -430,7 +430,7 @@ function* error_custom_json({operation: {id, required_posting_auths}}) {
     if(id === 'follow') {
         const follower = required_posting_auths[0]
         yield put(g.actions.update({
-            key: ['follow', 'get_following', follower, 'loading'],
+            key: ['follow', 'getFollowingAsync', follower, 'loading'],
             updater: () => null
         }))
     }

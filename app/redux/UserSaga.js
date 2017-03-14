@@ -95,8 +95,8 @@ function* usernamePasswordLogin(action) {
     const current = yield select(state => state.user.get('current'))
     if(current) {
         const username = current.get('username')
-        yield fork(loadFollows, "get_following", username, 'blog')
-        yield fork(loadFollows, "get_following", username, 'ignore')
+        yield fork(loadFollows, "getFollowingAsync", username, 'blog')
+        yield fork(loadFollows, "getFollowingAsync", username, 'ignore')
     }
 }
 

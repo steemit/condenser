@@ -28,8 +28,8 @@ export function* fetchState(location_change_action) {
     if(m && m.length === 2) {
         const username = m[1]
         yield fork(fetchFollowCount, username)
-        yield fork(loadFollows, "get_followers", username, 'blog')
-        yield fork(loadFollows, "get_following", username, 'blog')
+        yield fork(loadFollows, "getFollowersAsync", username, 'blog')
+        yield fork(loadFollows, "getFollowingAsync", username, 'blog')
     }
 
     // `ignore_fetch` case should only trigger on initial page load. No need to call

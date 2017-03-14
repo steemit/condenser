@@ -1,6 +1,5 @@
 import {takeEvery} from 'redux-saga';
 import {call, put, select} from 'redux-saga/effects';
-import {Apis} from 'shared/api_client'
 import {createTransaction, signTransaction} from 'shared/chain/transactions'
 import {ops} from 'shared/serializer'
 import {PublicKey, PrivateKey} from 'shared/ecc'
@@ -692,17 +691,12 @@ function* updateMeta(params) {
     }
 
     try {
-        console.log('account.name', account.name)
-      const tx = yield createTransaction([
-          ['update_account_meta', {
-              account_name: account.name,
-              json_meta: JSON.stringify(meta),
-          }]
-      ])
-      const sx = signTransaction(tx, signingKey);
-      yield new Promise((resolve, reject) =>
-          Apis.broadcastTransaction(sx, () => {resolve()}).catch(e => {reject(e)})
-      )
+      console.log('account.name', account.name)
+      const operations = ['update_account_meta', {
+          account_name: account.name,
+          json_meta: JSON.stringify(meta),
+      }]
+      yield broadcast.sendAsync({extensions: [], operations}, [signingKey])
       if(onSuccess) onSuccess()
       // console.log('sign key.toPublicKey().toString()', key.toPublicKey().toString())
       // console.log('payload', payload)

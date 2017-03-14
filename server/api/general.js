@@ -11,7 +11,7 @@ import secureRandom from 'secure-random'
 import {PublicKey, Signature, hash} from 'shared/ecc'
 import Mixpanel from 'mixpanel';
 import Tarantool from 'db/tarantool';
-import {api} from 'steem';
+import {api, broadcast} from 'steem';
 
 const mixpanel = config.get('mixpanel') ? Mixpanel.init(config.get('mixpanel')) : null;
 
@@ -372,11 +372,6 @@ export default function useGeneralApi(app) {
     });
 }
 
-import {Apis} from 'shared/api_client';
-import {createTransaction, signTransaction} from 'shared/chain/transactions';
-import {ops} from 'shared/serializer';
-
-const {signed_transaction} = ops;
 /**
  @arg signingKey {string|PrivateKey} - WIF or PrivateKey object
  */
@@ -391,12 +386,10 @@ function* createAccount({
         posting: {weight_threshold: 1, account_auths: [], key_auths: [[posting, 1]]},
         memo_key: memo,
     }]]
-    const tx = yield createTransaction(operations)
-    const sx = signTransaction(tx, signingKey)
-    if (!broadcast) return signed_transaction.toObject(sx)
-    return yield new Promise((resolve, reject) =>
-        Apis.broadcastTransaction(sx, () => {resolve()}).catch(e => {reject(e)})
-    )
+    yield broadcast.sendAsync({
+      extensions: [],
+      operations
+    }, [signingKey])
 }
 
 const parseSig = hexSig => {try {return Signature.fromHex(hexSig)} catch(e) {return null}}

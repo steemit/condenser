@@ -14,7 +14,7 @@ import tr from 'app/redux/Transaction'
 import getSlug from 'speakingurl'
 import {DEBT_TICKER} from 'app/client_config'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient'
-import {api, broadcast} from 'steem';
+import {api, broadcast, auth} from 'steem';
 
 const {transaction} = ops
 
@@ -482,70 +482,61 @@ function slug(text) {
     //    .toLowerCase()
 }
 
+const pwPubkey = (name, pw, role) => auth.wifToPublic(auth.toWif(name, pw.trim(), role))
+
 function* recoverAccount({payload: {account_to_recover, old_password, new_password, onError, onSuccess}}) {
     const [account] = yield call([api, api.getAccountsAsync], [account_to_recover])
     if(!account) {
         onError('Unknown account ' + account)
         return
     }
-    try {
-        PrivateKey.fromWif(new_password)
+    if(auth.isWif(new_password)) {
         onError('Your new password should not be a WIF')
         return
-    } catch(e) {
-        //
     }
-    if(PublicKey.fromString(new_password)) {
+    if(auth.isPubkey(new_password)) {
         onError('Your new password should not be a Public Key')
         return
     }
 
-    let oldOwner
-    try {
-        oldOwner = PrivateKey.fromWif(old_password)
-    } catch(e) {
-        oldOwner = PrivateKey.fromSeed(account_to_recover + 'owner' + old_password)
-    }
-    const newOwner = PrivateKey.fromSeed(account_to_recover + 'owner' + new_password.trim())
-    const newActive = PrivateKey.fromSeed(account_to_recover + 'active' + new_password.trim())
-    const newPosting = PrivateKey.fromSeed(account_to_recover + 'posting' + new_password.trim())
-    const newMemo = PrivateKey.fromSeed(account_to_recover + 'memo' + new_password.trim())
+    const oldOwnerPrivate = auth.isWif(old_password) ? old_password :
+        auth.toWif(account_to_recover, old_password, 'owner')
+
+    const oldOwner = auth.wifToPublic(oldOwnerPrivate)
+
+    const newOwnerPrivate = auth.toWif(account_to_recover, new_password.trim(), 'owner')
+    const newOwner = auth.wifToPublic(newOwnerPrivate)
+    const newActive = pwPubkey(account_to_recover, new_password.trim(), 'active')
+    const newPosting = pwPubkey(account_to_recover, new_password.trim(), 'posting')
+    const newMemo = pwPubkey(account_to_recover, new_password.trim(), 'memo')
 
     const new_owner_authority = {weight_threshold: 1, account_auths: [],
-        key_auths: [[newOwner.toPublicKey(), 1]]}
+        key_auths: [[newOwner, 1]]}
 
     const recent_owner_authority = {weight_threshold: 1, account_auths: [],
-        key_auths: [[oldOwner.toPublicKey(), 1]]}
+        key_auths: [[oldOwner, 1]]}
 
     try {
-        const tx1 = yield createTransaction([
+        yield broadcast.sendAsync({extensions: [], operations: [
             ['recover_account', {
                 account_to_recover,
                 new_owner_authority,
                 recent_owner_authority,
             }]
-        ])
-        const sx1 = signTransaction(tx1, [oldOwner, newOwner])
-        yield new Promise((resolve, reject) =>
-            Apis.broadcastTransaction(sx1, () => {resolve()}).catch(e => {reject(e)})
-        )
+        ]}, [oldOwnerPrivate, newOwnerPrivate])
 
         // change password
         // change password probably requires a separate transaction (single trx has not been tested)
         const {json_metadata} = account
-        const tx2 = yield createTransaction([
+        yield broadcast.sendAsync({extensions: [], operations: [
             ['account_update', {
                 account: account.name,
-                active: {weight_threshold: 1, account_auths: [], key_auths: [[newActive.toPublicKey(), 1]]},
-                posting: {weight_threshold: 1, account_auths: [], key_auths: [[newPosting.toPublicKey(), 1]]},
-                memo_key: newMemo.toPublicKey(),
+                active: {weight_threshold: 1, account_auths: [], key_auths: [[newActive, 1]]},
+                posting: {weight_threshold: 1, account_auths: [], key_auths: [[newPosting, 1]]},
+                memo_key: newMemo,
                 json_metadata,
             }]
-        ])
-        const sx2 = signTransaction(tx2, [newOwner])
-        yield new Promise((resolve, reject) =>
-            Apis.broadcastTransaction(sx2, () => {resolve()}).catch(e => {reject(e)})
-        )
+        ]}, [oldOwnerPrivate])
         if(onSuccess) onSuccess()
     } catch(error) {
         console.error('Recover account', error)

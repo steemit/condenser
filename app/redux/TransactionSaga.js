@@ -12,7 +12,6 @@ import {serverApiRecordEvent} from 'app/utils/ServerApiClient'
 import {PrivateKey, PublicKey} from 'steem/lib/auth/ecc';
 import {api, broadcast, auth, memo} from 'steem';
 
-
 export const transactionWatches = [
     watchForBroadcast,
     watchForUpdateAuthorities,
@@ -51,11 +50,11 @@ const hook = {
 }
 
 function* preBroadcast_transfer({operation}) {
-    let memo = operation.memo
-    if(memo) {
-        memo = toStringUtf8(memo)
-        memo = memo.trim()
-        if(/^#/.test(memo)) {
+    let memoStr = operation.memo
+    if(memoStr) {
+        memoStr = toStringUtf8(memoStr)
+        memoStr = memoStr.trim()
+        if(/^#/.test(memoStr)) {
             const memo_private = yield select(
                 state => state.user.getIn(['current', 'private_keys', 'memo_private'])
             )
@@ -63,8 +62,8 @@ function* preBroadcast_transfer({operation}) {
             const account = yield call(getAccount, operation.to)
             if(!account) throw new Error(`Unknown to account ${operation.to}`)
             const memo_key = account.get('memo_key')
-            memo = memo.encode(memo_private, memo_key, memo)
-            operation.memo = memo
+            memoStr = memo.encode(memo_private, memo_key, memoStr)
+            operation.memo = memoStr
         }
     }
     return operation

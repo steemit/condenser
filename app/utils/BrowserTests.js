@@ -41,9 +41,9 @@ export default function runTests() {
         assert(PublicKey.fromString(public_key.toString()))
     })
     it('memo encryption', () => {
-        const cyphertext = memo.encode(private_key, public_key, '#memo')
+        const cyphertext = memo.encode(private_key, public_key, '#memo爱')
         const plantext = memo.decode(private_key, cyphertext)
-        browserTests.memo_encryption = plantext === 'memo'
+        browserTests.memo_encryption = plantext === '#memo爱'
         if(!browserTests.memo_encryption) {
             console.error('Decoded memo did not match (memo encryption is unavailable)')
         }

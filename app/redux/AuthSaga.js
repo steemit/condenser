@@ -1,9 +1,9 @@
 import {takeEvery} from 'redux-saga';
 import {call, put, select} from 'redux-saga/effects';
 import {Set, Map, fromJS, List} from 'immutable'
-import {PrivateKey} from 'shared/ecc'
 import user from 'app/redux/User'
 import {getAccount} from 'app/redux/SagaShared'
+import {PrivateKey} from 'steem/lib/auth/ecc';
 import {api} from 'steem';
 
 // operations that require only posting authority

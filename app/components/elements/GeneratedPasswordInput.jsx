@@ -1,6 +1,6 @@
 import React from 'react';
-import {key_utils} from 'shared/ecc'
 import { translate } from 'app/Translator';
+import {key_utils} from 'steem/lib/auth/ecc';
 
 function allChecked(confirmCheckboxes) {
     return confirmCheckboxes.box1 && confirmCheckboxes.box2;

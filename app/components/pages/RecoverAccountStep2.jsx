@@ -1,11 +1,11 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInput';
-import {PrivateKey} from 'shared/ecc';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { translate } from 'app/Translator';
 import Callout from 'app/components/elements/Callout';
-import {api} from 'steem'
+import {PrivateKey} from 'steem/lib/auth/ecc';
+import {api} from 'steem';
 
 function passwordToOwnerPubKey(account_name, password) {
     let pub_key;

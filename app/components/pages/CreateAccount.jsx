@@ -2,13 +2,13 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import {PrivateKey} from 'shared/ecc';
 import user from 'app/redux/User';
 import {validate_account_name} from 'app/utils/ChainValidation';
 import SignUp from 'app/components/modules/SignUp';
-import runTests from 'shared/ecc/test/BrowserTests';
+import runTests from 'app/utils/BrowserTests';
 import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInput';
 import SignupProgressBar from 'app/components/elements/SignupProgressBar';
+import {PrivateKey} from 'steem/lib/auth/ecc';
 import {api} from 'steem';
 
 class CreateAccount extends React.Component {

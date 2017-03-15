@@ -1,21 +1,17 @@
 import {takeEvery} from 'redux-saga';
 import {call, put, select} from 'redux-saga/effects';
-import {createTransaction, signTransaction} from 'shared/chain/transactions'
-import {ops} from 'shared/serializer'
-import {PublicKey, PrivateKey} from 'shared/ecc'
 import {fromJS, Set, Map} from 'immutable'
 import {getAccount, getContent} from 'app/redux/SagaShared'
 import {findSigningKey} from 'app/redux/AuthSaga'
-import {encode} from 'shared/chain/memo'
 import g from 'app/redux/GlobalReducer'
 import user from 'app/redux/User'
 import tr from 'app/redux/Transaction'
 import getSlug from 'speakingurl'
 import {DEBT_TICKER} from 'app/client_config'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient'
-import {api, broadcast, auth} from 'steem';
+import {PrivateKey, PublicKey} from 'steem/lib/auth/ecc';
+import {api, broadcast, auth, memo} from 'steem';
 
-const {transaction} = ops
 
 export const transactionWatches = [
     watchForBroadcast,
@@ -67,7 +63,7 @@ function* preBroadcast_transfer({operation}) {
             const account = yield call(getAccount, operation.to)
             if(!account) throw new Error(`Unknown to account ${operation.to}`)
             const memo_key = account.get('memo_key')
-            memo = encode(memo_private, memo_key, memo)
+            memo = memo.encode(memo_private, memo_key, memo)
             operation.memo = memo
         }
     }

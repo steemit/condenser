@@ -146,8 +146,7 @@ export default function useGeneralApi(app) {
                 owner: account.owner_key,
                 active: account.active_key,
                 posting: account.posting_key,
-                memo: account.memo_key,
-                broadcast: true
+                memo: account.memo_key
             });
             console.log('-- create_account_with_keys created -->', this.session.uid, account.name, user.id, account.owner_key);
 
@@ -377,7 +376,7 @@ export default function useGeneralApi(app) {
  */
 function* createAccount({
     signingKey, fee, creator, new_account_name, json_metadata = '',
-    owner, active, posting, memo, broadcast = false,
+    owner, active, posting, memo
 }) {
     const operations = [['account_create', {
         fee, creator, new_account_name, json_metadata,

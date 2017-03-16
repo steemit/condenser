@@ -126,6 +126,7 @@
     "svg-inline-react": "^1.0.2",
     "svgo-loader": "^1.1.0",
     "tarantool-driver": "^2.0.1",
+    "twilio": "^2.11.1",
     "uncontrollable": "^3.2.1",
     "underscore.string": "^3.2.3",
     "url-loader": "^0.5.7",

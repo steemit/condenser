@@ -6,7 +6,8 @@ import Apis from 'shared/api_client/ApiInstances';
 import GlobalReducer from './GlobalReducer';
 import constants from './constants';
 import {fromJS, Map} from 'immutable'
-import {IGNORE_TAGS} from 'config/client_config';
+import {IGNORE_TAGS, PUBLIC_API} from 'config/client_config';
+import store from 'store';
 
 export const fetchDataWatches = [watchLocationChange, watchDataRequests, watchApiRequests, watchFetchJsonRequests, watchFetchState, watchGetContent];
 
@@ -49,8 +50,122 @@ export function* fetchState(location_change_action) {
 
     try {
         const db_api = Apis.instance().db_api;
-        const state = yield call([db_api, db_api.exec], 'get_state', [url]);
-        yield put(GlobalReducer.actions.receiveState(state));
+
+        // const _state = yield call([db_api, db_api.exec], 'get_state', [url]);
+        // ################################################################################
+        let _state = {};
+
+        // if empty or equal '/''
+        if (!url || typeof url !== 'string' || !url.length || url === '/') url = 'trending';
+        // remove / from start
+        if (url[0] === '/') url = url.substr(1)
+        // get parts of current url
+        const parts = url.split('/')
+        // create tag
+        const tag = parts[1]
+
+        // TODO fix bread ration
+        if (parts[0][0] === '@') {
+          _state = yield call([db_api, db_api.exec], 'get_state', [url]);
+        }
+        else {
+          const dynamic_global_properties = yield call([db_api, db_api.exec], 'get_dynamic_global_properties', [])
+          const feed_history              = yield call([db_api, db_api.exec], 'get_feed_history', []);
+          const witness_schedule          = yield call([db_api, db_api.exec], 'get_witness_schedule', [])
+
+          _state.current_route = parts[0];
+          _state.props = dynamic_global_properties;
+          _state.category_idx = { "active": [], "recent": [], "best": [] };
+          _state.categories = {};
+          _state.tags = {};
+          _state.content = {};
+          _state.accounts = {};
+          _state.pow_queue = [];
+          _state.witnesses = {};
+          _state.discussion_idx = {};
+          _state.witness_schedule = witness_schedule;
+          _state.feed_price = feed_history.current_median_history; // { "base":"1.000 GBG", "quote":"1.895 GOLOS" },
+
+          // by default trending tags limit=50, but if we in '/tags/' path then limit = 250
+          let tags_limit = 50;
+          if (parts[0] == "tags") {
+            tags_limit = 250
+          }
+          const trending_tags = yield call([db_api, db_api.exec], 'get_trending_tags', ['',`${tags_limit}`]);
+
+          if (parts[0][0] === '@') {
+            const uname = parts[0].substr(1)
+            accounts[uname] = yield call([db_api, db_api.exec], 'get_accounts', [uname]);
+
+            // FETSH part 2
+            switch (parts[1]) {
+              case 'transfers':
+                break;
+
+              case 'posts':
+              case 'comments':
+                break;
+
+              case 'blog':
+                break;
+
+              case 'feed':
+                break;
+
+              // default:
+            }
+          }
+          else if (parts[0] === 'witnesses' || parts[0] === '~witnesses') {
+            //
+          }
+          else if ([ 'trending', 'trending30', 'promoted', 'responses', 'hot', 'votes', 'cashout', 'active', 'created', 'recent' ].indexOf(parts[0]) >= 0) {
+            const args = [{
+              tag: tag,
+              limit: constants.FETCH_DATA_BATCH_SIZE,
+              truncate_body: '1024'
+            }]
+            let select_tags = store.get('select_tags');
+            if (!tag && select_tags && select_tags.length) {
+              args[0].select_tags = select_tags
+              // args[0].select_metadata_tags = select_tags;
+            }
+            else {
+              args[0].filter_tags = IGNORE_TAGS
+              // args[0].filter_metadata_tags = IGNORE_TAGS;
+            }
+            const discussions = yield call([db_api, db_api.exec], PUBLIC_API[parts[0]][0], args);
+            let accounts = []
+            let discussion_idxes = {}
+            discussion_idxes[ PUBLIC_API[parts[0]][1] ] = []
+            for (var i in discussions) {
+              const key = discussions[i].author + '/' + discussions[i].permlink;
+              discussion_idxes[ PUBLIC_API[parts[0]][1] ].push(key);
+              if (discussions[i].author && discussions[i].author.length)
+                accounts.push(discussions[i].author);
+              _state.content[key] = discussions[i];
+            }
+            _state.discussion_idx = { "": discussion_idxes }
+            accounts = yield call([db_api, db_api.exec], 'get_accounts', [accounts]);
+            for (var i in accounts) {
+              _state.accounts[ accounts[i].name ] = accounts[i]
+            }
+          }
+          else if (parts[0] == "tags") {
+            for (var i in trending_tags) {
+              _state.tags[trending_tags[i].name] = trending_tags[i]
+            }
+          }
+          else {
+            // NOTHING
+          }
+          _state.tag_idx = { "trending": trending_tags.map(t => t.name) };
+
+          for (var key in _state.content)
+            _state.content[key].active_votes = yield call([db_api, db_api.exec], 'get_active_votes', [_state.content[key].author, _state.content[key].permlink]);
+        }
+        // ################################################################################
+
+        yield put(GlobalReducer.actions.receiveState(_state));
     } catch (error) {
         console.error('~~ Saga fetchState error ~~>', url, error);
         yield put({type: 'global/STEEM_API_ERROR', error: error.message});
@@ -73,120 +188,55 @@ export function* fetchData(action) {
 
     yield put({type: 'global/FETCHING_DATA', payload: {order, category}});
     let call_name, args;
+    args = [{
+      tag: category,
+      limit: constants.FETCH_DATA_BATCH_SIZE,
+      start_author: author,
+      start_permlink: permlink
+    }];
+    let select_tags = store.get('select_tags');
+    if (select_tags && select_tags.length) {
+      args[0].select_tags = select_tags;
+      args[0].select_metadata_tags = select_tags;
+    }
+    else {
+      args[0].filter_tags = IGNORE_TAGS
+      args[0].filter_metadata_tags = IGNORE_TAGS;
+    }
     if (order === 'trending') {
         call_name = 'get_discussions_by_trending';
-        args = [
-        { tag: category,
-          limit: constants.FETCH_DATA_BATCH_SIZE,
-          filter_tags: IGNORE_TAGS,
-          start_author: author,
-          start_permlink: permlink}];
     } else if (order === 'trending30') {
         call_name = 'get_discussions_by_trending30';
-        args = [
-        { tag: category,
-          limit: constants.FETCH_DATA_BATCH_SIZE,
-          filter_tags: IGNORE_TAGS,
-          start_author: author,
-          start_permlink: permlink}];
     } else if (order === 'promoted') {
         call_name = 'get_discussions_by_promoted';
-        args = [
-        { tag: category,
-          limit: constants.FETCH_DATA_BATCH_SIZE,
-          filter_tags: IGNORE_TAGS,
-          start_author: author,
-          start_permlink: permlink}];
     } else if( order === 'active' ) {
         call_name = 'get_discussions_by_active';
-        args = [
-        { tag: category,
-          limit: constants.FETCH_DATA_BATCH_SIZE,
-          filter_tags: IGNORE_TAGS,
-          start_author: author,
-          start_permlink: permlink}];
     } else if( order === 'cashout' ) {
         call_name = 'get_discussions_by_cashout';
-        args = [
-        { tag: category,
-          limit: constants.FETCH_DATA_BATCH_SIZE,
-          filter_tags: IGNORE_TAGS,
-          start_author: author,
-          start_permlink: permlink}];
     } else if( order === 'updated' ) {
         call_name = 'get_discussions_by_active';
-        args = [
-        { tag: category,
-          limit: constants.FETCH_DATA_BATCH_SIZE,
-          filter_tags: IGNORE_TAGS,
-          start_author: author,
-          start_permlink: permlink}];
     } else if( order === 'created' || order === 'recent' ) {
         call_name = 'get_discussions_by_created';
-        args = [
-        { tag: category,
-          limit: constants.FETCH_DATA_BATCH_SIZE,
-          filter_tags: IGNORE_TAGS,
-          start_author: author,
-          start_permlink: permlink}];
     } else if( order === 'by_replies' ) {
         call_name = 'get_replies_by_last_update';
-        args = [author, permlink, filter_tags: IGNORE_TAGS, constants.FETCH_DATA_BATCH_SIZE];
+        args = [author, permlink, constants.FETCH_DATA_BATCH_SIZE];
     } else if( order === 'responses' ) {
         call_name = 'get_discussions_by_children';
-        args = [
-        { tag: category,
-          limit: constants.FETCH_DATA_BATCH_SIZE,
-          filter_tags: IGNORE_TAGS,
-          start_author: author,
-          start_permlink: permlink}];
     } else if( order === 'votes' ) {
         call_name = 'get_discussions_by_votes';
-        args = [
-        { tag: category,
-          limit: constants.FETCH_DATA_BATCH_SIZE,
-          filter_tags: IGNORE_TAGS,
-          start_author: author,
-          start_permlink: permlink}];
     } else if( order === 'hot' ) {
         call_name = 'get_discussions_by_hot';
-        args = [
-        { tag: category,
-          limit: constants.FETCH_DATA_BATCH_SIZE,
-          filter_tags: IGNORE_TAGS,
-          start_author: author,
-          start_permlink: permlink}];
     } else if( order === 'by_feed' ) { // https://github.com/steemit/steem/issues/249
         call_name = 'get_discussions_by_feed';
-        args = [
-        { tag: accountname,
-          limit: constants.FETCH_DATA_BATCH_SIZE,
-          filter_tags: IGNORE_TAGS,
-          start_author: author,
-          start_permlink: permlink}];
+        args[0].tag = accountname;
     } else if( order === 'by_author' ) {
         call_name = 'get_discussions_by_blog';
-        args = [
-        { tag: accountname,
-          limit: constants.FETCH_DATA_BATCH_SIZE,
-          filter_tags: IGNORE_TAGS,
-          start_author: author,
-          start_permlink: permlink}];
+        args[0].tag = accountname;
     } else if( order === 'by_comments' ) {
         call_name = 'get_discussions_by_comments';
-        args = [
-        { limit: constants.FETCH_DATA_BATCH_SIZE,
-          filter_tags: IGNORE_TAGS,
-          start_author: author,
-          start_permlink: permlink}];
+        delete args[0].tag
     } else {
         call_name = 'get_discussions_by_active';
-        args = [{
-            tag: category,
-            limit: constants.FETCH_DATA_BATCH_SIZE,
-            filter_tags: IGNORE_TAGS,
-            start_author: author,
-            start_permlink: permlink}];
     }
     try {
         const db_api = Apis.instance().db_api;

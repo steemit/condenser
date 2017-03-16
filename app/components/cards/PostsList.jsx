@@ -35,6 +35,7 @@ class PostsList extends React.Component {
     constructor() {
         super();
         this.state = {
+            _isMounted: false,
             thumbSize: 'desktop',
             showNegativeComments: false,
             nsfwPref: 'warn',
@@ -60,6 +61,7 @@ class PostsList extends React.Component {
     }
 
     componentDidMount() {
+        this.setState({_isMounted: true});
         this.attachScrollListener();
     }
 
@@ -90,6 +92,7 @@ class PostsList extends React.Component {
     }
 
     componentWillUnmount() {
+        this.setState({_isMounted: false});
         this.detachScrollListener();
         window.removeEventListener('popstate', this.onBackButton);
         window.removeEventListener('keydown', this.onBackButton);
@@ -133,6 +136,7 @@ class PostsList extends React.Component {
     }
 
     scrollListener = debounce(() => {
+      if (! this.state._isMounted) return;
         const el = window.document.getElementById('posts_list');
         if (!el) return;
         const scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset :

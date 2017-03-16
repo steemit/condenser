@@ -30,7 +30,7 @@ import Translator from 'app/Translator';
 import Tarantool from 'db/tarantool';
 import {notificationsArrayToMap} from 'app/utils/Notifications';
 import {routeRegex} from "app/ResolveRoute";
-import {APP_NAME} from 'config/client_config';
+import {APP_NAME, IGNORE_TAGS, PUBLIC_API} from 'config/client_config';
 
 const sagaMiddleware = createSagaMiddleware(
     ...userWatches, // keep first to remove keys early when a page change happens
@@ -144,7 +144,182 @@ async function universalRender({ location, initial_state, offchain }) {
         if (url.indexOf('/curation-rewards') !== -1) url = url.replace(/\/curation-rewards$/, '/transfers');
         if (url.indexOf('/author-rewards') !== -1) url = url.replace(/\/author-rewards$/, '/transfers');
 
-        onchain = await Apis.instance().db_api.exec('get_state', [url]);
+        // onchain = await Apis.instance().db_api.exec('get_state', [url]);
+        // ################################################################################
+
+        // if empty or equal '/''
+        if (!url || typeof url !== 'string' || !url.length || url === '/') url = 'trending';
+        // remove / from start
+        if (url[0] === '/') url = url.substr(1)
+        // get parts of current url
+        const parts = url.split('/')
+        // create tag
+        const tag = parts[1]
+
+        // TODO fix bread ration
+        if (parts[0][0] === '@') {
+          onchain = await Apis.instance().db_api.exec('get_state', [url]);
+        }
+        else {
+          const _state = {};
+          const feed_history      = await Apis.instance().db_api.exec('get_feed_history', [url]);
+
+          _state.current_route = parts[0];
+          _state.props = await Apis.instance().db_api.exec('get_dynamic_global_properties', []);
+          _state.category_idx = { "active": [], "recent": [], "best": [] };
+          _state.categories = {};
+          _state.tags = {};
+          _state.content = {};
+          _state.accounts = {};
+          _state.pow_queue = [];
+          _state.witnesses = {};
+          _state.discussion_idx = {};
+          _state.witness_schedule = await Apis.instance().db_api.exec('get_witness_schedule', []);
+          _state.feed_price = feed_history.current_median_history; // { "base":"1.000 GBG", "quote":"1.895 GOLOS" },
+
+          // by default trending tags limit=50, but if we in '/tags/' path then limit = 250
+          let tags_limit = 50;
+          if (parts[0] == "tags") {
+            tags_limit = 250
+          }
+          const trending_tags = await Apis.instance().db_api.exec('get_trending_tags', ['',`${tags_limit}`]);
+
+          if (parts[0][0] === '@') {
+            const uname = parts[0].substr(1)
+            _state.accounts[uname] = await Apis.instance().db_api.exec('get_accounts', [[uname]]);
+            _state.accounts[uname].tags_usage = await Apis.instance().db_api.exec('get_tags_used_by_author', [uname]);
+
+            // FETSH part 2
+            switch (parts[1]) {
+              case 'transfers':
+                const history = await Apis.instance().db_api.exec('get_account_history', [uname, -1, 1000]);
+                for (var key in history) {
+                  switch (history[key][1].op) {
+                    case 'transfer_to_vesting':
+                    case 'withdraw_vesting':
+                    case 'interest':
+                    case 'transfer':
+                    case 'liquidity_reward':
+                    case 'author_reward':
+                    case 'curation_reward':
+                    case 'transfer_to_savings':
+                    case 'transfer_from_savings':
+                    case 'cancel_transfer_from_savings':
+                    case 'escrow_transfer':
+                    case 'escrow_approve':
+                    case 'escrow_dispute':
+                    case 'escrow_release':
+                      _state.accounts[uname].transfer_history[history[key][0]] = history[key][1];
+                    break;
+
+                    case 'comment':
+                      // eacnt.post_history[item.first] =  item.second;
+                    break;
+
+                    case 'limit_order_create':
+                    case 'limit_order_cancel':
+                    case 'fill_convert_request':
+                    case 'fill_order':
+                      // eacnt.market_history[item.first] =  item.second;
+                    break;
+
+                    case 'vote':
+                    case 'account_witness_vote':
+                    case 'account_witness_proxy':
+                      // eacnt.vote_history[item.first] =  item.second;
+                    break;
+
+                    case 'account_create':
+                    case 'account_update':
+                    case 'witness_update':
+                    case 'pow':
+                    case 'custom':
+                    default:
+                      _state.accounts[uname].other_history[history[key][0]] = history[key][1];
+                  }
+                }
+                break;
+
+              case 'recent-replies':
+                const replies = await Apis.instance().db_api.exec('get_replies_by_last_update', [uname, "", 50]);
+                _state.accounts[uname].recent_replies = []
+                for (var key in replies) {
+                  const reply_ref = replies[key].author + "/" + replies[key].permlink;
+                  _state.content[reply_ref] = replies[key];
+                  _state.accounts[uname].recent_replies.push(reply_ref);
+                }
+                break;
+
+              case 'posts':
+              case 'comments':
+                break;
+
+              case 'blog':
+                break;
+
+              case 'feed':
+                break;
+
+              // default:
+            }
+          }
+          else if (parts[0] === 'witnesses' || parts[0] === '~witnesses') {
+            //
+          }
+          else if ([ 'trending', 'trending30', 'promoted', 'responses', 'hot', 'votes', 'cashout', 'active', 'created', 'recent' ].indexOf(parts[0]) >= 0) {
+            let args = [{
+              tag: tag,
+              limit: 20,
+              truncate_body: 1024
+            }]
+            let select_tags = typeof store !== "undefined" ? store.get('select_tags') : null;
+            if (!tag && select_tags && select_tags.length) {
+              args[0].select_tags = select_tags;
+              // args[0].select_metadata_tags = select_tags;
+            }
+            else {
+              args[0].filter_tags = IGNORE_TAGS
+              // args[0].filter_metadata_tags = IGNORE_TAGS;
+            }
+            const discussions =
+            await Apis.instance().db_api.exec(PUBLIC_API[parts[0]][0], args);
+            let accounts = []
+            let discussion_idxes = {}
+            discussion_idxes[ PUBLIC_API[parts[0]][1] ] = []
+            for (var i in discussions) {
+              const key = discussions[i].author + '/' + discussions[i].permlink;
+              discussion_idxes[ PUBLIC_API[parts[0]][1] ].push(key);
+              if (discussions[i].author && discussions[i].author.length)
+                accounts.push(discussions[i].author);
+              _state.content[key] = discussions[i];
+            }
+            _state.discussion_idx = { "": discussion_idxes }
+            accounts = await Apis.instance().db_api.exec('get_accounts', [accounts]);
+            for (var i in accounts) {
+              _state.accounts[ accounts[i].name ] = accounts[i]
+            }
+          }
+          else if (parts[0] == "tags") {
+            for (var i in trending_tags) {
+              _state.tags[trending_tags[i].name] = trending_tags[i]
+            }
+          }
+          else {
+            // NOTHING
+          }
+
+          _state.tag_idx = { "trending": trending_tags.map(t => t.name) };
+
+          // for (var key in _state.accounts)
+          //   _state.accounts[key].reputation = await Apis.instance().db_api.exec('get_account_reputations', [_state.content[key][1].author, _state.content[key][1].permlink]);
+
+          for (var key in _state.content)
+            _state.content[key].active_votes = await Apis.instance().db_api.exec('get_active_votes', [_state.content[key].author, _state.content[key].permlink]);
+
+          onchain = _state
+        }
+        // ################################################################################
+
 
         if (!url.match(routeRegex.PostsIndex) && !url.match(routeRegex.UserProfile1) && !url.match(routeRegex.UserProfile2) && url.match(routeRegex.PostNoCategory)) {
             const params = url.substr(2, url.length - 1).split("/");
@@ -178,6 +353,7 @@ async function universalRender({ location, initial_state, offchain }) {
         const msg = (e.toString && e.toString()) || e.message || e;
         const stack_trace = e.stack || '[no stack]';
         console.error('State/store error: ', msg, stack_trace);
+        console.error(e)
         return {
             title: 'Server error (500) - ' + APP_NAME,
             statusCode: 500,

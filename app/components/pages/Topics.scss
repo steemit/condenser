@@ -8,17 +8,22 @@ ul.Topics {
     overflow: hidden;
   }
   > li > a.action {
-    color: rgba(22, 69, 132, 0);
+    color: rgba(255,0,0,0);
     font-weight: bold;
     position: relative;
     left: -.5rem;
   }
-  > li.Topics__selected__remove > a.action,
+  > li.Topics__selected__remove {
+
+    a.action {
+      color: rgba(255,0,0,0.2);
+    }
+  }
   > li:hover > a.action {
-    color: rgba(22, 69, 132, .65);
+    color: rgba(255,0,0,0.65);
   }
   > li > a.action:hover {
-    color: rgba(22, 69, 132, 1);
+    color: rgba(255,0,0,1);
   }
   .show-more {
     margin-top: .75rem;
@@ -46,13 +51,13 @@ select.Topics {
   border-radius: 0.2rem;
   background-color: #f5f5f5;
   div > a.action {
-    color: rgba(22, 69, 132, .65);
+    color: rgba(255,0,0,0.65);
     font-weight: bold;
     position: relative;
     left: -.5rem;
   }
   div > a.action:hover {
-    color: rgba(22, 69, 132, 1);
+    color: rgba(255,0,0,1);
   }
   div > a.active {
     // color: #888 !important;

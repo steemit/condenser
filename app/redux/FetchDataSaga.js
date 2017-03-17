@@ -6,8 +6,8 @@ import Apis from 'shared/api_client/ApiInstances';
 import GlobalReducer from './GlobalReducer';
 import constants from './constants';
 import {fromJS, Map} from 'immutable'
-import {IGNORE_TAGS, PUBLIC_API} from 'config/client_config';
-import store from 'store';
+import { IGNORE_TAGS, PUBLIC_API, SELECT_TAGS_KEY } from 'config/client_config';
+import cookie from "react-cookie";
 
 export const fetchDataWatches = [watchLocationChange, watchDataRequests, watchApiRequests, watchFetchJsonRequests, watchFetchState, watchGetContent];
 
@@ -62,10 +62,10 @@ export function* fetchState(location_change_action) {
         // get parts of current url
         const parts = url.split('/')
         // create tag
-        const tag = parts[1]
+        const tag = typeof parts[1] !== "undefined" ? parts[1] : ''
 
         // TODO fix bread ration
-        if (parts[0][0] === '@') {
+        if (parts[0][0] === '@' || typeof parts[1] === 'string' && parts[1][0] === '@') {
           _state = yield call([db_api, db_api.exec], 'get_state', [url]);
         }
         else {
@@ -73,7 +73,7 @@ export function* fetchState(location_change_action) {
           const feed_history              = yield call([db_api, db_api.exec], 'get_feed_history', []);
           const witness_schedule          = yield call([db_api, db_api.exec], 'get_witness_schedule', [])
 
-          _state.current_route = parts[0];
+          _state.current_route = url;
           _state.props = dynamic_global_properties;
           _state.category_idx = { "active": [], "recent": [], "best": [] };
           _state.categories = {};
@@ -85,6 +85,9 @@ export function* fetchState(location_change_action) {
           _state.discussion_idx = {};
           _state.witness_schedule = witness_schedule;
           _state.feed_price = feed_history.current_median_history; // { "base":"1.000 GBG", "quote":"1.895 GOLOS" },
+
+          _state.select_tags = [];
+          _state.filter_tags = [];
 
           // by default trending tags limit=50, but if we in '/tags/' path then limit = 250
           let tags_limit = 50;
@@ -116,22 +119,26 @@ export function* fetchState(location_change_action) {
             }
           }
           else if (parts[0] === 'witnesses' || parts[0] === '~witnesses') {
+          }
+          else if (parts[0] === 'witnesses' || parts[0] === '~witnesses') {
             //
           }
           else if ([ 'trending', 'trending30', 'promoted', 'responses', 'hot', 'votes', 'cashout', 'active', 'created', 'recent' ].indexOf(parts[0]) >= 0) {
             const args = [{
-              tag: tag,
               limit: constants.FETCH_DATA_BATCH_SIZE,
               truncate_body: '1024'
             }]
-            let select_tags = store.get('select_tags');
-            if (!tag && select_tags && select_tags.length) {
-              args[0].select_tags = select_tags
-              // args[0].select_metadata_tags = select_tags;
+            if (typeof tag === 'string' && tag.length) {
+              args[0].tag = tag
             }
             else {
-              args[0].filter_tags = IGNORE_TAGS
-              // args[0].filter_metadata_tags = IGNORE_TAGS;
+              const select_tags = cookie.load(SELECT_TAGS_KEY);
+              if (!tag && select_tags && select_tags.length) {
+                args[0].select_tags = _state.select_tags = select_tags
+              }
+              else {
+                args[0].filter_tags = _state.filter_tags = IGNORE_TAGS
+              }
             }
             const discussions = yield call([db_api, db_api.exec], PUBLIC_API[parts[0]][0], args);
             let accounts = []
@@ -144,7 +151,8 @@ export function* fetchState(location_change_action) {
                 accounts.push(discussions[i].author);
               _state.content[key] = discussions[i];
             }
-            _state.discussion_idx = { "": discussion_idxes }
+            const discussions_key = typeof tag === 'string' && tag.length ? tag : _state.select_tags.sort().join('')
+            _state.discussion_idx[discussions_key] = discussion_idxes
             accounts = yield call([db_api, db_api.exec], 'get_accounts', [accounts]);
             for (var i in accounts) {
               _state.accounts[ accounts[i].name ] = accounts[i]
@@ -158,7 +166,7 @@ export function* fetchState(location_change_action) {
           else {
             // NOTHING
           }
-          _state.tag_idx = { "trending": trending_tags.map(t => t.name) };
+          _state.tag_idx = { trending: trending_tags.map(t => t.name) };
 
           for (var key in _state.content)
             _state.content[key].active_votes = yield call([db_api, db_api.exec], 'get_active_votes', [_state.content[key].author, _state.content[key].permlink]);
@@ -181,7 +189,7 @@ export function* watchFetchState() {
 }
 
 export function* fetchData(action) {
-    const {order, author, permlink, accountname} = action.payload;
+    const {order, author, permlink, accountname, keys} = action.payload;
     let {category} = action.payload;
     if( !category ) category = "";
     category = category.toLowerCase();
@@ -189,20 +197,23 @@ export function* fetchData(action) {
     yield put({type: 'global/FETCHING_DATA', payload: {order, category}});
     let call_name, args;
     args = [{
-      tag: category,
       limit: constants.FETCH_DATA_BATCH_SIZE,
       start_author: author,
       start_permlink: permlink
     }];
-    let select_tags = store.get('select_tags');
-    if (select_tags && select_tags.length) {
-      args[0].select_tags = select_tags;
-      args[0].select_metadata_tags = select_tags;
+    if (category.length) {
+      args[0].tag = category;
+    } else {
+      let select_tags = cookie.load(SELECT_TAGS_KEY);
+      if (select_tags && select_tags.length) {
+        args[0].select_tags = select_tags;
+        category = select_tags.sort().join('')
+      }
+      else {
+        args[0].filter_tags = IGNORE_TAGS
+      }
     }
-    else {
-      args[0].filter_tags = IGNORE_TAGS
-      args[0].filter_metadata_tags = IGNORE_TAGS;
-    }
+
     if (order === 'trending') {
         call_name = 'get_discussions_by_trending';
     } else if (order === 'trending30') {
@@ -241,7 +252,7 @@ export function* fetchData(action) {
     try {
         const db_api = Apis.instance().db_api;
         const data = yield call([db_api, db_api.exec], call_name, args);
-        yield put(GlobalReducer.actions.receiveData({data, order, category, author, permlink, accountname}));
+        yield put(GlobalReducer.actions.receiveData({data, order, category, author, permlink, accountname, keys}));
     } catch (error) {
         console.error('~~ Saga fetchData error ~~>', call_name, args, error);
         yield put({type: 'global/STEEM_API_ERROR', error: error.message});

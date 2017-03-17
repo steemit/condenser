@@ -4,21 +4,23 @@ import {connect} from 'react-redux';
 import { browserHistory } from 'react-router';
 import { translate } from 'app/Translator';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
-import { IGNORE_TAGS } from 'config/client_config';
-import store from 'store';
+import { IGNORE_TAGS, SELECT_TAGS_KEY } from 'config/client_config';
+import cookie from "react-cookie";
 
 class Topics extends React.Component {
     static propTypes = {
         categories: React.PropTypes.object.isRequired,
+        loading: React.PropTypes.bool,
         order: React.PropTypes.string,
         current: React.PropTypes.string,
+        loadSelected: React.PropTypes.func,
         className: React.PropTypes.string,
         compact: React.PropTypes.bool
     };
 
     constructor(props) {
         super(props);
-        this.state = {expanded: false, search: '', selected: store.get('select_tags') || [], selectedExpanded: false};
+        this.state = {expanded: false, search: '', selected: cookie.load(SELECT_TAGS_KEY) || [], selectedExpanded: false};
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -37,7 +39,9 @@ class Topics extends React.Component {
         keys.push(key)
 
       this.setState({selected: keys})
-      store.set('select_tags', keys)
+      cookie.save(SELECT_TAGS_KEY, keys, {path: "/"});
+      if (! this.props.loading && this.props.loadSelected)
+        this.props.loadSelected(keys)
     }
 
     onChangeSearch = e => {

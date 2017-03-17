@@ -4,8 +4,8 @@ import {connect} from 'react-redux';
 import { browserHistory } from 'react-router';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
 import { translate } from 'app/Translator';
-import { IGNORE_TAGS } from 'config/client_config';
-import store from 'store';
+import { IGNORE_TAGS, SELECT_TAGS_KEY } from 'config/client_config';
+import cookie from "react-cookie";
 
 export default class TagsIndex extends React.Component {
     static propTypes = {
@@ -16,7 +16,7 @@ export default class TagsIndex extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {search: '', selected: store.get('select_tags') || []};
+        this.state = {search: '', selected: cookie.load(SELECT_TAGS_KEY) || []};
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -35,7 +35,7 @@ export default class TagsIndex extends React.Component {
         keys.push(key)
 
       this.setState({selected: keys})
-      store.set('select_tags', keys)
+      cookie.save(SELECT_TAGS_KEY, keys, {path: "/"});
     }
 
     onChangeSearch = e => {

@@ -154,17 +154,17 @@ async function universalRender({ location, initial_state, offchain }) {
         // get parts of current url
         const parts = url.split('/')
         // create tag
-        const tag = parts[1]
+        const tag = typeof parts[1] !== "undefined" ? parts[1] : ''
 
         // TODO fix bread ration
-        if (parts[0][0] === '@') {
+        if (parts[0][0] === '@' || typeof parts[1] === 'string' && parts[1][0] === '@') {
           onchain = await Apis.instance().db_api.exec('get_state', [url]);
         }
         else {
           const _state = {};
           const feed_history      = await Apis.instance().db_api.exec('get_feed_history', [url]);
 
-          _state.current_route = parts[0];
+          _state.current_route = url;
           _state.props = await Apis.instance().db_api.exec('get_dynamic_global_properties', []);
           _state.category_idx = { "active": [], "recent": [], "best": [] };
           _state.categories = {};
@@ -176,6 +176,9 @@ async function universalRender({ location, initial_state, offchain }) {
           _state.discussion_idx = {};
           _state.witness_schedule = await Apis.instance().db_api.exec('get_witness_schedule', []);
           _state.feed_price = feed_history.current_median_history; // { "base":"1.000 GBG", "quote":"1.895 GOLOS" },
+
+          _state.select_tags = [];
+          _state.filter_tags = [];
 
           // by default trending tags limit=50, but if we in '/tags/' path then limit = 250
           let tags_limit = 50;
@@ -268,21 +271,22 @@ async function universalRender({ location, initial_state, offchain }) {
           }
           else if ([ 'trending', 'trending30', 'promoted', 'responses', 'hot', 'votes', 'cashout', 'active', 'created', 'recent' ].indexOf(parts[0]) >= 0) {
             let args = [{
-              tag: tag,
               limit: 20,
               truncate_body: 1024
             }]
-            let select_tags = typeof store !== "undefined" ? store.get('select_tags') : null;
-            if (!tag && select_tags && select_tags.length) {
-              args[0].select_tags = select_tags;
-              // args[0].select_metadata_tags = select_tags;
+
+            if (typeof tag === 'string' && tag.length) {
+              args[0].tag = tag
             }
             else {
-              args[0].filter_tags = IGNORE_TAGS
-              // args[0].filter_metadata_tags = IGNORE_TAGS;
+              if (typeof offchain.select_tags === "object" && offchain.select_tags.length) {
+                args[0].select_tags = _state.select_tags = offchain.select_tags;
+              }
+              else {
+                args[0].filter_tags = _state.filter_tags = IGNORE_TAGS
+              }
             }
-            const discussions =
-            await Apis.instance().db_api.exec(PUBLIC_API[parts[0]][0], args);
+            const discussions = await Apis.instance().db_api.exec(PUBLIC_API[parts[0]][0], args);
             let accounts = []
             let discussion_idxes = {}
             discussion_idxes[ PUBLIC_API[parts[0]][1] ] = []
@@ -293,7 +297,8 @@ async function universalRender({ location, initial_state, offchain }) {
                 accounts.push(discussions[i].author);
               _state.content[key] = discussions[i];
             }
-            _state.discussion_idx = { "": discussion_idxes }
+            const discussions_key = typeof tag === 'string' && tag.length ? tag : _state.select_tags.sort().join('')
+            _state.discussion_idx[discussions_key] = discussion_idxes;
             accounts = await Apis.instance().db_api.exec('get_accounts', [accounts]);
             for (var i in accounts) {
               _state.accounts[ accounts[i].name ] = accounts[i]

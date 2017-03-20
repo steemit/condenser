@@ -12,9 +12,9 @@ Golos.io is the react.js web interface to the world's first and best blockchain-
 
 #### Clone the repository and make a tmp folder
 ```bash
-sudo git clone https://github.com/GolosChain/tolstoy
+git clone https://github.com/GolosChain/tolstoy
 cd tolstoy
-sudo mkdir tmp
+mkdir tmp
 ```
 
 #### Install dependencies
@@ -23,7 +23,7 @@ sudo mkdir tmp
 # Install at least Node v6.3 if you don't already have it ([NVM](https://github.com/creationix/nvm) recommended)
 sudo nvm install v6
 
-sudo npm install
+npm install
 sudo npm install -g babel-cli
 ```
 
@@ -38,7 +38,7 @@ cp example/steem-example.json steem-dev.json
 Generate a new crypto_key and save under server_session_secret in ./steem-dev.json.
 
 ```bash
-sudo node
+node
 > crypto.randomBytes(32).toString('base64')
 ```
 
@@ -67,7 +67,7 @@ On Ubuntu 16.04+ you may be unable to connect to mysql without root access, if
 so update the mysql root user as follows::
 
 ```
-sudo mysql -u root
+mysql -u root
 > DROP USER 'root'@'localhost';
 > CREATE USER 'root'@'%' IDENTIFIED BY '';
 > GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';
@@ -76,7 +76,7 @@ sudo mysql -u root
 
 Now launch mysql client and create steemit_dev database:
 ```bash
-sudo mysql -u root
+mysql -u root
 > create database steemit_dev;
 ```
 
@@ -86,13 +86,13 @@ Install `sequelize-cli` globally:
 sudo npm install -g sequelize sequelize-cli pm2 mysql
 ```
 
-Run `sudo sequelize db:migrate` in `db/` directory.
+Run `sequelize db:migrate` in `db/` directory.
 
 
 ### Development
 
 ```bash
-sudo npm start
+npm start
 ```
 
 You now have your development front end running at localhost:3002, connected to the main public golos blockchain. You don't need to run ```golos``` locally, by default you will connect to ```wss://ws.golos.io```.  Use your regular account name and credentials to login -- there is no separate dev login.
@@ -130,16 +130,16 @@ We adhere to BEM methodology with exception for Foundation classes, here is an e
 If you want to test it locally in production mode, just run the following commands:
 
 ```bash
-sudo npm run build
-sudo npm run prod
+npm run build
+npm run prod
 ```
 
 or via pm2:
 
 ```bash
-sudo npm run build
-sudo npm -i -g pm2 # one time
-sudo pm2 start config/process.json
+npm run build
+npm -i -g pm2 # one time
+pm2 start config/process.json
 ```
 
 

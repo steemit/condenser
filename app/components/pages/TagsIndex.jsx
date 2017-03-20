@@ -69,7 +69,7 @@ export default class TagsIndex extends React.Component {
             const link = order ? `/${order}/${name}` : `/hot/${name}`;
             isSelected = selected.indexOf(name) !== -1
             // const tag_info = tagsAll.get(tag);
-            return (<tr key={tagname}>
+            return (<tr key={tagKey}>
                 <td className={isSelected ? 'isSelected' : ''}>
                   <a className="action" onClick={() => onSelectTag(name)}>{isSelected ? '×' : '+'}</a>
                   <Link to={link} activeClassName="active">{detransliterate(name)}</Link>

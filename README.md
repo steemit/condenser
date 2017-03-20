@@ -1,30 +1,30 @@
-# Steemit.com
+# Golos.io
 
 ========
-Steemit.com is the react.js web interface to the world's first and best blockchain-based social media platform.  It uses [STEEM](https://github.com/steemit/steem), a blockchain powered by Graphene 2.0 technology to store JSON-based content for a plethora of web applications.   
+Golos.io is the react.js web interface to the world's first and best blockchain-based social media platform.  It uses [STEEM](https://github.com/steemit/steem), a blockchain powered by Graphene 2.0 technology to store JSON-based content for a plethora of web applications.   
 
-## Why would I want to use Steemit.com?
-* Learning how to build blockchain-based web applications using STEEM as a content storage mechanism in react.js
-* Reviewing the inner workings of the steemit.com social media platform
-* Assisting with software development for steemit.com
+## Why would I want to use Golos.io?
+* Learning how to build blockchain-based web applications using STEEM/Golos as a content storage mechanism in react.js
+* Reviewing the inner workings of the golos.io social media platform
+* Assisting with software development for golos.io
 
 ## Installation
 
 #### Clone the repository and make a tmp folder
 ```bash
-git clone https://github.com/steemit/steemit.com
-cd steemit.com
-mkdir tmp
+sudo git clone https://github.com/GolosChain/tolstoy
+cd tolstoy
+sudo mkdir tmp
 ```
 
 #### Install dependencies
 
 ```bash
 # Install at least Node v6.3 if you don't already have it ([NVM](https://github.com/creationix/nvm) recommended)
-nvm install v6
+sudo nvm install v6
 
-npm install
-npm install -g babel-cli
+sudo npm install
+sudo npm install -g babel-cli
 ```
 
 #### Create config file
@@ -32,13 +32,13 @@ npm install -g babel-cli
 
 ```bash
 cd config
-cp steem-example.json steem-dev.json
+cp example/steem-example.json steem-dev.json
 ```
 
 Generate a new crypto_key and save under server_session_secret in ./steem-dev.json.
 
 ```bash
-node
+sudo node
 > crypto.randomBytes(32).toString('base64')
 ```
 
@@ -68,34 +68,34 @@ so update the mysql root user as follows::
 
 ```
 sudo mysql -u root
-DROP USER 'root'@'localhost';
-CREATE USER 'root'@'%' IDENTIFIED BY '';
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';
-FLUSH PRIVILEGES;
+> DROP USER 'root'@'localhost';
+> CREATE USER 'root'@'%' IDENTIFIED BY '';
+> GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';
+> FLUSH PRIVILEGES;
 ```
 
 Now launch mysql client and create steemit_dev database:
 ```bash
-mysql -u root
+sudo mysql -u root
 > create database steemit_dev;
 ```
 
 Install `sequelize-cli` globally:
 
 ```bash
-npm install -g sequelize sequelize-cli pm2 mysql
+sudo npm install -g sequelize sequelize-cli pm2 mysql
 ```
 
-Run `sequelize db:migrate` in `db/` directory.
+Run `sudo sequelize db:migrate` in `db/` directory.
 
 
 ### Development
 
 ```bash
-npm start
+sudo npm start
 ```
 
-You now have your development front end running at localhost:3002, connected to the main public steem blockchain. You don't need to run ```steemd``` locally, by default you will connect to ```ws://node.steem.ws```.  Use your regular account name and credentials to login -- there is no separate dev login.
+You now have your development front end running at localhost:3002, connected to the main public golos blockchain. You don't need to run ```golos``` locally, by default you will connect to ```wss://ws.golos.io```.  Use your regular account name and credentials to login -- there is no separate dev login.
 
 #### Style Guides
 
@@ -130,16 +130,16 @@ We adhere to BEM methodology with exception for Foundation classes, here is an e
 If you want to test it locally in production mode, just run the following commands:
 
 ```bash
-npm run build
-npm run prod
+sudo npm run build
+sudo npm run prod
 ```
 
 or via pm2:
 
 ```bash
-npm run build
-npm -i -g pm2 # one time
-pm2 start config/process.json
+sudo npm run build
+sudo npm -i -g pm2 # one time
+sudo pm2 start config/process.json
 ```
 
 
@@ -147,6 +147,6 @@ pm2 start config/process.json
 
 To report a non-critical issue, please file an issue on this GitHub project.
 
-If you find a security issue please report details to: security@steemit.com
+If you find a security issue please report details to: https://github.com/GolosChain/tolstoy/issues
 
 We will evaluate the risk and make a patch available before filing the issue.

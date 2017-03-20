@@ -58,7 +58,7 @@ export default createModule({
 
                 let updatedState = state.updateIn(['content', key], Map(emptyContent), r => r.merge({
                     author, permlink, parent_author, parent_permlink,
-                    title: title.toString('utf-8'), 
+                    title: title.toString('utf-8'),
                     body: body.toString('utf-8'),
                 }))
                 // console.log('<----------- updatedState content :', updatedState.getIn(['content', key]).toJS())
@@ -68,7 +68,7 @@ export default createModule({
                     updatedState = updatedState.updateIn(['content', parent_key, 'replies'], List(), r => r.insert(0, key))
                     // console.log('updatedState parent', updatedState.toJS())
                 }
-                return updatedState 
+                return updatedState
             }
         },
         {
@@ -166,6 +166,7 @@ export default createModule({
                     });
                 } else {
                     new_state = state.updateIn(['discussion_idx', category || '', order], list => {
+                        if (!list) list = List();
                         return list.withMutations(posts => {
                             data.forEach(value => {
                                 const entry = `${value.author}/${value.permlink}`;

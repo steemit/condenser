@@ -63,11 +63,13 @@ export default class TagsIndex extends React.Component {
         ).sort((a,b) => {
             return a.get('name').localeCompare(b.get('name'));
         }).map(tag => {
-            const name = tag.get('name');
+            const tagKey = tag.get('name');
+            let name = tagKey;
+            if (/[а-яёґєії]/.test(name)) name = 'ru--' + detransliterate(name.toLowerCase(), true)
             const link = order ? `/${order}/${name}` : `/hot/${name}`;
             isSelected = selected.indexOf(name) !== -1
             // const tag_info = tagsAll.get(tag);
-            return (<tr key={name}>
+            return (<tr key={tagname}>
                 <td className={isSelected ? 'isSelected' : ''}>
                   <a className="action" onClick={() => onSelectTag(name)}>{isSelected ? '×' : '+'}</a>
                   <Link to={link} activeClassName="active">{detransliterate(name)}</Link>

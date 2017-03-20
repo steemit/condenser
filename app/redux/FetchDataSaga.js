@@ -151,7 +151,7 @@ export function* fetchState(location_change_action) {
                 accounts.push(discussions[i].author);
               _state.content[key] = discussions[i];
             }
-            const discussions_key = typeof tag === 'string' && tag.length ? tag : _state.select_tags.sort().join('')
+            const discussions_key = typeof tag === 'string' && tag.length ? tag : _state.select_tags.sort().join('/')
             _state.discussion_idx[discussions_key] = discussion_idxes
             accounts = yield call([db_api, db_api.exec], 'get_accounts', [accounts]);
             for (var i in accounts) {
@@ -194,7 +194,6 @@ export function* fetchData(action) {
     if( !category ) category = "";
     category = category.toLowerCase();
 
-    yield put({type: 'global/FETCHING_DATA', payload: {order, category}});
     let call_name, args;
     args = [{
       limit: constants.FETCH_DATA_BATCH_SIZE,
@@ -207,12 +206,14 @@ export function* fetchData(action) {
       let select_tags = cookie.load(SELECT_TAGS_KEY);
       if (select_tags && select_tags.length) {
         args[0].select_tags = select_tags;
-        category = select_tags.sort().join('')
+        category = select_tags.sort().join('/')
       }
       else {
         args[0].filter_tags = IGNORE_TAGS
       }
     }
+
+    yield put({type: 'global/FETCHING_DATA', payload: {order, category}});
 
     if (order === 'trending') {
         call_name = 'get_discussions_by_trending';

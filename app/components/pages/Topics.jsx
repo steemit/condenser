@@ -89,8 +89,10 @@ class Topics extends React.Component {
             return <select className={cn} onChange={(e) => browserHistory.push(e.target.value)} value={currentValue}>
                 <option key={'*'} value={'/' + order}>{translate('topics')}...</option>
                 {categories.map(cat => {
+                    const catKey = cat
+                    if (/[а-яёґєії]/.test(cat)) cat = 'ru--' + detransliterate(cat, true)
                     const link = order ? `/${order}/${cat}` : `/${cat}`;
-                    return <option key={cat} value={link}>{detransliterate(cat)}</option>
+                    return <option key={catKey} value={link}>{detransliterate(cat)}</option>
                 })}
             </select>;
         }
@@ -98,10 +100,11 @@ class Topics extends React.Component {
         if (IGNORE_TAGS) categories = categories.filter(val => IGNORE_TAGS.indexOf(val) === -1);
         if (search) categories = categories.filter(val => val.indexOf(search.toLowerCase()) !== -1);
         categories = categories.map(cat => {
-            const localisedCat = /[а-яёґєії]/.test(cat.toLowerCase()) ? 'ru--' + detransliterate(cat.toLowerCase(), true) : cat
-            const link = order ? `/${order}/${localisedCat}` : `/${localisedCat}`;
+            const catKey = cat
+            if (/[а-яёґєії]/.test(cat)) cat = 'ru--' + detransliterate(cat.toLowerCase(), true)
+            const link = order ? `/${order}/${cat}` : `/${cat}`;
             isSelected = selected.indexOf(cat) !== -1
-            return cat ? (<li key={cat} className={isSelected ? 'Topics__selected__remove' : 'Topics__selected__add'}>
+            return cat ? (<li key={catKey} className={isSelected ? 'Topics__selected__remove' : 'Topics__selected__add'}>
                         <a className="action" onClick={() => onSelectTag(cat)}>{isSelected ? '×' : '+'}</a>
                         <Link to={link} className="tagname" activeClassName="active" title={detransliterate(cat)}>{detransliterate(cat)}</Link>
                     </li>) : null;

@@ -297,7 +297,7 @@ async function universalRender({ location, initial_state, offchain }) {
                 accounts.push(discussions[i].author);
               _state.content[key] = discussions[i];
             }
-            const discussions_key = typeof tag === 'string' && tag.length ? tag : _state.select_tags.sort().join('')
+            const discussions_key = typeof tag === 'string' && tag.length ? tag : _state.select_tags.sort().join('/')
             _state.discussion_idx[discussions_key] = discussion_idxes;
             accounts = await Apis.instance().db_api.exec('get_accounts', [accounts]);
             for (var i in accounts) {

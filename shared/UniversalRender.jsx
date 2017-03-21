@@ -30,7 +30,7 @@ import Translator from 'app/Translator';
 import Tarantool from 'db/tarantool';
 import {notificationsArrayToMap} from 'app/utils/Notifications';
 import {routeRegex} from "app/ResolveRoute";
-import {APP_NAME} from 'config/client_config';
+import {APP_NAME, SEO_TITLE} from 'config/client_config';
 
 const sagaMiddleware = createSagaMiddleware(
     ...userWatches, // keep first to remove keys early when a page change happens
@@ -203,8 +203,8 @@ async function universalRender({ location, initial_state, offchain }) {
     }
 
     return {
-        title: APP_NAME,
-        titleBase: APP_NAME + ' - ',
+        title: SEO_TITLE,
+        titleBase: SEO_TITLE + ' - ',
         meta,
         statusCode: status,
         body: Iso.render(app, server_store.getState())

@@ -283,23 +283,28 @@ class CommentImpl extends React.Component {
             </div>;
         }
 
-        if(!this.state.collapsed) {
-            replies = comment.replies;
-            sortComments( cont, replies, this.props.sort_order );
-            // When a comment has hidden replies and is collapsed, the reply count is off
-            //console.log("replies:", replies.length, "num_visible:", replies.filter( reply => !cont.get(reply).getIn(['stats', 'hide'])).length)
-            replies = replies.map((reply, idx) => (
-                <Comment
-                    key={idx}
-                    content={reply}
-                    cont={cont}
-                    sort_order={this.props.sort_order}
-                    depth={depth + 1}
-                    rootComment={rootComment}
-                    showNegativeComments={showNegativeComments}
-                    onHide={this.props.onHide}
-                />)
-            );
+        if(!this.state.collapsed && comment.children > 0) {
+            if(depth > 6) {
+                const comment_permlink = `/${comment.category}/@${comment.author}/${comment.permlink}`
+                replies = <Link to={comment_permlink}>Show {comment.children} more {comment.children == 1 ? 'reply' : 'replies'}</Link>
+            } else {
+                replies = comment.replies;
+                sortComments( cont, replies, this.props.sort_order );
+                // When a comment has hidden replies and is collapsed, the reply count is off
+                //console.log("replies:", replies.length, "num_visible:", replies.filter( reply => !cont.get(reply).getIn(['stats', 'hide'])).length)
+                replies = replies.map((reply, idx) => (
+                    <Comment
+                        key={idx}
+                        content={reply}
+                        cont={cont}
+                        sort_order={this.props.sort_order}
+                        depth={depth + 1}
+                        rootComment={rootComment}
+                        showNegativeComments={showNegativeComments}
+                        onHide={this.props.onHide}
+                    />)
+                );
+            }
         }
 
         const commentClasses = ['hentry']

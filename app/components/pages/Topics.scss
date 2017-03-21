@@ -48,7 +48,7 @@ select.Topics {
   color: $dark-gray;
   margin: 0 -1.25rem 0.5rem -1.25rem;
   padding: 0.25rem 0 0.25rem 1.75rem;
-  border-radius: 0.2rem;
+  border-radius: 0.25rem;
   background-color: #f5f5f5;
   div > a.action {
     color: rgba(255,0,0,0.65);
@@ -71,11 +71,12 @@ select.Topics {
     color: #989898;
   }
   div > span {
+    display: block;
+    padding-top: 0.75rem;
     padding-left: 0.5rem;
   }
-  a.expand {
-    font-weight: bold;
-    font-size: 75%;
+  input {
+    padding: 0rem 0.5rem;
   }
 }
 .filter_fixed {
@@ -84,6 +85,23 @@ select.Topics {
 }
 .filter_expanded {
   height: auto;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.Topics__filter__expand {
+  background-color: #e8e8e8;
+  margin: -0.5rem -1.25rem 0.5rem -1.25rem;
+  text-align: center;
+  border-bottom-right-radius: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
+  &:hover {
+    background-color: #e0e0e0;
+  }
+  a.expand {
+    font-weight: bold;
+    display: block;
+    font-size: 75%;
+  }
 }
 .Topics__selected__add {}
 .Topics__selected__remove {

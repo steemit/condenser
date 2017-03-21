@@ -31,6 +31,7 @@ import Tarantool from 'db/tarantool';
 import {notificationsArrayToMap} from 'app/utils/Notifications';
 import {routeRegex} from "app/ResolveRoute";
 import {APP_NAME, IGNORE_TAGS, PUBLIC_API} from 'config/client_config';
+import constants from 'app/redux/constants';
 
 const sagaMiddleware = createSagaMiddleware(
     ...userWatches, // keep first to remove keys early when a page change happens
@@ -271,8 +272,8 @@ async function universalRender({ location, initial_state, offchain }) {
           }
           else if ([ 'trending', 'trending30', 'promoted', 'responses', 'hot', 'votes', 'cashout', 'active', 'created', 'recent' ].indexOf(parts[0]) >= 0) {
             let args = [{
-              limit: 20,
-              truncate_body: 1024
+              limit: constants.FETCH_DATA_BATCH_SIZE,
+              truncate_body: constants.FETCH_DATA_TRUNCATE_BODY
             }]
 
             if (typeof tag === 'string' && tag.length) {

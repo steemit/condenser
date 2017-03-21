@@ -126,7 +126,7 @@ export function* fetchState(location_change_action) {
           else if ([ 'trending', 'trending30', 'promoted', 'responses', 'hot', 'votes', 'cashout', 'active', 'created', 'recent' ].indexOf(parts[0]) >= 0) {
             const args = [{
               limit: constants.FETCH_DATA_BATCH_SIZE,
-              truncate_body: '1024'
+              truncate_body: constants.FETCH_DATA_TRUNCATE_BODY
             }]
             if (typeof tag === 'string' && tag.length) {
               args[0].tag = tag
@@ -197,6 +197,7 @@ export function* fetchData(action) {
     let call_name, args;
     args = [{
       limit: constants.FETCH_DATA_BATCH_SIZE,
+      truncate_body: constants.FETCH_DATA_TRUNCATE_BODY,
       start_author: author,
       start_permlink: permlink
     }];

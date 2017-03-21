@@ -13,6 +13,8 @@ import Immutable from "immutable";
 import Callout from 'app/components/elements/Callout';
 import cookie from "react-cookie";
 import { SELECT_TAGS_KEY } from 'config/client_config';
+import transaction from 'app/redux/Transaction'
+import o2j from 'shared/clash/object2json'
 
 class PostsIndex extends React.Component {
 
@@ -27,7 +29,11 @@ class PostsIndex extends React.Component {
   };
 
   static defaultProps = {
-    showSpam: false
+    showSpam: false,
+    loading: false,
+    changed: false,
+    errorMessage: '',
+    successMessage: '',
   }
 
   constructor() {
@@ -35,6 +41,7 @@ class PostsIndex extends React.Component {
     this.state = {}
     this.loadMore = this.loadMore.bind(this);
     this.loadSelected = this.loadSelected.bind(this);
+    this.updateSubscribe = this.updateSubscribe.bind(this);
     this.shouldComponentUpdate = shouldComponentUpdate(this, 'PostsIndex')
   }
 
@@ -50,6 +57,49 @@ class PostsIndex extends React.Component {
     const topic_discussions = this.props.discussions.get(category || select_tags);
     if (!topic_discussions) return null;
     return topic_discussions.get(order);
+  }
+
+  updateSubscribe() {
+    const {accounts, username} = this.props
+    const account = accounts.get(username).toJS()
+    let metaData = account ? o2j.ifStringParseJSON(account.json_metadata) : {}
+    if (!metaData) metaData = {}
+    if (!metaData.profile) metaData.profile = {}
+
+    let select_tags = cookie.load(SELECT_TAGS_KEY);
+    metaData.profile.select_tags = typeof select_tags === 'object' ? select_tags : '';
+    if (!metaData.profile.select_tags) delete metaData.profile.select_tags;
+
+    this.props.updateAccount({
+      json_metadata: JSON.stringify(metaData),
+      account: account.name,
+      memo_key: account.memo_key,
+      errorCallback: (e) => {
+        if (e === 'Canceled') {
+          this.setState({
+            loading: false,
+            errorMessage: ''
+          })
+        } else {
+          console.log('updateAccount ERROR', e)
+          this.setState({
+            loading: false,
+            changed: false,
+            errorMessage: translate('server_returned_error')
+          })
+        }
+      },
+      successCallback: () => {
+        this.setState({
+          loading: false,
+          changed: false,
+          errorMessage: '',
+          successMessage: translate('saved') + '!',
+        })
+        // remove successMessage after a while
+        setTimeout(() => this.setState({successMessage: ''}), 4000)
+      }
+    })
   }
 
   loadMore(last_post) {
@@ -118,6 +168,8 @@ class PostsIndex extends React.Component {
     const status = this.props.status ? this.props.status.getIn([category || '', order]) : null;
     const fetching = (status && status.fetching) || this.props.loading;
     const {showSpam} = this.state;
+    const account = this.props.username && this.props.accounts.get(this.props.username).toJS() || {}
+    const metaData = account ? o2j.ifStringParseJSON(account.json_metadata) : {}
 
     return (
       <div className={'PostsIndex row' + (fetching ? ' fetching' : '')}>
@@ -137,7 +189,16 @@ class PostsIndex extends React.Component {
             />}
         </div>
         <div className="PostsIndex__topics column shrink show-for-large">
-          <Topics order={topics_order} current={category} loading={fetching} loadSelected={this.loadSelected} compact={false} />
+          <Topics
+            order={topics_order}
+            current={category}
+            loading={fetching}
+            loadSelected={this.loadSelected}
+            compact={false}
+            user={this.props.username}
+            updateSubscribe={this.updateSubscribe}
+            metaData={metaData}
+          />
           <small><a onClick={this.onShowSpam}>{translate(showSpam ? 'show_less' : 'show_more')}</a>{' ' + translate('value_posts')}</small>
         </div>
       </div>
@@ -160,6 +221,11 @@ module.exports = {
     (dispatch) => {
       return {
         requestData: (args) => dispatch({type: 'REQUEST_DATA', payload: args}),
+        updateAccount: ({successCallback, errorCallback, ...operation}) => {
+          // console.log(operation)
+          const options = {type: 'account_update', operation, successCallback, errorCallback}
+          dispatch(transaction.actions.broadcastOperation(options))
+        }
       }
     }
   )(PostsIndex)

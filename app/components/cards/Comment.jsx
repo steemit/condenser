@@ -262,7 +262,7 @@ class CommentImpl extends React.Component {
 
         const showDeleteOption = username === author && !hasReplies && netVoteSign <= 0
         const showEditOption = username === author
-        const showReplyOption = comment.depth < 6
+        const showReplyOption = comment.depth < 255
         const readonly = comment.mode == 'archived' || $STM_Config.read_only_mode
 
         let replies = null;

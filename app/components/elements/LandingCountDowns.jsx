@@ -192,7 +192,7 @@ export default class LandingCountDowns extends React.Component {
         <div className="row Documentation__buttons text-center">
           <div className="small-12 columns">
             <a href="/welcome" target="blank" className="button">Гид по платформе Голос</a>
-            <a href="/about#faq" target="blank" className="button">ФАК</a>
+            <a href="#faq" className="button">FAQ</a>
             <a href="https://docs.google.com/document/d/1WQF1xxmCMxzEA95Gnxw4FHViX_6pjVoUlBnItCepOmE/edit" target="blank" className="button">Планы на будущее</a>
             <a href="https://wiki.golos.io/" target="blank" className="button">Вики</a>
             <a href="https://www.youtube.com/c/golosioru" target="blank" className="button alert">YouTube канал</a>

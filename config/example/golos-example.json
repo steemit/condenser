@@ -2,13 +2,13 @@
   "db": {
     "username": "root",
     "password": "",
-    "database": "steemit_dev",
+    "database": "golos_dev",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
-  "session_cookie_key": "stm-dev",
-  "session_key": "steemses",
-  "server_session_secret": "somelongsecretstring",
+  "session_cookie_key": "golos-dev",
+  "session_key": "golosses",
+  "server_session_secret": "some-long-super-secret-string",
   "grant": {
     "server": {
       "protocol": "http",
@@ -42,11 +42,11 @@
   },
   "requestAccountRecovery": {
     "signing_key": "5J.....",
-    "recovery_account": "steem"
+    "recovery_account": "golos"
   },
-  "ws_connection_client": "wss://node.steem.ws",
+  "ws_connection_client": "wss://ws.golos.io",
   "ws_connection_server": [
-    "wss://node.steem.ws"
+    "wss://ws.golos.io"
   ],
   "sendgrid": {
     "key": "SG.xxx_yyyy",

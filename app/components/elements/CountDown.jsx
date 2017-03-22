@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react'
-import { Circle } from 'rc-progress';
+// import { Circle } from 'rc-progress';
 import { FIRST_DATE as firstDate } from 'config/client_config'
 // TODO add comment
 // TODO add function descriptions
@@ -78,7 +78,7 @@ export default class CountDown extends React.Component {
 
 			return 	<div className="left CountDown__single">
 						<div className="CountDown__value">{valueInSeconds}</div>
-						<Circle className="CountDown__circle" percent={percent} strokeWidth="3" strokeColor="#d21010" />
+						{/* <Circle className="CountDown__circle" percent={percent} strokeWidth="3" strokeColor="#d21010" /> */}
 						<span className="CountDown__description">{description}</span>
 					</div>
 		}

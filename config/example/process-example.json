@@ -1,12 +1,12 @@
 {
   "apps": [
     {
-      "name": "steemit1",
+      "name": "golos1",
       "script": "./server/index.js",
       "watch": false,
       "exec_interpreter": "babel-node",
       "exec_mode": "fork",
-      "log_file": "steemit1.log",
+      "log_file": "golos1.log",
       "log_date_format": "MM-DD HH:mm:ss",
       "env": {
         "NODE_ENV": "production",
@@ -14,7 +14,7 @@
       }
     },
     {
-      "name": "steemit2",
+      "name": "golos2",
       "script": "./server/index.js",
       "watch": false,
       "exec_interpreter": "babel-node",

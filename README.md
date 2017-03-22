@@ -1,7 +1,7 @@
 # Golos.io
 
 ========
-Golos.io is the react.js web interface to the world's first and best blockchain-based social media platform.  It uses [STEEM](https://github.com/steemit/steem), a blockchain powered by Graphene 2.0 technology to store JSON-based content for a plethora of web applications.   
+Golos.io is the react.js web interface to the world's first and best blockchain-based social media platform.  It uses [STEEM/Golos](https://github.com/GolosChain/golos), a fork of Steem/Steemit blockchain powered by Graphene 2.0 technology to store JSON-based content for a plethora of web applications.   
 
 ## Why would I want to use Golos.io?
 * Learning how to build blockchain-based web applications using STEEM/Golos as a content storage mechanism in react.js
@@ -32,17 +32,18 @@ sudo npm install -g babel-cli
 
 ```bash
 cd config
-cp example/steem-example.json steem-dev.json
+cp example/client-example.json client_config.json
+cp example/golos-example.json golos-dev.json
 ```
 
-Generate a new crypto_key and save under server_session_secret in ./steem-dev.json.
+Generate a new crypto_key and save under server_session_secret in ./golos-dev.json.
 
 ```bash
 node
 > crypto.randomBytes(32).toString('base64')
 ```
 
-(note: it's steem.json in production)
+(note: it's golos.json in production)
 
 #### Install mysql server
 
@@ -74,10 +75,10 @@ mysql -u root
 > FLUSH PRIVILEGES;
 ```
 
-Now launch mysql client and create steemit_dev database:
+Now launch mysql client and create golos_dev database:
 ```bash
 mysql -u root
-> create database steemit_dev;
+> create database golos_dev;
 ```
 
 Install `sequelize-cli` globally:
@@ -138,7 +139,8 @@ or via pm2:
 
 ```bash
 npm run build
-npm -i -g pm2 # one time
+sudo npm install -g pm2 # one time
+cp example/process-example.json process.json
 pm2 start config/process.json
 ```
 

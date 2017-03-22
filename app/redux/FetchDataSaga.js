@@ -114,6 +114,13 @@ export function* fetchData(action) {
           limit: constants.FETCH_DATA_BATCH_SIZE,
           start_author: author,
           start_permlink: permlink}];
+    } else if( order === 'payout_comments' ) {
+        call_name = 'get_discussions_by_payout_comments';
+        args = [
+        { tag: category,
+          limit: constants.FETCH_DATA_BATCH_SIZE,
+          start_author: author,
+          start_permlink: permlink}];
     } else if( order === 'updated' ) {
         call_name = 'get_discussions_by_active';
         args = [

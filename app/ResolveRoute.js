@@ -4,7 +4,7 @@ export const routeRegex = {
     UserProfile2: /^\/(@[\w\.\d-]+)\/(blog|posts|comments|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)\/?$/,
     UserProfile3: /^\/(@[\w\.\d-]+)\/[\w\.\d-]+/,
     UserEndPoints: /^(blog|posts|comments|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)$/,
-    CategoryFilters: /^\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|created|active)\/?$/ig,
+    CategoryFilters: /^\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/?$/ig,
     PostNoCategory: /^\/(@[\w\.\d-]+)\/([\w\d-]+)/,
     Post: /^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)\/?($|\?)/,
     PostJson: /^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)(\.json)$/,
@@ -86,8 +86,8 @@ export default function resolveRoute(path)
     if (match) {
         return {page: 'Post', params: match.slice(1)};
     }
-    match = path.match(/^\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|created|active)\/?$/)
-         || path.match(/^\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|created|active)\/([\w\d-]+)\/?$/);
+    match = path.match(/^\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/?$/)
+         || path.match(/^\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/([\w\d-]+)\/?$/);
     if (match) {
         return {page: 'PostsIndex', params: match.slice(1)};
     }

@@ -70,7 +70,7 @@ class PostSummary extends React.Component {
         const {account} = this.props;
         if (!content) return null;
 
-        const archived = content.get('mode') === 'archived'
+        const archived = content.get('cashout_time') === '1969-12-31T23:59:59' // TODO: audit after HF17. #1259
 
         let reblogged_by;
         if(content.get('reblogged_by') && content.get('reblogged_by').size > 0) {

@@ -247,7 +247,7 @@ export default connect(
         const current_user = state.user.get('current')
         const username = current_user ? current_user.get('username') : ''
         let metaData = account ? o2j.ifStringParseJSON(account.json_metadata) : {}
-        if (typeof metaData === 'string') metaData = JSON.parse(metaData); // issue #1237
+        if (typeof metaData === 'string') metaData = o2j.ifStringParseJSON(metaData); // issue #1237
         const profile = metaData && metaData.profile ? metaData.profile : {}
 
         return {

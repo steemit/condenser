@@ -23,8 +23,8 @@ class TransferForm extends Component {
 
     constructor(props) {
         super()
-        const {transferToSelf} = props
-        this.state = {advanced: !transferToSelf}
+        const {transferToSelf} = props;
+        this.state = {advanced: !transferToSelf};
         this.initForm(props)
     }
 
@@ -32,7 +32,7 @@ class TransferForm extends Component {
         setTimeout(() => {
             const {advanced} = this.state
             if (advanced)
-                ReactDOM.findDOMNode(this.refs.to).focus()
+                ReactDOM.findDOMNode(this.refs.to).focus();
             else
                 ReactDOM.findDOMNode(this.refs.amount).focus()
         }, 300)
@@ -40,7 +40,7 @@ class TransferForm extends Component {
 
     onAdvanced = (e) => {
         e.preventDefault() // prevent form submission!!
-        const username = this.props.currentUser.get('username')
+        const username = this.props.currentUser.get('username');
         this.state.to.props.onChange(username)
         // setTimeout(() => {ReactDOM.findDOMNode(this.refs.amount).focus()}, 300)
         this.setState({advanced: !this.state.advanced})
@@ -50,7 +50,7 @@ class TransferForm extends Component {
         const {transferType} = props.initialValues
         const insufficientFunds = (asset, amount) => {
             const {currentAccount} = props
-            const isWithdraw = transferType && transferType === 'Savings Withdraw'
+            const isWithdraw = transferType && transferType === 'Savings Withdraw';
             const balanceValue =
                 !asset || asset === 'STEEM' ?
                     isWithdraw ? currentAccount.get('savings_balance') : currentAccount.get('balance') :
@@ -58,13 +58,13 @@ class TransferForm extends Component {
                     isWithdraw ? currentAccount.get('savings_sbd_balance') : currentAccount.get('sbd_balance') :
                 null
             if(!balanceValue) return false
-            const balance = balanceValue.split(' ')[0]
+            const balance = balanceValue.split(' ')[0];
             return parseFloat(amount) > parseFloat(balance)
-        }
-        const {toVesting} = props
-        const fields = toVesting ? ['to', 'amount'] : ['to', 'amount', 'asset']
+        };
+        const {toVesting} = props;
+        const fields = toVesting ? ['to', 'amount'] : ['to', 'amount', 'asset'];
         if(!toVesting && transferType !== 'Transfer to Savings' && transferType !== 'Savings Withdraw')
-            fields.push('memo')
+            fields.push('memo');
 
         reactForm({
             name: 'transfer',
@@ -75,9 +75,9 @@ class TransferForm extends Component {
                     ! values.to ? 'Required' : validate_account_name(values.to),
                 amount:
                     ! values.amount ? 'Required' :
-                    ! /^[0-9]*\.?[0-9]*/.test(values.amount) ? 'Amount is in the form 99999.999' :
+                    ! /^\d+(?:[\.\.]\d+)?$/.test(values.amount) ? 'Amount is in the form 99999.999' :
                     insufficientFunds(values.asset, values.amount) ? 'Insufficient funds' :
-                    countDecimals(values.amount) > 3 ? 'Use only 3 digits of precison' :
+                    countDecimals(values.amount) > 3 ? 'Use only 3 digits of precision' :
                     null,
                 asset:
                     props.toVesting ? null :
@@ -277,18 +277,18 @@ export default connect(
             toVesting, currentUser, errorCallback
         }) => {
             if(!toVesting && !/Transfer to Account|Transfer to Savings|Savings Withdraw/.test(transferType))
-                throw new Error(`Invalid transfer params: toVesting ${toVesting}, transferType ${transferType}`)
+                throw new Error(`Invalid transfer params: toVesting ${toVesting}, transferType ${transferType}`);
 
-            const username = currentUser.get('username')
+            const username = currentUser.get('username');
             const successCallback = () => {
                 // refresh transfer history
-                dispatch({type: 'global/GET_STATE', payload: {url: `@${username}/transfers`}})
+                dispatch({type: 'global/GET_STATE', payload: {url: `@${username}/transfers`}});
                 if(/Savings Withdraw/.test(transferType)) {
                     dispatch({type: 'user/LOAD_SAVINGS_WITHDRAW', payload: {}})
                 }
                 dispatch(user.actions.hideTransfer())
             }
-            const asset2 = toVesting ? 'STEEM' : asset
+            const asset2 = toVesting ? 'STEEM' : asset;
             const operation = {
                 from: username,
                 to, amount: parseFloat(amount, 10).toFixed(3) + ' ' + asset2,
@@ -296,7 +296,7 @@ export default connect(
             }
 
             if(transferType === 'Savings Withdraw')
-                operation.request_id = Math.floor((Date.now() / 1000) % 4294967295)
+                operation.request_id = Math.floor((Date.now() / 1000) % 4294967295);
 
             dispatch(transaction.actions.broadcastOperation({
                 type: toVesting ? 'transfer_to_vesting' : (

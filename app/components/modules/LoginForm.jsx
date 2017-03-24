@@ -213,11 +213,12 @@ class LoginForm extends Component {
                         Cancel
                     </button>}
                 </div>
-                <hr />
-                <div>
-                    <p>Join our <span className="free-slogan">amazing community</span> to comment and reward others.</p>
-                    <button type="button" className="button sign-up" onClick={this.SignUp}>Sign up now to receive <span className="free-money">FREE STEEM!</span></button>
-                </div>
+                {authType == 'Posting' &&
+                    <div>
+                        <hr />
+                        <p>Join our <span className="free-slogan">amazing community</span> to comment and reward others.</p>
+                        <button type="button" className="button sign-up" onClick={this.SignUp}>Sign up now to receive <span className="free-money">FREE STEEM!</span></button>
+                    </div>}
             </form>
         </center>
         );

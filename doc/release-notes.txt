@@ -1,5 +1,5 @@
 ---------------------------------------------------------------------
-0.1.170323
+0.1.170324
 ---------------------------------------------------------------------
 
 New features
@@ -12,6 +12,7 @@ New features
  - simplified/refreshed post hero #1207
  - add post json routes #1122
  - markdown headings in sans #1184
+ - add payout sorts #1137
 
 Bug fixes
 --------
@@ -37,6 +38,8 @@ Bug fixes
  - critical telesign bugfix #1191
  - add fb and ga config env #1185
  - update readme for tarantool #1142
+ - hide signup prompt on active key login #1265
+ - add app manifest #1266
 
 
 ---------------------------------------------------------------------

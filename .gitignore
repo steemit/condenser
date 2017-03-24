@@ -6,6 +6,4 @@ node_modules
 dist
 vendor/*
 tmp/*
-app/assets/static/*.js
-app/assets/static/*.json
 .vagrant

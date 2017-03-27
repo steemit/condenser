@@ -13,12 +13,12 @@ import FoundationDropdown from 'app/components/elements/FoundationDropdown';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 
 const ABOUT_FLAG = <div>
-    <p>Flagging a post can remove rewards and make this material less visible.  Some common reasons to flag:</p>
+    <p>Downvoting a post can remove rewards and make this material less visible.  Some common reasons:</p>
     <ul>
         <li>Disagreement on rewards</li>
-        <li>Fraud or Plagiarism</li>
-        <li>Hate Speech or Internet Trolling</li>
-        <li>Intentional miscategorized content or Spam</li>
+        <li>Fraud or plagiarism</li>
+        <li>Hate speech or trolling</li>
+        <li>Intentionally miscategorized content or spam</li>
     </ul>
 </div>;
 
@@ -136,7 +136,7 @@ class Voting extends React.Component {
         const votingDownActive = voting && votingDown;
 
         if (flag) {
-            const down = <Icon name={votingDownActive ? 'empty' : (myVote < 0 ? 'flag2' : 'flag1')} />;
+            const down = <Icon name={votingDownActive ? 'empty' : 'chevron-down-circle'} />;
             const classDown = 'Voting__button Voting__button-down' + (myVote < 0 ? ' Voting__button--downvoted' : '') + (votingDownActive ? ' votingDown' : '');
             const flagWeight = post_obj.getIn(['stats', 'flagWeight']);
 
@@ -151,7 +151,7 @@ class Voting extends React.Component {
                 <CloseButton onClick={() => this.setState({showWeight: false})} />
                 <div className="clear Voting__about-flag">
                     <p>{ABOUT_FLAG}</p>
-                    <a href="#" onClick={this.voteDown} className="button outline" title="Flag">Flag</a>
+                    <a href="#" onClick={this.voteDown} className="button outline">Submit</a>
                 </div>
             </FoundationDropdown>;
 
@@ -159,7 +159,7 @@ class Voting extends React.Component {
             return <span className="Voting">
                 <span className={classDown}>
                     {flagWeight > 0 && <span className="Voting__button-downvotes">{"•".repeat(flagWeight)}</span>}
-                    {votingDownActive ? down : <a href="#" onClick={flagClickAction} title="Flag">{down}</a>}
+                    {votingDownActive ? down : <a href="#" onClick={flagClickAction} title="Downvote">{down}</a>}
                     {dropdown}
                 </span>
             </span>
@@ -299,7 +299,7 @@ export default connect(
             dispatch(transaction.actions.broadcastOperation({
                 type: 'vote',
                 operation: {voter: username, author, permlink, weight,
-                    __config: {title: weight < 0 ? 'Confirm Flag' : null},
+                    __config: {title: weight < 0 ? 'Confirm Downvote' : null},
                 },
                 confirm,
             }))

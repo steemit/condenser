@@ -83,8 +83,17 @@
     padding-right: 0.1rem;
   }
 
+  a path {
+    fill: #ccc;
+  }
   a:hover path {
     fill: #a00;
+  }
+
+  &.Voting__button--downvoted {
+    a path {
+      fill: #f99;
+    }
   }
 }
 

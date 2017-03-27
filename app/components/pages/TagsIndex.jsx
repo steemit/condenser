@@ -82,9 +82,11 @@ export default class TagsIndex extends React.Component {
         return (
             <div className="TagsIndex row">
                 <div className="column">
+                  {/*
                     <div className="medium-2 medium-offset-10">
                         <input type="text" placeholder={translate('filter')} value={search} onChange={this.onChangeSearch} />
                     </div>
+                  */}
                     <table>
                         <thead>
                         <tr>

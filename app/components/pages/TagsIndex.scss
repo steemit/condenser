@@ -13,7 +13,7 @@
           &.action {
             width: 1rem;
             display: inline-block;
-            color: rgba(255, 0, 0, 0);
+            color: rgba(0, 200, 0, 0);
             font-weight: bold;
             &:hover {
               color: red;
@@ -25,7 +25,10 @@
     td {
       &:hover {
         a.action {
-          color: rgba(255, 0, 0, .65);
+          color: rgba(0, 200, 0, 0.65);
+        }
+        a.action:hover {
+          color: rgba(0, 200, 0, 1);
         }
       }
       &.isSelected {
@@ -33,12 +36,12 @@
           text-decoration: underline;
           &.action {
             text-decoration: none;
-            color: rgba(255, 0, 0, .33);
+            color: rgba(255, 0, 0, 0.33);
           }
         }
         &:hover {
           a.action {
-            color: rgba(255, 0, 0, .65);
+            color: rgba(255, 0, 0, 0.65);
             &:hover {
               color: rgba(255, 0, 0, 1);
             }

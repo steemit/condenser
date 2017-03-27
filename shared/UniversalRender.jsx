@@ -179,7 +179,7 @@ async function universalRender({ location, initial_state, offchain }) {
           _state.feed_price = feed_history.current_median_history; // { "base":"1.000 GBG", "quote":"1.895 GOLOS" },
 
           _state.select_tags = [];
-          _state.filter_tags = [];
+          // _state.filter_tags = [];
 
           // by default trending tags limit=50, but if we in '/tags/' path then limit = 250
           let tags_limit = 50;
@@ -277,7 +277,8 @@ async function universalRender({ location, initial_state, offchain }) {
             }]
 
             if (typeof tag === 'string' && tag.length) {
-              args[0].tag = tag
+              // args[0].tag = tag
+              args[0].select_tags = [tag]
             }
             else {
               if (typeof offchain.select_tags === "object" && offchain.select_tags.length) {

@@ -129,7 +129,9 @@ export function* fetchState(location_change_action) {
               truncate_body: constants.FETCH_DATA_TRUNCATE_BODY
             }]
             if (typeof tag === 'string' && tag.length) {
-              args[0].tag = tag
+              // args[0].tag = tag
+              args[0].select_tags = [tag];
+
             }
             else {
               const select_tags = cookie.load(SELECT_TAGS_KEY);
@@ -202,7 +204,8 @@ export function* fetchData(action) {
       start_permlink: permlink
     }];
     if (category.length) {
-      args[0].tag = category;
+      // args[0].tag = category;
+      args[0].select_tags = [category];
     } else {
       let select_tags = cookie.load(SELECT_TAGS_KEY);
       if (select_tags && select_tags.length) {

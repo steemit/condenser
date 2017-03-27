@@ -4,6 +4,7 @@ import ServerHTML from './server-html';
 import universalRender from '../shared/UniversalRender';
 import models from 'db/models';
 import secureRandom from 'secure-random'
+import { SELECT_TAGS_KEY } from 'config/client_config';
 
 const DB_RECONNECT_TIMEOUT = process.env.NODE_ENV === 'development' ? 1000 * 60 * 60 : 1000 * 60 * 10;
 
@@ -15,11 +16,13 @@ async function appRender(ctx) {
             login_challenge = secureRandom.randomBuffer(16).toString('hex');
             ctx.session.login_challenge = login_challenge;
         }
+        let select_tags = JSON.parse( decodeURIComponent( ctx.cookies.get( SELECT_TAGS_KEY ) || '[]' ) || '[]');
         const offchain = {
             csrf: ctx.csrf,
             flash: ctx.flash,
             new_visit: ctx.session.new_visit,
             account: ctx.session.a,
+            select_tags: select_tags,
             config: $STM_Config,
             login_challenge
         };

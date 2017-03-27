@@ -35,6 +35,7 @@ class PostsList extends React.Component {
     constructor() {
         super();
         this.state = {
+            // _isMounted: false,
             thumbSize: 'desktop',
             showNegativeComments: false,
             nsfwPref: 'warn',
@@ -60,6 +61,7 @@ class PostsList extends React.Component {
     }
 
     componentDidMount() {
+        // this.setState({_isMounted: true});
         this.attachScrollListener();
     }
 
@@ -90,6 +92,7 @@ class PostsList extends React.Component {
     }
 
     componentWillUnmount() {
+        // this.setState({_isMounted: false});
         this.detachScrollListener();
         window.removeEventListener('popstate', this.onBackButton);
         window.removeEventListener('keydown', this.onBackButton);
@@ -133,6 +136,7 @@ class PostsList extends React.Component {
     }
 
     scrollListener = debounce(() => {
+      // if (! this.state._isMounted) return;
         const el = window.document.getElementById('posts_list');
         if (!el) return;
         const scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset :
@@ -184,14 +188,14 @@ class PostsList extends React.Component {
             }
             const ignore = ignore_result && ignore_result.has(cont.get('author'))
             // if(ignore) console.log('ignored post by', cont.get('author'), '\t', item)
-            const json_metadata = JSON.parse(cont.get('json_metadata') || '{}')
-            const postTags = Array.isArray(json_metadata.tags) ? json_metadata.tags : typeof json_metadata.tags === 'string' ? [json_metadata.tags] : []
-                  postTags.push(cont.get('category'))
+            // const json_metadata = JSON.parse(cont.get('json_metadata') || '{}')
+            // const postTags = Array.isArray(json_metadata.tags) ? json_metadata.tags : typeof json_metadata.tags === 'string' ? [json_metadata.tags] : []
+                  // postTags.push(cont.get('category'))
             // TODO: check tags is string or null
-            let igonedPostTags = IGNORE_TAGS && postTags.filter(function(n) { return IGNORE_TAGS.indexOf(n) >= 0 }) || []
+            // let igonedPostTags = IGNORE_TAGS && postTags.filter(function(n) { return IGNORE_TAGS.indexOf(n) >= 0 }) || []
 
             const {hide, netVoteSign, authorRepLog10} = cont.get('stats').toJS()
-            if( (!(ignore || hide) || showSpam) && !igonedPostTags.length) // rephide
+            if (!(ignore || hide) || showSpam) // rephide
                 postsInfo.push({item, ignore, netVoteSign, authorRepLog10})
         });
         const renderSummary = items => items.map(item => <li key={item.item}>

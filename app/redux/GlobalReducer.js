@@ -21,6 +21,12 @@ export default createModule({
             }
         },
         {
+            action: 'FETCHING_STATE',
+            reducer: (state, {payload: fetching}) => {
+                return state.mergeDeep({fetching: fetching});
+            }
+        },
+        {
             action: 'RECEIVE_STATE',
             reducer: (state, action) => {
                 let payload = fromJS(action.payload)

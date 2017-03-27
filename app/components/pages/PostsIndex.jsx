@@ -166,7 +166,7 @@ class PostsIndex extends React.Component {
     }
 
     const status = this.props.status ? this.props.status.getIn([category || '', order]) : null;
-    const fetching = (status && status.fetching) || this.props.loading;
+    const fetching = (status && status.fetching) || this.props.loading || this.props.fetching;
     const {showSpam} = this.state;
     const account = this.props.username && this.props.accounts.get(this.props.username).toJS() || {}
     const metaData = account ? o2j.ifStringParseJSON(account.json_metadata) : {}
@@ -214,6 +214,7 @@ module.exports = {
         discussions: state.global.get('discussion_idx'),
         status: state.global.get('status'),
         loading: state.app.get('loading'),
+        fetching: state.global.get('fetching'),
         accounts: state.global.get('accounts'),
         username: state.user.getIn(['current', 'username']) || state.offchain.get('account'),
       };

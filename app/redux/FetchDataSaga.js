@@ -69,6 +69,7 @@ export function* fetchState(location_change_action) {
           _state = yield call([db_api, db_api.exec], 'get_state', [url]);
         }
         else {
+          yield put({type: 'global/FETCHING_STATE', payload: true});
           const dynamic_global_properties = yield call([db_api, db_api.exec], 'get_dynamic_global_properties', [])
           const feed_history              = yield call([db_api, db_api.exec], 'get_feed_history', []);
           const witness_schedule          = yield call([db_api, db_api.exec], 'get_witness_schedule', [])
@@ -172,6 +173,8 @@ export function* fetchState(location_change_action) {
 
           for (var key in _state.content)
             _state.content[key].active_votes = yield call([db_api, db_api.exec], 'get_active_votes', [_state.content[key].author, _state.content[key].permlink]);
+
+          yield put({type: 'global/FETCHING_STATE', payload: false});
         }
         // ################################################################################
 

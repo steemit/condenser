@@ -4,10 +4,11 @@ import React from "react";
 import { renderToString } from "react-dom/server";
 import models from "db/models";
 import ServerHTML from "server/server-html";
-import { verify } from "server/teleSign";
+import teleSignVerify from "server/utils/teleSign";
+import twilioVerify from "server/utils/twilio";
 import SignupProgressBar from "app/components/elements/SignupProgressBar";
 import CountryCode from "app/components/elements/CountryCode";
-import { getRemoteIp, checkCSRF } from "server/utils";
+import { getRemoteIp, checkCSRF } from "server/utils/misc";
 import MiniHeader from "app/components/modules/MiniHeader";
 import secureRandom from "secure-random";
 import config from "config";
@@ -230,7 +231,7 @@ export default function useEnterAndConfirmMobilePages(app) {
             attributes: ["id", "value"],
             where: { kk: "block-phone-prefix" }
         });
-        for (let bp of blocked_prefixes) {
+        for (const bp of blocked_prefixes) {
             if (phone.match(new RegExp("^" + bp.value))) {
                 this.flash = {
                     error: "Unfortunately, we don't yet have support to send SMS to your carrier, please try again later."
@@ -313,7 +314,7 @@ export default function useEnterAndConfirmMobilePages(app) {
             });
         }
         console.log(
-            "-- /submit_mobile -->",
+            '-- /submit_mobile -->',
             this.session.uid,
             this.session.user,
             phone,
@@ -321,13 +322,25 @@ export default function useEnterAndConfirmMobilePages(app) {
         );
         const ip = getRemoteIp(this.req);
 
-        const verifyResult = yield verify({
+        const twilioResult = yield twilioVerify(phone);
+        console.log('-- /submit_mobile twilioResult -->', twilioResult);
+
+        if (twilioResult === 'block') {
+            mid.update({score: 111111});
+            this.flash = { error: 'Unable to verify your phone number. Please try a different phone number.' };
+            this.redirect(enterMobileUrl);
+            return;
+        }
+
+        const verifyResult = yield teleSignVerify({
             mobile: phone,
             confirmation_code,
-            ip
+            ip,
+            ignore_score: twilioResult === 'pass'
         });
-        if (verifyResult && verifyResult.score)
-            mid.update({ score: verifyResult.score });
+        if (verifyResult && verifyResult.score) {
+            mid.update({score: verifyResult.score});
+        }
         if (verifyResult && verifyResult.error) {
             this.flash = { error: verifyResult.error };
             this.redirect(enterMobileUrl);

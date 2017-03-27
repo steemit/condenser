@@ -246,7 +246,8 @@ export default connect(
         const account = state.global.getIn(['accounts', accountname]).toJS()
         const current_user = state.user.get('current')
         const username = current_user ? current_user.get('username') : ''
-        const metaData = account ? o2j.ifStringParseJSON(account.json_metadata) : {}
+        let metaData = account ? o2j.ifStringParseJSON(account.json_metadata) : {}
+        if (typeof metaData === 'string') metaData = o2j.ifStringParseJSON(metaData); // issue #1237
         const profile = metaData && metaData.profile ? metaData.profile : {}
 
         return {

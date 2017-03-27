@@ -122,7 +122,9 @@ class RecoverAccountStep2 extends React.Component {
         }
         const {account_to_recover} = this.props;
         if (!account_to_recover) {
-            return <Callout body={translate('account_recovery_request_not_confirmed')} />;
+            return <Callout type="error">
+                <span>{translate('account_recovery_request_not_confirmed')}</span>
+            </Callout>;
         }
         const {oldPassword, valid, error, progress_status, name_error, success} = this.state;
         const submit_btn_class = 'button action' + (!valid || !oldPassword ? ' disabled' : '');

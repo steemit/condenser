@@ -80,23 +80,13 @@ class Header extends React.Component {
                 if (current_account_name && account_name.indexOf(current_account_name) === 1)
                     home_account = true;
             } else {
-                if (route.params.length > 1) {
-                    topic = route.params[1];
-                    // Overwrite default created for more human readable title
-                    if (route.params[0] === "created") {
-                        page_title = `New ${topic} posts`;
-                    }
-                    else {
-                        page_title = `${sort_order} ${topic} posts`;
-                    }
-                } else {
-                    if (route.params[0] === "created") {
-                        page_title = `New posts`;
-                    }
-                    else {
-                        page_title = `${sort_order} posts`;
-                    }
-                }
+                const type = (route.params[0] == 'payout_comments' ? 'comments' : 'posts');
+                const topic = (route.params.length > 1 ? route.params[1] + ' ' : '')
+                let prefix = route.params[0];
+                if(prefix == 'created') prefix = 'New'
+                if(prefix == 'payout') prefix = 'Pending payout'
+                if(prefix == 'payout_comments') prefix = 'Pending payout'
+                page_title = `${prefix} ${topic}${type}`;
             }
         } else if (route.page === 'Post') {
             sort_order = '';
@@ -158,6 +148,8 @@ class Header extends React.Component {
             ['hot', 'hot'],
             ['trending', 'trending'],
             ['promoted', 'promoted'],
+            //['payout', 'payout (posts)'],
+            //['payout_comments', 'payout (comments)'],
         ];
         if (current_account_name) sort_orders.unshift(['home', 'home']);
         const sort_order_menu = sort_orders.filter(so => so[0] !== sort_order).map(so => ({link: sortOrderToLink(so[0], topic, current_account_name), value: so[1]}));
@@ -168,6 +160,8 @@ class Header extends React.Component {
             ['hot', 'hot'],
             ['trending', 'trending'],
             ['promoted', 'promoted'],
+            //['payout', 'payout (posts)'],
+            //['payout_comments', 'payout (comments)'],
         ];
         if (current_account_name) sort_orders_horizontal.unshift(['home', 'home']);
         const sort_order_menu_horizontal = sort_orders_horizontal.map(so => {

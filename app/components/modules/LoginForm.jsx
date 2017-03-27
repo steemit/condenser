@@ -138,9 +138,9 @@ class LoginForm extends Component {
             postType = 'Login to Follow Users'
         } else if (loginBroadcastOperation) {
             // check for post or comment in operation
-            postType = loginBroadcastOperation.getIn(['operation', 'title']) ? 'Login to Post' : 'Login to Comment';
+            postType = loginBroadcastOperation.getIn(['operation', 'title']) ? 'Login to Post' : 'Login to Proceed';
         }
-        const title = postType ? postType : 'Login to your Steem Account';
+        const title = postType ? postType : 'Login';
         const authType = /^vote|comment/.test(opType) ? 'Posting' : 'Active or Owner';
         const submitLabel = loginBroadcastOperation ? 'Sign In' : 'Login';
         let error = password.touched && password.error ? password.error : this.props.login_error;
@@ -205,6 +205,7 @@ class LoginForm extends Component {
                         <input id="saveLogin" type="checkbox" ref="pw" {...saveLogin.props} onChange={this.saveLoginToggle} disabled={submitting} /></label>
                 </div>}
                 <div>
+                    <br />
                     <button type="submit" disabled={submitting || disabled} className="button" onClick={this.SignIn}>
                         {submitLabel}
                     </button>
@@ -212,11 +213,12 @@ class LoginForm extends Component {
                         Cancel
                     </button>}
                 </div>
-                <hr />
-                <div>
-                    <p>Join our <span className="free-slogan">amazing community</span> to comment and reward others.</p>
-                    <button type="button" className="button sign-up" onClick={this.SignUp}>Sign up now to receive <span className="free-money">FREE MONEY!</span></button>
-                </div>
+                {authType == 'Posting' &&
+                    <div>
+                        <hr />
+                        <p>Join our <span className="free-slogan">amazing community</span> to comment and reward others.</p>
+                        <button type="button" className="button sign-up" onClick={this.SignUp}>Sign up now to receive <span className="free-money">FREE STEEM!</span></button>
+                    </div>}
             </form>
         </center>
         );

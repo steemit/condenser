@@ -1,4 +1,5 @@
 import React from 'react';
+import {connect} from 'react-redux'
 import { Link } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 // import Icon from 'app/components/elements/Icon';
@@ -11,17 +12,8 @@ class TransferHistoryRow extends React.Component {
         const {op, context, curation_reward, author_reward} = this.props
         // context -> account perspective
 
-        let type = op[1].op[0];
-        let data = op[1].op[1];
-
-        let deposit = null;
-        let withdraw = null;
-
-        if( data.from !== context )
-            deposit = data.amount;
-
-        if( data.to !== context )
-            withdraw = data.amount;
+        const type = op[1].op[0];
+        const data = op[1].op[1];
 
         /*  all transfers involve up to 2 accounts, context and 1 other. */
         let description_start = ""
@@ -85,6 +77,16 @@ class TransferHistoryRow extends React.Component {
             description_end = '';
         } else if (type === 'interest') {
             description_start += `Receive interest of ${data.interest}`;
+        } else if (type === 'fill_convert_request') {
+            description_start += `Fill convert request: ${data.amount_in} for ${data.amount_out}`;
+        } else if (type === 'fill_order') {
+            if(data.open_owner == context) {
+                // my order was filled by data.current_owner
+                description_start += `Paid ${data.open_pays} for ${data.current_pays}`;
+            } else {
+                // data.open_owner filled my order
+                description_start += `Paid ${data.current_pays} for ${data.open_pays}`;
+            }
         } else {
             description_start += JSON.stringify({type, ...data}, null, 2);
         }
@@ -105,11 +107,10 @@ class TransferHistoryRow extends React.Component {
                 </tr>
         );
     }
-};
+}
 
-const renameToSd = (txt) => txt ? numberWithCommas(txt.replace('SBD', 'SD')) : txt
+const renameToSd = txt => txt ? numberWithCommas(txt.replace('SBD', 'SD')) : txt
 
-import {connect} from 'react-redux'
 export default connect(
     // mapStateToProps
     (state, ownProps) => {

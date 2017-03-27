@@ -166,10 +166,11 @@ class PostsIndex extends React.Component {
     }
 
     const status = this.props.status ? this.props.status.getIn([category || '', order]) : null;
-    const fetching = (status && status.fetching) || this.props.loading || this.props.fetching;
+    const fetching = (status && status.fetching) || this.props.loading || this.props.fetching || false;
     const {showSpam} = this.state;
-    const account = this.props.username && this.props.accounts.get(this.props.username).toJS() || {}
-    const metaData = account ? o2j.ifStringParseJSON(account.json_metadata) : {}
+    const account = this.props.username && this.props.accounts.get(this.props.username) || null
+    const json_metadata = account ? account.toJS().json_metadata : {}
+    const metaData = account ? o2j.ifStringParseJSON(json_metadata) : {}
 
     return (
       <div className={'PostsIndex row' + (fetching ? ' fetching' : '')}>

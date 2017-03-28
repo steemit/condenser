@@ -335,6 +335,27 @@ export default connect(
     },
     // mapDispatchToProps
     dispatch => ({
+        claimRewards: (account, errorCallback) => {
+
+            const username = account.get('username')
+            const successCallback = () => {
+                dispatch({type: 'global/GET_STATE', payload: {url: `@${username}/transfers`}})
+            }
+
+            const operation = {
+                account: username,
+                reward_steem: account.get('reward_steem_balance'),
+                reward_sbd: account.get('reward_sbd_balance'),
+                reward_vests: account.get('reward_vesting_balance')
+            }
+
+            dispatch(transaction.actions.broadcastOperation({
+                type: 'claim_reward_balance',
+                operation,
+                successCallback,
+                errorCallback
+            }))
+        },
         convertToSteem: (e) => {
             e.preventDefault()
             const name = 'convertToSteem'

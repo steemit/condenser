@@ -253,7 +253,7 @@ class UserWallet extends React.Component {
             </div>
             <div className="UserWallet__balance row zebra">
                 <div className="column small-12 medium-8">
-                    SAVINGS<br /><span className="secondary">{savingsTip} currently collecting {sbdInterest}% APR.</span>
+                    SAVINGS<br /><span className="secondary">{savingsTip} STEEM Dollars currently collecting {sbdInterest}% APR.</span>
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?

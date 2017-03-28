@@ -339,7 +339,7 @@ export default connect(
         return {
             ...ownProps,
             open_orders: state.market.get('open_orders'),
-            price_per_steem,
+            price_per_golos,
             savings_withdraws,
             sbd_interest,
             gprops

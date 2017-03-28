@@ -117,7 +117,7 @@ export default connect(
         const op = ownProps.op;
         const type = op[1].op[0];
         const data = op[1].op[1];
-        const vests_to_sp = numberWithCommas(vestsToSp(state, data.vesting_shares));
+        const vests_to_sp = type === 'transfer_to_vesting' ? numberWithCommas(vestsToSp(state, data.vesting_shares)) : undefined;
         const curation_reward = type === 'curation_reward' ? numberWithCommas(vestsToSp(state, data.reward)) : undefined;
         const author_reward = type === 'author_reward' ? numberWithCommas(vestsToSp(state, data.vesting_payout)) : undefined;
         return {

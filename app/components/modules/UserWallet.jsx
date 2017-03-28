@@ -138,9 +138,9 @@ class UserWallet extends React.Component {
         // set displayed estimated value
         const total_sbd = sbd_balance + sbd_balance_savings + savings_sbd_pending + sbdOrders + conversionValue;
         const total_steem = vesting_steemf + balance_steem + saving_balance_steem + savings_pending + steemOrders;
-        let total_value = numberWithCommas(((total_steem / price_per_golos) + total_sbd).toFixed(2))
+        const total_value = Number(((total_steem / price_per_golos) + total_sbd).toFixed(3))
         // format spacing on estimated value based on account state
-        const estimate_output = total_value //<LocalizedCurrency amount={total_value} />
+        const estimate_output = <LocalizedCurrency amount={total_value} />
 
         /// transfer log
         let idx = 0

@@ -138,7 +138,7 @@ class UserWallet extends React.Component {
         // set displayed estimated value
         const total_sbd = sbd_balance + sbd_balance_savings + savings_sbd_pending + sbdOrders + conversionValue;
         const total_steem = vesting_steemf + balance_steem + saving_balance_steem + savings_pending + steemOrders;
-        const total_value = Number(((total_steem / price_per_golos) + total_sbd).toFixed(3))
+        const total_value = Number(((total_steem * price_per_golos) + total_sbd).toFixed(3))
         // format spacing on estimated value based on account state
         const estimate_output = <LocalizedCurrency amount={total_value} />
 
@@ -331,7 +331,7 @@ export default connect(
         if(feed_price && feed_price.has('base') && feed_price.has('quote')) {
             const {base, quote} = feed_price.toJS()
             if(/ GBG$/.test(base) && / GOLOS$/.test(quote))
-                price_per_golos = parseFloat(quote.split(' ')[0])
+                price_per_golos = parseFloat(base.split(' ')[0]) / parseFloat(quote.split(' ')[0])
         }
         const savings_withdraws = state.user.get('savings_withdraws')
         const gprops = state.global.get('props');

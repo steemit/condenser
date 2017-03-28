@@ -247,10 +247,12 @@ export function* fetchData(action) {
         call_name = 'get_discussions_by_hot';
     } else if( order === 'by_feed' ) { // https://github.com/steemit/steem/issues/249
         call_name = 'get_discussions_by_feed';
-        args[0].tag = accountname;
+        delete args[0].select_tags
+        args[0].select_authors = [accountname];
     } else if( order === 'by_author' ) {
         call_name = 'get_discussions_by_blog';
-        args[0].tag = accountname;
+        delete args[0].select_tags
+        args[0].select_authors = [accountname];
     } else if( order === 'by_comments' ) {
         call_name = 'get_discussions_by_comments';
         delete args[0].tag

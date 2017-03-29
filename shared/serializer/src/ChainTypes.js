@@ -46,14 +46,25 @@ ChainTypes.operations= {
     cancel_transfer_from_savings: 34,
     custom_binary: 35,
     decline_voting_rights: 36,
-    fill_convert_request: 37,
-    author_reward: 38,
-    curation_reward: 39,
-    comment_reward: 40,
-    liquidity_reward: 41,
-    interest: 42,
-    fill_vesting_withdraw: 43,
-    fill_order: 44
+    reset_account: 37,
+    set_reset_account: 38,
+    claim_reward_balance: 39,
+    delegate_vesting_shares: 40,
+    account_create_with_delegation: 41,
+    fill_convert_request: 42,
+    author_reward: 43,
+    curation_reward: 44,
+    comment_reward: 45,
+    liquidity_reward: 46,
+    interest: 47,
+    fill_vesting_withdraw: 48,
+    fill_order: 49,
+    shutdown_witness: 50,
+    fill_transfer_from_savings: 51,
+    hardfork: 52,
+    comment_payout_update: 53,
+    return_vesting_delegation: 54,
+    comment_benefactor_reward: 55
 };
 
 //types.hpp

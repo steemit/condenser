@@ -22,7 +22,7 @@ class TransferForm extends Component {
     }
 
     constructor(props) {
-        super()
+        super();
         const {transferToSelf} = props;
         this.state = {advanced: !transferToSelf};
         this.initForm(props)
@@ -30,7 +30,7 @@ class TransferForm extends Component {
 
     componentDidMount() {
         setTimeout(() => {
-            const {advanced} = this.state
+            const {advanced} = this.state;
             if (advanced)
                 ReactDOM.findDOMNode(this.refs.to).focus();
             else
@@ -39,25 +39,25 @@ class TransferForm extends Component {
     }
 
     onAdvanced = (e) => {
-        e.preventDefault() // prevent form submission!!
+        e.preventDefault(); // prevent form submission!!
         const username = this.props.currentUser.get('username');
-        this.state.to.props.onChange(username)
+        this.state.to.props.onChange(username);
         // setTimeout(() => {ReactDOM.findDOMNode(this.refs.amount).focus()}, 300)
         this.setState({advanced: !this.state.advanced})
     }
 
     initForm(props) {
-        const {transferType} = props.initialValues
+        const {transferType} = props.initialValues;
         const insufficientFunds = (asset, amount) => {
-            const {currentAccount} = props
+            const {currentAccount} = props;
             const isWithdraw = transferType && transferType === 'Savings Withdraw';
             const balanceValue =
                 !asset || asset === 'STEEM' ?
                     isWithdraw ? currentAccount.get('savings_balance') : currentAccount.get('balance') :
                 asset === 'SBD' ?
                     isWithdraw ? currentAccount.get('savings_sbd_balance') : currentAccount.get('sbd_balance') :
-                null
-            if(!balanceValue) return false
+                null;
+            if(!balanceValue) return false;
             const balance = balanceValue.split(' ')[0];
             return parseFloat(amount) > parseFloat(balance)
         };
@@ -75,7 +75,7 @@ class TransferForm extends Component {
                     ! values.to ? 'Required' : validate_account_name(values.to),
                 amount:
                     ! values.amount ? 'Required' :
-                    ! /^\d+(?:[\.\.]\d+)?$/.test(values.amount) ? 'Amount is in the form 99999.999' :
+                    ! /^\d+(\.\d+)?$/.test(values.amount) ? 'Amount is in the form 99999.999' :
                     insufficientFunds(values.asset, values.amount) ? 'Insufficient funds' :
                     countDecimals(values.amount) > 3 ? 'Use only 3 digits of precision' :
                     null,
@@ -92,13 +92,13 @@ class TransferForm extends Component {
 
     clearError = () => {this.setState({ trxError: undefined })}
 
-    errorCallback = estr => { this.setState({ trxError: estr, loading: false }) }
+    errorCallback = estr => { this.setState({ trxError: estr, loading: false }) };
 
     balanceValue() {
-        const {transferType} = this.props.initialValues
-        const {currentAccount} = this.props
-        const {asset} = this.state
-        const isWithdraw = transferType && transferType === 'Savings Withdraw'
+        const {transferType} = this.props.initialValues;
+        const {currentAccount} = this.props;
+        const {asset} = this.state;
+        const isWithdraw = transferType && transferType === 'Savings Withdraw';
         return !asset ||
             asset.value === 'STEEM' ?
                 isWithdraw ? currentAccount.get('savings_balance') : currentAccount.get('balance') :
@@ -108,23 +108,23 @@ class TransferForm extends Component {
     }
 
     assetBalanceClick = e => {
-        e.preventDefault()
+        e.preventDefault();
         // Convert '9.999 STEEM' to 9.999
         this.state.amount.props.onChange(this.balanceValue().split(' ')[0])
     }
 
     onChangeTo = (e) => {
-        const {value} = e.target
+        const {value} = e.target;
         this.state.to.props.onChange(value.toLowerCase().trim())
     }
 
     render() {
-        const {to, amount, asset, memo} = this.state
-        const {loading, trxError, advanced} = this.state
-        const {currentUser, toVesting, transferToSelf, dispatchSubmit} = this.props
-        const {transferType} = this.props.initialValues
-        const {submitting, valid, handleSubmit} = this.state.transfer
-        const isMemoPrivate = memo && /^#/.test(memo.value)
+        const {to, amount, asset, memo} = this.state;
+        const {loading, trxError, advanced} = this.state;
+        const {currentUser, toVesting, transferToSelf, dispatchSubmit} = this.props;
+        const {transferType} = this.props.initialValues;
+        const {submitting, valid, handleSubmit} = this.state.transfer;
+        const isMemoPrivate = memo && /^#/.test(memo.value);
         const form = (
             <form onSubmit={handleSubmit(({data}) => {
                 this.setState({loading: true})

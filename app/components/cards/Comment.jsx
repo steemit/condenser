@@ -263,7 +263,8 @@ class CommentImpl extends React.Component {
         const showDeleteOption = username === author && !hasReplies && netVoteSign <= 0
         const showEditOption = username === author
         const showReplyOption = comment.depth < 255
-        const readonly = comment.mode == 'archived' || $STM_Config.read_only_mode
+        const archived = comment.cashout_time === '1969-12-31T23:59:59' // TODO: audit after HF17. #1259
+        const readonly = archived || $STM_Config.read_only_mode
 
         let replies = null;
         let body = null;

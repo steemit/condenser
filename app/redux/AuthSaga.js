@@ -7,7 +7,7 @@ import user from 'app/redux/User'
 import {getAccount} from 'app/redux/SagaShared'
 
 // operations that require only posting authority
-const postingOps = Set(`vote, comment, delete_comment, custom_json`.trim().split(/,\s*/))
+const postingOps = Set(`vote, comment, delete_comment, custom_json, claim_reward_balance`.trim().split(/,\s*/))
 
 export const authWatches = [
     watchForAuth

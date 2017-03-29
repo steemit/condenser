@@ -210,10 +210,9 @@ class UserWallet extends React.Component {
         //const sbdMessage = translate('tokens_worth_about_AMOUNT_of_LIQUID_TOKEN') //TODO: add APR param to xlation
         const sbdMessage = <span>Tokens worth about $1.00 of STEEM, currently collecting {sbdInterest}% APR.</span>
 
-        // TODO: replace the following 3 greater-or-equals-to ops with just greater-than after testing
-        const reward_steem = parseFloat(account.get('reward_steem_balance').split(' ')[0]) >= 0 ? account.get('reward_steem_balance') : null;
-        const reward_sbd = parseFloat(account.get('reward_sbd_balance').split(' ')[0]) >= 0 ? account.get('reward_sbd_balance') : null;
-        const reward_sp = parseFloat(account.get('reward_vesting_steem').split(' ')[0]) >= 0 ? account.get('reward_vesting_steem').replace('STEEM', 'SP') : null;
+        const reward_steem = parseFloat(account.get('reward_steem_balance').split(' ')[0]) > 0 ? account.get('reward_steem_balance') : null;
+        const reward_sbd = parseFloat(account.get('reward_sbd_balance').split(' ')[0]) > 0 ? account.get('reward_sbd_balance') : null;
+        const reward_sp = parseFloat(account.get('reward_vesting_steem').split(' ')[0]) > 0 ? account.get('reward_vesting_steem').replace('STEEM', 'SP') : null;
 
         let rewards = [];
         if(reward_steem) rewards.push(reward_steem);
@@ -372,8 +371,7 @@ export default connect(
     },
     // mapDispatchToProps
     dispatch => ({
-        claimRewards: (account, errorCallback) => {
-
+        claimRewards: (account) => {
             const username = account.get('name')
             const successCallback = () => {
                 dispatch({type: 'global/GET_STATE', payload: {url: `@${username}/transfers`}})
@@ -390,7 +388,6 @@ export default connect(
                 type: 'claim_reward_balance',
                 operation,
                 successCallback,
-                errorCallback
             }))
         },
         convertToSteem: (e) => {

@@ -11,7 +11,7 @@ import BlocktradesDeposit from 'app/components/modules/BlocktradesDeposit';
 import Reveal from 'react-foundation-components/lib/global/reveal'
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {steemTip, powerTip, valueTip, savingsTip} from 'app/utils/Tips'
-import {numberWithCommas, vestingSteem} from 'app/utils/StateFunctions'
+import {numberWithCommas, vestingSteem, delegatedSteem} from 'app/utils/StateFunctions'
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu'
 import WalletSubMenu from 'app/components/elements/WalletSubMenu'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
@@ -45,8 +45,8 @@ class UserWallet extends React.Component {
         const gprops = this.props.gprops.toJS();
 
         if (!account) return null;
-        let vesting_steemf = vestingSteem(account.toJS(), gprops);
-        let vesting_steem = vesting_steemf.toFixed(3);
+        let vesting_steem = vestingSteem(account.toJS(), gprops);
+        let delegated_steem = delegatedSteem(account.toJS(), gprops);
 
         let isMyAccount = current_user && current_user.get('username') === account.get('name');
 
@@ -131,7 +131,7 @@ class UserWallet extends React.Component {
 
         // set displayed estimated value
         const total_sbd = sbd_balance + sbd_balance_savings + savings_sbd_pending + sbdOrders + conversionValue;
-        const total_steem = vesting_steemf + balance_steem + saving_balance_steem + savings_pending + steemOrders;
+        const total_steem = vesting_steem + balance_steem + saving_balance_steem + savings_pending + steemOrders;
         let total_value = '$' + numberWithCommas(
             ((total_steem * price_per_steem) + total_sbd
         ).toFixed(2))
@@ -190,9 +190,10 @@ class UserWallet extends React.Component {
             </Reveal>
         </div>
 
-        const steem_balance_str = numberWithCommas(balance_steem.toFixed(3)) // formatDecimal(balance_steem, 3)
+        const steem_balance_str = numberWithCommas(balance_steem.toFixed(3))
         const steem_orders_balance_str = numberWithCommas(steemOrders.toFixed(3))
-        const power_balance_str = numberWithCommas(vesting_steem) // formatDecimal(vesting_steem, 3)
+        const power_balance_str = numberWithCommas(vesting_steem.toFixed(3))
+        const received_power_balance_str = numberWithCommas((-delegated_steem).toFixed(3))
         const sbd_balance_str = numberWithCommas('$' + sbd_balance.toFixed(3)) // formatDecimal(account.sbd_balance, 3)
         const sbd_orders_balance_str = numberWithCommas('$' + sbdOrders.toFixed(3))
         const savings_balance_str = numberWithCommas(saving_balance_steem.toFixed(3) + ' STEEM')
@@ -237,6 +238,7 @@ class UserWallet extends React.Component {
                     {isMyAccount ?
                     <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={power_balance_str + ' STEEM'} menu={power_menu} />
                     : power_balance_str + ' STEEM'}
+                    {delegated_steem != 0 ? <div style={{paddingRight: isMyAccount ? "0.85rem" : null}}><Tooltip t="STEEM POWER delegated to this account">(+{received_power_balance_str} STEEM)</Tooltip></div> : null}
                 </div>
             </div>
             <div className="UserWallet__balance row">

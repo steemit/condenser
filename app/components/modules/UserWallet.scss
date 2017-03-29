@@ -15,6 +15,21 @@
 .UserWallet__dropdown {
 }
 
+.UserWallet__claimbox {
+  margin: 1.5rem 0 0.5rem;
+  padding: 1rem;
+  border: 1px solid #d6e9c6;
+  background: #dff0d8;
+  border-radius: 5px;
+
+  .button {
+    background: #337ab7;
+    border-color: #2e6da4;
+    color: white;
+    margin-top: -0.5rem;
+  }
+}
+
 .WalletSubMenu {
   > li > a {
     color: $dark-gray;

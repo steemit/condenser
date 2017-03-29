@@ -18,6 +18,7 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Tooltip from 'app/components/elements/Tooltip'
 import { translate } from 'app/Translator';
 import {List} from 'immutable'
+import transaction from 'app/redux/Transaction';
 
 const assetPrecision = 1000;
 
@@ -209,7 +210,43 @@ class UserWallet extends React.Component {
         //const sbdMessage = translate('tokens_worth_about_AMOUNT_of_LIQUID_TOKEN') //TODO: add APR param to xlation
         const sbdMessage = <span>Tokens worth about $1.00 of STEEM, currently collecting {sbdInterest}% APR.</span>
 
+        // TODO: replace the following 3 greater-or-equals-to ops with just greater-than after testing
+        const reward_steem = parseFloat(account.get('reward_steem_balance').split(' ')[0]) >= 0 ? account.get('reward_steem_balance') : null;
+        const reward_sbd = parseFloat(account.get('reward_sbd_balance').split(' ')[0]) >= 0 ? account.get('reward_sbd_balance') : null;
+        const reward_sp = parseFloat(account.get('reward_vesting_steem').split(' ')[0]) >= 0 ? account.get('reward_vesting_steem').replace('STEEM', 'SP') : null;
+
+        let rewards = [];
+        if(reward_steem) rewards.push(reward_steem);
+        if(reward_sbd) rewards.push(reward_sbd);
+        if(reward_sp) rewards.push(reward_sp);
+
+        let rewards_str;
+        switch(rewards.length) {
+          case 3:
+              rewards_str = `${rewards[0]}, ${rewards[1]} and ${rewards[2]}`
+              break;
+          case 2:
+              rewards_str = `${rewards[0]} and ${rewards[2]}`
+              break;
+          case 1:
+              rewards_str = `${rewards[0]}`
+              break;
+        }
+
+        let claimbox;
+        if(rewards_str) {
+            claimbox = <div className="row">
+                    <div className="columns small-12">
+                        <div className="UserWallet__claimbox">
+                            Unclaimed rewards: {rewards_str}
+                            {isMyAccount && <button className="button hollow float-right" onClick={e => {this.props.claimRewards(account)}}>Claim Rewards</button>}
+                        </div>
+                    </div>
+                </div>
+        }
+
         return (<div className="UserWallet">
+            {claimbox}
             <div className="row">
                 <div className="columns small-10 medium-12 medium-expand">
                     {isMyAccount ? <WalletSubMenu account_name={account.get('name')} /> : <div><br /><h4>BALANCES</h4><br /></div>}

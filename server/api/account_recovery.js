@@ -3,7 +3,7 @@ import koa_body from 'koa-body';
 import models from 'db/models';
 import config from 'config';
 import {esc, escAttrs} from 'db/models';
-import {getRemoteIp, rateLimitReq, checkCSRF} from '../utils';
+import {getRemoteIp, rateLimitReq, checkCSRF} from 'server/utils/misc';
 
 export default function useAccountRecoveryApi(app) {
     const router = koa_router();
@@ -129,9 +129,11 @@ export default function useAccountRecoveryApi(app) {
                         where: {user_id: existing_account.user_id},
                         order: 'id DESC'
                     });
-                    this.body = JSON.stringify({status: 'found', provider: identity ? identity.provider : null});
+                    this.body = JSON.stringify({
+                        status: 'found',
+                        provider: identity ? (identity.provider === 'phone' ? 'email' : identity.provider) : null});
                 } else {
-                    this.body = JSON.stringify({status: 'found', provider: 'both'});
+                    this.body = JSON.stringify({status: 'found', provider: 'email'});
                 }
             } else {
                 this.body = JSON.stringify({status: 'not found found', provider: 'email'});

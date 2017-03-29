@@ -31,23 +31,23 @@ class LoginForm extends Component {
             console.error('CreateAccount - cryptoTestResult: ', cryptoTestResult);
             cryptographyFailure = true
         }
-        this.state = {cryptographyFailure}
+        this.state = {cryptographyFailure};
         this.usernameOnChange = e => {
-            const value = e.target.value.toLowerCase()
+            const value = e.target.value.toLowerCase();
             this.state.username.props.onChange(value)
-        }
+        };
         this.onCancel = (e) => {
             if(e.preventDefault) e.preventDefault()
-            const {onCancel, loginBroadcastOperation} = this.props
-            const errorCallback = loginBroadcastOperation && loginBroadcastOperation.get('errorCallback')
-            if (errorCallback) errorCallback('Canceled')
+            const {onCancel, loginBroadcastOperation} = this.props;
+            const errorCallback = loginBroadcastOperation && loginBroadcastOperation.get('errorCallback');
+            if (errorCallback) errorCallback('Canceled');
             if (onCancel) onCancel()
-        }
+        };
         this.qrReader = () => {
             const {qrReader} = props
             const {password} = this.state
             qrReader(data => {password.props.onChange(data)})
-        }
+        };
         this.initForm(props)
     }
 
@@ -56,7 +56,7 @@ class LoginForm extends Component {
         if (this.refs.username && this.refs.username.value) this.refs.pw.focus();
     }
 
-    shouldComponentUpdate = shouldComponentUpdate(this, 'LoginForm')
+    shouldComponentUpdate = shouldComponentUpdate(this, 'LoginForm');
 
     initForm(props) {
         reactForm({
@@ -134,11 +134,13 @@ class LoginForm extends Component {
         let postType = "";
         if (opType === "vote") {
             postType = 'Login to Vote'
+        } else if (opType === "custom_json" && loginBroadcastOperation.getIn(['operation', 'id']) === "follow") {
+            postType = 'Login to Follow Users'
         } else if (loginBroadcastOperation) {
             // check for post or comment in operation
-            postType = loginBroadcastOperation.getIn(['operation', 'title']) ? 'Login to Post' : 'Login to Comment';
+            postType = loginBroadcastOperation.getIn(['operation', 'title']) ? 'Login to Post' : 'Login to Proceed';
         }
-        const title = postType ? postType : 'Login to your Steem Account';
+        const title = postType ? postType : 'Login';
         const authType = /^vote|comment/.test(opType) ? 'Posting' : 'Active or Owner';
         const submitLabel = loginBroadcastOperation ? 'Sign In' : 'Login';
         let error = password.touched && password.error ? password.error : this.props.login_error;
@@ -203,6 +205,7 @@ class LoginForm extends Component {
                         <input id="saveLogin" type="checkbox" ref="pw" {...saveLogin.props} onChange={this.saveLoginToggle} disabled={submitting} /></label>
                 </div>}
                 <div>
+                    <br />
                     <button type="submit" disabled={submitting || disabled} className="button" onClick={this.SignIn}>
                         {submitLabel}
                     </button>
@@ -210,11 +213,12 @@ class LoginForm extends Component {
                         Cancel
                     </button>}
                 </div>
-                <hr />
-                <div>
-                    <p>Join our <span className="free-slogan">amazing community</span> to comment and reward others.</p>
-                    <button type="button" className="button sign-up" onClick={this.SignUp}>Sign up now to receive <span className="free-money">FREE MONEY!</span></button>
-                </div>
+                {authType == 'Posting' &&
+                    <div>
+                        <hr />
+                        <p>Join our <span className="free-slogan">amazing community</span> to comment and reward others.</p>
+                        <button type="button" className="button sign-up" onClick={this.SignUp}>Sign up now to receive <span className="free-money">FREE STEEM!</span></button>
+                    </div>}
             </form>
         </center>
         );

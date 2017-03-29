@@ -44,7 +44,7 @@ export default class DropdownMenu extends React.Component {
         const inside_dropdown = !!findParent(e.target, 'VerticalMenu');
         if (inside_dropdown) return;
 
-        e.preventDefault()
+        e.preventDefault();
         this.setState({shown: false});
         document.removeEventListener('click', this.hide);
     };

@@ -67,7 +67,7 @@ npm run mocha -- shared/serializer/test/*.js
 
 */
 
-let ref;
+//let ref;
 let signed_transaction = new Serializer( 
     "signed_transaction",{
     ref_block_num: uint16,
@@ -461,13 +461,13 @@ let equihash_pow = new Serializer(
 }
 );
 
-static_variant([
-    pow2,    
-    equihash_pow
-] = Array.from(ref = static_variant([
-    pow2,    
-    equihash_pow
-])), ref);
+//static_variant([
+//    pow2,    
+//    equihash_pow
+//] = Array.from(ref = static_variant([
+//    pow2,    
+//    equihash_pow
+//])), ref);
 
 let escrow_approve = new Serializer( 
     "escrow_approve",{

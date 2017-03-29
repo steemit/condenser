@@ -9,7 +9,7 @@ import {numberWithCommas, vestsToSp} from 'app/utils/StateFunctions'
 class TransferHistoryRow extends React.Component {
 
     render() {
-        const {op, context, curation_reward, author_reward, vests_to_sp} = this.props;
+        const {op, context, curation_reward, author_reward, powerdown_vests} = this.props;
         // context -> account perspective
 
         const type = op[1].op[0];
@@ -65,7 +65,7 @@ class TransferHistoryRow extends React.Component {
             if( data.vesting_shares === '0.000000 VESTS' )
                 description_start += "Stop power down";
             else
-                description_start += "Start power down of " + vests_to_sp + " STEEM";
+                description_start += "Start power down of " + powerdown_vests + " STEEM";
         } else if( type === 'curation_reward' ) {
             description_start += `${curation_reward} STEEM POWER for `;
             other_account = data.comment_author + "/" + data.comment_permlink;
@@ -117,14 +117,14 @@ export default connect(
         const op = ownProps.op;
         const type = op[1].op[0];
         const data = op[1].op[1];
-        const vests_to_sp = type === 'withdraw_vesting' ? numberWithCommas(vestsToSp(state, data.vesting_shares)) : undefined;
+        const powerdown_vests = type === 'withdraw_vesting' ? numberWithCommas(vestsToSp(state, data.vesting_shares)) : undefined;
         const curation_reward = type === 'curation_reward' ? numberWithCommas(vestsToSp(state, data.reward)) : undefined;
         const author_reward = type === 'author_reward' ? numberWithCommas(vestsToSp(state, data.vesting_payout)) : undefined;
         return {
             ...ownProps,
             curation_reward,
             author_reward,
-            vests_to_sp,
+            powerdown_vests,
         }
     },
 )(TransferHistoryRow)

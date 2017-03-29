@@ -80,13 +80,14 @@ class Header extends React.Component {
                 if (current_account_name && account_name.indexOf(current_account_name) === 1)
                     home_account = true;
             } else {
+                topic = (route.params.length > 1 ? route.params[1] : '')
                 const type = (route.params[0] == 'payout_comments' ? 'comments' : 'posts');
-                const topic = (route.params.length > 1 ? route.params[1] + ' ' : '')
                 let prefix = route.params[0];
                 if(prefix == 'created') prefix = 'New'
                 if(prefix == 'payout') prefix = 'Pending payout'
                 if(prefix == 'payout_comments') prefix = 'Pending payout'
-                page_title = `${prefix} ${topic}${type}`;
+                if(topic !== '') prefix = prefix + ` ${topic}`;
+                page_title = `${prefix} ${type}`
             }
         } else if (route.page === 'Post') {
             sort_order = '';

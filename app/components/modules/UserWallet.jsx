@@ -374,7 +374,7 @@ export default connect(
     dispatch => ({
         claimRewards: (account, errorCallback) => {
 
-            const username = account.get('username')
+            const username = account.get('name')
             const successCallback = () => {
                 dispatch({type: 'global/GET_STATE', payload: {url: `@${username}/transfers`}})
             }

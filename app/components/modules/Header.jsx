@@ -39,7 +39,7 @@ class Header extends React.Component {
         }
     }
 
-    hideSubheader(){
+    hideSubheader() {
         const subheader_hidden = this.state.subheader_hidden;
         const y = window.scrollY >= 0 ? window.scrollY : document.documentElement.scrollTop;
         if (y === this.prevScrollY) return;
@@ -63,7 +63,7 @@ class Header extends React.Component {
 
     render() {
         const route = resolveRoute(this.props.location.pathname);
-        const current_account_name =  this.props.current_account_name;
+        const current_account_name = this.props.current_account_name;
         let home_account = false;
         let page_title = route.page;
 
@@ -86,7 +86,7 @@ class Header extends React.Component {
                 if(prefix == 'created') prefix = 'New'
                 if(prefix == 'payout') prefix = 'Pending payout'
                 if(prefix == 'payout_comments') prefix = 'Pending payout'
-                if(topic !== '') prefix = prefix + ` ${topic}`;
+                if(topic !== '') prefix += ` ${topic}`;
                 page_title = `${prefix} ${type}`
             }
         } else if (route.page === 'Post') {
@@ -142,7 +142,7 @@ class Header extends React.Component {
         if (process.env.BROWSER && (route.page !== 'Post' && route.page !== 'PostNoCategory')) document.title = page_title + ' — Steemit';
 
         const logo_link = route.params && route.params.length > 1 && this.last_sort_order ? '/' + this.last_sort_order : (current_account_name ? `/@${current_account_name}/feed` : '/');
-        let topic_link = topic ? <Link to={`/${this.last_sort_order || 'trending'}/${topic}`}>{topic}</Link> : null;
+        const topic_link = topic ? <Link to={`/${this.last_sort_order || 'trending'}/${topic}`}>{topic}</Link> : null;
 
         const sort_orders = [
             ['created', 'new'],
@@ -165,7 +165,7 @@ class Header extends React.Component {
             //['payout_comments', 'payout (comments)'],
         ];
         if (current_account_name) sort_orders_horizontal.unshift(['home', 'home']);
-        const sort_order_menu_horizontal = sort_orders_horizontal.map(so => {
+        const sort_order_menu_horizontal = sort_orders_horizontal.map((so) => {
                 let active = (so[0] === sort_order);
                 if (so[0] === 'home' && sort_order === 'home' && !home_account) active = false;
                 return {link: sortOrderToLink(so[0], topic, current_account_name), value: so[1], active};
@@ -209,7 +209,7 @@ class Header extends React.Component {
 export {Header as _Header_};
 
 export default connect(
-    state => {
+    (state) => {
         const current_user = state.user.get('current');
         const account_user = state.global.get('accounts');
         const current_account_name = current_user ? current_user.get('username') : state.offchain.get('account');

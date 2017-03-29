@@ -18,6 +18,7 @@ import MiniHeader from 'app/components/modules/MiniHeader';
 import tt from 'counterpart';
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
+import { APP_NAME, VESTING_TOKEN } from 'app/client_config';
 
 class App extends React.Component {
     constructor(props) {
@@ -153,7 +154,7 @@ class App extends React.Component {
                             <br />
                             <br />
                             <div className="tag3">
-                                <b>{tt("get_sp_when_sign_up", {signupBonus: signup_bonus})}</b>
+                                <b>{tt("get_sp_when_sign_up", {signupBonus: signup_bonus, VESTING_TOKEN})}</b>
                             </div>
                         </div>
                     </div>
@@ -193,7 +194,7 @@ class App extends React.Component {
                     </li>
                     <li>
                         <a href="https://steemit.chat/home" target="_blank" rel="noopener noreferrer">
-                            {translate("APP_NAME_chat")}&nbsp;<Icon name="extlink" />
+                            {tt("APP_NAME_chat")}&nbsp;<Icon name="extlink" />
                         </a>
                     </li>
                     <li>
@@ -213,7 +214,7 @@ class App extends React.Component {
                     </li>
                     <li>
                         <a href="/recover_account_step_1" onClick={this.navigate}>
-                        {tt("stolen_account_recovery")}
+                            {tt("stolen_account_recovery")}
                         </a>
                     </li>
                     <li>

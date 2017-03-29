@@ -24,8 +24,8 @@ class VotesAndComments extends React.Component {
 
     render() {
         const {votes, comments, commentsLink} = this.props;
-        let comments_tooltip = translate('no_responses_yet_click_to_respond');
-        if (comments > 0) comments_tooltip = `${tt('response_count', {responseCount: comments})}. ${translate('click_to_respond')}.`
+        let comments_tooltip = tt('no_responses_yet_click_to_respond');
+        if (comments > 0) comments_tooltip = `${tt('response_count', {responseCount: comments})}. ${tt('click_to_respond')}.`
 
         return (
             <span className="VotesAndComments">

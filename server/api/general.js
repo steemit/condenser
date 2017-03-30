@@ -142,6 +142,7 @@ export default function useGeneralApi(app) {
                 fee: `${fee.toFixed(3)} ${fee_currency}`,
                 creator: config.registrar.account,
                 new_account_name: account.name,
+                delegation: "0.000000 VESTS",
                 owner: account.owner_key,
                 active: account.active_key,
                 posting: account.posting_key,
@@ -380,11 +381,11 @@ const {signed_transaction} = ops;
  @arg signingKey {string|PrivateKey} - WIF or PrivateKey object
  */
 function* createAccount({
-    signingKey, fee, creator, new_account_name, json_metadata = '',
+    signingKey, fee, creator, new_account_name, json_metadata = '', delegation,
     owner, active, posting, memo, broadcast = false,
 }) {
-    const operations = [['account_create', {
-        fee, creator, new_account_name, json_metadata,
+    const operations = [['account_create_with_delegation', {
+        fee, creator, new_account_name, json_metadata, delegation,
         owner: {weight_threshold: 1, account_auths: [], key_auths: [[owner, 1]]},
         active: {weight_threshold: 1, account_auths: [], key_auths: [[active, 1]]},
         posting: {weight_threshold: 1, account_auths: [], key_auths: [[posting, 1]]},

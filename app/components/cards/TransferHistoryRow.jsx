@@ -75,6 +75,9 @@ class TransferHistoryRow extends React.Component {
             description_start += `${renameToSd(data.sbd_payout)}${steem_payout}, and ${author_reward} STEEM POWER for ${data.author}/${data.permlink}`;
             // other_account = ``;
             description_end = '';
+        } else if (type === 'claim_reward_balance') {
+            description_start += `Claim rewards: ${renameToSd(data.reward_sbd)}, ${data.reward_steem}, and ${data.reward_vests}`;
+            description_end = '';
         } else if (type === 'interest') {
             description_start += `Receive interest of ${data.interest}`;
         } else if (type === 'fill_convert_request') {

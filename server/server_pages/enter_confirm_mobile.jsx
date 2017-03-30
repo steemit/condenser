@@ -183,6 +183,9 @@ export default function useEnterAndConfirmMobilePages(app) {
                         <div className="secondary">
                             * Message and data rates may apply
                         </div>
+                        <div className="secondary">
+                            * VOIP services like Google Voice are not supported
+                        </div>
                         <br />
                         <div className="error">{this.flash.error}</div>
                         <input

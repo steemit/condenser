@@ -555,5 +555,14 @@
     "profile_website": "Website",
     "saved": "Saved",
     "server_returned_error": "server returned error"
+  },
+  "about_jsx": {
+    "version": "Version",
+    "about_app": "About {APP_NAME}",
+    "about_app_details": "{APP_NAME} is a social media platform where everyone gets paid for creating and curating content. It leverages a robust digital points system, called Steem, that supports real value for digital rewards through market price discovery and liquidity.",
+    "learn_more_at_app_url": "Learn more at {APP_URL}",
+    "resources": "Resources",
+    "join_our_slack": "Join our Slack",
+    "APP_NAME_whitepaper": "{APP_NAME} Whitepaper"
   }
 }

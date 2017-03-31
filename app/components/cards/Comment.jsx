@@ -266,7 +266,6 @@ class CommentImpl extends React.Component {
         const archived = comment.cashout_time === '1969-12-31T23:59:59' // TODO: audit after HF17. #1259
         const readonly = archived || $STM_Config.read_only_mode
 
-        let replies = null;
         let body = null;
         let controls = null;
 
@@ -284,8 +283,9 @@ class CommentImpl extends React.Component {
             </div>;
         }
 
+        let replies = null;
         if(!this.state.collapsed && comment.children > 0) {
-            if(depth > 6) {
+            if(depth > 7) {
                 const comment_permlink = `/${comment.category}/@${comment.author}/${comment.permlink}`
                 replies = <Link to={comment_permlink}>Show {comment.children} more {comment.children == 1 ? 'reply' : 'replies'}</Link>
             } else {

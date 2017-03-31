@@ -38,16 +38,22 @@ export default class Follow extends React.Component {
 
     initEvents(props) {
         const {updateFollow, follower, following} = props
-        const upd = type => {
+
+        /** @param {string} [msg] Confirmation message. */
+        const upd = (type, msg) => {
             if(this.state.busy) return;
+
+            const c = !msg || !confirm || confirm(msg)
+            if (!c) return
+
             this.setState({busy: true})
             const done = () => {this.setState({busy: false})}
             updateFollow(follower, following, type, done)
         }
-        this.follow = () => {upd('blog')}
-        this.unfollow = () => {upd()}
-        this.ignore = () => {upd('ignore')}
-        this.unignore = () => {upd()}
+        this.follow = upd.bind(null, 'blog', translate('confirm_follow'))
+        this.unfollow = upd.bind(null, null, translate('confirm_unfollow'))
+        this.ignore = upd.bind(null, 'ignore', translate('confirm_ignore'))
+        this.unignore = upd.bind(null, null, translate('confirm_unignore'))
     }
 
     render() {

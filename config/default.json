@@ -59,7 +59,8 @@
   },
   "registrar": {
     "account": "-",
-    "fee": "5.000 STEEM",
+    "fee": "9.000 STEEM",
+    "delegation": "220000.000000 VESTS",
     "signing_key": "5J..."
   },
   "requestAccountRecovery": {

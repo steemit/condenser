@@ -9,14 +9,14 @@ import {numberWithCommas, vestsToSp} from 'app/utils/StateFunctions'
 class TransferHistoryRow extends React.Component {
 
     render() {
-        const {op, context, curation_reward, author_reward} = this.props
+        const {op, context, curation_reward, author_reward, powerdown_vests} = this.props;
         // context -> account perspective
 
         const type = op[1].op[0];
         const data = op[1].op[1];
 
         /*  all transfers involve up to 2 accounts, context and 1 other. */
-        let description_start = ""
+        let description_start = "";
         let other_account = null;
         let description_end = "";
 
@@ -65,7 +65,7 @@ class TransferHistoryRow extends React.Component {
             if( data.vesting_shares === '0.000000 VESTS' )
                 description_start += "Stop power down";
             else
-                description_start += "Start power down of " + data.vesting_shares;
+                description_start += "Start power down of " + powerdown_vests + " STEEM";
         } else if( type === 'curation_reward' ) {
             description_start += `${curation_reward} STEEM POWER for `;
             other_account = data.comment_author + "/" + data.comment_permlink;
@@ -74,6 +74,9 @@ class TransferHistoryRow extends React.Component {
             if(data.steem_payout !== '0.000 STEEM') steem_payout = ", " + data.steem_payout;
             description_start += `${renameToSd(data.sbd_payout)}${steem_payout}, and ${author_reward} STEEM POWER for ${data.author}/${data.permlink}`;
             // other_account = ``;
+            description_end = '';
+        } else if (type === 'claim_reward_balance') {
+            description_start += `Claim rewards: ${renameToSd(data.reward_sbd)}, ${data.reward_steem}, and ${data.reward_vests}`;
             description_end = '';
         } else if (type === 'interest') {
             description_start += `Receive interest of ${data.interest}`;
@@ -109,20 +112,22 @@ class TransferHistoryRow extends React.Component {
     }
 }
 
-const renameToSd = txt => txt ? numberWithCommas(txt.replace('SBD', 'SD')) : txt
+const renameToSd = txt => txt ? numberWithCommas(txt.replace('SBD', 'SD')) : txt;
 
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
-        const op = ownProps.op
-        const type = op[1].op[0]
-        const data = op[1].op[1]
-        const curation_reward = type === 'curation_reward' ? numberWithCommas(vestsToSp(state, data.reward)) : undefined
-        const author_reward = type === 'author_reward' ? numberWithCommas(vestsToSp(state, data.vesting_payout)) : undefined
+        const op = ownProps.op;
+        const type = op[1].op[0];
+        const data = op[1].op[1];
+        const powerdown_vests = type === 'withdraw_vesting' ? numberWithCommas(vestsToSp(state, data.vesting_shares)) : undefined;
+        const curation_reward = type === 'curation_reward' ? numberWithCommas(vestsToSp(state, data.reward)) : undefined;
+        const author_reward = type === 'author_reward' ? numberWithCommas(vestsToSp(state, data.vesting_payout)) : undefined;
         return {
             ...ownProps,
             curation_reward,
             author_reward,
+            powerdown_vests,
         }
     },
 )(TransferHistoryRow)

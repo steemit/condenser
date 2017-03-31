@@ -7,7 +7,7 @@ import {PrivateKey} from 'steem/lib/auth/ecc';
 import {api} from 'steem';
 
 // operations that require only posting authority
-const postingOps = Set(`vote, comment, delete_comment, custom_json`.trim().split(/,\s*/))
+const postingOps = Set(`vote, comment, delete_comment, custom_json, claim_reward_balance`.trim().split(/,\s*/))
 
 export const authWatches = [
     watchForAuth

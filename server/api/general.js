@@ -123,26 +123,27 @@ export default function useGeneralApi(app) {
                 throw new Error('Phone number is not confirmed');
             }
 
-            const [fee_value, fee_currency] = config.get('registrar.fee').split(' ');
-            let fee = parseFloat(fee_value);
-            try {
-                const chain_properties = yield api.getChainPropertiesAsync();
-                const chain_fee = parseFloat(chain_properties.account_creation_fee);
-                if (chain_fee && chain_fee > fee) {
-                    if (fee / chain_fee > 0.5) { // just a sanity check - chain fee shouldn't be a way larger
-                        console.log('-- /accounts warning: chain_fee is larger than config fee -->', this.session.uid, fee, chain_fee);
-                        fee = chain_fee;
-                    }
-                }
-            } catch (error) {
-                console.error('Error in /accounts get_chain_properties', error);
-            }
+            // const [fee_value, fee_currency] = config.get('registrar.fee').split(' ');
+            // let fee = parseFloat(fee_value);
+            // try {
+            //     const chain_properties = yield api.getChainPropertiesAsync();
+            //     const chain_fee = parseFloat(chain_properties.account_creation_fee);
+            //     if (chain_fee && chain_fee > fee) {
+            //         if (fee / chain_fee > 0.5) { // just a sanity check - chain fee shouldn't be a way larger
+            //             console.log('-- /accounts warning: chain_fee is larger than config fee -->', this.session.uid, fee, chain_fee);
+            //             fee = chain_fee;
+            //         }
+            //     }
+            // } catch (error) {
+            //     console.error('Error in /accounts get_chain_properties', error);
+            // }
 
             yield createAccount({
                 signingKey: config.get('registrar.signing_key'),
-                fee: `${fee.toFixed(3)} ${fee_currency}`,
-                creator: config.registrar.account,
+                fee: config.get('registrar.fee'),
+                creator: config.get('registrar.account'),
                 new_account_name: account.name,
+                delegation: config.get('registrar.delegation'),
                 owner: account.owner_key,
                 active: account.active_key,
                 posting: account.posting_key,
@@ -375,11 +376,11 @@ export default function useGeneralApi(app) {
  @arg signingKey {string|PrivateKey} - WIF or PrivateKey object
  */
 function* createAccount({
-    signingKey, fee, creator, new_account_name, json_metadata = '',
-    owner, active, posting, memo
+    signingKey, fee, creator, new_account_name, json_metadata = '', delegation,
+    owner, active, posting, memo, broadcast = false,
 }) {
-    const operations = [['account_create', {
-        fee, creator, new_account_name, json_metadata,
+    const operations = [['account_create_with_delegation', {
+        fee, creator, new_account_name, json_metadata, delegation,
         owner: {weight_threshold: 1, account_auths: [], key_auths: [[owner, 1]]},
         active: {weight_threshold: 1, account_auths: [], key_auths: [[active, 1]]},
         posting: {weight_threshold: 1, account_auths: [], key_auths: [[posting, 1]]},

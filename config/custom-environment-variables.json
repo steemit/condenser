@@ -39,7 +39,8 @@
   "registrar": {
     "account": "SDC_REGISTRAR_ACCOUNT",
     "fee": "SDC_REGISTRAR_AMOUNT",
-    "signing_key": "SDC_REGISTRAR_SIGNINGKEY"
+    "signing_key": "SDC_REGISTRAR_SIGNINGKEY",
+    "delegation": "SDC_REGISTRAR_DELEGATION"
   },
   "requestAccountRecovery": {
     "recovery_account": "SDC_RECOVERY_ACCOUNT",

@@ -11,13 +11,14 @@ import BlocktradesDeposit from 'app/components/modules/BlocktradesDeposit';
 import Reveal from 'react-foundation-components/lib/global/reveal'
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {steemTip, powerTip, valueTip, savingsTip} from 'app/utils/Tips'
-import {numberWithCommas, vestingSteem} from 'app/utils/StateFunctions'
+import {numberWithCommas, vestingSteem, delegatedSteem} from 'app/utils/StateFunctions'
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu'
 import WalletSubMenu from 'app/components/elements/WalletSubMenu'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Tooltip from 'app/components/elements/Tooltip'
 import { translate } from 'app/Translator';
 import {List} from 'immutable'
+import transaction from 'app/redux/Transaction';
 
 const assetPrecision = 1000;
 
@@ -45,8 +46,8 @@ class UserWallet extends React.Component {
         const gprops = this.props.gprops.toJS();
 
         if (!account) return null;
-        let vesting_steemf = vestingSteem(account.toJS(), gprops);
-        let vesting_steem = vesting_steemf.toFixed(3);
+        let vesting_steem = vestingSteem(account.toJS(), gprops);
+        let delegated_steem = delegatedSteem(account.toJS(), gprops);
 
         let isMyAccount = current_user && current_user.get('username') === account.get('name');
 
@@ -131,7 +132,7 @@ class UserWallet extends React.Component {
 
         // set displayed estimated value
         const total_sbd = sbd_balance + sbd_balance_savings + savings_sbd_pending + sbdOrders + conversionValue;
-        const total_steem = vesting_steemf + balance_steem + saving_balance_steem + savings_pending + steemOrders;
+        const total_steem = vesting_steem + balance_steem + saving_balance_steem + savings_pending + steemOrders;
         let total_value = '$' + numberWithCommas(
             ((total_steem * price_per_steem) + total_sbd
         ).toFixed(2))
@@ -190,9 +191,10 @@ class UserWallet extends React.Component {
             </Reveal>
         </div>
 
-        const steem_balance_str = numberWithCommas(balance_steem.toFixed(3)) // formatDecimal(balance_steem, 3)
+        const steem_balance_str = numberWithCommas(balance_steem.toFixed(3))
         const steem_orders_balance_str = numberWithCommas(steemOrders.toFixed(3))
-        const power_balance_str = numberWithCommas(vesting_steem) // formatDecimal(vesting_steem, 3)
+        const power_balance_str = numberWithCommas(vesting_steem.toFixed(3))
+        const received_power_balance_str = numberWithCommas((-delegated_steem).toFixed(3))
         const sbd_balance_str = numberWithCommas('$' + sbd_balance.toFixed(3)) // formatDecimal(account.sbd_balance, 3)
         const sbd_orders_balance_str = numberWithCommas('$' + sbdOrders.toFixed(3))
         const savings_balance_str = numberWithCommas(saving_balance_steem.toFixed(3) + ' STEEM')
@@ -209,7 +211,42 @@ class UserWallet extends React.Component {
         //const sbdMessage = translate('tokens_worth_about_AMOUNT_of_LIQUID_TOKEN') //TODO: add APR param to xlation
         const sbdMessage = <span>Tokens worth about $1.00 of STEEM, currently collecting {sbdInterest}% APR.</span>
 
+        const reward_steem = parseFloat(account.get('reward_steem_balance').split(' ')[0]) > 0 ? account.get('reward_steem_balance') : null;
+        const reward_sbd = parseFloat(account.get('reward_sbd_balance').split(' ')[0]) > 0 ? account.get('reward_sbd_balance') : null;
+        const reward_sp = parseFloat(account.get('reward_vesting_steem').split(' ')[0]) > 0 ? account.get('reward_vesting_steem').replace('STEEM', 'SP') : null;
+
+        let rewards = [];
+        if(reward_steem) rewards.push(reward_steem);
+        if(reward_sbd) rewards.push(reward_sbd);
+        if(reward_sp) rewards.push(reward_sp);
+
+        let rewards_str;
+        switch(rewards.length) {
+          case 3:
+              rewards_str = `${rewards[0]}, ${rewards[1]} and ${rewards[2]}`
+              break;
+          case 2:
+              rewards_str = `${rewards[0]} and ${rewards[2]}`
+              break;
+          case 1:
+              rewards_str = `${rewards[0]}`
+              break;
+        }
+
+        let claimbox;
+        if(rewards_str) {
+            claimbox = <div className="row">
+                    <div className="columns small-12">
+                        <div className="UserWallet__claimbox">
+                            Unclaimed rewards: {rewards_str}
+                            {isMyAccount && <button className="button hollow float-right" onClick={e => {this.props.claimRewards(account)}}>Claim Rewards</button>}
+                        </div>
+                    </div>
+                </div>
+        }
+
         return (<div className="UserWallet">
+            {claimbox}
             <div className="row">
                 <div className="columns small-10 medium-12 medium-expand">
                     {isMyAccount ? <WalletSubMenu account_name={account.get('name')} /> : <div><br /><h4>BALANCES</h4><br /></div>}
@@ -237,6 +274,7 @@ class UserWallet extends React.Component {
                     {isMyAccount ?
                     <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={power_balance_str + ' STEEM'} menu={power_menu} />
                     : power_balance_str + ' STEEM'}
+                    {delegated_steem != 0 ? <div style={{paddingRight: isMyAccount ? "0.85rem" : null}}><Tooltip t="STEEM POWER delegated to this account">(+{received_power_balance_str} STEEM)</Tooltip></div> : null}
                 </div>
             </div>
             <div className="UserWallet__balance row">
@@ -253,7 +291,7 @@ class UserWallet extends React.Component {
             </div>
             <div className="UserWallet__balance row zebra">
                 <div className="column small-12 medium-8">
-                    SAVINGS<br /><span className="secondary">{savingsTip} currently collecting {sbdInterest}% APR.</span>
+                    SAVINGS<br /><span className="secondary">{savingsTip} STEEM Dollars currently collecting {sbdInterest}% APR.</span>
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
@@ -335,6 +373,25 @@ export default connect(
     },
     // mapDispatchToProps
     dispatch => ({
+        claimRewards: (account) => {
+            const username = account.get('name')
+            const successCallback = () => {
+                dispatch({type: 'global/GET_STATE', payload: {url: `@${username}/transfers`}})
+            }
+
+            const operation = {
+                account: username,
+                reward_steem: account.get('reward_steem_balance'),
+                reward_sbd: account.get('reward_sbd_balance'),
+                reward_vests: account.get('reward_vesting_balance')
+            }
+
+            dispatch(transaction.actions.broadcastOperation({
+                type: 'claim_reward_balance',
+                operation,
+                successCallback,
+            }))
+        },
         convertToSteem: (e) => {
             e.preventDefault()
             const name = 'convertToSteem'

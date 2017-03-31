@@ -1,21 +1,16 @@
 import {takeEvery} from 'redux-saga';
 import {call, put, select} from 'redux-saga/effects';
-import {Apis} from 'shared/api_client'
-import {createTransaction, signTransaction} from 'shared/chain/transactions'
-import {ops} from 'shared/serializer'
-import {PublicKey, PrivateKey} from 'shared/ecc'
 import {fromJS, Set, Map} from 'immutable'
 import {getAccount, getContent} from 'app/redux/SagaShared'
 import {findSigningKey} from 'app/redux/AuthSaga'
-import {encode} from 'shared/chain/memo'
 import g from 'app/redux/GlobalReducer'
 import user from 'app/redux/User'
 import tr from 'app/redux/Transaction'
 import getSlug from 'speakingurl'
 import {DEBT_TICKER} from 'app/client_config'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient'
-
-const {transaction} = ops
+import {PrivateKey, PublicKey} from 'steem/lib/auth/ecc';
+import {api, broadcast, auth, memo} from 'steem';
 
 export const transactionWatches = [
     watchForBroadcast,
@@ -55,11 +50,11 @@ const hook = {
 }
 
 function* preBroadcast_transfer({operation}) {
-    let memo = operation.memo
-    if(memo) {
-        memo = toStringUtf8(memo)
-        memo = memo.trim()
-        if(/^#/.test(memo)) {
+    let memoStr = operation.memo
+    if(memoStr) {
+        memoStr = toStringUtf8(memoStr)
+        memoStr = memoStr.trim()
+        if(/^#/.test(memoStr)) {
             const memo_private = yield select(
                 state => state.user.getIn(['current', 'private_keys', 'memo_private'])
             )
@@ -67,8 +62,8 @@ function* preBroadcast_transfer({operation}) {
             const account = yield call(getAccount, operation.to)
             if(!account) throw new Error(`Unknown to account ${operation.to}`)
             const memo_key = account.get('memo_key')
-            memo = encode(memo_private, memo_key, memo)
-            operation.memo = memo
+            memoStr = memo.encode(memo_private, memo_key, memoStr)
+            operation.memo = memoStr
         }
     }
     return operation
@@ -97,7 +92,7 @@ function* preBroadcast_custom_json({operation}) {
             if(json[0] === 'follow') {
                 const {follower, following, what: [action]} = json[1]
                 yield put(g.actions.update({
-                    key: ['follow', 'get_following', follower],
+                    key: ['follow', 'getFollowingAsync', follower],
                     notSet: Map(),
                     updater: m => {
                         //m = m.asMutable()
@@ -153,7 +148,7 @@ function* broadcastOperation({payload:
                 }
             }
         }
-        yield call(broadcast, {payload})
+        yield call(broadcastPayload, {payload})
         let eventType = type.replace(/^([a-z])/, g => g.toUpperCase()).replace(/_([a-z])/g, g => g[1].toUpperCase());
         if (eventType === 'Comment' && !operation.parent_author) eventType = 'Post';
         const page = eventType === 'Vote' ? `@${operation.author}/${operation.permlink}` : '';
@@ -164,8 +159,8 @@ function* broadcastOperation({payload:
     }
 }
 
-function* broadcast({payload: {operations, keys, username, successCallback, errorCallback}}) {
-    // console.log('broadcast')
+function* broadcastPayload({payload: {operations, keys, username, successCallback, errorCallback}}) {
+    // console.log('broadcastPayload')
     if ($STM_Config.read_only_mode) return;
     for (const [type] of operations) // see also transaction/ERROR
         yield put(tr.actions.remove({key: ['TransactionError', type]}))
@@ -186,8 +181,6 @@ function* broadcast({payload: {operations, keys, username, successCallback, erro
         }
         operations = newOps
     }
-    const tx = yield createTransaction(operations)
-    const sx = signTransaction(tx, keys)
 
     // status: broadcasting
     const broadcastedEvent = () => {
@@ -201,18 +194,26 @@ function* broadcast({payload: {operations, keys, username, successCallback, erro
             }
         }
     }
+
     try {
         yield new Promise((resolve, reject) => {
             if (process.env.BROWSER && window.bump === 1) { // for testing
-                console.log('TransactionSaga bump(no broadcast) and reject', transaction.toObject(tx))
+                console.log('TransactionSaga bump(no broadcast) and reject', JSON.stringify(operations, null, 2))
                 setTimeout(() => {reject(new Error('Testing, fake error'))}, 2000)
             } else if (process.env.BROWSER && window.bump === 2) { // also for testing
-                console.log('TransactionSaga bump(no broadcast) and resolve', transaction.toObject(tx))
+                console.log('TransactionSaga bump(no broadcast) and resolve', JSON.stringify(operations, null, 2))
                 setTimeout(() => {resolve(); broadcastedEvent()}, 2000)
-            } else
-                Apis.broadcastTransaction(sx, () => {resolve()})
-                    .then(() => {broadcastedEvent()})
-                    .catch(e => {reject(e)})
+            } else {
+                broadcast.send({ extensions: [], operations }, keys, (err) => {
+                    if(err) {
+                        console.error(err);
+                        reject(err)
+                    } else {
+                        broadcastedEvent()
+                        resolve()
+                    }
+                })
+            }
         })
         // status: accepted
         for (const [type, operation] of operations) {
@@ -234,7 +235,7 @@ function* broadcast({payload: {operations, keys, username, successCallback, erro
         }
         if (successCallback) try { successCallback() } catch (error) { console.error(error) }
     } catch (error) {
-        console.error('TransactionSaga\tbroadcast', error)
+        console.error('TransactionSaga\tbroadcastPayload', error)
         // status: error
         yield put(tr.actions.error({operations, error, errorCallback}))
         for (const [type, operation] of operations) {
@@ -270,13 +271,13 @@ function* accepted_vote({operation: {author, permlink, weight}}) {
 }
 
 function* accepted_withdraw_vesting({operation}) {
-    let [account] = yield call(Apis.db_api, 'get_accounts', [operation.account])
+    let [account] = yield call([api, api.getAccountsAsync], [operation.account])
     account = fromJS(account)
     yield put(g.actions.receiveAccount({account}))
 }
 
 function* accepted_account_update({operation}) {
-    let [account] = yield call(Apis.db_api, 'get_accounts', [operation.account])
+    let [account] = yield call([api, api.getAccountsAsync], [operation.account])
     account = fromJS(account)
     yield put(g.actions.receiveAccount({account}))
 
@@ -385,7 +386,7 @@ function* createPermlink(title, author, parent_author, parent_permlink) {
             s = base58.encode(secureRandom.randomBuffer(4))
         }
         // ensure the permlink(slug) is unique
-        const slugState = yield call([Apis, Apis.db_api], 'get_content', author, s)
+        const slugState = yield call([api, api.getContentAsync], author, s)
         let prefix
         if (slugState.body !== '') {
             // make sure slug is unique
@@ -423,7 +424,7 @@ function* error_custom_json({operation: {id, required_posting_auths}}) {
     if(id === 'follow') {
         const follower = required_posting_auths[0]
         yield put(g.actions.update({
-            key: ['follow', 'get_following', follower, 'loading'],
+            key: ['follow', 'getFollowingAsync', follower, 'loading'],
             updater: () => null
         }))
     }
@@ -475,70 +476,61 @@ function slug(text) {
     //    .toLowerCase()
 }
 
+const pwPubkey = (name, pw, role) => auth.wifToPublic(auth.toWif(name, pw.trim(), role))
+
 function* recoverAccount({payload: {account_to_recover, old_password, new_password, onError, onSuccess}}) {
-    const [account] = yield call([Apis, Apis.db_api], 'get_accounts', [account_to_recover])
+    const [account] = yield call([api, api.getAccountsAsync], [account_to_recover])
     if(!account) {
         onError('Unknown account ' + account)
         return
     }
-    try {
-        PrivateKey.fromWif(new_password)
+    if(auth.isWif(new_password)) {
         onError('Your new password should not be a WIF')
         return
-    } catch(e) {
-        //
     }
-    if(PublicKey.fromString(new_password)) {
+    if(auth.isPubkey(new_password)) {
         onError('Your new password should not be a Public Key')
         return
     }
 
-    let oldOwner
-    try {
-        oldOwner = PrivateKey.fromWif(old_password)
-    } catch(e) {
-        oldOwner = PrivateKey.fromSeed(account_to_recover + 'owner' + old_password)
-    }
-    const newOwner = PrivateKey.fromSeed(account_to_recover + 'owner' + new_password.trim())
-    const newActive = PrivateKey.fromSeed(account_to_recover + 'active' + new_password.trim())
-    const newPosting = PrivateKey.fromSeed(account_to_recover + 'posting' + new_password.trim())
-    const newMemo = PrivateKey.fromSeed(account_to_recover + 'memo' + new_password.trim())
+    const oldOwnerPrivate = auth.isWif(old_password) ? old_password :
+        auth.toWif(account_to_recover, old_password, 'owner')
+
+    const oldOwner = auth.wifToPublic(oldOwnerPrivate)
+
+    const newOwnerPrivate = auth.toWif(account_to_recover, new_password.trim(), 'owner')
+    const newOwner = auth.wifToPublic(newOwnerPrivate)
+    const newActive = pwPubkey(account_to_recover, new_password.trim(), 'active')
+    const newPosting = pwPubkey(account_to_recover, new_password.trim(), 'posting')
+    const newMemo = pwPubkey(account_to_recover, new_password.trim(), 'memo')
 
     const new_owner_authority = {weight_threshold: 1, account_auths: [],
-        key_auths: [[newOwner.toPublicKey(), 1]]}
+        key_auths: [[newOwner, 1]]}
 
     const recent_owner_authority = {weight_threshold: 1, account_auths: [],
-        key_auths: [[oldOwner.toPublicKey(), 1]]}
+        key_auths: [[oldOwner, 1]]}
 
     try {
-        const tx1 = yield createTransaction([
+        yield broadcast.sendAsync({extensions: [], operations: [
             ['recover_account', {
                 account_to_recover,
                 new_owner_authority,
                 recent_owner_authority,
             }]
-        ])
-        const sx1 = signTransaction(tx1, [oldOwner, newOwner])
-        yield new Promise((resolve, reject) =>
-            Apis.broadcastTransaction(sx1, () => {resolve()}).catch(e => {reject(e)})
-        )
+        ]}, [oldOwnerPrivate, newOwnerPrivate])
 
         // change password
         // change password probably requires a separate transaction (single trx has not been tested)
         const {json_metadata} = account
-        const tx2 = yield createTransaction([
+        yield broadcast.sendAsync({extensions: [], operations: [
             ['account_update', {
                 account: account.name,
-                active: {weight_threshold: 1, account_auths: [], key_auths: [[newActive.toPublicKey(), 1]]},
-                posting: {weight_threshold: 1, account_auths: [], key_auths: [[newPosting.toPublicKey(), 1]]},
-                memo_key: newMemo.toPublicKey(),
+                active: {weight_threshold: 1, account_auths: [], key_auths: [[newActive, 1]]},
+                posting: {weight_threshold: 1, account_auths: [], key_auths: [[newPosting, 1]]},
+                memo_key: newMemo,
                 json_metadata,
             }]
-        ])
-        const sx2 = signTransaction(tx2, [newOwner])
-        yield new Promise((resolve, reject) =>
-            Apis.broadcastTransaction(sx2, () => {resolve()}).catch(e => {reject(e)})
-        )
+        ]}, [oldOwnerPrivate])
         if(onSuccess) onSuccess()
     } catch(error) {
         console.error('Recover account', error)
@@ -550,7 +542,7 @@ function* recoverAccount({payload: {account_to_recover, old_password, new_passwo
 // const twofaAccount = 'steem'
 function* updateAuthorities({payload: {accountName, signingKey, auths, twofa, onSuccess, onError}}) {
     // Be sure this account is up-to-date (other required fields are sent in the update)
-    const [account] = yield call([Apis, Apis.db_api], 'get_accounts', [accountName])
+    const [account] = yield call([api, api.getAccountsAsync], [accountName])
     if (!account) {
         onError('Account not found')
         return
@@ -683,7 +675,7 @@ function* updateMeta(params) {
     console.log('meta', meta)
     console.log('account_name', account_name)
     // Be sure this account is up-to-date (other required fields are sent in the update)
-    const [account] = yield call([Apis, Apis.db_api], 'get_accounts', [account_name])
+    const [account] = yield call([api, api.getAccountsAsync], [account_name])
     if (!account) {
         onError('Account not found')
         return
@@ -694,17 +686,12 @@ function* updateMeta(params) {
     }
 
     try {
-        console.log('account.name', account.name)
-      const tx = yield createTransaction([
-          ['update_account_meta', {
-              account_name: account.name,
-              json_meta: JSON.stringify(meta),
-          }]
-      ])
-      const sx = signTransaction(tx, signingKey);
-      yield new Promise((resolve, reject) =>
-          Apis.broadcastTransaction(sx, () => {resolve()}).catch(e => {reject(e)})
-      )
+      console.log('account.name', account.name)
+      const operations = ['update_account_meta', {
+          account_name: account.name,
+          json_meta: JSON.stringify(meta),
+      }]
+      yield broadcast.sendAsync({extensions: [], operations}, [signingKey])
       if(onSuccess) onSuccess()
       // console.log('sign key.toPublicKey().toString()', key.toPublicKey().toString())
       // console.log('payload', payload)

@@ -8,9 +8,10 @@ import {esc, escAttrs} from 'db/models';
 import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF} from 'server/utils/misc';
 import coBody from 'co-body';
 import secureRandom from 'secure-random'
-import {PublicKey, Signature, hash} from 'shared/ecc'
 import Mixpanel from 'mixpanel';
 import Tarantool from 'db/tarantool';
+import {PublicKey, Signature, hash} from 'steem/lib/auth/ecc';
+import {api, broadcast} from 'steem';
 
 const mixpanel = config.get('mixpanel') ? Mixpanel.init(config.get('mixpanel')) : null;
 
@@ -125,7 +126,7 @@ export default function useGeneralApi(app) {
             // const [fee_value, fee_currency] = config.get('registrar.fee').split(' ');
             // let fee = parseFloat(fee_value);
             // try {
-            //     const chain_properties = yield Apis.instance().db_api.exec('get_chain_properties', []);
+            //     const chain_properties = yield api.getChainPropertiesAsync();
             //     const chain_fee = parseFloat(chain_properties.account_creation_fee);
             //     if (chain_fee && chain_fee > fee) {
             //         if (fee / chain_fee > 0.5) { // just a sanity check - chain fee shouldn't be a way larger
@@ -146,8 +147,7 @@ export default function useGeneralApi(app) {
                 owner: account.owner_key,
                 active: account.active_key,
                 posting: account.posting_key,
-                memo: account.memo_key,
-                broadcast: true
+                memo: account.memo_key
             });
             console.log('-- create_account_with_keys created -->', this.session.uid, account.name, user.id, account.owner_key);
 
@@ -224,7 +224,7 @@ export default function useGeneralApi(app) {
                 if(!this.session.login_challenge) {
                     console.error('/login_account missing this.session.login_challenge');
                 } else {
-                    const [chainAccount] = yield Apis.db_api('get_accounts', [account])
+                    const [chainAccount] = yield api.getAccountsAsync([account])
                     if(!chainAccount) {
                         console.error('/login_account missing blockchain account', account);
                     } else {
@@ -372,11 +372,6 @@ export default function useGeneralApi(app) {
     });
 }
 
-import {Apis} from 'shared/api_client';
-import {createTransaction, signTransaction} from 'shared/chain/transactions';
-import {ops} from 'shared/serializer';
-
-const {signed_transaction} = ops;
 /**
  @arg signingKey {string|PrivateKey} - WIF or PrivateKey object
  */
@@ -391,12 +386,10 @@ function* createAccount({
         posting: {weight_threshold: 1, account_auths: [], key_auths: [[posting, 1]]},
         memo_key: memo,
     }]]
-    const tx = yield createTransaction(operations)
-    const sx = signTransaction(tx, signingKey)
-    if (!broadcast) return signed_transaction.toObject(sx)
-    return yield new Promise((resolve, reject) =>
-        Apis.broadcastTransaction(sx, () => {resolve()}).catch(e => {reject(e)})
-    )
+    yield broadcast.sendAsync({
+      extensions: [],
+      operations
+    }, [signingKey])
 }
 
 const parseSig = hexSig => {try {return Signature.fromHex(hexSig)} catch(e) {return null}}

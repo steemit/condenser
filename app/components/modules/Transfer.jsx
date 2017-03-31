@@ -7,7 +7,7 @@ import user from 'app/redux/User';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import {transferTips} from 'app/utils/Tips'
 import {powerTip, powerTip2, powerTip3} from 'app/utils/Tips'
-import {browserTests} from 'shared/ecc/test/BrowserTests'
+import runTests, {browserTests} from 'app/utils/BrowserTests'
 import {validate_account_name} from 'app/utils/ChainValidation';
 import {countDecimals} from 'app/utils/ParsersAndFormatters'
 
@@ -36,6 +36,7 @@ class TransferForm extends Component {
             else
                 ReactDOM.findDOMNode(this.refs.amount).focus()
         }, 300)
+        runTests()
     }
 
     onAdvanced = (e) => {

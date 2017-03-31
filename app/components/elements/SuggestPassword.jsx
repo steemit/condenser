@@ -5,9 +5,9 @@ import {renderToString} from 'react-dom/server'
 import g from 'app/redux/GlobalReducer'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import Icon from 'app/components/elements/Icon'
-import {key_utils} from 'shared/ecc'
 import { translate } from 'app/Translator';
 import { APP_NAME, APP_ICON } from 'app/client_config';
+import {key_utils} from 'steem/lib/auth/ecc';
 
 const {bool} = React.PropTypes
 export const steemitCannotRecoverPasswords = translate('APP_NAME_cannot_recover_passwords_keep_this_page_in_a_secure_location')

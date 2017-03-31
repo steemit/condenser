@@ -112,9 +112,9 @@ module.exports = connect(
             follower = current_user ? current_user.get('username') : null
         }
 
-        const {following} = ownProps;
-        const f = state.global.getIn(['follow', 'get_following', follower], emptyMap);
-        const loading = f.get('blog_loading', false) || f.get('ignore_loading', false);
+        const {following} = ownProps
+        const f = state.global.getIn(['follow', 'getFollowingAsync', follower], emptyMap)
+        const loading = f.get('blog_loading', false) || f.get('ignore_loading', false)
         const followingWhat =
             f.get('blog_result', emptySet).contains(following) ? 'blog' :
             f.get('ignore_result', emptySet).contains(following) ? 'ignore' :

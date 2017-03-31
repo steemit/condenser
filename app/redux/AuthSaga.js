@@ -1,10 +1,10 @@
 import {takeEvery} from 'redux-saga';
 import {call, put, select} from 'redux-saga/effects';
-import Apis from 'shared/api_client/ApiInstances'
 import {Set, Map, fromJS, List} from 'immutable'
-import {PrivateKey} from 'shared/ecc'
 import user from 'app/redux/User'
 import {getAccount} from 'app/redux/SagaShared'
+import {PrivateKey} from 'steem/lib/auth/ecc';
+import {api} from 'steem';
 
 // operations that require only posting authority
 const postingOps = Set(`vote, comment, delete_comment, custom_json, claim_reward_balance`.trim().split(/,\s*/))
@@ -68,7 +68,7 @@ export function* threshold({pubkeys, authority, authType, recurse = 1}) {
     const account_auths = authority.get('account_auths')
     const aaNames = account_auths.map(v => v.get(0), List())
     if (aaNames.size) {
-        const aaAccounts = yield call(Apis.db_api, 'get_accounts', aaNames)
+        const aaAccounts = yield api.getAccountsAsync(aaNames)
         const aaThreshes = account_auths.map(v => v.get(1), List())
         for (let i = 0; i < aaAccounts.size; i++) {
             const aaAccount = aaAccounts.get(i)

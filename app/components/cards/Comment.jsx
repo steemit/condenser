@@ -392,7 +392,7 @@ const Comment = connect(
         const {content} = ownProps
 
         const username = state.user.getIn(['current', 'username'])
-        const ignore_list = username ? state.global.getIn(['follow', 'get_following', username, 'ignore_result']) : null
+        const ignore_list = username ? state.global.getIn(['follow', 'getFollowingAsync', username, 'ignore_result']) : null
 
         return {
             ...ownProps,

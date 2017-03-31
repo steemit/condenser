@@ -1,3 +1,5 @@
+import * as steem from 'steem';
+
 delete process.env.BROWSER;
 
 const path = require('path');
@@ -38,21 +40,13 @@ global.webpackIsomorphicTools = new WebpackIsomorphicTools(
 );
 
 global.webpackIsomorphicTools.server(ROOT, () => {
-        const SteemClient = require('shared/api_client/ApiInstances').default;
-        const connect_promises = [SteemClient.instance().connect_promise()];
+        steem.config.set('websocket', config.get('ws_connection_server'))
         // const CliWalletClient = require('shared/api_client/CliWalletClient').default;
         // if (process.env.NODE_ENV === 'production') connect_promises.push(CliWalletClient.instance().connect_promise());
-        Promise.all(connect_promises)
-            .then(() => {
-                try {
-                    require('./server');
-                } catch (error) {
-                    console.error(error);
-                    process.exit(1);
-                }
-            })
-            .catch(error => {
-                console.error('Web socket client init error', error);
-                process.exit(1);
-            });
+        try {
+            require('./server');
+        } catch (error) {
+            console.error(error);
+            process.exit(1);
+        }
 });

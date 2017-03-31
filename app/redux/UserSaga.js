@@ -2,14 +2,15 @@ import {fromJS, Set, List} from 'immutable'
 import {takeLatest} from 'redux-saga';
 import {call, put, select, fork} from 'redux-saga/effects';
 import {accountAuthLookup} from 'app/redux/AuthSaga'
-import {PrivateKey, Signature, hash} from 'shared/ecc'
 import user from 'app/redux/User'
 import {getAccount} from 'app/redux/SagaShared'
 import {browserHistory} from 'react-router'
 import {serverApiLogin, serverApiLogout} from 'app/utils/ServerApiClient';
-import {Apis} from 'shared/api_client';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import {loadFollows} from 'app/redux/FollowSaga'
+import {PrivateKey, Signature, hash} from 'steem/lib/auth/ecc';
+import {api} from 'steem';
+
 
 export const userWatches = [
     watchRemoveHighSecurityKeys, // keep first to remove keys early when a page change happens
@@ -52,8 +53,8 @@ export function* watchRemoveHighSecurityKeys() {
 
 function* loadSavingsWithdraw() {
     const username = yield select(state => state.user.getIn(['current', 'username']))
-    const to = yield call(Apis.db_api, 'get_savings_withdraw_to', username)
-    const fro = yield call(Apis.db_api, 'get_savings_withdraw_from', username)
+    const to = yield call([api, api.getSavingsWithdrawToAsync], username)
+    const fro = yield call([api, api.getSavingsWithdrawFromAsync], username)
 
     const m = {}
     for(const v of to) m[v.id] = v
@@ -95,8 +96,8 @@ function* usernamePasswordLogin(action) {
     const current = yield select(state => state.user.get('current'))
     if(current) {
         const username = current.get('username')
-        yield fork(loadFollows, "get_following", username, 'blog')
-        yield fork(loadFollows, "get_following", username, 'ignore')
+        yield fork(loadFollows, "getFollowingAsync", username, 'blog')
+        yield fork(loadFollows, "getFollowingAsync", username, 'ignore')
     }
 }
 
@@ -349,7 +350,7 @@ function* lookupPreviousOwnerAuthority({payload: {}}) {
         return
     }
     // Owner history since this index was installed July 14
-    let owner_history = fromJS(yield call(Apis.db_api, 'get_owner_history', username))
+    let owner_history = fromJS(yield call([api, api.getOwnerHistoryAsync], username))
     if(owner_history.count() === 0) return
     owner_history = owner_history.sort((b, a) => {//sort decending
         const aa = a.get('last_valid_time')
@@ -465,6 +466,6 @@ function* uploadImage({payload: {file, dataUrl, filename = 'image.txt', progress
 // function* getCurrentAccount() {
 //     const current = yield select(state => state.user.get('current'))
 //     if (!current) return
-//     const [account] = yield call(Apis.db_api, 'get_accounts', [current.get('username')])
+//     const [account] = yield call([api, api.getAccountsAsync], [current.get('username')])
 //     yield put(g.actions.receiveAccount({ account }))
 // }

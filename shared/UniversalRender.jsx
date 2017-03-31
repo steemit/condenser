@@ -6,7 +6,6 @@ import React from 'react';
 import { render } from 'react-dom';
 import { renderToString } from 'react-dom/server';
 import { Router, RouterContext, match, applyRouterMiddleware } from 'react-router';
-import Apis from './api_client/ApiInstances';
 import { Provider } from 'react-redux';
 import RootRoute from 'app/RootRoute';
 import {createStore, applyMiddleware, compose} from 'redux';
@@ -29,6 +28,8 @@ import Translator from 'app/Translator';
 import {notificationsArrayToMap} from 'app/utils/Notifications';
 import {routeRegex} from "app/ResolveRoute";
 import {contentStats} from 'app/utils/StateFunctions'
+
+import {api} from 'steem';
 
 const sagaMiddleware = createSagaMiddleware(
     ...userWatches, // keep first to remove keys early when a page change happens
@@ -84,23 +85,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
         sagaMiddleware.run(PollDataSaga).done
             .then(() => console.log('PollDataSaga is finished'))
             .catch(err => console.log('PollDataSaga is finished with error', err));
-        const ws_connection_status_cb = status => {
-            store.dispatch({type: 'WS_CONNECTION_STATUS', payload: {status}});
-        };
-        const ws_request_status_cb = payload => {
-            store.dispatch({type: 'RPC_REQUEST_STATUS', payload});
-        };
-        try {
-            await Apis.instance(ws_connection_status_cb, ws_request_status_cb).init();
-        } catch (e) {
-            console.error('Api init error: ', e);
-            if (e.toString && e.toString().match(/ReferenceError.+WebSocket/)) {
-                const message = 'Warning! This browser does not support web sockets communication, some elements of the website may not be displayed properly. Please upgrade your browser.';
-                store.dispatch({type: 'ADD_NOTIFICATION', payload: {key: 'websocket', message}});
-            } else {
-                serverApiRecordEvent('client_error', e);
-            }
-        }
+
         const history = syncHistoryWithStore(browserHistory, store);
         // const scrollHistory = useScroll(() => history)();
 
@@ -141,7 +126,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
         if (url.indexOf('/curation-rewards') !== -1) url = url.replace(/\/curation-rewards$/, '/transfers');
         if (url.indexOf('/author-rewards') !== -1) url = url.replace(/\/author-rewards$/, '/transfers');
 
-        onchain = await Apis.instance().db_api.exec('get_state', [url]);
+        onchain = await api.getStateAsync(url);
 
         if (Object.getOwnPropertyNames(onchain.accounts).length === 0 && (url.match(routeRegex.UserProfile1) || url.match(routeRegex.UserProfile3))) { // protect for invalid account
             return {
@@ -163,7 +148,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
 
         if (!url.match(routeRegex.PostsIndex) && !url.match(routeRegex.UserProfile1) && !url.match(routeRegex.UserProfile2) && url.match(routeRegex.PostNoCategory)) {
             const params = url.substr(2, url.length - 1).split("/");
-            const content = await Apis.instance().db_api.exec('get_content', [params[0], params[1]]);
+            const content = await api.getContentAsync(params[0], params[1]);
             if (content.author && content.permlink) { // valid short post url
                 onchain.content[url.substr(2, url.length - 1)] = content;
             } else { // protect on invalid user pages (i.e /user/transferss)

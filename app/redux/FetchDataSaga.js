@@ -121,9 +121,7 @@ export function* fetchState(location_change_action) {
           }
           else if (parts[0] === 'witnesses' || parts[0] === '~witnesses') {
             const wits = yield call([db_api, db_api.exec], PUBLIC_API.witnesses[0], ['',50]);
-            for (var key in wits) {
-              _state.witnesses[wits[key].owner] = wits[key];
-            }
+            for (var key in wits) _state.witnesses[wits[key].owner] = wits[key];
           }
           else if ([ 'trending', 'trending30', 'promoted', 'responses', 'hot', 'votes', 'cashout', 'active', 'created', 'recent' ].indexOf(parts[0]) >= 0) {
             const args = [{

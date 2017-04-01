@@ -269,9 +269,7 @@ async function universalRender({ location, initial_state, offchain }) {
           }
           else if (parts[0] === 'witnesses' || parts[0] === '~witnesses') {
             const wits = await Apis.instance().db_api.exec(PUBLIC_API.witnesses[0], ['',50]);
-            for (var key in wits) {
-              _state.witnesses[wits[key].owner] = wits[key];
-            }
+            for (var key in wits) _state.witnesses[wits[key].owner] = wits[key];
           }
           else if ([ 'trending', 'trending30', 'promoted', 'responses', 'hot', 'votes', 'cashout', 'active', 'created', 'recent' ].indexOf(parts[0]) >= 0) {
             let args = [{

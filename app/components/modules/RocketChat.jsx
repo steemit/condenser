@@ -36,12 +36,8 @@ export default class RocketChat extends React.Component {
 
     render() {
         return <div className={this.chatikClass() + this.stateClass()}>
-            <button className={this.stateClass()} onClick={this.toggle.bind(this)}><img src={this.iconUrl()} alt="Наш чат в RocketChat" /></button>
-            <div className="sidebar" style={{
-
-            }}>
-                <iframe src={this.link()} width="100%" height="100%"/>
-            </div>
+            <a className={this.stateClass()} href="https://chat.golos.io/" target="_blank"><img src={this.iconUrl()} alt="Наш чат в RocketChat" /></a>
+            <div className="sidebar"></div>
         </div>;
     }
 }

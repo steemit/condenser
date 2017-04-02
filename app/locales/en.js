@@ -623,13 +623,13 @@ const en =  {
   you: 'You',
   you_already_voted_for_this_post: 'You already voted for this post',
   you_are_viewing_single_comments_thread_from: 'You are viewing a single comment\'s thread from',
-  you_can: 'Нажмите чтобы',
+  you_can: 'You can',
   you_can_either: 'You can either',
   you_can_like_a_post_only_after_3_sec_after_last_post: 'Вы можете лайкать посты не чаще одного раза в три секунды',
   you_can_vote_for_maximum_of_witnesses: 'You can vote for a maximum of 30 witnesses',
   you_have_votes_remaining: `You have {votesCount, plural, =0 {no votes} one {1 vote} other {{votesCount} votes}} remaining`,
-  you_may_only_comment_once_every_20_seconds: 'Вы можете комментировать не чаще каждых 20 секунд',
-  you_may_only_post_once_per_minute: 'Вы можете создавать посты только раз в минуту.',
+  you_may_only_comment_once_every_20_seconds: 'You may comment once every 20 seconds',
+  you_may_only_post_once_per_minute: 'You may only post once per minute.',
   you_need_private_password_or_key_not_a_public_key: 'You need a private password or key (not a public key)',
   you_need_to_logout_before_creating_account: 'You need to {logoutLink} before you can create another account',
   you_successdully_promoted_this_post: 'Ви успішно просунули цей пост',
@@ -637,7 +637,7 @@ const en =  {
   your_existing_DEBT_TOKEN_are_liquid_and_transferable: 'Your existing ' + DEBT_TOKEN + ' are liquid and transferable. Instead you may wish to trade ' + DEBT_TOKEN + ' directly in this site under {link} or transfer to an external market.',
   your_password_permissions_were_reduced: 'Your password permissions were reduced',
   your_voice_is_worth_something: 'Your voice is worth something',
-  сancel_transfer_from_savings: 'Отмена перевода из сейфа (id запроса {request})',
+  сancel_transfer_from_savings: 'Cancel transfer from savings (id запроса {request})',
 }
 
 export { en }

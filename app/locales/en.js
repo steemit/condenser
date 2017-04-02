@@ -111,7 +111,7 @@ const en =  {
   by_verifying_you_agree_with_privacy_policy_of_website_APP_URL: 'of ' + APP_URL,
   cancel: 'Cancel',
   cancel_power_down: 'Cancel Power Down',
-  cancel_this_withdraw_request: 'Отменить запрос вывода средств?',
+  cancel_this_withdraw_request: 'Cancel this withdraw request?',
   canceled: 'Canceled',
   cannot_increase_reward_of_post_within_the_last_minute_before_payout: 'Cannot increase reward of post within the last minute before payout',
   cant_confirm_account_ownership: 'We can\'t confirm account ownership. Check your password',

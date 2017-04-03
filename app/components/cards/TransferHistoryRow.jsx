@@ -72,11 +72,11 @@ class TransferHistoryRow extends React.Component {
         } else if (type === 'author_reward') {
             let steem_payout = "";
             if(data.steem_payout !== '0.000 STEEM') steem_payout = ", " + data.steem_payout;
-            description_start += `${renameToSd(data.sbd_payout)}${steem_payout}, and ${author_reward} STEEM POWER for ${data.author}/${data.permlink}`;
+            description_start += `${data.sbd_payout}${steem_payout}, and ${author_reward} STEEM POWER for ${data.author}/${data.permlink}`;
             // other_account = ``;
             description_end = '';
         } else if (type === 'claim_reward_balance') {
-            description_start += `Claim rewards: ${renameToSd(data.reward_sbd)}, ${data.reward_steem}, and ${reward_vests} STEEM POWER`;
+            description_start += `Claim rewards: ${data.reward_sbd}, ${data.reward_steem}, and ${reward_vests} STEEM POWER`;
             description_end = '';
         } else if (type === 'interest') {
             description_start += `Receive interest of ${data.interest}`;
@@ -111,8 +111,6 @@ class TransferHistoryRow extends React.Component {
         );
     }
 }
-
-const renameToSd = txt => txt ? numberWithCommas(txt.replace('SBD', 'SD')) : txt;
 
 export default connect(
     // mapStateToProps

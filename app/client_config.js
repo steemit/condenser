@@ -26,7 +26,7 @@ export const WHITEPAPER_URL = 'https://steem.io/SteemWhitePaper.pdf';
 export const LIQUID_TICKER = 'STEEM';
 export const VEST_TICKER = 'VESTS';
 export const DEBT_TICKER = 'SBD';
-export const DEBT_TOKEN_SHORT = 'SD';
+export const DEBT_TOKEN_SHORT = 'SBD';
 
 // application settings
 export const DEFAULT_LANGUAGE = 'en'; // used on application internationalization bootstrap

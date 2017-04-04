@@ -656,6 +656,17 @@
     "are_you_sure": "Are you sure?",
     "resteem_this_post": "'Resteem This Post'"
   },
+  "savingswithdrawhistory_jsx": {
+    "cancel_this_withdraw_request": "Cancel this withdraw request?",
+    "pending_savings_withdrawals": "PENDING SAVINGS WITHDRAWS",
+    "cancel": "Cancel",
+    "withdraw": "Withdraw",
+    "from": "from",
+    "to": "to",
+  },
+  "_jsx": {
+    "": ""
+  },
   "_jsx": {
     "": ""
   }

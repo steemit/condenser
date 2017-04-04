@@ -630,8 +630,9 @@
   "pageviewscounter_jsx": {
     "since": "since"
   },
-  "_jsx": {
-    "": ""
+  "reblog_jsx": {
+    "are_you_sure": "Are you sure?",
+    "resteem_this_post": "'Resteem This Post'"
   },
   "_jsx": {
     "": ""

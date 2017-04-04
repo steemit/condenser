@@ -20,7 +20,8 @@ import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import ShareMenu from 'app/components/elements/ShareMenu';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import Userpic from 'app/components/elements/Userpic';
-import { APP_DOMAIN } from 'app/client_config';
+import { APP_DOMAIN, APP_NAME } from 'app/client_config';
+import tt from 'counterpart';
 
 // function loadFbSdk(d, s, id) {
 //     return new Promise(resolve => {
@@ -48,8 +49,8 @@ function TimeAuthorCategory({content, authorRepLog10, showTags}) {
         <span className="PostFull__time_author_category vcard">
             <Icon name="clock" className="space-right" />
             <TimeAgoWrapper date={content.created} className="updated" />
-            {} by <Author author={content.author} authorRepLog10={authorRepLog10} />
-            {showTags && <span> in <TagList post={content} single /></span>}
+            {} {tt('by')} <Author author={content.author} authorRepLog10={authorRepLog10} />
+            {showTags && <span> {tt('in')} <TagList post={content} single /></span>}
         </span>
      );
 }
@@ -61,7 +62,7 @@ function TimeAuthorCategoryLarge({content, authorRepLog10}) {
             <Userpic account={content.author} />
             <div className="right-side">
                 <Author author={content.author} authorRepLog10={authorRepLog10} />
-                <span> in <TagList post={content} single /></span>
+                <span> {tt('in')} <TagList post={content} single /></span>
             </div>
         </span>
     );
@@ -199,12 +200,12 @@ class PostFull extends React.Component {
         if (content.category) link = `/${content.category}${link}`;
 
         const {category, title, body} = content;
-        if (process.env.BROWSER && title) document.title = title + ' — Steemit';
+        if (process.env.BROWSER && title) document.title = title + ' — '+ APP_NAME;
 
         let content_body = content.body;
         const url = `/${category}/@${author}/${permlink}`
         if(DMCAList.includes(url)) {
-            content_body = 'This post is not available due to a copyright claim.'
+            content_body = tt('this_post_is_not_available_due_to_a_copyright_claim')
         }
 
         const replyParams = {author, permlink, parent_author, parent_permlink, category, title, body}
@@ -212,14 +213,14 @@ class PostFull extends React.Component {
         this.share_params = {
             link,
             url: 'https://' + APP_DOMAIN + link,
-            title: title + ' — Steemit',
+            title: title + ' — ' + APP_NAME,
             desc: p.desc
         };
 
         const share_menu = [
-            {link: '#', onClick: this.fbShare, value: 'Facebook', title: 'Share on Facebook', icon: 'facebook'},
-            {link: '#', onClick: this.twitterShare, value: 'Twitter', title: 'Share on Twitter', icon: 'twitter'},
-            {link: '#', onClick: this.linkedInShare, value: 'LinkedIn', title: 'Share on Linkedin', icon: 'linkedin'},
+            {link: '#', onClick: this.fbShare, value: 'Facebook', title: tt('share_on_facebook'), icon: 'facebook'},
+            {link: '#', onClick: this.twitterShare, value: 'Twitter', title: tt('share_on_twitter'), icon: 'twitter'},
+            {link: '#', onClick: this.linkedInShare, value: 'LinkedIn', title: tt('share_on_linkedin'), icon: 'linkedin'},
         ];
 
         const Editor = this.state.showReply ? PostFullReplyEditor : PostFullEditEditor;
@@ -248,7 +249,7 @@ class PostFull extends React.Component {
 
         let post_header = (<h1 className="entry-title">
                 {content.title}
-                {full_power && <span title="Powered Up 100%"><Icon name="steem" /></span>}
+                {full_power && <span title={tt('powered_up_100')}><Icon name="steem" /></span>}
             </h1>);
         if(content.depth > 0) {
             const parent_link = `/${content.category}/@${content.parent_author}/${content.parent_permlink}`;
@@ -256,20 +257,20 @@ class PostFull extends React.Component {
             if(content.depth > 1) {
                 direct_parent_link = (<li>
                     <Link to={parent_link}>
-                        View the direct parent
+                        {tt('view_the_direct_parent')}
                     </Link>
                 </li>)
             }
             post_header = (<div className="callout">
-                <h3 className="entry-title">RE: {content.root_title}</h3>
-                <h5>You are viewing a single comment&#39;s thread from:</h5>
+                <h3 className="entry-title">{tt('re')}: {content.root_title}</h3>
+                <h5>{tt('you_are_viewing_a_single_comments_thread_from')}:</h5>
                 <p>
                     {content.root_title}
                 </p>
                 <ul>
                     <li>
                         <Link to={content.url}>
-                            View the full context
+                            {tt('view_the_full_context')}
                         </Link>
                     </li>
                     {direct_parent_link}
@@ -302,7 +303,7 @@ class PostFull extends React.Component {
                     </span>
                 }
 
-                {showPromote && <button className="Promote__button float-right button hollow tiny" onClick={this.showPromotePost}>Promote</button>}
+                {showPromote && <button className="Promote__button float-right button hollow tiny" onClick={this.showPromotePost}>{tt('promote')}</button>}
                 <TagList post={content} horizontal />
                 <div className="PostFull__footer row">
                     <div className="column">
@@ -313,9 +314,9 @@ class PostFull extends React.Component {
                         {!readonly && <Reblog author={author} permlink={permlink} />}
                         {!readonly &&
                             <span className="PostFull__reply">
-                                {showReplyOption && <a onClick={onShowReply}>Reply</a>}
-                                {' '}{showEditOption && !showEdit && <a onClick={onShowEdit}>Edit</a>}
-                                {' '}{showDeleteOption && !showReply && <a onClick={onDeletePost}>Delete</a>}
+                                {showReplyOption && <a onClick={onShowReply}>{tt('reply')}</a>}
+                                {' '}{showEditOption && !showEdit && <a onClick={onShowEdit}>{tt('edit')}</a>}
+                                {' '}{showDeleteOption && !showReply && <a onClick={onDeletePost}>{tt('delete')}</a>}
                             </span>}
                         <span className="PostFull__responses">
                             <Link to={link} title={pluralize('Responses', content.children, true)}>
@@ -326,7 +327,7 @@ class PostFull extends React.Component {
                             <PageViewsCounter hidden={false} sinceDate={isPreViewCount ? 'Dec 2016' : null} />
                         </span>
                         <ShareMenu menu={share_menu} />
-                        <button className="explore-post" title="Share this post" onClick={this.showExplorePost}>
+                        <button className="explore-post" title={tt('share_this_post')} onClick={this.showExplorePost}>
                             <Icon name="link" className="chain-right" />
                         </button>
                     </div>
@@ -357,7 +358,7 @@ export default connect(
             dispatch(transaction.actions.broadcastOperation({
                 type: 'delete_comment',
                 operation: {author, permlink},
-                confirm: 'Are you sure?'
+                confirm: tt('are_you_sure')
             }));
         },
         showPromotePost: (author, permlink) => {

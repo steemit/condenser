@@ -156,8 +156,6 @@
     "are_you_sure": "Are you sure?"
   },
   "postfull_jsx": {
-    "by": "by",
-    "in": "in",
     "share": "Share",
     "in_reply_to": "in reply to",
     "replied_to": "replied to",
@@ -567,10 +565,29 @@
   },
   "app_jsx": {
     "welcome": "Welcome",
-    "faq": "FAQ",
+    "faq": "FAQ"
   },
   "markdownviewer_jsx": {
     "images_were_hidden_due_to_low_ratings": "Images were hidden due to low ratings.",
-    "show": "Show",
+    "show": "Show"
+  },
+  "postfull_jsx": {
+    "by": "by",
+    "in": "in",
+    "this_post_is_not_available_due_to_a_copyright_claim": "This post is not available due to a copyright claim.",
+    "share_on_facebook" : "Share on Facebook",
+    "share_on_twitter" : "Share on Twitter",
+    "share_on_linkedin" : "Share on Linkedin",
+    "powered_up_100": "Powered Up 100%",
+    "view_the_direct_parent": "View the direct parent",
+    "re": "RE",
+    "you_are_viewing_a_single_comments_thread_from": "You are viewing a single comment&#39;s thread from",
+    "view_the_full_context": "View the full context",
+    "promote": "Promote",
+    "reply": "Reply",
+    "edit": "Edit",
+    "delete": "Delete",
+    "share_this_post": "Share this post",
+    "are_you_sure": "Are you sure?"
   }
 }

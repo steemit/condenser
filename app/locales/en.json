@@ -592,5 +592,30 @@
   },
   "postslist_jsx": {
     "back": "Back"
+  },
+  "postsummary_jsx": {
+    "by": "by",
+    "in": "in",
+    "powered_up_100": "Powered Up 100%",
+    "resteemed": "Resteemed",
+    "resteemed_by": "Resteemed by",
+    "re": "Re",
+    "this_post_is": "This post is",
+    "you_can": "You can",
+    "reveal_it": "reveal it",
+    "or": "or",
+    "adjust_your": "adjust your",
+    "display_preferences": "display preferences",
+    "create_an_account": "create an account",
+    "to_save_your_preferences": "to save your preferences"
+  },
+  "_jsx": {
+    "": ""
+  },
+  "_jsx": {
+    "": ""
+  },
+  "_jsx": {
+    "": ""
   }
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux'
 import {IntlProvider} from 'react-intl';
-import {DEFAULT_LANGUAGE} from 'config/client_config';
+import {DEFAULT_LANGUAGE} from 'app/client_config';
 import tt from 'counterpart';
 
 tt.registerTranslations('en', require('app/locales/en.json'));

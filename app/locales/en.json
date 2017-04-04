@@ -564,5 +564,9 @@
     "resources": "Resources",
     "join_our_slack": "Join our Slack",
     "APP_NAME_whitepaper": "{APP_NAME} Whitepaper"
+  },
+  "app_jsx": {
+    "welcome": "Welcome",
+    "faq": "FAQ",
   }
 }

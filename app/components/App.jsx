@@ -184,12 +184,12 @@ class App extends React.Component {
                     </li>
                     <li>
                         <a href="/welcome" onClick={this.navigate}>
-                            Welcome
+                            {tt("welcome")}
                         </a>
                     </li>
                     <li>
                         <a href="/faq.html" onClick={this.navigate}>
-                            FAQ
+                            {tt("faq")}
                         </a>
                     </li>
                     <li>

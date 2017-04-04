@@ -9,6 +9,7 @@ import {validate_account_name} from 'app/utils/ChainValidation'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import { translate, translateHtml } from 'app/Translator';
 import { FormattedHTMLMessage } from 'react-intl';
+import tt from 'counterpart';
 
 const {string, oneOf} = React.PropTypes
 

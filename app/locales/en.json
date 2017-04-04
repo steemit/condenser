@@ -624,6 +624,12 @@
     "start_power_down_of": "Start power down of",
     "receive_interest_of": "Receive interest of"
   },
+  "datejoinwrapper_jsx": {
+    "joined": "Joined"
+  },
+  "_jsx": {
+    "": ""
+  },
   "_jsx": {
     "": ""
   },

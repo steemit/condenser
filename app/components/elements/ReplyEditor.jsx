@@ -150,13 +150,13 @@ class ReplyEditor extends React.Component {
             initialValues: props.initialValues,
             validation: values => ({
                 title: isStory && (
-                    !values.title || values.title.trim() === '' ? 'Required' :
-                    values.title.length > 255 ? 'Shorten title' :
+                    !values.title || values.title.trim() === '' ? tt('required') :
+                    values.title.length > 255 ? tt('shorten_title') :
                     null
                 ),
                 category: isStory && validateCategory(values.category, !isEdit),
-                body: !values.body ? 'Required' :
-                    values.body.length > maxKb * 1024 ? 'Exceeds maximum length ('+maxKb+'KB)' :
+                body: !values.body ? tt('required') :
+                    values.body.length > maxKb * 1024 ? tt('exceeds_maximum_length', maxKb) :
                 null
             })
         })
@@ -175,7 +175,7 @@ class ReplyEditor extends React.Component {
         if(e) e.preventDefault()
         const {onCancel} = this.props
         const {replyForm, body} = this.state
-        if(!body.value || confirm('Are you sure you want to clear this form?')) {
+        if(!body.value || confirm(tt('are_you_sure_you_want_to_clear_this_form'))) {
             replyForm.resetForm()
             this.setAutoVote()
             this.setState({rte_value: stateFromHtml()})
@@ -268,7 +268,7 @@ class ReplyEditor extends React.Component {
 
     upload = (file, name = '') => {
         const {uploadImage} = this.props
-        this.setState({progress: {message: 'Uploading...'}})
+        this.setState({progress: {message: tt('uploading') + '...'}})
         uploadImage(file, progress => {
             if(progress.url) {
                 this.setState({ progress: {} })
@@ -320,11 +320,11 @@ class ReplyEditor extends React.Component {
             jsonMetadata, autoVote: autoVoteValue, payoutType,
             successCallback: successCallbackWrapper, errorCallback
         }
-        const postLabel = username ? <Tooltip t={'Post as “' + username + '”'}>Post</Tooltip> : 'Post'
+        const postLabel = username ? <Tooltip t={ tt('post_as') +' “' + username + '”'}>{tt('post')}</Tooltip> : tt('post')
         const hasTitleError = title && title.touched && title.error
         let titleError = null
         // The Required title error (triggered onBlur) can shift the form making it hard to click on things..
-        if ((hasTitleError && (title.error !== 'Required' || body.value !== '')) || titleWarn) {
+        if ((hasTitleError && (title.error !== tt('required') || body.value !== '')) || titleWarn) {
             titleError = <div className={hasTitleError ? 'error' : 'warning'}>
                 {hasTitleError ? title.error : titleWarn}&nbsp;
             </div>
@@ -338,7 +338,7 @@ class ReplyEditor extends React.Component {
         return (
             <div className="ReplyEditor row">
                 <div className="column small-12">
-                    <div ref="draft" className="ReplyEditor__draft ReplyEditor__draft-hide">Draft saved.</div>
+                    <div ref="draft" className="ReplyEditor__draft ReplyEditor__draft-hide">tt('draft_saved')</div>
                     <form className={vframe_class}
                         onSubmit={handleSubmit(({data}) => {
                             const startLoadingIndicator = () => this.setState({loading: true, postError: undefined})
@@ -351,7 +351,7 @@ class ReplyEditor extends React.Component {
                                 <input type="text" className="ReplyEditor__title" {...title.props} onChange={onTitleChange} disabled={loading} placeholder="Title" autoComplete="off" ref="titleRef" tabIndex={1} />
                                 <div className="float-right secondary" style={{marginRight: '1rem'}}>
                                     {rte && <a href="#" onClick={this.toggleRte}>{body.value ? 'Raw HTML' : 'Markdown'}</a>}
-                                    {!rte && (isHtml || !body.value) && <a href="#" onClick={this.toggleRte}>Editor</a>}
+                                    {!rte && (isHtml || !body.value) && <a href="#" onClick={this.toggleRte}>tt('editor')</a>}
                                 </div>
                                 {titleError}
                             </span>}
@@ -374,19 +374,19 @@ class ReplyEditor extends React.Component {
                                             onPasteCapture={this.onPasteCapture}
                                             className={type === 'submit_story' ? 'upload-enabled' : ''}
                                             disabled={loading} rows={isStory ? 10 : 3}
-                                            placeholder={isStory ? 'Write your story...' : 'Reply'}
+                                            placeholder={isStory ? tt('write_your_story') + '...' : tt('reply')}
                                             autoComplete="off"
                                             tabIndex={2} />
                                     </Dropzone>
                                     {type === 'submit_story' &&
                                         <p className="drag-and-drop">
-                                            Insert images by dragging &amp; dropping,&nbsp;
-                                            {noClipboardData ? '' : 'pasting from the clipboard, '}
-                                            or by <a onClick={this.onOpenClick}>selecting them</a>.
+                                            {tt('insert_images_by_dragging_dropping')}
+                                            {noClipboardData ? '' : tt('pasting_from_the_clipboard')}
+                                            {tt('or') + " " + tt('by') + " "}<a onClick={this.onOpenClick}>{tt('selecting_them')}</a>.
                                         </p>
                                     }
                                     {progress.message && <div className="info">{progress.message}</div>}
-                                    {progress.error && <div className="error">Image upload: {progress.error}</div>}
+                                    {progress.error && <div className="error">{tt('image_upload')} : {progress.error}</div>}
                                 </span>
                             }
                         </div>
@@ -409,29 +409,29 @@ class ReplyEditor extends React.Component {
                             }
                             {loading && <span><br /><LoadingIndicator type="circle" /></span>}
                             &nbsp; {!loading && this.props.onCancel &&
-                                <button type="button" className="secondary hollow button no-border" tabIndex={5} onClick={onCancel}>Cancel</button>
+                                <button type="button" className="secondary hollow button no-border" tabIndex={5} onClick={onCancel}>{tt('cancel')}</button>
                             }
-                            {!loading && !this.props.onCancel && <button className="button hollow no-border" tabIndex={5} disabled={submitting} onClick={onCancel}>Clear</button>}
+                            {!loading && !this.props.onCancel && <button className="button hollow no-border" tabIndex={5} disabled={submitting} onClick={onCancel}>{tt('clear')}</button>}
 
                             {isStory && !isEdit && <div className="ReplyEditor__options float-right text-right">
 
-                                Rewards:&nbsp;
+                                {tt('rewards')}:&nbsp;
                                 <select value={this.state.payoutType} onChange={this.onPayoutTypeChange} style={{color: this.state.payoutType == '0%' ? 'orange' : 'inherit'}}>
-                                    <option value="100%">Power Up 100%</option>
-                                    <option value="50%">Default (50% / 50%)</option>
-                                    <option value="0%">Decline Payout</option>
+                                    <option value="100%">{tt('power_up_100')}</option>
+                                    <option value="50%">{tt('default_50_50')}</option>
+                                    <option value="0%">{tt('decline_payout')}</option>
                                 </select>
 
                                 <br />
-                                <label title="Check this to auto-upvote your post">
-                                  Upvote post&nbsp;
+                                <label title={tt('check_this_to_auto_upvote_your_post')}>
+                                  {tt('upvote_post')}&nbsp;
                                   <input type="checkbox" checked={autoVote.value} onChange={autoVoteOnChange} />
                                 </label>
                             </div>}
                         </div>
                         {!loading && !rte && body.value && <div className={'Preview ' + vframe_section_shrink_class}>
-                            {!isHtml && <div className="float-right"><a target="_blank" href="https://guides.github.com/features/mastering-markdown/">Markdown Styling Guide</a></div>}
-                            <h6>Preview</h6>
+                            {!isHtml && <div className="float-right"><a target="_blank" href="https://guides.github.com/features/mastering-markdown/">{tt('markdown_styling_guide')}</a></div>}
+                            <h6>{tt('preview')}</h6>
                             <MarkdownViewer formId={formId} text={body.value} canEdit jsonMetadata={jsonMetadata} large={isStory} noImage={noImage} />
                         </div>}
                     </form>

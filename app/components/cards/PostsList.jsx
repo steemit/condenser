@@ -8,6 +8,7 @@ import {findParent} from 'app/utils/DomUtils';
 import Icon from 'app/components/elements/Icon';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import {connect} from 'react-redux'
+import tt from 'counterpart';
 
 function topPosition(domElt) {
     if (!domElt) {

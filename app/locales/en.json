@@ -609,8 +609,20 @@
     "create_an_account": "create an account",
     "to_save_your_preferences": "to save your preferences"
   },
-  "_jsx": {
-    "": ""
+  "transferhistoryrow_jsx": {
+    "transfer": "Transfer ",
+    "recieve": "Receive ",
+    "to": " to ",
+    "from": " from ",
+    "for": " for ",
+    "and": "and",
+    "to_savings": "to savings",
+    "from_savings": "from savings",
+    "request": "request",
+    "cancel_transfer_from_savings": "Cancel transfer from savings",
+    "stop_power_down": "Stop power down",
+    "start_power_down_of": "Start power down of",
+    "receive_interest_of": "Receive interest of"
   },
   "_jsx": {
     "": ""

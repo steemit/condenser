@@ -589,5 +589,8 @@
     "delete": "Delete",
     "share_this_post": "Share this post",
     "are_you_sure": "Are you sure?"
+  },
+  "postslist_jsx": {
+    "back": "Back"
   }
 }

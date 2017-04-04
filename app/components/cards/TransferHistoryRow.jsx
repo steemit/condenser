@@ -9,7 +9,7 @@ import {numberWithCommas, vestsToSp} from 'app/utils/StateFunctions'
 class TransferHistoryRow extends React.Component {
 
     render() {
-        const {op, context, curation_reward, author_reward, powerdown_vests} = this.props;
+        const {op, context, curation_reward, author_reward, powerdown_vests, reward_vests} = this.props;
         // context -> account perspective
 
         const type = op[1].op[0];
@@ -70,13 +70,13 @@ class TransferHistoryRow extends React.Component {
             description_start += `${curation_reward} STEEM POWER for `;
             other_account = data.comment_author + "/" + data.comment_permlink;
         } else if (type === 'author_reward') {
-            let steem_payout = ""
+            let steem_payout = "";
             if(data.steem_payout !== '0.000 STEEM') steem_payout = ", " + data.steem_payout;
-            description_start += `${renameToSd(data.sbd_payout)}${steem_payout}, and ${author_reward} STEEM POWER for ${data.author}/${data.permlink}`;
+            description_start += `${data.sbd_payout}${steem_payout}, and ${author_reward} STEEM POWER for ${data.author}/${data.permlink}`;
             // other_account = ``;
             description_end = '';
         } else if (type === 'claim_reward_balance') {
-            description_start += `Claim rewards: ${renameToSd(data.reward_sbd)}, ${data.reward_steem}, and ${data.reward_vests}`;
+            description_start += `Claim rewards: ${data.reward_sbd}, ${data.reward_steem}, and ${reward_vests} STEEM POWER`;
             description_end = '';
         } else if (type === 'interest') {
             description_start += `Receive interest of ${data.interest}`;
@@ -112,8 +112,6 @@ class TransferHistoryRow extends React.Component {
     }
 }
 
-const renameToSd = txt => txt ? numberWithCommas(txt.replace('SBD', 'SD')) : txt;
-
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
@@ -121,6 +119,7 @@ export default connect(
         const type = op[1].op[0];
         const data = op[1].op[1];
         const powerdown_vests = type === 'withdraw_vesting' ? numberWithCommas(vestsToSp(state, data.vesting_shares)) : undefined;
+        const reward_vests = type === 'claim_reward_balance' ? numberWithCommas(vestsToSp(state, data.reward_vests)) : undefined;
         const curation_reward = type === 'curation_reward' ? numberWithCommas(vestsToSp(state, data.reward)) : undefined;
         const author_reward = type === 'author_reward' ? numberWithCommas(vestsToSp(state, data.vesting_payout)) : undefined;
         return {
@@ -128,6 +127,7 @@ export default connect(
             curation_reward,
             author_reward,
             powerdown_vests,
+            reward_vests,
         }
     },
 )(TransferHistoryRow)

@@ -662,10 +662,11 @@
     "cancel": "Cancel",
     "withdraw": "Withdraw",
     "from": "from",
-    "to": "to",
+    "to": "to"
   },
-  "_jsx": {
-    "": ""
+  "suggestpassword_jsx": {
+    "username": "Username",
+    "password": "Password"
   },
   "_jsx": {
     "": ""

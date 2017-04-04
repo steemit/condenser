@@ -568,5 +568,9 @@
   "app_jsx": {
     "welcome": "Welcome",
     "faq": "FAQ",
+  },
+  "markdownviewer_jsx": {
+    "images_were_hidden_due_to_low_ratings": "Images were hidden due to low ratings.",
+    "show": "Show",
   }
 }

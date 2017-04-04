@@ -73,7 +73,7 @@ class CategorySelector extends React.Component {
     }
 }
 export function validateCategory(category, required = true) {
-    if(!category || category.trim() === '') return required ? translate( 'required' ) : null
+    if(!category || category.trim() === '') return required ? tt( 'required' ) : null
     const cats = category.trim().split(' ')
     return (
         // !category || category.trim() === '' ? 'Required' :

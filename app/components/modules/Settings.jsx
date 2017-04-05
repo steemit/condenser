@@ -10,6 +10,8 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import Userpic from 'app/components/elements/Userpic';
 import reactForm from 'app/utils/ReactForm'
 import UserList from 'app/components/elements/UserList';
+import tt from 'counterpart';
+
 
 class Settings extends React.Component {
 
@@ -32,11 +34,11 @@ class Settings extends React.Component {
             fields: ['profile_image', 'name', 'about', 'location', 'website'],
             initialValues: props.profile,
             validation: values => ({
-                profile_image: values.profile_image && !/^https?:\/\//.test(values.profile_image) ? 'Invalid URL' : null,
-                name: values.name && values.name.length > 20 ? 'Name is too long' : values.name && /^\s*@/.test(values.name) ? 'Name must not begin with @' : null,
-                about: values.about && values.about.length > 160 ? 'About is too long' : null,
-                location: values.location && values.location.length > 30 ? 'Location is too long' : null,
-                website: values.website && values.website.length > 100 ? 'Website URL is too long' : values.website && !/^https?:\/\//.test(values.website) ? 'Invalid URL' : null,
+                profile_image: values.profile_image && !/^https?:\/\//.test(values.profile_image) ? tt('invalid_url') : null,
+                name: values.name && values.name.length > 20 ? tt('name_is_too_long') : values.name && /^\s*@/.test(values.name) ? tt('name_must_not_begin_with') : null,
+                about: values.about && values.about.length > 160 ? tt('about_is_too_long') : null,
+                location: values.location && values.location.length > 30 ? tt('location_is_too_long') : null,
+                website: values.website && values.website.length > 100 ? tt('website_url_is_too_long') : values.website && !/^https?:\/\//.test(values.website) ? tt('invalid_url') : null,
             })
         })
         this.handleSubmitForm =
@@ -167,7 +169,7 @@ class Settings extends React.Component {
             </div>*/}
             <div className="row">
                 <form onSubmit={this.handleSubmitForm} className="small-12 medium-6 large-4 columns">
-                    <h3>Public Profile Settings</h3>
+                    <h3>{tt('public_profile_settings')}</h3>
                     <label>
                         {tt('profile_image_url')}
                         <input type="url" {...profile_image.props} autoComplete="off" />
@@ -215,14 +217,14 @@ class Settings extends React.Component {
                 <div className="row">
                     <div className="small-12 columns">
                         <br /><br />
-                        <h3>Private Post Display Settings</h3>
+                        <h3>{tt('private_post_display_settings')}</h3>
                         <div>
-                            Not safe for work (NSFW) content
+                            {tt('not_safe_for_work_nsfw_content')}
                         </div>
                         <select value={this.state.nsfwPref} onChange={this.onNsfwPrefChange}>
-                            <option value="hide">Always hide</option>
-                            <option value="warn">Always warn</option>
-                            <option value="show">Always show</option>
+                            <option value="hide">{tt('always_hide')}</option>
+                            <option value="warn">{tt('always_warn')}</option>
+                            <option value="show">{tt('always_show')}</option>
                         </select>
                         <br /><br />
                         <input type="submit" onClick={this.onNsfwPrefSubmit} className="button" value="Update" disabled={this.state.nsfwPref == this.state.oldNsfwPref} />
@@ -232,7 +234,7 @@ class Settings extends React.Component {
                 <div className="row">
                     <div className="small-12 columns">
                         <br /><br />
-                        <UserList title="Muted Users" account={account} users={ignores} />
+                        <UserList title={tt('muted_users')} account={account} users={ignores} />
                     </div>
                 </div>}
         </div>

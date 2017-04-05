@@ -758,8 +758,20 @@
     "have_only_one_dash_in_a_row": "have only one dash in a row.",
     "end_with_a_letter_or_digit": "end with a letter or digit."
   },
-  "_jsx": {
-    "": ""
+  "settings_jsx": {
+    "invalid_url": "Invalid URL",
+    "name_is_too_long": "Name is too long",
+    "name_must_not_begin_with": "Name must not begin with @",
+    "about_is_too_long": "About is too long",
+    "location_is_too_long": "Location is too long",
+    "website_url_is_too_long": "Website URL is too long",
+    "public_profile_settings": "Public Profile Settings",
+    "private_post_display_settings": "Private Post Display Settings",
+    "not_safe_for_work_nsfw_content": "Not safe for work (NSFW) content",
+    "always_hide": "Always hide",
+    "always_warn": "Always warn",
+    "always_show": "Always show",
+    "muted_users": "Muted Users"
   },
   "_jsx": {
     "": ""

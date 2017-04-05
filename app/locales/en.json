@@ -677,6 +677,17 @@
     "changing_to_an_up_vote": "Changing to an Up-Vote",
     "changing_to_a_down_vote": "Changing to a Down-Vote"
   },
+  "confirmtransactionform_jsx": {
+    "ok": "Ok",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
+  },
+  "_jsx": {
+    "": ""
+  },
+  "_jsx": {
+    "": ""
+  },
   "_jsx": {
     "": ""
   }

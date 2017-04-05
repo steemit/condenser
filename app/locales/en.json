@@ -688,10 +688,23 @@
     "share_this_post": "Share this post"
     "alternative_sources": "Alternative Sources"
   },
-  "_jsx": {
-    "": ""
-  },
-  "_jsx": {
-    "": ""
+  "header_jsx": {
+    "home": "Home",
+    "new_topic_posts" : "New {topic} posts",
+    "sort_order_topic_posts": "{sort_order} {topic} posts",
+    "new_posts": "New posts",
+    "sort_order_posts": "{sort_order} posts",
+    "create_a_post": "Create a post",
+    "privacy_policy": "Privacy Policy",
+    "terms_of_service": "Terms of Service",
+    "change_account_password": "Change Account Password",
+    "create_account": "Create Account",
+    "stolen_account_recovery": "Stolen Account Recovery",
+    "people_following": "People following",
+    "people_followed_by": "People followed by",
+    "curation_rewards_by": "Curation rewards by",
+    "author_rewards_by": "Author rewards by",
+    "replies_to": "Replies to",
+    "comments_by": "Comments by",
   }
 }

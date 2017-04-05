@@ -28,11 +28,11 @@ class UserWallet extends React.Component {
         this.state = {};
         this.onShowDeposit = () => {this.setState({showDeposit: !this.state.showDeposit})};
         this.onShowDepositSteem = (e) => {
-            e.preventDefault()
+            e.preventDefault();
             this.setState({showDeposit: !this.state.showDeposit, depositType: 'STEEM'})
         };
         this.onShowDepositPower = (e) => {
-            e.preventDefault()
+            e.preventDefault();
             this.setState({showDeposit: !this.state.showDeposit, depositType: 'VESTS'})
         };
         // this.onShowDeposit = this.onShowDeposit.bind(this)
@@ -40,9 +40,9 @@ class UserWallet extends React.Component {
     }
     render() {
         const {state: {showDeposit, depositType, toggleDivestError},
-            onShowDeposit, onShowDepositSteem, onShowDepositPower} = this
+            onShowDeposit, onShowDepositSteem, onShowDepositPower} = this;
         const {convertToSteem, price_per_steem, savings_withdraws, account,
-            current_user, open_orders} = this.props
+            current_user, open_orders} = this.props;
         const gprops = this.props.gprops.toJS();
 
         if (!account) return null;
@@ -109,7 +109,7 @@ class UserWallet extends React.Component {
                     </Tooltip>
                 </div>
             ]);
-        }, [])
+        }, []);
 
         const balance_steem = parseFloat(account.get('balance').split(' ')[0]);
         const saving_balance_steem = parseFloat(savings_balance.split(' ')[0]);
@@ -191,29 +191,31 @@ class UserWallet extends React.Component {
             </Reveal>
         </div>
 
-        const steem_balance_str = numberWithCommas(balance_steem.toFixed(3))
-        const steem_orders_balance_str = numberWithCommas(steemOrders.toFixed(3))
-        const power_balance_str = numberWithCommas(vesting_steem.toFixed(3))
-        const received_power_balance_str = numberWithCommas((-delegated_steem).toFixed(3))
-        const sbd_balance_str = numberWithCommas('$' + sbd_balance.toFixed(3)) // formatDecimal(account.sbd_balance, 3)
-        const sbd_orders_balance_str = numberWithCommas('$' + sbdOrders.toFixed(3))
-        const savings_balance_str = numberWithCommas(saving_balance_steem.toFixed(3) + ' STEEM')
-        const savings_sbd_balance_str = numberWithCommas('$' + sbd_balance_savings.toFixed(3))
+        const steem_balance_str = numberWithCommas(balance_steem.toFixed(3));
+        const steem_orders_balance_str = numberWithCommas(steemOrders.toFixed(3));
+        const power_balance_str = numberWithCommas(vesting_steem.toFixed(3));
+        const received_power_balance_str = numberWithCommas((-delegated_steem).toFixed(3));
+        const sbd_balance_str = numberWithCommas('$' + sbd_balance.toFixed(3)); // formatDecimal(account.sbd_balance, 3)
+        const sbd_orders_balance_str = numberWithCommas('$' + sbdOrders.toFixed(3));
+        const savings_balance_str = numberWithCommas(saving_balance_steem.toFixed(3) + ' STEEM');
+        const savings_sbd_balance_str = numberWithCommas('$' + sbd_balance_savings.toFixed(3));
 
         const savings_menu = [
             { value: 'Withdraw Steem', link: '#', onClick: showTransfer.bind( this, 'STEEM', 'Savings Withdraw' ) },
-        ]
+        ];
         const savings_sbd_menu = [
             { value: 'Withdraw Steem Dollars', link: '#', onClick: showTransfer.bind( this, 'SBD', 'Savings Withdraw' ) },
-        ]
+        ];
         // set dynamic secondary wallet values
-        const sbdInterest = this.props.sbd_interest / 100
+        const sbdInterest = this.props.sbd_interest / 100;
         //const sbdMessage = translate('tokens_worth_about_AMOUNT_of_LIQUID_TOKEN') //TODO: add APR param to xlation
-        const sbdMessage = <span>Tokens worth about $1.00 of STEEM, currently collecting {sbdInterest}% APR.</span>
+        const sbdMessage = <span>Tokens worth about $1.00 of STEEM, currently collecting {sbdInterest}% APR.</span>;
 
         const reward_steem = parseFloat(account.get('reward_steem_balance').split(' ')[0]) > 0 ? account.get('reward_steem_balance') : null;
         const reward_sbd = parseFloat(account.get('reward_sbd_balance').split(' ')[0]) > 0 ? account.get('reward_sbd_balance') : null;
         const reward_sp = parseFloat(account.get('reward_vesting_steem').split(' ')[0]) > 0 ? account.get('reward_vesting_steem').replace('STEEM', 'SP') : null;
+
+        const delegated_balance = delegated_steem != 0 ? delegated_steem > 0 ? `-` + delegated_steem : `+` + received_power_balance_str : null;
 
         let rewards = [];
         if(reward_steem) rewards.push(reward_steem);
@@ -223,13 +225,13 @@ class UserWallet extends React.Component {
         let rewards_str;
         switch(rewards.length) {
           case 3:
-              rewards_str = `${rewards[0]}, ${rewards[1]} and ${rewards[2]}`
+              rewards_str = `${rewards[0]}, ${rewards[1]} and ${rewards[2]}`;
               break;
           case 2:
-              rewards_str = `${rewards[0]} and ${rewards[2]}`
+              rewards_str = `${rewards[0]} and ${rewards[2]}`;
               break;
           case 1:
-              rewards_str = `${rewards[0]}`
+              rewards_str = `${rewards[0]}`;
               break;
         }
 
@@ -274,7 +276,7 @@ class UserWallet extends React.Component {
                     {isMyAccount ?
                     <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={power_balance_str + ' STEEM'} menu={power_menu} />
                     : power_balance_str + ' STEEM'}
-                    {delegated_steem != 0 ? <div style={{paddingRight: isMyAccount ? "0.85rem" : null}}><Tooltip t="STEEM POWER delegated to this account">(+{received_power_balance_str} STEEM)</Tooltip></div> : null}
+                    {delegated_balance ? <div style={{paddingRight: isMyAccount ? "0.85rem" : null}}><Tooltip t="STEEM POWER delegated to this account">({delegated_balance} STEEM)</Tooltip></div> : null}
                 </div>
             </div>
             <div className="UserWallet__balance row">
@@ -377,14 +379,14 @@ export default connect(
             const username = account.get('name')
             const successCallback = () => {
                 dispatch({type: 'global/GET_STATE', payload: {url: `@${username}/transfers`}})
-            }
+            };
 
             const operation = {
                 account: username,
                 reward_steem: account.get('reward_steem_balance'),
                 reward_sbd: account.get('reward_sbd_balance'),
                 reward_vests: account.get('reward_vesting_balance')
-            }
+            };
 
             dispatch(transaction.actions.broadcastOperation({
                 type: 'claim_reward_balance',
@@ -394,12 +396,12 @@ export default connect(
         },
         convertToSteem: (e) => {
             e.preventDefault()
-            const name = 'convertToSteem'
+            const name = 'convertToSteem';
             dispatch(g.actions.showDialog({name}))
         },
         showChangePassword: (username) => {
-            const name = 'changePassword'
-            dispatch(g.actions.remove({key: name}))
+            const name = 'changePassword';
+            dispatch(g.actions.remove({key: name}));
             dispatch(g.actions.showDialog({name, params: {username}}))
         },
     })

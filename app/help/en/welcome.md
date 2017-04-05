@@ -4,7 +4,7 @@
 
 ### Quick Start Guide
 
-- <a href="/welcome#Cost_to_Participate">Cost to Participate</a>
+- <a href="/welcome#No_Cost_to_Participate">No Cost to Participate</a>
 - <a href="/welcome#Welcome_Page">Welcome Page</a>
 - <a href="/welcome#Upvotes">Upvotes</a>
 - <a href="/welcome#Comments">Comments</a>
@@ -41,8 +41,8 @@
 
 ## Quick Start Guide
 
-<a class="anchor" name="Cost_to_Participate"></a>
-### Cost to Participate
+<a class="anchor" name="No_Cost_to_Participate"></a>
+### No Cost to Participate
 
 It is free to post, comment, or upvote all content on Steemit.com. You might even get paid for it!
 

@@ -668,6 +668,15 @@
     "username": "Username",
     "password": "Password"
   },
+  "voting_jsx": {
+    "more": "more",
+    "upvote": "Upvote",
+    "remove_vote": "Remove Vote",
+    "will_reset_your_curation_rewards_for_this_post": " will reset your curation rewards for this post.",
+    "removing_your_vote": "Removing your vote",
+    "changing_to_an_up_vote": "Changing to an Up-Vote",
+    "changing_to_a_down_vote": "Changing to a Down-Vote"
+  },
   "_jsx": {
     "": ""
   }

@@ -530,7 +530,7 @@ function* recoverAccount({payload: {account_to_recover, old_password, new_passwo
                 memo_key: newMemo,
                 json_metadata,
             }]
-        ]}, [oldOwnerPrivate])
+        ]}, [newOwnerPrivate])
         if(onSuccess) onSuccess()
     } catch(error) {
         console.error('Recover account', error)

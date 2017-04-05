@@ -743,7 +743,8 @@
     "to_comment_and_reward_others": " to comment and reward others.",
     "sign_up_now_to_receive": "Sign up now to receive ",
     "free_money": "FREE MONEY!",
-    "returning_users": "Returning Users: "
+    "returning_users": "Returning Users: ",
+    "cancel": "Cancel"
   },
   "chainvalidation_js": {
     "account_name_should": "Account name should ",

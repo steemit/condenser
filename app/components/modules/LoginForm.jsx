@@ -206,7 +206,7 @@ class LoginForm extends Component {
                         {submitLabel}
                     </button>
                     {this.props.onCancel && <button type="button float-right" disabled={submitting} className="button hollow" onClick={onCancel}>
-                        Cancel
+                        {tt('cancel')}
                     </button>}
                 </div>
                 <hr />

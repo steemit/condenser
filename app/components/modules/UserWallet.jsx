@@ -215,6 +215,7 @@ class UserWallet extends React.Component {
         const reward_sbd = parseFloat(account.get('reward_sbd_balance').split(' ')[0]) > 0 ? account.get('reward_sbd_balance') : null;
         const reward_sp = parseFloat(account.get('reward_vesting_steem').split(' ')[0]) > 0 ? account.get('reward_vesting_steem').replace('STEEM', 'SP') : null;
 
+        // set delegated balance(if avail) either positive or negative
         const delegated_balance = delegated_steem != 0 ? delegated_steem > 0 ? `-` + delegated_steem : `+` + received_power_balance_str : null;
 
         let rewards = [];

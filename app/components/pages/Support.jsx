@@ -8,7 +8,7 @@ class Support extends React.Component {
                 <div>
                     <h2>{translate('APP_NAME_support')}</h2>
                     <p>
-                        {translate('please_email_questions_to')} <a href="mailto:t@cyber.fund">t@cyber.fund</a>.
+                        {translate('please_email_questions_to')} <a href="mailto:contact@steemit.com">contact@steemit.com</a>.
                     </p>
                 </div>
             </div>

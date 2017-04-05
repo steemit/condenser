@@ -9,6 +9,8 @@ import runTests from 'shared/ecc/test/BrowserTests';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import reactForm from 'app/utils/ReactForm'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
+import tt from 'counterpart';
+import { APP_URL } from 'app/client_config';
 
 class LoginForm extends Component {
 
@@ -65,9 +67,9 @@ class LoginForm extends Component {
             fields: ['username', 'password', 'saveLogin:checked'],
             initialValues: props.initialValues,
             validation: values => ({
-                username: ! values.username ? 'Required' : validate_account_name(values.username.split('/')[0]),
-                password: ! values.password ? 'Required' :
-                    PublicKey.fromString(values.password) ? 'You need a private password or key (not a public key)' :
+                username: ! values.username ? tt('required') : validate_account_name(values.username.split('/')[0]),
+                password: ! values.password ? tt('required') :
+                    PublicKey.fromString(values.password) ? tt('you_need_a_private_password_or_key') :
                     null,
             })
         })
@@ -100,7 +102,7 @@ class LoginForm extends Component {
         if (!process.env.BROWSER) {
             return <div className="row">
                 <div className="column">
-                    <p>Loading..</p>
+                    <p>{('loading')}...</p>
                 </div>
             </div>;
         }
@@ -108,9 +110,9 @@ class LoginForm extends Component {
             return <div className="row">
                 <div className="column">
                     <div className="callout alert">
-                        <h4>Cryptography test failed</h4>
-                        <p>We will be unable to log you in with this browser.</p>
-                        <p>The latest versions of <a href="https://www.google.com/chrome/">Chrome</a> and <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a> are well tested and known to work with steemit.com.</p>
+                        <h4>{tt('cryptography_test_failed')}</h4>
+                        <p>{tt('unable_to_log_you_in')}</p>
+                        <p>{tt('the_latest_versions_of')} <a href="https://www.google.com/chrome/">Chrome</a> {tt('and')} <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a> {tt('are_well_tested_and_known_to_work_with', {APP_URL})}</p>
                     </div>
                 </div>
             </div>;
@@ -120,7 +122,7 @@ class LoginForm extends Component {
             return <div className="row">
                 <div className="column">
                     <div className="callout alert">
-                        <p>Due to server maintenance we are running in read only mode. We are sorry for the inconvenience.</p></div>
+                        <p>{tt('due_to_server_maintenance')}</p></div>
                 </div>
             </div>;
         }
@@ -133,43 +135,40 @@ class LoginForm extends Component {
         const opType = loginBroadcastOperation ? loginBroadcastOperation.get('type') : null;
         let postType = "";
         if (opType === "vote") {
-            postType = 'Login to Vote'
+            postType = tt('login_to_vote')
         } else if (loginBroadcastOperation) {
             // check for post or comment in operation
-            postType = loginBroadcastOperation.getIn(['operation', 'title']) ? 'Login to Post' : 'Login to Comment';
+            postType = loginBroadcastOperation.getIn(['operation', 'title']) ? tt('login_to_post') : tt('login_to_comment');
         }
-        const title = postType ? postType : 'Login to your Steem Account';
-        const authType = /^vote|comment/.test(opType) ? 'Posting' : 'Active or Owner';
-        const submitLabel = loginBroadcastOperation ? 'Sign In' : 'Login';
+        const title = postType ? postType : tt('login_to_your_steem_account');
+        const authType = /^vote|comment/.test(opType) ? tt('posting') : tt('active_or_owner');
+        const submitLabel = loginBroadcastOperation ? tt('sign_n') : tt('login');
         let error = password.touched && password.error ? password.error : this.props.login_error;
         if (error === 'owner_login_blocked') {
-            error = <span>This password is bound to your account&apos;s owner key and can not be used to login to this site.
-                However, you can use it to <a onClick={this.showChangePassword}>update your password</a> to obtain a more secure set of keys.</span>
+            error = <span>{tt('this_password_is_bound_to_your_account')}
+                {tt('however_you_can_use_it_to')}<a onClick={this.showChangePassword}>{tt('update_your_password')}</a> {tt('to_obtain_a_more_secure_set_of_keys')}</span>
         } else if (error === 'active_login_blocked') {
-            error = <span>This password is bound to your account&apos;s active key and can not be used to login to this page.  You may use this
-                active key on other more secure pages like the Wallet or Market pages.</span>
+            error = <span>{tt('this_password_is_bound_to_your_account_active_key')} {tt('you_may_use_this_active_key_on_other_more')}</span>
         }
         let message = null;
         if (msg) {
             if (msg === 'accountcreated') {
                 message =<div className="callout primary">
-                        <p>You account has been successfully created!</p>
+                        <p>{tt('You_account_has_been_successfully_created')}</p>
                     </div>;
             }
             else if (msg === 'accountrecovered') {
                 message =<div className="callout primary">
-                    <p>You account has been successfully recovered!</p>
+                    <p>{tt('You_account_has_been_successfully_recovered')}</p>
                 </div>;
             }
             else if (msg === 'passwordupdated') {
                 message = <div className="callout primary">
-                    <p>The password for `{username.value}` was successfully updated.</p>
+                    <p>{tt('password_update_succes', {accountName: username.value})}</p>
                 </div>;
             }
         }
-        const password_info = checkPasswordChecksum(password.value) === false ?
-            'This password or private key was entered incorrectly.  There is probably a handwriting or data-entry error.  Hint: A password or private key generated by Steemit will never contain 0 (zero), O (capital o), I (capital i) and l (lower case L) characters.' :
-            null
+        const password_info = checkPasswordChecksum(password.value) === false ? tt('password_info') : null
 
         const form = (
             <center>
@@ -183,23 +182,23 @@ class LoginForm extends Component {
             >
                 <div className="input-group">
                     <span className="input-group-label">@</span>
-                    <input className="input-group-field" type="text" required placeholder="Enter your username" ref="username"
+                    <input className="input-group-field" type="text" required placeholder={tt('enter_your_username')} ref="username"
                         {...username.props} onChange={usernameOnChange} autoComplete="on" disabled={submitting}
                     />
                 </div>
                 {username.touched && username.blur && username.error ? <div className="error">{username.error}&nbsp;</div> : null}
 
                 <div>
-                    <input type="password" required ref="pw" placeholder="Password or WIF" {...password.props} autoComplete="on" disabled={submitting} />
+                    <input type="password" required ref="pw" placeholder={tt('password_or_wif')} {...password.props} autoComplete="on" disabled={submitting} />
                     {error && <div className="error">{error}&nbsp;</div>}
                     {error && password_info && <div className="warning">{password_info}&nbsp;</div>}
                 </div>
                 {loginBroadcastOperation && <div>
-                    <div className="info">This operation requires your {authType} key or Master password.</div>
+                    <div className="info">{tt('this_operation_requires_your_key_or_master_password', {authType})}</div>
                 </div>}
                 {!loginBroadcastOperation && <div>
                     <label htmlFor="saveLogin">
-                        Keep me logged in &nbsp;
+                        {tt('keep_me_logged_in')} &nbsp;
                         <input id="saveLogin" type="checkbox" ref="pw" {...saveLogin.props} onChange={this.saveLoginToggle} disabled={submitting} /></label>
                 </div>}
                 <div>
@@ -212,8 +211,8 @@ class LoginForm extends Component {
                 </div>
                 <hr />
                 <div>
-                    <p>Join our <span className="free-slogan">amazing community</span> to comment and reward others.</p>
-                    <button type="button" className="button sign-up" onClick={this.SignUp}>Sign up now to receive <span className="free-money">FREE MONEY!</span></button>
+                    <p>Join our <span className="free-slogan">{tt('amazing_community')}</span>{tt('to_comment_and_reward_others')}</p>
+                    <button type="button" className="button sign-up" onClick={this.SignUp}>{tt('sign_up_now_to_receive')}<span className="free-money">{tt('free_money')}</span></button>
                 </div>
             </form>
         </center>
@@ -223,7 +222,7 @@ class LoginForm extends Component {
            <div className="LoginForm">
                {message}
                <center>
-                   <h3>Returning Users: <span className="OpAction">{title}</span></h3>
+                   <h3>{tt('returning_users')}<span className="OpAction">{title}</span></h3>
                </center>
                <br />
                {form}

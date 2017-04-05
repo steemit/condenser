@@ -706,5 +706,23 @@
     "author_rewards_by": "Author rewards by",
     "replies_to": "Replies to",
     "comments_by": "Comments by",
+  },
+  "loginform_jsx": {
+    "required": "Required",
+    "required": "Required",
+  },
+  "chainvalidation_js": {
+    "account_name_should": "Account name should ",
+    "not_be_empty": "not be empty.",
+    "be_longer": "be longer.",
+    "be_shorter": "be shorter.",
+    "each_account_segment_should": "Each account segment should ",
+    "start_with_a_letter": "start with a letter.",
+    "have_only_letters_digits_or_dashes": "have only letters, digits, or dashes.",
+    "have_only_one_dash_in_a_row": "have only one dash in a row.",
+    "end_with_a_letter_or_digit": "end with a letter or digit."
+  },
+  "_jsx": {
+    "": ""
   }
 }

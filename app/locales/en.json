@@ -682,8 +682,11 @@
     "cancel": "Cancel",
     "confirm": "Confirm"
   },
-  "_jsx": {
-    "": ""
+  "explorepost_jsx": {
+    "copied": "Copied!",
+    "copy": "COPY",
+    "share_this_post": "Share this post"
+    "alternative_sources": "Alternative Sources"
   },
   "_jsx": {
     "": ""

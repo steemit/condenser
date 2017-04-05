@@ -211,7 +211,7 @@ class LoginForm extends Component {
                 </div>
                 <hr />
                 <div>
-                    <p>Join our <span className="free-slogan">{tt('amazing_community')}</span>{tt('to_comment_and_reward_others')}</p>
+                    <p>{tt('join_our')} <span className="free-slogan">{tt('amazing_community')}</span>{tt('to_comment_and_reward_others')}</p>
                     <button type="button" className="button sign-up" onClick={this.SignUp}>{tt('sign_up_now_to_receive')}<span className="free-money">{tt('free_money')}</span></button>
                 </div>
             </form>

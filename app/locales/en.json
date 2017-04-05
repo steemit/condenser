@@ -744,7 +744,8 @@
     "sign_up_now_to_receive": "Sign up now to receive ",
     "free_money": "FREE MONEY!",
     "returning_users": "Returning Users: ",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "join_our": "Join our"
   },
   "chainvalidation_js": {
     "account_name_should": "Account name should ",

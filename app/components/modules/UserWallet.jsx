@@ -194,7 +194,7 @@ class UserWallet extends React.Component {
         const steem_balance_str = numberWithCommas(balance_steem.toFixed(3));
         const steem_orders_balance_str = numberWithCommas(steemOrders.toFixed(3));
         const power_balance_str = numberWithCommas(vesting_steem.toFixed(3));
-        const received_power_balance_str = numberWithCommas((-delegated_steem).toFixed(3));
+        const received_power_balance_str = (delegated_steem < 0 ? '+' : '') + numberWithCommas((-delegated_steem).toFixed(3));
         const sbd_balance_str = numberWithCommas('$' + sbd_balance.toFixed(3)); // formatDecimal(account.sbd_balance, 3)
         const sbd_orders_balance_str = numberWithCommas('$' + sbdOrders.toFixed(3));
         const savings_balance_str = numberWithCommas(saving_balance_steem.toFixed(3) + ' STEEM');
@@ -214,9 +214,6 @@ class UserWallet extends React.Component {
         const reward_steem = parseFloat(account.get('reward_steem_balance').split(' ')[0]) > 0 ? account.get('reward_steem_balance') : null;
         const reward_sbd = parseFloat(account.get('reward_sbd_balance').split(' ')[0]) > 0 ? account.get('reward_sbd_balance') : null;
         const reward_sp = parseFloat(account.get('reward_vesting_steem').split(' ')[0]) > 0 ? account.get('reward_vesting_steem').replace('STEEM', 'SP') : null;
-
-        // set delegated balance(if avail) either positive or negative
-        const delegated_balance = delegated_steem != 0 ? delegated_steem > 0 ? `-` + delegated_steem : `+` + received_power_balance_str : null;
 
         let rewards = [];
         if(reward_steem) rewards.push(reward_steem);
@@ -277,7 +274,7 @@ class UserWallet extends React.Component {
                     {isMyAccount ?
                     <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={power_balance_str + ' STEEM'} menu={power_menu} />
                     : power_balance_str + ' STEEM'}
-                    {delegated_balance ? <div style={{paddingRight: isMyAccount ? "0.85rem" : null}}><Tooltip t="STEEM POWER delegated to this account">({delegated_balance} STEEM)</Tooltip></div> : null}
+                    {delegated_steem != 0 ? <div style={{paddingRight: isMyAccount ? "0.85rem" : null}}><Tooltip t="STEEM POWER delegated to this account">({received_power_balance_str} STEEM)</Tooltip></div> : null}
                 </div>
             </div>
             <div className="UserWallet__balance row">

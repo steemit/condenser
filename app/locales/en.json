@@ -791,6 +791,30 @@
     "search": "Search",
     "sign_up": "Sign Up"
   },
+  "transfer_jsx": {
+    "required": "Required",
+    "amount_is_in_form": "Amount is in the form 99999.999",
+    "insufficient_funds": "Insufficient funds",
+    "use_only_3_digits_of_precison": "Use only 3 digits of precison",
+    "from": "From",
+    "to": "To",
+    "send_to_account": "Send to account",
+    "amount": "Amount",
+    "asset": "Asset",
+    "memo": "Memo",
+    "this_memo_is": "This Memo is",
+    "private": "Private",
+    "public": "Public",
+    "power_up": "Power Up",
+    "submit": "Submit",
+    "basic" : "Basic",
+    "advanced": "Advanced",
+    "convert_to_VESTING_TOKEN": "Convert to {VESTING_TOKEN}",
+    "": "Balance subject to 3 day withdraw waiting period.",
+    "move_funds_to_another_account": "Move funds to another {APP_NAME} account.",
+    "protect_funds_by_requiring_a_3_day_withdraw_waiting_period": "Protect funds by requiring a 3 day withdraw waiting period.",
+    "withdraw_funds_after_the_required_3_day_waiting_period": "Withdraw funds after the required 3 day waiting period."
+  },
   "_jsx": {
     "": ""
   }

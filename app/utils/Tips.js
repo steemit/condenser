@@ -1,10 +1,11 @@
 import tt from 'counterpart';
+import { APP_NAME } from 'app/client_config';
 
-export const savingsTip = 'Balance subject to 3 day withdraw waiting period.'
+export const savingsTip = tt('balance_subject_to_3_day_withdraw_waiting_period')
 export const transferTips = {
-    'Transfer to Account': 'Move funds to another Steemit account.',
-    'Transfer to Savings': 'Protect funds by requiring a 3 day withdraw waiting period.',
-    'Savings Withdraw': 'Withdraw funds after the required 3 day waiting period.',
+    'Transfer to Account': tt('move_funds_to_another_account', {APP_NAME}),
+    'Transfer to Savings': tt('protect_funds_by_requiring_a_3_day_withdraw_waiting_period'),
+    'Savings Withdraw':    tt('withdraw_funds_after_the_required_3_day_waiting_period'),
 }
 
 // THIS TIPS DO NOT WORK PROPERLY TO DUE BAD RENDERING

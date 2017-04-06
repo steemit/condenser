@@ -10,6 +10,7 @@ import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdow
 import VerticalMenu from 'app/components/elements/VerticalMenu';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import NotifiCounter from 'app/components/elements/NotifiCounter';
+import tt from 'counterpart';
 
 const defaultNavigate = (e) => {
     e.preventDefault();

@@ -777,6 +777,20 @@
   "addtowaitinglist_jsx": {
     "submit": "Submit"
   },
+  "toprightmenu_jsx": {
+    "submit_a_story": "Submit a Story",
+    "login": "Login",
+    "logout": "Logout",
+    "feed": "Feed",
+    "wallet": "Wallet",
+    "blog": "Blog",
+    "comments": "Comments",
+    "replies": "Replies",
+    "change_password": "Change Password",
+    "settings": "Settings",
+    "search": "Search",
+    "sign_up": "Sign Up"
+  },
   "_jsx": {
     "": ""
   }

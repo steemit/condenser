@@ -58,7 +58,7 @@ export default class AddToWaitingList extends React.Component {
                 <p className="error">{email_error}</p>
             </div>
             <br />
-            <input type="submit" className="button secondary" value="Submit" />
+            <input type="submit" className="button secondary" value={tt('submit')} />
         </form>;
     }
 }

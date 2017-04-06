@@ -201,7 +201,7 @@ class Settings extends React.Component {
 
                     <br />
                     {state.loading && <span><LoadingIndicator type="circle" /><br /></span>}
-                    {!state.loading && <input type="submit" className="button" value="Update" disabled={disabled} />}
+                    {!state.loading && <input type="submit" className="button" value={tt('update')} disabled={disabled} />}
                     {' '}{
                             state.errorMessage
                                 ? <small className="error">{state.errorMessage}</small>
@@ -226,7 +226,7 @@ class Settings extends React.Component {
                             <option value="show">{tt('always_show')}</option>
                         </select>
                         <br /><br />
-                        <input type="submit" onClick={this.onNsfwPrefSubmit} className="button" value="Update" disabled={this.state.nsfwPref == this.state.oldNsfwPref} />
+                        <input type="submit" onClick={this.onNsfwPrefSubmit} className="button" value={tt('update')} disabled={this.state.nsfwPref == this.state.oldNsfwPref} />
                     </div>
                 </div>}
             {ignores && ignores.size > 0 &&

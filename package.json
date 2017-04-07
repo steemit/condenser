@@ -15,7 +15,6 @@
     "test:watch": "npm run mocha -- --watch --watch-extensions jsx",
     "production": "NODE_ENV=production ./node_modules/babel-cli/bin/babel-node.js server/index.js",
     "start": "./node_modules/babel-cli/bin/babel-node.js ./webpack/dev-server.js",
-    "db": "./node_modules/babel-cli/bin/babel-node.js ./db/console.js",
     "webpush": "./node_modules/babel-cli/bin/babel-node.js ./scripts/webpush_notify.js"
   },
   "author": "Steemit, Inc.",
@@ -127,6 +126,7 @@
     "svg-inline-react": "^1.0.2",
     "svgo-loader": "^1.1.0",
     "tarantool-driver": "^2.0.1",
+    "twilio": "^2.11.1",
     "uncontrollable": "^3.2.1",
     "underscore.string": "^3.2.3",
     "url-loader": "^0.5.7",

@@ -145,16 +145,16 @@ class App extends React.Component {
                     <div className="welcomeBanner">
                         <CloseButton onClick={() => this.setState({showBanner: false})} />
                         <div className="text-center">
-                            <h2>{tt("welcome_to_the_blockchain")}</h2>
-                            <h4>{tt("your_voice_is_worth_something")}</h4>
+                            <h2>{tt("submit_a_story.welcome_to_the_blockchain")}</h2>
+                            <h4>{tt("submit_a_story.your_voice_is_worth_something")}</h4>
                             <br />
-                            <a className="button" href="/enter_email"> <b>{tt("sign_up")}</b> </a>
+                            <a className="button" href="/enter_email"> <b>{tt("navigation.sign_up")}</b> </a>
                             &nbsp; &nbsp; &nbsp;
-                            <a className="button hollow uppercase" href="https://steem.io" target="_blank" onClick={this.learnMore}> <b>{tt("learn_more")}</b> </a>
+                            <a className="button hollow uppercase" href="https://steem.io" target="_blank" onClick={this.learnMore}> <b>{tt("submit_a_story.learn_more")}</b> </a>
                             <br />
                             <br />
                             <div className="tag3">
-                                <b>{tt("get_sp_when_sign_up", {signupBonus: signup_bonus, VESTING_TOKEN})}</b>
+                                <b>{tt("submit_a_story.get_sp_when_sign_up", {signupBonus: signup_bonus, VESTING_TOKEN})}</b>
                             </div>
                         </div>
                     </div>

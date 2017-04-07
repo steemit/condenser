@@ -32,6 +32,9 @@
   path {
     fill: #4BA2F2;
   }
+  circle {
+    stroke: #4BA2F2;
+  }
   .Icon:hover {
     box-shadow: 0 0 0 rgba(75, 162, 242, 1);
     animation: pulse 2s infinite;

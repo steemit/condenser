@@ -1,7 +1,7 @@
 import tt from 'counterpart';
 import { APP_NAME } from 'app/client_config';
 
-export const savingsTip = tt('balance_subject_to_3_day_withdraw_waiting_period')
+export const savingsTip = tt('balance_subject_to_3_day_withdraw_waiting_period');
 export const transferTips = {
     'Transfer to Account': tt('move_funds_to_another_account', {APP_NAME}),
     'Transfer to Savings': tt('protect_funds_by_requiring_a_3_day_withdraw_waiting_period'),

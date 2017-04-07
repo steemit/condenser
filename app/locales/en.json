@@ -813,9 +813,26 @@
     "": "Balance subject to 3 day withdraw waiting period.",
     "move_funds_to_another_account": "Move funds to another {APP_NAME} account.",
     "protect_funds_by_requiring_a_3_day_withdraw_waiting_period": "Protect funds by requiring a 3 day withdraw waiting period.",
-    "withdraw_funds_after_the_required_3_day_waiting_period": "Withdraw funds after the required 3 day waiting period."
+    "withdraw_funds_after_the_required_3_day_waiting_period": "Withdraw funds after the required 3 day waiting period.",
+    "balance": "Balance"
   },
-  "_jsx": {
-    "": ""
+  "userwallet_jsx": {
+    "transfer": "Transfer",
+    "transfer_to_savings": "Transfer to Savings",
+    "power_up": "Power Up",
+    "power_down": "Power Down",
+    "market": "Market",
+    "buy": "Buy",
+    "convert_to_LIQUID_TOKEN": "Convert to {LIQUID_TOKEN}",
+    "withdraw_LIQUID_TOKEN": "Withdraw {LIQUID_TOKEN}",
+    "withdraw": "Withdraw {DEBT_TOKENS}",
+    "tokens_worth_about_1_of_LIQUID_TICKER": "Tokens worth about $1.00 of {LIQUID_TICKER}, currently collecting {sbdInterest}% APR.",
+    "balances": "BALANCES",
+    "buy_LIQUID_TOKEN_or_VESTING_TOKEN": "Buy {LIQUID_TOKEN} or {VESTING_TOKEN}",
+    "savings": "SAVINGS",
+    "estimated_account_value": "Estimated Account Value",
+    "next_power_down_is_scheduled_to_happen": "The next power down is scheduled to happen",
+    "transfers_are_temporary_disabled": "Transfers are temporary disabled.",
+    "history": "HISTORY"
   }
 }

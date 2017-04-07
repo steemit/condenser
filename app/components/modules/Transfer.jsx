@@ -216,7 +216,7 @@ class TransferForm extends Component {
                 {memo && <div className="row">
                     <div className="column small-2" style={{paddingTop: 33}}>{tt('memo')}</div>
                     <div className="column small-10">
-                        <small>{tt('this_memo_is') {isMemoPrivate ? tt('private') : tt('public')}</small>
+                        <small>{tt('this_memo_is') + isMemoPrivate ? tt('private') : tt('public')}</small>
                         <input type="text" placeholder={tt('memo')} {...memo.props}
                             ref="memo" autoComplete="on" autoCorrect="off" autoCapitalize="off" disabled={loading} />
                         <div className="error">{memo.touched && memo.error && memo.error}&nbsp;</div>
@@ -246,7 +246,7 @@ class TransferForm extends Component {
 }
 
 const AssetBalance = ({onClick, balanceValue}) =>
-    <a onClick={onClick} style={{borderBottom: '#A09F9F 1px dotted', cursor: 'pointer'}}>Balance: {balanceValue}</a>
+    <a onClick={onClick} style={{borderBottom: '#A09F9F 1px dotted', cursor: 'pointer'}}>{tt('balance') + ": " + balanceValue}</a>
 
 import {connect} from 'react-redux'
 

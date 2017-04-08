@@ -8,6 +8,11 @@ vendor/*
 tmp/*
 app/assets/static/*.js
 app/assets/static/*.json
+app/assets/google*.html
+app/assets/mailru*.html
+app/assets/yandex*.html
+app/assets/sitemap.xml
+app/assets/robots.txt
 
 config/golos.json
 config/golos-dev.json

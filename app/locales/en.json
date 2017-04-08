@@ -103,7 +103,7 @@
     "learn_more": "Learn More",
     "get_sp_when_sign_up": "Get {signupBonus} of {VESTING_TOKEN} when you sign up today.",
     "all_accounts_refunded": "All Recovered Accounts have been fully Refunded",
-    "APP_URL_is_now_open_source": "{APP_URL} is now Open Source"
+    "APP_URL_is_now_open_source": " {APP_URL} is now Open Source"
   },
   "reply_editor": {
     "tag_your_story": "Tag (up to 5 tags), the first tag is your main category.",
@@ -810,7 +810,7 @@
     "basic" : "Basic",
     "advanced": "Advanced",
     "convert_to_VESTING_TOKEN": "Convert to {VESTING_TOKEN}",
-    "": "Balance subject to 3 day withdraw waiting period.",
+    "balance_subject_to_3_day_withdraw_waiting_period": "Balance subject to 3 day withdraw waiting period,",
     "move_funds_to_another_account": "Move funds to another {APP_NAME} account.",
     "protect_funds_by_requiring_a_3_day_withdraw_waiting_period": "Protect funds by requiring a 3 day withdraw waiting period.",
     "withdraw_funds_after_the_required_3_day_waiting_period": "Withdraw funds after the required 3 day waiting period.",
@@ -834,5 +834,17 @@
     "next_power_down_is_scheduled_to_happen": "The next power down is scheduled to happen",
     "transfers_are_temporary_disabled": "Transfers are temporary disabled.",
     "history": "HISTORY"
+  },
+  "tagsindex_jsx": {
+    "tag": "Tag",
+    "posts": "Posts",
+    "comments": "Comments",
+    "payouts": "Payouts",
+    "trending_topics": "Trending Topics"
+  },
+  "topics_jsx": {
+    "topics": "Topics",
+    "tags_and_topics": "Tags and Topics",
+    "show_more_topics": "Show more topics"
   }
 }

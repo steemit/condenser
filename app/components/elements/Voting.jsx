@@ -11,6 +11,7 @@ import DropdownMenu from 'app/components/elements/DropdownMenu';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import FoundationDropdown from 'app/components/elements/FoundationDropdown';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
+import tt from 'counterpart';
 
 const ABOUT_FLAG = <div>
     <p>Flagging a post can remove rewards and make this material less visible.  Some common reasons to flag:</p>

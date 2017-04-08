@@ -194,7 +194,7 @@ class TransferForm extends Component {
                     <div className="column small-2" style={{paddingTop: 5}}>{tt('amount')}</div>
                     <div className="column small-10">
                         <div className="input-group" style={{marginBottom: 5}}>
-                            <input type="text" placeholder={tt('amount')} {...amount.props} ref="amount" autoComplete="off" autoCorrect="off" autoCapitalize="off" disabled={loading} />
+                            <input type="text" placeholder={tt('amount')} {...amount.props} ref="amount" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck="false" disabled={loading} />
                             {asset && <span className="input-group-label" style={{paddingLeft: 0, paddingRight: 0}}>
                                 <select {...asset.props} placeholder={tt('asset')} disabled={loading} style={{minWidth: "5rem", height: "inherit", backgroundColor: "transparent", border: "none"}}>
                                     <option value="STEEM">STEEM</option>
@@ -218,7 +218,7 @@ class TransferForm extends Component {
                     <div className="column small-10">
                         <small>{tt('this_memo_is') + isMemoPrivate ? tt('private') : tt('public')}</small>
                         <input type="text" placeholder={tt('memo')} {...memo.props}
-                            ref="memo" autoComplete="on" autoCorrect="off" autoCapitalize="off" disabled={loading} />
+                            ref="memo" autoComplete="on" autoCorrect="off" autoCapitalize="off" spellCheck="false" disabled={loading} />
                         <div className="error">{memo.touched && memo.error && memo.error}&nbsp;</div>
                     </div>
                 </div>}

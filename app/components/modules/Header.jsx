@@ -82,23 +82,13 @@ class Header extends React.Component {
                 if (current_account_name && account_name.indexOf(current_account_name) === 1)
                     home_account = true;
             } else {
-                if (route.params.length > 1) {
-                    topic = route.params[1];
-                    // Overwrite default created for more human readable title
-                    if (route.params[0] === "created") {
-                        page_title = tt('new_topic_posts', {topic});
-                    }
-                    else {
-                        page_title = tt('sort_order_topic_posts', {sort_order, topic});
-                    }
-                } else {
-                    if (route.params[0] === "created") {
-                        page_title = tt('new_posts');
-                    }
-                    else {
-                        page_title = tt('sort_order_posts', {sort_order: tt(sort_order)});
-                    }
-                }
+                const type = (route.params[0] == 'payout_comments' ? 'comments' : 'posts');
+                const topic = (route.params.length > 1 ? route.params[1] + ' ' : '')
+                let prefix = route.params[0];
+                if(prefix == 'created') prefix = 'New'
+                if(prefix == 'payout') prefix = 'Pending payout'
+                if(prefix == 'payout_comments') prefix = 'Pending payout'
+                page_title = `${prefix} ${topic}${type}`;
             }
         } else if (route.page === 'Post') {
             sort_order = '';

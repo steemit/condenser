@@ -136,6 +136,8 @@ class LoginForm extends Component {
         let postType = "";
         if (opType === "vote") {
             postType = tt('login_to_vote')
+        } else if (opType === "custom_json" && loginBroadcastOperation.getIn(['operation', 'id']) === "follow") {
+            postType = 'Login to Follow Users'
         } else if (loginBroadcastOperation) {
             // check for post or comment in operation
             postType = loginBroadcastOperation.getIn(['operation', 'title']) ? tt('login_to_post') : tt('login_to_comment');
@@ -209,11 +211,12 @@ class LoginForm extends Component {
                         {tt('cancel')}
                     </button>}
                 </div>
-                <hr />
+                {authType == 'Posting' &&
                 <div>
+                    <hr />
                     <p>{tt('join_our')} <span className="free-slogan">{tt('amazing_community')}</span>{tt('to_comment_and_reward_others')}</p>
                     <button type="button" className="button sign-up" onClick={this.SignUp}>{tt('sign_up_now_to_receive')}<span className="free-money">{tt('free_money')}</span></button>
-                </div>
+                </div>}
             </form>
         </center>
         );

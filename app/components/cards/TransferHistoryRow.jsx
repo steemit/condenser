@@ -86,6 +86,16 @@ class TransferHistoryRow extends React.Component {
             description_end = '';
         } else if (type === 'interest') {
             description_start += `${tt('receive_interest_of')} ${data.interest}`;
+        } else if (type === 'fill_convert_request') {
+            description_start += `Fill convert request: ${data.amount_in} for ${data.amount_out}`;
+        } else if (type === 'fill_order') {
+            if(data.open_owner == context) {
+                // my order was filled by data.current_owner
+                description_start += `Paid ${data.open_pays} for ${data.current_pays}`;
+            } else {
+                // data.open_owner filled my order
+                description_start += `Paid ${data.current_pays} for ${data.open_pays}`;
+            }
         } else {
             description_start += JSON.stringify({type, ...data}, null, 2);
         }

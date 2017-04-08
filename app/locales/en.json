@@ -705,7 +705,9 @@
     "curation_rewards_by": "Curation rewards by",
     "author_rewards_by": "Author rewards by",
     "replies_to": "Replies to",
-    "comments_by": "Comments by"
+    "comments_by": "Comments by",
+    "new": "New",
+    "pending_payout": "Pending payout"
   },
   "loginform_jsx": {
     "required": "Required",

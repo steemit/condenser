@@ -13,6 +13,7 @@ import staticCache from 'koa-static-cache';
 import useRedirects from './redirects';
 import useOauthLogin from './api/oauth';
 import useGeneralApi from './api/general';
+import useIcoApi from './api/ico'
 import useAccountRecoveryApi from './api/account_recovery';
 import useNotificationsApi from './api/notifications';
 import useEnterAndConfirmEmailPages from './server_pages/enter_confirm_email';
@@ -184,6 +185,7 @@ useAccountRecoveryApi(app);
 useOauthLogin(app);
 useGeneralApi(app);
 useNotificationsApi(app);
+useIcoApi(app);
 
 // helmet wants some things as bools and some as lists, makes config difficult.
 // our config uses strings, this splits them to lists on whitespace.
@@ -215,6 +217,18 @@ app.use(
     mount(
         '/images',
         staticCache(path.join(__dirname, '../app/assets/images'), cacheOpts)
+    )
+);
+app.use(
+    mount(
+        '/legal',
+        staticCache(path.join(__dirname, '../app/assets/legal'), cacheOpts)
+    )
+);
+app.use(
+    mount(
+        '/sitemap.xml',
+        staticCache(path.join(__dirname, '../app/assets/sitemap.xml'), cacheOpts)
     )
 );
 // Proxy asset folder to webpack development server in development mode

@@ -29,6 +29,8 @@ import Translator from 'app/Translator';
 import {notificationsArrayToMap} from 'app/utils/Notifications';
 import {routeRegex} from "app/ResolveRoute";
 import {contentStats} from 'app/utils/StateFunctions'
+import {APP_NAME, IGNORE_TAGS, PUBLIC_API, SEO_TITLE} from 'app/client_config';
+import constants from 'app/redux/constants';
 
 const sagaMiddleware = createSagaMiddleware(
     ...userWatches, // keep first to remove keys early when a page change happens
@@ -65,7 +67,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
     } catch (e) {
         console.error('Routing error:', e.toString(), location);
         return {
-            title: 'Routing error - Steemit',
+            title: 'Routing error - ' + APP_NAME,
             statusCode: 500,
             body: renderToString(ErrorPage ? <ErrorPage /> : <span>Routing error</span>)
         };
@@ -73,7 +75,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
     if (error || !renderProps) {
         // debug('error')('Router error', error);
         return {
-            title: 'Page Not Found - Steemit',
+            title: 'Page Not Found - ' + APP_NAME,
             statusCode: 404,
             body: renderToString(<NotFound />)
         };
@@ -168,7 +170,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
                 onchain.content[url.substr(2, url.length - 1)] = content;
             } else { // protect on invalid user pages (i.e /user/transferss)
                 return {
-                    title: 'Page Not Found - Steemit',
+                    title: 'Page Not Found - ' + APP_NAME,
                     statusCode: 404,
                     body: renderToString(<NotFound />)
                 };
@@ -181,7 +183,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
         const sd = fee * feed,
               sdInt = parseInt(sd),
               sdDec = (sd - sdInt),
-              sdDisp = '$' + sdInt + (sdInt < 5 && sdDec >= 0.5 ? '.50' : '');
+              sdDisp = sdInt + (sdInt < 5 && sdDec >= 0.5 ? '.50' : '');
 
         offchain.signup_bonus = sdDisp;
         offchain.server_location = location;
@@ -200,7 +202,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
         if (location.match(routeRegex.UserProfile1)) {
             console.error('User/not found: ', location);
             return {
-                title: 'Page Not Found - Steemit',
+                title: 'Page Not Found - ' + APP_NAME,
                 statusCode: 404,
                 body: renderToString(<NotFound />)
             };
@@ -210,7 +212,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
             const stack_trace = e.stack || '[no stack]';
             console.error('State/store error: ', msg, stack_trace);
             return {
-                title: 'Server error - Steemit',
+                title: 'Server error - ' + APP_NAME,
                 statusCode: 500,
                 body: renderToString(<ErrorPage />)
             };
@@ -235,8 +237,8 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
     }
 
     return {
-        title: 'Steemit',
-        titleBase: 'Steemit - ',
+        title: SEO_TITLE,
+        titleBase: SEO_TITLE + ' - ',
         meta,
         statusCode: status,
         body: Iso.render(app, server_store.getState())

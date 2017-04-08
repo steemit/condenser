@@ -2,6 +2,7 @@ import koa_router from 'koa-router';
 
 const redirects = [
     // example: [/\/about(\d+)-(.+)/, '/about?$0:$1', 302],
+    [/^\/ico\/?$/, '/about'],
     [/^\/recent\/?$/, '/created']
 ];
 

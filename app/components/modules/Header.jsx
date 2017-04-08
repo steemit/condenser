@@ -9,7 +9,7 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import HorizontalMenu from 'app/components/elements/HorizontalMenu';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import tt from 'counterpart';
-import { APP_NAME } from 'app/client_config';
+import { SEO_TITLE, APP_NAME, APP_ICON } from 'app/client_config';
 
 function sortOrderToLink(so, topic, account) {
     if (so === 'home') return '/@' + account + '/feed';
@@ -85,9 +85,9 @@ class Header extends React.Component {
                 const type = (route.params[0] == 'payout_comments' ? 'comments' : 'posts');
                 const topic = (route.params.length > 1 ? route.params[1] + ' ' : '')
                 let prefix = route.params[0];
-                if(prefix == 'created') prefix = 'New'
-                if(prefix == 'payout') prefix = 'Pending payout'
-                if(prefix == 'payout_comments') prefix = 'Pending payout'
+                if(prefix == 'created') prefix = tt('new')
+                if(prefix == 'payout') prefix = tt('pending_payout')
+                if(prefix == 'payout_comments') prefix = tt('pending_payout')
                 page_title = `${prefix} ${topic}${type}`;
             }
         } else if (route.page === 'Post') {

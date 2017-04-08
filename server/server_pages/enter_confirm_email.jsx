@@ -6,7 +6,7 @@ import { renderToString } from "react-dom/server";
 import models from "db/models";
 import ServerHTML from "../server-html";
 import sendEmail from "../sendEmail";
-import { checkCSRF, getRemoteIp } from "../utils";
+import { checkCSRF, getRemoteIp } from "server/utils/misc";
 import config from "config";
 import SignupProgressBar from "app/components/elements/SignupProgressBar";
 import MiniHeader from "app/components/modules/MiniHeader";
@@ -27,6 +27,7 @@ if (process.env.NODE_ENV === "production") {
 const assets = Object.assign({}, require(assets_file), { script: [] });
 
 assets.script.push("https://www.google.com/recaptcha/api.js");
+assets.script.push("/enter_email/submit_form.js");
 
 function* confirmEmailHandler() {
     const confirmation_code = this.params && this.params.code
@@ -84,7 +85,7 @@ export default function useEnterAndConfirmEmailPages(app) {
     const router = koa_router();
     app.use(router.routes());
     const koaBody = koa_body();
-    const rc_site_key = config.get("recaptcha.site_key");
+    const rc_site_key = config.get('recaptcha.site_key');
 
     router.get("/enter_email", function*() {
         console.log("-- /enter_email -->", this.session.uid, this.session.user);
@@ -102,7 +103,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                 <br />
                 <div className="row" style={{ maxWidth: "32rem" }}>
                     <div className="column">
-                        <form action="/submit_email" method="POST">
+                        <form id="submit_email" action="/submit_email" method="POST">
                             <h4>
                                 Please provide your email address to continue the registration process
                             </h4>
@@ -116,8 +117,6 @@ export default function useEnterAndConfirmEmailPages(app) {
                             />
                             <label>
                                 Email
-
-
                                 <input
                                     type="email"
                                     name="email"
@@ -125,29 +124,30 @@ export default function useEnterAndConfirmEmailPages(app) {
                                 />
                             </label>
                             <br />
-                            <div
-                                className="g-recaptcha"
-                                data-sitekey={rc_site_key}
-                            />
-                            <br />
                             <div className="error">
                                 {this.flash.error}
                             </div>
-                            <input
-                                type="submit"
-                                className="button"
-                                value="CONTINUE"
-                            />
+                            {rc_site_key ? <button
+                                    className="button g-recaptcha"
+                                    data-sitekey={rc_site_key}
+                                    data-callback="submit_email_form">
+                                    CONTINUE
+                                </button> :
+                                <input
+                                    type="submit"
+                                    className="button"
+                                    value="CONTINUE" />
+                            }
                         </form>
                     </div>
                 </div>
             </div>
         );
-        const props = { body, title: "Email Address", assets, meta: [] };
-        this.body = "<!DOCTYPE html>" +
+        const props = { body, title: 'Email Address', assets, meta: [] };
+        this.body = '<!DOCTYPE html>' +
             renderToString(<ServerHTML {...props} />);
         if (mixpanel)
-            mixpanel.track("SignupStep1", { distinct_id: this.session.uid });
+            mixpanel.track('SignupStep1', { distinct_id: this.session.uid });
     });
 
     router.post("/submit_email", koaBody, function*() {
@@ -160,19 +160,21 @@ export default function useEnterAndConfirmEmailPages(app) {
             return;
         }
 
-        if (!(yield checkRecaptcha(this))) {
-            console.log(
-                "-- /submit_email captcha verification failed -->",
-                user_id,
-                this.session.uid,
-                email,
-                this.req.connection.remoteAddress
-            );
-            this.flash = {
-                error: "Failed captcha verification, please try again"
-            };
-            this.redirect("/enter_email?email=" + email);
-            return;
+        if (config.get('recaptcha.site_key')) {
+            if (!(yield checkRecaptcha(this))) {
+                console.log(
+                  "-- /submit_email captcha verification failed -->",
+                  user_id,
+                  this.session.uid,
+                  email,
+                  this.req.connection.remoteAddress
+                );
+                this.flash = {
+                    error: "Failed captcha verification, please try again"
+                };
+                this.redirect("/enter_email?email=" + email);
+                return;
+            }
         }
 
         const parsed_email = email.match(/^.+\@.*?([\w\d-]+\.\w+)$/);
@@ -320,6 +322,10 @@ export default function useEnterAndConfirmEmailPages(app) {
 
     router.get("/confirm_email/:code", confirmEmailHandler);
     router.post("/confirm_email", koaBody, confirmEmailHandler);
+    router.get("/enter_email/submit_form.js", function*() {
+        this.type = 'application/javascript';
+        this.body = "function submit_email_form(){document.getElementById('submit_email').submit()}";
+    });
 }
 
 function* checkRecaptcha(ctx) {

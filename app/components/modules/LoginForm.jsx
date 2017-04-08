@@ -33,23 +33,23 @@ class LoginForm extends Component {
             console.error('CreateAccount - cryptoTestResult: ', cryptoTestResult);
             cryptographyFailure = true
         }
-        this.state = {cryptographyFailure}
+        this.state = {cryptographyFailure};
         this.usernameOnChange = e => {
-            const value = e.target.value.toLowerCase()
+            const value = e.target.value.toLowerCase();
             this.state.username.props.onChange(value)
-        }
+        };
         this.onCancel = (e) => {
             if(e.preventDefault) e.preventDefault()
-            const {onCancel, loginBroadcastOperation} = this.props
-            const errorCallback = loginBroadcastOperation && loginBroadcastOperation.get('errorCallback')
-            if (errorCallback) errorCallback('Canceled')
+            const {onCancel, loginBroadcastOperation} = this.props;
+            const errorCallback = loginBroadcastOperation && loginBroadcastOperation.get('errorCallback');
+            if (errorCallback) errorCallback('Canceled');
             if (onCancel) onCancel()
-        }
+        };
         this.qrReader = () => {
             const {qrReader} = props
             const {password} = this.state
             qrReader(data => {password.props.onChange(data)})
-        }
+        };
         this.initForm(props)
     }
 
@@ -58,7 +58,7 @@ class LoginForm extends Component {
         if (this.refs.username && this.refs.username.value) this.refs.pw.focus();
     }
 
-    shouldComponentUpdate = shouldComponentUpdate(this, 'LoginForm')
+    shouldComponentUpdate = shouldComponentUpdate(this, 'LoginForm');
 
     initForm(props) {
         reactForm({
@@ -136,11 +136,13 @@ class LoginForm extends Component {
         let postType = "";
         if (opType === "vote") {
             postType = tt('login_to_vote')
+        } else if (opType === "custom_json" && loginBroadcastOperation.getIn(['operation', 'id']) === "follow") {
+            postType = 'Login to Follow Users'
         } else if (loginBroadcastOperation) {
             // check for post or comment in operation
             postType = loginBroadcastOperation.getIn(['operation', 'title']) ? tt('login_to_post') : tt('login_to_comment');
         }
-        const title = postType ? postType : tt('login_to_your_steem_account');
+        const title = postType ? postType : tt('login');
         const authType = /^vote|comment/.test(opType) ? tt('posting') : tt('active_or_owner');
         const submitLabel = loginBroadcastOperation ? tt('sign_n') : tt('login');
         let error = password.touched && password.error ? password.error : this.props.login_error;
@@ -202,6 +204,7 @@ class LoginForm extends Component {
                         <input id="saveLogin" type="checkbox" ref="pw" {...saveLogin.props} onChange={this.saveLoginToggle} disabled={submitting} /></label>
                 </div>}
                 <div>
+                    <br />
                     <button type="submit" disabled={submitting || disabled} className="button" onClick={this.SignIn}>
                         {submitLabel}
                     </button>
@@ -209,11 +212,12 @@ class LoginForm extends Component {
                         {tt('cancel')}
                     </button>}
                 </div>
-                <hr />
+                {authType == 'Posting' &&
                 <div>
+                    <hr />
                     <p>{tt('join_our')} <span className="free-slogan">{tt('amazing_community')}</span>{tt('to_comment_and_reward_others')}</p>
                     <button type="button" className="button sign-up" onClick={this.SignUp}>{tt('sign_up_now_to_receive')}<span className="free-money">{tt('free_money')}</span></button>
-                </div>
+                </div>}
             </form>
         </center>
         );

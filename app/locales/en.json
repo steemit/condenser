@@ -101,7 +101,7 @@
     "welcome_to_the_blockchain": "Welcome to the Blockchain!",
     "your_voice_is_worth_something": "Your voice is worth something",
     "learn_more": "Learn More",
-    "get_sp_when_sign_up": "Get {signupBonus} of {VESTING_TOKEN} when you sign up today.",
+    "get_sp_when_sign_up": "Get %(signupBonus)s of %(VESTING_TOKEN)s when you sign up today.",
     "all_accounts_refunded": "All Recovered Accounts have been fully Refunded",
     "APP_URL_is_now_open_source": " {APP_URL} is now Open Source"
   },

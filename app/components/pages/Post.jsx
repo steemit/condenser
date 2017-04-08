@@ -167,7 +167,7 @@ class Post extends React.Component {
                             <br /> {// remove '$' from signup_bonus before parsing it into local currency
                                     tt('if_you_enjoyed_what_you_read_earn_amount', {amount: '$'+localizedCurrency(signup_bonus.substring(1))})}
                             <br />
-                            <button type="button" className="button sign-up" onClick={showSignUp}>Sign up now to receive <span className="free-money">FREE MONEY!</span></button>
+                            <button type="button" className="button sign-up" onClick={showSignUp}>Sign up now to receive <span className="free-money">FREE STEEM!</span></button>
                         </div>
                     </div>
                 </div>}

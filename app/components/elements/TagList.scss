@@ -1,0 +1,25 @@
+.TagList {
+  ul.VerticalMenu {
+    a {
+      padding: 0 0.4rem;
+      line-height: 1.5;
+      color: inherit;
+    }
+  }
+}
+
+.TagList__horizontal {
+  margin-bottom: 0.5rem;
+  a {
+    display: inline-block;
+    margin: 0.1rem 0.4rem 0.1rem 0;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.3rem;
+    background: #efefef;
+    color: #8a8a8a;
+
+    &:hover {
+      background: #e6e6e6;
+    }
+  }
+}

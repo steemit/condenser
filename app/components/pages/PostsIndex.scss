@@ -1,0 +1,52 @@
+.PostsList {
+  clear: right;
+}
+
+.PostsList__summaries {
+  list-style-type: none;
+  margin-left: 0;
+}
+
+.PostsIndex__topics {
+  border-left: 1px solid $light-gray;
+}
+
+.PostsIndex__topics_compact {
+  float: right;
+  width: 15rem;
+  position: relative;
+  top: -0.8rem;
+  > select {
+    border: none;
+    border-bottom: 1px solid $medium-gray;
+    border-radius: 0;
+  }
+}
+
+.PostsIndex.fetching .PostsIndex__topics_compact {
+  visibility: hidden;
+}
+
+/* Small only */
+@media screen and (max-width: 39.9375em) {
+  .PostsIndex__left {
+    padding: 0;
+  }
+  .PostsIndex__topics_compact {
+    padding: 0 0.5rem;
+    float: none;
+    width: auto;
+  }
+}
+
+/* Medium and up */
+@media screen and (min-width: 39.94em) {
+  .PostsIndex__summaries {
+    > li:first-child {
+      .PostSummary {
+        margin-top: 0;
+        padding-top: 0;
+      }
+    }
+  }
+}

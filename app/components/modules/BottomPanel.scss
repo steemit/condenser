@@ -1,0 +1,41 @@
+$btm-panel-width: 400px;
+$btm-panel-height: 90px;
+
+.BottomPanel {
+  > div {
+    background-color: rgba(220, 220, 220, .9);
+    color: #fff;
+    padding: 2rem 1rem 0.5rem 1rem;
+    border-top-left-radius: $global-radius;
+    border-top-right-radius: $global-radius;
+    .close-button {
+      color: #000;
+    }
+
+    position: fixed;
+    z-index: 1000;
+    width: $btm-panel-width;
+    height: $btm-panel-height;
+    box-sizing: border-box;
+    transition: visibility 250ms, transform ease 250ms;
+    left: 50%;
+    margin-left: -$btm-panel-width/2;
+    bottom: -$btm-panel-height;
+    visibility: hidden;
+
+    &.visible {
+      transform: translate3d(0, -$btm-panel-height, 0);
+      visibility: visible;
+    }
+  }
+}
+
+/* Small only */
+@media screen and (max-width: 39.9375em) {
+  .BottomPanel > div {
+    width: 100%;
+    left: 0;
+    margin-left: 0;
+    border-radius: 0;
+  }
+}

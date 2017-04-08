@@ -1,0 +1,22 @@
+import React from 'react';
+import tt from 'counterpart';
+
+class Support extends React.Component {
+    render() {
+        return (
+            <div className="row">
+                <div>
+                    <h2>{tt('APP_NAME_support')}</h2>
+                    <p>
+                        {tt('please_email_questions_to')} <a href="mailto:t@cyber.fund">t@cyber.fund</a>.
+                    </p>
+                </div>
+            </div>
+        );
+    }
+}
+
+module.exports = {
+    path: 'support.html',
+    component: Support
+};

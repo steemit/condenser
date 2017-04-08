@@ -8,7 +8,6 @@ vendor/*
 tmp/*
 app/assets/static/*.js
 app/assets/static/*.json
-app/client_config.js
 
 config/golos.json
 config/golos-dev.json

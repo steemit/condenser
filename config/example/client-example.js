@@ -57,4 +57,23 @@ export const SITE_DESCRIPTION = 'Голос - социальная сеть, п�
 export const SUPPORT_EMAIL = 'support@yourdomain.name'
 export const SEGMENT_ANALYTICS_KEY = 'SEGMENT_ANALYTICS_KEY'
 export const FIRST_DATE = new Date(Date.UTC(2016, 7, 1)); //1 september
+
+// ignore special tags, dev-tags, partners tags
+export const IGNORE_TAGS = ['test', 'bm-open', 'bm-ceh23', 'bm-tasks', 'bm-taskceh1']
+export const SELECT_TAGS_KEY = 'golos:select.categories'
+export const PUBLIC_API = {
+  trending:     ['get_discussions_by_trending',   'trending'],
+  trending30:   ['get_discussions_by_trending30', 'trending30'],
+  responses:    ['get_discussions_by_children',   'responses'],
+  hot:          ['get_discussions_by_hot',        'hot'],
+  promoted:     ['get_discussions_by_promoted',   'promoted'],
+  votes:        ['get_discussions_by_votes',      'votes'],
+  cashout:      ['get_discussions_by_cashout',    'cashout'],
+  active:       ['get_discussions_by_active',     'active'],
+  created:      ['get_discussions_by_created',    'created'],
+  recent:       ['get_discussions_by_created',    'created'],
+  witnesses:    ['get_witnesses_by_vote',         'witnesses'],
+  tags:         ['get_trending_tags',             'tags'],
+  tagsbyauthor: ['get_tags_used_by_author',       'tagsbyauthor']
+}
 export const SEO_TITLE = 'GOLOS.io Блоги'

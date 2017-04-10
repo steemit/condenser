@@ -4,6 +4,12 @@
   }
 
   table tr {
+    th {
+      cursor: pointer;
+      &:hover .TagsIndex__tagToggle {
+        opacity: 1;
+      }
+    }
     td, th {
       text-align: right;
       &:first-child {
@@ -54,6 +60,13 @@
         padding-left: 2rem;
       }
     }
+  }
+}
+
+.TagsIndex__tagToggle {
+  opacity: 0;
+  &.isSelected {
+    opacity: 1;
   }
 }
 

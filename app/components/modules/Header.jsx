@@ -176,7 +176,7 @@ class Header extends React.Component {
                             <ul className="menu">
                                 <li className="Header__top-logo">
                                     <Link to={logo_link}>
-                                        <Icon name={APP_ICON} size="1_75x" />
+                                        <Icon name={APP_ICON} size="2x" />
                                     </Link>
                                 </li>
                                 <li className="Header__top-steemit show-for-medium noPrint"><Link to={logo_link}>{APP_NAME}<span className="beta">beta</span></Link></li>

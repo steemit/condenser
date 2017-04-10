@@ -36,7 +36,7 @@ const grant = new Grant(config.grant);
 // import uploadImage from 'server/upload-image' //medium-editor
 
 const app = new Koa();
-app.name = 'Steemit app';
+app.name = 'Golos app';
 const env = process.env.NODE_ENV || 'development';
 // cache of a thousand days
 const cacheOpts = { maxAge: 86400000, gzip: true };

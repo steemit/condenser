@@ -32,7 +32,7 @@ sudo npm install -g babel-cli
 
 ```bash
 cd config
-cp example/client-example.json client_config.js
+cp example/client-example.js client_config.js
 cp example/golos-example.json golos-dev.json
 ```
 

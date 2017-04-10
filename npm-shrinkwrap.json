@@ -5441,6 +5441,28 @@
       "from": "react-addons-pure-render-mixin@>=15.4.1 <16.0.0",
       "resolved": "https://registry.npmjs.org/react-addons-pure-render-mixin/-/react-addons-pure-render-mixin-15.4.1.tgz"
     },
+    "react-cookie": {
+      "version": "1.0.5",
+      "from": "react-cookie@1.0.5",
+      "resolved": "https://registry.npmjs.org/react-cookie/-/react-cookie-1.0.5.tgz",
+      "dependencies": {
+        "cookie": {
+          "version": "0.3.1",
+          "from": "cookie@0.3.1",
+          "resolved": "https://registry.npmjs.org/cookie/-/cookie-0.3.1.tgz"
+        },
+        "is-node": {
+          "version": "1.0.2",
+          "from": "is-node@1.0.2",
+          "resolved": "https://registry.npmjs.org/is-node/-/is-node-1.0.2.tgz"
+        },
+        "object-assign": {
+          "version": "4.1.0",
+          "from": "object-assign@>=4.1.0 <5.0.0",
+          "resolved": "https://registry.npmjs.org/object-assign/-/object-assign-4.1.0.tgz"
+        }
+      }
+    },
     "react-dom": {
       "version": "15.4.1",
       "from": "react-dom@15.4.1",

@@ -10,6 +10,8 @@ import {powerTip, powerTip2, powerTip3} from 'app/utils/Tips'
 import {browserTests} from 'shared/ecc/test/BrowserTests'
 import {validate_account_name} from 'app/utils/ChainValidation';
 import {countDecimals} from 'app/utils/ParsersAndFormatters'
+import tt from 'counterpart';
+import { VESTING_TOKEN } from 'app/client_config';
 
 /** Warning .. This is used for Power UP too. */
 class TransferForm extends Component {
@@ -72,16 +74,16 @@ class TransferForm extends Component {
             initialValues: props.initialValues,
             validation: values => ({
                 to:
-                    ! values.to ? 'Required' : validate_account_name(values.to),
+                    ! values.to ? tt('required') : validate_account_name(values.to),
                 amount:
-                    ! values.amount ? 'Required' :
-                    ! /^[0-9]*\.?[0-9]*/.test(values.amount) ? 'Amount is in the form 99999.999' :
-                    insufficientFunds(values.asset, values.amount) ? 'Insufficient funds' :
-                    countDecimals(values.amount) > 3 ? 'Use only 3 digits of precison' :
+                    ! values.amount ? tt('required') :
+                    ! /^[0-9]*\.?[0-9]*/.test(values.amount) ? tt('amount_is_in_form') :
+                    insufficientFunds(values.asset, values.amount) ? tt('insufficient_funds') :
+                    countDecimals(values.amount) > 3 ? tt('use_only_3_digits_of_precison') :
                     null,
                 asset:
                     props.toVesting ? null :
-                    ! values.asset ? 'Required' : null,
+                    ! values.asset ? tt('required') : null,
                 memo:
                     values.memo && (!browserTests.memo_encryption && /^#/.test(values.memo)) ?
                     'Encrypted memos are temporarily unavailable (issue #98)' :
@@ -149,7 +151,7 @@ class TransferForm extends Component {
                 </div>}
 
                 <div className="row">
-                    <div className="column small-2" style={{paddingTop: 5}}>From</div>
+                    <div className="column small-2" style={{paddingTop: 5}}>{tt('from')}</div>
                     <div className="column small-10">
                         <div className="input-group" style={{marginBottom: "1.25rem"}}>
                             <span className="input-group-label">@</span>
@@ -164,7 +166,7 @@ class TransferForm extends Component {
                 </div>
 
                 {advanced && <div className="row">
-                    <div className="column small-2" style={{paddingTop: 5}}>To</div>
+                    <div className="column small-2" style={{paddingTop: 5}}>{('to')}</div>
                     <div className="column small-10">
                         <div className="input-group" style={{marginBottom: "1.25rem"}}>
                             <span className="input-group-label">@</span>
@@ -172,7 +174,7 @@ class TransferForm extends Component {
                                 className="input-group-field"
                                 ref="to"
                                 type="text"
-                                placeholder="Send to account"
+                                placeholder={tt('send_to_account')}
                                 onChange={this.onChangeTo}
                                 autoComplete="off"
                                 autoCorrect="off"
@@ -190,12 +192,12 @@ class TransferForm extends Component {
                 </div>}
 
                 <div className="row">
-                    <div className="column small-2" style={{paddingTop: 5}}>Amount</div>
+                    <div className="column small-2" style={{paddingTop: 5}}>{tt('amount')}</div>
                     <div className="column small-10">
                         <div className="input-group" style={{marginBottom: 5}}>
-                            <input type="text" placeholder="Amount" {...amount.props} ref="amount" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck="false" disabled={loading} />
+                            <input type="text" placeholder={tt('amount')} {...amount.props} ref="amount" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck="false" disabled={loading} />
                             {asset && <span className="input-group-label" style={{paddingLeft: 0, paddingRight: 0}}>
-                                <select {...asset.props} placeholder="Asset" disabled={loading} style={{minWidth: "5rem", height: "inherit", backgroundColor: "transparent", border: "none"}}>
+                                <select {...asset.props} placeholder={tt('asset')} disabled={loading} style={{minWidth: "5rem", height: "inherit", backgroundColor: "transparent", border: "none"}}>
                                     <option value="STEEM">STEEM</option>
                                     <option value="SBD">SBD</option>
                                 </select>
@@ -213,10 +215,10 @@ class TransferForm extends Component {
                 </div>
 
                 {memo && <div className="row">
-                    <div className="column small-2" style={{paddingTop: 33}}>Memo</div>
+                    <div className="column small-2" style={{paddingTop: 33}}>{tt('memo')}</div>
                     <div className="column small-10">
-                        <small>This Memo is {isMemoPrivate ? 'Private' : 'Public'}</small>
-                        <input type="text" placeholder="Memo" {...memo.props}
+                        <small>{tt('this_memo_is') + isMemoPrivate ? tt('private') : tt('public')}</small>
+                        <input type="text" placeholder={tt('memo')} {...memo.props}
                             ref="memo" autoComplete="on" autoCorrect="off" autoCapitalize="off" spellCheck="false" disabled={loading} />
                         <div className="error">{memo.touched && memo.error && memo.error}&nbsp;</div>
                     </div>
@@ -225,15 +227,15 @@ class TransferForm extends Component {
                 {!loading && <span>
                     {trxError && <div className="error">{trxError}</div>}
                     <button type="submit" disabled={submitting || !valid} className="button">
-                        {toVesting ? 'Power Up' : 'Submit'}
+                        {tt(toVesting ? 'power_up' : 'submit')}
                     </button>
-                    {transferToSelf && <button className="button hollow no-border" disabled={submitting} onClick={this.onAdvanced}>{advanced ? 'Basic' : 'Advanced'}</button>}
+                    {transferToSelf && <button className="button hollow no-border" disabled={submitting} onClick={this.onAdvanced}>{tt(advanced ? 'basic' : 'advanced')}</button>}
                 </span>}
             </form>
         )
         return (
            <div>
-               <h3>{toVesting ? 'Convert to Steem Power' : transferType}</h3>
+               <h3>{toVesting ? tt('convert_to_VESTING_TOKEN', {VESTING_TOKEN}) : transferTips[transferType]}</h3>
                <div className="row">
                    <div className="column small-12">
                        {form}
@@ -245,7 +247,7 @@ class TransferForm extends Component {
 }
 
 const AssetBalance = ({onClick, balanceValue}) =>
-    <a onClick={onClick} style={{borderBottom: '#A09F9F 1px dotted', cursor: 'pointer'}}>Balance: {balanceValue}</a>
+    <a onClick={onClick} style={{borderBottom: '#A09F9F 1px dotted', cursor: 'pointer'}}>{tt('balance') + ": " + balanceValue}</a>
 
 import {connect} from 'react-redux'
 

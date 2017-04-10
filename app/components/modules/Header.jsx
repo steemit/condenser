@@ -8,6 +8,8 @@ import DropdownMenu from 'app/components/elements/DropdownMenu';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import HorizontalMenu from 'app/components/elements/HorizontalMenu';
 import normalizeProfile from 'app/utils/NormalizeProfile';
+import tt from 'counterpart';
+import { APP_NAME } from 'app/client_config';
 
 function sortOrderToLink(so, topic, account) {
     if (so === 'home') return '/@' + account + '/feed';
@@ -75,7 +77,7 @@ class Header extends React.Component {
         if (route.page === 'PostsIndex') {
             sort_order = route.params[0];
             if (sort_order === 'home') {
-                page_title = "Home"
+                page_title = tt("home")
                 const account_name = route.params[1];
                 if (current_account_name && account_name.indexOf(current_account_name) === 1)
                     home_account = true;
@@ -92,17 +94,17 @@ class Header extends React.Component {
             sort_order = '';
             topic = route.params[0];
         } else if (route.page == 'SubmitPost') {
-            page_title = `Create a Post`;
+            page_title = tt('create_a_post');
         } else if (route.page == 'Privacy') {
-            page_title = `Privacy Policy`;
+            page_title = tt('privacy_policy');
         } else if (route.page == 'Tos') {
-            page_title = `Terms of Service`;
+            page_title = tt('terms_of_service');
         } else if (route.page == 'ChangePassword') {
-            page_title = `Change Account Password`;
+            page_title = tt('change_account_password');
         } else if (route.page == 'CreateAccount') {
-            page_title = `Create Account`;
+            page_title = tt('create_account');
         } else if (route.page == 'RecoverAccountStep1' || route.page == 'RecoverAccountStep2') {
-            page_title = `Stolen Account Recovery`;
+            page_title = tt('stolen_account_recovery');
         } else if (route.page === 'UserProfile') {
             user_name = route.params[0].slice(1);
             const acct_meta = this.props.account_meta.getIn([user_name]);
@@ -110,23 +112,23 @@ class Header extends React.Component {
             const user_title = name ? `${name} (@${user_name})` : user_name;
             page_title = user_title;
             if(route.params[1] === "followers"){
-                page_title = "People following " + user_title;
+                page_title = tt('people_following') + " " + user_title;
             }
             if(route.params[1] === "followed"){
-                page_title = "People followed by " + user_title;
+                page_title = tt('people_followed_by') + " " + user_title;
             }
             if(route.params[1] === "curation-rewards"){
-                page_title = "Curation rewards by " + user_title;
+                page_title = tt('curation_rewards_by') + " " + user_title;
             }
             if(route.params[1] === "author-rewards"){
-                page_title = "Author rewards by " + user_title;
+                page_title = tt('author_rewards_by') + " " + user_title;
             }
             if(route.params[1] === "recent-replies"){
-                page_title = "Replies to " + user_title;
+                page_title = tt('replies_to') + " " + user_title;
             }
             // @user/"posts" is deprecated in favor of "comments" as of oct-2016 (#443)
             if(route.params[1] === "posts" || route.params[1] === "comments"){
-                page_title = "Comments by " + user_title;
+                page_title = tt('comments_by') + " " + user_title;
             }
         } else {
             page_name = ''; //page_title = route.page.replace( /([a-z])([A-Z])/g, '$1 $2' ).toLowerCase();
@@ -138,32 +140,32 @@ class Header extends React.Component {
         }
 
 
-        if (process.env.BROWSER && (route.page !== 'Post' && route.page !== 'PostNoCategory')) document.title = page_title + ' — Steemit';
+        if (process.env.BROWSER && (route.page !== 'Post' && route.page !== 'PostNoCategory')) document.title = page_title + ' — ' + APP_NAME;
 
         const logo_link = route.params && route.params.length > 1 && this.last_sort_order ? '/' + this.last_sort_order : (current_account_name ? `/@${current_account_name}/feed` : '/');
         let topic_link = topic ? <Link to={`/${this.last_sort_order || 'trending'}/${topic}`}>{topic}</Link> : null;
 
         const sort_orders = [
-            ['created', 'new'],
-            ['hot', 'hot'],
-            ['trending', 'trending'],
-            ['promoted', 'promoted'],
+            ['created', tt('new')],
+            ['hot', tt('hot')],
+            ['trending', tt('trending')],
+            ['promoted', tt('promoted')],
             //['payout', 'payout (posts)'],
             //['payout_comments', 'payout (comments)'],
         ];
-        if (current_account_name) sort_orders.unshift(['home', 'home']);
+        if (current_account_name) sort_orders.unshift(['home', tt('home')]);
         const sort_order_menu = sort_orders.filter(so => so[0] !== sort_order).map(so => ({link: sortOrderToLink(so[0], topic, current_account_name), value: so[1]}));
         const selected_sort_order = sort_orders.find(so => so[0] === sort_order);
 
         const sort_orders_horizontal = [
-            ['created', 'new'],
-            ['hot', 'hot'],
-            ['trending', 'trending'],
-            ['promoted', 'promoted'],
+            ['created', tt('new')],
+            ['hot', tt('hot')],
+            ['trending', tt('trending')],
+            ['promoted', tt('promoted')],
             //['payout', 'payout (posts)'],
             //['payout_comments', 'payout (comments)'],
         ];
-        if (current_account_name) sort_orders_horizontal.unshift(['home', 'home']);
+        if (current_account_name) sort_orders_horizontal.unshift(['home', tt('home')]);
         const sort_order_menu_horizontal = sort_orders_horizontal.map(so => {
                 let active = (so[0] === sort_order);
                 if (so[0] === 'home' && sort_order === 'home' && !home_account) active = false;

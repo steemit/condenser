@@ -82,12 +82,12 @@ module.exports = connect(
             const json = ['reblog', {account, author, permlink}]
             dispatch(transaction.actions.broadcastOperation({
                 type: 'custom_json',
-                confirm: 'Are you sure?',
+                confirm: tt('are_you_sure'),
                 operation: {
                     id: 'follow',
                     required_posting_auths: [account],
                     json: JSON.stringify(json),
-                    __config: {title: 'Resteem This Post'}
+                    __config: {title: tt('resteem_this_post')}
                 },
                 successCallback, errorCallback,
             }))

@@ -18,6 +18,7 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Tooltip from 'app/components/elements/Tooltip'
 import tt from 'counterpart';
 import {List} from 'immutable'
+import { LIQUID_TOKEN, DEBT_TOKENS } from 'app/client_config';
 
 const assetPrecision = 1000;
 
@@ -160,27 +161,27 @@ class UserWallet extends React.Component {
         }).filter(el => !!el).reverse();
 
         let steem_menu = [
-            { value: 'Transfer', link: '#', onClick: showTransfer.bind( this, 'STEEM', 'Transfer to Account' ) },
-            { value: 'Transfer to Savings', link: '#', onClick: showTransfer.bind( this, 'STEEM', 'Transfer to Savings' ) },
-            { value: 'Power Up', link: '#', onClick: showTransfer.bind( this, 'VESTS', 'Transfer to Account' ) },
+            { value: tt('transfer'), link: '#', onClick: showTransfer.bind( this, 'STEEM', 'Transfer to Account' ) },
+            { value: tt('transfer_to_savings'), link: '#', onClick: showTransfer.bind( this, 'STEEM', 'Transfer to Savings' ) },
+            { value: tt('power_up'), link: '#', onClick: showTransfer.bind( this, 'VESTS', 'Transfer to Account' ) },
         ]
         let power_menu = [
-            { value: 'Power Down', link: '#', onClick: powerDown.bind(this, false) }
+            { value: tt('power_down'), link: '#', onClick: powerDown.bind(this, false) }
         ]
         if(isMyAccount) {
-            steem_menu.push({ value: 'Buy', link: '#', onClick: onShowDepositSteem });
-            steem_menu.push({ value: 'Market', link: '/market' });
-            power_menu.push({ value: 'Buy', link: '#', onClick: onShowDepositPower })
+            steem_menu.push({ value: tt('buy'), link: '#', onClick: onShowDepositSteem });
+            steem_menu.push({ value: tt('market'), link: '/market' });
+            power_menu.push({ value: tt('buy'), link: '#', onClick: onShowDepositPower })
         }
         if( divesting ) {
             power_menu.push( { value: 'Cancel Power Down', link:'#', onClick: powerDown.bind(this,true) } );
         }
 
         let dollar_menu = [
-            { value: 'Transfer', link: '#', onClick: showTransfer.bind( this, 'SBD', 'Transfer to Account' ) },
-            { value: 'Transfer to Savings', link: '#', onClick: showTransfer.bind( this, 'SBD', 'Transfer to Savings' ) },
-            { value: 'Market', link: '/market' },
-            { value: 'Convert to STEEM', link: '#', onClick: convertToSteem },
+            { value: tt('transfer'), link: '#', onClick: showTransfer.bind( this, 'SBD', 'Transfer to Account' ) },
+            { value: tt('transfer_to_savings'), link: '#', onClick: showTransfer.bind( this, 'SBD', 'Transfer to Savings' ) },
+            { value: tt('market'), link: '/market' },
+            { value: translate('convert_to_LIQUID_TOKEN', {LIQUID_TOKEN}), link: '#', onClick: convertToSteem },
         ]
         const isWithdrawScheduled = new Date(account.get('next_vesting_withdrawal') + 'Z').getTime() > Date.now()
         const depositReveal = showDeposit && <div>
@@ -199,23 +200,23 @@ class UserWallet extends React.Component {
         const savings_sbd_balance_str = numberWithCommas('$' + sbd_balance_savings.toFixed(3))
 
         const savings_menu = [
-            { value: 'Withdraw Steem', link: '#', onClick: showTransfer.bind( this, 'STEEM', 'Savings Withdraw' ) },
+            { value: tt('withdraw_LIQUID_TOKEN', {LIQUID_TOKEN}), link: '#', onClick: showTransfer.bind( this, 'STEEM', 'Savings Withdraw' ) },
         ]
         const savings_sbd_menu = [
-            { value: 'Withdraw Steem Dollars', link: '#', onClick: showTransfer.bind( this, 'SBD', 'Savings Withdraw' ) },
+            { value: tt('withdraw_DEBT_TOKENS', {DEBT_TOKENS}), link: '#', onClick: showTransfer.bind( this, 'SBD', 'Savings Withdraw' ) },
         ]
         // set dynamic secondary wallet values
         const sbdInterest = this.props.sbd_interest / 100
         //const sbdMessage = tt('tokens_worth_about_AMOUNT_of_LIQUID_TOKEN') //TODO: add APR param to xlation
-        const sbdMessage = <span>Tokens worth about $1.00 of STEEM, currently collecting {sbdInterest}% APR.</span>
+        const sbdMessage = <span>{tt('tokens_worth_about_1_of_LIQUID_TICKER', {LIQUID_TICKER, sbdInterest})}</span>
 
         return (<div className="UserWallet">
             <div className="row">
                 <div className="columns small-10 medium-12 medium-expand">
-                    {isMyAccount ? <WalletSubMenu account_name={account.get('name')} /> : <div><br /><h4>BALANCES</h4><br /></div>}
+                    {isMyAccount ? <WalletSubMenu account_name={account.get('name')} /> : <div><br /><h4>{tt('balances')}</h4><br /></div>}
                 </div>
                 <div className="columns shrink">
-                    {isMyAccount && <button className="UserWallet__buysp button hollow" onClick={this.onShowDepositSteem}>Buy Steem or Steem Power</button>}
+                    {isMyAccount && <button className="UserWallet__buysp button hollow" onClick={this.onShowDepositSteem}>{tt('buy_LIQUID_TOKEN_or_VESTING_TOKEN')}</button>}
                 </div>
             </div>
             <div className="UserWallet__balance row">
@@ -253,7 +254,7 @@ class UserWallet extends React.Component {
             </div>
             <div className="UserWallet__balance row zebra">
                 <div className="column small-12 medium-8">
-                    SAVINGS<br /><span className="secondary">{savingsTip} currently collecting {sbdInterest}% APR.</span>
+                    {tt('savings')}<br /><span className="secondary">{savingsTip} currently collecting {sbdInterest}% APR.</span>
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
@@ -267,7 +268,7 @@ class UserWallet extends React.Component {
             </div>
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
-                    Estimated Account Value<br /><span className="secondary">{valueTip}</span>
+                    {tt('estimated_account_value')}<br /><span className="secondary">{valueTip}</span>
                 </div>
                 <div className="column small-12 medium-4">
                     {estimate_output}
@@ -275,7 +276,7 @@ class UserWallet extends React.Component {
             </div>
             <div className="UserWallet__balance row">
                 <div className="column small-12">
-                    {isWithdrawScheduled && <span>The next power down is scheduled to happen&nbsp; <TimeAgoWrapper date={account.get('next_vesting_withdrawal')} />.</span> }
+                    {isWithdrawScheduled && <span>{tt('next_power_down_is_scheduled_to_happen')}&nbsp; <TimeAgoWrapper date={account.get('next_vesting_withdrawal')} />.</span> }
                     {/*toggleDivestError && <div className="callout alert">{toggleDivestError}</div>*/}
                     <TransactionError opType="withdraw_vesting" />
                 </div>
@@ -283,7 +284,7 @@ class UserWallet extends React.Component {
             {disabledWarning && <div className="row">
                 <div className="column small-12">
                     <div className="callout warning">
-                        Transfers are temporary disabled.
+                        {tt('transfers_are_temporary_disabled')}
                     </div>
                 </div>
             </div>}
@@ -298,7 +299,7 @@ class UserWallet extends React.Component {
             <div className="row">
                 <div className="column small-12">
                     {/** history */}
-                    <h4>HISTORY</h4>
+                    <h4>{tt('history')}</h4>
                     <table>
                         <tbody>
                         {transfer_log}

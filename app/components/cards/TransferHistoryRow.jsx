@@ -5,6 +5,7 @@ import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 // import Icon from 'app/components/elements/Icon';
 import Memo from 'app/components/elements/Memo'
 import {numberWithCommas, vestsToSp} from 'app/utils/StateFunctions'
+import tt from 'counterpart';
 
 class TransferHistoryRow extends React.Component {
 
@@ -23,60 +24,60 @@ class TransferHistoryRow extends React.Component {
         if( type === 'transfer_to_vesting' ) {
             if( data.from === context ) {
                 if( data.to === "" ) {
-                    description_start += "Transfer " + data.amount.split(' ')[0] + " to STEEM POWER";
+                    description_start += tt("transfer") + data.amount.split(' ')[0] + tt("to") + "STEEM POWER";
                 }
                 else {
-                    description_start += "Transfer " + data.amount.split(' ')[0] + " STEEM POWER to ";
+                    description_start += tt("transfer") + data.amount.split(' ')[0] + " STEEM POWER" + tt("to");
                     other_account = data.to;
                 }
             }
             else if( data.to === context ) {
-                description_start += "Receive " + data.amount.split(' ')[0] + " STEEM POWER from ";
+                description_start += tt("recieve") + data.amount.split(' ')[0] + " STEEM POWER" + tt("from");
                 other_account = data.from;
             } else {
-                description_start += "Transfer " + data.amount.split(' ')[0] + " STEEM POWER from " + data.from + " to ";
+                description_start += tt("transfer") + data.amount.split(' ')[0] + " STEEM POWER" + tt("from") + data.from + tt("to");
                 other_account = data.to;
             }
         }
         else if(/^transfer$|^transfer_to_savings$|^transfer_from_savings$/.test(type)) {
             // transfer_to_savings
             const fromWhere =
-                type === 'transfer_to_savings' ? `to savings ` :
-                type === 'transfer_from_savings' ? `from savings ` :
+                type === 'transfer_to_savings' ? tt("to_savings") :
+                type === 'transfer_from_savings' ? tt("from_savings") :
                 ''
 
             if( data.from === context ) {
-                description_start += `Transfer ${fromWhere}${data.amount} to `;
+                description_start += tt("transfer") + `${fromWhere} ${data.amount}` + tt("to");
                 other_account = data.to;
             }
             else if( data.to === context ) {
-                description_start += `Receive ${fromWhere}${data.amount} from `;
+                description_start += tt("receive") + `${fromWhere} ${data.amount}` + tt("from");
                 other_account = data.from;
             } else {
-                description_start += `Transfer ${fromWhere}${data.amount} from `;
+                description_start += tt("transfer") + `${fromWhere} ${data.amount}` + tt("from");
                 other_account = data.from;
-                description_end += " to " + data.to;
+                description_end += tt("to") + data.to;
             }
             if(data.request_id != null)
-                description_end += ` (request ${data.request_id})`
+                description_end += ` (${tt('request')} ${data.request_id})`
         } else if (type === 'cancel_transfer_from_savings') {
-            description_start += `Cancel transfer from savings (request ${data.request_id})`;
+            description_start += `${tt('cancel_transfer_from_savings')} (${tt('request')} ${data.request_id})`;
         } else if( type === 'withdraw_vesting' ) {
             if( data.vesting_shares === '0.000000 VESTS' )
-                description_start += "Stop power down";
+                description_start += tt('stop_power_down');
             else
-                description_start += "Start power down of " + data.vesting_shares;
+                description_start += tt('start_power_down_of') + data.vesting_shares;
         } else if( type === 'curation_reward' ) {
-            description_start += `${curation_reward} STEEM POWER for `;
+            description_start += `${curation_reward} STEEM POWER` + tt("for");
             other_account = data.comment_author + "/" + data.comment_permlink;
         } else if (type === 'author_reward') {
             let steem_payout = ""
             if(data.steem_payout !== '0.000 STEEM') steem_payout = ", " + data.steem_payout;
-            description_start += `${renameToSd(data.sbd_payout)}${steem_payout}, and ${author_reward} STEEM POWER for ${data.author}/${data.permlink}`;
+            description_start += `${renameToSd(data.sbd_payout)}${steem_payout}, ${tt("and")} ${author_reward} STEEM POWER ${tt("for")} ${data.author}/${data.permlink}`;
             // other_account = ``;
             description_end = '';
         } else if (type === 'interest') {
-            description_start += `Receive interest of ${data.interest}`;
+            description_start += `${tt('receive_interest_of')} ${data.interest}`;
         } else if (type === 'fill_convert_request') {
             description_start += `Fill convert request: ${data.amount_in} for ${data.amount_out}`;
         } else if (type === 'fill_order') {

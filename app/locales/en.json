@@ -103,7 +103,7 @@
     "learn_more": "Learn More",
     "get_sp_when_sign_up": "Get %(signupBonus)s of %(VESTING_TOKEN)s when you sign up today.",
     "all_accounts_refunded": "All Recovered Accounts have been fully Refunded",
-    "APP_URL_is_now_open_source": "{APP_URL} is now Open Source"
+    "APP_URL_is_now_open_source": " {APP_URL} is now Open Source"
   },
   "reply_editor": {
     "tag_your_story": "Tag (up to 5 tags), the first tag is your main category.",
@@ -112,7 +112,29 @@
     "shorten_title": "Shorten title",
     "exceeds_maximum_length": "Exceeds maximum length ({maxKb}KB)",
     "including_the_category": "(including the category '{rootCategory}')",
-    "use_limited_amount_of_tags": "You have {tagsLength} tags total {includingCategory}.  Please use only 5 in your post and category line."
+    "use_limited_amount_of_tags": "You have {tagsLength} tags total {includingCategory}.  Please use only 5 in your post and category line.",
+    "are_you_sure_you_want_to_clear_this_form": "Are you sure you want to clear this form?",
+    "uploading": "Uploading",
+    "post": "Post",
+    "post_as": "Post as",
+    "draft_saved": "Draft saved.",
+    "editor": "Editor",
+    "insert_images_by_dragging_dropping": "Insert images by dragging &amp; dropping,&nbsp;",
+    "pasting_from_the_clipboard": "pasting from the clipboard, ",
+    "selecting_them": "selecting them",
+    "image_upload": "Image upload",
+    "write_your_story": "Write your story",
+    "reply": "Reply",
+    "cancel": "Cancel",
+    "clear": "Clear",
+    "power_up_100": "Power Up 100%",
+    "default_50_50": "Default (50% / 50%)",
+    "decline_payout": "Decline Payout",
+    "check_this_to_auto_upvote_your_post": "Check this to auto-upvote your post",
+    "rewards": "Rewards",
+    "upvote_post": "Upvote post",
+    "preview": "Preview",
+    "markdown_styling_guide": "Markdown Styling Guide"
   },
   "category_selector": {
     "maximum_tag_length_is_24_characters": "Maximum tag length is 24 characters",
@@ -156,8 +178,6 @@
     "are_you_sure": "Are you sure?"
   },
   "postfull_jsx": {
-    "by": "by",
-    "in": "in",
     "share": "Share",
     "in_reply_to": "in reply to",
     "replied_to": "replied to",
@@ -564,5 +584,267 @@
     "resources": "Resources",
     "join_our_slack": "Join our Slack",
     "APP_NAME_whitepaper": "{APP_NAME} Whitepaper"
+  },
+  "app_jsx": {
+    "welcome": "Welcome",
+    "faq": "FAQ"
+  },
+  "markdownviewer_jsx": {
+    "images_were_hidden_due_to_low_ratings": "Images were hidden due to low ratings.",
+    "show": "Show"
+  },
+  "postfull_jsx": {
+    "by": "by",
+    "in": "in",
+    "this_post_is_not_available_due_to_a_copyright_claim": "This post is not available due to a copyright claim.",
+    "share_on_facebook" : "Share on Facebook",
+    "share_on_twitter" : "Share on Twitter",
+    "share_on_linkedin" : "Share on Linkedin",
+    "powered_up_100": "Powered Up 100%",
+    "view_the_direct_parent": "View the direct parent",
+    "re": "RE",
+    "you_are_viewing_a_single_comments_thread_from": "You are viewing a single comment&#39;s thread from",
+    "view_the_full_context": "View the full context",
+    "promote": "Promote",
+    "reply": "Reply",
+    "edit": "Edit",
+    "delete": "Delete",
+    "share_this_post": "Share this post",
+    "are_you_sure": "Are you sure?"
+  },
+  "postslist_jsx": {
+    "back": "Back"
+  },
+  "postsummary_jsx": {
+    "by": "by",
+    "in": "in",
+    "powered_up_100": "Powered Up 100%",
+    "resteemed": "Resteemed",
+    "resteemed_by": "Resteemed by",
+    "re": "Re",
+    "this_post_is": "This post is",
+    "you_can": "You can",
+    "reveal_it": "reveal it",
+    "or": "or",
+    "adjust_your": "adjust your",
+    "display_preferences": "display preferences",
+    "create_an_account": "create an account",
+    "to_save_your_preferences": "to save your preferences"
+  },
+  "transferhistoryrow_jsx": {
+    "transfer": "Transfer ",
+    "recieve": "Receive ",
+    "to": " to ",
+    "from": " from ",
+    "for": " for ",
+    "and": "and",
+    "to_savings": "to savings",
+    "from_savings": "from savings",
+    "request": "request",
+    "cancel_transfer_from_savings": "Cancel transfer from savings",
+    "stop_power_down": "Stop power down",
+    "start_power_down_of": "Start power down of",
+    "receive_interest_of": "Receive interest of"
+  },
+  "datejoinwrapper_jsx": {
+    "joined": "Joined"
+  },
+  "pageviewscounter_jsx": {
+    "since": "since"
+  },
+  "reblog_jsx": {
+    "are_you_sure": "Are you sure?",
+    "resteem_this_post": "'Resteem This Post'"
+  },
+  "savingswithdrawhistory_jsx": {
+    "cancel_this_withdraw_request": "Cancel this withdraw request?",
+    "pending_savings_withdrawals": "PENDING SAVINGS WITHDRAWS",
+    "cancel": "Cancel",
+    "withdraw": "Withdraw",
+    "from": "from",
+    "to": "to"
+  },
+  "suggestpassword_jsx": {
+    "username": "Username",
+    "password": "Password"
+  },
+  "voting_jsx": {
+    "more": "more",
+    "upvote": "Upvote",
+    "remove_vote": "Remove Vote",
+    "will_reset_your_curation_rewards_for_this_post": " will reset your curation rewards for this post.",
+    "removing_your_vote": "Removing your vote",
+    "changing_to_an_up_vote": "Changing to an Up-Vote",
+    "changing_to_a_down_vote": "Changing to a Down-Vote"
+  },
+  "confirmtransactionform_jsx": {
+    "ok": "Ok",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
+  },
+  "explorepost_jsx": {
+    "copied": "Copied!",
+    "copy": "COPY",
+    "share_this_post": "Share this post",
+    "alternative_sources": "Alternative Sources"
+  },
+  "header_jsx": {
+    "home": "Home",
+    "new_topic_posts" : "New {topic} posts",
+    "sort_order_topic_posts": "{sort_order} {topic} posts",
+    "new_posts": "New posts",
+    "sort_order_posts": "{sort_order} posts",
+    "create_a_post": "Create a post",
+    "privacy_policy": "Privacy Policy",
+    "terms_of_service": "Terms of Service",
+    "change_account_password": "Change Account Password",
+    "create_account": "Create Account",
+    "stolen_account_recovery": "Stolen Account Recovery",
+    "people_following": "People following",
+    "people_followed_by": "People followed by",
+    "curation_rewards_by": "Curation rewards by",
+    "author_rewards_by": "Author rewards by",
+    "replies_to": "Replies to",
+    "comments_by": "Comments by"
+  },
+  "loginform_jsx": {
+    "required": "Required",
+    "you_need_a_private_password_or_key": "You need a private password or key (not a public key)",
+    "loading": "Loading",
+    "cryptography_test_failed": "Cryptography test failed",
+    "unable_to_log_you_in": "We will be unable to log you in with this browser.",
+    "the_latest_versions_of": "The latest versions of ",
+    "and": " and ",
+    "are_well_tested_and_known_to_work_with": "are well tested and known to work with {APP_URL}.",
+    "due_to_server_maintenance": "Due to server maintenance we are running in read only mode. We are sorry for the inconvenience.",
+    "login_to_vote": "Login to Vote",
+    "login_to_post": "Login to Post",
+    "login_to_comment": "Login to Comment",
+    "login_to_your_steem_account": "Login to your Steem Account",
+    "posting": "Posting",
+    "active_or_owner": "Active or Owner",
+    "login": "Login",
+    "sign_in": "Sign In",
+    "this_password_is_bound_to_your_account_owner_key": "This password is bound to your account&apos;s owner key and can not be used to login to this site.",
+    "however_you_can_use_it_to": "However, you can use it to ",
+    "update_your_password": "update your password",
+    "to_obtain_a_more_secure_set_of_keys": "to obtain a more secure set of keys.",
+    "this_password_is_bound_to_your_account_active_key": "This password is bound to your account&apos;s active key and can not be used to login to this page.",
+    "you_may_use_this_active_key_on_other_more": "You may use this active key on other more secure pages like the Wallet or Market pages.",
+    "You_account_has_been_successfully_created": "You account has been successfully created!",
+    "You_account_has_been_successfully_recovered": "You account has been successfully recovered!",
+    "password_update_succes": "The password for {accountName} was successfully updated",
+    "password_info": "This password or private key was entered incorrectly.  There is probably a handwriting or data-entry error.  Hint: A password or private key generated by Steemit will never contain 0 (zero), O (capital o), I (capital i) and l (lower case L) characters.",
+    "enter_your_username": "Enter your username",
+    "password_or_wif": "Password or WIF",
+    "this_operation_requires_your_key_or_master_password": "This operation requires your {authType} key or Master password.",
+    "keep_me_logged_in": "Keep me logged in",
+    "amazing_community": "amazing community",
+    "to_comment_and_reward_others": " to comment and reward others.",
+    "sign_up_now_to_receive": "Sign up now to receive ",
+    "free_money": "FREE MONEY!",
+    "returning_users": "Returning Users: ",
+    "cancel": "Cancel",
+    "join_our": "Join our"
+  },
+  "chainvalidation_js": {
+    "account_name_should": "Account name should ",
+    "not_be_empty": "not be empty.",
+    "be_longer": "be longer.",
+    "be_shorter": "be shorter.",
+    "each_account_segment_should": "Each account segment should ",
+    "start_with_a_letter": "start with a letter.",
+    "have_only_letters_digits_or_dashes": "have only letters, digits, or dashes.",
+    "have_only_one_dash_in_a_row": "have only one dash in a row.",
+    "end_with_a_letter_or_digit": "end with a letter or digit."
+  },
+  "settings_jsx": {
+    "invalid_url": "Invalid URL",
+    "name_is_too_long": "Name is too long",
+    "name_must_not_begin_with": "Name must not begin with @",
+    "about_is_too_long": "About is too long",
+    "location_is_too_long": "Location is too long",
+    "website_url_is_too_long": "Website URL is too long",
+    "public_profile_settings": "Public Profile Settings",
+    "private_post_display_settings": "Private Post Display Settings",
+    "not_safe_for_work_nsfw_content": "Not safe for work (NSFW) content",
+    "always_hide": "Always hide",
+    "always_warn": "Always warn",
+    "always_show": "Always show",
+    "muted_users": "Muted Users",
+    "update": "Update"
+  },
+  "addtowaitinglist_jsx": {
+    "submit": "Submit"
+  },
+  "toprightmenu_jsx": {
+    "submit_a_story": "Submit a Story",
+    "login": "Login",
+    "logout": "Logout",
+    "feed": "Feed",
+    "wallet": "Wallet",
+    "blog": "Blog",
+    "comments": "Comments",
+    "replies": "Replies",
+    "change_password": "Change Password",
+    "settings": "Settings",
+    "search": "Search",
+    "sign_up": "Sign Up"
+  },
+  "transfer_jsx": {
+    "required": "Required",
+    "amount_is_in_form": "Amount is in the form 99999.999",
+    "insufficient_funds": "Insufficient funds",
+    "use_only_3_digits_of_precison": "Use only 3 digits of precison",
+    "from": "From",
+    "to": "To",
+    "send_to_account": "Send to account",
+    "amount": "Amount",
+    "asset": "Asset",
+    "memo": "Memo",
+    "this_memo_is": "This Memo is",
+    "private": "Private",
+    "public": "Public",
+    "power_up": "Power Up",
+    "submit": "Submit",
+    "basic" : "Basic",
+    "advanced": "Advanced",
+    "convert_to_VESTING_TOKEN": "Convert to {VESTING_TOKEN}",
+    "balance_subject_to_3_day_withdraw_waiting_period": "Balance subject to 3 day withdraw waiting period,",
+    "move_funds_to_another_account": "Move funds to another {APP_NAME} account.",
+    "protect_funds_by_requiring_a_3_day_withdraw_waiting_period": "Protect funds by requiring a 3 day withdraw waiting period.",
+    "withdraw_funds_after_the_required_3_day_waiting_period": "Withdraw funds after the required 3 day waiting period.",
+    "balance": "Balance"
+  },
+  "userwallet_jsx": {
+    "transfer": "Transfer",
+    "transfer_to_savings": "Transfer to Savings",
+    "power_up": "Power Up",
+    "power_down": "Power Down",
+    "market": "Market",
+    "buy": "Buy",
+    "convert_to_LIQUID_TOKEN": "Convert to {LIQUID_TOKEN}",
+    "withdraw_LIQUID_TOKEN": "Withdraw {LIQUID_TOKEN}",
+    "withdraw": "Withdraw {DEBT_TOKENS}",
+    "tokens_worth_about_1_of_LIQUID_TICKER": "Tokens worth about $1.00 of {LIQUID_TICKER}, currently collecting {sbdInterest}% APR.",
+    "balances": "BALANCES",
+    "buy_LIQUID_TOKEN_or_VESTING_TOKEN": "Buy {LIQUID_TOKEN} or {VESTING_TOKEN}",
+    "savings": "SAVINGS",
+    "estimated_account_value": "Estimated Account Value",
+    "next_power_down_is_scheduled_to_happen": "The next power down is scheduled to happen",
+    "transfers_are_temporary_disabled": "Transfers are temporary disabled.",
+    "history": "HISTORY"
+  },
+  "tagsindex_jsx": {
+    "tag": "Tag",
+    "posts": "Posts",
+    "comments": "Comments",
+    "payouts": "Payouts",
+    "trending_topics": "Trending Topics"
+  },
+  "topics_jsx": {
+    "topics": "Topics",
+    "tags_and_topics": "Tags and Topics",
+    "show_more_topics": "Show more topics"
   }
 }

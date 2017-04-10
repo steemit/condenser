@@ -37,13 +37,13 @@ class SuggestPassword extends React.Component {
                 <Icon name={APP_ICON} size="2x" /> {APP_NAME}
                 <hr />
                 <div>
-                    <h5>{translate(print ? 'APP_NAME_password_backup' : 'APP_NAME_password_backup_required')}</h5>
+                    <h5>{tt(print ? 'APP_NAME_password_backup' : 'APP_NAME_password_backup_required')}</h5>
                     {steemitCannotRecoverPasswords}
                 </div>
                 <br />
                 <div>
                     {print && <div>
-                        <label>Username</label>
+                        <label>{tt('username')}</label>
                         <div>
                             <code><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></code>
                         </div>
@@ -57,7 +57,7 @@ class SuggestPassword extends React.Component {
                         <br />
                         <br />
                     </a>}
-                    <label>Password</label>
+                    <label>{tt('password')}</label>
                     <div className="overflow-ellipsis">
                         <code>{suggestedPassword}</code>
                     </div>

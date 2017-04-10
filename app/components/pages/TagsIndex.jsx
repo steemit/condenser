@@ -16,7 +16,8 @@ export default class TagsIndex extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {search: '', selected: cookie.load(SELECT_TAGS_KEY) || []};
+        this.state = {search: '', selected: cookie.load(SELECT_TAGS_KEY) || [], reverseOrder: false, sortBy: 'name'};;
+        this.onSort = this.onSort.bind(this);    
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -42,6 +43,18 @@ export default class TagsIndex extends React.Component {
         this.setState({search: e.target.value})
     }
 
+    onSort(parameter) {
+        this.setState({sortBy: parameter});
+
+        // check if parameter is already selected, in wich case reverse order
+        if (this.state.sortBy === parameter) {
+            this.setState({reverseOrder: !this.state.reverseOrder});
+        } 
+        else {
+            this.setState({reverseOrder: false});
+        }
+    }
+
     render() {
         const {tagsAll} = this.props;
         //console.log('-- TagsIndex.render -->', tagsAll.toJS());
@@ -49,7 +62,7 @@ export default class TagsIndex extends React.Component {
         //    console.log('-- map -->', v.toJS());
         //});
         const {
-          state: {search, selected}, onSelectTag
+          state: {search, selected, reverseOrder, sortBy}, onSelectTag
         } = this;
         const order = this.props.routeParams.order;
         let tags = tagsAll;
@@ -61,7 +74,21 @@ export default class TagsIndex extends React.Component {
             // there is a blank tag present, as well as some starting with #. filter them out.
             tag => /^[a-z]/.test(tag.get('name'))
         ).sort((a,b) => {
-            return a.get('name').localeCompare(b.get('name'));
+            const first = reverseOrder ? a : b;
+            const second = reverseOrder ? b : a;
+
+            switch (sortBy) {
+                case 'name':
+                    return second.get('name').localeCompare(first.get('name'));  
+                case 'top_posts':
+                    return first.get('top_posts') - second.get('top_posts');
+                case 'comments':
+                    return first.get('comments') - second.get('comments');
+                case 'total_payouts':
+                    return first.get('total_payouts').split(" ")[0] - second.get('total_payouts').split(" ")[0];
+                default:
+                    break;
+            }
         }).map(tag => {
             const tagKey = tag.get('name');
             let name = tagKey;
@@ -79,6 +106,11 @@ export default class TagsIndex extends React.Component {
                 <td>{tag.get('total_payouts')}</td>
             </tr>);
         }).toArray();
+        const tagToggle = (parameter) => (
+            <span className={`TagsIndex__tagToggle ${sortBy === parameter ? "isSelected" : ''}`} >
+                {reverseOrder ? '▲ ' : '▼ '}
+            </span> 
+        );
         return (
             <div className="TagsIndex row">
                 <div className="column">
@@ -90,10 +122,22 @@ export default class TagsIndex extends React.Component {
                     <table>
                         <thead>
                         <tr>
-                            <th>{translate('tag')}</th>
-                            <th>{translate('posts')}</th>
-                            <th>{translate('comments')}</th>
-                            <th>{translate('payouts')}</th>
+                            <th onClick={() => this.onSort('name')} >
+                                {tagToggle('name')}
+                                {translate('tag')}
+                            </th>
+                            <th onClick={() => this.onSort('top_posts')} >
+                                {tagToggle('top_posts')}
+                                {translate('posts')}
+                            </th>
+                            <th onClick={() => this.onSort('comments')} >
+                                {tagToggle('comments')}
+                                {translate('comments')}
+                            </th>
+                            <th onClick={() => this.onSort('total_payouts')} >
+                                {tagToggle('total_payouts')}
+                                {translate('payouts')}
+                            </th>
                         </tr>
                         </thead>
                         <tbody>

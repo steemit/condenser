@@ -34,6 +34,7 @@ sudo npm install -g babel-cli
 cd config
 cp example/client-example.js client_config.js
 cp example/golos-example.json golos-dev.json
+cp example/golos-example.json golos.json
 ```
 
 Generate a new crypto_key and save under server_session_secret in ./golos-dev.json.

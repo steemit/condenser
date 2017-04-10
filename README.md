@@ -84,7 +84,7 @@ mysql -u root
 Install `sequelize-cli` globally:
 
 ```bash
-sudo npm install -g sequelize sequelize-cli pm2 mysql
+sudo npm install -g sequelize sequelize-cli mysql
 ```
 
 Run `sequelize db:migrate` in `db/` directory.

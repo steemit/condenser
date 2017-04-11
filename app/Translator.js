@@ -21,13 +21,15 @@ import { DEFAULT_LANGUAGE } from 'config/client_config';
 import enLocaleData from 'react-intl/locale-data/en';
 import ruLocaleData from 'react-intl/locale-data/ru';
 import ukLocaleData from 'react-intl/locale-data/uk'; // in react-intl they use 'uk' instead of 'ua'
-addLocaleData([...enLocaleData, ...ruLocaleData, ...ukLocaleData]);
+import srLocaleData from 'react-intl/locale-data/sr'; http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry
+addLocaleData([...enLocaleData, ...ruLocaleData, ...ukLocaleData, ...srLocaleData]);
 
 // Our translated strings
 import { en } from './locales/en';
 import { ru } from './locales/ru';
 import { ua as uk } from './locales/ua';
-const messages = { en, ru, uk }
+import { rs_latin as sr } from './locales/rs';
+const messages = { en, ru, uk, sr }
 
 // exported function placeholders
 // this is needed for proper export before react-intl functions with locale data,

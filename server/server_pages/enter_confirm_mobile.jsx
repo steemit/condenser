@@ -124,7 +124,7 @@ export default function useEnterAndConfirmMobilePages(app) {
             return;
         }
         const mid = yield models.Identity.findOne({
-            attributes: ["phone"],
+            attributes: ["phone", "verified"],
             where: { user_id, provider: "phone" },
             order: "id DESC"
         });

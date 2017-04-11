@@ -99,7 +99,8 @@ export function contentStats(content) {
     const meetsGrayThreshold = net_rshares_adj.compare(grayThreshold) < 0
 
     // to be eligible for deletion, a comment must have non-positive rshares and no replies
-    const allowDelete = !Long.fromString(String(content.get('net_rshares'))).isPositive() && content.get('children') === 0
+    const hasPositiveRshares = Long.fromString(String(content.get('net_rshares'))).gt(Long.ZERO)
+    const allowDelete = !hasPositiveRshares && content.get('children') === 0
     const hasPendingPayout = parsePayoutAmount(content.get('pending_payout_value')) >= 0.02
     const authorRepLog10 = repLog10(content.get('author_reputation'))
 

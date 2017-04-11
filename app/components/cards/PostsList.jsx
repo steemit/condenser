@@ -190,7 +190,6 @@ class PostsList extends React.Component {
             <PostSummary
                 account={account}
                 post={item.item}
-                currentCategory={category}
                 thumbSize={thumbSize}
                 ignore={item.ignore}
                 onClick={this.onPostClick}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Icon from 'app/components/elements/Icon';
 import { connect } from 'react-redux';
@@ -8,11 +8,8 @@ import Reblog from 'app/components/elements/Reblog';
 import Voting from 'app/components/elements/Voting';
 import {immutableAccessor} from 'app/utils/Accessors';
 import extractContent from 'app/utils/ExtractContent';
-import { browserHistory } from 'react-router';
 import VotesAndComments from 'app/components/elements/VotesAndComments';
-import {authorNameAndRep} from 'app/utils/ComponentFormatters';
 import {Map} from 'immutable';
-import Reputation from 'app/components/elements/Reputation';
 import Author from 'app/components/elements/Author';
 import TagList from 'app/components/elements/TagList';
 import UserNames from 'app/components/elements/UserNames';
@@ -38,7 +35,6 @@ class PostSummary extends React.Component {
         pending_payout: React.PropTypes.string.isRequired,
         total_payout: React.PropTypes.string.isRequired,
         content: React.PropTypes.object.isRequired,
-        currentCategory: React.PropTypes.string,
         thumbSize: React.PropTypes.string,
         nsfwPref: React.PropTypes.string,
         onClick: React.PropTypes.func
@@ -65,73 +61,68 @@ class PostSummary extends React.Component {
     }
 
     render() {
-        const {currentCategory, thumbSize, ignore, onClick} = this.props;
-        const {post, content, pending_payout, total_payout} = this.props;
+        const {thumbSize, ignore, onClick} = this.props;
+        const {post, content} = this.props;
         const {account} = this.props;
         if (!content) return null;
-
-        const archived = content.get('cashout_time') === '1969-12-31T23:59:59' // TODO: audit after HF17. #1259
 
         let reblogged_by;
         if(content.get('reblogged_by') && content.get('reblogged_by').size > 0) {
             reblogged_by = content.get('reblogged_by').toJS()
-        } else if(content.get('first_reblogged_by')) {
-            // TODO: this case is backwards-compat for 0.16.1. remove after upgrading.
-            reblogged_by = [content.get('first_reblogged_by')]
         }
 
         if(reblogged_by) {
-          reblogged_by = <div className="PostSummary__reblogged_by">
-                             <Icon name="reblog" /> Resteemed by <UserNames names={reblogged_by} />
-                         </div>
+            reblogged_by = (<div className="PostSummary__reblogged_by">
+                               <Icon name="reblog" /> Resteemed by <UserNames names={reblogged_by} />
+                           </div>)
         }
 
+        // 'account' is the current blog being viewed, if applicable.
         if(account && account != content.get('author')) {
-          reblogged_by = <div className="PostSummary__reblogged_by">
-                             <Icon name="reblog" /> Resteemed
-                         </div>
+            reblogged_by = (<div className="PostSummary__reblogged_by">
+                               <Icon name="reblog" /> Resteemed
+                           </div>)
         }
 
         const {gray, pictures, authorRepLog10, flagWeight, isNsfw} = content.get('stats', Map()).toJS()
         const p = extractContent(immutableAccessor, content);
-        let desc = p.desc
-        if(p.image_link)// image link is already shown in the preview
-            desc = desc.replace(p.image_link, '')
+        const desc = p.desc
+
+        const archived = content.get('cashout_time') === '1969-12-31T23:59:59' // TODO: audit after HF17. #1259
+        const full_power = content.get('percent_steem_dollars') === 0;
+
         let title_link_url;
         let title_text = p.title;
         let comments_link;
-        let is_comment = false;
-        let full_power = content.get('percent_steem_dollars') === 0;
 
         if( content.get( 'parent_author') !== "" ) {
            title_text = "Re: " + content.get('root_title');
            title_link_url = content.get( 'url' );
            comments_link = title_link_url;
-           is_comment = true;
         } else {
            title_link_url = p.link;
            comments_link = p.link + '#comments';
         }
 
-        let content_body = <div className="PostSummary__body entry-content">
+        const content_body = (<div className="PostSummary__body entry-content">
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>{desc}</a>
-        </div>;
-        let content_title = <h3 className="entry-title">
+        </div>);
+        const content_title = (<h3 className="entry-title">
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>
                 {isNsfw && <span className="nsfw-flag">nsfw</span>}
                 {title_text}
                 {full_power && <span title="Powered Up 100%"><Icon name="steem" /></span>}
             </a>
-        </h3>;
+        </h3>);
 
         // author and category
-        let author_category = <span className="vcard">
+        const author_category = (<span className="vcard">
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}><TimeAgoWrapper date={p.created} className="updated" /></a>
             {} by <Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
             {} in <TagList post={p} single />
-        </span>
+        </span>);
 
-        const content_footer = <div className="PostSummary__footer">
+        const content_footer = (<div className="PostSummary__footer">
             <Voting post={post} showList={false} />
             <VotesAndComments post={post} commentsLink={comments_link} />
             <span className="PostSummary__time_author_category">
@@ -140,7 +131,7 @@ class PostSummary extends React.Component {
                     {author_category}
                 </span>
             </span>
-        </div>
+        </div>)
 
         const {nsfwPref, username} = this.props
         const {revealNsfw} = this.state

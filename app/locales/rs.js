@@ -358,7 +358,7 @@ const rs_latin =  {
   popular: 'popularno',
   post: 'Post',
   post_as: 'Post kao',
-  post_count: `{postCount, plural, =0 {no posts} jedan {1 post} drugi {{postCount} posts}}`,
+  post_count: `{postCount, plural, zero {0 postova} one {# posta} few {# posta} many {# postov}}`,
   posting: 'Post-ujem',
   posting_key_is_required_it_should_be_different: 'The posting ključ se koristi za post-ovanje i (UpVote)glasanje. Trebalo bi da bude drugačiji od aktivnog i vlasničkog ključa.',
   posts: 'Postovi',
@@ -640,4 +640,4 @@ const rs_latin =  {
   сancel_transfer_from_savings: 'Odbaciti transfer od štednje (id запроса {request})',
 }
 
-export { rs }
+export { rs_latin }

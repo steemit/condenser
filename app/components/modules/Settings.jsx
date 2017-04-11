@@ -180,6 +180,7 @@ class Settings extends React.Component {
                                 <option value="en">English</option>
                                 {/* in react-intl they use 'uk' instead of 'ua' */}
                                 <option value="uk">Українська</option>
+                                <option value="sr">Srpski</option>
                             </select>
                     </label>
                     <div className="error"></div>

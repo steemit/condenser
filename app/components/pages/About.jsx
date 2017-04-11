@@ -13,7 +13,7 @@ class About extends React.Component {
                     </p>
                     <h2>Resources</h2>
                     <h3><a href="https://steem.io/SteemWhitePaper.pdf" onClick={this.navigate}>Steem Whitepaper</a> <small>[PDF]</small></h3>
-                    <h3><a href="http://steem.herokuapp.com" target="_blank">Join our Slack</a></h3>
+                    <h3><a href="http://steem.herokuapp.com" target="_blank" rel="noopener noreferrer">Join our Slack</a></h3>
                 </div>
             </div>
         );

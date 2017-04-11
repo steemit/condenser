@@ -282,7 +282,7 @@ class PostFull extends React.Component {
         const showPromote = username && post_content.get('last_payout') === '1970-01-01T00:00:00' && post_content.get('depth') == 0 // TODO: audit after HF17. #1259
         const showReplyOption = post_content.get('depth') < 255
         const showEditOption = username === author
-        const showDeleteOption = username === author && post_content.get('children') === 0 && content.stats.netVoteSign <= 0
+        const showDeleteOption = username === author && content.stats.allowDelete
 
         const authorRepLog10 = repLog10(content.author_reputation)
         const isPreViewCount = Date.parse(post_content.get('created')) < 1480723200000 // check if post was created before view-count tracking began (2016-12-03)

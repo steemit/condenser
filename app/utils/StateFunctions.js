@@ -98,13 +98,10 @@ export function contentStats(content) {
     const grayThreshold = -9999999999
     const meetsGrayThreshold = net_rshares_adj.compare(grayThreshold) < 0
 
-    const net_rshares = Long.fromString(String(content.get('net_rshares')))
-    const netVoteSign = net_rshares.compare(Long.ZERO)
-    const pending_payout = content.get('pending_payout_value');
-    const hasPendingPayout = parsePayoutAmount(pending_payout) >= 0.02
-
+    // to be eligible for deletion, a comment must have non-positive rshares and no replies
+    const allowDelete = !Long.fromString(String(content.get('net_rshares'))).isPositive() && content.get('children') === 0
+    const hasPendingPayout = parsePayoutAmount(content.get('pending_payout_value')) >= 0.02
     const authorRepLog10 = repLog10(content.get('author_reputation'))
-    const hasReplies = content.get('replies').size !== 0
 
     const gray = !hasPendingPayout && (authorRepLog10 < 1 || (authorRepLog10 < 65 && meetsGrayThreshold))
     const hide = !hasPendingPayout && (authorRepLog10 < 0) // rephide
@@ -126,5 +123,5 @@ export function contentStats(content) {
     tags.push(content.get('category'))
     const isNsfw = tags.filter(tag => tag && tag.match(/^nsfw$/i)).length > 0;
 
-    return {hide, gray, pictures, netVoteSign, authorRepLog10, hasReplies, isNsfw, flagWeight, total_votes, up_votes, hasPendingPayout}
+    return {hide, gray, pictures, authorRepLog10, allowDelete, isNsfw, flagWeight, total_votes, up_votes, hasPendingPayout}
 }

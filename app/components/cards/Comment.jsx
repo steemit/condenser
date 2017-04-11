@@ -231,7 +231,7 @@ class CommentImpl extends React.Component {
             console.error('Comment -- missing stats object')
             comment.stats = {}
         }
-        const {netVoteSign, hasReplies, authorRepLog10, pictures, gray} = comment.stats
+        const {allowDelete, authorRepLog10, pictures, gray} = comment.stats
         const {author, json_metadata} = comment
         const {username, depth, anchor_link,
             showNegativeComments, ignore_list, noImage} = this.props
@@ -260,7 +260,7 @@ class CommentImpl extends React.Component {
         // const get_asset_value = ( asset_str ) => { return parseFloat( asset_str.split(' ')[0] ); }
         // const steem_supply = this.props.global.getIn(['props','current_supply']);
 
-        const showDeleteOption = username === author && !hasReplies && netVoteSign <= 0
+        const showDeleteOption = username === author && allowDelete
         const showEditOption = username === author
         const showReplyOption = comment.depth < 255
         const archived = comment.cashout_time === '1969-12-31T23:59:59' // TODO: audit after HF17. #1259

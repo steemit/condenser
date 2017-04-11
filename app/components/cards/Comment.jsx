@@ -263,7 +263,7 @@ class CommentImpl extends React.Component {
         const showDeleteOption = username === author && allowDelete
         const showEditOption = username === author
         const showReplyOption = comment.depth < 255
-        const archived = comment.cashout_time === '1969-12-31T23:59:59' // TODO: audit after HF17. #1259
+        const archived = comment.cashout_time === '1969-12-31T23:59:59' // TODO: audit after HF19. #1259
         const readonly = archived || $STM_Config.read_only_mode
 
         let body = null;
@@ -274,12 +274,11 @@ class CommentImpl extends React.Component {
                 noImage={noImage || gray} jsonMetadata={jsonMetadata} />);
             controls = <div>
                 <Voting post={post} />
-                {!readonly &&
-                    <span className="Comment__footer__controls">
-                        {showReplyOption && <a onClick={onShowReply}>{translate('reply')}</a>}
-                        {' '}{showEditOption   && <a onClick={onShowEdit}>{translate('edit')}</a>}
-                        {' '}{showDeleteOption && <a onClick={onDeletePost}>{translate('delete')}</a>}
-                    </span>}
+                <span className="Comment__footer__controls">
+                    {showReplyOption && <a onClick={onShowReply}>{translate('reply')}</a>}
+                    {' '}{!readonly && showEditOption   && <a onClick={onShowEdit}>{translate('edit')}</a>}
+                    {' '}{!readonly && showDeleteOption && <a onClick={onDeletePost}>{translate('delete')}</a>}
+                </span>
             </div>;
         }
 

@@ -277,9 +277,9 @@ class PostFull extends React.Component {
             </div>)
         }
 
-        const archived = post_content.get('cashout_time') === '1969-12-31T23:59:59' // TODO: audit after HF17. #1259
+        const archived = post_content.get('cashout_time') === '1969-12-31T23:59:59' // TODO: audit after HF19. #1259
         const readonly = archived || $STM_Config.read_only_mode
-        const showPromote = username && post_content.get('last_payout') === '1970-01-01T00:00:00' && post_content.get('depth') == 0 // TODO: audit after HF17. #1259
+        const showPromote = username && !archived && post_content.get('depth') == 0
         const showReplyOption = post_content.get('depth') < 255
         const showEditOption = username === author
         const showDeleteOption = username === author && content.stats.allowDelete
@@ -312,12 +312,11 @@ class PostFull extends React.Component {
                     </div>
                     <div className="RightShare__Menu small-11 medium-5 large-5 columns text-right">
                         {!readonly && <Reblog author={author} permlink={permlink} />}
-                        {!readonly &&
-                            <span className="PostFull__reply">
-                                {showReplyOption && <a onClick={onShowReply}>Reply</a>}
-                                {' '}{showEditOption && !showEdit && <a onClick={onShowEdit}>Edit</a>}
-                                {' '}{showDeleteOption && !showReply && <a onClick={onDeletePost}>Delete</a>}
-                            </span>}
+                        <span className="PostFull__reply">
+                            {showReplyOption && <a onClick={onShowReply}>Reply</a>}
+                            {' '}{!readonly && showEditOption && !showEdit && <a onClick={onShowEdit}>Edit</a>}
+                            {' '}{!readonly && showDeleteOption && !showReply && <a onClick={onDeletePost}>Delete</a>}
+                        </span>
                         <span className="PostFull__responses">
                             <Link to={link} title={pluralize('Responses', content.children, true)}>
                                 <Icon name="chatboxes" className="space-right" />{content.children}

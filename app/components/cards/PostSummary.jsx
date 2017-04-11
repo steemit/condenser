@@ -64,7 +64,8 @@ class PostSummary extends React.Component {
         currentCategory: React.PropTypes.string,
         thumbSize: React.PropTypes.string,
         nsfwPref: React.PropTypes.string,
-        onClick: React.PropTypes.func
+        onClick: React.PropTypes.func,
+        visited: React.PropTypes.bool
     };
 
     constructor() {
@@ -79,7 +80,8 @@ class PostSummary extends React.Component {
                props.total_payout !== this.props.total_payout ||
                props.username !== this.props.username ||
                props.nsfwPref !== this.props.nsfwPref ||
-               state.revealNsfw !== this.state.revealNsfw;
+               state.revealNsfw !== this.state.revealNsfw ||
+               props.visited !== this.props.visited;
     }
 
     onRevealNsfw(e) {
@@ -181,10 +183,11 @@ class PostSummary extends React.Component {
           const prox = $STM_Config.img_proxy_prefix
           const size = (thumbSize == 'mobile') ? '800x600' : '256x128'
           const url = (prox ? prox + size + '/' : '') + p.image_link
+          const visitedClassName = this.props.visited ? 'PostSummary__image-visited ' : '';
           if(thumbSize == 'mobile') {
-            thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image-mobile"><img src={url} /></a>
+            thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className={'PostSummary__image-mobile ' + visitedClassName}><img src={url} /></a>
           } else {
-            thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image" style={{backgroundImage: 'url(' + url + ')'}}></a>
+            thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className={'PostSummary__image ' + visitedClassName} style={{backgroundImage: 'url(' + url + ')'}}></a>
           }
         }
         const commentClasses = []

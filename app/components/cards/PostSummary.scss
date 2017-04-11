@@ -38,7 +38,10 @@ ul.PostsList__summaries {
   background-position: 50% 20%;
   border: 1px solid #EEE;
 }
-.PostSummary__image:visited {}
+
+.PostSummary__image-visited {
+  filter: grayscale(100%);
+}
 
 .PostSummary__image-mobile {
   display: block;

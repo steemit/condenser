@@ -8,6 +8,7 @@ import {findParent} from 'app/utils/DomUtils';
 import Icon from 'app/components/elements/Icon';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import { IGNORE_TAGS } from 'config/client_config';
+import {encode} from 'app/utils/helpers';
 
 function topPosition(domElt) {
     if (!domElt) {
@@ -39,7 +40,8 @@ class PostsList extends React.Component {
             thumbSize: 'desktop',
             showNegativeComments: false,
             nsfwPref: 'warn',
-            showPost: null
+            showPost: null,
+            visitedPosts : []
         }
         this.scrollListener = this.scrollListener.bind(this);
         this.onPostClick = this.onPostClick.bind(this);
@@ -63,6 +65,8 @@ class PostsList extends React.Component {
     componentDidMount() {
         // this.setState({_isMounted: true});
         this.attachScrollListener();
+        let visited = JSON.parse(localStorage.getItem("vp")) || [];
+        this.setState({visitedPosts: visited});
     }
 
     componentWillUpdate() {
@@ -166,12 +170,23 @@ class PostsList extends React.Component {
         window.removeEventListener('resize', this.scrollListener);
     }
 
+    visitPost(post) {
+      let visited = this.state.visitedPosts;
+      const encoded = encode(post);
+      if (!visited.includes(encoded)) {
+        visited.push(encoded);
+        this.setState({visitedPosts: visited});
+        localStorage.setItem("vp", JSON.stringify(this.state.visitedPosts));
+      }
+    }
+
     onPostClick(post, url) {
         this.post_url = url;
         this.props.fetchState(url);
         this.props.removeHighSecurityKeys();
         this.setState({showPost: post, prevTitle: window.document.title});
         window.history.pushState({}, '', url);
+        this.visitPost(post);
     }
 
     render() {
@@ -209,6 +224,7 @@ class PostsList extends React.Component {
                 authorRepLog10={item.authorRepLog10}
                 onClick={this.onPostClick}
                 nsfwPref={nsfwPref}
+                visited={this.state.visitedPosts.includes(encode(item.item))}
             />
         </li>)
 

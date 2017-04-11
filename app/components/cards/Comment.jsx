@@ -231,7 +231,7 @@ class CommentImpl extends React.Component {
             console.error('Comment -- missing stats object')
             comment.stats = {}
         }
-        const {allowDelete, authorRepLog10, pictures, gray} = comment.stats
+        const {allowDelete, authorRepLog10, gray} = comment.stats
         const {author, json_metadata} = comment
         const {username, depth, anchor_link,
             showNegativeComments, ignore_list, noImage} = this.props
@@ -271,7 +271,7 @@ class CommentImpl extends React.Component {
 
         if (!this.state.collapsed && !hide_body) {
             body = (<MarkdownViewer formId={post + '-viewer'} text={comment.body}
-                noImage={noImage || !pictures} jsonMetadata={jsonMetadata} />);
+                noImage={noImage || gray} jsonMetadata={jsonMetadata} />);
             controls = <div>
                 <Voting post={post} />
                 {!readonly &&

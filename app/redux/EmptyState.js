@@ -34,6 +34,5 @@ export const emptyContent = {
         hasPendingPayout: false,
         allowDelete: true,
         hide: false,
-        pictures: true,
     },
 }

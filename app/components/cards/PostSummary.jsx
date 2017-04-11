@@ -84,7 +84,7 @@ class PostSummary extends React.Component {
                            </div>)
         }
 
-        const {gray, pictures, authorRepLog10, flagWeight, isNsfw} = content.get('stats', Map()).toJS()
+        const {gray, authorRepLog10, flagWeight, isNsfw} = content.get('stats', Map()).toJS()
         const p = extractContent(immutableAccessor, content);
         const desc = p.desc
 
@@ -160,7 +160,7 @@ class PostSummary extends React.Component {
         }
 
         let thumb = null;
-        if(pictures && p.image_link) {
+        if(!gray && p.image_link) {
           const prox = $STM_Config.img_proxy_prefix
           const size = (thumbSize == 'mobile') ? '640x480' : '256x512';
           const url = (prox ? prox + size + '/' : '') + p.image_link

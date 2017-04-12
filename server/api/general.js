@@ -377,7 +377,7 @@ export default function useGeneralApi(app) {
  */
 function* createAccount({
     signingKey, fee, creator, new_account_name, json_metadata = '', delegation,
-    owner, active, posting, memo, broadcast = false,
+    owner, active, posting, memo
 }) {
     const operations = [['account_create_with_delegation', {
         fee, creator, new_account_name, json_metadata, delegation,

@@ -84,7 +84,8 @@ export default function useAccountRecoveryApi(app) {
                 return;
             }
 
-            const {signing_key, recovery_account} = config.requestAccountRecovery;
+            const recovery_account = config.get('registrar.account');
+            const signing_key = config.get('registrar.signing_key');
             const {new_owner_authority, old_owner_key, new_owner_key} = params;
 
             yield requestAccountRecovery({
@@ -171,11 +172,13 @@ export default function useAccountRecoveryApi(app) {
 }
 
 function* requestAccountRecovery({
-    recovery_account, account_to_recover, new_owner_authority,
+    recovery_account,
+    account_to_recover,
+    new_owner_authority,
     signing_key
 }) {
     const operations = [['request_account_recovery', {
         recovery_account, account_to_recover, new_owner_authority,
-    }]]
-    yield broadcast.sendAsync({extensions: [], operations})
+    }]];
+    yield broadcast.sendAsync({extensions: [], operations}, [signing_key]);
 }

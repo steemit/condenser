@@ -69,8 +69,8 @@ export default class OrderHistory extends React.Component {
                 <table className="Market__trade-history">
                     <thead>
                         <tr>
-                            <th>{tt('date')}</th>
-                            <th>{tt('price')}</th>
+                            <th>{tt('g.date')}</th>
+                            <th>{tt('g.price')}</th>
                             <th>{LIQUID_TOKEN}</th>
                             <th>{`${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}</th>
                         </tr>
@@ -84,12 +84,12 @@ export default class OrderHistory extends React.Component {
                   <ul className="pager">
                     <li>
                         <div className={"button tiny hollow float-left " + (historyIndex === 0 ? " disabled" : "")}  onClick={this._setHistoryPage.bind(this, false)} aria-label="Previous">
-                            <span aria-hidden="true">&larr; {tt('newer')}</span>
+                            <span aria-hidden="true">&larr; {tt('g.newer')}</span>
                         </div>
                     </li>
                     <li>
                         <div className={"button tiny hollow float-right " + (historyIndex >= (history.length - 10) ? " disabled" : "")}  onClick={this._setHistoryPage.bind(this, true)} aria-label="Next">
-                            <span aria-hidden="true">{tt('older')} &rarr;</span>
+                            <span aria-hidden="true">{tt('g.older')} &rarr;</span>
                         </div>
                     </li>
                   </ul>

@@ -6,5 +6,5 @@ export default ({value}) => {
         console.log("Unexpected rep value:", value);
         return null;
     }
-    return <span className="Reputation" title={tt('reputation')}>{value}</span>;
+    return <span className="Reputation" title={tt('g.reputation')}>{value}</span>;
 }

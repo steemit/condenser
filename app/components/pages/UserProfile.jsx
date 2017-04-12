@@ -119,7 +119,7 @@ export default class UserProfile extends React.Component {
         } else if (fetching) {
             return <center><LoadingIndicator type="circle" /></center>;
         } else {
-            return <div><center>{tt('unknown_account')}</center></div>
+            return <div><center>{tt('user_profile.unknown_account')}</center></div>
         }
         const followers = follow && follow.getIn(['get_followers', accountname]);
         const following = follow && follow.getIn(['get_following', accountname]);
@@ -183,7 +183,7 @@ export default class UserProfile extends React.Component {
             if (followers && followers.has('blog_result')) {
                 tab_content = <div>
                     <UserList
-                        title={tt('followers')}
+                        title={tt('user_profile.followers')}
                         account={account}
                         users={followers.get('blog_result')} />
                     {isMyAccount && <MarkNotificationRead fields="follow" account={account.name} />}
@@ -207,7 +207,7 @@ export default class UserProfile extends React.Component {
            {
                 let posts = accountImm.get('posts') || accountImm.get('comments');
                 if (!fetching && (posts && !posts.size)) {
-                    tab_content = <Callout>{tt('user_hasnt_made_any_posts_yet', {name: accountname})}</Callout>;
+                    tab_content = <Callout>{tt('user_profile.user_hasnt_made_any_posts_yet', {name: accountname})}</Callout>;
                 } else {
                   tab_content = (
                         <PostsList
@@ -232,7 +232,7 @@ export default class UserProfile extends React.Component {
                     <a href="/steemit/@thecryptofiend/the-missing-faq-a-beginners-guide-to-using-steemit">Read The Beginner's Guide</a><br />
                     <a href="/welcome">Read The Steemit Welcome Guide</a>
                 </div>:
-                    tt('user_hasnt_started_bloggin_yet', {name: accountname});
+                    tt('user_profile.user_hasnt_started_bloggin_yet', {name: accountname});
 
                 if (!fetching && (posts && !posts.size)) {
                     tab_content = <Callout>{emptyText}</Callout>;
@@ -256,7 +256,7 @@ export default class UserProfile extends React.Component {
             if (account.recent_replies) {
                 let posts = accountImm.get('recent_replies');
                 if (!fetching && (posts && !posts.size)) {
-                    tab_content = <Callout>{tt('user_hasnt_had_any_replies_yet', {name: accountname}) + '.'}</Callout>;
+                    tab_content = <Callout>{tt('user_profile.user_hasnt_had_any_replies_yet', {name: accountname}) + '.'}</Callout>;
                 } else {
                     tab_content = (
                         <div>
@@ -314,7 +314,7 @@ export default class UserProfile extends React.Component {
         if( section === 'permissions' ) {
            if(isMyAccount && wifShown) {
                printLink = <div><a className="float-right noPrint" onClick={onPrint}>
-                       <Icon name="printer" />&nbsp;{tt('print')}&nbsp;&nbsp;
+                       <Icon name="printer" />&nbsp;{tt('g.print')}&nbsp;&nbsp;
                    </a></div>
            }
         }
@@ -322,8 +322,8 @@ export default class UserProfile extends React.Component {
         // const wallet_tab_active = section === 'transfers' || section === 'password' || section === 'permissions' ? 'active' : ''; // className={wallet_tab_active}
 
         let rewardsMenu = [
-            {link: `/@${accountname}/curation-rewards`, label: tt('curation_rewards'), value: tt('curation_rewards')},
-            {link: `/@${accountname}/author-rewards`, label: tt('author_rewards'), value: tt('author_rewards')}
+            {link: `/@${accountname}/curation-rewards`, label: tt('g.curation_rewards'), value: tt('g.curation_rewards')},
+            {link: `/@${accountname}/author-rewards`, label: tt(g.'author_rewards'), value: tt('g.author_rewards')}
         ];
 
         // set account join date
@@ -332,10 +332,10 @@ export default class UserProfile extends React.Component {
         const top_menu = <div className="row UserProfile__top-menu">
             <div className="columns small-10 medium-12 medium-expand">
                 <ul className="menu" style={{flexWrap: "wrap"}}>
-                    <li><Link to={`/@${accountname}`} activeClassName="active">{tt('blog')}</Link></li>
-                    <li><Link to={`/@${accountname}/comments`} activeClassName="active">{tt('comments')}</Link></li>
+                    <li><Link to={`/@${accountname}`} activeClassName="active">{tt('user_menu.blog')}</Link></li>
+                    <li><Link to={`/@${accountname}/comments`} activeClassName="active">{tt('g.comments')}</Link></li>
                     <li><Link to={`/@${accountname}/recent-replies`} activeClassName="active">
-                        {tt('replies')} {isMyAccount && <NotifiCounter fields="comment_reply" />}
+                        {tt('g.replies')} {isMyAccount && <NotifiCounter fields="comment_reply" />}
                     </Link></li>
                     {/*<li><Link to={`/@${accountname}/feed`} activeClassName="active">Feed</Link></li>*/}
                     <li>
@@ -348,7 +348,7 @@ export default class UserProfile extends React.Component {
                             }
                         >
                             <a className={rewardsClass}>
-                                {tt('rewards')}
+                                {tt('g.rewards')}
                                 <Icon name="dropdown-arrow" />
                             </a>
                         </LinkWithDropdown>
@@ -359,11 +359,11 @@ export default class UserProfile extends React.Component {
                 <ul className="menu" style={{flexWrap: "wrap"}}>
                     <li>
                         <a href={`/@${accountname}/transfers`} className={walletClass} onClick={e => { e.preventDefault(); browserHistory.push(e.target.pathname); return false; }}>
-                            {tt('wallet')} {isMyAccount && <NotifiCounter fields="send,receive,account_update" />}
+                            {tt('user_menu.wallet')} {isMyAccount && <NotifiCounter fields="send,receive,account_update" />}
                         </a>
                     </li>
                     {isMyAccount && <li>
-                        <Link to={`/@${accountname}/settings`} activeClassName="active">{tt('settings')}</Link>
+                        <Link to={`/@${accountname}/settings`} activeClassName="active">{tt('g.settings')}</Link>
                     </li>}
                 </ul>
             </div>
@@ -387,7 +387,7 @@ export default class UserProfile extends React.Component {
                         <h1>
                             <Userpic account={account.name} hideIfDefault />
                             {name || account.name}{' '}
-                            <Tooltip t={tt('this_is_users_reputations_score_it_is_based_on_history_of_votes', {name: accountname})}>
+                            <Tooltip t={tt('user_profile.this_is_users_reputations_score_it_is_based_on_history_of_votes', {name: accountname})}>
                                 <span className="UserProfile__rep">({rep})</span>
                             </Tooltip>
                         </h1>
@@ -396,11 +396,11 @@ export default class UserProfile extends React.Component {
                             {about && <p className="UserProfile__bio">{about}</p>}
                             <div className="UserProfile__stats">
                                 <span>
-                                    <Link to={`/@${accountname}/followers`}>{tt('follower_count', {followerCount})}</Link>
+                                    <Link to={`/@${accountname}/followers`}>{tt('user_profile.follower_count', {followerCount})}</Link>
                                     {isMyAccount && <NotifiCounter fields="follow" />}
                                 </span>
-                                <span><Link to={`/@${accountname}`}>{tt('post_count', {postCount: account.post_count || 0})}</Link></span>
-                                <span><Link to={`/@${accountname}/followed`}>{tt('followed_count', {followingCount})}</Link></span>
+                                <span><Link to={`/@${accountname}`}>{tt('user_profile.post_count', {postCount: account.post_count || 0})}</Link></span>
+                                <span><Link to={`/@${accountname}/followed`}>{tt('user_profile.followed_count', {followingCount})}</Link></span>
                             </div>
                             <p className="UserProfile__info">
                                 {location && <span><Icon name="location" /> {location}</span>}

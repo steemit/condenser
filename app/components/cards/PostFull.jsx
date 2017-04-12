@@ -49,8 +49,8 @@ function TimeAuthorCategory({content, authorRepLog10, showTags}) {
         <span className="PostFull__time_author_category vcard">
             <Icon name="clock" className="space-right" />
             <TimeAgoWrapper date={content.created} className="updated" />
-            {} {tt('by')} <Author author={content.author} authorRepLog10={authorRepLog10} />
-            {showTags && <span> {tt('in')} <TagList post={content} single /></span>}
+            {} {tt('g.by')} <Author author={content.author} authorRepLog10={authorRepLog10} />
+            {showTags && <span> {tt('g.in')} <TagList post={content} single /></span>}
         </span>
      );
 }
@@ -62,7 +62,7 @@ function TimeAuthorCategoryLarge({content, authorRepLog10}) {
             <Userpic account={content.author} />
             <div className="right-side">
                 <Author author={content.author} authorRepLog10={authorRepLog10} />
-                <span> {tt('in')} <TagList post={content} single /></span>
+                <span> {tt('g.in')} <TagList post={content} single /></span>
             </div>
         </span>
     );
@@ -205,7 +205,7 @@ class PostFull extends React.Component {
         let content_body = content.body;
         const url = `/${category}/@${author}/${permlink}`
         if(DMCAList.includes(url)) {
-            content_body = tt('this_post_is_not_available_due_to_a_copyright_claim')
+            content_body = tt('postfull_jsx.this_post_is_not_available_due_to_a_copyright_claim')
         }
 
         const replyParams = {author, permlink, parent_author, parent_permlink, category, title, body}
@@ -218,9 +218,9 @@ class PostFull extends React.Component {
         };
 
         const share_menu = [
-            {link: '#', onClick: this.fbShare, value: 'Facebook', title: tt('share_on_facebook'), icon: 'facebook'},
-            {link: '#', onClick: this.twitterShare, value: 'Twitter', title: tt('share_on_twitter'), icon: 'twitter'},
-            {link: '#', onClick: this.linkedInShare, value: 'LinkedIn', title: tt('share_on_linkedin'), icon: 'linkedin'},
+            {link: '#', onClick: this.fbShare, value: 'Facebook', title: tt('postfull_jsx.share_on_facebook'), icon: 'facebook'},
+            {link: '#', onClick: this.twitterShare, value: 'Twitter', title: tt('postfull_jsx.share_on_twitter'), icon: 'twitter'},
+            {link: '#', onClick: this.linkedInShare, value: 'LinkedIn', title: tt('postfull_jsx.share_on_linkedin'), icon: 'linkedin'},
         ];
 
         const Editor = this.state.showReply ? PostFullReplyEditor : PostFullEditEditor;
@@ -249,7 +249,7 @@ class PostFull extends React.Component {
 
         let post_header = (<h1 className="entry-title">
                 {content.title}
-                {full_power && <span title={tt('powered_up_100')}><Icon name="steem" /></span>}
+                {full_power && <span title={tt('g.powered_up_100')}><Icon name="steem" /></span>}
             </h1>);
         if(content.depth > 0) {
             const parent_link = `/${content.category}/@${content.parent_author}/${content.parent_permlink}`;
@@ -257,20 +257,20 @@ class PostFull extends React.Component {
             if(content.depth > 1) {
                 direct_parent_link = (<li>
                     <Link to={parent_link}>
-                        {tt('view_the_direct_parent')}
+                        {tt('postfull_jsx.view_the_direct_parent')}
                     </Link>
                 </li>)
             }
             post_header = (<div className="callout">
-                <h3 className="entry-title">{tt('re')}: {content.root_title}</h3>
-                <h5>{tt('you_are_viewing_a_single_comments_thread_from')}:</h5>
+                <h3 className="entry-title">{tt('g.re')}: {content.root_title}</h3>
+                <h5>{tt('postfull_jsx.you_are_viewing_a_single_comments_thread_from')}:</h5>
                 <p>
                     {content.root_title}
                 </p>
                 <ul>
                     <li>
                         <Link to={content.url}>
-                            {tt('view_the_full_context')}
+                            {tt('g.view_the_full_context')}
                         </Link>
                     </li>
                     {direct_parent_link}
@@ -304,7 +304,7 @@ class PostFull extends React.Component {
                     </span>
                 }
 
-                {showPromote && <button className="Promote__button float-right button hollow tiny" onClick={this.showPromotePost}>{tt('promote')}</button>}
+                {showPromote && <button className="Promote__button float-right button hollow tiny" onClick={this.showPromotePost}>{tt('g.promote')}</button>}
                 <TagList post={content} horizontal />
                 <div className="PostFull__footer row">
                     <div className="column">
@@ -315,9 +315,9 @@ class PostFull extends React.Component {
                         {!readonly && <Reblog author={author} permlink={permlink} />}
                         {!readonly &&
                             <span className="PostFull__reply">
-                                {showReplyOption && <a onClick={onShowReply}>{tt('reply')}</a>}
-                                {' '}{showEditOption && !showEdit && <a onClick={onShowEdit}>{tt('edit')}</a>}
-                                {' '}{showDeleteOption && !showReply && <a onClick={onDeletePost}>{tt('delete')}</a>}
+                                {showReplyOption && <a onClick={onShowReply}>{tt('g.reply')}</a>}
+                                {' '}{showEditOption && !showEdit && <a onClick={onShowEdit}>{tt('g.edit')}</a>}
+                                {' '}{showDeleteOption && !showReply && <a onClick={onDeletePost}>{tt('g.delete')}</a>}
                             </span>}
                         <span className="PostFull__responses">
                             <Link to={link} title={pluralize('Responses', content.children, true)}>
@@ -328,7 +328,7 @@ class PostFull extends React.Component {
                             <PageViewsCounter hidden={false} sinceDate={isPreViewCount ? 'Dec 2016' : null} />
                         </span>
                         <ShareMenu menu={share_menu} />
-                        <button className="explore-post" title={tt('share_this_post')} onClick={this.showExplorePost}>
+                        <button className="explore-post" title={tt('g.share_this_post')} onClick={this.showExplorePost}>
                             <Icon name="link" className="chain-right" />
                         </button>
                     </div>
@@ -359,7 +359,7 @@ export default connect(
             dispatch(transaction.actions.broadcastOperation({
                 type: 'delete_comment',
                 operation: {author, permlink},
-                confirm: tt('are_you_sure')
+                confirm: tt('g.are_you_sure')
             }));
         },
         showPromotePost: (author, permlink) => {

@@ -77,7 +77,7 @@ class Header extends React.Component {
         if (route.page === 'PostsIndex') {
             sort_order = route.params[0];
             if (sort_order === 'home') {
-                page_title = tt("home")
+                page_title = tt('header_jsx.home')
                 const account_name = route.params[1];
                 if (current_account_name && account_name.indexOf(current_account_name) === 1)
                     home_account = true;
@@ -94,17 +94,17 @@ class Header extends React.Component {
             sort_order = '';
             topic = route.params[0];
         } else if (route.page == 'SubmitPost') {
-            page_title = tt('create_a_post');
+            page_title = tt('header_jsx.create_a_post');
         } else if (route.page == 'Privacy') {
-            page_title = tt('privacy_policy');
+            page_title = tt('navigation.privacy_policy');
         } else if (route.page == 'Tos') {
-            page_title = tt('terms_of_service');
+            page_title = tt('navigation.terms_of_service');
         } else if (route.page == 'ChangePassword') {
-            page_title = tt('change_account_password');
+            page_title = tt('header_jsx.change_account_password');
         } else if (route.page == 'CreateAccount') {
-            page_title = tt('create_account');
+            page_title = tt('header_jsx.create_account');
         } else if (route.page == 'RecoverAccountStep1' || route.page == 'RecoverAccountStep2') {
-            page_title = tt('stolen_account_recovery');
+            page_title = tt('header_jsx.stolen_account_recovery');
         } else if (route.page === 'UserProfile') {
             user_name = route.params[0].slice(1);
             const acct_meta = this.props.account_meta.getIn([user_name]);
@@ -112,23 +112,23 @@ class Header extends React.Component {
             const user_title = name ? `${name} (@${user_name})` : user_name;
             page_title = user_title;
             if(route.params[1] === "followers"){
-                page_title = tt('people_following') + " " + user_title;
+                page_title = tt('header_jsx.people_following') + " " + user_title;
             }
             if(route.params[1] === "followed"){
-                page_title = tt('people_followed_by') + " " + user_title;
+                page_title = tt('header_jsx.people_followed_by') + " " + user_title;
             }
             if(route.params[1] === "curation-rewards"){
-                page_title = tt('curation_rewards_by') + " " + user_title;
+                page_title = tt('header_jsx.curation_rewards_by') + " " + user_title;
             }
             if(route.params[1] === "author-rewards"){
-                page_title = tt('author_rewards_by') + " " + user_title;
+                page_title = tt('header_jsx.author_rewards_by') + " " + user_title;
             }
             if(route.params[1] === "recent-replies"){
-                page_title = tt('replies_to') + " " + user_title;
+                page_title = tt('header_jsx.replies_to') + " " + user_title;
             }
             // @user/"posts" is deprecated in favor of "comments" as of oct-2016 (#443)
             if(route.params[1] === "posts" || route.params[1] === "comments"){
-                page_title = tt('comments_by') + " " + user_title;
+                page_title = tt('header_jsx.comments_by') + " " + user_title;
             }
         } else {
             page_name = ''; //page_title = route.page.replace( /([a-z])([A-Z])/g, '$1 $2' ).toLowerCase();
@@ -146,26 +146,26 @@ class Header extends React.Component {
         let topic_link = topic ? <Link to={`/${this.last_sort_order || 'trending'}/${topic}`}>{topic}</Link> : null;
 
         const sort_orders = [
-            ['created', tt('new')],
-            ['hot', tt('hot')],
-            ['trending', tt('trending')],
-            ['promoted', tt('promoted')],
+            ['created', tt('g.new')],
+            ['hot', tt('main_menu.hot')],
+            ['trending', tt('main_menu.trending')],
+            ['promoted', tt('g.promoted')],
             //['payout', 'payout (posts)'],
             //['payout_comments', 'payout (comments)'],
         ];
-        if (current_account_name) sort_orders.unshift(['home', tt('home')]);
+        if (current_account_name) sort_orders.unshift(['home', tt('header_jsx.home')]);
         const sort_order_menu = sort_orders.filter(so => so[0] !== sort_order).map(so => ({link: sortOrderToLink(so[0], topic, current_account_name), value: so[1]}));
         const selected_sort_order = sort_orders.find(so => so[0] === sort_order);
 
         const sort_orders_horizontal = [
-            ['created', tt('new')],
-            ['hot', tt('hot')],
-            ['trending', tt('trending')],
-            ['promoted', tt('promoted')],
+            ['created', tt('g.new')],
+            ['hot', tt('main_menu.hot')],
+            ['trending', tt('main_menu.trending')],
+            ['promoted', tt('g.promoted')],
             //['payout', 'payout (posts)'],
             //['payout_comments', 'payout (comments)'],
         ];
-        if (current_account_name) sort_orders_horizontal.unshift(['home', tt('home')]);
+        if (current_account_name) sort_orders_horizontal.unshift(['home', tt('header_jsx.home')]);
         const sort_order_menu_horizontal = sort_orders_horizontal.map(so => {
                 let active = (so[0] === sort_order);
                 if (so[0] === 'home' && sort_order === 'home' && !home_account) active = false;

@@ -133,11 +133,11 @@ function generateDepthChart(bidsArray, asksArray) {
 
     if(process.env.BROWSER) {
         if(bids[0]) {
-            series.push({step: 'right', name: tt('bid'), color: 'rgba(0,150,0,1.0)', fillColor: 'rgba(0,150,0,0.2)', tooltip: {valueSuffix: ' ' + LIQUID_TICKER},
+            series.push({step: 'right', name: tt('g.bid'), color: 'rgba(0,150,0,1.0)', fillColor: 'rgba(0,150,0,0.2)', tooltip: {valueSuffix: ' ' + LIQUID_TICKER},
              data:  bids})
         }
         if(asks[0]) {
-            series.push({step: 'left', name: tt('ask'), color: 'rgba(150,0,0,1.0)', fillColor: 'rgba(150,0,0,0.2)', tooltip: {valueSuffix: ' ' + LIQUID_TICKER},
+            series.push({step: 'left', name: tt('g.ask'), color: 'rgba(150,0,0,1.0)', fillColor: 'rgba(150,0,0,0.2)', tooltip: {valueSuffix: ' ' + LIQUID_TICKER},
              data: asks})
         }
     }
@@ -192,7 +192,7 @@ function generateDepthChart(bidsArray, asksArray) {
             shared: false,
             backgroundColor: "rgba(0, 0, 0, 0.3)",
             formatter() {
-                return `<span>${tt('price')}: ${(this.x / power).toFixed(6)} ${CURRENCY_SIGN}/${LIQUID_TOKEN_UPPERCASE}</span><br/><span>\u25CF</span>${this.series.name}: <b>${(this.y / 1000).toFixed(3)} ${DEBT_TOKEN_SHORT} ` + '(' + CURRENCY_SIGN + ')</b>';
+                return `<span>${tt('g.price')}: ${(this.x / power).toFixed(6)} ${CURRENCY_SIGN}/${LIQUID_TOKEN_UPPERCASE}</span><br/><span>\u25CF</span>${this.series.name}: <b>${(this.y / 1000).toFixed(3)} ${DEBT_TOKEN_SHORT} ` + '(' + CURRENCY_SIGN + ')</b>';
             },
             style: {
                 color: "#FFFFFF"

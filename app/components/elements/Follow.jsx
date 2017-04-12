@@ -71,7 +71,7 @@ export default class Follow extends React.Component {
         const {follower, following} = this.props; // html
         // Show follow preview for new users
         if(!follower || !following) return <span>
-             <label className="button slim hollow secondary" onClick={this.followLoggedOut}>{translate('follow')}</label>
+             <label className="button slim hollow secondary" onClick={this.followLoggedOut}>{tt('g.follow')}</label>
         </span>;
         // Can't follow or ignore self
         if(follower === following) return <span></span>

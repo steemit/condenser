@@ -131,7 +131,7 @@ class BlocktradesDeposit extends React.Component {
         const {fields: {inputCoin, outputCoin, amount}, submitting, handleSubmit} = this.props
         const hasError = userTradeError != null
         const est = getEstimatedValue(this.props, flip)
-        const getAddressLabel = translate(inputAddress ? 'change_deposit_address' : 'get_deposit_address')
+        const getAddressLabel = tt(inputAddress ? 'blocktrades_deposit.change_deposit_address' : 'blocktrades_deposit.get_deposit_address')
         const arrowIcon = <span>→</span>
         const flipIcon = <span>⇆</span>
         const estimateInputCoin = flip ? coinName(outputCoin.value) : coinName(inputCoin.value)
@@ -180,7 +180,7 @@ class BlocktradesDeposit extends React.Component {
                 value: 'Bitshares', icon: 'bitshares', link: '#'},
         ];
         const selectInputCoin = <DropdownMenu className="move-left" items={coin_menu} selected={coinName(inputCoin.value)} el="span" />
-        const estimateButtonLabel = translate(est.inputAmount != null ? 'update_estimate' : 'get_estimate')
+        const estimateButtonLabel = tt(est.inputAmount != null ? 'blocktrades_deposit.update_estimate' : 'blocktrades_deposit.get_estimate')
         const sendTo = <span>
             {tt('blocktrades_deposit.send_amount_of_coins_to', {
                 value: amount.value,

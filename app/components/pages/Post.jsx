@@ -79,7 +79,7 @@ class Post extends React.Component {
                             <div className="column">
                                 <div className="PostFull">
                                     <p onClick={this.showAnywayClick}>{tt('this_post_was_hidden_due_to_low_ratings')}.{' '}
-                                    <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.showAnywayClick}>{translate('show')}</button></p>
+                                    <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.showAnywayClick}>{tt('show')}</button></p>
                                 </div>
                             </div>
                         </div>

@@ -332,7 +332,7 @@ export default class UserProfile extends React.Component {
         const top_menu = <div className="row UserProfile__top-menu">
             <div className="columns small-10 medium-12 medium-expand">
                 <ul className="menu" style={{flexWrap: "wrap"}}>
-                    <li><Link to={`/@${accountname}`} activeClassName="active">{tt('user_menu.blog')}</Link></li>
+                    <li><Link to={`/@${accountname}`} activeClassName="active">{tt('g.blog')}</Link></li>
                     <li><Link to={`/@${accountname}/comments`} activeClassName="active">{tt('g.comments')}</Link></li>
                     <li><Link to={`/@${accountname}/recent-replies`} activeClassName="active">
                         {tt('g.replies')} {isMyAccount && <NotifiCounter fields="comment_reply" />}
@@ -359,7 +359,7 @@ export default class UserProfile extends React.Component {
                 <ul className="menu" style={{flexWrap: "wrap"}}>
                     <li>
                         <a href={`/@${accountname}/transfers`} className={walletClass} onClick={e => { e.preventDefault(); browserHistory.push(e.target.pathname); return false; }}>
-                            {tt('user_menu.wallet')} {isMyAccount && <NotifiCounter fields="send,receive,account_update" />}
+                            {tt('g.wallet')} {isMyAccount && <NotifiCounter fields="send,receive,account_update" />}
                         </a>
                     </li>
                     {isMyAccount && <li>

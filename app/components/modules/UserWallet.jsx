@@ -181,7 +181,7 @@ class UserWallet extends React.Component {
             { value: tt('transfer'), link: '#', onClick: showTransfer.bind( this, 'SBD', 'Transfer to Account' ) },
             { value: tt('transfer_to_savings'), link: '#', onClick: showTransfer.bind( this, 'SBD', 'Transfer to Savings' ) },
             { value: tt('market'), link: '/market' },
-            { value: translate('convert_to_LIQUID_TOKEN', {LIQUID_TOKEN}), link: '#', onClick: convertToSteem },
+            { value: tt('convert_to_LIQUID_TOKEN', {LIQUID_TOKEN}), link: '#', onClick: convertToSteem },
         ]
         const isWithdrawScheduled = new Date(account.get('next_vesting_withdrawal') + 'Z').getTime() > Date.now()
         const depositReveal = showDeposit && <div>

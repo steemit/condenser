@@ -247,7 +247,7 @@ class Market extends React.Component {
             const rows = open_orders && normalizeOpenOrders(open_orders).map( o =>
               <tr key={o.orderid}>
                   <td>{o.created.replace('T', ' ')}</td>
-                  <td>{translate(o.type == 'ask' ? 'sell' : 'buy')}</td>
+                  <td>{tt(o.type == 'ask' ? 'sell' : 'buy')}</td>
                   <td>{CURRENCY_SIGN}{o.price.toFixed(6)}</td>
                   <td>{o.steem}</td>
                   <td>{o.sbd.replace('SBD', DEBT_TOKEN_SHORT)}</td>
@@ -577,7 +577,7 @@ module.exports = {
                 String(parseFloat(min_to_receive).toFixed(3)))
 
             const isSell = amount_to_sell.indexOf(LIQUID_TICKER) > 0;
-            const confirmStr = translate(isSell
+            const confirmStr = tt(isSell
                                 ? 'sell_amount_for_atleast'
                                 : 'buy_atleast_amount_for',
                                 {amount_to_sell, min_to_receive, effectivePrice}

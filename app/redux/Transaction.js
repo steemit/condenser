@@ -93,13 +93,11 @@ export default createModule({
                             }
                         }
                         if (errorStr.length > 200) errorStr = errorStr.substring(0, 200);
-
-                        // Catch for unknown key improve UI verbiage
+                        // Catch for unknown key better error handling
                         if (/unknown key: /.test(errorKey)) {
                             errorKey = "Steem account doesn't exist.";
                             errorStr = "Transaction failed: Steem account doesn't exist.";
                         }
-
                         state = state.update('errors', errors => {
                             return errors ? errors.set(errorKey, errorStr) : Map({[errorKey]: errorStr});
                         });

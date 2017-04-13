@@ -18,7 +18,7 @@ export function validate_account_name(value) {
         suffix = 'Each account segment should ';
     }
     if (BadActorList.test(value)) {
-        return suffix = 'Use caution sending to this account. Please double check your spelling for possible phishing. ';
+        return 'Use caution sending to this account. Please double check your spelling for possible phishing. ';
     }
     ref = value.split('.');
     for (i = 0, len = ref.length; i < len; i++) {

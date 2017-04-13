@@ -1,5 +1,5 @@
-
 export function validate_account_name(value) {
+    const badActorList = /(polonox|poloneix|blocktrads|blocktrade|bittrexx)/;
     let i, label, len, length, ref, suffix;
 
     suffix = 'Account name should ';
@@ -15,6 +15,9 @@ export function validate_account_name(value) {
     }
     if (/\./.test(value)) {
         suffix = 'Each account segment should ';
+    }
+    if (badActorList.test(value)) {
+        return suffix = 'Use caution sending to this account. Please double check your spelling for possible phishing. ';
     }
     ref = value.split('.');
     for (i = 0, len = ref.length; i < len; i++) {

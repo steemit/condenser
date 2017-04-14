@@ -1,6 +1,5 @@
 {
-  "_database_url": "sqlite:///tmp/sqlite.db",
-  "database_url": "mysql:///golosdev:qweqwe@127.0.0.1:3306/golosdev",
+  "database_url": "mysql://golosdev:golosdev@127.0.0.1:3306/golosdev",
   "disable_signups": false,
   "facebook_app_id": false,
   "grant": {

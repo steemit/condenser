@@ -206,7 +206,10 @@ class Voting extends React.Component {
             const cnt = Math.sign(pct)
             if(cnt === 0) continue
             count += 1
-            if (showList && voters.length < MAX_VOTES_DISPLAY) voters.push({value: (cnt > 0 ? '+ ' : '- ') + avotes[v].voter, link: '/@' + avotes[v].voter})
+            if (showList && voters.length < MAX_VOTES_DISPLAY) {
+                const voterPercent= pct / 100 + '%';
+                voters.push({value: (cnt > 0 ? '+ ' : '- ') + avotes[v].voter, link: '/@' + avotes[v].voter, data: voterPercent});
+            }
         }
         if (count > MAX_VOTES_DISPLAY) voters.push({value: <span>&hellip; {' ' + translate('and') + ' '} {(count - MAX_VOTES_DISPLAY)} {' ' + translate('more')}</span>});
 

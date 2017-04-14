@@ -154,7 +154,7 @@ function* broadcastOperation({payload:
         const page = eventType === 'Vote' ? `@${operation.author}/${operation.permlink}` : '';
         serverApiRecordEvent(eventType, page);
     } catch(error) {
-        console.error('TransactionSage', error)
+        console.error('TransactionSage', error);
         if(errorCallback) errorCallback(error.toString())
     }
 }
@@ -235,9 +235,9 @@ function* broadcastPayload({payload: {operations, keys, username, successCallbac
         }
         if (successCallback) try { successCallback() } catch (error) { console.error(error) }
     } catch (error) {
-        console.error('TransactionSaga\tbroadcastPayload', error)
+        console.error('TransactionSaga\tbroadcastPayload', error);
         // status: error
-        yield put(tr.actions.error({operations, error, errorCallback}))
+        yield put(tr.actions.error({operations, error, errorCallback}));
         for (const [type, operation] of operations) {
             if (hook['error_' + type]) {
                 try {

@@ -48,13 +48,13 @@ export default createModule({
         {
             action: 'ERROR',
             reducer: (state, {payload: {operations, error, errorCallback}}) => {
-                let errorStr = error.toString()
-                let errorKey = 'Transaction broadcast error.'
+                let errorStr = error.toString();
+                let errorKey = 'Transaction broadcast error.';
                 for (const [type/*, operation*/] of operations) {
                     switch (type) {
                     case 'vote':
                         if (/uniqueness constraint/.test(errorStr)) {
-                            errorKey = 'You already voted for this post'
+                            errorKey = 'You already voted for this post';
                             console.error('You already voted for this post.')
                         }
                         break;
@@ -62,7 +62,7 @@ export default createModule({
                         if (/You may only post once per minute/.test(errorStr)) {
                             errorKey = 'You may only post once per minute.'
                         } else if (errorStr === 'Testing, fake error')
-                            errorKey = 'Testing, fake error'
+                            errorKey = 'Testing, fake error';
                         break;
                     case 'transfer':
                         if (/get_balance/.test(errorStr)) {
@@ -85,7 +85,7 @@ export default createModule({
                             const err_lines = error.message.split('\n');
                             if (err_lines.length > 2) {
                                 errorKey = err_lines[1];
-                                const txt = errorKey.split(': ')
+                                const txt = errorKey.split(': ');
                                 if(txt.length && txt[txt.length - 1].trim() !== '') {
                                     errorKey = errorStr = txt[txt.length - 1]
                                 } else
@@ -93,6 +93,11 @@ export default createModule({
                             }
                         }
                         if (errorStr.length > 200) errorStr = errorStr.substring(0, 200);
+                        // Catch for unknown key better error handling
+                        if (/unknown key: /.test(errorKey)) {
+                            errorKey = "Steem account doesn't exist.";
+                            errorStr = "Transaction failed: Steem account doesn't exist.";
+                        }
                         state = state.update('errors', errors => {
                             return errors ? errors.set(errorKey, errorStr) : Map({[errorKey]: errorStr});
                         });

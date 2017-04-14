@@ -25,6 +25,7 @@ import ShareMenu from 'app/components/elements/ShareMenu';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import { translate } from 'app/Translator';
 import { APP_NAME, APP_ICON, APP_NAME_LATIN, APP_URL, SEO_TITLE } from 'config/client_config';
+import { isPostVisited, visitPost } from 'app/utils/helpers';
 
 function TimeAuthorCategory({content, authorRepLog10, showTags}) {
     return (
@@ -93,6 +94,10 @@ class PostFull extends React.Component {
                 }
                 if (showEditor.type === 'edit') {
                     this.setState({showEdit: true})
+                }
+
+                if (!isPostVisited(this.props.post)) {
+                    visitPost(this.props.post);
                 }
             }
         }

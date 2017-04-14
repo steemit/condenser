@@ -1,5 +1,6 @@
 {
   "g": {
+    "age": "age",
     "amount":"Amount",
     "and":"and",
     "are_you_sure":"Are you sure?",
@@ -8,6 +9,7 @@
     "balances":"Balances",
     "bid":"Bid",
     "blog": "Blog",
+    "browse": "Browse",
     "buy":"Buy",
     "buy_VESTING_TOKEN":"Buy %(VESTING_TOKEN)s",
     "buy_or_sell":"Buy or Sell",
@@ -90,14 +92,17 @@
     "transaction_history":"Transaction History",
     "transfer":"Transfer ",
     "trending_topics":"Trending Topics",
+    "type": "Type",
     "unfollow":"Unfollow",
     "unmute":"Unmute",
     "upvote":"Upvote",
     "upvote_post":"Upvote post",
     "username":"Username",
+    "version": "Version",
     "view_the_direct_parent":"View the direct parent",
     "view_the_full_context":"View the full context",
     "vote":"Vote",
+    "votes": "votes",
     "wallet": "Wallet",
     "warning":"warning",
     "yes":"Yes",
@@ -163,13 +168,17 @@
     "register_with_facebook": "Register with Facebook",
     "or_click_the_button_below_to_register_with_facebook": "Or click the button below to register with Facebook",
     "server_returned_error": "server returned error",
+    "APP_NAME_support": "%(APP_NAME)s Support",
+    "please_email_questions_to": "Please email your questions to",
 
-    "next_5_strings_sinngle_block": {
+    "next_7_strings_sinngle_block": {
       "authors_get_paid_when_people_like_you_upvote_their_post": "Authors get paid when people like you upvote their post",
-      "if_you_enjoyed_what_you_read_earn_amount": "If you enjoyed what you read here, earn %(amount)s of %(VESTING_TOKEN)s",
+      "if_you_enjoyed_what_you_read_earn_amount": "If you enjoyed what you read here, earn %(amount)s of %(amoun)s",
       "when_you": "when you",
       "when_you_link_text": "Sign Up",
-      "and_vote_for_it": "and vote for it"
+      "and_vote_for_it": "and vote for it",
+      "sign_up_now_to_receive": "Sign up now to receive ",
+      "free_steem": "FREE STEEM!"
     },
     "read_only_mode": "Due to server maintenance we are running in read only mode. We are sorry for the inconvenience.",
     "membership_invitation_only": "Membership to %(APP_URL)s is now under invitation only because of unexpectedly high sign up rate.",
@@ -292,7 +301,6 @@
     "get_deposit_address": "Get Deposit Address",
     "powered_by": "Powered by",
     "send_amount_of_coins_to": "Send %(value)s %(coinName)s to",
-    "amount_is_in_form": "Amount is in the form 99999.999",
     "insufficent_funds": "Insufficent funds",
     "update_estimate": "Update Estimate",
     "get_estimate": "Get Estimate",
@@ -328,9 +336,6 @@
     "author_reward_of_VESTING_TOKEN_for": "Author reward of %(payout)s and %(reward)s %(VESTING_TOKEN)s for",
     "recieve_interest_of": "Receive interest of %(interest)s",
     "recent_password": "Recent Password",
-    "recover_account": "Recover Account",
-    "age": "age",
-    "votes": "votes",
     "your_password_permissions_were_reduced": "Your password permissions were reduced",
     "if_you_did_not_make_this_change": "If you did not make this change please",
     "owhership_changed_on": "Ownership Changed On",
@@ -338,13 +343,11 @@
     "i_understand_dont_show_again": "I understand, don't show me again",
     "insufficent_balance": "Insufficient balance",
     "in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN": "In 3.5 days, convert %(amount)s %(DEBT_TOKEN)s into %(LIQUID_TOKEN)s",
-    "in_conversion": "%(amount)s in conversion",
-    "conversion_complete_tip": "Will complete on",
-    "unknown": "Unknown",
-    "account_name_is_not_available": "Account name is not available",
-    "type": "Type"
+    "account_name_is_not_available": "Account name is not available"
   },
   "market_jsx": {
+    "action": "Action",
+    "date_created": "Date Created",
     "last_price": "Last price",
     "24h_volume": "24h volume",
     "spread": "Spread",
@@ -379,6 +382,7 @@
     "continue_with_email": "Continue with Email",
     "thanks_for_submitting_request_for_account_recovery": "<p>Thanks for submitting your request for Account Recovery using %(APP_NAME)s's blockchain-based multi factor authentication.</p> <p>We will respond to you as quickly as possible, however, please expect there may be some delay in response due to high volume of emails.</p> <p>Please be prepared to verify your identity.</p> <p>Regards,</p> <p>Ned Scott</p> <p>CEO Steemit</p>",
     "recovering_account": "Recovering account",
+    "recover_account": "Recover Account",
     "checking_account_owner": "Checking account owner",
     "sending_recovery_request": "Sending recovery request",
     "cant_confirm_account_ownership": "We can't confirm account ownership. Check your password",
@@ -458,11 +462,9 @@
     "changing_to_an_upvote": "Changing to an Up-Vote",
     "changing_to_a_downvote": "Changing to a Down-Vote",
     "confirm_flag": "Confirm Flag",
-    "date_created": "Date Created",
     "search": "Search",
     "begin_recovery": "Begin Recovery",
     "post_as": "Post as",
-    "action": "Action",
     "APP_NAME_app_center": "%(APP_NAME)s App Center",
 
     "your_existing_DEBT_TOKEN_are_liquid_and_transferable": "Your existing %(DEBT_TOKEN)s are liquid and transferable. Instead you may wish to trade %(DEBT_TOKEN)s directly in this site under %(link)s or transfer to an external market.",
@@ -521,7 +523,6 @@
     "DEBT_TOKEN_will_be_unavailable": "This action will take place 3.5 days from now and can not be canceled. These %(DEBT_TOKEN)s will immediately become unavailable"
   },
   "user_profile_permissions": {
-    "browse": "Browse",
     "author_rewards_last_week": "Author rewards last week",
     "confirm": "Confirm",
     "canceled": "Canceled",
@@ -537,16 +538,12 @@
     "advanced": "Advanced",
     "convert_to_VESTING_TOKEN": "Convert to %(VESTING_TOKEN)s",
     "transfer_to_account": "Transfer to Account",
-    "buy_LIQUID_TOKEN_or_VESTING_TOKEN": "Buy %(LIQUID_TOKEN)s or %(VESTING_TOKEN)s",
-    "version": "Version",
     "about_APP_NAME": "About %(APP_NAME)s",
     "APP_NAME_is_a_social_media_platform_where_everyone_gets_paid_for_creating_and_curating_content": "%(APP_NAME)s is a social media platform where <strong>everyone</strong>&nbsp;gets <strong>paid</strong> for creating and curating content",
     "APP_NAME_is_a_social_media_platform_where_everyone_gets_paid": "%(APP_NAME)s is a social media platform where everyone gets paid for creating and curating content. It leverages a robust digital points system, called %(LIQUID_TOKEN)s, that supports real value for digital rewards through market price discovery and liquidity.",
     "learn_more_at_LANDING_PAGE_URL": "Learn more at %(LANDING_PAGE_URL)s",
     "resources": "Resources",
     "join_our_slack": "Join our Slack",
-    "APP_NAME_support": "%(APP_NAME)s Support",
-    "please_email_questions_to": "Please email your questions to",
     "trending_24_hour": "trending (24 hour)",
     "home": "home",
     "24_hour": "24 hour",
@@ -614,13 +611,11 @@
     }
   },
   "about_jsx": {
-    "version": "Version",
     "about_app": "About %(APP_NAME)s",
     "about_app_details": "%(APP_NAME)s is a social media platform where everyone gets paid for creating and curating content. It leverages a robust digital points system, called Steem, that supports real value for digital rewards through market price discovery and liquidity.",
     "learn_more_at_app_url": "Learn more at %(APP_URL)s",
     "resources": "Resources",
-    "join_our_slack": "Join our Slack",
-    "APP_NAME_whitepaper": "%(APP_NAME)s Whitepaper"
+    "join_our_slack": "Join our Slack"
   },
   "markdownviewer_jsx": {
     "images_were_hidden_due_to_low_ratings": "Images were hidden due to low ratings."
@@ -766,14 +761,15 @@
     "balance": "Balance"
   },
   "userwallet_jsx": {
+    "conversion_complete_tip": "Will complete on",
+    "in_conversion": "%(amount)s in conversion",
     "transfer_to_savings": "Transfer to Savings",
     "power_up": "Power Up",
     "power_down": "Power Down",
     "market": "Market",
-    "buy": "Buy",
     "convert_to_LIQUID_TOKEN": "Convert to %(LIQUID_TOKEN)s",
     "withdraw_LIQUID_TOKEN": "Withdraw %(LIQUID_TOKEN)s",
-    "withdraw": "Withdraw %(DEBT_TOKENS)s",
+    "withdraw_DEBT_TOKENS": "Withdraw %(DEBT_TOKENS)s",
     "tokens_worth_about_1_of_LIQUID_TICKER": "Tokens worth about $1.00 of %(LIQUID_TICKER)s, currently collecting %(sbdInterest)s% APR.",
     "balances": "BALANCES",
     "buy_LIQUID_TOKEN_or_VESTING_TOKEN": "Buy %(LIQUID_TOKEN)s or %(VESTING_TOKEN)s",
@@ -782,9 +778,5 @@
     "next_power_down_is_scheduled_to_happen": "The next power down is scheduled to happen",
     "transfers_are_temporary_disabled": "Transfers are temporary disabled.",
     "history": "HISTORY"
-  },
-  "topics_jsx": {
-    "tags_and_topics": "Tags and Topics",
-    "show_more_topics": "Show more topics"
   }
 }

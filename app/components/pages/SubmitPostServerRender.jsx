@@ -5,7 +5,7 @@ class SubmitPostServerRender extends React.Component {
     render() {
         return (
             <div className="text-center">
-                {tt('loading')}...
+                {tt('g.loading')}...
             </div>
         );
     }

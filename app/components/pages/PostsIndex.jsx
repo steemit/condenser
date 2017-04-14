@@ -84,7 +84,7 @@ class PostsIndex extends React.Component {
                 </div>;
                 markNotificationRead = <MarkNotificationRead fields="feed" account={account_name} />
             } else {
-                emptyText = <div>{tt('user_hasnt_followed_anything_yet', {name: account_name})}</div>;
+                emptyText = <div>{tt('user_profile.user_hasnt_followed_anything_yet', {name: account_name})}</div>;
             }
         } else {
             posts = this.getPosts(order, category);
@@ -116,7 +116,7 @@ class PostsIndex extends React.Component {
                 </div>
                 <div className="PostsIndex__topics column shrink show-for-large">
                     <Topics order={topics_order} current={category} compact={false} />
-                    <small><a onClick={this.onShowSpam}>{tt(showSpam ? 'show_less' : 'show_more')}</a>{' ' + tt('value_posts')}</small>
+                    <small><a onClick={this.onShowSpam}>{tt(showSpam ? 'next_3_strings_together.show_less' : 'next_3_strings_together.show_more')}</a>{' ' + tt('next_3_strings_together.value_posts')}</small>
                 </div>
             </div>
         );

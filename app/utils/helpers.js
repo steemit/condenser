@@ -8,3 +8,24 @@ export function encode(str) {
   }
   return hash;
 }
+
+export function getVisitedPosts() {
+    return JSON.parse(localStorage.getItem("vp")) || [];
+}
+
+export function visitPost(post) {
+    let visited = getVisitedPosts();
+    const encoded = encode(post);
+    if (!visited.includes(encoded)) {
+        visited.push(encoded);
+        localStorage.setItem("vp", JSON.stringify(visited));
+    }
+    return visited;
+}
+
+export function isPostVisited(post) {
+    if (process.env.BROWSER) {
+        return getVisitedPosts().includes(encode(post));
+    }
+    return false;
+}

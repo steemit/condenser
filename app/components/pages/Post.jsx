@@ -12,6 +12,7 @@ import tt from 'counterpart';
 import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
+import { INVEST_TOKEN_UPPERCASE } from 'app/client_config';
 
 class Post extends React.Component {
 
@@ -113,7 +114,7 @@ class Post extends React.Component {
                 <p>
                     {tt(showNegativeComments ? 'post_jsx.now_showing_comments_with_low_ratings' : 'post_jsx.comments_were_hidden_due_to_low_ratings')}.{' '}
                     <button className="button hollow tiny float-right" onClick={e => this.toggleNegativeReplies(e)}>
-                        {tt(showNegativeComments ? 'hide' :'show')}
+                        {tt(showNegativeComments ? 'g.hide' :'g.show')}
                     </button>
                 </p>
             </div>);
@@ -165,7 +166,7 @@ class Post extends React.Component {
                         <div className="Post__promo">
                             {tt('g.next_7_strings_sinngle_block.authors_get_paid_when_people_like_you_upvote_their_post')}.
                             <br /> {// remove '$' from signup_bonus before parsing it into local currency
-                                    tt('g.next_7_strings_sinngle_block.if_you_enjoyed_what_you_read_earn_amount', {amount: '$'+localizedCurrency(signup_bonus.substring(1))})}
+                                    tt('g.next_7_strings_sinngle_block.if_you_enjoyed_what_you_read_earn_amount', {amount: '$'+localizedCurrency(signup_bonus.substring(1)), INVEST_TOKEN_UPPERCASE})}
                             <br />
                             <button type="button" className="button sign-up" onClick={showSignUp}>{tt('g.next_7_strings_sinngle_block.sign_up_now_to_receive')}<span className="free-money">{tt('g.next_7_strings_sinngle_block.free_steem')}</span></button>
                         </div>

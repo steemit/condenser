@@ -10,9 +10,7 @@ import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdow
 import VerticalMenu from 'app/components/elements/VerticalMenu';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import NotifiCounter from 'app/components/elements/NotifiCounter';
-// TODO: Temporary disable counterpart library because of TopRightMenu is not fully ReactJS.Component and project doesn't running
-// import tt from 'counterpart';
-const tt = (s) => {return s}
+import tt from 'counterpart';
 
 const defaultNavigate = (e) => {
     if (e.metaKey || e.ctrlKey) {

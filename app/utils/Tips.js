@@ -1,5 +1,5 @@
 import tt from 'counterpart';
-import { APP_NAME } from 'app/client_config';
+import { APP_NAME, LIQUID_TOKEN, VESTING_TOKEN } from 'app/client_config';
 
 export const savingsTip = tt('transfer_jsx.balance_subject_to_3_day_withdraw_waiting_period');
 export const transferTips = {

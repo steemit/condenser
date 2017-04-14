@@ -501,7 +501,7 @@ class Market extends React.Component {
                     </div>
 
                     <div className="small-12 medium-6 large-4 columns">
-                        <h4>{tt('sell_orders')}</h4>
+                        <h4>{tt('market_jsx.sell_orders')}</h4>
                         <Orderbook
                             side={"asks"}
                             orders={orderbook.asks}
@@ -512,7 +512,7 @@ class Market extends React.Component {
                     </div>
 
                     <div className="small-12 large-4 column">
-                        <h4>{tt('trade_history')}</h4>
+                        <h4>{tt('market_jsx.trade_history')}</h4>
                         {trade_history_table(this.props.history)}
                     </div>
                 </div>
@@ -520,7 +520,7 @@ class Market extends React.Component {
                 {account &&
                     <div className="row">
                         <div className="column">
-                            <h4>{tt('open_orders')}</h4>
+                            <h4>{tt('market_jsx.open_orders')}</h4>
                             {open_orders_table(open_orders)}
                         </div>
                     </div>}
@@ -557,8 +557,8 @@ module.exports = {
           dispatch({type: 'market/UPDATE_MARKET', payload: {username: username}})
         },
         cancelOrder: (owner, orderid, successCallback) => {
-            const confirm = tt('order_cancel_confirm', {order_id: orderid, user: owner})
-            const successMessage = tt('order_cancelled', {order_id: orderid})
+            const confirm = tt('market_jsx.order_cancel_confirm', {order_id: orderid, user: owner})
+            const successMessage = tt('market_jsx.order_cancelled', {order_id: orderid})
             dispatch(transaction.actions.broadcastOperation({
                 type: 'limit_order_cancel',
                 operation: {owner, orderid/*, __config: {successMessage}*/},
@@ -578,13 +578,13 @@ module.exports = {
 
             const isSell = amount_to_sell.indexOf(LIQUID_TICKER) > 0;
             const confirmStr = tt(isSell
-                                ? 'sell_amount_for_atleast'
-                                : 'buy_atleast_amount_for',
+                                ? 'market_jsx.sell_amount_for_atleast'
+                                : 'market_jsx.buy_atleast_amount_for',
                                 {amount_to_sell, min_to_receive, effectivePrice}
                             )
-            const successMessage = tt('order_placed') + ': ' + confirmStr
+            const successMessage = tt('g.order_placed') + ': ' + confirmStr
             const confirm = confirmStr + '?'
-            const warning = priceWarning ? tt('price_warning_'+(isSell ? "below" : "above"), {marketPrice: CURRENCY_SIGN + parseFloat(marketPrice).toFixed(4) + "/" + LIQUID_TOKEN_UPPERCASE}) : null;
+            const warning = priceWarning ? tt('market_jsx.price_warning_'+(isSell ? "below" : "above"), {marketPrice: CURRENCY_SIGN + parseFloat(marketPrice).toFixed(4) + "/" + LIQUID_TOKEN_UPPERCASE}) : null;
             const orderid = Math.floor(Date.now() / 1000)
             dispatch(transaction.actions.broadcastOperation({
                 type: 'limit_order_create',

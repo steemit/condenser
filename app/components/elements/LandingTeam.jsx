@@ -43,24 +43,34 @@ export default class LandingTeam extends React.Component {
 							<li><a href="https://github.com/Nemo1369"><img src="images/landing/github_icon.jpg" /></a></li>
 						</ul>
 					</div>
-					<div data-wow-delay="1s" className="wow fadeIn small-12 medium-12 large-3 columns small-centered Team__member Team__member__mihail">
-						<div className="Team__members__image-wrapper">
-							<img className="Team__member__img" src="https://pp.userapi.com/c636321/v636321875/2bc03/wmwMYgcd2Ug.jpg" alt="фотография Алексея Гутника" />
-						</div>
-						<strong>Алексей Гутник</strong>
-						<p>Backend разработка</p>
-						<ul>
-							<li><a href="https://github.com/sualex"><img src="images/landing/github_icon.jpg" /></a></li>
-						</ul>
-					</div>
                     <div data-wow-delay="1s" className="wow fadeIn small-12 medium-4 large-3 columns small-centered Team__member Team__member__pavel">
                         <div className="Team__members__image-wrapper">
                             <img className="Team__member__img" src="https://avatars3.githubusercontent.com/u/25533641?v=3&s=460" alt="фотография Горошко Павла" />
                         </div>
                         <strong>Горошко Павел</strong>
-                        <p>Frontend разработка</p>
+                        <p>Web разработка</p>
                         <ul>
                             <li><a href="https://github.com/pavelit"><img src="images/landing/github_icon.jpg" /></a></li>
+                        </ul>
+                    </div>
+					<div data-wow-delay="1s" className="wow fadeIn small-12 medium-4 large-3 columns small-centered Team__member Team__member__pavel">
+                        <div className="Team__members__image-wrapper">
+                            <img className="Team__member__img" src="https://avatars2.githubusercontent.com/u/3322340?v=3&s=460" alt="фотография Ткаченко Игоря" />
+                        </div>
+                        <strong>Ткаченко Игорь</strong>
+                        <p>Web разработка</p>
+                        <ul>
+                            <li><a href="https://github.com/b1acksun"><img src="images/landing/github_icon.jpg" /></a></li>
+                        </ul>
+                    </div>
+					<div data-wow-delay="1s" className="wow fadeIn small-12 medium-4 large-3 columns small-centered Team__member Team__member__pavel">
+                        <div className="Team__members__image-wrapper">
+                            <img className="Team__member__img" src="https://avatars0.githubusercontent.com/u/19325076?v=3&s=460" alt="фотография Дениса Захаренкова" />
+                        </div>
+                        <strong>Денис Захаренков</strong>
+                        <p>DevOps</p>
+                        <ul>
+                            <li><a href="https://github.com/muhazzz/"><img src="images/landing/github_icon.jpg" /></a></li>
                         </ul>
                     </div>
 

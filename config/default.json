@@ -88,6 +88,10 @@
     "customer_id": false,
     "rest_api_key": false
   },
+  "twilio": {
+    "account_sid": false,
+    "auth_token": false
+  },
   "upload_image": false,
   "ws_connection_client": "wss://ws.golos.io",
   "ws_connection_server": "wss://ws.golos.io"

@@ -227,7 +227,7 @@ class Voting extends React.Component {
                 voters.push({value: (sign > 0 ? '+ ' : '- ') + voter, link: '/@' + voter})
             }
             if (total_votes > voters.length) {
-                voters.push({value: <span>&hellip; and {(total_votes - voters.length)} {tt('more')}</span>});
+                voters.push({value: <span>&hellip; and {(total_votes - voters.length)} {tt('g.more')}</span>});
             }
             voters_list = <DropdownMenu selected={pluralize('votes', total_votes, true)} className="Voting__voters_list" items={voters} el="div" />;
         }
@@ -238,7 +238,7 @@ class Voting extends React.Component {
             voteUpClick = this.toggleWeightUp;
             dropdown = <FoundationDropdown show={showWeight} onHide={() => this.setState({showWeight: false})}>
                 <div className="Voting__adjust_weight">
-                    <a href="#" onClick={this.voteUp} className="confirm_weight" title={tt('upvote')}><Icon size="2x" name="chevron-up-circle" /></a>
+                    <a href="#" onClick={this.voteUp} className="confirm_weight" title={tt('g.upvote')}><Icon size="2x" name="chevron-up-circle" /></a>
                     <div className="weight-display">{weight / 100}%</div>
                     <Slider min={100} max={10000} step={100} value={weight} onChange={this.handleWeightChange} />
                     <CloseButton className="Voting__adjust_weight_close" onClick={() => this.setState({showWeight: false})} />
@@ -249,7 +249,7 @@ class Voting extends React.Component {
             <span className="Voting">
                 <span className="Voting__inner">
                     <span className={classUp}>
-                        {votingUpActive ? up : <a href="#" onClick={voteUpClick} title={tt(myVote > 0 ? 'remove_vote' : 'upvote')}>{up}</a>}
+                        {votingUpActive ? up : <a href="#" onClick={voteUpClick} title={tt(myVote > 0 ? 'g.remove_vote' : 'g.upvote')}>{up}</a>}
                         {dropdown}
                     </span>
                     {payoutEl}
@@ -291,10 +291,10 @@ export default connect(
         vote: (weight, {author, permlink, username, myVote}) => {
             const confirm = () => {
                 if(myVote == null) return
-                const t = tt('will_reset_your_curation_rewards_for_this_post')
-                if(weight === 0) return tt('removing_your_vote') + t
-                if(weight > 0) return tt('changing_to_an_up_vote') + t
-                if(weight < 0) return tt('changing_to_a_down_vote') + t
+                const t = tt('voting_jsx.we_will_reset_curation_rewards_for_this_post')
+                if(weight === 0) return tt('voting_jsx.removing_your_vote') + t
+                if(weight > 0) return tt('voting_jsx.changing_to_an_upvote') + t
+                if(weight < 0) return tt('voting_jsx.changing_to_a_downvote') + t
                 return null
             }
             dispatch(transaction.actions.broadcastOperation({

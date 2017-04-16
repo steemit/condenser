@@ -8,7 +8,7 @@ class ChangePasswordPage extends React.Component {
         if (!process.env.BROWSER) { // don't render this page on the server
             return <div className="row">
                 <div className="column">
-                    {tt('loading')}..
+                    {tt('g.loading')}..
                 </div>
             </div>;
         }
@@ -16,7 +16,7 @@ class ChangePasswordPage extends React.Component {
         return (
             <div className="ChangePasswordPage row">
                 <div className="column large-7 small-10">
-                    <h2>{tt('change_password')}</h2>
+                    <h2>{tt('g.change_password')}</h2>
                     <ChangePassword />
                 </div>
             </div>

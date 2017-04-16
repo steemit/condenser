@@ -18,7 +18,7 @@ import MiniHeader from 'app/components/modules/MiniHeader';
 import tt from 'counterpart';
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
-import { APP_NAME, VESTING_TOKEN } from 'app/client_config';
+import { APP_NAME, VESTING_TOKEN, LIQUID_TOKEN } from 'app/client_config';
 
 class App extends React.Component {
     constructor(props) {
@@ -114,12 +114,12 @@ class App extends React.Component {
                         <ul>
                             <li>
                                 <a href="https://steemit.com/steemit/@steemitblog/steemit-com-is-now-open-source">
-                                    {tt('steemit_is_now_open_source')}
+                                    {tt('submit_a_story.APP_NAME_is_now_open_source', {APP_NAME})}
                                 </a>
                             </li>
                             <li>
                                 <a href="https://steemit.com/steemit/@steemitblog/all-recovered-accounts-have-been-fully-refunded">
-                                    {tt("all_accounts_refunded")}
+                                    {tt('submit_a_story.all_accounts_refunded')}
                                 </a>
                             </li>
                         </ul>
@@ -132,7 +132,7 @@ class App extends React.Component {
                 <div className="column">
                     <div className={classNames('callout warning', {alert}, {warning}, {success})}>
                         <CloseButton onClick={() => this.setState({showCallout: false})} />
-                        <p>{tt("read_only_mode")}</p>
+                        <p>{tt('g.read_only_mode')}</p>
                     </div>
                 </div>
             </div>;
@@ -145,16 +145,16 @@ class App extends React.Component {
                     <div className="welcomeBanner">
                         <CloseButton onClick={() => this.setState({showBanner: false})} />
                         <div className="text-center">
-                            <h2>{tt("welcome_to_the_blockchain")}</h2>
-                            <h4>{tt("your_voice_is_worth_something")}</h4>
+                            <h2>{tt('submit_a_story.welcome_to_the_blockchain')}</h2>
+                            <h4>{tt('submit_a_story.your_voice_is_worth_something')}</h4>
                             <br />
-                            <a className="button" href="/enter_email"> <b>{tt("sign_up")}</b> </a>
+                            <a className="button" href="/enter_email"> <b>{tt('navigation.sign_up')}</b> </a>
                             &nbsp; &nbsp; &nbsp;
-                            <a className="button hollow uppercase" href="https://steem.io" target="_blank" onClick={this.learnMore}> <b>{tt("learn_more")}</b> </a>
+                            <a className="button hollow uppercase" href="https://steem.io" target="_blank" onClick={this.learnMore}> <b>{tt('submit_a_story.learn_more')}</b> </a>
                             <br />
                             <br />
                             <div className="tag3">
-                                <b>{tt("get_sp_when_sign_up", {signupBonus: signup_bonus, VESTING_TOKEN})}</b>
+                                <b>{tt('submit_a_story.get_sp_when_sign_up', {signupBonus: signup_bonus, VESTING_TOKEN})}</b>
                             </div>
                         </div>
                     </div>
@@ -169,79 +169,79 @@ class App extends React.Component {
                 <ul className="vertical menu">
                     <li>
                         <a href="https://steem.io" onClick={this.navigate}>
-                            {tt("navigation.about")}
+                            {tt('navigation.about')}
                         </a>
                     </li>
                     <li>
                         <a href="/tags" onClick={this.navigate}>
-                            {tt("explore")}
+                            {tt('navigation.explore')}
                         </a>
                     </li>
                     <li>
                         <a href="https://steem.io/SteemWhitePaper.pdf" onClick={this.navigate}>
-                            {tt("APP_NAME_whitepaper")}
+                            {tt('navigation.APP_NAME_whitepaper', {APP_NAME})}
                         </a>
                     </li>
                     <li>
                         <a href="/welcome" onClick={this.navigate}>
-                            {tt("welcome")}
+                            {tt('navigation.welcome')}
                         </a>
                     </li>
                     <li>
                         <a href="/faq.html" onClick={this.navigate}>
-                            {tt("faq")}
+                            {tt('navigation.faq')}
                         </a>
                     </li>
                     <li>
                         <a href="https://steemit.chat/home" target="_blank" rel="noopener noreferrer">
-                            {tt("APP_NAME_chat")}&nbsp;<Icon name="extlink" />
+                            {tt('navigation.APP_NAME_chat', {APP_NAME})}&nbsp;<Icon name="extlink" />
                         </a>
                     </li>
                     <li>
                         <a onClick={() => depositSteem()}>
-                            {tt("buy_LIQUID_TOKEN")}
+                            {tt('navigation.buy_LIQUID_TOKEN', {LIQUID_TOKEN})}
                         </a>
                     </li>
                     <li>
                         <a href="http://steemtools.com/" onClick={this.navigate} target="_blank" rel="noopener noreferrer">
-                            {tt('APP_NAME_app_center')}&nbsp;<Icon name="extlink" />
+                            {tt('voting_jsx.APP_NAME_app_center', {APP_NAME})}&nbsp;<Icon name="extlink" />
                         </a>
                     </li>
                     <li>
                         <a href="/market" onClick={this.navigate}>
-                            {tt("currency_market")}
+                            {tt('navigation.currency_market')}
                         </a>
                     </li>
                     <li>
                         <a href="/recover_account_step_1" onClick={this.navigate}>
-                            {tt("stolen_account_recovery")}
+                            {tt('navigation.stolen_account_recovery')}
                         </a>
                     </li>
                     <li>
                         <a href="/change_password" onClick={this.navigate}>
-                            {tt("change_account_password")}
+                            {tt('navigation.change_account_password')}
                         </a>
                     </li>
                     <li>
                         <a href="https://steemit.github.io/steemit-docs/" target="_blank" rel="noopener noreferrer">
-                            {tt("steemit_api_docs")}&nbsp;<Icon name="extlink" />
+                            {tt('navigation.APP_NAME_api_docs', {APP_NAME})}&nbsp;<Icon name="extlink" />
                         </a>
                     </li>
                     <li className="last">
                         <a href="/~witnesses" onClick={this.navigate}>
-                            {tt("vote_for_witnesses")}
+                            {tt('navigation.vote_for_witnesses')}
                         </a>
                     </li>
                 </ul>
                 <ul className="vertical menu">
                     <li>
                         <a href="/privacy.html" onClick={this.navigate} rel="nofollow">
-                            {tt("privacy_policy")}
+                            {tt('navigation.privacy_policy')}
                         </a>
                     </li>
                     <li>
                         <a href="/tos.html" onClick={this.navigate} rel="nofollow">
-                            {tt("terms_of_service")}
+                            {tt('navigation.terms_of_service')}
                         </a>
                     </li>
                 </ul>

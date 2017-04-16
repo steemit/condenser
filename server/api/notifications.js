@@ -3,7 +3,7 @@ import koa_body from 'koa-body';
 import Tarantool from 'db/tarantool';
 import config from 'config';
 import webPush from 'web-push';
-import {checkCSRF} from 'server/utils';
+import { checkCSRF } from "server/utils/misc";
 
 if(config.has('notify.gcm_key')) {
     webPush.setGCMAPIKey(config.get('notify.gcm_key'));

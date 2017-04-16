@@ -85,9 +85,9 @@ class RecoverAccountStep2 extends React.Component {
         }).then(r => r.json()).then(res => {
             if (res.error) {
                 console.error('request_account_recovery server error (1)', res.error);
-                this.setState({error: res.error || tt('unknown'), progress_status: ''});
+                this.setState({error: res.error || tt('g.unknown'), progress_status: ''});
             } else {
-                this.setState({error: '', progress_status: tt('recovering_account') + '..'});
+                this.setState({error: '', progress_status: tt('recoveraccountstep1_jsx.recovering_account') + '..'});
                 this.props.recoverAccount(name, oldPassword, newPassword, this.onRecoverFailed, this.onRecoverSuccess);
             }
         }).catch(error => {
@@ -101,13 +101,13 @@ class RecoverAccountStep2 extends React.Component {
         const {oldPassword, newPassword} = this.state;
         const name = this.props.account_to_recover;
         const oldOwner = passwordToOwnerPubKey(name, oldPassword);
-        this.setState({progress_status: tt('checking_account_owner') + '..'});
+        this.setState({progress_status: tt('recoveraccountstep1_jsx.checking_account_owner') + '..'});
         this.checkOldOwner(name, oldOwner).then(res => {
             if (res) {
-                this.setState({progress_status: tt('sending_recovery_request') + '..'});
+                this.setState({progress_status: tt('recoveraccountstep1_jsx.sending_recovery_request') + '..'});
                 this.requestAccountRecovery(name, oldPassword, newPassword);
             } else {
-                this.setState({error: tt('cant_confirm_account_ownership'), progress_status: ''});
+                this.setState({error: tt('recoveraccountstep1_jsx.cant_confirm_account_ownership'), progress_status: ''});
             }
         });
     }
@@ -116,13 +116,15 @@ class RecoverAccountStep2 extends React.Component {
         if (!process.env.BROWSER) { // don't render this page on the server
             return <div className="row">
                 <div className="column">
-                    {tt('loading')}..
+                    {tt('g.loading')}..
                 </div>
             </div>;
         }
         const {account_to_recover} = this.props;
         if (!account_to_recover) {
-            return <Callout body={tt('account_recovery_request_not_confirmed')} />;
+            return <Callout type="error">
+                <span>{tt('recoveraccountstep1_jsx.account_recovery_request_not_confirmed')}</span>
+            </Callout>;
         }
         const {oldPassword, valid, error, progress_status, name_error, success} = this.state;
         const submit_btn_class = 'button action' + (!valid || !oldPassword ? ' disabled' : '');
@@ -144,17 +146,17 @@ class RecoverAccountStep2 extends React.Component {
             <div className="RestoreAccount SignUp">
                 <div className="row">
                     <div className="column large-6">
-                        <h2>{tt('recover_account')}</h2>
+                        <h2>{tt('recoveraccountstep1_jsx.recover_account')}</h2>
                         <form onSubmit={this.onSubmit} autoComplete="off" noValidate>
                             <div className={name_error ? 'error' : ''}>
-                                <label>{tt('account_name')}
+                                <label>{tt('g.account_name')}
                                     <input type="text" disabled="true" autoComplete="off" value={account_to_recover} />
                                 </label>
                                 <p className="help-text">{name_error}</p>
                             </div>
                             <br />
                             <div>
-                                <label>{tt('recent_password')}
+                                <label>{tt('postfull_jsx.recent_password')}
                                     <input type="password"
                                            disabled={disable_password_input}
                                            autoComplete="off"

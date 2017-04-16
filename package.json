@@ -1,11 +1,11 @@
 {
-  "name": "steemit.com",
+  "name": "Golos.io",
   "repository": {
     "type": "git",
-    "url": "https://github.com/steemit/steemit.com.git"
+    "url": "https://github.com/GolosChain/tolstoy.git"
   },
   "version": "1.0.0",
-  "description": "steemit.com is the koa web server & middleware and react.js in-browser code for the world's first blockchain content + social media monetization platform!",
+  "description": "Голос - социальная сеть, построенная на публичном блокчейне.",
   "main": "index.js",
   "scripts": {
     "build": "NODE_ENV=production ./node_modules/babel-cli/bin/babel-node.js ./node_modules/.bin/webpack --stats --config ./webpack/prod.config.js",
@@ -15,10 +15,9 @@
     "test:watch": "npm run mocha -- --watch --watch-extensions jsx",
     "production": "NODE_ENV=production ./node_modules/babel-cli/bin/babel-node.js server/index.js",
     "start": "./node_modules/babel-cli/bin/babel-node.js ./webpack/dev-server.js",
-    "db": "./node_modules/babel-cli/bin/babel-node.js ./db/console.js",
     "webpush": "./node_modules/babel-cli/bin/babel-node.js ./scripts/webpush_notify.js"
   },
-  "author": "Steemit, Inc.",
+  "author": "Golos.io",
   "license": "MIT",
   "dependencies": {
     "@steem/crypto-session": "git+https://github.com/steemit/crypto-session.git#83a90b319ce5bc6a70362d52a15a815de7e729bb",
@@ -127,6 +126,7 @@
     "svg-inline-react": "^1.0.2",
     "svgo-loader": "^1.1.0",
     "tarantool-driver": "^2.0.1",
+    "twilio": "^2.11.1",
     "uncontrollable": "^3.2.1",
     "underscore.string": "^3.2.3",
     "url-loader": "^0.5.7",

@@ -76,7 +76,7 @@ class KeyEdit extends Component {
                         <span className="error">{password.touched && password.error && password.error}&nbsp;</span>
                     </div>
                     <div className={'column small-12' + (confirm.touched && confirm.error ? ' error' : '')}>
-                        <label>{tt('confirm_password')}</label>
+                        <label>{tt('g.confirm_password')}</label>
                         <input ref="keyConfirm" type="password" {...cleanReduxInput(confirm)} disabled={isWif}
                             placeholder="Confirm Password" autoComplete="off" />
                         <div className="error">{confirm.touched && confirm.error && confirm.error}&nbsp;</div>
@@ -85,18 +85,18 @@ class KeyEdit extends Component {
                         {error && <div className="error">{error}</div>}
                         {submitting && <LoadingIndicator type="circle" />}
                         {accountChanged && <span>
-                            <div className="success">{tt('account_updated')}</div>
+                            <div className="success">{tt('g.account_updated')}</div>
                             <br />
                             <button className="button" type="button" onClick={onCancel}>
-                                {tt('close')}
+                                {tt('g.close')}
                             </button>
                         </span>}
                         {!accountChanged && <span>
                             <button className="button" type="submit" disabled={submitting}>
-                                {tt('save')}
+                                {tt('g.save')}
                             </button>
                             <button className="button" type="button" disabled={submitting} onClick={onCancel}>
-                                {tt('cancel')}
+                                {tt('g.cancel')}
                             </button>
                         </span>}
                     </div>
@@ -109,11 +109,11 @@ class KeyEdit extends Component {
 import {PublicKey} from 'shared/ecc'
 
 const keyValidate = values => ({
-    password: ! values.password ? tt('required') :
-        values.password.length < 32 ? tt('password_must_be_characters_or_more', {amount: 32}) :
-        PublicKey.fromString(values.password) ? tt('need_password_or_key') :
+    password: ! values.password ? tt('g.required') :
+        values.password.length < 32 ? tt('g.password_must_be_characters_or_more', {amount: 32}) :
+        PublicKey.fromString(values.password) ? tt('g.need_password_or_key') :
         null,
-    confirm: values.confirm !== values.password ? tt('passwords_do_not_match') : null,
+    confirm: values.confirm !== values.password ? tt('g.passwords_do_not_match') : null,
 })
 
 export default reduxForm(

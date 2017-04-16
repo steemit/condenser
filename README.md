@@ -89,6 +89,25 @@ sudo npm install -g sequelize sequelize-cli pm2 mysql
 
 Run `sequelize db:migrate` in `db/` directory.
 
+#### Install Tarantool
+
+OS X:
+
+```bash
+brew install tarantool
+```
+
+Debian based Linux:
+
+```bash
+sudo apt-get install tarantool
+```
+
+Test the interactive console:
+
+```bash
+user@example:~$ tarantool
+```
 
 ### Development
 

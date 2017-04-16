@@ -137,8 +137,8 @@ class MarkdownViewer extends Component {
             {sections}
             {noImageActive && allowNoImage &&
                 <div onClick={this.onAllowNoImage} className="MarkdownViewer__negative_group">
-                    {tt('images_were_hidden_due_to_low_ratings')}
-                    <button style={{marginBottom: 0}} className="button hollow tiny float-right">{tt('show')}</button>
+                    {tt('markdownviewer_jsx.images_were_hidden_due_to_low_ratings')}
+                    <button style={{marginBottom: 0}} className="button hollow tiny float-right">{tt('g.show')}</button>
                 </div>
             }
         </div>)

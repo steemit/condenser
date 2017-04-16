@@ -208,7 +208,7 @@ class PostsList extends React.Component {
                 {showPost && <div id="post_overlay" className="PostsList__post_overlay" tabIndex={0}>
                     <div className="PostsList__post_top_overlay">
                         <div className="PostsList__post_top_bar">
-                            <button className="back-button" type="button" title={tt('back')} onClick={() => { this.setState({showPost: null}) }}>
+                            <button className="back-button" type="button" title={tt('g.back')} onClick={() => { this.setState({showPost: null}) }}>
                                 <span aria-hidden="true"><Icon name="chevron-left" /></span>
                             </button>
                             <CloseButton onClick={this.closePostModal} />

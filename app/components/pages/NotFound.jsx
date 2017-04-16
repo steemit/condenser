@@ -2,6 +2,7 @@ import React from 'react';
 import SvgImage from 'app/components/elements/SvgImage';
 import { Link } from 'react-router';
 import Icon from 'app/components/elements/Icon.jsx';
+import { APP_NAME, APP_ICON } from 'app/client_config';
 
 class NotFound extends React.Component {
 
@@ -14,17 +15,17 @@ class NotFound extends React.Component {
                             <ul className="menu">
                                 <li className="Header__top-logo">
                                     <Link to='/'>
-                                        <Icon name="steem" size="2x" />
+                                        <Icon name={APP_ICON} size="2x" />
                                     </Link>
                                 </li>
-                                <li className="Header__top-steemit show-for-medium noPrint"><a href="/">steemit<span className="beta">beta</span></a></li>
+                                <li className="Header__top-steemit show-for-medium noPrint"><a href="/">{APP_NAME}<span className="beta">beta</span></a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
                 <div className="NotFound float-center">
                     <div>
-                        <Icon name="steem" size="4x" />
+                        <Icon name={APP_ICON} size="4x" />
                         <h4 className="NotFound__header">Sorry! This page doesn't exist.</h4>
                         <p>Not to worry. You can head back to <a style={{fontWeight: 800}} href="/">our homepage</a>,
                            or check out some great posts.

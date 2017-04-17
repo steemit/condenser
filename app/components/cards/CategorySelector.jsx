@@ -81,10 +81,11 @@ export function validateCategory(category, required = true) {
         cats.find(c => c.length > 24)           ? tt('category_selector_jsx.maximum_tag_length_is_24_characters') :
         cats.find(c => c.split('-').length > 2) ? tt('category_selector_jsx.use_one_dash') :
         cats.find(c => c.indexOf(',') >= 0)     ? tt('category_selector_jsx.use_spaces_to_separate_tags') :
-        cats.find(c => /[A-Z]/.test(c))      ? tt('category_selector_jsx.use_only_lowercase_letters') :
-        cats.find(c => !/^[a-z0-9-#]+$/.test(c)) ? tt('category_selector_jsx.use_only_allowed_characters') :
-        cats.find(c => !/^[a-z-#]/.test(c)) ? tt('category_selector_jsx.must_start_with_a_letter') :
-        cats.find(c => !/[a-z0-9]$/.test(c)) ? tt('category_selector_jsx.must_end_with_a_letter_or_number') :
+        cats.find(c => /[A-ZА-ЯЁҐЄІЇ]/.test(c))      ? tt('category_selector_jsx.use_only_lowercase_letters') :
+        // Check for English and Russian symbols
+        cats.find(c => '18+' !== c && !/^[a-zа-яё0-9-ґєії]+$/.test(c)) ? tt('category_selector_jsx.use_only_allowed_characters') :
+        cats.find(c => '18+' !== c && !/^[a-zа-яё-ґєії]/.test(c)) ? tt('category_selector_jsx.must_start_with_a_letter') :
+        cats.find(c => '18+' !== c && !/[a-zа-яё0-9ґєії]$/.test(c)) ? tt('category_selector_jsx.must_end_with_a_letter_or_number') :
         null
     )
 }
@@ -92,6 +93,6 @@ export default connect((state, ownProps) => {
     const trending = state.global.getIn(['tag_idx', 'trending'])
     // apply translations
     // they are used here because default prop can't acces intl property
-    const placeholder = tt('category_selector_jsx..tag_your_story');
+    const placeholder = tt('category_selector_jsx.tag_your_story');
     return { trending, placeholder, ...ownProps, }
 })(CategorySelector);

@@ -8,7 +8,6 @@ import TransactionError from 'app/components/elements/TransactionError'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import tt from 'counterpart';
-import { FormattedMessage, FormattedHTMLMessage } from 'react-intl';
 import { DEBT_TOKEN, DEBT_TICKER, LIQUID_TOKEN } from 'app/client_config';
 
 class ConvertToSteem extends React.Component {
@@ -44,8 +43,7 @@ class ConvertToSteem extends React.Component {
                     <div className="small-12 columns">
                         <h1>{tt('converttosteem_jsx.convert_to_LIQUID_TOKEN', {LIQUID_TOKEN})}</h1>
                         <p>{tt('converttosteem_jsx.DEBT_TOKEN_will_be_unavailable', {DEBT_TOKEN})}.</p>
-                        {/* using <FormattedMessage /> because nested html tag in values doesn't want to be rendered properly in translate() */}
-                        <p><FormattedMessage id="your_existing_DEBT_TOKEN_are_liquid_and_transferable" values={{ link: <i>{tt('g.buy_or_sell')}</i> }} /></p>
+                        <p>{tt('converttosteem_jsx.your_existing_DEBT_TOKEN_are_liquid_and_transferable', {DEBT_TOKEN, link: tt('g.buy_or_sell')})}
                         <p>{tt('converttosteem_jsx.this_is_a_price_feed_conversion')}.</p>
                     </div>
                 </div>

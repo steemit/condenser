@@ -1,6 +1,6 @@
 {
-  "name": "Steemit",
-  "short_name": "Steemit",
+  "name": "Golos",
+  "short_name": "Golos",
   "start_url": "/",
   "display": "standalone",
   "gcm_sender_id": "724829305784",

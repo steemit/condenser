@@ -226,7 +226,7 @@ class UserWallet extends React.Component {
               rewards_str = `${rewards[0]}, ${rewards[1]} and ${rewards[2]}`;
               break;
           case 2:
-              rewards_str = `${rewards[0]} and ${rewards[2]}`;
+              rewards_str = `${rewards[0]} and ${rewards[1]}`;
               break;
           case 1:
               rewards_str = `${rewards[0]}`;

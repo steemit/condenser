@@ -98,6 +98,11 @@ export default createModule({
                             errorKey = "Steem account doesn't exist.";
                             errorStr = "Transaction failed: Steem account doesn't exist.";
                         }
+                        // Catch for invalid active authority
+                        if (/Missing Active Authority /.test(errorKey)) {
+                            errorKey = "Not your valid active key.";
+                            errorStr = "Transaction failed: Not your valid active key.";
+                        }
                         state = state.update('errors', errors => {
                             return errors ? errors.set(errorKey, errorStr) : Map({[errorKey]: errorStr});
                         });

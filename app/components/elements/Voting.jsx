@@ -190,9 +190,6 @@ class Voting extends React.Component {
         if(cashout_active) {
             payoutItems.push({value: 'Potential Payout $' + formatDecimal(pending_payout).join('')});
         }
-        if(promoted > 0) {
-            payoutItems.push({value: 'Promotion Cost $' + formatDecimal(promoted).join('')});
-        }
         if(cashout_active) {
             payoutItems.push({value: <TimeAgoWrapper date={cashout_time} />});
         }
@@ -201,6 +198,9 @@ class Voting extends React.Component {
             payoutItems.push({value: 'Payout Declined'})
         } else if (max_payout < 1000000) {
             payoutItems.push({value: 'Max Accepted Payout $' + formatDecimal(max_payout).join('')})
+        }
+        if(promoted > 0) {
+            payoutItems.push({value: 'Promotion Cost $' + formatDecimal(promoted).join('')});
         }
         if(total_author_payout > 0) {
             payoutItems.push({value: 'Past Payouts $' + formatDecimal(total_author_payout + total_curator_payout).join('')});

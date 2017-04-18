@@ -76,7 +76,26 @@ class TransferHistoryRow extends React.Component {
             // other_account = ``;
             description_end = '';
         } else if (type === 'claim_reward_balance') {
-            description_start += `Claim rewards: ${data.reward_sbd}, ${data.reward_steem}, and ${reward_vests} STEEM POWER`;
+
+            let rewards = [];
+            if(parseFloat(data.reward_steem.split(' ')[0]) > 0) rewards.push(data.reward_steem);
+            if(parseFloat(data.reward_sbd.split(' ')[0]) > 0) rewards.push(data.reward_sbd);
+            if(parseFloat(data.reward_vests.split(' ')[0]) > 0) rewards.push(`${reward_vests} STEEM POWER`);
+
+            let rewards_str;
+            switch(rewards.length) {
+              case 3:
+                  rewards_str = `${rewards[0]}, ${rewards[1]} and ${rewards[2]}`;
+                  break;
+              case 2:
+                  rewards_str = `${rewards[0]} and ${rewards[1]}`;
+                  break;
+              case 1:
+                  rewards_str = `${rewards[0]}`;
+                  break;
+            }
+
+            description_start += `Claim rewards: ${rewards_str}`;
             description_end = '';
         } else if (type === 'interest') {
             description_start += `Receive interest of ${data.interest}`;

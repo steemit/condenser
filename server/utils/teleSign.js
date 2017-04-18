@@ -20,7 +20,8 @@ export default function* verify({ mobile, confirmation_code, ip, ignore_score })
     try {
         const result = yield getScore(mobile);
         const { recommendation, score } = result.risk;
-        if (!ignore_score && recommendation !== 'allow') {
+        // if (!ignore_score && recommendation !== 'allow') {
+        if (!ignore_score && (!score || score > 600)) {
             console.log(
                 `TeleSign did not allow phone ${mobile} ip ${ip}. TeleSign responded: ${recommendation}`
             );

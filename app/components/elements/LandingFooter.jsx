@@ -43,7 +43,7 @@ export default class LandingFooter extends React.Component {
         </div>
         <div className="row text-left LandingFooter__description">
           <div className="small-12 medium-12 columns">
-            <span className="text-left">2016 GOLOS.io - социальная платформа, сообщество блогеров, медиасеть - разработанная на Медиаблокчейне ГОЛОС</span>
+            <span className="text-left">2017 GOLOS.io - социальная платформа, сообщество блогеров, медиасеть - разработанная на Медиаблокчейне ГОЛОС</span>
           </div>
         </div>
       </section>

@@ -128,7 +128,7 @@ class TransferForm extends Component {
         const isMemoPrivate = memo && /^#/.test(memo.value);
         const form = (
             <form onSubmit={handleSubmit(({data}) => {
-                this.setState({loading: true})
+                this.setState({loading: true});
                 dispatchSubmit({...data, errorCallback: this.errorCallback, currentUser, toVesting, transferType})
             })}
                 onChange={this.clearError}
@@ -231,7 +231,7 @@ class TransferForm extends Component {
                     {transferToSelf && <button className="button hollow no-border" disabled={submitting} onClick={this.onAdvanced}>{advanced ? 'Basic' : 'Advanced'}</button>}
                 </span>}
             </form>
-        )
+        );
         return (
            <div>
                <h3>{toVesting ? 'Convert to Steem Power' : transferType}</h3>
@@ -246,24 +246,24 @@ class TransferForm extends Component {
 }
 
 const AssetBalance = ({onClick, balanceValue}) =>
-    <a onClick={onClick} style={{borderBottom: '#A09F9F 1px dotted', cursor: 'pointer'}}>Balance: {balanceValue}</a>
+    <a onClick={onClick} style={{borderBottom: '#A09F9F 1px dotted', cursor: 'pointer'}}>Balance: {balanceValue}</a>;
 
 import {connect} from 'react-redux'
 
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
-        const initialValues = state.user.get('transfer_defaults', Map()).toJS()
-        const toVesting = initialValues.asset === 'VESTS'
-        const currentUser = state.user.getIn(['current'])
-        const currentAccount = state.global.getIn(['accounts', currentUser.get('username')])
+        const initialValues = state.user.get('transfer_defaults', Map()).toJS();
+        const toVesting = initialValues.asset === 'VESTS';
+        const currentUser = state.user.getIn(['current']);
+        const currentAccount = state.global.getIn(['accounts', currentUser.get('username')]);
 
         if(!toVesting && !initialValues.transferType)
-            initialValues.transferType = 'Transfer to Account'
+            initialValues.transferType = 'Transfer to Account';
 
-        let transferToSelf = toVesting || /Transfer to Savings|Savings Withdraw/.test(initialValues.transferType)
+        let transferToSelf = toVesting || /Transfer to Savings|Savings Withdraw/.test(initialValues.transferType);
         if (transferToSelf && !initialValues.to)
-            initialValues.to = currentUser.get('username')
+            initialValues.to = currentUser.get('username');
 
         if(initialValues.to !== currentUser.get('username'))
             transferToSelf = false // don't hide the to field

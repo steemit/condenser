@@ -6,6 +6,10 @@
 }
 
 .Voting__button {
+  .Icon {
+    // Put the icon in a layer to improve rendering performance (scrolling especially)
+    transform: translate3d(0,0,0);
+  }
   path {
     fill: $dark-gray;
   }

@@ -37,6 +37,7 @@ ul.PostsList__summaries {
 }
 
 .PostSummary__image {
+  cursor: pointer;
   float: left;
   width: 130px;
   height: 4.5rem;
@@ -92,11 +93,12 @@ ul.PostsList__summaries {
   }
 }
 .PostSummary__collapse {
-  visibility: hidden;
+  opacity: 0;
+  will-change: opacity;
 }
 
 .PostSummary:hover .PostSummary__collapse {
-  visibility: visible;
+  opacity: 1;
 }
 
 .PostSummary__body {

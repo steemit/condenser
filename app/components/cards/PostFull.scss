@@ -37,9 +37,11 @@
 }
 
 .PostFull__header {
+  max-width: 40rem;
   > h1 {
     overflow: hidden;
-    font: 700 200% "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Arial, sans-serif;
+    font: 700 200% "Source Sans Pro", "Lucida Sans Unicode", "Lucida Sans", Geneva, Arial, sans-serif;
+    line-height: 1.1;
     .Icon {
       margin: 0 0 0 0.5rem;
       vertical-align: -30%;
@@ -64,6 +66,7 @@
 .PostFull__body {
   padding: 1rem 0 2rem 0;
   clear: left;
+  max-width: 40rem;
   a {
     color: #4078C0;
   }

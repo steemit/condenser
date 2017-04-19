@@ -38,7 +38,7 @@ class App extends React.Component {
         // setTimeout(() => this.setState({showCallout: false}), 15000);
     }
 
-    componentDidUpdate(nextProps) {
+    componentWillReceiveProps(nextProps) {
         // setTimeout(() => this.setState({showCallout: false}), 15000);
         if (nextProps.location.pathname !== this.props.location.pathname) {
             this.setState({showBanner: false, showCallout: false})
@@ -48,9 +48,14 @@ class App extends React.Component {
     shouldComponentUpdate(nextProps, nextState) {
         const p = this.props;
         const n = nextProps;
-        return p.location !== n.location ||
-                  p.visitor !== n.visitor ||
-                  p.flash !== n.flash || this.state !== nextState;
+        return (
+            p.location.pathname !== n.location.pathname ||
+            p.new_visitor !== n.new_visitor ||
+            p.flash !== n.flash ||
+            this.state.open !== nextState.open ||
+            this.state.showBanner !== nextState.showBanner ||
+            this.state.showCallout !== nextState.showCallout
+        );
     }
 
     toggleOffCanvasMenu(e) {

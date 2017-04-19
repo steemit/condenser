@@ -152,8 +152,8 @@ class PostsList extends React.Component {
     }, 150)
 
     attachScrollListener() {
-        window.addEventListener('scroll', this.scrollListener);
-        window.addEventListener('resize', this.scrollListener);
+        window.addEventListener('scroll', this.scrollListener, {capture: false, passive: true});
+        window.addEventListener('resize', this.scrollListener, {capture: false, passive: true});
         this.scrollListener();
     }
 

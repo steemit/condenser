@@ -1,4 +1,3 @@
-
 const list = `
 polonox
 poloneix
@@ -67,6 +66,4 @@ shapeshift
 livecoin.net
 `.trim().split('\n');
 
-export default RegExp(`(` + list.join("|") + `)\\b`, "i");
-
-
+export default list;

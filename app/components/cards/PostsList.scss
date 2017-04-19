@@ -10,6 +10,7 @@
   background-color: $white;
   // padding: 0 .9rem;
   -webkit-overflow-scrolling: touch;
+  backface-visibility: hidden;
 }
 
 .PostsList__post_top_overlay {

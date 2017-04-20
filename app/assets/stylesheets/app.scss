@@ -123,4 +123,10 @@ a, path, circle {
   }
 }
 
-.anchor { padding-top: 90px; }
+.anchor {
+  padding-top: 1.25em;
+
+  &:first-of-type {
+    padding-top: 5em;
+  }
+}

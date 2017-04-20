@@ -134,7 +134,7 @@ The more Steem Power you have in your account, the more your upvotes will be wor
 <a class="anchor" name="Payments"></a>
 ### Payments
 
-There are two payment periods for posts. The first is roughly 24-48 hours, and the second is roughly 30 days.
+Payouts are made approximately 7 days after the post/comment is created.
 
 The payments may fluctuate (up and down) until the final payment is reached.
 
@@ -312,13 +312,16 @@ It is not required either, but if you have other social media accounts (Twitter,
 - [Professional Formatting Tutorial](https://steemit.com/writing/@minion/professional-tutorial-for-post-formatting-both-for-beginners-and-advanced-users)
 - [Advice on using Tags](https://steemit.com/steemit/@rok-sivante/the-top-3-reasons-to-tag-your-steemit-posts-a-simple-quick-strategy-for-long-term-profits-and-success)
 - [Steem Dollars (SBD) to Cash (USD) Tutorial](https://steemit.com/how-to/@blueorgy/how-to-convert-your-steemdollars-sbd-to-cash-usd-transfer-it-into-your-bank-account)
+- [How to use Blocktrades to exchange STEEM/SBD for BTC](https://steemit.com/steem/@thecryptofiend/how-to-use-blocktrades-the-fastest-and-easiest-way-to-buy-and-sell-steem-sd-and-my-review-of-the-experience)
 - [SBD to bitcoin (BTC) using Blocktrades, then BTC to Euro or USD Using CEX.io](https://steemit.com/howto/@future24/blocktrades-tutorial-part-2-how-to-exchange-sbd-to-btc-and-sell-them-for-euro-or-usd-english-german)
+- [A Guide To Cashing Out Your STEEM/SBD Using PayPal](https://steemit.com/tutorial/@son-of-satire/a-minnows-guide-to-cashing-out-your-steem-sbd-using-paypal-without-using-coinbase-and-their-invasive-identity-checks)
 - [How to Buy STEEM Guide](https://steemit.com/steem/@timcliff/newbie-guide-how-to-buy-steem)
 - [How to Add Images to Your Posts](https://steemit.com/steem/@billbutler/adding-images-to-your-steem-posts)
 - [Steemit Markdown Basics](https://steemit.com/steemit/@thecryptofiend/markdown-basics-for-beginners)
 - [Emojis for Steemit](https://steemit.com/emojis/@blueorgy/steemit-emojis-master-list)
 - [5 Markdown Tips](https://steemit.com/steemit/@steemitguide/markdown-and-html-code-guide-for-beginners-that-includes-5-useful-tips-to-edit-posts-and-comments-using-the-raw-editor)
 - [Advice on How To Build a Following](https://steemit.com/steemit/@allasyummyfood/how-i-build-a-following-of-160-k-from-scratch)
+- [Everything you need to know about potential payouts and flagging](https://steemit.com/payout/@timcliff/everything-you-need-to-know-about-potential-payouts-and-flagging-for-new-users)
 - [Ways to Find Free and Legal Images](https://steemit.com/steem-help/@mindover/don-t-plagiarize-images-here-are-13-free-and-legal-ways-to-find-high-quality-photos-you-can-use-on-steemit)
 - [Steem Keys and Passwords Guide](https://steemit.com/steemit-guides/@pfunk/a-user-s-guide-to-the-different-steem-keys-or-passwords)
 - [Unwritten Rules of Steemit](https://steemit.com/steem-help/@beanz/the-unwritten-rules-of-steemit)
@@ -327,16 +330,17 @@ It is not required either, but if you have other social media accounts (Twitter,
 - [Advice on How to Succeed on Steemit: Come to Give, Not to Take](https://steemit.com/psychology/@shenanigator/come-to-give-not-take-the-power-of-reciprocity)
 - [Best Practices for Steemit Artists](https://steemit.com/art/@merej99/best-practices-for-steemit-newbie-artists-by-merej99-a-100-power-up-post)
 - [The Steemit Newbie's Comprehensive Guide To Understanding Your Wallet](https://steemit.com/steemit-help/@merej99/the-steemit-newbie-s-comprehensive-guide-to-understanding-your-wallet-by-merej99)
-- [How to use Blocktrades to exchange STEEM/SBD for BTC](https://steemit.com/steem/@thecryptofiend/how-to-use-blocktrades-the-fastest-and-easiest-way-to-buy-and-sell-steem-sd-and-my-review-of-the-experience)
+- [STEEM The Super Basic Explanation](https://steemit.com/steem/@thecryptofiend/steem-the-super-basic-explanation-for-new-users)
+- [Blogging Tools](https://steemit.com/blogging/@munteanu/blogging-tools)
+- [How to Create Different Types of Blog Content](https://steemit.com/writing/@jessicanicklos/how-to-create-different-types-of-blog-content-know-here-total-guide-line)
 - [How to Get Noticed if You Are a New User on Steemit](https://steemit.com/steemit/@thecryptofiend/how-to-get-noticed-if-you-are-a-new-user-on-steemit)
 
 <a href="/welcome#Table_of_Contents">&#11025;</a>
 <a class="anchor" name="Users_to_Follow"></a>
 ## Users to Follow
 
-- @dantheman - Daniel Larimer, CTO and Co-Founder of Steemit
-- @ned - Ned Scott, CEO and Co-Founder of Steemit
 - @steemitblog - Official Steemit Announcements
+- @ned - Ned Scott, CEO and Co-Founder of Steemit
 
 <a href="/welcome#Table_of_Contents">&#11025;</a>
 <a class="anchor" name="Other_Resources"></a>
@@ -353,7 +357,7 @@ It is not required either, but if you have other social media accounts (Twitter,
 <a class="anchor" name="Live_Help"></a>
 ## Live Help
 
-Ask your general questions in the [help](https://steemit.chat/channel/help) channel of [steemit.chat](https://steemit.chat/home).
+Ask your general questions in the [help](https://steemit.chat/channel/help) channel of [steemit.chat](https://steemit.chat/home). Users in the channel will typically respond to questions within a few hours.
 
 Steemprentice is a group of people dedicated to helping new users find their way around Steemit. You can find them in the [steemprentice](https://steemit.chat/channel/steemprentice) channel of [steemit.chat](https://steemit.chat/home).
 

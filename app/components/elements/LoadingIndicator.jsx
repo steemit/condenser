@@ -5,7 +5,12 @@ class LoadingIndicator extends React.Component {
     static propTypes = {
         // html component attributes
         type: React.PropTypes.oneOf(['dots', 'circle']),
-        inline: React.PropTypes.bool
+        inline: React.PropTypes.bool,
+        style: React.PropTypes.object
+    };
+
+    static defaultProps = {
+        style: {}
     };
 
     constructor(props) {
@@ -14,11 +19,11 @@ class LoadingIndicator extends React.Component {
     }
 
     render() {
-        const {type, inline} = this.props;
+        const {type, inline, style} = this.props;
         switch (type) {
             case 'dots':
                 return (
-                    <div className="LoadingIndicator three-bounce">
+                    <div style={style} className="LoadingIndicator three-bounce">
                         <div className="bounce1"></div>
                         <div className="bounce2"></div>
                         <div className="bounce3"></div>
@@ -26,7 +31,7 @@ class LoadingIndicator extends React.Component {
                 );
             case 'circle':
                 return  (
-                    <div className={'LoadingIndicator circle' + (inline ? ' inline' : '')}>
+                    <div style={style} className={'LoadingIndicator circle' + (inline ? ' inline' : '')}>
                         <div></div>
                     </div>
                 );
@@ -34,7 +39,7 @@ class LoadingIndicator extends React.Component {
                 var classes = 'LoadingIndicator loading-overlay';
                 if(this.progress > 0) { classes += ' with-progress'; }
                 return (
-                    <div className={classes}>
+                    <div className={classes} style={style}>
                         <div className="loading-panel">
                             <div className="spinner">
                                 <div className="bounce1"></div>

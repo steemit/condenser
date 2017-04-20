@@ -29,6 +29,10 @@ class Header extends React.Component {
         this.hideSubheader = this.hideSubheader.bind(this);
     }
 
+    componentDidMount() {
+        window.addEventListener('scroll', this.hideSubheader, {capture: false, passive: true});
+    }
+
     componentWillReceiveProps(nextProps) {
         if (nextProps.location.pathname !== this.props.location.pathname) {
             const route = resolveRoute(nextProps.location.pathname);
@@ -39,10 +43,15 @@ class Header extends React.Component {
         }
     }
 
+    componentWillUnmount() {
+        window.removeEventListener('scroll', this.hideSubheader);
+    }
+
     hideSubheader() {
         const subheader_hidden = this.state.subheader_hidden;
         const y = window.scrollY >= 0 ? window.scrollY : document.documentElement.scrollTop;
         if (y === this.prevScrollY) return;
+
         if (y < 5) {
             this.setState({subheader_hidden: false});
         } else if (y > this.prevScrollY) {
@@ -51,14 +60,6 @@ class Header extends React.Component {
             if (subheader_hidden) this.setState({subheader_hidden: false})
         }
         this.prevScrollY = y;
-    }
-
-    componentDidMount() {
-        window.addEventListener('scroll', this.hideSubheader);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('scroll', this.hideSubheader);
     }
 
     render() {

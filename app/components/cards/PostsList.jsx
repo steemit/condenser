@@ -152,8 +152,8 @@ class PostsList extends React.Component {
     }, 150)
 
     attachScrollListener() {
-        window.addEventListener('scroll', this.scrollListener);
-        window.addEventListener('resize', this.scrollListener);
+        window.addEventListener('scroll', this.scrollListener, {capture: false, passive: true});
+        window.addEventListener('resize', this.scrollListener, {capture: false, passive: true});
         this.scrollListener();
     }
 
@@ -202,7 +202,7 @@ class PostsList extends React.Component {
                 <ul className="PostsList__summaries hfeed" itemScope itemType="http://schema.org/blogPosts">
                     {renderSummary(postsInfo)}
                 </ul>
-                {loading && <center><LoadingIndicator type="circle" /></center>}
+                {loading && <center><LoadingIndicator style={{marginBottom: "2rem"}} type="circle" /></center>}
                 {showPost && <div id="post_overlay" className="PostsList__post_overlay" tabIndex={0}>
                     <div className="PostsList__post_top_overlay">
                         <div className="PostsList__post_top_bar">

@@ -49,7 +49,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
         ];
         return (
             <ul className={mcn + mcl}>
-                <li className={lcn}><a href="/static/search.html" title="Search">{vertical ? <span>Search</span> : <Icon name="search" />}</a></li>
+                <li className={lcn + " Header__search"}><a href="/static/search.html" title="Search">{vertical ? <span>Search</span> : <Icon name="search" />}</a></li>
                 {submit_story}
                 <LinkWithDropdown
                     closeOnClickOutside
@@ -66,7 +66,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
                         <div className="TopRightMenu__notificounter"><NotifiCounter fields="total" /></div>
                     </li>}
                 </LinkWithDropdown>
-                {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
+                {toggleOffCanvasMenu && <li className="toggle-menu Header__hamburger"><a href="#" onClick={toggleOffCanvasMenu}>
                     <span className="hamburger" />
                 </a></li>}
             </ul>
@@ -75,9 +75,9 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
     if (probablyLoggedIn) {
         return (
             <ul className={mcn + mcl}>
-                {!vertical && <li><a href="/static/search.html" title="Search"><Icon name="search" /></a></li>}
+                {!vertical && <li className="Header__search"><a href="/static/search.html" title="Search"><Icon name="search" /></a></li>}
                 <li className={lcn}><LoadingIndicator type="circle" inline /></li>
-                {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
+                {toggleOffCanvasMenu && <li className="toggle-menu Header__hamburger"><a href="#" onClick={toggleOffCanvasMenu}>
                     <span className="hamburger" />
                 </a></li>}
             </ul>
@@ -85,11 +85,11 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
     }
     return (
         <ul className={mcn + mcl}>
-            {!vertical && <li><a href="/static/search.html" title="Search"><Icon name="search" /></a></li>}
+            {!vertical && <li className="Header__search"><a href="/static/search.html" title="Search"><Icon name="search" /></a></li>}
             <li className={lcn}><a href="/enter_email">Sign Up</a></li>
             <li className={lcn}><a href="/login.html" onClick={showLogin}>Login</a></li>
             {submit_story}
-            {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
+            {toggleOffCanvasMenu && <li className="toggle-menu Header__hamburger"><a href="#" onClick={toggleOffCanvasMenu}>
                 <span className="hamburger" />
             </a></li>}
         </ul>

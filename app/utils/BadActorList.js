@@ -20,6 +20,7 @@ bitrrex
 bttrex
 btrex
 bttrex
+ittrex
 poloiex
 poloinex
 polomiex
@@ -56,6 +57,12 @@ polonniex
 polooniex
 pooniex
 poooniex
+plolniex
+ploniex
+plooniex
+poloex
+oloniex
+pooloniex
 blocktardes
 blocktrade
 bocktrades

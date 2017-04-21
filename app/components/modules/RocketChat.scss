@@ -12,7 +12,7 @@
         &.open {
             right: 0;
         }
-        button {
+        button, a {
             transition: transform 0.3s ease-in-out 0.55s;
             transform: rotate(-90deg);
             bottom: 0;

@@ -22,7 +22,7 @@ ul.PostsList__summaries {
      font-size: 75%;
      border-radius: 3px;
      font-weight: normal;
-     font-family: Arial;
+     font-family: $body-font-family;
      margin: 0 0.1rem;
      padding: 0 0.2rem;
   }
@@ -38,7 +38,10 @@ ul.PostsList__summaries {
   background-position: 50% 20%;
   border: 1px solid #EEE;
 }
-.PostSummary__image:visited {}
+
+.PostSummary__image-visited {
+  filter: grayscale(100%);
+}
 
 .PostSummary__image-mobile {
   display: block;
@@ -62,7 +65,7 @@ ul.PostsList__summaries {
 
 .PostSummary__header {
   > h1 {
-    font: 600 100% "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Arial, sans-serif;
+    font: 600 100% "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Arial, 'Roboto', sans-serif;
     margin: 0;
     overflow: hidden;
     > a {
@@ -95,7 +98,7 @@ ul.PostsList__summaries {
 .PostSummary__body {
   width: auto;
   padding: 0.3rem 0.1rem 0.15rem;
-  font-family: "Helvetica Neue", Helvetica, Verdana, Arial, sans-serif;
+  font-family: $body-font-family;
   color: #3f3f3f;
   overflow: hidden;
   line-height: 1.4;

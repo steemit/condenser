@@ -14,6 +14,7 @@ import FoundationDropdown from 'app/components/elements/FoundationDropdown';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import { translate } from 'app/Translator';
 import LocalizedCurrency, {localizedCurrency} from 'app/components/elements/LocalizedCurrency';
+import {DEBT_TICKER} from 'config/client_config';
 
 const ABOUT_FLAG = <div>
     <p>{translate('flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following')}:</p>
@@ -168,7 +169,7 @@ class Voting extends React.Component {
         const payoutItems = [];
 
         if(cashout_active) {
-            payoutItems.push({value: translate('potential_payout') + ' ' + localizedCurrency(pending_payout)});
+            payoutItems.push({value: translate('potential_payout') + ' ' + localizedCurrency(pending_payout) + ' (' + pending_payout.toFixed(3) + ' ' + DEBT_TICKER + ')'});
         }
         if(promoted > 0) {
             payoutItems.push({value: translate('boost_payments') + ' ' + localizedCurrency(promoted)});
@@ -205,7 +206,10 @@ class Voting extends React.Component {
             const cnt = Math.sign(pct)
             if(cnt === 0) continue
             count += 1
-            if (showList && voters.length < MAX_VOTES_DISPLAY) voters.push({value: (cnt > 0 ? '+ ' : '- ') + avotes[v].voter, link: '/@' + avotes[v].voter})
+            if (showList && voters.length < MAX_VOTES_DISPLAY) {
+                const voterPercent= pct / 100 + '%';
+                voters.push({value: (cnt > 0 ? '+ ' : '- ') + avotes[v].voter, link: '/@' + avotes[v].voter, data: voterPercent});
+            }
         }
         if (count > MAX_VOTES_DISPLAY) voters.push({value: <span>&hellip; {' ' + translate('and') + ' '} {(count - MAX_VOTES_DISPLAY)} {' ' + translate('more')}</span>});
 

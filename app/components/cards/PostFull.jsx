@@ -24,7 +24,8 @@ import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import ShareMenu from 'app/components/elements/ShareMenu';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import { translate } from 'app/Translator';
-import { APP_NAME, APP_ICON, APP_NAME_LATIN, APP_URL } from 'config/client_config';
+import { APP_NAME, APP_ICON, APP_NAME_LATIN, APP_URL, SEO_TITLE } from 'config/client_config';
+import { isPostVisited, visitPost } from 'app/utils/helpers';
 
 function TimeAuthorCategory({content, authorRepLog10, showTags}) {
     return (
@@ -94,6 +95,10 @@ class PostFull extends React.Component {
                 if (showEditor.type === 'edit') {
                     this.setState({showEdit: true})
                 }
+
+                if (!isPostVisited(this.props.post)) {
+                    visitPost(this.props.post);
+                }
             }
         }
     }
@@ -156,7 +161,7 @@ class PostFull extends React.Component {
         if (content.category) link = `/${content.category}${link}`;
 
         const {category, title, body} = content;
-        if (process.env.BROWSER && title) document.title = title + ' — ' + APP_NAME_LATIN;
+        if (process.env.BROWSER && title) document.title = title + ' | ' + SEO_TITLE;
 
         let content_body = content.body;
         const url = `/${category}/@${author}/${permlink}`
@@ -180,7 +185,7 @@ class PostFull extends React.Component {
         this.share_params = {
             link,
             url: 'https://' + APP_URL + link,
-            title: title + ' — '+ APP_NAME_LATIN,
+            title: title + ' | '+ SEO_TITLE,
             desc: p.desc
         };
 

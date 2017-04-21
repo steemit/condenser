@@ -27,7 +27,7 @@ export default class LandingFooter extends React.Component {
               <strong>{header}</strong>
               <ul>
                 {menuItems[index][0].icon ?
-                  <li key="0" className="social-icons">{menuItems[index].map((item, i) => { return <a href={item.url} target="blank"><img src={item.icon}/></a> })}</li>
+                  <li key="0" className="social-icons">{menuItems[index].map((item, i) => { return <a key={i} href={item.url} target="blank"><img src={item.icon}/></a> })}</li>
                   :
                   menuItems[index].map((item, i) => { return <li key={i}><a href={item.url} target="blank">{item.name}</a></li> })
                 }
@@ -43,7 +43,7 @@ export default class LandingFooter extends React.Component {
         </div>
         <div className="row text-left LandingFooter__description">
           <div className="small-12 medium-12 columns">
-            <span className="text-left">2016 GOLOS.io - социальная платформа, сообщество блогеров, медиасеть - разработанная на Медиаблокчейне ГОЛОС</span>
+            <span className="text-left">2017 GOLOS.io - социальная платформа, сообщество блогеров, медиасеть - разработанная на Медиаблокчейне ГОЛОС</span>
           </div>
         </div>
       </section>

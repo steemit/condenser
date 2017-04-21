@@ -492,16 +492,17 @@
 		margin-bottom: 65px;
 		img { width: 160px; }
 	}
-	.Partners__skolkovo-logo { transform: translateY(-17%); }
-  .Partners__forklog-logo { transform: translateY(0%); }
-  .Partners__liqui-logo { margin-top: 70px; }
-  .Partners__coinessa-logo { margin-top: 0 !important; }
+	.Partners__daocasino-logo { transform: translateY(-17%); }
+    .Partners__forklog-logo { transform: translateY(19%); }
+    .Partners__liqui-logo { margin-top: 70px; }
+    .Partners__coinessa-logo { margin-top: 0 !important; }
+	.Partners__changebot-logo { transform: translateY(-10%); }
 	.Partners__mapala-logo img {
-    margin-top: 10px;
-    max-height: 150px;
-  }
+    	margin-top: 33px;
+		max-height: 150px;
+  	}
 	.Partners__tolkachev-logo {
-		transform: translateY(5%);
+		transform: translateY(12%);
 		img { max-height: 65px; }
 	}
 	@media #{$small-up} {

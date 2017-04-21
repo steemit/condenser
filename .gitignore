@@ -7,8 +7,8 @@ dist
 vendor/*
 tmp/*
 config/client_config.js
-config/steem.json
-config/steem-dev.json
+config/golos.json
+config/golos-dev.json
 config/process.json
 config/process-dev.json
 config/process-prod.json

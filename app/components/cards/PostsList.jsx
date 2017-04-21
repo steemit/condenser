@@ -8,6 +8,8 @@ import {findParent} from 'app/utils/DomUtils';
 import Icon from 'app/components/elements/Icon';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import { IGNORE_TAGS } from 'config/client_config';
+import {encode} from 'app/utils/helpers';
+import { isPostVisited, getVisitedPosts, visitPost } from 'app/utils/helpers';
 
 function topPosition(domElt) {
     if (!domElt) {
@@ -35,10 +37,12 @@ class PostsList extends React.Component {
     constructor() {
         super();
         this.state = {
+            // _isMounted: false,
             thumbSize: 'desktop',
             showNegativeComments: false,
             nsfwPref: 'warn',
-            showPost: null
+            showPost: null,
+            visitedPosts : []
         }
         this.scrollListener = this.scrollListener.bind(this);
         this.onPostClick = this.onPostClick.bind(this);
@@ -60,6 +64,7 @@ class PostsList extends React.Component {
     }
 
     componentDidMount() {
+        // this.setState({_isMounted: true});
         this.attachScrollListener();
     }
 
@@ -89,7 +94,15 @@ class PostsList extends React.Component {
         }
     }
 
+    componentWillReceiveProps(nextProps) {
+        const visited = getVisitedPosts();
+        if (this.state.visitedPosts != visited) {
+            this.setState({visitedPosts: visited});
+        }
+    }
+
     componentWillUnmount() {
+        // this.setState({_isMounted: false});
         this.detachScrollListener();
         window.removeEventListener('popstate', this.onBackButton);
         window.removeEventListener('keydown', this.onBackButton);
@@ -133,6 +146,7 @@ class PostsList extends React.Component {
     }
 
     scrollListener = debounce(() => {
+      // if (! this.state._isMounted) return;
         const el = window.document.getElementById('posts_list');
         if (!el) return;
         const scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset :
@@ -168,6 +182,7 @@ class PostsList extends React.Component {
         this.props.removeHighSecurityKeys();
         this.setState({showPost: post, prevTitle: window.document.title});
         window.history.pushState({}, '', url);
+        visitPost(post);
     }
 
     render() {
@@ -184,14 +199,14 @@ class PostsList extends React.Component {
             }
             const ignore = ignore_result && ignore_result.has(cont.get('author'))
             // if(ignore) console.log('ignored post by', cont.get('author'), '\t', item)
-            const json_metadata = JSON.parse(cont.get('json_metadata') || '{}')
-            const postTags = Array.isArray(json_metadata.tags) ? json_metadata.tags : typeof json_metadata.tags === 'string' ? [json_metadata.tags] : []
-                  postTags.push(cont.get('category'))
+            // const json_metadata = JSON.parse(cont.get('json_metadata') || '{}')
+            // const postTags = Array.isArray(json_metadata.tags) ? json_metadata.tags : typeof json_metadata.tags === 'string' ? [json_metadata.tags] : []
+                  // postTags.push(cont.get('category'))
             // TODO: check tags is string or null
-            let igonedPostTags = IGNORE_TAGS && postTags.filter(function(n) { return IGNORE_TAGS.indexOf(n) >= 0 }) || []
+            // let igonedPostTags = IGNORE_TAGS && postTags.filter(function(n) { return IGNORE_TAGS.indexOf(n) >= 0 }) || []
 
             const {hide, netVoteSign, authorRepLog10} = cont.get('stats').toJS()
-            if( (!(ignore || hide) || showSpam) && !igonedPostTags.length) // rephide
+            if (!(ignore || hide) || showSpam) // rephide
                 postsInfo.push({item, ignore, netVoteSign, authorRepLog10})
         });
         const renderSummary = items => items.map(item => <li key={item.item}>
@@ -205,6 +220,7 @@ class PostsList extends React.Component {
                 authorRepLog10={item.authorRepLog10}
                 onClick={this.onPostClick}
                 nsfwPref={nsfwPref}
+                visited={isPostVisited(item.item)}
             />
         </li>)
 

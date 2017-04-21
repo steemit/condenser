@@ -19,10 +19,12 @@ div[role=dialog] {
   z-index: 500;
 }
 
+input[type=button]:disabled,
+input[type=button].disabled, input[type=button].disabled:focus,
 input[type=submit].disabled, input[type=submit].disabled:focus {
-  opacity: 1;
+  opacity: 0.25;
   cursor: inherit;
-  background-color: $medium-gray;
+  background-color: #1A5099;
 }
 
 button, .button {

@@ -1,11 +1,11 @@
 {
-  "name": "Steemit.com",
+  "name": "Golos.io",
   "repository": {
     "type": "git",
-    "url": "https://github.com/steemit/steemit.com.git"
+    "url": "https://github.com/GolosChain/tolstoy.git"
   },
   "version": "1.0.0",
-  "description": "Steemit.com is the koa web server & middleware and react.js in-browser code for the world's first blockchain content + social media monetization platform!",
+  "description": "Голос - социальная сеть, построенная на публичном блокчейне.",
   "main": "index.js",
   "scripts": {
     "build": "NODE_ENV=production babel-node ./node_modules/.bin/webpack --stats --config ./webpack/prod.config.js",
@@ -84,9 +84,9 @@
     "pluralize": "^2.0.0",
     "purest": "^2.0.1",
     "raw-loader": "^0.5.1",
-    "rc-progress": "^2.0.6",
     "react": "^15.4.1",
     "react-addons-pure-render-mixin": "^15.4.1",
+    "react-cookie": "^1.0.5",
     "react-dom": "^15.4.1",
     "react-foundation-components": "git+https://github.com/valzav/react-foundation-components.git#d14362c7c8eee946a4acc3b18d70271d5a82813e",
     "react-highcharts": "^8.3.3",
@@ -108,7 +108,6 @@
     "redux-modules": "0.0.5",
     "redux-saga": "^0.9.5",
     "remarkable": "1.6.2",
-    "round-precision": "^1.0.0",
     "sanitize-html": "^1.11.4",
     "sass-loader": "^3.1.2",
     "secure-random": "^1.1.1",

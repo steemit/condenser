@@ -13,7 +13,7 @@ window.onerror = error => {
 };
 
 Iso.bootstrap(initial_state => {
-    console.log('Initial state', initial_state);
+    // console.log('Initial state', initial_state);
     window.$STM_Config = initial_state.offchain.config;
     if (initial_state.offchain.serverBusy) {
         window.$STM_ServerBusy = true;

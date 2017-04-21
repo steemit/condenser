@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react'
-import CountDown from 'app/components/elements/CountDown'
+// import CountDown from 'app/components/elements/CountDown'
 import Icon from 'app/components/elements/Icon'
 import {APP_ICON} from 'config/client_config'
 import 'whatwg-fetch';
@@ -7,7 +7,7 @@ import icoDestinationAddress from 'shared/icoAddress'
 import { FormattedMessage } from 'react-intl';
 import { translate } from 'app/Translator';
 import _btc from 'shared/clash/coins/btc'
-import roundPrecision from 'round-precision'
+// import roundPrecision from 'round-precision'
 import LandingCrowdsaleStats from './LandingCrowdsaleStats'
 // import { crowdsaleStartAt } from '../pages/Landing'
 
@@ -192,7 +192,7 @@ export default class LandingCountDowns extends React.Component {
         <div className="row Documentation__buttons text-center">
           <div className="small-12 columns">
             <a href="/welcome" target="blank" className="button">Гид по платформе Голос</a>
-            <a href="/about#faq" target="blank" className="button">ФАК</a>
+            <a href="https://golos.io/ru--golos/@bitcoinfo/samyi-polnyi-f-a-q-o-golose-spisok-luchshykh-postov-raskryvayushikh-vse-aspekty-proekta-bonusy-v-vide-kreativa" className="button">FAQ</a>
             <a href="https://docs.google.com/document/d/1WQF1xxmCMxzEA95Gnxw4FHViX_6pjVoUlBnItCepOmE/edit" target="blank" className="button">Планы на будущее</a>
             <a href="https://wiki.golos.io/" target="blank" className="button">Вики</a>
             <a href="https://www.youtube.com/c/golosioru" target="blank" className="button alert">YouTube канал</a>

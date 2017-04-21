@@ -43,7 +43,7 @@ class UserWallet extends React.Component {
     render() {
         const {state: {showDeposit, depositType, toggleDivestError},
             onShowDeposit, onShowDepositSteem, onShowDepositPower} = this
-        const {convertToSteem, price_per_steem, savings_withdraws, account,
+        const {convertToSteem, price_per_golos, savings_withdraws, account,
             current_user, open_orders} = this.props
         const gprops = this.props.gprops.toJS();
 
@@ -138,16 +138,8 @@ class UserWallet extends React.Component {
         // set displayed estimated value
         const total_sbd = sbd_balance + sbd_balance_savings + savings_sbd_pending + sbdOrders + conversionValue;
         const total_steem = vesting_steemf + balance_steem + saving_balance_steem + savings_pending + steemOrders;
-        // let total_value = '$' + numberWithCommas(
-        //     ((total_steem * price_per_steem) + total_sbd
-        // ).toFixed(3))
-        const total_value = (((vesting_steemf + balance_steem) * price_per_steem) + sbd_balance) || 0
+        const total_value = Number(((total_steem * price_per_golos) + total_sbd).toFixed(3))
         // format spacing on estimated value based on account state
-        // const estimate_output = <p>{localizedCurrency(total_value)}</p>;
-        // const estimate_output = <p>{localCurrencySymbol + ' ' + translateNumber(total_value.toFixed(3)) }</p>;
-        // if (isMyAccount) {
-        //     estimate_output = <p>{localizedCurrency(total_value)}&nbsp; &nbsp; &nbsp;</p>;
-        // }
         const estimate_output = <LocalizedCurrency amount={total_value} />
 
         /// transfer log
@@ -334,12 +326,12 @@ class UserWallet extends React.Component {
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
-        let price_per_steem = undefined
+        let price_per_golos = undefined
         const feed_price = state.global.get('feed_price')
         if(feed_price && feed_price.has('base') && feed_price.has('quote')) {
             const {base, quote} = feed_price.toJS()
             if(/ GBG$/.test(base) && / GOLOS$/.test(quote))
-                price_per_steem = parseFloat(base.split(' ')[0])
+                price_per_golos = parseFloat(base.split(' ')[0]) / parseFloat(quote.split(' ')[0])
         }
         const savings_withdraws = state.user.get('savings_withdraws')
         const gprops = state.global.get('props');
@@ -347,7 +339,7 @@ export default connect(
         return {
             ...ownProps,
             open_orders: state.market.get('open_orders'),
-            price_per_steem,
+            price_per_golos,
             savings_withdraws,
             sbd_interest,
             gprops

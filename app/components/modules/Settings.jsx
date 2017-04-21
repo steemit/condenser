@@ -62,6 +62,16 @@ class Settings extends React.Component {
         this.setState({oldNsfwPref: nsfwPref})
     }
 
+    onCurrencyChange(event) {
+        store.set('currency', event.target.value)
+    }
+
+    onLanguageChange = (event) => {
+        const language = event.target.value
+        store.set('language', language)
+        this.props.changeLanguage(language)
+    }
+
     handleSubmit = ({updateInitialValues}) => {
         let {metaData} = this.props
         if (!metaData) metaData = {}
@@ -141,7 +151,7 @@ class Settings extends React.Component {
             {/*<div className="row">
                 <div className="small-12 medium-6 large-4 columns">
                     <label>{tt('g.choose_language')}
-                        <select defaultValue={store.get('language')} onChange={this.handleLanguageChange}>
+                        <select defaultValue={store.get('language')} onChange={this.onLanguageChange}>
                             <option value="en">English</option>
                             <option value="ru">Russian</option>
                             <option value="es">Spanish</option>
@@ -156,7 +166,7 @@ class Settings extends React.Component {
             {/*<div className="row">
                 <div className="small-12 medium-6 large-4 columns">
                     <label>{tt('g.choose_currency')}
-                        <select defaultValue={store.get('currency')} onChange={this.handleCurrencyChange}>
+                        <select defaultValue={store.get('currency')} onChange={this.onCurrencyChange}>
                             {
                                 ALLOWED_CURRENCIES.map(i => {
                                     return <option key={i} value={i}>{i}</option>
@@ -169,6 +179,29 @@ class Settings extends React.Component {
             <div className="row">
                 <form onSubmit={this.handleSubmitForm} className="small-12 medium-6 large-4 columns">
                     <h3>{tt('settings_jsx.public_profile_settings')}</h3>
+                    {/* CHOOSE LANGUAGE */}
+                    <label>
+                        {tt('settings_jsx.choose_language')}
+                            <select defaultValue={store.get('language')} onChange={this.onLanguageChange}>
+                                <option value="ru">Русский</option>
+                                <option value="en">English</option>
+                                {/* in react-intl they use 'uk' instead of 'ua' */}
+                                <option value="uk">Українська</option>
+                                <option value="sr">Srpski</option>
+                            </select>
+                    </label>
+                    <div className="error"></div>
+                    {/* CHOOSE CURRENCY */}
+                    <label>{tt('settings_jsx.choose_currency')}
+                        <select defaultValue={store.get('currency')} onChange={this.onCurrencyChange}>
+                            {
+                                ALLOWED_CURRENCIES.map(i => {
+                                    return <option key={i} value={i}>{i}</option>
+                                })
+                            }
+                        </select>
+                    </label>
+                    <div className="error"></div>
                     <label>
                         {tt('settings_jsx.profile_image_url')}
                         <input type="url" {...profile_image.props} autoComplete="off" />

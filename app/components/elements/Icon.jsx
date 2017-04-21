@@ -3,6 +3,8 @@ import React from 'react';
 const icons = [
     'user',
     'share',
+    'calendar'
+    'chain',
     'chevron-up-circle',
     'chevron-down-circle',
     'chevron-left',
@@ -11,10 +13,13 @@ const icons = [
     'facebook',
     'twitter',
     'linkedin',
+    'vk',
     'link',
     'clock',
     'extlink',
     'steem',
+    'steemd',
+    'golos',
     'ether',
     'bitcoin',
     'bitshares',
@@ -32,12 +37,7 @@ const icons = [
     'line',
     'video',
     'eye',
-    'location',
-    'calendar',
-    'steemd',
-    'chain',
-    'golos',
-    'vk'
+    'location'
 ];
 const icons_map = {};
 for (const i of icons) icons_map[i] = require(`app/assets/icons/${i}.svg`);

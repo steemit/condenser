@@ -60,7 +60,7 @@ class Post extends React.Component {
 
     render() {
         const {showSignUp} = this
-        const {current_user, signup_bonus, content} = this.props
+        const {current_user, ignoring, signup_bonus, content} = this.props
         const {showNegativeComments, commentHidden, showAnyway} = this.state
         let post = this.props.post;
         if (!post) {
@@ -96,7 +96,17 @@ class Post extends React.Component {
            sort_order = this.props.location.query.sort;
 
         sortComments( content, replies, sort_order );
-        const positiveComments = replies
+        const keep = a => {
+            const c = content.get(a);
+            const hide = c.getIn(['stats', 'hide'])
+            let ignore = false
+            if(ignoring) {
+                ignore = ignoring.has(c.get('author'))
+                // if(ignore) console.log(current_user && current_user.get('username'), 'is ignoring post author', c.get('author'), '\t', a)
+            }
+            return !hide && !ignore
+        }
+        const positiveComments = replies.filter(a => keep(a))
             .map(reply => (
                 <Comment
                     root
@@ -166,7 +176,7 @@ class Post extends React.Component {
                         <div className="Post__promo">
                             {tt('g.next_7_strings_sinngle_block.authors_get_paid_when_people_like_you_upvote_their_post')}.
                             <br /> {// remove '$' from signup_bonus before parsing it into local currency
-                                    tt('g.next_7_strings_sinngle_block.if_you_enjoyed_what_you_read_earn_amount', {amount: '$'+localizedCurrency(signup_bonus.substring(1)), VESTING_TOKEN_UPPERCASE})}
+                                    tt('g.next_7_strings_sinngle_block.if_you_enjoyed_what_you_read_earn_amount', {amount: localizedCurrency(signup_bonus.substring(1)), VESTING_TOKEN_UPPERCASE})}
                             <br />
                             <button type="button" className="button sign-up" onClick={showSignUp}>{tt('g.next_7_strings_sinngle_block.sign_up_now_to_receive')}<span className="free-money">{tt('g.next_7_strings_sinngle_block.free_steem')}</span></button>
                         </div>

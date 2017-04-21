@@ -7,7 +7,6 @@ import {key_utils} from 'shared/ecc'
 import Apis from 'shared/api_client/ApiInstances'
 import {validate_account_name} from 'app/utils/ChainValidation'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
-import { FormattedHTMLMessage } from 'react-intl';
 import tt from 'counterpart';
 import { APP_NAME } from 'app/client_config';
 

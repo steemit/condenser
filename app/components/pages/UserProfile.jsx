@@ -147,11 +147,11 @@ export default class UserProfile extends React.Component {
 
 
         // let balance_steem = parseFloat(account.balance.split(' ')[0]);
-        // let vesting_steem = vestingSteem(account, gprops).toFixed(2);
-        // const steem_balance_str = numberWithCommas(balance_steem.toFixed(2)) + " STEEM";
+        // let vesting_steem = vestingSteem(account, gprops).toFixed(3);
+        // const steem_balance_str = numberWithCommas(balance_steem.toFixed(3)) + " STEEM";
         // const power_balance_str = numberWithCommas(vesting_steem) + " STEEM POWER";
         // const sbd_balance = parseFloat(account.sbd_balance)
-        // const sbd_balance_str = numberWithCommas('$' + sbd_balance.toFixed(2));
+        // const sbd_balance_str = numberWithCommas('$' + sbd_balance.toFixed(3));
 
         let rewardsClass = "", walletClass = "";
         if( section === 'transfers' ) {
@@ -227,10 +227,9 @@ export default class UserProfile extends React.Component {
             if (account.blog) {
                 let posts = accountImm.get('blog');
                 const emptyText = isMyAccount ? <div>
-                    Looks like you haven't posted anything yet.<br /><br />
-                    <Link to="/submit.html">Submit a Story</Link><br />
-                    <a href="/steemit/@thecryptofiend/the-missing-faq-a-beginners-guide-to-using-steemit">Read The Beginner's Guide</a><br />
-                    <a href="/welcome">Read The Steemit Welcome Guide</a>
+                    {tt('submit_a_story.you_hasnt_started_bloggin_yet')}<br /><br />
+                    <Link to="/submit.html">{tt('g.submit_a_story')}</Link><br />
+                    <a href="/welcome">{tt('submit_a_story.welcome_to_the_blockchain')}</a>
                 </div>:
                     tt('user_profile.user_hasnt_started_bloggin_yet', {name: accountname});
 
@@ -328,6 +327,10 @@ export default class UserProfile extends React.Component {
 
         // set account join date
         let accountjoin = account.created;
+        const transferFromSteemToGolosDate = '2016-09-29T12:00:00';
+        if (new Date(accountjoin) < new Date(transferFromSteemToGolosDate)) {
+          accountjoin = transferFromSteemToGolosDate;
+        }
 
         const top_menu = <div className="row UserProfile__top-menu">
             <div className="columns small-10 medium-12 medium-expand">

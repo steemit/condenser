@@ -8,6 +8,7 @@ import user from 'app/redux/User';
 import transaction from 'app/redux/Transaction'
 import Voting from 'app/components/elements/Voting';
 import Reblog from 'app/components/elements/Reblog';
+import Tooltip from 'app/components/elements/Tooltip';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import ReplyEditor from 'app/components/elements/ReplyEditor';
 import {immutableAccessor} from 'app/utils/Accessors';
@@ -20,7 +21,8 @@ import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import ShareMenu from 'app/components/elements/ShareMenu';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import Userpic from 'app/components/elements/Userpic';
-import { APP_DOMAIN, APP_NAME, APP_ICON } from 'app/client_config';
+import { APP_DOMAIN, APP_NAME, APP_ICON, APP_NAME_LATIN, SEO_TITLE } from 'app/client_config';
+import { isPostVisited, visitPost } from 'app/utils/helpers';
 import tt from 'counterpart';
 
 // function loadFbSdk(d, s, id) {
@@ -86,9 +88,9 @@ class PostFull extends React.Component {
     constructor() {
         super();
         this.state = {};
+        this.vkShare = this.vkShare.bind(this);
         this.fbShare = this.fbShare.bind(this);
         this.twitterShare = this.twitterShare.bind(this);
-        this.linkedInShare = this.linkedInShare.bind(this);
         this.showExplorePost = this.showExplorePost.bind(this);
         this.onShowReply = () => {
             const {state: {showReply, formId}} = this
@@ -125,6 +127,10 @@ class PostFull extends React.Component {
                 if (showEditor.type === 'edit') {
                     this.setState({showEdit: true})
                 }
+
+                if (!isPostVisited(this.props.post)) {
+                    visitPost(this.props.post);
+                }
             }
         }
     }
@@ -137,6 +143,7 @@ class PostFull extends React.Component {
 
     fbShare(e) {
         const href = this.share_params.url;
+        // serverApiRecordEvent('FbShare', this.share_params.link);
         e.preventDefault();
         // loadFbSdk(document, 'script', 'facebook-jssdk').then(fb => {
             window.FB.ui({
@@ -161,16 +168,13 @@ class PostFull extends React.Component {
         window.open('http://twitter.com/share?' + q, 'Share', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=' + winWidth + ',height=' + winHeight);
     }
 
-    linkedInShare(e) {
-        serverApiRecordEvent('LinkedInShare', this.share_params.link);
+    vkShare = (e) => {
         e.preventDefault();
         const winWidth = 720;
         const winHeight = 480;
         const winTop = (screen.height / 2) - (winWidth / 2);
         const winLeft = (screen.width / 2) - (winHeight / 2);
-        const s = this.share_params;
-        const q = 'title=' + encodeURIComponent(s.title) + '&url=' + encodeURIComponent(s.url) + '&source=Steemit&mini=true';
-        window.open('https://www.linkedin.com/shareArticle?' + q, 'Share', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=' + winWidth + ',height=' + winHeight);
+        window.open('https://vk.com/share.php?url=' + this.share_params.url, this.share_params, 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=' + winWidth + ',height=' + winHeight)
     }
 
     showPromotePost = () => {
@@ -200,7 +204,7 @@ class PostFull extends React.Component {
         if (content.category) link = `/${content.category}${link}`;
 
         const {category, title, body} = content;
-        if (process.env.BROWSER && title) document.title = title + ' — '+ APP_NAME;
+        if (process.env.BROWSER && title) document.title = title + ' | ' + SEO_TITLE;
 
         let content_body = content.body;
         const url = `/${category}/@${author}/${permlink}`
@@ -213,14 +217,14 @@ class PostFull extends React.Component {
         this.share_params = {
             link,
             url: 'https://' + APP_DOMAIN + link,
-            title: title + ' — ' + APP_NAME,
+            title: title + ' | '+ SEO_TITLE,
             desc: p.desc
         };
 
         const share_menu = [
+            {link: '#', onClick: this.vkShare, value: 'VK', title: tt('postfull_jsx.share_on_vk') icon: 'vk'},
             {link: '#', onClick: this.fbShare, value: 'Facebook', title: tt('postfull_jsx.share_on_facebook'), icon: 'facebook'},
             {link: '#', onClick: this.twitterShare, value: 'Twitter', title: tt('postfull_jsx.share_on_twitter'), icon: 'twitter'},
-            {link: '#', onClick: this.linkedInShare, value: 'LinkedIn', title: tt('postfull_jsx.share_on_linkedin'), icon: 'linkedin'},
         ];
 
         const Editor = this.state.showReply ? PostFullReplyEditor : PostFullEditEditor;

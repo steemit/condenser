@@ -6,10 +6,12 @@ import { connect } from 'react-redux';
 import user from 'app/redux/User';
 import Reblog from 'app/components/elements/Reblog';
 import Voting from 'app/components/elements/Voting';
+import Tooltip from 'app/components/elements/Tooltip';
 import {immutableAccessor} from 'app/utils/Accessors';
 import extractContent from 'app/utils/ExtractContent';
 import { browserHistory } from 'react-router';
 import VotesAndComments from 'app/components/elements/VotesAndComments';
+import TagList from 'app/components/elements/TagList';
 import {authorNameAndRep} from 'app/utils/ComponentFormatters';
 import {Map} from 'immutable';
 import Reputation from 'app/components/elements/Reputation';
@@ -18,6 +20,8 @@ import TagList from 'app/components/elements/TagList';
 import UserNames from 'app/components/elements/UserNames';
 import tt from 'counterpart';
 import { APP_ICON } from 'app/client_config';
+import { detransliterate } from 'app/utils/ParsersAndFormatters';
+
 
 function isLeftClickEvent(event) {
     return event.button === 0
@@ -43,7 +47,8 @@ class PostSummary extends React.Component {
         currentCategory: React.PropTypes.string,
         thumbSize: React.PropTypes.string,
         nsfwPref: React.PropTypes.string,
-        onClick: React.PropTypes.func
+        onClick: React.PropTypes.func,
+        visited: React.PropTypes.bool
     };
 
     constructor() {
@@ -58,7 +63,8 @@ class PostSummary extends React.Component {
                props.total_payout !== this.props.total_payout ||
                props.username !== this.props.username ||
                props.nsfwPref !== this.props.nsfwPref ||
-               state.revealNsfw !== this.state.revealNsfw;
+               state.revealNsfw !== this.state.revealNsfw ||
+               props.visited !== this.props.visited;
     }
 
     onRevealNsfw(e) {
@@ -68,7 +74,7 @@ class PostSummary extends React.Component {
 
     render() {
         const {currentCategory, thumbSize, ignore, onClick} = this.props;
-        const {post, content, pending_payout, total_payout} = this.props;
+        const {post, content, pending_payout, total_payout, cashout_time} = this.props;
         const {account} = this.props;
         if (!content) return null;
 
@@ -96,6 +102,13 @@ class PostSummary extends React.Component {
 
         const {gray, pictures, authorRepLog10, flagWeight, isNsfw} = content.get('stats', Map()).toJS()
         const p = extractContent(immutableAccessor, content);
+        const nsfwTags = ['nsfw', 'ru--mat', '18+']
+        let nsfwTitle = nsfwTags[0]
+        let currentNsfw = []
+        if (isNsfw && p.json_metadata && p.json_metadata.tags)
+            currentNsfw = p.json_metadata.tags.filter(function(n) { return nsfwTags.indexOf(n) >= 0 })
+        if (currentNsfw && currentNsfw.length)
+            nsfwTitle = currentNsfw[0]
         let desc = p.desc
         if(p.image_link)// image link is already shown in the preview
             desc = desc.replace(p.image_link, '')
@@ -120,7 +133,7 @@ class PostSummary extends React.Component {
         </div>;
         let content_title = <h3 className="entry-title">
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>
-                {isNsfw && <span className="nsfw-flag">nsfw</span>}
+                {isNsfw && <span className="nsfw-flag">{detransliterate(nsfwTitle)}</span>}
                 {title_text}
                 {full_power && <span title={tt('g.powered_up_100')}><Icon name={APP_ICON} /></span>}
             </a>
@@ -159,7 +172,7 @@ class PostSummary extends React.Component {
                             <div className="PostSummary__time_author_category_small show-for-small-only">
                                 {author_category}
                             </div>
-                            tt('postsummary_jsx.this_post_is') <span className="nsfw-flag">nsfw</span>.
+                            tt('postsummary_jsx.this_post_is') <span className="nsfw-flag">{detransliterate(nsfwTitle)}</span>.
                             tt('postsummary_jsx.you_can') <a href="#" onClick={this.onRevealNsfw}>tt('postsummary_jsx.reveal_it')</a> {tt('g.or') + ' '}
                             {username ? <span>{tt('postsummary_jsx.adjust_your')} <Link to={`/@${username}/settings`}>{tt('postsummary_jsx.display_preferences')}</Link>.</span>
                                       : <span><Link to="/enter_email">{tt('postsummary_jsx.create_an_account')}</Link> {tt('postsummary_jsx.to_save_your_preferences')}.</span>}
@@ -175,10 +188,11 @@ class PostSummary extends React.Component {
           const prox = $STM_Config.img_proxy_prefix
           const size = (thumbSize == 'mobile') ? '640x480' : '256x512';
           const url = (prox ? prox + size + '/' : '') + p.image_link
+          const visitedClassName = this.props.visited ? 'PostSummary__image-visited ' : '';
           if(thumbSize == 'mobile') {
-            thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image-mobile"><img src={url} /></a>
+            thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className={'PostSummary__image-mobile ' + visitedClassName}><img src={url} /></a>
           } else {
-            thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image" style={{backgroundImage: 'url(' + url + ')'}}></a>
+            thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className={'PostSummary__image ' + visitedClassName} style={{backgroundImage: 'url(' + url + ')'}}></a>
           }
         }
         const commentClasses = []

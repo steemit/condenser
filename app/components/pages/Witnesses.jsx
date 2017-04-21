@@ -196,7 +196,7 @@ class Witnesses extends React.Component {
                         {this.state.proxyFailed && <p className="error">{tt('witnesses_jsx.proxy_update_error')}.</p>}
                         <br />
                      </div>
-                </div>
+                </div>}
             </div>
         );
     }

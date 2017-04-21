@@ -10,7 +10,6 @@ export default function sendEmail(template, to, params, from = null) {
     }
     const tmpl_id = config.get('sendgrid.templates')[template];
     if (!tmpl_id) throw new Error(`can't find template ${template}`);
-
     const request = sg.emptyRequest({
         method: 'POST',
         path: '/v3/mail/send',
@@ -26,9 +25,9 @@ export default function sendEmail(template, to, params, from = null) {
 
     sg.API(request)
     .then(response => {
-        console.log(`sent '${template}' email to '${to}'`, response.statusCode);
+        // console.log(`<------------- sent '${template}' email to '${to}'`, response.statusCode);
     })
     .catch(error => {
-        console.error(`failed to send '${template}' email to '${to}'`, error);
+        // console.error(`<------------- failed to send '${template}' email to '${to}'`, error);
     });
 }

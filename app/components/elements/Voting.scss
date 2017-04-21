@@ -116,16 +116,23 @@
 }
 
 .Voting .DropdownMenu ul {
-  width: 240px;
+  min-width: 240px;
+  width: auto;
 
   li > a {
     padding: 0 0.5rem;
     line-height: 1.25;
+    position: relative;
   }
 
   li > span {
     padding: 0 0.5rem;
     line-height: 1.25;
+  }
+
+  li > a > span {
+    position: absolute;
+    right: 15px;
   }
 }
 

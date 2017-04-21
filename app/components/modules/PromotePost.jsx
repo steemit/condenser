@@ -6,6 +6,7 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, DEBT_TICKER} from 'app/client_config';
 import tt from 'counterpart';
 
+
 class PromotePost extends Component {
 
     static propTypes = {

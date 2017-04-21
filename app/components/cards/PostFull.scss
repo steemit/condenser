@@ -64,8 +64,39 @@
 .PostFull__body {
   padding: 1rem 0 2rem 0;
   clear: left;
+
+  font-family: Georgia, serif;
+  font-size: 120%;
+  line-height: 150%;
+
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
+
   a {
     color: #4078C0;
+  }
+
+  table td {
+    word-break: normal; // issue #146
+  }
+
+  p {
+    font-size: 100%;
+    line-height: 150%;
+  }
+
+  img {
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: none;
+  }
+
+  iframe {
+    max-width: 100%;
+    max-height: 75vw;
   }
 }
 
@@ -161,6 +192,10 @@ input.share-box {
     -ms-transform: rotate(120deg);
     -o-transform: rotate(120deg);
     transform: rotate(120deg);
+}
+
+.Promote__button {
+  margin-right: 0px!important;
 }
 
 /* Small only */

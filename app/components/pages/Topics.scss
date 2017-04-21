@@ -1,5 +1,5 @@
 ul.Topics {
-  max-width: 10rem;
+  max-width: 20rem;
   > li {
     list-style-type: none;
   }
@@ -7,7 +7,31 @@ ul.Topics {
     font-weight: bold;
     overflow: hidden;
   }
+  > li > a.action {
+    color: rgba(0,200,0,0);
+    font-weight: bold;
+    position: relative;
+    left: -.5rem;
+  }
+  > li.Topics__selected__remove {
+    &:hover > a.action {
+      color: rgba(255,0,0,0.65);
+    }
+    a.action {
+      color: rgba(255,0,0,0.2);
+    }
+    a.action:hover {
+      color: rgba(255,0,0,1);
+    }
+  }
+  > li:hover > a.action {
+    color: rgba(0,200,0,0.65);
+  }
+  > li > a.action:hover {
+    color: rgba(0,200,0,1);
+  }
   .show-more {
+    margin-top: .75rem;
     font-size: 0.9rem;
     font-weight: bold;
     color: $dark-gray;
@@ -19,15 +43,74 @@ select.Topics {
 }
 
 .Topics__title {
+  padding-left: .5rem;
   font-weight: bold;
   color: $dark-gray;
 }
 
 .Topics__filter {
-  margin: 0.5rem 0;
+  min-height: 5.5rem;
+  color: $dark-gray;
+  margin: 0 -1.25rem 0.5rem -1.25rem;
+  padding: 0.25rem 0 0.25rem 1.75rem;
+  border-radius: 0.25rem;
+  background-color: #f5f5f5;
+  div > a.action {
+    color: rgba(255,0,0,0.65);
+    font-weight: bold;
+    position: relative;
+    left: -.5rem;
+  }
+  div > a.action:hover {
+    color: rgba(255,0,0,1);
+  }
+  div > a.active {
+    // color: #888 !important;
+  }
+  div > a.tagname {
+    // color: #888;
+    text-decoration: underline;
+  }
+  div {
+    margin-left: -0.5rem;
+    color: #989898;
+  }
+  div > span {
+    display: block;
+    padding-top: 0.75rem;
+    padding-left: 0.5rem;
+  }
   input {
-    padding-top: 0.1rem;
-    padding-bottom: 0.1rem;
-    border-color: $light-gray;
+    padding: 0rem 0.5rem;
+  }
+}
+.filter_fixed {
+  height: 5.5rem;
+  overflow-y: hidden
+}
+.filter_expanded {
+  height: auto;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.Topics__filter__expand {
+  background-color: #e8e8e8;
+  margin: -0.5rem -1.25rem 0.5rem -1.25rem;
+  text-align: center;
+  border-bottom-right-radius: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
+  &:hover {
+    background-color: #e0e0e0;
+  }
+  a.expand {
+    font-weight: bold;
+    display: block;
+    font-size: 75%;
+  }
+}
+.Topics__selected__add {}
+.Topics__selected__remove {
+  a.tagname {
+    text-decoration: underline;
   }
 }

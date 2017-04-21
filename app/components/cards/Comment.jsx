@@ -31,7 +31,6 @@ function hasPositivePayout(cont, c) {
     return false;
 }
 
-
 export function sortComments( cont, comments, sort_order ) {
 
   function netNegative(a)  {

@@ -32,8 +32,9 @@ sudo npm install -g babel-cli
 
 ```bash
 cd config
-cp example/client-example.json client_config.json
+cp example/client-example.js client_config.js
 cp example/golos-example.json golos-dev.json
+cp example/golos-example.json golos.json
 ```
 
 Generate a new crypto_key and save under server_session_secret in ./golos-dev.json.
@@ -84,7 +85,7 @@ mysql -u root
 Install `sequelize-cli` globally:
 
 ```bash
-sudo npm install -g sequelize sequelize-cli pm2 mysql
+sudo npm install -g sequelize sequelize-cli mysql
 ```
 
 Run `sequelize db:migrate` in `db/` directory.

@@ -4,8 +4,8 @@ export default ({title, children, type}) => {
     return <div className="row">
         <div className="column">
             <div className={'callout' + (type ? ` ${type}` : '')}>
-                <h4>{title}</h4>
-                <div>{children}</div>
+                {title && <h4>{title}</h4>}
+                {children && <div>{children}</div> || <span/>}
             </div>
         </div>
     </div>

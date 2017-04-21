@@ -41,10 +41,14 @@ ul.PostsList__summaries {
   width: 130px;
   height: 4.5rem;
   background-color: #EEE;
-  background-size: 100%;
+  background-size: 110%;
   background-repeat: no-repeat;
   background-position: 50% 20%;
   border: 1px solid #EEE;
+}
+
+.PostSummary__image-visited {
+  filter: grayscale(100%);
 }
 
 .PostSummary__image-mobile {
@@ -64,19 +68,19 @@ ul.PostsList__summaries {
 
 .PostSummary.with-image .PostSummary__reblogged_by,
 .PostSummary.with-image .PostSummary__content {
-  margin-left: 8.25rem;
+  margin-left: 8.5rem;
 }
 
 .PostSummary__header {
   > h3 {
-    font: 600 100% "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Arial, sans-serif;
+    font: 600 100% "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Arial, 'Roboto', sans-serif;
     margin: 0;
     overflow: hidden;
     > a {
-      color: #333;
+      color: #000;
     }
     > a:visited {
-      color: #777;
+      color: #999;
     }
     .Icon {
       margin: 0 0.25rem;
@@ -86,6 +90,17 @@ ul.PostsList__summaries {
         vertical-align: 5%;
       }
     }
+    .Icon {
+      margin: 0 0.25rem;
+      svg {
+        width: 0.85rem;
+        height: 0.85rem;
+        vertical-align: 5%;
+      }
+    }
+  }
+  .nsfw-flag {
+    margin-right: 0.25rem;
   }
   .nsfw-flag {
     margin-right: 0.25rem;
@@ -102,8 +117,8 @@ ul.PostsList__summaries {
 .PostSummary__body {
   width: auto;
   padding: 0.3rem 0.1rem 0.15rem;
-  font-family: "Helvetica Neue", Helvetica, Verdana, Arial, sans-serif;
-  color: #666;
+  font-family: $body-font-family;
+  color: #3f3f3f;
   overflow: hidden;
   line-height: 1.4;
   white-space: nowrap;
@@ -112,6 +127,9 @@ ul.PostsList__summaries {
   a {
     color: inherit;
     display: inline;
+  }
+  > a:visited {
+    color: #6f6f6f;
   }
 }
 
@@ -142,9 +160,9 @@ ul.PostsList__summaries {
   border-left: 1px solid #cacaca;
 
   .Reblog__button {
+    margin-left: .5rem;
     margin-right: 1rem;
     padding-right: 1rem;
-    border-right: 1px solid #cacaca;
   }
 }
 

@@ -10,7 +10,8 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import reactForm from 'app/utils/ReactForm'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import tt from 'counterpart';
-import { APP_URL } from 'app/client_config';
+import { APP_DOMAIN } from 'app/client_config';
+import { translateError } from 'app/utils/ParsersAndFormatters';
 
 class LoginForm extends Component {
 
@@ -26,7 +27,7 @@ class LoginForm extends Component {
 
     constructor(props) {
         super()
-        const cryptoTestResult = runTests();
+        const cryptoTestResult = runTests(); // const cryptoTestResult = undefined; // temporary switch BrowserTests off
         let cryptographyFailure = false;
         this.SignUp = this.SignUp.bind(this);
         if (cryptoTestResult !== undefined) {
@@ -112,7 +113,7 @@ class LoginForm extends Component {
                     <div className="callout alert">
                         <h4>{tt('loginform_jsx.cryptography_test_failed')}</h4>
                         <p>{tt('loginform_jsx.unable_to_log_you_in')}</p>
-                        <p>{tt('loginform_jsx.the_latest_versions_of')} <a href="https://www.google.com/chrome/">Chrome</a> {tt('g.and')} <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a> {tt('loginform_jsx.are_well_tested_and_known_to_work_with', {APP_URL})}</p>
+                        <p>{tt('loginform_jsx.the_latest_versions_of')} <a href="https://www.google.com/chrome/">Chrome</a> {tt('g.and')} <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a> {tt('loginform_jsx.are_well_tested_and_known_to_work_with', {APP_DOMAIN})}</p>
                     </div>
                 </div>
             </div>;
@@ -176,7 +177,6 @@ class LoginForm extends Component {
             <center>
             <form onSubmit={handleSubmit(({data}) => {
                 // bind redux-form to react-redux
-                console.log('Login\tdispatchSubmit');
                 return dispatchSubmit(data, loginBroadcastOperation, afterLoginRedirectToWelcome)
             })}
                 onChange={this.props.clearError}
@@ -188,11 +188,11 @@ class LoginForm extends Component {
                         {...username.props} onChange={usernameOnChange} autoComplete="on" disabled={submitting}
                     />
                 </div>
-                {username.touched && username.blur && username.error ? <div className="error">{username.error}&nbsp;</div> : null}
+                {username.touched && username.blur && username.error ? <div className="error">{translateError(username.error)}&nbsp;</div> : null}
 
                 <div>
                     <input type="password" required ref="pw" placeholder={tt('loginform_jsx.password_or_wif')} {...password.props} autoComplete="on" disabled={submitting} />
-                    {error && <div className="error">{error}&nbsp;</div>}
+                    {error && <div className="error">{translateError(error)}&nbsp;</div>}
                     {error && password_info && <div className="warning">{password_info}&nbsp;</div>}
                 </div>
                 {loginBroadcastOperation && <div>

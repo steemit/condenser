@@ -21,6 +21,12 @@ export default createModule({
             }
         },
         {
+            action: 'FETCHING_STATE',
+            reducer: (state, {payload: fetching}) => {
+                return state.mergeDeep({fetching: fetching});
+            }
+        },
+        {
             action: 'RECEIVE_STATE',
             reducer: (state, action) => {
                 let payload = fromJS(action.payload)
@@ -153,8 +159,6 @@ export default createModule({
         {
             action: 'RECEIVE_DATA',
             reducer: (state, {payload: {data, order, category, author, accountname, /*permlink*/}}) => {
-                // console.log('-- RECEIVE_DATA reducer -->', order, category, author, permlink, data);
-                // console.log('-- RECEIVE_DATA state -->', state.toJS());
                 let new_state;
                 if (order === 'by_author' || order === 'by_feed' || order === 'by_comments' || order === 'by_replies') {
                     // category is either "blog", "feed", "comments", or "recent_replies" (respectively) -- and all posts are keyed under current profile
@@ -169,6 +173,7 @@ export default createModule({
                     });
                 } else {
                     new_state = state.updateIn(['discussion_idx', category || '', order], list => {
+                        if (!list) list = List();
                         return list.withMutations(posts => {
                             data.forEach(value => {
                                 const entry = `${value.author}/${value.permlink}`;

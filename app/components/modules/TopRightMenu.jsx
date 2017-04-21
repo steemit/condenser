@@ -22,18 +22,28 @@ const defaultNavigate = (e) => {
     browserHistory.push(a.pathname + a.search + a.hash);
 };
 
-function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn}) {
+function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn, showSignUp, location}) {
     const mcn = 'menu' + (vertical ? ' vertical show-for-small-only' : '');
     const mcl = vertical ? '' : ' sub-menu';
     const lcn = vertical ? '' : 'show-for-medium';
     const nav = navigate || defaultNavigate;
     const submit_story = $STM_Config.read_only_mode ? null : <li className={lcn + ' submit-story'}><a href="/submit.html" onClick={nav}>{tt('g.submit_a_story')}</a></li>;
+    const user_information_button = <li className={lcn + ' buttons'}><Link to="/about" className="button success">{tt('g.about_project')}</Link></li>;
     const feed_link = `/@${username}/feed`;
     const replies_link = `/@${username}/recent-replies`;
     const wallet_link = `/@${username}/transfers`;
+    const settings_link = `/@${username}/settings`;
     const account_link = `/@${username}`;
-    const comments_link = `/@${username}/comments`;
+    const posts_link = `/@${username}/posts`;
     const reset_password_link = `/@${username}/password`;
+
+    const inIco = location && location.pathname.indexOf("/about") == 0;
+    const ico_menu = [
+        {link: '#what-is-golos', value: tt('g.video')},
+        {link: '#docs', value: tt('g.documentation')},
+        {link: '#faq', value: tt('navigation.faq')},
+        {link: '#team', value: tt('g.team')},
+    ];
     const settings_link = `/@${username}/settings`;
     if (loggedIn) { // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!
         const user_menu = [
@@ -50,15 +60,15 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
         ];
         return (
             <ul className={mcn + mcl}>
-                <li className={lcn}><a href="/static/search.html" title={tt('g.search')}>{vertical ? <span>{tt('g.search')}</span> : <Icon name="search" />}</a></li>
-                {submit_story}
+                {inIco ? ico_menu.map((o,i) => {return <li key={i} className={lcn}><a href={o.link}>{o.value}</a></li>}) : user_information_button}
+                {!inIco && <li className={lcn}><a href="/static/search.html" title="Search">{vertical ? <span>{tt('g.search')}</span> : <Icon name="search" />}</a></li>}
+                {!inIco && submit_story}
                 <LinkWithDropdown
                     closeOnClickOutside
                     dropdownPosition="bottom"
                     dropdownAlignment="right"
-                    dropdownContent={
-                                <VerticalMenu items={user_menu} title={username} />
-                              }
+                    dropdownContent={<VerticalMenu items={user_menu} title={username} />}
+                    onClick={trackAnalytics.bind(this, 'user dropdown menu clicked')}
                 >
                     {!vertical && <li className={'Header__userpic '}>
                         <a href={account_link} title={username} onClick={e => e.preventDefault()}>
@@ -73,23 +83,14 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
             </ul>
         );
     }
-    if (probablyLoggedIn) {
-        return (
-            <ul className={mcn + mcl}>
-                {!vertical && <li><a href="/static/search.html" title={tt('g.search')}><Icon name="search" /></a></li>}
-                <li className={lcn}><LoadingIndicator type="circle" inline /></li>
-                {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
-                    <span className="hamburger" />
-                </a></li>}
-            </ul>
-        );
-    }
     return (
         <ul className={mcn + mcl}>
-            {!vertical && <li><a href="/static/search.html" title={tt('g.search')}><Icon name="search" /></a></li>}
-            <li className={lcn}><a href="/enter_email">{tt('g.sign_up')}</a></li>
-            <li className={lcn}><a href="/login.html" onClick={showLogin}>{tt('g.login')}</a></li>
-            {submit_story}
+            {inIco ? ico_menu.map((o,i) => {return <li key={i} className={lcn}><a href="{o.link}">{o.value}</a></li>}) : user_information_button }
+            {!inIco && !vertical && <li><a href="/static/search.html" title={tt('g.search')}><Icon name="search" /></a></li>}
+            {!inIco && !probablyLoggedIn && <li className={lcn}><a href="/create_account" onClick={showSignUp}>{tt('g.sign_up')}</a></li>}
+            {!inIco && !probablyLoggedIn && <li className={lcn}><a href="/login.html" onClick={showLogin}>{tt('g.login')}</a></li>}
+            {!inIco && !probablyLoggedIn && submit_story}
+            {probablyLoggedIn && <li className={lcn}><LoadingIndicator type="circle" inline /></li>}
             {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
                 <span className="hamburger" />
             </a></li>}
@@ -105,7 +106,8 @@ TopRightMenu.propTypes = {
     logout: React.PropTypes.func.isRequired,
     vertical: React.PropTypes.bool,
     navigate: React.PropTypes.func,
-    toggleOffCanvasMenu: React.PropTypes.func
+    toggleOffCanvasMenu: React.PropTypes.func,
+    showSignUp: React.PropTypes.func.isRequired
 };
 
 export default connect(
@@ -129,6 +131,10 @@ export default connect(
         showLogin: e => {
             if (e) e.preventDefault();
             dispatch(user.actions.showLogin())
+        },
+        showSignUp: e => {
+            if (e) e.preventDefault();
+            dispatch(user.actions.showSignUp())
         },
         logout: e => {
             if (e) e.preventDefault();

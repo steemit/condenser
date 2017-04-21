@@ -5,6 +5,7 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper'
 import transaction from 'app/redux/Transaction'
 import Memo from 'app/components/elements/Memo'
+import tt from 'counterpart';
 
 class SavingsWithdrawHistory extends React.Component {
 

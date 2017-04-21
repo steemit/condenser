@@ -46,7 +46,7 @@
     "reportOnly": false,
     "setAllHeaders": true
   },
-  "img_proxy_prefix": "https://steemitdevimages.com/",
+  "img_proxy_prefix": "https://imgp.golos.io/",
   "ipfs_prefix": false,
   "mixpanel": false,
   "notify": {
@@ -59,7 +59,7 @@
   },
   "registrar": {
     "account": "-",
-    "fee": "5.000 STEEM",
+    "fee": "5.000 GOLOS",
     "signing_key": "5J..."
   },
   "requestAccountRecovery": {

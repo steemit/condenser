@@ -12,14 +12,16 @@ import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import FoundationDropdown from 'app/components/elements/FoundationDropdown';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import tt from 'counterpart';
+import LocalizedCurrency, {localizedCurrency} from 'app/components/elements/LocalizedCurrency';
+import { DEBT_TICKER } from 'app/client_config';
 
 const ABOUT_FLAG = <div>
-    <p>Flagging a post can remove rewards and make this material less visible.  Some common reasons to flag:</p>
+    <p>{tt('voting_jsx.flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following')}:</p>
     <ul>
-        <li>Disagreement on rewards</li>
-        <li>Fraud or Plagiarism</li>
-        <li>Hate Speech or Internet Trolling</li>
-        <li>Intentional miscategorized content or Spam</li>
+        <li>{tt('voting_jsx.disagreement_on_rewards')}</li>
+        <li>{tt('voting_jsx.fraud_or_plagiarism')}</li>
+        <li>{tt('voting_jsx.hate_speech_or_internet_trolling')}</li>
+        <li>{tt('voting_jsx.intentional_miss_categorized_content_or_spam')}</li>
     </ul>
 </div>;
 
@@ -152,7 +154,7 @@ class Voting extends React.Component {
                 <CloseButton onClick={() => this.setState({showWeight: false})} />
                 <div className="clear Voting__about-flag">
                     <p>{ABOUT_FLAG}</p>
-                    <a href="#" onClick={this.voteDown} className="button outline" title="Flag">Flag</a>
+                    <a href="#" onClick={this.voteDown} className="button outline" title={tt('g.flag')}>{tt('g.flag')}</a>
                 </div>
             </FoundationDropdown>;
 
@@ -160,7 +162,7 @@ class Voting extends React.Component {
             return <span className="Voting">
                 <span className={classDown}>
                     {flagWeight > 0 && <span className="Voting__button-downvotes">{"•".repeat(flagWeight)}</span>}
-                    {votingDownActive ? down : <a href="#" onClick={flagClickAction} title="Flag">{down}</a>}
+                    {votingDownActive ? down : <a href="#" onClick={flagClickAction} title={tt('g.flag')}>{down}</a>}
                     {dropdown}
                 </span>
             </span>
@@ -189,28 +191,28 @@ class Voting extends React.Component {
         const payoutItems = [];
 
         if(cashout_active) {
-            payoutItems.push({value: 'Potential Payout $' + formatDecimal(pending_payout).join('')});
+            payoutItems.push({value: tt('voting_jsx.potential_payout') + ' ' + localizedCurrency(pending_payout) + ' (' + pending_payout.toFixed(3) + ' ' + DEBT_TICKER + ')'});
         }
         if(promoted > 0) {
-            payoutItems.push({value: 'Promotion Cost $' + formatDecimal(promoted).join('')});
+            payoutItems.push({value: tt('voting_jsx.boost_payments') + ' ' + localizedCurrency(promoted)});
         }
         if(cashout_active) {
             payoutItems.push({value: <TimeAgoWrapper date={cashout_time} />});
         }
 
         if(max_payout == 0) {
-            payoutItems.push({value: 'Payout Declined'})
+            payoutItems.push({value: tt('voting_jsx.payouts_declined')})
         } else if (max_payout < 1000000) {
-            payoutItems.push({value: 'Max Accepted Payout $' + formatDecimal(max_payout).join('')})
+            payoutItems.push({value: tt('voting_jsx.max_accepted_payout') + localizedCurrency(max_payout)})
         }
         if(total_author_payout > 0) {
-            payoutItems.push({value: 'Past Payouts $' + formatDecimal(total_author_payout + total_curator_payout).join('')});
-            payoutItems.push({value: ' - Author: $' + formatDecimal(total_author_payout).join('')});
-            payoutItems.push({value: ' - Curators: $' + formatDecimal(total_curator_payout).join('')});
+            payoutItems.push({value: tt('voting_jsx.past_payouts') + ' ' + localizedCurrency(total_author_payout + total_curator_payout)});
+            payoutItems.push({value: ' - ' + tt('voting_jsx.authors') + ': ' + localizedCurrency(total_author_payout)});
+            payoutItems.push({value: ' - ' + tt('voting_jsx.curators') + ': ' + localizedCurrency(total_curator_payout)});
         }
         const payoutEl = <DropdownMenu el="div" items={payoutItems}>
             <span style={payout_limit_hit ? {opacity: '0.5'} : {}}>
-                <FormattedAsset amount={payout} asset="$" classname={max_payout === 0 ? 'strikethrough' : ''} />
+                <LocalizedCurrency amount={payout} className={max_payout === 0 ? 'strikethrough' : ''} />
                 {payoutItems.length > 0 && <Icon name="dropdown-arrow" />}
             </span>
         </DropdownMenu>;
@@ -300,7 +302,7 @@ export default connect(
             dispatch(transaction.actions.broadcastOperation({
                 type: 'vote',
                 operation: {voter: username, author, permlink, weight,
-                    __config: {title: weight < 0 ? 'Confirm Flag' : null},
+                    __config: {title: weight < 0 ? tt('voting_jsx.confirm_flag') : null},
                 },
                 confirm,
             }))

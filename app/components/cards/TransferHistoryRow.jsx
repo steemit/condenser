@@ -2,10 +2,12 @@ import React from 'react';
 import {connect} from 'react-redux'
 import { Link } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
+import Tooltip from 'app/components/elements/Tooltip';
 // import Icon from 'app/components/elements/Icon';
 import Memo from 'app/components/elements/Memo'
 import {numberWithCommas, vestsToSp} from 'app/utils/StateFunctions'
 import tt from 'counterpart';
+import { APP_NAME, DEBT_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TOKEN, CURRENCY_SIGN, VESTING_TOKEN, VEST_TICKER, LIQUID_TICKER } from 'app/client_config';
 
 class TransferHistoryRow extends React.Component {
 
@@ -22,20 +24,21 @@ class TransferHistoryRow extends React.Component {
         let description_end = "";
 
         if( type === 'transfer_to_vesting' ) {
+            const amount = data.amount && data.amount.split && data.amount.split(' ')[0]
             if( data.from === context ) {
                 if( data.to === "" ) {
-                    description_start += tt('g.transfer') + data.amount.split(' ')[0] + tt('g.to') + "STEEM POWER";
+                    description_start += tt('g.transfer') + data.amount.split(' ')[0] + tt('g.to') + " " + VESTING_TOKEN;
                 }
                 else {
-                    description_start += tt('g.transfer') + data.amount.split(' ')[0] + " STEEM POWER" + tt('g.to');
+                    description_start += tt('g.transfer') + data.amount.split(' ')[0] + " " + VESTING_TOKEN + tt('g.to');
                     other_account = data.to;
                 }
             }
             else if( data.to === context ) {
-                description_start += tt('g.recieve') + data.amount.split(' ')[0] + " STEEM POWER" + tt('g.from');
+                description_start += tt('g.recieve') + data.amount.split(' ')[0] + " " + VESTING_TOKEN + tt('g.from');
                 other_account = data.from;
             } else {
-                description_start += tt('g.transfer') + data.amount.split(' ')[0] + " STEEM POWER" + tt('g.from') + data.from + tt('g.to');
+                description_start += tt('g.transfer') + data.amount.split(' ')[0] + " " + VESTING_TOKEN + tt('g.from') + data.from + tt('g.to');
                 other_account = data.to;
             }
         }
@@ -46,6 +49,22 @@ class TransferHistoryRow extends React.Component {
                 type === 'transfer_from_savings' ? tt('transferhistoryrow_jsx.from_savings') :
                 ''
 
+            // if( data.from === context ) {
+            //     description_start += `Transfer ${fromWhere}${data.amount} to `;
+            //     other_account = data.to;
+            // }
+            // else if( data.to === context ) {
+            //     description_start += `Receive ${fromWhere}${data.amount} from `;
+            //     other_account = data.from;
+            // } else {
+            //     description_start += `Transfer ${fromWhere}${data.amount} from `;
+            //     other_account = data.from;
+            //     description_end += " to " + data.to;
+            // }
+            // if(data.request_id != null)
+            //     description_end += ` (request ${data.request_id})`
+
+            const { amount } = data
             if( data.from === context ) {
                 description_start += tt('g.transfer') + `${fromWhere} ${data.amount}` + tt('g.to');
                 other_account = data.to;
@@ -63,17 +82,17 @@ class TransferHistoryRow extends React.Component {
         } else if (type === 'cancel_transfer_from_savings') {
             description_start += `${tt('transferhistoryrow_jsx.cancel_transfer_from_savings')} (${tt('g.request')} ${data.request_id})`;
         } else if( type === 'withdraw_vesting' ) {
-            if( data.vesting_shares === '0.000000 VESTS' )
+            if( data.vesting_shares === '0.000000 ' + VEST_TICKER)
                 description_start += tt('transferhistoryrow_jsx.stop_power_down');
             else
                 description_start += tt('transferhistoryrow_jsx.start_power_down_of') + data.vesting_shares;
         } else if( type === 'curation_reward' ) {
-            description_start += `${curation_reward} STEEM POWER` + tt('g.for');
+            description_start += `${curation_reward} ${VESTING_TOKEN}` + tt('g.for');
             other_account = data.comment_author + "/" + data.comment_permlink;
         } else if (type === 'author_reward') {
             let steem_payout = ""
-            if(data.steem_payout !== '0.000 STEEM') steem_payout = ", " + data.steem_payout;
-            description_start += `${renameToSd(data.sbd_payout)}${steem_payout}, ${tt('g.and')} ${author_reward} STEEM POWER ${tt('g.for')} ${data.author}/${data.permlink}`;
+            if(data.steem_payout !== '0.000 ' + LIQUID_TICKER) steem_payout = ", " + data.steem_payout;
+            description_start += `${renameToSd(data.sbd_payout)}${steem_payout}, ${tt('g.and')} ${author_reward} ${VESTING_TOKEN} ${tt('g.for')} ${data.author}/${data.permlink}`;
             // other_account = ``;
             description_end = '';
         } else if (type === 'interest') {
@@ -95,7 +114,9 @@ class TransferHistoryRow extends React.Component {
         return(
                 <tr key={op[0]} className="Trans">
                     <td>
-                        <TimeAgoWrapper date={op[1].timestamp} />
+                        <Tooltip t={new Date(op[1].timestamp).toLocaleString()}>
+                            <TimeAgoWrapper date={op[1].timestamp} />
+                        </Tooltip>
                     </td>
                     <td className="TransferHistoryRow__text" style={{maxWidth: "40rem"}}>
                         {description_start}
@@ -110,7 +131,7 @@ class TransferHistoryRow extends React.Component {
     }
 }
 
-const renameToSd = txt => txt ? numberWithCommas(txt.replace('SBD', 'SD')) : txt
+const renameToSd = txt => txt ? numberWithCommas(txt.replace('SBD', DEBT_TOKEN_SHORT)) : txt
 
 export default connect(
     // mapStateToProps

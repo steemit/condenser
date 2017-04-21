@@ -1,5 +1,7 @@
 {
   "g": {
+    "24_hour": "24 hour",
+    "30_day": "30 day",
     "age": "age",
     "amount": "Amount",
     "and": "and",
@@ -23,10 +25,12 @@
     "date": "Date",
     "delete": "Delete",
     "dismiss": "Dismiss",
+    "documentation": "Documentation",
     "edit": "Edit",
     "email": "Email",
     "feed": "Feed",
     "feeds": "Feeds",
+    "flag": "Flag",
     "follow": "Follow",
     "for": " for ",
     "from": " from ",
@@ -88,6 +92,7 @@
     "submit": "Submit",
     "submit_a_story": "Submit a Story",
     "tag": "Tag",
+    "team": "Team",
     "to": " to ",
     "topics": "Topics",
     "transaction_history": "Transaction History",
@@ -95,11 +100,13 @@
     "trending_topics": "Trending Topics",
     "type": "Type",
     "unfollow": "Unfollow",
+    "unknown": "Unknown",
     "unmute": "Unmute",
     "upvote": "Upvote",
     "upvote_post": "Upvote post",
     "username": "Username",
     "version": "Version",
+    "video": "Video",
     "view_the_direct_parent": "View the direct parent",
     "view_the_full_context": "View the full context",
     "vote": "Vote",
@@ -109,6 +116,7 @@
     "yes": "Yes",
     "you_are_viewing_a_single_comments_thread_from": "You are viewing a single comment's thread from",
 
+    "about_project": "About project",
     "account_not_found": "Account not found",
     "this_is_wrong_password": "This is the wrong password",
     "do_you_need_to": "Do you need to",
@@ -189,15 +197,17 @@
     },
 
     "read_only_mode": "Due to server maintenance we are running in read only mode. We are sorry for the inconvenience.",
-    "membership_invitation_only": "Membership to %(APP_URL)s is now under invitation only because of unexpectedly high sign up rate.",
+    "membership_invitation_only": "Membership to %(APP_DOMAIN)s is now under invitation only because of unexpectedly high sign up rate.",
     "submit_email_to_get_on_waiting_list": "Submit your email to get on the waiting list",
     "show_less_low_value_posts": "Show fewer low value posts",
     "show_more_low_value_posts": "Show more low value posts",
     "select_topic": "Select Topic",
-    "tags_and_topics": "Tags and Topics",
+    "tags_and_topics": "Tags",
     "filter": "Filter",
     "show_more_topics": "Show more topics",
     "we_require_social_account": "%(APP_NAME)s funds each account with over %(signup_bonus)s worth of %(VESTING_TOKEN)s; to prevent abuse, we require new users to login via social media.",
+    "we_require_social_account1": "%(APP_NAME)s funds each account with over ",
+    "we_require_social_account2": "worth of %(VESTING_TOKEN)s; to prevent abuse, we require new users to login via social media.",
     "personal_info_will_be_private": "Your personal information will be kept",
     "personal_info_will_be_private_link": "Private",
     "continue_with_facebook": "Continue with Facebook",
@@ -214,7 +224,7 @@
     "next_3_blocks": {
       "the_latest_versions_of": "The latest versions of",
       "and": "and",
-      "are_well_tested_and_known_to_work_with": "are well tested and known to work with %(APP_URL)s."
+      "are_well_tested_and_known_to_work_with": "are well tested and known to work with %(APP_DOMAIN)s."
     },
     "account_creation_succes": "Your account has been successfully created!",
     "account_recovery_succes": "Your account has been successfully recovered!",
@@ -240,12 +250,16 @@
     "change_account_password": "Change Account Password",
     "APP_NAME_api_docs": "%(APP_NAME)s API Docs",
     "APP_NAME_chat": "%(APP_NAME)s Chat",
+    "APP_NAME_app_center": "%(APP_NAME)s App Center",
     "witnesses": "Witnesses",
     "vote_for_witnesses": "Vote for Witnesses",
     "privacy_policy": "Privacy Policy",
+    "payouts_by_tag": "Payouts by tag",
     "terms_of_service": "Terms of Service",
     "sign_up": "Sign Up",
     "welcome": "Welcome",
+    "feedback": "Feedback",
+    "wiki": "Wiki",
     "faq": "FAQ"
   },
   "main_menu": {
@@ -263,9 +277,12 @@
     "markdown_is_supported": "Styling with Markdown is supported",
     "markdown_not_supported": "Markdown is not supported here",
     "welcome_to_the_blockchain": "Welcome to the Blockchain!",
+    "you_hasnt_started_bloggin_yet":  "Looks like you hasn't started blogging yet!",
     "your_voice_is_worth_something": "Your voice is worth something",
     "learn_more": "Learn More",
     "get_sp_when_sign_up": "Get %(signupBonus)s of %(VESTING_TOKEN)s when you sign up today.",
+    "get_sp_when_sign_up1": "Get ",
+    "get_sp_when_sign_up2": " %(VESTING_TOKEN)s when you sign up today.",
     "all_accounts_refunded": "All Recovered Accounts have been fully Refunded",
     "APP_NAME_is_now_open_source": " %(APP_NAME)s is now Open Source"
   },
@@ -329,7 +346,7 @@
     "this_post_is_not_available_due_to_a_copyright_claim": "This post is not available due to a copyright claim.",
     "share_on_facebook" : "Share on Facebook",
     "share_on_twitter" : "Share on Twitter",
-    "share_on_linkedin" : "Share on Linkedin",
+    "share_on_vk" : "Share on Vkontakte",
     "share": "Share",
     "transfer_amount_to_VESTING_TOKEN": "Transfer %(amount)s to %(VESTING_TOKEN)s",
     "transfer_amount_VESTING_TOKEN_to": "Transfer %(amount)s %(VESTING_TOKEN)s to",
@@ -383,7 +400,7 @@
     "unable_to_recover_account_not_change_ownership_recently": "We are unable to recover this account, it has not changed ownership recently.",
     "password_not_used_in_last_days": "This password was not used on this account in the last 30 days.",
     "request_already_submitted_contact_support": "Your request has been already submitted and we are working on it. Please contact t@cyber.fund for the status of your request.",
-    "recover_account_intro": "From time to time, a Steemian's owner key may be compromised. Stolen Account Recovery gives the rightful account owner 30 days to recover their account from the moment the thief changed their owner key. Stolen Account Recovery can only be used on %(APP_URL)s if the account owner had perviously listed '%(APP_NAME)s' as their account trustee and complied with %(APP_NAME)s's Terms of Service.",
+    "recover_account_intro": "From time to time, a Steemian's owner key may be compromised. Stolen Account Recovery gives the rightful account owner 30 days to recover their account from the moment the thief changed their owner key. Stolen Account Recovery can only be used on %(APP_DOMAIN)s if the account owner had perviously listed '%(APP_NAME)s' as their account trustee and complied with %(APP_NAME)s's Terms of Service.",
     "login_with_facebook_or_reddit_media_to_verify_identity": "Please login with Facebook or Reddit to verify your identity",
     "login_with_social_media_to_verify_identity": "Please login with %(provider)s to verify your identity",
     "enter_email_toverify_identity": "We need to verify your identity. Please enter your email address below to begin the verification.",
@@ -439,20 +456,24 @@
   "post_jsx": {
     "now_showing_comments_with_low_ratings": "Now showing comments with low ratings",
     "sort_order": "Sort Order",
-    "comments_were_hidden_due_to_low_ratings": "Comments were hidden due to low ratings",
-    "we_will_be_unable_to_create_account_with_this_browser": "We will be unable to create your %(APP_NAME)s account with this browser",
-    "you_need_to_logout_before_creating_account": "You need to %(logoutLink)s before you can create another account",
-    "APP_NAME_can_only_register_one_account_per_verified_user": "Please note that %(APP_NAME)s can only register one account per verified user",
-    "couldnt_create_account_server_returned_error": "Couldn't create account. Server returned the following error",
-    "form_requires_javascript_to_be_enabled": "This form requires javascript to be enabled in your browser",
+    "comments_were_hidden_due_to_low_ratings": "Comments were hidden due to low ratings"
+  },
+  "createaccount_jsx": {
     "our_records_indicate_you_already_have_account": "Our records indicate that you already have %(APP_NAME)s account",
-    "to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user": "In order to prevent abuse (each registered account costs %(amount)s in %(LIQUID_TOKEN)s) %(APP_NAME)s can only register one account per verified user.",
+    "in_order_to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user": "In order to prevent abuse %(APP_NAME)s can only register one account per verified user.",
     "next_3_blocks": {
       "you_can_either": "You can either",
       "to_your_existing_account_or": "to your existing account or",
       "if_you_need_a_new_account": "if you need a new account"
     },
-    "send_us_email": "send us email"
+    "send_us_email": "send us email",
+    "ctyptography_test_failed": "Ctyptography test failed",
+    "you_need_to": "You need to ",
+    "before_creating_account": " before you can create another account.",
+    "APP_NAME_can_only_register_one_account_per_verified_user": "Please note that %(APP_NAME)s can only register one account per verified user.",
+    "we_will_be_unable_to_create_account_with_this_browser": "We will be unable to create your %(APP_NAME)s account with this browser",
+    "couldnt_create_account_server_returned_error": "Couldn't create account. Server returned the following error",
+    "form_requires_javascript_to_be_enabled": "This form requires javascript to be enabled in your browser"
   },
   "voting_jsx": {
     "stop_seeing_content_from_this_user": "Stop seeing content from this user",
@@ -472,12 +493,13 @@
     "search": "Search",
     "begin_recovery": "Begin Recovery",
     "post_as": "Post as",
-    "APP_NAME_app_center": "%(APP_NAME)s App Center",
 
     "trending_30_day": "trending (30 day)",
     "this_password_is_bound_to_your_accounts_private_key": "This password is bound to your account's active key and can not be used to login to this page. You may use this active key on other more secure pages like the Wallet or Market pages.",
     "potential_payout": "Potential Payout",
     "boost_payments": "Boost Payments",
+    "payouts_declined": "Payouts declined",
+    "max_accepted_payout": "Max accepted payout",
     "authors": "Authors",
     "curators": "Curators",
     "paste_a_youtube_or_vimeo_and_press_enter": "Paste a YouTube or Vimeo and press Enter",
@@ -538,7 +560,6 @@
     "this_memo_is_public": "This Memo is Public",
     "power_up": "Power Up",
     "power_down": "Power Down",
-    "cancel_power_down": "Cancel Power Down",
     "transfer": "Transfer",
     "deposit": "Deposit",
     "basic": "Basic",
@@ -553,9 +574,6 @@
     "join_our_slack": "Join our Slack",
     "trending_24_hour": "trending (24 hour)",
     "home": "home",
-    "24_hour": "24 hour",
-    "30_day": "30 day",
-    "flag": "Flag",
     "posting": "Posting",
     "owner": "Owner",
     "active_or_owner": "Active or Owner",
@@ -609,13 +627,13 @@
     "next_3_strings": {
       "by_verifying_you_agree_with": "By verifying your account you agree to the",
       "by_verifying_you_agree_with_privacy_policy": "Privacy Policy",
-      "by_verifying_you_agree_with_privacy_policy_of_website_APP_URL": "of %(APP_URL)s"
+      "by_verifying_you_agree_with_privacy_policy_of_website_APP_DOMAIN": "of %(APP_DOMAIN)s"
     }
   },
   "about_jsx": {
     "about_app": "About %(APP_NAME)s",
     "about_app_details": "%(APP_NAME)s is a social media platform where everyone gets paid for creating and curating content. It leverages a robust digital points system, called Steem, that supports real value for digital rewards through market price discovery and liquidity.",
-    "learn_more_at_app_url": "Learn more at %(APP_URL)s",
+    "learn_more_at_app_url": "Learn more at %(APP_DOMAIN)s",
     "resources": "Resources",
     "join_our_slack": "Join our Slack"
   },
@@ -681,7 +699,7 @@
     "cryptography_test_failed": "Cryptography test failed",
     "unable_to_log_you_in": "We will be unable to log you in with this browser.",
     "the_latest_versions_of": "The latest versions of ",
-    "are_well_tested_and_known_to_work_with": "are well tested and known to work with %(APP_URL)s.",
+    "are_well_tested_and_known_to_work_with": "are well tested and known to work with %(APP_DOMAIN)s.",
     "due_to_server_maintenance": "Due to server maintenance we are running in read only mode. We are sorry for the inconvenience.",
     "login_to_vote": "Login to Vote",
     "login_to_post": "Login to Post",
@@ -773,12 +791,22 @@
     "withdraw_LIQUID_TOKEN": "Withdraw %(LIQUID_TOKEN)s",
     "withdraw_DEBT_TOKENS": "Withdraw %(DEBT_TOKENS)s",
     "tokens_worth_about_1_of_LIQUID_TICKER": "Tokens worth about $1.00 of %(LIQUID_TICKER)s, currently collecting %(sbdInterest)s%% APR.",
+    "savingstip_currently_collecting": "%(savingsTip)s, currently collecting %(sbdInterest)s%% APR.",
     "balances": "BALANCES",
     "buy_LIQUID_TOKEN_or_VESTING_TOKEN": "Buy %(LIQUID_TOKEN)s or %(VESTING_TOKEN)s",
     "savings": "SAVINGS",
     "estimated_account_value": "Estimated Account Value",
     "next_power_down_is_scheduled_to_happen": "The next power down is scheduled to happen",
     "transfers_are_temporary_disabled": "Transfers are temporary disabled.",
+    "cancel_power_down": "Cancel Power Down",
     "history": "HISTORY"
+  },
+  "oauth": {
+    "we_couldnt_verify_your_account_contact_us_at_SUPPORT_EMAIL": "We couldnt verify your email contact us at %(SUPPORT_EMAIL)s for further information.",
+    "facebook_login_didnt_provide_any_email_addresses": "Facebook login didnt provide any email address.",
+    "we_are_sorry_we_cannot_sign_you_up_at_this_time_because_ip_associated_with_bots_activity": "We are sorry we cannot sign you up currently at this time because this ip is associated with bot activity contact %(SUPPORT_EMAIL)s for further information.",
+    "not_supported_email_address": "Not a supported email address",
+    "please_make_sure_you_dont_use_temporary_email_providers_contact_SUPPORT_EMAIL": "Please make sure you dont use a temporary email address when contacting %(SUPPORT_EMAIL)s .",
+    "successfully_authenticated_with": "Sucessfully authenticated with"
   }
 }

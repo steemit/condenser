@@ -18,7 +18,9 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Tooltip from 'app/components/elements/Tooltip'
 import tt from 'counterpart';
 import {List} from 'immutable'
-import { LIQUID_TOKEN, DEBT_TOKENS } from 'app/client_config';
+import { translateNumber } from 'app/Translator';
+import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
+import { APP_NAME_LATIN, LIQUID_TOKEN, LIQUID_TOKEN_UPPERCASE, DEBT_TOKEN, DEBT_TOKENS, CURRENCY_SIGN, VESTING_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TICKER, VEST_TICKER, DEBT_TICKER } from 'app/client_config';
 
 const assetPrecision = 1000;
 
@@ -29,19 +31,19 @@ class UserWallet extends React.Component {
         this.onShowDeposit = () => {this.setState({showDeposit: !this.state.showDeposit})};
         this.onShowDepositSteem = (e) => {
             e.preventDefault()
-            this.setState({showDeposit: !this.state.showDeposit, depositType: 'STEEM'})
-        };
+            this.setState({showDeposit: !this.state.showDeposit, depositType: LIQUID_TICKER})
+        }
         this.onShowDepositPower = (e) => {
             e.preventDefault()
-            this.setState({showDeposit: !this.state.showDeposit, depositType: 'VESTS'})
-        };
+            this.setState({showDeposit: !this.state.showDeposit, depositType: VEST_TICKER})
+        }
         // this.onShowDeposit = this.onShowDeposit.bind(this)
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'UserWallet');
     }
     render() {
         const {state: {showDeposit, depositType, toggleDivestError},
             onShowDeposit, onShowDepositSteem, onShowDepositPower} = this
-        const {convertToSteem, price_per_steem, savings_withdraws, account,
+        const {convertToSteem, price_per_golos, savings_withdraws, account,
             current_user, open_orders} = this.props
         const gprops = this.props.gprops.toJS();
 
@@ -68,7 +70,7 @@ class UserWallet extends React.Component {
         const powerDown = (cancel, e) => {
             e.preventDefault()
             const name = account.get('name');
-            const vesting_shares = cancel ? '0.000000 VESTS' : account.get('vesting_shares');
+            const vesting_shares = cancel ? '0.000000 GESTS' : account.get('vesting_shares');
             this.setState({toggleDivestError: null});
             const errorCallback = e2 => {this.setState({toggleDivestError: e2.toString()})};
             const successCallback = () => {this.setState({toggleDivestError: null})}
@@ -80,10 +82,10 @@ class UserWallet extends React.Component {
         if(savings_withdraws) {
             savings_withdraws.forEach(withdraw => {
                 const [amount, asset] = withdraw.get('amount').split(' ');
-                if(asset === 'STEEM')
+                if(asset === LIQUID_TICKER)
                     savings_pending += parseFloat(amount);
                 else {
-                    if(asset === 'SBD')
+                    if(asset === DEBT_TICKER)
                         savings_sbd_pending += parseFloat(amount)
                 }
             })
@@ -97,15 +99,16 @@ class UserWallet extends React.Component {
 
             const timestamp = new Date(item.getIn([1, 'timestamp'])).getTime();
             const finishTime = timestamp + (86400000 * 3.5); // add 3.5day conversion delay
+            // const finishTime = timestamp + (86400000 * (timestamp <= 1481040000000 ? 7 : 3.5)); // add conversion delay before/after hardfork change
             if(finishTime < currentTime) return out;
 
-            const amount = parseFloat(item.getIn([1, 'op', 1, 'amount']).replace(" SBD", ""));
+            const amount = parseFloat(item.getIn([1, 'op', 1, 'amount']).replace(' ' + DEBT_TICKER, ''));
             conversionValue += amount;
 
             return out.concat([
                 <div key={item.get(0)}>
                     <Tooltip t={tt('userwallet_jsx.conversion_complete_tip') + ": " + new Date(finishTime).toLocaleString()}>
-                        <span>(+{tt('userwallet_jsx.in_conversion', {amount: numberWithCommas('$' + amount.toFixed(3))})})</span>
+                        <span>(+{tt('userwallet_jsx.in_conversion', {amount: numberWithCommas(amount.toFixed(3)) + ' ' + DEBT_TICKER})})</span>
                     </Tooltip>
                 </div>
             ]);
@@ -117,14 +120,14 @@ class UserWallet extends React.Component {
         const sbd_balance = parseFloat(account.get('sbd_balance'))
         const sbd_balance_savings = parseFloat(savings_sbd_balance.split(' ')[0]);
         const sbdOrders = (!open_orders || !isMyAccount) ? 0 : open_orders.reduce((o, order) => {
-            if (order.sell_price.base.indexOf("SBD") !== -1) {
+            if (order.sell_price.base.indexOf(DEBT_TICKER) !== -1) {
                 o += order.for_sale;
             }
             return o;
         }, 0) / assetPrecision;
 
         const steemOrders = (!open_orders || !isMyAccount) ? 0 : open_orders.reduce((o, order) => {
-            if (order.sell_price.base.indexOf("STEEM") !== -1) {
+            if (order.sell_price.base.indexOf(LIQUID_TICKER) !== -1) {
                 o += order.for_sale;
             }
             return o;
@@ -133,15 +136,12 @@ class UserWallet extends React.Component {
         // set displayed estimated value
         const total_sbd = sbd_balance + sbd_balance_savings + savings_sbd_pending + sbdOrders + conversionValue;
         const total_steem = vesting_steemf + balance_steem + saving_balance_steem + savings_pending + steemOrders;
-        let total_value = '$' + numberWithCommas(
-            ((total_steem * price_per_steem) + total_sbd
-        ).toFixed(2))
+
+        // set displayed estimated value
+        const total_value = Number(((total_steem * price_per_golos) + total_sbd).toFixed(2))
 
         // format spacing on estimated value based on account state
-        let estimate_output = <p>{total_value}</p>;
-        if (isMyAccount) {
-            estimate_output = <p>{total_value}&nbsp; &nbsp; &nbsp;</p>;
-        }
+        const estimate_output = <LocalizedCurrency amount={total_value} />
 
         /// transfer log
         let idx = 0
@@ -155,15 +155,15 @@ class UserWallet extends React.Component {
                 return null;
             }
 
-            if(data.sbd_payout === '0.000 SBD' && data.vesting_payout === '0.000000 VESTS')
+            if(data.sbd_payout === '0.000 GBG' && data.vesting_payout === '0.000000 GESTS')
                 return null
             return <TransferHistoryRow key={idx++} op={item.toJS()} context={account.get('name')} />;
         }).filter(el => !!el).reverse();
 
         let steem_menu = [
-            { value: tt('g.transfer'), link: '#', onClick: showTransfer.bind( this, 'STEEM', 'Transfer to Account' ) },
-            { value: tt('userwallet_jsx.transfer_to_savings'), link: '#', onClick: showTransfer.bind( this, 'STEEM', 'Transfer to Savings' ) },
-            { value: tt('userwallet_jsx.power_up'), link: '#', onClick: showTransfer.bind( this, 'VESTS', 'Transfer to Account' ) },
+            { value: tt('g.transfer'), link: '#', onClick: showTransfer.bind( this, LIQUID_TICKER, 'Transfer to Account' ) },
+            { value: tt('userwallet_jsx.transfer_to_savings'), link: '#', onClick: showTransfer.bind( this, LIQUID_TICKER, 'Transfer to Savings' ) },
+            { value: tt('userwallet_jsx.power_up'), link: '#', onClick: showTransfer.bind( this, VEST_TICKER, 'Transfer to Account' ) },
         ]
         let power_menu = [
             { value: tt('userwallet_jsx.power_down'), link: '#', onClick: powerDown.bind(this, false) }
@@ -174,12 +174,18 @@ class UserWallet extends React.Component {
             power_menu.push({ value: tt('g.buy'), link: '#', onClick: onShowDepositPower })
         }
         if( divesting ) {
-            power_menu.push( { value: 'Cancel Power Down', link:'#', onClick: powerDown.bind(this,true) } );
+            power_menu.pop()
+            power_menu.push( { value: tt('userwallet_jsx.cancel_power_down'), link:'#', onClick: powerDown.bind(this,true) } );
+        }
+        if(isMyAccount) {
+            // steem_menu.push({ value: tt('g.deposit'), link: '#', onClick: onShowDepositSteem })
+            steem_menu.push({ value: tt('g.buy_or_sell'), link: '/market' })
+            // power_menu.push({ value: tt('g.deposit'), link: '#', onClick: onShowDepositPower })
         }
 
         let dollar_menu = [
-            { value: tt('g.transfer'), link: '#', onClick: showTransfer.bind( this, 'SBD', 'Transfer to Account' ) },
-            { value: tt('userwallet_jsx.transfer_to_savings'), link: '#', onClick: showTransfer.bind( this, 'SBD', 'Transfer to Savings' ) },
+            { value: tt('g.transfer'), link: '#', onClick: showTransfer.bind( this, DEBT_TICKER, 'Transfer to Account' ) },
+            { value: tt('userwallet_jsx.transfer_to_savings'), link: '#', onClick: showTransfer.bind( this, DEBT_TICKER, 'Transfer to Savings' ) },
             { value: tt('userwallet_jsx.market'), link: '/market' },
             { value: tt('userwallet_jsx.convert_to_LIQUID_TOKEN', {LIQUID_TOKEN}), link: '#', onClick: convertToSteem },
         ]
@@ -191,6 +197,7 @@ class UserWallet extends React.Component {
             </Reveal>
         </div>
 
+        /*
         const steem_balance_str = numberWithCommas(balance_steem.toFixed(3)) // formatDecimal(balance_steem, 3)
         const steem_orders_balance_str = numberWithCommas(steemOrders.toFixed(3))
         const power_balance_str = numberWithCommas(vesting_steem) // formatDecimal(vesting_steem, 3)
@@ -198,16 +205,23 @@ class UserWallet extends React.Component {
         const sbd_orders_balance_str = numberWithCommas('$' + sbdOrders.toFixed(3))
         const savings_balance_str = numberWithCommas(saving_balance_steem.toFixed(3) + ' STEEM')
         const savings_sbd_balance_str = numberWithCommas('$' + sbd_balance_savings.toFixed(3))
+        */
+        const steem_balance_str = translateNumber(balance_steem.toFixed(3)) + ' ' + LIQUID_TOKEN_UPPERCASE;
+        const steem_orders_balance_str = translateNumber(steemOrders.toFixed(3)) + ' ' + LIQUID_TOKEN_UPPERCASE;
+        const power_balance_str = translateNumber(vesting_steem) + ' ' + LIQUID_TOKEN_UPPERCASE;
+        const savings_balance_str = translateNumber(saving_balance_steem.toFixed(3)) + ' ' + LIQUID_TOKEN_UPPERCASE;
+        const sbd_balance_str = translateNumber(sbd_balance.toFixed(3)) + ' ' + DEBT_TICKER;
+        const sbd_orders_balance_str = translateNumber(sbdOrders.toFixed(3)) + ' ' + DEBT_TICKER;
+        const savings_sbd_balance_str = translateNumber(sbd_balance_savings.toFixed(3)) + ' ' + DEBT_TICKER;
 
         const savings_menu = [
-            { value: tt('userwallet_jsx.withdraw_LIQUID_TOKEN', {LIQUID_TOKEN}), link: '#', onClick: showTransfer.bind( this, 'STEEM', 'Savings Withdraw' ) },
+            { value: tt('userwallet_jsx.withdraw_LIQUID_TOKEN', {LIQUID_TOKEN}), link: '#', onClick: showTransfer.bind( this, LIQUID_TICKER, 'Savings Withdraw' ) },
         ]
         const savings_sbd_menu = [
-            { value: tt('userwallet_jsx.withdraw_DEBT_TOKENS', {DEBT_TOKENS}), link: '#', onClick: showTransfer.bind( this, 'SBD', 'Savings Withdraw' ) },
+            { value: tt('userwallet_jsx.withdraw_DEBT_TOKENS', {DEBT_TOKENS}), link: '#', onClick: showTransfer.bind( this, DEBT_TICKER, 'Savings Withdraw' ) },
         ]
         // set dynamic secondary wallet values
         const sbdInterest = this.props.sbd_interest / 100
-        //const sbdMessage = tt('userwallet_jsx.tokens_worth_about_AMOUNT_of_LIQUID_TOKEN') //TODO: add APR param to xlation
         const sbdMessage = <span>{tt('userwallet_jsx.tokens_worth_about_1_of_LIQUID_TICKER', {LIQUID_TICKER, sbdInterest})}</span>
 
         return (<div className="UserWallet">
@@ -216,33 +230,35 @@ class UserWallet extends React.Component {
                     {isMyAccount ? <WalletSubMenu account_name={account.get('name')} /> : <div><br /><h4>{tt('g.balances')}</h4><br /></div>}
                 </div>
                 <div className="columns shrink">
-                    {isMyAccount && <button className="UserWallet__buysp button hollow" onClick={this.onShowDepositSteem}>{tt('userwallet_jsx.buy_LIQUID_TOKEN_or_VESTING_TOKEN')}</button>}
+                    {/* isMyAccount && <button className="UserWallet__buysp button hollow" onClick={this.onShowDepositSteem}>{tt('userwallet_jsx.buy_LIQUID_TOKEN_or_VESTING_TOKEN')}</button> */}
                 </div>
             </div>
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
-                    STEEM<br /><span className="secondary">{steemTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})}</span>
+                    {LIQUID_TOKEN.toUpperCase()}<br /><span className="secondary">{steemTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})}</span>
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
-                    <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={steem_balance_str + ' STEEM'} menu={steem_menu} />
+                    <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={steem_balance_str + ' ' + LIQUID_TICKER} menu={steem_menu} />
                     : steem_balance_str + ' STEEM'}
-                    {steemOrders ? <div style={{paddingRight: isMyAccount ? "0.85rem" : null}}><Link to="/market"><Tooltip t={tt('market_jsx.open_orders')}>(+{steem_orders_balance_str} STEEM)</Tooltip></Link></div> : null}
+                    {steemOrders ? <div style={{paddingRight: isMyAccount ? "0.85rem" : null}}><Link to="/market"><Tooltip t={tt('market_jsx.open_orders')}>(+{steem_orders_balance_str + ' ' + LIQUID_TICKER})</Tooltip></Link></div> : null}
                 </div>
             </div>
             <div className="UserWallet__balance row zebra">
                 <div className="column small-12 medium-8">
-                    STEEM POWER<br /><span className="secondary">{powerTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})}</span>
+                    {VESTING_TOKEN.toUpperCase()}<br /><span className="secondary">{powerTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})}</span>
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
-                    <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={power_balance_str + ' STEEM'} menu={power_menu} />
-                    : power_balance_str + ' STEEM'}
+                    <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={power_balance_str + ' ' + LIQUID_TICKER} menu={power_menu} />
+                    : power_balance_str + ' ' + LIQUID_TICKER}
                 </div>
             </div>
+
+
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
-                    STEEM DOLLARS<br /><span className="secondary">{sbdMessage}</span>
+                    {DEBT_TOKEN.toUpperCase()}<br /><span className="secondary">{sbdMessage}</span>
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
@@ -254,7 +270,7 @@ class UserWallet extends React.Component {
             </div>
             <div className="UserWallet__balance row zebra">
                 <div className="column small-12 medium-8">
-                    {tt('g.savings')}<br /><span className="secondary">{savingsTip} currently collecting {sbdInterest}% APR.</span>
+                    {tt('userwallet_jsx.savings')}<br /><span className="secondary">{tt('userwallet_jsx.savingstip_currently_collecting', {savingsTip, sbdInterest})}</span>
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
@@ -315,12 +331,12 @@ class UserWallet extends React.Component {
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
-        let price_per_steem = undefined
+        let price_per_golos = undefined
         const feed_price = state.global.get('feed_price')
         if(feed_price && feed_price.has('base') && feed_price.has('quote')) {
             const {base, quote} = feed_price.toJS()
-            if(/ SBD$/.test(base) && / STEEM$/.test(quote))
-                price_per_steem = parseFloat(base.split(' ')[0])
+            if(/ GBG$/.test(base) && / GOLOS$/.test(quote))
+                price_per_golos = parseFloat(base.split(' ')[0]) / parseFloat(quote.split(' ')[0])
         }
         const savings_withdraws = state.user.get('savings_withdraws')
         const gprops = state.global.get('props');
@@ -328,7 +344,7 @@ export default connect(
         return {
             ...ownProps,
             open_orders: state.market.get('open_orders'),
-            price_per_steem,
+            price_per_golos,
             savings_withdraws,
             sbd_interest,
             gprops

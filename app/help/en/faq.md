@@ -29,7 +29,6 @@
 ### Community
 - <a href="/faq.html#Is_there_an_Etiquette_Guide_for_Steemit">Is there an Etiquette Guide for Steemit?</a>
 - <a href="/faq.html#Am_I_required_to_verify_my_identity">Am I required to verify my identity?</a>
-- <a href="/faq.html#What_are_whales__dolphins_and_minnows">What are whales, dolphins and minnows?</a>
 
 <a class="anchor" name="Table_of_Contents_Site_Navigation"></a>
 ### Site Navigation
@@ -151,7 +150,6 @@
 <a class="anchor" name="Table_of_Contents_Steemit__Inc"></a>
 ### Steemit, Inc.
 - <a href="/faq.html#Who_are_the_Steemit_co_founders">Who are the Steemit co-founders?</a>
-- <a href="/faq.html#How_does_Steemit__Inc__earn_money">How does Steemit, Inc. earn money?</a>
 - <a href="/faq.html#Can_I_invest_in_Steemit">Can I invest in Steemit?</a>
 - <a href="/faq.html#What_does_Steemit_s_development_roadmap_look_like">What does Steemit’s development roadmap look like?</a>
 - <a href="/faq.html#Am_I_allowed_to_use_the_Steemit_logo">Am I allowed to use the Steemit logo?</a>
@@ -330,12 +328,6 @@ Verification is a process where users give evidence to show that they are the pe
 There are a number of ways to do this. The most common way to verify your identity is by posting a link to your Steemit profile on a website or social media account which you are already known for having such as Twitter, Facebook, LinkedIn, a blog, or photography site.
 
 Many users also like to post a photo or a video which shows them holding up a sheet of paper with the current date and their Steem account name handwritten on it. This is a great way to add a personal touch to verifying.
-
-<a href="/faq.html#Table_of_Contents_Community">^</a>
-<a class="anchor" name="What_are_whales__dolphins_and_minnows"></a>
-## What are whales, dolphins and minnows?
-
-These are terms that people use to describe Steemit users with different amounts of STEEM Power. There are no formal definitions.  As the names suggest, minnows have the smallest amount of SP, followed by dolphins in the middle, with whales having the most. Where the boundaries are for each label is subjective. There is a lot of talk about whales because they have the largest voting power and the most influence on the platform.
 
 <a href="/faq.html#Table_of_Contents_Community">^</a>
 # Site Navigation
@@ -677,7 +669,7 @@ Up to 25% of a post's payout is awarded to curators (the people who upvoted the 
 
 When users upvote or downvote posts, they are not adding or taking money away from the reward pool. They are only changing how the pool is allocated. The same amount of rewards will be paid out no matter what. 
 
-Votes in Steem are stake-weighted. Therefore voters with more STEEM Power have a greater influence over the allocation than voters with less SP, but higher-staked "whale" votes do not increase rewards overall.
+Votes in Steem are stake-weighted. Therefore voters with more STEEM Power have a greater influence over the allocation than voters with less SP, but higher-staked votes do not increase rewards overall.
 
 <a href="/faq.html#Table_of_Contents_Economics">^</a>
 <a class="anchor" name="Why_do_the_earnings_for_my_post_go_up_or_down"></a>
@@ -1110,18 +1102,12 @@ Daniel Larimer, CTO of Steemit, @dan @dantheman
 https://www.linkedin.com/in/daniel-larimer-0a367089
 
 <a href="/faq.html#Table_of_Contents_Steemit__Inc">^</a>
-<a class="anchor" name="How_does_Steemit__Inc__earn_money"></a>
-## How does Steemit, Inc. earn money?
-
-Over time, Steemit will allow advertisers and bloggers to promote content by buying and burning SBD/STEEM. Steemit can benefit from sales of Steem to advertisers in the cryptocurrency markets or offer advanced services to these advertisers and bloggers.
-
-<a href="/faq.html#Table_of_Contents_Steemit__Inc">^</a>
 <a class="anchor" name="Can_I_invest_in_Steemit"></a>
 ## Can I invest in Steemit?
 
 Steemit, Inc. is a privately held company and is not available for public investment.
 
-Though not considered an investment, you can speculate on the platform's success by purchasing STEEM tokens. You can power up these tokens into STEEM Power, which grants more influence in the Steem platform.
+Though not considered an investment, you can purchase STEEM tokens which can go up or down in value. You can power up these tokens into STEEM Power, which grants more influence in the Steem platform.
 
 <a href="/faq.html#Table_of_Contents_Steemit__Inc">^</a>
 <a class="anchor" name="What_does_Steemit_s_development_roadmap_look_like"></a>
@@ -1149,22 +1135,7 @@ https://steemit.com/art/@artist1989/custom-steem-and-steemit-art-and-instruction
 <a class="anchor" name="Did_Steemit__pre_mine__tokens"></a>
 ## Did Steemit "pre-mine" tokens?
 
-The challenge for a blockchain startup company is that they need tokens to sell to get funding for the development. If the blockchain is launched so that anybody can mine as much as they want, founders will get very little and may not be able to fund the development.
-
-When Steem was designed, one of the most important factors was to launch in a way to avoid legal pitfalls for the founding team.
-
-Before the launch of Steem, Dan Larimer wrote a blog post <a href="https://bytemaster.github.io/article/2016/03/27/How-to-Launch-a-Crypto-Currency-Legally-while-Raising-Funds/">How to Launch a Crypto Currency Legally while Raising Funds</a> where he described the problems that founders might face from authorities.
-
-Here are some of the key take-aways:
-- Do not pre-allocate any currency to yourself or others.
-- Do not sell currency directly to others
-- Always sell through a regulated exchange.
-- Complete the currency and protocol prior to launch.
-- Never promise to do anything for the currency
-
-To secure a portion of the tokens for themselves, the founders released the blockchain with very little information other than the code itself. This allowed them mine it before many others got too interested in it. The other miners that did get involved early on were the ones that took the time to read and understand the code, and saw the potential of what the platform could become. This was successful, and a majority of the coins were mined by the Steemit development team.
-
-The STEEM tokens mined by Steemit, Inc were not "pre-mined". All mining took place after the coin was officially and publicly announced on <a href="https://bitcointalk.org/index.php?topic=1410943.0">Bitcointalk.org</a>.
+The STEEM tokens mined by Steemit, Inc. were not "pre-mined". All mining took place after the coin was officially and publicly announced on <a href="https://bitcointalk.org/index.php?topic=1410943.0">Bitcointalk.org</a>.
 
 <a href="/faq.html#Table_of_Contents_Steemit__Inc">^</a>
 <a class="anchor" name="What_is_the_Steemit_Privacy_Policy"></a>
@@ -1209,7 +1180,7 @@ The password has to be long and random for maximum account security.
 
 **Active key** - The active key is meant for more sensitive tasks such as transferring funds, power up/down transactions, converting Steem Dollars, voting for witnesses, updating profile details and avatar, and placing a market order. 
 
-**Memo key** - The memo key is the only key that can decrypt private messages or memos sent to your account. Currently these features are not present on Steemit.com
+**Memo key** - Currently the memo key is not used.
 
 **Owner key** - The owner key is only meant for use when necessary. It is the most powerful key because it can change any key of an account, including the owner key. Ideally it is meant to be stored offline, and only used to recover a compromised account.
 

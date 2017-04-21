@@ -1234,7 +1234,9 @@ If you find a security issue please report the details to security@steemit.com.
 <a class="anchor" name="Are_the_Steem_blockchain_and_Steemit_com_code_open_source"></a>
 ## Are the Steem blockchain and Steemit.com code open-source?
 
-Yes.
+Yes. Both the Steem blockchain and Steemit.com are open-source projects.
+
+Developers should however avoid the use of the term "Steemit" in their own products, and instead refer to the Steem Blockchain or Steem Platform. Steemit refers to Steemit.com, which is owned by Steemit, Inc.
 
 <a href="/faq.html#Table_of_Contents_Developers">^</a>
 <a class="anchor" name="Is_there_a_Github_page_for_Steemit_com"></a>

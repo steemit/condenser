@@ -1,3 +1,4 @@
+/*global $STM_Config */
 import koa_router from 'koa-router';
 import koa_body from 'koa-body';
 import models from 'db/models';
@@ -7,7 +8,6 @@ import recordWebEvent from 'server/record_web_event';
 import {esc, escAttrs} from 'db/models';
 import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF} from 'server/utils/misc';
 import coBody from 'co-body';
-import secureRandom from 'secure-random'
 import Mixpanel from 'mixpanel';
 import Tarantool from 'db/tarantool';
 import {PublicKey, Signature, hash} from 'steem/lib/auth/ecc';
@@ -290,8 +290,10 @@ export default function useGeneralApi(app) {
             console.log('-- /record_event -->', this.session.uid, type, value);
             const str_value = typeof value === 'string' ? value : JSON.stringify(value);
             if (type.match(/^[A-Z]/)) {
-                mixpanel.track(type, {distinct_id: this.session.uid, Page: str_value});
-                mixpanel.people.increment(this.session.uid, type, 1);
+                if (mixpanel) {
+                    mixpanel.track(type, {distinct_id: this.session.uid, Page: str_value});
+                    mixpanel.people.increment(this.session.uid, type, 1);
+                }
             } else {
                 recordWebEvent(this, type, str_value);
             }

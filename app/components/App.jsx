@@ -172,23 +172,8 @@ class App extends React.Component {
                 <TopRightMenu vertical navigate={this.navigate} />
                 <ul className="vertical menu">
                     <li>
-                        <a href="https://steem.io" onClick={this.navigate}>
-                            {translate("about")}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/tags" onClick={this.navigate}>
-                            {translate("explore")}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://steem.io/SteemWhitePaper.pdf" onClick={this.navigate}>
-                            {translate("APP_NAME_whitepaper")}
-                        </a>
-                    </li>
-                    <li>
                         <a href="/welcome" onClick={this.navigate}>
-                            Welcome
+                            {translate("welcome")}
                         </a>
                     </li>
                     <li>
@@ -197,18 +182,13 @@ class App extends React.Component {
                         </a>
                     </li>
                     <li>
-                        <a href="https://steemit.chat/home" target="_blank" rel="noopener noreferrer">
-                            {translate("APP_NAME_chat")}&nbsp;<Icon name="extlink" />
+                        <a href="/tags" onClick={this.navigate}>
+                            {translate("explore")}
                         </a>
                     </li>
                     <li>
                         <a onClick={() => depositSteem()}>
                             {translate("buy_LIQUID_TOKEN")}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="http://steemtools.com/" onClick={this.navigate} target="_blank" rel="noopener noreferrer">
-                            {translate('APP_NAME_app_center')}&nbsp;<Icon name="extlink" />
                         </a>
                     </li>
                     <li>
@@ -226,11 +206,6 @@ class App extends React.Component {
                             {translate("change_account_password")}
                         </a>
                     </li>
-                    <li>
-                        <a href="https://steemit.github.io/steemit-docs/" target="_blank" rel="noopener noreferrer">
-                            {translate("steemit_api_docs")}&nbsp;<Icon name="extlink" />
-                        </a>
-                    </li>
                     <li className="last">
                         <a href="/~witnesses" onClick={this.navigate}>
                             {translate("vote_for_witnesses")}
@@ -239,11 +214,38 @@ class App extends React.Component {
                 </ul>
                 <ul className="vertical menu">
                     <li>
+                        <a href="https://steemit.chat/home" target="_blank" rel="noopener noreferrer">
+                            {translate("APP_NAME_chat")}&nbsp;<Icon name="extlink" />
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://steemtools.com/" onClick={this.navigate} target="_blank" rel="noopener noreferrer">
+                            {translate('APP_NAME_app_center')}&nbsp;<Icon name="extlink" />
+                        </a>
+                    </li>
+                    <li className="last">
+                        <a href="https://steemit.github.io/steemit-docs/" target="_blank" rel="noopener noreferrer">
+                            {translate("steemit_api_docs")}&nbsp;<Icon name="extlink" />
+                        </a>
+                    </li>
+                </ul>
+                <ul className="vertical menu">
+                    <li>
+                        <a href="https://steem.io/SteemWhitePaper.pdf" onClick={this.navigate}>
+                            {translate("APP_NAME_whitepaper")}&nbsp;<Icon name="extlink" />
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://steem.io" onClick={this.navigate}>
+                            {translate("about")}&nbsp;<Icon name="extlink" />
+                        </a>
+                    </li>
+                    <li>
                         <a href="/privacy.html" onClick={this.navigate} rel="nofollow">
                             {translate("privacy_policy")}
                         </a>
                     </li>
-                    <li>
+                    <li className="last">
                         <a href="/tos.html" onClick={this.navigate} rel="nofollow">
                             {translate("terms_of_service")}
                         </a>

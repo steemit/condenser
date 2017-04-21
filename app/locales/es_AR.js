@@ -16,6 +16,7 @@ const es_AR = 	{
 	privacy_policy: "Política de Privacidad",
 	terms_of_service: "Términos de Servicio",
 	sign_up: "Registro",
+	welcome: "Quick start guide",
 	/* end navigation */
 	buy: 'Comprar',
 	sell: 'Vender',

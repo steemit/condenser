@@ -4,13 +4,13 @@ import { APP_NAME, APP_DOMAIN, LANDING_PAGE_URL, DEBT_TOKEN, DEBT_TOKEN_SHORT, L
  */
 const en = 	{
 	// this variables mainly used in navigation section
-	about: "About",
-	explore: "Explore",
+	about: "About Steem",
+	explore: "Trending topics",
 	APP_NAME_whitepaper: APP_NAME + " Whitepaper",
 	buy_LIQUID_TOKEN: 'Buy ' + LIQUID_TOKEN,
 	sell_LIQUID_TOKEN: 'Sell ' + LIQUID_TOKEN,
 	market: "Market",
-	currency_market: "Currency Market",
+	currency_market: "Internal Market",
 	stolen_account_recovery: "Stolen Accounts Recovery",
 	change_account_password: "Change Account Password",
 	steemit_api_docs: "Steemit API Docs",
@@ -20,6 +20,7 @@ const en = 	{
 	privacy_policy: "Privacy Policy",
 	terms_of_service: "Terms of Service",
 	sign_up: "Sign Up",
+	welcome: "Quick start guide",
 	/* end navigation */
 	buy: 'Buy',
 	sell: 'Sell',

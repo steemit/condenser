@@ -16,6 +16,7 @@ const it = 	{
 	privacy_policy: "Privacy Policy",
 	terms_of_service: "Termini di Servizio",
 	sign_up: "Iscriviti",
+	welcome: "Quick start guide",
 	/* end navigation */
 	buy: 'Compra',
 	sell: 'Vendi',

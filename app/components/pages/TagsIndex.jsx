@@ -65,7 +65,7 @@ export default class TagsIndex extends React.Component {
         ).sort((a,b) => {
             return this.compareTags(a, b, order)
         }).map(tag => {
-            const name = tag.get('name');
+            let name = tag.get('name');
             const link = `/trending/${name}`;
 
             if (/[а-яёґєії]/.test(name)) {

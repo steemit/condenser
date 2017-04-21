@@ -143,7 +143,7 @@ class Topics extends React.Component {
                       value={tt('g.save')}
                     />
                   }
-                  {selectedKeys.length ? selectedKeys : <div><span>не выбрано ни одного тега</span></div>}
+                  {selectedKeys.length ? selectedKeys : <div><span>{tt('g.no_tags_selected')}</span></div>}
                 </li>
                 <li className="Topics__filter__expand" key="filter__expand_action">{expandFilterButton}</li>
                 <li className="Topics__title" key={'*'}>{tt('g.tags_and_topics')}</li>

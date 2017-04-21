@@ -7,7 +7,7 @@ import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {findParent} from 'app/utils/DomUtils';
 import Icon from 'app/components/elements/Icon';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
-import {connect} from 'react-redux'
+import {connect} from 'react-redux';
 import tt from 'counterpart';
 import {encode} from 'app/utils/helpers';
 import { isPostVisited, getVisitedPosts, visitPost } from 'app/utils/helpers';
@@ -236,9 +236,6 @@ class PostsList extends React.Component {
         );
     }
 }
-
-// import {List, Map} from 'immutable'
-import {connect} from 'react-redux'
 
 export default connect(
     (state, props) => {

@@ -187,7 +187,7 @@
       "when_you_link_text": "Sign Up",
       "and_vote_for_it": "and vote for it",
       "sign_up_now_to_receive": "Sign up now to receive ",
-      "free_steem": "FREE STEEM!"
+      "free_steem": "FREE %(VESTING_TOKEN_UPPERCASE)s!"
     },
 
     "next_3_strings_together": {
@@ -203,6 +203,8 @@
     "show_more_low_value_posts": "Show more low value posts",
     "select_topic": "Select Topic",
     "tags_and_topics": "Tags",
+    "tags_filter": "Filter",
+    "no_tags_selected": "No tags selected",
     "filter": "Filter",
     "show_more_topics": "Show more topics",
     "we_require_social_account": "%(APP_NAME)s funds each account with over %(signup_bonus)s worth of %(VESTING_TOKEN)s; to prevent abuse, we require new users to login via social media.",

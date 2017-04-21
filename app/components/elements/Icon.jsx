@@ -3,7 +3,7 @@ import React from 'react';
 const icons = [
     'user',
     'share',
-    'calendar'
+    'calendar',
     'chain',
     'chevron-up-circle',
     'chevron-down-circle',

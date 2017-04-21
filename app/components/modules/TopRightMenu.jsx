@@ -44,7 +44,6 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
         {link: '#faq', value: tt('navigation.faq')},
         {link: '#team', value: tt('g.team')},
     ];
-    const settings_link = `/@${username}/settings`;
     if (loggedIn) { // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!
         const user_menu = [
             {link: feed_link, value: tt('g.feed'), addon: <NotifiCounter fields="feed" />},

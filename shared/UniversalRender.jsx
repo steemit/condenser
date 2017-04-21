@@ -269,7 +269,20 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
             const wits = await Apis.instance().db_api.exec(PUBLIC_API.witnesses[0], ['',50]);
             for (var key in wits) _state.witnesses[wits[key].owner] = wits[key];
           }
-          else if ([ 'trending', 'trending30', 'promoted', 'responses', 'hot', 'votes', 'cashout', 'payout', 'payout_comments' 'active', 'created', 'recent' ].indexOf(parts[0]) >= 0) {
+          else if ([
+              'trending',
+              'trending30',
+              'promoted',
+              'responses',
+              'hot',
+              'votes',
+              'cashout',
+              'payout',
+              'payout_comments',
+              'active',
+              'created',
+              'recent'
+          ].indexOf(parts[0]) >= 0) {
             let args = [{
               limit: constants.FETCH_DATA_BATCH_SIZE,
               truncate_body: constants.FETCH_DATA_TRUNCATE_BODY

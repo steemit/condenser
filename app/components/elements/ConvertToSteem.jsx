@@ -43,7 +43,7 @@ class ConvertToSteem extends React.Component {
                     <div className="small-12 columns">
                         <h1>{tt('converttosteem_jsx.convert_to_LIQUID_TOKEN', {LIQUID_TOKEN})}</h1>
                         <p>{tt('converttosteem_jsx.DEBT_TOKEN_will_be_unavailable', {DEBT_TOKEN})}.</p>
-                        <p>{tt('converttosteem_jsx.your_existing_DEBT_TOKEN_are_liquid_and_transferable', {DEBT_TOKEN, link: tt('g.buy_or_sell')})}
+                        <p>{tt('converttosteem_jsx.your_existing_DEBT_TOKEN_are_liquid_and_transferable', {DEBT_TOKEN, link: tt('g.buy_or_sell')})}</p>
                         <p>{tt('converttosteem_jsx.this_is_a_price_feed_conversion')}.</p>
                     </div>
                 </div>

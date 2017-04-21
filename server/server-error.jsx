@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import SvgImage from 'app/components/elements/SvgImage';
-import { LIQUID_TOKEN } from 'app/client_config';
+import { APP_DOMAIN, LIQUID_TOKEN } from 'app/client_config';
 
 class ServerError extends Component {
 

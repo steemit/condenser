@@ -16,7 +16,7 @@ const fr = 	{
 	privacy_policy: "Politique de Confidentialité",
 	terms_of_service: "Conditions d'utilisation",
 	sign_up: "Inscription",
-	welcome: "Quick start guide",
+	welcome: "Quick Start Guide",
 	/* end navigation */
 	buy: 'Acheter',
 	sell: 'Vendre',

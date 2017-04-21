@@ -5,7 +5,7 @@ import { APP_NAME, APP_DOMAIN, LANDING_PAGE_URL, DEBT_TOKEN, DEBT_TOKEN_SHORT, L
 const en = 	{
 	// this variables mainly used in navigation section
 	about: "About Steem",
-	explore: "Trending topics",
+	explore: "Trending Topics",
 	APP_NAME_whitepaper: APP_NAME + " Whitepaper",
 	buy_LIQUID_TOKEN: 'Buy ' + LIQUID_TOKEN,
 	sell_LIQUID_TOKEN: 'Sell ' + LIQUID_TOKEN,
@@ -20,7 +20,7 @@ const en = 	{
 	privacy_policy: "Privacy Policy",
 	terms_of_service: "Terms of Service",
 	sign_up: "Sign Up",
-	welcome: "Quick start guide",
+	welcome: "Quick Start Guide",
 	/* end navigation */
 	buy: 'Buy',
 	sell: 'Sell',

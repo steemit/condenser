@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import SvgImage from 'app/components/elements/SvgImage';
 import AddToWaitingList from 'app/components/modules/AddToWaitingList';
-import { translate } from 'app/Translator';
+import tt from 'counterpart';
 import { formatCoins } from 'app/utils/FormatCoins';
 import { APP_NAME, APP_DOMAIN, VESTING_TOKEN, PRIVACY_POLICY_URL, TERMS_OF_SERVICE_URL } from 'app/client_config';
 import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';

@@ -27,7 +27,8 @@ class LoginForm extends Component {
 
     constructor(props) {
         super()
-        const cryptoTestResult = runTests(); // const cryptoTestResult = undefined; // temporary switch BrowserTests off
+        // const cryptoTestResult = runTests();
+        const cryptoTestResult = undefined; // temporary switch BrowserTests off
         let cryptographyFailure = false;
         this.SignUp = this.SignUp.bind(this);
         if (cryptoTestResult !== undefined) {

@@ -65,7 +65,7 @@ export default function reducer(state = defaultState, action) {
     }
     if (action.type === 'ADD_NOTIFICATION') {
         const n = {
-            action: tt('dismiss'),
+            action: tt('g.dismiss'),
             dismissAfter: 10000,
             ...action.payload
         };

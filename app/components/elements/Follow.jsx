@@ -62,7 +62,7 @@ export default class Follow extends React.Component {
 
     render() {
         const {loading} = this.props;
-        if(loading) return <span><LoadingIndicator /> {tt('loading')}&hellip;</span>;
+        if(loading) return <span><LoadingIndicator /> {tt('g.loading')}&hellip;</span>;
         if(loading !== false) {
             // must know what the user is already following before any update can happen
             return <span></span>
@@ -71,7 +71,7 @@ export default class Follow extends React.Component {
         const {follower, following} = this.props; // html
         // Show follow preview for new users
         if(!follower || !following) return <span>
-             <label className="button slim hollow secondary" onClick={this.followLoggedOut}>{translate('follow')}</label>
+             <label className="button slim hollow secondary" onClick={this.followLoggedOut}>{tt('g.follow')}</label>
         </span>;
         // Can't follow or ignore self
         if(follower === following) return <span></span>
@@ -85,16 +85,16 @@ export default class Follow extends React.Component {
         const cnInactive = cnActive + ' hollow secondary ' + cnBusy;
         return <span>
             {showFollow && followingWhat !== 'blog' &&
-                <label className={cnInactive} onClick={this.follow}>{tt('follow')}</label>}
+                <label className={cnInactive} onClick={this.follow}>{tt('g.follow')}</label>}
 
             {showFollow && followingWhat === 'blog' &&
-                <label className={cnInactive} onClick={this.unfollow}>{tt('unfollow')}</label>}
+                <label className={cnInactive} onClick={this.unfollow}>{tt('g.unfollow')}</label>}
 
             {showMute && followingWhat !== 'ignore' &&
-                <label className={cnInactive} onClick={this.ignore}>{tt('mute')}</label>}
+                <label className={cnInactive} onClick={this.ignore}>{tt('g.mute')}</label>}
 
             {showMute && followingWhat === 'ignore' &&
-                <label className={cnInactive} onClick={this.unignore}>{tt('unmute')}</label>}
+                <label className={cnInactive} onClick={this.unignore}>{tt('g.unmute')}</label>}
 
             {children && <span>&nbsp;&nbsp;{children}</span>}
         </span>

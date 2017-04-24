@@ -61,10 +61,10 @@ export default class TagsIndex extends React.Component {
         }).toArray();
 
         const cols = [
-            ['name', tt('tag')],
-            ['posts', tt('posts')],
-            ['comments', tt('comments')],
-            ['payouts', tt('payouts')]
+            ['name', tt('g.tag')],
+            ['posts', tt('g.posts')],
+            ['comments', tt('g.comments')],
+            ['payouts', tt('g.payouts')]
         ].map( col => {
             return <th key={col[0]}>
                     {order === col[0]
@@ -77,7 +77,7 @@ export default class TagsIndex extends React.Component {
             <div className="TagsIndex row">
                 <div className="column">
                     <br />
-                    <h4>{tt('trending_topics')}</h4>
+                    <h4>{tt('g.trending_topics')}</h4>
                     <table>
                         <thead>
                         <tr>

@@ -7,10 +7,10 @@ const Footer = props => (
     <footer className="Footer row expanded">
         <div className="large-6 columns">
             <ul className="menu">
-               <li><Link to="/about.html">{tt('about')}</Link></li>
-               <li><Link to="/privacy.html" rel="nofollow">{tt('privacy_policy')}</Link></li>
-               <li><Link to="/tos.html" rel="nofollow">{tt('terms_of_service')}</Link></li>
-               <li><Link to="/~witnesses">{tt('witnesses')}</Link></li>
+               <li><Link to="/about.html">{tt('navigation.about')}</Link></li>
+               <li><Link to="/privacy.html" rel="nofollow">{tt('navigation.privacy_policy')}</Link></li>
+               <li><Link to="/tos.html" rel="nofollow">{tt('navigation.terms_of_service')}</Link></li>
+               <li><Link to="/~witnesses">{tt('navigation.witnesses')}</Link></li>
             </ul>
         </div>
         <div className="large-6 columns">

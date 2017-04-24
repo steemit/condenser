@@ -11,7 +11,7 @@ export default class LpHeader extends React.Component {
                     </div>
                     <div className="top-bar-right">
                         <ul className="menu">
-                            <li><Link to="/trending" activeClassName="active">{tt('browse')}</Link></li>
+                            <li><Link to="/trending" activeClassName="active">{tt('g.browse')}</Link></li>
                         </ul>
                     </div>
                 </div>

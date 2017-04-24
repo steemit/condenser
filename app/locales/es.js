@@ -16,6 +16,7 @@ const es = 	{
 	privacy_policy: "Política de Privacidad",
 	terms_of_service: "Terminos de Servicio",
 	sign_up: "Sign Up",
+	welcome: "Quick Start Guide",
 	go_back: "Back",
 	/* end navigation */
 	buy: 'Comprar',

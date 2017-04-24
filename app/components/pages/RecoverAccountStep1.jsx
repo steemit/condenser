@@ -1,11 +1,13 @@
 import React from 'react';
 import Apis from 'shared/api_client/ApiInstances';
 import SvgImage from 'app/components/elements/SvgImage';
+import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import PasswordInput from 'app/components/elements/PasswordInput';
 import constants from 'app/redux/constants';
 import {PrivateKey} from 'shared/ecc';
 import tt from 'counterpart';
-import { FormattedHTMLMessage } from 'react-intl';
+import { FormattedHTMLMessage } from 'app/Translator';
+import { APP_DOMAIN, APP_NAME, SUPPORT_EMAIL } from 'app/client_config';
 
 const email_regex = /^([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22))*\x40([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d))*$/;
 
@@ -143,7 +145,7 @@ class RecoverAccountStep1 extends React.Component {
                     this.setState({email_submitted: true});
                 }
                 if (res.status === 'duplicate') {
-                    this.setState({email_error: tt('recoveraccountstep1_jsx.request_already_submitted_contact_support')});
+                    this.setState({email_error: tt('recoveraccountstep1_jsx.request_already_submitted_contact_support', {SUPPORT_EMAIL})});
                 }
             }
         }).catch(error => {
@@ -164,7 +166,7 @@ class RecoverAccountStep1 extends React.Component {
                     <div className="column large-4">
                         <h2>{tt('navigation.stolen_account_recovery')}</h2>
                         <p>
-                            {tt('recoveraccountstep1_jsx.recover_account_intro')}
+                            {tt('recoveraccountstep1_jsx.recover_account_intro', {APP_URL: APP_DOMAIN, APP_NAME})}
                         </p>
                         <form onSubmit={this.onSubmit} noValidate>
                             <div className={name_error ? 'error' : ''}>
@@ -228,20 +230,18 @@ class RecoverAccountStep1 extends React.Component {
                         <div className="column large-4">
                             {
                                 email_submitted
-                                ?   <div>
-                                        {/* currently translateHtml() does not work, using <FormattedHTMLMessage /> instead */}
-                                        <FormattedHTMLMessage id="thanks_for_submitting_request_for_account_recovery" />
+                                    ? <FormattedHTMLMessage id="recoveraccountstep1_jsx.thanks_for_submitting_request_for_account_recovery" params={{APP_NAME}} />
+                                    : <form onSubmit={this.onSubmitEmail} noValidate>
+                                    <p>{tt('recoveraccountstep1_jsx.enter_email_toverify_identity')}</p>
+                                    <div className={email_error ? 'column large-4 shrink error' : 'column large-4 shrink'}>
+                                        <label>{tt('g.email')}
+                                            <input type="text" name="email" autoComplete="off" onChange={this.onEmailChange} value={email} />
+                                        </label>
+                                        <p className="error">{email_error}</p>
+                                        <input type="submit" disabled={email_error || !email} className="button hollow"
+                                               value={tt('recoveraccountstep1_jsx.continue_with_email')} />
                                     </div>
-                                : <form onSubmit={this.onSubmitEmail} noValidate>
-                                <p>{tt('recoveraccountstep1_jsx.enter_email_toverify_identity')}</p>
-                                <div className={email_error ? 'column large-4 shrink error' : 'column large-4 shrink'}>
-                                    <label>{tt('g.email')}
-                                        <input type="text" name="email" autoComplete="off" onChange={this.onEmailChange} value={email} />
-                                    </label>
-                                    <p className="error">{email_error}</p>
-                                    <input type="submit" disabled={email_error || !email} className="button hollow" value={tt('recoveraccountstep1_jsx.continue_with_email')} />
-                                </div>
-                            </form>
+                                </form>
                             }
                         </div>
                     </div>
@@ -255,3 +255,4 @@ module.exports = {
     path: 'recover_account_step_1',
     component: RecoverAccountStep1
 };
+

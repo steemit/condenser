@@ -1,6 +1,7 @@
 import React from 'react';
 import {key_utils} from 'shared/ecc'
 import tt from 'counterpart';
+import { APP_NAME } from 'app/client_config';
 
 function allChecked(confirmCheckboxes) {
     return confirmCheckboxes.box1 && confirmCheckboxes.box2;

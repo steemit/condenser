@@ -26,4 +26,8 @@ export default connect(
         const locale = state.user.get('locale');
         return {...ownProps, locale};
     }
-)(Translator)
+)(Translator);
+
+export const FormattedHTMLMessage = ({id, params}) => (
+    <span className="FormattedHTMLMessage" dangerouslySetInnerHTML={ { __html: tt(id, params) } }></span>
+);

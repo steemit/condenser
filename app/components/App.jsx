@@ -18,6 +18,17 @@ import { translate } from '../Translator.js';
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import {key_utils} from 'steem/lib/auth/ecc';
+import resolveRoute from 'app/ResolveRoute';
+
+const pageRequiresEntropy = (path) => {
+    const {page} = resolveRoute(path);
+    const entropyPages = [
+        "ChangePassword", "RecoverAccountStep1", "RecoverAccountStep2",
+        "UserProfile", "CreateAccount"
+    ];
+    /* Returns true if that page requires the entropy collection listener */
+    return entropyPages.indexOf(page) !== -1
+}
 
 class App extends React.Component {
     constructor(props) {
@@ -26,6 +37,8 @@ class App extends React.Component {
         this.toggleOffCanvasMenu = this.toggleOffCanvasMenu.bind(this);
         this.signUp = this.signUp.bind(this);
         this.learnMore = this.learnMore.bind(this);
+        this.listenerActive = null;
+        this.onEntropyEvent = this.onEntropyEvent.bind(this);
         // this.shouldComponentUpdate = shouldComponentUpdate(this, 'App')
     }
 
@@ -36,12 +49,38 @@ class App extends React.Component {
 
     componentDidMount() {
         // setTimeout(() => this.setState({showCallout: false}), 15000);
+        if (pageRequiresEntropy(this.props.location.pathname)) {
+            this._addEntropyCollector();
+        }
     }
 
     componentWillReceiveProps(nextProps) {
         // setTimeout(() => this.setState({showCallout: false}), 15000);
         if (nextProps.location.pathname !== this.props.location.pathname) {
             this.setState({showBanner: false, showCallout: false})
+        }
+    }
+
+    componentWillReceiveProps(np) {
+        /* Add listener if the next page requires entropy and the current page didn't */
+        if (pageRequiresEntropy(np.location.pathname) && !pageRequiresEntropy(this.props.location.pathname)) {
+            this._addEntropyCollector();
+        } else if (!pageRequiresEntropy(np.location.pathname)) { // Remove if next page does not require entropy
+            this._removeEntropyCollector();
+        }
+    }
+
+    _addEntropyCollector() {
+        if (!this.listenerActive && this.refs.App_root) {
+            this.refs.App_root.addEventListener("mousemove", this.onEntropyEvent, {capture: false, passive: true});
+            this.listenerActive = true;
+        }
+    }
+
+    _removeEntropyCollector() {
+        if (this.listenerActive && this.refs.App_root) {
+            this.refs.App_root.removeEventListener("mousemove", this.onEntropyEvent);
+            this.listenerActive = null;
         }
     }
 
@@ -167,7 +206,8 @@ class App extends React.Component {
         }
 
         return <div className={'App' + (lp ? ' LP' : '') + (ip ? ' index-page' : '') + (miniHeader ? ' mini-header' : '')}
-                    onMouseMove={this.onEntropyEvent}>
+                    ref="App_root"
+                >
             <SidePanel ref="side_panel" alignment="right">
                 <TopRightMenu vertical navigate={this.navigate} />
                 <ul className="vertical menu">

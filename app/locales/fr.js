@@ -173,6 +173,7 @@ const fr = 	{
 	age: 'nouveau',
 	votes: 'votes',
 	backup_password_by_storing_it: 'Gardez une copie de votre mot de passe dans votre gestionnaire de mot de passe ou dans un fichier texte',
+	enter_account_show_password: 'Enter a valid account name to show the password',
 	click_to_generate_password: 'Cliquez pour génerer un mot de passe',
 	re_enter_generate_password: 'Retaper le Mot de Passe Généré',
 	understand_that_steemit_cannot_recover_password: 'Je comprend que Steemit ne peux pas récuperer un mot de passe perdu',

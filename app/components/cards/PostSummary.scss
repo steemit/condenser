@@ -39,8 +39,8 @@ ul.PostsList__summaries {
   border: 1px solid #EEE;
 }
 
-.PostSummary__image-visited {
-  filter: grayscale(100%);
+.PostSummary__post-visited {
+  text-decoration: underline;
 }
 
 .PostSummary__image-mobile {

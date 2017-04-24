@@ -178,6 +178,8 @@ class PostSummary extends React.Component {
             }
         }
 
+        const visitedClassName = this.props.visited ? ' PostSummary__post-visited' : '';
+
         let thumb = null;
         if(pictures && p.image_link) {
           const prox = $STM_Config.img_proxy_prefix
@@ -185,9 +187,9 @@ class PostSummary extends React.Component {
           const url = (prox ? prox + size + '/' : '') + p.image_link
           const visitedClassName = this.props.visited ? 'PostSummary__image-visited ' : '';
           if(thumbSize == 'mobile') {
-            thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className={'PostSummary__image-mobile ' + visitedClassName}><img src={url} /></a>
+            thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className='PostSummary__image-mobile'><img src={url} /></a>
           } else {
-            thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className={'PostSummary__image ' + visitedClassName} style={{backgroundImage: 'url(' + url + ')'}}></a>
+            thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className='PostSummary__image' style={{backgroundImage: 'url(' + url + ')'}}></a>
           }
         }
         const commentClasses = []
@@ -207,7 +209,7 @@ class PostSummary extends React.Component {
                 </div>
                 {thumb}
                 <div className="PostSummary__content">
-                    <div className="PostSummary__header show-for-medium">
+                    <div className={'PostSummary__header show-for-medium' + visitedClassName}>
                         {content_title}
                     </div>
                     {content_body}

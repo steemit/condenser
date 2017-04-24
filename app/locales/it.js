@@ -17,6 +17,7 @@ const it = 	{
 	terms_of_service: "Termini di Servizio",
 	sign_up: "Iscriviti",
 	welcome: "Quick Start Guide",
+	go_back: "Back",
 	/* end navigation */
 	buy: 'Compra',
 	sell: 'Vendi',
@@ -174,6 +175,7 @@ const it = 	{
 	age: 'nuovo',
 	votes: 'votes',
 	backup_password_by_storing_it: 'Fai un backup della tua password o scrivila su un foglio di carta',
+	enter_account_show_password: 'Enter a valid account name to show the password',
 	click_to_generate_password: 'Clicca per generare una password',
 	re_enter_generate_password: 'Riscrivi la Password generata',
 	understand_that_steemit_cannot_recover_password: 'Io capisco che Steemit non può recuperare le password smarrite',

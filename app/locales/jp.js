@@ -17,6 +17,7 @@ const jp = 	{
 	terms_of_service: "利用規約",
 	sign_up: "サインアップ",
 	welcome: "Quick Start Guide",
+	go_back: "Back",
 	/* end navigation */
 	buy: '買う',
 	sell: '売る',
@@ -174,6 +175,7 @@ const jp = 	{
 	age: 'age',
 	votes: 'votes',
 	backup_password_by_storing_it: 'パスワードマネジャーやテキストファイルでパスワードのバックアップを取ろう',
+	enter_account_show_password: 'Enter a valid account name to show the password',
 	click_to_generate_password: 'パスワードを生成する',
 	re_enter_generate_password: '生成されたパスワードで入室する',
 	understand_that_steemit_cannot_recover_password: '私は私が無くしたパスワードをSteemitでは復元できないということに同意します',

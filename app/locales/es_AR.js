@@ -17,6 +17,7 @@ const es_AR = 	{
 	terms_of_service: "Términos de Servicio",
 	sign_up: "Registro",
 	welcome: "Quick Start Guide",
+	go_back: "Back",
 	/* end navigation */
 	buy: 'Comprar',
 	sell: 'Vender',
@@ -174,6 +175,7 @@ const es_AR = 	{
 	age: 'nueva',
 	votes: 'votes',
 	backup_password_by_storing_it: 'Asegurá esta contraseña almacenándola en un gestor de contraseñas, en un papel, y/o en un archivo de texto seguro',
+	enter_account_show_password: 'Enter a valid account name to show the password',
 	click_to_generate_password: 'Click para generar contraseña',
 	re_enter_generate_password: 'Re-ingresar constaseña generada',
 	understand_that_steemit_cannot_recover_password: 'Entiendo que Steemit no tiene forma de recuperar mi contraseña perdida',

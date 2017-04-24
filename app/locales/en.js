@@ -21,6 +21,7 @@ const en = 	{
 	terms_of_service: "Terms of Service",
 	sign_up: "Sign Up",
 	welcome: "Quick Start Guide",
+	go_back: "Back",
 	/* end navigation */
 	buy: 'Buy',
 	sell: 'Sell',
@@ -191,6 +192,7 @@ const en = 	{
 	age: 'age',
 	votes: 'votes',
 	backup_password_by_storing_it: 'Back it up by storing in your password manager or a text file',
+	enter_account_show_password: 'Enter a valid account name to show the password',
 	click_to_generate_password: 'Click to generate password',
 	re_enter_generate_password: 'Re-enter Generated Password',
 	understand_that_APP_NAME_cannot_recover_password: 'I understand that ' + APP_NAME + ' cannot recover lost passwords',

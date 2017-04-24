@@ -8,6 +8,7 @@ import {findParent} from 'app/utils/DomUtils';
 import Icon from 'app/components/elements/Icon';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import {connect} from 'react-redux'
+import { translate } from 'app/Translator.js';
 
 function topPosition(domElt) {
     if (!domElt) {
@@ -206,9 +207,9 @@ class PostsList extends React.Component {
                 {showPost && <div id="post_overlay" className="PostsList__post_overlay" tabIndex={0}>
                     <div className="PostsList__post_top_overlay">
                         <div className="PostsList__post_top_bar">
-                            <button className="back-button" type="button" title="Back" onClick={() => { this.setState({showPost: null}) }}>
-                                <span aria-hidden="true"><Icon name="chevron-left" /></span>
-                            </button>
+                            <ul className="menu back-button-menu">
+                                <li><a onClick={(e) => {e.preventDefault(); this.setState({showPost: null}) }} href="#"><i><Icon name="chevron-left" /></i> <span>{translate('go_back')}</span></a></li>
+                            </ul>
                             <CloseButton onClick={this.closePostModal} />
                         </div>
                     </div>

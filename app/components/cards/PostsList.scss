@@ -19,7 +19,7 @@
   left: 0;
   width: 100%;
   z-index: 310;
-  height: 2.5rem;
+  height: 3rem;
   overflow-x: hidden;
   overflow-y: scroll;
   border-bottom: 1px solid $light-gray;
@@ -28,24 +28,19 @@
 .PostsList__post_top_bar {
   position: relative;
   width: 100%;
-  height: 2.5rem;
+  height: 3rem;
   margin: 0 auto;
-  padding: 0.3rem 0.9rem 0;
   background-color: $white;
   overflow: hidden;
+  a {
+    span.Icon path {
+      fill: map-get($foundation-palette, 'primary');
+    }
+  }
   > .close-button {
     visibility: hidden;
     top: 1rem;
     right: 0;
-  }
-  > .back-button {
-    position: relative;
-    font-size: 2em;
-    line-height: 1;
-    cursor: pointer;
-    path {
-      fill: map-get($foundation-palette, 'primary');
-    }
   }
 }
 
@@ -76,7 +71,7 @@ body.with-post-overlay {
     > .close-button {
       visibility: visible;
     }
-    > .back-button {
+    > .back-button-menu {
       visibility: hidden;
     }
   }

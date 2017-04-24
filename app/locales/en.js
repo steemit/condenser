@@ -20,6 +20,7 @@ const en = 	{
 	privacy_policy: "Privacy Policy",
 	terms_of_service: "Terms of Service",
 	sign_up: "Sign Up",
+	go_back: "Back",
 	/* end navigation */
 	buy: 'Buy',
 	sell: 'Sell',

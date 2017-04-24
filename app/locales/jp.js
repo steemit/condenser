@@ -16,6 +16,7 @@ const jp = 	{
 	privacy_policy: "プライバシーポリシー",
 	terms_of_service: "利用規約",
 	sign_up: "サインアップ",
+	go_back: "Back",
 	/* end navigation */
 	buy: '買う',
 	sell: '売る',

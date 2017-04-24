@@ -288,7 +288,7 @@ class App extends React.Component {
                       </a>
                   </li>
                   <li>
-                      <a href="http://golostools.com/" onClick={this.navigate} target="_blank" rel="noopener noreferrer">
+                      <a href="http://golostools.com/" target="_blank" rel="noopener noreferrer">
                           {translate('APP_NAME_app_center')}&nbsp;<Icon name="extlink" />
                       </a>
                   </li>
@@ -300,12 +300,12 @@ class App extends React.Component {
                 </ul>
                 <ul className="vertical menu">
                     <li>
-                      <a href={TERMS_OF_SERVICE_URL} onClick={this.navigate} rel="nofollow">
+                      <a href={TERMS_OF_SERVICE_URL} target="_blank" rel="nofollow">
                             {translate("terms_of_service")}
                         </a>
                     </li>
                     <li>
-                      <a href={PRIVACY_POLICY_URL} onClick={this.navigate} rel="nofollow">
+                      <a href={PRIVACY_POLICY_URL} target="_blank" rel="nofollow">
                             {translate("privacy_policy")}
                         </a>
                     </li>

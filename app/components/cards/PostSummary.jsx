@@ -53,11 +53,11 @@ class PostSummary extends React.Component {
 
     shouldComponentUpdate(props, state) {
         return props.thumbSize !== this.props.thumbSize ||
-               props.pending_payout !== this.props.pending_payout ||
-               props.total_payout !== this.props.total_payout ||
-               props.username !== this.props.username ||
-               props.nsfwPref !== this.props.nsfwPref ||
-               state.revealNsfw !== this.state.revealNsfw;
+            props.pending_payout !== this.props.pending_payout ||
+            props.total_payout !== this.props.total_payout ||
+            props.username !== this.props.username ||
+            props.nsfwPref !== this.props.nsfwPref ||
+            state.revealNsfw !== this.state.revealNsfw;
     }
 
     onRevealNsfw(e) {
@@ -82,15 +82,15 @@ class PostSummary extends React.Component {
         }
 
         if(reblogged_by) {
-          reblogged_by = <div className="PostSummary__reblogged_by">
-                             <Icon name="reblog" /> {tt('resteemed_by')} <UserNames names={reblogged_by} />
-                         </div>
+            reblogged_by = <div className="PostSummary__reblogged_by">
+                <Icon name="reblog" /> {tt('postsummary_jsx.resteemed_by')} <UserNames names={reblogged_by} />
+            </div>
         }
 
         if(account && account != content.get('author')) {
-          reblogged_by = <div className="PostSummary__reblogged_by">
-                             <Icon name="reblog" /> {tt('resteemed')}
-                         </div>
+            reblogged_by = <div className="PostSummary__reblogged_by">
+                <Icon name="reblog" /> {tt('postsummary_jsx.resteemed')}
+            </div>
         }
 
         const {gray, pictures, authorRepLog10, flagWeight, isNsfw} = content.get('stats', Map()).toJS()
@@ -105,13 +105,13 @@ class PostSummary extends React.Component {
         let full_power = content.get('percent_steem_dollars') === 0;
 
         if( content.get( 'parent_author') !== "" ) {
-           title_text = tt('re') + ": " + content.get('root_title');
-           title_link_url = content.get( 'url' );
-           comments_link = title_link_url;
-           is_comment = true;
+            title_text = tt('g.re') + ": " + content.get('root_title');
+            title_link_url = content.get( 'url' );
+            comments_link = title_link_url;
+            is_comment = true;
         } else {
-           title_link_url = p.link;
-           comments_link = p.link + '#comments';
+            title_link_url = p.link;
+            comments_link = p.link + '#comments';
         }
 
         let content_body = <div className="PostSummary__body entry-content">
@@ -121,15 +121,15 @@ class PostSummary extends React.Component {
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>
                 {isNsfw && <span className="nsfw-flag">nsfw</span>}
                 {title_text}
-                {full_power && <span title={tt('powered_up_100')}><Icon name="steem" /></span>}
+                {full_power && <span title={tt('g.powered_up_100')}><Icon name="steem" /></span>}
             </a>
         </h3>;
 
         // author and category
         let author_category = <span className="vcard">
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}><TimeAgoWrapper date={p.created} className="updated" /></a>
-            {} {tt('by')} <Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
-            {} {tt('in')} <TagList post={p} single />
+            {} {tt('g.by')} <Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
+            {} {tt('g.in')} <TagList post={p} single />
         </span>
 
         const content_footer = <div className="PostSummary__footer">
@@ -158,10 +158,10 @@ class PostSummary extends React.Component {
                             <div className="PostSummary__time_author_category_small show-for-small-only">
                                 {author_category}
                             </div>
-                            tt('this_post_is') <span className="nsfw-flag">nsfw</span>.
-                            tt('you_can') <a href="#" onClick={this.onRevealNsfw}>tt('reveal_it')</a> {tt('or') + ' '}
-                            {username ? <span>{tt('adjust_your')} <Link to={`/@${username}/settings`}>{tt('display_preferences')}</Link>.</span>
-                                      : <span><Link to="/enter_email">{tt('create_an_account')}</Link> {tt('to_save_your_preferences')}.</span>}
+                            tt('postsummary_jsx.this_post_is') <span className="nsfw-flag">nsfw</span>.
+                            tt('postsummary_jsx.you_can') <a href="#" onClick={this.onRevealNsfw}>tt('postsummary_jsx.reveal_it')</a> {tt('g.or') + ' '}
+                            {username ? <span>{tt('postsummary_jsx.adjust_your')} <Link to={`/@${username}/settings`}>{tt('postsummary_jsx.display_preferences')}</Link>.</span>
+                                : <span><Link to="/enter_email">{tt('postsummary_jsx.create_an_account')}</Link> {tt('postsummary_jsx.to_save_your_preferences')}.</span>}
                             {content_footer}
                         </div>
                     </article>
@@ -171,14 +171,14 @@ class PostSummary extends React.Component {
 
         let thumb = null;
         if(pictures && p.image_link) {
-          const prox = $STM_Config.img_proxy_prefix
-          const size = (thumbSize == 'mobile') ? '640x480' : '256x512';
-          const url = (prox ? prox + size + '/' : '') + p.image_link
-          if(thumbSize == 'mobile') {
-            thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image-mobile"><img src={url} /></a>
-          } else {
-            thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image" style={{backgroundImage: 'url(' + url + ')'}}></a>
-          }
+            const prox = $STM_Config.img_proxy_prefix
+            const size = (thumbSize == 'mobile') ? '640x480' : '256x512';
+            const url = (prox ? prox + size + '/' : '') + p.image_link
+            if(thumbSize == 'mobile') {
+                thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image-mobile"><img src={url} /></a>
+            } else {
+                thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image" style={{backgroundImage: 'url(' + url + ')'}}></a>
+            }
         }
         const commentClasses = []
         if(gray || ignore) commentClasses.push('downvoted') // rephide

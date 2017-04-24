@@ -68,7 +68,7 @@ export default class Reblog extends React.Component {
         const state = this.state.active ? 'active' : 'inactive'
         const loading = this.state.loading ? ' loading' : ''
         return <span className={'Reblog__button Reblog__button-'+state + loading}>
-            <a href="#" onClick={this.reblog} title={tt('reblog')}><Icon name="reblog" /></a>
+            <a href="#" onClick={this.reblog} title={tt('g.reblog')}><Icon name="reblog" /></a>
         </span>
     }
 }
@@ -82,12 +82,12 @@ module.exports = connect(
             const json = ['reblog', {account, author, permlink}]
             dispatch(transaction.actions.broadcastOperation({
                 type: 'custom_json',
-                confirm: tt('are_you_sure'),
+                confirm: tt('g.are_you_sure'),
                 operation: {
                     id: 'follow',
                     required_posting_auths: [account],
                     json: JSON.stringify(json),
-                    __config: {title: tt('resteem_this_post')}
+                    __config: {title: tt('g.resteem_this_post')}
                 },
                 successCallback, errorCallback,
             }))

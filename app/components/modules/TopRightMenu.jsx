@@ -10,9 +10,7 @@ import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdow
 import VerticalMenu from 'app/components/elements/VerticalMenu';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import NotifiCounter from 'app/components/elements/NotifiCounter';
-// TODO: Temporary disable counterpart library because of TopRightMenu is not fully ReactJS.Component and project doesn't running
-// import tt from 'counterpart';
-const tt = (s) => {return s}
+import tt from 'counterpart';
 
 const defaultNavigate = (e) => {
     if (e.metaKey || e.ctrlKey) {
@@ -29,7 +27,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
     const mcl = vertical ? '' : ' sub-menu';
     const lcn = vertical ? '' : 'show-for-medium';
     const nav = navigate || defaultNavigate;
-    const submit_story = $STM_Config.read_only_mode ? null : <li className={lcn + ' submit-story'}><a href="/submit.html" onClick={nav}>{tt('submit_a_story')}</a></li>;
+    const submit_story = $STM_Config.read_only_mode ? null : <li className={lcn + ' submit-story'}><a href="/submit.html" onClick={nav}>{tt('g.submit_a_story')}</a></li>;
     const feed_link = `/@${username}/feed`;
     const replies_link = `/@${username}/recent-replies`;
     const wallet_link = `/@${username}/transfers`;
@@ -39,20 +37,20 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
     const settings_link = `/@${username}/settings`;
     if (loggedIn) { // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!
         const user_menu = [
-            {link: feed_link, value: tt('feed'), addon: <NotifiCounter fields="feed" />},
-            {link: account_link, value: tt('blog')},
-            {link: comments_link, value: tt('comments')},
-            {link: replies_link, value: tt('replies'), addon: <NotifiCounter fields="comment_reply" />},
-            {link: wallet_link, value: tt('wallet'), addon: <NotifiCounter fields="follow,send,receive,account_update" />},
-            {link: reset_password_link, value: tt('change_password')},
-            {link: settings_link, value: tt('settings')},
+            {link: feed_link, value: tt('g.feed'), addon: <NotifiCounter fields="feed" />},
+            {link: account_link, value: tt('g.blog')},
+            {link: comments_link, value: tt('g.comments')},
+            {link: replies_link, value: tt('g.replies'), addon: <NotifiCounter fields="comment_reply" />},
+            {link: wallet_link, value: tt('g.wallet'), addon: <NotifiCounter fields="follow,send,receive,account_update" />},
+            {link: reset_password_link, value: tt('g.change_password')},
+            {link: settings_link, value: tt('g.settings')},
             loggedIn ?
-                {link: '#', onClick: logout, value: tt('logout')} :
-                {link: '#', onClick: showLogin, value: tt('login')}
+                {link: '#', onClick: logout, value: tt('g.logout')} :
+                {link: '#', onClick: showLogin, value: tt('g.login')}
         ];
         return (
             <ul className={mcn + mcl}>
-                <li className={lcn}><a href="/static/search.html" title={tt('search')}>{vertical ? <span>{tt('search')}</span> : <Icon name="search" />}</a></li>
+                <li className={lcn}><a href="/static/search.html" title={tt('g.search')}>{vertical ? <span>{tt('g.search')}</span> : <Icon name="search" />}</a></li>
                 {submit_story}
                 <LinkWithDropdown
                     closeOnClickOutside
@@ -78,7 +76,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
     if (probablyLoggedIn) {
         return (
             <ul className={mcn + mcl}>
-                {!vertical && <li><a href="/static/search.html" title="Search"><Icon name="search" /></a></li>}
+                {!vertical && <li><a href="/static/search.html" title={tt('g.search')}><Icon name="search" /></a></li>}
                 <li className={lcn}><LoadingIndicator type="circle" inline /></li>
                 {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
                     <span className="hamburger" />
@@ -88,9 +86,9 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
     }
     return (
         <ul className={mcn + mcl}>
-            {!vertical && <li><a href="/static/search.html" title={tt('search')}><Icon name="search" /></a></li>}
-            <li className={lcn}><a href="/enter_email">{tt('sign_up')}</a></li>
-            <li className={lcn}><a href="/login.html" onClick={showLogin}>{tt('login')}</a></li>
+            {!vertical && <li><a href="/static/search.html" title={tt('g.search')}><Icon name="search" /></a></li>}
+            <li className={lcn}><a href="/enter_email">{tt('g.sign_up')}</a></li>
+            <li className={lcn}><a href="/login.html" onClick={showLogin}>{tt('g.login')}</a></li>
             {submit_story}
             {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
                 <span className="hamburger" />

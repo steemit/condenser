@@ -7,7 +7,7 @@ class Login extends React.Component {
         if (!process.env.BROWSER) { // don't render this page on the server
             return <div className="row">
                 <div className="column">
-                    {tt('loading')}..
+                    {tt('g.loading')}..
                 </div>
             </div>;
         }

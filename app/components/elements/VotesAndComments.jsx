@@ -24,12 +24,12 @@ class VotesAndComments extends React.Component {
 
     render() {
         const {votes, comments, commentsLink} = this.props;
-        let comments_tooltip = tt('no_responses_yet_click_to_respond');
-        if (comments > 0) comments_tooltip = `${tt('response_count', {responseCount: comments})}. ${tt('click_to_respond')}.`
+        let comments_tooltip = tt('votesandcomments_jsx.no_responses_yet_click_to_respond');
+        if (comments > 0) comments_tooltip = `${tt('votesandcomments_jsx.response_count', {responseCount: comments})}. ${tt('votesandcomments_jsx.click_to_respond')}.`
 
         return (
             <span className="VotesAndComments">
-                <span className="VotesAndComments__votes" title={tt('vote_count', {voteCount: votes})}>
+                <span className="VotesAndComments__votes" title={tt('votesandcomments_jsx.vote_count', {voteCount: votes})}>
                     <Icon size="1x" name="chevron-up-circle" />&nbsp;{votes}
                 </span>
                 <span className={'VotesAndComments__comments' + (comments === 0 ? ' no-comments' : '')}>

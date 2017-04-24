@@ -67,10 +67,10 @@ class LoginForm extends Component {
             fields: ['username', 'password', 'saveLogin:checked'],
             initialValues: props.initialValues,
             validation: values => ({
-                username: ! values.username ? tt('required') : validate_account_name(values.username.split('/')[0]),
-                password: ! values.password ? tt('required') :
-                    PublicKey.fromString(values.password) ? tt('you_need_a_private_password_or_key') :
-                    null,
+                username: ! values.username ? tt('g.required') : validate_account_name(values.username.split('/')[0]),
+                password: ! values.password ? tt('g.required') :
+                    PublicKey.fromString(values.password) ? tt('loginform_jsx.you_need_a_private_password_or_key') :
+                        null,
             })
         })
     }
@@ -110,9 +110,9 @@ class LoginForm extends Component {
             return <div className="row">
                 <div className="column">
                     <div className="callout alert">
-                        <h4>{tt('cryptography_test_failed')}</h4>
-                        <p>{tt('unable_to_log_you_in')}</p>
-                        <p>{tt('the_latest_versions_of')} <a href="https://www.google.com/chrome/">Chrome</a> {tt('and')} <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a> {tt('are_well_tested_and_known_to_work_with', {APP_URL})}</p>
+                        <h4>{tt('loginform_jsx.cryptography_test_failed')}</h4>
+                        <p>{tt('loginform_jsx.unable_to_log_you_in')}</p>
+                        <p>{tt('loginform_jsx.the_latest_versions_of')} <a href="https://www.google.com/chrome/">Chrome</a> {tt('g.and')} <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a> {tt('loginform_jsx.are_well_tested_and_known_to_work_with', {APP_URL})}</p>
                     </div>
                 </div>
             </div>;
@@ -122,7 +122,7 @@ class LoginForm extends Component {
             return <div className="row">
                 <div className="column">
                     <div className="callout alert">
-                        <p>{tt('due_to_server_maintenance')}</p></div>
+                        <p>{tt('loginform_jsx.due_to_server_maintenance')}</p></div>
                 </div>
             </div>;
         }
@@ -135,103 +135,103 @@ class LoginForm extends Component {
         const opType = loginBroadcastOperation ? loginBroadcastOperation.get('type') : null;
         let postType = "";
         if (opType === "vote") {
-            postType = tt('login_to_vote')
+            postType = tt('loginform_jsx.login_to_vote')
         } else if (opType === "custom_json" && loginBroadcastOperation.getIn(['operation', 'id']) === "follow") {
             postType = 'Login to Follow Users'
         } else if (loginBroadcastOperation) {
             // check for post or comment in operation
-            postType = loginBroadcastOperation.getIn(['operation', 'title']) ? tt('login_to_post') : tt('login_to_comment');
+            postType = loginBroadcastOperation.getIn(['operation', 'title']) ? tt('loginform_jsx.login_to_post') : tt('loginform_jsx.login_to_comment');
         }
-        const title = postType ? postType : tt('login');
-        const authType = /^vote|comment/.test(opType) ? tt('posting') : tt('active_or_owner');
-        const submitLabel = loginBroadcastOperation ? tt('sign_n') : tt('login');
+        const title = postType ? postType : tt('g.login');
+        const authType = /^vote|comment/.test(opType) ? tt('loginform_jsx.posting') : tt('loginform_jsx.active_or_owner');
+        const submitLabel = loginBroadcastOperation ? tt('g.sign_n') : tt('g.login');
         let error = password.touched && password.error ? password.error : this.props.login_error;
         if (error === 'owner_login_blocked') {
-            error = <span>{tt('this_password_is_bound_to_your_account')}
-                {tt('however_you_can_use_it_to')}<a onClick={this.showChangePassword}>{tt('update_your_password')}</a> {tt('to_obtain_a_more_secure_set_of_keys')}</span>
+            error = <span>{tt('loginform_jsx.this_password_is_bound_to_your_account')}
+                {tt('loginform_jsx.however_you_can_use_it_to')}<a onClick={this.showChangePassword}>{tt('loginform_jsx.update_your_password')}</a> {tt('loginform_jsx.to_obtain_a_more_secure_set_of_keys')}</span>
         } else if (error === 'active_login_blocked') {
-            error = <span>{tt('this_password_is_bound_to_your_account_active_key')} {tt('you_may_use_this_active_key_on_other_more')}</span>
+            error = <span>{tt('loginform_jsx.this_password_is_bound_to_your_account_active_key')} {tt('loginform_jsx.you_may_use_this_active_key_on_other_more')}</span>
         }
         let message = null;
         if (msg) {
             if (msg === 'accountcreated') {
                 message =<div className="callout primary">
-                        <p>{tt('You_account_has_been_successfully_created')}</p>
-                    </div>;
+                    <p>{tt('loginform_jsx.you_account_has_been_successfully_created')}</p>
+                </div>;
             }
             else if (msg === 'accountrecovered') {
                 message =<div className="callout primary">
-                    <p>{tt('You_account_has_been_successfully_recovered')}</p>
+                    <p>{tt('loginform_jsx.you_account_has_been_successfully_recovered')}</p>
                 </div>;
             }
             else if (msg === 'passwordupdated') {
                 message = <div className="callout primary">
-                    <p>{tt('password_update_succes', {accountName: username.value})}</p>
+                    <p>{tt('loginform_jsx.password_update_succes', {accountName: username.value})}</p>
                 </div>;
             }
         }
-        const password_info = checkPasswordChecksum(password.value) === false ? tt('password_info') : null
+        const password_info = checkPasswordChecksum(password.value) === false ? tt('loginform_jsx.password_info') : null
 
         const form = (
             <center>
-            <form onSubmit={handleSubmit(({data}) => {
-                // bind redux-form to react-redux
-                console.log('Login\tdispatchSubmit');
-                return dispatchSubmit(data, loginBroadcastOperation, afterLoginRedirectToWelcome)
-            })}
-                onChange={this.props.clearError}
-                method="post"
-            >
-                <div className="input-group">
-                    <span className="input-group-label">@</span>
-                    <input className="input-group-field" type="text" required placeholder={tt('enter_your_username')} ref="username"
-                        {...username.props} onChange={usernameOnChange} autoComplete="on" disabled={submitting}
-                    />
-                </div>
-                {username.touched && username.blur && username.error ? <div className="error">{username.error}&nbsp;</div> : null}
+                <form onSubmit={handleSubmit(({data}) => {
+                    // bind redux-form to react-redux
+                    console.log('Login\tdispatchSubmit');
+                    return dispatchSubmit(data, loginBroadcastOperation, afterLoginRedirectToWelcome)
+                })}
+                      onChange={this.props.clearError}
+                      method="post"
+                >
+                    <div className="input-group">
+                        <span className="input-group-label">@</span>
+                        <input className="input-group-field" type="text" required placeholder={tt('loginform_jsx.enter_your_username')} ref="username"
+                               {...username.props} onChange={usernameOnChange} autoComplete="on" disabled={submitting}
+                        />
+                    </div>
+                    {username.touched && username.blur && username.error ? <div className="error">{username.error}&nbsp;</div> : null}
 
-                <div>
-                    <input type="password" required ref="pw" placeholder={tt('password_or_wif')} {...password.props} autoComplete="on" disabled={submitting} />
-                    {error && <div className="error">{error}&nbsp;</div>}
-                    {error && password_info && <div className="warning">{password_info}&nbsp;</div>}
-                </div>
-                {loginBroadcastOperation && <div>
-                    <div className="info">{tt('this_operation_requires_your_key_or_master_password', {authType})}</div>
-                </div>}
-                {!loginBroadcastOperation && <div>
-                    <label htmlFor="saveLogin">
-                        {tt('keep_me_logged_in')} &nbsp;
-                        <input id="saveLogin" type="checkbox" ref="pw" {...saveLogin.props} onChange={this.saveLoginToggle} disabled={submitting} /></label>
-                </div>}
-                <div>
-                    <br />
-                    <button type="submit" disabled={submitting || disabled} className="button" onClick={this.SignIn}>
-                        {submitLabel}
-                    </button>
-                    {this.props.onCancel && <button type="button float-right" disabled={submitting} className="button hollow" onClick={onCancel}>
-                        {tt('cancel')}
-                    </button>}
-                </div>
-                {authType == 'Posting' &&
-                <div>
-                    <hr />
-                    <p>{tt('join_our')} <span className="free-slogan">{tt('amazing_community')}</span>{tt('to_comment_and_reward_others')}</p>
-                    <button type="button" className="button sign-up" onClick={this.SignUp}>{tt('sign_up_now_to_receive')}<span className="free-money">{tt('free_money')}</span></button>
-                </div>}
-            </form>
-        </center>
+                    <div>
+                        <input type="password" required ref="pw" placeholder={tt('loginform_jsx.password_or_wif')} {...password.props} autoComplete="on" disabled={submitting} />
+                        {error && <div className="error">{error}&nbsp;</div>}
+                        {error && password_info && <div className="warning">{password_info}&nbsp;</div>}
+                    </div>
+                    {loginBroadcastOperation && <div>
+                        <div className="info">{tt('loginform_jsx.this_operation_requires_your_key_or_master_password', {authType})}</div>
+                    </div>}
+                    {!loginBroadcastOperation && <div>
+                        <label htmlFor="saveLogin">
+                            {tt('loginform_jsx.keep_me_logged_in')} &nbsp;
+                            <input id="saveLogin" type="checkbox" ref="pw" {...saveLogin.props} onChange={this.saveLoginToggle} disabled={submitting} /></label>
+                    </div>}
+                    <div>
+                        <br />
+                        <button type="submit" disabled={submitting || disabled} className="button" onClick={this.SignIn}>
+                            {submitLabel}
+                        </button>
+                        {this.props.onCancel && <button type="button float-right" disabled={submitting} className="button hollow" onClick={onCancel}>
+                            {tt('g.cancel')}
+                        </button>}
+                    </div>
+                    {authType == 'Posting' &&
+                    <div>
+                        <hr />
+                        <p>{tt('loginform_jsx.join_our')} <span className="free-slogan">{tt('loginform_jsx.amazing_community')}</span>{tt('loginform_jsx.to_comment_and_reward_others')}</p>
+                        <button type="button" className="button sign-up" onClick={this.SignUp}>{tt('loginform_jsx.sign_up_now_to_receive')}<span className="free-money">{tt('loginform_jsx.free_money')}</span></button>
+                    </div>}
+                </form>
+            </center>
         );
 
         return (
-           <div className="LoginForm">
-               {message}
-               <center>
-                   <h3>{tt('returning_users')}<span className="OpAction">{title}</span></h3>
-               </center>
-               <br />
-               {form}
-           </div>
-       )
+            <div className="LoginForm">
+                {message}
+                <center>
+                    <h3>{tt('loginform_jsx.returning_users')}<span className="OpAction">{title}</span></h3>
+                </center>
+                <br />
+                {form}
+            </div>
+        )
     }
 }
 

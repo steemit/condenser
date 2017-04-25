@@ -14,6 +14,7 @@ import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInp
 import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 import { FormattedHTMLMessage } from 'react-intl';
 import { APP_NAME, APP_DOMAIN, LIQUID_TOKEN, SUPPORT_EMAIL } from 'app/client_config';
+import tt from 'counterpart';
 //import SignupProgressBar from 'app/components/elements/SignupProgressBar';
 
 const PASSWORD_MIN_LENGTH = 32;

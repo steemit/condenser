@@ -33,7 +33,7 @@
   "helmet": {
     "directives": {
       "childSrc": "'self' www.youtube.com staticxx.facebook.com w.soundcloud.com player.vimeo.com",
-      "connectSrc": "'self' golos.io ws.golos.io api.blocktrades.us",
+      "connectSrc": "'self' golos.io ws.golos.io testnet.golos.io ws.testnet.golos.io api.blocktrades.us",
       "defaultSrc": "'self' www.youtube.com staticxx.facebook.com player.vimeo.com",
       "fontSrc": "data: fonts.gstatic.com",
       "frameAncestors": "'none'",

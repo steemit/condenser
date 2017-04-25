@@ -238,8 +238,8 @@ class UserWallet extends React.Component {
             claimbox = <div className="row">
                     <div className="columns small-12">
                         <div className="UserWallet__claimbox">
-                            Unclaimed rewards: {rewards_str}
-                            {isMyAccount && <button className="button hollow float-right" onClick={e => {this.props.claimRewards(account)}}>Claim Rewards</button>}
+                            Your current rewards: {rewards_str}
+                            {isMyAccount && <button className="button hollow float-right" onClick={e => {this.props.claimRewards(account)}}>Redeem Rewards (Transfer to Balance)</button>}
                         </div>
                     </div>
                 </div>

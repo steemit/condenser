@@ -1,3 +1,4 @@
+/*global $STM_Config */
 import koa_router from 'koa-router';
 import koa_body from 'koa-body';
 import models from 'db/models';
@@ -7,10 +8,10 @@ import recordWebEvent from 'server/record_web_event';
 import {esc, escAttrs} from 'db/models';
 import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF} from 'server/utils/misc';
 import coBody from 'co-body';
-import secureRandom from 'secure-random'
-import {PublicKey, Signature, hash} from 'shared/ecc'
 import Mixpanel from 'mixpanel';
 import Tarantool from 'db/tarantool';
+import {PublicKey, Signature, hash} from 'steem/lib/auth/ecc';
+import {api, broadcast} from 'steem';
 
 const mixpanel = config.get('mixpanel') ? Mixpanel.init(config.get('mixpanel')) : null;
 
@@ -122,31 +123,31 @@ export default function useGeneralApi(app) {
                 throw new Error('Phone number is not confirmed');
             }
 
-            const [fee_value, fee_currency] = config.get('registrar.fee').split(' ');
-            let fee = parseFloat(fee_value);
-            try {
-                const chain_properties = yield Apis.instance().db_api.exec('get_chain_properties', []);
-                const chain_fee = parseFloat(chain_properties.account_creation_fee);
-                if (chain_fee && chain_fee > fee) {
-                    if (fee / chain_fee > 0.5) { // just a sanity check - chain fee shouldn't be a way larger
-                        console.log('-- /accounts warning: chain_fee is larger than config fee -->', this.session.uid, fee, chain_fee);
-                        fee = chain_fee;
-                    }
-                }
-            } catch (error) {
-                console.error('Error in /accounts get_chain_properties', error);
-            }
+            // const [fee_value, fee_currency] = config.get('registrar.fee').split(' ');
+            // let fee = parseFloat(fee_value);
+            // try {
+            //     const chain_properties = yield api.getChainPropertiesAsync();
+            //     const chain_fee = parseFloat(chain_properties.account_creation_fee);
+            //     if (chain_fee && chain_fee > fee) {
+            //         if (fee / chain_fee > 0.5) { // just a sanity check - chain fee shouldn't be a way larger
+            //             console.log('-- /accounts warning: chain_fee is larger than config fee -->', this.session.uid, fee, chain_fee);
+            //             fee = chain_fee;
+            //         }
+            //     }
+            // } catch (error) {
+            //     console.error('Error in /accounts get_chain_properties', error);
+            // }
 
             yield createAccount({
                 signingKey: config.get('registrar.signing_key'),
-                fee: `${fee.toFixed(3)} ${fee_currency}`,
-                creator: config.registrar.account,
+                fee: config.get('registrar.fee'),
+                creator: config.get('registrar.account'),
                 new_account_name: account.name,
+                delegation: config.get('registrar.delegation'),
                 owner: account.owner_key,
                 active: account.active_key,
                 posting: account.posting_key,
-                memo: account.memo_key,
-                broadcast: true
+                memo: account.memo_key
             });
             console.log('-- create_account_with_keys created -->', this.session.uid, account.name, user.id, account.owner_key);
 
@@ -223,7 +224,7 @@ export default function useGeneralApi(app) {
                 if(!this.session.login_challenge) {
                     console.error('/login_account missing this.session.login_challenge');
                 } else {
-                    const [chainAccount] = yield Apis.db_api('get_accounts', [account])
+                    const [chainAccount] = yield api.getAccountsAsync([account])
                     if(!chainAccount) {
                         console.error('/login_account missing blockchain account', account);
                     } else {
@@ -289,8 +290,10 @@ export default function useGeneralApi(app) {
             console.log('-- /record_event -->', this.session.uid, type, value);
             const str_value = typeof value === 'string' ? value : JSON.stringify(value);
             if (type.match(/^[A-Z]/)) {
-                mixpanel.track(type, {distinct_id: this.session.uid, Page: str_value});
-                mixpanel.people.increment(this.session.uid, type, 1);
+                if (mixpanel) {
+                    mixpanel.track(type, {distinct_id: this.session.uid, Page: str_value});
+                    mixpanel.people.increment(this.session.uid, type, 1);
+                }
             } else {
                 recordWebEvent(this, type, str_value);
             }
@@ -371,31 +374,24 @@ export default function useGeneralApi(app) {
     });
 }
 
-import {Apis} from 'shared/api_client';
-import {createTransaction, signTransaction} from 'shared/chain/transactions';
-import {ops} from 'shared/serializer';
-
-const {signed_transaction} = ops;
 /**
  @arg signingKey {string|PrivateKey} - WIF or PrivateKey object
  */
 function* createAccount({
-    signingKey, fee, creator, new_account_name, json_metadata = '',
-    owner, active, posting, memo, broadcast = false,
+    signingKey, fee, creator, new_account_name, json_metadata = '', delegation,
+    owner, active, posting, memo
 }) {
-    const operations = [['account_create', {
-        fee, creator, new_account_name, json_metadata,
+    const operations = [['account_create_with_delegation', {
+        fee, creator, new_account_name, json_metadata, delegation,
         owner: {weight_threshold: 1, account_auths: [], key_auths: [[owner, 1]]},
         active: {weight_threshold: 1, account_auths: [], key_auths: [[active, 1]]},
         posting: {weight_threshold: 1, account_auths: [], key_auths: [[posting, 1]]},
         memo_key: memo,
     }]]
-    const tx = yield createTransaction(operations)
-    const sx = signTransaction(tx, signingKey)
-    if (!broadcast) return signed_transaction.toObject(sx)
-    return yield new Promise((resolve, reject) =>
-        Apis.broadcastTransaction(sx, () => {resolve()}).catch(e => {reject(e)})
-    )
+    yield broadcast.sendAsync({
+      extensions: [],
+      operations
+    }, [signingKey])
 }
 
 const parseSig = hexSig => {try {return Signature.fromHex(hexSig)} catch(e) {return null}}

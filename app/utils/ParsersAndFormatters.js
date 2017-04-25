@@ -68,7 +68,7 @@ export function countDecimals(amount) {
 
 // this function searches for right translation of provided error (usually from back-end)
 export function translateError(string) {
-    if (typeof(string) != 'string') return string
+    if (typeof(string) != 'string') return string;
     switch (string) {
         case 'Account not found':
             return tt('g.account_not_found')

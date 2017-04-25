@@ -13,12 +13,23 @@ import CloseButton from 'react-foundation-components/lib/global/close-button';
 import Dialogs from 'app/components/modules/Dialogs';
 import Modals from 'app/components/modules/Modals';
 import Icon from 'app/components/elements/Icon';
-import {key_utils} from 'shared/ecc';
 import MiniHeader from 'app/components/modules/MiniHeader';
 import tt from 'counterpart';
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import { APP_NAME, VESTING_TOKEN, LIQUID_TOKEN } from 'app/client_config';
+import {key_utils} from 'steem/lib/auth/ecc';
+import resolveRoute from 'app/ResolveRoute';
+
+const pageRequiresEntropy = (path) => {
+    const {page} = resolveRoute(path);
+    const entropyPages = [
+        "ChangePassword", "RecoverAccountStep1", "RecoverAccountStep2",
+        "UserProfile", "CreateAccount"
+    ];
+    /* Returns true if that page requires the entropy collection listener */
+    return entropyPages.indexOf(page) !== -1
+}
 
 class App extends React.Component {
     constructor(props) {
@@ -27,6 +38,8 @@ class App extends React.Component {
         this.toggleOffCanvasMenu = this.toggleOffCanvasMenu.bind(this);
         this.signUp = this.signUp.bind(this);
         this.learnMore = this.learnMore.bind(this);
+        this.listenerActive = null;
+        this.onEntropyEvent = this.onEntropyEvent.bind(this);
         // this.shouldComponentUpdate = shouldComponentUpdate(this, 'App')
     }
 
@@ -37,21 +50,52 @@ class App extends React.Component {
 
     componentDidMount() {
         // setTimeout(() => this.setState({showCallout: false}), 15000);
+        if (pageRequiresEntropy(this.props.location.pathname)) {
+            this._addEntropyCollector();
+        }
     }
 
-    componentDidUpdate(nextProps) {
+    componentWillReceiveProps(nextProps) {
         // setTimeout(() => this.setState({showCallout: false}), 15000);
         if (nextProps.location.pathname !== this.props.location.pathname) {
             this.setState({showBanner: false, showCallout: false})
         }
     }
 
+    componentWillReceiveProps(np) {
+        /* Add listener if the next page requires entropy and the current page didn't */
+        if (pageRequiresEntropy(np.location.pathname) && !pageRequiresEntropy(this.props.location.pathname)) {
+            this._addEntropyCollector();
+        } else if (!pageRequiresEntropy(np.location.pathname)) { // Remove if next page does not require entropy
+            this._removeEntropyCollector();
+        }
+    }
+
+    _addEntropyCollector() {
+        if (!this.listenerActive && this.refs.App_root) {
+            this.refs.App_root.addEventListener("mousemove", this.onEntropyEvent, {capture: false, passive: true});
+            this.listenerActive = true;
+        }
+    }
+
+    _removeEntropyCollector() {
+        if (this.listenerActive && this.refs.App_root) {
+            this.refs.App_root.removeEventListener("mousemove", this.onEntropyEvent);
+            this.listenerActive = null;
+        }
+    }
+
     shouldComponentUpdate(nextProps, nextState) {
         const p = this.props;
         const n = nextProps;
-        return p.location !== n.location ||
-                  p.visitor !== n.visitor ||
-                  p.flash !== n.flash || this.state !== nextState;
+        return (
+            p.location.pathname !== n.location.pathname ||
+            p.new_visitor !== n.new_visitor ||
+            p.flash !== n.flash ||
+            this.state.open !== nextState.open ||
+            this.state.showBanner !== nextState.showBanner ||
+            this.state.showCallout !== nextState.showCallout
+        );
     }
 
     toggleOffCanvasMenu(e) {
@@ -150,7 +194,7 @@ class App extends React.Component {
                             <br />
                             <a className="button" href="/enter_email"> <b>{tt('navigation.sign_up')}</b> </a>
                             &nbsp; &nbsp; &nbsp;
-                            <a className="button hollow uppercase" href="https://steem.io" target="_blank" onClick={this.learnMore}> <b>{tt('submit_a_story.learn_more')}</b> </a>
+                            <a className="button hollow uppercase" href="https://steem.io" target="_blank" rel="noopener noreferrer" onClick={this.learnMore}> <b>{tt('submit_a_story.learn_more')}</b> </a>
                             <br />
                             <br />
                             <div className="tag3">
@@ -163,25 +207,11 @@ class App extends React.Component {
         }
 
         return <div className={'App' + (lp ? ' LP' : '') + (ip ? ' index-page' : '') + (miniHeader ? ' mini-header' : '')}
-                    onMouseMove={this.onEntropyEvent}>
+                    ref="App_root"
+                >
             <SidePanel ref="side_panel" alignment="right">
                 <TopRightMenu vertical navigate={this.navigate} />
                 <ul className="vertical menu">
-                    <li>
-                        <a href="https://steem.io" onClick={this.navigate}>
-                            {tt('navigation.about')}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/tags" onClick={this.navigate}>
-                            {tt('navigation.explore')}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://steem.io/SteemWhitePaper.pdf" onClick={this.navigate}>
-                            {tt('navigation.APP_NAME_whitepaper', {APP_NAME})}
-                        </a>
-                    </li>
                     <li>
                         <a href="/welcome" onClick={this.navigate}>
                             {tt('navigation.welcome')}
@@ -193,18 +223,13 @@ class App extends React.Component {
                         </a>
                     </li>
                     <li>
-                        <a href="https://steemit.chat/home" target="_blank" rel="noopener noreferrer">
-                            {tt('navigation.APP_NAME_chat', {APP_NAME})}&nbsp;<Icon name="extlink" />
+                        <a href="/tags" onClick={this.navigate}>
+                            {tt('navigation.explore')}
                         </a>
                     </li>
                     <li>
                         <a onClick={() => depositSteem()}>
                             {tt('navigation.buy_LIQUID_TOKEN', {LIQUID_TOKEN})}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="http://steemtools.com/" onClick={this.navigate} target="_blank" rel="noopener noreferrer">
-                            {tt('voting_jsx.APP_NAME_app_center', {APP_NAME})}&nbsp;<Icon name="extlink" />
                         </a>
                     </li>
                     <li>
@@ -222,11 +247,6 @@ class App extends React.Component {
                             {tt('navigation.change_account_password')}
                         </a>
                     </li>
-                    <li>
-                        <a href="https://steemit.github.io/steemit-docs/" target="_blank" rel="noopener noreferrer">
-                            {tt('navigation.APP_NAME_api_docs', {APP_NAME})}&nbsp;<Icon name="extlink" />
-                        </a>
-                    </li>
                     <li className="last">
                         <a href="/~witnesses" onClick={this.navigate}>
                             {tt('navigation.vote_for_witnesses')}
@@ -235,11 +255,38 @@ class App extends React.Component {
                 </ul>
                 <ul className="vertical menu">
                     <li>
+                        <a href="https://steemit.chat/home" target="_blank" rel="noopener noreferrer">
+                            {tt('navigation.chat')}&nbsp;<Icon name="extlink" />
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://steemtools.com/" onClick={this.navigate} target="_blank" rel="noopener noreferrer">
+                            {tt('navigation.app_center')}&nbsp;<Icon name="extlink" />
+                        </a>
+                    </li>
+                    <li className="last">
+                        <a href="https://steemit.github.io/steemit-docs/" target="_blank" rel="noopener noreferrer">
+                            {tt('navigation.steemit_api_docs')}&nbsp;<Icon name="extlink" />
+                        </a>
+                    </li>
+                </ul>
+                <ul className="vertical menu">
+                    <li>
+                        <a href="https://steem.io/SteemWhitePaper.pdf" onClick={this.navigate}>
+                            {tt('navigation.whitepaper')}&nbsp;<Icon name="extlink" />
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://steem.io" onClick={this.navigate}>
+                            {tt('navigation.about')}&nbsp;<Icon name="extlink" />
+                        </a>
+                    </li>
+                    <li>
                         <a href="/privacy.html" onClick={this.navigate} rel="nofollow">
                             {tt('navigation.privacy_policy')}
                         </a>
                     </li>
-                    <li>
+                    <li className="last">
                         <a href="/tos.html" onClick={this.navigate} rel="nofollow">
                             {tt('navigation.terms_of_service')}
                         </a>

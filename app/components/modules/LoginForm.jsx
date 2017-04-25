@@ -1,16 +1,16 @@
 /* eslint react/prop-types: 0 */
 import React, { PropTypes, Component } from 'react';
-import {PublicKey, PrivateKey} from 'shared/ecc'
 import transaction from 'app/redux/Transaction'
 import g from 'app/redux/GlobalReducer'
 import user from 'app/redux/User'
 import {validate_account_name} from 'app/utils/ChainValidation';
-import runTests from 'shared/ecc/test/BrowserTests';
+import runTests from 'app/utils/BrowserTests';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import reactForm from 'app/utils/ReactForm'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import tt from 'counterpart';
 import { APP_URL } from 'app/client_config';
+import {PrivateKey, PublicKey} from 'steem/lib/auth/ecc';
 
 class LoginForm extends Component {
 

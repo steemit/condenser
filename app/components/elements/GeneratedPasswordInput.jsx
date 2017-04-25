@@ -1,7 +1,7 @@
 import React from 'react';
-import {key_utils} from 'shared/ecc'
 import tt from 'counterpart';
 import { APP_NAME } from 'app/client_config';
+import {key_utils} from 'steem/lib/auth/ecc';
 
 function allChecked(confirmCheckboxes) {
     return confirmCheckboxes.box1 && confirmCheckboxes.box2;
@@ -18,13 +18,26 @@ export default class GeneratedPasswordInput extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            generatedPassword: 'P' + key_utils.get_random_key().toWif(),
+            generatedPassword: props.showPasswordString ? 'P' + key_utils.get_random_key().toWif() : null, // Only generate a password if it should be shown already here
             confirmPassword: '',
             confirmPasswordError: '',
             confirmCheckboxes: {box1: false, box2: false},
         };
         this.confirmPasswordChange = this.confirmPasswordChange.bind(this);
         this.confirmCheckChange = this.confirmCheckChange.bind(this);
+    }
+
+    componentWillReceiveProps(np) {
+        /*
+        * By delaying the password generation until the user enters an account
+        * name (making showPasswordString = true), we allow more time for
+        * entropy collection via the App.jsx mousemove event listener
+        */
+        if (!this.state.generatedPassword && np.showPasswordString) {
+            this.setState({
+                generatedPassword: 'P' + key_utils.get_random_key().toWif()
+            });
+        }
     }
 
     confirmCheckChange(e) {
@@ -53,7 +66,7 @@ export default class GeneratedPasswordInput extends React.Component {
                     <label className="uppercase">{tt('g.generated_password')}<br />
                         <code className="GeneratedPasswordInput__generated_password">{showPasswordString ? generatedPassword : '-'}</code>
                         <div className="GeneratedPasswordInput__backup_text">
-                            {tt('g.backup_password_by_storing_it')}
+                            {showPasswordString ? tt('g.backup_password_by_storing_it') : tt('g.enter_account_show_password')}
                         </div>
                     </label>
                 </div>

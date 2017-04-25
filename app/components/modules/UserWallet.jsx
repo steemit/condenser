@@ -11,7 +11,7 @@ import BlocktradesDeposit from 'app/components/modules/BlocktradesDeposit';
 import Reveal from 'react-foundation-components/lib/global/reveal'
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {steemTip, powerTip, valueTip, savingsTip} from 'app/utils/Tips'
-import {numberWithCommas, vestingSteem} from 'app/utils/StateFunctions'
+import {numberWithCommas, vestingSteem, delegatedSteem} from 'app/utils/StateFunctions'
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu'
 import WalletSubMenu from 'app/components/elements/WalletSubMenu'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
@@ -19,6 +19,7 @@ import Tooltip from 'app/components/elements/Tooltip'
 import tt from 'counterpart';
 import {List} from 'immutable'
 import { LIQUID_TOKEN, LIQUID_TICKER, DEBT_TOKENS } from 'app/client_config';
+import transaction from 'app/redux/Transaction';
 
 const assetPrecision = 1000;
 
@@ -28,11 +29,11 @@ class UserWallet extends React.Component {
         this.state = {};
         this.onShowDeposit = () => {this.setState({showDeposit: !this.state.showDeposit})};
         this.onShowDepositSteem = (e) => {
-            e.preventDefault()
+            e.preventDefault();
             this.setState({showDeposit: !this.state.showDeposit, depositType: 'STEEM'})
         };
         this.onShowDepositPower = (e) => {
-            e.preventDefault()
+            e.preventDefault();
             this.setState({showDeposit: !this.state.showDeposit, depositType: 'VESTS'})
         };
         // this.onShowDeposit = this.onShowDeposit.bind(this)
@@ -40,14 +41,14 @@ class UserWallet extends React.Component {
     }
     render() {
         const {state: {showDeposit, depositType, toggleDivestError},
-            onShowDeposit, onShowDepositSteem, onShowDepositPower} = this
+            onShowDeposit, onShowDepositSteem, onShowDepositPower} = this;
         const {convertToSteem, price_per_steem, savings_withdraws, account,
-            current_user, open_orders} = this.props
+            current_user, open_orders} = this.props;
         const gprops = this.props.gprops.toJS();
 
         if (!account) return null;
-        let vesting_steemf = vestingSteem(account.toJS(), gprops);
-        let vesting_steem = vesting_steemf.toFixed(3);
+        let vesting_steem = vestingSteem(account.toJS(), gprops);
+        let delegated_steem = delegatedSteem(account.toJS(), gprops);
 
         let isMyAccount = current_user && current_user.get('username') === account.get('name');
 
@@ -109,7 +110,7 @@ class UserWallet extends React.Component {
                     </Tooltip>
                 </div>
             ]);
-        }, [])
+        }, []);
 
         const balance_steem = parseFloat(account.get('balance').split(' ')[0]);
         const saving_balance_steem = parseFloat(savings_balance.split(' ')[0]);
@@ -132,7 +133,7 @@ class UserWallet extends React.Component {
 
         // set displayed estimated value
         const total_sbd = sbd_balance + sbd_balance_savings + savings_sbd_pending + sbdOrders + conversionValue;
-        const total_steem = vesting_steemf + balance_steem + saving_balance_steem + savings_pending + steemOrders;
+        const total_steem = vesting_steem + balance_steem + saving_balance_steem + savings_pending + steemOrders;
         let total_value = '$' + numberWithCommas(
             ((total_steem * price_per_steem) + total_sbd
         ).toFixed(2))
@@ -191,26 +192,62 @@ class UserWallet extends React.Component {
             </Reveal>
         </div>
 
-        const steem_balance_str = numberWithCommas(balance_steem.toFixed(3)) // formatDecimal(balance_steem, 3)
-        const steem_orders_balance_str = numberWithCommas(steemOrders.toFixed(3))
-        const power_balance_str = numberWithCommas(vesting_steem) // formatDecimal(vesting_steem, 3)
-        const sbd_balance_str = numberWithCommas('$' + sbd_balance.toFixed(3)) // formatDecimal(account.sbd_balance, 3)
-        const sbd_orders_balance_str = numberWithCommas('$' + sbdOrders.toFixed(3))
-        const savings_balance_str = numberWithCommas(saving_balance_steem.toFixed(3) + ' STEEM')
-        const savings_sbd_balance_str = numberWithCommas('$' + sbd_balance_savings.toFixed(3))
+        const steem_balance_str = numberWithCommas(balance_steem.toFixed(3));
+        const steem_orders_balance_str = numberWithCommas(steemOrders.toFixed(3));
+        const power_balance_str = numberWithCommas(vesting_steem.toFixed(3));
+        const received_power_balance_str = (delegated_steem < 0 ? '+' : '') + numberWithCommas((-delegated_steem).toFixed(3));
+        const sbd_balance_str = numberWithCommas('$' + sbd_balance.toFixed(3)); // formatDecimal(account.sbd_balance, 3)
+        const sbd_orders_balance_str = numberWithCommas('$' + sbdOrders.toFixed(3));
+        const savings_balance_str = numberWithCommas(saving_balance_steem.toFixed(3) + ' STEEM');
+        const savings_sbd_balance_str = numberWithCommas('$' + sbd_balance_savings.toFixed(3));
 
         const savings_menu = [
-            { value: tt('userwallet_jsx.withdraw_LIQUID_TOKEN', {LIQUID_TOKEN}), link: '#', onClick: showTransfer.bind( this, 'STEEM', 'Savings Withdraw' ) },
-        ]
+            { value: tt('userwallet_jsx.withdraw_LIQUID_TOKEN'), link: '#', onClick: showTransfer.bind( this, 'STEEM', 'Savings Withdraw' ) },
+        ];
         const savings_sbd_menu = [
-            { value: tt('userwallet_jsx.withdraw_DEBT_TOKENS', {DEBT_TOKENS}), link: '#', onClick: showTransfer.bind( this, 'SBD', 'Savings Withdraw' ) },
-        ]
+            { value: tt('userwallet_jsx.withdraw_DEBT_TOKENS'), link: '#', onClick: showTransfer.bind( this, 'SBD', 'Savings Withdraw' ) },
+        ];
         // set dynamic secondary wallet values
-        const sbdInterest = this.props.sbd_interest / 100
-        //const sbdMessage = tt('userwallet_jsx.tokens_worth_about_AMOUNT_of_LIQUID_TOKEN') //TODO: add APR param to xlation
+        const sbdInterest = this.props.sbd_interest / 100;
+        //const sbdMessage = translate('tokens_worth_about_AMOUNT_of_LIQUID_TOKEN') //TODO: add APR param to xlation
         const sbdMessage = <span>{tt('userwallet_jsx.tokens_worth_about_1_of_LIQUID_TICKER', {LIQUID_TICKER, sbdInterest})}</span>
 
+        const reward_steem = parseFloat(account.get('reward_steem_balance').split(' ')[0]) > 0 ? account.get('reward_steem_balance') : null;
+        const reward_sbd = parseFloat(account.get('reward_sbd_balance').split(' ')[0]) > 0 ? account.get('reward_sbd_balance') : null;
+        const reward_sp = parseFloat(account.get('reward_vesting_steem').split(' ')[0]) > 0 ? account.get('reward_vesting_steem').replace('STEEM', 'SP') : null;
+
+        let rewards = [];
+        if(reward_steem) rewards.push(reward_steem);
+        if(reward_sbd) rewards.push(reward_sbd);
+        if(reward_sp) rewards.push(reward_sp);
+
+        let rewards_str;
+        switch(rewards.length) {
+          case 3:
+              rewards_str = `${rewards[0]}, ${rewards[1]} and ${rewards[2]}`;
+              break;
+          case 2:
+              rewards_str = `${rewards[0]} and ${rewards[1]}`;
+              break;
+          case 1:
+              rewards_str = `${rewards[0]}`;
+              break;
+        }
+
+        let claimbox;
+        if(rewards_str) {
+            claimbox = <div className="row">
+                    <div className="columns small-12">
+                        <div className="UserWallet__claimbox">
+                            Your current rewards: {rewards_str}
+                            {isMyAccount && <button className="button hollow float-right" onClick={e => {this.props.claimRewards(account)}}>Redeem Rewards (Transfer to Balance)</button>}
+                        </div>
+                    </div>
+                </div>
+        }
+
         return (<div className="UserWallet">
+            {claimbox}
             <div className="row">
                 <div className="columns small-10 medium-12 medium-expand">
                     {isMyAccount ? <WalletSubMenu account_name={account.get('name')} /> : <div><br /><h4>{tt('g.balances')}</h4><br /></div>}
@@ -238,6 +275,7 @@ class UserWallet extends React.Component {
                     {isMyAccount ?
                     <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={power_balance_str + ' STEEM'} menu={power_menu} />
                     : power_balance_str + ' STEEM'}
+                    {delegated_steem != 0 ? <div style={{paddingRight: isMyAccount ? "0.85rem" : null}}><Tooltip t="STEEM POWER delegated to this account">({received_power_balance_str} STEEM)</Tooltip></div> : null}
                 </div>
             </div>
             <div className="UserWallet__balance row">
@@ -255,6 +293,7 @@ class UserWallet extends React.Component {
             <div className="UserWallet__balance row zebra">
                 <div className="column small-12 medium-8">
                     {tt('g.savings')}<br /><span className="secondary">{savingsTip} currently collecting {sbdInterest}% APR.</span>
+                    {tt('g.savings')}<br /><span className="secondary">{savingsTip} {DEBT_TOKENS} currently collecting {sbdInterest}% APR.</span>
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
@@ -336,14 +375,33 @@ export default connect(
     },
     // mapDispatchToProps
     dispatch => ({
+        claimRewards: (account) => {
+            const username = account.get('name')
+            const successCallback = () => {
+                dispatch({type: 'global/GET_STATE', payload: {url: `@${username}/transfers`}})
+            };
+
+            const operation = {
+                account: username,
+                reward_steem: account.get('reward_steem_balance'),
+                reward_sbd: account.get('reward_sbd_balance'),
+                reward_vests: account.get('reward_vesting_balance')
+            };
+
+            dispatch(transaction.actions.broadcastOperation({
+                type: 'claim_reward_balance',
+                operation,
+                successCallback,
+            }))
+        },
         convertToSteem: (e) => {
             e.preventDefault()
-            const name = 'convertToSteem'
+            const name = 'convertToSteem';
             dispatch(g.actions.showDialog({name}))
         },
         showChangePassword: (username) => {
-            const name = 'changePassword'
-            dispatch(g.actions.remove({key: name}))
+            const name = 'changePassword';
+            dispatch(g.actions.remove({key: name}));
             dispatch(g.actions.showDialog({name, params: {username}}))
         },
     })

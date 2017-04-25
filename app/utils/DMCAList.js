@@ -1,5 +1,4 @@
 export default `
-
 /children/@carlidos/why-it-s-important-to-teach-your-child-gratitude
 /curation/@carlidos/lead-by-better-borrowing-3-content-curation-tips-100-of-steem-dollars-will-be-donated-to-curie
 /compliment/@carlidos/you-get-complimented-on-and-you-cower-down-why
@@ -30,5 +29,18 @@ export default `
 /travel/@outchemy/broken-relationships-the-museum-of-zagreb-that-celebrates-heartache
 /travel/@outchemy/get-rid-of-the-toxins-see-these-amazing-detox-vacations
 /photography/@maxmalini/the-dark-hedges
-
-`.trim().split("\n")
+/creation/@andysyuhada/toys-creation-own-photography
+/photography/@andysyuhada/animals-photography
+/photography/@andysyuhada/flies-and-locusts-aceh
+/photography/@andysyuhada/how-to-make-toys-photography
+/photography/@andysyuhada/life-photography-toys
+/photography/@andysyuhada/photographing-birds-in-a-tree-relaxing
+/photography/@andysyuhada/toys-photography-life-toys
+/photography/@andysyuhada/toys-photography-very-funny-was-dancing-and-singing
+/photography/@andysyuhada/tutorial-photography-pengujian-kamera
+/photography/@elvinanurhaliza/butterfly-photography
+/photography/@elvinanurhaliza/finepix-s4800-reptiles-etc
+/photography/@elvinanurhaliza/photography-flowers-finepix-s4800
+/photography/@elvinanurhaliza/photohraphy-dewy-flowers
+/photography/@elvinanurhaliza/spider-finepix-s4800-reptiles-etc
+`.trim().split('\n');

@@ -153,8 +153,8 @@ class PostsList extends React.Component {
     }, 150)
 
     attachScrollListener() {
-        window.addEventListener('scroll', this.scrollListener);
-        window.addEventListener('resize', this.scrollListener);
+        window.addEventListener('scroll', this.scrollListener, {capture: false, passive: true});
+        window.addEventListener('resize', this.scrollListener, {capture: false, passive: true});
         this.scrollListener();
     }
 
@@ -191,7 +191,6 @@ class PostsList extends React.Component {
             <PostSummary
                 account={account}
                 post={item.item}
-                currentCategory={category}
                 thumbSize={thumbSize}
                 ignore={item.ignore}
                 onClick={this.onPostClick}
@@ -204,13 +203,13 @@ class PostsList extends React.Component {
                 <ul className="PostsList__summaries hfeed" itemScope itemType="http://schema.org/blogPosts">
                     {renderSummary(postsInfo)}
                 </ul>
-                {loading && <center><LoadingIndicator type="circle" /></center>}
+                {loading && <center><LoadingIndicator style={{marginBottom: "2rem"}} type="circle" /></center>}
                 {showPost && <div id="post_overlay" className="PostsList__post_overlay" tabIndex={0}>
                     <div className="PostsList__post_top_overlay">
                         <div className="PostsList__post_top_bar">
-                            <button className="back-button" type="button" title={tt('g.back')} onClick={() => { this.setState({showPost: null}) }}>
-                                <span aria-hidden="true"><Icon name="chevron-left" /></span>
-                            </button>
+                            <ul className="menu back-button-menu">
+                                <li><a onClick={(e) => {e.preventDefault(); this.setState({showPost: null}) }} href="#"><i><Icon name="chevron-left" /></i> <span>{tt('g.go_back')}</span></a></li>
+                            </ul>
                             <CloseButton onClick={this.closePostModal} />
                         </div>
                     </div>
@@ -229,7 +228,7 @@ export default connect(
         const current = state.user.get('current')
         const username = current ? current.get('username') : state.offchain.get('account')
         const content = state.global.get('content');
-        const ignore_result = state.global.getIn(['follow', 'get_following', username, 'ignore_result']);
+        const ignore_result = state.global.getIn(['follow', 'getFollowingAsync', username, 'ignore_result']);
         return {...props, username, content, ignore_result, pathname};
     },
     dispatch => ({

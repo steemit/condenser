@@ -11,7 +11,7 @@ export const APP_DOMAIN = 'steemit.com';
 export const LIQUID_TOKEN = 'Steem';
 // sometimes it's impossible to use html tags to style coin name, hence usage of _UPPERCASE modifier
 export const LIQUID_TOKEN_UPPERCASE = 'STEEM';
-export const VESTING_TOKEN = 'STEEM Power';
+export const VESTING_TOKEN = 'STEEM POWER';
 export const INVEST_TOKEN_UPPERCASE = 'STEEM POWER';
 export const INVEST_TOKEN_SHORT = 'SP';
 export const DEBT_TOKEN = 'STEEM DOLLAR';
@@ -27,7 +27,7 @@ export const WHITEPAPER_URL = 'https://steem.io/SteemWhitePaper.pdf';
 export const LIQUID_TICKER = 'STEEM';
 export const VEST_TICKER = 'VESTS';
 export const DEBT_TICKER = 'SBD';
-export const DEBT_TOKEN_SHORT = 'SD';
+export const DEBT_TOKEN_SHORT = 'SBD';
 
 // application settings
 export const DEFAULT_LANGUAGE = 'en'; // used on application internationalization bootstrap

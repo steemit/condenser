@@ -13,7 +13,9 @@
 li.Header__userpic {
   padding: 0;
   position: relative;
-
+  a {
+      padding: 6px;
+  }
   .Userpic {
     width: 36px !important;
     height: 36px !important;
@@ -27,5 +29,23 @@ li.Header__userpic {
     right: 0;
     > .NotifiCounter {
         display: block;
+    }
+}
+
+div.Header__top
+{
+    li.Header__search {
+        padding: 0;
+        > a {
+            padding: 14px;
+        }
+    }
+    li.Header__hamburger.toggle-menu {
+        &.toggle-menu {
+            padding-left: 0.25rem;
+        }
+        > a {
+            padding: 14px;
+        }
     }
 }

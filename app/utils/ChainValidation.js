@@ -1,4 +1,5 @@
 import tt from 'counterpart';
+import BadActorList from 'app/utils/BadActorList';
 
 export function validate_account_name(value) {
     let i, label, len, length, ref, suffix;
@@ -16,6 +17,9 @@ export function validate_account_name(value) {
     }
     if (/\./.test(value)) {
         suffix = tt('chainvalidation_js.each_account_segment_should');
+    }
+    if (BadActorList.includes(value)) {
+        return 'Use caution sending to this account. Please double check your spelling for possible phishing. ';
     }
     ref = value.split('.');
     for (i = 0, len = ref.length; i < len; i++) {

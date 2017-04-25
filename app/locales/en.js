@@ -4,13 +4,13 @@ import { APP_NAME, APP_DOMAIN, LANDING_PAGE_URL, DEBT_TOKEN, DEBT_TOKEN_SHORT, L
  */
 const en = 	{
 	// this variables mainly used in navigation section
-	about: "About",
-	explore: "Explore",
+	about: "About Steem",
+	explore: "Trending Topics",
 	APP_NAME_whitepaper: APP_NAME + " Whitepaper",
 	buy_LIQUID_TOKEN: 'Buy ' + LIQUID_TOKEN,
 	sell_LIQUID_TOKEN: 'Sell ' + LIQUID_TOKEN,
 	market: "Market",
-	currency_market: "Currency Market",
+	currency_market: "Internal Market",
 	stolen_account_recovery: "Stolen Accounts Recovery",
 	change_account_password: "Change Account Password",
 	steemit_api_docs: "Steemit API Docs",
@@ -20,6 +20,8 @@ const en = 	{
 	privacy_policy: "Privacy Policy",
 	terms_of_service: "Terms of Service",
 	sign_up: "Sign Up",
+	welcome: "Quick Start Guide",
+	go_back: "Back",
 	/* end navigation */
 	buy: 'Buy',
 	sell: 'Sell',
@@ -190,6 +192,7 @@ const en = 	{
 	age: 'age',
 	votes: 'votes',
 	backup_password_by_storing_it: 'Back it up by storing in your password manager or a text file',
+	enter_account_show_password: 'Enter a valid account name to show the password',
 	click_to_generate_password: 'Click to generate password',
 	re_enter_generate_password: 'Re-enter Generated Password',
 	understand_that_APP_NAME_cannot_recover_password: 'I understand that ' + APP_NAME + ' cannot recover lost passwords',
@@ -255,7 +258,7 @@ const en = 	{
 	account_name_is_not_found: 'Account name is not found',
 	unable_to_recover_account_not_change_ownership_recently: 'We are unable to recover this account, it has not changed ownership recently.',
 	password_not_used_in_last_days: 'This password was not used on this account in the last 30 days.',
-	request_already_submitted_contact_support: 'Your request has been already submitted and we are working on it. Please contact t@cyber.fund for the status of your request.',
+	request_already_submitted_contact_support: 'Your request has been already submitted and we are working on it. Please contact contact@steemit.com for the status of your request.',
 	recover_account_intro: "From time to time, a Steemian’s owner key may be compromised. Stolen Account Recovery gives the rightful account owner 30 days to recover their account from the moment the thief changed their owner key. Stolen Account Recovery can only be used on " + APP_DOMAIN + " if the account owner had perviously listed ‘" + APP_NAME + "’ as their account trustee and complied with " + APP_NAME + "’s Terms of Service.",
 	login_with_facebook_or_reddit_media_to_verify_identity: 'Please login with Facebook or Reddit to verify your identity',
 	login_with_social_media_to_verify_identity: 'Please login with {provider} to verify your identity',

@@ -263,7 +263,7 @@ class BlocktradesDeposit extends React.Component {
                 <div className="row">
                     <div className="column small-12">
                         <div className="secondary">
-                            {tt('blocktrades_deposit.powered_by') + ' '}<a href="//blocktrades.us" target="_blank">Blocktrades</a>
+                            {tt('blocktrades_deposit.powered_by') + ' '}<a href="//blocktrades.us" target="_blank" rel="noopener noreferrer">Blocktrades</a>
                         </div>
                     </div>
                 </div>
@@ -380,9 +380,9 @@ const encodeParams = obj => Object.keys(obj).map(key => `${key}=${encodeURICompo
 const trStatus = stat => coalesce(statusNames[stat], stat)
 const trHashLink = (coin, hash) =>
     !hash ? null :
-    coin === 'BTC' ? <a href={`https://blockchain.info/tx/${hash}`} target="_blank"><Icon name="extlink" /></a> :
-    /STEEM|VESTS|SBD/.test(coin) ? <a href={`https://steemd.com/tx/${hash}`} target="_blank"><Icon name="extlink" /></a> :
-    /GOLOS|GESTS|GBG/.test(coin) ? <a href={`http://golosd.com/tx/${hash}`} target="_blank"><Icon name="extlink" /></a> :
+    coin === 'BTC' ? <a href={`https://blockchain.info/tx/${hash}`} target="_blank" rel="noopener noreferrer"><Icon name="extlink" /></a> :
+    /STEEM|VESTS|SBD/.test(coin) ? <a href={`https://steemd.com/tx/${hash}`} target="_blank" rel="noopener noreferrer"><Icon name="extlink" /></a> :
+    /GOLOS|GESTS|GBG/.test(coin) ? <a href={`http://golosd.com/tx/${hash}`} target="_blank" rel="noopener noreferrer"><Icon name="extlink" /></a> :
     <span t={hash}>hash.substring(0, 10) + '...'</span>
 
 /** Memory backed local storage.  Assumes this is the sole maintainer of this key.

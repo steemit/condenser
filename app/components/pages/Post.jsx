@@ -196,7 +196,7 @@ export default connect(state => {
     const current_user = state.user.get('current')
     let ignoring
     if(current_user) {
-        const key = ['follow', 'get_following', current_user.get('username'), 'ignore_result']
+        const key = ['follow', 'getFollowingAsync', current_user.get('username'), 'ignore_result']
         ignoring = state.global.getIn(key, emptySet)
     }
     return {

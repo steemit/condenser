@@ -1,13 +1,13 @@
 import React from 'react';
-import Apis from 'shared/api_client/ApiInstances';
 import SvgImage from 'app/components/elements/SvgImage';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import PasswordInput from 'app/components/elements/PasswordInput';
 import constants from 'app/redux/constants';
-import {PrivateKey} from 'shared/ecc';
 import tt from 'counterpart';
 import { FormattedHTMLMessage } from 'app/Translator';
 import { APP_DOMAIN, APP_NAME, SUPPORT_EMAIL } from 'app/client_config';
+import {PrivateKey} from 'steem/lib/auth/ecc';
+import {api} from 'steem';
 
 const email_regex = /^([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22))*\x40([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d))*$/;
 
@@ -61,7 +61,7 @@ class RecoverAccountStep1 extends React.Component {
 
     validateAccountName(name) {
         if (!name) return;
-        Apis.db_api('get_accounts', [name]).then(res => {
+        api.getAccountsAsync([name]).then(res => {
             this.setState({name_error: !res || res.length === 0 ? tt('recoveraccountstep1_jsx.account_name_is_not_found') : ''});
             if(res.length) {
                 const [account] = res
@@ -77,7 +77,7 @@ class RecoverAccountStep1 extends React.Component {
 
     validateAccountOwner(name) {
         const oldOwner = passwordToOwnerPubKey(name, this.state.password.value);
-        return Apis.db_api('get_owner_history', name).then(history => {
+        return api.getOwnerHistoryAsync(name).then(history => {
             const res = history.filter(a => {
                 const owner = a.previous_owner_authority.key_auths[0][0];
                 return owner === oldOwner;

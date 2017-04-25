@@ -124,7 +124,7 @@ export default function useEnterAndConfirmMobilePages(app) {
             return;
         }
         const mid = yield models.Identity.findOne({
-            attributes: ["phone"],
+            attributes: ["phone", "verified"],
             where: { user_id, provider: "phone" },
             order: "id DESC"
         });
@@ -182,6 +182,9 @@ export default function useEnterAndConfirmMobilePages(app) {
                         </div>
                         <div className="secondary">
                             * Message and data rates may apply
+                        </div>
+                        <div className="secondary">
+                            * VOIP services like Google Voice are not supported
                         </div>
                         <br />
                         <div className="error">{this.flash.error}</div>
@@ -322,21 +325,21 @@ export default function useEnterAndConfirmMobilePages(app) {
         );
         const ip = getRemoteIp(this.req);
 
-        const twilioResult = yield twilioVerify(phone);
-        console.log('-- /submit_mobile twilioResult -->', twilioResult);
-
-        if (twilioResult === 'block') {
-            mid.update({score: 111111});
-            this.flash = { error: 'Unable to verify your phone number. Please try a different phone number.' };
-            this.redirect(enterMobileUrl);
-            return;
-        }
+        // const twilioResult = yield twilioVerify(phone);
+        // console.log('-- /submit_mobile twilioResult -->', twilioResult);
+        //
+        // if (twilioResult === 'block') {
+        //     mid.update({score: 111111});
+        //     this.flash = { error: 'Unable to verify your phone number. Please try a different phone number.' };
+        //     this.redirect(enterMobileUrl);
+        //     return;
+        // }
 
         const verifyResult = yield teleSignVerify({
             mobile: phone,
             confirmation_code,
             ip,
-            ignore_score: twilioResult === 'pass'
+            ignore_score: false //twilioResult === 'pass'
         });
         if (verifyResult && verifyResult.score) {
             mid.update({score: verifyResult.score});

@@ -1,8 +1,9 @@
-import React, {PropTypes, Component} from 'react'
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
-import {connect} from 'react-redux'
-import user from 'app/redux/User'
+import React, {PropTypes, Component} from 'react';
+import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+import {connect} from 'react-redux';
+import user from 'app/redux/User';
 import tt from 'counterpart';
+import g from 'app/redux/GlobalReducer';
 
 /** Display a public key.  Offer to show a private key, but only if it matches the provided public key */
 class ShowKey extends Component {
@@ -57,6 +58,10 @@ class ShowKey extends Component {
         const {onKey, pubkey} = nextProps
         if(onKey) onKey((show ? wif : null), pubkey)
     }
+    showQr = () => {
+        const {show, wif} = this.state;
+        this.props.showQRKey({type: this.props.authType, text: show ? wif : this.props.pubkey, isPrivate: show});
+    }
     render() {
         const {onShow, showLogin, props: {pubkey, cmpProps, children, authType}} = this
         const {show, wif} = this.state
@@ -76,6 +81,9 @@ class ShowKey extends Component {
 
         return (<div className="row">
             <div className="column small-12 medium-10">
+                <div style={{display: "inline-block", paddingRight: 10, cursor: "pointer"}} onClick={this.showQr}>
+                    <img src={require("app/assets/images/qrcode.png")} height="40" width="40" />
+                </div>
                 {/* Keep this as wide as possible, check print preview makes sure WIF it not cut off */}
                 <span {...cmpProps}>{show ? wif : pubkey}</span>
             </div>
@@ -93,6 +101,9 @@ export default connect(
     dispatch => ({
         showLogin: ({username, authType}) => {
             dispatch(user.actions.showLogin({loginDefault: {username, authType}}))
+        },
+        showQRKey: ({type, isPrivate, text}) => {
+            dispatch(g.actions.showDialog({name: "qr_key", params: {type, isPrivate, text}}));
         }
     })
 )(ShowKey)

@@ -1,9 +1,9 @@
 import React, {PropTypes, Component} from 'react'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import {reduxForm} from 'redux-form' // @deprecated, instead use: app/utils/ReactForm.js
-import {PrivateKey} from 'shared/ecc'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import tt from 'counterpart';
+import {PrivateKey, PublicKey} from 'steem/lib/auth/ecc';
 
 class KeyEdit extends Component {
     static propTypes = {
@@ -105,8 +105,6 @@ class KeyEdit extends Component {
         )
     }
 }
-
-import {PublicKey} from 'shared/ecc'
 
 const keyValidate = values => ({
     password: ! values.password ? tt('g.required') :

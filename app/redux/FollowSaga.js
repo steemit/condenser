@@ -1,6 +1,6 @@
 import {fromJS, Map, Set} from 'immutable'
 import {call, put, select} from 'redux-saga/effects';
-import {Apis} from 'shared/api_client';
+import {api} from 'steem';
 
 /**
     This loadFollows both 'blog' and 'ignore'
@@ -8,7 +8,7 @@ import {Apis} from 'shared/api_client';
 
 //fetch for follow/following count
 export function* fetchFollowCount(account) {
-    const counts = yield call(Apis.follow, 'get_follow_count', account)
+    const counts = yield call([api, api.getFollowCountAsync], account)
     yield put({
         type: 'global/UPDATE',
         payload: {
@@ -46,8 +46,8 @@ export function* loadFollows(method, account, type, force = false) {
 }
 
 function* loadFollowsLoop(method, account, type, start = '', limit = 100) {
-    if(method === "get_followers") limit = 1000;
-    const res = fromJS(yield Apis.follow(method, account, start, type, limit));
+    if(method === "getFollowersAsync") limit = 1000;
+    const res = fromJS(yield api[method](account, start, type, limit));
     // console.log('res.toJS()', res.toJS())
 
     let cnt = 0
@@ -62,7 +62,7 @@ function* loadFollowsLoop(method, account, type, start = '', limit = 100) {
                 cnt += 1;
 
                 const whatList = value.get('what')
-                const accountNameKey = method === "get_following" ? "following" : "follower";
+                const accountNameKey = method === "getFollowingAsync" ? "following" : "follower";
                 const accountName = lastAccountName = value.get(accountNameKey)
                 whatList.forEach((what) => {
                     //currently this is always true: what === type

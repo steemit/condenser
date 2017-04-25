@@ -25,6 +25,17 @@ export function vestingSteem(account, gprops) {
     return vesting_steemf;
 }
 
+// How much STEEM this account has delegated out (minus received).
+export function delegatedSteem(account, gprops) {
+    const delegated_vests = parseFloat(account.delegated_vesting_shares.split( ' ' )[0]);
+    const received_vests = parseFloat(account.received_vesting_shares.split( ' ' )[0]);
+    const vests = delegated_vests - received_vests;
+    const total_vests = parseFloat(gprops.total_vesting_shares.split( ' ' )[0]);
+    const total_vest_steem = parseFloat(gprops.total_vesting_fund_steem.split( ' ' )[0]);
+    const vesting_steemf = total_vest_steem * (vests / total_vests);
+    return vesting_steemf;
+}
+
 export function assetFloat(str, asset) {
     try {
         assert.equal(typeof str, 'string')
@@ -87,17 +98,14 @@ export function contentStats(content) {
     const grayThreshold = -9999999999
     const meetsGrayThreshold = net_rshares_adj.compare(grayThreshold) < 0
 
-    const net_rshares = Long.fromString(String(content.get('net_rshares')))
-    const netVoteSign = net_rshares.compare(Long.ZERO)
-    const pending_payout = content.get('pending_payout_value');
-    const hasPendingPayout = parsePayoutAmount(pending_payout) >= 0.02
-
+    // to be eligible for deletion, a comment must have non-positive rshares and no replies
+    const hasPositiveRshares = Long.fromString(String(content.get('net_rshares'))).gt(Long.ZERO)
+    const allowDelete = !hasPositiveRshares && content.get('children') === 0
+    const hasPendingPayout = parsePayoutAmount(content.get('pending_payout_value')) >= 0.02
     const authorRepLog10 = repLog10(content.get('author_reputation'))
-    const hasReplies = content.get('replies').size !== 0
 
     const gray = !hasPendingPayout && (authorRepLog10 < 1 || (authorRepLog10 < 65 && meetsGrayThreshold))
     const hide = !hasPendingPayout && (authorRepLog10 < 0) // rephide
-    const pictures = !gray
 
     // Combine tags+category to check nsfw status
     const json = content.get('json_metadata')
@@ -115,5 +123,5 @@ export function contentStats(content) {
     tags.push(content.get('category'))
     const isNsfw = tags.filter(tag => tag && tag.match(/^nsfw$/i)).length > 0;
 
-    return {hide, gray, pictures, netVoteSign, authorRepLog10, hasReplies, isNsfw, flagWeight, total_votes, up_votes, hasPendingPayout}
+    return {hide, gray, authorRepLog10, allowDelete, isNsfw, flagWeight, total_votes, up_votes, hasPendingPayout}
 }

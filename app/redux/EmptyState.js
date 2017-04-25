@@ -32,9 +32,7 @@ export const emptyContent = {
         authorRepLog10: 86,
         gray: false,
         hasPendingPayout: false,
-        hasReplies: false,
+        allowDelete: true,
         hide: false,
-        netVoteSign: 0,
-        pictures: true,
     },
 }

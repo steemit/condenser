@@ -65,10 +65,10 @@ class ExplorePost extends Component {
                 </div>
                 <h5>{tt('explorepost_jsx.alternative_sources')}</h5>
                 <ul>
-                    <li><a href={steemd} onClick={this.Steemd} target="_blank">steemd.com <Icon name="extlink" /></a></li>
-                    <li><a href={steemdb} onClick={this.Steemdb} target="_blank">steemdb.com <Icon name="extlink" /></a></li>
-                    <li><a href={busy} onClick={this.Busy} target="_blank">busy.org <Icon name="extlink" /></a></li>
-                    <li><a href={phist} onClick={this.Phist} target="_blank">phist.steemdata.com <Icon name="extlink" /></a></li>
+                    <li><a href={steemd} onClick={this.Steemd} target="_blank" rel="noopener noreferrer">steemd.com <Icon name="extlink" /></a></li>
+                    <li><a href={steemdb} onClick={this.Steemdb} target="_blank" rel="noopener noreferrer">steemdb.com <Icon name="extlink" /></a></li>
+                    <li><a href={busy} onClick={this.Busy} target="_blank" rel="noopener noreferrer">busy.org <Icon name="extlink" /></a></li>
+                    <li><a href={phist} onClick={this.Phist} target="_blank" rel="noopener noreferrer">phist.steemdata.com <Icon name="extlink" /></a></li>
                 </ul>
             </span>
         )

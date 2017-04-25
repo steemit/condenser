@@ -4,6 +4,7 @@ import models from 'db/models';
 import config from 'config';
 import {esc, escAttrs} from 'db/models';
 import {getRemoteIp, rateLimitReq, checkCSRF} from 'server/utils/misc';
+import {broadcast} from 'steem';
 
 export default function useAccountRecoveryApi(app) {
     const router = koa_router();
@@ -83,15 +84,15 @@ export default function useAccountRecoveryApi(app) {
                 return;
             }
 
-            const {signing_key, recovery_account} = config.requestAccountRecovery;
+            const recovery_account = config.get('registrar.account');
+            const signing_key = config.get('registrar.signing_key');
             const {new_owner_authority, old_owner_key, new_owner_key} = params;
 
             yield requestAccountRecovery({
                 signing_key,
                 account_to_recover: params.name,
                 recovery_account,
-                new_owner_authority,
-                broadcast: true
+                new_owner_authority
             });
             console.log('-- /request_account_recovery completed -->', this.session.uid, this.session.user, params.name, old_owner_key, new_owner_key);
 
@@ -170,23 +171,14 @@ export default function useAccountRecoveryApi(app) {
     });
 }
 
-import {Apis} from 'shared/api_client';
-import {createTransaction, signTransaction} from 'shared/chain/transactions';
-import {ops} from 'shared/serializer';
-
-const {signed_transaction} = ops;
-
 function* requestAccountRecovery({
-    recovery_account, account_to_recover, new_owner_authority,
-    signing_key, broadcast = false,
+    recovery_account,
+    account_to_recover,
+    new_owner_authority,
+    signing_key
 }) {
     const operations = [['request_account_recovery', {
         recovery_account, account_to_recover, new_owner_authority,
-    }]]
-    const tx = yield createTransaction(operations)
-    const sx = signTransaction(tx, signing_key)
-    if (!broadcast) return signed_transaction.toObject(sx)
-    return yield new Promise((resolve, reject) =>
-        Apis.broadcastTransaction(sx, () => {resolve()}).catch(e => {reject(e)})
-    )
+    }]];
+    yield broadcast.sendAsync({extensions: [], operations}, [signing_key]);
 }

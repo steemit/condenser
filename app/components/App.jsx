@@ -59,20 +59,21 @@ class App extends React.Component {
           fbq('track', "PageView");
 
           window.fbAsyncInit = function() {
-            FB.init({
-              appId      : '150154408771266',
-              xfbml      : true,
-              version    : 'v2.8'
-            });
-          };
+          FB.init({
+            appId      : '150164015436972',
+            xfbml      : true,
+            version    : 'v2.9'
+          });
+          FB.AppEvents.logPageView();
+        };
 
-          (function(d, s, id){
-             var js, fjs = d.getElementsByTagName(s)[0];
-             if (d.getElementById(id)) {return;}
-              js = d.createElement(s); js.id = id;
-             js.src = "//connect.facebook.net/en_US/sdk.js";
-             fjs.parentNode.insertBefore(js, fjs);
-           }(document, 'script', 'facebook-jssdk'));
+        (function(d, s, id){
+           var js, fjs = d.getElementsByTagName(s)[0];
+           if (d.getElementById(id)) {return;}
+           js = d.createElement(s); js.id = id;
+           js.src = "//connect.facebook.net/en_US/sdk.js";
+           fjs.parentNode.insertBefore(js, fjs);
+         }(document, 'script', 'facebook-jssdk'));
 
           /* Yandex.Metrika counter */
           /* NOTE dont't forget to remove <img /> tag of yandex metrika (down below) */

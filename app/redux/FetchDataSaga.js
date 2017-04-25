@@ -46,6 +46,7 @@ export function* fetchState(location_change_action) {
     if (url.indexOf("/curation-rewards") !== -1) url = url.replace("/curation-rewards", "/transfers");
     if (url.indexOf("/author-rewards") !== -1) url = url.replace("/author-rewards", "/transfers");
 
+    yield put({type: 'FETCH_DATA_BEGIN'});
     try {
         const state = yield call([api, api.getStateAsync], url)
         yield put(GlobalReducer.actions.receiveState(state));
@@ -53,6 +54,7 @@ export function* fetchState(location_change_action) {
         console.error('~~ Saga fetchState error ~~>', url, error);
         yield put({type: 'global/STEEM_API_ERROR', error: error.message});
     }
+    yield put({type: 'FETCH_DATA_END'});
 }
 
 export function* watchLocationChange() {
@@ -186,6 +188,7 @@ export function* fetchData(action) {
             start_author: author,
             start_permlink: permlink}];
     }
+    yield put({type: 'FETCH_DATA_BEGIN'});
     try {
         const data = yield call([api, api[call_name]], ...args);
         yield put(GlobalReducer.actions.receiveData({data, order, category, author, permlink, accountname}));
@@ -193,6 +196,7 @@ export function* fetchData(action) {
         console.error('~~ Saga fetchData error ~~>', call_name, args, error);
         yield put({type: 'global/STEEM_API_ERROR', error: error.message});
     }
+    yield put({type: 'FETCH_DATA_END'});
 }
 
 // export function* watchMetaRequests() {

@@ -12,6 +12,7 @@ import SignupProgressBar from "app/components/elements/SignupProgressBar";
 import MiniHeader from "app/components/modules/MiniHeader";
 import secureRandom from "secure-random";
 import Mixpanel from "mixpanel";
+import tt from 'counterpart';
 
 // FIXME copy paste code, refactor mixpanel out
 var mixpanel = null;

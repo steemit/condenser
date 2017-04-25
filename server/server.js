@@ -178,7 +178,6 @@ app.use(function*(next) {
 
 useRedirects(app);
 useEnterAndConfirmEmailPages(app);
-useEnterAndConfirmMobilePages(app);
 useUserJson(app);
 usePostJson(app);
 

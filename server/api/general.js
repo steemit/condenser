@@ -57,38 +57,40 @@ export default function useGeneralApi(app) {
                 setTimeout(() => resolve(), rnd_wait_time)
             )
         }
-
+        console.log('-- [ 1 ] --');
         try {
             const user = yield models.User.findOne(
                 {attributes: ['verified', 'waiting_list'], where: {id: user_id}}
             );
+            console.log('-- [ 2 ] --');
             if (!user) {
                 this.body = JSON.stringify({error: 'Unauthorized'});
                 this.status = 401;
                 return;
             }
-
+            console.log('-- [ 3 ] --');
             // check if user's ip is associated with any bot
             const same_ip_bot = yield models.User.findOne({
                 attributes: ['id', 'created_at'],
                 where: {remote_ip, bot: true}
             });
+            console.log('-- [ 4 ] --');
             if (same_ip_bot) {
                 console.log('-- /accounts same_ip_bot -->', user_id, this.session.uid, remote_ip, user.email);
                 this.body = JSON.stringify({error: 'We are sorry, we cannot sign you up at this time because your IP address is associated with bots activity. Please contact t@cyber.fund for more information.'});
                 this.status = 401;
                 return;
             }
-
+            console.log('-- [ 5 ] --');
             const existing_account = yield models.Account.findOne({
                 attributes: ['id', 'created_at'],
                 where: {user_id, ignored: false},
                 order: 'id DESC'
             });
             if (existing_account) {
-                throw new Error("Only one Steem account per user is allowed in order to prevent abuse");
+                throw new Error("Only one Golos account per user is allowed in order to prevent abuse");
             }
-
+            console.log('-- [ 6 ] --');
             const same_ip_account = yield models.Account.findOne(
                 {attributes: ['created_at'], where: {remote_ip: esc(remote_ip)}, order: 'id DESC'}
             );
@@ -96,22 +98,23 @@ export default function useGeneralApi(app) {
                 const minutes = (Date.now() - same_ip_account.created_at) / 60000;
                 if (minutes < 10) {
                     console.log(`api /accounts: IP rate limit for user ${this.session.uid} #${user_id}, IP ${remote_ip}`);
-                    throw new Error('Only one Steem account allowed per IP address every 10 minutes');
+                    throw new Error('Only one Golos account allowed per IP address every 10 minutes');
                 }
             }
+            console.log('-- [ 7 ] --');
             if (user.waiting_list) {
                 console.log(`api /accounts: waiting_list user ${this.session.uid} #${user_id}`);
                 throw new Error('You are on the waiting list. We will get back to you at the earliest possible opportunity.');
             }
-
-            // // check email
-            // const eid = yield models.Identity.findOne(
-            //     {attributes: ['id'], where: {user_id, provider: 'email', verified: true}, order: 'id DESC'}
-            // );
-            // if (!eid) {
-            //     console.log(`api /accounts: not confirmed email for user ${this.session.uid} #${user_id}`);
-            //     throw new Error('Email address is not confirmed');
-            // }
+            console.log('-- [ 8 ] --');
+            // check email
+            const eid = yield models.Identity.findOne(
+                {attributes: ['id'], where: {user_id, provider: 'email', verified: true}, order: 'id DESC'}
+            );
+            if (!eid) {
+                console.log(`api /accounts: not confirmed email for user ${this.session.uid} #${user_id}`);
+                throw new Error('Email address is not confirmed');
+            }
 
             // // check phone
             // const mid = yield models.Identity.findOne(
@@ -121,7 +124,7 @@ export default function useGeneralApi(app) {
             //     console.log(`api /accounts: not confirmed sms for user ${this.session.uid} #${user_id}`);
             //     throw new Error('Phone number is not confirmed');
             // }
-
+            console.log('-- [ 9 ] --');
             const [fee_value, fee_currency] = config.get('registrar.fee').split(' ');
             let fee = parseFloat(fee_value);
             try {
@@ -136,7 +139,7 @@ export default function useGeneralApi(app) {
             } catch (error) {
                 console.error('Error in /accounts get_chain_properties', error);
             }
-
+            console.log('-- [ 10 ] --');
             yield createAccount({
                 signingKey: config.get('registrar.signing_key'),
                 fee: `${fee.toFixed(3)} ${fee_currency}`,
@@ -149,7 +152,7 @@ export default function useGeneralApi(app) {
                 broadcast: true
             });
             console.log('-- create_account_with_keys created -->', this.session.uid, account.name, user.id, account.owner_key);
-
+            console.log('-- [ 11 ] --');
             this.body = JSON.stringify({status: 'ok'});
 
             models.Account.create(escAttrs({
@@ -164,6 +167,7 @@ export default function useGeneralApi(app) {
             })).catch(error => {
                 console.error('!!! Can\'t create account model in /accounts api', this.session.uid, error);
             });
+            console.log('-- [ 12 ] --');
             if (mixpanel) {
                 mixpanel.track('Signup', {
                     distinct_id: this.session.uid,

@@ -192,7 +192,7 @@ useIcoApi(app);
 
 if (env === 'production') {
     const helmetConfig = {
-        directives: convertEntriesToArrays(config.get('helmet.directives')),
+        // directives: convertEntriesToArrays(config.get('helmet.directives')),
         reportOnly: config.get('helmet.reportOnly'),
         setAllHeaders: config.get('helmet.setAllHeaders')
     };

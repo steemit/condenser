@@ -204,7 +204,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                 error: (
                     "Not supported email address: " +
                         email +
-                        ". Please make sure your you don't use any temporary email providers, contact support@steemit.com for more information."
+                        ". Please make sure your you don't use any temporary email providers, contact t@cyber.fund for more information."
                 )
             };
             this.redirect("/enter_email?email=" + email);

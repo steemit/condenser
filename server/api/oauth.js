@@ -255,12 +255,12 @@ function* handleRedditCallback() {
                 } else {
                     console.log('-- arec: failed to confirm user for account (no account) -->', this.session.uid, provider, account_recovery_record.id, user.id, this.session.uid, account_recovery_record.owner_key);
                     account_recovery_record.update({user_id: user.id, status: 'account not found'});
-                    this.body = 'We cannot verify the user account. Please contact support@steemit.com';
+                    this.body = 'We cannot verify the user account. Please contact t@cyber.fund';
                 }
             } else {
                 console.log('-- arec: failed to confirm user for account (no user) -->', this.session.uid, provider, this.session.arec, this.session.email);
                 account_recovery_record.update({status: 'user not found'});
-                this.body = 'We cannot verify the user account. Please contact support@steemit.com';
+                this.body = 'We cannot verify the user account. Please contact t@cyber.fund';
             }
             return null;
         }

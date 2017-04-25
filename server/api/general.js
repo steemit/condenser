@@ -75,7 +75,7 @@ export default function useGeneralApi(app) {
             });
             if (same_ip_bot) {
                 console.log('-- /accounts same_ip_bot -->', user_id, this.session.uid, remote_ip, user.email);
-                this.body = JSON.stringify({error: 'We are sorry, we cannot sign you up at this time because your IP address is associated with bots activity. Please contact support@steemit.com for more information.'});
+                this.body = JSON.stringify({error: 'We are sorry, we cannot sign you up at this time because your IP address is associated with bots activity. Please contact t@cyber.fund for more information.'});
                 this.status = 401;
                 return;
             }

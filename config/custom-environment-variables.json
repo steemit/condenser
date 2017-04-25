@@ -10,6 +10,10 @@
     "reddit": {
       "key": "SDC_REDDIT_API_KEY",
       "secret": "SDC_REDDIT_API_SECRET"
+    },
+    "vk": {
+      "key": "SDC_VK_API_KEY",
+      "secret": "SDC_VK_API_SECRET"
     }
   },
   "google_analytics_id": "SDC_GOOGLE_ANALYTICS_ID",

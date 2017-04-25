@@ -24,6 +24,15 @@
       ],
       "secret": ""
     },
+    "vk": {
+      "key": "",
+      "secret": "",
+      "callback": "/handle_vk_callback",
+      "scope": [
+        "identity",
+        "email"
+      ]
+    },
     "server": {
       "host": "testnet.golos.io",
       "protocol": "https"
@@ -33,7 +42,7 @@
   "helmet": {
     "directives": {
       "childSrc": "'self' www.youtube.com staticxx.facebook.com w.soundcloud.com player.vimeo.com",
-      "connectSrc": "'self' *.golos.io wss://*.golos.io api.blocktrades.us",
+      "connectSrc": "'self' *.golos.io wss://*.golos.io api.blocktrades.us query.yahooapis.com",
       "defaultSrc": "'self' www.youtube.com staticxx.facebook.com player.vimeo.com",
       "fontSrc": "data: fonts.gstatic.com",
       "frameAncestors": "'none'",

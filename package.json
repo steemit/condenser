@@ -85,6 +85,7 @@
     "purest": "^2.0.1",
     "raw-loader": "^0.5.1",
     "react": "15.4.2",
+    "react-ab-test": "^1.7.0",
     "react-addons-pure-render-mixin": "15.4.2",
     "react-copy-to-clipboard": "^4.2.3",
     "react-dom": "15.4.2",

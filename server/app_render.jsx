@@ -23,6 +23,7 @@ async function appRender(ctx) {
             new_visit: ctx.session.new_visit,
             account: ctx.session.a,
             config: $STM_Config,
+            uid: ctx.session.uid,
             login_challenge
         };
         const user_id = ctx.session.user;

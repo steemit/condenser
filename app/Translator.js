@@ -28,6 +28,6 @@ export default connect(
     }
 )(Translator);
 
-export const FormattedHTMLMessage = ({id, params}) => (
-    <span className="FormattedHTMLMessage" dangerouslySetInnerHTML={ { __html: tt(id, params) } }></span>
+export const FormattedHTMLMessage = ({id, params, className}) => (
+    <div className={'FormattedHTMLMessage' + (className ? ` ${className}` : '')} dangerouslySetInnerHTML={ { __html: tt(id, params) } }></div>
 );

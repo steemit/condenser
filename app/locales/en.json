@@ -109,7 +109,9 @@
     "warning": "warning",
     "yes": "Yes",
     "you_are_viewing_a_single_comments_thread_from": "You are viewing a single comment's thread from",
-
+    "posting": "Posting",
+    "owner": "Owner",
+    "active": "Active",
     "account_not_found": "Account not found",
     "this_is_wrong_password": "This is the wrong password",
     "do_you_need_to": "Do you need to",
@@ -574,12 +576,10 @@
     "sign": "Sign"
   },
   "tips_js": {
-    "tradeable_tokens_that_may_be_transferred_anywhere_at_anytime": "Tradeable tokens that may be transferred anywhere at anytime.",
-    "LIQUID_TOKEN_can_be_converted_to_VESTING_TOKEN_in_a_process_called_powering_up": "%(LIQUID_TOKEN)s can be converted to %(VESTING_TOKEN)s in a process called powering up.",
+    "liquid_token": "Tradeable tokens that may be transferred anywhere at anytime.<br/>%(LIQUID_TOKEN)s can be converted to %(VESTING_TOKEN)s in a process called powering up.",
     "tokens_worth_about_AMOUNT_of_LIQUID_TOKEN": "Tokens worth about %(amount)s of %(LIQUID_TOKEN)s.",
-    "influence_tokens_which_give_you_more_control_over": "Influence tokens which give you more control over post payouts and allow you to earn on curation rewards.",
-    "the_more_you_hold_the_more_you_influence_post_rewards": "The more you hold the more you influence post rewards and earn for accurate voting.",
-    "the_estimated_value_is_based_on_an_average_value_of_steem_in_US_dollars": "The estimated value is based on an average value of %(LIQUID_TOKEN)s in US dollars.",
+    "influence_token": "Influence tokens which give you more control over post payouts and allow you to earn on curation rewards.",
+    "estimated_value": "The estimated value is based on an average value of %(LIQUID_TOKEN)s in US dollars.",
     "VESTING_TOKEN_is_non_transferrable_and_requires_convert_back_to_LIQUID_TOKEN": "%(VESTING_TOKEN)s is non-transferrable and requires 3 months (13 payments) to convert back to %(LIQUID_TOKEN)s.",
     "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again": "Converted %(VESTING_TOKEN)s can be sent to yourself or someone else but can not transfer again without converting back to %(LIQUID_TOKEN)s.",
     "profile": "Profile",

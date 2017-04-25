@@ -10,12 +10,13 @@ import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import BlocktradesDeposit from 'app/components/modules/BlocktradesDeposit';
 import Reveal from 'react-foundation-components/lib/global/reveal'
 import CloseButton from 'react-foundation-components/lib/global/close-button';
-import {steemTip, powerTip, valueTip, savingsTip} from 'app/utils/Tips'
+import {powerTip, valueTip, savingsTip} from 'app/utils/Tips'
 import {numberWithCommas, vestingSteem, delegatedSteem} from 'app/utils/StateFunctions'
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu'
 import WalletSubMenu from 'app/components/elements/WalletSubMenu'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Tooltip from 'app/components/elements/Tooltip'
+import {FormattedHTMLMessage} from 'app/Translator';
 import tt from 'counterpart';
 import {List} from 'immutable'
 import { LIQUID_TOKEN, LIQUID_TICKER, DEBT_TOKENS, VESTING_TOKEN } from 'app/client_config';
@@ -257,7 +258,8 @@ class UserWallet extends React.Component {
             </div>
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
-                    STEEM<br /><span className="secondary">{steemTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})}</span>
+                    STEEM
+                    <FormattedHTMLMessage className="secondary" id="tips_js.liquid_token" params={{LIQUID_TOKEN, VESTING_TOKEN}} />
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
@@ -268,7 +270,8 @@ class UserWallet extends React.Component {
             </div>
             <div className="UserWallet__balance row zebra">
                 <div className="column small-12 medium-8">
-                    STEEM POWER<br /><span className="secondary">{powerTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})}</span>
+                    STEEM POWER
+                    <FormattedHTMLMessage className="secondary" id="tips_js.influence_token" />
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
@@ -279,7 +282,8 @@ class UserWallet extends React.Component {
             </div>
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
-                    STEEM DOLLARS<br /><span className="secondary">{sbdMessage}</span>
+                    STEEM DOLLARS
+                    <div className="secondary">{sbdMessage}</div>
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
@@ -291,8 +295,8 @@ class UserWallet extends React.Component {
             </div>
             <div className="UserWallet__balance row zebra">
                 <div className="column small-12 medium-8">
-                    {tt('g.savings')}<br /><span className="secondary">{savingsTip} currently collecting {sbdInterest}% APR.</span>
-                    {tt('g.savings')}<br /><span className="secondary">{savingsTip} {DEBT_TOKENS} currently collecting {sbdInterest}% APR.</span>
+                    {tt('userwallet_jsx.savings')}
+                    <div className="secondary">{tt('transfer_jsx.balance_subject_to_3_day_withdraw_waiting_period')} {DEBT_TOKENS} currently collecting {sbdInterest}% APR.</div>
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
@@ -306,7 +310,8 @@ class UserWallet extends React.Component {
             </div>
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
-                    {tt('userwallet_jsx.estimated_account_value')}<br /><span className="secondary">{valueTip}</span>
+                    {tt('userwallet_jsx.estimated_account_value')}
+                    <div className="secondary">{tt('tips_js.estimated_value', {LIQUID_TOKEN})}</div>
                 </div>
                 <div className="column small-12 medium-4">
                     {estimate_output}

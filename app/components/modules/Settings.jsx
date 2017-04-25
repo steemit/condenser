@@ -168,7 +168,7 @@ class Settings extends React.Component {
             </div>*/}
             <div className="row">
                 <form onSubmit={this.handleSubmitForm} className="small-12 medium-6 large-4 columns">
-                    <h3>{tt('settings_jsx.public_profile_settings')}</h3>
+                    <h4>{tt('settings_jsx.public_profile_settings')}</h4>
                     <label>
                         {tt('settings_jsx.profile_image_url')}
                         <input type="url" {...profile_image.props} autoComplete="off" />
@@ -214,9 +214,9 @@ class Settings extends React.Component {
 
             {isOwnAccount &&
                 <div className="row">
-                    <div className="small-12 columns">
+                    <div className="small-12 medium-6 large-4 columns">
                         <br /><br />
-                        <h3>{tt('settings_jsx.private_post_display_settings')}</h3>
+                        <h4>{tt('settings_jsx.private_post_display_settings')}</h4>
                         <div>
                             {tt('settings_jsx.not_safe_for_work_nsfw_content')}
                         </div>
@@ -225,13 +225,15 @@ class Settings extends React.Component {
                             <option value="warn">{tt('settings_jsx.always_warn')}</option>
                             <option value="show">{tt('settings_jsx.always_show')}</option>
                         </select>
-                        <br /><br />
+                        <br />
+                        <br />
                         <input type="submit" onClick={this.onNsfwPrefSubmit} className="button" value={tt('settings_jsx.update')} disabled={this.state.nsfwPref == this.state.oldNsfwPref} />
+                        <div>&nbsp;</div>
                     </div>
                 </div>}
             {ignores && ignores.size > 0 &&
                 <div className="row">
-                    <div className="small-12 columns">
+                    <div className="small-12 medium-6 large-4 columns">
                         <br /><br />
                         <UserList title={tt('settings_jsx.muted_users')} account={account} users={ignores} />
                     </div>

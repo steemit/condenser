@@ -18,7 +18,7 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import Tooltip from 'app/components/elements/Tooltip'
 import tt from 'counterpart';
 import {List} from 'immutable'
-import { LIQUID_TOKEN, LIQUID_TICKER, DEBT_TOKENS } from 'app/client_config';
+import { LIQUID_TOKEN, LIQUID_TICKER, DEBT_TOKENS, VESTING_TOKEN } from 'app/client_config';
 import transaction from 'app/redux/Transaction';
 
 const assetPrecision = 1000;
@@ -202,14 +202,13 @@ class UserWallet extends React.Component {
         const savings_sbd_balance_str = numberWithCommas('$' + sbd_balance_savings.toFixed(3));
 
         const savings_menu = [
-            { value: tt('userwallet_jsx.withdraw_LIQUID_TOKEN'), link: '#', onClick: showTransfer.bind( this, 'STEEM', 'Savings Withdraw' ) },
+            { value: tt('userwallet_jsx.withdraw_LIQUID_TOKEN', {LIQUID_TOKEN}), link: '#', onClick: showTransfer.bind( this, 'STEEM', 'Savings Withdraw' ) },
         ];
         const savings_sbd_menu = [
-            { value: tt('userwallet_jsx.withdraw_DEBT_TOKENS'), link: '#', onClick: showTransfer.bind( this, 'SBD', 'Savings Withdraw' ) },
+            { value: tt('userwallet_jsx.withdraw_DEBT_TOKENS', {DEBT_TOKENS}), link: '#', onClick: showTransfer.bind( this, 'SBD', 'Savings Withdraw' ) },
         ];
         // set dynamic secondary wallet values
         const sbdInterest = this.props.sbd_interest / 100;
-        //const sbdMessage = translate('tokens_worth_about_AMOUNT_of_LIQUID_TOKEN') //TODO: add APR param to xlation
         const sbdMessage = <span>{tt('userwallet_jsx.tokens_worth_about_1_of_LIQUID_TICKER', {LIQUID_TICKER, sbdInterest})}</span>
 
         const reward_steem = parseFloat(account.get('reward_steem_balance').split(' ')[0]) > 0 ? account.get('reward_steem_balance') : null;
@@ -253,7 +252,7 @@ class UserWallet extends React.Component {
                     {isMyAccount ? <WalletSubMenu account_name={account.get('name')} /> : <div><br /><h4>{tt('g.balances')}</h4><br /></div>}
                 </div>
                 <div className="columns shrink">
-                    {isMyAccount && <button className="UserWallet__buysp button hollow" onClick={this.onShowDepositSteem}>{tt('userwallet_jsx.buy_LIQUID_TOKEN_or_VESTING_TOKEN')}</button>}
+                    {isMyAccount && <button className="UserWallet__buysp button hollow" onClick={this.onShowDepositSteem}>{tt('userwallet_jsx.buy_LIQUID_TOKEN_or_VESTING_TOKEN', {LIQUID_TOKEN, VESTING_TOKEN})}</button>}
                 </div>
             </div>
             <div className="UserWallet__balance row">

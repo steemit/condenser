@@ -413,9 +413,21 @@
     "recent_replies_to_users_posts": "Recent replies to %(name)s's posts",
     "followers": "Followers",
     "this_is_users_reputations_score_it_is_based_on_history_of_votes": "This is %(name)s's reputation score.\n\nThe reputation score is based on the history of votes received by the account, and is used to hide low quality content.",
-    "follower_count": "{followerCount, plural,\n=0 {no followers}\none {1 follower}\nother {%(followerCount)s followers}}",
-    "followed_count": "{followingCount, plural,\n=0 {not following anybody}\none {1 following}\nother {%(followingCount)s following}}",
-    "post_count": "{postCount, plural,\n=0 {no posts}\none {1 post}\nother {%(postCount)s posts}}"
+    "follower_count": {
+      "zero":  "No followers",
+      "one": "1 follower",
+      "other": "%(count)s followers"
+    },
+    "followed_count": {
+      "zero":  "Not following anybody",
+      "one": "1 following",
+      "other": "%(count)s following"
+    },
+    "post_count":  {
+      "zero":  "No posts",
+      "one": "1 post",
+      "other": "%(count)s posts"
+    }
   },
   "authorrewards_jsx": {
     "estimated_author_rewards_last_week": "Estimated author rewards last week",
@@ -475,7 +487,6 @@
     "begin_recovery": "Begin Recovery",
     "post_as": "Post as",
     "APP_NAME_app_center": "%(APP_NAME)s App Center",
-
     "your_existing_DEBT_TOKEN_are_liquid_and_transferable": "Your existing %(DEBT_TOKEN)s are liquid and transferable. Instead you may wish to trade %(DEBT_TOKEN)s directly in this site under %(link)s or transfer to an external market.",
     "trending_30_day": "trending (30 day)",
     "this_password_is_bound_to_your_accounts_private_key": "This password is bound to your account's active key and can not be used to login to this page. You may use this active key on other more secure pages like the Wallet or Market pages.",
@@ -552,7 +563,6 @@
     "APP_NAME_is_a_social_media_platform_where_everyone_gets_paid": "%(APP_NAME)s is a social media platform where everyone gets paid for creating and curating content. It leverages a robust digital points system, called %(LIQUID_TOKEN)s, that supports real value for digital rewards through market price discovery and liquidity.",
     "learn_more_at_LANDING_PAGE_URL": "Learn more at %(LANDING_PAGE_URL)s",
     "resources": "Resources",
-    "join_our_slack": "Join our Slack",
     "trending_24_hour": "trending (24 hour)",
     "home": "home",
     "24_hour": "24 hour",
@@ -660,7 +670,7 @@
     "alternative_sources": "Alternative Sources"
   },
   "header_jsx": {
-    "home": "Home",
+    "home": "home",
     "new_topic_posts" : "New %(topic)s posts",
     "sort_order_topic_posts": "%(sort_order)s %(topic)s posts",
     "new_posts": "New posts",

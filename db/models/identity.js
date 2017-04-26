@@ -15,11 +15,7 @@ module.exports = function (sequelize, DataTypes) {
         phone: {type: DataTypes.STRING(32)},
         confirmation_code: {type: DataTypes.STRING, unique: true},
         verified: DataTypes.BOOLEAN,
-        score: DataTypes.INTEGER,
-        user_name_picked: {type: DataTypes.STRING},
-        last_step: DataTypes.INTEGER,
-        email_code: DataTypes.STRING,
-        email_verified: DataTypes.BOOLEAN
+        score: DataTypes.INTEGER
     }, {
         tableName: 'identities',
         createdAt   : 'created_at',

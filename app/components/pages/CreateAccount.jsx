@@ -54,7 +54,7 @@ class CreateAccount extends React.Component {
     mousePosition(e) {
         // log x/y cords
         console.log(e);
-        if(e.type === 'mousemove') {
+        if(e.type === 'mouseenter') {
             console.log(e.screenX, e.screenY);
         }
     }

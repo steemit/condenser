@@ -16,8 +16,7 @@ module.exports = function (sequelize, DataTypes) {
         referrer: DataTypes.STRING,
         refcode: DataTypes.STRING,
         remote_ip: DataTypes.STRING,
-        ignored: {type: DataTypes.BOOLEAN},
-        to_be_created: DataTypes.BOOLEAN
+        ignored: {type: DataTypes.BOOLEAN}
     }, {
         tableName: 'accounts',
         createdAt   : 'created_at',

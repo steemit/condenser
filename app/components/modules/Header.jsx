@@ -72,7 +72,7 @@ class Header extends React.Component {
         let topic = '';
         let user_name = null;
         let page_name = null;
-
+        this.state.subheader_hidden = false;
         if (route.page === 'PostsIndex') {
             sort_order = route.params[0];
             if (sort_order === 'home') {

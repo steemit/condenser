@@ -29,17 +29,17 @@ const assets = Object.assign({}, require(assets_file), { script: [] });
 assets.script.push("https://www.google.com/recaptcha/api.js");
 
 function* confirmEmailHandler() {
-    const email_code = this.params && this.params.code
+    const confirmation_code = this.params && this.params.code
         ? this.params.code
         : this.request.body.code;
     console.log(
         "-- /confirm_email -->",
         this.session.uid,
         this.session.user,
-        email_code
+        confirmation_code
     );
     const eid = yield models.Identity.findOne({
-        where: { email_code: email_code }
+        where: { confirmation_code: confirmation_code, provider: "email"}
     });
     if (!eid) {
         this.status = 401;
@@ -61,8 +61,7 @@ function* confirmEmailHandler() {
     }
     this.session.user = eid.user_id;
     yield eid.update({
-        verified: true,
-        email_verified: true
+        verified: true
     });
     yield models.User.update({ email: eid.email, waiting_list: true}, {
         where: { id: eid.user_id }
@@ -101,28 +100,31 @@ export default function useEnterAndConfirmEmailPages(app) {
             // create user and identity
             console.log("-- /Creating User & Identity -->");
             const user = yield models.User.create({
-                uid: this.session.uid
+                uid: this.session.uid,
+                name: this.request.query.account,
+                last_step: 1
             });
             this.session.user = user_id = user.id;
             user_identity = yield models.Identity.create({
                 user_id: user.id,
                 uid: user.uid,
                 verified: false,
-                last_step: 1,
-                user_name_picked: this.request.query.account
+                provider: "email"
             });
         } else {
-            const eid = yield models.Identity.findOne({ where: { user_id: user.id }});
+            const eid = yield models.Identity.findOne({ where: { user_id: user.id, provider: "email" }});
             if (!eid) {
                 yield models.Identity.create({
                     user_id: user.id,
                     uid: user.uid,
                     verified: false,
-                    last_step: 1,
-                    user_name_picked: this.request.query.account
+                    provider: "email"
                 });
             } else {
-                yield eid.update({user_name_picked: this.request.query.account});
+                yield user.update({
+                    name: this.request.query.account,
+                    last_step: 2
+                });
             }
 
         }
@@ -289,7 +291,7 @@ export default function useEnterAndConfirmEmailPages(app) {
             // We must resend the email to get the session going again if the user gets interrupted (clears cookies or changes browser) after email verify.
             const { id } = existing_email;
 
-            yield eid.update({email_code: confirmation_code});
+            yield eid.update({confirmation_code: confirmation_code});
             console.log(
                 "-- /submit_email ->",
                 this.session.uid,
@@ -304,7 +306,7 @@ export default function useEnterAndConfirmEmailPages(app) {
             yield eid.update({
                 email: this.request.body.email,
                 last_step: 2,
-                email_code: confirmation_code
+                confirmation_code: confirmation_code
             });
             console.log(
                 "-- /submit_email -->",

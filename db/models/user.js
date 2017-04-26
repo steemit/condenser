@@ -16,7 +16,13 @@ module.exports = function (sequelize, DataTypes) {
         remote_ip: DataTypes.STRING,
         verified: DataTypes.BOOLEAN,
         waiting_list: DataTypes.BOOLEAN,
-        bot: DataTypes.BOOLEAN
+        bot: DataTypes.BOOLEAN,
+        last_step: DataTypes.INTEGER,
+        link_clicked: DataTypes.STRING,
+        approved: DataTypes.BOOLEAN,
+        to_be_created: DataTypes.BOOLEAN,
+        button_screen_x: DataTypes.STRING,
+        button_screen_y: DataTypes.STRING
     }, {
         tableName: 'users',
         createdAt   : 'created_at',

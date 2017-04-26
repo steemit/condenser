@@ -27,7 +27,21 @@ if (process.env.NODE_ENV === "production") {
 
 const assets = Object.assign({}, require(assets_file), { script: [] });
 
-function* confirmMobileHandler() {
+// function mousePosition(e) {
+//     // log x/y cords
+//     console.log("hereI am man", e);
+//     if(e.type === 'mouseenter') {
+//         console.log(e.screenX, e.screenY);
+//     }
+// }
+
+function* confirmMobileHandler(e) {
+    // // log x/y cords
+    // console.log("hereI am man", e);
+    // if(e.type === 'mouseenter') {
+    //     console.log(e.screenX, e.screenY);
+    // }
+
     if (!checkCSRF(this, this.request.body.csrf)) return;
     const confirmation_code = this.params && this.params.code
         ? this.params.code
@@ -150,7 +164,7 @@ export default function useEnterAndConfirmMobilePages(app) {
             where: { uid: this.session.uid }
         });
         const mid = yield models.Identity.findOne({
-            where: { user_id: user.id }
+            where: { user_id: user.id, provider: "phone" }
         });
         this.session.user = user.id;
         // this.session.user_name_picked = mid.user_name_picked;
@@ -162,7 +176,7 @@ export default function useEnterAndConfirmMobilePages(app) {
                     distinct_id: this.session.uid
                 });
             console.log("--/Already verified redirecting user", this.session.user, mid.user_name_picked);
-            this.redirect("/create_account?user=" + mid.user_name_picked);
+            this.redirect("/create_account?user=" + user.name);
             return;
         }
         const phone = this.query.phone;
@@ -275,12 +289,16 @@ export default function useEnterAndConfirmMobilePages(app) {
         }
 
         const eid = yield models.Identity.findOne({
-            where: { user_id: user.id }
+            where: { user_id: user.id, provider: "phone"}
         });
+
         if (!eid) {
-            this.flash = { error: "Please confirm your email address first" };
-            this.redirect("/enter_mobile");
-            return;
+            let user_identity = yield models.Identity.create({
+                user_id: user.id,
+                uid: user.uid,
+                provider: "phone",
+                phone: phone
+            });
         }
 
         const existing_phone = yield models.Identity.findOne({
@@ -308,7 +326,7 @@ export default function useEnterAndConfirmMobilePages(app) {
             .toString(10)
             .substring(0, 4); // 4 digit code
         let mid = yield models.Identity.findOne({
-            where: { user_id: user.id }
+            where: { user_id: user.id, provider: "phone" }
         });
         if (mid) {
             if (mid.verified) {
@@ -351,25 +369,22 @@ export default function useEnterAndConfirmMobilePages(app) {
         );
         const ip = getRemoteIp(this.req);
 
-        const twilioResult = yield twilioVerify(phone);
-        console.log('-- /submit_mobile twilioResult -->', twilioResult);
-
-        if (twilioResult === 'block') {
-            mid.update({score: 111111});
-            this.flash = { error: 'Unable to verify your phone number. Please try a different phone number.' };
-            this.redirect(enterMobileUrl);
-            return;
-        }
+        // const twilioResult = yield twilioVerify(phone);
+        // console.log('-- /submit_mobile twilioResult -->', twilioResult);
+        //
+        // if (twilioResult === 'block') {
+        //     mid.update({score: 111111});
+        //     this.flash = { error: 'Unable to verify your phone number. Please try a different phone number.' };
+        //     this.redirect(enterMobileUrl);
+        //     return;
+        // }
 
         const verifyResult = yield teleSignVerify({
             mobile: phone,
             confirmation_code,
             ip,
-            ignore_score: twilioResult === 'pass'
+            ignore_score: false //twilioResult === 'pass'
         });
-
-        console.log('-- /submit_mobile teleSignResult -->', verifyResult);
-
         if (verifyResult && verifyResult.score) {
             mid.update({score: verifyResult.score});
         }

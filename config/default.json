@@ -1,7 +1,4 @@
 {
-  "chain": {
-    "id": ""
-  },
   "database_url": "mysql://golosdev:golosdev@127.0.0.1:3306/golosdev",
   "disable_signups": false,
   "facebook_app_id": false,

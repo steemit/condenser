@@ -40,13 +40,15 @@ global.webpackIsomorphicTools = new WebpackIsomorphicTools(
 );
 
 global.webpackIsomorphicTools.server(ROOT, () => {
-        steem.config.set('websocket', config.get('ws_connection_server'))
-        // const CliWalletClient = require('shared/api_client/CliWalletClient').default;
-        // if (process.env.NODE_ENV === 'production') connect_promises.push(CliWalletClient.instance().connect_promise());
-        try {
-            require('./server');
-        } catch (error) {
-            console.error(error);
-            process.exit(1);
-        }
+    const ws_connection = config.get('ws_connection_server');
+    console.log('connecting to ', ws_connection);
+    steem.config.set('websocket', ws_connection)
+    // const CliWalletClient = require('shared/api_client/CliWalletClient').default;
+    // if (process.env.NODE_ENV === 'production') connect_promises.push(CliWalletClient.instance().connect_promise());
+    try {
+        require('./server');
+    } catch (error) {
+        console.error(error);
+        process.exit(1);
+    }
 });

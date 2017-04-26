@@ -144,7 +144,7 @@ class LoginForm extends Component {
         }
         const title = postType ? postType : tt('g.login');
         const authType = /^vote|comment/.test(opType) ? tt('loginform_jsx.posting') : tt('loginform_jsx.active_or_owner');
-        const submitLabel = loginBroadcastOperation ? tt('g.sign_n') : tt('g.login');
+        const submitLabel = loginBroadcastOperation ? tt('g.sign_in') : tt('g.login');
         let error = password.touched && password.error ? password.error : this.props.login_error;
         if (error === 'owner_login_blocked') {
             error = <span>{tt('loginform_jsx.this_password_is_bound_to_your_account')}
@@ -173,63 +173,61 @@ class LoginForm extends Component {
         const password_info = checkPasswordChecksum(password.value) === false ? tt('loginform_jsx.password_info') : null
 
         const form = (
-            <center>
-                <form onSubmit={handleSubmit(({data}) => {
-                    // bind redux-form to react-redux
-                    console.log('Login\tdispatchSubmit');
-                    return dispatchSubmit(data, loginBroadcastOperation, afterLoginRedirectToWelcome)
-                })}
-                      onChange={this.props.clearError}
-                      method="post"
-                >
-                    <div className="input-group">
-                        <span className="input-group-label">@</span>
-                        <input className="input-group-field" type="text" required placeholder={tt('loginform_jsx.enter_your_username')} ref="username"
-                               {...username.props} onChange={usernameOnChange} autoComplete="on" disabled={submitting}
-                        />
-                    </div>
-                    {username.touched && username.blur && username.error ? <div className="error">{username.error}&nbsp;</div> : null}
+            <form onSubmit={handleSubmit(({data}) => {
+                // bind redux-form to react-redux
+                console.log('Login\tdispatchSubmit');
+                return dispatchSubmit(data, loginBroadcastOperation, afterLoginRedirectToWelcome)
+            })}
+                  onChange={this.props.clearError}
+                  method="post"
+            >
+                <div className="input-group">
+                    <span className="input-group-label">@</span>
+                    <input className="input-group-field" type="text" required placeholder={tt('loginform_jsx.enter_your_username')} ref="username"
+                           {...username.props} onChange={usernameOnChange} autoComplete="on" disabled={submitting}
+                    />
+                </div>
+                {username.touched && username.blur && username.error ? <div className="error">{username.error}&nbsp;</div> : null}
 
-                    <div>
-                        <input type="password" required ref="pw" placeholder={tt('loginform_jsx.password_or_wif')} {...password.props} autoComplete="on" disabled={submitting} />
-                        {error && <div className="error">{error}&nbsp;</div>}
-                        {error && password_info && <div className="warning">{password_info}&nbsp;</div>}
-                    </div>
-                    {loginBroadcastOperation && <div>
-                        <div className="info">{tt('loginform_jsx.this_operation_requires_your_key_or_master_password', {authType})}</div>
-                    </div>}
-                    {!loginBroadcastOperation && <div>
-                        <label htmlFor="saveLogin">
-                            {tt('loginform_jsx.keep_me_logged_in')} &nbsp;
-                            <input id="saveLogin" type="checkbox" ref="pw" {...saveLogin.props} onChange={this.saveLoginToggle} disabled={submitting} /></label>
-                    </div>}
-                    <div>
-                        <br />
-                        <button type="submit" disabled={submitting || disabled} className="button" onClick={this.SignIn}>
-                            {submitLabel}
-                        </button>
-                        {this.props.onCancel && <button type="button float-right" disabled={submitting} className="button hollow" onClick={onCancel}>
-                            {tt('g.cancel')}
-                        </button>}
-                    </div>
-                    {authType == 'Posting' &&
-                    <div>
-                        <hr />
-                        <p>{tt('loginform_jsx.join_our')} <span className="free-slogan">{tt('loginform_jsx.amazing_community')}</span>{tt('loginform_jsx.to_comment_and_reward_others')}</p>
-                        <button type="button" className="button sign-up" onClick={this.SignUp}>{tt('loginform_jsx.sign_up_now_to_receive')}<span className="free-money">{tt('loginform_jsx.free_money')}</span></button>
-                    </div>}
-                </form>
-            </center>
+                <div>
+                    <input type="password" required ref="pw" placeholder={tt('loginform_jsx.password_or_wif')} {...password.props} autoComplete="on" disabled={submitting} />
+                    {error && <div className="error">{error}&nbsp;</div>}
+                    {error && password_info && <div className="warning">{password_info}&nbsp;</div>}
+                </div>
+                {loginBroadcastOperation && <div>
+                    <div className="info">{tt('loginform_jsx.this_operation_requires_your_key_or_master_password', {authType})}</div>
+                </div>}
+                {!loginBroadcastOperation && <div>
+                    <label htmlFor="saveLogin">
+                        {tt('loginform_jsx.keep_me_logged_in')} &nbsp;
+                        <input id="saveLogin" type="checkbox" ref="pw" {...saveLogin.props} onChange={this.saveLoginToggle} disabled={submitting} /></label>
+                </div>}
+                <div>
+                    <br />
+                    <button type="submit" disabled={submitting || disabled} className="button" onClick={this.SignIn}>
+                        {submitLabel}
+                    </button>
+                    {this.props.onCancel && <button type="button float-right" disabled={submitting} className="button hollow" onClick={onCancel}>
+                        {tt('g.cancel')}
+                    </button>}
+                </div>
+                {authType == 'Posting' &&
+                <div>
+                    <hr />
+                    <p>{tt('loginform_jsx.join_our')} <span className="free-slogan">{tt('loginform_jsx.amazing_community')}</span>{tt('loginform_jsx.to_comment_and_reward_others')}</p>
+                    <button type="button" className="button sign-up" onClick={this.SignUp}>{tt('loginform_jsx.sign_up_now_to_receive')}<span className="free-money">{tt('loginform_jsx.free_money')}</span></button>
+                </div>}
+            </form>
         );
 
         return (
-            <div className="LoginForm">
-                {message}
-                <center>
-                    <h3>{tt('loginform_jsx.returning_users')}<span className="OpAction">{title}</span></h3>
-                </center>
-                <br />
-                {form}
+            <div className="LoginForm row">
+                <div className="column">
+                    {message}
+                        <h3>{tt('loginform_jsx.returning_users')}<span className="OpAction">{title}</span></h3>
+                    <br />
+                    {form}
+                </div>
             </div>
         )
     }

@@ -5,13 +5,11 @@ import {Map} from 'immutable';
 import transaction from 'app/redux/Transaction';
 import user from 'app/redux/User';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import {transferTips} from 'app/utils/Tips'
-import {powerTip, powerTip2, powerTip3} from 'app/utils/Tips'
 import runTests, {browserTests} from 'app/utils/BrowserTests'
 import {validate_account_name} from 'app/utils/ChainValidation';
 import {countDecimals} from 'app/utils/ParsersAndFormatters'
 import tt from 'counterpart';
-import { VESTING_TOKEN } from 'app/client_config';
+import { APP_NAME, LIQUID_TOKEN, VESTING_TOKEN } from 'app/client_config';
 
 /** Warning .. This is used for Power UP too. */
 class TransferForm extends Component {
@@ -122,6 +120,13 @@ class TransferForm extends Component {
     };
 
     render() {
+        const transferTips = {
+            'Transfer to Account': tt('transfer_jsx.move_funds_to_another_account', {APP_NAME}),
+            'Transfer to Savings': tt('transfer_jsx.protect_funds_by_requiring_a_3_day_withdraw_waiting_period'),
+            'Savings Withdraw': tt('transfer_jsx.withdraw_funds_after_the_required_3_day_waiting_period'),
+        };
+        const powerTip2 = tt('tips_js.VESTING_TOKEN_is_non_transferrable_and_requires_convert_back_to_LIQUID_TOKEN', {LIQUID_TOKEN, VESTING_TOKEN})
+        const powerTip3 = tt('tips_js.converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again', {LIQUID_TOKEN, VESTING_TOKEN})
         const {to, amount, asset, memo} = this.state;
         const {loading, trxError, advanced} = this.state;
         const {currentUser, toVesting, transferToSelf, dispatchSubmit} = this.props;
@@ -152,7 +157,7 @@ class TransferForm extends Component {
                 </div>}
 
                 <div className="row">
-                    <div className="column small-2" style={{paddingTop: 5}}>{tt('g.from')}</div>
+                    <div className="column small-2" style={{paddingTop: 5}}>{tt('transfer_jsx.from')}</div>
                     <div className="column small-10">
                         <div className="input-group" style={{marginBottom: "1.25rem"}}>
                             <span className="input-group-label">@</span>
@@ -167,7 +172,7 @@ class TransferForm extends Component {
                 </div>
 
                 {advanced && <div className="row">
-                    <div className="column small-2" style={{paddingTop: 5}}>{('to')}</div>
+                    <div className="column small-2" style={{paddingTop: 5}}>{tt('transfer_jsx.to')}</div>
                     <div className="column small-10">
                         <div className="input-group" style={{marginBottom: "1.25rem"}}>
                             <span className="input-group-label">@</span>
@@ -224,24 +229,27 @@ class TransferForm extends Component {
                         <div className="error">{memo.touched && memo.error && memo.error}&nbsp;</div>
                     </div>
                 </div>}
-                {loading && <span><LoadingIndicator type="circle" /><br /></span>}
-                {!loading && <span>
-                    {trxError && <div className="error">{trxError}</div>}
-                    <button type="submit" disabled={submitting || !valid} className="button">
-                        {tt(toVesting ? 'g.power_up' : 'g.submit')}
-                    </button>
-                    {transferToSelf && <button className="button hollow no-border" disabled={submitting} onClick={this.onAdvanced}>{tt(advanced ? 'g.basic' : 'g.advanced')}</button>}
-                </span>}
+                <div className="row">
+                    <div className="column">
+                        {loading && <span><LoadingIndicator type="circle" /><br /></span>}
+                        {!loading && <span>
+                            {trxError && <div className="error">{trxError}</div>}
+                            <button type="submit" disabled={submitting || !valid} className="button">
+                                {tt(toVesting ? 'g.power_up' : 'g.submit')}
+                            </button>
+                            {transferToSelf && <button className="button hollow no-border" disabled={submitting}
+                                                       onClick={this.onAdvanced}>{tt(advanced ? 'g.basic' : 'g.advanced')}</button>}
+                        </span>}
+                    </div>
+                </div>
             </form>
         );
         return (
            <div>
-               <h3>{toVesting ? tt('transfer_jsx.convert_to_VESTING_TOKEN', {VESTING_TOKEN}) : transferTips[transferType]}</h3>
                <div className="row">
-                   <div className="column small-12">
-                       {form}
-                   </div>
+                    <h3 className="column">{toVesting ? tt('transfer_jsx.convert_to_VESTING_TOKEN', {VESTING_TOKEN}) : transferType}</h3>
                </div>
+               {form}
            </div>
        )
     }

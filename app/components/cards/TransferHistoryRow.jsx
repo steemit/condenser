@@ -66,7 +66,7 @@ class TransferHistoryRow extends React.Component {
             if( data.vesting_shares === '0.000000 VESTS' )
                 description_start += tt('transferhistoryrow_jsx.stop_power_down');
             else
-                description_start += tt('transferhistoryrow_jsx.start_power_down_of') + powerdown_vests + " STEEM";
+                description_start += tt('transferhistoryrow_jsx.start_power_down_of') + ' ' + powerdown_vests + " STEEM";
         } else if( type === 'curation_reward' ) {
             description_start += `${curation_reward} STEEM POWER` + tt('g.for');
             other_account = data.comment_author + "/" + data.comment_permlink;

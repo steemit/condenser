@@ -87,12 +87,14 @@
     "sign_up": "Sign Up",
     "since": "since",
     "submit": "Submit",
+    "power_up": "Power Up",
     "submit_a_story": "Submit a Story",
     "tag": "Tag",
     "to": " to ",
     "topics": "Topics",
     "transaction_history": "Transaction History",
     "transfer": "Transfer ",
+    "receive": "Receive ",
     "trending_topics": "Trending Topics",
     "type": "Type",
     "unfollow": "Unfollow",
@@ -123,7 +125,7 @@
     "you_need_private_password_or_key_not_a_public_key": "You need a private password or key (not a public key)",
     "the_rules_of_APP_NAME": {
       "one": "The first rule of %(APP_NAME)s is: Do not lose your password.",
-      "second": "The second rule of %(APP_NAME)s is: Do <strong>not</strong> lose your password.",
+      "second": "The second rule of %(APP_NAME)s is: Do not lose your password.",
       "third": "The third rule of %(APP_NAME)s is: We cannot recover your password.",
       "fourth": "The fourth rule: If you can remember the password, it's not secure.",
       "fifth": "The fifth rule: Use only randomly-generated passwords.",
@@ -230,7 +232,9 @@
     "enter_username": "Enter your username",
     "password_or_wif": "Password or WIF",
     "requires_auth_key": "This operation requires your %(authType)s key (or use your master password)",
-    "keep_me_logged_in": "Keep me logged in"
+    "keep_me_logged_in": "Keep me logged in",
+    "basic": "Basic",
+    "advanced": "Advanced"
   },
   "navigation": {
     "about": "About",
@@ -343,7 +347,6 @@
     "recieve_amount_from": "Receive %(amount)s from",
     "transfer_amount_from": "Transfer %(amount)s from",
     "stop_power_down": "Stop power down",
-    "start_power_down_of": "Start power down of",
     "curation_reward_of_VESTING_TOKEN_for": "Curation reward of %(reward)s %(VESTING_TOKEN)s for",
     "author_reward_of_VESTING_TOKEN_for": "Author reward of %(payout)s and %(reward)s %(VESTING_TOKEN)s for",
     "recieve_interest_of": "Receive interest of %(interest)s",
@@ -772,7 +775,9 @@
     "move_funds_to_another_account": "Move funds to another %(APP_NAME)s account.",
     "protect_funds_by_requiring_a_3_day_withdraw_waiting_period": "Protect funds by requiring a 3 day withdraw waiting period.",
     "withdraw_funds_after_the_required_3_day_waiting_period": "Withdraw funds after the required 3 day waiting period.",
-    "balance": "Balance"
+    "balance": "Balance",
+    "from": "From",
+    "to": "To"
   },
   "userwallet_jsx": {
     "conversion_complete_tip": "Will complete on",

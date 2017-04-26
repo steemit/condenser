@@ -11,7 +11,8 @@ before_install:
 
 script:
   - if [ -n "${TRAVIS_TAG}" ]; then
-       deploy/deploy.sh;
+       cd deploy/;
+       ./deploy.sh;
     fi
   - docker images
 

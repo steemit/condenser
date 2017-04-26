@@ -70,8 +70,17 @@ function* confirmEmailHandler() {
     if (mixpanel)
         mixpanel.track("SignupStepConfirmEmail", { distinct_id: this.session.uid });
 
-    this.flash = { success: "Thanks for confirming your email!" };
-    this.redirect("/approval?confirm=true");
+    const eid_phone = yield models.Identity.findOne({
+        where: { user_id: eid.user_id, provider: "phone", verified: true}
+    });
+
+    if (eid_phone) {
+        this.flash = { success: "Thanks for confirming your email!" };
+        this.redirect("/approval?confirm=true");
+    } else {
+        this.flash = { success: "Thanks for confirming your email. Your phone needs to be confirmed before proceeding." };
+        this.redirect("/enter_mobile");
+    }
 
     // check if the phone is confirmed then redirect to create account - this is useful when we invite users and send them the link
     // const mid = yield models.Identity.findOne({
@@ -104,8 +113,8 @@ export default function useEnterAndConfirmEmailPages(app) {
                 name: this.request.query.account,
                 last_step: 1
             });
-            this.session.user = user_id = user.id;
-            user_identity = yield models.Identity.create({
+            this.session.user = user.id;
+            const user_identity = yield models.Identity.create({
                 user_id: user.id,
                 uid: user.uid,
                 verified: false,

@@ -8,8 +8,6 @@ import Transfer from 'app/components/modules/Transfer';
 import SignUp from 'app/components/modules/SignUp';
 import user from 'app/redux/User';
 import tr from 'app/redux/Transaction';
-import BottomPanel from 'app/components/modules/BottomPanel';
-import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import {NotificationStack} from 'react-notification';
 import {OrderedSet} from 'immutable';

@@ -5,7 +5,7 @@ import findUser from 'db/utils/find_user';
 import config from 'config';
 import recordWebEvent from 'server/record_web_event';
 import {esc, escAttrs} from 'db/models';
-import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF} from 'server/utils';
+import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF} from 'server/utils/misc';
 import coBody from 'co-body';
 import secureRandom from 'secure-random'
 import {PublicKey, Signature, hash} from 'shared/ecc'
@@ -75,7 +75,7 @@ export default function useGeneralApi(app) {
             });
             if (same_ip_bot) {
                 console.log('-- /accounts same_ip_bot -->', user_id, this.session.uid, remote_ip, user.email);
-                this.body = JSON.stringify({error: 'We are sorry, we cannot sign you up at this time because your IP address is associated with bots activity. Please contact support@steemit.com for more information.'});
+                this.body = JSON.stringify({error: 'We are sorry, we cannot sign you up at this time because your IP address is associated with bots activity. Please contact t@cyber.fund for more information.'});
                 this.status = 401;
                 return;
             }
@@ -113,14 +113,14 @@ export default function useGeneralApi(app) {
                 throw new Error('Email address is not confirmed');
             }
 
-            // check phone
-            const mid = yield models.Identity.findOne(
-                {attributes: ['id'], where: {user_id, provider: 'phone', verified: true}, order: 'id DESC'}
-            );
-            if (!mid) {
-                console.log(`api /accounts: not confirmed sms for user ${this.session.uid} #${user_id}`);
-                throw new Error('Phone number is not confirmed');
-            }
+            // // check phone
+            // const mid = yield models.Identity.findOne(
+            //     {attributes: ['id'], where: {user_id, provider: 'phone', verified: true}, order: 'id DESC'}
+            // );
+            // if (!mid) {
+            //     console.log(`api /accounts: not confirmed sms for user ${this.session.uid} #${user_id}`);
+            //     throw new Error('Phone number is not confirmed');
+            // }
 
             const [fee_value, fee_currency] = config.get('registrar.fee').split(' ');
             let fee = parseFloat(fee_value);

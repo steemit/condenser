@@ -11,7 +11,7 @@ import {browserTests} from 'shared/ecc/test/BrowserTests'
 import {validate_account_name} from 'app/utils/ChainValidation';
 import {countDecimals} from 'app/utils/ParsersAndFormatters'
 import tt from 'counterpart';
-import { VESTING_TOKEN } from 'app/client_config';
+import { LIQUID_TOKEN, DEBT_TOKEN, VESTING_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TICKER, VEST_TICKER, DEBT_TICKER } from 'app/client_config';
 
 /** Warning .. This is used for Power UP too. */
 class TransferForm extends Component {
@@ -54,9 +54,9 @@ class TransferForm extends Component {
             const {currentAccount} = props
             const isWithdraw = transferType && transferType === 'Savings Withdraw'
             const balanceValue =
-                !asset || asset === 'STEEM' ?
+                !asset || asset === 'GOLOS' ?
                     isWithdraw ? currentAccount.get('savings_balance') : currentAccount.get('balance') :
-                asset === 'SBD' ?
+                asset === 'GBG' ?
                     isWithdraw ? currentAccount.get('savings_sbd_balance') : currentAccount.get('sbd_balance') :
                 null
             if(!balanceValue) return false
@@ -74,16 +74,16 @@ class TransferForm extends Component {
             initialValues: props.initialValues,
             validation: values => ({
                 to:
-                    ! values.to ? tt('required') : validate_account_name(values.to),
+                    ! values.to ? tt('g.required') : validate_account_name(values.to),
                 amount:
-                    ! values.amount ? tt('required') :
-                    ! /^[0-9]*\.?[0-9]*/.test(values.amount) ? tt('amount_is_in_form') :
-                    insufficientFunds(values.asset, values.amount) ? tt('insufficient_funds') :
-                    countDecimals(values.amount) > 3 ? tt('use_only_3_digits_of_precison') :
+                    ! values.amount ? tt('g.required') :
+                    ! /^[0-9]*\.?[0-9]*/.test(values.amount) ? tt('transfer_jsx.amount_is_in_form') :
+                    insufficientFunds(values.asset, values.amount) ? tt('transfer_jsx.insufficient_funds') :
+                    countDecimals(values.amount) > 3 ? tt('transfer_jsx.use_only_3_digits_of_precison') :
                     null,
                 asset:
                     props.toVesting ? null :
-                    ! values.asset ? tt('required') : null,
+                    ! values.asset ? tt('g.required') : null,
                 memo:
                     values.memo && (!browserTests.memo_encryption && /^#/.test(values.memo)) ?
                     'Encrypted memos are temporarily unavailable (issue #98)' :
@@ -102,9 +102,9 @@ class TransferForm extends Component {
         const {asset} = this.state
         const isWithdraw = transferType && transferType === 'Savings Withdraw'
         return !asset ||
-            asset.value === 'STEEM' ?
+            asset.value === 'GOLOS' ?
                 isWithdraw ? currentAccount.get('savings_balance') : currentAccount.get('balance') :
-            asset.value === 'SBD' ?
+            asset.value === 'GBG' ?
                 isWithdraw ? currentAccount.get('savings_sbd_balance') : currentAccount.get('sbd_balance') :
             null
     }
@@ -151,7 +151,7 @@ class TransferForm extends Component {
                 </div>}
 
                 <div className="row">
-                    <div className="column small-2" style={{paddingTop: 5}}>{tt('from')}</div>
+                    <div className="column small-2" style={{paddingTop: 5}}>{tt('g.from')}</div>
                     <div className="column small-10">
                         <div className="input-group" style={{marginBottom: "1.25rem"}}>
                             <span className="input-group-label">@</span>
@@ -166,7 +166,7 @@ class TransferForm extends Component {
                 </div>
 
                 {advanced && <div className="row">
-                    <div className="column small-2" style={{paddingTop: 5}}>{('to')}</div>
+                    <div className="column small-2" style={{paddingTop: 5}}>{tt('g.to')}</div>
                     <div className="column small-10">
                         <div className="input-group" style={{marginBottom: "1.25rem"}}>
                             <span className="input-group-label">@</span>
@@ -174,11 +174,12 @@ class TransferForm extends Component {
                                 className="input-group-field"
                                 ref="to"
                                 type="text"
-                                placeholder={tt('send_to_account')}
+                                placeholder={tt('transfer_jsx.send_to_account')}
                                 onChange={this.onChangeTo}
                                 autoComplete="off"
                                 autoCorrect="off"
                                 autoCapitalize="off"
+                                spellCheck="false"
                                 disabled={loading}
                                 {...to.props}
                             />
@@ -191,14 +192,14 @@ class TransferForm extends Component {
                 </div>}
 
                 <div className="row">
-                    <div className="column small-2" style={{paddingTop: 5}}>{tt('amount')}</div>
+                    <div className="column small-2" style={{paddingTop: 5}}>{tt('g.amount')}</div>
                     <div className="column small-10">
                         <div className="input-group" style={{marginBottom: 5}}>
-                            <input type="text" placeholder={tt('amount')} {...amount.props} ref="amount" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck="false" disabled={loading} />
+                            <input type="text" placeholder={tt('g.amount')} {...amount.props} ref="amount" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck="false" disabled={loading} />
                             {asset && <span className="input-group-label" style={{paddingLeft: 0, paddingRight: 0}}>
-                                <select {...asset.props} placeholder={tt('asset')} disabled={loading} style={{minWidth: "5rem", height: "inherit", backgroundColor: "transparent", border: "none"}}>
-                                    <option value="STEEM">STEEM</option>
-                                    <option value="SBD">SBD</option>
+                                <select {...asset.props} placeholder={tt('transfer_jsx.asset')} disabled={loading} style={{minWidth: "5rem", height: "inherit", backgroundColor: "transparent", border: "none"}}>
+                                    <option value={LIQUID_TICKER}>{LIQUID_TOKEN}</option>
+                                    <option value={DEBT_TICKER}>{DEBT_TICKER}</option>
                                 </select>
                             </span>}
                         </div>
@@ -214,10 +215,10 @@ class TransferForm extends Component {
                 </div>
 
                 {memo && <div className="row">
-                    <div className="column small-2" style={{paddingTop: 33}}>{tt('memo')}</div>
+                    <div className="column small-2" style={{paddingTop: 33}}>{tt('g.memo')}</div>
                     <div className="column small-10">
-                        <small>{tt('this_memo_is') + isMemoPrivate ? tt('private') : tt('public')}</small>
-                        <input type="text" placeholder={tt('memo')} {...memo.props}
+                        <small>{tt('transfer_jsx.this_memo_is') + isMemoPrivate ? tt('transfer_jsx.private') : tt('transfer_jsx.public')}</small>
+                        <input type="text" placeholder={tt('g.memo')} {...memo.props}
                             ref="memo" autoComplete="on" autoCorrect="off" autoCapitalize="off" spellCheck="false" disabled={loading} />
                         <div className="error">{memo.touched && memo.error && memo.error}&nbsp;</div>
                     </div>
@@ -226,15 +227,15 @@ class TransferForm extends Component {
                 {!loading && <span>
                     {trxError && <div className="error">{trxError}</div>}
                     <button type="submit" disabled={submitting || !valid} className="button">
-                        {tt(toVesting ? 'power_up' : 'submit')}
+                        {tt(toVesting ? 'g.power_up' : 'g.submit')}
                     </button>
-                    {transferToSelf && <button className="button hollow no-border" disabled={submitting} onClick={this.onAdvanced}>{tt(advanced ? 'basic' : 'advanced')}</button>}
+                    {transferToSelf && <button className="button hollow no-border" disabled={submitting} onClick={this.onAdvanced}>{tt(advanced ? 'g.basic' : 'g.advanced')}</button>}
                 </span>}
             </form>
         )
         return (
            <div>
-               <h3>{toVesting ? tt('convert_to_VESTING_TOKEN', {VESTING_TOKEN}) : transferTips[transferType]}</h3>
+               <h3>{toVesting ? tt('transfer_jsx.convert_to_VESTING_TOKEN', {VESTING_TOKEN}) : transferTips[transferType]}</h3>
                <div className="row">
                    <div className="column small-12">
                        {form}
@@ -246,7 +247,7 @@ class TransferForm extends Component {
 }
 
 const AssetBalance = ({onClick, balanceValue}) =>
-    <a onClick={onClick} style={{borderBottom: '#A09F9F 1px dotted', cursor: 'pointer'}}>{tt('balance') + ": " + balanceValue}</a>
+    <a onClick={onClick} style={{borderBottom: '#A09F9F 1px dotted', cursor: 'pointer'}}>{tt('transfer_jsx.balance') + ": " + balanceValue}</a>
 
 import {connect} from 'react-redux'
 
@@ -254,7 +255,7 @@ export default connect(
     // mapStateToProps
     (state, ownProps) => {
         const initialValues = state.user.get('transfer_defaults', Map()).toJS()
-        const toVesting = initialValues.asset === 'VESTS'
+        const toVesting = initialValues.asset === 'GESTS'
         const currentUser = state.user.getIn(['current'])
         const currentAccount = state.global.getIn(['accounts', currentUser.get('username')])
 
@@ -289,7 +290,7 @@ export default connect(
                 }
                 dispatch(user.actions.hideTransfer())
             }
-            const asset2 = toVesting ? 'STEEM' : asset
+            const asset2 = toVesting ? 'GOLOS' : asset
             const operation = {
                 from: username,
                 to, amount: parseFloat(amount, 10).toFixed(3) + ' ' + asset2,

@@ -16,7 +16,7 @@ export default class YoutubePreview extends React.Component {
     static defaultProps = {
         width: 640,
         height: 360,
-        dataParams: 'enablejsapi=0&rel=0&origin=https://steemit.com'
+        dataParams: 'enablejsapi=0&rel=0&origin=https://golos.io'
     }
 
     constructor() {

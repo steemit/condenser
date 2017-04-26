@@ -1,0 +1,42 @@
+.RocketChat {
+    &.sidepanel {
+        transition: right 0.5s ease-out;
+        background: rgba(255,255,255,0.9);
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        right: -50%;
+        min-width: 320px;
+        width: 50%;
+        z-index: 120;
+        &.open {
+            right: 0;
+        }
+        button, a {
+            transition: transform 0.3s ease-in-out 0.55s;
+            transform: rotate(-90deg);
+            bottom: 0;
+            position: absolute;
+            width: 48px;
+            height: 48px;
+            left: -48px;
+            &.open {
+                transform: rotate(90deg);
+            }
+            &:focus {
+                outline: none;
+            }
+        }
+        .sidebar {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+    }
+}
+
+@media screen and (max-width: 660px) {
+  .RocketChat {
+    display: none;
+  }
+}

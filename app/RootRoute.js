@@ -14,6 +14,9 @@ export default {
             //require.ensure([], (require) => {
                 cb(null, [require('app/components/pages/About')]);
             //});
+        // golos.io landing page
+        } else if (route.page === 'Landing') {
+            cb(null, [require('app/components/pages/Landing')]);
         } else if (route.page === 'Welcome') {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/Welcome')]);

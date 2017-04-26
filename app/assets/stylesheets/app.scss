@@ -46,7 +46,17 @@ a, path, circle {
 }
 
 .strikethrough {
-  text-decoration: line-through;
+  // text-decoration: line-through;
+  position: relative;
+}
+.strikethrough::after {
+  border-bottom: 0.125em solid #EB0000;
+  content: "";
+  left: 0;
+  margin-top: calc(0.125em / 2 * -1);
+  position: absolute;
+  right: 0;
+  top: 50%;
 }
 
 .uppercase, label {

@@ -103,11 +103,11 @@ function generateBidAsk(bidsArray, asksArray) {
 
     let bids = aggregateOrders(bidsArray);
     // Insert a 0 entry to make sure the chart is centered properly
-    bids.unshift([0, bids[0][1]]);
+    bids.length && bids.unshift([0, bids[0][1]]);
 
     let asks = aggregateOrders(asksArray);
     // Insert a final entry to make sure the chart is centered properly
-    asks.push([asks[asks.length - 1][0] * 4, asks[asks.length - 1][1]]);
+    asks.length && asks.push([asks[asks.length - 1][0] * 4, asks[asks.length - 1][1]]);
 
     return {bids, asks};
 }
@@ -116,11 +116,14 @@ function getMinMax(bids, asks) {
     const highestBid = bids.length ? bids[bids.length-1][0] : 0;
     const lowestAsk = asks.length ? asks[0][0] : 1;
 
+    const firstBid = bids.length ? bids[0][0] : 0;
+    const lastAsk  = asks.length ? asks[asks.length-1][0] : 0;
+
     const middle = (highestBid + lowestAsk) / 2;
 
     return {
-        min: Math.max(middle * 0.65, bids[0][0]),
-        max: Math.min(middle * 1.35, asks[asks.length-1][0])
+        min: Math.max(middle * 0.65, firstBid),
+        max: Math.min(middle * 1.35, lastAsk)
     }
 }
 
@@ -133,11 +136,11 @@ function generateDepthChart(bidsArray, asksArray) {
 
     if(process.env.BROWSER) {
         if(bids[0]) {
-            series.push({step: 'right', name: tt('bid'), color: 'rgba(0,150,0,1.0)', fillColor: 'rgba(0,150,0,0.2)', tooltip: {valueSuffix: ' ' + LIQUID_TICKER},
+            series.push({step: 'right', name: tt('g.bid'), color: 'rgba(0,150,0,1.0)', fillColor: 'rgba(0,150,0,0.2)', tooltip: {valueSuffix: ' ' + LIQUID_TICKER},
              data:  bids})
         }
         if(asks[0]) {
-            series.push({step: 'left', name: tt('ask'), color: 'rgba(150,0,0,1.0)', fillColor: 'rgba(150,0,0,0.2)', tooltip: {valueSuffix: ' ' + LIQUID_TICKER},
+            series.push({step: 'left', name: tt('g.ask'), color: 'rgba(150,0,0,1.0)', fillColor: 'rgba(150,0,0,0.2)', tooltip: {valueSuffix: ' ' + LIQUID_TICKER},
              data: asks})
         }
     }
@@ -192,7 +195,7 @@ function generateDepthChart(bidsArray, asksArray) {
             shared: false,
             backgroundColor: "rgba(0, 0, 0, 0.3)",
             formatter() {
-                return `<span>${tt('price')}: ${(this.x / power).toFixed(6)} ${CURRENCY_SIGN}/${LIQUID_TOKEN_UPPERCASE}</span><br/><span>\u25CF</span>${this.series.name}: <b>${(this.y / 1000).toFixed(3)} ${DEBT_TOKEN_SHORT} ` + '(' + CURRENCY_SIGN + ')</b>';
+                return `<span>${tt('g.price')}: ${(this.x / power).toFixed(6)} ${CURRENCY_SIGN}/${LIQUID_TOKEN_UPPERCASE}</span><br/><span>\u25CF</span>${this.series.name}: <b>${(this.y / 1000).toFixed(3)} ${DEBT_TOKEN_SHORT} ` + '(' + CURRENCY_SIGN + ')</b>';
             },
             style: {
                 color: "#FFFFFF"

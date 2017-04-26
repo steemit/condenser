@@ -131,7 +131,7 @@ class BlocktradesDeposit extends React.Component {
         const {fields: {inputCoin, outputCoin, amount}, submitting, handleSubmit} = this.props
         const hasError = userTradeError != null
         const est = getEstimatedValue(this.props, flip)
-        const getAddressLabel = translate(inputAddress ? 'change_deposit_address' : 'get_deposit_address')
+        const getAddressLabel = tt(inputAddress ? 'blocktrades_deposit.change_deposit_address' : 'blocktrades_deposit.get_deposit_address')
         const arrowIcon = <span>→</span>
         const flipIcon = <span>⇆</span>
         const estimateInputCoin = flip ? coinName(outputCoin.value) : coinName(inputCoin.value)
@@ -152,12 +152,12 @@ class BlocktradesDeposit extends React.Component {
         </div>)
 
         const depositTip = outputCoin.value === LIQUID_TICKER
-            ? tt('tradeable_tokens_that_may_be_transferred_anywhere_at_anytime')
+            ? tt('tips_js.tradeable_tokens_that_may_be_transferred_anywhere_at_anytime')
                 + ' ' +
-                tt('LIQUID_TOKEN_can_be_converted_to_VESTING_TOKEN_in_a_process_called_powering_up')
+                tt('tips_js.LIQUID_TOKEN_can_be_converted_to_VESTING_TOKEN_in_a_process_called_powering_up', {LIQUID_TOKEN, VESTING_TOKEN})
             : outputCoin.value === VEST_TICKER ? <div>
-                <p>{tt('influence_tokens_which_earn_more_power_by_holding_long_term') + ' ' + tt('the_more_you_hold_the_more_you_influence_post_rewards')}</p>
-                <p>{tt('VESTING_TOKEN_is_non_transferrable_and_requires_convert_back_to_LIQUID_TOKEN')}</p>
+                <p>{tt('tips_js.influence_tokens_which_earn_more_power_by_holding_long_term') + ' ' + tt('tips_js.the_more_you_hold_the_more_you_influence_post_rewards')}</p>
+                <p>{tt('tips_js.VESTING_TOKEN_is_non_transferrable_and_requires_convert_back_to_LIQUID_TOKEN', {LIQUID_TOKEN, VESTING_TOKEN})}</p>
             </div>
             : null
 
@@ -180,17 +180,17 @@ class BlocktradesDeposit extends React.Component {
                 value: 'Bitshares', icon: 'bitshares', link: '#'},
         ];
         const selectInputCoin = <DropdownMenu className="move-left" items={coin_menu} selected={coinName(inputCoin.value)} el="span" />
-        const estimateButtonLabel = translate(est.inputAmount != null ? 'update_estimate' : 'get_estimate')
+        const estimateButtonLabel = tt(est.inputAmount != null ? 'blocktrades_deposit.update_estimate' : 'blocktrades_deposit.get_estimate')
         const sendTo = <span>
-            {tt("send_amount_of_coins_to", {
+            {tt('blocktrades_deposit.send_amount_of_coins_to', {
                 value: amount.value,
                 coinName: coinName(inputCoin.value)
             }) + ' '}
             {
                 inputAddress && !hasError ? <span><code>{inputAddress}</code>
                 {inputAddressMemo && <span><br />
-                    {tt("memo")}: <code>{inputAddressMemo}</code><br />
-                    {tt("must_include_memo")}&hellip;
+                    {tt('g.memo')}: <code>{inputAddressMemo}</code><br />
+                    {tt('blocktrades_deposit.must_include_memo')}&hellip;
                 </span>} </span> :
                 <span>&hellip;</span>
             }
@@ -198,7 +198,7 @@ class BlocktradesDeposit extends React.Component {
         return <div className="BlocktradesDeposit">
             <div className="row">
                 <div className="column small-12">
-                    <h1>{tt('buy') + ' ' + coinName(outputCoin.value)}</h1>
+                    <h1>{tt('g.buy') + ' ' + coinName(outputCoin.value)}</h1>
                     <span className="text-center">{selectOutputCoin}</span>
                     <span><Icon name={APP_ICON} /></span>
                     <div>{depositTip}</div>
@@ -213,12 +213,12 @@ class BlocktradesDeposit extends React.Component {
                         </h5>
                         <div>
                             <label className="float-left" htmlFor="estimateAmount">
-                                {tt('estimate_using') + ' ' + estimateInputCoin}
+                                {tt('blocktrades_deposit.estimate_using') + ' ' + estimateInputCoin}
                             </label>
                             <span className="float-right" onClick={onFlip}>{flipIcon}</span>
                         </div>
                         <input id="estimateAmount" type="tel" {...cleanReduxInput(amount)} disabled={submitting}
-                            placeholder={tt('amount_to_send', {estimateInputCoin})}
+                            placeholder={tt('blocktrades_deposit.amount_to_send', {estimateInputCoin})}
                             autoComplete="off" ref="amountRef"
                         />
                         <div className="warning">{amount.touched && amount.error && amount.error}&nbsp;</div>
@@ -229,22 +229,22 @@ class BlocktradesDeposit extends React.Component {
                 </div>
                 <div className="row">
                     <div className="column small-12">
-                        {tt('deposit_using') + ' '} {selectInputCoin}
+                        {tt('blocktrades_deposit.deposit_using') + ' '} {selectInputCoin}
                     </div>
                 </div>
                 <div className="row">
                     <div className="column small-12">
                         {sendTo}
                         {paymentLink && !hasError && <a href={paymentLink}>&nbsp;<Icon name="extlink" /></a>}
-                        <div className="de-empasize">{depositLimit && tt('suggested_limit', {depositLimit})}&nbsp;</div>
+                        <div className="de-empasize">{depositLimit && tt('blocktrades_deposit.suggested_limit', {depositLimit})}&nbsp;</div>
                     </div>
                 </div>
                 <br />
                 <div className="row">
                     <div className="column small-12">
                         {inputAddress && trRows && <div className="BlocktradesDeposit__history">
-                            <h4>{tt("transaction_history")}</h4>
-                            {trRows.length ? trRows : <div>{tt("nothing_yet")}&hellip;</div>}
+                            <h4>{tt('g.transaction_history')}</h4>
+                            {trRows.length ? trRows : <div>{tt('g.nothing_yet')}&hellip;</div>}
                         </div>}
                     </div>
                 </div>
@@ -255,7 +255,7 @@ class BlocktradesDeposit extends React.Component {
                         <button type="submit" className="button" disabled={submitting || !username}>
                             {estimateButtonLabel}</button>
 
-                        {onClose && <button className="button secondary hollow float-right" type="button" disabled={submitting} onClick={onClose}>{tt("close")}</button>}
+                        {onClose && <button className="button secondary hollow float-right" type="button" disabled={submitting} onClick={onClose}>{tt('g.close')}</button>}
                         <button onClick={fetchInputAddress} className="button secondary hollow float-right" type="button" disabled={submitting || !username}>
                             {getAddressLabel}</button>
                     </div>
@@ -263,7 +263,7 @@ class BlocktradesDeposit extends React.Component {
                 <div className="row">
                     <div className="column small-12">
                         <div className="secondary">
-                            {tt('powered_by') + ' '}<a href="//blocktrades.us" target="_blank">Blocktrades</a>
+                            {tt('blocktrades_deposit.powered_by') + ' '}<a href="//blocktrades.us" target="_blank">Blocktrades</a>
                         </div>
                     </div>
                 </div>
@@ -318,12 +318,12 @@ export default reduxForm(
             const error = tradeError.toJS()
             userTradeError = error.message
             console.error('Blocktrades API Error', error)
-            const prefix = tt('internal_server_error') + ': '
+            const prefix = tt('blocktrades_deposit.internal_server_error') + ': '
             if (userTradeError.startsWith(prefix))
                 userTradeError = userTradeError.substr(prefix.length);
         }
         const validate = values => ({
-            amount: !/[0-9\.]/.test(values.amount) ? tt('enter_amount') : null
+            amount: !/[0-9\.]/.test(values.amount) ? tt('blocktrades_deposit.enter_amount') : null
         })
         // 'defaults' is needed because the redux form `initialValues` are not available in the fields at mounting time
         return {...ownProps, initialValues, defaults: initialValues, validate,
@@ -365,9 +365,9 @@ export default reduxForm(
 
 // ['transaction_seen' or 'transaction_fully_confirmed' or 'no_output_mapping' or 'permanent_output_failure_unauthorized_input_currency' or 'permanent_output_failure_unauthorized_output_currency' or 'permanent_output_failure_input_too_small' or 'output_wallet_unreachable' or 'insufficient_funds_in_hot_wallet' or 'output_transaction_initiated' or 'awaiting_order_fill' or 'unknown_error_sending_output' or 'output_transaction_broadcast' or 'output_transaction_fully_confirmed' or 'no_refund_address']
 const statusNames = {
-    transaction_seen: tt('processing'),
-    output_transaction_broadcast: tt('broadcasted'),
-    output_transaction_fully_confirmed: tt('confirmed'),
+    transaction_seen: tt('blocktrades_deposit.processing'),
+    output_transaction_broadcast: tt('blocktrades_deposit.broadcasted'),
+    output_transaction_fully_confirmed: tt('blocktrades_deposit.confirmed'),
 }
 
 const coalesce = (...values) => values.find(v => v != null)

@@ -1,6 +1,5 @@
 {
-  "database_url": "sqlite:///tmp/sqlite.db",
-  "_database_url": "mysql:///root:@127.0.0.1:3306/hardfork17",
+  "database_url": "mysql://golosdev:golosdev@127.0.0.1:3306/golosdev",
   "disable_signups": false,
   "facebook_app_id": false,
   "grant": {
@@ -25,16 +24,25 @@
       ],
       "secret": ""
     },
+    "vk": {
+      "key": "",
+      "secret": "",
+      "callback": "/handle_vk_callback",
+      "scope": [
+        "identity",
+        "email"
+      ]
+    },
     "server": {
-      "host": "localhost:3002",
-      "protocol": "http"
+      "host": "golos.io",
+      "protocol": "https"
     }
   },
   "google_analytics_id": false,
   "helmet": {
     "directives": {
       "childSrc": "'self' www.youtube.com staticxx.facebook.com w.soundcloud.com player.vimeo.com",
-      "connectSrc": "'self' steemit.com steemd.steemit.com api.blocktrades.us",
+      "connectSrc": "'self' *.golos.io wss://*.golos.io api.blocktrades.us query.yahooapis.com",
       "defaultSrc": "'self' www.youtube.com staticxx.facebook.com player.vimeo.com",
       "fontSrc": "data: fonts.gstatic.com",
       "frameAncestors": "'none'",
@@ -47,7 +55,7 @@
     "reportOnly": false,
     "setAllHeaders": true
   },
-  "img_proxy_prefix": "https://steemitdevimages.com/",
+  "img_proxy_prefix": "https://imgp.golos.io/",
   "ipfs_prefix": false,
   "mixpanel": false,
   "notify": {
@@ -60,7 +68,7 @@
   },
   "registrar": {
     "account": "-",
-    "fee": "5.000 STEEM",
+    "fee": "5.000 GOLOS",
     "signing_key": "5J..."
   },
   "requestAccountRecovery": {
@@ -88,6 +96,10 @@
   "telesign": {
     "customer_id": false,
     "rest_api_key": false
+  },
+  "twilio": {
+    "account_sid": false,
+    "auth_token": false
   },
   "upload_image": false,
   "ws_connection_client": "wss://ws.golos.io",

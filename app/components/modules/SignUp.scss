@@ -5,6 +5,11 @@
   }
   .button {
     width: 16rem;
+    /* Small only */
+    @media screen and (max-width: 39.9375em) {
+      width: auto;
+      margin-top: auto;
+    }
   }
 }
 

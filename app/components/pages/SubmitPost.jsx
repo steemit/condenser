@@ -20,9 +20,10 @@ class SubmitPost extends React.Component {
     }
     render() {
         const {success} = this
+        const {query} = this.props.location
         return (
             <div className="SubmitPost">
-               <SubmitReplyEditor type="submit_story" successCallback={success} />
+               <SubmitReplyEditor type={query.type || 'submit_story'} successCallback={success} />
             </div>
         );
     }

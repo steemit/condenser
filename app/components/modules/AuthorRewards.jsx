@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import TransferHistoryRow from 'app/components/cards/TransferHistoryRow';
 import {numberWithCommas, vestsToSp, assetFloat} from 'app/utils/StateFunctions'
 import tt from 'counterpart';
-import { VESTING_TOKEN, LIQUID_TICKER, VEST_TICKER, DEBT_TICKER, DEBT_TOKEN_SHORT } from 'app/client_config';
+import { VESTING_TOKEN, VESTING_TOKENS, LIQUID_TICKER, VEST_TICKER, DEBT_TICKER, DEBT_TOKEN_SHORT } from 'app/client_config';
 
 class AuthorRewards extends React.Component {
     constructor() {
@@ -94,12 +94,12 @@ class AuthorRewards extends React.Component {
                <ul className="pager">
                  <li>
                      <div className={"button tiny hollow float-left " + (historyIndex === 0 ? " disabled" : "")} onClick={this._setHistoryPage.bind(this, false)} aria-label="Previous">
-                         <span aria-hidden="true">&larr; {tt('newer')}</span>
+                         <span aria-hidden="true">&larr; {tt('g.newer')}</span>
                      </div>
                  </li>
                  <li>
                      <div className={"button tiny hollow float-right " + (historyIndex >= (curationLength - 10) ? " disabled" : "")} onClick={historyIndex >= (curationLength - 10) ? null : this._setHistoryPage.bind(this, true)} aria-label="Next">
-                         <span aria-hidden="true">{tt('older')} &rarr;</span>
+                         <span aria-hidden="true">{tt('g.older')} &rarr;</span>
                      </div>
                  </li>
                </ul>
@@ -108,15 +108,15 @@ class AuthorRewards extends React.Component {
         return (<div className="UserWallet">
             <div className="row">
                 <div className="column small-12">
-                    <h4 className="uppercase">{tt('author_rewards')}</h4>
+                    <h4 className="uppercase">{tt('g.author_rewards')}</h4>
                 </div>
             </div>
             <div className="UserWallet__balance UserReward__row row">
                 <div className="column small-12 medium-8">
-                    {tt('estimated_author_rewards_last_week')}:
+                    {tt('authorrewards_jsx.estimated_author_rewards_last_week')}:
                 </div>
                 <div className="column small-12 medium-4">
-                    {numberWithCommas(vestsToSp(this.props.state, rewardsWeekVests + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
+                    {numberWithCommas(vestsToSp(this.props.state, rewardsWeekVests + " " + VEST_TICKER)) + " " + VESTING_TOKENS}
                     <br />
                     {rewardsWeekSteem.toFixed(3) + " " + LIQUID_TICKER}
                     <br />
@@ -140,7 +140,7 @@ class AuthorRewards extends React.Component {
 
             <div className="UserWallet__balance UserReward__row row">
                 <div className="column small-12 medium-8">
-                    tt('daily_average_author_rewards')}:
+                    tt('authorrewards_jsx.daily_average_author_rewards')}:
                 </div>
                 <div className="column small-12 medium-4">
                     {numberWithCommas(vestsToSp(this.props.state, averageCurationVests + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
@@ -152,7 +152,7 @@ class AuthorRewards extends React.Component {
             </div>
             <div className="UserWallet__balance UserReward__row row">
                 <div className="column small-12 medium-8">
-                    {translate(!hasFullWeek ? 'estimated_author_rewards_last_week' : 'author_rewards_last_week')}:
+                    {tt(!hasFullWeek ? 'estimated_author_rewards_last_week' : 'author_rewards_last_week')}:
                 </div>
                 <div className="column small-12 medium-4">
                     {numberWithCommas(vestsToSp(this.props.state, (hasFullWeek ? rewardsWeekVests : averageCurationVests * 7) + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
@@ -173,7 +173,7 @@ class AuthorRewards extends React.Component {
             <div className="row">
                 <div className="column small-12">
                     {/** history */}
-                    <h4 className="uppercase">{tt('author_rewards_history')}</h4>
+                    <h4 className="uppercase">{tt('authorrewards_jsx.author_rewards_history')}</h4>
                     {navButtons}
                     <table>
                         <tbody>

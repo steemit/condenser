@@ -14,6 +14,7 @@ import g from 'app/redux/GlobalReducer'
 import {Set} from 'immutable'
 import Remarkable from 'remarkable'
 import Dropzone from 'react-dropzone'
+import tt from 'counterpart'
 
 const remarkable = new Remarkable({ html: true, linkify: false, breaks: true })
 const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
@@ -150,13 +151,13 @@ class ReplyEditor extends React.Component {
             initialValues: props.initialValues,
             validation: values => ({
                 title: isStory && (
-                    !values.title || values.title.trim() === '' ? tt('required') :
-                    values.title.length > 255 ? tt('shorten_title') :
+                    !values.title || values.title.trim() === '' ? tt('g.required') :
+                    values.title.length > 255 ? tt('reply_editor.shorten_title') :
                     null
                 ),
                 category: isStory && validateCategory(values.category, !isEdit),
-                body: !values.body ? tt('required') :
-                    values.body.length > maxKb * 1024 ? tt('exceeds_maximum_length', maxKb) :
+                body: !values.body ? tt('g.required') :
+                    values.body.length > maxKb * 1024 ? tt('reply_editor.exceeds_maximum_length', maxKb) :
                 null
             })
         })
@@ -175,7 +176,7 @@ class ReplyEditor extends React.Component {
         if(e) e.preventDefault()
         const {onCancel} = this.props
         const {replyForm, body} = this.state
-        if(!body.value || confirm(tt('are_you_sure_you_want_to_clear_this_form'))) {
+        if(!body.value || confirm(tt('reply_editor.are_you_sure_you_want_to_clear_this_form'))) {
             replyForm.resetForm()
             this.setAutoVote()
             this.setState({rte_value: stateFromHtml()})
@@ -268,7 +269,7 @@ class ReplyEditor extends React.Component {
 
     upload = (file, name = '') => {
         const {uploadImage} = this.props
-        this.setState({progress: {message: tt('uploading') + '...'}})
+        this.setState({progress: {message: tt('reply_editor.uploading') + '...'}})
         uploadImage(file, progress => {
             if(progress.url) {
                 this.setState({ progress: {} })
@@ -320,11 +321,11 @@ class ReplyEditor extends React.Component {
             jsonMetadata, autoVote: autoVoteValue, payoutType,
             successCallback: successCallbackWrapper, errorCallback
         }
-        const postLabel = username ? <Tooltip t={ tt('post_as') +' “' + username + '”'}>{tt('post')}</Tooltip> : tt('post')
+        const postLabel = username ? <Tooltip t={ tt('g.post_as') +' “' + username + '”'}>{tt('g.post')}</Tooltip> : tt('g.post')
         const hasTitleError = title && title.touched && title.error
         let titleError = null
         // The Required title error (triggered onBlur) can shift the form making it hard to click on things..
-        if ((hasTitleError && (title.error !== tt('required') || body.value !== '')) || titleWarn) {
+        if ((hasTitleError && (title.error !== tt('g.required') || body.value !== '')) || titleWarn) {
             titleError = <div className={hasTitleError ? 'error' : 'warning'}>
                 {hasTitleError ? title.error : titleWarn}&nbsp;
             </div>
@@ -338,7 +339,7 @@ class ReplyEditor extends React.Component {
         return (
             <div className="ReplyEditor row">
                 <div className="column small-12">
-                    <div ref="draft" className="ReplyEditor__draft ReplyEditor__draft-hide">tt('draft_saved')</div>
+                    <div ref="draft" className="ReplyEditor__draft ReplyEditor__draft-hide">tt('reply_editor.draft_saved')</div>
                     <form className={vframe_class}
                         onSubmit={handleSubmit(({data}) => {
                             const startLoadingIndicator = () => this.setState({loading: true, postError: undefined})
@@ -351,7 +352,7 @@ class ReplyEditor extends React.Component {
                                 <input type="text" className="ReplyEditor__title" {...title.props} onChange={onTitleChange} disabled={loading} placeholder="Title" autoComplete="off" ref="titleRef" tabIndex={1} />
                                 <div className="float-right secondary" style={{marginRight: '1rem'}}>
                                     {rte && <a href="#" onClick={this.toggleRte}>{body.value ? 'Raw HTML' : 'Markdown'}</a>}
-                                    {!rte && (isHtml || !body.value) && <a href="#" onClick={this.toggleRte}>tt('editor')</a>}
+                                    {!rte && (isHtml || !body.value) && <a href="#" onClick={this.toggleRte}>{tt('reply_editor.editor')}</a>}
                                 </div>
                                 {titleError}
                             </span>}
@@ -374,19 +375,19 @@ class ReplyEditor extends React.Component {
                                             onPasteCapture={this.onPasteCapture}
                                             className={type === 'submit_story' ? 'upload-enabled' : ''}
                                             disabled={loading} rows={isStory ? 10 : 3}
-                                            placeholder={isStory ? tt('write_your_story') + '...' : tt('reply')}
+                                            placeholder={isStory ? tt('g.write_your_story') + '...' : tt('g.reply')}
                                             autoComplete="off"
                                             tabIndex={2} />
                                     </Dropzone>
                                     {type === 'submit_story' &&
                                         <p className="drag-and-drop">
-                                            {tt('insert_images_by_dragging_dropping')}
-                                            {noClipboardData ? '' : tt('pasting_from_the_clipboard')}
-                                            {tt('or') + " " + tt('by') + " "}<a onClick={this.onOpenClick}>{tt('selecting_them')}</a>.
+                                            {tt('reply_editor.insert_images_by_dragging_dropping')}
+                                            {noClipboardData ? '' : tt('reply_editor.pasting_from_the_clipboard')}
+                                            {tt('g.or') + " " + tt('g.by') + " "}<a onClick={this.onOpenClick}>{tt('reply_editor.selecting_them')}</a>.
                                         </p>
                                     }
                                     {progress.message && <div className="info">{progress.message}</div>}
-                                    {progress.error && <div className="error">{tt('image_upload')} : {progress.error}</div>}
+                                    {progress.error && <div className="error">{tt('reply_editor.image_upload')} : {progress.error}</div>}
                                 </span>
                             }
                         </div>
@@ -409,29 +410,29 @@ class ReplyEditor extends React.Component {
                             }
                             {loading && <span><br /><LoadingIndicator type="circle" /></span>}
                             &nbsp; {!loading && this.props.onCancel &&
-                                <button type="button" className="secondary hollow button no-border" tabIndex={5} onClick={onCancel}>{tt('cancel')}</button>
+                                <button type="button" className="secondary hollow button no-border" tabIndex={5} onClick={onCancel}>{tt('g.cancel')}</button>
                             }
-                            {!loading && !this.props.onCancel && <button className="button hollow no-border" tabIndex={5} disabled={submitting} onClick={onCancel}>{tt('clear')}</button>}
+                            {!loading && !this.props.onCancel && <button className="button hollow no-border" tabIndex={5} disabled={submitting} onClick={onCancel}>{tt('g.clear')}</button>}
 
                             {isStory && !isEdit && <div className="ReplyEditor__options float-right text-right">
 
-                                {tt('rewards')}:&nbsp;
+                                {tt('g.rewards')}:&nbsp;
                                 <select value={this.state.payoutType} onChange={this.onPayoutTypeChange} style={{color: this.state.payoutType == '0%' ? 'orange' : 'inherit'}}>
-                                    <option value="100%">{tt('power_up_100')}</option>
-                                    <option value="50%">{tt('default_50_50')}</option>
-                                    <option value="0%">{tt('decline_payout')}</option>
+                                    <option value="100%">{tt('reply_editor.power_up_100')}</option>
+                                    <option value="50%">{tt('reply_editor.default_50_50')}</option>
+                                    <option value="0%">{tt('reply_editor.decline_payout')}</option>
                                 </select>
 
                                 <br />
-                                <label title={tt('check_this_to_auto_upvote_your_post')}>
-                                  {tt('upvote_post')}&nbsp;
+                                <label title={tt('reply_editor.check_this_to_auto_upvote_your_post')}>
+                                  {tt('g.upvote_post')}&nbsp;
                                   <input type="checkbox" checked={autoVote.value} onChange={autoVoteOnChange} />
                                 </label>
                             </div>}
                         </div>
                         {!loading && !rte && body.value && <div className={'Preview ' + vframe_section_shrink_class}>
-                            {!isHtml && <div className="float-right"><a target="_blank" href="https://guides.github.com/features/mastering-markdown/">{tt('markdown_styling_guide')}</a></div>}
-                            <h6>{tt('preview')}</h6>
+                            {!isHtml && <div className="float-right"><a target="_blank" href="https://guides.github.com/features/mastering-markdown/">{tt('reply_editor.markdown_styling_guide')}</a></div>}
+                            <h6>{tt('g.preview')}</h6>
                             <MarkdownViewer formId={formId} text={body.value} canEdit jsonMetadata={jsonMetadata} large={isStory} noImage={noImage} />
                         </div>}
                     </form>
@@ -579,7 +580,7 @@ export default formId => connect(
             if(rtags.images.size) meta.image = rtags.images; else delete meta.image
             if(rtags.links.size) meta.links = rtags.links; else delete meta.links
 
-            meta.app = "steemit/0.1"
+            meta.app = "golos.io/0.1"
             if(isStory) {
                 meta.format = isHtml ? 'html' : 'markdown'
             }

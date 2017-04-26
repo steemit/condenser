@@ -10,6 +10,14 @@
     "reddit": {
       "key": "SDC_REDDIT_API_KEY",
       "secret": "SDC_REDDIT_API_SECRET"
+    },
+    "vk": {
+      "key": "SDC_VK_API_KEY",
+      "secret": "SDC_VK_API_SECRET"
+    },
+    "server": {
+      "host": "SDC_GRANT_HOST",
+      "protocol": "SDC_GRANT_PROTOCOL"
     }
   },
   "google_analytics_id": "SDC_GOOGLE_ANALYTICS_ID",
@@ -64,6 +72,10 @@
   "telesign": {
     "customer_id": "SDC_TELESIGN_CUSTOMER_ID",
     "rest_api_key": "SDC_TELESIGN_API_KEY"
+  },
+  "twilio": {
+    "account_sid": "SDC_TWILIO_ACCOUNT_SID",
+    "auth_token": "SDC_TWILIO_AUTH_TOKEN"
   },
   "upload_image": "SDC_UPLOAD_IMAGE_URL",
   "session_cookie_key": "SDC_SESSION_COOKIE_KEY",

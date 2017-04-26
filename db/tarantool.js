@@ -1,7 +1,6 @@
 import TarantoolDriver from 'tarantool-driver';
 
 const config = require('config');
-
 let instance = null;
 
 class Tarantool {
@@ -10,7 +9,6 @@ class Tarantool {
         const port = config.get('tarantool.port');
         const username = config.get('tarantool.username');
         const password = config.get('tarantool.password');
-
         const connection = this.connection = new TarantoolDriver({host, port});
         this.ready_promise = new Promise((resolve, reject) => {
             connection.connect()

@@ -10,7 +10,7 @@ function notify(account, nparams, title, body, url, pic) {
         title,
         body,
         url,
-        icon: pic || 'https://steemit.com/favicon.ico'  //FIXME domain name from config
+        icon: pic || 'https://golos.io/favicon.ico'  //FIXME domain name from config
     });
     return new Promise((resolve, reject) => {
         webPush.sendNotification(nparams, payload).then(function() {

@@ -4,6 +4,9 @@ import {connect} from 'react-redux';
 import { browserHistory } from 'react-router';
 import { numberWithCommas } from 'app/utils/StateFunctions';
 import tt from 'counterpart';
+import { detransliterate } from 'app/utils/ParsersAndFormatters';
+import { IGNORE_TAGS, SELECT_TAGS_KEY } from 'app/client_config';
+import cookie from "react-cookie";
 
 export default class TagsIndex extends React.Component {
     static propTypes = {
@@ -12,7 +15,7 @@ export default class TagsIndex extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {order: props.order || 'name'};
+        this.state = {order: props.order || 'name', selected: cookie.load(SELECT_TAGS_KEY) || []};
         this.onChangeSort = this.onChangeSort.bind(this)
     }
 
@@ -36,11 +39,25 @@ export default class TagsIndex extends React.Component {
         }
     }
 
+    onSelectTag = key => {
+      let keys = this.state.selected
+      const index = keys.indexOf(key)
+      if (index !== -1)
+        keys.splice(index, 1)
+      else
+        keys.push(key)
+
+      this.setState({selected: keys})
+      cookie.save(SELECT_TAGS_KEY, keys, {path: "/"});
+    }
+
     render() {
         const {tagsAll} = this.props;
-        //console.log('-- TagsIndex.render -->', tagsAll.toJS());
-        const {order} = this.state;
+        const { state: { order, selected }, onSelectTag } = this;
         let tags = tagsAll;
+        let isSelected = false
+
+        if (IGNORE_TAGS) tags = tags.filter(tag => IGNORE_TAGS.indexOf(tag.get('name')) === -1);
 
         const rows = tags.filter(
             // there is a blank tag present, as well as some starting with #. filter them out.
@@ -48,11 +65,18 @@ export default class TagsIndex extends React.Component {
         ).sort((a,b) => {
             return this.compareTags(a, b, order)
         }).map(tag => {
-            const name = tag.get('name');
+            let name = tag.get('name');
             const link = `/trending/${name}`;
-            return (<tr key={name}>
-                <td>
-                    <Link to={link} activeClassName="active">{name}</Link>
+
+            if (/[а-яёґєії]/.test(name)) {
+              name = 'ru--' + detransliterate(name.toLowerCase(), true)
+            }
+            isSelected = selected.indexOf(name) !== -1
+
+            return (<tr key={tag.get('name')}>
+                <td className={isSelected ? 'isSelected' : ''}>
+                    <a className="action" onClick={() => onSelectTag(name)}>{isSelected ? '×' : '+'}</a>
+                    <Link to={link} activeClassName="active">{detransliterate(name)}</Link>
                 </td>
                 <td>{numberWithCommas(tag.get('top_posts').toString())}</td>
                 <td>{numberWithCommas(tag.get('comments').toString())}</td>
@@ -61,10 +85,10 @@ export default class TagsIndex extends React.Component {
         }).toArray();
 
         const cols = [
-            ['name', tt('tag')],
-            ['posts', tt('posts')],
-            ['comments', tt('comments')],
-            ['payouts', tt('payouts')]
+            ['name', tt('g.tag')],
+            ['posts', tt('g.posts')],
+            ['comments', tt('g.comments')],
+            ['payouts', tt('g.payouts')]
         ].map( col => {
             return <th key={col[0]}>
                     {order === col[0]
@@ -77,7 +101,7 @@ export default class TagsIndex extends React.Component {
             <div className="TagsIndex row">
                 <div className="column">
                     <br />
-                    <h4>{tt('trending_topics')}</h4>
+                    <h4>{tt('g.trending_topics')}</h4>
                     <table>
                         <thead>
                         <tr>

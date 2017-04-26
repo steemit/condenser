@@ -1,0 +1,8 @@
+.DS_Store
+.idea
+coverage
+node_modules
+*.log
+vendor
+config/*.json
+.git

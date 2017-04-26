@@ -1,0 +1,24 @@
+.CountDown {
+	margin-top: 1.5rem;
+	.CountDown__single{
+		width: 60px;
+		display: inline-block;
+		margin-right: 20px;
+		position: relative;
+		// position: relative;
+		// &:nth-last-of-type(even) {
+		// 	margin-right: 0;
+		// }
+		.CountDown__circle { position: relative; }
+		.CountDown__title { display: block; }
+		.CountDown__value {
+			position: absolute;
+			top: 34%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+		}
+	}
+	// .CountDown__circle:nth-last-of-type(odd) {
+	// 	margin-right: 0;
+	// }
+}

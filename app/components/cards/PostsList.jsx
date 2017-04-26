@@ -7,8 +7,10 @@ import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {findParent} from 'app/utils/DomUtils';
 import Icon from 'app/components/elements/Icon';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
-import {connect} from 'react-redux'
+import {connect} from 'react-redux';
 import tt from 'counterpart';
+import {encode} from 'app/utils/helpers';
+import { isPostVisited, getVisitedPosts, visitPost } from 'app/utils/helpers';
 
 function topPosition(domElt) {
     if (!domElt) {
@@ -36,10 +38,12 @@ class PostsList extends React.Component {
     constructor() {
         super();
         this.state = {
+            // _isMounted: false,
             thumbSize: 'desktop',
             showNegativeComments: false,
             nsfwPref: 'warn',
-            showPost: null
+            showPost: null,
+            visitedPosts : []
         }
         this.scrollListener = this.scrollListener.bind(this);
         this.onPostClick = this.onPostClick.bind(this);
@@ -90,6 +94,13 @@ class PostsList extends React.Component {
         }
     }
 
+    componentWillReceiveProps(nextProps) {
+        const visited = getVisitedPosts();
+        if (this.state.visitedPosts != visited) {
+            this.setState({visitedPosts: visited});
+        }
+    }
+
     componentWillUnmount() {
         this.detachScrollListener();
         window.removeEventListener('popstate', this.onBackButton);
@@ -134,6 +145,7 @@ class PostsList extends React.Component {
     }
 
     scrollListener = debounce(() => {
+      // if (! this.state._isMounted) return;
         const el = window.document.getElementById('posts_list');
         if (!el) return;
         const scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset :
@@ -169,6 +181,7 @@ class PostsList extends React.Component {
         this.props.removeHighSecurityKeys();
         this.setState({showPost: post, prevTitle: window.document.title});
         window.history.pushState({}, '', url);
+        visitPost(post);
     }
 
     render() {
@@ -196,6 +209,7 @@ class PostsList extends React.Component {
                 ignore={item.ignore}
                 onClick={this.onPostClick}
                 nsfwPref={nsfwPref}
+                visited={isPostVisited(item.item)}
             />
         </li>)
 
@@ -208,7 +222,7 @@ class PostsList extends React.Component {
                 {showPost && <div id="post_overlay" className="PostsList__post_overlay" tabIndex={0}>
                     <div className="PostsList__post_top_overlay">
                         <div className="PostsList__post_top_bar">
-                            <button className="back-button" type="button" title={tt('back')} onClick={() => { this.setState({showPost: null}) }}>
+                            <button className="back-button" type="button" title={tt('g.back')} onClick={() => { this.setState({showPost: null}) }}>
                                 <span aria-hidden="true"><Icon name="chevron-left" /></span>
                             </button>
                             <CloseButton onClick={this.closePostModal} />

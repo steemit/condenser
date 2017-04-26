@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
+import Tooltip from 'app/components/elements/Tooltip';
 import Icon from 'app/components/elements/Icon';
 import tt from 'counterpart';
 
@@ -19,9 +20,9 @@ export default class PostHistoryRow extends React.Component {
         let permlink = op[1].op[1].permlink;
         let in_reply_to = <span></span>;
         if( parent_author && parent_author != context )
-            in_reply_to = <span>{tt('in_reply_to') + ' '}<Link to={parent_link}>@{parent_author}</Link></span>;
+            in_reply_to = <span>{tt('g.in_reply_to') + ' '}<Link to={parent_link}>@{parent_author}</Link></span>;
         else if( parent_author == context )
-            in_reply_to = <span><Link to={author_link}>@{author}</Link> {' ' + tt('replied_to') + ' ' + parent_author}</span>;
+            in_reply_to = <span><Link to={author_link}>@{author}</Link> {' ' + tt('g.replied_to') + ' ' + parent_author}</span>;
 
         //    const content_markdown = op[1].op[1].body;
         //    const body = (<MarkdownViewer formId={} text={content_markdown} jsonMetadata={} />)
@@ -36,8 +37,10 @@ export default class PostHistoryRow extends React.Component {
             </div>
             <div className="row">
                 <div className="column small-12" >
-                    <Icon name="clock" className="space-right" />
-                    <TimeAgoWrapper date={op[1].timestamp} /> {in_reply_to}
+                    <Tooltip t={new Date(op[1].timestamp).toLocaleString()}>
+                        <Icon name="clock" className="space-right" />
+                        <TimeAgoWrapper date={op[1].timestamp} /> {in_reply_to}
+                    </Tooltip>
                 </div>
             </div>
         </div>);

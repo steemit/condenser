@@ -258,6 +258,7 @@ function* accepted_comment({operation}) {
     // mark the time (can only post 1 per min)
     // yield put(user.actions.acceptedComment())
 }
+
 function* accepted_delete_comment({operation}) {
     yield put(g.actions.deleteContent(operation))
 }

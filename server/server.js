@@ -29,6 +29,7 @@ import Grant from 'grant-koa';
 import config from 'config';
 import { routeRegex } from 'app/ResolveRoute';
 import secureRandom from 'secure-random';
+import { APP_NAME_LATIN } from 'app/client_config';
 
 console.log('application server starting, please wait.');
 
@@ -36,7 +37,7 @@ const grant = new Grant(config.grant);
 // import uploadImage from 'server/upload-image' //medium-editor
 
 const app = new Koa();
-app.name = 'Steemit app';
+app.name = APP_NAME_LATIN + ' app';
 const env = process.env.NODE_ENV || 'development';
 // cache of a thousand days
 const cacheOpts = { maxAge: 86400000, gzip: true };
@@ -152,7 +153,7 @@ app.use(
         const file_content = fs
             .readFileSync(path.join(__dirname, './service-worker.js'))
             .toString();
-        // TODO: use APP_URL from client_config.js
+        // TODO: use APP_DOMAIN from client_config.js
         // actually use a config value for it
         this.body = file_content.replace(
             /\{DEFAULT_URL\}/i,
@@ -177,7 +178,6 @@ app.use(function*(next) {
 
 useRedirects(app);
 useEnterAndConfirmEmailPages(app);
-useEnterAndConfirmMobilePages(app);
 useUserJson(app);
 usePostJson(app);
 
@@ -231,6 +231,13 @@ app.use(
         staticCache(path.join(__dirname, '../app/assets/sitemap.xml'), cacheOpts)
     )
 );
+app.use(
+    mount(
+        '/robots.txt',
+        staticCache(path.join(__dirname, '../app/assets/robots.txt'), cacheOpts)
+    )
+);
+
 // Proxy asset folder to webpack development server in development mode
 if (env === 'development') {
     const webpack_dev_port = process.env.PORT

@@ -42,7 +42,7 @@ class SteemApi {
      */
     exec(method, params = [], callback = null) {
         return this.init().then(() => {
-            console.log('SteemApi exec', this.api_id, method, '(', params, ')');
+            console.log('GolosApi exec', this.api_id, method, '(', params, ')');
             return this.ws_rpc.call(this.api_id, method, params, callback);
         })
     }

@@ -18,8 +18,8 @@ class SaveLogin extends Component {
         setTimeout(() => {no()}, 7.5 * 1000)
         return (
             <span style={{backgroundColor: 'white'}}>
-                <Tooltip t={tt('remember_voting_and_posting_key')}>
-                    {tt('auto_login_question_mark')} <a onClick={yes} className="uppercase">{tt('yes')}</a> / <a onClick={no} className="uppercase">{tt('no')}</a>
+                <Tooltip t={tt('g.remember_voting_and_posting_key')}>
+                    {tt('g.auto_login_question_mark')} <a onClick={yes} className="uppercase">{tt('g.yes')}</a> / <a onClick={no} className="uppercase">{tt('g.no')}</a>
                 </Tooltip>
             </span>
         )

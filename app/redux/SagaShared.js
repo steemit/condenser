@@ -56,7 +56,7 @@ function* showConnectionErrorNotification({payload: {status}}) {
         if (ws_connection && ws_connection.status !== 'open') {
             yield put({type: 'ADD_NOTIFICATION', payload:
                 {key: 'ws:connection:error',
-                 message: tt('connection_lost_reconnecting') + '..',
+                 message: tt('g.connection_lost_reconnecting') + '..',
                  dismissAfter: 15000}
             });
         }

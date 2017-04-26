@@ -2,6 +2,10 @@ import React from 'react';
 import {connect} from 'react-redux';
 import SvgImage from 'app/components/elements/SvgImage';
 import AddToWaitingList from 'app/components/modules/AddToWaitingList';
+import tt from 'counterpart';
+import { formatCoins } from 'app/utils/FormatCoins';
+import { APP_NAME, APP_DOMAIN, VESTING_TOKEN, PRIVACY_POLICY_URL, TERMS_OF_SERVICE_URL } from 'app/client_config';
+import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
 
 class SignUp extends React.Component {
     constructor() {
@@ -13,16 +17,18 @@ class SignUp extends React.Component {
             return <div className="row">
                 <div className="column">
                     <div className="callout alert">
-                        <p>Due to server maintenance we are running in read only mode. We are sorry for the inconvenience.</p></div>
+                        <p>{tt("g.read_only_mode")}</p>
+                    </div>
                 </div>
             </div>;
         }
-        
+
         if (this.props.serverBusy || $STM_Config.disable_signups) {
             return <div className="row">
                 <div className="column callout" style={{margin: '20px', padding: '40px'}}>
-                    <p>Membership to Steemit.com is now under invitation only because of unexpectedly high sign up rate.
-                        Submit your email to get on the waiting list.</p>
+                    <p>
+                        {tt("g.membership_invitation_only") + ' ' + tt("g.submit_email_to_get_on_waiting_list")}
+                    </p>
                     <AddToWaitingList />
                 </div>
             </div>;
@@ -31,46 +37,78 @@ class SignUp extends React.Component {
         return <div className="SignUp">
             <div className="row">
                 <div className="column">
-                    <h3>Sign Up</h3>
-                    <p>Steemit funds each account with over {this.props.signup_bonus} worth of Steem Power; to prevent abuse, we
-                        require new users to login via social media.<br />
-                        Your personal information will be kept <a href="/privacy.html" target="_blank">private</a>.
+                    <h3>{tt("g.sign_up")}</h3>
+                    <p>
+                        {tt("g.we_require_social_account1", {APP_NAME})}
+                        <LocalizedCurrency amount={this.props.signup_bonus} />
+                        {tt("g.we_require_social_account2", {VESTING_TOKEN})}
+                        <br />
+                        {tt("g.personal_info_will_be_private")}
+                        {' '}
+                        <a href={TERMS_OF_SERVICE_URL} target="_blank">
+                            {tt("g.personal_info_will_be_private_link")}
+                        </a>.
                     </p>
                 </div>
             </div>
             <div className="row">
                 <div className="column large-4 shrink">
-                    <SvgImage name="facebook" width="64px" height="64px" />
+                    <SvgImage name="vk" width="64px" height="64px" />
                 </div>
                 <div className="column large-8">
-                    <a href="/connect/facebook" className="button SignUp--fb-button">Continue with Facebook</a>
+                    <a href="/connect/vk" className="button SignUp--vk-button">
+                        {tt("g.continue_with_vk")}
+                    </a>
+                </div>
+                &nbsp;
+            </div>
+            <div className="row">
+            </div>
+            <div className="row">
+                <div className="column large-4 shrink">
+                      <SvgImage name="facebook" width="64px" height="64px" />
+                </div>
+                <div className="column large-8">
+                      <a href="/connect/facebook" className="button SignUp--fb-button">{tt("g.continue_with_facebook")}</a>
                 </div>
             </div>
             <div className="row">
-            &nbsp;
+              &nbsp;
             </div>
-            <div className="row">
+            {/*<div className="row">
                 <div className="column large-4 shrink">
                     <SvgImage name="reddit" width="64px" height="64px" />
                 </div>
                 <div className="column large-8">
-                    <a href="/connect/reddit" className="button SignUp--reddit-button">Continue with Reddit</a>
-                    <br /><span className="secondary">(requires 5 or more Reddit comment karma)</span>
+                    <a href="/connect/reddit" className="button SignUp--reddit-button">
+                        {tt("g.continue_with_reddit")}
+                    </a>
+                    <br />
+                    <span className="secondary">
+                        ({tt("g.requires_5_or_more_reddit_comment_karma")})
+                    </span>
                 </div>
-            </div>
-            <div className="row">
+            </div>*/}
+
+            {/*<div className="row">
                 <div className="column">
                       <br />
-                    Don't have a Facebook or Reddit account? <br />
+                    tt("g.dont_have_facebook") <br />
                     {this.state.waiting_list ? <AddToWaitingList /> : <a href="#" onClick={() => this.setState({waiting_list: true})}>
-                        <strong> Subscribe to get a notification when SMS confirmation is available.</strong>
+                        <strong> {tt("g.subscribe_to_get_sms_confirm")}.</strong>
                     </a>}
                 </div>
-            </div>
+            </div>*/}
             <div className="row">
                 <div className="column">
                       <br />
-                    <p className="secondary">By verifying your account you agree to the Steemit <a href="/tos.html" target="_blank">terms and conditions</a>.</p>
+                    <p className="secondary">
+                        {tt('enter_confirm_email_jsx.next_3_strings.by_verifying_you_agree_with') + ' '}
+                        <a href={PRIVACY_POLICY_URL} target="_blank">
+                            {tt('enter_confirm_email_jsx.next_3_strings.by_verifying_you_agree_with_privacy_policy')}
+                        </a>
+                        {' ' + tt('enter_confirm_email_jsx.next_3_strings.by_verifying_you_agree_with_privacy_policy_of_website_APP_DOMAIN', {APP_DOMAIN})}.
+                    </p>
                 </div>
             </div>
         </div>

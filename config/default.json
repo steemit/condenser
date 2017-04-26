@@ -34,7 +34,7 @@
       ]
     },
     "server": {
-      "host": "testnet.golos.io",
+      "host": "golos.io",
       "protocol": "https"
     }
   },

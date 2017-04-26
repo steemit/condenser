@@ -14,6 +14,10 @@
     "vk": {
       "key": "SDC_VK_API_KEY",
       "secret": "SDC_VK_API_SECRET"
+    },
+    "server": {
+      "host": "SDC_GRANT_HOST",
+      "protocol": "SDC_GRANT_PROTOCOL"
     }
   },
   "google_analytics_id": "SDC_GOOGLE_ANALYTICS_ID",

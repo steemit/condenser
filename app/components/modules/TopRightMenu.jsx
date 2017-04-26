@@ -1,4 +1,3 @@
-import Immutable from 'immutable';
 import React from 'react';
 import { Link } from 'react-router';
 import {connect} from 'react-redux';
@@ -78,7 +77,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
         return (
             <ul className={mcn + mcl}>
                 {!vertical && <li className="Header__search"><a href="/static/search.html" title="Search"><Icon name="search" /></a></li>}
-                <li className={lcn}><LoadingIndicator type="circle" inline /></li>
+                <li className={lcn} style={{paddingTop: 0, paddingBottom: 0}}><LoadingIndicator type="circle" inline /></li>
                 {toggleOffCanvasMenu && <li className="toggle-menu Header__hamburger"><a href="#" onClick={toggleOffCanvasMenu}>
                     <span className="hamburger" />
                 </a></li>}

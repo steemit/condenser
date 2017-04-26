@@ -4,15 +4,15 @@ import React from "react";
 import { renderToString } from "react-dom/server";
 import models from "db/models";
 import ServerHTML from "server/server-html";
-import teleSignVerify from "server/utils/teleSign";
 import twilioVerify from "server/utils/twilio";
-import SignupProgressBar from "app/components/elements/SignupProgressBar";
+import teleSignVerify from "server/utils/teleSign";
 import CountryCode from "app/components/elements/CountryCode";
 import { getRemoteIp, checkCSRF } from "server/utils/misc";
 import MiniHeader from "app/components/modules/MiniHeader";
 import secureRandom from "secure-random";
 import config from "config";
 import Mixpanel from "mixpanel";
+import Progress from 'react-foundation-components/lib/global/progress-bar';
 
 // FIXME copy paste code, refactor mixpanel out
 var mixpanel = null;
@@ -39,17 +39,28 @@ function* confirmMobileHandler() {
         confirmation_code
     );
 
-    let mid = yield models.Identity.findOne({
-        attributes: ["id", "user_id", "verified", "updated_at", "phone"],
-        where: {
-            user_id: this.session.user,
-            confirmation_code,
-            provider: "phone"
-        },
-        order: "id DESC"
+    let user;
+    user = yield models.User.findOne({
+        where: { uid: this.session.uid }
     });
+    const mid = yield models.Identity.findOne({
+        where: { user_id: user.id,
+            confirmation_code: confirmation_code
+        }
+    });
+
+    // let mid = yield models.Identity.findOne({
+    //     attributes: ["id", "user_id", "verified", "updated_at", "phone"],
+    //     where: {
+    //         user_id: this.session.user,
+    //         confirmation_code
+    //         // provider: "phone"
+    //     },
+    //     order: "id DESC"
+    // });
+    let mid2;
     if (!mid) {
-        mid = yield models.Identity.findOne({
+        mid2 = yield models.Identity.findOne({
             attributes: ["id"],
             where: { user_id: this.session.user, provider: "phone" },
             order: "id DESC"
@@ -62,8 +73,9 @@ function* confirmMobileHandler() {
         return;
     }
     if (mid.verified) {
-        this.flash = { success: "Phone number has already been verified" };
-        this.redirect("/create_account");
+        // this.flash = { success: "Phone number has already been verified" };
+        console.log("--/Already verified redirecting user", this.session.user);
+        this.redirect("/enter_mobile");
         return;
     }
 
@@ -81,9 +93,10 @@ function* confirmMobileHandler() {
     });
     if (used_phone) {
         if (used_phone.user_id === this.session.user) {
-            this.flash = {
-                success: "Phone number has already been verified"
-            };
+            // this.flash = {
+            //     success: "Phone number has already been verified"
+            // };
+            console.log("--/Already verified redirecting user", this.session.user);
             this.redirect("/create_account");
         } else {
             this.flash = {
@@ -101,9 +114,13 @@ function* confirmMobileHandler() {
         this.redirect("/enter_mobile");
         return;
     }
-    yield mid.update({ verified: true });
+
+    // successful new verified phone number
+    yield mid.update({ provider: 'phone', verified: true });
     if (mixpanel)
-        mixpanel.track("SignupStep3", { distinct_id: this.session.uid });
+        mixpanel.track("SignupStepPhone", { distinct_id: this.session.uid });
+
+    console.log("--/Success phone redirecting user", this.session.user);
     this.redirect("/create_account");
 }
 
@@ -118,23 +135,34 @@ export default function useEnterAndConfirmMobilePages(app) {
             this.session.uid,
             this.session.user
         );
-        const user_id = this.session.user;
-        if (!user_id) {
-            this.body = "user not found";
-            return;
-        }
-        const mid = yield models.Identity.findOne({
-            attributes: ["phone", "verified"],
-            where: { user_id, provider: "phone" },
-            order: "id DESC"
+        // const user_id = this.session.user;
+        // if (!user_id) {
+        //     this.body = "user not found";
+        //     return;
+        // }
+        // const mid = yield models.Identity.findOne({
+        //     attributes: ["phone"],
+        //     where: { user_id, provider: "phone" },
+        //     order: "id DESC"
+        // });
+        let user;
+        user = yield models.User.findOne({
+            where: { uid: this.session.uid }
         });
+        const mid = yield models.Identity.findOne({
+            where: { user_id: user.id }
+        });
+        this.session.user = user.id;
+        // this.session.user_name_picked = mid.user_name_picked;
+        // mark for waiting list
         if (mid && mid.verified) {
-            this.flash = { success: "Phone number has already been verified" };
+            // this.flash = { success: "Phone number has already been verified" };
             if (mixpanel)
                 mixpanel.track("SignupStep3", {
                     distinct_id: this.session.uid
                 });
-            this.redirect("/create_account");
+            console.log("--/Already verified redirecting user", this.session.user, mid.user_name_picked);
+            this.redirect("/create_account?user=" + mid.user_name_picked);
             return;
         }
         const phone = this.query.phone;
@@ -143,57 +171,55 @@ export default function useEnterAndConfirmMobilePages(app) {
         const body = renderToString(
             <div className="App">
                 <MiniHeader />
-                <SignupProgressBar
-                    steps={["email", "phone", "steem account"]}
-                    current={2}
-                />
                 <br />
                 <div className="row" style={{ maxWidth: "32rem" }}>
-                    <form
-                        className="column"
-                        action="/submit_mobile"
-                        method="POST"
-                    >
-                        <h4>
-                            Please provide your phone number to continue the registration process
-                        </h4>
-                        <div className="secondary">
-                            Phone verification helps with preventing spam and allows Steemit to assist with Account Recovery in case your account is ever compromised.
+                    <div className="column">
+                        <Progress tabIndex="0" value={90} max={100} />
+                        <form
+                            className="column"
+                            action="/submit_mobile"
+                            method="POST"
+                        >
+                            <h4 style={{ color: "#4078c0" }}>
+                                Last, please provide your phone number to receive your initial free steem deposit.
+                            </h4>
+                            <div className="secondary">
+                                Phone verification helps with preventing spam, allows Steemit to assist with Account Recovery in case your account is ever compromised, and for your initial
+                                steem deposit.
 
-
-                            Your phone number will not be used for any other purpose other than phone verification and account recovery.
-                        </div>
-                        <br />
-                        <input type="hidden" name="csrf" value={this.csrf} />
-                        <label>
-                            Country Code
-                            <CountryCode name="country" value={country} />
-                        </label>
-                        <label>
-                            Phone number
-                            <input type="tel" name="phone" value={phone} />
-                        </label>
-                        <div className="secondary">
-                            Examples: 541-754-3010 | 89-636-48018
-                        </div>
-                        <br />
-                        <div className="secondary">
-                            * Land lines cannot receive SMS messages
-                        </div>
-                        <div className="secondary">
-                            * Message and data rates may apply
-                        </div>
-                        <div className="secondary">
-                            * VOIP services like Google Voice are not supported
-                        </div>
-                        <br />
-                        <div className="error">{this.flash.error}</div>
-                        <input
-                            type="submit"
-                            className="button"
-                            value="CONTINUE"
-                        />
-                    </form>
+                                <br />
+                                <br />
+                                <em>Your phone number will not be used for any other purpose other than phone verification and account recovery.</em>
+                            </div>
+                            <br />
+                            <input type="hidden" name="csrf" value={this.csrf} />
+                            <label>
+                                Country Code
+                                <CountryCode name="country" value={country} />
+                            </label>
+                            <label>
+                                Phone number
+                                <input type="tel" name="phone" value={phone} />
+                            </label>
+                            <div className="secondary">
+                                Examples: 541-754-3010 | 89-636-48018
+                            </div>
+                            <br />
+                            <div className="secondary">
+                                * Land lines cannot receive SMS messages
+                            </div>
+                            <div className="secondary">
+                                * Message and data rates may apply
+                            </div>
+                            <br />
+                            <div className="error">{this.flash.error}</div>
+                            <input
+                                type="submit"
+                                className="button"
+                                value="CONTINUE"
+                            />
+                        </form>
+                    </div>
                 </div>
             </div>
         );
@@ -206,11 +232,15 @@ export default function useEnterAndConfirmMobilePages(app) {
 
     router.post("/submit_mobile", koaBody, function*() {
         if (!checkCSRF(this, this.request.body.csrf)) return;
-        const user_id = this.session.user;
-        if (!user_id) {
-            this.body = "user not found";
-            return;
-        }
+        // const user_id = this.session.user;
+        // if (!user_id) {
+        //     this.body = "user not found";
+        //     return;
+        // }
+        const user = yield models.User.findOne({
+            where: { uid: this.session.uid }
+        });
+        const user_id = user.id;
 
         const country = this.request.body.country;
         const localPhone = this.request.body.phone;
@@ -245,9 +275,7 @@ export default function useEnterAndConfirmMobilePages(app) {
         }
 
         const eid = yield models.Identity.findOne({
-            attributes: ["id"],
-            where: { user_id, provider: "email", verified: true },
-            order: "id DESC"
+            where: { user_id: user.id }
         });
         if (!eid) {
             this.flash = { error: "Please confirm your email address first" };
@@ -280,9 +308,7 @@ export default function useEnterAndConfirmMobilePages(app) {
             .toString(10)
             .substring(0, 4); // 4 digit code
         let mid = yield models.Identity.findOne({
-            attributes: ["id", "phone", "verified", "updated_at"],
-            where: { user_id, provider: "phone" },
-            order: "id DESC"
+            where: { user_id: user.id }
         });
         if (mid) {
             if (mid.verified) {
@@ -298,23 +324,23 @@ export default function useEnterAndConfirmMobilePages(app) {
                 yield mid.update({ verified: false, phone });
             }
             const seconds_ago = (Date.now() - mid.updated_at) / 1000.0;
-            if (seconds_ago < 120) {
-                this.flash = {
-                    error: "Confirmation was attempted a moment ago. You can try again only in 2 minutes."
-                };
-                this.redirect(enterMobileUrl);
-                return;
-            }
+            // if (seconds_ago < 120) {
+            //     this.flash = {
+            //         error: "Confirmation was attempted a moment ago. You can attempt verification again in 2 minutes."
+            //     };
+            //     this.redirect(enterMobileUrl);
+            //     return;
+            // }
             yield mid.update({ confirmation_code, phone });
         } else {
-            mid = yield models.Identity.create({
-                provider: "phone",
-                user_id,
-                uid: this.session.uid,
-                phone,
-                verified: false,
-                confirmation_code
-            });
+            // mid = yield models.Identity.create({
+            //     provider: "phone",
+            //     user_id,
+            //     uid: this.session.uid,
+            //     phone,
+            //     verified: false,
+            //     confirmation_code
+            // });
         }
         console.log(
             '-- /submit_mobile -->',
@@ -325,22 +351,25 @@ export default function useEnterAndConfirmMobilePages(app) {
         );
         const ip = getRemoteIp(this.req);
 
-        // const twilioResult = yield twilioVerify(phone);
-        // console.log('-- /submit_mobile twilioResult -->', twilioResult);
-        //
-        // if (twilioResult === 'block') {
-        //     mid.update({score: 111111});
-        //     this.flash = { error: 'Unable to verify your phone number. Please try a different phone number.' };
-        //     this.redirect(enterMobileUrl);
-        //     return;
-        // }
+        const twilioResult = yield twilioVerify(phone);
+        console.log('-- /submit_mobile twilioResult -->', twilioResult);
+
+        if (twilioResult === 'block') {
+            mid.update({score: 111111});
+            this.flash = { error: 'Unable to verify your phone number. Please try a different phone number.' };
+            this.redirect(enterMobileUrl);
+            return;
+        }
 
         const verifyResult = yield teleSignVerify({
             mobile: phone,
             confirmation_code,
             ip,
-            ignore_score: false //twilioResult === 'pass'
+            ignore_score: twilioResult === 'pass'
         });
+
+        console.log('-- /submit_mobile teleSignResult -->', verifyResult);
+
         if (verifyResult && verifyResult.score) {
             mid.update({score: verifyResult.score});
         }
@@ -353,13 +382,10 @@ export default function useEnterAndConfirmMobilePages(app) {
         const body = renderToString(
             <div className="App">
                 <MiniHeader />
-                <SignupProgressBar
-                    steps={["email", "phone", "steem account"]}
-                    current={2}
-                />
                 <br />
                 <div className="row" style={{ maxWidth: "32rem" }}>
                     <div className="column">
+                        <Progress tabIndex="0" value={90} max={100} />
                         Thank you for providing your phone number (
                         {phone}
                         ).

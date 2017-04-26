@@ -103,6 +103,12 @@ class Header extends React.Component {
             page_title = `Change Account Password`;
         } else if (route.page == 'CreateAccount') {
             page_title = `Create Account`;
+        } else if (route.page == 'PickAccount') {
+            page_title = `Pick Your New Steemit Account`;
+            this.state.subheader_hidden = true;
+        } else if (route.page == 'Approval') {
+            page_title = `Account Confirmation`;
+            this.state.subheader_hidden = true;
         } else if (route.page == 'RecoverAccountStep1' || route.page == 'RecoverAccountStep2') {
             page_title = `Stolen Account Recovery`;
         } else if (route.page === 'UserProfile') {
@@ -167,10 +173,10 @@ class Header extends React.Component {
         ];
         if (current_account_name) sort_orders_horizontal.unshift(['home', 'home']);
         const sort_order_menu_horizontal = sort_orders_horizontal.map((so) => {
-                let active = (so[0] === sort_order);
-                if (so[0] === 'home' && sort_order === 'home' && !home_account) active = false;
-                return {link: sortOrderToLink(so[0], topic, current_account_name), value: so[1], active};
-            });
+            let active = (so[0] === sort_order);
+            if (so[0] === 'home' && sort_order === 'home' && !home_account) active = false;
+            return {link: sortOrderToLink(so[0], topic, current_account_name), value: so[1], active};
+        });
 
         return (
             <header className="Header noPrint">

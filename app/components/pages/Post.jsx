@@ -30,7 +30,7 @@ class Post extends React.Component {
         };
         this.showSignUp = () => {
             serverApiRecordEvent('SignUp', 'Post Promo');
-            window.location = '/enter_email';
+            window.location = '/pick_account';
         };
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Post')
     }

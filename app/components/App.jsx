@@ -191,7 +191,7 @@ class App extends React.Component {
                             <h2>{translate("welcome_to_the_blockchain")}</h2>
                             <h4>{translate("your_voice_is_worth_something")}</h4>
                             <br />
-                            <a className="button" href="/enter_email" onClick={this.signUp}> <b>{translate("sign_up")}</b> </a>
+                            <a className="button" href="/enter_user" onClick={this.signUp}> <b>{translate("sign_up")}</b> </a>
                             &nbsp; &nbsp; &nbsp;
                             <a className="button hollow uppercase" href="https://steem.io" target="_blank" rel="noopener noreferrer" onClick={this.learnMore}> <b>{translate("learn_more")}</b> </a>
                             <br />

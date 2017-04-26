@@ -156,7 +156,7 @@ export default function useEnterAndConfirmEmailPages(app) {
     router.get('/enter_email', function *() {
         console.log('-- /enter_email -->', this.session.uid, this.session.user);
         const user_id = this.session.user;
-        if (!user_id) { this.body = tt('g.user_not_found'); return; }
+        if (!user_id) { this.body = tt('enter_confirm_email_jsx.user_not_found'); return; }
         const eid = yield models.Identity.findOne(
             {attributes: ['email'], where: {user_id, provider: 'email'}, order: 'id DESC'}
         );
@@ -167,15 +167,15 @@ export default function useEnterAndConfirmEmailPages(app) {
                 <div className="row">
                     <form className="column small-4" action="/submit_email" method="POST">
                         <p>
-                            {tt('g.please_provide_your_email_address_to_continue_the_registration_process')}.<br />
-                            <span className="secondary">{tt('g.this_information_allows_steemit_to_assist_with_account_recovery_in_case_your_account_is_ever_compormised')}.</span>
+                            {tt('enter_confirm_email_jsx.please_provide_your_email_address_to_continue_the_registration_process')}.<br />
+                            <span className="secondary">{tt('enter_confirm_email_jsx.this_information_allows_steemit_to_assist_with_account_recovery_in_case_your_account_is_ever_compormised')}.</span>
                         </p>
                         <input type="hidden" name="csrf" value={this.csrf} />
                         <label>
                             {tt('g.email')}
                             <input type="email" name="email" defaultValue={eid ? eid.email : ''} readOnly={eid && eid.email} />
                         </label>
-                        {eid && eid.email && <div className="secondary"><i>{tt('g.email_address_cannot_be_changed_at_this_moment_sorry_for_inconvenience')}.</i></div>}
+                        {eid && eid.email && <div className="secondary"><i>{tt('enter_confirm_email_jsx.email_address_cannot_be_changed_at_this_moment_sorry_for_inconvenience')}.</i></div>}
                         <br />
                         <div className="g-recaptcha" data-sitekey={config.recaptcha.site_key}></div>
                         <br />
@@ -185,7 +185,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                 </div>
             </div>
         );
-        const props = { body, title: tt('email_address'), assets, meta: [] };
+        const props = { body, title: tt('enter_confirm_email_jsx.email_address'), assets, meta: [] };
         this.body = '<!DOCTYPE html>' + renderToString(<ServerHTML { ...props } />);
 // >>>>>>> master
     });
@@ -193,7 +193,7 @@ export default function useEnterAndConfirmEmailPages(app) {
     router.post("/submit_email", koaBody, function*() {
         if (!checkCSRF(this, this.request.body.csrf)) return;
         const user_id = this.session.user;
-        if (!user_id) { this.body = tt('user_not_found'); return; }
+        if (!user_id) { this.body = tt('enter_confirm_email_jsx.user_not_found'); return; }
         const email = this.request.body.email;
         if (!email) {
 // <<<<<<< HEAD
@@ -361,7 +361,7 @@ export default function useEnterAndConfirmEmailPages(app) {
 //         this.body = "<!DOCTYPE html>" +
 //             renderToString(<ServerHTML {...props} />);
 // =======
-            this.flash = {error: tt('please_prove_an_email_address')};
+            this.flash = {error: tt('enter_confirm_email_jsx.please_prove_an_email_address')};
             this.redirect('/enter_email');
             return;
         }
@@ -379,7 +379,7 @@ export default function useEnterAndConfirmEmailPages(app) {
         }
         if (captcha_failed) {
             console.log('-- /submit_email captcha verification failed -->', user_id, this.session.uid, email, this.req.connection.remoteAddress);
-            this.flash = {error: tt('failed_captcha_verification_please_try_again') + '.'};
+            this.flash = {error: tt('enter_confirm_email_jsx.failed_captcha_verification_please_try_again') + '.'};
             this.redirect('/enter_email');
             return;
         }
@@ -408,14 +408,14 @@ export default function useEnterAndConfirmEmailPages(app) {
             <br />
             <div className="row">
                 <div className="column">
-                    {tt('thank_you_for_providing_your_email_address') + ' (' + email + ')'}.<br />
-                    {tt('to_continue_please_click_on_the_link_in_the_email_weve_sent_you')}.
+                    {tt('enter_confirm_email_jsx.thank_you_for_providing_your_email_address') + ' (' + email + ')'}.<br />
+                    {tt('enter_confirm_email_jsx.to_continue_please_click_on_the_link_in_the_email_weve_sent_you')}.
                 </div>
             </div>
             <br />
             <div className="row">
                 <div className="column">
-                    <a href="/enter_email">{tt('re_send_email')}</a>
+                    <a href="/enter_email">{tt('enter_confirm_email_jsx.re_send_email')}</a>
                 </div>
             </div>
             {/*<div className="row">
@@ -429,7 +429,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                 </form>
             </div>*/}
         </div>);
-        const props = { body, title: tt('email_confirmation'), assets, meta: [] };
+        const props = { body, title: tt('enter_confirm_email_jsx.email_confirmation'), assets, meta: [] };
         this.body = '<!DOCTYPE html>' + renderToString(<ServerHTML { ...props } />);
 // >>>>>>> master
     });

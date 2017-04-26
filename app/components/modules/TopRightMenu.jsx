@@ -34,6 +34,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
     const wallet_link = `/@${username}/transfers`;
     const settings_link = `/@${username}/settings`;
     const account_link = `/@${username}`;
+    const comments_link = `/@${username}/comments`;
     const posts_link = `/@${username}/posts`;
     const reset_password_link = `/@${username}/password`;
 

@@ -52,6 +52,7 @@ export default function useGeneralApi(app) {
         } catch (error) {
             console.error('Error in /accounts_wait', error);
         }
+        this.body = JSON.stringify({status: 'ok'});
         recordWebEvent(this, 'api/accounts_wait', account ? account.name : 'n/a');
     });
 

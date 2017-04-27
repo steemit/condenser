@@ -238,9 +238,17 @@ class CreateAccount extends React.Component {
                 <div className="column large-7 small-10">
                     <h2>{tt('g.sign_up')}</h2>
                     <div className="CreateAccount__rules">
-                            <hr />
+                        <hr />
                         {/* currently translateHtml() does not work, using <FormattedHTMLMessage /> instead */}
-                        <p><FormattedHTMLMessage id="the_rules_of_APP_NAME" /></p>
+                        <p>
+                            {tt('g.the_rules_of_APP_NAME.one', {APP_NAME})}<br/>
+                            {tt('g.the_rules_of_APP_NAME.second', {APP_NAME})}<br/>
+                            {tt('g.the_rules_of_APP_NAME.third', {APP_NAME})}<br/>
+                            {tt('g.the_rules_of_APP_NAME.fourth')}<br/>
+                            {tt('g.the_rules_of_APP_NAME.fifth')}<br/>
+                            {tt('g.the_rules_of_APP_NAME.sixth')}<br/>
+                            {tt('g.the_rules_of_APP_NAME.seventh')}
+                        </p>
                         <hr />
                     </div>
                         <form onSubmit={this.onSubmit} autoComplete="off" noValidate method="post">

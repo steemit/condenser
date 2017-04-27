@@ -483,7 +483,7 @@
     "in_order_to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user": "In order to prevent abuse %(APP_NAME)s can only register one account per verified user.",
     "next_3_blocks": {
       "you_can_either": "You can either",
-      "to_your_existing_account_or": "to your existing account or",
+      "to_your_existing_account_or": " to your existing account or",
       "if_you_need_a_new_account": "if you need a new account"
     },
     "send_us_email": "send us email",

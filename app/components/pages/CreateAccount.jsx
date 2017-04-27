@@ -8,7 +8,7 @@ import {validate_account_name} from 'app/utils/ChainValidation';
 import runTests from 'app/utils/BrowserTests';
 import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInput';
 import Progress from 'react-foundation-components/lib/global/progress-bar';
-import {sendConfirmEmail} from 'app/utils/ServerApiClient';
+import {sendConfirmEmail, saveCords} from 'app/utils/ServerApiClient';
 import {api} from 'steem';
 
 class CreateAccount extends React.Component {
@@ -52,9 +52,9 @@ class CreateAccount extends React.Component {
 
     mousePosition(e) {
         // log x/y cords
-        console.log(e);
-        if(e.type === 'mouseenter') {
-            console.log(e.screenX, e.screenY);
+        console.log("--> mouse position --", e.type, e.screenX, e.screenY);
+        if(e.type === 'click') {
+            saveCords(e.screenX, e.screenY);
         }
     }
 
@@ -210,7 +210,6 @@ class CreateAccount extends React.Component {
 
         let next_step = null;
         if (server_error) {
-            console.log("server error");
             if (server_error === 'Email address is not confirmed') {
                 next_step = <div className="callout alert">
                     <a href="/enter_email">Please verify your email address</a>
@@ -268,7 +267,7 @@ class CreateAccount extends React.Component {
                                 </div>
                             </noscript>
                             {loading && <LoadingIndicator type="circle" />}
-                            <input disabled={submit_btn_disabled} type="submit" className={submit_btn_class} onMouseEnter={this.mousePosition} value="Create Account" />
+                            <input disabled={submit_btn_disabled} type="submit" className={submit_btn_class} onClick={this.mousePosition} value="Create Account" />
                         </form>
                     </div>
                 </div>

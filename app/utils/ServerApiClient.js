@@ -78,6 +78,11 @@ export function sendConfirmEmail(account) {
     fetch('/api/v1/notifications/send_confirm', request);
 }
 
+export function saveCords(x, y) {
+    const request = Object.assign({}, request_base, {body: JSON.stringify({csrf: $STM_csrf, x: x, y: y})});
+    fetch('/api/v1/save_cords', request);
+}
+
 if (process.env.BROWSER) {
     window.getNotifications = getNotifications;
     window.markNotificationRead = markNotificationRead;

@@ -407,6 +407,28 @@ export default function useGeneralApi(app) {
             this.status = 500;
         }
     });
+
+    router.post('/save_cords', koaBody, function *() {
+        const params = this.request.body;
+        const {csrf, x, y} = typeof(params) === 'string' ? JSON.parse(params) : params;
+        if (!checkCSRF(this, csrf)) return;
+        const user = yield models.User.findOne({
+            where: { id: this.session.user }
+        });
+        if (user) {
+            try {
+                user.update({
+                    button_screen_x: x,
+                    button_screen_y: y
+                });
+            } catch (error) {
+                console.error('Error in /save_cords api call', this.session.uid, error.message);
+                this.body = JSON.stringify({error: error.message});
+                this.status = 500;
+            }
+        }
+        this.body = JSON.stringify({status: 'ok'});
+    });
 }
 
 /**

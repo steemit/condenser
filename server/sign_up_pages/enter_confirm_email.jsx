@@ -266,10 +266,9 @@ export default function useEnterAndConfirmEmailPages(app) {
         }
 
         const existing_email = yield models.Identity.findOne({
-            attributes: ["id", "user_id", "confirmation_code"],
-            where: { email, provider: "email" },
-            order: "id DESC"
+            where: { email: email, provider: "email" }
         });
+
         const confirmation_code = secureRandom.randomBuffer(13).toString("hex");
         let user_id = this.session.user;
         let user;

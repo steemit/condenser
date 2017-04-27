@@ -1,6 +1,6 @@
-import React from 'react';
+import React from 'react'
 import reactForm from 'app/utils/ReactForm'
-import transaction from 'app/redux/Transaction';
+import transaction from 'app/redux/Transaction'
 import MarkdownViewer from 'app/components/cards/MarkdownViewer'
 import CategorySelector from 'app/components/cards/CategorySelector'
 import {validateCategory} from 'app/components/cards/CategorySelector'
@@ -15,6 +15,7 @@ import {Set} from 'immutable'
 import Remarkable from 'remarkable'
 import Dropzone from 'react-dropzone'
 import tt from 'counterpart'
+import {DEBT_TICKER} from 'app/client_config'
 
 const remarkable = new Remarkable({ html: true, linkify: false, breaks: true })
 const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
@@ -609,7 +610,7 @@ export default formId => connect(
                 switch(payoutType) {
                     case '0%': // decline payout
                         __config.comment_options = {
-                            max_accepted_payout: '0.000 GBG',
+                            max_accepted_payout: '0.000 ' + DEBT_TICKER,
                         }
                         break;
                     case '100%': // 100% steem power payout

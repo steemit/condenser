@@ -484,7 +484,7 @@
   "post_jsx": {
     "now_showing_comments_with_low_ratings": "Отображаем комментарии с низким рейтингом",
     "sort_order": "Порядок сортировки",
-    "comments_were_hidden_due_to_low_ratings": "Комментарии были скрыты из-за низкого рейтинга",
+    "comments_were_hidden_due_to_low_ratings": "Комментарии были скрыты из-за низкого рейтинга"
   },
   "postfull_jsx": {
     "this_post_is_not_available_due_to_a_copyright_claim": "Этот пост недоступен из-за жалобы о нарушении авторских прав.",

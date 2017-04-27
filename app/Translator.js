@@ -14,7 +14,7 @@ tt.registerTranslations('ru', require('app/locales/ru-RU.json'));
 class Translator extends React.Component {
     render() {
         const locale = this.props.locale || DEFAULT_LANGUAGE;
-        const localeWithoutRegionCode = language.toLowerCase().split(/[_-]+/)[0];
+        const localeWithoutRegionCode = locale.toLowerCase().split(/[_-]+/)[0];
         tt.setLocale(localeWithoutRegionCode)
         return <IntlProvider
             // to ensure dynamic language change, "key" property with same "locale" info must be added

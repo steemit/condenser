@@ -573,6 +573,12 @@ const en = 	{
 	profile_website: 'Website',
 	saved: 'Saved',
 	server_returned_error: 'server returned error',
+	// Beginner tips in empty feed page
+	empty_feed_1: "Looks like you haven't followed anything yet",
+	empty_feed_2: 'If you recently added new users to follow, your personalized feed will populate once new content is available',
+	empty_feed_3: 'Explore Trending Articles',
+	empty_feed_4: "Read The Beginner's Guide",
+	empty_feed_5: 'Read The Steemit Welcome Guide'
 }
 
 export { en }

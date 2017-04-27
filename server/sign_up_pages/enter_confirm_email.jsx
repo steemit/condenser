@@ -27,6 +27,7 @@ if (process.env.NODE_ENV === "production") {
 const assets = Object.assign({}, require(assets_file), { script: [] });
 
 assets.script.push("https://www.google.com/recaptcha/api.js");
+assets.script.push("/enter_email/submit_form.js");
 
 function* confirmEmailHandler() {
     const confirmation_code = this.params && this.params.code
@@ -148,7 +149,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                 <div className="row" style={{ maxWidth: "32rem" }}>
                     <div className="column">
                         <Progress tabIndex="0" value={50} max={100} />
-                        <form action="/submit_email" method="POST">
+                        <form id="submit_email" action="/submit_email" method="POST">
                             <h4 style={{ color: "#4078c0" }}>
                                 Please provide your email address to continue the registration process
                             </h4>

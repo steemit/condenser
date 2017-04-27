@@ -265,7 +265,13 @@ class PostFull extends React.Component {
                             <TimeAuthorCategory content={content} authorRepLog10={authorRepLog10} showTags />
                         </div>
                         <div className="PostFull__body entry-content">
-                            <MarkdownViewer formId={formId + '-viewer'} text={content_body} jsonMetadata={jsonMetadata} large highQualityPost={high_quality_post} noImage={!content.stats.pictures} />
+                            <MarkdownViewer formId={formId + '-viewer'}
+                                            text={content_body}
+                                            jsonMetadata={jsonMetadata}
+                                            large highQualityPost={high_quality_post}
+                                            noImage={!content.stats.pictures}
+                                            timeCteated={new Date(content.created)}
+                            />
                         </div>
                     </span>
                 }

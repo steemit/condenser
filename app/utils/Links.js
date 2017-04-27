@@ -4,6 +4,7 @@ const urlCharEnd = urlChar.replace(/\]$/, '.,]') // insert bad chars to end on
 const imagePath = '(?:(?:\\.(?:tiff?|jpe?g|gif|png|svg|ico)|ipfs/[a-z\\d]{40,}))'
 const domainPath = '(?:[-a-zA-Z0-9\\._]*[-a-zA-Z0-9])'
 const urlChars = '(?:' + urlChar + '*' + urlCharEnd + ')?'
+const url = 'https?\\:\\/\\/([\\w_-]+(?:(?:\\.[\\w_-]+)+))([\\w.,@?^=%:/~+#-]*[\\w@?^=%/~+#-])?'
 
 const urlSet = ({domain = domainPath, path} = {}) => {
      // urlChars is everything but html or markdown stop chars
@@ -23,6 +24,7 @@ export const image = (flags = 'i') => new RegExp(urlSet({path: imagePath}), flag
 export const imageFile = (flags = 'i') => new RegExp(imagePath, flags)
 // export const nonImage = (flags = 'i') => new RegExp(urlSet({path: '!' + imageFile}), flags)
 // export const markDownImageRegExp = (flags = 'i') => new RegExp('\!\[[\w\s]*\]\(([^\)]+)\)', flags);
+export const embedContent = ( flags = 'i') =>  new RegExp(url, flags)
 
 export default {
     any: any(),
@@ -35,6 +37,7 @@ export default {
     vimeoId: /(?:vimeo.com\/|player.vimeo.com\/video\/)([0-9]+)/,
     // simpleLink: new RegExp(`<a href="(.*)">(.*)<\/a>`, 'ig'),
     ipfsPrefix: /(https?:\/\/.*)?\/ipfs/i,
+    embedContent : embedContent(),
 }
 
 // Original regex

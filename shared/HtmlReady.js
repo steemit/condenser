@@ -2,6 +2,7 @@ import xmldom from 'xmldom'
 import linksRe from 'app/utils/Links'
 import {validate_account_name} from 'app/utils/ChainValidation'
 import {detransliterate} from 'app/utils/ParsersAndFormatters'
+import { isWhite } from 'app/utils/EmbedContentWhitelist'
 
 const noop = () => {}
 const DOMParser = new xmldom.DOMParser({
@@ -66,7 +67,7 @@ const XMLSerializer = new xmldom.XMLSerializer()
 
 /** Embed videos, link mentions and hashtags, etc...
 */
-export default function (html, {mutate = true} = {}) {
+export default function (html, {mutate = true} = {}, resolve = false) {
     const state = {mutate}
     state.hashtags = new Set()
     state.usertags = new Set()
@@ -75,7 +76,7 @@ export default function (html, {mutate = true} = {}) {
     state.links = new Set()
     try {
         const doc = DOMParser.parseFromString(html, 'text/html')
-        traverse(doc, state)
+        traverse(doc, state, 0, resolve)
         if(mutate) proxifyImages(doc)
         // console.log('state', state)
         if(!mutate) return state
@@ -87,7 +88,7 @@ export default function (html, {mutate = true} = {}) {
     }
 }
 
-function traverse(node, state, depth = 0) {
+function traverse(node, state, depth = 0, resolve) {
     if(!node || !node.childNodes) return
     Array(...node.childNodes).forEach(child => {
         // console.log(depth, 'child.tag,data', child.tagName, child.data)
@@ -101,9 +102,9 @@ function traverse(node, state, depth = 0) {
         else if(tag === 'a')
             link(state, child)
         else if(child.nodeName === '#text')
-            linkifyNode(child, state)
+            linkifyNode(child, state, resolve)
 
-        traverse(child, state, depth + 1)
+        traverse(child, state, depth + 1, resolve)
     })
 }
 
@@ -159,7 +160,7 @@ function proxifyImages(doc) {
     })
 }
 
-function linkifyNode(child, state) {try{
+function linkifyNode(child, state, resolve) {try{
     const tag = child.parentNode.tagName ? child.parentNode.tagName.toLowerCase() : child.parentNode.tagName
     if(tag === 'code') return
     if(tag === 'a') return
@@ -168,6 +169,7 @@ function linkifyNode(child, state) {try{
     if(!child.data) return
     if(embedYouTubeNode(child, state.links, state.images)) return
     if(embedVimeoNode(child, state.links, state.images)) return
+    if(embedContentNode(child, state.links, resolve)) return
 
     const data = XMLSerializer.serializeToString(child)
     const content = linkify(data, state.mutate, state.hashtags, state.usertags, state.images, state.links)
@@ -258,6 +260,28 @@ function embedVimeoNode(child, links, /*images*/) {try{
 
     // Preview image requires a callback.. http://stackoverflow.com/questions/1361149/get-img-thumbnails-from-vimeo
     // if(images) images.add('https://.../vi/' + id + '/0.jpg')
+
+    return true
+} catch(error) {console.log(error); return false}}
+
+function embedContentNode(child, links, resolve) {try{
+    if(!child.data) return false
+    let data = child.data.trim()
+
+    let url
+    let w
+    {
+        const m = data.match(linksRe.embedContent)
+        url = m ? m[0] : null
+        w = m && m.length > 0 ? m[1] : null
+    }
+    if(!url) return false
+    if(!w || !isWhite(w)) return false
+    if(!resolve) return false
+
+    const v = DOMParser.parseFromString(`~~~ embed:${url} ~~~`)
+    child.parentNode.replaceChild(v, child)
+    if(links) links.add(url)
 
     return true
 } catch(error) {console.log(error); return false}}

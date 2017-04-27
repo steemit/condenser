@@ -79,7 +79,7 @@ mysql -u root
 Now launch mysql client and create golos_dev database:
 ```bash
 mysql -u root
-> create database golos_dev;
+> CREATE DATABASE golos_dev CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
 Install `sequelize-cli` globally:

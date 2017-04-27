@@ -424,6 +424,9 @@
     "user_hasnt_started_bloggin_yet": "Looks like %(name)s hasn't started blogging yet!",
     "user_hasnt_followed_anything_yet": "Looks like %(name)s might not be following anyone yet! If %(name)s recently added new users to follow, their personalized feed will populate once new content is available.",
     "user_hasnt_had_any_replies_yet": "%(name)s hasn't had any replies yet",
+    "if_you_recently_added_new_users_to_follow": "If you recently added new users to follow, your personalized feed will populate once new content is available.",
+    "explore_APP_NAME": "Explore %(APP_NAME)s",
+    "full_faq": "The full F.A.Q on %(APP_NAME)s",
     "users_blog": "%(name)s's blog",
     "users_posts": "%(name)s's posts",
     "users_wallet": "%(name)s's wallet",
@@ -433,9 +436,21 @@
     "recent_replies_to_users_posts": "Recent replies to %(name)s's posts",
     "followers": "Followers",
     "this_is_users_reputations_score_it_is_based_on_history_of_votes": "This is %(name)s's reputation score.\n\nThe reputation score is based on the history of votes received by the account, and is used to hide low quality content.",
-    "follower_count": "{followerCount, plural,\n=0 {no followers}\none {1 follower}\nother {%(followerCount)s followers}}",
-    "followed_count": "{followingCount, plural,\n=0 {not following anybody}\none {1 following}\nother {%(followingCount)s following}}",
-    "post_count": "{postCount, plural,\n=0 {no posts}\none {1 post}\nother {%(postCount)s posts}}"
+    "follower_count": {
+      "zero":  "No followers",
+      "one": "1 follower",
+      "other": "%(count)s followers"
+    },
+    "followed_count": {
+      "zero":  "Not following anybody",
+      "one": "1 following",
+      "other": "%(count)s following"
+    },
+    "post_count":  {
+      "zero":  "No posts",
+      "one": "1 post",
+      "other": "%(count)s posts"
+    }
   },
   "authorrewards_jsx": {
     "estimated_author_rewards_last_week": "Estimated author rewards last week",
@@ -611,8 +626,6 @@
     "updated": "updated",
     "created": "created",
     "settings": "Settings",
-    "choose_language": "Choose language",
-    "choose_currency": "Choose currency",
     "crowdsale": "Crowdsale",
     "following": "Following"
   },
@@ -680,7 +693,7 @@
     "alternative_sources": "Alternative Sources"
   },
   "header_jsx": {
-    "home": "Home",
+    "home": "home",
     "new_topic_posts" : "New %(topic)s posts",
     "sort_order_topic_posts": "%(sort_order)s %(topic)s posts",
     "new_posts": "New posts",
@@ -744,6 +757,8 @@
     "end_with_a_letter_or_digit": "end with a letter or digit."
   },
   "settings_jsx": {
+    "choose_language": "Choose language",
+    "choose_currency": "Choose currency",
     "invalid_url": "Invalid URL",
     "name_is_too_long": "Name is too long",
     "name_must_not_begin_with": "Name must not begin with @",

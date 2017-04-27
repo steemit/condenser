@@ -1,24 +1,22 @@
 /* eslint react/prop-types: 0 */
 import React from 'react';
-import {connect} from 'react-redux'
-import {Link} from 'react-router'
-import g from 'app/redux/GlobalReducer'
+import {connect} from 'react-redux';
+import {Link} from 'react-router';
+import g from 'app/redux/GlobalReducer';
 import SavingsWithdrawHistory from 'app/components/elements/SavingsWithdrawHistory';
 import TransferHistoryRow from 'app/components/cards/TransferHistoryRow';
 import TransactionError from 'app/components/elements/TransactionError';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import BlocktradesDeposit from 'app/components/modules/BlocktradesDeposit';
-import Reveal from 'react-foundation-components/lib/global/reveal'
+import Reveal from 'react-foundation-components/lib/global/reveal';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
-import {steemTip, powerTip, valueTip, savingsTip} from 'app/utils/Tips'
-import {numberWithCommas, vestingSteem} from 'app/utils/StateFunctions'
-import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu'
-import WalletSubMenu from 'app/components/elements/WalletSubMenu'
+import {numberWithCommas, vestingSteem} from 'app/utils/StateFunctions';
+import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
+import WalletSubMenu from 'app/components/elements/WalletSubMenu';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
-import Tooltip from 'app/components/elements/Tooltip'
+import Tooltip from 'app/components/elements/Tooltip';
 import tt from 'counterpart';
-import {List} from 'immutable'
-import { translateNumber } from 'app/Translator';
+import {List} from 'immutable';
 import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
 import { APP_NAME_LATIN, LIQUID_TOKEN, LIQUID_TOKEN_UPPERCASE, DEBT_TOKEN, DEBT_TOKENS, CURRENCY_SIGN, VESTING_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TICKER, VEST_TICKER, DEBT_TICKER } from 'app/client_config';
 
@@ -197,22 +195,16 @@ class UserWallet extends React.Component {
             </Reveal>
         </div>
 
-        /*
-        const steem_balance_str = numberWithCommas(balance_steem.toFixed(3)) // formatDecimal(balance_steem, 3)
-        const steem_orders_balance_str = numberWithCommas(steemOrders.toFixed(3))
-        const power_balance_str = numberWithCommas(vesting_steem) // formatDecimal(vesting_steem, 3)
-        const sbd_balance_str = numberWithCommas('$' + sbd_balance.toFixed(3)) // formatDecimal(account.sbd_balance, 3)
-        const sbd_orders_balance_str = numberWithCommas('$' + sbdOrders.toFixed(3))
-        const savings_balance_str = numberWithCommas(saving_balance_steem.toFixed(3) + ' STEEM')
-        const savings_sbd_balance_str = numberWithCommas('$' + sbd_balance_savings.toFixed(3))
-        */
-        const steem_balance_str = translateNumber(balance_steem.toFixed(3)) + ' ' + LIQUID_TOKEN_UPPERCASE;
-        const steem_orders_balance_str = translateNumber(steemOrders.toFixed(3)) + ' ' + LIQUID_TOKEN_UPPERCASE;
-        const power_balance_str = translateNumber(vesting_steem) + ' ' + LIQUID_TOKEN_UPPERCASE;
-        const savings_balance_str = translateNumber(saving_balance_steem.toFixed(3)) + ' ' + LIQUID_TOKEN_UPPERCASE;
-        const sbd_balance_str = translateNumber(sbd_balance.toFixed(3)) + ' ' + DEBT_TICKER;
-        const sbd_orders_balance_str = translateNumber(sbdOrders.toFixed(3)) + ' ' + DEBT_TICKER;
-        const savings_sbd_balance_str = translateNumber(sbd_balance_savings.toFixed(3)) + ' ' + DEBT_TICKER;
+        const steem_balance_str = numberWithCommas(balance_steem.toFixed(3)) + ' ' + LIQUID_TOKEN_UPPERCASE;
+        const steem_orders_balance_str = numberWithCommas(steemOrders.toFixed(3)) + ' ' + LIQUID_TOKEN_UPPERCASE;
+        const power_balance_str = numberWithCommas(vesting_steem) + ' ' + LIQUID_TOKEN_UPPERCASE;
+        const savings_balance_str = numberWithCommas(saving_balance_steem.toFixed(3)) + ' ' + LIQUID_TOKEN_UPPERCASE;
+        const sbd_balance_str = numberWithCommas(sbd_balance.toFixed(3)) + ' ' + DEBT_TICKER;
+        const sbd_orders_balance_str = numberWithCommas(sbdOrders.toFixed(3)) + ' ' + DEBT_TICKER;
+        const savings_sbd_balance_str = numberWithCommas(sbd_balance_savings.toFixed(3)) + ' ' + DEBT_TICKER;
+
+        const steemTip = tt('tips_js.tradeable_tokens_that_may_be_transferred_anywhere_at_anytime') + ' ' + tt('tips_js.LIQUID_TOKEN_can_be_converted_to_VESTING_TOKEN_in_a_process_called_powering_up', {LIQUID_TOKEN, VESTING_TOKEN});
+        const powerTip = tt('tips_js.influence_tokens_which_give_you_more_control_over');
 
         const savings_menu = [
             { value: tt('userwallet_jsx.withdraw_LIQUID_TOKEN', {LIQUID_TOKEN}), link: '#', onClick: showTransfer.bind( this, LIQUID_TICKER, 'Savings Withdraw' ) },
@@ -239,9 +231,9 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
-                    <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={steem_balance_str + ' ' + LIQUID_TICKER} menu={steem_menu} />
-                    : steem_balance_str + ' STEEM'}
-                    {steemOrders ? <div style={{paddingRight: isMyAccount ? "0.85rem" : null}}><Link to="/market"><Tooltip t={tt('market_jsx.open_orders')}>(+{steem_orders_balance_str + ' ' + LIQUID_TICKER})</Tooltip></Link></div> : null}
+                    <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={steem_balance_str} menu={steem_menu} />
+                    : steem_balance_str}
+                    {steemOrders ? <div style={{paddingRight: isMyAccount ? "0.85rem" : null}}><Link to="/market"><Tooltip t={tt('market_jsx.open_orders')}>(+{steem_orders_balance_str})</Tooltip></Link></div> : null}
                 </div>
             </div>
             <div className="UserWallet__balance row zebra">
@@ -250,8 +242,8 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
-                    <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={power_balance_str + ' ' + LIQUID_TICKER} menu={power_menu} />
-                    : power_balance_str + ' ' + LIQUID_TICKER}
+                    <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={power_balance_str} menu={power_menu} />
+                    : power_balance_str}
                 </div>
             </div>
 
@@ -270,7 +262,7 @@ class UserWallet extends React.Component {
             </div>
             <div className="UserWallet__balance row zebra">
                 <div className="column small-12 medium-8">
-                    {tt('userwallet_jsx.savings')}<br /><span className="secondary">{tt('userwallet_jsx.savingstip_currently_collecting', {savingsTip, sbdInterest})}</span>
+                    {tt('userwallet_jsx.savings')}<br /><span className="secondary">{tt('userwallet_jsx.savingstip_currently_collecting', {savingsTip: tt('transfer_jsx.balance_subject_to_3_day_withdraw_waiting_period'), sbdInterest})}</span>
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?
@@ -284,7 +276,7 @@ class UserWallet extends React.Component {
             </div>
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">
-                    {tt('userwallet_jsx.estimated_account_value')}<br /><span className="secondary">{valueTip}</span>
+                    {tt('userwallet_jsx.estimated_account_value')}<br /><span className="secondary">{tt('tips_js.the_estimated_value_is_based_on_an_average_value_of_steem_in_US_dollars', {LIQUID_TOKEN})}</span>
                 </div>
                 <div className="column small-12 medium-4">
                     {estimate_output}

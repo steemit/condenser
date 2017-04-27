@@ -126,8 +126,8 @@ export default class UserProfile extends React.Component {
 
         // instantiate following items
         let totalCounts = this.props.follow_count;
-        let followerCount = "";
-        let followingCount = "";
+        let followerCount = 0;
+        let followingCount = 0;
 
         if (totalCounts && accountname) {
             totalCounts = totalCounts.get(accountname);
@@ -399,11 +399,11 @@ export default class UserProfile extends React.Component {
                             {about && <p className="UserProfile__bio">{about}</p>}
                             <div className="UserProfile__stats">
                                 <span>
-                                    <Link to={`/@${accountname}/followers`}>{tt('user_profile.follower_count', {followerCount})}</Link>
+                                    <Link to={`/@${accountname}/followers`}>{tt('user_profile.follower_count', {count: followerCount})}</Link>
                                     {isMyAccount && <NotifiCounter fields="follow" />}
                                 </span>
-                                <span><Link to={`/@${accountname}`}>{tt('user_profile.post_count', {postCount: account.post_count || 0})}</Link></span>
-                                <span><Link to={`/@${accountname}/followed`}>{tt('user_profile.followed_count', {followingCount})}</Link></span>
+                                <span><Link to={`/@${accountname}`}>{tt('user_profile.post_count', {count: account.post_count || 0})}</Link></span>
+                                <span><Link to={`/@${accountname}/followed`}>{tt('user_profile.followed_count', {count: followingCount})}</Link></span>
                             </div>
                             <p className="UserProfile__info">
                                 {location && <span><Icon name="location" /> {location}</span>}
@@ -425,6 +425,7 @@ export default class UserProfile extends React.Component {
                 <div>
                   {tab_content}
                 </div>
+                <br/><br/>
             </div>
         );
     }

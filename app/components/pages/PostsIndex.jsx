@@ -11,6 +11,7 @@ import MarkNotificationRead from 'app/components/elements/MarkNotificationRead';
 import tt from 'counterpart';
 import Immutable from "immutable";
 import Callout from 'app/components/elements/Callout';
+import {APP_NAME} from 'app/client_config';
 
 class PostsIndex extends React.Component {
 
@@ -76,11 +77,12 @@ class PostsIndex extends React.Component {
             const isMyAccount = this.props.username === account_name;
             if (isMyAccount) {
                 emptyText = <div>
-                    Looks like you haven't followed anything yet.<br /><br />
-                    If you recently added new users to follow, your personalized feed will populate once new content is available.<br /><br />
-                    <Link to="/trending">Explore Steemit</Link><br />
-                    <a href="/steemit/@thecryptofiend/the-missing-faq-a-beginners-guide-to-using-steemit">Read The Beginner's Guide</a><br />
-                    <a href="/welcome">Read The Steemit Welcome Guide</a>
+                    {tt('user_profile.user_hasnt_followed_anything_yet', {name: account_name})}
+                    <br /><br />
+                    {tt('user_profile.if_you_recently_added_new_users_to_follow')}<br /><br />
+                    <Link to="/trending">{tt('user_profile.explore_APP_NAME', {APP_NAME})}</Link><br />
+                    <Link to="/welcome">{tt('submit_a_story.welcome_to_the_blockchain')}</Link><br />
+                    <a href="https://golos.io/ru--golos/@bitcoinfo/samyi-polnyi-f-a-q-o-golose-spisok-luchshykh-postov-raskryvayushikh-vse-aspekty-proekta-bonusy-v-vide-kreativa">{tt('user_profile.full_faq', {APP_NAME})}</a>
                 </div>;
                 markNotificationRead = <MarkNotificationRead fields="feed" account={account_name} />
             } else {

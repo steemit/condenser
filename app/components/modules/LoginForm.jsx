@@ -146,7 +146,7 @@ class LoginForm extends Component {
         }
         const title = postType ? postType : tt('g.login');
         const authType = /^vote|comment/.test(opType) ? tt('loginform_jsx.posting') : tt('loginform_jsx.active_or_owner');
-        const submitLabel = loginBroadcastOperation ? tt('g.sign_n') : tt('g.login');
+        const submitLabel = loginBroadcastOperation ? tt('g.sign_in') : tt('g.login');
         let error = password.touched && password.error ? password.error : this.props.login_error;
         if (error === 'owner_login_blocked') {
             error = <span>{tt('loginform_jsx.this_password_is_bound_to_your_account')}

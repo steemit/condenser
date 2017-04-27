@@ -68,7 +68,6 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
                     dropdownPosition="bottom"
                     dropdownAlignment="right"
                     dropdownContent={<VerticalMenu items={user_menu} title={username} />}
-                    onClick={trackAnalytics.bind(this, 'user dropdown menu clicked')}
                 >
                     {!vertical && <li className={'Header__userpic '}>
                         <a href={account_link} title={username} onClick={e => e.preventDefault()}>

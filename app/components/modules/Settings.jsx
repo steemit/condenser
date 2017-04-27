@@ -148,34 +148,6 @@ class Settings extends React.Component {
 
         return <div className="Settings">
 
-            {/*<div className="row">
-                <div className="small-12 medium-6 large-4 columns">
-                    <label>{tt('g.choose_language')}
-                        <select defaultValue={store.get('language')} onChange={this.onLanguageChange}>
-                            <option value="en">English</option>
-                            <option value="ru">Russian</option>
-                            <option value="es">Spanish</option>
-                            <option value="es-AR">Spanish (Argentina)</option>
-                            <option value="fr">French</option>
-                            <option value="it">Italian</option>
-                            <option value="jp">Japanese</option>
-                        </select>
-                    </label>
-                </div>
-            </div>*/}
-            {/*<div className="row">
-                <div className="small-12 medium-6 large-4 columns">
-                    <label>{tt('g.choose_currency')}
-                        <select defaultValue={store.get('currency')} onChange={this.onCurrencyChange}>
-                            {
-                                ALLOWED_CURRENCIES.map(i => {
-                                    return <option key={i} value={i}>{i}</option>
-                                })
-                            }
-                        </select>
-                    </label>
-                </div>
-            </div>*/}
             <div className="row">
                 <form onSubmit={this.handleSubmitForm} className="small-12 medium-6 large-4 columns">
                     <h3>{tt('settings_jsx.public_profile_settings')}</h3>

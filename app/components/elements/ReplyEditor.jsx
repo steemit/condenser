@@ -609,7 +609,7 @@ export default formId => connect(
                 switch(payoutType) {
                     case '0%': // decline payout
                         __config.comment_options = {
-                            max_accepted_payout: '0.000 SBD',
+                            max_accepted_payout: '0.000 GBG',
                         }
                         break;
                     case '100%': // 100% steem power payout

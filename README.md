@@ -172,3 +172,16 @@ To report a non-critical issue, please file an issue on this GitHub project.
 If you find a security issue please report details to: https://github.com/GolosChain/tolstoy/issues
 
 We will evaluate the risk and make a patch available before filing the issue.
+
+##
+
+```bash
+cat node_modules/@steem/crypto-session/index.js
+```
+
+```git
+#65 - throw new Error('@steem/crypto-session: Discarding session: ' + text)
+#65 + //throw new Error('@steem/crypto-session: Discarding session: ' + text)
+#66 + console.error('@steem/crypto-session: Discarding session', text, error2);
+#67 + return {};
+```

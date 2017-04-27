@@ -26,7 +26,7 @@
 }
 
 a, path, circle {
-  transition: all .3s ease 0s;
+  transition: opacity, fill, stroke .3s ease 0s;
 }
 
 .space-right {
@@ -123,10 +123,8 @@ a, path, circle {
   }
 }
 
-.anchor {
-  padding-top: 1.25em;
+.anchor { padding-top: 90px; }
 
-  &:first-of-type {
-    padding-top: 5em;
-  }
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.2 !important;
 }

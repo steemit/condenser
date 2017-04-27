@@ -16,6 +16,8 @@ const it = 	{
 	privacy_policy: "Privacy Policy",
 	terms_of_service: "Termini di Servizio",
 	sign_up: "Iscriviti",
+	welcome: "Quick Start Guide",
+	go_back: "Back",
 	/* end navigation */
 	buy: 'Compra',
 	sell: 'Vendi',
@@ -173,6 +175,7 @@ const it = 	{
 	age: 'nuovo',
 	votes: 'votes',
 	backup_password_by_storing_it: 'Fai un backup della tua password o scrivila su un foglio di carta',
+	enter_account_show_password: 'Enter a valid account name to show the password',
 	click_to_generate_password: 'Clicca per generare una password',
 	re_enter_generate_password: 'Riscrivi la Password generata',
 	understand_that_steemit_cannot_recover_password: 'Io capisco che Steemit non può recuperare le password smarrite',
@@ -467,7 +470,12 @@ const it = 	{
 	'24_hour': '24 ore',
 	'30_day': '30 giorni',
 	flag: "Flag",
-
+	// Beginner tips in empty feed page
+	empty_feed_1: "Looks like you haven't followed anything yet",
+	empty_feed_2: 'If you recently added new users to follow, your personalized feed will populate once new content is available',
+	empty_feed_3: 'Explore Trending Articles',
+	empty_feed_4: "Read The Beginner's Guide",
+	empty_feed_5: 'Read The Steemit Welcome Guide'
 }
 
 export { it }

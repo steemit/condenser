@@ -1,5 +1,6 @@
 .Header {
   position: fixed;
+  backface-visibility: hidden;
   top: 0;
   left: 0;
   width: 100%;
@@ -53,7 +54,7 @@
   }
   @media screen and (max-width: 39.9375em) {
       .shrink {
-          padding: .3rem 1rem;
+          padding: 0 1rem;
       }
   }
 }
@@ -77,8 +78,9 @@ ul > li > .button {
   padding: 0;
   background-color: $white;
   border-bottom: 1px solid $light-gray;
-  transition: all .3s;
+  transition: margin .3s;
   z-index: -1;
+  will-change: margin;
   li {
     line-height: 1rem;
     padding: 1.2rem 0 1.2rem 0;

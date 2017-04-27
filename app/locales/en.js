@@ -4,13 +4,13 @@ import { APP_NAME, APP_DOMAIN, LANDING_PAGE_URL, DEBT_TOKEN, DEBT_TOKEN_SHORT, L
  */
 const en = 	{
 	// this variables mainly used in navigation section
-	about: "About",
-	explore: "Explore",
+	about: "About Steem",
+	explore: "Trending Topics",
 	APP_NAME_whitepaper: APP_NAME + " Whitepaper",
 	buy_LIQUID_TOKEN: 'Buy ' + LIQUID_TOKEN,
 	sell_LIQUID_TOKEN: 'Sell ' + LIQUID_TOKEN,
 	market: "Market",
-	currency_market: "Currency Market",
+	currency_market: "Internal Market",
 	stolen_account_recovery: "Stolen Accounts Recovery",
 	change_account_password: "Change Account Password",
 	steemit_api_docs: "Steemit API Docs",
@@ -20,6 +20,8 @@ const en = 	{
 	privacy_policy: "Privacy Policy",
 	terms_of_service: "Terms of Service",
 	sign_up: "Sign Up",
+	welcome: "Quick Start Guide",
+	go_back: "Back",
 	/* end navigation */
 	buy: 'Buy',
 	sell: 'Sell',
@@ -190,6 +192,7 @@ const en = 	{
 	age: 'age',
 	votes: 'votes',
 	backup_password_by_storing_it: 'Back it up by storing in your password manager or a text file',
+	enter_account_show_password: 'Enter a valid account name to show the password',
 	click_to_generate_password: 'Click to generate password',
 	re_enter_generate_password: 'Re-enter Generated Password',
 	understand_that_APP_NAME_cannot_recover_password: 'I understand that ' + APP_NAME + ' cannot recover lost passwords',
@@ -570,6 +573,12 @@ const en = 	{
 	profile_website: 'Website',
 	saved: 'Saved',
 	server_returned_error: 'server returned error',
+	// Beginner tips in empty feed page
+	empty_feed_1: "Looks like you haven't followed anything yet",
+	empty_feed_2: 'If you recently added new users to follow, your personalized feed will populate once new content is available',
+	empty_feed_3: 'Explore Trending Articles',
+	empty_feed_4: "Read The Beginner's Guide",
+	empty_feed_5: 'Read The Steemit Welcome Guide'
 }
 
 export { en }

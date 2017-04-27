@@ -102,8 +102,8 @@ class Topics extends React.Component {
         })
         const expandFilterButton = selectedKeys.length > 2 &&
           selectedExpanded ?
-            <a onClick={onSelectExpand} className="expand">{tt('collapse')} &uarr;</a> :
-            <a onClick={onSelectExpand} className="expand">{tt('expand')} &darr;</a>
+            <a onClick={onSelectExpand} className="expand">{tt('g.collapse')} &uarr;</a> :
+            <a onClick={onSelectExpand} className="expand">{tt('g.expand')} &darr;</a>
         ;
         let isSelected = false
 

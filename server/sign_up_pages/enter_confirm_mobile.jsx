@@ -297,7 +297,8 @@ export default function useEnterAndConfirmMobilePages(app) {
                 user_id: user.id,
                 uid: user.uid,
                 provider: "phone",
-                phone: phone
+                phone: phone,
+                verified: false
             });
         }
 

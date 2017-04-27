@@ -30,7 +30,7 @@ class CreateAccount extends React.Component {
             cryptographyFailure: false,
             showRules: true,
             showPass: false,
-            user_name_picked: this.props.location.query.user
+            user_name_picked: this.props.offchainUser.getIn(["name"])
         };
         this.onSubmit = this.onSubmit.bind(this);
         this.onNameChange = this.onNameChange.bind(this);
@@ -48,7 +48,6 @@ class CreateAccount extends React.Component {
     }
 
     componentWillMount() {
-
     }
 
     mousePosition(e) {

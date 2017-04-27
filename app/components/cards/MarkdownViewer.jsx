@@ -8,6 +8,10 @@ import {renderToString} from 'react-dom/server';
 import sanitize from 'sanitize-html'
 import HtmlReady from 'shared/HtmlReady'
 import {translate} from 'app/Translator';
+import EmbedView from 'app/components/elements/EmbedView';
+import links from 'app/utils/Links';
+import { isWhite } from 'app/utils/EmbedContentWhitelist';
+import { SCRAP_EMBED_SINCE as scrapEmbedSince } from 'config/client_config';
 
 const remarkable = new Remarkable({
     html: true, // remarkable renders first then sanitize runs...
@@ -30,6 +34,7 @@ class MarkdownViewer extends Component {
         highQualityPost: React.PropTypes.bool,
         noImage: React.PropTypes.bool,
         allowDangerousHTML: React.PropTypes.bool,
+        timeCteated : React.PropTypes.object.isRequired,
     }
 
     static defaultProps = {
@@ -78,9 +83,13 @@ class MarkdownViewer extends Component {
 
         let renderedText = html ? text : remarkable.render(text)
 
-        // Embed videos, link mentions and hashtags, etc...
-        if(renderedText) renderedText = HtmlReady(renderedText).html
+        const postDate = this.props.timeCteated.getTime();
+        const scrapSince = scrapEmbedSince.getTime();
+        const resolve = postDate > scrapSince;
 
+        // Embed videos/content, link mentions and hashtags, etc...
+        if(renderedText) renderedText = HtmlReady(renderedText, {}, resolve).html
+        //console.log("MarkDown -> " + renderedText + " <-")
         // Complete removal of javascript and other dangerous tags..
         // The must remain as close as possible to dangerouslySetInnerHTML
         let cleanText = renderedText
@@ -102,9 +111,9 @@ class MarkdownViewer extends Component {
         let idx = 0
         const sections = []
 
-        // HtmlReady inserts ~~~ embed:${id} type ~~~
+        // HtmlReady inserts ~~~ embed:${id} type ~~~ and ~~~ embed:${url} ~~~
         for(let section of cleanText.split('~~~ embed:')) {
-            const match = section.match(/^([A-Za-z0-9\_\-]+) (youtube|vimeo) ~~~/)
+            let match = section.match(/^([A-Za-z0-9\_\-]+) (youtube|vimeo) ~~~/)
             if(match && match.length >= 3) {
                 const id = match[1]
                 const type = match[2]
@@ -128,6 +137,22 @@ class MarkdownViewer extends Component {
                 }
                 section = section.substring(`${id} ${type} ~~~`.length)
                 if(section === '') continue
+            }
+
+            match = section.match(links.embedContent);
+            if (resolve && (match && match.length > 1)) {
+                const url = match[0];
+                let a = match[1];
+
+                if (a && isWhite(a)) {
+                    sections.push(
+                        <EmbedView key={idx++} contentUrl={url}/>
+                    );
+
+                    section = section.substring(`${url} ~~~`.length);
+                    if(section === '') continue
+                }
+
             }
             sections.push(<div key={idx++} dangerouslySetInnerHTML={{__html: section}} />)
         }

@@ -5,11 +5,12 @@ import {DEFAULT_LANGUAGE} from 'app/client_config';
 import tt from 'counterpart';
 import en from 'react-intl/locale-data/en';
 import ru from 'react-intl/locale-data/ru';
+import counterpartpluralize from 'counterpart/locales/en';
 
 addLocaleData([...ru, ...en]);
 
 tt.registerTranslations('en', require('app/locales/en.json'));
-tt.registerTranslations('ru', require('app/locales/ru-RU.json'));
+tt.registerTranslations('ru', Object.assign(require('app/locales/ru-RU.json'), counterpartpluralize));
 
 class Translator extends React.Component {
     render() {

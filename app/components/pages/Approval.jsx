@@ -25,8 +25,8 @@ class Approval extends React.Component {
             </div>
         } else {
             body = <div>
-                <p><strong>You've been added to the wait list and pending approval.</strong> Please validate your email by clicking the link in your welcome email.</p>
-                <p>You will receive an email confirmation when you can log into your new account.</p>
+                <p><strong>You've been added to the wait list and pending approval.</strong></p>
+                <p>To process your account, <strong>you must validate your email</strong> by clicking the link in your welcome email.</p>
             </div>
         }
         return (

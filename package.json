@@ -15,6 +15,7 @@
     "test:watch": "npm run mocha -- --watch --watch-extensions jsx",
     "production": "NODE_ENV=production ./node_modules/babel-cli/bin/babel-node.js server/index.js",
     "start": "./node_modules/babel-cli/bin/babel-node.js ./webpack/dev-server.js",
+    "start:local": "./.env.start.local.sh",
     "webpush": "./node_modules/babel-cli/bin/babel-node.js ./scripts/webpush_notify.js"
   },
   "author": "Golos.io",

@@ -56,6 +56,11 @@ export default function useGeneralApi(app) {
     });
 
     router.post('/accounts', koaBody, function *() {
+        // temporary disable any accounts creation until approval is implemented
+        this.body = JSON.stringify({error: 'Unauthorized'});
+        this.status = 401;
+        return;
+
         if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;
         const account = typeof(params) === 'string' ? JSON.parse(params) : params;

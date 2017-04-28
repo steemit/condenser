@@ -15,8 +15,8 @@ import useOauthLogin from './api/oauth';
 import useGeneralApi from './api/general';
 import useAccountRecoveryApi from './api/account_recovery';
 import useNotificationsApi from './api/notifications';
-import useEnterAndConfirmEmailPages from './server_pages/enter_confirm_email';
-import useEnterAndConfirmMobilePages from './server_pages/enter_confirm_mobile';
+import useEnterAndConfirmEmailPages from './sign_up_pages/enter_confirm_email';
+import useEnterAndConfirmMobilePages from './sign_up_pages/enter_confirm_mobile';
 import useUserJson from './json/user_json';
 import usePostJson from './json/post_json';
 import isBot from 'koa-isbot';
@@ -55,9 +55,9 @@ app.use(flash({ key: 'flash' }));
 
 function convertEntriesToArrays(obj) {
     return Object.keys(obj).reduce((result, key) => {
-        result[key] = obj[key].split(/\s+/);
-        return result;
-    }, {});
+            result[key] = obj[key].split(/\s+/);
+    return result;
+}, {});
 }
 
 // some redirects
@@ -71,8 +71,8 @@ app.use(function*(next) {
     // normalize user name url from cased params
     if (
         this.method === 'GET' &&
-            (routeRegex.UserProfile1.test(this.url) ||
-                routeRegex.PostNoCategory.test(this.url))
+        (routeRegex.UserProfile1.test(this.url) ||
+        routeRegex.PostNoCategory.test(this.url))
     ) {
         const p = this.originalUrl.toLowerCase();
         if (p !== this.originalUrl) {
@@ -90,8 +90,8 @@ app.use(function*(next) {
             return;
         }
     }
-    // start registration process if user get to create_account page and has no id in session yet
-    if (this.url === '/create_account' && !this.session.user) {
+    // do not enter unless session uid & verified phone
+    if (this.url === '/create_account' && !this.session.uid) {
         this.status = 302;
         this.redirect('/enter_email');
         return;
@@ -99,10 +99,10 @@ app.use(function*(next) {
     // remember ch, cn, r url params in the session and remove them from url
     if (this.method === 'GET' && /\?[^\w]*(ch=|cn=|r=)/.test(this.url)) {
         let redir = this.url.replace(/((ch|cn|r)=[^&]+)/gi, r => {
-            const p = r.split('=');
-            if (p.length === 2) this.session[p[0]] = p[1];
-            return '';
-        });
+                const p = r.split('=');
+        if (p.length === 2) this.session[p[0]] = p[1];
+        return '';
+    });
         redir = redir.replace(/&&&?/, '');
         redir = redir.replace(/\?&?$/, '');
         console.log(`server redirect ${this.url} -> ${redir}`);
@@ -225,9 +225,9 @@ if (env === 'development') {
     const proxyhost = 'http://0.0.0.0:' + webpack_dev_port;
     console.log('proxying to webpack dev server at ' + proxyhost);
     const proxy = require('koa-proxy')({
-        host: proxyhost,
-        map: filePath => 'assets/' + filePath
-    });
+            host: proxyhost,
+            map: filePath => 'assets/' + filePath
+});
     app.use(mount('/assets', proxy));
 } else {
     app.use(

@@ -20,7 +20,47 @@ export default function useGeneralApi(app) {
     app.use(router.routes());
     const koaBody = koa_body();
 
+    router.post('/accounts_wait', koaBody, function *() {
+        if (rateLimitReq(this, this.req)) return;
+        const params = this.request.body;
+        const account = typeof(params) === 'string' ? JSON.parse(params) : params;
+        const remote_ip = getRemoteIp(this.req);
+        if (!checkCSRF(this, account.csrf)) return;
+        console.log('-- /accounts_wait -->', this.session.uid, this.session.user, account);
+        const user_id = this.session.user;
+        try {
+            models.Account.create(escAttrs({
+                user_id,
+                name: account.name,
+                owner_key: account.owner_key,
+                active_key: account.active_key,
+                posting_key: account.posting_key,
+                memo_key: account.memo_key,
+                remote_ip,
+                referrer: this.session.r
+            })).catch(error => {
+                console.error('!!! Can\'t create account wait model in /accounts api', this.session.uid, error);
+        });
+            if (mixpanel) {
+                mixpanel.track('Signup WaitList', {
+                    distinct_id: this.session.uid,
+                    ip: remote_ip
+                });
+                mixpanel.people.set(this.session.uid, {ip: remote_ip});
+            }
+        } catch (error) {
+            console.error('Error in /accounts_wait', error);
+        }
+        this.body = JSON.stringify({status: 'ok'});
+        recordWebEvent(this, 'api/accounts_wait', account ? account.name : 'n/a');
+    });
+
     router.post('/accounts', koaBody, function *() {
+        // temporary disable any accounts creation until approval is implemented
+        this.body = JSON.stringify({error: 'Unauthorized'});
+        this.status = 401;
+        return;
+
         if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;
         const account = typeof(params) === 'string' ? JSON.parse(params) : params;
@@ -55,8 +95,8 @@ export default function useGeneralApi(app) {
             const rnd_wait_time = Math.random() * 10000;
             console.log('-- /accounts rnd_wait_time -->', rnd_wait_time);
             yield new Promise((resolve) =>
-                setTimeout(() => resolve(), rnd_wait_time)
-            )
+            setTimeout(() => resolve(), rnd_wait_time)
+        )
         }
 
         try {
@@ -105,14 +145,14 @@ export default function useGeneralApi(app) {
                 throw new Error('You are on the waiting list. We will get back to you at the earliest possible opportunity.');
             }
 
-            // check email
-            const eid = yield models.Identity.findOne(
-                {attributes: ['id'], where: {user_id, provider: 'email', verified: true}, order: 'id DESC'}
-            );
-            if (!eid) {
-                console.log(`api /accounts: not confirmed email for user ${this.session.uid} #${user_id}`);
-                throw new Error('Email address is not confirmed');
-            }
+            // disable email verification for now
+            // const eid = yield models.Identity.findOne(
+            //     {attributes: ['id'], where: {user_id, provider: 'email', verified: true}, order: 'id DESC'}
+            // );
+            // if (!eid) {
+            //     console.log(`api /accounts: not confirmed email for user ${this.session.uid} #${user_id}`);
+            //     throw new Error('Email address is not confirmed');
+            // }
 
             // check phone
             const mid = yield models.Identity.findOne(
@@ -164,7 +204,7 @@ export default function useGeneralApi(app) {
                 referrer: this.session.r
             })).catch(error => {
                 console.error('!!! Can\'t create account model in /accounts api', this.session.uid, error);
-            });
+        });
             if (mixpanel) {
                 mixpanel.track('Signup', {
                     distinct_id: this.session.uid,
@@ -372,6 +412,31 @@ export default function useGeneralApi(app) {
             this.status = 500;
         }
     });
+
+    router.post('/save_cords', koaBody, function *() {
+        const params = this.request.body;
+        const {csrf, x, y} = typeof(params) === 'string' ? JSON.parse(params) : params;
+        if (!checkCSRF(this, csrf)) return;
+        const user = yield models.User.findOne({
+            where: { id: this.session.user }
+        });
+        if (user) {
+            let data = user.sign_up_meta ? JSON.parse(user.sign_up_meta) : {};
+            data["button_screen_x"] = x;
+            data["button_screen_y"] = y;
+            data["last_step"] = 3;
+            try {
+                user.update({
+                    sign_up_meta: JSON.stringify(data)
+                });
+            } catch (error) {
+                console.error('Error in /save_cords api call', this.session.uid, error.message);
+                this.body = JSON.stringify({error: error.message});
+                this.status = 500;
+            }
+        }
+        this.body = JSON.stringify({status: 'ok'});
+    });
 }
 
 /**
@@ -389,8 +454,8 @@ function* createAccount({
         memo_key: memo,
     }]]
     yield broadcast.sendAsync({
-      extensions: [],
-      operations
+        extensions: [],
+        operations
     }, [signingKey])
 }
 

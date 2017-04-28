@@ -3,12 +3,12 @@ import React from 'react';
 import {connect} from 'react-redux';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import user from 'app/redux/User';
+import {PrivateKey} from 'steem/lib/auth/ecc';
 import {validate_account_name} from 'app/utils/ChainValidation';
-import SignUp from 'app/components/modules/SignUp';
 import runTests from 'app/utils/BrowserTests';
 import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInput';
-import SignupProgressBar from 'app/components/elements/SignupProgressBar';
-import {PrivateKey} from 'steem/lib/auth/ecc';
+import Progress from 'react-foundation-components/lib/global/progress-bar';
+import {sendConfirmEmail, saveCords} from 'app/utils/ServerApiClient';
 import {api} from 'steem';
 
 class CreateAccount extends React.Component {
@@ -28,11 +28,14 @@ class CreateAccount extends React.Component {
             server_error: '',
             loading: false,
             cryptographyFailure: false,
-            showRules: false
+            showRules: true,
+            showPass: false,
+            user_name_picked: this.props.offchainUser.getIn(["name"])
         };
         this.onSubmit = this.onSubmit.bind(this);
         this.onNameChange = this.onNameChange.bind(this);
         this.onPasswordChange = this.onPasswordChange.bind(this);
+        this.preventDoubleClick = this.preventDoubleClick.bind(this);
     }
 
     componentDidMount() {
@@ -41,13 +44,26 @@ class CreateAccount extends React.Component {
             console.error('CreateAccount - cryptoTestResult: ', cryptoTestResult);
             this.setState({cryptographyFailure: true}); // TODO: do not use setState in componentDidMount
         }
+        this.setState({showPass: true});
+    }
+
+    componentWillMount() {
+    }
+
+    mousePosition(e) {
+        // log x/y cords
+        console.log("--> mouse position --", e.type, e.screenX, e.screenY);
+        if(e.type === 'click') {
+            saveCords(e.screenX, e.screenY);
+        }
     }
 
     onSubmit(e) {
         e.preventDefault();
         this.setState({server_error: '', loading: true});
-        const {name, password, password_valid} = this.state;
-        if (!name || !password || !password_valid) return;
+        const {password, password_valid} = this.state;
+        const name = this.state.user_name_picked;
+        if (!password || !password_valid) return;
 
         let public_keys;
         try {
@@ -60,8 +76,8 @@ class CreateAccount extends React.Component {
             });
         }
 
-        // createAccount
-        fetch('/api/v1/accounts', {
+        // create wait account
+        fetch('/api/v1/accounts_wait', {
             method: 'post',
             mode: 'no-cors',
             credentials: 'same-origin',
@@ -77,28 +93,12 @@ class CreateAccount extends React.Component {
                 posting_key: public_keys[2],
                 memo_key: public_keys[3]
             })
-        }).then(r => r.json()).then(res => {
-            if (res.error || res.status !== 'ok') {
-                console.error('CreateAccount server error', res.error);
-                if (res.error === 'Unauthorized') {
-                    window.location = '/enter_email';
-                }
-                this.setState({server_error: res.error || 'Unknown', loading: false});
-            } else {
-                window.location = `/login.html#account=${name}&msg=accountcreated`;
-                // this.props.loginUser(name, password);
-                // const redirect_page = localStorage.getItem('redirect');
-                // if (redirect_page) {
-                //     localStorage.removeItem('redirect');
-                //     browserHistory.push(redirect_page);
-                // }
-                // else {
-                //     browserHistory.push('/@' + name);
-                // }
-            }
+        }).then(res => {
+            // redirect to thank you approval
+            console.log("created wait account successfully");
+            window.location = '/approval';
         }).catch(error => {
-            console.error('Caught CreateAccount server error', error);
-            this.setState({server_error: (error.message ? error.message : error), loading: false});
+            console.error("--> error creating wait account --", error);
         });
     }
 
@@ -106,9 +106,13 @@ class CreateAccount extends React.Component {
         this.setState({password, password_valid});
     }
 
+    preventDoubleClick() {
+        // return false;
+    }
+
     onNameChange(e) {
         const name = e.target.value.trim().toLowerCase();
-        this.validateAccountName(name);
+        // this.validateAccountName(name);
         this.setState({name});
     }
 
@@ -136,23 +140,21 @@ class CreateAccount extends React.Component {
     }
 
     render() {
-        if (!process.env.BROWSER) { // don't render this page on the server
-            return <div className="row">
-                <div className="column">
-                    Loading..
-                </div>
-            </div>;
-        }
+        // if (!process.env.BROWSER) { // don't render this page on the server
+        //     return <div className="row">
+        //         <div className="column">
+        //
+        //         </div>
+        //     </div>;
+        // }
 
         const {
-            name, password_valid, //showPasswordString,
+            password_valid, //showPasswordString,
             name_error, server_error, loading, cryptographyFailure, showRules
         } = this.state;
 
         const {loggedIn, logout, offchainUser, serverBusy} = this.props;
-        const submit_btn_disabled =
-            loading || !name || !password_valid ||
-            name_error;
+        const submit_btn_disabled = loading || !password_valid;
         const submit_btn_class = 'button action' + (submit_btn_disabled ? ' disabled' : '');
 
         if (serverBusy || $STM_Config.disable_signups) {
@@ -176,9 +178,10 @@ class CreateAccount extends React.Component {
                 </div>
             </div>;
         }
-        if (!offchainUser) {
-            return <SignUp />;
-        }
+        // if (!offchainUser) {
+        //     window.location = "/enter_user";
+        // }
+        console.log("--> offchainUser", offchainUser);
 
         if (loggedIn) {
             return <div className="row">
@@ -225,38 +228,37 @@ class CreateAccount extends React.Component {
 
         return (
             <div>
-                <SignupProgressBar steps={['email', 'phone', 'steem account']} current={3} />
                 <div className="CreateAccount row">
                     <div className="column" style={{maxWidth: '36rem', margin: '0 auto'}}>
                         <br />
+                        <Progress tabIndex="0" value={95} max={100} />
                         {showRules ? <div className="CreateAccount__rules">
                             <p>
                                 The first rule of Steemit is: Do not lose your password.<br />
                                 The second rule of Steemit is: Do <strong>not</strong> lose your password.<br />
                                 The third rule of Steemit is: We cannot recover your password.<br />
-                                The fourth rule: If you can remember the password, it&apos;s not secure.<br />
-                                The fifth rule: Use only randomly-generated passwords.<br />
-                                The sixth rule: Do not tell anyone your password.<br />
-                                The seventh rule: Always back up your password.
+                                The forth rule: Do not tell anyone your password.<br />
+                                The fifth rule: Always back up your password.
                             </p>
-                            <div className="text-center">
-                                <a className="CreateAccount__rules-button" href="#" onClick={() => this.setState({showRules: false})}>
-                                    <span style={{display: 'inline-block', transform: 'rotate(-90deg)'}}>&raquo;</span>
-                                </a>
-                            </div>
+                            {/*<div className="text-center">*/}
+                            {/*<a className="CreateAccount__rules-button" href="#" onClick={() => this.setState({showRules: false})}>*/}
+                            {/*<span style={{display: 'inline-block', transform: 'rotate(-90deg)'}}>&raquo;</span>*/}
+                            {/*</a>*/}
+                            {/*</div>*/}
                             <hr />
                         </div> : <div className="text-center">
                             <a className="CreateAccount__rules-button" href="#" onClick={() => this.setState({showRules: true})}>Steemit
                                 Rules &nbsp; &raquo;</a>
                         </div>}
+                        <br />
                         <form onSubmit={this.onSubmit} autoComplete="off" noValidate method="post">
-                            <div className={name_error ? 'error' : ''}>
-                                <label>ACCOUNT NAME
-                                    <input type="text" name="name" autoComplete="off" onChange={this.onNameChange} value={name} />
-                                </label>
-                                <p>{name_error}</p>
-                            </div>
-                            <GeneratedPasswordInput onChange={this.onPasswordChange} disabled={loading} showPasswordString={name.length > 0 && !name_error} />
+                            {/*<div className={name_error ? 'error' : ''}>*/}
+                            {/*<label>RE-TYPE TO CONFIRM ACCOUNT NAME*/}
+                            {/*<input type="text" name="name" autoComplete="off" onChange={this.onNameChange} value={name} placeholder={this.state.user_name_picked} />*/}
+                            {/*</label>*/}
+                            {/*<p>{name_error}</p>*/}
+                            {/*</div>*/}
+                            <GeneratedPasswordInput onChange={this.onPasswordChange} disabled={loading} showPasswordString={this.state.showPass} />
                             <br />
                             {next_step && <div>{next_step}<br /></div>}
                             <noscript>
@@ -265,7 +267,7 @@ class CreateAccount extends React.Component {
                                 </div>
                             </noscript>
                             {loading && <LoadingIndicator type="circle" />}
-                            <input disabled={submit_btn_disabled} type="submit" className={submit_btn_class} value="Create Account" />
+                            <input disabled={submit_btn_disabled} type="submit" className={submit_btn_class} onClick={this.mousePosition} value="Create Account" />
                         </form>
                     </div>
                 </div>

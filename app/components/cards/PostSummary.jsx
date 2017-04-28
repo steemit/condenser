@@ -151,7 +151,7 @@ class PostSummary extends React.Component {
                             This post is <span className="nsfw-flag">nsfw</span>.
                             You can <a href="#" onClick={this.onRevealNsfw}>reveal it</a> or{' '}
                             {username ? <span>adjust your <Link to={`/@${username}/settings`}>display preferences</Link>.</span>
-                                      : <span><Link to="/enter_email">create an account</Link> to save your preferences.</span>}
+                                      : <span><Link to="/pick_account">create an account</Link> to save your preferences.</span>}
                             {content_footer}
                         </div>
                     </article>

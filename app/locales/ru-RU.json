@@ -103,7 +103,7 @@
     "next_3_strings": {
       "by_verifying_you_agree_with": "Подтверждая ваш аккаунт вы соглашаетесь с",
       "by_verifying_you_agree_with_privacy_policy": "Политика Конфиденциальности",
-      "by_verifying_you_agree_with_privacy_policy_of_website_APP_URL": "сайта %(APP_URL)s"
+      "by_verifying_you_agree_with_privacy_policy_of_website_APP_DOMAIN": "сайта %(APP_DOMAIN)s"
     }
   },
   "explorepost_jsx": {
@@ -115,6 +115,7 @@
     "24_hour": "24 часа",
     "30_day": "30 дней",
     "age": "возраст",
+    "active" : "Обсуждаемое",
     "amount": "Количество",
     "and": "и",
     "are_you_sure": "Вы уверены?",
@@ -136,6 +137,7 @@
     "comments": "Комментарии",
     "continue": "продолжить",
     "convert": "Конвертировать",
+    "created": "Новое",
     "date": "Дата",
     "delete": "Удалить",
     "dismiss": "Скрыть",
@@ -150,6 +152,7 @@
     "for": " для ",
     "from": " от ",
     "hide": "Скрыть",
+    "hot": "Актуальное",
     "in": "в",
     "in_reply_to": "в ответ на",
     "insufficient_balance": "Недостаточный баланс",
@@ -158,7 +161,7 @@
     "loading": "Загрузка",
     "login": "Войти",
     "logout": "Выйти",
-    "memo": "Примечание",
+    "memo": "Заметка",
     "more": "больше",
     "mute": "Заблокировать",
     "new": "Новое",
@@ -170,10 +173,12 @@
     "older": "Старее",
     "or": "или",
     "order_placed": "Заказ размещен",
+    "owner" : "Владелец",
     "password": "Пароль",
     "payouts": "Выплаты",
     "permissions": "Разрешения",
     "post": "Пост",
+    "posting": "Постинг",
     "post_as": "Запостить как",
     "posts": "Посты",
     "powered_up_100": "100%% в Силе Голоса",
@@ -182,7 +187,7 @@
     "price": "Цена",
     "print": "Распечатать",
     "promote": "Продвинуть",
-    "promoted": "Продвигаемое",
+    "promoted": "Промо",
     "re": "RE",
     "recent_password": "Недавний пароль",
     "recieve": "Получить ",
@@ -214,6 +219,7 @@
     "transaction_history": "История транзакций",
     "transfer": "Передать ",
     "trending_topics": "Популярное",
+    "trending": "Популярное",
     "type": "Тип",
     "unfollow": "Отписаться",
     "unknown": "Неизвестный",
@@ -240,10 +246,11 @@
     "reset_usernames_password": "Сбросить пароль пользователя %(username)s",
     "this_will_update_usernames_authtype_key": "Это обновит %(username)s %(authType)s ключ",
     "passwords_do_not_match": "Пароли не совпадают",
+    "no_topics_by_order_found" : "В разделе %(order)s пока нет постов!",
     "you_need_private_password_or_key_not_a_public_key": "Вам нужен приватный пароль или ключ (не публичный ключ)",
     "the_rules_of_APP_NAME": {
       "one": "Первое правило сети %(APP_NAME)s: не теряйте свой пароль.",
-      "second": "Второе правило %(APP_NAME)s: <strong>Не</strong> теряйте свой пароль.",
+      "second": "Второе правило %(APP_NAME)s: Не теряйте свой пароль.",
       "third": "Третье правило %(APP_NAME)s: мы не можем восстановить ваш пароль.",
       "fourth": "Четвертое правило: если Вы можете запомнить свой пароль, значит он не безопасен.",
       "fifth": "Пятое правило: используйте только сгенерированные случайным образом пароли.",
@@ -300,22 +307,22 @@
       "when_you_link_text": "Регистрация",
       "and_vote_for_it": "и проголосовать за него",
       "sign_up_now_to_receive": "Зарегистрируйтесь сейчас чтобы получить ",
-      "free_steem": "GOLOS!"
+      "free_steem": " Бесплатные"
     },
     "next_3_strings_together": {
       "show_more": "Показать больше",
       "show_less": "Показать меньше",
-      "value_posts": "меньше сообщений низкой стоимости"
+      "value_posts": "постов с более низким вознаграждением"
     },
     "read_only_mode": "Из-за технического обслуживания сервера мы работаем в режиме чтения. Извините за неудобства.",
     "membership_invitation_only": "Из-за неожиданно высокой скорости регистрации, стать пользователем %(APP_URL)s сейчас возможно только по приглашению.",
     "submit_email_to_get_on_waiting_list": "Добавьте Ваш адрес электронной почты, чтобы попасть в список ожидания",
-    "show_less_low_value_posts": "Показать меньше сообщений низкой стоимости",
-    "show_more_low_value_posts": "Показать больше сообщений низкой стоимости",
+    "show_less_low_value_posts": "Показать постов с более низким вознаграждением",
+    "show_more_low_value_posts": "Показать постов с более низким вознаграждением",
     "select_topic": "Выбрать топик",
     "tags_and_topics": "Тэги и топики",
     "tags_filter": "Фильтр",
-    "no_tags_selected": "не выбрано ни одного тега",
+    "no_tags_selected": "теги не выбраны",
     "filter": "Фильтр",
     "show_more_topics": "Показать больше топиков",
     "we_require_social_account": "%(APP_NAME)s спонсирует каждый аккаунт на сумму около %(signup_bonus)s в %(VESTING_TOKEN)s; чтобы предотвратить злоупотребление, мы просим новых пользователей регистрироваться используя социальные сети.",
@@ -401,7 +408,7 @@
     "to_comment_and_reward_others": " комментировать и вознаграждать других.",
     "sign_up_now_to_receive": "Зарегистрируйтесь сейчас чтобы получить ",
     "free_money": "ЛЕГКИЕ ДЕНЬГИ!",
-    "returning_users": "Вернувшиеся пользователи: ",
+    "returning_users": "С возвращением: ",
     "join_our": "Присоединяйтесь к нашему"
   },
   "main_menu": {
@@ -445,7 +452,7 @@
     "APP_NAME_whitepaper": "Белая книга %(APP_NAME)s",
     "buy_LIQUID_TOKEN": "Купить %(LIQUID_TOKEN)s",
     "sell_LIQUID_TOKEN": "Продать %(LIQUID_TOKEN)s",
-    "market": "Биржа",
+    "market": "Купить или Продать",
     "currency_market": "Валютный рынок",
     "stolen_account_recovery": "Возврат украденного аккаунта",
     "change_account_password": "Изменить пароль аккаунта",
@@ -459,7 +466,7 @@
     "terms_of_service": "Условия пользования",
     "sign_up": "Регистрация",
     "welcome": "Добро пожаловать",
-    "feedback": "Feedback",
+    "feedback": "ОБРАТНАЯ СВЯЗЬ",
     "wiki": "Wiki",
     "faq": "ЧаВО"
   },
@@ -569,15 +576,16 @@
     "uploading": "Загрузка",
     "draft_saved": "Черновик сохранен.",
     "editor": "Редактор",
-    "insert_images_by_dragging_dropping": "Вставьте изображения, перетащив их, ",
-    "pasting_from_the_clipboard": "или вставив из буфера обмена, ",
-    "selecting_them": "выбрав их",
+    "insert_images_by_dragging_dropping": "Вставьте изображения перетащив, ",
+    "pasting_from_the_clipboard": "вставвте из буфера обмена, ",
+    "selecting_them": "выбрать",
     "image_upload": "Загрузка изображения",
     "power_up_100": "Сила Голоса 100%%",
     "default_50_50": "50%% / 50%%",
     "decline_payout": "Отказаться от выплаты",
     "check_this_to_auto_upvote_your_post": "Отметьте, чтобы проголосовать за свой пост",
-    "markdown_styling_guide": "Руководство стилизации в Markdown"
+    "markdown_styling_guide": "Руководство стилизации в Markdown",
+    "placeholder" : "Заголовок"
   },
   "savingswithdrawhistory_jsx": {
     "cancel_this_withdraw_request": "Отменить запрос вывода средств?",
@@ -595,7 +603,7 @@
     "website_url_is_too_long": "URL-адрес веб-сайта слишком длинный",
     "public_profile_settings": "Настройки Публичного Профиля",
     "private_post_display_settings": "Настройки отображения приватных постов",
-    "not_safe_for_work_nsfw_content": "Небезопасный для работы (NSFW) контент",
+    "not_safe_for_work_nsfw_content": "Контент для взрослых",
     "always_hide": "Всегда скрывать",
     "always_warn": "Всегда предупреждать",
     "always_show": "Отображать всегда",
@@ -693,7 +701,7 @@
     "users_permissions": "Разрешения %(name)s",
     "recent_replies_to_users_posts": "Недавние ответы к постам пользователя %(name)s",
     "followers": "Подписчики",
-    "this_is_users_reputations_score_it_is_based_on_history_of_votes": "Это количество очков репутации пользователя %(name)s.\\n\\nКоличество очков подсчитывается на основе истории полученных голосов и используется, чтобы скрыть некачественное содержимое.",
+    "this_is_users_reputations_score_it_is_based_on_history_of_votes": "Это количество очков репутации пользователя %(name)s.\n\nКоличество очков подсчитывается на основе истории полученных голосов и используется, чтобы скрыть некачественное содержимое.",
     "follower_count": {
       "zero": "0 подписчиков",
       "one": "1 подписчик",
@@ -748,7 +756,7 @@
     "the_active_key_is_used_to_make_transfers_and_place_orders": "Активный ключ используется для переводов и размещения заказов на внутреннем рынке.",
     "the_owner_key_is_required_to_change_other_keys": "Ключ владельца это главный ключ ко всему аккаунта, он необходим для изменения других ключей.",
     "the_private_key_or_password_should_be_kept_offline": "Приватный ключ или пароль должен храниться в оффлайне так часто насколько возможно.",
-    "the_memo_key_is_used_to_create_and_read_memos": "Ключ примечаний используется для создания и чтения примечаний."
+    "the_memo_key_is_used_to_create_and_read_memos": "Ключ заметок используется для создания и чтения заметок."
   },
   "userwallet_jsx": {
     "conversion_complete_tip": "Завершается",
@@ -758,8 +766,8 @@
     "power_down": "Уменьшить силу голоса",
     "market": "Биржа",
     "convert_to_LIQUID_TOKEN": "Перевести в %(LIQUID_TOKEN)s",
-    "withdraw_LIQUID_TOKEN": "Снять %(LIQUID_TOKEN)s",
-    "withdraw_DEBT_TOKENS": "Снять %(DEBT_TOKENS)s",
+    "withdraw_LIQUID_TOKEN": "Вывести %(LIQUID_TOKEN)s на текущий баланс",
+    "withdraw_DEBT_TOKENS": "Вывести %(DEBT_TOKENS)s на текущий баланс",
     "tokens_worth_about_1_of_LIQUID_TICKER": "Перемещаемые цифровые токены, цена которых равна ~1 мг золота в %(LIQUID_TICKER)s, в настоящее время собирает %(sbdInterest)s%% годовую ставку.",
     "savingstip_currently_collecting": "%(savingsTip)s, currently collecting %(sbdInterest)s%% APR.",
     "balances": "БАЛАНСЫ",

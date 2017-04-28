@@ -62,7 +62,7 @@ class Keys extends Component {
             <span>
                 <div className="row">
                     <div className="column small-12">
-                        <label>{tt(authType.toLowerCase())}</label>
+                        <label>{tt('g.' + authType.toLowerCase())}</label>
                         {auths}
                     </div>
                 </div>

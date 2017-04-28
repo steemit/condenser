@@ -340,7 +340,7 @@ class ReplyEditor extends React.Component {
         return (
             <div className="ReplyEditor row">
                 <div className="column small-12">
-                    <div ref="draft" className="ReplyEditor__draft ReplyEditor__draft-hide">tt('reply_editor.draft_saved')</div>
+                    <div ref="draft" className="ReplyEditor__draft ReplyEditor__draft-hide">{tt('reply_editor.draft_saved')}</div>
                     <form className={vframe_class}
                         onSubmit={handleSubmit(({data}) => {
                             const startLoadingIndicator = () => this.setState({loading: true, postError: undefined})
@@ -350,10 +350,10 @@ class ReplyEditor extends React.Component {
                     >
                         <div className={vframe_section_shrink_class}>
                             {isStory && <span>
-                                <input type="text" className="ReplyEditor__title" {...title.props} onChange={onTitleChange} disabled={loading} placeholder="Title" autoComplete="off" ref="titleRef" tabIndex={1} />
+                                <input type="text" className="ReplyEditor__title" {...title.props} onChange={onTitleChange} disabled={loading} placeholder={tt('reply_editor.placeholder')} autoComplete="off" ref="titleRef" tabIndex={1} />
                                 <div className="float-right secondary" style={{marginRight: '1rem'}}>
                                     {rte && <a href="#" onClick={this.toggleRte}>{body.value ? 'Raw HTML' : 'Markdown'}</a>}
-                                    {!rte && (isHtml || !body.value) && <a href="#" onClick={this.toggleRte}>{tt('reply_editor.editor')}</a>}
+                                    {!rte && <a href="#" onClick={this.toggleRte}>{tt('reply_editor.editor')}</a>}
                                 </div>
                                 {titleError}
                             </span>}

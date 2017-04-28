@@ -14,6 +14,11 @@ module.exports = {
               type: Sequelize.TEXT
           }
       );
+      queryInterface.addColumn('accounts', 'created',
+          {
+              type: Sequelize.BOOLEAN
+          }
+      );
   },
 
   down: function (queryInterface, Sequelize) {

@@ -89,7 +89,7 @@ export default class EmbedView extends Component {
     shouldComponentUpdate = shouldComponentUpdate(this, 'EmbedView');
 
     fetchOEmbedData = (url) => {
-        const requestURl = '/embed/' + encodeURIComponent(url);
+        const requestURl = '/embed/v1/content/' + encodeURIComponent(url);
         fetch(requestURl)
             .then((response) => {
                if (response.ok) return response.json();

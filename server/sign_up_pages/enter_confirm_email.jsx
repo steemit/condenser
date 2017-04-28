@@ -133,7 +133,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                     provider: "email"
                 });
             } else {
-                let data = user.sign_up_meta ? user.sign_up_meta : {};
+                let data = user.sign_up_meta ? JSON.parse(user.sign_up_meta) : {};
                 data["last_step"] = 1;
                 yield user.update({
                     name: this.request.query.account,

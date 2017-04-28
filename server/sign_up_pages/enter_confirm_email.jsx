@@ -109,10 +109,12 @@ export default function useEnterAndConfirmEmailPages(app) {
         if (!user) {
             // create user and identity
             console.log("-- /Creating User & Identity -->");
+            let data = {};
+            data["last_step"] = 1;
             const user = yield models.User.create({
                 uid: this.session.uid,
                 name: this.request.query.account,
-                last_step: 1
+                sign_up_meta: JSON.stringify(data)
             });
             this.session.user = user.id;
             const user_identity = yield models.Identity.create({
@@ -131,9 +133,11 @@ export default function useEnterAndConfirmEmailPages(app) {
                     provider: "email"
                 });
             } else {
+                let data = user.sign_up_meta ? user.sign_up_meta : {};
+                data["last_step"] = 1;
                 yield user.update({
                     name: this.request.query.account,
-                    last_step: 2
+                    sign_up_meta: JSON.stringify(data)
                 });
             }
 
@@ -314,8 +318,12 @@ export default function useEnterAndConfirmEmailPages(app) {
         } else {
             yield eid.update({
                 email: this.request.body.email,
-                last_step: 2,
                 confirmation_code: confirmation_code
+            });
+            let data = user.sign_up_meta ? JSON.parse(user.sign_up_meta) : {};
+            data["last_step"] = 2;
+            yield user.update({
+                sign_up_meta: JSON.stringify(data)
             });
             console.log(
                 "-- /submit_email -->",

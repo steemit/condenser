@@ -37,8 +37,7 @@ export default function useGeneralApi(app) {
                 posting_key: account.posting_key,
                 memo_key: account.memo_key,
                 remote_ip,
-                referrer: this.session.r,
-                to_be_created: "1"
+                referrer: this.session.r
             })).catch(error => {
                 console.error('!!! Can\'t create account wait model in /accounts api', this.session.uid, error);
         });
@@ -417,10 +416,13 @@ export default function useGeneralApi(app) {
             where: { id: this.session.user }
         });
         if (user) {
+            let data = user.sign_up_meta ? JSON.parse(user.sign_up_meta) : {};
+            data["button_screen_x"] = x;
+            data["button_screen_y"] = y;
+            data["last_step"] = 3;
             try {
                 user.update({
-                    button_screen_x: x,
-                    button_screen_y: y
+                    sign_up_meta: JSON.stringify(data)
                 });
             } catch (error) {
                 console.error('Error in /save_cords api call', this.session.uid, error.message);

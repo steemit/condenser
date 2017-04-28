@@ -17,12 +17,8 @@ module.exports = function (sequelize, DataTypes) {
         verified: DataTypes.BOOLEAN,
         waiting_list: DataTypes.BOOLEAN,
         bot: DataTypes.BOOLEAN,
-        last_step: DataTypes.INTEGER,
-        link_clicked: DataTypes.STRING,
-        approved: DataTypes.BOOLEAN,
-        to_be_created: DataTypes.BOOLEAN,
-        button_screen_x: DataTypes.STRING,
-        button_screen_y: DataTypes.STRING
+        sign_up_meta: DataTypes.TEXT,
+        account_status: DataTypes.STRING
     }, {
         tableName: 'users',
         createdAt   : 'created_at',

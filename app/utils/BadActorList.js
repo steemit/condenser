@@ -1,6 +1,9 @@
 const list = `
 polonox
 poloneix
+biitrex
+biittrex
+bitter
 bitterx
 bittex
 bittrax

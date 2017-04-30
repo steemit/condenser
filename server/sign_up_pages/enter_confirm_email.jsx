@@ -105,24 +105,25 @@ export default function useEnterAndConfirmEmailPages(app) {
     router.get("/enter_email", function*() {
         console.log("-- /enter_email -->", this.session.uid, this.session.user, this.session);
         // update requested account name for later
-        const user = yield models.User.findOne({ where: { uid: this.session.uid }});
+        let user = yield models.User.findOne({ where: { uid: this.session.uid }});
         if (!user) {
             // create user and identity
             console.log("-- /Creating User & Identity -->");
-            let data = {};
-            data["last_step"] = 1;
-            const user = yield models.User.create({
+            const data = {};
+            data['last_step'] = 1;
+            user = yield models.User.create({
                 uid: this.session.uid,
                 name: this.request.query.account,
+                remote_ip: getRemoteIp(this.request.req),
                 sign_up_meta: JSON.stringify(data)
             });
             this.session.user = user.id;
-            const user_identity = yield models.Identity.create({
-                user_id: user.id,
-                uid: user.uid,
-                verified: false,
-                provider: "email"
-            });
+            // const user_identity = yield models.Identity.create({
+            //     user_id: user.id,
+            //     uid: user.uid,
+            //     verified: false,
+            //     provider: 'email'
+            // });
         } else {
             const eid = yield models.Identity.findOne({ where: { user_id: user.id, provider: "email" }});
             if (!eid) {
@@ -130,17 +131,16 @@ export default function useEnterAndConfirmEmailPages(app) {
                     user_id: user.id,
                     uid: user.uid,
                     verified: false,
-                    provider: "email"
+                    provider: 'email'
                 });
             } else {
-                let data = user.sign_up_meta ? JSON.parse(user.sign_up_meta) : {};
-                data["last_step"] = 1;
+                const data = user.sign_up_meta ? JSON.parse(user.sign_up_meta) : {};
+                data['last_step'] = 1;
                 yield user.update({
                     name: this.request.query.account,
                     sign_up_meta: JSON.stringify(data)
                 });
             }
-
         }
         // this.session.user = null;
         let default_email = "";

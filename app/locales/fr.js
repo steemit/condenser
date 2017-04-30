@@ -194,7 +194,7 @@ const fr = 	{
 	ok: 'Ok',
 	convert_to_steem: 'Convertir en Steem',
 	steem_dollars_will_be_unavailable: 'Cette action sera effective dans une semaine et ne peux pas être annulée. Ces Steem Dollars ne seront plus accessibles immediatement. The 3.5 day delay is necessary to prevent abuse from gaming the price feed average',
-	steem_dollar_conversions_have_risk: 'Steem Dollar conversions have risk. There is no guarantee on the amount of STEEM that will result from the conversion. The conversion amount depends on many factors including fluxuating market prices, witness price feeds, and witness price feed biases',
+	steem_dollar_conversions_have_risk: 'Steem Dollar conversions have risk. There is no guarantee on the amount of STEEM that will result from the conversion. The conversion amount depends on many factors including fluctuating market prices, witness price feeds, and witness price feed biases',
     amount: 'Montant',
 	steem_dollars: 'STEEM DOLLARS',
 	convert: 'Convertir',

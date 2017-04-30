@@ -212,7 +212,7 @@ const ru = {
 	ok: 'Ок', // Лучше использовать "хорошо" или "ладно"?
 	convert_to_VESTING_TOKEN: 'Перевести в ' + VESTING_TOKEN,
 	DEBT_TOKEN_will_be_unavailable: 'Эта операция будет проходить 3,5 дней от настоящего момента и ее нельзя отменить. Эти ' + DEBT_TOKEN + ' мгновенно станут недоступны. Отсрочка 3,5 день необходима чтобы предотвратить злоупотребление от игры на средней ценовой катировке',
-	DEBT_TOKEN_conversions_have_risk: DEBT_TOKEN + ' conversions have risk. There is no guarantee on the amount of ' + LIQUID_TOKEN_UPPERCASE + ' that will result from the conversion. The conversion amount depends on many factors including fluxuating market prices, witness price feeds, and witness price feed biases',
+	DEBT_TOKEN_conversions_have_risk: DEBT_TOKEN + ' conversions have risk. There is no guarantee on the amount of ' + LIQUID_TOKEN_UPPERCASE + ' that will result from the conversion. The conversion amount depends on many factors including fluctuating market prices, witness price feeds, and witness price feed biases',
     amount: 'Количество',
 	convert: 'Конвертировать',
 	invalid_amount: 'Неверное количество',

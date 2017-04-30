@@ -211,7 +211,7 @@ const en = 	{
 	ok: 'Ok',
 	convert_to_LIQUID_TOKEN: 'Convert to ' + LIQUID_TOKEN,
 	DEBT_TOKEN_will_be_unavailable: 'This action will take place 3.5 days from now and can not be canceled. These ' + DEBT_TOKEN + ' will immediately become unavailable. The 3.5 day delay is necessary to prevent abuse from gaming the price feed average',
-	DEBT_TOKEN_conversions_have_risk: DEBT_TOKEN + ' conversions have risk. There is no guarantee on the amount of ' + LIQUID_TOKEN_UPPERCASE + ' that will result from the conversion. The conversion amount depends on many factors including fluxuating market prices, witness price feeds, and witness price feed biases',
+	DEBT_TOKEN_conversions_have_risk: DEBT_TOKEN + ' conversions have risk. There is no guarantee on the amount of ' + LIQUID_TOKEN_UPPERCASE + ' that will result from the conversion. The conversion amount depends on many factors including fluctuating market prices, witness price feeds, and witness price feed biases',
         amount: 'Amount',
 	convert: 'Convert',
 	invalid_amount: 'Invalid amount',

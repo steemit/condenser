@@ -414,7 +414,6 @@ const en = 	{
 	view_the_direct_parent: 'View the direct parent',
 	you_are_viewing_single_comments_thread_from: 'You are viewing a single comment\'s thread from',
 	view_the_full_context: 'View the full context',
-	this_is_a_price_feed_conversion: '',
 	your_existing_DEBT_TOKEN_are_liquid_and_transferable: 'Your existing ' + DEBT_TOKEN + ' are liquid and transferable. Instead of converting, you may wish to trade ' + DEBT_TOKEN + ' for ' + LIQUID_TOKEN_UPPERCASE + ' directly in this site under {link}. There is less risk, and you do not need to wait 3.5 days.',
 	trending_30_day: 'trending (30 day)',
 	promoted: 'promoted',

@@ -393,7 +393,6 @@ const es = 	{
 	view_the_direct_parent: 'Vista directa del padre',
 	you_are_viewing_single_comments_thread_from: 'You are viewing a single comment&#39;s thread from',
 	view_the_full_context: 'View the full context',
-	this_is_a_price_feed_conversion: 'This is a price feed conversion. The 3.5 day delay is necessary to prevent abuse from gaming the price feed average',
 	your_existing_SD_are_liquid_and_transferable: 'Your existing Steem Dollars are liquid and transferable. Instead of converting, you may wish to trade Steem Dollars for STEEM directly in this site under {link}. There is less risk, and you do not need to wait 3.5 days.',
 	trending_30_day: 'trending (30 day)',
 	promoted: 'promoted',

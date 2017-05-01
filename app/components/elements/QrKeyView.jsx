@@ -1,6 +1,5 @@
 import React from 'react';
 import QRCode from 'react-qr'
-require('./QrKeyView.scss');
 import { translate } from 'app/Translator';
 
 export default ({type, text, isPrivate, onClose}) => {

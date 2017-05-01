@@ -267,7 +267,7 @@ class CreateAccount extends React.Component {
                                 </div>
                             </noscript>
                             {loading && <LoadingIndicator type="circle" />}
-                            <input disabled={submit_btn_disabled} type="submit" className={submit_btn_class} onClick={this.mousePosition} value="Create Account" />
+                            <input disabled={submit_btn_disabled} type="submit" className={submit_btn_class} onClick={this.mousePosition} value="Submit" />
                         </form>
                     </div>
                 </div>

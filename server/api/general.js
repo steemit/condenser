@@ -37,7 +37,8 @@ export default function useGeneralApi(app) {
                 posting_key: account.posting_key,
                 memo_key: account.memo_key,
                 remote_ip,
-                referrer: this.session.r
+                referrer: this.session.r,
+                created: false
             })).catch(error => {
                 console.error('!!! Can\'t create account wait model in /accounts api', this.session.uid, error);
         });
@@ -201,7 +202,8 @@ export default function useGeneralApi(app) {
                 posting_key: account.posting_key,
                 memo_key: account.memo_key,
                 remote_ip,
-                referrer: this.session.r
+                referrer: this.session.r,
+                created: true
             })).catch(error => {
                 console.error('!!! Can\'t create account model in /accounts api', this.session.uid, error);
         });

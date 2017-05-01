@@ -195,7 +195,7 @@ export default function useEnterAndConfirmMobilePages(app) {
                             method="POST"
                         >
                             <h4 style={{ color: "#4078c0" }}>
-                                Last, please provide your phone number to receive your initial free steem deposit.
+                                Please provide your phone number to receive your initial free steem deposit.
                             </h4>
                             <div className="secondary">
                                 Phone verification helps with preventing spam, allows Steemit to assist with Account Recovery in case your account is ever compromised, and for your initial

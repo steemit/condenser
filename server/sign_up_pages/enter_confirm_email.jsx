@@ -155,12 +155,12 @@ export default function useEnterAndConfirmEmailPages(app) {
                         <Progress tabIndex="0" value={50} max={100} />
                         <form id="submit_email" action="/submit_email" method="POST">
                             <h4 style={{ color: "#4078c0" }}>
-                                Please provide your email address to continue the registration process
+                                Please provide your email address to continue.
                             </h4>
                             <p className="secondary">
                                 Email verification helps with preventing spam and allows Steemit to assist with Account Recovery in case your account is ever compromised.
                             </p>
-                            <p className="secondary"> Your email must be confirmed to create a valid account. Make sure to enter a <strong>valid</strong> email.</p>
+                            <p className="secondary"> Your email must be confirmed to be allowed on the wait list. Make sure to enter a <strong>valid</strong> email.</p>
                             <input
                                 type="hidden"
                                 name="csrf"

@@ -115,7 +115,8 @@ export default function useEnterAndConfirmEmailPages(app) {
                 uid: this.session.uid,
                 name: this.request.query.account,
                 remote_ip: getRemoteIp(this.request.req),
-                sign_up_meta: JSON.stringify(data)
+                sign_up_meta: JSON.stringify(data),
+                account_status: 'waiting'
             });
             this.session.user = user.id;
             yield models.Identity.create({

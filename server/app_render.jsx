@@ -34,7 +34,7 @@ async function appRender(ctx) {
                     user = await models.User.findOne({
                         attributes: ['name', 'email', 'picture_small'],
                         where: {id: user_id},
-                        include: [{model: models.Account, attributes: ['name', 'ignored']}],
+                        include: [{model: models.Account, attributes: ['name', 'ignored', 'created']}],
                         logging: false
                     });
                     appRender.dbStatus = {ok: true};
@@ -49,7 +49,7 @@ async function appRender(ctx) {
             if (user) {
                 let account = null;
                 for (const a of user.Accounts) {
-                    if (!a.ignored) {
+                    if (!a.ignored && a.created !== false) {
                         account = a.name;
                         break;
                     }

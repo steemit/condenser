@@ -118,12 +118,12 @@ export default function useEnterAndConfirmEmailPages(app) {
                 sign_up_meta: JSON.stringify(data)
             });
             this.session.user = user.id;
-            // const user_identity = yield models.Identity.create({
-            //     user_id: user.id,
-            //     uid: user.uid,
-            //     verified: false,
-            //     provider: 'email'
-            // });
+            yield models.Identity.create({
+                user_id: user.id,
+                uid: user.uid,
+                verified: false,
+                provider: 'email'
+            });
         } else {
             const eid = yield models.Identity.findOne({ where: { user_id: user.id, provider: "email" }});
             if (!eid) {

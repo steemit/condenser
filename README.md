@@ -17,6 +17,14 @@ cd condenser
 mkdir tmp
 ```
 
+#### Verify NVM is installed
+
+```bash
+command -v nvm # verify
+```
+
+It should output "nvm". If it does not, install nvm.
+
 #### Install dependencies
 
 ```bash
@@ -32,7 +40,7 @@ npm install -g babel-cli
 
 ```bash
 cd config
-cp steem-example.json steem-dev.json
+cp default.json steem-dev.json
 ```
 
 Generate a new crypto_key and save under server_session_secret in ./steem-dev.json.
@@ -40,6 +48,7 @@ Generate a new crypto_key and save under server_session_secret in ./steem-dev.js
 ```bash
 node
 > crypto.randomBytes(32).toString('base64')
+> .exit
 ```
 
 (note: it's steem.json in production)
@@ -78,6 +87,7 @@ Now launch mysql client and create steemit_dev database:
 ```bash
 mysql -u root
 > create database steemit_dev;
+> quit
 ```
 
 Install `sequelize-cli` globally:
@@ -85,6 +95,8 @@ Install `sequelize-cli` globally:
 ```bash
 npm install -g sequelize sequelize-cli pm2 mysql
 ```
+
+Edit `~/condenser/db/config/config.json` and save the mysql password under "password".
 
 Run `sequelize db:migrate` in `db/` directory.
 
@@ -114,7 +126,7 @@ user@example:~$ tarantool
 npm start
 ```
 
-You now have your development front end running at localhost:3002, connected to the main public steem blockchain. You don't need to run ```steemd``` locally, by default you will connect to ```ws://node.steem.ws```.  Use your regular account name and credentials to login -- there is no separate dev login.
+It will take a few moments to launch. Once it says "Application started on port ####", you now have your development front end running at localhost:####, connected to the main public steem blockchain. You don't need to run ```steemd``` locally, by default you will connect to ```ws://node.steem.ws```.  Use your regular account name and credentials to login -- there is no separate dev login.
 
 #### Style Guides
 

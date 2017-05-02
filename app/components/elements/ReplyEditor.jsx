@@ -383,8 +383,8 @@ class ReplyEditor extends React.Component {
                                     {type === 'submit_story' &&
                                         <p className="drag-and-drop">
                                             {tt('reply_editor.insert_images_by_dragging_dropping')}
+                                            <a onClick={this.onOpenClick}>{tt('reply_editor.selecting_them')}</a>
                                             {noClipboardData ? '' : tt('reply_editor.pasting_from_the_clipboard')}
-                                            {tt('g.or') + " " + tt('g.by') + " "}<a onClick={this.onOpenClick}>{tt('reply_editor.selecting_them')}</a>.
                                         </p>
                                     }
                                     {progress.message && <div className="info">{progress.message}</div>}

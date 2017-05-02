@@ -43,7 +43,7 @@
 
 .Voting__button-up > a:hover, a.confirm_weight:hover {
     path {
-        fill: #fff;
+        fill: $white;
     }
     circle {
         fill: #4BA2F2;
@@ -93,7 +93,7 @@
     animation: none !important;
   }
   path {
-    fill: #fff !important;
+    fill: $white !important;
   }
 }
 
@@ -103,7 +103,7 @@
 }
 
 .Voting__button--upvoted a:hover path {
-  fill: #fff !important;
+  fill: $white !important;
 }
 
 .Voting__button--upvoted a:hover circle {
@@ -164,7 +164,7 @@
     background-color: #f8f8f8;
     border-radius: 50%;
     border: 1px solid #dadada;
-    color: #8a8a8a;
+    color: $dark-gray;
   }
 }
 
@@ -214,7 +214,7 @@
   .rangeslider {
     position: relative;
     float: left;
-    background: #e6e6e6;
+    background: $light-gray;
     .rangeslider__fill, .rangeslider__handle {
       position: absolute;
     }
@@ -224,7 +224,7 @@
       border-radius: 10px;
     }
     .rangeslider__handle {
-      background: #fff;
+      background: $white;
       border: 1px solid #ccc;
       cursor: pointer;
       display: inline-block;

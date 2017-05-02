@@ -9,22 +9,22 @@ $menu-width: 250px;
 
   > div {
     background-color: #555;
-    color: #fff;
+    color: $white;
     padding-top: 3rem;
     .close-button {
-      color: #fff;
+      color: $white;
       margin-right: 0 !important;
     }
     .menu > li {
       > a {
-        color: #fff;
+        color: $white;
         border-top: 1px solid #777;
       }
       > a:hover {
         background-color: #666;
       }
       path {
-        fill: #fff;
+        fill: $white;
       }
     }
 

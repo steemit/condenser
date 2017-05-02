@@ -28,7 +28,7 @@
 		text-transform: none;
 		font-weight: bold;
 	}
-	.button-blue { background-color: #1A5099; }
+	.button-blue { background-color: $mainly-blue; }
 	.Landing__supporting-text { color: #a8a8a8; }
 	@media #{$small-only} {
 		h2 { font-size: 2.38095rem; }
@@ -177,7 +177,7 @@
 		.button {
 			color: white;
 			border-radius: 4px;
-			background-color: #1A5099;
+			background-color: $mainly-blue;
 			// border: 2px solid #c0c0bf;
 		}
 	}
@@ -492,11 +492,11 @@
 		margin-bottom: 65px;
 		img { width: 160px; }
 	}
-	.Partners__skolkovo-logo { transform: translateY(-17%); }
-    .Partners__forklog-logo { transform: translateY(0%); }
+	.Partners__daocasino-logo { transform: translateY(-17%); }
+    .Partners__forklog-logo { transform: translateY(19%); }
     .Partners__liqui-logo { margin-top: 70px; }
     .Partners__coinessa-logo { margin-top: 0 !important; }
-	.Partners__changebot-logo { transform: translateY(-24%); }
+	.Partners__changebot-logo { transform: translateY(-10%); }
 	.Partners__mapala-logo img {
     	margin-top: 33px;
 		max-height: 150px;

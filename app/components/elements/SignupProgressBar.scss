@@ -48,19 +48,19 @@
     content: none;
   }
   > ul > li.done {
-    color: #1A5099;
+    color: $mainly-blue;
   }
   > ul > li.done:before {
     content: "\2713";
     color: $white;
-    border-color: #1A5099;
-    background-color: #1A5099;
+    border-color: $mainly-blue;
+    background-color: $mainly-blue;
   }
   > ul > li.done:after {
-    background-color: #1A5099;
+    background-color: $mainly-blue;
   }
   > ul > li.current {
-    color: #1A5099;
+    color: $mainly-blue;
   }
   > ul > li.current:before {
     color: $white;
@@ -68,6 +68,6 @@
     background-color: #4ba2f2;
   }
   > ul > li.current:after {
-    background-color: #1A5099;
+    background-color: $mainly-blue;
   }
 }

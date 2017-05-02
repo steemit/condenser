@@ -5,7 +5,7 @@ ul.PostsList__summaries {
 .PostSummary {
   padding: 0 0 0.5rem;
   margin: 0 0 1.25vw;
-  background-color: #fff;
+  background-color: $white;
   clear: left;
   @include clearfix;
 

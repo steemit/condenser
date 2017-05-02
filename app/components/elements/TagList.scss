@@ -16,10 +16,10 @@
     padding: 0.2rem 0.5rem;
     border-radius: 0.3rem;
     background: #efefef;
-    color: #8a8a8a;
+    color: $dark-gray;
 
     &:hover {
-      background: #e6e6e6;
+      background: $light-gray;
     }
   }
 }

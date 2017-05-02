@@ -19,7 +19,7 @@ import MiniHeader from 'app/components/modules/MiniHeader';
 import tt from 'counterpart';
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
-import { APP_NAME, VESTING_TOKEN, LIQUID_TOKEN, VEST_TICKER, WIKI_URL, LANDING_PAGE_URL, ABOUT_PAGE_URL, WHITEPAPER_URL, SEGMENT_ANALYTICS_KEY, TERMS_OF_SERVICE_URL, PRIVACY_POLICY_URL } from 'app/client_config';
+import { APP_NAME, VESTING_TOKEN, LIQUID_TOKEN, VEST_TICKER, WIKI_URL, LANDING_PAGE_URL, ABOUT_PAGE_URL, WHITEPAPER_URL, SEGMENT_ANALYTICS_KEY, TERMS_OF_SERVICE_URL, PRIVACY_POLICY_URL, VESTING_TOKENS } from 'app/client_config';
 import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
 
 class App extends React.Component {
@@ -237,7 +237,7 @@ class App extends React.Component {
                                 <b>
                                   {tt('submit_a_story.get_sp_when_sign_up1')}
                                   <LocalizedCurrency amount={signup_bonus} />
-                                  {tt('submit_a_story.get_sp_when_sign_up2', {VESTING_TOKEN})}
+                                  {tt('submit_a_story.get_sp_when_sign_up2', {VESTING_TOKENS})}
                                 </b>
                             </div>
                         </div>
@@ -328,11 +328,6 @@ class App extends React.Component {
                 {lp ? <LpFooter /> : null}
                 {/* temporary disabled in favor of live chat */}
                 <RocketChat />
-                <div className="Feedback">
-                  <a href="/submit.html?type=submit_feedback" target="blank" onClick={this.navigate}>
-                    {tt('navigation.feedback')}
-                  </a>
-                </div>
             </div>
             <Dialogs />
             <Modals />

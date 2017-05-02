@@ -18,7 +18,7 @@ import Tooltip from 'app/components/elements/Tooltip';
 import tt from 'counterpart';
 import {List} from 'immutable';
 import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
-import { APP_NAME_LATIN, LIQUID_TOKEN, LIQUID_TOKEN_UPPERCASE, DEBT_TOKEN, DEBT_TOKENS, CURRENCY_SIGN, VESTING_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TICKER, VEST_TICKER, DEBT_TICKER } from 'app/client_config';
+import { APP_NAME_LATIN, LIQUID_TOKEN, LIQUID_TOKEN_UPPERCASE, DEBT_TOKEN, DEBT_TOKENS, CURRENCY_SIGN, VESTING_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TICKER, VEST_TICKER, DEBT_TICKER, VESTING_TOKENS } from 'app/client_config';
 
 const assetPrecision = 1000;
 
@@ -166,11 +166,11 @@ class UserWallet extends React.Component {
         let power_menu = [
             { value: tt('userwallet_jsx.power_down'), link: '#', onClick: powerDown.bind(this, false) }
         ]
-        if(isMyAccount) {
-            steem_menu.push({ value: tt('g.buy'), link: '#', onClick: onShowDepositSteem });
-            steem_menu.push({ value: tt('userwallet_jsx.market'), link: '/market' });
-            power_menu.push({ value: tt('g.buy'), link: '#', onClick: onShowDepositPower })
-        }
+        // if(isMyAccount) {
+        //     steem_menu.push({ value: tt('g.buy'), link: '#', onClick: onShowDepositSteem });
+        //     steem_menu.push({ value: tt('userwallet_jsx.market'), link: '/market' });
+        //     power_menu.push({ value: tt('g.buy'), link: '#', onClick: onShowDepositPower })
+        // }
         if( divesting ) {
             power_menu.pop()
             power_menu.push( { value: tt('userwallet_jsx.cancel_power_down'), link:'#', onClick: powerDown.bind(this,true) } );
@@ -203,8 +203,8 @@ class UserWallet extends React.Component {
         const sbd_orders_balance_str = numberWithCommas(sbdOrders.toFixed(3)) + ' ' + DEBT_TICKER;
         const savings_sbd_balance_str = numberWithCommas(sbd_balance_savings.toFixed(3)) + ' ' + DEBT_TICKER;
 
-        const steemTip = tt('tips_js.tradeable_tokens_that_may_be_transferred_anywhere_at_anytime') + ' ' + tt('tips_js.LIQUID_TOKEN_can_be_converted_to_VESTING_TOKEN_in_a_process_called_powering_up', {LIQUID_TOKEN, VESTING_TOKEN});
-        const powerTip = tt('tips_js.influence_tokens_which_give_you_more_control_over');
+        const steemTip = tt('tips_js.tradeable_tokens_that_may_be_transferred_anywhere_at_anytime') + ' ' + tt('tips_js.LIQUID_TOKEN_can_be_converted_to_VESTING_TOKEN_in_a_process_called_powering_up', {LIQUID_TOKEN, VESTING_TOKEN, VESTING_TOKENS});
+        const powerTip = tt('tips_js.influence_tokens_which_give_you_more_control_over', {VESTING_TOKEN, VESTING_TOKENS});
 
         const savings_menu = [
             { value: tt('userwallet_jsx.withdraw_LIQUID_TOKEN', {LIQUID_TOKEN}), link: '#', onClick: showTransfer.bind( this, LIQUID_TICKER, 'Savings Withdraw' ) },
@@ -262,7 +262,7 @@ class UserWallet extends React.Component {
             </div>
             <div className="UserWallet__balance row zebra">
                 <div className="column small-12 medium-8">
-                    {tt('userwallet_jsx.savings')}<br /><span className="secondary">{tt('userwallet_jsx.savingstip_currently_collecting', {savingsTip: tt('transfer_jsx.balance_subject_to_3_day_withdraw_waiting_period'), sbdInterest})}</span>
+                    {tt('userwallet_jsx.savings')}<br /><span className="secondary">{tt('transfer_jsx.balance_subject_to_3_day_withdraw_waiting_period')}</span>
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?

@@ -7,6 +7,7 @@ export default class Link extends React.Component {
     static propTypes = {
         // HTML properties
         href: React.PropTypes.string,
+        title:React.PropTypes.string
     }
     constructor(props) {
         super()
@@ -19,8 +20,8 @@ export default class Link extends React.Component {
         }
     }
     render() {
-        const {props: {href, children}, onLocalClick} = this
+        const {props: {href, children, title}, onLocalClick} = this
         if(this.localLink) return <a onClick={onLocalClick}>{children}</a>
-        return <a target="_blank" href={href}>{children}</a>
+        return <a target="_blank" href={href} title={title}>{children}</a>
     }
 }

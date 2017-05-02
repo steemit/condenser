@@ -74,10 +74,6 @@ ul > li > .button {
   padding-bottom: 0.2rem;
 }
 
-//ul > li.submit-story {
-//  padding-top: 0.4rem;
-//}
-
 .Header__sub-nav {
   position: relative;
   padding: 0;
@@ -104,13 +100,11 @@ ul > li > .button {
   }
   a.active {
     color: $black;
-    //border-bottom: 1px solid $dark-gray;
   }
 }
 
 
 .Header__sub-nav.hidden {
-  // display: none;
   margin-top: -42px;
 }
 
@@ -124,12 +118,19 @@ ul > li > .button {
 
 .Header__top-steemit {
   margin-right: -22px;
+
+  a {
+    text-transform: uppercase;
+    letter-spacing: 0.01rem;
+  }
+
   .beta {
     position: relative;
     top: 14px;
     right: 22px;
     font-size: 0.7rem;
     color: #4ba2f2;
+    text-transform: none;
   }
 }
 

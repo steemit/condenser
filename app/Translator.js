@@ -5,18 +5,18 @@ import {DEFAULT_LANGUAGE} from 'app/client_config';
 import tt from 'counterpart';
 import en from 'react-intl/locale-data/en';
 import ru from 'react-intl/locale-data/ru';
-import counterpartpluralize from 'counterpart/locales/en';
 
 addLocaleData([...ru, ...en]);
 
 tt.registerTranslations('en', require('app/locales/en.json'));
-tt.registerTranslations('ru', Object.assign(require('app/locales/ru-RU.json'), counterpartpluralize));
+tt.registerTranslations('ru', require('app/locales/ru-RU.json'));
 
 class Translator extends React.Component {
     render() {
         const locale = this.props.locale || DEFAULT_LANGUAGE;
         const localeWithoutRegionCode = locale.toLowerCase().split(/[_-]+/)[0];
         tt.setLocale(localeWithoutRegionCode)
+		tt.setFallbackLocale('en');
         return <IntlProvider
             // to ensure dynamic language change, "key" property with same "locale" info must be added
             // see: https://github.com/yahoo/react-intl/wiki/Components#multiple-intl-contexts

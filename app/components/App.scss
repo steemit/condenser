@@ -42,14 +42,14 @@
 .RightMenu {
   background-color: #555;
   height: 100vh;
-  color: #fff;
+  color: $white;
   padding-top: 3rem;
   .close-button {
-    color: #fff;
+    color: $white;
   }
   .menu > li {
     > a {
-      color: #fff;
+      color: $white;
       border-top: 1px solid #777;
     }
     > a:hover {
@@ -60,12 +60,12 @@
     border-bottom: 1px solid #777;
   }
   .button.hollow {
-    color: #fff;
+    color: $white;
     border: none;
   }
 }
 .PlainLink {
-    color: #8a8a8a;
+    color: $dark-gray;
 }
 
 .welcomeBanner {
@@ -130,20 +130,19 @@
     position: absolute;
     font-size: 87.5%;
     font-weight: bold;
-    text-transform: uppercase;
     width: 140px;
     height: 22px;
     left: -140px;
     text-align: center;
-    background-color: #3adb76;
-    color: #fefefe;
+    background-color: $gray95;
+    color: $mainly-blue;
     border-radius: 3px;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
   }
   a:hover, a:focus {
     height: 24px;
-    background-color: #22bb5b;
+    background-color: $gray95;
   }
 }
 

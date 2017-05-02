@@ -8,7 +8,6 @@
   overflow-x: hidden;
   overflow-y: scroll;
   background-color: $white;
-  // padding: 0 .9rem;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -82,7 +81,7 @@ body.with-post-overlay {
   .PostsList__post_container {
     border-radius: 3px;
     width: 56rem;
-    box-shadow: 0 0 5px 0px rgba(64,64,64,1);
+    box-shadow: 0 0 5px 0 rgba(64,64,64,1);
   }
 }
 

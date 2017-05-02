@@ -28,7 +28,6 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
     const lcn = vertical ? '' : 'show-for-medium';
     const nav = navigate || defaultNavigate;
     const submit_story = $STM_Config.read_only_mode ? null : <li className={lcn + ' submit-story'}><a href="/submit.html" onClick={nav}>{tt('g.submit_a_story')}</a></li>;
-    const user_information_button = <li className={lcn + ' buttons'}><Link to="/about" className="button success">{tt('g.about_project')}</Link></li>;
     const feed_link = `/@${username}/feed`;
     const replies_link = `/@${username}/recent-replies`;
     const wallet_link = `/@${username}/transfers`;
@@ -60,8 +59,10 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
         ];
         return (
             <ul className={mcn + mcl}>
-                {inIco ? ico_menu.map((o,i) => {return <li key={i} className={lcn}><a href={o.link}>{o.value}</a></li>}) : user_information_button}
-                {!inIco && <li className={lcn}><a href="/static/search.html" title="Search">{vertical ? <span>{tt('g.search')}</span> : <Icon name="search" />}</a></li>}
+                {inIco && ico_menu.map((o,i) => {return <li key={i} className={lcn}><a href={o.link}>{o.value}</a></li>})}
+				{!inIco && <li className={lcn}><Link to="/about" title={tt('g.about_project')}>{vertical ? <span>{tt('g.about_project')}</span> : <Icon name="info_o" />}</Link></li>}
+				{!inIco && <li className={lcn}><Link to="/submit.html?type=submit_feedback" title={tt('navigation.feedback')}><Icon name="envelope" /></Link></li>}
+                {!inIco && <li className={lcn}><a href="/static/search.html" title={tt('g.search')}>{vertical ? <span>{tt('g.search')}</span> : <Icon name="search" />}</a></li>}
                 {!inIco && submit_story}
                 <LinkWithDropdown
                     closeOnClickOutside
@@ -84,7 +85,9 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
     }
     return (
         <ul className={mcn + mcl}>
-            {inIco ? ico_menu.map((o,i) => {return <li key={i} className={lcn}><a href="{o.link}">{o.value}</a></li>}) : user_information_button }
+            {inIco && ico_menu.map((o,i) => {return <li key={i} className={lcn}><a href="{o.link}">{o.value}</a></li>})}
+			{!inIco && <li className={lcn}><Link to="/about" title={tt('g.about_project')}>{vertical ? <span>{tt('g.about_project')}</span> : <Icon name="info_o" />}</Link></li>}
+            {!inIco && !vertical && <li><a href="/submit.html?type=submit_feedback" title={tt('navigation.feedback')}><Icon name="envelope" /></a></li>}
             {!inIco && !vertical && <li><a href="/static/search.html" title={tt('g.search')}><Icon name="search" /></a></li>}
             {!inIco && !probablyLoggedIn && <li className={lcn}><a href="/create_account" onClick={showSignUp}>{tt('g.sign_up')}</a></li>}
             {!inIco && !probablyLoggedIn && <li className={lcn}><a href="/login.html" onClick={showLogin}>{tt('g.login')}</a></li>}

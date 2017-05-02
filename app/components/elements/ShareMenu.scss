@@ -13,8 +13,8 @@
         padding-left: 4px;
     }
     li > a:hover {
-        color: #ffffff;
-        svg {fill: #1A5099;}
+        color: $white;
+        svg {fill: $mainly-blue;}
     }
     li > a:link {
         text-decoration: none;

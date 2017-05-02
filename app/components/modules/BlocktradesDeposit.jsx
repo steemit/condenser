@@ -10,7 +10,7 @@ import {steemTip, powerTip, powerTip2} from 'app/utils/Tips'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import tt from 'counterpart';
 import { formatCoins } from 'app/utils/FormatCoins';
-import { APP_NAME, APP_ICON, DEBT_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TOKEN, CURRENCY_SIGN, VESTING_TOKEN, VEST_TICKER, LIQUID_TICKER } from 'app/client_config';
+import { APP_NAME, APP_ICON, DEBT_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TOKEN, CURRENCY_SIGN, VESTING_TOKEN, VEST_TICKER, LIQUID_TICKER, VESTING_TOKENS } from 'app/client_config';
 
 const coinNames = {
     [LIQUID_TICKER]: LIQUID_TOKEN,
@@ -154,7 +154,7 @@ class BlocktradesDeposit extends React.Component {
         const depositTip = outputCoin.value === LIQUID_TICKER
             ? tt('tips_js.tradeable_tokens_that_may_be_transferred_anywhere_at_anytime')
                 + ' ' +
-                tt('tips_js.LIQUID_TOKEN_can_be_converted_to_VESTING_TOKEN_in_a_process_called_powering_up', {LIQUID_TOKEN, VESTING_TOKEN})
+                tt('tips_js.LIQUID_TOKEN_can_be_converted_to_VESTING_TOKEN_in_a_process_called_powering_up', {LIQUID_TOKEN, VESTING_TOKEN, VESTING_TOKENS})
             : outputCoin.value === VEST_TICKER ? <div>
                 <p>{tt('tips_js.influence_tokens_which_earn_more_power_by_holding_long_term') + ' ' + tt('tips_js.the_more_you_hold_the_more_you_influence_post_rewards')}</p>
                 <p>{tt('tips_js.VESTING_TOKEN_is_non_transferrable_and_requires_convert_back_to_LIQUID_TOKEN', {LIQUID_TOKEN, VESTING_TOKEN})}</p>

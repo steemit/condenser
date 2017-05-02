@@ -1,7 +1,7 @@
 import React from "react";
 import OrderbookRow from "./OrderbookRow";
 import tt from 'counterpart';
-import { LIQUID_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN } from 'app/client_config';
+import { LIQUID_TOKEN, DEBT_TOKEN_SHORT } from 'app/client_config';
 
 export default class Orderbook extends React.Component {
 
@@ -49,10 +49,10 @@ export default class Orderbook extends React.Component {
         return (
             <thead>
                 <tr>
-                    <th>{buy ? tt('market_jsx.total_DEBT_TOKEN_SHORT_CURRENCY_SIGN', {DEBT_TOKEN_SHORT, CURRENCY_SIGN}) : tt('g.price')}</th>
-                    <th>{buy ? `${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})` : LIQUID_TOKEN}</th>
-                    <th>{buy ? LIQUID_TOKEN : `${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}</th>
-                    <th>{buy ? tt('g.price') : tt('market_jsx.total_DEBT_TOKEN_SHORT_CURRENCY_SIGN', {DEBT_TOKEN_SHORT, CURRENCY_SIGN})}</th>
+                    <th>{buy ? tt('market_jsx.total_DEBT_TOKEN_SHORT_CURRENCY_SIGN', {DEBT_TOKEN_SHORT}) : tt('g.price')}</th>
+                    <th>{buy ? `${DEBT_TOKEN_SHORT}` : LIQUID_TOKEN}</th>
+                    <th>{buy ? LIQUID_TOKEN : `${DEBT_TOKEN_SHORT}`}</th>
+                    <th>{buy ? tt('g.price') : tt('market_jsx.total_DEBT_TOKEN_SHORT_CURRENCY_SIGN', {DEBT_TOKEN_SHORT})}</th>
                 </tr>
             </thead>
         );

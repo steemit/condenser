@@ -19,15 +19,29 @@ class Approval extends React.Component {
         let body = '';
         if (this.state.confirm) {
             body = <div>
-                <h4 style={{ color: "#4078c0" }}>All set, your email is now confirmed.</h4>
-                <p>Please make sure your <strong>password is backed up</strong> and safely secure.</p>
-                <p>You will receive a final email confirmation when you can log into your new account.</p>
-            </div>
+
+	<h4 style={{ color: "#4078c0" }}>All set, your email is now
+	confirmed.</h4>
+
+	<p>Please make sure your <strong>password is stored safely</strong> and
+	a second copy is backed up somewhere you will <strong>never lose
+	it</strong>.</p>
+
+	<p>You will receive an email confirmation soon when you can log into
+	your shiny new account.</p>
+
+	    </div>
         } else {
             body = <div>
-                <h4 style={{ color: "#4078c0" }}><strong>You've been added to the wait list and pending approval.</strong></h4>
+
+		<h4 style={{ color: "#4078c0" }}><strong>Your account will be
+		active soon!</strong></h4>
+
                 <br />
-                <p><strong>You must validate your email</strong> as the final step. Please click the confirmation link in your welcome email.</p>
+
+		<p>Thank you! Please note that you must click the validation
+	link in the email we just sent you to finish creating your account.</p>
+
             </div>
         }
         return (

@@ -229,17 +229,37 @@ class CreateAccount extends React.Component {
         return (
             <div>
                 <div className="CreateAccount row">
-                    <div className="column" style={{maxWidth: '36rem', margin: '0 auto'}}>
+                    <div className="column"
+				style={{maxWidth: '36rem', margin: '0 auto'}}>
                         <br />
                         <Progress tabIndex="0" value={95} max={100} />
                         {showRules ? <div className="CreateAccount__rules">
                             <p>
-                                The first rule of Steemit is: Do not lose your password.<br />
-                                The second rule of Steemit is: Do <strong>not</strong> lose your password.<br />
-                                The third rule of Steemit is: We cannot recover your password.<br />
-                                The forth rule: Do not tell anyone your password.<br />
-                                The fifth rule: Always back up your password.
+
+	The first rule of Steemit is: Do not lose your password.<br />
+
+	The second rule of Steemit is: Do <strong>not</strong> lose your password.<br />
+
+	The third rule of Steemit is: We cannot recover your password, or your account if you lose your password.<br />
+
+	The forth rule: Do not tell anyone your password.<br />
+
+	The fifth rule: Always back up your password.
+
+	<br />
+	<br />
+	Seriously, we are, for technical reasons, entirely unable to gain
+	access to an account without knowing the password.  Steemit is a
+	new model, entirely unlike other sites on the Internet.  It's not
+	simply policy: <strong>We cannot recover your account or password
+	if you lose it.</strong>
+
+	<br />
+	<br />
+	Print out your password or write it down in a safe place.
+
                             </p>
+
                             {/*<div className="text-center">*/}
                             {/*<a className="CreateAccount__rules-button" href="#" onClick={() => this.setState({showRules: false})}>*/}
                             {/*<span style={{display: 'inline-block', transform: 'rotate(-90deg)'}}>&raquo;</span>*/}

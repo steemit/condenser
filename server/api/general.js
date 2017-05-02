@@ -58,6 +58,7 @@ export default function useGeneralApi(app) {
 
     router.post('/accounts', koaBody, function *() {
         // temporary disable any accounts creation until approval is implemented
+        console.log("--> account creation is currently disabled --");
         this.body = JSON.stringify({error: 'Unauthorized'});
         this.status = 401;
         return;
@@ -465,6 +466,22 @@ function* createAccount({
         extensions: [],
         operations
     }, [signingKey])
+}
+
+
+function createWaitCheck(name, params) {
+    console.log("lets create");
+    // yield createAccount({
+    //     signingKey: config.get('registrar.signing_key'),
+    //     fee: config.get('registrar.fee'),
+    //     creator: config.get('registrar.account'),
+    //     new_account_name: account.name,
+    //     delegation: config.get('registrar.delegation'),
+    //     owner: account.owner_key,
+    //     active: account.active_key,
+    //     posting: account.posting_key,
+    //     memo: account.memo_key
+    // });
 }
 
 const parseSig = hexSig => {try {return Signature.fromHex(hexSig)} catch(e) {return null}}

@@ -11,7 +11,8 @@ import config from "config";
 import MiniHeader from "app/components/modules/MiniHeader";
 import secureRandom from "secure-random";
 import Mixpanel from "mixpanel";
-import Progress from 'react-foundation-components/lib/global/progress-bar';
+import Progress from "react-foundation-components/lib/global/progress-bar";
+import fetch from 'node-fetch';
 
 // FIXME copy paste code, refactor mixpanel out
 var mixpanel = null;
@@ -114,28 +115,29 @@ export default function useEnterAndConfirmEmailPages(app) {
             if (account.created === null && user.account_status === "approved") {
                 // approved account not yet created. create and log in
                 const name = account.name;
-                console.log("--creating account -->", user.id, name);
-                router.post('/api/v1/accounts', function *(){
-                    let response = yield request({
-                        method: 'post',
-                        mode: 'no-cors',
-                        credentials: 'same-origin',
-                        headers: {
-                            Accept: 'application/json',
-                            'Content-type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            name,
-                            owner_key: user.owner_key,
-                            active_key: user.active_key,
-                            posting_key: user.posting_key,
-                            memo_key: user.memo_key
-                        })
-                    });
-                    this.body = response;
-                    console.log("api response", response)
-                });
-                // router.use('/api/v1/accounts', {
+                console.log("--creating account for -->", user.id, name);
+                // createWaitCheck(name);
+                // router.get('/api/v1/accounts', function *(){
+                //     let response = yield request({
+                //         method: 'post',
+                //         mode: 'no-cors',
+                //         credentials: 'same-origin',
+                //         headers: {
+                //             Accept: 'application/json',
+                //             'Content-type': 'application/json'
+                //         },
+                //         body: JSON.stringify({
+                //             name,
+                //             owner_key: user.owner_key,
+                //             active_key: user.active_key,
+                //             posting_key: user.posting_key,
+                //             memo_key: user.memo_key
+                //         })
+                //     });
+                //     this.body = response;
+                //     console.log("api response", response)
+                // });
+                // return fetch('/api/v1/accounts', {
                 //     method: 'post',
                 //     mode: 'no-cors',
                 //     credentials: 'same-origin',
@@ -186,6 +188,7 @@ export default function useEnterAndConfirmEmailPages(app) {
             this.redirect("/");
             return;
         }
+        // handle success
     });
 
     router.get("/enter_email", function*() {

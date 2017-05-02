@@ -159,9 +159,9 @@ export default function useEnterAndConfirmEmailPages(app) {
                                 Please provide your email address to continue.
                             </h4>
                             <p className="secondary">
-                                Email verification helps with preventing spam and allows Steemit to assist with Account Recovery in case your account is ever compromised.
+                                We need your email address to ensure that we can contact you to verify account ownership in the event that your account is ever compromised.
                             </p>
-                            <p className="secondary"> Your email must be confirmed to be allowed on the wait list. Make sure to enter a <strong>valid</strong> email.</p>
+                            <p className="secondary">Please make sure that you enter a <strong>valid</strong> email so that you receive the confirmation link.</p>
                             <input
                                 type="hidden"
                                 name="csrf"

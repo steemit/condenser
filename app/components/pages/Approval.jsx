@@ -28,7 +28,8 @@ class Approval extends React.Component {
 	it</strong>.</p>
 
 	<p>You will receive an email confirmation soon when you can log into
-	your shiny new account.</p>
+	your shiny new account - usually less than one business day.
+	Stay tuned!</p>
 
 	    </div>
         } else {

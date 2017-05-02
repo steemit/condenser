@@ -321,6 +321,7 @@ function retrieveVkUserData(access_token, userId) {
 
 function* handleVkCallback() {
     let print = getLogger('oauth - vk').print;
+    console.log('oauth - vk')
     print ('session id', this.session.uid);
     print ('query', this.query)
     //console.log('-- /handle_facebook_callback -->', this.session.uid, this.query);
@@ -461,5 +462,5 @@ function* handleVkCallback() {
 export default function useOauthLogin(app) {
     app.use(route.get('/handle_facebook_callback', handleFacebookCallback));
     app.use(route.get('/handle_reddit_callback', handleRedditCallback));
-    app.use(route.get('/handle_vk_callback', handleVkCallback));
+    // app.use(route.get('/handle_vk_callback', handleVkCallback));
 }

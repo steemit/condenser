@@ -102,6 +102,92 @@ export default function useEnterAndConfirmEmailPages(app) {
     const koaBody = koa_body();
     const rc_site_key = config.get("recaptcha.site_key");
 
+    router.get("/start/:code", function*() {
+        const code = this.params.code;
+        console.log("--start_account -->", code, this.session.user);
+        const eid = yield models.Identity.findOne({ where: { provider: "email", confirmation_code: code }});
+        console.log("--identity found -->", eid.user_id, eid.confirmation_code);
+        const user = yield models.User.findOne({ where: { id: eid.user_id }});
+        if (eid && user) {
+            // validate account should be created
+            const account = yield models.Account.findOne({ where: { user_id: user.id }});
+            if (account.created === null && user.account_status === "approved") {
+                // approved account not yet created. create and log in
+                const name = account.name;
+                console.log("--creating account -->", user.id, name);
+                router.post('/api/v1/accounts', function *(){
+                    let response = yield request({
+                        method: 'post',
+                        mode: 'no-cors',
+                        credentials: 'same-origin',
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            name,
+                            owner_key: user.owner_key,
+                            active_key: user.active_key,
+                            posting_key: user.posting_key,
+                            memo_key: user.memo_key
+                        })
+                    });
+                    this.body = response;
+                    console.log("api response", response)
+                });
+                // router.use('/api/v1/accounts', {
+                //     method: 'post',
+                //     mode: 'no-cors',
+                //     credentials: 'same-origin',
+                //     headers: {
+                //         Accept: 'application/json',
+                //         'Content-type': 'application/json'
+                //     },
+                //     body: JSON.stringify({
+                //         name,
+                //         owner_key: user.owner_key,
+                //         active_key: user.active_key,
+                //         posting_key: user.posting_key,
+                //         memo_key: user.memo_key
+                //     })
+                // }).then(r => r.json()).then(res => {
+                //     if (res.error || res.status !== 'ok') {
+                //         console.error('CreateAccount server error', res.error);
+                //         if (res.error === 'Unauthorized') {
+                //             this.redirect("/");
+                //             return;
+                //         }
+                //         // this.setState({server_error: res.error || 'Unknown', loading: false});
+                //     } else {
+                //         this.redirect("/");
+                //         return;
+                //     }
+                // }).catch(error => {
+                //     console.error('Caught CreateAccount server error', error);
+                //     // this.setState({server_error: (error.message ? error.message : error), loading: false});
+                // });
+            } else if (user.account_status === "created") {
+                // user clicked expired link already create account
+                this.flash = { error: "Your account has already been created." };
+                this.redirect("/");
+                return;
+            } else if (user.account_status === "waiting") {
+                this.flash = { error: "Your account has not been approved." };
+                this.redirect("/");
+                return;
+            } else {
+                this.flash = { error: "Issue locating account." };
+                this.redirect("/");
+                return;
+            }
+        } else {
+            // no matching identity found redirect
+            this.flash = { error: "This is not a valid account code. Please click the link in your welcome email." };
+            this.redirect("/");
+            return;
+        }
+    });
+
     router.get("/enter_email", function*() {
         console.log("-- /enter_email -->", this.session.uid, this.session.user, this.session);
         // update requested account name for later

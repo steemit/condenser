@@ -266,6 +266,14 @@ export default function useEnterAndConfirmEmailPages(app) {
                     ". Please make sure your you don't use any temporary email providers, contact support@steemit.com for more information."
                 )
             };
+            // update identity with blocked email address
+            const block_user = yield models.User.findOne({
+                where: { uid: this.session.uid }
+            });
+            const block_eid = yield models.Identity.findOne({
+                where: { user_id: block_user.id, provider: "email" }
+            });
+            yield block_eid.update({email: email});
             this.redirect("/enter_email?email=" + email);
             return;
         }
@@ -282,7 +290,7 @@ export default function useEnterAndConfirmEmailPages(app) {
             where: { uid: this.session.uid }
         });
         eid = yield models.Identity.findOne({
-            where: { user_id: user.id }
+            where: { user_id: user.id, provider: "email" }
         });
         if (existing_email) {
             console.log(

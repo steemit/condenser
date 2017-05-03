@@ -122,6 +122,19 @@ export default function useGeneralApi(app) {
             //     throw new Error('Phone number is not confirmed');
             // }
 
+            models.Account.create(escAttrs({
+                user_id,
+                name: account.name,
+                owner_key: account.owner_key,
+                active_key: account.active_key,
+                posting_key: account.posting_key,
+                memo_key: account.memo_key,
+                remote_ip,
+                referrer: this.session.r
+            })).catch(error => {
+                console.error('!!! Can\'t create account model in /accounts api', this.session.uid, error);
+            });
+
             yield createAccount({
                 signingKey: config.registrar.signing_key,
                 fee: config.registrar.fee,
@@ -136,19 +149,6 @@ export default function useGeneralApi(app) {
             console.log('-- create_account_with_keys created -->', this.session.uid, account.name, user.id, account.owner_key);
 
             this.body = JSON.stringify({status: 'ok'});
-
-            models.Account.create(escAttrs({
-                user_id,
-                name: account.name,
-                owner_key: account.owner_key,
-                active_key: account.active_key,
-                posting_key: account.posting_key,
-                memo_key: account.memo_key,
-                remote_ip,
-                referrer: this.session.r
-            })).catch(error => {
-                console.error('!!! Can\'t create account model in /accounts api', this.session.uid, error);
-            });
             if (mixpanel) {
                 mixpanel.track('Signup', {
                     distinct_id: this.session.uid,

@@ -90,7 +90,9 @@ export default function useGeneralApi(app) {
             where: {id: new_eid.user_id}
         });
         const account = yield models.Account.findOne({
-            where: {user_id: new_user.id}
+            attributes: ["id"],
+            where: {user_id: new_user.id},
+            order: "id DESC"
         });
         this.session.user = new_eid.user_id;
         this.session.uid = new_user.uid;
@@ -202,9 +204,7 @@ export default function useGeneralApi(app) {
             // } catch (error) {
             //     console.error('Error in /accounts get_chain_properties', error);
             // }
-            const new_account = yield models.Account.findOne({
-                where: {user_id: user.id}
-            });
+            const new_account = account;
             console.log('-- attemping to create account with keys -->', this.session.uid, new_account.name, user.id, new_account.owner_key);
             yield createAccount({
                 signingKey: config.get('registrar.signing_key'),

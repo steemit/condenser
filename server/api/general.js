@@ -133,6 +133,7 @@ export default function useGeneralApi(app) {
                 referrer: this.session.r
             })).catch(error => {
                 console.error('!!! Can\'t create account model in /accounts api', this.session.uid, error);
+                throw new Error('Cannot create Golos account');
             });
 
             yield createAccount({

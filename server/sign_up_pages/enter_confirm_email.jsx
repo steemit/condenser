@@ -12,6 +12,7 @@ import MiniHeader from "app/components/modules/MiniHeader";
 import secureRandom from "secure-random";
 import Mixpanel from "mixpanel";
 import Progress from "react-foundation-components/lib/global/progress-bar";
+// import {createAccount} from "server/api/general"
 import fetch from 'node-fetch';
 
 // FIXME copy paste code, refactor mixpanel out
@@ -116,7 +117,23 @@ export default function useEnterAndConfirmEmailPages(app) {
                 // approved account not yet created. create and log in
                 const name = account.name;
                 console.log("--creating account for -->", user.id, name);
-                // createWaitCheck(name);
+                const fields = JSON.stringify({
+                                name,
+                                confirmation_code: code,
+                                owner_key: account.owner_key,
+                                active_key: account.active_key,
+                                posting_key: account.posting_key,
+                                memo_key: account.memo_key
+                            });
+                return fetch("http://" + this.request.header.host + '/api/v1/accounts', {
+                    method: 'post',
+                    body: fields,
+                    headers: {
+                                    Accept: 'application/json',
+                                    'Content-type': 'application/json'
+                                }
+                });
+                // createAccount(name);
                 // router.get('/api/v1/accounts', function *(){
                 //     let response = yield request({
                 //         method: 'post',

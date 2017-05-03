@@ -15,6 +15,21 @@ import {api, broadcast} from 'steem';
 
 const mixpanel = config.get('mixpanel') ? Mixpanel.init(config.get('mixpanel')) : null;
 
+// function createWaitCheck() {
+//     console.log("lets create");
+//     // yield createAccount({
+//     //     signingKey: config.get('registrar.signing_key'),
+//     //     fee: config.get('registrar.fee'),
+//     //     creator: config.get('registrar.account'),
+//     //     new_account_name: account.name,
+//     //     delegation: config.get('registrar.delegation'),
+//     //     owner: account.owner_key,
+//     //     active: account.active_key,
+//     //     posting: account.posting_key,
+//     //     memo: account.memo_key
+//     // });
+// }
+
 export default function useGeneralApi(app) {
     const router = koa_router({prefix: '/api/v1'});
     app.use(router.routes());
@@ -58,15 +73,20 @@ export default function useGeneralApi(app) {
 
     router.post('/accounts', koaBody, function *() {
         // temporary disable any accounts creation until approval is implemented
-        console.log("--> account creation is currently disabled --");
-        this.body = JSON.stringify({error: 'Unauthorized'});
-        this.status = 401;
-        return;
+        // console.log("--> account creation is currently disabled --");
+        // this.body = JSON.stringify({error: 'Unauthorized'});
+        // this.status = 401;
+        // return;
 
         if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;
         const account = typeof(params) === 'string' ? JSON.parse(params) : params;
-        if (!checkCSRF(this, account.csrf)) return;
+        // if (!checkCSRF(this, account.csrf)) return;
+        console.log('-- this user session --', this.session.uid, params);
+        const new_eid = yield models.Identity.findOne({
+            where: {confirmation_code: params.confirmation_code}
+        });
+        this.session.user = new_eid.user_id;
         console.log('-- /accounts creation -->', this.session.uid, this.session.user, account);
 
         if ($STM_Config.disable_signups) {
@@ -78,12 +98,13 @@ export default function useGeneralApi(app) {
         const remote_ip = getRemoteIp(this.req);
 
         const user_id = this.session.user;
+        console.log("--> user id --", user_id);
         if (!user_id) { // require user to sign in with identity provider
             this.body = JSON.stringify({error: 'Unauthorized'});
             this.status = 401;
             return;
         }
-
+        console.log("--> trying tarantool --");
         try {
             const lock_entity_res = yield Tarantool.instance().call('lock_entity', user_id+'');
             if (!lock_entity_res[0][0]) {
@@ -100,7 +121,7 @@ export default function useGeneralApi(app) {
             setTimeout(() => resolve(), rnd_wait_time)
         )
         }
-
+        console.log("--> trying 118 --");
         try {
             const user_id = this.session.user;
             const user = yield models.User.findOne({
@@ -181,17 +202,17 @@ export default function useGeneralApi(app) {
             //     console.error('Error in /accounts get_chain_properties', error);
             // }
 
-            // yield createAccount({
-            //     signingKey: config.get('registrar.signing_key'),
-            //     fee: config.get('registrar.fee'),
-            //     creator: config.get('registrar.account'),
-            //     new_account_name: account.name,
-            //     delegation: config.get('registrar.delegation'),
-            //     owner: account.owner_key,
-            //     active: account.active_key,
-            //     posting: account.posting_key,
-            //     memo: account.memo_key
-            // });
+            yield createAccount({
+                signingKey: config.get('registrar.signing_key'),
+                fee: config.get('registrar.fee'),
+                creator: config.get('registrar.account'),
+                new_account_name: account.name,
+                delegation: config.get('registrar.delegation'),
+                owner: account.owner_key,
+                active: account.active_key,
+                posting: account.posting_key,
+                memo: account.memo_key
+            });
             console.log('-- create_account_with_keys created -->', this.session.uid, account.name, user.id, account.owner_key);
 
             this.body = JSON.stringify({status: 'ok'});
@@ -466,22 +487,6 @@ function* createAccount({
         extensions: [],
         operations
     }, [signingKey])
-}
-
-
-function createWaitCheck(name, params) {
-    console.log("lets create");
-    // yield createAccount({
-    //     signingKey: config.get('registrar.signing_key'),
-    //     fee: config.get('registrar.fee'),
-    //     creator: config.get('registrar.account'),
-    //     new_account_name: account.name,
-    //     delegation: config.get('registrar.delegation'),
-    //     owner: account.owner_key,
-    //     active: account.active_key,
-    //     posting: account.posting_key,
-    //     memo: account.memo_key
-    // });
 }
 
 const parseSig = hexSig => {try {return Signature.fromHex(hexSig)} catch(e) {return null}}

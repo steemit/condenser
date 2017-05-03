@@ -151,7 +151,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                     console.error('Caught CreateAccount server error', error);
                     // this.setState({server_error: (error.message ? error.message : error), loading: false});
                 });
-                // success
+                this.flash = { error: "Your account is now ready. Please log-in with your password." };
                 this.redirect("/welcome");
                 return;
             } else if (user.account_status === "created") {
@@ -357,7 +357,7 @@ export default function useEnterAndConfirmEmailPages(app) {
             where: { uid: this.session.uid }
         });
         eid = yield models.Identity.findOne({
-            where: { user_id: user.id }
+            where: { user_id: user.id, provider: "email"}
         });
         if (existing_email) {
             console.log(

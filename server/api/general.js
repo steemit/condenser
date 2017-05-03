@@ -94,9 +94,9 @@ export default function useGeneralApi(app) {
             );
             if (same_ip_account) {
                 const minutes = (Date.now() - same_ip_account.created_at) / 60000;
-                if (minutes < 10) {
+                if (minutes < 120) {
                     console.log(`api /accounts: IP rate limit for user ${this.session.uid} #${user_id}, IP ${remote_ip}`);
-                    throw new Error('Only one Steem account allowed per IP address every 10 minutes');
+                    throw new Error('Only one Golos account allowed per IP address every 10 minutes');
                 }
             }
             if (user.waiting_list) {

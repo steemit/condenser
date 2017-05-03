@@ -82,7 +82,6 @@ export default function useGeneralApi(app) {
         const params = this.request.body;
         const account = typeof(params) === 'string' ? JSON.parse(params) : params;
         // if (!checkCSRF(this, account.csrf)) return;
-        console.log('-- this user session --', this.session.uid, params);
         const new_eid = yield models.Identity.findOne({
             where: {confirmation_code: params.confirmation_code}
         });
@@ -121,7 +120,6 @@ export default function useGeneralApi(app) {
             setTimeout(() => resolve(), rnd_wait_time)
         )
         }
-        console.log("--> trying 118 --");
         try {
             const user_id = this.session.user;
             const user = yield models.User.findOne({
@@ -201,7 +199,7 @@ export default function useGeneralApi(app) {
             // } catch (error) {
             //     console.error('Error in /accounts get_chain_properties', error);
             // }
-
+            console.log('-- attemping to create account with keys -->', this.session.uid, account.name, user.id, account.owner_key);
             yield createAccount({
                 signingKey: config.get('registrar.signing_key'),
                 fee: config.get('registrar.fee'),

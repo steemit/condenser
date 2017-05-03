@@ -267,13 +267,12 @@ export default function useEnterAndConfirmEmailPages(app) {
                 )
             };
             // update identity with blocked email address
-            const block_user = yield models.User.findOne({
-                where: { uid: this.session.uid }
-            });
             const block_eid = yield models.Identity.findOne({
-                where: { user_id: block_user.id, provider: "email" }
+                attributes: ["id"],
+                where: { user_id: this.session.user, provider: "email" },
+                order: "id DESC"
             });
-            yield block_eid.update({email: email});
+            if (block_eid) yield block_eid.update({email});
             this.redirect("/enter_email?email=" + email);
             return;
         }

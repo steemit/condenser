@@ -114,7 +114,13 @@ export default function useEnterAndConfirmEmailPages(app) {
             this.session.user = user.id;
             this.session.uid = user.uid;
             console.log('-- checking incoming start request -->', this.session.uid, this.session.user);
-            const account = yield models.Account.findOne({ where: { user_id: user.id }});
+            const account = yield models.Account.findOne({
+                where: {
+                    attributes: ["id"],
+                    user_id: user.id,
+                    order: "id DESC"
+                }
+            });
             // set session based on confirmation code(user from diff device, etc)
             if ((account.created === null || account.created === false) && user.account_status === "approved") {
                 // approved account not yet created. create and log in

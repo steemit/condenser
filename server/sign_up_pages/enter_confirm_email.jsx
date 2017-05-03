@@ -106,17 +106,16 @@ export default function useEnterAndConfirmEmailPages(app) {
 
     router.get("/start/:code", function*() {
         const code = this.params.code;
-        console.log("--start_account -->", code, this.session.user);
         const eid = yield models.Identity.findOne({ where: { provider: "email", confirmation_code: code }});
-        console.log("--identity found -->", eid.user_id, eid.confirmation_code);
         const user = yield models.User.findOne({ where: { id: eid.user_id }});
+        // validate account should be created
         if (eid && user) {
-            // validate account should be created
-            const account = yield models.Account.findOne({ where: { user_id: user.id }});
             // set session based on cofirmation code(user from diff device, etc)
             this.session.user = user.id;
             this.session.uid = user.uid;
             console.log('-- checking incoming start request -->', this.session.uid, this.session.user);
+            const account = yield models.Account.findOne({ where: { user_id: user.id }});
+            // set session based on confirmation code(user from diff device, etc)
             if ((account.created === null || account.created === false) && user.account_status === "approved") {
                 // approved account not yet created. create and log in
                 const name = account.name;

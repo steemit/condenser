@@ -11,6 +11,7 @@ import {Set} from 'immutable'
 import tt from 'counterpart';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
+import { LIQUID_TOKEN } from 'app/client_config';
 
 class Post extends React.Component {
 
@@ -176,7 +177,7 @@ class Post extends React.Component {
                             <br /> {// remove '$' from signup_bonus before parsing it into local currency
                                     tt('g.next_7_strings_sinngle_block.if_you_enjoyed_what_you_read_earn_amount')}
                             <br />
-                            <button type="button" className="button sign-up" onClick={showSignUp}>{tt('g.next_7_strings_sinngle_block.sign_up_now_to_receive')}<span className="free-money">{tt('g.next_7_strings_sinngle_block.free_steem', {VESTING_TOKEN_UPPERCASE})}</span></button>
+                            <button type="button" className="button sign-up" onClick={showSignUp}>{tt('g.next_7_strings_sinngle_block.sign_up_now_to_receive')}<span className="free-money">{tt('g.next_7_strings_sinngle_block.free_steem', {LIQUID_TOKEN})}</span></button>
                         </div>
                     </div>
                 </div>}

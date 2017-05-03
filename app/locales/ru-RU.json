@@ -309,8 +309,8 @@
       "when_you": "зарегистрируйтесь",
       "when_you_link_text": "Регистрация",
       "and_vote_for_it": "и проголосовать за него",
-      "sign_up_now_to_receive": "Зарегистрируйтесь сейчас чтобы получить ",
-      "free_steem": " Бесплатные"
+      "sign_up_now_to_receive": "Зарегистрируйтесь сейчас, чтобы получить ",
+      "free_steem": "БЕСПЛАТНЫЕ %(LIQUID_TOKEN)sa"
     },
     "next_3_strings_together": {
       "show_more": "Показать больше",

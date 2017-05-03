@@ -128,7 +128,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                                 posting_key: account.posting_key,
                                 memo_key: account.memo_key
                             });
-                return fetch("http://" + this.request.header.host + '/api/v1/accounts', {
+                return fetch("https://" + this.request.header.host + '/api/v1/accounts', {
                     method: 'post',
                     body: fields,
                     headers: {
@@ -151,8 +151,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                     console.error('Caught CreateAccount server error', error);
                     // this.setState({server_error: (error.message ? error.message : error), loading: false});
                 });
-
-                // sucess
+                // success
                 this.redirect("/welcome");
                 return;
             } else if (user.account_status === "created") {

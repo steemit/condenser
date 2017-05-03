@@ -80,13 +80,21 @@ export default function useGeneralApi(app) {
 
         if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;
-        const account = typeof(params) === 'string' ? JSON.parse(params) : params;
+        // const account = typeof(params) === 'string' ? JSON.parse(params) : params;
         // if (!checkCSRF(this, account.csrf)) return;
+        console.log(params, params.confirmation_code)
         const new_eid = yield models.Identity.findOne({
             where: {confirmation_code: params.confirmation_code}
         });
+        const new_user = yield models.User.findOne({
+            where: {id: new_eid.user_id}
+        });
+        const account = yield models.Account.findOne({
+            where: {user_id: new_user.id}
+        });
         this.session.user = new_eid.user_id;
-        console.log('-- /accounts creation -->', this.session.uid, this.session.user, account);
+        this.session.uid = new_user.uid;
+        console.log('-- /accounts creation -->', this.session.uid, this.session.user, account.name);
 
         if ($STM_Config.disable_signups) {
             this.body = JSON.stringify({error: 'New signups are temporary disabled.'});
@@ -122,9 +130,7 @@ export default function useGeneralApi(app) {
         }
         try {
             const user_id = this.session.user;
-            const user = yield models.User.findOne({
-                where: {id: user_id}
-            });
+            const user = new_user;
             if (!user) {
                 this.body = JSON.stringify({error: 'Unauthorized'});
                 this.status = 401;
@@ -143,15 +149,14 @@ export default function useGeneralApi(app) {
                 return;
             }
 
-            // const existing_account = yield models.Account.findOne({
-            //     attributes: ['id', 'created_at'],
-            //     where: {user_id, ignored: false},
-            //     order: 'id DESC'
-            // });
-            // if (existing_account) {
-            //     throw new Error("Only one Steem account per user is allowed in order to prevent abuse");
-            // }
-
+            const existing_account = yield models.Account.findOne({
+                attributes: ['id', 'created_at'],
+                where: {user_id, ignored: false},
+                order: 'id DESC'
+            });
+            if (existing_account && existing_account.created === "created") {
+                throw new Error("Only one Steem account per user is allowed in order to prevent abuse");
+            }
             const same_ip_account = yield models.Account.findOne(
                 {attributes: ['created_at'], where: {remote_ip: esc(remote_ip)}, order: 'id DESC'}
             );
@@ -166,7 +171,6 @@ export default function useGeneralApi(app) {
                 console.log(`api /accounts: waiting_list user ${this.session.uid} #${user_id}`);
                 throw new Error('You are on the waiting list. We will get back to you at the earliest possible opportunity.');
             }
-
             // disable email verification for now
             // const eid = yield models.Identity.findOne(
             //     {attributes: ['id'], where: {user_id, provider: 'email', verified: true}, order: 'id DESC'}
@@ -184,7 +188,6 @@ export default function useGeneralApi(app) {
                 console.log(`api /accounts: not confirmed sms for user ${this.session.uid} #${user_id}`);
                 throw new Error('Phone number is not confirmed');
             }
-
             // const [fee_value, fee_currency] = config.get('registrar.fee').split(' ');
             // let fee = parseFloat(fee_value);
             // try {
@@ -199,17 +202,20 @@ export default function useGeneralApi(app) {
             // } catch (error) {
             //     console.error('Error in /accounts get_chain_properties', error);
             // }
-            console.log('-- attemping to create account with keys -->', this.session.uid, account.name, user.id, account.owner_key);
+            const new_account = yield models.Account.findOne({
+                where: {user_id: user.id}
+            });
+            console.log('-- attemping to create account with keys -->', this.session.uid, new_account.name, user.id, new_account.owner_key);
             yield createAccount({
                 signingKey: config.get('registrar.signing_key'),
                 fee: config.get('registrar.fee'),
                 creator: config.get('registrar.account'),
-                new_account_name: account.name,
+                new_account_name: new_account.name,
                 delegation: config.get('registrar.delegation'),
-                owner: account.owner_key,
-                active: account.active_key,
-                posting: account.posting_key,
-                memo: account.memo_key
+                owner: new_account.owner_key,
+                active: new_account.active_key,
+                posting: new_account.posting_key,
+                memo: new_account.memo_key
             });
             console.log('-- create_account_with_keys created -->', this.session.uid, account.name, user.id, account.owner_key);
 

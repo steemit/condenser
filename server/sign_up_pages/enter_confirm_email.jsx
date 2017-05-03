@@ -116,7 +116,10 @@ export default function useEnterAndConfirmEmailPages(app) {
             if (account.created === null && user.account_status === "approved") {
                 // approved account not yet created. create and log in
                 const name = account.name;
-                console.log("--creating account for -->", user.id, name);
+                // set session based on cofirmation code(user from diff device, etc)
+                this.session.user = user.id;
+                this.session.uid = user.uid;
+                console.log("--creating account for -->", this.session.uid, this.session.user);
                 const fields = JSON.stringify({
                                 name,
                                 confirmation_code: code,
@@ -129,62 +132,29 @@ export default function useEnterAndConfirmEmailPages(app) {
                     method: 'post',
                     body: fields,
                     headers: {
-                                    Accept: 'application/json',
-                                    'Content-type': 'application/json'
-                                }
+                        Accept: 'application/json',
+                        'Content-type': 'application/json'
+                    }
+                }).then(r => r.json()).then(res => {
+                    if (res.error || res.status !== 'ok') {
+                        console.error('CreateAccount server error', res.error);
+                        if (res.error === 'Unauthorized') {
+                            this.redirect("/");
+                            return;
+                        }
+                        // this.setState({server_error: res.error || 'Unknown', loading: false});
+                    } else {
+                        this.redirect("/");
+                        return;
+                    }
+                }).catch(error => {
+                    console.error('Caught CreateAccount server error', error);
+                    // this.setState({server_error: (error.message ? error.message : error), loading: false});
                 });
-                // createAccount(name);
-                // router.get('/api/v1/accounts', function *(){
-                //     let response = yield request({
-                //         method: 'post',
-                //         mode: 'no-cors',
-                //         credentials: 'same-origin',
-                //         headers: {
-                //             Accept: 'application/json',
-                //             'Content-type': 'application/json'
-                //         },
-                //         body: JSON.stringify({
-                //             name,
-                //             owner_key: user.owner_key,
-                //             active_key: user.active_key,
-                //             posting_key: user.posting_key,
-                //             memo_key: user.memo_key
-                //         })
-                //     });
-                //     this.body = response;
-                //     console.log("api response", response)
-                // });
-                // return fetch('/api/v1/accounts', {
-                //     method: 'post',
-                //     mode: 'no-cors',
-                //     credentials: 'same-origin',
-                //     headers: {
-                //         Accept: 'application/json',
-                //         'Content-type': 'application/json'
-                //     },
-                //     body: JSON.stringify({
-                //         name,
-                //         owner_key: user.owner_key,
-                //         active_key: user.active_key,
-                //         posting_key: user.posting_key,
-                //         memo_key: user.memo_key
-                //     })
-                // }).then(r => r.json()).then(res => {
-                //     if (res.error || res.status !== 'ok') {
-                //         console.error('CreateAccount server error', res.error);
-                //         if (res.error === 'Unauthorized') {
-                //             this.redirect("/");
-                //             return;
-                //         }
-                //         // this.setState({server_error: res.error || 'Unknown', loading: false});
-                //     } else {
-                //         this.redirect("/");
-                //         return;
-                //     }
-                // }).catch(error => {
-                //     console.error('Caught CreateAccount server error', error);
-                //     // this.setState({server_error: (error.message ? error.message : error), loading: false});
-                // });
+
+                // sucess
+                this.redirect("/welcome");
+                return;
             } else if (user.account_status === "created") {
                 // user clicked expired link already create account
                 this.flash = { error: "Your account has already been created." };

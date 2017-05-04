@@ -116,10 +116,7 @@ export default function useEnterAndConfirmEmailPages(app) {
             console.log('-- checking incoming start request -->', this.session.uid, this.session.user);
             const acc = yield models.Account.findOne({
                 attributes: ["id", "user_id", "created", "name"],
-                where: {
-                    user_id: this.session.user,
-                    created: false
-                },
+                where: {user_id: this.session.user},
                 order: "id DESC"
             });
             console.log('-- account found processing start request -->', acc.name, acc.created, user.account_status);

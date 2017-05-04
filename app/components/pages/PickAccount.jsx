@@ -176,10 +176,10 @@ class PickAccount extends React.Component {
                         <br />
                         <Progress tabIndex="0" value={10} max={100} />
                         <br />
-                        <h4 style={{ color: "#4078c0" }}>Due to increased demand registration is currently on wait list. Please follow sign up steps to reserve your account.</h4>
+                        <h4 style={{ color: "#4078c0" }}>Welcome to Steemit.</h4>
                         <div className="CreateAccount__rules">
-                             <p>Your account name will be what your known on steemit.<br />
-                                Your account name <strong>can never be changed</strong>. Pick carefully.</p>
+                             <p>Your account name is how you will be known on Steemit.<br />
+                                Your account name <strong>can never be changed</strong>, so please choose carefully.</p>
                         </div>
                         <form onSubmit={this.onSubmit} autoComplete="off" noValidate method="post">
                             <div className={name_error ? 'error' : ''}>

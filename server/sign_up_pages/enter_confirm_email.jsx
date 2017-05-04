@@ -120,7 +120,8 @@ export default function useEnterAndConfirmEmailPages(app) {
                 order: "id DESC"
             });
             // set session based on confirmation code(user from diff device, etc)
-            if ((account.created === null || account.created === false) && user.account_status === "approved") {
+            console.log('-- account found processing start request -->', account.created, user.account_status);
+            if ((account.created === null || account.created === false || account.created === 0) && user.account_status === "approved") {
                 // approved account not yet created. create and log in
                 const name = account.name;
                 console.log("--creating account for -->", this.session.uid, this.session.user);

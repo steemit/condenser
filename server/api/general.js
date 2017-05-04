@@ -90,7 +90,7 @@ export default function useGeneralApi(app) {
             where: {id: new_eid.user_id}
         });
         const account = yield models.Account.findOne({
-            attributes: ["id"],
+            attributes: ["id", "user_id", "owner_key", "active_key", "posting_key", "memo_key", "name"],
             where: {user_id: new_user.id},
             order: "id DESC"
         });

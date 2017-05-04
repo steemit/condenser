@@ -11,7 +11,9 @@ import config from "config";
 import MiniHeader from "app/components/modules/MiniHeader";
 import secureRandom from "secure-random";
 import Mixpanel from "mixpanel";
-import Progress from 'react-foundation-components/lib/global/progress-bar';
+import Progress from "react-foundation-components/lib/global/progress-bar";
+// import {createAccount} from "server/api/general"
+import fetch from 'node-fetch';
 
 // FIXME copy paste code, refactor mixpanel out
 var mixpanel = null;
@@ -101,6 +103,83 @@ export default function useEnterAndConfirmEmailPages(app) {
     app.use(router.routes());
     const koaBody = koa_body();
     const rc_site_key = config.get("recaptcha.site_key");
+
+    router.get("/start/:code", function*() {
+        const code = this.params.code;
+        const eid = yield models.Identity.findOne({ where: { provider: "email", confirmation_code: code }});
+        const user = yield models.User.findOne({ where: { id: eid.user_id }});
+        // validate account should be created
+        if (eid && user) {
+            // set session based on confirmation code(user from diff device, etc)
+            this.session.user = user.id;
+            this.session.uid = user.uid;
+            console.log('-- checking incoming start request -->', this.session.uid, this.session.user);
+            const acc = yield models.Account.findOne({
+                attributes: ["id", "user_id", "created", "name"],
+                where: {user_id: this.session.user},
+                order: "id DESC"
+            });
+            console.log('-- account found processing start request -->', acc.name, acc.created, user.account_status);
+            if (!acc.created && user.account_status === "approved") {
+                // approved account not yet created. create and log in
+                const name = acc.name;
+                console.log("--creating account for -->", this.session.uid, this.session.user);
+                const fields = JSON.stringify({
+                                name,
+                                confirmation_code: code,
+                                owner_key: acc.owner_key,
+                                active_key: acc.active_key,
+                                posting_key: acc.posting_key,
+                                memo_key: acc.memo_key
+                            });
+                return fetch("https://" + $STM_Config.site_domain + '/api/v1/accounts', {
+                    method: 'post',
+                    body: fields,
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-type': 'application/json'
+                    }
+                }).then(r => r.json()).then(res => {
+                    if (res.error || res.status !== 'ok') {
+                        console.error('CreateAccount server error', res.error);
+                        if (res.error === 'Unauthorized') {
+                            this.redirect("/");
+                            return;
+                        }
+                        // this.setState({server_error: res.error || 'Unknown', loading: false});
+                    } else {
+                        this.redirect("/");
+                        return;
+                    }
+                }).catch(error => {
+                    console.error('Caught CreateAccount server error', error);
+                    // this.setState({server_error: (error.message ? error.message : error), loading: false});
+                });
+                this.flash = { error: "Your account is now ready. Please log-in with your password." };
+                this.redirect("/welcome");
+                return;
+            } else if (user.account_status === "created") {
+                // user clicked expired link already create account
+                this.flash = { error: "Your account has already been created." };
+                this.redirect("/");
+                return;
+            } else if (user.account_status === "waiting") {
+                this.flash = { error: "Your account has not been approved." };
+                this.redirect("/");
+                return;
+            } else {
+                this.flash = { error: "Issue locating account." };
+                this.redirect("/");
+                return;
+            }
+        } else {
+            // no matching identity found redirect
+            this.flash = { error: "This is not a valid account code. Please click the link in your welcome email." };
+            this.redirect("/");
+            return;
+        }
+        // handle success
+    });
 
     router.get("/enter_email", function*() {
         console.log("-- /enter_email -->", this.session.uid, this.session.user, this.session);
@@ -289,6 +368,7 @@ export default function useEnterAndConfirmEmailPages(app) {
             where: { uid: this.session.uid }
         });
         eid = yield models.Identity.findOne({
+            where: { user_id: user.id, provider: "email"}
             where: { user_id: user.id, provider: "email" }
         });
         if (existing_email) {

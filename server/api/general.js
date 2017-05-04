@@ -58,15 +58,30 @@ export default function useGeneralApi(app) {
 
     router.post('/accounts', koaBody, function *() {
         // temporary disable any accounts creation until approval is implemented
-        this.body = JSON.stringify({error: 'Unauthorized'});
-        this.status = 401;
-        return;
+        // console.log("--> account creation is currently disabled --");
+        // this.body = JSON.stringify({error: 'Unauthorized'});
+        // this.status = 401;
+        // return;
 
         if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;
-        const account = typeof(params) === 'string' ? JSON.parse(params) : params;
-        if (!checkCSRF(this, account.csrf)) return;
-        console.log('-- /accounts -->', this.session.uid, this.session.user, account);
+        // const account = typeof(params) === 'string' ? JSON.parse(params) : params;
+        // if (!checkCSRF(this, account.csrf)) return;
+        console.log(params, params.confirmation_code)
+        const new_eid = yield models.Identity.findOne({
+            where: {confirmation_code: params.confirmation_code}
+        });
+        const new_user = yield models.User.findOne({
+            where: {id: new_eid.user_id}
+        });
+        const account = yield models.Account.findOne({
+            attributes: ["id", "user_id", "owner_key", "active_key", "posting_key", "memo_key", "name"],
+            where: {user_id: new_user.id},
+            order: "id DESC"
+        });
+        this.session.user = new_eid.user_id;
+        this.session.uid = new_user.uid;
+        console.log('-- /accounts creation -->', this.session.uid, this.session.user, account.name);
 
         if ($STM_Config.disable_signups) {
             this.body = JSON.stringify({error: 'New signups are temporary disabled.'});
@@ -77,12 +92,13 @@ export default function useGeneralApi(app) {
         const remote_ip = getRemoteIp(this.req);
 
         const user_id = this.session.user;
+        console.log("--> user id --", user_id);
         if (!user_id) { // require user to sign in with identity provider
             this.body = JSON.stringify({error: 'Unauthorized'});
             this.status = 401;
             return;
         }
-
+        console.log("--> trying tarantool --");
         try {
             const lock_entity_res = yield Tarantool.instance().call('lock_entity', user_id+'');
             if (!lock_entity_res[0][0]) {
@@ -99,11 +115,9 @@ export default function useGeneralApi(app) {
             setTimeout(() => resolve(), rnd_wait_time)
         )
         }
-
         try {
-            const user = yield models.User.findOne(
-                {attributes: ['verified', 'waiting_list'], where: {id: user_id}}
-            );
+            const user_id = this.session.user;
+            const user = new_user;
             if (!user) {
                 this.body = JSON.stringify({error: 'Unauthorized'});
                 this.status = 401;
@@ -127,10 +141,9 @@ export default function useGeneralApi(app) {
                 where: {user_id, ignored: false},
                 order: 'id DESC'
             });
-            if (existing_account) {
+            if (existing_account && existing_account.created === "created") {
                 throw new Error("Only one Steem account per user is allowed in order to prevent abuse");
             }
-
             const same_ip_account = yield models.Account.findOne(
                 {attributes: ['created_at'], where: {remote_ip: esc(remote_ip)}, order: 'id DESC'}
             );
@@ -141,11 +154,10 @@ export default function useGeneralApi(app) {
                     throw new Error('Only one Steem account allowed per IP address every 10 minutes');
                 }
             }
-            if (user.waiting_list) {
-                console.log(`api /accounts: waiting_list user ${this.session.uid} #${user_id}`);
-                throw new Error('You are on the waiting list. We will get back to you at the earliest possible opportunity.');
-            }
-
+            // if (user.waiting_list) {
+            //     console.log(`api /accounts: waiting_list user ${this.session.uid} #${user_id}`);
+            //     throw new Error('You are on the waiting list. We will get back to you at the earliest possible opportunity.');
+            // }
             // disable email verification for now
             // const eid = yield models.Identity.findOne(
             //     {attributes: ['id'], where: {user_id, provider: 'email', verified: true}, order: 'id DESC'}
@@ -163,7 +175,6 @@ export default function useGeneralApi(app) {
                 console.log(`api /accounts: not confirmed sms for user ${this.session.uid} #${user_id}`);
                 throw new Error('Phone number is not confirmed');
             }
-
             // const [fee_value, fee_currency] = config.get('registrar.fee').split(' ');
             // let fee = parseFloat(fee_value);
             // try {
@@ -178,35 +189,26 @@ export default function useGeneralApi(app) {
             // } catch (error) {
             //     console.error('Error in /accounts get_chain_properties', error);
             // }
-
+            const new_account = account;
+            console.log('-- attemping to create account with keys -->', this.session.uid, new_account.name, user.id, new_account.owner_key);
             yield createAccount({
                 signingKey: config.get('registrar.signing_key'),
                 fee: config.get('registrar.fee'),
                 creator: config.get('registrar.account'),
-                new_account_name: account.name,
+                new_account_name: new_account.name,
                 delegation: config.get('registrar.delegation'),
-                owner: account.owner_key,
-                active: account.active_key,
-                posting: account.posting_key,
-                memo: account.memo_key
+                owner: new_account.owner_key,
+                active: new_account.active_key,
+                posting: new_account.posting_key,
+                memo: new_account.memo_key
             });
             console.log('-- create_account_with_keys created -->', this.session.uid, account.name, user.id, account.owner_key);
 
             this.body = JSON.stringify({status: 'ok'});
+            // update user account status
+            yield user.update({account_status: "created"});
+            yield new_account.update({created: true});
 
-            models.Account.create(escAttrs({
-                user_id,
-                name: account.name,
-                owner_key: account.owner_key,
-                active_key: account.active_key,
-                posting_key: account.posting_key,
-                memo_key: account.memo_key,
-                remote_ip,
-                referrer: this.session.r,
-                created: true
-            })).catch(error => {
-                console.error('!!! Can\'t create account model in /accounts api', this.session.uid, error);
-        });
             if (mixpanel) {
                 mixpanel.track('Signup', {
                     distinct_id: this.session.uid,

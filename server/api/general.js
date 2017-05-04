@@ -169,10 +169,10 @@ export default function useGeneralApi(app) {
                     throw new Error('Only one Steem account allowed per IP address every 10 minutes');
                 }
             }
-            if (user.waiting_list) {
-                console.log(`api /accounts: waiting_list user ${this.session.uid} #${user_id}`);
-                throw new Error('You are on the waiting list. We will get back to you at the earliest possible opportunity.');
-            }
+            // if (user.waiting_list) {
+            //     console.log(`api /accounts: waiting_list user ${this.session.uid} #${user_id}`);
+            //     throw new Error('You are on the waiting list. We will get back to you at the earliest possible opportunity.');
+            // }
             // disable email verification for now
             // const eid = yield models.Identity.findOne(
             //     {attributes: ['id'], where: {user_id, provider: 'email', verified: true}, order: 'id DESC'}

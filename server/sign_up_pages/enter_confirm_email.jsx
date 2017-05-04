@@ -115,12 +115,12 @@ export default function useEnterAndConfirmEmailPages(app) {
             this.session.uid = user.uid;
             console.log('-- checking incoming start request -->', this.session.uid, this.session.user);
             const account = yield models.Account.findOne({
-                attributes: ["id", "user_id"],
+                attributes: ["id", "user_id", "created", "name"],
                 where: {user_id: this.session.user},
                 order: "id DESC"
             });
             console.log('-- account found processing start request -->', account.name, account.created, user.account_status);
-            if ((account.created === null || account.created === false || account.created === 0) && user.account_status === "approved") {
+            if (!account.created && user.account_status === "approved") {
                 // approved account not yet created. create and log in
                 const name = account.name;
                 console.log("--creating account for -->", this.session.uid, this.session.user);

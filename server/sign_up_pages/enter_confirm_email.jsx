@@ -368,7 +368,6 @@ export default function useEnterAndConfirmEmailPages(app) {
             where: { uid: this.session.uid }
         });
         eid = yield models.Identity.findOne({
-            where: { user_id: user.id, provider: "email"}
             where: { user_id: user.id, provider: "email" }
         });
         if (existing_email) {

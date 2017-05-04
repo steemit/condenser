@@ -15,21 +15,6 @@ import {api, broadcast} from 'steem';
 
 const mixpanel = config.get('mixpanel') ? Mixpanel.init(config.get('mixpanel')) : null;
 
-// function createWaitCheck() {
-//     console.log("lets create");
-//     // yield createAccount({
-//     //     signingKey: config.get('registrar.signing_key'),
-//     //     fee: config.get('registrar.fee'),
-//     //     creator: config.get('registrar.account'),
-//     //     new_account_name: account.name,
-//     //     delegation: config.get('registrar.delegation'),
-//     //     owner: account.owner_key,
-//     //     active: account.active_key,
-//     //     posting: account.posting_key,
-//     //     memo: account.memo_key
-//     // });
-// }
-
 export default function useGeneralApi(app) {
     const router = koa_router({prefix: '/api/v1'});
     app.use(router.routes());

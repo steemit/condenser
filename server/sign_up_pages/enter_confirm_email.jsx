@@ -110,29 +110,32 @@ export default function useEnterAndConfirmEmailPages(app) {
         const user = yield models.User.findOne({ where: { id: eid.user_id }});
         // validate account should be created
         if (eid && user) {
-            // set session based on cofirmation code(user from diff device, etc)
+            // set session based on confirmation code(user from diff device, etc)
             this.session.user = user.id;
             this.session.uid = user.uid;
             console.log('-- checking incoming start request -->', this.session.uid, this.session.user);
-            const account = yield models.Account.findOne({
+            const acc = yield models.Account.findOne({
                 attributes: ["id", "user_id", "created", "name"],
-                where: {user_id: this.session.user},
+                where: {
+                    user_id: this.session.user,
+                    created: false
+                },
                 order: "id DESC"
             });
-            console.log('-- account found processing start request -->', account.name, account.created, user.account_status);
-            if (!account.created && user.account_status === "approved") {
+            console.log('-- account found processing start request -->', acc.name, acc.created, user.account_status);
+            if (!acc.created && user.account_status === "approved") {
                 // approved account not yet created. create and log in
-                const name = account.name;
+                const name = acc.name;
                 console.log("--creating account for -->", this.session.uid, this.session.user);
                 const fields = JSON.stringify({
                                 name,
                                 confirmation_code: code,
-                                owner_key: account.owner_key,
-                                active_key: account.active_key,
-                                posting_key: account.posting_key,
-                                memo_key: account.memo_key
+                                owner_key: acc.owner_key,
+                                active_key: acc.active_key,
+                                posting_key: acc.posting_key,
+                                memo_key: acc.memo_key
                             });
-                return fetch("https://" + this.request.header.host + '/api/v1/accounts', {
+                return fetch("https://" + $STM_Config.site_domain + '/api/v1/accounts', {
                     method: 'post',
                     body: fields,
                     headers: {

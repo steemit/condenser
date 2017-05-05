@@ -117,8 +117,8 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
             return !prevLocation || prevLocation.location.pathname !== location.pathname;
         });
         if (process.env.NODE_ENV === 'production') {
-            console.log('%c%s', 'color: red; background: yellow; font-size: 24px;', 'WARNING!');
-            console.log('%c%s', 'color: black; font-size: 16px;', 'This is a developer console, you must read and understand anything you paste or type here or you could compromise your account and your private keys.');
+            // console.log('%c%s', 'color: red; background: yellow; font-size: 24px;', 'WARNING!');
+            // console.log('%c%s', 'color: black; font-size: 16px;', 'This is a developer console, you must read and understand anything you paste or type here or you could compromise your account and your private keys.');
         }
         return render(
             <Provider store={store}>

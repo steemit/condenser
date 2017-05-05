@@ -78,7 +78,7 @@ function* confirmEmailHandler() {
     });
 
     if (eid_phone) {
-        this.flash = { success: "Thanks for confirming your email!" };
+        // this.flash = { success: "Thanks for confirming your email!" };
         this.redirect("/approval?confirm=true");
     } else {
         this.flash = { success: "Thanks for confirming your email. Your phone needs to be confirmed before proceeding." };
@@ -107,7 +107,7 @@ export default function useEnterAndConfirmEmailPages(app) {
     router.get("/start/:code", function*() {
         const code = this.params.code;
         const eid = yield models.Identity.findOne({ where: { provider: "email", confirmation_code: code }});
-        const user = yield models.User.findOne({ where: { id: eid.user_id }});
+        const user = eid ? yield models.User.findOne({ where: { id: eid.user_id }}) : null;
         // validate account should be created
         if (eid && user) {
             // set session based on confirmation code(user from diff device, etc)
@@ -132,7 +132,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                                 posting_key: acc.posting_key,
                                 memo_key: acc.memo_key
                             });
-                return fetch("https://" + $STM_Config.site_domain + '/api/v1/accounts', {
+                fetch("https://" + $STM_Config.site_domain + '/api/v1/accounts', {
                     method: 'post',
                     body: fields,
                     headers: {
@@ -146,21 +146,20 @@ export default function useEnterAndConfirmEmailPages(app) {
                             this.redirect("/");
                             return;
                         }
-                        // this.setState({server_error: res.error || 'Unknown', loading: false});
                     } else {
-                        this.redirect("/");
+                        this.flash = { success: "Your account is now ready. Please log-in with your password." };
+                        this.redirect("/login.html");
                         return;
                     }
                 }).catch(error => {
                     console.error('Caught CreateAccount server error', error);
-                    // this.setState({server_error: (error.message ? error.message : error), loading: false});
+                    this.flash = { error: "We couldn't create account at this time, please try again later." };
+                    this.redirect("/");
                 });
-                this.flash = { error: "Your account is now ready. Please log-in with your password." };
-                this.redirect("/welcome");
                 return;
             } else if (user.account_status === "created") {
                 // user clicked expired link already create account
-                this.flash = { error: "Your account has already been created." };
+                this.flash = { alert: "Your account has already been created." };
                 this.redirect("/");
                 return;
             } else if (user.account_status === "waiting") {

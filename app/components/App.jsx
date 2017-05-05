@@ -135,7 +135,7 @@ class App extends React.Component {
         const miniHeader = location.pathname === '/create_account';
         const params_keys = Object.keys(params);
         const ip = location.pathname === '/' || (params_keys.length === 2 && params_keys[0] === 'order' && params_keys[1] === 'category');
-        const alert = this.props.error || flash.get('alert');
+        const alert = this.props.error || flash.get('alert') || flash.get('error');
         const warning = flash.get('warning');
         const success = flash.get('success');
         let callout = null;

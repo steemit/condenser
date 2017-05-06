@@ -11,6 +11,8 @@ import VerticalMenu from 'app/components/elements/VerticalMenu';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import NotifiCounter from 'app/components/elements/NotifiCounter';
 import tt from 'counterpart';
+import store from 'store';
+import {APP_NAME, DEFAULT_LANGUAGE, LANGUAGES} from 'app/client_config';
 
 const defaultNavigate = (e) => {
     if (e.metaKey || e.ctrlKey) {
@@ -22,7 +24,7 @@ const defaultNavigate = (e) => {
     browserHistory.push(a.pathname + a.search + a.hash);
 };
 
-function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn, showSignUp, location}) {
+function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn, showSignUp, location, changeLanguage}) {
     const mcn = 'menu' + (vertical ? ' vertical show-for-small-only' : '');
     const mcl = vertical ? '' : ' sub-menu';
     const lcn = vertical ? '' : 'show-for-medium';
@@ -44,6 +46,52 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
         {link: '#faq', value: tt('navigation.faq')},
         {link: '#team', value: tt('g.team')},
     ];
+    let currentLang = DEFAULT_LANGUAGE;
+    const lang_menu = [];
+    for (var key in LANGUAGES) {
+      if (store.get('language') === key)
+        currentLang = LANGUAGES[key].substr(0,3).toUpperCase();
+      else
+        lang_menu.push({link: '#' + key, onClick: changeLanguage, value: LANGUAGES[key]})
+    }
+    const aboutItem = <li className={lcn}>
+        <Link to="/about" title={tt('g.about_project')}>
+          {vertical ? <span>{tt('g.about_project')}</span> : <Icon name="info_o" />}
+        </Link>
+      </li>
+    ;
+    const submitItem = <li className={lcn}>
+        <Link to="/submit.html?type=submit_feedback" title={tt('navigation.feedback')}>
+          <Icon name="envelope" />
+        </Link>
+      </li>
+    ;
+    const searchItem = <li className={lcn}>
+        <a href="/static/search.html" title={tt('g.search')}>
+          {vertical ? <span>{tt('g.search')}</span> : <Icon name="search" />}
+        </a>
+      </li>
+    ;
+    const languageMenu = <LinkWithDropdown
+        closeOnClickOutside
+        dropdownPosition="bottom"
+        dropdownAlignment="right"
+        dropdownContent={<VerticalMenu items={lang_menu} title={tt('settings_jsx.choose_language')} />}
+        >
+            {!vertical && <li className={lcn + ' languages'}>
+                <a title={tt('settings_jsx.choose_language')} onClick={e => e.preventDefault()}>
+                    <small>{currentLang}</small>
+                </a>
+            </li>}
+        </LinkWithDropdown>
+    ;
+    const rocketchatItem = !vertical ? <li className={lcn}>
+        <a href="https://chat.golos.io/" title={tt("navigation.APP_NAME_chat", {APP_NAME})} target="_blank">
+          <Icon name="rocket-chat" />
+        </a>
+      </li>
+      : null
+    ;
     if (loggedIn) { // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!
         const user_menu = [
             {link: feed_link, value: tt('g.feed'), addon: <NotifiCounter fields="feed" />},
@@ -60,9 +108,11 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
         return (
             <ul className={mcn + mcl}>
                 {inIco && ico_menu.map((o,i) => {return <li key={i} className={lcn}><a href={o.link}>{o.value}</a></li>})}
-				{!inIco && <li className={lcn}><Link to="/about" title={tt('g.about_project')}>{vertical ? <span>{tt('g.about_project')}</span> : <Icon name="info_o" />}</Link></li>}
-				{!inIco && <li className={lcn}><Link to="/submit.html?type=submit_feedback" title={tt('navigation.feedback')}><Icon name="envelope" /></Link></li>}
-                {!inIco && <li className={lcn}><a href="/static/search.html" title={tt('g.search')}>{vertical ? <span>{tt('g.search')}</span> : <Icon name="search" />}</a></li>}
+                {!inIco && aboutItem}
+                {!inIco && submitItem}
+                {!inIco && searchItem}
+                {!inIco && languageMenu}
+                {!inIco && rocketchatItem}
                 {!inIco && submit_story}
                 <LinkWithDropdown
                     closeOnClickOutside
@@ -86,9 +136,11 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
     return (
         <ul className={mcn + mcl}>
             {inIco && ico_menu.map((o,i) => {return <li key={i} className={lcn}><a href="{o.link}">{o.value}</a></li>})}
-			{!inIco && <li className={lcn}><Link to="/about" title={tt('g.about_project')}>{vertical ? <span>{tt('g.about_project')}</span> : <Icon name="info_o" />}</Link></li>}
+            {!inIco && aboutItem}
             {!inIco && !vertical && <li><a href="/submit.html?type=submit_feedback" title={tt('navigation.feedback')}><Icon name="envelope" /></a></li>}
             {!inIco && !vertical && <li><a href="/static/search.html" title={tt('g.search')}><Icon name="search" /></a></li>}
+            {!inIco && !vertical && languageMenu}
+            {!inIco && rocketchatItem}
             {!inIco && !probablyLoggedIn && <li className={lcn}><a href="/create_account" onClick={showSignUp}>{tt('g.sign_up')}</a></li>}
             {!inIco && !probablyLoggedIn && <li className={lcn}><a href="/login.html" onClick={showLogin}>{tt('g.login')}</a></li>}
             {!inIco && !probablyLoggedIn && submit_story}
@@ -130,6 +182,17 @@ export default connect(
         }
     },
     dispatch => ({
+        changeLanguage: e => {
+            if (e) e.preventDefault();
+            const targetLanguage = e.target.text.trim();
+            let language = DEFAULT_LANGUAGE;
+            for (var key in LANGUAGES) {
+              if (targetLanguage.localeCompare(LANGUAGES[key]) == 0)
+                language = key
+            }
+            store.set('language', language)
+            dispatch(user.actions.changeLanguage(language))
+        },
         showLogin: e => {
             if (e) e.preventDefault();
             dispatch(user.actions.showLogin())

@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux'
 import user from 'app/redux/User';
 import tt from 'counterpart';
-import {ALLOWED_CURRENCIES} from 'app/client_config'
+import {ALLOWED_CURRENCIES, DEFAULT_LANGUAGE, LANGUAGES} from 'app/client_config'
 import store from 'store';
 import transaction from 'app/redux/Transaction'
 import o2j from 'shared/clash/object2json'
@@ -146,6 +146,13 @@ class Settings extends React.Component {
         const following = follow && follow.getIn(['get_following', account.name]);
         const ignores = isOwnAccount && following && following.get('ignore_result')
 
+        const languageSelectBox = <select defaultValue={store.get('language')} onChange={this.onLanguageChange}>
+          {Object.keys(LANGUAGES).map(key => {
+            console.log('LANGUAGES[key]', LANGUAGES[key])
+            return <option key={key} value={key}>{LANGUAGES[key]}</option>
+          })}
+        </select>;
+
         return <div className="Settings">
 
             <div className="row">
@@ -154,13 +161,7 @@ class Settings extends React.Component {
                     {/* CHOOSE LANGUAGE */}
                     <label>
                         {tt('settings_jsx.choose_language')}
-                            <select defaultValue={store.get('language')} onChange={this.onLanguageChange}>
-                                <option value="ru">Русский</option>
-                                <option value="en">English</option>
-                                {/* in react-intl they use 'uk' instead of 'ua' */}
-                                <option value="uk">Українська</option>
-                                <option value="sr">Srpski</option>
-                            </select>
+                        {languageSelectBox}
                     </label>
                     <div className="error"></div>
                     {/* CHOOSE CURRENCY */}

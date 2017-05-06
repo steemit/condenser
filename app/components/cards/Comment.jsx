@@ -236,7 +236,7 @@ class CommentImpl extends React.Component {
 
         if (!this.state.collapsed && !hide_body) {
             body = (<MarkdownViewer formId={post + '-viewer'} text={comment.body}
-                noImage={noImage || !pictures} jsonMetadata={jsonMetadata} />);
+                noImage={noImage || !pictures} jsonMetadata={jsonMetadata} timeCteated={new Date(comment.created)} />);
             controls = <div>
                 <Voting post={post} />
                 {!readonly &&

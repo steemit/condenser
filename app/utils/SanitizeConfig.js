@@ -26,6 +26,12 @@ const iframeWhitelist = [
                 '&auto_play=false&hide_related=false&show_comments=true' +
                 '&show_user=true&show_reposts=false&visual=true'
         }
+    },
+    { re: /^(https?:)?\/\/www.google.com\/maps\/embed\/*/i,
+        fn: (src) => {
+            if(!src) return null;
+            return src;
+        }
     }
 ];
 export const noImageText = '(Image not shown due to low ratings)'

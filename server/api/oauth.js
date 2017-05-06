@@ -462,5 +462,5 @@ function* handleVkCallback() {
 export default function useOauthLogin(app) {
     app.use(route.get('/handle_facebook_callback', handleFacebookCallback));
     app.use(route.get('/handle_reddit_callback', handleRedditCallback));
-    // app.use(route.get('/handle_vk_callback', handleVkCallback));
+    app.use(route.get('/handle_vk_callback', handleVkCallback));
 }

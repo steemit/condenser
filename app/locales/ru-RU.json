@@ -235,7 +235,7 @@
     "view_the_direct_parent": "Просмотр прямого родителя",
     "view_the_full_context": "Показать полный контекст",
     "vote": "Проголосовать",
-    "votes": "голосов",
+    "votes": "Голоса",
     "wallet": "Кошелек",
     "warning": "внимание",
     "yes": "Да",
@@ -482,7 +482,16 @@
     "successfully_authenticated_with": "Проверка подлинности выполнена успешно"
   },
   "plurals": {
-    "reply_count": "{replyCount, plural,\n=0 {0 ответов}\none {1 ответ}\nother {%(replyCount)s ответов}}",
+    "reply_count": {
+      "zero": "0 ответов",
+      "one": "1 ответ",
+      "other": "%(count)s ответов"
+    },
+    "view_count": {
+      "zero": "0 просмотров",
+      "one": "1 просмотр",
+      "other": "%(count)s просмотров"
+    },
     "author_rewards_last_24_hours": "Авторские вознаграждения за последние 24 часа",
     "daily_average_author_rewards": "Среднесуточные авторские вознаграждения",
     "balance": "Баланс",
@@ -500,7 +509,7 @@
     "this_post_is_not_available_due_to_a_copyright_claim": "Этот пост недоступен из-за жалобы о нарушении авторских прав.",
     "share_on_facebook": "Поделитесь в Facebook",
     "share_on_twitter": "Поделиться в Twitter",
-    "share_on_linkedin": "Поделиться в Linkedin",
+    "share_on_vk": "Поделиться в ВКонтакте",
     "share": "Поделиться",
     "transfer_amount_to_VESTING_TOKEN": "Перевести %(amount)s %(VESTING_TOKEN)s",
     "transfer_amount_VESTING_TOKEN_to": "Перевод %(amount)s %(VESTING_TOKEN)s в",
@@ -784,9 +793,17 @@
   },
   "votesandcomments_jsx": {
     "no_responses_yet_click_to_respond": "Ответов пока нет. Нажмите чтобы ответить.",
-    "response_count": "{responseCount, plural,\n=0 {0 ответов}\none {1 ответ}\nother {%(responseCount)s ответов}}",
+    "response_count": {
+      "zero": "0 ответов",
+      "one": "1 ответ",
+      "other": "%(count)s ответов"
+    },
     "click_to_respond": "Нажмите чтобы ответить",
-    "vote_count": "{voteCount, plural,\n=0 {0 голосов}\none {1 голос}\nother {%(voteCount)s голосов}}"
+    "vote_count": {
+      "zero": "0 голосов",
+      "one": "1 голос",
+      "other": "%(count)s голосов"
+    }
   },
   "voting_jsx": {
     "stop_seeing_content_from_this_user": "Перестать видеть контент от этого пользователя",

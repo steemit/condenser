@@ -72,4 +72,11 @@ export const PUBLIC_API = {
   tags:            ['get_trending_tags',                 'tags'],
   tagsbyauthor:    ['get_tags_used_by_author',           'tagsbyauthor']
 }
+export const LANGUAGES = {
+  ru: 'Русский',
+  en: 'English',
+  /* in react-intl they use 'uk' instead of 'ua' */
+  uk: 'Українська',
+  sr: 'Srpski'
+}
 export const SEO_TITLE = 'GOLOS.io Блоги'

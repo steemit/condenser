@@ -11,7 +11,6 @@ import {translate} from 'app/Translator';
 import EmbedView from 'app/components/elements/EmbedView';
 import links from 'app/utils/Links';
 import { isWhite } from 'app/utils/EmbedContentWhitelist';
-import { SCRAP_EMBED_SINCE as scrapEmbedSince } from 'config/client_config';
 
 const remarkable = new Remarkable({
     html: true, // remarkable renders first then sanitize runs...
@@ -84,7 +83,7 @@ class MarkdownViewer extends Component {
         let renderedText = html ? text : remarkable.render(text)
 
         const postDate = this.props.timeCteated.getTime();
-        const scrapSince = scrapEmbedSince.getTime();
+        const scrapSince = new Date(Date.UTC(2017, 4, 5)).getTime(); //move to config
         const resolve = postDate > scrapSince;
 
         // Embed videos/content, link mentions and hashtags, etc...

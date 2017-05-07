@@ -142,14 +142,11 @@ export default function useEnterAndConfirmEmailPages(app) {
                 }).then(r => r.json()).then(res => {
                     if (res.error || res.status !== 'ok') {
                         console.error('CreateAccount server error', res.error);
-                        if (res.error === 'Unauthorized') {
-                            this.redirect("/");
-                            return;
-                        }
+                        this.flash = { error: "We couldn't create account at this time, please try again later. " + res.error};
+                        this.redirect("/");
                     } else {
                         this.flash = { success: "Your account is now ready. Please log-in with your password." };
                         this.redirect("/login.html");
-                        return;
                     }
                 }).catch(error => {
                     console.error('Caught CreateAccount server error', error);

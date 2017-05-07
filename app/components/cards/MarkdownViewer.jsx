@@ -83,7 +83,7 @@ class MarkdownViewer extends Component {
         let renderedText = html ? text : remarkable.render(text)
 
         const postDate = this.props.timeCteated.getTime();
-        const scrapSince = new Date(Date.UTC(2017, 4, 5)).getTime(); //move to config
+        const scrapSince = new Date(Date.UTC(2017, 7, 5)).getTime(); //move to config
         const resolve = postDate > scrapSince;
 
         // Embed videos/content, link mentions and hashtags, etc...

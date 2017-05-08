@@ -49,7 +49,7 @@ async function appRender(ctx) {
             if (user) {
                 let account = null;
                 for (const a of user.Accounts) {
-                    if (!a.ignored && a.created !== false) {
+                    if (!a.ignored) {
                         account = a.name;
                         break;
                     }

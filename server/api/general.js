@@ -111,18 +111,18 @@ export default function useGeneralApi(app) {
                 throw new Error("Only one Steem account per user is allowed in order to prevent abuse");
             }
 
-            // rate limit account creation to one per IP every 10 minutes
             const remote_ip = getRemoteIp(this.req);
-            const same_ip_account = yield models.Account.findOne(
-                {attributes: ['created_at'], where: {remote_ip: esc(remote_ip)}, order: 'id DESC'}
-            );
-            if (same_ip_account) {
-                const minutes = (Date.now() - same_ip_account.created_at) / 60000;
-                if (minutes < 10) {
-                    console.log(`api /accounts: IP rate limit for user ${this.session.uid} #${user_id}, IP ${remote_ip}`);
-                    throw new Error('Only one Steem account allowed per IP address every 10 minutes');
-                }
-            }
+            // // rate limit account creation to one per IP every 10 minutes
+            // const same_ip_account = yield models.Account.findOne(
+            //     {attributes: ['created_at'], where: {remote_ip: esc(remote_ip)}, order: 'id DESC'}
+            // );
+            // if (same_ip_account) {
+            //     const minutes = (Date.now() - same_ip_account.created_at) / 60000;
+            //     if (minutes < 10) {
+            //         console.log(`api /accounts: IP rate limit for user ${this.session.uid} #${user_id}, IP ${remote_ip}`);
+            //         throw new Error('Only one Steem account allowed per IP address every 10 minutes');
+            //     }
+            // }
 
             yield createAccount({
                 signingKey: config.get('registrar.signing_key'),
@@ -143,20 +143,21 @@ export default function useGeneralApi(app) {
             yield user.update({account_status: 'created'});
 
             // update or create account record
+            const account_attrs = escAttrs({
+                user_id,
+                name: account.name,
+                owner_key: account.owner_key,
+                active_key: account.active_key,
+                posting_key: account.posting_key,
+                memo_key: account.memo_key,
+                remote_ip,
+                referrer: this.session.r,
+                created: true
+            });
             if (existing_account) {
-                yield existing_account.update({created: true});
+                yield existing_account.update(account_attrs);
             } else {
-                models.Account.create(escAttrs({
-                    user_id,
-                    name: account.name,
-                    owner_key: account.owner_key,
-                    active_key: account.active_key,
-                    posting_key: account.posting_key,
-                    memo_key: account.memo_key,
-                    remote_ip,
-                    referrer: this.session.r,
-                    created: true
-                })).catch(error => {
+                models.Account.create(account_attrs).catch(error => {
                     console.error('!!! Can\'t create account model in /accounts api', this.session.uid, error);
                 });
             }

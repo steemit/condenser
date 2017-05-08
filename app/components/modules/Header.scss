@@ -15,6 +15,7 @@
     .hamburger {
       @include hamburger();
       position: relative;
+      height: 20px;
       top: 2px;
     }
   }
@@ -50,7 +51,7 @@
   ul > li > span {
     font-size: 1.1rem;
     line-height: 1.5rem;
-    padding: 0.7rem 1rem;
+    padding: 0.7rem 0.7rem;
     display: flex;
     text-transform: lowercase;
     @media #{$small-only} {
@@ -59,7 +60,7 @@
   }
   @media screen and (max-width: 39.9375em) {
       .shrink {
-          padding: .3rem 1rem;
+          padding: .3rem 1rem 0 1rem;
       }
   }
 }
@@ -112,7 +113,7 @@ ul > li > .button {
 .Header__topic {
   background-color: $white;
   line-height: 1.5rem;
-  padding: 0.7rem 1rem;
+  padding: 0.7rem 0.7rem;
   text-transform: uppercase;
 }
 

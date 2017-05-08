@@ -111,7 +111,7 @@ function* confirmMobileHandler(e) {
             //     success: "Phone number has already been verified"
             // };
             console.log("--/Already verified redirecting user", this.session.user);
-            this.redirect("/create_account");
+            this.redirect("/approval");
         } else {
             this.flash = {
                 error: "This phone number has already been used"
@@ -135,7 +135,7 @@ function* confirmMobileHandler(e) {
         mixpanel.track("SignupStepPhone", { distinct_id: this.session.uid });
 
     console.log("--/Success phone redirecting user", this.session.user);
-    this.redirect("/create_account");
+    this.redirect("/approval");
 }
 
 export default function useEnterAndConfirmMobilePages(app) {
@@ -176,7 +176,7 @@ export default function useEnterAndConfirmMobilePages(app) {
                     distinct_id: this.session.uid
                 });
             console.log("--/Already verified redirecting user", this.session.user, mid.user_name_picked);
-            this.redirect("/create_account?user=" + user.name);
+            this.redirect("/approval");
             return;
         }
         const phone = this.query.phone;
@@ -215,7 +215,7 @@ export default function useEnterAndConfirmMobilePages(app) {
 other purpose other than account verification and (potentially) account
 recovery should your account ever be compromised.</em>
 
-			
+
                             </div>
                             <br />
                             <input type="hidden" name="csrf" value={this.csrf} />
@@ -349,7 +349,7 @@ recovery should your account ever be compromised.</em>
                         mixpanel.track("SignupStep3", {
                             distinct_id: this.session.uid
                         });
-                    this.redirect("/create_account");
+                    this.redirect("/approval");
                     return;
                 }
                 yield mid.update({ verified: false, phone });

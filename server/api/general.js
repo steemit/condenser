@@ -99,9 +99,7 @@ export default function useGeneralApi(app) {
                 {attributes: ['id'], where: {id: user_id, account_status: 'approved'}}
             );
             if (!user) {
-                this.body = JSON.stringify({error: 'Unauthorized'});
-                this.status = 401;
-                return;
+                throw new Error("We can't find your sign up request. You either haven't started your sign up application or weren't approved yet.");
             }
 
             const existing_account = yield models.Account.findOne({

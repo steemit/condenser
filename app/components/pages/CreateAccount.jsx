@@ -82,8 +82,8 @@ class CreateAccount extends React.Component {
             });
         }
 
-        // create wait account
-        fetch('/api/v1/accounts_wait', {
+        // createAccount
+        fetch('/api/v1/accounts', {
             method: 'post',
             mode: 'no-cors',
             credentials: 'same-origin',
@@ -99,12 +99,16 @@ class CreateAccount extends React.Component {
                 posting_key: public_keys[2],
                 memo_key: public_keys[3]
             })
-        }).then(() => {
-            // redirect to thank you approval
-            console.log("created wait account successfully");
-            window.location = '/approval';
+        }).then(r => r.json()).then(res => {
+            if (res.error || res.status !== 'ok') {
+                console.error('CreateAccount server error', res.error);
+                this.setState({server_error: res.error || 'Unknown server error', loading: false});
+            } else {
+                window.location = `/login.html#account=${name}&msg=accountcreated`;
+            }
         }).catch(error => {
-            console.error("--> error creating wait account --", error);
+            console.error('Caught CreateAccount server error', error);
+            this.setState({server_error: (error.message ? error.message : error), loading: false});
         });
     }
 

@@ -112,7 +112,7 @@ export default function useEnterAndConfirmEmailPages(app) {
         if (eid && user) {
             // set session based on confirmation code(user from diff device, etc)
             this.session.user = user.id;
-            this.session.uid = user.uid;
+            if (user.uid) this.session.uid = user.uid;
             console.log('-- checking incoming start request -->', this.session.uid, this.session.user);
             if (user.account_status === "approved") {
                 console.log("-- approved account for -->", this.session.uid, this.session.user);

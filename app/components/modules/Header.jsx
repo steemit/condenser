@@ -3,13 +3,16 @@ import { Link } from 'react-router';
 import {connect} from 'react-redux';
 import TopRightMenu from 'app/components/modules/TopRightMenu';
 import Icon from 'app/components/elements/Icon.jsx';
+import user from 'app/redux/User';
 import resolveRoute from 'app/ResolveRoute';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import HorizontalMenu from 'app/components/elements/HorizontalMenu';
 import normalizeProfile from 'app/utils/NormalizeProfile';
+import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
+import VerticalMenu from 'app/components/elements/VerticalMenu';
 import tt from 'counterpart';
-import { SEO_TITLE, APP_NAME, APP_ICON } from 'app/client_config';
+import { APP_NAME, APP_ICON, DEFAULT_DOMESTIC, DOMESTIC, SEO_TITLE } from 'app/client_config';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
 
 function capitalizeFirstLetter(string) {
@@ -48,7 +51,7 @@ class Header extends React.Component {
         }
     }
 
-    hideSubheader(){
+    hideSubheader() {
         const subheader_hidden = this.state.subheader_hidden;
         const y = window.scrollY >= 0 ? window.scrollY : document.documentElement.scrollTop;
         if (y === this.prevScrollY) return;
@@ -180,6 +183,16 @@ class Header extends React.Component {
                 return {link: sortOrderToLink(so[0], topic_original_link, current_account_name), value: so[1], active};
             });
 
+        // domestic
+        let currentDomesticTitle = DOMESTIC[DEFAULT_DOMESTIC];
+        const domestic_menu = [];
+        for (var key in DOMESTIC) {
+          if (this.props.current_domestic === key)
+            currentDomesticTitle = DOMESTIC[key];
+          else
+            domestic_menu.push({link: '#' + key, onClick: this.props.changeDomestic, value: DOMESTIC[key]})
+        }
+
         let sort_order_extra_menu = null;
         if (sort_order === 'trending' || sort_order === 'trending30') {
             const items = [
@@ -218,7 +231,18 @@ class Header extends React.Component {
                 </div>
                 <div className={'Header__sub-nav expanded show-for-medium row' + (this.state.subheader_hidden ? ' hidden' : '')}>
                     <div className="columns">
-                        <HorizontalMenu items={sort_order_menu_horizontal} />
+                        <HorizontalMenu items={sort_order_menu_horizontal}>
+                          <LinkWithDropdown
+                            closeOnClickOutside
+                            dropdownPosition="bottom"
+                            dropdownAlignment="left"
+                            dropdownContent={<VerticalMenu items={domestic_menu} title={tt('settings_jsx.choose_language')} />}
+                            >
+                              <a title={tt('settings_jsx.choose_language')} onClick={e => e.preventDefault()}>
+                                {currentDomesticTitle} ▼
+                              </a>
+                            </LinkWithDropdown>
+                        </HorizontalMenu>
                     </div>
                 </div>
             </header>
@@ -230,13 +254,27 @@ export {Header as _Header_};
 
 export default connect(
     state => {
+        const current_domestic = state.user.get('domestic');
         const current_user = state.user.get('current');
         const account_user = state.global.get('accounts');
         const current_account_name = current_user ? current_user.get('username') : state.offchain.get('account');
         return {
             location: state.app.get('location'),
             current_account_name,
-            account_meta: account_user
+            account_meta: account_user,
+            current_domestic: current_domestic || DEFAULT_DOMESTIC
         }
-    }
+    },
+    dispatch => ({
+        changeDomestic: e => {
+          if (e) e.preventDefault();
+          const targetDomestic = e.target.text.trim();
+          let domestic = DEFAULT_DOMESTIC;
+          for (var key in DOMESTIC) {
+            if (targetDomestic.localeCompare(DOMESTIC[key]) == 0)
+              domestic = key;
+          }
+          dispatch(user.actions.changeDomestic(domestic));
+        }
+    })
 )(Header);

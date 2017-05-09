@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import Icon from 'app/components/elements/Icon';
 import CopyToClipboard from 'react-copy-to-clipboard';
+import tt from 'counterpart';
 
 class ExplorePost extends Component {
 
@@ -46,10 +47,10 @@ class ExplorePost extends Component {
 
     render() {
         const link = this.props.permlink;
-        const steemd = 'https://steemd.com' + link;
-        const steemdb = 'https://steemdb.com' + link;
+        const steemd = 'https://golosd.com' + link;
+        const steemdb = 'https://golosdb.com' + link;
         const busy = 'https://busy.org' + link;
-        const steemit = 'https://steemit.com' + link;
+        const steemit = 'https://golos.io' + link;
         const phist = 'https://phist.steemdata.com/history?identifier=steemit.com' + link;
         let text = this.state.copied == true ? tt('explorepost_jsx.copied') : tt('explorepost_jsx.copy');
         return (
@@ -64,10 +65,10 @@ class ExplorePost extends Component {
                 </div>
                 <h5>{tt('explorepost_jsx.alternative_sources')}</h5>
                 <ul>
-                    <li><a href={steemd} onClick={this.Steemd} target="_blank">steemd.com <Icon name="extlink" /></a></li>
-                    <li><a href={steemdb} onClick={this.Steemdb} target="_blank">steemdb.com <Icon name="extlink" /></a></li>
+                    <li><a href={steemd} onClick={this.Steemd} target="_blank">golosd.com <Icon name="extlink" /></a></li>
+                    <li><a href={steemdb} onClick={this.Steemdb} target="_blank">golosdb.com <Icon name="extlink" /></a></li>
                     <li><a href={busy} onClick={this.Busy} target="_blank">busy.org <Icon name="extlink" /></a></li>
-                    <li><a href={phist} onClick={this.Phist} target="_blank">phist.steemdata.com <Icon name="extlink" /></a></li>
+                    {/**<li><a href={phist} onClick={this.Phist} target="_blank">phist.steemdata.com <Icon name="extlink" /></a></li>*/}
                 </ul>
             </span>
         )

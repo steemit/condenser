@@ -106,75 +106,33 @@ export default function useEnterAndConfirmEmailPages(app) {
 
     router.get("/start/:code", function*() {
         const code = this.params.code;
-        const eid = yield models.Identity.findOne({ where: { provider: "email", confirmation_code: code }});
-        const user = eid ? yield models.User.findOne({ where: { id: eid.user_id }}) : null;
-        // validate account should be created
+        const eid = yield models.Identity.findOne({ attributes: ["id", "user_id"], where: { provider: "email", confirmation_code: code }});
+        const user = eid ? yield models.User.findOne({ attributes: ["id", "account_status"], where: { id: eid.user_id }}) : null;
+        // validate there is email identity and user record
         if (eid && user) {
             // set session based on confirmation code(user from diff device, etc)
             this.session.user = user.id;
             this.session.uid = user.uid;
             console.log('-- checking incoming start request -->', this.session.uid, this.session.user);
-            const acc = yield models.Account.findOne({
-                attributes: ["id", "user_id", "created", "name"],
-                where: {user_id: this.session.user},
-                order: "id DESC"
-            });
-            console.log('-- account found processing start request -->', acc.name, acc.created, user.account_status);
-            if (!acc.created && user.account_status === "approved") {
-                // approved account not yet created. create and log in
-                const name = acc.name;
-                console.log("--creating account for -->", this.session.uid, this.session.user);
-                const fields = JSON.stringify({
-                                name,
-                                confirmation_code: code,
-                                owner_key: acc.owner_key,
-                                active_key: acc.active_key,
-                                posting_key: acc.posting_key,
-                                memo_key: acc.memo_key
-                            });
-                fetch("https://" + $STM_Config.site_domain + '/api/v1/accounts', {
-                    method: 'post',
-                    body: fields,
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-type': 'application/json'
-                    }
-                }).then(r => r.json()).then(res => {
-                    if (res.error || res.status !== 'ok') {
-                        console.error('CreateAccount server error', res.error);
-                        this.flash = { error: "We couldn't create account at this time, please try again later. " + res.error};
-                        this.redirect("/");
-                    } else {
-                        this.flash = { success: "Your account is now ready. Please log-in with your password." };
-                        this.redirect("/login.html");
-                    }
-                }).catch(error => {
-                    console.error('Caught CreateAccount server error', error);
-                    this.flash = { error: "We couldn't create account at this time, please try again later." };
-                    this.redirect("/");
-                });
-                return;
+            if (user.account_status === "approved") {
+                console.log("-- approved account for -->", this.session.uid, this.session.user);
+                this.redirect("/create_account");
             } else if (user.account_status === "created") {
                 // user clicked expired link already create account
                 this.flash = { alert: "Your account has already been created." };
-                this.redirect("/");
-                return;
+                this.redirect("/login.html");
             } else if (user.account_status === "waiting") {
                 this.flash = { error: "Your account has not been approved." };
                 this.redirect("/");
-                return;
             } else {
-                this.flash = { error: "Issue locating account." };
+                this.flash = { error: "Issue with your sign up status." };
                 this.redirect("/");
-                return;
             }
         } else {
             // no matching identity found redirect
-            this.flash = { error: "This is not a valid account code. Please click the link in your welcome email." };
+            this.flash = { error: "This is not a valid sign up code. Please click the link in your welcome email." };
             this.redirect("/");
-            return;
         }
-        // handle success
     });
 
     router.get("/enter_email", function*() {

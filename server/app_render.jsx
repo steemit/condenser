@@ -32,7 +32,7 @@ async function appRender(ctx) {
             if (appRender.dbStatus.ok || (new Date() - appRender.dbStatus.lastAttempt) > DB_RECONNECT_TIMEOUT) {
                 try {
                     user = await models.User.findOne({
-                        attributes: ['name', 'email', 'picture_small'],
+                        attributes: ['name', 'email', 'picture_small', 'account_status'],
                         where: {id: user_id},
                         include: [{model: models.Account, attributes: ['name', 'ignored', 'created', 'owner_key']}],
                         logging: false
@@ -64,6 +64,7 @@ async function appRender(ctx) {
                     email: user.email,
                     picture: user.picture_small,
                     prv: ctx.session.prv,
+                    account_status: user.account_status,
                     account,
                     account_has_keys
                 }

@@ -172,9 +172,12 @@ class CreateAccount extends React.Component {
         const submit_btn_disabled = loading || !password_valid;
         const submit_btn_class = 'button action' + (submit_btn_disabled ? ' disabled' : '');
 
+        const account_status = this.props.offchainUser ? this.props.offchainUser.get('account_status') : null;
+
         if (serverBusy || $STM_Config.disable_signups) {
             return <div className="row">
                 <div className="column">
+                    <br />
                     <div className="callout alert">
                         <p>Membership to Steemit.com is now under invitation only because of unexpectedly high sign up rate.</p>
                     </div>
@@ -184,6 +187,7 @@ class CreateAccount extends React.Component {
         if (cryptographyFailure) {
             return <div className="row">
                 <div className="column">
+                    <br />
                     <div className="callout alert">
                         <h4>Cryptography test failed</h4>
                         <p>We will be unable to create your Steem account with this browser.</p>
@@ -197,9 +201,24 @@ class CreateAccount extends React.Component {
         if (loggedIn) {
             return <div className="row">
                 <div className="column">
+                    <br />
                     <div className="callout alert">
                         <p>You need to <a href="#" onClick={logout}>Logout</a> before you can create another account.</p>
                         <p>Please note that Steemit can only register one account per verified user.</p>
+                    </div>
+                </div>
+            </div>;
+        }
+
+        if (account_status !== 'approved') {
+            return <div className="row">
+                <div className="column">
+                    <br />
+                    <div className="callout alert">
+                        <p>It looks like your sign up request is not approved yet or you already created an account.<br />
+                           Please try again later or contact <a href="mailto:support@steemit.com">support@steemit.com</a> for the status of your request.<br />
+                           If you didn't submit your sign up application yet, <a href="/pick_account">apply now</a>!
+                        </p>
                     </div>
                 </div>
             </div>;

@@ -5,33 +5,30 @@ class Approval extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            confirm: false
+            confirm_email: false
         }
     }
 
     componentWillMount() {
-        if (this.props.location.query.confirm) {
-            this.setState({confirm: true});
+        if (this.props.location.query.confirm_email) {
+            this.setState({confirm_email: true});
         }
     }
 
     render() {
         let body = '';
-        if (this.state.confirm) {
+        if (this.state.confirm_email) {
             body = <div>
-                <h4 style={{ color: "#4078c0" }}>All set, your email is now
-                confirmed.</h4>
-                <p>You will receive an email confirmation soon when you can log into
-                your shiny new account - usually less than one business day.
-                Stay tuned!</p>
+                <h4>Thanks for confirming your email!</h4>
+                <p>After validating your sing up request with us we'll look it over for approval. As soon as your turn is up and you're approved, you'll be sent a link to finalize your account!</p>
+                <p>You'll be among the earliest members of the Steemit community!</p>
             </div>
         } else {
             body = <div>
-                <h4 style={{ color: "#4078c0" }}><strong>Your account will be
-                active soon!</strong></h4>
-                <br />
-                <p>Thank you! Please note that you must click the validation
-                link in the email we just sent you to finish creating your account.</p>
+                <h4>Thanks for confirming your phone number!</h4>
+                <p>You're a few steps away from getting to the top of the list. Check your email and click the email validation link.</p>
+                <p>After validating your sing up request with us we'll look it over for approval. As soon as your turn is up and you're approved, you'll be sent a link to finalize your account!</p>
+                <p>You'll be among the earliest members of the Steemit community!</p>
             </div>
         }
         return (

@@ -52,7 +52,7 @@ function* confirmEmailHandler() {
     if (eid.email_verified) {
         this.session.user = eid.user_id; // session recovery (user changed browsers)
         this.flash = { success: "Email has already been verified" };
-        this.redirect("/approval?confirm=true");
+        this.redirect("/approval?confirm_email=true");
         return;
     }
     const hours_ago = (Date.now() - eid.updated_at) / 1000.0 / 3600.0;
@@ -79,7 +79,7 @@ function* confirmEmailHandler() {
 
     if (eid_phone) {
         // this.flash = { success: "Thanks for confirming your email!" };
-        this.redirect("/approval?confirm=true");
+        this.redirect("/approval?confirm_email=true");
     } else {
         this.flash = { success: "Thanks for confirming your email. Your phone needs to be confirmed before proceeding." };
         this.redirect("/enter_mobile");

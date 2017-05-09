@@ -30,6 +30,7 @@ class CreateAccount extends React.Component {
             cryptographyFailure: false,
             showRules: false,
             showPass: false,
+            account_has_keys_warning: false, // remove this after May 20th
             // user_name_picked: this.props.offchainUser.getIn(["name"])
         };
         this.onSubmit = this.onSubmit.bind(this);
@@ -52,6 +53,10 @@ class CreateAccount extends React.Component {
         if (offchainAccount) {
             newState.name = offchainAccount;
             this.validateAccountName(offchainAccount);
+            // remove below after May 20th
+            if (this.props.offchainUser.get('account_has_keys')) {
+                newState.account_has_keys_warning = true;
+            }
         }
         this.setState(newState);
     }
@@ -260,6 +265,11 @@ class CreateAccount extends React.Component {
                             </label>
                             <p>{name_error}</p>
                             </div>
+                            { // TODO: remove this after May 20th
+                                this.state.account_has_keys_warning && <div className="warning">
+                                    Please note: due to recent security changes if you chosen a password before during signup, this one below will override it — this is the one you need to save.
+                                </div>
+                            }
                             <GeneratedPasswordInput onChange={this.onPasswordChange} disabled={loading} showPasswordString={this.state.showPass} />
                             <br />
                             {next_step && <div>{next_step}<br /></div>}

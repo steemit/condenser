@@ -73,7 +73,7 @@ class CreateAccount extends React.Component {
         e.preventDefault();
         this.setState({server_error: '', loading: true});
         const {password, password_valid} = this.state;
-        const name = this.state.user_name_picked;
+        const name = this.state.name;
         if (!password || !password_valid) return;
 
         let public_keys;

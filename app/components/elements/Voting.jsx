@@ -3,9 +3,7 @@ import { connect } from 'react-redux';
 import transaction from 'app/redux/Transaction';
 import Slider from 'react-rangeslider';
 import Icon from 'app/components/elements/Icon';
-import FormattedAsset from 'app/components/elements/FormattedAsset';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
-import pluralize from 'pluralize';
 import {formatDecimal, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
@@ -225,13 +223,14 @@ class Voting extends React.Component {
             for( let v = 0; v < avotes.length && voters.length < MAX_VOTES_DISPLAY; ++v ) {
                 const {percent, voter} = avotes[v]
                 const sign = Math.sign(percent)
+                const voterPercent= percent / 100 + '%';
                 if(sign === 0) continue
-                voters.push({value: (sign > 0 ? '+ ' : '- ') + voter, link: '/@' + voter})
+                voters.push({value: (sign > 0 ? '+ ' : '- ') + voter, link: '/@' + voter, data: voterPercent})
             }
             if (total_votes > voters.length) {
-                voters.push({value: <span>&hellip; and {(total_votes - voters.length)} {tt('g.more')}</span>});
+                voters.push({value: <span>&hellip; {tt('g.and')} {(total_votes - voters.length)} {tt('g.more')}</span>});
             }
-            voters_list = <DropdownMenu selected={pluralize('votes', total_votes, true)} className="Voting__voters_list" items={voters} el="div" />;
+            voters_list = <DropdownMenu selected={tt('votesandcomments_jsx.vote_count', {count: total_votes})} className="Voting__voters_list" items={voters} el="div" />;
         }
 
         let voteUpClick = this.voteUp;

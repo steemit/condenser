@@ -10,7 +10,6 @@ import user from 'app/redux/User';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Userpic from 'app/components/elements/Userpic';
 import transaction from 'app/redux/Transaction'
-import {List} from 'immutable'
 import tt from 'counterpart';
 import {parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import {Long} from 'bytebuffer';
@@ -360,7 +359,7 @@ class CommentImpl extends React.Component {
                         { (this.state.collapsed || hide_body) &&
                           <Voting post={post} showList={false} /> }
                         { this.state.collapsed && comment.children > 0 &&
-                          <span className="marginLeft1rem">{tt('reply_count', {replyCount: comment.children})}</span>}
+                          <span className="marginLeft1rem">{tt('plurals.reply_count', {count: comment.children})}</span>}
                         { !this.state.collapsed && hide_body &&
                             <a className="marginLeft1rem" onClick={this.revealBody}>{tt('blocktrades_deposit.reveal_comment')}</a>}
                     </div>

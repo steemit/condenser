@@ -62,7 +62,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
     ;
     const submitItem = <li className={lcn}>
         <Link to="/submit.html?type=submit_feedback" title={tt('navigation.feedback')}>
-          <Icon name="envelope" />
+          <Icon name="feedback" />
         </Link>
       </li>
     ;
@@ -137,7 +137,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
         <ul className={mcn + mcl}>
             {inIco && ico_menu.map((o,i) => {return <li key={i} className={lcn}><a href="{o.link}">{o.value}</a></li>})}
             {!inIco && aboutItem}
-            {!inIco && !vertical && <li><a href="/submit.html?type=submit_feedback" title={tt('navigation.feedback')}><Icon name="envelope" /></a></li>}
+            {!inIco && !vertical && <li><a href="/submit.html?type=submit_feedback" title={tt('navigation.feedback')}><Icon name="feedback" /></a></li>}
             {!inIco && !vertical && <li><a href="/static/search.html" title={tt('g.search')}><Icon name="search" /></a></li>}
             {!inIco && !vertical && languageMenu}
             {!inIco && rocketchatItem}

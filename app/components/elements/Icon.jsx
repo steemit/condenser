@@ -39,7 +39,7 @@ const icons = [
     'eye',
     'location',
     'info_o',
-    'envelope',
+    'feedback',
     'rocket-chat'
 ];
 const icons_map = {};

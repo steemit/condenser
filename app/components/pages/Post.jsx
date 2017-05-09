@@ -1,11 +1,8 @@
 import React from 'react';
-// import ReactMarkdown from 'react-markdown';
 import Comment from 'app/components/cards/Comment';
 import PostFull from 'app/components/cards/PostFull';
 import {connect} from 'react-redux';
-
 import {sortComments} from 'app/components/cards/Comment';
-// import { Link } from 'react-router';
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
 import {Set} from 'immutable'
 import tt from 'counterpart';
@@ -130,7 +127,7 @@ class Post extends React.Component {
 
 
         let sort_orders = [ 'trending', 'votes', 'new'];
-        let sort_labels = [ tt('main_menu.trending'), tt('g.votes'), tt('g.age') ];
+        let sort_labels = [ tt('main_menu.trending'), tt('g.votes'), tt('g.created') ];
         let sort_menu = [];
         let sort_label;
 

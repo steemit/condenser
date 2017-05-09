@@ -1,14 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
-import pluralize from 'pluralize';
 import Icon from 'app/components/elements/Icon';
 import { connect } from 'react-redux';
 import user from 'app/redux/User';
 import transaction from 'app/redux/Transaction'
 import Voting from 'app/components/elements/Voting';
 import Reblog from 'app/components/elements/Reblog';
-import Tooltip from 'app/components/elements/Tooltip';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import ReplyEditor from 'app/components/elements/ReplyEditor';
 import {immutableAccessor} from 'app/utils/Accessors';
@@ -324,7 +322,7 @@ class PostFull extends React.Component {
                                 {' '}{showDeleteOption && !showReply && <a onClick={onDeletePost}>{tt('g.delete')}</a>}
                             </span>}
                         <span className="PostFull__responses">
-                            <Link to={link} title={pluralize('Responses', content.children, true)}>
+                            <Link to={link} title={tt('votesandcomments_jsx.response_count', {count: content.children})}>
                                 <Icon name="chatboxes" className="space-right" />{content.children}
                             </Link>
                         </span>

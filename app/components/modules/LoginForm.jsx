@@ -285,6 +285,10 @@ export default connect(
         } else if (initialUsername) {
             initialValues.username = initialUsername;
         }
+        const offchainUser = state.offchain.get('user');
+        if (!initialUsername && offchainUser && offchainUser.get('account')) {
+            initialValues.username = offchainUser.get('account');
+        }
         let msg = '';
         const msg_match = window.location.hash.match(/msg\=([\w]+)/);
         if (msg_match && msg_match.length > 1) msg = msg_match[1];

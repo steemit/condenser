@@ -286,30 +286,30 @@ recovery should your account ever be compromised.</em>
 
         const phone = digits(parseInt(country) + localPhone);
 
-        const blocked_prefixes = yield models.List.findAll({
-            attributes: ["id", "value"],
-            where: { kk: "block-phone-prefix" }
-        });
-        for (const bp of blocked_prefixes) {
-            if (phone.match(new RegExp("^" + bp.value))) {
-                this.flash = {
-                    error: "Unfortunately, we don't yet have support to send SMS to your carrier, please try again later."
-                };
-                this.redirect("/enter_mobile");
-                return;
-            }
-        }
+        // const blocked_prefixes = yield models.List.findAll({
+        //     attributes: ["id", "value"],
+        //     where: { kk: "block-phone-prefix" }
+        // });
+        // for (const bp of blocked_prefixes) {
+        //     if (phone.match(new RegExp("^" + bp.value))) {
+        //         this.flash = {
+        //             error: "Unfortunately, we don't yet have support to send SMS to your carrier, please try again later."
+        //         };
+        //         this.redirect("/enter_mobile");
+        //         return;
+        //     }
+        // }
 
         const eid = yield models.Identity.findOne({
             where: { user_id: user.id, provider: "phone"}
         });
 
         if (!eid) {
-            let user_identity = yield models.Identity.create({
+            yield models.Identity.create({
                 user_id: user.id,
                 uid: user.uid,
                 provider: "phone",
-                phone: phone,
+                phone,
                 verified: false
             });
         }

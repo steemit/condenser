@@ -42,7 +42,7 @@ function* confirmEmailHandler() {
         confirmation_code
     );
     const eid = yield models.Identity.findOne({
-        where: { confirmation_code: confirmation_code, provider: "email"}
+        where: { confirmation_code, provider: "email"}
     });
     if (!eid) {
         this.status = 401;
@@ -52,7 +52,7 @@ function* confirmEmailHandler() {
     if (eid.email_verified) {
         this.session.user = eid.user_id; // session recovery (user changed browsers)
         this.flash = { success: "Email has already been verified" };
-        this.redirect("/approval?confirm=true");
+        this.redirect("/approval?confirm_email=true");
         return;
     }
     const hours_ago = (Date.now() - eid.updated_at) / 1000.0 / 3600.0;
@@ -66,7 +66,7 @@ function* confirmEmailHandler() {
     yield eid.update({
         verified: true
     });
-    yield models.User.update({ email: eid.email, waiting_list: true}, {
+    yield models.User.update({ email: eid.email}, {
         where: { id: eid.user_id }
     });
 
@@ -79,7 +79,7 @@ function* confirmEmailHandler() {
 
     if (eid_phone) {
         // this.flash = { success: "Thanks for confirming your email!" };
-        this.redirect("/approval?confirm=true");
+        this.redirect("/approval?confirm_email=true");
     } else {
         this.flash = { success: "Thanks for confirming your email. Your phone needs to be confirmed before proceeding." };
         this.redirect("/enter_mobile");
@@ -106,119 +106,38 @@ export default function useEnterAndConfirmEmailPages(app) {
 
     router.get("/start/:code", function*() {
         const code = this.params.code;
-        const eid = yield models.Identity.findOne({ where: { provider: "email", confirmation_code: code }});
-        const user = eid ? yield models.User.findOne({ where: { id: eid.user_id }}) : null;
-        // validate account should be created
+        const eid = yield models.Identity.findOne({ attributes: ["id", "user_id"], where: { provider: "email", confirmation_code: code }});
+        const user = eid ? yield models.User.findOne({ attributes: ["id", "account_status"], where: { id: eid.user_id }}) : null;
+        // validate there is email identity and user record
         if (eid && user) {
             // set session based on confirmation code(user from diff device, etc)
             this.session.user = user.id;
-            this.session.uid = user.uid;
+            if (user.uid) this.session.uid = user.uid;
             console.log('-- checking incoming start request -->', this.session.uid, this.session.user);
-            const acc = yield models.Account.findOne({
-                attributes: ["id", "user_id", "created", "name"],
-                where: {user_id: this.session.user},
-                order: "id DESC"
-            });
-            console.log('-- account found processing start request -->', acc.name, acc.created, user.account_status);
-            if (!acc.created && user.account_status === "approved") {
-                // approved account not yet created. create and log in
-                const name = acc.name;
-                console.log("--creating account for -->", this.session.uid, this.session.user);
-                const fields = JSON.stringify({
-                                name,
-                                confirmation_code: code,
-                                owner_key: acc.owner_key,
-                                active_key: acc.active_key,
-                                posting_key: acc.posting_key,
-                                memo_key: acc.memo_key
-                            });
-                fetch("https://" + $STM_Config.site_domain + '/api/v1/accounts', {
-                    method: 'post',
-                    body: fields,
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-type': 'application/json'
-                    }
-                }).then(r => r.json()).then(res => {
-                    if (res.error || res.status !== 'ok') {
-                        console.error('CreateAccount server error', res.error);
-                        this.flash = { error: "We couldn't create account at this time, please try again later. " + res.error};
-                        this.redirect("/");
-                    } else {
-                        this.flash = { success: "Your account is now ready. Please log-in with your password." };
-                        this.redirect("/login.html");
-                    }
-                }).catch(error => {
-                    console.error('Caught CreateAccount server error', error);
-                    this.flash = { error: "We couldn't create account at this time, please try again later." };
-                    this.redirect("/");
-                });
-                return;
+            if (user.account_status === "approved") {
+                console.log("-- approved account for -->", this.session.uid, this.session.user);
+                this.redirect("/create_account");
             } else if (user.account_status === "created") {
                 // user clicked expired link already create account
                 this.flash = { alert: "Your account has already been created." };
-                this.redirect("/");
-                return;
+                this.redirect("/login.html");
             } else if (user.account_status === "waiting") {
                 this.flash = { error: "Your account has not been approved." };
                 this.redirect("/");
-                return;
             } else {
-                this.flash = { error: "Issue locating account." };
+                this.flash = { error: "Issue with your sign up status." };
                 this.redirect("/");
-                return;
             }
         } else {
             // no matching identity found redirect
-            this.flash = { error: "This is not a valid account code. Please click the link in your welcome email." };
+            this.flash = { error: "This is not a valid sign up code. Please click the link in your welcome email." };
             this.redirect("/");
-            return;
         }
-        // handle success
     });
 
     router.get("/enter_email", function*() {
-        console.log("-- /enter_email -->", this.session.uid, this.session.user, this.session);
-        // update requested account name for later
-        let user = yield models.User.findOne({ where: { uid: this.session.uid }});
-        if (!user) {
-            // create user and identity
-            console.log("-- /Creating User & Identity -->");
-            const data = {};
-            data['last_step'] = 1;
-            user = yield models.User.create({
-                uid: this.session.uid,
-                name: this.request.query.account,
-                remote_ip: getRemoteIp(this.request.req),
-                sign_up_meta: JSON.stringify(data),
-                account_status: 'waiting'
-            });
-            this.session.user = user.id;
-            yield models.Identity.create({
-                user_id: user.id,
-                uid: user.uid,
-                verified: false,
-                provider: 'email'
-            });
-        } else {
-            const eid = yield models.Identity.findOne({ where: { user_id: user.id, provider: "email" }});
-            if (!eid) {
-                yield models.Identity.create({
-                    user_id: user.id,
-                    uid: user.uid,
-                    verified: false,
-                    provider: 'email'
-                });
-            } else {
-                const data = user.sign_up_meta ? JSON.parse(user.sign_up_meta) : {};
-                data['last_step'] = 1;
-                yield user.update({
-                    name: this.request.query.account,
-                    sign_up_meta: JSON.stringify(data)
-                });
-            }
-        }
-        // this.session.user = null;
+        console.log("-- /enter_email -->", this.session.uid, this.session.user, this.session, this.request.query.account);
+        this.session.picked_account_name = this.request.query.account;
         let default_email = "";
         if (this.request.query && this.request.query.email)
             default_email = this.request.query.email;
@@ -244,8 +163,6 @@ export default function useEnterAndConfirmEmailPages(app) {
                             />
                             <label>
                                 Email
-
-
                                 <input
                                     type="email"
                                     name="email"
@@ -253,11 +170,6 @@ export default function useEnterAndConfirmEmailPages(app) {
                                 />
                             </label>
                             <br />
-                            {/*<div*/}
-                            {/*className="g-recaptcha"*/}
-                            {/*data-sitekey={rc_site_key}*/}
-                            {/*/>*/}
-                            {/*<br />*/}
                             <div className="error">
                                 {this.flash.error}
                             </div>
@@ -306,7 +218,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                 this.flash = {
                     error: "Failed captcha verification, please try again"
                 };
-                this.redirect("/enter_email?email=" + email);
+                this.redirect("/enter_email?email=" + email + "&account=" + this.request.query.account);
                 return;
             }
         }
@@ -320,133 +232,125 @@ export default function useEnterAndConfirmEmailPages(app) {
                 email
             );
             this.flash = { error: "Not valid email address" };
-            this.redirect("/enter_email?email=" + email);
+            this.redirect("/enter_email?email=" + email + "&account=" + this.request.query.account);
             return;
         }
-        const email_provider = parsed_email[1];
-        const blocked_email = yield models.List.findOne({
-            attributes: ["id"],
-            where: { kk: "block-email-provider", value: email_provider }
-        });
-        if (blocked_email) {
-            console.log(
-                "-- /submit_email blocked_email -->",
-                this.session.uid,
-                email
-            );
-            this.flash = {
-                error: (
-                    "Not a supported email address: " +
-                    email +
-                    ". Please make sure your you don't use any temporary email providers, contact support@steemit.com for more information."
-                )
-            };
-            // update identity with blocked email address
-            const block_eid = yield models.Identity.findOne({
-                attributes: ["id"],
-                where: { user_id: this.session.user, provider: "email" },
-                order: "id DESC"
-            });
-            if (block_eid) yield block_eid.update({email});
-            this.redirect("/enter_email?email=" + email);
-            return;
-        }
+
+        // const email_provider = parsed_email[1];
+        // const blocked_email = yield models.List.findOne({
+        //     attributes: ["id"],
+        //     where: { kk: "block-email-provider", value: email_provider }
+        // });
+        // if (blocked_email) {
+        //     console.log(
+        //         "-- /submit_email blocked_email -->",
+        //         this.session.uid,
+        //         email
+        //     );
+        //     this.flash = {
+        //         error: (
+        //             "Not a supported email address: " +
+        //             email +
+        //             ". Please make sure your you don't use any temporary email providers, contact support@steemit.com for more information."
+        //         )
+        //     };
+        //     // update identity with blocked email address
+        //     const block_eid = yield models.Identity.findOne({
+        //         attributes: ["id"],
+        //         where: { user_id: this.session.user, provider: "email" },
+        //         order: "id DESC"
+        //     });
+        //     if (block_eid) yield block_eid.update({email});
+        //     this.redirect("/enter_email?email=" + email);
+        //     return;
+        // }
 
         const existing_email = yield models.Identity.findOne({
-            where: { email: email, provider: "email" }
-        });
-
-        const confirmation_code = secureRandom.randomBuffer(13).toString("hex");
-        let user_id = this.session.user;
-        let user;
-        let eid;
-        user = yield models.User.findOne({
-            where: { uid: this.session.uid }
-        });
-        eid = yield models.Identity.findOne({
-            where: { user_id: user.id, provider: "email" }
+            where: { email, provider: "email" }
         });
         if (existing_email) {
             console.log(
                 "-- /submit_email existing_email -->",
-                user_id,
                 this.session.uid,
                 email,
                 existing_email.user_id
             );
             const act = yield models.Account.findOne({
                 attributes: ["id"],
-                where: { user_id: existing_email.user_id, ignored: false },
+                where: {user_id: existing_email.user_id, ignored: false},
                 order: "id DESC"
             });
             if (act) {
-                this.flash = { error: "This email has already been taken." };
+                this.flash = {error: "This email has already been taken."};
                 this.redirect("/enter_email?email=" + email);
                 return;
             }
-            // We must resend the email to get the session going again if the user gets interrupted (clears cookies or changes browser) after email verify.
-            const { id } = existing_email;
+        }
 
-            yield eid.update({confirmation_code: confirmation_code});
-            console.log(
-                "-- /submit_email ->",
-                this.session.uid,
-                this.session.user,
-                email,
-                eid.id,
-                confirmation_code
-            );
-
-            sendEmail("confirm_email", email, { confirmation_code });
-        } else {
-            yield eid.update({
-                email: this.request.body.email,
-                confirmation_code: confirmation_code
-            });
-            let data = user.sign_up_meta ? JSON.parse(user.sign_up_meta) : {};
-            data["last_step"] = 2;
+        let user = yield models.User.findOne({ where: { uid: this.session.uid }});
+        if (user) {
+            const data = user.sign_up_meta ? JSON.parse(user.sign_up_meta) : {};
+            data.last_step = 2;
             yield user.update({
                 sign_up_meta: JSON.stringify(data)
             });
-            console.log(
-                "-- /submit_email -->",
-                this.session.uid,
-                this.session.user,
-                email,
-                eid.id,
-                confirmation_code
-            );
-
-            sendEmail("confirm_email", email, { confirmation_code });
-            // redirect to phone verification
-            this.redirect("/enter_mobile");
-            return;
+        } else {
+            // create user and identity
+            console.log("-- /Creating User -->");
+            user = yield models.User.create({
+                uid: this.session.uid,
+                remote_ip: getRemoteIp(this.request.req),
+                sign_up_meta: JSON.stringify({last_step: 2}),
+                account_status: 'waiting'
+            });
         }
-        const body = renderToString(
-            <div className="App">
-                <MiniHeader />
-                <br />
-                <div className="row" style={{ maxWidth: "32rem" }}>
-                    <div className="column">
-                        Thank you for providing your email address (
-                        {email}
-                        ).
-                        <br />
+        this.session.user = user.id;
 
-                        To continue please click on the link in the email we've sent you.
-
-                        <br />
-                        <span className="secondary">
-                            Didn't recieve email?{" "}
-                            <a href={`/enter_email?email=${email}`}>Re-send</a>
-                        </span>
-                    </div>
-                </div>
-            </div>
+        const confirmation_code = secureRandom.randomBuffer(13).toString("hex");
+        let eid = yield models.Identity.findOne({
+            where: { user_id: user.id, provider: "email" }
+        });
+        if (eid) {
+            yield eid.update({
+                verified: false,
+                email,
+                confirmation_code
+            });
+        } else {
+            eid = yield models.Identity.create({
+                user_id: user.id,
+                provider: 'email',
+                verified: false,
+                email,
+                confirmation_code
+            });
+        }
+        console.log(
+            "-- /submit_email ->",
+            this.session.uid,
+            this.session.user,
+            email,
+            eid.id,
+            confirmation_code
         );
-        const props = { body, title: "Email Confirmation", assets, meta: [] };
-        this.body = "<!DOCTYPE html>" +
-            renderToString(<ServerHTML {...props} />);
+        sendEmail("confirm_email", email, { confirmation_code });
+
+        if (this.session.picked_account_name) {
+            const account = yield models.Account.findOne({
+                attributes: ['id'],
+                where: {user_id: user.id, ignored: false},
+                order: 'id DESC'
+            });
+            if (!account) {
+                models.Account.create({
+                    user_id: user.id,
+                    name: this.session.picked_account_name,
+                    remote_ip: getRemoteIp(this.request.req)
+                });
+            }
+        }
+        // redirect to phone verification
+        this.redirect("/enter_mobile");
     });
 
     router.get("/confirm_email/:code", confirmEmailHandler);

@@ -151,6 +151,8 @@ app.use(mount('/sitemap.xml', staticCache(path.join(__dirname, '../app/assets/si
 app.use(mount('/favicons', staticCache(path.join(__dirname, '../app/assets/images/favicons'), cacheOpts)));
 app.use(mount('/images', staticCache(path.join(__dirname, '../app/assets/images'), cacheOpts)));
 app.use(mount('/legal', staticCache(path.join(__dirname, '../app/assets/legal'), cacheOpts)));
+app.use(mount('/googleb1863376a961eb3b.html', staticCache(path.join(__dirname, '../app/assets/googleb1863376a961eb3b.html'), cacheOpts)));
+
 
 // Proxy asset folder to webpack development server in development mode
 if (env === 'development') {

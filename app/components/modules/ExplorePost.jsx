@@ -17,18 +17,18 @@ class ExplorePost extends Component {
             copied: false
         };
         this.onCopy = this.onCopy.bind(this);
-        this.Steemd = this.Steemd.bind(this);
-        this.Steemdb = this.Steemdb.bind(this);
+        this.Golosd = this.Golosd.bind(this);
+        this.Golosdb = this.Golosdb.bind(this);
         this.Busy = this.Busy.bind(this);
         this.Phist = this.Phist.bind(this);
     }
 
-    Steemd() {
-        serverApiRecordEvent('SteemdView', this.props.permlink);
+    Golosd() {
+        serverApiRecordEvent('GolosdView', this.props.permlink);
     }
 
-    Steemdb() {
-        serverApiRecordEvent('SteemdbView', this.props.permlink);
+    Golosdb() {
+        serverApiRecordEvent('GolosdbView', this.props.permlink);
     }
 
     Busy() {
@@ -47,8 +47,8 @@ class ExplorePost extends Component {
 
     render() {
         const link = this.props.permlink;
-        const steemd = 'https://golosd.com' + link;
-        const steemdb = 'https://golosdb.com' + link;
+        const golosd = 'http://golosd.com' + link;
+        const golosdb = 'https://golosdb.com' + link;
         const busy = 'https://busy.org' + link;
         const steemit = 'https://golos.io' + link;
         const phist = 'https://phist.steemdata.com/history?identifier=steemit.com' + link;
@@ -65,9 +65,9 @@ class ExplorePost extends Component {
                 </div>
                 <h5>{tt('explorepost_jsx.alternative_sources')}</h5>
                 <ul>
-                    <li><a href={steemd} onClick={this.Steemd} target="_blank">golosd.com <Icon name="extlink" /></a></li>
-                    <li><a href={steemdb} onClick={this.Steemdb} target="_blank">golosdb.com <Icon name="extlink" /></a></li>
-                    <li><a href={busy} onClick={this.Busy} target="_blank">busy.org <Icon name="extlink" /></a></li>
+                    <li><a href={golosd} onClick={this.Golosd} target="_blank">golosd.com <Icon name="extlink" /></a></li>
+                    <li><a href={golosdb} onClick={this.Golosdb} target="_blank">golosdb.com <Icon name="extlink" /></a></li>
+                    {/**<li><a href={busy} onClick={this.Busy} target="_blank">busy.org <Icon name="extlink" /></a></li>*/}
                     {/**<li><a href={phist} onClick={this.Phist} target="_blank">phist.steemdata.com <Icon name="extlink" /></a></li>*/}
                 </ul>
             </span>

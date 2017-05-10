@@ -11,7 +11,6 @@ import SignUp from 'app/components/modules/SignUp';
 import runTests from 'shared/ecc/test/BrowserTests';
 import g from 'app/redux/GlobalReducer';
 import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInput';
-import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 import { FormattedHTMLMessage } from 'react-intl';
 import { APP_NAME, APP_DOMAIN, LIQUID_TOKEN, SUPPORT_EMAIL } from 'app/client_config';
 import tt from 'counterpart';

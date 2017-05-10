@@ -80,3 +80,14 @@ export const LANGUAGES = {
   sr: 'Srpski'
 }
 export const SEO_TITLE = 'GOLOS.io Блоги'
+export const DEFAULT_DOMESTIC = 'ru'
+export const DOMESTIC = {
+  ar: "العربية",
+  cn: "漢",
+  es: "Español",
+  en: "English",
+  hd: "हिन्दी",
+  pt: "Portuguesa",
+  ru: "Русский",
+  fr: "Français"
+}

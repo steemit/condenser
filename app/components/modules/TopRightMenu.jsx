@@ -46,7 +46,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
         {link: '#faq', value: tt('navigation.faq')},
         {link: '#team', value: tt('g.team')},
     ];
-    let currentLang = DEFAULT_LANGUAGE;
+    let currentLang = LANGUAGES[DEFAULT_LANGUAGE].substr(0,3).toUpperCase();
     const lang_menu = [];
     for (var key in LANGUAGES) {
       if (store.get('language') === key)
@@ -85,7 +85,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
             </li>}
         </LinkWithDropdown>
     ;
-    const rocketchatItem = !vertical ? <li className={lcn}>
+    const rocketchatItem = !vertical ? <li className={lcn + ' wrap-rocket-chat'}>
         <a href="https://chat.golos.io/" title={tt("navigation.APP_NAME_chat", {APP_NAME})} target="_blank">
           <Icon name="rocket-chat" />
         </a>

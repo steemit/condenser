@@ -112,17 +112,17 @@ export default function useGeneralApi(app) {
             }
 
             const remote_ip = getRemoteIp(this.req);
-            // // rate limit account creation to one per IP every 10 minutes
-            // const same_ip_account = yield models.Account.findOne(
-            //     {attributes: ['created_at'], where: {remote_ip: esc(remote_ip)}, order: 'id DESC'}
-            // );
-            // if (same_ip_account) {
-            //     const minutes = (Date.now() - same_ip_account.created_at) / 60000;
-            //     if (minutes < 10) {
-            //         console.log(`api /accounts: IP rate limit for user ${this.session.uid} #${user_id}, IP ${remote_ip}`);
-            //         throw new Error('Only one Steem account allowed per IP address every 10 minutes');
-            //     }
-            // }
+            // rate limit account creation to one per IP every 10 minutes
+            const same_ip_account = yield models.Account.findOne(
+                {attributes: ['created_at'], where: {remote_ip: esc(remote_ip), created: true}, order: 'id DESC'}
+            );
+            if (same_ip_account) {
+                const minutes = (Date.now() - same_ip_account.created_at) / 60000;
+                if (minutes < 10) {
+                    console.log(`api /accounts: IP rate limit for user ${this.session.uid} #${user_id}, IP ${remote_ip}`);
+                    throw new Error('Only one Steem account allowed per IP address every 10 minutes');
+                }
+            }
 
             yield createAccount({
                 signingKey: config.get('registrar.signing_key'),

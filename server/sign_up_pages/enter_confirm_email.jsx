@@ -218,7 +218,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                 this.flash = {
                     error: "Failed captcha verification, please try again"
                 };
-                this.redirect("/enter_email?email=" + email);
+                this.redirect("/enter_email?email=" + email + "&account=" + this.request.query.account);
                 return;
             }
         }
@@ -232,7 +232,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                 email
             );
             this.flash = { error: "Not valid email address" };
-            this.redirect("/enter_email?email=" + email);
+            this.redirect("/enter_email?email=" + email + "&account=" + this.request.query.account);
             return;
         }
 

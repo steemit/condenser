@@ -399,7 +399,7 @@ class ReplyEditor extends React.Component {
 
                         <div className={vframe_section_shrink_class} style={{marginTop: '0.5rem'}}>
                             {isStory && <span>
-                                <select defaultValue="all">
+                                <select defaultValue="all" disabled={loading}>
                                   {Object.keys(DOMESTIC).map(key => {
                                     return <option key={key} value={key}>{DOMESTIC[key]}</option>
                                   })}

@@ -128,11 +128,12 @@ class Witnesses extends React.Component {
                         <h2>{tt('witnesses_jsx.top_witnesses')}</h2>
                         {current_proxy && current_proxy.length ? null :
                             <p>
-                            <strong>{tt('witnesses_jsx.you_have_votes_remaining', {votesCount: witness_vote_count})}.</strong>{' '}
+                            <strong>{tt('witnesses_jsx.you_have_votes_remaining') + tt('witnesses_jsx.you_have_votes_remaining_count', {count: witness_vote_count})}.</strong>{' '}
                             {tt('witnesses_jsx.you_can_vote_for_maximum_of_witnesses')}.
                         </p>}
                     </div>
                 </div>
+
                 {current_proxy && current_proxy.length ? null :
                 <div className="row small-collapse">
                     <div className="column">
@@ -168,7 +169,7 @@ class Witnesses extends React.Component {
                         <br /><br />
                      </div>
                 </div>}
-
+                {/**
                 <div className="row">
                     <div className="column">
                         <p>{tt(current_proxy && current_proxy.length ? 'witnesses_jsx.witness_set' : 'witnesses_jsx.set_witness_proxy', {proxy: current_proxy})}</p>
@@ -196,7 +197,7 @@ class Witnesses extends React.Component {
                         {this.state.proxyFailed && <p className="error">{tt('witnesses_jsx.proxy_update_error')}.</p>}
                         <br />
                      </div>
-                </div>}
+                </div>*/}
             </div>
         );
     }

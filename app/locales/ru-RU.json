@@ -189,6 +189,7 @@
     "previous": "Предыдущий",
     "price": "Цена",
     "print": "Распечатать",
+    "prolong": "Продлить",
     "promote": "Продвинуть",
     "promoted": "Промо",
     "re": "RE",
@@ -606,6 +607,7 @@
   },
   "settings_jsx": {
     "choose_language": "Выберите язык",
+    "choose_domestic": "Национальный язык",
     "choose_currency": "Выберите валюту",
     "invalid_url": "Недопустимый URL-адрес",
     "name_is_too_long": "Имя слишком длинное",

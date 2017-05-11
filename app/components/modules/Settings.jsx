@@ -148,7 +148,6 @@ class Settings extends React.Component {
 
         const languageSelectBox = <select defaultValue={store.get('language')} onChange={this.onLanguageChange}>
           {Object.keys(LANGUAGES).map(key => {
-            console.log('LANGUAGES[key]', LANGUAGES[key])
             return <option key={key} value={key}>{LANGUAGES[key]}</option>
           })}
         </select>;

@@ -236,9 +236,9 @@ class Header extends React.Component {
                             closeOnClickOutside
                             dropdownPosition="bottom"
                             dropdownAlignment="left"
-                            dropdownContent={<VerticalMenu items={domestic_menu} title={tt('settings_jsx.choose_language')} />}
+                            dropdownContent={<VerticalMenu items={domestic_menu} title={tt('settings_jsx.choose_domestic')} />}
                             >
-                              <a title={tt('settings_jsx.choose_language')} onClick={e => e.preventDefault()}>
+                              <a title={tt('settings_jsx.choose_domestic')} onClick={e => e.preventDefault()}>
                                 {currentDomesticTitle} ▼
                               </a>
                             </LinkWithDropdown>

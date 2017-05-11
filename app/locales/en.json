@@ -69,6 +69,7 @@
     "previous": "Previous",
     "price": "Price",
     "print": "Print",
+    "prolong": "Prolong",
     "promote": "Promote",
     "promoted": "promoted",
     "re": "RE",
@@ -758,6 +759,7 @@
   },
   "settings_jsx": {
     "choose_language": "Choose language",
+    "choose_domestic": "Choose domestic",
     "choose_currency": "Choose currency",
     "invalid_url": "Invalid URL",
     "name_is_too_long": "Name is too long",

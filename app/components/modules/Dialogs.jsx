@@ -12,6 +12,7 @@ import SuggestPassword from 'app/components/elements/SuggestPassword'
 import ChangePassword from 'app/components/elements/ChangePassword'
 import CheckLoginOwner from 'app/components/elements/CheckLoginOwner'
 import PromotePost from 'app/components/modules/PromotePost';
+import ProlongPost from 'app/components/modules/ProlongPost';
 import ExplorePost from 'app/components/modules/ExplorePost';
 
 class Dialogs extends React.Component {
@@ -71,6 +72,12 @@ class Dialogs extends React.Component {
                 <Reveal onHide={this['hide_' + k]} show>
                     <CloseButton onClick={this['hide_' + k]} />
                     <PromotePost onClose={this['hide_' + k]} {...v.get('params').toJS()} />
+                </Reveal>
+            </span>:
+            k === 'prolongPost' ? <span key={idx++} >
+                <Reveal onHide={this['hide_' + k]} show>
+                    <CloseButton onClick={this['hide_' + k]} />
+                    <ProlongPost onClose={this['hide_' + k]} {...v.get('params').toJS()} />
                 </Reveal>
             </span>:
             k === 'explorePost' ? <span key={idx++} >

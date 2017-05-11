@@ -35,6 +35,7 @@ async function appRender(ctx) {
                         attributes: ['name', 'email', 'picture_small', 'account_status'],
                         where: {id: user_id},
                         include: [{model: models.Account, attributes: ['name', 'ignored', 'created', 'owner_key']}],
+                        order: 'Accounts.id desc',
                         logging: false
                     });
                     appRender.dbStatus = {ok: true};

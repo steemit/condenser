@@ -149,36 +149,7 @@ export default function useEnterAndConfirmMobilePages(app) {
             this.session.uid,
             this.session.user
         );
-        // const user_id = this.session.user;
-        // if (!user_id) {
-        //     this.body = "user not found";
-        //     return;
-        // }
-        // const mid = yield models.Identity.findOne({
-        //     attributes: ["phone"],
-        //     where: { user_id, provider: "phone" },
-        //     order: "id DESC"
-        // });
-        let user;
-        user = yield models.User.findOne({
-            where: { uid: this.session.uid }
-        });
-        const mid = yield models.Identity.findOne({
-            where: { user_id: user.id, provider: "phone" }
-        });
-        this.session.user = user.id;
-        // this.session.user_name_picked = mid.user_name_picked;
-        // mark for waiting list
-        if (mid && mid.verified) {
-            // this.flash = { success: "Phone number has already been verified" };
-            if (mixpanel)
-                mixpanel.track("SignupStep3", {
-                    distinct_id: this.session.uid
-                });
-            console.log("--/Already verified redirecting user", this.session.user, mid.user_name_picked);
-            this.redirect("/approval");
-            return;
-        }
+
         const phone = this.query.phone;
         const country = this.query.country;
 

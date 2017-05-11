@@ -1,6 +1,7 @@
 import React from 'react';
 
 const icons = [
+    'flags/4x3/all',
     'flags/4x3/ru',
     'flags/4x3/ua',
     'flags/4x3/by',

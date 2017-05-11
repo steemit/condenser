@@ -598,9 +598,9 @@
     "uploading": "Загрузка",
     "draft_saved": "Черновик сохранен.",
     "editor": "Редактор",
-    "insert_images_by_dragging_dropping": "Вставьте изображения перетащив их при помощи мышки, либо выбрав ",
-    "pasting_from_the_clipboard": " из буфера обмена. ",
-    "selecting_them": "(тут кликабельно)",
+    "insert_images_by_dragging_dropping": "Вставьте изображения перетащив их при помощи мышки,либо ",
+    "pasting_from_the_clipboard": " их из буфера обмена. ",
+    "selecting_them": "выбрав",
     "image_upload": "Загрузка изображения",
     "power_up_100": "Сила Голоса 100%%",
     "default_50_50": "50%% / 50%%",
@@ -615,8 +615,8 @@
     "withdraw": "Вывод"
   },
   "settings_jsx": {
-    "choose_language": "Выберите язык",
-    "choose_domestic": "Национальный язык",
+    "choose_language": "Выберите язык интерфейса",
+    "choose_domestic": "Выберите язык контента",
     "choose_currency": "Выберите валюту",
     "invalid_url": "Недопустимый URL-адрес",
     "name_is_too_long": "Имя слишком длинное",
@@ -850,7 +850,12 @@
   "witnesses_jsx": {
     "witness_thread": "пост делегата",
     "top_witnesses": "Топ делегатов",
-    "you_have_votes_remaining": "У Вас осталось {votesCount, plural,\n=0 {0 голосов} \none {1 голос}\nother {%(votesCount)s голосов}} ",
+    "you_have_votes_remaining": "У Вас осталось ",
+    "you_have_votes_remaining_count": {
+      "zero": "0 голосов",
+      "one": "1 голос",
+      "other": "%(count)s голосов"
+    },
     "you_can_vote_for_maximum_of_witnesses": "Вы можете голосовать максимум за 30 делегатов",
     "witness": "Делегаты",
     "information": "Информация",

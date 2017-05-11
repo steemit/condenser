@@ -85,7 +85,7 @@ class PromotePost extends Component {
                                </div>
                            </div>
                        </div>
-                       <div>{`${tt('g.balance')}: ${balance} ${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}</div>
+                       <div>{`${tt('transfer_jsx.balance')}: ${balance} ${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}</div>
                        <br />
                        {loading && <span><LoadingIndicator type="circle" /><br /></span>}
                        {!loading && <span>
@@ -121,7 +121,7 @@ export default connect(
                 from: username,
                 to: 'null', amount: parseFloat(amount, 10).toFixed(3) + ' ' + asset,
                 memo: `@${author}/${permlink}`,
-                __config: {successMessage: tt('t.you_successfully_promoted_this_post') + '.'}
+                __config: {successMessage: tt('promote_post_jsx.you_successfully_promoted_this_post') + '.'}
             }
             dispatch(transaction.actions.broadcastOperation({
                 type: 'transfer',

@@ -190,7 +190,7 @@
     "previous": "Предыдущий",
     "price": "Цена",
     "print": "Распечатать",
-    "prolong": "Продлить",
+    "prolong": "Продлить выплату",
     "promote": "Продвинуть",
     "promoted": "Промо",
     "re": "RE",
@@ -563,7 +563,7 @@
   },
   "prolong_post_jsx": {
     "prolong_post": "Продлить окно выплат у поста",
-    "spend_your_DEBT_TOKEN_to_prolong_withdrawals_window_post": "Используйте Ваши %(DEBT_TOKEN)s чтобы продлить окно выплат у этого поста",
+    "spend_your_DEBT_TOKEN_to_prolong_payments_window_post": "Используйте Ваши %(DEBT_TOKEN)s чтобы продлить окно выплат у этого поста",
     "you_successfully_promoted_this_post": "Вы успешно продвинули этот пост",
     "leave_this_unchecked_to_receive_half_your_reward": "Оставьте неотмеченным для получения 1/2 вознаграждения в %(VESTING_TOKEN)s и 1/2 %(DEBT_TOKEN)s",
     "pay_me_100_in_VESTING_TOKEN": "Заплатить мне 100%% в %(VESTING_TOKEN)s",

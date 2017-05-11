@@ -98,9 +98,16 @@ ul > li > .button {
     font-size: 1rem;
     line-height: 0;
     padding: 0;
-    .caret-down {
+    &.domestic-selector .Icon {
       padding-top: 0.65rem;
       margin-top: -1.12rem;
+    }
+    .domestic-flag {
+      -webkit-filter: drop-shadow(0 0 4px #ccc);
+      filter: drop-shadow(0 0 4px #ccc);
+    }
+    .caret-down {
+      margin-left: 0.24rem;
     }
   }
   a.active {

@@ -1,6 +1,18 @@
 import React from 'react';
 
 const icons = [
+    'flags/4x3/ru',
+    'flags/4x3/ua',
+    'flags/4x3/by',
+    'flags/4x3/am',
+    'flags/4x3/kz',
+    'flags/4x3/tj',
+    'flags/4x3/md',
+    'flags/4x3/es',
+    'flags/4x3/in',
+    'flags/4x3/pt',
+    'flags/4x3/fr',
+    'flags/4x3/us',
     'user',
     'share',
     'calendar',

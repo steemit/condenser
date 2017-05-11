@@ -184,11 +184,15 @@ class Header extends React.Component {
             });
 
         // domestic
-        let currentDomesticTitle = DOMESTIC[DEFAULT_DOMESTIC];
+        DOMESTIC.all = tt('g.all_langs');
+        let currentDomesticKey = DEFAULT_DOMESTIC;
+        let currentDomesticTitle = DOMESTIC[currentDomesticKey];
         const domestic_menu = [];
         for (var key in DOMESTIC) {
-          if (this.props.current_domestic === key)
-            currentDomesticTitle = DOMESTIC[key];
+          if (this.props.current_domestic === key) {
+            currentDomesticKey = key;
+            currentDomesticTitle = DOMESTIC[currentDomesticKey];
+          }
           else
             domestic_menu.push({link: '#' + key, onClick: this.props.changeDomestic, value: DOMESTIC[key]})
         }
@@ -238,8 +242,8 @@ class Header extends React.Component {
                             dropdownAlignment="left"
                             dropdownContent={<VerticalMenu items={domestic_menu} title={tt('settings_jsx.choose_domestic')} />}
                             >
-                              <a title={tt('settings_jsx.choose_domestic')} onClick={e => e.preventDefault()}>
-                                {currentDomesticTitle} <Icon name="caret-down" />
+                              <a className="domestic-selector" title={tt('settings_jsx.choose_domestic')} onClick={e => e.preventDefault()}>
+                                <Icon className="domestic-flag" name={'flags/4x3/' + currentDomesticKey} /> <Icon name="caret-down" />
                               </a>
                             </LinkWithDropdown>
                         </HorizontalMenu>

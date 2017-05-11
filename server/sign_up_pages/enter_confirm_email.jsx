@@ -136,7 +136,7 @@ export default function useEnterAndConfirmEmailPages(app) {
     });
 
     router.get("/enter_email", function*() {
-        console.log("-- /enter_email -->", this.session.uid, this.session.user, this.session, this.request.query.account);
+        console.log("-- /enter_email -->", this.session.uid, this.session.user, this.request.query.account);
         this.session.picked_account_name = this.request.query.account;
         let default_email = "";
         if (this.request.query && this.request.query.email)
@@ -160,6 +160,11 @@ export default function useEnterAndConfirmEmailPages(app) {
                                 type="hidden"
                                 name="csrf"
                                 value={this.csrf}
+                            />
+                            <input
+                                type="hidden"
+                                name="account"
+                                value={this.request.query.account}
                             />
                             <label>
                                 Email
@@ -199,10 +204,11 @@ export default function useEnterAndConfirmEmailPages(app) {
     router.post("/submit_email", koaBody, function*() {
         if (!checkCSRF(this, this.request.body.csrf)) return;
 
-        const email = this.request.body.email;
+        const {email, account} = this.request.body;
+        console.log('-- /submit_email -->', this.session.uid, email, account);
         if (!email) {
             this.flash = { error: "Please provide an email address" };
-            this.redirect("/enter_email");
+            this.redirect(`/enter_email?account=${account}`);
             return;
         }
 
@@ -218,7 +224,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                 this.flash = {
                     error: "Failed captcha verification, please try again"
                 };
-                this.redirect("/enter_email?email=" + email + "&account=" + this.request.query.account);
+                this.redirect(`/enter_email?email=${email}&account=${account}`);
                 return;
             }
         }
@@ -232,123 +238,98 @@ export default function useEnterAndConfirmEmailPages(app) {
                 email
             );
             this.flash = { error: "Not valid email address" };
-            this.redirect("/enter_email?email=" + email + "&account=" + this.request.query.account);
+            this.redirect(`/enter_email?email=${email}&account=${account}`);
             return;
         }
 
-        // const email_provider = parsed_email[1];
-        // const blocked_email = yield models.List.findOne({
-        //     attributes: ["id"],
-        //     where: { kk: "block-email-provider", value: email_provider }
-        // });
-        // if (blocked_email) {
-        //     console.log(
-        //         "-- /submit_email blocked_email -->",
-        //         this.session.uid,
-        //         email
-        //     );
-        //     this.flash = {
-        //         error: (
-        //             "Not a supported email address: " +
-        //             email +
-        //             ". Please make sure your you don't use any temporary email providers, contact support@steemit.com for more information."
-        //         )
-        //     };
-        //     // update identity with blocked email address
-        //     const block_eid = yield models.Identity.findOne({
-        //         attributes: ["id"],
-        //         where: { user_id: this.session.user, provider: "email" },
-        //         order: "id DESC"
-        //     });
-        //     if (block_eid) yield block_eid.update({email});
-        //     this.redirect("/enter_email?email=" + email);
-        //     return;
-        // }
-
-        const existing_email = yield models.Identity.findOne({
-            where: { email, provider: "email" }
-        });
-        if (existing_email) {
-            console.log(
-                "-- /submit_email existing_email -->",
-                this.session.uid,
-                email,
-                existing_email.user_id
-            );
-            const act = yield models.Account.findOne({
-                attributes: ["id"],
-                where: {user_id: existing_email.user_id, ignored: false},
-                order: "id DESC"
-            });
-            if (act) {
-                this.flash = {error: "This email has already been taken."};
-                this.redirect("/enter_email?email=" + email);
-                return;
-            }
-        }
-
-        let user = yield models.User.findOne({ where: { uid: this.session.uid }});
-        if (user) {
-            const data = user.sign_up_meta ? JSON.parse(user.sign_up_meta) : {};
-            data.last_step = 2;
-            yield user.update({
-                sign_up_meta: JSON.stringify(data)
-            });
-        } else {
-            // create user and identity
-            console.log("-- /Creating User -->");
-            user = yield models.User.create({
-                uid: this.session.uid,
-                remote_ip: getRemoteIp(this.request.req),
-                sign_up_meta: JSON.stringify({last_step: 2}),
-                account_status: 'waiting'
-            });
-        }
-        this.session.user = user.id;
-
-        const confirmation_code = secureRandom.randomBuffer(13).toString("hex");
-        let eid = yield models.Identity.findOne({
-            where: { user_id: user.id, provider: "email" }
-        });
-        if (eid) {
-            yield eid.update({
-                verified: false,
-                email,
-                confirmation_code
-            });
-        } else {
-            eid = yield models.Identity.create({
-                user_id: user.id,
-                provider: 'email',
-                verified: false,
-                email,
-                confirmation_code
-            });
-        }
-        console.log(
-            "-- /submit_email ->",
-            this.session.uid,
-            this.session.user,
-            email,
-            eid.id,
-            confirmation_code
-        );
-        sendEmail("confirm_email", email, { confirmation_code });
-
-        if (this.session.picked_account_name) {
-            const account = yield models.Account.findOne({
-                attributes: ['id'],
-                where: {user_id: user.id, ignored: false},
+        try {
+            const existing_email = yield models.Identity.findOne({
+                attributes: ['id', 'user_id', 'verified', 'confirmation_code'],
+                where: { email, provider: 'email' },
                 order: 'id DESC'
             });
-            if (!account) {
-                models.Account.create({
+            if (existing_email) {
+                console.log(
+                    '-- /submit_email existing_email -->',
+                    this.session.uid,
+                    email,
+                    existing_email.user_id
+                );
+                const act = yield models.Account.findOne({
+                    attributes: ['id'],
+                    where: {user_id: existing_email.user_id, ignored: false, created: true},
+                    order: 'id DESC'
+                });
+                if (act) {
+                    this.flash = {error: 'This email has already been taken'};
+                    this.redirect(`/enter_email?email=${email}&account=${account}`);
+                    return;
+                }
+            }
+
+            let user = yield models.User.findOne({ attributes: ['id'], where: { id: this.session.user }});
+            if (user) {
+                const data = user.sign_up_meta ? JSON.parse(user.sign_up_meta) : {};
+                data.last_step = 2;
+                yield user.update({
+                    sign_up_meta: JSON.stringify(data)
+                });
+            } else {
+                // create user
+                console.log("-- /Creating User -->");
+                user = yield models.User.create({
+                    uid: this.session.uid,
+                    remote_ip: getRemoteIp(this.request.req),
+                    sign_up_meta: JSON.stringify({last_step: 2}),
+                    account_status: 'waiting'
+                });
+                this.session.user = user.id;
+            }
+
+            let confirmation_code = secureRandom.randomBuffer(13).toString("hex");
+            if (existing_email && existing_email.user_id === user.id) {
+                confirmation_code = existing_email.confirmation_code;
+            } else {
+                // create identity
+                yield models.Identity.create({
                     user_id: user.id,
-                    name: this.session.picked_account_name,
-                    remote_ip: getRemoteIp(this.request.req)
+                    provider: 'email',
+                    verified: false,
+                    email,
+                    confirmation_code
                 });
             }
+
+            console.log(
+                "-- /submit_email ->",
+                this.session.uid,
+                this.session.user,
+                email,
+                confirmation_code
+            );
+
+            sendEmail("confirm_email", email, { confirmation_code });
+
+            if (account) {
+                const existing_account = yield models.Account.findOne({
+                    attributes: ['id'],
+                    where: {user_id: user.id, name: account},
+                    order: 'id DESC'
+                });
+                if (!existing_account) {
+                    yield models.Account.create({
+                        user_id: user.id,
+                        name: account,
+                        remote_ip: getRemoteIp(this.request.req)
+                    });
+                }
+            }
+        } catch (error) {
+            this.flash = {error: 'Internal Server Error'};
+            this.redirect(`/enter_email?email=${email}&account=${account}`);
+            console.error('Error in /submit_email :', this.session.uid, error.toString());
         }
+
         // redirect to phone verification
         this.redirect("/enter_mobile");
     });

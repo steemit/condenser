@@ -102,12 +102,12 @@ export default function useGeneralApi(app) {
                 throw new Error("We can't find your sign up request. You either haven't started your sign up application or weren't approved yet.");
             }
 
-            const existing_account = yield models.Account.findOne({
-                attributes: ['id', 'created'],
-                where: {user_id, ignored: false},
+            const existing_created_account = yield models.Account.findOne({
+                attributes: ['id'],
+                where: {user_id, ignored: false, created: true},
                 order: 'id DESC'
             });
-            if (existing_account && existing_account.created) {
+            if (existing_created_account) {
                 throw new Error("Only one Steem account per user is allowed in order to prevent abuse");
             }
 
@@ -154,12 +154,16 @@ export default function useGeneralApi(app) {
                 referrer: this.session.r,
                 created: true
             });
+
+            const existing_account = yield models.Account.findOne({
+                attributes: ['id'],
+                where: {user_id, name: account.name},
+                order: 'id DESC'
+            });
             if (existing_account) {
                 yield existing_account.update(account_attrs);
             } else {
-                models.Account.create(account_attrs).catch(error => {
-                    console.error('!!! Can\'t create account model in /accounts api', this.session.uid, error);
-                });
+                yield models.Account.create(account_attrs);
             }
             if (mixpanel) {
                 mixpanel.track('Signup', {

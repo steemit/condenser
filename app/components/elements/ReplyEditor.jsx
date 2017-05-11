@@ -15,7 +15,7 @@ import {Set} from 'immutable'
 import Remarkable from 'remarkable'
 import Dropzone from 'react-dropzone'
 import tt from 'counterpart'
-import {DEBT_TICKER} from 'app/client_config'
+import {DEBT_TICKER, DOMESTIC} from 'app/client_config'
 
 const remarkable = new Remarkable({ html: true, linkify: false, breaks: true })
 const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
@@ -337,6 +337,7 @@ class ReplyEditor extends React.Component {
         const vframe_section_class = isStory ? 'vframe__section' : '';
         const vframe_section_shrink_class = isStory ? 'vframe__section--shrink' : '';
 
+        DOMESTIC.all = tt('settings_jsx.choose_domestic')
         return (
             <div className="ReplyEditor row">
                 <div className="column small-12">
@@ -398,13 +399,25 @@ class ReplyEditor extends React.Component {
 
                         <div className={vframe_section_shrink_class} style={{marginTop: '0.5rem'}}>
                             {isStory && <span>
+                                <select defaultValue="all">
+                                  {Object.keys(DOMESTIC).map(key => {
+                                    return <option key={key} value={key}>{DOMESTIC[key]}</option>
+                                  })}
+                                </select>
+                            </span>}
+                        </div>
+
+                        <div className={vframe_section_shrink_class} style={{marginTop: '0.5rem'}}>
+                            {isStory && <span>
                                 <CategorySelector {...category.props} disabled={loading} isEdit={isEdit} tabIndex={3} />
                                 <div className="error">{(category.touched || category.value) && category.error}&nbsp;</div>
                             </span>}
                         </div>
+
                         <div className={vframe_section_shrink_class}>
                             {postError && <div className="error">{postError}</div>}
                         </div>
+
                         <div className={vframe_section_shrink_class}>
                             {!loading &&
                                 <button type="submit" className="button" disabled={disabled} tabIndex={4}>{isEdit ? 'Update Post' : postLabel}</button>

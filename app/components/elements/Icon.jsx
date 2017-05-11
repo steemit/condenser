@@ -5,6 +5,7 @@ const icons = [
     'share',
     'calendar',
     'chain',
+    'caret-down',
     'chevron-up-circle',
     'chevron-down-circle',
     'chevron-left',

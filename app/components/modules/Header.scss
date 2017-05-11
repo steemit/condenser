@@ -98,6 +98,10 @@ ul > li > .button {
     font-size: 1rem;
     line-height: 0;
     padding: 0;
+    .caret-down {
+      padding-top: 0.65rem;
+      margin-top: -1.12rem;
+    }
   }
   a.active {
     color: $black;

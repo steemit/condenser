@@ -239,7 +239,7 @@ class Header extends React.Component {
                             dropdownContent={<VerticalMenu items={domestic_menu} title={tt('settings_jsx.choose_domestic')} />}
                             >
                               <a title={tt('settings_jsx.choose_domestic')} onClick={e => e.preventDefault()}>
-                                {currentDomesticTitle} ▼
+                                {currentDomesticTitle} <Icon name="caret-down" />
                               </a>
                             </LinkWithDropdown>
                         </HorizontalMenu>

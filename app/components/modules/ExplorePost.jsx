@@ -20,7 +20,6 @@ class ExplorePost extends Component {
         this.Golosd = this.Golosd.bind(this);
         this.Golosdb = this.Golosdb.bind(this);
         this.Busy = this.Busy.bind(this);
-        this.Phist = this.Phist.bind(this);
     }
 
     Golosd() {

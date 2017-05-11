@@ -108,7 +108,7 @@
   },
   "explorepost_jsx": {
     "copied": "Скопировано!",
-    "copy": "Права",
+    "copy": "Скопировать",
     "alternative_sources": "Альтернативные источники"
   },
   "g": {
@@ -559,6 +559,14 @@
     "settings": "Настройки",
     "crowdsale": "Краудсейл",
     "following": "Подписки"
+  },
+  "prolong_post_jsx": {
+    "prolong_post": "Продлить окно выплат у поста",
+    "spend_your_DEBT_TOKEN_to_prolong_withdrawals_window_post": "Используйте Ваши %(DEBT_TOKEN)s чтобы продлить окно выплат у этого поста",
+    "you_successfully_promoted_this_post": "Вы успешно продвинули этот пост",
+    "leave_this_unchecked_to_receive_half_your_reward": "Оставьте неотмеченным для получения 1/2 вознаграждения в %(VESTING_TOKEN)s и 1/2 %(DEBT_TOKEN)s",
+    "pay_me_100_in_VESTING_TOKEN": "Заплатить мне 100%% в %(VESTING_TOKEN)s",
+    "requires_5_or_more_reddit_comment_karma": "необходимо 5 или больше Reddit кармы комментирования"
   },
   "reblog_jsx": {},
   "recoveraccountstep1_jsx": {

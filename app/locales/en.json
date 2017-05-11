@@ -630,6 +630,15 @@
     "crowdsale": "Crowdsale",
     "following": "Following"
   },
+  "prolong_post_jsx": {
+    "promote_post": "Prolong Post",
+    "spend_your_DEBT_TOKEN_to_advertise_this_post": "Spend your %(DEBT_TOKEN)s's to advertise this post in the promoted content section",
+    "you_successfully_promoted_this_post": "You successfully promoted this post",
+    "leave_this_unchecked_to_receive_half_your_reward": "Leave this unchecked to receive 1/2 your reward in %(VESTING_TOKEN)s and 1/2 in %(DEBT_TOKEN)s",
+    "pay_me_100_in_VESTING_TOKEN": "Pay me 100%% in %(VESTING_TOKEN)s",
+    "requires_5_or_more_reddit_comment_karma": "requires 5 or more Reddit comment karma",
+    "this_post_was_hidden_due_to_low_ratings": "This post was hidden due to low ratings"
+  },
   "enter_confirm_email_jsx": {
     "thank_you_for_providing_your_email_address": "Thank you for providing your email address",
     "to_continue_please_click_on_the_link_in_the_email_weve_sent_you": "To continue please click on the link in the email we've sent you",

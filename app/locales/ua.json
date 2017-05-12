@@ -712,7 +712,7 @@
     "user_hasnt_made_any_posts_yet": "Схоже, що %(name)s ще не написав постів!",
     "user_hasnt_started_bloggin_yet": "Схоже, що %(name)s ще не завів блог!",
     "user_hasnt_followed_anything_yet": "Схоже, що %(name)s ще ні на кого не підписаний! Якщо, %(name)s недавно підписався на нових користувачів, їх персоналізований канал буде заповнюватися відразу після появи нового контенту.",
-    "user_hasnt_had_any_replies_yet": "%(name)s еще не получил ответов",
+    "user_hasnt_had_any_replies_yet": "%(name)s ще не отримав відповідей",
     "if_you_recently_added_new_users_to_follow": "Якщо Ви недавно додали нових користувачів, ваш персоналізований фид буде заповнюватися відразу після появи нового контенту.",
     "explore_APP_NAME": "Дослідити %(APP_NAME)s",
     "full_faq": "Детальне FAQ %(APP_NAME)s",

@@ -229,15 +229,12 @@ recovery should your account ever be compromised.</em>
 
     router.post("/submit_mobile", koaBody, function*() {
         if (!checkCSRF(this, this.request.body.csrf)) return;
-        // const user_id = this.session.user;
-        // if (!user_id) {
-        //     this.body = "user not found";
-        //     return;
-        // }
-        const user = yield models.User.findOne({
-            where: { uid: this.session.uid }
-        });
-        const user_id = user.id;
+        const user_id = this.session.user;
+        if (!user_id) {
+            this.flash = { error: "Your session has been interrupted, please start over" };
+            this.redirect('/pick_account');
+            return;
+        }
 
         const country = this.request.body.country;
         const localPhone = this.request.body.phone;
@@ -271,36 +268,29 @@ recovery should your account ever be compromised.</em>
         //     }
         // }
 
-        const eid = yield models.Identity.findOne({
-            where: { user_id: user.id, provider: "phone"}
-        });
-
-        if (!eid) {
-            yield models.Identity.create({
-                user_id: user.id,
-                uid: user.uid,
-                provider: "phone",
-                phone,
-                verified: false
-            });
-        }
-
         const existing_phone = yield models.Identity.findOne({
             attributes: ["user_id"],
             where: { phone, provider: "phone", verified: true },
             order: "id DESC"
         });
         if (existing_phone && existing_phone.user_id != user_id) {
-            console.log(
-                "-- /submit_email existing_phone -->",
-                user_id,
-                this.session.uid,
-                phone,
-                existing_phone.user_id
-            );
-            this.flash = { error: "This phone number has already been used" };
-            this.redirect(enterMobileUrl);
-            return;
+            const act = yield models.Account.findOne({
+                attributes: ['id'],
+                where: {user_id: existing_phone.user_id, ignored: false, created: true},
+                order: 'id DESC'
+            });
+            if (act) {
+                console.log(
+                    "-- /submit_email existing_phone -->",
+                    user_id,
+                    this.session.uid,
+                    phone,
+                    existing_phone.user_id
+                );
+                this.flash = { error: "This phone number has already been used" };
+                this.redirect(enterMobileUrl);
+                return;
+            }
         }
 
         const confirmation_code = parseInt(
@@ -308,9 +298,10 @@ recovery should your account ever be compromised.</em>
             16
         )
             .toString(10)
-            .substring(0, 4); // 4 digit code
+            .substring(0, 5); // 4 digit code
+
         let mid = yield models.Identity.findOne({
-            where: { user_id: user.id, provider: "phone" }
+            where: { user_id, provider: "phone" }
         });
         if (mid) {
             if (mid.verified) {
@@ -326,23 +317,23 @@ recovery should your account ever be compromised.</em>
                 yield mid.update({ verified: false, phone });
             }
             const seconds_ago = (Date.now() - mid.updated_at) / 1000.0;
-            // if (seconds_ago < 120) {
-            //     this.flash = {
-            //         error: "Confirmation was attempted a moment ago. You can attempt verification again in 2 minutes."
-            //     };
-            //     this.redirect(enterMobileUrl);
-            //     return;
-            // }
+            if (seconds_ago < 60) {
+                this.flash = {
+                    error: "Confirmation was attempted a moment ago. You can attempt verification again in one minute."
+                };
+                this.redirect(enterMobileUrl);
+                return;
+            }
             yield mid.update({ confirmation_code, phone });
         } else {
-            // mid = yield models.Identity.create({
-            //     provider: "phone",
-            //     user_id,
-            //     uid: this.session.uid,
-            //     phone,
-            //     verified: false,
-            //     confirmation_code
-            // });
+            mid = yield models.Identity.create({
+                provider: "phone",
+                user_id,
+                uid: this.session.uid,
+                phone,
+                verified: false,
+                confirmation_code
+            });
         }
         console.log(
             '-- /submit_mobile -->',
@@ -367,7 +358,7 @@ recovery should your account ever be compromised.</em>
             mobile: phone,
             confirmation_code,
             ip,
-            ignore_score: false //twilioResult === 'pass'
+            ignore_score: true //twilioResult === 'pass'
         });
         if (verifyResult && verifyResult.score) {
             mid.update({score: verifyResult.score});

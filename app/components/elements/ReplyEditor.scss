@@ -78,6 +78,12 @@
   clear: both;
 }
 
+.ReplyEditor__domestic {
+  .Icon > svg {
+    fill: #8a8a8a;
+  }
+}
+
 .ReplyEditor__options {
   font-size: 85%;
   select {

@@ -14,8 +14,11 @@ import g from 'app/redux/GlobalReducer'
 import {Set} from 'immutable'
 import Remarkable from 'remarkable'
 import Dropzone from 'react-dropzone'
+import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown'
+import VerticalMenu from 'app/components/elements/VerticalMenu'
 import tt from 'counterpart'
-import {DEBT_TICKER, DOMESTIC} from 'app/client_config'
+import {DEBT_TICKER, DEFAULT_DOMESTIC, DOMESTIC} from 'app/client_config'
+import Icon from 'app/components/elements/Icon.jsx'
 
 const remarkable = new Remarkable({ html: true, linkify: false, breaks: true })
 const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
@@ -39,6 +42,7 @@ class ReplyEditor extends React.Component {
         jsonMetadata: React.PropTypes.object, // An existing comment has its own meta data
         category: React.PropTypes.string, // initial value
         title: React.PropTypes.string, // initial value
+        domestic: React.PropTypes.string, // initial value
         body: React.PropTypes.string, // initial value
     }
 
@@ -156,6 +160,7 @@ class ReplyEditor extends React.Component {
                     values.title.length > 255 ? tt('reply_editor.shorten_title') :
                     null
                 ),
+                domestic: Object.keys(DOMESTIC).indexOf(values.domestic) >= 0 ? values.domestic : DEFAULT_DOMESTIC ,
                 category: isStory && validateCategory(values.category, !isEdit),
                 body: !values.body ? tt('g.required') :
                     values.body.length > maxKb * 1024 ? tt('reply_editor.exceeds_maximum_length', maxKb) :
@@ -171,6 +176,20 @@ class ReplyEditor extends React.Component {
         this.setState({ titleWarn: hasMarkdown ? 'Markdown is not supported here' : '' })
         const {title} = this.state
         title.props.onChange(e)
+    }
+
+    onDomesticChange = e => {
+        if (e) e.preventDefault();
+        const targetDomestic = e.target.text.trim();
+        let value = DEFAULT_DOMESTIC;
+        for (var key in DOMESTIC) {
+            if (targetDomestic.localeCompare(DOMESTIC[key]) == 0) {
+                value = key;
+                break;
+            }
+        }
+        this.state.domestic.props.onChange(value)
+        // this.setState({domestic})
     }
 
     onCancel = e => {
@@ -296,7 +315,7 @@ class ReplyEditor extends React.Component {
             body: this.props.body,
         }
         const {onCancel, onTitleChange, autoVoteOnChange} = this
-        const {title, category, body, autoVote} = this.state
+        const {title, domestic, category, body, autoVote} = this.state
         const {
             reply, username, isStory, formId, noImage,
             author, permlink, parent_author, parent_permlink, type, jsonMetadata,
@@ -337,7 +356,19 @@ class ReplyEditor extends React.Component {
         const vframe_section_class = isStory ? 'vframe__section' : '';
         const vframe_section_shrink_class = isStory ? 'vframe__section--shrink' : '';
 
-        DOMESTIC.all = tt('settings_jsx.choose_domestic')
+        DOMESTIC.all = tt('g.auto');
+        let currentDomesticKey = DEFAULT_DOMESTIC;
+        let currentDomesticTitle = DOMESTIC[currentDomesticKey];
+        const domestic_menu = [];
+        for (var key in DOMESTIC) {
+          if (domestic === key) {
+            currentDomesticKey = key;
+            currentDomesticTitle = DOMESTIC[currentDomesticKey];
+          }
+          else
+            domestic_menu.push({link: '#' + key, onClick: this.onDomesticChange, value: DOMESTIC[key]})
+        }
+
         return (
             <div className="ReplyEditor row">
                 <div className="column small-12">
@@ -353,6 +384,17 @@ class ReplyEditor extends React.Component {
                             {isStory && <span>
                                 <input type="text" className="ReplyEditor__title" {...title.props} onChange={onTitleChange} disabled={loading} placeholder={tt('reply_editor.placeholder')} autoComplete="off" ref="titleRef" tabIndex={1} />
                                 <div className="float-right secondary" style={{marginRight: '1rem'}}>
+                                    <input type="hidden" {...domestic.props} />
+                                    {tt('settings_jsx.choose_domestic')}: <LinkWithDropdown
+                                      closeOnClickOutside
+                                      dropdownPosition="bottom"
+                                      dropdownAlignment="left"
+                                      dropdownContent={<VerticalMenu items={domestic_menu} title={tt('settings_jsx.choose_domestic')} />}
+                                      >
+                                        <a className="ReplyEditor__domestic" title={tt('settings_jsx.choose_domestic')} onClick={e => e.preventDefault()} style={{marginRight: '1rem'}}>
+                                          {currentDomesticTitle} <Icon name="caret-down" />
+                                        </a>
+                                    </LinkWithDropdown>
                                     {rte && <a href="#" onClick={this.toggleRte}>{body.value ? 'Raw HTML' : 'Markdown'}</a>}
                                     {!rte && <a href="#" onClick={this.toggleRte}>{tt('reply_editor.editor')}</a>}
                                 </div>
@@ -395,16 +437,6 @@ class ReplyEditor extends React.Component {
                         </div>
                         <div className={vframe_section_shrink_class}>
                             <div className="error">{body.touched && body.error && body.error !== 'Required' && body.error}</div>
-                        </div>
-
-                        <div className={vframe_section_shrink_class} style={{marginTop: '0.5rem'}}>
-                            {isStory && <span>
-                                <select defaultValue="all" disabled={loading}>
-                                  {Object.keys(DOMESTIC).map(key => {
-                                    return <option key={key} value={key}>{DOMESTIC[key]}</option>
-                                  })}
-                                </select>
-                            </span>}
                         </div>
 
                         <div className={vframe_section_shrink_class} style={{marginTop: '0.5rem'}}>
@@ -509,8 +541,9 @@ export default formId => connect(
         )
         if (isStory) fields.push('title')
         if (isStory) fields.push('category')
+        if (isStory) fields.push('domestic')
 
-        let {category, title, body} = ownProps
+        let {category, title, body, domestic} = ownProps
         if (/submit_/.test(type)) title = body = ''
         if(isStory && jsonMetadata && jsonMetadata.tags) {
             category = Set([category, ...jsonMetadata.tags]).join(' ')
@@ -518,7 +551,7 @@ export default formId => connect(
         const ret = {
             ...ownProps,
             fields, isStory, username,
-            initialValues: {title, body, category}, state,
+            initialValues: {title, domestic, body, category}, state,
             formId,
         }
         return ret
@@ -538,7 +571,7 @@ export default formId => connect(
                 payload: {file, progress},
             })
         },
-        reply: ({category, title, body, author, permlink, parent_author, parent_permlink, isHtml, isStory,
+        reply: ({category, title, domestic, body, author, permlink, parent_author, parent_permlink, isHtml, isStory,
             type, originalPost, autoVote = false, payoutType = '50%',
             state, jsonMetadata,
             successCallback, errorCallback, startLoadingIndicator
@@ -630,11 +663,6 @@ export default formId => connect(
                     case '100%': // 100% steem power payout
                         __config.comment_options = {
                             percent_steem_dollars: 0, // 10000 === 100% (of 50%)
-                        }
-                        break;
-                    case '200%': // test
-                        __config.comment_options = {
-                          test: 'test data'
                         }
                         break;
                     default: // 50% steem power, 50% sd+steem

@@ -32,6 +32,9 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
     const submitStory = $STM_Config.read_only_mode ? null : <li className={lcn + ' submit-story'}>
       <a href="/submit.html" onClick={nav}>{tt('g.submit_a_story')}</a>
     </li>;
+    const submitStoryPencil = $STM_Config.read_only_mode ? null : <li className="submit-story">
+      <a href="/submit.html" onClick={nav}><Icon name="pencil" /></a>
+    </li>;
     const feedLink = `/@${username}/feed`;
     const repliesLink = `/@${username}/recent-replies`;
     const walletLink = `/@${username}/transfers`;
@@ -116,9 +119,6 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
                 {!inIco && languageMenu}
                 {!inIco && rocketchatItem}
                 {!inIco && submitStory}
-                {!inIco && !vertical && <li>
-                  <a href="/submit.html" onClick={nav}><Icon name="pencil" /></a>
-                </li>}
                 <LinkWithDropdown
                     closeOnClickOutside
                     dropdownPosition="bottom"
@@ -147,13 +147,9 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
                 <Icon name="feedback" />
               </a>
             </li>}
-            {!inIco && !vertical && <li>
-              <a href="/submit.html" onClick={nav}>
-                <Icon name="pencil" />
-              </a>
-            </li>}
             {!inIco && !vertical && languageMenu}
             {!inIco && rocketchatItem}
+            {!inIco && submitStory}
             {!inIco && !probablyLoggedIn && <li className={lcn}>
               <a href="/create_account" onClick={showSignUp}>{tt('g.sign_up')}</a>
             </li>}

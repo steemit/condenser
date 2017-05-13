@@ -29,14 +29,16 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
     const mcl = vertical ? '' : ' sub-menu';
     const lcn = vertical ? '' : 'show-for-medium';
     const nav = navigate || defaultNavigate;
-    const submit_story = $STM_Config.read_only_mode ? null : <li className={lcn + ' submit-story'}><a href="/submit.html" onClick={nav}>{tt('g.submit_a_story')}</a></li>;
-    const feed_link = `/@${username}/feed`;
-    const replies_link = `/@${username}/recent-replies`;
-    const wallet_link = `/@${username}/transfers`;
-    const settings_link = `/@${username}/settings`;
-    const account_link = `/@${username}`;
-    const comments_link = `/@${username}/comments`;
-    const posts_link = `/@${username}/posts`;
+    const submitStory = $STM_Config.read_only_mode ? null : <li className={lcn + ' submit-story'}>
+      <a href="/submit.html" onClick={nav}>{tt('g.submit_a_story')}</a>
+    </li>;
+    const feedLink = `/@${username}/feed`;
+    const repliesLink = `/@${username}/recent-replies`;
+    const walletLink = `/@${username}/transfers`;
+    const settingsLink = `/@${username}/settings`;
+    const accountLink = `/@${username}`;
+    const commentsLink = `/@${username}/comments`;
+    const postsLink = `/@${username}/posts`;
     const reset_password_link = `/@${username}/password`;
 
     const inIco = location && location.pathname.indexOf("/about") == 0;
@@ -62,7 +64,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
     ;
     const submitItem = <li className={lcn}>
         <Link to="/submit.html?type=submit_feedback" title={tt('navigation.feedback')}>
-          <Icon name="feedback" />
+          {vertical ? <span>{tt('navigation.feedback')}</span> : <Icon name="feedback" />}
         </Link>
       </li>
     ;
@@ -94,15 +96,15 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
     ;
     if (loggedIn) { // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!
         const user_menu = [
-            {link: feed_link, value: tt('g.feed'), addon: <NotifiCounter fields="feed" />},
-            {link: account_link, value: tt('g.blog')},
-            {link: comments_link, value: tt('g.comments')},
-            {link: replies_link, value: tt('g.replies'), addon: <NotifiCounter fields="comment_reply" />},
-            {link: wallet_link, value: tt('g.wallet'), addon: <NotifiCounter fields="follow,send,receive,account_update" />},
-            {link: reset_password_link, value: tt('g.change_password')},
-            {link: settings_link, value: tt('g.settings')},
+            {link: feedLink, icon: 'home', value: tt('g.feed'), addon: <NotifiCounter fields="feed" />},
+            {link: accountLink, icon: 'profile', value: tt('g.blog')},
+            {link: commentsLink, icon: 'replies', value: tt('g.comments')},
+            {link: repliesLink, icon: 'reply', value: tt('g.replies'), addon: <NotifiCounter fields="comment_reply" />},
+            {link: walletLink, icon: 'wallet', value: tt('g.wallet'), addon: <NotifiCounter fields="follow,send,receive,account_update" />},
+            {link: reset_password_link, icon: 'key', value: tt('g.change_password')},
+            {link: settingsLink, icon: 'cog', value: tt('g.settings')},
             loggedIn ?
-                {link: '#', onClick: logout, value: tt('g.logout')} :
+                {link: '#', icon: 'enter', onClick: logout, value: tt('g.logout')} :
                 {link: '#', onClick: showLogin, value: tt('g.login')}
         ];
         return (
@@ -113,7 +115,10 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
                 {!inIco && searchItem}
                 {!inIco && languageMenu}
                 {!inIco && rocketchatItem}
-                {!inIco && submit_story}
+                {!inIco && submitStory}
+                {!inIco && !vertical && <li>
+                  <a href="/submit.html" onClick={nav}><Icon name="pencil" /></a>
+                </li>}
                 <LinkWithDropdown
                     closeOnClickOutside
                     dropdownPosition="bottom"
@@ -121,7 +126,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
                     dropdownContent={<VerticalMenu items={user_menu} title={username} />}
                 >
                     {!vertical && <li className={'Header__userpic '}>
-                        <a href={account_link} title={username} onClick={e => e.preventDefault()}>
+                        <a href={accountLink} title={username} onClick={e => e.preventDefault()}>
                             <Userpic account={username} />
                         </a>
                         <div className="TopRightMenu__notificounter"><NotifiCounter fields="total" /></div>
@@ -137,17 +142,33 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
         <ul className={mcn + mcl}>
             {inIco && ico_menu.map((o,i) => {return <li key={i} className={lcn}><a href={o.link}>{o.value}</a></li>})}
             {!inIco && aboutItem}
-            {!inIco && !vertical && <li><a href="/submit.html?type=submit_feedback" title={tt('navigation.feedback')}><Icon name="feedback" /></a></li>}
-            {!inIco && !vertical && <li><a href="/static/search.html" title={tt('g.search')}><Icon name="search" /></a></li>}
+            {!inIco && !vertical && <li>
+              <a href="/submit.html?type=submit_feedback" title={tt('navigation.feedback')}>
+                <Icon name="feedback" />
+              </a>
+            </li>}
+            {!inIco && !vertical && <li>
+              <a href="/submit.html" onClick={nav}>
+                <Icon name="pencil" />
+              </a>
+            </li>}
             {!inIco && !vertical && languageMenu}
             {!inIco && rocketchatItem}
-            {!inIco && !probablyLoggedIn && <li className={lcn}><a href="/create_account" onClick={showSignUp}>{tt('g.sign_up')}</a></li>}
-            {!inIco && !probablyLoggedIn && <li className={lcn}><a href="/login.html" onClick={showLogin}>{tt('g.login')}</a></li>}
-            {!inIco && !probablyLoggedIn && submit_story}
-            {probablyLoggedIn && <li className={lcn}><LoadingIndicator type="circle" inline /></li>}
-            {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
+            {!inIco && !probablyLoggedIn && <li className={lcn}>
+              <a href="/create_account" onClick={showSignUp}>{tt('g.sign_up')}</a>
+            </li>}
+            {!inIco && !probablyLoggedIn && <li className={lcn}>
+              <a href="/login.html" onClick={showLogin}>{tt('g.login')}</a>
+            </li>}
+            {!inIco && !probablyLoggedIn && submitStory}
+            {probablyLoggedIn && <li className={lcn}>
+              <LoadingIndicator type="circle" inline />
+            </li>}
+            {toggleOffCanvasMenu && <li className="toggle-menu">
+              <a href="#" onClick={toggleOffCanvasMenu}>
                 <span className="hamburger" />
-            </a></li>}
+              </a>
+            </li>}
         </ul>
     );
 }

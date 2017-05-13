@@ -89,7 +89,7 @@
     "curation_rewards_history": "История кураторских наград"
   },
   "enter_confirm_email_jsx": {
-    "thank_you_for_providing_your_email_address": "Благодарим Dас за предоставление вашей электронной почты",
+    "thank_you_for_providing_your_email_address": "Благодарим Вас за предоставление вашей электронной почты",
     "to_continue_please_click_on_the_link_in_the_email_weve_sent_you": "Для продолжения, перейдите по ссылке в письме, которое мы вам прислали",
     "user_not_found": "пользователь не найден",
     "please_provide_your_email_address_to_continue_the_registration_process": "Пожалуйста, укажите адрес Вашей электронной почты для продолжения процесса регистрации",
@@ -114,7 +114,7 @@
   "g": {
     "24_hour": "24 часа",
     "30_day": "30 дней",
-    "auto": "Определить автоматически",
+    "auto": "автоматически",
     "age": "возраст",
     "active" : "Обсуждаемое",
     "advanced": "Расширенные опции",

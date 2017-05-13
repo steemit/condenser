@@ -27,6 +27,7 @@ const icons = [
     'facebook',
     'twitter',
     'linkedin',
+    'pencil',
     'vk',
     'link',
     'clock',
@@ -54,7 +55,15 @@ const icons = [
     'location',
     'info_o',
     'feedback',
-    'rocket-chat'
+    'rocket-chat',
+    'cog',
+    'enter',
+    'profile',
+    'key',
+    'reply',
+    'replies',
+    'wallet',
+    'home'
 ];
 const icons_map = {};
 for (const i of icons) icons_map[i] = require(`app/assets/icons/${i}.svg`);

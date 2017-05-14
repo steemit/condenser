@@ -149,6 +149,8 @@ class ReplyEditor extends React.Component {
     initForm(props) {
         const {isStory, type, fields} = props
         const isEdit = type === 'edit'
+        const isFeedback = type === 'submit_feedback'
+        console.log('isFeedback', isFeedback)
         const maxKb = isStory ? 100 : 16
         reactForm({
             fields,
@@ -161,8 +163,8 @@ class ReplyEditor extends React.Component {
                     values.title.length > 255 ? tt('reply_editor.shorten_title') :
                     null
                 ),
-                domestic: Object.keys(DOMESTIC).indexOf(values.domestic) >= 0 ? values.domestic : DEFAULT_DOMESTIC ,
-                category: isStory && validateCategory(values.category, !isEdit),
+                // domestic: Object.keys(DOMESTIC).indexOf(values.domestic) >= 0 ? values.domestic : DEFAULT_DOMESTIC ,
+                category: isStory && !isFeedback && validateCategory(values.category, !isEdit),
                 body: !values.body ? tt('g.required') :
                     values.body.length > maxKb * 1024 ? tt('reply_editor.exceeds_maximum_length', maxKb) :
                 null
@@ -448,7 +450,7 @@ class ReplyEditor extends React.Component {
                             </span>}
                             {isStory && isFeedback && <span>
                               <div className="TagList__horizontal">
-                                <a href="/created/ru--obratnaya-svyazx">{tt('g.feedback').split(' ').join('-')}</a>
+                                <a href="/created/ru--obratnaya-svyazx">{tt('navigation.feedback').split(' ').join('-')}</a>
                               </div>
                             </span>}
                         </div>
@@ -471,7 +473,6 @@ class ReplyEditor extends React.Component {
 
                                 {tt('g.rewards')}:&nbsp;
                                 <select value={this.state.payoutType} onChange={this.onPayoutTypeChange} style={{color: this.state.payoutType == '0%' ? 'orange' : 'inherit'}}>
-                                    <option value="200%">200%</option>
                                     <option value="100%">{tt('reply_editor.power_up_100')}</option>
                                     <option value="50%">{tt('reply_editor.default_50_50')}</option>
                                     <option value="0%">{tt('reply_editor.decline_payout')}</option>

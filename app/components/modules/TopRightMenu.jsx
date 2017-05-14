@@ -109,7 +109,7 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
     ;
     const submitFeedback = <li className={lcn}>
         <Link to="/submit.html?type=submit_feedback" title={tt('navigation.feedback')}>
-          {vertical ? <span>{tt('navigation.feedback')}</span> : <Icon name="feedback" />}
+          <Icon name="feedback" />
         </Link>
       </li>
     ;
@@ -158,6 +158,7 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
             <ul className={mcn + mcl}>
                 {inIco && ico_menu.map((o,i) => {return <li key={i} className={lcn}><a href={o.link}>{o.value}</a></li>})}
                 {!inIco && aboutItem}
+                {!inIco && !vertical && submitFeedback}
                 {!inIco && searchItem}
                 {!inIco && languageMenu}
                 {!inIco && rocketchatItem}

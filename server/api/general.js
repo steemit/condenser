@@ -122,7 +122,7 @@ export default function useGeneralApi(app) {
             //     throw new Error('Phone number is not confirmed');
             // }
 
-            models.Account.create(escAttrs({
+            const accountInstance = models.Account.create(escAttrs({
                 user_id,
                 name: account.name,
                 owner_key: account.owner_key,
@@ -136,26 +136,28 @@ export default function useGeneralApi(app) {
                 throw new Error('Cannot create Golos account');
             });
 
-            yield createAccount({
-                signingKey: config.registrar.signing_key,
-                fee: config.registrar.fee,
-                creator: config.registrar.account,
-                new_account_name: account.name,
-                owner: account.owner_key,
-                active: account.active_key,
-                posting: account.posting_key,
-                memo: account.memo_key,
-                broadcast: true
-            });
-            console.log('-- create_account_with_keys created -->', this.session.uid, account.name, user.id, account.owner_key);
+            if (newAccount) {
+              yield createAccount({
+                  signingKey: config.registrar.signing_key,
+                  fee: config.registrar.fee,
+                  creator: config.registrar.account,
+                  new_account_name: account.name,
+                  owner: account.owner_key,
+                  active: account.active_key,
+                  posting: account.posting_key,
+                  memo: account.memo_key,
+                  broadcast: true
+              });
+              console.log('-- create_account_with_keys created -->', this.session.uid, account.name, user.id, account.owner_key);
 
-            this.body = JSON.stringify({status: 'ok'});
-            if (mixpanel) {
-                mixpanel.track('Signup', {
-                    distinct_id: this.session.uid,
-                    ip: remote_ip
-                });
-                mixpanel.people.set(this.session.uid, {ip: remote_ip});
+              this.body = JSON.stringify({status: 'ok'});
+              if (mixpanel) {
+                  mixpanel.track('Signup', {
+                      distinct_id: this.session.uid,
+                      ip: remote_ip
+                  });
+                  mixpanel.people.set(this.session.uid, {ip: remote_ip});
+              }
             }
         } catch (error) {
             console.error('Error in /accounts api call', this.session.uid, error.toString());

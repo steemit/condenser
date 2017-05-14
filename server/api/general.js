@@ -136,7 +136,7 @@ export default function useGeneralApi(app) {
                 throw new Error('Cannot create Golos account');
             });
 
-            if (newAccount) {
+            if (accountInstance) {
               yield createAccount({
                   signingKey: config.registrar.signing_key,
                   fee: config.registrar.fee,

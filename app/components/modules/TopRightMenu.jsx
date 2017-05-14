@@ -12,7 +12,9 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import NotifiCounter from 'app/components/elements/NotifiCounter';
 import tt from 'counterpart';
 import store from 'store';
-import {APP_NAME, DEFAULT_LANGUAGE, LANGUAGES} from 'app/client_config';
+import {APP_NAME, DEFAULT_LANGUAGE, LANGUAGES, LIQUID_TICKER, DEBT_TICKER} from 'app/client_config';
+import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
+import {vestingSteem} from 'app/utils/StateFunctions';
 
 const defaultNavigate = (e) => {
     if (e.metaKey || e.ctrlKey) {
@@ -24,7 +26,47 @@ const defaultNavigate = (e) => {
     browserHistory.push(a.pathname + a.search + a.hash);
 };
 
-function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn, showSignUp, location, changeLanguage}) {
+const calculateEstimateOutput = ({a, p, sw, g}) => {
+  if (!a)
+    return 0;
+
+  // Sum savings withrawals
+  let savings_pending = 0, savings_sbd_pending = 0;
+  if (sw) {
+    sw.forEach(withdraw => {
+      const [amount, asset] = withdraw.get('amount').split(' ');
+      if (asset === LIQUID_TICKER)
+        savings_pending += parseFloat(amount);
+      else {
+        if (asset === DEBT_TICKER)
+          savings_sbd_pending += parseFloat(amount)
+      }
+    })
+  }
+
+  const total_sbd = 0
+    // sbd_balance
+    + parseFloat(a.get('sbd_balance'))
+    // sbd_balance_savings
+    + parseFloat(a.get('savings_sbd_balance').split(' ')[0])
+    + savings_sbd_pending
+    // + conversionValue
+    // + sbdOrders
+  ;
+  const total_steem = 0
+    // balance_steem
+    + parseFloat(a.get('balance').split(' ')[0])
+    // saving_balance_steem
+    + parseFloat(a.get('savings_balance').split(' ')[0])
+    // vesting_steem
+    + vestingSteem(a.toJS(), g.toJS())
+    + savings_pending
+    // + steemOrders
+  ;
+  return Number( ( (total_steem * p) + total_sbd).toFixed(2) );
+}
+
+function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops, username, showLogin, logout, loggedIn, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn, showSignUp, location, changeLanguage}) {
     const mcn = 'menu' + (vertical ? ' vertical show-for-small-only' : '');
     const mcl = vertical ? '' : ' sub-menu';
     const lcn = vertical ? '' : 'show-for-medium';
@@ -97,6 +139,8 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
       </li>
       : null
     ;
+    const estimateOutput = <LocalizedCurrency amount={calculateEstimateOutput({a:account, p: price_per_golos, sw: savings_withdraws, g: globalprops})} />;
+
     if (loggedIn) { // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!
         const user_menu = [
             {link: feedLink, icon: 'home', value: tt('g.feed'), addon: <NotifiCounter fields="feed" />},
@@ -123,7 +167,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
                     closeOnClickOutside
                     dropdownPosition="bottom"
                     dropdownAlignment="right"
-                    dropdownContent={<VerticalMenu items={user_menu} title={username} />}
+                    dropdownContent={<VerticalMenu items={user_menu} title={username} description={estimateOutput} />}
                 >
                     {!vertical && <li className={'Header__userpic '}>
                         <a href={accountLink} title={username} onClick={e => e.preventDefault()}>
@@ -192,10 +236,26 @@ export default connect(
             }
         }
         const username = state.user.getIn(['current', 'username']);
+        const account  = state.global.getIn(['accounts', username]);
         const loggedIn = !!username;
+
+        const savings_withdraws = state.user.get('savings_withdraws');
+        let price_per_golos = undefined;
+        const feed_price = state.global.get('feed_price');
+        if(feed_price && feed_price.has('base') && feed_price.has('quote')) {
+            const {base, quote} = feed_price.toJS()
+            if(/ GBG$/.test(base) && / GOLOS$/.test(quote))
+                price_per_golos = parseFloat(base.split(' ')[0]) / parseFloat(quote.split(' ')[0])
+        }
+        const globalprops = state.global.get('props');
+
         return {
+            account,
             username,
             loggedIn,
+            savings_withdraws,
+            price_per_golos,
+            globalprops,
             probablyLoggedIn: false
         }
     },

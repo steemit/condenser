@@ -6,6 +6,7 @@ export default class VerticalMenu extends React.Component {
     static propTypes = {
         items: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
         title: React.PropTypes.string,
+        description: React.PropTypes.string,
         className: React.PropTypes.string,
         hideValue: React.PropTypes.oneOfType([
             React.PropTypes.string,
@@ -22,9 +23,10 @@ export default class VerticalMenu extends React.Component {
     }
 
     render() {
-        const {items, title, className, hideValue} = this.props;
+        const {items, title, description, className, hideValue} = this.props;
         return <ul className={'VerticalMenu menu vertical' + (className ? ' ' + className : '')}>
             {title && <li className="title">{title}</li>}
+            {description && <li className="description">{description}</li>}
             {items.map(i => {
                 if(i.value === hideValue) return null
                 return <li key={i.value} onClick={this.closeMenu}>

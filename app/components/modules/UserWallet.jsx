@@ -134,6 +134,7 @@ class UserWallet extends React.Component {
         // set displayed estimated value
         const total_sbd = sbd_balance + sbd_balance_savings + savings_sbd_pending + sbdOrders + conversionValue;
         const total_steem = vesting_steemf + balance_steem + saving_balance_steem + savings_pending + steemOrders;
+        console.log('vesting_steemf', vesting_steemf)
 
         // set displayed estimated value
         const total_value = Number(((total_steem * price_per_golos) + total_sbd).toFixed(2))

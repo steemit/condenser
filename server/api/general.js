@@ -122,7 +122,7 @@ export default function useGeneralApi(app) {
             //     throw new Error('Phone number is not confirmed');
             // }
 
-            const accountInstance = models.Account.create(escAttrs({
+            const accountInstance = yield models.Account.create(escAttrs({
                 user_id,
                 name: account.name,
                 owner_key: account.owner_key,

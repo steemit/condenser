@@ -38,7 +38,7 @@
     "use_limitied_amount_of_categories": "Пожалуйста, используйте только %(amount)s категории",
     "use_only_lowercase_letters": "Используйте только символы нижнего регистра",
     "use_one_dash": "Используйте только одно тире",
-    "use_spaces_to_separate_tags": "Используйте пробел чтобы разделить тэги",
+    "use_spaces_to_separate_tags": "Используйте пробел, чтобы разделить тэги",
     "use_only_allowed_characters": "Используйте только строчные буквы, цифры и одно тире",
     "must_start_with_a_letter": "Должно начинаться с буквы",
     "must_end_with_a_letter_or_number": "Должно заканчиваться с буквы или номера"
@@ -48,9 +48,9 @@
     "not_be_empty": "не может быть пустым.",
     "be_longer": "длиннее.",
     "be_shorter": "короче.",
-    "each_account_segment_should": "Имя аккаунта должно начинаться с ",
-    "start_with_a_letter": "должно начинаться с буквы.",
-    "have_only_letters_digits_or_dashes": "должно должно состоять только из букв, цифр или дефисов.",
+    "each_account_segment_should": "Имя аккаунта должно ",
+    "start_with_a_letter": "начинаться с буквы.",
+    "have_only_letters_digits_or_dashes": "состоять только из букв, цифр или дефисов.",
     "have_only_one_dash_in_a_row": "иметь только одно тире в строке.",
     "end_with_a_letter_or_digit": "заканчиваться буквой или цифрой."
   },
@@ -65,7 +65,7 @@
     "DEBT_TOKEN_will_be_unavailable": "Конвертация золотых будет происходить в течении 3.5 дней с момента запуска. Отменить её нельзя. После запуска конвертации, конвертируемые монеты станут недоступны."
   },
   "createaccount_jsx": {
-    "our_records_indicate_you_already_have_account": "Наши записи показывают что у Вас уже есть %(APP_NAME)s аккаунт",
+    "our_records_indicate_you_already_have_account": "Наши записи показывают, что у Вас уже есть %(APP_NAME)s аккаунт",
     "in_order_to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user": "Чтобы предотвратить злоупотребление %(APP_NAME)s может зарегистрировать только один аккаунт для каждого подтвержденного пользователя.",
     "next_3_blocks": {
       "you_can_either": "Вы можете или",
@@ -90,10 +90,10 @@
   },
   "enter_confirm_email_jsx": {
     "thank_you_for_providing_your_email_address": "Благодарим Вас за предоставление вашей электронной почты",
-    "to_continue_please_click_on_the_link_in_the_email_weve_sent_you": "Для продолжения, перейдите по ссылке в письме, которое мы вам прислали",
+    "to_continue_please_click_on_the_link_in_the_email_weve_sent_you": "Для продолжения, перейдите по ссылке в письме, которое мы Вам прислали",
     "user_not_found": "пользователь не найден",
     "please_provide_your_email_address_to_continue_the_registration_process": "Пожалуйста, укажите адрес Вашей электронной почты для продолжения процесса регистрации",
-    "this_information_allows_steemit_to_assist_with_account_recovery_in_case_your_account_is_ever_compormised": "Эта информация позволяет Голос помочь Вам восстановить аккаунт, если он когда-нибудь будет украден",
+    "this_information_allows_steemit_to_assist_with_account_recovery_in_case_your_account_is_ever_compormised": "Эта информация позволяет Голосу помочь Вам восстановить аккаунт, если он когда-нибудь будет украден",
     "email_address_cannot_be_changed_at_this_moment_sorry_for_inconvenience": "Адрес электронной почты на данный момент не может быть изменен, извините за неудобства",
     "email_address": "Адрес электронной почты",
     "please_prove_an_email_address": "Пожалуйста укажите адрес электронной почты",
@@ -102,7 +102,7 @@
     "email_confirmation": "Подтверждение электронной почты",
     "next_3_strings": {
       "by_verifying_you_agree_with": "Подтверждая ваш аккаунт вы соглашаетесь с",
-      "by_verifying_you_agree_with_privacy_policy": "Политика Конфиденциальности",
+      "by_verifying_you_agree_with_privacy_policy": "Политикой Конфиденциальности",
       "by_verifying_you_agree_with_privacy_policy_of_website_APP_DOMAIN": "сайта %(APP_DOMAIN)s"
     }
   },
@@ -257,7 +257,7 @@
     "the_rules_of_APP_NAME": {
       "one": "Первое правило сети %(APP_NAME)s: не теряйте свой пароль.",
       "second": "Второе правило %(APP_NAME)s: Не теряйте свой пароль.",
-      "third": "Третье правило %(APP_NAME)s: мы не можем восстановить ваш пароль.",
+      "third": "Третье правило %(APP_NAME)s: мы не можем восстановить Ваш пароль.",
       "fourth": "Четвертое правило: если Вы можете запомнить свой пароль, значит он не безопасен.",
       "fifth": "Пятое правило: используйте только сгенерированные случайным образом пароли.",
       "sixth": "Шестое правило: Никому не говорите свой пароль.",
@@ -356,7 +356,7 @@
     "account_recovery_succes": "Ваш аккаунт был успешно восстановлен!",
     "password_update_succes": "Пароль для %(accountName)s был успешно обновлен",
     "password_is_bound_to_your_accounts_owner_key": "Этот пароль привязан к главному ключу аккаунта и не может быть использован для входа на этот сайт",
-    "however_you_can_use_it_to": "Тем не менее его можно использовать чтобы",
+    "however_you_can_use_it_to": "Тем не менее его можно использовать, чтобы",
     "to_obtaion_a_more_secure_set_of_keys": "для получения более безопасного набора ключей",
     "update_your_password": "обновить Ваш пароль",
     "enter_username": "Введи свое имя пользователя",
@@ -412,7 +412,7 @@
     "keep_me_logged_in": "Оставить меня залогиненным",
     "amazing_community": "удивительное сообщество",
     "to_comment_and_reward_others": " комментировать и вознаграждать других.",
-    "sign_up_now_to_receive": "Зарегистрируйтесь сейчас чтобы получить ",
+    "sign_up_now_to_receive": "Зарегистрируйтесь сейчас, чтобы получить ",
     "free_money": "ЛЕГКИЕ ДЕНЬГИ!",
     "returning_users": "",
     "join_our": "Присоединяйтесь к нашему"
@@ -477,7 +477,7 @@
     "faq": "FAQ"
   },
   "oauth": {
-    "we_couldnt_verify_your_account_contact_us_at_SUPPORT_EMAIL": "Мы не смогли верифицировать учётную запись. Нишите на почту %(SUPPORT_EMAIL)s для получения дополнительной информации.",
+    "we_couldnt_verify_your_account_contact_us_at_SUPPORT_EMAIL": "Мы не смогли верифицировать учётную запись. Напишите на почту %(SUPPORT_EMAIL)s для получения дополнительной информации.",
     "facebook_login_didnt_provide_any_email_addresses": "Логин через Facebook не предоставил каких-либо email адресов. Пожалуйста, удостоверьтесь что Facebook аккаунт имеет главный email и попробуйте снова.",
     "we_are_sorry_we_cannot_sign_you_up_at_this_time_because_ip_associated_with_bots_activity": "Извините, мы не можем зарегистрировать Вас, потому что в настоящее время ваш IP адрес ассоциирован с активностью ботов. Пожалуйста, свяжитесь с %(SUPPORT_EMAIL)s для получения дополнительной информации.",
     "not_supported_email_address": "Данный email не поддерживается",
@@ -549,7 +549,7 @@
   },
   "promote_post_jsx": {
     "promote_post": "Продвинуть пост",
-    "spend_your_DEBT_TOKEN_to_advertise_this_post": "Используйте Ваши %(DEBT_TOKEN)s чтобы прорекламировать этот пост в секции продвигаемого контента",
+    "spend_your_DEBT_TOKEN_to_advertise_this_post": "Используйте Ваши %(DEBT_TOKEN)s, чтобы прорекламировать этот пост в секции продвигаемого контента",
     "you_successfully_promoted_this_post": "Вы успешно продвинули этот пост",
     "leave_this_unchecked_to_receive_half_your_reward": "Оставьте неотмеченным для получения 1/2 вознаграждения в %(VESTING_TOKEN)s и 1/2 %(DEBT_TOKEN)s",
     "pay_me_100_in_VESTING_TOKEN": "Заплатить мне 100%% в %(VESTING_TOKEN)s",
@@ -564,7 +564,7 @@
   },
   "prolong_post_jsx": {
     "prolong_post": "Продлить окно выплат у поста",
-    "spend_your_DEBT_TOKEN_to_prolong_payments_window_post": "Используйте Ваши %(DEBT_TOKEN)s чтобы продлить окно выплат у этого поста",
+    "spend_your_DEBT_TOKEN_to_prolong_payments_window_post": "Используйте Ваши %(DEBT_TOKEN)s, чтобы продлить окно выплат у этого поста",
     "you_successfully_promoted_this_post": "Вы успешно продвинули этот пост",
     "leave_this_unchecked_to_receive_half_your_reward": "Оставьте неотмеченным для получения 1/2 вознаграждения в %(VESTING_TOKEN)s и 1/2 %(DEBT_TOKEN)s",
     "pay_me_100_in_VESTING_TOKEN": "Заплатить мне 100%% в %(VESTING_TOKEN)s",
@@ -577,7 +577,7 @@
     "unable_to_recover_account_not_change_ownership_recently": "Мы не можем восстановить эту учетную запись, она не изменила владельца в последнее время.",
     "password_not_used_in_last_days": "Этот пароль не использовался в этой учетной записи за последние 30 дней.",
     "request_already_submitted_contact_support": "Ваш запрос был отправлен, и мы работаем над этим. Пожалуйста, свяжитесь с %(SUPPORT_EMAIL)s для получения статуса вашего запроса.",
-    "recover_account_intro": "Иногда бывает что ключ владельца может быть скомпрометирован. Восстановление украденного аккаунта дает законному владельцу 30 дней чтобы вернуть аккаунт с момента изменения владельческого ключа мошенником. Восстановление украденного аккаунта в %(APP_URL)s возможно только если владелец аккаунта ранее указал %(APP_NAME)s's в качестве доверенного лица и согласился с Условиями Использования сайта %(APP_NAME)s's.",
+    "recover_account_intro": "Иногда бывает что ключ владельца может быть скомпрометирован. Восстановление украденного аккаунта дает законному владельцу 30 дней, чтобы вернуть аккаунт с момента изменения владельческого ключа мошенником. Восстановление украденного аккаунта в %(APP_URL)s возможно только, если владелец аккаунта ранее указал %(APP_NAME)s в качестве доверенного лица и согласился с Условиями Использования сайта %(APP_NAME)s.",
     "login_with_facebook_or_reddit_media_to_verify_identity": "Пожалуйста, войдите используя Facebook или Reddit для подтверждения вашей личности",
     "login_with_social_media_to_verify_identity": "Пожалуйста, войдите используя %(provider)s для подтверждения Вашей личности",
     "enter_email_toverify_identity": "Нам нужно подтвердить Вашу личность. Пожалуйста, укажите Вашу электронную почту ниже для начала проверки.",
@@ -595,11 +595,11 @@
     "exceeds_maximum_length": "Превышает максимальную длину (%(maxKb)sKB)",
     "including_the_category": "(включая категорию «%(rootCategory)s»)",
     "use_limited_amount_of_tags": "У вас %(tagsLength)s тэгов, включая %(includingCategory)s. Пожалуйста, используйте не более 5 в посте и категории.",
-    "are_you_sure_you_want_to_clear_this_form": "Вы уверены, что Вы хотите очистить эту форму?",
+    "are_you_sure_you_want_to_clear_this_form": "Вы уверены, что хотите очистить эту форму?",
     "uploading": "Загрузка",
     "draft_saved": "Черновик сохранен.",
     "editor": "Редактор",
-    "insert_images_by_dragging_dropping": "Вставьте изображения перетащив их при помощи мышки,либо ",
+    "insert_images_by_dragging_dropping": "Вставьте изображения перетащив их при помощи мышки, либо ",
     "pasting_from_the_clipboard": " их из буфера обмена. ",
     "selecting_them": "выбрав",
     "image_upload": "Загрузка изображения",
@@ -666,7 +666,7 @@
     "payouts": "Выплаты"
   },
   "tips_js": {
-    "tradeable_tokens_that_may_be_transferred_anywhere_at_anytime": "Перемещаемые цифровые токены, которые могут переданы куда угодно в любой момент..",
+    "tradeable_tokens_that_may_be_transferred_anywhere_at_anytime": "Перемещаемые цифровые токены, которые могут переданы куда угодно в любой момент.",
     "LIQUID_TOKEN_can_be_converted_to_VESTING_TOKEN_in_a_process_called_powering_up": "%(LIQUID_TOKEN)s может быть конвертирован в %(VESTING_TOKEN)s, этот процесс называется \"увеличение %(VESTING_TOKENS)s\".",
     "tokens_worth_about_AMOUNT_of_LIQUID_TOKEN": "Перемещаемые цифровые токены, цена которых всегда равна %(amount)s в %(LIQUID_TOKEN)s.",
     "influence_tokens_which_give_you_more_control_over": "%(VESTING_TOKEN)s неперемещаемая, её количество увеличивается при долгосрочном хранении. Чем больше у Вас %(VESTING_TOKENS)s, тем сильней вы влияете на вознаграждения за пост и тем больше зарабатываете за голосование.",
@@ -712,7 +712,7 @@
   "user_profile": {
     "unknown_account": "Неизвестный аккаунт",
     "user_hasnt_made_any_posts_yet": "Похоже, что %(name)s еще не написал постов!",
-    "user_hasnt_started_bloggin_yet": "Похоже. что %(name)s еще не завёл блог!",
+    "user_hasnt_started_bloggin_yet": "Похоже, что %(name)s еще не завёл блог!",
     "user_hasnt_followed_anything_yet": "Похоже, что %(name)s еще ни на кого не подписан! Если, %(name)s недавно подписался на новых пользователей, их персонализированный канал будет заполняться сразу после появления нового контента.",
     "user_hasnt_had_any_replies_yet": "%(name)s еще не получил ответов",
     "if_you_recently_added_new_users_to_follow": "Если Вы недавно добавили новых пользователей, ваш персонализированный фид будет заполняться сразу после появления нового контента.",
@@ -752,7 +752,7 @@
     "this_memo_is_public": "Эта заметка является публичной",
     "power_up": "Увеличить Силу Голоса",
     "power_down": "Уменьшить Силу Голоса",
-    "cancel_power_down": "Отменить понижение силы голоса",
+    "cancel_power_down": "Отменить понижение Силы голоса",
     "transfer": "Передать",
     "deposit": "Купить",
     "basic": "Базовый",
@@ -804,13 +804,13 @@
     "history": "ИСТОРИЯ"
   },
   "votesandcomments_jsx": {
-    "no_responses_yet_click_to_respond": "Ответов пока нет. Нажмите чтобы ответить.",
+    "no_responses_yet_click_to_respond": "Ответов пока нет. Нажмите, чтобы ответить.",
     "response_count": {
       "zero": "0 ответов",
       "one": "1 ответ",
       "other": "%(count)s ответов"
     },
-    "click_to_respond": "Нажмите чтобы ответить",
+    "click_to_respond": "Нажмите, чтобы ответить",
     "vote_count": {
       "zero": "0 голосов",
       "one": "1 голос",
@@ -827,7 +827,7 @@
     "downvote": "Голосовать против",
     "pending_payout": "Ожидаемая выплата",
     "past_payouts": "Прошлые выплаты",
-    "we_will_reset_curation_rewards_for_this_post": "сбросит Ваши кураторские вознаграждения за этот пост",
+    "we_will_reset_curation_rewards_for_this_post": " сбросит Ваши кураторские вознаграждения за этот пост",
     "removing_your_vote": "Удаление голоса",
     "changing_to_an_upvote": "Измение на голос за",
     "changing_to_a_downvote": "Измение на голос против",
@@ -846,7 +846,7 @@
     "paste_a_youtube_or_vimeo_and_press_enter": "Вставьте YouTube или Vimeo ссылку и нажмите Enter",
     "there_was_an_error_uploading_your_image": "Произошла ошибка во время загрузки изображения",
     "raw_html": "HTML код",
-    "please_remove_following_html_elements": "Пожалуйста удалите эти HTML элементы из Вашего поста: "
+    "please_remove_following_html_elements": "Пожалуйста, удалите эти HTML элементы из Вашего поста: "
   },
   "witnesses_jsx": {
     "witness_thread": "пост делегата",
@@ -860,7 +860,7 @@
     "you_can_vote_for_maximum_of_witnesses": "Вы можете голосовать максимум за 30 делегатов",
     "witness": "Делегаты",
     "information": "Информация",
-    "if_you_want_to_vote_outside_of_top_enter_account_name": "Если Вы хотите проголосовать за делегата вне top 50, введите имя аккаунта ниже",
+    "if_you_want_to_vote_outside_of_top_enter_account_name": "Если Вы хотите проголосовать за делегата вне TOP 50, введите имя аккаунта ниже",
     "set_witness_proxy": "Вы также можете выбрать прокси, который будет вместо Вас голосовать за делегатов. Это сбросит Ваш текущий выбор делегата.",
     "witness_set": "Вы установили прокси для голосования. Если Вы хотите голосовать вручную, пожалуйста, очистите ваш прокси.",
     "witness_proxy_current": "Ваш текущий прокси",

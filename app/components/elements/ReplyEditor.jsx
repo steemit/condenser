@@ -19,6 +19,7 @@ import VerticalMenu from 'app/components/elements/VerticalMenu'
 import tt from 'counterpart'
 import {DEBT_TICKER, DEFAULT_DOMESTIC, DOMESTIC} from 'app/client_config'
 import Icon from 'app/components/elements/Icon.jsx'
+import {detransliterate} from 'app/utils/ParsersAndFormatters'
 
 const remarkable = new Remarkable({ html: true, linkify: false, breaks: true })
 const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
@@ -31,7 +32,7 @@ class ReplyEditor extends React.Component {
 
         // html component attributes
         formId: React.PropTypes.string.isRequired, // unique form id for each editor
-        type: React.PropTypes.oneOf(['submit_story', 'submit_comment', 'edit']),
+        type: React.PropTypes.oneOf(['submit_feedback', 'submit_story', 'submit_comment', 'edit']),
         successCallback: React.PropTypes.func, // indicator that the editor is done and can be hidden
         onCancel: React.PropTypes.func, // hide editor when cancel button clicked
 
@@ -333,11 +334,12 @@ class ReplyEditor extends React.Component {
             if (successCallback) successCallback(args)
         }
         const isEdit = type === 'edit'
+        const isFeedback = type === 'submit_feedback'
         const isHtml = rte || isHtmlTest(body.value)
         // Be careful, autoVote can reset curation rewards.  Never autoVote on edit..
         const autoVoteValue = !isEdit && autoVote.value
         const replyParams = {
-            author, permlink, parent_author, parent_permlink, type, state, originalPost, isHtml, isStory,
+            author, permlink, parent_author, parent_permlink, type, state, originalPost, isHtml, isStory, isFeedback,
             jsonMetadata, autoVote: autoVoteValue, payoutType,
             successCallback: successCallbackWrapper, errorCallback
         }
@@ -440,9 +442,14 @@ class ReplyEditor extends React.Component {
                         </div>
 
                         <div className={vframe_section_shrink_class} style={{marginTop: '0.5rem'}}>
-                            {isStory && <span>
+                            {isStory && !isFeedback && <span>
                                 <CategorySelector {...category.props} disabled={loading} isEdit={isEdit} tabIndex={3} />
                                 <div className="error">{(category.touched || category.value) && category.error}&nbsp;</div>
+                            </span>}
+                            {isStory && isFeedback && <span>
+                              <div className="TagList__horizontal">
+                                <a href="/created/ru--obratnaya-svyazx">{tt('g.feedback').split(' ').join('-')}</a>
+                              </div>
                             </span>}
                         </div>
 
@@ -536,9 +543,10 @@ export default formId => connect(
         const fields = ['body', 'autoVote:checked']
         const {type, parent_author, jsonMetadata} = ownProps
         const isEdit = type === 'edit'
-        const isStory = /submit_story/.test(type) || (
+        const isStory = /submit_story|submit_feedback/.test(type) || (
             isEdit && parent_author === ''
         )
+        const isFeedback = type === 'submit_feedback'
         if (isStory) fields.push('title')
         if (isStory) fields.push('category')
         if (isStory) fields.push('domestic')
@@ -546,7 +554,8 @@ export default formId => connect(
         let {category, title, body, domestic} = ownProps
         if (/submit_/.test(type)) title = body = ''
         if(isStory && jsonMetadata && jsonMetadata.tags) {
-            category = Set([category, ...jsonMetadata.tags]).join(' ')
+            const detags = jsonMetadata.tags.map(tag => detransliterate(tag))
+            category = Set([detransliterate(category), ...detags]).join(' ')
         }
         const ret = {
             ...ownProps,
@@ -571,13 +580,27 @@ export default formId => connect(
                 payload: {file, progress},
             })
         },
-        reply: ({category, title, domestic, body, author, permlink, parent_author, parent_permlink, isHtml, isStory,
+        reply: ({category, title, domestic, body, author, permlink, parent_author, parent_permlink, isHtml, isStory, isFeedback,
             type, originalPost, autoVote = false, payoutType = '50%',
             state, jsonMetadata,
             successCallback, errorCallback, startLoadingIndicator
         }) => {
             // const post = state.global.getIn(['content', author + '/' + permlink])
             const username = state.user.getIn(['current', 'username'])
+
+            // Parse categories:
+            // if category string starts with russian symbol, add 'ru-' prefix to it
+            // when transletirate it
+            // This is needed to be able to detransletirate it back to russian in future (to show russian categories to user)
+            // (all of this is needed because blockchain does not allow russian symbols in category)
+            if (isFeedback) category = 'обратная-связь'
+            if (category) {
+                category = category
+                    .split(' ')
+                    .map(item => /^[а-яё]/.test(item) ? 'ru--' + detransliterate(item, true) : item)
+                    .join(' ')
+                    .trim()
+            }
 
             const isEdit = type === 'edit'
             const isNew = /^submit_/.test(type)

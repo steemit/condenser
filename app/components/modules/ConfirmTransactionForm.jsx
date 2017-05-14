@@ -56,7 +56,7 @@ const typeName = confirmBroadcastOperation => {
     const title = confirmBroadcastOperation.getIn(['operation', '__config', 'title'])
     if(title) return title
     const type = confirmBroadcastOperation.get('type')
-    return tt('g.confirm') + ' ' + (type.split('_').map(n => n.charAt(0).toUpperCase() + n.substring(1))).join(' ')
+    return tt('confirmtransactionform_jsx.confirm') + ' ' + (type.split('_').map(n => n.charAt(0).toUpperCase() + n.substring(1))).join(' ')
 }
 
 export default connect(

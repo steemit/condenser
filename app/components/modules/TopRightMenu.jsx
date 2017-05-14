@@ -32,8 +32,8 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
     const submitStory = $STM_Config.read_only_mode ? null : <li className={lcn + ' submit-story'}>
       <a href="/submit.html" onClick={nav}>{tt('g.submit_a_story')}</a>
     </li>;
-    const submitStoryPencil = $STM_Config.read_only_mode ? null : <li className="submit-story">
-      <a href="/submit.html" onClick={nav}><Icon name="pencil" /></a>
+    const submitStoryPencil = $STM_Config.read_only_mode ? null : <li className="show-for-small-only">
+      <Link to="/submit.html"><Icon name="pencil" /></Link>
     </li>;
     const feedLink = `/@${username}/feed`;
     const repliesLink = `/@${username}/recent-replies`;
@@ -65,7 +65,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
         </Link>
       </li>
     ;
-    const submitItem = <li className={lcn}>
+    const submitFeedback = <li className={lcn}>
         <Link to="/submit.html?type=submit_feedback" title={tt('navigation.feedback')}>
           {vertical ? <span>{tt('navigation.feedback')}</span> : <Icon name="feedback" />}
         </Link>
@@ -114,11 +114,11 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
             <ul className={mcn + mcl}>
                 {inIco && ico_menu.map((o,i) => {return <li key={i} className={lcn}><a href={o.link}>{o.value}</a></li>})}
                 {!inIco && aboutItem}
-                {!inIco && submitItem}
                 {!inIco && searchItem}
                 {!inIco && languageMenu}
                 {!inIco && rocketchatItem}
                 {!inIco && submitStory}
+                {!inIco && !vertical && submitStoryPencil}
                 <LinkWithDropdown
                     closeOnClickOutside
                     dropdownPosition="bottom"
@@ -150,6 +150,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
             {!inIco && !vertical && languageMenu}
             {!inIco && rocketchatItem}
             {!inIco && submitStory}
+            {!inIco && !vertical && submitStoryPencil}
             {!inIco && !probablyLoggedIn && <li className={lcn}>
               <a href="/create_account" onClick={showSignUp}>{tt('g.sign_up')}</a>
             </li>}

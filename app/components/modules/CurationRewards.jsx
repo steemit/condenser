@@ -5,7 +5,7 @@ import TransferHistoryRow from 'app/components/cards/TransferHistoryRow';
 import {numberWithCommas, vestsToSp, assetFloat} from 'app/utils/StateFunctions'
 import tt from 'counterpart';
 import { APP_NAME, DEBT_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TOKEN, CURRENCY_SIGN,
-VESTING_TOKEN, LIQUID_TICKER, VEST_TICKER } from 'app/client_config';
+VESTING_TOKEN, VESTING_TOKENS, LIQUID_TICKER, VEST_TICKER } from 'app/client_config';
 
 class CurationRewards extends React.Component {
     constructor() {
@@ -105,7 +105,7 @@ class CurationRewards extends React.Component {
                     {tt('curationrewards_jsx.estimated_curation_rewards_last_week')}:
                 </div>
                 <div className="column small-12 medium-4">
-                    {numberWithCommas(vestsToSp(this.props.state, rewardsWeek + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
+                    {numberWithCommas(vestsToSp(this.props.state, rewardsWeek + " " + VEST_TICKER)) + " " + VESTING_TOKENS}
                 </div>
             </div>
 

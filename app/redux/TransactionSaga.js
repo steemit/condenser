@@ -189,19 +189,6 @@ function* broadcast({payload: {operations, keys, username, successCallback, erro
     const tx = yield createTransaction(operations)
     const sx = signTransaction(tx, keys)
 
-    // TODO: remove this after tests
-    // if ()
-    console.log('operations', operations)
-    if (
-      typeof operations[0][0] === "string" &&
-      operations[0][0] === "comment" &&
-      typeof operations[0][1].__config === "object" &&
-      typeof operations[0][1].__config.comment_options === "object" &&
-      typeof operations[0][1].__config.comment_options.test === "object" ) {
-      return
-    }
-    // !TODO: remove this after tests
-
     // status: broadcasting
     const broadcastedEvent = () => {
         for (const [type, operation] of operations) {

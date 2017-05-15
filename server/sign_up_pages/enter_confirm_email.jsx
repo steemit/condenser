@@ -141,6 +141,11 @@ export default function useEnterAndConfirmEmailPages(app) {
     router.get("/enter_email", function*() {
         console.log("-- /enter_email -->", this.session.uid, this.session.user, this.request.query.account);
         this.session.picked_account_name = this.request.query.account;
+        if (!this.session.picked_account_name) {
+            this.flash = { error: "Please select your account name" };
+            this.redirect('/pick_account');
+            return;
+        }
         let default_email = "";
         if (this.request.query && this.request.query.email)
             default_email = this.request.query.email;
@@ -153,7 +158,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                         <Progress tabIndex="0" value={50} max={100} />
                         <form id="submit_email" action="/submit_email" method="POST">
                             <h4 style={{ color: "#4078c0" }}>
-                                Please provide your email address to continue.
+                                Please provide your email address to continue
                             </h4>
                             <p className="secondary">
                                 We need your email address to ensure that we can contact you to verify account ownership in the event that your account is ever compromised.

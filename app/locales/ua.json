@@ -194,7 +194,7 @@
     "promoted": "Промо",
     "re": "RE",
     "recent_password": "Недавній пароль",
-    "recieve": "Отримати ",
+    "receive": "Отримано",
     "remove": "Видалити",
     "remove_vote": "Прибрати голос",
     "replied_to": "відповів",
@@ -606,7 +606,11 @@
     "decline_payout": "Відмовитися від виплати",
     "check_this_to_auto_upvote_your_post": "Відмітьте, щоб проголосувати за свою посаду",
     "markdown_styling_guide": "Інструкція стилізації в Markdown",
-    "placeholder" : "Заголовок"
+    "placeholder" : "Заголовок",
+    "update_post": "Оновити пост",
+    "feedback_placeholder": "Написати...",
+    "unable_to_contact_the_server" : "Не вдалося зв'язатися з сервером",
+    "please_insert_only_image_files":"Вставляйте тільки файли зображень"
   },
   "savingswithdrawhistory_jsx": {
     "cancel_this_withdraw_request": "Скасувати запит виведення коштів?",
@@ -692,7 +696,7 @@
     "basic": "Основні",
     "advanced": "Розширені опції",
     "convert_to_VESTING_TOKEN": "Перевести у %(VESTING_TOKEN2)s",
-    "balance_subject_to_3_day_withdraw_waiting_period": "Вивід балансу з сейфа на звичайний рахунок, займає 3 дні.",
+    "balance_subject_to_3_day_withdraw_waiting_period": "Вивід балансу з сейфа на звичайний рахунок займає 3 дні.",
     "form_title": "Передати користувачеві",
     "move_funds_to_another_account": "Надіслати кошти на інший рахунок.",
     "protect_funds_by_requiring_a_3_day_withdraw_waiting_period": "Захистіть кошти від виведення 3-х денним періодом очікування.",

@@ -259,7 +259,7 @@ class ReplyEditor extends React.Component {
     onDrop = (acceptedFiles, rejectedFiles) => {
         if(!acceptedFiles.length) {
             if(rejectedFiles.length) {
-                this.setState({progress: {error: 'Please insert only image files.'}})
+                this.setState({progress: {error: tt('reply_editor.please_insert_only_image_files')}})
                 console.log('onDrop Rejected files: ', rejectedFiles);
             }
             return
@@ -447,7 +447,7 @@ class ReplyEditor extends React.Component {
                                             {noClipboardData ? '' : tt('reply_editor.pasting_from_the_clipboard')}
                                         </p>
                                     }
-                                    {progress.message && <div className="info">{progress.message}</div>}
+                                    {progress.message && <div className="info">{progress.message.replace('Uploading', tt('reply_editor.uploading'))}</div>}
                                     {progress.error && <div className="error">{tt('reply_editor.image_upload')} : {progress.error}</div>}
                                 </span>
                             }
@@ -474,7 +474,7 @@ class ReplyEditor extends React.Component {
 
                         <div className={vframe_section_shrink_class}>
                             {!loading &&
-                                <button type="submit" className="button" disabled={disabled} tabIndex={4}>{isEdit ? 'Update Post' : postLabel}</button>
+                                <button type="submit" className="button" disabled={disabled} tabIndex={4}>{isEdit ? tt('reply_editor.update_post') : postLabel}</button>
                             }
                             {loading && <span><br /><LoadingIndicator type="circle" /></span>}
                             &nbsp; {!loading && this.props.onCancel &&

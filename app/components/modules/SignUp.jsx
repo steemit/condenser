@@ -41,7 +41,7 @@ class SignUp extends React.Component {
                     <p>
                         {tt("g.we_require_social_account1", {APP_NAME})}
                         <LocalizedCurrency amount={Number(this.props.signup_bonus)} />
-                        {tt("g.we_require_social_account2", {VESTING_TOKEN})}
+                        {tt("g.we_require_social_account2")}
                         <br />
                         {tt("g.personal_info_will_be_private")}
                         {' '}

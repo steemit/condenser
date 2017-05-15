@@ -74,7 +74,7 @@
     "promote": "Promote",
     "promoted": "promoted",
     "re": "RE",
-    "recieve": "Receive ",
+    "receive": "Receive",
     "remove": "Remove",
     "remove_vote": "Remove Vote",
     "replied_to": "replied to",
@@ -319,7 +319,11 @@
       "message4": " button to create new post.",
       "message5": "THANK YOU! Your feedback is important for us!"
     },
-    "feedback_placeholder": "Write..."
+    "feedback_placeholder": "Write...",
+    "placeholder" : "Tile",
+    "update_post": "Update Post",
+    "unable_to_contact_the_server" : "Unable to contact the server",
+    "please_insert_only_image_files":"Please insert only image files"
   },
   "category_selector_jsx": {
     "tag_your_story": "Tag (up to 5 tags), the first tag is your main category.",

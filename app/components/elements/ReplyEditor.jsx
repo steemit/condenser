@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router'
 import reactForm from 'app/utils/ReactForm'
 import transaction from 'app/redux/Transaction'
 import MarkdownViewer from 'app/components/cards/MarkdownViewer'
@@ -376,6 +377,18 @@ class ReplyEditor extends React.Component {
         return (
             <div className="ReplyEditor row">
                 <div className="column small-12">
+                    {isFeedback && <div>
+                        <h4>{tt('reply_editor.feedback_welcome.dear_users')}</h4>
+                        <p>{tt('reply_editor.feedback_welcome.message1')}</p>
+                        <p>{tt('reply_editor.feedback_welcome.message2')}</p>
+                        <p>
+                          {tt('reply_editor.feedback_welcome.message3')}
+                          <Link to="/submit.html"><Icon name="pencil" /> {tt('g.submit_a_story')}</Link>
+                          {tt('reply_editor.feedback_welcome.message4')}
+                        </p>
+                        <p>{tt('reply_editor.feedback_welcome.message5')}</p>
+                      </div>
+                    }
                     <div ref="draft" className="ReplyEditor__draft ReplyEditor__draft-hide">{tt('reply_editor.draft_saved')}</div>
                     <form className={vframe_class}
                         onSubmit={handleSubmit(({data}) => {
@@ -423,7 +436,7 @@ class ReplyEditor extends React.Component {
                                             onPasteCapture={this.onPasteCapture}
                                             className={type === 'submit_story' ? 'upload-enabled' : ''}
                                             disabled={loading} rows={isStory ? 10 : 3}
-                                            placeholder={isStory ? tt('g.write_your_story') + '...' : tt('g.reply')}
+                                            placeholder={isFeedback ? tt('reply_editor.feedback_placeholder') : isStory ? tt('g.write_your_story') + '...' : tt('g.reply')}
                                             autoComplete="off"
                                             tabIndex={2} />
                                     </Dropzone>

@@ -310,7 +310,16 @@
     "default_50_50": "Default (50%% / 50%%)",
     "decline_payout": "Decline Payout",
     "check_this_to_auto_upvote_your_post": "Check this to auto-upvote your post",
-    "markdown_styling_guide": "Markdown Styling Guide"
+    "markdown_styling_guide": "Markdown Styling Guide",
+    "feedback_welcome": {
+      "dear_users": "Dear users!",
+      "message1": "We do our best to create fun & creative activities.",
+      "message2": "But, sometimes, technical errors can occur… If you find any errors in our lessons, please send us your feedback!",
+      "message3": "You can use this ",
+      "message4": " button to create new post.",
+      "message5": "THANK YOU! Your feedback is important for us!"
+    },
+    "feedback_placeholder": "Write..."
   },
   "category_selector_jsx": {
     "tag_your_story": "Tag (up to 5 tags), the first tag is your main category.",

@@ -6,7 +6,6 @@ export default class VerticalMenu extends React.Component {
     static propTypes = {
         items: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
         title: React.PropTypes.string,
-        description: React.PropTypes.string,
         className: React.PropTypes.string,
         hideValue: React.PropTypes.oneOfType([
             React.PropTypes.string,

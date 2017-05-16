@@ -7,7 +7,7 @@ import Tooltip from 'app/components/elements/Tooltip';
 import Memo from 'app/components/elements/Memo'
 import {numberWithCommas, vestsToSp} from 'app/utils/StateFunctions'
 import tt from 'counterpart';
-import { APP_NAME, DEBT_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TOKEN, CURRENCY_SIGN, VESTING_TOKEN, VEST_TICKER, LIQUID_TICKER } from 'app/client_config';
+import { APP_NAME, DEBT_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TOKEN, CURRENCY_SIGN, VESTING_TOKEN, VEST_TICKER, LIQUID_TICKER, VESTING_TOKENS } from 'app/client_config';
 
 class TransferHistoryRow extends React.Component {
 
@@ -83,16 +83,16 @@ class TransferHistoryRow extends React.Component {
             description_start += `${tt('transferhistoryrow_jsx.cancel_transfer_from_savings')} (${tt('g.request')} ${data.request_id})`;
         } else if( type === 'withdraw_vesting' ) {
             if( data.vesting_shares === '0.000000 ' + VEST_TICKER)
-                description_start += tt('transferhistoryrow_jsx.stop_power_down');
+                description_start += tt('transferhistoryrow_jsx.stop_power_down', {VESTING_TOKENS});
             else
-                description_start += tt('transferhistoryrow_jsx.start_power_down_of') + data.vesting_shares;
+                description_start += tt('transferhistoryrow_jsx.start_power_down_of', {VESTING_TOKENS}) + data.vesting_shares;
         } else if( type === 'curation_reward' ) {
-            description_start += `${curation_reward} ${VESTING_TOKEN}` + tt('g.for');
+            description_start += `${curation_reward} ${VESTING_TOKENS}` + tt('g.for');
             other_account = data.comment_author + "/" + data.comment_permlink;
         } else if (type === 'author_reward') {
             let steem_payout = ""
             if(data.steem_payout !== '0.000 ' + LIQUID_TICKER) steem_payout = ", " + data.steem_payout;
-            description_start += `${renameToSd(data.sbd_payout)}${steem_payout}, ${tt('g.and')} ${author_reward} ${VESTING_TOKEN} ${tt('g.for')} ${data.author}/${data.permlink}`;
+            description_start += `${renameToSd(data.sbd_payout)}${steem_payout}, ${tt('g.and')} ${author_reward} ${VESTING_TOKENS} ${tt('g.for')} ${data.author}/${data.permlink}`;
             // other_account = ``;
             description_end = '';
         } else if (type === 'interest') {

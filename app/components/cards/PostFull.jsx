@@ -268,13 +268,13 @@ class PostFull extends React.Component {
             if(content.depth > 1) {
                 direct_parent_link = (<li>
                     <Link to={parent_link}>
-                        {tt('postfull_jsx.view_the_direct_parent')}
+                        {tt('g.view_the_direct_parent')}
                     </Link>
                 </li>)
             }
             post_header = (<div className="callout">
                 <h3 className="entry-title">{tt('g.re')}: {content.root_title}</h3>
-                <h5>{tt('postfull_jsx.you_are_viewing_a_single_comments_thread_from')}:</h5>
+                <h5>{tt('g.you_are_viewing_a_single_comments_thread_from')}:</h5>
                 <p>
                     {content.root_title}
                 </p>

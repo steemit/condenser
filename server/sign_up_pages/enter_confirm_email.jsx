@@ -106,7 +106,7 @@ export default function useEnterAndConfirmEmailPages(app) {
 
     router.get("/start/:code", function*() {
         const code = this.params.code;
-        const eid = yield models.Identity.findOne({ attributes: ["id", "user_id"], where: { provider: "email", confirmation_code: code }});
+        const eid = yield models.Identity.findOne({ attributes: ["id", "user_id", "verified"], where: { provider: "email", confirmation_code: code }});
         const user = eid ? yield models.User.findOne({ attributes: ["id", "account_status"], where: { id: eid.user_id }}) : null;
         // validate there is email identity and user record
         if (eid && user) {
@@ -114,6 +114,9 @@ export default function useEnterAndConfirmEmailPages(app) {
             this.session.user = user.id;
             if (user.uid) this.session.uid = user.uid;
             console.log('-- checking incoming start request -->', this.session.uid, this.session.user);
+            if (!eid.verified) {
+                yield eid.update({ verified: true });
+            }
             if (user.account_status === "approved") {
                 console.log("-- approved account for -->", this.session.uid, this.session.user);
                 this.redirect("/create_account");
@@ -138,6 +141,11 @@ export default function useEnterAndConfirmEmailPages(app) {
     router.get("/enter_email", function*() {
         console.log("-- /enter_email -->", this.session.uid, this.session.user, this.request.query.account);
         this.session.picked_account_name = this.request.query.account;
+        if (!this.session.picked_account_name) {
+            this.flash = { error: "Please select your account name" };
+            this.redirect('/pick_account');
+            return;
+        }
         let default_email = "";
         if (this.request.query && this.request.query.email)
             default_email = this.request.query.email;
@@ -150,7 +158,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                         <Progress tabIndex="0" value={50} max={100} />
                         <form id="submit_email" action="/submit_email" method="POST">
                             <h4 style={{ color: "#4078c0" }}>
-                                Please provide your email address to continue.
+                                Please provide your email address to continue
                             </h4>
                             <p className="secondary">
                                 We need your email address to ensure that we can contact you to verify account ownership in the event that your account is ever compromised.
@@ -204,13 +212,15 @@ export default function useEnterAndConfirmEmailPages(app) {
     router.post("/submit_email", koaBody, function*() {
         if (!checkCSRF(this, this.request.body.csrf)) return;
 
-        const {email, account} = this.request.body;
+        let {email, account} = this.request.body;
         console.log('-- /submit_email -->', this.session.uid, email, account);
         if (!email) {
             this.flash = { error: "Please provide an email address" };
             this.redirect(`/enter_email?account=${account}`);
             return;
         }
+        email = email.toLowerCase();
+        account = account.toLowerCase();
 
         //recaptcha
         if (config.get('recaptcha.site_key')) {

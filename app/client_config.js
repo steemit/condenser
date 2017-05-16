@@ -77,24 +77,27 @@ export const LANGUAGES = {
   en: 'English',
   /* in react-intl they use 'uk' instead of 'ua' */
   uk: 'Українська',
-  sr: 'Srpski'
+  sr: 'Srpski',
+  ro: 'Română',
 }
 export const SEO_TITLE = 'GOLOS.io Блоги'
 export const DEFAULT_DOMESTIC = 'all'
 export const DOMESTIC = {
-  all: "All langs",
-  ru: "Русский",
-  ua: "Український",
-  by: "Белору́сский",
-  am: "գրաբար",
-  kz: "Қазақ тілі",
-  tj: "Забо́ни тоҷикӣ",
-  md: "Limba moldovenească",
-  ar: "العربية",
-  cn: "漢",
-  es: "Español",
-  us: "English",
-  in: "हिन्दी",
-  pt: "Portuguesa",
-  fr: "Français"
+  all: 'All langs',
+  ru:  'Русский',
+  ua:  'Український',
+  by:  'Белору́сский',
+  rs:  'Srpski',
+  ro:  'Română',
+  am:  'գրաբար',
+  kz:  'Қазақ тілі',
+  tj:  'Забо́ни тоҷикӣ',
+  md:  'Limba moldovenească',
+  ar:  'العربية',
+  cn:  '漢',
+  es:  'Español',
+  us:  'English',
+  in:  'हिन्दी',
+  pt:  'Portuguesa',
+  fr:  'Français'
 }

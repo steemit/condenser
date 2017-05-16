@@ -209,7 +209,7 @@ class Voting extends React.Component {
             payoutItems.push({value: ' - ' + tt('voting_jsx.curators') + ': ' + localizedCurrency(total_curator_payout)});
         }
         const payoutEl = <DropdownMenu el="div" items={payoutItems}>
-            <span style={payout_limit_hit ? {opacity: '0.5'} : {}}>
+            <span style={payout_limit_hit ? {opacity: '0.33'} : {}}>
                 <LocalizedCurrency amount={payout} className={max_payout === 0 ? 'strikethrough' : ''} />
                 {payoutItems.length > 0 && <Icon name="dropdown-arrow" />}
             </span>

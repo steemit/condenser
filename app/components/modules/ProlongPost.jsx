@@ -3,15 +3,23 @@ import {connect} from 'react-redux';
 import ReactDOM from 'react-dom';
 import transaction from 'app/redux/Transaction';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import { DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, DEBT_TICKER} from 'app/client_config';
+import { DEBT_TOKEN, DEBT_TOKENS, DEBT_TOKEN_SHORT, CURRENCY_SIGN, DEBT_TICKER} from 'app/client_config';
 import tt from 'counterpart';
+import Slider from 'react-rangeslider';
 
+Date.prototype.addDays = function(days) {
+  var dat = new Date(this.valueOf());
+  dat.setDate(dat.getDate() + days);
+  return dat;
+}
 
 class ProlongPost extends Component {
 
     static propTypes = {
         author: PropTypes.string.isRequired,
         permlink: PropTypes.string.isRequired,
+        dispatchSubmit: React.PropTypes.func.isRequired,
+        dispatchGetPayoutCostByTime: React.PropTypes.func.isRequired,
     };
 
     constructor(props) {
@@ -21,18 +29,65 @@ class ProlongPost extends Component {
             asset: '',
             loading: false,
             amountError: '',
+            days: 1,
             trxError: ''
         };
         this.onSubmit = this.onSubmit.bind(this);
         this.errorCallback = this.errorCallback.bind(this);
         this.amountChange = this.amountChange.bind(this);
+
+        this.handleDaysChange = days => {
+            const {author, permlink, onClose} = this.props
+            const {amount} = this.state
+            const now = new Date()
+            const time = now.addDays(days).getTime()
+            this.setState({loading: true});
+            console.log('-- ProlongPost.onGetPayoutCostByTime -->');
+            // this.props.dispatchGetPayoutCostByTime({
+            //   days,
+            //   author,
+            //   permlink,
+            //   onClose,
+            //   currentUser: this.props.currentUser,
+            //   errorCallback: this.errorCallback
+            // });
+
+            // this.props.dispatchGetPayoutCostByTime({
+            //   days,
+            //   author,
+            //   permlink,
+            //   onClose,
+            //   currentUser: this.props.currentUser,
+            //   errorCallback: this.errorCallback
+            // })
+            // .then(data => {
+            //   if (data) {
+            //     console.log('data', data)
+            //       // browserHistory.replace(`/${content.category}/@${post}`)
+            //   }
+            //   this.setState({days})
+            // }).catch((error) => {
+            //   this.setState({loading: false});
+            //   this.errorCallback(error)
+            // });
+
+            this.props.dispatchGetPayoutWindow({type: 'cost', author, permlink, time})
+            .then(data => {
+              if (data) {
+                console.log('data', data)
+                // browserHistory.replace(`/${content.category}/@${post}`)
+                this.setState({days})
+              }
+            }).catch((error) => {
+              console.log('------- error -------')
+              console.log(error)
+              this.setState({loading: false});
+              this.errorCallback(error)
+            });
+        }
     }
 
-    componentDidMount() {
-        setTimeout(() => {
-            ReactDOM.findDOMNode(this.refs.amount).focus()
-        }, 300)
-    }
+    componentDidMount() {}
 
     errorCallback(estr) {
         this.setState({ trxError: estr, loading: false });
@@ -41,10 +96,10 @@ class ProlongPost extends Component {
     onSubmit(e) {
         e.preventDefault();
         const {author, permlink, onClose} = this.props
-        const {amount} = this.state
+        const {amount, days} = this.state
         this.setState({loading: true});
         console.log('-- ProlongPost.onSubmit -->');
-        this.props.dispatchSubmit({amount, asset: DEBT_TICKER, author, permlink, onClose,
+        this.props.dispatchSubmit({amount, days, asset: DEBT_TICKER, author, permlink, onClose,
             currentUser: this.props.currentUser, errorCallback: this.errorCallback});
     }
 
@@ -54,7 +109,7 @@ class ProlongPost extends Component {
     }
 
     render() {
-        const {amount, loading, amountError, trxError} = this.state;
+        const {amount, loading, amountError, trxError, days} = this.state;
         const {currentAccount} = this.props;
         const balanceValue = currentAccount.get('sbd_balance');
         const balance = balanceValue ? balanceValue.split(' ')[0] : 0.0;
@@ -65,16 +120,17 @@ class ProlongPost extends Component {
                <div className="column small-12">
                    <form onSubmit={this.onSubmit} onChange={() => this.setState({trxError: ''})}>
                        <h4>{tt('prolong_post_jsx.prolong_post')}</h4>
-                       <p>{tt('prolong_post_jsx.spend_your_DEBT_TOKEN_to_prolong_payments_window_post', {DEBT_TOKEN})}.</p>
                        <hr />
+                       <p>{tt('prolong_post_jsx.spend_your_DEBT_TOKEN_to_prolong_payments_window_post', {DEBT_TOKEN: DEBT_TOKENS})}.</p>
                        <div className="row">
-                           <div className="column small-4">
-                               <label>{tt('g.amount')}</label>
+                           <div className="column small-8">
+                               <label>{tt('prolong_post_jsx.days')}</label>
+                               <Slider className={loading && 'rangeslider__disabled' || ''} min={1} max={7} step={1} value={days} onChange={this.handleDaysChange} />
                                <div className="input-group">
-                                   <input className="input-group-field" type="text" placeholder={tt('g.amount')} value={amount} ref="amount" autoComplete="off" disabled={loading} onChange={this.amountChange} />
-                                   <span className="input-group-label">{DEBT_TOKEN_SHORT + ' '} ({CURRENCY_SIGN})</span>
-                                   <div className="error">{amountError}</div>
+                                   <span className="input-group-label">{days + ' / ' + amount}</span>
+                                   <span className="input-group-label">{tt('prolong_post_jsx.days_short') + ' / ' + DEBT_TOKEN_SHORT + ' '} ({CURRENCY_SIGN})</span>
                                </div>
+                               <div className="error">{amountError}</div>
                            </div>
                        </div>
                        <div>{`${tt('transfer_jsx.balance')}: ${balance} ${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}</div>
@@ -93,25 +149,82 @@ class ProlongPost extends Component {
 
 export default connect(
     (state, ownProps) => {
+        const payoutWindow = state.global.get('payoutWindow')
         const currentUser = state.user.getIn(['current']);
         const currentAccount = state.global.getIn(['accounts', currentUser.get('username')]);
-        return {...ownProps, currentAccount, currentUser}
+        return {...ownProps, currentAccount, currentUser, payoutWindow}
     },
     dispatch => ({
-        dispatchSubmit: ({amount, asset, author, permlink, currentUser, onClose, errorCallback}) => {
+        dispatchGetPayoutTimeByCost: ({amount, asset, author, permlink, currentUser, onClose, errorCallback}) => {
+            const cost = parseFloat(amount, 10).toFixed(3) + ' ' + asset
+            const successCallback = () => {}
+            // const successCallback = () => {
+            //     dispatch({type: 'global/GET_STATE', payload: {url: `@${username}/transfers`}}) // refresh transfer history
+            //     onClose()
+            // }
+            dispatch({
+                type: 'PAYOUT_WINDOW_REQUEST',
+                payload: {
+                  type: 'time',
+                  author,
+                  permlink,
+                  cost
+                },
+            })
+        },
+
+        dispatchGetPayoutCostByTime: ({days, author, permlink, currentUser, onClose, errorCallback}) => {
+            const now = new Date()
+            const time = now.addDays(days).getTime()
+
+            // const successCallback = () => {}
+            // dispatch({
+            //     type: 'PAYOUT_WINDOW_REQUEST',
+            //     payload: {
+            //       type: 'cost',
+            //       author,
+            //       permlink,
+            //       time,
+            //       // onSuccess: successCallback,
+            //       // onError: errorCallback
+            //     }
+            // })
+            return new Promise((resolve, reject) => {
+              dispatch({
+                  type: 'PAYOUT_WINDOW_REQUEST',
+                  payload: {
+                    type: 'cost',
+                    author,
+                    permlink,
+                    time,
+                    resolve,
+                    reject
+                  }
+              })
+            })
+        },
+
+        dispatchGetPayoutWindow: (payload) => (new Promise((resolve, reject) => {
+            dispatch({type: 'PAYOUT_WINDOW_REQUEST', payload: {...payload, resolve, reject}})
+        })),
+
+        dispatchSubmit: ({amount, days, asset, author, permlink, currentUser, onClose, errorCallback}) => {
+            const now = new Date()
+            const timestamp = now.addDays(days)
             const username = currentUser.get('username')
             const successCallback = () => {
                 dispatch({type: 'global/GET_STATE', payload: {url: `@${username}/transfers`}}) // refresh transfer history
                 onClose()
             }
             const operation = {
-                from: username,
-                to: 'null', amount: parseFloat(amount, 10).toFixed(3) + ' ' + asset,
-                memo: `@${author}/${permlink}`,
+                payer: username,
+                author,
+                permlink,
+                timestamp,
                 __config: {successMessage: tt('prolong_post_jsx.you_successfully_prolong_this_post') + '.'}
             }
             dispatch(transaction.actions.broadcastOperation({
-                type: 'transfer',
+                type: 'comment_payout_extension_operation',
                 operation,
                 successCallback,
                 errorCallback

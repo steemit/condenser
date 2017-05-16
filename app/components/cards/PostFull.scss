@@ -199,6 +199,66 @@ input.share-box {
   margin-left: 1em;
 }
 
+.ProlongPost {
+  .rangeslider {
+    position: relative;
+    float: left;
+    background: $light-gray;
+    .rangeslider__fill, .rangeslider__handle {
+      position: absolute;
+    }
+    &, .rangeslider__fill {
+      display: block;
+      box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+    }
+    &, .rangeslider__fill_disabled {
+      display: block;
+      box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+    .rangeslider__handle {
+      background: $white;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      display: inline-block;
+      position: absolute;
+      &:active {
+        background: #4ba2f2;
+      }
+    }
+    .rangeslider__handle_disabled {
+      border: 1px solid #e8e8e8;
+      &:active {
+        background: rgba(162, 162, 162, .2);
+      }
+    }
+  }
+  .rangeslider-horizontal {
+    height: 10px;
+    width: 200px;
+    background: none;
+    float: left;
+    margin-top: 18px;
+    margin-bottom: 18px;
+    .rangeslider__fill {
+      height: 100%;
+      background: #4ba2f2;
+      box-shadow: none;
+      left: 0;
+    }
+    .rangeslider__handle {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      top: -10px;
+      &:active {
+        box-shadow: none;
+      }
+    }
+  }
+}
+
 /* Small only */
 @media screen and (max-width: 39.9375em) {
   .Post {

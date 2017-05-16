@@ -151,7 +151,6 @@ class ReplyEditor extends React.Component {
         const {isStory, type, fields} = props
         const isEdit = type === 'edit'
         const isFeedback = type === 'submit_feedback'
-        console.log('isFeedback', isFeedback)
         const maxKb = isStory ? 100 : 16
         reactForm({
             fields,

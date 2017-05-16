@@ -9,7 +9,7 @@ import {fromJS, Map} from 'immutable'
 import { IGNORE_TAGS, PUBLIC_API, SELECT_TAGS_KEY } from 'app/client_config';
 import cookie from "react-cookie";
 
-export const fetchDataWatches = [watchLocationChange, watchDataRequests, watchApiRequests, watchFetchJsonRequests, watchFetchState, watchGetContent];
+export const fetchDataWatches = [watchLocationChange, watchDataRequests, watchApiRequests, watchFetchJsonRequests, watchFetchState, watchGetContent, watchPayoutWindowRequests];
 
 export function* watchDataRequests() {
     yield* takeLatest('REQUEST_DATA', fetchData);
@@ -366,4 +366,38 @@ function* fetchJson({payload: {id, url, body, successCallback, skipLoading = fal
         console.error('fetchJson', error)
         yield put(GlobalReducer.actions.fetchJsonResult({id, error}))
     }
+}
+
+export function* watchPayoutWindowRequests() {
+    yield* takeEvery('PAYOUT_WINDOW_REQUEST', fetchPayoutWindow);
+}
+
+export function* fetchPayoutWindow({payload: {type, author, permlink, cost, time, resolve, reject, onSuccess, onError}}) {
+  let callName = type === "cost" ? 'get_payout_extension_time_by_cost' : 'get_payout_extension_time_by_cost';
+  let args = {
+    author,
+    permlink,
+    cost,
+    time
+  };
+
+  const data = yield call([Apis, Apis.db_api], callName, args);
+  console.log('data')
+  console.log(data)
+  yield put(GlobalReducer.actions.receivePayoutWindow({payoutWindow: data}))
+  if (resolve && data) {
+    resolve(data);
+  } else if (reject && !data) {
+    reject();
+  }
+  // try {
+  //   const db_api = Apis.instance().db_api;
+  //   const data = yield call([db_api, db_api.exec], callName, args);
+  //   yield put(GlobalReducer.actions.receivePayoutWindow({payoutWindow: data, payer, author, permlink, cost, time})); // receivePayoutWindow({data, author, permlink, cost, time}));
+  //   if (onSuccess) onSuccess(data);
+  // } catch (error) {
+  //   console.error('~~ Saga fetchPayoutWindow error ~~>', callName, args, error);
+  //   // yield put({type: 'global/STEEM_API_ERROR', error: error.message});
+  //   if (onError) onError(error);
+  // }
 }

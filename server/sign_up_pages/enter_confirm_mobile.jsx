@@ -268,29 +268,24 @@ recovery should your account ever be compromised.</em>
         //     }
         // }
 
-        const existing_phone = yield models.Identity.findOne({
-            attributes: ["user_id"],
-            where: { phone, provider: "phone", verified: true },
-            order: "id DESC"
-        });
-        if (existing_phone && existing_phone.user_id != user_id) {
-            const act = yield models.Account.findOne({
-                attributes: ['id'],
-                where: {user_id: existing_phone.user_id, ignored: false, created: true},
-                order: 'id DESC'
-            });
-            if (act) {
-                console.log(
-                    "-- /submit_email existing_phone -->",
-                    user_id,
-                    this.session.uid,
-                    phone,
-                    existing_phone.user_id
-                );
-                this.flash = { error: "This phone number has already been used" };
-                this.redirect(enterMobileUrl);
-                return;
-            }
+        const number_of_created_accounts = yield models.sequelize.query(
+            ```
+            select count(*) as result from identities i
+                join accounts a on a.user_id=i.user_id
+                where i.provider='phone' and
+                    i.phone='${phone}' and
+                    a.created=1 and
+                    a.ignored<>1
+            ```);
+        if (number_of_created_accounts && number_of_created_accounts[0][0].result > 0) {
+            console.log(
+                "-- /submit_mobile there are created accounts -->",
+                user_id,
+                phone
+            );
+            this.flash = { error: "This phone number has already been used" };
+            this.redirect(enterMobileUrl);
+            return;
         }
 
         const confirmation_code = parseInt(

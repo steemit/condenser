@@ -253,28 +253,24 @@ export default function useEnterAndConfirmEmailPages(app) {
         }
 
         try {
-            const existing_email = yield models.Identity.findOne({
-                attributes: ['id', 'user_id', 'verified', 'confirmation_code'],
-                where: { email, provider: 'email' },
-                order: 'id DESC'
-            });
-            if (existing_email) {
+            const number_of_created_accounts = yield models.sequelize.query(
+                ```
+            select count(*) as result from identities i
+                join accounts a on a.user_id=i.user_id
+                where i.provider='email' and
+                    i.phone='${email}' and
+                    a.created=1 and
+                    a.ignored<>1
+            ```);
+            if (number_of_created_accounts && number_of_created_accounts[0][0].result > 0) {
                 console.log(
-                    '-- /submit_email existing_email -->',
+                    "-- /submit_email there are created accounts -->",
                     this.session.uid,
-                    email,
-                    existing_email.user_id
+                    email
                 );
-                const act = yield models.Account.findOne({
-                    attributes: ['id'],
-                    where: {user_id: existing_email.user_id, ignored: false, created: true},
-                    order: 'id DESC'
-                });
-                if (act) {
-                    this.flash = {error: 'This email has already been taken'};
-                    this.redirect(`/enter_email?email=${email}&account=${account}`);
-                    return;
-                }
+                this.flash = {error: 'This email has already been used'};
+                this.redirect(`/enter_email?email=${email}&account=${account}`);
+                return;
             }
 
             let user = yield models.User.findOne({ attributes: ['id'], where: { id: this.session.user }});
@@ -297,18 +293,14 @@ export default function useEnterAndConfirmEmailPages(app) {
             }
 
             let confirmation_code = secureRandom.randomBuffer(13).toString("hex");
-            if (existing_email && existing_email.user_id === user.id) {
-                confirmation_code = existing_email.confirmation_code;
-            } else {
-                // create identity
-                yield models.Identity.create({
-                    user_id: user.id,
-                    provider: 'email',
-                    verified: false,
-                    email,
-                    confirmation_code
-                });
-            }
+            // create identity
+            yield models.Identity.create({
+                user_id: user.id,
+                provider: 'email',
+                verified: false,
+                email,
+                confirmation_code
+            });
 
             console.log(
                 "-- /submit_email ->",

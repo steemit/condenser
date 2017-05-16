@@ -194,14 +194,13 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
             </li>}
             {!inIco && !vertical && languageMenu}
             {!inIco && rocketchatItem}
-            {!inIco && submitStory}
-            {!inIco && !vertical && submitStoryPencil}
             {!inIco && !probablyLoggedIn && <li className={lcn}>
               <a href="/create_account" onClick={showSignUp}>{tt('g.sign_up')}</a>
             </li>}
             {!inIco && !probablyLoggedIn && <li className={lcn}>
               <a href="/login.html" onClick={showLogin}>{tt('g.login')}</a>
             </li>}
+            {!inIco && !probablyLoggedIn && !vertical && submitStoryPencil}
             {!inIco && !probablyLoggedIn && submitStory}
             {probablyLoggedIn && <li className={lcn}>
               <LoadingIndicator type="circle" inline />

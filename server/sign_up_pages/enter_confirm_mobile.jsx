@@ -36,12 +36,6 @@ const assets = Object.assign({}, require(assets_file), { script: [] });
 // }
 
 function* confirmMobileHandler(e) {
-    // // log x/y cords
-    // console.log("hereI am man", e);
-    // if(e.type === 'mouseenter') {
-    //     console.log(e.screenX, e.screenY);
-    // }
-
     if (!checkCSRF(this, this.request.body.csrf)) return;
     const confirmation_code = this.params && this.params.code
         ? this.params.code
@@ -53,71 +47,21 @@ function* confirmMobileHandler(e) {
         confirmation_code
     );
 
-    let user;
-    user = yield models.User.findOne({
-        where: { uid: this.session.uid }
+    const user = yield models.User.findOne({
+        where: { id: this.session.user }
     });
+    if (!user) {
+        this.flash = { error: "User session not found, please make sure you have cookies enabled in your browser for this website" };
+        this.redirect("/enter_mobile");
+        return;
+    }
     const mid = yield models.Identity.findOne({
-        where: { user_id: user.id,
-            confirmation_code: confirmation_code
-        }
+        where: { user_id: user.id, provider: 'phone', confirmation_code }
     });
 
-    // let mid = yield models.Identity.findOne({
-    //     attributes: ["id", "user_id", "verified", "updated_at", "phone"],
-    //     where: {
-    //         user_id: this.session.user,
-    //         confirmation_code
-    //         // provider: "phone"
-    //     },
-    //     order: "id DESC"
-    // });
-    let mid2;
     if (!mid) {
-        mid2 = yield models.Identity.findOne({
-            attributes: ["id"],
-            where: { user_id: this.session.user, provider: "phone" },
-            order: "id DESC"
-        });
-        if (mid) {
-            yield mid.destroy({ force: true });
-        }
-        this.flash = { error: "Wrong confirmation code." };
+        this.flash = { error: "Wrong confirmation code" };
         this.redirect("/enter_mobile");
-        return;
-    }
-    if (mid.verified) {
-        // this.flash = { success: "Phone number has already been verified" };
-        console.log("--/Already verified redirecting user", this.session.user);
-        this.redirect("/enter_mobile");
-        return;
-    }
-
-    // const used_phone = yield models.sequelize.query(`SELECT a.id FROM
-    // accounts a JOIN identities i ON i.user_id=a.user_id WHERE
-    // i.phone='${mid.phone}'`, { type: models.Sequelize.QueryTypes.SELECT})
-    const used_phone = yield models.Identity.findOne({
-        attributes: ["id", "user_id"],
-        where: {
-            phone: mid.phone,
-            provider: "phone",
-            verified: true
-        },
-        order: "id DESC"
-    });
-    if (used_phone) {
-        if (used_phone.user_id === this.session.user) {
-            // this.flash = {
-            //     success: "Phone number has already been verified"
-            // };
-            console.log("--/Already verified redirecting user", this.session.user);
-            this.redirect("/approval");
-        } else {
-            this.flash = {
-                error: "This phone number has already been used"
-            };
-            this.redirect("/enter_mobile");
-        }
         return;
     }
 
@@ -268,14 +212,7 @@ recovery should your account ever be compromised.</em>
         //     }
         // }
 
-        const number_of_created_accounts = yield models.sequelize.query(`
-            select count(*) as result from identities i
-                join accounts a on a.user_id=i.user_id
-                where i.provider='phone' and
-                    i.phone='${phone}' and
-                    a.created=1 and
-                    a.ignored<>1
-            `);
+        const number_of_created_accounts = yield models.sequelize.query(`select count(*) as result from identities i join accounts a on a.user_id=i.user_id where i.provider='phone' and i.phone='${phone}' and a.created=1 and a.ignored<>1`);
         if (number_of_created_accounts && number_of_created_accounts[0][0].result > 0) {
             console.log(
                 "-- /submit_mobile there are created accounts -->",

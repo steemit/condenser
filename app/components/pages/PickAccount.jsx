@@ -1,12 +1,13 @@
 /* eslint react/prop-types: 0 */
+/*global $STM_csrf, $STM_Config */
 import React from 'react';
 import {connect} from 'react-redux';
 import user from 'app/redux/User';
 import {api} from 'steem';
-import {PrivateKey} from 'steem/lib/auth/ecc';
 import {validate_account_name} from 'app/utils/ChainValidation';
 import runTests from 'app/utils/BrowserTests';
 import Progress from 'react-foundation-components/lib/global/progress-bar';
+import { Link } from 'react-router';
 
 class PickAccount extends React.Component {
 
@@ -87,18 +88,20 @@ class PickAccount extends React.Component {
         if (!process.env.BROWSER) { // don't render this page on the server
             return <div className="row">
                 <div className="column">
+                    <p className="text-center">LOADING..</p>
                 </div>
             </div>;
         }
 
         const {
-            name, password_valid, //showPasswordString,
-            name_error, server_error, loading, cryptographyFailure, showRules
+            name, name_error, server_error, loading, cryptographyFailure
         } = this.state;
 
         const {loggedIn, logout, offchainUser, serverBusy} = this.props;
         const submit_btn_disabled = loading || !name || name_error;
         const submit_btn_class = 'button action' + (submit_btn_disabled ? ' disabled' : '');
+
+        const account_status = offchainUser ? offchainUser.get('account_status') : null;
 
         if (serverBusy || $STM_Config.disable_signups) {
             return <div className="row">
@@ -121,10 +124,6 @@ class PickAccount extends React.Component {
                 </div>
             </div>;
         }
-        // if (!offchainUser) {
-        //     window.location = "/enter_user";
-        // }
-        // console.log("--> offchainUser2", this, session);
 
         if (loggedIn) {
             return <div className="row">
@@ -132,6 +131,31 @@ class PickAccount extends React.Component {
                     <div className="callout alert">
                         <p>You need to <a href="#" onClick={logout}>Logout</a> before you can create another account.</p>
                         <p>Please note that Steemit can only register one account per verified user.</p>
+                    </div>
+                </div>
+            </div>;
+        }
+
+        if (account_status === 'waiting') {
+            return <div className="row">
+                <div className="column">
+                    <br />
+                    <div className="callout alert">
+                        <p>Your sign up request is not confirmed yet, we will send you a confirmation email as soon as we process it.</p>
+                        <p>It usually takes up to one business day to process a request, please be patient.</p>
+                        <p>Drop us a <a href="mailto:support@steemit.com?subject=Sign Up">message</a> if it takes longer or you need to sign up sooner.</p>
+                    </div>
+                </div>
+            </div>;
+        }
+
+        if (account_status === 'approved') {
+            return <div className="row">
+                <div className="column">
+                    <br />
+                    <div className="callout success">
+                        <p>Congratulations! Your sign up request has been approved.</p>
+                        <p><Link to="/create_account">Proceed to Create Account Form</Link></p>
                     </div>
                 </div>
             </div>;
@@ -187,17 +211,10 @@ class PickAccount extends React.Component {
                                 <input type="text" name="name" autoComplete="off" onChange={this.onNameChange} value={name} placeholder={"Name..."} />
                                 <p>{name_error}</p>
                             </div>
-                            {/*<GeneratedPasswordInput onChange={this.onPasswordChange} disabled={loading} showPasswordString={name.length > 0 && !name_error} />*/}
-                            {/*<br />*/}
-                            {/*{next_step && <div>{next_step}<br /></div>}*/}
-                            {/*<noscript>*/}
-                            {/*<div className="callout alert">*/}
-                            {/*<p>This form requires javascript to be enabled in your browser</p>*/}
-                            {/*</div>*/}
-                            {/*</noscript>*/}
-                            {/*{loading && <LoadingIndicator type="circle" />}*/}
                             <input disabled={submit_btn_disabled} type="submit" className={submit_btn_class} value="CONTINUE" />
                         </form>
+                        <br />
+                        <p className="secondary">Already have account? <Link to="/login.html">Login</Link></p>
                     </div>
                 </div>
             </div>

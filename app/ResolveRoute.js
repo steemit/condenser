@@ -13,9 +13,6 @@ export default function resolveRoute(path)
     if (path === '/') {
         return {page: 'PostsIndex', params: ['trending']};
     }
-    if (path.indexOf('@bm-chara728')) {
-        return {page: 'NotFound'};
-    }
     if (path === '/about.html') {
         return {page: 'About'};
     }

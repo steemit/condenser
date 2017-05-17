@@ -27,7 +27,7 @@ const iframeWhitelist = [
                 '&show_user=true&show_reposts=false&visual=true'
         }
     },
-    { re: /^(https?:)?\/\/www.google.com\/maps\/embed\/*/i,
+    { re: /^(https?:)?\/\/www.google.com\/maps\/*/i,
         fn: (src) => {
             if(!src) return null;
             return src;

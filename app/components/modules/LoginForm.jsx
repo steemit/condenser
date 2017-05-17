@@ -149,7 +149,7 @@ class LoginForm extends Component {
         const submitLabel = loginBroadcastOperation ? tt('g.sign_in') : tt('g.login');
         let error = password.touched && password.error ? password.error : this.props.login_error;
         if (error === 'owner_login_blocked') {
-            error = <span>{tt('loginform_jsx.this_password_is_bound_to_your_account')}
+            error = <span>{tt('loginform_jsx.this_password_is_bound_to_your_account_owner_key')}
                 {tt('loginform_jsx.however_you_can_use_it_to')}<a onClick={this.showChangePassword}>{tt('loginform_jsx.update_your_password')}</a> {tt('loginform_jsx.to_obtain_a_more_secure_set_of_keys')}</span>
         } else if (error === 'active_login_blocked') {
             error = <span>{tt('loginform_jsx.this_password_is_bound_to_your_account_active_key')} {tt('loginform_jsx.you_may_use_this_active_key_on_other_more')}</span>

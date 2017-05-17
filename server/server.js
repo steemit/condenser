@@ -7,6 +7,7 @@ import Koa from 'koa';
 import mount from 'koa-mount';
 import helmet from 'koa-helmet';
 import koa_logger from 'koa-logger';
+import requestTime from './requesttimings';
 import prod_logger from './prod_logger';
 import favicon from 'koa-favicon';
 import staticCache from 'koa-static-cache';
@@ -39,6 +40,8 @@ app.name = 'Steemit app';
 const env = process.env.NODE_ENV || 'development';
 // cache of a thousand days
 const cacheOpts = { maxAge: 86400000, gzip: true };
+
+app.use(requestTime());
 
 app.keys = [config.get('session_key')];
 

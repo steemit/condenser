@@ -10,6 +10,7 @@ import runTests from 'app/utils/BrowserTests';
 import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInput';
 import {saveCords} from 'app/utils/ServerApiClient';
 import {api} from 'steem';
+import { Link } from 'react-router';
 
 class CreateAccount extends React.Component {
 
@@ -217,7 +218,7 @@ class CreateAccount extends React.Component {
                     <div className="callout alert">
                         <p>It looks like your sign up request is not approved yet or you already created an account.<br />
                            Please try again later or contact <a href="mailto:support@steemit.com">support@steemit.com</a> for the status of your request.<br />
-                           If you didn't submit your sign up application yet, <a href="/pick_account">apply now</a>!
+                           If you didn't submit your sign up application yet, <Link to="/pick_account">apply now</Link>!
                         </p>
                     </div>
                 </div>

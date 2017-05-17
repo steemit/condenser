@@ -36,7 +36,7 @@ export function* getState({payload: {url}}) {
         yield put(g.actions.receiveState(state));
     } catch (error) {
         console.error('~~ Saga getState error ~~>', url, error);
-        yield put({type: 'global/STEEM_API_ERROR', error: error.message});
+        yield put({type: 'global/CHAIN_API_ERROR', error: error.message});
     }
 }
 

@@ -27,7 +27,7 @@ export default function reducer(state = defaultState, action) {
     if (action.type === '@@router/LOCATION_CHANGE') {
         return state.set('location', {pathname: action.payload.pathname});
     }
-    if (action.type === 'STEEM_API_ERROR') {
+    if (action.type === 'CHAIN_API_ERROR') {
         return state.set('error', action.error).set('loading', false);
     }
     if (action.type === 'WS_CONNECTION_STATUS') {

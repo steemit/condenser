@@ -45,6 +45,13 @@ const cacheOpts = { maxAge: 86400000, gzip: true };
 app.keys = [config.get('session_key')];
 
 const crypto_key = config.get('server_session_secret');
+
+// TODO: To close #366 needs to edit ./node_modules/@steem/crypto-session/index.js
+// vim ./node_modules/@steem/crypto-session/index.js
+// #65 - throw new Error('@steem/crypto-session: Discarding session: ' + text)
+// #65 + //throw new Error('@steem/crypto-session: Discarding session: ' + text)
+// #66 + console.error('@steem/crypto-session: Discarding session', text, error2);
+// #67 + return {};
 session(app, {
     maxAge: 1000 * 3600 * 24 * 60,
     crypto_key,

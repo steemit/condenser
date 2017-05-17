@@ -1,7 +1,7 @@
 import React from "react";
 import OrderbookRow from "./OrderbookRow";
 import tt from 'counterpart';
-import { LIQUID_TOKEN, DEBT_TOKEN_SHORT } from 'app/client_config';
+import { DEBT_TOKEN_SHORT } from 'app/client_config';
 
 export default class Orderbook extends React.Component {
 
@@ -44,6 +44,8 @@ export default class Orderbook extends React.Component {
     }
 
     renderBuySellHeader() {
+        const LIQUID_TOKEN = tt('token_names.LIQUID_TOKEN')
+
         let buy = this.props.side === "bids";
 
         return (

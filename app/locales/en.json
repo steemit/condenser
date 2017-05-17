@@ -1,5 +1,17 @@
 {
+  "token_names": {
+    "LIQUID_TOKEN": "Golos",
+    "LIQUID_TOKEN_UPPERCASE" : "GOLOS",
+    "VESTING_TOKEN" : "Golos Power",
+    "VESTING_TOKEN_UPPERCASE" : "GOLOS POWER",
+    "VESTING_TOKEN2" : "Golos Power",
+    "VESTING_TOKENS" : "Golos Power",
+    "DEBT_TOKEN" : "GOLD BACKED GOLOS",
+    "DEBT_TOKENS" : "GOLD BACKED GOLOS",
+    "TOKEN_WORTH" : "~1 mg of gold"
+  },
   "g": {
+    "APP_NAME" : "Golos",
     "24_hour": "24 hour",
     "30_day": "30 day",
     "age": "age",
@@ -8,6 +20,7 @@
     "and": "and",
     "are_you_sure": "Are you sure?",
     "ask": "Ask",
+    "auto": "auto",
     "back": "Back",
     "balances": "Balances",
     "bid": "Bid",
@@ -412,7 +425,7 @@
     "order_cancelled": "Order %(order_id)s cancelled.",
     "higher": "Higher",
     "lower": "Lower",
-    "total_DEBT_TOKEN_SHORT_CURRENCY_SIGN": "Total %(DEBT_TOKEN_SHORT)s (%(CURRENCY_SIGN)s)"
+    "total_DEBT_TOKEN_SHORT_CURRENCY_SIGN": "Total %(DEBT_TOKEN_SHORT)s)"
   },
   "recoveraccountstep1_jsx": {
     "not_valid": "Not valid",
@@ -472,7 +485,16 @@
     "author_rewards_history": "Author Rewards History"
   },
   "plurals": {
-    "reply_count": "{replyCount, plural,\n=0 {no replies}\none {1 reply}\nother {%(replyCount)s replies}}",
+    "reply_count": {
+      "zero": "no replies",
+      "one": "1 reply",
+      "other": "%(count)s replies"
+    },
+    "view_count": {
+      "zero": "no views",
+      "one": "1 view",
+      "other": "%(count)s views"
+    },
     "author_rewards_last_24_hours": "Author rewards last 24 hours",
     "daily_average_author_rewards": "Daily average author rewards",
     "balance": "Balance",
@@ -559,9 +581,17 @@
   },
   "votesandcomments_jsx": {
     "no_responses_yet_click_to_respond": "No responses yet. Click to respond.",
-    "response_count": "{responseCount, plural,\n=0 {no responses}\none {1 responses}\nother {%(responseCount)s responses}}",
+    "response_count": {
+      "zero": "no responses",
+      "one": "1 responses",
+      "other": "%(count)s responses"
+    },
     "click_to_respond": "Click to respond",
-    "vote_count": "{voteCount, plural,\n=0 {no votes}\none {1 vote}\nother {%(voteCount)s votes}}"
+    "vote_count": {
+      "zero": "no votes",
+      "one": "1 vote",
+      "other": "%(count)s votes"
+    }
   },
   "userkeys_jsx": {
     "public": "Public",
@@ -616,12 +646,12 @@
   },
   "tips_js": {
     "tradeable_tokens_that_may_be_transferred_anywhere_at_anytime": "Tradeable tokens that may be transferred anywhere at anytime.",
-    "LIQUID_TOKEN_can_be_converted_to_VESTING_TOKEN_in_a_process_called_powering_up": "%(LIQUID_TOKEN)s can be converted to %(VESTING_TOKEN)s in a process called powering up.",
+    "LIQUID_TOKEN_can_be_converted_to_VESTING_TOKEN_in_a_process_called_powering_up": "%(LIQUID_TOKEN)s can be converted to %(VESTING_TOKEN2)s in a process called powering up.",
     "tokens_worth_about_AMOUNT_of_LIQUID_TOKEN": "Tokens worth about %(amount)s of %(LIQUID_TOKEN)s.",
     "influence_tokens_which_give_you_more_control_over": "Influence tokens which give you more control over post payouts and allow you to earn on curation rewards.",
     "the_more_you_hold_the_more_you_influence_post_rewards": "The more you hold the more you influence post rewards and earn for accurate voting.",
     "the_estimated_value_is_based_on_an_average_value_of_steem_in_US_dollars": "The estimated value is based on an average value of %(LIQUID_TOKEN)s in US dollars.",
-    "VESTING_TOKEN_is_non_transferrable_and_requires_convert_back_to_LIQUID_TOKEN": "%(VESTING_TOKEN)s is non-transferrable and requires 3 months (13 payments) to convert back to %(LIQUID_TOKEN)s.",
+    "VESTING_TOKEN_is_non_transferrable_and_requires_convert_back_to_LIQUID_TOKEN": "%(VESTING_TOKEN2)s is non-transferrable and requires 3 months (13 payments) to convert back to %(LIQUID_TOKEN)s.",
     "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again": "Converted %(VESTING_TOKEN)s can be sent to yourself or someone else but can not transfer again without converting back to %(LIQUID_TOKEN)s.",
     "profile": "Profile",
     "send_to_account": "Send to account",
@@ -819,7 +849,7 @@
     "advanced": "Advanced",
     "convert_to_VESTING_TOKEN": "Convert to %(VESTING_TOKEN)s",
     "balance_subject_to_3_day_withdraw_waiting_period": "Balance subject to 3 day withdraw waiting period,",
-    "move_funds_to_another_account": "Move funds to another %(APP_NAME)s account.",
+    "move_funds_to_another_account": "Move funds to another account.",
     "protect_funds_by_requiring_a_3_day_withdraw_waiting_period": "Protect funds by requiring a 3 day withdraw waiting period.",
     "withdraw_funds_after_the_required_3_day_waiting_period": "Withdraw funds after the required 3 day waiting period.",
     "balance": "Balance"
@@ -834,8 +864,7 @@
     "convert_to_LIQUID_TOKEN": "Convert to %(LIQUID_TOKEN)s",
     "withdraw_LIQUID_TOKEN": "Withdraw %(LIQUID_TOKEN)s",
     "withdraw_DEBT_TOKENS": "Withdraw %(DEBT_TOKENS)s",
-    "tokens_worth_about_1_of_LIQUID_TICKER": "Tokens worth about $1.00 of %(LIQUID_TICKER)s, currently collecting %(sbdInterest)s%% APR.",
-    "savingstip_currently_collecting": "%(savingsTip)s, currently collecting %(sbdInterest)s%% APR.",
+    "tokens_worth_about_1_of_LIQUID_TICKER": "Tokens worth about %(TOKEN_WORTH)s in %(LIQUID_TICKER)s.",
     "balances": "BALANCES",
     "buy_LIQUID_TOKEN_or_VESTING_TOKEN": "Buy %(LIQUID_TOKEN)s or %(VESTING_TOKEN)s",
     "savings": "SAVINGS",

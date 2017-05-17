@@ -9,7 +9,7 @@ import {browserTests} from 'shared/ecc/test/BrowserTests'
 import {validate_account_name} from 'app/utils/ChainValidation';
 import {countDecimals} from 'app/utils/ParsersAndFormatters'
 import tt from 'counterpart';
-import { APP_NAME, LIQUID_TOKEN, DEBT_TOKEN, VESTING_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TICKER, VEST_TICKER, DEBT_TICKER , VESTING_TOKEN2, VESTING_TOKENS} from 'app/client_config';
+import { LIQUID_TICKER, DEBT_TICKER , VESTING_TOKEN2 } from 'app/client_config';
 
 /** Warning .. This is used for Power UP too. */
 class TransferForm extends Component {
@@ -119,6 +119,11 @@ class TransferForm extends Component {
     }
 
     render() {
+        const LIQUID_TOKEN = tt('token_names.LIQUID_TOKEN')
+        const VESTING_TOKEN =  tt('token_names.VESTING_TOKEN')
+        const VESTING_TOKENS = tt('token_names.VESTING_TOKENS')
+        const VESTING_TOKEN2 = tt('token_names.VESTING_TOKEN2')
+
 		const transferTips = {
 			'Transfer to Account': tt('transfer_jsx.move_funds_to_another_account'),
 			'Transfer to Savings': tt('transfer_jsx.protect_funds_by_requiring_a_3_day_withdraw_waiting_period'),

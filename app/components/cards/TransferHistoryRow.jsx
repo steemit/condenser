@@ -3,15 +3,20 @@ import {connect} from 'react-redux'
 import { Link } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Tooltip from 'app/components/elements/Tooltip';
-// import Icon from 'app/components/elements/Icon';
 import Memo from 'app/components/elements/Memo'
 import {numberWithCommas, vestsToSp} from 'app/utils/StateFunctions'
 import tt from 'counterpart';
-import { APP_NAME, DEBT_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TOKEN, CURRENCY_SIGN, VESTING_TOKEN, VEST_TICKER, LIQUID_TICKER, VESTING_TOKENS } from 'app/client_config';
+import { VEST_TICKER, LIQUID_TICKER, DEBT_TOKEN_SHORT } from 'app/client_config';
 
 class TransferHistoryRow extends React.Component {
 
     render() {
+        const LIQUID_TOKEN = tt('token_names.LIQUID_TOKEN')
+        const DEBT_TOKEN = tt('token_names.DEBT_TOKEN')
+        const DEBT_TOKENS = tt('token_names.DEBT_TOKENS')
+        const VESTING_TOKEN =  tt('token_names.VESTING_TOKEN')
+        const VESTING_TOKENS = tt('token_names.VESTING_TOKENS')
+
         const {op, context, curation_reward, author_reward} = this.props
         // context -> account perspective
 

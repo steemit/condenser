@@ -1,4 +1,3 @@
-import Immutable from 'immutable';
 import React from 'react';
 import { Link } from 'react-router';
 import {connect} from 'react-redux';
@@ -12,7 +11,7 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import NotifiCounter from 'app/components/elements/NotifiCounter';
 import tt from 'counterpart';
 import store from 'store';
-import {APP_NAME, DEFAULT_LANGUAGE, LANGUAGES, LIQUID_TICKER, DEBT_TICKER} from 'app/client_config';
+import { DEFAULT_LANGUAGE, LANGUAGES, LIQUID_TICKER, DEBT_TICKER } from 'app/client_config';
 import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
 import {vestingSteem} from 'app/utils/StateFunctions';
 
@@ -67,6 +66,8 @@ const calculateEstimateOutput = ({a, p, sw, g}) => {
 }
 
 function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops, username, showLogin, logout, loggedIn, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn, showSignUp, location, changeLanguage}) {
+    const APP_NAME = tt('g.APP_NAME');
+
     const mcn = 'menu' + (vertical ? ' vertical show-for-small-only' : '');
     const mcl = vertical ? '' : ' sub-menu';
     const lcn = vertical ? '' : 'show-for-medium';

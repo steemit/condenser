@@ -1,6 +1,5 @@
 /* eslint react/prop-types: 0 */
 import React from 'react';
-import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import Apis from 'shared/api_client/ApiInstances';
@@ -8,11 +7,9 @@ import { PrivateKey } from 'shared/ecc';
 import user from 'app/redux/User';
 import {validate_account_name} from 'app/utils/ChainValidation';
 import SignUp from 'app/components/modules/SignUp';
-import runTests from 'shared/ecc/test/BrowserTests';
 import g from 'app/redux/GlobalReducer';
 import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInput';
-import { FormattedHTMLMessage } from 'react-intl';
-import { APP_NAME, APP_DOMAIN, LIQUID_TOKEN, SUPPORT_EMAIL } from 'app/client_config';
+import { APP_DOMAIN, SUPPORT_EMAIL } from 'app/client_config';
 import tt from 'counterpart';
 //import SignupProgressBar from 'app/components/elements/SignupProgressBar';
 
@@ -152,6 +149,8 @@ class CreateAccount extends React.Component {
                 </div>
             </div>;
         }
+
+        const APP_NAME = tt('g.APP_NAME');
 
         const {
             name, password_valid, showPasswordString,

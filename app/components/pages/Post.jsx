@@ -8,7 +8,6 @@ import {Set} from 'immutable'
 import tt from 'counterpart';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
-import { LIQUID_TOKEN } from 'app/client_config';
 
 class Post extends React.Component {
 
@@ -55,6 +54,8 @@ class Post extends React.Component {
     }
 
     render() {
+        const LIQUID_TOKEN = tt('token_names.LIQUID_TOKEN')
+
         const {showSignUp} = this
         const {current_user, ignoring, signup_bonus, content} = this.props
         const {showNegativeComments, commentHidden, showAnyway} = this.state

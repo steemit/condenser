@@ -20,7 +20,7 @@ const defaultNavigate = (e) => {
     browserHistory.push(a.pathname + a.search + a.hash);
 };
 
-function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn}) {
+function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn, account_status}) {
     const mcn = 'menu' + (vertical ? ' vertical show-for-small-only' : '');
     const mcl = vertical ? '' : ' sub-menu';
     const lcn = vertical ? '' : 'show-for-medium';
@@ -87,7 +87,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
     return (
         <ul className={mcn + mcl}>
             {!vertical && <li className="Header__search"><a href="/static/search.html" title="Search"><Icon name="search" /></a></li>}
-            <li className={lcn}><a href="/pick_account">Sign Up</a></li>
+            <li className={lcn}><a href="/pick_account">Sign Up</a>{account_status === 'approved' && <div className="checkmark">&#10004;</div>}</li>
             <li className={lcn}><a href="/login.html" onClick={showLogin}>Login</a></li>
             {submit_story}
             {!vertical && submit_icon}
@@ -120,10 +120,13 @@ export default connect(
         }
         const username = state.user.getIn(['current', 'username']);
         const loggedIn = !!username;
+        const offchainUser = state.offchain.get('user');
+        const account_status = offchainUser ? offchainUser.get('account_status') : null;
         return {
             username,
             loggedIn,
-            probablyLoggedIn: false
+            probablyLoggedIn: false,
+            account_status
         }
     },
     dispatch => ({

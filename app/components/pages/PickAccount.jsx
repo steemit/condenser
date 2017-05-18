@@ -141,9 +141,9 @@ class PickAccount extends React.Component {
                 <div className="column">
                     <br />
                     <div className="callout alert">
-                        <p>Your sign up request is not confirmed yet, we will send you a confirmation email as soon as we process it.</p>
-                        <p>It usually takes up to one business day to process a request, please be patient.</p>
-                        <p>Drop us a <a href="mailto:support@steemit.com?subject=Sign Up">message</a> if it takes longer or you need to sign up sooner.</p>
+                        <p>It seems like you've already submitted your sign up request. It takes us a little time to process requests (for security reasons) so bear with us. It usually takes us 1 to 2 business days to do this.</p>
+                        <p>If it's taking longer than that, then <a href="mailto:support@steemit.com?subject=Sign Up">email us here</a>, and we'll see what we can do.</p>
+                        <p>See you soon on Steemit!</p>
                     </div>
                 </div>
             </div>;

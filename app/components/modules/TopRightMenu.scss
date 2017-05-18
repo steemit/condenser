@@ -1,5 +1,6 @@
 .sub-menu {
     li {
+        position: relative;
         padding: .7rem 1rem;
         a {
             padding: 0px;
@@ -32,7 +33,7 @@ li.Header__userpic {
     }
 }
 
-div.Header__top
+.Header__top
 {
     li.Header__search {
         padding: 0;
@@ -47,5 +48,21 @@ div.Header__top
         > a {
             padding: 14px;
         }
+    }
+    .checkmark {
+        background-color: #00a000;
+        position: absolute;
+        top: 10px;
+        right: 6px;
+        display: inline-block;
+        color: $white;
+        border-radius: 2px;
+        font-size: 9px;
+        padding: 2px;
+        min-width: 14px;
+        text-align: center;
+        line-height: 12px;
+        height: 16px;
+        margin-left: 0.2rem;
     }
 }

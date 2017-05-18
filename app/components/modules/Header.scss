@@ -25,12 +25,6 @@
   .menu-icon {
     margin: 0.2rem 0;
   }
-  svg > path {
-    fill: $dark-gray;
-  }
-  //.submit-story {
-  //  margin-right: 1rem;
-  //}
 }
 
 .Header__top {
@@ -58,6 +52,11 @@
       font-size: 1em;
     }
   }
+
+  svg > path {
+    fill: $dark-gray;
+  }
+
   @media screen and (max-width: 39.9375em) {
       .shrink {
           padding: .3rem 1rem 0 1rem;
@@ -110,6 +109,11 @@ ul > li > .button {
       margin-left: 0.24rem;
     }
   }
+    //domestic icons
+    [class*="/all"],
+    .caret-down {
+      fill: $dark-gray;
+    }
   a.active {
     color: $black;
   }

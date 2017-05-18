@@ -93,7 +93,7 @@
     "form_requires_javascript_to_be_enabled": "Эта форма требует активированный javascript в браузере"
   },
   "curationrewards_jsx": {
-    "curation_rewards_last_24_hours": "Кураторские награды за полседние 24 часа",
+    "curation_rewards_last_24_hours": "Кураторские награды за последние 24 часа",
     "daily_average_curation_rewards": "Среднесуточные кураторские награды",
     "estimated_curation_rewards_last_week": "Оценочные кураторские награды за последнюю неделю",
     "curation_rewards_last_week": "Кураторские награды за последнюю неделю",
@@ -217,7 +217,6 @@
     "reputation": "Репутация",
     "request": "запрос",
     "required": "Обязательно",
-    "receive": "Получено",
     "rewards": "Награды",
     "save": "Сохранить",
     "saved": "Сохранено",
@@ -280,7 +279,7 @@
     "current_password": "Текущий пароль",
     "generated_password": "Сгенерированный пароль",
     "backup_password_by_storing_it": "Сделайте резервную копию в менеджере паролей или текстовом файле",
-    "click_to_generate_password": "Нажмите, чтобы сгененировать пароль",
+    "click_to_generate_password": "Нажмите, чтобы сгенерировать пароль",
     "re_enter_generate_password": "Повторно введите пароль",
     "understand_that_APP_NAME_cannot_recover_password": "Я понимаю, что %(APP_NAME)s не может восстановить потерянные пароли",
     "i_saved_password": "Я надежно сохранил сгенерированный пароль",
@@ -308,7 +307,7 @@
     "hide_private_key": "Скрыть приватный ключ",
     "show_private_key": "Показать приватный ключ",
     "login_to_show": "Авторизируйтесь для этой транзакции",
-    "not_valid_email": "Не действительный адрес",
+    "not_valid_email": "Недействительный адрес",
     "thank_you_for_being_an_early_visitor_to_APP_NAME": "Благодарим Вас за то что являетесь ранним посетителем %(APP_NAME)s. Мы свяжемся с Вами при первой же возможности.",
     "author_rewards": "Авторские награды",
     "curation_rewards": "Кураторские награды",
@@ -355,7 +354,7 @@
     "requires_positive_karma": "необходима позитивная карма Reddit комментирования",
     "dont_have_facebook": "Нет Facebook или Reddit аккаунта?",
     "subscribe_to_get_sms_confirm": "Подпишитесь, чтобы получить SMS когда подтверждение будет доступно",
-    "by_verifying_you_agree": "Подтверждая ваш аккаунт Вы соглашаетесь с условиями проекта %(APP_NAME)s",
+    "by_verifying_you_agree": "Подтверждая Ваш аккаунт Вы соглашаетесь с условиями проекта %(APP_NAME)s",
     "by_verifying_you_agree_terms_and_conditions": "Условия и Соглашения",
     "terms_and_conditions": "Условия и Соглашения",
     "cryptography_test_failed": "Криптографический тест провален",
@@ -374,7 +373,7 @@
     "update_your_password": "обновить Ваш пароль",
     "enter_username": "Введи свое имя пользователя",
     "password_or_wif": "Пароль или WIF",
-    "requires_auth_key": "Эта операция требует вашего %(authType)s ключа (или используйте главный пароль)",
+    "requires_auth_key": "Эта операция требует Вашего %(authType)s ключа (или используйте главный пароль)",
     "keep_me_logged_in": "Оставить меня залогиненным"
   },
   "header_jsx": {

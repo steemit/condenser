@@ -193,8 +193,8 @@ class Header extends React.Component {
             currentDomesticKey = key;
             currentDomesticTitle = DOMESTIC[currentDomesticKey];
           }
-          else
-            domestic_menu.push({link: '#' + key, onClick: this.props.changeDomestic, value: DOMESTIC[key]})
+
+          domestic_menu.push({link: '#' + key, onClick: this.props.changeDomestic, value: DOMESTIC[key]})
         }
 
         let sort_order_extra_menu = null;

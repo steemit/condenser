@@ -87,6 +87,7 @@ export const DOMESTIC = {
   all: 'All langs',
   ru:  'Русский',
   ua:  'Український',
+  us:  'English',
   by:  'Белору́сский',
   rs:  'Srpski',
   ro:  'Română',
@@ -97,7 +98,6 @@ export const DOMESTIC = {
   ar:  'العربية',
   cn:  '漢',
   es:  'Español',
-  us:  'English',
   in:  'हिन्दी',
   pt:  'Portuguesa',
   fr:  'Français'

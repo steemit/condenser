@@ -676,7 +676,11 @@
   },
   "prolong_post_jsx": {
     "promote_post": "Prolong Post",
-    "spend_your_DEBT_TOKEN_to_prolong_payments_window_post": "Spend your %(DEBT_TOKEN)s's to prolong payments window for this post",
+    "prolong_post": "Prolong Post",
+    "days_short": "d.",
+    "days": "days",
+    "payouts": "Payouts",
+    "spend_your_DEBT_TOKEN_to_prolong_payments_window_post": "Spend your %(DEBT_TOKENS)s to prolong payments window for this post",
     "you_successfully_prolong_this_post": "You successfully prolong this post",
     "leave_this_unchecked_to_receive_half_your_reward": "Leave this unchecked to receive 1/2 your reward in %(VESTING_TOKEN)s and 1/2 in %(DEBT_TOKEN)s",
     "pay_me_100_in_VESTING_TOKEN": "Pay me 100%% in %(VESTING_TOKEN)s",

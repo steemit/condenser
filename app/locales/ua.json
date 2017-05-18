@@ -574,8 +574,11 @@
     "following": "Підписки"
   },
   "prolong_post_jsx": {
+    "days_short": "д.",
+    "days": "кількість днів",
+    "payouts": "Буде знято",
     "prolong_post": "Продовжити вікно виплат у поста",
-    "spend_your_DEBT_TOKEN_to_prolong_withdrawals_window_post": "Використовуйте Ваші %(DEBT_TOKEN)s, щоб продовжити вікно виплат у поста",
+    "spend_your_DEBT_TOKEN_to_prolong_payments_window_post": "Використовуйте Ваші %(DEBT_TOKENS)s, щоб продовжити вікно виплат у поста",
     "you_successfully_promoted_this_post": "Ви успішно просунули цей пост",
     "leave_this_unchecked_to_receive_half_your_reward": "Залиште невідміченим для отримання 1/2 винагороди у %(VESTING_TOKEN)s та 1/2 %(DEBT_TOKEN)s",
     "pay_me_100_in_VESTING_TOKEN": "Заплатіть мені 100%% у%(VESTING_TOKEN)s",

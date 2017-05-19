@@ -178,7 +178,6 @@ app.use(function*(next) {
             this.session.r = this.request.headers.referer;
         }
     }
-    console.log("--> incoming referer --", this.session.uid, this.request.headers.referer);
     yield next;
 });
 

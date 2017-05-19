@@ -283,6 +283,15 @@ export default function useEnterAndConfirmEmailPages(app) {
                 });
                 this.session.user = user.id;
             }
+            // create referer attribute
+            let user_att = yield models.UserAttribute.findOne({ attributes: ['user_id', 'type_of'], where: { user_id: user.id, type_of: 'referer' }});
+            if (!user_att) {
+                yield models.UserAttribute.create({
+                    user_id: user.id,
+                    value: this.session.r,
+                    type_of: 'referer'
+                });
+            }
 
             let confirmation_code = secureRandom.randomBuffer(13).toString("hex");
             // create identity

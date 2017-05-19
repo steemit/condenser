@@ -171,15 +171,15 @@ app.use(function*(next) {
     if (!this.session.uid) {
         this.session.uid = secureRandom.randomBuffer(13).toString('hex');
         this.session.new_visit = true;
-        this.session.r = this.request.headers.referer;
+        this.session.r = this.request.referer;
     } else {
         this.session.new_visit = this.session.last_visit - last_visit > 1800;
         if (!this.session.r) {
-            this.session.r = this.request.headers.referer;
+            this.session.r = this.request.referer;
         }
     }
-    console.log("--> referer saved --", this.session.uid, this.session.r);
-    console.log("--> referer check --", this.session.uid, this.request.headers);
+    console.log("--> referer saved --", this.session.uid, this.request);
+    console.log("--> referer check --", this.session.uid, this.request.referer);
     yield next;
 });
 

@@ -180,7 +180,7 @@ export function* fetchState(location_change_action) {
         yield put(GlobalReducer.actions.receiveState(_state));
     } catch (error) {
         console.error('~~ Saga fetchState error ~~>', url, error);
-        yield put({type: 'global/STEEM_API_ERROR', error: error.message});
+        yield put({type: 'global/CHAIN_API_ERROR', error: error.message});
     }
 }
 
@@ -268,7 +268,7 @@ export function* fetchData(action) {
         yield put(GlobalReducer.actions.receiveData({data, order, category, author, permlink, accountname, keys}));
     } catch (error) {
         console.error('~~ Saga fetchData error ~~>', call_name, args, error);
-        yield put({type: 'global/STEEM_API_ERROR', error: error.message});
+        yield put({type: 'global/CHAIN_API_ERROR', error: error.message});
     }
 }
 
@@ -372,32 +372,21 @@ export function* watchPayoutWindowRequests() {
     yield* takeEvery('PAYOUT_WINDOW_REQUEST', fetchPayoutWindow);
 }
 
-export function* fetchPayoutWindow({payload: {type, author, permlink, cost, time, resolve, reject, onSuccess, onError}}) {
-  let callName = type === "cost" ? 'get_payout_extension_time_by_cost' : 'get_payout_extension_time_by_cost';
-  let args = {
-    author,
-    permlink,
-    cost,
-    time
-  };
-
-  const data = yield call([Apis, Apis.db_api], callName, args);
-  console.log('data')
-  console.log(data)
-  yield put(GlobalReducer.actions.receivePayoutWindow({payoutWindow: data}))
-  if (resolve && data) {
-    resolve(data);
-  } else if (reject && !data) {
-    reject();
+export function* fetchPayoutWindow({payload: {type, author, permlink, cost, time, onSuccess, onError}}) {
+  let callName = type === "getcost" ? 'get_payout_extension_cost_by_time' : 'get_payout_extension_time_by_cost';
+  try {
+    const data = yield call(
+      [Apis, Apis.db_api],
+      callName,
+      author,
+      permlink,
+      type === "getcost" ? time : cost
+    );
+    yield put(GlobalReducer.actions.receivePayoutWindow({payoutWindow: data, author, permlink, cost, time}));
+    if (onSuccess) onSuccess(data);
+  } catch (error) {
+    console.error('~~ Saga fetchPayoutWindow error ~~>', callName, error);
+    // yield put({type: 'global/CHAIN_API_ERROR', error: error.message});
+    if (onError) onError(error.message);
   }
-  // try {
-  //   const db_api = Apis.instance().db_api;
-  //   const data = yield call([db_api, db_api.exec], callName, args);
-  //   yield put(GlobalReducer.actions.receivePayoutWindow({payoutWindow: data, payer, author, permlink, cost, time})); // receivePayoutWindow({data, author, permlink, cost, time}));
-  //   if (onSuccess) onSuccess(data);
-  // } catch (error) {
-  //   console.error('~~ Saga fetchPayoutWindow error ~~>', callName, args, error);
-  //   // yield put({type: 'global/STEEM_API_ERROR', error: error.message});
-  //   if (onError) onError(error);
-  // }
 }

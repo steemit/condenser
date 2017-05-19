@@ -19,7 +19,7 @@ class ProlongPost extends Component {
         author: PropTypes.string.isRequired,
         permlink: PropTypes.string.isRequired,
         dispatchSubmit: React.PropTypes.func.isRequired,
-        dispatchGetPayoutCostByTime: React.PropTypes.func.isRequired,
+        dispatchGetPayoutWindow: React.PropTypes.func.isRequired,
     };
 
     constructor(props) {
@@ -40,49 +40,27 @@ class ProlongPost extends Component {
             const {author, permlink, onClose} = this.props
             const {amount} = this.state
             const now = new Date()
-            const time = now.addDays(days).getTime()
-            this.setState({loading: true});
-            console.log('-- ProlongPost.onGetPayoutCostByTime -->');
-            // this.props.dispatchGetPayoutCostByTime({
-            //   days,
-            //   author,
-            //   permlink,
-            //   onClose,
-            //   currentUser: this.props.currentUser,
-            //   errorCallback: this.errorCallback
-            // });
+            const time = now.addDays(days).toISOString().slice(0,-5)
+            // cost: parseFloat(amount, 10).toFixed(3) + ' ' + DEBT_TICKER // if get_time_by_cost
 
-            // this.props.dispatchGetPayoutCostByTime({
-            //   days,
-            //   author,
-            //   permlink,
-            //   onClose,
-            //   currentUser: this.props.currentUser,
-            //   errorCallback: this.errorCallback
+            this.setState({loading: true});
+            this.props.dispatchGetPayoutWindow({
+              type: 'getcost', // 'gettime' if get_time_by_cost
+              author,
+              permlink,
+              // cost, // if get_time_by_cost
+              time,
+              onClose,
+              onError: this.errorCallback,
             // })
             // .then(data => {
             //   if (data) {
-            //     console.log('data', data)
-            //       // browserHistory.replace(`/${content.category}/@${post}`)
+            //     // browserHistory.replace(`/${content.category}/@${post}`)
+            //     this.setState({days})
             //   }
-            //   this.setState({days})
             // }).catch((error) => {
             //   this.setState({loading: false});
             //   this.errorCallback(error)
-            // });
-
-            this.props.dispatchGetPayoutWindow({type: 'cost', author, permlink, time})
-            .then(data => {
-              if (data) {
-                console.log('data', data)
-                // browserHistory.replace(`/${content.category}/@${post}`)
-                this.setState({days})
-              }
-            }).catch((error) => {
-              console.log('------- error -------')
-              console.log(error)
-              this.setState({loading: false});
-              this.errorCallback(error)
             });
         }
     }
@@ -155,62 +133,18 @@ export default connect(
         return {...ownProps, currentAccount, currentUser, payoutWindow}
     },
     dispatch => ({
-        dispatchGetPayoutTimeByCost: ({amount, asset, author, permlink, currentUser, onClose, errorCallback}) => {
-            const cost = parseFloat(amount, 10).toFixed(3) + ' ' + asset
-            const successCallback = () => {}
-            // const successCallback = () => {
-            //     dispatch({type: 'global/GET_STATE', payload: {url: `@${username}/transfers`}}) // refresh transfer history
-            //     onClose()
-            // }
-            dispatch({
-                type: 'PAYOUT_WINDOW_REQUEST',
-                payload: {
-                  type: 'time',
-                  author,
-                  permlink,
-                  cost
-                },
-            })
+        dispatchGetPayoutWindow: ({type, author, permlink, time, cost, onClose, onError}) => {
+          const onSuccess = () => {
+            console.log('-- dispatchGetPayoutWindow.onSuccess --')
+            // dispatch({type: 'global/GET_STATE', payload: {url: `@${username}/transfers`}}) // refresh transfer history
+            // onClose()
+          }
+          dispatch({type: 'PAYOUT_WINDOW_REQUEST', payload: {type, author, permlink, time, cost, onSuccess, onError}})
         },
-
-        dispatchGetPayoutCostByTime: ({days, author, permlink, currentUser, onClose, errorCallback}) => {
-            const now = new Date()
-            const time = now.addDays(days).getTime()
-
-            // const successCallback = () => {}
-            // dispatch({
-            //     type: 'PAYOUT_WINDOW_REQUEST',
-            //     payload: {
-            //       type: 'cost',
-            //       author,
-            //       permlink,
-            //       time,
-            //       // onSuccess: successCallback,
-            //       // onError: errorCallback
-            //     }
-            // })
-            return new Promise((resolve, reject) => {
-              dispatch({
-                  type: 'PAYOUT_WINDOW_REQUEST',
-                  payload: {
-                    type: 'cost',
-                    author,
-                    permlink,
-                    time,
-                    resolve,
-                    reject
-                  }
-              })
-            })
-        },
-
-        dispatchGetPayoutWindow: (payload) => (new Promise((resolve, reject) => {
-            dispatch({type: 'PAYOUT_WINDOW_REQUEST', payload: {...payload, resolve, reject}})
-        })),
 
         dispatchSubmit: ({amount, days, asset, author, permlink, currentUser, onClose, errorCallback}) => {
             const now = new Date()
-            const timestamp = now.addDays(days)
+            const timestamp = now.addDays(days).toISOString().slice(0,-5)
             const username = currentUser.get('username')
             const successCallback = () => {
                 dispatch({type: 'global/GET_STATE', payload: {url: `@${username}/transfers`}}) // refresh transfer history

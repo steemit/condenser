@@ -1,4 +1,15 @@
 {
+  "token_names": {
+    "LIQUID_TOKEN": "Голос",
+    "LIQUID_TOKEN_UPPERCASE " : "ГОЛОС",
+    "VESTING_TOKEN" : "Сила Голоса",
+    "VESTING_TOKEN_UPPERCASE" : "СИЛА ГОЛОСА",
+    "VESTING_TOKEN2" : "Силу Голоса",
+    "VESTING_TOKENS" : "Силы Голоса",
+    "DEBT_TOKEN" : "Золотой",
+    "DEBT_TOKENS" : "Золотые",
+    "TOKEN_WORTH" : "~1 мг золота"
+  },
   "about_jsx": {
     "about_app": "О %(APP_NAME)s",
     "about_app_details": "%(APP_NAME)s - это социальная медиа платформа в которой каждый зарабатывает за создание и курирование контента. Он использует надежную систему цифровых очков под названием Голос, который поддерживает реальную ценность для цифровых наград через выявление рыночной цены и ликвидности.",
@@ -82,7 +93,7 @@
     "form_requires_javascript_to_be_enabled": "Эта форма требует активированный javascript в браузере"
   },
   "curationrewards_jsx": {
-    "curation_rewards_last_24_hours": "Кураторские награды за полседние 24 часа",
+    "curation_rewards_last_24_hours": "Кураторские награды за последние 24 часа",
     "daily_average_curation_rewards": "Среднесуточные кураторские награды",
     "estimated_curation_rewards_last_week": "Оценочные кураторские награды за последнюю неделю",
     "curation_rewards_last_week": "Кураторские награды за последнюю неделю",
@@ -112,6 +123,7 @@
     "alternative_sources": "Альтернативные источники"
   },
   "g": {
+    "APP_NAME" : "Голос",
     "24_hour": "24 часа",
     "30_day": "30 дней",
     "auto": "автоматически",
@@ -205,7 +217,6 @@
     "reputation": "Репутация",
     "request": "запрос",
     "required": "Обязательно",
-    "receive": "Получено",
     "rewards": "Награды",
     "save": "Сохранить",
     "saved": "Сохранено",
@@ -268,7 +279,7 @@
     "current_password": "Текущий пароль",
     "generated_password": "Сгенерированный пароль",
     "backup_password_by_storing_it": "Сделайте резервную копию в менеджере паролей или текстовом файле",
-    "click_to_generate_password": "Нажмите, чтобы сгененировать пароль",
+    "click_to_generate_password": "Нажмите, чтобы сгенерировать пароль",
     "re_enter_generate_password": "Повторно введите пароль",
     "understand_that_APP_NAME_cannot_recover_password": "Я понимаю, что %(APP_NAME)s не может восстановить потерянные пароли",
     "i_saved_password": "Я надежно сохранил сгенерированный пароль",
@@ -296,7 +307,7 @@
     "hide_private_key": "Скрыть приватный ключ",
     "show_private_key": "Показать приватный ключ",
     "login_to_show": "Авторизируйтесь для этой транзакции",
-    "not_valid_email": "Не действительный адрес",
+    "not_valid_email": "Недействительный адрес",
     "thank_you_for_being_an_early_visitor_to_APP_NAME": "Благодарим Вас за то что являетесь ранним посетителем %(APP_NAME)s. Мы свяжемся с Вами при первой же возможности.",
     "author_rewards": "Авторские награды",
     "curation_rewards": "Кураторские награды",
@@ -343,7 +354,7 @@
     "requires_positive_karma": "необходима позитивная карма Reddit комментирования",
     "dont_have_facebook": "Нет Facebook или Reddit аккаунта?",
     "subscribe_to_get_sms_confirm": "Подпишитесь, чтобы получить SMS когда подтверждение будет доступно",
-    "by_verifying_you_agree": "Подтверждая ваш аккаунт Вы соглашаетесь с условиями проекта %(APP_NAME)s",
+    "by_verifying_you_agree": "Подтверждая Ваш аккаунт Вы соглашаетесь с условиями проекта %(APP_NAME)s",
     "by_verifying_you_agree_terms_and_conditions": "Условия и Соглашения",
     "terms_and_conditions": "Условия и Соглашения",
     "cryptography_test_failed": "Криптографический тест провален",
@@ -362,7 +373,7 @@
     "update_your_password": "обновить Ваш пароль",
     "enter_username": "Введи свое имя пользователя",
     "password_or_wif": "Пароль или WIF",
-    "requires_auth_key": "Эта операция требует вашего %(authType)s ключа (или используйте главный пароль)",
+    "requires_auth_key": "Эта операция требует Вашего %(authType)s ключа (или используйте главный пароль)",
     "keep_me_logged_in": "Оставить меня залогиненным"
   },
   "header_jsx": {
@@ -683,7 +694,7 @@
   },
   "tips_js": {
     "tradeable_tokens_that_may_be_transferred_anywhere_at_anytime": "Перемещаемые цифровые токены, которые могут переданы куда угодно в любой момент.",
-    "LIQUID_TOKEN_can_be_converted_to_VESTING_TOKEN_in_a_process_called_powering_up": "%(LIQUID_TOKEN)s может быть конвертирован в %(VESTING_TOKEN)s, этот процесс называется \"увеличение %(VESTING_TOKENS)s\".",
+    "LIQUID_TOKEN_can_be_converted_to_VESTING_TOKEN_in_a_process_called_powering_up": "%(LIQUID_TOKEN)s может быть конвертирован в %(VESTING_TOKEN2)s, этот процесс называется \"увеличение %(VESTING_TOKENS)s\".",
     "tokens_worth_about_AMOUNT_of_LIQUID_TOKEN": "Перемещаемые цифровые токены, цена которых всегда равна %(amount)s в %(LIQUID_TOKEN)s.",
     "influence_tokens_which_give_you_more_control_over": "%(VESTING_TOKEN)s неперемещаемая, её количество увеличивается при долгосрочном хранении. Чем больше у Вас %(VESTING_TOKENS)s, тем сильней вы влияете на вознаграждения за пост и тем больше зарабатываете за голосование.",
     "the_more_you_hold_the_more_you_influence_post_rewards": "Чем больше у Вас %(VESTING_TOKENS)s, тем сильней вы влияете на вознаграждения за пост и тем больше зарабатываете за голосование.'",
@@ -809,7 +820,7 @@
     "convert_to_LIQUID_TOKEN": "Перевести в %(LIQUID_TOKEN)s",
     "withdraw_LIQUID_TOKEN": "Вывести %(LIQUID_TOKEN)s на текущий баланс",
     "withdraw_DEBT_TOKENS": "Вывести %(DEBT_TOKENS)s на текущий баланс",
-    "tokens_worth_about_1_of_LIQUID_TICKER": "Перемещаемые цифровые токены, цена которых равна ~1 мг золота в %(LIQUID_TICKER)s.",
+    "tokens_worth_about_1_of_LIQUID_TICKER": "Перемещаемые цифровые токены, цена которых равна %(TOKEN_WORTH)s в %(LIQUID_TICKER)s.",
     "balances": "БАЛАНСЫ",
     "buy_LIQUID_TOKEN_or_VESTING_TOKEN": "Купить %(LIQUID_TOKEN)s или %(VESTING_TOKEN2)s",
     "savings": "СЕЙФ",

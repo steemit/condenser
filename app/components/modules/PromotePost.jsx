@@ -3,9 +3,8 @@ import {connect} from 'react-redux';
 import ReactDOM from 'react-dom';
 import transaction from 'app/redux/Transaction';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import { DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, DEBT_TICKER} from 'app/client_config';
+import { DEBT_TOKEN_SHORT, DEBT_TICKER, CURRENCY_SIGN} from 'app/client_config';
 import tt from 'counterpart';
-
 
 class PromotePost extends Component {
 
@@ -62,6 +61,8 @@ class PromotePost extends Component {
     // }
 
     render() {
+        const DEBT_TOKEN = tt('token_names.DEBT_TOKEN')
+
         const {amount, loading, amountError, trxError} = this.state;
         const {currentAccount} = this.props;
         const balanceValue = currentAccount.get('sbd_balance');

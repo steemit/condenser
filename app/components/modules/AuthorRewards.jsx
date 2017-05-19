@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import TransferHistoryRow from 'app/components/cards/TransferHistoryRow';
 import {numberWithCommas, vestsToSp, assetFloat} from 'app/utils/StateFunctions'
 import tt from 'counterpart';
-import { VESTING_TOKEN, VESTING_TOKENS, LIQUID_TICKER, VEST_TICKER, DEBT_TICKER, DEBT_TOKEN_SHORT } from 'app/client_config';
+import { LIQUID_TICKER, VEST_TICKER, DEBT_TICKER, DEBT_TOKEN_SHORT } from 'app/client_config';
 
 class AuthorRewards extends React.Component {
     constructor() {
@@ -32,6 +32,9 @@ class AuthorRewards extends React.Component {
     }
 
     render() {
+        const VESTING_TOKEN =  tt('token_names.VESTING_TOKEN')
+        const VESTING_TOKENS = tt('token_names.VESTING_TOKENS')
+
         const {state: {historyIndex}} = this
         const account = this.props.account;
 

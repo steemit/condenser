@@ -23,6 +23,7 @@ export const VESTING_TOKENS = 'Силы Голоса'
 export const DEBT_TOKEN = 'Золотой'
 export const DEBT_TOKENS = 'Золотые'
 export const CURRENCY_SIGN = '₽≈'
+export const TOKEN_WORTH = '~1 мг золота'
 export const WIKI_URL = 'https://wiki.' + APP_DOMAIN + '/'
 export const LANDING_PAGE_URL = 'https://' + APP_DOMAIN + '/about'
 export const TERMS_OF_SERVICE_URL = 'https://' + APP_DOMAIN + '/legal/terms_of_service.pdf'
@@ -86,6 +87,7 @@ export const DOMESTIC = {
   all: 'All langs',
   ru:  'Русский',
   ua:  'Український',
+  us:  'English',
   by:  'Белору́сский',
   rs:  'Srpski',
   ro:  'Română',
@@ -96,7 +98,6 @@ export const DOMESTIC = {
   ar:  'العربية',
   cn:  '漢',
   es:  'Español',
-  us:  'English',
   in:  'हिन्दी',
   pt:  'Portuguesa',
   fr:  'Français'

@@ -1,7 +1,7 @@
 import React from "react";
 import HistoryRow from "./OrderhistoryRow.jsx";
 import tt from 'counterpart';
-import { DEBT_TOKEN_SHORT, LIQUID_TOKEN, CURRENCY_SIGN } from 'app/client_config';
+import { DEBT_TOKEN_SHORT } from 'app/client_config';
 
 export default class OrderHistory extends React.Component {
 
@@ -71,8 +71,8 @@ export default class OrderHistory extends React.Component {
                         <tr>
                             <th>{tt('g.date')}</th>
                             <th>{tt('g.price')}</th>
-                            <th>{LIQUID_TOKEN}</th>
-                            <th>{`${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}</th>
+                            <th>{tt('token_names.LIQUID_TOKEN')}</th>
+                            <th>{`${DEBT_TOKEN_SHORT}`}</th>
                         </tr>
                     </thead>
                     <tbody>

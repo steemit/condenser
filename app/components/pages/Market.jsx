@@ -1,8 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
-//import Highcharts from 'highcharts';
-
 import transaction from 'app/redux/Transaction'
 import TransactionError from 'app/components/elements/TransactionError'
 import DepthChart from 'app/components/elements/DepthChart';
@@ -11,7 +9,7 @@ import OrderHistory from "app/components/elements/OrderHistory";
 import {Order, TradeHistory} from "app/utils/MarketClasses";
 import {roundUp, roundDown} from "app/utils/MarketUtils";
 import tt from 'counterpart';
-import { LIQUID_TOKEN, LIQUID_TOKEN_UPPERCASE, DEBT_TOKEN_SHORT, LIQUID_TICKER, DEBT_TICKER } from 'app/client_config';
+import { DEBT_TOKEN_SHORT, LIQUID_TICKER, DEBT_TICKER } from 'app/client_config';
 
 class Market extends React.Component {
     static propTypes = {
@@ -149,6 +147,9 @@ class Market extends React.Component {
     }
 
     render() {
+        const LIQUID_TOKEN = tt('token_names.LIQUID_TOKEN')
+        const LIQUID_TOKEN_UPPERCASE = tt('token_names.LIQUID_TOKEN_UPPERCASE')
+
         const {sellSteem, buySteem, cancelOrderClick, setFormPrice,
                validateBuySteem, validateSellSteem} = this
         const {buy_disabled, sell_disabled,

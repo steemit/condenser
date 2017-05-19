@@ -18,7 +18,7 @@ import Tooltip from 'app/components/elements/Tooltip';
 import tt from 'counterpart';
 import {List} from 'immutable';
 import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
-import { APP_NAME_LATIN, LIQUID_TOKEN, LIQUID_TOKEN_UPPERCASE, DEBT_TOKEN, DEBT_TOKENS, CURRENCY_SIGN, VESTING_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TICKER, VEST_TICKER, DEBT_TICKER, VESTING_TOKENS } from 'app/client_config';
+import { LIQUID_TICKER, VEST_TICKER, DEBT_TICKER} from 'app/client_config';
 
 const assetPrecision = 1000;
 
@@ -39,6 +39,15 @@ class UserWallet extends React.Component {
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'UserWallet');
     }
     render() {
+        const LIQUID_TOKEN = tt('token_names.LIQUID_TOKEN')
+        const LIQUID_TOKEN_UPPERCASE = tt('token_names.LIQUID_TOKEN_UPPERCASE')
+        const DEBT_TOKEN = tt('token_names.DEBT_TOKEN')
+        const DEBT_TOKENS = tt('token_names.DEBT_TOKENS')
+        const VESTING_TOKEN =  tt('token_names.VESTING_TOKEN')
+        const VESTING_TOKEN2 = tt('token_names.VESTING_TOKEN2')
+        const VESTING_TOKENS = tt('token_names.VESTING_TOKENS')
+        const TOKEN_WORTH = tt('token_names.TOKEN_WORTH')
+
         const {state: {showDeposit, depositType, toggleDivestError},
             onShowDeposit, onShowDepositSteem, onShowDepositPower} = this
         const {convertToSteem, price_per_golos, savings_withdraws, account,
@@ -204,7 +213,7 @@ class UserWallet extends React.Component {
         const sbd_orders_balance_str = numberWithCommas(sbdOrders.toFixed(3)) + ' ' + DEBT_TICKER;
         const savings_sbd_balance_str = numberWithCommas(sbd_balance_savings.toFixed(3)) + ' ' + DEBT_TICKER;
 
-        const steemTip = tt('tips_js.tradeable_tokens_that_may_be_transferred_anywhere_at_anytime') + ' ' + tt('tips_js.LIQUID_TOKEN_can_be_converted_to_VESTING_TOKEN_in_a_process_called_powering_up', {LIQUID_TOKEN, VESTING_TOKEN, VESTING_TOKENS});
+        const steemTip = tt('tips_js.tradeable_tokens_that_may_be_transferred_anywhere_at_anytime') + ' ' + tt('tips_js.LIQUID_TOKEN_can_be_converted_to_VESTING_TOKEN_in_a_process_called_powering_up', {LIQUID_TOKEN, VESTING_TOKEN2, VESTING_TOKENS});
         const powerTip = tt('tips_js.influence_tokens_which_give_you_more_control_over', {VESTING_TOKEN, VESTING_TOKENS});
 
         const savings_menu = [
@@ -215,7 +224,7 @@ class UserWallet extends React.Component {
         ]
         // set dynamic secondary wallet values
         const sbdInterest = this.props.sbd_interest / 100
-        const sbdMessage = <span>{tt('userwallet_jsx.tokens_worth_about_1_of_LIQUID_TICKER', {LIQUID_TICKER, sbdInterest})}</span>
+        const sbdMessage = <span>{tt('userwallet_jsx.tokens_worth_about_1_of_LIQUID_TICKER', {TOKEN_WORTH, LIQUID_TICKER, sbdInterest})}</span>
 
         return (<div className="UserWallet">
             <div className="row">

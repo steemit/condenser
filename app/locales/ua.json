@@ -1,4 +1,15 @@
 {
+  "token_names": {
+    "LIQUID_TOKEN": "Голос",
+    "LIQUID_TOKEN_UPPERCASE" : "ГОЛОС",
+    "VESTING_TOKEN" : "Сила Голосу",
+    "VESTING_TOKEN_UPPERCASE" : "СИЛА ГОЛОСУ",
+    "VESTING_TOKEN2" : "Силу Голосу",
+    "VESTING_TOKENS" : "Сили Голосу",
+    "DEBT_TOKEN" : "Золотий",
+    "DEBT_TOKENS" : "Золоті",
+    "TOKEN_WORTH" : "~1 мг золота"
+  },
   "about_jsx": {
     "about_app": "Про %(APP_NAME)s",
     "about_app_details": "%(APP_NAME)s - це соціальна медіа платформа в якій кожен заробляє за створення і курирування контенту. Він використовує надійну систему цифрових очок під назвою Голос, який підтримує реальну цінність для цифрових нагород через виявлення ринкової ціни і ліквідності.",
@@ -112,6 +123,7 @@
     "alternative_sources": "Альтернативні джерела"
   },
   "g": {
+    "APP_NAME" : "Голос",
     "24_hour": "24 години",
     "30_day": "30 днів",
     "age": "вік",
@@ -121,6 +133,7 @@
     "and": "та",
     "are_you_sure": "Ви впевнені?",
     "ask": "Продаж",
+    "auto": "автоматично",
     "back": "Назад",
     "balances": "Баланси",
     "bid": "Купівля",
@@ -453,7 +466,7 @@
   "navigation": {
     "about": "Про проект",
     "explore": "Дослідити",
-    "APP_NAME_whitepaper": "Папір про%(APP_NAME)s",
+    "APP_NAME_whitepaper": "Папір про %(APP_NAME)s",
     "buy_LIQUID_TOKEN": "Купити %(LIQUID_TOKEN)s",
     "sell_LIQUID_TOKEN": "Продати %(LIQUID_TOKEN)s",
     "market": "Купити або Продати",
@@ -561,8 +574,11 @@
     "following": "Підписки"
   },
   "prolong_post_jsx": {
+    "days_short": "д.",
+    "days": "кількість днів",
+    "payouts": "Буде знято",
     "prolong_post": "Продовжити вікно виплат у поста",
-    "spend_your_DEBT_TOKEN_to_prolong_withdrawals_window_post": "Використовуйте Ваші %(DEBT_TOKEN)s, щоб продовжити вікно виплат у поста",
+    "spend_your_DEBT_TOKEN_to_prolong_payments_window_post": "Використовуйте Ваші %(DEBT_TOKENS)s, щоб продовжити вікно виплат у поста",
     "you_successfully_promoted_this_post": "Ви успішно просунули цей пост",
     "leave_this_unchecked_to_receive_half_your_reward": "Залиште невідміченим для отримання 1/2 винагороди у %(VESTING_TOKEN)s та 1/2 %(DEBT_TOKEN)s",
     "pay_me_100_in_VESTING_TOKEN": "Заплатіть мені 100%% у%(VESTING_TOKEN)s",
@@ -669,7 +685,7 @@
   },
   "tips_js": {
     "tradeable_tokens_that_may_be_transferred_anywhere_at_anytime": "Переміщувані цифрові токени, які можуть бути передані куди завгодно в будь-який момент.",
-    "LIQUID_TOKEN_can_be_converted_to_VESTING_TOKEN_in_a_process_called_powering_up": "%(LIQUID_TOKEN)s може бути конвертований в %(VESTING_TOKEN)s, цей процес називається \"збільшення %(VESTING_TOKENS)s\".",
+    "LIQUID_TOKEN_can_be_converted_to_VESTING_TOKEN_in_a_process_called_powering_up": "%(LIQUID_TOKEN)s може бути конвертований в %(VESTING_TOKEN2)s, цей процес називається \"збільшення %(VESTING_TOKENS)s\".",
     "tokens_worth_about_AMOUNT_of_LIQUID_TOKEN": "Переміщувані цифрові токени, ціна яких завжди дорівнює %(amount)s у %(LIQUID_TOKEN)s.",
     "influence_tokens_which_give_you_more_control_over": "%(VESTING_TOKEN)s непереміщувана, її кількість збільшується при довгостроковому зберіганні. Чим більше у Вас %(VESTING_TOKENS)s, тим сильніше ви впливаєте на винагороди за пост і тим більше заробляєте за голосування.",
     "the_more_you_hold_the_more_you_influence_post_rewards": "Чим їх більше, тим сильніше Ви впливаєте на винагороди за пост і тим більше заробляєте за голосування.",
@@ -795,7 +811,7 @@
     "convert_to_LIQUID_TOKEN": "Перевести в %(LIQUID_TOKEN)s",
     "withdraw_LIQUID_TOKEN": "Вивести %(LIQUID_TOKEN)s на поточний баланс",
     "withdraw_DEBT_TOKENS": "Вивести %(DEBT_TOKENS)s на поточний баланс",
-    "tokens_worth_about_1_of_LIQUID_TICKER": "Переміщувані цифрові токени, ціна яких дорівнює ~ 1 мг золота в %(LIQUID_TICKER)s.",
+    "tokens_worth_about_1_of_LIQUID_TICKER": "Переміщувані цифрові токени, ціна яких дорівнює %(TOKEN_WORTH)s в %(LIQUID_TICKER)s.",
     "balances": "БАЛАНСЫ",
     "buy_LIQUID_TOKEN_or_VESTING_TOKEN": "Купити %(LIQUID_TOKEN)s або %(VESTING_TOKEN)s",
     "savings": "СЕЙФ",

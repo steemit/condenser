@@ -2,7 +2,7 @@ import React from 'react';
 //import Highcharts from 'highcharts';
 const ReactHighcharts = require("react-highcharts/dist/ReactHighstock");
 import tt from 'counterpart';
-import { LIQUID_TOKEN_UPPERCASE, DEBT_TOKEN_SHORT, LIQUID_TICKER, CURRENCY_SIGN } from 'app/client_config';
+import { DEBT_TOKEN_SHORT, LIQUID_TICKER, CURRENCY_SIGN } from 'app/client_config';
 
 //Highstock does not play well with decimal x values, so we need to
 // multiply the x values by a constant factor and divide by this factor for
@@ -195,7 +195,7 @@ function generateDepthChart(bidsArray, asksArray) {
             shared: false,
             backgroundColor: "rgba(0, 0, 0, 0.3)",
             formatter() {
-                return `<span>${tt('g.price')}: ${(this.x / power).toFixed(6)} ${CURRENCY_SIGN}/${LIQUID_TOKEN_UPPERCASE}</span><br/><span>\u25CF</span>${this.series.name}: <b>${(this.y / 1000).toFixed(3)} ${DEBT_TOKEN_SHORT} ` + '(' + CURRENCY_SIGN + ')</b>';
+                return `<span>${tt('g.price')}: ${(this.x / power).toFixed(6)} ${CURRENCY_SIGN}/${tt('token_names.LIQUID_TOKEN_UPPERCASE')}</span><br/><span>\u25CF</span>${this.series.name}: <b>${(this.y / 1000).toFixed(3)} ${DEBT_TOKEN_SHORT} ` + '(' + CURRENCY_SIGN + ')</b>';
             },
             style: {
                 color: "#FFFFFF"

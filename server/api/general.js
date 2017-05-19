@@ -137,7 +137,7 @@ export default function useGeneralApi(app) {
                 console.error('Error in /accounts get_chain_properties', error);
             }
 
-            yield createAccount({
+            const accountInstance = yield createAccount({
                 signingKey: config.get('registrar.signing_key'),
                 fee: `${fee.toFixed(3)} ${fee_currency}`,
                 creator: config.registrar.account,
@@ -152,24 +152,26 @@ export default function useGeneralApi(app) {
 
             this.body = JSON.stringify({status: 'ok'});
 
-            models.Account.create(escAttrs({
-                user_id,
-                name: account.name,
-                owner_key: account.owner_key,
-                active_key: account.active_key,
-                posting_key: account.posting_key,
-                memo_key: account.memo_key,
-                remote_ip,
-                referrer: this.session.r
-            })).catch(error => {
-                console.error('!!! Can\'t create account model in /accounts api', this.session.uid, error);
-            });
-            if (mixpanel) {
-                mixpanel.track('Signup', {
-                    distinct_id: this.session.uid,
-                    ip: remote_ip
+            if (accountInstance) {
+                models.Account.create(escAttrs({
+                    user_id,
+                    name: account.name,
+                    owner_key: account.owner_key,
+                    active_key: account.active_key,
+                    posting_key: account.posting_key,
+                    memo_key: account.memo_key,
+                    remote_ip,
+                    referrer: this.session.r
+                })).catch(error => {
+                    console.error('!!! Can\'t create account model in /accounts api', this.session.uid, error);
                 });
-                mixpanel.people.set(this.session.uid, {ip: remote_ip});
+                if (mixpanel) {
+                    mixpanel.track('Signup', {
+                        distinct_id: this.session.uid,
+                        ip: remote_ip
+                    });
+                    mixpanel.people.set(this.session.uid, {ip: remote_ip});
+                }
             }
         } catch (error) {
             console.error('Error in /accounts api call', this.session.uid, error.toString());

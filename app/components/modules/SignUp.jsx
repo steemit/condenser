@@ -4,7 +4,7 @@ import SvgImage from 'app/components/elements/SvgImage';
 import AddToWaitingList from 'app/components/modules/AddToWaitingList';
 import tt from 'counterpart';
 import { formatCoins } from 'app/utils/FormatCoins';
-import { APP_NAME, APP_DOMAIN, VESTING_TOKEN, PRIVACY_POLICY_URL, TERMS_OF_SERVICE_URL } from 'app/client_config';
+import { APP_DOMAIN, PRIVACY_POLICY_URL, TERMS_OF_SERVICE_URL } from 'app/client_config';
 import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
 
 class SignUp extends React.Component {
@@ -13,6 +13,8 @@ class SignUp extends React.Component {
         this.state = {waiting_list: false};
     }
     render() {
+        const APP_NAME = tt('g.APP_NAME');
+
         if ($STM_Config.read_only_mode) {
             return <div className="row">
                 <div className="column">
@@ -75,20 +77,6 @@ class SignUp extends React.Component {
             <div className="row">
               &nbsp;
             </div>
-            {/*<div className="row">
-                <div className="column large-4 shrink">
-                    <SvgImage name="reddit" width="64px" height="64px" />
-                </div>
-                <div className="column large-8">
-                    <a href="/connect/reddit" className="button SignUp--reddit-button">
-                        {tt("g.continue_with_reddit")}
-                    </a>
-                    <br />
-                    <span className="secondary">
-                        ({tt("g.requires_5_or_more_reddit_comment_karma")})
-                    </span>
-                </div>
-            </div>*/}
 
             {/*<div className="row">
                 <div className="column">

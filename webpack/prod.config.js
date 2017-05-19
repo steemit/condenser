@@ -1,6 +1,8 @@
 import webpack from 'webpack';
 import git from 'git-rev-sync';
 import baseConfig from './base.config';
+// Analyse bundle library
+// import {BundleAnalyzerPlugin} from 'webpack-bundle-analyzer';
 
 export default {
     ...baseConfig,
@@ -47,6 +49,10 @@ export default {
                 comments: false
             }
         }),
+
+        // Analyse your bundle dependencies
+        // new BundleAnalyzerPlugin(),
+
         ...baseConfig.plugins
     ]
 };

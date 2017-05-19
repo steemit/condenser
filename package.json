@@ -158,7 +158,8 @@
     "redbox-react": "^1.2.0",
     "sinon": "^1.17.3",
     "sinon-chai": "^2.8.0",
-    "supertest": "^1.2.0"
+    "supertest": "^1.2.0",
+    "webpack-bundle-analyzer": "^2.8.2"
   },
   "optionalDependencies": {
     "fsevents": "*"

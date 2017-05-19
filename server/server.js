@@ -180,6 +180,8 @@ app.use(function*(next) {
     }
     console.log("--> referer saved --", this.session.uid, this.request);
     console.log("--> referer check --", this.session.uid, this.request.referer);
+    console.log("--> referrer check --", this.session.uid, this.request.referrer);
+    console.log("--> headers check --", this.session.uid, this.request.headers);
     yield next;
 });
 

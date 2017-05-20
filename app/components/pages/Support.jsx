@@ -1,5 +1,6 @@
 import React from 'react';
 import { translate } from 'app/Translator';
+import { SUPPORT_EMAIL } from 'config/client_config';
 
 class Support extends React.Component {
     render() {
@@ -8,7 +9,7 @@ class Support extends React.Component {
                 <div>
                     <h2>{translate('APP_NAME_support')}</h2>
                     <p>
-                        {translate('please_email_questions_to')} <a href="mailto:t@cyber.fund">t@cyber.fund</a>.
+                        {translate('please_email_questions_to')} <a href={'mailto:' + SUPPORT_EMAIL}>{SUPPORT_EMAIL}</a>.
                     </p>
                 </div>
             </div>

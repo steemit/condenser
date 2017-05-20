@@ -418,7 +418,7 @@ const en =  {
   reply: 'Reply',
   reply_count: `{replyCount, plural, =0 {no replies} one {1 reply} other {{replyCount} replies}}`,
   reputation: "Reputation",
-  request_already_submitted_contact_support: 'Your request has been already submitted and we are working on it. Please contact t@cyber.fund for the status of your request.',
+  request_already_submitted_contact_support: 'Your request has been already submitted and we are working on it. Please contact ' + SUPPORT_EMAIL + ' for the status of your request.',
   required: 'Required',
   requires_5_or_more_reddit_comment_karma: 'requires 5 or more Reddit comment karma',
   requires_auth_key: 'This operation requires your {authType} key (or use your master password)',

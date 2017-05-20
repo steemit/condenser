@@ -5,7 +5,7 @@
 ### Quick Start Guide
 
 - <a href="/welcome#No_Cost_to_Participate">No Cost to Participate</a>
-- <a href="/welcome#Welcome_Page">Welcome Page</a>
+- <a href="/welcome#Finding_This_Page">Finding This Page</a>
 - <a href="/welcome#Upvotes">Upvotes</a>
 - <a href="/welcome#Comments">Comments</a>
 - <a href="/welcome#Creating_Posts">Creating Posts</a>
@@ -47,10 +47,10 @@
 It is free to post, comment, or upvote all content on Steemit.com. You might even get paid for it!
 
 <a href="/welcome#Table_of_Contents">^</a>
-<a class="anchor" name="Welcome_Page"></a>
-### Welcome Page
+<a class="anchor" name="Finding_This_Page"></a>
+### Finding This Page
 
-To return to this page at any time, click on the "Welcome" link in the main menu in the upper right corner.
+To return to this page at any time, click on the "Quick Start Guide" link in the main menu in the upper right corner.
 
 <a href="/welcome#Table_of_Contents">^</a>
 <a class="anchor" name="Upvotes"></a>
@@ -304,36 +304,33 @@ It is not required either, but if you have other social media accounts (Twitter,
 <a class="anchor" name="Helpful_Posts_from_Steemit_Users"></a>
 ## Helpful Posts from Steemit Users
 
-- [Beginners Guide To Using Steemit](https://steemit.com/steemit/@thecryptofiend/the-missing-faq-a-beginners-guide-to-using-steemit)
+- [Posting and Markdown Basics](https://steemit.com/steemit/@thecryptofiend/markdown-basics-for-beginners)
+- [Tons of Ways to Spend Your Hard Earned STEEM/SBD](https://steemit.com/steem/@timcliff/the-steem-economy-tons-of-ways-to-spend-your-hard-earned-steem-sbd)
+- [Advice on How To Build a Following](https://steemit.com/steemit/@allasyummyfood/how-i-build-a-following-of-160-k-from-scratch)
 - [Steemit Etiquette Guide](https://steemit.com/steemit/@thecryptofiend/the-complete-steemit-etiquette-guide-revision-2-0)
-- [The Official Steemit FAQ](https://steemit.com/steemit/@shenanigator/thanks-to-your-help-the-official-steemit-faq-is-now-complete)
-- [How to Publish an Article Tutorial](https://steemit.com/howto/@future24/tutorial-how-to-publish-an-article-at-steemit-quick-and-easy-guide-english-german)
 - [Steemit Chat Guide](https://steemit.com/steemit/@firepower/dummies-guide-to-using-steemit-chat-effectively-everyday)
+- [Steemit Succeeds if We Make it Succeed](https://steemit.com/steemit/@krnel/steemit-succeeds-if-we-make-it-succeed)
 - [Professional Formatting Tutorial](https://steemit.com/writing/@minion/professional-tutorial-for-post-formatting-both-for-beginners-and-advanced-users)
 - [Advice on using Tags](https://steemit.com/steemit/@rok-sivante/the-top-3-reasons-to-tag-your-steemit-posts-a-simple-quick-strategy-for-long-term-profits-and-success)
+- [The Steemit Newbie's Comprehensive Guide To Understanding Your Wallet](https://steemit.com/steemit-help/@merej99/the-steemit-newbie-s-comprehensive-guide-to-understanding-your-wallet-by-merej99)
+- [Witness Voting Guide](https://steemit.com/witness-category/@timcliff/witness-voting-guide)
 - [Steem Dollars (SBD) to Cash (USD) Tutorial](https://steemit.com/how-to/@blueorgy/how-to-convert-your-steemdollars-sbd-to-cash-usd-transfer-it-into-your-bank-account)
 - [How to use Blocktrades to exchange STEEM/SBD for BTC](https://steemit.com/steem/@thecryptofiend/how-to-use-blocktrades-the-fastest-and-easiest-way-to-buy-and-sell-steem-sd-and-my-review-of-the-experience)
 - [SBD to bitcoin (BTC) using Blocktrades, then BTC to Euro or USD Using CEX.io](https://steemit.com/howto/@future24/blocktrades-tutorial-part-2-how-to-exchange-sbd-to-btc-and-sell-them-for-euro-or-usd-english-german)
 - [A Guide To Cashing Out Your STEEM/SBD Using PayPal](https://steemit.com/tutorial/@son-of-satire/a-minnows-guide-to-cashing-out-your-steem-sbd-using-paypal-without-using-coinbase-and-their-invasive-identity-checks)
 - [How to Buy STEEM Guide](https://steemit.com/steem/@timcliff/newbie-guide-how-to-buy-steem)
-- [How to Add Images to Your Posts](https://steemit.com/steem/@billbutler/adding-images-to-your-steem-posts)
-- [Steemit Markdown Basics](https://steemit.com/steemit/@thecryptofiend/markdown-basics-for-beginners)
 - [Emojis for Steemit](https://steemit.com/emojis/@blueorgy/steemit-emojis-master-list)
 - [5 Markdown Tips](https://steemit.com/steemit/@steemitguide/markdown-and-html-code-guide-for-beginners-that-includes-5-useful-tips-to-edit-posts-and-comments-using-the-raw-editor)
-- [Advice on How To Build a Following](https://steemit.com/steemit/@allasyummyfood/how-i-build-a-following-of-160-k-from-scratch)
+- [How to Get Noticed if You Are a New User on Steemit](https://steemit.com/steemit/@thecryptofiend/how-to-get-noticed-if-you-are-a-new-user-on-steemit)
 - [Everything you need to know about potential payouts and flagging](https://steemit.com/payout/@timcliff/everything-you-need-to-know-about-potential-payouts-and-flagging-for-new-users)
 - [Ways to Find Free and Legal Images](https://steemit.com/steem-help/@mindover/don-t-plagiarize-images-here-are-13-free-and-legal-ways-to-find-high-quality-photos-you-can-use-on-steemit)
 - [Steem Keys and Passwords Guide](https://steemit.com/steemit-guides/@pfunk/a-user-s-guide-to-the-different-steem-keys-or-passwords)
 - [Unwritten Rules of Steemit](https://steemit.com/steem-help/@beanz/the-unwritten-rules-of-steemit)
-- [Witness Voting Guide](https://steemit.com/witness-category/@timcliff/witness-voting-guide)
-- [Steemit Succeeds if We Make it Succeed](https://steemit.com/steemit/@krnel/steemit-succeeds-if-we-make-it-succeed)
 - [Advice on How to Succeed on Steemit: Come to Give, Not to Take](https://steemit.com/psychology/@shenanigator/come-to-give-not-take-the-power-of-reciprocity)
 - [Best Practices for Steemit Artists](https://steemit.com/art/@merej99/best-practices-for-steemit-newbie-artists-by-merej99-a-100-power-up-post)
-- [The Steemit Newbie's Comprehensive Guide To Understanding Your Wallet](https://steemit.com/steemit-help/@merej99/the-steemit-newbie-s-comprehensive-guide-to-understanding-your-wallet-by-merej99)
 - [STEEM The Super Basic Explanation](https://steemit.com/steem/@thecryptofiend/steem-the-super-basic-explanation-for-new-users)
 - [Blogging Tools](https://steemit.com/blogging/@munteanu/blogging-tools)
 - [How to Create Different Types of Blog Content](https://steemit.com/writing/@jessicanicklos/how-to-create-different-types-of-blog-content-know-here-total-guide-line)
-- [How to Get Noticed if You Are a New User on Steemit](https://steemit.com/steemit/@thecryptofiend/how-to-get-noticed-if-you-are-a-new-user-on-steemit)
 
 <a href="/welcome#Table_of_Contents">^</a>
 <a class="anchor" name="Users_to_Follow"></a>
@@ -346,8 +343,8 @@ It is not required either, but if you have other social media accounts (Twitter,
 <a class="anchor" name="Other_Resources"></a>
 ## Other Resources
 
+- [FAQ](https://steemit.com/faq.html)
 - [Steemit Help](https://www.steemithelp.net/)
-- [Website FAQ](https://steemit.com/faq.html)
 - [The Steem Whitepaper](https://steem.io/SteemWhitePaper.pdf)
 - [Steem App Center](http://steemtools.com/)
 - [Steem Block Explorer](https://steemd.com/)

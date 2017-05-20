@@ -87,7 +87,7 @@ module.exports = connect(
                     id: 'follow',
                     required_posting_auths: [account],
                     json: JSON.stringify(json),
-                    __config: {title: 'Resteem This Post'}
+                    __config: {title: 'Resteem This Post as @' + account}
                 },
                 successCallback, errorCallback,
             }))

@@ -73,7 +73,6 @@ changelly.com
 changely
 shapeshif
 shapeshift
-livecoin.net
 `.trim().split('\n');
 
 export default list;

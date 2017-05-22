@@ -31,5 +31,5 @@ export default function recordWebEvent(ctx, event_type, value) {
         console.error('!!! Can\'t create web event record', error);
     });
     const stats = new StatsD({prefix: 'testnet.'});
-    stats.increment(event_type);
+    stats.increment(event_type.replace(/[^a-zA-Z0-9]/g,'_'));
 }

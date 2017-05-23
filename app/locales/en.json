@@ -380,6 +380,7 @@
     "share_on_facebook" : "Share on Facebook",
     "share_on_twitter" : "Share on Twitter",
     "share_on_vk" : "Share on Vkontakte",
+    "share_on_lj" : "Share on LiveJournal",
     "share": "Share",
     "transfer_amount_to_VESTING_TOKEN": "Transfer %(amount)s to %(VESTING_TOKEN)s",
     "transfer_amount_VESTING_TOKEN_to": "Transfer %(amount)s %(VESTING_TOKEN)s to",

@@ -87,6 +87,7 @@ class PostFull extends React.Component {
     constructor() {
         super();
         this.state = {};
+        this.ljShare = this.ljShare.bind(this);
         this.vkShare = this.vkShare.bind(this);
         this.fbShare = this.fbShare.bind(this);
         this.twitterShare = this.twitterShare.bind(this);
@@ -176,6 +177,15 @@ class PostFull extends React.Component {
         window.open('https://vk.com/share.php?url=' + this.share_params.url, this.share_params, 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=' + winWidth + ',height=' + winHeight)
     }
 
+    ljShare = (e) => {
+        e.preventDefault();
+        const href = this.share_params.url;
+        const title = this.share_params.title;
+        const desc = this.share_params.desc;
+        const link = `<div><a href=${href}>${title}</a></div>`
+        window.open(`http://www.livejournal.com/update.bml?subject=${title}&event=${desc + link}`);
+    }
+
     showPromotePost = () => {
         const post_content = this.props.cont.get(this.props.post);
         if (!post_content) return
@@ -229,6 +239,7 @@ class PostFull extends React.Component {
         };
 
         const share_menu = [
+            {link: '#', onClick: this.ljShare, value: 'LJ', title: tt('postfull_jsx.share_on_lj'), icon: 'lj'},
             {link: '#', onClick: this.vkShare, value: 'VK', title: tt('postfull_jsx.share_on_vk'), icon: 'vk'},
             {link: '#', onClick: this.fbShare, value: 'Facebook', title: tt('postfull_jsx.share_on_facebook'), icon: 'facebook'},
             {link: '#', onClick: this.twitterShare, value: 'Twitter', title: tt('postfull_jsx.share_on_twitter'), icon: 'twitter'},

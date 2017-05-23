@@ -524,6 +524,7 @@
     "share_on_facebook": "Поділитись у Facebook",
     "share_on_twitter": "Поділитись у Twitter",
     "share_on_vk": "Поділитись у ВКонтакте",
+    "share_on_lj": "Поділитись у LiveJournal",
     "share": "Поділитись",
     "transfer_amount_to_VESTING_TOKEN": "Переказати %(amount)s %(VESTING_TOKEN)s",
     "transfer_amount_VESTING_TOKEN_to": "Переказ %(amount)s %(VESTING_TOKEN)s у",

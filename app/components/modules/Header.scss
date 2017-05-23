@@ -97,9 +97,12 @@ ul > li > .button {
     font-size: 1rem;
     line-height: 0;
     padding: 0;
+    &.domestic-selector {
+      font-size: 112.5%;
+    }
     &.domestic-selector .Icon {
       padding-top: 0.65rem;
-      margin-top: -1.12rem;
+      margin-top: -1.25rem;
     }
     .domestic-flag {
       -webkit-filter: drop-shadow(0 0 4px #ccc);

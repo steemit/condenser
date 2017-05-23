@@ -184,7 +184,7 @@ class Header extends React.Component {
             });
 
         // domestic
-        DOMESTIC.all = tt('g.all_langs');
+        DOMESTIC.all = '🌎 ' + tt('g.all_langs');
         let currentDomesticKey = DEFAULT_DOMESTIC;
         let currentDomesticTitle = DOMESTIC[currentDomesticKey];
         const domestic_menu = [];
@@ -243,7 +243,8 @@ class Header extends React.Component {
                             dropdownContent={<VerticalMenu items={domestic_menu} title={tt('settings_jsx.choose_domestic')} />}
                             >
                               <a className="domestic-selector" title={tt('settings_jsx.choose_domestic')} onClick={e => e.preventDefault()}>
-                                <Icon className="domestic-flag" name={'flags/4x3/' + currentDomesticKey} /> <Icon name="caret-down" />
+                                {/* <Icon className="domestic-flag" name={'flags/4x3/' + currentDomesticKey} /> <Icon name="caret-down" /> */}
+                                {DOMESTIC[currentDomesticKey].split(' ')[0]} <Icon name="caret-down" />
                               </a>
                             </LinkWithDropdown>
                         </HorizontalMenu>

@@ -525,6 +525,7 @@
     "share_on_facebook":"Distribuiți pe Facebook",
     "share_on_twitter":"Distribuiți pe Twitter",
     "share_on_vk":"Distribuiți pe ВКонтакте",
+    "share_on_lj": "Distribuiți pe LiveJournal",
     "share":"Distribuiți",
     "transfer_amount_to_VESTING_TOKEN":"Transferă %(amount)s %(VESTING_TOKEN2)s",
     "transfer_amount_VESTING_TOKEN_to":"Transfer %(amount)s %(VESTING_TOKENS)s în",

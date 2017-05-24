@@ -36,12 +36,14 @@ class SignUp extends React.Component {
             </div>;
         }
 
+        const VESTING_TOKEN =  tt('token_names.VESTING_TOKEN')
+
         return <div className="SignUp">
             <div className="row">
                 <div className="column">
                     <h3>{tt("g.sign_up")}</h3>
                     <p>
-                        {tt("g.we_require_social_account1", {APP_NAME})}
+                        {tt("g.we_require_social_account1", {APP_NAME, VESTING_TOKEN})}
                         <LocalizedCurrency amount={Number(this.props.signup_bonus)} />
                         {tt("g.we_require_social_account2")}
                         <br />

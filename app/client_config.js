@@ -40,7 +40,8 @@ export const DEBT_TOKEN_SHORT = 'GBG'
 // application settings
 export const DEFAULT_LANGUAGE = 'ru' // used on application internationalization bootstrap
 export const DEFAULT_CURRENCY = 'RUB'
-export const ALLOWED_CURRENCIES = ['RUB', 'UAH', 'BYN', 'USD', 'EUR', 'CNY', 'GEL', 'KZT']
+// First element always is USD, it needs to be correct fetch yahoo exchange rates from server side
+export const ALLOWED_CURRENCIES = ['USD', 'RUB', 'UAH', 'BYN', 'EUR', 'CNY', 'GEL', 'KZT']
 export const FRACTION_DIGITS = 2 // default amount of decimal digits
 export const FRACTION_DIGITS_MARKET = 3 // accurate amount of deciaml digits (example: used in market)
 

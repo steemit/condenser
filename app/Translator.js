@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux'
 import {addLocaleData, IntlProvider} from 'react-intl';
 import {DEFAULT_LANGUAGE} from 'app/client_config';
+import store from 'store';
 import tt from 'counterpart';
 import en from 'react-intl/locale-data/en';
 import ru from 'react-intl/locale-data/ru';
@@ -19,7 +20,8 @@ tt.registerTranslations('ro', require('app/locales/ro-RO.json'));
 
 class Translator extends React.Component {
     render() {
-        const locale = this.props.locale || DEFAULT_LANGUAGE;
+        const locale = store.get('language') || DEFAULT_LANGUAGE
+        // const locale = this.props.locale || DEFAULT_LANGUAGE;
         const localeWithoutRegionCode = locale.toLowerCase().split(/[_-]+/)[0];
         tt.setLocale(localeWithoutRegionCode)
 		    tt.setFallbackLocale('en');

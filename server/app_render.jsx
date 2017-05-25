@@ -6,7 +6,7 @@ import universalRender from '../shared/UniversalRender';
 import models from 'db/models';
 import secureRandom from 'secure-random';
 import ErrorPage from 'server/server-error';
-import { SELECT_TAGS_KEY } from 'app/client_config';
+import { CURRENCIES, DEFAULT_CURRENCY, SELECT_TAGS_KEY } from 'app/client_config';
 
 const DB_RECONNECT_TIMEOUT = process.env.NODE_ENV === 'development' ? 1000 * 60 * 60 : 1000 * 60 * 10;
 
@@ -18,16 +18,24 @@ async function appRender(ctx) {
             login_challenge = secureRandom.randomBuffer(16).toString('hex');
             ctx.session.login_challenge = login_challenge;
         }
-        let select_tags = JSON.parse( decodeURIComponent( ctx.cookies.get( SELECT_TAGS_KEY ) || '[]' ) || '[]');
+
+        let select_tags = [];
+        try {
+            select_tags = JSON.parse(decodeURIComponent(ctx.cookies.get(SELECT_TAGS_KEY) || '[]') || '[]') || [];
+        } catch(e) {}
+
         const offchain = {
             csrf: ctx.csrf,
             flash: ctx.flash,
             new_visit: ctx.session.new_visit,
             account: ctx.session.a,
-            select_tags: select_tags,
             config: $STM_Config,
-            login_challenge
+            login_challenge,
+            select_tags
         };
+        // Use global variable to store remote cookie current user selected currency value
+        $GLS_Config.currency = CURRENCIES.indexOf(ctx.cookies.get('gls.currency')) !== -1 ? ctx.cookies.get('gls.currency') : DEFAULT_CURRENCY
+
         const user_id = ctx.session.user;
         if (user_id) {
             let user = null;

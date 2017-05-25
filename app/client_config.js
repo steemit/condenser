@@ -39,9 +39,9 @@ export const DEBT_TOKEN_SHORT = 'GBG'
 
 // application settings
 export const DEFAULT_LANGUAGE = 'ru' // used on application internationalization bootstrap
-export const DEFAULT_CURRENCY = 'RUB'
 // First element always is USD, it needs to be correct fetch yahoo exchange rates from server side
-export const ALLOWED_CURRENCIES = ['USD', 'RUB', 'UAH', 'BYN', 'EUR', 'CNY', 'GEL', 'KZT']
+export const CURRENCIES = ['USD', 'RUB', 'UAH', 'BYN', 'EUR', 'CNY', 'GEL', 'KZT']
+export const DEFAULT_CURRENCY = CURRENCIES[0]
 export const FRACTION_DIGITS = 2 // default amount of decimal digits
 export const FRACTION_DIGITS_MARKET = 3 // accurate amount of deciaml digits (example: used in market)
 
@@ -56,7 +56,7 @@ export const SUPPORT_EMAIL = 'support@' + APP_DOMAIN
 export const FIRST_DATE = new Date(Date.UTC(2016, 7, 1)); //1 september
 // ignore special tags, dev-tags, partners tags
 export const IGNORE_TAGS = ['test', 'bm-open', 'bm-ceh23', 'bm-tasks', 'bm-taskceh1']
-export const SELECT_TAGS_KEY = 'golos:select.categories'
+export const SELECT_TAGS_KEY = 'gls.select.tags'
 export const PUBLIC_API = {
   trending:        ['get_discussions_by_trending',       'trending'],
   trending30:      ['get_discussions_by_trending30',     'trending30'],

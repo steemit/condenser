@@ -1,12 +1,21 @@
+import 'isomorphic-fetch';
 import React from 'react';
-import store from 'store';
 // import cc from 'currency-codes';
 import { injectIntl } from 'react-intl';
 import { getSymbolFromCurrency } from 'currency-symbol-map';
 import { FRACTION_DIGITS, DEFAULT_CURRENCY } from 'app/client_config';
+import cookie from "react-cookie";
 
 let localizedCurrency = () => {}
-const localCurrencySymbol = process.env.BROWSER ? getSymbolFromCurrency(store.get('currency') || DEFAULT_CURRENCY) : ''
+const localCurrencySymbol = process.env.BROWSER ? getSymbolFromCurrency(cookie.load('gls.currency') || $GLS_Config.currency) : $GLS_Config.currency
+
+const getExchangePairRateById = (id) => {
+  for (var i in $GLS_Config.exRates) {
+    if ($GLS_Config.exRates[i].id === id)
+      return $GLS_Config.exRates[i].Rate
+  }
+  return null
+}
 
 // TODO refactor. This is a mess
 // TODO add comments on what this code does
@@ -25,19 +34,24 @@ export default class LocalizedCurrency extends React.Component {
         fractionDigits: FRACTION_DIGITS
     }
 
-    state = {
-        exchangeRate: store.get('exchangeRate'),
-        goldExchangeRate: store.get('goldExchangeRate'),
-        currency: store.get('currency') || DEFAULT_CURRENCY,
-        localCurrencySymbol: getSymbolFromCurrency(store.get('currency') || DEFAULT_CURRENCY)
+    state = process.env.BROWSER ? {
+        exchangeRate: localStorage.getItem('exchangeRate'),
+        exchangeRateGold: localStorage.getItem('exchangeRateGold'),
+        currency: cookie.load('gls.currency') || $GLS_Config.currency,
+        localCurrencySymbol: getSymbolFromCurrency(process.env.BROWSER ? cookie.load('gls.currency') || $GLS_Config.currency : $GLS_Config.currency)
+    } : {
+        exchangeRate: getExchangePairRateById(DEFAULT_CURRENCY + $GLS_Config.currency),
+        exchangeRateGold: getExchangePairRateById('XAU' + DEFAULT_CURRENCY),
+        currency: $GLS_Config.currency,
+        localCurrencySymbol: getSymbolFromCurrency($GLS_Config.currency)
     }
 
     // on mount check if data is fresh and fetch it if needed
     componentDidMount() {
         if (process.env.BROWSER) {
             const oneDay = 1000 * 60 * 60 * 24
-            const exchangeRateDate = store.get('exchangeRateDate')
-            if (!exchangeRateDate || Date.now() - exchangeRateDate > oneDay) {
+            const exchangeFetchDate = localStorage.getItem('exchangeFetchDate')
+            if (!exchangeFetchDate || Date.now() - exchangeFetchDate > oneDay) {
                 this.fetchExchangeRates()
             }
         }
@@ -48,9 +62,14 @@ export default class LocalizedCurrency extends React.Component {
         if (process.env.BROWSER) {
             // fetch new exchange data if:
             // currency has changed
-            if(this.state.currency != store.get('fetchedCurrency')) this.fetchExchangeRates()
+            if(this.state.currency != localStorage.getItem('exchangeCurrency')) this.fetchExchangeRates()
             // if currency rates are not fetched at all
-            if (!store.get('goldExchangeRate') || !store.get('exchangeRate')) this.fetchExchangeRates()
+            if (!localStorage.getItem('exchangeRateGold') || !localStorage.getItem('exchangeRate')) this.fetchExchangeRates()
+        }
+        else {
+            // console.log('GLS_Config', getExchangePairRateById(DEFAULT_CURRENCY + $GLS_Config.currency))
+            // TODO: fetch currencies on server side, but store it on global variable like $GLS_Config / $STM_Config
+            // fetch data with every user server request it's bad, need to store it global
         }
     }
 
@@ -59,59 +78,33 @@ export default class LocalizedCurrency extends React.Component {
         console.warn('exchange rates are outdated!')
         console.info('fetching new ones...')
         const {currency} = this.state
-        // TODO rework this to accept only allowed countries (russia, ukraine and so on)
-        // get users country by ip
-        // fetch('http://freegeoip.net/json/')
-        //  .then(function(response) {
-        //      if (response.status >= 400) {
-        //          throw new Error("Bad response from server");
-        //      }
-        //      return response.json()
-        //  })
-        //  .then(data => {
-        //      const currency = cc.country( data.country_name.toLowerCase() )[0].code
-        //      store.set('fetchedCurrency', currency)
-        //      // store.set('currency', currency)
-        //      this.setState({currency})
-        //      console.info('fetched exchange rates successfully!')
-        //  })
-        //  .catch(err => console.error('Failed to get users loaction info', err))
-
-        // fetch exchange rates GOLD to USD exchange rates
-        fetch('https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.xchange%20where%20pair%20in%20(%22' + 'XAU' + 'USD' + '%22)&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=')
+        // fetch exchange rates GOLD to USD exchange rates and rates of currently choosen currency
+        fetch('https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.xchange%20where%20pair%3D%22' + 'XAU' + 'USD' + '%2C' + 'USD' + currency + '%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys')
             .then(function(data) { return data.json() })
             .then(data => {
-                const goldExchangeRate = data.query.results.rate.Rate
-                store.set('goldExchangeRate', goldExchangeRate)
-                store.set('exchangeRateDateGold', Date.now())
-                this.setState({ goldExchangeRate })
-                console.info('Everything is fine, fetched GOLD properly')
+                const exchangeRateGold = data.query.results.rate[0].Rate
+                const exchangeRate = data.query.results.rate[1].Rate
+                if (process.env.BROWSER) {
+                    localStorage.setItem('exchangeRateGold', exchangeRateGold)
+                    localStorage.setItem('exchangeRate', exchangeRate)
+                    localStorage.setItem('exchangeCurrency', currency)
+                    localStorage.setItem('exchangeFetchDate', Date.now())
+                    this.setState({
+                        exchangeRate,
+                        exchangeRateGold,
+                        localCurrencySymbol: getSymbolFromCurrency(currency)
+                    })
+                }
+                console.info('Everything is fine, fetched exrates properly')
             })
             .catch(error => {
                 console.error('LocalizedCurrency request failed', error)
             })
 
-        // fetch exchange rates of currently choosen currency
-        fetch('https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.xchange%20where%20pair%20in%20(%22' + 'USD' + currency + '%22)&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=')
-            .then(function(data) { return data.json() })
-            .then(data => {
-                const exchangeRate = data.query.results.rate.Rate
-                store.set('exchangeRate', exchangeRate)
-                store.set('exchangeRateDate', Date.now())
-                store.set('fetchedCurrency', currency)
-                this.setState({
-                    exchangeRate,
-                    localCurrencySymbol: getSymbolFromCurrency(currency)
-                })
-                console.info('Everything is fine, fetched CURRENCY properly')
-            })
-            .catch(error => {
-                console.error('LocalizedCurrency request failed', error)
-            })
     }
 
     render() {
-        const {exchangeRate, goldExchangeRate} = this.state
+        const {exchangeRate, exchangeRateGold} = this.state
         const {amount, intl: {formatNumber}, noSymbol, fractionDigits, ...rest} = this.props
         let {localCurrencySymbol} = this.state
 
@@ -128,14 +121,14 @@ export default class LocalizedCurrency extends React.Component {
             // const currencyAmount =   formatNumber(
             //                          exchangeRate
             //                          // вознаграждение руб = Сумма Золотых х (Биржевая цена унции в USD / 31103.4768) * курс USD ЦБ РФ (или любая другая валюта)
-            //                          ? number * (goldExchangeRate / 31103.4768) * exchangeRate
+            //                          ? number * (exchangeRateGold / 31103.4768) * exchangeRate
             //                          : number,
             //                          options
             //                      )
             const currencyAmount =  Number(
                                         exchangeRate
                                         // вознаграждение руб = Сумма Золотых х (Биржевая цена унции в USD / 31103.4768) * курс USD ЦБ РФ (или любая другая валюта)
-                                        ? number * (goldExchangeRate / 31103.4768) * exchangeRate
+                                        ? number * (exchangeRateGold / 31103.4768) * exchangeRate
                                         : number
                                     ).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
             // if noSymbol is specified return only amount of digits

@@ -10,7 +10,6 @@ import VerticalMenu from 'app/components/elements/VerticalMenu';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import NotifiCounter from 'app/components/elements/NotifiCounter';
 import tt from 'counterpart';
-import store from 'store';
 import { DEFAULT_LANGUAGE, LANGUAGES, LIQUID_TICKER, DEBT_TICKER } from 'app/client_config';
 import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
 import {vestingSteem} from 'app/utils/StateFunctions';
@@ -95,9 +94,10 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
         {link: '#team', value: tt('g.team')},
     ];
     let currentLang = LANGUAGES[DEFAULT_LANGUAGE].substr(0,3).toUpperCase();
+    const locale = process.env.BROWSER ? localStorage.getItem('language') || DEFAULT_LANGUAGE : DEFAULT_LANGUAGE
     const lang_menu = [];
     for (var key in LANGUAGES) {
-      if (store.get('language') === key)
+      if (locale === key)
         currentLang = LANGUAGES[key].substr(0,3).toUpperCase();
       else
         lang_menu.push({link: '#' + key, onClick: changeLanguage, value: LANGUAGES[key]})
@@ -269,7 +269,7 @@ export default connect(
               if (targetLanguage.localeCompare(LANGUAGES[key]) == 0)
                 language = key
             }
-            store.set('language', language)
+            localStorage.setItem('language', language)
             dispatch(user.actions.changeLanguage(language))
         },
         showLogin: e => {

@@ -2,14 +2,14 @@ import React from 'react';
 import {connect} from 'react-redux'
 import user from 'app/redux/User';
 import tt from 'counterpart';
-import {ALLOWED_CURRENCIES, DEFAULT_LANGUAGE, LANGUAGES} from 'app/client_config'
-import store from 'store';
+import { CURRENCIES, DEFAULT_CURRENCY, LANGUAGES, DEFAULT_LANGUAGE } from 'app/client_config'
 import transaction from 'app/redux/Transaction'
 import o2j from 'shared/clash/object2json'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import Userpic from 'app/components/elements/Userpic';
 import reactForm from 'app/utils/ReactForm'
 import UserList from 'app/components/elements/UserList';
+import cookie from "react-cookie";
 
 
 class Settings extends React.Component {
@@ -63,12 +63,12 @@ class Settings extends React.Component {
     }
 
     onCurrencyChange(event) {
-        store.set('currency', event.target.value)
+        cookie.save('gls.currency', event.target.value, {path: "/"});
     }
 
     onLanguageChange = (event) => {
         const language = event.target.value
-        store.set('language', language)
+        localStorage.setItem('language', language)
         this.props.changeLanguage(language)
     }
 
@@ -93,11 +93,6 @@ class Settings extends React.Component {
         if(!metaData.profile.about) delete metaData.profile.about;
         if(!metaData.profile.location) delete metaData.profile.location;
         if(!metaData.profile.website) delete metaData.profile.website;
-
-        // TODO: Update language & currency
-        //store.set('language', language)
-        //this.props.changeLanguage(language)
-        //store.set('currency', event.target.value)
 
         const {account, updateAccount} = this.props
         this.setState({loading: true})
@@ -146,7 +141,7 @@ class Settings extends React.Component {
         const following = follow && follow.getIn(['get_following', account.name]);
         const ignores = isOwnAccount && following && following.get('ignore_result')
 
-        const languageSelectBox = <select defaultValue={store.get('language')} onChange={this.onLanguageChange}>
+        const languageSelectBox = <select defaultValue={process.env.BROWSER ? localStorage.getItem('language') : DEFAULT_LANGUAGE} onChange={this.onLanguageChange}>
           {Object.keys(LANGUAGES).map(key => {
             return <option key={key} value={key}>{LANGUAGES[key]}</option>
           })}
@@ -165,9 +160,9 @@ class Settings extends React.Component {
                     <div className="error"></div>
                     {/* CHOOSE CURRENCY */}
                     <label>{tt('settings_jsx.choose_currency')}
-                        <select defaultValue={store.get('currency')} onChange={this.onCurrencyChange}>
+                        <select defaultValue={process.env.BROWSER ? cookie.load('gls.currency') : DEFAULT_CURRENCY} onChange={this.onCurrencyChange}>
                             {
-                                ALLOWED_CURRENCIES.map(i => {
+                                CURRENCIES.map(i => {
                                     return <option key={i} value={i}>{i}</option>
                                 })
                             }

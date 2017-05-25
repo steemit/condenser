@@ -104,5 +104,5 @@
   "upload_image": false,
   "ws_connection_client": "wss://ws.golos.io",
   "ws_connection_server": "wss://ws.golos.io",
-  "metrics_name": "golos"
+  "node_name": "golos"
 }

@@ -21,16 +21,7 @@ import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import { VEST_TICKER, WIKI_URL, LANDING_PAGE_URL, ABOUT_PAGE_URL, WHITEPAPER_URL, SEGMENT_ANALYTICS_KEY, TERMS_OF_SERVICE_URL, PRIVACY_POLICY_URL } from 'app/client_config';
 import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
 
-class App extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {open: null, showCallout: true, showBanner: true, expandCallout: false};
-        this.toggleOffCanvasMenu = this.toggleOffCanvasMenu.bind(this);
-        this.showSignUp = this.props.showSignUp.bind(this);
-        // this.shouldComponentUpdate = shouldComponentUpdate(this, 'App')
-    }
-
-    initVendorScripts() {
+const initVendorScripts = () => {
         if (process.env.BROWSER) {
           // SEGMENT.COM ANALYTICS INITIALIZATION
           !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
@@ -106,12 +97,23 @@ class App extends React.Component {
           fbq('init', '217726192019770'); // Insert your pixel ID here.
           fbq('track', 'PageView');
         }
+}
+initVendorScripts()
+
+class App extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {open: null, showCallout: true, showBanner: true, expandCallout: false};
+        this.toggleOffCanvasMenu = this.toggleOffCanvasMenu.bind(this);
+        this.showSignUp = this.props.showSignUp.bind(this);
+        // this.shouldComponentUpdate = shouldComponentUpdate(this, 'App')
     }
+
 
     componentWillMount() {
         if (process.env.BROWSER) localStorage.removeItem('autopost') // July 14 '16 compromise, renamed to autopost2
         this.props.loginUser();
-        this.initVendorScripts()
+        // this.initVendorScripts()
     }
 
     componentDidMount() {

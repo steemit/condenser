@@ -2,7 +2,7 @@ var humanize = require('humanize-number');
 var bytes = require('bytes');
 var nodeStats = require('node-statsd');
 
-const stats = new nodeStats();
+const stats = new nodeStats({host: '127.0.0.1'});
 
 module.exports = prod_logger;
 

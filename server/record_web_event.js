@@ -1,5 +1,4 @@
 import {WebEvent, esc} from 'db/models';
-import StatsD from 'node-statsd';
 
 export default function recordWebEvent(ctx, event_type, value) {
     if (ctx.state.isBot) return;
@@ -30,6 +29,4 @@ export default function recordWebEvent(ctx, event_type, value) {
     WebEvent.create(d, {logging: false}).catch(error => {
         console.error('!!! Can\'t create web event record', error);
     });
-    const stats = new StatsD({prefix: 'testnet.'});
-    stats.increment(event_type.replace(/[^a-zA-Z0-9]/g,'_'));
 }

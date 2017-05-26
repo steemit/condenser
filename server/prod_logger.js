@@ -1,6 +1,6 @@
 var humanize = require('humanize-number');
 var bytes = require('bytes');
-var nodeStats require('node-statsd');
+var nodeStats = require('node-statsd');
 
 const stats = new nodeStats();
 

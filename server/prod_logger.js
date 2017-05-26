@@ -1,5 +1,8 @@
 var humanize = require('humanize-number');
 var bytes = require('bytes');
+var nodeStats require('node-statsd');
+
+const stats = new nodeStats();
 
 module.exports = prod_logger;
 
@@ -46,6 +49,8 @@ function log(ctx, start, len, err, asset) {
         time(start),
         length,
         ctx.session.uid || '');
+
+    stats.increment('http.code.' + status);
 }
 
 function time(start) {

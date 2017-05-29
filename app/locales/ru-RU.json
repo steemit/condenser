@@ -90,7 +90,12 @@
     "APP_NAME_can_only_register_one_account_per_verified_user": "Пожалуйста, имейте ввиду, что %(APP_NAME)s можно регистрировать только один аккаунт для каждого подтвержденного пользователя",
     "we_will_be_unable_to_create_account_with_this_browser": "У нас не получится создать %(APP_NAME)s аккаунт используя этот браузер",
     "couldnt_create_account_server_returned_error": "Не получилось создать аккаунт. Сервер вернул эту ошибку",
-    "form_requires_javascript_to_be_enabled": "Эта форма требует активированный javascript в браузере"
+    "form_requires_javascript_to_be_enabled": "Эта форма требует активированный javascript в браузере",
+    "please_provide_your_email_address_to_continue": "Чтобы продолжить, укажите свой адрес электронной почты",
+    "email_verification_helps_with_preventing_spam": "Проверка электронной почты помогает предотвратить спам и позволяет %(APP_NAME)s помогать с восстановлением учетной записи в случае, если ваша учетная запись когда-либо была скомпрометирована.",
+    "thank_you_for_providing_your_email_address": "Благодарим вас за предоставленный адрес электронной почты",
+    "to_continue_please_click_on_the_link_in_the_email": "Чтобы продолжить, нажмите на ссылку в письме, которую мы вам отправили.",
+    "didnt_recieve_email": "Не получили письмо?"
   },
   "curationrewards_jsx": {
     "curation_rewards_last_24_hours": "Кураторские награды за последние 24 часа",
@@ -124,6 +129,7 @@
   },
   "g": {
     "APP_NAME" : "Голос",
+    "APP_NAME_account": "%(APP_NAME)s аккаунт",
     "24_hour": "24 часа",
     "30_day": "30 дней",
     "auto": "автоматически",
@@ -193,6 +199,7 @@
     "password": "Пароль",
     "payouts": "Выплаты",
     "permissions": "Разрешения",
+    "phone": "телефон",
     "post": "Пост",
     "posting": "Постинг",
     "post_as": "Запостить как",
@@ -345,7 +352,7 @@
     "show_more_topics": "Показать больше топиков",
     "we_require_social_account": "%(APP_NAME)s спонсирует каждый аккаунт на сумму около %(signup_bonus)s в %(VESTING_TOKEN)s; чтобы предотвратить злоупотребление, мы просим новых пользователей регистрироваться используя социальные сети.",
     "we_require_social_account1": "%(APP_NAME)s спонсирует каждый аккаунт на сумму около ",
-    "we_require_social_account2": "%(VESTING_TOKEN)s; чтобы предотвратить злоупотребление, мы просим новых пользователей регистрироваться используя социальные сети.",
+    "we_require_social_account2": " %(VESTING_TOKEN)s; чтобы предотвратить злоупотребление, мы просим новых пользователей регистрироваться используя социальные сети.",
     "personal_info_will_be_private": "Ваша персональная информация будет оставаться",
     "personal_info_will_be_private_link": "приватной",
     "continue_with_facebook": "Продолжить с Facebook",

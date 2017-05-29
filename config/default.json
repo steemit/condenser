@@ -99,7 +99,8 @@
   },
   "twilio": {
     "account_sid": false,
-    "auth_token": false
+    "auth_token": false,
+    "sender_id": false
   },
   "upload_image": false,
   "ws_connection_client": "wss://ws.golos.io",

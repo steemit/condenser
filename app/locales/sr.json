@@ -345,7 +345,7 @@
     "show_more_topics":"Prikaži više tema",
     "we_require_social_account":"%(APP_NAME)s Sredstva za svaki nalog sa preko %(signup_bonus)s vredi %(VESTING_TOKEN)s; za sprečavanje zloupotrebe, zahtevamo od novih korisnika da se uloguju preko društvenih medija.",
     "we_require_social_account1":"%(APP_NAME)s Sponzoriše svaki nalog za oko ",
-    "we_require_social_account2":". Da bi se sprečila zloupotreba, tražimo nove korisnike da se registruju koristeći društvene mreže.",
+    "we_require_social_account2":" %(VESTING_TOKEN)s. Da bi se sprečila zloupotreba, tražimo nove korisnike da se registruju koristeći društvene mreže.",
     "personal_info_will_be_private":"Vaši lični podaci će se čuvati",
     "personal_info_will_be_private_link":"Privatno",
     "continue_with_facebook":"Continue with Facebook",

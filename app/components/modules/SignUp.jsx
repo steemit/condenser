@@ -43,9 +43,9 @@ class SignUp extends React.Component {
                 <div className="column">
                     <h3>{tt("g.sign_up")}</h3>
                     <p>
-                        {tt("g.we_require_social_account1", {APP_NAME, VESTING_TOKEN})}
+                        {tt("g.we_require_social_account1", {APP_NAME})}
                         <LocalizedCurrency amount={Number(this.props.signup_bonus)} />
-                        {tt("g.we_require_social_account2")}
+                        {tt("g.we_require_social_account2", {VESTING_TOKEN})}
                         <br />
                         {tt("g.personal_info_will_be_private")}
                         {' '}
@@ -76,19 +76,25 @@ class SignUp extends React.Component {
                       <a href="/connect/facebook" className="button SignUp--fb-button">{tt("g.continue_with_facebook")}</a>
                 </div>
             </div>
-            <div className="row">
-              &nbsp;
-            </div>
 
-            {/*<div className="row">
+            <div className="row">
                 <div className="column">
-                      <br />
-                    tt("g.dont_have_facebook") <br />
-                    {this.state.waiting_list ? <AddToWaitingList /> : <a href="#" onClick={() => this.setState({waiting_list: true})}>
+                    <br />
+                    {tt("g.dont_have_facebook")}
+                    <br />
+                    {/* this.state.waiting_list ? <AddToWaitingList /> : <a href="#" onClick={() => this.setState({waiting_list: true})}>
                         <strong> {tt("g.subscribe_to_get_sms_confirm")}.</strong>
-                    </a>}
+                    </a> */}
                 </div>
-            </div>*/}
+            </div>
+            <div className="row">
+                <div className="column large-4 shrink">
+                    <SvgImage name="golos" width="64px" height="64px" />
+                </div>
+                <div className="column large-8">
+                    <a href="/create_account" className="button secondary">{tt("recoveraccountstep1_jsx.continue_with_email")}</a>
+                </div>
+            </div>
             <div className="row">
                 <div className="column">
                       <br />

@@ -12,6 +12,10 @@ import tt from 'counterpart';
 import Immutable from "immutable";
 import Callout from 'app/components/elements/Callout';
 import {APP_NAME} from 'app/client_config';
+import cookie from "react-cookie";
+import { SELECT_TAGS_KEY } from 'app/client_config';
+import transaction from 'app/redux/Transaction'
+import o2j from 'shared/clash/object2json'
 
 class PostsIndex extends React.Component {
 
@@ -26,7 +30,11 @@ class PostsIndex extends React.Component {
     };
 
     static defaultProps = {
-        showSpam: false
+        showSpam: false,
+        loading: false,
+        changed: false,
+        errorMessage: '',
+        successMessage: '',
     }
 
     constructor() {
@@ -34,6 +42,8 @@ class PostsIndex extends React.Component {
         this.state = {}
         this.loadMore = this.loadMore.bind(this);
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'PostsIndex')
+        this.loadSelected = this.loadSelected.bind(this);
+        this.updateSubscribe = this.updateSubscribe.bind(this);
     }
 
     componentDidUpdate(prevProps) {
@@ -43,9 +53,57 @@ class PostsIndex extends React.Component {
     }
 
     getPosts(order, category) {
+        let select_tags = cookie.load(SELECT_TAGS_KEY);
+        select_tags = typeof select_tags === 'object' ? select_tags.sort().join('/') : '';
         const topic_discussions = this.props.discussions.get(category || '');
         if (!topic_discussions) return null;
         return topic_discussions.get(order);
+    }
+
+    updateSubscribe() {
+        const {accounts, username} = this.props
+        const account = accounts.get(username).toJS()
+        let metaData = account ? o2j.ifStringParseJSON(account.json_metadata) : {}
+        if (!metaData)
+            metaData = {}
+        if (!metaData.profile)
+            metaData.profile = {}
+
+        let select_tags = cookie.load(SELECT_TAGS_KEY);
+        metaData.profile.select_tags = typeof select_tags === 'object' ? select_tags : '';
+        if (!metaData.profile.select_tags)
+            delete metaData.profile.select_tags;
+
+        this.props.updateAccount({
+            json_metadata: JSON.stringify(metaData),
+            account: account.name,
+            memo_key: account.memo_key,
+            errorCallback: (e) => {
+                if (e === 'Canceled') {
+                    this.setState({
+                        loading: false,
+                        errorMessage: ''
+                    })
+                } else {
+                    console.log('updateAccount ERROR', e)
+                    this.setState({
+                        loading: false,
+                        changed: false,
+                        errorMessage: translate('server_returned_error')
+                    })
+                }
+            },
+            successCallback: () => {
+                this.setState({
+                    loading: false,
+                    changed: false,
+                    errorMessage: '',
+                    successMessage: translate('saved') + '!',
+                })
+                // remove successMessage after a while
+                setTimeout(() => this.setState({successMessage: ''}), 4000)
+            }
+        })
     }
 
     loadMore(last_post) {
@@ -60,9 +118,22 @@ class PostsIndex extends React.Component {
         const [author, permlink] = last_post.split('/');
         this.props.requestData({author, permlink, order, category, accountname});
     }
+
+    loadSelected(keys) {
+        let {accountname} = this.props.routeParams
+        let {category, order = constants.DEFAULT_SORT_ORDER} = this.props.routeParams;
+        if (category === 'feed') {
+            accountname = order.slice(1);
+            order = 'by_feed';
+        }
+        // if (isFetchingOrRecentlyUpdated(this.props.status, order, category)) return;
+        this.props.requestData({order, keys});
+    }
+
     onShowSpam = () => {
         this.setState({showSpam: !this.state.showSpam})
     }
+
     render() {
         let {category, order = constants.DEFAULT_SORT_ORDER} = this.props.routeParams;
         let topics_order = order;
@@ -96,14 +167,17 @@ class PostsIndex extends React.Component {
         }
 
         const status = this.props.status ? this.props.status.getIn([category || '', order]) : null;
-        const fetching = (status && status.fetching) || this.props.loading;
+        const fetching = (status && status.fetching) || this.props.loading || this.props.fetching || false;
         const {showSpam} = this.state;
+        const account = this.props.username && this.props.accounts.get(this.props.username) || null
+        const json_metadata = account ? account.toJS().json_metadata : {}
+        const metaData = account ? o2j.ifStringParseJSON(json_metadata) : {}
 
         return (
             <div className={'PostsIndex row' + (fetching ? ' fetching' : '')}>
                 <div className="PostsIndex__left column small-collapse">
                     <div className="PostsIndex__topics_compact show-for-small hide-for-large">
-                        <Topics order={topics_order} current={category} compact />
+                        <Topics order={topics_order} current={category} loading={fetching} loadSelected={this.loadSelected} compact />
                     </div>
                     {markNotificationRead}
                     {(!fetching && (posts && !posts.size)) ? <Callout>{emptyText}</Callout> :
@@ -117,7 +191,16 @@ class PostsIndex extends React.Component {
                         />}
                 </div>
                 <div className="PostsIndex__topics column shrink show-for-large">
-                    <Topics order={topics_order} current={category} compact={false} />
+                    <Topics
+                        order={topics_order}
+                        current={category}
+                        loading={fetching}
+                        loadSelected={this.loadSelected}
+                        compact={false}
+                        user={this.props.username}
+                        updateSubscribe={this.updateSubscribe}
+                        metaData={metaData}
+                    />
                     <small><a onClick={this.onShowSpam}>{tt(showSpam ? 'g.next_3_strings_together.show_less' : 'g.next_3_strings_together.show_more')}</a><br/>{tt('g.next_3_strings_together.value_posts')}</small>
                 </div>
             </div>
@@ -135,11 +218,16 @@ module.exports = {
                 loading: state.app.get('loading'),
                 accounts: state.global.get('accounts'),
                 username: state.user.getIn(['current', 'username']) || state.offchain.get('account'),
+                fetching: state.global.get('fetching'),
             };
         },
         (dispatch) => {
             return {
                 requestData: (args) => dispatch({type: 'REQUEST_DATA', payload: args}),
+                updateAccount: ({successCallback, errorCallback, ...operation}) => {
+                    const options = {type: 'account_update', operation, successCallback, errorCallback}
+                    dispatch(transaction.actions.broadcastOperation(options))
+                }
             }
         }
     )(PostsIndex)

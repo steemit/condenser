@@ -134,15 +134,13 @@ class Topics extends React.Component {
             <ul className={cn}>
                 <li className={`Topics__filter ${selectedExpanded ? 'filter_expanded' : 'filter_fixed'}`} key="filter">
                   <b>{tt('g.tags_filter')}{selectedKeys.length ? ' ('+ selectedKeys.length + ')' : ''}</b>&nbsp;&nbsp;&nbsp;
-                  {user &&
-                    <input
-                      onClick={onSaveTags}
-                      disabled={! this.state.needUpdateSubscribe}
-                      type="button"
-                      className="button"
-                      value={tt('g.save')}
-                    />
-                  }
+                  <input
+                    onClick={onSaveTags}
+                    disabled={! this.state.needUpdateSubscribe}
+                    type="button"
+                    className="button"
+                    value={tt('g.save')}
+                  />
                   {selectedKeys.length ? selectedKeys : <div><span>{tt('g.no_tags_selected')}</span></div>}
                 </li>
                 <li className="Topics__filter__expand" key="filter__expand_action">{expandFilterButton}</li>

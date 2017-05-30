@@ -62,7 +62,7 @@ class PostsIndex extends React.Component {
 
     updateSubscribe() {
         const {accounts, username} = this.props
-        const account = accounts.get(username).toJS()
+        const account = accounts.get(username) ? accounts.get(username).toJS() : {}
         let metaData = account ? o2j.ifStringParseJSON(account.json_metadata) : {}
         if (!metaData)
             metaData = {}

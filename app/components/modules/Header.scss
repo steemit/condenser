@@ -89,6 +89,8 @@ ul > li > .button {
   // No margin adjustments for first child element in menu items
   li:first-child {
     margin: 0 0 0 0;
+    // for domestic selector
+    padding: 0;
   }
   li > a {
     color: $dark-gray;
@@ -97,16 +99,15 @@ ul > li > .button {
     font-size: 1rem;
     line-height: 0;
     padding: 0;
-    &.domestic-selector {
-      font-size: 112.5%;
-    }
+    &.domestic-selector {}
     &.domestic-selector .Icon {
-      padding-top: 0.65rem;
-      margin-top: -1.25rem;
+      width: 1.12rem;
+      height: 1.12rem;
+      display: block;
+      overflow: hidden;
     }
-    .domestic-flag {
-      -webkit-filter: drop-shadow(0 0 4px #ccc);
-      filter: drop-shadow(0 0 4px #ccc);
+    &.domestic-selector .flag {
+      border-radius: 1.12rem;
     }
     .caret-down {
       margin-left: 0.24rem;

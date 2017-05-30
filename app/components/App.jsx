@@ -231,7 +231,7 @@ class App extends React.Component {
                             <h2>{tt('submit_a_story.welcome_to_the_blockchain')}</h2>
                             <h4>{tt('submit_a_story.your_voice_is_worth_something')}</h4>
                             <br />
-                            <a className="button" href="/create_account" onClick={this.showSignUp}> <b>{tt('navigation.sign_up')}</b> </a>
+                            <a className="button" href="#" onClick={this.showSignUp}> <b>{tt('navigation.sign_up')}</b> </a>
                             &nbsp; &nbsp; &nbsp;
                             <a className="button hollow uppercase" href="/welcome" target="_blank" onClick={this.learnMore}> <b>{tt('submit_a_story.learn_more')}</b> </a>
                             <br />

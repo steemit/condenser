@@ -196,7 +196,7 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
             {!inIco && !vertical && languageMenu}
             {!inIco && rocketchatItem}
             {!inIco && !probablyLoggedIn && <li className={lcn}>
-              <a href="/create_account" onClick={showSignUp}>{tt('g.sign_up')}</a>
+              <a href="#" onClick={showSignUp}>{tt('g.sign_up')}</a>
             </li>}
             {!inIco && !probablyLoggedIn && <li className={lcn}>
               <a href="/login.html" onClick={showLogin}>{tt('g.login')}</a>

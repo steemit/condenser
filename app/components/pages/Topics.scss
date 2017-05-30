@@ -53,7 +53,7 @@ select.Topics {
   color: $dark-gray;
   margin: 0 -1.25rem 0.5rem -1.25rem;
   padding: 0.25rem 0 0.25rem 1.75rem;
-  border: 1px solid rgba(51, 51, 51, 0.25);
+  border: 1px solid $light-gray;
   border-bottom: 0;
   border-radius: 0.25rem 0.25rem 0 0;
   div > a.action {
@@ -95,13 +95,13 @@ select.Topics {
   border-bottom-left-radius: 0;
 }
 .Topics__filter__expand {
-  border: 1px solid rgba(51, 51, 51, 0.25);
+  border: 1px solid $light-gray;
   margin: -0.5rem -1.25rem 0.5rem -1.25rem;
   text-align: center;
   border-bottom-right-radius: 0.25rem;
   border-bottom-left-radius: 0.25rem;
   &:hover {
-    background-color: $gray88;
+    background-color: $gray95;
   }
   a.expand {
     font-weight: bold;

@@ -105,5 +105,8 @@
   "upload_image": false,
   "ws_connection_client": "wss://ws.golos.io",
   "ws_connection_server": "wss://ws.golos.io",
-  "node_name": "golos"
+  "metrics": {
+    "name": "golos",
+    "host": "127.0.0.1"
+  }
 }

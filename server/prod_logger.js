@@ -1,8 +1,9 @@
 var humanize = require('humanize-number');
 var bytes = require('bytes');
+var config = require('config');
 var StatsD = require('node-statsd');
 
-const metrics = new StatsD({host: '127.0.0.1'});
+const metrics = new StatsD({host: config.get('metrics.host')});
 
 module.exports = prod_logger;
 

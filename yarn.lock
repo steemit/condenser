@@ -2745,18 +2745,18 @@ formidable@1.0.17, formidable@~1.0.14:
   version "1.0.17"
   resolved "https://registry.yarnpkg.com/formidable/-/formidable-1.0.17.tgz#ef5491490f9433b705faa77249c99029ae348559"
 
-foundation-sites@6.2.1:
-  version "6.2.1"
-  resolved "https://registry.yarnpkg.com/foundation-sites/-/foundation-sites-6.2.1.tgz#2e472ea9d37ab62b5eaf609d66bbacf7fbad1f0a"
-  dependencies:
-    jquery "^2.2.0"
-    what-input "^2.0.0"
-
 foundation-sites@^6.2.3:
   version "6.3.1"
   resolved "https://registry.yarnpkg.com/foundation-sites/-/foundation-sites-6.3.1.tgz#23853372deb9480c13b426499eaf0c8f90cdbe1d"
   dependencies:
     jquery ">=2.2.0"
+    what-input "^4.0.3"
+
+"foundation-sites@git+https://github.com/steemit/foundation-sites.git#e8e32c715bbc4c822b80b555345f61337269ca78":
+  version "6.3.1"
+  resolved "git+https://github.com/steemit/foundation-sites.git#e8e32c715bbc4c822b80b555345f61337269ca78"
+  dependencies:
+    jquery ">=3.0.0"
     what-input "^4.0.3"
 
 frameguard@3.0.0:
@@ -3759,9 +3759,13 @@ jquery-sortable@~0.9.12:
   dependencies:
     jquery "^2.1.2"
 
-jquery@>=1.9.0, jquery@>=2.2.0, jquery@^2.1.2, jquery@^2.2.0:
+jquery@>=1.9.0, jquery@>=2.2.0, jquery@^2.1.2:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-2.2.4.tgz#2c89d6889b5eac522a7eea32c14521559c6cbf02"
+
+jquery@>=3.0.0:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.2.1.tgz#5c4d9de652af6cd0a770154a631bba12b015c787"
 
 js-base64@^2.1.9:
   version "2.1.9"
@@ -7319,10 +7323,6 @@ websocket@^1.0.22:
     nan "^2.3.3"
     typedarray-to-buffer "^3.1.2"
     yaeti "^0.0.6"
-
-what-input@^2.0.0:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/what-input/-/what-input-2.1.1.tgz#86b6e0338d670a9fd936892b8f5115c4fe0d1d0b"
 
 what-input@^4.0.3:
   version "4.1.1"

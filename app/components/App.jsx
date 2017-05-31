@@ -218,7 +218,7 @@ class App extends React.Component {
                             <h2>{translate("welcome_to_the_blockchain")}</h2>
                             <h4>{translate("your_voice_is_worth_something")}</h4>
                             <br />
-                            <a className="button" href="/create_account" onClick={this.showSignUp}> <b>{translate("sign_up")}</b> </a>
+                            <a className="button" href="#" onClick={this.showSignUp}> <b>{translate("sign_up")}</b> </a>
                             &nbsp; &nbsp; &nbsp;
                             <a className="button hollow uppercase" href="/welcome" target="_blank"> <b>{translate("learn_more")}</b> </a>
                             <br />

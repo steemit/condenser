@@ -469,6 +469,7 @@ const jp = 	{
 	'24_hour': '24時間',
 	'30_day': '30日',
 	flag: "フラグ",
+  use_caution_sending_to_this_account: 'Use caution sending to this account. Please double check your spelling for possible phishing. ',
 
 }
 

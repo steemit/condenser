@@ -638,6 +638,7 @@ const en =  {
   your_password_permissions_were_reduced: 'Your password permissions were reduced',
   your_voice_is_worth_something: 'Your voice is worth something',
   сancel_transfer_from_savings: 'Cancel transfer from savings (id запроса {request})',
+  use_caution_sending_to_this_account: 'Use caution sending to this account. Please double check your spelling for possible phishing. '
 }
 
 export { en }

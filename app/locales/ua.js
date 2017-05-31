@@ -638,6 +638,7 @@ const ua = {
   your_password_permissions_were_reduced: 'Ваш дозвіл  паролю був знижен',
   your_voice_is_worth_something: 'Твій голос чогось вартий',
   сancel_transfer_from_savings: 'Отмена перевода из сейфа (id запроса {request})',
+  use_caution_sending_to_this_account: 'Use caution sending to this account. Please double check your spelling for possible phishing. ',
 }
 
 export { ua }

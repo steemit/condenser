@@ -470,6 +470,7 @@ const es_AR = 	{
 	'24_hour': '24 horas',
 	'30_day': '30 dias',
 	flag: "Denunciar",
+  use_caution_sending_to_this_account: 'Use caution sending to this account. Please double check your spelling for possible phishing. '
 
 }
 

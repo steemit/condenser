@@ -468,6 +468,7 @@ const it = 	{
 	'24_hour': '24 ore',
 	'30_day': '30 giorni',
 	flag: "Flag",
+  use_caution_sending_to_this_account: 'Use caution sending to this account. Please double check your spelling for possible phishing. ',
 
 }
 

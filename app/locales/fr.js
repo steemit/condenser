@@ -469,6 +469,7 @@ const fr = 	{
 	'24_hour': '24 hour',
 	'30_day': '30 day',
 	flag: "Flag",
+  use_caution_sending_to_this_account: 'Use caution sending to this account. Please double check your spelling for possible phishing. ',
 
 }
 

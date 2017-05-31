@@ -638,6 +638,7 @@ const rs_latin =  {
   your_password_permissions_were_reduced: 'Vaše dozvole za lozinku su smanjene',
   your_voice_is_worth_something: 'Tvoj glas vredi nesto',
   сancel_transfer_from_savings: 'Odbaciti transfer od štednje (id запроса {request})',
+  use_caution_sending_to_this_account: 'Use caution sending to this account. Please double check your spelling for possible phishing. ',
 }
 
 export { rs_latin }

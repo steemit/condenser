@@ -90,7 +90,7 @@ const jp = 	{
 	welcome_to_the_blockchain: '新しいBlockchainの世界へようこそ!',
 	your_voice_is_worth_something: 'あなたの言葉はどこかの世界のだれかに必ず役に立つ',
 	learn_more: 'もっと学ぶ',
-	get_sp_when_sign_up: '{signupBonus} 分のSteem Powerサインアップボーナスをゲットしよう',
+	get_sp_when_sign_up: '無料 分のSteem Powerサインアップボーナスをゲットしよう',
 	all_accounts_refunded: '復元されたアカウント全てに対して払い戻されます',
 	steemit_is_now_open_source: 'Steemit.comはオープンソースプロジェクトです',
 	// this is mainly from ReplyEditor

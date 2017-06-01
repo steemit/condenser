@@ -90,7 +90,7 @@ const fr = 	{
 	welcome_to_the_blockchain: 'Bienvenue sur la Blockchain!',
 	your_voice_is_worth_something: 'Votre voix a une valeur',
 	learn_more: 'En savoir plus',
-	get_sp_when_sign_up: 'Obtenez {signupBonus} de Steem Power à votre inscription.',
+	get_sp_when_sign_up: 'Obtenez gratuit Steem Power à votre inscription.',
 	all_accounts_refunded: 'Vous les comptes récupérés ont été remboursés.',
 	steemit_is_now_open_source: 'Steemit.com est maintenant Open Source',
 	// this is mainly from ReplyEditor

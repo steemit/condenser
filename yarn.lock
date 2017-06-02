@@ -1274,6 +1274,13 @@ buffer@^4.9.0:
     ieee754 "^1.1.4"
     isarray "^1.0.0"
 
+buffer@^5.0.6:
+  version "5.0.6"
+  resolved "https://registry.yarnpkg.com/buffer/-/buffer-5.0.6.tgz#2ea669f7eec0b6eda05b08f8b5ff661b28573588"
+  dependencies:
+    base64-js "^1.0.2"
+    ieee754 "^1.1.4"
+
 builtin-modules@^1.0.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/builtin-modules/-/builtin-modules-1.1.1.tgz#270f076c5a72c02f5b65a47df94c5fe3a278892f"
@@ -1948,6 +1955,12 @@ debug@2.6.1:
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.1.tgz#79855090ba2c4e3115cc7d8769491d58f0491351"
   dependencies:
     ms "0.7.2"
+
+debug@^2.6.8:
+  version "2.6.8"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.8.tgz#e731531ca2ede27d188222427da17821d68ff4fc"
+  dependencies:
+    ms "2.0.0"
 
 decamelize@^1.0.0, decamelize@^1.1.1, decamelize@^1.1.2:
   version "1.2.0"
@@ -2745,14 +2758,7 @@ formidable@1.0.17, formidable@~1.0.14:
   version "1.0.17"
   resolved "https://registry.yarnpkg.com/formidable/-/formidable-1.0.17.tgz#ef5491490f9433b705faa77249c99029ae348559"
 
-foundation-sites@^6.2.3:
-  version "6.3.1"
-  resolved "https://registry.yarnpkg.com/foundation-sites/-/foundation-sites-6.3.1.tgz#23853372deb9480c13b426499eaf0c8f90cdbe1d"
-  dependencies:
-    jquery ">=2.2.0"
-    what-input "^4.0.3"
-
-"foundation-sites@git+https://github.com/steemit/foundation-sites.git#e8e32c715bbc4c822b80b555345f61337269ca78":
+foundation-sites@^6.2.3, "foundation-sites@git+https://github.com/steemit/foundation-sites.git#e8e32c715bbc4c822b80b555345f61337269ca78":
   version "6.3.1"
   resolved "git+https://github.com/steemit/foundation-sites.git#e8e32c715bbc4c822b80b555345f61337269ca78"
   dependencies:
@@ -3759,7 +3765,7 @@ jquery-sortable@~0.9.12:
   dependencies:
     jquery "^2.1.2"
 
-jquery@>=1.9.0, jquery@>=2.2.0, jquery@^2.1.2:
+jquery@>=1.9.0, jquery@^2.1.2:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-2.2.4.tgz#2c89d6889b5eac522a7eea32c14521559c6cbf02"
 
@@ -4668,6 +4674,10 @@ ms@0.7.1:
 ms@0.7.2, ms@^0.7.1:
   version "0.7.2"
   resolved "https://registry.yarnpkg.com/ms/-/ms-0.7.2.tgz#ae25cf2512b3885a1d95d7f037868d8431124765"
+
+ms@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
 
 msgpack-lite@^0.1.20:
   version "0.1.26"
@@ -6551,18 +6561,19 @@ statuses@1, "statuses@>= 1.2.1 < 2", "statuses@>= 1.3.1 < 2", statuses@^1.2.0, s
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/statuses/-/statuses-1.3.1.tgz#faf51b9eb74aaef3b3acf4ad5f61abf24cb7b93e"
 
-steem@0.5.5:
-  version "0.5.5"
-  resolved "https://registry.yarnpkg.com/steem/-/steem-0.5.5.tgz#a3cbe3c2e3f02e18af44b37cc7f319371a1e8265"
+steem@0.5.12:
+  version "0.5.12"
+  resolved "https://registry.yarnpkg.com/steem/-/steem-0.5.12.tgz#6ce373f5e497241ee12cfae6d07f66f1df24e016"
   dependencies:
     bigi "^1.4.2"
     bluebird "^3.4.6"
     browserify-aes "^1.0.6"
     bs58 "^4.0.0"
+    buffer "^5.0.6"
     bytebuffer "^5.0.1"
     create-hash "^1.1.2"
     create-hmac "^1.1.4"
-    debug "^2.2.0"
+    debug "^2.6.8"
     detect-node "^2.0.3"
     ecurve "^1.0.5"
     lodash "^4.16.4"

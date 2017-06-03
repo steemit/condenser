@@ -58,7 +58,7 @@ function TimeAuthorCategoryLarge({content, authorRepLog10}) {
     return (
         <span className="PostFull__time_author_category_large vcard">
             <TimeAgoWrapper date={content.created} className="updated float-right" />
-            <Userpic account={content.author} />
+            <Userpic account={content.author} onClick={this.showAuthorPreview} />
             <div className="right-side">
                 <Author author={content.author} authorRepLog10={authorRepLog10} />
                 <span> in <TagList post={content} single /></span>
@@ -90,25 +90,25 @@ class PostFull extends React.Component {
         this.linkedInShare = this.linkedInShare.bind(this);
         this.showExplorePost = this.showExplorePost.bind(this);
         this.onShowReply = () => {
-            const {state: {showReply, formId}} = this
+            const {state: {showReply, formId}} = this;
             this.setState({showReply: !showReply, showEdit: false})
             saveOnShow(formId, !showReply ? 'reply' : null)
         }
         this.onShowEdit = () => {
-            const {state: {showEdit, formId}} = this
+            const {state: {showEdit, formId}} = this;
             this.setState({showEdit: !showEdit, showReply: false})
             saveOnShow(formId, !showEdit ? 'edit' : null)
         }
         this.onDeletePost = () => {
-            const {props: {deletePost}} = this
+            const {props: {deletePost}} = this;
             const content = this.props.cont.get(this.props.post);
             deletePost(content.get('author'), content.get('permlink'))
         }
     }
 
     componentWillMount() {
-        const {post} = this.props
-        const formId = `postFull-${post}`
+        const {post} = this.props;
+        const formId = `postFull-${post}`;
         this.setState({
             formId,
             PostFullReplyEditor: ReplyEditor(formId + '-reply'),
@@ -132,6 +132,10 @@ class PostFull extends React.Component {
         const names = 'cont, post, username'.split(', ');
         return names.findIndex(name => this.props[name] !== nextProps[name]) !== -1 ||
             this.state !== nextState
+    }
+
+    showAuthorPreview() {
+        document.querySelector(".PostFull__header .FoundationDropdownMenu__label").click();
     }
 
     fbShare(e) {
@@ -174,9 +178,9 @@ class PostFull extends React.Component {
 
     showPromotePost = () => {
         const post_content = this.props.cont.get(this.props.post);
-        if (!post_content) return
-        const author = post_content.get('author')
-        const permlink = post_content.get('permlink')
+        if (!post_content) return;
+        const author = post_content.get('author');
+        const permlink = post_content.get('permlink');
         this.props.showPromotePost(author, permlink)
     };
 
@@ -187,12 +191,12 @@ class PostFull extends React.Component {
 
     render() {
         const {props: {username, post}, state: {PostFullReplyEditor, PostFullEditEditor, formId, showReply, showEdit},
-            onShowReply, onShowEdit, onDeletePost} = this
+            onShowReply, onShowEdit, onDeletePost} = this;
         const post_content = this.props.cont.get(this.props.post);
         if (!post_content) return null;
         const p = extractContent(immutableAccessor, post_content);
         const content = post_content.toJS();
-        const {author, permlink, parent_author, parent_permlink} = content
+        const {author, permlink, parent_author, parent_permlink} = content;
         const jsonMetadata = this.state.showReply ? null : p.json_metadata
         // let author_link = '/@' + content.author;
         let link = `/@${content.author}/${content.permlink}`;

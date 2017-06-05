@@ -18,14 +18,15 @@
 ### Accounts
 - <a href="/faq.html#How_do_I_create_an_account">How do I create an account?</a>
 - <a href="/faq.html#What_information_do_I_need_to_provide_in_order_to_create_an_account">What information do I need to provide in order to create an account?</a>
+- <a href="/faq.html#How_long_does_the_account_approval_process_take">How long does the account approval process take?</a>
 - <a href="/faq.html#Why_do_I_need_to_provide_my_email_and_phone_number">Why do I need to provide my email and phone number?</a>
 - <a href="/faq.html#Can_I_create_a_Steem_account_without_an_email_and_phone_number">Can I create a Steem account without an email and phone number?</a>
 - <a href="/faq.html#What_are_other_ways_to_create_an_account_on_the_blockchain_besides_using_Steemit_com">What are other ways to create an account on the blockchain besides using Steemit.com?</a>
 - <a href="/faq.html#It_is_not_letting_me_create_an_account_with_my_phone_number__What_should_I_do">It is not letting me create an account with my phone number. What should I do?</a>
 - <a href="/faq.html#What_happens_if_my_email_or_phone_number_changes">What happens if my email or phone number changes?</a>
+- <a href="/faq.html#Am_I_allowed_to_create_more_than_one_account">Am I allowed to create more than one account</a>
 - <a href="/faq.html#Can_I_delete_or_deactivate_my_account">Can I delete or deactivate my account?</a>
 
-<a class="anchor" name="Table_of_Contents_Community"></a>
 ### Community
 - <a href="/faq.html#Is_there_an_Etiquette_Guide_for_Steemit">Is there an Etiquette Guide for Steemit?</a>
 - <a href="/faq.html#Am_I_required_to_verify_my_identity">Am I required to verify my identity?</a>
@@ -59,6 +60,7 @@
 - <a href="/faq.html#What_are_tags">What are tags?</a>
 - <a href="/faq.html#What_tags_should_I_use">What tags should I use?</a>
 - <a href="/faq.html#How_many_tags_can_I_use">How many tags can I use?</a>
+- <a href="/faq.html#Why_is_the_Post_button_grayed_out">Why is the "Post" button grayed out?</a>
 - <a href="/faq.html#How_do_I_format_text_in_Markdown">How do I format text in Markdown?</a>
 - <a href="/faq.html#How_often_can_I_post">How often can I post?</a>
 - <a href="/faq.html#How_long_can_my_post_be">How long can my post be?</a>
@@ -83,8 +85,10 @@
 - <a href="/faq.html#Why_do_the_earnings_for_my_post_go_up_or_down">Why do the earnings for my post go up or down?</a>
 - <a href="/faq.html#When_can_I_claim_my_rewards">When can I claim my rewards?</a>
 - <a href="/faq.html#What_is_the_difference_between_STEEM__STEEM_Power__and_Steem_Dollars">What is the difference between STEEM, STEEM Power, and Steem Dollars?</a>
+- <a href="/faq.html#What_is_delegated_STEEM_Power">What is delegated STEEM Power?</a>
 - <a href="/faq.html#What_determines_the_price_of_STEEM">What determines the price of STEEM?</a>
 - <a href="/faq.html#How_do_I_get_more_STEEM_Power">How do I get more STEEM Power?</a>
+- <a href="/faq.html#How_long_does_it_take_STEEM_or_STEEM_Power_that_I_purchased_to_show_up_in_my_account">How long does it take STEEM or STEEM Power that I purchased to show up in my account?</a>
 - <a href="/faq.html#What_is_powering_up_and_down">What is powering up and down?</a>
 - <a href="/faq.html#Will_1_Steem_Dollar_always_be_worth__1_00_USD">Will 1 Steem Dollar always be worth $1.00 USD?</a>
 - <a href="/faq.html#How_do_Steem_Dollar_to_STEEM_conversions_work">How do Steem Dollar to STEEM conversions work?</a>
@@ -107,6 +111,7 @@
 - <a href="/faq.html#What_determines_how_much_of_the_curation_reward_goes_to_the_author_versus_curators">What determines how much of the curation reward goes to the author versus curators?</a>
 - <a href="/faq.html#Can_I_get_curation_rewards_for_upvoting_comments">Can I get curation rewards for upvoting comments?</a>
 - <a href="/faq.html#Do_I_get_curation_rewards_for_downvoting_posts_or_comments">Do I get curation rewards for downvoting posts or comments?</a>
+- <a href="/faq.html#What_are_curation_trails">What are curation trails?</a>
 - <a href="/faq.html#Why_don_t_my_upvotes_have_an_effect_on_a_post_s_rewards">Why don't my upvotes have an effect on a post's rewards?</a>
 - <a href="/faq.html#Is_there_a_way_to_make_my_votes_count_for_more">Is there a way to make my votes count for more?</a>
 - <a href="/faq.html#What_are_the_valid_reasons_for_downvoting">What are the valid reasons for downvoting?</a>
@@ -267,11 +272,23 @@ It is best to have realistic expectations, without focusing on rewards when you 
 
 Click on the "Sign Up" link at the top of Steemit.com to get started.
 
+You will be asked to verify your email address and phone number. After your email address and phone number have been verified, you will be added to the waiting list. You will be notified via email once your account is approved.
+
+After you receive notification that your account is approved, click on the link in the email to finish the account creation process. Be sure to save and backup your username and password. It is very important that you do not lose your password. There is no way to recover your password or access your account if it is lost. Once your password is saved and backed up, click on the "Create Account" button to create the account.
+
 <a href="/faq.html#Table_of_Contents_Accounts">^</a>
 <a class="anchor" name="What_information_do_I_need_to_provide_in_order_to_create_an_account"></a>
 ## What information do I need to provide in order to create an account?
 
 You will need to provide your email address and phone number.
+
+<a href="/faq.html#Table_of_Contents_Accounts">^</a>
+<a class="anchor" name="How_long_does_the_account_approval_process_take"></a>
+## How long does the account approval process take?
+
+Most accounts are approved within 24 hours. Some may take up to three business days.
+
+If your account has not been approved after three business days, please ask for help in the <a href="https://steemit.chat/channel/help">#help</a> channel on <a href="https://steemit.chat/home">steemit.chat</a>.
 
 <a href="/faq.html#Table_of_Contents_Accounts">^</a>
 <a class="anchor" name="Why_do_I_need_to_provide_my_email_and_phone_number"></a>
@@ -283,15 +300,17 @@ To create an account on the blockchain, it costs STEEM tokens. When you create a
 <a class="anchor" name="Can_I_create_a_Steem_account_without_an_email_and_phone_number"></a>
 ## Can I create a Steem account without an email and phone number?
 
-The only way to have an account created via Steemit.com is to supply your email and phone number. Because Steem is an open and permissionless network, there are other ways to create a Steem account. Any Steem account can be used on Steemit.com
+The only way to have an account created via Steemit.com is to supply your email and phone number. Because Steem is an open and permissionless network, there are other ways to create a Steem account. Any Steem blockchain account can be used on Steemit.com
 
 <a href="/faq.html#Table_of_Contents_Accounts">^</a>
 <a class="anchor" name="What_are_other_ways_to_create_an_account_on_the_blockchain_besides_using_Steemit_com"></a>
 ## What are other ways to create an account on the blockchain besides using Steemit.com?
 
-If you are willing to pay your own signup fee, then there are other ways to create a new account on the blockchain. If you are not sure how to do this, you can ask for help in the <a href="https://steemit.chat/channel/help">#help</a> channel on <a href="https://steemit.chat/home">steemit.chat</a>.
+If you are willing to pay your own signup fee, then there are other ways to create a new account on the blockchain.
 
-There is also a third-party tool called <a href="https://steemit.com/steemit/@someguy123/anonsteem-create-anonymous-steem-accounts-without-social-media">AnonSteem</a> that accepts bitcoin and Litecoin to anonymously create a Steem account.
+There is a third-party tool called <a href="https://steemit.com/steemit/@someguy123/anonsteem-create-anonymous-steem-accounts-without-social-media">AnonSteem</a> that accepts bitcoin, Litecoin, STEEM, or SBD to anonymously create a Steem account. You do not need to have an existing Steem blockchain account to use the service, but there is a charge on top of the blockchain account creation fee for using the service.
+
+There is also a third-party tool called <a href="https://steemit.com/news/@timcliff/new-tool-from-busy-org-create-new-steem-blockchain-accounts-with-steemconnect">SteemConnect</a> that allows you to create accounts by paying or delegating the account creation fee. There is no additional fee to use the service, but does require an existing Steem blockchain account to pay the account creation fee to create the account.
 
 <a href="/faq.html#Table_of_Contents_Accounts">^</a>
 <a class="anchor" name="It_is_not_letting_me_create_an_account_with_my_phone_number__What_should_I_do"></a>
@@ -304,6 +323,12 @@ Ask for help in the <a href="https://steemit.chat/channel/help">#help</a> channe
 ## What happens if my email or phone number changes?
 
 Currently there is no way to change the email or phone number that is linked to your account.  Though once your account is created, you can continue to use it even if the email or phone number that is linked to the account has changed.
+
+<a href="/faq.html#Table_of_Contents_Accounts">^</a>
+<a class="anchor" name="Am_I_allowed_to_create_more_than_one_account"></a>
+## Am I allowed to create more than one account?
+
+Each user is allowed only one paid-for account created via Steemit.com, however users are allowed to create multiple accounts on the blockchain. Creating additional accounts on the blockchain requires users to pay their own account creation fee for any additional accounts.
 
 <a href="/faq.html#Table_of_Contents_Accounts">^</a>
 <a class="anchor" name="Can_I_delete_or_deactivate_my_account"></a>
@@ -544,6 +569,12 @@ All tags must be lowercase letters. Spaces aren't allowed, but hyphenated words 
 You can use up to 5 tags per post. 
 
 <a href="/faq.html#Table_of_Contents_Posting">^</a>
+<a class="anchor" name="Why_is_the_Post_button_grayed_out"></a>
+## Why is the "Post" button grayed out?
+
+A post must have a title, body, and at least one valid tag. If any of these are missing, then the "Post" button will be disabled.
+
+<a href="/faq.html#Table_of_Contents_Posting">^</a>
 <a class="anchor" name="How_do_I_format_text_in_Markdown"></a>
 ## How do I format text in Markdown?
 
@@ -703,6 +734,16 @@ Posts and comments remain active for 7 days. When the period is over, you are ab
 **Steem Dollars** - Steem Dollars (commonly abbreviated SBD) are liquid stable-value currency tokens designed to be pegged to $1 USD. Steem Dollars can be traded with STEEM, and transferred to other accounts for commerce or exchange.  Steem Dollars may also be converted into STEEM in a process that takes 3.5 days. Steem Dollars can be used to buy things in marketplaces, such as PeerHub.com.
 
 <a href="/faq.html#Table_of_Contents_Economics">^</a>
+<a class="anchor" name="What_is_delegated_STEEM_Power"></a>
+## What is delegated STEEM Power?
+
+Users have the option to delegate STEEM Power to other users. When a user is delegated STEEM Power, their content votes and curation rewards are calculated as if it were their own STEEM Power. Users are not able to power down or cash out delegated STEEM Power, as it still belongs to the original owner.
+
+Most users will have a small amount of STEEM Power delegated to them by the Steemit account after creating an account via Steemit.com.
+
+Delegated STEEM Power shows up in a user's wallet below their actual STEEM Power balance in parentheses.
+
+<a href="/faq.html#Table_of_Contents_Economics">^</a>
 <a class="anchor" name="What_determines_the_price_of_STEEM"></a>
 ## What determines the price of STEEM?
 
@@ -724,6 +765,14 @@ To buy:
 STEEM purchases made on Steemit.com are facilitated by <a href="https://blocktrades.us">BlockTrades</a>.
 
 bitcoin can also be exchanged for STEEM on external markets such as <a href="https://poloniex.com">Poloniex</a>, <a href="https://bittrex.com">Bittrex</a>, <a href="https://shapeshift.io">ShapeShift.io</a>, and <a href="https://changelly.com">Changelly</a>.
+
+<a href="/faq.html#Table_of_Contents_Economics">^</a>
+<a class="anchor" name="How_long_does_it_take_STEEM_or_STEEM_Power_that_I_purchased_to_show_up_in_my_account"></a>
+## How long does it take STEEM or STEEM Power that I purchased to show up in my account?
+
+Transactions on the Steem blockchain typically only take about three seconds to process, but when you are purchasing the STEEM tokens using bitcoin or some other token, then the transaction must wait for the transaction to be confirmed on the other network. This can often take several hours, and sometimes even days.    
+
+If you paid using bitcoin, the third party website <a href="https://bitcoinfees.21.co/">bitcoinfees.21.co</a> can estimate the approximate wait time of the transaction based on the fees that were paid. The third party website <a href="https://blockchain.info/">blockchain.info</a> will lookup the fees that were paid on a specific blockchain transaction.
 
 <a href="/faq.html#Table_of_Contents_Economics">^</a>
 <a class="anchor" name="What_is_powering_up_and_down"></a>
@@ -879,6 +928,12 @@ Yes. You can earn curation rewards from upvoting both posts and comments!
 ## Do I get curation rewards for downvoting posts or comments?
 
 No. Since downvoting reduces the rewards on a post/comment, it does not earn curation rewards.
+
+<a href="/faq.html#Table_of_Contents_Voting_and_Curating">^</a>
+<a class="anchor" name="What_are_curation_trails"></a>
+## What are curation trails?
+
+Some users decide to use third party applications such as <a href="https://streemian.com/">Streemian</a> to automatically cast votes. Users can automatically vote for the same posts and comments that other users does. Typically they will set this up to follow the votes of users who are good at curating. When a user has other users automatically voting for the same content that they do, the people that automatically vote after them are called their "curation trail". 
 
 <a href="/faq.html#Table_of_Contents_Voting_and_Curating">^</a>
 <a class="anchor" name="Why_don_t_my_upvotes_have_an_effect_on_a_post_s_rewards"></a>
@@ -1333,7 +1388,7 @@ You can also create a post on Steemit.com with the tag #help, and someone in the
 <a class="anchor" name="Third_Party_References_and_User_Links"></a>
 ## Third Party References and User Links
 
-BlockTrades, Poloniex, Bittrex, Changelly, Shapeshift.io, Coinbase, Localbitcoins, SteemDB, PeerHub, Steemit.chat, SteemTools, AnonSteem, SteemStats, Pixabay, Steemcleaners, Pexels, Postimage, Markdown Cheatsheet, @cheetah, Bitcointalk, and steemd are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here, as well as any other third party applications or websites that are listed, does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
+BlockTrades, Poloniex, Bittrex, Changelly, Shapeshift.io, Coinbase, Localbitcoins, SteemDB, PeerHub, Steemit.chat, SteemTools, AnonSteem, SteemConnect, Streemian, SteemStats, Pixabay, Steemcleaners, Pexels, Postimage, Markdown Cheatsheet, @cheetah, Bitcointalk, bitcoinfees, blockchain.info, and steemd are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here, as well as any other third party applications or websites that are listed, does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 
 All links to user posts were created by our users and do not necessarily represent the views of Steemit, Inc. or its management. Their listing here does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 

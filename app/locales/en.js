@@ -6,7 +6,7 @@ const en = 	{
 	// this variables mainly used in navigation section
 	about: "About Steem",
 	explore: "Trending Topics",
-	APP_NAME_whitepaper: APP_NAME + " Whitepaper",
+	APP_NAME_whitepaper: "Steem" + " Whitepaper",
 	buy_LIQUID_TOKEN: 'Buy ' + LIQUID_TOKEN,
 	sell_LIQUID_TOKEN: 'Sell ' + LIQUID_TOKEN,
 	market: "Market",

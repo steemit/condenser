@@ -276,7 +276,7 @@ export default function useGeneralApi(app) {
             if (!checkCSRF(this, csrf)) return;
             console.log('-- /record_event -->', this.session.uid, type, value);
             const str_value = typeof value === 'string' ? value : JSON.stringify(value);
-            if (type.match(/^[A-Z]/)) {
+            if (mixpanel && type.match(/^[A-Z]/)) {
                 mixpanel.track(type, {distinct_id: this.session.uid, Page: str_value});
                 mixpanel.people.increment(this.session.uid, type, 1);
             } else {
@@ -340,14 +340,16 @@ export default function useGeneralApi(app) {
                     $referrer: ref,
                     $referring_domain: referring_domain
                 };
-                mixpanel.track('PageView', mp_params);
-                if (!this.session.mp) {
+                if (mixpanel) mixpanel.track('PageView', mp_params);
+                if (mixpanel && !this.session.mp) {
                     mixpanel.track('FirstVisit', mp_params);
                     this.session.mp = 1;
                 }
-                if (ref) mixpanel.people.set_once(this.session.uid, '$referrer', ref);
-                mixpanel.people.set_once(this.session.uid, 'FirstPage', page);
-                mixpanel.people.increment(this.session.uid, 'PageView', 1);
+                if (mixpanel) {
+                    if (ref) mixpanel.people.set_once(this.session.uid, '$referrer', ref);
+                    mixpanel.people.set_once(this.session.uid, 'FirstPage', page);
+                    mixpanel.people.increment(this.session.uid, 'PageView', 1);
+                }
             }
         } catch (error) {
             console.error('Error in /page_view api call', this.session.uid, error.message);

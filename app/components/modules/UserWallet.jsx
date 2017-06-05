@@ -234,7 +234,7 @@ class UserWallet extends React.Component {
         }
 
         let claimbox;
-        if(rewards_str) {
+        if(rewards_str && (!current_user || current_user && isMyAccount)) {
             claimbox = <div className="row">
                     <div className="columns small-12">
                         <div className="UserWallet__claimbox">

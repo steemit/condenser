@@ -77,7 +77,6 @@
     "lodash.debounce": "^4.0.7",
     "medium-editor-insert-plugin": "^2.3.2",
     "minimist": "^1.2.0",
-    "mixpanel": "^0.5.0",
     "mysql": "^2.10.2",
     "net": "^1.0.2",
     "node-sass": "^3.4.2",

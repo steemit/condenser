@@ -69,7 +69,6 @@
     "username": "guest",
     "password": ""
   },
-  "mixpanel": "",
   "img_proxy_prefix": "",
   "ipfs_prefix": "",
   "disable_signups": false,

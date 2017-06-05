@@ -11,7 +11,6 @@
  - clarify power down error message #838
  - disable follow buttons while pending #832
  - translation of markets #604
- - mixpanel - track more events #828
  - add contributors.md #825
  - support for secure server sessions #823
  - fix post footer promo text #822

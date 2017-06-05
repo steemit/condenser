@@ -80,6 +80,7 @@
     "mysql": "^2.10.2",
     "net": "^1.0.2",
     "node-sass": "^3.4.2",
+    "node-statsd": "0.1.1",
     "pluralize": "^2.0.0",
     "purest": "^2.0.1",
     "raw-loader": "^0.5.1",

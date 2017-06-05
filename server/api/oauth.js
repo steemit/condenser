@@ -135,7 +135,7 @@ function* handleFacebookCallback() {
         }
 
         if (!u.verified) {
-            throw new Error('Not verified Facebook account. Please verify your Facebook account and try again to sign up to Steemit.');
+            throw new Error('Not verified Facebook account. Please verify your Facebook account and try again to sign up to GOLOS.');
         }
 
         const same_ip_bot = yield models.User.findOne({

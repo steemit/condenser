@@ -133,10 +133,10 @@ class App extends React.Component {
         const {location, params, children, flash, new_visitor,
             depositSteem, signup_bonus} = this.props;
         const lp = false; //location.pathname === '/';
-        const miniHeader = location.pathname === '/create_account';
+        const miniHeader = location.pathname === '/create_account' || location.pathname === '/pick_account';
         const params_keys = Object.keys(params);
         const ip = location.pathname === '/' || (params_keys.length === 2 && params_keys[0] === 'order' && params_keys[1] === 'category');
-        const alert = this.props.error || flash.get('alert');
+        const alert = this.props.error || flash.get('alert') || flash.get('error');
         const warning = flash.get('warning');
         const success = flash.get('success');
         let callout = null;

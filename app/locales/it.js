@@ -90,7 +90,7 @@ const it = 	{
 	welcome_to_the_blockchain: 'Welcome to the Blockchain!',
 	your_voice_is_worth_something: 'La tua voce ha un certo valore',
 	learn_more: 'Approfondisci',
-	get_sp_when_sign_up: 'Ottieni un bonus di {signupBonus} di Steem Power se ti iscrivi oggi.',
+	get_sp_when_sign_up: 'Ottieni gratuito di Steem Power se ti iscrivi oggi.',
 	all_accounts_refunded: 'Tutti gli account recuperati sono stati rimborsati pienamente',
 	steemit_is_now_open_source: 'Steemit.com è ora Open Source',
 	// this is mainly from ReplyEditor
@@ -193,8 +193,9 @@ const it = 	{
 	i_understand_dont_show_again: "Ho capito, non mostrare più",
 	ok: 'Ok',
 	convert_to_steem: 'Converti in Steem',
-	steem_dollars_will_be_unavailable: 'Questa azione durerà una settimana da ora e non potrà essere cancellata. Questi Steem Dollars diventeranno immediatamente inutilizzabili',
-	amount: 'Quantità',
+	steem_dollars_will_be_unavailable: 'Questa azione durerà una settimana da ora e non potrà essere cancellata. Questi Steem Dollars diventeranno immediatamente inutilizzabili. The 3.5 day delay is necessary to prevent abuse from gaming the price feed average',
+	steem_dollar_conversions_have_risk: 'Steem Dollar conversions have risk. There is no guarantee on the amount of STEEM that will result from the conversion. The conversion amount depends on many factors including fluctuating market prices, witness price feeds, and witness price feed biases',
+    amount: 'Quantità',
 	steem_dollars: 'STEEM DOLLARS',
 	convert: 'Converti',
 	invalid_amount: 'Quantità non valida',
@@ -392,9 +393,7 @@ const it = 	{
 	view_the_direct_parent: 'Visualizza cartella principale',
 	you_are_viewing_single_comments_thread_from: 'You are viewing a single comment&#39;s thread from',
 	view_the_full_context: 'Visualizza tutto il contesto',
-	this_is_a_price_feed_conversion: 'This is a price feed conversion. The 3.5 day delay is necessary to prevent abuse from gaming the price feed average',
-	your_existing_SD_are_liquid_and_transferable: 'I tuoi Steem Dollars esistenti sono liquidi and trasferibili.  Instead you may wish to trade Steem Dollars directly in this site under {link} or transfer to an external market.',
-	buy_or_sell: 'Compra or Vendi',
+	your_existing_SD_are_liquid_and_transferable: 'I tuoi Steem Dollars esistenti sono liquidi and trasferibili. Instead of converting, you may wish to trade Steem Dollars for STEEM directly in this site under {link}. There is less risk, and you do not need to wait 3.5 days.',
 	trending_30_day: 'trending (30 day)',
 	promoted: 'Pubblicizzati',
 	comments: 'Commenti',
@@ -470,7 +469,12 @@ const it = 	{
 	'24_hour': '24 ore',
 	'30_day': '30 giorni',
 	flag: "Flag",
-
+	// Beginner tips in empty feed page
+	empty_feed_1: "Looks like you haven't followed anything yet",
+	empty_feed_2: 'If you recently added new users to follow, your personalized feed will populate once new content is available',
+	empty_feed_3: 'Explore Trending Articles',
+	empty_feed_4: "Read The Quick Start Guide",
+	empty_feed_5: 'Browse The FAQ'
 }
 
 export { it }

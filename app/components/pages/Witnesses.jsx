@@ -157,6 +157,7 @@ class Witnesses extends React.Component {
                         <p>{tt('witnesses_jsx.if_you_want_to_vote_outside_of_top_enter_account_name')}.</p>
                         <form>
                             <div className="input-group">
+                                <span className="input-group-label">@</span>
                                 <input className="input-group-field" type="text" style={{float: "left", width: "75%", maxWidth: "20rem"}} value={customUsername} onChange={onWitnessChange} />
                                 <div className="input-group-button">
                                     <button className="button" onClick={accountWitnessVote.bind(this, customUsername, !(witness_votes ? witness_votes.has(customUsername) : null))}>{tt('g.vote')}</button>
@@ -187,6 +188,7 @@ class Witnesses extends React.Component {
                         </div> :
                         <form>
                             <div className="input-group">
+                                <span className="input-group-label">@</span>
                                 <input className="input-group-field bold" type="text" style={{float: "left", width: "75%", maxWidth: "20rem"}} value={proxy} onChange={(e) => {this.setState({proxy: e.target.value});}} />
                                 <div className="input-group-button">
                                     <button style={{marginBottom: 0}} className="button" onClick={accountWitnessProxy}>{tt('witnesses_jsx.witness_proxy_set')}</button>

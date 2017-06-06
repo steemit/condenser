@@ -78,7 +78,7 @@ class LoginForm extends Component {
     SignUp() {
         const onType = document.getElementsByClassName("OpAction")[0].textContent;
         serverApiRecordEvent('FreeMoneySignUp', onType);
-        window.location.href = "/enter_email";
+        window.location.href = "/pick_account";
     }
 
     SignIn() {
@@ -197,11 +197,11 @@ class LoginForm extends Component {
                 {loginBroadcastOperation && <div>
                     <div className="info">{tt('loginform_jsx.this_operation_requires_your_key_or_master_password', {authType})}</div>
                 </div>}
-                {!loginBroadcastOperation && <div>
+                <div>
                     <label htmlFor="saveLogin">
                         {tt('loginform_jsx.keep_me_logged_in')} &nbsp;
                         <input id="saveLogin" type="checkbox" ref="pw" {...saveLogin.props} onChange={this.saveLoginToggle} disabled={submitting} /></label>
-                </div>}
+                </div>
                 <div>
                     <br />
                     <button type="submit" disabled={submitting || disabled} className="button" onClick={this.SignIn}>
@@ -282,6 +282,10 @@ export default connect(
         } else if (initialUsername) {
             initialValues.username = initialUsername;
         }
+        const offchainUser = state.offchain.get('user');
+        if (!initialUsername && offchainUser && offchainUser.get('account')) {
+            initialValues.username = offchainUser.get('account');
+        }
         let msg = '';
         const msg_match = window.location.hash.match(/msg\=([\w]+)/);
         if (msg_match && msg_match.length > 1) msg = msg_match[1];
@@ -304,8 +308,7 @@ export default connect(
             if (loginBroadcastOperation) {
                 const {type, operation, successCallback, errorCallback} = loginBroadcastOperation.toJS()
                 dispatch(transaction.actions.broadcastOperation({type, operation, username, password, successCallback, errorCallback}))
-                // Avoid saveLogin, this could be a user-provided content page and the login might be an active key.  Security will reject that...
-                dispatch(user.actions.usernamePasswordLogin({username, password, saveLogin: false, afterLoginRedirectToWelcome, operationType: type}))
+                dispatch(user.actions.usernamePasswordLogin({username, password, saveLogin, afterLoginRedirectToWelcome, operationType: type}))
                 dispatch(user.actions.closeLogin())
             } else {
                 dispatch(user.actions.usernamePasswordLogin({username, password, saveLogin, afterLoginRedirectToWelcome}))

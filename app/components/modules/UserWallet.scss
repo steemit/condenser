@@ -28,6 +28,12 @@
     color: white;
     margin-top: -0.5rem;
   }
+  // spacing for mobile collapse
+  @media only screen and (max-width: 30em) {
+      .button {
+          margin-top: 1.5rem;
+      }
+  }
 }
 
 .WalletSubMenu {

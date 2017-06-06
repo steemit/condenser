@@ -74,7 +74,7 @@ class Header extends React.Component {
         let topic = '';
         let user_name = null;
         let page_name = null;
-
+        this.state.subheader_hidden = false;
         if (route.page === 'PostsIndex') {
             sort_order = route.params[0];
             if (sort_order === 'home') {
@@ -105,6 +105,12 @@ class Header extends React.Component {
             page_title = tt('header_jsx.change_account_password');
         } else if (route.page == 'CreateAccount') {
             page_title = tt('header_jsx.create_account');
+        } else if (route.page == 'PickAccount') {
+            page_title = `Pick Your New Steemit Account`;
+            this.state.subheader_hidden = true;
+        } else if (route.page == 'Approval') {
+            page_title = `Account Confirmation`;
+            this.state.subheader_hidden = true;
         } else if (route.page == 'RecoverAccountStep1' || route.page == 'RecoverAccountStep2') {
             page_title = tt('header_jsx.stolen_account_recovery');
         } else if (route.page === 'UserProfile') {

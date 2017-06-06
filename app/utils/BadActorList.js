@@ -1,6 +1,9 @@
 const list = `
 polonox
 poloneix
+biitrex
+biittrex
+bitter
 bitterx
 bittex
 bittrax
@@ -21,6 +24,7 @@ bttrex
 btrex
 bttrex
 ittrex
+bittrex-deposit
 poloiex
 poloinex
 polomiex
@@ -70,7 +74,6 @@ changelly.com
 changely
 shapeshif
 shapeshift
-livecoin.net
 `.trim().split('\n');
 
 export default list;

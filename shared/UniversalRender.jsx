@@ -163,10 +163,14 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
         const fee = parseFloat($STM_Config.registrar_fee.split(' ')[0]),
               {base, quote} = onchain.feed_price,
               feed = parseFloat(base.split(' ')[0]) / parseFloat(quote.split(' ')[0]);
-        const sd = fee * feed,
-              sdInt = parseInt(sd),
-              sdDec = (sd - sdInt),
-              sdDisp = '$' + sdInt + (sdInt < 5 && sdDec >= 0.5 ? '.50' : '');
+        const sd = fee * feed;
+        let sdDisp;
+        if (sd < 1.0) {
+            sdDisp = '¢' + parseInt(sd * 100);
+        } else {
+            const sdInt = parseInt(sd), sdDec = (sd - sdInt);
+            sdDisp = '$' + sdInt + (sdInt < 5 && sdDec >= 0.5 ? '.50' : '');
+        }
 
         offchain.signup_bonus = sdDisp;
         offchain.server_location = location;

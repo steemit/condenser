@@ -28,3 +28,7 @@ input[type=submit].disabled, input[type=submit].disabled:focus {
 button, .button {
   text-transform: uppercase;
 }
+
+.column, .columns {
+    min-width: 0;
+}

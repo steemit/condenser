@@ -90,7 +90,7 @@ const es_AR = 	{
 	welcome_to_the_blockchain: 'Bienvenidos al Blockchain!',
 	your_voice_is_worth_something: 'Tu voz vale algo',
 	learn_more: 'Aprende más',
-	get_sp_when_sign_up: 'Get {signupBonus} of Steem Power when you sign up today.',
+	get_sp_when_sign_up: 'Get free Steem Power when you sign up today.',
 	all_accounts_refunded: 'All Recovered Accounts have been fully Refunded',
 	steemit_is_now_open_source: 'Steemit.com es ahora Software Libre',
 	// this is mainly from ReplyEditor
@@ -193,8 +193,9 @@ const es_AR = 	{
 	i_understand_dont_show_again: "I understand, don't show me again",
 	ok: 'Ok',
 	convert_to_steem: 'Convertir a Steem',
-	steem_dollars_will_be_unavailable: 'This action will take place 3.5 days from now and can not be canceled. These Steem Dollars will immediately become unavailable',
-	amount: 'Cantidad',
+	steem_dollars_will_be_unavailable: 'This action will take place 3.5 days from now and can not be canceled. These Steem Dollars will immediately become unavailable. The 3.5 day delay is necessary to prevent abuse from gaming the price feed average',
+	DEBT_TOKEN_conversions_have_risk: 'Steem Dollar conversions have risk. There is no guarantee on the amount of STEEM that will result from the conversion. The conversion amount depends on many factors including fluctuating market prices, witness price feeds, and witness price feed biases',
+    amount: 'Cantidad',
 	steem_dollars: 'STEEM DOLLARS',
 	convert: 'Convertir',
 	invalid_amount: 'Invalid amount',
@@ -392,9 +393,7 @@ const es_AR = 	{
 	view_the_direct_parent: 'Vista directa del padre',
 	you_are_viewing_single_comments_thread_from: 'Estás viendo un comentario individual de',
 	view_the_full_context: 'Ver todo el contexto',
-	this_is_a_price_feed_conversion: 'This is a price feed conversion. The 3.5 day delay is necessary to prevent abuse from gaming the price feed average',
-	your_existing_SD_are_liquid_and_transferable: 'Your existing Steem Dollars are liquid and transferable.  Instead you may wish to trade Steem Dollars directly in this site under {link} or transfer to an external market.',
-	buy_or_sell: 'Comprar o vender',
+	your_existing_SD_are_liquid_and_transferable: 'Your existing Steem Dollars are liquid and transferable. Instead of converting, you may wish to trade Steem Dollars for STEEM directly in this site under {link}. There is less risk, and you do not need to wait 3.5 days.',
 	trending_30_day: 'Popular (30 dias)',
 	promoted: 'Promocionados',
 	comments: 'Comentarios',
@@ -470,7 +469,12 @@ const es_AR = 	{
 	'24_hour': '24 horas',
 	'30_day': '30 dias',
 	flag: "Denunciar",
-
+	// Beginner tips in empty feed page
+	empty_feed_1: "Looks like you haven't followed anything yet",
+	empty_feed_2: 'If you recently added new users to follow, your personalized feed will populate once new content is available',
+	empty_feed_3: 'Explore Trending Articles',
+	empty_feed_4: "Read The Quick Start Guide",
+	empty_feed_5: 'Browse The FAQ'
 }
 
 export { es_AR }

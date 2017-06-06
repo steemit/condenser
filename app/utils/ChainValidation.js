@@ -41,3 +41,7 @@ export function validate_account_name(value) {
     }
     return null;
 }
+
+export function validate_memo_field(value) {
+
+}

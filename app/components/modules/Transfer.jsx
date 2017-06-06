@@ -8,7 +8,7 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import {transferTips} from 'app/utils/Tips'
 import {powerTip, powerTip2, powerTip3} from 'app/utils/Tips'
 import runTests, {browserTests} from 'app/utils/BrowserTests'
-import {validate_account_name} from 'app/utils/ChainValidation';
+import {validate_account_name, validate_memo_field} from 'app/utils/ChainValidation';
 import {countDecimals} from 'app/utils/ParsersAndFormatters'
 
 /** Warning .. This is used for Power UP too. */
@@ -84,6 +84,7 @@ class TransferForm extends Component {
                     props.toVesting ? null :
                     ! values.asset ? 'Required' : null,
                 memo:
+                    values.memo ? validate_memo_field(values.memo):
                     values.memo && (!browserTests.memo_encryption && /^#/.test(values.memo)) ?
                     'Encrypted memos are temporarily unavailable (issue #98)' :
                     null,

@@ -7,7 +7,7 @@ const ru = {
 	// this variables mainly used in navigation section
 	about: "О проекте",
 	explore: "Исследовать",
-	APP_NAME_whitepaper: "Бумага о " + APP_NAME + 'е',
+	APP_NAME_whitepaper: "Бумага о " + "Steem" + 'е',
 	buy_LIQUID_TOKEN: 'Купить ' + LIQUID_TOKEN,
 	sell_LIQUID_TOKEN: 'Продать ' + LIQUID_TOKEN,
 	market: "Биржа",

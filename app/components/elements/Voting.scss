@@ -147,6 +147,10 @@
     display: block;
     color: #666;
   }
+  li > a > span {
+    position: absolute;
+    right: 15px;
+  }
 }
 
 .Voting__inner {

@@ -223,7 +223,8 @@ class Voting extends React.Component {
                 const {percent, voter} = avotes[v]
                 const sign = Math.sign(percent)
                 if(sign === 0) continue
-                voters.push({value: (sign > 0 ? '+ ' : '- ') + voter, link: '/@' + voter})
+                const voterPercent= percent / 100 + '%';
+                voters.push({value: (sign > 0 ? '+ ' : '- ') + voter, link: '/@' + voter, data: voterPercent})
             }
             if (total_votes > voters.length) {
                 voters.push({value: <span>&hellip; and {(total_votes - voters.length)} more</span>});

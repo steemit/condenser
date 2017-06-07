@@ -10,6 +10,7 @@ export default class LandingJoinUs extends React.Component {
 			'База данных Голоса',
 			'Статистический инструмент',
 			'Аналитический инструмент',
+      'Китовый сонар',
 		]
 		const secondaryTexts = [
 			'Это место, где вы сможете получить награды за свои достижения на Голосе. Здесь же вы также сможете увидеть награды других пользователей.',
@@ -18,6 +19,7 @@ export default class LandingJoinUs extends React.Component {
 			'Аналитический инструмент с помошью которого можно осуществлять различные выборки из базы данных Голоса',
 			'Приложение создано для того чтобы следить за активностью вашего пользователья в Голосе',
 			'С помошью данного ресурса можно увидеть в сыром виде структуры данных Голоса',
+      'Приложение демонстрирует активность пользователей с различными настройками'
 		]
 		const urls = [
 			'http://golosboard.com/',
@@ -26,6 +28,7 @@ export default class LandingJoinUs extends React.Component {
 			'https://golosdb.com/',
 			'http://golos.steemstats.com/',
 			'http://golosd.com/',
+      'http://golos.loadsup.net/sonar/',
 		]
 
 		function renderItems() {

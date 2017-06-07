@@ -432,6 +432,7 @@ const it = 	{
 	the_owner_key_is_required_to_change_other_keys: 'L\'owner key è la chiave master dell\'account e viene utilizzata per modificare tutte le altre.',
 	the_private_key_or_password_should_be_kept_offline: 'La private key o la password proprietaria dovrebbero essere tenute offline il più possibile.',
 	the_memo_key_is_used_to_create_and_read_memos: 'La memo key è utilizzata per creare e visualizzare memo.',
+	the_memo_key_is_not_required_to_make_a_transfers: 'The memo key (especially private key) should not be used as memo when you are making a transfer!',
 	previous: 'Precedente',
 	next: 'Prossimo',
 	browse: 'Browse',

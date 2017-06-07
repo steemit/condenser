@@ -456,6 +456,7 @@ const ru = {
 	the_owner_key_is_required_to_change_other_keys: 'Ключ владельца это главный ключ ко всему аккаунта, он необходим для изменения других ключей.',
 	the_private_key_or_password_should_be_kept_offline: 'Приватный ключ или пароль должен храниться в оффлайне так часто насколько возможно.',
 	the_memo_key_is_used_to_create_and_read_memos: 'Ключ заметок используется для создания и чтения заметок.',
+	the_memo_key_is_not_required_to_make_a_transfers: 'The memo key (especially private key) should not be used as memo when you are making a transfer!',
 	previous: 'Предыдущий',
 	next: 'Следующий',
 	browse: 'Посмотреть',

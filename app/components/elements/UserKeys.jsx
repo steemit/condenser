@@ -91,7 +91,8 @@ class UserKeys extends Component {
             </div>
             <div style={{paddingBottom: 10}} className="column small-12">
                 <Keys account={account} authType="memo" onKey={onKey.Memo} />
-                <span className="secondary">{translate('the_memo_key_is_used_to_create_and_read_memos')}</span>
+                <span className="secondary">{translate('the_memo_key_is_used_to_create_and_read_memos')}</span><br />
+                <span className="UserKeysWarning">{translate('the_memo_key_is_not_required_to_make_a_transfers')}</span>
             </div>
             {/*
             <div className="column small-12">

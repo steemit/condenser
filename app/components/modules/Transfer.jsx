@@ -8,7 +8,7 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import {transferTips} from 'app/utils/Tips'
 import {powerTip, powerTip2, powerTip3} from 'app/utils/Tips'
 import runTests, {browserTests} from 'app/utils/BrowserTests'
-import {validate_account_name} from 'app/utils/ChainValidation';
+import {validate_account_name, validate_memo_field} from 'app/utils/ChainValidation';
 import {countDecimals} from 'app/utils/ParsersAndFormatters'
 
 /** Warning .. This is used for Power UP too. */
@@ -66,7 +66,6 @@ class TransferForm extends Component {
         const fields = toVesting ? ['to', 'amount'] : ['to', 'amount', 'asset'];
         if(!toVesting && transferType !== 'Transfer to Savings' && transferType !== 'Savings Withdraw')
             fields.push('memo');
-
         reactForm({
             name: 'transfer',
             instance: this, fields,
@@ -84,6 +83,7 @@ class TransferForm extends Component {
                     props.toVesting ? null :
                     ! values.asset ? 'Required' : null,
                 memo:
+                    values.memo ? validate_memo_field(values.memo, props.currentUser.get('username'), props.currentAccount.get('memo_key')):
                     values.memo && (!browserTests.memo_encryption && /^#/.test(values.memo)) ?
                     'Encrypted memos are temporarily unavailable (issue #98)' :
                     null,

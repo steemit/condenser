@@ -10,6 +10,7 @@ import {powerTip, powerTip2, powerTip3} from 'app/utils/Tips'
 import runTests, {browserTests} from 'app/utils/BrowserTests'
 import {validate_account_name} from 'app/utils/ChainValidation';
 import {countDecimals} from 'app/utils/ParsersAndFormatters'
+import {PrivateKey, PublicKey} from 'steem/lib/auth/ecc';
 
 /** Warning .. This is used for Power UP too. */
 class TransferForm extends Component {
@@ -67,6 +68,9 @@ class TransferForm extends Component {
         if(!toVesting && transferType !== 'Transfer to Savings' && transferType !== 'Savings Withdraw')
             fields.push('memo');
 
+        const memoKey = props.currentAccount.get('memo_key');
+        const username = props.currentUser.get('username');
+
         reactForm({
             name: 'transfer',
             instance: this, fields,
@@ -84,9 +88,16 @@ class TransferForm extends Component {
                     props.toVesting ? null :
                     ! values.asset ? 'Required' : null,
                 memo:
-                    values.memo && (!browserTests.memo_encryption && /^#/.test(values.memo)) ?
-                    'Encrypted memos are temporarily unavailable (issue #98)' :
-                    null,
+                    values.memo &&
+                    (!browserTests.memo_encryption && /^#/.test(values.memo)) ?
+                        'Encrypted memos are temporarily unavailable (issue #98)' :
+                    PublicKey.fromString(values.memo) ?
+                        'Public Key is not required to make a transfer!' :
+                    PrivateKey.isWif(values.memo) ?
+                        'NEVER, NEVER, NEVER use your private key as a public memo!' :
+                    memoKey === PrivateKey.fromSeed(username + 'memo' + values.memo).toPublicKey().toString() ?
+                        'NEVER, NEVER, NEVER use your password as a public memo!' :
+                    null
             })
         })
     }

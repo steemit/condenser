@@ -47,5 +47,8 @@ export function validate_memo_field(value) {
     if (/5[HJK]/i.test(value)) {
         return suffix = 'Please do not use private keys in memos. ';
     }
+    if (/P5/i.test(value)) {
+        return suffix = 'Please do not use private keys in memos. ';
+    }
     return null;
 }

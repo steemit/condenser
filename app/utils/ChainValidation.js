@@ -43,5 +43,9 @@ export function validate_account_name(value) {
 }
 
 export function validate_memo_field(value) {
-
+    let suffix;
+    if (/5[HJK]/i.test(value)) {
+        return suffix = 'Please do not use private keys in memos. ';
+    }
+    return null;
 }

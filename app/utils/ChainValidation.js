@@ -1,4 +1,5 @@
 import BadActorList from 'app/utils/BadActorList';
+import {PrivateKey, PublicKey} from 'steem/lib/auth/ecc';
 
 export function validate_account_name(value) {
     let i, label, len, length, ref, suffix;
@@ -42,13 +43,16 @@ export function validate_account_name(value) {
     return null;
 }
 
-export function validate_memo_field(value) {
+export function validate_memo_field(value, username, memokey) {
     let suffix;
-    if (/5[HJK]/i.test(value)) {
-        return suffix = 'Please do not use private keys in memos. ';
-    }
-    if (/P5/i.test(value)) {
-        return suffix = 'Please do not use private keys in memos. ';
+    value = value.split(' ').filter(v=>v!='');
+    for (var w in value) {
+        if (PrivateKey.isWif(value[w])) {
+            return suffix = 'Do not use private keys in memos. ';
+        }
+        if (memokey === PrivateKey.fromSeed(username + 'memo' + value[w]).toPublicKey().toString()) {
+            return suffix = 'Do not use passwords in memos. ';
+        }
     }
     return null;
 }

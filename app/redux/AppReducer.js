@@ -31,6 +31,12 @@ export default function reducer(state = defaultState, action) {
         return state.set('error', action.error).set('loading', false);
     }
     let res = state;
+    if (action.type === 'FETCH_DATA_BEGIN') {
+        res = state.set('loading', true);
+    }
+    if (action.type === 'FETCH_DATA_END') {
+        res = state.set('loading', false);
+    }
     if (action.type === 'ADD_NOTIFICATION') {
         const n = {
             action: translate('dismiss'),

@@ -1,4 +1,3 @@
-import Immutable from 'immutable';
 import React from 'react';
 import { Link } from 'react-router';
 import {connect} from 'react-redux';
@@ -45,8 +44,8 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
             {link: reset_password_link, icon: 'key', value: 'Change Password'},
             {link: settings_link, icon: 'cog', value: 'Settings'},
             loggedIn ?
-                {link: '#', icon: 'enter', onClick: logout, value: 'Logout'} :
-                {link: '#', onClick: showLogin, value: 'Login'}
+            {link: '#', icon: 'enter', onClick: logout, value: 'Logout'} :
+            {link: '#', onClick: showLogin, value: 'Login'}
         ];
         return (
             <ul className={mcn + mcl}>
@@ -58,8 +57,8 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
                     dropdownPosition="bottom"
                     dropdownAlignment="right"
                     dropdownContent={
-                                <VerticalMenu items={user_menu} title={username} />
-                              }
+                        <VerticalMenu items={user_menu} title={username} />
+                    }
                 >
                     {!vertical && <li className={'Header__userpic '}>
                         <a href={account_link} title={username} onClick={e => e.preventDefault()}>
@@ -78,7 +77,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
         return (
             <ul className={mcn + mcl}>
                 {!vertical && <li className="Header__search"><a href="/static/search.html" title="Search"><Icon name="search" /></a></li>}
-                <li className={lcn}><LoadingIndicator type="circle" inline /></li>
+                <li className={lcn} style={{paddingTop: 0, paddingBottom: 0}}><LoadingIndicator type="circle" inline /></li>
                 {toggleOffCanvasMenu && <li className="toggle-menu Header__hamburger"><a href="#" onClick={toggleOffCanvasMenu}>
                     <span className="hamburger" />
                 </a></li>}
@@ -88,7 +87,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
     return (
         <ul className={mcn + mcl}>
             {!vertical && <li className="Header__search"><a href="/static/search.html" title="Search"><Icon name="search" /></a></li>}
-            <li className={lcn}><a href="/enter_email">Sign Up</a></li>
+            <li className={lcn}><a href="/pick_account">Sign Up</a></li>
             <li className={lcn}><a href="/login.html" onClick={showLogin}>Login</a></li>
             {submit_story}
             {!vertical && submit_icon}

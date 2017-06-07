@@ -23,9 +23,10 @@ export function serverApiLogout() {
 }
 
 let last_call;
-export function serverApiRecordEvent(type, val) {
+export function serverApiRecordEvent(type, val, rate_limit_ms = 5000) {
+    console.log('-- serverApiRecordEvent -->', type, val, rate_limit_ms);
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;
-    if (last_call && (new Date() - last_call < 5000)) return;
+    if (last_call && (new Date() - last_call) < rate_limit_ms) return;
     last_call = new Date();
     const value = val && val.stack ? `${val.toString()} | ${val.stack}` : val;
     const request = Object.assign({}, request_base, {body: JSON.stringify({csrf: $STM_csrf, type, value})});
@@ -37,7 +38,7 @@ export function getNotifications(account) {
     const request = Object.assign({}, request_base, {method: 'get'});
     return fetch(`/api/v1/notifications/${account}`, request).then(r => r.json()).then(res => {
         return notificationsArrayToMap(res);
-    });
+});
 }
 
 export function markNotificationRead(account, fields) {
@@ -46,7 +47,7 @@ export function markNotificationRead(account, fields) {
     const field_nums_str = fields.map(f => NTYPES.indexOf(f)).join('-');
     return fetch(`/api/v1/notifications/${account}/${field_nums_str}`, request).then(r => r.json()).then(res => {
         return notificationsArrayToMap(res);
-    });
+});
 }
 
 let last_page, last_views, last_page_promise;
@@ -60,8 +61,8 @@ export function recordPageView(page, ref) {
     const request = Object.assign({}, request_base, {body: JSON.stringify({csrf: $STM_csrf, page, ref})});
     last_page_promise = fetch(`/api/v1/page_view`, request).then(r => r.json()).then(res => {
         last_views = res.views;
-        return last_views;
-    });
+    return last_views;
+});
     last_page = page;
     return last_page_promise;
 }
@@ -72,8 +73,17 @@ export function webPushRegister(account, webpush_params) {
     fetch('/api/v1/notifications/register', request);
 }
 
+export function sendConfirmEmail(account) {
+    const request = Object.assign({}, request_base, {body: JSON.stringify({csrf: $STM_csrf, account})});
+    fetch('/api/v1/notifications/send_confirm', request);
+}
+
+export function saveCords(x, y) {
+    const request = Object.assign({}, request_base, {body: JSON.stringify({csrf: $STM_csrf, x: x, y: y})});
+    fetch('/api/v1/save_cords', request);
+}
+
 if (process.env.BROWSER) {
     window.getNotifications = getNotifications;
     window.markNotificationRead = markNotificationRead;
 }
-

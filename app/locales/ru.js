@@ -1,5 +1,5 @@
 
-import { APP_NAME, APP_DOMAIN, LANDING_PAGE_URL, LIQUID_TOKEN, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, VESTING_TOKEN, LIQUID_TICKER } from 'app/client_config';
+import { APP_NAME, APP_DOMAIN, LANDING_PAGE_URL, LIQUID_TOKEN, LIQUID_TOKEN_UPPERCASE, DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, VESTING_TOKEN, LIQUID_TICKER } from 'app/client_config';
 /**
  * see: app/locales/README.md
  */
@@ -7,7 +7,7 @@ const ru = {
 	// this variables mainly used in navigation section
 	about: "О проекте",
 	explore: "Исследовать",
-	APP_NAME_whitepaper: "Бумага о " + APP_NAME + 'е',
+	APP_NAME_whitepaper: "Бумага о " + "Steem" + 'е',
 	buy_LIQUID_TOKEN: 'Купить ' + LIQUID_TOKEN,
 	sell_LIQUID_TOKEN: 'Продать ' + LIQUID_TOKEN,
 	market: "Биржа",
@@ -211,12 +211,13 @@ const ru = {
 	i_understand_dont_show_again: "Понимаю, больше не показывать",
 	ok: 'Ок', // Лучше использовать "хорошо" или "ладно"?
 	convert_to_VESTING_TOKEN: 'Перевести в ' + VESTING_TOKEN,
-	DEBT_TOKEN_will_be_unavailable: 'Эта операция будет проходить 3,5 дней от настоящего момента и ее нельзя отменить. Эти ' + DEBT_TOKEN + ' мгновенно станут недоступны',
-	amount: 'Количество',
+	DEBT_TOKEN_will_be_unavailable: 'Эта операция будет проходить 3,5 дней от настоящего момента и ее нельзя отменить. Эти ' + DEBT_TOKEN + ' мгновенно станут недоступны. Отсрочка 3,5 день необходима чтобы предотвратить злоупотребление от игры на средней ценовой катировке',
+	DEBT_TOKEN_conversions_have_risk: DEBT_TOKEN + ' conversions have risk. There is no guarantee on the amount of ' + LIQUID_TOKEN_UPPERCASE + ' that will result from the conversion. The conversion amount depends on many factors including fluctuating market prices, witness price feeds, and witness price feed biases',
+    amount: 'Количество',
 	convert: 'Конвертировать',
 	invalid_amount: 'Неверное количество',
 	insufficent_balance: 'Недостаточный баланс',
-	in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN: 'В 3,5 дня перевести {amount} ' + DEBT_TOKEN + ' в ' + LIQUID_TOKEN,
+	in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN: 'В 3,5 дня перевести {amount} ' + DEBT_TOKEN + ' в ' + LIQUID_TOKEN_UPPERCASE,
 	order_placed: 'Заказ размещен', // ex.: "Order placed: Sell {someamount_to_sell} for atleast {min_to_receive}"
 	follow: 'Подписаться',
 	unfollow: 'Отписаться',
@@ -413,9 +414,7 @@ const ru = {
 	view_the_direct_parent: 'Просмотр прямого родителя',
 	you_are_viewing_single_comments_thread_from: 'Вы читаете одну нить комментариев от',
 	view_the_full_context: 'Показать полный контекст',
-	this_is_a_price_feed_conversion: 'Это котировка цены. Отсрочка 3,5 день необходима чтобы предотвратить злоупотребление от игры на средней ценовой катировке.',
-	your_existing_DEBT_TOKEN_are_liquid_and_transferable: 'Ваши существующие ' + DEBT_TOKEN + ' ликвидны и перемещаемы. Возможно, вы хотите торговать ' + DEBT_TOKEN + ' напрямую на этом сайте в разделе {link} или перевести на внешний рынок.',
-	buy_or_sell: 'Купить или Продать',
+	your_existing_DEBT_TOKEN_are_liquid_and_transferable: 'Your existing ' + DEBT_TOKEN + ' are liquid and transferable. Instead of converting, you may wish to trade ' + DEBT_TOKEN + ' for ' + LIQUID_TOKEN_UPPERCASE + ' directly in this site under {link}. There is less risk, and you do not need to wait 3.5 days.',
 	trending_30_day: 'популярное (30 дней)',
 	promoted: 'Продвигаемое',
 	comments: 'Комментарии',
@@ -580,6 +579,12 @@ const ru = {
 	profile_website: 'Website',
 	saved: 'Сохранено',
 	server_returned_error: 'ошибка сервера',
+	// Beginner tips in empty feed page
+	empty_feed_1: "Looks like you haven't followed anything yet",
+	empty_feed_2: 'If you recently added new users to follow, your personalized feed will populate once new content is available',
+	empty_feed_3: 'Explore Trending Articles',
+	empty_feed_4: "Read The Quick Start Guide",
+	empty_feed_5: 'Browse The FAQ'
 }
 
 export { ru }

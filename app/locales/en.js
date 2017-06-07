@@ -1,4 +1,4 @@
-import { APP_NAME, APP_DOMAIN, LANDING_PAGE_URL, DEBT_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TOKEN, CURRENCY_SIGN, VESTING_TOKEN } from 'app/client_config';
+import { APP_NAME, APP_DOMAIN, LANDING_PAGE_URL, DEBT_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TOKEN, LIQUID_TOKEN_UPPERCASE, CURRENCY_SIGN, VESTING_TOKEN } from 'app/client_config';
 /**
  * see: app/locales/README.md
  */
@@ -6,7 +6,7 @@ const en = 	{
 	// this variables mainly used in navigation section
 	about: "About Steem",
 	explore: "Trending Topics",
-	APP_NAME_whitepaper: APP_NAME + " Whitepaper",
+	APP_NAME_whitepaper: "Steem" + " Whitepaper",
 	buy_LIQUID_TOKEN: 'Buy ' + LIQUID_TOKEN,
 	sell_LIQUID_TOKEN: 'Sell ' + LIQUID_TOKEN,
 	market: "Market",
@@ -104,7 +104,7 @@ const en = 	{
 	welcome_to_the_blockchain: 'Welcome to the Blockchain!',
 	your_voice_is_worth_something: 'Your voice is worth something',
 	learn_more: 'Learn More',
-	get_sp_when_sign_up: 'Get {signupBonus} of ' + VESTING_TOKEN + ' when you sign up today.',
+	get_sp_when_sign_up: 'Get free ' + VESTING_TOKEN + ' when you sign up today.',
 	all_accounts_refunded: 'All Recovered Accounts have been fully Refunded',
 	APP_URL_is_now_open_source: APP_DOMAIN + ' is now Open Source',
 	// this is mainly from ReplyEditor
@@ -210,12 +210,13 @@ const en = 	{
 	i_understand_dont_show_again: "I understand, don't show me again",
 	ok: 'Ok',
 	convert_to_LIQUID_TOKEN: 'Convert to ' + LIQUID_TOKEN,
-	DEBT_TOKEN_will_be_unavailable: 'This action will take place 3.5 days from now and can not be canceled. These ' + DEBT_TOKEN + ' will immediately become unavailable',
-	amount: 'Amount',
+	DEBT_TOKEN_will_be_unavailable: 'This action will take place 3.5 days from now and can not be canceled. These ' + DEBT_TOKEN + ' will immediately become unavailable. The 3.5 day delay is necessary to prevent abuse from gaming the price feed average',
+	DEBT_TOKEN_conversions_have_risk: DEBT_TOKEN + ' conversions have risk. There is no guarantee on the amount of ' + LIQUID_TOKEN_UPPERCASE + ' that will result from the conversion. The conversion amount depends on many factors including fluctuating market prices, witness price feeds, and witness price feed biases',
+        amount: 'Amount',
 	convert: 'Convert',
 	invalid_amount: 'Invalid amount',
 	insufficent_balance: 'Insufficient balance',
-	in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN: 'In 3.5 days, convert {amount} ' + DEBT_TOKEN + ' into ' + LIQUID_TOKEN,
+	in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN: 'In 3.5 days, convert {amount} ' + DEBT_TOKEN + ' into ' + LIQUID_TOKEN_UPPERCASE,
 	in_conversion: "{amount} in conversion",
 	conversion_complete_tip: "Will complete on",
 	order_placed: 'Order placed', // ex.: "Order placed: Sell {someamount_to_sell} for atleast {min_to_receive}"
@@ -413,9 +414,7 @@ const en = 	{
 	view_the_direct_parent: 'View the direct parent',
 	you_are_viewing_single_comments_thread_from: 'You are viewing a single comment\'s thread from',
 	view_the_full_context: 'View the full context',
-	this_is_a_price_feed_conversion: 'This is a price feed conversion. The 3.5 day delay is necessary to prevent abuse from gaming the price feed average',
-	your_existing_DEBT_TOKEN_are_liquid_and_transferable: 'Your existing ' + DEBT_TOKEN + ' are liquid and transferable. Instead you may wish to trade ' + DEBT_TOKEN + ' directly in this site under {link} or transfer to an external market.',
-	buy_or_sell: 'Buy or Sell',
+	your_existing_DEBT_TOKEN_are_liquid_and_transferable: 'Your existing ' + DEBT_TOKEN + ' are liquid and transferable. Instead of converting, you may wish to trade ' + DEBT_TOKEN + ' for ' + LIQUID_TOKEN_UPPERCASE + ' directly in this site under {link}. There is less risk, and you do not need to wait 3.5 days.',
 	trending_30_day: 'trending (30 day)',
 	promoted: 'promoted',
 	comments: 'Comments',
@@ -573,6 +572,12 @@ const en = 	{
 	profile_website: 'Website',
 	saved: 'Saved',
 	server_returned_error: 'server returned error',
+	// Beginner tips in empty feed page
+	empty_feed_1: "Looks like you haven't followed anything yet",
+	empty_feed_2: 'If you recently added new users to follow, your personalized feed will populate once new content is available',
+	empty_feed_3: 'Explore Trending Articles',
+	empty_feed_4: "Read The Quick Start Guide",
+	empty_feed_5: 'Browse The FAQ'
 }
 
 export { en }

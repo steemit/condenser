@@ -1,5 +1,5 @@
 module.exports = function (sequelize, DataTypes) {
-    var Account = sequelize.define('Account', {
+    var UserAttribute = sequelize.define('UserAttribute', {
         UserId: {
             type: DataTypes.INTEGER,
             references: {
@@ -8,25 +8,17 @@ module.exports = function (sequelize, DataTypes) {
             },
             field: 'user_id'
         },
-        name: {type: DataTypes.STRING, unique: true},
-        owner_key: {type: DataTypes.STRING, unique: true},
-        active_key: {type: DataTypes.STRING, unique: true},
-        posting_key: {type: DataTypes.STRING, unique: true},
-        memo_key: {type: DataTypes.STRING, unique: true},
-        referrer: DataTypes.STRING,
-        refcode: DataTypes.STRING,
-        remote_ip: DataTypes.STRING,
-        ignored: {type: DataTypes.BOOLEAN},
-        created: {type: DataTypes.BOOLEAN}
+        type_of: DataTypes.STRING(64),
+        value: DataTypes.STRING(256)
     }, {
-        tableName: 'accounts',
+        tableName: 'user_attributes',
         createdAt   : 'created_at',
         updatedAt   : 'updated_at',
         timestamps  : true,
         underscored : true,
         classMethods: {
             associate: function (models) {
-                Account.belongsTo(models.User, {
+                UserAttribute.belongsTo(models.User, {
                     onDelete: "CASCADE",
                     foreignKey: {
                         allowNull: false
@@ -35,5 +27,5 @@ module.exports = function (sequelize, DataTypes) {
             }
         }
     });
-    return Account;
+    return UserAttribute;
 };

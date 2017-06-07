@@ -4,6 +4,7 @@ import Tarantool from 'db/tarantool';
 import config from 'config';
 import webPush from 'web-push';
 import {checkCSRF} from 'server/utils/misc';
+import sendEmail from "../sendEmail";
 
 if(config.has('notify.gcm_key')) {
     webPush.setGCMAPIKey(config.get('notify.gcm_key'));
@@ -74,9 +75,14 @@ export default function useNotificationsApi(app) {
             console.error('-- POST /notifications/register error -->', this.session.uid, error.message);
         }
     });
+
+    router.post('/notifications/send_confirm', koaBody, function *(email, id) {
+        console.log("sendign email", email,id);
+        sendEmail("confirm_email", email, { id });
+    });
 }
 
 const status = (ctx, account) =>
-    ctx.session.a == null ? 'not logged in' :
+ctx.session.a == null ? 'not logged in' :
     account !== ctx.session.a ? 'wrong account' + ctx.session.a :
-    '';
+        '';

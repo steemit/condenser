@@ -76,11 +76,11 @@ class PostsIndex extends React.Component {
             const isMyAccount = this.props.username === account_name;
             if (isMyAccount) {
                 emptyText = <div>
-                    Looks like you haven't followed anything yet.<br /><br />
-                    If you recently added new users to follow, your personalized feed will populate once new content is available.<br /><br />
-                    <Link to="/trending">Explore Steemit</Link><br />
-                    <a href="/steemit/@thecryptofiend/the-missing-faq-a-beginners-guide-to-using-steemit">Read The Beginner's Guide</a><br />
-                    <a href="/welcome">Read The Steemit Welcome Guide</a>
+                    {translate('empty_feed_1')}.<br /><br />
+                    {translate('empty_feed_2')}.<br /><br />
+                    <Link to="/trending">{translate('empty_feed_3')}</Link><br />
+                    <Link to="/welcome">{translate('empty_feed_4')}</Link><br />
+                    <Link to="/faq.html">{translate('empty_feed_5')}</Link><br />
                 </div>;
                 markNotificationRead = <MarkNotificationRead fields="feed" account={account_name} />
             } else {

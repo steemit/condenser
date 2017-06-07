@@ -11,6 +11,7 @@ import ConvertToSteem from 'app/components/elements/ConvertToSteem'
 import SuggestPassword from 'app/components/elements/SuggestPassword'
 import ChangePassword from 'app/components/elements/ChangePassword'
 import CheckLoginOwner from 'app/components/elements/CheckLoginOwner'
+import QrKeyView from 'app/components/elements/QrKeyView'
 import PromotePost from 'app/components/modules/PromotePost';
 import ExplorePost from 'app/components/modules/ExplorePost';
 
@@ -77,6 +78,12 @@ class Dialogs extends React.Component {
                 <Reveal onHide={this['hide_' + k]} show>
                     <CloseButton onClick={this['hide_' + k]} />
                     <ExplorePost onClick={this['hide_' + k]} {...v.get('params').toJS()} />
+                </Reveal>
+            </span>:
+            k === 'qr_key' ? <span key={idx++} >
+                <Reveal onHide={this['hide_' + k]} show>
+                    <CloseButton onClick={this['hide_' + k]} />
+                    <QrKeyView onClose={this['hide_' + k]} {...v.get('params').toJS()} />
                 </Reveal>
             </span>:
             null

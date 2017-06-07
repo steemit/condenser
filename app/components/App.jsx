@@ -132,10 +132,10 @@ class App extends React.Component {
         const {location, params, children, flash, new_visitor,
             depositSteem, signup_bonus} = this.props;
         const lp = false; //location.pathname === '/';
-        const miniHeader = location.pathname === '/create_account';
+        const miniHeader = location.pathname === '/create_account' || location.pathname === '/pick_account';
         const params_keys = Object.keys(params);
         const ip = location.pathname === '/' || (params_keys.length === 2 && params_keys[0] === 'order' && params_keys[1] === 'category');
-        const alert = this.props.error || flash.get('alert');
+        const alert = this.props.error || flash.get('alert') || flash.get('error');
         const warning = flash.get('warning');
         const success = flash.get('success');
         let callout = null;
@@ -191,7 +191,7 @@ class App extends React.Component {
                             <h2>{translate("welcome_to_the_blockchain")}</h2>
                             <h4>{translate("your_voice_is_worth_something")}</h4>
                             <br />
-                            <a className="button" href="/enter_email" onClick={this.signUp}> <b>{translate("sign_up")}</b> </a>
+                            <a className="button" href="/pick_account" onClick={this.signUp}> <b>{translate("sign_up")}</b> </a>
                             &nbsp; &nbsp; &nbsp;
                             <a className="button hollow uppercase" href="https://steem.io" target="_blank" rel="noopener noreferrer" onClick={this.learnMore}> <b>{translate("learn_more")}</b> </a>
                             <br />

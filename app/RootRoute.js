@@ -12,7 +12,7 @@ export default {
         const route = resolveRoute(nextState.location.pathname);
         if (route.page === 'About') {
             //require.ensure([], (require) => {
-                cb(null, [require('app/components/pages/About')]);
+            cb(null, [require('app/components/pages/About')]);
             //});
         } else if (route.page === 'Welcome') {
             //require.ensure([], (require) => {
@@ -28,11 +28,11 @@ export default {
             //});
         } else if (route.page === 'Privacy') {
             //require.ensure([], (require) => {
-                cb(null, [require('app/components/pages/Privacy')]);
+            cb(null, [require('app/components/pages/Privacy')]);
             //});
         } else if (route.page === 'Support') {
             //require.ensure([], (require) => {
-                cb(null, [require('app/components/pages/Support')]);
+            cb(null, [require('app/components/pages/Support')]);
             //});
         } else if (route.page === 'XSSTest' && process.env.NODE_ENV === 'development') {
             //require.ensure([], (require) => {
@@ -44,15 +44,23 @@ export default {
             //});
         } else if (route.page === 'Tos') {
             //require.ensure([], (require) => {
-                cb(null, [require('app/components/pages/Tos')]);
+            cb(null, [require('app/components/pages/Tos')]);
             //});
         } else if (route.page === 'ChangePassword') {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/ChangePasswordPage')]);
             //});
+        } else if (route.page === 'PickAccount') {
+            //require.ensure([], (require) => {
+            cb(null, [require('app/components/pages/PickAccount')]);
+            //});
         } else if (route.page === 'CreateAccount') {
             //require.ensure([], (require) => {
-                cb(null, [require('app/components/pages/CreateAccount')]);
+            cb(null, [require('app/components/pages/CreateAccount')]);
+            //});
+        } else if (route.page === 'Approval') {
+            //require.ensure([], (require) => {
+            cb(null, [require('app/components/pages/Approval')]);
             //});
         } else if (route.page === 'RecoverAccountStep1') {
             //require.ensure([], (require) => {
@@ -68,7 +76,7 @@ export default {
             //});
         } else if (route.page === 'Witnesses') {
             //require.ensure([], (require) => {
-                cb(null, [require('app/components/pages/Witnesses')]);
+            cb(null, [require('app/components/pages/Witnesses')]);
             //});
         } else if (route.page === 'SubmitPost') {
             //require.ensure([], (require) => {
@@ -78,26 +86,26 @@ export default {
                 cb(null, [require('app/components/pages/SubmitPostServerRender')]);
         } else if (route.page === 'UserProfile') {
             //require.ensure([], (require) => {
-                cb(null, [require('app/components/pages/UserProfile')]);
+            cb(null, [require('app/components/pages/UserProfile')]);
             //});
         } else if (route.page === 'Market') {
             //require.ensure([], (require) => {
-                cb(null, [require('app/components/pages/Market')]);
+            cb(null, [require('app/components/pages/Market')]);
             //});
         } else if (route.page === 'Post') {
             //require.ensure([], (require) => {
-                cb(null, [require('app/components/pages/PostPage')]);
+            cb(null, [require('app/components/pages/PostPage')]);
             //});
         } else if (route.page === 'PostNoCategory') {
-                cb(null, [require('app/components/pages/PostPageNoCategory')]);
+            cb(null, [require('app/components/pages/PostPageNoCategory')]);
         } else if (route.page === 'PostsIndex') {
             //require.ensure([], (require) => {
-                //cb(null, [require('app/components/pages/PostsIndex')]);
-                cb(null, [PostsIndex]);
+            //cb(null, [require('app/components/pages/PostsIndex')]);
+            cb(null, [PostsIndex]);
             //});
         } else {
             //require.ensure([], (require) => {
-                cb(process.env.BROWSER ? null : Error(404), [require('app/components/pages/NotFound')]);
+            cb(process.env.BROWSER ? null : Error(404), [require('app/components/pages/NotFound')]);
             //});
         }
     },

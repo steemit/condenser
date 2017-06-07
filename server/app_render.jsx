@@ -23,6 +23,7 @@ async function appRender(ctx) {
             new_visit: ctx.session.new_visit,
             account: ctx.session.a,
             config: $STM_Config,
+            uid: ctx.session.uid,
             login_challenge
         };
         const user_id = ctx.session.user;
@@ -31,9 +32,10 @@ async function appRender(ctx) {
             if (appRender.dbStatus.ok || (new Date() - appRender.dbStatus.lastAttempt) > DB_RECONNECT_TIMEOUT) {
                 try {
                     user = await models.User.findOne({
-                        attributes: ['name', 'email', 'picture_small'],
+                        attributes: ['name', 'email', 'picture_small', 'account_status'],
                         where: {id: user_id},
-                        include: [{model: models.Account, attributes: ['name', 'ignored']}],
+                        include: [{model: models.Account, attributes: ['name', 'ignored', 'created', 'owner_key']}],
+                        order: 'Accounts.id desc',
                         logging: false
                     });
                     appRender.dbStatus = {ok: true};
@@ -47,9 +49,13 @@ async function appRender(ctx) {
             }
             if (user) {
                 let account = null;
+                let account_has_keys = null;
                 for (const a of user.Accounts) {
                     if (!a.ignored) {
                         account = a.name;
+                        if (a.owner_key && !a.created) {
+                            account_has_keys = true;
+                        }
                         break;
                     }
                 }
@@ -59,7 +65,9 @@ async function appRender(ctx) {
                     email: user.email,
                     picture: user.picture_small,
                     prv: ctx.session.prv,
-                    account
+                    account_status: user.account_status,
+                    account,
+                    account_has_keys
                 }
             }
         }

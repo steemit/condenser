@@ -50,6 +50,12 @@ export default function resolveRoute(path)
     if (path === '/create_account') {
         return {page: 'CreateAccount'};
     }
+    if (path === '/approval') {
+        return {page: 'Approval'};
+    }
+    if (path === '/pick_account') {
+        return {page: 'PickAccount'};
+    }
     if (path === '/recover_account_step_1') {
         return {page: 'RecoverAccountStep1'};
     }
@@ -87,7 +93,7 @@ export default function resolveRoute(path)
         return {page: 'Post', params: match.slice(1)};
     }
     match = path.match(/^\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/?$/)
-         || path.match(/^\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/([\w\d-]+)\/?$/);
+        || path.match(/^\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/([\w\d-]+)\/?$/);
     if (match) {
         return {page: 'PostsIndex', params: match.slice(1)};
     }

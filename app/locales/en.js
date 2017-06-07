@@ -455,6 +455,7 @@ const en = 	{
 	the_owner_key_is_required_to_change_other_keys: 'The owner key is the master key for the account and is required to change the other keys.',
 	the_private_key_or_password_should_be_kept_offline: 'The private key or password for the owner key should be kept offline as much as possible.',
 	the_memo_key_is_used_to_create_and_read_memos: 'The memo key is used to create and read memos.',
+	the_memo_key_is_not_required_to_make_a_transfers: 'The memo key (especially private key) should not be used as memo when you are making a transfer!',
 	previous: 'Previous',
 	next: 'Next',
 	browse: 'Browse',

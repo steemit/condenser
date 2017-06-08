@@ -10,6 +10,10 @@
     "reddit": {
       "key": "SDC_REDDIT_API_KEY",
       "secret": "SDC_REDDIT_API_SECRET"
+    },
+    "server": {
+      "host": "SDC_GRANT_SERVER",
+      "protocol": "SDC_GRANT_PROTOCOL"
     }
   },
   "google_analytics_id": "SDC_GOOGLE_ANALYTICS_ID",

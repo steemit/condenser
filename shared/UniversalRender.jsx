@@ -23,7 +23,6 @@ import {transactionWatches} from 'app/redux/TransactionSaga';
 import PollDataSaga from 'app/redux/PollDataSaga';
 import {component as NotFound} from 'app/components/pages/NotFound';
 import extractMeta from 'app/utils/ExtractMeta';
-import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import Translator from 'app/Translator';
 import {notificationsArrayToMap} from 'app/utils/Notifications';
 import {routeRegex} from "app/ResolveRoute";
@@ -92,16 +91,13 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
         window.store = {
             getState: () => {debugger}
         }
-        // Bump transaction (for live UI testing).. Put 0 in now (no effect),
-        // to enable browser's autocomplete and help prevent typos.
-        window.bump = parseInt(localStorage.getItem('bump') || 0);
-        const scroll = useScroll((prevLocation, {location}) => {
-            if (location.hash || location.action === 'POP') return false;
-            return !prevLocation || prevLocation.location.pathname !== location.pathname;
+        const scroll = useScroll((prevLocation, context) => {
+            if (context.location.hash || context.location.action === 'POP') return false;
+            return !prevLocation || prevLocation.location.pathname !== context.location.pathname;
         });
         if (process.env.NODE_ENV === 'production') {
-            console.log('%c%s','color: red; background: yellow; font-size: 24px;', 'WARNING!');
-            console.log('%c%s','color: black; font-size: 16px;', 'This is a developer console, you must read and understand anything you paste or type here or you could compromise your account and your private keys.');
+            console.log('%c%s', 'color: red; background: yellow; font-size: 24px;', 'WARNING!');
+            console.log('%c%s', 'color: black; font-size: 16px;', 'This is a developer console, you must read and understand anything you paste or type here or you could compromise your account and your private keys.');
         }
         return render(
             <Provider store={store}>

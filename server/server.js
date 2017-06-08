@@ -6,6 +6,7 @@ import mount from 'koa-mount';
 import helmet from 'koa-helmet';
 import koa_logger from 'koa-logger';
 import prod_logger from './prod_logger';
+import responseTime from './responseTime';
 import favicon from 'koa-favicon';
 import staticCache from 'koa-static-cache';
 import useRedirects from './redirects';
@@ -93,6 +94,8 @@ app.use(function *(next) {
         yield next;
     }
 });
+
+app.use(responseTime());
 
 if (env === 'production') {
     // load production middleware

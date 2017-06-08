@@ -122,6 +122,7 @@ const ru = {
   changing_to_an_upvote: 'Измение на голос за',
   checking_account_owner: 'Проверяем владельца аккаунта',
   choose_currency: 'Выберите валюту',
+  choose_theme: 'Выберите тему',
   choose_language: 'Выберите язык',
   clear: 'Очистить',
   click_to_generate_password: 'Нажмите, чтобы сгененировать пароль',

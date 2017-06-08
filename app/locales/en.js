@@ -122,6 +122,7 @@ const en =  {
   changing_to_an_upvote: 'Changing to an Up-Vote',
   checking_account_owner: 'Checking account owner',
   choose_currency: 'Choose currency',
+  choose_theme: 'Choose theme',
   choose_language: 'Choose language',
   clear: 'Clear',
   click_to_generate_password: 'Click to generate password',

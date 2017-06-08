@@ -86,11 +86,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
             .catch(err => console.log('PollDataSaga is finished with error', err));
 
         const history = syncHistoryWithStore(browserHistory, store);
-        // const scrollHistory = useScroll(() => history)();
 
-        window.store = {
-            getState: () => {debugger}
-        }
         const scroll = useScroll((prevLocation, context) => {
             if (context.location.hash || context.location.action === 'POP') return false;
             return !prevLocation || prevLocation.location.pathname !== context.location.pathname;

@@ -12,16 +12,15 @@ import MiniHeader from "app/components/modules/MiniHeader";
 import secureRandom from "secure-random";
 import Mixpanel from "mixpanel";
 import Progress from "react-foundation-components/lib/global/progress-bar";
-// import {createAccount} from "server/api/general"
-import fetch from 'node-fetch';
+import {api} from 'steem';
 
 // FIXME copy paste code, refactor mixpanel out
-var mixpanel = null;
+let mixpanel = null;
 if (config.has("mixpanel") && config.get("mixpanel")) {
     mixpanel = Mixpanel.init(config.get("mixpanel"));
 }
 
-var assets_file = "tmp/webpack-stats-dev.json";
+let assets_file = "tmp/webpack-stats-dev.json";
 if (process.env.NODE_ENV === "production") {
     assets_file = "tmp/webpack-stats-prod.json";
 }
@@ -107,7 +106,11 @@ export default function useEnterAndConfirmEmailPages(app) {
     router.get("/start/:code", function*() {
         const code = this.params.code;
         const eid = yield models.Identity.findOne({ attributes: ["id", "user_id", "verified"], where: { provider: "email", confirmation_code: code }});
-        const user = eid ? yield models.User.findOne({ attributes: ["id", "account_status"], where: { id: eid.user_id }}) : null;
+        const user = eid ? yield models.User.findOne({
+            attributes: ["id", "account_status"],
+            where: { id: eid.user_id },
+            include: [{model: models.Account, attributes: ['id', 'name', 'ignored', 'created']}],
+        }) : null;
         // validate there is email identity and user record
         if (eid && user) {
             // set session based on confirmation code(user from diff device, etc)
@@ -121,9 +124,26 @@ export default function useEnterAndConfirmEmailPages(app) {
                 console.log("-- approved account for -->", this.session.uid, this.session.user);
                 this.redirect("/create_account");
             } else if (user.account_status === "created") {
-                // user clicked expired link already create account
-                this.flash = { alert: "Your account has already been created." };
-                this.redirect("/login.html");
+                // check if account is really created onchain
+                let there_is_created_account = false;
+                for (const a of user.Accounts) {
+                    const check_account_res = yield api.getAccountsAsync([a.name]);
+                    const account_created = check_account_res && check_account_res.length > 0;
+                    if (account_created && !a.ignored) there_is_created_account = true;
+                    if (!account_created && a.created) {
+                        console.log("-- found ghost account -->", this.session.uid, this.session.user, a.name);
+                        a.update({created: false});
+                    }
+                }
+                if (there_is_created_account) {
+                    // user clicked expired link - already created account
+                    this.flash = {alert: "Your account has already been created."};
+                    this.redirect("/login.html");
+                } else {
+                    user.update({account_status: 'approved'});
+                    console.log("-- approved account (ghost) for -->", this.session.uid, this.session.user);
+                    this.redirect("/create_account");
+                }
             } else if (user.account_status === "waiting") {
                 this.flash = { error: "Your account has not been approved." };
                 this.redirect("/");

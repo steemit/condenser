@@ -336,10 +336,18 @@ function* createAccount({
         memo_key: memo,
     }]]
     const tx = yield createTransaction(operations)
+    console.log('-- createAccount: createTransaction')
     const sx = signTransaction(tx, signingKey)
+    console.log('-- createAccount: signTransaction')
     if (!broadcast) return signed_transaction.toObject(sx)
     return yield new Promise((resolve, reject) =>
-        Apis.broadcastTransaction(sx, () => {resolve()}).catch(e => {reject(e)})
+        Apis.broadcastTransaction(sx, () => {
+          resolve()
+          console.log('-- createAccount: broadcastTransaction resolve()')
+        }).catch(e => {
+          reject(e)
+          console.log('-- createAccount: broadcastTransaction reject()')
+        })
     )
 }
 

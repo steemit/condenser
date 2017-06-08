@@ -122,6 +122,7 @@ const ua = {
   changing_to_an_upvote: 'Зміна на голос за',
   checking_account_owner: 'Перевіряємо власника акаунта',
   choose_currency: 'Виберіть валюту',
+  choose_theme: 'Виберіть тему',
   choose_language: 'Виберіть мову',
   clear: 'Очистити',
   click_to_generate_password: 'Натисніть щоб згенерувати пароль',

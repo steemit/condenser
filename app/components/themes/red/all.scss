@@ -1,0 +1,74 @@
+body[data-theme="red"] {
+  $th_green: #9d2329;
+
+  a {
+    color: #6f241e;
+  }
+
+  .UserProfile__banner {
+    text-align: center;
+    color: $black;
+    a {
+      color: $black;
+      font-size: 18px;
+    }
+    > div.column {
+      background: $th_green;
+      background: linear-gradient(to bottom, #f3d5d9 0%, $th_green 100%);
+    }
+  }
+
+  .UserProfile__top-nav {
+    background-color: $black;
+    .menu > li > a {
+      color: $white;
+      &:hover {
+        background-color: $th_green;
+        color: $white;
+      }
+      &.active {
+        color: $black;
+      }
+    }
+  }
+
+  .PostSummary {
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    padding: 7px;
+  }
+  .PostSummary:hover {
+    box-shadow: 0 0 10px $th_green;
+  }
+
+  .Voting__button--upvoted circle {
+    fill: $th_green;
+    stroke: $th_green;
+  }
+
+  .VotesAndComments {
+    path {
+      fill: $th_green;
+    }
+  }
+
+  @media screen and (min-width: 60rem) {
+    .PostsList__post_overlay {
+      background-color: rgba(247, 228, 225, 0.9);
+    }
+    .PostsList__post_container {
+      box-shadow: 0 0 5px 0px #420505;
+    }
+  }
+  .close-button {
+    color: #420208;
+  }
+
+  input[type=button]:disabled,
+  input[type=button].disabled, input[type=button].disabled:focus,
+  input[type=submit].disabled, input[type=submit].disabled:focus {
+    background-color: #994c1c;
+  }
+}

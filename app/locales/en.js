@@ -259,6 +259,7 @@ const en =  {
   influence_tokens_which_earn_more_power_by_holding_long_term: 'Influence tokens which earn more power by holding long term.',
   information: 'Information',
   information_for_user: 'Information for user',
+  golos_fest: '#яИдуНаГОЛОСфест!',
   insufficent_balance: 'Insufficient balance',
   insufficent_funds: 'Insufficent funds',
   intentional_miss_categorized_content_or_spam: 'Intentional miss-categorized content or Spam',

@@ -28,6 +28,7 @@ import config from '../config';
 import {routeRegex} from 'app/ResolveRoute';
 import secureRandom from 'secure-random';
 import { APP_NAME_LATIN } from 'config/client_config';
+import requestId from './requestId';
 
 const grant = new Grant(config.grant);
 // import uploadImage from 'server/upload-image' //medium-editor
@@ -95,6 +96,7 @@ app.use(function *(next) {
     }
 });
 
+app.use(requestId());
 app.use(responseTime());
 
 if (env === 'production') {

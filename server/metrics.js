@@ -25,7 +25,6 @@ function responseTime() {
     const start = process.hrtime();
     yield next;
     const elapsed = process.hrtime(start);
-    console.log('responseTime', (elapsed[0] * 1e3 + elapsed[1] / 1e6).toFixed(3))
     if (metrics) metrics.timing('_response_time', + (elapsed[0] * 1e3 + elapsed[1] / 1e6).toFixed(3)); //  in ms
   };
 }

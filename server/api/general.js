@@ -341,7 +341,7 @@ function* createAccount({
     if (!broadcast) return signed_transaction.toObject(sx)
     return yield new Promise((resolve, reject) =>
         Apis.broadcastTransaction(sx, () => {
-          if (metrics.client) metrics.client.increment('_createaccount_success');
+          if (metrics) metrics.increment('_createaccount_success');
           resolve()
         }).catch(e => {
           if (metrics) metrics.increment('_createaccount_error');

@@ -5,8 +5,8 @@ import appReducer from './AppReducer';
 //import discussionReducer from './DiscussionReducer';
 import globalReducerModule from './GlobalReducer';
 import marketReducerModule from './MarketReducer';
+import assetsReducerModule from './AssetsReducer';
 import user from './User';
-// import auth from './AuthSaga';
 import transaction from './Transaction';
 import offchain from './Offchain';
 import {reducer as formReducer} from 'redux-form'; // @deprecated, instead use: app/utils/ReactForm.js
@@ -58,6 +58,7 @@ export default combineReducers({
     routing: initReducer(routerReducer),
     app: initReducer(appReducer),
     form: formReducer,
+    assets: initReducer(assetsReducerModule.reducer),
 });
 
 /*

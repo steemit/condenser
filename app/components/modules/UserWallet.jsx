@@ -10,7 +10,7 @@ import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import BlocktradesDeposit from 'app/components/modules/BlocktradesDeposit';
 import Reveal from 'react-foundation-components/lib/global/reveal'
 import CloseButton from 'react-foundation-components/lib/global/close-button';
-import {steemTip, powerTip, valueTip, savingsTip} from 'app/utils/Tips'
+import {steemTip, powerTip, valueTip, savingsTip, delegationTip} from 'app/utils/Tips'
 import {numberWithCommas, vestingSteem, delegatedSteem} from 'app/utils/StateFunctions'
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu'
 import WalletSubMenu from 'app/components/elements/WalletSubMenu'
@@ -269,6 +269,7 @@ class UserWallet extends React.Component {
             <div className="UserWallet__balance row zebra">
                 <div className="column small-12 medium-8">
                     STEEM POWER<br /><span className="secondary">{powerTip.split(".").map((a, index) => {if (a) {return <div key={index}>{a}.</div>;} return null;})}</span>
+                    {delegated_steem != 0 ? <span className="secondary">{delegationTip}</span> : null}
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?

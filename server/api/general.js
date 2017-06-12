@@ -10,6 +10,7 @@ import coBody from 'co-body';
 import secureRandom from 'secure-random'
 import {PublicKey, Signature, hash} from 'shared/ecc'
 import Tarantool from 'db/tarantool';
+import {metrics} from 'server/metrics';
 
 
 export default function useGeneralApi(app) {
@@ -336,17 +337,16 @@ function* createAccount({
         memo_key: memo,
     }]]
     const tx = yield createTransaction(operations)
-    console.log('-- createAccount: createTransaction')
     const sx = signTransaction(tx, signingKey)
-    console.log('-- createAccount: signTransaction')
     if (!broadcast) return signed_transaction.toObject(sx)
     return yield new Promise((resolve, reject) =>
         Apis.broadcastTransaction(sx, () => {
+          if (metrics) metrics.increment('_createaccount_success');
           resolve()
-          console.log('-- createAccount: broadcastTransaction resolve()')
         }).catch(e => {
+          if (metrics) metrics.increment('_createaccount_error');
+          console.log('-- createAccount.broadcastTransaction.error [', new_account_name, ']', e)
           reject(e)
-          console.log('-- createAccount: broadcastTransaction reject()')
         })
     )
 }

@@ -29,6 +29,19 @@ export default createModule({
                 return state.merge({show_login_modal: true, loginBroadcastOperation: operation, loginDefault})
             }
         },
+        {
+            action: 'SHOW_TERMS',
+            reducer: (state, {payload}) => {
+            // https://github.com/mboperator/redux-modules/issues/11
+            if (typeof payload === 'function') payload = undefined;
+            let operation, termsDefault;
+            if(payload) {
+                operation = fromJS(payload.operation);
+                termsDefault = fromJS(payload.termsDefault)
+            }
+            return state.merge({show_terms_modal: true, loginBroadcastOperation: operation, termsDefault})
+            }
+        },
         { action: 'HIDE_LOGIN', reducer: state =>
             state.merge({show_login_modal: false, loginBroadcastOperation: undefined, loginDefault: undefined}) },
         { action: 'SAVE_LOGIN_CONFIRM', reducer: (state, {payload}) => state.set('saveLoginConfirm', payload) },

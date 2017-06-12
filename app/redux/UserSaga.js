@@ -17,6 +17,7 @@ export const userWatches = [
     loginWatch,
     saveLoginWatch,
     logoutWatch,
+    showTermsWatch,
     // getCurrentAccountWatch,
     loginErrorWatch,
     lookupPreviousOwnerAuthorityWatch,
@@ -45,6 +46,10 @@ function* loginErrorWatch() {
 
 function* watchLoadSavingsWithdraw() {
     yield* takeLatest('user/LOAD_SAVINGS_WITHDRAW', loadSavingsWithdraw);
+}
+
+function* showTermsWatch() {
+    yield* takeLatest('user/SHOW_TERMS', showTerms);
 }
 
 export function* watchRemoveHighSecurityKeys() {
@@ -327,6 +332,10 @@ function* logout() {
     if (process.env.BROWSER)
         localStorage.removeItem('autopost2')
     serverApiLogout();
+}
+
+function* showTerms() {
+    yield put(user.actions.showTermsConfirm(false)) // Just incase it is still showing
 }
 
 function* loginError({payload: {/*error*/}}) {

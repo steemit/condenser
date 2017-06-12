@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import Reveal from 'react-foundation-components/lib/global/reveal';
 import LoginForm from 'app/components/modules/LoginForm';
+import TermsAgree from 'app/components/modules/TermsAgree';
 import ConfirmTransactionForm from 'app/components/modules/ConfirmTransactionForm';
 import Transfer from 'app/components/modules/Transfer';
 import SignUp from 'app/components/modules/SignUp';
@@ -25,6 +26,7 @@ class Modals extends React.Component {
         hideTransfer: React.PropTypes.func.isRequired,
         hidePromotePost: React.PropTypes.func.isRequired,
         notifications: React.PropTypes.object,
+        show_terms_modal: React.PropTypes.bool,
         removeNotification: React.PropTypes.func,
     };
 
@@ -36,7 +38,7 @@ class Modals extends React.Component {
     render() {
         const {
             show_login_modal, show_confirm_modal, show_transfer_modal, show_signup_modal,
-            hideLogin, hideTransfer, hideConfirm, hideSignUp,
+            hideLogin, hideTransfer, hideConfirm, hideSignUp, show_terms_modal,
             notifications, removeNotification, hidePromotePost, show_promote_post_modal
         } = this.props;
 
@@ -62,6 +64,9 @@ class Modals extends React.Component {
                     <CloseButton onClick={hideSignUp} />
                     <SignUp />
                 </Reveal>}
+                {show_terms_modal && <Reveal show={show_terms_modal}>
+                    <TermsAgree onCancel={hideLogin} />
+                </Reveal>}
                 <NotificationStack
                     style={false}
                     notifications={notifications_array}
@@ -80,7 +85,8 @@ export default connect(
             show_transfer_modal: state.user.get('show_transfer_modal'),
             show_promote_post_modal: state.user.get('show_promote_post_modal'),
             show_signup_modal: state.user.get('show_signup_modal'),
-            notifications: state.app.get('notifications')
+            notifications: state.app.get('notifications'),
+            show_terms_modal: state.user.get('show_terms_modal')
         }
     },
     dispatch => ({

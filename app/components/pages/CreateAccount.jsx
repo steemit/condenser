@@ -16,6 +16,7 @@ class CreateAccount extends React.Component {
 
     static propTypes = {
         loginUser: React.PropTypes.func.isRequired,
+        showTerms: React.PropTypes.func.isRequired,
         serverBusy: React.PropTypes.bool
     };
 
@@ -31,6 +32,7 @@ class CreateAccount extends React.Component {
             cryptographyFailure: false,
             showRules: false,
             showPass: false,
+            agreeTerms: false,
             account_has_keys_warning: false, // remove this after May 20th
             // user_name_picked: this.props.offchainUser.getIn(["name"])
         };
@@ -58,6 +60,9 @@ class CreateAccount extends React.Component {
             if (this.props.offchainUser.get('account_has_keys')) {
                 newState.account_has_keys_warning = true;
             }
+        }
+        if (!this.props.agreeTerms) {
+            this.props.showTerms();
         }
         this.setState(newState);
     }
@@ -324,6 +329,10 @@ module.exports = {
             logout: e => {
                 if (e) e.preventDefault();
                 dispatch(user.actions.logout())
+            },
+            showTerms: e => {
+                if (e) e.preventDefault();
+                dispatch(user.actions.showTerms())
             }
         })
     )(CreateAccount)

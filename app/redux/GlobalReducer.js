@@ -2,7 +2,7 @@ import {Map, Set, List, fromJS, Iterable} from 'immutable';
 import createModule from 'redux-modules';
 import {emptyContent} from 'app/redux/EmptyState';
 import constants from './constants';
-import {contentStats} from 'app/utils/StateFunctions'
+import {contentStats, fromJSGreedy} from 'app/utils/StateFunctions'
 
 const emptyContentMap = Map(emptyContent)
 
@@ -39,7 +39,13 @@ export default createModule({
                         })
                     })
                     payload = payload.set('content', content)
-                }
+
+                    // TODO reserved words used in account names, find correct solution
+                    if (!Map.isMap(payload.get('accounts'))) {
+                      const accounts = payload.get('accounts')
+                      payload = payload.set('accounts', fromJSGreedy(accounts))
+                    }
+                  }
                 // console.log('state.mergeDeep(action.payload).toJS(), action.payload', state.mergeDeep(action.payload).toJS(), action.payload)
                 return state.mergeDeep(payload);
             }

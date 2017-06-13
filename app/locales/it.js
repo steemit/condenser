@@ -335,7 +335,7 @@ const it = 	{
 	curation_rewards_last_24_hours: 'Curation rewards delle ultime 24 ore',
 	daily_average_curation_rewards: 'Media giornaliera curation rewards',
 	estimated_curation_rewards_last_week: "Curation rewards stimata di settimana scorsa",
-    part_of_your_steem_power_is_currently_delegated:'Part of your STEEM POWER is currently delegated to you. Delegation is donated for influence or to help new users perform actions on steemit. Your delegation amount can fluctuate.',
+    part_of_your_steem_power_is_currently_delegated: "Una parte del tuo STEAM POWER è attualmente delegata a voi. La delegazione è donata per influenza o per aiutare i nuovi utenti a svolgere azioni su steemit. È l'importo della delegazione può oscillare.",
     curation_rewards_last_week: "Curation rewards settimana scorsa",
 	curation_rewards_history: 'Storico Curation Rewards',
 	// Post.jsx

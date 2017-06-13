@@ -432,7 +432,7 @@ const es = 	{
 	the_owner_key_is_required_to_change_other_keys: 'The owner key is the master key for the account and is required to change the other keys.',
 	the_private_key_or_password_should_be_kept_offline: 'The private key or password for the owner key should be kept offline as much as possible.',
 	the_memo_key_is_used_to_create_and_read_memos: 'The memo key is used to create and read memos.',
-    part_of_your_steem_power_is_currently_delegated:'Part of your STEEM POWER is currently delegated to you. Delegation is donated for influence or to help new users perform actions on steemit. Your delegation amount can fluctuate.',
+    part_of_your_steem_power_is_currently_delegated: 'Parte de su STEAM POWER está actualmente delegado a usted. La delegación es donada para influir o para ayudar a nuevos usuarios a realizar acciones en steemit. Su cantidad de delegación puede fluctuar.',
     previous: 'Previous',
 	next: 'Next',
 	browse: 'Browse',

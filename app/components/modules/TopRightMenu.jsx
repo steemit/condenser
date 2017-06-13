@@ -27,7 +27,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
     const lcn = vertical ? '' : 'show-for-medium';
     const nav = navigate || defaultNavigate;
     const user_information_button = <li className={lcn + ' buttons'}><Link to="/about" className="button success">{translate('information_for_user')}</Link></li>;
-    const golosFest = <li className={lcn + ' buttons'}><Link to="/ru--golos-fest/@golosevents/ya-idu-na-golos-fest-29-iyulya-2017-goda" className="button alert fest">{translate('golos_fest')}</Link></li>;
+    const golosFest = <li className={lcn + ' buttons'}><Link to="/ru--yaidunagolosfest/@golosevents/yaidunagolosfest-or-o-stoimosti-uchastiya" className="button alert fest">{translate('golos_fest')}</Link></li>;
     const submit_story = $STM_Config.read_only_mode ? null : <li className={lcn + ' submit-story'}><a href="/submit.html" onClick={nav}>{translate("submit_a_story")}</a></li>;
     const userpic_src = userpic || '/images/user.png';
     const feed_link = `/@${username}/feed`;

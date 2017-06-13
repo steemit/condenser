@@ -20,13 +20,26 @@ export default createModule({
             action: 'SHOW_LOGIN',
             reducer: (state, {payload}) => {
                 // https://github.com/mboperator/redux-modules/issues/11
-                if (typeof payload === 'function') payload = undefined
+                if (typeof payload === 'function') payload = undefined;
                 let operation, loginDefault
                 if(payload) {
                     operation = fromJS(payload.operation)
                     loginDefault = fromJS(payload.loginDefault)
                 }
                 return state.merge({show_login_modal: true, loginBroadcastOperation: operation, loginDefault})
+            }
+        },
+        {
+            action: 'SHOW_TERMS',
+            reducer: (state, {payload}) => {
+                // https://github.com/mboperator/redux-modules/issues/11
+                if (typeof payload === 'function') payload = undefined;
+                let operation, termsDefault;
+                if(payload) {
+                    operation = fromJS(payload.operation);
+                    termsDefault = fromJS(payload.termsDefault)
+                }
+                return state.merge({show_terms_modal: true, loginBroadcastOperation: operation, termsDefault})
             }
         },
         { action: 'HIDE_LOGIN', reducer: state =>

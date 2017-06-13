@@ -8,6 +8,7 @@ import mount from 'koa-mount';
 import helmet from 'koa-helmet';
 import koa_logger from 'koa-logger';
 import requestTime from './requesttimings';
+import hardwareStats from './hardwarestats';
 import prod_logger from './prod_logger';
 import favicon from 'koa-favicon';
 import staticCache from 'koa-static-cache';
@@ -269,5 +270,10 @@ if (env !== 'test') {
     if (process.send) process.send('online');
     console.log(`Application started on port ${port}`);
 }
+
+// set PERFORMANCE_TRACING to the number of seconds desired for
+// logging hardware stats to the console
+if(process.env.PERFORMANCE_TRACING)
+    setInterval(hardwareStats, (1000*process.env.PERFORMANCE_TRACING));
 
 module.exports = app;

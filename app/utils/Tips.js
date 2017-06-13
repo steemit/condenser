@@ -12,7 +12,7 @@ export const transferTips = {
 
 export const steemTip = translate('tradeable_tokens_that_may_be_transferred_anywhere_at_anytime') + ' ' + translate('LIQUID_TOKEN_can_be_converted_to_VESTING_TOKEN_in_a_process_called_powering_up');
 export const powerTip = 'Influence tokens which give you more control over post payouts and allow you to earn on curation rewards.';
-export const delegationTip = translate('delegation_wallet_tip');
+export const delegationTip = translate('part_of_your_steem_power_is_currently_delegated');
 //export const powerTip = translate('influence_tokens_which_earn_more_power_by_holding_long_term') + ' ' + translate('the_more_you_hold_the_more_you_influence_post_rewards') //TODO: this text is outdated
 export const valueTip = translate('the_estimated_value_is_based_on_an_average_value_of_steem_in_US_dollars');
 export const powerTip2 = translate('VESTING_TOKEN_is_non_transferrable_and_requires_convert_back_to_LIQUID_TOKEN');

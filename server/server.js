@@ -1,6 +1,3 @@
-// newrelic is not working with latest npm
-//if(config.has('newrelic')) require('newrelic');
-
 import path from 'path';
 import fs from 'fs';
 import Koa from 'koa';

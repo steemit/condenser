@@ -32,6 +32,7 @@
   },
   "img_proxy_prefix": "SDC_IMAGE_PROXY_PREFIX",
   "mixpanel": "SDC_MIXPANEL",
+  "newrelic": "SDC_NEWRELIC_LICENSE_KEY",
   "notify": {
     "gcm_key": "SDC_NOTIFY_GCM_KEY"
   },

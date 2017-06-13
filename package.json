@@ -13,7 +13,7 @@
     "test": "npm run mocha -- app/**/*.test.js",
     "test:watch:all": "npm test -- --watch --watch-extensions jsx",
     "test:watch": "npm run mocha -- --watch --watch-extensions jsx",
-    "production": "NODE_ENV=production ./node_modules/babel-cli/bin/babel-node.js server/index.js",
+    "production": "NODE_ENV=production ./node_modules/babel-cli/bin/babel-node.js --max-old-space-size=4096 server/index.js",
     "start": "./node_modules/babel-cli/bin/babel-node.js ./webpack/dev-server.js",
     "webpush": "./node_modules/babel-cli/bin/babel-node.js ./scripts/webpush_notify.js"
   },
@@ -83,6 +83,7 @@
     "mixpanel": "^0.5.0",
     "mysql": "^2.10.2",
     "net": "^1.0.2",
+    "newrelic": "^1.40.0",
     "node-sass": "^3.4.2",
     "pluralize": "^2.0.0",
     "purest": "^2.0.1",

@@ -49,6 +49,7 @@
   "img_proxy_prefix": "https://steemitdevimages.com/",
   "ipfs_prefix": false,
   "mixpanel": false,
+  "newrelic": false,
   "notify": {
     "gcm_key": "google secret key"
   },

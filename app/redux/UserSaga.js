@@ -71,10 +71,6 @@ function* loadSavingsWithdraw() {
 
 const strCmp = (a, b) => a > b ? 1 : a < b ? -1 : 0
 
-// function* getCurrentAccountWatch() {
-//     // yield* takeLatest('user/SHOW_TRANSFER', getCurrentAccount);
-// }
-
 function* removeHighSecurityKeys({payload: {pathname}}) {
     const highSecurityPage = highSecurityPages.find(p => p.test(pathname)) != null
     // Let the user keep the active key when going from one high security page to another.  This helps when
@@ -328,6 +324,10 @@ function* logout() {
         localStorage.removeItem('autopost2')
     serverApiLogout();
 }
+
+// function* showTerms() {
+//     yield put(user.actions.showTermsConfirm(false)) // Just incase it is still showing
+// }
 
 function* loginError({payload: {/*error*/}}) {
     serverApiLogout();

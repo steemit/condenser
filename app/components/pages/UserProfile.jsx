@@ -29,6 +29,7 @@ import WalletSubMenu from 'app/components/elements/WalletSubMenu';
 import Userpic from 'app/components/elements/Userpic';
 import Callout from 'app/components/elements/Callout';
 import normalizeProfile from 'app/utils/NormalizeProfile';
+import {Map} from 'immutable';
 
 export default class UserProfile extends React.Component {
     constructor() {
@@ -113,7 +114,10 @@ export default class UserProfile extends React.Component {
         const fetching = (status && status.fetching) || this.props.loading;
 
         let account
-        let accountImm = this.props.accounts.get(accountname);
+        let accountImm = this.props.accounts.get(accountname, Map());
+        if (!Map.isMap(accountImm))
+          accountImm = Map(accountImm)
+
         if( accountImm ) {
             account = accountImm.toJS();
         } else if (fetching) {
@@ -437,6 +441,9 @@ module.exports = {
             const wifShown = state.global.get('UserKeys_wifShown')
             const current_user = state.user.get('current')
             // const current_account = current_user && state.global.getIn(['accounts', current_user.get('username')])
+            let accounts = state.global.get('accounts', Map())
+            if (!Map.isMap(accounts))
+              accounts = Map(accounts)
 
             return {
                 discussions: state.global.get('discussion_idx'),
@@ -445,7 +452,7 @@ module.exports = {
                 wifShown,
                 loading: state.app.get('loading'),
                 global_status: state.global.get('status'),
-                accounts: state.global.get('accounts'),
+                accounts,
                 follow: state.global.get('follow'),
                 follow_count: state.global.get('follow_count')
             };

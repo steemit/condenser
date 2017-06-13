@@ -59,6 +59,7 @@ class CreateAccount extends React.Component {
                 newState.account_has_keys_warning = true;
             }
         }
+        this.props.showTerms();
         this.setState(newState);
     }
 
@@ -324,6 +325,10 @@ module.exports = {
             logout: e => {
                 if (e) e.preventDefault();
                 dispatch(user.actions.logout())
+            },
+            showTerms: e => {
+                if (e) e.preventDefault();
+                dispatch(user.actions.showTerms())
             }
         })
     )(CreateAccount)

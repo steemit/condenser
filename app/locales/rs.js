@@ -258,7 +258,7 @@ const rs_latin =  {
   influence_tokens_which_earn_more_power_by_holding_long_term: 'Uticajni tokeni koji zarađuju više energije/snage dugoročnim držanjem.',
   information: 'Informacija',
   information_for_user: 'Informacija za korisnika',
-  golos_fest: '#яИдуНаГОЛОСфест!',
+  golos_fest: '#яИдуНаГОЛОСфест',
   insufficent_balance: 'Nedovoljno stanje',
   insufficent_funds: 'Nedovoljno sredstava',
   intentional_miss_categorized_content_or_spam: 'Namerno van-kategorisan sadržaja ili spam',

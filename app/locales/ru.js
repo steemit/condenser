@@ -259,7 +259,7 @@ const ru = {
   influence_tokens_which_earn_more_power_by_holding_long_term: 'Сила Голоса неперемещаемая, её количество увеличивается при долгосрочном хранении.',
   information: 'Информация',
   information_for_user: 'О проекте',
-  golos_fest: '#яИдуНаГОЛОСфест!',
+  golos_fest: '#яИдуНаГОЛОСфест',
   insufficent_balance: 'Недостаточный баланс',
   insufficent_funds: 'Недостаточно средств',
   intentional_miss_categorized_content_or_spam: 'Преднамеренная неправильная категоризация контента или спам',

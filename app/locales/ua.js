@@ -259,7 +259,7 @@ const ua = {
   influence_tokens_which_earn_more_power_by_holding_long_term: 'Непереміщуваними цифрові токени, їх кількість збільшується при довгостроковому зберіганні.',
   information: 'Інформація',
   information_for_user: 'О проекте',
-  golos_fest: '#яИдуНаГОЛОСфест!',
+  golos_fest: '#яИдуНаГОЛОСфест',
   insufficent_balance: 'Недостатній баланс',
   insufficent_funds: 'Недостатньо коштів',
   intentional_miss_categorized_content_or_spam: 'Навмисна неправильна категоризація контенту або спам',

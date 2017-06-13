@@ -335,7 +335,8 @@ const jp = 	{
 	curation_rewards_last_24_hours: '24時間以内のキュレーションリワード',
 	daily_average_curation_rewards: '1にち平均のキュレーションリワード',
 	estimated_curation_rewards_last_week: "先週の予定されているキュレーションリワード",
-	curation_rewards_last_week: "先週のキュレーションリワード",
+    part_of_your_steem_power_is_currently_delegated:'Part of your STEEM POWER is currently delegated to you. Delegation is donated for influence or to help new users perform actions on steemit. Your delegation amount can fluctuate.',
+    curation_rewards_last_week: "先週のキュレーションリワード",
 	curation_rewards_history: 'キュレーションリワード履歴',
 	// Post.jsx
 	now_showing_comments_with_low_ratings: '評価が低いコメントを表示しています',

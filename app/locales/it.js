@@ -335,7 +335,8 @@ const it = 	{
 	curation_rewards_last_24_hours: 'Curation rewards delle ultime 24 ore',
 	daily_average_curation_rewards: 'Media giornaliera curation rewards',
 	estimated_curation_rewards_last_week: "Curation rewards stimata di settimana scorsa",
-	curation_rewards_last_week: "Curation rewards settimana scorsa",
+    part_of_your_steem_power_is_currently_delegated:'Part of your STEEM POWER is currently delegated to you. Delegation is donated for influence or to help new users perform actions on steemit. Your delegation amount can fluctuate.',
+    curation_rewards_last_week: "Curation rewards settimana scorsa",
 	curation_rewards_history: 'Storico Curation Rewards',
 	// Post.jsx
 	now_showing_comments_with_low_ratings: 'mostra commenti di bassa qualità',

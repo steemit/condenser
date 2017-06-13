@@ -1,3 +1,6 @@
+import config from 'config';
+if(config.get('newrelic')) require('newrelic');
+
 import * as steem from 'steem';
 
 delete process.env.BROWSER;
@@ -12,8 +15,6 @@ require('module').Module._initPaths();
 
 // Load Intl polyfill
 // require('utils/intl-polyfill')(require('./config/init').locales);
-
-import config from 'config';
 
 global.$STM_Config = {
     fb_app: config.get('grant.facebook.key'),

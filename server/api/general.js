@@ -146,23 +146,6 @@ export default function useGeneralApi(app) {
                   posting: account.posting_key,
                   memo: account.memo_key,
                   broadcast: true
-              }).catch(error => {
-                  console.log('-- createAccount.broadcastTransaction.error [', new_account_name, ']', e)
-
-                  // Remove created in MySQL Database user account
-                  // const created_account = yield models.Account.findOne({
-                  //   where: {
-                  //     name: account.name,
-                  //     owner_key: account.owner_key,
-                  //     active_key: account.active_key,
-                  //     posting_key: account.memo_key,
-                  //     memo_key: account.memo_key,
-                  //   }
-                  // });
-                  // if (created_account) {
-                  //   yield created_account.destroy({force: true});
-                  // }
-                  accountInstance.destroy({force: true});
               });
               console.log('-- create_account_with_keys created -->', this.session.uid, account.name, user.id, account.owner_key);
 
@@ -362,6 +345,7 @@ function* createAccount({
           resolve()
         }).catch(e => {
           if (metrics) metrics.increment('_createaccount_error');
+          console.log('-- createAccount.broadcastTransaction.error [', new_account_name, ']', e)
           reject(e)
         })
     )

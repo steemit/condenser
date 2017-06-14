@@ -85,7 +85,7 @@ export default function useGeneralApi(app) {
                 order: 'id DESC'
             });
             if (existing_account) {
-                throw new Error("Only one Steem account per user is allowed in order to prevent abuse");
+                throw new Error("Only one GOLOS account per user is allowed in order to prevent abuse");
             }
 
             const same_ip_account = yield models.Account.findOne(
@@ -346,6 +346,19 @@ function* createAccount({
         }).catch(e => {
           if (metrics) metrics.increment('_createaccount_error');
           console.log('-- createAccount.broadcastTransaction.error [', new_account_name, ']', e)
+
+          const created_account = yield models.Account.findOne({
+            where: {
+              name: new_account_name,
+              owner_key: owner,
+              active_key: active,
+              posting_key: posting,
+              memo_key: memo,
+            },
+          });
+          if (created_account) {
+            yield created_account.destroy({force: true});
+          }
           reject(e)
         })
     )

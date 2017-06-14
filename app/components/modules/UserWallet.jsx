@@ -29,11 +29,17 @@ class UserWallet extends React.Component {
         this.onShowDeposit = () => {this.setState({showDeposit: !this.state.showDeposit})};
         this.onShowDepositSteem = (e) => {
             e.preventDefault();
-            this.setState({showDeposit: !this.state.showDeposit, depositType: 'STEEM'})
+            // this.setState({showDeposit: !this.state.showDeposit, depositType: 'STEEM'})
+            const new_window = window.open();
+            new_window.opener = null;
+            new_window.location = 'https://blocktrades.us';
         };
         this.onShowDepositPower = (e) => {
             e.preventDefault();
-            this.setState({showDeposit: !this.state.showDeposit, depositType: 'VESTS'})
+            // this.setState({showDeposit: !this.state.showDeposit, depositType: 'VESTS'})
+            const new_window = window.open();
+            new_window.opener = null;
+            new_window.location = 'https://blocktrades.us';
         };
         // this.onShowDeposit = this.onShowDeposit.bind(this)
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'UserWallet');
@@ -251,9 +257,9 @@ class UserWallet extends React.Component {
                 <div className="columns small-10 medium-12 medium-expand">
                     {isMyAccount ? <WalletSubMenu account_name={account.get('name')} /> : <div><br /><h4>BALANCES</h4><br /></div>}
                 </div>
-                <div className="columns shrink">
+                {/*<div className="columns shrink">
                     {isMyAccount && <button className="UserWallet__buysp button hollow" onClick={this.onShowDepositSteem}>Buy Steem or Steem Power</button>}
-                </div>
+                </div>*/}
             </div>
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">

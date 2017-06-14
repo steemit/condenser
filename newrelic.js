@@ -13,7 +13,7 @@ exports.config = {
   /**
    * Array of application names.
    */
-  app_name: ['condenser'],
+  app_name: [process.env.NODE_ENV === 'production' ? 'condenser' : 'condenser-dev'],
   /**
    * Your New Relic license key.
    */

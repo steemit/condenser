@@ -10,6 +10,8 @@ import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import {loadFollows} from 'app/redux/FollowSaga'
 import {PrivateKey, Signature, hash} from 'steem/lib/auth/ecc';
 import {api} from 'steem';
+import {translate} from 'app/Translator';
+import DMCAUserList from 'app/utils/DMCAUserList';
 
 
 export const userWatches = [
@@ -146,6 +148,11 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     const account = yield call(getAccount, username)
     if (!account) {
         yield put(user.actions.loginError({ error: 'Username does not exist' }))
+        return
+    }
+    //dmca user block
+    if (username && DMCAUserList.includes(username)) {
+        yield put(user.actions.loginError({ error: translate('terms_violation') }))
         return
     }
 

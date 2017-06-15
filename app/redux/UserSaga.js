@@ -10,6 +10,7 @@ import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import {loadFollows} from 'app/redux/FollowSaga'
 import {PrivateKey, Signature, hash} from 'steem/lib/auth/ecc';
 import {api} from 'steem';
+import {translate} from 'app/Translator';
 import DMCAUserList from 'app/utils/DMCAUserList';
 
 
@@ -151,7 +152,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     }
     //dmca user block
     if (username && DMCAUserList.includes(username)) {
-        yield put(user.actions.loginError({ error: 'This account has been flagged for violation of steemit.com Terms of Service. Please contact support@steemit.com with questions.' }))
+        yield put(user.actions.loginError({ error: translate('terms_violation') }))
         return
     }
 

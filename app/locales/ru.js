@@ -585,6 +585,8 @@ const ru = {
 	empty_feed_3: 'Explore Trending Articles',
 	empty_feed_4: "Read The Quick Start Guide",
 	empty_feed_5: 'Browse The FAQ'
+    // Terms of service violations
+    terms_violation: 'Эта учетная запись была отмечена за нарушение Условий использования steemit.com. Пожалуйста, свяжитесь с support@steemit.com с вопросами.'
 }
 
 export { ru }

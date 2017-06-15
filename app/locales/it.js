@@ -476,6 +476,8 @@ const it = 	{
 	empty_feed_3: 'Explore Trending Articles',
 	empty_feed_4: "Read The Quick Start Guide",
 	empty_feed_5: 'Browse The FAQ'
+    // Terms of service violations
+    terms_violation: 'This account has been flagged for violation of steemit.com Terms of Service. Please contact support@steemit.com with questions.'
 }
 
 export { it }

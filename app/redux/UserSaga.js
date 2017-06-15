@@ -151,7 +151,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     }
     //dmca user block
     if (username && DMCAUserList.includes(username)) {
-        yield put(user.actions.loginError({ error: 'This account has been flagged for DMCA concerns. Please contact support@steemit.com with questions.' }))
+        yield put(user.actions.loginError({ error: 'This account has been flagged for violation of steemit.com Terms of Service. Please contact support@steemit.com with questions.' }))
         return
     }
 

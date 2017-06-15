@@ -240,12 +240,12 @@ class UserWallet extends React.Component {
         }
 
         let claimbox;
-        if(rewards_str && (!current_user || current_user && isMyAccount)) {
+        if(current_user && rewards_str && isMyAccount) {
             claimbox = <div className="row">
                     <div className="columns small-12">
                         <div className="UserWallet__claimbox">
                             Your current rewards: {rewards_str}
-                            {isMyAccount && <button className="button hollow float-right" onClick={e => {this.props.claimRewards(account)}}>Redeem Rewards (Transfer to Balance)</button>}
+                            <button className="button hollow float-right" onClick={e => {this.props.claimRewards(account)}}>Redeem Rewards (Transfer to Balance)</button>
                         </div>
                     </div>
                 </div>

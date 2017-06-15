@@ -75,6 +75,7 @@ changelly.com
 changely
 shapeshif
 shapeshift
+randomwhale
 `.trim().split('\n');
 
 export default list;

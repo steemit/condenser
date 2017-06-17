@@ -76,6 +76,7 @@ changely
 shapeshif
 shapeshift
 randomwhale
+coinpayments
 `.trim().split('\n');
 
 export default list;

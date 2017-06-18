@@ -135,7 +135,7 @@ function* handleFacebookCallback() {
         }
 
         if (!u.verified) {
-            throw new Error('Not verified Facebook account. Please verify your Facebook account and try again to sign up to GOLOS.');
+            throw new Error('Not verified Facebook account. Please verify your Facebook account and try again to sign up to Golos.');
         }
 
         const same_ip_bot = yield models.User.findOne({
@@ -417,6 +417,38 @@ function* handleVkCallback() {
             }
             return null;
         }
+        if (!attrs.email) {
+            console.log('-- /handle_vk_callback no email -->', this.session.uid, u);
+            this.flash = {alert: 'Vkontakte login didnt provide any email address.'};
+            this.redirect('/');
+            return;
+        }
+
+
+        const same_ip_bot = yield models.User.findOne({
+            attributes: ['id', 'created_at'],
+            where: {remote_ip: attrs.remote_ip, bot: true}
+        });
+        if (same_ip_bot) {
+            console.log('-- /handle_vk_callback same_ip_bot -->', this.session.uid, attrs.remote_ip, attrs.email);
+            this.flash = {alert: translate('we_are_sorry_we_cannot_sign_you_up_at_this_time_because_ip_associated_with_bots_activity')};
+            this.redirect('/');
+            return;
+        }
+
+        const email_provider = attrs.email.match(/([\w\d-]+\.\w+)$/)[1];
+        if (!email_provider) throw new Error('Incorrect email format');
+        const blocked_email = yield models.List.findOne({
+            attributes: ['id'],
+            where: {kk: 'block-email-provider', value: email_provider}
+        });
+        if (blocked_email) {
+            console.log('-- /handle_vk_callback blocked_email -->', this.session.uid, u.email);
+            this.flash = {alert: translate('not_supported_email_address') + ': ' + attrs.email + '. ' + translate('please_make_sure_you_dont_use_temporary_email_providers_contact_SUPPORT_URL')};
+            this.redirect('/');
+            return;
+        }
+
 
         if (user) {
             i_attrs_email.user_id = attrs.id = user.id;

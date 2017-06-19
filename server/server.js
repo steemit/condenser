@@ -61,6 +61,10 @@ function convertEntriesToArrays(obj) {
 }, {});
 }
 
+const service_worker_js_content = fs
+    .readFileSync(path.join(__dirname, './service-worker.js'))
+    .toString();
+
 // some redirects
 app.use(function*(next) {
     // redirect to home page/feed if known account
@@ -149,12 +153,9 @@ app.use(
     mount('/service-worker.js', function*() {
         this.set('Cache-Control', 'public, max-age=7200000');
         this.type = 'application/javascript';
-        const file_content = fs
-            .readFileSync(path.join(__dirname, './service-worker.js'))
-            .toString();
         // TODO: use APP_URL from client_config.js
         // actually use a config value for it
-        this.body = file_content.replace(
+        this.body = service_worker_js_content.replace(
             /\{DEFAULT_URL\}/i,
             'https://' + this.request.header.host
         );

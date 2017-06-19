@@ -1,5 +1,5 @@
 import config from 'config';
-if(config.get('newrelic')) require('newrelic');
+const newrelic = config.get('newrelic') ? require('newrelic') : undefined;
 
 import * as steem from 'steem';
 
@@ -41,7 +41,12 @@ global.webpackIsomorphicTools = new WebpackIsomorphicTools(
 );
 
 global.webpackIsomorphicTools.server(ROOT, () => {
-        steem.config.set('websocket', config.get('ws_connection_server'))
+        steem.config.set('websocket', config.get('ws_connection_server'));
+        if (newrelic) {
+            steem.api.on('track-performance', (method, time_taken) => {
+                newrelic.recordMetric(`WebTransaction/Performance/steem-js/${method}`, time_taken / 1000.0);
+            });
+        }
         // const CliWalletClient = require('shared/api_client/CliWalletClient').default;
         // if (process.env.NODE_ENV === 'production') connect_promises.push(CliWalletClient.instance().connect_promise());
         try {

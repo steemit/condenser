@@ -1,6 +1,6 @@
+import config from 'config';
+const newrelic = config.get('newrelic') ? require('newrelic') : undefined;
 import TarantoolDriver from 'tarantool-driver';
-
-const config = require('config');
 
 let instance = null;
 
@@ -16,13 +16,24 @@ class Tarantool {
             connection.connect()
             .then(() => connection.auth(username, password))
             .then(() => resolve())
-            .catch(error => resolve(false));
+            .catch(() => resolve(false));
         });
     }
 
     makeCall(call_name, args) {
         return this.ready_promise
-            .then(() => this.connection[call_name].apply(this.connection, args))
+            .then(() => {
+                const call_time = Date.now();
+                return new Promise((resolve, reject) => {
+                    this.connection[call_name].apply(this.connection, args).then(res => {
+                        if (newrelic) {
+                            const time_taken = Date.now() - call_time;
+                            newrelic.recordMetric(`WebTransaction/Performance/tarantool/${call_name}/${args['0']}`, time_taken / 1000.0);
+                        }
+                        resolve(res)
+                    }).catch(error => reject(error));
+                });
+            })
             .catch(error => {
                 if (error.message.indexOf('connect') >= 0)
                     instance = null;

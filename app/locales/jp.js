@@ -474,7 +474,9 @@ const jp = 	{
 	empty_feed_2: 'If you recently added new users to follow, your personalized feed will populate once new content is available',
 	empty_feed_3: 'Explore Trending Articles',
 	empty_feed_4: "Read The Quick Start Guide",
-	empty_feed_5: 'Browse The FAQ'
+	empty_feed_5: 'Browse The FAQ',
+    // Terms of service violations
+    terms_violation: 'このアカウントはsteemit.com利用規約に違反しているとフラグされています。 support@steemit.comまでご連絡ください。'
 }
 
 export { jp }

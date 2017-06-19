@@ -248,7 +248,7 @@ class CreateAccount extends React.Component {
             <div>
                 <div className="CreateAccount row">
                     <div className="column">
-                        <h4>Please read Steemit Rules and fill up the form below to create your Steemit account</h4>
+                        <h4>Please read the Steemit Rules and fill in the form below to create your Steemit account</h4>
                         {/*<Progress tabIndex="0" value={95} max={100} />*/}
                         {showRules ? <div className="CreateAccount__rules">
                             <p>

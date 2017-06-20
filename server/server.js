@@ -6,6 +6,8 @@ import helmet from 'koa-helmet';
 import koa_logger from 'koa-logger';
 import requestTime from './requesttimings';
 import hardwareStats from './hardwarestats';
+import cluster from 'cluster';
+import os from 'os';
 import prod_logger from './prod_logger';
 import favicon from 'koa-favicon';
 import staticCache from 'koa-static-cache';
@@ -262,7 +264,16 @@ if (env !== 'test') {
 
     const port = process.env.PORT ? parseInt(process.env.PORT) : 8080;
 
-    app.listen(port);
+    let numProcesses = os.cpus().length * 2;
+
+    if(cluster.isMaster){
+        for(var i = 0; i < numProcesses; i++) {
+            cluster.fork();
+        }
+    }
+    else {
+        app.listen(port);
+    }
 
     // Tell parent process koa-server is started
     if (process.send) process.send('online');

@@ -92,7 +92,7 @@ mysql -u root
 
 Create a password for the root mysql account:
 
-mysql_secure_installation
+`mysql_secure_installation`
 
 (answer all it's questions as No, with Enter key, except to add a password, use "password")
 
@@ -103,39 +103,19 @@ Install `sequelize-cli` globally:
 npm install -g sequelize sequelize-cli pm2 mysql
 ```
 
-###### Edit the following files and make these changes:
-
-Edit `~/condenser/db/config/config.json` and save the mysql password under "password".
-
-Edit `~/condenser/config/default.json` and enter this string for database:
-
-"database_url": "mysql://root:password@127.0.0.1/steemit_dev"
-
-Edit `~/condenser/.babelrc if it doesn't look like the following: 
-
-{
-
-  "presets": ["es2015", "stage-0", "react"],
-
-  "plugins": ["transform-runtime", "transform-decorators-legacy"]
-
-}
-
-
 ###### IMPORTANT: Add an env var for the database as well in your shell:
 
-touch ~/.bash_profile
-edit this file, add 1 line:
+`touch ~/.bash_profile`
+
+edit ~/.bash_profile and add 1 line:
 
 `export SDC_DATABASE_URL="mysql://root:password@localhost/steemit_dev"`
 
-source ~/.bash_profile
+`source ~/.bash_profile`
 
 globally install sql2:
 
-npm i -g mysql2
-
-
+`npm i -g mysql2`
 
 Run `sequelize db:migrate` in `db/` directory.
 

@@ -227,7 +227,7 @@ class App extends React.Component {
                         </a>
                     </li>
                     <li>
-                        <a href="https://blocktrades.us" target="_blank" rel="noopener noreferrer">
+                        <a href="https://blocktrades.us/unregistered_trade/btc/steem" target="_blank" rel="noopener noreferrer">
                             {translate("buy_LIQUID_TOKEN")}
                         </a>
                     </li>

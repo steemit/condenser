@@ -32,21 +32,40 @@ class UserWallet extends React.Component {
             // this.setState({showDeposit: !this.state.showDeposit, depositType: 'STEEM'})
             const new_window = window.open();
             new_window.opener = null;
-            new_window.location = 'https://blocktrades.us';
+            new_window.location = 'https://blocktrades.us/unregistered_trade/btc/steem';
+        };
+        this.onShowWithdrawSteem = (e) => {
+            e.preventDefault();
+            const new_window = window.open();
+            new_window.opener = null;
+            new_window.location = 'https://blocktrades.us/unregistered_trade/steem/btc';
         };
         this.onShowDepositPower = (e) => {
             e.preventDefault();
             // this.setState({showDeposit: !this.state.showDeposit, depositType: 'VESTS'})
             const new_window = window.open();
             new_window.opener = null;
-            new_window.location = 'https://blocktrades.us';
+            new_window.location = 'https://blocktrades.us/unregistered_trade/btc/steem_power';
+        };
+        this.onShowDepositSBD = (e) => {
+            e.preventDefault();
+            const new_window = window.open();
+            new_window.opener = null;
+            new_window.location = 'https://blocktrades.us/unregistered_trade/btc/sbd';
+        };
+        this.onShowWithdrawSBD = (e) => {
+            e.preventDefault();
+            const new_window = window.open();
+            new_window.opener = null;
+            new_window.location = 'https://blocktrades.us/unregistered_trade/sbd/btc';
         };
         // this.onShowDeposit = this.onShowDeposit.bind(this)
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'UserWallet');
     }
     render() {
         const {state: {showDeposit, depositType, toggleDivestError},
-            onShowDeposit, onShowDepositSteem, onShowDepositPower} = this;
+            onShowDeposit, onShowDepositSteem, onShowWithdrawSteem,
+            onShowDepositSBD, onShowWithdrawSBD, onShowDepositPower} = this;
         const {convertToSteem, price_per_steem, savings_withdraws, account,
             current_user, open_orders} = this.props;
         const gprops = this.props.gprops.toJS();
@@ -174,21 +193,24 @@ class UserWallet extends React.Component {
         let power_menu = [
             { value: 'Power Down', link: '#', onClick: powerDown.bind(this, false) }
         ]
-        if(isMyAccount) {
-            steem_menu.push({ value: 'Buy', link: '#', onClick: onShowDepositSteem });
-            steem_menu.push({ value: 'Market', link: '/market' });
-            power_menu.push({ value: 'Buy', link: '#', onClick: onShowDepositPower })
-        }
-        if( divesting ) {
-            power_menu.push( { value: 'Cancel Power Down', link:'#', onClick: powerDown.bind(this,true) } );
-        }
-
         let dollar_menu = [
             { value: 'Transfer', link: '#', onClick: showTransfer.bind( this, 'SBD', 'Transfer to Account' ) },
             { value: 'Transfer to Savings', link: '#', onClick: showTransfer.bind( this, 'SBD', 'Transfer to Savings' ) },
             { value: 'Market', link: '/market' },
             { value: 'Convert to STEEM', link: '#', onClick: convertToSteem },
         ]
+        if(isMyAccount) {
+            steem_menu.push({ value: 'Buy', link: '#', onClick: onShowDepositSteem });
+            steem_menu.push({ value: 'Sell', link: '#', onClick: onShowWithdrawSteem });
+            steem_menu.push({ value: 'Market', link: '/market' });
+            power_menu.push({ value: 'Buy', link: '#', onClick: onShowDepositPower })
+            dollar_menu.push({ value: 'Buy', link: '#', onClick: onShowDepositSBD });
+            dollar_menu.push({ value: 'Sell', link: '#', onClick: onShowWithdrawSBD });
+        }
+        if( divesting ) {
+            power_menu.push( { value: 'Cancel Power Down', link:'#', onClick: powerDown.bind(this,true) } );
+        }
+
         const isWithdrawScheduled = new Date(account.get('next_vesting_withdrawal') + 'Z').getTime() > Date.now()
         const depositReveal = showDeposit && <div>
             <Reveal onHide={onShowDeposit} show={showDeposit}>

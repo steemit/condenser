@@ -8,6 +8,8 @@ import Orderbook from "app/components/elements/Orderbook";
 import OrderHistory from "app/components/elements/OrderHistory";
 import {Order, TradeHistory} from "app/utils/MarketClasses";
 import {roundUp, roundDown} from "app/utils/MarketUtils";
+import {Tabs, Tab} from 'app/components/elements/Tabs'
+import TickerPriceStat from 'app/components/elements/TickerPriceStat'
 import tt from 'counterpart';
 import { DEBT_TOKEN_SHORT, LIQUID_TICKER, DEBT_TICKER } from 'app/client_config';
 
@@ -161,7 +163,8 @@ class Market extends React.Component {
             highest_bid:    0,
             percent_change: 0,
             sbd_volume:     0,
-            feed_price:     0}
+            feed_price:     0
+        };
 
         if(typeof this.props.ticker != 'undefined') {
             let {latest, lowest_ask, highest_bid, percent_change, sbd_volume} = this.props.ticker;
@@ -284,103 +287,40 @@ class Market extends React.Component {
             return <OrderHistory history={norm(trades)} />
         }
 
-        const pct_change = <span className={'Market__ticker-pct-' + (ticker.percent_change < 0 ? 'down' : 'up')}>
-                {ticker.percent_change < 0 ? '' : '+'}{ticker.percent_change.toFixed(3)}%
-              </span>
-
         return (
             <div>
                 <div className="row">
-                    <div className="column">
-                        <ul className="Market__ticker">
-                            <li><b>{tt('market_jsx.last_price')}</b> {DEBT_TICKER} {ticker.latest.toFixed(6)} ({pct_change})</li>
-                            <li><b>{tt('market_jsx.24h_volume')}</b> {DEBT_TICKER} {ticker.sbd_volume.toFixed(2)}</li>
-                            <li><b>{tt('g.bid')}</b> {DEBT_TICKER} {ticker.highest_bid.toFixed(6)}</li>
-                            <li><b>{tt('g.ask')}</b> {DEBT_TICKER} {ticker.lowest_ask.toFixed(6)}</li>
-                            {ticker.highest_bid > 0 &&
-                                <li><b>{tt('market_jsx.spread')}</b> {(200 * (ticker.lowest_ask - ticker.highest_bid) / (ticker.highest_bid + ticker.lowest_ask)).toFixed(3)}%</li>}
-                            {/*<li><b>Feed price</b> ${ticker.feed_price.toFixed(3)}</li>*/}
-                        </ul>
+                    <div className="column small-8">
+                        <Tabs>
+                            <Tab title="Trading Chart">
+                                <p>Trading Chart</p>
+                            </Tab>
+
+                            <Tab title="Depth Chart">
+                                <DepthChart bids={orderbook.bids} asks={orderbook.asks} />
+                            </Tab>
+                        </Tabs>
+                    </div>
+                    <div className="column small-4">
+                        <TickerPriceStat ticker={ticker} symbol={DEBT_TICKER} />
                     </div>
                 </div>
 
                 <div className="row">
-                    <div className="column">
-                        <DepthChart bids={orderbook.bids} asks={orderbook.asks} />
-                    </div>
-                </div>
-
-                <div className="row">
-                    <div className="column">
+                    <div className="column small-12">
                         <TransactionError opType="limit_order_create" />
                     </div>
                 </div>
-
                 <div className="row">
-                    <div className="small-12 medium-6 columns">
-                        <h4 className="buy-color uppercase">{tt('navigation.buy_LIQUID_TOKEN', {LIQUID_TOKEN})}</h4>
-                        <form className="Market__orderform" onSubmit={buySteem}>
-
-                            <div className="row">
-                                <div className="column small-3 large-2">
-                                    <label>{tt('g.price')}</label>
-                                </div>
-                                <div className="column small-9 large-8">
-                                    <div className="input-group">
-                                        <input className={'input-group-field' + (buy_price_warning ? ' price_warning' : '')} type="text"
-                                          ref="buySteem_price" placeholder="0.0" onChange={e => {
-                                            const amount = parseFloat(this.refs.buySteem_amount.value)
-                                            const price  = parseFloat(this.refs.buySteem_price.value)
-                                            if(amount >= 0 && price >= 0) this.refs.buySteem_total.value = roundUp(price * amount, 3)
-                                            validateBuySteem()
-                                        }} />
-                                        <span className="input-group-label uppercase">{`${DEBT_TOKEN_SHORT}/${LIQUID_TOKEN}`}</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="row">
-                                <div className="column small-3 large-2">
-                                    <label>{tt('g.amount')}</label>
-                                </div>
-                                <div className="column small-9 large-8">
-                                    <div className="input-group">
-                                        <input className="input-group-field" type="text" ref="buySteem_amount" placeholder="0.0" onChange={e => {
-                                            const price = parseFloat(this.refs.buySteem_price.value)
-                                            const amount = parseFloat(this.refs.buySteem_amount.value)
-                                            if(price >= 0 && amount >= 0) this.refs.buySteem_total.value = roundUp(price * amount, 3)
-                                            validateBuySteem()
-                                        }} />
-                                        <span className="input-group-label uppercase"> {LIQUID_TOKEN}</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="row">
-                                <div className="column small-3 large-2">
-                                    <label>{tt('market_jsx.total')}</label>
-                                </div>
-                                <div className="column small-9 large-8">
-                                    <div className="input-group">
-                                        <input className="input-group-field" type="text" ref="buySteem_total" placeholder="0.0" onChange={e => {
-                                            const price = parseFloat(this.refs.buySteem_price.value)
-                                            const total = parseFloat(this.refs.buySteem_total.value)
-                                            if(total >= 0 && price >= 0) this.refs.buySteem_amount.value = roundUp(total / price, 3)
-                                            validateBuySteem()
-                                        }} />
-                                        <span className="input-group-label">{DEBT_TOKEN_SHORT}</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="row">
-                                <div className="column small-3 large-2">
-                                </div>
-                                <div className="column small-9 large-8">
-                                    <input disabled={buy_disabled} type="submit" className="button hollow buy-color float-right uppercase" value={tt('navigation.buy_LIQUID_TOKEN', {LIQUID_TOKEN})} />
-                                    {account &&
-                                    <div><small>
-                                        <a href="#" onClick={e => {
+                    <div className="column small-12">
+                        <Tabs>
+                            <Tab title="Limit Order">
+                                <div className="row">
+                                    <div className="small-12 medium-6 columns">
+                                        <h4 className="buy-color uppercase">{tt('navigation.buy_LIQUID_TOKEN', {LIQUID_TOKEN})}</h4>
+                                        {account &&
+                                        <div><small>
+                                            <a href="#" onClick={e => {
                                                 e.preventDefault();
                                                 const price = parseFloat(this.refs.buySteem_price.value)
                                                 const total = account.sbd_balance.split(' ')[0]
@@ -388,109 +328,177 @@ class Market extends React.Component {
                                                 if(price >= 0) this.refs.buySteem_amount.value = roundDown(parseFloat(total) / price, 3).toFixed(3)
                                                 validateBuySteem()
                                             }}>{tt('market_jsx.available')}:</a> {account.sbd_balance.replace('GBG', DEBT_TOKEN_SHORT)}
-                                    </small></div>}
+                                        </small></div>}
+                                        <form className="Market__orderform" onSubmit={buySteem}>
 
-                                    <div><small>
-                                        <a href="#" onClick={e => {
-                                            e.preventDefault();
-                                            const amount = parseFloat(this.refs.buySteem_amount.value)
-                                            const price = parseFloat(ticker.lowest_ask)
-                                            this.refs.buySteem_price.value = ticker.lowest_ask
-                                            if(amount >= 0) this.refs.buySteem_total.value = roundUp(amount * price, 3).toFixed(3)
-                                            validateBuySteem()
-                                        }}>{tt('market_jsx.lowest_ask')}:</a> {ticker.lowest_ask.toFixed(6)}
-                                    </small></div>
-                                </div>
-                            </div>
-                        </form>
+                                            <div className="row">
+                                                <div className="column small-3 large-2">
+                                                    <label>{tt('g.price')}</label>
+                                                </div>
+                                                <div className="column small-9 large-8">
+                                                    <div className="input-group">
+                                                        <input className={'input-group-field' + (buy_price_warning ? ' price_warning' : '')} type="text"
+                                                               ref="buySteem_price" placeholder="0.0" onChange={e => {
+                                                            const amount = parseFloat(this.refs.buySteem_amount.value)
+                                                            const price  = parseFloat(this.refs.buySteem_price.value)
+                                                            if(amount >= 0 && price >= 0) this.refs.buySteem_total.value = roundUp(price * amount, 3)
+                                                            validateBuySteem()
+                                                        }} />
+                                                        <span className="input-group-label uppercase">{`${DEBT_TOKEN_SHORT}/${LIQUID_TOKEN}`}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                    </div>
+                                            <div className="row">
+                                                <div className="column small-3 large-2">
+                                                    <label>{tt('g.amount')}</label>
+                                                </div>
+                                                <div className="column small-9 large-8">
+                                                    <div className="input-group">
+                                                        <input className="input-group-field" type="text" ref="buySteem_amount" placeholder="0.0" onChange={e => {
+                                                            const price = parseFloat(this.refs.buySteem_price.value)
+                                                            const amount = parseFloat(this.refs.buySteem_amount.value)
+                                                            if(price >= 0 && amount >= 0) this.refs.buySteem_total.value = roundUp(price * amount, 3)
+                                                            validateBuySteem()
+                                                        }} />
+                                                        <span className="input-group-label uppercase"> {LIQUID_TOKEN}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="row">
+                                                <div className="column small-3 large-2">
+                                                    <label>{tt('market_jsx.total')}</label>
+                                                </div>
+                                                <div className="column small-9 large-8">
+                                                    <div className="input-group">
+                                                        <input className="input-group-field" type="text" ref="buySteem_total" placeholder="0.0" onChange={e => {
+                                                            const price = parseFloat(this.refs.buySteem_price.value)
+                                                            const total = parseFloat(this.refs.buySteem_total.value)
+                                                            if(total >= 0 && price >= 0) this.refs.buySteem_amount.value = roundUp(total / price, 3)
+                                                            validateBuySteem()
+                                                        }} />
+                                                        <span className="input-group-label">{DEBT_TOKEN_SHORT}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="row">
+                                                <div className="column small-3 large-2">
+                                                </div>
+                                                <div className="column small-9 large-8">
+                                                    <input disabled={buy_disabled} type="submit" className="button hollow buy-color float-right uppercase" value={tt('navigation.buy_LIQUID_TOKEN', {LIQUID_TOKEN})} />
 
 
-                    <div className="small-12 medium-6 columns">
-                        <h4 className="sell-color uppercase">{tt('navigation.sell_LIQUID_TOKEN', {LIQUID_TOKEN})}</h4>
+                                                    <div><small>
+                                                        <a href="#" onClick={e => {
+                                                            e.preventDefault();
+                                                            const amount = parseFloat(this.refs.buySteem_amount.value)
+                                                            const price = parseFloat(ticker.lowest_ask)
+                                                            this.refs.buySteem_price.value = ticker.lowest_ask
+                                                            if(amount >= 0) this.refs.buySteem_total.value = roundUp(amount * price, 3).toFixed(3)
+                                                            validateBuySteem()
+                                                        }}>{tt('market_jsx.lowest_ask')}:</a> {ticker.lowest_ask.toFixed(6)}
+                                                    </small></div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
 
-                        <form className="Market__orderform" onSubmit={sellSteem}>
-                            <div className="row">
-                                <div className="column small-3 large-2">
-                                    <label>{tt('g.price')}</label>
-                                </div>
-                                <div className="column small-9 large-8">
-                                    <div className="input-group">
-                                        <input className={'input-group-field' + (sell_price_warning ? ' price_warning' : '')} type="text"
-                                          ref="sellSteem_price" placeholder="0.0" onChange={e => {
-                                          const amount = parseFloat(this.refs.sellSteem_amount.value)
-                                          const price  = parseFloat(this.refs.sellSteem_price.value)
-                                          if(amount >= 0 && price >= 0) this.refs.sellSteem_total.value = roundDown(price * amount, 3)
-                                          validateSellSteem()
-                                        }} />
-                                        <span className="input-group-label uppercase">{`${DEBT_TOKEN_SHORT}/${LIQUID_TOKEN}`}</span>
+                                    <div className="small-12 medium-6 columns">
+                                        <h4 className="sell-color uppercase">{tt('navigation.sell_LIQUID_TOKEN', {LIQUID_TOKEN})}</h4>
+                                        {account && <div style={{marginBottom: "1rem"}}>
+                                            <small><a href="#" onClick={e => {e.preventDefault()
+                                                const price = parseFloat(this.refs.sellSteem_price.value)
+                                                const amount = account.balance.split(' ')[0]
+                                                this.refs.sellSteem_amount.value = amount
+                                                if(price >= 0) this.refs.sellSteem_total.value = roundDown(price * parseFloat(amount), 3)
+                                                validateSellSteem()}}>{tt('market_jsx.available')}:</a> {account.balance.replace(LIQUID_TICKER, LIQUID_TOKEN_UPPERCASE)}
+                                            </small></div>}
+
+                                        <form className="Market__orderform" onSubmit={sellSteem}>
+                                            <div className="row">
+                                                <div className="column small-3 large-2">
+                                                    <label>{tt('g.price')}</label>
+                                                </div>
+
+                                                <div className="column small-9 large-8">
+                                                    <div className="input-group">
+                                                        <input className={'input-group-field' + (sell_price_warning ? ' price_warning' : '')} type="text"
+                                                               ref="sellSteem_price" placeholder="0.0" onChange={e => {
+                                                            const amount = parseFloat(this.refs.sellSteem_amount.value)
+                                                            const price  = parseFloat(this.refs.sellSteem_price.value)
+                                                            if(amount >= 0 && price >= 0) this.refs.sellSteem_total.value = roundDown(price * amount, 3)
+                                                            validateSellSteem()
+                                                        }} />
+                                                        <span className="input-group-label uppercase">{`${DEBT_TOKEN_SHORT}/${LIQUID_TOKEN}`}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="row">
+                                                <div className="column small-3 large-2">
+                                                    <label>{tt('g.amount')}</label>
+                                                </div>
+                                                <div className="column small-9 large-8">
+                                                    <div className="input-group">
+                                                        <input className="input-group-field" type="text" ref="sellSteem_amount" placeholder="0.0" onChange={e => {
+                                                            const price  = parseFloat(this.refs.sellSteem_price.value)
+                                                            const amount = parseFloat(this.refs.sellSteem_amount.value)
+                                                            if(price >= 0 && amount >= 0) this.refs.sellSteem_total.value = roundDown(price * amount, 3)
+                                                            validateSellSteem()
+                                                        }} />
+                                                        <span className="input-group-label uppercase">{LIQUID_TOKEN}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="row">
+                                                <div className="column small-3 large-2">
+                                                    <label>{tt('market_jsx.total')}</label>
+                                                </div>
+                                                <div className="column small-9 large-8">
+                                                    <div className="input-group">
+                                                        <input className="input-group-field" type="text" ref="sellSteem_total" placeholder="0.0" onChange={e => {
+                                                            const price = parseFloat(this.refs.sellSteem_price.value)
+                                                            const total = parseFloat(this.refs.sellSteem_total.value)
+                                                            if(price >= 0 && total >= 0) this.refs.sellSteem_amount.value = roundUp(total / price, 3)
+                                                            validateSellSteem()
+                                                        }} />
+                                                        <span className="input-group-label">{DEBT_TOKEN_SHORT}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="row">
+                                                <div className="column small-3 large-2"></div>
+                                                <div className="column small-9 large-8">
+                                                    <input disabled={sell_disabled} type="submit" className="button hollow sell-color float-right uppercase" value={tt('navigation.sell_LIQUID_TOKEN', {LIQUID_TOKEN})} />
+
+                                                    <div><small><a href="#" onClick={e => {e.preventDefault()
+                                                        const amount = parseFloat(this.refs.sellSteem_amount.value)
+                                                        const price = ticker.highest_bid
+                                                        this.refs.sellSteem_price.value = price
+                                                        if(amount >= 0) this.refs.sellSteem_total.value = roundDown(parseFloat(price) * amount, 3)
+                                                        validateSellSteem()
+                                                    }}>{tt('market_jsx.highest_bid')}:</a> {ticker.highest_bid.toFixed(6)}</small></div>
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
-                            </div>
+                            </Tab>
 
-                            <div className="row">
-                                <div className="column small-3 large-2">
-                                    <label>{tt('g.amount')}</label>
-                                </div>
-                                <div className="column small-9 large-8">
-                                    <div className="input-group">
-                                        <input className="input-group-field" type="text" ref="sellSteem_amount" placeholder="0.0" onChange={e => {
-                                          const price  = parseFloat(this.refs.sellSteem_price.value)
-                                          const amount = parseFloat(this.refs.sellSteem_amount.value)
-                                          if(price >= 0 && amount >= 0) this.refs.sellSteem_total.value = roundDown(price * amount, 3)
-                                          validateSellSteem()
-                                        }} />
-                                        <span className="input-group-label uppercase">{LIQUID_TOKEN}</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="row">
-                                <div className="column small-3 large-2">
-                                    <label>{tt('market_jsx.total')}</label>
-                                </div>
-                                <div className="column small-9 large-8">
-                                    <div className="input-group">
-                                      <input className="input-group-field" type="text" ref="sellSteem_total" placeholder="0.0" onChange={e => {
-                                          const price = parseFloat(this.refs.sellSteem_price.value)
-                                          const total = parseFloat(this.refs.sellSteem_total.value)
-                                          if(price >= 0 && total >= 0) this.refs.sellSteem_amount.value = roundUp(total / price, 3)
-                                          validateSellSteem()
-                                      }} />
-                                      <span className="input-group-label">{DEBT_TOKEN_SHORT}</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="row">
-                                <div className="column small-3 large-2"></div>
-                                <div className="column small-9 large-8">
-                                    <input disabled={sell_disabled} type="submit" className="button hollow sell-color float-right uppercase" value={tt('navigation.sell_LIQUID_TOKEN', {LIQUID_TOKEN})} />
-                                    {account &&
-                                        <div><small><a href="#" onClick={e => {e.preventDefault()
-                                            const price = parseFloat(this.refs.sellSteem_price.value)
-                                            const amount = account.balance.split(' ')[0]
-                                            this.refs.sellSteem_amount.value = amount
-                                            if(price >= 0) this.refs.sellSteem_total.value = roundDown(price * parseFloat(amount), 3)
-                                            validateSellSteem()
-                                        }}>{tt('market_jsx.available')}:</a> {account.balance.replace(LIQUID_TICKER, LIQUID_TOKEN_UPPERCASE)}</small></div>}
-                                    <div><small><a href="#" onClick={e => {e.preventDefault()
-                                        const amount = parseFloat(this.refs.sellSteem_amount.value)
-                                        const price = ticker.highest_bid
-                                        this.refs.sellSteem_price.value = price
-                                        if(amount >= 0) this.refs.sellSteem_total.value = roundDown(parseFloat(price) * amount, 3)
-                                        validateSellSteem()
-                                    }}>{tt('market_jsx.highest_bid')}:</a> {ticker.highest_bid.toFixed(6)}</small></div>
-                                </div>
-                            </div>
-                        </form>
+                            <Tab title="Market Order">
+                                <p>Market Order</p>
+                            </Tab>
+                        </Tabs>
                     </div>
                 </div>
 
                 <div className="row show-for-medium">
 
-                    <div className="small-12 medium-6 large-4 columns">
+                    <div className="small-6 columns">
                         <h4>{tt('market_jsx.buy_orders')}</h4>
                         <Orderbook
                             side={"bids"}
@@ -501,7 +509,7 @@ class Market extends React.Component {
                         />
                     </div>
 
-                    <div className="small-12 medium-6 large-4 columns">
+                    <div className="small-6 columns">
                         <h4>{tt('market_jsx.sell_orders')}</h4>
                         <Orderbook
                             side={"asks"}
@@ -512,7 +520,9 @@ class Market extends React.Component {
                         />
                     </div>
 
-                    <div className="small-12 large-4 column">
+                </div>
+                <div className="row ">
+                    <div className="small-12 column">
                         <h4>{tt('market_jsx.trade_history')}</h4>
                         {trade_history_table(this.props.history)}
                     </div>

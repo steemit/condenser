@@ -1,0 +1,16 @@
+.TickerPriceStat {
+
+  >div {
+    position: relative;
+    margin-bottom: 1rem;
+    padding-bottom: .7rem;
+    border-bottom: 1px solid #cacaca;
+
+    > span {
+      display: inline-block;
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+  }
+}

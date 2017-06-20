@@ -70,6 +70,7 @@ export default class OrderHistory extends React.Component {
                     <thead>
                         <tr>
                             <th>{tt('g.date')}</th>
+                            <th>Buy/Sell</th>
                             <th>{tt('g.price')}</th>
                             <th>{tt('token_names.LIQUID_TOKEN')}</th>
                             <th>{`${DEBT_TOKEN_SHORT}`}</th>

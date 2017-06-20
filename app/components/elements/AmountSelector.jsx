@@ -43,29 +43,27 @@ export default class AmountSelector extends React.Component {
         );
 
         const labelTop = (
-                <div>
-                    <div className="row">
-                        <div className="column small-12">
-                            <label>{this.props.label}</label>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="column small-12">
-                            {inputGroup}
-                        </div>
+            <div>
+                <div className="row">
+                    <div className="column small-12">
+                        <label>{this.props.label}</label>
                     </div>
                 </div>
+                <div className="row">
+                    <div className="column small-12">
+                        {inputGroup}
+                    </div>
+                </div>
+            </div>
         );
 
         const labelLeft = (
-            <div>
-                <div className="row">
-                    <div className="column small-3 large-2">
-                        <label>{this.props.label}</label>
-                    </div>
-                    <div className="column small-9 large-8">
-                        {inputGroup}
-                    </div>
+            <div className="row">
+                <div className="column small-3 large-2">
+                    <label>{this.props.label}</label>
+                </div>
+                <div className="column small-9 large-8">
+                    {inputGroup}
                 </div>
             </div>
         );

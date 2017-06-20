@@ -23,7 +23,7 @@ const ABOUT_FLAG = <div>
 </div>;
 
 const MAX_VOTES_DISPLAY = 20;
-const VOTE_WEIGHT_DROPDOWN_THRESHOLD = 1.0 * 1000.0 * 1000.0;
+const VOTE_WEIGHT_DROPDOWN_THRESHOLD = 0.25 * 1000.0 * 1000.0;
 
 class Voting extends React.Component {
 

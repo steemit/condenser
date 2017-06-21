@@ -85,10 +85,17 @@ app.use(function*(next) {
     if (
         this.method === 'GET' &&
         (routeRegex.UserProfile1.test(this.url) ||
-        routeRegex.PostNoCategory.test(this.url))
+        routeRegex.PostNoCategory.test(this.url) || routeRegex.Post.test(this.url)
+        )
     ) {
         const p = this.originalUrl.toLowerCase();
-        if (userIllegalContent.includes(p.slice(2))) {
+        let userCheck = "";
+        if (routeRegex.Post.test(this.url)) {
+            userCheck = p.split("/")[2].slice(1);
+        } else {
+            userCheck = p.split("/")[1].slice(1);
+        }
+        if (userIllegalContent.includes(userCheck)) {
             console.log('Illegal content user found blocked', p.slice(2));
             this.status = 451;
             return;

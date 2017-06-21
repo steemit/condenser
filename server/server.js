@@ -96,7 +96,7 @@ app.use(function*(next) {
             userCheck = p.split("/")[1].slice(1);
         }
         if (userIllegalContent.includes(userCheck)) {
-            console.log('Illegal content user found blocked', p.slice(2));
+            console.log('Illegal content user found blocked', userCheck);
             this.status = 451;
             return;
         }

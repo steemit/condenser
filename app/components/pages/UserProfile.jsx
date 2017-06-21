@@ -29,6 +29,7 @@ import WalletSubMenu from 'app/components/elements/WalletSubMenu';
 import Userpic from 'app/components/elements/Userpic';
 import Callout from 'app/components/elements/Callout';
 import normalizeProfile from 'app/utils/NormalizeProfile';
+import userIllegalContent from 'app/utils/userIllegalContent';
 
 export default class UserProfile extends React.Component {
     constructor() {
@@ -300,6 +301,11 @@ export default class UserProfile extends React.Component {
                 </div>
         } else {
         //    console.log( "no matches" );
+        }
+
+        // detect illegal users
+        if (userIllegalContent.includes(accountname)) {
+            tab_content = <div>Unavailable For Legal Reasons.</div>;
         }
 
         if (!(section === 'transfers' || section === 'permissions' || section === 'password')) {

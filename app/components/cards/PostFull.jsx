@@ -21,6 +21,7 @@ import ShareMenu from 'app/components/elements/ShareMenu';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import Userpic from 'app/components/elements/Userpic';
 import { APP_DOMAIN } from 'app/client_config';
+import userIllegalContent from 'app/utils/userIllegalContent';
 
 // function loadFbSdk(d, s, id) {
 //     return new Promise(resolve => {
@@ -205,6 +206,10 @@ class PostFull extends React.Component {
         const url = `/${category}/@${author}/${permlink}`
         if(DMCAList.includes(url)) {
             content_body = 'This post is not available due to a copyright claim.'
+        }
+        // detect illegal users
+        if (userIllegalContent.includes(content.author)) {
+            content_body  = 'Not available for legal reasons.'
         }
 
         const replyParams = {author, permlink, parent_author, parent_permlink, category, title, body}

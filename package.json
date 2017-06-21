@@ -13,7 +13,7 @@
     "test": "npm run mocha -- app/**/*.test.js",
     "test:watch:all": "npm test -- --watch --watch-extensions jsx",
     "test:watch": "npm run mocha -- --watch --watch-extensions jsx",
-    "production": "NODE_ENV=production ./node_modules/babel-cli/bin/babel-node.js --max-old-space-size=4096 server/index.js",
+    "production": "NODE_ENV=production ./node_modules/babel-cli/bin/babel-node.js --max-old-space-size=1792 server/index.js",
     "start": "./node_modules/babel-cli/bin/babel-node.js ./webpack/dev-server.js",
     "webpush": "./node_modules/babel-cli/bin/babel-node.js ./scripts/webpush_notify.js"
   },

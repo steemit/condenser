@@ -1,5 +1,3 @@
-// const numeral = require("numeral");
-
 const id_regex = /\b\d+\.\d+\.(\d+)\b/;
 
 import {ops} from 'shared/serializer';

@@ -38,3 +38,29 @@ export function validate_account_name(value) {
     }
     return null;
 }
+
+export function validate_asset_symbol(value) {
+    let suffix = tt('chainvalidation_js.asset_name_should');
+    if (value == null || value.length === 0) {
+        return suffix + tt('chainvalidation_js.not_be_empty');
+    }
+    if (value.split('.').length > 2) {
+        return suffix + tt('chainvalidation_js.have_only_one_dot');
+    }
+    if (value.length < 3) {
+        return suffix + tt('chainvalidation_js.be_longer');
+    }
+    if (value.length > 16) {
+        return suffix + tt('chainvalidation_js.be_shorter');
+    }
+    if (!/^[A-Z]/.test(value)) {
+        return suffix + tt('chainvalidation_js.start_with_a_letter');
+    }
+    if (!/[A-Z]$/.test(value)) {
+        return suffix + tt('chainvalidation_js.end_with_a_letter');
+    }
+    if (/^[A-Z0-9\.]$/.test(value)) {
+        return suffix + tt('chainvalidation_js.contain_only_letters_numbers_and_perhaps_a_dot');
+    }
+    return null;
+}

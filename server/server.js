@@ -29,6 +29,7 @@ import Grant from 'grant-koa';
 import config from 'config';
 import { routeRegex } from 'app/ResolveRoute';
 import secureRandom from 'secure-random';
+import userIllegalContent from 'app/utils/userIllegalContent';
 
 if(cluster.isMaster)
     console.log('application server starting, please wait.');
@@ -87,6 +88,11 @@ app.use(function*(next) {
         routeRegex.PostNoCategory.test(this.url))
     ) {
         const p = this.originalUrl.toLowerCase();
+        if (userIllegalContent.includes(p.slice(2))) {
+            console.log('Illegal content user found blocked', p.slice(2));
+            this.status = 451;
+            return;
+        }
         if (p !== this.originalUrl) {
             this.status = 301;
             this.redirect(p);

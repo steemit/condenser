@@ -6,6 +6,8 @@ import helmet from 'koa-helmet';
 import koa_logger from 'koa-logger';
 import requestTime from './requesttimings';
 import hardwareStats from './hardwarestats';
+import cluster from 'cluster';
+import os from 'os';
 import prod_logger from './prod_logger';
 import favicon from 'koa-favicon';
 import staticCache from 'koa-static-cache';
@@ -28,7 +30,8 @@ import config from 'config';
 import { routeRegex } from 'app/ResolveRoute';
 import secureRandom from 'secure-random';
 
-console.log('application server starting, please wait.');
+if(cluster.isMaster)
+    console.log('application server starting, please wait.');
 
 const grant = new Grant(config.grant);
 // import uploadImage from 'server/upload-image' //medium-editor
@@ -38,6 +41,10 @@ app.name = 'Steemit app';
 const env = process.env.NODE_ENV || 'development';
 // cache of a thousand days
 const cacheOpts = { maxAge: 86400000, gzip: true };
+
+// set number of processes equal to number of cores
+// (unless passed in as an env var)
+const numProcesses = process.env.NUM_PROCESSES || os.cpus().length;
 
 app.use(requestTime());
 
@@ -262,11 +269,29 @@ if (env !== 'test') {
 
     const port = process.env.PORT ? parseInt(process.env.PORT) : 8080;
 
-    app.listen(port);
-
-    // Tell parent process koa-server is started
-    if (process.send) process.send('online');
-    console.log(`Application started on port ${port}`);
+    if(env === 'production') {
+        if(cluster.isMaster) {
+            for(var i = 0; i < numProcesses; i++) {
+                cluster.fork();
+            }
+            // if a worker dies replace it so application keeps running
+            cluster.on('exit', function (worker) {
+                console.log('error: worker %d died, starting a new one', worker.id);
+                cluster.fork();
+            });
+        }
+        else {
+            app.listen(port);
+            if (process.send) process.send('online');
+            console.log(`Worker process started for port ${port}`);
+        }
+    }
+    else {
+        // spawn a single thread if not running in production mode
+        app.listen(port);
+        if (process.send) process.send('online');
+        console.log(`Application started on port ${port}`);
+    }
 }
 
 // set PERFORMANCE_TRACING to the number of seconds desired for

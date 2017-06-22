@@ -57,7 +57,7 @@ class Settings extends React.Component {
         const theme = event.target.value
         store.set('theme', theme)
         if (document) {
-            document.body.setAttribute("data-theme", theme);
+            document.body.setAttribute("data-theme", theme.replace(/"/g,'').toLowerCase());
         }
     }
 

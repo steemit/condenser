@@ -57,7 +57,7 @@ export default class UserProfile extends React.Component {
 
         return (
             np.current_user !== this.props.current_user ||
-            // np.accounts.get(account) !== this.props.accounts.get(account) ||
+            np.accounts.get(account) !== this.props.accounts.get(account) ||
             np.wifShown !== this.props.wifShown ||
             np.global_status !== this.props.global_status ||
             ((npFollowersLoading !== followersLoading) && !npFollowersLoading) ||

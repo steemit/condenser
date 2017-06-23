@@ -308,8 +308,20 @@ export default function useGeneralApi(app) {
 
     router.post('/csp_violation', function *() {
         if (rateLimitReq(this, this.req)) return;
-        const params = yield coBody.json(this);
-        console.log('-- /csp_violation -->', this.req.headers['user-agent'], params);
+        let params;
+        try {
+            params = yield coBody(this);
+        } catch (error) {
+            console.log('-- /csp_violation error -->', error);
+        }
+        if (params && params['csp-report']) {
+            const csp_report = params['csp-report'];
+            const value = `${csp_report['document-uri']} : ${csp_report['blocked-uri']}`;
+            console.log('-- /csp_violation -->', value, '--', this.req.headers['user-agent']);
+            recordWebEvent(this, 'csp_violation', value);
+        } else {
+            console.log('-- /csp_violation [no csp-report] -->', params, '--', this.req.headers['user-agent']);
+        }
         this.body = '';
     });
 

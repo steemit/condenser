@@ -160,9 +160,16 @@ export default function useEnterAndConfirmEmailPages(app) {
 
     router.get("/enter_email", function*() {
         console.log("-- /enter_email -->", this.session.uid, this.session.user, this.request.query.account);
-        this.session.picked_account_name = this.request.query.account;
-        if (!this.session.picked_account_name) {
+        const picked_account_name = this.session.picked_account_name = this.request.query.account;
+        if (!picked_account_name) {
             this.flash = { error: "Please select your account name" };
+            this.redirect('/pick_account');
+            return;
+        }
+        // check for existing account
+        const check_account_res = yield api.getAccountsAsync([picked_account_name]);
+        if (check_account_res && check_account_res.length > 0) {
+            this.flash = { error: `${picked_account_name} is already taken, please try another name` };
             this.redirect('/pick_account');
             return;
         }
@@ -192,7 +199,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                             <input
                                 type="hidden"
                                 name="account"
-                                value={this.request.query.account}
+                                value={picked_account_name}
                             />
                             <label>
                                 Email

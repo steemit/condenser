@@ -65,7 +65,7 @@ function* confirmEmailHandler() {
     yield eid.update({
         verified: true
     });
-    yield models.User.update({ email: eid.email}, {
+    yield models.User.update({ email: eid.email, account_status: 'waiting'}, {
         where: { id: eid.user_id }
     });
 

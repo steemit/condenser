@@ -267,6 +267,7 @@ recovery should your account ever be compromised.</em>
                 confirmation_code
             });
         }
+        yield models.User.update({account_status: 'waiting'}, {where: {id: user_id}});
         console.log(
             '-- /submit_mobile -->',
             this.session.uid,

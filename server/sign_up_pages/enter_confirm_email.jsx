@@ -297,7 +297,8 @@ export default function useEnterAndConfirmEmailPages(app) {
                 const data = user.sign_up_meta ? JSON.parse(user.sign_up_meta) : {};
                 data.last_step = 2;
                 yield user.update({
-                    sign_up_meta: JSON.stringify(data)
+                    sign_up_meta: JSON.stringify(data),
+                    account_status: 'waiting'
                 });
             } else {
                 // create user

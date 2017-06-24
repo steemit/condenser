@@ -84,8 +84,8 @@
     }
   },
   "server_session_secret": "exiKdyF+IwRIXJDmtGIl4vWUz4i3eVSISpfZoeYc0s4=",
-  "session_cookie_key": "golos-dev",
-  "session_key": "goloses",
+  "session_cookie_key": "gls.session",
+  "session_key": "gls.ses",
   "site_domain": "golos.io",
   "tarantool": {
     "host": "localhost",

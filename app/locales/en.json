@@ -541,7 +541,19 @@
     "email_verification_helps_with_preventing_spam": "Email verification helps with preventing spam and allows %(APP_NAME)s to assist with Account Recovery in case your account is ever compromised.",
     "thank_you_for_providing_your_email_address": "Thank you for providing your email address",
     "to_continue_please_click_on_the_link_in_the_email": "To continue please click on the link in the email we've sent you.",
-    "didnt_recieve_email": "Didn't recieve email?"
+    "didnt_recieve_email": "Didn't recieve email?",
+    "please_provide_your_phone_number_to_continue": "Please provide your phone number to continue the registration process",
+    "phone_verification_helps_with_preventing_spam": "Phone verification helps with preventing spam and allows $(APP_NAME)s to assist with Account Recovery in case your account is ever compromised. Your phone number will not be used for any other purpose other than phone verification and account recovery.",
+    "country_code": "Country Code",
+    "phone_number": "Phone number",
+    "examples": "Examples: 541-754-3010 | 89-636-48018",
+    "land_lines_cannot_receive_sms_messages": "* Land lines cannot receive SMS messages",
+    "message_and_data_rates_may_apply": "* Message and data rates may apply",
+    "thank_you_for_providing_your_phone_number": "Thank you for providing your phone number ($(phone)s).",
+    "to_continue_please_enter_the_sms_code_weve_sent_you": "To continue please enter the SMS code we've sent you.",
+    "confirmation_code": "Confirmation code",
+    "didnt_receive_the_verification_code": "Didn't receive the verification code? ",
+    "re_send": "Re-send"
   },
   "voting_jsx": {
     "stop_seeing_content_from_this_user": "Stop seeing content from this user",
@@ -667,6 +679,7 @@
     "profile": "Profile",
     "send_to_account": "Send to account",
     "confirm_email": "Confirm Email",
+    "confirm_phone": "Please verify your phone number",
     "authenticate_for_this_transaction": "Authenticate for this transaction",
     "login_to_your_APP_NAME_account": "Login to your %(APP_NAME)s Account"
   },
@@ -707,6 +720,8 @@
     "email_address_cannot_be_changed_at_this_moment_sorry_for_inconvenience": "Email address cannot be changed at this moment, sorry for the inconvenience",
     "email_address": "Email Address",
     "please_prove_an_email_address": "Please provide an email address",
+    "not_valid_email_address": "Not valid email address",
+    "this_email_has_already_been_taken": "This email has already been taken",
     "failed_captcha_verification_please_try_again": "Failed captcha verification, please try again",
     "re_send_email": "Re-send email",
     "email_confirmation": "Email Confirmation",

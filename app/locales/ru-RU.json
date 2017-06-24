@@ -80,7 +80,7 @@
     "in_order_to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user": "Чтобы предотвратить злоупотребление %(APP_NAME)s может зарегистрировать только один аккаунт для каждого подтвержденного пользователя.",
     "next_3_blocks": {
       "you_can_either": "Вы можете или",
-      "to_your_existing_account_or": "в Ваш существующий аккаунт или",
+      "to_your_existing_account_or": " в Ваш существующий аккаунт или",
       "if_you_need_a_new_account": "если Вам нужен новый аккаунт"
     },
     "send_us_email": "отправьте нам email",
@@ -95,7 +95,19 @@
     "email_verification_helps_with_preventing_spam": "Проверка электронной почты помогает предотвратить спам и позволяет %(APP_NAME)s помогать с восстановлением учетной записи в случае, если ваша учетная запись когда-либо была скомпрометирована.",
     "thank_you_for_providing_your_email_address": "Благодарим вас за предоставленный адрес электронной почты",
     "to_continue_please_click_on_the_link_in_the_email": "Чтобы продолжить, нажмите на ссылку в письме, которую мы вам отправили.",
-    "didnt_recieve_email": "Не получили письмо?"
+    "didnt_recieve_email": "Не получили письмо?",
+    "please_provide_your_phone_number_to_continue": "Чтобы продолжить, укажите свой номер телефона",
+    "phone_verification_helps_with_preventing_spam": "Проверка номера телефона помогает предотвратить спам и позволяет  $(APP_NAME)s помогать с восстановлением учетной записи в случае, если ваша учетная запись когда-либо была скомпрометирована. Ваш номер телефона не будет использоваться более нигде. Номер мобильного телефона не будет использоваться для рассылки сообщений рекламного характера! В базе данных номер телефона хранится в виде sha256 хэша",
+    "country_code": "Код страны",
+    "phone_number": "Номер телефона",
+    "examples": "Например: 9001234567 | 9261234567",
+    "land_lines_cannot_receive_sms_messages": "* Городские телефоны не могу принимать СМС сообщения",
+    "message_and_data_rates_may_apply": "",
+    "thank_you_for_providing_your_phone_number": "Спасибо за предоставленный номер телефона ($(phone)s).",
+    "to_continue_please_enter_the_sms_code_weve_sent_you": "Чтобы продолжить, пожалуйста укажите СМС код который мы вам отправили.",
+    "confirmation_code": "Код подтверждения",
+    "didnt_receive_the_verification_code": "Не получили код подтверждения? ",
+    "re_send": "Повторная отправка"
   },
   "curationrewards_jsx": {
     "curation_rewards_last_24_hours": "Кураторские награды за последние 24 часа",
@@ -113,6 +125,8 @@
     "email_address_cannot_be_changed_at_this_moment_sorry_for_inconvenience": "Адрес электронной почты на данный момент не может быть изменен, извините за неудобства",
     "email_address": "Адрес электронной почты",
     "please_prove_an_email_address": "Пожалуйста укажите адрес электронной почты",
+    "not_valid_email_address": "Указан некорректный адрес электронной почты",
+    "this_email_has_already_been_taken": "Этот адрес электронной почты уже занят",
     "failed_captcha_verification_please_try_again": "Ошибка проверки капчи, попробуйте еще раз",
     "re_send_email": "Повторная отправка электронной почты",
     "email_confirmation": "Подтверждение электронной почты",
@@ -374,9 +388,9 @@
     "account_creation_succes": "Ваш аккаунт был успешно создан!",
     "account_recovery_succes": "Ваш аккаунт был успешно восстановлен!",
     "password_update_succes": "Пароль для %(accountName)s был успешно обновлен",
-    "password_is_bound_to_your_accounts_owner_key": "Этот пароль привязан к главному ключу аккаунта и не может быть использован для входа на этот сайт",
+    "password_is_bound_to_your_accounts_owner_key": "Этот пароль привязан к главному ключу аккаунта и не может быть использован для входа на сайт",
     "however_you_can_use_it_to": "Тем не менее его можно использовать, чтобы",
-    "to_obtaion_a_more_secure_set_of_keys": "для получения более безопасного набора ключей",
+    "to_obtaion_a_more_secure_set_of_keys": "Например, для получения более безопасного набора ключей",
     "update_your_password": "обновить Ваш пароль",
     "enter_username": "Введи свое имя пользователя",
     "password_or_wif": "Пароль или WIF",
@@ -712,6 +726,7 @@
     "profile": "Профиль",
     "send_to_account": "Отправить аккаунту",
     "confirm_email": "Подтвердить email",
+    "confirm_phone": "Пожалуйста подтвердите Ваш телефон",
     "authenticate_for_this_transaction": "Авторизируйтесь для этой транзакции",
     "login_to_your_APP_NAME_account": "Зайдите в Ваш %(APP_NAME)s аккаунт"
   },

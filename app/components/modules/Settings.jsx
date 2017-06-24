@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux'
 import user from 'app/redux/User';
 import tt from 'counterpart';
-import { CURRENCIES, DEFAULT_CURRENCY, LANGUAGES, DEFAULT_LANGUAGE } from 'app/client_config'
+import { CURRENCIES, DEFAULT_CURRENCY, CURRENCY_COOKIE_KEY, LANGUAGES, DEFAULT_LANGUAGE } from 'app/client_config'
 import transaction from 'app/redux/Transaction'
 import o2j from 'shared/clash/object2json'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
@@ -63,7 +63,7 @@ class Settings extends React.Component {
     }
 
     onCurrencyChange(event) {
-        cookie.save('gls.currency', event.target.value, {path: "/"});
+        cookie.save(CURRENCY_COOKIE_KEY, event.target.value, {path: "/"});
     }
 
     onLanguageChange = (event) => {
@@ -160,7 +160,7 @@ class Settings extends React.Component {
                     <div className="error"></div>
                     {/* CHOOSE CURRENCY */}
                     <label>{tt('settings_jsx.choose_currency')}
-                        <select defaultValue={process.env.BROWSER ? cookie.load('gls.currency') : DEFAULT_CURRENCY} onChange={this.onCurrencyChange}>
+                        <select defaultValue={process.env.BROWSER ? cookie.load(CURRENCY_COOKIE_KEY) : DEFAULT_CURRENCY} onChange={this.onCurrencyChange}>
                             {
                                 CURRENCIES.map(i => {
                                     return <option key={i} value={i}>{i}</option>

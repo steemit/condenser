@@ -16,6 +16,7 @@
     "production": "NODE_ENV=production ./node_modules/babel-cli/bin/babel-node.js server/index.js",
     "start": "./node_modules/babel-cli/bin/babel-node.js ./webpack/dev-server.js",
     "start:local": "./.env.start.local.sh",
+    "start:win32": "cross-env ./node_modules/babel-cli/bin/babel-node.js ./webpack/dev-server.js",
     "webpush": "./node_modules/babel-cli/bin/babel-node.js ./scripts/webpush_notify.js"
   },
   "author": "Golos.io",
@@ -35,6 +36,7 @@
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
     "bigi": "^1.4.1",
+    "bignumber.js": "^4.0.0",
     "blocked": "^1.1.0",
     "bs58": "^3.0.0",
     "bytebuffer": "^5.0.0",
@@ -86,6 +88,7 @@
     "net": "^1.0.2",
     "node-sass": "^3.4.2",
     "node-statsd": "^0.1.1",
+    "numeral": "^2.0.6",
     "pluralize": "^2.0.0",
     "purest": "^2.0.1",
     "raw-loader": "^0.5.1",

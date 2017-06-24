@@ -1,14 +1,30 @@
-import React from 'react';
-import {formatDecimal, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
+import React, { PropTypes } from 'react';
+import { formatDecimal } from 'app/utils/ParsersAndFormatters';
+import utils from 'app/utils/Assets/utils';
 
-const FormattedAsset = ({amount, asset, classname}) => {
-    if (amount && typeof(amount) === 'string') {
-        amount = parsePayoutAmount(amount);
+export default class FormattedAsset extends React.Component {
+    static propTypes = {
+        amount: PropTypes.any.isRequired,
+        asset: PropTypes.any.isRequired
+    };
+
+    static defaultProps = {
+        amount: 0,
+    };
+
+    constructor(props) {
+        super(props);
     }
-    const amnt = formatDecimal(amount);
-    return asset === '$' ?
-        <span className={`FormattedAsset ${classname}`}><span className="prefix">$</span><span className="integer">{amnt[0]}</span><span className="decimal">{amnt[1]}</span></span> :
-        <span className="FormattedAsset"><span className="integer">{amnt[0]}</span><span className="decimal">{amnt[1]}</span> <span className="asset">{asset}</span></span>;
-};
 
-export default FormattedAsset;
+    render() {
+        let {amount, asset} = this.props;
+        if( asset && asset.toJS ) asset = asset.toJS();
+
+        const precision = utils.get_asset_precision(asset.precision);
+
+        return (
+            <span>{formatDecimal(this.props.exact_amount ? amount : amount / precision)}</span>
+        );
+    }
+}
+

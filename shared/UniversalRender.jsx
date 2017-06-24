@@ -17,6 +17,7 @@ import { syncHistoryWithStore } from 'react-router-redux';
 import rootReducer from 'app/redux/RootReducer';
 import {fetchDataWatches} from 'app/redux/FetchDataSaga';
 import {marketWatches} from 'app/redux/MarketSaga';
+import {assetsWatches} from 'app/redux/AssetsSaga';
 import {sharedWatches} from 'app/redux/SagaShared';
 import {userWatches} from 'app/redux/UserSaga';
 import {authWatches} from 'app/redux/AuthSaga';
@@ -38,7 +39,8 @@ const sagaMiddleware = createSagaMiddleware(
     ...sharedWatches,
     ...authWatches,
     ...transactionWatches,
-    ...marketWatches
+    ...marketWatches,
+    ...assetsWatches
 );
 
 let middleware;

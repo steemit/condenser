@@ -1,0 +1,323 @@
+import Immutable from "immutable";
+
+const assetArray = [
+    {
+        "id":"1.3.1072",
+        "symbol":"BLOCKPAY",
+        "precision":4,
+        "issuer":"1.2.96393",
+        "options":{
+            "max_supply":"1000000000000",
+            "market_fee_percent":200,
+            "max_market_fee":"10000000000",
+            "issuer_permissions":79,
+            "flags":1,
+            "core_exchange_rate":{
+                "base":{
+                    "amount":2500000,
+                    "asset_id":"1.3.0"
+                },
+                "quote":{
+                    "amount":10000,
+                    "asset_id":"1.3.1072"
+                }
+            },
+            "whitelist_authorities":[],
+            "blacklist_authorities":[],
+            "whitelist_markets":[],
+            "blacklist_markets":[],
+            "description":"{\"main\":\"BlockPay tokens allows you to share in the rewards from BlockPay transactions as well as value \\nincreases from products built by the Company. \\nMore info @ www.BlockPay.ch\",\"market\":\"\",\"short_name\":\"BlockPay\"}",
+            "extensions":[]
+        },
+        "dynamic_asset_data_id":"2.3.1072",
+        "dynamic_data":{
+            "id":"2.3.1072",
+            "current_supply":"989283163300",
+            "confidential_supply":0,
+            "accumulated_fees":31744072,
+            "fee_pool":194
+        },
+        "market_asset":false
+    },
+    {
+        "id":"1.3.776","symbol":"OPENPOS","precision":4,"issuer":"1.2.96393","options":{"max_supply":"5000000000","market_fee_percent":200,"max_market_fee":"10000000000000","issuer_permissions":79,"flags":1,"core_exchange_rate":{"base":{"amount":2500000,"asset_id":"1.3.0"},"quote":{"amount":10000,"asset_id":"1.3.776"}},"whitelist_authorities":[],"blacklist_authorities":[],"whitelist_markets":[],"blacklist_markets":[],"description":"This token helps to fund the completion of BitShares Wallet v1.0 for Android/iPhone and the Smartcoins POS systems. Share the benefits! ","extensions":[]},"dynamic_asset_data_id":"2.3.776","dynamic_data":{"id":"2.3.776","current_supply":"5000000000","confidential_supply":0,"accumulated_fees":973382,"fee_pool":847003},"market_asset":false
+    },
+    {
+        "id":"1.3.1072","symbol":"BLOCKPAY","precision":4,"issuer":"1.2.96393","options":{"max_supply":"1000000000000","market_fee_percent":200,"max_market_fee":"10000000000","issuer_permissions":79,"flags":1,"core_exchange_rate":{"base":{"amount":2500000,"asset_id":"1.3.0"},"quote":{"amount":10000,"asset_id":"1.3.1072"}},"whitelist_authorities":[],"blacklist_authorities":[],"whitelist_markets":[],"blacklist_markets":[],"description":"{\"main\":\"BlockPay tokens allows you to share in the rewards from BlockPay transactions as well as value \\nincreases from products built by the Company. \\nMore info @ www.BlockPay.ch\",\"market\":\"\",\"short_name\":\"BlockPay\"}","extensions":[]},"dynamic_asset_data_id":"2.3.1072","dynamic_data":{"id":"2.3.1072","current_supply":"989283163300","confidential_supply":0,"accumulated_fees":56244836,"fee_pool":194},"market_asset":false
+    },
+    {
+        "id":"1.3.1389","symbol":"ZENGOLD","precision":8,"issuer":"1.2.96393","options":{"max_supply":"1000000000000000","market_fee_percent":30,"max_market_fee":"100000000000000","issuer_permissions":79,"flags":1,"core_exchange_rate":{"base":{"amount":100000,"asset_id":"1.3.0"},"quote":{"amount":100000000,"asset_id":"1.3.1389"}},"whitelist_authorities":[],"blacklist_authorities":[],"whitelist_markets":[],"blacklist_markets":[],"description":"{\"main\":\"ZENGOLD is a native asset on OpenLedger backed by Danish OpenLedger ApS in agreement with Viewfin, the founders of the crypto asset ZenGold which is developed on the Metaverse Blockchain. ZenGold creates crypto assets that are backed by physical gold enabling investors to instantly buy and transfer gold, in any quantity, anywhere in the world. \\n\\nAnd estimated amount of 9.3 million tokens is made available on OpenLedger  on May 27 at 12.00 NOON GMT and will be offered on selected markets in the form of the asset ZENGOLD. A new crypto gateway OPEN.ZGC will then be made available on the day of distribution and all ZENGOLD native tokens on OpenLedger will be offered to be converted to the OPEN.ZGC 1:1 which you could then withdraw to your official ZenGold wallet as you would with any other crypto.\\nFor more information about ZenGold please visit: http://www.zengold.org\\nAny questions to OpenLedger pls send to support@openledger.info\",\"market\":\"\",\"short_name\":\"ZENGOLD \"}","extensions":[]},"dynamic_asset_data_id":"2.3.1389","dynamic_data":{"id":"2.3.1389","current_supply":"945000000000000","confidential_supply":0,"accumulated_fees":"206772594399","fee_pool":179969098},"market_asset":false
+    }
+    ,
+    { //Asset bitUSD
+        "dynamic_asset_data_id":"2.3.121",
+        "bitasset":{
+            "current_feed":{
+                "settlement_price":{
+                    "base":{
+                        "amount":681,
+                        "asset_id":"1.3.121"
+                    },
+                    "quote":{
+                        "amount":39644,"asset_id":"1.3.0"
+                    }
+                },
+                "maintenance_collateral_ratio":1750,
+                "maximum_short_squeeze_ratio":1100,
+                "core_exchange_rate":{
+                    "base":{
+                        "amount":1432,
+                        "asset_id":"1.3.121"
+                    },
+                    "quote":{
+                        "amount":80158,
+                        "asset_id":"1.3.0"
+                    }
+                }
+            },
+            "asset_id":"1.3.121",
+            "settlement_price":{
+                "base":{
+                    "amount":0,
+                    "asset_id":"1.3.0"
+                },
+                "quote":{
+                    "amount":0,
+                    "asset_id":"1.3.0"
+                }
+            },
+            "force_settled_volume":0,
+            "feeds":[
+                ["1.2.167",
+                    ["2017-06-09T08:48:09",{
+                        "settlement_price":{
+                            "base":{
+                                "amount":833,
+                                "asset_id":"1.3.121"
+                            },
+                            "quote":{
+                                "amount":47993,
+                                "asset_id":"1.3.0"
+                            }
+                        },
+                        "maintenance_collateral_ratio":1750,
+                        "maximum_short_squeeze_ratio":1100,
+                        "core_exchange_rate":{
+                            "base":{
+                                "amount":833,
+                                "asset_id":"1.3.121"
+                            },
+                            "quote":{
+                                "amount":45593,
+                                "asset_id":"1.3.0"
+                            }
+                        }
+                    }
+                    ]
+                ],
+                ["1.2.277",["2017-06-09T08:24:57",{"settlement_price":{"base":{"amount":168401,"asset_id":"1.3.121"},"quote":{"amount":10000000,"asset_id":"1.3.0"}},"maintenance_collateral_ratio":1750,"maximum_short_squeeze_ratio":1100,"core_exchange_rate":{"base":{"amount":168401,"asset_id":"1.3.121"},"quote":{"amount":9500000,"asset_id":"1.3.0"}}}]],
+                ["1.2.333",["2017-06-09T08:50:09",{"settlement_price":{"base":{"amount":1432,"asset_id":"1.3.121"},"quote":{"amount":84377,"asset_id":"1.3.0"}},"maintenance_collateral_ratio":1750,"maximum_short_squeeze_ratio":1100,"core_exchange_rate":{"base":{"amount":1432,"asset_id":"1.3.121"},"quote":{"amount":80158,"asset_id":"1.3.0"}}}]],
+                ["1.2.564",["2017-06-09T05:14:48",{"settlement_price":{"base":{"amount":1117,"asset_id":"1.3.121"},"quote":{"amount":61599,"asset_id":"1.3.0"}},"maintenance_collateral_ratio":1750,"maximum_short_squeeze_ratio":1100,"core_exchange_rate":{"base":{"amount":1721,"asset_id":"1.3.121"},"quote":{"amount":93968,"asset_id":"1.3.0"}}}]],
+                ["1.2.964",["2017-06-09T05:14:45",{"settlement_price":{"base":{"amount":414,"asset_id":"1.3.121"},"quote":{"amount":22823,"asset_id":"1.3.0"}},"maintenance_collateral_ratio":1750,"maximum_short_squeeze_ratio":1100,"core_exchange_rate":{"base":{"amount":1247,"asset_id":"1.3.121"},"quote":{"amount":68064,"asset_id":"1.3.0"}}}]],
+                ["1.2.1191",["2016-08-31T06:21:00",{"settlement_price":{"base":{"amount":67,"asset_id":"1.3.121"},"quote":{"amount":90389,"asset_id":"1.3.0"}},"maintenance_collateral_ratio":1750,"maximum_short_squeeze_ratio":1100,"core_exchange_rate":{"base":{"amount":67,"asset_id":"1.3.121"},"quote":{"amount":85869,"asset_id":"1.3.0"}}}]],
+                ["1.2.2850",["2017-06-09T08:53:09",{"settlement_price":{"base":{"amount":1580,"asset_id":"1.3.121"},"quote":{"amount":90371, "asset_id":"1.3.0"}},"maintenance_collateral_ratio":1750, "maximum_short_squeeze_ratio":1100, "core_exchange_rate":{"base":{"amount":1580, "asset_id":"1.3.121"},"quote":{"amount":85852,"asset_id":"1.3.0"}}}]],
+                ["1.2.3284",["2017-06-09T05:19:06",{"settlement_price":{"base":{"amount":1491,"asset_id":"1.3.121"},"quote":{"amount":82462,"asset_id":"1.3.0"}},"maintenance_collateral_ratio":1750,"maximum_short_squeeze_ratio":1100,"core_exchange_rate":{"base":{"amount":701,"asset_id":"1.3.121"},"quote":{"amount":38386,"asset_id":"1.3.0"}}}]],
+                ["1.2.4952",["2017-06-09T08:54:09",{"settlement_price":{"base":{"amount":1576,"asset_id":"1.3.121"},"quote":{"amount":90377,"asset_id":"1.3.0"}},"maintenance_collateral_ratio":1750,"maximum_short_squeeze_ratio":1100,"core_exchange_rate":{"base":{"amount":1576,"asset_id":"1.3.121"},"quote":{"amount":85858,"asset_id":"1.3.0"}}}]],
+                ["1.2.6004",["2016-01-14T04:00:00",{"settlement_price":{"base":{"amount":23,"asset_id":"1.3.121"},"quote":{"amount":68677,"asset_id":"1.3.0"}},"maintenance_collateral_ratio":1750,"maximum_short_squeeze_ratio":1100,"core_exchange_rate":{"base":{"amount":23,"asset_id":"1.3.121"},"quote":{"amount":65243,"asset_id":"1.3.0"}}}]],
+                ["1.2.9952",["2017-06-09T08:14:36",{"settlement_price":{"base":{"amount":1613,"asset_id":"1.3.121"},"quote":{"amount":94202,"asset_id":"1.3.0"}},"maintenance_collateral_ratio":1750,"maximum_short_squeeze_ratio":1100,"core_exchange_rate":{"base":{"amount":1728,"asset_id":"1.3.121"},"quote":{"amount":99919,"asset_id":"1.3.0"}}}]],
+                ["1.2.10091",["2017-06-09T08:54:12",{"settlement_price":{"base":{"amount":721,"asset_id":"1.3.121"},"quote":{"amount":41242,"asset_id":"1.3.0"}},"maintenance_collateral_ratio":1750,"maximum_short_squeeze_ratio":1100,"core_exchange_rate":{"base":{"amount":1703,"asset_id":"1.3.121"},"quote":{"amount":96449,"asset_id":"1.3.0"}}}]],
+                ["1.2.10285",["2017-06-09T08:02:30",{"settlement_price":{"base":{"amount":1724,"asset_id":"1.3.121"},"quote":{"amount":99979,"asset_id":"1.3.0"}},"maintenance_collateral_ratio":1750,"maximum_short_squeeze_ratio":1100,"core_exchange_rate":{"base":{"amount":1346,"asset_id":"1.3.121"},"quote":{"amount":77285,"asset_id":"1.3.0"}}}]],
+                ["1.2.13774",["2015-11-16T03:47:03",{"settlement_price":{"base":{"amount":31,"asset_id":"1.3.121"},"quote":{"amount":89750,"asset_id":"1.3.0"}},"maintenance_collateral_ratio":1750,"maximum_short_squeeze_ratio":1100,"core_exchange_rate":{"base":{"amount":31,"asset_id":"1.3.121"},"quote":{"amount":85262,"asset_id":"1.3.0"}}}]],
+                ["1.2.14035",["2017-06-09T08:32:57",{"settlement_price":{"base":{"amount":182,"asset_id":"1.3.121"},"quote":{"amount":10617,"asset_id":"1.3.0"}},"maintenance_collateral_ratio":1750,"maximum_short_squeeze_ratio":1100,"core_exchange_rate":{"base":{"amount":1712,"asset_id":"1.3.121"},"quote":{"amount":98881,"asset_id":"1.3.0"}}}]],
+                ],
+            "is_prediction_market":false,
+            "settlement_fund":0,
+            "id":"2.4.21",
+            "current_feed_publication_time":"2017-06-09T04:16:15",
+            "options":{
+                "feed_lifetime_sec":86400,
+                "minimum_feeds":7,
+                "force_settlement_delay_sec":86400,
+                "force_settlement_offset_percent":100,
+                "maximum_force_settlement_volume":50,
+                "short_backing_asset":"1.3.0",
+                "extensions":[]
+             }
+        },
+        "bitasset_data_id":"2.4.21",
+        "symbol":"USD",
+        "issuer":"1.2.0",
+        "id":"1.3.121",
+        "precision":4,
+        "options":{
+            "flags":128,
+            "market_fee_percent":0,
+            "whitelist_authorities":[],
+            "max_supply":"1000000000000000",
+            "extensions":[],
+            "blacklist_markets":[],
+            "core_exchange_rate":{
+                "base":{
+                    "amount":1432,
+                    "asset_id":"1.3.121"
+                },
+                "quote":{
+                    "amount":80158,
+                    "asset_id":"1.3.0"
+                }
+            },
+            "description":"1 United States dollar",
+            "max_market_fee":"1000000000000000",
+            "issuer_permissions":511,
+            "blacklist_authorities":[],
+            "whitelist_markets":[]
+        },
+        "dynamic_data":{
+            "asset_id":"1.3.121",
+            "id":"2.3.121",
+            "current_supply": "26189309379",
+            "confidential_supply":3459,
+            "accumulated_fees":467407,
+            "fee_pool":"13501640286"
+        }
+    }
+]
+
+//core asset 1.3.0
+export const core = {
+    "id":"1.3.0",
+    "symbol":"BTS",
+    "precision":5,
+    "issuer":"1.2.3",
+    "options":{
+        "flags":0,
+        "market_fee_percent":0,
+        "whitelist_authorities":[],
+        "max_supply":"360057050210207",
+        "extensions":[],
+        "blacklist_markets":[],
+        "core_exchange_rate":{
+            "base":{
+                "amount":1,
+                "asset_id":"1.3.0"
+            },
+            "quote":{
+                "amount":1,
+                "asset_id":"1.3.0"
+            }
+        },
+        "description":"",
+        "max_market_fee":"1000000000000000",
+        "issuer_permissions":0,
+        "blacklist_authorities":[],
+        "whitelist_markets":[]
+    },
+    "dynamic_asset_data_id":"2.3.0",
+    "dynamic":{
+        "asset_id":"1.3.0",
+        //
+        "id":"2.3.0",
+        "current_supply":"260240931209497",
+        "confidential_supply":"26906766462",
+        "accumulated_fees":0,
+        "fee_pool":10100000
+    }
+}
+
+export const immutableCore = Immutable.fromJS(core)
+
+export const globalObject = {
+    "id":"2.0.0",
+    "parameters":{
+        "maintenance_skip_slots":3,
+        "maximum_transaction_size":98304,
+        "worker_budget_per_day":"50000000000",
+        "lifetime_referrer_percent_of_fee":3000,
+        "maximum_time_until_expiration":86400,
+        "count_non_member_votes":true,
+        "network_percent_of_fee":2000,
+        "allow_non_member_whitelists":false,
+        "maximum_witness_count":1001,
+        "maximum_asset_feed_publishers":10,
+        "max_authority_depth":2,
+        "fee_liquidation_threshold":10000000,
+        "maximum_committee_count":1001,
+        "witness_pay_per_block":100000,
+        "max_predicate_opcode":1,
+        "maintenance_interval":3600,
+        "maximum_authority_membership":10,
+        "maximum_block_size":2097152,
+        "cashback_vesting_period_seconds":7776000,
+        "current_fees":{
+            "parameters":[
+                [0,{"fee":21851,"price_per_kbyte":12139}],
+                [1,{"fee":1213}],
+                [2,{"fee":121}],
+                [3,{"fee":1213}],
+                [4,{}],
+                [5,{"basic_fee":121396,"premium_fee":6069837,"price_per_kbyte":8497}],
+                [6,{"fee":1213,"price_per_kbyte":8497}],
+                [7,{"fee":121396}],
+                [8,{"membership_annual_fee":"12139675270075","membership_lifetime_fee":145676103}],
+                [9,{"fee":6069837}],
+                [10,{"symbol3":"9711740216","symbol4":2427935054,"long_symbol":60698376,"price_per_kbyte":12139}],
+                [11,{"fee":2427935,"price_per_kbyte":8497}],
+                [12,{"fee":6069837}],
+                [13,{"fee":6069837}],
+                [14,{"fee":21851,"price_per_kbyte":12139}],
+                [15,{"fee":1213}],
+                [16,{"fee":606983}],
+                [17,{"fee":60698}],
+                [18,{"fee":6069837}],
+                [19,{"fee":121}],
+                [20,{"fee":60698376}],
+                [21,{"fee":12139}],
+                [22,{"fee":182095,"price_per_kbyte":60698}],
+                [23,{"fee":6069,"price_per_kbyte":8497}],
+                [24,{"fee":0}],
+                [25,{"fee":182095}],
+                [26,{"fee":12139}],
+                [27,{"fee":17481,"price_per_kbyte":8497}],
+                [28,{"fee":0}],
+                [29,{"fee":6069837}],
+                [30,{"fee":12139675}],
+                [31,{"fee":0}],
+                [32,{"fee":6069837}],
+                [33,{"fee":2427935}],
+                [34,{"fee":60698376}],
+                [35,{"fee":12139,"price_per_kbyte":60698}],
+                [36,{"fee":606983}],
+                [37,{}],
+                [38,{"fee":1213967,"price_per_kbyte":8497}],
+                [39,{"fee":254933,"price_per_output":84977}],
+                [41,{"fee":254933}],
+                [43,{"fee":1213967}]
+            ],
+            "scale":10000
+        },
+        "extensions":[],
+        "accounts_per_fee_scale":1000,
+        "block_interval":3,
+        "maximum_proposal_lifetime":2419200,
+        "cashback_vesting_threshold":10000000,
+        "reserve_percent_of_fee":2000,
+        "maximum_asset_whitelist_authorities":10,
+        "committee_proposal_review_period":3600,
+        "account_fee_scale_bitshifts":0
+    },
+    "next_available_vote_id":223,
+    "active_committee_members":["1.5.15","1.5.25","1.5.16","1.5.17","1.5.28","1.5.27","1.5.20","1.5.22","1.5.23","1.5.30","1.5.13"],
+    "active_witnesses":["1.6.15","1.6.16","1.6.17","1.6.18","1.6.20","1.6.22","1.6.23","1.6.24","1.6.26","1.6.27","1.6.28","1.6.34","1.6.35","1.6.37","1.6.38","1.6.45","1.6.59","1.6.63","1.6.64","1.6.65","1.6.69","1.6.71","1.6.72","1.6.73","1.6.74","1.6.75","1.6.76"]
+}
+
+export const global_object = Immutable.fromJS(globalObject)
+
+export function getAssets() {
+    let assets = Immutable.Map()
+    assetArray.forEach(asset => {
+        assets = assets.set(asset.id, asset)
+    })
+
+    return assets
+}
+

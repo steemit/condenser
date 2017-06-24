@@ -251,7 +251,7 @@ if (env === 'development') {
     const webpack_dev_port = process.env.PORT
         ? parseInt(process.env.PORT) + 1
         : 8081;
-    const proxyhost = 'http://0.0.0.0:' + webpack_dev_port;
+    const proxyhost = `http://${(process.platform === 'win32') ? '127.0.0.1' : '0.0.0.0'}:${webpack_dev_port}`;
     console.log('proxying to webpack dev server at ' + proxyhost);
     const proxy = require('koa-proxy')({
         host: proxyhost,

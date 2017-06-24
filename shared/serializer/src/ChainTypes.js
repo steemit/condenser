@@ -1,4 +1,4 @@
-var ChainTypes;
+let ChainTypes;
 
 module.exports = ChainTypes = {};
 
@@ -8,6 +8,7 @@ ChainTypes.reserved_spaces = {
   implementation_ids: 2
 };
 
+//operations.hpp
 ChainTypes.operations= {
     vote: 0,
     comment: 1,

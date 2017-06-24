@@ -29,6 +29,8 @@ import WalletSubMenu from 'app/components/elements/WalletSubMenu';
 import Userpic from 'app/components/elements/Userpic';
 import Callout from 'app/components/elements/Callout';
 import normalizeProfile from 'app/utils/NormalizeProfile';
+import AccountAssetCreate from 'app/components/modules/AssetCreate';
+import AccountAssets from 'app/components/modules/AccountAssets';
 
 export default class UserProfile extends React.Component {
     constructor() {
@@ -277,11 +279,8 @@ export default class UserProfile extends React.Component {
         else if( section === 'permissions' && isMyAccount ) {
             walletClass = 'active'
             tab_content = <div>
-                <div className="row">
-                    <div className="column">
-                        <WalletSubMenu account_name={account.name} />
-                    </div>
-                </div>
+                 <WalletSubMenu account_name={account.name} />
+
                 <br />
                 <UserKeys account={accountImm} />
                 {isMyAccount && <MarkNotificationRead fields="account_update" account={account.name} />}
@@ -289,19 +288,35 @@ export default class UserProfile extends React.Component {
         } else if( section === 'password' ) {
             walletClass = 'active'
             tab_content = <div>
-                    <div className="row">
-                        <div className="column">
-                            <WalletSubMenu account_name={account.name} />
-                        </div>
-                    </div>
+                    <WalletSubMenu account_name={account.name} />
+
                     <br />
                     <PasswordReset account={accountImm} />
                 </div>
-        } else {
-        //    console.log( "no matches" );
+        } else if (section === 'assets' && isMyAccount) {
+            walletClass = 'active'
+            tab_content = <div>
+                <WalletSubMenu account_name={account.name} />
+
+                <br />
+                <AccountAssets
+                    account={account}
+                    account_name={accountname}/>
+            </div>
+        } else if (section === 'create-asset' && isMyAccount) {
+            walletClass = 'active'
+            tab_content = <div>
+                <WalletSubMenu account_name={account.name} />
+
+                <AccountAssetCreate/>
+            </div>
         }
 
-        if (!(section === 'transfers' || section === 'permissions' || section === 'password')) {
+        if (!(section === 'transfers' ||
+              section === 'permissions' ||
+              section === 'password' ||
+              section === 'assets'||
+              section === 'create-asset')) {
             tab_content = <div className="row">
                 <div className="UserProfile__tab_content column">
                     {tab_content}

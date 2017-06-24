@@ -1,0 +1,68 @@
+.AssetCreate_tabs {
+
+  .margin {
+    margin-bottom: 1rem;
+  }
+
+  .tab-selector {
+    margin-bottom: 1rem;
+
+    >ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    li {
+      >a {
+        padding: 0.7rem 1rem;
+        line-height: 1.5rem;
+        display: flex;
+        flex-flow: row nowrap;
+      }
+    }
+
+    .is-active {
+      color: #333333;
+      background-color: $gray95;
+    }
+
+    label > [type='checkbox']{
+      padding-left: 0.5rem;
+    }
+  }
+
+  .help-content {
+    padding: 5px;
+  }
+
+  .switch {
+    margin: 0;
+    font-size: 100%;
+  }
+
+  input[type=range] {
+    -webkit-appearance: none;
+    width: 100%;
+    border-radius: 8px;
+    height: 7px;
+    border: 1px solid #bdc3c7;
+    background-color: #fff;
+  }
+  //add mozilla
+  input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background-color: #4ba2f2;
+    border: 1px solid #ccc;
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  input[type=range]:focus {
+    outline: none;
+  }
+
+
+}

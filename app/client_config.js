@@ -39,9 +39,19 @@ export const DEBT_TOKEN_SHORT = 'GBG'
 
 // application settings
 export const DEFAULT_LANGUAGE = 'ru' // used on application internationalization bootstrap
+export const LOCALE_COOKIE_KEY = 'gls.locale'
+export const LANGUAGES = {
+  ru: 'Русский',
+  en: 'English',
+  /* in react-intl they use 'uk' instead of 'ua' */
+  uk: 'Українська',
+  sr: 'Srpski',
+  ro: 'Română',
+}
 // First element always is USD, it needs to be correct fetch yahoo exchange rates from server side
 export const CURRENCIES = ['USD', 'RUB', 'UAH', 'BYN', 'EUR', 'CNY', 'GEL', 'KZT']
 export const DEFAULT_CURRENCY = CURRENCIES[0]
+export const CURRENCY_COOKIE_KEY = 'gls.currency'
 export const FRACTION_DIGITS = 2 // default amount of decimal digits
 export const FRACTION_DIGITS_MARKET = 3 // accurate amount of deciaml digits (example: used in market)
 
@@ -73,14 +83,6 @@ export const PUBLIC_API = {
   witnesses:       ['get_witnesses_by_vote',             'witnesses'],
   tags:            ['get_trending_tags',                 'tags'],
   tagsbyauthor:    ['get_tags_used_by_author',           'tagsbyauthor']
-}
-export const LANGUAGES = {
-  ru: 'Русский',
-  en: 'English',
-  /* in react-intl they use 'uk' instead of 'ua' */
-  uk: 'Українська',
-  sr: 'Srpski',
-  ro: 'Română',
 }
 export const SEO_TITLE = 'GOLOS.io Блоги'
 export const DEFAULT_DOMESTIC = 'all'

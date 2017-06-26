@@ -65,10 +65,12 @@ function* confirmEmailHandler() {
     yield eid.update({
         verified: true
     });
-    yield models.User.update({ email: eid.email, account_status: 'waiting'}, {
+    yield models.User.update({ email: eid.email}, {
         where: { id: eid.user_id }
     });
-
+    yield models.User.update({ account_status: 'waiting'}, {
+        where: { id: eid.user_id, account_status: 'onhold' }
+    });
     if (mixpanel)
         mixpanel.track("SignupStepConfirmEmail", { distinct_id: this.session.uid });
 
@@ -145,7 +147,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                     this.redirect("/create_account");
                 }
             } else if (user.account_status === "waiting") {
-                this.flash = { error: "Your account has not been approved." };
+                this.flash = { error: "Your account has not been approved yet." };
                 this.redirect("/");
             } else {
                 this.flash = { error: "Issue with your sign up status." };
@@ -297,8 +299,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                 const data = user.sign_up_meta ? JSON.parse(user.sign_up_meta) : {};
                 data.last_step = 2;
                 yield user.update({
-                    sign_up_meta: JSON.stringify(data),
-                    account_status: 'waiting'
+                    sign_up_meta: JSON.stringify(data)
                 });
             } else {
                 // create user

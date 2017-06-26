@@ -43,13 +43,17 @@ export default function* verify({ mobile, confirmation_code, ip, ignore_score })
 
 function getScore(mobile) {
     const fields = urlencode({
-        ucid: use_case_code
+        // ucid: use_case_code
+        account_lifecycle_event: 'create'
     });
-    const resource = '/v1/phoneid/score/' + mobile.match(/\d+/g).join('');
-    const method = 'GET';
-    return fetch(`https://rest.telesign.com${resource}?${fields}`, {
+    // const resource = '/v1/phoneid/score/' + mobile.match(/\d+/g).join('');
+    const resource = '/v1/score/' + mobile.match(/\d+/g).join('');
+    const method = 'POST'; // 'GET';
+    return fetch('https://rest-api.telesign.com' + resource, { // `https://rest.telesign.com${resource}?${fields}`, {
         method,
-        headers: authHeaders({ resource, method })
+        // headers: authHeaders({ resource, method })
+        body: fields,
+        headers: authHeaders({ resource, method, fields })
     })
         .then(r => r.json())
         .catch(error => {
@@ -81,18 +85,21 @@ function verifySms({ mobile, confirmation_code, ip }) {
     // https://developer.telesign.com/v2.0/docs/rest_api-verify-sms
     const f = {
         phone_number: mobile,
-        language: 'en-US',
-        ucid: use_case_code,
-        verify_code: confirmation_code,
-        template: '$$CODE$$ is your Steemit confirmation code'
+        // language: 'en-US',
+        // ucid: use_case_code,
+        // verify_code: confirmation_code,
+        // template: '$$CODE$$ vash Golos kod podtverzhdeniya'
+        message: 'GOLOS confirmation code: ' + confirmation_code,
+        message_type: 'OTP',
+        account_lifecycle_event: 'create'
     };
-    if (ip) f.originating_ip = ip;
+    // if (ip) f.originating_ip = ip;
     const fields = urlencode(f);
-    // console.log('fields', fields) // logspam
+    console.log('fields', fields) // logspam
 
-    const resource = '/v1/verify/sms';
+    const resource = '/v1/messaging'; // '/v1/verify/sms';
     const method = 'POST';
-    return fetch('https://rest.telesign.com' + resource, {
+    return fetch('https://rest-api.telesign.com' + resource, { // 'https://rest.telesign.com' + resource, {
         method,
         body: fields,
         headers: authHeaders({ resource, method, fields })
@@ -137,16 +144,18 @@ function authHeaders(
 ) {
     const auth_method = 'HMAC-SHA256';
     const currDate = new Date().toUTCString();
-    const nonce = parseInt(
-        secureRandom.randomBuffer(8).toString('hex'),
-        16
-    ).toString(36);
+    // const nonce = parseInt(
+    //     secureRandom.randomBuffer(8).toString('hex'),
+    //     16
+    // ).toString(36);
+    const nonce = uuid4();
 
     let content_type = '';
     if (/POST|PUT/.test(method))
         content_type = 'application/x-www-form-urlencoded';
 
-    let strToSign = `${method}\n${content_type}\n\nx-ts-auth-method:${auth_method}\nx-ts-date:${currDate}\nx-ts-nonce:${nonce}`;
+    // let strToSign = `${method}\n${content_type}\n\nx-ts-auth-method:${auth_method}\nx-ts-date:${currDate}\nx-ts-nonce:${nonce}`;
+    let strToSign = `${method}\n${content_type}\n${currDate}\nx-ts-auth-method:${auth_method}\nx-ts-nonce:${nonce}`;
 
     if (fields) {
         strToSign += '\n' + fields;
@@ -161,8 +170,9 @@ function authHeaders(
 
     const headers = {
         Authorization: `TSA ${customer_id}:${sig}`,
+        Date: currDate,
         'Content-Type': content_type,
-        'x-ts-date': currDate,
+        // 'x-ts-date': currDate,
         'x-ts-auth-method': auth_method,
         'x-ts-nonce': nonce
     };
@@ -173,3 +183,28 @@ const urlencode = json =>
     Object.keys(json)
         .map(key => encodeURI(key) + '=' + encodeURI(json[key]))
         .join('&');
+
+const uuid4 = () => {
+    // return uuid of form xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx
+    var uuid = '', ii;
+    for (ii = 0; ii < 32; ii += 1) {
+      switch (ii) {
+      case 8:
+      case 20:
+        uuid += '-';
+        uuid += (Math.random() * 16 | 0).toString(16);
+        break;
+      case 12:
+        uuid += '-';
+        uuid += '4';
+        break;
+      case 16:
+        uuid += '-';
+        uuid += (Math.random() * 4 | 8).toString(16);
+        break;
+      default:
+        uuid += (Math.random() * 16 | 0).toString(16);
+      }
+    }
+    return uuid;
+  };

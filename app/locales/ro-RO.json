@@ -592,7 +592,7 @@
     "days_short":"d.",
     "days":"numărul de zile",
     "payouts":"Vor fi eliminate",
-    "spend_your_DEBT_TOKEN_to_prolong_payments_window_post":"Folosiți %(DEBT_TOKEN)s, pentru a extinde fereastra de plată la acest postare",
+    "spend_your_DEBT_TOKEN_to_prolong_payments_window_post":"Folosiți %(DEBT_TOKENS)s, pentru a extinde fereastra de plată la acest postare",
     "you_successfully_promoted_this_post":"Ați promovat cu succes această postare",
     "leave_this_unchecked_to_receive_half_your_reward":"Lasă nemarcat pentru a primi premii de 1/2 %(VESTING_TOKEN)s și 1/2 %(DEBT_TOKEN)s",
     "pay_me_100_in_VESTING_TOKEN":"Plătiți-mi 100%% в %(VESTING_TOKEN)s",

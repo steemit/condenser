@@ -592,7 +592,7 @@
     "days_short":"д.",
     "days":"количество дней",
     "payouts":"Isplate",
-    "spend_your_DEBT_TOKEN_to_prolong_payments_window_post":"Для продления окна выплат у этого поста будут использоваться Ваши %(DEBT_TOKEN)s",
+    "spend_your_DEBT_TOKEN_to_prolong_payments_window_post":"Для продления окна выплат у этого поста будут использоваться Ваши %(DEBT_TOKENS)s",
     "you_successfully_promoted_this_post":"Uspešno ste promovisali ovaj post",
     "leave_this_unchecked_to_receive_half_your_reward":"Ostavite ovo neobeleženo da primite 1/2 vaše nagrade u %(VESTING_TOKEN)s i 1/2 u %(DEBT_TOKEN)s",
     "pay_me_100_in_VESTING_TOKEN":"Plati me 100% u %(VESTING_TOKEN)s",

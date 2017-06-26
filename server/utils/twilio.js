@@ -1,8 +1,9 @@
-import twilio from 'twilio';
+import Twilio from 'twilio';
 import config from 'config';
 
 const accountSid = config.get('twilio.account_sid');
 const authToken = config.get('twilio.auth_token');
+const senderId = config.get('twilio.sender_id');
 let client;
 
 function checkEligibility(phone) {
@@ -27,43 +28,26 @@ function checkEligibility(phone) {
     return false;
 }
 
-export default function verify(phone) {
-    if (!client) client = new twilio.LookupsClient(accountSid, authToken);
-    return new Promise(resolve => {
-      if (!checkEligibility(phone)) {
-          resolve('na');
-          return;
+export default function sendVerifySMS(phone, confirmation_code) {
+  if (process.env.NODE_ENV !== 'production') {
+    console.log(`send sms message to: <${phone}> <${confirmation_code}> (not sent due to not production env)`);
+    return new Promise(resolve => {resolve()});
+  }
+  if (!client) client = new Twilio(accountSid, authToken);
+  return new Promise(resolve => {
+    client.messages.create({
+      from: senderId,
+      to: phone,
+      body: 'GOLOS confirmation code: ' + confirmation_code
+    }, function(error, result) {
+      if (error) {
+        console.error('Twilio error', JSON.stringify(error, null, 2));
+        resolve('error');
       }
-      client.phoneNumbers(phone).get({
-        type: 'carrier',
-        addOns: 'whitepages_pro_phone_rep',
-      }, (error, result) => {
-        if (error) {
-          if (error.code === 20404) {
-            console.log('Twilio phone not found ', phone);
-            resolve('block');
-          } else {
-            console.error('Twilio error', JSON.stringify(error, null, 2));
-            resolve('error');
-          }
-        } else {
-          if (result.addOns &&
-              result.addOns.results &&
-              result.addOns.results.whitepages_pro_phone_rep &&
-              result.addOns.results.whitepages_pro_phone_rep.result &&
-              result.addOns.results.whitepages_pro_phone_rep.result.results &&
-              result.addOns.results.whitepages_pro_phone_rep.result.results[0] &&
-              result.addOns.results.whitepages_pro_phone_rep.result.results[0].reputation &&
-              result.addOns.results.whitepages_pro_phone_rep.result.results[0].reputation.level
-        ) {
-            const reputation_level = result.addOns.results.whitepages_pro_phone_rep.result.results[0].reputation.level;
-            console.log('Twilio reputation level ', phone, reputation_level);
-            resolve(reputation_level < 3 ? 'pass' : 'block');
-          } else {
-            console.error('Twilio result does not contain reputation level:', JSON.stringify(result, null, 2));
-            resolve('error');
-          }
-        }
-      });
+      else {
+        console.log('Twilio send message to', phone, 'with confirmation_code', confirmation_code, 'result.sid', result.sid);
+        resolve(result.sid);
+      }
+    });
   });
 }

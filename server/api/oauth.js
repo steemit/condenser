@@ -4,11 +4,8 @@ import models from 'db/models';
 import findUser from 'db/utils/find_user';
 import {esc, escAttrs} from 'db/models';
 import request from 'request'
-import {getLogger} from '../../app/utils/Logger'
 import { translate } from 'app/Translator';
 import { APP_URL, SUPPORT_EMAIL } from 'config/client_config'
-
-const print = getLogger('oauth').print
 
 const facebook = new Purest({provider: 'facebook'});
 const reddit = new Purest({provider: 'reddit'});
@@ -306,71 +303,60 @@ function* handleRedditCallback() {
 
 
 function retrieveVkUserData(access_token, userId) {
-    console.log('https://api.vk.com/method/account.getProfileInfo?v=5.53&user_ids='+userId)
+    console.log('https://api.vk.com/method/account.getProfileInfo?v=5.53&user_ids=' + userId)
     return new Promise((resolve, reject) => {
-       vk.query().get('https://api.vk.com/method/users.get?v=5.53&user_ids='+userId+'&fields=verified,sex,bdate,city,country,timezone,screen_name')
-       .request((err, res) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(res.body);
-                }
-            });
+        vk.query()
+        .get('https://api.vk.com/method/users.get?v=5.53&user_ids=' + userId + '&fields=verified,sex,bdate,city,country,timezone,screen_name')
+        .request((err, res) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(res.body);
+            }
+        });
     });
 }
 
 function* handleVkCallback() {
-    let print = getLogger('oauth - vk').print;
-    console.log('oauth - vk')
-    print ('session id', this.session.uid);
-    print ('query', this.query)
-    //console.log('-- /handle_facebook_callback -->', this.session.uid, this.query);
+    console.log('-- /handle_vk_callback -->', this.session.uid, this.query);
     let verified_email = false;
-    let vkData = this.query;
     try {
-      //const u = yield retrieveVkUserData(this.query.access_token);
-      //print ('received data', u)
-      //if (!vkData['raw[email]']) {
-        //  return logErrorAndRedirect(this, 'Ошибка регистрации через vkontakte:', 'нам нужен ваш email, на случай если вы забудете пароль');
-      //}
       const provider = 'vkontakte'
-      let providerId = vkData['raw[user_id]']
-      let email = vkData['raw[email]'] || null;
+      let email = this.query['raw[email]'] || null;
 
-      const u = yield retrieveVkUserData(vkData.access_token, providerId);
-      print ('user dara', u);
-      const userData = u.response[0]
-      let country = userData.country && userData.country.title || '';
-      let city = userData.city && userData.city.title || '';
-      let birthday = (userData.bdate && userData.bdate.split && userData.bdate.split('.').length == 3) ? userData.bdate.split('.') : null;
+      const data = yield retrieveVkUserData(this.query.access_token, this.query['raw[user_id]']);
+      const u = data.response[0]
+      let country = u.country && u.country.title || '';
+      let city = u.city && u.city.title || '';
+      let birthday = (u.bdate && u.bdate.split && u.bdate.split('.').length == 3) ? u.bdate.split('.') : null;
       if (birthday) birthday = new Date(birthday[2], birthday[1], birthday[0]);
 
       const attrs = {
           uid: this.session.uid,
-          name: [userData.first_name, userData.last_name].join(' '),
+          name: [u.first_name, u.last_name].join(' '),
           email: email,
-          first_name: userData.first_name,
-          last_name: userData.last_name,
+          first_name: u.first_name,
+          last_name: u.last_name,
           birthday: birthday,
-          gender: userData.gender,
+          gender: u.gender,
           location_id: null,
           location_name: [country, city].join(', '),
-          locale: userData.locale,
-          timezone: userData.timezone,
+          locale: u.locale,
+          timezone: u.timezone,
           remote_ip: getRemoteIp(this.request.req),
-          verified: !!userData.verified,
+          verified: !!u.verified,
           waiting_list: false,
-          vk_id: userData.id
+          vk_id: u.id
       };
-      verified_email = !!(userData.verified && email);
+      verified_email = !!(u.verified && email);
 
         const i_attrs = {
             provider: provider,
-            uid: userData.id,
+            uid: u.id,
             name: attrs.name,
             email: email,
-            verified: !!userData.verified,
-            provider_user_id: userData.id
+            verified: !!u.verified,
+            provider_user_id: u.id
         };
         const i_attrs_email = {
             provider: 'email',
@@ -378,7 +364,7 @@ function* handleVkCallback() {
             verified: verified_email
         };
 
-        let user = yield findUser({email: email, provider_user_id: userData.id});
+        let user = yield findUser({email: email, provider_user_id: u.id});
         console.log('-- /handle_vk_callback user id -->', this.session.uid, user ? user.id : 'not found');
 
         let account_recovery_record = null;
@@ -424,6 +410,9 @@ function* handleVkCallback() {
             return;
         }
 
+        // if (!u.verified) {
+        //     throw new Error('Not verified Vkontakte account. Please verify your Vkontakte account and try again to sign up to Golos.');
+        // }
 
         const same_ip_bot = yield models.User.findOne({
             attributes: ['id', 'created_at'],
@@ -443,7 +432,7 @@ function* handleVkCallback() {
             where: {kk: 'block-email-provider', value: email_provider}
         });
         if (blocked_email) {
-            console.log('-- /handle_vk_callback blocked_email -->', this.session.uid, u.email);
+            console.log('-- /handle_vk_callback blocked_email -->', this.session.uid, attrs.email);
             this.flash = {alert: translate('not_supported_email_address') + ': ' + attrs.email + '. ' + translate('please_make_sure_you_dont_use_temporary_email_providers_contact_SUPPORT_URL')};
             this.redirect('/');
             return;
@@ -464,11 +453,11 @@ function* handleVkCallback() {
                     yield models.Identity.create(i_attrs_email);
                 }
             }
-            console.log('-- vk updated user -->', this.session.uid, user.id, userData.name, email);
+            console.log('-- vk updated user -->', this.session.uid, user.id, u.name, email);
         } else {
             user = yield models.User.create(attrs);
             i_attrs_email.user_id = i_attrs.user_id = user.id;
-            console.log('-- vk created user -->', user.id, userData.name, email);
+            console.log('-- vk created user -->', user.id, u.name, email);
             const identity = yield models.Identity.create(i_attrs);
             console.log('-- vk created identity -->', this.session.uid, identity.id);
             if (i_attrs_email.email) {

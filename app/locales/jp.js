@@ -474,8 +474,6 @@ const jp = 	{
   phone: 'Phone',
   golos_account: 'GOLOS account',
   didnt_recieve_email: "Didn't recieve email?",
-  please_provide_your_phone_number_to_continue: 'Please provide your phone number to continue the registration process',
-  didnt_recieve_email: "Didn't recieve email?",
   please_provide_your_phone_number_to_continue: "Please provide your phone number to continue the registration process",
   phone_verification_helps_with_preventing_spam: "Phone verification helps with preventing spam and allows " + APP_NAME + " to assist with Account Recovery in case your account is ever compromised. Your phone number will not be used for any other purpose other than phone verification and account recovery.",
   country_code: "Country Code",

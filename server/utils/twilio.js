@@ -1,9 +1,9 @@
 import Twilio from 'twilio';
 import config from 'config';
 
-const accountSid = config.get('twilio.account_sid');
-const authToken = config.get('twilio.auth_token');
-const senderId = config.get('twilio.sender_id');
+const accountSid = config.twilio.account_sid;
+const authToken = config.twilio.auth_token;
+const senderId = config.twilio.sender_id;
 let client;
 
 function checkEligibility(phone) {

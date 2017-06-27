@@ -641,6 +641,22 @@ const ru = {
   your_voice_is_worth_something: 'Твоя ' + VESTING_TOKEN + ' на вес золота!',
   сancel_transfer_from_savings: 'Отмена перевода из сейфа (id запроса {request})',
   use_caution_sending_to_this_account: 'Будьте внимательны при переводе средств на указанный аккаунт. Возможно Вы совершили ошибку в правильном написании имени аккаунта. ',
+
+  phone: 'Телефон',
+  golos_account: 'Пользователь ГОЛОСа',
+  didnt_recieve_email: "Не получили письмо?",
+  please_provide_your_phone_number_to_continue: "Чтобы продолжить, укажите свой номер телефона",
+  phone_verification_helps_with_preventing_spam: "Проверка номера телефона помогает предотвратить спам и позволяет  " + APP_NAME + " помогать с восстановлением учетной записи в случае, если ваша учетная запись когда-либо была скомпрометирована. Ваш номер телефона не будет использоваться более нигде. Номер мобильного телефона не будет использоваться для рассылки сообщений рекламного характера! В базе данных номер телефона хранится в виде sha256 хэша",
+  country_code: "Код страны",
+  phone_number: "Номер телефона",
+  examples: "Например: 9001234567 | 9261234567",
+  land_lines_cannot_receive_sms_messages: "* Городские телефоны не могу принимать СМС сообщения",
+  message_and_data_rates_may_apply: "",
+  thank_you_for_providing_your_phone_number: "Спасибо за предоставленный номер телефона ({phone}).",
+  to_continue_please_enter_the_sms_code_weve_sent_you: "Чтобы продолжить, пожалуйста укажите СМС код который мы вам отправили.",
+  confirmation_code: "Код подтверждения",
+  didnt_receive_the_verification_code: "Не получили код подтверждения? ",
+  re_send: "Повторная отправка"
 }
 
 export { ru }

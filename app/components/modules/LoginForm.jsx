@@ -26,8 +26,7 @@ class LoginForm extends Component {
 
     constructor(props) {
         super()
-        const cryptoTestResult = undefined; // temporary switch BrowserTests off
-        //const cryptoTestResult = runTests();
+        const cryptoTestResult = undefined; // = runTests(); // temporarily switch BrowserTests off
         let cryptographyFailure = false;
         if (cryptoTestResult !== undefined) {
             console.error('CreateAccount - cryptoTestResult: ', cryptoTestResult);
@@ -102,7 +101,7 @@ class LoginForm extends Component {
                         <p>
                             {translate('the_latest_versions_of') + ' '}
                             <a href="https://www.google.com/chrome/">Chrome</a>
-                            {' ' + translate('and')}
+                            {' ' + translate('and') + ' '}
                             <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a>
                             {' ' + translate('are_well_tested_and_known_to_work_with')}
                         </p>
@@ -144,7 +143,7 @@ class LoginForm extends Component {
                         {translate('password_is_bound_to_your_accounts_owner_key')}.
                         <br />
                         {translate('however_you_can_use_it_to') + ' '}
-                        <a onClick={this.showChangePassword}>{translate('update_your_password')}</a>
+                        <a onClick={this.showChangePassword}>{translate('update_your_password')}</a>.
                         {' ' + translate('to_obtaion_a_more_secure_set_of_keys')}.
                     </span>
         } else if (error === 'active_login_blocked') {

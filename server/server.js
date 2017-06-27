@@ -6,6 +6,7 @@ import mount from 'koa-mount';
 import helmet from 'koa-helmet';
 import koa_logger from 'koa-logger';
 import prod_logger from './prod_logger';
+import {responseTime} from './metrics';
 import favicon from 'koa-favicon';
 import staticCache from 'koa-static-cache';
 import useRedirects from './redirects';
@@ -27,6 +28,7 @@ import config from '../config';
 import {routeRegex} from 'app/ResolveRoute';
 import secureRandom from 'secure-random';
 import { APP_NAME_LATIN } from 'config/client_config';
+import requestId from './requestId';
 
 const grant = new Grant(config.grant);
 // import uploadImage from 'server/upload-image' //medium-editor
@@ -94,6 +96,9 @@ app.use(function *(next) {
     }
 });
 
+app.use(requestId());
+app.use(responseTime());
+
 if (env === 'production') {
     // load production middleware
     app.use(require('koa-conditional-get')());
@@ -151,6 +156,8 @@ app.use(mount('/sitemap.xml', staticCache(path.join(__dirname, '../app/assets/si
 app.use(mount('/favicons', staticCache(path.join(__dirname, '../app/assets/images/favicons'), cacheOpts)));
 app.use(mount('/images', staticCache(path.join(__dirname, '../app/assets/images'), cacheOpts)));
 app.use(mount('/legal', staticCache(path.join(__dirname, '../app/assets/legal'), cacheOpts)));
+app.use(mount('/googleb1863376a961eb3b.html', staticCache(path.join(__dirname, '../app/assets/googleb1863376a961eb3b.html'), cacheOpts)));
+
 
 // Proxy asset folder to webpack development server in development mode
 if (env === 'development') {

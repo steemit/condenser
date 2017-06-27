@@ -10,7 +10,7 @@ import user from './User';
 import transaction from './Transaction';
 import offchain from './Offchain';
 import {reducer as formReducer} from 'redux-form'; // @deprecated, instead use: app/utils/ReactForm.js
-import {contentStats} from 'app/utils/StateFunctions'
+import {contentStats, fromJSGreedy} from 'app/utils/StateFunctions'
 
 function initReducer(reducer, type) {
     return (state, action) => {
@@ -29,6 +29,12 @@ function initReducer(reducer, type) {
                     })
                 })
                 state = state.set('content', content)
+
+                // TODO reserved words used in account names, find correct solution
+                if (!Map.isMap(state.get('accounts'))) {
+                  const accounts = state.get('accounts')
+                  state = state.set('accounts', fromJSGreedy(accounts))
+                }
             }
             return state
         }

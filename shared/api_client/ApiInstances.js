@@ -120,7 +120,6 @@ export default {
         return apis_instance;
     },
     broadcastTransaction(sx, callback) {
-        // console.log('-- broadcastTransaction -->', JSON.stringify(signed_transaction.toObject(sx), null, 2));
         const tr_object = signed_transaction.toObject(sx)
         // callback(); return Promise.resolve() // DEBUG
         return this.instance().network.exec(

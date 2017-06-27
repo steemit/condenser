@@ -77,10 +77,10 @@
     "lodash.debounce": "^4.0.7",
     "medium-editor-insert-plugin": "^2.3.2",
     "minimist": "^1.2.0",
-    "mixpanel": "^0.5.0",
     "mysql": "^2.10.2",
     "net": "^1.0.2",
     "node-sass": "^3.4.2",
+    "node-statsd": "0.1.1",
     "pluralize": "^2.0.0",
     "purest": "^2.0.1",
     "raw-loader": "^0.5.1",
@@ -121,6 +121,7 @@
     "svg-inline-react": "^1.0.2",
     "svgo-loader": "^1.1.0",
     "tarantool-driver": "^2.0.1",
+    "twilio": "^3.4.0",
     "uncontrollable": "^3.2.1",
     "underscore.string": "^3.2.3",
     "url-loader": "^0.5.7",
@@ -158,7 +159,8 @@
     "redbox-react": "^1.2.0",
     "sinon": "^1.17.3",
     "sinon-chai": "^2.8.0",
-    "supertest": "^1.2.0"
+    "supertest": "^1.2.0",
+    "webpack-bundle-analyzer": "^2.8.2"
   },
   "optionalDependencies": {
     "fsevents": "*"

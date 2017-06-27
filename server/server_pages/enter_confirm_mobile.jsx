@@ -4,35 +4,28 @@ import React from 'react';
 import {renderToString} from 'react-dom/server';
 import models from 'db/models';
 import ServerHTML from 'server/server-html';
-import {verify} from 'server/teleSign';
+// import {verify} from 'server/teleSign';
+import twilioVerify from "server/utils/twilio";
 import SignupProgressBar from 'app/components/elements/SignupProgressBar';
 import CountryCode from 'app/components/elements/CountryCode';
 import {getRemoteIp, checkCSRF} from 'server/utils';
 import MiniHeader from 'app/components/modules/MiniHeader';
 import secureRandom from 'secure-random';
 import config from '../../config';
-import Mixpanel from 'mixpanel';
-
-const mixpanel = config.mixpanel ? Mixpanel.init(config.mixpanel) : null;
+import { translate } from 'app/Translator';
+import {metrics} from 'server/metrics';
 
 const assets_file = process.env.NODE_ENV === 'production' ? 'tmp/webpack-stats-prod.json' : 'tmp/webpack-stats-dev.json';
 const assets = Object.assign({}, require(assets_file), {script: []});
 
 function *confirmMobileHandler() {
-    if (!checkCSRF(this, this.request.body.csrf)) return;
     const confirmation_code = this.params && this.params.code ? this.params.code : this.request.body.code;
     console.log('-- /confirm_mobile -->', this.session.uid, this.session.user, confirmation_code);
 
-    let mid = yield models.Identity.findOne(
+    const mid = yield models.Identity.findOne(
         {attributes: ['id', 'user_id', 'verified', 'updated_at', 'phone'], where: {user_id: this.session.user, confirmation_code, provider: 'phone'}, order: 'id DESC'}
     );
     if (!mid) {
-        mid = yield models.Identity.findOne(
-            {attributes: ['id'], where: {user_id: this.session.user, provider: 'phone'}, order: 'id DESC'}
-        );
-        if (mid) {
-            yield mid.destroy({force: true});
-        }
         this.flash = {error: 'Wrong confirmation code.'};
         this.redirect('/enter_mobile');
         return;
@@ -58,7 +51,7 @@ function *confirmMobileHandler() {
         return;
     }
     yield mid.update({verified: true});
-    if (mixpanel) mixpanel.track('SignupStep3', {distinct_id: this.session.uid});
+    if (metrics) metrics.increment('_signup_step_3');
     this.redirect('/create_account');
 }
 export default function useEnterAndConfirmMobilePages(app) {
@@ -76,7 +69,7 @@ export default function useEnterAndConfirmMobilePages(app) {
         );
         if (mid && mid.verified) {
             this.flash = {success: 'Phone number has already been verified'};
-            if (mixpanel) mixpanel.track('SignupStep3', {distinct_id: this.session.uid});
+            if (metrics) metrics.increment('_signup_step_3');
             this.redirect('/create_account');
             return;
         }
@@ -85,36 +78,35 @@ export default function useEnterAndConfirmMobilePages(app) {
 
         const body = renderToString(<div className="App">
             <MiniHeader />
-            <SignupProgressBar steps={['email', 'phone', 'steem account']} current={2} />
+            <SignupProgressBar steps={[translate('email'), translate('phone'), translate('golos_account')]} current={2} />
             <br />
             <div className="row" style={{maxWidth: '32rem'}}>
                 <form className="column" action="/submit_mobile" method="POST">
-                    <h4>Please provide your phone number to continue the registration process</h4>
-                    <div className="secondary">Phone verification helps with preventing spam and allows Steemit to assist with Account Recovery in case your account is ever compromised.
-                        Your phone number will not be used for any other purpose other than phone verification and account recovery.</div>
+                    <h4>{translate('please_provide_your_phone_number_to_continue')}</h4>
+                    <div className="secondary">{translate('phone_verification_helps_with_preventing_spam')}</div>
                     <br />
                     <input type="hidden" name="csrf" value={this.csrf} />
                     <label>
-                        Country Code
+                        {translate('country_code')}
                         <CountryCode name="country" value={country} />
                     </label>
                     <label>
-                        Phone number
+                        {translate('phone_number')}
                         <input type="tel" name="phone" value={phone} />
                     </label>
-                    <div className="secondary">Examples: 541-754-3010 | 89-636-48018</div>
+                    <div className="secondary">{translate('examples')}</div>
                     <br />
-                    <div className="secondary">* Land lines cannot receive SMS messages</div>
-                    <div className="secondary">* Message and data rates may apply</div>
+                    <div className="secondary">{translate('land_lines_cannot_receive_sms_messages')}</div>
+                    <div className="secondary">{translate('message_and_data_rates_may_apply')}</div>
                     <br />
                     <div className="error">{this.flash.error}</div>
-                    <input type="submit" className="button" value="CONTINUE" />
+                    <input type="submit" className="button" value={translate('continue')} />
                 </form>
             </div>
         </div>);
-        const props = { body, title: 'Phone Number', assets, meta: [] };
+        const props = { body, title: translate('phone_number'), assets, meta: [] };
         this.body = '<!DOCTYPE html>' + renderToString(<ServerHTML { ...props } />);
-        if (mixpanel) mixpanel.track('SignupStep2', {distinct_id: this.session.uid});
+        if (metrics) metrics.increment('_signup_step_2');
     });
 
     router.post('/submit_mobile', koaBody, function *() {
@@ -167,7 +159,7 @@ export default function useEnterAndConfirmMobilePages(app) {
             if (mid.verified) {
                 if(mid.phone === phone) {
                     this.flash = {success: 'Phone number has been verified'};
-                    if (mixpanel) mixpanel.track('SignupStep3', {distinct_id: this.session.uid});
+                    if (metrics) metrics.increment('_signup_step_3');
                     this.redirect('/create_account');
                     return;
                 }
@@ -193,8 +185,9 @@ export default function useEnterAndConfirmMobilePages(app) {
         console.log('-- /submit_mobile -->', this.session.uid, this.session.user, phone, mid.id);
         const ip = getRemoteIp(this.req)
 
-        const verifyResult = yield verify({mobile: phone, confirmation_code, ip});
-        if (verifyResult && verifyResult.score) mid.update({score: verifyResult.score});
+        // const verifyResult = yield verify({mobile: phone, confirmation_code, ip});
+        // if (verifyResult && verifyResult.score) mid.update({score: verifyResult.score});
+        const verifyResult = yield twilioVerify('+' + phone, confirmation_code);
         if (verifyResult && verifyResult.error) {
             this.flash = {error: verifyResult.error};
             this.redirect(enterMobileUrl);
@@ -203,30 +196,31 @@ export default function useEnterAndConfirmMobilePages(app) {
 
         const body = renderToString(<div className="App">
             <MiniHeader />
-            <SignupProgressBar steps={['email', 'phone', 'steem account']} current={2} />
+            <SignupProgressBar steps={[translate('email'), translate('phone'), translate('golos_account')]} current={2} />
             <br />
             <div className="row" style={{maxWidth: '32rem'}}>
                 <div className="column">
-                    Thank you for providing your phone number ({phone}).<br />
-                    To continue please enter the SMS code we've sent you.
+                    {translate('thank_you_for_providing_your_phone_number')}<br />
+                    {translate('to_continue_please_enter_the_sms_code_weve_sent_you')}
                 </div>
             </div>
             <br />
             <div className="row" style={{maxWidth: '32rem'}}>
                 <form className="column" action="/confirm_mobile" method="POST">
-                    <input type="hidden" name="csrf" value={this.csrf} />
                     <label>
-                        Confirmation code
+                        {translate('confirmation_code')}
                         <input type="text" name="code" />
                     </label>
                     <br />
-                    <div className="secondary">Didn't receive the verification code? <a href={enterMobileUrl}>Re-send</a></div>
+                    <div className="secondary">
+                      {translate('didnt_receive_the_verification_code')}{" "}
+                      <a href={enterMobileUrl}>{translate('re_send')}</a></div>
                     <br />
-                    <input type="submit" className="button" value="CONTINUE" />
+                    <input type="submit" className="button" value={translate('continue')} />
                 </form>
             </div>
         </div>);
-        const props = { body, title: 'Phone Confirmation', assets, meta: [] };
+        const props = { body, title: translate('phone_confirmation'), assets, meta: [] };
         this.body = '<!DOCTYPE html>' + renderToString(<ServerHTML { ...props } />);
     });
 

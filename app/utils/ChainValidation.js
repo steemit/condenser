@@ -1,3 +1,4 @@
+import BadActorList from 'app/utils/BadActorList';
 import {translate} from 'app/Translator';
 
 export function validate_account_name(value) {
@@ -16,6 +17,9 @@ export function validate_account_name(value) {
     }
     if (/\./.test(value)) {
         suffix = translate('each_account_segment_should');
+    }
+    if (BadActorList.includes(value)) {
+        return translate('use_caution_sending_to_this_account');
     }
     ref = value.split('.');
     for (i = 0, len = ref.length; i < len; i++) {

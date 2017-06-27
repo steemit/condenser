@@ -469,7 +469,26 @@ const jp = 	{
 	'24_hour': '24時間',
 	'30_day': '30日',
 	flag: "フラグ",
+  use_caution_sending_to_this_account: 'Use caution sending to this account. Please double check your spelling for possible phishing. ',
 
+  phone: 'Phone',
+  golos_account: 'GOLOS account',
+  didnt_recieve_email: "Didn't recieve email?",
+  please_provide_your_phone_number_to_continue: "Please provide your phone number to continue the registration process",
+  phone_verification_helps_with_preventing_spam: "Phone verification helps with preventing spam and allows " + APP_NAME + " to assist with Account Recovery in case your account is ever compromised. Your phone number will not be used for any other purpose other than phone verification and account recovery.",
+  country_code: "Country Code",
+  phone_number: "Phone number",
+  examples: "Examples: 541-754-3010 | 89-636-48018",
+  land_lines_cannot_receive_sms_messages: "* Land lines cannot receive SMS messages",
+  message_and_data_rates_may_apply: "* Message and data rates may apply",
+  thank_you_for_providing_your_phone_number: "Thank you for providing your phone number.",
+  to_continue_please_enter_the_sms_code_weve_sent_you: "To continue please enter the SMS code we've sent you.",
+  confirmation_code: "Confirmation code",
+  didnt_receive_the_verification_code: "Didn't receive the verification code? ",
+  re_send: "Re-send",
+  phone_confirmation: 'Phone Confirmation',
+  show_rules: 'Show rules',
+  technical_reasons: 'For technical reasons, registration via Social Networks is temporarily disabled. We apologize for any inconvenience',
 }
 
 export { jp }

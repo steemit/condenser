@@ -3,6 +3,7 @@ import constants from 'app/redux/constants';
 import {parsePayoutAmount, repLog10} from 'app/utils/ParsersAndFormatters';
 import {Long} from 'bytebuffer';
 import {VEST_TICKER, LIQUID_TICKER} from 'config/client_config'
+import {Map, Seq, fromJS} from 'immutable';
 
 export const numberWithCommas = (x) => x.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 
@@ -93,4 +94,11 @@ export function contentStats(content) {
     const isNsfw = tags.filter(tag => tag.match(/^nsfw$|^ru--mat$|^18\+$/i)).length > 0;
 
     return {hide, gray, pictures, netVoteSign, hasPendingPayout, authorRepLog10, hasReplies, hasFlag, isNsfw}
+}
+
+export function fromJSGreedy(js) {
+  return typeof js !== 'object' || js === null ? js :
+    Array.isArray(js) ?
+      Seq(js).map(fromJSGreedy).toList() :
+      Seq(js).map(fromJSGreedy).toMap();
 }

@@ -20,6 +20,7 @@ import {WIKI_URL, LANDING_PAGE_URL, ABOUT_PAGE_URL, WHITEPAPER_URL, SEGMENT_ANAL
 import MiniHeader from 'app/components/modules/MiniHeader';
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
+import { themeName } from 'app/components/elements/Themes';
 
 class App extends React.Component {
     constructor(props) {
@@ -156,6 +157,7 @@ class App extends React.Component {
     }
 
     render() {
+
         const {location, params, children, flash, new_visitor,
             depositSteem, signup_bonus} = this.props;
         const lp = false; //location.pathname === '/';
@@ -218,7 +220,7 @@ class App extends React.Component {
                             <h2>{translate("welcome_to_the_blockchain")}</h2>
                             <h4>{translate("your_voice_is_worth_something")}</h4>
                             <br />
-                            <a className="button" href="/create_account" onClick={this.showSignUp}> <b>{translate("sign_up")}</b> </a>
+                            <a className="button" href="#" onClick={this.showSignUp}> <b>{translate("sign_up")}</b> </a>
                             &nbsp; &nbsp; &nbsp;
                             <a className="button hollow uppercase" href="/welcome" target="_blank"> <b>{translate("learn_more")}</b> </a>
                             <br />
@@ -235,6 +237,10 @@ class App extends React.Component {
                     </div>
                 </div>
             );
+        }
+
+        if (process.env.BROWSER) {
+            document.body.setAttribute("data-theme", themeName());
         }
 
         return <div className={'App' + (lp ? ' LP' : '') + (ip ? ' index-page' : '') + (miniHeader ? ' mini-header' : '')}
@@ -288,7 +294,7 @@ class App extends React.Component {
                       </a>
                   </li>
                   <li>
-                      <a href="http://golostools.com/" onClick={this.navigate} target="_blank" rel="noopener noreferrer">
+                      <a href="http://golostools.com/" target="_blank" rel="noopener noreferrer">
                           {translate('APP_NAME_app_center')}&nbsp;<Icon name="extlink" />
                       </a>
                   </li>
@@ -300,12 +306,12 @@ class App extends React.Component {
                 </ul>
                 <ul className="vertical menu">
                     <li>
-                      <a href={TERMS_OF_SERVICE_URL} onClick={this.navigate} rel="nofollow">
+                      <a href={TERMS_OF_SERVICE_URL} target="_blank" rel="nofollow">
                             {translate("terms_of_service")}
                         </a>
                     </li>
                     <li>
-                      <a href={PRIVACY_POLICY_URL} onClick={this.navigate} rel="nofollow">
+                      <a href={PRIVACY_POLICY_URL} target="_blank" rel="nofollow">
                             {translate("privacy_policy")}
                         </a>
                     </li>

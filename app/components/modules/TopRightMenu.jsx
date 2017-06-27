@@ -27,6 +27,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
     const lcn = vertical ? '' : 'show-for-medium';
     const nav = navigate || defaultNavigate;
     const user_information_button = <li className={lcn + ' buttons'}><Link to="/about" className="button success">{translate('information_for_user')}</Link></li>;
+    const golosFest = <li className={lcn + ' buttons'}><Link to="/ru--yaidunagolosfest/@golosevents/yaidunagolosfest-or-o-stoimosti-uchastiya" className="button alert fest">{translate('golos_fest')}</Link></li>;
     const submit_story = $STM_Config.read_only_mode ? null : <li className={lcn + ' submit-story'}><a href="/submit.html" onClick={nav}>{translate("submit_a_story")}</a></li>;
     const userpic_src = userpic || '/images/user.png';
     const feed_link = `/@${username}/feed`;
@@ -62,6 +63,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
         ];
         return (
             <ul className={mcn + mcl}>
+                {!inIco && golosFest}
                 {inIco ? ico_menu.map((o,i) => {return <li key={i} className={lcn}><a href={o.link}>{o.value}</a></li>}) : user_information_button}
                 {!inIco && <li className={lcn}><a href="/static/search.html" title="Search">{vertical ? <span>{translate('search')}</span> : <Icon name="search" />}</a></li>}
                 {!inIco && submit_story}
@@ -87,11 +89,12 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
     }
     return (
         <ul className={mcn + mcl}>
-            {inIco ? ico_menu.map((o,i) => {return <li key={i} className={lcn}><a href="{o.link}">{o.value}</a></li>}) : user_information_button }
+            {!inIco && golosFest}
+            {inIco ? ico_menu.map((o,i) => {return <li key={i} className={lcn}><a href="{o.link}">{o.value}</a></li>}) : user_information_button}
             {!inIco && !vertical && <li><a href="/static/search.html" title="{translate('search')}"><Icon name="search" /></a></li>}
-            {!inIco && !probablyLoggedIn && <li className={lcn}><a href="/create_account" onClick={showSignUp}>{translate('sign_up')}</a></li>}
+            {!inIco && !probablyLoggedIn && <li className={lcn}><a href="#" onClick={showSignUp}>{translate('sign_up')}</a></li>}
             {!inIco && !probablyLoggedIn && <li className={lcn}><a href="/login.html" onClick={showLogin}>{translate('login')}</a></li>}
-            {!inIco && !probablyLoggedIn && submit_story}            
+            {!inIco && !probablyLoggedIn && submit_story}
             {probablyLoggedIn && <li className={lcn}><LoadingIndicator type="circle" inline /></li>}
             {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
                 <span className="hamburger" />

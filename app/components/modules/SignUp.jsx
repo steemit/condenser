@@ -22,7 +22,7 @@ class SignUp extends React.Component {
                 </div>
             </div>;
         }
-        
+
         if (this.props.serverBusy || $STM_Config.disable_signups) {
             return <div className="row">
                 <div className="column callout" style={{margin: '20px', padding: '40px'}}>
@@ -52,6 +52,14 @@ class SignUp extends React.Component {
                 </div>
             </div>
             <div className="row">
+                <div className="column">
+                    <p className="callout alert">
+                      {translate('technical_reasons')}
+                    </p>
+                </div>
+            </div>
+            {/*
+            <div className="row">
                 <div className="column large-4 shrink">
                     <SvgImage name="vk" width="64px" height="64px" />
                 </div>
@@ -75,7 +83,7 @@ class SignUp extends React.Component {
             <div className="row">
               &nbsp;
             </div>
-            {/*<div className="row">
+            <div className="row">
                 <div className="column large-4 shrink">
                     <SvgImage name="reddit" width="64px" height="64px" />
                 </div>
@@ -99,6 +107,14 @@ class SignUp extends React.Component {
                     </a>}
                 </div>
             </div>*/}
+            <div className="row">
+                <div className="column large-4 shrink">
+                    <SvgImage name="golos" width="64px" height="64px" />
+                </div>
+                <div className="column large-8">
+                    <a href="/create_account" className="button secondary">{translate("continue_with_email")}</a>
+                </div>
+            </div>
             <div className="row">
                 <div className="column">
                       <br />

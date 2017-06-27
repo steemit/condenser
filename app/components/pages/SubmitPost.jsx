@@ -14,7 +14,7 @@ class SubmitPost extends React.Component {
         super()
         this.success = (/*operation*/) => {
             // const { category } = operation
-            localStorage.removeItem('replyEditorData-' + formId)
+            // localStorage.removeItem('replyEditorData-' + formId)
             browserHistory.push('/created')//'/category/' + category)
         }
     }

@@ -651,7 +651,7 @@ const rs_latin =  {
   examples: "Examples: 541-754-3010 | 89-636-48018",
   land_lines_cannot_receive_sms_messages: "* Land lines cannot receive SMS messages",
   message_and_data_rates_may_apply: "* Message and data rates may apply",
-  thank_you_for_providing_your_phone_number: "Thank you for providing your phone number ({phone}).",
+  thank_you_for_providing_your_phone_number: "Thank you for providing your phone number.",
   to_continue_please_enter_the_sms_code_weve_sent_you: "To continue please enter the SMS code we've sent you.",
   confirmation_code: "Confirmation code",
   didnt_receive_the_verification_code: "Didn't receive the verification code? ",

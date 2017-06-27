@@ -12,8 +12,6 @@ import config from '../../config';
 import SignupProgressBar from 'app/components/elements/SignupProgressBar';
 import MiniHeader from 'app/components/modules/MiniHeader';
 import secureRandom from 'secure-random';
-import Icon from 'app/components/elements/Icon.jsx';
-import { APP_ICON, APP_NAME } from 'config/client_config';
 import { translate } from 'app/Translator';
 import {metrics} from 'server/metrics';
 
@@ -31,7 +29,7 @@ function *confirmEmailHandler() {
     const eid = yield models.Identity.findOne({
         attributes: ['id', 'user_id', 'email', 'updated_at', 'verified'],
         where: {confirmation_code, provider: 'email'}, order: 'id DESC'
-    );
+    });
     if (!eid) {
         this.status = 401;
         this.body = 'confirmation code not found';
@@ -77,7 +75,7 @@ export default function useEnterAndConfirmEmailPages(app) {
         if (this.request.query && this.request.query.email) default_email = this.request.query.email;
         const body = renderToString(<div className="App">
             <MiniHeader />
-            <SignupProgressBar steps={['email', 'phone', 'steem account']} current={1} />
+            <SignupProgressBar steps={[translate('email'), translate('phone'), translate('golos_account')]} current={1} />
             <br />
             <div className="row" style={{maxWidth: '32rem'}}>
                 <div className="column">
@@ -97,7 +95,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                         <div className="error">
                             {this.flash.error}
                         </div>
-                        <input type="submit" className="button" value="{translate("continue")}" />
+                        <input type="submit" className="button" value={translate("continue")} />
                     </form>
                 </div>
             </div>
@@ -197,13 +195,16 @@ export default function useEnterAndConfirmEmailPages(app) {
         }
         const body = renderToString(<div className="App">
             <MiniHeader />
-            <SignupProgressBar steps={['email', 'phone', 'steem account']} current={1} />
+            <SignupProgressBar steps={[translate('email'), translate('phone'), translate('golos_account')]} current={1} />
             <br />
             <div className="row" style={{maxWidth: '32rem'}}>
                 <div className="column">
                     {translate('thank_you_for_providing_your_email_address') +' (' + email + ')'}.<br />
                     {translate('to_continue_please_click_on_the_link_in_the_email_weve_sent_you')}.<br />
-                    <span className="secondary"><a href={`/enter_email?email=${email}`}>{translate('re_send_email')}</a></span>
+                    <span className="secondary">
+                      {translate('didnt_recieve_email')}{" "}
+                      <a href={`/enter_email?email=${email}`}>{translate('re_send_email')}</a>
+                    </span>
                 </div>
             </div>
         </div>);

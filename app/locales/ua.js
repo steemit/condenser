@@ -145,7 +145,7 @@ const ua = {
   connection_lost_reconnecting: 'Зв\'язок втрачений, перепідключитися',
   content_preferences: 'Настройки контента',
   continue: 'продовжити',
-  continue_with_email: "Продовжити",
+  continue_with_email: "Продовжити з електронної пошти",
   continue_with_facebook: 'Продовжити з Facebook',
   continue_with_reddit: 'Продовжити з Reddit',
   continue_with_vk: 'Продовжити з Vk',
@@ -651,13 +651,15 @@ const ua = {
   phone_number: "Номер телефона",
   examples: "Например: 9001234567 | 9261234567",
   land_lines_cannot_receive_sms_messages: "* Городские телефоны не могу принимать СМС сообщения",
-  message_and_data_rates_may_apply: "",
+  message_and_data_rates_may_apply: "* В зависимости от оператора за прием SMS-сообщения может взиматься плата",
   thank_you_for_providing_your_phone_number: "Спасибо за предоставленный номер телефона ({phone}).",
   to_continue_please_enter_the_sms_code_weve_sent_you: "Чтобы продолжить, пожалуйста укажите СМС код который мы вам отправили.",
   confirmation_code: "Код подтверждения",
   didnt_receive_the_verification_code: "Не получили код подтверждения? ",
   re_send: "Повторная отправка",
-  phone_confirmation: 'Подтверждение телефона'
+  phone_confirmation: 'Подтверждение телефона',
+  show_rules: 'Показать правила',
+  technical_reasons: 'По техническим причинам, регистрация через Социальные Сети временно отключена. Приносим свои извинения.',
 }
 
 export { ua }

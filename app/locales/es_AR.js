@@ -487,7 +487,9 @@ const es_AR = 	{
   confirmation_code: "Confirmation code",
   didnt_receive_the_verification_code: "Didn't receive the verification code? ",
   re_send: "Re-send",
-  phone_confirmation: 'Phone Confirmation'
+  phone_confirmation: 'Phone Confirmation',
+  show_rules: 'Show rules',
+  technical_reasons: 'For technical reasons, registration via Social Networks is temporarily disabled. We apologize for any inconvenience',
 }
 
 export { es_AR }

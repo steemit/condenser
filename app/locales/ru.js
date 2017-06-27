@@ -145,7 +145,7 @@ const ru = {
   connection_lost_reconnecting: 'Связь потеряна, переподключаемся',
   content_preferences: 'Настройки контента',
   continue: 'продолжить',
-  continue_with_email: "Продолжить",
+  continue_with_email: "Продолжить с электронной почтой",
   continue_with_facebook: 'Продолжить с Facebook',
   continue_with_reddit: 'Продолжить с Reddit',
   continue_with_vk: 'Продолжить с Vk',
@@ -515,7 +515,7 @@ const ru = {
   this_will_update_usernames_authtype_key: 'Это обновит {username} {authType} ключ',
   title: "Заголовок",
   to: 'к',
-  to_continue_please_click_on_the_link_in_the_email_weve_sent_you: 'Для продолжения, кликните ссылку в письме, которое мы вам прислали',
+  to_continue_please_click_on_the_link_in_the_email_weve_sent_you: 'Для продолжения, перейдите по ссылке указанной в письме, которое мы вам отправили',
   to_obtaion_a_more_secure_set_of_keys: "для получения более безопасного набора ключей",
   to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user: 'Чтобы предотвратить злоупотребление (каждый зарегистрированный аккаунт стоит {amount} в ' + LIQUID_TOKEN + ') ' + APP_NAME + ' может регистрировать только один аккаунт для каждого подтвержденного пользователя.',
   to_save_your_preferences: 'для того чтобы сохранить настройки.',
@@ -651,13 +651,15 @@ const ru = {
   phone_number: "Номер телефона",
   examples: "Например: 9001234567 | 9261234567",
   land_lines_cannot_receive_sms_messages: "* Городские телефоны не могу принимать СМС сообщения",
-  message_and_data_rates_may_apply: "",
+  message_and_data_rates_may_apply: "* В зависимости от оператора за прием SMS-сообщения может взиматься плата",
   thank_you_for_providing_your_phone_number: "Спасибо за предоставленный номер телефона ({phone}).",
   to_continue_please_enter_the_sms_code_weve_sent_you: "Чтобы продолжить, пожалуйста укажите СМС код который мы вам отправили.",
   confirmation_code: "Код подтверждения",
   didnt_receive_the_verification_code: "Не получили код подтверждения? ",
   re_send: "Повторная отправка",
-  phone_confirmation: 'Подтверждение телефона'
+  phone_confirmation: 'Подтверждение телефона',
+  show_rules: 'Показать правила',
+  technical_reasons: 'По техническим причинам, регистрация через Социальные Сети временно отключена. Приносим свои извинения.',
 }
 
 export { ru }

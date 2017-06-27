@@ -23,7 +23,7 @@ class Translator extends React.Component {
         // const locale = this.props.locale || DEFAULT_LANGUAGE;
         const localeWithoutRegionCode = locale.toLowerCase().split(/[_-]+/)[0];
         tt.setLocale(localeWithoutRegionCode)
-		    tt.setFallbackLocale('en');
+		    tt.setFallbackLocale(DEFAULT_LANGUAGE);
         return <IntlProvider
             // to ensure dynamic language change, "key" property with same "locale" info must be added
             // see: https://github.com/yahoo/react-intl/wiki/Components#multiple-intl-contexts

@@ -25,9 +25,9 @@ export default function sendEmail(template, to, params, from = null) {
 
     sg.API(request)
     .then(response => {
-        // console.log(`<------------- sent '${template}' email to '${to}'`, response.statusCode);
+        console.log(`  <-- sent '${template}' email to '${to}'`, response.statusCode);
     })
     .catch(error => {
-        // console.error(`<------------- failed to send '${template}' email to '${to}'`, error);
+        console.error(`  <-- failed to send '${template}' email to '${to}'`, error);
     });
 }

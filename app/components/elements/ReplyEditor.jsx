@@ -163,7 +163,7 @@ class ReplyEditor extends React.Component {
                     values.title.length > 255 ? tt('reply_editor.shorten_title') :
                     null
                 ),
-                // domestic: Object.keys(DOMESTIC).indexOf(values.domestic) >= 0 ? values.domestic : DEFAULT_DOMESTIC ,
+                // domestic: Object.keys(DOMESTIC).indexOf(values.domestic) !== -1 ? values.domestic : DEFAULT_DOMESTIC ,
                 category: isStory && !isFeedback && validateCategory(values.category, !isEdit),
                 body: !values.body ? tt('g.required') :
                     values.body.length > maxKb * 1024 ? tt('reply_editor.exceeds_maximum_length', maxKb) :
@@ -183,16 +183,15 @@ class ReplyEditor extends React.Component {
 
     onDomesticChange = e => {
         if (e) e.preventDefault();
-        const targetDomestic = e.target.text.trim();
+        const targetValue = e.target.text.trim();
         let value = DEFAULT_DOMESTIC;
         for (var key in DOMESTIC) {
-            if (targetDomestic.localeCompare(DOMESTIC[key]) == 0) {
+            if (targetValue.localeCompare(DOMESTIC[key]) == 0) {
                 value = key;
                 break;
             }
         }
         this.state.domestic.props.onChange(value)
-        // this.setState({domestic})
     }
 
     onCancel = e => {
@@ -365,7 +364,7 @@ class ReplyEditor extends React.Component {
         let currentDomesticTitle = DOMESTIC[currentDomesticKey];
         const domestic_menu = [];
         for (var key in DOMESTIC) {
-          if (domestic === key) {
+          if (domestic.value === key) {
             currentDomesticKey = key;
             currentDomesticTitle = DOMESTIC[currentDomesticKey];
           }
@@ -663,6 +662,7 @@ export default formId => connect(
             if(rtags.usertags.size) meta.users = rtags.usertags; else delete meta.users
             if(rtags.images.size) meta.image = rtags.images; else delete meta.image
             if(rtags.links.size) meta.links = rtags.links; else delete meta.links
+            if(domestic && Object.keys(DOMESTIC).indexOf(domestic) !== -1) meta.language = domestic; else delete meta.language
 
             meta.app = "golos.io/0.1"
             if(isStory) {
@@ -711,12 +711,48 @@ export default formId => connect(
                 json_metadata: meta,
                 __config
             }
-            dispatch(transaction.actions.broadcastOperation({
+            var determineLanguage = (data) => {
+              fetch('http://lang.golos.io:3000/', {
+                  method: 'post',
+                  mode: 'no-cors',
+                  credentials: 'same-origin',
+                  headers: {
+                      Accept: 'application/json',
+                      'Content-type': 'application/json'
+                  },
+                  body: JSON.stringify({text: body})
+              }).then(r => r.json()).then(res => {
+                  if (res.error || res.status !== 'ok') {
+                      console.error('Determine language server error', res.error);
+                  } else {
+                    console.log(res)
+                    if (res.iso6391code) {
+                      data.operation.json_metadata.language = res.iso6391code
+                    }
+                    dispatch(transaction.actions.broadcastOperation(data))
+                  }
+              }).catch(error => {
+                  console.error('Caught determine language code server error', error);
+                  dispatch(transaction.actions.broadcastOperation(data))
+              });
+            }
+
+            if (!meta.language) {
+              determineLanguage({
                 type: 'comment',
                 operation,
                 errorCallback,
                 successCallback,
-            }))
+              })
+            }
+            else {
+                dispatch(transaction.actions.broadcastOperation({
+                  type: 'comment',
+                  operation,
+                  errorCallback,
+                  successCallback,
+                }))
+            }
         },
     })
 )(ReplyEditor)

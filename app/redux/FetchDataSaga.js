@@ -373,7 +373,7 @@ export function* watchPayoutWindowRequests() {
 }
 
 export function* fetchPayoutWindow({payload: {type, author, permlink, cost, time, onSuccess, onError}}) {
-  let callName = type === "getcost" ? 'get_payout_extension_cost_by_time' : 'get_payout_extension_time_by_cost';
+  let callName = type === "getcost" ? 'get_payout_extension_cost' : 'get_payout_extension_time';
   try {
     const data = yield call(
       [Apis, Apis.db_api],

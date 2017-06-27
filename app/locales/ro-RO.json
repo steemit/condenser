@@ -90,7 +90,19 @@
     "APP_NAME_can_only_register_one_account_per_verified_user":"Vă rugăm să rețineți că %(APP_NAME)s poate înregistra un singur cont pentru fiecare utilizator verificat",
     "we_will_be_unable_to_create_account_with_this_browser":"Nu vom putea crea contul %(APP_NAME)s  folosind acet browser",
     "couldnt_create_account_server_returned_error":"Nu am reușit să creem un cont. Serverul a returnat eroare",
-    "form_requires_javascript_to_be_enabled":"Această formă necesită activarea javascript în browser"
+    "form_requires_javascript_to_be_enabled":"Această formă necesită activarea javascript în browser",
+    "please_provide_your_phone_number_to_continue": "Please provide your phone number to continue the registration process",
+    "phone_verification_helps_with_preventing_spam": "Phone verification helps with preventing spam and allows $(APP_NAME)s to assist with Account Recovery in case your account is ever compromised. Your phone number will not be used for any other purpose other than phone verification and account recovery.",
+    "country_code": "Country Code",
+    "phone_number": "Phone number",
+    "examples": "Examples: 541-754-3010 | 89-636-48018",
+    "land_lines_cannot_receive_sms_messages": "* Land lines cannot receive SMS messages",
+    "message_and_data_rates_may_apply": "* Message and data rates may apply",
+    "thank_you_for_providing_your_phone_number": "Thank you for providing your phone number ($(phone)s).",
+    "to_continue_please_enter_the_sms_code_weve_sent_you": "To continue please enter the SMS code we've sent you.",
+    "confirmation_code": "Confirmation code",
+    "didnt_receive_the_verification_code": "Didn't receive the verification code? ",
+    "re_send": "Re-send"
   },
   "curationrewards_jsx":{
     "curation_rewards_last_24_hours":"Atribuire curatorială în ultimele 24 de ore",
@@ -580,14 +592,14 @@
     "days_short":"d.",
     "days":"numărul de zile",
     "payouts":"Vor fi eliminate",
-    "spend_your_DEBT_TOKEN_to_prolong_payments_window_post":"Folosiți %(DEBT_TOKEN)s, pentru a extinde fereastra de plată la acest postare",
+    "spend_your_DEBT_TOKEN_to_prolong_payments_window_post":"Folosiți %(DEBT_TOKENS)s, pentru a extinde fereastra de plată la acest postare",
     "you_successfully_promoted_this_post":"Ați promovat cu succes această postare",
     "leave_this_unchecked_to_receive_half_your_reward":"Lasă nemarcat pentru a primi premii de 1/2 %(VESTING_TOKEN)s și 1/2 %(DEBT_TOKEN)s",
     "pay_me_100_in_VESTING_TOKEN":"Plătiți-mi 100%% в %(VESTING_TOKEN)s",
     "requires_5_or_more_reddit_comment_karma":"aveți nevoie de 5 puncte de karmă, sau mai multe pe Reddit"
   },
   "reblog_jsx":{
-    
+
   },
   "recoveraccountstep1_jsx":{
     "not_valid":"Invalid",
@@ -707,6 +719,7 @@
     "profile":"Profil",
     "send_to_account":"Trimite contului",
     "confirm_email":"Confirmă e-mailul",
+    "confirm_phone": "Please verify your phone number",
     "authenticate_for_this_transaction":"Autentificați-vă pentru această tranzacție",
     "login_to_your_APP_NAME_account":"Intrați în contul %(APP_NAME)s"
   },

@@ -90,7 +90,19 @@
     "APP_NAME_can_only_register_one_account_per_verified_user":"Molimo vas, imajte na umu da na %(APP_NAME)s platformi može registorvati samo jedan nalog po verifikovanom korisniku.",
     "we_will_be_unable_to_create_account_with_this_browser":"Nismo u stanju da kreiramo vaš %(APP_NAME)s nalog sa ovim brovser-om.",
     "couldnt_create_account_server_returned_error":"Nalog ne može da biti kreiran. Server je ispisao sledece greske",
-    "form_requires_javascript_to_be_enabled":"Ovaj obrazac zahteva da JavaScript bude uključen u vašem brovseru."
+    "form_requires_javascript_to_be_enabled":"Ovaj obrazac zahteva da JavaScript bude uključen u vašem brovseru.",
+    "please_provide_your_phone_number_to_continue": "Please provide your phone number to continue the registration process",
+    "phone_verification_helps_with_preventing_spam": "Phone verification helps with preventing spam and allows $(APP_NAME)s to assist with Account Recovery in case your account is ever compromised. Your phone number will not be used for any other purpose other than phone verification and account recovery.",
+    "country_code": "Country Code",
+    "phone_number": "Phone number",
+    "examples": "Examples: 541-754-3010 | 89-636-48018",
+    "land_lines_cannot_receive_sms_messages": "* Land lines cannot receive SMS messages",
+    "message_and_data_rates_may_apply": "* Message and data rates may apply",
+    "thank_you_for_providing_your_phone_number": "Thank you for providing your phone number ($(phone)s).",
+    "to_continue_please_enter_the_sms_code_weve_sent_you": "To continue please enter the SMS code we've sent you.",
+    "confirmation_code": "Confirmation code",
+    "didnt_receive_the_verification_code": "Didn't receive the verification code? ",
+    "re_send": "Re-send"
   },
   "curationrewards_jsx":{
     "curation_rewards_last_24_hours":"Curation rewards u poslednjih 24 časa",
@@ -580,7 +592,7 @@
     "days_short":"д.",
     "days":"количество дней",
     "payouts":"Isplate",
-    "spend_your_DEBT_TOKEN_to_prolong_payments_window_post":"Для продления окна выплат у этого поста будут использоваться Ваши %(DEBT_TOKEN)s",
+    "spend_your_DEBT_TOKEN_to_prolong_payments_window_post":"Для продления окна выплат у этого поста будут использоваться Ваши %(DEBT_TOKENS)s",
     "you_successfully_promoted_this_post":"Uspešno ste promovisali ovaj post",
     "leave_this_unchecked_to_receive_half_your_reward":"Ostavite ovo neobeleženo da primite 1/2 vaše nagrade u %(VESTING_TOKEN)s i 1/2 u %(DEBT_TOKEN)s",
     "pay_me_100_in_VESTING_TOKEN":"Plati me 100% u %(VESTING_TOKEN)s",
@@ -707,6 +719,7 @@
     "profile":"Profil",
     "send_to_account":"Pošalji korisniku",
     "confirm_email":"Potvrdi Email adresu",
+    "confirm_phone": "Please verify your phone number",
     "authenticate_for_this_transaction":"Potrebna potvrda o autentičnosti za ovu transakciju",
     "login_to_your_APP_NAME_account":"Prijavite se sa svog %(APP_NAME)s naloga"
   },

@@ -3,11 +3,11 @@ import React from 'react';
 // import cc from 'currency-codes';
 import { injectIntl } from 'react-intl';
 import { getSymbolFromCurrency } from 'currency-symbol-map';
-import { FRACTION_DIGITS, DEFAULT_CURRENCY } from 'app/client_config';
+import { FRACTION_DIGITS, DEFAULT_CURRENCY, CURRENCY_COOKIE_KEY } from 'app/client_config';
 import cookie from "react-cookie";
 
 let localizedCurrency = () => {}
-const localCurrencySymbol = process.env.BROWSER ? getSymbolFromCurrency(cookie.load('gls.currency') || DEFAULT_CURRENCY) : $GLS_Config.currency
+const localCurrencySymbol = process.env.BROWSER ? getSymbolFromCurrency(cookie.load(CURRENCY_COOKIE_KEY) || DEFAULT_CURRENCY) : $GLS_Config.currency
 
 const getExchangePairRateById = (id) => {
   for (var i in $GLS_Config.exRates) {
@@ -37,8 +37,8 @@ export default class LocalizedCurrency extends React.Component {
     state = process.env.BROWSER ? {
         exchangeRate: localStorage.getItem('exchangeRate'),
         exchangeRateGold: localStorage.getItem('exchangeRateGold'),
-        currency: cookie.load('gls.currency') || DEFAULT_CURRENCY,
-        localCurrencySymbol: getSymbolFromCurrency(process.env.BROWSER ? cookie.load('gls.currency') || DEFAULT_CURRENCY : DEFAULT_CURRENCY)
+        currency: cookie.load(CURRENCY_COOKIE_KEY) || DEFAULT_CURRENCY,
+        localCurrencySymbol: getSymbolFromCurrency(process.env.BROWSER ? cookie.load(CURRENCY_COOKIE_KEY) || DEFAULT_CURRENCY : DEFAULT_CURRENCY)
     } : {
         exchangeRate: getExchangePairRateById(DEFAULT_CURRENCY + $GLS_Config.currency),
         exchangeRateGold: getExchangePairRateById('XAU' + DEFAULT_CURRENCY),

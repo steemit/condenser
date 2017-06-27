@@ -657,6 +657,7 @@ const ua = {
   confirmation_code: "Код подтверждения",
   didnt_receive_the_verification_code: "Не получили код подтверждения? ",
   re_send: "Повторная отправка",
+  phone_confirmation: 'Подтверждение телефона'
 }
 
 export { ua }

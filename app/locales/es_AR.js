@@ -487,6 +487,7 @@ const es_AR = 	{
   confirmation_code: "Confirmation code",
   didnt_receive_the_verification_code: "Didn't receive the verification code? ",
   re_send: "Re-send",
+  phone_confirmation: 'Phone Confirmation'
 }
 
 export { es_AR }

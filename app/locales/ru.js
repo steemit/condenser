@@ -656,7 +656,8 @@ const ru = {
   to_continue_please_enter_the_sms_code_weve_sent_you: "Чтобы продолжить, пожалуйста укажите СМС код который мы вам отправили.",
   confirmation_code: "Код подтверждения",
   didnt_receive_the_verification_code: "Не получили код подтверждения? ",
-  re_send: "Повторная отправка"
+  re_send: "Повторная отправка",
+  phone_confirmation: 'Подтверждение телефона'
 }
 
 export { ru }

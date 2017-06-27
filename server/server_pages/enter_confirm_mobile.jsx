@@ -4,7 +4,8 @@ import React from 'react';
 import {renderToString} from 'react-dom/server';
 import models from 'db/models';
 import ServerHTML from 'server/server-html';
-import {verify} from 'server/teleSign';
+// import {verify} from 'server/teleSign';
+import twilioVerify from "server/utils/twilio";
 import SignupProgressBar from 'app/components/elements/SignupProgressBar';
 import CountryCode from 'app/components/elements/CountryCode';
 import {getRemoteIp, checkCSRF} from 'server/utils';
@@ -184,8 +185,9 @@ export default function useEnterAndConfirmMobilePages(app) {
         console.log('-- /submit_mobile -->', this.session.uid, this.session.user, phone, mid.id);
         const ip = getRemoteIp(this.req)
 
-        const verifyResult = yield verify({mobile: phone, confirmation_code, ip});
-        if (verifyResult && verifyResult.score) mid.update({score: verifyResult.score});
+        // const verifyResult = yield verify({mobile: phone, confirmation_code, ip});
+        // if (verifyResult && verifyResult.score) mid.update({score: verifyResult.score});
+        const verifyResult = yield twilioVerify('+' + phone, confirmation_code);
         if (verifyResult && verifyResult.error) {
             this.flash = {error: verifyResult.error};
             this.redirect(enterMobileUrl);
@@ -198,7 +200,7 @@ export default function useEnterAndConfirmMobilePages(app) {
             <br />
             <div className="row" style={{maxWidth: '32rem'}}>
                 <div className="column">
-                    {translate('thank_you_for_providing_your_phone_number', {phone})}<br />
+                    {translate('thank_you_for_providing_your_phone_number')}<br />
                     {translate('to_continue_please_enter_the_sms_code_weve_sent_you')}
                 </div>
             </div>

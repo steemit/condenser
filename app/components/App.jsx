@@ -228,7 +228,7 @@ class App extends React.Component {
                         </a>
                     </li>
                     <li>
-                        <a onClick={() => depositSteem()}>
+                        <a href="https://blocktrades.us/unregistered_trade/btc/steem" target="_blank" rel="noopener noreferrer">
                             {tt('navigation.buy_LIQUID_TOKEN', {LIQUID_TOKEN})}
                         </a>
                     </li>

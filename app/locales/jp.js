@@ -335,7 +335,8 @@ const jp = 	{
 	curation_rewards_last_24_hours: '24時間以内のキュレーションリワード',
 	daily_average_curation_rewards: '1にち平均のキュレーションリワード',
 	estimated_curation_rewards_last_week: "先週の予定されているキュレーションリワード",
-	curation_rewards_last_week: "先週のキュレーションリワード",
+    part_of_your_steem_power_is_currently_delegated: 'あなたのSTEAM POWERの一部が現在あなたに委任されています。 委任は、影響を与えたり、新しいユーザーがsteemitで行動を起こすのを助けるために寄付されます。 あなたは代表団の額が変動する可能性があります。',
+    curation_rewards_last_week: "先週のキュレーションリワード",
 	curation_rewards_history: 'キュレーションリワード履歴',
 	// Post.jsx
 	now_showing_comments_with_low_ratings: '評価が低いコメントを表示しています',
@@ -473,7 +474,9 @@ const jp = 	{
 	empty_feed_2: 'If you recently added new users to follow, your personalized feed will populate once new content is available',
 	empty_feed_3: 'Explore Trending Articles',
 	empty_feed_4: "Read The Quick Start Guide",
-	empty_feed_5: 'Browse The FAQ'
+	empty_feed_5: 'Browse The FAQ',
+    // Terms of service violations
+    terms_violation: 'このアカウントはsteemit.com利用規約に違反しているとフラグされています。 support@steemit.comまでご連絡ください。'
 }
 
 export { jp }

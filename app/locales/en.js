@@ -6,7 +6,7 @@ const en = 	{
 	// this variables mainly used in navigation section
 	about: "About Steem",
 	explore: "Trending Topics",
-	APP_NAME_whitepaper: APP_NAME + " Whitepaper",
+	APP_NAME_whitepaper: "Steem" + " Whitepaper",
 	buy_LIQUID_TOKEN: 'Buy ' + LIQUID_TOKEN,
 	sell_LIQUID_TOKEN: 'Sell ' + LIQUID_TOKEN,
 	market: "Market",
@@ -502,7 +502,8 @@ const en = 	{
 	influence_tokens_which_earn_more_power_by_holding_long_term: 'Influence tokens which earn more power by holding long term.',
 	the_more_you_hold_the_more_you_influence_post_rewards: 'The more you hold the more you influence post rewards and earn for accurate voting.',
 	the_estimated_value_is_based_on_an_average_value_of_steem_in_US_dollars: 'The estimated value is based on an average value of ' + LIQUID_TOKEN +  ' in US dollars.',
-	VESTING_TOKEN_is_non_transferrable_and_requires_convert_back_to_LIQUID_TOKEN: VESTING_TOKEN + ' is non-transferrable and requires 3 months (13 payments) to convert back to ' + LIQUID_TOKEN + '.',
+    part_of_your_steem_power_is_currently_delegated: 'Part of your STEEM POWER is currently delegated to you. Delegation is donated for influence or to help new users perform actions on steemit. Your delegation amount can fluctuate.',
+    VESTING_TOKEN_is_non_transferrable_and_requires_convert_back_to_LIQUID_TOKEN: VESTING_TOKEN + ' is non-transferrable and requires 3 months (13 payments) to convert back to ' + LIQUID_TOKEN + '.',
 	converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again: 'Converted ' + VESTING_TOKEN + ' can be sent to yourself or someone else but can not transfer again without converting back to ' + LIQUID_TOKEN + '.',
 	profile: 'Profile',
 	send_to_account: "Send to account",
@@ -577,7 +578,9 @@ const en = 	{
 	empty_feed_2: 'If you recently added new users to follow, your personalized feed will populate once new content is available',
 	empty_feed_3: 'Explore Trending Articles',
 	empty_feed_4: "Read The Quick Start Guide",
-	empty_feed_5: 'Browse The FAQ'
+	empty_feed_5: 'Browse The FAQ',
+    // Terms of service violations
+    terms_violation: 'This account has been flagged for violation of steemit.com Terms of Service. Please contact support@steemit.com with questions.'
 }
 
 export { en }

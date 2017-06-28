@@ -10,6 +10,10 @@
     "reddit": {
       "key": "SDC_REDDIT_API_KEY",
       "secret": "SDC_REDDIT_API_SECRET"
+    },
+    "server": {
+      "host": "SDC_GRANT_SERVER",
+      "protocol": "SDC_GRANT_PROTOCOL"
     }
   },
   "google_analytics_id": "SDC_GOOGLE_ANALYTICS_ID",
@@ -28,6 +32,7 @@
   },
   "img_proxy_prefix": "SDC_IMAGE_PROXY_PREFIX",
   "mixpanel": "SDC_MIXPANEL",
+  "newrelic": "SDC_NEWRELIC_LICENSE_KEY",
   "notify": {
     "gcm_key": "SDC_NOTIFY_GCM_KEY"
   },

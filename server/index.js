@@ -1,3 +1,6 @@
+import config from 'config';
+const newrelic = config.get('newrelic') ? require('newrelic') : undefined;
+
 import * as steem from 'steem';
 
 delete process.env.BROWSER;
@@ -12,8 +15,6 @@ require('module').Module._initPaths();
 
 // Load Intl polyfill
 // require('utils/intl-polyfill')(require('./config/init').locales);
-
-import config from 'config';
 
 global.$STM_Config = {
     fb_app: config.get('grant.facebook.key'),
@@ -40,9 +41,12 @@ global.webpackIsomorphicTools = new WebpackIsomorphicTools(
 );
 
 global.webpackIsomorphicTools.server(ROOT, () => {
-    const ws_connection = config.get('ws_connection_server');
-    console.log('connecting to ', ws_connection);
-    steem.config.set('websocket', ws_connection)
+    steem.config.set('websocket', config.get('ws_connection_server'));
+    if (newrelic) {
+        steem.api.on('track-performance', (method, time_taken) => {
+            newrelic.recordMetric(`WebTransaction/Performance/steem-js/${method}`, time_taken / 1000.0);
+        });
+    }
     // const CliWalletClient = require('shared/api_client/CliWalletClient').default;
     // if (process.env.NODE_ENV === 'production') connect_promises.push(CliWalletClient.instance().connect_promise());
     try {

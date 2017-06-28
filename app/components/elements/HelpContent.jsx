@@ -4,6 +4,7 @@ import Icon from 'app/components/elements/Icon';
 import {renderToString} from 'react-dom/server';
 
 if (!process.env.BROWSER) {
+    const cache = {};
     // please note we don't need to define require.context for client side rendering because it's defined by webpack
     const path = require('path');
     const fs = require('fs');
@@ -16,7 +17,7 @@ if (!process.env.BROWSER) {
     }
     function requireContext(folder, recursive, pattern) {
         var normalizedFolder = path.resolve(path.dirname(module.filename), folder);
-        var folderContents = getFolderContents(normalizedFolder, recursive)
+        var folderContents = cache[folder] = cache[folder] ? cache[folder] : getFolderContents(normalizedFolder, recursive)
             .filter(function (item) {
                 if (item === module.filename) return false;
                 return pattern.test(item);
@@ -26,7 +27,7 @@ if (!process.env.BROWSER) {
             return folderContents;
         };
         var returnContext = function returnContext(item) {
-            return fs.readFileSync(item, 'utf8');//require(item);
+            return cache[item] = cache[item] ? cache[item] : fs.readFileSync(item, 'utf8');
         };
         returnContext.keys = keys;
         return returnContext;

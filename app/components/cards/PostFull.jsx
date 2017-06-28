@@ -22,6 +22,7 @@ import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import Userpic from 'app/components/elements/Userpic';
 import { APP_DOMAIN, APP_NAME } from 'app/client_config';
 import tt from 'counterpart';
+import userIllegalContent from 'app/utils/userIllegalContent';
 
 // function loadFbSdk(d, s, id) {
 //     return new Promise(resolve => {
@@ -206,6 +207,10 @@ class PostFull extends React.Component {
         const url = `/${category}/@${author}/${permlink}`
         if(DMCAList.includes(url)) {
             content_body = tt('postfull_jsx.this_post_is_not_available_due_to_a_copyright_claim')
+        }
+        // detect illegal users
+        if (userIllegalContent.includes(content.author)) {
+            content_body  = 'Not available for legal reasons.'
         }
 
         const replyParams = {author, permlink, parent_author, parent_permlink, category, title, body}

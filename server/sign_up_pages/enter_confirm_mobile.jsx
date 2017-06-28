@@ -48,6 +48,7 @@ function* confirmMobileHandler(e) {
     );
 
     const user = yield models.User.findOne({
+        attributes: ['id', 'account_status'],
         where: { id: this.session.user }
     });
     if (!user) {
@@ -75,6 +76,7 @@ function* confirmMobileHandler(e) {
 
     // successful new verified phone number
     yield mid.update({ provider: 'phone', verified: true });
+    if (user.account_status === 'onhold') yield user.update({account_status: 'waiting'});
     if (mixpanel)
         mixpanel.track("SignupStepPhone", { distinct_id: this.session.uid });
 

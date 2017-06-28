@@ -58,9 +58,12 @@ export default {
             path.resolve(__dirname, '..')
         ],
         alias: {
-            'react': path.join(__dirname, '../node_modules', 'react')
+            react: path.join(__dirname, '../node_modules', 'react')
         },
         extensions: ['', '.js', '.json', '.jsx'],
         modulesDirectories: ['node_modules']
+    },
+    externals: {
+        newrelic: true
     }
 };

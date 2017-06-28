@@ -30,18 +30,43 @@ class UserWallet extends React.Component {
         this.onShowDeposit = () => {this.setState({showDeposit: !this.state.showDeposit})};
         this.onShowDepositSteem = (e) => {
             e.preventDefault();
-            this.setState({showDeposit: !this.state.showDeposit, depositType: 'STEEM'})
+            // this.setState({showDeposit: !this.state.showDeposit, depositType: 'STEEM'})
+            const new_window = window.open();
+            new_window.opener = null;
+            new_window.location = 'https://blocktrades.us/unregistered_trade/btc/steem';
+        };
+        this.onShowWithdrawSteem = (e) => {
+            e.preventDefault();
+            const new_window = window.open();
+            new_window.opener = null;
+            new_window.location = 'https://blocktrades.us/unregistered_trade/steem/btc';
         };
         this.onShowDepositPower = (e) => {
             e.preventDefault();
-            this.setState({showDeposit: !this.state.showDeposit, depositType: 'VESTS'})
+            // this.setState({showDeposit: !this.state.showDeposit, depositType: 'VESTS'})
+            const new_window = window.open();
+            new_window.opener = null;
+            new_window.location = 'https://blocktrades.us/unregistered_trade/btc/steem_power';
+        };
+        this.onShowDepositSBD = (e) => {
+            e.preventDefault();
+            const new_window = window.open();
+            new_window.opener = null;
+            new_window.location = 'https://blocktrades.us/unregistered_trade/btc/sbd';
+        };
+        this.onShowWithdrawSBD = (e) => {
+            e.preventDefault();
+            const new_window = window.open();
+            new_window.opener = null;
+            new_window.location = 'https://blocktrades.us/unregistered_trade/sbd/btc';
         };
         // this.onShowDeposit = this.onShowDeposit.bind(this)
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'UserWallet');
     }
     render() {
         const {state: {showDeposit, depositType, toggleDivestError},
-            onShowDeposit, onShowDepositSteem, onShowDepositPower} = this;
+            onShowDeposit, onShowDepositSteem, onShowWithdrawSteem,
+            onShowDepositSBD, onShowWithdrawSBD, onShowDepositPower} = this;
         const {convertToSteem, price_per_steem, savings_withdraws, account,
             current_user, open_orders} = this.props;
         const gprops = this.props.gprops.toJS();
@@ -169,21 +194,24 @@ class UserWallet extends React.Component {
         let power_menu = [
             { value: tt('userwallet_jsx.power_down'), link: '#', onClick: powerDown.bind(this, false) }
         ]
-        if(isMyAccount) {
-            steem_menu.push({ value: tt('g.buy'), link: '#', onClick: onShowDepositSteem });
-            steem_menu.push({ value: tt('userwallet_jsx.market'), link: '/market' });
-            power_menu.push({ value: tt('g.buy'), link: '#', onClick: onShowDepositPower })
-        }
-        if( divesting ) {
-            power_menu.push( { value: 'Cancel Power Down', link:'#', onClick: powerDown.bind(this,true) } );
-        }
-
         let dollar_menu = [
             { value: tt('g.transfer'), link: '#', onClick: showTransfer.bind( this, 'SBD', 'Transfer to Account' ) },
             { value: tt('userwallet_jsx.transfer_to_savings'), link: '#', onClick: showTransfer.bind( this, 'SBD', 'Transfer to Savings' ) },
             { value: tt('userwallet_jsx.market'), link: '/market' },
             { value: tt('userwallet_jsx.convert_to_LIQUID_TOKEN', {LIQUID_TOKEN}), link: '#', onClick: convertToSteem },
         ]
+        if(isMyAccount) {
+            steem_menu.push({ value: tt('g.buy'), link: '#', onClick: onShowDepositSteem });
+            steem_menu.push({ value: tt('g.sell'), link: '#', onClick: onShowWithdrawSteem });
+            steem_menu.push({ value: tt('userwallet_jsx.market'), link: '/market' });
+            power_menu.push({ value: tt('g.buy'), link: '#', onClick: onShowDepositPower })
+            dollar_menu.push({ value: tt('g.buy'), link: '#', onClick: onShowDepositSBD });
+            dollar_menu.push({ value: tt('g.sell'), link: '#', onClick: onShowWithdrawSBD });
+        }
+        if( divesting ) {
+            power_menu.push( { value: 'Cancel Power Down', link:'#', onClick: powerDown.bind(this,true) } );
+        }
+
         const isWithdrawScheduled = new Date(account.get('next_vesting_withdrawal') + 'Z').getTime() > Date.now()
         const depositReveal = showDeposit && <div>
             <Reveal onHide={onShowDeposit} show={showDeposit}>
@@ -234,12 +262,12 @@ class UserWallet extends React.Component {
         }
 
         let claimbox;
-        if(rewards_str && (!current_user || current_user && isMyAccount)) {
+        if(current_user && rewards_str && isMyAccount) {
             claimbox = <div className="row">
                     <div className="columns small-12">
                         <div className="UserWallet__claimbox">
                             Your current rewards: {rewards_str}
-                            {isMyAccount && <button className="button hollow float-right" onClick={e => {this.props.claimRewards(account)}}>Redeem Rewards (Transfer to Balance)</button>}
+                            <button className="button hollow float-right" onClick={e => {this.props.claimRewards(account)}}>Redeem Rewards (Transfer to Balance)</button>
                         </div>
                     </div>
                 </div>
@@ -250,9 +278,6 @@ class UserWallet extends React.Component {
             <div className="row">
                 <div className="columns small-10 medium-12 medium-expand">
                     {isMyAccount ? <WalletSubMenu account_name={account.get('name')} /> : <div><br /><h4>{tt('g.balances')}</h4><br /></div>}
-                </div>
-                <div className="columns shrink">
-                    {isMyAccount && <button className="UserWallet__buysp button hollow" onClick={this.onShowDepositSteem}>{tt('userwallet_jsx.buy_LIQUID_TOKEN_or_VESTING_TOKEN', {LIQUID_TOKEN, VESTING_TOKEN})}</button>}
                 </div>
             </div>
             <div className="UserWallet__balance row">
@@ -271,6 +296,7 @@ class UserWallet extends React.Component {
                 <div className="column small-12 medium-8">
                     STEEM POWER
                     <FormattedHTMLMessage className="secondary" id="tips_js.influence_token" />
+                    {delegated_steem != 0 ? <span className="secondary">{tt('TODO.part_of_your_steem_power_is_currently_delegated')}</span> : null}
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?

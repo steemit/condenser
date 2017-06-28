@@ -59,6 +59,7 @@ class CreateAccount extends React.Component {
                 newState.account_has_keys_warning = true;
             }
         }
+        this.props.showTerms();
         this.setState(newState);
     }
 
@@ -247,7 +248,7 @@ class CreateAccount extends React.Component {
             <div>
                 <div className="CreateAccount row">
                     <div className="column">
-                        <h4>Please read Steemit Rules and fill up the form below to create your Steemit account</h4>
+                        <h4>Please read the Steemit Rules and fill in the form below to create your Steemit account</h4>
                         {/*<Progress tabIndex="0" value={95} max={100} />*/}
                         {showRules ? <div className="CreateAccount__rules">
                             <p>
@@ -324,6 +325,10 @@ module.exports = {
             logout: e => {
                 if (e) e.preventDefault();
                 dispatch(user.actions.logout())
+            },
+            showTerms: e => {
+                if (e) e.preventDefault();
+                dispatch(user.actions.showTerms())
             }
         })
     )(CreateAccount)

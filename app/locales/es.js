@@ -432,7 +432,8 @@ const es = 	{
 	the_owner_key_is_required_to_change_other_keys: 'The owner key is the master key for the account and is required to change the other keys.',
 	the_private_key_or_password_should_be_kept_offline: 'The private key or password for the owner key should be kept offline as much as possible.',
 	the_memo_key_is_used_to_create_and_read_memos: 'The memo key is used to create and read memos.',
-	previous: 'Previous',
+    part_of_your_steem_power_is_currently_delegated: 'Parte de su STEAM POWER está actualmente delegado a usted. La delegación es donada para influir o para ayudar a nuevos usuarios a realizar acciones en steemit. Su cantidad de delegación puede fluctuar.',
+    previous: 'Previous',
 	next: 'Next',
 	browse: 'Browse',
 	not_valid_email: 'Not valid email',
@@ -474,7 +475,9 @@ const es = 	{
 	empty_feed_2: 'If you recently added new users to follow, your personalized feed will populate once new content is available',
 	empty_feed_3: 'Explore Trending Articles',
 	empty_feed_4: "Read The Quick Start Guide",
-	empty_feed_5: 'Browse The FAQ'
+	empty_feed_5: 'Browse The FAQ',
+    // Terms of service violations
+    terms_violation: 'Esta cuenta se ha marcado por infracción de los Términos de servicio de steemit.com. Póngase en contacto con support@steemit.com con preguntas.'
 }
 
 export { es }

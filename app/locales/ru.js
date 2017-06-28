@@ -7,7 +7,7 @@ const ru = {
 	// this variables mainly used in navigation section
 	about: "О проекте",
 	explore: "Исследовать",
-	APP_NAME_whitepaper: "Бумага о " + APP_NAME + 'е',
+	APP_NAME_whitepaper: "Бумага о " + "Steem" + 'е',
 	buy_LIQUID_TOKEN: 'Купить ' + LIQUID_TOKEN,
 	sell_LIQUID_TOKEN: 'Продать ' + LIQUID_TOKEN,
 	market: "Биржа",
@@ -584,7 +584,9 @@ const ru = {
 	empty_feed_2: 'If you recently added new users to follow, your personalized feed will populate once new content is available',
 	empty_feed_3: 'Explore Trending Articles',
 	empty_feed_4: "Read The Quick Start Guide",
-	empty_feed_5: 'Browse The FAQ'
+	empty_feed_5: 'Browse The FAQ',
+    // Terms of service violations
+    terms_violation: 'Эта учетная запись была отмечена за нарушение Условий использования steemit.com. Пожалуйста, свяжитесь с support@steemit.com с вопросами.'
 }
 
 export { ru }

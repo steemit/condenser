@@ -165,7 +165,7 @@ export default function useEnterAndConfirmMobilePages(app) {
                     this.redirect('/create_account');
                     return;
                 }
-                yield mid.update({verified: false, phone});
+                yield mid.update({verified: false, phoneHash});
             }
             const seconds_ago = (Date.now() - mid.updated_at) / 1000.0;
             if (seconds_ago < 120) {
@@ -173,7 +173,7 @@ export default function useEnterAndConfirmMobilePages(app) {
                 this.redirect(enterMobileUrl);
                 return;
             }
-            yield mid.update({confirmation_code, phone});
+            yield mid.update({confirmation_code, phoneHash});
         } else {
             mid = yield models.Identity.create({
                 provider: 'phone',

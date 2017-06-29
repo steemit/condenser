@@ -14,6 +14,7 @@ import secureRandom from 'secure-random';
 import config from '../../config';
 import { translate } from 'app/Translator';
 import {metrics} from 'server/metrics';
+import {hash} from 'shared/ecc';
 
 const assets_file = process.env.NODE_ENV === 'production' ? 'tmp/webpack-stats-prod.json' : 'tmp/webpack-stats-dev.json';
 const assets = Object.assign({}, require(assets_file), {script: []});
@@ -131,6 +132,7 @@ export default function useEnterAndConfirmMobilePages(app) {
         }
 
         const phone = digits(parseInt(country) + localPhone)
+        const phoneHash = hash.sha256(phone, 'hex')
 
         const eid = yield models.Identity.findOne(
             {attributes: ['id'], where: {user_id, provider: 'email', verified: true}, order: 'id DESC'}
@@ -142,10 +144,10 @@ export default function useEnterAndConfirmMobilePages(app) {
         }
 
         const existing_phone = yield models.Identity.findOne(
-            {attributes: ['user_id'], where: {phone, provider: 'phone', verified: true}, order: 'id DESC'}
+            {attributes: ['user_id'], where: {phone: phoneHash, provider: 'phone', verified: true}, order: 'id DESC'}
         );
         if (existing_phone && existing_phone.user_id != user_id) {
-            console.log('-- /submit_email existing_phone -->', user_id, this.session.uid, phone, existing_phone.user_id);
+            console.log('-- /submit_email existing_phone -->', user_id, this.session.uid, phoneHash, existing_phone.user_id);
             this.flash = {error: 'This phone number has already been used'};
             this.redirect(enterMobileUrl);
             return;
@@ -177,12 +179,12 @@ export default function useEnterAndConfirmMobilePages(app) {
                 provider: 'phone',
                 user_id,
                 uid: this.session.uid,
-                phone,
+                phone: phoneHash,
                 verified: false,
                 confirmation_code
             });
         }
-        console.log('-- /submit_mobile -->', this.session.uid, this.session.user, phone, mid.id);
+        console.log('-- /submit_mobile -->', this.session.uid, this.session.user, phoneHash, mid.id);
         const ip = getRemoteIp(this.req)
 
         // const verifyResult = yield verify({mobile: phone, confirmation_code, ip});

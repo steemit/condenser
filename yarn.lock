@@ -6671,9 +6671,9 @@ statuses@1, "statuses@>= 1.3.1 < 2", statuses@^1.2.0, statuses@~1.3.1:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/statuses/-/statuses-1.3.1.tgz#faf51b9eb74aaef3b3acf4ad5f61abf24cb7b93e"
 
-steem@0.5.15:
-  version "0.5.15"
-  resolved "https://registry.yarnpkg.com/steem/-/steem-0.5.15.tgz#ae1e53dbc16c1d70b0dae4cab5a37e4b5484c7c8"
+steem@0.5.19:
+  version "0.5.19"
+  resolved "https://registry.yarnpkg.com/steem/-/steem-0.5.19.tgz#df46bba8385f4fcfa6a7381c4f504f49aea5ab8e"
   dependencies:
     bigi "^1.4.2"
     bluebird "^3.4.6"

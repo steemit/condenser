@@ -296,7 +296,7 @@ class UserWallet extends React.Component {
                 <div className="column small-12 medium-8">
                     STEEM POWER
                     <FormattedHTMLMessage className="secondary" id="tips_js.influence_token" />
-                    {delegated_steem != 0 ? <span className="secondary">{tt('TODO.part_of_your_steem_power_is_currently_delegated')}</span> : null}
+                    {delegated_steem != 0 ? <span className="secondary">{tt('tips_js.part_of_your_steem_power_is_currently_delegated')}</span> : null}
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?

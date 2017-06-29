@@ -6,7 +6,6 @@ import Icon from 'app/components/elements/Icon'
 import DropdownMenu from 'app/components/elements/DropdownMenu'
 import g from 'app/redux/GlobalReducer'
 import QRCode from 'react-qr'
-import {steemTip, powerTip, powerTip2} from 'app/utils/Tips'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import tt from 'counterpart';
 import { formatCoins } from 'app/utils/FormatCoins';

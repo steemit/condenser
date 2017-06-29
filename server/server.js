@@ -143,7 +143,7 @@ if (env === 'production') {
 }
 
 useAccountRecoveryApi(app);
-useOauthLogin(app);
+// useOauthLogin(app);
 useGeneralApi(app);
 useIcoApi(app);
 useNotificationsApi(app);

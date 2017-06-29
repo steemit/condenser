@@ -1255,8 +1255,6 @@ The password has to be long and random for maximum account security.
 
 **Owner key** - The owner key is only meant for use when necessary. It is the most powerful key because it can change any key of an account, including the owner key. Ideally it is meant to be stored offline, and only used to recover a compromised account.
 
-The posting key is available on the Permissions sub-tab on your wallet page, after pressing the "show private key" button. The other keys can be derived using @xeroc's paper wallet generator: https://steemit.com/steem/@xeroc/paperwallet-easily-secure-your-account-with-steem-paperwallet-generator
-
 <a href="/faq.html#Table_of_Contents_Security">^</a>
 <a class="anchor" name="What_do_I_do_if_I_lost_my_password_keys"></a>
 ## What do I do if I lost my password/keys?

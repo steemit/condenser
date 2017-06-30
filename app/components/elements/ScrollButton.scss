@@ -1,0 +1,21 @@
+.ScrollButton {
+  opacity: .3;
+  background-color: $medium-gray;
+  width: 5rem;
+  height: 5rem;
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  border-radius: 50%;
+  border: none;
+
+  &:hover {
+    opacity: .9;
+  }
+
+  >span {
+    >svg {
+      fill: $white;
+    }
+  }
+}

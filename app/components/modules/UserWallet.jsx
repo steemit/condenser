@@ -27,12 +27,12 @@ class UserWallet extends React.Component {
         super();
         this.state = {};
         this.onShowDeposit = () => {this.setState({showDeposit: !this.state.showDeposit})};
-        this.onShowDepositSteem = (e) => {
+        this.onShowDepositSteem = (current_user_name, e) => {
             e.preventDefault();
             // this.setState({showDeposit: !this.state.showDeposit, depositType: 'STEEM'})
             const new_window = window.open();
             new_window.opener = null;
-            new_window.location = 'https://blocktrades.us/unregistered_trade/btc/steem';
+            new_window.location = 'https://blocktrades.us/?input_coin_type=btc&output_coin_type=steem&receive_address=' + current_user_name;
         };
         this.onShowWithdrawSteem = (e) => {
             e.preventDefault();
@@ -40,18 +40,18 @@ class UserWallet extends React.Component {
             new_window.opener = null;
             new_window.location = 'https://blocktrades.us/unregistered_trade/steem/btc';
         };
-        this.onShowDepositPower = (e) => {
+        this.onShowDepositPower = (current_user_name, e) => {
             e.preventDefault();
             // this.setState({showDeposit: !this.state.showDeposit, depositType: 'VESTS'})
             const new_window = window.open();
             new_window.opener = null;
-            new_window.location = 'https://blocktrades.us/unregistered_trade/btc/steem_power';
+            new_window.location = 'https://blocktrades.us/?input_coin_type=btc&output_coin_type=steem_power&receive_address=' + current_user_name;
         };
-        this.onShowDepositSBD = (e) => {
+        this.onShowDepositSBD = (current_user_name, e) => {
             e.preventDefault();
             const new_window = window.open();
             new_window.opener = null;
-            new_window.location = 'https://blocktrades.us/unregistered_trade/btc/sbd';
+            new_window.location = 'https://blocktrades.us/?input_coin_type=btc&output_coin_type=sbd&receive_address=' + current_user_name;
         };
         this.onShowWithdrawSBD = (e) => {
             e.preventDefault();
@@ -200,11 +200,11 @@ class UserWallet extends React.Component {
             { value: 'Convert to STEEM', link: '#', onClick: convertToSteem },
         ]
         if(isMyAccount) {
-            steem_menu.push({ value: 'Buy', link: '#', onClick: onShowDepositSteem });
+            steem_menu.push({ value: 'Buy', link: '#', onClick: onShowDepositSteem.bind( this, current_user.get('username') )  });
             steem_menu.push({ value: 'Sell', link: '#', onClick: onShowWithdrawSteem });
             steem_menu.push({ value: 'Market', link: '/market' });
-            power_menu.push({ value: 'Buy', link: '#', onClick: onShowDepositPower })
-            dollar_menu.push({ value: 'Buy', link: '#', onClick: onShowDepositSBD });
+            power_menu.push({ value: 'Buy', link: '#', onClick: onShowDepositPower.bind( this, current_user.get('username') ) })
+            dollar_menu.push({ value: 'Buy', link: '#', onClick: onShowDepositSBD.bind( this, current_user.get('username') ) });
             dollar_menu.push({ value: 'Sell', link: '#', onClick: onShowWithdrawSBD });
         }
         if( divesting ) {

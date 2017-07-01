@@ -239,7 +239,7 @@ class Voting extends React.Component {
                 <div className="Voting__adjust_weight">
                     <a href="#" onClick={this.voteUp} className="confirm_weight" title="Upvote"><Icon size="2x" name="chevron-up-circle" /></a>
                     <div className="weight-display">{weight}%</div>
-                    <Slider min={100} max={10000} step={100} value={weight} onChange={this.handleWeightChange} />
+                    <Slider min={100} max={10000} step={100} value={weight / 100} onChange={this.handleWeightChange} />
                     <CloseButton className="Voting__adjust_weight_close" onClick={() => this.setState({showWeight: false})} />
                 </div>
             </FoundationDropdown>;

@@ -228,7 +228,7 @@ class App extends React.Component {
                     </li>
                     <li>
                         <a onClick={() => depositSteem(username)}>
-                             {translate("buy_LIQUID_TOKEN")}
+                            {translate("buy_LIQUID_TOKEN")}
                         </a>
                     </li>
                     <li>
@@ -333,8 +333,6 @@ export default connect(
         loginUser: () =>
             dispatch(user.actions.usernamePasswordLogin()),
         depositSteem: (username) => {
-            let receive_address = username;
-
             const new_window = window.open();
             new_window.opener = null;
             new_window.location = 'https://blocktrades.us/?input_coin_type=btc&output_coin_type=steem&receive_address=' + username;

@@ -2,15 +2,16 @@ import React from 'react';
 import {connect} from 'react-redux';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import Reveal from 'react-foundation-components/lib/global/reveal';
-import g from 'app/redux/GlobalReducer'
-import {Map, List} from 'immutable'
+import g from 'app/redux/GlobalReducer';
+import {Map, List} from 'immutable';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
-import BlocktradesDeposit from 'app/components/modules/BlocktradesDeposit'
-import QrReader from 'app/components/elements/QrReader'
-import ConvertToSteem from 'app/components/elements/ConvertToSteem'
-import SuggestPassword from 'app/components/elements/SuggestPassword'
-import ChangePassword from 'app/components/elements/ChangePassword'
-import CheckLoginOwner from 'app/components/elements/CheckLoginOwner'
+import BlocktradesDeposit from 'app/components/modules/BlocktradesDeposit';
+import QrReader from 'app/components/elements/QrReader';
+import ConvertToSteem from 'app/components/elements/ConvertToSteem';
+import SuggestPassword from 'app/components/elements/SuggestPassword';
+import ChangePassword from 'app/components/elements/ChangePassword';
+import CheckLoginOwner from 'app/components/elements/CheckLoginOwner';
+import QrKeyView from 'app/components/elements/QrKeyView';
 import PromotePost from 'app/components/modules/PromotePost';
 import ProlongPost from 'app/components/modules/ProlongPost';
 import ExplorePost from 'app/components/modules/ExplorePost';
@@ -20,6 +21,7 @@ class Dialogs extends React.Component {
         active_dialogs: React.PropTypes.object,
         hide: React.PropTypes.func.isRequired,
     }
+
     constructor() {
         super()
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Dialogs')
@@ -27,6 +29,7 @@ class Dialogs extends React.Component {
             this.props.hide(name)
         }
     }
+
     componentWillReceiveProps(nextProps) {
         const {active_dialogs, hide} = nextProps
         active_dialogs.forEach((v, k) => {
@@ -34,6 +37,7 @@ class Dialogs extends React.Component {
                 this['hide_' + k] = () => hide(k)
         })
     }
+
     render() {
         const {active_dialogs} = this.props
         let idx = 0
@@ -86,6 +90,12 @@ class Dialogs extends React.Component {
                     <ExplorePost onClick={this['hide_' + k]} {...v.get('params').toJS()} />
                 </Reveal>
             </span>:
+            k === 'qr_key' ? <span key={idx++} >
+                <Reveal onHide={this['hide_' + k]} show>
+                    <CloseButton onClick={this['hide_' + k]} />
+                    <QrKeyView onClose={this['hide_' + k]} {...v.get('params').toJS()} />
+                </Reveal>
++           </span>:
             null
             return cmp ? r.push(cmp) : r
         }, List())

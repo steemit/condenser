@@ -231,8 +231,26 @@ class CreateAccount extends React.Component {
             </div>;
         }
 
+        let next_step = null;
+        if (server_error) {
+            if (server_error === 'Email address is not confirmed') {
+                next_step = <div className="callout alert">
+                    <a href="/enter_email">{tt('tips_js.confirm_email')}</a>
+                </div>;
+            } else if (server_error === 'Phone number is not confirmed') {
+                next_step = <div className="callout alert">
+                    <a href="/enter_mobile">{tt('tips_js.confirm_phone')}</a>
+                </div>;
+            } else {
+                next_step = <div className="callout alert">
+                    <strong>{tt('createaccount_jsx.couldnt_create_account_server_returned_error')}:</strong>
+                    <p>{server_error}</p>
+                </div>;
+            }
+        }
+
         return (
-                <div className="CreateAccount row">
+            <div className="CreateAccount row">
                 <div className="column large-7 small-10">
                     <h2>{tt('g.sign_up')}</h2>
                     <div className="CreateAccount__rules">
@@ -249,30 +267,26 @@ class CreateAccount extends React.Component {
                         </p>
                         <hr />
                     </div>
-                        <form onSubmit={this.onSubmit} autoComplete="off" noValidate method="post">
-                            <div className={name_error ? 'error' : ''}>
+                    <form onSubmit={this.onSubmit} autoComplete="off" noValidate method="post">
+                        <div className={name_error ? 'error' : ''}>
                             <label className="uppercase">{tt('g.username')}
-                                    <input type="text" name="name" autoComplete="off" onChange={this.onNameChange} value={name} />
-                                </label>
-                                <p>{name_error}</p>
-                            </div>
-                            <GeneratedPasswordInput onChange={this.onPasswordChange} disabled={loading} showPasswordString={name.length > 0 && !name_error} />
-                            <br />
-                        {server_error && <div className="callout alert">
-                            <h5>{tt('createaccount_jsx.couldnt_create_account_server_returned_error')}:</h5>
-                            <p>{server_error}</p>
-                            {server_error === 'Email address is not confirmed' && <a href="/enter_email">{tt('tips_js.confirm_email')}</a>}
-                        </div>}
-                            <noscript>
-                                <div className="callout alert">
+                                <input type="text" name="name" autoComplete="off" onChange={this.onNameChange} value={name} />
+                            </label>
+                            <p>{name_error}</p>
+                        </div>
+                        <GeneratedPasswordInput onChange={this.onPasswordChange} disabled={loading} showPasswordString={name.length > 0 && !name_error} />
+                        <br />
+                        {next_step}
+                        <noscript>
+                            <div className="callout alert">
                                 <p>{tt('createaccount_jsx.form_requires_javascript_to_be_enabled')}</p>
-                                </div>
-                            </noscript>
-                            {loading && <LoadingIndicator type="circle" />}
+                            </div>
+                        </noscript>
+                        {loading && <LoadingIndicator type="circle" />}
                         <input disabled={submit_btn_disabled} type="submit" className={submit_btn_class + ' uppercase'} value={tt('g.sign_up')} />
-                        </form>
-                    </div>
+                    </form>
                 </div>
+            </div>
         );
     }
 }

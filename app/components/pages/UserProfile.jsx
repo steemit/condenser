@@ -31,6 +31,7 @@ import Callout from 'app/components/elements/Callout';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import AccountAssetCreate from 'app/components/modules/AssetCreate';
 import AccountAssets from 'app/components/modules/AccountAssets';
+import UserInvites from 'app/components/elements/UserInvites';
 
 export default class UserProfile extends React.Component {
     constructor() {
@@ -310,11 +311,20 @@ export default class UserProfile extends React.Component {
 
                 <AccountAssetCreate/>
             </div>
+        } else if( section === 'invites' ) {
+            walletClass = 'active'
+            tab_content = <div>
+                    <WalletSubMenu account_name={account.name} />
+
+                    <br />
+                    <UserInvites account={accountImm} />
+                </div>
         }
 
         if (!(section === 'transfers' ||
               section === 'permissions' ||
               section === 'password' ||
+              section === 'invites' ||
               section === 'assets'||
               section === 'create-asset')) {
             tab_content = <div className="row">

@@ -20,6 +20,9 @@ export default ({account_name}) => {
                 <li>
                     <Link to={`/@${account_name}/password`} activeClassName="active">{tt('g.password')}</Link>
                 </li>
+                <li>
+                    <Link to={`/@${account_name}/invites`} activeClassName="active">{tt('g.invites')}</Link>
+                </li>
             </ul>
         </div>
         <div className="columns shrink right-column">

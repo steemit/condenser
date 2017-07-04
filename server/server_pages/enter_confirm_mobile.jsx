@@ -13,6 +13,7 @@ import MiniHeader from "app/components/modules/MiniHeader";
 import secureRandom from "secure-random";
 import config from "config";
 import Mixpanel from "mixpanel";
+import tt from 'counterpart';
 
 // FIXME copy paste code, refactor mixpanel out
 var mixpanel = null;
@@ -144,7 +145,11 @@ export default function useEnterAndConfirmMobilePages(app) {
             <div className="App">
                 <MiniHeader />
                 <SignupProgressBar
-                    steps={["email", "phone", "steem account"]}
+                    steps={[
+                        "email",
+                        tt('g.phone'),
+                        tt('g.APP_NAME_account', {APP_NAME: tt('g.APP_NAME')}).toLowerCase()
+                    ]}
                     current={2}
                 />
                 <br />
@@ -154,41 +159,36 @@ export default function useEnterAndConfirmMobilePages(app) {
                         action="/submit_mobile"
                         method="POST"
                     >
-                        <h4>
-                            Please provide your phone number to continue the registration process
-                        </h4>
+                        <h4>{tt('createaccount_jsx.please_provide_your_phone_number_to_continue')}</h4>
                         <div className="secondary">
-                            Phone verification helps with preventing spam and allows Steemit to assist with Account Recovery in case your account is ever compromised.
-
-
-                            Your phone number will not be used for any other purpose other than phone verification and account recovery.
+                            {tt('createaccount_jsx.please_provide_your_phone_number_to_continue', {APP_NAME: tt('g.APP_NAME')})}
                         </div>
                         <br />
                         <input type="hidden" name="csrf" value={this.csrf} />
                         <label>
-                            Country Code
+                            {tt('createaccount_jsx.country_code')}
                             <CountryCode name="country" value={country} />
                         </label>
                         <label>
-                            Phone number
+                            {tt('createaccount_jsx.phone_number')}
                             <input type="tel" name="phone" value={phone} />
                         </label>
                         <div className="secondary">
-                            Examples: 541-754-3010 | 89-636-48018
+                            {tt('createaccount_jsx.examples')}
                         </div>
                         <br />
                         <div className="secondary">
-                            * Land lines cannot receive SMS messages
+                            {tt('createaccount_jsx.land_lines_cannot_receive_sms_messages')}
                         </div>
                         <div className="secondary">
-                            * Message and data rates may apply
+                            {tt('createaccount_jsx.message_and_data_rates_may_apply')}
                         </div>
                         <br />
                         <div className="error">{this.flash.error}</div>
                         <input
                             type="submit"
                             className="button"
-                            value="CONTINUE"
+                            value={tt('g.continue').toUpperCase()}
                         />
                     </form>
                 </div>
@@ -322,6 +322,7 @@ export default function useEnterAndConfirmMobilePages(app) {
         );
         const ip = getRemoteIp(this.req);
 
+        /*
         const twilioResult = yield twilioVerify(phone);
         console.log('-- /submit_mobile twilioResult -->', twilioResult);
 
@@ -346,23 +347,32 @@ export default function useEnterAndConfirmMobilePages(app) {
             this.redirect(enterMobileUrl);
             return;
         }
+        */
+
+        const twilioResult = yield twilioVerify('+' + phone, confirmation_code);
+        if (twilioResult && twilioResult.error) {
+            this.flash = { error: twilioResult.error };
+            this.redirect(enterMobileUrl);
+            return;
+        }
 
         const body = renderToString(
             <div className="App">
                 <MiniHeader />
                 <SignupProgressBar
-                    steps={["email", "phone", "steem account"]}
+                    steps={[
+                        "email",
+                        tt('g.phone'),
+                        tt('g.APP_NAME_account', {APP_NAME: tt('g.APP_NAME')}).toLowerCase()
+                    ]}
                     current={2}
                 />
                 <br />
                 <div className="row" style={{ maxWidth: "32rem" }}>
                     <div className="column">
-                        Thank you for providing your phone number (
-                        {phone}
-                        ).
+                        {tt('createaccount_jsx.thank_you_for_providing_your_phone_number', {phone})}
                         <br />
-
-                        To continue please enter the SMS code we've sent you.
+                        {tt('createaccount_jsx.to_continue_please_enter_the_sms_code_weve_sent_you')}
                     </div>
                 </div>
                 <br />
@@ -374,19 +384,19 @@ export default function useEnterAndConfirmMobilePages(app) {
                     >
                         <input type="hidden" name="csrf" value={this.csrf} />
                         <label>
-                            Confirmation code
+                            {tt('createaccount_jsx.confirmation_code')}
                             <input type="text" name="code" />
                         </label>
                         <br />
                         <div className="secondary">
-                            Didn't receive the verification code?{" "}
-                            <a href={enterMobileUrl}>Re-send</a>
+                            {tt('createaccount_jsx.didnt_receive_the_verification_code')}{" "}
+                            <a href={enterMobileUrl}>{tt('createaccount_jsx.re_send')}</a>
                         </div>
                         <br />
                         <input
                             type="submit"
                             className="button"
-                            value="CONTINUE"
+                            value={tt('g.continue').toUpperCase()}
                         />
                     </form>
                 </div>

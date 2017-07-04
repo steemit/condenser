@@ -56,6 +56,7 @@
     "foundation-sites": "6.2.1",
     "git-rev-sync": "^1.6.0",
     "grant-koa": "^3.6.0",
+    "@goloschain/golos-js": "git+https://github.com/GolosChain/golos-js.git#ade347ef85e3eace69218193f1a723b1ad9748d9",
     "highcharts": "^4.2.5",
     "history": "^2.0.0-rc2",
     "humanize-number": "0.0.2",

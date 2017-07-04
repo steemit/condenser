@@ -114,13 +114,16 @@ export default function useGeneralApi(app) {
             }
 
             // // check phone
-            // const mid = yield models.Identity.findOne(
-            //     {attributes: ['id'], where: {user_id, provider: 'phone', verified: true}, order: 'id DESC'}
-            // );
-            // if (!mid) {
-            //     console.log(`api /accounts: not confirmed sms for user ${this.session.uid} #${user_id}`);
-            //     throw new Error('Phone number is not confirmed');
-            // }
+            const mid = yield models.Identity.findOne(
+                {attributes: ['id'], where: {user_id, provider: 'phone', verified: true}, order: 'id DESC'}
+            );
+            if (!mid) {
+                console.log(`api /accounts: not confirmed sms for user ${this.session.uid} #${user_id}`);
+                throw new Error('Phone number is not confirmed');
+            }
+            else {
+              console.log(`api /accounts: is confirmed sms for user ${this.session.uid} #${user_id}`)
+            }
 
             const [fee_value, fee_currency] = config.get('registrar.fee').split(' ');
             let fee = parseFloat(fee_value);
@@ -137,34 +140,31 @@ export default function useGeneralApi(app) {
                 console.error('Error in /accounts get_chain_properties', error);
             }
 
-            const accountInstance = yield createAccount({
-                signingKey: config.get('registrar.signing_key'),
-                fee: `${fee.toFixed(3)} ${fee_currency}`,
-                creator: config.registrar.account,
-                new_account_name: account.name,
-                owner: account.owner_key,
-                active: account.active_key,
-                posting: account.posting_key,
-                memo: account.memo_key,
-                broadcast: true
+            const accountInstance = yield models.Account.create(escAttrs({
+                user_id,
+                name: account.name,
+                owner_key: account.owner_key,
+                active_key: account.active_key,
+                posting_key: account.posting_key,
+                memo_key: account.memo_key,
+                remote_ip,
+                referrer: this.session.r
+            })).catch(error => {
+                console.error('!!! Can\'t create account model in /accounts api', this.session.uid, error);
             });
-            console.log('-- create_account_with_keys created -->', this.session.uid, account.name, user.id, account.owner_key);
-
-            this.body = JSON.stringify({status: 'ok'});
-
             if (accountInstance) {
-                models.Account.create(escAttrs({
-                    user_id,
-                    name: account.name,
-                    owner_key: account.owner_key,
-                    active_key: account.active_key,
-                    posting_key: account.posting_key,
-                    memo_key: account.memo_key,
-                    remote_ip,
-                    referrer: this.session.r
-                })).catch(error => {
-                    console.error('!!! Can\'t create account model in /accounts api', this.session.uid, error);
+                createAccount({
+                    signingKey: config.get('registrar.signing_key'),
+                    fee: `${fee.toFixed(3)} ${fee_currency}`,
+                    creator: config.registrar.account,
+                    new_account_name: account.name,
+                    owner: account.owner_key,
+                    active: account.active_key,
+                    posting: account.posting_key,
+                    memo: account.memo_key,
+                    broadcast: true
                 });
+                console.log('-- create_account_with_keys created -->', this.session.uid, account.name, user_id, account.owner_key);
                 if (mixpanel) {
                     mixpanel.track('Signup', {
                         distinct_id: this.session.uid,
@@ -172,6 +172,7 @@ export default function useGeneralApi(app) {
                     });
                     mixpanel.people.set(this.session.uid, {ip: remote_ip});
                 }
+                this.body = JSON.stringify({status: 'ok'});
             }
         } catch (error) {
             console.error('Error in /accounts api call', this.session.uid, error.toString());
@@ -290,7 +291,7 @@ export default function useGeneralApi(app) {
             if (!checkCSRF(this, csrf)) return;
             console.log('-- /record_event -->', this.session.uid, type, value);
             const str_value = typeof value === 'string' ? value : JSON.stringify(value);
-            if (type.match(/^[A-Z]/)) {
+            if (type.match(/^[A-Z]/) && mixpanel) {
                 mixpanel.track(type, {distinct_id: this.session.uid, Page: str_value});
                 mixpanel.people.increment(this.session.uid, type, 1);
             } else {

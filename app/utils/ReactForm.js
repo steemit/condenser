@@ -170,7 +170,7 @@ function getData(fields, state) {
     @arg {string} field - field:type
     <pre>
         type = checked (for checkbox or radio)
-        type = selected (for seelct option)
+        type = selected (for select option)
         type = string
     </pre>
     @return {string} type

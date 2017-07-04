@@ -8,6 +8,7 @@ import assetConstants from "app/utils/Assets/Constants";
 import assetUtils from "app/utils/Assets/AssetsUtils";
 import utils from 'app/utils/Assets/utils';
 import FormattedAsset from "app/components/elements/FormattedAsset";
+import {validate_asset_symbol} from 'app/utils/ChainValidation';
 
 let MAX_SAFE_INT = new big("9007199254740991");
 
@@ -367,7 +368,7 @@ class AccountAssetCreate extends React.Component {
             max_supply: null
         };
 
-        errors.symbol = utils.is_valid_symbol_error(new_state.symbol);
+        errors.symbol = validate_asset_symbol(new_state.symbol);
         //TODO
         let existingAsset = ''; //Store.getAsset(new_state.symbol);
         if (existingAsset) {
@@ -492,6 +493,13 @@ class AccountAssetCreate extends React.Component {
             )
         }
 
+        const price = utils.get_asset_price(
+            core_exchange_rate.quote.amount * utils.get_asset_precision(update.precision),
+            {precision: update.precision},
+            core_exchange_rate.base.amount * utils.get_asset_precision(core),
+            core);
+        const formattedPrice = price.toFixed(2 + (parseInt(update.precision, 10) || 8));
+
         let tabs = <div className="AssetCreate_tabs">
             <h4>{tt('asset_create_jsx.header')}</h4>
             <Tabs>
@@ -600,14 +608,7 @@ class AccountAssetCreate extends React.Component {
                                 <div>
                                     <h5>
                                         {tt('asset_create_jsx.price')}
-                                        <span>: {
-                                            utils.format_number(utils.get_asset_price(
-                                                core_exchange_rate.quote.amount * utils.get_asset_precision(update.precision),
-                                                {precision: update.precision},
-                                                core_exchange_rate.base.amount * utils.get_asset_precision(core),
-                                                core
-                                            ), 2 + (parseInt(update.precision, 10) || 8))
-                                        }</span>
+                                        <span>: {formattedPrice}</span>
                                         <span> {update.symbol}/{core.get("symbol")}</span>
                                     </h5>
                                 </div>
@@ -795,6 +796,10 @@ export default connect(
                 type: 'CREATE_ASSET',
                 payload: {account, update, flags, permissions, core_exchange_rate, isBitAsset, is_prediction_market, bitasset_opts, description}
             })
+        },
+
+        reserveAsset : (amount, assetId, account) =>{
+
         }
     })
 )(AccountAssetCreate);

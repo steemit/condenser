@@ -13,6 +13,7 @@ import CloseButton from 'react-foundation-components/lib/global/close-button';
 import Dialogs from 'app/components/modules/Dialogs';
 import Modals from 'app/components/modules/Modals';
 import Icon from 'app/components/elements/Icon';
+import ScrollButton from 'app/components/elements/ScrollButton';
 import {key_utils} from 'shared/ecc';
 import MiniHeader from 'app/components/modules/MiniHeader';
 import tt from 'counterpart';
@@ -329,7 +330,7 @@ class App extends React.Component {
                 {callout}
                 {children}
                 {lp ? <LpFooter /> : null}
-                {/* temporary disabled in favor of live chat */}
+                <ScrollButton />
             </div>
             <Dialogs />
             <Modals />

@@ -68,21 +68,21 @@ export const FIRST_DATE = new Date(Date.UTC(2016, 7, 1)); //1 september
 export const IGNORE_TAGS = ['test', 'bm-open', 'bm-ceh23', 'bm-tasks', 'bm-taskceh1']
 export const SELECT_TAGS_KEY = 'gls.select.tags'
 export const PUBLIC_API = {
-  trending:        ['get_discussions_by_trending',       'trending'],
-  trending30:      ['get_discussions_by_trending30',     'trending30'],
-  responses:       ['get_discussions_by_children',       'responses'],
-  hot:             ['get_discussions_by_hot',            'hot'],
-  promoted:        ['get_discussions_by_promoted',       'promoted'],
-  votes:           ['get_discussions_by_votes',          'votes'],
-  cashout:         ['get_discussions_by_cashout',        'cashout'],
-  payout:          ['get_post_discussions_by_payout',    'payout'],
-  payout_comments: ['get_comment_discussions_by_payout', 'payout_comments'],
-  active:          ['get_discussions_by_active',         'active'],
-  created:         ['get_discussions_by_created',        'created'],
-  recent:          ['get_discussions_by_created',        'created'],
-  witnesses:       ['get_witnesses_by_vote',             'witnesses'],
-  tags:            ['get_trending_tags',                 'tags'],
-  tagsbyauthor:    ['get_tags_used_by_author',           'tagsbyauthor']
+  trending:        ['getDiscussionsByTrending',      'trending'],
+  trending30:      ['getDiscussionsByTrending30',    'trending30'],
+  responses:       ['getDiscussionsByChildren',      'responses'],
+  hot:             ['getDiscussionsByHot',           'hot'],
+  promoted:        ['getDiscussionsByPromoted',      'promoted'],
+  votes:           ['getDiscussionsByVotes',         'votes'],
+  cashout:         ['getDiscussionsByCashout',       'cashout'],
+  payout:          ['getPostDiscussionsByPayout',    'payout'],
+  payout_comments: ['getCommentDiscussionsByPayout', 'payout_comments'],
+  active:          ['getDiscussionsByActive',        'active'],
+  created:         ['getDiscussionsByCreated',       'created'],
+  recent:          ['getDiscussionsByCreated',       'created'],
+  witnesses:       ['getWitnessesByVote',            'witnesses'],
+  tags:            ['getTrendingTags',               'tags'],
+  tagsbyauthor:    ['getTagsUsedByAuthor',           'tagsbyauthor']
 }
 export const SEO_TITLE = 'GOLOS.io Блоги'
 export const DEFAULT_DOMESTIC = 'all'

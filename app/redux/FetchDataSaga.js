@@ -8,6 +8,7 @@ import constants from './constants';
 import {fromJS, Map} from 'immutable'
 import { IGNORE_TAGS, PUBLIC_API, SELECT_TAGS_KEY } from 'app/client_config';
 import cookie from "react-cookie";
+import {api} from 'golos-js'
 
 export const fetchDataWatches = [watchLocationChange, watchDataRequests, watchApiRequests, watchFetchJsonRequests, watchFetchState, watchGetContent, watchPayoutWindowRequests];
 
@@ -23,7 +24,7 @@ export function* getContentCaller(action) {
     yield getContent(action.payload);
 }
 
-let is_initial_state = true;
+let is_initialstate = true;
 export function* fetchState(location_change_action) {
     const {pathname} = location_change_action.payload;
     const m = pathname.match(/^\/@([a-z0-9\.-]+)/)
@@ -37,8 +38,8 @@ export function* fetchState(location_change_action) {
     // `ignore_fetch` case should only trigger on initial page load. No need to call
     // fetchState immediately after loading fresh state from the server. Details: #593
     const server_location = yield select(state => state.offchain.get('server_location'));
-    const ignore_fetch = (pathname === server_location && is_initial_state)
-    is_initial_state = false;
+    const ignore_fetch = (pathname === server_location && is_initialstate)
+    is_initialstate = false;
     if(ignore_fetch) return;
 
     let url = `${pathname}`;
@@ -49,11 +50,7 @@ export function* fetchState(location_change_action) {
     if (url.indexOf("/author-rewards") !== -1) url = url.replace("/author-rewards", "/transfers");
 
     try {
-        const db_api = Apis.instance().db_api;
-
-        // const _state = yield call([db_api, db_api.exec], 'get_state', [url]);
-        // ################################################################################
-        let _state = {};
+        let state = {};
 
         // if empty or equal '/''
         if (!url || typeof url !== 'string' || !url.length || url === '/') url = 'trending';
@@ -66,42 +63,42 @@ export function* fetchState(location_change_action) {
 
         // TODO fix bread ration
         if (parts[0][0] === '@' || typeof parts[1] === 'string' && parts[1][0] === '@') {
-          _state = yield call([db_api, db_api.exec], 'get_state', [url]);
+          const state = yield call([api, api.getStateAsync], url)
         }
         else {
           yield put({type: 'global/FETCHING_STATE', payload: true});
-          const dynamic_global_properties = yield call([db_api, db_api.exec], 'get_dynamic_global_properties', [])
-          const feed_history              = yield call([db_api, db_api.exec], 'get_feed_history', []);
-          const witness_schedule          = yield call([db_api, db_api.exec], 'get_witness_schedule', [])
+          const dynamic_global_properties = yield call([api, api.getDynamicGlobalProperties], url)
+          const feed_history              = yield call([api, api.getFeedHistory], url)
+          const witness_schedule          = yield call([api, api.getWitnessSchedule], url)
 
-          _state.current_route = url;
-          _state.props = dynamic_global_properties;
-          _state.category_idx = { "active": [], "recent": [], "best": [] };
-          _state.categories = {};
-          _state.tags = {};
-          _state.content = {};
-          _state.accounts = {};
-          _state.pow_queue = [];
-          _state.witnesses = {};
-          _state.discussion_idx = {};
-          _state.witness_schedule = witness_schedule;
-          _state.feed_price = feed_history.current_median_history; // { "base":"1.000 GBG", "quote":"1.895 GOLOS" },
+          state.current_route = url;
+          state.props = dynamic_global_properties;
+          state.category_idx = { "active": [], "recent": [], "best": [] };
+          state.categories = {};
+          state.tags = {};
+          state.content = {};
+          state.accounts = {};
+          state.pow_queue = [];
+          state.witnesses = {};
+          state.discussion_idx = {};
+          state.witness_schedule = witness_schedule;
+          state.feed_price = feed_history.current_median_history; // { "base":"1.000 GBG", "quote":"1.895 GOLOS" },
 
-          _state.select_tags = [];
-          _state.filter_tags = [];
+          state.select_tags = [];
+          state.filter_tags = [];
 
           // by default trending tags limit=50, but if we in '/tags/' path then limit = 250
           let tags_limit = 50;
           if (parts[0] == "tags") {
             tags_limit = 250
           }
-          const trending_tags = yield call([db_api, db_api.exec], 'get_trending_tags', ['',`${tags_limit}`]);
+          const trending_tags = yield call([api, api.getTrendingTags], '',`${tags_limit}`);
 
           if (parts[0][0] === '@') {
             const uname = parts[0].substr(1)
-            accounts[uname] = yield call([db_api, db_api.exec], 'get_accounts', [uname]);
+            accounts[uname] = yield call([api, api.getAccounts], [uname]);
 
-            // FETSH part 2
+            // FETCH part 2
             switch (parts[1]) {
               case 'transfers':
                 break;
@@ -120,29 +117,28 @@ export function* fetchState(location_change_action) {
             }
           }
           else if (parts[0] === 'witnesses' || parts[0] === '~witnesses') {
-            const wits = yield call([db_api, db_api.exec], PUBLIC_API.witnesses[0], ['',50]);
-            for (var key in wits) _state.witnesses[wits[key].owner] = wits[key];
+            const wits = yield call([api, api.getWitnessesByVote], '', 50);
+            for (var key in wits) state.witnesses[wits[key].owner] = wits[key];
           }
           else if ([ 'trending', 'trending30', 'promoted', 'responses', 'hot', 'votes', 'cashout', 'active', 'created', 'recent' ].indexOf(parts[0]) >= 0) {
-            const args = [{
+            const args = {
               limit: constants.FETCH_DATA_BATCH_SIZE,
               truncate_body: constants.FETCH_DATA_TRUNCATE_BODY
-            }]
+            }
             if (typeof tag === 'string' && tag.length) {
-              // args[0].tag = tag
-              args[0].select_tags = [tag];
+              args.select_tags = [tag];
 
             }
             else {
               const select_tags = cookie.load(SELECT_TAGS_KEY);
               if (!tag && select_tags && select_tags.length) {
-                args[0].select_tags = _state.select_tags = select_tags
+                args.select_tags = state.select_tags = select_tags
               }
               else {
-                args[0].filter_tags = _state.filter_tags = IGNORE_TAGS
+                args.filter_tags = state.filter_tags = IGNORE_TAGS
               }
             }
-            const discussions = yield call([db_api, db_api.exec], PUBLIC_API[parts[0]][0], args);
+            const discussions = yield call([api, api[PUBLIC_API[parts[0]][0]]], args);
             let accounts = []
             let discussion_idxes = {}
             discussion_idxes[ PUBLIC_API[parts[0]][1] ] = []
@@ -151,33 +147,32 @@ export function* fetchState(location_change_action) {
               discussion_idxes[ PUBLIC_API[parts[0]][1] ].push(key);
               if (discussions[i].author && discussions[i].author.length)
                 accounts.push(discussions[i].author);
-              _state.content[key] = discussions[i];
+              state.content[key] = discussions[i];
             }
-            const discussions_key = typeof tag === 'string' && tag.length ? tag : _state.select_tags.sort().join('/')
-            _state.discussion_idx[discussions_key] = discussion_idxes
-            accounts = yield call([db_api, db_api.exec], 'get_accounts', [accounts]);
+            const discussions_key = typeof tag === 'string' && tag.length ? tag : state.select_tags.sort().join('/')
+            state.discussion_idx[discussions_key] = discussion_idxes
+            accounts = yield call([api, api.getAccounts], accounts);
             for (var i in accounts) {
-              _state.accounts[ accounts[i].name ] = accounts[i]
+              state.accounts[ accounts[i].name ] = accounts[i]
             }
           }
           else if (parts[0] == "tags") {
             for (var i in trending_tags) {
-              _state.tags[trending_tags[i].name] = trending_tags[i]
+              state.tags[trending_tags[i].name] = trending_tags[i]
             }
           }
           else {
             // NOTHING
           }
-          _state.tag_idx = { trending: trending_tags.map(t => t.name) };
+          state.tag_idx = { trending: trending_tags.map(t => t.name) };
 
-          for (var key in _state.content)
-            _state.content[key].active_votes = yield call([db_api, db_api.exec], 'get_active_votes', [_state.content[key].author, _state.content[key].permlink]);
+          for (var key in state.content)
+            state.content[key].active_votes = yield call([api, api.getActiveVotes], state.content[key].author, state.content[key].permlink);
 
           yield put({type: 'global/FETCHING_STATE', payload: false});
         }
-        // ################################################################################
 
-        yield put(GlobalReducer.actions.receiveState(_state));
+        yield put(GlobalReducer.actions.receiveState(state));
     } catch (error) {
         console.error('~~ Saga fetchState error ~~>', url, error);
         yield put({type: 'global/CHAIN_API_ERROR', error: error.message});
@@ -199,72 +194,71 @@ export function* fetchData(action) {
     category = category.toLowerCase();
 
     let call_name, args;
-    args = [{
+    args = {
       limit: constants.FETCH_DATA_BATCH_SIZE,
       truncate_body: constants.FETCH_DATA_TRUNCATE_BODY,
       start_author: author,
       start_permlink: permlink
-    }];
+    };
     if (category.length) {
-      // args[0].tag = category;
-      args[0].select_tags = [category];
+      // args.tag = category;
+      args.select_tags = [category];
     } else {
       let select_tags = cookie.load(SELECT_TAGS_KEY);
       if (select_tags && select_tags.length) {
-        args[0].select_tags = select_tags;
+        args.select_tags = select_tags;
         category = select_tags.sort().join('/')
       }
       else {
-        args[0].filter_tags = IGNORE_TAGS
+        args.filter_tags = IGNORE_TAGS
       }
     }
 
     yield put({type: 'global/FETCHING_DATA', payload: {order, category}});
 
     if (order === 'trending') {
-        call_name = 'get_discussions_by_trending';
+        call_name = 'getDiscussionsByTrending';
     } else if (order === 'trending30') {
-        call_name = 'get_discussions_by_trending30';
+        call_name = 'getDiscussionsByTrending30';
     } else if (order === 'promoted') {
-        call_name = 'get_discussions_by_promoted';
+        call_name = 'getDiscussionsByPromoted';
     } else if( order === 'active' ) {
-        call_name = 'get_discussions_by_active';
+        call_name = 'getDiscussionsByActive';
     } else if( order === 'cashout' ) {
-        call_name = 'get_discussions_by_cashout';
+        call_name = 'getDiscussionsByCashout';
     } else if( order === 'payout' ) {
-        call_name = 'get_post_discussions_by_payout';
+        call_name = 'getPostDiscussionsByPayout';
     } else if( order === 'payout_comments' ) {
-        call_name = 'get_comment_discussions_by_payout';
+        call_name = 'getCommentDiscussionsByPayout';
     } else if( order === 'updated' ) {
-        call_name = 'get_discussions_by_active';
+        call_name = 'getDiscussionsByActive';
     } else if( order === 'created' || order === 'recent' ) {
-        call_name = 'get_discussions_by_created';
+        call_name = 'getDiscussionsByCreated';
     } else if( order === 'by_replies' ) {
-        call_name = 'get_replies_by_last_update';
+        call_name = 'getRepliesByLastUpdate';
         args = [author, permlink, constants.FETCH_DATA_BATCH_SIZE];
     } else if( order === 'responses' ) {
-        call_name = 'get_discussions_by_children';
+        call_name = 'getDiscussionsByChildren';
     } else if( order === 'votes' ) {
-        call_name = 'get_discussions_by_votes';
+        call_name = 'getDiscussionsByVotes';
     } else if( order === 'hot' ) {
-        call_name = 'get_discussions_by_hot';
+        call_name = 'getDiscussionsByHot';
     } else if( order === 'by_feed' ) { // https://github.com/steemit/steem/issues/249
-        call_name = 'get_discussions_by_feed';
-        delete args[0].select_tags
-        args[0].select_authors = [accountname];
+        call_name = 'getDiscussionsByFeed';
+        delete args.select_tags
+        args.select_authors = [accountname];
     } else if( order === 'by_author' ) {
-        call_name = 'get_discussions_by_blog';
-        delete args[0].select_tags
-        args[0].select_authors = [accountname];
+        call_name = 'getDiscussionsByBlog';
+        delete args.select_tags
+        args.select_authors = [accountname];
     } else if( order === 'by_comments' ) {
-        call_name = 'get_discussions_by_comments';
-        delete args[0].tag
+        call_name = 'getDiscussionsByComments';
+        delete args.tag
     } else {
-        call_name = 'get_discussions_by_active';
+        call_name = 'getDiscussionsByActive';
     }
     try {
-        const db_api = Apis.instance().db_api;
-        const data = yield call([db_api, db_api.exec], call_name, args);
+        const data = yield call([api, db_api[call_name]], args);
         yield put(GlobalReducer.actions.receiveData({data, order, category, author, permlink, accountname, keys}));
     } catch (error) {
         console.error('~~ Saga fetchData error ~~>', call_name, args, error);

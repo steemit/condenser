@@ -2,7 +2,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import Apis from 'shared/api_client/ApiInstances';
 import { PrivateKey } from 'shared/ecc';
 import user from 'app/redux/User';
 import {validate_account_name} from 'app/utils/ChainValidation';
@@ -11,6 +10,8 @@ import g from 'app/redux/GlobalReducer';
 import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInput';
 import { APP_DOMAIN, SUPPORT_EMAIL } from 'app/client_config';
 import tt from 'counterpart';
+import {api} from 'golos-js';
+
 //import SignupProgressBar from 'app/components/elements/SignupProgressBar';
 
 const PASSWORD_MIN_LENGTH = 32;
@@ -129,7 +130,7 @@ class CreateAccount extends React.Component {
         if (name.length > 0) {
             name_error = validate_account_name(name);
             if (!name_error) {
-                promise = Apis.db_api('get_accounts', [name]).then(res => {
+                promise = api.getAccountsAsync([name]).then(res => {
                     return res && res.length > 0 ? tt('postfull_jsx.account_name_is_not_available') : '';
                 });
             }

@@ -1,9 +1,10 @@
 
 import {Signature} from '../ecc'
-import {Apis, ChainConfig} from '../api_client'
+import {ChainConfig} from '../api_client'
 import {select} from 'redux-saga/effects'
 import {ops} from '../serializer'
 import {fromJS} from 'immutable'
+import {api} from 'golos-js';
 
 const {transaction} = ops
 
@@ -15,7 +16,7 @@ const {transaction} = ops
 */
 export function* createTransaction(operations, head, expire_epoc, num) {
     if(head == null || expire_epoc == null || num == null) {
-        const props = yield Apis.db_api('get_dynamic_global_properties')
+        const props = yield api.getDynamicGlobalPropertiesAsync()
         // state.global is not available on the server.
         // In the client, use state.global.props incase the user was on a fork the last time they refreshed the state.  This will help the transaction to fail.
         const props2 = process.env.BROWSER ? yield select(state => state.global.get('props')) : fromJS(props)

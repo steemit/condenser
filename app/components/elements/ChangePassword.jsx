@@ -4,7 +4,6 @@ import transaction from 'app/redux/Transaction'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import {PrivateKey} from 'shared/ecc'
 import {key_utils} from 'shared/ecc'
-import Apis from 'shared/api_client/ApiInstances'
 import {validate_account_name} from 'app/utils/ChainValidation'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import tt from 'counterpart';

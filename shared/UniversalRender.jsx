@@ -146,9 +146,6 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
         if (url.indexOf('/curation-rewards') !== -1) url = url.replace(/\/curation-rewards$/, '/transfers');
         if (url.indexOf('/author-rewards') !== -1) url = url.replace(/\/author-rewards$/, '/transfers');
 
-        // onchain = await Apis.instance().db_api.exec('get_state', [url]);
-        // ################################################################################
-
         // if empty or equal '/''
         if (!url || typeof url !== 'string' || !url.length || url === '/') url = 'trending';
         // remove / from start
@@ -160,14 +157,14 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
 
         // TODO fix bread ration
         if (parts[0][0] === '@' || typeof parts[1] === 'string' && parts[1][0] === '@') {
-          onchain = await Apis.instance().db_api.exec('get_state', [url]);
+          onchain = await api.getStateAsync(url);
         }
         else {
           const _state = {};
-          const feed_history      = await Apis.instance().db_api.exec('get_feed_history', [url]);
+          const feed_history = await api.getFeedHistoryAsync(url);
 
           _state.current_route = url;
-          _state.props = await Apis.instance().db_api.exec('get_dynamic_global_properties', []);
+          _state.props = await api.getDynamicGlobalPropertiesAsync();
           _state.category_idx = { "active": [], "recent": [], "best": [] };
           _state.categories = {};
           _state.tags = {};
@@ -176,7 +173,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
           _state.pow_queue = [];
           _state.witnesses = {};
           _state.discussion_idx = {};
-          _state.witness_schedule = await Apis.instance().db_api.exec('get_witness_schedule', []);
+          _state.witness_schedule = await api.getWitnessScheduleAsync();
           _state.feed_price = feed_history.current_median_history; // { "base":"1.000 GBG", "quote":"1.895 GOLOS" },
 
           _state.select_tags = [];
@@ -187,17 +184,17 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
           if (parts[0] == "tags") {
             tags_limit = 250
           }
-          const trending_tags = await Apis.instance().db_api.exec('get_trending_tags', ['',`${tags_limit}`]);
+          const trending_tags = await api.getTrendingTagsAsync('',`${tags_limit}`);
 
           if (parts[0][0] === '@') {
             const uname = parts[0].substr(1)
-            _state.accounts[uname] = await Apis.instance().db_api.exec('get_accounts', [[uname]]);
-            _state.accounts[uname].tags_usage = await Apis.instance().db_api.exec('get_tags_used_by_author', [uname]);
+            _state.accounts[uname] = await api.getAccountsAsync([uname]);
+            _state.accounts[uname].tags_usage = await api.getTagsUsedByAuthorAsync([uname]);
 
             // FETSH part 2
             switch (parts[1]) {
               case 'transfers':
-                const history = await Apis.instance().db_api.exec('get_account_history', [uname, -1, 1000]);
+                const history = await api.getAccountHistoryAsync(uname, -1, 1000);
                 for (var key in history) {
                   switch (history[key][1].op) {
                     case 'transfer_to_vesting':
@@ -246,7 +243,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
                 break;
 
               case 'recent-replies':
-                const replies = await Apis.instance().db_api.exec('get_replies_by_last_update', [uname, "", 50]);
+                const replies = await api.getRepliesByLastUpdateAsync(uname, '', 50);
                 _state.accounts[uname].recent_replies = []
                 for (var key in replies) {
                   const reply_ref = replies[key].author + "/" + replies[key].permlink;
@@ -269,7 +266,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
             }
           }
           else if (parts[0] === 'witnesses' || parts[0] === '~witnesses') {
-            const wits = await Apis.instance().db_api.exec(PUBLIC_API.witnesses[0], ['',50]);
+            const wits = await api[PUBLIC_API.witnesses[0]]('', 50); ['',50]);
             for (var key in wits) _state.witnesses[wits[key].owner] = wits[key];
           }
           else if ([
@@ -303,7 +300,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
                 args[0].filter_tags = _state.filter_tags = IGNORE_TAGS
               }
             }
-            const discussions = await Apis.instance().db_api.exec(PUBLIC_API[parts[0]][0], args);
+            const discussions = await api[PUBLIC_API[parts[0]][0]](args);
             let accounts = []
             let discussion_idxes = {}
             discussion_idxes[ PUBLIC_API[parts[0]][1] ] = []
@@ -316,7 +313,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
             }
             const discussions_key = typeof tag === 'string' && tag.length ? tag : _state.select_tags.sort().join('/')
             _state.discussion_idx[discussions_key] = discussion_idxes;
-            accounts = await Apis.instance().db_api.exec('get_accounts', [accounts]);
+            accounts = await api.getAccountsAsync([accounts]);
             for (var i in accounts) {
               _state.accounts[ accounts[i].name ] = accounts[i]
             }
@@ -332,15 +329,11 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
 
           _state.tag_idx = { "trending": trending_tags.map(t => t.name) };
 
-          // for (var key in _state.accounts)
-          //   _state.accounts[key].reputation = await Apis.instance().db_api.exec('get_account_reputations', [_state.content[key][1].author, _state.content[key][1].permlink]);
-
           for (var key in _state.content)
-            _state.content[key].active_votes = await Apis.instance().db_api.exec('get_active_votes', [_state.content[key].author, _state.content[key].permlink]);
+            _state.content[key].active_votes = await api.getActiveVotesAsync(_state.content[key].author, _state.content[key].permlink);
 
           onchain = _state
         }
-        // ################################################################################
 
         if (Object.getOwnPropertyNames(onchain.accounts).length === 0 && (url.match(routeRegex.UserProfile1) || url.match(routeRegex.UserProfile3))) { // protect for invalid account
             return {
@@ -362,7 +355,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
 
         if (!url.match(routeRegex.PostsIndex) && !url.match(routeRegex.UserProfile1) && !url.match(routeRegex.UserProfile2) && url.match(routeRegex.PostNoCategory)) {
             const params = url.substr(2, url.length - 1).split("/");
-            const content = await Apis.instance().db_api.exec('get_content', [params[0], params[1]]);
+            const content = await api.getContentAsync(params[0], params[1]);
             if (content.author && content.permlink) { // valid short post url
                 onchain.content[url.substr(2, url.length - 1)] = content;
             } else { // protect on invalid user pages (i.e /user/transferss)

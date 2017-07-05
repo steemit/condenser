@@ -5,7 +5,7 @@ import {connect} from 'react-redux'
 import user from 'app/redux/User'
 import g from 'app/redux/GlobalReducer'
 import ShowKey from 'app/components/elements/ShowKey'
-import { translate } from 'app/Translator';
+import tt from 'counterpart';
 
 class Keys extends Component {
     static propTypes = {
@@ -62,7 +62,7 @@ class Keys extends Component {
             <span>
                 <div className="row">
                     <div className="column small-12">
-                        <label>{translate(authType.toLowerCase())}</label>
+                        <label>{tt('g.' + authType.toLowerCase())}</label>
                         {auths}
                     </div>
                 </div>

@@ -2,7 +2,7 @@ import React, {PropTypes, Component} from 'react'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import {reduxForm} from 'redux-form' // @deprecated, instead use: app/utils/ReactForm.js
 import {cleanReduxInput} from 'app/utils/ReduxForms'
-import { translate } from 'app/Translator';
+import tt from 'counterpart';
 import {PrivateKey, PublicKey} from 'steem/lib/auth/ecc';
 
 class KeyEdit extends Component {
@@ -76,7 +76,7 @@ class KeyEdit extends Component {
                         <span className="error">{password.touched && password.error && password.error}&nbsp;</span>
                     </div>
                     <div className={'column small-12' + (confirm.touched && confirm.error ? ' error' : '')}>
-                        <label>{translate('confirm_password')}</label>
+                        <label>{tt('g.confirm_password')}</label>
                         <input ref="keyConfirm" type="password" {...cleanReduxInput(confirm)} disabled={isWif}
                             placeholder="Confirm Password" autoComplete="off" />
                         <div className="error">{confirm.touched && confirm.error && confirm.error}&nbsp;</div>
@@ -85,18 +85,18 @@ class KeyEdit extends Component {
                         {error && <div className="error">{error}</div>}
                         {submitting && <LoadingIndicator type="circle" />}
                         {accountChanged && <span>
-                            <div className="success">{translate('account_updated')}</div>
+                            <div className="success">{tt('g.account_updated')}</div>
                             <br />
                             <button className="button" type="button" onClick={onCancel}>
-                                {translate('close')}
+                                {tt('g.close')}
                             </button>
                         </span>}
                         {!accountChanged && <span>
                             <button className="button" type="submit" disabled={submitting}>
-                                {translate('save')}
+                                {tt('g.save')}
                             </button>
                             <button className="button" type="button" disabled={submitting} onClick={onCancel}>
-                                {translate('cancel')}
+                                {tt('g.cancel')}
                             </button>
                         </span>}
                     </div>
@@ -107,11 +107,11 @@ class KeyEdit extends Component {
 }
 
 const keyValidate = values => ({
-    password: ! values.password ? translate('required') :
-        values.password.length < 32 ? translate('password_must_be_characters_or_more', {amount: 32}) :
-        PublicKey.fromString(values.password) ? translate('need_password_or_key') :
+    password: ! values.password ? tt('g.required') :
+        values.password.length < 32 ? tt('g.password_must_be_characters_or_more', {amount: 32}) :
+        PublicKey.fromString(values.password) ? tt('g.need_password_or_key') :
         null,
-    confirm: values.confirm !== values.password ? translate('passwords_do_not_match') : null,
+    confirm: values.confirm !== values.password ? tt('g.passwords_do_not_match') : null,
 })
 
 export default reduxForm(

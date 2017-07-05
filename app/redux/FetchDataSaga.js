@@ -7,7 +7,7 @@ import constants from './constants';
 import {fromJS, Map} from 'immutable'
 import { IGNORE_TAGS, PUBLIC_API, SELECT_TAGS_KEY } from 'app/client_config';
 import cookie from "react-cookie";
-import {api} from 'golos-js'
+import {api} from 'golos-js';
 
 export const fetchDataWatches = [watchLocationChange, watchDataRequests, watchFetchJsonRequests, watchFetchState, watchGetContent, watchPayoutWindowRequests];
 

@@ -266,7 +266,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
             }
           }
           else if (parts[0] === 'witnesses' || parts[0] === '~witnesses') {
-            const wits = await api[PUBLIC_API.witnesses[0]]('', 50); ['',50]);
+            const wits = await api[PUBLIC_API.witnesses[0]]('', 50);
             for (var key in wits) _state.witnesses[wits[key].owner] = wits[key];
           }
           else if ([

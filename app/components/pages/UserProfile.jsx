@@ -50,12 +50,12 @@ export default class UserProfile extends React.Component {
 
         const account = np.routeParams.accountname.toLowerCase();
         if (follow) {
-            followersLoading = follow.getIn(['get_followers', account, 'blog_loading'], false);
-            followingLoading = follow.getIn(['get_following', account, 'blog_loading'], false);
+            followersLoading = follow.getIn(['getFollowersAsync', account, 'blog_loading'], false);
+            followingLoading = follow.getIn(['getFollowingAsync', account, 'blog_loading'], false);
         }
         if (np.follow) {
-            npFollowersLoading = np.follow.getIn(['get_followers', account, 'blog_loading'], false);
-            npFollowingLoading = np.follow.getIn(['get_following', account, 'blog_loading'], false);
+            npFollowersLoading = np.follow.getIn(['getFollowersAsync', account, 'blog_loading'], false);
+            npFollowingLoading = np.follow.getIn(['getFollowingAsync', account, 'blog_loading'], false);
         }
 
         return (
@@ -124,8 +124,8 @@ export default class UserProfile extends React.Component {
         } else {
             return <div><center>{tt('user_profile.unknown_account')}</center></div>
         }
-        const followers = follow && follow.getIn(['get_followers', accountname]);
-        const following = follow && follow.getIn(['get_following', accountname]);
+        const followers = follow && follow.getIn(['getFollowersAsync', accountname]);
+        const following = follow && follow.getIn(['getFollowingAsync', accountname]);
 
         // instantiate following items
         let totalCounts = this.props.follow_count;

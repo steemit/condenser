@@ -138,7 +138,7 @@ class Settings extends React.Component {
         const {profile_image, name, about, location, website} = this.state
 
         const {follow, account, isOwnAccount} = this.props
-        const following = follow && follow.getIn(['get_following', account.name]);
+        const following = follow && follow.getIn(['getFollowingAsync', account.name]);
         const ignores = isOwnAccount && following && following.get('ignore_result')
 
         const languageSelectBox = <select defaultValue={process.env.BROWSER ? localStorage.getItem('language') : DEFAULT_LANGUAGE} onChange={this.onLanguageChange}>

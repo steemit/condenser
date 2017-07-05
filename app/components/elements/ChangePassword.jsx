@@ -9,6 +9,7 @@ import {validate_account_name} from 'app/utils/ChainValidation'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import tt from 'counterpart';
 import { APP_NAME } from 'app/client_config';
+import {api} from 'golos-js'
 
 const {string, oneOf} = React.PropTypes
 
@@ -42,7 +43,7 @@ class ChangePassword extends React.Component {
         if (name.length > 0) {
             nameError = validate_account_name(name);
             if (!nameError) {
-                promise = Apis.db_api('get_accounts', [name]).then(res => {
+                promise = api.getAccountsAsync([name]).then(res => {
                     return !(res && res.length > 0) ? tt('g.account_not_found') : '';
                 });
             }

@@ -138,7 +138,7 @@ export function* fetchState(location_change_action) {
                 args.filter_tags = state.filter_tags = IGNORE_TAGS
               }
             }
-            const discussions = yield call([api, api[PUBLIC_API[parts[0]][0]]], args);
+            const discussions = yield call([api, api[PUBLIC_API[parts[0]][0]]], ...[args]);
             let accounts = []
             let discussion_idxes = {}
             discussion_idxes[ PUBLIC_API[parts[0]][1] ] = []
@@ -258,7 +258,7 @@ export function* fetchData(action) {
         call_name = 'getDiscussionsByActive';
     }
     try {
-        const data = yield call([api, db_api[call_name]], args);
+        const data = yield call([api, api[call_name]], ...[args]);
         yield put(GlobalReducer.actions.receiveData({data, order, category, author, permlink, accountname, keys}));
     } catch (error) {
         console.error('~~ Saga fetchData error ~~>', call_name, args, error);

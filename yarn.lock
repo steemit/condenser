@@ -2,26 +2,6 @@
 # yarn lockfile v1
 
 
-"@goloschain/golos-js@git+https://github.com/GolosChain/golos-js.git#ade347ef85e3eace69218193f1a723b1ad9748d9":
-  version "0.5.20"
-  resolved "git+https://github.com/GolosChain/golos-js.git#ade347ef85e3eace69218193f1a723b1ad9748d9"
-  dependencies:
-    bigi "^1.4.2"
-    bluebird "^3.4.6"
-    browserify-aes "^1.0.6"
-    bs58 "^4.0.0"
-    buffer "^5.0.6"
-    bytebuffer "^5.0.1"
-    create-hash "^1.1.2"
-    create-hmac "^1.1.4"
-    cross-env "^5.0.0"
-    debug "^2.6.8"
-    detect-node "^2.0.3"
-    ecurve "^1.0.5"
-    lodash "^4.16.4"
-    secure-random "^1.1.1"
-    ws "^1.1.1"
-
 "@steem/crypto-session@git+https://github.com/steemit/crypto-session.git#83a90b319ce5bc6a70362d52a15a815de7e729bb":
   version "1.0.3"
   resolved "git+https://github.com/steemit/crypto-session.git#83a90b319ce5bc6a70362d52a15a815de7e729bb"
@@ -3181,6 +3161,26 @@ glogg@^1.0.0:
   dependencies:
     sparkles "^1.0.0"
 
+golos-js@^0.5.20:
+  version "0.5.20"
+  resolved "https://registry.yarnpkg.com/golos-js/-/golos-js-0.5.20.tgz#7f33097ea5844c8f4c57ff8907df51fbb48d3975"
+  dependencies:
+    bigi "^1.4.2"
+    bluebird "^3.4.6"
+    browserify-aes "^1.0.6"
+    bs58 "^4.0.0"
+    buffer "^5.0.6"
+    bytebuffer "^5.0.1"
+    create-hash "^1.1.2"
+    create-hmac "^1.1.4"
+    cross-env "^5.0.0"
+    debug "^2.6.8"
+    detect-node "^2.0.3"
+    ecurve "^1.0.5"
+    lodash "^4.16.4"
+    secure-random "^1.1.1"
+    ws "^1.1.1"
+
 graceful-fs@4.1.6, graceful-fs@^4.1.2, graceful-fs@^4.1.4, graceful-fs@^4.1.6:
   version "4.1.6"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.1.6.tgz#514c38772b31bee2e08bedc21a0aeb3abf54c19e"
@@ -4830,11 +4830,11 @@ moment-timezone@^0.5.4:
   dependencies:
     moment ">= 2.6.0"
 
-moment@2.18.1:
+moment@2.18.1, "moment@>= 2.6.0", moment@^2.8.3:
   version "2.18.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.18.1.tgz#c36193dd3ce1c2eed2adb7c802dbbc77a81b1c0f"
 
-"moment@>= 2.6.0", moment@^2.13.0, moment@^2.15.1, moment@^2.8.3:
+moment@^2.13.0, moment@^2.15.1:
   version "2.17.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.17.1.tgz#fed9506063f36b10f066c8b59a144d7faebe1d82"
 

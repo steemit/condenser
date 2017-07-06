@@ -185,10 +185,10 @@ const assetArray = [
 
 //core asset 1.3.0
 export const core = {
-    "id":"1.3.0",
+    "asset_name":"GOLOS",
     "symbol":"BTS",
     "precision":5,
-    "issuer":"1.2.3",
+    "issuer":"creator",
     "options":{
         "flags":0,
         "market_fee_percent":0,
@@ -199,11 +199,11 @@ export const core = {
         "core_exchange_rate":{
             "base":{
                 "amount":1,
-                "asset_id":"1.3.0"
+                "asset_name":"GBG"
             },
             "quote":{
                 "amount":1,
-                "asset_id":"1.3.0"
+                "asset_name":"GBG"
             }
         },
         "description":"",
@@ -214,8 +214,7 @@ export const core = {
     },
     "dynamic_asset_data_id":"2.3.0",
     "dynamic":{
-        "asset_id":"1.3.0",
-        //
+        "asset_name":"GBG",
         "id":"2.3.0",
         "current_supply":"260240931209497",
         "confidential_supply":"26906766462",

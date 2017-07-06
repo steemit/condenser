@@ -160,7 +160,7 @@ function* broadcastOperation({payload:
         const page = eventType === 'Vote' ? `@${operation.author}/${operation.permlink}` : '';
         serverApiRecordEvent(eventType, page);
     } catch(error) {
-        console.error('TransactionSage', error)
+        console.error('TransactionSaga', error)
         if(errorCallback) errorCallback(error.toString())
     }
 }

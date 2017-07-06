@@ -29,7 +29,7 @@ import WalletSubMenu from 'app/components/elements/WalletSubMenu';
 import Userpic from 'app/components/elements/Userpic';
 import Callout from 'app/components/elements/Callout';
 import normalizeProfile from 'app/utils/NormalizeProfile';
-import AccountAssetCreate from 'app/components/modules/AssetCreate';
+import AssetCreate from 'app/components/modules/AssetCreate';
 import AccountAssets from 'app/components/modules/AccountAssets';
 import UserInvites from 'app/components/elements/UserInvites';
 
@@ -309,7 +309,7 @@ export default class UserProfile extends React.Component {
             tab_content = <div>
                 <WalletSubMenu account_name={account.name} />
 
-                <AccountAssetCreate/>
+                <AssetCreate account={account}/>
             </div>
         } else if( section === 'invites' ) {
             walletClass = 'active'

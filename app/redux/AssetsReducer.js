@@ -24,12 +24,6 @@ export default createModule({
             reducer: (state, {payload}) => {
                 return state.set('asset', payload)
             }
-        },
-        {
-            action : 'CREATE_ASSET',
-            reducer : (state, {payload}) => {
-                return state('asset', payload)
-            }
         }
     ]
 });

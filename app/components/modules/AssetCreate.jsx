@@ -131,7 +131,7 @@ class BitAssetOptions extends React.Component {
     }
 }
 
-class AccountAssetCreate extends React.Component {
+class AssetCreate extends React.Component {
 
     static propTypes = {
         core: PropTypes.any.isRequired,
@@ -176,20 +176,20 @@ class AccountAssetCreate extends React.Component {
                 }
             },
             bitasset_opts: {
-                "feed_lifetime_sec" : 60 * 60 * 24,
-                "minimum_feeds" : 7,
-                "force_settlement_delay_sec" : 60 * 60 * 24,
-                "force_settlement_offset_percent" : 1 * assetConstants.GRAPHENE_1_PERCENT,
-                "maximum_force_settlement_volume" : 20 * assetConstants.GRAPHENE_1_PERCENT,
-                "short_backing_asset" : "1.3.0"
+                feed_lifetime_sec : 60 * 60 * 24,
+                minimum_feeds : 7,
+                force_settlement_delay_sec : 60 * 60 * 24,
+                force_settlement_offset_percent : 1 * assetConstants.GRAPHENE_1_PERCENT,
+                maximum_force_settlement_volume : 20 * assetConstants.GRAPHENE_1_PERCENT,
+                short_backing_asset : "1.3.0"
             },
             marketInput: ""
         };
     }
 
     getPermissions(state) {
-        let flagBooleans = assetUtils.getFlagBooleans(0, state.isBitAsset);
-        let permissionBooleans = assetUtils.getFlagBooleans("all", state.isBitAsset);
+        const flagBooleans = assetUtils.getFlagBooleans(0, state.isBitAsset);
+        const permissionBooleans = assetUtils.getFlagBooleans("all", state.isBitAsset);
 
         return {
             flagBooleans,
@@ -203,9 +203,7 @@ class AccountAssetCreate extends React.Component {
 
     onInputMarket(event) {
         let asset = event.target.value.trim().substr(0, 16).toUpperCase();
-        this.setState({
-            marketInput: asset
-        });
+        this.setState({marketInput: asset});
 
         //TODO
         //this.onUpdateDescription("market", asset.get("symbol"));
@@ -342,7 +340,7 @@ class AccountAssetCreate extends React.Component {
             asset = e.asset.get("id");
         }
 
-        let {core_exchange_rate} = this.state;
+        const {core_exchange_rate} = this.state;
         core_exchange_rate[type] = {
             amount: amount,
             asset_id: asset
@@ -353,24 +351,24 @@ class AccountAssetCreate extends React.Component {
     onToggleBitAsset() {
         this.state.isBitAsset = !this.state.isBitAsset;
         if (!this.state.isBitAsset) {
-            this.state.is_prediction_market = false;
+            this.setState({is_prediction_market :false})
         }
 
-        let {flagBooleans, permissionBooleans} = this.getPermissions(this.state);
-        this.state.flagBooleans = flagBooleans;
-        this.state.permissionBooleans = permissionBooleans;
+        const {flagBooleans, permissionBooleans} = this.getPermissions(this.state);
+        this.setState({flagBooleans});
+        this.setState({permissionBooleans});
 
         this.forceUpdate();
     }
 
     validateEditFields( new_state ) {
-        let errors = {
+        const errors = {
             max_supply: null
         };
 
         errors.symbol = validate_asset_symbol(new_state.symbol);
         //TODO
-        let existingAsset = ''; //Store.getAsset(new_state.symbol);
+        const existingAsset = ''; //Store.getAsset(new_state.symbol);
         if (existingAsset) {
             errors.symbol = tt('user_issued_assets.exists')
         }
@@ -382,44 +380,40 @@ class AccountAssetCreate extends React.Component {
     }
 
     onFlagChange(key) {
-        let booleans = this.state.flagBooleans;
+        const booleans = this.state.flagBooleans;
         booleans[key] = !booleans[key];
-        this.setState({
-            flagBooleans: booleans
-        });
+        this.setState({ flagBooleans: booleans });
     }
 
     onPermissionChange(key) {
-        let booleans = this.state.permissionBooleans;
+        const booleans = this.state.permissionBooleans;
         booleans[key] = !booleans[key];
-        this.setState({
-            permissionBooleans: booleans
-        });
+        this.setState({ permissionBooleans: booleans });
     }
 
     onTogglePM() {
         this.state.is_prediction_market = !this.state.is_prediction_market;
         this.state.update.precision = this.props.core.get("precision");
-        this.state.core_exchange_rate.base.asset_id = this.props.core.get("id");
+        this.state.core_exchange_rate.base.asset_name = this.props.core.get("asset_name");
         this.forceUpdate();
     }
 
     createAsset(e) {
         e.preventDefault();
-        let {update, flagBooleans, permissionBooleans, core_exchange_rate,
-            isBitAsset, is_prediction_market, bitasset_opts} = this.state;
+        const { update, flagBooleans, permissionBooleans, core_exchange_rate,
+            isBitAsset, is_prediction_market, bitasset_opts } = this.state;
 
-        let {account} = this.props;
+        const { account } = this.props;
 
-        let flags = assetUtils.getFlags(flagBooleans, isBitAsset);
-        let permissions = assetUtils.getPermissions(permissionBooleans, isBitAsset);
+        const flags = assetUtils.getFlags(flagBooleans, isBitAsset);
+        const permissions = assetUtils.getPermissions(permissionBooleans, isBitAsset);
 
         if (this.state.marketInput !== update.description.market) {
             update.description.market = "";
         }
-        let description = JSON.stringify(update.description);
+        const description = JSON.stringify(update.description);
 
-        this.props.assetCreate(account, update, flags, permissions, core_exchange_rate, isBitAsset, is_prediction_market, bitasset_opts, description);
+        this.props.assetCreate(account.name, update, flags, permissions, core_exchange_rate, isBitAsset, is_prediction_market, bitasset_opts, description);
     }
 
     reset(e) {
@@ -431,15 +425,16 @@ class AccountAssetCreate extends React.Component {
     }
 
     render() {
-        let {globalObject, core} = this.props;
-        let {errors, isValid, update, flagBooleans, permissionBooleans,
-            core_exchange_rate, is_prediction_market, isBitAsset, bitasset_opts} = this.state;
+        const { globalObject, core } = this.props;
+        const { errors, isValid, update, flagBooleans, permissionBooleans,
+            core_exchange_rate, is_prediction_market, isBitAsset, bitasset_opts } = this.state;
 
         //only for DEBUG
         // is_prediction_market = true;
 
         // Estimate the asset creation fee from the symbol character length
-        let symbolLength = update.symbol.length, createFee = "N/A";
+        let symbolLength = update.symbol.length;
+        let createFee = "N/A";
 
         if(symbolLength === 3) {
             createFee = <FormattedAsset amount={utils.estimateFee("asset_create", ["symbol3"], globalObject)} asset={"1.3.0"} />;
@@ -791,10 +786,10 @@ export default connect(
         }
     },
     dispatch => ({
-        assetCreate : (account, update, flags, permissions, core_exchange_rate, isBitAsset, is_prediction_market, bitasset_opts, description) => {
+        assetCreate : (account, createObject, flags, permissions, coreExchangeRate, isBitAsset, isPredictionMarket, bitassetOpts, description) => {
             dispatch({
                 type: 'CREATE_ASSET',
-                payload: {account, update, flags, permissions, core_exchange_rate, isBitAsset, is_prediction_market, bitasset_opts, description}
+                payload: {account, createObject, flags, permissions, coreExchangeRate, isBitAsset, isPredictionMarket, bitassetOpts, description}
             })
         },
 
@@ -802,4 +797,4 @@ export default connect(
 
         }
     })
-)(AccountAssetCreate);
+)(AssetCreate);

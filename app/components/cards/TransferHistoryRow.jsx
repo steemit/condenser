@@ -8,9 +8,8 @@ import {numberWithCommas, vestsToSp} from 'app/utils/StateFunctions'
 import tt from 'counterpart';
 
 class TransferHistoryRow extends React.Component {
-
     render() {
-        const {op, context, curation_reward, author_reward, powerdown_vests, reward_vests} = this.props;
+        const {op, context, curation_reward, author_reward, benefactor_reward, powerdown_vests, reward_vests} = this.props;
         // context -> account perspective
 
         const type = op[1].op[0];
@@ -110,6 +109,11 @@ class TransferHistoryRow extends React.Component {
                 // data.open_owner filled my order
                 description_start += `Paid ${data.current_pays} for ${data.open_pays}`;
             }
+        } else if (type === 'comment_benefactor_reward') {
+          let steem_payout = "";
+          if(data.steem_payout !== '0.000 STEEM') steem_payout = ", " + data.steem_payout;
+          description_start += `${benefactor_reward} STEEM POWER for ${data.author}/${data.permlink}`;
+          description_end = '';
         } else {
             description_start += JSON.stringify({type, ...data}, null, 2);
         }
@@ -142,10 +146,12 @@ export default connect(
         const reward_vests = type === 'claim_reward_balance' ? numberWithCommas(vestsToSp(state, data.reward_vests)) : undefined;
         const curation_reward = type === 'curation_reward' ? numberWithCommas(vestsToSp(state, data.reward)) : undefined;
         const author_reward = type === 'author_reward' ? numberWithCommas(vestsToSp(state, data.vesting_payout)) : undefined;
+        const benefactor_reward = type === 'comment_benefactor_reward' ? numberWithCommas(vestsToSp(state, data.reward)) : undefined;
         return {
             ...ownProps,
             curation_reward,
             author_reward,
+            benefactor_reward,
             powerdown_vests,
             reward_vests,
         }

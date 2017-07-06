@@ -131,7 +131,7 @@ class App extends React.Component {
 
     render() {
         const {location, params, children, flash, new_visitor,
-            depositSteem, signup_bonus} = this.props;
+            depositSteem, signup_bonus, username} = this.props;
         const lp = false; //location.pathname === '/';
         const miniHeader = location.pathname === '/create_account' || location.pathname === '/pick_account';
         const params_keys = Object.keys(params);
@@ -228,7 +228,7 @@ class App extends React.Component {
                         </a>
                     </li>
                     <li>
-                        <a href="https://blocktrades.us/unregistered_trade/btc/steem" target="_blank" rel="noopener noreferrer">
+                        <a onClick={() => depositSteem(username)}>
                             {tt('navigation.buy_LIQUID_TOKEN', {LIQUID_TOKEN})}
                         </a>
                     </li>
@@ -314,6 +314,7 @@ App.propTypes = {
     signup_bonus: React.PropTypes.string,
     loginUser: React.PropTypes.func.isRequired,
     depositSteem: React.PropTypes.func.isRequired,
+    username:  React.PropTypes.string,
 };
 
 export default connect(
@@ -325,14 +326,18 @@ export default connect(
             new_visitor: !state.user.get('current') &&
                 !state.offchain.get('user') &&
                 !state.offchain.get('account') &&
-                state.offchain.get('new_visit')
+                state.offchain.get('new_visit'),
+            username: state.user.getIn(['current', 'username']) || state.offchain.get('account') || ''
         };
     },
     dispatch => ({
         loginUser: () =>
             dispatch(user.actions.usernamePasswordLogin()),
-        depositSteem: () => {
-            dispatch(g.actions.showDialog({name: 'blocktrades_deposit', params: {outputCoinType: 'VESTS'}}));
+        depositSteem: (username) => {
+            const new_window = window.open();
+            new_window.opener = null;
+            new_window.location = 'https://blocktrades.us/?input_coin_type=btc&output_coin_type=steem&receive_address=' + username;
+            //dispatch(g.actions.showDialog({name: 'blocktrades_deposit', params: {outputCoinType: 'VESTS'}}));
         },
     })
 )(App);

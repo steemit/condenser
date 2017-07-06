@@ -43,7 +43,7 @@ class Voting extends React.Component {
         active_votes: React.PropTypes.object,
         loggedin: React.PropTypes.bool,
         post_obj: React.PropTypes.object,
-        vesting_shares: React.PropTypes.number,
+        net_vesting_shares: React.PropTypes.number,
         voting: React.PropTypes.bool,
     };
 
@@ -73,7 +73,7 @@ class Voting extends React.Component {
             this.setState({votingUp: up, votingDown: !up});
             const {myVote} = this.state;
             const {author, permlink, username, is_comment} = this.props;
-            if (this.props.vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD) {
+            if (this.props.net_vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD) {
                 localStorage.setItem('voteWeight' + (up ? '' : 'Down') + '-'+username+(is_comment ? '-comment' : ''),
                     this.state.weight);
             }
@@ -127,7 +127,7 @@ class Voting extends React.Component {
     }
 
     render() {
-        const {active_votes, showList, voting, flag, vesting_shares, is_comment, post_obj} = this.props;
+        const {active_votes, showList, voting, flag, net_vesting_shares, is_comment, post_obj} = this.props;
         const {username} = this.props;
         const {votingUp, votingDown, showWeight, weight, myVote} = this.state;
         // console.log('-- Voting.render -->', myVote, votingUp, votingDown);
@@ -143,11 +143,11 @@ class Voting extends React.Component {
 
             // myVote === current vote
             const dropdown = <FoundationDropdown show={showWeight} onHide={() => this.setState({showWeight: false})} className="Voting__adjust_weight_down">
-                {(myVote == null || myVote === 0) && vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD &&
-                <div>
-                    <div className="weight-display">- {weight / 100}%</div>
-                    <Slider min={100} max={10000} step={100} value={weight} onChange={this.handleWeightChange} />
-                </div>
+                {(myVote == null || myVote === 0) && net_vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD &&
+                    <div>
+                        <div className="weight-display">- {weight / 100}%</div>
+                        <Slider min={100} max={10000} step={100} value={weight} onChange={this.handleWeightChange} />
+                    </div>
                 }
                 <CloseButton onClick={() => this.setState({showWeight: false})} />
                 <div className="clear Voting__about-flag">
@@ -234,7 +234,7 @@ class Voting extends React.Component {
 
         let voteUpClick = this.voteUp;
         let dropdown = null;
-        if (myVote <= 0 && vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD) {
+        if (myVote <= 0 && net_vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD) {
             voteUpClick = this.toggleWeightUp;
             dropdown = <FoundationDropdown show={showWeight} onHide={() => this.setState({showWeight: false})}>
                 <div className="Voting__adjust_weight">
@@ -273,13 +273,16 @@ export default connect(
         const current_account = state.user.get('current')
         const username = current_account ? current_account.get('username') : null;
         const vesting_shares = current_account ? current_account.get('vesting_shares') : 0.0;
+        const delegated_vesting_shares = current_account ? current_account.get('delegated_vesting_shares') : 0.0;
+        const received_vesting_shares = current_account ? current_account.get('received_vesting_shares') : 0.0;
+        const net_vesting_shares = vesting_shares - delegated_vesting_shares + received_vesting_shares;
         const voting = state.global.get(`transaction_vote_active_${author}_${permlink}`)
 
         return {
             post: ownProps.post,
             flag: ownProps.flag,
             showList: ownProps.showList,
-            author, permlink, username, active_votes, vesting_shares, is_comment,
+            author, permlink, username, active_votes, net_vesting_shares, is_comment,
             post_obj: post,
             loggedin: username != null,
             voting

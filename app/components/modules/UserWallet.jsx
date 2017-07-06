@@ -30,9 +30,10 @@ class UserWallet extends React.Component {
         this.onShowDepositSteem = (current_user_name, e) => {
             e.preventDefault();
             // this.setState({showDeposit: !this.state.showDeposit, depositType: 'STEEM'})
+            const name = this.props.current_user.get('username');
             const new_window = window.open();
             new_window.opener = null;
-            new_window.location = 'https://blocktrades.us/?input_coin_type=btc&output_coin_type=steem&receive_address=' + current_user_name;
+            new_window.location = 'https://blocktrades.us/?input_coin_type=btc&output_coin_type=steem&receive_address=' + name;
         };
         this.onShowWithdrawSteem = (e) => {
             e.preventDefault();
@@ -279,9 +280,9 @@ class UserWallet extends React.Component {
                 <div className="columns small-10 medium-12 medium-expand">
                     {isMyAccount ? <WalletSubMenu account_name={account.get('name')} /> : <div><br /><h4>BALANCES</h4><br /></div>}
                 </div>
-                {/*<div className="columns shrink">
+                {<div className="columns shrink">
                     {isMyAccount && <button className="UserWallet__buysp button hollow" onClick={this.onShowDepositSteem}>Buy Steem or Steem Power</button>}
-                </div>*/}
+                </div>}
             </div>
             <div className="UserWallet__balance row">
                 <div className="column small-12 medium-8">

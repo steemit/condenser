@@ -7,6 +7,7 @@ import { render } from 'react-dom';
 import { renderToString } from 'react-dom/server';
 import { Router, RouterContext, match, applyRouterMiddleware } from 'react-router';
 import Apis from './api_client/ApiInstances';
+import { api } from 'golos-js';
 import { Provider } from 'react-redux';
 import RootRoute from 'app/RootRoute';
 import {createStore, applyMiddleware, compose} from 'redux';

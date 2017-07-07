@@ -291,15 +291,15 @@ class Market extends React.Component {
             <div>
                 <div className="row">
                     <div className="column small-8">
-                        <Tabs>
+                        {/** <Tabs>
                             <Tab title="Trading Chart">
                                 <p>Trading Chart</p>
                             </Tab>
 
-                            <Tab title="Depth Chart">
+                            <Tab title="Depth Chart"> */}
                                 <DepthChart bids={orderbook.bids} asks={orderbook.asks} />
-                            </Tab>
-                        </Tabs>
+                        {/**  </Tab>
+                        </Tabs> */}
                     </div>
                     <div className="column small-4">
                         <TickerPriceStat ticker={ticker} symbol={DEBT_TICKER} />
@@ -311,10 +311,10 @@ class Market extends React.Component {
                         <TransactionError opType="limit_order_create" />
                     </div>
                 </div>
-                <div className="row">
+                {/**  <div className="row">
                     <div className="column small-12">
                         <Tabs>
-                            <Tab title="Limit Order">
+                            <Tab title="Limit Order"> */}
                                 <div className="row">
                                     <div className="small-12 medium-6 columns">
                                         <h4 className="buy-color uppercase">{tt('navigation.buy_LIQUID_TOKEN', {LIQUID_TOKEN})}</h4>
@@ -487,14 +487,14 @@ class Market extends React.Component {
                                         </form>
                                     </div>
                                 </div>
-                            </Tab>
+                {/** </Tab>
 
                             <Tab title="Market Order">
                                 <p>Market Order</p>
                             </Tab>
                         </Tabs>
                     </div>
-                </div>
+                </div> */}
 
                 <div className="row show-for-medium">
 

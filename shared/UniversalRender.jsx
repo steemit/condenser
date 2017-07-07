@@ -120,7 +120,6 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
             document.getElementById('content')
         );
     }
-
     // below is only executed on the server
     let server_store, onchain;
     try {
@@ -145,8 +144,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
         }
         else {
           const _state = {};
-          const feed_history = await api.getFeedHistoryAsync(url);
-
+          const feed_history = await api.getFeedHistoryAsync();
           _state.current_route = url;
           _state.props = await api.getDynamicGlobalPropertiesAsync();
           _state.category_idx = { "active": [], "recent": [], "best": [] };
@@ -284,7 +282,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
                 args[0].filter_tags = _state.filter_tags = IGNORE_TAGS
               }
             }
-            const discussions = await api[PUBLIC_API[parts[0]][0]](args);
+            const discussions = await api[PUBLIC_API[parts[0]][0]](args[0]);
             let accounts = []
             let discussion_idxes = {}
             discussion_idxes[ PUBLIC_API[parts[0]][1] ] = []
@@ -297,7 +295,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
             }
             const discussions_key = typeof tag === 'string' && tag.length ? tag : _state.select_tags.sort().join('/')
             _state.discussion_idx[discussions_key] = discussion_idxes;
-            accounts = await api.getAccountsAsync([accounts]);
+            accounts = await api.getAccountsAsync(accounts);
             for (var i in accounts) {
               _state.accounts[ accounts[i].name ] = accounts[i]
             }

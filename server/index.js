@@ -1,3 +1,6 @@
+import config from 'config';
+import * as golos from 'golos-js';
+
 delete process.env.BROWSER;
 
 const path = require('path');
@@ -11,8 +14,6 @@ require('module').Module._initPaths();
 
 // Load Intl polyfill
 // require('utils/intl-polyfill')(require('./config/init').locales);
-
-import config from 'config';
 
 global.$STM_Config = {
     fb_app: config.get('grant.facebook.key'),
@@ -39,23 +40,16 @@ global.webpackIsomorphicTools = new WebpackIsomorphicTools(
 );
 
 global.webpackIsomorphicTools.server(ROOT, () => {
-        const SteemClient = require('shared/api_client/ApiInstances').default;
-        const connect_promises = [SteemClient.instance().connect_promise()];
-        // const CliWalletClient = require('shared/api_client/CliWalletClient').default;
-        // if (process.env.NODE_ENV === 'production') connect_promises.push(CliWalletClient.instance().connect_promise());
-        Promise.all(connect_promises)
-            .then(() => {
-                try {
-                    require('./server');
-                } catch (error) {
-                    console.error(error);
-                    process.exit(1);
-                }
-            })
-            .catch(error => {
-                console.error('Web socket client init error', error);
-                process.exit(1);
-            });
+    golos.config.set('websocket', config.get('ws_connection_server'));
+
+    // const CliWalletClient = require('shared/api_client/CliWalletClient').default;
+    // if (process.env.NODE_ENV === 'production') connect_promises.push(CliWalletClient.instance().connect_promise());
+    try {
+        require('./server');
+    } catch (error) {
+        console.error(error);
+        process.exit(1);
+    }
 });
 
 import {DEFAULT_CURRENCY, CURRENCIES} from '../app/client_config';

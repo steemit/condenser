@@ -61,10 +61,10 @@ export function* fetchState(location_change_action) {
 
         // TODO fix bread ration
         if (parts[0][0] === '@' || typeof parts[1] === 'string' && parts[1][0] === '@') {
-          yield put({type: 'global/FETCHING_STATE', payload: true});
             state = yield call([api, api.getStateAsync], url)
         }
         else {
+          yield put({type: 'global/FETCHING_STATE', payload: true});
           const dynamic_global_properties = yield call([api, api.getDynamicGlobalPropertiesAsync])
           const feed_history              = yield call([api, api.getFeedHistoryAsync])
           const witness_schedule          = yield call([api, api.getWitnessScheduleAsync])

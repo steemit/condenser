@@ -31,7 +31,7 @@ export function* watchGetState() {
 /** Manual refreshes.  The router is in FetchDataSaga. */
 export function* getState({payload: {url}}) {
     try {
-        const state = yield call([api, api.getStateAsync], [url]);
+        const state = yield call([api, api.getStateAsync], url);
         yield put(g.actions.receiveState(state));
     } catch (error) {
         console.error('~~ Saga getState error ~~>', url, error);

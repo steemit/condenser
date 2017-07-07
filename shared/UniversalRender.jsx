@@ -6,7 +6,6 @@ import React from 'react';
 import { render } from 'react-dom';
 import { renderToString } from 'react-dom/server';
 import { Router, RouterContext, match, applyRouterMiddleware } from 'react-router';
-import Apis from './api_client/ApiInstances';
 import { api } from 'golos-js';
 import { Provider } from 'react-redux';
 import RootRoute from 'app/RootRoute';
@@ -90,23 +89,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
         sagaMiddleware.run(PollDataSaga).done
             .then(() => console.log('PollDataSaga is finished'))
             .catch(err => console.log('PollDataSaga is finished with error', err));
-        const ws_connection_status_cb = status => {
-            store.dispatch({type: 'WS_CONNECTION_STATUS', payload: {status}});
-        };
-        const ws_request_status_cb = payload => {
-            store.dispatch({type: 'RPC_REQUEST_STATUS', payload});
-        };
-        try {
-            await Apis.instance(ws_connection_status_cb, ws_request_status_cb).init();
-        } catch (e) {
-            console.error('Api init error: ', e);
-            if (e.toString && e.toString().match(/ReferenceError.+WebSocket/)) {
-                const message = 'Warning! This browser does not support web sockets communication, some elements of the website may not be displayed properly. Please upgrade your browser.';
-                store.dispatch({type: 'ADD_NOTIFICATION', payload: {key: 'websocket', message}});
-            } else {
-                serverApiRecordEvent('client_error', e);
-            }
-        }
+
         const history = syncHistoryWithStore(browserHistory, store);
         // const scrollHistory = useScroll(() => history)();
 
@@ -156,7 +139,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
         // create tag
         const tag = typeof parts[1] !== "undefined" ? parts[1] : ''
 
-        // TODO fix bread ration
+        // TODO fix bread ration IMPORTANT
         if (parts[0][0] === '@' || typeof parts[1] === 'string' && parts[1][0] === '@') {
           onchain = await api.getStateAsync(url);
         }

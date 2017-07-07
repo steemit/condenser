@@ -23,7 +23,7 @@ export function* getContentCaller(action) {
     yield getContent(action.payload);
 }
 
-let is_initialstate = true;
+let is_initial_state = true;
 export function* fetchState(location_change_action) {
     const {pathname} = location_change_action.payload;
     const m = pathname.match(/^\/@([a-z0-9\.-]+)/)
@@ -37,14 +37,13 @@ export function* fetchState(location_change_action) {
     // `ignore_fetch` case should only trigger on initial page load. No need to call
     // fetchState immediately after loading fresh state from the server. Details: #593
     const server_location = yield select(state => state.offchain.get('server_location'));
-    const ignore_fetch = (pathname === server_location && is_initialstate)
-    is_initialstate = false;
+    const ignore_fetch = (pathname === server_location && is_initial_state)
+    is_initial_state = false;
     if(ignore_fetch) return;
 
     let url = `${pathname}`;
     if (url === '/') url = 'trending';
-    // Replace /curation-rewards and /author-rewards with /transfers for UserProfile
-    // to resolve data correctly
+    // Replace /curation-rewards and /author-rewards with /transfers for UserProfile to resolve data correctly
     if (url.indexOf("/curation-rewards") !== -1) url = url.replace("/curation-rewards", "/transfers");
     if (url.indexOf("/author-rewards") !== -1) url = url.replace("/author-rewards", "/transfers");
 
@@ -62,13 +61,13 @@ export function* fetchState(location_change_action) {
 
         // TODO fix bread ration
         if (parts[0][0] === '@' || typeof parts[1] === 'string' && parts[1][0] === '@') {
-          const state = yield call([api, api.getStateAsync], url)
+          yield put({type: 'global/FETCHING_STATE', payload: true});
+            state = yield call([api, api.getStateAsync], url)
         }
         else {
-          yield put({type: 'global/FETCHING_STATE', payload: true});
-          const dynamic_global_properties = yield call([api, api.getDynamicGlobalProperties], url)
-          const feed_history              = yield call([api, api.getFeedHistory], url)
-          const witness_schedule          = yield call([api, api.getWitnessSchedule], url)
+          const dynamic_global_properties = yield call([api, api.getDynamicGlobalPropertiesAsync])
+          const feed_history              = yield call([api, api.getFeedHistoryAsync])
+          const witness_schedule          = yield call([api, api.getWitnessScheduleAsync])
 
           state.current_route = url;
           state.props = dynamic_global_properties;
@@ -91,11 +90,11 @@ export function* fetchState(location_change_action) {
           if (parts[0] == "tags") {
             tags_limit = 250
           }
-          const trending_tags = yield call([api, api.getTrendingTags], '',`${tags_limit}`);
+          const trending_tags = yield call([api, api.getTrendingTagsAsync], '',`${tags_limit}`);
 
           if (parts[0][0] === '@') {
             const uname = parts[0].substr(1)
-            accounts[uname] = yield call([api, api.getAccounts], [uname]);
+            accounts[uname] = yield call([api, api.getAccountsAsync], [uname]);
 
             // FETCH part 2
             switch (parts[1]) {
@@ -116,28 +115,28 @@ export function* fetchState(location_change_action) {
             }
           }
           else if (parts[0] === 'witnesses' || parts[0] === '~witnesses') {
-            const wits = yield call([api, api.getWitnessesByVote], '', 50);
+            const wits = yield call([api, api.getWitnessesByVoteAsync], '', 50);
             for (var key in wits) state.witnesses[wits[key].owner] = wits[key];
           }
           else if ([ 'trending', 'trending30', 'promoted', 'responses', 'hot', 'votes', 'cashout', 'active', 'created', 'recent' ].indexOf(parts[0]) >= 0) {
-            const args = {
+            const args = [{
               limit: constants.FETCH_DATA_BATCH_SIZE,
               truncate_body: constants.FETCH_DATA_TRUNCATE_BODY
-            }
+            }]
             if (typeof tag === 'string' && tag.length) {
-              args.select_tags = [tag];
+              args[0].select_tags = [tag];
 
             }
             else {
               const select_tags = cookie.load(SELECT_TAGS_KEY);
               if (!tag && select_tags && select_tags.length) {
-                args.select_tags = state.select_tags = select_tags
+                args[0].select_tags = state.select_tags = select_tags
               }
               else {
-                args.filter_tags = state.filter_tags = IGNORE_TAGS
+                args[0].filter_tags = state.filter_tags = IGNORE_TAGS
               }
             }
-            const discussions = yield call([api, api[PUBLIC_API[parts[0]][0]]], ...[args]);
+            const discussions = yield call([api, api[PUBLIC_API[parts[0]][0]]], ...args);
             let accounts = []
             let discussion_idxes = {}
             discussion_idxes[ PUBLIC_API[parts[0]][1] ] = []
@@ -150,7 +149,7 @@ export function* fetchState(location_change_action) {
             }
             const discussions_key = typeof tag === 'string' && tag.length ? tag : state.select_tags.sort().join('/')
             state.discussion_idx[discussions_key] = discussion_idxes
-            accounts = yield call([api, api.getAccounts], accounts);
+            accounts = yield call([api, api.getAccountsAsync], accounts);
             for (var i in accounts) {
               state.accounts[ accounts[i].name ] = accounts[i]
             }
@@ -166,7 +165,7 @@ export function* fetchState(location_change_action) {
           state.tag_idx = { trending: trending_tags.map(t => t.name) };
 
           for (var key in state.content)
-            state.content[key].active_votes = yield call([api, api.getActiveVotes], state.content[key].author, state.content[key].permlink);
+            state.content[key].active_votes = yield call([api, api.getActiveVotesAsync], state.content[key].author, state.content[key].permlink);
 
           yield put({type: 'global/FETCHING_STATE', payload: false});
         }
@@ -193,71 +192,69 @@ export function* fetchData(action) {
     category = category.toLowerCase();
 
     let call_name, args;
-    args = {
+    args = [{
       limit: constants.FETCH_DATA_BATCH_SIZE,
       truncate_body: constants.FETCH_DATA_TRUNCATE_BODY,
       start_author: author,
       start_permlink: permlink
-    };
+    }];
     if (category.length) {
-      // args.tag = category;
-      args.select_tags = [category];
+      args[0].select_tags = [category];
     } else {
       let select_tags = cookie.load(SELECT_TAGS_KEY);
       if (select_tags && select_tags.length) {
-        args.select_tags = select_tags;
+        args[0].select_tags = select_tags;
         category = select_tags.sort().join('/')
       }
       else {
-        args.filter_tags = IGNORE_TAGS
+        args[0].filter_tags = IGNORE_TAGS
       }
     }
 
     yield put({type: 'global/FETCHING_DATA', payload: {order, category}});
 
     if (order === 'trending') {
-        call_name = 'getDiscussionsByTrending';
+        call_name = 'getDiscussionsByTrendingAsync';
     } else if (order === 'trending30') {
-        call_name = 'getDiscussionsByTrending30';
+        call_name = 'getDiscussionsByTrending30Async';
     } else if (order === 'promoted') {
-        call_name = 'getDiscussionsByPromoted';
+        call_name = 'getDiscussionsByPromotedAsync';
     } else if( order === 'active' ) {
-        call_name = 'getDiscussionsByActive';
+        call_name = 'getDiscussionsByActiveAsync';
     } else if( order === 'cashout' ) {
-        call_name = 'getDiscussionsByCashout';
+        call_name = 'getDiscussionsByCashoutAsync';
     } else if( order === 'payout' ) {
-        call_name = 'getPostDiscussionsByPayout';
+        call_name = 'getPostDiscussionsByPayoutAsync';
     } else if( order === 'payout_comments' ) {
-        call_name = 'getCommentDiscussionsByPayout';
+        call_name = 'getCommentDiscussionsByPayoutAsync';
     } else if( order === 'updated' ) {
-        call_name = 'getDiscussionsByActive';
+        call_name = 'getDiscussionsByActiveAsync';
     } else if( order === 'created' || order === 'recent' ) {
-        call_name = 'getDiscussionsByCreated';
+        call_name = 'getDiscussionsByCreatedAsync';
     } else if( order === 'by_replies' ) {
-        call_name = 'getRepliesByLastUpdate';
+        call_name = 'getRepliesByLastUpdateAsync';
         args = [author, permlink, constants.FETCH_DATA_BATCH_SIZE];
     } else if( order === 'responses' ) {
-        call_name = 'getDiscussionsByChildren';
+        call_name = 'getDiscussionsByChildrenAsync';
     } else if( order === 'votes' ) {
-        call_name = 'getDiscussionsByVotes';
+        call_name = 'getDiscussionsByVotesAsync';
     } else if( order === 'hot' ) {
-        call_name = 'getDiscussionsByHot';
+        call_name = 'getDiscussionsByHotAsync';
     } else if( order === 'by_feed' ) { // https://github.com/steemit/steem/issues/249
-        call_name = 'getDiscussionsByFeed';
-        delete args.select_tags
-        args.select_authors = [accountname];
+        call_name = 'getDiscussionsByFeedAsync';
+        delete args[0].select_tags
+        args[0].select_authors = [accountname];
     } else if( order === 'by_author' ) {
-        call_name = 'getDiscussionsByBlog';
+        call_name = 'getDiscussionsByBlogAsync';
         delete args.select_tags
-        args.select_authors = [accountname];
+        args[0].select_authors = [accountname];
     } else if( order === 'by_comments' ) {
-        call_name = 'getDiscussionsByComments';
-        delete args.tag
+        call_name = 'getDiscussionsByCommentsAsync';
     } else {
-        call_name = 'getDiscussionsByActive';
+        call_name = 'getDiscussionsByActiveAsync';
     }
     try {
-        const data = yield call([api, api[call_name]], ...[args]);
+        const data = yield call([api, api[call_name]], ...args);
         yield put(GlobalReducer.actions.receiveData({data, order, category, author, permlink, accountname, keys}));
     } catch (error) {
         console.error('~~ Saga fetchData error ~~>', call_name, args, error);

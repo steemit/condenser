@@ -4,6 +4,7 @@ import models from 'db/models';
 import config from 'config';
 import {esc, escAttrs} from 'db/models';
 import {getRemoteIp, rateLimitReq, checkCSRF} from 'server/utils/misc';
+import { broadcast } from 'golos-js';
 
 export default function useAccountRecoveryApi(app) {
     const router = koa_router();
@@ -170,23 +171,16 @@ export default function useAccountRecoveryApi(app) {
     });
 }
 
-import {Apis} from 'shared/api_client';
-import {createTransaction, signTransaction} from 'shared/chain/transactions';
-import {ops} from 'shared/serializer';
-
-const {signed_transaction} = ops;
-
 function* requestAccountRecovery({
     recovery_account, account_to_recover, new_owner_authority,
     signing_key, broadcast = false,
 }) {
-    const operations = [['request_account_recovery', {
-        recovery_account, account_to_recover, new_owner_authority,
-    }]]
-    const tx = yield createTransaction(operations)
-    const sx = signTransaction(tx, signing_key)
-    if (!broadcast) return signed_transaction.toObject(sx)
-    return yield new Promise((resolve, reject) =>
-        Apis.broadcastTransaction(sx, () => {resolve()}).catch(e => {reject(e)})
-    )
+    const operations = [['request_account_recovery',
+        {
+            recovery_account,
+            account_to_recover,
+            new_owner_authority,
+        }
+    ]];
+    return yield broadcast.sendAsync({extensions: [], operations}, [signing_key]);
 }

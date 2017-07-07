@@ -1,5 +1,4 @@
 import { call, put, select } from 'redux-saga/effects';
-import GlobalReducer from './GlobalReducer';
 import {getNotifications, webPushRegister} from 'app/utils/ServerApiClient';
 import registerServiceWorker from 'app/utils/RegisterServiceWorker';
 import {api} from 'golos-js';

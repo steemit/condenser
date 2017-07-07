@@ -30,39 +30,7 @@ export default function reducer(state = defaultState, action) {
     if (action.type === 'CHAIN_API_ERROR') {
         return state.set('error', action.error).set('loading', false);
     }
-    if (action.type === 'WS_CONNECTION_STATUS') {
-        return state.updateIn(['ws_connection'], value => {
-            if (value && value.status === action.payload.status) return value;
-            return {status: action.payload.status, updated_at: new Date()};
-        });
-    }
     let res = state;
-    if (action.type === 'RPC_REQUEST_STATUS') {
-        const request_id = action.payload.id + '';
-        const loadingBlacklist = [
-            'get_dynamic_global_properties',
-            'get_api_by_name',
-            'getFollowersAsync',
-            'getFollowingAsync'
-        ];
-        const loadingIgnored = loadingBlacklist.indexOf(action.payload.method) !== -1;
-        if (action.payload.event === 'BEGIN') {
-            res = state.mergeDeep({
-                loading: loadingIgnored ? state.get('loading') : true, // reuse current loading state if the method is blacklisted
-                requests: {[request_id]: Date.now()},
-                ignoredLoadingRequestCount: state.get('ignoredLoadingRequestCount') + (loadingIgnored ? 1 : 0)
-            });
-        }
-        if (action.payload.event === 'END' || action.payload.event === 'ERROR') {
-            const ignoredLoadingRequestCount = state.get('ignoredLoadingRequestCount') - (loadingIgnored ? 1 : 0);
-            res = res.deleteIn(['requests', request_id]);
-            const loading = (res.get('requests').size - ignoredLoadingRequestCount) > 0;
-            res = res.mergeDeep({
-                loading,
-                ignoredLoadingRequestCount
-            });
-        }
-    }
     if (action.type === 'ADD_NOTIFICATION') {
         const n = {
             action: tt('g.dismiss'),

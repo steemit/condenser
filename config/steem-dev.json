@@ -82,7 +82,7 @@
   "site_domain": "steemitdev.com",
   "tarantool": {
     "host": "localhost",
-    "password": "password",
+    "password": "",
     "port": "3301",
     "username": "guest"
   },

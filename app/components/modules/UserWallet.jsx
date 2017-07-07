@@ -19,13 +19,18 @@ import Tooltip from 'app/components/elements/Tooltip'
 import { translate } from 'app/Translator';
 import {List} from 'immutable'
 import transaction from 'app/redux/Transaction';
+import Slider from 'react-rangeslider';
+
 
 const assetPrecision = 1000;
 
 class UserWallet extends React.Component {
     constructor() {
         super();
-        this.state = {};
+        this.state = {
+          powerDownAmount: 5000
+        }
+
         this.onShowDeposit = () => {this.setState({showDeposit: !this.state.showDeposit})};
         this.onShowDepositSteem = (e) => {
             e.preventDefault();
@@ -91,7 +96,7 @@ class UserWallet extends React.Component {
         const savings_sbd_balance = account.get('savings_sbd_balance');
 
         const powerDown = (cancel, e) => {
-            e.preventDefault()
+            console.log(account.get('vesting_shares'));
             const name = account.get('name');
             const vesting_shares = cancel ? '0.000000 VESTS' : account.get('vesting_shares');
             this.setState({toggleDivestError: null});
@@ -99,6 +104,23 @@ class UserWallet extends React.Component {
             const successCallback = () => {this.setState({toggleDivestError: null})}
             this.props.withdrawVesting({account: name, vesting_shares, errorCallback, successCallback})
         }
+
+
+        const powerDownMin = 5000;
+        const powerDownMax = parseFloat(account.get('vesting_shares'));
+        const handlePowerDownSliderChange= e => {
+            this.setState({powerDownAmount: e});
+        };
+
+        const handlePowerDown= e => {
+            e.preventDefault();
+            let name = account.get('name');
+            let pdv = this.state.powerDownAmount + ' VESTS';
+            this.setState({toggleDivestError: null});
+            const errorCallback = e2 => {this.setState({toggleDivestError: e2.toString()})};
+            const successCallback = () => {this.setState({toggleDivestError: null})}
+            this.props.withdrawVesting({account: name, vesting_shares: pdv, err: ()=>{}, suc: ()=>{}});
+        };
 
         // Sum savings withrawals
         let savings_pending = 0, savings_sbd_pending = 0;
@@ -112,7 +134,7 @@ class UserWallet extends React.Component {
                         savings_sbd_pending += parseFloat(amount)
                 }
             })
-        }
+        };
 
         // Sum conversions
         let conversionValue = 0;
@@ -303,6 +325,12 @@ class UserWallet extends React.Component {
                     {isMyAccount ?
                     <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={power_balance_str + ' STEEM'} menu={power_menu} />
                     : power_balance_str + ' STEEM'}
+                    <br />
+                    <Slider min={powerDownMin} max={powerDownMax} step={1} value={parseFloat(this.state.powerDownAmount)} onChange={(e) => handlePowerDownSliderChange(e)} />
+                    <br />
+                    <div className='pwer-down-amount'>Power Down Amount: {this.state.powerDownAmount}</div>
+                    <br />
+                    <button onClick={(e) => handlePowerDown(e)}>Power Down</button>
                     {delegated_steem != 0 ? <div style={{paddingRight: isMyAccount ? "0.85rem" : null}}><Tooltip t="STEEM POWER delegated to this account">({received_power_balance_str} STEEM)</Tooltip></div> : null}
                 </div>
             </div>

@@ -20,14 +20,17 @@ class Modals extends React.Component {
         show_transfer_modal: React.PropTypes.bool,
         show_signup_modal: React.PropTypes.bool,
         show_promote_post_modal: React.PropTypes.bool,
+        show_powerdown_confirm_modal: React.PropTypes.bool,
         hideLogin: React.PropTypes.func.isRequired,
         hideConfirm: React.PropTypes.func.isRequired,
         hideSignUp: React.PropTypes.func.isRequired,
         hideTransfer: React.PropTypes.func.isRequired,
         hidePromotePost: React.PropTypes.func.isRequired,
+        hidePowerdownConfirm: React.PropTypes.func.isRequired,
         notifications: React.PropTypes.object,
         show_terms_modal: React.PropTypes.bool,
         removeNotification: React.PropTypes.func,
+        confirmPowerDown: React.PropTypes.bool,
     };
 
     constructor() {
@@ -37,8 +40,8 @@ class Modals extends React.Component {
 
     render() {
         const {
-            show_login_modal, show_confirm_modal, show_transfer_modal, show_signup_modal,
-            hideLogin, hideTransfer, hideConfirm, hideSignUp, show_terms_modal,
+            show_login_modal, show_confirm_modal, show_transfer_modal, show_signup_modal, show_powerdown_confirm_modal,
+            hideLogin, hideTransfer, hideConfirm, hideSignUp, hidePowerdownConfirm, show_terms_modal,
             notifications, removeNotification, hidePromotePost, show_promote_post_modal
         } = this.props;
 
@@ -67,6 +70,9 @@ class Modals extends React.Component {
                 {show_terms_modal && <Reveal show={show_terms_modal}>
                     <TermsAgree onCancel={hideLogin} />
                 </Reveal>}
+                {show_powerdown_confirm_modal && <Reveal show={show_powerdown_confirm_modal}>
+                    <TermsAgree onCancel={hidePowerdownConfirm} />
+                </Reveal>}
                 <NotificationStack
                     style={false}
                     notifications={notifications_array}
@@ -86,7 +92,8 @@ export default connect(
             show_promote_post_modal: state.user.get('show_promote_post_modal'),
             show_signup_modal: state.user.get('show_signup_modal'),
             notifications: state.app.get('notifications'),
-            show_terms_modal: state.user.get('show_terms_modal')
+            show_terms_modal: state.user.get('show_terms_modal'),
+            show_powerdown_confirm_modal: state.user.get('show_powerdown_confirm_modal')
         }
     },
     dispatch => ({
@@ -109,6 +116,10 @@ export default connect(
         hideSignUp: e => {
             if (e) e.preventDefault();
             dispatch(user.actions.hideSignUp())
+        },
+        hidePowerdownConfirm: e => {
+            if (e) e.preventDefault();
+            dispatch(user.actions.hidePowerdownConfirm())
         },
         // example: addNotification: ({key, message}) => dispatch({type: 'ADD_NOTIFICATION', payload: {key, message}}),
         removeNotification: (key) => dispatch({type: 'REMOVE_NOTIFICATION', payload: {key}})

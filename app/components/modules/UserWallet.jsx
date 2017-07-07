@@ -28,7 +28,8 @@ class UserWallet extends React.Component {
     constructor() {
         super();
         this.state = {
-          powerDownAmount: 5000
+          powerDownAmount: 5000,
+          show_powerdown_confirm_modal: false
         }
 
         this.onShowDeposit = () => {this.setState({showDeposit: !this.state.showDeposit})};

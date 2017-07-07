@@ -1,11 +1,12 @@
 import React, { PropTypes } from 'react';
 import { formatDecimal } from 'app/utils/ParsersAndFormatters';
 import utils from 'app/utils/Assets/utils';
+import AssetName from "app/components/elements/AssetName";
 
 export default class FormattedAsset extends React.Component {
     static propTypes = {
         amount: PropTypes.any.isRequired,
-        asset: PropTypes.any.isRequired
+        asset: PropTypes.any.isRequired,
     };
 
     static defaultProps = {
@@ -23,7 +24,10 @@ export default class FormattedAsset extends React.Component {
         const precision = utils.get_asset_precision(asset.precision);
 
         return (
-            <span>{formatDecimal(this.props.exact_amount ? amount : amount / precision)}</span>
+            <span>
+                <span>{formatDecimal(this.props.exact_amount ? amount : amount / precision)}</span>&nbsp;
+                <span><AssetName name={asset.symbol} isBitAsset={('bitasset' in asset)}/></span>
+            </span>
         );
     }
 }

@@ -3,12 +3,13 @@ import { connect } from 'react-redux';
 import tt from 'counterpart';
 import FormattedAsset from "app/components/elements/FormattedAsset";
 import FormattedPrice from "app/components/elements/FormattedPrice";
+import AssetName from "app/components/elements/AssetName";
 import assetUtils from "app/utils/Assets/AssetsUtils";
 import utils from 'app/utils/Assets/utils';
 
 class AssetFlag extends React.Component {
     render() {
-        let {isSet, name} = this.props;
+        const { isSet, name } = this.props;
         if (!isSet) return ( <span></span> );
 
         return (
@@ -21,7 +22,7 @@ class AssetFlag extends React.Component {
 
 class AssetPermission extends React.Component {
     render() {
-        let {isSet, name} = this.props;
+        const { isSet, name } = this.props;
         if (!isSet) return ( <span></span> );
 
         return (
@@ -86,14 +87,14 @@ class Asset extends React.Component {
         const currentSupply = (dynamic) ? (
                 <tr>
                     <td> {tt('asset_jsx.current_supply')} </td>
-                    <td> <FormattedAsset amount={dynamic.current_supply} asset={asset.id}/> </td>
+                    <td> <FormattedAsset amount={dynamic.current_supply} asset={asset}/> </td>
                 </tr>
             ) : null;
 
         const stealthSupply = (dynamic) ? (
                 <tr>
                     <td> {tt('asset_jsx.stealth_supply')} </td>
-                    <td> <FormattedAsset amount={dynamic.confidential_supply} asset={asset.id}/> </td>
+                    <td> <FormattedAsset amount={dynamic.confidential_supply} asset={asset}/> </td>
                 </tr>
             ) : null;
 
@@ -107,13 +108,13 @@ class Asset extends React.Component {
         const maxMarketFee = flagBooleans["charge_market_fee"] ? (
                 <tr>
                     <td> {tt('asset_jsx.max_market_fee')} </td>
-                    <td> <FormattedAsset amount={+options.max_market_fee} asset={asset.id} /> </td>
+                    <td> <FormattedAsset amount={+options.max_market_fee} asset={asset} /> </td>
                 </tr>
             ) : null;
 
         return (
             <div className="asset-card">
-                <h4>{/*TODO <AssetName name=*/}{asset.symbol}{/* />*/}</h4>
+                <h4>{<AssetName name={asset.symbol} />}</h4>
                 <table>
                     <tbody>
                     <tr>
@@ -187,7 +188,7 @@ class Asset extends React.Component {
                     </tr>
                     <tr>
                         <td> {tt('asset_jsx.pool_balance')} </td>
-                        <td> {dynamic ? <FormattedAsset asset={asset} amount={dynamic.fee_pool} /> : null} </td>
+                        <td> {dynamic ? <FormattedAsset asset={asset/*core asset*/} amount={dynamic.fee_pool} /> : null} </td>
                     </tr>
                     <tr>
                         <td> {tt('asset_jsx.unclaimed_issuer_income')} </td>
@@ -278,22 +279,24 @@ class Asset extends React.Component {
 
     render() {
         const asset = this.props.asset.toJS();
-        let priceFeed = ('bitasset' in asset) ? this.renderPriceFeed(asset) : null;
-        let priceFeedData = ('bitasset' in asset) ? this.renderPriceFeedData(asset) : null;
+        const priceFeed = ('bitasset' in asset) ? this.renderPriceFeed(asset) : null;
+        const priceFeedData = ('bitasset' in asset) ? this.renderPriceFeedData(asset) : null;
 
         const description = assetUtils.parseDescription(asset.options.description);
         const short_name = description.short_name ? description.short_name : null;
 
         //let preferredMarket = description.market ? description.market : "BTS";
-        let {name, prefix} = utils.replaceName(asset.symbol, "bitasset" in asset && !asset.bitasset.is_prediction_market && asset.issuer === "1.2.0");
+        const { name, prefix } = utils.replaceName(asset.symbol, "bitasset" in asset && !asset.bitasset.is_prediction_market && asset.issuer === "1.2.0");
 
-        const aboutBox = (<div className="asset-card">
-            <h3>{tt('asset_jsx.title')} {(prefix || "") + name}</h3>
-            <p>{description.main}</p>
-            <p>{asset.issuer}</p>
-            {short_name ? <p>{short_name}</p> : null}
-            {/*<a style={{textTransform: "uppercase"}} href={`/market/${asset.symbol}_${preferredMarket}`}>{tt('asset_jsx.market')}</a>*/}
-        </div>);
+        const aboutBox = (
+            <div className="asset-card">
+                <h3>{tt('asset_jsx.title')} {(prefix || "") + name}</h3>
+                <p>{description.main}</p>
+                <p>{asset.issuer}</p>
+                {short_name ? <p>{short_name}</p> : null}
+                {/*<a style={{textTransform: "uppercase"}} href={`/market/${asset.symbol}_${preferredMarket}`}>{tt('asset_jsx.market')}</a>*/}
+            </div>
+        );
 
         const options = asset.options;
         const permissionBooleans = assetUtils.getFlagBooleans(asset.options.issuer_permissions, ('bitasset_data_id' in asset) ? asset.bitasset_data_id: false);

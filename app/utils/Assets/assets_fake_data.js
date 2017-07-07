@@ -146,7 +146,7 @@ const assetArray = [
         },
         "bitasset_data_id":"2.4.21",
         "symbol":"USD",
-        "issuer":"1.2.0",
+        "issuer":"luke-skywalker",
         "id":"1.3.121",
         "precision":4,
         "options":{

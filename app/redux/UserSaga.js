@@ -8,7 +8,7 @@ import {browserHistory} from 'react-router'
 import {serverApiLogin, serverApiLogout} from 'app/utils/ServerApiClient';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import {loadFollows} from 'app/redux/FollowSaga'
-import {PrivateKey, PublicKey, hash} from 'golos-js/lib/auth/ecc'
+import {PrivateKey, Signature, hash} from 'golos-js/lib/auth/ecc'
 import {api} from 'golos-js'
 
 export const userWatches = [

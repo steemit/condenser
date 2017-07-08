@@ -102,14 +102,16 @@ export default function useGeneralApi(app) {
                 throw new Error("We can't find your sign up request. You either haven't started your sign up application or weren't approved yet.");
             }
 
-            const existing_created_account = yield models.Account.findOne({
-                attributes: ['id'],
-                where: {user_id, ignored: false, created: true},
-                order: 'id DESC'
-            });
-            if (existing_created_account) {
-                throw new Error("Only one Steem account per user is allowed in order to prevent abuse");
-            }
+            // disable session/multi account for now
+
+            // const existing_created_account = yield models.Account.findOne({
+            //     attributes: ['id'],
+            //     where: {user_id, ignored: false, created: true},
+            //     order: 'id DESC'
+            // });
+            // if (existing_created_account) {
+            //     throw new Error("Only one Steem account per user is allowed in order to prevent abuse");
+            // }
 
             const remote_ip = getRemoteIp(this.req);
             // rate limit account creation to one per IP every 10 minutes

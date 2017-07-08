@@ -14,6 +14,8 @@ import secureRandom from "secure-random";
 import config from "config";
 import Mixpanel from "mixpanel";
 import tt from 'counterpart';
+import {metrics} from 'server/metrics';
+import {hash} from 'golos-js/lib/auth/ecc';
 
 // FIXME copy paste code, refactor mixpanel out
 var mixpanel = null;
@@ -68,9 +70,6 @@ function* confirmMobileHandler() {
         return;
     }
 
-    // const used_phone = yield models.sequelize.query(`SELECT a.id FROM
-    // accounts a JOIN identities i ON i.user_id=a.user_id WHERE
-    // i.phone='${mid.phone}'`, { type: models.Sequelize.QueryTypes.SELECT})
     const used_phone = yield models.Identity.findOne({
         attributes: ["id", "user_id"],
         where: {
@@ -103,6 +102,7 @@ function* confirmMobileHandler() {
         return;
     }
     yield mid.update({ verified: true });
+    if (metrics) metrics.increment('_signup_step_3');
     if (mixpanel)
         mixpanel.track("SignupStep3", { distinct_id: this.session.uid });
     this.redirect("/create_account");
@@ -131,6 +131,7 @@ export default function useEnterAndConfirmMobilePages(app) {
         });
         if (mid && mid.verified) {
             this.flash = { success: "Phone number has already been verified" };
+            if (metrics) metrics.increment('_signup_step_3');
             if (mixpanel)
                 mixpanel.track("SignupStep3", {
                     distinct_id: this.session.uid
@@ -197,6 +198,7 @@ export default function useEnterAndConfirmMobilePages(app) {
         const props = { body, title: "Phone Number", assets, meta: [] };
         this.body = "<!DOCTYPE html>" +
             renderToString(<ServerHTML {...props} />);
+        if (metrics) metrics.increment('_signup_step_2');
         if (mixpanel)
             mixpanel.track("SignupStep2", { distinct_id: this.session.uid });
     });
@@ -226,6 +228,7 @@ export default function useEnterAndConfirmMobilePages(app) {
         }
 
         const phone = digits(parseInt(country) + localPhone);
+        const phoneHash = hash.sha256(phone, 'hex')
 
         const blocked_prefixes = yield models.List.findAll({
             attributes: ["id", "value"],
@@ -254,7 +257,7 @@ export default function useEnterAndConfirmMobilePages(app) {
 
         const existing_phone = yield models.Identity.findOne({
             attributes: ["user_id"],
-            where: { phone, provider: "phone", verified: true },
+            where: { phone: phoneHash, provider: "phone", verified: true },
             order: "id DESC"
         });
         if (existing_phone && existing_phone.user_id != user_id) {
@@ -262,7 +265,7 @@ export default function useEnterAndConfirmMobilePages(app) {
                 "-- /submit_email existing_phone -->",
                 user_id,
                 this.session.uid,
-                phone,
+                phoneHash,
                 existing_phone.user_id
             );
             this.flash = { error: "This phone number has already been used" };
@@ -283,8 +286,9 @@ export default function useEnterAndConfirmMobilePages(app) {
         });
         if (mid) {
             if (mid.verified) {
-                if (mid.phone === phone) {
+                if (mid.phone === phoneHash) {
                     this.flash = { success: "Phone number has been verified" };
+                    if (metrics) metrics.increment('_signup_step_3');
                     if (mixpanel)
                         mixpanel.track("SignupStep3", {
                             distinct_id: this.session.uid
@@ -292,7 +296,7 @@ export default function useEnterAndConfirmMobilePages(app) {
                     this.redirect("/create_account");
                     return;
                 }
-                yield mid.update({ verified: false, phone });
+                yield mid.update({ verified: false, phone: phoneHash});
             }
             const seconds_ago = (Date.now() - mid.updated_at) / 1000.0;
             if (seconds_ago < 120) {
@@ -302,13 +306,13 @@ export default function useEnterAndConfirmMobilePages(app) {
                 this.redirect(enterMobileUrl);
                 return;
             }
-            yield mid.update({ confirmation_code, phone });
+            yield mid.update({ confirmation_code, phone: phoneHash });
         } else {
             mid = yield models.Identity.create({
                 provider: "phone",
                 user_id,
                 uid: this.session.uid,
-                phone,
+                phone: phoneHash,
                 verified: false,
                 confirmation_code
             });
@@ -317,7 +321,7 @@ export default function useEnterAndConfirmMobilePages(app) {
             '-- /submit_mobile -->',
             this.session.uid,
             this.session.user,
-            phone,
+            phoneHash,
             mid.id
         );
         const ip = getRemoteIp(this.req);

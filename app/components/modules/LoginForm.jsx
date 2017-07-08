@@ -1,11 +1,11 @@
 /* eslint react/prop-types: 0 */
 import React, { PropTypes, Component } from 'react';
-import {PublicKey, PrivateKey} from 'shared/ecc'
+import {PrivateKey, PublicKey} from 'golos-js/lib/auth/ecc'
 import transaction from 'app/redux/Transaction'
 import g from 'app/redux/GlobalReducer'
 import user from 'app/redux/User'
 import {validate_account_name} from 'app/utils/ChainValidation';
-import runTests from 'shared/ecc/test/BrowserTests';
+import runTests from 'app/utils/BrowserTests';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import reactForm from 'app/utils/ReactForm'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
@@ -27,8 +27,8 @@ class LoginForm extends Component {
 
     constructor(props) {
         super()
-        // const cryptoTestResult = runTests();
-        const cryptoTestResult = undefined; // temporary switch BrowserTests off
+        const cryptoTestResult = runTests();
+        // const cryptoTestResult = undefined; // temporary switch BrowserTests off
         let cryptographyFailure = false;
         this.SignUp = this.SignUp.bind(this);
         if (cryptoTestResult !== undefined) {

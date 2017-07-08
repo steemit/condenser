@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import {reduxForm} from 'redux-form' // @deprecated, instead use: app/utils/ReactForm.js
-import {PrivateKey} from 'shared/ecc'
+import {PrivateKey, PublicKey} from 'golos-js/lib/auth/ecc'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import tt from 'counterpart';
 
@@ -105,8 +105,6 @@ class KeyEdit extends Component {
         )
     }
 }
-
-import {PublicKey} from 'shared/ecc'
 
 const keyValidate = values => ({
     password: ! values.password ? tt('g.required') :

@@ -5,9 +5,9 @@ import {Map} from 'immutable';
 import transaction from 'app/redux/Transaction';
 import user from 'app/redux/User';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import {browserTests} from 'shared/ecc/test/BrowserTests'
+import runTests, {browserTests} from 'app/utils/BrowserTests';
 import {validate_account_name} from 'app/utils/ChainValidation';
-import {countDecimals} from 'app/utils/ParsersAndFormatters'
+import {countDecimals} from 'app/utils/ParsersAndFormatters';
 import tt from 'counterpart';
 import { LIQUID_TICKER, DEBT_TICKER , VESTING_TOKEN2 } from 'app/client_config';
 
@@ -36,6 +36,7 @@ class TransferForm extends Component {
             else
                 ReactDOM.findDOMNode(this.refs.amount).focus()
         }, 300)
+        runTests()
     }
 
     onAdvanced = (e) => {

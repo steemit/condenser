@@ -2,7 +2,7 @@ import React from 'react';
 import SvgImage from 'app/components/elements/SvgImage';
 import PasswordInput from 'app/components/elements/PasswordInput';
 import constants from 'app/redux/constants';
-import {PrivateKey} from 'shared/ecc';
+import {PrivateKey} from 'golos-js/lib/auth/ecc';
 import tt from 'counterpart';
 import { FormattedHTMLMessage } from 'react-intl';
 import {api} from 'golos-js';

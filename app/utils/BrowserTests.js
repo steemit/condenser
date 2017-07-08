@@ -1,7 +1,7 @@
 import assert from 'assert'
-import {PrivateKey, PublicKey} from 'shared/ecc'
-import {encode, decode} from 'shared/chain/memo'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient'
+import {PrivateKey, PublicKey} from 'golos-js/lib/auth/ecc'
+import {memo} from 'golos-js';
 
 export const browserTests = {}
 
@@ -21,9 +21,9 @@ export default function runTests() {
         }
     }
 
-    let private_key, public_key, encodedMemo
+    let private_key, public_key
     const wif = '5JdeC9P7Pbd1uGdFVEsJ41EkEnADbbHGq6p1BwFxm6txNBsQnsw'
-    const pubkey = 'STM8m5UgaFAAYQRuaNejYdS8FVLVp9Ss3K1qAVk5de6F8s3HnVbvA'
+    const pubkey = 'GLS8m5UgaFAAYQRuaNejYdS8FVLVp9Ss3K1qAVk5de6F8s3HnVbvA'
 
     it('create private key', () => {
         private_key = PrivateKey.fromSeed('1')
@@ -40,15 +40,12 @@ export default function runTests() {
     it('parses public key', () => {
         assert(PublicKey.fromString(public_key.toString()))
     })
-    it('encrypts memo', () => {
-        encodedMemo = encode(private_key, public_key, '#memo')
-        assert(encodedMemo)
-    })
-    it('decripts memo', () => {
-        const dec = decode(private_key, encodedMemo)
-        if(dec !== '#memo') {
+    it('memo encryption', () => {
+        const cyphertext = memo.encode(private_key, public_key, '#memo爱')
+        const plantext = memo.decode(private_key, cyphertext)
+        browserTests.memo_encryption = plantext === '#memo爱'
+        if(!browserTests.memo_encryption) {
             console.error('Decoded memo did not match (memo encryption is unavailable)')
-            browserTests.memo_encryption = false
         }
     })
     if(!pass) return rpt

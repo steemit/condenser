@@ -1,21 +1,17 @@
 import {takeEvery} from 'redux-saga';
 import {call, put, select} from 'redux-saga/effects';
-import {createTransaction, signTransaction} from 'shared/chain/transactions'
-import {ops} from 'shared/serializer'
-import {PublicKey, PrivateKey} from 'shared/ecc'
 import {fromJS, Set, Map} from 'immutable'
 import {getAccount, getContent} from 'app/redux/SagaShared'
 import {findSigningKey} from 'app/redux/AuthSaga'
-import {encode} from 'shared/chain/memo'
 import g from 'app/redux/GlobalReducer'
 import user from 'app/redux/User'
 import tr from 'app/redux/Transaction'
 import getSlug from 'speakingurl'
 import {DEBT_TICKER} from 'app/client_config'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient'
-import { api, broadcast, auth, memo } from 'golos-js'
+import {PrivateKey, PublicKey} from 'golos-js/lib/auth/ecc'
+import {api, broadcast, auth, memo} from 'golos-js'
 
-const {transaction} = ops
 
 export const transactionWatches = [
     watchForBroadcast,

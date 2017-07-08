@@ -9,8 +9,8 @@ import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF} from 'server/utils/mis
 import coBody from 'co-body';
 import Mixpanel from 'mixpanel';
 import Tarantool from 'db/tarantool';
-import { PublicKey, Signature, hash } from 'golos-js/lib/auth/ecc';
-import { api, broadcast } from 'golos-js';
+import {PublicKey, Signature, hash} from 'golos-js/lib/auth/ecc';
+import {api, broadcast} from 'golos-js';
 
 const mixpanel = config.get('mixpanel') ? Mixpanel.init(config.get('mixpanel')) : null;
 

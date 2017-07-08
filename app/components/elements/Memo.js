@@ -1,8 +1,8 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
-import {decode} from 'shared/chain/memo'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import tt from 'counterpart';
+import {memo} from 'golos-js'
 
 class Memo extends React.Component {
     static propTypes = {
@@ -17,7 +17,7 @@ class Memo extends React.Component {
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Memo');
         this.decodeMemo = (memo_private, text) => {
             try {
-                return decode(memo_private, text)
+                return memo.decode(memo_private, text)
             } catch(e) {
                 // if(/Invalid key/i.test(e.toString())) {
                 console.error('memo decryption error', text, e);

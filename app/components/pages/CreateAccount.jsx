@@ -2,10 +2,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import { PrivateKey } from 'shared/ecc';
+import {PrivateKey} from 'golos-js/lib/auth/ecc';
 import user from 'app/redux/User';
 import {validate_account_name} from 'app/utils/ChainValidation';
 import SignUp from 'app/components/modules/SignUp';
+import runTests from 'app/utils/BrowserTests';
 import g from 'app/redux/GlobalReducer';
 import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInput';
 import { APP_DOMAIN, SUPPORT_EMAIL } from 'app/client_config';
@@ -41,8 +42,7 @@ class CreateAccount extends React.Component {
     }
 
     componentDidMount() {
-        const cryptoTestResult = undefined;
-        //const cryptoTestResult = runTests();
+        const cryptoTestResult = runTests();
         if (cryptoTestResult !== undefined) {
             console.error('CreateAccount - cryptoTestResult: ', cryptoTestResult);
             this.setState({cryptographyFailure: true}); // TODO: do not use setState in componentDidMount

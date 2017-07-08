@@ -2,14 +2,14 @@ import {fromJS, Set, List} from 'immutable'
 import {takeLatest} from 'redux-saga';
 import {call, put, select, fork} from 'redux-saga/effects';
 import {accountAuthLookup} from 'app/redux/AuthSaga'
-import {PrivateKey, Signature, hash} from 'shared/ecc'
 import user from 'app/redux/User'
 import {getAccount} from 'app/redux/SagaShared'
 import {browserHistory} from 'react-router'
 import {serverApiLogin, serverApiLogout} from 'app/utils/ServerApiClient';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import {loadFollows} from 'app/redux/FollowSaga'
-import { api } from 'golos-js';
+import {PrivateKey, PublicKey, hash} from 'golos-js/lib/auth/ecc'
+import {api} from 'golos-js'
 
 export const userWatches = [
     watchRemoveHighSecurityKeys, // keep first to remove keys early when a page change happens

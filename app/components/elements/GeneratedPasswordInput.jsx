@@ -1,5 +1,5 @@
 import React from 'react';
-import {key_utils} from 'shared/ecc'
+import {key_utils} from 'golos-js/lib/auth/ecc';
 import tt from 'counterpart';
 import { APP_NAME } from 'app/client_config';
 

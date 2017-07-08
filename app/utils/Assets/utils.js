@@ -1,7 +1,5 @@
 const id_regex = /\b\d+\.\d+\.(\d+)\b/;
 
-import {ops} from 'shared/serializer';
-
 const Utils = {
 
     get_asset_precision: (precision) => {

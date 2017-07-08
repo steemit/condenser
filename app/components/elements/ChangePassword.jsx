@@ -2,8 +2,7 @@
 import React from 'react'
 import transaction from 'app/redux/Transaction'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
-import {PrivateKey} from 'shared/ecc'
-import {key_utils} from 'shared/ecc'
+import {PrivateKey, PublicKey, key_utils} from 'golos-js/lib/auth/ecc'
 import {validate_account_name} from 'app/utils/ChainValidation'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import tt from 'counterpart';
@@ -212,7 +211,6 @@ class ChangePassword extends React.Component {
     }
 }
 
-import {PublicKey} from 'shared/ecc'
 let newWif = null
 const keyValidate = (values) => ({
     password: ! values.password ? tt('g.required') :

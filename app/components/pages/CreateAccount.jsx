@@ -249,12 +249,18 @@ class CreateAccount extends React.Component {
 
         return (
             <div>
-                <SignupProgressBar steps={[translate('email'), translate('phone'), translate('golos_account')]} current={3} />
+                <SignupProgressBar
+                    steps={[
+                        "email",
+                        tt('g.phone'),
+                        tt('g.APP_NAME_account', {APP_NAME: tt('g.APP_NAME')}).toLowerCase()
+                    ]}
+                    current={3}
+                />
                 <div className="CreateAccount row">
                     <div className="column" style={{maxWidth: '36rem', margin: '0 auto'}}>
                         <h2>{tt('g.sign_up')}</h2>
                         <hr />
-                        {/* currently translateHtml() does not work, using <FormattedHTMLMessage /> instead */}
                         {showRules ? <div className="CreateAccount__rules">
                             <p>
                                 {tt('g.the_rules_of_APP_NAME.one', {APP_NAME})}<br/>
@@ -292,6 +298,7 @@ class CreateAccount extends React.Component {
                             {loading && <LoadingIndicator type="circle" />}
                             <input disabled={submit_btn_disabled} type="submit" className={submit_btn_class + ' uppercase'} value={tt('g.sign_up')} />
                         </form>
+                    </div>
                 </div>
             </div>
         );

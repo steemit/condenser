@@ -86,7 +86,7 @@ export default function useGeneralApi(app) {
                 order: 'id DESC'
             });
             if (existing_account) {
-                throw new Error("Only one Steem account per user is allowed in order to prevent abuse");
+                throw new Error("Only one Golos account per user is allowed in order to prevent abuse");
             }
 
             const same_ip_account = yield models.Account.findOne(
@@ -96,7 +96,7 @@ export default function useGeneralApi(app) {
                 const minutes = (Date.now() - same_ip_account.created_at) / 60000;
                 if (minutes < 10) {
                     console.log(`api /accounts: IP rate limit for user ${this.session.uid} #${user_id}, IP ${remote_ip}`);
-                    throw new Error('Only one Steem account allowed per IP address every 10 minutes');
+                    throw new Error('Only one Golos account allowed per IP address every 10 minutes');
                 }
             }
             if (user.waiting_list) {
@@ -128,7 +128,7 @@ export default function useGeneralApi(app) {
             const [fee_value, fee_currency] = config.get('registrar.fee').split(' ');
             let fee = parseFloat(fee_value);
             try {
-                const chain_properties = yield api.getChainPropertiesAsync([]);
+                const chain_properties = yield api.getChainPropertiesAsync();
                 const chain_fee = parseFloat(chain_properties.account_creation_fee);
                 if (chain_fee && chain_fee > fee) {
                     if (fee / chain_fee > 0.5) { // just a sanity check - chain fee shouldn't be a way larger
@@ -377,17 +377,19 @@ export default function useGeneralApi(app) {
  @arg signingKey {string|PrivateKey} - WIF or PrivateKey object
  */
 function* createAccount({
-    signingKey, fee, creator, new_account_name, json_metadata = '',
+    signingKey, fee, creator, new_account_name, json_metadata = '', delegation,
     owner, active, posting, memo
 }) {
-    const operations = [['account_create', {
-        fee, creator, new_account_name, json_metadata,
+    const operations = [['account_create_with_delegation', {
+        fee, creator, new_account_name, json_metadata, delegation,
         owner: {weight_threshold: 1, account_auths: [], key_auths: [[owner, 1]]},
         active: {weight_threshold: 1, account_auths: [], key_auths: [[active, 1]]},
         posting: {weight_threshold: 1, account_auths: [], key_auths: [[posting, 1]]},
         memo_key: memo,
     }]]
-    return yield broadcast.sendAsync({extensions: [], operations}, [signingKey])
+    yield broadcast.sendAsync({
+        extensions: [],
+        operations
+    }, [signingKey])
 }
-
 const parseSig = hexSig => {try {return Signature.fromHex(hexSig)} catch(e) {return null}}

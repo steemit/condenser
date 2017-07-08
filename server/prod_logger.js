@@ -1,9 +1,6 @@
 var humanize = require('humanize-number');
 var bytes = require('bytes');
-var config = require('config');
-var StatsD = require('node-statsd');
-
-const metrics = new StatsD({host: config.get('metrics.host')});
+var metrics = require('./metrics').metrics;
 
 module.exports = prod_logger;
 
@@ -51,7 +48,7 @@ function log(ctx, start, len, err, asset) {
         length,
         ctx.session.uid || '');
 
-    metrics.increment('http.code.' + status);
+    if (metrics) metrics.increment('_http_code_' + status);
 }
 
 function time(start) {

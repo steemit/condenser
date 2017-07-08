@@ -12,10 +12,7 @@ import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInp
 import { APP_DOMAIN, SUPPORT_EMAIL } from 'app/client_config';
 import tt from 'counterpart';
 import {api} from 'golos-js';
-
-//import SignupProgressBar from 'app/components/elements/SignupProgressBar';
-
-const PASSWORD_MIN_LENGTH = 32;
+import SignupProgressBar from 'app/components/elements/SignupProgressBar';
 
 class CreateAccount extends React.Component {
 
@@ -58,9 +55,6 @@ class CreateAccount extends React.Component {
         if (!name || !password || !password_valid) return;
 
         let public_keys;
-        // try generating btc address via blockcypher
-        // if no success - abort (redirect with try again)
-        let icoAddress = ''
         try {
             const pk = PrivateKey.fromWif(password);
             public_keys = [1, 2, 3, 4].map(() => pk.toPublicKey().toString());
@@ -86,14 +80,13 @@ class CreateAccount extends React.Component {
                 owner_key: public_keys[0],
                 active_key: public_keys[1],
                 posting_key: public_keys[2],
-                memo_key: public_keys[3]//,
-                //json_meta: JSON.stringify({"ico_address": icoAddress})
+                memo_key: public_keys[3]
             })
         }).then(r => r.json()).then(res => {
             if (res.error || res.status !== 'ok') {
                 console.error('CreateAccount server error', res.error);
                 if (res.error === 'Unauthorized') {
-                    this.props.showSignUp();
+                    window.location = '/enter_email';
                 }
                 this.setState({server_error: res.error || tt('g.unknown'), loading: false});
             } else {
@@ -136,7 +129,11 @@ class CreateAccount extends React.Component {
             }
         }
         if (promise) {
-            promise.then(error => this.setState({name_error: error}));
+            promise
+                .then(name_error => this.setState({name_error}))
+                .catch(() => this.setState({
+                    name_error: "Account name can't be verified right now due to server failure. Please try again later."
+                }));
         } else {
             this.setState({name_error});
         }
@@ -155,7 +152,7 @@ class CreateAccount extends React.Component {
 
         const {
             name, password_valid, showPasswordString,
-            name_error, server_error, loading, cryptographyFailure
+            name_error, server_error, loading, cryptographyFailure, showRules
         } = this.state;
 
         const {loggedIn, logout, offchainUser, serverBusy} = this.props;
@@ -251,41 +248,50 @@ class CreateAccount extends React.Component {
         }
 
         return (
-            <div className="CreateAccount row">
-                <div className="column large-7 small-10">
-                    <h2>{tt('g.sign_up')}</h2>
-                    <div className="CreateAccount__rules">
+            <div>
+                <SignupProgressBar steps={[translate('email'), translate('phone'), translate('golos_account')]} current={3} />
+                <div className="CreateAccount row">
+                    <div className="column" style={{maxWidth: '36rem', margin: '0 auto'}}>
+                        <h2>{tt('g.sign_up')}</h2>
                         <hr />
                         {/* currently translateHtml() does not work, using <FormattedHTMLMessage /> instead */}
-                        <p>
-                            {tt('g.the_rules_of_APP_NAME.one', {APP_NAME})}<br/>
-                            {tt('g.the_rules_of_APP_NAME.second', {APP_NAME})}<br/>
-                            {tt('g.the_rules_of_APP_NAME.third', {APP_NAME})}<br/>
-                            {tt('g.the_rules_of_APP_NAME.fourth')}<br/>
-                            {tt('g.the_rules_of_APP_NAME.fifth')}<br/>
-                            {tt('g.the_rules_of_APP_NAME.sixth')}<br/>
-                            {tt('g.the_rules_of_APP_NAME.seventh')}
-                        </p>
-                        <hr />
-                    </div>
-                    <form onSubmit={this.onSubmit} autoComplete="off" noValidate method="post">
-                        <div className={name_error ? 'error' : ''}>
-                            <label className="uppercase">{tt('g.username')}
-                                <input type="text" name="name" autoComplete="off" onChange={this.onNameChange} value={name} />
-                            </label>
-                            <p>{name_error}</p>
-                        </div>
-                        <GeneratedPasswordInput onChange={this.onPasswordChange} disabled={loading} showPasswordString={name.length > 0 && !name_error} />
-                        <br />
-                        {next_step}
-                        <noscript>
-                            <div className="callout alert">
-                                <p>{tt('createaccount_jsx.form_requires_javascript_to_be_enabled')}</p>
+                        {showRules ? <div className="CreateAccount__rules">
+                            <p>
+                                {tt('g.the_rules_of_APP_NAME.one', {APP_NAME})}<br/>
+                                {tt('g.the_rules_of_APP_NAME.second', {APP_NAME})}<br/>
+                                {tt('g.the_rules_of_APP_NAME.third', {APP_NAME})}<br/>
+                                {tt('g.the_rules_of_APP_NAME.fourth')}<br/>
+                                {tt('g.the_rules_of_APP_NAME.fifth')}<br/>
+                                {tt('g.the_rules_of_APP_NAME.sixth')}<br/>
+                                {tt('g.the_rules_of_APP_NAME.seventh')}
+                            </p>
+                            <div>
+                                <a className="CreateAccount__rules-button" href="#" onClick={() => this.setState({showRules: false})}>
+                                    <span style={{display: 'inline-block', transform: 'rotate(-90deg)'}}>&raquo;</span>
+                                </a>
                             </div>
-                        </noscript>
-                        {loading && <LoadingIndicator type="circle" />}
-                        <input disabled={submit_btn_disabled} type="submit" className={submit_btn_class + ' uppercase'} value={tt('g.sign_up')} />
-                    </form>
+                            <hr />
+                        </div> : <div className="text-center">
+                            <a className="CreateAccount__rules-button" href="#" onClick={() => this.setState({showRules: true})}>{tt('g.show_rules')}&nbsp; &raquo;</a>
+                        </div>}
+                        <form onSubmit={this.onSubmit} autoComplete="off" noValidate method="post">
+                            <div className={name_error ? 'error' : ''}>
+                                <label className="uppercase">{tt('g.username')}
+                                    <input type="text" name="name" autoComplete="off" onChange={this.onNameChange} value={name} />
+                                </label>
+                                <p>{name_error}</p>
+                            </div>
+                            <GeneratedPasswordInput onChange={this.onPasswordChange} disabled={loading} showPasswordString={name.length > 0 && !name_error} />
+                            <br />
+                            {next_step}
+                            <noscript>
+                                <div className="callout alert">
+                                    <p>{tt('createaccount_jsx.form_requires_javascript_to_be_enabled')}</p>
+                                </div>
+                            </noscript>
+                            {loading && <LoadingIndicator type="circle" />}
+                            <input disabled={submit_btn_disabled} type="submit" className={submit_btn_class + ' uppercase'} value={tt('g.sign_up')} />
+                        </form>
                 </div>
             </div>
         );

@@ -55,7 +55,7 @@ class SignUp extends React.Component {
                     </p>
                 </div>
             </div>
-            <div className="row">
+            {/* <div className="row">
                 <div className="column large-4 shrink">
                     <SvgImage name="vk" width="64px" height="64px" />
                 </div>
@@ -75,18 +75,18 @@ class SignUp extends React.Component {
                 <div className="column large-8">
                       <a href="/connect/facebook" className="button SignUp--fb-button">{tt("g.continue_with_facebook")}</a>
                 </div>
-            </div>
+            </div> */}
 
-            <div className="row">
+            {/* <div className="row">
                 <div className="column">
                     <br />
                     {tt("g.dont_have_facebook")}
                     <br />
-                    {/* this.state.waiting_list ? <AddToWaitingList /> : <a href="#" onClick={() => this.setState({waiting_list: true})}>
+                    {this.state.waiting_list ? <AddToWaitingList /> : <a href="#" onClick={() => this.setState({waiting_list: true})}>
                         <strong> {tt("g.subscribe_to_get_sms_confirm")}.</strong>
-                    </a> */}
+                    </a>}
                 </div>
-            </div>
+            </div>*/}
             <div className="row">
                 <div className="column large-4 shrink">
                     <SvgImage name="golos" width="64px" height="64px" />

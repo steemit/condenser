@@ -11,7 +11,7 @@ const wait = ms => (
     })
 );
 
-export const sharedWatches = [watchGetState, watchWsConnectionStatus, watchTransactionErrors]
+export const sharedWatches = [watchGetState, watchTransactionErrors]
 
 export function* getAccount(username, force = false) {
     let account = yield select(state => state.global.get('accounts').get(username))
@@ -36,29 +36,6 @@ export function* getState({payload: {url}}) {
     } catch (error) {
         console.error('~~ Saga getState error ~~>', url, error);
         yield put({type: 'global/CHAIN_API_ERROR', error: error.message});
-    }
-}
-
-export function* watchWsConnectionStatus() {
-    yield* takeEvery('WS_CONNECTION_STATUS', showConnectionErrorNotification);
-}
-
-function* showConnectionErrorNotification({payload: {status}}) {
-    const notifications = yield select(state => state.app.get('notifications'));
-    if (notifications && notifications.has('ws:connection:error')) {
-        if (status === 'open') {
-            yield put({type: 'REMOVE_NOTIFICATION', payload: {key: 'ws:connection:error'}});
-        }
-    } else if (status !== 'open') {
-        yield call(wait, 3000);
-        const ws_connection = yield select(state => state.app.get('ws_connection'));
-        if (ws_connection && ws_connection.status !== 'open') {
-            yield put({type: 'ADD_NOTIFICATION', payload:
-                {key: 'ws:connection:error',
-                 message: tt('g.connection_lost_reconnecting') + '..',
-                 dismissAfter: 15000}
-            });
-        }
     }
 }
 

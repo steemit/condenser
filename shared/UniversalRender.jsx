@@ -145,6 +145,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
         else {
           const _state = {};
           const feed_history = await api.getFeedHistoryAsync();
+
           _state.current_route = url;
           _state.props = await api.getDynamicGlobalPropertiesAsync();
           _state.category_idx = { "active": [], "recent": [], "best": [] };
@@ -265,24 +266,24 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
               'created',
               'recent'
           ].indexOf(parts[0]) >= 0) {
-            let args = [{
+            let args = {
               limit: constants.FETCH_DATA_BATCH_SIZE,
               truncate_body: constants.FETCH_DATA_TRUNCATE_BODY
-            }]
+            }
 
             if (typeof tag === 'string' && tag.length) {
               // args[0].tag = tag
-              args[0].select_tags = [tag]
+              args.select_tags = [tag]
             }
             else {
               if (typeof offchain.select_tags === "object" && offchain.select_tags.length) {
-                args[0].select_tags = _state.select_tags = offchain.select_tags;
+                args.select_tags = _state.select_tags = offchain.select_tags;
               }
               else {
-                args[0].filter_tags = _state.filter_tags = IGNORE_TAGS
+                args.filter_tags = _state.filter_tags = IGNORE_TAGS
               }
             }
-            const discussions = await api[PUBLIC_API[parts[0]][0]](args[0]);
+            const discussions = await api[PUBLIC_API[parts[0]][0]](args);
             let accounts = []
             let discussion_idxes = {}
             discussion_idxes[ PUBLIC_API[parts[0]][1] ] = []

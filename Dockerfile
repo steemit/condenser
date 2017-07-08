@@ -10,6 +10,9 @@ RUN mkdir -p /var/app
 ADD package.json /var/app/package.json
 RUN yarn
 
+# Update @steem/crypto-session package to prevent koa-session crash
+sed '65s/.*/            console\.error\("\@steem\/crypto-session: Discarding session", text, error2\)\; return \{\}\;/' node_modules/\@steem/crypto-session/index.js
+
 COPY . /var/app
 
 # FIXME TODO: fix eslint warnings

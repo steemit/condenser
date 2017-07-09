@@ -122,7 +122,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                             </div>
                             {rc_site_key
                               ?
-                                <button className="button g-recaptcha" data-sitekey={config.recaptcha.site_key} data-callback="submit_email_form">{tt('g.continue').toUpperCase()}</button>
+                                <button className="button g-recaptcha" data-sitekey={rc_site_key} data-callback="submit_email_form">{tt('g.continue').toUpperCase()}</button>
                               :
                                 <input type="submit" className="button" value="{tt('g.continue').toUpperCase()}" />
                             }

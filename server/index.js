@@ -41,7 +41,11 @@ global.webpackIsomorphicTools = new WebpackIsomorphicTools(
 );
 
 global.webpackIsomorphicTools.server(ROOT, () => {
-        steem.config.set('websocket', config.get('ws_connection_server'));
+        if(process.env.USE_JSONRPC)
+            steem.api.setOptions({ transport: 'http', uri: config.get('ws_connection_server') });
+        else
+            steem.config.set('websocket', config.get('ws_connection_server'));
+
         if (newrelic) {
             steem.api.on('track-performance', (method, time_taken) => {
                 newrelic.recordMetric(`WebTransaction/Performance/steem-js/${method}`, time_taken / 1000.0);

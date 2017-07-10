@@ -85,5 +85,9 @@
   "metrics": {
     "name": "SDC_METRICS_NAME",
     "host": "SDC_METRICS_HOST"
-  }
+  },
+  "newrelic": {
+    "license_key": "SDC_NEWRELIC_KEY"
+  },
+  "blockcypher_token": "SDC_BLOCKCYPHER_TOKEN"
 }

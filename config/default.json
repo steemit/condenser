@@ -41,16 +41,17 @@
   "google_analytics_id": false,
   "helmet": {
     "directives": {
-      "childSrc": "'self' www.youtube.com staticxx.facebook.com w.soundcloud.com player.vimeo.com",
-      "connectSrc": "'self' *.golos.io wss://*.golos.io api.blocktrades.us query.yahooapis.com",
-      "defaultSrc": "'self' www.youtube.com staticxx.facebook.com player.vimeo.com",
-      "fontSrc": "data: fonts.gstatic.com",
-      "frameAncestors": "'none'",
-      "imgSrc": "* data:",
-      "objectSrc": "'none'",
-      "pluginTypes": "application/pdf",
-      "scriptSrc": "'self' www.google-analytics.com connect.facebook.net",
-      "styleSrc": "'self' 'unsafe-inline' fonts.googleapis.com"
+      "defaultSrc": ["'self'", "golos.io", "www.youtube.com", "*.facebook.com"],
+      "childSrc": ["'self'", "www.youtube.com", "w.soundcloud.com", "*.facebook.com", "player.vimeo.com", "chat.golos.io", "livejournal.com", "www.google.com/maps/"],
+      "scriptSrc": ["'self'", "'unsafe-inline'","*.facebook.com", "cyber.fund", "www.google-analytics.com", "*.facebook.net", "js-agent.newrelic.com", "bam.nr-data.net", "cdn.polyfill.io", "cdn.segment.com", "*.mxpnl.com", "*.metabar.ru", "mc.yandex.ru", "chat.golos.io", "media.reformal.ru"],
+      "styleSrc": ["'self'", "'unsafe-inline'", "cdnjs.cloudflare.com",  "fonts.googleapis.com"],
+      "imgSrc": ["*", "data:"],
+      "fontSrc": ["data:", "fonts.gstatic.com"],
+      "connectSrc": ["'self'", "cyber.fund", "wss://ws.golos.io", "*.facebook.com", "www.google-analytics.com", "api.segment.io", "api.blocktrades.us", "query.yahooapis.com", "api.blockcypher.com", "api.mixpanel.com", "mc.yandex.ru", "mc.yandex.ru"],
+      "reportUri": "/api/v1/csp_violation",
+      "objectSrc": ["'self'"],
+      "pluginTypes": ["application/pdf"],
+      "frameAncestors": ["'none'"]
     },
     "reportOnly": false,
     "setAllHeaders": true
@@ -85,7 +86,7 @@
   },
   "server_session_secret": "exiKdyF+IwRIXJDmtGIl4vWUz4i3eVSISpfZoeYc0s4=",
   "session_cookie_key": "gls.session",
-  "session_key": "gls.ses",
+  "session_key": "golos",
   "site_domain": "golos.io",
   "tarantool": {
     "host": "localhost",
@@ -108,5 +109,11 @@
   "metrics": {
     "name": "golos",
     "host": "127.0.0.1"
-  }
+  },
+  "newrelic": {
+    "license_key": "newrelic license key",
+    "app_name": ["Golos.io"],
+    "log_level": "info"
+  },
+  "blockcypher_token": "blockcypher token"
 }

@@ -21,15 +21,16 @@ import {List} from 'immutable'
 import transaction from 'app/redux/Transaction';
 import Slider from 'react-rangeslider';
 
-
 const assetPrecision = 1000;
 
 class UserWallet extends React.Component {
     constructor() {
         super();
         this.state = {
-          powerDownAmount: 5000,
-          show_powerdown_confirm_modal: false
+          powerDownAmount: 0,
+          powedDownDivesting: "divesting-hide",
+          powerDownConfirm: "power-down-confirm-hide",
+          powerDownSelect: "power-down-select-show"
         }
 
         this.onShowDeposit = () => {this.setState({showDeposit: !this.state.showDeposit})};
@@ -96,31 +97,50 @@ class UserWallet extends React.Component {
         const savings_balance = account.get('savings_balance');
         const savings_sbd_balance = account.get('savings_sbd_balance');
 
+        const powerDownAmt = (vesting_shares) => {
+            this.setState({
+              toggleDivestError: null,
+              powerDownConfirm: "power-down-confirm-show",
+              powerDownSelect: "power-down-select-hide",
+              divestingState: "diviesting-hide"
+            });
+        };
+
+        const finishPowerDown = (e) => {
+          const vesting_shares = this.state.powerDownAmount.toFixed(6) + ' VESTS';
+          const VEST_TICKER = 'VESTS';
+          const name = account.get('name');
+          this.setState({toggleDivestError: null});
+          const errorCallback = e2 => {this.setState({toggleDivestError: e2.toString()})};
+          const successCallback = () => {
+            this.setState({
+              toggleDivestError: null,
+              powerDownConfirm: "power-down-confirm-hide",
+              powerDownSelect: "power-down-select-show"
+            });
+          }
+          this.props.withdrawVesting({account: name, vesting_shares, errorCallback, successCallback});
+        };
+
         const powerDown = (cancel, e) => {
-            console.log(account.get('vesting_shares'));
-            const name = account.get('name');
             const vesting_shares = cancel ? '0.000000 VESTS' : account.get('vesting_shares');
-            this.setState({toggleDivestError: null});
-            const errorCallback = e2 => {this.setState({toggleDivestError: e2.toString()})};
-            const successCallback = () => {this.setState({toggleDivestError: null})}
-            this.props.withdrawVesting({account: name, vesting_shares, errorCallback, successCallback})
-        }
+            finishPowerDown(vesting_shares);
+        };
 
-
-        const powerDownMin = 5000;
-        const powerDownMax = parseFloat(account.get('vesting_shares'));
+        const vs = account.get('vesting_shares');
+        this.setState({powerDownAmt: vs});
+        const powerDownMin = 0;
+        const powerDownMax = vesting_steem.toFixed(3);
         const handlePowerDownSliderChange= e => {
             this.setState({powerDownAmount: e});
         };
 
         const handlePowerDown= e => {
-            e.preventDefault();
-            let name = account.get('name');
-            let pdv = this.state.powerDownAmount + ' VESTS';
-            this.setState({toggleDivestError: null});
-            const errorCallback = e2 => {this.setState({toggleDivestError: e2.toString()})};
-            const successCallback = () => {this.setState({toggleDivestError: null})}
-            this.props.withdrawVesting({account: name, vesting_shares: pdv, err: ()=>{}, suc: ()=>{}});
+          this.setState({
+            toggleDivestError: null,
+            powerDownConfirm: "power-down-confirm-show",
+            powerDownSelect: "power-down-select-hide"
+          });
         };
 
         // Sum savings withrawals
@@ -135,7 +155,7 @@ class UserWallet extends React.Component {
                         savings_sbd_pending += parseFloat(amount)
                 }
             })
-        };
+        }
 
         // Sum conversions
         let conversionValue = 0;
@@ -232,6 +252,7 @@ class UserWallet extends React.Component {
         }
         if( divesting ) {
             power_menu.push( { value: 'Cancel Power Down', link:'#', onClick: powerDown.bind(this,true) } );
+            this.powerDownDivesting = "devesting-show";
         }
 
         const isWithdrawScheduled = new Date(account.get('next_vesting_withdrawal') + 'Z').getTime() > Date.now()
@@ -327,12 +348,22 @@ class UserWallet extends React.Component {
                     <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={power_balance_str + ' STEEM'} menu={power_menu} />
                     : power_balance_str + ' STEEM'}
                     <br />
-                    <Slider min={powerDownMin} max={powerDownMax} step={1} value={parseFloat(this.state.powerDownAmount)} onChange={(e) => handlePowerDownSliderChange(e)} />
-                    <br />
-                    <div className='pwer-down-amount'>Power Down Amount: {this.state.powerDownAmount}</div>
-                    <br />
-                    <button onClick={(e) => handlePowerDown(e)}>Power Down</button>
-                    {delegated_steem != 0 ? <div style={{paddingRight: isMyAccount ? "0.85rem" : null}}><Tooltip t="STEEM POWER delegated to this account">({received_power_balance_str} STEEM)</Tooltip></div> : null}
+
+
+                    <div className={this.state.powerDownSelect}>
+                      {delegated_steem != 0 ? <div style={{paddingRight: isMyAccount ? "0.85rem" : null}}><Tooltip t="STEEM POWER delegated to this account">({received_power_balance_str} STEEM)</Tooltip></div> : null}
+                      <br />
+                      <Slider min={powerDownMin} max={powerDownMax} step={0.001} value={parseFloat(this.state.powerDownAmount)} onChange={(e) => handlePowerDownSliderChange(e)} />
+                      <div className='power-down-amount'>Power Down Amount: {this.state.powerDownAmount.toFixed(3)}</div>
+                      <br />
+                      <button className="button hollow float-right" onClick={(e) => handlePowerDown(e)}>Power Down</button>
+                      <button className="{this.state.powerDownDivesting} button hollow float-right" onClick={(e) => powerDown.bind(this,true)}>Cancel Current Power Down</button>
+                    </div>
+                    <div className={this.state.powerDownConfirm}>
+                      Confirm Power Down?
+                      <br />
+                      <button className="button hollow float-right" onClick={(e)=>finishPowerDown(e)}>Confirm</button>
+                    </div>
                 </div>
             </div>
             <div className="UserWallet__balance row">

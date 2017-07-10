@@ -41,17 +41,17 @@
   "google_analytics_id": false,
   "helmet": {
     "directives": {
-      "defaultSrc": ["'self'", "golos.io", "www.youtube.com", "*.facebook.com"],
-      "childSrc": ["'self'", "www.youtube.com", "w.soundcloud.com", "*.facebook.com", "player.vimeo.com", "chat.golos.io", "livejournal.com", "www.google.com/maps/"],
-      "scriptSrc": ["'self'", "'unsafe-inline'","*.facebook.com", "cyber.fund", "www.google-analytics.com", "*.facebook.net", "js-agent.newrelic.com", "bam.nr-data.net", "cdn.polyfill.io", "cdn.segment.com", "*.mxpnl.com", "*.metabar.ru", "mc.yandex.ru", "chat.golos.io", "media.reformal.ru"],
-      "styleSrc": ["'self'", "'unsafe-inline'", "cdnjs.cloudflare.com",  "fonts.googleapis.com"],
-      "imgSrc": ["*", "data:"],
-      "fontSrc": ["data:", "fonts.gstatic.com"],
-      "connectSrc": ["'self'", "cyber.fund", "wss://ws.golos.io", "*.facebook.com", "www.google-analytics.com", "api.segment.io", "api.blocktrades.us", "query.yahooapis.com", "api.blockcypher.com", "api.mixpanel.com", "mc.yandex.ru", "mc.yandex.ru"],
+      "defaultSrc": "'self' golos.io www.youtube.com *.facebook.com",
+      "childSrc": "'self' www.youtube.com w.soundcloud.com *.facebook.com player.vimeo.com chat.golos.io livejournal.com www.google.com/maps/",
+      "scriptSrc": "'self' 'unsafe-inline' *.facebook.com cyber.fund www.google-analytics.com *.facebook.net js-agent.newrelic.com bam.nr-data.net cdn.polyfill.io cdn.segment.com *.mxpnl.com *.metabar.ru mc.yandex.ru chat.golos.io media.reformal.ru",
+      "styleSrc": "'self' 'unsafe-inline' cdnjs.cloudflare.com fonts.googleapis.com",
+      "imgSrc": "* data:",
+      "fontSrc": "data: fonts.gstatic.com",
+      "connectSrc": "'self' cyber.fund wss://ws.golos.io *.facebook.com www.google-analytics.com api.segment.io api.blocktrades.us query.yahooapis.com api.blockcypher.com api.mixpanel.com mc.yandex.ru mc.yandex.ru",
       "reportUri": "/api/v1/csp_violation",
-      "objectSrc": ["'self'"],
-      "pluginTypes": ["application/pdf"],
-      "frameAncestors": ["'none'"]
+      "objectSrc": "'self'",
+      "pluginTypes": "application/pdf",
+      "frameAncestors": "'none'"
     },
     "reportOnly": false,
     "setAllHeaders": true
@@ -112,7 +112,7 @@
   },
   "newrelic": {
     "license_key": "newrelic license key",
-    "app_name": ["Golos.io"],
+    "app_name": "Golos.io",
     "log_level": "info"
   },
   "blockcypher_token": "blockcypher token"

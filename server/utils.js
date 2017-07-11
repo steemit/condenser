@@ -16,7 +16,7 @@ function rateLimitReq(ctx, req) {
     // purge hits older than minutes_max
     ip_last_hit.forEach((v, k) => {
         const seconds = (now - v) / 1000;
-        if (seconds > 1) {
+        if (seconds > 0.5) {
             ip_last_hit.delete(ip)
         }
     })
@@ -26,7 +26,7 @@ function rateLimitReq(ctx, req) {
     if (ip_last_hit.has(ip)) {
         // console.log(`api rate limited for ${ip}: ${req}`);
         // throw new Error(`Rate limit reached: one call per ${minutes_max} minutes allowed.`);
-        console.error(`Rate limit reached: one call per 1 second allowed.`);
+        console.error(`Rate limit reached: one call per 0.5 second allowed.`);
         ctx.status = 429;
         ctx.body = 'Too Many Requests';
         result = true;

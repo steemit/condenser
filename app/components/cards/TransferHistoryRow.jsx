@@ -40,7 +40,7 @@ class TransferHistoryRow extends React.Component {
                 }
             }
             else if( data.to === context ) {
-                description_start += tt('g.recieve') + data.amount.split(' ')[0] + " " + VESTING_TOKEN + tt('g.from');
+                description_start += tt('g.receive') + data.amount.split(' ')[0] + " " + VESTING_TOKEN + tt('g.from');
                 other_account = data.from;
             } else {
                 description_start += tt('g.transfer') + data.amount.split(' ')[0] + " " + VESTING_TOKEN + tt('g.from') + data.from + tt('g.to');

@@ -82,6 +82,7 @@
   "session_cookie_key": "SDC_SESSION_COOKIE_KEY",
   "ws_connection_client": "SDC_CLIENT_WEBSOCKET_URL",
   "ws_connection_server": "SDC_SERVER_WEBSOCKET_URL",
+  "chain_id" : "SDC_CHAIN_ID",
   "metrics": {
     "name": "SDC_METRICS_NAME",
     "host": "SDC_METRICS_HOST"

@@ -27,7 +27,8 @@ global.$STM_Config = {
     upload_image: config.get('upload_image'),
     site_domain: config.get('site_domain'),
     facebook_app_id: config.get('facebook_app_id'),
-    google_analytics_id: config.get('google_analytics_id')
+    google_analytics_id: config.get('google_analytics_id'),
+    chain_id: config.get('chain_id'),
 };
 
 const WebpackIsomorphicTools = require('webpack-isomorphic-tools');

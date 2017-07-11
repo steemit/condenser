@@ -712,7 +712,7 @@ export default formId => connect(
                 __config
             }
             var determineLanguage = (data) => {
-              fetch('http://lang.golos.io:3000/', {
+              fetch($STM_Config.lang_server, {
                   method: 'post',
                   mode: 'no-cors',
                   credentials: 'same-origin',

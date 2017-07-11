@@ -294,7 +294,7 @@ export default function useGeneralApi(app) {
                 mixpanel.track(type, {distinct_id: this.session.uid, Page: str_value});
                 mixpanel.people.increment(this.session.uid, type, 1);
             } else {
-                recordWebEvent(this, type, str_value);
+                // recordWebEvent(this, type, str_value);
             }
             this.body = JSON.stringify({status: 'ok'});
         } catch (error) {

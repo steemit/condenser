@@ -105,3 +105,4 @@ export const DOMESTIC = {
   pt:  'Portuguesa',
   fr:  'Français'
 }
+export const SEGMENT_ANALYTICS_KEY = 'F7tldQJxt491gXYqDGi5TkTT4wFpSPps'

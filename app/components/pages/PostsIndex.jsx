@@ -55,7 +55,7 @@ class PostsIndex extends React.Component {
     getPosts(order, category) {
         let select_tags = cookie.load(SELECT_TAGS_KEY);
         select_tags = typeof select_tags === 'object' ? select_tags.sort().join('/') : '';
-        const topic_discussions = this.props.discussions.get(category || '');
+        const topic_discussions = this.props.discussions.get(category || select_tags);
         if (!topic_discussions) return null;
         return topic_discussions.get(order);
     }

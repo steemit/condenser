@@ -57,6 +57,7 @@
     "setAllHeaders": true
   },
   "img_proxy_prefix": "https://imgp.golos.io/",
+  "lang_server" : "https://lang.golos.io/",
   "ipfs_prefix": false,
   "mixpanel": false,
   "notify": {

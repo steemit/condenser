@@ -13,16 +13,6 @@ import tt from 'counterpart';
 import LocalizedCurrency, {localizedCurrency} from 'app/components/elements/LocalizedCurrency';
 import { DEBT_TICKER } from 'app/client_config';
 
-const ABOUT_FLAG = <div>
-    <p>{tt('voting_jsx.flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following')}:</p>
-    <ul>
-        <li>{tt('voting_jsx.disagreement_on_rewards')}</li>
-        <li>{tt('voting_jsx.fraud_or_plagiarism')}</li>
-        <li>{tt('voting_jsx.hate_speech_or_internet_trolling')}</li>
-        <li>{tt('voting_jsx.intentional_miss_categorized_content_or_spam')}</li>
-    </ul>
-</div>;
-
 const MAX_VOTES_DISPLAY = 20;
 const VOTE_WEIGHT_DROPDOWN_THRESHOLD = 1.0 * 1000.0 * 1000.0;
 
@@ -135,6 +125,16 @@ class Voting extends React.Component {
 
         const votingUpActive = voting && votingUp;
         const votingDownActive = voting && votingDown;
+
+        const ABOUT_FLAG = <div>
+            <p>{tt('voting_jsx.flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following')}:</p>
+            <ul>
+                <li>{tt('voting_jsx.disagreement_on_rewards')}</li>
+                <li>{tt('voting_jsx.fraud_or_plagiarism')}</li>
+                <li>{tt('voting_jsx.hate_speech_or_internet_trolling')}</li>
+                <li>{tt('voting_jsx.intentional_miss_categorized_content_or_spam')}</li>
+            </ul>
+        </div>;
 
         if (flag) {
             const down = <Icon name={votingDownActive ? 'empty' : (myVote < 0 ? 'flag2' : 'flag1')} />;

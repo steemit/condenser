@@ -111,7 +111,7 @@ class UserWallet extends React.Component {
         };
 
         const finishPowerDown = (e, cancel) => {
-          const pwrDwnCalc = account.get('vesting_shares') * (this.state.powerDownAmount / powerDownMax);
+          const pwrDwnCalc = parseFloat(account.get('vesting_shares')) * (this.state.powerDownAmount / powerDownMax);
           const vesting_shares = cancel ? '0.000000 VESTS' : pwrDwnCalc.toFixed(6) + ' VESTS';
 
           const VEST_TICKER = 'VESTS';
@@ -359,7 +359,7 @@ class UserWallet extends React.Component {
                     <div className={this.state.powerDownSelect}>
                       {delegated_steem != 0 ? <div style={{paddingRight: isMyAccount ? "0.85rem" : null}}><Tooltip t="STEEM POWER delegated to this account">({received_power_balance_str} STEEM)</Tooltip></div> : null}
                       <br />
-                      <Slider min={0} max={powerDownMax} step={0.001} value={parseFloat(this.state.powerDownAmount)} onChange={(e) => handlePowerDownSliderChange(e)} />
+                      <Slider min={0.000} max={powerDownMax} step={0.001} value={parseFloat(this.state.powerDownAmount)} onChange={(e) => handlePowerDownSliderChange(e)} />
                       <div className='power-down-amount'>Power Down Amount: {parseFloat(this.state.powerDownAmount).toFixed(3)}</div>
                       <br />
                       <button className="button hollow float-right" onClick={(e) => handlePowerDown(e)}>Power Down</button>

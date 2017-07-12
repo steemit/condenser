@@ -281,7 +281,7 @@ class UserWallet extends React.Component {
                     {isMyAccount ? <WalletSubMenu account_name={account.get('name')} /> : <div><br /><h4>BALANCES</h4><br /></div>}
                 </div>
                 {<div className="columns shrink">
-                    {isMyAccount && <button className="UserWallet__buysp button hollow" onClick={this.onShowDepositSteem}>Buy Steem or Steem Power</button>}
+                    {isMyAccount && <button className="UserWallet__buysp button hollow" onClick={onShowDepositSteem}>Buy Steem or Steem Power</button>}
                 </div>}
             </div>
             <div className="UserWallet__balance row">

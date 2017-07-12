@@ -69,10 +69,12 @@
 Сообщество Голос высоко ценит оригинальный контент, поэтому используя чужой материал, Вы рискуете получить от сообщества негативную реакцию (и флаги). 
 Мы не рекомендуем использовать чужой материал для публикации на Голосе. 
 При использовании чужих картинок, мы рекомендуем всегда оставлять ссылку на источник картинки (также удостоверитесь, что использованный Вами материал разрешен для публикации).
-**Не теряйте свой пароль! **
+
+**Не теряйте свой пароль!**
 Регистрируясь на сайте, вы ознакомились с соглашением хранить свой пароль в безопасности.
 Пожалуйста, следуйте этому правилу.
-**Сколько я смогу тут заработать? **
+
+**Сколько я смогу тут заработать?**
 Мы не рекомендуем гнаться за прибылью. Помните что это социальная площадка, для общения с другими участниками и для публикации Вашего материала. Поэтому не ставьте перед собой цель заработать. Наслаждайтесь Вашим временем на платформе.  
 
 #### Ниже, Вы можете найти F.A.Q. любезно предоставленный @bitcoinfo
@@ -85,6 +87,7 @@
     •   [Официальная Вики проекта Голос](https://wiki.golos.io/)
     •   [Официальный репозиторий на GitHub](https://github.com/GolosChain)
     •   [Отчёты о проделанной работе команды Голоса](https://golos.io/@golos)
+
 **Публикация и оформление постов в Голосе**
     •   [Как создать пост на платформе Голос?](https://golos.io/ru--knigagolos/@aleksandraz/kniga-pro-golos-kak-sozdat-post-na-platforme-golos)
     •   [Основы оформления постов на Голосе + полный курс по работе с Markdown](https://golos.io/ru--golos/@on0tole/osnovy-oformleniya-postov-na-golose-polnyi-kurs-po-rabote-s-markdown)
@@ -93,6 +96,7 @@
     •   [Этика поведения. О чём и как писать?](https://golos.io/ru--knigagolos/@katrin/etika-povedeniya-o-chyom-i-kak-pisat)
     •   [Где брать картинки для своих публикаций: базы изображений для коммерческого использования](https://golos.io/ru--golos/@awispa/gde-brat-kartinki-dlya-svoikh-publikacii-bazy-izobrazhenii-dlya-kommercheskogo-ispolzovaniya)
     •   [Флаг: как и в каких случаях стоит использовать](https://golos.io/ru--knigagolos/@aleksandraz/kniga-pro-golos-flag-kak-i-v-kakikh-sluchayakh-stoit-ispolzovat)
+
 **Биржи для торговли токенами Голоса**
     •   Bittrex: [GOLOS](https://www.bittrex.com/Market/Index?MarketName=BTC-GOLOS)
     •   Livecoin: [GOLOS](https://www.livecoin.net/)
@@ -112,6 +116,7 @@
 **Новая экономика Голоса после 16 хадфорка**
     •   [Новая Экономическая Модель ГОЛОСа: перевод поста @hipster на язык простых смертных:)](https://golos.io/ru--golos/@natasha/novaya-ekonomicheskaya-model-golosa-perevod-posta-hipster-na-yazyk-prostykh-smertnykh)
     •   [Новая экономика Голоса в простых цифрах: что ждёт авторов, инвесторов и делегатов?](https://golos.io/ru--golos/@primus/novaya-ekonomika-golosa-v-prostykh-cifrakh-chto-zhdyot-avtorov-investorov-i-delegatov)
+
 **Промо-материалы: баннеры, картинки, креатив про Голос**
     •   [Комплекты баннеров для рекламы Голоса на ваших сайтах и в социальных сетях](https://golos.io/ru--golos/@primus/komplekty-1-i-2-bannerov-dlya-reklamy-golosa-na-vashikh-saitakh-i-v-socialnykh-setyakh)
     •   Принты для футболок: [1](https://golos.io/ru--golos/@konti/printy-dlya-futbolok-or-golos) 

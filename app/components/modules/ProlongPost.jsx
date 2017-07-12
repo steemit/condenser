@@ -118,7 +118,7 @@ class ProlongPost extends Component {
                        {loading && <span><LoadingIndicator type="circle" /><br /></span>}
                        {!loading && <span>
                            {trxError && <div className="error">{trxError}</div>}
-                           <button type="submit" className="button" disabled={submitDisabled}>{tt('g.prolong')}</button>
+                           <button type="submit" className="button" disabled={true}>{tt('g.prolong')}</button>
                         </span>}
                    </form>
                </div>

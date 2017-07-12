@@ -78,5 +78,7 @@
   "upload_image": "SDC_UPLOAD_IMAGE_URL",
   "session_cookie_key": "SDC_SESSION_COOKIE_KEY",
   "ws_connection_client": "SDC_CLIENT_WEBSOCKET_URL",
-  "ws_connection_server": "SDC_SERVER_WEBSOCKET_URL"
+  "ws_connection_server": "SDC_SERVER_WEBSOCKET_URL",
+  "http_connection_client": "SDC_CLIENT_HTTP_URL",
+  "http_connection_server": "SDC_SERVER_HTTP_URL"
 }

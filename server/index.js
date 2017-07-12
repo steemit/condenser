@@ -42,7 +42,7 @@ global.webpackIsomorphicTools = new WebpackIsomorphicTools(
 
 global.webpackIsomorphicTools.server(ROOT, () => {
         if(process.env.USE_JSONRPC)
-            steem.api.setOptions({ transport: 'http', uri: config.get('ws_connection_server') });
+            steem.api.setOptions({ transport: 'http', uri: config.get('http_connection_server') });
         else
             steem.config.set('websocket', config.get('ws_connection_server'));
 

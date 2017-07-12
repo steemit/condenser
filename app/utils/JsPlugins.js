@@ -1,5 +1,6 @@
-// 3rd party plugins
+import { SEGMENT_ANALYTICS_KEY } from 'app/client_config';
 
+// 3rd party plugins
 export default function init(config) {
 
     // SEGMENT.COM ANALYTICS INITIALIZATION

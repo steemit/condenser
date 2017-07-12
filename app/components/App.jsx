@@ -19,7 +19,7 @@ import MiniHeader from 'app/components/modules/MiniHeader';
 import tt from 'counterpart';
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
-import { VEST_TICKER, WIKI_URL, LANDING_PAGE_URL, ABOUT_PAGE_URL, WHITEPAPER_URL, SEGMENT_ANALYTICS_KEY, TERMS_OF_SERVICE_URL, PRIVACY_POLICY_URL } from 'app/client_config';
+import { VEST_TICKER, WIKI_URL, LANDING_PAGE_URL, ABOUT_PAGE_URL, WHITEPAPER_URL, TERMS_OF_SERVICE_URL, PRIVACY_POLICY_URL } from 'app/client_config';
 import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
 
 class App extends React.Component {

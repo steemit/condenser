@@ -27,7 +27,7 @@ class UserWallet extends React.Component {
         super();
         this.state = {};
         this.onShowDeposit = () => {this.setState({showDeposit: !this.state.showDeposit})};
-        this.onShowDepositSteem = (current_user_name, e) => {
+        this.onShowDepositSteem = (e) => {
             e.preventDefault();
             // this.setState({showDeposit: !this.state.showDeposit, depositType: 'STEEM'})
             const name = this.props.current_user.get('username');

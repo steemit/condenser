@@ -11,6 +11,7 @@
     "TOKEN_WORTH" : "~1 mg of gold"
   },
   "g": {
+    "golos_fest" : "#яИдуНаГОЛОСфест",
     "APP_NAME" : "Golos",
     "APP_NAME_account": "%(APP_NAME)s account",
     "24_hour": "24 hour",

@@ -364,7 +364,7 @@ class ReplyEditor extends React.Component {
         let currentDomesticTitle = DOMESTIC[currentDomesticKey];
         const domestic_menu = [];
         for (var key in DOMESTIC) {
-          if (domestic.value === key) {
+          if (domestic && domestic.value === key) {
             currentDomesticKey = key;
             currentDomesticTitle = DOMESTIC[currentDomesticKey];
           }

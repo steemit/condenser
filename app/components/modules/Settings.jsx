@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux'
 import user from 'app/redux/User';
 import tt from 'counterpart';
-import { CURRENCIES, DEFAULT_CURRENCY, CURRENCY_COOKIE_KEY, LANGUAGES, DEFAULT_LANGUAGE } from 'app/client_config'
+import { CURRENCIES, DEFAULT_CURRENCY, CURRENCY_COOKIE_KEY, LANGUAGES, DEFAULT_LANGUAGE, THEMES, DEFAULT_THEME } from 'app/client_config'
 import transaction from 'app/redux/Transaction'
 import o2j from 'shared/clash/object2json'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
@@ -70,6 +70,12 @@ class Settings extends React.Component {
         const language = event.target.value
         localStorage.setItem('language', language)
         this.props.changeLanguage(language)
+    }
+
+    onThemeChange = (event) => {
+        const theme = event.target.value
+        localStorage.setItem('theme', theme)
+        this.props.changeTheme(theme)
     }
 
     handleSubmit = ({updateInitialValues}) => {
@@ -147,6 +153,12 @@ class Settings extends React.Component {
           })}
         </select>;
 
+        const themeSelectBox = <select defaultValue={process.env.BROWSER ? localStorage.getItem('theme') : DEFAULT_THEME} onChange={this.onThemeChange}>
+            {THEMES.map(i => {
+                return <option key={i} value={i}>{i}</option>
+            })}
+        </select>;
+
         return <div className="Settings">
 
             <div className="row">
@@ -167,6 +179,11 @@ class Settings extends React.Component {
                                 })
                             }
                         </select>
+                    </label>
+                    {/* CHOOSE THEME */}
+                    <label>
+                        {tt('settings_jsx.choose_theme')}
+                        {themeSelectBox}
                     </label>
                     <div className="error"></div>
                     <label>
@@ -265,6 +282,9 @@ export default connect(
     dispatch => ({
         changeLanguage: (language) => {
             dispatch(user.actions.changeLanguage(language))
+        },
+        changeTheme: (theme) => {
+            dispatch(user.actions.changeTheme(theme))
         },
         updateAccount: ({successCallback, errorCallback, ...operation}) => {
             const options = {type: 'account_update', operation, successCallback, errorCallback}

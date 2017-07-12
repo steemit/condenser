@@ -19,7 +19,7 @@ import MiniHeader from 'app/components/modules/MiniHeader';
 import tt from 'counterpart';
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
-import { VEST_TICKER, WIKI_URL, LANDING_PAGE_URL, ABOUT_PAGE_URL, WHITEPAPER_URL, TERMS_OF_SERVICE_URL, PRIVACY_POLICY_URL } from 'app/client_config';
+import { VEST_TICKER, WIKI_URL, LANDING_PAGE_URL, ABOUT_PAGE_URL, WHITEPAPER_URL, TERMS_OF_SERVICE_URL, PRIVACY_POLICY_URL, THEMES, DEFAULT_THEME } from 'app/client_config';
 import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
 
 class App extends React.Component {
@@ -52,7 +52,8 @@ class App extends React.Component {
     shouldComponentUpdate(nextProps, nextState) {
         const p = this.props;
         const n = nextProps;
-        return p.location !== n.location ||
+        return nextProps.theme !== this.props.theme ||
+                  p.location !== n.location ||
                   p.visitor !== n.visitor ||
                   p.flash !== n.flash || this.state !== nextState;
     }
@@ -93,6 +94,11 @@ class App extends React.Component {
         const APP_NAME = tt('g.APP_NAME');
 
         const {location, params, children, flash, new_visitor, depositSteem, signup_bonus} = this.props;
+        const theme = process.env.BROWSER ? localStorage.getItem('theme') : DEFAULT_THEME
+        let currentTheme = ' theme-' + DEFAULT_THEME.toLowerCase();
+        if (THEMES.indexOf(theme) !== -1) {
+          currentTheme = ' theme-' + theme.toLowerCase();
+        }
         const lp = false; //location.pathname === '/';
         const miniHeader = location.pathname === '/create_account';
         const params_keys = Object.keys(params);
@@ -171,7 +177,7 @@ class App extends React.Component {
             );
         }
 
-        return <div className={'App' + (lp ? ' LP' : '') + (ip ? ' index-page' : '') + (miniHeader ? ' mini-header' : '')}
+        return <div className={'App' + currentTheme + (lp ? ' LP' : '') + (ip ? ' index-page' : '') + (miniHeader ? ' mini-header' : '')}
                     onMouseMove={this.onEntropyEvent}>
             <SidePanel ref="side_panel" alignment="right">
                 <TopRightMenu vertical navigate={this.navigate} />
@@ -261,6 +267,7 @@ class App extends React.Component {
 }
 
 App.propTypes = {
+    theme: React.PropTypes.string,
     error: React.PropTypes.string,
     children: AppPropTypes.Children,
     location: React.PropTypes.object,
@@ -273,6 +280,7 @@ App.propTypes = {
 export default connect(
     state => {
         return {
+            theme: state.user.get('theme'),
             error: state.app.get('error'),
             flash: state.offchain.get('flash'),
             signup_bonus: state.offchain.get('signup_bonus'),

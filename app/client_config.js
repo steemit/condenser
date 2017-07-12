@@ -106,3 +106,6 @@ export const DOMESTIC = {
   fr:  'Français'
 }
 export const SEGMENT_ANALYTICS_KEY = 'F7tldQJxt491gXYqDGi5TkTT4wFpSPps'
+// ui themes
+export const THEMES = ['Default', 'Green', 'Red']
+export const DEFAULT_THEME = THEMES[0]

@@ -654,6 +654,7 @@
     "choose_language": "Виберіть мову інтерфейсу",
     "choose_domestic": "Виберіть мову контенту",
     "choose_currency": "Виберіть валюту",
+    "choose_theme": "Виберіть тему",
     "invalid_url": "Неприпустима URL-адреса",
     "name_is_too_long": "Ім'я задовге",
     "name_must_not_begin_with": "Ім'я не повинно починатися з @",

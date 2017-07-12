@@ -676,6 +676,7 @@
     "choose_language": "Выберите язык интерфейса",
     "choose_domestic": "Национальный язык",
     "choose_currency": "Выберите валюту",
+    "choose_theme": "Выберите тему",
     "invalid_url": "Недопустимый URL-адрес",
     "name_is_too_long": "Имя слишком длинное",
     "name_must_not_begin_with": "Имя не должно начинаться с @",

@@ -848,6 +848,7 @@
     "choose_language": "Choose language",
     "choose_domestic": "Choose domestic",
     "choose_currency": "Choose currency",
+    "choose_theme": "Choose theme",
     "invalid_url": "Invalid URL",
     "name_is_too_long": "Name is too long",
     "name_must_not_begin_with": "Name must not begin with @",

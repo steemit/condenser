@@ -665,6 +665,7 @@
     "choose_language":"Selectați limba interfeței",
     "choose_domestic":"Limba națională",
     "choose_currency":"Selectați valuta",
+    "choose_theme": "Choose theme",
     "invalid_url":"Adresa URL nevalidă",
     "name_is_too_long":"Numele este prea lung",
     "name_must_not_begin_with":"Numele nu trebuie să înceapă cu @",

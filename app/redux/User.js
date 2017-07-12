@@ -1,6 +1,6 @@
 import {fromJS} from 'immutable';
 import createModule from 'redux-modules';
-import { DEFAULT_LANGUAGE, DEFAULT_DOMESTIC } from 'app/client_config';
+import { DEFAULT_LANGUAGE, DEFAULT_DOMESTIC, DEFAULT_THEME } from 'app/client_config';
 
 const defaultState = fromJS({
     current: null,
@@ -10,7 +10,8 @@ const defaultState = fromJS({
     show_signup_modal: false,
     pub_keys_used: null,
     locale: DEFAULT_LANGUAGE,
-    domestic: DEFAULT_DOMESTIC
+    domestic: DEFAULT_DOMESTIC,
+    theme: DEFAULT_THEME
 });
 
 export default createModule({
@@ -60,6 +61,9 @@ export default createModule({
         },
         { action: 'CHANGE_DOMESTIC', reducer: (state, {payload}) => {
             return state.set('domestic', payload)}
+        },
+        { action: 'CHANGE_THEME', reducer: (state, {payload}) => {
+            return state.set('theme', payload)}
         },
         { action: 'SHOW_TRANSFER', reducer: state => state.set('show_transfer_modal', true) },
         { action: 'HIDE_TRANSFER', reducer: state => state.set('show_transfer_modal', false) },

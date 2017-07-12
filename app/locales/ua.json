@@ -763,12 +763,12 @@
     "users_author_rewards": "Авторські нагороди %(name)s",
     "users_permissions": "Дозволи %(name)s",
     "recent_replies_to_users_posts": "Недавні відповіді до постів користувача %(name)s",
-    "followers": "Підписчики",
+    "followers": "Підписники",
     "this_is_users_reputations_score_it_is_based_on_history_of_votes": "Це кількість очок репутації користувача %(name)s.\n\nКількість очок підраховується на основі історії отриманих голосів і використовується, щоб приховати неякісне вміст.",
     "follower_count": {
-      "zero": "0 пидпичсиків",
-      "one": "1 пидпичсик",
-      "other": "%(count)s пидпичсиків"
+      "zero": "0 підписників",
+      "one": "1 підписник",
+      "other": "%(count)s підписників"
     },
     "followed_count": {
       "zero": "0 підписок",

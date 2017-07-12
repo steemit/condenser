@@ -146,6 +146,7 @@
     "alternative_sources": "Альтернативные источники"
   },
   "g": {
+    "golos_fest" : "#яИдуНаГОЛОСфест",
     "APP_NAME" : "Голос",
     "APP_NAME_account": "%(APP_NAME)s аккаунт",
     "24_hour": "24 часа",

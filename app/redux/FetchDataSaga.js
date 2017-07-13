@@ -246,7 +246,7 @@ export function* fetchData(action) {
         args[0].select_authors = [accountname];
     } else if( order === 'by_author' ) {
         call_name = 'getDiscussionsByBlogAsync';
-        delete args.select_tags
+        delete args[0].select_tags
         args[0].select_authors = [accountname];
     } else if( order === 'by_comments' ) {
         call_name = 'getDiscussionsByCommentsAsync';

@@ -63,7 +63,7 @@ class Settings extends React.Component {
     }
 
     onCurrencyChange(event) {
-        cookie.save(CURRENCY_COOKIE_KEY, event.target.value, {path: "/"});
+        cookie.save(CURRENCY_COOKIE_KEY, event.target.value, {path: "/", expires: new Date(Date.now() + 60 * 60 * 24 * 365 * 10 * 1000)});
     }
 
     onLanguageChange = (event) => {

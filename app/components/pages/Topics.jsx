@@ -59,7 +59,7 @@ class Topics extends React.Component {
         keys.push(key)
       keys.sort()
       this.setState({selected: keys})
-      cookie.save(SELECT_TAGS_KEY, keys, {path: "/"});
+      cookie.save(SELECT_TAGS_KEY, keys, {path: "/", expires: new Date(Date.now() + 60 * 60 * 24 * 365 * 10 * 1000)});
       if (! this.props.loading && this.props.loadSelected)
         this.props.loadSelected(keys)
 

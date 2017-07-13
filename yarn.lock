@@ -3161,9 +3161,9 @@ glogg@^1.0.0:
   dependencies:
     sparkles "^1.0.0"
 
-golos-js@^0.5.20:
-  version "0.5.20"
-  resolved "https://registry.yarnpkg.com/golos-js/-/golos-js-0.5.20.tgz#7f33097ea5844c8f4c57ff8907df51fbb48d3975"
+golos-js@^0.5.21:
+  version "0.5.21"
+  resolved "https://registry.yarnpkg.com/golos-js/-/golos-js-0.5.21.tgz#1527996da1afba230d91093a09e1be791da61fe1"
   dependencies:
     bigi "^1.4.2"
     bluebird "^3.4.6"

@@ -153,7 +153,7 @@ export default function useGeneralApi(app) {
                 console.error('!!! Can\'t create account model in /accounts api', this.session.uid, error);
             });
             if (accountInstance) {
-                createAccount({
+                const chainAccount = yield createAccount({
                     signingKey: config.get('registrar.signing_key'),
                     fee: `${fee.toFixed(3)} ${fee_currency}`,
                     creator: config.registrar.account,
@@ -377,11 +377,11 @@ export default function useGeneralApi(app) {
  @arg signingKey {string|PrivateKey} - WIF or PrivateKey object
  */
 function* createAccount({
-    signingKey, fee, creator, new_account_name, json_metadata = '', delegation,
+    signingKey, fee, creator, new_account_name, json_metadata = '',
     owner, active, posting, memo
 }) {
-    const operations = [['account_create_with_delegation', {
-        fee, creator, new_account_name, json_metadata, delegation,
+    const operations = [['account_create', {
+        fee, creator, new_account_name, json_metadata,
         owner: {weight_threshold: 1, account_auths: [], key_auths: [[owner, 1]]},
         active: {weight_threshold: 1, account_auths: [], key_auths: [[active, 1]]},
         posting: {weight_threshold: 1, account_auths: [], key_auths: [[posting, 1]]},

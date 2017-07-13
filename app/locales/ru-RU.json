@@ -107,7 +107,7 @@
     "examples": "Например: 9001234567 | 9261234567",
     "land_lines_cannot_receive_sms_messages": "* Городские телефоны не могу принимать СМС сообщения",
     "message_and_data_rates_may_apply": "",
-    "thank_you_for_providing_your_phone_number": "Спасибо за предоставленный номер телефона ($(phone)s).",
+    "thank_you_for_providing_your_phone_number": "Спасибо за предоставленный номер телефона.",
     "to_continue_please_enter_the_sms_code_weve_sent_you": "Чтобы продолжить, пожалуйста укажите СМС код который мы вам отправили.",
     "confirmation_code": "Код подтверждения",
     "didnt_receive_the_verification_code": "Не получили код подтверждения? ",

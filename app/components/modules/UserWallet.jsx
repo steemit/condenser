@@ -29,9 +29,10 @@ class UserWallet extends React.Component {
         super();
         this.state = {
           powerDownAmount: 0,
-          powedDownDivesting: "divesting-hide",
-          powerDownConfirm: "power-down-confirm-hide",
-          powerDownSelect: "power-down-select-show"
+          currentPoweringDownAmount: 0,
+          powerDownDivesting: "UserWallet__powerdown__divesting-hide",
+          powerDownConfirm: "UserWallet__powerdown__confirm-hide",
+          powerDownSelect: "UserWallet__powerdown__select-show"
         };
 
         this.onShowDeposit = () => {this.setState({showDeposit: !this.state.showDeposit})};
@@ -79,7 +80,7 @@ class UserWallet extends React.Component {
         const gprops = this.props.gprops.toJS();
 
         let powerdown_vests = parseFloat(this.props.powerdown_vests).toFixed(3);
-        this.state.powerDownAmount = this.state.powerDownAmount || powerdown_vests;
+        this.state.currentPoweringDownAmount = parseFloat(powerdown_vests);
 
         if (!account) return null;
         let vesting_steem = vestingSteem(account.toJS(), gprops);
@@ -104,9 +105,9 @@ class UserWallet extends React.Component {
         const powerDownAmt = (vesting_shares) => {
             this.setState({
               toggleDivestError: null,
-              powerDownConfirm: "power-down-confirm-show",
-              powerDownSelect: "power-down-select-hide",
-              divestingState: "diviesting-hide"
+              powerDownConfirm: "UserWallet__powerdown__confirm-show",
+              powerDownSelect: "UserWallet__powerdown__select-hide",
+              divestingState: "UserWallet__powerdown__diviesting-hide"
             });
         };
 
@@ -121,8 +122,8 @@ class UserWallet extends React.Component {
           const successCallback = () => {
             this.setState({
               toggleDivestError: null,
-              powerDownConfirm: "power-down-confirm-hide",
-              powerDownSelect: "power-down-select-show"
+              powerDownConfirm: "UserWallet__powerdown__confirm-hide",
+              powerDownSelect: "UserWallet__powerdown__select-show"
             });
           }
           this.props.withdrawVesting({account: name, vesting_shares, errorCallback, successCallback});
@@ -133,19 +134,17 @@ class UserWallet extends React.Component {
             finishPowerDown(vesting_shares, true);
         };
 
-        const vs = account.get('vesting_shares');
-        //this.setState({powerDownAmt: vs});
-        const powerDownMin = 0;
         const powerDownMax = parseFloat(vesting_steem.toFixed(3));
         const handlePowerDownSliderChange= e => {
+            console.log(e)
             this.setState({powerDownAmount: parseFloat(e.toFixed(3))});
         };
 
         const handlePowerDown= e => {
           this.setState({
             toggleDivestError: null,
-            powerDownConfirm: "power-down-confirm-show",
-            powerDownSelect: "power-down-select-hide"
+            powerDownConfirm: "UserWallet__powerdown__confirm-show",
+            powerDownSelect: "UserWallet__powerdown__select-hide"
           });
         };
 
@@ -354,15 +353,15 @@ class UserWallet extends React.Component {
                     <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={power_balance_str + ' STEEM'} menu={power_menu} />
                     : power_balance_str + ' STEEM'}
                     <br />
-
-
                     <div className={this.state.powerDownSelect}>
                       {delegated_steem != 0 ? <div style={{paddingRight: isMyAccount ? "0.85rem" : null}}><Tooltip t="STEEM POWER delegated to this account">({received_power_balance_str} STEEM)</Tooltip></div> : null}
                       <br />
-                      <Slider min={0.000} max={powerDownMax} step={0.001} value={parseFloat(this.state.powerDownAmount)} onChange={(e) => handlePowerDownSliderChange(e)} />
-                      <div className='power-down-amount'>Power Down Amount: {parseFloat(this.state.powerDownAmount).toFixed(3)}</div>
+                      <Slider min={0.000} max={powerDownMax} step={0.001} value={parseFloat(this.state.powerDownAmount)} onChange={(e)=>handlePowerDownSliderChange(e)} orientation='horizontal' />
+                      <div>Power Down Amount: {parseFloat(this.state.powerDownAmount).toFixed(3)}</div>
                       <br />
-                      <button className="button hollow float-right" onClick={(e) => handlePowerDown(e)}>Power Down</button>
+                      <div style={{display: this.state.currentPoweringDownAmount==0 ? "none" : "block"}}>Current Power Down Amount: {parseFloat(this.state.currentPoweringDownAmount).toFixed(3)}</div>
+                      <br />
+                      <button className="button hollow float-right" onClick={(e)=>handlePowerDown(e)}>Power Down</button>
                     </div>
                     <div className={this.state.powerDownConfirm}>
                       Confirm Power Down?

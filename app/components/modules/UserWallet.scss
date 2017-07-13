@@ -58,6 +58,20 @@
     }
 }
 
+
+.UserWallet__powerdown__confirm-show,
+.UserWallet__powerdown__select-show,
+.UserWallet__powerdown__divesting-show  {
+    display: block;
+}
+
+.UserWallet__powerdown__confirm-hide,
+.UserWallet__powerdown__select-hide,
+.UserWallet__powerdown__divesting-hide {
+    display: none;
+}
+
+
 /**
 * Rangeslider
 */
@@ -197,7 +211,6 @@
 /**
 * Rangeslider - Reverse
 */
-
 .rangeslider-reverse {
   &.rangeslider-horizontal {
     .rangeslider__fill {
@@ -210,14 +223,6 @@
       bottom: inherit;
     }
   }
-}
-
-.power-down-confirm-show, .power-down-select-show, .divesting-show  {
-    display: block;
-}
-
-.power-down-confirm-hide, .power-down-select-hide, .divesting-hide {
-    display: none;
 }
 
 /**

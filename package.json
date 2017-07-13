@@ -55,7 +55,7 @@
     "file-loader": "^0.8.5",
     "foundation-sites": "6.2.1",
     "git-rev-sync": "^1.6.0",
-    "golos-js": "^0.5.20",
+    "golos-js": "^0.5.21",
     "grant-koa": "^3.6.0",
     "highcharts": "^4.2.5",
     "history": "^2.0.0-rc2",

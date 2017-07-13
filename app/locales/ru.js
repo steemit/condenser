@@ -193,7 +193,7 @@ const ru = {
   age: 'Новое',
   votes: 'votes',
   backup_password_by_storing_it: 'Сделайте резервную копию в менеджере паролей или текстовом файле',
-  click_to_generate_password: 'Нажмите, чтобы сгененировать пароль',
+  click_to_generate_password: 'Нажмите, чтобы сгенерировать пароль',
   re_enter_generate_password: 'Повторно введите пароль',
   understand_that_APP_NAME_cannot_recover_password: 'Я понимаю что ' + APP_NAME + ' не сможет восстановить утраченный пароль',
   i_saved_password: 'Я надежно сохранил сгенерированный пароль',

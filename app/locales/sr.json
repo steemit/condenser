@@ -164,6 +164,8 @@
     "close":"Zatvori",
     "collapse":"Свернуть",
     "comments":"Komentari",
+    "confirm_ignore" : "Вы действительно хотите заблокировать этого пользователя?",
+    "confirm_unfollow": "Вы действительно хотите отменить подписку на этого пользователя?",
     "continue":"Nastavi",
     "convert":"Konvertuj",
     "created":"kreiran",

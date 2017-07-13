@@ -39,6 +39,8 @@
     "close": "Close",
     "collapse": "Collapse",
     "comments": "Comments",
+    "confirm_ignore": "Are you sure you want to block this user?",
+    "confirm_unfollow": "Are you sure you want to unfollow this user?",
     "continue": "continue",
     "convert": "Convert",
     "date": "Date",

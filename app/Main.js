@@ -26,6 +26,12 @@ function runApp(initial_state) {
     console.log('Initial state', initial_state);
     const config = initial_state.offchain.config
     steem.config.set('websocket', config.ws_connection_client);
+    if (config.custom_addr_prefix) {
+        steem.config.set('address_prefix', config.custom_addr_prefix);
+    }
+    if (config.custom_chain_id) {
+        steem.config.set('chain_id', config.custom_chain_id);
+    }
     window.$STM_Config = config;
     plugins(config);
     if (initial_state.offchain.serverBusy) {

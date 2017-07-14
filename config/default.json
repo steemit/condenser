@@ -96,5 +96,7 @@
   },
   "upload_image": false,
   "ws_connection_client": "wss://steemd.steemit.com",
-  "ws_connection_server": "wss://steemd.steemit.com"
+  "ws_connection_server": "wss://steemd.steemit.com",
+  "custom_chain_id": false,
+  "custom_addr_prefix": false
 }

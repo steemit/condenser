@@ -1,7 +1,7 @@
 import assert from 'assert'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient'
 import {PrivateKey, PublicKey} from 'steem/lib/auth/ecc'
-import {memo, config} from 'steem';
+import {config} from 'steem';
 
 export const browserTests = {}
 
@@ -39,14 +39,6 @@ export default function runTests() {
     })
     it('parses public key', () => {
         assert(PublicKey.fromString(public_key.toString()))
-    })
-    it('memo encryption', () => {
-        const cyphertext = memo.encode(private_key, public_key, '#memo爱')
-        const plantext = memo.decode(private_key, cyphertext)
-        browserTests.memo_encryption = plantext === '#memo爱'
-        if(!browserTests.memo_encryption) {
-            console.error('Decoded memo did not match (memo encryption is unavailable)')
-        }
     })
     if(!pass) return rpt
 }

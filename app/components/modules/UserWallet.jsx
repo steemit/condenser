@@ -29,7 +29,6 @@ class UserWallet extends React.Component {
         super();
         this.state = {
           powerDownAmount: 0,
-          currentPoweringDownAmount: 0,
           powerDownDivesting: "UserWallet__powerdown__divesting-hide",
           powerDownConfirm: "UserWallet__powerdown__confirm-hide",
           powerDownSelect: "UserWallet__powerdown__select-show"
@@ -78,9 +77,6 @@ class UserWallet extends React.Component {
         const {convertToSteem, price_per_steem, savings_withdraws, account,
             current_user, open_orders} = this.props;
         const gprops = this.props.gprops.toJS();
-
-        let powerdown_vests = parseFloat(this.props.powerdown_vests).toFixed(3);
-        this.state.currentPoweringDownAmount = parseFloat(powerdown_vests);
 
         if (!account) return null;
         let vesting_steem = vestingSteem(account.toJS(), gprops);
@@ -355,12 +351,11 @@ class UserWallet extends React.Component {
                     <div className={this.state.powerDownSelect}>
                       {delegated_steem != 0 ? <div style={{paddingRight: isMyAccount ? "0.85rem" : null}}><Tooltip t="STEEM POWER delegated to this account">({received_power_balance_str} STEEM)</Tooltip></div> : null}
                       <Slider min={0.000} max={powerDownMax} step={0.001} value={parseFloat(this.state.powerDownAmount)} onChange={(e)=>handlePowerDownSliderChange(e)} orientation='horizontal' />
-                      <div>Power Down Amount: {parseInt(this.state.powerDownAmount)} STEEM</div>
-                      <div style={{display: this.state.currentPoweringDownAmount==0 ? "none" : "block"}}>Currently Powering Down: {parseFloat(this.state.currentPoweringDownAmount).toFixed(3)} STEEM</div>
+                      <div>Power Down Amount: {this.state.powerDownAmount.toFixed(3)} STEEM</div>
                       <button className="button hollow float-right" onClick={(e)=>handlePowerDown(e)}>Power Down</button>
                     </div>
                     <div className={this.state.powerDownConfirm}>
-                      Confirm Power Down of {parseInt(this.state.powerDownAmount)} STEEM?
+                      Confirm Power Down of {this.state.powerDownAmount.toFixed(3)} STEEM?
                       <br />
                       <button className="button hollow float-right" onClick={(e)=>finishPowerDown(e)}>Confirm</button>
                     </div>

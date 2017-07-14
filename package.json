@@ -8,12 +8,12 @@
   "description": "steemit.com is the koa web server & middleware and react.js in-browser code for the world's first blockchain content + social media monetization platform!",
   "main": "index.js",
   "scripts": {
-    "build": "NODE_ENV=production ./node_modules/babel-cli/bin/babel-node.js ./node_modules/.bin/webpack --stats --config ./webpack/prod.config.js",
+    "build": "NODE_ENV=production ./node_modules/babel-cli/bin/babel-node.js ./node_modules/.bin/webpack --stats --config ./webpack/prod.config.js; babel src --out-dir lib -D",
     "mocha": "NODE_ENV=test mocha ./mocha.setup.js",
     "test": "npm run mocha -- app/**/*.test.js",
     "test:watch:all": "npm test -- --watch --watch-extensions jsx",
     "test:watch": "npm run mocha -- --watch --watch-extensions jsx",
-    "production": "NODE_ENV=production ./node_modules/babel-cli/bin/babel-node.js --max-old-space-size=1792 src/server/index.js",
+    "production": "NODE_ENV=production node lib/server/index.js",
     "start": "NODE_ENV=development ./node_modules/babel-cli/bin/babel-node.js ./webpack/dev-server.js",
     "webpush": "./node_modules/babel-cli/bin/babel-node.js ./scripts/webpush_notify.js"
   },

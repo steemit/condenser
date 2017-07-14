@@ -1,5 +1,5 @@
 import React from 'react';
-import Icon from 'app/components/elements/Icon.jsx';
+import Icon from 'app/components/elements/Icon';
 import { APP_NAME } from 'app/client_config';
 
 export default function MiniHeader() {

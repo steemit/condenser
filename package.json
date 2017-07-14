@@ -13,8 +13,8 @@
     "test": "npm run mocha -- app/**/*.test.js",
     "test:watch:all": "npm test -- --watch --watch-extensions jsx",
     "test:watch": "npm run mocha -- --watch --watch-extensions jsx",
-    "production": "NODE_ENV=production ./node_modules/babel-cli/bin/babel-node.js --max-old-space-size=1792 server/index.js",
-    "start": "./node_modules/babel-cli/bin/babel-node.js ./webpack/dev-server.js",
+    "production": "NODE_ENV=production ./node_modules/babel-cli/bin/babel-node.js --max-old-space-size=1792 src/server/index.js",
+    "start": "NODE_ENV=development ./node_modules/babel-cli/bin/babel-node.js ./webpack/dev-server.js",
     "webpush": "./node_modules/babel-cli/bin/babel-node.js ./scripts/webpush_notify.js"
   },
   "author": "Steemit, Inc.",
@@ -139,7 +139,7 @@
     "url-loader": "^0.5.7",
     "web-push": "^3.2.1",
     "webpack": "^1.13.2",
-    "webpack-isomorphic-tools": "^2.2.31",
+    "webpack-isomorphic-tools": "^3.0.3",
     "websocket": "^1.0.22",
     "whatwg-fetch": "^0.11.1",
     "xmldom": "^0.1.22"
@@ -162,7 +162,7 @@
     "koa-webpack-dev-middleware": "^1.1.0",
     "koa-webpack-hot-middleware": "^1.0.3",
     "mocha": "^2.4.5",
-    "node-watch": "^0.3.5",
+    "node-watch": "^0.5.5",
     "react-addons-perf": "15.4.2",
     "react-addons-test-utils": "15.4.2",
     "react-transform-catch-errors": "^1.0.1",

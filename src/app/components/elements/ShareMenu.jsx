@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router'
-import Icon from 'app/components/elements/Icon.jsx';
+import Icon from 'app/components/elements/Icon';
 
 export default class ShareMenu extends React.Component {
 

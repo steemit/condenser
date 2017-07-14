@@ -6,7 +6,7 @@ import * as steem from 'steem';
 delete process.env.BROWSER;
 
 const path = require('path');
-const ROOT = path.join(__dirname, '..');
+const ROOT = path.join(__dirname, '../..');
 
 // Tell `require` calls to look into `/app` also
 // it will avoid `../../../../../` require strings
@@ -33,7 +33,7 @@ global.$STM_Config = {
 
 const WebpackIsomorphicTools = require('webpack-isomorphic-tools');
 const WebpackIsomorphicToolsConfig = require(
-    '../webpack/webpack-isotools-config'
+    '../../webpack/webpack-isotools-config'
 );
 
 global.webpackIsomorphicTools = new WebpackIsomorphicTools(

@@ -1,7 +1,7 @@
 import React from 'react';
 import SvgImage from 'app/components/elements/SvgImage';
 import { Link } from 'react-router';
-import Icon from 'app/components/elements/Icon.jsx';
+import Icon from 'app/components/elements/Icon';
 
 class NotFound extends React.Component {
 

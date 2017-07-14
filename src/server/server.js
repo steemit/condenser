@@ -260,7 +260,7 @@ if (env === 'development') {
     app.use(
         mount(
             '/assets',
-            staticCache(path.join(__dirname, '../dist'), cacheOpts)
+            staticCache(path.join(__dirname, '../../dist'), cacheOpts)
         )
     );
 }

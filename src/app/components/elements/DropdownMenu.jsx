@@ -1,6 +1,6 @@
 import React from 'react';
 import { browserHistory } from 'react-router';
-import Icon from 'app/components/elements/Icon.jsx';
+import Icon from 'app/components/elements/Icon';
 import VerticalMenu from './VerticalMenu';
 import {findParent} from 'app/utils/DomUtils';
 

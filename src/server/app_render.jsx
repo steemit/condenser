@@ -7,6 +7,9 @@ import models from 'db/models';
 import secureRandom from 'secure-random';
 import ErrorPage from 'server/server-error';
 
+const path = require('path');
+const ROOT = path.join(__dirname, '../..');
+
 const DB_RECONNECT_TIMEOUT = process.env.NODE_ENV === 'development' ? 1000 * 60 * 60 : 1000 * 60 * 10;
 
 async function appRender(ctx) {
@@ -84,7 +87,7 @@ async function appRender(ctx) {
         const { body, title, statusCode, meta } = await universalRender({location: ctx.request.url, store, offchain, ErrorPage, tarantool: Tarantool.instance()});
 
         // Assets name are found in `webpack-stats` file
-        const assets_filename = process.env.NODE_ENV === 'production' ? 'tmp/webpack-stats-prod.json' : 'tmp/webpack-stats-dev.json';
+        const assets_filename = ROOT + (process.env.NODE_ENV === 'production' ? '/tmp/webpack-stats-prod.json' : '/tmp/webpack-stats-dev.json');
         const assets = require(assets_filename);
 
         // Don't cache assets name on dev

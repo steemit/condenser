@@ -30,7 +30,7 @@ class Userpic extends Component {
             if(hideIfDefault) {
                 return null;
             }
-            url = require('app/assets/images/user.png');
+            url = require('assets/images/user.png');
         }
 
         const style = {backgroundImage: 'url(' + url + ')',

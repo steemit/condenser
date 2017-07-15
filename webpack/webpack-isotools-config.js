@@ -3,7 +3,6 @@ const path = require('path');
 const ROOT = path.join(__dirname, '..');
 
 module.exports = {
-    // debug: true,
     webpack_assets_file_path: ROOT + (process.env.NODE_ENV === 'production' ? '/tmp/webpack-isotools-assets-prod.json' : '/tmp/webpack-isotools-assets-dev.json'),
     webpack_stats_file_path: './tmp/webpack-stats.json',
     alias: {
@@ -12,32 +11,14 @@ module.exports = {
     assets: {
         images:
         {
-            extensions: ['png', 'jpg', 'svg'],
-            path: function(module, options, log)
-            {
-                console.log('-- exports.path -->', module.name);
-                return module.name
-            }
+            extensions: ['png', 'jpg', 'svg']
         },
         fonts:
         {
             extensions: ['woff', 'ttf']
         },
-        //png_images: {
-        //    extension: 'png', //
-        //    filter: function(module, regular_expression, options, log)
-        //    {
-        //        return regular_expression.test(module.name)
-        //    },
-        //    path: function(module, options, log)
-        //    {
-        //        return module.name
-        //    },
-        //
-        //},
         styles: {
             extensions: ['css', 'scss'],
-
             // which `module`s to parse CSS from:
             filter(module, regular_expression, options, log) {
                 if (options.development) {

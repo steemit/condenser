@@ -61,6 +61,14 @@
       "waiting_list_invite": "SDC_SENDGRID_WAITINGTEMPLATE"
     }
   },
+  "postmark": {
+    "from": "SDC_POSTMARK_FROM",
+    "key": "SDC_POSTMARK_API_KEY",
+    "templates": {
+      "confirm_email": "SDC_POSTMARK_CONFIRMTEMPLATE",
+      "waiting_list_invite": "SDC_POSTMARK_WAITINGTEMPLATE"
+    }
+  },
   "server_session_secret": "SDC_SESSION_SECRETKEY",
   "site_domain": "SDC_SITE_DOMAIN",
   "tarantool": {

@@ -90,6 +90,7 @@
     "node-sass": "^3.4.2",
     "node-statsd": "^0.1.1",
     "pluralize": "^2.0.0",
+    "postmark": "^1.4.1",
     "purest": "^2.0.1",
     "raw-loader": "^0.5.1",
     "react": "https://registry.npmjs.org/react/-/react-15.4.1.tgz",

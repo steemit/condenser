@@ -254,7 +254,11 @@
     "terms_of_service": "Terms of Service",
     "sign_up": "Sign Up",
     "welcome": "Welcome",
-    "faq": "FAQ"
+    "faq": "FAQ",
+    "chat": "Steemit Chat",
+    "app_center": "Steemit App Center",
+    "api_docs": "Steemit API Docs",
+    "whitepaper": "Steem Whitepaper"
   },
   "main_menu": {
     "hot": "hot",

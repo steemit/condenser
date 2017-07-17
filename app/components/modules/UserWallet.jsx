@@ -11,7 +11,7 @@ import BlocktradesDeposit from 'app/components/modules/BlocktradesDeposit';
 import Reveal from 'react-foundation-components/lib/global/reveal'
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {steemTip, powerTip, valueTip, savingsTip, delegationTip} from 'app/utils/Tips'
-import {numberWithCommas, vestingSteem, delegatedSteem, vestsToSp} from 'app/utils/StateFunctions'
+import {numberWithCommas, vestingSteem, delegatedSteem} from 'app/utils/StateFunctions'
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu'
 import WalletSubMenu from 'app/components/elements/WalletSubMenu'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
@@ -20,7 +20,6 @@ import { translate } from 'app/Translator';
 import {List} from 'immutable'
 import transaction from 'app/redux/Transaction';
 import Slider from 'react-rangeslider';
-import { APP_NAME, DEBT_TOKEN, DEBT_TOKEN_SHORT, LIQUID_TOKEN, CURRENCY_SIGN, VESTING_TOKEN, LIQUID_TICKER, VEST_TICKER } from 'app/client_config';
 
 const assetPrecision = 1000;
 
@@ -252,7 +251,6 @@ class UserWallet extends React.Component {
         }
         if( divesting ) {
             power_menu.push( { value: 'Cancel Power Down', link:'#', onClick: powerDown.bind(this,true) } );
-            this.powerDownDivesting = "devesting-show";
         }
 
         const isWithdrawScheduled = new Date(account.get('next_vesting_withdrawal') + 'Z').getTime() > Date.now()
@@ -446,16 +444,13 @@ export default connect(
         const savings_withdraws = state.user.get('savings_withdraws')
         const gprops = state.global.get('props');
         const sbd_interest = gprops.get('sbd_interest_rate')
-        let powerdown_vests = numberWithCommas(vestsToSp(state, ownProps.account.get('to_withdraw') + ' VESTS'));
         return {
-            state,
             ...ownProps,
             open_orders: state.market.get('open_orders'),
             price_per_steem,
             savings_withdraws,
             sbd_interest,
-            gprops,
-            powerdown_vests
+            gprops
         }
     },
     // mapDispatchToProps

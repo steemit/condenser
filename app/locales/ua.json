@@ -505,7 +505,8 @@
     "welcome": "Ласкаво просимо",
     "feedback": "Зворотній зв'язок",
     "wiki": "Вікі",
-    "faq": "FAQ"
+    "faq": "FAQ",
+    "sale_agreement": "Договор купли-продажи"
   },
   "oauth": {
     "we_couldnt_verify_your_account_contact_us_at_SUPPORT_EMAIL": "Ми не змогли верифікувати обліковий запис. Напишіть на пошту %(SUPPORT_EMAIL)s для отримання додаткової інформації.",

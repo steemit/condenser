@@ -505,7 +505,8 @@
     "welcome":"Bine ați venit",
     "feedback":"Feedback-ul",
     "wiki":"WIKI",
-    "faq":"FAQ"
+    "faq":"FAQ",
+    "sale_agreement": "Sale Agreement"
   },
   "oauth":{
     "we_couldnt_verify_your_account_contact_us_at_SUPPORT_EMAIL":"Nu am putut verifica contul. Scrie pe e-mailul: %(SUPPORT_EMAIL)s pentru a primi mai multe informații.",

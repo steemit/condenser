@@ -90,7 +90,7 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
     const inIco = location && location.pathname.indexOf("/about") == 0;
     const ico_menu = [
         {link: '#what-is-golos', value: tt('g.video')},
-        {link: 'https://developers.golos.io', value: tt('g.documentation')},
+        {link: '#docs', value: tt('g.documentation')},
         {link: '#faq', value: tt('navigation.faq')},
         {link: '#team', value: tt('g.team')},
     ];

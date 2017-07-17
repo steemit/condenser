@@ -505,7 +505,8 @@
     "welcome":"Dobrodošli",
     "feedback":"Feedback",
     "wiki":"Wiki",
-    "faq":"FAQ"
+    "faq":"FAQ",
+    "sale_agreement": "Sale Agreement"
   },
   "oauth":{
     "we_couldnt_verify_your_account_contact_us_at_SUPPORT_EMAIL":"Nismo mogli da potvrdimo vašu e-email adresu, kontaktirajte nas na %(SUPPORT_EMAIL)s za više informacija.",

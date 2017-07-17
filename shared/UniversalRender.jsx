@@ -332,7 +332,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
                 //onchain.content[key]['body'] = onchain.content[key]['body'].substring(0, 1024) // TODO: can be removed. will be handled by steemd
                 // Count some stats then remove voting data. But keep current user's votes. (#1040)
                 onchain.content[key]['stats'] = contentStats(onchain.content[key])
-                onchain.content[key]['active_votes'] = onchain.content[key]['active_votes'].filter(vote => vote.voter === offchain.account)
+                // onchain.content[key]['active_votes'] = onchain.content[key]['active_votes'].filter(vote => vote.voter === offchain.account)
             }
         }
 

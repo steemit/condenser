@@ -10,6 +10,7 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import Userpic from 'app/components/elements/Userpic';
 import reactForm from 'app/utils/ReactForm'
 import UserList from 'app/components/elements/UserList';
+import Dropzone from 'react-dropzone';
 
 
 class Settings extends React.Component {
@@ -24,6 +25,7 @@ class Settings extends React.Component {
     state = {
         errorMessage: '',
         successMessage: '',
+        progress: {}
     }
 
     initForm(props) {
@@ -124,6 +126,61 @@ class Settings extends React.Component {
         })
     }
 
+    onDrop = (acceptedFiles, rejectedFiles) => {
+        if(!acceptedFiles.length) {
+            if(rejectedFiles.length) {
+                this.setState({progress: {error: 'Please insert only image files.'}})
+                console.log('onDrop Rejected files: ', rejectedFiles);
+            }
+            return
+        }
+        const file = acceptedFiles[0]
+        this.upload(file, file.name)
+    }
+
+    onOpenClick = () => {
+        this.dropzone.open();
+    }
+
+    onPasteCapture = e => {
+        try {
+            if(e.clipboardData) {
+                for(const item of e.clipboardData.items) {
+                    if(item.kind === 'file' && /^image\//.test(item.type)) {
+                        const blob = item.getAsFile()
+                        this.upload(blob)
+                    }
+                }
+            } else {
+                // http://joelb.me/blog/2011/code-snippet-accessing-clipboard-images-with-javascript/
+                // contenteditable element that catches all pasted data
+                this.setState({noClipboardData: true})
+            }
+        } catch(error) {
+            console.error('Error analyzing clipboard event', error);
+        }
+    }
+
+    upload = (file, name = '') => {
+        const {uploadImage} = this.props
+        this.setState({progress: {message: 'Uploading...'}})
+        uploadImage(file, progress => {
+            if(progress.url) {
+                this.setState({ progress: {} })
+                const {url} = progress
+                const image_md = `${url}`
+                const {body} = this.state
+                const {selectionStart, selectionEnd} = this.refs.postRef
+                profile_image.props.onChange(
+                    image_md
+                )
+            } else {
+                this.setState({ progress })
+            }
+            setTimeout(() => { this.setState({ progress: {} }) }, 4000) // clear message
+        })
+    }
+
     render() {
         const {state, props} = this
 
@@ -135,6 +192,8 @@ class Settings extends React.Component {
         const {follow, account, isOwnAccount} = this.props
         const following = follow && follow.getIn(['getFollowingAsync', account.name]);
         const ignores = isOwnAccount && following && following.get('ignore_result')
+
+        const {progress, noClipboardData} = this.state
 
         return <div className="Settings">
 
@@ -171,7 +230,22 @@ class Settings extends React.Component {
                     <h4>{tt('settings_jsx.public_profile_settings')}</h4>
                     <label>
                         {tt('settings_jsx.profile_image_url')}
-                        <input type="url" {...profile_image.props} autoComplete="off" />
+                        <Dropzone onDrop={this.onDrop}
+                          className="dropzone"
+                          disableClick multiple={false} accept="image/*"
+                          ref={(node) => { this.dropzone = node; }}>
+                            <input type="url" {...profile_image.props} autoComplete="off" />
+                            <span>
+
+                                <p className="drag-and-drop">
+                                    Insert images by dragging &amp; dropping,&nbsp;
+                                    {noClipboardData ? '' : 'pasting from the clipboard, '}
+                                    or by <a onClick={this.onOpenClick}>selecting them</a>.
+                                </p>
+                                {progress.message && <div className="info">{progress.message}</div>}
+                                {progress.error && <div className="error">Image upload: {progress.error}</div>}
+                            </span>
+                        </Dropzone>
                     </label>
                     <div className="error">{profile_image.blur && profile_image.touched && profile_image.error}</div>
 
@@ -271,6 +345,12 @@ export default connect(
         updateAccount: ({successCallback, errorCallback, ...operation}) => {
             const options = {type: 'account_update', operation, successCallback, errorCallback}
             dispatch(transaction.actions.broadcastOperation(options))
+        },
+        uploadImage: (file, progress) => {
+            dispatch({
+                type: 'user/UPLOAD_IMAGE',
+                payload: {file, progress},
+            })
         }
     })
 )(Settings)

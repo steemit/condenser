@@ -20,20 +20,13 @@ import tt from 'counterpart';
 import {List} from 'immutable'
 import { LIQUID_TOKEN, LIQUID_TICKER, DEBT_TOKENS, VESTING_TOKEN } from 'app/client_config';
 import transaction from 'app/redux/Transaction';
-import Slider from 'react-rangeslider';
 
 const assetPrecision = 1000;
 
 class UserWallet extends React.Component {
     constructor() {
         super();
-        this.state = {
-          powerDownAmount: 0,
-          powerDownDivesting: "UserWallet__powerdown__divesting-hide",
-          powerDownConfirm: "UserWallet__powerdown__confirm-hide",
-          powerDownSelect: "UserWallet__powerdown__select-show"
-        };
-
+        this.state = {};
         this.onShowDeposit = () => {this.setState({showDeposit: !this.state.showDeposit})};
         this.onShowDepositSteem = (e) => {
             e.preventDefault();
@@ -99,50 +92,15 @@ class UserWallet extends React.Component {
         const savings_balance = account.get('savings_balance');
         const savings_sbd_balance = account.get('savings_sbd_balance');
 
-        const powerDownAmt = (vesting_shares) => {
-            this.setState({
-              toggleDivestError: null,
-              powerDownConfirm: "UserWallet__powerdown__confirm-show",
-              powerDownSelect: "UserWallet__powerdown__select-hide",
-              divestingState: "UserWallet__powerdown__diviesting-hide"
-            });
-        };
-
-        const finishPowerDown = (e, cancel) => {
-          const pwrDwnCalc = parseFloat(account.get('vesting_shares')) * (this.state.powerDownAmount / powerDownMax);
-          const vesting_shares = cancel ? '0.000000 VESTS' : pwrDwnCalc.toFixed(6) + ' VESTS';
-
-          const VEST_TICKER = 'VESTS';
-          const name = account.get('name');
-          this.setState({toggleDivestError: null});
-          const errorCallback = e2 => {this.setState({toggleDivestError: e2.toString()})};
-          const successCallback = () => {
-            this.setState({
-              toggleDivestError: null,
-              powerDownConfirm: "UserWallet__powerdown__confirm-hide",
-              powerDownSelect: "UserWallet__powerdown__select-show"
-            });
-          }
-          this.props.withdrawVesting({account: name, vesting_shares, errorCallback, successCallback});
-        };
-
         const powerDown = (cancel, e) => {
+            e.preventDefault()
+            const name = account.get('name');
             const vesting_shares = cancel ? '0.000000 VESTS' : account.get('vesting_shares');
-            finishPowerDown(vesting_shares, true);
-        };
-
-        const powerDownMax = parseFloat(vesting_steem.toFixed(3));
-        const handlePowerDownSliderChange= e => {
-            this.setState({powerDownAmount: parseFloat(e.toFixed(3))});
-        };
-
-        const handlePowerDown= e => {
-          this.setState({
-            toggleDivestError: null,
-            powerDownConfirm: "UserWallet__powerdown__confirm-show",
-            powerDownSelect: "UserWallet__powerdown__select-hide"
-          });
-        };
+            this.setState({toggleDivestError: null});
+            const errorCallback = e2 => {this.setState({toggleDivestError: e2.toString()})};
+            const successCallback = () => {this.setState({toggleDivestError: null})}
+            this.props.withdrawVesting({account: name, vesting_shares, errorCallback, successCallback})
+        }
 
         // Sum savings withrawals
         let savings_pending = 0, savings_sbd_pending = 0;
@@ -348,18 +306,7 @@ class UserWallet extends React.Component {
                     {isMyAccount ?
                     <FoundationDropdownMenu className="Wallet_dropdown" dropdownPosition="bottom" dropdownAlignment="right" label={power_balance_str + ' STEEM'} menu={power_menu} />
                     : power_balance_str + ' STEEM'}
-                    <br />
-                    <div className={this.state.powerDownSelect}>
-                      {delegated_steem != 0 ? <div style={{paddingRight: isMyAccount ? "0.85rem" : null}}><Tooltip t="STEEM POWER delegated to this account">({received_power_balance_str} STEEM)</Tooltip></div> : null}
-                      <Slider min={0.000} max={powerDownMax} step={0.001} value={parseFloat(this.state.powerDownAmount)} onChange={(e)=>handlePowerDownSliderChange(e)} orientation='horizontal' />
-                      <div>Power Down Amount: {this.state.powerDownAmount.toFixed(3)} STEEM</div>
-                      <button className="button hollow float-right" onClick={(e)=>handlePowerDown(e)}>Power Down</button>
-                    </div>
-                    <div className={this.state.powerDownConfirm}>
-                      Confirm Power Down of {this.state.powerDownAmount.toFixed(3)} STEEM?
-                      <br />
-                      <button className="button hollow float-right" onClick={(e)=>finishPowerDown(e)}>Confirm</button>
-                    </div>
+                    {delegated_steem != 0 ? <div style={{paddingRight: isMyAccount ? "0.85rem" : null}}><Tooltip t="STEEM POWER delegated to this account">({received_power_balance_str} STEEM)</Tooltip></div> : null}
                 </div>
             </div>
             <div className="UserWallet__balance row">

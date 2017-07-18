@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import transaction from 'app/redux/Transaction';
 import Icon from 'app/components/elements/Icon';
-import { translate } from 'app/Translator';
+import tt from 'counterpart';
 
 const {string, func} = PropTypes
 
@@ -68,7 +68,7 @@ export default class Reblog extends React.Component {
         const state = this.state.active ? 'active' : 'inactive'
         const loading = this.state.loading ? ' loading' : ''
         return <span className={'Reblog__button Reblog__button-'+state + loading}>
-            <a href="#" onClick={this.reblog} title={translate('reblog')}><Icon name="reblog" /></a>
+            <a href="#" onClick={this.reblog} title={tt('g.reblog')}><Icon name="reblog" /></a>
         </span>
     }
 }
@@ -82,12 +82,12 @@ module.exports = connect(
             const json = ['reblog', {account, author, permlink}]
             dispatch(transaction.actions.broadcastOperation({
                 type: 'custom_json',
-                confirm: 'Are you sure?',
+                confirm: tt('g.are_you_sure'),
                 operation: {
                     id: 'follow',
                     required_posting_auths: [account],
                     json: JSON.stringify(json),
-                    __config: {title: 'Resteem This Post'}
+                    __config: {title: tt('g.resteem_this_post')}
                 },
                 successCallback, errorCallback,
             }))

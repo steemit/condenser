@@ -2,7 +2,7 @@ import {fromJS} from 'immutable'
 import {call, put, select} from 'redux-saga/effects';
 import g from 'app/redux/GlobalReducer'
 import {takeEvery} from 'redux-saga';
-import { translate } from '../Translator.js';
+import tt from 'counterpart';
 import {api} from 'steem';
 
 const wait = ms => (

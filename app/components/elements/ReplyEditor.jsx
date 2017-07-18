@@ -14,6 +14,7 @@ import g from 'app/redux/GlobalReducer'
 import {Set} from 'immutable'
 import Remarkable from 'remarkable'
 import Dropzone from 'react-dropzone'
+import tt from 'counterpart'
 
 const remarkable = new Remarkable({ html: true, linkify: false, breaks: true })
 const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
@@ -150,14 +151,14 @@ class ReplyEditor extends React.Component {
             initialValues: props.initialValues,
             validation: values => ({
                 title: isStory && (
-                    !values.title || values.title.trim() === '' ? 'Required' :
-                    values.title.length > 255 ? 'Shorten title' :
-                    null
+                    !values.title || values.title.trim() === '' ? tt('g.required') :
+                        values.title.length > 255 ? tt('reply_editor.shorten_title') :
+                            null
                 ),
                 category: isStory && validateCategory(values.category, !isEdit),
-                body: !values.body ? 'Required' :
-                    values.body.length > maxKb * 1024 ? 'Exceeds maximum length ('+maxKb+'KB)' :
-                null
+                body: !values.body ? tt('g.required') :
+                    values.body.length > maxKb * 1024 ? tt('reply_editor.exceeds_maximum_length', maxKb) :
+                        null
             })
         })
     }
@@ -175,7 +176,7 @@ class ReplyEditor extends React.Component {
         if(e) e.preventDefault()
         const {onCancel} = this.props
         const {replyForm, body} = this.state
-        if(!body.value || confirm('Are you sure you want to clear this form?')) {
+        if(!body.value || confirm(tt('reply_editor.are_you_sure_you_want_to_clear_this_form'))) {
             replyForm.resetForm()
             this.setAutoVote()
             this.setState({rte_value: stateFromHtml()})
@@ -204,7 +205,7 @@ class ReplyEditor extends React.Component {
         if(isStory) {
             const {autoVote} = this.state
             const key = 'replyEditorData-autoVote-story'
-            const autoVoteDefault = JSON.parse(localStorage.getItem(key) || true)
+            const autoVoteDefault = JSON.parse(localStorage.getItem(key) || false)
             autoVote.props.onChange(autoVoteDefault)
         }
     }
@@ -268,7 +269,7 @@ class ReplyEditor extends React.Component {
 
     upload = (file, name = '') => {
         const {uploadImage} = this.props
-        this.setState({progress: {message: 'Uploading...'}})
+        this.setState({progress: {message: tt('reply_editor.uploading') + '...'}})
         uploadImage(file, progress => {
             if(progress.url) {
                 this.setState({ progress: {} })
@@ -320,11 +321,11 @@ class ReplyEditor extends React.Component {
             jsonMetadata, autoVote: autoVoteValue, payoutType,
             successCallback: successCallbackWrapper, errorCallback
         }
-        const postLabel = username ? <Tooltip t={'Post as “' + username + '”'}>Post</Tooltip> : 'Post'
+        const postLabel = username ? <Tooltip t={ tt('g.post_as') +' “' + username + '”'}>{tt('g.post')}</Tooltip> : tt('g.post')
         const hasTitleError = title && title.touched && title.error
         let titleError = null
         // The Required title error (triggered onBlur) can shift the form making it hard to click on things..
-        if ((hasTitleError && (title.error !== 'Required' || body.value !== '')) || titleWarn) {
+        if ((hasTitleError && (title.error !== tt('g.required') || body.value !== '')) || titleWarn) {
             titleError = <div className={hasTitleError ? 'error' : 'warning'}>
                 {hasTitleError ? title.error : titleWarn}&nbsp;
             </div>
@@ -338,20 +339,20 @@ class ReplyEditor extends React.Component {
         return (
             <div className="ReplyEditor row">
                 <div className="column small-12">
-                    <div ref="draft" className="ReplyEditor__draft ReplyEditor__draft-hide">Draft saved.</div>
+                    <div ref="draft" className="ReplyEditor__draft ReplyEditor__draft-hide">tt('reply_editor.draft_saved')</div>
                     <form className={vframe_class}
-                        onSubmit={handleSubmit(({data}) => {
-                            const startLoadingIndicator = () => this.setState({loading: true, postError: undefined})
-                            reply({ ...data, ...replyParams, startLoadingIndicator })
-                        })}
-                        onChange={() => {this.setState({ postError: null })}}
+                          onSubmit={handleSubmit(({data}) => {
+                              const startLoadingIndicator = () => this.setState({loading: true, postError: undefined})
+                              reply({ ...data, ...replyParams, startLoadingIndicator })
+                          })}
+                          onChange={() => {this.setState({ postError: null })}}
                     >
                         <div className={vframe_section_shrink_class}>
                             {isStory && <span>
                                 <input type="text" className="ReplyEditor__title" {...title.props} onChange={onTitleChange} disabled={loading} placeholder="Title" autoComplete="off" ref="titleRef" tabIndex={1} />
                                 <div className="float-right secondary" style={{marginRight: '1rem'}}>
                                     {rte && <a href="#" onClick={this.toggleRte}>{body.value ? 'Raw HTML' : 'Markdown'}</a>}
-                                    {!rte && (isHtml || !body.value) && <a href="#" onClick={this.toggleRte}>Editor</a>}
+                                    {!rte && (isHtml || !body.value) && <a href="#" onClick={this.toggleRte}>{tt('reply_editor.editor')}</a>}
                                 </div>
                                 {titleError}
                             </span>}
@@ -360,33 +361,33 @@ class ReplyEditor extends React.Component {
                         <div className={'ReplyEditor__body ' + (rte ? `rte ${vframe_section_class}` : vframe_section_shrink_class)}>
                             {process.env.BROWSER && rte ?
                                 <RichTextEditor ref="rte"
-                                    readOnly={loading}
-                                    value={this.state.rte_value}
-                                    onChange={this.onChange}
-                                    onBlur={body.onBlur} tabIndex={2} />
+                                                readOnly={loading}
+                                                value={this.state.rte_value}
+                                                onChange={this.onChange}
+                                                onBlur={body.onBlur} tabIndex={2} />
                                 : <span>
                                     <Dropzone onDrop={this.onDrop}
-                                        className={type === 'submit_story' ? 'dropzone' : 'none'}
-                                        disableClick multiple={false} accept="image/*"
-                                        ref={(node) => { this.dropzone = node; }}>
+                                              className={type === 'submit_story' ? 'dropzone' : 'none'}
+                                              disableClick multiple={false} accept="image/*"
+                                              ref={(node) => { this.dropzone = node; }}>
                                         <textarea {...body.props}
-                                            ref="postRef"
-                                            onPasteCapture={this.onPasteCapture}
-                                            className={type === 'submit_story' ? 'upload-enabled' : ''}
-                                            disabled={loading} rows={isStory ? 10 : 3}
-                                            placeholder={isStory ? 'Write your story...' : 'Reply'}
-                                            autoComplete="off"
-                                            tabIndex={2} />
+                                                  ref="postRef"
+                                                  onPasteCapture={this.onPasteCapture}
+                                                  className={type === 'submit_story' ? 'upload-enabled' : ''}
+                                                  disabled={loading} rows={isStory ? 10 : 3}
+                                                  placeholder={isStory ? tt('g.write_your_story') + '...' : tt('g.reply')}
+                                                  autoComplete="off"
+                                                  tabIndex={2} />
                                     </Dropzone>
-                                    {type === 'submit_story' &&
-                                        <p className="drag-and-drop">
-                                            Insert images by dragging &amp; dropping,&nbsp;
-                                            {noClipboardData ? '' : 'pasting from the clipboard, '}
-                                            or by <a onClick={this.onOpenClick}>selecting them</a>.
-                                        </p>
-                                    }
-                                    {progress.message && <div className="info">{progress.message}</div>}
-                                    {progress.error && <div className="error">Image upload: {progress.error}</div>}
+                                {type === 'submit_story' &&
+                                <p className="drag-and-drop">
+                                    {tt('reply_editor.insert_images_by_dragging_dropping')}
+                                    {noClipboardData ? '' : tt('reply_editor.pasting_from_the_clipboard')}
+                                    {tt('g.or') + " " + tt('g.by') + " "}<a onClick={this.onOpenClick}>{tt('reply_editor.selecting_them')}</a>.
+                                </p>
+                                }
+                                {progress.message && <div className="info">{progress.message}</div>}
+                                {progress.error && <div className="error">{tt('reply_editor.image_upload')} : {progress.error}</div>}
                                 </span>
                             }
                         </div>
@@ -405,33 +406,37 @@ class ReplyEditor extends React.Component {
                         </div>
                         <div className={vframe_section_shrink_class}>
                             {!loading &&
-                                <button type="submit" className="button" disabled={disabled} tabIndex={4}>{isEdit ? 'Update Post' : postLabel}</button>
+                            <button type="submit" className="button" disabled={disabled} tabIndex={4}>{isEdit ? 'Update Post' : postLabel}</button>
                             }
                             {loading && <span><br /><LoadingIndicator type="circle" /></span>}
                             &nbsp; {!loading && this.props.onCancel &&
-                                <button type="button" className="secondary hollow button no-border" tabIndex={5} onClick={onCancel}>Cancel</button>
-                            }
-                            {!loading && !this.props.onCancel && <button className="button hollow no-border" tabIndex={5} disabled={submitting} onClick={onCancel}>Clear</button>}
+                        <button type="button" className="secondary hollow button no-border" tabIndex={5} onClick={onCancel}>{tt('g.cancel')}</button>
+                        }
+                            {!loading && !this.props.onCancel && <button className="button hollow no-border" tabIndex={5} disabled={submitting} onClick={onCancel}>{tt('g.clear')}</button>}
 
                             {isStory && !isEdit && <div className="ReplyEditor__options float-right text-right">
 
-                                Rewards:&nbsp;
+                                {tt('g.rewards')}:&nbsp;
                                 <select value={this.state.payoutType} onChange={this.onPayoutTypeChange} style={{color: this.state.payoutType == '0%' ? 'orange' : 'inherit'}}>
-                                    <option value="100%">Power Up 100%</option>
-                                    <option value="50%">Default (50% / 50%)</option>
-                                    <option value="0%">Decline Payout</option>
+                                    <option value="100%">{tt('reply_editor.power_up_100')}</option>
+                                    <option value="50%">{tt('reply_editor.default_50_50')}</option>
+                                    <option value="0%">{tt('reply_editor.decline_payout')}</option>
                                 </select>
 
                                 <br />
-                                <label title="Check this to auto-upvote your post">
-                                  Upvote post&nbsp;
-                                  <input type="checkbox" checked={autoVote.value} onChange={autoVoteOnChange} />
+                                <label title={tt('reply_editor.check_this_to_auto_upvote_your_post')}>
+                                    {tt('g.upvote_post')}&nbsp;
+                                    <input type="checkbox" checked={autoVote.value} onChange={autoVoteOnChange} />
                                 </label>
                             </div>}
                         </div>
                         {!loading && !rte && body.value && <div className={'Preview ' + vframe_section_shrink_class}>
-                            {!isHtml && <div className="float-right"><a target="_blank" href="https://guides.github.com/features/mastering-markdown/" rel="noopener noreferrer">Markdown Styling Guide</a></div>}
-                            <h6>Preview</h6>
+                            {!isHtml && <div className="float-right">
+                                <a target="_blank" href="https://guides.github.com/features/mastering-markdown/" rel="noopener noreferrer">
+                                    {tt('reply_editor.markdown_styling_guide')}
+                                </a>
+                            </div>}
+                            <h6>{tt('g.preview')}</h6>
                             <MarkdownViewer formId={formId} text={body.value} canEdit jsonMetadata={jsonMetadata} large={isStory} noImage={noImage} />
                         </div>}
                     </form>
@@ -465,7 +470,7 @@ function stateFromHtml(html = null) {
     if(html) html = stripHtmlWrapper(html)
     if(html && html.trim() == '') html = null
     return html ? RichTextEditor.createValueFromString(html, 'html')
-                : RichTextEditor.createEmptyValue()
+        : RichTextEditor.createEmptyValue()
 }
 
 function stateFromMarkdown(markdown) {
@@ -489,8 +494,8 @@ export default formId => connect(
         const {type, parent_author, jsonMetadata} = ownProps
         const isEdit = type === 'edit'
         const isStory = /submit_story/.test(type) || (
-            isEdit && parent_author === ''
-        )
+                isEdit && parent_author === ''
+            )
         if (isStory) fields.push('title')
         if (isStory) fields.push('category')
 
@@ -542,9 +547,9 @@ export default formId => connect(
                     author: username,
                     // permlink,  assigned in TransactionSaga
                 } :
-                // edit existing
-                isEdit ? {author, permlink, parent_author, parent_permlink}
-                : null
+                    // edit existing
+                    isEdit ? {author, permlink, parent_author, parent_permlink}
+                        : null
 
             if (!linkProps) throw new Error('Unknown type: ' + type)
 

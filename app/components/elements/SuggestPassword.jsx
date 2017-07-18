@@ -5,12 +5,13 @@ import {renderToString} from 'react-dom/server'
 import g from 'app/redux/GlobalReducer'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import Icon from 'app/components/elements/Icon'
-import { translate } from 'app/Translator';
+import tt from 'counterpart';
 import { APP_NAME, APP_ICON } from 'app/client_config';
 import {key_utils} from 'steem/lib/auth/ecc';
 
+
 const {bool} = React.PropTypes
-export const steemitCannotRecoverPasswords = translate('APP_NAME_cannot_recover_passwords_keep_this_page_in_a_secure_location')
+export const steemitCannotRecoverPasswords = tt('suggestpassword_jsx.APP_NAME_cannot_recover_passwords_keep_this_page_in_a_secure_location')
 
 class SuggestPassword extends React.Component {
     static propTypes = {
@@ -36,27 +37,27 @@ class SuggestPassword extends React.Component {
                 <Icon name={APP_ICON} size="2x" /> {APP_NAME}
                 <hr />
                 <div>
-                    <h5>{translate(print ? 'APP_NAME_password_backup' : 'APP_NAME_password_backup_required')}</h5>
+                    <h5>{tt('suggestpassword_jsx.' + (print ? 'APP_NAME_password_backup' : 'APP_NAME_password_backup_required'), {APP_NAME})}</h5>
                     {steemitCannotRecoverPasswords}
                 </div>
                 <br />
                 <div>
                     {print && <div>
-                        <label>Username</label>
+                        <label>{tt('g.username')}</label>
                         <div>
                             <code><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></code>
                         </div>
                     </div>}
-                    {!print && <div>{translate('after_printing_write_down_your_user_name')}.</div>}
+                    {!print && <div>{tt('suggestpassword_jsx.after_printing_write_down_your_user_name')}.</div>}
                 </div>
                 <br />
                 <div>
                     {!print && <a onClick={() => openPP(render(true))}>
-                        <Icon name="printer" size="3x" />&nbsp;{translate('print')}&nbsp;&nbsp;
+                        <Icon name="printer" size="3x" />&nbsp;{tt('g.print')}&nbsp;&nbsp;
                         <br />
                         <br />
                     </a>}
-                    <label>Password</label>
+                    <label>{tt('g.password')}</label>
                     <div className="overflow-ellipsis">
                         <code>{suggestedPassword}</code>
                     </div>

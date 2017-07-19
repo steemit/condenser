@@ -170,7 +170,6 @@ class Settings extends React.Component {
                 const {url} = progress
                 const image_md = `${url}`
                 const {body} = this.state
-                const {selectionStart, selectionEnd} = this.refs.postRef
                 profile_image.props.onChange(
                     image_md
                 )

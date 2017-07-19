@@ -90,6 +90,7 @@
 - <a href="/faq.html#How_do_I_get_more_STEEM_Power">How do I get more STEEM Power?</a>
 - <a href="/faq.html#How_long_does_it_take_STEEM_or_STEEM_Power_that_I_purchased_to_show_up_in_my_account">How long does it take STEEM or STEEM Power that I purchased to show up in my account?</a>
 - <a href="/faq.html#What_is_powering_up_and_down">What is powering up and down?</a>
+- <a href="/faq.html#What_do_the_dollar_amounts_for_pending_payouts_represent">What do the dollar amounts for pending payouts represent?</a>
 - <a href="/faq.html#Will_1_Steem_Dollar_always_be_worth__1_00_USD">Will 1 Steem Dollar always be worth $1.00 USD?</a>
 - <a href="/faq.html#How_do_Steem_Dollar_to_STEEM_conversions_work">How do Steem Dollar to STEEM conversions work?</a>
 - <a href="/faq.html#Is_there_a_way_for_me_to_convert_my_Steem_Dollars_to_STEEM_without_waiting_3_5_days">Is there a way for me to convert my Steem Dollars to STEEM without waiting 3.5 days?</a>
@@ -168,7 +169,6 @@
 - <a href="/faq.html#Why_should_I_be_careful_with_my_master_password">Why should I be careful with my master password?</a>
 - <a href="/faq.html#Why_is_the_master_password_a_long_string_of_gibberish">Why is the master password a long string of gibberish?</a>
 - <a href="/faq.html#What_are_my_different_keys_for">What are my different keys for?</a>
-- <a href="/faq.html#How_can_I_extract_these_keys_from_my_master_password">How can I extract these keys from my master password?</a>
 - <a href="/faq.html#What_do_I_do_if_I_lost_my_password_keys">What do I do if I lost my password/keys?</a>
 - <a href="/faq.html#Are_my_STEEM_and_Steem_Dollar_tokens_insured_in_the_event_of_a_hack_or_if_someone_takes_over_my_account">Are my STEEM and Steem Dollar tokens insured in the event of a hack or if someone takes over my account?</a>
 - <a href="/faq.html#What_should_I_do_if_I_discover_that_someone_hacked_my_account">What should I do if I discover that someone hacked my account?</a>
@@ -698,9 +698,9 @@ Up to 25% of a post's payout is awarded to curators (the people who upvoted the 
 <a class="anchor" name="Will_the_reward_pool_pay_out_more_or_less_depending_on_who_votes"></a>
 ## Will the reward pool pay out more or less depending on who votes?
 
-When users upvote or downvote posts, they are not adding or taking money away from the reward pool. They are only changing how the pool is allocated. The same amount of rewards will be paid out no matter what. 
+There is a fixed amount of STEEM coins that gets added to the rewards pool each day. In the short term, the amount of coins that get paid out may be higher or lower depending on the amount of voting activity, but over time it will pay out the full amount of rewards regardless of who votes.
 
-Votes in Steem are stake-weighted. Therefore voters with more STEEM Power have a greater influence over the allocation than voters with less SP, but higher-staked votes do not increase rewards overall.
+Votes in Steem are stake-weighted. Therefore voters with more STEEM Power have a greater influence over the allocation than voters with less SP, but their votes do not increase the amount of rewards.
 
 <a href="/faq.html#Table_of_Contents_Economics">^</a>
 <a class="anchor" name="Why_do_the_earnings_for_my_post_go_up_or_down"></a>
@@ -753,16 +753,18 @@ The price of STEEM is based on the supply and demand of the token, determined by
 <a class="anchor" name="How_do_I_get_more_STEEM_Power"></a>
 ## How do I get more STEEM Power?
 
-With STEEM tokens in your wallet, click "Power Up" to turn them into STEEM Power. If you have Steem Dollars, you can convert them to STEEM from your wallet.
+With STEEM tokens in your wallet, click "Power Up" to turn them into STEEM Power. If you have Steem Dollars, you can convert them to STEEM from your wallet, and then power up the STEEM.
 
 If you don’t already have STEEM or Steem Dollars in your wallet, you can purchase them using bitcoin (BTC), ether (ETH), or BitShares (BTS) tokens. You may purchase BTC on various exchanges, such as Coinbase.com or Localbitcoins.com. 
 
 To buy:
-- Click “Buy Steem” from the main menu in the top right corner of Steemit.com, or from your wallet.
-- Select whether you want to buy STEEM or STEEM Power.
-- Select the currency to deposit, and the amount of that currency you wish to use. Then send the currency to the provided address.
+- Click "Buy Steem" from the main menu in the top right corner of Steemit.com, or from your wallet.
+- Select the currency to deposit, and enter the amount of that currency you wish to use.
+- Enter your Steemit account name (without the @) for "Your receive address".
+- Click the "Get Deposit Address" button.
+- Send the currency to the provided address.
 
-STEEM purchases made on Steemit.com are facilitated by <a href="https://blocktrades.us">BlockTrades</a>.
+STEEM purchases made via Steemit.com are facilitated by <a href="https://blocktrades.us">BlockTrades</a>.
 
 bitcoin can also be exchanged for STEEM on external markets such as <a href="https://poloniex.com">Poloniex</a>, <a href="https://bittrex.com">Bittrex</a>, <a href="https://shapeshift.io">ShapeShift.io</a>, and <a href="https://changelly.com">Changelly</a>.
 
@@ -783,6 +785,16 @@ If you paid using bitcoin, the third party website <a href="https://bitcoinfees.
 **Powering down** - If you have STEEM Power, you can power down to turn it into liquid STEEM over a period of time. The system will transfer 1/13 of your STEEM Power to STEEM each week for about three months (13 weeks), starting 1 week from the time it is started. However, you will lose your influence in the network proportionally to how much is powered down, so think about it carefully. Power downs can be stopped at any time.
 
 <a href="/faq.html#Table_of_Contents_Economics">^</a>
+<a class="anchor" name="What_do_the_dollar_amounts_for_pending_payouts_represent"></a>
+## What do the dollar amounts for pending payouts represent?
+
+The dollar amounts next to posts and comments are estimates of the potential payout that will occur when the payout period ends, based on the current voting activity and price of STEEM. These potential payout amounts may fluctuate up or down until the payout period ends.
+
+Payouts occur as a combination of STEEM Power and Steem Dollars. Sometimes the blockchain may substitute STEEM in place of the Steem Dollars based on market conditions.
+
+The blockchain estimates the dollar value of STEEM and STEEM Power based on the 3.5 day average price of STEEM reported by the witnesses. The blockchain assumes Steem Dollars are worth approximately one USD.
+
+<a href="/faq.html#Table_of_Contents_Economics">^</a>
 <a class="anchor" name="Will_1_Steem_Dollar_always_be_worth__1_00_USD"></a>
 ## Will 1 Steem Dollar always be worth $1.00 USD?
 
@@ -792,13 +804,15 @@ The market value of a Steem Dollar is dictated by the supply and demand of the t
 <a class="anchor" name="How_do_Steem_Dollar_to_STEEM_conversions_work"></a>
 ## How do Steem Dollar to STEEM conversions work?
 
-If you convert Steem Dollars to STEEM on the Wallet page, the blockchain will process the transaction over a period of 3.5 days. At the end of the 3.5 days, the SBD will be gone and replaced by approximately $1 USD worth of STEEM tokens. The "approximately 1 USD worth of STEEM tokens" is based on the median STEEM price over the 3.5 days, using the price feeds from the Steem witnesses. Depending on price fluctuations during the 3.5 days it is possible to end up with more or less than $1 USD worth of STEEM per SBD at the end of the conversion, but the difference is generally minor.
+If you convert Steem Dollars to STEEM on the Wallet page, the blockchain will process the transaction over a period of 3.5 days. At the end of the 3.5 days, the SBD will be gone and replaced by approximately $1 USD worth of STEEM tokens. The "approximately 1 USD worth of STEEM tokens" is based on the median STEEM price over the 3.5 days, using the price feeds from the Steem witnesses. Depending on price fluctuations during the 3.5 days it is possible to end up with more or less than $1 USD worth of STEEM per SBD at the end of the conversion.
 
 <a href="/faq.html#Table_of_Contents_Economics">^</a>
 <a class="anchor" name="Is_there_a_way_for_me_to_convert_my_Steem_Dollars_to_STEEM_without_waiting_3_5_days"></a>
 ## Is there a way for me to convert my Steem Dollars to STEEM without waiting 3.5 days?
 
 You can exchange them. Visit the internal Market, found in the main menu. There you can exchange your SBD for STEEM in real-time at whatever the current market price is.
+
+Depending on market conditions, users may get more STEEM for their SBD by trading them for STEEM on the internal market, rather than using the conversion.
 
 <a href="/faq.html#Table_of_Contents_Economics">^</a>
 <a class="anchor" name="What_can_I_do_with_my_STEEM_tokens"></a>
@@ -829,9 +843,9 @@ Other than making a post and making sales manually, there is no interface for se
 <a class="anchor" name="How_can_I_withdraw_my_STEEM_or_SBD_coins"></a>
 ## How can I withdraw my STEEM or SBD coins?
 
-STEEM and SBD tokens are readily tradable to bitcoin, which is readily tradable to the local currency of your choice.
+STEEM and SBD tokens are readily tradable to bitcoin, which is readily tradable to the local currency of your choice. There is a link to "Sell" your STEEM and SBD tokens in your wallet, which uses the <a href="https://blocktrades.us/">BlockTrades</a> interface.
 
-There are several guides that have been posted by users in the community for using various exchanges to withdraw STEEM and SBD tokens. Please read the <a href="/faq.html#Disclaimer">disclaimer</a> before using any of these guides to withdraw your coins. The users, guides, and exchanges listed in the guides are not endorsed by Steemit, Inc. Use the guides below at your own risk. 
+There are several guides that have been posted by users in the community for using various external exchanges to withdraw STEEM and SBD tokens. Please read the <a href="/faq.html#Disclaimer">disclaimer</a> before using any of these guides to withdraw your coins. The users, guides, and exchanges listed in the guides are not endorsed by Steemit, Inc. Use the guides below at your own risk. 
 
 It is recommended that you withdraw a small amount first, to verify it works before withdrawing a larger amount.
 
@@ -877,13 +891,15 @@ A transfer of tokens between accounts typically takes 3 seconds. This is far fas
 <a class="anchor" name="What_is_my_voting_power"></a>
 ## What is my voting power?
 
-Voting power is like an "energy bar" in a computer game that goes down a little bit every time you vote. Every time you vote, you use a small amount of your power. Less voting power means your votes carry less influence. But not to worry, you start off with 100%, and the network recharges it by 20% every day.
+Voting power is like an "energy bar" in a computer game that goes down a little bit every time you vote. You start out with 100% voting power. Every time you vote, you will use a small amount of your voting power.
+
+As you use more of your voting power, your votes will carry less influence. A vote with 50% voting power left will be worth 1/2 as much as a vote cast with 100% voting power. Not to worry, the network recharges your voting power by 20% every day.
 
 <a href="/faq.html#Table_of_Contents_Voting_and_Curating">^</a>
 <a class="anchor" name="How_many_times_can_I_vote_without_depleting_my_voting_power"></a>
 ## How many times can I vote without depleting my voting power?
 
-You can use up to 40 full strength votes within a 24 hour period without depleting your voting power over time.
+Every 100% vote you cast will use 2% of your remaining voting power. Your voting power will recharge by 20% each day. You can vote more than 10 times per day, but each vote will be worth less, and it will take longer to reach full voting power again.
 
 <a href="/faq.html#Table_of_Contents_Voting_and_Curating">^</a>
 <a class="anchor" name="Can_I_vote_with_less_than_100__of_my_voting_strength"></a>
@@ -1010,7 +1026,7 @@ https://steemit.com/steemcleaners/@steemcleaners/announcing-steemcleaners-the-st
 Abusive accounts (serial plagiarists or identity thieves, for example) will go on Cheetah’s blacklist. These users will get downvoted by @cheetah accounts when they post.
 
 More information on the @cheetah bot can be found in this post:
-https://steemit.com/steemitabuse/@cheetah/cheetah-bot-explained
+https://steemit.com/steemit/@cheetah/faq-about-cheetah
 
 <a href="/faq.html#Table_of_Contents_Plagiarism__Spam__and_Abuse">^</a>
 <a class="anchor" name="Where_do_I_report_a_post_or_comment_that_contains_plagiarism__spam__or_abuse"></a>
@@ -1238,12 +1254,6 @@ The password has to be long and random for maximum account security.
 **Memo key** - Currently the memo key is not used.
 
 **Owner key** - The owner key is only meant for use when necessary. It is the most powerful key because it can change any key of an account, including the owner key. Ideally it is meant to be stored offline, and only used to recover a compromised account.
-
-<a href="/faq.html#Table_of_Contents_Security">^</a>
-<a class="anchor" name="How_can_I_extract_these_keys_from_my_master_password"></a>
-## How can I extract these keys from my master password?
-
-The posting key is available on the Permissions sub-tab on your wallet page, after pressing the "show private key" button. The other keys can be derived using @xeroc's paper wallet generator: https://steemit.com/steem/@xeroc/paperwallet-easily-secure-your-account-with-steem-paperwallet-generator
 
 <a href="/faq.html#Table_of_Contents_Security">^</a>
 <a class="anchor" name="What_do_I_do_if_I_lost_my_password_keys"></a>

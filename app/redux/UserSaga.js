@@ -249,9 +249,13 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     if(!operationType || saveLogin) {
         // Keep the posting key in RAM but only when not signing an operation.
         // No operation or the user has checked: Keep me logged in...
-        yield put(user.actions.setUser({username, private_keys, login_owner_pubkey, vesting_shares: account.get('vesting_shares')}))
+        yield put(user.actions.setUser({username, private_keys, login_owner_pubkey, vesting_shares: account.get('vesting_shares'),
+         received_vesting_shares: account.get('received_vesting_shares'),
+         delegated_vesting_shares: account.get('delegated_vesting_shares')}))
     } else {
-        yield put(user.actions.setUser({username, vesting_shares: account.get('vesting_shares')}))
+        yield put(user.actions.setUser({username, vesting_shares: account.get('vesting_shares'), 
+         received_vesting_shares: account.get('received_vesting_shares'),
+         delegated_vesting_shares: account.get('delegated_vesting_shares')}))
     }
 
     if (!autopost && saveLogin)

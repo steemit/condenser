@@ -1,8 +1,9 @@
 import tt from 'counterpart';
 import BadActorList from 'app/utils/BadActorList';
+import VerifiedExchangeList from 'app/utils/VerifiedExchangeList';
 import {PrivateKey, PublicKey} from 'steem/lib/auth/ecc';
 
-export function validate_account_name(value) {
+export function validate_account_name(value, memo) {
     let i, label, len, length, ref, suffix;
 
     suffix = tt('chainvalidation_js.account_name_should');
@@ -21,6 +22,9 @@ export function validate_account_name(value) {
     }
     if (BadActorList.includes(value)) {
         return 'Use caution sending to this account. Please double check your spelling for possible phishing. ';
+    }
+    if (VerifiedExchangeList.includes(value) && !memo) {
+        return 'Must include memo'
     }
     ref = value.split('.');
     for (i = 0, len = ref.length; i < len; i++) {

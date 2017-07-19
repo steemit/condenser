@@ -56,6 +56,11 @@ node
 
 OS X:
 
+Install Brew first:
+```bash
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+```
+
 ```bash
 brew update
 brew doctor
@@ -91,7 +96,9 @@ mysql -u root
 
 Create a password for the root mysql account:
 
+```bash
 mysql_secure_installation
+```
 
 (answer all it's questions as No, with Enter key, except to add a password, use "password")
 
@@ -128,7 +135,9 @@ edit this file, add 1 line:
 
 `export SDC_DATABASE_URL="mysql://root:password@localhost/steemit_dev"`
 
+```bash
 source ~/.bash_profile
+```
 
 globally install sql2:
 

@@ -47,7 +47,7 @@ const cacheOpts = { maxAge: 86400000, gzip: true };
 // (unless passed in as an env var)
 const numProcesses = process.env.NUM_PROCESSES || os.cpus().length;
 
-app.use(requestTime());
+app.use(requestTime(numProcesses));
 
 app.keys = [config.get('session_key')];
 

@@ -233,7 +233,7 @@ class Settings extends React.Component {
                           className="dropzone"
                           disableClick multiple={false} accept="image/*"
                           ref={(node) => { this.dropzone = node; }}>
-                            <input type="url" {...profile_image.props} autoComplete="off" />
+                            <input type="url" ref="profile_image" {...profile_image.props} autoComplete="off" />
                             <span>
 
                                 <p className="drag-and-drop">

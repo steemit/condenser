@@ -579,6 +579,8 @@ const ru = {
 	profile_website: 'Website',
 	saved: 'Сохранено',
 	server_returned_error: 'ошибка сервера',
+    // no memo for verified exchanges
+    verified_exchange_no_memo: 'You must include a memo for your exchange transfer',
 	// Beginner tips in empty feed page
 	empty_feed_1: "Looks like you haven't followed anything yet",
 	empty_feed_2: 'If you recently added new users to follow, your personalized feed will populate once new content is available',

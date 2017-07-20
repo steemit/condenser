@@ -24,7 +24,7 @@ export function validate_account_name(value, memo) {
         return 'Use caution sending to this account. Please double check your spelling for possible phishing. ';
     }
     if (VerifiedExchangeList.includes(value) && !memo) {
-        return 'Must include memo'
+        return tt('chainvalidation_js.verified_exchange_no_memo')
     }
     ref = value.split('.');
     for (i = 0, len = ref.length; i < len; i++) {

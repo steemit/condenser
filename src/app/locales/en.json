@@ -746,7 +746,8 @@
     "start_with_a_letter": "start with a letter.",
     "have_only_letters_digits_or_dashes": "have only letters, digits, or dashes.",
     "have_only_one_dash_in_a_row": "have only one dash in a row.",
-    "end_with_a_letter_or_digit": "end with a letter or digit."
+    "end_with_a_letter_or_digit": "end with a letter or digit.",
+    "verified_exchange_no_memo": "You must include a memo for your exchange transfer."
   },
   "settings_jsx": {
     "invalid_url": "Invalid URL",

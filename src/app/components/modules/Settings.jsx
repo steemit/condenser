@@ -84,11 +84,6 @@ class Settings extends React.Component {
         if(!metaData.profile.location) delete metaData.profile.location;
         if(!metaData.profile.website) delete metaData.profile.website;
 
-        // TODO: Update language & currency
-        //store.set('language', language)
-        //this.props.changeLanguage(language)
-        //store.set('currency', event.target.value)
-
         const {account, updateAccount} = this.props
         this.setState({loading: true})
         updateAccount({
@@ -124,6 +119,12 @@ class Settings extends React.Component {
         })
     }
 
+    handleLanguageChange = (event) => {
+        const language = event.target.value
+        store.set('language', language)
+        this.props.changeLanguage(language)
+    }
+
     render() {
         const {state, props} = this
 
@@ -132,40 +133,23 @@ class Settings extends React.Component {
 
         const {profile_image, name, about, location, website} = this.state
 
-        const {follow, account, isOwnAccount} = this.props
+        const {follow, account, isOwnAccount, locale} = this.props
         const following = follow && follow.getIn(['getFollowingAsync', account.name]);
         const ignores = isOwnAccount && following && following.get('ignore_result')
 
         return <div className="Settings">
 
-            {/*<div className="row">
+            <div className="row">
                 <div className="small-12 medium-6 large-4 columns">
                     <label>{tt('g.choose_language')}
-                        <select defaultValue={store.get('language')} onChange={this.handleLanguageChange}>
+                        <select defaultValue={locale} onChange={this.handleLanguageChange}>
                             <option value="en">English</option>
-                            <option value="ru">Russian</option>
                             <option value="es">Spanish</option>
-                            <option value="es-AR">Spanish (Argentina)</option>
-                            <option value="fr">French</option>
-                            <option value="it">Italian</option>
-                            <option value="jp">Japanese</option>
                         </select>
                     </label>
                 </div>
-            </div>*/}
-            {/*<div className="row">
-                <div className="small-12 medium-6 large-4 columns">
-                    <label>{tt('g.choose_currency')}
-                        <select defaultValue={store.get('currency')} onChange={this.handleCurrencyChange}>
-                            {
-                                ALLOWED_CURRENCIES.map(i => {
-                                    return <option key={i} value={i}>{i}</option>
-                                })
-                            }
-                        </select>
-                    </label>
-                </div>
-            </div>*/}
+            </div>
+            <br />
             <div className="row">
                 <form onSubmit={this.handleSubmitForm} className="small-12 medium-6 large-4 columns">
                     <h4>{tt('settings_jsx.public_profile_settings')}</h4>
@@ -251,7 +235,8 @@ export default connect(
         const username = current_user ? current_user.get('username') : ''
         let metaData = account ? o2j.ifStringParseJSON(account.json_metadata) : {}
         if (typeof metaData === 'string') metaData = o2j.ifStringParseJSON(metaData); // issue #1237
-        const profile = metaData && metaData.profile ? metaData.profile : {}
+        const profile = metaData && metaData.profile ? metaData.profile : {};
+        const locale = state.user.get('locale');
 
         return {
             account,
@@ -260,6 +245,7 @@ export default connect(
             isOwnAccount: username == accountname,
             profile,
             follow: state.global.get('follow'),
+            locale,
             ...ownProps
         }
     },

@@ -1,6 +1,7 @@
 import {fromJS} from 'immutable';
 import createModule from 'redux-modules';
 import { DEFAULT_LANGUAGE } from 'app/client_config';
+import store from 'store';
 
 const defaultState = fromJS({
     current: null,
@@ -11,6 +12,11 @@ const defaultState = fromJS({
     pub_keys_used: null,
     locale: DEFAULT_LANGUAGE
 });
+
+if (process.env.BROWSER) {
+    const locale = store.get('language');
+    if (locale) defaultState.locale = locale;
+}
 
 export default createModule({
     name: 'user',

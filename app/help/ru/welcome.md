@@ -145,8 +145,7 @@
 
 **Альтернативные web-клиенты блокчейна Голос**
     •   [Mapala.net](http://mapala.net/) - портал для самостоятельных путешественников
-    •   ["Бизнес Молодость"](https://feed.molodost.bz/)
-    •   [VGolose - анонс альтернативного веб-клиента для блокчейна Golos](https://golos.io/ru--golos/@kocherginji/v-golose-anons-alternativnogo-veb-klienta-dlya-blokcheina-golos)
+    •   [Steepshot](https://steepshot.io) - инстаграм на блокчейне Голос
     •   [Анонс siski.io](https://golos.io/siski/@siski/10-faktov-o-siski-io-kotorye-vy-khoteli-znat-no-boyalis-sprosit)
 
 **Альтернативные каналы общения пользователей Голоса**

@@ -72,7 +72,7 @@ class TransferForm extends Component {
             initialValues: props.initialValues,
             validation: values => ({
                 to:
-                    ! values.to ? tt('g.required') : validate_account_name(values.to),
+                    ! values.to ? tt('g.required') : validate_account_name(values.to, values.memo),
                 amount:
                     ! values.amount ? 'Required' :
                     ! /^\d+(\.\d+)?$/.test(values.amount) ? tt('transfer_jsx.amount_is_in_form') :

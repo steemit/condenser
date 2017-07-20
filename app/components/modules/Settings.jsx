@@ -170,9 +170,7 @@ class Settings extends React.Component {
                 const {url} = progress
                 const image_md = `${url}`
                 const {body} = this.state
-                profile_image.props.onChange(
-                    image_md
-                )
+                this.state.profile_image.props.value = image_md
             } else {
                 this.setState({ progress })
             }
@@ -235,7 +233,6 @@ class Settings extends React.Component {
                           ref={(node) => { this.dropzone = node; }}>
                             <input type="url" ref="profile_image" {...profile_image.props} autoComplete="off" />
                             <span>
-
                                 <p className="drag-and-drop">
                                     Insert images by dragging &amp; dropping,&nbsp;
                                     {noClipboardData ? '' : 'pasting from the clipboard, '}

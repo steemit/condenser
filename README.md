@@ -22,7 +22,7 @@ mkdir tmp
 command -v nvm # verify
 ```
 
-It should output "nvm". If it does not, install nvm.
+It should output "nvm". If it does not, [install nvm](https://github.com/creationix/nvm#installation).
 
 #### Install dependencies
 

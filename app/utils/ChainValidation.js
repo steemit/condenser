@@ -1,22 +1,23 @@
+import tt from 'counterpart';
 import BadActorList from 'app/utils/BadActorList';
 import {PrivateKey, PublicKey} from 'steem/lib/auth/ecc';
 
 export function validate_account_name(value) {
     let i, label, len, length, ref, suffix;
 
-    suffix = 'Account name should ';
+    suffix = tt('chainvalidation_js.account_name_should');
     if (!value) {
-        return suffix + 'not be empty.';
+        return suffix + tt('chainvalidation_js.not_be_empty');
     }
     length = value.length;
     if (length < 3) {
-        return suffix + 'be longer.';
+        return suffix + tt('chainvalidation_js.be_longer');
     }
     if (length > 16) {
-        return suffix + 'be shorter.';
+        return suffix + tt('chainvalidation_js.be_shorter');
     }
     if (/\./.test(value)) {
-        suffix = 'Each account segment should ';
+        suffix = tt('chainvalidation_js.each_account_segment_should');
     }
     if (BadActorList.includes(value)) {
         return 'Use caution sending to this account. Please double check your spelling for possible phishing. ';
@@ -25,19 +26,19 @@ export function validate_account_name(value) {
     for (i = 0, len = ref.length; i < len; i++) {
         label = ref[i];
         if (!/^[a-z]/.test(label)) {
-            return suffix + 'start with a letter.';
+            return suffix + tt('chainvalidation_js.start_with_a_letter');
         }
         if (!/^[a-z0-9-]*$/.test(label)) {
-            return suffix + 'have only letters, digits, or dashes.';
+            return suffix + tt('chainvalidation_js.have_only_letters_digits_or_dashes');
         }
         if (/--/.test(label)) {
-            return suffix + 'have only one dash in a row.';
+            return suffix + tt('chainvalidation_js.have_only_one_dash_in_a_row');
         }
         if (!/[a-z0-9]$/.test(label)) {
-            return suffix + 'end with a letter or digit.';
+            return suffix + tt('chainvalidation_js.end_with_a_letter_or_digit');
         }
         if (!(label.length >= 3)) {
-            return suffix + 'be longer';
+            return suffix + tt('chainvalidation_js.be_longer');
         }
     }
     return null;

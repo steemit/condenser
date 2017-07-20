@@ -4,8 +4,8 @@ import transaction from 'app/redux/Transaction'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import {validate_account_name} from 'app/utils/ChainValidation'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
-import { translate, translateHtml } from 'app/Translator';
-import { FormattedHTMLMessage } from 'react-intl';
+import tt from 'counterpart';
+import { APP_NAME } from 'app/client_config';
 import {PrivateKey, PublicKey, key_utils} from 'steem/lib/auth/ecc';
 import {api} from 'steem';
 
@@ -42,7 +42,7 @@ class ChangePassword extends React.Component {
             nameError = validate_account_name(name);
             if (!nameError) {
                 promise = api.getAccountsAsync([name]).then(res => {
-                    return !(res && res.length > 0) ? translate('account_not_found') : '';
+                    return !(res && res.length > 0) ? tt('g.account_not_found') : '';
                 });
             }
         }
@@ -85,7 +85,7 @@ class ChangePassword extends React.Component {
         if (!process.env.BROWSER) { // don't render this page on the server
             return <div className="row">
                 <div className="column">
-                    {translate('loading')}..
+                    {tt('g.loading')}..
                 </div>
             </div>;
         }
@@ -98,7 +98,7 @@ class ChangePassword extends React.Component {
             console.error('Missing priorAuthKey')
 
         const error2 = /Missing Owner Authority/.test(error) ?
-            <span>{translate('this_is_wrong_password')}. {translate('do_you_need_to') + ' '}<a href="/recover_account_step_1">{translate('recover_your_account')}</a>?</span> :
+            <span>{tt('g.this_is_wrong_password')}. {tt('g.do_you_need_to') + ' '}<a href="/recover_account_step_1">{tt('g.recover_your_account')}</a>?</span> :
             error;
 
         const {accountName, nameError} = this.state;
@@ -107,28 +107,42 @@ class ChangePassword extends React.Component {
         return (
             <span className="ChangePassword">
                 <form onSubmit={handleSubmit(() => {this.dispatchSubmit()})}>
-                    {username && <h4>{translate('reset_usernames_password', {username})}</h4>}
+                    {username && <h4>{tt('g.reset_usernames_password', {username})}</h4>}
                     {authType ?
-                        <p>{translate('this_will_update_usernames_authtype_key', {
+                        <p>{tt('g.this_will_update_usernames_authtype_key', {
                                 username, authType
                             })}</p> :
                         <div className="ChangePassword__rules">
                             <hr />
-                            <p> <FormattedHTMLMessage id="the_rules_of_APP_NAME" /> </p>
+                            <p>
+                                {tt('g.the_rules_of_APP_NAME.one', {APP_NAME})}
+                                <br/>
+                                {tt('g.the_rules_of_APP_NAME.second', {APP_NAME})}
+                                <br/>
+                                {tt('g.the_rules_of_APP_NAME.third', {APP_NAME})}
+                                <br/>
+                                {tt('g.the_rules_of_APP_NAME.fourth')}
+                                <br/>
+                                {tt('g.the_rules_of_APP_NAME.fifth')}
+                                <br/>
+                                {tt('g.the_rules_of_APP_NAME.sixth')}
+                                <br/>
+                                {tt('g.the_rules_of_APP_NAME.seventh')}
+                            </p>
                         <hr />
                         </div>
                     }
 
                     <div className={nameError ? 'error' : ''}>
-                        <label>{translate('account_name')}
+                        <label>{tt('g.account_name')}
                             <input type="text" disabled={readOnlyAccountName} autoComplete="off" value={accountName} onChange={this.onNameChange} />
                         </label>
                         <p className="help-text">{nameError}</p>
                     </div>
                     <br />
                     <label>
-                        <div className="float-right"><a href="/recover_account_step_1">{translate('recover_password')}</a></div>
-                        {translate('current_password')}
+                        <div className="float-right"><a href="/recover_account_step_1">{tt('g.recover_password')}</a></div>
+                        {tt('g.current_password')}
                         <br />
                         <input {...cleanReduxInput(password)} type="password" disabled={loading} />
                     </label>
@@ -137,7 +151,7 @@ class ChangePassword extends React.Component {
                     <br></br>
 
                     <label>
-                        {translate('generated_password') + ' ' } <span className="secondary">({translate('new')})</span><br />
+                        {tt('g.generated_password') + ' ' } <span className="secondary">({tt('g.new')})</span><br />
                     </label>
                     {generated &&
                         <span>
@@ -146,17 +160,17 @@ class ChangePassword extends React.Component {
                                 <div className="overflow-ellipsis"><code style={{display: 'block', padding: '0.2rem 0.5rem', background: 'white', color: '#c7254e', wordWrap: 'break-word', fontSize: '100%', textAlign: 'center'}}>{newWif}</code></div>
                             </div>
                             <label className="ChangePassword__backup_text">
-                                {translate('backup_password_by_storing_it')}.
+                                {tt('g.backup_password_by_storing_it')}.
                             </label>
                         </span>
                         ||
-                        <center><button type="button" className="button hollow" onClick={this.generateWif}>{translate('click_to_generate_password')}</button></center>
+                        <center><button type="button" className="button hollow" onClick={this.generateWif}>{tt('g.click_to_generate_password')}</button></center>
                     }
 
                     <br></br>
 
                     <label>
-                        {translate('re_enter_generate_password')}
+                        {tt('g.re_enter_generate_password')}
                         <br />
                         <input {...cleanReduxInput(confirmPassword)} type="password" disabled={loading} />
                     </label>
@@ -164,20 +178,20 @@ class ChangePassword extends React.Component {
 
                     <br />
 
-                    <label><input {...cleanReduxInput(confirmCheck)} type="checkbox" /> {translate('understand_that_APP_NAME_cannot_recover_password')}.</label>
+                    <label><input {...cleanReduxInput(confirmCheck)} type="checkbox" /> {tt('g.understand_that_APP_NAME_cannot_recover_password', {APP_NAME})}.</label>
                     {confirmCheck.touched && confirmCheck.error && <div className="error">{confirmCheck.error}</div>}
 
-                    <label><input {...cleanReduxInput(confirmSaved)} type="checkbox" />{translate('i_saved_password')}.</label>
+                    <label><input {...cleanReduxInput(confirmSaved)} type="checkbox" />{tt('g.i_saved_password')}.</label>
                     {confirmSaved.touched && confirmSaved.error && <div className="error">{confirmSaved.error}</div>}
                     <br />
                     {loading && <div><LoadingIndicator type="circle" /></div>}
                     {!loading && <div>
                         <div className="error">{error2}</div>
                         <button type="submit" className="button" disabled={loading}>
-                            {translate('update_password')}
+                            {tt('g.update_password')}
                         </button>
                         {onClose && <button type="button" disabled={submitting} className="button hollow float-right" onClick={onClose}>
-                            {translate('cancel')}
+                            {tt('g.cancel')}
                         </button>}
                     </div>}
                 </form>
@@ -199,13 +213,13 @@ class ChangePassword extends React.Component {
 
 let newWif = null
 const keyValidate = (values) => ({
-    password: ! values.password ? translate('required') :
-        PublicKey.fromString(values.password) ? translate('you_need_private_password_or_key_not_a_public_key') :
+    password: ! values.password ? tt('g.required') :
+        PublicKey.fromString(values.password) ? tt('g.you_need_private_password_or_key_not_a_public_key') :
         null,
-    confirmPassword: ! values.confirmPassword ? translate('required') :
-        values.confirmPassword.trim() !== newWif ? translate('passwords_do_not_match') : null,
-    confirmCheck: ! values.confirmCheck ? translate('required') : null,
-    confirmSaved: ! values.confirmSaved ? translate('required') : null,
+    confirmPassword: ! values.confirmPassword ? tt('g.required') :
+        values.confirmPassword.trim() !== newWif ? tt('g.passwords_do_not_match') : null,
+    confirmCheck: ! values.confirmCheck ? tt('g.required') : null,
+    confirmSaved: ! values.confirmSaved ? tt('g.required') : null,
 })
 
 import {reduxForm} from 'redux-form' // @deprecated, instead use: app/utils/ReactForm.js

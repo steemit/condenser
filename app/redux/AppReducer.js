@@ -1,5 +1,5 @@
 import {Map, OrderedMap} from 'immutable';
-import { translate } from 'app/Translator';
+import tt from 'counterpart';
 
 const defaultState = Map({
     requests: {},
@@ -39,7 +39,7 @@ export default function reducer(state = defaultState, action) {
     }
     if (action.type === 'ADD_NOTIFICATION') {
         const n = {
-            action: translate('dismiss'),
+            action: tt('g.dismiss'),
             dismissAfter: 10000,
             ...action.payload
         };

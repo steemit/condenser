@@ -128,7 +128,7 @@ class Witnesses extends React.Component {
                         <h2>{tt('witnesses_jsx.top_witnesses')}</h2>
                         {current_proxy && current_proxy.length ? null :
                             <p>
-                            <strong>{tt('witnesses_jsx.you_have_votes_remaining', {votesCount: witness_vote_count})}.</strong>{' '}
+                            <strong>{tt('witnesses_jsx.you_have_votes_remaining', {count: witness_vote_count})}.</strong>{' '}
                             {tt('witnesses_jsx.you_can_vote_for_maximum_of_witnesses')}.
                         </p>}
                     </div>

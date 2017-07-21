@@ -31,7 +31,7 @@ export default {
         devtool: 'source-map',
         entry: {
             app: [
-                './app/Main.js',
+                './src/app/Main.js',
                 //`webpack-hot-middleware/client?path=//${HOST}:${PORT}/__webpack_hmr`,
             ]
         },

@@ -178,7 +178,7 @@ export default class LandingCountDowns extends React.Component {
 
         {/* COUNTERS */}
         {/* prefill means pre crowdsale start info */}
-        <div className="row CountDowns__blocks">
+        <div className="row CountDowns__blocks" id="docs">
           {/* number of blocks */}
           <div className="small-12 columns">
             <div className="CountDowns__links">

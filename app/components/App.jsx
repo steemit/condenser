@@ -240,12 +240,17 @@ class App extends React.Component {
                 </ul>
                 <ul className="vertical menu">
                     <li>
-                      <a href={TERMS_OF_SERVICE_URL} onClick={this.navigate} rel="nofollow">
+                      <a href="https://golos.io/ru--golos/@golos/dogovor-kupli-prodazhi-tokenov-sila-golosa" onClick={this.navigate} rel="nofollow">
+                            {tt("navigation.sale_agreement")}
+                        </a>
+                    </li>
+                    <li>
+                      <a href={TERMS_OF_SERVICE_URL} target="_blank" rel="nofollow">
                             {tt("navigation.terms_of_service")}
                         </a>
                     </li>
                     <li>
-                      <a href={PRIVACY_POLICY_URL} onClick={this.navigate} rel="nofollow">
+                      <a href={PRIVACY_POLICY_URL} target="_blank" rel="nofollow">
                             {tt("navigation.privacy_policy")}
                         </a>
                     </li>

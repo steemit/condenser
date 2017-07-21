@@ -98,10 +98,13 @@
     "examples": "Examples: 541-754-3010 | 89-636-48018",
     "land_lines_cannot_receive_sms_messages": "* Land lines cannot receive SMS messages",
     "message_and_data_rates_may_apply": "* Message and data rates may apply",
+    "APP_NAME_wants_you_to_know": "* Your mobile provider's standard rates for sending and receiving text messages still apply.",
     "thank_you_for_providing_your_phone_number": "Thank you for providing your phone number.",
     "to_continue_please_enter_the_sms_code_weve_sent_you": "To continue please enter the SMS code we've sent you.",
+    "to_continue_please_send_sms_code": "To continue please send SMS message from your mobile phone with code %(code)s to %(phone_number)s.",
     "confirmation_code": "Confirmation code",
     "didnt_receive_the_verification_code": "Didn't receive the verification code? ",
+    "you_can_change_your_number": "You can change your number at any time if we didn't receive your sms with verification code. ",
     "re_send": "Re-send"
   },
   "curationrewards_jsx":{
@@ -505,7 +508,8 @@
     "welcome":"Dobrodošli",
     "feedback":"Feedback",
     "wiki":"Wiki",
-    "faq":"FAQ"
+    "faq":"FAQ",
+    "sale_agreement": "Sale Agreement"
   },
   "oauth":{
     "we_couldnt_verify_your_account_contact_us_at_SUPPORT_EMAIL":"Nismo mogli da potvrdimo vašu e-email adresu, kontaktirajte nas na %(SUPPORT_EMAIL)s za više informacija.",

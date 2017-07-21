@@ -4,8 +4,6 @@ import React from "react";
 import { renderToString } from "react-dom/server";
 import models from "db/models";
 import ServerHTML from "server/server-html";
-import teleSignVerify from "server/utils/teleSign";
-import twilioVerify from "server/utils/twilio";
 import SignupProgressBar from "app/components/elements/SignupProgressBar";
 import CountryCode from "app/components/elements/CountryCode";
 import { getRemoteIp, checkCSRF } from "server/utils/misc";
@@ -31,66 +29,51 @@ if (process.env.NODE_ENV === "production") {
 const assets = Object.assign({}, require(assets_file), { script: [] });
 
 function* confirmMobileHandler() {
-    if (!checkCSRF(this, this.request.body.csrf)) return;
-    const confirmation_code = this.params && this.params.code
-        ? this.params.code
-        : this.request.body.code;
+    if (! this.request.body) return;
+
+    const accountSid = this.request.body && this.request.body.AccountSid
+      ? this.request.body.AccountSid
+      : ''
+    ;
+    if (accountSid.localeCompare(config.get('twilio.account_sid')) != 0) return;
+
+    const phone = this.request.body && this.request.body.From
+      ? this.request.body.From.substr(1)
+      : ''
+    ;
+    if (!phone || digits(phone).length === 0) return;
+
+    const confirmation_code = this.request.body.Body
+      ? this.request.body.Body.substr(0,4)
+      : ''
+    ;
+    if (!confirmation_code || digits(confirmation_code).length !== 4) return;
+
+    const phoneHash = hash.sha256(phone, 'hex');
+
     console.log(
-        "-- /confirm_mobile -->",
-        this.session.uid,
-        this.session.user,
+        "-- /confirm_provider -->",
+        phone,
         confirmation_code
     );
 
     let mid = yield models.Identity.findOne({
         attributes: ["id", "user_id", "verified", "updated_at", "phone"],
         where: {
-            user_id: this.session.user,
+            phone: phoneHash,
             confirmation_code,
             provider: "phone"
         },
         order: "id DESC"
     });
     if (!mid) {
-        mid = yield models.Identity.findOne({
-            attributes: ["id"],
-            where: { user_id: this.session.user, provider: "phone" },
-            order: "id DESC"
-        });
-        if (mid) {
-            yield mid.destroy({ force: true });
-        }
-        this.flash = { error: "Wrong confirmation code." };
-        this.redirect("/enter_mobile");
+        if (metrics) metrics.increment('_mobile_provier_fail');
+        this.flash = { error: "Wrong confirmation code" };
         return;
     }
     if (mid.verified) {
+        if (metrics) metrics.increment('_mobile_provier_verified');
         this.flash = { success: "Phone number has already been verified" };
-        this.redirect("/create_account");
-        return;
-    }
-
-    const used_phone = yield models.Identity.findOne({
-        attributes: ["id", "user_id"],
-        where: {
-            phone: mid.phone,
-            provider: "phone",
-            verified: true
-        },
-        order: "id DESC"
-    });
-    if (used_phone) {
-        if (used_phone.user_id === this.session.user) {
-            this.flash = {
-                success: "Phone number has already been verified"
-            };
-            this.redirect("/create_account");
-        } else {
-            this.flash = {
-                error: "This phone number has already been used"
-            };
-            this.redirect("/enter_mobile");
-        }
         return;
     }
 
@@ -102,10 +85,7 @@ function* confirmMobileHandler() {
         return;
     }
     yield mid.update({ verified: true });
-    if (metrics) metrics.increment('_signup_step_3');
-    if (mixpanel)
-        mixpanel.track("SignupStep3", { distinct_id: this.session.uid });
-    this.redirect("/create_account");
+    if (metrics) metrics.increment('_mobile_provier_ok');
 }
 
 export default function useEnterAndConfirmMobilePages(app) {
@@ -213,6 +193,7 @@ export default function useEnterAndConfirmMobilePages(app) {
 
         const country = this.request.body.country;
         const localPhone = this.request.body.phone;
+        const check = this.request.body.check;
         const enterMobileUrl = `/enter_mobile?phone=${localPhone}&country=${country}`;
 
         if (!country || country === "") {
@@ -273,14 +254,14 @@ export default function useEnterAndConfirmMobilePages(app) {
             return;
         }
 
-        const confirmation_code = parseInt(
+        let confirmation_code = parseInt(
             secureRandom.randomBuffer(8).toString("hex"),
             16
         )
             .toString(10)
             .substring(0, 4); // 4 digit code
         let mid = yield models.Identity.findOne({
-            attributes: ["id", "phone", "verified", "updated_at"],
+            attributes: ["id", "phone", "verified", "updated_at", "confirmation_code"],
             where: { user_id, provider: "phone" },
             order: "id DESC"
         });
@@ -299,14 +280,20 @@ export default function useEnterAndConfirmMobilePages(app) {
                 yield mid.update({ verified: false, phone: phoneHash});
             }
             const seconds_ago = (Date.now() - mid.updated_at) / 1000.0;
-            if (seconds_ago < 120) {
-                this.flash = {
-                    error: "Confirmation was attempted a moment ago. You can try again only in 2 minutes."
-                };
-                this.redirect(enterMobileUrl);
-                return;
+            const timeAgo = process.env.NODE_ENV === "production" ? 300 : 10;
+            if (check) {
+                confirmation_code = mid.confirmation_code
             }
-            yield mid.update({ confirmation_code, phone: phoneHash });
+            else {
+                if (seconds_ago < timeAgo) {
+                    this.flash = {
+                        error: "Confirmation was attempted a moment ago. You can try again only in 5 minutes."
+                    };
+                    this.redirect(enterMobileUrl);
+                    return;
+                }
+                yield mid.update({ confirmation_code, phone: phoneHash });
+            }
         } else {
             mid = yield models.Identity.create({
                 provider: "phone",
@@ -326,40 +313,6 @@ export default function useEnterAndConfirmMobilePages(app) {
         );
         const ip = getRemoteIp(this.req);
 
-        /*
-        const twilioResult = yield twilioVerify(phone);
-        console.log('-- /submit_mobile twilioResult -->', twilioResult);
-
-        if (twilioResult === 'block') {
-            mid.update({score: 111111});
-            this.flash = { error: 'Unable to verify your phone number. Please try a different phone number.' };
-            this.redirect(enterMobileUrl);
-            return;
-        }
-
-        const verifyResult = yield teleSignVerify({
-            mobile: phone,
-            confirmation_code,
-            ip,
-            ignore_score: twilioResult === 'pass'
-        });
-        if (verifyResult && verifyResult.score) {
-            mid.update({score: verifyResult.score});
-        }
-        if (verifyResult && verifyResult.error) {
-            this.flash = { error: verifyResult.error };
-            this.redirect(enterMobileUrl);
-            return;
-        }
-        */
-
-        const twilioResult = yield twilioVerify('+' + phone, confirmation_code);
-        if (twilioResult && twilioResult.error) {
-            this.flash = { error: twilioResult.error };
-            this.redirect(enterMobileUrl);
-            return;
-        }
-
         const body = renderToString(
             <div className="App">
                 <MiniHeader />
@@ -376,31 +329,34 @@ export default function useEnterAndConfirmMobilePages(app) {
                     <div className="column">
                         {tt('createaccount_jsx.thank_you_for_providing_your_phone_number', {phone})}
                         <br />
-                        {tt('createaccount_jsx.to_continue_please_enter_the_sms_code_weve_sent_you')}
+                        {tt('createaccount_jsx.to_continue_please_send_sms_code', {code: confirmation_code, phone_number: config.get('twilio.sender_id')})}
                     </div>
                 </div>
                 <br />
                 <div className="row" style={{ maxWidth: "32rem" }}>
                     <form
                         className="column"
-                        action="/confirm_mobile"
+                        action="/submit_mobile"
                         method="POST"
                     >
                         <input type="hidden" name="csrf" value={this.csrf} />
-                        <label>
-                            {tt('createaccount_jsx.confirmation_code')}
-                            <input type="text" name="code" />
-                        </label>
-                        <br />
+                        <input type="hidden" name="country" value={country} />
+                        <input type="hidden" name="phone" value={localPhone} />
+                        <input type="hidden" name="check" value={true} />
                         <div className="secondary">
-                            {tt('createaccount_jsx.didnt_receive_the_verification_code')}{" "}
-                            <a href={enterMobileUrl}>{tt('createaccount_jsx.re_send')}</a>
+                            {tt('createaccount_jsx.APP_NAME_wants_you_to_know', {APP_NAME: tt('g.APP_NAME')})}
                         </div>
                         <br />
+                        <div className="secondary">
+                            {tt('createaccount_jsx.you_can_change_your_number')}{" "}
+                            <a href={enterMobileUrl}>{tt('g.edit')}</a>
+                        </div>
+                        <br />
+                        <div className="error">{check && 'Confirmation was attempted a moment ago. You can try again in 5 minutes later.'}</div>
                         <input
                             type="submit"
                             className="button"
-                            value={tt('g.continue').toUpperCase()}
+                            value={tt('settings_jsx.update').toUpperCase()}
                         />
                     </form>
                 </div>
@@ -411,7 +367,6 @@ export default function useEnterAndConfirmMobilePages(app) {
             renderToString(<ServerHTML {...props} />);
     });
 
-    router.get("/confirm_mobile/:code", confirmMobileHandler);
     router.post("/confirm_mobile", koaBody, confirmMobileHandler);
 }
 

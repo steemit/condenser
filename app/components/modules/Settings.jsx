@@ -62,20 +62,27 @@ class Settings extends React.Component {
         this.setState({oldNsfwPref: nsfwPref})
     }
 
-    onCurrencyChange(event) {
+    notify = () => {
+        this.props.notify(tt('g.saved'))
+    }
+
+    onCurrencyChange = (event) => {
         cookie.save(CURRENCY_COOKIE_KEY, event.target.value, {path: "/", expires: new Date(Date.now() + 60 * 60 * 24 * 365 * 10 * 1000)});
+        this.notify()
     }
 
     onLanguageChange = (event) => {
         const language = event.target.value
         localStorage.setItem('language', language)
         this.props.changeLanguage(language)
+        this.notify()
     }
 
     onThemeChange = (event) => {
         const theme = event.target.value
         localStorage.setItem('theme', theme)
         this.props.changeTheme(theme)
+        this.notify()
     }
 
     handleSubmit = ({updateInitialValues}) => {
@@ -289,6 +296,13 @@ export default connect(
         updateAccount: ({successCallback, errorCallback, ...operation}) => {
             const options = {type: 'account_update', operation, successCallback, errorCallback}
             dispatch(transaction.actions.broadcastOperation(options))
+        },
+        notify: (message) => {
+            dispatch({type: 'ADD_NOTIFICATION', payload: {
+                key: "settings_" + Date.now(),
+                message,
+                dismissAfter: 3000}
+            });
         }
     })
 )(Settings)

@@ -138,7 +138,6 @@ class Settings extends React.Component {
         const ignores = isOwnAccount && following && following.get('ignore_result')
 
         return <div className="Settings">
-
             <div className="row">
                 <div className="small-12 medium-6 large-4 columns">
                     <label>{tt('g.choose_language')}

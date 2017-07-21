@@ -20,6 +20,10 @@ const defaultState = Map({
         account_update: 0,
         message: 0,
         receive: 0
+    }),
+    user_settings: Map({
+        locale: null,
+        nsfwPref: 'warn'
     })
 });
 
@@ -57,6 +61,9 @@ export default function reducer(state = defaultState, action) {
             nc.follow = 0;
         }
         res = res.set('notificounters', Map(nc));
+    }
+    if (action.type === 'UPDATE_USER_SETTINGS') {
+        res = res.set('user_settings', Map(action.payload));
     }
     return res;
 }

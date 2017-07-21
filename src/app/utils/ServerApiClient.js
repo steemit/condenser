@@ -83,6 +83,12 @@ export function saveCords(x, y) {
     fetch('/api/v1/save_cords', request);
 }
 
+export function updateUserSettings(settings) {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return Promise.resolve();
+    const request = Object.assign({}, request_base, {body: JSON.stringify({csrf: window.$STM_csrf, settings})});
+    return fetch('/api/v1/update_user_settings', request);
+}
+
 if (process.env.BROWSER) {
     window.getNotifications = getNotifications;
     window.markNotificationRead = markNotificationRead;

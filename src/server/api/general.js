@@ -412,6 +412,35 @@ export default function useGeneralApi(app) {
         }
         this.body = JSON.stringify({status: 'ok'});
     });
+
+    router.post('/update_user_settings', koaBody, function *() {
+        const params = this.request.body;
+        const {csrf, settings} = typeof(params) === 'string' ? JSON.parse(params) : params;
+        if (!checkCSRF(this, csrf)) return;
+        console.log('-- /update_user_settings -->', this.session.user, this.session.uid, settings);
+        if (!this.session.user) {
+            this.body = 'missing user id';
+            this.status = 500;
+            return;
+        }
+        try {
+            const attrs = {};
+            attrs.settings = JSON.stringify(settings);
+            if (attrs.settings.length > 1024) throw new Error('data too long');
+            const user = yield models.User.findOne({
+                attributes: ['id', 'email'],
+                where: {id: this.session.user}
+            });
+            if (user) {
+                yield models.User.update(attrs, {where: {id: this.session.user}});
+            }
+            this.body = JSON.stringify({status: 'ok'});
+        } catch (error) {
+            console.error('Error in /update_user_settings api call', this.session.uid, error);
+            this.body = JSON.stringify({error: error.message});
+            this.status = 500;
+        }
+    });
 }
 
 /**

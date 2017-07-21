@@ -344,6 +344,10 @@ export default function useEnterAndConfirmMobilePages(app) {
                         <input type="hidden" name="phone" value={localPhone} />
                         <input type="hidden" name="check" value={true} />
                         <div className="secondary">
+                            {tt('createaccount_jsx.APP_NAME_wants_you_to_know', {APP_NAME: tt('g.APP_NAME')})}
+                        </div>
+                        <br />
+                        <div className="secondary">
                             {tt('createaccount_jsx.you_can_change_your_number')}{" "}
                             <a href={enterMobileUrl}>{tt('g.edit')}</a>
                         </div>

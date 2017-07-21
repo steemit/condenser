@@ -1,7 +1,6 @@
 import React from 'react';
 import QRCode from 'react-qr'
 import tt from 'counterpart';
-require('./QrKeyView.scss');
 
 export default ({type, text, isPrivate, onClose}) => {
     return (

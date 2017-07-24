@@ -805,5 +805,11 @@
     "next_power_down_is_scheduled_to_happen": "The next power down is scheduled to happen",
     "transfers_are_temporary_disabled": "Transfers are temporary disabled.",
     "history": "HISTORY"
+  },
+  "powerdown_jsx": {
+    "power_down": "Power Down",
+    "power_down_amount": "Power Down Amount",
+    "confirm_power_down": "Confirm Power Down",
+    "confirm": "confirm"
   }
 }

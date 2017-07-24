@@ -6,6 +6,7 @@
     "are_you_sure": "Are you sure?",
     "ask": "Ask",
     "back": "Back",
+    "balance": "Balance",
     "balances": "Balances",
     "bid": "Bid",
     "blog": "Blog",
@@ -16,7 +17,7 @@
     "by": "by",
     "cancel": "Cancel",
     "change_password": "Change Password",
-    "choose_language": "*Choose Language (es)*",
+    "choose_language": "Choose Language",
     "clear": "Clear",
     "close": "Close",
     "comments": "Comments",
@@ -31,6 +32,7 @@
     "follow": "Follow",
     "for": " for ",
     "from": " from ",
+    "go_back": "Back",
     "hide": "Hide",
     "in": "in",
     "in_reply_to": "in reply to",
@@ -67,13 +69,14 @@
     "promoted": "promoted",
     "re": "RE",
     "recent_password": "Recent Password",
-    "recieve": "Receive ",
+    "receive": "Receive ",
     "remove": "Remove",
     "remove_vote": "Remove Vote",
     "replied_to": "replied to",
     "replies": "Replies",
     "reply": "Reply",
     "reputation": "Reputation",
+    "reveal_comment": "Reveal Comment",
     "request": "request",
     "required": "Required",
     "rewards": "Rewards",
@@ -95,7 +98,6 @@
     "topics": "Topics",
     "transaction_history": "Transaction History",
     "transfer": "Transfer ",
-    "receive": "Receive ",
     "trending_topics": "Trending Topics",
     "type": "Type",
     "unfollow": "Unfollow",
@@ -317,27 +319,6 @@
     "replies": "Replies",
     "payouts": "Payouts"
   },
-  "blocktrades_deposit": {
-    "change_deposit_address": "Change Deposit Address",
-    "get_deposit_address": "Get Deposit Address",
-    "powered_by": "Powered by",
-    "send_amount_of_coins_to": "Send %(value)s %(coinName)s to",
-    "insufficent_funds": "Insufficent funds",
-    "update_estimate": "Update Estimate",
-    "get_estimate": "Get Estimate",
-    "must_include_memo": "You must include the memo above",
-    "estimate_using": "Estimate using",
-    "amount_to_send": "Amount to send %(estimateInputCoin)s",
-    "deposit_using": "Deposit using",
-    "suggested_limit": "Suggested limit %(depositLimit)s",
-    "internal_server_error": "Internal Server Error",
-    "enter_amount": "Enter Amount",
-    "processing": "Processing",
-    "broadcasted": "Broadcasted",
-    "confirmed": "Confirmed",
-    "collapse_or_expand": "Collapse/Expand",
-    "reveal_comment": "Reveal comment"
-  },
   "postfull_jsx": {
     "this_post_is_not_available_due_to_a_copyright_claim": "This post is not available due to a copyright claim.",
     "share_on_facebook" : "Share on Facebook",
@@ -444,7 +425,11 @@
     "author_rewards_history": "Author Rewards History"
   },
   "plurals": {
-    "reply_count": "{replyCount, plural,\n=0 {no replies}\none {1 reply}\nother {%(replyCount)s replies}}",
+    "reply_count": {
+      "zero":  "no replies",
+      "one": "1 reply",
+      "other": "%(count)s replies"
+    },
     "author_rewards_last_24_hours": "Author rewards last 24 hours",
     "daily_average_author_rewards": "Daily average author rewards",
     "balance": "Balance",
@@ -512,7 +497,11 @@
   "witnesses_jsx": {
     "witness_thread": "witness thread",
     "top_witnesses": "Witness Voting",
-    "you_have_votes_remaining": "You have {votesCount, plural,\n=0 {no votes}\none {1 vote}\nother {%(votesCount)s votes}} remaining",
+    "you_have_votes_remaining": {
+      "zero": "You have no votes remaining",
+      "one": "You have 1 vote remaining",
+      "other": "You have %(count)s votes remaining"
+    },
     "you_can_vote_for_maximum_of_witnesses": "You can vote for a maximum of 30 witnesses",
     "witness": "Witness",
     "information": "Information",
@@ -526,9 +515,17 @@
   },
   "votesandcomments_jsx": {
     "no_responses_yet_click_to_respond": "No responses yet. Click to respond.",
-    "response_count": "{responseCount, plural,\n=0 {no responses}\none {1 responses}\nother {%(responseCount)s responses}}",
+    "response_count": {
+      "zero": "no responses",
+      "one": "1 response",
+      "other": "%(count)s responses"
+    },
     "click_to_respond": "Click to respond",
-    "vote_count": "{voteCount, plural,\n=0 {no votes}\none {1 vote}\nother {%(voteCount)s votes}}"
+    "vote_count": {
+      "zero": "no votes",
+      "one": "1 vote",
+      "other": "%(count)s votes"
+    },
   },
   "userkeys_jsx": {
     "public": "Public",

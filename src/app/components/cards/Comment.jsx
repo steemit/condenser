@@ -365,9 +365,9 @@ class CommentImpl extends React.Component {
                         { (this.state.collapsed || hide_body) &&
                           <Voting post={post} showList={false} /> }
                         { this.state.collapsed && comment.children > 0 &&
-                          <span className="marginLeft1rem">{tt('reply_count', {replyCount: comment.children})}</span>}
+                          <span className="marginLeft1rem">{tt('reply_count', {count: comment.children})}</span>}
                         { !this.state.collapsed && hide_body &&
-                            <a className="marginLeft1rem" onClick={this.revealBody}>{tt('blocktrades_deposit.reveal_comment')}</a>}
+                            <a className="marginLeft1rem" onClick={this.revealBody}>{tt('g.reveal_comment')}</a>}
                     </div>
                     <div className="Comment__body entry-content">
                         {showEdit ? renderedEditor : body}

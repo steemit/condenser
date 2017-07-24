@@ -168,6 +168,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
         offchain.server_location = location;
         server_store = createStore(rootReducer, { global: onchain, offchain});
         server_store.dispatch({type: '@@router/LOCATION_CHANGE', payload: {pathname: location}});
+        server_store.dispatch({type: 'UPDATE_USER_SETTINGS', payload: {locale: 'es'}});
         if (offchain.account) {
             try {
                 const notifications = await tarantool.select('notifications', 0, 1, 0, 'eq', offchain.account);

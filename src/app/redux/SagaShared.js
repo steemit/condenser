@@ -1,9 +1,10 @@
 import {fromJS} from 'immutable'
 import {call, put, select} from 'redux-saga/effects';
 import g from 'app/redux/GlobalReducer'
-import {takeEvery} from 'redux-saga';
+import {takeEvery, takeLatest} from 'redux-saga';
 import tt from 'counterpart';
 import {api} from 'steem';
+import {updateUserSettings} from 'app/utils/ServerApiClient';
 
 const wait = ms => (
     new Promise(resolve => {
@@ -11,7 +12,7 @@ const wait = ms => (
     })
 );
 
-export const sharedWatches = [watchGetState, watchTransactionErrors]
+export const sharedWatches = [watchGetState, watchTransactionErrors, watchUserSettingsUpdates]
 
 export function* getAccount(username, force = false) {
     let account = yield select(state => state.global.get('accounts').get(username))
@@ -59,4 +60,12 @@ export function* getContent({author, permlink, resolve, reject}) {
     } else if (reject && !content) {
         reject();
     }
+}
+
+function* saveUserSettings({payload}) {
+    yield updateUserSettings(payload);
+}
+
+function* watchUserSettingsUpdates() {
+    yield* takeLatest('UPDATE_USER_SETTINGS', saveUserSettings);
 }

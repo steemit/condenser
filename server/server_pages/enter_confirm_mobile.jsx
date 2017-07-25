@@ -28,6 +28,8 @@ if (process.env.NODE_ENV === "production") {
 
 const assets = Object.assign({}, require(assets_file), { script: [] });
 
+assets.script.push("/enter_mobile/helpers.js");
+
 function* confirmMobileHandler() {
     if (! this.request.body) return;
 
@@ -68,23 +70,25 @@ function* confirmMobileHandler() {
     });
     if (!mid) {
         if (metrics) metrics.increment('_mobile_provier_fail');
-        this.flash = { error: "Wrong confirmation code" };
+        this.status = 401;
+        this.body = "Wrong confirmation code";
         return;
     }
     if (mid.verified) {
         if (metrics) metrics.increment('_mobile_provier_verified');
-        this.flash = { success: "Phone number has already been verified" };
+        this.status = 401;
+        this.body = "Phone number has already been verified";
         return;
     }
 
     const hours_ago = (Date.now() - mid.updated_at) / 1000.0 / 3600.0;
     if (hours_ago > 24.0) {
         this.status = 401;
-        this.flash = { error: "Confirmation code has been expired" };
-        this.redirect("/enter_mobile");
+        this.body = "Confirmation code has been expired";
         return;
     }
     yield mid.update({ verified: true });
+    this.body = "Thank you for validate your phone number";
     if (metrics) metrics.increment('_mobile_provier_ok');
 }
 
@@ -147,11 +151,11 @@ export default function useEnterAndConfirmMobilePages(app) {
                         <br />
                         <input type="hidden" name="csrf" value={this.csrf} />
                         <label>
-                            {tt('createaccount_jsx.country_code')}
+                            <span style={{color: 'red'}}>*</span> {tt('createaccount_jsx.country_code')}
                             <CountryCode name="country" value={country} />
                         </label>
                         <label>
-                            {tt('createaccount_jsx.phone_number')}
+                            <span style={{color: 'red'}}>*</span> {tt('createaccount_jsx.phone_number')} <span style={{color: 'red'}}>{tt('createaccount_jsx.without_country_code')}</span>
                             <input type="tel" name="phone" value={phone} />
                         </label>
                         <div className="secondary">
@@ -160,9 +164,6 @@ export default function useEnterAndConfirmMobilePages(app) {
                         <br />
                         <div className="secondary">
                             {tt('createaccount_jsx.land_lines_cannot_receive_sms_messages')}
-                        </div>
-                        <div className="secondary">
-                            {tt('createaccount_jsx.message_and_data_rates_may_apply')}
                         </div>
                         <br />
                         <div className="error">{this.flash.error}</div>
@@ -249,7 +250,7 @@ export default function useEnterAndConfirmMobilePages(app) {
                 phoneHash,
                 existing_phone.user_id
             );
-            this.flash = { error: "This phone number has already been used" };
+            this.flash = { error: tt('createaccount_jsx.this_phone_number_has_already_been_used') };
             this.redirect(enterMobileUrl);
             return;
         }
@@ -268,7 +269,7 @@ export default function useEnterAndConfirmMobilePages(app) {
         if (mid) {
             if (mid.verified) {
                 if (mid.phone === phoneHash) {
-                    this.flash = { success: "Phone number has been verified" };
+                    this.flash = { success: tt('createaccount_jsx.phone_number_has_been_verified') };
                     if (metrics) metrics.increment('_signup_step_3');
                     if (mixpanel)
                         mixpanel.track("SignupStep3", {
@@ -334,6 +335,19 @@ export default function useEnterAndConfirmMobilePages(app) {
                 </div>
                 <br />
                 <div className="row" style={{ maxWidth: "32rem" }}>
+                    <div className="column">
+                        <p id="Spoiler" style={{ display: "none" }}>
+                          {tt('createaccount_jsx.mobile_description.one', {APP_NAME: tt('g.APP_NAME')})}<br/>
+                          {tt('createaccount_jsx.mobile_description.second')}<br/>
+                          {tt('createaccount_jsx.mobile_description.third', {APP_NAME: tt('g.APP_NAME')})}<br/>
+                          {tt('createaccount_jsx.mobile_description.fourth')}
+                        </p>
+                        <button id="SpoilerButton" className="button hollow tiny">
+                          <span>{tt('createaccount_jsx.why_send_sms')}</span>
+                        </button>
+                  </div>
+                </div>
+                <div className="row" style={{ maxWidth: "32rem" }}>
                     <form
                         className="column"
                         action="/submit_mobile"
@@ -368,6 +382,10 @@ export default function useEnterAndConfirmMobilePages(app) {
     });
 
     router.post("/confirm_mobile", koaBody, confirmMobileHandler);
+    router.get("/enter_mobile/helpers.js", function*() {
+        this.type = 'application/javascript';
+        this.body = "document.getElementById('SpoilerButton').onclick=function(){document.getElementById('Spoiler').style.display= document.getElementById('Spoiler').style.display==='none'?'block':'none'}";
+    });
 }
 
 function digits(text) {

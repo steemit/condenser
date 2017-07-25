@@ -525,7 +525,7 @@
       "zero": "no votes",
       "one": "1 vote",
       "other": "%(count)s votes"
-    },
+    }
   },
   "userkeys_jsx": {
     "public": "Public",

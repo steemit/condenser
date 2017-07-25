@@ -572,7 +572,9 @@
     "confirmation_code": "Confirmation code",
     "didnt_receive_the_verification_code": "Didn't receive the verification code? ",
     "you_can_change_your_number": "You can change your number at any time if we didn't receive your sms with verification code. ",
-    "re_send": "Re-send"
+    "re_send": "Re-send",
+    "phone_number_has_been_verified": "Phone number has been verified",
+    "this_phone_number_has_already_been_used": "This phone number has already been used"
   },
   "voting_jsx": {
     "stop_seeing_content_from_this_user": "Stop seeing content from this user",

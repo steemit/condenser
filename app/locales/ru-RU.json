@@ -121,7 +121,9 @@
     "confirmation_code": "Код подтверждения",
     "didnt_receive_the_verification_code": "Не получили код подтверждения? ",
     "you_can_change_your_number": "Вы можете изменить ваш номер телефона, в случае если мы так и подтвердили ваше смс сообщение с кодом подтверждения. ",
-    "re_send": "Повторная отправка"
+    "re_send": "Повторная отправка",
+    "phone_number_has_been_verified": "Номер телефона успешно подтвержден",
+    "this_phone_number_has_already_been_used": "Указанный Вами номер уже зарегистрирован на платформе"
   },
   "curationrewards_jsx": {
     "curation_rewards_last_24_hours": "Кураторские награды за последние 24 часа",

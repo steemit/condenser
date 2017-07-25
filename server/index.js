@@ -41,18 +41,18 @@ global.webpackIsomorphicTools = new WebpackIsomorphicTools(
 );
 
 global.webpackIsomorphicTools.server(ROOT, () => {
-    steem.config.set('websocket', config.get('ws_connection_server'));
-    if (newrelic) {
-        steem.api.on('track-performance', (method, time_taken) => {
-            newrelic.recordMetric(`WebTransaction/Performance/steem-js/${method}`, time_taken / 1000.0);
-        });
-    }
-    // const CliWalletClient = require('shared/api_client/CliWalletClient').default;
-    // if (process.env.NODE_ENV === 'production') connect_promises.push(CliWalletClient.instance().connect_promise());
-    try {
-        require('./server');
-    } catch (error) {
-        console.error(error);
-        process.exit(1);
-    }
+        steem.config.set('websocket', config.get('ws_connection_server'));
+        if (newrelic) {
+            steem.api.on('track-performance', (method, time_taken) => {
+                newrelic.recordMetric(`WebTransaction/Performance/steem-js/${method}`, time_taken / 1000.0);
+            });
+        }
+        // const CliWalletClient = require('shared/api_client/CliWalletClient').default;
+        // if (process.env.NODE_ENV === 'production') connect_promises.push(CliWalletClient.instance().connect_promise());
+        try {
+            require('./server');
+        } catch (error) {
+            console.error(error);
+            process.exit(1);
+        }
 });

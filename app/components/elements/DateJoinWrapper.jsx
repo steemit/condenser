@@ -1,5 +1,4 @@
 import React from 'react';
-import tt from 'counterpart';
 
 export default class DateJoinWrapper extends React.Component {
     render() {
@@ -10,7 +9,7 @@ export default class DateJoinWrapper extends React.Component {
         let joinMonth = monthNames[date.getMonth()];
         let joinYear = date.getFullYear();
         return (
-                <span>{tt('g.joined')} {joinMonth} {joinYear}</span>
+                <span>Joined {joinMonth} {joinYear}</span>
             )
     }
 }

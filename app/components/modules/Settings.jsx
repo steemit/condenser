@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux'
 import user from 'app/redux/User';
-import tt from 'counterpart';
+import {translate} from 'app/Translator';
 import {ALLOWED_CURRENCIES} from 'app/client_config'
 import store from 'store';
 import transaction from 'app/redux/Transaction'
@@ -10,7 +10,6 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import Userpic from 'app/components/elements/Userpic';
 import reactForm from 'app/utils/ReactForm'
 import UserList from 'app/components/elements/UserList';
-
 
 class Settings extends React.Component {
 
@@ -33,11 +32,11 @@ class Settings extends React.Component {
             fields: ['profile_image', 'name', 'about', 'location', 'website'],
             initialValues: props.profile,
             validation: values => ({
-                profile_image: values.profile_image && !/^https?:\/\//.test(values.profile_image) ? tt('settings_jsx.invalid_url') : null,
-                name: values.name && values.name.length > 20 ? tt('settings_jsx.name_is_too_long') : values.name && /^\s*@/.test(values.name) ? tt('settings_jsx.name_must_not_begin_with') : null,
-                about: values.about && values.about.length > 160 ? tt('settings_jsx.about_is_too_long') : null,
-                location: values.location && values.location.length > 30 ? tt('settings_jsx.location_is_too_long') : null,
-                website: values.website && values.website.length > 100 ? tt('settings_jsx.website_url_is_too_long') : values.website && !/^https?:\/\//.test(values.website) ? tt('settings_jsx.invalid_url') : null,
+                profile_image: values.profile_image && !/^https?:\/\//.test(values.profile_image) ? 'Invalid URL' : null,
+                name: values.name && values.name.length > 20 ? 'Name is too long' : values.name && /^\s*@/.test(values.name) ? 'Name must not begin with @' : null,
+                about: values.about && values.about.length > 160 ? 'About is too long' : null,
+                location: values.location && values.location.length > 30 ? 'Location is too long' : null,
+                website: values.website && values.website.length > 100 ? 'Website URL is too long' : values.website && !/^https?:\/\//.test(values.website) ? 'Invalid URL' : null,
             })
         })
         this.handleSubmitForm =
@@ -106,7 +105,7 @@ class Settings extends React.Component {
                     this.setState({
                         loading: false,
                         changed: false,
-                        errorMessage: tt('g.server_returned_error')
+                        errorMessage: translate('server_returned_error')
                     })
                 }
             },
@@ -115,7 +114,7 @@ class Settings extends React.Component {
                     loading: false,
                     changed: false,
                     errorMessage: '',
-                    successMessage: tt('g.saved') + '!',
+                    successMessage: translate('saved') + '!',
                 })
                 // remove successMessage after a while
                 setTimeout(() => this.setState({successMessage: ''}), 4000)
@@ -140,7 +139,7 @@ class Settings extends React.Component {
 
             {/*<div className="row">
                 <div className="small-12 medium-6 large-4 columns">
-                    <label>{tt('g.choose_language')}
+                    <label>{translate('choose_language')}
                         <select defaultValue={store.get('language')} onChange={this.handleLanguageChange}>
                             <option value="en">English</option>
                             <option value="ru">Russian</option>
@@ -155,7 +154,7 @@ class Settings extends React.Component {
             </div>*/}
             {/*<div className="row">
                 <div className="small-12 medium-6 large-4 columns">
-                    <label>{tt('g.choose_currency')}
+                    <label>{translate('choose_currency')}
                         <select defaultValue={store.get('currency')} onChange={this.handleCurrencyChange}>
                             {
                                 ALLOWED_CURRENCIES.map(i => {
@@ -168,40 +167,40 @@ class Settings extends React.Component {
             </div>*/}
             <div className="row">
                 <form onSubmit={this.handleSubmitForm} className="small-12 medium-6 large-4 columns">
-                    <h4>{tt('settings_jsx.public_profile_settings')}</h4>
+                    <h3>Public Profile Settings</h3>
                     <label>
-                        {tt('settings_jsx.profile_image_url')}
+                        {translate('profile_image_url')}
                         <input type="url" {...profile_image.props} autoComplete="off" />
                     </label>
                     <div className="error">{profile_image.blur && profile_image.touched && profile_image.error}</div>
 
                     <label>
-                        {tt('settings_jsx.profile_name')}
+                        {translate('profile_name')}
                         <input type="text" {...name.props} maxLength="20" autoComplete="off" />
                     </label>
                     <div className="error">{name.touched && name.error}</div>
 
                     <label>
-                        {tt('settings_jsx.profile_about')}
+                        {translate('profile_about')}
                         <input type="text" {...about.props} maxLength="160" autoComplete="off" />
                     </label>
                     <div className="error">{about.touched && about.error}</div>
 
                     <label>
-                        {tt('settings_jsx.profile_location')}
+                        {translate('profile_location')}
                         <input type="text" {...location.props} maxLength="30" autoComplete="off" />
                     </label>
                     <div className="error">{location.touched && location.error}</div>
 
                     <label>
-                        {tt('settings_jsx.profile_website')}
+                        {translate('profile_website')}
                         <input type="url" {...website.props} maxLength="100" autoComplete="off" />
                     </label>
                     <div className="error">{website.blur && website.touched && website.error}</div>
 
                     <br />
                     {state.loading && <span><LoadingIndicator type="circle" /><br /></span>}
-                    {!state.loading && <input type="submit" className="button" value={tt('settings_jsx.update')} disabled={disabled} />}
+                    {!state.loading && <input type="submit" className="button" value="Update" disabled={disabled} />}
                     {' '}{
                             state.errorMessage
                                 ? <small className="error">{state.errorMessage}</small>
@@ -214,28 +213,26 @@ class Settings extends React.Component {
 
             {isOwnAccount &&
                 <div className="row">
-                    <div className="small-12 medium-6 large-4 columns">
+                    <div className="small-12 columns">
                         <br /><br />
-                        <h4>{tt('settings_jsx.private_post_display_settings')}</h4>
+                        <h3>Private Post Display Settings</h3>
                         <div>
-                            {tt('settings_jsx.not_safe_for_work_nsfw_content')}
+                            Not safe for work (NSFW) content
                         </div>
                         <select value={this.state.nsfwPref} onChange={this.onNsfwPrefChange}>
-                            <option value="hide">{tt('settings_jsx.always_hide')}</option>
-                            <option value="warn">{tt('settings_jsx.always_warn')}</option>
-                            <option value="show">{tt('settings_jsx.always_show')}</option>
+                            <option value="hide">Always hide</option>
+                            <option value="warn">Always warn</option>
+                            <option value="show">Always show</option>
                         </select>
-                        <br />
-                        <br />
-                        <input type="submit" onClick={this.onNsfwPrefSubmit} className="button" value={tt('settings_jsx.update')} disabled={this.state.nsfwPref == this.state.oldNsfwPref} />
-                        <div>&nbsp;</div>
+                        <br /><br />
+                        <input type="submit" onClick={this.onNsfwPrefSubmit} className="button" value="Update" disabled={this.state.nsfwPref == this.state.oldNsfwPref} />
                     </div>
                 </div>}
             {ignores && ignores.size > 0 &&
                 <div className="row">
-                    <div className="small-12 medium-6 large-4 columns">
+                    <div className="small-12 columns">
                         <br /><br />
-                        <UserList title={tt('settings_jsx.muted_users')} account={account} users={ignores} />
+                        <UserList title="Muted Users" account={account} users={ignores} />
                     </div>
                 </div>}
         </div>

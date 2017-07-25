@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router';
 import {connect} from 'react-redux';
 import { browserHistory } from 'react-router';
-import tt from 'counterpart';
 
 class Topics extends React.Component {
     static propTypes = {
@@ -38,7 +37,7 @@ class Topics extends React.Component {
 
         if (compact) {
             return <select className={cn} onChange={(e) => browserHistory.push(e.target.value)} value={currentValue}>
-                <option key={'*'} value={'/' + order}>{tt('g.topics')}...</option>
+                <option key={'*'} value={'/' + order}>Topics...</option>
                 {categories.map(cat => {
                     const link = order ? `/${order}/${cat}` : `/${cat}`;
                     return <option key={cat} value={link}>{cat}</option>
@@ -54,11 +53,11 @@ class Topics extends React.Component {
         });
         return (
             <ul className={cn}>
-                <li className="Topics__title" key={'*'}>{tt('g.tags_and_topics')}</li>
+                <li className="Topics__title" key={'*'}>Tags and Topics</li>
                 <hr />
                {categories}
                <li className="show-more">
-                   <Link to={`/tags`}>{tt('g.show_more_topics')}..</Link>
+                   <Link to={`/tags`}>Show more topics..</Link>
                </li>
             </ul>
         );

@@ -8,7 +8,7 @@ import PostsList from 'app/components/cards/PostsList';
 import {isFetchingOrRecentlyUpdated} from 'app/utils/StateFunctions';
 import {Link} from 'react-router';
 import MarkNotificationRead from 'app/components/elements/MarkNotificationRead';
-import tt from 'counterpart';
+import { translate } from 'app/Translator';
 import Immutable from "immutable";
 import Callout from 'app/components/elements/Callout';
 
@@ -76,15 +76,15 @@ class PostsIndex extends React.Component {
             const isMyAccount = this.props.username === account_name;
             if (isMyAccount) {
                 emptyText = <div>
-                    {tt('posts_index.empty_feed_1')}.<br /><br />
-                    {tt('posts_index.empty_feed_2')}.<br /><br />
-                    <Link to="/trending">{tt('posts_index.empty_feed_3')}</Link><br />
-                    <Link to="/welcome">{tt('posts_index.empty_feed_4')}</Link><br />
-                    <Link to="/faq.html">{tt('posts_index.empty_feed_5')}</Link><br />
+                    {translate('empty_feed_1')}.<br /><br />
+                    {translate('empty_feed_2')}.<br /><br />
+                    <Link to="/trending">{translate('empty_feed_3')}</Link><br />
+                    <Link to="/welcome">{translate('empty_feed_4')}</Link><br />
+                    <Link to="/faq.html">{translate('empty_feed_5')}</Link><br />
                 </div>;
                 markNotificationRead = <MarkNotificationRead fields="feed" account={account_name} />
             } else {
-                emptyText = <div>{tt('user_profile.user_hasnt_followed_anything_yet', {name: account_name})}</div>;
+                emptyText = <div>{translate('user_hasnt_followed_anything_yet', {name: account_name})}</div>;
             }
         } else {
             posts = this.getPosts(order, category);
@@ -116,7 +116,7 @@ class PostsIndex extends React.Component {
                 </div>
                 <div className="PostsIndex__topics column shrink show-for-large">
                     <Topics order={topics_order} current={category} compact={false} />
-                    <small><a onClick={this.onShowSpam}>{tt(showSpam ? 'g.next_3_strings_together.show_less' : 'g.next_3_strings_together.show_more')}</a>{' ' + tt('g.next_3_strings_together.value_posts')}</small>
+                    <small><a onClick={this.onShowSpam}>{translate(showSpam ? 'show_less' : 'show_more')}</a>{' ' + translate('value_posts')}</small>
                 </div>
             </div>
         );

@@ -3,8 +3,9 @@ import {connect} from 'react-redux';
 import ReactDOM from 'react-dom';
 import transaction from 'app/redux/Transaction';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import { DEBT_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN, DEBT_TICKER} from 'app/client_config';
-import tt from 'counterpart';
+import {DEBT_TOKEN_SHORT, CURRENCY_SIGN, DEBT_TICKER} from 'app/client_config';
+import { translate } from 'app/Translator';
+
 
 class PromotePost extends Component {
 
@@ -71,25 +72,25 @@ class PromotePost extends Component {
            <div className="PromotePost row">
                <div className="column small-12">
                    <form onSubmit={this.onSubmit} onChange={() => this.setState({trxError: ''})}>
-                       <h4>{tt('promote_post_jsx.promote_post')}</h4>
-                       <p>{tt('promote_post_jsx.spend_your_DEBT_TOKEN_to_advertise_this_post', {DEBT_TOKEN})}.</p>
+                       <h4>{translate('promote_post')}</h4>
+                       <p>{translate('spend_your_DEBT_TOKEN_to_advertise_this_post')}.</p>
                        <hr />
                        <div className="row">
                            <div className="column small-4">
-                               <label>{tt('g.amount')}</label>
+                               <label>{translate('amount')}</label>
                                <div className="input-group">
-                                   <input className="input-group-field" type="text" placeholder={tt('g.amount')} value={amount} ref="amount" autoComplete="off" disabled={loading} onChange={this.amountChange} />
+                                   <input className="input-group-field" type="text" placeholder={translate('amount')} value={amount} ref="amount" autoComplete="off" disabled={loading} onChange={this.amountChange} />
                                    <span className="input-group-label">{DEBT_TOKEN_SHORT + ' '} ({CURRENCY_SIGN})</span>
                                    <div className="error">{amountError}</div>
                                </div>
                            </div>
                        </div>
-                       <div>{`${tt('g.balance')}: ${balance} ${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}</div>
+                       <div>{`${translate('balance')}: ${balance} ${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}</div>
                        <br />
                        {loading && <span><LoadingIndicator type="circle" /><br /></span>}
                        {!loading && <span>
                            {trxError && <div className="error">{trxError}</div>}
-                           <button type="submit" className="button" disabled={submitDisabled}>{tt('g.promote')}</button>
+                           <button type="submit" className="button" disabled={submitDisabled}>{translate('promote')}</button>
                         </span>}
                    </form>
                </div>
@@ -120,7 +121,7 @@ export default connect(
                 from: username,
                 to: 'null', amount: parseFloat(amount, 10).toFixed(3) + ' ' + asset,
                 memo: `@${author}/${permlink}`,
-                __config: {successMessage: tt('t.you_successfully_promoted_this_post') + '.'}
+                __config: {successMessage: translate('you_successfully_promoted_this_post') + '.'}
             }
             dispatch(transaction.actions.broadcastOperation({
                 type: 'transfer',

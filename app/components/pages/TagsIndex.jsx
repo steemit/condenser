@@ -3,7 +3,6 @@ import { Link } from 'react-router';
 import {connect} from 'react-redux';
 import { browserHistory } from 'react-router';
 import { numberWithCommas } from 'app/utils/StateFunctions';
-import tt from 'counterpart';
 
 export default class TagsIndex extends React.Component {
     static propTypes = {
@@ -61,10 +60,10 @@ export default class TagsIndex extends React.Component {
         }).toArray();
 
         const cols = [
-            ['name', tt('g.tag')],
-            ['posts', tt('g.posts')],
-            ['comments', tt('g.comments')],
-            ['payouts', tt('g.payouts')]
+            ['name', 'Tag'],
+            ['posts', 'Posts'],
+            ['comments', 'Comments'],
+            ['payouts', 'Payouts']
         ].map( col => {
             return <th key={col[0]}>
                     {order === col[0]
@@ -77,7 +76,7 @@ export default class TagsIndex extends React.Component {
             <div className="TagsIndex row">
                 <div className="column">
                     <br />
-                    <h4>{tt('g.trending_topics')}</h4>
+                    <h4>Trending Topics</h4>
                     <table>
                         <thead>
                         <tr>

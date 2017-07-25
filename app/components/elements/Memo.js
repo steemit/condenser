@@ -1,8 +1,8 @@
-import React, {PropTypes} from 'react';
-import {connect} from 'react-redux';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
-import tt from 'counterpart';
-import {memo} from 'steem';
+import React, {PropTypes} from 'react'
+import {connect} from 'react-redux'
+import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
+import { translate } from 'app/Translator';
+import {memo} from 'steem'
 
 class Memo extends React.Component {
     static propTypes = {
@@ -33,7 +33,7 @@ class Memo extends React.Component {
         if(!isEncoded) return <span>{text}</span>
         if(!myAccount) return <span></span>
         if(memo_private) return <span>{decodeMemo(memo_private, text)}</span>
-        return <span>{tt('g.login_to_see_memo')}</span>
+        return <span>{translate('login_to_see_memo')}</span>
     }
 }
 

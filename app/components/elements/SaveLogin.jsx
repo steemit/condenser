@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import Tooltip from 'app/components/elements/Tooltip'
 import {connect} from 'react-redux'
 import user from 'app/redux/User'
-import tt from 'counterpart';
+import { translate } from 'app/Translator';
 
 const {bool, func} = PropTypes
 
@@ -18,8 +18,8 @@ class SaveLogin extends Component {
         setTimeout(() => {no()}, 7.5 * 1000)
         return (
             <span style={{backgroundColor: 'white'}}>
-                <Tooltip t={tt('g.remember_voting_and_posting_key')}>
-                    {tt('g.auto_login_question_mark')} <a onClick={yes} className="uppercase">{tt('g.yes')}</a> / <a onClick={no} className="uppercase">{tt('g.no')}</a>
+                <Tooltip t={translate('remember_voting_and_posting_key')}>
+                    {translate('auto_login_question_mark')} <a onClick={yes} className="uppercase">{translate('yes')}</a> / <a onClick={no} className="uppercase">{translate('no')}</a>
                 </Tooltip>
             </span>
         )

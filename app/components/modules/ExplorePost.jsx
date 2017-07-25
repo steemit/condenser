@@ -3,7 +3,6 @@ import {connect} from 'react-redux';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import Icon from 'app/components/elements/Icon';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import tt from 'counterpart';
 
 class ExplorePost extends Component {
 
@@ -52,10 +51,10 @@ class ExplorePost extends Component {
         const busy = 'https://busy.org' + link;
         const steemit = 'https://steemit.com' + link;
         const phist = 'https://phist.steemdata.com/history?identifier=steemit.com' + link;
-        let text = this.state.copied == true ? tt('explorepost_jsx.copied') : tt('explorepost_jsx.copy');
+        let text = this.state.copied == true ? 'Copied!' : 'COPY';
         return (
             <span className="ExplorePost">
-                <h4>{tt('g.share_this_post')}</h4>
+                <h4>Share this post</h4>
                 <hr />
                 <div className="input-group">
                     <input className="input-group-field share-box" type="text" value={steemit} onChange={(e) => e.preventDefault()} />
@@ -63,7 +62,7 @@ class ExplorePost extends Component {
                       <span>{text}</span>
                     </CopyToClipboard>
                 </div>
-                <h5>{tt('explorepost_jsx.alternative_sources')}</h5>
+                <h5>Alternative Sources</h5>
                 <ul>
                     <li><a href={steemd} onClick={this.Steemd} target="_blank" rel="noopener noreferrer">steemd.com <Icon name="extlink" /></a></li>
                     <li><a href={steemdb} onClick={this.Steemdb} target="_blank" rel="noopener noreferrer">steemdb.com <Icon name="extlink" /></a></li>

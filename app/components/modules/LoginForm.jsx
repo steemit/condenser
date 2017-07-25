@@ -8,8 +8,6 @@ import runTests from 'app/utils/BrowserTests';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import reactForm from 'app/utils/ReactForm'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
-import tt from 'counterpart';
-import { APP_URL } from 'app/client_config';
 import {PrivateKey, PublicKey} from 'steem/lib/auth/ecc';
 
 class LoginForm extends Component {
@@ -67,10 +65,10 @@ class LoginForm extends Component {
             fields: ['username', 'password', 'saveLogin:checked'],
             initialValues: props.initialValues,
             validation: values => ({
-                username: ! values.username ? tt('g.required') : validate_account_name(values.username.split('/')[0]),
-                password: ! values.password ? tt('g.required') :
-                    PublicKey.fromString(values.password) ? tt('loginform_jsx.you_need_a_private_password_or_key') :
-                        null,
+                username: ! values.username ? 'Required' : validate_account_name(values.username.split('/')[0]),
+                password: ! values.password ? 'Required' :
+                    PublicKey.fromString(values.password) ? 'You need a private password or key (not a public key)' :
+                    null,
             })
         })
     }
@@ -102,7 +100,7 @@ class LoginForm extends Component {
         if (!process.env.BROWSER) {
             return <div className="row">
                 <div className="column">
-                    <p>{('loading')}...</p>
+                    <p>Loading..</p>
                 </div>
             </div>;
         }
@@ -110,9 +108,9 @@ class LoginForm extends Component {
             return <div className="row">
                 <div className="column">
                     <div className="callout alert">
-                        <h4>{tt('loginform_jsx.cryptography_test_failed')}</h4>
-                        <p>{tt('loginform_jsx.unable_to_log_you_in')}</p>
-                        <p>{tt('loginform_jsx.the_latest_versions_of')} <a href="https://www.google.com/chrome/">Chrome</a> {tt('g.and')} <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a> {tt('loginform_jsx.are_well_tested_and_known_to_work_with', {APP_URL})}</p>
+                        <h4>Cryptography test failed</h4>
+                        <p>We will be unable to log you in with this browser.</p>
+                        <p>The latest versions of <a href="https://www.google.com/chrome/">Chrome</a> and <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a> are well tested and known to work with steemit.com.</p>
                     </div>
                 </div>
             </div>;
@@ -122,7 +120,7 @@ class LoginForm extends Component {
             return <div className="row">
                 <div className="column">
                     <div className="callout alert">
-                        <p>{tt('loginform_jsx.due_to_server_maintenance')}</p></div>
+                        <p>Due to server maintenance we are running in read only mode. We are sorry for the inconvenience.</p></div>
                 </div>
             </div>;
         }
@@ -135,71 +133,75 @@ class LoginForm extends Component {
         const opType = loginBroadcastOperation ? loginBroadcastOperation.get('type') : null;
         let postType = "";
         if (opType === "vote") {
-            postType = tt('loginform_jsx.login_to_vote')
+            postType = 'Login to Vote'
         } else if (opType === "custom_json" && loginBroadcastOperation.getIn(['operation', 'id']) === "follow") {
             postType = 'Login to Follow Users'
         } else if (loginBroadcastOperation) {
             // check for post or comment in operation
-            postType = loginBroadcastOperation.getIn(['operation', 'title']) ? tt('loginform_jsx.login_to_post') : tt('loginform_jsx.login_to_comment');
+            postType = loginBroadcastOperation.getIn(['operation', 'title']) ? 'Login to Post' : 'Login to Proceed';
         }
-        const title = postType ? postType : tt('g.login');
-        const authType = /^vote|comment/.test(opType) ? tt('loginform_jsx.posting') : tt('loginform_jsx.active_or_owner');
-        const submitLabel = loginBroadcastOperation ? tt('g.sign_in') : tt('g.login');
+        const title = postType ? postType : 'Login';
+        const authType = /^vote|comment/.test(opType) ? 'Posting' : 'Active or Owner';
+        const submitLabel = loginBroadcastOperation ? 'Sign In' : 'Login';
         let error = password.touched && password.error ? password.error : this.props.login_error;
         if (error === 'owner_login_blocked') {
-            error = <span>{tt('loginform_jsx.this_password_is_bound_to_your_account')}
-                {tt('loginform_jsx.however_you_can_use_it_to')}<a onClick={this.showChangePassword}>{tt('loginform_jsx.update_your_password')}</a> {tt('loginform_jsx.to_obtain_a_more_secure_set_of_keys')}</span>
+            error = <span>This password is bound to your account&apos;s owner key and can not be used to login to this site.
+                However, you can use it to <a onClick={this.showChangePassword}>update your password</a> to obtain a more secure set of keys.</span>
         } else if (error === 'active_login_blocked') {
-            error = <span>{tt('loginform_jsx.this_password_is_bound_to_your_account_active_key')} {tt('loginform_jsx.you_may_use_this_active_key_on_other_more')}</span>
+            error = <span>This password is bound to your account&apos;s active key and can not be used to login to this page.  You may use this
+                active key on other more secure pages like the Wallet or Market pages.</span>
         }
         let message = null;
         if (msg) {
             if (msg === 'accountcreated') {
                 message =<div className="callout primary">
-                    <p>{tt('loginform_jsx.you_account_has_been_successfully_created')}</p>
-                </div>;
+                        <p>You account has been successfully created!</p>
+                    </div>;
             }
             else if (msg === 'accountrecovered') {
                 message =<div className="callout primary">
-                    <p>{tt('loginform_jsx.you_account_has_been_successfully_recovered')}</p>
+                    <p>You account has been successfully recovered!</p>
                 </div>;
             }
             else if (msg === 'passwordupdated') {
                 message = <div className="callout primary">
-                    <p>{tt('loginform_jsx.password_update_succes', {accountName: username.value})}</p>
+                    <p>The password for `{username.value}` was successfully updated.</p>
                 </div>;
             }
         }
-        const password_info = checkPasswordChecksum(password.value) === false ? tt('loginform_jsx.password_info') : null
+        const password_info = checkPasswordChecksum(password.value) === false ?
+            'This password or private key was entered incorrectly.  There is probably a handwriting or data-entry error.  Hint: A password or private key generated by Steemit will never contain 0 (zero), O (capital o), I (capital i) and l (lower case L) characters.' :
+            null
 
         const form = (
+            <center>
             <form onSubmit={handleSubmit(({data}) => {
                 // bind redux-form to react-redux
                 console.log('Login\tdispatchSubmit');
                 return dispatchSubmit(data, loginBroadcastOperation, afterLoginRedirectToWelcome)
             })}
-                  onChange={this.props.clearError}
-                  method="post"
+                onChange={this.props.clearError}
+                method="post"
             >
                 <div className="input-group">
                     <span className="input-group-label">@</span>
-                    <input className="input-group-field" type="text" required placeholder={tt('loginform_jsx.enter_your_username')} ref="username"
-                           {...username.props} onChange={usernameOnChange} autoComplete="on" disabled={submitting}
+                    <input className="input-group-field" type="text" required placeholder="Enter your username" ref="username"
+                        {...username.props} onChange={usernameOnChange} autoComplete="on" disabled={submitting}
                     />
                 </div>
                 {username.touched && username.blur && username.error ? <div className="error">{username.error}&nbsp;</div> : null}
 
                 <div>
-                    <input type="password" required ref="pw" placeholder={tt('loginform_jsx.password_or_wif')} {...password.props} autoComplete="on" disabled={submitting} />
+                    <input type="password" required ref="pw" placeholder="Password or WIF" {...password.props} autoComplete="on" disabled={submitting} />
                     {error && <div className="error">{error}&nbsp;</div>}
                     {error && password_info && <div className="warning">{password_info}&nbsp;</div>}
                 </div>
                 {loginBroadcastOperation && <div>
-                    <div className="info">{tt('loginform_jsx.this_operation_requires_your_key_or_master_password', {authType})}</div>
+                    <div className="info">This operation requires your {authType} key or Master password.</div>
                 </div>}
                 <div>
                     <label htmlFor="saveLogin">
-                        {tt('loginform_jsx.keep_me_logged_in')} &nbsp;
+                        Keep me logged in &nbsp;
                         <input id="saveLogin" type="checkbox" ref="pw" {...saveLogin.props} onChange={this.saveLoginToggle} disabled={submitting} /></label>
                 </div>
                 <div>
@@ -208,28 +210,29 @@ class LoginForm extends Component {
                         {submitLabel}
                     </button>
                     {this.props.onCancel && <button type="button float-right" disabled={submitting} className="button hollow" onClick={onCancel}>
-                        {tt('g.cancel')}
+                        Cancel
                     </button>}
                 </div>
                 {authType == 'Posting' &&
-                <div>
-                    <hr />
-                    <p>{tt('loginform_jsx.join_our')} <span className="free-slogan">{tt('loginform_jsx.amazing_community')}</span>{tt('loginform_jsx.to_comment_and_reward_others')}</p>
-                    <button type="button" className="button sign-up" onClick={this.SignUp}>{tt('loginform_jsx.sign_up_now_to_receive')}<span className="free-money">{tt('loginform_jsx.free_money')}</span></button>
-                </div>}
+                    <div>
+                        <hr />
+                        <p>Join our <span className="free-slogan">amazing community</span> to comment and reward others.</p>
+                        <button type="button" className="button sign-up" onClick={this.SignUp}>Sign up now to receive <span className="free-money">FREE STEEM!</span></button>
+                    </div>}
             </form>
+        </center>
         );
 
         return (
-            <div className="LoginForm row">
-                <div className="column">
-                    {message}
-                        <h3>{tt('loginform_jsx.returning_users')}<span className="OpAction">{title}</span></h3>
-                    <br />
-                    {form}
-                </div>
-            </div>
-        )
+           <div className="LoginForm">
+               {message}
+               <center>
+                   <h3>Returning Users: <span className="OpAction">{title}</span></h3>
+               </center>
+               <br />
+               {form}
+           </div>
+       )
     }
 }
 

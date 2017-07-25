@@ -1,6 +1,6 @@
 import React from "react";
 import OrderbookRow from "./OrderbookRow";
-import tt from 'counterpart';
+import { translate } from 'app/Translator.js';
 import { LIQUID_TOKEN, DEBT_TOKEN_SHORT, CURRENCY_SIGN } from 'app/client_config';
 
 export default class Orderbook extends React.Component {
@@ -49,10 +49,10 @@ export default class Orderbook extends React.Component {
         return (
             <thead>
                 <tr>
-                    <th>{buy ? tt('market_jsx.total_DEBT_TOKEN_SHORT_CURRENCY_SIGN', {DEBT_TOKEN_SHORT, CURRENCY_SIGN}) : tt('g.price')}</th>
+                    <th>{translate(buy ? "total_DEBT_TOKEN_SHORT_CURRENCY_SIGN" : "price")}</th>
                     <th>{buy ? `${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})` : LIQUID_TOKEN}</th>
                     <th>{buy ? LIQUID_TOKEN : `${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}</th>
-                    <th>{buy ? tt('g.price') : tt('market_jsx.total_DEBT_TOKEN_SHORT_CURRENCY_SIGN', {DEBT_TOKEN_SHORT, CURRENCY_SIGN})}</th>
+                    <th>{translate(buy ? "price" : "total_DEBT_TOKEN_SHORT_CURRENCY_SIGN")}</th>
                 </tr>
             </thead>
         );
@@ -109,12 +109,12 @@ export default class Orderbook extends React.Component {
                   <ul className="pager">
                     <li>
                         <div className={"button tiny hollow " + (buy ? "float-left" : "float-left") + (currentIndex === 0 ? " disabled" : "")} onClick={this._setBuySellPage.bind(this, false)} aria-label="Previous">
-                            <span aria-hidden="true">&larr; {tt(buy ? 'market_jsx.higher' : 'market_jsx.lower')}</span>
+                            <span aria-hidden="true">&larr; {translate(buy ? "higher" : "lower")}</span>
                         </div>
                     </li>
                     <li>
                         <div className={"button tiny hollow " + (buy ? "float-right" : "float-right") + (currentIndex >= (orders.length - 10) ? " disabled" : "")} onClick={this._setBuySellPage.bind(this, true)} aria-label="Next">
-                            <span aria-hidden="true">{tt(buy ? 'market_jsx.lower' : 'market_jsx.higher')} &rarr;</span>
+                            <span aria-hidden="true">{translate(buy ? "lower" : "higher")} &rarr;</span>
                         </div>
                     </li>
                   </ul>

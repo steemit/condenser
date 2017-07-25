@@ -555,9 +555,16 @@
     "phone_verification_helps_with_preventing_spam": "Phone verification helps with preventing spam and allows $(APP_NAME)s to assist with Account Recovery in case your account is ever compromised. Your phone number will not be used for any other purpose other than phone verification and account recovery.",
     "country_code": "Country Code",
     "phone_number": "Phone number",
-    "examples": "Examples: 541-754-3010 | 89-636-48018",
-    "land_lines_cannot_receive_sms_messages": "* Land lines cannot receive SMS messages",
+    "examples": "Enter number without country code, for example: 541-754-3010 | 89-636-48018",
+    "land_lines_cannot_receive_sms_messages": "* Land lines cannot send or receive SMS messages",
     "message_and_data_rates_may_apply": "* Message and data rates may apply",
+    "why_send_sms": "Why send SMS?",
+    "mobile_description": {
+      "one": "Right now, the registration on media-blockchain %(APP_NAME)s costs money for the system. In order for the community to grow quicker, we take those costs on board and pay out 5 %(APP_NAME)s tokens to each new member.",
+      "second": "Unfortunately, people have started to take advantage of that and automated account registration had started to grow. Verification methods like: email checks, scripts or sending out a free sms verification, simply do not work. And cannot prove that the registry isn't a robot.",
+      "third": "Accepting a paid sms from a user, is a good method to check out his motivation to register on the %(APP_NAME)s platform, also it is by far, more economically efficient for the whole system.",
+      "fourth": "We are interested in real users (not bots) to register on our platform, hence, we kindly ask you to send out an sms to the stated number. It is no more than a human verification process. And works for the best of the whole community. Thank you!"
+    },
     "APP_NAME_wants_you_to_know": "* Your mobile provider's standard rates for sending and receiving text messages still apply.",
     "thank_you_for_providing_your_phone_number": "Thank you for providing your phone number.",
     "to_continue_please_enter_the_sms_code_weve_sent_you": "To continue please enter the SMS code we've sent you.",

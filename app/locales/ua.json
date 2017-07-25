@@ -95,9 +95,16 @@
     "phone_verification_helps_with_preventing_spam": "Phone verification helps with preventing spam and allows $(APP_NAME)s to assist with Account Recovery in case your account is ever compromised. Your phone number will not be used for any other purpose other than phone verification and account recovery.",
     "country_code": "Country Code",
     "phone_number": "Phone number",
-    "examples": "Examples: 541-754-3010 | 89-636-48018",
-    "land_lines_cannot_receive_sms_messages": "* Land lines cannot receive SMS messages",
+    "examples": "Enter number without country code, for example: 541-754-3010 | 89-636-48018",
+    "land_lines_cannot_receive_sms_messages": "* Land lines cannot send or receive SMS messages",
     "message_and_data_rates_may_apply": "* Message and data rates may apply",
+    "why_send_sms": "Навiщо вiдправляти СМС?",
+    "mobile_description": {
+      "one": " Реєстрація в медіаблокчейні % (APP_NAME) s - платна, в даний час з метою зростання і популяризації нашого співтовариства, ми беремо ці витрати на себе, нараховуючи по 5 токенів % (APP_NAME) s на кожен новий акаунт. ",
+      "second": "На жаль, ми зіткнулися з тим, що почастішали випадки реєстрації акаунтів в автоматичному режимі. Способи верифікації живих користувачів, такі як скрипти, поштове підтвердження, підтвердження телефону шляхом відправки користувачеві текстового коду і системи верифікації  'Я не робот' не працюють.",
+      "third": " Прийом текстового смс повідомлення від користувача - гарний спосіб підтвердження мотивації користувача до реєстрації на нашому ресурсі, до того ж це економічно вигідніше для екосистеми всієї медіаблокчейн платфроми % (APP_NAME) s.",
+      "fourth": "Ми зацікавлені в реєстраціях справжніх людей (не роботів), саме тому просимо Вас відправити СМС на вказаний номер. Це не більше ніж умовна верифікація, що Ви - людина. Дане обмеження працює на благо всієї спільноти."
+    },
     "APP_NAME_wants_you_to_know": "* Вартість відправки та отримання текстових повідомлень відповідає  поточному тарифному плану Вашого мобільного оператора.",
     "thank_you_for_providing_your_phone_number": "Thank you for providing your phone number.",
     "to_continue_please_enter_the_sms_code_weve_sent_you": "To continue please enter the SMS code we've sent you.",

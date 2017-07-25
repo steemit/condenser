@@ -95,6 +95,7 @@
     "phone_verification_helps_with_preventing_spam": "Phone verification helps with preventing spam and allows $(APP_NAME)s to assist with Account Recovery in case your account is ever compromised. Your phone number will not be used for any other purpose other than phone verification and account recovery.",
     "country_code": "Country Code",
     "phone_number": "Phone number",
+    "without_country_code": "Without country code",
     "examples": "Enter number without country code, for example: 541-754-3010 | 89-636-48018",
     "land_lines_cannot_receive_sms_messages": "* Land lines cannot send or receive SMS messages",
     "message_and_data_rates_may_apply": "* Message and data rates may apply",

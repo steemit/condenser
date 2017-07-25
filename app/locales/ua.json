@@ -70,6 +70,7 @@
     "confirm": "Підтвердити"
   },
   "converttosteem_jsx": {
+    "confirm_title" : "Подтвердіть Конвертацію",
     "this_is_a_price_feed_conversion": "Це котування ціни. Потрібен тиждень відстрочки, щоб запобігти зловживанням від гри на середній ціновій катировці.",
     "convert_to_LIQUID_TOKEN": "Перевести в %(LIQUID_TOKEN)s",
     "your_existing_DEBT_TOKEN_are_liquid_and_transferable": "Токени %(DEBT_TOKEN)s ліквідні, та їх можливо передавати між акаунтами. Перед запуском конвертації, перевірте опції %(link)s %(DEBT_TOKEN)s, на внутрішній біржі. Також, токен %(DEBT_TOKEN)s, доступний до віводу (і торгівлі) на зовнішніх біржах.",

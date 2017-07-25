@@ -70,6 +70,7 @@
     "confirm":"Confirmă"
   },
   "converttosteem_jsx":{
+    "confirm_title" : "Подтвердите Конвертацию",
     "this_is_a_price_feed_conversion":"Săptămâna de repaos prin conversia automată este necesară pentru a preveni abuzul de speculații, la o cotatie medie de preț.",
     "convert_to_LIQUID_TOKEN":"Convertați în %(LIQUID_TOKEN)s",
     "your_existing_DEBT_TOKEN_are_liquid_and_transferable":"Tokenurile %(DEBT_TOKEN)s sunt lichide și pot fi transferate între conturi. Înainte de a începe conversia, verificați opțiunile %(link)s %(DEBT_TOKEN)s, la bursa internă. De asemenea, tokenul %(DEBT_TOKEN)s, e accesibil retrage (și comerț) pe bursele externe.",

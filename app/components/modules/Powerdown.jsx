@@ -8,6 +8,7 @@ import user from 'app/redux/User';
 import tt from 'counterpart'
 import {numberWithCommas, vestingSteem, vestsToSp} from 'app/utils/StateFunctions'
 
+
 class Powerdown extends React.Component {
 
     constructor() {

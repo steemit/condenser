@@ -656,6 +656,7 @@
     "after_printing_write_down_your_user_name": "After printing, write down your user name"
   },
   "converttosteem_jsx": {
+    "confirm_title" : "Confirm Convert",
     "this_is_a_price_feed_conversion": "This is a price feed conversion. The 3.5 day delay is necessary to prevent abuse from gaming the price feed average",
     "convert_to_LIQUID_TOKEN": "Convert to %(LIQUID_TOKEN)s",
     "your_existing_DEBT_TOKEN_are_liquid_and_transferable": "Your existing %(DEBT_TOKEN)s are liquid and transferable. Instead you may wish to trade %(DEBT_TOKEN)s directly in this site under %(link)s or transfer to an external market.",

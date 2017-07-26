@@ -86,6 +86,9 @@ shapeshif
 shapeshift
 randomwhale
 coinpayments
+minnowboost
+minnowboster
+minowbooster
 `.trim().split('\n');
 
 export default list;

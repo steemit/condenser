@@ -142,8 +142,8 @@ class TransferForm extends Component {
             >
                 {toVesting && <div className="row">
                     <div className="column small-12">
-                        <p>{powerTip}</p>
-                        <p>{powerTip2}</p>
+                        <p>{tt('tips_js.influence_token')}</p>
+                        <p>{tt('tips_js.non_transferable', {LIQUID_TOKEN, VESTING_TOKEN})}</p>
                     </div>
                 </div>}
 

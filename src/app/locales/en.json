@@ -585,7 +585,7 @@
     "tokens_worth_about_AMOUNT_of_LIQUID_TOKEN": "Tokens worth about %(amount)s of %(LIQUID_TOKEN)s.",
     "influence_token": "Influence tokens which give you more control over post payouts and allow you to earn on curation rewards.",
     "estimated_value": "The estimated value is based on an average value of %(LIQUID_TOKEN)s in US dollars.",
-    "VESTING_TOKEN_is_non_transferrable_and_requires_convert_back_to_LIQUID_TOKEN": "%(VESTING_TOKEN)s is non-transferrable and requires 3 months (13 payments) to convert back to %(LIQUID_TOKEN)s.",
+    "non_transferable": "%(VESTING_TOKEN)s is non-transferable and requires 3 months (13 payments) to convert back to %(LIQUID_TOKEN)s.",
     "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again": "Converted %(VESTING_TOKEN)s can be sent to yourself or someone else but can not transfer again without converting back to %(LIQUID_TOKEN)s.",
     "profile": "Profile",
     "send_to_account": "Send to account",

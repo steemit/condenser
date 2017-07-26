@@ -70,6 +70,7 @@
     "confirm":"Potvrdi"
   },
   "converttosteem_jsx":{
+    "confirm_title" : "Подтвердите Конвертацию",
     "this_is_a_price_feed_conversion":"Ovo je stranica za konverziju cena. kašnjenje od 3,5 dana je potrebno da bi se spriječile zloupotrebe od prevare prosečne cene",
     "convert_to_LIQUID_TOKEN":"Konvertuj u %(LIQUID_TOKEN)s",
     "your_existing_DEBT_TOKEN_are_liquid_and_transferable":"Vaši postojeći %(DEBT_TOKEN)s su likvidni i prenosivi. Umesto toga, možda ćete želeti da trgujete %(DEBT_TOKEN)s direktno na ovom sajtu pod %(link)s ili da prebacite sredstva na spoljnu berzu.",

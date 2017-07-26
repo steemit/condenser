@@ -402,7 +402,7 @@ const Comment = connect(
             dispatch(transaction.actions.broadcastOperation({
                 type: 'delete_comment',
                 operation: {author, permlink},
-                confirm: tt('blocktrades_deposit.are_you_sure'),
+                confirm: tt('g.are_you_sure'),
             }))
         },
     })

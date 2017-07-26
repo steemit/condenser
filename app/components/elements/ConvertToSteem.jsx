@@ -8,7 +8,7 @@ import TransactionError from 'app/components/elements/TransactionError'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
 import tt from 'counterpart';
-import { DEBT_TICKER, LIQUID_TOKEN } from 'app/client_config';
+import { DEBT_TICKER, LIQUID_TOKEN, LIQUID_TICKER } from 'app/client_config';
 
 class ConvertToSteem extends React.Component {
     constructor() {
@@ -104,11 +104,18 @@ export default reduxForm(
         convert: (owner, amt, success, error) => {
             const amount = [parseFloat(amt).toFixed(3), DEBT_TICKER].join(" ")
             const requestid = Math.floor(Date.now() / 1000)
-            const conf = tt('postfull_jsx.in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN', { amount: amount.split(' ')[0] })
+            const conf = tt('postfull_jsx.in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN',
+                { amount: amount.split(' ')[0], DEBT_TOKEN: DEBT_TICKER, LIQUID_TOKEN: LIQUID_TICKER })
             dispatch(transaction.actions.broadcastOperation({
                 type: 'convert',
-                operation: {owner, requestid, amount},
+                operation: {
+                    owner,
+                    requestid,
+                    amount,
+                    __config: {title: tt('converttosteem_jsx.confirm_title')}
+                },
                 confirm: conf + '?',
+
                 successCallback: () => {
                     success()
                     dispatch({type: 'ADD_NOTIFICATION', payload:

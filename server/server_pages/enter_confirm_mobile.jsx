@@ -88,7 +88,7 @@ function* confirmMobileHandler() {
         return;
     }
     yield mid.update({ verified: true });
-    this.body = "Thank you for validate your phone number";
+    this.body = "Thank you for validating your phone number";
     if (metrics) metrics.increment('_mobile_provier_ok');
 }
 

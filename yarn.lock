@@ -3161,7 +3161,7 @@ glogg@^1.0.0:
   dependencies:
     sparkles "^1.0.0"
 
-golos-js@^0.5.21:
+golos-js@0.5.21:
   version "0.5.21"
   resolved "https://registry.yarnpkg.com/golos-js/-/golos-js-0.5.21.tgz#1527996da1afba230d91093a09e1be791da61fe1"
   dependencies:

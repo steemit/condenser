@@ -20,7 +20,9 @@
     "choose_language": "Choose Language",
     "clear": "Clear",
     "close": "Close",
+    "collapse_or_expand": "Collapse/Expand",
     "comments": "Comments",
+    "confirm": "Confirm",
     "convert": "Convert",
     "date": "Date",
     "delete": "Delete",
@@ -75,6 +77,11 @@
     "replied_to": "replied to",
     "replies": "Replies",
     "reply": "Reply",
+    "reply_count": {
+      "zero":  "no replies",
+      "one": "1 reply",
+      "other": "%(count)s replies"
+    },
     "reputation": "Reputation",
     "reveal_comment": "Reveal Comment",
     "request": "request",
@@ -102,18 +109,17 @@
     "type": "Type",
     "unfollow": "Unfollow",
     "unmute": "Unmute",
+    "unknown": "Unknown",
     "upvote": "Upvote",
     "upvote_post": "Upvote post",
     "username": "Username",
     "version": "Version",
-    "view_the_direct_parent": "View the direct parent",
-    "view_the_full_context": "View the full context",
+
     "vote": "Vote",
     "votes": "votes",
     "wallet": "Wallet",
     "warning": "warning",
     "yes": "Yes",
-    "you_are_viewing_a_single_comments_thread_from": "You are viewing a single comment's thread from",
     "posting": "Posting",
     "owner": "Owner",
     "active": "Active",
@@ -181,7 +187,7 @@
     "APP_NAME_support": "%(APP_NAME)s Support",
     "please_email_questions_to": "Please email your questions to",
 
-    "next_7_strings_sinngle_block": {
+    "next_7_strings_single_block": {
       "authors_get_paid_when_people_like_you_upvote_their_post": "Authors get paid when people like you upvote their post",
       "if_you_enjoyed_what_you_read_earn_amount": "If you enjoyed what you read here, earn %(amount)s of %(INVEST_TOKEN_UPPERCASE)s",
       "when_you": "when you",
@@ -307,7 +313,7 @@
     "tag_your_story": "Tag (up to 5 tags), the first tag is your main category.",
     "select_a_tag": "Select a tag",
     "maximum_tag_length_is_24_characters": "Maximum tag length is 24 characters",
-    "use_limitied_amount_of_categories": "Please use only %(amount)s categories",
+    "use_limited_amount_of_categories": "Please use only %(amount)s categories",
     "use_only_lowercase_letters": "Use only lowercase letters",
     "use_one_dash": "Use only one dash",
     "use_spaces_to_separate_tags": "Use spaces to separate tags",
@@ -344,7 +350,9 @@
     "i_understand_dont_show_again": "I understand, don't show me again",
     "insufficent_balance": "Insufficient balance",
     "in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN": "In 3.5 days, convert %(amount)s %(DEBT_TOKEN)s into %(LIQUID_TOKEN)s",
-    "account_name_is_not_available": "Account name is not available"
+    "account_name_is_not_available": "Account name is not available",
+    "view_the_full_context": "View the full context",
+    "you_are_viewing_a_single_comments_thread_from": "You are viewing a single comment's thread from"
   },
   "market_jsx": {
     "action": "Action",
@@ -423,20 +431,6 @@
   "authorrewards_jsx": {
     "estimated_author_rewards_last_week": "Estimated author rewards last week",
     "author_rewards_history": "Author Rewards History"
-  },
-  "plurals": {
-    "reply_count": {
-      "zero":  "no replies",
-      "one": "1 reply",
-      "other": "%(count)s replies"
-    },
-    "author_rewards_last_24_hours": "Author rewards last 24 hours",
-    "daily_average_author_rewards": "Daily average author rewards",
-    "balance": "Balance",
-    "estimate_account_value": "Estimated Account Value",
-    "next_power_down_is_scheduled_to_happen_at": "The next power down is scheduled to happen",
-    "transfers_are_temporary_disabled": "Transfers are temporary disabled",
-    "history": "History"
   },
   "curationrewards_jsx": {
     "curation_rewards_last_24_hours": "Curation rewards last 24 hours",
@@ -585,7 +579,8 @@
     "tokens_worth_about_AMOUNT_of_LIQUID_TOKEN": "Tokens worth about %(amount)s of %(LIQUID_TOKEN)s.",
     "influence_token": "Influence tokens which give you more control over post payouts and allow you to earn on curation rewards.",
     "estimated_value": "The estimated value is based on an average value of %(LIQUID_TOKEN)s in US dollars.",
-    "VESTING_TOKEN_is_non_transferrable_and_requires_convert_back_to_LIQUID_TOKEN": "%(VESTING_TOKEN)s is non-transferrable and requires 3 months (13 payments) to convert back to %(LIQUID_TOKEN)s.",
+    "non_transferable": "%(VESTING_TOKEN)s is non-transferable and requires 3 months (13 payments) to convert back to %(LIQUID_TOKEN)s.",
+    "VESTING_TOKEN_is_non_transferable_and_requires_convert_back_to_LIQUID_TOKEN": "%(VESTING_TOKEN)s is non-transferrable and requires 3 months (13 payments) to convert back to %(LIQUID_TOKEN)s.",
     "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again": "Converted %(VESTING_TOKEN)s can be sent to yourself or someone else but can not transfer again without converting back to %(LIQUID_TOKEN)s.",
     "profile": "Profile",
     "send_to_account": "Send to account",

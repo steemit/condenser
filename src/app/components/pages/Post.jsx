@@ -164,11 +164,10 @@ class Post extends React.Component {
                 {!current_user && <div className="row">
                     <div className="column">
                         <div className="Post__promo">
-                            {tt('g.next_7_strings_sinngle_block.authors_get_paid_when_people_like_you_upvote_their_post')}.
-                            <br /> {// remove '$' from signup_bonus before parsing it into local currency
-                                    tt('g.next_7_strings_sinngle_block.if_you_enjoyed_what_you_read_earn_amount', {amount: '$'+localizedCurrency(signup_bonus.substring(1)), INVEST_TOKEN_UPPERCASE})}
+                            {tt('g.next_7_strings_single_block.authors_get_paid_when_people_like_you_upvote_their_post')}.
+                            <br />{tt('g.next_7_strings_single_block.if_you_enjoyed_what_you_read_earn_amount', {amount: '$'+localizedCurrency(signup_bonus.substring(1)), INVEST_TOKEN_UPPERCASE})}
                             <br />
-                            <button type="button" className="button sign-up" onClick={showSignUp}>{tt('g.next_7_strings_sinngle_block.sign_up_now_to_receive')}<span className="free-money">{tt('g.next_7_strings_sinngle_block.free_steem')}</span></button>
+                            <button type="button" className="button sign-up" onClick={showSignUp}>{tt('g.next_7_strings_single_block.sign_up_now_to_receive')}<span className="free-money">{tt('g.next_7_strings_single_block.free_steem')}</span></button>
                         </div>
                     </div>
                 </div>}

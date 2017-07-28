@@ -229,7 +229,7 @@ class TransferForm extends Component {
                 {memo && <div className="row">
                     <div className="column small-2" style={{paddingTop: 33}}>{tt('g.memo')}</div>
                     <div className="column small-10">
-                        <small>{tt('transfer_jsx.this_memo_is') + isMemoPrivate ? tt('transfer_jsx.private') : tt('transfer_jsx.public')}</small>
+                        <small>{tt('transfer_jsx.this_memo_is') + isMemoPrivate ? tt('transfer_jsx.public') : tt('transfer_jsx.private')}</small>
                         <input type="text" placeholder={tt('g.memo')} {...memo.props}
                             ref="memo" autoComplete="on" autoCorrect="off" autoCapitalize="off" spellCheck="false" disabled={loading} />
                         <div className="error">{memo.touched && memo.error && memo.error}&nbsp;</div>

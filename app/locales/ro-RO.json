@@ -110,7 +110,7 @@
     "APP_NAME_wants_you_to_know": "* Your mobile provider's standard rates for sending and receiving text messages still apply.",
     "thank_you_for_providing_your_phone_number": "Thank you for providing your phone number.",
     "to_continue_please_enter_the_sms_code_weve_sent_you": "To continue please enter the SMS code we've sent you.",
-    "to_continue_please_send_sms_code": "To continue please send SMS message from your mobile phone with code %(code)s to %(phone_number)s.",
+    "to_continue_please_send_sms_code": "To continue please send SMS message from your mobile phone with code %(code)s to %(phone_number)s. The text message should consist of only 4-digit code.",
     "confirmation_code": "Confirmation code",
     "didnt_receive_the_verification_code": "Didn't receive the verification code? ",
     "you_can_change_your_number": "You can change your number at any time if we didn't receive your sms with verification code. ",

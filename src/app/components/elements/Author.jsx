@@ -48,6 +48,11 @@ class Author extends React.Component {
         const {author, follow, mute, authorRepLog10} = this.props; // html
         const {username} = this.props; // redux
         const {name, about} = this.props.account ? normalizeProfile(this.props.account.toJS()) : {};
+        if (!(follow || mute) || username === author) {
+            return <span className="author" itemProp="author" itemScope itemType="http://schema.org/Person">
+                <Link to={'/@' + author}><strong>{author}</strong></Link> <Reputation value={authorRepLog10} />
+            </span>;
+        }
         return (
             <span className="Author">
                 <span

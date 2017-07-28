@@ -727,7 +727,7 @@
     "influence_tokens_which_give_you_more_control_over": "%(VESTING_TOKEN)s непереміщувана, її кількість збільшується при довгостроковому зберіганні. Чим більше у Вас %(VESTING_TOKENS)s, тим сильніше ви впливаєте на винагороди за пост і тим більше заробляєте за голосування.",
     "the_more_you_hold_the_more_you_influence_post_rewards": "Чим їх більше, тим сильніше Ви впливаєте на винагороди за пост і тим більше заробляєте за голосування.",
     "the_estimated_value_is_based_on_an_average_value_of_steem_in_US_dollars": "Оціночна вартість розраховується з 7-ми денної середньої вартості %(LIQUID_TOKEN)s.",
-    "VESTING_TOKEN_is_non_transferrable_and_requires_convert_back_to_LIQUID_TOKEN": "%(VESTING_TOKEN2)s не можна передати і буде потрібно 20 тижнів щоб перевести її назад в %(LIQUID_TOKEN)s.",
+    "VESTING_TOKEN_is_non_transferrable_and_requires_convert_back_to_LIQUID_TOKEN": "%(VESTING_TOKEN2)s не можна передати, і Вам буде потрібно 20 тижнів, щоб перевести її назад в токени %(LIQUID_TOKEN)s.",
     "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again": "Конвертована %(VESTING_TOKEN)s може бути відправлена собі або будь-кому ще, але не може бути передана знову без конвертації назад в %(LIQUID_TOKEN)s.",
     "profile": "Профіль",
     "send_to_account": "Відправити акаунту",

@@ -25,10 +25,7 @@ try {
 function runApp(initial_state) {
     console.log('Initial state', initial_state);
     const config = initial_state.offchain.config
-    if(config.use_jsonrpc)
-        steem.api.setOptions({ transport: 'http', uri: config.http_connection_client });
-    else
-        steem.config.set('websocket', config.ws_connection_client);
+    steem.api.setOptions({ url: config.steemd_connection_client });
     window.$STM_Config = config;
     plugins(config);
     if (initial_state.offchain.serverBusy) {

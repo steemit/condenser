@@ -18,10 +18,8 @@
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 310;
+  z-index: 999;
   height: 3rem;
-  overflow-x: hidden;
-  overflow-y: scroll;
   border-bottom: 1px solid $light-gray;
 }
 
@@ -57,12 +55,21 @@
 
 body.with-post-overlay {
   overflow: hidden;
+  position: fixed;
 }
 
 @media screen and (min-width: 60rem) {
-  .PostsList__post_overlay {
+
+  .PostsList__post_overlay_backdrop {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: auto;
+    background-color: $white;
     background-color: rgba(150, 150, 150, 0.9);
-  }
+  };
   .PostsList__post_top_overlay {
     border-bottom: none;
   }

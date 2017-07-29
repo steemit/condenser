@@ -7,8 +7,11 @@ import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {findParent} from 'app/utils/DomUtils';
 import Icon from 'app/components/elements/Icon';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
-import {connect} from 'react-redux'
+import {connect} from 'react-redux';
 import { translate } from 'app/Translator.js';
+
+import Modal from 'react-overlays/lib/Modal';
+import Portal from 'react-overlays/lib/Portal';
 
 function topPosition(domElt) {
     if (!domElt) {
@@ -39,12 +42,14 @@ class PostsList extends React.Component {
             thumbSize: 'desktop',
             showNegativeComments: false,
             nsfwPref: 'warn',
-            showPost: null
+            showPost: null,
+            showModal: false,
         }
         this.scrollListener = this.scrollListener.bind(this);
         this.onPostClick = this.onPostClick.bind(this);
-        this.onBackButton = this.onBackButton.bind(this);
-        this.closeOnOutsideClick = this.closeOnOutsideClick.bind(this);
+        this.closePostModal = this.closePostModal.bind(this);
+        // this.onBackButton = this.onBackButton.bind(this);
+        // this.closeOnOutsideClick = this.closeOnOutsideClick.bind(this);
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'PostsList')
     }
 
@@ -74,6 +79,7 @@ class PostsList extends React.Component {
 
     componentDidUpdate(prevProps, prevState) {
         if (this.state.showPost && !prevState.showPost) {
+            /*
             document.getElementsByTagName('body')[0].className = 'with-post-overlay';
             window.addEventListener('popstate', this.onBackButton);
             window.addEventListener('keydown', this.onBackButton);
@@ -82,6 +88,7 @@ class PostsList extends React.Component {
                 post_overlay.addEventListener('click', this.closeOnOutsideClick);
                 post_overlay.focus();
             }
+            */
         }
         if (!this.state.showPost && prevState.showPost) {
             window.history.pushState({}, '', this.props.pathname);
@@ -92,20 +99,23 @@ class PostsList extends React.Component {
 
     componentWillUnmount() {
         this.detachScrollListener();
-        window.removeEventListener('popstate', this.onBackButton);
-        window.removeEventListener('keydown', this.onBackButton);
+        // window.removeEventListener('popstate', this.onBackButton);
+        // window.removeEventListener('keydown', this.onBackButton);
         const post_overlay = document.getElementById('post_overlay');
-        if (post_overlay) post_overlay.removeEventListener('click', this.closeOnOutsideClick);
+        // if (post_overlay) post_overlay.removeEventListener('click', this.closeOnOutsideClick);
         document.getElementsByTagName('body')[0].className = "";
     }
 
+    /*
     onBackButton(e) {
         if ('keyCode' in e && e.keyCode !== 27) return;
-        window.removeEventListener('popstate', this.onBackButton);
-        window.removeEventListener('keydown', this.onBackButton);
+        // window.removeEventListener('popstate', this.onBackButton);
+        // window.removeEventListener('keydown', this.onBackButton);
         this.closePostModal();
     }
+    */
 
+    /*
     closeOnOutsideClick(e) {
         const inside_post = findParent(e.target, 'PostsList__post_container');
         if (!inside_post) {
@@ -117,10 +127,11 @@ class PostsList extends React.Component {
             }
         }
     }
+    */
 
     closePostModal = () => {
         window.document.title = this.state.prevTitle;
-        this.setState({showPost: null, prevTitle: null});
+        this.setState({showPost: null, prevTitle: null, showModal: false,});
     }
 
     fetchIfNeeded() {
@@ -167,7 +178,7 @@ class PostsList extends React.Component {
         this.post_url = url;
         this.props.fetchState(url);
         this.props.removeHighSecurityKeys();
-        this.setState({showPost: post, prevTitle: window.document.title});
+        this.setState({showModal: true, showPost: post, prevTitle: window.document.title});
         window.history.pushState({}, '', url);
     }
 
@@ -197,26 +208,39 @@ class PostsList extends React.Component {
                 nsfwPref={nsfwPref}
             />
         </li>)
+        const postTopBar = (
+          <div className="PostsList__post_top_overlay">
+              <div className="PostsList__post_top_bar">
+                  <ul className="menu back-button-menu">
+                      <li><a onClick={this.closePostModal} href="#"><i><Icon name="chevron-left" /></i> <span>{translate('go_back')}</span></a></li>
+                  </ul>
+                  <CloseButton onClick={this.closePostModal} />
+              </div>
+          </div>
+        )
 
         return (
-            <div id="posts_list" className="PostsList">
+            <div id="posts_list" className="PostsList" ref="container">
                 <ul className="PostsList__summaries hfeed" itemScope itemType="http://schema.org/blogPosts">
                     {renderSummary(postsInfo)}
+                    <Modal
+                        aria-labelledby='modal-label'
+                        className="PostsList__post_overlay"
+                        backdropClassName="PostsList__post_overlay_backdrop"
+                        show={this.state.showModal}
+                        onHide={this.closePostModal}
+                      >
+                          <div id="post_overlay">
+                              <Portal container={()=> this.refs.container}>
+                                  { postTopBar }
+                              </Portal>
+                              <div className="PostsList__post_container">
+                                  <Post post={ showPost }/>
+                              </div>
+                          </div>
+                      </Modal>
                 </ul>
                 {loading && <center><LoadingIndicator style={{marginBottom: "2rem"}} type="circle" /></center>}
-                {showPost && <div id="post_overlay" className="PostsList__post_overlay" tabIndex={0}>
-                    <div className="PostsList__post_top_overlay">
-                        <div className="PostsList__post_top_bar">
-                            <ul className="menu back-button-menu">
-                                <li><a onClick={(e) => {e.preventDefault(); this.setState({showPost: null}) }} href="#"><i><Icon name="chevron-left" /></i> <span>{translate('go_back')}</span></a></li>
-                            </ul>
-                            <CloseButton onClick={this.closePostModal} />
-                        </div>
-                    </div>
-                    <div className="PostsList__post_container">
-                        <Post post={showPost} />
-                    </div>
-                </div>}
             </div>
         );
     }

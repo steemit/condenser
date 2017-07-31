@@ -121,8 +121,8 @@ class Settings extends React.Component {
 
     handleLanguageChange = (event) => {
         const locale = event.target.value;
-        const user_settings = {...this.props.user_settings, locale}
-        this.props.updateUserSettings(user_settings)
+        const user_preferences = {...this.props.user_preferences, locale}
+        this.props.setUserPreferences(user_preferences)
     }
 
     render() {
@@ -133,7 +133,7 @@ class Settings extends React.Component {
 
         const {profile_image, name, about, location, website} = this.state
 
-        const {follow, account, isOwnAccount, user_settings} = this.props
+        const {follow, account, isOwnAccount, user_preferences} = this.props
         const following = follow && follow.getIn(['getFollowingAsync', account.name]);
         const ignores = isOwnAccount && following && following.get('ignore_result')
 
@@ -141,7 +141,7 @@ class Settings extends React.Component {
             <div className="row">
                 <div className="small-12 medium-6 large-4 columns">
                     <label>{tt('g.choose_language')}
-                        <select defaultValue={user_settings.locale} onChange={this.handleLanguageChange}>
+                        <select defaultValue={user_preferences.locale} onChange={this.handleLanguageChange}>
                             <option value="en">English</option>
                             <option value="es">Spanish</option>
                         </select>
@@ -235,7 +235,7 @@ export default connect(
         let metaData = account ? o2j.ifStringParseJSON(account.json_metadata) : {}
         if (typeof metaData === 'string') metaData = o2j.ifStringParseJSON(metaData); // issue #1237
         const profile = metaData && metaData.profile ? metaData.profile : {};
-        const user_settings = state.app.get('user_settings').toJS();
+        const user_preferences = state.app.get('user_preferences').toJS();
 
         return {
             account,
@@ -244,7 +244,7 @@ export default connect(
             isOwnAccount: username == accountname,
             profile,
             follow: state.global.get('follow'),
-            user_settings,
+            user_preferences,
             ...ownProps
         }
     },
@@ -257,8 +257,8 @@ export default connect(
             const options = {type: 'account_update', operation, successCallback, errorCallback}
             dispatch(transaction.actions.broadcastOperation(options))
         },
-        updateUserSettings: (payload) => {
-            dispatch({type: 'UPDATE_USER_SETTINGS', payload})
+        setUserPreferences: (payload) => {
+            dispatch({type: 'SET_USER_PREFERENCES', payload})
         }
     })
 )(Settings)

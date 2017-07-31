@@ -83,10 +83,10 @@ export function saveCords(x, y) {
     fetch('/api/v1/save_cords', request);
 }
 
-export function updateUserSettings(settings) {
+export function setUserPreferences(settings) {
     if (!process.env.BROWSER || window.$STM_ServerBusy) return Promise.resolve();
     const request = Object.assign({}, request_base, {body: JSON.stringify({csrf: window.$STM_csrf, settings})});
-    return fetch('/api/v1/update_user_settings', request);
+    return fetch('/api/v1/setUserPreferences', request);
 }
 
 if (process.env.BROWSER) {

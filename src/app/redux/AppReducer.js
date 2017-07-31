@@ -21,7 +21,7 @@ const defaultState = Map({
         message: 0,
         receive: 0
     }),
-    user_settings: Map({
+    user_preferences: Map({
         locale: null,
         nsfwPref: 'warn'
     })
@@ -62,8 +62,8 @@ export default function reducer(state = defaultState, action) {
         }
         res = res.set('notificounters', Map(nc));
     }
-    if (action.type === 'UPDATE_USER_SETTINGS') {
-        res = res.set('user_settings', Map(action.payload));
+    if (action.type === 'SET_USER_PREFERENCES') {
+        res = res.set('user_preferences', Map(action.payload));
     }
     return res;
 }

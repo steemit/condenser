@@ -4,7 +4,7 @@ import g from 'app/redux/GlobalReducer'
 import {takeEvery, takeLatest} from 'redux-saga';
 import tt from 'counterpart';
 import {api} from 'steem';
-import {updateUserSettings} from 'app/utils/ServerApiClient';
+import {setUserPreferences} from 'app/utils/ServerApiClient';
 
 const wait = ms => (
     new Promise(resolve => {
@@ -62,10 +62,10 @@ export function* getContent({author, permlink, resolve, reject}) {
     }
 }
 
-function* saveUserSettings({payload}) {
-    yield updateUserSettings(payload);
+function* saveUserPreferences({payload}) {
+    yield setUserPreferences(payload);
 }
 
 function* watchUserSettingsUpdates() {
-    yield* takeLatest('UPDATE_USER_SETTINGS', saveUserSettings);
+    yield* takeLatest('SET_USER_PREFERENCES', saveUserPreferences);
 }

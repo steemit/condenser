@@ -413,11 +413,11 @@ export default function useGeneralApi(app) {
         this.body = JSON.stringify({status: 'ok'});
     });
 
-    router.post('/update_user_settings', koaBody, function *() {
+    router.post('/setUserPreferences', koaBody, function *() {
         const params = this.request.body;
         const {csrf, settings} = typeof(params) === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
-        console.log('-- /update_user_settings -->', this.session.user, this.session.uid, settings);
+        console.log('-- /setUserPreferences -->', this.session.user, this.session.uid, settings);
         if (!this.session.user) {
             this.body = 'missing user id';
             this.status = 500;
@@ -436,7 +436,7 @@ export default function useGeneralApi(app) {
             }
             this.body = JSON.stringify({status: 'ok'});
         } catch (error) {
-            console.error('Error in /update_user_settings api call', this.session.uid, error);
+            console.error('Error in /setUserPreferences api call', this.session.uid, error);
             this.body = JSON.stringify({error: error.message});
             this.status = 500;
         }

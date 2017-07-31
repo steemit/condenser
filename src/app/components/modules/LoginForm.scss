@@ -1,9 +1,11 @@
 .LoginForm {
+  max-width: 28rem;
+  margin: 1rem auto 0.5rem auto;
   label {
     text-transform: none;
   }
   form {
-    max-width: 440px;
+    margin-top: 1.5rem;
   }
   .button.sign-up {
       background-color: #4078C0 !important;
@@ -24,4 +26,8 @@
   p {
       margin-bottom: 2rem;
   }
+}
+
+.LoginForm__save-login {
+  margin-top: 0.5rem;
 }

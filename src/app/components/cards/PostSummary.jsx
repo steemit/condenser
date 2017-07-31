@@ -97,7 +97,7 @@ class PostSummary extends React.Component {
         let comments_link;
 
         if( content.get( 'parent_author') !== "" ) {
-           title_text = tt('g.re') + content.get('root_title');
+           title_text = tt('g.re') + ': ' + content.get('root_title');
            title_link_url = content.get( 'url' );
            comments_link = title_link_url;
         } else {
@@ -149,8 +149,8 @@ class PostSummary extends React.Component {
                             <div className="PostSummary__time_author_category_small show-for-small-only">
                                 {author_category}
                             </div>
-                            tt('postsummary_jsx.this_post_is') <span className="nsfw-flag">nsfw</span>.
-                            tt('postsummary_jsx.you_can') <a href="#" onClick={this.onRevealNsfw}>tt('postsummary_jsx.reveal_it')</a> {tt('g.or') + ' '}
+                            {tt('postsummary_jsx.this_post_is')} <span className="nsfw-flag">nsfw</span>.
+                            {tt('postsummary_jsx.you_can')} <a href="#" onClick={this.onRevealNsfw}>{tt('postsummary_jsx.reveal_it')}</a> {tt('g.or') + ' '}
                             {username ? <span>{tt('postsummary_jsx.adjust_your')} <Link to={`/@${username}/settings`}>{tt('postsummary_jsx.display_preferences')}</Link>.</span>
                                 : <span><Link to="/enter_email">{tt('postsummary_jsx.create_an_account')}</Link> {tt('postsummary_jsx.to_save_your_preferences')}.</span>}
                             {content_footer}

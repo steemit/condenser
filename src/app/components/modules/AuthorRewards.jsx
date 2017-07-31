@@ -140,7 +140,7 @@ class AuthorRewards extends React.Component {
 
             <div className="UserWallet__balance UserReward__row row">
                 <div className="column small-12 medium-8">
-                    tt('authorrewards_jsx.daily_average_author_rewards')}:
+                    {tt('authorrewards_jsx.daily_average_author_rewards')}
                 </div>
                 <div className="column small-12 medium-4">
                     {numberWithCommas(vestsToSp(this.props.state, averageCurationVests + " " + VEST_TICKER)) + " " + VESTING_TOKEN}

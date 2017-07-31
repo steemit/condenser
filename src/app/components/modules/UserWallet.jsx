@@ -29,7 +29,7 @@ class UserWallet extends React.Component {
         this.state = {};
         this.onShowDeposit = () => {this.setState({showDeposit: !this.state.showDeposit})};
         this.onShowDepositSteem = (e) => {
-            e.preventDefault();
+            if (e && e.preventDefault) e.preventDefault();
             // this.setState({showDeposit: !this.state.showDeposit, depositType: 'STEEM'})
             const name = this.props.current_user.get('username');
             const new_window = window.open();

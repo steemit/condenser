@@ -275,7 +275,7 @@ class PostFull extends React.Component {
                 <ul>
                     <li>
                         <Link to={content.url}>
-                            {tt('g.view_the_full_context')}
+                            {tt('postfull_jsx.view_the_full_context')}
                         </Link>
                     </li>
                     {direct_parent_link}

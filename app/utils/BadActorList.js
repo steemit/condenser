@@ -89,6 +89,7 @@ coinpayments
 minnowboost
 minnowboster
 minowbooster
+blocktades
 `.trim().split('\n');
 
 export default list;

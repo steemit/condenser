@@ -78,5 +78,7 @@
   "upload_image": "SDC_UPLOAD_IMAGE_URL",
   "session_cookie_key": "SDC_SESSION_COOKIE_KEY",
   "steemd_connection_client": "SDC_CLIENT_STEEMD_URL",
-  "steemd_connection_server": "SDC_SERVER_STEEMD_URL"
+  "steemd_connection_server": "SDC_SERVER_STEEMD_URL",
+  "chain_id": "SDC_CHAIN_ID",
+  "address_prefix": "SDC_ADDRESS_PREFIX"
 }

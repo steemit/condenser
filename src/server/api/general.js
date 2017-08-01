@@ -415,24 +415,25 @@ export default function useGeneralApi(app) {
 
     router.post('/setUserPreferences', koaBody, function *() {
         const params = this.request.body;
-        const {csrf, settings} = typeof(params) === 'string' ? JSON.parse(params) : params;
+        const {csrf, payload} = typeof(params) === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
-        console.log('-- /setUserPreferences -->', this.session.user, this.session.uid, settings);
-        if (!this.session.user) {
-            this.body = 'missing user id';
+        console.log('-- /setUserPreferences -->', this.session.user, this.session.uid, payload);
+        if (!this.session.a) {
+            this.body = 'missing logged in account';
             this.status = 500;
             return;
         }
         try {
-            const attrs = {};
-            attrs.settings = JSON.stringify(settings);
-            if (attrs.settings.length > 1024) throw new Error('data too long');
-            const user = yield models.User.findOne({
-                attributes: ['id', 'email'],
-                where: {id: this.session.user}
+            const json = JSON.stringify(payload);
+            if (json.length > 1024) throw new Error('data too long');
+            const user_preferences = yield models.UserPreferences.findOne({
+                attributes: ['id', 'json'],
+                where: {account: this.session.a}
             });
-            if (user) {
-                yield models.User.update(attrs, {where: {id: this.session.user}});
+            if (user_preferences) {
+                yield user_preferences.update({json});
+            } else {
+                yield models.UserPreferences.create({json});
             }
             this.body = JSON.stringify({status: 'ok'});
         } catch (error) {

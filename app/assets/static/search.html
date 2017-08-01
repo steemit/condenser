@@ -13,6 +13,9 @@
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+    <!-- Additional Styles -->
     <style>
         html {
             font-size: 105%;
@@ -34,14 +37,6 @@
 
         a {
             color: #1a5099 !important;
-        }
-
-        .gsc-control-cse * {
-            box-sizing: content-box;
-        }
-
-        .gsc-control-cse input {
-            box-shadow: none !important;
         }
 
         table {
@@ -106,9 +101,9 @@
             margin-top: 2rem;
         }
         /* Search CSS */
-
         #search {
             width: 100%;
+            margin: 0;
             border-width: 0px;
             padding-bottom: 6px;
             border-bottom: 1px solid #1a5099;
@@ -126,6 +121,10 @@
         #results #item {
             padding: 2%;
             border-radius: 3px;
+        }
+
+        .ui-autocomplete {
+          position: inherit !important;
         }
 
         /* branding */
@@ -169,7 +168,7 @@
         <div class="row">
             <form class="col-sm-12" id="search-form">
               <div class="form-group">
-                <input type="text" placeholder="Search..." id="search" autofocus="on">
+                <input type="search" placeholder="Search..." id="search" autofocus="on" autocomplete="off">
               </div>
               <button type="submit" class="btn btn-primary">Search</button>
               <!-- Attribution Required by API Terms of Use -->
@@ -179,7 +178,6 @@
               </a>
             </form>
         </div>
-
         <div class="row">
             <div id="results">
               <!-- <div id='item'>
@@ -223,6 +221,7 @@
                     }
                 }
             });
+            $( "#search" ).autocomplete( "close" );
             return false;
         });
 
@@ -245,6 +244,11 @@
                     }
                 }
             });
+        });
+        // Search Auto complete
+        $( "#search" ).autocomplete({
+          source: "https://api.asksteem.com/suggestions",
+          appendTo: ".form-group"
         });
     </script>
 </body>

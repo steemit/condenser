@@ -19,7 +19,7 @@ import PostsList from 'app/components/cards/PostsList';
 import {isFetchingOrRecentlyUpdated} from 'app/utils/StateFunctions';
 import {repLog10} from 'app/utils/ParsersAndFormatters.js';
 import Tooltip from 'app/components/elements/Tooltip';
-import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
+import Overlay from 'react-overlays/lib/Overlay';
 import VerticalMenu from 'app/components/elements/VerticalMenu';
 import MarkNotificationRead from 'app/components/elements/MarkNotificationRead';
 import NotifiCounter from 'app/components/elements/NotifiCounter';
@@ -30,16 +30,19 @@ import Userpic from 'app/components/elements/Userpic';
 import Callout from 'app/components/elements/Callout';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import userIllegalContent from 'app/utils/userIllegalContent';
+import { findDOMNode } from 'react-dom';
 
 export default class UserProfile extends React.Component {
     constructor() {
         super()
-        this.state = {}
+        this.state = { showRewardDropdown: false };
         this.onPrint = () => {window.print()}
         this.loadMore = this.loadMore.bind(this);
+        this.closeRewardDropdown = this.closeRewardDropdown.bind(this);
+        this.toggleRewardDropdown = this.toggleRewardDropdown.bind(this);
     }
 
-    shouldComponentUpdate(np) {
+    shouldComponentUpdate(np, ns) {
         const {follow} = this.props;
         const {follow_count} = this.props;
 
@@ -66,7 +69,8 @@ export default class UserProfile extends React.Component {
             np.loading !== this.props.loading ||
             np.location.pathname !== this.props.location.pathname ||
             np.routeParams.accountname !== this.props.routeParams.accountname ||
-            np.follow_count !== this.props.follow_count
+            np.follow_count !== this.props.follow_count ||
+            ns.showRewardDropdown !== this.state.showRewardDropdown
         )
     }
 
@@ -90,6 +94,20 @@ export default class UserProfile extends React.Component {
         if (isFetchingOrRecentlyUpdated(this.props.global_status, order, category)) return;
         const [author, permlink] = last_post.split('/');
         this.props.requestData({author, permlink, order, category, accountname});
+    }
+
+    toggleRewardDropdown = (evt) => {
+        evt.preventDefault();
+        this.setState({
+            showRewardDropdown: !this.state.showRewardDropdown
+        });
+    }
+
+    closeRewardDropdown = (evt) => {
+        evt.preventDefault();
+        this.setState({
+            showRewardDropdown: false
+        });
     }
 
     render() {
@@ -335,48 +353,10 @@ export default class UserProfile extends React.Component {
         // set account join date
         let accountjoin = account.created;
 
-        const top_menu = <div className="row UserProfile__top-menu">
-            <div className="columns small-10 medium-12 medium-expand">
-                <ul className="menu" style={{flexWrap: "wrap"}}>
-                    <li><Link to={`/@${accountname}`} activeClassName="active">{translate('blog')}</Link></li>
-                    <li><Link to={`/@${accountname}/comments`} activeClassName="active">{translate('comments')}</Link></li>
-                    <li><Link to={`/@${accountname}/recent-replies`} activeClassName="active">
-                        {translate('replies')} {isMyAccount && <NotifiCounter fields="comment_reply" />}
-                    </Link></li>
-                    {/*<li><Link to={`/@${accountname}/feed`} activeClassName="active">Feed</Link></li>*/}
-                    <li>
-                        <LinkWithDropdown
-                            closeOnClickOutside
-                            dropdownPosition="bottom"
-                            dropdownAlignment="right"
-                            dropdownContent={
-                                <VerticalMenu items={rewardsMenu} />
-                            }
-                        >
-                            <a className={rewardsClass}>
-                                {translate('rewards')}
-                                <Icon name="dropdown-arrow" />
-                            </a>
-                        </LinkWithDropdown>
-                    </li>
-                </ul>
-            </div>
-            <div className="columns shrink">
-                <ul className="menu" style={{flexWrap: "wrap"}}>
-                    <li>
-                        <a href={`/@${accountname}/transfers`} className={walletClass} onClick={e => { e.preventDefault(); browserHistory.push(e.target.pathname); return false; }}>
-                            {translate('wallet')} {isMyAccount && <NotifiCounter fields="send,receive,account_update" />}
-                        </a>
-                    </li>
-                    {isMyAccount && <li>
-                        <Link to={`/@${accountname}/settings`} activeClassName="active">{translate('settings')}</Link>
-                    </li>}
-                </ul>
-            </div>
-         </div>;
-
         const {name, location, about, website} = normalizeProfile(account);
         const website_label = website ? website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '') : null
+
+        let showRewardDropdown = this.state.showRewardDropdown;
 
         return (
             <div className="UserProfile">
@@ -420,7 +400,55 @@ export default class UserProfile extends React.Component {
                     </div>
                 </div>
                 <div className="UserProfile__top-nav row expanded noPrint">
-                    {top_menu}
+                  <div className="row UserProfile__top-menu">
+                      <div className="columns small-10 medium-12 medium-expand">
+                          <ul className="menu" style={{flexWrap: "wrap"}}>
+                              <li><Link to={`/@${accountname}`} activeClassName="active">{translate('blog')}</Link></li>
+                              <li><Link to={`/@${accountname}/comments`} activeClassName="active">{translate('comments')}</Link></li>
+                              <li><Link to={`/@${accountname}/recent-replies`} activeClassName="active">
+                                  {translate('replies')} {isMyAccount && <NotifiCounter fields="comment_reply" />}
+                              </Link></li>
+                              {/*<li><Link to={`/@${accountname}/feed`} activeClassName="active">Feed</Link></li>*/}
+                              <li
+                                  ref={'container'}
+                                  className="menu__dropdown-link"
+                                  onClick={this.toggleRewardDropdown}
+                              >
+                                  <a
+                                      className={rewardsClass}
+                                      ref={'target'}
+                                  >
+                                      {translate('rewards')}
+                                      <Icon name="dropdown-arrow" />
+                                  </a>
+                              </li>
+                              <Overlay
+                                  show={showRewardDropdown}
+                                  onHide={this.closeRewardDropdown}
+                                  placement="bottom"
+                                  container={props => findDOMNode(this.refs.container)}
+                                  target={props => findDOMNode(this.refs.target)}
+                                  rootClose
+                              >
+                                  <div className="dropdown-pane is-open">
+                                      <VerticalMenu items={rewardsMenu} />
+                                  </div>
+                              </Overlay>
+                          </ul>
+                      </div>
+                      <div className="columns shrink">
+                          <ul className="menu" style={{flexWrap: "wrap"}}>
+                              <li>
+                                  <a href={`/@${accountname}/transfers`} className={walletClass} onClick={e => { e.preventDefault(); browserHistory.push(e.target.pathname); return false; }}>
+                                      {translate('wallet')} {isMyAccount && <NotifiCounter fields="send,receive,account_update" />}
+                                  </a>
+                              </li>
+                              {isMyAccount && <li>
+                                  <Link to={`/@${accountname}/settings`} activeClassName="active">{translate('settings')}</Link>
+                              </li>}
+                          </ul>
+                      </div>
+                   </div>
                 </div>
                 <div>
                   {printLink}

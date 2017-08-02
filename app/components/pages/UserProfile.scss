@@ -2,6 +2,8 @@
     margin-top: -1.5rem;
 }
 
+
+
 .UserProfile__tab_content {
     margin-top: 1.5rem;
 }
@@ -17,7 +19,7 @@
   .menu {
     background-color: transparent;
   }
-  .menu > li > a {
+  .menu li a {
       transition: all 200ms ease-in;
       transform: translate3d( 0, 0, 0);
       padding-left: 0.7rem;
@@ -33,6 +35,29 @@
           color: $black;
           font-weight: bold;
         }
+  }
+  .menu__dropdown-link > div > div {
+      position: static;
+      border: 0px;
+      .VerticalMenu {
+          position: fixed;
+          width: auto;
+          padding: 0;
+          box-shadow: 1px 1px 5px 0 rgba(50,50,50,.75);
+          z-index: 1000;
+          font-size: inherit;
+          border: 1px solid #cacaca;
+          border-radius: 3px;
+          background-color: #fefefe;
+          > li > a {
+            color: $black;
+            line-height: 1rem;
+            position: relative;
+            :hover {
+              background-color: #f0f0f0;
+            }
+          }
+      }
   }
 
   div.UserProfile__top-menu {

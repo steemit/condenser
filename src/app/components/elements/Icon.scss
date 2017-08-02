@@ -1,0 +1,49 @@
+.Icon {
+  vertical-align: middle;
+
+  > svg, span.icon {
+    width: 1.12rem;
+    height: 1.12rem;
+    vertical-align: top;
+  }
+
+  &.fill-black > svg > path {
+    fill:black;
+  }
+}
+
+.Icon_1_5x > svg, span.Icon_1_5x {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.Icon_2x > svg, span.Icon_2x {
+  width: 2rem;
+  height: 2rem;
+}
+
+.Icon_3x > svg, span.Icon_3x {
+  width: 3rem;
+  height: 3rem;
+}
+
+.Icon_4x > svg, span.Icon_4x {
+  width: 4.60rem;
+  height: 4.60rem;
+}
+
+.Icon_5x > svg, span.Icon_5x {
+  width: 5.75rem;
+  height: 5.75rem;
+  margin: 24px 0 24px 0;
+}
+
+.Icon_10x > svg, span.Icon_10x {
+  width: 10rem;
+  height: 10rem;
+  margin: 24px 0 24px 0;
+}
+
+.Icon.dropdown-arrow polygon {
+  fill: $dark-gray;
+}

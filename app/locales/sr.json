@@ -772,7 +772,8 @@
     "cancel_transfer_from_savings":"Отменить перевод из сейфа",
     "stop_power_down":"Obustavi power down",
     "start_power_down_of":"Otpočni power down od",
-    "receive_interest_of":"Получать проценты по"
+    "receive_interest_of":"Получать проценты по",
+    "transfer": "Отправлено"
   },
   "user_profile":{
     "unknown_account":"Nepoznat korisnički nalog",

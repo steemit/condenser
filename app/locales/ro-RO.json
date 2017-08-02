@@ -773,7 +773,8 @@
     "cancel_transfer_from_savings":"Anulați transferul din seif",
     "stop_power_down":"Diminuarea %(VESTING_TOKENS)s oprită",
     "start_power_down_of":"Diminuarea %(VESTING_TOKENS)s începută de pe",
-    "receive_interest_of":"Primiți procente pentru"
+    "receive_interest_of":"Primiți procente pentru",
+    "transfer": "Отправлено"
   },
   "user_profile":{
     "unknown_account":"Cont necunoscut",

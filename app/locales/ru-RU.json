@@ -785,7 +785,8 @@
     "cancel_transfer_from_savings": "Отменить перевод из сейфа",
     "stop_power_down": "Ослабление %(VESTING_TOKENS)s остановлено",
     "start_power_down_of": "Ослабление %(VESTING_TOKENS)s начато с",
-    "receive_interest_of": "Получать проценты по"
+    "receive_interest_of": "Получать проценты по",
+    "transfer": "Отправлено"
   },
   "user_profile": {
     "unknown_account": "Неизвестный аккаунт",

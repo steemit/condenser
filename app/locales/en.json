@@ -780,7 +780,8 @@
     "cancel_transfer_from_savings": "Cancel transfer from savings",
     "stop_power_down": "Stop power down",
     "start_power_down_of": "Start power down of",
-    "receive_interest_of": "Receive interest of"
+    "receive_interest_of": "Receive interest of",
+    "transfer": "Transfer"
   },
   "reblog_jsx": {
   },

@@ -18,8 +18,10 @@ require('module').Module._initPaths();
 
 global.$STM_Config = {
     fb_app: config.get('grant.facebook.key'),
-    ws_connection_client: config.get('ws_connection_client'),
-    ws_connection_server: config.get('ws_connection_server'),
+    steemd_connection_client: config.get('steemd_connection_client'),
+    steemd_connection_server: config.get('steemd_connection_server'),
+    chain_id: config.get('chain_id'),
+    address_prefix: config.get('address_prefix'),
     img_proxy_prefix: config.get('img_proxy_prefix'),
     ipfs_prefix: config.get('ipfs_prefix'),
     disable_signups: config.get('disable_signups'),
@@ -41,18 +43,21 @@ global.webpackIsomorphicTools = new WebpackIsomorphicTools(
 );
 
 global.webpackIsomorphicTools.server(ROOT, () => {
-    steem.config.set('websocket', config.get('ws_connection_server'));
-    if (newrelic) {
-        steem.api.on('track-performance', (method, time_taken) => {
-            newrelic.recordMetric(`WebTransaction/Performance/steem-js/${method}`, time_taken / 1000.0);
-        });
-    }
-    // const CliWalletClient = require('shared/api_client/CliWalletClient').default;
-    // if (process.env.NODE_ENV === 'production') connect_promises.push(CliWalletClient.instance().connect_promise());
-    try {
-        require('./server');
-    } catch (error) {
-        console.error(error);
-        process.exit(1);
-    }
+        steem.api.setOptions({ url: config.steemd_connection_server });
+        steem.config.set('address_prefix', config.get('address_prefix'));
+        steem.config.set('chain_id', config.get('chain_id'));
+
+        if (newrelic) {
+            steem.api.on('track-performance', (method, time_taken) => {
+                newrelic.recordMetric(`WebTransaction/Performance/steem-js/${method}`, time_taken / 1000.0);
+            });
+        }
+        // const CliWalletClient = require('shared/api_client/CliWalletClient').default;
+        // if (process.env.NODE_ENV === 'production') connect_promises.push(CliWalletClient.instance().connect_promise());
+        try {
+            require('./server');
+        } catch (error) {
+            console.error(error);
+            process.exit(1);
+        }
 });

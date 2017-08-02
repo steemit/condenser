@@ -95,6 +95,8 @@
     "auth_token": false
   },
   "upload_image": false,
-  "ws_connection_client": "wss://steemd.steemit.com",
-  "ws_connection_server": "wss://steemd.steemit.com"
+  "steemd_connection_client": "wss://steemd.steemit.com",
+  "steemd_connection_server": "wss://steemd.steemit.com",
+  "chain_id": "0000000000000000000000000000000000000000000000000000000000000000",
+  "address_prefix": "STM"
 }

@@ -1,4 +1,21 @@
 export default `
+/writing/@weareone/the-four-stages-of-life
+/life/@kalimor/in-defense-of-being-average-v-zashitu-posredstvennosti
+/life/@blend/5-life-lessons-from-5-years-of-traveling-the-world
+/life/@rubal/stop-trying-to-be-happy
+/steemit/@rubal/fuck-yes-or-no
+/fuck/@rubal/the-subtle-art-of-not-giving-a-fuck
+/relationship/@kcekene/relationship-advice
+/love/@ravindrasail/maybe-you-don-t-know-what-love-is
+/life/@ravindrasail/the-four-stages-of-life
+/economics/@jacor/attention-economy
+/life/@youcef/life-lessons-from-traveling-the-world
+/friendship/@salmanbahadur/the-friendship-test
+/life/@ariann/what-s-the-most-important-question-of-your-life
+/trending/@bigkush/the-most-important-question-of-your-life
+/happy/@bigkush/stop-trying-to-be-happy
+/happiness/@salmanbahadur/happiness-is-the-process-of-becoming-your-ideal-self
+/life/@thecryptofiend/the-subtle-art-of-not-giving-a-f-ck-by-mark-manson-book-review-and-chance-to-win
 /children/@carlidos/why-it-s-important-to-teach-your-child-gratitude
 /curation/@carlidos/lead-by-better-borrowing-3-content-curation-tips-100-of-steem-dollars-will-be-donated-to-curie
 /compliment/@carlidos/you-get-complimented-on-and-you-cower-down-why

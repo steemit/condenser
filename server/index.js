@@ -18,8 +18,8 @@ require('module').Module._initPaths();
 
 global.$STM_Config = {
     fb_app: config.get('grant.facebook.key'),
-    ws_connection_client: config.get('ws_connection_client'),
-    ws_connection_server: config.get('ws_connection_server'),
+    steemd_connection_client: config.get('steemd_connection_client'),
+    steemd_connection_server: config.get('steemd_connection_server'),
     chain_id: config.get('chain_id'),
     address_prefix: config.get('address_prefix'),
     img_proxy_prefix: config.get('img_proxy_prefix'),
@@ -43,7 +43,7 @@ global.webpackIsomorphicTools = new WebpackIsomorphicTools(
 );
 
 global.webpackIsomorphicTools.server(ROOT, () => {
-        steem.config.set('websocket', config.get('ws_connection_server'));
+        steem.api.setOptions({ url: config.steemd_connection_server });
         steem.config.set('address_prefix', config.get('address_prefix'));
         steem.config.set('chain_id', config.get('chain_id'));
 

@@ -912,7 +912,8 @@
     "paste_a_youtube_or_vimeo_and_press_enter":"Introduceți link-ul Vimeo sau YouTube și apăsați Enter",
     "there_was_an_error_uploading_your_image":"A apărut o eroare în timpul încărcării imaginii",
     "raw_html":"Codul HTML",
-    "please_remove_following_html_elements":"Vă rugăm să eliminați aceste elemente HTML din postare: "
+    "please_remove_following_html_elements":"Vă rugăm să eliminați aceste elemente HTML din postare: ",
+    "payouts_declined": "Выплаты отключены"
   },
   "witnesses_jsx":{
     "witness_thread":"postarea delegatului",

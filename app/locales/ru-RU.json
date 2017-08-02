@@ -924,7 +924,8 @@
     "paste_a_youtube_or_vimeo_and_press_enter": "Вставьте YouTube или Vimeo ссылку и нажмите Enter",
     "there_was_an_error_uploading_your_image": "Произошла ошибка во время загрузки изображения",
     "raw_html": "HTML код",
-    "please_remove_following_html_elements": "Пожалуйста, удалите эти HTML элементы из Вашего поста: "
+    "please_remove_following_html_elements": "Пожалуйста, удалите эти HTML элементы из Вашего поста: ",
+    "payouts_declined": "Выплаты отключены"
   },
   "witnesses_jsx": {
     "witness_thread": "пост делегата",

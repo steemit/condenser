@@ -212,7 +212,7 @@ export default function useGeneralApi(app) {
     });
 
     router.post('/login_account', koaBody, function *() {
-        if (rateLimitReq(this, this.req)) return;
+        // if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;
         const {csrf, account, signatures} = typeof(params) === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
@@ -433,7 +433,7 @@ export default function useGeneralApi(app) {
             if (user_preferences) {
                 yield user_preferences.update({json});
             } else {
-                yield models.UserPreferences.create({json});
+                yield models.UserPreferences.create({account: this.session.a, json});
             }
             this.body = JSON.stringify({status: 'ok'});
         } catch (error) {

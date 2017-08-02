@@ -16,6 +16,7 @@ async function appRender(ctx) {
     const store = {};
     try {
         let login_challenge = ctx.session.login_challenge;
+        let user_preferences = null;
         if (!login_challenge) {
             login_challenge = secureRandom.randomBuffer(16).toString('hex');
             ctx.session.login_challenge = login_challenge;
@@ -83,8 +84,17 @@ async function appRender(ctx) {
                 offchain.recover_account = account_recovery_record.account_name;
             }
         }
+        if (ctx.session.a) {
+            const user_preferences_record = await models.UserPreferences.findOne({
+                attributes: ['json'],
+                where: {account: ctx.session.a}
+            });
+            if (user_preferences_record) {
+                user_preferences = JSON.parse(user_preferences_record.json);
+            }
+        }
 
-        const { body, title, statusCode, meta } = await universalRender({location: ctx.request.url, store, offchain, ErrorPage, tarantool: Tarantool.instance()});
+        const { body, title, statusCode, meta } = await universalRender({location: ctx.request.url, store, offchain, ErrorPage, tarantool: Tarantool.instance(), user_preferences});
 
         // Assets name are found in `webpack-stats` file
         const assets_filename = ROOT + (process.env.NODE_ENV === 'production' ? '/tmp/webpack-stats-prod.json' : '/tmp/webpack-stats-dev.json');

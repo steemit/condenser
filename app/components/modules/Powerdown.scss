@@ -1,3 +1,15 @@
+.reveal {
+    width: 71.42857rem;
+}
+
+.rangeslider__handle {
+  top: 35px !important;
+}
+
+.rangeslider-horizontal, .rangeslider__fill {
+  height: 100px !important;
+}
+
 .powerdown-confirm-text {
   text-align: center;
 }
@@ -66,7 +78,7 @@
   .rangeslider__fill {
     height: 100%;
     // background-color: #4CAF50;
-    background-color: #7CB342;
+    background-color: #1A5099;
     border-radius: 10px;
     top: 0;
   }
@@ -115,7 +127,7 @@
 
   .rangeslider__fill {
     width: 100%;
-    background-color: #7CB342;
+    background-color: #1A5099;
     box-shadow: none;
     bottom: 0;
   }

@@ -77,7 +77,6 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
     const submitStoryPencil = $STM_Config.read_only_mode ? null : <li className="show-for-small-only">
       <Link to="/submit.html"><Icon name="pencil" /></Link>
     </li>;
-    const golosFest = <li className={lcn + ' buttons'}><Link to="/ru--yaidunagolosfest/@golosevents/yaidunagolosfest-or-itogi-konkursa-na-besplatnyi-bilet-zakanchivaetsya-registraciya-na-fest-otkryvaetsya-registraciya-na-seminar" className="button alert fest">{tt('g.golos_fest')}</Link></li>;
     const feedLink = `/@${username}/feed`;
     const repliesLink = `/@${username}/recent-replies`;
     const walletLink = `/@${username}/transfers`;
@@ -158,7 +157,6 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
         ];
         return (
             <ul className={mcn + mcl}>
-                {!inIco && golosFest}
                 {inIco && ico_menu.map((o,i) => {return <li key={i} className={lcn}><a href={o.link}>{o.value}</a></li>})}
                 {!inIco && aboutItem}
                 {!inIco && !vertical && submitFeedback}
@@ -188,7 +186,6 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
     }
     return (
         <ul className={mcn + mcl}>
-            {!inIco && golosFest}
             {inIco && ico_menu.map((o,i) => {return <li key={i} className={lcn}><a href={o.link}>{o.value}</a></li>})}
             {!inIco && aboutItem}
             {!inIco && !vertical && <li>

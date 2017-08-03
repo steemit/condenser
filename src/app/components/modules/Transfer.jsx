@@ -132,7 +132,7 @@ class TransferForm extends Component {
         const {currentUser, toVesting, transferToSelf, dispatchSubmit} = this.props;
         const {transferType} = this.props.initialValues;
         const {submitting, valid, handleSubmit} = this.state.transfer;
-        const isMemoPrivate = memo && /^#/.test(memo.value);
+        const isMemoPrivate = memo;
         const form = (
             <form onSubmit={handleSubmit(({data}) => {
                 this.setState({loading: true});

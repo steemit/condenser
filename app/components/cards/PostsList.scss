@@ -53,13 +53,7 @@
   }
 }
 
-body.with-post-overlay {
-  overflow: hidden;
-  position: fixed;
-}
-
 @media screen and (min-width: 60rem) {
-
   .PostsList__post_overlay_backdrop {
     position: fixed;
     top: 0;
@@ -69,7 +63,7 @@ body.with-post-overlay {
     z-index: auto;
     background-color: $white;
     background-color: rgba(150, 150, 150, 0.9);
-  };
+  }
   .PostsList__post_top_overlay {
     border-bottom: none;
   }

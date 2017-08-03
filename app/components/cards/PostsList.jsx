@@ -9,7 +9,6 @@ import Icon from 'app/components/elements/Icon';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import {connect} from 'react-redux';
 import { translate } from 'app/Translator.js';
-
 import Modal from 'react-overlays/lib/Modal';
 import Portal from 'react-overlays/lib/Portal';
 
@@ -48,8 +47,6 @@ class PostsList extends React.Component {
         this.scrollListener = this.scrollListener.bind(this);
         this.onPostClick = this.onPostClick.bind(this);
         this.closePostModal = this.closePostModal.bind(this);
-        // this.onBackButton = this.onBackButton.bind(this);
-        // this.closeOnOutsideClick = this.closeOnOutsideClick.bind(this);
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'PostsList')
     }
 
@@ -78,56 +75,15 @@ class PostsList extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (this.state.showPost && !prevState.showPost) {
-            /*
-            document.getElementsByTagName('body')[0].className = 'with-post-overlay';
-            window.addEventListener('popstate', this.onBackButton);
-            window.addEventListener('keydown', this.onBackButton);
-            const post_overlay = document.getElementById('post_overlay');
-            if (post_overlay) {
-                post_overlay.addEventListener('click', this.closeOnOutsideClick);
-                post_overlay.focus();
-            }
-            */
-        }
         if (!this.state.showPost && prevState.showPost) {
             window.history.pushState({}, '', this.props.pathname);
-            document.getElementsByTagName('body')[0].className = '';
             this.post_url = null;
         }
     }
 
     componentWillUnmount() {
         this.detachScrollListener();
-        // window.removeEventListener('popstate', this.onBackButton);
-        // window.removeEventListener('keydown', this.onBackButton);
-        const post_overlay = document.getElementById('post_overlay');
-        // if (post_overlay) post_overlay.removeEventListener('click', this.closeOnOutsideClick);
-        document.getElementsByTagName('body')[0].className = "";
     }
-
-    /*
-    onBackButton(e) {
-        if ('keyCode' in e && e.keyCode !== 27) return;
-        // window.removeEventListener('popstate', this.onBackButton);
-        // window.removeEventListener('keydown', this.onBackButton);
-        this.closePostModal();
-    }
-    */
-
-    /*
-    closeOnOutsideClick(e) {
-        const inside_post = findParent(e.target, 'PostsList__post_container');
-        if (!inside_post) {
-            const inside_top_bar = findParent(e.target, 'PostsList__post_top_bar');
-            if (!inside_top_bar) {
-                const post_overlay = document.getElementById('post_overlay');
-                if (post_overlay) post_overlay.removeEventListener('click', this.closeOnOutsideClick);
-                this.closePostModal();
-            }
-        }
-    }
-    */
 
     closePostModal = () => {
         window.document.title = this.state.prevTitle;

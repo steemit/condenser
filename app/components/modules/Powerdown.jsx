@@ -32,8 +32,35 @@ class Powerdown extends React.Component {
       let powerDownMin = 0;
       let powerDownMax = parseFloat(powerdown_vests.toFixed(3));
       const handlePowerDownSliderChange= e => {
-          //let pwrDwnCalc = parseFloat(account.get('vesting_shares')) * (this.state.powerDownAmount / powerDownMax);
-          this.setState({powerDownAmount: parseFloat(e.toFixed(3))});
+          let pdv = e;
+          if(pdv > powerDownMax){
+            pdv = powerDownMax;
+          }
+          if(pdv < 0){
+            pdv = 0;
+          }
+
+          let pwrDwnCalc = parseFloat(100*(pdv/powerDownMax)).toFixed(3);
+          this.setState({
+            powerDownAmount: parseFloat(pdv.toFixed(3)),
+            powerDownPercent: pwrDwnCalc
+          });
+      };
+
+      const handlePowerDownTextChange= e => {
+          let pdv = e.target.value;
+          if(pdv > powerDownMax){
+            pdv = powerDownMax;
+          }
+          if(pdv < 0){
+            pdv = 0;
+          }
+
+          let pwrDwnCalc = parseFloat(100*(pdv/powerDownMax)).toFixed(3);
+          this.setState({
+            powerDownAmount: parseFloat(pdv.toFixed(3)),
+            powerDownPercent: pwrDwnCalc
+          });
       };
 
       const cancelPowerDown = e => {
@@ -78,16 +105,18 @@ class Powerdown extends React.Component {
           {this.state.confirm ? '' :
               <div>
                  <Slider min={powerDownMin} max={powerDownMax} step={0.001} value={parseFloat(this.state.powerDownAmount)} onChange={(e) => handlePowerDownSliderChange(e)} />
-                 <div className="powerdown-amount">{tt('powerdown_jsx.power_down_amount')}: {this.state.powerDownAmount.toFixed(3)}</div>
+                 {tt('powerdown_jsx.power_down_amount')}: <input type="text" className="powerdown-amount" onChange={(e) => handlePowerDownTextChange(e)} value={this.state.powerDownAmount} />
                  <br />
                  <button className="button hollow float-right" onClick={(e) => handlePowerDown(e)}>{tt('powerdown_jsx.power_down')}</button>
               </div>
           }
           {!this.state.confirm ? '' :
-               <div className="powerdown-confirm-text">
-                   {tt('powerdown_jsx.confirm_power_down')}?
-                   <br />
-                   <button className="button hollow float-right" onClick={(e)=> finishPowerDown(e)}>{tt('powerdown_jsx.confirm')}</button>
+              <div className="powerdown-confirm-text">
+                 {tt('powerdown_jsx.confirm_power_down_of')} {this.state.powerDownAmount} STEEM?
+                 <br />
+                 {this.state.powerDownPercent}% {tt('powerdown_jsx.of_your')} STEEM
+                 <br />
+                 <button className="button hollow float-right" onClick={(e)=> finishPowerDown(e)}>{tt('powerdown_jsx.confirm')}</button>
                </div>
           }
          </div>

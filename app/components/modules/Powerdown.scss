@@ -1,9 +1,15 @@
+.powerdown-amount {
+  width: 150px;
+  display: inline;
+}
+
 .reveal {
-    width: 71.42857rem;
+    width: 61.8%;
 }
 
 .rangeslider__handle {
-  top: 35px !important;
+  top: 0px !important;
+  height: 100% !important;
 }
 
 .rangeslider-horizontal, .rangeslider__fill {
@@ -85,14 +91,14 @@
   .rangeslider__handle {
     width: 30px;
     height: 30px;
-    border-radius: 30px;
+    border-radius: 10px;
     top: -10px;
     &:after {
       content: ' ';
       position: absolute;
       width: 16px;
       height: 16px;
-      top: 6px;
+      top: 36px;
       left: 6px;
       border-radius: 50%;
       background-color: #dadada;

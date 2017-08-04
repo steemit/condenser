@@ -123,6 +123,7 @@ class Topics extends React.Component {
         categories = categories.map(cat => {
             const catKey = cat
             if (/[а-яёґєії]/.test(cat)) cat = 'ru--' + detransliterate(cat.toLowerCase(), true)
+            if (/^(u.{4}){3,}+/.test(cat)) return null;
             const link = order ? `/${order}/${cat}` : `/${cat}`;
             isSelected = selected.indexOf(cat) !== -1
             return cat ? (<li key={catKey} className={isSelected ? 'Topics__selected__remove' : 'Topics__selected__add'}>

@@ -352,6 +352,7 @@
     "in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN": "In 3.5 days, convert %(amount)s %(DEBT_TOKEN)s into %(LIQUID_TOKEN)s",
     "account_name_is_not_available": "Account name is not available",
     "view_the_full_context": "View the full context",
+    "view_the_direct_parent": "View the direct parent",
     "you_are_viewing_a_single_comments_thread_from": "You are viewing a single comment's thread from"
   },
   "market_jsx": {

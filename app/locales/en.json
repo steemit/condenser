@@ -595,7 +595,6 @@
     "search": "Search",
     "begin_recovery": "Begin Recovery",
     "post_as": "Post as",
-
     "trending_30_day": "trending (30 day)",
     "this_password_is_bound_to_your_accounts_private_key": "This password is bound to your account's active key and can not be used to login to this page. You may use this active key on other more secure pages like the Wallet or Market pages.",
     "potential_payout": "Potential Payout",
@@ -781,7 +780,8 @@
     "cancel_transfer_from_savings": "Cancel transfer from savings",
     "stop_power_down": "Stop power down",
     "start_power_down_of": "Start power down of",
-    "receive_interest_of": "Receive interest of"
+    "receive_interest_of": "Receive interest of",
+    "transfer": "Transfer"
   },
   "reblog_jsx": {
   },

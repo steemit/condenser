@@ -772,7 +772,8 @@
     "cancel_transfer_from_savings":"Отменить перевод из сейфа",
     "stop_power_down":"Obustavi power down",
     "start_power_down_of":"Otpočni power down od",
-    "receive_interest_of":"Получать проценты по"
+    "receive_interest_of":"Получать проценты по",
+    "transfer": "Отправлено"
   },
   "user_profile":{
     "unknown_account":"Nepoznat korisnički nalog",
@@ -911,7 +912,8 @@
     "paste_a_youtube_or_vimeo_and_press_enter":"Nalepi YouTube ili Vimeo video i pritisni Enter",
     "there_was_an_error_uploading_your_image":"Došlo je do greške pri otpremanju vaše slike",
     "raw_html":"Sirov HTML",
-    "please_remove_following_html_elements":"Molimo Vas da uklonite sledeće HTML elemente iz svog post-a: "
+    "please_remove_following_html_elements":"Molimo Vas da uklonite sledeće HTML elemente iz svog post-a: ",
+    "payouts_declined": "Выплаты отключены"
   },
   "witnesses_jsx":{
     "witness_thread":"Teme svedoka",

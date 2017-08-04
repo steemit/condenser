@@ -773,7 +773,8 @@
     "cancel_transfer_from_savings":"Anulați transferul din seif",
     "stop_power_down":"Diminuarea %(VESTING_TOKENS)s oprită",
     "start_power_down_of":"Diminuarea %(VESTING_TOKENS)s începută de pe",
-    "receive_interest_of":"Primiți procente pentru"
+    "receive_interest_of":"Primiți procente pentru",
+    "transfer": "Отправлено"
   },
   "user_profile":{
     "unknown_account":"Cont necunoscut",
@@ -912,7 +913,8 @@
     "paste_a_youtube_or_vimeo_and_press_enter":"Introduceți link-ul Vimeo sau YouTube și apăsați Enter",
     "there_was_an_error_uploading_your_image":"A apărut o eroare în timpul încărcării imaginii",
     "raw_html":"Codul HTML",
-    "please_remove_following_html_elements":"Vă rugăm să eliminați aceste elemente HTML din postare: "
+    "please_remove_following_html_elements":"Vă rugăm să eliminați aceste elemente HTML din postare: ",
+    "payouts_declined": "Выплаты отключены"
   },
   "witnesses_jsx":{
     "witness_thread":"postarea delegatului",

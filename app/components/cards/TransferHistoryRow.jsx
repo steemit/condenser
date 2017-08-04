@@ -71,7 +71,7 @@ class TransferHistoryRow extends React.Component {
 
             const { amount } = data
             if( data.from === context ) {
-                description_start += tt('g.transfer') + `${fromWhere} ${data.amount}` + tt('g.to');
+                description_start += tt('transferhistoryrow_jsx.transfer') + `${fromWhere} ${data.amount}` + tt('g.to');
                 other_account = data.to;
             }
             else if( data.to === context ) {
@@ -90,7 +90,7 @@ class TransferHistoryRow extends React.Component {
             if( data.vesting_shares === '0.000000 ' + VEST_TICKER)
                 description_start += tt('transferhistoryrow_jsx.stop_power_down', {VESTING_TOKENS});
             else
-                description_start += tt('transferhistoryrow_jsx.start_power_down_of', {VESTING_TOKENS}) + data.vesting_shares;
+                description_start += tt('transferhistoryrow_jsx.start_power_down_of', {VESTING_TOKENS}) + ' ' +  data.vesting_shares;
         } else if( type === 'curation_reward' ) {
             description_start += `${curation_reward} ${VESTING_TOKENS}` + tt('g.for');
             other_account = data.comment_author + "/" + data.comment_permlink;

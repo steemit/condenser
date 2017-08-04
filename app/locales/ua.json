@@ -763,7 +763,8 @@
     "cancel_transfer_from_savings": "Скасувати переказ з сейфа",
     "stop_power_down": "Ослаблення Сили Голоса зупинено",
     "start_power_down_of": "Ослаблення Сили Голоса розпочато з",
-    "receive_interest_of": "Отримувати відсотки за"
+    "receive_interest_of": "Отримувати відсотки за",
+    "transfer": "Відправлено"
   },
   "user_profile": {
     "unknown_account": "Невідомий аккаунт",
@@ -902,7 +903,8 @@
     "paste_a_youtube_or_vimeo_and_press_enter": "Вставте YouTube або Vimeo посилання і натисніть Enter",
     "there_was_an_error_uploading_your_image": "Сталася помилка під час завантаження зображення",
     "raw_html": "HTML код",
-    "please_remove_following_html_elements": "Будь ласка, видаліть ці HTML елементи з Вашого поста: "
+    "please_remove_following_html_elements": "Будь ласка, видаліть ці HTML елементи з Вашого поста: ",
+    "payouts_declined": "Виплати відключені"
   },
   "witnesses_jsx": {
     "witness_thread": "пост делегата",

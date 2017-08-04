@@ -7,14 +7,7 @@
     width: 61.8%;
 }
 
-.rangeslider__handle {
-  top: 0px !important;
-  height: 100% !important;
-}
 
-.rangeslider-horizontal, .rangeslider__fill {
-  height: 100px !important;
-}
 
 .powerdown-confirm-text {
   text-align: center;
@@ -79,7 +72,7 @@
 * Rangeslider - Horizontal slider
 */
 .rangeslider-horizontal {
-  height: 12px;
+  height: 24px;
   border-radius: 10px;
   .rangeslider__fill {
     height: 100%;
@@ -90,15 +83,15 @@
   }
   .rangeslider__handle {
     width: 30px;
-    height: 30px;
-    border-radius: 10px;
+    height: 45px;
+    border-radius: 30px;
     top: -10px;
     &:after {
       content: ' ';
       position: absolute;
       width: 16px;
       height: 16px;
-      top: 36px;
+      top: 13px;
       left: 6px;
       border-radius: 50%;
       background-color: #dadada;

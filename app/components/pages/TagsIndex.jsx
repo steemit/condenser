@@ -71,6 +71,7 @@ export default class TagsIndex extends React.Component {
             if (/[а-яёґєії]/.test(name)) {
               name = 'ru--' + detransliterate(name.toLowerCase(), true)
             }
+            if (/^(u\w{4}){6,}/.test(name)) return null;
             isSelected = selected.indexOf(name) !== -1
 
             return (<tr key={tag.get('name')}>

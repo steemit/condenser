@@ -1,4 +1,3 @@
-
 # Steemit.com
 
 
@@ -11,6 +10,33 @@ Steemit.com is the react.js web interface to the world's first and best blockcha
 
 ## Installation
 
+#### Install yarn if not already installed
+
+```bash
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+(enter password)
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+sudo apt-get update && sudo apt-get install yarn
+```
+
+#### OS X: Install brew if not already installed
+
+```bash
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+```
+
+#### Install Node v6.3 (or above) if not already installed ([NVM](https://github.com/creationix/nvm) recommended)
+
+```bash
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.32.1/install.sh | bash
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
+
+command -v nvm # verify it outputs nvm
+
+nvm install v6
+```
+
 #### Clone the repository and make a tmp folder
 ```bash
 git clone https://github.com/steemit/condenser
@@ -18,33 +44,15 @@ cd condenser
 mkdir tmp
 ```
 
-#### Verify NVM is installed
-
-```bash
-command -v nvm # verify
-```
-
-It should output "nvm". If it does not, install nvm.
-
-#### Install dependencies
-
-```bash
-# Install at least Node v6.3 if you don't already have it ([NVM](https://github.com/creationix/nvm) recommended)
-nvm install v6
-
-npm install
-npm install -g babel-cli
-```
-
 #### Create config file
-
 
 ```bash
 cd config
 cp default.json steem-dev.json
+cd ..
 ```
 
-Generate a new crypto_key and save under server_session_secret in ./steem-dev.json.
+#### Generate a new crypto_key and save under server_session_secret in `./config/steem-dev.json`.
 
 ```bash
 node
@@ -73,72 +81,26 @@ sudo apt-get update
 sudo apt-get install mysql-server
 ```
 
-On Ubuntu 16.04+ you may be unable to connect to mysql without root access, if
-so update the mysql root user as follows::
+#### Save password in config
 
-```
-sudo mysql -u root
-DROP USER 'root'@'localhost';
-CREATE USER 'root'@'%' IDENTIFIED BY '';
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';
-FLUSH PRIVILEGES;
-```
+Edit `~/condenser/src/db/config/config.json` 
+Save the mysql password under `"password"`.
 
-Now launch mysql client and create steemit_dev database:
+#### Launch mysql client and create steemit_dev database:
+
 ```bash
-mysql -u root
+mysql -u root -p
+(enter password)
 > create database steemit_dev;
 > quit
 ```
 
-Create a password for the root mysql account:
-
-mysql_secure_installation
-
-(answer all it's questions as No, with Enter key, except to add a password, use "password")
-
-
-Install `sequelize-cli` globally:
+#### Install sequelize and mysql2:
 
 ```bash
-npm install -g sequelize sequelize-cli pm2 mysql
+yarn add sequelize
+yarn add mysql2
 ```
-
-###### Edit the following files and make these changes:
-
-Edit `~/condenser/db/config/config.json` and save the mysql password under "password".
-
-Edit `~/condenser/config/default.json` and enter this string for database:
-
-"database_url": "mysql://root:password@127.0.0.1/steemit_dev"
-
-Edit `~/condenser/.babelrc if it doesn't look like the following: 
-
-{
-
-  "presets": ["es2015", "stage-0", "react"],
-
-  "plugins": ["transform-runtime", "transform-decorators-legacy"]
-
-}
-
-
-###### IMPORTANT: Add an env var for the database as well in your shell:
-
-touch ~/.bash_profile
-edit this file, add 1 line:
-
-`export SDC_DATABASE_URL="mysql://root:password@localhost/steemit_dev"`
-
-source ~/.bash_profile
-
-globally install sql2:
-
-npm i -g mysql2
-
-
-
-Run `sequelize db:migrate` in `db/` directory.
 
 #### Install Tarantool - Production Only
 
@@ -160,15 +122,92 @@ Test the interactive console:
 user@example:~$ tarantool
 ```
 
-### Development
+#### Install all the dependencies of the project
 
 ```bash
-npm start
+yarn install
 ```
 
-It will take a few moments to launch. Once it says "Application started on port ####", you now have your development front end running at localhost:####, connected to the main public steem blockchain. You don't need to run ```steemd``` locally, by default you will connect to ```ws://node.steem.ws```.  Use your regular account name and credentials to login -- there is no separate dev login.
+#### Launch (Development)
 
-#### Style Guides
+```bash
+yarn start
+```
+
+It will take a few moments to launch. Once it says "Application started on port ####", you now have your development front end running at localhost:####, connected to the main public steem blockchain. It may output some SQL commands after that too, so you may need to scroll up to verify. You don't need to run ```steemd``` locally, by default you will connect to ```ws://node.steem.ws```.  Use your regular account name and credentials to login -- there is no separate dev login.
+
+#### Launch (Production)
+
+If you want to test it locally in production mode, just run the following commands:
+
+```bash
+yarn build
+yarn production
+```
+
+or via pm2:
+
+```bash
+npm run build
+npm -i -g pm2 # one time
+pm2 start config/process.json
+```
+
+## Troubleshooting
+
+#### On Ubuntu 16.04+ you may be unable to connect to mysql without root access. 
+
+If so update the mysql root user as follows::
+
+```bash
+sudo mysql -u root
+DROP USER 'root'@'localhost';
+CREATE USER 'root'@'%' IDENTIFIED BY '';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';
+FLUSH PRIVILEGES;
+```
+
+#### If the database connection is not working, double check these settings
+
+Edit `~/condenser/config/default.json` and enter this string for database:
+
+```bash
+"database_url": "mysql://root:password@127.0.0.1/steemit_dev"
+```
+
+Edit `~/condenser/.babelrc` if it doesn't look like the following: 
+
+```bash
+{
+
+  "presets": ["es2015", "stage-0", "react"],
+
+  "plugins": ["transform-runtime", "transform-decorators-legacy"]
+
+}
+```
+
+Add an env var for the database in your shell:
+
+`touch ~/.bash_profile`
+
+Add 1 line to `~/.bash_profile`:
+```bash
+export SDC_DATABASE_URL="mysql://root:password@localhost/steemit_dev"
+```
+
+Then run:
+```bash
+source ~/.bash_profile`
+```
+
+#### How to create a password for the root mysql account:
+
+`mysql_secure_installation`
+
+(answer all it's questions as No, with Enter key, except to add a password, use "password")
+
+## Style Guides
 
 ##### File naming and location
 
@@ -195,24 +234,6 @@ We adhere to BEM methodology with exception for Foundation classes, here is an e
   <li class="Header__menu-item--selected">Element with modifier</li>
 </ul>
 ```
-
-### Production
-
-If you want to test it locally in production mode, just run the following commands:
-
-```bash
-npm run build
-npm run prod
-```
-
-or via pm2:
-
-```bash
-npm run build
-npm -i -g pm2 # one time
-pm2 start config/process.json
-```
-
 
 ## Issues
 

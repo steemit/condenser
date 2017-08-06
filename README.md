@@ -47,7 +47,7 @@ mkdir tmp
 
 #### Install dependencies
 
-Install at least Node v7.5 if you don't already have it. We recommend using `nvm` to do this as it's both the simplest way to install and manage installed version(s) of node.
+Install at least Node v7.5 if you don't already have it. We recommend using `nvm` to do this as it's both the simplest way to install and manage installed version(s) of node. If you need `nvm`, you can get it at [https://github.com/creationix/nvm](https://github.com/creationix/nvm).
 
 Using nvm, you would install like this:
 ```bash
@@ -78,7 +78,7 @@ yarn run start
 
 It will take quite a bit longer to start in this mode (~60s) as it needs to build and start the webpack-dev-server.
 
-By default you will be connected to steemit.com's public steem node at `wss://steemd.steeemit.com`. This is actually on the real blockchain and you would use your regular account name and credentials to login - there is not an official separate testnet at this time. If you intend to run a full-fleged site relying on your own, we recommend looking into running a copy of `steemd` locally instead (https://github.com/steemit/steem)[https://github.com/steemit/steem].
+By default you will be connected to steemit.com's public steem node at `wss://steemd.steeemit.com`. This is actually on the real blockchain and you would use your regular account name and credentials to login - there is not an official separate testnet at this time. If you intend to run a full-fleged site relying on your own, we recommend looking into running a copy of `steemd` locally instead [https://github.com/steemit/steem](https://github.com/steemit/steem).
 
 #### Configuration
 

@@ -214,7 +214,7 @@ class PickAccount extends React.Component {
                             <input disabled={submit_btn_disabled} type="submit" className={submit_btn_class} value="CONTINUE" />
                         </form>
                         <br />
-                        <p className="secondary">Already have account? <Link to="/login.html">Login</Link></p>
+                        <p className="secondary">Already have an account? <Link to="/login.html">Login</Link></p>
                     </div>
                 </div>
             </div>

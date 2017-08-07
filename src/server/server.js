@@ -221,7 +221,10 @@ if (env === 'production') {
         reportOnly: config.get('helmet.reportOnly'),
         setAllHeaders: config.get('helmet.setAllHeaders')
     };
-    helmetConfig.directives.reportUri = '/api/v1/csp_violation';
+    helmetConfig.directives.reportUri = helmetConfig.directives.reportUri[0];
+    if (helmetConfig.directives.reportUri === '-') {
+        delete helmetConfig.directives.reportUri;
+    }
     app.use(helmet.contentSecurityPolicy(helmetConfig));
 }
 

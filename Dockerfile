@@ -3,11 +3,12 @@ FROM node:7.5
 # yarn > npm
 #RUN npm install --global yarn
 
-RUN npm install -g yarn
+RUN npm install -g yarn nsp
 
 WORKDIR /var/app
 RUN mkdir -p /var/app
 ADD package.json /var/app/package.json
+RUN nsp check --output none
 RUN yarn
 
 COPY . /var/app

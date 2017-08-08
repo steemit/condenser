@@ -1,3 +1,12 @@
+.select-powerdown-text {
+    text-align: center;
+}
+
+.select-powerdown-amount {
+    text-align: center;
+    font-size: 1.2em;
+}
+
 .powerdown-amount {
   width: 150px;
   display: inline;
@@ -7,10 +16,17 @@
     width: 61.8%;
 }
 
-
+.rangeslider {
+  margin: 40px !important;
+}
 
 .powerdown-confirm-text {
   text-align: center;
+}
+
+.close-button {
+  top: 14px;
+  right: 12px;
 }
 
 /**

@@ -251,7 +251,7 @@ class Market extends React.Component {
             const rows = open_orders && normalizeOpenOrders(open_orders).map( o =>
               <tr key={o.orderid}>
                   <td>{o.created.replace('T', ' ')}</td>
-                  <td>{tt(o.type == 'g.ask' ? 'g.sell' : 'g.buy')}</td>
+                  <td>{tt(o.type == 'ask' ? 'g.sell' : 'g.buy')}</td>
                   <td>{DEBT_TICKER} {o.price.toFixed(6)}</td>
                   <td>{o.steem}</td>
                   <td>{o.sbd.replace('SBD', DEBT_TOKEN_SHORT)}</td>

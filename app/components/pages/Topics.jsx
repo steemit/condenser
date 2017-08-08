@@ -91,6 +91,12 @@ class Topics extends React.Component {
 
         let categories = this.props.categories.get('trending');
         if (!(expanded) || compact) categories = categories.take(50);
+        categories = categories.map(cat => {
+            if (/^(u\w{4}){6,}/.test(cat)) return null;
+            return cat ? cat : null;
+        }).filter(cat => {
+          return cat !== null
+        })
 
         const cn = 'Topics' + (className ? ` ${className}` : '');
         const currentValue = `/${order}/${current}`;
@@ -111,26 +117,22 @@ class Topics extends React.Component {
             return <select className={cn} onChange={(e) => browserHistory.push(e.target.value)} value={currentValue}>
                 <option key={'*'} value={'/' + order}>{tt('g.topics')}...</option>
                 {categories.map(cat => {
-                    const catKey = cat
-                    if (/[а-яёґєії]/.test(cat)) cat = 'ru--' + detransliterate(cat, true)
-                    const link = order ? `/${order}/${cat}` : `/${cat}`;
-                    return <option key={catKey} value={link}>{detransliterate(cat)}</option>
+                    const translitCat = /[а-яёґєії]/.test(cat) ? 'ru--' + detransliterate(cat.toLowerCase(), true) : cat
+                    const link = order ? `/${order}/${translitCat}` : `/${translitCat}`;
+                    return <option key={cat} value={link}>{detransliterate(cat)}</option>
                 })}
             </select>;
         }
 
         if (IGNORE_TAGS) categories = categories.filter(val => IGNORE_TAGS.indexOf(val) === -1);
         categories = categories.map(cat => {
-            const catKey = cat
-            if (/[а-яёґєії]/.test(cat)) cat = 'ru--' + detransliterate(cat.toLowerCase(), true)
-            if (/^(u\w{4}){3,}\w+/.test(cat)) return null;
-            if (/ru--lesnik-sluchaijnayavst/.test(cat)) return null;
-            const link = order ? `/${order}/${cat}` : `/${cat}`;
+            const translitCat = /[а-яёґєії]/.test(cat) ? 'ru--' + detransliterate(cat.toLowerCase(), true) : cat
+            const link = order ? `/${order}/${translitCat}` : `/${translitCat}`;
             isSelected = selected.indexOf(cat) !== -1
-            return cat ? (<li key={catKey} className={isSelected ? 'Topics__selected__remove' : 'Topics__selected__add'}>
+            return <li key={cat} className={isSelected ? 'Topics__selected__remove' : 'Topics__selected__add'}>
                         <a className="action" onClick={() => onSelectTag(cat)}>{isSelected ? '×' : '+'}</a>
                         <Link to={link} className="tagname" activeClassName="active" title={detransliterate(cat)}>{detransliterate(cat)}</Link>
-                    </li>) : null;
+                    </li>;
         });
         return (
             <ul className={cn}>

@@ -154,6 +154,7 @@ export default function useEnterAndConfirmMobilePages(app) {
                             <span style={{color: 'red'}}>*</span> {tt('createaccount_jsx.country_code')}
                             <CountryCode name="country" value={country} />
                         </label>
+                        <br />
                         <label>
                             <span style={{color: 'red'}}>*</span> {tt('createaccount_jsx.phone_number')} <span style={{color: 'red'}}>{tt('createaccount_jsx.without_country_code')}</span>
                             <input type="tel" name="phone" value={phone} />
@@ -329,17 +330,20 @@ export default function useEnterAndConfirmMobilePages(app) {
                 <div className="row" style={{ maxWidth: "32rem" }}>
                     <div className="column">
                         {tt('createaccount_jsx.thank_you_for_providing_your_phone_number', {phone})}
-                        <br />
-                        {tt('createaccount_jsx.to_continue_please_send_sms_code', {code: confirmation_code, phone_number: config.get('twilio.sender_id')})}
+                        <br /><br />
+                        <div className="callout success">
+                        <b>{tt('createaccount_jsx.to_continue_please_send_sms_code', {code: confirmation_code, phone_number: config.get('twilio.sender_id')})}</b>
+                        </div>
                     </div>
                 </div>
-                <br />
                 <div className="row" style={{ maxWidth: "32rem" }}>
                     <div className="column">
                         <p id="Spoiler" style={{ display: "none" }}>
                           {tt('createaccount_jsx.mobile_description.one', {APP_NAME: tt('g.APP_NAME')})}<br/>
                           {tt('createaccount_jsx.mobile_description.second')}<br/>
+                          {/*
                           {tt('createaccount_jsx.mobile_description.third', {APP_NAME: tt('g.APP_NAME')})}<br/>
+                          */}
                           {tt('createaccount_jsx.mobile_description.fourth')}
                         </p>
                         <button id="SpoilerButton" className="button hollow tiny">
@@ -364,6 +368,10 @@ export default function useEnterAndConfirmMobilePages(app) {
                         <div className="secondary">
                             {tt('createaccount_jsx.you_can_change_your_number')}{" "}
                             <a href={enterMobileUrl}>{tt('g.edit')}</a>
+                        </div>
+                        <br />
+                        <div className="secondary">
+                            <b>{tt('createaccount_jsx.after_verification')}</b>
                         </div>
                         <br />
                         <div className="error">{check && 'Confirmation was attempted a moment ago. You can try again in 5 minutes later.'}</div>

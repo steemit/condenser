@@ -6,7 +6,11 @@ import universalRender from '../shared/UniversalRender';
 import models from 'db/models';
 import secureRandom from 'secure-random';
 import ErrorPage from 'server/server-error';
-import { CURRENCIES, DEFAULT_CURRENCY, SELECT_TAGS_KEY, LOCALE_COOKIE_KEY, CURRENCY_COOKIE_KEY } from 'app/client_config';
+import {
+  CURRENCIES, DEFAULT_CURRENCY, CURRENCY_COOKIE_KEY,
+  DEFAULT_LANGUAGE, LANGUAGES, LOCALE_COOKIE_KEY,
+  SELECT_TAGS_KEY
+} from 'app/client_config';
 
 const DB_RECONNECT_TIMEOUT = process.env.NODE_ENV === 'development' ? 1000 * 60 * 60 : 1000 * 60 * 10;
 
@@ -34,7 +38,8 @@ async function appRender(ctx) {
             select_tags
         };
         // Use global variable to store remote cookie current user selected currency value
-        $GLS_Config.currency = CURRENCIES.indexOf(ctx.cookies.get(CURRENCY_COOKIE_KEY)) !== -1 ? ctx.cookies.get(CURRENCY_COOKIE_KEY) : DEFAULT_CURRENCY
+        $GLS_Config.currency = CURRENCIES.indexOf(ctx.cookies.get(CURRENCY_COOKIE_KEY)) !== -1 ? ctx.cookies.get(CURRENCY_COOKIE_KEY) : DEFAULT_CURRENCY;
+        $GLS_Config.locale = Object.keys(LANGUAGES).indexOf(ctx.cookies.get(LOCALE_COOKIE_KEY)) !== -1 ? ctx.cookies.get(LOCALE_COOKIE_KEY) : DEFAULT_LANGUAGE;
 
         const user_id = ctx.session.user;
         if (user_id) {

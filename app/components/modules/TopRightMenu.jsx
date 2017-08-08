@@ -10,9 +10,10 @@ import VerticalMenu from 'app/components/elements/VerticalMenu';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import NotifiCounter from 'app/components/elements/NotifiCounter';
 import tt from 'counterpart';
-import { DEFAULT_LANGUAGE, LANGUAGES, LIQUID_TICKER, DEBT_TICKER } from 'app/client_config';
+import { DEFAULT_LANGUAGE, LANGUAGES, LOCALE_COOKIE_KEY, LIQUID_TICKER, DEBT_TICKER } from 'app/client_config';
 import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
 import {vestingSteem} from 'app/utils/StateFunctions';
+import cookie from "react-cookie";
 
 const defaultNavigate = (e) => {
     if (e.metaKey || e.ctrlKey) {
@@ -94,7 +95,7 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
         {link: '#team', value: tt('g.team')},
     ];
     let currentLang = LANGUAGES[DEFAULT_LANGUAGE].substr(0,3).toUpperCase();
-    const locale = process.env.BROWSER ? localStorage.getItem('language') || DEFAULT_LANGUAGE : DEFAULT_LANGUAGE
+    const locale = process.env.BROWSER ? cookie.load(LOCALE_COOKIE_KEY) || DEFAULT_LANGUAGE : DEFAULT_LANGUAGE
     const lang_menu = [];
     for (var key in LANGUAGES) {
       if (locale === key)
@@ -269,6 +270,7 @@ export default connect(
               if (targetLanguage.localeCompare(LANGUAGES[key]) == 0)
                 language = key
             }
+            cookie.save(LOCALE_COOKIE_KEY, language, {path: "/", expires: new Date(Date.now() + 60 * 60 * 24 * 365 * 10 * 1000)});
             localStorage.setItem('language', language)
             dispatch(user.actions.changeLanguage(language))
         },

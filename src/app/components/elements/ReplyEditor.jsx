@@ -339,7 +339,7 @@ class ReplyEditor extends React.Component {
         return (
             <div className="ReplyEditor row">
                 <div className="column small-12">
-                    <div ref="draft" className="ReplyEditor__draft ReplyEditor__draft-hide">tt('reply_editor.draft_saved')</div>
+                    <div ref="draft" className="ReplyEditor__draft ReplyEditor__draft-hide">{tt('reply_editor.draft_saved')}</div>
                     <form className={vframe_class}
                           onSubmit={handleSubmit(({data}) => {
                               const startLoadingIndicator = () => this.setState({loading: true, postError: undefined})

@@ -132,7 +132,8 @@ class TransferForm extends Component {
         const {currentUser, toVesting, transferToSelf, dispatchSubmit} = this.props;
         const {transferType} = this.props.initialValues;
         const {submitting, valid, handleSubmit} = this.state.transfer;
-        const isMemoPrivate = memo && /^#/.test(memo.value);
+        // const isMemoPrivate = memo && /^#/.test(memo.value); -- private memos are not supported yet
+        const isMemoPrivate = false;
         const form = (
             <form onSubmit={handleSubmit(({data}) => {
                 this.setState({loading: true});
@@ -223,7 +224,7 @@ class TransferForm extends Component {
                 {memo && <div className="row">
                     <div className="column small-2" style={{paddingTop: 33}}>{tt('g.memo')}</div>
                     <div className="column small-10">
-                        <small>{tt('transfer_jsx.this_memo_is') + isMemoPrivate ? tt('transfer_jsx.private') : tt('transfer_jsx.public')}</small>
+                        <small>{isMemoPrivate ? tt('transfer_jsx.this_memo_is_private') : tt('transfer_jsx.this_memo_is_public')}</small>
                         <input type="text" placeholder={tt('g.memo')} {...memo.props}
                             ref="memo" autoComplete="on" autoCorrect="off" autoCapitalize="off" spellCheck="false" disabled={loading} />
                         <div className="error">{memo.touched && memo.error && memo.error}&nbsp;</div>

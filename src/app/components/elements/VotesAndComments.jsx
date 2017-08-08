@@ -13,7 +13,6 @@ class VotesAndComments extends React.Component {
         commentsLink: React.PropTypes.string.isRequired,
 
         // Redux connect properties
-        votes: React.PropTypes.number,
         comments: React.PropTypes.number,
     };
 
@@ -29,9 +28,6 @@ class VotesAndComments extends React.Component {
 
         return (
             <span className="VotesAndComments">
-                <span className="VotesAndComments__votes" title={tt('votesandcomments_jsx.vote_count', {count: votes})}>
-                    <Icon size="1x" name="chevron-up-circle" />&nbsp;{votes}
-                </span>
                 <span className={'VotesAndComments__comments' + (comments === 0 ? ' no-comments' : '')}>
                      <Link to={commentsLink} title={comments_tooltip}>
                         <Icon name={comments > 1 ? 'chatboxes' : 'chatbox'} />&nbsp;{comments}
@@ -48,7 +44,6 @@ export default connect(
         if (!post) return props;
         return {
             ...props,
-            votes: post.get('net_votes'),
             comments: post.get('children')
         };
     }

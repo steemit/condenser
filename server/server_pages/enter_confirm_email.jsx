@@ -89,7 +89,7 @@ export default function useEnterAndConfirmEmailPages(app) {
     const router = koa_router();
     app.use(router.routes());
     const koaBody = koa_body();
-    const rc_site_key = config.get('recaptcha.site_key');
+    const rc_site_key = false; // config.get('recaptcha.site_key');
 
     router.get("/enter_email", function*() {
         console.log("-- /enter_email -->", this.session.uid, this.session.user);
@@ -149,7 +149,7 @@ export default function useEnterAndConfirmEmailPages(app) {
             return;
         }
 
-        if (config.get('recaptcha.site_key')) {
+        if (rc_site_key) {
             if (!(yield checkRecaptcha(this))) {
                 console.log(
                   "-- /submit_email captcha verification failed -->",

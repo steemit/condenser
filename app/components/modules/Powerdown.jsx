@@ -105,19 +105,21 @@ class Powerdown extends React.Component {
           <div><h3>{tt('powerdown_jsx.power_down')}</h3></div>
           {this.state.confirm ? '' :
               <div>
-                  <div className="select-powerdown-text">{tt('powerdown_jsx.select_powerdown_amt', {VESTING_TOKEN})}</div>
+                  <div className="select-powerdown-text">{tt('powerdown_jsx.select_powerdown_amt_VESTING_TOKEN', {VESTING_TOKEN})}</div>
                   <Slider min={powerDownMin} max={powerDownMax} step={0.001} value={parseFloat(this.state.powerDownAmount)} onChange={(e) => handlePowerDownSliderChange(e)} />
-                  <div className="select-powerdown-amount">{tt('powerdown_jsx.power_down_amount')}: <input type="text" className="powerdown-amount" onChange={(e) => handlePowerDownTextChange(e)} value={this.state.powerDownAmount} /><b><i>{tt('powerdown_jsx.steem_power')}</i></b></div>
+                  <div className="select-powerdown-amount">{tt('powerdown_jsx.power_down_amount')}: <input type="text" className="powerdown-amount" onChange={(e) => handlePowerDownTextChange(e)} value={this.state.powerDownAmount} /><b><i>{tt('powerdown_jsx.steem_power', {VESTING_TOKEN})}</i></b></div>
                   <br />
                   <button className="button filled float-right" onClick={(e) => handlePowerDown(e)}>{tt('powerdown_jsx.power_down')}</button>
               </div>
           }
           {!this.state.confirm ? '' :
-              <div className="powerdown-confirm-text">
-                 {tt('powerdown_jsx.confirm_power_down')}
-                 <br />
-                 {this.state.powerDownPercent}% {tt('powerdown_jsx.of_your')} VESTING TOKEN
-                 <br />
+              <div>
+                <div className="powerdown-confirm-text">
+                   {tt('powerdown_jsx.confirm_power_down')}
+                   <br />
+                   {this.state.powerDownPercent}% {tt('powerdown_jsx.of_your', {VESTING_TOKEN})}
+                   <br />
+                 </div>
                  <button className="button filled float-right" onClick={(e)=> finishPowerDown(e)}>{tt('powerdown_jsx.confirm')}</button>
                </div>
           }

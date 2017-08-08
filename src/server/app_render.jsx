@@ -87,7 +87,8 @@ async function appRender(ctx) {
         if (ctx.session.a) {
             const user_preferences_record = await models.UserPreferences.findOne({
                 attributes: ['json'],
-                where: {account: ctx.session.a}
+                where: {account: ctx.session.a},
+                logging: false
             });
             if (user_preferences_record) {
                 user_preferences = JSON.parse(user_preferences_record.json);

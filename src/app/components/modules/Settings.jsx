@@ -2,12 +2,9 @@ import React from 'react';
 import {connect} from 'react-redux'
 import user from 'app/redux/User';
 import tt from 'counterpart';
-import {ALLOWED_CURRENCIES} from 'app/client_config'
-import store from 'store';
 import transaction from 'app/redux/Transaction'
 import o2j from 'shared/clash/object2json'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
-import Userpic from 'app/components/elements/Userpic';
 import reactForm from 'app/utils/ReactForm'
 import UserList from 'app/components/elements/UserList';
 
@@ -15,15 +12,13 @@ import UserList from 'app/components/elements/UserList';
 class Settings extends React.Component {
 
     constructor(props) {
-        super()
-        this.initForm(props)
-        this.onNsfwPrefChange = this.onNsfwPrefChange.bind(this)
-        this.onNsfwPrefSubmit = this.onNsfwPrefSubmit.bind(this)
-    }
-
-    state = {
-        errorMessage: '',
-        successMessage: '',
+        super(props);
+        this.state = {
+            errorMessage: '',
+            successMessage: '',
+        }
+        this.initForm(props);
+        this.onNsfwPrefChange = this.onNsfwPrefChange.bind(this);
     }
 
     initForm(props) {
@@ -52,14 +47,8 @@ class Settings extends React.Component {
 
     onNsfwPrefChange(e) {
         const nsfwPref = e.currentTarget.value;
-        this.setState({nsfwPref: nsfwPref})
-    }
-
-    onNsfwPrefSubmit(e) {
-        const {accountname} = this.props;
-        const {nsfwPref} = this.state;
-        localStorage.setItem('nsfwPref-'+accountname, nsfwPref)
-        this.setState({oldNsfwPref: nsfwPref})
+        const user_preferences = {...this.props.user_preferences, nsfwPref}
+        this.props.setUserPreferences(user_preferences)
     }
 
     handleSubmit = ({updateInitialValues}) => {
@@ -203,14 +192,12 @@ class Settings extends React.Component {
                         <div>
                             {tt('settings_jsx.not_safe_for_work_nsfw_content')}
                         </div>
-                        <select value={this.state.nsfwPref} onChange={this.onNsfwPrefChange}>
+                        <select value={user_preferences.nsfwPref} onChange={this.onNsfwPrefChange}>
                             <option value="hide">{tt('settings_jsx.always_hide')}</option>
                             <option value="warn">{tt('settings_jsx.always_warn')}</option>
                             <option value="show">{tt('settings_jsx.always_show')}</option>
                         </select>
                         <br />
-                        <br />
-                        <input type="submit" onClick={this.onNsfwPrefSubmit} className="button" value={tt('settings_jsx.update')} disabled={this.state.nsfwPref == this.state.oldNsfwPref} />
                         <div>&nbsp;</div>
                     </div>
                 </div>}

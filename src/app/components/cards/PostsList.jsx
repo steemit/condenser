@@ -204,15 +204,15 @@ class PostsList extends React.Component {
                     {renderSummary(postsInfo)}
                 </ul>
                 {loading && <center><LoadingIndicator style={{marginBottom: "2rem"}} type="circle" /></center>}
-                {showPost && <div id="post_overlay" className="PostsList__post_overlay" tabIndex={0}>
-                    <div className="PostsList__post_top_overlay">
-                        <div className="PostsList__post_top_bar">
-                            <ul className="menu back-button-menu">
-                                <li><a onClick={(e) => {e.preventDefault(); this.setState({showPost: null}) }} href="#"><i><Icon name="chevron-left" /></i> <span>{tt('g.go_back')}</span></a></li>
-                            </ul>
-                            <CloseButton onClick={this.closePostModal} />
-                        </div>
+                {showPost && <div className="PostsList__post_top_overlay">
+                    <div className="PostsList__post_top_bar">
+                        <ul className="menu back-button-menu">
+                            <li><a onClick={(e) => {e.preventDefault(); this.setState({showPost: null}) }} href="#"><i><Icon name="chevron-left" /></i> <span>{tt('g.go_back')}</span></a></li>
+                        </ul>
+                        <CloseButton onClick={this.closePostModal} />
                     </div>
+                </div>}
+                {showPost && <div id="post_overlay" className="PostsList__post_overlay" tabIndex={0}>
                     <div className="PostsList__post_container">
                         <Post post={showPost} />
                     </div>

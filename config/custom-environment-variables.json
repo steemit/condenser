@@ -27,7 +27,8 @@
       "imgSrc": "SDC_HELMET_IMGSRC",
       "objectSrc": "SDC_HELMET_OBJECTSRC",
       "scriptSrc": "SDC_HELMET_SCRIPTSRC",
-      "styleSrc": "SDC_HELMET_STYLESRC"
+      "styleSrc": "SDC_HELMET_STYLESRC",
+      "reportUri": "SDC_HELMET_REPORTURI"
     }
   },
   "img_proxy_prefix": "SDC_IMAGE_PROXY_PREFIX",

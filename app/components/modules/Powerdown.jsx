@@ -18,7 +18,8 @@ class Powerdown extends React.Component {
         confirm: false,
         powerDownMax: 8,
         powerDownMin: 0,
-        powerDownAmount: 0
+        powerDownAmount: 0,
+        powerDownPercent: 100
       };
     }
 

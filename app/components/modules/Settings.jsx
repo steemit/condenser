@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux'
 import user from 'app/redux/User';
 import tt from 'counterpart';
-import { CURRENCIES, DEFAULT_CURRENCY, CURRENCY_COOKIE_KEY, LANGUAGES, DEFAULT_LANGUAGE, THEMES, DEFAULT_THEME } from 'app/client_config'
+import { CURRENCIES, DEFAULT_CURRENCY, CURRENCY_COOKIE_KEY, LANGUAGES, DEFAULT_LANGUAGE, LOCALE_COOKIE_KEY, THEMES, DEFAULT_THEME } from 'app/client_config'
 import transaction from 'app/redux/Transaction'
 import o2j from 'shared/clash/object2json'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
@@ -73,6 +73,7 @@ class Settings extends React.Component {
 
     onLanguageChange = (event) => {
         const language = event.target.value
+        cookie.save(LOCALE_COOKIE_KEY, language, {path: "/", expires: new Date(Date.now() + 60 * 60 * 24 * 365 * 10 * 1000)});
         localStorage.setItem('language', language)
         this.props.changeLanguage(language)
         this.notify()
@@ -154,7 +155,7 @@ class Settings extends React.Component {
         const following = follow && follow.getIn(['getFollowingAsync', account.name]);
         const ignores = isOwnAccount && following && following.get('ignore_result')
 
-        const languageSelectBox = <select defaultValue={process.env.BROWSER ? localStorage.getItem('language') : DEFAULT_LANGUAGE} onChange={this.onLanguageChange}>
+        const languageSelectBox = <select defaultValue={process.env.BROWSER ? cookie.load(LOCALE_COOKIE_KEY) : DEFAULT_LANGUAGE} onChange={this.onLanguageChange}>
           {Object.keys(LANGUAGES).map(key => {
             return <option key={key} value={key}>{LANGUAGES[key]}</option>
           })}

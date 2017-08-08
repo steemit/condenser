@@ -1,13 +1,14 @@
 import React from 'react';
 import {connect} from 'react-redux'
 import {addLocaleData, IntlProvider} from 'react-intl';
-import {DEFAULT_LANGUAGE} from 'app/client_config';
+import {LANGUAGES, DEFAULT_LANGUAGE, LOCALE_COOKIE_KEY} from 'app/client_config';
 import tt from 'counterpart';
 import en from 'react-intl/locale-data/en';
 import ru from 'react-intl/locale-data/ru';
 import uk from 'react-intl/locale-data/uk';
 import sr from 'react-intl/locale-data/sr';
 import ro from 'react-intl/locale-data/ro';
+import cookie from "react-cookie";
 
 addLocaleData([...en, ...ru, ...uk, ...sr, ...ro]);
 
@@ -19,7 +20,10 @@ tt.registerTranslations('ro', require('app/locales/ro-RO.json'));
 
 class Translator extends React.Component {
     render() {
-        const locale = process.env.BROWSER ? localStorage.getItem('language') || DEFAULT_LANGUAGE : DEFAULT_LANGUAGE
+      console.log('Translator reload')
+        const fromCookie = process.env.BROWSER && Object.keys(LANGUAGES).indexOf(cookie.load(LOCALE_COOKIE_KEY)) !== -1 ? cookie.load(LOCALE_COOKIE_KEY) : DEFAULT_LANGUAGE
+        const locale = process.env.BROWSER ? fromCookie || DEFAULT_LANGUAGE : $GLS_Config.locale
+        // const locale = process.env.BROWSER ? localStorage.getItem('language') || DEFAULT_LANGUAGE : DEFAULT_LANGUAGE
         // const locale = this.props.locale || DEFAULT_LANGUAGE;
         const localeWithoutRegionCode = locale.toLowerCase().split(/[_-]+/)[0];
         tt.setLocale(localeWithoutRegionCode)

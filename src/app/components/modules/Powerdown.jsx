@@ -106,7 +106,7 @@ class Powerdown extends React.Component {
           <div><h3>{tt('powerdown_jsx.power_down')}</h3></div>
           {this.state.confirm ? '' :
               <div>
-                  <div className="select-powerdown-text">{tt('powerdown_jsx.select_powerdown_amt_VESTING_TOKEN', {VESTING_TOKEN})}</div>
+                  <div className="select-powerdown-text">{tt('powerdown_jsx.select_powerdown_amt', {VESTING_TOKEN})}</div>
                   <Slider min={powerDownMin} max={powerDownMax} step={0.001} value={parseFloat(this.state.powerDownAmount)} onChange={(e) => handlePowerDownSliderChange(e)} />
                   <div className="select-powerdown-amount">{tt('powerdown_jsx.power_down_amount')}: <input type="text" className="powerdown-amount" onChange={(e) => handlePowerDownTextChange(e)} value={this.state.powerDownAmount} /><b><i>{tt('powerdown_jsx.steem_power', {VESTING_TOKEN})}</i></b></div>
                   <br />

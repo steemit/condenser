@@ -78,7 +78,7 @@ yarn run start
 
 It will take quite a bit longer to start in this mode (~60s) as it needs to build and start the webpack-dev-server.
 
-By default you will be connected to steemit.com's public steem node at `wss://steemd.steeemit.com`. This is actually on the real blockchain and you would use your regular account name and credentials to login - there is not an official separate testnet at this time. If you intend to run a full-fleged site relying on your own, we recommend looking into running a copy of `steemd` locally instead [https://github.com/steemit/steem](https://github.com/steemit/steem).
+By default you will be connected to steemit.com's public steem node at `wss://steemd.steeemit.com`. This is actually on the real blockchain and you would use your regular account name and credentials to login - there is not an official separate testnet at this time. If you intend to run a full-fledged site relying on your own, we recommend looking into running a copy of `steemd` locally instead [https://github.com/steemit/steem](https://github.com/steemit/steem).
 
 #### Configuration
 
@@ -92,9 +92,9 @@ export SDC_SERVER_STEEMD_URL="wss://steemd.steemit.com"
 ```
 Keep in mind environment variables only exist in your active session, so if you wish to save them for later use you can put them all in a file and `source` them in.
 
-If you'd like to statically configure condenser without variables you can edit the settings directly in `config/defaults.json`.
+If you'd like to statically configure condenser without variables you can edit the settings directly in `config/production.json`. If you're running in development mode, copy `config/production.json` to `config/dev.json` with `cp config/production.json config/dev.json` and adjust settings in `dev.json`.
 
-If you're intending to run condenser in a production environment one configuration option that you will definetely want to edit is `server_session_secret` which can be set by the environment variable `SDC_SESSION_SECRETKEY`. To generate a new value for this setting, you can do this:
+If you're intending to run condenser in a production environment one configuration option that you will definitely want to edit is `server_session_secret` which can be set by the environment variable `SDC_SESSION_SECRETKEY`. To generate a new value for this setting, you can do this:
 
 ```bash
 node
@@ -104,9 +104,9 @@ node
 
 #### Install mysql server
 
-If you've followed the instructions up until this point you will already have a running condenser installation which is entirely acceptable for development purposes. It is *not required to run a SQL server for development*. If you're running a full-fleged site however, you will want to set one up.
+If you've followed the instructions up until this point you will already have a running condenser installation which is entirely acceptable for development purposes. It is *not required to run a SQL server for development*. If you're running a full-fledged site however, you will want to set one up.
 
-Once set up, you can set the mysql server configuration option for condenser using the environment variable `SDC_DATABASE_URL`, or alterntivaely by editting it in `config/defaults.json`. You will use the format `mysql://user:pass@hostname/databasename`.
+Once set up, you can set the mysql server configuration option for condenser using the environment variable `SDC_DATABASE_URL`, or alternatively by editing it in `config/production.json`. You will use the format `mysql://user:pass@hostname/databasename`.
 
 Example:
 
@@ -134,7 +134,7 @@ sudo apt-get install mysql-server
 ```
 
 On Ubuntu 16.04+ you may be unable to connect to mysql without root access, if
-so update the mysql root user as follows::
+so update the mysql root user as follows:
 
 ```
 sudo mysql -u root
@@ -172,7 +172,7 @@ sequelize db:migrate
 
 #### Install Tarantool - Production Only
 
-Tarantool similarly to mysql is not required for development but if you're running a full-fleged site with condenser you will want to run one.
+Tarantool similarly to mysql is not required for development but if you're running a full-fledged site with condenser you will want to run one.
 
 OS X:
 

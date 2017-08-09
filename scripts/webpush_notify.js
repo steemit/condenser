@@ -1,6 +1,6 @@
 import config from 'config';
 import webPush from 'web-push';
-import Tarantool from '../db/tarantool';
+import Tarantool from '../src/db/tarantool';
 
 webPush.setGCMAPIKey(config.get('notify.gcm_key'));
 

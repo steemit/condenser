@@ -92,10 +92,6 @@ export default connect((state, ownProps) => {
     const trending = state.global.getIn(['tag_idx', 'trending'])
     // apply translations
     // they are used here because default prop can't acces intl property
-<<<<<<< HEAD:app/components/cards/CategorySelector.jsx
-    const placeholder = tt('category_selector_jsx..tag_your_story');
-=======
     const placeholder = tt('category_selector_jsx.tag_your_story');
->>>>>>> master:src/app/components/cards/CategorySelector.jsx
     return { trending, placeholder, ...ownProps, }
 })(CategorySelector);

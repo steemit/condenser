@@ -198,11 +198,7 @@ class LoginForm extends Component {
                     <div className="info">{tt('loginform_jsx.this_operation_requires_your_key_or_master_password', {authType})}</div>
                 </div>}
                 <div>
-<<<<<<< HEAD:app/components/modules/LoginForm.jsx
-                    <label htmlFor="saveLogin">
-=======
                     <label className="LoginForm__save-login" htmlFor="saveLogin">
->>>>>>> master:src/app/components/modules/LoginForm.jsx
                         {tt('loginform_jsx.keep_me_logged_in')} &nbsp;
                         <input id="saveLogin" type="checkbox" ref="pw" {...saveLogin.props} onChange={this.saveLoginToggle} disabled={submitting} /></label>
                 </div>
@@ -228,12 +224,7 @@ class LoginForm extends Component {
             <div className="LoginForm row">
                 <div className="column">
                     {message}
-<<<<<<< HEAD:app/components/modules/LoginForm.jsx
-                        <h3>{tt('loginform_jsx.returning_users')}<span className="OpAction">{title}</span></h3>
-                    <br />
-=======
                     <h3>{tt('loginform_jsx.returning_users')}<span className="OpAction">{title}</span></h3>
->>>>>>> master:src/app/components/modules/LoginForm.jsx
                     {form}
                 </div>
             </div>

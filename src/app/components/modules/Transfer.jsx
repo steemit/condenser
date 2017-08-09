@@ -125,11 +125,7 @@ class TransferForm extends Component {
             'Transfer to Savings': tt('transfer_jsx.protect_funds_by_requiring_a_3_day_withdraw_waiting_period'),
             'Savings Withdraw': tt('transfer_jsx.withdraw_funds_after_the_required_3_day_waiting_period'),
         };
-<<<<<<< HEAD:app/components/modules/Transfer.jsx
-        const powerTip2 = tt('tips_js.VESTING_TOKEN_is_non_transferrable_and_requires_convert_back_to_LIQUID_TOKEN', {LIQUID_TOKEN, VESTING_TOKEN})
-=======
         const powerTip2 = tt('tips_js.VESTING_TOKEN_is_non_transferable_and_requires_convert_back_to_LIQUID_TOKEN', {LIQUID_TOKEN, VESTING_TOKEN})
->>>>>>> master:src/app/components/modules/Transfer.jsx
         const powerTip3 = tt('tips_js.converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again', {LIQUID_TOKEN, VESTING_TOKEN})
         const {to, amount, asset, memo} = this.state;
         const {loading, trxError, advanced} = this.state;
@@ -228,11 +224,7 @@ class TransferForm extends Component {
                 {memo && <div className="row">
                     <div className="column small-2" style={{paddingTop: 33}}>{tt('g.memo')}</div>
                     <div className="column small-10">
-<<<<<<< HEAD:app/components/modules/Transfer.jsx
-                        <small>{tt('transfer_jsx.this_memo_is') + isMemoPrivate ? tt('transfer_jsx.private') : tt('transfer_jsx.public')}</small>
-=======
                         <small>{isMemoPrivate ? tt('transfer_jsx.this_memo_is_private') : tt('transfer_jsx.this_memo_is_public')}</small>
->>>>>>> master:src/app/components/modules/Transfer.jsx
                         <input type="text" placeholder={tt('g.memo')} {...memo.props}
                             ref="memo" autoComplete="on" autoCorrect="off" autoCapitalize="off" spellCheck="false" disabled={loading} />
                         <div className="error">{memo.touched && memo.error && memo.error}&nbsp;</div>
@@ -265,11 +257,7 @@ class TransferForm extends Component {
 }
 
 const AssetBalance = ({onClick, balanceValue}) =>
-<<<<<<< HEAD:app/components/modules/Transfer.jsx
-    <a onClick={onClick} style={{borderBottom: '#A09F9F 1px dotted', cursor: 'pointer'}}>{tt('transfer_jsx.balance') + ": " + balanceValue}</a>;
-=======
     <a onClick={onClick} style={{borderBottom: '#A09F9F 1px dotted', cursor: 'pointer'}}>{tt('g.balance') + ": " + balanceValue}</a>;
->>>>>>> master:src/app/components/modules/Transfer.jsx
 
 import {connect} from 'react-redux'
 

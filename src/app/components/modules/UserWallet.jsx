@@ -366,7 +366,7 @@ class UserWallet extends React.Component {
                 </div>
             </div>
 
-            {isMyAccount && <SavingsWithdrawHistory />}
+            {true && <SavingsWithdrawHistory />}
 
             <div className="row">
                 <div className="column small-12">

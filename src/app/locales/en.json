@@ -40,7 +40,7 @@
     "in_reply_to": "in reply to",
     "insufficient_balance": "Insufficient balance",
     "invalid_amount": "Invalid amount",
-    "joined": "Joined",
+    "joined": "Joined %(month)s %(year)s",
     "loading": "Loading",
     "login": "Login",
     "logout": "Logout",
@@ -70,11 +70,12 @@
     "promote": "Promote",
     "promoted": "promoted",
     "re": "RE",
+    "re_to": "RE: %(topic)",
     "recent_password": "Recent Password",
     "receive": "Receive ",
     "remove": "Remove",
     "remove_vote": "Remove Vote",
-    "replied_to": "replied to",
+    "replied_to": "replied to %(account)s",
     "replies": "Replies",
     "reply": "Reply",
     "reply_count": {
@@ -114,7 +115,6 @@
     "upvote_post": "Upvote post",
     "username": "Username",
     "version": "Version",
-
     "vote": "Vote",
     "votes": "votes",
     "wallet": "Wallet",
@@ -166,7 +166,6 @@
     "cannot_increase_reward_of_post_within_the_last_minute_before_payout": "Cannot increase reward of post within the last minute before payout",
     "vote_currently_exists_user_must_be_indicate_a_to_reject_witness": "vote currently exists, user must be indicate a desire to reject witness",
     "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes": "Only one Steem account allowed per IP address every 10 minutes",
-
     "resteem_this_post": "Resteem This Post",
     "reblog": "Resteem",
     "write_your_story": "Write your story",
@@ -307,7 +306,8 @@
     "default_50_50": "Default (50%% / 50%%)",
     "decline_payout": "Decline Payout",
     "check_this_to_auto_upvote_your_post": "Check this to auto-upvote your post",
-    "markdown_styling_guide": "Markdown Styling Guide"
+    "markdown_styling_guide": "Markdown Styling Guide",
+    "or_by": "or by"
   },
   "category_selector_jsx": {
     "tag_your_story": "Tag (up to 5 tags), the first tag is your main category.",
@@ -345,10 +345,10 @@
     "recent_password": "Recent Password",
     "your_password_permissions_were_reduced": "Your password permissions were reduced",
     "if_you_did_not_make_this_change": "If you did not make this change please",
-    "owhership_changed_on": "Ownership Changed On",
+    "owhership_changed_on": "Ownership Changed On %(date)s",
     "deadline_for_recovery_is": "Deadline for recovery is",
     "i_understand_dont_show_again": "I understand, don't show me again",
-    "insufficent_balance": "Insufficient balance",
+    "insufficient_balance": "Insufficient balance",
     "in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN": "In 3.5 days, convert %(amount)s %(DEBT_TOKEN)s into %(LIQUID_TOKEN)s",
     "account_name_is_not_available": "Account name is not available",
     "view_the_full_context": "View the full context",
@@ -667,7 +667,9 @@
   "savingswithdrawhistory_jsx": {
     "cancel_this_withdraw_request": "Cancel this withdraw request?",
     "pending_savings_withdrawals": "PENDING SAVINGS WITHDRAWS",
-    "withdraw": "Withdraw"
+    "withdraw": "Withdraw %(amount)s",
+    "to": "to %(to)s",
+    "from_to": "from %(from)s to %(to)s"
   },
   "confirmtransactionform_jsx": {
     "ok": "Ok",

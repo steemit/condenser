@@ -37,7 +37,7 @@ class SuggestPassword extends React.Component {
                 <Icon name={APP_ICON} size="2x" /> {APP_NAME}
                 <hr />
                 <div>
-                    <h5>{tt('suggestpassword_jsx.' + (print ? 'APP_NAME_password_backup' : 'APP_NAME_password_backup_required'), {APP_NAME})}</h5>
+                    <h5>{print ? tt('suggestpassword_jsx.APP_NAME_password_backup', {APP_NAME}) : tt('suggestpassword_jsx.APP_NAME_password_backup_required', {APP_NAME})}</h5>
                     {steemitCannotRecoverPasswords}
                 </div>
                 <br />

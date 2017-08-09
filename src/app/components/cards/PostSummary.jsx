@@ -97,7 +97,7 @@ class PostSummary extends React.Component {
         let comments_link;
 
         if( content.get( 'parent_author') !== "" ) {
-           title_text = tt('g.re') + ': ' + content.get('root_title');
+           title_text = tt('g.re_to', {topic: content.get('root_title')});
            title_link_url = content.get( 'url' );
            comments_link = title_link_url;
         } else {

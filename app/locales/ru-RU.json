@@ -55,11 +55,11 @@
     "must_end_with_a_letter_or_number": "Должно заканчиваться с буквы или номера"
   },
   "chainvalidation_js": {
-    "account_name_should": "Имя аккаунта должно быть ",
+    "account_name_should": "Имя аккаунта должно ",
     "asset_name_should": "Asset name should ",
     "not_be_empty": "не может быть пустым.",
-    "be_longer": "длиннее.",
-    "be_shorter": "короче.",
+    "be_longer": " быть длиннее.",
+    "be_shorter": "быть короче.",
     "contain_only_letters_numbers_and_perhaps_a_dot": "contain only letters numbers and perhaps a dot.",
     "each_account_segment_should": "Имя аккаунта должно ",
     "start_with_a_letter": "начинаться с буквы.",
@@ -67,7 +67,7 @@
     "have_only_one_dash_in_a_row": "иметь только одно тире в строке.",
     "have_only_one_dot": "have only one dot.",
     "end_with_a_letter_or_digit": "заканчиваться буквой или цифрой.",
-    "end_with_a_letter": "end with a letter."
+    "end_with_a_letter": "заканчиваться буквой."
   },
   "confirmtransactionform_jsx": {
     "ok": "ОК",

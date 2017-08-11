@@ -19,7 +19,7 @@ export default class VoteHistoryRow extends React.Component {
         let permlink = op[1].op[1].permlink;
         let in_reply_to = <span></span>;
         if( parent_author && parent_author != context )
-            in_reply_to = <span>{tt('g.in_reply_to') + ' '} <Link to={parent_link}>@{parent_author}</Link></span>;
+            in_reply_to = <span>{tt('g.in_reply_to')} <Link to={parent_link}>@{parent_author}</Link></span>;
         else if( parent_author == context )
             in_reply_to = <span><Link to={author_link}>@{author}</Link> {tt('g.replied_to', {account: parent_author})}</span>;
 

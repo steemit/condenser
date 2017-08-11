@@ -488,7 +488,8 @@
     "paste_a_youtube_or_vimeo_and_press_enter": "Paste a YouTube or Vimeo and press Enter",
     "there_was_an_error_uploading_your_image": "There was an error uploading your image",
     "raw_html": "Raw HTML",
-    "please_remove_following_html_elements": "Please remove the following HTML elements from your post: "
+    "please_remove_following_html_elements": "Please remove the following HTML elements from your post: ",
+    "and_more": "and %(count)s more"
   },
   "witnesses_jsx": {
     "witness_thread": "witness thread",
@@ -511,12 +512,11 @@
   },
   "votesandcomments_jsx": {
     "no_responses_yet_click_to_respond": "No responses yet. Click to respond.",
-    "response_count": {
-      "zero": "no responses",
-      "one": "1 response",
-      "other": "%(count)s responses"
+    "response_count_tooltip": {
+      "zero": "no responses. Click to respond.",
+      "one": "1 response. Click to respond.",
+      "other": "%(count)s responses. Click to respond."
     },
-    "click_to_respond": "Click to respond",
     "vote_count": {
       "zero": "no votes",
       "one": "1 vote",
@@ -787,7 +787,8 @@
     "withdraw_funds_after_the_required_3_day_waiting_period": "Withdraw funds after the required 3 day waiting period.",
     "balance": "Balance",
     "from": "From",
-    "to": "To"
+    "to": "To",
+    "asset_currently_collecting": "%(asset) currently collecting %(interest)% APR."
   },
   "userwallet_jsx": {
     "conversion_complete_tip": "Will complete on",

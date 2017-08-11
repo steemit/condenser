@@ -227,7 +227,7 @@ class Voting extends React.Component {
                 voters.push({value: (sign > 0 ? '+ ' : '- ') + voter, link: '/@' + voter})
             }
             if (total_votes > voters.length) {
-                voters.push({value: <span>&hellip; and {(total_votes - voters.length)} {tt('g.more')}</span>});
+                voters.push({value: <span>&hellip; {tt('voting_jsx.and_more', {count: total_votes - voters.length})}</span>});
             }
             voters_list = <DropdownMenu selected={pluralize('votes', total_votes, true)} className="Voting__voters_list" items={voters} el="div" />;
         }
@@ -249,7 +249,7 @@ class Voting extends React.Component {
             <span className="Voting">
                 <span className="Voting__inner">
                     <span className={classUp}>
-                        {votingUpActive ? up : <a href="#" onClick={voteUpClick} title={tt(myVote > 0 ? 'g.remove_vote' : 'g.upvote')}>{up}</a>}
+                        {votingUpActive ? up : <a href="#" onClick={voteUpClick} title={myVote > 0 ? tt('g.remove_vote') : tt('g.upvote')}>{up}</a>}
                         {dropdown}
                     </span>
                     {payoutEl}

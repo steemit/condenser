@@ -760,6 +760,7 @@
     "muted_users": "Muted Users",
     "update": "Update",
     "profile_image_url": "Profile picture url",
+    "cover_image_url": "Cover image url",
     "profile_name": "Display Name",
     "profile_about": "About",
     "profile_location": "Location",

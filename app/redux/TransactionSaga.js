@@ -271,13 +271,13 @@ function* accepted_vote({operation: {author, permlink, weight}}) {
 }
 
 function* accepted_withdraw_vesting({operation}) {
-    let account = yield call([api, api.getAccountsAsync], [operation.account])
+    let [account] = yield call([api, api.getAccountsAsync], [operation.account])
     account = fromJS(account)
     yield put(g.actions.receiveAccount({account}))
 }
 
 function* accepted_account_update({operation}) {
-    let account = yield ([api, api.getAccountsAsync], [operation.account])
+    let [account] = yield call([api, api.getAccountsAsync], [operation.account])
     account = fromJS(account)
     yield put(g.actions.receiveAccount({account}))
 

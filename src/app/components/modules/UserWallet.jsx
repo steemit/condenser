@@ -95,7 +95,8 @@ class UserWallet extends React.Component {
         const powerDown = (cancel, e) => {
             e.preventDefault()
             const name = account.get('name');
-            const vesting_shares = cancel ? '0.000000 VESTS' : account.get('vesting_shares');
+            const vesting_shares = cancel ? '0.000000 VESTS' :
+                parseFloat(account.get('vesting_shares')) - parseFloat(account.get('delegated_vesting_shares')) + ' VESTS';
             this.setState({toggleDivestError: null});
             const errorCallback = e2 => {this.setState({toggleDivestError: e2.toString()})};
             const successCallback = () => {this.setState({toggleDivestError: null})}

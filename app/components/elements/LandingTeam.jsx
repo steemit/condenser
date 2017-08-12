@@ -10,71 +10,141 @@ export default class LandingTeam extends React.Component {
 					</div>
 				</div>
 
-				<div className="row Team__members text-center">
-                    <div data-wow-delay="1s" className="wow fadeIn small-12 medium-4 large-3 small-centered medium-centered large-centered columns Team__member Team__member__sergey">
-                        <div className="Team__members__image-wrapper">
-                            <a href="https://www.facebook.com/serejandmyself"><img className="Team__member__img" src="images/landing/sergey.jpg" /></a>
-                        </div>
-                        <strong>Сергей Симановский</strong>
-                        <p>Project Manager</p>
-                        <ul>
-                            <li><a href="https://www.linkedin.com/in/sergey-simanovsky-87b5ab100"><img src="images/landing/linkedin_icon.jpg" /></a></li>
-                            <li><a href="https://www.facebook.com/serejandmyself"><img className="Team__facebook-logo" src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-facebook-512.png" /></a></li>
-                        </ul>
-                    </div>
-                    <div data-wow-delay="1s" className="wow fadeIn small-12 medium-4 large-3 small-centered medium-centered large-centered columns Team__member Team__member__anton">
-                        <div className="Team__members__image-wrapper">
-                            <a href="https://www.linkedin.com/in/solodikov"><img className="Team__member__img" src="images/landing/anton.jpg" /></a>
-                        </div>
-                        <strong>Антон Солодиков</strong>
-                        <p>СМО</p>
-                        <ul>
-                            <li><a href="https://www.linkedin.com/in/solodikov"><img src="images/landing/linkedin_icon.jpg" alt="фотография Антона Солодикова" /></a></li>
-                            <li><a href="https://www.facebook.com/solodikov"><img className="Team__facebook-logo" src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-facebook-512.png" /></a></li>
-                        </ul>
-                    </div>
-					<div data-wow-delay="1s" className="wow fadeIn small-12 medium-12 large-3 columns small-centered Team__member Team__member__mihail">
-						<div className="Team__members__image-wrapper">
-							<img className="Team__member__img" src="https://s23.postimg.org/ju1d2msuz/2765860.png" alt="фотография Михаила Комарова" />
-						</div>
-						<strong>Михаил Комаров</strong>
-						<p>Блокчейн разработка</p>
-						<ul>
-							<li><a href="https://github.com/Nemo1369"><img src="images/landing/github_icon.jpg" /></a></li>
-						</ul>
-					</div>
-                    <div data-wow-delay="1s" className="wow fadeIn small-12 medium-4 large-3 columns small-centered Team__member Team__member__pavel">
-                        <div className="Team__members__image-wrapper">
-                            <img className="Team__member__img" src="https://avatars3.githubusercontent.com/u/25533641?v=3&s=460" alt="фотография Горошко Павла" />
-                        </div>
-                        <strong>Горошко Павел</strong>
-                        <p>Web разработка</p>
-                        <ul>
-                            <li><a href="https://github.com/pavelit"><img src="images/landing/github_icon.jpg" /></a></li>
-                        </ul>
-                    </div>
-					<div data-wow-delay="1s" className="wow fadeIn small-12 medium-4 large-3 columns small-centered Team__member Team__member__pavel">
-                        <div className="Team__members__image-wrapper">
-                            <img className="Team__member__img" src="https://avatars2.githubusercontent.com/u/3322340?v=3&s=460" alt="фотография Ткаченко Игоря" />
-                        </div>
-                        <strong>Ткаченко Игорь</strong>
-                        <p>Web разработка</p>
-                        <ul>
-                            <li><a href="https://github.com/b1acksun"><img src="images/landing/github_icon.jpg" /></a></li>
-                        </ul>
-                    </div>
-					<div data-wow-delay="1s" className="wow fadeIn small-12 medium-4 large-3 columns small-centered Team__member Team__member__pavel">
-                        <div className="Team__members__image-wrapper">
-                            <img className="Team__member__img" src="https://avatars0.githubusercontent.com/u/19325076?v=3&s=460" alt="фотография Дениса Захаренкова" />
-                        </div>
-                        <strong>Денис Захаренков</strong>
-                        <p>DevOps</p>
-                        <ul>
-                            <li><a href="https://github.com/muhazzz/"><img src="images/landing/github_icon.jpg" /></a></li>
-                        </ul>
-                    </div>
+        <div className="row"><div className="small-12"><h3>GolosIO</h3></div></div>
+        <div className="row Team__members text-center">
 
+            <div data-wow-delay="1s" className="wow fadeIn small-12 medium-12 large-3 columns small-centered Team__member ">
+                <div className="Team__members__image-wrapper">
+                    <img className="Team__member__img" src="images/landing/evgeniya.jpg" />
                 </div>
+                <strong>Евгения</strong>
+                <p>CMO</p>
+            </div>
+
+            <div data-wow-delay="1s" className="wow fadeIn small-12 medium-12 large-3 columns small-centered Team__member ">
+                <div className="Team__members__image-wrapper">
+                    <img className="Team__member__img" src="images/landing/maria-l.jpg" />
+                </div>
+                <strong>Мария Листван</strong>
+                <p>Маркетинг, пиар</p>
+            </div>
+
+            <div data-wow-delay="1s" className="wow fadeIn small-12 medium-4 large-3 columns small-centered Team__member Team__member__pavel">
+                <div className="Team__members__image-wrapper">
+                    <img className="Team__member__img" src="https://avatars3.githubusercontent.com/u/25533641?v=3&s=460" alt="фотография Горошко Павла" />
+                </div>
+                <strong>Горошко Павел</strong>
+                <p>Web разработка</p>
+                <ul>
+                    <li><a href="https://github.com/pavelit"><img src="images/landing/github_icon.jpg" /></a></li>
+                </ul>
+            </div>
+
+            <div data-wow-delay="1s" className="wow fadeIn small-12 medium-4 large-3 columns small-centered Team__member Team__member__pavel">
+                <div className="Team__members__image-wrapper">
+                    <img className="Team__member__img" src="https://avatars2.githubusercontent.com/u/3322340?v=3&s=460" alt="фотография Ткаченко Игоря" />
+                </div>
+                <strong>Ткаченко Игорь</strong>
+                <p>Web разработка</p>
+                <ul>
+                    <li><a href="https://github.com/b1acksun"><img src="images/landing/github_icon.jpg" /></a></li>
+                </ul>
+            </div>
+
+            <div data-wow-delay="1s" className="wow fadeIn small-12 medium-4 large-3 columns small-centered Team__member Team__member__pavel">
+                <div className="Team__members__image-wrapper">
+                    <img className="Team__member__img" src="https://avatars0.githubusercontent.com/u/19325076?v=3&s=460" alt="фотография Дениса Захаренкова" />
+                </div>
+                <strong>Денис Захаренков</strong>
+                <p>DevOps</p>
+                <ul>
+                    <li><a href="https://github.com/muhazzz/"><img src="images/landing/github_icon.jpg" /></a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div className="row"><div className="small-12"><h3>Golos Fund</h3></div></div>
+        <div className="row Team__members text-center">
+            <div data-wow-delay="1s" className="wow fadeIn small-12 medium-4 large-3 small-centered medium-centered large-centered columns Team__member Team__member__sergey">
+                <div className="Team__members__image-wrapper">
+                    <a href="https://www.facebook.com/serejandmyself"><img className="Team__member__img" src="images/landing/sergey.jpg" /></a>
+                </div>
+                <strong>Сергей Симановский</strong>
+                <p>Project Manager</p>
+                <ul>
+                    <li><a href="https://www.linkedin.com/in/sergey-simanovsky-87b5ab100"><img src="images/landing/linkedin_icon.jpg" /></a></li>
+                    <li><a href="https://www.facebook.com/serejandmyself"><img className="Team__facebook-logo" src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-facebook-512.png" /></a></li>
+                </ul>
+            </div>
+
+            <div data-wow-delay="1s" className="wow fadeIn small-12 medium-12 large-3 columns small-centered Team__member ">
+                <div className="Team__members__image-wrapper">
+                    <img className="Team__member__img" src="https://avatars1.githubusercontent.com/u/115528?v=4&s=400" />
+                </div>
+                <strong>Вадим Барсуков</strong>
+                <p>wiki.golos.io менеджер</p>
+                <ul>
+                    <li><a href="https://github.com/vadbars"><img src="images/landing/github_icon.jpg" /></a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div className="row"><div className="small-12"><h3>Golos Core</h3></div></div>
+        <div className="row Team__members text-center">
+            <div data-wow-delay="1s" className="wow fadeIn small-12 medium-12 large-3 columns small-centered Team__member Team__member__mihail">
+                <div className="Team__members__image-wrapper">
+                    <img className="Team__member__img" src="https://s23.postimg.org/ju1d2msuz/2765860.png" />
+                </div>
+                <strong>Михаил Комаров</strong>
+                <p>Блокчейн разработка</p>
+                <ul>
+                    <li><a href="https://github.com/Nemo1369"><img src="images/landing/github_icon.jpg" /></a></li>
+                </ul>
+            </div>
+
+            <div data-wow-delay="1s" className="wow fadeIn small-12 medium-12 large-3 columns small-centered Team__member Team__member__mihail">
+                <div className="Team__members__image-wrapper">
+                    <img className="Team__member__img" src="https://avatars2.githubusercontent.com/u/958279?v=4&s=400" />
+                </div>
+                <strong>Александр</strong>
+                <p>Блокчейн разработка</p>
+                <ul>
+                    <li><a href="https://github.com/kotbegemot"><img src="images/landing/github_icon.jpg" /></a></li>
+                </ul>
+            </div>
+
+            <div data-wow-delay="1s" className="wow fadeIn small-12 medium-12 large-3 columns small-centered Team__member Team__member__mihail">
+                <div className="Team__members__image-wrapper">
+                    <img className="Team__member__img" src="https://avatars0.githubusercontent.com/u/12054931?v=4&s=400" />
+                </div>
+                <strong>Антон Корпусенко</strong>
+                <p>Блокчейн разработка</p>
+                <ul>
+                    <li><a href="https://github.com/AKorpusenko"><img src="images/landing/github_icon.jpg" /></a></li>
+                </ul>
+            </div>
+
+            <div data-wow-delay="1s" className="wow fadeIn small-12 medium-12 large-3 columns small-centered Team__member Team__member__mihail">
+                <div className="Team__members__image-wrapper">
+                    <img className="Team__member__img" src="images/landing/maria-d.jpg" />
+                </div>
+                <strong>Мария Дъячук</strong>
+                <p>Аккаунт-менеджер</p>
+            </div>
+
+            <div data-wow-delay="1s" className="wow fadeIn small-12 medium-4 large-3 columns small-centered Team__member Team__member__pavel">
+                <div className="Team__members__image-wrapper">
+                    <img className="Team__member__img" src="https://avatars0.githubusercontent.com/u/19325076?v=3&s=460" alt="фотография Дениса Захаренкова" />
+                </div>
+                <strong>Денис Захаренков</strong>
+                <p>DevOps</p>
+                <ul>
+                    <li><a href="https://github.com/muhazzz/"><img src="images/landing/github_icon.jpg" /></a></li>
+                </ul>
+            </div>
+        </div>
+
+
 
 				<div className="row text-center">
 					<div className="small-12 columns">

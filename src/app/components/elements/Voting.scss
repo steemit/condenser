@@ -169,11 +169,15 @@
 }
 
 .Voting__adjust_weight_down {
+    position: absolute;
     @extend .Voting__adjust_weight;
-
-    right: 0;
     width: auto !important;
     max-width: 500px;
+    z-index: 333;
+    box-shadow: 1px 1px 5px 0 rgba(50,50,50,.75);
+    background-color: #fefefe;
+    border: 1px solid #cacaca;
+    display: block;
 
     div.clear {
       clear: both;

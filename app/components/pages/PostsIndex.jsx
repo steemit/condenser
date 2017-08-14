@@ -26,6 +26,7 @@ class PostsIndex extends React.Component {
         routeParams: PropTypes.object,
         requestData: PropTypes.func,
         loading: PropTypes.bool,
+        loggedIn: PropTypes.bool,
         username: PropTypes.string
     };
 
@@ -135,6 +136,7 @@ class PostsIndex extends React.Component {
     }
 
     render() {
+        let {loggedIn} = this.props;
         let {category, order = constants.DEFAULT_SORT_ORDER} = this.props.routeParams;
         let topics_order = order;
         let posts = [];
@@ -143,7 +145,7 @@ class PostsIndex extends React.Component {
         if (category === 'feed') {
             const account_name = order.slice(1);
             order = 'by_feed';
-            topics_order = 'trending';
+            topics_order = loggedIn ? 'created' : 'trending';
             posts = this.props.accounts.getIn([account_name, 'feed']);
             const isMyAccount = this.props.username === account_name;
             if (isMyAccount) {
@@ -217,6 +219,7 @@ module.exports = {
                 status: state.global.get('status'),
                 loading: state.app.get('loading'),
                 accounts: state.global.get('accounts'),
+                loggedIn: !!state.user.get('current'),
                 username: state.user.getIn(['current', 'username']) || state.offchain.get('account'),
                 fetching: state.global.get('fetching'),
             };

@@ -17,7 +17,7 @@ export default class LandingTeam extends React.Component {
                 <div className="Team__members__image-wrapper">
                     <img className="Team__member__img" src="images/landing/evgeniya.jpg" />
                 </div>
-                <strong>Евгения</strong>
+                <strong>Евгения Харченко</strong>
                 <p>CMO</p>
             </div>
 
@@ -89,7 +89,7 @@ export default class LandingTeam extends React.Component {
 
             <div data-wow-delay="1s" className="wow fadeIn small-12 medium-12 large-3 columns small-centered Team__member Team__member__mihail">
                 <div className="Team__members__image-wrapper">
-                    <img className="Team__member__img" src="https://avatars0.githubusercontent.com/u/12054931?v=4&s=400" />
+                    <img className="Team__member__img" src="images/landing/korpusenko.jpg" />
                 </div>
                 <strong>Антон Корпусенко</strong>
                 <p>Блокчейн разработка</p>

@@ -90,6 +90,7 @@ minnowboost
 minnowboster
 minowbooster
 blocktades
+bloocktrades
 `.trim().split('\n');
 
 export default list;

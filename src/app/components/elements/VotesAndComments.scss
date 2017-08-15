@@ -13,11 +13,11 @@
 
 .VotesAndComments__votes {
   padding-right: 1rem;
+  border-right: 1px solid $medium-gray;
 }
 
 .VotesAndComments__comments {
   padding-left: 1rem;
-  border-left: 1px solid $medium-gray;
 }
 
 /* Small only */

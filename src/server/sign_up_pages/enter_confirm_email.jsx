@@ -65,8 +65,11 @@ function* confirmEmailHandler() {
         return;
     }
 
-    const number_of_created_accounts = yield models.sequelize.query(`select count(*) as result from identities i join accounts a on a.user_id=i.user_id where i.provider='email' and i.email='${eid.email}' and a.created=1 and a.ignored<>1`);
-    if (number_of_created_accounts && number_of_created_accounts[0][0].result > 0) {
+    const number_of_created_accounts = yield models.sequelize.query(
+        `select count(*) as result from identities i join accounts a on a.user_id=i.user_id where i.provider='email' and i.email=:email and a.created=1 and a.ignored<>1`,
+        { replacements: { email: eid.email }, type: models.sequelize.QueryTypes.SELECT }
+    );
+    if (number_of_created_accounts && number_of_created_accounts[0].result > 0) {
         console.log(
             "-- /confirm_email email has already been used -->",
             this.session.uid,

@@ -77,8 +77,11 @@ function* confirmMobileHandler(e) {
         return;
     }
 
-    const number_of_created_accounts = yield models.sequelize.query(`select count(*) as result from identities i join accounts a on a.user_id=i.user_id where i.provider='phone' and i.phone='${mid.phone}' and a.created=1 and a.ignored<>1`);
-    if (number_of_created_accounts && number_of_created_accounts[0][0].result > 0) {
+    const number_of_created_accounts = yield models.sequelize.query(
+        `select count(*) as result from identities i join accounts a on a.user_id=i.user_id where i.provider='phone' and i.phone=:phone and a.created=1 and a.ignored<>1`,
+        { replacements: { phone: mid.phone }, type: models.sequelize.QueryTypes.SELECT }
+    );
+    if (number_of_created_accounts && number_of_created_accounts[0].result > 0) {
         console.log(
             "-- /confirm_mobile there are created accounts -->",
             user.id,

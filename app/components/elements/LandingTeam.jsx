@@ -30,7 +30,7 @@ export default class LandingTeam extends React.Component {
                     <img className="Team__member__img" src="images/landing/maria-l.jpg" />
                 </div>
                 <strong>Мария Листван</strong>
-                <p>Маркетинг, пиар</p>
+                <p>Комьюнити-менеджер</p>
                 <ul>
                     <li><a href="mailto:support@golos.io" title="mail to support@golos.io"><Icon name="envelope" size="2x" /></a></li>
                 </ul>

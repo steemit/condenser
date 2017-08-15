@@ -1,4 +1,5 @@
 import React from 'react'
+import Icon from 'app/components/elements/Icon';
 
 export default class LandingTeam extends React.Component {
 	render() {
@@ -19,6 +20,9 @@ export default class LandingTeam extends React.Component {
                 </div>
                 <strong>Евгения Харченко</strong>
                 <p>CMO</p>
+                <ul>
+                    <li><a href="mailto:marketing@golos.io" title="mail to marketing@golos.io"><Icon name="envelope" size="2x" /></a></li>
+                </ul>
             </div>
 
             <div data-wow-delay="1s" className="wow fadeIn small-12 medium-12 large-3 columns small-centered Team__member ">
@@ -27,6 +31,9 @@ export default class LandingTeam extends React.Component {
                 </div>
                 <strong>Мария Листван</strong>
                 <p>Маркетинг, пиар</p>
+                <ul>
+                    <li><a href="mailto:support@golos.io" title="mail to support@golos.io"><Icon name="envelope" size="2x" /></a></li>
+                </ul>
             </div>
 
             <div data-wow-delay="1s" className="wow fadeIn small-12 medium-4 large-3 columns small-centered Team__member Team__member__pavel">
@@ -102,7 +109,7 @@ export default class LandingTeam extends React.Component {
                 <div className="Team__members__image-wrapper">
                     <img className="Team__member__img" src="images/landing/maria-d.jpg" />
                 </div>
-                <strong>Мария Дъячук</strong>
+                <strong>Мария Дьячук</strong>
                 <p>Аккаунт-менеджер</p>
             </div>
 
@@ -129,6 +136,7 @@ export default class LandingTeam extends React.Component {
                 <ul>
                     <li><a href="https://www.linkedin.com/in/sergey-simanovsky-87b5ab100"><img src="images/landing/linkedin_icon.jpg" /></a></li>
                     <li><a href="https://www.facebook.com/serejandmyself"><img className="Team__facebook-logo" src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-facebook-512.png" /></a></li>
+                    <li><a href="mailto:golosfund@golos.io" title="mail to golosfund@golos.io"><Icon name="envelope" size="2x" /></a></li>
                 </ul>
             </div>
 

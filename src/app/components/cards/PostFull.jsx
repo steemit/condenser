@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
-import pluralize from 'pluralize';
 import Icon from 'app/components/elements/Icon';
 import { connect } from 'react-redux';
 import user from 'app/redux/User';
@@ -324,7 +323,7 @@ class PostFull extends React.Component {
                   {' '}{!readonly && showDeleteOption && !showReply && <a onClick={onDeletePost}>{tt('g.delete')}</a>}
                 </span>
                 <span className="PostFull__responses">
-                  <Link to={link} title={pluralize('Responses', content.children, true)}>
+                  <Link to={link} title={tt('g.responses', {count: content.children})}>
                     <Icon name="chatboxes" className="space-right" />{content.children}
                   </Link>
                 </span>

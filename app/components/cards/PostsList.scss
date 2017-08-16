@@ -1,0 +1,99 @@
+.PostsList__post_overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 300;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  background-color: $white;
+  // padding: 0 .9rem;
+  -webkit-overflow-scrolling: touch;
+  backface-visibility: hidden;
+}
+
+.PostsList__post_top_overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+  height: 3rem;
+  border-bottom: 1px solid $light-gray;
+}
+
+.PostsList__post_top_bar {
+  position: relative;
+  width: 100%;
+  height: 3rem;
+  margin: 0 auto;
+  background-color: $white;
+  overflow: hidden;
+  a {
+    span.Icon path {
+      fill: map-get($foundation-palette, 'primary');
+    }
+  }
+  > .close-button {
+    visibility: hidden;
+    top: 1rem;
+    right: 0;
+  }
+}
+
+.PostsList__post_container {
+  position: relative;
+  background-color: $white;
+  margin: 1rem auto;
+  padding: 2rem 0.9rem 0 0.9rem;
+  transform: translateZ(0);
+  .PostFull {
+    background-color: $white;
+  }
+}
+
+body.with-post-overlay {
+  overflow: hidden;
+  position: fixed;
+}
+
+@media screen and (min-width: 60rem) {
+
+  .PostsList__post_overlay_backdrop {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: auto;
+    background-color: rgba(150, 150, 150, 0.9);
+  }
+  .PostsList__post_top_overlay {
+    border-bottom: none;
+  }
+  .PostsList__post_top_bar {
+    width: 56rem;
+    background-color: transparent;
+    > .close-button {
+      visibility: visible;
+    }
+    > .back-button-menu {
+      visibility: hidden;
+    }
+  }
+  .PostsList__post_container {
+    border-radius: 3px;
+    width: 56rem;
+    box-shadow: 0 0 5px 0px rgba(64,64,64,1);
+  }
+}
+
+@media screen and (min-width: 67rem) {
+  .PostsList__post_container {
+    width: 62rem;
+  }
+  .PostsList__post_top_bar {
+    width: 62rem;
+  }
+}

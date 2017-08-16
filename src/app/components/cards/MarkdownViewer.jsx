@@ -17,7 +17,6 @@ const remarkable = new Remarkable({
 })
 
 class MarkdownViewer extends Component {
-
     static propTypes = {
         // HTML properties
         text: React.PropTypes.string,
@@ -92,7 +91,7 @@ class MarkdownViewer extends Component {
         if(/<\s*script/ig.test(cleanText)) {
             // Not meant to be complete checking, just a secondary trap and red flag (code can change)
             console.error('Refusing to render script tag in post text', cleanText)
-            return <div></div>
+            return <div />
         }
 
         const noImageActive = cleanText.indexOf(noImageText) !== -1
@@ -111,16 +110,28 @@ class MarkdownViewer extends Component {
                       h = large ? 360 : 270
                 if(type === 'youtube') {
                     sections.push(
-                        <YoutubePreview key={idx++} width={w} height={h} youTubeId={id}
-                            frameBorder="0" allowFullScreen="true" />
+                      <YoutubePreview
+                          key={idx++}
+                          width={w}
+                          height={h}
+                          youTubeId={id}
+                          frameBorder="0"
+                          allowFullScreen="true" />
                     )
                 } else if(type === 'vimeo') {
                     const url = `https://player.vimeo.com/video/${id}`
                     sections.push(
-                        <div className="videoWrapper">
-                            <iframe key={idx++} src={url} width={w} height={h} frameBorder="0"
-                                webkitallowfullscreen mozallowfullscreen allowFullScreen></iframe>
-                        </div>
+                      <div className="videoWrapper">
+                        <iframe
+                            key={idx++}
+                            src={url}
+                            width={w}
+                            height={h}
+                            frameBorder="0"
+                            webkitallowfullscreen
+                            mozallowfullscreen
+                            allowFullScreen />
+                      </div>
                     )
                 } else {
                     console.error('MarkdownViewer unknown embed type', type);
@@ -133,12 +144,12 @@ class MarkdownViewer extends Component {
 
         const cn = 'Markdown' + (this.props.className ? ` ${this.props.className}` : '') + (html ? ' html' : '') + (large ? '' : ' MarkdownViewer--small')
         return (<div className={"MarkdownViewer " + cn}>
-            {sections}
-            {noImageActive && allowNoImage &&
-                <div onClick={this.onAllowNoImage} className="MarkdownViewer__negative_group">
-                    {tt('markdownviewer_jsx.images_were_hidden_due_to_low_ratings')}
-                    <button style={{marginBottom: 0}} className="button hollow tiny float-right">{tt('g.show')}</button>
-                </div>
+          {sections}
+          {noImageActive && allowNoImage &&
+            <div onClick={this.onAllowNoImage} className="MarkdownViewer__negative_group">
+              {tt('markdownviewer_jsx.images_were_hidden_due_to_low_ratings')}
+              <button style={{marginBottom: 0}} className="button hollow tiny float-right">{tt('g.show')}</button>
+            </div>
             }
         </div>)
     }

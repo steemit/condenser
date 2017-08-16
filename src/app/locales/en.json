@@ -243,7 +243,17 @@
     "requires_auth_key": "This operation requires your %(authType)s key (or use your master password)",
     "keep_me_logged_in": "Keep me logged in",
     "basic": "Basic",
-    "advanced": "Advanced"
+    "advanced": "Advanced",
+    "views": {
+      "zero": "No Views",
+      "one": "%(count)s View",
+      "other": "%(count)s Views"
+    },
+    "responses": {
+      "zero": "No Responses",
+      "one": "%(count)s Response",
+      "other": "%(count)s Responses"
+    }
   },
   "navigation": {
     "about": "About",
@@ -489,7 +499,11 @@
     "there_was_an_error_uploading_your_image": "There was an error uploading your image",
     "raw_html": "Raw HTML",
     "please_remove_following_html_elements": "Please remove the following HTML elements from your post: ",
-    "and_more": "and %(count)s more"
+    "and_more": "and %(count)s more",
+    "votes_plural": {
+      "one": "%(count)s vote",
+      "other": "%(count)s votes"
+    }
   },
   "witnesses_jsx": {
     "witness_thread": "witness thread",
@@ -504,7 +518,7 @@
     "information": "Information",
     "if_you_want_to_vote_outside_of_top_enter_account_name": "If you would like to vote for a witness outside of the top 50, enter the account name below to cast a vote",
     "set_witness_proxy": "You can also choose a proxy that will vote for witnesses for you. This will reset your current witness selection.",
-    "witness_set": "You have set a voting proxy. If you would like to reenable manual voting, please clear your proxy.",
+    "witness_set": "You have set a voting proxy. If you would like to re-enable manual voting, please clear your proxy.",
     "witness_proxy_current": "Your current proxy is",
     "witness_proxy_set": "Set proxy",
     "witness_proxy_clear": "Clear proxy",

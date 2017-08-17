@@ -68,7 +68,7 @@ class ReplyEditor extends React.Component {
 
         if(process.env.BROWSER) {
             // Check for rte editor preference
-            let rte = this.props.isStory && JSON.parse(localStorage.getItem('replyEditorData-rte') || RTE_DEFAULT);
+            let rte = this.props.isStory && RTE_DEFAULT // && JSON.parse(localStorage.getItem('replyEditorData-rte') || RTE_DEFAULT);
             let raw = null;
 
             // Process initial body value (if this is an edit)
@@ -239,7 +239,7 @@ class ReplyEditor extends React.Component {
             state.rte_value = isHtmlTest(body.value) ? stateFromHtml(body.value) : stateFromMarkdown(body.value)
         }
         this.setState(state);
-        localStorage.setItem('replyEditorData-rte', !this.state.rte)
+        //localStorage.setItem('replyEditorData-rte', !this.state.rte)
     }
     showDraftSaved() {
         const {draft} = this.refs
@@ -410,8 +410,8 @@ class ReplyEditor extends React.Component {
                                           {currentDomesticTitle} <Icon name="caret-down" />
                                         </a>
                                     </LinkWithDropdown>
-                                    {rte && <a href="#" onClick={this.toggleRte}>{body.value ? 'Raw HTML' : 'Markdown'}</a>}
-                                    {!rte && <a href="#" onClick={this.toggleRte}>{tt('reply_editor.editor')}</a>}
+                                    {rte && <a href="#" onClick={this.toggleRte}>{body.value ? 'Raw HTML' : `Markdown ${tt('reply_editor.editor')}`}</a>}
+                                    {!rte && <a href="#" onClick={this.toggleRte}>{`HTML ${tt('reply_editor.editor')}`}</a>}
                                 </div>
                                 {titleError}
                             </span>}

@@ -20,6 +20,7 @@ export default function* verify({ mobile, confirmation_code, ip, ignore_score })
     try {
         const result = yield getScore(mobile);
         const { recommendation, score } = result.risk;
+        let phone = mobile;
         // if (!ignore_score && recommendation !== 'allow') {
         if (!ignore_score && (!score || score > 600)) {
             console.log(
@@ -30,12 +31,16 @@ export default function* verify({ mobile, confirmation_code, ip, ignore_score })
                 score
             };
         }
+        if (result.numbering && result.numbering.cleansing && result.numbering.cleansing.sms) {
+            const sms = result.numbering.cleansing.sms;
+            phone = sms.country_code + sms.phone_number;
+        }
         const { reference_id } = yield verifySms({
             mobile,
             confirmation_code,
             ip
         });
-        return { reference_id, score };
+        return { reference_id, score, phone };
     } catch (error) {
         console.log('-- verify score error -->', error);
         return { error: 'Unable to verify phone, please try again later.' };
@@ -48,7 +53,7 @@ function getScore(mobile) {
     });
     const resource = '/v1/phoneid/score/' + mobile.match(/\d+/g).join('');
     const method = 'GET';
-    return fetch(`https://rest.telesign.com${resource}?${fields}`, {
+    return fetch(`https://rest-ww.telesign.com${resource}?${fields}`, {
         method,
         headers: authHeaders({ resource, method })
     })

@@ -1,5 +1,6 @@
 import React from 'react'
 import Icon from 'app/components/elements/Icon';
+import {APP_ICON} from 'app/client_config';
 
 export default class LandingTeam extends React.Component {
 	render() {
@@ -22,6 +23,7 @@ export default class LandingTeam extends React.Component {
                 <p>CMO</p>
                 <ul>
                     <li><a href="mailto:marketing@golos.io" title="mail to marketing@golos.io"><Icon name="envelope" size="2x" /></a></li>
+                    <li><a href="/@jevgenika"><Icon name={APP_ICON} size="2x" /></a></li>
                 </ul>
             </div>
 
@@ -44,6 +46,7 @@ export default class LandingTeam extends React.Component {
                 <p>Web разработка</p>
                 <ul>
                     <li><a href="https://github.com/pavelit"><img src="images/landing/github_icon.jpg" /></a></li>
+                    <li><a href="https://golos.io/@pav"><Icon name={APP_ICON} size="2x" /></a></li>
                 </ul>
             </div>
 
@@ -55,6 +58,7 @@ export default class LandingTeam extends React.Component {
                 <p>Web разработка</p>
                 <ul>
                     <li><a href="https://github.com/b1acksun"><img src="images/landing/github_icon.jpg" /></a></li>
+                    <li><a href="/@b1acksun"><Icon name={APP_ICON} size="2x" /></a></li>
                 </ul>
             </div>
 
@@ -66,6 +70,7 @@ export default class LandingTeam extends React.Component {
                 <p>DevOps</p>
                 <ul>
                     <li><a href="https://github.com/muhazzz/"><img src="images/landing/github_icon.jpg" /></a></li>
+                    <li><a href="/@muhazokotuha"><Icon name={APP_ICON} size="2x" /></a></li>
                 </ul>
             </div>
         </div>
@@ -80,6 +85,7 @@ export default class LandingTeam extends React.Component {
                 <p>Блокчейн разработка</p>
                 <ul>
                     <li><a href="https://github.com/Nemo1369"><img src="images/landing/github_icon.jpg" /></a></li>
+                    <li><a href="/@nemo1369"><Icon name={APP_ICON} size="2x" /></a></li>
                 </ul>
             </div>
 
@@ -121,6 +127,7 @@ export default class LandingTeam extends React.Component {
                 <p>DevOps</p>
                 <ul>
                     <li><a href="https://github.com/muhazzz/"><img src="images/landing/github_icon.jpg" /></a></li>
+                    <li><a href="/@muhazokotuha"><Icon name={APP_ICON} size="2x" /></a></li>
                 </ul>
             </div>
         </div>
@@ -137,6 +144,7 @@ export default class LandingTeam extends React.Component {
                     <li><a href="https://www.linkedin.com/in/sergey-simanovsky-87b5ab100"><img src="images/landing/linkedin_icon.jpg" /></a></li>
                     <li><a href="https://www.facebook.com/serejandmyself"><img className="Team__facebook-logo" src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-facebook-512.png" /></a></li>
                     <li><a href="mailto:golosfund@golos.io" title="mail to golosfund@golos.io"><Icon name="envelope" size="2x" /></a></li>
+                    <li><a href="/@serejandmyself"><Icon name={APP_ICON} size="2x" /></a></li>
                 </ul>
             </div>
 
@@ -148,6 +156,7 @@ export default class LandingTeam extends React.Component {
                 <p>wiki.golos.io менеджер</p>
                 <ul>
                     <li><a href="https://github.com/vadbars"><img src="images/landing/github_icon.jpg" /></a></li>
+                    <li><a href="/@vadbars"><Icon name={APP_ICON} size="2x" /></a></li>
                 </ul>
             </div>
         </div>

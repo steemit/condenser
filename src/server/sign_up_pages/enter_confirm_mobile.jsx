@@ -4,7 +4,7 @@ import React from "react";
 import { renderToString } from "react-dom/server";
 import models from "db/models";
 import ServerHTML from "server/server-html";
-import twilioVerify from "server/utils/twilio";
+// import twilioVerify from "server/utils/twilio";
 import teleSignVerify from "server/utils/teleSign";
 import CountryCode from "app/components/elements/CountryCode";
 import { getRemoteIp, checkCSRF } from "server/utils/misc";
@@ -74,6 +74,21 @@ function* confirmMobileHandler(e) {
         this.status = 401;
         this.flash = { error: "Confirmation code has been expired" };
         this.redirect("/enter_mobile");
+        return;
+    }
+
+    const number_of_created_accounts = yield models.sequelize.query(
+        `select count(*) as result from identities i join accounts a on a.user_id=i.user_id where i.provider='phone' and i.phone=:phone and a.created=1 and a.ignored<>1`,
+        { replacements: { phone: mid.phone }, type: models.sequelize.QueryTypes.SELECT }
+    );
+    if (number_of_created_accounts && number_of_created_accounts[0].result > 0) {
+        console.log(
+            "-- /confirm_mobile there are created accounts -->",
+            user.id,
+            mid.phone
+        );
+        this.flash = { error: "This phone number has already been used" };
+        this.redirect('/enter_mobile');
         return;
     }
 
@@ -201,7 +216,7 @@ recovery should your account ever be compromised.</em>
             return;
         }
 
-        const phone = digits(parseInt(country) + localPhone);
+        let phone = digits(parseInt(country) + localPhone);
 
         // const blocked_prefixes = yield models.List.findAll({
         //     attributes: ["id", "value"],
@@ -217,18 +232,6 @@ recovery should your account ever be compromised.</em>
         //     }
         // }
 
-        const number_of_created_accounts = yield models.sequelize.query(`select count(*) as result from identities i join accounts a on a.user_id=i.user_id where i.provider='phone' and i.phone='${phone}' and a.created=1 and a.ignored<>1`);
-        if (number_of_created_accounts && number_of_created_accounts[0][0].result > 0) {
-            console.log(
-                "-- /submit_mobile there are created accounts -->",
-                user_id,
-                phone
-            );
-            this.flash = { error: "This phone number has already been used" };
-            this.redirect(enterMobileUrl);
-            return;
-        }
-
         const confirmation_code = parseInt(
             secureRandom.randomBuffer(8).toString("hex"),
             16
@@ -239,6 +242,7 @@ recovery should your account ever be compromised.</em>
         let mid = yield models.Identity.findOne({
             where: { user_id, provider: "phone" }
         });
+
         if (mid) {
             if (mid.verified) {
                 if (mid.phone === phone) {
@@ -260,25 +264,7 @@ recovery should your account ever be compromised.</em>
                 this.redirect(enterMobileUrl);
                 return;
             }
-            yield mid.update({ confirmation_code, phone });
-        } else {
-            mid = yield models.Identity.create({
-                provider: "phone",
-                user_id,
-                uid: this.session.uid,
-                phone,
-                verified: false,
-                confirmation_code
-            });
         }
-        console.log(
-            '-- /submit_mobile -->',
-            this.session.uid,
-            this.session.user,
-            phone,
-            mid.id
-        );
-        const ip = getRemoteIp(this.req);
 
         // const twilioResult = yield twilioVerify(phone);
         // console.log('-- /submit_mobile twilioResult -->', twilioResult);
@@ -293,17 +279,39 @@ recovery should your account ever be compromised.</em>
         const verifyResult = yield teleSignVerify({
             mobile: phone,
             confirmation_code,
-            ip,
+            ip: getRemoteIp(this.req),
             ignore_score: true //twilioResult === 'pass'
         });
-        if (verifyResult && verifyResult.score) {
-            mid.update({score: verifyResult.score});
-        }
-        if (verifyResult && verifyResult.error) {
+
+        if (verifyResult.error) {
             this.flash = { error: verifyResult.error };
             this.redirect(enterMobileUrl);
             return;
         }
+
+        phone = verifyResult.phone;
+
+        if (mid) {
+            yield mid.update({confirmation_code, phone, score: verifyResult.score});
+        } else {
+            mid = yield models.Identity.create({
+                provider: "phone",
+                user_id,
+                uid: this.session.uid,
+                phone,
+                verified: false,
+                confirmation_code,
+                score: verifyResult.score
+            });
+        }
+
+        console.log(
+            '-- /submit_mobile -->',
+            this.session.uid,
+            this.session.user,
+            phone,
+            mid.id
+        );
 
         const body = renderToString(
             <div className="App">

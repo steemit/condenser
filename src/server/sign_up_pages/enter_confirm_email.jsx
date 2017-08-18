@@ -64,6 +64,24 @@ function* confirmEmailHandler() {
         this.body = '<!DOCTYPE html>Confirmation code expired.  Please <a href="/enter_email">re-submit</a> your email for verification.';
         return;
     }
+
+    const number_of_created_accounts = yield models.sequelize.query(
+        `select count(*) as result from identities i join accounts a on a.user_id=i.user_id where i.provider='email' and i.email=:email and a.created=1 and a.ignored<>1`,
+        { replacements: { email: eid.email }, type: models.sequelize.QueryTypes.SELECT }
+    );
+    if (number_of_created_accounts && number_of_created_accounts[0].result > 0) {
+        console.log(
+            "-- /confirm_email email has already been used -->",
+            this.session.uid,
+            eid.email
+        );
+        this.session.uid = undefined;
+        this.session.user = undefined;
+        this.flash = {error: 'This email has already been used'};
+        this.redirect('/pick_account');
+        return;
+    }
+
     this.session.user = eid.user_id;
     yield eid.update({
         verified: true
@@ -251,8 +269,8 @@ export default function useEnterAndConfirmEmailPages(app) {
             this.redirect(`/enter_email?account=${account}`);
             return;
         }
-        email = email.toLowerCase();
-        account = account.toLowerCase();
+        email = email.trim().toLowerCase();
+        account = account.trim().toLowerCase();
 
         //recaptcha
         if (config.get('recaptcha.site_key')) {
@@ -285,18 +303,6 @@ export default function useEnterAndConfirmEmailPages(app) {
         }
 
         try {
-            const number_of_created_accounts = yield models.sequelize.query(`select count(*) as result from identities i join accounts a on a.user_id=i.user_id where i.provider='email' and i.email='${email}' and a.created=1 and a.ignored<>1`);
-            if (number_of_created_accounts && number_of_created_accounts[0][0].result > 0) {
-                console.log(
-                    "-- /submit_email there are created accounts -->",
-                    this.session.uid,
-                    email
-                );
-                this.flash = {error: 'This email has already been used'};
-                this.redirect(`/enter_email?email=${email}&account=${account}`);
-                return;
-            }
-
             let user = yield models.User.findOne({ attributes: ['id'], where: { id: this.session.user }});
             if (user) {
                 const data = user.sign_up_meta ? JSON.parse(user.sign_up_meta) : {};
@@ -316,7 +322,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                 this.session.user = user.id;
             }
             // create referer attribute
-            let user_att = yield models.UserAttribute.findOne({ attributes: ['user_id', 'type_of'], where: { user_id: user.id, type_of: 'referer' }});
+            const user_att = yield models.UserAttribute.findOne({ attributes: ['user_id', 'type_of'], where: { user_id: user.id, type_of: 'referer' }});
             if (!user_att && this.session.r) {
                 yield models.UserAttribute.create({
                     user_id: user.id,
@@ -325,7 +331,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                 });
             }
 
-            let confirmation_code = secureRandom.randomBuffer(13).toString("hex");
+            const confirmation_code = secureRandom.randomBuffer(13).toString("hex");
             // create identity
             yield models.Identity.create({
                 user_id: user.id,

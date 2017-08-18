@@ -85,6 +85,8 @@ export default createModule({
         { action: 'HIDE_PROMOTE_POST', reducer: state => state.set('show_promote_post_modal', false) },
         { action: 'SET_TRANSFER_DEFAULTS', reducer: (state, {payload}) => state.set('transfer_defaults', fromJS(payload)) },
         { action: 'CLEAR_TRANSFER_DEFAULTS', reducer: (state) => state.remove('transfer_defaults') },
+        { action: 'SET_POWERDOWN_DEFAULTS', reducer: (state, {payload}) => state.set('powerdown_defaults', fromJS(payload)) },
+        { action: 'CLEAR_POWERDOWN_DEFAULTS', reducer: (state) => state.remove('powerdown_defaults') },
         {
             action: 'USERNAME_PASSWORD_LOGIN',
             reducer: state => state, // saga

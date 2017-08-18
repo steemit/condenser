@@ -94,14 +94,17 @@ class UserWallet extends React.Component {
 
         const powerDown = (cancel, e) => {
             e.preventDefault()
-            console.log('-- UserWallet.powerDown -->');
-            this.props.showPowerdown();
-            // const name = account.get('name');
-            // const vesting_shares = cancel ? '0.000000 VESTS' : account.get('vesting_shares');
-            // this.setState({toggleDivestError: null});
-            // const errorCallback = e2 => {this.setState({toggleDivestError: e2.toString()})};
-            // const successCallback = () => {this.setState({toggleDivestError: null})}
-            // this.props.withdrawVesting({account: name, vesting_shares, errorCallback, successCallback})
+            if (cancel) {
+                const name = account.get('name');
+                const vesting_shares = cancel ? '0.000000 VESTS' : account.get('vesting_shares');
+                this.setState({toggleDivestError: null});
+                const errorCallback = e2 => {this.setState({toggleDivestError: e2.toString()})};
+                const successCallback = () => {this.setState({toggleDivestError: null})}
+                this.props.withdrawVesting({account: name, vesting_shares, errorCallback, successCallback})
+            } else {
+                const to_withdraw = account.get('to_withdraw')
+                this.props.showPowerdown({to_withdraw});
+            }
         }
 
         // Sum savings withrawals
@@ -212,7 +215,7 @@ class UserWallet extends React.Component {
             dollar_menu.push({ value: tt('g.sell'), link: '#', onClick: onShowWithdrawSBD });
         }
         if( divesting ) {
-            power_menu.push( { value: 'Cancel Power Down', link:'#', onClick: powerDown.bind(this,true) } );
+            power_menu.push( { value: 'Cancel Power Down', link:'#', onClick: powerDown.bind(this, true) } );
         }
 
         const isWithdrawScheduled = new Date(account.get('next_vesting_withdrawal') + 'Z').getTime() > Date.now()

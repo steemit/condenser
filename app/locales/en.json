@@ -306,7 +306,7 @@
   },
   "submit_a_story": {
     "title": "Title",
-    "editor": "Editor",
+    "editor": "editor",
     "update_post": "Update Post",
     "markdown_is_supported": "Styling with Markdown is supported",
     "markdown_not_supported": "Markdown is not supported here",

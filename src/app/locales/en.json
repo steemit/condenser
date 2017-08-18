@@ -40,7 +40,7 @@
     "in_reply_to": "in reply to",
     "insufficient_balance": "Insufficient balance",
     "invalid_amount": "Invalid amount",
-    "joined": "Joined %(month)s %(year)s",
+    "joined": "Joined",
     "loading": "Loading",
     "login": "Login",
     "logout": "Logout",

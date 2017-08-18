@@ -93,10 +93,11 @@ export default class LandingTeam extends React.Component {
                 <div className="Team__members__image-wrapper">
                     <img className="Team__member__img" src="https://avatars2.githubusercontent.com/u/958279?v=4&s=400" />
                 </div>
-                <strong>Александр</strong>
+                <strong>Александр Боргардт</strong>
                 <p>Блокчейн разработка</p>
                 <ul>
                     <li><a href="https://github.com/kotbegemot"><img src="images/landing/github_icon.jpg" /></a></li>
+                    <li><a href="/@kotbegemot"><Icon name={APP_ICON} size="2x" /></a></li>
                 </ul>
             </div>
 

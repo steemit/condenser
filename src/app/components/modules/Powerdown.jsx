@@ -7,7 +7,7 @@ import transaction from 'app/redux/Transaction';
 import user from 'app/redux/User';
 import tt from 'counterpart'
 import {VEST_TICKER, LIQUID_TICKER} from 'app/client_config'
-import {numberWithCommas, vestingSteem, vestsToSp, assetFloat} from 'app/utils/StateFunctions'
+import {numberWithCommas, spToVestsf, vestsToSpf, vestsToSp, assetFloat} from 'app/utils/StateFunctions'
 
 class Powerdown extends React.Component {
 
@@ -15,15 +15,26 @@ class Powerdown extends React.Component {
         super(props, context)
         this.state = {
             broadcasting: false,
+            manual_entry: false,
             new_withdraw: (props.to_withdraw !== 0) ? props.to_withdraw : props.available_shares
         }
     }
 
     render() {
-        const {broadcasting, new_withdraw} = this.state
+        const {broadcasting, new_withdraw, manual_entry} = this.state
         const {account, available_shares, withdrawn, to_withdraw, vesting_shares, delegated_vesting_shares} = this.props
         const formatSp = (amount) => numberWithCommas(vestsToSp(this.props.state, amount))
-        const sliderChange = (value) => this.setState({new_withdraw: value})
+        const sliderChange = (value) => {
+            this.setState({new_withdraw: value, manual_entry: false})
+        }
+        const inputChange = (event) => {
+            event.preventDefault()
+            let value = spToVestsf(this.props.state, parseFloat(event.target.value.replace(/,/g, '')))
+            if (!isFinite(value)) {
+                value = new_withdraw
+            }
+            this.setState({new_withdraw: value, manual_entry: event.target.value})
+        }
         const powerDown = (event) => {
             event.preventDefault()
             this.setState({broadcasting: true})
@@ -65,7 +76,14 @@ class Powerdown extends React.Component {
                     format={formatSp}
                     onChange={sliderChange}
                 />
-                <p className="powerdown-amount">{tt('powerdown_jsx.power_down_amount')}: {formatSp(new_withdraw)} {LIQUID_TICKER}</p>
+                <p className="powerdown-amount">
+                    {tt('powerdown_jsx.power_down_amount')}:
+                    <input
+                        value={manual_entry ? manual_entry : formatSp(new_withdraw)}
+                        onChange={inputChange}
+                        autoCorrect={false} />
+                    {LIQUID_TICKER}
+                </p>
                 <ul className="powerdown-notes">{notes}</ul>
                 <button type="submit" className="button float-right" onClick={powerDown} disabled={broadcasting}>{tt('powerdown_jsx.power_down')}</button>
             </div>

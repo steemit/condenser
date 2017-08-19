@@ -1,12 +1,18 @@
-.powerdown-confirm-text {
+
+.powerdown-amount {
   text-align: center;
+}
+
+.powerdown-notes {
+  font-size: 80%;
+  list-style: none;
 }
 
 /**
 * Rangeslider
 */
 .rangeslider {
-  margin: 20px 0;
+  margin: 20px;
   position: relative;
   background: #e6e6e6;
   -ms-touch-action: none;
@@ -61,28 +67,28 @@
 * Rangeslider - Horizontal slider
 */
 .rangeslider-horizontal {
-  height: 12px;
+  height: 24px;
   border-radius: 10px;
   .rangeslider__fill {
     height: 100%;
     // background-color: #4CAF50;
-    background-color: #7CB342;
+    background-color: #1946a0;
     border-radius: 10px;
     top: 0;
   }
   .rangeslider__handle {
     width: 30px;
-    height: 30px;
+    height: 42px;
     border-radius: 30px;
     top: -10px;
     &:after {
       content: ' ';
       position: absolute;
       width: 16px;
-      height: 16px;
+      height: 28px;
       top: 6px;
       left: 6px;
-      border-radius: 50%;
+      border-radius: 40%;
       background-color: #dadada;
       box-shadow: 0 1px 3px rgba(0,0,0,0.4) inset,
                   0 -1px 3px rgba(0,0,0,0.4) inset;

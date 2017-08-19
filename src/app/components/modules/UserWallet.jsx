@@ -94,8 +94,8 @@ class UserWallet extends React.Component {
 
         const powerDown = (cancel, e) => {
             e.preventDefault()
+            const name = account.get('name');
             if (cancel) {
-                const name = account.get('name');
                 const vesting_shares = cancel ? '0.000000 VESTS' : account.get('vesting_shares');
                 this.setState({toggleDivestError: null});
                 const errorCallback = e2 => {this.setState({toggleDivestError: e2.toString()})};
@@ -103,7 +103,14 @@ class UserWallet extends React.Component {
                 this.props.withdrawVesting({account: name, vesting_shares, errorCallback, successCallback})
             } else {
                 const to_withdraw = account.get('to_withdraw')
-                this.props.showPowerdown({to_withdraw});
+                const withdrawn = account.get('withdrawn')
+                const vesting_shares = account.get('vesting_shares')
+                const delegated_vesting_shares = account.get('delegated_vesting_shares')
+                this.props.showPowerdown({
+                    account: name,
+                    to_withdraw, withdrawn,
+                    vesting_shares, delegated_vesting_shares,
+                });
             }
         }
 

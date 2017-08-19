@@ -27,6 +27,12 @@ class Settings extends React.Component {
     }
 
     initForm(props) {
+        let websitePattern = new RegExp(
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|'+ // domain name
+        '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+        '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+        '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
         reactForm({
             instance: this,
             name: 'accountSettings',
@@ -38,7 +44,7 @@ class Settings extends React.Component {
                 name: values.name && values.name.length > 20 ? tt('settings_jsx.name_is_too_long') : values.name && /^\s*@/.test(values.name) ? tt('settings_jsx.name_must_not_begin_with') : null,
                 about: values.about && values.about.length > 160 ? tt('settings_jsx.about_is_too_long') : null,
                 location: values.location && values.location.length > 30 ? tt('settings_jsx.location_is_too_long') : null,
-                website: values.website && values.website.length > 100 ? tt('settings_jsx.website_url_is_too_long') : values.website && !/^https?:\/\//.test(values.website) ? tt('settings_jsx.invalid_url') : null,
+                website: values.website && values.website.length > 100 ? tt('settings_jsx.website_url_is_too_long') : values.website && !websitePattern.test(values.website) ? tt('settings_jsx.invalid_url') : null,
             })
         })
         this.handleSubmitForm =
@@ -187,7 +193,7 @@ class Settings extends React.Component {
 
                     <label>
                         {tt('settings_jsx.profile_website')}
-                        <input type="url" {...website.props} maxLength="100" autoComplete="off" />
+                        <input type="text" {...website.props} maxLength="100" autoComplete="off" />
                     </label>
                     <div className="error">{website.blur && website.touched && website.error}</div>
 

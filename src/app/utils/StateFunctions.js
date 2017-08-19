@@ -9,7 +9,10 @@ export const numberWithCommas = (x) => x.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 
 export function vestsToSp(state, vesting_shares) {
     const {global} = state
-    const vests = assetFloat(vesting_shares, VEST_TICKER)
+    let vests = vesting_shares
+    if (typeof vesting_shares === 'string') {
+        vests = assetFloat(vesting_shares, VEST_TICKER)
+    }
     const total_vests = assetFloat(global.getIn(['props', 'total_vesting_shares']), VEST_TICKER)
     const total_vest_steem = assetFloat(global.getIn(['props', 'total_vesting_fund_steem']), LIQUID_TICKER)
     const vesting_steemf = total_vest_steem * (vests / total_vests);

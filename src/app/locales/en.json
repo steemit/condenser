@@ -356,7 +356,7 @@
     "recent_password": "Recent Password",
     "your_password_permissions_were_reduced": "Your password permissions were reduced",
     "if_you_did_not_make_this_change": "If you did not make this change please",
-    "owhership_changed_on": "Ownership Changed On %(date)s",
+    "owhership_changed_on": "Ownership Changed On ",
     "deadline_for_recovery_is": "Deadline for recovery is",
     "i_understand_dont_show_again": "I understand, don't show me again",
     "insufficient_balance": "Insufficient balance",

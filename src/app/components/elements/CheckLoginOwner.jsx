@@ -5,6 +5,7 @@ import CloseButton from 'react-foundation-components/lib/global/close-button';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import {browserHistory} from 'react-router';
 import tt from 'counterpart';
+import {FormattedDate} from 'react-intl';
 
 class CheckLoginOwner extends React.Component {
     constructor() {
@@ -69,10 +70,10 @@ class CheckLoginOwner extends React.Component {
                     <span className="warning uppercase">{tt('g.warning')}:</span> {tt('postfull_jsx.your_password_permissions_were_reduced')} <TimeAgoWrapper date={last_valid_time} />. {tt('postfull_jsx.if_you_did_not_make_this_change') + ' '} <a onClick={this.recover}>{tt('g.recover_your_account')}</a>.
                 </p>
                 <p>
-                    {tt('postfull_jsx.owhership_changed_on', {date: last_valid_date.toString()})}
+                    {tt('postfull_jsx.owhership_changed_on')} <FormattedDate value={last_valid_date} />
                 </p>
                 <p>
-                    {tt('postfull_jsx.deadline_for_recovery_is' + ' ')} <b><TimeAgoWrapper date={deadline} /></b>.
+                    {tt('postfull_jsx.deadline_for_recovery_is')} <b><TimeAgoWrapper date={deadline} /></b>.
                 </p>
                 <p>
                     <input type="checkbox" onChange={this.onUnderstood} />&nbsp;&nbsp;

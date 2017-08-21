@@ -10,6 +10,7 @@ addLocaleData([...en, ...es]);
 
 tt.registerTranslations('en', require('app/locales/en.json'));
 tt.registerTranslations('es', require('app/locales/es.json'));
+tt.setFallbackLocale('en');
 
 class Translator extends React.Component {
     render() {

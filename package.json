@@ -8,7 +8,8 @@
   "description": "steemit.com is the koa web server & middleware and react.js in-browser code for the world's first blockchain content + social media monetization platform!",
   "main": "index.js",
   "scripts": {
-    "build": "NODE_ENV=production ./node_modules/babel-cli/bin/babel-node.js ./node_modules/.bin/webpack --stats --config ./webpack/prod.config.js; rm -rf ./lib; babel src --out-dir lib -Dq",
+    "build": "NODE_ENV=production ./node_modules/babel-cli/bin/babel-node.js ./node_modules/.bin/webpack --config ./webpack/prod.config.js; rm -rf ./lib; babel src --out-dir lib -Dq",
+    "build1": "NODE_ENV=production ./node_modules/babel-cli/bin/babel-node.js ./node_modules/.bin/webpack --config ./webpack/prod.config.js",
     "mocha": "NODE_ENV=test mocha ./mocha.setup.js",
     "test": "npm run mocha -- src/app/**/*.test.js",
     "test:watch:all": "npm test -- --watch --watch-extensions jsx",
@@ -51,7 +52,6 @@
     "disk-stat": "^1.0.4",
     "ecurve": "^1.0.2",
     "estraverse-fb": "^1.3.1",
-    "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.5",
     "foundation-sites": "git+https://github.com/steemit/foundation-sites.git#e8e32c715bbc4c822b80b555345f61337269ca78",
     "git-rev-sync": "^1.6.0",
@@ -139,7 +139,6 @@
     "underscore.string": "^3.2.3",
     "url-loader": "^0.5.7",
     "web-push": "^3.2.1",
-    "webpack": "^1.13.2",
     "webpack-isomorphic-tools": "^3.0.3",
     "websocket": "^1.0.22",
     "whatwg-fetch": "^0.11.1",
@@ -158,7 +157,7 @@
     "eslint-config-airbnb": "^6.1.0",
     "eslint-plugin-babel": "^3.1.0",
     "eslint-plugin-react": "^4.2.0",
-    "extract-text-webpack-plugin": "^1.0.1",
+    "extract-text-webpack-plugin": "^3.0.0",
     "jsdom": "^9.8.0",
     "koa-webpack-dev-middleware": "^1.1.0",
     "koa-webpack-hot-middleware": "^1.0.3",
@@ -170,7 +169,8 @@
     "react-transform-hmr": "^1.0.4",
     "sinon": "^1.17.3",
     "sinon-chai": "^2.8.0",
-    "supertest": "^1.2.0"
+    "supertest": "^1.2.0",
+    "webpack": "^3.5.5"
   },
   "optionalDependencies": {
     "fsevents": "*"

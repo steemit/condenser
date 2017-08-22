@@ -7,6 +7,30 @@ const webpack_isomorphic_tools_plugin =
     new Webpack_isomorphic_tools_plugin(require('./webpack-isotools-config'))
         .development();
 
+const css_loaders = [
+    {
+        loader: 'style-loader',
+    },
+    {
+        loader: 'css-loader',
+    },
+    {
+        loader: 'autoprefixer-loader'
+    }
+]
+
+const scss_loaders = [
+    {
+        loader: 'css-loader',
+    },
+    {
+        loader: 'autoprefixer-loader'
+    },
+    {
+        loader: 'sass-loader'
+    }
+]
+
 export default {
     entry: {
         app: ['babel-polyfill', './src/app/Main.js'],
@@ -19,10 +43,10 @@ export default {
         publicPath: '/assets/'
     },
     module: {
-        loaders: [
+        rules: [
             {test: /\.(jpe?g|png)/, loader: 'url-loader?limit=4096'},
-            {test: /\.json$/, loader: 'json'},
-            {test: /\.js$|\.jsx$/, exclude: /node_modules/, loader: 'babel'},
+            {test: /\.json$/, loader: 'json-loader'},
+            {test: /\.js$|\.jsx$/, exclude: /node_modules/, loader: 'babel-loader'},
             {test: /\.svg$/, loader: 'svg-inline-loader'},
             {
                 test: require.resolve("blueimp-file-upload"),
@@ -34,35 +58,41 @@ export default {
             },
             {
                 test: /\.css$/,
-                loader: 'style!css!autoprefixer'
+                loader: css_loaders
             },
             {
                 test: /\.scss$/,
-                loader: ExtractTextPlugin.extract('style', 'css!autoprefixer!sass?outputStyle=expanded')
+                use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: scss_loaders
+                })
             },
             {
                 test: /\.md/,
-                loader: 'raw'
+                loader: 'raw-loader'
             }
         ]
     },
     plugins: [
-        function () {
-            this.plugin('done', writeStats);
-        },
+        // function () {
+        //     this.plugin('done', writeStats);
+        // },
         webpack_isomorphic_tools_plugin,
         new ExtractTextPlugin('[name]-[chunkhash].css')
     ],
     resolve: {
-        root: [
-            path.resolve(__dirname, '../src')
-        ],
+        // root: [
+        //     path.resolve(__dirname, '../src')
+        // ],
         alias: {
             react: path.join(__dirname, '../node_modules', 'react'),
             assets: path.join(__dirname, '../src/app/assets')
         },
-        extensions: ['', '.js', '.json', '.jsx'],
-        modulesDirectories: ['node_modules']
+        extensions: ['.js', '.json', '.jsx'],
+        modules: [
+            path.resolve(__dirname, '../src'),
+            'node_modules'
+        ]
     },
     externals: {
         newrelic: true

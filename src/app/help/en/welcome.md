@@ -1,3 +1,12 @@
+## Welcome to Steemit!
+
+This page is full of information to help you learn about the platform and become a successful Steemian. You can return to this page at any time by clicking on the "Welcome" link in the main menu. There is a table of contents below to help you navigate the page.
+
+Included on the page is a "Quick Start Guide" with information on how the platform works, and a "To Do List" with recommended steps to get started with your account. 
+
+Below that is a section of "Helpful Posts from Steemit Users", which contains a collection of posts from users in the community that are helpful for new users getting started. 
+
+Below that is a list of recommended users to follow, a collection of other resources including the <a href="/faq.html">FAQ Page</a>, and information on where to find live help. 
 
 <a class="anchor" name="Table_of_Contents"></a>
 ## Table of Contents
@@ -5,7 +14,6 @@
 ### Quick Start Guide
 
 - <a href="/welcome#No_Cost_to_Participate">No Cost to Participate</a>
-- <a href="/welcome#Finding_This_Page">Finding This Page</a>
 - <a href="/welcome#Upvotes">Upvotes</a>
 - <a href="/welcome#Comments">Comments</a>
 - <a href="/welcome#Creating_Posts">Creating Posts</a>
@@ -27,7 +35,7 @@
 
 1. <a href="/welcome#Backup_your_password">Backup your password</a>
 2. <a href="/welcome#Sign_Up_for_Steemit_Chat">Sign Up for Steemit Chat</a>
-3. <a href="/welcome#Setup_your_Profile_and_Avatar">Setup your Profile and Avatar</a>
+3. <a href="/welcome#Setup_your_Profile_Avatar_and_Cover_Image">Setup your Profile, Avatar, and Cover Image</a>
 4. <a href="/welcome#Choose_your_NSFW_(Not_Safe_for_Work)_Display_Preference">Choose your "NSFW" (Not Safe for Work) Display Preference</a>
 5. <a href="/welcome#Create_your_introduceyourself_post">Create your "introduceyourself" post</a>
 
@@ -45,12 +53,6 @@
 ### No Cost to Participate
 
 It is free to post, comment, or upvote all content on Steemit.com. You might even get paid for it!
-
-<a href="/welcome#Table_of_Contents">^</a>
-<a class="anchor" name="Finding_This_Page"></a>
-### Finding This Page
-
-To return to this page at any time, click on the "Quick Start Guide" link in the main menu in the upper right corner.
 
 <a href="/welcome#Table_of_Contents">^</a>
 <a class="anchor" name="Upvotes"></a>
@@ -134,7 +136,7 @@ The more Steem Power you have in your account, the more your upvotes will be wor
 <a class="anchor" name="Payments"></a>
 ### Payments
 
-Payouts are made approximately 7 days after the post/comment is created.
+Payouts are made 7 days after the post/comment is created. You can claim your rewards in your wallet after 7 days.
 
 The payments may fluctuate (up and down) until the final payment is reached.
 
@@ -159,8 +161,6 @@ These are various ways to sort blog posts.
 **Trending** - Posts with the highest pending rewards currently.
 
 **Promoted** - Listings that are boosted by Steem Dollar payments get "Promoted" for greater visibility.
-
-**Active** - Most recent posts with edits or comments.
 
 <a href="/welcome#Table_of_Contents">^</a>
 <a class="anchor" name="Profile"></a>
@@ -202,7 +202,7 @@ Your reputation will go up as you earn upvotes for your posts and comments, but 
 
 You can spend your SBD at the [Peerhub Store](https://www.peerhub.com/).
 
-You can exchange your STEEM and SBD for bitcoin on an exchange such as [BlockTrades](https://blocktrades.us/), [Poloniex](https://poloniex.com/), and [Bittrex](https://bittrex.com/).
+You can exchange your STEEM and SBD for bitcoin on an exchange such as [BlockTrades](https://blocktrades.us/) or [Bittrex](https://bittrex.com/).
 
 You can also "Power Up" and use your STEEM/SBD to gain more Steem Power!
 
@@ -268,12 +268,14 @@ Some channels allow you to share links, but others don't. For instance, [general
 Each channel will have its rules posted in the "Info" section.
 
 <a href="/welcome#Table_of_Contents">^</a>
-<a class="anchor" name="Setup_your_Profile_and_Avatar"></a>
-### 3. Setup your Profile and Avatar
+<a class="anchor" name="Setup_your_Profile_Avatar_and_Cover_Image"></a>
+### 3. Setup your Profile, Avatar, and Cover Image
 
 Under your user settings, you can update your profile. This includes your display name, location, about info, and website.
 
 To set your avatar image, type or paste a link to the URL where the image is located into the "Profile Picture URL" field.
+
+To set your cover image, type or paste a link to the URL where the image is located into the "Cover Image URL" field.
 
 Once you have made all your changes, click the "Update" button to save your profile.
 
@@ -308,21 +310,26 @@ It is not required either, but if you have other social media accounts (Twitter,
 - [Tons of Ways to Spend Your Hard Earned STEEM/SBD](https://steemit.com/steem/@timcliff/the-steem-economy-tons-of-ways-to-spend-your-hard-earned-steem-sbd)
 - [Advice on How To Build a Following](https://steemit.com/steemit/@allasyummyfood/how-i-build-a-following-of-160-k-from-scratch)
 - [Steemit Etiquette Guide](https://steemit.com/steemit/@thecryptofiend/the-complete-steemit-etiquette-guide-revision-2-0)
-- [Steemit Chat Guide](https://steemit.com/steemit/@firepower/dummies-guide-to-using-steemit-chat-effectively-everyday)
+- [Advice on using Tags](https://steemit.com/steemit/@rok-sivante/the-top-3-reasons-to-tag-your-steemit-posts-a-simple-quick-strategy-for-long-term-profits-and-success)
+- [The Ultimate Guide To Steemit Payouts](https://steemit.com/steemit/@shenanigator/the-ultimate-guide-to-steemit-payouts)
 - [Steemit Succeeds if We Make it Succeed](https://steemit.com/steemit/@krnel/steemit-succeeds-if-we-make-it-succeed)
 - [Professional Formatting Tutorial](https://steemit.com/writing/@minion/professional-tutorial-for-post-formatting-both-for-beginners-and-advanced-users)
-- [Advice on using Tags](https://steemit.com/steemit/@rok-sivante/the-top-3-reasons-to-tag-your-steemit-posts-a-simple-quick-strategy-for-long-term-profits-and-success)
+- [Introduceyourself Example](https://steemit.com/almost-famous/@teamsteem/hello-steemit-coinmaketcap-com-introduced-me)
 - [The Steemit Newbie's Comprehensive Guide To Understanding Your Wallet](https://steemit.com/steemit-help/@merej99/the-steemit-newbie-s-comprehensive-guide-to-understanding-your-wallet-by-merej99)
 - [Witness Voting Guide](https://steemit.com/witness-category/@timcliff/witness-voting-guide)
-- [Steem Dollars (SBD) to Cash (USD) Tutorial](https://steemit.com/how-to/@blueorgy/how-to-convert-your-steemdollars-sbd-to-cash-usd-transfer-it-into-your-bank-account)
+- [Steemit for Artists](https://steemit.com/art/@voronoi/steemit-for-artists-a-new-stage-for-craft)
+- [Steemit Chat Guide](https://steemit.com/steemit/@firepower/dummies-guide-to-using-steemit-chat-effectively-everyday)
 - [How to use Blocktrades to exchange STEEM/SBD for BTC](https://steemit.com/steem/@thecryptofiend/how-to-use-blocktrades-the-fastest-and-easiest-way-to-buy-and-sell-steem-sd-and-my-review-of-the-experience)
 - [SBD to bitcoin (BTC) using Blocktrades, then BTC to Euro or USD Using CEX.io](https://steemit.com/howto/@future24/blocktrades-tutorial-part-2-how-to-exchange-sbd-to-btc-and-sell-them-for-euro-or-usd-english-german)
 - [A Guide To Cashing Out Your STEEM/SBD Using PayPal](https://steemit.com/tutorial/@son-of-satire/a-minnows-guide-to-cashing-out-your-steem-sbd-using-paypal-without-using-coinbase-and-their-invasive-identity-checks)
-- [How to Buy STEEM Guide](https://steemit.com/steem/@timcliff/newbie-guide-how-to-buy-steem)
+- [How to Make Your Presence Known](https://steemit.com/steem-help/@papa-pepper/let-your-presence-be-known-advice-from-papa-for-newer-users)
 - [Emojis for Steemit](https://steemit.com/emojis/@blueorgy/steemit-emojis-master-list)
 - [5 Markdown Tips](https://steemit.com/steemit/@steemitguide/markdown-and-html-code-guide-for-beginners-that-includes-5-useful-tips-to-edit-posts-and-comments-using-the-raw-editor)
 - [How to Get Noticed if You Are a New User on Steemit](https://steemit.com/steemit/@thecryptofiend/how-to-get-noticed-if-you-are-a-new-user-on-steemit)
+- [Curation Rewards Explained](https://steemit.com/curation/@liberosist/mind-your-votes-ii-a-guide-to-maximizing-your-curation-rewards)
+- [More Information on Curation Rewards](https://steemit.com/steemit/@calamus056/curation-rewards-explained-in-great-detail)
 - [Everything you need to know about potential payouts and flagging](https://steemit.com/payout/@timcliff/everything-you-need-to-know-about-potential-payouts-and-flagging-for-new-users)
+- [The Ultimate Guide of Tips for New Steem Users](https://steemit.com/steem-help/@timcliff/the-ultimate-guide-of-tips-for-new-steem-users)
 - [Ways to Find Free and Legal Images](https://steemit.com/steem-help/@mindover/don-t-plagiarize-images-here-are-13-free-and-legal-ways-to-find-high-quality-photos-you-can-use-on-steemit)
 - [Steem Keys and Passwords Guide](https://steemit.com/steemit-guides/@pfunk/a-user-s-guide-to-the-different-steem-keys-or-passwords)
 - [Unwritten Rules of Steemit](https://steemit.com/steem-help/@beanz/the-unwritten-rules-of-steemit)
@@ -356,13 +363,13 @@ It is not required either, but if you have other social media accounts (Twitter,
 
 Ask your general questions in the [help](https://steemit.chat/channel/help) channel of [steemit.chat](https://steemit.chat/home). Users in the channel will typically respond to questions within a few hours.
 
-Steemprentice is a group of people dedicated to helping new users find their way around Steemit. You can find them in the [steemprentice](https://steemit.chat/channel/steemprentice) channel of [steemit.chat](https://steemit.chat/home).
+Minnow Support Group is a group of people dedicated to helping new users find their way around Steemit. You can find them in the [Minnow Support Group channel](https://discord.gg/HYj4yvw) of Discord Chat.
 
 <a href="/welcome#Table_of_Contents">^</a>
 <a class="anchor" name="Third_Party_References"></a>
 ## Third Party References
 
-Peerhub, BlockTrades, Poloniex, Bittrex, Steemit Chat, Steemit Help, Steemprentice, as well as the tools listed under "Other Resources" are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
+Peerhub, BlockTrades, Bittrex, Steemit Chat, Steemit Help, Minnow Support Group, and Discord Chat, as well as the tools listed under "Other Resources" are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 
 All of the links in the "Helpful Posts from Steemit Users" section were created by our users and do not necessarily represent the views of Steemit, Inc. or its management.
 

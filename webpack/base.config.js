@@ -74,16 +74,13 @@ export default {
         ]
     },
     plugins: [
-        // function () {
-        //     this.plugin('done', writeStats);
-        // },
+        function () {
+            this.plugin('done', writeStats);
+        },
         webpack_isomorphic_tools_plugin,
         new ExtractTextPlugin('[name]-[chunkhash].css')
     ],
     resolve: {
-        // root: [
-        //     path.resolve(__dirname, '../src')
-        // ],
         alias: {
             react: path.join(__dirname, '../node_modules', 'react'),
             assets: path.join(__dirname, '../src/app/assets')

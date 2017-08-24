@@ -12,6 +12,7 @@ export default class Reblog extends React.Component {
     static propTypes = {
         account: string,
         author: string,
+        parent_author: string,
         permlink: string,
         reblog: func,
     }
@@ -36,11 +37,11 @@ export default class Reblog extends React.Component {
 
     reblog = e => {
         e.preventDefault()
-        if(this.state.active) return
-        this.setState({loading: true})
-        const {reblog, account, author, permlink} = this.props
+        if(this.state.active) return;
+        this.setState({loading: true});
+        const {reblog, account, author, parent_author, permlink} = this.props;
         reblog(account, author, permlink,
-            () => {this.setState({active: true, loading: false})
+            () => {this.setState({active: true, loading: false});
                    this.setReblogged(account)},
             () => {this.setState({active: false, loading: false})},
         )
@@ -63,7 +64,7 @@ export default class Reblog extends React.Component {
     }
 
     render() {
-        if(this.props.author == this.props.account) return null;
+        if(this.props.author == this.props.account || this.props.parent_author) return null;
 
         const state = this.state.active ? 'active' : 'inactive'
         const loading = this.state.loading ? ' loading' : ''

@@ -4,11 +4,6 @@ import baseConfig from './base.config';
 
 export default {
     ...baseConfig,
-    module: {
-        loaders: [
-            ...baseConfig.module.rules
-        ]
-    },
     plugins: [
         new webpack.DefinePlugin({
             'process.env': {
@@ -21,10 +16,6 @@ export default {
                 TYPED_ARRAY_SUPPORT: JSON.stringify(false)
             }
         }),
-
-        // optimizations
-        // new webpack.optimize.DedupePlugin(),
-        // new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.optimize.UglifyJsPlugin({
             compress: {
                 warnings: false,

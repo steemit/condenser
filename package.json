@@ -9,7 +9,6 @@
   "main": "index.js",
   "scripts": {
     "build": "NODE_ENV=production ./node_modules/babel-cli/bin/babel-node.js ./node_modules/.bin/webpack --config ./webpack/prod.config.js; rm -rf ./lib; babel src --out-dir lib -Dq",
-    "build1": "NODE_ENV=production ./node_modules/babel-cli/bin/babel-node.js ./node_modules/.bin/webpack --config ./webpack/prod.config.js",
     "mocha": "NODE_ENV=test mocha ./mocha.setup.js",
     "test": "npm run mocha -- src/app/**/*.test.js",
     "test:watch:all": "npm test -- --watch --watch-extensions jsx",
@@ -139,6 +138,7 @@
     "underscore.string": "^3.2.3",
     "url-loader": "^0.5.9",
     "web-push": "^3.2.1",
+    "webpack": "^3.5.5",
     "webpack-isomorphic-tools": "^3.0.3",
     "websocket": "^1.0.22",
     "whatwg-fetch": "^0.11.1",
@@ -170,7 +170,7 @@
     "sinon": "^1.17.3",
     "sinon-chai": "^2.8.0",
     "supertest": "^1.2.0",
-    "webpack": "^3.5.5"
+    "webpack-bundle-analyzer": "^2.9.0"
   },
   "optionalDependencies": {
     "fsevents": "*"

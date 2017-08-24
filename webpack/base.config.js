@@ -1,4 +1,5 @@
 import path from 'path';
+import webpack from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import writeStats from './utils/write-stats';
 
@@ -44,21 +45,21 @@ export default {
     },
     module: {
         rules: [
-            {test: /\.(jpe?g|png)/, loader: 'url-loader?limit=4096'},
-            {test: /\.json$/, loader: 'json-loader'},
-            {test: /\.js$|\.jsx$/, exclude: /node_modules/, loader: 'babel-loader'},
-            {test: /\.svg$/, loader: 'svg-inline-loader'},
+            {test: /\.(jpe?g|png)/, use: 'url-loader?limit=4096'},
+            {test: /\.json$/, use: 'json-loader'},
+            {test: /\.js$|\.jsx$/, exclude: /node_modules/, use: 'babel-loader'},
+            {test: /\.svg$/, use: 'svg-inline-loader'},
             {
                 test: require.resolve("blueimp-file-upload"),
-                loader: "imports?define=>false"
+                use: "imports?define=>false"
             },
             {
                 test: require.resolve("medium-editor-insert-plugin"),
-                loader: "imports?define=>false"
+                use: "imports?define=>false"
             },
             {
                 test: /\.css$/,
-                loader: css_loaders
+                use: css_loaders
             },
             {
                 test: /\.scss$/,
@@ -69,7 +70,7 @@ export default {
             },
             {
                 test: /\.md/,
-                loader: 'raw-loader'
+                use: 'raw-loader'
             }
         ]
     },
@@ -77,6 +78,7 @@ export default {
         function () {
             this.plugin('done', writeStats);
         },
+        new webpack.optimize.ModuleConcatenationPlugin(),
         webpack_isomorphic_tools_plugin,
         new ExtractTextPlugin('[name]-[chunkhash].css')
     ],

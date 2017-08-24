@@ -7,8 +7,8 @@ import startKoa from './utils/start-koa';
 // const LOCAL_IP = require('dev-ip')();
 // const HOST = (isArray(LOCAL_IP) && LOCAL_IP[0]) || LOCAL_IP || 'localhost';
 
-// var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-// baseConfig.plugins.push(new BundleAnalyzerPlugin());
+var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+baseConfig.plugins.push(new BundleAnalyzerPlugin());
 
 export default {
     ...baseConfig,

@@ -22,6 +22,7 @@ import Userpic from 'app/components/elements/Userpic';
 import { APP_DOMAIN, APP_NAME } from 'app/client_config';
 import tt from 'counterpart';
 import userIllegalContent from 'app/utils/userIllegalContent';
+import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 
 // function loadFbSdk(d, s, id) {
 //     return new Promise(resolve => {
@@ -212,6 +213,9 @@ class PostFull extends React.Component {
             content_body = 'Not available for legal reasons.'
         }
 
+        // hide images if user is on blacklist
+        const hideImages = ImageUserBlockList.includes(content.author)
+
         const replyParams = {author, permlink, parent_author, parent_permlink, category, title, body}
 
         this.share_params = {
@@ -303,7 +307,11 @@ class PostFull extends React.Component {
                         <TimeAuthorCategoryLarge content={content} authorRepLog10={authorRepLog10} />
                       </div>
                       <div className="PostFull__body entry-content">
-                        <MarkdownViewer formId={formId + '-viewer'} text={content_body} jsonMetadata={jsonMetadata} large highQualityPost={high_quality_post} noImage={content.stats.gray} />
+                        <MarkdownViewer
+                            formId={formId + '-viewer'}text={content_body} jsonMetadata={jsonMetadata}
+                            large highQualityPost={high_quality_post} noImage={content.stats.gray}
+                            hideImages={hideImages}
+                        />
                       </div>
                     </span>
                 }

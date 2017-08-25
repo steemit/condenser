@@ -14,6 +14,7 @@ import Author from 'app/components/elements/Author';
 import TagList from 'app/components/elements/TagList';
 import UserNames from 'app/components/elements/UserNames';
 import tt from 'counterpart';
+import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 
 function isLeftClickEvent(event) {
     return event.button === 0
@@ -127,7 +128,7 @@ class PostSummary extends React.Component {
             <Voting post={post} showList={false} />
             <VotesAndComments post={post} commentsLink={comments_link} />
             <span className="PostSummary__time_author_category">
-                {!archived && <Reblog author={p.author} permlink={p.permlink} />}
+                {!archived && <Reblog author={p.author} permlink={p.permlink} parent_author={p.parent_author} />}
                 <span className="show-for-medium">
                     {author_category}
                 </span>
@@ -160,8 +161,10 @@ class PostSummary extends React.Component {
             }
         }
 
+        const userBlacklisted = ImageUserBlockList.includes(p.author)
+
         let thumb = null;
-        if(!gray && p.image_link) {
+        if(!gray && p.image_link && !userBlacklisted) {
           const prox = $STM_Config.img_proxy_prefix
           const size = (thumbSize == 'mobile') ? '640x480' : '256x512';
           const url = (prox ? prox + size + '/' : '') + p.image_link

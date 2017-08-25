@@ -85,6 +85,7 @@ changely
 shapeshif
 shapeshift
 randomwhale
+randowale
 coinpayments
 minnowboost
 minnowboster

@@ -148,6 +148,13 @@
     "copy": "Скопіювати",
     "alternative_sources": "Альтернативні джерела"
   },
+  "illegal_content": {
+    "hidden": "схований",
+    "unavailable" : "Користувача заблоковано",
+    "due_to_illegal_content": "через порушення",
+    "terms_of_service": "Умов користування",
+    "terms_of_service_section": ", пункт 5.5.7"
+  },
   "g": {
     "golos_fest" : "#яИдуНаГОЛОСфест",
     "APP_NAME" : "Голос",

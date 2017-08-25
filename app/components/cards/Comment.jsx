@@ -9,10 +9,12 @@ import { Link } from 'react-router';
 import user from 'app/redux/User';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Userpic from 'app/components/elements/Userpic';
+import IllegalContentMessage from 'app/components/elements/IllegalContentMessage';
 import transaction from 'app/redux/Transaction'
 import tt from 'counterpart';
 import {parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import {Long} from 'bytebuffer';
+import { blockedUsers } from 'app/utils/IllegalContent';
 
 // returns true if the comment has a 'hide' flag AND has no descendants w/ positive payout
 function hideSubtree(cont, c) {
@@ -268,19 +270,23 @@ class CommentImpl extends React.Component {
         let body = null;
         let controls = null;
 
-        if (!this.state.collapsed && !hide_body) {
-            body = (<MarkdownViewer formId={post + '-viewer'} text={comment.body}
-                noImage={noImage || !pictures} jsonMetadata={jsonMetadata} />);
-            controls = <div>
-                <Voting post={post} />
-                {!readonly &&
-                    <span className="Comment__footer__controls">
-                        {showReplyOption && <a onClick={onShowReply}>{tt('g.reply')}</a>}
-                        {' '}{showEditOption   && <a onClick={onShowEdit}>{tt('g.edit')}</a>}
-                        {' '}{showDeleteOption && <a onClick={onDeletePost}>{tt('g.delete')}</a>}
-                    </span>}
-            </div>;
-        }
+		if (blockedUsers.includes(comment.author)) {
+			body = <IllegalContentMessage />
+		} else {
+			if (!this.state.collapsed && !hide_body) {
+				body = (<MarkdownViewer formId={post + '-viewer'} text={comment.body}
+					noImage={noImage || !pictures} jsonMetadata={jsonMetadata} />);
+				controls = <div>
+					<Voting post={post} />
+					{!readonly &&
+						<span className="Comment__footer__controls">
+							{showReplyOption && <a onClick={onShowReply}>{tt('g.reply')}</a>}
+							{' '}{showEditOption   && <a onClick={onShowEdit}>{tt('g.edit')}</a>}
+							{' '}{showDeleteOption && <a onClick={onDeletePost}>{tt('g.delete')}</a>}
+						</span>}
+				</div>;
+			}
+		}
 
         if(!this.state.collapsed) {
             replies = comment.replies;

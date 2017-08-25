@@ -17,7 +17,9 @@ import Follow from 'app/components/elements/Follow';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import PostsList from 'app/components/cards/PostsList';
 import {isFetchingOrRecentlyUpdated} from 'app/utils/StateFunctions';
-import {repLog10} from 'app/utils/ParsersAndFormatters.js';
+import {repLog10} from 'app/utils/ParsersAndFormatters';
+import { blockedUsers } from 'app/utils/IllegalContent';
+import IllegalContentMessage from 'app/components/elements/IllegalContentMessage';
 import Tooltip from 'app/components/elements/Tooltip';
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
 import VerticalMenu from 'app/components/elements/VerticalMenu';
@@ -320,6 +322,10 @@ export default class UserProfile extends React.Component {
                     <UserInvites account={accountImm} />
                 </div>
         }
+
+		if (blockedUsers.includes(accountname)) {
+			tab_content = <IllegalContentMessage />;
+		}
 
         if (!(section === 'transfers' ||
               section === 'permissions' ||

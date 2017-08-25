@@ -148,6 +148,13 @@
     "copy":"Copie",
     "alternative_sources":"Resurse alternative "
   },
+  "illegal_content": {
+    "hidden": "скрыт",
+    "unavailable" : "Пользователь заблокирован",
+    "due_to_illegal_content": "из-за нарушений",
+    "terms_of_service": "Условий пользования",
+    "terms_of_service_section": ", пункт 5.5.7"
+  },
   "g":{
     "APP_NAME":"Golos",
     "24_hour":"24 ore",

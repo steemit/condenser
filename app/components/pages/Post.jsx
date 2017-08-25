@@ -4,9 +4,11 @@ import PostFull from 'app/components/cards/PostFull';
 import {connect} from 'react-redux';
 import {sortComments} from 'app/components/cards/Comment';
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
+import IllegalContentMessage from 'app/components/elements/IllegalContentMessage';
 import {Set} from 'immutable'
 import tt from 'counterpart';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+import { blockedUsers } from 'app/utils/IllegalContent';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 
 class Post extends React.Component {
@@ -160,6 +162,10 @@ class Post extends React.Component {
                     </div>
                 </div>
             </center>
+
+		if(blockedUsers.includes(post.split("/")[0])) {
+			return (<IllegalContentMessage />)
+		}
 
         return (
             <div className="Post">

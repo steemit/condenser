@@ -10,6 +10,13 @@
     "DEBT_TOKENS" : "GOLD BACKED GOLOS",
     "TOKEN_WORTH" : "~1 mg of gold"
   },
+  "illegal_content": {
+    "hidden": "hidden",
+    "unavailable" : "User is blocked",
+    "due_to_illegal_content": "due to illegal content",
+    "terms_of_service": "Terms of service",
+    "terms_of_service_section": ", section 5.5.7"
+  },
   "g": {
     "golos_fest" : "#яИдуНаГОЛОСфест",
     "APP_NAME" : "Golos",

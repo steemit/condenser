@@ -160,6 +160,13 @@
     "copy": "Скопировать",
     "alternative_sources": "Альтернативные источники"
   },
+  "illegal_content": {
+    "hidden": "скрыт",
+    "unavailable" : "Пользователь заблокирован",
+    "due_to_illegal_content": "из-за нарушений",
+    "terms_of_service": "Условий пользования",
+    "terms_of_service_section": ", пункт 5.5.7"
+  },
   "g": {
     "golos_fest" : "#яИдуНаГОЛОСфест",
     "APP_NAME" : "Голос",

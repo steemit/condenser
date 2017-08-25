@@ -28,6 +28,7 @@ import minimist from 'minimist';
 import Grant from 'grant-koa';
 import config from 'config';
 import { routeRegex } from 'app/ResolveRoute';
+import { blockedUsers } from 'app/utils/IllegalContent';
 import secureRandom from 'secure-random';
 import { APP_NAME_LATIN } from 'app/client_config';
 
@@ -84,6 +85,17 @@ app.use(function*(next) {
                 routeRegex.PostNoCategory.test(this.url))
     ) {
         const p = this.originalUrl.toLowerCase();
+		let userCheck = "";
+		if (routeRegex.Post.test(this.url)) {
+			userCheck = p.split("/")[2].slice(1);
+		} else {
+			userCheck = p.split("/")[1].slice(1);
+		}
+		if (blockedUsers.includes(userCheck)) {
+			console.log('Illegal content user found blocked', `@${userCheck}`);
+			this.status = 451;
+			return;
+		}
         if (p !== this.originalUrl) {
             this.status = 301;
             this.redirect(p);

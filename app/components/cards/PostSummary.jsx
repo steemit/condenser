@@ -8,6 +8,7 @@ import Reblog from 'app/components/elements/Reblog';
 import Voting from 'app/components/elements/Voting';
 import {immutableAccessor} from 'app/utils/Accessors';
 import extractContent from 'app/utils/ExtractContent';
+import { blockedContent } from 'app/utils/IllegalContent'
 import { browserHistory } from 'react-router';
 import VotesAndComments from 'app/components/elements/VotesAndComments';
 import TagList from 'app/components/elements/TagList';
@@ -16,7 +17,7 @@ import {Map} from 'immutable';
 import Author from 'app/components/elements/Author';
 import UserNames from 'app/components/elements/UserNames';
 import tt from 'counterpart';
-import { APP_ICON } from 'app/client_config';
+import { APP_ICON, TERMS_OF_SERVICE_URL } from 'app/client_config';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
 
 
@@ -84,6 +85,22 @@ class PostSummary extends React.Component {
             // TODO: this case is backwards-compat for 0.16.1. remove after upgrading.
             reblogged_by = [content.get('first_reblogged_by')]
         }
+
+		if(blockedContent.includes(content.get('url'))) {
+			return (
+				<article className={'PostSummary hentry'} itemScope itemType ="http://schema.org/blogPost">
+					<div className="PostSummary__nsfw-warning" style={{minHeight: 0}}>
+						{tt('postsummary_jsx.this_post_is')}&nbsp;
+						{tt('illegal_content.hidden')}&nbsp;
+						{tt('illegal_content.due_to_illegal_content')}&nbsp;
+						<a href={TERMS_OF_SERVICE_URL} target="_blank" rel="nofollow">
+							{tt('illegal_content.terms_of_service')}
+						</a>
+						{tt('illegal_content.terms_of_service_section')}
+					</div>
+				</article>
+			)
+		}
 
         if(reblogged_by) {
           reblogged_by = <div className="PostSummary__reblogged_by">

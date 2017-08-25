@@ -450,7 +450,7 @@
     "you_account_has_been_successfully_created":"Ваш аккаунт был успешно создан!",
     "you_account_has_been_successfully_recovered":"Ваш аккаунт был успешно восстановлен!",
     "password_update_succes":"Lozinka za %(accountName)s je uspešno osvežena",
-    "password_info":"Nepravilno uneti podatci lozinka ili privatni ključ.  Verovatno postoji greška rukopisa ili unosa podataka.  Hint: Lozinka ili privatni ključ generisani na Golos-u nikada neće sadržati 0 (nulu), O (veliko slovo o), I (veliko i) i l (malo slovo L) karaktere.",
+    "password_info":"Nepravilno uneti podatci lozinka ili privatni ključ. Verovatno postoji greška rukopisa ili unosa podataka.",
     "enter_your_username":"Введи свое имя пользователя",
     "password_or_wif":"Lozinka ili WIF",
     "this_operation_requires_your_key_or_master_password":"Эта операция требует ввода Вашего ключа владельца или ввода Вашего активного ключа",

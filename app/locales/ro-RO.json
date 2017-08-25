@@ -450,7 +450,7 @@
     "you_account_has_been_successfully_created":"Contul dvs. a fost creat cu succes!",
     "you_account_has_been_successfully_recovered":"Contul dvs. a fost restabilit cu succes!",
     "password_update_succes":"Parolă pentru %(accountName)s a fost reînnoită cu succes",
-    "password_info":"Această parolă sau cheie privată a fost introdusă incorect. Probabil, există o eroare la introducerea datelor. Sugestie: Parolă sau o cheia privată, generată de Golos nu va conține caractere 0 (zero), O (litere mici o), I (litere mari i) și l (L cu litere mici).",
+    "password_info":"Această parolă sau cheie privată a fost introdusă incorect. Probabil, există o eroare la introducerea datelor.",
     "enter_your_username":"Introdu numele de utilizator",
     "password_or_wif":"Parola sau WIF",
     "this_operation_requires_your_key_or_master_password":"Această operație necesită introducerea cheii proprietarului sau cheii active",

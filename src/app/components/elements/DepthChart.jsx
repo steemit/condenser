@@ -164,8 +164,8 @@ function generateDepthChart(bidsArray, asksArray) {
                 align: "left",
                 formatter: function() {
                     const value = this.value / precision;
-                    return '$' + (value > 10e5 ? (value / 10e5).toFixed(3) + "M" :
-                        value > 10000 ? (value / 10e2).toFixed(0) + "k" :
+                    return '$' + (value > 1e6 ? (value / 1e6).toFixed(3) + "M" :
+                        value > 10000 ? (value / 1e3).toFixed(0) + "k" :
                         value);
                 }
             },

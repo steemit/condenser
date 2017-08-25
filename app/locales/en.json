@@ -213,12 +213,12 @@
 
     "next_7_strings_sinngle_block": {
       "authors_get_paid_when_people_like_you_upvote_their_post": "Authors get paid when people like you upvote their post",
-      "if_you_enjoyed_what_you_read_earn_amount": "If you enjoyed what you read here, earn %(amount)s of %(VESTING_TOKEN_UPPERCASE)s",
+      "if_you_enjoyed_what_you_read_earn_amount": "Join our amazing community to comment and reward others.",
       "when_you": "when you",
       "when_you_link_text": "Sign Up",
       "and_vote_for_it": "and vote for it",
       "sign_up_now_to_receive": "Sign up now to receive ",
-      "free_steem": "FREE %(VESTING_TOKEN_UPPERCASE)s!"
+      "free_steem": "FREE %(LIQUID_TOKEN)ss!"
     },
 
     "next_3_strings_together": {

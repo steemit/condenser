@@ -353,7 +353,7 @@
     "please_email_questions_to":"Molim vas pošaljite email sa sadržajem vašeg pitanja na",
     "next_7_strings_sinngle_block":{
       "authors_get_paid_when_people_like_you_upvote_their_post":"Autori će biti plaćeni kada ljudi kao ti glasaju za njegov post",
-      "if_you_enjoyed_what_you_read_earn_amount":"Ako ste uživali u onome što ste pročitali ovde, zaradi %(amount)s %(VESTING_TOKEN)s",
+      "if_you_enjoyed_what_you_read_earn_amount":"Ako ste uživali u onome što ste pročitali ovde",
       "when_you":"kada vi",
       "when_you_link_text":"Registracija",
       "and_vote_for_it":"i glasaj za to",

@@ -74,7 +74,6 @@ class DepthChart extends React.Component {
             return null;
         }
         const depth_chart_config = generateDepthChart(bids, asks);
-        console.log(depth_chart_config)
         return (
             <div className="DepthChart"><ReactHighcharts ref="depthChart" config={depth_chart_config} /></div>
         );

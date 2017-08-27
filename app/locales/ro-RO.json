@@ -765,6 +765,7 @@
     "power_up":"Creșterea puterea de vot",
     "submit":"Transmite",
     "basic":"De bază",
+    "memo" : "Заметка",
     "advanced":"Opțiuni avansate",
     "convert_to_VESTING_TOKEN":"Convertați în %(VESTING_TOKEN2)s",
     "balance_subject_to_3_day_withdraw_waiting_period":"Retragerea din seif în cont obișnuit, durează 3 zile.",

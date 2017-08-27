@@ -764,6 +764,7 @@
     "power_up":"Power Up",
     "submit":"Передать",
     "basic":"Osnovno",
+    "memo" : "Заметка",
     "advanced":"Napredan",
     "convert_to_VESTING_TOKEN":"Konvertuj u %(VESTING_TOKEN)s",
     "balance_subject_to_3_day_withdraw_waiting_period":"Period čekanja za povlačenje zadatog iznosa ima 3-dnevni period",

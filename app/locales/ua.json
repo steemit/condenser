@@ -755,6 +755,7 @@
     "power_up": "Збільшити Силу Голоса",
     "submit": "Передати",
     "basic": "Основні",
+    "memo" : "Примітка",
     "advanced": "Розширені опції",
     "convert_to_VESTING_TOKEN": "Перевести у %(VESTING_TOKEN2)s",
     "balance_subject_to_3_day_withdraw_waiting_period": "Вивід балансу з сейфа на звичайний рахунок займає 3 дні.",

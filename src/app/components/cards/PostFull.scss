@@ -27,7 +27,8 @@
   strong, a {color: #999}
   font-size: 120%;
   display: block;
-  > .Userpic {
+  > .Userpic-wrapper,
+  .Userpic {
     margin-top: -4px;
     float: left;
   }

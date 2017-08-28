@@ -60,7 +60,7 @@ function TimeAuthorCategoryLarge({content, authorRepLog10}) {
     return (
       <span className="PostFull__time_author_category_large vcard">
         <TimeAgoWrapper date={content.created} className="updated float-right" />
-        <Userpic account={content.author} />
+          <Link to={'/@' + content.author} className="float-left Userpic-wrapper"><Userpic account={content.author} authorRepLog10={authorRepLog10} /></Link>
         <div className="right-side">
           <Author author={content.author} authorRepLog10={authorRepLog10} />
           <span> {tt('g.in')} <TagList post={content} single /></span>

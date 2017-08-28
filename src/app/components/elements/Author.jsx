@@ -18,11 +18,13 @@ class Author extends React.Component {
         author: string.isRequired,
         follow: bool,
         mute: bool,
+        popupEnabled: bool,
         authorRepLog10: number,
     };
     static defaultProps = {
         follow: true,
         mute: true,
+        popupEnabled: false
     };
 
     constructor(...args){
@@ -48,45 +50,47 @@ class Author extends React.Component {
         const {author, follow, mute, authorRepLog10} = this.props; // html
         const {username} = this.props; // redux
         const {name, about} = this.props.account ? normalizeProfile(this.props.account.toJS()) : {};
+
         if (!(follow || mute) || username === author) {
-            return <span className="author" itemProp="author" itemScope itemType="http://schema.org/Person">
+            return (<span className="author" itemProp="author" itemScope itemType="http://schema.org/Person">
                 <Link to={'/@' + author}><strong>{author}</strong></Link> <Reputation value={authorRepLog10} />
-            </span>;
+            </span>)
         }
+
         return (
             <span className="Author">
-                <span
-                    onClick={this.toggle}
-                    ref={(c) => { this.target = c; }}
-                >
+                <span>
                     <span
                         itemProp="author"
                         itemScope
                         itemType="http://schema.org/Person"
                     >
-                        <strong>{author}</strong>
+                        <Link to={'/@' + author}><strong>{author}</strong></Link>
                     </span>
-                    <Icon name="dropdown-arrow" />
-                    <Reputation value={authorRepLog10} />
-                </span>
-                <Overlay
-                    show={this.state.show}
-                    onHide={this.close}
-                    placement="bottom"
-                    container={this}
-                    target={() => findDOMNode(this.target)}
-                    rootClose
-                >
+                    <span onClick={this.toggle}
+                          ref={(c) => { this.target = c; }}>
+                        <Icon name="dropdown-arrow" />
+                        <Reputation value={authorRepLog10} />
+                    </span>
+                    <Overlay
+                        show={this.state.show}
+                        onHide={this.close}
+                        placement="bottom"
+                        container={this}
+                        target={() => findDOMNode(this.target)}
+                        rootClose
+                    >
                     <AuthorDropdown
-                      author={author}
-                      follow={follow}
-                      mute={mute}
-                      authorRepLog10={authorRepLog10}
-                      name={name}
-                      about={about}
-                      username={username}
+                        author={author}
+                        follow={follow}
+                        mute={mute}
+                        authorRepLog10={authorRepLog10}
+                        name={name}
+                        about={about}
+                        username={username}
                     />
                 </Overlay>
+                </span>
             </span>
         )
     }

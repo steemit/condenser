@@ -325,7 +325,10 @@ class UserWallet extends React.Component {
             <div className="UserWallet__balance row zebra">
                 <div className="column small-12 medium-8">
                     {tt('userwallet_jsx.savings')}
-                    <div className="secondary">{tt('transfer_jsx.balance_subject_to_3_day_withdraw_waiting_period')} {DEBT_TOKENS} currently collecting {sbdInterest}% APR.</div>
+                    <div className="secondary">
+                        <span>{tt('transfer_jsx.balance_subject_to_3_day_withdraw_waiting_period')}</span>
+                        <span>{tt('asset_currently_collecting', {asset: DEBT_TOKENS, interest: sbdInterest})}</span>
+                    </div>
                 </div>
                 <div className="column small-12 medium-4">
                     {isMyAccount ?

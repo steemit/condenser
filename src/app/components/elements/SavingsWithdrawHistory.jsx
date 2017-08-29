@@ -5,6 +5,7 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper'
 import transaction from 'app/redux/Transaction'
 import Memo from 'app/components/elements/Memo'
+import tt from 'counterpart'
 
 class SavingsWithdrawHistory extends React.Component {
 
@@ -56,12 +57,12 @@ class SavingsWithdrawHistory extends React.Component {
         let idx = 0
         const rows = savings_withdraws.map(withdraw => {
             const {complete, amount, to, from, memo, request_id} = withdraw.toJS()
-            const dest = to === from ? tt('g.to') + " " + to : tt('g.from') + " " + from + " " + tt('g.to') + " " +  to
+            const dest = to === from ? tt('savingswithdrawhistory_jsx.to', {to}) : tt('savingswithdrawhistory_jsx.from_to', {from, to})
             const loading = this.state['loading_' + request_id]
             return <tr key={idx++}>
                 <td><TimeAgoWrapper date={complete} /></td>
                 <td>
-                    {tt('savingswithdrawhistory_jsx.withdraw')} {amount} {dest}
+                    {tt('savingswithdrawhistory_jsx.withdraw', {amount})} {dest}
                     &nbsp;
                     {/* A cancel link puts the action very close to the info stating what is being canceled */}
                     {!loading && <span>(<a onClick={this['cancel_' + request_id]}>{tt('g.cancel')}</a>)</span>}

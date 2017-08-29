@@ -98,7 +98,7 @@ class PostSummary extends React.Component {
         let comments_link;
 
         if( content.get( 'parent_author') !== "" ) {
-           title_text = tt('g.re') + ': ' + content.get('root_title');
+           title_text = tt('g.re_to', {topic: content.get('root_title')});
            title_link_url = content.get( 'url' );
            comments_link = title_link_url;
         } else {
@@ -128,7 +128,7 @@ class PostSummary extends React.Component {
             <Voting post={post} showList={false} />
             <VotesAndComments post={post} commentsLink={comments_link} />
             <span className="PostSummary__time_author_category">
-                {!archived && <Reblog author={p.author} permlink={p.permlink} />}
+                {!archived && <Reblog author={p.author} permlink={p.permlink} parent_author={p.parent_author} />}
                 <span className="show-for-medium">
                     {author_category}
                 </span>

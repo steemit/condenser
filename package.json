@@ -89,7 +89,6 @@
     "newrelic": "^1.40.0",
     "node-sass": "^3.4.2",
     "os": "^0.1.1",
-    "pluralize": "^2.0.0",
     "purest": "^2.0.1",
     "raw-loader": "^0.5.1",
     "react": "15.4.2",

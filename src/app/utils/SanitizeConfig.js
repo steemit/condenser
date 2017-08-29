@@ -33,7 +33,7 @@ export const allowedTags = `
     div, iframe, del,
     a, p, b, i, q, br, ul, li, ol, img, h1, h2, h3, h4, h5, h6, hr,
     blockquote, pre, code, em, strong, center, table, thead, tbody, tr, th, td,
-    strike, sup, sub
+    strike, sup, sub, span
 `.trim().split(/,\s*/)
 
 // Medium insert plugin uses: div, figure, figcaption, iframe
@@ -49,6 +49,9 @@ export default ({large = true, highQualityPost = true, noImage = false, sanitize
 
         // class attribute is strictly whitelisted (below)
         div: ['class'],
+
+        // class attribute for syntax highlighting
+        span: ['class'],
 
         // style is subject to attack, filtering more below
         td: ['style'],
@@ -131,5 +134,15 @@ export default ({large = true, highQualityPost = true, noImage = false, sanitize
                 attribs: attys
             }
         },
+        span: (tagName, attribs) => {
+            const attys = {}
+            if (attribs.class && /hljs-[a-z_-]+/.test(attribs.class)) {
+                attys.class = attribs.class
+            }
+            return {
+                tagName,
+                attribs: attys
+            }
+        }
     }
 })

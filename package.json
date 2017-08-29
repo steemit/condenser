@@ -57,6 +57,7 @@
     "git-rev-sync": "^1.6.0",
     "grant-koa": "^3.6.0",
     "highcharts": "^4.2.5",
+    "highlight.js": "^9.12.0",
     "humanize-number": "0.0.2",
     "imports-loader": "^0.6.5",
     "intl": "^1.2.5",

@@ -289,10 +289,8 @@ export default function useGeneralApi(app) {
         try {
             const params = this.request.body;
             const remote_address = this.request.headers['x-forwarded-for'] || this.request.connection.remoteAddress;
-            const test_remote_address1 = this.request.headers['x-forwarded-for'];
-            const test_remote_address2 = this.request.connection.remoteAddress;
-            console.log('DEBUG: test1: ', test_remote_address1);
-            console.log('DEBUG: test2: ', test_remote_address2);
+            const test_remote_from_proxy = this.request.headers['x-forwarded-for'];
+            console.log('DEBUG: test: ', test_remote_from_proxy);
             const {csrf, type, value} = typeof(params) === 'string' ? JSON.parse(params) : params;
             if (!checkCSRF(this, csrf)) return;
             console.log('-- /record_event -->', this.session.uid, remote_address, type, value);

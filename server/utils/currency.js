@@ -62,6 +62,9 @@ var exports = module.exports = {};
     res.setEncoding('utf-8');
     res.on('data', function(stuff) {
       var parsed = JSON.parse(stuff);
+      if (parsed.error) {
+        return cb(new Error('The result is undefined. Make sure that you are using correct currency symbols'), null);
+      }
       var vals = parsed.query.results.rate;
       if (typeof vals == 'object' && vals.Name == 'N/A') {
         return cb(new Error('The result is undefined. Make sure that you are using correct currency symbols'), null);

@@ -231,7 +231,7 @@ class RecoverAccountStep1 extends React.Component {
                                 email_submitted
                                 ?   <div>
                                         {/* currently translateHtml() does not work, using <FormattedHTMLMessage /> instead */}
-                                        <FormattedHTMLMessage id="thanks_for_submitting_request_for_account_recovery" />
+                                        {/* <FormattedHTMLMessage id="thanks_for_submitting_request_for_account_recovery" /> */}
                                         <p>{tt('recoveraccountstep1_jsx.thanks_for_submitting_request_for_account_recovery_1', {APP_NAME})}</p>
                                         <p>{tt('recoveraccountstep1_jsx.thanks_for_submitting_request_for_account_recovery_2')}</p>
                                         <p>{tt('recoveraccountstep1_jsx.thanks_for_submitting_request_for_account_recovery_3')}</p>

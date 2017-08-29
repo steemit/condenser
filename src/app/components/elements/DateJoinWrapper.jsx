@@ -1,16 +1,12 @@
 import React from 'react';
 import tt from 'counterpart';
+import {FormattedDate} from 'react-intl';
 
 export default class DateJoinWrapper extends React.Component {
     render() {
-        let date = new Date(this.props.date);
-        let monthNames = ["January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"
-        ];
-        let joinMonth = monthNames[date.getMonth()];
-        let joinYear = date.getFullYear();
+        const date = new Date(this.props.date);
         return (
-                <span>{tt('g.joined')} {joinMonth} {joinYear}</span>
+                <span>{tt('g.joined')} <FormattedDate value={date} year="numeric" month="long" /></span>
             )
     }
 }

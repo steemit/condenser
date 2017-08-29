@@ -1,42 +1,75 @@
 /* eslint react/prop-types: 0 */
 import React from 'react';
+import ReactDOM from 'react-dom';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import Icon from 'app/components/elements/Icon';
 import { Link } from 'react-router';
 import {authorNameAndRep} from 'app/utils/ComponentFormatters';
 import AuthorDropdown from './AuthorDropdown';
 import Reputation from 'app/components/elements/Reputation';
-import tt from 'counterpart';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import Overlay from 'react-overlays/lib/Overlay';
 import { findDOMNode } from 'react-dom';
 
 const {string, bool, number} = React.PropTypes;
 
+const closers = [];
+
+const fnCloseAll = () => {
+    var close;
+    while(close = closers.shift()) {
+        close();
+    }
+}
+
 class Author extends React.Component {
     static propTypes = {
         author: string.isRequired,
         follow: bool,
         mute: bool,
-        popupEnabled: bool,
         authorRepLog10: number,
     };
     static defaultProps = {
         follow: true,
-        mute: true,
-        popupEnabled: false
+        mute: true
     };
 
-    constructor(...args){
+    constructor(...args) {
         super(...args);
         this.state = { show: false };
+        this.toggle = this.toggle.bind(this);
+        this.close = this.close.bind(this);
     }
 
-    toggle = () => {
-        const toggleShow = !this.state.show;
-        this.setState({
-            show: toggleShow
-        });
+    componentDidMount() {
+        const node = ReactDOM.findDOMNode(this.refs.authorProfileLink);
+        if(node.addEventListener) {
+            node.addEventListener('click', this.toggle, false);
+        } else {
+            node.attachEvent('click', this.toggle, false);
+        }
+    }
+
+    componentWillUnmount() {
+        const node = ReactDOM.findDOMNode(this.refs.authorProfileLink);
+        if(node.removeEventListener) {
+            node.removeEventListener('click', this.toggle, false);
+        } else {
+            node.detachEvent('click', this.toggle, false);
+        }
+    }
+
+    toggle = (e) => {
+        if(!(e.metaKey || e.ctrlKey)) {
+            e.preventDefault();
+            e.stopPropagation();
+            const show = !this.state.show;
+            fnCloseAll();
+            if(show) {
+                this.setState({show})
+                closers.push(this.close)
+            }
+        }
     }
 
     close = () => {
@@ -52,34 +85,28 @@ class Author extends React.Component {
         const {name, about} = this.props.account ? normalizeProfile(this.props.account.toJS()) : {};
 
         if (!(follow || mute) || username === author) {
-            return (<span className="author" itemProp="author" itemScope itemType="http://schema.org/Person">
-                <Link to={'/@' + author}><strong>{author}</strong></Link> <Reputation value={authorRepLog10} />
-            </span>)
+            return (
+                <span className="author" itemProp="author" itemScope itemType="http://schema.org/Person">
+                    <Link to={'/@' + author} onClick={this.toggle}><strong>{author}</strong></Link> <Reputation value={authorRepLog10} />
+                </span>
+            )
         }
 
         return (
             <span className="Author">
-                <span>
-                    <span
-                        itemProp="author"
-                        itemScope
-                        itemType="http://schema.org/Person"
-                    >
-                        <Link to={'/@' + author}><strong>{author}</strong></Link>
-                    </span>
-                    <span onClick={this.toggle}
-                          ref={(c) => { this.target = c; }}>
-                        <Icon name="dropdown-arrow" />
-                        <Reputation value={authorRepLog10} />
-                    </span>
-                    <Overlay
-                        show={this.state.show}
-                        onHide={this.close}
-                        placement="bottom"
-                        container={this}
-                        target={() => findDOMNode(this.target)}
-                        rootClose
-                    >
+                <span itemProp="author" itemScope itemType="http://schema.org/Person">
+                    <Link ref="authorProfileLink" to={'/@' + author}><strong>{author}</strong> <Icon name="dropdown-arrow" /></Link>
+
+                    <Reputation value={authorRepLog10} />
+                </span>
+                <Overlay
+                    show={this.state.show}
+                    onHide={this.close}
+                    placement="bottom"
+                    container={this}
+                    target={() => findDOMNode(this.target)}
+                    rootClose
+                >
                     <AuthorDropdown
                         author={author}
                         follow={follow}
@@ -90,13 +117,13 @@ class Author extends React.Component {
                         username={username}
                     />
                 </Overlay>
-                </span>
             </span>
         )
     }
 }
 
 import {connect} from 'react-redux'
+
 export default connect(
     (state, ownProps) => {
         const {author, follow, mute, authorRepLog10} = ownProps;

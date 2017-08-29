@@ -9,8 +9,7 @@ export default {
             'process.env': {
                 BROWSER: JSON.stringify(true),
                 NODE_ENV: JSON.stringify('production'),
-                // FIXME this requires we put .git into the docker image :(
-                VERSION: JSON.stringify(git.tag())
+                VERSION: JSON.stringify(git.long())
             },
             global: {
                 TYPED_ARRAY_SUPPORT: JSON.stringify(false)
@@ -32,8 +31,7 @@ export default {
                 hoist_funs: true,
                 if_return: true,
                 join_vars: true,
-                cascade: true,
-                //drop_console: true
+                cascade: true
             },
             output: {
                 comments: false

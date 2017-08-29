@@ -353,6 +353,7 @@
     "in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN": "In 3.5 days, convert %(amount)s %(DEBT_TOKEN)s into %(LIQUID_TOKEN)s",
     "account_name_is_not_available": "Account name is not available",
     "view_the_full_context": "View the full context",
+    "view_the_direct_parent": "View the direct parent",
     "you_are_viewing_a_single_comments_thread_from": "You are viewing a single comment's thread from"
   },
   "market_jsx": {
@@ -629,7 +630,7 @@
   "about_jsx": {
     "about_app": "About %(APP_NAME)s",
     "about_app_details": "%(APP_NAME)s is a social media platform where everyone gets paid for creating and curating content. It leverages a robust digital points system, called Steem, that supports real value for digital rewards through market price discovery and liquidity.",
-    "learn_more_at_app_url": "Learn more at %(APP_URL)s",
+    "learn_more_at_app_url": "Learn more at %(LANDING_PAGE_URL)s",
     "resources": "Resources",
     "join_our_slack": "Join our Slack"
   },
@@ -771,9 +772,8 @@
     "use_only_3_digits_of_precison": "Use only 3 digits of precison",
     "send_to_account": "Send to account",
     "asset": "Asset",
-    "this_memo_is": "This Memo is",
-    "private": "Private",
-    "public": "Public",
+    "this_memo_is_private": "This memo is private",
+    "this_memo_is_public": "This memo is public",
     "power_up": "Power Up",
     "submit": "Submit",
     "basic" : "Basic",

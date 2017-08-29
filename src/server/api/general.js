@@ -9,11 +9,13 @@ import {esc, escAttrs} from 'db/models';
 import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF} from 'server/utils/misc';
 import coBody from 'co-body';
 import Mixpanel from 'mixpanel';
+import Rakam from 'rakam';
 import Tarantool from 'db/tarantool';
 import {PublicKey, Signature, hash} from 'steem/lib/auth/ecc';
 import {api, broadcast} from 'steem';
 
 const mixpanel = config.get('mixpanel') ? Mixpanel.init(config.get('mixpanel')) : null;
+const rakam = config.get('rakam') ? Mixpanel.init(config.get('rakam')) : null;
 
 export default function useGeneralApi(app) {
     const router = koa_router({prefix: '/api/v1'});

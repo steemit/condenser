@@ -363,13 +363,13 @@ It is not required either, but if you have other social media accounts (Twitter,
 
 Ask your general questions in the [help](https://steemit.chat/channel/help) channel of [steemit.chat](https://steemit.chat/home). Users in the channel will typically respond to questions within a few hours.
 
-Minnow Support Project is a group of people dedicated to helping new users find their way around Steemit. You can find them in the [Minnow Support Project channel](https://discord.gg/HYj4yvw) of Discord Chat.
+New Member Support Community is a group of people dedicated to helping new users find their way around Steemit. You can find them in the [New Member Support Community](https://discord.gg/HYj4yvw) channel of Discord Chat.
 
 <a href="/welcome#Table_of_Contents">^</a>
 <a class="anchor" name="Third_Party_References"></a>
 ## Third Party References
 
-Peerhub, BlockTrades, Bittrex, Steemit Chat, Steemit Help, Minnow Support Project, and Discord Chat, as well as the tools listed under "Other Resources" are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
+Peerhub, BlockTrades, Bittrex, Steemit Chat, Steemit Help, New Member Support Community, and Discord Chat, as well as the tools listed under "Other Resources" are third party applications/services, and are not owned or maintained by Steemit, Inc. Their listing here does not constitute and endorsement or recommendation on behalf of Steemit, Inc.
 
 All of the links in the "Helpful Posts from Steemit Users" section were created by our users and do not necessarily represent the views of Steemit, Inc. or its management.
 

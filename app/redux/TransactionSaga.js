@@ -505,10 +505,10 @@ function* recoverAccount({payload: {account_to_recover, old_password, new_passwo
     const newMemo = pwPubkey(account_to_recover, new_password.trim(), 'memo')
 
     const new_owner_authority = {weight_threshold: 1, account_auths: [],
-        key_auths: [[newOwner.toPublicKey(), 1]]}
+        key_auths: [[newOwner, 1]]}
 
     const recent_owner_authority = {weight_threshold: 1, account_auths: [],
-        key_auths: [[oldOwner.toPublicKey(), 1]]}
+        key_auths: [[oldOwner, 1]]}
 
     try {
         yield broadcast.sendAsync({extensions: [], operations: [

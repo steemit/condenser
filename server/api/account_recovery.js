@@ -4,7 +4,7 @@ import models from 'db/models';
 import config from 'config';
 import {esc, escAttrs} from 'db/models';
 import {getRemoteIp, rateLimitReq, checkCSRF} from 'server/utils/misc';
-import { broadcast } from 'golos-js';
+import {broadcast} from 'golos-js';
 
 export default function useAccountRecoveryApi(app) {
     const router = koa_router();
@@ -172,15 +172,10 @@ export default function useAccountRecoveryApi(app) {
 }
 
 function* requestAccountRecovery({
-    recovery_account, account_to_recover, new_owner_authority,
-    signing_key, broadcast = false,
+    recovery_account, account_to_recover, new_owner_authority, signing_key
 }) {
-    const operations = [['request_account_recovery',
-        {
-            recovery_account,
-            account_to_recover,
-            new_owner_authority,
-        }
-    ]];
+    const operations = [['request_account_recovery', {
+        recovery_account, account_to_recover, new_owner_authority
+    }]];
     return yield broadcast.sendAsync({extensions: [], operations}, [signing_key]);
 }

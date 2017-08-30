@@ -1,5 +1,5 @@
 // polyfill webpack require.ensure
-//if (typeof require.ensure !== 'function') require.ensure = (d, c) => c(require);
+if (typeof require.ensure !== 'function') require.ensure = (d, c) => c(require);
 
 import App from 'app/components/App';
 import PostsIndex from 'app/components/pages/PostsIndex';
@@ -89,9 +89,9 @@ export default {
             cb(null, [require('app/components/pages/UserProfile')]);
             //});
         } else if (route.page === 'Market') {
-            //require.ensure([], (require) => {
-            cb(null, [require('app/components/pages/Market')]);
-            //});
+            require.ensure([], (require) => {
+                cb(null, [require('app/components/pages/Market')]);
+            });
         } else if (route.page === 'Post') {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/PostPage')]);

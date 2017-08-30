@@ -20,8 +20,10 @@ export default function (stats) {
             .map(chunk => `${publicPath}${chunk}`); // add public path to it
     };
 
-    let script = getChunks('vendor', /js/);
-    script = [...script, ...getChunks('app', /js/)];
+    const vendor = getChunks('vendor', /js/);
+    const common = getChunks('common', /js/);
+    const app = getChunks('app', /js/);
+    const script = [...vendor, ...common, ...app];
     const style = getChunks('app', /css/);
 
     // Find compiled images in modules

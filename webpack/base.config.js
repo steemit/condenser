@@ -35,7 +35,7 @@ const scss_loaders = [
 export default {
     entry: {
         app: ['babel-polyfill', './src/app/Main.js'],
-        vendor: ['react', 'react-dom', 'react-router']
+        vendor: ['react', 'react-dom', 'react-router', 'steem', 'bytebuffer', 'immutable']
     },
     output: {
         path: path.resolve(__dirname, '../dist'),
@@ -79,6 +79,9 @@ export default {
             this.plugin('done', writeStats);
         },
         new webpack.optimize.ModuleConcatenationPlugin(),
+        new webpack.optimize.CommonsChunkPlugin({
+           name: 'common' // Specify the common bundle's name.
+        }),
         webpack_isomorphic_tools_plugin,
         new ExtractTextPlugin('[name]-[chunkhash].css')
     ],

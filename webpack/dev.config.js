@@ -3,8 +3,8 @@ import git from 'git-rev-sync';
 import baseConfig from './base.config';
 import startKoa from './utils/start-koa';
 
-// var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-// baseConfig.plugins.push(new BundleAnalyzerPlugin());
+var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+baseConfig.plugins.push(new BundleAnalyzerPlugin());
 
 export default {
     ...baseConfig,

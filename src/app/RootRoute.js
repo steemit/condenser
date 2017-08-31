@@ -79,11 +79,13 @@ export default {
             cb(null, [require('app/components/pages/Witnesses')]);
             //});
         } else if (route.page === 'SubmitPost') {
-            //require.ensure([], (require) => {
-            if (process.env.BROWSER)
-                cb(null, [require('app/components/pages/SubmitPost')]);
-            else
+            if (process.env.BROWSER) {
+                require.ensure([], (require) => {
+                    cb(null, [require('app/components/pages/SubmitPost')]);
+                });
+            } else {
                 cb(null, [require('app/components/pages/SubmitPostServerRender')]);
+            }
         } else if (route.page === 'UserProfile') {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/UserProfile')]);

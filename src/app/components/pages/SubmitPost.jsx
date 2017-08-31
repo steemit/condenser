@@ -1,10 +1,10 @@
 import React from 'react';
-// import {connect} from 'react-redux';
 import { browserHistory } from 'react-router';
 import ReplyEditor from 'app/components/elements/ReplyEditor'
 
-const formId = 'submitStory'
-const SubmitReplyEditor = ReplyEditor(formId)
+const formId = 'submitStory';
+const richTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
+const SubmitReplyEditor = ReplyEditor(formId, richTextEditor);
 
 class SubmitPost extends React.Component {
     // static propTypes = {

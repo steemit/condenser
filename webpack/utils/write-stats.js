@@ -21,9 +21,9 @@ export default function (stats) {
     };
 
     const vendor = getChunks('vendor', /js/);
-    const common = getChunks('common', /js/);
+    // const common = getChunks('common', /js/);
     const app = getChunks('app', /js/);
-    const script = [...vendor, ...common, ...app];
+    const script = [...vendor, ...app];
     const style = getChunks('app', /css/);
 
     // Find compiled images in modules

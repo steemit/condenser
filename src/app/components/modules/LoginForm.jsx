@@ -1,7 +1,6 @@
 /* eslint react/prop-types: 0 */
 import React, { PropTypes, Component } from 'react';
 import transaction from 'app/redux/Transaction'
-import g from 'app/redux/GlobalReducer'
 import user from 'app/redux/User'
 import {validate_account_name} from 'app/utils/ChainValidation';
 import runTests from 'app/utils/BrowserTests';
@@ -315,12 +314,12 @@ export default connect(
         },
         clearError: () => { if (hasError) dispatch(user.actions.loginError({error: null})) },
         qrReader: (dataCallback) => {
-            dispatch(g.actions.showDialog({name: 'qr_reader', params: {handleScan: dataCallback}}));
+            dispatch({type: 'global/SHOW_DIALOG', payload: {name: 'qr_reader', params: {handleScan: dataCallback}}});
         },
         showChangePassword: (username, defaultPassword) => {
             dispatch(user.actions.closeLogin())
-            dispatch(g.actions.remove({key: 'changePassword'}))
-            dispatch(g.actions.showDialog({name: 'changePassword', params: {username, defaultPassword}}))
+            dispatch({type: 'global/REMOVE', payload: {key: 'changePassword'}})
+            dispatch({type: 'global/SHOW_DIALOG', payload: {name: 'changePassword', params: {username, defaultPassword}}})
         },
     })
 )(LoginForm)

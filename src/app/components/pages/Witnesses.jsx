@@ -6,7 +6,6 @@ import Icon from 'app/components/elements/Icon';
 import transaction from 'app/redux/Transaction'
 import ByteBuffer from 'bytebuffer'
 import {is} from 'immutable'
-import g from 'app/redux/GlobalReducer';
 import tt from 'counterpart';
 
 const Long = ByteBuffer.Long
@@ -235,7 +234,7 @@ module.exports = {
                         operation: {account, proxy},
                         confirm: proxy.length ? "Set proxy to: " + proxy : "You are about to remove your proxy.",
                         successCallback: () => {
-                            dispatch(g.actions.updateAccountWitnessProxy({account, proxy}));
+                            dispatch({type: 'global/UPDATE_ACCOUNT_WITNESS_PROXY', payload: {account, proxy}});
                             stateCallback({proxyFailed: false, proxy: ""});
                         },
                         errorCallback: (e) => {

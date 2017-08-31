@@ -1,7 +1,6 @@
 import React, {PropTypes, Component} from 'react'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import Keys from 'app/components/elements/Keys'
-import g from 'app/redux/GlobalReducer'
 import {connect} from 'react-redux';
 import QRCode from 'react-qr'
 import tt from 'counterpart';
@@ -114,12 +113,12 @@ export default connect(
     },
     dispatch => ({
         setWifShown: (shown) => {
-            dispatch(g.actions.receiveState({UserKeys_wifShown: shown}))
+            dispatch({type: 'global/RECEIVE_STATE', payload: {UserKeys_wifShown: shown}})
         },
         showChangePassword: (username) => {
             const name = 'changePassword'
-            dispatch(g.actions.remove({key: name}))
-            dispatch(g.actions.showDialog({name, params: {username}}))
+            dispatch({type: 'global/REMOVE', payload: {key: name}})
+            dispatch({type: 'global/SHOW_DIALOG', payload: {name, params: {username}}})
         },
     })
 )(UserKeys)

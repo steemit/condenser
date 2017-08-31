@@ -2,8 +2,6 @@
 import React, {PropTypes, Component} from 'react'
 import {Map, List} from 'immutable'
 import {connect} from 'react-redux'
-import user from 'app/redux/User'
-import g from 'app/redux/GlobalReducer'
 import ShowKey from 'app/components/elements/ShowKey'
 import tt from 'counterpart';
 
@@ -111,8 +109,8 @@ export default connect(
     dispatch => ({
         showChangePassword: (username, authType, priorAuthKey) => {
             const name = 'changePassword'
-            dispatch(g.actions.remove({key: name}))
-            dispatch(g.actions.showDialog({name, params: {username, authType, priorAuthKey}}))
+            dispatch({type: 'global/REMOVE', payload: {key: name}})
+            dispatch({type: 'global/SHOW_DIALOG', payload: {name, params: {username, authType, priorAuthKey}}})
         },
     })
 )(Keys)

@@ -1,5 +1,4 @@
 import { call, put, select } from 'redux-saga/effects';
-import GlobalReducer from './GlobalReducer';
 import {getNotifications, webPushRegister} from 'app/utils/ServerApiClient';
 import registerServiceWorker from 'app/utils/RegisterServiceWorker';
 import {api} from 'steem';
@@ -32,10 +31,7 @@ function* pollData() {
         }
 
         try {
-            const data = yield call([api, api.getDynamicGlobalPropertiesAsync]);
-            // console.log('-- pollData.pollData -->', data);
-            // const data = yield call([api, api.getDiscussionsByCreatedAsync], {limit: 10});
-            // yield put(GlobalReducer.actions.receiveRecentPosts({data}));
+            yield call([api, api.getDynamicGlobalPropertiesAsync]);
         } catch (error) {
             console.error('~~ pollData saga error ~~>', error);
         }

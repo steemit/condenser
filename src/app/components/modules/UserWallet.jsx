@@ -2,7 +2,6 @@
 import React from 'react';
 import {connect} from 'react-redux'
 import {Link} from 'react-router'
-import g from 'app/redux/GlobalReducer'
 import SavingsWithdrawHistory from 'app/components/elements/SavingsWithdrawHistory';
 import TransferHistoryRow from 'app/components/cards/TransferHistoryRow';
 import TransactionError from 'app/components/elements/TransactionError';
@@ -433,12 +432,12 @@ export default connect(
         convertToSteem: (e) => {
             e.preventDefault()
             const name = 'convertToSteem';
-            dispatch(g.actions.showDialog({name}))
+            dispatch({type: 'global/SHOW_DIALOG', payload: {name}})
         },
         showChangePassword: (username) => {
             const name = 'changePassword';
-            dispatch(g.actions.remove({key: name}));
-            dispatch(g.actions.showDialog({name, params: {username}}))
+            dispatch({type: 'global/REMOVE', payload: {key: name}});
+            dispatch({type: 'global/SHOW_DIALOG', payload: {name, params: {username}}})
         },
     })
 )(UserWallet)

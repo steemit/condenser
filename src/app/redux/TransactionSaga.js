@@ -3,7 +3,6 @@ import {call, put, select} from 'redux-saga/effects';
 import {fromJS, Set, Map} from 'immutable'
 import {getAccount, getContent} from 'app/redux/SagaShared'
 import {findSigningKey} from 'app/redux/AuthSaga'
-import g from 'app/redux/GlobalReducer'
 import user from 'app/redux/User'
 import tr from 'app/redux/Transaction'
 import getSlug from 'speakingurl'
@@ -74,14 +73,14 @@ function* preBroadcast_vote({operation, username}) {
     if (!operation.voter) operation.voter = username
     const {voter, author, permlink, weight} = operation
     // give immediate feedback
-    yield put(g.actions.set({key: `transaction_vote_active_${author}_${permlink}`, value: true}))
-    yield put(g.actions.voted({username: voter, author, permlink, weight}))
+    yield put({type: 'global/SET', payload: {key: `transaction_vote_active_${author}_${permlink}`, value: true}})
+    yield put({type: 'global/VOTED', payload: {username: voter, author, permlink, weight}})
     return operation
 }
 function* preBroadcast_account_witness_vote({operation, username}) {
     if (!operation.account) operation.account = username
     const {account, witness, approve} = operation
-    yield put(g.actions.updateAccountWitnessVote({account, witness, approve}))
+    yield put({type: 'global/UPDATE_ACCOUNT_WITNESS_VOTE', payload: {account, witness, approve}})
     return operation
 }
 
@@ -91,7 +90,7 @@ function* preBroadcast_custom_json({operation}) {
         try {
             if(json[0] === 'follow') {
                 const {follower, following, what: [action]} = json[1]
-                yield put(g.actions.update({
+                yield put({type: 'global/UPDATE', payload: {
                     key: ['follow', 'getFollowingAsync', follower],
                     notSet: Map(),
                     updater: m => {
@@ -110,7 +109,7 @@ function* preBroadcast_custom_json({operation}) {
                         m = m.set('ignore_count', m.get('ignore_result', Set()).size)
                         return m//.asImmutable()
                     }
-                }))
+                }})
             }
         } catch(e) {
             console.error('TransactionSaga unrecognized follow custom_json format', operation.json);
@@ -120,7 +119,7 @@ function* preBroadcast_custom_json({operation}) {
 }
 
 function* error_account_witness_vote({operation: {account, witness, approve}}) {
-    yield put(g.actions.updateAccountWitnessVote({account, witness, approve: !approve}))
+    yield put({type: 'global/UPDATE_ACCOUNT_WITNESS_VOTE', payload: {account, witness, approve: !approve}})
 }
 
 /** Keys, username, and password are not needed for the initial call.  This will check the login and may trigger an action to prompt for the password / key. */
@@ -259,31 +258,31 @@ function* accepted_comment({operation}) {
     // update again with new $$ amount from the steemd node
     yield call(getContent, {author, permlink})
     // receiveComment did the linking already (but that is commented out)
-    yield put(g.actions.linkReply(operation))
+    yield put({type: 'global/LINK_REPLY', payload: operation})
     // mark the time (can only post 1 per min)
     // yield put(user.actions.acceptedComment())
 }
 function* accepted_delete_comment({operation}) {
-    yield put(g.actions.deleteContent(operation))
+    yield put({type: 'global/DELETE_CONTENT', payload: operation})
 }
 
 function* accepted_vote({operation: {author, permlink, weight}}) {
     console.log('Vote accepted, weight', weight, 'on', author + '/' + permlink, 'weight');
     // update again with new $$ amount from the steemd node
-    yield put(g.actions.remove({key: `transaction_vote_active_${author}_${permlink}`}))
+    yield put({type: 'global/REMOVE', payload: {key: `transaction_vote_active_${author}_${permlink}`}})
     yield call(getContent, {author, permlink})
 }
 
 function* accepted_withdraw_vesting({operation}) {
     let [account] = yield call([api, api.getAccountsAsync], [operation.account])
     account = fromJS(account)
-    yield put(g.actions.receiveAccount({account}))
+    yield put({type: 'global/RECEIVE_ACCOUNT', payload: {account}})
 }
 
 function* accepted_account_update({operation}) {
     let [account] = yield call([api, api.getAccountsAsync], [operation.account])
     account = fromJS(account)
-    yield put(g.actions.receiveAccount({account}))
+    yield put({type: 'global/RECEIVE_ACCOUNT', payload: {account}})
 
     // bug, fork, etc.. the folowing would be mis-leading
     // const {account} = operation
@@ -427,14 +426,14 @@ function createPatch(text1, text2) {
 function* error_custom_json({operation: {id, required_posting_auths}}) {
     if(id === 'follow') {
         const follower = required_posting_auths[0]
-        yield put(g.actions.update({
+        yield put({type: 'global/UPDATE', payload: {
             key: ['follow', 'getFollowingAsync', follower, 'loading'],
             updater: () => null
-        }))
+        }})
     }
 }
 function* error_vote({operation: {author, permlink}}) {
-    yield put(g.actions.remove({key: `transaction_vote_active_${author}_${permlink}`}));
+    yield put({type: 'global/REMOVE', payload: {key: `transaction_vote_active_${author}_${permlink}`}});
     yield call(getContent, {author, permlink}); // unvote
 }
 

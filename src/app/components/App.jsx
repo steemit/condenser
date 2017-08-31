@@ -4,7 +4,6 @@ import AppPropTypes from 'app/utils/AppPropTypes';
 import Header from 'app/components/modules/Header';
 import LpFooter from 'app/components/modules/lp/LpFooter';
 import user from 'app/redux/User';
-import g from 'app/redux/GlobalReducer';
 import TopRightMenu from 'app/components/modules/TopRightMenu';
 import { browserHistory } from 'react-router';
 import classNames from 'classnames';
@@ -337,7 +336,6 @@ export default connect(
             const new_window = window.open();
             new_window.opener = null;
             new_window.location = 'https://blocktrades.us/?input_coin_type=btc&output_coin_type=steem&receive_address=' + username;
-            //dispatch(g.actions.showDialog({name: 'blocktrades_deposit', params: {outputCoinType: 'VESTS'}}));
         },
     })
 )(App);

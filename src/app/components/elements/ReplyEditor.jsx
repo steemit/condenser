@@ -10,7 +10,6 @@ import Tooltip from 'app/components/elements/Tooltip'
 import sanitizeConfig, {allowedTags} from 'app/utils/SanitizeConfig'
 import sanitize from 'sanitize-html'
 import HtmlReady from 'shared/HtmlReady'
-import g from 'app/redux/GlobalReducer'
 import {Set} from 'immutable'
 import Remarkable from 'remarkable'
 import Dropzone from 'react-dropzone'
@@ -517,10 +516,10 @@ export default (formId, richTextEditor = null) => connect(
     // mapDispatchToProps
     dispatch => ({
         clearMetaData: (id) => {
-            dispatch(g.actions.clearMeta({id}))
+            dispatch({type: 'global/CLEAR_META', payload: {id}})
         },
         setMetaData: (id, jsonMetadata) => {
-            dispatch(g.actions.setMetaData({id, meta: jsonMetadata ? jsonMetadata.steem : null}))
+            dispatch({type: 'global/SET_META_DATA', payload: {id, meta: jsonMetadata ? jsonMetadata.steem : null}})
         },
         uploadImage: (file, progress) => {
             dispatch({

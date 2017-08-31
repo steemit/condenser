@@ -10,6 +10,10 @@
     "reddit": {
       "key": "SDC_REDDIT_API_KEY",
       "secret": "SDC_REDDIT_API_SECRET"
+    },
+    "server": {
+      "host": "SDC_GRANT_SERVER",
+      "protocol": "SDC_GRANT_PROTOCOL"
     }
   },
   "google_analytics_id": "SDC_GOOGLE_ANALYTICS_ID",
@@ -23,11 +27,13 @@
       "imgSrc": "SDC_HELMET_IMGSRC",
       "objectSrc": "SDC_HELMET_OBJECTSRC",
       "scriptSrc": "SDC_HELMET_SCRIPTSRC",
-      "styleSrc": "SDC_HELMET_STYLESRC"
+      "styleSrc": "SDC_HELMET_STYLESRC",
+      "reportUri": "SDC_HELMET_REPORTURI"
     }
   },
   "img_proxy_prefix": "SDC_IMAGE_PROXY_PREFIX",
   "mixpanel": "SDC_MIXPANEL",
+  "newrelic": "SDC_NEWRELIC_LICENSE_KEY",
   "notify": {
     "gcm_key": "SDC_NOTIFY_GCM_KEY"
   },
@@ -72,6 +78,8 @@
   },
   "upload_image": "SDC_UPLOAD_IMAGE_URL",
   "session_cookie_key": "SDC_SESSION_COOKIE_KEY",
-  "ws_connection_client": "SDC_CLIENT_WEBSOCKET_URL",
-  "ws_connection_server": "SDC_SERVER_WEBSOCKET_URL"
+  "steemd_connection_client": "SDC_CLIENT_STEEMD_URL",
+  "steemd_connection_server": "SDC_SERVER_STEEMD_URL",
+  "chain_id": "SDC_CHAIN_ID",
+  "address_prefix": "SDC_ADDRESS_PREFIX"
 }

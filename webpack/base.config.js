@@ -9,7 +9,7 @@ const webpack_isomorphic_tools_plugin =
 
 export default {
     entry: {
-        app: ['babel-polyfill', './app/Main.js'],
+        app: ['babel-polyfill', './src/app/Main.js'],
         vendor: ['react', 'react-dom', 'react-router']
     },
     output: {
@@ -55,12 +55,16 @@ export default {
     ],
     resolve: {
         root: [
-            path.resolve(__dirname, '..')
+            path.resolve(__dirname, '../src')
         ],
         alias: {
-            'react': path.join(__dirname, '../node_modules', 'react')
+            react: path.join(__dirname, '../node_modules', 'react'),
+            assets: path.join(__dirname, '../src/app/assets')
         },
         extensions: ['', '.js', '.json', '.jsx'],
         modulesDirectories: ['node_modules']
+    },
+    externals: {
+        newrelic: true
     }
 };

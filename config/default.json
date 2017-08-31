@@ -1,5 +1,5 @@
 {
-  "database_url": "sqlite:///tmp/sqlite.db",
+  "database_url": "mysql://root:password@127.0.0.1/steemit_dev",
   "disable_signups": false,
   "facebook_app_id": false,
   "grant": {
@@ -33,7 +33,7 @@
   "helmet": {
     "directives": {
       "childSrc": "'self' www.youtube.com staticxx.facebook.com w.soundcloud.com player.vimeo.com",
-      "connectSrc": "'self' steemit.com steemd.steemit.com api.blocktrades.us",
+      "connectSrc": "'self' steemit.com wss://steemd.steemit.com api.blocktrades.us",
       "defaultSrc": "'self' www.youtube.com staticxx.facebook.com player.vimeo.com",
       "fontSrc": "data: fonts.gstatic.com",
       "frameAncestors": "'none'",
@@ -41,7 +41,8 @@
       "objectSrc": "'none'",
       "pluginTypes": "application/pdf",
       "scriptSrc": "'self' www.google-analytics.com connect.facebook.net",
-      "styleSrc": "'self' 'unsafe-inline' fonts.googleapis.com"
+      "styleSrc": "'self' 'unsafe-inline' fonts.googleapis.com",
+      "reportUri": "/api/v1/csp_violation"
     },
     "reportOnly": false,
     "setAllHeaders": true
@@ -49,6 +50,7 @@
   "img_proxy_prefix": "https://steemitdevimages.com/",
   "ipfs_prefix": false,
   "mixpanel": false,
+  "newrelic": false,
   "notify": {
     "gcm_key": "google secret key"
   },
@@ -94,6 +96,8 @@
     "auth_token": false
   },
   "upload_image": false,
-  "ws_connection_client": "wss://steemd.steemit.com",
-  "ws_connection_server": "wss://steemd.steemit.com"
+  "steemd_connection_client": "wss://steemd.steemit.com",
+  "steemd_connection_server": "wss://steemd.steemit.com",
+  "chain_id": "0000000000000000000000000000000000000000000000000000000000000000",
+  "address_prefix": "STM"
 }

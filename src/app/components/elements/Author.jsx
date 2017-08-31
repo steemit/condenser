@@ -42,8 +42,9 @@ class Author extends React.Component {
     }
 
     componentDidMount() {
-        const node = ReactDOM.findDOMNode(this.refs.authorProfileLink);
-        if(node.addEventListener) {
+        if(!this.authorProfileLink) return;
+        const node = ReactDOM.findDOMNode(this.authorProfileLink);
+        if (node.addEventListener) {
             node.addEventListener('click', this.toggle, false);
         } else {
             node.attachEvent('click', this.toggle, false);
@@ -51,11 +52,12 @@ class Author extends React.Component {
     }
 
     componentWillUnmount() {
-        const node = ReactDOM.findDOMNode(this.refs.authorProfileLink);
-        if(node.removeEventListener) {
-            node.removeEventListener('click', this.toggle, false);
+        if(!this.authorProfileLink) return;
+        const node = ReactDOM.findDOMNode(this.authorProfileLink);
+        if (node.removeEventListener) {
+            node.removeEventListener('click', this.toggle);
         } else {
-            node.detachEvent('click', this.toggle, false);
+            node.detachEvent('click', this.toggle);
         }
     }
 
@@ -95,7 +97,7 @@ class Author extends React.Component {
         return (
             <span className="Author">
                 <span itemProp="author" itemScope itemType="http://schema.org/Person">
-                    <Link ref="authorProfileLink" to={'/@' + author}><strong>{author}</strong> <Icon name="dropdown-arrow" /></Link>
+                    <Link ref={(link) => {this.authorProfileLink = link}} to={'/@' + author}><strong>{author}</strong> <Icon name="dropdown-arrow" /></Link>
 
                     <Reputation value={authorRepLog10} />
                 </span>

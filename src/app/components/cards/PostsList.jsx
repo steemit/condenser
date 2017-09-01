@@ -18,7 +18,6 @@ function topPosition(domElt) {
 }
 
 class PostsList extends React.Component {
-
     static propTypes = {
         posts: PropTypes.object.isRequired,
         loading: PropTypes.bool.isRequired,
@@ -187,37 +186,37 @@ class PostsList extends React.Component {
             if(!(ignore || hide) || showSpam) // rephide
                 postsInfo.push({item, ignore})
         });
-        const renderSummary = items => items.map(item => <li key={item.item}>
-            <PostSummary
-                account={account}
-                post={item.item}
-                thumbSize={thumbSize}
-                ignore={item.ignore}
-                onClick={this.onPostClick}
-                nsfwPref={nsfwPref}
+        const renderSummary = items => items.map(item => (<li key={item.item}>
+          <PostSummary
+              account={account}
+              post={item.item}
+              thumbSize={thumbSize}
+              ignore={item.ignore}
+              onClick={this.onPostClick}
+              nsfwPref={nsfwPref}
             />
-        </li>)
+        </li>))
 
         return (
-            <div id="posts_list" className="PostsList">
-                <ul className="PostsList__summaries hfeed" itemScope itemType="http://schema.org/blogPosts">
-                    {renderSummary(postsInfo)}
-                </ul>
-                {loading && <center><LoadingIndicator style={{marginBottom: "2rem"}} type="circle" /></center>}
-                {showPost && <div id="post_overlay" className="PostsList__post_overlay" tabIndex={0}>
-                    <div className="PostsList__post_top_overlay">
-                        <div className="PostsList__post_top_bar">
-                            <ul className="menu back-button-menu">
-                                <li><a onClick={(e) => {e.preventDefault(); this.setState({showPost: null}) }} href="#"><i><Icon name="chevron-left" /></i> <span>{tt('g.go_back')}</span></a></li>
-                            </ul>
-                            <CloseButton onClick={this.closePostModal} />
-                        </div>
-                    </div>
-                    <div className="PostsList__post_container">
-                        <Post post={showPost} />
-                    </div>
-                </div>}
-            </div>
+          <div id="posts_list" className="PostsList">
+            <ul className="PostsList__summaries hfeed" itemScope itemType="http://schema.org/blogPosts">
+              {renderSummary(postsInfo)}
+            </ul>
+            {loading && <center><LoadingIndicator style={{marginBottom: "2rem"}} type="circle" /></center>}
+            {showPost && <div id="post_overlay" className="PostsList__post_overlay" tabIndex={0}>
+              <div className="PostsList__post_top_overlay">
+                <div className="PostsList__post_top_bar">
+                  <ul className="menu back-button-menu">
+                    <li><a onClick={(e) => { e.preventDefault(); this.setState({showPost: null}) }} href="#"><i><Icon name="chevron-left" /></i> <span>{tt('g.go_back')}</span></a></li>
+                  </ul>
+                  <CloseButton onClick={this.closePostModal} />
+                </div>
+              </div>
+              <div className="PostsList__post_container">
+                <Post post={showPost} />
+              </div>
+            </div>}
+          </div>
         );
     }
 }

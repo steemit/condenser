@@ -75,15 +75,15 @@ class PostSummary extends React.Component {
 
         if(reblogged_by) {
             reblogged_by = (<div className="PostSummary__reblogged_by">
-                               <Icon name="reblog" /> {tt('postsummary_jsx.resteemed_by')} <UserNames names={reblogged_by} />
-                           </div>)
+              <Icon name="reblog" /> {tt('postsummary_jsx.resteemed_by')} <UserNames names={reblogged_by} />
+            </div>)
         }
 
         // 'account' is the current blog being viewed, if applicable.
         if(account && account != content.get('author')) {
             reblogged_by = (<div className="PostSummary__reblogged_by">
-                               <Icon name="reblog" /> {tt('postsummary_jsx.resteemed')}
-                           </div>)
+              <Icon name="reblog" /> {tt('postsummary_jsx.resteemed')}
+            </div>)
         }
 
         const {gray, authorRepLog10, flagWeight, isNsfw} = content.get('stats', Map()).toJS()
@@ -107,32 +107,32 @@ class PostSummary extends React.Component {
         }
 
         const content_body = (<div className="PostSummary__body entry-content">
-            <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>{desc}</a>
+          <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>{desc}</a>
         </div>);
         const content_title = (<h3 className="entry-title">
-            <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>
-                {isNsfw && <span className="nsfw-flag">nsfw</span>}
-                {title_text}
-                {full_power && <span title={tt('g.powered_up_100')}><Icon name="steem" /></span>}
-            </a>
+          <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>
+            {isNsfw && <span className="nsfw-flag">nsfw</span>}
+            {title_text}
+            {full_power && <span title={tt('g.powered_up_100')}><Icon name="steem" /></span>}
+          </a>
         </h3>);
 
         // author and category
         const author_category = (<span className="vcard">
-            <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}><TimeAgoWrapper date={p.created} className="updated" /></a>
-            {} {tt('g.by')} <Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
-            {} {tt('g.in')} <TagList post={p} single />
+          <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}><TimeAgoWrapper date={p.created} className="updated" /></a>
+          {} {tt('g.by')} <Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
+          {} {tt('g.in')} <TagList post={p} single />
         </span>);
 
         const content_footer = (<div className="PostSummary__footer">
-            <Voting post={post} showList={false} />
-            <VotesAndComments post={post} commentsLink={comments_link} />
-            <span className="PostSummary__time_author_category">
-                {!archived && <Reblog author={p.author} permlink={p.permlink} parent_author={p.parent_author} />}
-                <span className="show-for-medium">
-                    {author_category}
-                </span>
+          <Voting post={post} showList={false} />
+          <VotesAndComments post={post} commentsLink={comments_link} />
+          <span className="PostSummary__time_author_category">
+            {!archived && <Reblog author={p.author} permlink={p.permlink} parent_author={p.parent_author} />}
+            <span className="show-for-medium">
+              {author_category}
             </span>
+          </span>
         </div>)
 
         const {nsfwPref, username} = this.props
@@ -145,18 +145,18 @@ class PostSummary extends React.Component {
             } else if(nsfwPref === 'warn' && !revealNsfw) {
                 // user wishes to be warned, and has not revealed this post
                 return (
-                    <article className={'PostSummary hentry'} itemScope itemType ="http://schema.org/blogPost">
-                        <div className="PostSummary__nsfw-warning">
-                            <div className="PostSummary__time_author_category_small show-for-small-only">
-                                {author_category}
-                            </div>
-                            {tt('postsummary_jsx.this_post_is')} <span className="nsfw-flag">nsfw</span>.
+                  <article className={'PostSummary hentry'} itemScope itemType="http://schema.org/blogPost">
+                    <div className="PostSummary__nsfw-warning">
+                      <div className="PostSummary__time_author_category_small show-for-small-only">
+                        {author_category}
+                      </div>
+                      {tt('postsummary_jsx.this_post_is')} <span className="nsfw-flag">nsfw</span>.
                             {tt('postsummary_jsx.you_can')} <a href="#" onClick={this.onRevealNsfw}>{tt('postsummary_jsx.reveal_it')}</a> {tt('g.or') + ' '}
-                            {username ? <span>{tt('postsummary_jsx.adjust_your')} <Link to={`/@${username}/settings`}>{tt('postsummary_jsx.display_preferences')}</Link>.</span>
+                      {username ? <span>{tt('postsummary_jsx.adjust_your')} <Link to={`/@${username}/settings`}>{tt('postsummary_jsx.display_preferences')}</Link>.</span>
                                 : <span><Link to="/pick_account">{tt('postsummary_jsx.create_an_account')}</Link> {tt('postsummary_jsx.to_save_your_preferences')}.</span>}
-                            {content_footer}
-                        </div>
-                    </article>
+                      {content_footer}
+                    </div>
+                  </article>
                 )
             }
         }
@@ -171,33 +171,33 @@ class PostSummary extends React.Component {
           if(thumbSize == 'mobile') {
             thumb = <span onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image-mobile"><img src={url} /></span>
           } else {
-            thumb = <span onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image" style={{backgroundImage: 'url(' + url + ')'}}></span>
+            thumb = <span onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image" style={{backgroundImage: 'url(' + url + ')'}} />
           }
         }
         const commentClasses = []
         if(gray || ignore) commentClasses.push('downvoted') // rephide
 
         return (
-            <article className={'PostSummary hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')} itemScope itemType ="http://schema.org/blogPost">
-                <div className={flagWeight > 0 ? '' : 'PostSummary__collapse'}>
-                    <div className="float-right"><Voting post={post} flag /></div>
-                </div>
-                {reblogged_by}
-                <div className="PostSummary__header show-for-small-only">
-                    {content_title}
-                </div>
-                <div className="PostSummary__time_author_category_small show-for-small-only">
-                    {author_category}
-                </div>
-                {thumb}
-                <div className="PostSummary__content">
-                    <div className="PostSummary__header show-for-medium">
-                        {content_title}
-                    </div>
-                    {content_body}
-                    {content_footer}
-                </div>
-            </article>
+          <article className={'PostSummary hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')} itemScope itemType="http://schema.org/blogPost">
+            <div className={flagWeight > 0 ? '' : 'PostSummary__collapse'}>
+              <div className="float-right"><Voting post={post} flag /></div>
+            </div>
+            {reblogged_by}
+            <div className="PostSummary__header show-for-small-only">
+              {content_title}
+            </div>
+            <div className="PostSummary__time_author_category_small show-for-small-only">
+              {author_category}
+            </div>
+            {thumb}
+            <div className="PostSummary__content">
+              <div className="PostSummary__header show-for-medium">
+                {content_title}
+              </div>
+              {content_body}
+              {content_footer}
+            </div>
+          </article>
         )
     }
 }
@@ -213,13 +213,16 @@ export default connect(
             total_payout = content.get('total_payout_value');
         }
         return {
-            post, content, pending_payout, total_payout,
+            post,
+content,
+pending_payout,
+total_payout,
             username: state.user.getIn(['current', 'username']) || state.offchain.get('account')
         };
     },
 
-    (dispatch) => ({
-        dispatchSubmit: data => { dispatch(user.actions.usernamePasswordLogin({...data})) },
+    dispatch => ({
+        dispatchSubmit: (data) => { dispatch(user.actions.usernamePasswordLogin({...data})) },
         clearError: () => { dispatch(user.actions.loginError({error: null})) }
     })
 )(PostSummary)

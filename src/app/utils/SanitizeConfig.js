@@ -1,5 +1,5 @@
+import sanitizeUrl from './SanitizeUrl'
 
-const rProxyDomains = /http(s)?:\/\/steemit(dev|stage)?images.com/g
 
 const iframeWhitelist = [
     {
@@ -92,13 +92,7 @@ export default ({large = true, highQualityPost = true, noImage = false, sanitize
             }
 
             // replace http:// with // to force https when needed
-            const proxyList = src.match(rProxyDomains);
-            if(proxyList && proxyList.length > 1) {
-                src = src.substring(src.lastIndexOf(proxyList.pop()));
-            }
-            src = src.replace(/^http:\/\//i, '//')
-
-
+            src = sanitizeUrl(src).replace(/^http:\/\//i, '//')
             let atts = {src}
             if(alt && alt !== '') atts.alt = alt
             return {tagName, attribs: atts}

@@ -15,6 +15,7 @@ import TagList from 'app/components/elements/TagList';
 import UserNames from 'app/components/elements/UserNames';
 import tt from 'counterpart';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
+import sanitizeUrl from 'app/utils/SanitizeUrl';
 
 function isLeftClickEvent(event) {
     return event.button === 0
@@ -167,11 +168,11 @@ class PostSummary extends React.Component {
         if(!gray && p.image_link && !userBlacklisted) {
           const prox = $STM_Config.img_proxy_prefix
           const size = (thumbSize == 'mobile') ? '640x480' : '256x512';
-          const url = (prox ? prox + size + '/' : '') + p.image_link
+          const url = (prox ? prox + size + '/' + sanitizeUrl(p.image_link, true): p.image_link)
           if(thumbSize == 'mobile') {
             thumb = <span onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image-mobile"><img src={url} /></span>
           } else {
-            thumb = <span onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image" style={{backgroundImage: 'url(' + url + ')'}}></span>
+              thumb = <span onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image" style={{backgroundImage: 'url(' + url + ')'}}></span>
           }
         }
         const commentClasses = []

@@ -1,6 +1,5 @@
 import {takeLatest} from 'redux-saga';
 import {call, put} from 'redux-saga/effects';
-import MarketReducer from './MarketReducer';
 import {getAccount} from './SagaShared';
 import {api} from 'steem';
 
@@ -29,24 +28,24 @@ export function* fetchMarket(location_change_action) {
 
         try {
             const state = yield call([api, api.getOrderBookAsync], 500);
-            yield put(MarketReducer.actions.receiveOrderbook(state));
+            yield put({type: 'market/RECEIVE_ORDERBOOK', payload: state});
 
             let trades;
             if(last_trade == null ) {
                 trades = yield call([api, api.getRecentTradesAsync], 25);
-                yield put(MarketReducer.actions.receiveTradeHistory(trades));
+                yield put({type: 'market/RECEIVE_TRADE_HISTORY', payload: trades});
             } else {
                 let start = last_trade.toISOString().slice(0, -5)
                 trades = yield call([api, api.getTradeHistoryAsync], start, "1969-12-31T23:59:59", 1000);
                 trades = trades.reverse()
-                yield put(MarketReducer.actions.appendTradeHistory(trades));
+                yield put({type: 'market/APPEND_TRADE_HISTORY', payload: trades});
             }
             if(trades.length > 0) {
               last_trade = new Date((new Date(Date.parse(trades[0]['date']))).getTime() + 1000)
             }
 
             const state3 = yield call([api, api.getTickerAsync]);
-            yield put(MarketReducer.actions.receiveTicker(state3));
+            yield put({type: 'market/RECEIVE_TICKER', payload: state3});
         } catch (error) {
             console.error('~~ Saga fetchMarket error ~~>', error);
             yield put({type: 'global/STEEM_API_ERROR', error: error.message});
@@ -61,7 +60,7 @@ export function* fetchOpenOrders(set_user_action) {
 
     try {
         const state = yield call([api, api.getOpenOrdersAsync], username);
-        yield put(MarketReducer.actions.receiveOpenOrders(state));
+        yield put({type: 'market/RECEIVE_OPEN_ORDERS', payload: state});
         yield call(getAccount, username, true);
     } catch (error) {
         console.error('~~ Saga fetchOpenOrders error ~~>', error);

@@ -5,7 +5,7 @@ import appReducer from './AppReducer';
 //import discussionReducer from './DiscussionReducer';
 import globalReducer from './GlobalReducer';
 import marketReducer from './MarketReducer';
-import user from './User';
+import userReducer from './UserReducer';
 // import auth from './AuthSaga';
 import transaction from './Transaction';
 import offchain from './Offchain';
@@ -50,7 +50,7 @@ export default combineReducers({
     global: initReducer(globalReducer, 'global'),
     market: initReducer(marketReducer),
     offchain: initReducer(offchain),
-    user: initReducer(user.reducer),
+    user: initReducer(userReducer),
     // auth: initReducer(auth.reducer),
     transaction: initReducer(transaction.reducer),
     //discussion: initReducer(discussionReducer),

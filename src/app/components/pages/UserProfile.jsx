@@ -4,7 +4,6 @@ import { Link } from 'react-router';
 import {connect} from 'react-redux';
 import { browserHistory } from 'react-router';
 import transaction from 'app/redux/Transaction';
-import user from 'app/redux/User';
 import Icon from 'app/components/elements/Icon'
 import UserKeys from 'app/components/elements/UserKeys';
 import PasswordReset from 'app/components/elements/PasswordReset';
@@ -463,11 +462,11 @@ module.exports = {
             };
         },
         dispatch => ({
-            login: () => {dispatch(user.actions.showLogin())},
-            clearTransferDefaults: () => {dispatch(user.actions.clearTransferDefaults())},
+            login: () => {dispatch({type: 'user/SHOW_LOGIN'})},
+            clearTransferDefaults: () => {dispatch({type: 'user/CLEAR_TRANSFER_DEFAULTS'})},
             showTransfer: (transferDefaults) => {
-                dispatch(user.actions.setTransferDefaults(transferDefaults))
-                dispatch(user.actions.showTransfer())
+                dispatch({type: 'user/SET_TRANSFER_DEFAULTS', payload: transferDefaults})
+                dispatch({type: 'user/SHOW_TRANSFER'})
             },
             withdrawVesting: ({account, vesting_shares, errorCallback, successCallback}) => {
                 const successCallbackWrapper = (...args) => {

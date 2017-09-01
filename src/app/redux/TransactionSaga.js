@@ -3,7 +3,6 @@ import {call, put, select} from 'redux-saga/effects';
 import {fromJS, Set, Map} from 'immutable'
 import {getAccount, getContent} from 'app/redux/SagaShared'
 import {findSigningKey} from 'app/redux/AuthSaga'
-import user from 'app/redux/User'
 import tr from 'app/redux/Transaction'
 import getSlug from 'speakingurl'
 import {DEBT_TICKER} from 'app/client_config'
@@ -142,7 +141,7 @@ function* broadcastOperation({payload:
                 payload.keys.push(signingKey)
             else {
                 if (!password) {
-                    yield put(user.actions.showLogin({operation: {type, operation, username, successCallback, errorCallback, saveLogin: true}}))
+                    yield put({type: 'user/SHOW_LOGIN', payload: {operation: {type, operation, username, successCallback, errorCallback, saveLogin: true}}})
                     return
                 }
             }

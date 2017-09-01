@@ -3,7 +3,6 @@ import {connect} from 'react-redux';
 import AppPropTypes from 'app/utils/AppPropTypes';
 import Header from 'app/components/modules/Header';
 import LpFooter from 'app/components/modules/lp/LpFooter';
-import user from 'app/redux/User';
 import TopRightMenu from 'app/components/modules/TopRightMenu';
 import { browserHistory } from 'react-router';
 import classNames from 'classnames';
@@ -331,7 +330,7 @@ export default connect(
     },
     dispatch => ({
         loginUser: () =>
-            dispatch(user.actions.usernamePasswordLogin()),
+            dispatch({type: 'user/USERNAME_PASSWORD_LOGIN', payload: {}}),
         depositSteem: (username) => {
             const new_window = window.open();
             new_window.opener = null;

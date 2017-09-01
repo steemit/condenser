@@ -1,13 +1,10 @@
 import React from 'react';
 import {connect} from 'react-redux'
-import user from 'app/redux/User';
 import tt from 'counterpart';
-import {ALLOWED_CURRENCIES} from 'app/client_config'
 import store from 'store';
 import transaction from 'app/redux/Transaction'
 import o2j from 'shared/clash/object2json'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
-import Userpic from 'app/components/elements/Userpic';
 import reactForm from 'app/utils/ReactForm'
 import UserList from 'app/components/elements/UserList';
 
@@ -260,7 +257,7 @@ export default connect(
     // mapDispatchToProps
     dispatch => ({
         changeLanguage: (language) => {
-            dispatch(user.actions.changeLanguage(language))
+            dispatch({type: 'user/CHANGE_LANGUAGE', payload: language})
         },
         updateAccount: ({successCallback, errorCallback, ...operation}) => {
             const options = {type: 'account_update', operation, successCallback, errorCallback}

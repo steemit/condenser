@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router';
 import {connect} from 'react-redux';
 import Icon from 'app/components/elements/Icon';
-import user from 'app/redux/User';
 import Userpic from 'app/components/elements/Userpic';
 import { browserHistory } from 'react-router';
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
@@ -130,11 +129,11 @@ export default connect(
     dispatch => ({
         showLogin: e => {
             if (e) e.preventDefault();
-            dispatch(user.actions.showLogin())
+            dispatch({type: 'user/SHOW_LOGIN'})
         },
         logout: e => {
             if (e) e.preventDefault();
-            dispatch(user.actions.logout())
+            dispatch({type: 'user/LOGOUT'})
         }
     })
 )(TopRightMenu);

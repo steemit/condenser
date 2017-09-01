@@ -1,7 +1,6 @@
 /* eslint react/prop-types: 0 */
 import React, { PropTypes, Component } from 'react';
 import transaction from 'app/redux/Transaction'
-import user from 'app/redux/User'
 import {validate_account_name} from 'app/utils/ChainValidation';
 import runTests from 'app/utils/BrowserTests';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
@@ -301,25 +300,25 @@ export default connect(
     // mapDispatchToProps
     dispatch => ({
         dispatchSubmit: (data, loginBroadcastOperation, afterLoginRedirectToWelcome) => {
-            const {password, saveLogin} = data
-            const username = data.username.trim().toLowerCase()
+            const {password, saveLogin} = data;
+            const username = data.username.trim().toLowerCase();
             if (loginBroadcastOperation) {
-                const {type, operation, successCallback, errorCallback} = loginBroadcastOperation.toJS()
-                dispatch(transaction.actions.broadcastOperation({type, operation, username, password, successCallback, errorCallback}))
-                dispatch(user.actions.usernamePasswordLogin({username, password, saveLogin, afterLoginRedirectToWelcome, operationType: type}))
-                dispatch(user.actions.closeLogin())
+                const {type, operation, successCallback, errorCallback} = loginBroadcastOperation.toJS();
+                dispatch(transaction.actions.broadcastOperation({type, operation, username, password, successCallback, errorCallback}));
+                dispatch({type: 'user/USERNAME_PASSWORD_LOGIN', payload: {username, password, saveLogin, afterLoginRedirectToWelcome, operationType: type}});
+                dispatch({type: 'user/CLOSE_LOGIN'});
             } else {
-                dispatch(user.actions.usernamePasswordLogin({username, password, saveLogin, afterLoginRedirectToWelcome}))
+                dispatch({type: 'user/USERNAME_PASSWORD_LOGIN', payload: {username, password, saveLogin, afterLoginRedirectToWelcome}});
             }
         },
-        clearError: () => { if (hasError) dispatch(user.actions.loginError({error: null})) },
+        clearError: () => { if (hasError) dispatch({type: 'user/LOGIN_ERROR', payload: {error: null}}) },
         qrReader: (dataCallback) => {
             dispatch({type: 'global/SHOW_DIALOG', payload: {name: 'qr_reader', params: {handleScan: dataCallback}}});
         },
         showChangePassword: (username, defaultPassword) => {
-            dispatch(user.actions.closeLogin())
-            dispatch({type: 'global/REMOVE', payload: {key: 'changePassword'}})
-            dispatch({type: 'global/SHOW_DIALOG', payload: {name: 'changePassword', params: {username, defaultPassword}}})
+            dispatch({type: 'user/CLOSE_LOGIN'});
+            dispatch({type: 'global/REMOVE', payload: {key: 'changePassword'}});
+            dispatch({type: 'global/SHOW_DIALOG', payload: {name: 'changePassword', params: {username, defaultPassword}}});
         },
     })
 )(LoginForm)

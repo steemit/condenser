@@ -89,13 +89,21 @@ class Post extends React.Component {
             }
         }
 
-        const replies = dis.get('replies').toJS();
+        let replies = dis.get('replies').toJS();
 
         let sort_order = 'trending';
         if( this.props.location && this.props.location.query.sort )
            sort_order = this.props.location.query.sort;
 
         sortComments( content, replies, sort_order );
+
+        // Don't render too many comments
+        const commentLimit = (global['process'] !== undefined) ? 500 : 1000
+        if (replies.length > commentLimit) {
+            console.log(`Too many comments, ${ replies.length - commentLimit } omitted.`)
+            replies = replies.slice(0, commentLimit)
+        }
+
         const positiveComments = replies
             .map(reply => (
                 <Comment

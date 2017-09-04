@@ -1,31 +1,22 @@
+/*global $STM_Config:false*/
+
 //this regular expression should capture all possible proxy domains
 const rProxyDomains = /http(s)?:\/\/steemit(dev|stage)?images.com\//g
-const rHttp = /http(s)?:\/\//
 
 /**
  * Strips all but final 'steemit' image proxy from the beginning of the url.
- * @param url
- * @param stripAllProxies //also strips the final proxy, unless it's the actual resource host
+ * @param {string} url
+ * @param {string} dimensions - optional - if provided. url is proxied && global var $STM_Config.img_proxy_prefix is avail. resp will be "$STM_Config.img_proxy_prefix{dimensions}/{sanitized url}"
  * @returns string
  */
-export default (url, stripAllProxies = false) => {
+export default (url, dimensions = false) => {
     const proxyList = url.match(rProxyDomains)
+    let respUrl = url;
     if(proxyList && proxyList.length > 0) {
-        if(stripAllProxies) {
-            const finalProxy = proxyList.pop()
-            let respUrl = url.substring(url.lastIndexOf(finalProxy) + finalProxy.length)
-            switch(respUrl.indexOf(rHttp)) {
-                case 0 :
-                    break
-                case -1 :
-                    respUrl = finalProxy + respUrl //if the proxy we pulled is the *last* domain in the url, we want to keep it
-                    break
-                default :
-                    respUrl = respUrl.substring(respUrl.indexOf(rHttp))
-            }
-            return respUrl;
+        respUrl = url.substring(url.lastIndexOf(proxyList.pop()))
+        if(dimensions && $STM_Config && $STM_Config.img_proxy_prefix) {
+            respUrl = $STM_Config.img_proxy_prefix + dimensions + '/' + respUrl;
         }
-        return url.substring(url.lastIndexOf(proxyList.pop()))
     }
-    return url;
+    return respUrl;
 }

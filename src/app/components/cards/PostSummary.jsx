@@ -166,9 +166,9 @@ class PostSummary extends React.Component {
 
         let thumb = null;
         if(!gray && p.image_link && !userBlacklisted) {
-          const prox = $STM_Config.img_proxy_prefix
           const size = (thumbSize == 'mobile') ? '640x480' : '256x512';
-          const url = (prox ? prox + size + '/' + sanitizeUrl(p.image_link, true): p.image_link)
+          console.log("post summary")
+          const url = sanitizeUrl(p.image_link, size)
           if(thumbSize == 'mobile') {
             thumb = <span onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image-mobile"><img src={url} /></span>
           } else {

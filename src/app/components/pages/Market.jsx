@@ -1,9 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
-//import Highcharts from 'highcharts';
-
-import transaction from 'app/redux/Transaction'
 import TransactionError from 'app/components/elements/TransactionError'
 import DepthChart from 'app/components/elements/DepthChart';
 import Orderbook from "app/components/elements/Orderbook";
@@ -559,13 +556,13 @@ module.exports = {
         cancelOrder: (owner, orderid, successCallback) => {
             const confirm = tt('market_jsx.order_cancel_confirm', {order_id: orderid, user: owner})
             const successMessage = tt('market_jsx.order_cancelled', {order_id: orderid})
-            dispatch(transaction.actions.broadcastOperation({
+            dispatch({type: 'transaction/BROADCAST_OPERATION', payload: {
                 type: 'limit_order_cancel',
                 operation: {owner, orderid/*, __config: {successMessage}*/},
                 confirm,
                 successCallback: () => {successCallback(successMessage);}
                 //successCallback
-            }))
+            }})
         },
         placeOrder: (owner, amount_to_sell, min_to_receive, effectivePrice, priceWarning, marketPrice, successCallback, fill_or_kill = false, expiration = DEFAULT_EXPIRE) => {
             // create_order jsc 12345 "1.000 SBD" "100.000 STEEM" true 1467122240 false
@@ -586,14 +583,14 @@ module.exports = {
             const confirm = confirmStr + '?'
             const warning = priceWarning ? tt('market_jsx.price_warning_'+(isSell ? "below" : "above"), {marketPrice: CURRENCY_SIGN + parseFloat(marketPrice).toFixed(4) + "/" + LIQUID_TOKEN_UPPERCASE}) : null;
             const orderid = Math.floor(Date.now() / 1000)
-            dispatch(transaction.actions.broadcastOperation({
+            dispatch({type: 'transaction/BROADCAST_OPERATION', payload: {
                 type: 'limit_order_create',
                 operation: {owner, amount_to_sell, min_to_receive, fill_or_kill, expiration, orderid}, //,
                     //__config: {successMessage}},
                 confirm,
                 warning,
                 successCallback: () => {successCallback(successMessage);}
-            }))
+            }})
         }
     })
     )(Market)

@@ -1,6 +1,5 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import transaction from 'app/redux/Transaction'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import {Map} from 'immutable'
 
@@ -62,11 +61,11 @@ export default connect(
     // mapDispatchToProps
     dispatch => ({
         addListener: (opType) => {
-            dispatch(transaction.actions.set({key: ['TransactionError', opType + '_listener'], value: true}))
+            dispatch({type: 'transaction/SET', payload: {key: ['TransactionError', opType + '_listener'], value: true}})
         },
         removeListener: (opType) => {
-            dispatch(transaction.actions.remove({key: ['TransactionError', opType]}))
-            dispatch(transaction.actions.remove({key: ['TransactionError', opType + '_listener']}))
+            dispatch({type: 'transaction/REMOVE', payload: {key: ['TransactionError', opType]}})
+            dispatch({type: 'transaction/REMOVE', payload: {key: ['TransactionError', opType + '_listener']}})
         },
     })
 )(TransactionError)

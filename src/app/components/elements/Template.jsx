@@ -1,6 +1,5 @@
 /* eslint react/prop-types: 0 */
 import React from 'react'
-// import transaction from 'app/redux/Transaction'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 // import {Map} from 'immutable'
 

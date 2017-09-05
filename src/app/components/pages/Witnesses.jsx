@@ -3,7 +3,6 @@ import {connect} from 'react-redux';
 import { Link } from 'react-router';
 import links from 'app/utils/Links'
 import Icon from 'app/components/elements/Icon';
-import transaction from 'app/redux/Transaction'
 import ByteBuffer from 'bytebuffer'
 import {is} from 'immutable'
 import tt from 'counterpart';
@@ -223,13 +222,13 @@ module.exports = {
         (dispatch) => {
             return {
                 accountWitnessVote: (username, witness, approve) => {
-                    dispatch(transaction.actions.broadcastOperation({
+                    dispatch({type: 'transaction/BROADCAST_OPERATION', payload: {
                         type: 'account_witness_vote',
                         operation: {account: username, witness, approve},
-                    }))
+                    }})
                 },
                 accountWitnessProxy: (account, proxy, stateCallback) => {
-                    dispatch(transaction.actions.broadcastOperation({
+                    dispatch({type: 'transaction/BROADCAST_OPERATION', payload: {
                         type: 'account_witness_proxy',
                         operation: {account, proxy},
                         confirm: proxy.length ? "Set proxy to: " + proxy : "You are about to remove your proxy.",
@@ -241,7 +240,7 @@ module.exports = {
                             console.log('error:', e);
                             stateCallback({proxyFailed: true});
                         }
-                    }))
+                    }})
                 }
             }
         }

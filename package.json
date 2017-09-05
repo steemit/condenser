@@ -114,7 +114,6 @@
     "react-timeago": "^3.1.2",
     "redux": "^3.3.1",
     "redux-form": "5.3.4",
-    "redux-modules": "^0.0.5",
     "redux-saga": "^0.9.5",
     "remarkable": "1.6.2",
     "sanitize-html": "^1.11.4",

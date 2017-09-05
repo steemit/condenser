@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import transaction from 'app/redux/Transaction';
 import Slider from 'react-rangeslider';
 import Icon from 'app/components/elements/Icon';
 import FormattedAsset from 'app/components/elements/FormattedAsset';
@@ -299,13 +298,13 @@ export default connect(
                 if(weight < 0) return tt('voting_jsx.changing_to_a_downvote') + t
                 return null
             }
-            dispatch(transaction.actions.broadcastOperation({
+            dispatch({type: 'transaction/BROADCAST_OPERATION', payload: {
                 type: 'vote',
                 operation: {voter: username, author, permlink, weight,
                     __config: {title: weight < 0 ? 'Confirm Flag' : null},
                 },
                 confirm,
-            }))
+            }})
         },
     })
 )(Voting)

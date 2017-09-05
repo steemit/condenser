@@ -1,6 +1,5 @@
 /* eslint react/prop-types: 0 */
 import React, { PropTypes, Component } from 'react';
-import transaction from 'app/redux/Transaction'
 import {validate_account_name} from 'app/utils/ChainValidation';
 import runTests from 'app/utils/BrowserTests';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
@@ -304,7 +303,7 @@ export default connect(
             const username = data.username.trim().toLowerCase();
             if (loginBroadcastOperation) {
                 const {type, operation, successCallback, errorCallback} = loginBroadcastOperation.toJS();
-                dispatch(transaction.actions.broadcastOperation({type, operation, username, password, successCallback, errorCallback}));
+                dispatch({type: 'transaction/BROADCAST_OPERATION', payload: {type, operation, username, password, successCallback, errorCallback}});
                 dispatch({type: 'user/USERNAME_PASSWORD_LOGIN', payload: {username, password, saveLogin, afterLoginRedirectToWelcome, operationType: type}});
                 dispatch({type: 'user/CLOSE_LOGIN'});
             } else {

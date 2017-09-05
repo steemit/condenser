@@ -42,7 +42,6 @@ export default {
             'steem',
             'bytebuffer',
             'immutable',
-            'ramda',
             'autolinker',
             'pako',
             'remarkable'

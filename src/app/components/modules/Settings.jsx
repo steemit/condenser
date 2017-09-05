@@ -2,7 +2,6 @@ import React from 'react';
 import {connect} from 'react-redux'
 import tt from 'counterpart';
 import store from 'store';
-import transaction from 'app/redux/Transaction'
 import o2j from 'shared/clash/object2json'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import reactForm from 'app/utils/ReactForm'
@@ -261,7 +260,7 @@ export default connect(
         },
         updateAccount: ({successCallback, errorCallback, ...operation}) => {
             const options = {type: 'account_update', operation, successCallback, errorCallback}
-            dispatch(transaction.actions.broadcastOperation(options))
+            dispatch({type: 'transaction/BROADCAST_OPERATION', payload: options})
         }
     })
 )(Settings)

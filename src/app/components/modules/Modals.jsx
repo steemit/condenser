@@ -6,7 +6,6 @@ import LoginForm from 'app/components/modules/LoginForm';
 import ConfirmTransactionForm from 'app/components/modules/ConfirmTransactionForm';
 import Transfer from 'app/components/modules/Transfer';
 import SignUp from 'app/components/modules/SignUp';
-import tr from 'app/redux/Transaction';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import {NotificationStack} from 'react-notification';
 import TermsAgree from 'app/components/modules/TermsAgree';
@@ -94,7 +93,7 @@ export default connect(
         },
         hideConfirm: e => {
             if (e) e.preventDefault();
-            dispatch(tr.actions.hideConfirm())
+            dispatch({type: 'transaction/HIDE_CONFIRM'})
         },
         hideTransfer: e => {
             if (e) e.preventDefault();

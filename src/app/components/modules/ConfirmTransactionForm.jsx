@@ -1,6 +1,5 @@
 import React, { PropTypes, Component } from 'react';
 import {connect} from 'react-redux'
-import transaction from 'app/redux/Transaction'
 import {findParent} from 'app/utils/DomUtils';
 import tt from 'counterpart';
 
@@ -76,8 +75,8 @@ export default connect(
     // mapDispatchToProps
     dispatch => ({
         okClick: (confirmBroadcastOperation) => {
-            dispatch(transaction.actions.hideConfirm())
-            dispatch(transaction.actions.broadcastOperation({...(confirmBroadcastOperation.toJS())}))
+            dispatch({type: 'transaction/HIDE_CONFIRM'})
+            dispatch({type: 'transaction/BROADCAST_OPERATION', payload: {...(confirmBroadcastOperation.toJS())}})
         }
     })
 )(ConfirmTransactionForm)

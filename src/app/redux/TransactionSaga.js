@@ -3,7 +3,6 @@ import {call, put, select} from 'redux-saga/effects';
 import {fromJS, Set, Map} from 'immutable'
 import {getAccount, getContent} from 'app/redux/SagaShared'
 import {findSigningKey} from 'app/redux/AuthSaga'
-import tr from 'app/redux/Transaction'
 import getSlug from 'speakingurl'
 import {DEBT_TICKER} from 'app/client_config'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient'
@@ -128,7 +127,7 @@ function* broadcastOperation({payload:
     const operationParam = {type, operation, keys, username, password, successCallback, errorCallback}
     const conf = typeof confirm === 'function' ? confirm() : confirm
     if(conf) {
-        yield put(tr.actions.confirmOperation({confirm, warning, operation: operationParam, errorCallback}))
+        yield put({type: 'transaction/CONFIRM_OPERATION', payload: {confirm, warning, operation: operationParam, errorCallback}})
         return
     }
     const payload = {operations: [[type, operation]], keys, username, successCallback, errorCallback}
@@ -161,7 +160,7 @@ function* broadcastPayload({payload: {operations, keys, username, successCallbac
     // console.log('broadcastPayload')
     if ($STM_Config.read_only_mode) return;
     for (const [type] of operations) // see also transaction/ERROR
-        yield put(tr.actions.remove({key: ['TransactionError', type]}))
+        yield put({type: 'transaction/REMOVE', payload: {key: ['TransactionError', type]}})
 
     {
         const newOps = []
@@ -239,7 +238,7 @@ function* broadcastPayload({payload: {operations, keys, username, successCallbac
     } catch (error) {
         console.error('TransactionSaga\tbroadcastPayload', error);
         // status: error
-        yield put(tr.actions.error({operations, error, errorCallback}));
+        yield put({type: 'transaction/ERROR', payload: {operations, error, errorCallback}});
         for (const [type, operation] of operations) {
             if (hook['error_' + type]) {
                 try {

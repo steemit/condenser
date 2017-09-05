@@ -3,7 +3,6 @@ import React from 'react';
 import { Link } from 'react-router';
 import {connect} from 'react-redux';
 import { browserHistory } from 'react-router';
-import transaction from 'app/redux/Transaction';
 import Icon from 'app/components/elements/Icon'
 import UserKeys from 'app/components/elements/UserKeys';
 import PasswordReset from 'app/components/elements/PasswordReset';
@@ -473,12 +472,12 @@ module.exports = {
                     dispatch({type: 'global/GET_STATE', payload: {url: `@${account}/transfers`}})
                     return successCallback(...args)
                 }
-                dispatch(transaction.actions.broadcastOperation({
+                dispatch({type: 'transaction/BROADCAST_OPERATION', payload: {
                     type: 'withdraw_vesting',
                     operation: {account, vesting_shares},
                     errorCallback,
                     successCallback: successCallbackWrapper,
-                }))
+                }})
             },
             requestData: (args) => dispatch({type: 'REQUEST_DATA', payload: args}),
         })

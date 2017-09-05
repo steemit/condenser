@@ -18,7 +18,6 @@ import {FormattedHTMLMessage} from 'app/Translator';
 import tt from 'counterpart';
 import {List} from 'immutable'
 import { LIQUID_TOKEN, LIQUID_TICKER, DEBT_TOKENS, VESTING_TOKEN } from 'app/client_config';
-import transaction from 'app/redux/Transaction';
 
 const assetPrecision = 1000;
 
@@ -423,11 +422,11 @@ export default connect(
                 reward_vests: account.get('reward_vesting_balance')
             };
 
-            dispatch(transaction.actions.broadcastOperation({
+            dispatch({type: 'transaction/BROADCAST_OPERATION', payload: {
                 type: 'claim_reward_balance',
                 operation,
                 successCallback,
-            }))
+            }})
         },
         convertToSteem: (e) => {
             e.preventDefault()

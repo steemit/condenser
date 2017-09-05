@@ -1,6 +1,5 @@
 import React from 'react';
 import reactForm from 'app/utils/ReactForm'
-import transaction from 'app/redux/Transaction';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer'
 import CategorySelector from 'app/components/cards/CategorySelector'
 import {validateCategory} from 'app/components/cards/CategorySelector'
@@ -631,12 +630,12 @@ export default (formId, richTextEditor = null) => connect(
                 json_metadata: meta,
                 __config
             }
-            dispatch(transaction.actions.broadcastOperation({
+            dispatch({type: 'transaction/BROADCAST_OPERATION', payload: {
                 type: 'comment',
                 operation,
                 errorCallback,
                 successCallback,
-            }))
+            }})
         },
     })
 )(ReplyEditor)

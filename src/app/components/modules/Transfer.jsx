@@ -2,7 +2,6 @@ import React, { PropTypes, Component } from 'react';
 import ReactDOM from 'react-dom';
 import reactForm from 'app/utils/ReactForm';
 import {Map} from 'immutable';
-import transaction from 'app/redux/Transaction';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import runTests, {browserTests} from 'app/utils/BrowserTests'
 import {validate_account_name, validate_memo_field} from 'app/utils/ChainValidation';
@@ -309,7 +308,7 @@ export default connect(
             if(transferType === 'Savings Withdraw')
                 operation.request_id = Math.floor((Date.now() / 1000) % 4294967295);
 
-            dispatch(transaction.actions.broadcastOperation({
+            dispatch({type: 'transaction/BROADCAST_OPERATION', payload: {
                 type: toVesting ? 'transfer_to_vesting' : (
                     transferType === 'Transfer to Account' ? 'transfer' :
                     transferType === 'Transfer to Savings' ? 'transfer_to_savings' :
@@ -319,7 +318,7 @@ export default connect(
                 operation,
                 successCallback,
                 errorCallback
-            }))
+            }})
         }
     })
 )(TransferForm)

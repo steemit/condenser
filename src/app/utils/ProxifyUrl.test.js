@@ -1,6 +1,6 @@
 /*global describe, before, it */
 import assert from 'assert'
-import proxifyImageUrl from 'app/utils/ProxifyUrl'
+import proxifyImageUrl from './ProxifyUrl'
 
 describe('ProxifyUrl', () => {
     before(function (){

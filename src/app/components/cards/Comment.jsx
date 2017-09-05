@@ -14,6 +14,7 @@ import {List} from 'immutable'
 import tt from 'counterpart';
 import {parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import {Long} from 'bytebuffer';
+import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 
 // returns true if the comment has a 'hide' flag AND has no descendants w/ positive payout
 function hideSubtree(cont, c) {
@@ -33,8 +34,7 @@ function hasPositivePayout(cont, c) {
 
 
 export function sortComments( cont, comments, sort_order ) {
-
-  function netNegative(a)  {
+  function netNegative(a) {
       return a.get("net_rshares") < 0;
   }
   function totalPayout(a) {
@@ -50,13 +50,13 @@ export function sortComments( cont, comments, sort_order ) {
   }
 
   /** sorts replies by upvotes, age, or payout */
-  let sort_orders = {
+  const sort_orders = {
       votes: (a, b) => {
                 const aactive = countUpvotes(cont.get(a))
                 const bactive = countUpvotes(cont.get(b))
                 return bactive - aactive;
               },
-      new: (a, b) =>  {
+      new: (a, b) => {
                 const acontent = cont.get(a);
                 const bcontent = cont.get(b);
                 if (netNegative(acontent)) {
@@ -86,10 +86,9 @@ export function sortComments( cont, comments, sort_order ) {
               }
   }
   comments.sort( sort_orders[sort_order] );
-};
+}
 
 class CommentImpl extends React.Component {
-
     static propTypes = {
         // html props
         cont: React.PropTypes.object.isRequired,
@@ -260,6 +259,9 @@ class CommentImpl extends React.Component {
         // const get_asset_value = ( asset_str ) => { return parseFloat( asset_str.split(' ')[0] ); }
         // const steem_supply = this.props.global.getIn(['props','current_supply']);
 
+        // hide images if author is in blacklist
+        const hideImages = ImageUserBlockList.includes(author)
+
         const showDeleteOption = username === author && allowDelete
         const showEditOption = username === author
         const showReplyOption = comment.depth < 255
@@ -270,16 +272,20 @@ class CommentImpl extends React.Component {
         let controls = null;
 
         if (!this.state.collapsed && !hide_body) {
-            body = (<MarkdownViewer formId={post + '-viewer'} text={comment.body}
-                noImage={noImage || gray} jsonMetadata={jsonMetadata} />);
-            controls = <div>
-                <Voting post={post} />
-                <span className="Comment__footer__controls">
-                    {showReplyOption && <a onClick={onShowReply}>{tt('g.reply')}</a>}
-                    {' '}{!readonly && showEditOption   && <a onClick={onShowEdit}>{tt('g.edit')}</a>}
-                    {' '}{!readonly && showDeleteOption && <a onClick={onDeletePost}>{tt('g.delete')}</a>}
-                </span>
-            </div>;
+            body = (<MarkdownViewer
+                formId={post + '-viewer'}
+                text={comment.body}
+                noImage={noImage || gray}
+                hideImages={hideImages}
+                jsonMetadata={jsonMetadata} />);
+            controls = (<div>
+              <Voting post={post} />
+              <span className="Comment__footer__controls">
+                {showReplyOption && <a onClick={onShowReply}>{tt('g.reply')}</a>}
+                {' '}{!readonly && showEditOption && <a onClick={onShowEdit}>{tt('g.edit')}</a>}
+                {' '}{!readonly && showDeleteOption && <a onClick={onDeletePost}>{tt('g.delete')}</a>}
+              </span>
+            </div>);
         }
 
         let replies = null;
@@ -293,15 +299,15 @@ class CommentImpl extends React.Component {
                 // When a comment has hidden replies and is collapsed, the reply count is off
                 //console.log("replies:", replies.length, "num_visible:", replies.filter( reply => !cont.get(reply).getIn(['stats', 'hide'])).length)
                 replies = replies.map((reply, idx) => (
-                    <Comment
-                        key={idx}
-                        content={reply}
-                        cont={cont}
-                        sort_order={this.props.sort_order}
-                        depth={depth + 1}
-                        rootComment={rootComment}
-                        showNegativeComments={showNegativeComments}
-                        onHide={this.props.onHide}
+                  <Comment
+                      key={idx}
+                      content={reply}
+                      cont={cont}
+                      sort_order={this.props.sort_order}
+                      depth={depth + 1}
+                      rootComment={rootComment}
+                      showNegativeComments={showNegativeComments}
+                      onHide={this.props.onHide}
                     />)
                 );
             }
@@ -313,24 +319,26 @@ class CommentImpl extends React.Component {
         if(hide_body || this.state.collapsed) commentClasses.push('collapsed');
 
         let innerCommentClass = ignore || gray ? 'downvoted' : ''
-        if(this.state.highlight) innerCommentClass = innerCommentClass + ' highlighted'
+        if(this.state.highlight) innerCommentClass += ' highlighted'
 
         //console.log(comment);
         let renderedEditor = null;
         if (showReply || showEdit) {
-            renderedEditor = <div key="editor">
-                <Editor {...comment} type={showReply ? 'submit_comment' : 'edit'}
-                    successCallback={() => {
+            renderedEditor = (<div key="editor">
+              <Editor
+                  {...comment}
+                  type={showReply ? 'submit_comment' : 'edit'}
+                  successCallback={() => {
                         this.setState({showReply: false, showEdit: false})
                         this.saveOnShow(null)
                     }}
-                    onCancel={() => {
+                  onCancel={() => {
                         this.setState({showReply: false, showEdit: false})
                         this.saveOnShow(null)
                     }}
-                    jsonMetadata={jsonMetadata}
+                  jsonMetadata={jsonMetadata}
                 />
-            </div>
+            </div>)
         }
 
         const depth_indicator = [];
@@ -341,46 +349,46 @@ class CommentImpl extends React.Component {
         }
 
         return (
-            <div className={commentClasses.join(' ')} id={anchor_link} itemScope itemType="http://schema.org/comment">
-                {depth_indicator}
-                <div className="Comment__Userpic show-for-medium">
-                    <Userpic account={comment.author} />
+          <div className={commentClasses.join(' ')} id={anchor_link} itemScope itemType="http://schema.org/comment">
+            {depth_indicator}
+            <div className="Comment__Userpic show-for-medium">
+              <Userpic account={comment.author} />
+            </div>
+            <div className={innerCommentClass}>
+              <div className="Comment__header">
+                <div className="Comment__header_collapse">
+                  <Voting post={post} flag />
+                  <a title={tt('g.collapse_or_expand')} onClick={this.toggleCollapsed}>{ this.state.collapsed ? '[+]' : '[-]' }</a>
                 </div>
-                <div className={innerCommentClass}>
-                    <div className="Comment__header">
-                        <div className="Comment__header_collapse">
-                            <Voting post={post} flag />
-                            <a title={tt('g.collapse_or_expand')} onClick={this.toggleCollapsed}>{ this.state.collapsed ? '[+]' : '[-]' }</a>
-                        </div>
-                        <span className="Comment__header-user">
-                            <div className="Comment__Userpic-small">
-                                <Userpic account={comment.author} />
-                            </div>
-                            <Author author={comment.author} authorRepLog10={authorRepLog10} />
-                        </span>
+                <span className="Comment__header-user">
+                  <div className="Comment__Userpic-small">
+                    <Userpic account={comment.author} />
+                  </div>
+                  <Author author={comment.author} authorRepLog10={authorRepLog10} />
+                </span>
                         &nbsp; &middot; &nbsp;
                         <Link to={comment_link} className="PlainLink">
-                            <TimeAgoWrapper date={comment.created} className="updated" />
+                          <TimeAgoWrapper date={comment.created} className="updated" />
                         </Link>
-                        { (this.state.collapsed || hide_body) &&
-                          <Voting post={post} showList={false} /> }
-                        { this.state.collapsed && comment.children > 0 &&
-                          <span className="marginLeft1rem">{tt('g.reply_count', {count: comment.children})}</span>}
-                        { !this.state.collapsed && hide_body &&
-                            <a className="marginLeft1rem" onClick={this.revealBody}>{tt('g.reveal_comment')}</a>}
-                    </div>
-                    <div className="Comment__body entry-content">
-                        {showEdit ? renderedEditor : body}
-                    </div>
-                    <div className="Comment__footer">
-                        {controls}
-                    </div>
-                </div>
-                <div className="Comment__replies hfeed">
-                    {showReply && renderedEditor}
-                    {replies}
-                </div>
+                { (this.state.collapsed || hide_body) &&
+                  <Voting post={post} showList={false} /> }
+                { this.state.collapsed && comment.children > 0 &&
+                  <span className="marginLeft1rem">{tt('g.reply_count', {count: comment.children})}</span>}
+                { !this.state.collapsed && hide_body &&
+                <a className="marginLeft1rem" onClick={this.revealBody}>{tt('g.reveal_comment')}</a>}
+              </div>
+              <div className="Comment__body entry-content">
+                {showEdit ? renderedEditor : body}
+              </div>
+              <div className="Comment__footer">
+                {controls}
+              </div>
             </div>
+            <div className="Comment__replies hfeed">
+              {showReply && renderedEditor}
+              {replies}
+            </div>
+          </div>
         );
     }
 }
@@ -402,7 +410,7 @@ const Comment = connect(
     },
 
     // mapDispatchToProps
-    (dispatch) => ({
+    dispatch => ({
         unlock: () => { dispatch(user.actions.showLogin()) },
         deletePost: (author, permlink) => {
             dispatch(transaction.actions.broadcastOperation({

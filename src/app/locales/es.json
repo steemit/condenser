@@ -70,11 +70,12 @@
     "promote": "Promote",
     "promoted": "promoted",
     "re": "RE",
+    "re_to": "RE: %(topic)s",
     "recent_password": "Recent Password",
     "receive": "Receive ",
     "remove": "Remove",
     "remove_vote": "Remove Vote",
-    "replied_to": "replied to",
+    "replied_to": "replied to %(account)s",
     "replies": "Replies",
     "reply": "Reply",
     "reply_count": {
@@ -114,7 +115,6 @@
     "upvote_post": "Upvote post",
     "username": "Username",
     "version": "Version",
-
     "vote": "Vote",
     "votes": "votes",
     "wallet": "Wallet",
@@ -166,7 +166,6 @@
     "cannot_increase_reward_of_post_within_the_last_minute_before_payout": "Cannot increase reward of post within the last minute before payout",
     "vote_currently_exists_user_must_be_indicate_a_to_reject_witness": "vote currently exists, user must be indicate a desire to reject witness",
     "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes": "Only one Steem account allowed per IP address every 10 minutes",
-
     "resteem_this_post": "Resteem This Post",
     "reblog": "Resteem",
     "write_your_story": "Write your story",
@@ -189,12 +188,13 @@
 
     "next_7_strings_single_block": {
       "authors_get_paid_when_people_like_you_upvote_their_post": "Authors get paid when people like you upvote their post",
-      "if_you_enjoyed_what_you_read_earn_amount": "If you enjoyed what you read here, earn %(amount)s of %(INVEST_TOKEN_UPPERCASE)s",
+      "if_you_enjoyed_what_you_read_earn_amount": "If you enjoyed what you read here, create your account today and start earning FREE STEEM!",
       "when_you": "when you",
       "when_you_link_text": "Sign Up",
       "and_vote_for_it": "and vote for it",
       "sign_up_now_to_receive": "Sign up now to receive ",
-      "free_steem": "FREE STEEM!"
+      "free_steem": "FREE STEEM!",
+      "sign_up_earn_steem": "Sign up now to earn "
     },
 
     "next_3_strings_together": {
@@ -243,7 +243,17 @@
     "requires_auth_key": "This operation requires your %(authType)s key (or use your master password)",
     "keep_me_logged_in": "Keep me logged in",
     "basic": "Basic",
-    "advanced": "Advanced"
+    "advanced": "Advanced",
+    "views": {
+      "zero": "No Views",
+      "one": "%(count)s View",
+      "other": "%(count)s Views"
+    },
+    "responses": {
+      "zero": "No Responses",
+      "one": "%(count)s Response",
+      "other": "%(count)s Responses"
+    }
   },
   "navigation": {
     "about": "About",
@@ -307,7 +317,8 @@
     "default_50_50": "Default (50%% / 50%%)",
     "decline_payout": "Decline Payout",
     "check_this_to_auto_upvote_your_post": "Check this to auto-upvote your post",
-    "markdown_styling_guide": "Markdown Styling Guide"
+    "markdown_styling_guide": "Markdown Styling Guide",
+    "or_by": "or by"
   },
   "category_selector_jsx": {
     "tag_your_story": "Tag (up to 5 tags), the first tag is your main category.",
@@ -345,13 +356,14 @@
     "recent_password": "Recent Password",
     "your_password_permissions_were_reduced": "Your password permissions were reduced",
     "if_you_did_not_make_this_change": "If you did not make this change please",
-    "owhership_changed_on": "Ownership Changed On",
+    "owhership_changed_on": "Ownership Changed On ",
     "deadline_for_recovery_is": "Deadline for recovery is",
     "i_understand_dont_show_again": "I understand, don't show me again",
-    "insufficent_balance": "Insufficient balance",
+    "insufficient_balance": "Insufficient balance",
     "in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN": "In 3.5 days, convert %(amount)s %(DEBT_TOKEN)s into %(LIQUID_TOKEN)s",
     "account_name_is_not_available": "Account name is not available",
     "view_the_full_context": "View the full context",
+    "view_the_direct_parent": "View the direct parent",
     "you_are_viewing_a_single_comments_thread_from": "You are viewing a single comment's thread from"
   },
   "market_jsx": {
@@ -486,7 +498,12 @@
     "paste_a_youtube_or_vimeo_and_press_enter": "Paste a YouTube or Vimeo and press Enter",
     "there_was_an_error_uploading_your_image": "There was an error uploading your image",
     "raw_html": "Raw HTML",
-    "please_remove_following_html_elements": "Please remove the following HTML elements from your post: "
+    "please_remove_following_html_elements": "Please remove the following HTML elements from your post: ",
+    "and_more": "and %(count)s more",
+    "votes_plural": {
+      "one": "%(count)s vote",
+      "other": "%(count)s votes"
+    }
   },
   "witnesses_jsx": {
     "witness_thread": "witness thread",
@@ -501,7 +518,7 @@
     "information": "Information",
     "if_you_want_to_vote_outside_of_top_enter_account_name": "If you would like to vote for a witness outside of the top 50, enter the account name below to cast a vote",
     "set_witness_proxy": "You can also choose a proxy that will vote for witnesses for you. This will reset your current witness selection.",
-    "witness_set": "You have set a voting proxy. If you would like to reenable manual voting, please clear your proxy.",
+    "witness_set": "You have set a voting proxy. If you would like to re-enable manual voting, please clear your proxy.",
     "witness_proxy_current": "Your current proxy is",
     "witness_proxy_set": "Set proxy",
     "witness_proxy_clear": "Clear proxy",
@@ -509,12 +526,11 @@
   },
   "votesandcomments_jsx": {
     "no_responses_yet_click_to_respond": "No responses yet. Click to respond.",
-    "response_count": {
-      "zero": "no responses",
-      "one": "1 response",
-      "other": "%(count)s responses"
+    "response_count_tooltip": {
+      "zero": "no responses. Click to respond.",
+      "one": "1 response. Click to respond.",
+      "other": "%(count)s responses. Click to respond."
     },
-    "click_to_respond": "Click to respond",
     "vote_count": {
       "zero": "no votes",
       "one": "1 vote",
@@ -666,7 +682,9 @@
   "savingswithdrawhistory_jsx": {
     "cancel_this_withdraw_request": "Cancel this withdraw request?",
     "pending_savings_withdrawals": "PENDING SAVINGS WITHDRAWS",
-    "withdraw": "Withdraw"
+    "withdraw": "Withdraw %(amount)s",
+    "to": "to %(to)s",
+    "from_to": "from %(from)s to %(to)s"
   },
   "confirmtransactionform_jsx": {
     "ok": "Ok",
@@ -726,6 +744,7 @@
     "amazing_community": "amazing community",
     "to_comment_and_reward_others": " to comment and reward others.",
     "sign_up_now_to_receive": "Sign up now to receive ",
+    "sign_up_now_to_earn": "Sign up now to earn ",
     "free_money": "FREE MONEY!",
     "returning_users": "Returning Users: ",
     "join_our": "Join our"
@@ -758,6 +777,7 @@
     "muted_users": "Muted Users",
     "update": "Update",
     "profile_image_url": "Profile picture url",
+    "cover_image_url": "Cover image url",
     "profile_name": "Display Name",
     "profile_about": "About",
     "profile_location": "Location",
@@ -769,9 +789,8 @@
     "use_only_3_digits_of_precison": "Use only 3 digits of precison",
     "send_to_account": "Send to account",
     "asset": "Asset",
-    "this_memo_is": "This Memo is",
-    "private": "Private",
-    "public": "Public",
+    "this_memo_is_private": "This memo is private",
+    "this_memo_is_public": "This memo is public",
     "power_up": "Power Up",
     "submit": "Submit",
     "basic" : "Basic",
@@ -783,7 +802,8 @@
     "withdraw_funds_after_the_required_3_day_waiting_period": "Withdraw funds after the required 3 day waiting period.",
     "balance": "Balance",
     "from": "From",
-    "to": "To"
+    "to": "To",
+    "asset_currently_collecting": "%(asset) currently collecting %(interest)% APR."
   },
   "userwallet_jsx": {
     "conversion_complete_tip": "Will complete on",

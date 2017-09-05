@@ -622,6 +622,7 @@ Language-specific groups include:
 - Korean = kr
 - Russian = ru
 - French = fr
+- Portuguese = pt
 
 <a href="/faq.html#Table_of_Contents_Posting">^</a>
 <a class="anchor" name="Can_I_delete_something_I_posted"></a>

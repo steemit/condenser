@@ -323,7 +323,7 @@
     "learn_more": "Learn More",
     "get_sp_when_sign_up": "Get %(signupBonus)s of %(VESTING_TOKEN)s when you sign up today.",
     "get_sp_when_sign_up1": "Get ",
-    "get_sp_when_sign_up2": " %(VESTING_TOKEN)s when you sign up today.",
+    "get_sp_when_sign_up2": " %(VESTING_TOKENS)s when you sign up today.",
     "all_accounts_refunded": "All Recovered Accounts have been fully Refunded",
     "APP_NAME_is_now_open_source": " %(APP_NAME)s is now Open Source"
   },

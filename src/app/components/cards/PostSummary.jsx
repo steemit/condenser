@@ -15,7 +15,7 @@ import TagList from 'app/components/elements/TagList';
 import UserNames from 'app/components/elements/UserNames';
 import tt from 'counterpart';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
-import sanitizeUrl from 'app/utils/SanitizeUrl';
+import proxifyImageUrl from 'app/utils/ProxifyUrl';
 
 function isLeftClickEvent(event) {
     return event.button === 0
@@ -167,7 +167,7 @@ class PostSummary extends React.Component {
         let thumb = null;
         if(!gray && p.image_link && !userBlacklisted) {
           const size = (thumbSize == 'mobile') ? '640x480' : '256x512';
-          const url = sanitizeUrl(p.image_link, size)
+          const url = proxifyImageUrl(p.image_link, size)
           if(thumbSize == 'mobile') {
             thumb = <span onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image-mobile"><img src={url} /></span>
           } else {

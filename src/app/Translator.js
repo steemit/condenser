@@ -3,14 +3,21 @@ import {connect} from 'react-redux'
 import {IntlProvider, addLocaleData} from 'react-intl';
 import en from 'react-intl/locale-data/en';
 import es from 'react-intl/locale-data/es';
+import ru from 'react-intl/locale-data/ru';
 import {DEFAULT_LANGUAGE} from 'app/client_config';
 import tt from 'counterpart';
 
-addLocaleData([...en, ...es]);
+addLocaleData([...en, ...es, ...ru]);
 
+tt.registerTranslations('en', require('counterpart/locales/en'));
 tt.registerTranslations('en', require('app/locales/en.json'));
 tt.registerTranslations('es', require('app/locales/es.json'));
-tt.setFallbackLocale('en');
+tt.registerTranslations('ru', require('counterpart/locales/ru'));
+tt.registerTranslations('ru', require('app/locales/ru.json'));
+
+if (process.env.NODE_ENV === 'production') {
+    tt.setFallbackLocale('en');
+}
 
 class Translator extends React.Component {
     render() {
@@ -30,7 +37,7 @@ class Translator extends React.Component {
 
 export default connect(
     (state, ownProps) => {
-        const locale = state.user.get('locale');
+        const locale = state.app.getIn(['user_preferences', 'locale']);
         return {...ownProps, locale};
     }
 )(Translator);

@@ -136,6 +136,7 @@ class Settings extends React.Component {
                         <select defaultValue={user_preferences.locale} onChange={this.handleLanguageChange}>
                             <option value="en">English</option>
                             <option value="es">Spanish</option>
+                            <option value="ru">Russian</option>
                         </select>
                     </label>
                 </div>

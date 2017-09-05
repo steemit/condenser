@@ -2059,7 +2059,7 @@ delayed-stream@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/delayed-stream/-/delayed-stream-1.0.0.tgz#df3ae199acadfb7d440aaae0b29e2272b24ec619"
 
-delegates@^1.0.0:
+delegates@1.0.0, delegates@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/delegates/-/delegates-1.0.0.tgz#84c6e159b81904fdca59a0ef44cd870d31250f9a"
 
@@ -4056,6 +4056,12 @@ koa-is-json@1, koa-is-json@^1.0.0:
 koa-isbot@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/koa-isbot/-/koa-isbot-0.1.1.tgz#980e2546c697e3b9278c5fd32fe37e1374fe8253"
+
+koa-locale@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/koa-locale/-/koa-locale-1.3.0.tgz#95289ae6fa4098804a1ee8aadd46b0af1c82cbcb"
+  dependencies:
+    delegates "1.0.0"
 
 koa-logger@^1.3.0:
   version "1.3.1"

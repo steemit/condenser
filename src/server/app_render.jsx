@@ -16,7 +16,10 @@ async function appRender(ctx) {
     const store = {};
     try {
         let login_challenge = ctx.session.login_challenge;
-        let user_preferences = null;
+        let locale = ctx.getLocaleFromHeader();
+        if (locale) locale = locale.substring(0, 2);
+        if (!locale.match(/(en|es|ru)/)) locale = 'en';
+        let user_preferences = {locale};
         if (!login_challenge) {
             login_challenge = secureRandom.randomBuffer(16).toString('hex');
             ctx.session.login_challenge = login_challenge;

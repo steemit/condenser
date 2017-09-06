@@ -91,7 +91,6 @@ export default ({large = true, highQualityPost = true, noImage = false, sanitize
 
             // replace http:// with // to force https when needed
             src = src.replace(/^http:\/\//i, '//')
-
             let atts = {src}
             if(alt && alt !== '') atts.alt = alt
             return {tagName, attribs: atts}

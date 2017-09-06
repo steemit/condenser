@@ -21,7 +21,7 @@ class Userpic extends Component {
             const md = JSON.parse(json_metadata);
             if(/^(https?:)\/\//.test(md.profile.profile_image)) {
                 const size = (width && width > 48)? '320x320' : '120x120';
-                url = proxifyImageUrl(url, size);
+                url = proxifyImageUrl(md.profile.profile_image, size);
             }
         } catch (e) {}
         if(!url) {

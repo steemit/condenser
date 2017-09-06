@@ -26,7 +26,7 @@ function runApp(initial_state) {
     console.log('Initial state', initial_state);
 
     const konami = {
-        code: 'k0nami',
+        code: 'xyzzy',
         enabled: false
     };
     const buff = konami.code.split('');

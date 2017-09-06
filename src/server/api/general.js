@@ -288,9 +288,10 @@ export default function useGeneralApi(app) {
         if (rateLimitReq(this, this.req)) return;
         try {
             const params = this.request.body;
+            const remote_address = this.request.headers['x-forwarded-for'] || this.request.connection.remoteAddress;
             const {csrf, type, value} = typeof(params) === 'string' ? JSON.parse(params) : params;
             if (!checkCSRF(this, csrf)) return;
-            console.log('-- /record_event -->', this.session.uid, type, value);
+            console.log('-- /record_event -->', this.session.uid, remote_address, type, value);
             const str_value = typeof value === 'string' ? value : JSON.stringify(value);
             if (type.match(/^[A-Z]/)) {
                 if (mixpanel) {

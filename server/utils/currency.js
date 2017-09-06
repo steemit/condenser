@@ -61,7 +61,12 @@ var exports = module.exports = {};
   http.get(options, function(res) {
     res.setEncoding('utf-8');
     res.on('data', function(stuff) {
-      var parsed = JSON.parse(stuff);
+      var parsed = {};
+      try {
+        parsed = JSON.parse(stuff);
+      } catch(e) {
+        return cb(new Error('The result is broken. Unexpected some token in JSON'), null);
+      }
       if (parsed.error) {
         return cb(new Error('The result is undefined. Make sure that you are using correct currency symbols'), null);
       }

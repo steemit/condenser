@@ -23,7 +23,13 @@ export default createModule({
         {
             action: 'FETCHING_STATE',
             reducer: (state, {payload: fetching}) => {
-                return state.mergeDeep({fetching: fetching});
+                return state.mergeDeep({fetching});
+            }
+        },
+        {
+            action: 'FETCHING_RATES',
+            reducer: (state, {payload: fetchingExRates}) => {
+                return state.mergeDeep({fetchingExRates});
             }
         },
         {

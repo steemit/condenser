@@ -36,7 +36,7 @@ function runApp(initial_state) {
         buff.push(e.key)
         if(buff.join('') === konami.code) {
             konami.enabled = !konami.enabled;
-            console.log("The cupie doll is " + ((konami.enabled)? '': 'not ') +  "yours.\nSetting konami.enabled " + konami.enabled);
+            console.log("The cupie doll is " + ((konami.enabled)? '': 'not ') + "yours.\nSetting konami.enabled " + konami.enabled);
             if(konami.enabled) {
                 steem.api.setOptions({logger: console});
             } else {

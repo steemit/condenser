@@ -6,7 +6,8 @@ const rProxyDomains = /http(s)?:\/\/steemit(dev|stage)?images.com\/([0-9]+x[0-9]
 /**
  * Strips all but final 'steemit' image proxy from the beginning of the url.
  * @param {string} url
- * @param {string} dimensions - optional - if provided. url is proxied && global var $STM_Config.img_proxy_prefix is avail. resp will be "$STM_Config.img_proxy_prefix{dimensions}/{sanitized url}"
+ * @param {string} dimensions - optional -  if provided. url is proxied && global var $STM_Config.img_proxy_prefix is avail. resp will be "$STM_Config.img_proxy_prefix{dimensions}/{sanitized url}"
+ *                                          if falsy, all proxies are stripped.
  * @returns string
  */
 export default (url, dimensions = false) => {

@@ -88,7 +88,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
     return (
         <ul className={mcn + mcl}>
             {!vertical && <li className="Header__search"><a href="/static/search.html" title="Search"><Icon name="search" /></a></li>}
-            <li className={lcn}><a href="/enter_email">{tt('g.sign_up')}</a></li>
+            <li className={lcn}><a href="/pick_account">{tt('g.sign_up')}</a></li>
             <li className={lcn}><a href="/login.html" onClick={showLogin}>{tt('g.login')}</a></li>
             {submit_story}
             {!vertical && submit_icon}

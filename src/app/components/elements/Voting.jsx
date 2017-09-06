@@ -6,7 +6,6 @@ import Slider from 'react-rangeslider';
 import Icon from 'app/components/elements/Icon';
 import FormattedAsset from 'app/components/elements/FormattedAsset';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
-import pluralize from 'pluralize';
 import {formatDecimal, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
@@ -250,9 +249,9 @@ class Voting extends React.Component {
                 voters.push({value: (sign > 0 ? '+ ' : '- ') + voter, link: '/@' + voter})
             }
             if (total_votes > voters.length) {
-                voters.push({value: <span>&hellip; and {(total_votes - voters.length)} {tt('g.more')}</span>});
+                voters.push({value: <span>&hellip; {tt('voting_jsx.and_more', {count: total_votes - voters.length})}</span>});
             }
-            voters_list = <DropdownMenu selected={pluralize('votes', total_votes, true)} className="Voting__voters_list" items={voters} el="div" />;
+            voters_list = <DropdownMenu selected={tt('voting_jsx.votes_plural', {count: total_votes})} className="Voting__voters_list" items={voters} el="div" />;
         }
 
         let voteUpClick = this.voteUp;
@@ -272,7 +271,7 @@ class Voting extends React.Component {
             <span className="Voting">
                 <span className="Voting__inner">
                     <span className={classUp}>
-                        {votingUpActive ? up : <a href="#" onClick={voteUpClick} title={tt(myVote > 0 ? 'g.remove_vote' : 'g.upvote')}>{up}</a>}
+                        {votingUpActive ? up : <a href="#" onClick={voteUpClick} title={myVote > 0 ? tt('g.remove_vote') : tt('g.upvote')}>{up}</a>}
                         {dropdown}
                     </span>
                     {payoutEl}

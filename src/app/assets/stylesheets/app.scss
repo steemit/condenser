@@ -62,6 +62,16 @@ a, path, circle {
   }
 }
 
+.ptc,
+a.ptc {
+  color: $black;
+  text-decoration: none;
+  &:hover {
+    color: $dark-gray;
+    text-decoration: none;
+  }
+}
+
 .button.hollow.no-border {
   border: none;
   text-decoration: underline;

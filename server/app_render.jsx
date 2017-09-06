@@ -35,11 +35,11 @@ async function appRender(ctx) {
             account: ctx.session.a,
             config: $STM_Config,
             login_challenge,
+            locale: Object.keys(LANGUAGES).indexOf(ctx.cookies.get(LOCALE_COOKIE_KEY)) !== -1 ? ctx.cookies.get(LOCALE_COOKIE_KEY) : DEFAULT_LANGUAGE,
+            currency: CURRENCIES.indexOf(ctx.cookies.get(CURRENCY_COOKIE_KEY)) !== -1 ? ctx.cookies.get(CURRENCY_COOKIE_KEY) : DEFAULT_CURRENCY,
+            exrates: $ExchangeRates,
             select_tags
         };
-        // Use global variable to store remote cookie current user selected currency value
-        $GLS_Config.currency = CURRENCIES.indexOf(ctx.cookies.get(CURRENCY_COOKIE_KEY)) !== -1 ? ctx.cookies.get(CURRENCY_COOKIE_KEY) : DEFAULT_CURRENCY;
-        $GLS_Config.locale = Object.keys(LANGUAGES).indexOf(ctx.cookies.get(LOCALE_COOKIE_KEY)) !== -1 ? ctx.cookies.get(LOCALE_COOKIE_KEY) : DEFAULT_LANGUAGE;
 
         const user_id = ctx.session.user;
         if (user_id) {

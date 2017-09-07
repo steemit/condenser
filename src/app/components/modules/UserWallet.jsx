@@ -315,7 +315,7 @@ class UserWallet extends React.Component {
                     {tt('userwallet_jsx.savings')}
                     <div className="secondary">
                         <span>{tt('transfer_jsx.balance_subject_to_3_day_withdraw_waiting_period')}</span>
-                        <span>{tt('asset_currently_collecting', {asset: DEBT_TOKENS, interest: sbdInterest})}</span>
+                        <span>{tt('transfer_jsx.asset_currently_collecting', {asset: DEBT_TOKENS, interest: sbdInterest})}</span>
                     </div>
                 </div>
                 <div className="column small-12 medium-4">

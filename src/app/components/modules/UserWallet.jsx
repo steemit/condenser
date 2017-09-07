@@ -7,7 +7,6 @@ import SavingsWithdrawHistory from 'app/components/elements/SavingsWithdrawHisto
 import TransferHistoryRow from 'app/components/cards/TransferHistoryRow';
 import TransactionError from 'app/components/elements/TransactionError';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
-import BlocktradesDeposit from 'app/components/modules/BlocktradesDeposit';
 import Reveal from 'react-foundation-components/lib/global/reveal'
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {numberWithCommas, vestingSteem, delegatedSteem} from 'app/utils/StateFunctions'
@@ -27,10 +26,8 @@ class UserWallet extends React.Component {
     constructor() {
         super();
         this.state = {};
-        this.onShowDeposit = () => {this.setState({showDeposit: !this.state.showDeposit})};
         this.onShowDepositSteem = (e) => {
             if (e && e.preventDefault) e.preventDefault();
-            // this.setState({showDeposit: !this.state.showDeposit, depositType: 'STEEM'})
             const name = this.props.current_user.get('username');
             const new_window = window.open();
             new_window.opener = null;
@@ -44,7 +41,6 @@ class UserWallet extends React.Component {
         };
         this.onShowDepositPower = (current_user_name, e) => {
             e.preventDefault();
-            // this.setState({showDeposit: !this.state.showDeposit, depositType: 'VESTS'})
             const new_window = window.open();
             new_window.opener = null;
             new_window.location = 'https://blocktrades.us/?input_coin_type=btc&output_coin_type=steem_power&receive_address=' + current_user_name;
@@ -61,12 +57,10 @@ class UserWallet extends React.Component {
             new_window.opener = null;
             new_window.location = 'https://blocktrades.us/unregistered_trade/sbd/btc';
         };
-        // this.onShowDeposit = this.onShowDeposit.bind(this)
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'UserWallet');
     }
     render() {
-        const {state: {showDeposit, depositType, toggleDivestError},
-            onShowDeposit, onShowDepositSteem, onShowWithdrawSteem,
+        const {onShowDepositSteem, onShowWithdrawSteem,
             onShowDepositSBD, onShowWithdrawSBD, onShowDepositPower} = this;
         const {convertToSteem, price_per_steem, savings_withdraws, account,
             current_user, open_orders} = this.props;
@@ -214,12 +208,6 @@ class UserWallet extends React.Component {
         }
 
         const isWithdrawScheduled = new Date(account.get('next_vesting_withdrawal') + 'Z').getTime() > Date.now()
-        const depositReveal = showDeposit && <div>
-            <Reveal onHide={onShowDeposit} show={showDeposit}>
-                <CloseButton onClick={onShowDeposit} />
-                <BlocktradesDeposit onClose={onShowDeposit} outputCoinType={depositType} />
-            </Reveal>
-        </div>
 
         const steem_balance_str = numberWithCommas(balance_steem.toFixed(3));
         const steem_orders_balance_str = numberWithCommas(steemOrders.toFixed(3));
@@ -382,7 +370,6 @@ class UserWallet extends React.Component {
                      </table>
                 </div>
             </div>
-            {depositReveal}
         </div>);
     }
 }

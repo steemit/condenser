@@ -24,6 +24,26 @@ try {
 
 function runApp(initial_state) {
     console.log('Initial state', initial_state);
+
+    const konami = {
+        code: 'xyzzy',
+        enabled: false
+    };
+    const buff = konami.code.split('');
+
+    window.document.body.onkeypress = (e) => {
+        buff.shift()
+        buff.push(e.key)
+        if(buff.join('') === konami.code) {
+            konami.enabled = !konami.enabled;
+            console.log("The cupie doll is " + ((konami.enabled)? '': 'not ') + "yours.\nSetting konami.enabled " + konami.enabled);
+            if(konami.enabled) {
+                steem.api.setOptions({logger: console});
+            } else {
+                steem.api.setOptions({logger: false});
+            }
+        }
+    };
     const config = initial_state.offchain.config
     steem.api.setOptions({ url: config.steemd_connection_client });
     steem.config.set('address_prefix', config.address_prefix);

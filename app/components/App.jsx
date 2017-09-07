@@ -35,6 +35,7 @@ class App extends React.Component {
     componentWillMount() {
         if (process.env.BROWSER) localStorage.removeItem('autopost') // July 14 '16 compromise, renamed to autopost2
         this.props.loginUser();
+        this.props.loadExchangeRates();
         // this.initVendorScripts()
     }
 
@@ -305,5 +306,8 @@ export default connect(
             if (e) e.preventDefault();
             dispatch(user.actions.showSignUp())
         },
+        loadExchangeRates: () => {
+            dispatch(g.actions.fetchExchangeRates())
+        }
     })
 )(App);

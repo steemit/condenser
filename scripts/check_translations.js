@@ -1,7 +1,5 @@
 const fs = require('fs');
 
-const used_keys = {};
-
 function jsonToKeys(keys, prefix, json) {
     if (typeof json === 'object') {
         for (const k in json) {
@@ -34,7 +32,7 @@ function loadTranslationFiles(path) {
     return translations;
 }
 
-function processFile(path) {
+function processFile(used_keys, path) {
     const lines = fs.readFileSync(path, 'utf8').split(/\r?\n/);
     for (const l of lines) {
         const tts = l.match(/(tt\(['.-_\w]+\))/g);
@@ -52,15 +50,17 @@ function processFile(path) {
 }
 
 function processDir(path) {
+    const used_keys = {};
     const files = fs.readdirSync(path);
     for (const filename of files) {
         const newpath = path + '/' + filename;
         const stat = fs.statSync(newpath);
         if (stat.isDirectory()) processDir(newpath);
         else if (filename.match(/\.jsx?$/)) {
-            processFile(newpath);
+            processFile(used_keys, newpath);
         }
     }
+    return used_keys;
 }
 
 function checkKeys(translations, used_keys) {
@@ -76,5 +76,5 @@ function checkKeys(translations, used_keys) {
 }
 
 const translations = loadTranslationFiles('src/app/locales');
-processDir('src');
+const used_keys = processDir('src');
 checkKeys(translations, used_keys);

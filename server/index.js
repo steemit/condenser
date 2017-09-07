@@ -5,7 +5,7 @@ delete process.env.BROWSER;
 
 const path = require('path');
 const ROOT = path.join(__dirname, '..');
-const yahooapi = require('./utils/currency');
+// const yahooapi = require('./utils/currency');
 
 // Tell `require` calls to look into `/app` also
 // it will avoid `../../../../../` require strings
@@ -53,28 +53,3 @@ global.webpackIsomorphicTools.server(ROOT, () => {
         process.exit(1);
     }
 });
-
-import {DEFAULT_CURRENCY, CURRENCIES} from '../app/client_config';
-
-global.$GLS_Config = {currency: DEFAULT_CURRENCY}
-
-const fillExchangeRates = () => {
-  const defaultCurrency = CURRENCIES.shift()
-  const yahooQuery = [];
-
-  // add GOLD/USD pair
-  yahooQuery.push('XAU' + defaultCurrency)
-
-  // add CURRENCIES/USD pairs
-  for (var i in CURRENCIES) {
-    yahooQuery.push(defaultCurrency + CURRENCIES[i])
-  }
-
-  // get exrates from yahoo
-  yahooapi.getRates(yahooQuery, function(error, result) {
-    // this variable available only on server side
-    global.$GLS_Config.exRates = result
-  })
-}
-
-fillExchangeRates()

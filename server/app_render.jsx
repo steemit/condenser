@@ -7,7 +7,6 @@ import models from 'db/models';
 import secureRandom from 'secure-random';
 import ErrorPage from 'server/server-error';
 import {
-  CURRENCIES, DEFAULT_CURRENCY, CURRENCY_COOKIE_KEY,
   DEFAULT_LANGUAGE, LANGUAGES, LOCALE_COOKIE_KEY,
   SELECT_TAGS_KEY
 } from 'app/client_config';
@@ -36,8 +35,6 @@ async function appRender(ctx) {
             config: $STM_Config,
             login_challenge,
             locale: Object.keys(LANGUAGES).indexOf(ctx.cookies.get(LOCALE_COOKIE_KEY)) !== -1 ? ctx.cookies.get(LOCALE_COOKIE_KEY) : DEFAULT_LANGUAGE,
-            currency: CURRENCIES.indexOf(ctx.cookies.get(CURRENCY_COOKIE_KEY)) !== -1 ? ctx.cookies.get(CURRENCY_COOKIE_KEY) : DEFAULT_CURRENCY,
-            exrates: $ExchangeRates,
             select_tags
         };
 

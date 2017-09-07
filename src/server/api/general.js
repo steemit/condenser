@@ -15,6 +15,30 @@ import {api, broadcast} from 'steem';
 
 const mixpanel = config.get('mixpanel') ? Mixpanel.init(config.get('mixpanel')) : null;
 
+const _stringval = (v) => typeof v === 'string' ? v : JSON.stringify(v)
+function logRequest(path, ctx, extra) {
+    let d = {ip: getRemoteIp(ctx.req)}
+    if (ctx.session) {
+        if (ctx.session.user) {
+            d.user = ctx.session.user
+        }
+        if (ctx.session.uid) {
+            d.uid = ctx.session.uid
+        }
+        if (ctx.session.a) {
+            d.account = ctx.session.a
+        }
+    }
+    if (extra) {
+        Object.keys(extra).forEach((k) => {
+            const nk = d[k] ? '_'+k : k
+            d[nk] = extra[k]
+        })
+    }
+    const info = Object.keys(d).map((k) => `${ k }=${ _stringval(d[k]) }`).join(' ')
+    console.log(`-- /${ path } --> ${ info }`)
+}
+
 export default function useGeneralApi(app) {
     const router = koa_router({prefix: '/api/v1'});
     app.use(router.routes());
@@ -26,7 +50,7 @@ export default function useGeneralApi(app) {
         const account = typeof(params) === 'string' ? JSON.parse(params) : params;
         const remote_ip = getRemoteIp(this.req);
         if (!checkCSRF(this, account.csrf)) return;
-        console.log('-- /accounts_wait -->', this.session.uid, this.session.user, account);
+        logRequest('accounts_wait', this, {account});
         const user_id = this.session.user;
         try {
             models.Account.create(escAttrs({
@@ -61,8 +85,7 @@ export default function useGeneralApi(app) {
         const params = this.request.body;
         const account = typeof(params) === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, account.csrf)) return;
-        console.log('-- /accounts -->', this.session.uid, this.session.user, account);
-
+        logRequest('accounts', this, {account})
         if ($STM_Config.disable_signups) {
             this.body = JSON.stringify({error: 'New signups are temporary disabled.'});
             this.status = 401;
@@ -191,7 +214,7 @@ export default function useGeneralApi(app) {
         const params = this.request.body;
         const {csrf, email} = typeof(params) === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
-        console.log('-- /update_email -->', this.session.uid, email);
+        logRequest('update_email', this, {email});
         try {
             if (!emailRegex.test(email.toLowerCase())) throw new Error('not valid email: ' + email);
             // TODO: limit by 1/min/ip
@@ -216,7 +239,7 @@ export default function useGeneralApi(app) {
         const params = this.request.body;
         const {csrf, account, signatures} = typeof(params) === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
-        console.log('-- /login_account -->', this.session.uid, account);
+        logRequest('login_account', this, {account});
         try {
             const db_account = yield models.Account.findOne(
                 {attributes: ['user_id'], where: {name: esc(account)}, logging: false}
@@ -273,7 +296,7 @@ export default function useGeneralApi(app) {
         const params = this.request.body;
         const {csrf} = typeof(params) === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
-        console.log('-- /logout_account -->', this.session.uid);
+        logRequest('logout_account', this);
         try {
             this.session.a = null;
             this.body = JSON.stringify({status: 'ok'});
@@ -290,7 +313,7 @@ export default function useGeneralApi(app) {
             const params = this.request.body;
             const {csrf, type, value} = typeof(params) === 'string' ? JSON.parse(params) : params;
             if (!checkCSRF(this, csrf)) return;
-            console.log('-- /record_event -->', this.session.uid, type, value);
+            logRequest('record_event', this, {type, value});
             const str_value = typeof value === 'string' ? value : JSON.stringify(value);
             if (type.match(/^[A-Z]/)) {
                 if (mixpanel) {
@@ -335,8 +358,8 @@ export default function useGeneralApi(app) {
             this.body = JSON.stringify({views: 0});
             return;
         }
-        console.log('-- /page_view -->', this.session.uid, page);
         const remote_ip = getRemoteIp(this.req);
+        logRequest('page_view', this, {page});
         try {
             let views = 1, unique = true;
             if (config.has('tarantool') && config.has('tarantool.host')) {

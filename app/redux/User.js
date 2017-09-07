@@ -1,6 +1,6 @@
 import {fromJS} from 'immutable';
 import createModule from 'redux-modules';
-import {DEFAULT_CURRENCY, CURRENCY_COOKIE_KEY, DEFAULT_LANGUAGE, LOCALE_COOKIE_KEY, DEFAULT_DOMESTIC, DEFAULT_THEME} from 'app/client_config';
+import {DEFAULT_LANGUAGE, LOCALE_COOKIE_KEY, DEFAULT_DOMESTIC, DEFAULT_THEME} from 'app/client_config';
 import cookie from "react-cookie";
 
 const defaultState = fromJS({
@@ -10,7 +10,6 @@ const defaultState = fromJS({
     show_promote_post_modal: false,
     show_signup_modal: false,
     pub_keys_used: null,
-    currency: DEFAULT_CURRENCY,
     locale: DEFAULT_LANGUAGE,
     domestic: DEFAULT_DOMESTIC,
     theme: DEFAULT_THEME
@@ -19,8 +18,6 @@ const defaultState = fromJS({
 if (process.env.BROWSER) {
     const locale = cookie.load(LOCALE_COOKIE_KEY)
     if (locale) defaultState.locale = locale;
-    const currency = cookie.load(CURRENCY_COOKIE_KEY)
-    if (currency) defaultState.currency = currency;
 }
 
 export default createModule({

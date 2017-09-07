@@ -107,7 +107,7 @@ class PickAccount extends React.Component {
             return <div className="row">
                 <div className="column">
                     <div className="callout alert">
-                        <p>Membership to Steemit.com is now under invitation only because of unexpectedly high sign up rate.</p>
+                        <p>The creation of new accounts is temporarily disabled.</p>
                     </div>
                 </div>
             </div>;
@@ -116,10 +116,10 @@ class PickAccount extends React.Component {
             return <div className="row">
                 <div className="column">
                     <div className="callout alert">
-                        <h4>Cryptography test failed</h4>
+                        <h4>Browser Out of Date</h4>
                         <p>We will be unable to create your Steem account with this browser.</p>
                         <p>The latest versions of <a href="https://www.google.com/chrome/">Chrome</a> and <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a>
-                            are well tested and known to work with steemit.com.</p>
+                            are well-tested and known to work well with steemit.com.</p>
                     </div>
                 </div>
             </div>;
@@ -129,7 +129,7 @@ class PickAccount extends React.Component {
             return <div className="row">
                 <div className="column">
                     <div className="callout alert">
-                        <p>You need to <a href="#" onClick={logout}>Logout</a> before you can create another account.</p>
+                        <p>You need to <a href="#" onClick={logout}>Logout</a> before you can create an additional account.</p>
                         <p>Please note that Steemit can only register one account per verified user.</p>
                     </div>
                 </div>
@@ -141,9 +141,8 @@ class PickAccount extends React.Component {
                 <div className="column">
                     <br />
                     <div className="callout alert">
-                        <p>Your sign up request is not confirmed yet, we will send you a confirmation email as soon as we process it.</p>
-                        <p>It usually takes up to one business day to process a request, please be patient.</p>
-                        <p>Drop us a <a href="mailto:support@steemit.com?subject=Sign Up">message</a> if it takes longer or you need to sign up sooner.</p>
+                        <p>Your sign up request is being processed and you will receive an email from us when it is ready.</p>
+                        <p>Signup requests can take up to 7 days to be processed, but usually complete in a day or two.</p>
                     </div>
                 </div>
             </div>;
@@ -155,7 +154,7 @@ class PickAccount extends React.Component {
                     <br />
                     <div className="callout success">
                         <p>Congratulations! Your sign up request has been approved.</p>
-                        <p><Link to="/create_account">Proceed to Create Account Form</Link></p>
+                        <p><Link to="/create_account">Let's get your account created!</Link></p>
                     </div>
                 </div>
             </div>;
@@ -187,7 +186,7 @@ class PickAccount extends React.Component {
                 </div>;
             } else {
                 next_step = <div className="callout alert">
-                    <h5>Couldn't create account. Server returned the following error:</h5>
+                    <h5>Couldn't create account. The server returned the following error:</h5>
                     <p>{server_error}</p>
                 </div>;
             }
@@ -202,7 +201,7 @@ class PickAccount extends React.Component {
                         <br />
                         <h4 style={{ color: "#4078c0" }}>Welcome to Steemit</h4>
                         <div className="secondary">
-                             <p>Your account name is how you will be known on Steemit.<br />
+                             <p>Your account name is how you will be known on steemit.com.<br />
                                  {/*Your account name <strong>can never be changed</strong>, so please choose carefully.*/}</p>
                         </div>
                         <form onSubmit={this.onSubmit} autoComplete="off" noValidate method="post">

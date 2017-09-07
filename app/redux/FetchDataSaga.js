@@ -5,11 +5,11 @@ import {getContent} from 'app/redux/SagaShared';
 import GlobalReducer from './GlobalReducer';
 import constants from './constants';
 import {fromJS, Map} from 'immutable'
-import { IGNORE_TAGS, PUBLIC_API, SELECT_TAGS_KEY } from 'app/client_config';
+import { DEBT_TOKEN_SHORT, DEFAULT_CURRENCY, IGNORE_TAGS, PUBLIC_API, SELECT_TAGS_KEY } from 'app/client_config';
 import cookie from "react-cookie";
 import {api} from 'golos-js';
 
-export const fetchDataWatches = [watchLocationChange, watchDataRequests, watchFetchJsonRequests, watchFetchState, watchGetContent, watchPayoutWindowRequests];
+export const fetchDataWatches = [watchLocationChange, watchDataRequests, watchFetchJsonRequests, watchFetchState, watchGetContent, watchPayoutWindowRequests, watchFetchExchangeRates];
 
 export function* watchDataRequests() {
     yield* takeLatest('REQUEST_DATA', fetchData);
@@ -173,6 +173,7 @@ export function* fetchState(location_change_action) {
         yield put(GlobalReducer.actions.receiveState(state));
     } catch (error) {
         console.error('~~ Saga fetchState error ~~>', url, error);
+        yield put({type: 'global/FETCHING_STATE', payload: false});
         yield put({type: 'global/CHAIN_API_ERROR', error: error.message});
     }
 }
@@ -325,12 +326,15 @@ function* fetchJson({payload: {id, url, body, successCallback, skipLoading = fal
             },
             body: body ? JSON.stringify(body) : undefined
         }
+        yield put({type: 'global/FETCHING_JSON', payload: true});
         let result = yield skipLoading ? fetch(url, payload) : call(fetch, url, payload)
         result = yield result.json()
-        if(successCallback) result = successCallback(result)
+        if (successCallback) result = successCallback(result)
+        yield put({type: 'global/FETCHING_JSON', payload: false});
         yield put(GlobalReducer.actions.fetchJsonResult({id, result}))
     } catch(error) {
         console.error('fetchJson', error)
+        yield put({type: 'global/FETCHING_JSON', payload: false});
         yield put(GlobalReducer.actions.fetchJsonResult({id, error}))
     }
 }
@@ -355,4 +359,82 @@ export function* fetchPayoutWindow({payload: {type, author, permlink, cost, time
     // yield put({type: 'global/CHAIN_API_ERROR', error: error.message});
     if (onError) onError(error.message);
   }
+}
+
+export function* watchFetchExchangeRates() {
+    yield* takeEvery('global/FETCH_EXCHANGE_RATES', fetchExchangeRates);
+}
+
+export function* fetchExchangeRates() {
+  try {
+    const created = localStorage.getItem('xchange.created') || 0;
+    const halfDay = 1000 * 60 * 60 * 12;
+    const goldPair = 'XAUUSD';
+    const yahooapis = 'https://query.yahooapis.com/v1/public/';
+
+    let pickedCurrency = localStorage.getItem('xchange.picked') || DEFAULT_CURRENCY;
+    if (pickedCurrency.localeCompare(DEBT_TOKEN_SHORT) == 0) {
+      pickedCurrency = DEFAULT_CURRENCY;
+    }
+    const query = 'yql?q=select%20*%20from%20yahoo.finance.xchange%20where%20pair%3D%22'
+      + goldPair
+      + '%2C'
+      + 'USD' + pickedCurrency
+      + '%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys'
+    ;
+    if (Date.now() - created < halfDay) {
+      return;
+    }
+    // xchange rates are outdated or not exists
+    console.log('xChange rates are outdated or not exists, fetching...')
+
+    yield put({type: 'global/FETCHING_JSON', payload: true});
+
+    let result = yield call(fetch, yahooapis + query);
+    result = yield result.json()
+
+    if (result.error) {
+      console.log('~~ Saga fetchExchangeRates error ~~>', '[0] The result is undefined.');
+      setDefaultExchangeValues();
+      yield put({type: 'global/FETCHING_XCHANGE', payload: false});
+      return;
+    }
+    const vals = result.query.results.rate;
+    if (typeof vals == 'object' && vals.Name == 'N/A') {
+      console.log('~~ Saga fetchExchangeRates error ~~>', '[1] The result is undefined.');
+      setDefaultExchangeValues();
+      yield put({type: 'global/FETCHING_XCHANGE', payload: false});
+      return;
+    }
+    else if (Array.isArray(vals)) {
+      for (var i = 1; i < vals.length; i++) {
+        // starts from second pair
+        if (vals[i].Name == 'N/A') {
+          console.log('~~ Saga fetchExchangeRates error ~~>', '[2] The result is undefined.');
+          setDefaultExchangeValues();
+          yield put({type: 'global/FETCHING_XCHANGE', payload: false});
+          return;
+        }
+      }
+    }
+    // store result into localstorage
+    localStorage.setItem('xchange.created', new Date(result.query.created).getTime());
+    localStorage.setItem('xchange.gold', vals[0].Rate);
+    localStorage.setItem('xchange.pair', vals[1].Rate);
+    localStorage.setItem('xchange.picked', pickedCurrency);
+    yield put({type: 'global/FETCHING_XCHANGE', payload: false});
+  }
+  catch(error) {
+    // set default values
+    setDefaultExchangeValues();
+    console.error('~~ Saga fetchExchangeRates error ~~>', error);
+    yield put({type: 'global/FETCHING_XCHANGE', payload: false});
+  }
+}
+
+function setDefaultExchangeValues() {
+  localStorage.setItem('xchange.created', 0);
+  localStorage.setItem('xchange.gold', 1);
+  localStorage.setItem('xchange.pair', 1);
+  localStorage.setItem('xchange.picked', DEBT_TOKEN_SHORT);
 }

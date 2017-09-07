@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux'
 import user from 'app/redux/User';
+import g from 'app/redux/GlobalReducer';
 import tt from 'counterpart';
 import { CURRENCIES, DEFAULT_CURRENCY, CURRENCY_COOKIE_KEY, LANGUAGES, DEFAULT_LANGUAGE, LOCALE_COOKIE_KEY, THEMES, DEFAULT_THEME } from 'app/client_config'
 import transaction from 'app/redux/Transaction'
@@ -67,7 +68,9 @@ class Settings extends React.Component {
     }
 
     onCurrencyChange = (event) => {
-        cookie.save(CURRENCY_COOKIE_KEY, event.target.value, {path: "/", expires: new Date(Date.now() + 60 * 60 * 24 * 365 * 10 * 1000)});
+        localStorage.setItem('xchange.created', 0);
+        localStorage.setItem('xchange.picked', event.target.value);
+        this.props.reloadExchangeRates()
         this.notify()
     }
 
@@ -180,7 +183,7 @@ class Settings extends React.Component {
                     <div className="error"></div>
                     {/* CHOOSE CURRENCY */}
                     <label>{tt('settings_jsx.choose_currency')}
-                        <select defaultValue={process.env.BROWSER ? cookie.load(CURRENCY_COOKIE_KEY) : DEFAULT_CURRENCY} onChange={this.onCurrencyChange}>
+                        <select defaultValue={process.env.BROWSER ? localStorage.getItem('xchange.picked') : DEFAULT_CURRENCY} onChange={this.onCurrencyChange}>
                             {
                                 CURRENCIES.map(i => {
                                     return <option key={i} value={i}>{i}</option>
@@ -290,6 +293,9 @@ export default connect(
     dispatch => ({
         changeLanguage: (language) => {
             dispatch(user.actions.changeLanguage(language))
+        },
+        reloadExchangeRates: () => {
+          dispatch(g.actions.fetchExchangeRates())
         },
         changeTheme: (theme) => {
             dispatch(user.actions.changeTheme(theme))

@@ -153,6 +153,9 @@
   border-right: 1px solid #cacaca;
   padding-right: .8rem;
   margin-right: .6rem;
+  .DropdownMenu .LoadingIndicator {
+    display: inline-block;
+  }
   .DropdownMenu .Icon.dropdown-arrow {
     margin-right: -0.5rem
   }

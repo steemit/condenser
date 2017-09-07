@@ -140,6 +140,12 @@
   border-radius: 50%;
   border-right-color: transparent;
   border-top-color: transparent;
-  animation: loading 500ms infinite linear;
+  animation: loading 625ms infinite linear;
+}
+
+.LoadingIndicator.little > div {
+  width: 11px;
+  height: 11px;
+  margin: 0px;
 }
 

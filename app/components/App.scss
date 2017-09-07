@@ -38,6 +38,9 @@
   background-repeat: repeat-x;
   background-position:bottom;
   //background-attachment:fixed;
+  .LoadingIndicator.little {
+    display: inline-block;
+  }
 }
 
 .RightMenu {

@@ -31,10 +31,10 @@ function initReducer(reducer, type) {
                             c.setIn([key, 'stats'], fromJS(contentStats(cc)))
                         }
                     })
-                })
-                state = state.set('content', content)
+                });
+                state = state.set('content', content);
             }
-            return state
+            return state;
         }
 
         if (action.type === '@@router/LOCATION_CHANGE' && type === 'global') {

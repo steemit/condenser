@@ -21,10 +21,12 @@ function readTranslationKeys(path) {
 }
 
 function loadTranslationFiles(path) {
+    const args = process.argv.slice(2);
     const translations = {};
     const files = fs.readdirSync(path);
     for (const filename of files) {
-        const m = filename.match(/([\w-]+)\.json$/);
+        if (args.length > 0 && filename !== args[0]) continue;
+        const m = filename.match(/([\w\-]+)\.json$/);
         if (!m) continue;
         const lang = m[1];
         translations[lang] = readTranslationKeys(path + '/' + filename);
@@ -49,13 +51,12 @@ function processFile(used_keys, path) {
     }
 }
 
-function processDir(path) {
-    const used_keys = {};
+function processDir(path, used_keys = {}) {
     const files = fs.readdirSync(path);
     for (const filename of files) {
         const newpath = path + '/' + filename;
         const stat = fs.statSync(newpath);
-        if (stat.isDirectory()) processDir(newpath);
+        if (stat.isDirectory()) processDir(newpath, used_keys);
         else if (filename.match(/\.jsx?$/)) {
             processFile(used_keys, newpath);
         }

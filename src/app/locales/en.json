@@ -74,7 +74,7 @@
     "replies": "Replies",
     "reply": "Reply",
     "reply_count": {
-      "zero":  "no replies",
+      "zero": "no replies",
       "one": "1 reply",
       "other": "%(count)s replies"
     },
@@ -178,20 +178,17 @@
     "server_returned_error": "server returned error",
     "APP_NAME_support": "%(APP_NAME)s Support",
     "please_email_questions_to": "Please email your questions to",
-
     "next_7_strings_single_block": {
       "authors_get_paid_when_people_like_you_upvote_their_post": "Authors get paid when people like you upvote their post",
       "if_you_enjoyed_what_you_read_earn_amount": "If you enjoyed what you read here, create your account today and start earning FREE STEEM!",
       "free_steem": "FREE STEEM!",
       "sign_up_earn_steem": "Sign up now to earn "
     },
-
     "next_3_strings_together": {
       "show_more": "Show more",
       "show_less": "Show fewer",
       "value_posts": "low value posts"
     },
-
     "read_only_mode": "Due to server maintenance we are running in read only mode. We are sorry for the inconvenience.",
     "tags_and_topics": "Tags and Topics",
     "show_more_topics": "Show more topics",
@@ -214,12 +211,9 @@
     "APP_NAME_whitepaper": "%(APP_NAME)s Whitepaper",
     "buy_LIQUID_TOKEN": "Buy %(LIQUID_TOKEN)s",
     "sell_LIQUID_TOKEN": "Sell %(LIQUID_TOKEN)s",
-    "market": "Market",
     "currency_market": "Currency Market",
     "stolen_account_recovery": "Stolen Accounts Recovery",
     "change_account_password": "Change Account Password",
-    "APP_NAME_api_docs": "%(APP_NAME)s API Docs",
-    "APP_NAME_chat": "%(APP_NAME)s Chat",
     "witnesses": "Witnesses",
     "vote_for_witnesses": "Vote for Witnesses",
     "privacy_policy": "Privacy Policy",
@@ -234,30 +228,19 @@
   },
   "main_menu": {
     "hot": "hot",
-    "trending": "trending",
-    "payout_time": "payout time",
-    "active": "active",
-    "responses": "responses",
-    "popular": "popular"
+    "trending": "trending"
   },
   "submit_a_story": {
-    "title": "Title",
-    "editor": "Editor",
-    "update_post": "Update Post",
-    "markdown_is_supported": "Styling with Markdown is supported",
-    "markdown_not_supported": "Markdown is not supported here",
     "welcome_to_the_blockchain": "Welcome to the Blockchain!",
     "your_voice_is_worth_something": "Your voice is worth something",
     "learn_more": "Learn More",
-    "get_sp_when_sign_up": "Get %(signupBonus)s of %(VESTING_TOKEN)s when you sign up today.",
-    "all_accounts_refunded": "All Recovered Accounts have been fully Refunded",
-    "APP_NAME_is_now_open_source": " %(APP_NAME)s is now Open Source"
+    "get_sp_when_sign_up": "Get %(signupBonus)s of %(VESTING_TOKEN)s when you sign up today."
   },
   "reply_editor": {
     "shorten_title": "Shorten title",
     "exceeds_maximum_length": "Exceeds maximum length (%(maxKb)sKB)",
-    "including_the_category": "(including the category '%(rootCategory)s')",
-    "use_limited_amount_of_tags": "You have %(tagsLength)s tags total %(includingCategory)s.  Please use only 5 in your post and category line.",
+    "including_the_category": " (including the category '%(rootCategory)s')",
+    "use_limited_amount_of_tags": "You have %(tagsLength)s tags total%(includingCategory)s. Please use only 5 in your post and category line.",
     "are_you_sure_you_want_to_clear_this_form": "Are you sure you want to clear this form?",
     "uploading": "Uploading",
     "draft_saved": "Draft saved.",
@@ -285,15 +268,11 @@
     "must_start_with_a_letter": "Must start with a letter",
     "must_end_with_a_letter_or_number": "Must end with a letter or number"
   },
-  "tags_page": {
-    "replies": "Replies",
-    "payouts": "Payouts"
-  },
   "postfull_jsx": {
     "this_post_is_not_available_due_to_a_copyright_claim": "This post is not available due to a copyright claim.",
-    "share_on_facebook" : "Share on Facebook",
-    "share_on_twitter" : "Share on Twitter",
-    "share_on_linkedin" : "Share on Linkedin",
+    "share_on_facebook": "Share on Facebook",
+    "share_on_twitter": "Share on Twitter",
+    "share_on_linkedin": "Share on Linkedin",
     "share": "Share",
     "transfer_amount_to_VESTING_TOKEN": "Transfer %(amount)s to %(VESTING_TOKEN)s",
     "transfer_amount_VESTING_TOKEN_to": "Transfer %(amount)s %(VESTING_TOKEN)s to",
@@ -378,17 +357,17 @@
     "followers": "Followers",
     "this_is_users_reputations_score_it_is_based_on_history_of_votes": "This is %(name)s's reputation score.\n\nThe reputation score is based on the history of votes received by the account, and is used to hide low quality content.",
     "follower_count": {
-      "zero":  "No followers",
+      "zero": "No followers",
       "one": "1 follower",
       "other": "%(count)s followers"
     },
     "followed_count": {
-      "zero":  "Not following anybody",
+      "zero": "Not following anybody",
       "one": "1 following",
       "other": "%(count)s following"
     },
-    "post_count":  {
-      "zero":  "No posts",
+    "post_count": {
+      "zero": "No posts",
       "one": "1 post",
       "other": "%(count)s posts"
     }
@@ -616,11 +595,11 @@
     "to_save_your_preferences": "to save your preferences"
   },
   "posts_index": {
-      "empty_feed_1": "Looks like you haven't followed anything yet",
-      "empty_feed_2": "If you recently added new users to follow, your personalized feed will populate once new content is available",
-      "empty_feed_3": "Explore Trending Articles",
-      "empty_feed_4": "Read The Quick Start Guide",
-      "empty_feed_5": "Browse The FAQ"
+    "empty_feed_1": "Looks like you haven't followed anything yet",
+    "empty_feed_2": "If you recently added new users to follow, your personalized feed will populate once new content is available",
+    "empty_feed_3": "Explore Trending Articles",
+    "empty_feed_4": "Read The Quick Start Guide",
+    "empty_feed_5": "Browse The FAQ"
   },
   "transferhistoryrow_jsx": {
     "to_savings": "to savings",
@@ -650,7 +629,7 @@
   },
   "header_jsx": {
     "home": "home",
-    "new_topic_posts" : "New %(topic)s posts",
+    "new_topic_posts": "New %(topic)s posts",
     "sort_order_topic_posts": "%(sort_order)s %(topic)s posts",
     "new_posts": "New posts",
     "sort_order_posts": "%(sort_order)s posts",
@@ -746,7 +725,7 @@
     "this_memo_is_public": "This memo is public",
     "power_up": "Power Up",
     "submit": "Submit",
-    "basic" : "Basic",
+    "basic": "Basic",
     "advanced": "Advanced",
     "convert_to_VESTING_TOKEN": "Convert to %(VESTING_TOKEN)s",
     "balance_subject_to_3_day_withdraw_waiting_period": "Balance subject to 3 day withdraw waiting period,",

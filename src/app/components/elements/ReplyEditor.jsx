@@ -598,8 +598,8 @@ export default formId => connect(
             }
 
             if(meta.tags.length > 5) {
-                const includingCategory = isEdit ? ` (including the category '${rootCategory}')` : ''
-                errorCallback(`You have ${meta.tags.length} tags total${includingCategory}.  Please use only 5 in your post and category line.`)
+                const includingCategory = isEdit ? tt('reply_editor.including_the_category', {rootCategory}) : ''
+                errorCallback(tt('reply_editor.use_limited_amount_of_tags', {tagsLength: meta.tags.length, includingCategory}))
                 return
             }
 

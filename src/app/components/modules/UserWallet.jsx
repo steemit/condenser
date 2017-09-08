@@ -7,8 +7,6 @@ import SavingsWithdrawHistory from 'app/components/elements/SavingsWithdrawHisto
 import TransferHistoryRow from 'app/components/cards/TransferHistoryRow';
 import TransactionError from 'app/components/elements/TransactionError';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
-import Reveal from 'react-foundation-components/lib/global/reveal'
-import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {numberWithCommas, vestingSteem, delegatedSteem} from 'app/utils/StateFunctions'
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu'
 import WalletSubMenu from 'app/components/elements/WalletSubMenu'
@@ -256,7 +254,7 @@ class UserWallet extends React.Component {
                     <div className="columns small-12">
                         <div className="UserWallet__claimbox">
                             Your current rewards: {rewards_str}
-                            <button className="button hollow float-right" onClick={e => {this.props.claimRewards(account)}}>Redeem Rewards (Transfer to Balance)</button>
+                            <button className="button hollow float-right" onClick={e => {this.props.claimRewards(account)}}>{tt('userwallet_jsx.redeem_rewards')}</button>
                         </div>
                     </div>
                 </div>
@@ -269,7 +267,7 @@ class UserWallet extends React.Component {
                     {isMyAccount ? <WalletSubMenu account_name={account.get('name')} /> : <div><br /><h4>{tt('g.balances')}</h4><br /></div>}
                 </div>
                 {<div className="columns shrink">
-                    {isMyAccount && <button className="UserWallet__buysp button hollow" onClick={onShowDepositSteem}>Buy Steem or Steem Power</button>}
+                    {isMyAccount && <button className="UserWallet__buysp button hollow" onClick={onShowDepositSteem}>{tt('userwallet_jsx.buy_steem_or_steem_power')}</button>}
                 </div>}
             </div>
             <div className="UserWallet__balance row">

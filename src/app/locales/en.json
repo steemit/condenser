@@ -85,6 +85,7 @@
     "rewards": "Rewards",
     "save": "Save",
     "saved": "Saved",
+    "search": "Search",
     "sell": "Sell",
     "settings": "Settings",
     "share_this_post": "Share this post",
@@ -194,22 +195,6 @@
     "read_only_mode": "Due to server maintenance we are running in read only mode. We are sorry for the inconvenience.",
     "tags_and_topics": "Tags and Topics",
     "show_more_topics": "Show more topics",
-    "next_3_blocks": {
-      "the_latest_versions_of": "The latest versions of",
-      "and": "and",
-      "are_well_tested_and_known_to_work_with": "are well tested and known to work with %(APP_URL)s."
-    },
-    "account_creation_succes": "Your account has been successfully created!",
-    "account_recovery_succes": "Your account has been successfully recovered!",
-    "password_update_succes": "The password for %(accountName)s was successfully updated",
-    "password_is_bound_to_your_accounts_owner_key": "This password is bound to your account's owner key and can not be used to login to this site",
-    "however_you_can_use_it_to": "However, you can use it to",
-    "to_obtaion_a_more_secure_set_of_keys": "to obtain a more secure set of keys",
-    "update_your_password": "update your password",
-    "enter_username": "Enter your username",
-    "password_or_wif": "Password or WIF",
-    "requires_auth_key": "This operation requires your %(authType)s key (or use your master password)",
-    "keep_me_logged_in": "Keep me logged in",
     "basic": "Basic",
     "advanced": "Advanced",
     "views": {
@@ -771,7 +756,7 @@
     "balance": "Balance",
     "from": "From",
     "to": "To",
-    "asset_currently_collecting": "%(asset) currently collecting %(interest)% APR."
+    "asset_currently_collecting": "%(asset)s currently collecting %(interest)s%% APR."
   },
   "userwallet_jsx": {
     "conversion_complete_tip": "Will complete on",
@@ -790,6 +775,8 @@
     "estimated_account_value": "Estimated Account Value",
     "next_power_down_is_scheduled_to_happen": "The next power down is scheduled to happen",
     "transfers_are_temporary_disabled": "Transfers are temporary disabled.",
-    "history": "HISTORY"
+    "history": "HISTORY",
+    "redeem_rewards": "Redeem Rewards (Transfer to Balance)",
+    "buy_steem_or_steem_power": "Buy STEEM or STEEM POWER"
   }
 }

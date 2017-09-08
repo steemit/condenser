@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+import proxifyImageUrl from 'app/utils/ProxifyUrl';
 
 class Userpic extends Component {
     static propTypes = {
@@ -18,15 +19,12 @@ class Userpic extends Component {
         // try to extract image url from users metaData
         try {
             const md = JSON.parse(json_metadata);
-            if(md.profile) url = md.profile.profile_image;
-        } catch (e) {}
-
-        if (url && /^(https?:)\/\//.test(url)) {
-            const size = width && width > 48 ? '320x320' : '120x120';
-            if($STM_Config.img_proxy_prefix) {
-                url = $STM_Config.img_proxy_prefix + size + '/' + url;
+            if(/^(https?:)\/\//.test(md.profile.profile_image)) {
+                const size = (width && width > 48)? '320x320' : '120x120';
+                url = proxifyImageUrl(md.profile.profile_image, size);
             }
-        } else {
+        } catch (e) {}
+        if(!url) {
             if(hideIfDefault) {
                 return null;
             }
@@ -37,7 +35,7 @@ class Userpic extends Component {
                        width: (width || 48) + 'px',
                        height: (height || 48) + 'px'}
 
-        return <div className="Userpic" style={style} />;
+        return (<div className="Userpic" style={style} />)
     }
 }
 

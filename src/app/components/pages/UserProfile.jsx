@@ -28,6 +28,7 @@ import Userpic from 'app/components/elements/Userpic';
 import Callout from 'app/components/elements/Callout';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import userIllegalContent from 'app/utils/userIllegalContent';
+import proxifyImageUrl from 'app/utils/ProxifyUrl';
 
 export default class UserProfile extends React.Component {
     constructor() {
@@ -378,11 +379,7 @@ export default class UserProfile extends React.Component {
 
         let cover_image_style = {}
         if(cover_image) {
-            let cover_image_prefix = '';
-            if($STM_Config.img_proxy_prefix) {
-                cover_image_prefix = $STM_Config.img_proxy_prefix + '2048x512/';
-            }
-            cover_image_style = {backgroundImage: "url(" + cover_image_prefix + cover_image + ")"}
+            cover_image_style = {backgroundImage: "url(" + proxifyImageUrl(cover_image, '2048x512') + ")"}
         }
 
         return (

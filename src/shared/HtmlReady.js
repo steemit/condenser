@@ -1,6 +1,7 @@
 import xmldom from 'xmldom'
 import linksRe from 'app/utils/Links'
 import {validate_account_name} from 'app/utils/ChainValidation'
+import proxifyImageUrl from 'app/utils/ProxifyUrl'
 
 const noop = () => {}
 const DOMParser = new xmldom.DOMParser({
@@ -177,12 +178,11 @@ function img(state, child) {
 
 // For all img elements with non-local URLs, prepend the proxy URL (e.g. `https://img0.steemit.com/0x0/`)
 function proxifyImages(doc) {
-    if (!$STM_Config.img_proxy_prefix) return
     if (!doc) return;
     [...doc.getElementsByTagName('img')].forEach(node => {
         const url = node.getAttribute('src')
         if(! linksRe.local.test(url))
-            node.setAttribute('src', $STM_Config.img_proxy_prefix + '0x0/' + url)
+            node.setAttribute('src', proxifyImageUrl(url, '0x0'))
     })
 }
 

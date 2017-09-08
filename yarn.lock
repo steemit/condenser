@@ -2650,6 +2650,12 @@ fbjs@^0.8.1, fbjs@^0.8.4, fbjs@^0.8.9, fbjs@~0:
     setimmediate "^1.0.5"
     ua-parser-js "^0.7.9"
 
+fetch-ponyfill@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/fetch-ponyfill/-/fetch-ponyfill-4.1.0.tgz#ae3ce5f732c645eab87e4ae8793414709b239893"
+  dependencies:
+    node-fetch "~1.7.1"
+
 figures@^1.3.5:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/figures/-/figures-1.7.0.tgz#cbe1e3affcf1cd44b80cadfed28dc793a9701d2e"
@@ -3292,7 +3298,7 @@ hide-powered-by@1.0.0:
   resolved "https://registry.yarnpkg.com/hide-powered-by/-/hide-powered-by-1.0.0.tgz#4a85ad65881f62857fc70af7174a1184dccce32b"
 
 highcharts@^4.2.3, highcharts@^4.2.5:
-  version v4.2.7
+  version "4.2.7"
   resolved "https://registry.yarnpkg.com/highcharts/-/highcharts-4.2.7.tgz#45cbed8e99c9c042e95f9c51076726496f686862"
 
 history@^3.0.0:
@@ -3800,7 +3806,7 @@ isobject@^2.0.0:
   dependencies:
     isarray "1.0.0"
 
-isomorphic-fetch@^2.1.1, isomorphic-fetch@^2.2.1:
+isomorphic-fetch@^2.1.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/isomorphic-fetch/-/isomorphic-fetch-2.2.1.tgz#611ae1acf14f5e81f729507472819fe9733558a9"
   dependencies:
@@ -4857,6 +4863,13 @@ nocache@2.0.0:
 node-fetch@^1.0.1:
   version "1.7.1"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-1.7.1.tgz#899cb3d0a3c92f952c47f1b876f4c8aeabd400d5"
+  dependencies:
+    encoding "^0.1.11"
+    is-stream "^1.0.1"
+
+node-fetch@~1.7.1:
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-1.7.2.tgz#c54e9aac57e432875233525f3c891c4159ffefd7"
   dependencies:
     encoding "^0.1.11"
     is-stream "^1.0.1"
@@ -6683,9 +6696,9 @@ statuses@1, "statuses@>= 1.3.1 < 2", statuses@^1.2.0, statuses@~1.3.1:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/statuses/-/statuses-1.3.1.tgz#faf51b9eb74aaef3b3acf4ad5f61abf24cb7b93e"
 
-"steem@github:steemit/steem-js#2454f5e":
-  version "0.6.1"
-  resolved "https://codeload.github.com/steemit/steem-js/tar.gz/2454f5e"
+"steem@github:steemit/steem-js#5f50ad5":
+  version "0.6.3"
+  resolved "https://codeload.github.com/steemit/steem-js/tar.gz/5f50ad5"
   dependencies:
     bigi "^1.4.2"
     bluebird "^3.4.6"
@@ -6699,7 +6712,7 @@ statuses@1, "statuses@>= 1.3.1 < 2", statuses@^1.2.0, statuses@~1.3.1:
     debug "^2.6.8"
     detect-node "^2.0.3"
     ecurve "^1.0.5"
-    isomorphic-fetch "^2.2.1"
+    fetch-ponyfill "^4.1.0"
     lodash "^4.16.4"
     postinstall-build "^5.0.1"
     secure-random "^1.1.1"

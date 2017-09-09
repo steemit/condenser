@@ -28,6 +28,7 @@ class App extends React.Component {
         this.state = {open: null, showCallout: true, showBanner: true, expandCallout: false};
         this.toggleOffCanvasMenu = this.toggleOffCanvasMenu.bind(this);
         this.showSignUp = this.props.showSignUp.bind(this);
+        this.checkLogin = this.checkLogin.bind(this);
         // this.shouldComponentUpdate = shouldComponentUpdate(this, 'App')
     }
 
@@ -40,7 +41,12 @@ class App extends React.Component {
     }
 
     componentDidMount() {
+        window.addEventListener('storage', this.checkLogin);
         // setTimeout(() => this.setState({showCallout: false}), 15000);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('storage', this.checkLogin);
     }
 
     componentDidUpdate(nextProps) {
@@ -57,6 +63,15 @@ class App extends React.Component {
                   p.location !== n.location ||
                   p.visitor !== n.visitor ||
                   p.flash !== n.flash || this.state !== nextState;
+    }
+
+    checkLogin(event) {
+      if (event.key === 'autopost2') {
+        if (! event.newValue)
+          this.props.logoutUser();
+        else if (! event.oldValue || event.oldValue !== event.newValue)
+          this.props.loginUser();
+      }
     }
 
     toggleOffCanvasMenu(e) {
@@ -279,6 +294,7 @@ App.propTypes = {
     location: React.PropTypes.object,
     signup_bonus: React.PropTypes.string,
     loginUser: React.PropTypes.func.isRequired,
+    logoutUser: React.PropTypes.func.isRequired,
     depositSteem: React.PropTypes.func.isRequired,
     showSignUp: React.PropTypes.func.isRequired
 };
@@ -299,6 +315,8 @@ export default connect(
     dispatch => ({
         loginUser: () =>
             dispatch(user.actions.usernamePasswordLogin()),
+        logoutUser: () =>
+            dispatch(user.actions.logout()),
         depositSteem: () => {
             dispatch(g.actions.showDialog({name: 'blocktrades_deposit', params: {outputCoinType: VEST_TICKER}}));
         },

@@ -4,6 +4,7 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import tt from 'counterpart';
 import {memo} from 'golos-js'
 import { Link } from 'react-router'
+import links from 'app/utils/Links'
 import {validate_account_name} from 'app/utils/ChainValidation'
 
 class Memo extends React.Component {
@@ -35,7 +36,7 @@ class Memo extends React.Component {
 		for (let section of text.split(' ')) {
     		if (section.trim().length === 0) continue
     		const matchUserName = section.match(/(^|\s)(@[a-z][-\.a-z\d]+[a-z\d])/i)
-    		const matchLink = section.match(/^\/(?!\/)|(https?:)?\/\//)
+    		const matchLink = section.match(links.local)
 			if (matchUserName) {
 				const user2 = matchUserName[0].trim().substring(1)
 				const userLower = user2.toLowerCase()

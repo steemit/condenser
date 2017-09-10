@@ -274,9 +274,11 @@
     "sign_up": "Sign Up",
     "welcome": "Welcome",
     "faq": "FAQ",
+    "shop": "The Steemit Shop",
     "chat": "Steemit Chat",
     "app_center": "Steemit App Center",
     "api_docs": "Steemit API Docs",
+    "bluepaper": "Steem Bluepaper",
     "whitepaper": "Steem Whitepaper"
   },
   "main_menu": {

@@ -255,6 +255,11 @@ class App extends React.Component {
                 </ul>
                 <ul className="vertical menu">
                     <li>
+                        <a href="https://thesteemitshop.com/" target="_blank" rel="noopener noreferrer">
+                            {tt('navigation.shop')}&nbsp;<Icon name="extlink" />
+                        </a>
+                    </li>
+                    <li>
                         <a href="https://steemit.chat/home" target="_blank" rel="noopener noreferrer">
                             {tt('navigation.chat')}&nbsp;<Icon name="extlink" />
                         </a>
@@ -272,7 +277,12 @@ class App extends React.Component {
                 </ul>
                 <ul className="vertical menu">
                     <li>
-                        <a href="https://steem.io/SteemWhitePaper.pdf" onClick={this.navigate}>
+                        <a href="https://steem.io/steem-bluepaper.pdf" target="_blank" rel="noopener noreferrer">
+                            {tt('navigation.bluepaper')}&nbsp;<Icon name="extlink" />
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://steem.io/SteemWhitePaper.pdf" target="_blank" rel="noopener noreferrer">
                             {tt('navigation.whitepaper')}&nbsp;<Icon name="extlink" />
                         </a>
                     </li>

@@ -8,9 +8,9 @@
  * <proxy>/{int}x{int}/[<proxy>/{int}x{int}/]<proxy>/<file url>
  * @type {RegExp}
  */
-const rProxyDomain = /^http(s)?:\/\/steemit(dev|stage)?images.com\//g
-const rProxyDomainsDimensions = /http(s)?:\/\/steemit(dev|stage)?images.com\/([0-9]+x[0-9]+)\//g
-const NATURAL_SIZE = '0x0/'
+const rProxyDomain = /^http(s)?:\/\/steemit(dev|stage)?images.com\//g;
+const rProxyDomainsDimensions = /http(s)?:\/\/steemit(dev|stage)?images.com\/([0-9]+x[0-9]+)\//g;
+const NATURAL_SIZE = '0x0/';
 
 /**
  * Strips all proxy domains from the beginning of the url. Adds the global proxy if dimension is specified
@@ -21,21 +21,21 @@ const NATURAL_SIZE = '0x0/'
  * @returns string
  */
 export default (url, dimensions = false) => {
-    const proxyList = url.match(rProxyDomainsDimensions)
-    var respUrl = url
-    if(proxyList) {
-        const lastProxy = proxyList[proxyList.length -1]
-        respUrl = url.substring(url.lastIndexOf(lastProxy) + lastProxy.length)
+    const proxyList = url.match(rProxyDomainsDimensions);
+    let respUrl = url;
+    if (proxyList) {
+        const lastProxy = proxyList[proxyList.length - 1];
+        respUrl = url.substring(url.lastIndexOf(lastProxy) + lastProxy.length);
     }
-    if(dimensions && $STM_Config && $STM_Config.img_proxy_prefix) {
-        let dims = dimensions + '/'
-        if(typeof dimensions !== 'string') {
-            dims = (proxyList)? proxyList.shift().match(/([0-9]+x[0-9]+)\//g)[0] : NATURAL_SIZE
+    if (dimensions && $STM_Config && $STM_Config.img_proxy_prefix) {
+        let dims = dimensions + '/';
+        if (typeof dimensions !== 'string') {
+            dims = (proxyList) ? proxyList.shift().match(/([0-9]+x[0-9]+)\//g)[0] : NATURAL_SIZE;
         }
-        if(NATURAL_SIZE !== dims || !rProxyDomain.test(respUrl)) {
-            return $STM_Config.img_proxy_prefix + dims + respUrl
+        if (NATURAL_SIZE !== dims || !rProxyDomain.test(respUrl)) {
+            return $STM_Config.img_proxy_prefix + dims + respUrl;
         }
     }
-    return respUrl
+    return respUrl;
 }
 

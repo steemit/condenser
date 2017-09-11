@@ -805,6 +805,15 @@
     "to": "To",
     "asset_currently_collecting": "%(asset) currently collecting %(interest)% APR."
   },
+  "powerdown_jsx": {
+     "power_down": "Power Down",
+     "power_down_amount": "Power Down Amount",
+     "select_powerdown_amt": "Please select and amount of %(VESTING_TOKEN)s to power down.",
+     "confirm": "Confirm Power Down",
+     "steem_power": "%(VESTING_TOKEN)s",
+     "confirm_power_down": "Are you sure you wish to power down of your Steem Power?",
+     "of_your": "of your %(VESTING_TOKEN)s"
+  },
   "userwallet_jsx": {
     "conversion_complete_tip": "Will complete on",
     "in_conversion": "%(amount)s in conversion",

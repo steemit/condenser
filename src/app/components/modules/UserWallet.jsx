@@ -20,6 +20,7 @@ import tt from 'counterpart';
 import {List} from 'immutable'
 import { LIQUID_TOKEN, LIQUID_TICKER, DEBT_TOKENS, VESTING_TOKEN } from 'app/client_config';
 import transaction from 'app/redux/Transaction';
+import Powerdown from 'app/components/modules/Powerdown';
 
 const assetPrecision = 1000;
 
@@ -89,6 +90,15 @@ class UserWallet extends React.Component {
             });
         };
 
+        const showPowerdown = (asset, transferType, e) => {
+            e.preventDefault();
+            this.props.showPowerdown({
+                to: account.get('name'),
+                asset, transferType
+            });
+        };
+
+
         const savings_balance = account.get('savings_balance');
         const savings_sbd_balance = account.get('savings_sbd_balance');
 
@@ -96,9 +106,15 @@ class UserWallet extends React.Component {
             e.preventDefault()
             const name = account.get('name');
             const vesting_shares = cancel ? '0.000000 VESTS' : account.get('vesting_shares');
-            this.setState({toggleDivestError: null});
+            this.setState({
+              toggleDivestError: null,
+              show_powerdown_modal: true
+            });
             const errorCallback = e2 => {this.setState({toggleDivestError: e2.toString()})};
-            const successCallback = () => {this.setState({toggleDivestError: null})}
+            const successCallback = () => {this.setState({
+              toggleDivestError: null,
+              show_powerdown_modal: true
+            })}
             this.props.withdrawVesting({account: name, vesting_shares, errorCallback, successCallback})
         }
 

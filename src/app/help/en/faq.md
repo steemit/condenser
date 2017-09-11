@@ -43,6 +43,7 @@
 - <a href="/faq.html#Will_I_receive_notifications_when_there_is_activity_with_my_account">Will I receive notifications when there is activity with my account?</a>
 - <a href="/faq.html#What_is_shown_in_my_profile">What is shown in my profile?</a>
 - <a href="/faq.html#How_do_I_change_my_avatar_image_and_other_profile_information">How do I change my avatar image and other profile information?</a>
+- <a href="/faq.html#What_is_the_recommend_size_for_the_cover_image">What is the recommend size for the cover image?</a>
 - <a href="/faq.html#How_can_I_control_whether_I_see__Not_Safe_For_Work___NSFW__content">How can I control whether I see "Not Safe For Work" (NSFW) content?</a>
 - <a href="/faq.html#How_do_I_search_for_content">How do I search for content?</a>
 - <a href="/faq.html#Can_I_see_which_users_I_have_muted">Can I see which users I have muted?</a>
@@ -55,6 +56,8 @@
 - <a href="/faq.html#What_can_users_post_to_Steemit">What can users post to Steemit?</a>
 - <a href="/faq.html#What_are_the_different_choices_for_post_rewards__50__50___Power_Up_100___Decline_Payout">What are the different choices for post rewards (50%/50%, Power Up 100%, Decline Payout)?</a>
 - <a href="/faq.html#How_do_I_add_images_and_photos_to_my_posts">How do I add images and photos to my posts?</a>
+- <a href="/faq.html#How_do_I_set_the_thumbnail_image_for_my_post">How do I set the thumbnail image for my post?</a>
+- <a href="/faq.html#What_is_the_recommend_aspect_ratio_for_thumbnail_images">What is the recommend aspect ratio for thumbnail images?</a>
 - <a href="/faq.html#How_do_I_add_videos_to_my_posts">How do I add videos to my posts?</a>
 - <a href="/faq.html#Is_there_a_way_I_can_make_my_images_smaller">Is there a way I can make my images smaller?</a>
 - <a href="/faq.html#What_are_tags">What are tags?</a>
@@ -96,6 +99,7 @@
 - <a href="/faq.html#Is_there_a_way_for_me_to_convert_my_Steem_Dollars_to_STEEM_without_waiting_3_5_days">Is there a way for me to convert my Steem Dollars to STEEM without waiting 3.5 days?</a>
 - <a href="/faq.html#What_can_I_do_with_my_STEEM_tokens">What can I do with my STEEM tokens?</a>
 - <a href="/faq.html#What_can_I_do_with_my_SBD_tokens">What can I do with my SBD tokens?</a>
+- <a href="/faq.html#What_is_a_MVEST">What is a MVEST?</a>
 - <a href="/faq.html#Can_I_sell_goods_and_services_on_Steemit">Can I sell goods and services on Steemit?</a>
 - <a href="/faq.html#How_can_I_withdraw_my_STEEM_or_SBD_coins">How can I withdraw my STEEM or SBD coins?</a>
 - <a href="/faq.html#Will_I_get_a_1099_from_Steemit">Will I get a 1099 from Steemit?</a>
@@ -452,7 +456,7 @@ Currently, there are no options to receive notifications for votes directly on S
 
 At the top of your profile is your display name and reputation score. Below your display name is the number of followers you have, the number of posts and comments you have written, and the number of people you are following. It also shows the month and year when your account was created.
 
-You have the option to change your avatar and display name on the Settings page. There, you can set additional information such as "about" information, your location, and add a link to a website of your choosing.
+You have the option to change your avatar and display name on the Settings page. There, you can set additional information such as "about" information, your location, and add a link to a website of your choosing. You also have the option to set a cover image for your profile.
 
 You can view your own profile by clicking on the link to your Blog in your account menu.
 
@@ -460,7 +464,13 @@ You can view your own profile by clicking on the link to your Blog in your accou
 <a class="anchor" name="How_do_I_change_my_avatar_image_and_other_profile_information"></a>
 ## How do I change my avatar image and other profile information?
 
-Your profile info and avatar image are set in your Settings page. In order to update your avatar picture, you will need to host the image somewhere. This can be done by uploading it to a Steemit comment or post, or using a third-party image host such as <a href="http://postimage.io/">Postimage</a>.  Once your image is uploaded, copy its URL and paste it into the "Profile Picture URL" box. Then click the Update button and enter your password or active key.
+Your profile info, avatar image, and cover image are set in your Settings page. In order to update your avatar picture and cover image, you will need to host the images somewhere. This can be done by uploading it to a Steemit comment or post, or using a third-party image host such as <a href="http://postimage.io/">Postimage</a>.  Once your image is uploaded, copy its URL and paste it into the "Profile Picture URL" box for the avatar, or the "Cover Image URL" box for the cover image. Then click the Update button and enter your password or active key.
+
+<a href="/faq.html#Table_of_Contents_Site_Navigation">^</a>
+<a class="anchor" name="What_is_the_recommend_size_for_the_cover_image"></a>
+## What is the recommend size for the cover image?
+
+The cover image will be resized/scaled depending on the device being used. Therefore it is recommend to use an image that will still look good when cropped or resized. A 2048x512 image is the optimal size to work for most devices.
 
 <a href="/faq.html#Table_of_Contents_Site_Navigation">^</a>
 <a class="anchor" name="How_can_I_control_whether_I_see__Not_Safe_For_Work___NSFW__content"></a>
@@ -529,6 +539,18 @@ You can browse your hard drive to add an image by clicking on the "selecting the
 If you have an image copied to your clipboard, you can simply paste (`ctrl + v`) while in the post/comment editor, and your image will be uploaded into your post or comment. Due to the file size of these pasted images, this method is only recommended for simple graphics. Photos (.JPG) should be uploaded from your disk.
 
 Pictures can also be hosted on an external site. Paste the image's web address (URL) into the editor and it will automatically be added.
+
+<a href="/faq.html#Table_of_Contents_Posting">^</a>
+<a class="anchor" name="How_do_I_set_the_thumbnail_image_for_my_post"></a>
+## How do I set the thumbnail image for my post?
+
+The first image in the post will automatically be set as the thumbnail image.
+
+<a href="/faq.html#Table_of_Contents_Posting">^</a>
+<a class="anchor" name="What_is_the_recommend_aspect_ratio_for_thumbnail_images"></a>
+## What is the recommend aspect ratio for thumbnail images?
+
+The recommend aspect ratio for thumbnail images is 16x9.
 
 <a href="/faq.html#Table_of_Contents_Posting">^</a>
 <a class="anchor" name="How_do_I_add_videos_to_my_posts"></a>
@@ -628,7 +650,7 @@ Language-specific groups include:
 <a class="anchor" name="Can_I_delete_something_I_posted"></a>
 ## Can I delete something I posted?
 
-The blockchain will always contain the full edit history of posts and comments, so it can never be completely deleted. If you would like to update a post so that users cannot see the content via Steemit.com, you can edit the post and replace it with blank content.
+The blockchain will always contain the full edit history of posts and comments, so it can never be completely deleted. If you would like to update a post so that users cannot see the content via Steemit.com, you can edit the post and replace it with blank content for as long as the post is active. After seven days, the post can no longer be edited.
 
 <a href="/faq.html#Table_of_Contents_Posting">^</a>
 <a class="anchor" name="What_does__Promoting__a_post_do"></a>
@@ -833,6 +855,12 @@ Depending on market conditions, users may get more STEEM for their SBD by tradin
 - Exchange for STEEM in the internal market
 - Withdraw to an exchange, and trade for BTC or other digital tokens
 - Purchase items through third-party stores that accept SBD tokens
+
+<a href="/faq.html#Table_of_Contents_Economics">^</a>
+<a class="anchor" name="What_is_a_MVEST"></a>
+## What is a MVEST?
+
+A VEST is a unit of measurement for STEEM Power. A MVEST is one million VESTS. The amount of STEEM Power in one MVEST can be found on <a href="https://steemd.com/">steemd.com</a> as `steem_per_mvests`.
 
 <a href="/faq.html#Table_of_Contents_Economics">^</a>
 <a class="anchor" name="Can_I_sell_goods_and_services_on_Steemit"></a>

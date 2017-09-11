@@ -7,8 +7,7 @@ import {validateCategory} from 'app/components/cards/CategorySelector'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import Tooltip from 'app/components/elements/Tooltip'
-import sanitizeConfig, {allowedTags} from 'app/utils/SanitizeConfig'
-import sanitize from 'sanitize-html'
+import {sanitize, allowedTags} from '@steemit/render'
 import HtmlReady from 'shared/HtmlReady'
 import g from 'app/redux/GlobalReducer'
 import {Set} from 'immutable'
@@ -591,7 +590,7 @@ export default formId => connect(
 
             // if(Object.keys(json_metadata.steem).length === 0) json_metadata = {}// keep json_metadata minimal
             const sanitizeErrors = []
-            sanitize(body, sanitizeConfig({sanitizeErrors}))
+            sanitize(body, {sanitizeErrors})
             if(sanitizeErrors.length) {
                 errorCallback(sanitizeErrors.join('.  '))
                 return

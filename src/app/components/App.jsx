@@ -189,17 +189,14 @@ class App extends React.Component {
                     <div className="welcomeBanner">
                         <CloseButton onClick={() => this.setState({showBanner: false})} />
                         <div className="text-center">
-                            <h2>{tt('submit_a_story.welcome_to_the_blockchain')}</h2>
-                            <h4>{tt('submit_a_story.your_voice_is_worth_something')}</h4>
+                            <h2>{tt('submit_a_story.intro_tagline')}</h2>
+                            <h4>{tt('submit_a_story.intro_paragraph')}</h4>
                             <br />
-                            <a className="button" href="/pick_account"> <b>{tt('navigation.sign_up')}</b> </a>
+                            <a className="button button--primary" href="/pick_account"> <b>{tt('navigation.sign_up')}</b> </a>
                             &nbsp; &nbsp; &nbsp;
                             <a className="button hollow uppercase" href="https://steem.io" target="_blank" rel="noopener noreferrer" onClick={this.learnMore}> <b>{tt('submit_a_story.learn_more')}</b> </a>
                             <br />
                             <br />
-                            <div className="tag3">
-                                <b>{tt('submit_a_story.get_sp_when_sign_up', {signupBonus: signup_bonus, VESTING_TOKEN})}</b>
-                            </div>
                         </div>
                     </div>
                 </div>

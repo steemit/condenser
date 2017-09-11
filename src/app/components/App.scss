@@ -28,7 +28,7 @@
   padding-bottom: 1rem;
 }
 .welcomeBanner {
-  padding-bottom: 2.35rem;
+  padding: 2.35rem 0 4em;
   background-color: #fafbfd;
   background-image: url(../images/lp-bottom.jpg);
   background-repeat: repeat-x;
@@ -70,12 +70,18 @@
   h2 {
     font-size: 3.8rem;
     font-weight: 300;
-    margin-bottom: 0;
+    margin-bottom: 16px;
   }
   h4 {
     color: #999;
     font-weight: 500;
     margin-bottom: 1rem;
+    width: 84%;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .button {
+    min-width: 120px;
   }
   .close-button {
     top: 0.5rem;

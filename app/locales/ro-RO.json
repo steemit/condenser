@@ -708,6 +708,7 @@
     "muted_users":"Utilizatori blocați",
     "update":"Actualizți",
     "profile_image_url":"Adăugați adresa URL a imaginii",
+    "cover_image_url": "Cover image url",
     "profile_name":"Numele afișat",
     "profile_about":"Despre poriect",
     "profile_location":"Locația",

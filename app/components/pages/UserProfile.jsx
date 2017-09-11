@@ -403,15 +403,21 @@ export default class UserProfile extends React.Component {
             </div>
          </div>;
 
-        const {name, location, about, website} = normalizeProfile(account);
+        const { name, location, about, website, cover_image } = normalizeProfile(account)
         const website_label = website ? website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '') : null
+
+        let cover_image_style = {}
+        if(cover_image) {
+            const cover_image_url = $STM_Config.img_proxy_prefix ? $STM_Config.img_proxy_prefix + '0x0' + '/' + cover_image : null
+            cover_image_style = {backgroundImage: "url(" + cover_image_url + ")"}
+        }
 
         return (
             <div className="UserProfile">
 
                 <div className="UserProfile__banner row expanded">
 
-                    <div className="column">
+                    <div className="column" style={cover_image_style}>
                         <div style={{position: "relative"}}>
                             <div className="UserProfile__buttons hide-for-small-only">
                                 <Follow follower={username} following={accountname} />

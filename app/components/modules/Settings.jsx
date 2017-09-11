@@ -12,7 +12,6 @@ import reactForm from 'app/utils/ReactForm'
 import UserList from 'app/components/elements/UserList';
 import cookie from "react-cookie";
 
-
 class Settings extends React.Component {
 
     constructor(props) {
@@ -31,10 +30,11 @@ class Settings extends React.Component {
         reactForm({
             instance: this,
             name: 'accountSettings',
-            fields: ['profile_image', 'name', 'about', 'location', 'website'],
+            fields: ['profile_image', 'cover_image', 'name', 'about', 'location', 'website'],
             initialValues: props.profile,
             validation: values => ({
                 profile_image: values.profile_image && !/^https?:\/\//.test(values.profile_image) ? tt('settings_jsx.invalid_url') : null,
+                cover_image: values.cover_image && !/^https?:\/\//.test(values.cover_image) ? tt('settings_jsx.invalid_url') : null,
                 name: values.name && values.name.length > 20 ? tt('settings_jsx.name_is_too_long') : values.name && /^\s*@/.test(values.name) ? tt('settings_jsx.name_must_not_begin_with') : null,
                 about: values.about && values.about.length > 160 ? tt('settings_jsx.about_is_too_long') : null,
                 location: values.location && values.location.length > 30 ? tt('settings_jsx.location_is_too_long') : null,
@@ -95,10 +95,11 @@ class Settings extends React.Component {
         if(!metaData.profile) metaData.profile = {}
         delete metaData.user_image; // old field... cleanup
 
-        const {profile_image, name, about, location, website} = this.state
+        const {profile_image, cover_image, name, about, location, website} = this.state
 
         // Update relevant fields
         metaData.profile.profile_image = profile_image.value
+        metaData.profile.cover_image = cover_image.value
         metaData.profile.name = name.value
         metaData.profile.about = about.value
         metaData.profile.location = location.value
@@ -106,6 +107,7 @@ class Settings extends React.Component {
 
         // Remove empty keys
         if(!metaData.profile.profile_image) delete metaData.profile.profile_image;
+        if(!metaData.profile.cover_image) delete metaData.profile.cover_image;
         if(!metaData.profile.name) delete metaData.profile.name;
         if(!metaData.profile.about) delete metaData.profile.about;
         if(!metaData.profile.location) delete metaData.profile.location;
@@ -152,7 +154,7 @@ class Settings extends React.Component {
         const {submitting, valid, touched} = this.state.accountSettings
         const disabled = !props.isOwnAccount || state.loading || submitting || !valid || !touched
 
-        const {profile_image, name, about, location, website} = this.state
+        const {profile_image, cover_image, name, about, location, website} = this.state
 
         const {follow, account, isOwnAccount} = this.props
         const following = follow && follow.getIn(['getFollowingAsync', account.name]);
@@ -175,13 +177,13 @@ class Settings extends React.Component {
             <div className="row">
                 <form onSubmit={this.handleSubmitForm} className="small-12 medium-6 large-4 columns">
                     <h3>{tt('settings_jsx.public_profile_settings')}</h3>
-                    {/* CHOOSE LANGUAGE */}
+                    
                     <label>
                         {tt('settings_jsx.choose_language')}
                         {languageSelectBox}
                     </label>
                     <div className="error"></div>
-                    {/* CHOOSE CURRENCY */}
+                    
                     <label>{tt('settings_jsx.choose_currency')}
                         <select defaultValue={process.env.BROWSER ? localStorage.getItem('xchange.picked') : DEFAULT_CURRENCY} onChange={this.onCurrencyChange}>
                             {
@@ -191,17 +193,24 @@ class Settings extends React.Component {
                             }
                         </select>
                     </label>
-                    {/* CHOOSE THEME */}
+                    
                     <label>
                         {tt('settings_jsx.choose_theme')}
                         {themeSelectBox}
                     </label>
                     <div className="error"></div>
+
                     <label>
                         {tt('settings_jsx.profile_image_url')}
                         <input type="url" {...profile_image.props} autoComplete="off" />
                     </label>
                     <div className="error">{profile_image.blur && profile_image.touched && profile_image.error}</div>
+
+                    <label>
+                        {tt('settings_jsx.cover_image_url')}
+                        <input type="url" {...cover_image.props} autoComplete="off" />
+                    </label>
+                    <div className="error">{cover_image.blur && cover_image.touched && cover_image.error}</div>
 
                     <label>
                         {tt('settings_jsx.profile_name')}
@@ -254,7 +263,13 @@ class Settings extends React.Component {
                             <option value="show">{tt('settings_jsx.always_show')}</option>
                         </select>
                         <br /><br />
-                        <input type="submit" onClick={this.onNsfwPrefSubmit} className="button" value={tt('settings_jsx.update')} disabled={this.state.nsfwPref == this.state.oldNsfwPref} />
+                        <input 
+                            type="submit"
+                            onClick={this.onNsfwPrefSubmit}
+                            className="button"
+                            value={tt('settings_jsx.update')}
+                            disabled={this.state.nsfwPref == this.state.oldNsfwPref}
+                        />
                     </div>
                 </div>}
             {ignores && ignores.size > 0 &&

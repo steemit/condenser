@@ -721,6 +721,7 @@
     "muted_users": "Заблокированные пользователи",
     "update": "Обновить",
     "profile_image_url": "Добавьте URL Вашего изображения",
+    "cover_image_url": "Добавьте URL Вашей обложки",
     "profile_name": "Отображаемое имя",
     "profile_about": "О проекте",
     "profile_location": "Местоположение",

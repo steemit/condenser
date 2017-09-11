@@ -124,46 +124,6 @@ class AuthorRewards extends React.Component {
                 </div>
             </div>
 
-            {/*  -- These estimates have been causing issus, see #600 --
-            <div className="UserWallet__balance UserReward__row row">
-                <div className="column small-12 medium-8">
-                    {tt('author_rewards_last_24_hours')}:
-                </div>
-                <div className="column small-12 medium-4">
-                    {numberWithCommas(vestsToSp(this.props.state, rewards24Vests + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
-                    <br />
-                    {rewards24Steem.toFixed(3) + " " + LIQUID_TICKER}
-                    <br />
-                    {rewards24SBD.toFixed(3) + " " + DEBT_TOKEN_SHORT}
-                </div>
-            </div>
-
-            <div className="UserWallet__balance UserReward__row row">
-                <div className="column small-12 medium-8">
-                    {tt('authorrewards_jsx.daily_average_author_rewards')}
-                </div>
-                <div className="column small-12 medium-4">
-                    {numberWithCommas(vestsToSp(this.props.state, averageCurationVests + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
-                    <br />
-                    {averageCurationSteem.toFixed(3) + " " + LIQUID_TICKER}
-                    <br />
-                    {averageCurationSBD.toFixed(3) + " " + DEBT_TOKEN_SHORT}
-                </div>
-            </div>
-            <div className="UserWallet__balance UserReward__row row">
-                <div className="column small-12 medium-8">
-                    {tt(!hasFullWeek ? 'estimated_author_rewards_last_week' : 'author_rewards_last_week')}:
-                </div>
-                <div className="column small-12 medium-4">
-                    {numberWithCommas(vestsToSp(this.props.state, (hasFullWeek ? rewardsWeekVests : averageCurationVests * 7) + " " + VEST_TICKER)) + " " + VESTING_TOKEN}
-                    <br />
-                    {(hasFullWeek ? rewardsWeekSteem : averageCurationSteem * 7).toFixed(3) + " " + LIQUID_TICKER}
-                    <br />
-                    {(hasFullWeek ? rewardsWeekSBD : averageCurationSBD * 7).toFixed(3) + " " + DEBT_TOKEN_SHORT}
-                </div>
-            </div>
-            */}
-
             <div className="row">
                 <div className="column small-12">
                     <hr />

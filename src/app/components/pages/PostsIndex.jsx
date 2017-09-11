@@ -116,7 +116,7 @@ class PostsIndex extends React.Component {
                 </div>
                 <div className="PostsIndex__topics column shrink show-for-large">
                     <Topics order={topics_order} current={category} compact={false} />
-                    <small><a onClick={this.onShowSpam}>{tt(showSpam ? 'g.next_3_strings_together.show_less' : 'g.next_3_strings_together.show_more')}</a>{' ' + tt('g.next_3_strings_together.value_posts')}</small>
+                    <small><a onClick={this.onShowSpam}>{showSpam ? tt('g.next_3_strings_together.show_less') : tt('g.next_3_strings_together.show_more')}</a>{' ' + tt('g.next_3_strings_together.value_posts')}</small>
                 </div>
             </div>
         );

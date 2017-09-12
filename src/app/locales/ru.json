@@ -801,7 +801,7 @@
     "balance": "Баланс",
     "from": "От",
     "to": "Кому",
-    "asset_currently_collecting": "%(asset) currently collecting %(interest)% APR."
+    "asset_currently_collecting": "%(asset)s currently collecting %(interest)s%% APR."
   },
   "userwallet_jsx": {
     "conversion_complete_tip": "Завершается",

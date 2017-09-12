@@ -182,7 +182,7 @@ function proxifyImages(doc) {
     [...doc.getElementsByTagName('img')].forEach(node => {
         const url = node.getAttribute('src')
         if(! linksRe.local.test(url))
-            node.setAttribute('src', proxifyImageUrl(url, '0x0'))
+            node.setAttribute('src', proxifyImageUrl(url, true))
     })
 }
 

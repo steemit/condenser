@@ -50,7 +50,7 @@ function runApp(initial_state) {
             default :
                 return 'That command is not supported.';
         }
-        return 'done';
+        //return 'done';
     }
 
     const enableKonami = () => {

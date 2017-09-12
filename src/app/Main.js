@@ -13,6 +13,10 @@ window.onerror = error => {
     if (window.$STM_csrf) serverApiRecordEvent('client_error', error);
 };
 
+const CMD_LOG_T = 'log-t'
+const CMD_LOG_TOGGLE = 'log-toggle'
+const CMD_LOG_O = 'log-on'
+
 try {
     if(process.env.NODE_ENV === 'development') {
         // Adds some object refs to the global window object
@@ -24,26 +28,52 @@ try {
 
 function runApp(initial_state) {
     console.log('Initial state', initial_state);
-
     const konami = {
         code: 'xyzzy',
         enabled: false
     };
     const buff = konami.code.split('');
+    const cmd = (command) => {
+        console.log('got command:' + command);
+        switch (command) {
+            case CMD_LOG_O :
+                konami.enabled = false;
+            case CMD_LOG_TOGGLE :
+            case CMD_LOG_T :
+                konami.enabled = !konami.enabled;
+                console.log('api logging ' + konami.enabled)
+                if(konami.enabled) {
+                    steem.api.setOptions({logger: console});
+                } else {
+                    steem.api.setOptions({logger: false});
+                }
+                break;
+            default :
+                console.log('That command is not supported.');
+        }
+    }
+
+    const enableKonami = () => {
+        if(!window.cmd) {
+            console.log('The cupie doll is yours.');
+            window.s = cmd;
+        }
+    }
 
     window.document.body.onkeypress = (e) => {
         buff.shift()
         buff.push(e.key)
         if(buff.join('') === konami.code) {
-            konami.enabled = !konami.enabled;
-            console.log("The cupie doll is " + ((konami.enabled)? '': 'not ') + "yours.\nSetting konami.enabled " + konami.enabled);
-            if(konami.enabled) {
-                steem.api.setOptions({logger: console});
-            } else {
-                steem.api.setOptions({logger: false});
-            }
+            enableKonami();
+            cmd(CMD_LOG_T)
         }
     };
+
+    if(window.location.hash.indexOf('#'+konami.code) === 0) {
+        enableKonami()
+        cmd('konami-on')
+    }
+
     const config = initial_state.offchain.config
     steem.api.setOptions({ url: config.steemd_connection_client });
     steem.config.set('address_prefix', config.address_prefix);

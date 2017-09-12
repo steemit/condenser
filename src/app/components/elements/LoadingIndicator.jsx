@@ -6,11 +6,13 @@ class LoadingIndicator extends React.Component {
         // html component attributes
         type: React.PropTypes.oneOf(['dots', 'circle']),
         inline: React.PropTypes.bool,
-        style: React.PropTypes.object
+        style: React.PropTypes.object,
+        spinnerStyle: React.PropTypes.object
     };
 
     static defaultProps = {
-        style: {}
+        style: {},
+        spinnerStyle: {}
     };
 
     constructor(props) {
@@ -19,7 +21,7 @@ class LoadingIndicator extends React.Component {
     }
 
     render() {
-        const {type, inline, style} = this.props;
+        const {type, inline, style, spinnerStyle} = this.props;
         switch (type) {
             case 'dots':
                 return (
@@ -32,7 +34,7 @@ class LoadingIndicator extends React.Component {
             case 'circle':
                 return  (
                     <div style={style} className={'LoadingIndicator circle' + (inline ? ' inline' : '')}>
-                        <div></div>
+                        <div style={spinnerStyle}></div>
                     </div>
                 );
             default:

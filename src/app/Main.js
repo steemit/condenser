@@ -41,22 +41,22 @@ function runApp(initial_state) {
             case CMD_LOG_TOGGLE :
             case CMD_LOG_T :
                 konami.enabled = !konami.enabled;
-                console.log('api logging ' + konami.enabled)
                 if(konami.enabled) {
                     steem.api.setOptions({logger: console});
                 } else {
                     steem.api.setOptions({logger: false});
                 }
-                break;
+                return 'api logging ' + konami.enabled;
             default :
-                console.log('That command is not supported.');
+                return 'That command is not supported.';
         }
+        return 'done';
     }
 
     const enableKonami = () => {
-        if(!window.cmd) {
+        if(!window.s) {
             console.log('The cupie doll is yours.');
-            window.s = cmd;
+            window.s = (command) => { return cmd.call(this, command) };
         }
     }
 
@@ -71,7 +71,7 @@ function runApp(initial_state) {
 
     if(window.location.hash.indexOf('#'+konami.code) === 0) {
         enableKonami()
-        cmd('konami-on')
+        cmd(CMD_LOG_O)
     }
 
     const config = initial_state.offchain.config

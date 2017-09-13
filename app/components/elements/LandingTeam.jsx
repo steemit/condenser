@@ -118,6 +118,10 @@ export default class LandingTeam extends React.Component {
                 </div>
                 <strong>Мария Дьячук</strong>
                 <p>Аккаунт-менеджер</p>
+                <ul>
+                    <li><a href="mailto:mariacore@golos.io" title="mail to mariacore@golos.io"><Icon name="envelope" size="2x" /></a></li>
+                    <li><a href="/@mariadia"><Icon name={APP_ICON} size="2x" /></a></li>
+                </ul>
             </div>
 
             <div data-wow-delay="1s" className="wow fadeIn small-12 medium-4 large-3 columns small-centered Team__member Team__member__pavel">

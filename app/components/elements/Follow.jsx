@@ -45,8 +45,8 @@ export default class Follow extends React.Component {
         const upd = (type, msg) => {
             if(this.state.busy) return;
 
-            const c = !msg || !confirm || confirm(msg)
-            if (!c) return
+            // const c = !msg || !confirm || confirm(msg)
+            // if (!c) return
 
             this.setState({busy: true});
             const done = () => {this.setState({busy: false})};

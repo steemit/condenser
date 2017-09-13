@@ -61,13 +61,14 @@ export default function extractMeta(chain_data, rp) {
         }
     } else if (rp.accountname) { // user profile root
         const account = chain_data.accounts[rp.accountname];
+        const accountname = account && account.name && account.name || '';
         let {name, about, profile_image} = normalizeProfile(account);
-        if(name == null) name = account.name;
+        if(name == null) name = accountname;
         if(about == null) about = "Join thousands on Golos.io who share, post and earn rewards.";
         if(profile_image == null) profile_image = TWITTER_SHARE_IMAGE;
         // Set profile tags
-        const title = `@${account.name}`;
-        const desc  = `The latest posts from ${name}. Follow me at @${account.name}. ${about}`;
+        const title = `@${accountname}`;
+        const desc  = `The latest posts from ${name}. Follow me at @${accountname}. ${about}`;
         const image = profile_image;
 
         // Standard meta

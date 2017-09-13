@@ -273,27 +273,8 @@
     "share_on_facebook": "Share on Facebook",
     "share_on_twitter": "Share on Twitter",
     "share_on_linkedin": "Share on Linkedin",
-    "share": "Share",
-    "transfer_amount_to_VESTING_TOKEN": "Transfer %(amount)s to %(VESTING_TOKEN)s",
-    "transfer_amount_VESTING_TOKEN_to": "Transfer %(amount)s %(VESTING_TOKEN)s to",
-    "recieve_amount_VESTING_TOKEN_from": "Receive %(amount)s %(VESTING_TOKEN)s from",
-    "transfer_amount_VESTING_TOKEN_from_to": "Transfer %(amount)s %(VESTING_TOKEN)s from %(from)s to",
-    "transfer_amount_to": "Transfer %(amount)s to",
-    "recieve_amount_from": "Receive %(amount)s from",
-    "transfer_amount_from": "Transfer %(amount)s from",
-    "stop_power_down": "Stop power down",
-    "curation_reward_of_VESTING_TOKEN_for": "Curation reward of %(reward)s %(VESTING_TOKEN)s for",
-    "author_reward_of_VESTING_TOKEN_for": "Author reward of %(payout)s and %(reward)s %(VESTING_TOKEN)s for",
-    "recieve_interest_of": "Receive interest of %(interest)s",
     "recent_password": "Recent Password",
-    "your_password_permissions_were_reduced": "Your password permissions were reduced",
-    "if_you_did_not_make_this_change": "If you did not make this change please",
-    "owhership_changed_on": "Ownership Changed On ",
-    "deadline_for_recovery_is": "Deadline for recovery is",
-    "i_understand_dont_show_again": "I understand, don't show me again",
-    "insufficient_balance": "Insufficient balance",
     "in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN": "In 3.5 days, convert %(amount)s %(DEBT_TOKEN)s into %(LIQUID_TOKEN)s",
-    "account_name_is_not_available": "Account name is not available",
     "view_the_full_context": "View the full context",
     "view_the_direct_parent": "View the direct parent",
     "you_are_viewing_a_single_comments_thread_from": "You are viewing a single comment's thread from"
@@ -757,5 +738,13 @@
     "history": "HISTORY",
     "redeem_rewards": "Redeem Rewards (Transfer to Balance)",
     "buy_steem_or_steem_power": "Buy STEEM or STEEM POWER"
+  },
+  "checkloginowner_jsx": {
+    "your_password_permissions_were_reduced": "Your password permissions were reduced",
+    "if_you_did_not_make_this_change": "If you did not make this change please",
+    "ownership_changed_on": "Ownership Changed On ",
+    "deadline_for_recovery_is": "Deadline for recovery is",
+    "i_understand_dont_show_again": "I understand, don't show me again",
+    "in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN": "In 3.5 days, convert %(amount)s %(DEBT_TOKEN)s into %(LIQUID_TOKEN)s"
   }
 }

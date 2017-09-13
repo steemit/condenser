@@ -230,7 +230,7 @@ class RecoverAccountStep1 extends React.Component {
                         <div className="column large-4">
                             {
                                 email_submitted
-                                    ? <FormattedHTMLMessage id="recoveraccountstep1_jsx.thanks_for_submitting_request_for_account_recovery" params={{APP_NAME}} />
+                                    ? tt('recoveraccountstep1_jsx.thanks_for_submitting_request_for_account_recovery', {APP_NAME})
                                     : <form onSubmit={this.onSubmitEmail} noValidate>
                                     <p>{tt('recoveraccountstep1_jsx.enter_email_toverify_identity')}</p>
                                     <div className={email_error ? 'column large-4 shrink error' : 'column large-4 shrink'}>

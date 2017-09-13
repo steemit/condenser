@@ -314,7 +314,7 @@
     "login_with_social_media_to_verify_identity": "Please login with %(provider)s to verify your identity",
     "enter_email_toverify_identity": "We need to verify your identity. Please enter your email address below to begin the verification.",
     "continue_with_email": "Continue with Email",
-    "thanks_for_submitting_request_for_account_recovery": "<p>Thanks for submitting your request for Account Recovery using %(APP_NAME)s's blockchain-based multi factor authentication.</p> <p>We will respond to you as quickly as possible, however, please expect there may be some delay in response due to high volume of emails.</p> <p>Please be prepared to verify your identity.</p> <p>Regards,</p> <p>Ned Scott</p> <p>CEO Steemit</p>",
+    "thanks_for_submitting_request_for_account_recovery": "Thanks for submitting your request for Account Recovery using %(APP_NAME)s's blockchain-based multi factor authentication. We will respond to you as quickly as possible, however, please expect there may be some delay in response due to high volume of emails. Please be prepared to verify your identity.",
     "recovering_account": "Recovering account",
     "recover_account": "Recover Account",
     "checking_account_owner": "Checking account owner",
@@ -328,13 +328,6 @@
     "user_hasnt_started_bloggin_yet": "Looks like %(name)s hasn't started blogging yet!",
     "user_hasnt_followed_anything_yet": "Looks like %(name)s might not be following anyone yet! If %(name)s recently added new users to follow, their personalized feed will populate once new content is available.",
     "user_hasnt_had_any_replies_yet": "%(name)s hasn't had any replies yet",
-    "users_blog": "%(name)s's blog",
-    "users_posts": "%(name)s's posts",
-    "users_wallet": "%(name)s's wallet",
-    "users_curation_rewards": "%(name)s's curation rewards",
-    "users_author_rewards": "%(name)s's author rewards",
-    "users_permissions": "%(name)s's permissions",
-    "recent_replies_to_users_posts": "Recent replies to %(name)s's posts",
     "followers": "Followers",
     "this_is_users_reputations_score_it_is_based_on_history_of_votes": "This is %(name)s's reputation score.\n\nThe reputation score is based on the history of votes received by the account, and is used to hide low quality content.",
     "follower_count": {
@@ -358,29 +351,13 @@
     "author_rewards_history": "Author Rewards History"
   },
   "curationrewards_jsx": {
-    "curation_rewards_last_24_hours": "Curation rewards last 24 hours",
-    "daily_average_curation_rewards": "Daily average curation rewards",
     "estimated_curation_rewards_last_week": "Estimated curation rewards last week",
-    "curation_rewards_last_week": "Curation rewards last week",
     "curation_rewards_history": "Curation Rewards History"
   },
   "post_jsx": {
     "now_showing_comments_with_low_ratings": "Now showing comments with low ratings",
     "sort_order": "Sort Order",
-    "comments_were_hidden_due_to_low_ratings": "Comments were hidden due to low ratings",
-    "we_will_be_unable_to_create_account_with_this_browser": "We will be unable to create your %(APP_NAME)s account with this browser",
-    "you_need_to_logout_before_creating_account": "You need to %(logoutLink)s before you can create another account",
-    "APP_NAME_can_only_register_one_account_per_verified_user": "Please note that %(APP_NAME)s can only register one account per verified user",
-    "couldnt_create_account_server_returned_error": "Couldn't create account. Server returned the following error",
-    "form_requires_javascript_to_be_enabled": "This form requires javascript to be enabled in your browser",
-    "our_records_indicate_you_already_have_account": "Our records indicate that you already have %(APP_NAME)s account",
-    "to_prevent_abuse_APP_NAME_can_only_register_one_account_per_user": "In order to prevent abuse (each registered account costs %(amount)s in %(LIQUID_TOKEN)s) %(APP_NAME)s can only register one account per verified user.",
-    "next_3_blocks": {
-      "you_can_either": "You can either",
-      "to_your_existing_account_or": "to your existing account or",
-      "if_you_need_a_new_account": "if you need a new account"
-    },
-    "send_us_email": "send us email"
+    "comments_were_hidden_due_to_low_ratings": "Comments were hidden due to low ratings"
   },
   "voting_jsx": {
     "stop_seeing_content_from_this_user": "Stop seeing content from this user",

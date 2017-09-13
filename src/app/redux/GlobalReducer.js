@@ -73,7 +73,7 @@ export default function reducer(state = defaultState, action) {
     }
 
     if (action.type === 'global/LINK_REPLY') {
-        const {author, permlink, parent_author = '', parent_permlink = ''} = payload.op;
+        const {author, permlink, parent_author = '', parent_permlink = ''} = payload;
         if (parent_author === '' || parent_permlink === '') return state;
         const key = author + '/' + permlink;
         const parent_key = parent_author + '/' + parent_permlink;

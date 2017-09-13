@@ -42,7 +42,6 @@ class PromotePost extends Component {
         const {author, permlink, onClose} = this.props
         const {amount} = this.state
         this.setState({loading: true});
-        console.log('-- PromotePost.onSubmit -->');
         this.props.dispatchSubmit({amount, asset: DEBT_TICKER, author, permlink, onClose,
             currentUser: this.props.currentUser, errorCallback: this.errorCallback});
     }

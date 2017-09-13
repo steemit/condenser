@@ -180,7 +180,7 @@ class RecoverAccountStep1 extends React.Component {
                             <br />
                             <div className="error">{error}</div>
                             {progress_status ? <span><LoadingIndicator type="circle" inline /> {progress_status}</span>
-                        : <input disabled={!valid} type="submit" className={submit_btn_class} value= {tt('voting_jsx.begin_recovery')} />}
+                        : <input disabled={!valid} type="submit" className={submit_btn_class} value= {tt('recoveraccountstep1_jsx.begin_recovery')} />}
                         </form>
                     </div>
                 </div>}

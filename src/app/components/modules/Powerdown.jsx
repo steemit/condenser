@@ -49,18 +49,27 @@ class Powerdown extends React.Component {
 
         const notes = []
         if (to_withdraw !== 0) {
+            const AMOUNT = formatSp(to_withdraw)
+            const WITHDRAWN = formatSp(withdrawn)
             notes.push(
-                <li>
-                    You are already powering down {formatSp(to_withdraw)} {LIQUID_TICKER} ({formatSp(withdrawn)} {LIQUID_TICKER} paid out so far).
-                    Note that if you change the power down amount the payout schedule will reset.
+                <li key="already_power_down">
+                    {tt('powerdown_jsx.already_power_down', {AMOUNT, WITHDRAWN, LIQUID_TICKER})}
                 </li>
             )
         }
         if (delegated_vesting_shares !== 0) {
+            const AMOUNT = formatSp(delegated_vesting_shares)
             notes.push(
-                <li>
-                    You are delegating {formatSp(delegated_vesting_shares)} {LIQUID_TICKER}, those are locked up and not
-                    available to power down until the delgation is removed and a full reward period has passed.
+                <li key="delegating">
+                    {tt('powerdown_jsx.delegating', {AMOUNT, LIQUID_TICKER})}
+                </li>
+            )
+        }
+        if (notes.length === 0) {
+            const AMOUNT = Math.floor(vestsToSpf(this.props.state, new_withdraw) / 13)
+            notes.push(
+                <li key="per_week">
+                    {tt('powerdown_jsx.per_week', {AMOUNT, LIQUID_TICKER})}
                 </li>
             )
         }
@@ -77,7 +86,7 @@ class Powerdown extends React.Component {
                     onChange={sliderChange}
                 />
                 <p className="powerdown-amount">
-                    {tt('powerdown_jsx.power_down_amount')}:
+                    {tt('powerdown_jsx.amount')}<br />
                     <input
                         value={manual_entry ? manual_entry : formatSp(new_withdraw)}
                         onChange={inputChange}
@@ -85,7 +94,7 @@ class Powerdown extends React.Component {
                     {LIQUID_TICKER}
                 </p>
                 <ul className="powerdown-notes">{notes}</ul>
-                <button type="submit" className="button float-right" onClick={powerDown} disabled={broadcasting}>{tt('powerdown_jsx.power_down')}</button>
+                <button type="submit" className="button" onClick={powerDown} disabled={broadcasting}>{tt('powerdown_jsx.power_down')}</button>
             </div>
         )
      }

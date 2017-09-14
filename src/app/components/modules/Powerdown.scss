@@ -5,9 +5,18 @@
   .powerdown-amount {
     margin: 18px;
     input {
-      margin: 0 10px;
+      margin-top: 10px;
+      margin-right: 10px;
       width: 30%;
     }
+  }
+
+  li + li {
+    margin-top: 10px;
+  }
+
+  .button.button {
+    margin: 14px;
   }
 
   .powerdown-notes {

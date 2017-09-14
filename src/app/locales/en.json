@@ -767,8 +767,9 @@
   },
   "powerdown_jsx": {
     "power_down": "Power Down",
-    "power_down_amount": "Power Down Amount",
-    "confirm_power_down": "Confirm Power Down",
-    "confirm": "confirm"
+    "amount": "Amount",
+    "already_power_down": "You are already powering down %(AMOUNT)s %(LIQUID_TICKER)s. (%(WITHDRAWN)s %(LIQUID_TICKER)s paid out so far). Note that if you change the power down amount the payout schedule will reset.",
+    "delegating": "You are delegating %(AMOUNT)s %(LIQUID_TICKER)s, those are locked up and not available to power down until the delgation is removed and a full reward period has passed.",
+    "per_week": "That's ~%(AMOUNT)s %(LIQUID_TICKER)s per week."
   }
 }

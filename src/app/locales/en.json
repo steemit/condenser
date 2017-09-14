@@ -729,7 +729,7 @@
     "send_to_account": "Send to account",
     "asset": "Asset",
     "this_memo_is_private": "This memo is private",
-    "this_memo_is_public": "This memo is public",
+    "this_memo_is_public": "This memo is public (Start with # for private memo)",
     "power_up": "Power Up",
     "submit": "Submit",
     "basic": "Basic",

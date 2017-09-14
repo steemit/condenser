@@ -1,6 +1,7 @@
 import xmldom from 'xmldom'
 import linksRe from 'app/utils/Links'
 import {validate_account_name} from 'app/utils/ChainValidation'
+import proxifyImageUrl from 'app/utils/ProxifyUrl'
 
 const noop = () => {}
 const DOMParser = new xmldom.DOMParser({
@@ -69,8 +70,10 @@ const XMLSerializer = new xmldom.XMLSerializer()
 // }
 
 /** Embed videos, link mentions and hashtags, etc...
+    If hideImages and mutate is set to true all images will be replaced
+    by <pre> elements containing just the image url.
 */
-export default function (html, {mutate = true} = {}) {
+export default function (html, {mutate = true, hideImages = false} = {}) {
     const state = {mutate}
     state.hashtags = new Set()
     state.usertags = new Set()
@@ -80,7 +83,18 @@ export default function (html, {mutate = true} = {}) {
     try {
         const doc = DOMParser.parseFromString(html, 'text/html')
         traverse(doc, state)
-        if(mutate) proxifyImages(doc)
+        if(mutate) {
+            if (hideImages) {
+                for (const image of Array.from(doc.getElementsByTagName('img'))) {
+                    const pre = doc.createElement('pre')
+                    pre.setAttribute('class', 'image-url-only')
+                    pre.appendChild(doc.createTextNode(image.getAttribute('src')))
+                    image.parentNode.replaceChild(pre, image)
+                }
+            } else {
+                proxifyImages(doc)
+            }
+        }
         // console.log('state', state)
         if(!mutate) return state
         return {html: (doc) ? XMLSerializer.serializeToString(doc) : '', ...state}
@@ -164,12 +178,11 @@ function img(state, child) {
 
 // For all img elements with non-local URLs, prepend the proxy URL (e.g. `https://img0.steemit.com/0x0/`)
 function proxifyImages(doc) {
-    if (!$STM_Config.img_proxy_prefix) return
     if (!doc) return;
     [...doc.getElementsByTagName('img')].forEach(node => {
         const url = node.getAttribute('src')
         if(! linksRe.local.test(url))
-            node.setAttribute('src', $STM_Config.img_proxy_prefix + '0x0/' + url)
+            node.setAttribute('src', proxifyImageUrl(url, true))
     })
 }
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import {recordPageView} from 'app/utils/ServerApiClient';
 import Icon from 'app/components/elements/Icon';
-import pluralize from 'pluralize';
 import tt from 'counterpart';
 
 export default class PageViewsCounter extends React.Component {
@@ -43,7 +42,7 @@ export default class PageViewsCounter extends React.Component {
         const views = this.state.views;
         if (this.props.hidden || !views) return null;
         const suffix = this.props.sinceDate ? tt('g.since') + this.props.sinceDate : '';
-        return <span className="PageViewsCounter" title={pluralize('Views', views, true) + suffix}>
+        return <span className="PageViewsCounter" title={tt('g.views', {count: views}) + suffix}>
             <Icon name="eye" /> {views.toLocaleString()}
         </span>;
     }

@@ -247,7 +247,7 @@ class Market extends React.Component {
             const rows = open_orders && normalizeOpenOrders(open_orders).map( o =>
               <tr key={o.orderid}>
                   <td>{o.created.replace('T', ' ')}</td>
-                  <td>{tt(o.type == 'g.ask' ? 'g.sell' : 'g.buy')}</td>
+                  <td>{o.type == 'g.ask' ? tt('g.sell') : tt('g.buy')}</td>
                   <td>{CURRENCY_SIGN}{o.price.toFixed(6)}</td>
                   <td>{o.steem}</td>
                   <td>{o.sbd.replace('SBD', DEBT_TOKEN_SHORT)}</td>
@@ -577,14 +577,16 @@ module.exports = {
                 String(parseFloat(min_to_receive).toFixed(3)))
 
             const isSell = amount_to_sell.indexOf(LIQUID_TICKER) > 0;
-            const confirmStr = tt(isSell
-                                ? 'market_jsx.sell_amount_for_atleast'
-                                : 'market_jsx.buy_atleast_amount_for',
-                                {amount_to_sell, min_to_receive, effectivePrice}
-                            )
+            const confirmStr = isSell ?
+                    tt('market_jsx.sell_amount_for_atleast', {amount_to_sell, min_to_receive, effectivePrice})
+                    : tt('market_jsx.buy_atleast_amount_for', {amount_to_sell, min_to_receive, effectivePrice})
             const successMessage = tt('g.order_placed') + ': ' + confirmStr
             const confirm = confirmStr + '?'
-            const warning = priceWarning ? tt('market_jsx.price_warning_'+(isSell ? "below" : "above"), {marketPrice: CURRENCY_SIGN + parseFloat(marketPrice).toFixed(4) + "/" + LIQUID_TOKEN_UPPERCASE}) : null;
+            let warning = null;
+            if (priceWarning) {
+                const warning_args = {marketPrice: CURRENCY_SIGN + parseFloat(marketPrice).toFixed(4) + "/" + LIQUID_TOKEN_UPPERCASE};
+                warning = isSell ? tt('market_jsx.price_warning_below', warning_args) : tt('market_jsx.price_warning_above', warning_args);
+            }
             const orderid = Math.floor(Date.now() / 1000)
             dispatch(transaction.actions.broadcastOperation({
                 type: 'limit_order_create',

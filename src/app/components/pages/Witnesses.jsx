@@ -133,7 +133,7 @@ class Witnesses extends React.Component {
                         </p>}
                     </div>
                 </div>
-                {current_proxy && current_proxy.length ? null :
+                {current_proxy ? null :
                 <div className="row small-collapse">
                     <div className="column">
                         <table>
@@ -151,7 +151,7 @@ class Witnesses extends React.Component {
                     </div>
                 </div>}
 
-                {current_proxy && current_proxy.length ? null :
+                {current_proxy ? null :
                 <div className="row">
                     <div className="column">
                         <p>{tt('witnesses_jsx.if_you_want_to_vote_outside_of_top_enter_account_name')}.</p>
@@ -172,10 +172,10 @@ class Witnesses extends React.Component {
 
                 <div className="row">
                     <div className="column">
-                        <p>{tt(current_proxy && current_proxy.length ? 'witnesses_jsx.witness_set' : 'witnesses_jsx.set_witness_proxy', {proxy: current_proxy})}</p>
-                        {current_proxy && current_proxy.length ?
+                        <p>{current_proxy ? tt('witnesses_jsx.witness_set') : tt('witnesses_jsx.set_witness_proxy')}</p>
+                        {current_proxy ?
                         <div>
-                            <div style={{paddingBottom: 10}}>{tt('witnesses_jsx.witness_proxy_current')}: <strong>{}</strong></div>
+                            <div style={{paddingBottom: 10}}>{tt('witnesses_jsx.witness_proxy_current')}: <strong>{current_proxy}</strong></div>
 
                             <form>
                                 <div className="input-group">

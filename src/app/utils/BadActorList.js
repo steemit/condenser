@@ -85,12 +85,14 @@ changely
 shapeshif
 shapeshift
 randomwhale
+randowale
 coinpayments
 minnowboost
 minnowboster
 minowbooster
 blocktades
 bloocktrades
+bloctrades
 `.trim().split('\n');
 
 export default list;

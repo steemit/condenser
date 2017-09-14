@@ -383,7 +383,7 @@ class ReplyEditor extends React.Component {
                                 <p className="drag-and-drop">
                                     {tt('reply_editor.insert_images_by_dragging_dropping')}
                                     {noClipboardData ? '' : tt('reply_editor.pasting_from_the_clipboard')}
-                                    {tt('g.or') + " " + tt('g.by') + " "}<a onClick={this.onOpenClick}>{tt('reply_editor.selecting_them')}</a>.
+                                    {tt('reply_editor.or_by')} <a onClick={this.onOpenClick}>{tt('reply_editor.selecting_them')}</a>.
                                 </p>
                                 }
                                 {progress.message && <div className="info">{progress.message}</div>}
@@ -416,7 +416,7 @@ class ReplyEditor extends React.Component {
 
                             {isStory && !isEdit && <div className="ReplyEditor__options float-right text-right">
 
-                                {tt('g.rewards')}:&nbsp;
+                                {tt('g.rewards')} &nbsp;
                                 <select value={this.state.payoutType} onChange={this.onPayoutTypeChange} style={{color: this.state.payoutType == '0%' ? 'orange' : 'inherit'}}>
                                     <option value="100%">{tt('reply_editor.power_up_100')}</option>
                                     <option value="50%">{tt('reply_editor.default_50_50')}</option>
@@ -425,7 +425,7 @@ class ReplyEditor extends React.Component {
 
                                 <br />
                                 <label title={tt('reply_editor.check_this_to_auto_upvote_your_post')}>
-                                    {tt('g.upvote_post')}&nbsp;
+                                    {tt('g.upvote_post')} &nbsp;
                                     <input type="checkbox" checked={autoVote.value} onChange={autoVoteOnChange} />
                                 </label>
                             </div>}
@@ -598,8 +598,8 @@ export default formId => connect(
             }
 
             if(meta.tags.length > 5) {
-                const includingCategory = isEdit ? ` (including the category '${rootCategory}')` : ''
-                errorCallback(`You have ${meta.tags.length} tags total${includingCategory}.  Please use only 5 in your post and category line.`)
+                const includingCategory = isEdit ? tt('reply_editor.including_the_category', {rootCategory}) : ''
+                errorCallback(tt('reply_editor.use_limited_amount_of_tags', {tagsLength: meta.tags.length, includingCategory}))
                 return
             }
 

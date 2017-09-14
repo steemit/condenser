@@ -488,8 +488,6 @@
     "start_power_down_of": "Start power down of",
     "receive_interest_of": "Receive interest of"
   },
-  "reblog_jsx": {
-  },
   "savingswithdrawhistory_jsx": {
     "cancel_this_withdraw_request": "Cancel this withdraw request?",
     "pending_savings_withdrawals": "PENDING SAVINGS WITHDRAWS",

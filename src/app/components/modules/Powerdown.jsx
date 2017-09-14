@@ -66,7 +66,7 @@ class Powerdown extends React.Component {
         }
 
         return (
-            <div>
+            <div className="PowerdownModal">
                 <div className="row">
                     <h3 className="column">{tt('powerdown_jsx.power_down')} {broadcasting}</h3>
                 </div>

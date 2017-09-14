@@ -302,8 +302,9 @@ class PostFull extends React.Component {
         const isPreViewCount = Date.parse(post_content.get('created')) < 1480723200000 // check if post was created before view-count tracking began (2016-12-03)
         let contentBody
 
+
         if(bShowLoading) {
-            contentBody = <LoadingIndicator type='circle' style={ {width: '100px', height: '100px', margin: 'auto'} } spinnerStyle={ {width: '100px', height: '100px'} } inline={false} />
+            contentBody = <LoadingIndicator type="circle-strong" />
         } else {
             contentBody = <MarkdownViewer
                 formId={formId + '-viewer'} text={content_body} jsonMetadata={jsonMetadata}
@@ -311,6 +312,7 @@ class PostFull extends React.Component {
                 hideImages={hideImages}
             />
         }
+
         return (
           <article className="PostFull hentry" itemScope itemType="http://schema.org/blogPost">
             {showEdit ?

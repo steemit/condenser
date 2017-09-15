@@ -167,7 +167,7 @@ class ReplyEditor extends React.Component {
         const value = e.target.value
         // TODO block links in title (they do not make good permlinks)
         const hasMarkdown = /(?:\*[\w\s]*\*|\#[\w\s]*\#|_[\w\s]*_|~[\w\s]*~|\]\s*\(|\]\s*\[)/.test(value)
-        this.setState({ titleWarn: hasMarkdown ? 'Markdown is not supported here' : '' })
+        this.setState({ titleWarn: hasMarkdown ? tt('reply_editor.markdown_not_supported') : '' })
         const {title} = this.state
         title.props.onChange(e)
     }
@@ -349,7 +349,16 @@ class ReplyEditor extends React.Component {
                     >
                         <div className={vframe_section_shrink_class}>
                             {isStory && <span>
-                                <input type="text" className="ReplyEditor__title" {...title.props} onChange={onTitleChange} disabled={loading} placeholder="Title" autoComplete="off" ref="titleRef" tabIndex={1} />
+                                <input
+                                    type="text"
+                                    className="ReplyEditor__title"
+                                    onChange={onTitleChange}
+                                    disabled={loading}
+                                    placeholder={tt('reply_editor.title')}
+                                    autoComplete="off"
+                                    ref="titleRef"
+                                    tabIndex={1}
+                                    {...title.props} />
                                 <div className="float-right secondary" style={{marginRight: '1rem'}}>
                                     {rte && <a href="#" onClick={this.toggleRte}>{body.value ? 'Raw HTML' : 'Markdown'}</a>}
                                     {!rte && (isHtml || !body.value) && <a href="#" onClick={this.toggleRte}>{tt('reply_editor.editor')}</a>}
@@ -406,7 +415,7 @@ class ReplyEditor extends React.Component {
                         </div>
                         <div className={vframe_section_shrink_class}>
                             {!loading &&
-                            <button type="submit" className="button" disabled={disabled} tabIndex={4}>{isEdit ? 'Update Post' : postLabel}</button>
+                            <button type="submit" className="button" disabled={disabled} tabIndex={4}>{isEdit ? tt('reply_editor.update_post') : postLabel}</button>
                             }
                             {loading && <span><br /><LoadingIndicator type="circle" /></span>}
                             &nbsp; {!loading && this.props.onCancel &&

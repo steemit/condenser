@@ -1,5 +1,4 @@
 const list = `
-matthewtyoung
 spaces
 the-gaming-llama
 cmgsteems

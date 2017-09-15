@@ -13,10 +13,16 @@ class Powerdown extends React.Component {
 
     constructor(props, context) {
         super(props, context)
+        let new_withdraw = props.to_withdraw
+        if (new_withdraw === 0) {
+            // Set the default withrawal amount to (available - 5 STEEM)
+            // This should be removed post hf20
+            new_withdraw = props.available_shares - spToVestsf(props.state, 5.001)
+        }
         this.state = {
             broadcasting: false,
             manual_entry: false,
-            new_withdraw: (props.to_withdraw !== 0) ? props.to_withdraw : props.available_shares
+            new_withdraw,
         }
     }
 
@@ -78,6 +84,16 @@ class Powerdown extends React.Component {
                 </li>
             )
         }
+        // NOTE: remove this post hf20
+        if (new_withdraw > vesting_shares - delegated_vesting_shares - spToVestsf(this.props.state, 5)) {
+            const AMOUNT = 5
+            notes.push(
+                <li key="warning" className="warning">
+                    {tt('powerdown_jsx.warning', {AMOUNT, LIQUID_TICKER})}
+                </li>
+            )
+        }
+
 
         return (
             <div className="PowerdownModal">
@@ -115,8 +131,7 @@ export default connect(
         const withdrawn = parseFloat(values.get('withdrawn')) / 1e6
         const vesting_shares = assetFloat(values.get('vesting_shares'), VEST_TICKER)
         const delegated_vesting_shares = assetFloat(values.get('delegated_vesting_shares'), VEST_TICKER)
-
-        const available_shares = vesting_shares - to_withdraw - withdrawn
+        const available_shares = vesting_shares - to_withdraw - withdrawn - delegated_vesting_shares
 
         return {
             ...ownProps,

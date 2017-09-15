@@ -43,11 +43,10 @@ class Powerdown extends React.Component {
         }
         const powerDown = (event) => {
             event.preventDefault()
-            this.setState({broadcasting: true})
+            this.setState({broadcasting: true, error_message: undefined})
             const successCallback = this.props.successCallback
             const errorCallback = (error) => {
-                this.setState({toggleDivestError: error.toString()})
-                successCallback()
+                this.setState({broadcasting: false, error_message: String(error)})
             }
             // workaround bad math in react-rangeslider
             let withdraw = new_withdraw
@@ -90,6 +89,15 @@ class Powerdown extends React.Component {
             notes.push(
                 <li key="warning" className="warning">
                     {tt('powerdown_jsx.warning', {AMOUNT, LIQUID_TICKER})}
+                </li>
+            )
+        }
+
+        if (this.state.error_message) {
+            const MESSAGE = this.state.error_message
+            notes.push(
+                <li key="error" className="error">
+                    {tt('powerdown_jsx.error', {MESSAGE})}
                 </li>
             )
         }

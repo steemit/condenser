@@ -43,7 +43,12 @@ class Powerdown extends React.Component {
                 this.setState({toggleDivestError: error.toString()})
                 successCallback()
             }
-            const vesting_shares = `${ new_withdraw.toFixed(6) } ${ VEST_TICKER }`
+            // workaround bad math in react-rangeslider
+            let withdraw = new_withdraw
+            if (withdraw > vesting_shares - delegated_vesting_shares) {
+                withdraw = vesting_shares - delegated_vesting_shares
+            }
+            const vesting_shares = `${ withdraw.toFixed(6) } ${ VEST_TICKER }`
             this.props.withdrawVesting({account, vesting_shares, errorCallback, successCallback})
         }
 
@@ -81,6 +86,7 @@ class Powerdown extends React.Component {
                 </div>
                 <Slider
                     value={new_withdraw}
+                    step={0.000001}
                     max={vesting_shares - delegated_vesting_shares}
                     format={formatSp}
                     onChange={sliderChange}

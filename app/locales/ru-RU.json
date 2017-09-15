@@ -578,6 +578,7 @@
   },
   "postfull_jsx": {
     "this_post_is_not_available_due_to_a_copyright_claim": "Этот пост недоступен из-за жалобы о нарушении авторских прав.",
+    "this_post_is_not_available_due_to_breach_of_legislation": "Этот пост недоступен из-за жалобы о нарушении законодательства РФ.",
     "share_on_facebook": "Поделитесь в Facebook",
     "share_on_twitter": "Поделиться в Twitter",
     "share_on_vk": "Поделиться в ВКонтакте",

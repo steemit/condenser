@@ -15,6 +15,7 @@ import TagList from 'app/components/elements/TagList';
 import Author from 'app/components/elements/Author';
 import {repLog10, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import DMCAList from 'app/utils/DMCAList'
+import LEGALList from 'app/utils/LEGALList'
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import ShareMenu from 'app/components/elements/ShareMenu';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
@@ -225,8 +226,11 @@ class PostFull extends React.Component {
 
         let content_body = content.body;
         const url = `/${category}/@${author}/${permlink}`
-        if(DMCAList.includes(url)) {
+        if (DMCAList.includes(url)) {
             content_body = tt('postfull_jsx.this_post_is_not_available_due_to_a_copyright_claim')
+        }
+        else if (LEGALList.includes(url)) {
+            content_body = tt('postfull_jsx.this_post_is_not_available_due_to_breach_of_legislation')
         }
 
         const replyParams = {author, permlink, parent_author, parent_permlink, category, title, body}

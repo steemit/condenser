@@ -159,7 +159,7 @@
 
 <a class="anchor" name="Table_of_Contents_Steemit__Inc"></a>
 ### Steemit, Inc.
-- <a href="/faq.html#Who_are_the_Steemit_co_founders">Who are the Steemit co-founders?</a>
+- <a href="/faq.html#Who_is_the_CEO_of_Steemit">Who is the CEO of Steemit?</a>
 - <a href="/faq.html#Can_I_invest_in_Steemit">Can I invest in Steemit?</a>
 - <a href="/faq.html#What_does_Steemit_s_development_roadmap_look_like">What does Steemit’s development roadmap look like?</a>
 - <a href="/faq.html#Am_I_allowed_to_use_the_Steemit_logo">Am I allowed to use the Steemit logo?</a>
@@ -1192,14 +1192,11 @@ No. Proof of work mining has been removed from Steem.
 <a href="/faq.html#Table_of_Contents_Blockchain">^</a>
 # Steemit, Inc.
 
-<a class="anchor" name="Who_are_the_Steemit_co_founders"></a>
-## Who are the Steemit co-founders?
+<a class="anchor" name="Who_is_the_CEO_of_Steemit"></a>
+## Who is the CEO of Steemit?
 
-Ned Scott, CEO of Steemit, @ned
+Ned Scott, @ned
 https://www.linkedin.com/in/nedscott
-
-Daniel Larimer, CTO of Steemit, @dan @dantheman
-https://www.linkedin.com/in/daniel-larimer-0a367089
 
 <a href="/faq.html#Table_of_Contents_Steemit__Inc">^</a>
 <a class="anchor" name="Can_I_invest_in_Steemit"></a>

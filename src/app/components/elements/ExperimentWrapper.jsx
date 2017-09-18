@@ -51,9 +51,9 @@ class ExperimentWrapper extends React.Component {
     render() {
         const uid = this.props.uid;
         return (
-            <Experiment name={this.props.name} userIdentifier={uid}>
-                {this.props.children}
-            </Experiment>
+          <Experiment name={this.props.name} userIdentifier={uid}>
+            {this.props.children}
+          </Experiment>
         );
     }
 }
@@ -70,13 +70,13 @@ emitter.addWinListener( (experimentName, variantName) => {
 
 
 ExperimentWrapper = connect(
-    state => {
+    (state) => {
         return {
             uid: state.offchain.get('uid')
         }
     }
 )(ExperimentWrapper);
 
-ExperimentWrapper.win = (name) => emitter.emitWin(name);
+ExperimentWrapper.win = name => emitter.emitWin(name);
 
 export default ExperimentWrapper;

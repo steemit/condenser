@@ -41,7 +41,7 @@ class ChangePassword extends React.Component {
         if (name.length > 0) {
             nameError = validate_account_name(name);
             if (!nameError) {
-                promise = api.getAccountsAsync([name]).then(res => {
+                promise = api.getAccountsAsync([name]).then((res) => {
                     return !(res && res.length > 0) ? tt('g.account_not_found') : '';
                 });
             }
@@ -83,11 +83,11 @@ class ChangePassword extends React.Component {
     }
     render() {
         if (!process.env.BROWSER) { // don't render this page on the server
-            return <div className="row">
-                <div className="column">
-                    {tt('g.loading')}..
+            return (<div className="row">
+              <div className="column">
+                {tt('g.loading')}..
                 </div>
-            </div>;
+            </div>);
         }
         const {generated, loading, error} = this.state
         const {username, authType, priorAuthKey, /*enable2fa*/} = this.props
@@ -98,104 +98,104 @@ class ChangePassword extends React.Component {
             console.error('Missing priorAuthKey')
 
         const error2 = /Missing Owner Authority/.test(error) ?
-            <span>{tt('g.this_is_wrong_password')}. {tt('g.do_you_need_to') + ' '}<a href="/recover_account_step_1">{tt('g.recover_your_account')}</a>?</span> :
+          <span>{tt('g.this_is_wrong_password')}. {tt('g.do_you_need_to') + ' '}<a href="/recover_account_step_1">{tt('g.recover_your_account')}</a>?</span> :
             error;
 
         const {accountName, nameError} = this.state;
         const readOnlyAccountName = username && username.length > 0;
 
         return (
-            <span className="ChangePassword">
-                <form onSubmit={handleSubmit(() => {this.dispatchSubmit()})}>
-                    {username && <h4>{tt('g.reset_usernames_password', {username})}</h4>}
-                    {authType ?
-                        <p>{tt('g.this_will_update_usernames_authtype_key', {
+          <span className="ChangePassword">
+            <form onSubmit={handleSubmit(() => { this.dispatchSubmit() })}>
+              {username && <h4>{tt('g.reset_usernames_password', {username})}</h4>}
+              {authType ?
+                <p>{tt('g.this_will_update_usernames_authtype_key', {
                                 username, authType
                             })}</p> :
-                        <div className="ChangePassword__rules">
-                            <hr />
-                            <p>
-                                {tt('g.the_rules_of_APP_NAME.one', {APP_NAME})}
-                                <br />
-                                {tt('g.the_rules_of_APP_NAME.second', {APP_NAME})}
-                                <br />
-                                {tt('g.the_rules_of_APP_NAME.third', {APP_NAME})}
-                                <br />
-                                {tt('g.the_rules_of_APP_NAME.fourth')}
-                                <br />
-                                {tt('g.the_rules_of_APP_NAME.fifth')}
-                                <br />
-                                {tt('g.the_rules_of_APP_NAME.sixth')}
-                                <br />
-                                {tt('g.the_rules_of_APP_NAME.seventh')}
-                            </p>
-                        <hr />
-                        </div>
+                <div className="ChangePassword__rules">
+                  <hr />
+                  <p>
+                    {tt('g.the_rules_of_APP_NAME.one', {APP_NAME})}
+                    <br />
+                    {tt('g.the_rules_of_APP_NAME.second', {APP_NAME})}
+                    <br />
+                    {tt('g.the_rules_of_APP_NAME.third', {APP_NAME})}
+                    <br />
+                    {tt('g.the_rules_of_APP_NAME.fourth')}
+                    <br />
+                    {tt('g.the_rules_of_APP_NAME.fifth')}
+                    <br />
+                    {tt('g.the_rules_of_APP_NAME.sixth')}
+                    <br />
+                    {tt('g.the_rules_of_APP_NAME.seventh')}
+                  </p>
+                  <hr />
+                </div>
                     }
 
-                    <div className={nameError ? 'error' : ''}>
-                        <label>{tt('g.account_name')}
-                            <input type="text" disabled={readOnlyAccountName} autoComplete="off" value={accountName} onChange={this.onNameChange} />
-                        </label>
-                        <p className="help-text">{nameError}</p>
-                    </div>
-                    <br />
-                    <label>
-                        <div className="float-right"><a href="/recover_account_step_1">{tt('g.recover_password')}</a></div>
-                        {tt('g.current_password')}
-                        <br />
-                        <input {...cleanReduxInput(password)} type="password" disabled={loading} />
-                    </label>
-                    {password.touched && password.error && <div className="error">{password.error}</div>}
+              <div className={nameError ? 'error' : ''}>
+                <label>{tt('g.account_name')}
+                  <input type="text" disabled={readOnlyAccountName} autoComplete="off" value={accountName} onChange={this.onNameChange} />
+                </label>
+                <p className="help-text">{nameError}</p>
+              </div>
+              <br />
+              <label>
+                <div className="float-right"><a href="/recover_account_step_1">{tt('g.recover_password')}</a></div>
+                {tt('g.current_password')}
+                <br />
+                <input {...cleanReduxInput(password)} type="password" disabled={loading} />
+              </label>
+              {password.touched && password.error && <div className="error">{password.error}</div>}
 
-                    <br></br>
+              <br />
 
-                    <label>
-                        {tt('g.generated_password') + ' ' } <span className="secondary">({tt('g.new')})</span><br />
-                    </label>
-                    {generated &&
-                        <span>
-                            <div>
-                                {/* !! Do not put keys in a label, labels have an uppercase css style applied !! */}
-                                <div className="overflow-ellipsis"><code style={{display: 'block', padding: '0.2rem 0.5rem', background: 'white', color: '#c7254e', wordWrap: 'break-word', fontSize: '100%', textAlign: 'center'}}>{newWif}</code></div>
-                            </div>
-                            <label className="ChangePassword__backup_text">
-                                {tt('g.backup_password_by_storing_it')}.
+              <label>
+                {tt('g.generated_password') + ' ' } <span className="secondary">({tt('g.new')})</span><br />
+              </label>
+              {generated &&
+                <span>
+                  <div>
+                    {/* !! Do not put keys in a label, labels have an uppercase css style applied !! */}
+                    <div className="overflow-ellipsis"><code style={{display: 'block', padding: '0.2rem 0.5rem', background: 'white', color: '#c7254e', wordWrap: 'break-word', fontSize: '100%', textAlign: 'center'}}>{newWif}</code></div>
+                  </div>
+                  <label className="ChangePassword__backup_text">
+                    {tt('g.backup_password_by_storing_it')}.
                             </label>
-                        </span>
+                </span>
                         ||
                         <center><button type="button" className="button hollow" onClick={this.generateWif}>{tt('g.click_to_generate_password')}</button></center>
                     }
 
-                    <br></br>
+              <br />
 
-                    <label>
-                        {tt('g.re_enter_generate_password')}
-                        <br />
-                        <input {...cleanReduxInput(confirmPassword)} type="password" disabled={loading} />
-                    </label>
-                    {confirmPassword.touched && confirmPassword.error && <div className="error">{confirmPassword.error}</div>}
+              <label>
+                {tt('g.re_enter_generate_password')}
+                <br />
+                <input {...cleanReduxInput(confirmPassword)} type="password" disabled={loading} />
+              </label>
+              {confirmPassword.touched && confirmPassword.error && <div className="error">{confirmPassword.error}</div>}
 
-                    <br />
+              <br />
 
-                    <label><input {...cleanReduxInput(confirmCheck)} type="checkbox" /> {tt('g.understand_that_APP_NAME_cannot_recover_password', {APP_NAME})}</label>
-                    {confirmCheck.touched && confirmCheck.error && <div className="error">{confirmCheck.error}</div>}
+              <label><input {...cleanReduxInput(confirmCheck)} type="checkbox" /> {tt('g.understand_that_APP_NAME_cannot_recover_password', {APP_NAME})}</label>
+              {confirmCheck.touched && confirmCheck.error && <div className="error">{confirmCheck.error}</div>}
 
-                    <label><input {...cleanReduxInput(confirmSaved)} type="checkbox" />{tt('g.i_saved_password')}</label>
-                    {confirmSaved.touched && confirmSaved.error && <div className="error">{confirmSaved.error}</div>}
-                    <br />
-                    {loading && <div><LoadingIndicator type="circle" /></div>}
-                    {!loading && <div>
-                        <div className="error">{error2}</div>
-                        <button type="submit" className="button" disabled={loading}>
-                            {tt('g.update_password')}
-                        </button>
-                        {onClose && <button type="button" disabled={submitting} className="button hollow float-right" onClick={onClose}>
-                            {tt('g.cancel')}
-                        </button>}
-                    </div>}
-                </form>
-            </span>
+              <label><input {...cleanReduxInput(confirmSaved)} type="checkbox" />{tt('g.i_saved_password')}</label>
+              {confirmSaved.touched && confirmSaved.error && <div className="error">{confirmSaved.error}</div>}
+              <br />
+              {loading && <div><LoadingIndicator type="circle" /></div>}
+              {!loading && <div>
+                <div className="error">{error2}</div>
+                <button type="submit" className="button" disabled={loading}>
+                  {tt('g.update_password')}
+                </button>
+                {onClose && <button type="button" disabled={submitting} className="button hollow float-right" onClick={onClose}>
+                  {tt('g.cancel')}
+                </button>}
+                </div>}
+            </form>
+          </span>
         )
                     // {enable2fa && <p>
                     //     <h4>Enable Steemit Account Recovery</h4>
@@ -212,17 +212,18 @@ class ChangePassword extends React.Component {
 }
 
 let newWif = null
-const keyValidate = (values) => ({
-    password: ! values.password ? tt('g.required') :
+const keyValidate = values => ({
+    password: !values.password ? tt('g.required') :
         PublicKey.fromString(values.password) ? tt('g.you_need_private_password_or_key_not_a_public_key') :
         null,
-    confirmPassword: ! values.confirmPassword ? tt('g.required') :
+    confirmPassword: !values.confirmPassword ? tt('g.required') :
         values.confirmPassword.trim() !== newWif ? tt('g.passwords_do_not_match') : null,
-    confirmCheck: ! values.confirmCheck ? tt('g.required') : null,
-    confirmSaved: ! values.confirmSaved ? tt('g.required') : null,
+    confirmCheck: !values.confirmCheck ? tt('g.required') : null,
+    confirmSaved: !values.confirmSaved ? tt('g.required') : null,
 })
 
-import {reduxForm} from 'redux-form' // @deprecated, instead use: app/utils/ReactForm.js
+import {reduxForm} from 'redux-form'
+ // @deprecated, instead use: app/utils/ReactForm.js
 export default reduxForm(
     { form: 'changePassword', fields: ['password', 'confirmPassword', 'confirmCheck', 'confirmSaved', 'twofa'] },
     // mapStateToProps
@@ -230,7 +231,8 @@ export default reduxForm(
         const {authType} = ownProps
         const enable2fa = authType == null
         return {
-            ...ownProps, enable2fa,
+            ...ownProps,
+enable2fa,
             validate: keyValidate,
             initialValues: {twofa: false, password: ownProps.defaultPassword},
         }
@@ -256,13 +258,16 @@ export default reduxForm(
                 twofa,
                 // signingKey provides the password if it was not provided in auths
                 signingKey: authType ? password : null,
-                accountName, auths,
-                onSuccess: success, onError: error,
+                accountName,
+auths,
+                onSuccess: success,
+onError: error,
                 // notifySuccess: 'Change password success'
             }))
         },
         notify: (message) => {
-            dispatch({type: 'ADD_NOTIFICATION', payload: {
+            dispatch({type: 'ADD_NOTIFICATION',
+payload: {
                 key: "chpwd_" + Date.now(),
                 message,
                 dismissAfter: 5000}

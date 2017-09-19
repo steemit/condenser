@@ -105,7 +105,6 @@ class Powerdown extends React.Component {
             )
         }
 
-
         return (
             <div className="PowerdownModal">
                 <div className="row">

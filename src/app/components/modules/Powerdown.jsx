@@ -90,7 +90,7 @@ class Powerdown extends React.Component {
             const AMOUNT = 5
             notes.push(
                 <li key="warning" className="warning">
-                    {tt('powerdown_jsx.warning', {AMOUNT, LIQUID_TICKER})}
+                    {tt('powerdown_jsx.warning', {AMOUNT})}
                 </li>
             )
         }

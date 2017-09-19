@@ -6,7 +6,7 @@ import Slider from 'react-rangeslider';
 import transaction from 'app/redux/Transaction';
 import user from 'app/redux/User';
 import tt from 'counterpart'
-import {VEST_TICKER, LIQUID_TICKER} from 'app/client_config'
+import {VEST_TICKER, LIQUID_TICKER, VESTING_TOKEN} from 'app/client_config'
 import {numberWithCommas, spToVestsf, vestsToSpf, vestsToSp, assetFloat} from 'app/utils/StateFunctions'
 
 class Powerdown extends React.Component {
@@ -90,7 +90,7 @@ class Powerdown extends React.Component {
             const AMOUNT = 5
             notes.push(
                 <li key="warning" className="warning">
-                    {tt('powerdown_jsx.warning', {AMOUNT})}
+                    {tt('powerdown_jsx.warning', {AMOUNT, VESTING_TOKEN})}
                 </li>
             )
         }

@@ -14,7 +14,7 @@ class Powerdown extends React.Component {
     constructor(props, context) {
         super(props, context)
         let new_withdraw
-        if (props.to_withdraw > 0) {
+        if (props.to_withdraw - props.withdrawn > 0) {
             new_withdraw = props.to_withdraw - props.withdrawn
         } else {
             // Set the default withrawal amount to (available - 5 STEEM)
@@ -60,7 +60,7 @@ class Powerdown extends React.Component {
         }
 
         const notes = []
-        if (to_withdraw !== 0) {
+        if (to_withdraw - withdrawn > 0) {
             const AMOUNT = formatSp(to_withdraw)
             const WITHDRAWN = formatSp(withdrawn)
             notes.push(

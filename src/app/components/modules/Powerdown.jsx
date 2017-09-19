@@ -78,7 +78,8 @@ class Powerdown extends React.Component {
             )
         }
         if (notes.length === 0) {
-            const AMOUNT = Math.floor(vestsToSpf(this.props.state, new_withdraw) / 13)
+            let AMOUNT = vestsToSpf(this.props.state, new_withdraw) / 13
+            AMOUNT = AMOUNT.toFixed(AMOUNT >= 10 ? 0 : 1)
             notes.push(
                 <li key="per_week">
                     {tt('powerdown_jsx.per_week', {AMOUNT, LIQUID_TICKER})}

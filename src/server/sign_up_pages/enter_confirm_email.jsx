@@ -75,8 +75,6 @@ function* confirmEmailHandler() {
             this.session.uid,
             eid.email
         );
-        this.session.uid = undefined;
-        this.session.user = undefined;
         this.flash = {error: 'This email has already been used'};
         this.redirect('/pick_account');
         return;
@@ -303,33 +301,23 @@ export default function useEnterAndConfirmEmailPages(app) {
         }
 
         try {
-            let user = yield models.User.findOne({ attributes: ['id'], where: { id: this.session.user }});
-            if (user) {
-                const data = user.sign_up_meta ? JSON.parse(user.sign_up_meta) : {};
-                data.last_step = 2;
-                yield user.update({
-                    sign_up_meta: JSON.stringify(data)
-                });
-            } else {
-                // create user
-                console.log("-- /Creating User -->");
-                user = yield models.User.create({
-                    uid: this.session.uid,
-                    remote_ip: getRemoteIp(this.request.req),
-                    sign_up_meta: JSON.stringify({last_step: 2}),
-                    account_status: 'waiting'
-                });
-                this.session.user = user.id;
-            }
-            // create referer attribute
-            const user_att = yield models.UserAttribute.findOne({ attributes: ['user_id', 'type_of'], where: { user_id: user.id, type_of: 'referer' }});
-            if (!user_att && this.session.r) {
-                yield models.UserAttribute.create({
-                    user_id: user.id,
-                    value: this.session.r,
-                    type_of: 'referer'
-                });
-            }
+            // create user, use new uid
+            const old_uid = this.session.uid;
+            this.session.uid = secureRandom.randomBuffer(13).toString('hex');
+            const user = yield models.User.create({
+                uid: this.session.uid,
+                remote_ip: getRemoteIp(this.request.req),
+                sign_up_meta: JSON.stringify({last_step: 2}),
+                account_status: 'waiting'
+            });
+            this.session.user = user.id;
+            console.log('-- /submit_email created new user -->', old_uid, this.session.uid, user.id);
+
+            yield models.UserAttribute.create({
+                user_id: user.id,
+                value: this.session.r,
+                type_of: 'referer'
+            });
 
             const confirmation_code = secureRandom.randomBuffer(13).toString("hex");
             // create identity

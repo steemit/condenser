@@ -7,6 +7,7 @@ import o2j from 'shared/clash/object2json'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import reactForm from 'app/utils/ReactForm'
 import UserList from 'app/components/elements/UserList';
+import YotificationSettingsPanel from './YotificationSettingsPanel';
 
 
 class Settings extends React.Component {
@@ -117,6 +118,7 @@ class Settings extends React.Component {
         this.props.setUserPreferences(userPreferences)
     }
 
+
     render() {
         const {state, props} = this
 
@@ -145,7 +147,7 @@ class Settings extends React.Component {
             </div>
             <br />
             <div className="row">
-                <form onSubmit={this.handleSubmitForm} className="small-12 medium-6 large-4 columns">
+                <form onSubmit={this.handleSubmitForm} className="settings-group small-12 medium-6 columns">
                     <h4>{tt('settings_jsx.public_profile_settings')}</h4>
                     <label>
                         {tt('settings_jsx.profile_image_url')}
@@ -195,11 +197,14 @@ class Settings extends React.Component {
                         }
                 </form>
             </div>
-
             {isOwnAccount &&
                 <div className="row">
-                    <div className="small-12 medium-6 large-4 columns">
-                        <br /><br />
+                    <YotificationSettingsPanel className="settings-group small-12 medium-6 columns" />
+                </div>
+            }
+            {isOwnAccount &&
+                <div className="row">
+                    <div className="settings-group small-12 medium-6 columns">
                         <h4>{tt('settings_jsx.private_post_display_settings')}</h4>
                         <div>
                             {tt('settings_jsx.not_safe_for_work_nsfw_content')}
@@ -215,7 +220,7 @@ class Settings extends React.Component {
                 </div>}
             {ignores && ignores.size > 0 &&
                 <div className="row">
-                    <div className="small-12 medium-6 large-4 columns">
+                    <div className="settings-group small-12 medium-6 large-4 columns">
                         <br /><br />
                         <UserList title={tt('settings_jsx.muted_users')} account={account} users={ignores} />
                     </div>
@@ -235,6 +240,7 @@ export default connect(
         if (typeof metaData === 'string') metaData = o2j.ifStringParseJSON(metaData); // issue #1237
         const profile = metaData && metaData.profile ? metaData.profile : {};
         const user_preferences = state.app.get('user_preferences').toJS();
+        const { notificationsettings } = state;
 
         return {
             account,
@@ -244,11 +250,20 @@ export default connect(
             profile,
             follow: state.global.get('follow'),
             user_preferences,
+            notificationsettings,
             ...ownProps
         }
     },
     // mapDispatchToProps
     dispatch => ({
+        saveNotificationSettings: (settings) => {
+            dispatch({
+                type: 'notificationsettings/UPDATE',
+                payload: {
+                    settings: 'here',
+                },
+            });
+        },
         changeLanguage: (language) => {
             dispatch(user.actions.changeLanguage(language))
         },

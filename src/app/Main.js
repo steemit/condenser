@@ -1,21 +1,26 @@
 import 'babel-core/register';
 import 'babel-polyfill';
 import 'whatwg-fetch';
-import './assets/stylesheets/app.scss';
+import 'app/assets/stylesheets/app.scss';
 import plugins from 'app/utils/JsPlugins';
+import { setStore } from 'app/utils/User';
 import Iso from 'iso';
 import universalRender from 'shared/UniversalRender';
-import ConsoleExports from './utils/ConsoleExports';
+import ConsoleExports from 'app/utils/ConsoleExports';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import * as steem from 'steem';
 
+console.log("Search for " + "%c//Todo: for dev only! Do not merge if present!","background:red; color:yellow", "in src and remove before merging")
 window.onerror = error => {
     if (window.$STM_csrf) serverApiRecordEvent('client_error', error);
 };
 
-const CMD_LOG_T = 'log-t'
-const CMD_LOG_TOGGLE = 'log-toggle'
-const CMD_LOG_O = 'log-on'
+const kCommand = {
+    CMD_LOG_T: 'log-t',
+    CMD_LOG_TOGGLE: 'log-toggle',
+    CMD_LOG_O: 'log-on'
+};
+let theStore = false;
 
 try {
     if(process.env.NODE_ENV === 'development') {
@@ -34,12 +39,13 @@ function runApp(initial_state) {
     };
     const buff = konami.code.split('');
     const cmd = (command) => {
-        console.log('got command:' + command);
+        if(command) console.log('got command:' + command);
+
         switch (command) {
-            case CMD_LOG_O :
+            case kCommand.CMD_LOG_O :
                 konami.enabled = false;
-            case CMD_LOG_TOGGLE :
-            case CMD_LOG_T :
+            case kCommand.CMD_LOG_TOGGLE :
+            case kCommand.CMD_LOG_T :
                 konami.enabled = !konami.enabled;
                 if(konami.enabled) {
                     steem.api.setOptions({logger: console});
@@ -48,7 +54,11 @@ function runApp(initial_state) {
                 }
                 return 'api logging ' + konami.enabled;
             default :
-                return 'That command is not supported.';
+                console.log('These commands are understood');
+                for(var k in kCommand) if(kCommand.hasOwnProperty(k)) {
+                    console.log(kCommand[k]);
+                }
+                return ''
         }
         //return 'done';
     }
@@ -65,13 +75,13 @@ function runApp(initial_state) {
         buff.push(e.key)
         if(buff.join('') === konami.code) {
             enableKonami();
-            cmd(CMD_LOG_T)
+            cmd(kCommand.CMD_LOG_T)
         }
     };
 
     if(window.location.hash.indexOf('#'+konami.code) === 0) {
         enableKonami()
-        cmd(CMD_LOG_O)
+        cmd(kCommand.CMD_LOG_O)
     }
 
     const config = initial_state.offchain.config
@@ -89,7 +99,7 @@ function runApp(initial_state) {
     }
 
     const location = `${window.location.pathname}${window.location.search}${window.location.hash}`;
-    universalRender({history, location, initial_state})
+    universalRender({history, location, initial_state, setStore})
     .catch(error => {
         console.error(error);
         serverApiRecordEvent('client_error', error);

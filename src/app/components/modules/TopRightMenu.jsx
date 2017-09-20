@@ -1,15 +1,24 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { browserHistory, Link } from 'react-router';
 import {connect} from 'react-redux';
+import tt from 'counterpart';
 import Icon from 'app/components/elements/Icon';
 import user from 'app/redux/User';
 import Userpic from 'app/components/elements/Userpic';
-import { browserHistory } from 'react-router';
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
 import VerticalMenu from 'app/components/elements/VerticalMenu';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import NotifiCounter from 'app/components/elements/NotifiCounter';
-import tt from 'counterpart';
+import YotifiCounter from 'app/components/elements/YotifiCounter';
+import YotificationModule, { LAYOUT_DROPDOWN } from "./YotificationList";
+
+const bodyClick = (e) => {
+    // If this was not a left click, or if CTRL or CMD were held, do not close the menu.
+    if(e.button !== 0 || e.ctrlKey || e.metaKey) return;
+
+    // Simulate clicking of document body which will close any open menus
+    document.body.click();
+}
 
 const defaultNavigate = (e) => {
     if (e.metaKey || e.ctrlKey) {
@@ -53,7 +62,28 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
             <ul className={mcn + mcl}>
                 <li className={lcn + " Header__search"}><a href="/static/search.html" title={tt_search}>{vertical ? <span>{tt_search}</span> : <Icon name="search" />}</a></li>
                 {submit_story}
+
                 {!vertical && submit_icon}
+
+                <LinkWithDropdown
+                    dropdownClassName="small-8 medium-6 large-4"
+                    closeOnClickOutside
+                    dropdownPosition="bottom"
+                    dropdownAlignment="right"
+                    dropdownContent={
+                        <div className="NotificationMenuWrapper" >
+                            {/*<NotificationMenu items={user_menu} account_link={ account_link } /> */}
+                            <YotificationModule layout={LAYOUT_DROPDOWN} onViewAll={bodyClick} />
+                        </div>
+                    }
+                >
+                    {!vertical && <li className={'Header__userpic '}>
+                        <a href={account_link} title={tt('g.notifications')} onClick={e => e.preventDefault()}>
+                            <Icon name="notify" size="1_5x" />
+                            <div className="TopRightMenu__notificounter"><YotifiCounter /></div>
+                        </a>
+                    </li>}
+                </LinkWithDropdown>
                 <LinkWithDropdown
                     closeOnClickOutside
                     dropdownPosition="bottom"
@@ -69,6 +99,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
                         <div className="TopRightMenu__notificounter"><NotifiCounter fields="total" /></div>
                     </li>}
                 </LinkWithDropdown>
+
                 {toggleOffCanvasMenu && <li className="toggle-menu Header__hamburger"><a href="#" onClick={toggleOffCanvasMenu}>
                     <span className="hamburger" />
                 </a></li>}

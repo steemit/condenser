@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 46.2 (44496) - http://www.bohemiancoding.com/sketch -->
+    <title>icon-new-post</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-6" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icon-new-post" fill-rule="nonzero" fill="#333333">
+            <g id="pencil" transform="translate(3.000000, 3.000000)">
+                <path d="M5.2495625,8.75 L6.9995625,7.875 L13.1245625,1.75 L12.2495625,0.875 L6.1245625,7 L5.2495625,8.75 Z M3.955,11.8549375 C3.5223125,10.94275 3.05725,10.47725 2.1450625,10.045 L3.5,6.3153125 L5.25,5.25 L10.5,0 L7.875,0 L2.625,5.25 L0,14 L8.75,11.375 L14,6.125 L14,3.5 L8.75,8.75 L7.6846875,10.5 L3.955,11.8549375 Z" id="Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>

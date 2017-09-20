@@ -55,3 +55,15 @@ $body-font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-s
 /// Global value used for all elements that have a border radius.
 /// @type Number
 $global-radius: 3px !default;
+
+$user_pic_badge_border_color: #dddddd;
+
+$notif_item_read_bg: none;
+$notif_item_read_bg_hover: #f1f2f2;
+$notif_item_badge_unread_color: #4a8cd3;
+$notif_item_unread_bg: #e8edf5;
+$notif_item_unread_bg_hover: #d1dceb;
+$notif_dd_ctrl_color: #4a8cd3;
+$notif_dd_black: #000000;
+$notif_counter_badge_color: #eb3566;
+$notif_item_border_color: #dddddd;

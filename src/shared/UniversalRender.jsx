@@ -5,11 +5,10 @@ import Iso from 'iso';
 import React from 'react';
 import { render } from 'react-dom';
 import { renderToString } from 'react-dom/server';
-import { Router, RouterContext, match, applyRouterMiddleware } from 'react-router';
+import { browserHistory, Router, RouterContext, match, applyRouterMiddleware } from 'react-router';
 import { Provider } from 'react-redux';
 import RootRoute from 'app/RootRoute';
 import {createStore, applyMiddleware, compose} from 'redux';
-import { browserHistory } from 'react-router';
 import { useScroll } from 'react-router-scroll';
 import createSagaMiddleware from 'redux-saga';
 import { syncHistoryWithStore } from 'react-router-redux';
@@ -21,6 +20,8 @@ import {userWatches} from 'app/redux/UserSaga';
 import {authWatches} from 'app/redux/AuthSaga';
 import {transactionWatches} from 'app/redux/TransactionSaga';
 import PollDataSaga from 'app/redux/PollDataSaga';
+import { NotificationFetchSaga, NotificationPollSaga } from 'app/redux/NotificationSaga';
+import { NotificationSettingsSaga } from 'app/redux/NotificationSettingsSaga';
 import {component as NotFound} from 'app/components/pages/NotFound';
 import extractMeta from 'app/utils/ExtractMeta';
 import Translator from 'app/Translator';
@@ -59,7 +60,7 @@ const onRouterError = (error) => {
     console.error('onRouterError', error);
 };
 
-async function universalRender({ location, initial_state, offchain, ErrorPage, tarantool, userPreferences }) {
+async function universalRender({ location, initial_state, offchain, ErrorPage, tarantool, userPreferences, setStore }) {
     let error, redirect, renderProps;
     try {
         [error, redirect, renderProps] = await runRouter(location, RootRoute);
@@ -82,9 +83,14 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
 
     if (process.env.BROWSER) {
         const store = createStore(rootReducer, initial_state, middleware);
+        setStore(store);
         sagaMiddleware.run(PollDataSaga).done
             .then(() => console.log('PollDataSaga is finished'))
             .catch(err => console.log('PollDataSaga is finished with error', err));
+
+        sagaMiddleware.run(NotificationFetchSaga);
+        sagaMiddleware.run(NotificationPollSaga);
+        sagaMiddleware.run(NotificationSettingsSaga);
 
         const history = syncHistoryWithStore(browserHistory, store);
 
@@ -119,6 +125,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
         if (url.indexOf('/curation-rewards') !== -1) url = url.replace(/\/curation-rewards$/, '/transfers');
         if (url.indexOf('/author-rewards') !== -1) url = url.replace(/\/author-rewards$/, '/transfers');
 
+        //todo: this line is triggering a node exception when client hard reloads the page in dev. Doesn't seem to be a production issue, but should be noted.
         onchain = await api.getStateAsync(url);
 
         if (Object.getOwnPropertyNames(onchain.accounts).length === 0 && (url.match(routeRegex.UserProfile1) || url.match(routeRegex.UserProfile3))) { // protect for invalid account

@@ -47,6 +47,7 @@
     "newer": "Newer",
     "next": "Next",
     "no": "No",
+    "notifications":"Notifications",
     "ok": "Ok",
     "older": "Older",
     "or": "or",
@@ -94,6 +95,7 @@
     "sign_in": "Sign In",
     "sign_up": "Sign Up",
     "since": "since",
+    "steem": "Steem",
     "submit": "Submit",
     "power_up": "Power Up",
     "submit_a_story": "Post",
@@ -579,6 +581,35 @@
     "public_profile_settings": "Public Profile Settings",
     "private_post_display_settings": "Private Post Display Settings",
     "not_safe_for_work_nsfw_content": "Not safe for work (NSFW) content",
+    "notifications": {
+      "title": "Notification settings",
+      "transports": {
+        "wwwpoll": {
+          "title": "Website notifications",
+          "sub_title": "Appears on Steemit.com",
+          "icon":"notify-outline"
+        },
+        "sms": {
+          "title": "SMS notifications",
+          "sub_title": "For security alerts",
+          "icon":"chat-bubble-outline"
+        },
+        "email": {
+          "title": "Email notifications",
+          "sub_title": "Straight to your inbox",
+          "icon":"mail-outline"
+        }
+      },
+      "meta_types": {
+        "security": "Security setting changes",
+        "wallet": "Wallet",
+        "postReplies": "Comments on your posts",
+        "commentReplies": "Replies to your comments",
+        "resteems": "Resteems",
+        "mentions": "Mentions",
+        "newPosts": "New posts"
+      }
+    },
     "always_hide": "Always hide",
     "always_warn": "Always warn",
     "always_show": "Always show",
@@ -643,5 +674,82 @@
     "ownership_changed_on": "Ownership Changed On ",
     "deadline_for_recovery_is": "Deadline for recovery is",
     "i_understand_dont_show_again": "I understand, don't show me again"
-  }
+  },
+    "notifications": {
+        "controls": {
+          "go_to_page": "View all",
+          "mark_all_read": "Mark all as Read",
+          "mark_all_hidden": "Clear all",
+          "fetch_more": "Get more!",
+          "fetch_no_more": "That's it."
+        },
+        "filters": {
+          "_label": "Filters",
+          "all": "All",
+          "security": "Security",
+          "posts": "Posts",
+          "wallet": "Wallet",
+          "mentions": "Mentions",
+          "followers": "Followers",
+          "newPosts": "New Posts"
+        },
+        "announcement":{
+            "action": "official announcement"
+        },
+        "announcement_important":{
+            "action": "important announcement"
+        },
+        "follow":{
+            "action": "posted"
+        },
+        "comment_reply": {
+            "action": "replied to your comment"
+        },
+        "mention": {
+          "action": "tagged you",
+          "actionPost": "tagged you in a story",
+          "actionComment": "tagged you in a comment"
+        },
+        "post_reply": {
+            "action": "commented on"
+        },
+        "power_down": {
+            "action": "Power down executed",
+            "subject": "Notice"
+        },
+        "receive": {
+            "action": "paid you with"
+        },
+        "resteem": {
+            "action": "resteemed"
+        },
+        "security_new_mobile_device":{
+          "action":"New mobile device linked",
+          "body":"If this wasn't you, change your password ASAP",
+          "subject":"Security warning",
+          "z_currenty_unused":true
+        },
+        "security_password_changed":{
+          "action":"Password changed",
+          "body":"If this wasn't you, recover your account ASAP",
+          "subject":"Security warning",
+          "z_currenty_unused":true
+        },
+        "power_down":{
+          "action":"Power Down initiated",
+          "body":"If this wasn't you, change your password ASAP",
+          "subject":"Security warning"
+        },
+        "security_withdrawal":{
+          "action":"Savings withdrawal initiated",
+          "body":"If this wasn't you, change your password ASAP",
+          "subject":"Security warning",
+          "z_currenty_unused":true
+        },
+        "vote": {
+            "action": "upvoted you",
+            "actionPost": "upvoted your post",
+            "actionComment": "upvoted your comment"
+        }
+    }
 }

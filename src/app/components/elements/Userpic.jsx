@@ -4,6 +4,10 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import { imageProxy } from 'app/utils/ProxifyUrl';
 
 class Userpic extends Component {
+    static propTypes = {
+        account: PropTypes.string,
+        badge: PropTypes.string
+    }
 
     shouldComponentUpdate = shouldComponentUpdate(this, 'Userpic')
 
@@ -22,9 +26,11 @@ class Userpic extends Component {
             /* eslint-disable-line no-empty */
         }
 
+        const badge = (this.props.badge)? <span className="badge" dangerouslySetInnerHTML={ {__html: this.props.badge} } /> : null
+
         const style = {backgroundImage: 'url(' + imageProxy() + `u/${account}/avatar)` };
 
-        return (<div className="Userpic" style={style} />)
+        return (<div className="Userpic" title={"Picture for " + this.props.account} style={style} >{ badge }</div>)
     }
 }
 

@@ -1,0 +1,244 @@
+.NotificationMenuWrapper {
+    max-height: 90vh;
+    overflow-y: auto;
+
+}
+
+
+.NotificationsModule {
+    &.no-notifications {
+        ul.Notifications {
+            background: url(../icons/notifications/tropical.png);
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+    }
+    &.Dropdown {
+        >ul.Notifications {
+            min-height: 135px;
+        }
+        >.footer.get-more {
+            border-bottom:none;
+        }
+    }
+    > ul {
+        margin: 0;
+    }
+
+    ul.Notifications {
+        list-style: none outside;
+        min-height: 200px;
+        > li.item {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+    }
+
+    > .title {
+        &.absolute {
+            background: $white;
+            left:0px;
+            position: absolute;
+            top: 0px;
+            width: 100%;
+
+            @media (max-height: 600px) {
+                display:none;
+            }
+        }
+    }
+    > .footer.absolute {
+        background: $white;
+        bottom: 0px;
+        left: 0px;
+        position: absolute;
+        width: 100%;
+    }
+    > .title,
+    > .footer {
+        border-bottom: 1px solid $medium-gray;
+        padding: 0.6rem 1rem;
+        color: $notif_dd_black;
+        font-weight: bold;
+        line-height: 1.5rem;
+
+        .controls-right {
+            float:right;
+            margin-left: 20px;
+        }
+
+        .ptc {
+            color:$notif_dd_ctrl_color;
+            font-weight:normal;
+            font-size:0.8rem;
+            margin-right:1rem!important;
+        }
+
+        a {
+            display:inline-block;
+            color:$notif_dd_ctrl_color;
+            padding:0px;
+
+            .Icon {
+                fill:$notif_dd_ctrl_color;
+                margin-right:0;
+            }
+        }
+    }
+
+    > .title {
+        font-size:1.1rem;
+
+        a {
+            line-height: 1.4rem;
+        }
+    }
+    > .footer {
+        border-top: 1px solid $medium-gray;
+        display: inherit;
+        text-align:center;
+        a {
+            margin:auto;
+        }
+        &.get-more {
+            border-top: none;
+        }
+
+    }
+    &.Page {
+        > ul.menu {
+            overflow-x: auto;
+            li.selected {
+                font-weight: bold;
+            }
+        }
+        > .title {
+            padding-left: 0;
+            padding-right: 0.2rem;
+            font-size:1.8rem;
+            font-weight: normal;
+        }
+    }
+}
+
+.Notifications,
+.NotificationMenu {
+
+    .Icon { //for regular list items
+        padding-left: 0.1rem;
+        margin-right: 0.5rem;
+        top: 0;
+    }
+
+    > li.item {
+        background: $notif_item_read_bg;
+        position: relative;
+        border-bottom: 1px solid $notif_item_border_color;
+
+        &:active,
+        &:hover {
+            background: $notif_item_read_bg_hover;
+            .rightControls {
+                display: block;
+                &:hover {
+                    fill: $black;
+                }
+            }
+        }
+        &.unread {
+            background: $notif_item_unread_bg;
+            &:hover {
+                background: $notif_item_unread_bg_hover;
+            }
+            .unseenIndicator {
+                color: $notif_counter_badge_color;
+                display: block;
+                left: 4px;
+                position: absolute;
+                top: 28px;
+            }
+
+            .item-panel {
+                .Userpic svg g {
+                    fill: $notif_item_badge_unread_color;
+                }
+
+                .commentReply,
+                .postReply {
+                    .Userpic svg g {
+                        fill: none;
+                        stroke: $notif_item_badge_unread_color;
+                    }
+                }
+            }
+        }
+
+        a {
+            padding-top: 0;
+            padding-bottom: 0;
+            color: $black;
+
+            //padding: 0 1rem 0 1rem; //1rem definition needed for notifications page
+        }
+
+        .item-panel {
+            width: 100%;
+            height:87px;
+            margin: 0;
+            line-height: 22px;
+            padding: 10px 0px;
+
+            .Userpic svg g {
+                fill: $black;
+            }
+            .commentReply,
+            .postReply {
+                .Userpic svg g {
+                    fill: none;
+                }
+            }
+        }
+        .item-header,
+        .item-body,
+        .item-footer {
+            margin-left:0;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            @media screen and (min-width: 39.9375em) {
+                margin-left: 62px;
+            }
+
+            .subject {
+                color: $black;
+                font-weight:bold;
+                text-transform:uppercase;
+            }
+        }
+        .item-header,
+        .item-footer {
+            color: $dark-gray;
+            .user {
+                color: $black;
+                font-weight:bold;
+                font-size:1rem;
+                text-transform: lowercase;
+                display: inline;
+            }
+        }
+        .rightControls {
+            display:none;
+            height: 40px;
+            padding: 10px;
+            position: absolute;
+            right: 0px;
+            top: 0px;
+            width: 40px;
+            fill:$dark-gray;
+        }
+        .unseenIndicator {
+            display:none;
+        }
+    }
+}
+

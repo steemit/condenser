@@ -32,6 +32,7 @@
 @import "./elements/AuthorDropdown";
 @import "./elements/UserNames";
 @import "./elements/QrKeyView";
+@import "./elements/IOSToggle";
 
 // modules
 @import "./modules/Header";
@@ -40,11 +41,14 @@
 @import "./modules/lp/LpFooter";
 @import "./modules/SignUp";
 @import "./modules/LoginForm";
+@import "modules/YotificationList";
+@import "./modules/Settings";
 @import "./modules/SidePanel";
 @import "./modules/BottomPanel";
 @import "./modules/UserWallet";
 @import "./modules/Powerdown";
 @import "./modules/TopRightMenu";
+@import "./modules/YotificationSettingsPanel";
 
 // pages
 @import "./pages/PostsIndex";

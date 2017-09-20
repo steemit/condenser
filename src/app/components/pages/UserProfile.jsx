@@ -466,11 +466,11 @@ module.exports = {
                 dispatch({type: 'user/SET_TRANSFER_DEFAULTS', payload: transferDefaults})
                 dispatch({type: 'user/SHOW_TRANSFER'})
             },
-            clearPowerdownDefaults: () => {dispatch(user.actions.clearPowerdownDefaults())},
+            clearPowerdownDefaults: () => {dispatch({type: 'user/CLEAR_POWERDOWN_DEFAULTS'})},
             showPowerdown: (powerdownDefaults) => {
                 console.log('power down defaults:', powerdownDefaults)
-                dispatch(user.actions.setPowerdownDefaults(powerdownDefaults))
-                dispatch(user.actions.showPowerdown())
+                dispatch({type: 'user/SET_POWERDOWN_DEFAULTS', payload: powerdownDefaults})
+                dispatch({type: 'user/SHOW_POWERDOWN'})
             },
             withdrawVesting: ({account, vesting_shares, errorCallback, successCallback}) => {
                 const successCallbackWrapper = (...args) => {

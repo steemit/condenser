@@ -157,7 +157,7 @@ export default connect(
     // mapDispatchToProps
     dispatch => ({
         successCallback: () => {
-            dispatch(user.actions.hidePowerdown())
+            dispatch({type: 'user/HIDE_POWERDOWN'})
         },
         powerDown: (e) => {
             e.preventDefault()

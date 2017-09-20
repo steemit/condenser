@@ -109,7 +109,7 @@ export default connect(
         },
         hidePowerdown: e => {
             if (e) e.preventDefault();
-            dispatch(user.actions.hidePowerdown())
+            dispatch({type: 'user/HIDE_POWERDOWN'})
         },
         hidePromotePost: e => {
             if (e) e.preventDefault();

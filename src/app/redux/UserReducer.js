@@ -84,6 +84,14 @@ export default function reducer(state = defaultState, action) {
         return state.set('show_transfer_modal', false);
     }
 
+    if (action.type === 'user/SHOW_POWERDOWN') {
+        return state.set('show_powerdown_modal', true);
+    }
+
+    if (action.type === 'user/HIDE_POWERDOWN') {
+        return state.set('show_powerdown_modal', false);
+    }
+
     if (action.type === 'user/SHOW_PROMOTE_POST') {
         return state.set('show_promote_post_modal', true);
     }
@@ -98,6 +106,14 @@ export default function reducer(state = defaultState, action) {
 
     if (action.type === 'user/CLEAR_TRANSFER_DEFAULTS') {
         return state.remove('transfer_defaults');
+    }
+
+    if (action.type === 'user/SET_POWERDOWN_DEFAULTS') {
+        return state.set('powerdown_defaults', fromJS(payload));
+    }
+
+    if (action.type === 'user/CLEAR_POWERDOWN_DEFAULTS') {
+        return state.remove('powerdown_defaults');
     }
 
     if (action.type === 'user/USERNAME_PASSWORD_LOGIN') {

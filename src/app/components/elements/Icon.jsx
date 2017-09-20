@@ -22,6 +22,7 @@ const icons = [
     'printer',
     'search',
     'menu',
+    'notify',
     'voter',
     'voters',
     'empty',

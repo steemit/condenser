@@ -3,6 +3,8 @@ import {connect} from 'react-redux';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
 
+const urlUserDefaultPic = 'assets/images/user.png';
+
 class Userpic extends Component {
     static propTypes = {
         account: PropTypes.string
@@ -11,6 +13,10 @@ class Userpic extends Component {
     shouldComponentUpdate = shouldComponentUpdate(this, 'Userpic')
 
     render() {
+        if(!window.authors) {
+            window.authors = [];
+        }
+
         const {json_metadata, width, height} = this.props
         const hideIfDefault = this.props.hideIfDefault || false
 
@@ -35,7 +41,13 @@ class Userpic extends Component {
                        width: (width || 48) + 'px',
                        height: (height || 48) + 'px'}
 
-        return (<div className="Userpic" style={style} />)
+        if(urlUserDefaultPic === url) {
+            return (<div className="Userpic" style={style} />)
+        }
+        if(window.authors.indexOf(this.props.account) < 0) {
+            window.authors.push(this.props.account)
+        }
+        return (<div className="Userpic" title={"Picture for " + this.props.account} style={style} />)
     }
 }
 

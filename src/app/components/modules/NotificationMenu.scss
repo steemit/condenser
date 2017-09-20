@@ -1,0 +1,116 @@
+.NotificationMenu {
+
+    //width: 500px;
+
+
+    .Icon { //for regular list items
+        padding-left: 0.1rem;
+        margin-right: 0.5rem;
+        top: 0;
+    }
+
+    > li.title,
+    > li.footer {
+        border-bottom: 1px solid $medium-gray;
+        color:#6a6a6a;
+        font-weight: bold;
+        line-height: 1.5rem;
+
+        a {
+            display:inline-block;
+            float:right;
+            padding:0px;
+            .Icon {
+                margin-right:0px;
+                fill:#575757;
+            }
+        }
+
+    }
+    > li.title {
+        padding: 0.5rem 0.6rem;
+        background: #eeeeee;
+        font-size:1.1rem;
+
+        a {
+            line-height: 1.4rem;
+        }
+    }
+
+    > li.footer {
+        padding: 0.3rem 0.6rem;
+        background: inherit;
+        border-top: 1px solid $medium-gray;
+        .view-all {
+            float:left;
+        }
+        .controls-right {
+            float:right;
+        }
+        button {
+            background:none!important;
+            color:inherit;
+            border:none;
+            padding:0!important;
+            font: inherit;
+            cursor: pointer!important;
+            margin: 0!important;
+            text-transform: capitalize;
+            &:hover {
+                font-weight:bold;
+            }
+        }
+    }
+
+    > li.item {
+        a {
+            padding-top:0;
+            padding-bottom:0;
+            color:$black;
+            &.unread {
+                background: $notification_unread_bg;
+            }
+        }
+
+        .item-panel { //could have been bundled into the a-tag, but may want to re-use the rendering engine.
+            width: 100%;
+            height:87px;
+            border-bottom: 1px solid #eaeaea;
+            margin: 0;
+            line-height: 22px;
+            padding: 10px 0px;
+        }
+        .item-header,
+        .item-content,
+        .item-footer {
+            margin-left:0;
+            @media screen and (min-width: 39.9375em) {
+                margin-left: 62px;
+            }
+
+            .subject {
+                color: $black;
+                font-weight:bold;
+                text-transform:uppercase;
+            }
+        }
+        .item-header,
+        .item-footer {
+            color: $dark-gray;
+            .user {
+                color: $black;
+                font-weight:bold;
+                font-size:1rem;
+                text-transform: lowercase;
+            }
+        }
+
+        .item-content {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+    }
+
+}
+

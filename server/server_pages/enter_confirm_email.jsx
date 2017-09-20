@@ -5,6 +5,7 @@ import React from "react";
 import { renderToString } from "react-dom/server";
 import models from "db/models";
 import ServerHTML from "../server-html";
+import AnalyticsScripts from "../analylics";
 import sendEmail from "../sendEmail";
 import { checkCSRF, getRemoteIp } from "server/utils/misc";
 import config from "config";
@@ -129,6 +130,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                         </form>
                     </div>
                 </div>
+                <AnalyticsScripts />
             </div>
         );
         const props = { body, title: 'Email Address', assets, meta: [] };
@@ -302,6 +304,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                         </span>
                     </div>
                 </div>
+                <AnalyticsScripts />
             </div>
         );
         const props = { body, title: "Email Confirmation", assets, meta: [] };

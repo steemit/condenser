@@ -4,6 +4,7 @@ import React from "react";
 import { renderToString } from "react-dom/server";
 import models from "db/models";
 import ServerHTML from "server/server-html";
+import AnalyticsScripts from "../analylics";
 import SignupProgressBar from "app/components/elements/SignupProgressBar";
 import CountryCode from "app/components/elements/CountryCode";
 import { getRemoteIp, checkCSRF } from "server/utils/misc";
@@ -175,6 +176,7 @@ export default function useEnterAndConfirmMobilePages(app) {
                         />
                     </form>
                 </div>
+                <AnalyticsScripts />
             </div>
         );
         const props = { body, title: "Phone Number", assets, meta: [] };
@@ -382,6 +384,7 @@ export default function useEnterAndConfirmMobilePages(app) {
                         />
                     </form>
                 </div>
+                <AnalyticsScripts />
             </div>
         );
         const props = { body, title: "Phone Confirmation", assets, meta: [] };

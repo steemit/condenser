@@ -64,11 +64,18 @@
 
     > li.item {
         a {
-            padding-top:0;
-            padding-bottom:0;
-            color:$black;
+            padding-top: 0;
+            padding-bottom: 0;
+            color: $black;
+            background: $notification_read_bg;
+            &:hover {
+                background: $notification_read_bg_hover;
+            }
             &.unread {
                 background: $notification_unread_bg;
+                &:hover {
+                    background: $notification_unread_bg_hover;
+                }
             }
         }
 

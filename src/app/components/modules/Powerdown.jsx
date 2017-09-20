@@ -52,8 +52,12 @@ class Powerdown extends React.Component {
             if (withdraw > vesting_shares - delegated_vesting_shares) {
                 withdraw = vesting_shares - delegated_vesting_shares
             }
-            const vesting_shares_str = `${withdraw.toFixed(6)} ${VEST_TICKER}`
-            this.props.withdrawVesting({account, vesting_shares_str, errorCallback, successCallback})
+            this.props.withdrawVesting({
+                account,
+                vesting_shares: `${withdraw.toFixed(6)} ${VEST_TICKER}`,
+                errorCallback,
+                successCallback
+            })
         }
 
         const notes = []

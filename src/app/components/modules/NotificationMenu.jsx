@@ -9,70 +9,7 @@ import NotificationResteem from 'app/components/modules/notification_menu/Restee
 import NotificationReceiveSteem from 'app/components/modules/notification_menu/ReceiveSteem';
 import NotificationVote from 'app/components/modules/notification_menu/Vote';
 
-/**
- * possible types of notification (notifyList may not be in this order)
- * comment on post (single or multi)
- * comment on comment (single or multi)
- * vote
- * - id (notification id. needed to track read status)
- * - type - string - 'voted'
- *
- * - item_author - string - username (of voter)
- * - item_permlink - string
- * - item_summary - string - the first x chars of the item
- * - item_depth
- *
- * - root_item_permlink
- * - root_item_author
- * - root_item_summary
- *
- * - voter - string - username
- * - read - boolean - state kept somewhere
- *
- * resteem (single)
- * - id (notification id. needed to track read status)
- * - type - string - 'resteemed'
- *
- * - item_author - string - username (of comment on comment)
- * - item_permlink - string
- * - item_summary - string - the first x chars of the item
- * - item_depth
- *
- * - root_item_permlink
- * - root_item_author
- * - root_item_summary
- *
- * - voter - string - username
- * - read - boolean - state kept somewhere
- *
- * tag (single)
- * - id (notification id. needed to track read status)
- * - type - string - 'tagged'
- *
- * - item_author - string - username (of comment on comment)
- * - item_permlink - string
- * - item_summary - string - the first x chars of the item
- * - item_depth
- *
- * - root_item_permlink
- * - root_item_author
- * - root_item_summary
- *
- * - read - boolean - state kept somewhere
- *
- * receivedSteem
- * - id (notification id. needed to track read status)
- * - type - string - 'receivedSteem'
- *
- * - item_author - string - username (sender username)
- * - item_permlink - string - (is there a thing?)
- * - item_summary - string - ???
- * - item_amount - float - ???
- *
- * - read - boolean - state kept somewhere
- * @type {[null]}
- */
-
+//notify event types
 const N_COMMENT_REPLY = 'commentReply';
 const N_POST_REPLY = 'postReply';
 const N_RECEIVE_STEEM = 'receiveSteem';
@@ -80,6 +17,7 @@ const N_RESTEEM = 'resteem';
 const N_TAG = 'tag';
 const N_VOTE = 'vote';
 
+//notify object spec - see notifyList below for spec
 const notifyItemSpec = {
     id: "UID", //needed to track .read
     read: false, //a boolean value

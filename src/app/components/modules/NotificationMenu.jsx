@@ -17,7 +17,7 @@ const N_RESTEEM = 'resteem';
 const N_TAG = 'tag';
 const N_VOTE = 'vote';
 
-//notify object spec - see notifyList below for spec
+//notify object spec - see notifyList below for specific examples
 const notifyItemSpec = {
     id: "UID", //needed to track .read
     read: false, //a boolean value
@@ -34,7 +34,7 @@ const notifyItemSpec = {
                             //exists only for N_COMMENT_REPLY, N_POST_REPLY,
         summary: "", //a string to summarize the item. Title or Content (max 255 chars)
     },
-    rootItem: { //exists only if there is a root for item
+    rootItem: { //exists only if there is a root for item, property definitions follow .item children
         author: "",
         category: "",
         permlink: "",

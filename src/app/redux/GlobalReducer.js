@@ -257,10 +257,10 @@ export default createModule({
             reducer: (state, {payload: {formId, element}}) =>
                 state.updateIn(['metaLinkData', formId], data => data.remove(element))
         },
-        fetchJson{
+        fetchJson: {
             reducer: state => state // saga
         },
-        fetchJsonResult{
+        fetchJsonResult: {
             reducer: (state, {payload: {id, result, error}}) =>
                 state.set(id, fromJS({result, error}))
         },

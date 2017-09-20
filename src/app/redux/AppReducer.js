@@ -43,6 +43,7 @@ export default function reducer(state = defaultState, action) {
     if (action.type === 'FETCH_DATA_END') {
         res = state.set('loading', false);
     }
+    //this notifications code needs to be updated or replaced
     if (action.type === 'ADD_NOTIFICATION') {
         const n = {
             action: tt('g.dismiss'),

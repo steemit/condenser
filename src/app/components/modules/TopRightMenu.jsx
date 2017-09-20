@@ -7,6 +7,7 @@ import Userpic from 'app/components/elements/Userpic';
 import { browserHistory } from 'react-router';
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
 import VerticalMenu from 'app/components/elements/VerticalMenu';
+import NotificationMenu from 'app/components/modules/NotificationMenu';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import NotifiCounter from 'app/components/elements/NotifiCounter';
 import tt from 'counterpart';
@@ -53,7 +54,25 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
             <ul className={mcn + mcl}>
                 <li className={lcn + " Header__search"}><a href="/static/search.html" title={tt_search}>{vertical ? <span>{tt_search}</span> : <Icon name="search" />}</a></li>
                 {submit_story}
+
                 {!vertical && submit_icon}
+
+                <LinkWithDropdown
+                    dropdownClassName="small-8 medium-6 large-4"
+                    closeOnClickOutside
+                    dropdownPosition="bottom"
+                    dropdownAlignment="right"
+                    dropdownContent={
+                        <NotificationMenu items={user_menu} account_link={ account_link } />
+                    }
+                >
+                    {!vertical && <li className={'Header__userpic '}>
+                        <a href={account_link} title={tt('g.notfications')} onClick={e => e.preventDefault()}>
+                            <Icon name="notify" size="1_5x" />
+                            <div className="TopRightMenu__notificounter"><NotifiCounter fields="total" /></div>
+                        </a>
+                    </li>}
+                </LinkWithDropdown>
                 <LinkWithDropdown
                     closeOnClickOutside
                     dropdownPosition="bottom"
@@ -69,6 +88,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
                         <div className="TopRightMenu__notificounter"><NotifiCounter fields="total" /></div>
                     </li>}
                 </LinkWithDropdown>
+
                 {toggleOffCanvasMenu && <li className="toggle-menu Header__hamburger"><a href="#" onClick={toggleOffCanvasMenu}>
                     <span className="hamburger" />
                 </a></li>}

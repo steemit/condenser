@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import { imageProxy } from 'app/utils/ProxifyUrl';
 
+const urlUserDefaultPic = 'assets/images/user.png';
+
 class Userpic extends Component {
 
     shouldComponentUpdate = shouldComponentUpdate(this, 'Userpic')
@@ -24,7 +26,13 @@ class Userpic extends Component {
 
         const style = {backgroundImage: 'url(' + imageProxy() + `u/${account}/avatar)` };
 
-        return (<div className="Userpic" style={style} />)
+        if(urlUserDefaultPic === url) {
+            return (<div className="Userpic" style={style} />)
+        }
+        if(window.authors.indexOf(this.props.account) < 0) {
+            window.authors.push(this.props.account)
+        }
+        return (<div className="Userpic" title={"Picture for " + this.props.account} style={style} />)
     }
 }
 

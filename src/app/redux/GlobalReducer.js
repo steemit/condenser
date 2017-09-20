@@ -1,5 +1,5 @@
 import {Map, Set, List, fromJS, Iterable} from 'immutable';
-import createModule from 'redux-modules';
+import { createModule } from 'redux-modules';
 import {emptyContent} from 'app/redux/EmptyState';
 import constants from './constants';
 import {contentStats} from 'app/utils/StateFunctions'
@@ -9,9 +9,8 @@ const emptyContentMap = Map(emptyContent)
 export default createModule({
     name: 'global',
     initialState: Map({status: {}}),
-    transformations: [
-        {
-            action: 'SET_COLLAPSED',
+    transformations: {
+        setCollapsed: {
             reducer: (state, action) => {
                 return state.withMutations(map => {
                     map.updateIn(['content', action.payload.post], value => {
@@ -20,8 +19,7 @@ export default createModule({
                 });
             }
         },
-        {
-            action: 'RECEIVE_STATE',
+        receiveState: {
             reducer: (state, action) => {
                 let payload = fromJS(action.payload)
                 if(payload.has('content')) {
@@ -38,8 +36,7 @@ export default createModule({
                 return state.mergeDeep(payload);
             }
         },
-        {
-            action: 'RECEIVE_ACCOUNT',
+        receiveAccount: {
             reducer: (state, {payload: {account}}) => {
                 account = fromJS(account, (key, value) => {
                     if (key === 'witness_votes') return value.toSet()
@@ -50,8 +47,7 @@ export default createModule({
                 return state.updateIn(['accounts', account.get('name')], Map(), a => a.mergeDeep(account))
             }
         },
-        {
-            action: 'RECEIVE_COMMENT',
+        receiveComment: {
             reducer: (state, {payload: op}) => {
                 const {author, permlink, parent_author = '', parent_permlink = '', title = '', body} = op
                 const key = author + '/' + permlink
@@ -73,8 +69,7 @@ export default createModule({
                 return updatedState
             }
         },
-        {
-            action: 'RECEIVE_CONTENT',
+        receiveContent: {
             reducer: (state, {payload: {content}}) => {
                 // console.log('GlobalReducer -- RECEIVE_CONTENT content', content)
                 content = fromJS(content)
@@ -88,8 +83,7 @@ export default createModule({
                 })
             }
         },
-        { // works...
-            action: 'LINK_REPLY',
+        linkReply: { // works...
             reducer: (state, {payload: op}) => {
                 const {author, permlink, parent_author = '', parent_permlink = ''} = op
                 if (parent_author === '' || parent_permlink === '') return state
@@ -103,19 +97,16 @@ export default createModule({
                 return updatedState;
             }
         },
-        { // works...
-            action: 'UPDATE_ACCOUNT_WITNESS_VOTE',
+        updateAccountWitnessVote: { // works...
             reducer: (state, {payload: {account, witness, approve}}) =>
                 state.updateIn(['accounts', account, 'witness_votes'], Set(),
                     votes => (approve ? Set(votes).add(witness) : Set(votes).remove(witness)))
         },
-        { // works...
-            action: 'UPDATE_ACCOUNT_WITNESS_PROXY',
+        updateAccountWitnessProxy: { // works...
             reducer: (state, {payload: {account, proxy}}) =>
                     state.setIn(['accounts', account, 'proxy'], proxy)
         },
-        {
-            action: 'DELETE_CONTENT',
+        deleteContent: {
             reducer: (state, {payload: {author, permlink}}) => {
                 const key = author + '/' + permlink
                 const content = state.getIn(['content', key])
@@ -130,8 +121,7 @@ export default createModule({
                 return updatedState
             }
         },
-        {
-            action: 'VOTED',
+        voted: {
             reducer: (state, {payload: {username, author, permlink, weight}}) => {
                 const key = ['content', author + '/' + permlink, 'active_votes']
                 let active_votes = state.getIn(key, List())
@@ -146,8 +136,7 @@ export default createModule({
                 return state;
             }
         },
-        {
-            action: 'FETCHING_DATA',
+        fetchingData: {
             reducer: (state, {payload: {order, category}}) => {
                 const new_state = state.updateIn(['status', category || '', order], () => {
                     return {fetching: true};
@@ -155,8 +144,7 @@ export default createModule({
                 return new_state;
             }
         },
-        {
-            action: 'RECEIVE_DATA',
+        receiveData: {
             reducer: (state, {payload: {data, order, category, author, accountname, /*permlink*/}}) => {
                 // console.log('-- RECEIVE_DATA reducer -->', order, category, author, permlink, data);
                 // console.log('-- RECEIVE_DATA state -->', state.toJS());
@@ -203,8 +191,7 @@ export default createModule({
                 return new_state;
             }
         },
-        {
-            action: 'RECEIVE_RECENT_POSTS',
+        receiveRecentPosts: {
             reducer: (state, {payload: {data}}) => {
                 // console.log('-- RECEIVE_RECENT_POSTS state -->', state.toJS());
                 // console.log('-- RECEIVE_RECENT_POSTS reducer -->', data);
@@ -233,70 +220,58 @@ export default createModule({
                 return new_state;
             }
         },
-        {
-            action: 'REQUEST_META', // browser console debug
+        requestMeta: {
             reducer: (state, {payload: {id, link}}) =>
                 state.setIn(['metaLinkData', id], Map({link}))
         },
-        {
-            action: 'RECEIVE_META', // browser console debug
+        receiveMeta: {
             reducer: (state, {payload: {id, meta}}) =>
                 state.updateIn(['metaLinkData', id], data => data.merge(meta))
         },
-        {
-            action: 'SET',
+        set: {
             reducer: (state, {payload: {key, value}}) => {
                 key = Array.isArray(key) ? key : [key]
                 return state.setIn(key, fromJS(value))
             }
         },
-        {
-            action: 'REMOVE',
+        remove: {
             reducer: (state, {payload: {key}}) => {
                 key = Array.isArray(key) ? key : [key]
                 return state.removeIn(key)
             }
         },
-        {
-            action: 'UPDATE',
+        update: {
             reducer: (state, {payload: {key, notSet = Map(), updater}}) =>
                 // key = Array.isArray(key) ? key : [key] // TODO enable and test
                 state.updateIn(key, notSet, updater)
         },
-        {
-            action: 'SET_META_DATA', // browser console debug
+        setMetaData: {
             reducer: (state, {payload: {id, meta}}) =>
                 state.setIn(['metaLinkData', id], fromJS(meta))
         },
-        {
-            action: 'CLEAR_META', // browser console debug
+        clearMeta: {
             reducer: (state, {payload: {id}}) =>
                 state.deleteIn(['metaLinkData', id])
         },
-        {
-            action: 'CLEAR_META_ELEMENT', // browser console debug
+        clearMetaElement: {
             reducer: (state, {payload: {formId, element}}) =>
                 state.updateIn(['metaLinkData', formId], data => data.remove(element))
         },
-        {
-            action: 'FETCH_JSON',
+        fetchJson{
             reducer: state => state // saga
         },
-        {
-            action: 'FETCH_JSON_RESULT',
+        fetchJsonResult{
             reducer: (state, {payload: {id, result, error}}) =>
                 state.set(id, fromJS({result, error}))
         },
-        {
-            action: 'SHOW_DIALOG',
+        showDialog: {
             reducer: (state, {payload: {name, params = {}}}) =>
                 state.update('active_dialogs', Map(), d => d.set(name, fromJS({params})))
         },
-        {
-            action: 'HIDE_DIALOG',
+        hideDialog: {
             reducer: (state, {payload: {name}}) =>
                 state.update('active_dialogs', d => d.delete(name))
         },
 
-    ]
+    }
 });

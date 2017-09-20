@@ -1,5 +1,5 @@
 import {fromJS} from 'immutable';
-import createModule from 'redux-modules';
+import { createModule } from 'redux-modules';
 import { DEFAULT_LANGUAGE } from 'app/client_config';
 import store from 'store';
 
@@ -22,9 +22,8 @@ if (process.env.BROWSER) {
 export default createModule({
     name: 'user',
     initialState: defaultState,
-    transformations: [
-        {
-            action: 'SHOW_LOGIN',
+    transformations: {
+        showLogin: {
             reducer: (state, {payload}) => {
                 // https://github.com/mboperator/redux-modules/issues/11
                 if (typeof payload === 'function') payload = undefined;
@@ -36,8 +35,7 @@ export default createModule({
                 return state.merge({show_login_modal: true, loginBroadcastOperation: operation, loginDefault})
             }
         },
-        {
-            action: 'SHOW_TERMS',
+        showTerms: {
             reducer: (state, {payload}) => {
                 // https://github.com/mboperator/redux-modules/issues/11
                 if (typeof payload === 'function') payload = undefined;
@@ -49,11 +47,11 @@ export default createModule({
                 return state.merge({show_terms_modal: true, loginBroadcastOperation: operation, termsDefault})
             }
         },
-        { action: 'HIDE_LOGIN', reducer: state =>
+        hideLogin: { reducer: state =>
             state.merge({show_login_modal: false, loginBroadcastOperation: undefined, loginDefault: undefined}) },
-        { action: 'SAVE_LOGIN_CONFIRM', reducer: (state, {payload}) => state.set('saveLoginConfirm', payload) },
-        { action: 'SAVE_LOGIN', reducer: (state) => state }, // Use only for low security keys (like posting only keys)
-        { action: 'REMOVE_HIGH_SECURITY_KEYS', reducer: (state) => {
+        saveLoginConfirm: { reducer: (state, {payload}) => state.set('saveLoginConfirm', payload) },
+        saveLogin: { reducer: (state) => state }, // Use only for low security keys (like posting only keys)
+        removeHighSecurityKeys: { reducer: (state) => {
             if(!state.hasIn(['current', 'private_keys'])) return state
             let empty = false
             state = state.updateIn(['current', 'private_keys'], private_keys => {
@@ -74,25 +72,23 @@ export default createModule({
             state = state.setIn(['authority', username, 'owner'], 'none')
             return state
         }},
-        { action: 'CHANGE_LANGUAGE', reducer: (state, {payload}) => {
+        changeLanguage: { reducer: (state, {payload}) => {
             return state.set('locale', payload)}
         },
-        { action: 'SHOW_TRANSFER', reducer: state => state.set('show_transfer_modal', true) },
-        { action: 'HIDE_TRANSFER', reducer: state => state.set('show_transfer_modal', false) },
-        { action: 'SHOW_POWERDOWN', reducer: state => state.set('show_powerdown_modal', true) },
-        { action: 'HIDE_POWERDOWN', reducer: state => state.set('show_powerdown_modal', false) },
-        { action: 'SHOW_PROMOTE_POST', reducer: state => state.set('show_promote_post_modal', true) },
-        { action: 'HIDE_PROMOTE_POST', reducer: state => state.set('show_promote_post_modal', false) },
-        { action: 'SET_TRANSFER_DEFAULTS', reducer: (state, {payload}) => state.set('transfer_defaults', fromJS(payload)) },
-        { action: 'CLEAR_TRANSFER_DEFAULTS', reducer: (state) => state.remove('transfer_defaults') },
-        { action: 'SET_POWERDOWN_DEFAULTS', reducer: (state, {payload}) => state.set('powerdown_defaults', fromJS(payload)) },
-        { action: 'CLEAR_POWERDOWN_DEFAULTS', reducer: (state) => state.remove('powerdown_defaults') },
-        {
-            action: 'USERNAME_PASSWORD_LOGIN',
+        showTransfer: { reducer: state => state.set('show_transfer_modal', true) },
+        hideTransfer: { reducer: state => state.set('show_transfer_modal', false) },
+        showPowerdown: { reducer: state => state.set('show_powerdown_modal', true) },
+        hidePowerdown: { reducer: state => state.set('show_powerdown_modal', false) },
+        showPromotePost: { reducer: state => state.set('show_promote_post_modal', true) },
+        hidePromitePost: { reducer: state => state.set('show_promote_post_modal', false) },
+        setTransferDefaults: { reducer: (state, {payload}) => state.set('transfer_defaults', fromJS(payload)) },
+        clearTransferDefaults: { reducer: (state) => state.remove('transfer_defaults') },
+        setPowerdownDefaults: { reducer: (state, {payload}) => state.set('powerdown_defaults', fromJS(payload)) },
+        clearPowerdownDefaults: { reducer: (state) => state.remove('powerdown_defaults') },
+        usernamePasswordLogin: {
             reducer: state => state, // saga
         },
-        {
-            action: 'SET_USER',
+        setUser: {
             reducer: (state, {payload}) => {
                 // console.log('SET_USER')
                 if (payload.vesting_shares) payload.vesting_shares = parseFloat(payload.vesting_shares);
@@ -101,16 +97,13 @@ export default createModule({
                 return state.mergeDeep({ current: payload, show_login_modal: false, loginBroadcastOperation: undefined, loginDefault: undefined, logged_out: undefined })
             }
         },
-        {
-            action: 'CLOSE_LOGIN',
+        closeLogin: {
             reducer: (state) => state.merge({ login_error: undefined, show_login_modal: false, loginBroadcastOperation: undefined, loginDefault: undefined })
         },
-        {
-            action: 'LOGIN_ERROR',
+        loginError: {
             reducer: (state, {payload: {error}}) => state.merge({ login_error: error, logged_out: undefined })
         },
-        {
-            action: 'LOGOUT',
+        logout: {
             reducer: () => {
                 return defaultState.merge({logged_out: true})
             }
@@ -120,22 +113,19 @@ export default createModule({
         //     // User can only post 1 comment per minute
         //     reducer: (state) => state.merge({ current: {lastComment: Date.now()} })
         // },
-        { action: 'SHOW_SIGN_UP', reducer: state => state.set('show_signup_modal', true) },
-        { action: 'HIDE_SIGN_UP', reducer: state => state.set('show_signup_modal', false) },
+        showSignUp: { reducer: state => state.set('show_signup_modal', true) },
+        hideSignUp: { reducer: state => state.set('show_signup_modal', false) },
 
-        {
-            action: 'KEYS_ERROR',
+        keysError: {
             reducer: (state, {payload: {error}}) => state.merge({ keys_error: error })
         },
         // { action: 'UPDATE_PERMISSIONS', reducer: state => {
         //     return state // saga
         // }},
-        { // AuthSaga
-            action: 'ACCOUNT_AUTH_LOOKUP',
+        accountAuthLookup: { // AuthSaga
             reducer: state => state
         },
-        { // AuthSaga
-            action: 'SET_AUTHORITY',
+        setAuthority: { // AuthSaga
             reducer: (state, {payload: {accountName, auth, pub_keys_used}}) => {
                 state = state.setIn(['authority', accountName], fromJS(auth))
                 if(pub_keys_used)
@@ -143,13 +133,12 @@ export default createModule({
                 return state
             },
         },
-        { action: 'HIDE_CONNECTION_ERROR_MODAL', reducer: state => state.set('hide_connection_error_modal', true) },
-        {
-            action: 'SET',
+        hideConnectionErrorModal: { reducer: state => state.set('hide_connection_error_modal', true) },
+        set: {
             reducer: (state, {payload: {key, value}}) => {
                 key = Array.isArray(key) ? key : [key]
                 return state.setIn(key, fromJS(value))
             }
         },
-    ]
+    }
 });

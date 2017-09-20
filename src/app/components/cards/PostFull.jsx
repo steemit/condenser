@@ -21,6 +21,7 @@ import { APP_DOMAIN, APP_NAME } from 'app/client_config';
 import tt from 'counterpart';
 import userIllegalContent from 'app/utils/userIllegalContent';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
+import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 
 // function loadFbSdk(d, s, id) {
 //     return new Promise(resolve => {
@@ -203,13 +204,17 @@ class PostFull extends React.Component {
 
         let content_body = content.body;
         const url = `/${category}/@${author}/${permlink}`
-        if(DMCAList.includes(url)) {
+        const bDMCAStop = DMCAList.includes(url);
+        const bIllegalContentUser = userIllegalContent.includes(content.author)
+        if(bDMCAStop) {
             content_body = tt('postfull_jsx.this_post_is_not_available_due_to_a_copyright_claim')
         }
         // detect illegal users
-        if (userIllegalContent.includes(content.author)) {
+        if (bIllegalContentUser) {
             content_body = 'Not available for legal reasons.'
         }
+
+        const bShowLoading = (!bIllegalContentUser && !bDMCAStop && content.body.length < content.body_length)
 
         // hide images if user is on blacklist
         const hideImages = ImageUserBlockList.includes(content.author)
@@ -293,6 +298,18 @@ class PostFull extends React.Component {
 
         const authorRepLog10 = repLog10(content.author_reputation)
         const isPreViewCount = Date.parse(post_content.get('created')) < 1480723200000 // check if post was created before view-count tracking began (2016-12-03)
+        let contentBody
+
+
+        if(bShowLoading) {
+            contentBody = <LoadingIndicator type="circle-strong" />
+        } else {
+            contentBody = <MarkdownViewer
+                formId={formId + '-viewer'} text={content_body} jsonMetadata={jsonMetadata}
+                large highQualityPost={high_quality_post} noImage={content.stats.gray}
+                hideImages={hideImages}
+            />
+        }
 
         return (
           <article className="PostFull hentry" itemScope itemType="http://schema.org/blogPost">
@@ -305,11 +322,7 @@ class PostFull extends React.Component {
                         <TimeAuthorCategoryLarge content={content} authorRepLog10={authorRepLog10} />
                       </div>
                       <div className="PostFull__body entry-content">
-                        <MarkdownViewer
-                            formId={formId + '-viewer'}text={content_body} jsonMetadata={jsonMetadata}
-                            large highQualityPost={high_quality_post} noImage={content.stats.gray}
-                            hideImages={hideImages}
-                        />
+                          { contentBody }
                       </div>
                     </span>
                 }

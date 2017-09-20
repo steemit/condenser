@@ -71,6 +71,7 @@ export default class UserProfile extends React.Component {
 
     componentWillUnmount() {
         this.props.clearTransferDefaults()
+        this.props.clearPowerdownDefaults()
     }
 
     loadMore(last_post, category) {
@@ -160,6 +161,7 @@ export default class UserProfile extends React.Component {
                 <UserWallet
                     account={accountImm}
                     showTransfer={this.props.showTransfer}
+                    showPowerdown={this.props.showPowerdown}
                     current_user={current_user}
                     withdrawVesting={this.props.withdrawVesting} />
                 {isMyAccount && <div><MarkNotificationRead fields="send,receive" account={account.name} /></div>}
@@ -463,6 +465,12 @@ module.exports = {
             showTransfer: (transferDefaults) => {
                 dispatch({type: 'user/SET_TRANSFER_DEFAULTS', payload: transferDefaults})
                 dispatch({type: 'user/SHOW_TRANSFER'})
+            },
+            clearPowerdownDefaults: () => {dispatch(user.actions.clearPowerdownDefaults())},
+            showPowerdown: (powerdownDefaults) => {
+                console.log('power down defaults:', powerdownDefaults)
+                dispatch(user.actions.setPowerdownDefaults(powerdownDefaults))
+                dispatch(user.actions.showPowerdown())
             },
             withdrawVesting: ({account, vesting_shares, errorCallback, successCallback}) => {
                 const successCallbackWrapper = (...args) => {

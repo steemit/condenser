@@ -67,17 +67,20 @@ class CheckLoginOwner extends React.Component {
                 <CloseButton onClick={this.hide} />
                 <h3>{tt('g.account_updated')}</h3>
                 <p>
-                    <span className="warning uppercase">{tt('g.warning')}:</span> {tt('postfull_jsx.your_password_permissions_were_reduced')} <TimeAgoWrapper date={last_valid_time} />. {tt('postfull_jsx.if_you_did_not_make_this_change') + ' '} <a onClick={this.recover}>{tt('g.recover_your_account')}</a>.
+                    <span className="warning uppercase">{tt('g.warning')}:</span>
+                    {tt('checkloginowner_jsx.your_password_permissions_were_reduced')}
+                    <TimeAgoWrapper date={last_valid_time} />. {tt('checkloginowner_jsx.if_you_did_not_make_this_change') + ' '}
+                    <a onClick={this.recover}>{tt('g.recover_your_account')}</a>.
                 </p>
                 <p>
-                    {tt('postfull_jsx.owhership_changed_on')} <FormattedDate value={last_valid_date} />
+                    {tt('checkloginowner_jsx.ownership_changed_on')} <FormattedDate value={last_valid_date} />
                 </p>
                 <p>
-                    {tt('postfull_jsx.deadline_for_recovery_is')} <b><TimeAgoWrapper date={deadline} /></b>.
+                    {tt('checkloginowner_jsx.deadline_for_recovery_is')} <b><TimeAgoWrapper date={deadline} /></b>.
                 </p>
                 <p>
                     <input type="checkbox" onChange={this.onUnderstood} />&nbsp;&nbsp;
-                    {tt('postfull_jsx.i_understand_dont_show_again')}
+                    {tt('checkloginowner_jsx.i_understand_dont_show_again')}
                 </p>
                 <div className="button" onClick={this.hide}>{tt('g.ok')}</div>
             </Reveal>

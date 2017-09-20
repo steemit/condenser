@@ -6,6 +6,7 @@ import LoginForm from 'app/components/modules/LoginForm';
 import ConfirmTransactionForm from 'app/components/modules/ConfirmTransactionForm';
 import Transfer from 'app/components/modules/Transfer';
 import SignUp from 'app/components/modules/SignUp';
+import Powerdown from 'app/components/modules/Powerdown';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import {NotificationStack} from 'react-notification';
 import TermsAgree from 'app/components/modules/TermsAgree';
@@ -15,12 +16,14 @@ class Modals extends React.Component {
         show_login_modal: React.PropTypes.bool,
         show_confirm_modal: React.PropTypes.bool,
         show_transfer_modal: React.PropTypes.bool,
+        show_powerdown_modal: React.PropTypes.bool,
         show_signup_modal: React.PropTypes.bool,
         show_promote_post_modal: React.PropTypes.bool,
         hideLogin: React.PropTypes.func.isRequired,
         hideConfirm: React.PropTypes.func.isRequired,
         hideSignUp: React.PropTypes.func.isRequired,
         hideTransfer: React.PropTypes.func.isRequired,
+        hidePowerdown: React.PropTypes.func.isRequired,
         hidePromotePost: React.PropTypes.func.isRequired,
         notifications: React.PropTypes.object,
         show_terms_modal: React.PropTypes.bool,
@@ -34,8 +37,8 @@ class Modals extends React.Component {
 
     render() {
         const {
-            show_login_modal, show_confirm_modal, show_transfer_modal, show_signup_modal,
-            hideLogin, hideTransfer, hideConfirm, hideSignUp, show_terms_modal,
+            show_login_modal, show_confirm_modal, show_transfer_modal, show_powerdown_modal, show_signup_modal,
+            hideLogin, hideTransfer, hidePowerdown, hideConfirm, hideSignUp, show_terms_modal,
             notifications, removeNotification, hidePromotePost, show_promote_post_modal
         } = this.props;
 
@@ -56,6 +59,10 @@ class Modals extends React.Component {
                 {show_transfer_modal && <Reveal onHide={hideTransfer} show={show_transfer_modal}>
                     <CloseButton onClick={hideTransfer} />
                     <Transfer />
+                </Reveal>}
+                {show_powerdown_modal && <Reveal onHide={hidePowerdown} show={show_powerdown_modal}>
+                    <CloseButton onClick={hidePowerdown} />
+                    <Powerdown />
                 </Reveal>}
                 {show_signup_modal && <Reveal onHide={hideSignUp} show={show_signup_modal}>
                     <CloseButton onClick={hideSignUp} />
@@ -80,6 +87,7 @@ export default connect(
             show_login_modal: state.user.get('show_login_modal'),
             show_confirm_modal: state.transaction.get('show_confirm_modal'),
             show_transfer_modal: state.user.get('show_transfer_modal'),
+            show_powerdown_modal: state.user.get('show_powerdown_modal'),
             show_promote_post_modal: state.user.get('show_promote_post_modal'),
             show_signup_modal: state.user.get('show_signup_modal'),
             notifications: state.app.get('notifications'),
@@ -98,6 +106,10 @@ export default connect(
         hideTransfer: e => {
             if (e) e.preventDefault();
             dispatch({type: 'user/HIDE_TRANSFER'})
+        },
+        hidePowerdown: e => {
+            if (e) e.preventDefault();
+            dispatch(user.actions.hidePowerdown())
         },
         hidePromotePost: e => {
             if (e) e.preventDefault();

@@ -1,3 +1,5 @@
+/* eslint guard-for-in: 0 */
+
 const fs = require('fs');
 
 function jsonToKeys(keys, prefix, json) {
@@ -70,17 +72,22 @@ function processDir(path, used_keys = {}) {
 }
 
 function checkKeys(translations, used_keys) {
+    let errors_counter = 0;
     for (const lang in translations) {
         const lang_keys = translations[lang];
         for (const key in used_keys) {
-            if (!lang_keys[key]) console.warn('Warning! Translation key not found: ', lang, key);
+            if (!lang_keys[key]) console.warn('Translation key not found: ', lang, key);
+            errors_counter += 1;
         }
         for (const key in lang_keys) {
-            if (!used_keys[key]) console.warn('Warning! Unused translation: ', lang, key);
+            if (!used_keys[key]) console.warn('Unused translation: ', lang, key);
+            errors_counter += 1;
         }
     }
+    return errors_counter;
 }
 
 const translations = loadTranslationFiles('src/app/locales');
 const used_keys = processDir('src');
-checkKeys(translations, used_keys);
+const errors_counter = checkKeys(translations, used_keys);
+process.exit(errors_counter > 0 ? 1 : 0);

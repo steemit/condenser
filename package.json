@@ -8,7 +8,7 @@
   "description": "steemit.com is the koa web server & middleware and react.js in-browser code for the world's first blockchain content + social media monetization platform!",
   "main": "index.js",
   "scripts": {
-    "build": "node scripts/check_translations.js; NODE_ENV=production ./node_modules/babel-cli/bin/babel-node.js ./node_modules/.bin/webpack --stats --config ./webpack/prod.config.js; rm -rf ./lib; babel src --out-dir lib -Dq",
+    "build": "NODE_ENV=production ./node_modules/babel-cli/bin/babel-node.js ./node_modules/.bin/webpack --stats --config ./webpack/prod.config.js; rm -rf ./lib; babel src --out-dir lib -Dq",
     "mocha": "NODE_ENV=test mocha ./mocha.setup.js",
     "test": "npm run mocha -- src/app/**/*.test.js",
     "test:watch:all": "npm test -- --watch --watch-extensions jsx",
@@ -182,6 +182,7 @@
     "node": ">=7.0.0"
   },
   "pre-commit": [
-    "eslint"
+    "eslint",
+    "checktranslations"
   ]
 }

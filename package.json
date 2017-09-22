@@ -15,7 +15,7 @@
     "test:watch": "npm run mocha -- --watch --watch-extensions jsx",
     "eslint": "LIST=`git diff-index --name-only HEAD | grep .*\\.js | grep -v json`; if [ \"$LIST\" ]; then eslint $LIST; fi",
     "production": "NODE_ENV=production node lib/server/index.js",
-    "start": "node scripts/check_translations.js; NODE_ENV=development ./node_modules/babel-cli/bin/babel-node.js ./webpack/dev-server.js",
+    "start": "NODE_ENV=development ./node_modules/babel-cli/bin/babel-node.js ./webpack/dev-server.js",
     "webpush": "./node_modules/babel-cli/bin/babel-node.js ./scripts/webpush_notify.js",
     "checktranslations": "node scripts/check_translations.js"
   },

@@ -13,7 +13,7 @@ export default class Link extends React.Component {
         const {href} = props
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Link')
         this.localLink = href && links.local.test(href)
-        this.onLocalClick = e => {
+        this.onLocalClick = (e) => {
             e.preventDefault()
             browserHistory.push(this.props.href)
         }

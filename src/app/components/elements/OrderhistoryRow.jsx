@@ -1,8 +1,8 @@
-var React = require("react");
+const React = require("react");
+
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 
 export default class OrderhistoryRow extends React.Component {
-
     constructor(props) {
         super();
 
@@ -59,17 +59,17 @@ export default class OrderhistoryRow extends React.Component {
     }
 
     render() {
-        let {order, buy, total} = this.props;
+        const {order, buy, total} = this.props;
 
-        let className = this.state.animate ? "animate " : "";
+        const className = this.state.animate ? "animate " : "";
 
         return (
-            <tr className={className}>
-                <td><TimeAgoWrapper date={order.date} /></td>
-                <td className={order.color}>{order.getStringPrice()}</td>
-                <td>{order.getSteemAmount().toFixed(3)}</td>
-                <td>{order.getSBDAmount().toFixed(3)}</td>
-            </tr>
+          <tr className={className}>
+            <td><TimeAgoWrapper date={order.date} /></td>
+            <td className={order.color}>{order.getStringPrice()}</td>
+            <td>{order.getSteemAmount().toFixed(3)}</td>
+            <td>{order.getSBDAmount().toFixed(3)}</td>
+          </tr>
         )
     }
 }

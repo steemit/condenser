@@ -9,24 +9,24 @@ if (!process.env.BROWSER) {
     const path = require('path');
     const fs = require('fs');
     function getFolderContents(folder, recursive) {
-        return fs.readdirSync(folder).reduce(function (list, file) {
-            var name = path.resolve(folder, file);
-            var isDir = fs.statSync(name).isDirectory();
+        return fs.readdirSync(folder).reduce((list, file) => {
+            const name = path.resolve(folder, file);
+            const isDir = fs.statSync(name).isDirectory();
             return list.concat((isDir && recursive) ? getFolderContents(name, recursive) : [name]);
         }, []);
     }
     function requireContext(folder, recursive, pattern) {
-        var normalizedFolder = path.resolve(path.dirname(module.filename), folder);
-        var folderContents = cache[folder] = cache[folder] ? cache[folder] : getFolderContents(normalizedFolder, recursive)
-            .filter(function (item) {
+        const normalizedFolder = path.resolve(path.dirname(module.filename), folder);
+        const folderContents = cache[folder] = cache[folder] ? cache[folder] : getFolderContents(normalizedFolder, recursive)
+            .filter((item) => {
                 if (item === module.filename) return false;
                 return pattern.test(item);
             });
 
-        var keys = function () {
+        const keys = function () {
             return folderContents;
         };
-        var returnContext = function returnContext(item) {
+        const returnContext = function returnContext(item) {
             return cache[item] = cache[item] ? cache[item] : fs.readFileSync(item, 'utf8');
         };
         returnContext.keys = keys;
@@ -35,8 +35,8 @@ if (!process.env.BROWSER) {
     require.context = requireContext;
 }
 
-let req = require.context("../../help", true, /\.md/);
-let HelpData = {};
+const req = require.context("../../help", true, /\.md/);
+const HelpData = {};
 
 function split_into_sections(str) {
     let sections = str.split(/\[#\s?(.+?)\s?\]/);
@@ -55,7 +55,6 @@ function split_into_sections(str) {
 }
 
 export default class HelpContent extends React.Component {
-
     static propTypes = {
         path: React.PropTypes.string.isRequired,
         section: React.PropTypes.string
@@ -68,22 +67,22 @@ export default class HelpContent extends React.Component {
 
     componentWillMount() {
         const md_file_path_regexp = new RegExp(`\/${this.locale}\/(.+)\.md$`)
-        req.keys().filter(a => {
+        req.keys().filter((a) => {
             return a.indexOf(`/${this.locale}/`) !== -1;
-        }).forEach(filename => {
-            var res = filename.match(md_file_path_regexp);
-            let key = res[1];
+        }).forEach((filename) => {
+            const res = filename.match(md_file_path_regexp);
+            const key = res[1];
             let help_locale = HelpData[this.locale];
             if (!help_locale) HelpData[this.locale] = help_locale = {};
-            let content = req(filename);
+            const content = req(filename);
             help_locale[key] = split_into_sections(content);
         });
     }
 
     setVars(str) {
         return str.replace(/(\{.+?\})/gi, (match, text) => {
-            let key = text.substr(1, text.length - 2);
-            let value = this.props[key] !== undefined ? this.props[key] : text;
+            const key = text.substr(1, text.length - 2);
+            const value = this.props[key] !== undefined ? this.props[key] : text;
             return value;
         });
     }
@@ -96,7 +95,7 @@ export default class HelpContent extends React.Component {
         let value = HelpData[this.locale][this.props.path];
         if (!value && this.locale !== "en") {
             console.warn(`missing path '${this.props.path}' for locale '${this.locale}' help files, rolling back to 'en'`);
-            value = HelpData['en'][this.props.path];
+            value = HelpData.en[this.props.path];
         }
         if (!value) {
             console.error(`help file not found '${this.props.path}' for locale '${this.locale}'`);

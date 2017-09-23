@@ -1,7 +1,8 @@
+ul.Notifications {
+    list-style: none outside;
+}
+.Notifications,
 .NotificationMenu {
-
-    //width: 500px;
-
 
     .Icon { //for regular list items
         padding-left: 0.1rem;
@@ -46,19 +47,6 @@
         }
         .controls-right {
             float:right;
-        }
-        button {
-            background:none!important;
-            color:inherit;
-            border:none;
-            padding:0!important;
-            font: inherit;
-            cursor: pointer!important;
-            margin: 0!important;
-            text-transform: capitalize;
-            &:hover {
-                font-weight:bold;
-            }
         }
     }
 
@@ -118,6 +106,5 @@
             overflow: hidden;
         }
     }
-
 }
 

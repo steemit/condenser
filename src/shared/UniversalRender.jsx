@@ -58,7 +58,7 @@ const onRouterError = (error) => {
     console.error('onRouterError', error);
 };
 
-async function universalRender({ location, initial_state, offchain, ErrorPage, tarantool }) {
+async function universalRender({ location, initial_state, offchain, ErrorPage, tarantool, setStore }) {
     let error, redirect, renderProps;
     try {
         [error, redirect, renderProps] = await runRouter(location, RootRoute);
@@ -81,6 +81,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
 
     if (process.env.BROWSER) {
         const store = createStore(rootReducer, initial_state, middleware);
+        setStore(store);
         sagaMiddleware.run(PollDataSaga).done
             .then(() => console.log('PollDataSaga is finished'))
             .catch(err => console.log('PollDataSaga is finished with error', err));

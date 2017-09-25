@@ -155,11 +155,6 @@ mysql -u root
 
 This is a required step in order for the database to be 'ready' for condenser's use.
 
-Install these modules globally:
-
-```bash
-yarn global add sequelize sequelize-cli pm2 mysql mysql2
-```
 
 Edit the file `src/db/config/config.json` using your favorite command line text editor being sure that the username, password, host, and database name are set correctly and match your newly configured mysql setup.
 
@@ -167,7 +162,7 @@ Run `sequelize db:migrate` in `src/db` directory, like this:
 
 ```bash
 cd src/db
-sequelize db:migrate
+yarn exec sequelize db:migrate
 ```
 
 #### Install Tarantool - Production Only

@@ -1,5 +1,5 @@
 import {fromJS, Map} from 'immutable';
-import createModule from 'redux-modules';
+import { createModule } from 'redux-modules';
 
 export default createModule({
     name: 'transaction',
@@ -8,9 +8,8 @@ export default createModule({
         status: { key: '', error: false, busy: false, },
         errors: null
     }),
-    transformations: [
-        {
-            action: 'CONFIRM_OPERATION',
+    transformations: {
+        confirmOperation: {
             reducer: (state, {payload}) => {
                 const operation = fromJS(payload.operation)
                 const confirm = payload.confirm
@@ -24,29 +23,26 @@ export default createModule({
                 })
             }
         },
-        { action: 'HIDE_CONFIRM', reducer: state =>
+        hideConfirm: {
+          reducer: state =>
             state.merge({show_confirm_modal: false, confirmBroadcastOperation: undefined, confirm: undefined})
         },
-        {
+        broadcastOperation: {
             // An error will end up in QUEUE
-            action: 'BROADCAST_OPERATION',
             reducer: (state) => {//, {payload: {type, operation, keys}}
                 // See TransactionSaga.js
                 return state
             },
         },
-        {
+        updateAuthorities: {
             // An error will end up in QUEUE
-            action: 'UPDATE_AUTHORITIES',
             reducer: (state) => state,
         },
-        {
+        updateMeta: {
             // An error will end up in QUEUE
-            action: 'UPDATE_META',
             reducer: (state) => state,
         },
-        {
-            action: 'ERROR',
+        error: {
             reducer: (state, {payload: {operations, error, errorCallback}}) => {
                 let errorStr = error.toString();
                 let errorKey = 'Transaction broadcast error.';
@@ -112,27 +108,24 @@ export default createModule({
                 return state
             },
         },
-        {
-            action: 'DELETE_ERROR',
+        deleteError: {
             reducer: (state, {payload: {key}}) => {
                 return state.deleteIn(['errors', key]);
             }
         },
-        {
-            action: 'SET',
+        set: {
             reducer: (state, {payload: {key, value}}) => {
                 key = Array.isArray(key) ? key : [key]
                 return state.setIn(key, fromJS(value))
             }
         },
-        {
-            action: 'REMOVE',
+        remove: {
             reducer: (state, {payload: {key}}) => {
                 key = Array.isArray(key) ? key : [key]
                 return state.removeIn(key)
             }
         },
-    ]
+    }
 });
 
 // const log = v => {console.log('l', v); return v}

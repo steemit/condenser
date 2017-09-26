@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { Link } from 'react-router'
 import tt from 'counterpart'
 import Userpic from 'app/components/elements/Userpic'

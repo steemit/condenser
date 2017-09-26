@@ -82,7 +82,6 @@ a, path, circle {
   }
 }
 
-.ptc,
 a.ptc {
   text-decoration: none;
   transition: 0.2s all ease-in-out;
@@ -97,6 +96,20 @@ a.ptc {
         color: themed('textColorAccent');  
     }  
   }
+}
+
+button.ptc {
+    background:none!important;
+    color:inherit;
+    border:none;
+    padding:0!important;
+    font: inherit;
+    cursor: pointer!important;
+    margin: 0!important;
+    text-transform: none;
+    &:hover {
+        font-weight:bold;
+    }
 }
 
 .button.hollow.no-border {

@@ -9,10 +9,10 @@ export const setStore = (theStore) => {
     }
 }
 
-export const routeProfile = (userName) => {
+export const urlProfile = (userName) => {
         return '/@' + ((userName)? userName : store.getState().user.getIn(['current', 'username']))
 }
 
 export default {
-    profile: routeProfile
+    profile: urlProfile
 }

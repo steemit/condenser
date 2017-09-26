@@ -208,12 +208,11 @@ class LoginForm extends Component {
                         {tt('g.cancel')}
                     </button>}
                 </div>
-                {authType == 'Posting' &&
                 <div>
                     <hr />
                     <p>{tt('loginform_jsx.join_our')} <span className="free-slogan">{tt('loginform_jsx.amazing_community')}</span>{tt('loginform_jsx.to_comment_and_reward_others')}</p>
                     <button type="button" className="button sign-up" onClick={this.SignUp}>{tt('loginform_jsx.sign_up_now_to_earn')}<span className="free-money">{tt('loginform_jsx.free_money')}</span></button>
-                </div>}
+                </div>
             </form>
         );
 

@@ -1,11 +1,22 @@
 import React from 'react';
-
 import { Link } from 'react-router'
+import {connect} from 'react-redux'
 import tt from 'counterpart'
 import Userpic from 'app/components/elements/Userpic'
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper'
 
-export default class NotificationPostReply extends React.Component {
+class NotificationPostReply extends React.Component {
+    constructor(notification, ...args) {
+        super(notification, ...args)
+        this.state = {
+            id: notification.id
+        }
+    }
+
+    markRead = (e) => {
+        e.preventDefault()
+        this.props.markRead(this.state.id)
+    }
 
     render() {
         //const author = authors[Math.floor(Math.random() * authors.length)]
@@ -17,7 +28,7 @@ export default class NotificationPostReply extends React.Component {
 
         const link = ['', post.category, '@' + post.author, post.permlink, '#@' + comment.author, comment.permlink].join('/')
 
-        return <Link href={ link } className={ classNames }>
+        return <Link href={ link } className={ classNames } onClick={ this.markRead } >
             <div className="item-panel" >
                 <div className="Comment__Userpic show-for-medium">
                     <Userpic account={ author } />
@@ -35,3 +46,16 @@ export default class NotificationPostReply extends React.Component {
         </Link>
     }
 }
+
+export default connect(
+    null,
+    dispatch => ({
+        markRead: e => {
+            const action = {
+                type: 'yotification_markRead',
+                id: e
+            }
+            console.log('markRead', action)
+            dispatch(action)
+        }
+    }))(NotificationPostReply)

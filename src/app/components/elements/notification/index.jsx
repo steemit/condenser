@@ -31,7 +31,8 @@ const fnInstantiateNotification = (n) => {
 export const makeNotificationList = notifications => {
     const notificationList = []
     notifications.forEach( (notification) => {
-        notificationList.push(<li className="item" key={notification.id}>{ fnInstantiateNotification(notification) }</li> )
+        let classNames = "item" + ((notification.read)? '' : ' unread')
+        notificationList.push(<li className={ classNames } key={notification.id}>{ fnInstantiateNotification(notification) }</li> )
     })
     return notificationList
 }

@@ -1,5 +1,11 @@
 ul.Notifications {
     list-style: none outside;
+    > li.item {
+        padding-left:1rem;
+        padding-right:1rem;
+    }
+
+
 }
 .Notifications,
 .NotificationMenu {
@@ -51,23 +57,25 @@ ul.Notifications {
     }
 
     > li.item {
+        background: $notification_read_bg;
+        &:hover {
+            background: $notification_read_bg_hover;
+        }
+        &.unread {
+            background: $notification_unread_bg;
+            &:hover {
+                background: $notification_unread_bg_hover;
+            }
+        }
+
         a {
             padding-top: 0;
             padding-bottom: 0;
             color: $black;
-            background: $notification_read_bg;
-            &:hover {
-                background: $notification_read_bg_hover;
-            }
-            &.unread {
-                background: $notification_unread_bg;
-                &:hover {
-                    background: $notification_unread_bg_hover;
-                }
-            }
+            //padding: 0 1rem 0 1rem; //1rem definition needed for notifications page
         }
 
-        .item-panel { //could have been bundled into the a-tag, but may want to re-use the rendering engine.
+        .item-panel {
             width: 100%;
             height:87px;
             border-bottom: 1px solid #eaeaea;

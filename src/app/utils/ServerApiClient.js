@@ -50,6 +50,38 @@ export function markNotificationRead(account, fields) {
 });
 }
 
+
+//Yo Notifications integration
+export function getNotificationsList(account, fields) {
+    //need default (before notification x, all, filter by type)
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return Promise.resolve(null);
+    const request = Object.assign({}, request_base, {method: 'put', mode: 'cors'});
+    const field_nums_str = fields.map(f => NTYPES.indexOf(f)).join('-');
+    return fetch(`/api/v1/notifications/${account}/${field_nums_str}`, request).then(r => r.json()).then(res => {
+        return notificationsArrayToMap(res);
+    });
+}
+
+//Yo Notifications integration
+export function markNotificationsRead(account, fields) {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return Promise.resolve(null);
+    const request = Object.assign({}, request_base, {method: 'put', mode: 'cors'});
+    const field_nums_str = fields.map(f => NTYPES.indexOf(f)).join('-');
+    return fetch(`/api/v1/notifications/${account}/${field_nums_str}`, request).then(r => r.json()).then(res => {
+        return notificationsArrayToMap(res);
+    });
+}
+
+//Yo Notifications integration
+export function markNotificationsHidden(account, fields) {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return Promise.resolve(null);
+    const request = Object.assign({}, request_base, {method: 'put', mode: 'cors'});
+    const field_nums_str = fields.map(f => NTYPES.indexOf(f)).join('-');
+    return fetch(`/api/v1/notifications/${account}/${field_nums_str}`, request).then(r => r.json()).then(res => {
+        return notificationsArrayToMap(res);
+    });
+}
+
 let last_page, last_views, last_page_promise;
 export function recordPageView(page, ref) {
     if (last_page_promise && page === last_page) return last_page_promise;

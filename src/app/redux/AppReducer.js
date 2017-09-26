@@ -1,4 +1,4 @@
-import {Map, OrderedMap} from 'immutable';
+import {List, Map, OrderedMap} from 'immutable';
 import tt from 'counterpart';
 
 const defaultState = Map({
@@ -37,7 +37,20 @@ export default function reducer(state = defaultState, action) {
     if (action.type === 'FETCH_DATA_END') {
         res = state.set('loading', false);
     }
-    //this notifications code needs to be updated or replaced
+
+    if (action.type === 'yotification_markRead') {
+        const yotifications = state.getIn(['yotifications']);
+        const notifications = (yotifications && yotifications.size > 0)? yotifications.toJS() : [];
+        notifications.forEach((n) => {
+            if(n.id === action.id) {
+                n.read = true;
+            }
+        })
+        console.log("notifications", JSON.stringify(notifications, null, 2));
+        return state.set('yotifications', List(notifications));
+    }
+
+    //Original verions of notifications code
     if (action.type === 'ADD_NOTIFICATION') {
         const n = {
             action: tt('g.dismiss'),

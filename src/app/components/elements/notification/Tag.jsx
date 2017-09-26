@@ -4,7 +4,6 @@ import { Link } from 'react-router'
 import tt from 'counterpart'
 import Userpic from 'app/components/elements/Userpic'
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper'
-
 export default class NotificationPostReply extends React.Component {
 
     render() {

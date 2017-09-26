@@ -1,11 +1,11 @@
-# Golos.io
+# GOLOS.io
 
-Golos.io is the react.js web interface to the world's first and best blockchain-based social media platform.  It uses [STEEM/Golos](https://github.com/GolosChain/golos), a fork of Steem/Steemit blockchain powered by Graphene 2.0 technology to store JSON-based content for a plethora of web applications.   
+GOLOS.io is the react.js web interface to the world's first and best blockchain-based social media platform.  It uses [STEEM/GOLOS](https://github.com/GolosChain/golos), a fork of Steem/Steemit blockchain powered by Graphene 2.0 technology to store JSON-based content for a plethora of web applications.   
 
-## Why would I want to use Golos.io?
+## Why would I want to use GOLOS.io?
 * Learning how to build blockchain-based web applications using STEEM/Golos as a content storage mechanism in react.js
-* Reviewing the inner workings of the golos.io social media platform
-* Assisting with software development for golos.io
+* Reviewing the inner workings of the GOLOS.io social media platform
+* Assisting with software development for GOLOS.io
 
 ## Installation
 

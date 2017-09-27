@@ -12,15 +12,22 @@ export default function (instance, name) {
     }
     return (nextProps, nextState) => {
         const upd = mixin(nextProps, nextState)
+        // Usage: steemDebug_shouldComponentUpdate = true
+        // Or: steemDebug_shouldComponentUpdate = /Comment/
         if (upd && process.env.BROWSER && window.steemDebug_shouldComponentUpdate) {
-            cmp(name, instance.props, nextProps)
-            cmp(name, instance.state, nextState)
+            const filter = window.steemDebug_shouldComponentUpdate
+            if(filter.test) {
+                if(!filter.test(name))
+                    return upd
+            }
+            compare(name, instance.props, nextProps)
+            compare(name, instance.state, nextState)
         }
         return upd
     }
 }
 
-export function cmp(name, a, b) {
+export function compare(name, a, b) {
     const aKeys = new Set(a && Object.keys(a))
     const bKeys = new Set(b && Object.keys(b))
     const ab = new Set([...aKeys, ...aKeys])

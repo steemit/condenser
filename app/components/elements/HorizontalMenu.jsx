@@ -11,11 +11,12 @@ export default class HorizontalMenu extends React.Component {
     };
 
     render() {
-        const {items, title, className, hideValue} = this.props;
+        const {children, items, title, className, hideValue} = this.props;
         return <ul className={'HorizontalMenu menu' + (className ? ' ' + className : '')}>
+            {children && <li key="domastic" className="children">{children}</li>}
             {title && <li className="title">{title}</li>}
             {items.map(i => {
-                if(i.value === hideValue) return null
+                if (i.value === hideValue) return null
                 return <li key={i.value} className={i.active ? 'active' : ''}>
                     {i.link ? <Link to={i.link} onClick={i.onClick}>
                         {i.icon && <Icon name={i.icon} />}{i.label ? i.label : i.value}

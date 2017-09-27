@@ -1,6 +1,6 @@
 import React from 'react';
 import Icon from 'app/components/elements/Icon.jsx';
-import { APP_NAME, APP_ICON } from 'config/client_config';
+import { APP_NAME, APP_ICON } from 'app/client_config';
 
 export default function MiniHeader() {
     return <header className="Header">
@@ -11,7 +11,7 @@ export default function MiniHeader() {
                         <li className="Header__top-logo">
                             <a href="/"><Icon name={APP_ICON} size="2x" /></a>
                         </li>
-                        <li className="Header__top-steemit show-for-medium"><a href="/">{APP_NAME}</a></li>
+                        <li className="Header__top-steemit show-for-medium"><a href="/">{APP_NAME}<span className="beta">beta</span></a></li>
                     </ul>
                 </div>
             </div>

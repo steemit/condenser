@@ -1,11 +1,12 @@
 import React from 'react';
-import Apis from 'shared/api_client/ApiInstances';
 import SvgImage from 'app/components/elements/SvgImage';
 import PasswordInput from 'app/components/elements/PasswordInput';
 import constants from 'app/redux/constants';
-import {PrivateKey} from 'shared/ecc';
-import { translate } from 'app/Translator';
+import {PrivateKey} from 'golos-js/lib/auth/ecc';
+import tt from 'counterpart';
 import { FormattedHTMLMessage } from 'react-intl';
+import { APP_NAME, APP_DOMAIN, SUPPORT_EMAIL } from 'app/client_config';
+import {api} from 'golos-js';
 
 const email_regex = /^([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22))*\x40([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d))*$/;
 
@@ -53,14 +54,14 @@ class RecoverAccountStep1 extends React.Component {
     onEmailChange(e) {
         const email = e.target.value.trim().toLowerCase();
         let email_error = '';
-        if (!email_regex.test(email.toLowerCase())) email_error = translate('not_valid');
+        if (!email_regex.test(email.toLowerCase())) email_error = tt('recoveraccountstep1_jsx.not_valid');
         this.setState({email, email_error});
     }
 
     validateAccountName(name) {
         if (!name) return;
-        Apis.db_api('get_accounts', [name]).then(res => {
-            this.setState({name_error: !res || res.length === 0 ? translate('account_name_is_not_found') : ''});
+        api.getAccountsAsync([name]).then(res => {
+            this.setState({name_error: !res || res.length === 0 ? tt('recoveraccountstep1_jsx.account_name_is_not_found') : ''});
             if(res.length) {
                 const [account] = res
                 // if your last owner key update is prior to July 14th then the old key will not be able to recover
@@ -68,14 +69,14 @@ class RecoverAccountStep1 extends React.Component {
                 const ownerUpdateTime = new Date(ownerUpdate).getTime()
                 const THIRTY_DAYS_AGO = new Date(Date.now() - (30 * 24 * 60 * 60 * 1000)).getTime()
                 if(ownerUpdateTime < Math.max(THIRTY_DAYS_AGO, constants.JULY_14_HACK))
-                    this.setState({name_error: translate('unable_to_recover_account_not_change_ownership_recently')})
+                    this.setState({name_error: tt('recoveraccountstep1_jsx.unable_to_recover_account_not_change_ownership_recently')})
             }
         })
     }
 
     validateAccountOwner(name) {
         const oldOwner = passwordToOwnerPubKey(name, this.state.password.value);
-        return Apis.db_api('get_owner_history', name).then(history => {
+        return api.getOwnerHistoryAsync(name).then(history => {
             const res = history.filter(a => {
                 const owner = a.previous_owner_authority.key_auths[0][0];
                 return owner === oldOwner;
@@ -113,7 +114,7 @@ class RecoverAccountStep1 extends React.Component {
                     this.setState({show_social_login: provider});
                 });
             }
-            else this.setState({error: translate('password_not_used_in_last_days')});
+            else this.setState({error: tt('recoveraccountstep1_jsx.password_not_used_in_last_days')});
         });
     }
 
@@ -143,7 +144,7 @@ class RecoverAccountStep1 extends React.Component {
                     this.setState({email_submitted: true});
                 }
                 if (res.status === 'duplicate') {
-                    this.setState({email_error: translate('request_already_submitted_contact_support')});
+                    this.setState({email_error: tt('recoveraccountstep1_jsx.request_already_submitted_contact_support', {SUPPORT_EMAIL})});
                 }
             }
         }).catch(error => {
@@ -162,23 +163,23 @@ class RecoverAccountStep1 extends React.Component {
             <div className="RestoreAccount SignUp">
                 {show_account_and_passwords && <div className="row">
                     <div className="column large-4">
-                        <h2>{translate('stolen_account_recovery')}</h2>
+                        <h2>{tt('navigation.stolen_account_recovery')}</h2>
                         <p>
-                            {translate('recover_account_intro')}
+                            {tt('recoveraccountstep1_jsx.recover_account_intro', {APP_NAME, APP_URL: APP_DOMAIN})}
                         </p>
                         <form onSubmit={this.onSubmit} noValidate>
                             <div className={name_error ? 'error' : ''}>
                                 <label>
-                                    {translate('account_name')}
+                                    {tt('g.account_name')}
                                     <input type="text" name="name" autoComplete="off" onChange={this.onNameChange} value={name} />
                                 </label>
                                 <p className="error">{name_error}</p>
                             </div>
-                            <PasswordInput passwordLabel={translate('recent_password')} onChange={this.onPasswordsChange} />
+                            <PasswordInput passwordLabel={tt('g.recent_password')} onChange={this.onPasswordsChange} />
                             <br />
                             <div className="error">{error}</div>
                             {progress_status ? <span><LoadingIndicator type="circle" inline /> {progress_status}</span>
-                        : <input disabled={!valid} type="submit" className={submit_btn_class} value= {translate('begin_recovery')} />}
+                        : <input disabled={!valid} type="submit" className={submit_btn_class} value= {tt('voting_jsx.begin_recovery')} />}
                         </form>
                     </div>
                 </div>}
@@ -190,9 +191,9 @@ class RecoverAccountStep1 extends React.Component {
                     <input type="hidden" name="owner_key" value={owner_key} />
                     <div className="row">
                         <div className="column large-4">
-                            {show_social_login === 'both' ? <p>{translate('login_with_facebook_or_reddit_media_to_verify_identity')}.</p>
-                        : <p>{translate('login_with_social_media_to_verify_identity', {
-                            provider: show_social_login
+                            {show_social_login === 'both' ? <p>{tt('recoveraccountstep1_jsx.login_with_facebook_or_reddit_media_to_verify_identity')}.</p>
+                        : <p>{tt('recoveraccountstep1_jsx.login_with_social_media_to_verify_identity', {
+                            provider: show_social_login.charAt(0).toUpperCase() + show_social_login.slice(1)
                         })}.</p>}
                         </div>
                     </div>
@@ -211,7 +212,7 @@ class RecoverAccountStep1 extends React.Component {
                         &nbsp;
                     </div>
                     {(show_social_login === 'both' || show_social_login === 'reddit') && <div className="row">
-                        <div className="column large-4">
+                        <div className="column large-4 shrink">
                             <SvgImage name="reddit" width="64px" height="64px" />
                         </div>
                         <div className="column large-8">
@@ -230,16 +231,19 @@ class RecoverAccountStep1 extends React.Component {
                                 email_submitted
                                 ?   <div>
                                         {/* currently translateHtml() does not work, using <FormattedHTMLMessage /> instead */}
-                                        <FormattedHTMLMessage id="thanks_for_submitting_request_for_account_recovery" />
+                                        {/* <FormattedHTMLMessage id="thanks_for_submitting_request_for_account_recovery" /> */}
+                                        <p>{tt('recoveraccountstep1_jsx.thanks_for_submitting_request_for_account_recovery_1', {APP_NAME})}</p>
+                                        <p>{tt('recoveraccountstep1_jsx.thanks_for_submitting_request_for_account_recovery_2')}</p>
+                                        <p>{tt('recoveraccountstep1_jsx.thanks_for_submitting_request_for_account_recovery_3')}</p>
                                     </div>
                                 : <form onSubmit={this.onSubmitEmail} noValidate>
-                                <p>{translate('enter_email_toverify_identity')}</p>
+                                <p>{tt('recoveraccountstep1_jsx.enter_email_toverify_identity')}</p>
                                 <div className={email_error ? 'column large-4 shrink error' : 'column large-4 shrink'}>
-                                    <label>{translate('email')}
+                                    <label>{tt('g.email')}
                                         <input type="text" name="email" autoComplete="off" onChange={this.onEmailChange} value={email} />
                                     </label>
                                     <p className="error">{email_error}</p>
-                                    <input type="submit" disabled={email_error || !email} className="button hollow" value={translate('continue_with_email')} />
+                                    <input type="submit" disabled={email_error || !email} className="button hollow" value={tt('recoveraccountstep1_jsx.continue_with_email')} />
                                 </div>
                             </form>
                             }

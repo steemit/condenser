@@ -78,7 +78,7 @@ mysql -u root
 Now launch mysql client and create golos_dev database:
 ```bash
 mysql -u root
-> create database golos_dev;
+> CREATE DATABASE golos_dev CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
 Install `sequelize-cli` globally:
@@ -89,6 +89,25 @@ sudo npm install -g sequelize sequelize-cli mysql
 
 Run `sequelize db:migrate` in `db/` directory.
 
+#### Install Tarantool
+
+OS X:
+
+```bash
+brew install tarantool
+```
+
+Debian based Linux:
+
+```bash
+sudo apt-get install tarantool
+```
+
+Test the interactive console:
+
+```bash
+user@example:~$ tarantool
+```
 
 ### Development
 
@@ -150,3 +169,5 @@ pm2 start config/process.json
 To report a non-critical issue, please file an issue on this GitHub project.
 
 If you find a security issue please report details to: https://github.com/GolosChain/tolstoy/issues
+
+We will evaluate the risk and make a patch available before filing the issue.

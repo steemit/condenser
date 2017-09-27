@@ -1,13 +1,13 @@
 'use strict';
 
-var config = require('../config').default;
+var config = require('config');
 var metrics = null;
 
 if (config.metrics) {
   var StatsD = require('node-statsd');
   metrics = new StatsD({
-    host: config.metrics.host,
-    prefix: config.metrics.name + '_' + (process.env.METRICS_NODE ? process.env.METRICS_NODE : '')
+    host: config.get('metrics.host'),
+    prefix: config.get('metrics.name') + '_' + (process.env.METRICS_NODE ? process.env.METRICS_NODE : '')
   });
 }
 

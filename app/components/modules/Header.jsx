@@ -3,12 +3,16 @@ import { Link } from 'react-router';
 import {connect} from 'react-redux';
 import TopRightMenu from 'app/components/modules/TopRightMenu';
 import Icon from 'app/components/elements/Icon.jsx';
+import user from 'app/redux/User';
 import resolveRoute from 'app/ResolveRoute';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
-import { translate } from 'app/Translator';
 import HorizontalMenu from 'app/components/elements/HorizontalMenu';
-import { SEO_TITLE, APP_NAME, APP_ICON } from 'config/client_config';
+import normalizeProfile from 'app/utils/NormalizeProfile';
+import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
+import VerticalMenu from 'app/components/elements/VerticalMenu';
+import tt from 'counterpart';
+import { APP_NAME, APP_ICON, DEFAULT_DOMESTIC, DOMESTIC, SEO_TITLE } from 'app/client_config';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
 
 function capitalizeFirstLetter(string) {
@@ -26,7 +30,8 @@ function sortOrderToLink(so, topic, account) {
 class Header extends React.Component {
     static propTypes = {
         location: React.PropTypes.object.isRequired,
-        current_account_name: React.PropTypes.string
+        current_account_name: React.PropTypes.string,
+        account_meta: React.PropTypes.object
     };
 
     constructor() {
@@ -38,15 +43,6 @@ class Header extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.location.pathname !== this.props.location.pathname) {
-            /**
-             * To track page changes analytics for segment.io in SPA we need to
-             * specifically track route changes
-             * (we are not doing it somewhere in router because react-router does multiple
-             * route iterations and it is hard to track only one page change event)
-             */
-            // try {
-            //     if(process.env.BROWSER) analytics.page(nextProps.location.pathname);
-            // } catch (e) { console.warn(e) }
             const route = resolveRoute(nextProps.location.pathname);
             if (route && route.page === 'PostsIndex' && route.params && route.params.length > 0) {
                 const sort_order = route.params[0] !== 'home' ? route.params[0] : null;
@@ -55,7 +51,7 @@ class Header extends React.Component {
         }
     }
 
-    hideSubheader(){
+    hideSubheader() {
         const subheader_hidden = this.state.subheader_hidden;
         const y = window.scrollY >= 0 ? window.scrollY : document.documentElement.scrollTop;
         if (y === this.prevScrollY) return;
@@ -71,9 +67,6 @@ class Header extends React.Component {
 
     componentDidMount() {
         window.addEventListener('scroll', this.hideSubheader);
-        // identify user for proper segment.io analytics data
-        // try { if (process.env.BROWSER) analytics.identify(this.props.current_account_name) }
-        // catch (e) { console.warn(e) }
     }
 
     componentWillUnmount() {
@@ -95,67 +88,59 @@ class Header extends React.Component {
         if (route.page === 'PostsIndex') {
             sort_order = route.params[0] || '';
             if (sort_order === 'home') {
-                page_title = translate('home')
+                page_title = tt('header_jsx.home')
                 const account_name = route.params[1];
                 if (current_account_name && account_name.indexOf(current_account_name) === 1)
                     home_account = true;
             } else {
-                if (route.params.length > 1) {
-                    topic = detransliterate(route.params[1]);
-                    topic_original_link = (route.params[1])
-                    // Overwrite default created for more human readable title
-                    if (route.params[0] === "created") {
-                        page_title = translate('new_topic_posts', {topic});
-                    }
-                    else {
-                        page_title = translate('sort_order_topic_posts', {sort_order, topic});
-                    }
-                } else {
-                    if (route.params[0] === "created") {
-                        page_title = translate('new_posts');
-                    }
-                    else {
-                        page_title = translate('sort_order_posts', {sort_order: translate(sort_order)});
-                    }
-                }
+                const type = tt(route.params[0] == 'payout_comments' ? 'g.comments' : 'g.posts');
+                const topic = (route.params.length > 1 ? detransliterate(route.params[1]) + ' ' : '')
+                topic_original_link = route.params[1]
+                let prefix = route.params[0];
+                if(prefix == 'created') prefix = tt('g.new')
+                if(prefix == 'payout') prefix = tt('voting_jsx.pending_payout')
+                if(prefix == 'payout_comments') prefix = tt('voting_jsx.pending_payout')
+                page_title = `${prefix} ${topic}${type}`;
             }
         } else if (route.page === 'Post') {
             sort_order = '';
             topic = route.params[0];
         } else if (route.page == 'SubmitPost') {
-            page_title = translate('create_a_post');
+            page_title = tt('header_jsx.create_a_post');
         } else if (route.page == 'Privacy') {
-            page_title = translate('privacy_policy');
+            page_title = tt('navigation.privacy_policy');
         } else if (route.page == 'Tos') {
-            page_title = translate('terms_of_service');
+            page_title = tt('navigation.terms_of_service');
         } else if (route.page == 'ChangePassword') {
-            page_title = translate('change_account_password');
+            page_title = tt('header_jsx.change_account_password');
         } else if (route.page == 'CreateAccount') {
-            page_title = translate('create_account');
+            page_title = tt('header_jsx.create_account');
         } else if (route.page == 'RecoverAccountStep1' || route.page == 'RecoverAccountStep2') {
-            page_title = translate('stolen_account_recovery');
+            page_title = tt('header_jsx.stolen_account_recovery');
         } else if (route.page === 'UserProfile') {
             user_name = route.params[0].slice(1);
-            page_title = user_name;
-            // TODO
-            if(route.params[1] === "followers") {
-                page_title = translate('people_following_user_name', {user_name}) + ' ';
+            const acct_meta = this.props.account_meta.getIn([user_name]);
+            const name = acct_meta ? normalizeProfile(acct_meta.toJS()).name : null;
+            const user_title = name ? `${name} (@${user_name})` : user_name;
+            page_title = user_title;
+            if(route.params[1] === "followers"){
+                page_title = tt('header_jsx.people_following') + " " + user_title;
             }
-            if(route.params[1] === "followed") {
-                page_title = translate('people_followed_by_user_name', {user_name}) + ' ';
+            if(route.params[1] === "followed"){
+                page_title = tt('header_jsx.people_followed_by') + " " + user_title;
             }
-            if(route.params[1] === "curation-rewards") {
-                page_title = translate('curation_rewards_by_user_name', {user_name}) + ' ';
+            if(route.params[1] === "curation-rewards"){
+                page_title = tt('header_jsx.curation_rewards_by') + " " + user_title;
             }
-            if(route.params[1] === "author-rewards") {
-                page_title = translate('author_rewards_by_user_name', {user_name}) + ' ';
+            if(route.params[1] === "author-rewards"){
+                page_title = tt('header_jsx.author_rewards_by') + " " + user_title;
             }
-            if(route.params[1] === "recent-replies") {
-                page_title = translate('replies_by_user_name', {user_name}) + ' ';
+            if(route.params[1] === "recent-replies"){
+                page_title = tt('header_jsx.replies_to') + " " + user_title;
             }
             // @user/"posts" is deprecated in favor of "comments" as of oct-2016 (#443)
-            if(route.params[1] === "posts" || route.params[1] === "comments") {
-                page_title = translate('comments_by_user_name', {user_name}) + ' ';
+            if(route.params[1] === "posts" || route.params[1] === "comments"){
+                page_title = tt('header_jsx.comments_by') + " " + user_title;
             }
         } else {
             page_name = ''; //page_title = route.page.replace( /([a-z])([A-Z])/g, '$1 $2' ).toLowerCase();
@@ -172,45 +157,55 @@ class Header extends React.Component {
         let topic_link = topic ? <Link to={`/${this.last_sort_order || 'hot'}/${topic_original_link}`}>{detransliterate(topic)}</Link> : null;
 
         const sort_orders = [
-            ['created', translate('new')],
-            ['hot', translate('hot')],
-            ['trending', translate('trending_24_hour')],
-            //['trending30', translate('trending_30_day')],
-            ['trending30', translate('trending30')],
-            // promotion functionality currently does not work
-            ['promoted', translate('promoted')],
-            // ['active', translate('active')]
+            ['created', tt('g.new')],
+            ['hot', tt('main_menu.hot')],
+            ['trending', tt('main_menu.trending')],
+            ['promoted', tt('g.promoted')],
+            //['payout', 'payout (posts)'],
+            //['payout_comments', 'payout (comments)'],
         ];
-        if (current_account_name) sort_orders.unshift(['home', translate('home')]);
+        if (current_account_name) sort_orders.unshift(['home', tt('header_jsx.home')]);
         const sort_order_menu = sort_orders.filter(so => so[0] !== sort_order).map(so => ({link: sortOrderToLink(so[0], topic_original_link, current_account_name), value: capitalizeFirstLetter(so[1])}));
-        // there were a problem when in root route ('/') when header menu didn't
-        // had any active links. Thats why selected_sort_order falls down to 'trending' if undefined
-        const selected_sort_order = sort_orders.find(so => so[0] === sort_order) || sort_orders[2];
+        const selected_sort_order = sort_orders.find(so => so[0] === sort_order);
 
         const sort_orders_horizontal = [
-            ['created', translate('new')],
-            ['hot', translate('hot')],
-            ['trending', translate('trending')],
-            ['promoted', translate('promoted')],
-            // ['active', translate('active')]
+            ['created', tt('g.new')],
+            ['hot', tt('main_menu.hot')],
+            ['trending', tt('main_menu.trending')],
+            ['promoted', tt('g.promoted')],
+            //['payout', 'payout (posts)'],
+            //['payout_comments', 'payout (comments)'],
         ];
-        if (current_account_name) sort_orders_horizontal.unshift(['home', translate('home')]);
+        if (current_account_name) sort_orders_horizontal.unshift(['home', tt('header_jsx.home')]);
         const sort_order_menu_horizontal = sort_orders_horizontal.map(so => {
-                let active = (so[0] === sort_order) || (so[0] === 'trending' && sort_order === 'trending30');
+                let active = (so[0] === sort_order);
                 if (so[0] === 'home' && sort_order === 'home' && !home_account) active = false;
                 return {link: sortOrderToLink(so[0], topic_original_link, current_account_name), value: so[1], active};
             });
 
+        // domestic
+        DOMESTIC.all = tt('g.all_langs');
+        let currentDomesticKey = DEFAULT_DOMESTIC;
+        let currentDomesticTitle = DOMESTIC[currentDomesticKey];
+        const domestic_menu = [];
+        for (var key in DOMESTIC) {
+          if (this.props.current_domestic === key) {
+            currentDomesticKey = key;
+            currentDomesticTitle = DOMESTIC[currentDomesticKey];
+          }
+
+          domestic_menu.push({link: '#' + key, onClick: this.props.changeDomestic, value: DOMESTIC[key]})
+        }
+
         let sort_order_extra_menu = null;
         if (sort_order === 'trending' || sort_order === 'trending30') {
             const items = [
-                {link: `/trending/${topic_original_link}`, value: translate('24_hour'), active: sort_order === 'trending'},
-                {link: `/trending30/${topic_original_link}`, value: translate('30_day'), active: sort_order === 'trending30'}
+                {link: `/trending/${topic_original_link}`, value: tt('g.24_hour'), active: sort_order === 'trending'},
+                {link: `/trending30/${topic_original_link}`, value: tt('g.30_day'), active: sort_order === 'trending30'}
             ];
             // hide extra menu until crowdsale start because they make no sense
             sort_order_extra_menu = <HorizontalMenu items={items} />
         }
-
         return (
             <header className="Header noPrint">
                 <div className="Header__top header">
@@ -222,11 +217,9 @@ class Header extends React.Component {
                                         <Icon name={APP_ICON} size="2x" />
                                     </Link>
                                 </li>
-
                                 <li className="Header__top-steemit show-for-medium noPrint">
                                     <Link to={logo_link}>{APP_NAME}<span className="beta">beta</span></Link>
                                 </li>
-
                                 {(topic_link || user_name || page_name) && <li className="delim show-for-medium">|</li>}
                                 {topic_link && <li className="Header__top-topic">{topic_link}</li>}
                                 {user_name && <li><Link to={`/@${user_name}`}>@{user_name}</Link></li>}
@@ -242,10 +235,19 @@ class Header extends React.Component {
                 </div>
                 <div className={'Header__sub-nav expanded show-for-medium row' + (this.state.subheader_hidden ? ' hidden' : '')}>
                     <div className="columns">
-                        <HorizontalMenu items={sort_order_menu_horizontal} />
-                    </div>
-                    <div className="columns shrink">
-                        {sort_order_extra_menu}
+                        <HorizontalMenu items={sort_order_menu_horizontal}>
+                          <LinkWithDropdown
+                            closeOnClickOutside
+                            dropdownPosition="bottom"
+                            dropdownAlignment="left"
+                            dropdownContent={<VerticalMenu items={domestic_menu} title={tt('settings_jsx.choose_domestic')} />}
+                            >
+                              <a className="domestic-selector" title={tt('settings_jsx.choose_domestic')} onClick={e => e.preventDefault()}>
+                                <Icon className="flag" name={'flags/1x1/' + currentDomesticKey} /> <Icon className="caret" name="caret-down" />
+                                {/* {DOMESTIC[currentDomesticKey].split(' ')[0]} <Icon name="caret-down" /> */}
+                              </a>
+                            </LinkWithDropdown>
+                        </HorizontalMenu>
                     </div>
                 </div>
             </header>
@@ -257,11 +259,27 @@ export {Header as _Header_};
 
 export default connect(
     state => {
+        const current_domestic = state.user.get('domestic');
         const current_user = state.user.get('current');
+        const account_user = state.global.get('accounts');
         const current_account_name = current_user ? current_user.get('username') : state.offchain.get('account');
         return {
             location: state.app.get('location'),
-            current_account_name
+            current_account_name,
+            account_meta: account_user,
+            current_domestic: current_domestic || DEFAULT_DOMESTIC
         }
-    }
+    },
+    dispatch => ({
+        changeDomestic: e => {
+          if (e) e.preventDefault();
+          const targetDomestic = e.target.text.trim();
+          let domestic = DEFAULT_DOMESTIC;
+          for (var key in DOMESTIC) {
+            if (targetDomestic.localeCompare(DOMESTIC[key]) == 0)
+              domestic = key;
+          }
+          dispatch(user.actions.changeDomestic(domestic));
+        }
+    })
 )(Header);

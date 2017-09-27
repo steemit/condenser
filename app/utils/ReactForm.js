@@ -34,7 +34,9 @@ export default function reactForm({name, instance, fields, initialValues, valida
             instance.setState(
                 {[name]: fs},
                 () => {
+                    // TODO, support promise ret
                     const ret = submitCallback({data, event, updateInitialValues}) || {}
+                    // Look for field level errors
                     for(const fieldName of Object.keys(ret)) {
                         const error = ret[fieldName]
                         if(!error) continue
@@ -168,7 +170,7 @@ function getData(fields, state) {
     @arg {string} field - field:type
     <pre>
         type = checked (for checkbox or radio)
-        type = selected (for seelct option)
+        type = selected (for select option)
         type = string
     </pre>
     @return {string} type

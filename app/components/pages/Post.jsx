@@ -1,16 +1,15 @@
 import React from 'react';
-// import ReactMarkdown from 'react-markdown';
 import Comment from 'app/components/cards/Comment';
 import PostFull from 'app/components/cards/PostFull';
 import {connect} from 'react-redux';
-
 import {sortComments} from 'app/components/cards/Comment';
-// import { Link } from 'react-router';
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
-import SvgImage from 'app/components/elements/SvgImage';
+import IllegalContentMessage from 'app/components/elements/IllegalContentMessage';
 import {Set} from 'immutable'
-import { translate } from 'app/Translator';
+import tt from 'counterpart';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+import { blockedUsers } from 'app/utils/IllegalContent';
+import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 
 class Post extends React.Component {
 
@@ -26,10 +25,11 @@ class Post extends React.Component {
         super();
         this.state = {
             showNegativeComments: false
-        }
+        };
         this.showSignUp = () => {
+            serverApiRecordEvent('SignUp', 'Post Promo');
             window.location = '/enter_email';
-        }
+        };
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Post')
     }
 
@@ -40,11 +40,12 @@ class Post extends React.Component {
         }
     }
 
-    toggleNegativeReplies = () => {
+    toggleNegativeReplies = (e) => {
         this.setState({
             showNegativeComments: !this.state.showNegativeComments
         });
-    }
+        e.preventDefault();
+    };
 
     onHideComment = () => {
         this.setState({commentHidden: true})
@@ -55,6 +56,8 @@ class Post extends React.Component {
     }
 
     render() {
+        const LIQUID_TOKEN = tt('token_names.LIQUID_TOKEN')
+
         const {showSignUp} = this
         const {current_user, ignoring, signup_bonus, content} = this.props
         const {showNegativeComments, commentHidden, showAnyway} = this.state
@@ -68,14 +71,15 @@ class Post extends React.Component {
         if (!dis) return null;
 
         if(!showAnyway) {
-            const {authorRepLog10, netVoteSign} = dis.get('stats').toJS()
-            if(authorRepLog10 < 1 || netVoteSign < 0) {
+            const {gray} = dis.get('stats').toJS()
+            if(gray) {
                 return (
                     <div className="Post">
                         <div className="row">
                             <div className="column">
                                 <div className="PostFull">
-                                    <p onClick={this.showAnywayClick}>{translate('this_post_was_hidden_due_to_low_ratings')}. <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.showAnywayClick}>{translate('show')}</button></p>
+                                    <p onClick={this.showAnywayClick}>{tt('promote_post_jsx.this_post_was_hidden_due_to_low_ratings')}.{' '}
+                                    <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.showAnywayClick}>{tt('g.show')}</button></p>
                                 </div>
                             </div>
                         </div>
@@ -114,40 +118,25 @@ class Post extends React.Component {
                 />)
             );
 
-        // Not the complete hidding logic, just move to the bottom, the rest hide in-place
-        const negativeReplies = replies.filter(a => !keep(a));
-        const stuffHidden = negativeReplies.length > 0 || commentHidden
-
-        const negativeComments =
-            negativeReplies.map(reply => (
-                <Comment
-                    root
-                    key={post + reply}
-                    content={reply}
-                    cont={content}
-                    sort_order={sort_order}
-                    showNegativeComments
-                    onHide={this.onHideComment}
-                    noImage
-                />)
-            );
-
-        const negativeGroup = !stuffHidden ? null :
+        const negativeGroup = commentHidden &&
             (<div className="hentry Comment root Comment__negative_group">
-                {this.state.showNegativeComments ?
-                    <p onClick={this.toggleNegativeReplies}>{translate('now_showing_comments_with_low_ratings')}: <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>{translate('hide')}</button></p> :
-                    <p onClick={this.toggleNegativeReplies}>{translate('comments_were_hidden_due_to_low_ratings')}. <button style={{marginBottom: 0}} className="button hollow tiny float-right" onClick={this.toggleNegativeReplies}>{translate('show')}</button></p>
-                }
-            </div>
-        );
+                <p>
+                    {tt(showNegativeComments ? 'post_jsx.now_showing_comments_with_low_ratings' : 'post_jsx.comments_were_hidden_due_to_low_ratings')}.{' '}
+                    <button className="button hollow tiny float-right" onClick={e => this.toggleNegativeReplies(e)}>
+                        {tt(showNegativeComments ? 'g.hide' :'g.show')}
+                    </button>
+                </p>
+            </div>);
 
 
         let sort_orders = [ 'trending', 'votes', 'new'];
-        let sort_labels = [ translate('trending'), translate('votes'), translate('new') ];
+        let sort_labels = [ tt('main_menu.trending'), tt('g.votes'), tt('g.created') ];
         let sort_menu = [];
+        let sort_label;
 
         let selflink = `/${dis.get('category')}/@${post}`;
         for( let o = 0; o < sort_orders.length; ++o ){
+            if(sort_orders[o] == sort_order) sort_label = sort_labels[o];
             sort_menu.push({
                 value: sort_orders[o],
                 label: sort_labels[o],
@@ -157,8 +146,26 @@ class Post extends React.Component {
         const emptyPost = dis.get('created') === '1970-01-01T00:00:00' && dis.get('body') === ''
         if(emptyPost)
             return <center>
-                <SvgImage name="404" width="640px" height="480px" />
+                <div className="NotFound float-center">
+                    <div>
+                        <h4 className="NotFound__header">Sorry! This page doesnt exist.</h4>
+                        <p>Not to worry. You can head back to <a style={{fontWeight: 800}} href="/">our homepage</a>,
+                            or check out some great posts.
+                        </p>
+                        <ul className="NotFound__menu">
+                            <li><a href="/created">new posts</a></li>
+                            <li><a href="/hot">hot posts</a></li>
+                            <li><a href="/trending">trending posts</a></li>
+                            <li><a href="/promoted">promoted posts</a></li>
+                            <li><a href="/active">active posts</a></li>
+                        </ul>
+                    </div>
+                </div>
             </center>
+
+		if(blockedUsers.includes(post.split("/")[0])) {
+			return (<IllegalContentMessage />)
+		}
 
         return (
             <div className="Post">
@@ -170,12 +177,10 @@ class Post extends React.Component {
                 {!current_user && <div className="row">
                     <div className="column">
                         <div className="Post__promo">
-                            {translate('authors_get_paid_when_people_like_you_upvote_their_post')}.
-                            <br /> {// remove '$' from signup_bonus before parsing it into local currency
-                                    translate('if_you_enjoyed_what_you_read_earn_amount')}
-                            <br /> {translate('when_you') + ' '}
-                            <a onClick={showSignUp}>{translate('when_you_link_text')}</a>
-                            {' ' + translate('and_vote_for_it') + '.'}
+                            {tt('g.next_7_strings_sinngle_block.authors_get_paid_when_people_like_you_upvote_their_post')}.
+                            <br /> {tt('g.next_7_strings_sinngle_block.if_you_enjoyed_what_you_read_earn_amount')}
+                            <br />
+                            <button type="button" className="button sign-up" onClick={showSignUp}>{tt('g.next_7_strings_sinngle_block.sign_up_now_to_receive')}<span className="free-money">{tt('g.next_7_strings_sinngle_block.free_steem', {LIQUID_TOKEN})}</span></button>
                         </div>
                     </div>
                 </div>}
@@ -184,12 +189,11 @@ class Post extends React.Component {
                         <div className="Post_comments__content">
                             {positiveComments.length ?
                             (<div className="Post__comments_sort_order float-right">
-                                {translate('sort_order')}: &nbsp;
-                                <FoundationDropdownMenu menu={sort_menu} label={translate(sort_order)} dropdownPosition="bottom" dropdownAlignment="right" />
+                                {tt('post_jsx.sort_order')}: &nbsp;
+                                <FoundationDropdownMenu menu={sort_menu} label={sort_label} dropdownPosition="bottom" dropdownAlignment="right" />
                             </div>) : null}
                             {positiveComments}
                             {negativeGroup}
-                            {showNegativeComments && negativeComments}
                         </div>
                     </div>
                 </div>
@@ -204,7 +208,7 @@ export default connect(state => {
     const current_user = state.user.get('current')
     let ignoring
     if(current_user) {
-        const key = ['follow', 'get_following', current_user.get('username'), 'ignore_result']
+        const key = ['follow', 'getFollowingAsync', current_user.get('username'), 'ignore_result']
         ignoring = state.global.getIn(key, emptySet)
     }
     return {

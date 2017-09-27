@@ -1,5 +1,5 @@
 import React from 'react'
-import { PRIVACY_POLICY_URL, TERMS_OF_SERVICE_URL } from 'config/client_config'
+import { PRIVACY_POLICY_URL, TERMS_OF_SERVICE_URL } from 'app/client_config'
 
 export default class LandingFooter extends React.Component {
 

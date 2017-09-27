@@ -3,7 +3,8 @@ import koa_body from 'koa-body';
 import models from 'db/models';
 import config from 'config';
 import {esc, escAttrs} from 'db/models';
-import {getRemoteIp, rateLimitReq, checkCSRF} from '../utils';
+import {getRemoteIp, rateLimitReq, checkCSRF} from 'server/utils/misc';
+import {broadcast} from 'golos-js';
 
 export default function useAccountRecoveryApi(app) {
     const router = koa_router();
@@ -129,9 +130,11 @@ export default function useAccountRecoveryApi(app) {
                         where: {user_id: existing_account.user_id},
                         order: 'id DESC'
                     });
-                    this.body = JSON.stringify({status: 'found', provider: identity ? identity.provider : null});
+                    this.body = JSON.stringify({
+                        status: 'found',
+                        provider: identity ? (identity.provider === 'phone' ? 'email' : identity.provider) : null});
                 } else {
-                    this.body = JSON.stringify({status: 'found', provider: 'both'});
+                    this.body = JSON.stringify({status: 'found', provider: 'email'});
                 }
             } else {
                 this.body = JSON.stringify({status: 'not found found', provider: 'email'});
@@ -168,23 +171,11 @@ export default function useAccountRecoveryApi(app) {
     });
 }
 
-import {Apis} from 'shared/api_client';
-import {createTransaction, signTransaction} from 'shared/chain/transactions';
-import {ops} from 'shared/serializer';
-
-const {signed_transaction} = ops;
-
 function* requestAccountRecovery({
-    recovery_account, account_to_recover, new_owner_authority,
-    signing_key, broadcast = false,
+    recovery_account, account_to_recover, new_owner_authority, signing_key
 }) {
     const operations = [['request_account_recovery', {
-        recovery_account, account_to_recover, new_owner_authority,
-    }]]
-    const tx = yield createTransaction(operations)
-    const sx = signTransaction(tx, signing_key)
-    if (!broadcast) return signed_transaction.toObject(sx)
-    return yield new Promise((resolve, reject) =>
-        Apis.broadcastTransaction(sx, () => {resolve()}).catch(e => {reject(e)})
-    )
+        recovery_account, account_to_recover, new_owner_authority
+    }]];
+    return yield broadcast.sendAsync({extensions: [], operations}, [signing_key]);
 }

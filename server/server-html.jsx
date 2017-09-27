@@ -1,5 +1,5 @@
 import React from 'react';
-import config from 'config';
+import { LIQUID_TOKEN } from 'app/client_config';
 
 export default function ServerHTML({ body, assets, locale, title, meta }) {
     let page_title = title;
@@ -25,6 +25,7 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
                     return null;
                 })
             }
+            <link rel="manifest" href="/static/manifest.json" />
             <link rel="icon" type="image/x-icon" href="/favicon.ico" />
             <link rel="apple-touch-icon-precomposed" sizes="57x57" href="/images/favicons/apple-icon-57x57.png" type="image/png" />
             <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/images/favicons/apple-icon-114x114.png" type="image/png" />
@@ -34,10 +35,12 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
             <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/images/favicons/apple-icon-120x120.png" type="image/png" />
             <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/images/favicons/apple-icon-76x76.png" type="image/png" />
             <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/images/favicons/apple-icon-152x152.png" type="image/png" />
+            {/*<link rel="icon" type="image/png" href="/images/favicons/favicon-196x196.png" sizes="196x196" />*/}
             <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96" />
             <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32" />
             <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16" />
-            <meta name="application-name" content="Голос" />
+            {/*<link rel="icon" type="image/png" href="/images/favicons/favicon-128.png" sizes="128x128" />*/}
+            <meta name="application-name" content={LIQUID_TOKEN} />
             <meta name="msapplication-TileColor" content="#FFFFFF" />
             <meta name="msapplication-TileImage" content="/images/favicons/ms-icon-144x144.png" />
             <meta name="msapplication-square70x70logo" content="/images/favicons/ms-icon-70x70.png" />
@@ -46,13 +49,11 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
             <meta name="msapplication-square310x310logo" content="/images/favicons/ms-icon-310x310.png" />
             { assets.style.map((href, idx) =>
                 <link href={href} key={idx} rel="stylesheet" type="text/css" />) }
-            <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Intl.~locale.en"></script>
             <title>{page_title}</title>
         </head>
         <body>
         <div id="content" dangerouslySetInnerHTML={ { __html: body } }></div>
         {assets.script.map((href, idx) => <script key={ idx } src={ href }></script>) }
-        {config.js_plugins_path && <script src={config.js_plugins_path}></script>}
         </body>
         </html>
     );

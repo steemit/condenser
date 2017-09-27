@@ -1,15 +1,16 @@
 /* eslint react/prop-types: 0 */
 import React, { PropTypes, Component } from 'react';
-
-import {PublicKey, PrivateKey} from 'shared/ecc'
+import {PrivateKey, PublicKey} from 'golos-js/lib/auth/ecc'
 import transaction from 'app/redux/Transaction'
 import g from 'app/redux/GlobalReducer'
 import user from 'app/redux/User'
 import {validate_account_name} from 'app/utils/ChainValidation';
-import runTests from 'shared/ecc/test/BrowserTests';
+import runTests from 'app/utils/BrowserTests';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import reactForm from 'app/utils/ReactForm'
-import { translate } from 'app/Translator';
+import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
+import tt from 'counterpart';
+import { APP_DOMAIN } from 'app/client_config';
 import { translateError } from 'app/utils/ParsersAndFormatters';
 
 class LoginForm extends Component {
@@ -26,29 +27,31 @@ class LoginForm extends Component {
 
     constructor(props) {
         super()
-        const cryptoTestResult = undefined; // = runTests(); // temporarily switch BrowserTests off
+        const cryptoTestResult = runTests();
+        // const cryptoTestResult = undefined; // temporary switch BrowserTests off
         let cryptographyFailure = false;
+        this.SignUp = this.SignUp.bind(this);
         if (cryptoTestResult !== undefined) {
             console.error('CreateAccount - cryptoTestResult: ', cryptoTestResult);
             cryptographyFailure = true
         }
-        this.state = {cryptographyFailure}
+        this.state = {cryptographyFailure};
         this.usernameOnChange = e => {
-            const value = e.target.value.toLowerCase()
+            const value = e.target.value.toLowerCase();
             this.state.username.props.onChange(value)
-        }
+        };
         this.onCancel = (e) => {
             if(e.preventDefault) e.preventDefault()
-            const {onCancel, loginBroadcastOperation} = this.props
-            const errorCallback = loginBroadcastOperation && loginBroadcastOperation.get('errorCallback')
-            if (errorCallback) errorCallback(translate('canceled'))
+            const {onCancel, loginBroadcastOperation} = this.props;
+            const errorCallback = loginBroadcastOperation && loginBroadcastOperation.get('errorCallback');
+            if (errorCallback) errorCallback('Canceled');
             if (onCancel) onCancel()
-        }
+        };
         this.qrReader = () => {
             const {qrReader} = props
             const {password} = this.state
             qrReader(data => {password.props.onChange(data)})
-        }
+        };
         this.initForm(props)
     }
 
@@ -57,7 +60,7 @@ class LoginForm extends Component {
         if (this.refs.username && this.refs.username.value) this.refs.pw.focus();
     }
 
-    shouldComponentUpdate = shouldComponentUpdate(this, 'LoginForm')
+    shouldComponentUpdate = shouldComponentUpdate(this, 'LoginForm');
 
     initForm(props) {
         reactForm({
@@ -66,29 +69,42 @@ class LoginForm extends Component {
             fields: ['username', 'password', 'saveLogin:checked'],
             initialValues: props.initialValues,
             validation: values => ({
-                username: ! values.username ? translate('required') : validate_account_name(values.username.split('/')[0]),
-                password: ! values.password ? translate('required') :
-                    PublicKey.fromString(values.password) ? translate('you_need_private_password_or_key_not_a_public_key') :
+                username: ! values.username ? tt('g.required') : validate_account_name(values.username.split('/')[0]),
+                password: ! values.password ? tt('g.required') :
+                    PublicKey.fromString(values.password) ? tt('loginform_jsx.you_need_a_private_password_or_key') :
                     null,
             })
         })
     }
 
+    SignUp() {
+        const onType = document.getElementsByClassName("OpAction")[0].textContent;
+        serverApiRecordEvent('FreeMoneySignUp', onType);
+        window.location.href = "/enter_email";
+    }
+
+    SignIn() {
+        const onType = document.getElementsByClassName("OpAction")[0].textContent;
+        serverApiRecordEvent('SignIn', onType);
+    }
+
     saveLoginToggle = () => {
-        const {saveLogin} = this.state
-        saveLoginDefault = !saveLoginDefault
-        localStorage.setItem('saveLogin', saveLoginDefault ? 'yes' : 'no')
-        saveLogin.props.onChange(saveLoginDefault) // change UI
-    }
+        const {saveLogin} = this.state;
+        saveLoginDefault = !saveLoginDefault;
+        localStorage.setItem('saveLogin', saveLoginDefault ? 'yes' : 'no');
+        saveLogin.props.onChange(saveLoginDefault); // change UI
+    };
+
     showChangePassword = () => {
-        const {username, password} = this.state
+        const {username, password} = this.state;
         this.props.showChangePassword(username.value, password.value)
-    }
+    };
+
     render() {
         if (!process.env.BROWSER) {
             return <div className="row">
                 <div className="column">
-                    <p>{translate("loading")}...</p>
+                    <p>{('loading')}...</p>
                 </div>
             </div>;
         }
@@ -96,15 +112,9 @@ class LoginForm extends Component {
             return <div className="row">
                 <div className="column">
                     <div className="callout alert">
-                        <h4>{translate("cryptography_test_failed")}</h4>
-                        <p>{translate("unable_to_log_you_in")}.</p>
-                        <p>
-                            {translate('the_latest_versions_of') + ' '}
-                            <a href="https://www.google.com/chrome/">Chrome</a>
-                            {' ' + translate('and') + ' '}
-                            <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a>
-                            {' ' + translate('are_well_tested_and_known_to_work_with')}
-                        </p>
+                        <h4>{tt('loginform_jsx.cryptography_test_failed')}</h4>
+                        <p>{tt('loginform_jsx.unable_to_log_you_in')}</p>
+                        <p>{tt('loginform_jsx.the_latest_versions_of')} <a href="https://www.google.com/chrome/">Chrome</a> {tt('g.and')} <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a> {tt('loginform_jsx.are_well_tested_and_known_to_work_with', {APP_DOMAIN})}</p>
                     </div>
                 </div>
             </div>;
@@ -114,61 +124,67 @@ class LoginForm extends Component {
             return <div className="row">
                 <div className="column">
                     <div className="callout alert">
-                        <p>{translate("read_only_mode")}</p>
-                    </div>
+                        <p>{tt('loginform_jsx.due_to_server_maintenance')}</p></div>
                 </div>
             </div>;
         }
 
         const {loginBroadcastOperation, dispatchSubmit, afterLoginRedirectToWelcome, msg} = this.props;
-        const {username, password, saveLogin} = this.state
-        const {submitting, valid, handleSubmit} = this.state.login
-        const {usernameOnChange, onCancel, /*qrReader*/} = this
+        const {username, password, saveLogin} = this.state;
+        const {submitting, valid, handleSubmit} = this.state.login;
+        const {usernameOnChange, onCancel, /*qrReader*/} = this;
         const disabled = submitting || !valid;
-
-        const title = loginBroadcastOperation ?
-            translate('authenticate_for_this_transaction') :
-            translate('login_to_your_APP_NAME_account');
-        const opType = loginBroadcastOperation ? loginBroadcastOperation.get('type') : null
-        const authType = translate(/^vote|comment/.test(opType) ? 'posting' : 'active_or_owner')
-        const submitLabel = translate(loginBroadcastOperation ? 'sign' : 'login');
-        let error = password.touched && password.error ? password.error : this.props.login_error
+        const opType = loginBroadcastOperation ? loginBroadcastOperation.get('type') : null;
+        let postType = "";
+        if (opType === "vote") {
+            postType = tt('loginform_jsx.login_to_vote')
+        } else if (opType === "custom_json" && loginBroadcastOperation.getIn(['operation', 'id']) === "follow") {
+            postType = 'Login to Follow Users'
+        } else if (loginBroadcastOperation) {
+            // check for post or comment in operation
+            postType = loginBroadcastOperation.getIn(['operation', 'title']) ? tt('loginform_jsx.login_to_post') : tt('loginform_jsx.login_to_comment');
+        }
+        const title = postType ? postType : tt('g.login');
+        const authType = /^vote|comment/.test(opType) ? tt('loginform_jsx.posting') : tt('loginform_jsx.active_or_owner');
+        const submitLabel = loginBroadcastOperation ? tt('g.sign_in') : tt('g.login');
+        let error = password.touched && password.error ? password.error : this.props.login_error;
         if (error === 'owner_login_blocked') {
             error = <span>
-                        {translate("password_is_bound_to_account", {
-                                changePasswordLink: <a onClick={this.showChangePassword} >
-                                                        {translate('update_your_password')}
-                                                    </a>
-                            })} />
-                        {translate('password_is_bound_to_your_accounts_owner_key')}.
-                        <br />
-                        {translate('however_you_can_use_it_to') + ' '}
-                        <a onClick={this.showChangePassword}>{translate('update_your_password')}</a>.
-                        {' ' + translate('to_obtaion_a_more_secure_set_of_keys')}.
-                    </span>
+                {tt('loginform_jsx.this_password_is_bound_to_your_account_owner_key')}
+                &nbsp;
+                {tt('loginform_jsx.however_you_can_use_it_to')}
+                <a onClick={this.showChangePassword}>{tt('loginform_jsx.update_your_password')}</a>
+                {tt('loginform_jsx.to_obtain_a_more_secure_set_of_keys')}
+            </span>
         } else if (error === 'active_login_blocked') {
-            error = <span>{translate('this_password_is_bound_to_your_accounts_private_key')}</span>
+            error = <span>
+              {tt('loginform_jsx.this_password_is_bound_to_your_account_active_key')}
+              &nbsp;
+              {tt('loginform_jsx.you_may_use_this_active_key_on_other_more')}
+            </span>
         }
         let message = null;
         if (msg) {
             if (msg === 'accountcreated') {
                 message =<div className="callout primary">
-                        <p>{translate("account_creation_succes")}</p>
+                        <p>{tt('loginform_jsx.you_account_has_been_successfully_created')}</p>
                     </div>;
             }
             else if (msg === 'accountrecovered') {
                 message =<div className="callout primary">
-                    <p>{translate("account_recovery_succes")}</p>
+                    <p>{tt('loginform_jsx.you_account_has_been_successfully_recovered')}</p>
                 </div>;
             }
             else if (msg === 'passwordupdated') {
                 message = <div className="callout primary">
-                    <p>{translate("password_update_succes", { accountName: username.value })}.</p>
+                    <p>{tt('loginform_jsx.password_update_succes', {accountName: username.value})}</p>
                 </div>;
             }
         }
-        const password_info = checkPasswordChecksum(password.value) === false ? translate("password_info") : null
+        const password_info = checkPasswordChecksum(password.value) === false ? tt('loginform_jsx.password_info') : null
+
         const form = (
+            <center>
             <form onSubmit={handleSubmit(({data}) => {
                 // bind redux-form to react-redux
                 return dispatchSubmit(data, loginBroadcastOperation, afterLoginRedirectToWelcome)
@@ -178,41 +194,50 @@ class LoginForm extends Component {
             >
                 <div className="input-group">
                     <span className="input-group-label">@</span>
-                    <input className="input-group-field" type="text" required placeholder={translate('enter_username')} ref="username"
+                    <input className="input-group-field" type="text" required placeholder={tt('loginform_jsx.enter_your_username')} ref="username"
                         {...username.props} onChange={usernameOnChange} autoComplete="on" disabled={submitting}
                     />
                 </div>
                 {username.touched && username.blur && username.error ? <div className="error">{translateError(username.error)}&nbsp;</div> : null}
 
                 <div>
-                    <input type="password" required ref="pw" placeholder={translate('password_or_wif')} {...password.props} autoComplete="on" disabled={submitting} />
+                    <input type="password" required ref="pw" placeholder={tt('loginform_jsx.password_or_wif')} {...password.props} autoComplete="on" disabled={submitting} />
                     {error && <div className="error">{translateError(error)}&nbsp;</div>}
                     {error && password_info && <div className="warning">{password_info}&nbsp;</div>}
                 </div>
                 {loginBroadcastOperation && <div>
-                    <div className="info">{translate("requires_auth_key")}.</div>
+                    <div className="info">{tt('loginform_jsx.this_operation_requires_your_key_or_master_password', {authType})}</div>
                 </div>}
                 {!loginBroadcastOperation && <div>
                     <label htmlFor="saveLogin">
-                        {translate("keep_me_logged_in") + ' '}
+                        {tt('loginform_jsx.keep_me_logged_in')} &nbsp;
                         <input id="saveLogin" type="checkbox" ref="pw" {...saveLogin.props} onChange={this.saveLoginToggle} disabled={submitting} /></label>
                 </div>}
-                <br />
                 <div>
-                    <button type="submit" disabled={submitting || disabled} className="button">
+                    <br />
+                    <button type="submit" disabled={submitting || disabled} className="button" onClick={this.SignIn}>
                         {submitLabel}
                     </button>
                     {this.props.onCancel && <button type="button float-right" disabled={submitting} className="button hollow" onClick={onCancel}>
-                        {translate("cancel")}
+                        {tt('g.cancel')}
                     </button>}
                 </div>
+                {authType == 'Posting' &&
+                <div>
+                    <hr />
+                    <p>{tt('loginform_jsx.join_our')} <span className="free-slogan">{tt('loginform_jsx.amazing_community')}</span>{tt('loginform_jsx.to_comment_and_reward_others')}</p>
+                    <button type="button" className="button sign-up" onClick={this.SignUp}>{tt('loginform_jsx.sign_up_now_to_receive')}<span className="free-money">{tt('loginform_jsx.free_money')}</span></button>
+                </div>}
             </form>
-        )
+        </center>
+        );
 
         return (
            <div className="LoginForm">
                {message}
-               <h3>{title}</h3>
+               <center>
+                   <h3>{tt('loginform_jsx.returning_users')}<span className="OpAction">{title}</span></h3>
+               </center>
                <br />
                {form}
            </div>

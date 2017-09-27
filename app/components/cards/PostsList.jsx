@@ -7,7 +7,8 @@ import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {findParent} from 'app/utils/DomUtils';
 import Icon from 'app/components/elements/Icon';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
-import { IGNORE_TAGS } from 'config/client_config';
+import {connect} from 'react-redux';
+import tt from 'counterpart';
 import {encode} from 'app/utils/helpers';
 import { isPostVisited, getVisitedPosts, visitPost } from 'app/utils/helpers';
 
@@ -64,7 +65,6 @@ class PostsList extends React.Component {
     }
 
     componentDidMount() {
-        // this.setState({_isMounted: true});
         this.attachScrollListener();
     }
 
@@ -102,7 +102,6 @@ class PostsList extends React.Component {
     }
 
     componentWillUnmount() {
-        // this.setState({_isMounted: false});
         this.detachScrollListener();
         window.removeEventListener('popstate', this.onBackButton);
         window.removeEventListener('keydown', this.onBackButton);
@@ -115,7 +114,7 @@ class PostsList extends React.Component {
         if ('keyCode' in e && e.keyCode !== 27) return;
         window.removeEventListener('popstate', this.onBackButton);
         window.removeEventListener('keydown', this.onBackButton);
-        this.setState({showPost: null});
+        this.closePostModal();
     }
 
     closeOnOutsideClick(e) {
@@ -190,24 +189,16 @@ class PostsList extends React.Component {
             ignore_result, account} = this.props;
         const {thumbSize, showPost, nsfwPref} = this.state
         const postsInfo = [];
-
-        posts.forEach(item => {
+        posts.forEach((item) => {
             const cont = content.get(item);
             if(!cont) {
                 console.error('PostsList --> Missing cont key', item)
                 return
             }
             const ignore = ignore_result && ignore_result.has(cont.get('author'))
-            // if(ignore) console.log('ignored post by', cont.get('author'), '\t', item)
-            // const json_metadata = JSON.parse(cont.get('json_metadata') || '{}')
-            // const postTags = Array.isArray(json_metadata.tags) ? json_metadata.tags : typeof json_metadata.tags === 'string' ? [json_metadata.tags] : []
-                  // postTags.push(cont.get('category'))
-            // TODO: check tags is string or null
-            // let igonedPostTags = IGNORE_TAGS && postTags.filter(function(n) { return IGNORE_TAGS.indexOf(n) >= 0 }) || []
-
-            const {hide, netVoteSign, authorRepLog10} = cont.get('stats').toJS()
-            if (!(ignore || hide) || showSpam) // rephide
-                postsInfo.push({item, ignore, netVoteSign, authorRepLog10})
+            const hide = cont.getIn(['stats', 'hide'])
+            if(!(ignore || hide) || showSpam) // rephide
+                postsInfo.push({item, ignore})
         });
         const renderSummary = items => items.map(item => <li key={item.item}>
             <PostSummary
@@ -216,8 +207,6 @@ class PostsList extends React.Component {
                 currentCategory={category}
                 thumbSize={thumbSize}
                 ignore={item.ignore}
-                netVoteSign={item.netVoteSign}
-                authorRepLog10={item.authorRepLog10}
                 onClick={this.onPostClick}
                 nsfwPref={nsfwPref}
                 visited={isPostVisited(item.item)}
@@ -233,7 +222,7 @@ class PostsList extends React.Component {
                 {showPost && <div id="post_overlay" className="PostsList__post_overlay" tabIndex={0}>
                     <div className="PostsList__post_top_overlay">
                         <div className="PostsList__post_top_bar">
-                            <button className="back-button" type="button" title="Back" onClick={() => {this.setState({showPost: null})}}>
+                            <button className="back-button" type="button" title={tt('g.back')} onClick={() => { this.setState({showPost: null}) }}>
                                 <span aria-hidden="true"><Icon name="chevron-left" /></span>
                             </button>
                             <CloseButton onClick={this.closePostModal} />
@@ -248,16 +237,13 @@ class PostsList extends React.Component {
     }
 }
 
-// import {List, Map} from 'immutable'
-import {connect} from 'react-redux'
-
 export default connect(
     (state, props) => {
         const pathname = state.app.get('location').pathname;
         const current = state.user.get('current')
         const username = current ? current.get('username') : state.offchain.get('account')
         const content = state.global.get('content');
-        const ignore_result = state.global.getIn(['follow', 'get_following', username, 'ignore_result']);
+        const ignore_result = state.global.getIn(['follow', 'getFollowingAsync', username, 'ignore_result']);
         return {...props, username, content, ignore_result, pathname};
     },
     dispatch => ({

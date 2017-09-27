@@ -15,9 +15,14 @@ li.Header__userpic {
   position: relative;
 
   .Userpic {
-    width: 36px !important;
-    height: 36px !important;
-    border: 1px solid #e0e0e0;
+    width: 32px !important;
+    height: 32px !important;
+    border: 1px solid $gray88;
+  }
+}
+li.languages {
+  > a {
+    color: #8a8a8a;
   }
 }
 
@@ -37,8 +42,9 @@ li.buttons {
 
 li {
     .button.alert, .button.success {
-      padding: 0px 5px;
+      padding: 3px;
       font-size: 100%;
+      line-height: 100%;
       font-weight: 500;
     }
     .button.fest {
@@ -46,3 +52,14 @@ li {
       background-color: #eb3010;
     }
 }
+li.wrap-rocket-chat {
+  > a > span.Icon {
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+    svg {
+      width: 1.5rem !important;
+      height: 1.5rem !important;
+    }
+  }
+}
+

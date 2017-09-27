@@ -5,7 +5,7 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper'
 import transaction from 'app/redux/Transaction'
 import Memo from 'app/components/elements/Memo'
-import { translate } from 'app/Translator';
+import tt from 'counterpart';
 
 class SavingsWithdrawHistory extends React.Component {
 
@@ -57,15 +57,15 @@ class SavingsWithdrawHistory extends React.Component {
         let idx = 0
         const rows = savings_withdraws.map(withdraw => {
             const {complete, amount, to, from, memo, request_id} = withdraw.toJS()
-            const dest = to === from ? translate('to') + ` ${to}` : translate('from') + ` ${from} ` + translate('to') + ` ${to}`
+            const dest = to === from ? tt('g.to') + " " + to : tt('g.from') + " " + from + " " + tt('g.to') + " " +  to
             const loading = this.state['loading_' + request_id]
             return <tr key={idx++}>
                 <td><TimeAgoWrapper date={complete} /></td>
                 <td>
-                    {translate('withdraw')} {amount} {dest}
+                    {tt('savingswithdrawhistory_jsx.withdraw')} {amount} {dest}
                     &nbsp;
                     {/* A cancel link puts the action very close to the info stating what is being canceled */}
-                    {!loading && <span>(<a onClick={this['cancel_' + request_id]}>{translate('cancel')}</a>)</span>}
+                    {!loading && <span>(<a onClick={this['cancel_' + request_id]}>{tt('g.cancel')}</a>)</span>}
                     {loading && <span><LoadingIndicator type="circle" /></span>}
                 </td>
                 <td><Memo text={memo} /></td>
@@ -74,7 +74,7 @@ class SavingsWithdrawHistory extends React.Component {
         return <div className="SavingsWithdrawHistory">
             <div className="row">
                 <div className="column small-12">
-                    <h4>{translate('pending_savings_withdrawals').toUpperCase()}</h4>
+                    <h4>{tt('savingswithdrawhistory_jsx.pending_savings_withdrawals')}</h4>
                     <table>
                         <tbody>
                             {rows}
@@ -106,7 +106,7 @@ export default connect(
             })
         },
         cancelWithdraw: (fro, request_id, success, errorCallback) => {
-            const confirm = translate('cancel_this_withdraw_request')
+            const confirm = tt('savingswithdrawhistory_jsx.cancel_this_withdraw_request')
             const successCallback = () => {
                 // refresh transfer history
                 dispatch({type: 'global/GET_STATE', payload: {url: `@${fro}/transfers`}})

@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import {connect} from 'react-redux'
 import transaction from 'app/redux/Transaction'
 import {findParent} from 'app/utils/DomUtils';
-import { translate } from 'app/Translator';
+import tt from 'counterpart';
 
 class ConfirmTransactionForm extends Component {
 
@@ -46,8 +46,8 @@ class ConfirmTransactionForm extends Component {
                <div>{conf}</div>
                {warning ? <div style={{paddingTop: 10}} className="error">{warning}</div> : null}
                <br />
-               <button className="button" onClick={okClick}>{translate('ok')}</button>
-               <button type="button hollow" className="button hollow" onClick={onCancel}>{translate('cancel')}</button>
+               <button className="button" onClick={okClick}>{tt('g.ok')}</button>
+               <button type="button hollow" className="button hollow" onClick={onCancel}>{tt('g.cancel')}</button>
            </div>
        )
     }
@@ -56,11 +56,7 @@ const typeName = confirmBroadcastOperation => {
     const title = confirmBroadcastOperation.getIn(['operation', '__config', 'title'])
     if(title) return title
     const type = confirmBroadcastOperation.get('type')
-    // this part was too complicated to add i18n
-    //  Plus i didn't know where and how exactly thi component is used
-    //  so i added generic 'Confirm Action' title
-    // return translate('confirm') + ' ' + translate((type.split('_').map(n => n.charAt(0).toLowerCase() + n.substring(1))).join(' '))
-    return translate('confirm') + ' ' + translate('action')
+    return tt('confirmtransactionform_jsx.confirm') + ' ' + (type.split('_').map(n => n.charAt(0).toUpperCase() + n.substring(1))).join(' ')
 }
 
 export default connect(

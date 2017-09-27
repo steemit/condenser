@@ -1,10 +1,10 @@
 import React from 'react';
-import { translate } from 'app/Translator';
+import tt from 'counterpart';
 
 function validatePassword(value, new_password) {
     if (!new_password) return '';
     const length = 32;
-    return value && value.length < length ? translate('password_must_be_characters_or_more', {amount: length}) : '';
+    return value && value.length < length ? tt('g.password_must_be_characters_or_more', {amount: length}) : '';
 }
 
 export default class PasswordInput extends React.Component {
@@ -69,7 +69,7 @@ export default class PasswordInput extends React.Component {
         const res = {newPassword: {value, error}};
         if (value !== this.state.confirmPassword.value) {
             res.confirmPassword = this.state.confirmPassword;
-            res.confirmPassword.error = translate('passwords_do_not_match');
+            res.confirmPassword.error = tt('g.passwords_do_not_match');
         }
         this.setState(res);
         this.onChange(res);
@@ -78,7 +78,7 @@ export default class PasswordInput extends React.Component {
     confirmPasswordChange(e) {
         const value = e.target.value.trim();
         let error = '';
-        if (value !== this.state.newPassword.value) error = translate('passwords_do_not_match');
+        if (value !== this.state.newPassword.value) error = tt('g.passwords_do_not_match');
         const res = {confirmPassword: {value, error}};
         this.setState(res);
         this.onChange(res);
@@ -94,13 +94,13 @@ export default class PasswordInput extends React.Component {
                     </label><div className="error">{oldPassword.error}</div>
                 </div>
                 {inputNewPassword && <div>
-                    <label>{translate('new_password')}
+                    <label>{tt('g.new_password')}
                         <input type="password" name="oldPassword" autoComplete="off" onChange={this.newPasswordChange} value={newPassword.value} disabled={disabled} />
                     </label>
                     <div className="error">{newPassword.error}</div>
                 </div>}
                 {inputNewPassword && inputConfirmPassword && <div>
-                    <label>{translate('confirm_password')}
+                    <label>{tt('g.confirm_password')}
                         <input type="password" name="confirmPassword" autoComplete="off" onChange={this.confirmPasswordChange} value={confirmPassword.value} disabled={disabled} />
                     </label>
                     <div className="error">{confirmPassword.error}</div>

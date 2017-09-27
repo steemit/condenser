@@ -2,9 +2,9 @@ import React from 'react';
 import {connect} from 'react-redux';
 import SvgImage from 'app/components/elements/SvgImage';
 import AddToWaitingList from 'app/components/modules/AddToWaitingList';
-import { translate } from 'app/Translator';
+import tt from 'counterpart';
 import { formatCoins } from 'app/utils/FormatCoins';
-import { PRIVACY_POLICY_URL, TERMS_OF_SERVICE_URL } from 'config/client_config';
+import { APP_DOMAIN, PRIVACY_POLICY_URL, TERMS_OF_SERVICE_URL } from 'app/client_config';
 import LocalizedCurrency from 'app/components/elements/LocalizedCurrency';
 
 class SignUp extends React.Component {
@@ -13,11 +13,13 @@ class SignUp extends React.Component {
         this.state = {waiting_list: false};
     }
     render() {
+        const APP_NAME = tt('g.APP_NAME');
+
         if ($STM_Config.read_only_mode) {
             return <div className="row">
                 <div className="column">
                     <div className="callout alert">
-                        <p>{translate("read_only_mode")}</p>
+                        <p>{tt("g.read_only_mode")}</p>
                     </div>
                 </div>
             </div>;
@@ -27,45 +29,39 @@ class SignUp extends React.Component {
             return <div className="row">
                 <div className="column callout" style={{margin: '20px', padding: '40px'}}>
                     <p>
-                        {translate("membership_invitation_only") + ' ' + translate("submit_email_to_get_on_waiting_list")}
+                        {tt("g.membership_invitation_only") + ' ' + tt("g.submit_email_to_get_on_waiting_list")}
                     </p>
                     <AddToWaitingList />
                 </div>
             </div>;
         }
 
+        const VESTING_TOKEN =  tt('token_names.VESTING_TOKEN')
+
         return <div className="SignUp">
             <div className="row">
                 <div className="column">
-                    <h3>{translate("sign_up")}</h3>
+                    <h3>{tt("g.sign_up")}</h3>
                     <p>
-                        {translate("we_require_social_account1")}
-                        <LocalizedCurrency amount={this.props.signup_bonus} />
-                        {translate("we_require_social_account2")}
+                        {tt("g.we_require_social_account1", {APP_NAME})}
+                        <LocalizedCurrency amount={Number(this.props.signup_bonus)} />
+                        {tt("g.we_require_social_account2", {VESTING_TOKEN})}
                         <br />
-                        {translate("personal_info_will_be_private")}
+                        {tt("g.personal_info_will_be_private")}
                         {' '}
                         <a href={TERMS_OF_SERVICE_URL} target="_blank">
-                            {translate("personal_info_will_be_private_link")}
+                            {tt("g.personal_info_will_be_private_link")}
                         </a>.
                     </p>
                 </div>
             </div>
-            <div className="row">
-                <div className="column">
-                    <p className="callout alert">
-                      {translate('technical_reasons')}
-                    </p>
-                </div>
-            </div>
-            {/*
-            <div className="row">
+            {/* <div className="row">
                 <div className="column large-4 shrink">
                     <SvgImage name="vk" width="64px" height="64px" />
                 </div>
                 <div className="column large-8">
                     <a href="/connect/vk" className="button SignUp--vk-button">
-                        {translate("continue_with_vk")}
+                        {tt("g.continue_with_vk")}
                     </a>
                 </div>
                 &nbsp;
@@ -77,33 +73,17 @@ class SignUp extends React.Component {
                       <SvgImage name="facebook" width="64px" height="64px" />
                 </div>
                 <div className="column large-8">
-                      <a href="/connect/facebook" className="button SignUp--fb-button">{translate("continue_with_facebook")}</a>
+                      <a href="/connect/facebook" className="button SignUp--fb-button">{tt("g.continue_with_facebook")}</a>
                 </div>
-            </div>
-            <div className="row">
-              &nbsp;
-            </div>
-            <div className="row">
-                <div className="column large-4 shrink">
-                    <SvgImage name="reddit" width="64px" height="64px" />
-                </div>
-                <div className="column large-8">
-                    <a href="/connect/reddit" className="button SignUp--reddit-button">
-                        {translate("continue_with_reddit")}
-                    </a>
-                    <br />
-                    <span className="secondary">
-                        ({translate("requires_5_or_more_reddit_comment_karma")})
-                    </span>
-                </div>
-            </div>*/}
+            </div> */}
 
-            {/*<div className="row">
+            {/* <div className="row">
                 <div className="column">
-                      <br />
-                    translate("dont_have_facebook") <br />
+                    <br />
+                    {tt("g.dont_have_facebook")}
+                    <br />
                     {this.state.waiting_list ? <AddToWaitingList /> : <a href="#" onClick={() => this.setState({waiting_list: true})}>
-                        <strong> {translate("subscribe_to_get_sms_confirm")}.</strong>
+                        <strong> {tt("g.subscribe_to_get_sms_confirm")}.</strong>
                     </a>}
                 </div>
             </div>*/}
@@ -112,18 +92,18 @@ class SignUp extends React.Component {
                     <SvgImage name="golos" width="64px" height="64px" />
                 </div>
                 <div className="column large-8">
-                    <a href="/create_account" className="button secondary">{translate("continue_with_email")}</a>
+                    <a href="/create_account" className="button secondary">{tt("recoveraccountstep1_jsx.continue_with_email")}</a>
                 </div>
             </div>
             <div className="row">
                 <div className="column">
                       <br />
                     <p className="secondary">
-                        {translate('by_verifying_you_agree_with') + ' '}
+                        {tt('enter_confirm_email_jsx.next_3_strings.by_verifying_you_agree_with') + ' '}
                         <a href={PRIVACY_POLICY_URL} target="_blank">
-                            {translate('by_verifying_you_agree_with_privacy_policy')}
+                            {tt('enter_confirm_email_jsx.next_3_strings.by_verifying_you_agree_with_privacy_policy')}
                         </a>
-                        {' ' + translate('by_verifying_you_agree_with_privacy_policy_of_website_APP_URL')}.
+                        {' ' + tt('enter_confirm_email_jsx.next_3_strings.by_verifying_you_agree_with_privacy_policy_of_website_APP_DOMAIN', {APP_DOMAIN})}.
                     </p>
                 </div>
             </div>

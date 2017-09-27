@@ -1,16 +1,16 @@
 import React from 'react';
 import {connect} from 'react-redux'
 import user from 'app/redux/User';
-import {translate} from 'app/Translator';
-import {ALLOWED_CURRENCIES} from 'config/client_config'
-import {ALLOWED_THEMES} from 'app/components/elements/Themes'
-import store from 'store';
+import g from 'app/redux/GlobalReducer';
+import tt from 'counterpart';
+import { CURRENCIES, DEFAULT_CURRENCY, CURRENCY_COOKIE_KEY, LANGUAGES, DEFAULT_LANGUAGE, LOCALE_COOKIE_KEY, THEMES, DEFAULT_THEME } from 'app/client_config'
 import transaction from 'app/redux/Transaction'
 import o2j from 'shared/clash/object2json'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import Userpic from 'app/components/elements/Userpic';
 import reactForm from 'app/utils/ReactForm'
 import UserList from 'app/components/elements/UserList';
+import cookie from "react-cookie";
 
 class Settings extends React.Component {
 
@@ -18,6 +18,7 @@ class Settings extends React.Component {
         super()
         this.initForm(props)
         this.onNsfwPrefChange = this.onNsfwPrefChange.bind(this)
+        this.onNsfwPrefSubmit = this.onNsfwPrefSubmit.bind(this)
     }
 
     state = {
@@ -29,14 +30,15 @@ class Settings extends React.Component {
         reactForm({
             instance: this,
             name: 'accountSettings',
-            fields: ['profile_image', 'name', 'about', 'location', 'website'],
+            fields: ['profile_image', 'cover_image', 'name', 'about', 'location', 'website'],
             initialValues: props.profile,
             validation: values => ({
-                profile_image: values.profile_image && !/^https?:\/\//.test(values.profile_image) ? translate('invalid_url') : null,
-                name: values.name && values.name.length > 20 ? translate('name_is_too_long') : values.name && /^\s*@/.test(values.name) ? translate('') : null,
-                about: values.about && values.about.length > 160 ? translate('about_is_too_long') : null,
-                location: values.location && values.location.length > 30 ? translate('location_is_too_long') : null,
-                website: values.website && values.website.length > 100 ? translate('url_is_too_long') : values.website && !/^https?:\/\//.test(values.website) ? translate('invalid_url') : null,
+                profile_image: values.profile_image && !/^https?:\/\//.test(values.profile_image) ? tt('settings_jsx.invalid_url') : null,
+                cover_image: values.cover_image && !/^https?:\/\//.test(values.cover_image) ? tt('settings_jsx.invalid_url') : null,
+                name: values.name && values.name.length > 20 ? tt('settings_jsx.name_is_too_long') : values.name && /^\s*@/.test(values.name) ? tt('settings_jsx.name_must_not_begin_with') : null,
+                about: values.about && values.about.length > 160 ? tt('settings_jsx.about_is_too_long') : null,
+                location: values.location && values.location.length > 30 ? tt('settings_jsx.location_is_too_long') : null,
+                website: values.website && values.website.length > 100 ? tt('settings_jsx.website_url_is_too_long') : values.website && !/^https?:\/\//.test(values.website) ? tt('settings_jsx.invalid_url') : null,
             })
         })
         this.handleSubmitForm =
@@ -46,32 +48,45 @@ class Settings extends React.Component {
     componentWillMount() {
         const {accountname} = this.props
         const nsfwPref = (process.env.BROWSER ? localStorage.getItem('nsfwPref-' + accountname) : null) || 'warn'
-        this.setState({nsfwPref})
-    }
-
-    handleCurrencyChange(event) {
-        store.set('currency', event.target.value)
-    }
-
-    handleThemeChange(event) {
-        const theme = event.target.value
-        store.set('theme', theme)
-        if (document) {
-            document.body.setAttribute("data-theme", theme.replace(/"/g,'').toLowerCase());
-        }
-    }
-
-    handleLanguageChange = (event) => {
-        const language = event.target.value
-        store.set('language', language)
-        this.props.changeLanguage(language)
+        this.setState({nsfwPref, oldNsfwPref: nsfwPref})
     }
 
     onNsfwPrefChange(e) {
         const nsfwPref = e.currentTarget.value;
+        this.setState({nsfwPref: nsfwPref})
+    }
+
+    onNsfwPrefSubmit(e) {
         const {accountname} = this.props;
+        const {nsfwPref} = this.state;
         localStorage.setItem('nsfwPref-'+accountname, nsfwPref)
-        this.setState({nsfwPref})
+        this.setState({oldNsfwPref: nsfwPref})
+    }
+
+    notify = () => {
+        this.props.notify(tt('g.saved'))
+    }
+
+    onCurrencyChange = (event) => {
+        localStorage.setItem('xchange.created', 0);
+        localStorage.setItem('xchange.picked', event.target.value);
+        this.props.reloadExchangeRates()
+        this.notify()
+    }
+
+    onLanguageChange = (event) => {
+        const language = event.target.value
+        cookie.save(LOCALE_COOKIE_KEY, language, {path: "/", expires: new Date(Date.now() + 60 * 60 * 24 * 365 * 10 * 1000)});
+        localStorage.setItem('language', language)
+        this.props.changeLanguage(language)
+        this.notify()
+    }
+
+    onThemeChange = (event) => {
+        const theme = event.target.value
+        localStorage.setItem('theme', theme)
+        this.props.changeTheme(theme)
+        this.notify()
     }
 
     handleSubmit = ({updateInitialValues}) => {
@@ -80,10 +95,11 @@ class Settings extends React.Component {
         if(!metaData.profile) metaData.profile = {}
         delete metaData.user_image; // old field... cleanup
 
-        const {profile_image, name, about, location, website} = this.state
+        const {profile_image, cover_image, name, about, location, website} = this.state
 
         // Update relevant fields
         metaData.profile.profile_image = profile_image.value
+        metaData.profile.cover_image = cover_image.value
         metaData.profile.name = name.value
         metaData.profile.about = about.value
         metaData.profile.location = location.value
@@ -91,15 +107,11 @@ class Settings extends React.Component {
 
         // Remove empty keys
         if(!metaData.profile.profile_image) delete metaData.profile.profile_image;
+        if(!metaData.profile.cover_image) delete metaData.profile.cover_image;
         if(!metaData.profile.name) delete metaData.profile.name;
         if(!metaData.profile.about) delete metaData.profile.about;
         if(!metaData.profile.location) delete metaData.profile.location;
         if(!metaData.profile.website) delete metaData.profile.website;
-
-        // TODO: Update language & currency
-        //store.set('language', language)
-        //this.props.changeLanguage(language)
-        //store.set('currency', event.target.value)
 
         const {account, updateAccount} = this.props
         this.setState({loading: true})
@@ -118,7 +130,7 @@ class Settings extends React.Component {
                     this.setState({
                         loading: false,
                         changed: false,
-                        errorMessage: translate('server_returned_error')
+                        errorMessage: tt('g.server_returned_error')
                     })
                 }
             },
@@ -127,7 +139,7 @@ class Settings extends React.Component {
                     loading: false,
                     changed: false,
                     errorMessage: '',
-                    successMessage: translate('saved') + '!',
+                    successMessage: tt('g.saved') + '!',
                 })
                 // remove successMessage after a while
                 setTimeout(() => this.setState({successMessage: ''}), 4000)
@@ -142,113 +154,91 @@ class Settings extends React.Component {
         const {submitting, valid, touched} = this.state.accountSettings
         const disabled = !props.isOwnAccount || state.loading || submitting || !valid || !touched
 
-        const {profile_image, name, about, location, website} = this.state
+        const {profile_image, cover_image, name, about, location, website} = this.state
 
         const {follow, account, isOwnAccount} = this.props
-        const following = follow && follow.getIn(['get_following', account.name]);
+        const following = follow && follow.getIn(['getFollowingAsync', account.name]);
         const ignores = isOwnAccount && following && following.get('ignore_result')
+
+        const languageSelectBox = <select defaultValue={process.env.BROWSER ? cookie.load(LOCALE_COOKIE_KEY) : DEFAULT_LANGUAGE} onChange={this.onLanguageChange}>
+          {Object.keys(LANGUAGES).map(key => {
+            return <option key={key} value={key}>{LANGUAGES[key]}</option>
+          })}
+        </select>;
+
+        const themeSelectBox = <select defaultValue={process.env.BROWSER ? localStorage.getItem('theme') : DEFAULT_THEME} onChange={this.onThemeChange}>
+            {THEMES.map(i => {
+                return <option key={i} value={i}>{i}</option>
+            })}
+        </select>;
 
         return <div className="Settings">
 
-            {/*<div className="row">
-                <div className="small-12 medium-6 large-4 columns">
-                    <label>{translate('choose_language')}
-                        <select defaultValue={store.get('language')} onChange={this.handleLanguageChange}>
-                            <option value="en">English</option>
-                            <option value="ru">Russian</option>
-                            <option value="es">Spanish</option>
-                            <option value="es-AR">Spanish (Argentina)</option>
-                            <option value="fr">French</option>
-                            <option value="it">Italian</option>
-                            <option value="jp">Japanese</option>
-                        </select>
-                    </label>
-                </div>
-            </div>*/}
-            {/*<div className="row">
-                <div className="small-12 medium-6 large-4 columns">
-                    <label>{translate('choose_currency')}
-                        <select defaultValue={store.get('currency')} onChange={this.handleCurrencyChange}>
-                            {
-                                ALLOWED_CURRENCIES.map(i => {
-                                    return <option key={i} value={i}>{i}</option>
-                                })
-                            }
-                        </select>
-                    </label>
-                </div>
-            </div>*/}
             <div className="row">
                 <form onSubmit={this.handleSubmitForm} className="small-12 medium-6 large-4 columns">
-                    <h3>{translate('profile')}</h3>
-                    {/* CHOOSE LANGUAGE */}
+                    <h3>{tt('settings_jsx.public_profile_settings')}</h3>
+                    
                     <label>
-                        {translate('choose_language')}
-                            <select defaultValue={store.get('language')} onChange={this.handleLanguageChange}>
-                                <option value="ru">Русский</option>
-                                <option value="en">English</option>
-                                {/* in react-intl they use 'uk' instead of 'ua' */}
-                                <option value="uk">Українська</option>
-                                <option value="sr">Srpski</option>
-                            </select>
+                        {tt('settings_jsx.choose_language')}
+                        {languageSelectBox}
                     </label>
                     <div className="error"></div>
-                    {/* CHOOSE CURRENCY */}
-                    <label>{translate('choose_currency')}
-                        <select defaultValue={store.get('currency')} onChange={this.handleCurrencyChange}>
+                    
+                    <label>{tt('settings_jsx.choose_currency')}
+                        <select defaultValue={process.env.BROWSER ? localStorage.getItem('xchange.picked') : DEFAULT_CURRENCY} onChange={this.onCurrencyChange}>
                             {
-                                ALLOWED_CURRENCIES.map(i => {
+                                CURRENCIES.map(i => {
                                     return <option key={i} value={i}>{i}</option>
                                 })
                             }
                         </select>
                     </label>
-                    <div className="error"></div>
+                    
                     <label>
-                        {translate('profile_image_url')}
+                        {tt('settings_jsx.choose_theme')}
+                        {themeSelectBox}
+                    </label>
+                    <div className="error"></div>
+
+                    <label>
+                        {tt('settings_jsx.profile_image_url')}
                         <input type="url" {...profile_image.props} autoComplete="off" />
                     </label>
                     <div className="error">{profile_image.blur && profile_image.touched && profile_image.error}</div>
 
                     <label>
-                        {translate('profile_name')}
+                        {tt('settings_jsx.cover_image_url')}
+                        <input type="url" {...cover_image.props} autoComplete="off" />
+                    </label>
+                    <div className="error">{cover_image.blur && cover_image.touched && cover_image.error}</div>
+
+                    <label>
+                        {tt('settings_jsx.profile_name')}
                         <input type="text" {...name.props} maxLength="20" autoComplete="off" />
                     </label>
                     <div className="error">{name.touched && name.error}</div>
 
                     <label>
-                        {translate('profile_about')}
+                        {tt('settings_jsx.profile_about')}
                         <input type="text" {...about.props} maxLength="160" autoComplete="off" />
                     </label>
                     <div className="error">{about.touched && about.error}</div>
 
                     <label>
-                        {translate('profile_location')}
+                        {tt('settings_jsx.profile_location')}
                         <input type="text" {...location.props} maxLength="30" autoComplete="off" />
                     </label>
                     <div className="error">{location.touched && location.error}</div>
 
                     <label>
-                        {translate('profile_website')}
+                        {tt('settings_jsx.profile_website')}
                         <input type="url" {...website.props} maxLength="100" autoComplete="off" />
                     </label>
                     <div className="error">{website.blur && website.touched && website.error}</div>
 
-                    {/* CHOOSE THEME */}
-                    <label>{translate('choose_theme')}
-                        <select defaultValue={store.get('theme')} onChange={this.handleThemeChange}>
-                            {
-                                ALLOWED_THEMES.map(i => {
-                                    return <option key={i} value={i}>{i}</option>
-                                })
-                            }
-                        </select>
-                    </label>
-                    <div className="error"></div>
-
                     <br />
                     {state.loading && <span><LoadingIndicator type="circle" /><br /></span>}
-                    {!state.loading && <input type="submit" className="button" value={translate('update')} disabled={disabled} />}
+                    {!state.loading && <input type="submit" className="button" value={tt('settings_jsx.update')} disabled={disabled} />}
                     {' '}{
                             state.errorMessage
                                 ? <small className="error">{state.errorMessage}</small>
@@ -261,27 +251,34 @@ class Settings extends React.Component {
 
             {isOwnAccount &&
                 <div className="row">
-                    <div className="small-12 medium-6 large-4 columns">
+                    <div className="small-12 columns">
                         <br /><br />
-                        <h3>{translate('content_preferences')}</h3>
+                        <h3>{tt('settings_jsx.private_post_display_settings')}</h3>
                         <div>
-                            {translate('not_safe_for_work')}
+                            {tt('settings_jsx.not_safe_for_work_nsfw_content')}
                         </div>
                         <select value={this.state.nsfwPref} onChange={this.onNsfwPrefChange}>
-                            <option value="hide">{translate('always_hide')}</option>
-                            <option value="warn">{translate('always_warn')}</option>
-                            <option value="show">{translate('always_show')}</option>
+                            <option value="hide">{tt('settings_jsx.always_hide')}</option>
+                            <option value="warn">{tt('settings_jsx.always_warn')}</option>
+                            <option value="show">{tt('settings_jsx.always_show')}</option>
                         </select>
+                        <br /><br />
+                        <input 
+                            type="submit"
+                            onClick={this.onNsfwPrefSubmit}
+                            className="button"
+                            value={tt('settings_jsx.update')}
+                            disabled={this.state.nsfwPref == this.state.oldNsfwPref}
+                        />
                     </div>
                 </div>}
             {ignores && ignores.size > 0 &&
                 <div className="row">
                     <div className="small-12 columns">
                         <br /><br />
-                        <UserList title={translate('muted_users')} account={account} users={ignores} />
+                        <UserList title={tt('settings_jsx.muted_users')} account={account} users={ignores} />
                     </div>
                 </div>}
-                <br /><br />
         </div>
     }
 }
@@ -293,7 +290,8 @@ export default connect(
         const account = state.global.getIn(['accounts', accountname]).toJS()
         const current_user = state.user.get('current')
         const username = current_user ? current_user.get('username') : ''
-        const metaData = account ? o2j.ifStringParseJSON(account.json_metadata) : {}
+        let metaData = account ? o2j.ifStringParseJSON(account.json_metadata) : {}
+        if (typeof metaData === 'string') metaData = o2j.ifStringParseJSON(metaData); // issue #1237
         const profile = metaData && metaData.profile ? metaData.profile : {}
 
         return {
@@ -311,9 +309,22 @@ export default connect(
         changeLanguage: (language) => {
             dispatch(user.actions.changeLanguage(language))
         },
+        reloadExchangeRates: () => {
+          dispatch(g.actions.fetchExchangeRates())
+        },
+        changeTheme: (theme) => {
+            dispatch(user.actions.changeTheme(theme))
+        },
         updateAccount: ({successCallback, errorCallback, ...operation}) => {
             const options = {type: 'account_update', operation, successCallback, errorCallback}
             dispatch(transaction.actions.broadcastOperation(options))
+        },
+        notify: (message) => {
+            dispatch({type: 'ADD_NOTIFICATION', payload: {
+                key: "settings_" + Date.now(),
+                message,
+                dismissAfter: 3000}
+            });
         }
     })
 )(Settings)

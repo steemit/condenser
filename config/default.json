@@ -1,0 +1,129 @@
+{
+  "database_url": "mysql://golosdev:golosdev@127.0.0.1:3306/golosdev",
+  "disable_signups": false,
+  "facebook_app_id": false,
+  "grant": {
+    "facebook": {
+      "callback": "/handle_facebook_callback",
+      "key": "",
+      "scope": [
+        "email",
+        "user_location"
+      ],
+      "secret": ""
+    },
+    "reddit": {
+      "callback": "/handle_reddit_callback",
+      "custom_params": {
+        "duration": "temporary",
+        "state": "void"
+      },
+      "key": "",
+      "scope": [
+        "identity"
+      ],
+      "secret": ""
+    },
+    "vk": {
+      "key": "",
+      "secret": "",
+      "callback": "/handle_vk_callback",
+      "scope": [
+        "identity",
+        "email"
+      ]
+    },
+    "server": {
+      "host": "golos.io",
+      "protocol": "https"
+    }
+  },
+  "google_analytics_id": false,
+  "helmet": {
+    "directives": {
+      "defaultSrc": "'self' golos.io www.youtube.com *.facebook.com",
+      "childSrc": "'self' www.youtube.com w.soundcloud.com *.facebook.com player.vimeo.com chat.golos.io livejournal.com www.google.com/maps/",
+      "scriptSrc": "'self' 'unsafe-inline' *.facebook.com cyber.fund www.google-analytics.com *.facebook.net js-agent.newrelic.com bam.nr-data.net cdn.polyfill.io cdn.segment.com *.mxpnl.com *.metabar.ru mc.yandex.ru chat.golos.io media.reformal.ru",
+      "styleSrc": "'self' 'unsafe-inline' cdnjs.cloudflare.com fonts.googleapis.com",
+      "imgSrc": "* data:",
+      "fontSrc": "data: fonts.gstatic.com",
+      "connectSrc": "'self' cyber.fund wss://ws.golos.io *.facebook.com www.google-analytics.com api.segment.io api.blocktrades.us query.yahooapis.com api.blockcypher.com api.mixpanel.com mc.yandex.ru mc.yandex.ru",
+      "reportUri": "/api/v1/csp_violation",
+      "objectSrc": "'self'",
+      "pluginTypes": "application/pdf",
+      "frameAncestors": "'none'"
+    },
+    "reportOnly": false,
+    "setAllHeaders": true
+  },
+  "img_proxy_prefix": "https://imgp.golos.io/",
+  "lang_server" : "https://lang.golos.io/",
+  "ipfs_prefix": false,
+  "mixpanel": false,
+  "notify": {
+    "gcm_key": "google secret key"
+  },
+  "read_only_mode": false,
+  "recaptcha": {
+    "secret_key": false,
+    "site_key": false
+  },
+  "registrar": {
+    "account": "-",
+    "fee": "5.000 GOLOS",
+    "signing_key": "5J..."
+  },
+  "requestAccountRecovery": {
+    "recovery_account": "golos",
+    "signing_key": "5J..."
+  },
+  "sendgrid": {
+    "from": "noreply@example.com",
+    "key": "SG.xxx_yyyy",
+    "templates": {
+      "confirm_email": false,
+      "waiting_list_invite": false
+    }
+  },
+  "postmark": {
+    "from": "noreply@example.com",
+    "key": "postmark server key",
+    "templates": {
+      "confirm_email": false,
+      "waiting_list_invite": false
+    }
+  },
+  "server_session_secret": "exiKdyF+IwRIXJDmtGIl4vWUz4i3eVSISpfZoeYc0s4=",
+  "session_cookie_key": "gls.session",
+  "session_key": "golos",
+  "site_domain": "golos.io",
+  "tarantool": {
+    "host": "localhost",
+    "password": "",
+    "port": "3301",
+    "username": "guest"
+  },
+  "telesign": {
+    "customer_id": false,
+    "rest_api_key": false
+  },
+  "twilio": {
+    "account_sid": false,
+    "auth_token": false,
+    "sender_id": false
+  },
+  "upload_image": false,
+  "ws_connection_client": "wss://ws.golos.io",
+  "ws_connection_server": "wss://ws.golos.io",
+  "chain_id": "0000000000000000000000000000000000000000000000000000000000000000",
+  "metrics": {
+    "name": "golos",
+    "host": "127.0.0.1"
+  },
+  "newrelic": {
+    "license_key": "newrelic license key",
+    "app_name": "Golos.io",
+    "log_level": "info"
+  },
+  "blockcypher_token": "blockcypher token"
+}

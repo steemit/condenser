@@ -1,12 +1,18 @@
 export const routeRegex = {
     PostsIndex: /^\/(@[\w\.\d-]+)\/feed\/?$/,
     UserProfile1: /^\/(@[\w\.\d-]+)\/?$/,
-    UserProfile2: /^\/(@[\w\.\d-]+)\/(blog|posts|comments|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)\/?$/,
-    UserEndPoints: /^(blog|posts|comments|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)$/,
-    CategoryFilters: /^\/(hot|created|trending|active|promoted)\/?$/ig,
+    UserProfile2: /^\/(@[\w\.\d-]+)\/(blog|posts|comments|recommended|transfers|invites|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)\/?$/,
+    UserProfile3: /^\/(@[\w\.\d-]+)\/[\w\.\d-]+/,
+    UserProfileAssets: /^\/(@[\w\.\d-]+)\/(assets|create-asset)\/?$/,
+    UserEndPoints: /^(blog|posts|comments|recommended|transfers|invites|curation-rewards|author-rewards|permissions|assets|created|recent-replies|feed|password|followed|followers|settings)$/,
+    CategoryFilters: /^\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/?$/ig,
     PostNoCategory: /^\/(@[\w\.\d-]+)\/([\w\d-]+)/,
-    UserJson: /^\/(@[\w\.\d-]+)(\/json)$/
-}
+    Post: /^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)\/?($|\?)/,
+    PostJson: /^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)(\.json)$/,
+    UserJson: /^\/(@[\w\.\d-]+)(\.json)$/,
+    UserNameJson: /^.*(?=(\.json))/,
+    Assets: /^\/asset\/([\w\d.]+)/,
+};
 
 export default function resolveRoute(path)
 {
@@ -76,22 +82,25 @@ export default function resolveRoute(path)
     }
     match = path.match(routeRegex.UserProfile1) ||
         // @user/"posts" is deprecated in favor of "comments" as of oct-2016 (#443)
-        path.match(routeRegex.UserProfile2);
+        path.match(routeRegex.UserProfile2) ||
+        path.match(routeRegex.UserProfileAssets);
     if (match) {
         return {page: 'UserProfile', params: match.slice(1)};
+    }
+    match = path.match(routeRegex.Assets);
+    if (match) {
+        return {page: 'Asset', params: match.slice(1)};
     }
     match = path.match(routeRegex.PostNoCategory);
     if (match) {
         return {page: 'PostNoCategory', params: match.slice(1)};
     }
-    match = path.match(/^\/(\@[\w\d-]+)\/([\w\d-]+)\/?$/) ||
-        path.match(/^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)\/?$/) ||
-        path.match(/^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)\/?\?sort=(\w+)$/);
+    match = path.match(routeRegex.Post);
     if (match) {
         return {page: 'Post', params: match.slice(1)};
     }
-    match = path.match(/^\/(best|updated|hot|votes|responses|trending|trending30|promoted|cashout|created|recent|active)\/?$/)
-         || path.match(/^\/(best|updated|hot|votes|responses|trending|trending30|promoted|cashout|created|recent|active)\/([\w\d-]+)\/?$/);
+    match = path.match(/^\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/?$/)
+         || path.match(/^\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/([\w\d-]+)\/?$/);
     if (match) {
         return {page: 'PostsIndex', params: match.slice(1)};
     }

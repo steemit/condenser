@@ -5,15 +5,23 @@ ul.PostsList__summaries {
 .PostSummary {
   padding: 0 0 0.5rem;
   margin: 0 0 1.25vw;
-  background-color: #fff;
+  background-color: $white;
   clear: left;
   @include clearfix;
 
   .PostSummary__nsfw-warning {
     border: 1px solid $medium-gray;
     border-radius: 0.5rem;
-    padding: 1.5rem 2rem;
+    padding: 0.75rem 2rem;
     min-height: 80px;
+    .PostSummary__footer {
+      margin-top: 0.2rem;
+      .Reblog__button {display: none;}
+      .Voting__button {display: none;}
+    }
+    .PostSummary__time_author_category_small {
+      margin-bottom: 0.2rem;
+    }
   }
 
   .nsfw-flag {
@@ -22,7 +30,7 @@ ul.PostsList__summaries {
      font-size: 75%;
      border-radius: 3px;
      font-weight: normal;
-     font-family: $body-font-family;
+     font-family: Arial;
      margin: 0 0.1rem;
      padding: 0 0.2rem;
   }
@@ -64,7 +72,7 @@ ul.PostsList__summaries {
 }
 
 .PostSummary__header {
-  > h1 {
+  > h3 {
     font: 600 100% "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Arial, 'Roboto', sans-serif;
     margin: 0;
     overflow: hidden;
@@ -82,6 +90,17 @@ ul.PostsList__summaries {
         vertical-align: 5%;
       }
     }
+    .Icon {
+      margin: 0 0.25rem;
+      svg {
+        width: 0.85rem;
+        height: 0.85rem;
+        vertical-align: 5%;
+      }
+    }
+  }
+  .nsfw-flag {
+    margin-right: 0.25rem;
   }
   .nsfw-flag {
     margin-right: 0.25rem;
@@ -122,11 +141,6 @@ ul.PostsList__summaries {
   }
   a {
     color: $dark-gray;
-    font-weight: bold;
-  }
-  .FormattedAsset {
-    font-weight: normal;
-    font-size: 110%;
   }
   .Icon {
     position: relative;
@@ -210,5 +224,14 @@ ul.PostsList__summaries {
   }
   .PostSummary__footer .Voting, .PostSummary__footer .Voting__inner {
     border-right: none;
+  }
+  .PostSummary__time_author_category {
+    margin-left: 0;
+    border-left: 1px solid #cacaca;
+    .Reblog__button {
+        margin-right: 1rem;
+        padding-right: 1rem;
+        border-right: none;
+    }
   }
 }

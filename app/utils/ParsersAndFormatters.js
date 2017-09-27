@@ -1,12 +1,8 @@
-import { translate } from 'app/Translator';
+import tt from 'counterpart';
 
 function fractional_part_len(value) {
     const parts = (Number(value) + '').split('.');
     return parts.length < 2 ? 0 : parts[1].length;
-}
-
-export function prettyDigit(value) {
-    return value && String(value).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1 ')
 }
 
 // FIXME this should be unit tested.. here is one bug: 501,695,.505
@@ -75,25 +71,25 @@ export function translateError(string) {
     if (typeof(string) != 'string') return string
     switch (string) {
         case 'Account not found':
-            return translate('account_not_found')
+            return tt('g.account_not_found')
         case 'Incorrect Password':
-            return translate('incorrect_password')
+            return tt('g.incorrect_password')
         case 'Username does not exist':
-            return translate('username_does_not_exist')
+            return tt('g.username_does_not_exist')
         case 'Account name should be longer.':
-            return translate('account_name_should_be_longer')
+            return tt('g.account_name_should_be_longer')
         case 'Account name should be shorter.':
-            return translate('account_name_should_be_shorter')
+            return tt('g.account_name_should_be_shorter')
         case 'Account name should start with a letter.':
-            return translate('account_name_should_start_with_a_letter')
+            return tt('g.account_name_should_start_with_a_letter')
         case 'Account name should have only letters, digits, or dashes.':
-            return translate('account_name_should_have_only_letters_digits_or_dashes')
+            return tt('g.account_name_should_have_only_letters_digits_or_dashes')
         case 'vote currently exists, user must be indicate a desire to reject witness':
-            return translate('vote_currently_exists_user_must_be_indicate_a_to_reject_witness')
+            return tt('g.vote_currently_exists_user_must_be_indicate_a_to_reject_witness')
         case 'Only one Steem account allowed per IP address every 10 minutes':
-            return translate('only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes')
+            return tt('g.only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes')
         case 'Cannot increase reward of post within the last minute before payout':
-            return translate('cannot_increase_reward_of_post_within_the_last_minute_before_payout')
+            return tt('g.cannot_increase_reward_of_post_within_the_last_minute_before_payout')
         default:
             return string
     }
@@ -108,11 +104,11 @@ var d = /\s+/g,
     //rus = "щ  ш   ч   ц   ю   ю   я   я  ые   ий  ё   ё   ж   ъ   э   ы   а   б   в   г   д   е   з   и   й   к   л   м   н   о   п   р   с   т   у   ф   х   х   ь".split(d),
     //eng = "sch    sh  ch  cz  yu  ju  ya  q  yie  iy  yo  jo  zh  w   ye  y   a   b   v   g   d   e   z   i   yi  k   l   m   n   o   p   r   s   t   u   f   x   h   j".split(d);
 
-    rus = "щ    ш  ч  ц  й  ё  э  ю  я  х  ж  а б в г д е з и к л м н о п р с т у ф ъ  ы ь ґ є і ї".split(d),
-    eng = "shch sh ch cz ij yo ye yu ya kh zh a b v g d e z i k l m n o p r s t u f xx y x g e i i".split(d);
+	rus = "щ    ш  ч  ц  й  ё  э  ю  я  х  ж  а б в г д е з и к л м н о п р с т у ф ъ  ы ь ґ є і ї".split(d),
+	eng = "shch sh ch cz ij yo ye yu ya kh zh a b v g d e z i k l m n o p r s t u f xx y x g e i i".split(d);
 
 export function detransliterate(str, reverse) {
-  if (!str) return str
+    if (!str) return str
     if (!reverse && str.substring(0, 4) !== 'ru--') return str
     if (!reverse) str = str.substring(4)
 

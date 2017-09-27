@@ -4,7 +4,7 @@ $btm-panel-height: 90px;
 .BottomPanel {
   > div {
     background-color: rgba(220, 220, 220, .9);
-    color: #fff;
+    color: $white;
     padding: 2rem 1rem 0.5rem 1rem;
     border-top-left-radius: $global-radius;
     border-top-right-radius: $global-radius;

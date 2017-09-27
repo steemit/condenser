@@ -1,0 +1,8 @@
+{
+  "name": "Golos",
+  "short_name": "Golos",
+  "start_url": "/",
+  "display": "standalone",
+  "gcm_sender_id": "724829305784",
+  "gcm_user_visible_only": true
+}

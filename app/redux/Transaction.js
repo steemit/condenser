@@ -57,7 +57,7 @@ export default createModule({
                             errorKey = 'You already voted for this post'
                             console.error('You already voted for this post.')
                         }
-                        break
+                        break;
                     case 'comment':
                         if (/You may only post once per minute/.test(errorStr)) {
                             errorKey = 'You may only post once per minute.'
@@ -68,13 +68,13 @@ export default createModule({
                         if (/get_balance/.test(errorStr)) {
                             errorKey = 'Insufficient balance.'
                         }
-                        break
+                        break;
                     case 'withdraw_vesting':
                         if(/Account registered by another account requires 10x account creation fee worth of Steem Power/.test(errorStr))
                             errorKey = 'Account requires 10x the account creation fee in Steem Power (approximately 300 SP) before it can power down.'
-                        break
+                        break;
                     default:
-                        break
+                        break;
                     }
                     if (state.hasIn(['TransactionError', type + '_listener'])) {
                         state = state.setIn(['TransactionError', type], fromJS({key: errorKey, exception: errorStr}))

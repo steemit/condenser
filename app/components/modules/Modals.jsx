@@ -8,8 +8,6 @@ import Transfer from 'app/components/modules/Transfer';
 import SignUp from 'app/components/modules/SignUp';
 import user from 'app/redux/User';
 import tr from 'app/redux/Transaction';
-import BottomPanel from 'app/components/modules/BottomPanel';
-import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import {NotificationStack} from 'react-notification';
 import {OrderedSet} from 'immutable';
@@ -50,7 +48,6 @@ class Modals extends React.Component {
         return (
             <div>
                 {show_login_modal && <Reveal onHide={hideLogin} show={show_login_modal}>
-                    <CloseButton onClick={hideLogin} />
                     <LoginForm onCancel={hideLogin} />
                 </Reveal>}
                 {show_confirm_modal && <Reveal onHide={hideConfirm} show={show_confirm_modal}>

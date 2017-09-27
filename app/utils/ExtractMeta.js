@@ -1,9 +1,11 @@
 import extractContent from 'app/utils/ExtractContent';
 import {objAccessor} from 'app/utils/Accessors';
-import { SEO_TITLE, APP_NAME, APP_URL, SITE_DESCRIPTION, TWITTER_HANDLE, SHARE_IMAGE, TWITTER_SHARE_IMAGE } from 'config/client_config';
+import normalizeProfile from 'app/utils/NormalizeProfile';
+import { SEO_TITLE, APP_NAME, APP_DOMAIN, SITE_DESCRIPTION, TWITTER_HANDLE, SHARE_IMAGE, TWITTER_SHARE_IMAGE } from 'app/client_config';
 
 function addSiteMeta(metas) {
     metas.push({title: SEO_TITLE});
+    metas.push({name: 'description', content: SITE_DESCRIPTION});
     metas.push({property: 'og:type', content: 'website'});
     metas.push({property: 'og:site_name', content: SEO_TITLE});
     metas.push({property: 'og:title', content: SEO_TITLE});
@@ -22,19 +24,20 @@ export default function extractMeta(chain_data, rp) {
     if (rp.username && rp.slug) { // post
         const post = `${rp.username}/${rp.slug}`;
         const content = chain_data.content[post];
+        const author  = chain_data.accounts[rp.username];
+        const profile = normalizeProfile(author);
         if (content && content.id !== '0.0.0') { // API currently returns 'false' data with id 0.0.0 for posts that do not exist
             const d = extractContent(objAccessor, content, false);
-            const url = 'https://' + APP_URL + d.link;
+            const url = 'https://' + APP_DOMAIN + d.link;
             const title = d.title + ' | ' + SEO_TITLE;
             const desc  = d.desc + " by " + d.author;
-            const image = d.image_link ? d.image_link : SHARE_IMAGE;
-            const twimage = d.image_link ? d.image_link : TWITTER_SHARE_IMAGE;
+            const image = d.image_link || profile.profile_image || SHARE_IMAGE
             const {category, created} = d
 
             // Standard meta
             metas.push({title});
             metas.push({canonical: url});
-            metas.push({name: 'description',         content: desc});
+            metas.push({name: 'description', content: desc});
 
             // Open Graph data
             metas.push({property: 'og:title',        content: title});
@@ -48,14 +51,35 @@ export default function extractMeta(chain_data, rp) {
             metas.push({property: 'article:published_time', content: created});
 
             // Twitter card data
-            metas.push({name: 'twitter:card', content: 'summary'});
-            metas.push({name: 'twitter:site', content: TWITTER_HANDLE});
-            metas.push({name: 'twitter:title', content: title});
-            metas.push({name: 'twitter:description', content: d.desc});
-            metas.push({name: 'twitter:image', content: twimage});
+            metas.push({name: 'twitter:card',        content: image ? 'summary_large_image' : 'summary'});
+            metas.push({name: 'twitter:site',        content: TWITTER_HANDLE});
+            metas.push({name: 'twitter:title',       content: title});
+            metas.push({name: 'twitter:description', content: desc});
+            metas.push({name: 'twitter:image',       content: image || TWITTER_SHARE_IMAGE});
         } else {
             addSiteMeta(metas);
         }
+    } else if (rp.accountname) { // user profile root
+        const account = chain_data.accounts[rp.accountname];
+        const accountname = account && account.name && account.name || '';
+        let {name, about, profile_image} = normalizeProfile(account);
+        if(name == null) name = accountname;
+        if(about == null) about = "Join thousands on Golos.io who share, post and earn rewards.";
+        if(profile_image == null) profile_image = TWITTER_SHARE_IMAGE;
+        // Set profile tags
+        const title = `@${accountname}`;
+        const desc  = `The latest posts from ${name}. Follow me at @${accountname}. ${about}`;
+        const image = profile_image;
+
+        // Standard meta
+        metas.push({name: 'description', content: desc});
+
+        // Twitter card data
+        metas.push({name: 'twitter:card',        content: 'summary'});
+        metas.push({name: 'twitter:site',        content: TWITTER_HANDLE});
+        metas.push({name: 'twitter:title',       content: title});
+        metas.push({name: 'twitter:description', content: desc});
+        metas.push({name: 'twitter:image',       content: image});
     } else { // site
         addSiteMeta(metas);
     }

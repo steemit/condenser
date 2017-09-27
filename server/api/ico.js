@@ -6,11 +6,9 @@ import {esc, escAttrs} from 'db/models';
 import {getRemoteIp, rateLimitReq, checkCSRF} from '../utils';
 import destinationBtcAddress from 'shared/icoAddress'
 import coRequest from 'co-request'
-import {getLogger} from '../../app/utils/Logger'
-import Apis from 'shared/api_client/ApiInstances';
+import {api} from 'golos-js';
 
 const cypherToken = config.blockcypher_token
-const print = getLogger('API - ico').print
 
 export default function useIcoApi(app) {
   const router = koa_router();
@@ -19,7 +17,7 @@ export default function useIcoApi(app) {
 
   router.get('/api/v1/get_golos_current_supply', function * () {
     try {
-      const data = yield Apis.instance().db_api.exec( 'get_dynamic_global_properties', []);
+      const data = yield call([api, api.getDynamicGlobalPropertiesAsync]);
       this.body = data.current_supply.split(' ')[0];
     } catch (error) {
         console.error('Error in /api/v1/get_current_supply', error);
@@ -32,7 +30,7 @@ export default function useIcoApi(app) {
 
   router.get('/api/v1/get_gbg_current_supply', function * () {
     try {
-      const data = yield Apis.instance().db_api.exec( 'get_dynamic_global_properties', []);
+      const data = yield call([api, api.getDynamicGlobalPropertiesAsync]);
       this.body = data.current_sbd_supply.split(' ')[0];
     } catch (error) {
         console.error('Error in /api/v1/get_gbg_current_supply', error);
@@ -80,7 +78,6 @@ export default function useIcoApi(app) {
     });
     try {
       let cypherParsed = JSON.parse(cypher.body);
-      print('blockcypher generated payment forwarding address', cypherParsed);
       const icoAddress = cypherParsed.input_address;
       this.body = JSON.stringify({status: 'ok', icoAddress: icoAddress});
     } catch (error) {

@@ -1,12 +1,12 @@
 import React, { PropTypes } from 'react'
 // import CountDown from 'app/components/elements/CountDown'
 import Icon from 'app/components/elements/Icon'
-import {APP_ICON} from 'config/client_config'
+import {APP_ICON} from 'app/client_config'
 import 'whatwg-fetch';
 import icoDestinationAddress from 'shared/icoAddress'
 import { FormattedMessage } from 'react-intl';
 import { translate } from 'app/Translator';
-import _btc from 'shared/clash/coins/btc'
+// import _btc from 'shared/clash/coins/btc'
 // import roundPrecision from 'round-precision'
 import LandingCrowdsaleStats from './LandingCrowdsaleStats'
 // import { crowdsaleStartAt } from '../pages/Landing'
@@ -178,7 +178,7 @@ export default class LandingCountDowns extends React.Component {
 
         {/* COUNTERS */}
         {/* prefill means pre crowdsale start info */}
-        <div className="row CountDowns__blocks">
+        <div className="row CountDowns__blocks" id="docs">
           {/* number of blocks */}
           <div className="small-12 columns">
             <div className="CountDowns__links">

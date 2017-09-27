@@ -4,7 +4,7 @@ import Keys from 'app/components/elements/Keys'
 import g from 'app/redux/GlobalReducer'
 import {connect} from 'react-redux';
 import QRCode from 'react-qr'
-import { translate } from 'app/Translator';
+import tt from 'counterpart';
 
 const keyTypes = ['Posting', 'Active', 'Owner', 'Memo']
 
@@ -54,23 +54,23 @@ class UserKeys extends Component {
                 <hr />
                 <div className="row">
                     <div className="column small-2">
-                        <label>{translate('public')}</label>
+                        <label>{tt('userkeys_jsx.public')}</label>
                         <QRCode text={keyObj.pubkey} />
                     </div>
                     <div className="column small-8">
-                        <label>{translate('public_something_key', {key})}</label>
+                        <label>{tt('userkeys_jsx.public_something_key', {key})}</label>
                         <div className="overflow-ellipsis">
                             <code><small>{keyObj.pubkey}</small></code>
                         </div>
                         {keyObj.wif && <div>
-                            <label>{translate('private_something_key', {key})}</label>
+                            <label>{tt('userkeys_jsx.private_something_key', {key})}</label>
                             <div className="overflow-ellipsis">
                                 <code><small>{keyObj.wif}</small></code>
                             </div>
                         </div>}
                     </div>
                     {keyObj.wif && <div className="column small-2">
-                        <label>{translate('private')}</label>
+                        <label>{tt('userkeys_jsx.private')}</label>
                         <QRCode text={keyObj.wif} />
                     </div>}
                 </div>
@@ -79,19 +79,19 @@ class UserKeys extends Component {
         return (<div className="row">
             <div style={{paddingBottom: 10}} className="column small-12">
                 <Keys account={account} authType="posting" onKey={onKey.Posting} />
-                <span className="secondary">{translate('posting_key_is_required_it_should_be_different')}</span>
+                <span className="secondary">{tt('userkeys_jsx.posting_key_is_required_it_should_be_different')}</span>
             </div>
             <div style={{paddingBottom: 10}} className="column small-12">
                 <Keys account={account} authType="active" onKey={onKey.Active} />
-                <span className="secondary">{translate('the_active_key_is_used_to_make_transfers_and_place_orders')}</span>
+                <span className="secondary">{tt('userkeys_jsx.the_active_key_is_used_to_make_transfers_and_place_orders')}</span>
             </div>
             <div style={{paddingBottom: 10}} className="column small-12">
                 <Keys account={account} authType="owner" onKey={onKey.Owner} />
-                <span className="secondary">{translate('the_owner_key_is_required_to_change_other_keys')}<br />{translate('the_private_key_or_password_should_be_kept_offline')}</span>
+                <span className="secondary">{tt('userkeys_jsx.the_owner_key_is_required_to_change_other_keys')}<br />{tt('userkeys_jsx.the_private_key_or_password_should_be_kept_offline')}</span>
             </div>
             <div style={{paddingBottom: 10}} className="column small-12">
                 <Keys account={account} authType="memo" onKey={onKey.Memo} />
-                <span className="secondary">{translate('the_memo_key_is_used_to_create_and_read_memos')}</span>
+                <span className="secondary">{tt('userkeys_jsx.the_memo_key_is_used_to_create_and_read_memos')}</span>
             </div>
             {/*
             <div className="column small-12">

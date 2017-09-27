@@ -1,0 +1,20 @@
+sudo: required
+
+language: cpp
+
+services:
+  - docker
+
+before_install:
+  - echo "$TRAVIS_TAG"
+  - echo "$TRAVIS_BRANCH"
+
+script:
+  - if [ -n "${TRAVIS_TAG}" ]; then
+       cd deploy/;
+       ./deploy.sh;
+    fi
+  - docker images
+
+
+

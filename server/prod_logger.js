@@ -1,6 +1,5 @@
 var humanize = require('humanize-number');
 var bytes = require('bytes');
-var config = require('../config').default;
 var metrics = require('./metrics').metrics;
 
 module.exports = prod_logger;

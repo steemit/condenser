@@ -5,13 +5,14 @@ import findUser from 'db/utils/find_user';
 import config from 'config';
 import recordWebEvent from 'server/record_web_event';
 import {esc, escAttrs} from 'db/models';
-import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF} from 'server/utils';
+import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF} from 'server/utils/misc';
 import coBody from 'co-body';
-import secureRandom from 'secure-random'
-import {PublicKey, Signature, hash} from 'shared/ecc'
+import Mixpanel from 'mixpanel';
 import Tarantool from 'db/tarantool';
-import {metrics} from 'server/metrics';
+import {PublicKey, Signature, hash} from 'golos-js/lib/auth/ecc';
+import {api, broadcast} from 'golos-js';
 
+const mixpanel = config.get('mixpanel') ? Mixpanel.init(config.get('mixpanel')) : null;
 
 export default function useGeneralApi(app) {
     const router = koa_router({prefix: '/api/v1'});
@@ -74,7 +75,7 @@ export default function useGeneralApi(app) {
             });
             if (same_ip_bot) {
                 console.log('-- /accounts same_ip_bot -->', user_id, this.session.uid, remote_ip, user.email);
-                this.body = JSON.stringify({error: 'We are sorry, we cannot sign you up at this time because your IP address is associated with bots activity. Please contact support@steemit.com for more information.'});
+                this.body = JSON.stringify({error: 'We are sorry, we cannot sign you up at this time because your IP address is associated with bots activity. Please contact t@cyber.fund for more information.'});
                 this.status = 401;
                 return;
             }
@@ -93,7 +94,7 @@ export default function useGeneralApi(app) {
             );
             if (same_ip_account) {
                 const minutes = (Date.now() - same_ip_account.created_at) / 60000;
-                if (minutes < 120) {
+                if (minutes < 10) {
                     console.log(`api /accounts: IP rate limit for user ${this.session.uid} #${user_id}, IP ${remote_ip}`);
                     throw new Error('Only one Golos account allowed per IP address every 10 minutes');
                 }
@@ -112,13 +113,31 @@ export default function useGeneralApi(app) {
                 throw new Error('Email address is not confirmed');
             }
 
-            // check phone
+            // // check phone
             const mid = yield models.Identity.findOne(
                 {attributes: ['id'], where: {user_id, provider: 'phone', verified: true}, order: 'id DESC'}
             );
             if (!mid) {
                 console.log(`api /accounts: not confirmed sms for user ${this.session.uid} #${user_id}`);
                 throw new Error('Phone number is not confirmed');
+            }
+            else {
+              console.log(`api /accounts: is confirmed sms for user ${this.session.uid} #${user_id}`)
+            }
+
+            const [fee_value, fee_currency] = config.get('registrar.fee').split(' ');
+            let fee = parseFloat(fee_value);
+            try {
+                const chain_properties = yield api.getChainPropertiesAsync();
+                const chain_fee = parseFloat(chain_properties.account_creation_fee);
+                if (chain_fee && chain_fee > fee) {
+                    if (fee / chain_fee > 0.5) { // just a sanity check - chain fee shouldn't be a way larger
+                        console.log('-- /accounts warning: chain_fee is larger than config fee -->', this.session.uid, fee, chain_fee);
+                        fee = chain_fee;
+                    }
+                }
+            } catch (error) {
+                console.error('Error in /accounts get_chain_properties', error);
             }
 
             const accountInstance = yield models.Account.create(escAttrs({
@@ -132,24 +151,27 @@ export default function useGeneralApi(app) {
                 referrer: this.session.r
             })).catch(error => {
                 console.error('!!! Can\'t create account model in /accounts api', this.session.uid, error);
-                throw new Error('Cannot create Golos account');
             });
-
             if (accountInstance) {
-              yield createAccount({
-                  signingKey: config.registrar.signing_key,
-                  fee: config.registrar.fee,
-                  creator: config.registrar.account,
-                  new_account_name: account.name,
-                  owner: account.owner_key,
-                  active: account.active_key,
-                  posting: account.posting_key,
-                  memo: account.memo_key,
-                  broadcast: true
-              });
-              console.log('-- create_account_with_keys created -->', this.session.uid, account.name, user.id, account.owner_key);
-
-              this.body = JSON.stringify({status: 'ok'});
+                const chainAccount = yield createAccount({
+                    signingKey: config.get('registrar.signing_key'),
+                    fee: `${fee.toFixed(3)} ${fee_currency}`,
+                    creator: config.registrar.account,
+                    new_account_name: account.name,
+                    owner: account.owner_key,
+                    active: account.active_key,
+                    posting: account.posting_key,
+                    memo: account.memo_key
+                });
+                console.log('-- create_account_with_keys created -->', this.session.uid, account.name, user_id, account.owner_key);
+                if (mixpanel) {
+                    mixpanel.track('Signup', {
+                        distinct_id: this.session.uid,
+                        ip: remote_ip
+                    });
+                    mixpanel.people.set(this.session.uid, {ip: remote_ip});
+                }
+                this.body = JSON.stringify({status: 'ok'});
             }
         } catch (error) {
             console.error('Error in /accounts api call', this.session.uid, error.toString());
@@ -203,7 +225,7 @@ export default function useGeneralApi(app) {
                 if(!this.session.login_challenge) {
                     console.error('/login_account missing this.session.login_challenge');
                 } else {
-                    const [chainAccount] = yield Apis.db_api('get_accounts', [account])
+                    const [chainAccount] = yield api.getAccountsAsync([account])
                     if(!chainAccount) {
                         console.error('/login_account missing blockchain account', account);
                     } else {
@@ -231,6 +253,11 @@ export default function useGeneralApi(app) {
             }
 
             this.body = JSON.stringify({status: 'ok'});
+            const remote_ip = getRemoteIp(this.req);
+            if (mixpanel) {
+                mixpanel.people.set(this.session.uid, {ip: remote_ip, $ip: remote_ip});
+                mixpanel.people.increment(this.session.uid, 'Logins', 1);
+            }
         } catch (error) {
             console.error('Error in /login_account api call', this.session.uid, error.message);
             this.body = JSON.stringify({error: error.message});
@@ -263,7 +290,12 @@ export default function useGeneralApi(app) {
             if (!checkCSRF(this, csrf)) return;
             console.log('-- /record_event -->', this.session.uid, type, value);
             const str_value = typeof value === 'string' ? value : JSON.stringify(value);
-            recordWebEvent(this, type, str_value);
+            if (type.match(/^[A-Z]/) && mixpanel) {
+                mixpanel.track(type, {distinct_id: this.session.uid, Page: str_value});
+                mixpanel.people.increment(this.session.uid, type, 1);
+            } else {
+                // recordWebEvent(this, type, str_value);
+            }
             this.body = JSON.stringify({status: 'ok'});
         } catch (error) {
             console.error('Error in /record_event api call', error.message);
@@ -291,9 +323,11 @@ export default function useGeneralApi(app) {
         const remote_ip = getRemoteIp(this.req);
         try {
             let views = 1, unique = true;
-            if (config.tarantool) {
-                const res = yield Tarantool.instance().call('page_view', page, remote_ip, this.session.uid, ref);
-                unique = res[0][0];
+            if (config.has('tarantool') && config.has('tarantool.host')) {
+                try {
+                    const res = yield Tarantool.instance().call('page_view', page, remote_ip, this.session.uid, ref);
+                    unique = res[0][0];
+                } catch (e) {}
             }
             const page_model = yield models.Page.findOne(
                 {attributes: ['id', 'views'], where: {permlink: esc(page)}, logging: false}
@@ -309,6 +343,28 @@ export default function useGeneralApi(app) {
                 if (page_model) views = page_model.views;
             }
             this.body = JSON.stringify({views});
+            if (mixpanel) {
+                let referring_domain = '';
+                if (ref) {
+                    const matches = ref.match(/^https?\:\/\/([^\/?#]+)(?:[\/?#]|$)/i);
+                    referring_domain = matches && matches[1];
+                }
+                const mp_params = {
+                    distinct_id: this.session.uid,
+                    Page: page,
+                    ip: remote_ip,
+                    $referrer: ref,
+                    $referring_domain: referring_domain
+                };
+                mixpanel.track('PageView', mp_params);
+                if (!this.session.mp) {
+                    mixpanel.track('FirstVisit', mp_params);
+                    this.session.mp = 1;
+                }
+                if (ref) mixpanel.people.set_once(this.session.uid, '$referrer', ref);
+                mixpanel.people.set_once(this.session.uid, 'FirstPage', page);
+                mixpanel.people.increment(this.session.uid, 'PageView', 1);
+            }
         } catch (error) {
             console.error('Error in /page_view api call', this.session.uid, error.message);
             this.body = JSON.stringify({error: error.message});
@@ -317,17 +373,12 @@ export default function useGeneralApi(app) {
     });
 }
 
-import {Apis} from 'shared/api_client';
-import {createTransaction, signTransaction} from 'shared/chain/transactions';
-import {ops} from 'shared/serializer';
-
-const {signed_transaction} = ops;
 /**
  @arg signingKey {string|PrivateKey} - WIF or PrivateKey object
  */
 function* createAccount({
     signingKey, fee, creator, new_account_name, json_metadata = '',
-    owner, active, posting, memo, broadcast = false,
+    owner, active, posting, memo
 }) {
     const operations = [['account_create', {
         fee, creator, new_account_name, json_metadata,
@@ -336,19 +387,9 @@ function* createAccount({
         posting: {weight_threshold: 1, account_auths: [], key_auths: [[posting, 1]]},
         memo_key: memo,
     }]]
-    const tx = yield createTransaction(operations)
-    const sx = signTransaction(tx, signingKey)
-    if (!broadcast) return signed_transaction.toObject(sx)
-    return yield new Promise((resolve, reject) =>
-        Apis.broadcastTransaction(sx, () => {
-          if (metrics) metrics.increment('_createaccount_success');
-          resolve()
-        }).catch(e => {
-          if (metrics) metrics.increment('_createaccount_error');
-          console.log('-- createAccount.broadcastTransaction.error [', new_account_name, ']', e)
-          reject(e)
-        })
-    )
+    yield broadcast.sendAsync({
+        extensions: [],
+        operations
+    }, [signingKey])
 }
-
 const parseSig = hexSig => {try {return Signature.fromHex(hexSig)} catch(e) {return null}}

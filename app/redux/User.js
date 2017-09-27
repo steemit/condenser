@@ -1,6 +1,7 @@
 import {fromJS} from 'immutable';
 import createModule from 'redux-modules';
-import { DEFAULT_LANGUAGE } from 'config/client_config';
+import {DEFAULT_LANGUAGE, LOCALE_COOKIE_KEY, DEFAULT_DOMESTIC, DEFAULT_THEME} from 'app/client_config';
+import cookie from "react-cookie";
 
 const defaultState = fromJS({
     current: null,
@@ -9,8 +10,15 @@ const defaultState = fromJS({
     show_promote_post_modal: false,
     show_signup_modal: false,
     pub_keys_used: null,
-    locale: DEFAULT_LANGUAGE
+    locale: DEFAULT_LANGUAGE,
+    domestic: DEFAULT_DOMESTIC,
+    theme: DEFAULT_THEME
 });
+
+if (process.env.BROWSER) {
+    const locale = cookie.load(LOCALE_COOKIE_KEY)
+    if (locale) defaultState.locale = locale;
+}
 
 export default createModule({
     name: 'user',
@@ -54,8 +62,17 @@ export default createModule({
             state = state.setIn(['authority', username, 'owner'], 'none')
             return state
         }},
+        { action: 'CHANGE_CURRENCY', reducer: (state, {payload}) => {
+            return state.set('currency', payload)}
+        },
         { action: 'CHANGE_LANGUAGE', reducer: (state, {payload}) => {
             return state.set('locale', payload)}
+        },
+        { action: 'CHANGE_DOMESTIC', reducer: (state, {payload}) => {
+            return state.set('domestic', payload)}
+        },
+        { action: 'CHANGE_THEME', reducer: (state, {payload}) => {
+            return state.set('theme', payload)}
         },
         { action: 'SHOW_TRANSFER', reducer: state => state.set('show_transfer_modal', true) },
         { action: 'HIDE_TRANSFER', reducer: state => state.set('show_transfer_modal', false) },

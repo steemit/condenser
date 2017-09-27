@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 // import { Circle } from 'rc-progress';
-import { FIRST_DATE as firstDate } from 'config/client_config'
+import { FIRST_DATE as firstDate } from 'app/client_config'
 // TODO add comment
 // TODO add function descriptions
 const _ms_in_day = 1000*60*60*24;

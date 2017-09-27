@@ -22,9 +22,10 @@ export default class VerticalMenu extends React.Component {
     }
 
     render() {
-        const {items, title, className, hideValue} = this.props;
+        const {items, title, description, className, hideValue} = this.props;
         return <ul className={'VerticalMenu menu vertical' + (className ? ' ' + className : '')}>
             {title && <li className="title">{title}</li>}
+            {description && <li className="description">{description}</li>}
             {items.map(i => {
                 if(i.value === hideValue) return null
                 return <li key={i.value} onClick={this.closeMenu}>

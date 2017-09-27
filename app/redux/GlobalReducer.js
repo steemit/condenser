@@ -27,6 +27,18 @@ export default createModule({
             }
         },
         {
+          action: 'FETCHING_JSON',
+          reducer: (state, {payload: fetchingJson}) => {
+              return state.mergeDeep({fetchingJson: fetchingJson});
+          }
+        },
+        {
+          action: 'FETCHING_XCHANGE',
+          reducer: (state, {payload: fetchingXchange}) => {
+            return state.mergeDeep({fetchingXchange: fetchingXchange});
+          }
+        },
+        {
             action: 'RECEIVE_STATE',
             reducer: (state, action) => {
                 let payload = fromJS(action.payload)
@@ -73,7 +85,7 @@ export default createModule({
                     title: title.toString('utf-8'),
                     body: body.toString('utf-8'),
                 }))
-                // console.log('<----------- updatedState content :', updatedState.getIn(['content', key]).toJS())
+                // console.log('updatedState content', updatedState.getIn(['content', key]).toJS())
 
                 if (parent_author !== '' && parent_permlink !== '') {
                     const parent_key = parent_author + '/' + parent_permlink
@@ -145,11 +157,12 @@ export default createModule({
                 const idx = active_votes.findIndex(v => v.get('voter') === username)
                 // steemd flips weight into percent
                 if(idx === -1)
-                    active_votes = active_votes.push(Map({voter: username, percent: weight}))
+                    active_votes = active_votes.push(Map({voter: username, percent: weight}));
                 else {
-                    active_votes = active_votes.set(idx, Map({voter: username, percent: weight}))
+                    active_votes = active_votes.set(idx, Map({voter: username, percent: weight}));
                 }
-                return state.setIn(key, active_votes)
+                state.setIn(key, active_votes);
+                return state;
             }
         },
         {
@@ -288,6 +301,10 @@ export default createModule({
             reducer: state => state // saga
         },
         {
+            action: 'FETCH_EXCHANGE_RATES',
+            reducer: state => state // saga
+        },
+        {
             action: 'FETCH_JSON_RESULT',
             reducer: (state, {payload: {id, result, error}}) =>
                 state.set(id, fromJS({result, error}))
@@ -301,6 +318,19 @@ export default createModule({
             action: 'HIDE_DIALOG',
             reducer: (state, {payload: {name}}) =>
                 state.update('active_dialogs', d => d.delete(name))
+        },
+        {
+            action: 'RECEIVE_PAYOUT_WINDOW',
+            reducer: (state, {payload: {payoutWindow}}) => {
+                // console.log('GlobalReducer -- RECEIVE_PAYOUT_WINDOW payoutWindow', payoutWindow)
+                payoutWindow = fromJS(payoutWindow)
+                const key = payoutWindow.get('author') + '/' + payoutWindow.get('permlink')
+                return state.updateIn(['payoutWindow', key], Map(), c => {
+                    c = emptyContentMap.mergeDeep(c)
+                    c = c.mergeDeep(payoutWindow)
+                    return c
+                })
+            }
         },
 
     ]

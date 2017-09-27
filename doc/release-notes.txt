@@ -1,0 +1,336 @@
+---------------------------------------------------------------------
+0.1.170324
+---------------------------------------------------------------------
+
+New features
+--------
+ - use twilio to verify phone numbers #1232
+ - show order ops in wallet #1144
+ - switch to invisible recaptcha #1244
+ - votes icon refresh #1110
+ - add busy to external links #1117 
+ - simplified/refreshed post hero #1207
+ - add post json routes #1122
+ - markdown headings in sans #1184
+ - add payout sorts #1137
+
+Bug fixes
+--------
+ - replace usage of mode prop #1260
+ - fix account recovery issue #1257
+ - update login dialog titles, copy #1251
+ - handle double-encoded json bug #1249
+ - disable spellcheck on transfer #1248
+ - use blue circle stroke on upvote #1242
+ - show follow mute button for guests #1217
+ - prevent anchor tags breaking #1218
+ - support ctrl clicking on authors #1220
+ - show apr in saving balance #1228
+ - update README.md #1208
+ - add TOC to FAQ Page #1106
+ - conv tracking for banner signup #1183
+ - no signup link authenticate #1176
+ - post quote update #1198
+ - add Banner & TOC to Welcome page #1130
+ - fix depth check on Comments #1204
+ - add commas to view count #1199
+ - update CONTRIBUTING.md #1193
+ - critical telesign bugfix #1191
+ - add fb and ga config env #1185
+ - update readme for tarantool #1142
+ - hide signup prompt on active key login #1265
+ - add app manifest #1266
+
+
+---------------------------------------------------------------------
+0.1.170216
+---------------------------------------------------------------------
+
+New features
+--------
+ - markdown image upload #1026
+ - create CONTRIBUTING.md #1141
+ - dockerization, config module, node 7.5 #1108
+ - add phist to alternative post viewers #1150
+ - do not linkify exe and zip urls #1087
+
+Bug fixes
+--------
+ - fetch more followers in batch #1097
+ - fall back to rshares sort for comments #1099
+ - adjust author heading #1101
+ - move the "Steemit Chat" link higher in the main menu #1102
+ - adjust graying and post collapsing rules #1124
+ - move witness proxy to bottom of page #1104
+ - restore page title when closing modal with ESC #1123
+ - cleanup unused import, eslint #1125
+ - improve byline handling in mobile view #1112
+ - FollowSaga: fix ternary op, eslint #1111
+ - update json profile #1120
+ - rollback to loading fb plugin on page load #1151
+ - disable autocorrect on wallet page #1143
+ - address large svgs problem #1152
+ - fix HtmlReady regression #1157
+ - wrap transfer memo text properly #1156
+ - fix invalid vote state bug #1154
+
+
+---------------------------------------------------------------------
+0.1.170201
+---------------------------------------------------------------------
+
+New features
+--------
+ - show author's userpic below the title on post page #1051
+ - smaller server response size & flag refactor #1054
+ - remove flag count on posts #1039
+ - post performance #1016
+ - lighten post link color #1044
+ - setting page consistency #1056
+ - load fb sdk only when needed #1049
+ - link to block explorer from post #1063, #1077
+ - Parse metadata when returning user JSON #1037
+ - use large twitter card, fallback to profile image #1053
+
+Bug fixes
+--------
+ - fix web push notifications undefined url issue on Android #1079
+ - fix scrollable close sign on post modal #1078
+ - cannot read property bug #1060
+ - fix Comments tab truncation #1085
+ - use on chain account reg fee instead of config if larger #1069
+ - fix upvote slider positioning on mobile & state #1068
+ - capitalized steem verbiage for consistency #1048
+
+
+---------------------------------------------------------------------
+0.1.170121
+---------------------------------------------------------------------
+
+New features
+--------
+ - Add plain description meta tag #982
+ - Remove filtering of trending options for time being #983
+ - Do not confirm clearing of reply form when body is empty #985
+ - Meta description should be name, not property #989
+ - Show Author dropdown for non-logged in users #991
+ - Adjust rephide -- add threshold #1010
+ - Update profile header for semantic upgrade, adjust styling to match old #1001
+ - #844 protect for invalid user pages allow for short post urls #1011
+ - 958 web push notifications #1007
+ - Add profile pics support to notifications #1017
+ - Support blacklisted phone prefixes #1015
+
+Bug fixes
+--------
+ - Save json_metadata youtube preview image url for iframe embedds. fix #995
+ - Clarify wording of wallet actions, fix #990
+ - Usernames element for reblogged_by array compat #994
+
+
+---------------------------------------------------------------------
+0.1.161261
+---------------------------------------------------------------------
+
+New features
+--------
+ - Strict checking of profile url #979
+ - TagsIndex revamp #806
+ - Parse block quote from text if preview text is rendered as comment #955
+ - Prepend nested comments with dots #942
+ - Welcome Page Copyedit Changes for #923
+ - Update default wallet estimated balance tip message, update en and ru… #921
+ - Add a last-minute check to ensure one phone per account #917
+ - Add 3x support for thumbnail previews for post previews to remove fuz… #940
+ - 914 user thumbnails #934
+ - 915 resteem button feeds mobile #937
+ - Add metadata to nsfw post summaries #956
+ - Update verbiage for flag tooltip for distribution/rewards, update loc… #957
+
+Bug fixes
+--------
+ - Fix phone verification issue #922
+ - Fix translation issue on account recovery page #908
+ - Patch route user #883
+ - Fix account page 500 error #897
+ - Comment edit bug 895 #954
+ - Confirm clearing of post form. fix #970
+
+
+---------------------------------------------------------------------
+0.1.161221
+---------------------------------------------------------------------
+
+New features
+--------
+ - Mixpanel Social Sharing Tracking #881
+ - Json route user #869
+ - nsfw handling #861
+ - ability to sort comments by upvotes #808
+ - username routes 404 #851
+ - utilize new get follow count #845
+ - update react & babel #843
+ - never hide flags #858
+ - allow refetching of pages #593
+ - make cookie name configurable #852
+
+Bug fixes
+--------
+ - Patch route user #883
+ - Increase nodejs framesize #873
+ - should fix some inconsistent post overlay scrolling behavior #863
+ - mark fsevents as optional dep (fixes linux instal issue with npm ~4.0.3) #850
+ - phone is considered to be used only if there is account created with it #841
+ - username should appear in header prefixed with #855
+ - typesafe json metadata #868
+ - Refactor class name for best practice conventional naming #871
+
+
+---------------------------------------------------------------------
+0.1.161214
+---------------------------------------------------------------------
+
+ - ability to set witness proxy voter #797
+ - add muted user list on Settings page #834
+ - add zebra stripes to wallet page #818
+ - allow votes dropdown to expand past post modal #836
+ - always show comment collapser #835
+ - fix phone verification issue #839
+ - clarify power down error message #838
+ - disable follow buttons while pending #832
+ - translation of markets #604
+ - mixpanel - track more events #828
+ - add contributors.md #825
+ - support for secure server sessions #823
+ - fix post footer promo text #822
+ - translation of blocktrades deposit #821
+ - display pending conversions & add them to account value #804
+ - fix follow counts #802
+ - fix unknown account flashing #801
+ - login/transfer updates, autofill username #798
+ - prevent post footer wrapping #781
+
+
+---------------------------------------------------------------------
+0.1.161205
+---------------------------------------------------------------------
+
+ - proper inflection for vote count #794
+ - update econ rules copy #793
+ - remove high security key in overlay #791
+ - @author/permlink redirect #786
+ - normalize profile url #785
+ - enforce display names not starting with `@` #780
+ - show 'since date' for view counts on old posts #779
+ - handle off screen click on resteem confirm #778
+ - revert youtube previews to lower resolution #777
+ - remove 0.15.0 compat layer, re-enable Promoted posts #776
+ - refactor follow data structure #774
+ - fix prop warnings - npm cleanup #773
+ - fix potential firefox bug - not able to scroll a post #767
+ - refactoring of market state #758
+
+
+---------------------------------------------------------------------
+0.1.161202
+---------------------------------------------------------------------
+
+New features
+--------
+ - views counter #744
+ - profile customization #737
+ - full power badge #748
+ - add current open orders to wallet balances #740
+
+Bug fixes
+--------
+ - various market bug fixes and price warning #728
+ - performance tweaks: minimize rendering and API calls #738
+ - fix witness votes not appearing for logged in user #741
+ - add support for vimeo auto embed #731
+ - fix obscure bug which causes certain keys to trigger back event #754
+ - fix follow mute button alignment for mobile display #753
+ - do not show dropdown for comments with 0 votes #747
+ - fix bug preventing declined payout post from being edited #743
+ - handle malformed categories in url #742
+ - fix share menu scrolling behavior #739
+ - adjust password data-entry error wording #736
+ - clarify dangerous-html flag usage #733
+ - remove fastclick for JS dropdown conflicts #727
+ - allow links to open in new tab without closing menu #726
+ - add padding for avatar on collapsed state #717
+ - display previous title when closing post modal #709
+ - remove negative top margin on comment footer #714
+
+
+---------------------------------------------------------------------
+0.1.161123
+---------------------------------------------------------------------
+
+ - Add welcome page #585 (@timcliff, @bitcoiner)
+ - Fix joined date on mobile #629 (@bitcoiner)
+ - Add a "settings" link to the drop-down menu #618 (@bitcoiner)
+ - Fix wallet UI glitches on mobile #633 (@bitcoiner)
+ - Hide follow counts until loaded #632
+ - Hamburger menu clarifications #635 (@bitcoiner)
+ - Add support for renamed API key #637
+ - Do not hide dropdown menu on ctrl-click #641
+ - Strikethrough payout amount for declined payout posts #644
+ - Fix reputation (float) bug #643
+ - i18n: fix reply count var and singular counts #649
+ - Better support for non-lowercase tags and mentions #659
+ - Fix showing of category error #659
+ - Fix auto-vote + decline payout bug #650
+ - Remove dup exports #657
+ - Update follows api logic with backwards compat for share-db upgrade #669
+ - Fix react-addons-perf and update shrinkwrap #670
+ - Ensure lowercase user names for page titles #661
+ - Fix comment sort order label #671
+ - Properly handle relative links #603
+ - Support for new tags and tag_idx state #689
+ - Fix multiple account creation per verification issue #692
+ - Cleanup & i18n for awards pages #658 (@bitcoiner)
+ - Replace showSignUp with redirect to sign up's first step #694
+ - Fix follow loading status, invert shared-db follows api fix #695
+ - Replace showSignUp with redirect to sign up's first step #694
+ - Allow email verification resend if expired #691
+ - Fix sign up issue that could allow attacker to create up to 8 accounts per single verification #625
+
+
+---------------------------------------------------------------------
+0.1.161109
+---------------------------------------------------------------------
+
+New features and improvements
+--------
+- custom user profile images
+- show dynamic sbd interest in user's wallet
+- new submenu on the wallet page
+
+Bug fixes
+--------
+- remove estimates, just show 7-day summary #600
+- own reply notifications appear on other users' account pages #595
+
+
+---------------------------------------------------------------------
+0.1.161104
+---------------------------------------------------------------------
+
+New features and improvements
+--------
+- In app notifications #584
+- New confirmation dialog for resteeming action #572
+- New Profile display user join steem date #582
+- New hyperlink on post timestamp for content
+- Inclusive of Steemit API docs sub menu
+- Youtube preview improvements #588
+
+Bug fixes
+--------
+- fixes for user wallet views/actions #528
+- fixes rewards balances #528
+- TypeError: Cannot read property 'get' of undefined #238
+- remove ReplyEditor__title padding #570
+- Show message when no post results #571
+- do not display invalid cashout_time #532

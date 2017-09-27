@@ -1,10 +1,15 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
+import Tarantool from 'db/tarantool';
 import ServerHTML from './server-html';
 import universalRender from '../shared/UniversalRender';
 import models from 'db/models';
-import secureRandom from 'secure-random'
-import { SELECT_TAGS_KEY } from 'config/client_config';
+import secureRandom from 'secure-random';
+import ErrorPage from 'server/server-error';
+import {
+  DEFAULT_LANGUAGE, LANGUAGES, LOCALE_COOKIE_KEY,
+  SELECT_TAGS_KEY
+} from 'app/client_config';
 
 const DB_RECONNECT_TIMEOUT = process.env.NODE_ENV === 'development' ? 1000 * 60 * 60 : 1000 * 60 * 10;
 
@@ -16,16 +21,23 @@ async function appRender(ctx) {
             login_challenge = secureRandom.randomBuffer(16).toString('hex');
             ctx.session.login_challenge = login_challenge;
         }
-        let select_tags = JSON.parse( decodeURIComponent( ctx.cookies.get( SELECT_TAGS_KEY ) || '[]' ) || '[]');
+
+        let select_tags = [];
+        try {
+            select_tags = JSON.parse(decodeURIComponent(ctx.cookies.get(SELECT_TAGS_KEY) || '[]') || '[]') || [];
+        } catch(e) {}
+
         const offchain = {
             csrf: ctx.csrf,
             flash: ctx.flash,
             new_visit: ctx.session.new_visit,
             account: ctx.session.a,
-            select_tags: select_tags,
             config: $STM_Config,
-            login_challenge
+            login_challenge,
+            locale: Object.keys(LANGUAGES).indexOf(ctx.cookies.get(LOCALE_COOKIE_KEY)) !== -1 ? ctx.cookies.get(LOCALE_COOKIE_KEY) : DEFAULT_LANGUAGE,
+            select_tags
         };
+
         const user_id = ctx.session.user;
         if (user_id) {
             let user = null;
@@ -73,7 +85,8 @@ async function appRender(ctx) {
                 offchain.recover_account = account_recovery_record.account_name;
             }
         }
-        const { body, title, statusCode, meta } = await universalRender({location: ctx.request.url, store, offchain});
+
+        const { body, title, statusCode, meta } = await universalRender({location: ctx.request.url, store, offchain, ErrorPage, tarantool: Tarantool.instance()});
 
         // Assets name are found in `webpack-stats` file
         const assets_filename = process.env.NODE_ENV === 'production' ? 'tmp/webpack-stats-prod.json' : 'tmp/webpack-stats-dev.json';

@@ -1,6 +1,6 @@
 import {fromJS, Map, Set} from 'immutable'
 import {call, put, select} from 'redux-saga/effects';
-import {Apis} from 'shared/api_client';
+import {api} from 'golos-js';
 
 /**
     This loadFollows both 'blog' and 'ignore'
@@ -8,11 +8,14 @@ import {Apis} from 'shared/api_client';
 
 //fetch for follow/following count
 export function* fetchFollowCount(account) {
-    const counts = yield call(Apis.follow, 'get_follow_count', account)
-    yield put({type: 'global/UPDATE', payload: {
-        key: ['follow_count', account],
-        updater: m => m.mergeDeep({'follower_count': counts.follower_count,
-        'following_count': counts.following_count})
+    const counts = yield call([api, api.getFollowCountAsync], account)
+    yield put({
+        type: 'global/UPDATE',
+        payload: {
+            key: ['follow_count', account],
+            updater: m => m.mergeDeep({
+                follower_count: counts.follower_count,
+                following_count: counts.following_count})
     }})
 }
 
@@ -31,17 +34,20 @@ export function* loadFollows(method, account, type, force = false) {
         }
     }
 
-    yield put({type: 'global/UPDATE', payload: {
-        key: ['follow', method, account],
-        notSet: Map(),
-        updater: m => m.set(type + '_loading', true),
+    yield put({
+        type: 'global/UPDATE',
+        payload: {
+            key: ['follow', method, account],
+            notSet: Map(),
+            updater: m => m.set(type + '_loading', true),
     }})
 
     yield loadFollowsLoop(method, account, type)
 }
 
 function* loadFollowsLoop(method, account, type, start = '', limit = 100) {
-    const res = fromJS(yield Apis.follow(method, account, start, type, limit))
+    if(method === "getFollowersAsync") limit = 1000;
+    const res = fromJS(yield api[method](account, start, type, limit));
     // console.log('res.toJS()', res.toJS())
 
     let cnt = 0
@@ -50,15 +56,15 @@ function* loadFollowsLoop(method, account, type, start = '', limit = 100) {
     yield put({type: 'global/UPDATE', payload: {
         key: ['follow_inprogress', method, account],
         notSet: Map(),
-        updater: m => {
+        updater: (m) => {
             m = m.asMutable()
-            res.forEach(value => {
-                cnt++
+            res.forEach((value) => {
+                cnt += 1;
 
                 const whatList = value.get('what')
-                const accountNameKey = method === "get_following" ? "following" : "follower";
+                const accountNameKey = method === "getFollowingAsync" ? "following" : "follower";
                 const accountName = lastAccountName = value.get(accountNameKey)
-                whatList.forEach(what => {
+                whatList.forEach((what) => {
                     //currently this is always true: what === type
                     m.update(what, Set(), s => s.add(accountName))
                 })
@@ -75,7 +81,7 @@ function* loadFollowsLoop(method, account, type, start = '', limit = 100) {
         // Every account has a different followers and following list for: blog, ignore
         yield put({type: 'global/UPDATE', payload: {
             key: [],
-            updater: m => {
+            updater: (m) => {
                 m = m.asMutable()
 
                 const result = m.getIn(['follow_inprogress', method, account, type], Set())

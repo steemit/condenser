@@ -1,5 +1,4 @@
-import Apis from 'shared/api_client/ApiInstances'
-import { PrivateKey, PublicKey, Aes, key_utils } from 'shared/ecc'
+import {PrivateKey, PublicKey, Aes, key_utils} from 'golos-js/lib/auth/ecc'
 
 // import secureRandom from 'secure-random'
 // import links from 'app/utils/Links'
@@ -7,7 +6,6 @@ import { PrivateKey, PublicKey, Aes, key_utils } from 'shared/ecc'
 
 module.exports = {
 
-    Apis,
     PrivateKey, PublicKey, Aes, key_utils,
 
     // Run once to start, then again to stop and print a report

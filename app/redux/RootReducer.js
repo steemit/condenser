@@ -5,8 +5,8 @@ import appReducer from './AppReducer';
 //import discussionReducer from './DiscussionReducer';
 import globalReducerModule from './GlobalReducer';
 import marketReducerModule from './MarketReducer';
+import assetsReducerModule from './AssetsReducer';
 import user from './User';
-// import auth from './AuthSaga';
 import transaction from './Transaction';
 import offchain from './Offchain';
 import {reducer as formReducer} from 'redux-form'; // @deprecated, instead use: app/utils/ReactForm.js
@@ -24,19 +24,17 @@ function initReducer(reducer, type) {
             if(type === 'global') {
                 const content = state.get('content').withMutations(c => {
                     c.forEach((cc, key) => {
-                        const stats = fromJS(contentStats(cc))
-                        c.setIn([key, 'stats'], stats)
+                        if(!c.getIn([key, 'stats'])) {
+                            // This may have already been set in UniversalRender; if so, then
+                            //   active_votes were cleared from server response. In this case it
+                            //   is important to not try to recalculate the stats. (#1040)
+                            c.setIn([key, 'stats'], fromJS(contentStats(cc)))
+                        }
                     })
-                })
-                state = state.set('content', content)
-
-                // TODO reserved words used in account names, find correct solution
-                if (!Map.isMap(state.get('accounts'))) {
-                  const accounts = state.get('accounts')
-                  state = state.set('accounts', fromJSGreedy(accounts))
-                }
+                });
+                state = state.set('content', content);
             }
-            return state
+            return state;
         }
 
         if (action.type === '@@router/LOCATION_CHANGE' && type === 'global') {
@@ -60,6 +58,7 @@ export default combineReducers({
     routing: initReducer(routerReducer),
     app: initReducer(appReducer),
     form: formReducer,
+    assets: initReducer(assetsReducerModule.reducer),
 });
 
 /*

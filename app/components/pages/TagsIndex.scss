@@ -4,6 +4,19 @@
   }
 
   table tr {
+    th a {
+      position: relative;
+    }
+    th a:hover::after {
+      content: '\2193';
+      position: absolute;
+      left: 100%;
+    }
+
+    td, th {
+      text-align: right;
+      &:first-child {text-align: left;}
+    }
     th {
       cursor: pointer;
       &:hover .TagsIndex__tagToggle {

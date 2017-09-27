@@ -28,7 +28,7 @@
 		text-transform: none;
 		font-weight: bold;
 	}
-	.button-blue { background-color: #1A5099; }
+	.button-blue { background-color: $mainly-blue; }
 	.Landing__supporting-text { color: #a8a8a8; }
 	@media #{$small-only} {
 		h2 { font-size: 2.38095rem; }
@@ -118,6 +118,7 @@
 		.button {
 			padding: 20px 30px;
 			margin-right: 30px;
+			color: $white;
 		}
 		@media #{$small-only} {
 			.button {
@@ -177,7 +178,7 @@
 		.button {
 			color: white;
 			border-radius: 4px;
-			background-color: #1A5099;
+			background-color: $mainly-blue;
 			// border: 2px solid #c0c0bf;
 		}
 	}
@@ -186,7 +187,7 @@
 .WhatIsGolos {
 	// background-color: #f2f2f2;
 	.WhatIsGolos__header {
-		
+
 	}
 	.WhatIsGolos__video {
 		margin-top: 80px;
@@ -384,12 +385,11 @@
 
 	}
 	.Team__member__sergey .Team__member__img {
-		width: 350px;
-	    left: 83%;
+	    left: 50%;
 	    max-width: none;
 	}
 	.Team__member__roman .Team__member__img {
-        width: 217px;
+      width: 217px;
 	    left: 56%;
 	    max-width: none;
 	}

@@ -6,38 +6,20 @@ import { connect } from 'react-redux';
 import user from 'app/redux/User';
 import Reblog from 'app/components/elements/Reblog';
 import Voting from 'app/components/elements/Voting';
-import Tooltip from 'app/components/elements/Tooltip';
 import {immutableAccessor} from 'app/utils/Accessors';
 import extractContent from 'app/utils/ExtractContent';
+import { blockedContent } from 'app/utils/IllegalContent'
 import { browserHistory } from 'react-router';
 import VotesAndComments from 'app/components/elements/VotesAndComments';
 import TagList from 'app/components/elements/TagList';
 import {authorNameAndRep} from 'app/utils/ComponentFormatters';
 import {Map} from 'immutable';
-import Reputation from 'app/components/elements/Reputation';
 import Author from 'app/components/elements/Author';
-import { translate } from 'app/Translator';
+import UserNames from 'app/components/elements/UserNames';
+import tt from 'counterpart';
+import { APP_ICON, TERMS_OF_SERVICE_URL } from 'app/client_config';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
-import { APP_ICON } from 'config/client_config';
 
-function TimeAuthorCategory({post, links, authorRepLog10, gray}) {
-    const author = <strong>{post.author}</strong>;
-    return (
-        <span className="vcard">
-            <Tooltip t={new Date(post.created).toLocaleString()}>
-                <span className="TimeAgo"><TimeAgoWrapper date={post.created} /></span>
-            </Tooltip>
-            <span>{' ' + translate('by')}&nbsp;
-                <span itemProp="author" itemScope itemType="http://schema.org/Person">
-                    {links ? <Link to={post.author_link}>{author}</Link> :
-                        <strong>{author}</strong>}&nbsp;
-                    <Reputation value={authorRepLog10} />
-                </span>
-            </span>
-            <span>{' ' + translate('in')}&nbsp;{links ? <TagList post={post} /> : <strong>{detransliterate(post.category)}</strong>}</span>
-        </span>
-    );
-}
 
 function isLeftClickEvent(event) {
     return event.button === 0
@@ -60,7 +42,6 @@ class PostSummary extends React.Component {
         pending_payout: React.PropTypes.string.isRequired,
         total_payout: React.PropTypes.string.isRequired,
         content: React.PropTypes.object.isRequired,
-        netVoteSign: React.PropTypes.number,
         currentCategory: React.PropTypes.string,
         thumbSize: React.PropTypes.string,
         nsfwPref: React.PropTypes.string,
@@ -95,22 +76,45 @@ class PostSummary extends React.Component {
         const {account} = this.props;
         if (!content) return null;
 
-        const archived = content.get('mode') === 'archived'
+        const archived = content.get('cashout_time') === '1969-12-31T23:59:59' // TODO: audit after HF17. #1259
 
-        let reblogged_by = content.get('first_reblogged_by')
+        let reblogged_by;
+        if(content.get('reblogged_by') && content.get('reblogged_by').size > 0) {
+            reblogged_by = content.get('reblogged_by').toJS()
+        } else if(content.get('first_reblogged_by')) {
+            // TODO: this case is backwards-compat for 0.16.1. remove after upgrading.
+            reblogged_by = [content.get('first_reblogged_by')]
+        }
+
+		if(blockedContent.includes(content.get('url'))) {
+			return (
+				<article className={'PostSummary hentry'} itemScope itemType ="http://schema.org/blogPost">
+					<div className="PostSummary__nsfw-warning" style={{minHeight: 0}}>
+						{tt('postsummary_jsx.this_post_is')}&nbsp;
+						{tt('illegal_content.hidden')}&nbsp;
+						{tt('illegal_content.due_to_illegal_content')}&nbsp;
+						<a href={TERMS_OF_SERVICE_URL} target="_blank" rel="nofollow">
+							{tt('illegal_content.terms_of_service')}
+						</a>
+						{tt('illegal_content.terms_of_service_section')}
+					</div>
+				</article>
+			)
+		}
+
         if(reblogged_by) {
           reblogged_by = <div className="PostSummary__reblogged_by">
-                             <Icon name="reblog" /> {translate('reblogged_by')} <Link to={'/@'+reblogged_by}>{reblogged_by}</Link>
+                             <Icon name="reblog" /> {tt('postsummary_jsx.resteemed_by')} <UserNames names={reblogged_by} />
                          </div>
         }
 
         if(account && account != content.get('author')) {
           reblogged_by = <div className="PostSummary__reblogged_by">
-                             <Icon name="reblog" /> {translate('reblog')}
+                             <Icon name="reblog" /> {tt('postsummary_jsx.resteemed')}
                          </div>
         }
 
-        const {gray, pictures, authorRepLog10, hasFlag, isNsfw} = content.get('stats', Map()).toJS()
+        const {gray, pictures, authorRepLog10, flagWeight, isNsfw} = content.get('stats', Map()).toJS()
         const p = extractContent(immutableAccessor, content);
         const nsfwTags = ['nsfw', 'ru--mat', '18+']
         let nsfwTitle = nsfwTags[0]
@@ -129,7 +133,7 @@ class PostSummary extends React.Component {
         let full_power = content.get('percent_steem_dollars') === 0;
 
         if( content.get( 'parent_author') !== "" ) {
-           title_text = "Re: " + content.get('root_title');
+           title_text = tt('g.re') + ": " + content.get('root_title');
            title_link_url = content.get( 'url' );
            comments_link = title_link_url;
            is_comment = true;
@@ -141,20 +145,31 @@ class PostSummary extends React.Component {
         let content_body = <div className="PostSummary__body entry-content">
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>{desc}</a>
         </div>;
-        let content_title = <h1 className="entry-title">
+        let content_title = <h3 className="entry-title">
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>
                 {isNsfw && <span className="nsfw-flag">{detransliterate(nsfwTitle)}</span>}
                 {title_text}
-                {full_power && <span title="Powered Up 100%"><Icon name={APP_ICON} /></span>}
+                {full_power && <span title={tt('g.powered_up_100')}><Icon name={APP_ICON} /></span>}
             </a>
-        </h1>;
+        </h3>;
 
         // author and category
         let author_category = <span className="vcard">
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}><TimeAgoWrapper date={p.created} className="updated" /></a>
-            {translate('by')} <Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
-            {' ' + translate('in')} <TagList post={p} single />
+            {} {tt('g.by')} <Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
+            {} {tt('g.in')} <TagList post={p} single />
         </span>
+
+        const content_footer = <div className="PostSummary__footer">
+            <Voting post={post} showList={false} />
+            <VotesAndComments post={post} commentsLink={comments_link} />
+            <span className="PostSummary__time_author_category">
+                {!archived && <Reblog author={p.author} permlink={p.permlink} />}
+                <span className="show-for-medium">
+                    {author_category}
+                </span>
+            </span>
+        </div>
 
         const {nsfwPref, username} = this.props
         const {revealNsfw} = this.state
@@ -163,31 +178,35 @@ class PostSummary extends React.Component {
             if(nsfwPref === 'hide') {
                 // user wishes to hide these posts entirely
                 return null;
-            } else if(!revealNsfw && nsfwPref !== 'show') {
-                // warn the user, unless they have chosen to reveal this post or have their preference set to "show always"
+            } else if(nsfwPref === 'warn' && !revealNsfw) {
+                // user wishes to be warned, and has not revealed this post
                 return (
                     <article className={'PostSummary hentry'} itemScope itemType ="http://schema.org/blogPost">
                         <div className="PostSummary__nsfw-warning">
-                            {translate('this_post_is')} <span className="nsfw-flag">{detransliterate(nsfwTitle)}</span>.
-                            {translate('you_can')} <a href="#" onClick={this.onRevealNsfw}>{translate('reveal_it')}</a>{' '+translate('or')+' '}
-                            {username ? <span>{translate('adjust_your')} <Link to={`/@${username}/settings`}>{translate('display_preferences')}</Link>.</span>
-                                      : <span><Link to="/create_account">{translate('sign_up')}</Link> {translate('to_save_your_preferences')}</span>}
+                            <div className="PostSummary__time_author_category_small show-for-small-only">
+                                {author_category}
+                            </div>
+                            {tt('postsummary_jsx.this_post_is')} <span className="nsfw-flag">{detransliterate(nsfwTitle)}</span>.
+                            {tt('postsummary_jsx.you_can')} <a href="#" onClick={this.onRevealNsfw}>{tt('postsummary_jsx.reveal_it')}</a> {tt('g.or') + ' '}
+                            {username ? <span>{tt('postsummary_jsx.adjust_your')} <Link to={`/@${username}/settings`}>{tt('postsummary_jsx.display_preferences')}</Link>.</span>
+                                      : <span><Link to="/enter_email">{tt('postsummary_jsx.create_an_account')}</Link> {tt('postsummary_jsx.to_save_your_preferences')}.</span>}
+                            {content_footer}
                         </div>
                     </article>
                 )
             }
         }
 
-        const visitedClassName = this.props.visited ? ' PostSummary__post-visited' : '';
+        const visitedClassName = this.props.visited ? 'PostSummary__post-visited ' : '';
         let thumb = null;
         if(pictures && p.image_link) {
           const prox = $STM_Config.img_proxy_prefix
           const size = (thumbSize == 'mobile') ? '800x600' : '256x128'
           const url = (prox ? prox + size + '/' : '') + p.image_link
           if(thumbSize == 'mobile') {
-            thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image-mobile"><img src={url} /></a>
+            thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className={'PostSummary__image-mobile '}><img src={url} /></a>
           } else {
-            thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image" style={{backgroundImage: 'url(' + url + ')'}}></a>
+            thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className={'PostSummary__image ' + visitedClassName} style={{backgroundImage: 'url(' + url + ')'}}></a>
           }
         }
         const commentClasses = []
@@ -195,8 +214,8 @@ class PostSummary extends React.Component {
 
         return (
             <article className={'PostSummary hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')} itemScope itemType ="http://schema.org/blogPost">
-                <div className={hasFlag ? '' : 'PostSummary__collapse'}>
-                    <div className="float-right"><Voting pending_payout={pending_payout} total_payout={total_payout} showList={false} cashout_time={cashout_time} post={post} flag /></div>
+                <div className={flagWeight > 0 ? '' : 'PostSummary__collapse'}>
+                    <div className="float-right"><Voting post={post} flag /></div>
                 </div>
                 {reblogged_by}
                 <div className="PostSummary__header show-for-small-only">
@@ -207,18 +226,11 @@ class PostSummary extends React.Component {
                 </div>
                 {thumb}
                 <div className="PostSummary__content">
-                    <div className={'PostSummary__header show-for-medium' + visitedClassName}>
+                    <div className={'PostSummary__header show-for-medium ' + visitedClassName}>
                         {content_title}
                     </div>
                     {content_body}
-                    <div className="PostSummary__footer">
-                        <Voting post={post} showList={false} />
-                        <VotesAndComments post={post} commentsLink={comments_link} />
-                        <span className="PostSummary__time_author_category show-for-medium">
-                            {author_category}
-                            {!archived && <Reblog author={p.author} permlink={p.permlink} />}
-                        </span>
-                    </div>
+                    {content_footer}
                 </div>
             </article>
         )

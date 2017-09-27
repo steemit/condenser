@@ -48,17 +48,7 @@ a, path, circle {
 }
 
 .strikethrough {
-  // text-decoration: line-through;
   position: relative;
-}
-.strikethrough::after {
-  border-bottom: 0.125em solid #EB0000;
-  content: "";
-  left: 0;
-  margin-top: calc(0.125em / 2 * -1);
-  position: absolute;
-  right: 0;
-  top: 50%;
 }
 
 .uppercase, label {
@@ -99,6 +89,34 @@ a, path, circle {
 
 .NotFound {
   width: 640px;
+  margin-top: 2em;
+  text-align: center;
+  // small only
+  @media screen and (max-width: 39.9375em) {
+      width: 340px;
+  }
+}
+
+.NotFound__menu {
+ text-align: center;
+    li {
+        float: none;
+        display: inline-block;
+        text-align: center;
+        margin-right: 1%;
+        list-style: none;
+        font-weight: 400;
+    }
+    li:after {
+        content: " |";
+    }
+    li:last-child:after {
+        content: "";
+    }
+}
+
+.NotFound__header {
+  margin-top: 1em;
 }
 
 @media print {
@@ -107,3 +125,4 @@ a, path, circle {
   }
 }
 
+.anchor { padding-top: 90px; }

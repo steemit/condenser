@@ -1,8 +1,28 @@
 import React from 'react';
 
 const icons = [
+    'flags/1x1/all',
+    'flags/1x1/ru',
+    'flags/1x1/ua',
+    'flags/1x1/by',
+    'flags/1x1/am',
+    'flags/1x1/kz',
+    'flags/1x1/tj',
+    'flags/1x1/md',
+    'flags/1x1/es',
+    'flags/1x1/in',
+    'flags/1x1/pt',
+    'flags/1x1/fr',
+    'flags/1x1/us',
+    "flags/1x1/rs",
+    "flags/1x1/ar",
+    "flags/1x1/cn",
+    "flags/1x1/ro",
     'user',
     'share',
+    'calendar',
+    'chain',
+    'caret-down',
     'chevron-up-circle',
     'chevron-down-circle',
     'chevron-left',
@@ -11,11 +31,13 @@ const icons = [
     'facebook',
     'twitter',
     'linkedin',
+    'pencil',
     'vk',
     'link',
     'clock',
     'extlink',
     'steem',
+    'steemd',
     'golos',
     'ether',
     'bitcoin',
@@ -35,12 +57,25 @@ const icons = [
     'video',
     'eye',
     'location',
-    'calendar',
+    'info_o',
+    'feedback',
+    'rocket-chat',
+    'cog',
+    'enter',
+    'profile',
+    'key',
+    'reply',
+    'replies',
+    'wallet',
+    'home',
+    'lj',
+    'arrow',
+    'envelope'
 ];
 const icons_map = {};
 for (const i of icons) icons_map[i] = require(`app/assets/icons/${i}.svg`);
 
-const rem_sizes = {'1x': '1.12', '1_5x': '1.5', '2x': '2', '3x': '3.45', '4x': '4.60', '5x': '5.75', '10x': '10.0'};
+const rem_sizes = {'1x': '1.12', '1_5x': '1.5', '1_75x': '1.75', '2x': '2', '3x': '3.45', '4x': '4.60', '5x': '5.75', '10x': '10.0'};
 
 export default class Icon extends React.Component {
 

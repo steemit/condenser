@@ -54,6 +54,11 @@ const XMLSerializer = new xmldom.XMLSerializer()
  *    - linkify #tags and @mentions
  *    - proxify images
  *
+ * TODO:
+ *  - change ipfsPrefix(url) to normalizeUrl(url)
+ *    - rewrite IPFS prefixes to valid URLs
+ *    - schema normalization
+ *    - gracefully handle protocols like ftp, mailto
  */
 
 /** Split the HTML on top-level elements. This allows react to compare separately, preventing excessive re-rendering.
@@ -123,6 +128,16 @@ function link(state, child) {
 
 // wrap iframes in div.videoWrapper to control size/aspect ratio
 function iframe(state, child) {
+    const url = child.getAttribute('src')
+    if(url) {
+        const {images, links} = state
+        const yt = youTubeId(url)
+        if(yt && images && links) {
+            links.add(yt.url)
+            images.add('https://img.youtube.com/vi/' + yt.id + '/0.jpg')
+        }
+    }
+
     const {mutate} = state
     if(!mutate) return
 
@@ -174,13 +189,15 @@ function linkifyNode(child, state, resolve) {try{
     const data = XMLSerializer.serializeToString(child)
     const content = linkify(data, state.mutate, state.hashtags, state.usertags, state.images, state.links)
     if(mutate && content !== data) {
-        child.parentNode.replaceChild(DOMParser.parseFromString(`<span>${content}</span>`), child)
+        const newChild = DOMParser.parseFromString(`<span>${content}</span>`)
+        child.parentNode.replaceChild(newChild, child)
+        return newChild;
     }
 } catch(error) {console.log(error)}}
 
 function linkify(content, mutate, hashtags, usertags, images, links) {
     // hashtag
-    content = content.replace(/(^|\s)(#[-a-zа-я\d]+)/ig, tag => {
+    content = content.replace(/(^|\s)(#[-a-zа-яёґєії\d]+)/ig, tag => {
         if(/#[\d]+$/.test(tag)) return tag // Don't allow numbers to be tags
         const space = /^\s/.test(tag) ? tag[0] : ''
         let tag2 = tag.trim().substring(1)
@@ -189,7 +206,7 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
         // when transletirate it
         // This is needed to be able to detransletirate it back to russian in future (to show russian categories to user)
         // (all of this is needed because blockchain does not allow russian symbols in category)
-        if(/^[а-яё]/.test(tag2)) tag2 = 'ru--' + detransliterate(tag2, true)
+        if(/^[а-яёґєії]/.test(tag2)) tag2 = 'ru--' + detransliterate(tag2, true)
         const tagLower = tag2.toLowerCase()
         if(hashtags) hashtags.add(tagLower)
         if(!mutate) return tag
@@ -197,50 +214,61 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
     })
 
     // usertag (mention)
-    content = content.replace(/(^|["\(]|\s)@([a-z][-\.a-z\d]+[a-z\d])($|^|[^\w\/]|\s)/ig, (match, symbol, user, tail) => {
-        // console.log('['+match+']', '['+symbol+']', '['+user+']')
-        const userLower = user.toLowerCase()
-        const valid = validate_account_name(userLower) == null
-        if(valid && usertags) usertags.add(userLower)
-        if(!mutate) return match
-        return valid ? `${symbol}<a href="/@${userLower}">@${user}</a>` + tail : symbol + '@' + user + tail
-    })
+	content = content.replace(/(^|\s)(@[a-z][-\.a-z\d]+[a-z\d])/ig, user => {
+		const space = /^\s/.test(user) ? user[0] : ''
+		const user2 = user.trim().substring(1)
+		const userLower = user2.toLowerCase()
+		const valid = validate_account_name(userLower) == null
+		if(valid && usertags) usertags.add(userLower)
+		if(!mutate) return user
+		return space + (valid
+							? `<a href="/@${userLower}">@${user2}</a>`
+							: '@' + user2
+			)
+	})
 
     content = content.replace(linksRe.any, ln => {
         if(linksRe.image.test(ln)) {
             if(images) images.add(ln)
             return `<img src="${ipfsPrefix(ln)}" />`
         }
+
+        // do not linkify .exe or .zip urls
+        if(/\.(zip|exe)$/i.test(ln)) return ln;
+
         if(links) links.add(ln)
         return `<a href="${ipfsPrefix(ln)}">${ln}</a>`
     })
     return content
 }
 
-function embedYouTubeNode(child, links, images) {try{
+function embedYouTubeNode(child, links, images) { try {
     if(!child.data) return false
     const data = child.data
+    const yt = youTubeId(data)
+    if(!yt) return false
 
-    let url
-    {
-        const m = data.match(linksRe.youTube)
-        url = m ? m[0] : null
-    }
-    if(!url) return false;
-
-    let id
-    {
-        const m = url.match(linksRe.youTubeId)
-        id = m && m.length >=2 ? m[1] : null
-    }
-    if(!id) return false
-
-    const v = DOMParser.parseFromString(`~~~ embed:${id} youtube ~~~`)
+    const v = DOMParser.parseFromString(`~~~ embed:${yt.id} youtube ~~~`)
     child.parentNode.replaceChild(v, child)
-    if(links) links.add(url)
-    if(images) images.add('https://img.youtube.com/vi/' + id + '/0.jpg')
+    if(links) links.add(yt.url)
+    if(images) images.add('https://img.youtube.com/vi/' + yt.id + '/0.jpg')
     return true
-} catch(error) {console.log(error); return false}}
+} catch(error) { console.log(error); return false } }
+
+/** @return {id, url} or <b>null</b> */
+function youTubeId(data) {
+    if(!data) return null
+
+    const m1 = data.match(linksRe.youTube)
+    const url = m1 ? m1[0] : null
+    if(!url) return null
+
+    const m2 = url.match(linksRe.youTubeId)
+    const id = m2 && m2.length >= 2 ? m2[1] : null
+    if(!id) return null
+
+    return {id, url}
+}
 
 function embedVimeoNode(child, links, /*images*/) {try{
     if(!child.data) return false

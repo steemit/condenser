@@ -26,6 +26,34 @@ input.sell-color:hover {
   background-color: smart-scale($sell-color, 90%) !important;
 }
 
+.tab-selector {
+  margin-bottom: 1rem;
+
+  >ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    >a {
+      padding: 0.7rem 1rem;
+      line-height: 1.5rem;
+      display: flex;
+      flex-flow: row nowrap;
+    }
+  }
+
+  .is-active {
+    color: #333333;
+    background-color: $gray95;
+  }
+
+  label > [type='checkbox']{
+    padding-left: 0.5rem;
+  }
+}
+
 .Market__orderbook {
     tbody > tr {
         cursor: pointer;
@@ -49,6 +77,15 @@ input.sell-color:hover {
 
   tbody > tr > td {
       font-size: 90%;
+  }
+
+  .sell-arrow {
+    transform: rotate(180deg);
+    fill: $sell-color;
+  }
+
+  .buy-arrow {
+    fill: $buy-color;
   }
 
 }
@@ -78,31 +115,6 @@ input.sell-color:hover {
   input.price_warning {
     background: rgba(255, 153, 0, 0.13);
   }
-}
-
-.Market__ticker {
-  width: 100%;
-  overflow: hidden;
-  font-size: 90%;
-  text-align: center;
-
-  li {
-    list-style: none;
-    padding: 0;
-    display: inline-block;
-    border: 1px solid $light-gray;
-    border-radius: 3px;
-    margin: 0 0.25rem;
-    padding-right: 0.5rem;
-    b {
-      padding: 0 0.5rem;
-      margin-right: 0.5rem;
-      display: inline-block;
-      border-right: 1px solid $light-gray;
-      background: #F8F8F8;
-    }
-  }
-
 }
 
 .Market__ticker-pct-up {

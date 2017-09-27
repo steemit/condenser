@@ -1,5 +1,6 @@
-var React = require("react");
+import React from 'react';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
+import Icon from 'app/components/elements/Icon.jsx';
 
 export default class OrderhistoryRow extends React.Component {
 
@@ -63,9 +64,16 @@ export default class OrderhistoryRow extends React.Component {
 
         let className = this.state.animate ? "animate " : "";
 
+        const arrow = (
+            order.type === 'bid'
+                ? <Icon name='arrow' className="buy-arrow" />
+                : <Icon name='arrow' className="sell-arrow" />
+        );
+
         return (
             <tr className={className}>
                 <td><TimeAgoWrapper date={order.date} /></td>
+                <td>{arrow}</td>
                 <td className={order.color}>{order.getStringPrice()}</td>
                 <td>{order.getSteemAmount().toFixed(3)}</td>
                 <td>{order.getSBDAmount().toFixed(3)}</td>

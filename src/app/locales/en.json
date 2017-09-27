@@ -643,6 +643,9 @@
             "actionPost": "tagged you in a story",
             "actionComment": "tagged you in a comment"
         },
+        "followAuthorPost":{
+            "action": "posted"
+        },
         "commentReply": {
             "action": "replied to your comment"
         },
@@ -651,6 +654,26 @@
         },
         "receiveSteem": {
             "action": "received from"
+        },
+        "securityPasswordChanged":{
+            "action":"Password changed",
+            "body":"If this wasn't you, recover your account ASAP",
+            "subject":"Security warning"
+        },
+        "securityWithrawal":{
+            "action":"Savings withdrawal initiated",
+            "body":"If this wasn't you, change your password ASAP",
+            "subject":"Security warning"
+        },
+        "securityNewMobileDevice":{
+            "action":"New mobile device linked",
+            "body":"If this wasn't you, change your password ASAP",
+            "subject":"Security warning"
+        },
+        "securityPowerDown":{
+            "action":"Power Down initiated",
+            "body":"If this wasn't you, change your password ASAP",
+            "subject":"Security warning"
         },
         "vote": {
             "action": "upvoted you",

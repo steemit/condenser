@@ -28,39 +28,49 @@ class NotificationLink extends React.Component {
         const created = this.props.created
         const classNames = (this.props.read)? '' : 'unread'
         const notificationType = this.props.notificationType
+        const localeRoot = `notifications.${notificationType}`
 
         let bodyContent = null
         let headerContent = null
         let link = Url.comment(post, item)
+        let localeAction = `${localeRoot}.action`
 
         switch (notificationType) {
             case type.POST_REPLY :
-                headerContent = <span><span className="user">{ author }</span> { tt("notifications.postReply.action") } </span>
+                headerContent = <span><span className="user">{ author }</span> { tt(localeAction) } </span>
                 bodyContent = item.parentSummary
                 break
             case type.COMMENT_REPLY :
-                headerContent = <span><span className="user">{ author }</span> { tt("notifications.commentReply.action") } </span>
+                headerContent = <span><span className="user">{ author }</span> { tt(localeAction) } </span>
                 bodyContent = post.summary
                 break
+            case type.FOLLOW_AUTHOR_POST :
+                headerContent = <span><span className="user">{ author }</span> { tt(localeAction) } </span>
+                bodyContent = item.summary
+                break
             case type.RECEIVE_STEEM :
-                headerContent = <span><span className="subject">{ amount } { tt("g.steem") }</span> { tt("notifications.receiveSteem.action") } <span className="user">{ author }</span></span>
+                headerContent = <span><span className="subject">{ amount } { tt("g.steem") }</span> { tt(localeAction) } <span className="user">{ author }</span></span>
                 break
             case type.RESTEEM :
-                headerContent = <span><span className="user">{ author }</span> { tt("notifications.resteem.action") }</span>
+                headerContent = <span><span className="user">{ author }</span> { tt(localeAction) }</span>
                 bodyContent = item.summary
                 link = Url.comment(item)
                 break
-            case type.TAG :
-                headerContent = <span><span className="user">{ author }</span> { (0 === item.depth)? tt("notifications.tag.actionPost") : tt("notifications.tag.actionComment") }</span>
-                bodyContent = item.summary
+            case type.SECURITY_PWD_CHANGE :
+            case type.SECURITY_WITHDRAWAL :
+            case type.SECURITY_NEW_MOBILE :
+            case type.SECURITY_POWER_DOWN :
+                headerContent = <span><span className="subject">{ tt(`${localeRoot}.subject`) }</span> { tt(localeAction) }</span>
+                bodyContent = tt(`${localeRoot}.body`)
                 break
+            case type.TAG :
             case type.VOTE :
-                let actionText = tt("notifications.vote.actionComment")
+                localeAction = localeRoot + '.actionComment'
                 if(0 === item.depth) {
-                    actionText = tt("notifications.vote.actionPost")
+                    localeAction = localeRoot + '.actionPost'
                     link = Url.comment(item)
                 }
-                headerContent = <span><span className="user">{ author }</span> { actionText }</span>
+                headerContent = <span><span className="user">{ author }</span> { tt(localeAction) }</span>
                 bodyContent = item.summary
                 break
             default :

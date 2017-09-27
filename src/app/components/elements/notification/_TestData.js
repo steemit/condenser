@@ -115,6 +115,12 @@ export default [
             summary: "From the Hills of Ireland to Planet Steem, A Wolfy Hello!"
         }
     },{
+        id: "UID6.1", //needed to track .read
+        read: true, //a boolean value
+        notificationType: type.SECURITY_NEW_MOBILE, //receivedSteem, tagged, resteemed, postComment, commentComment
+        created: '2017-09-19T14:24:51',
+        author: "security"
+    },{
         id: "UID7", //needed to track .read
         read: false, //a boolean value
         notificationType: type.COMMENT_REPLY, //receivedSteem, tagged, resteemed, postComment, commentComment

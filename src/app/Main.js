@@ -3,7 +3,7 @@ import 'babel-polyfill';
 import 'whatwg-fetch';
 import './assets/stylesheets/app.scss';
 import plugins from 'app/utils/JsPlugins';
-import { setStore } from 'app/utils/Routes';
+import { setStore } from 'app/utils/Url';
 import Iso from 'iso';
 import universalRender from 'shared/UniversalRender';
 import ConsoleExports from './utils/ConsoleExports';

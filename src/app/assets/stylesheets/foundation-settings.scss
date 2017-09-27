@@ -56,7 +56,9 @@ $body-font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-s
 /// @type Number
 $global-radius: 3px !default;
 
-$notification_read_bg: none;
-$notification_read_bg_hover: #f1f2f2;
-$notification_unread_bg: #e8edf5;
-$notification_unread_bg_hover: #d1dceb;
+$notif_item_read_bg: none;
+$notif_item_read_bg_hover: #f1f2f2;
+$notif_item_unread_bg: #e8edf5;
+$notif_item_unread_bg_hover: #d1dceb;
+$notif_dd_ctrl_color: #4a8cd3;
+$notif_dd_black: #000000;

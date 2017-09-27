@@ -3,7 +3,6 @@ if(!fs.existsSync('tmp'))
     fs.mkdirSync('tmp');
 
 process.env.BABEL_ENV = 'browser';
-process.env.NODE_ENV = 'development';
 
 const Koa = require('koa');
 const webpack = require('webpack');

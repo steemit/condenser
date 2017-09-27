@@ -34,7 +34,7 @@ export default {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/Support')]);
             //});
-        } else if (route.page === 'XSSTest' && process.env.NODE_ENV === 'development') {
+        } else if (route.page === 'XSSTest' && process.env.NODE_ENV !== 'production') {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/XSS')]);
             //});

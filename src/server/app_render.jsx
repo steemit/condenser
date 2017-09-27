@@ -12,7 +12,8 @@ import {determineViewMode} from "../app/utils/Links";
 
 const path = require('path');
 const ROOT = path.join(__dirname, '../..');
-const DB_RECONNECT_TIMEOUT = process.env.NODE_ENV === 'development' ? 1000 * 60 * 60 : 1000 * 60 * 10;
+
+const DB_RECONNECT_TIMEOUT = process.env.NODE_ENV !== 'production' ? 1000 * 60 * 60 : 1000 * 60 * 10;
 
 function getSupportedLocales() {
     const locales = [];
@@ -125,7 +126,7 @@ async function appRender(ctx) {
         const assets = require(assets_filename);
 
         // Don't cache assets name on dev
-        if (process.env.NODE_ENV === 'development') {
+        if (process.env.NODE_ENV !== 'production') {
             delete require.cache[require.resolve(assets_filename)];
         }
 

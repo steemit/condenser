@@ -26,7 +26,7 @@ Object.keys(db).forEach(function (modelName) {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-if(env === 'development') {
+if(env !== 'production') {
     // in dev, sync all table schema automatically for convenience
     sequelize.sync();
 }

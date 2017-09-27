@@ -18,7 +18,7 @@ const startServer = () => {
     };
 
     // merge env for the new process
-    const env = {...process.env, NODE_ENV: 'development', BABEL_ENV: 'server'};
+    const env = {...process.env, BABEL_ENV: 'server'};
     // start the server procress
     server = cp.fork(KOA_PATH, {env});
     // when server is `online`

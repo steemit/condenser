@@ -259,7 +259,7 @@ app.use(
     )
 );
 // Proxy asset folder to webpack development server in development mode
-if (env === 'development') {
+if (env !== 'production') {
     const webpack_dev_port = process.env.PORT
         ? parseInt(process.env.PORT) + 1
         : 8081;

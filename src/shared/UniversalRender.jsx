@@ -183,8 +183,8 @@ const sagaMiddleware = createSagaMiddleware(
 
 let middleware;
 
-if (process.env.BROWSER && process.env.NODE_ENV === 'development') {
-    const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // eslint-disable-line no-underscore-dangle
+if (process.env.BROWSER && process.env.NODE_ENV !== 'production') {
+    const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
     middleware = composeEnhancers(
         applyMiddleware(sagaMiddleware)
     );

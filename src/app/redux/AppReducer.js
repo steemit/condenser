@@ -52,7 +52,7 @@ export default function reducer(state = defaultState, action) {
                 n.read = true;
             }
         })
-        console.log("notifications", JSON.stringify(notifications, null, 2));
+        console.log("notifications", JSON.stringify(notifications, null, 2)); //Todo: for dev only! Do not merge if present
         return state.set('yotifications', List(notifications));
     }
 

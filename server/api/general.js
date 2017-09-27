@@ -164,13 +164,13 @@ export default function useGeneralApi(app) {
                     memo: account.memo_key
                 });
                 console.log('-- create_account_with_keys created -->', this.session.uid, account.name, user_id, account.owner_key);
-                if (mixpanel) {
-                    mixpanel.track('Signup', {
-                        distinct_id: this.session.uid,
-                        ip: remote_ip
-                    });
-                    mixpanel.people.set(this.session.uid, {ip: remote_ip});
-                }
+                // if (mixpanel) {
+                //     mixpanel.track('Signup', {
+                //         distinct_id: this.session.uid,
+                //         ip: remote_ip
+                //     });
+                //     mixpanel.people.set(this.session.uid, {ip: remote_ip});
+                // }
                 this.body = JSON.stringify({status: 'ok'});
             }
         } catch (error) {
@@ -254,10 +254,10 @@ export default function useGeneralApi(app) {
 
             this.body = JSON.stringify({status: 'ok'});
             const remote_ip = getRemoteIp(this.req);
-            if (mixpanel) {
-                mixpanel.people.set(this.session.uid, {ip: remote_ip, $ip: remote_ip});
-                mixpanel.people.increment(this.session.uid, 'Logins', 1);
-            }
+            // if (mixpanel) {
+            //     mixpanel.people.set(this.session.uid, {ip: remote_ip, $ip: remote_ip});
+            //     mixpanel.people.increment(this.session.uid, 'Logins', 1);
+            // }
         } catch (error) {
             console.error('Error in /login_account api call', this.session.uid, error.message);
             this.body = JSON.stringify({error: error.message});
@@ -290,12 +290,12 @@ export default function useGeneralApi(app) {
             if (!checkCSRF(this, csrf)) return;
             console.log('-- /record_event -->', this.session.uid, type, value);
             const str_value = typeof value === 'string' ? value : JSON.stringify(value);
-            if (type.match(/^[A-Z]/) && mixpanel) {
-                mixpanel.track(type, {distinct_id: this.session.uid, Page: str_value});
-                mixpanel.people.increment(this.session.uid, type, 1);
-            } else {
-                // recordWebEvent(this, type, str_value);
-            }
+            // if (type.match(/^[A-Z]/) && mixpanel) {
+            //     mixpanel.track(type, {distinct_id: this.session.uid, Page: str_value});
+            //     mixpanel.people.increment(this.session.uid, type, 1);
+            // } else {
+            //     // recordWebEvent(this, type, str_value);
+            // }
             this.body = JSON.stringify({status: 'ok'});
         } catch (error) {
             console.error('Error in /record_event api call', error.message);
@@ -343,28 +343,28 @@ export default function useGeneralApi(app) {
                 if (page_model) views = page_model.views;
             }
             this.body = JSON.stringify({views});
-            if (mixpanel) {
-                let referring_domain = '';
-                if (ref) {
-                    const matches = ref.match(/^https?\:\/\/([^\/?#]+)(?:[\/?#]|$)/i);
-                    referring_domain = matches && matches[1];
-                }
-                const mp_params = {
-                    distinct_id: this.session.uid,
-                    Page: page,
-                    ip: remote_ip,
-                    $referrer: ref,
-                    $referring_domain: referring_domain
-                };
-                mixpanel.track('PageView', mp_params);
-                if (!this.session.mp) {
-                    mixpanel.track('FirstVisit', mp_params);
-                    this.session.mp = 1;
-                }
-                if (ref) mixpanel.people.set_once(this.session.uid, '$referrer', ref);
-                mixpanel.people.set_once(this.session.uid, 'FirstPage', page);
-                mixpanel.people.increment(this.session.uid, 'PageView', 1);
-            }
+            // if (mixpanel) {
+            //     let referring_domain = '';
+            //     if (ref) {
+            //         const matches = ref.match(/^https?\:\/\/([^\/?#]+)(?:[\/?#]|$)/i);
+            //         referring_domain = matches && matches[1];
+            //     }
+            //     const mp_params = {
+            //         distinct_id: this.session.uid,
+            //         Page: page,
+            //         ip: remote_ip,
+            //         $referrer: ref,
+            //         $referring_domain: referring_domain
+            //     };
+            //     mixpanel.track('PageView', mp_params);
+            //     if (!this.session.mp) {
+            //         mixpanel.track('FirstVisit', mp_params);
+            //         this.session.mp = 1;
+            //     }
+            //     if (ref) mixpanel.people.set_once(this.session.uid, '$referrer', ref);
+            //     mixpanel.people.set_once(this.session.uid, 'FirstPage', page);
+            //     mixpanel.people.increment(this.session.uid, 'PageView', 1);
+            // }
         } catch (error) {
             console.error('Error in /page_view api call', this.session.uid, error.message);
             this.body = JSON.stringify({error: error.message});

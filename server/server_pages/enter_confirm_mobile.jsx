@@ -11,16 +11,16 @@ import { getRemoteIp, checkCSRF } from "server/utils/misc";
 import MiniHeader from "app/components/modules/MiniHeader";
 import secureRandom from "secure-random";
 import config from "config";
-import Mixpanel from "mixpanel";
+// import Mixpanel from "mixpanel";
 import tt from 'counterpart';
 import {metrics} from 'server/metrics';
 import {hash} from 'golos-js/lib/auth/ecc';
 
 // FIXME copy paste code, refactor mixpanel out
-var mixpanel = null;
-if (config.has("mixpanel") && config.get("mixpanel")) {
-    mixpanel = Mixpanel.init(config.get("mixpanel"));
-}
+// var mixpanel = null;
+// if (config.has("mixpanel") && config.get("mixpanel")) {
+//     mixpanel = Mixpanel.init(config.get("mixpanel"));
+// }
 
 var assets_file = "tmp/webpack-stats-dev.json";
 if (process.env.NODE_ENV === "production") {

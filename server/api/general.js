@@ -7,12 +7,12 @@ import recordWebEvent from 'server/record_web_event';
 import {esc, escAttrs} from 'db/models';
 import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF} from 'server/utils/misc';
 import coBody from 'co-body';
-import Mixpanel from 'mixpanel';
+// import Mixpanel from 'mixpanel';
 import Tarantool from 'db/tarantool';
 import {PublicKey, Signature, hash} from 'golos-js/lib/auth/ecc';
 import {api, broadcast} from 'golos-js';
 
-const mixpanel = config.get('mixpanel') ? Mixpanel.init(config.get('mixpanel')) : null;
+// const mixpanel = config.get('mixpanel') ? Mixpanel.init(config.get('mixpanel')) : null;
 
 export default function useGeneralApi(app) {
     const router = koa_router({prefix: '/api/v1'});

@@ -12,15 +12,15 @@ import config from "config";
 import SignupProgressBar from "app/components/elements/SignupProgressBar";
 import MiniHeader from "app/components/modules/MiniHeader";
 import secureRandom from "secure-random";
-import Mixpanel from "mixpanel";
+// import Mixpanel from "mixpanel";
 import tt from 'counterpart';
 import {metrics} from 'server/metrics';
 
 // FIXME copy paste code, refactor mixpanel out
-var mixpanel = null;
-if (config.has("mixpanel") && config.get("mixpanel")) {
-    mixpanel = Mixpanel.init(config.get("mixpanel"));
-}
+// var mixpanel = null;
+// if (config.has("mixpanel") && config.get("mixpanel")) {
+//     mixpanel = Mixpanel.init(config.get("mixpanel"));
+// }
 
 var assets_file = "tmp/webpack-stats-dev.json";
 if (process.env.NODE_ENV === "production") {

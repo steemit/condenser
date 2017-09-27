@@ -19,12 +19,13 @@ class NotificationPostReply extends React.Component {
     }
 
     render() {
-        //const author = authors[Math.floor(Math.random() * authors.length)]
         const author = this.props.author
         const post = this.props.rootItem
         const comment = this.props.item
         const created = this.props.created
         const classNames = (this.props.read)? '' : 'unread'
+
+        console.log('author', author)
 
         const link = ['', post.category, '@' + post.author, post.permlink, '#@' + comment.author, comment.permlink].join('/')
 

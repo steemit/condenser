@@ -203,6 +203,10 @@
       "zero": "No Responses",
       "one": "%(count)s Response",
       "other": "%(count)s Responses"
+    },
+    "post_key_warning": {
+        "confirm": "It looks like you are about to post a STEEM private key or master password to the public, are you sure you want to do this?",
+        "warning": "You can loose control of your account and funds by doing this."
     }
   },
   "navigation": {

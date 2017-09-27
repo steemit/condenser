@@ -19,24 +19,32 @@ ul.Notifications {
     > li.title,
     > li.footer {
         border-bottom: 1px solid $medium-gray;
-        color:#6a6a6a;
+        padding: 0.6rem 1rem;
+        color: $notif_dd_black;
         font-weight: bold;
         line-height: 1.5rem;
-
+        .controls-right {
+            float:right;
+        }
+        .ptc {
+            color:$notif_dd_ctrl_color;
+            font-weight:normal;
+            font-size:0.8rem;
+            margin-right:1rem!important;
+        }
         a {
             display:inline-block;
-            float:right;
+            color:$notif_dd_ctrl_color;
             padding:0px;
             .Icon {
-                margin-right:0px;
-                fill:#575757;
+                fill:$notif_dd_ctrl_color;
+                margin-right:0;
             }
         }
 
     }
     > li.title {
-        padding: 0.5rem 0.6rem;
-        background: #eeeeee;
+
         font-size:1.1rem;
 
         a {
@@ -45,26 +53,24 @@ ul.Notifications {
     }
 
     > li.footer {
-        padding: 0.3rem 0.6rem;
-        background: inherit;
         border-top: 1px solid $medium-gray;
-        .view-all {
-            float:left;
+        display: inherit;
+        text-align:center;
+        a {
+            margin:auto;
         }
-        .controls-right {
-            float:right;
-        }
+
     }
 
     > li.item {
-        background: $notification_read_bg;
+        background: $notif_item_read_bg;
         &:hover {
-            background: $notification_read_bg_hover;
+            background: $notif_item_read_bg_hover;
         }
         &.unread {
-            background: $notification_unread_bg;
+            background: $notif_item_unread_bg;
             &:hover {
-                background: $notification_unread_bg_hover;
+                background: $notif_item_unread_bg_hover;
             }
         }
 
@@ -84,7 +90,7 @@ ul.Notifications {
             padding: 10px 0px;
         }
         .item-header,
-        .item-body,
+        .item-content,
         .item-footer {
             margin-left:0;
             @media screen and (min-width: 39.9375em) {

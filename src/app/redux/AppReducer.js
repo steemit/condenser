@@ -38,6 +38,7 @@ export default function reducer(state = defaultState, action) {
         res = state.set('loading', false);
     }
 
+    //Todo: for dev only! Do not merge if present - probably belongs in a different place
     if (action.type === 'yotification_markRead') {
         const yotifications = state.getIn(['yotifications']);
         const notifications = (yotifications && yotifications.size > 0)? yotifications.toJS() : [];
@@ -46,7 +47,15 @@ export default function reducer(state = defaultState, action) {
                 n.read = true;
             }
         })
-        console.log("notifications", JSON.stringify(notifications, null, 2)); //Todo: for dev only! Do not merge if present
+        return state.set('yotifications', List(notifications));
+    }
+    //Todo: for dev only! Do not merge if present - probably belongs in a different place
+    if (action.type === 'yotification_markAllRead') {
+        const yotifications = state.getIn(['yotifications']);
+        const notifications = (yotifications && yotifications.size > 0)? yotifications.toJS() : [];
+        notifications.forEach((n) => {
+            n.read = true;
+        })
         return state.set('yotifications', List(notifications));
     }
 

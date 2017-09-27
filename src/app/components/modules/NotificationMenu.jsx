@@ -16,7 +16,13 @@ class NotificationMenu extends React.Component {
             React.PropTypes.string,
             React.PropTypes.element
         ]),
-    };
+    }
+
+
+    markAllRead = (e) => {
+        e.preventDefault()
+        this.props.markAllRead()
+    }
 
     closeMenu = (e) => {
         // If this was not a left click, or if CTRL or CMD were held, do not close the menu.
@@ -29,11 +35,15 @@ class NotificationMenu extends React.Component {
         const {account_link, className} = this.props
 
         return ( <ul className={'NotificationMenu menu vertical' + (className ? ' ' + className : '')}>
-            <li className="title">{tt('g.notifications')} <Link href={account_link}><Icon name="cog" /></Link></li>
+            <li className="title">{tt('g.notifications')}
+                <span className="controls-right">
+                    <button className="ptc" onClick={ this.markAllRead }>Mark All as Read</button>
+                    <Link href={account_link}><Icon name="cog" /></Link>
+                </span>
+            </li>
             { makeNotificationList(this.props.notifications) }
             <li className="footer">
                 <Link href={ account_link + '/notifications'} className="view-all">View All</Link>
-                <span className="controls-right"><button className="ptc">Mark All as Read</button> | <button className="ptc">Clear All</button></span>
             </li>
         </ul> )
     }
@@ -48,5 +58,13 @@ export default connect(
             notifications,
             ...ownProps
         }
-    }
+    },
+    dispatch => ({
+        markAllRead: () => {
+            const action = {
+                type: 'yotification_markAllRead',
+            }
+            dispatch(action)
+        }
+    })
 )(NotificationMenu)

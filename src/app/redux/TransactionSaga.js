@@ -126,9 +126,9 @@ function* error_account_witness_vote({operation: {account, witness, approve}}) {
 
 /** Keys, username, and password are not needed for the initial call.  This will check the login and may trigger an action to prompt for the password / key. */
 function* broadcastOperation({payload:
-    {type, operation, confirm, warning, keys, username, password, successCallback, errorCallback, postUnsafe}
+    {type, operation, confirm, warning, keys, username, password, successCallback, errorCallback, allowPostUnsafe}
 }) {
-    const operationParam = {type, operation, keys, username, password, successCallback, errorCallback, postUnsafe}
+    const operationParam = {type, operation, keys, username, password, successCallback, errorCallback, allowPostUnsafe}
 
     const conf = typeof confirm === 'function' ? confirm() : confirm
     if(conf) {
@@ -136,10 +136,10 @@ function* broadcastOperation({payload:
         return
     }
     const payload = {operations: [[type, operation]], keys, username, successCallback, errorCallback}
-    if (!postUnsafe && hasPrivateKeys(payload)) {
+    if (!allowPostUnsafe && hasPrivateKeys(payload)) {
         const confirm = tt('g.post_key_warning.confirm')
         const warning = tt('g.post_key_warning.warning')
-        operationParam.postUnsafe = true
+        operationParam.allowPostUnsafe = true
         yield put(tr.actions.confirmOperation({confirm, warning, operation: operationParam, errorCallback}))
         return
     }

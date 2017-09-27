@@ -17,7 +17,7 @@
     "fmt": "prettier --config .prettierrc --write 'src/**/*.js*'",
     "precommit": "lint-staged",
     "production": "NODE_ENV=production node lib/server/index.js",
-    "start": "NODE_ENV=development babel-node ./webpack/dev-server.js",
+    "start": "babel-node ./webpack/dev-server.js",
     "webpush": "node ./scripts/webpush_notify.js",
     "checktranslations": "node scripts/check_translations.js"
   },

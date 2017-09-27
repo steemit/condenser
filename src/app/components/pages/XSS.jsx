@@ -3,7 +3,7 @@ import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 
 class XSS extends React.Component {
     render() {
-        if (!process.env.NODE_ENV === 'development') return <div />;
+        if (!process.env.NODE_ENV !== 'production') return <div />;
         let tests = xss.map((test, i) => (
             <div key={i}>
                 <h2>Test {i}</h2>

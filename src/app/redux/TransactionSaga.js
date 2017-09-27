@@ -169,7 +169,20 @@ function* broadcastOperation({payload:
 }
 
 function hasPrivateKeys(payload) {
-    return /P?5[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{50}/.test(JSON.stringify(payload.operations))
+    const blob = JSON.stringify(payload.operations)
+    let m, re = /P?(5[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{50})/g
+    while (true) {
+        m = re.exec(blob)
+        if (m) {
+            try {
+                PrivateKey.fromWif(m[1]) // performs the base58check
+                return true
+            } catch (e) {}
+        } else {
+            break
+        }
+    }
+    return false
 }
 
 function* broadcastPayload({payload: {operations, keys, username, successCallback, errorCallback}}) {

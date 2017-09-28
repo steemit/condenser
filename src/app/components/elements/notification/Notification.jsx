@@ -4,8 +4,9 @@ import {connect} from 'react-redux'
 import tt from 'counterpart'
 import Userpic from 'app/components/elements/Userpic'
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper'
-import Url from 'app/utils/Url';
+import Url from 'app/utils/Url'
 import * as type from './type'
+import badges from './icon'
 
 class NotificationLink extends React.Component {
     constructor(notification, ...args) {
@@ -28,6 +29,8 @@ class NotificationLink extends React.Component {
         const item = this.props.item
         const post = this.props.rootItem
         const notificationType = this.props.notificationType
+
+        const badge = badges[notificationType]? badges[notificationType] : null
         const localeRoot = `notifications.${notificationType}`
 
         let bodyContent = null
@@ -38,7 +41,10 @@ class NotificationLink extends React.Component {
 
         switch (notificationType) {
             case type.ANNOUNCEMENT :
+                console.log(`Notification type - ${notificationType} needs to use the steemit logo check with all to see if this can just be part of the account, or if it needs special treatment`)
+                throw new Error(`Notification ${notificationType} not implemented`)
             case type.ANNOUNCEMENT_IMPORTANT :
+                console.log(`Notification type - ${notificationType} needs to use the blog post cover image for its icon`)
             case type.FOLLOW_POST_POST :
                 throw new Error(`Notification ${notificationType} not implemented`)
             case type.POST_REPLY :
@@ -54,7 +60,7 @@ class NotificationLink extends React.Component {
                 bodyContent = item.summary
                 break
             case type.POWER_DOWN :
-                console.log("Notification type - " + type.POWER_DOWN + " needs to have a custom icon image")
+                console.log(`Notification type - ${notificationType} needs to use the steemit logo check with all to see if this can just be part of the account, or if it needs special treatment`)
                 headerContent = <span><span className="subject">{ tt(`${localeRoot}.subject`) }</span> { tt(localeAction) }</span>
                 break
             case type.RECEIVE_STEEM :
@@ -83,7 +89,7 @@ class NotificationLink extends React.Component {
                 bodyContent = item.summary
                 break
             default :
-                console.log("no option for this notification", this.props)
+                console.log(`no option for this notification ${notificationType}`, this.props)
                 return null
         }
 
@@ -96,14 +102,14 @@ class NotificationLink extends React.Component {
                 //todo: blank circle image
                 break
             default :
-                picture = <Userpic account={ author } />
+                picture = <Userpic account={ author } badge={ badge } />
         }
 
 
         return <Link href={ link } className={ classNames } onClick={ this.markRead } >
             <div className="item-panel" >
                 { (notificationType !== type.POWER_DOWN) ? <div className="Comment__Userpic show-for-medium">
-                    <Userpic account={ author } />
+                        { picture }
                 </div> : null }
                 <div className="item-header">
                     { headerContent }
@@ -127,7 +133,6 @@ export default connect(
                 type: 'yotification_markRead',
                 id: e
             }
-            console.log('markRead', action)
             dispatch(action)
         }
     }))(NotificationLink)

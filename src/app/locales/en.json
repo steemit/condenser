@@ -664,6 +664,10 @@
         "postReply": {
             "action": "commented on"
         },
+        "powerDown": {
+            "action": "Power down executed",
+            "subject": "Notice"
+        },
         "receiveSteem": {
             "action": "received from"
         },

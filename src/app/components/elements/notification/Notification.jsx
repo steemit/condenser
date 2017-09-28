@@ -36,6 +36,10 @@ class NotificationLink extends React.Component {
         let localeAction = `${localeRoot}.action`
 
         switch (notificationType) {
+            case type.ANNOUNCEMENT :
+            case type.ANNOUNCEMENT_IMPORTANT :
+            case type.FOLLOW_POST_POST :
+                throw new Error(`Notification ${notificationType} not implemented`)
             case type.POST_REPLY :
                 headerContent = <span><span className="user">{ author }</span> { tt(localeAction) } <strong>{ post.summary }</strong></span>
                 bodyContent = item.summary
@@ -47,6 +51,10 @@ class NotificationLink extends React.Component {
             case type.FOLLOW_AUTHOR_POST :
                 headerContent = <span><span className="user">{ author }</span> { tt(localeAction) } </span>
                 bodyContent = item.summary
+                break
+            case type.POWER_DOWN :
+                console.log("Notification type - " + type.POWER_DOWN + " needs to have a custom icon image")
+                headerContent = <span><span className="subject">{ tt(`${localeRoot}.subject`) }</span> { tt(localeAction) }</span>
                 break
             case type.RECEIVE_STEEM :
                 headerContent = <span><span className="subject">{ amount } { tt("g.steem") }</span> { tt(localeAction) } <span className="user">{ author }</span></span>
@@ -81,9 +89,9 @@ class NotificationLink extends React.Component {
 
         return <Link href={ link } className={ classNames } onClick={ this.markRead } >
             <div className="item-panel" >
-                <div className="Comment__Userpic show-for-medium">
+                { (notificationType !== type.POWER_DOWN) ? <div className="Comment__Userpic show-for-medium">
                     <Userpic account={ author } />
-                </div>
+                </div> : null }
                 <div className="item-header">
                     { headerContent }
                 </div>

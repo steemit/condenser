@@ -30,6 +30,13 @@ const notifyItemSpec = {
 export default [
     {
         id: "UID", //needed to track .read
+        read: true, //a boolean value
+        notificationType: type.POWER_DOWN, //receivedSteem, tagged, resteemed, postComment, commentComment
+        created: '2017-09-19T16:19:48',
+        author: "roadscape",
+        amount: 10000.2
+    },{
+        id: "UID1", //needed to track .read
         read: false, //a boolean value
         notificationType: type.RESTEEM, //receivedSteem, tagged, resteemed, postComment, commentComment
         created: '2017-09-19T18:59:00',

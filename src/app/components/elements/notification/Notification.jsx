@@ -37,12 +37,12 @@ class NotificationLink extends React.Component {
 
         switch (notificationType) {
             case type.POST_REPLY :
-                headerContent = <span><span className="user">{ author }</span> { tt(localeAction) } </span>
-                bodyContent = item.parentSummary
+                headerContent = <span><span className="user">{ author }</span> { tt(localeAction) } <strong>{ post.summary }</strong></span>
+                bodyContent = item.summary
                 break
             case type.COMMENT_REPLY :
-                headerContent = <span><span className="user">{ author }</span> { tt(localeAction) } </span>
-                bodyContent = post.summary
+                headerContent = <span><span className="user">{ author }</span> { tt(localeAction) } <strong>{ item.parentSummary }</strong></span>
+                bodyContent = item.summary
                 break
             case type.FOLLOW_AUTHOR_POST :
                 headerContent = <span><span className="user">{ author }</span> { tt(localeAction) } </span>

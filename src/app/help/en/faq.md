@@ -1038,6 +1038,7 @@ With the current implementation, there is no difference between a downvote and a
 - Threatening users with any type of physical violence.
 - Not citing sources when using someone else’s material.
 - Posting ‘not safe for work’ content without using the “nsfw” tag.
+- Selling or offering to buy votes/resteems/follows, or schemes that facilitate this.
 - Scams or Fraudulent offers.
 
 <a href="/faq.html#Table_of_Contents_Plagiarism__Spam__and_Abuse">^</a>

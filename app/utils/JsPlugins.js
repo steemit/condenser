@@ -50,7 +50,7 @@ export default function init(config) {
     document,'script','https://connect.facebook.net/en_US/fbevents.js');
     /* Facebook Pixel Code */
     /* NOTE dont't forget to remove <img /> tag of facebook pixel (down below) */
-    fbq('init', '217726192019770'); // Insert your pixel ID here.
+    fbq('init', config.facebook_app_id); // Insert your pixel ID here.
 
 
     /* Yandex.Metrika counter */

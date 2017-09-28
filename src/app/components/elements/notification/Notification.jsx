@@ -23,10 +23,10 @@ class NotificationLink extends React.Component {
     render() {
         const amount = this.props.amount
         const author = this.props.author
-        const post = this.props.rootItem
-        const item = this.props.item
-        const created = this.props.created
         const classNames = (this.props.read)? '' : 'unread'
+        const created = this.props.created
+        const item = this.props.item
+        const post = this.props.rootItem
         const notificationType = this.props.notificationType
         const localeRoot = `notifications.${notificationType}`
 
@@ -34,6 +34,7 @@ class NotificationLink extends React.Component {
         let headerContent = null
         let link = Url.comment(post, item)
         let localeAction = `${localeRoot}.action`
+        let picture = null
 
         switch (notificationType) {
             case type.ANNOUNCEMENT :
@@ -84,6 +85,18 @@ class NotificationLink extends React.Component {
             default :
                 console.log("no option for this notification", this.props)
                 return null
+        }
+
+        switch (notificationType) {
+            case type.ANNOUNCEMENT_IMPORTANT :
+                //todo: special image - unknown json format
+                break
+            case type.ANNOUNCEMENT :
+            case type.POWER_DOWN :
+                //todo: blank circle image
+                break
+            default :
+                picture = <Userpic account={ author } />
         }
 
 

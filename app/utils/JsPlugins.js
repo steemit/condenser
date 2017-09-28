@@ -9,9 +9,15 @@ export default function init(config) {
         e.async = 1;
         e.src = v;
         e.setAttribute("crossorigin", "anonymous");
+        e.onreadystatechange = e.onload = function () {
+            var state = e.readyState;
+            if (! this.done && (! state || /loaded|complete/.test(state))) {
+                this.done = true;
+                try { Raven.config('https://b4bbf18029b54caead7b0cc7e76b94a1@sentry.io/222685').install(); } catch(e) {}
+            }
+        };
         n.parentNode.insertBefore(e, n);
     })(document, 'script', 'https://cdn.ravenjs.com/3.17.0/raven.min.js');
-    Raven.config('https://b4bbf18029b54caead7b0cc7e76b94a1@sentry.io/222685').install()
     
     // SEGMENT.COM ANALYTICS INITIALIZATION
     !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";

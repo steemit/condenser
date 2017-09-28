@@ -17,7 +17,6 @@ import tt from 'counterpart';
 import {metrics} from 'server/metrics';
 
 // FIXME copy paste code, refactor mixpanel out
-// var mixpanel = null;
 // if (config.has("mixpanel") && config.get("mixpanel")) {
 //     mixpanel = Mixpanel.init(config.get("mixpanel"));
 // }
@@ -137,8 +136,8 @@ export default function useEnterAndConfirmEmailPages(app) {
         this.body = '<!DOCTYPE html>' +
             renderToString(<ServerHTML {...props} />);
         if (metrics) metrics.increment('_signup_step_1');
-        if (mixpanel)
-            mixpanel.track('SignupStep1', { distinct_id: this.session.uid });
+        // if (mixpanel)
+        //     mixpanel.track('SignupStep1', { distinct_id: this.session.uid });
     });
 
     router.post("/submit_email", koaBody, function*() {

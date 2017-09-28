@@ -17,7 +17,6 @@ import {metrics} from 'server/metrics';
 import {hash} from 'golos-js/lib/auth/ecc';
 
 // FIXME copy paste code, refactor mixpanel out
-// var mixpanel = null;
 // if (config.has("mixpanel") && config.get("mixpanel")) {
 //     mixpanel = Mixpanel.init(config.get("mixpanel"));
 // }
@@ -117,10 +116,10 @@ export default function useEnterAndConfirmMobilePages(app) {
         if (mid && mid.verified) {
             this.flash = { success: "Phone number has already been verified" };
             if (metrics) metrics.increment('_signup_step_3');
-            if (mixpanel)
-                mixpanel.track("SignupStep3", {
-                    distinct_id: this.session.uid
-                });
+            // if (mixpanel)
+            //     mixpanel.track("SignupStep3", {
+            //         distinct_id: this.session.uid
+            //     });
             this.redirect("/create_account");
             return;
         }
@@ -183,8 +182,8 @@ export default function useEnterAndConfirmMobilePages(app) {
         this.body = "<!DOCTYPE html>" +
             renderToString(<ServerHTML {...props} />);
         if (metrics) metrics.increment('_signup_step_2');
-        if (mixpanel)
-            mixpanel.track("SignupStep2", { distinct_id: this.session.uid });
+        // if (mixpanel)
+        //     mixpanel.track("SignupStep2", { distinct_id: this.session.uid });
     });
 
     router.post("/submit_mobile", koaBody, function*() {
@@ -274,10 +273,10 @@ export default function useEnterAndConfirmMobilePages(app) {
                 if (mid.phone === phoneHash) {
                     this.flash = { success: tt('createaccount_jsx.phone_number_has_been_verified') };
                     if (metrics) metrics.increment('_signup_step_3');
-                    if (mixpanel)
-                        mixpanel.track("SignupStep3", {
-                            distinct_id: this.session.uid
-                        });
+                    // if (mixpanel)
+                    //     mixpanel.track("SignupStep3", {
+                    //         distinct_id: this.session.uid
+                    //     });
                     this.redirect("/create_account");
                     return;
                 }

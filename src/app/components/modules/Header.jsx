@@ -154,9 +154,9 @@ class Header extends React.Component {
         const topic_link = topic ? <Link to={`/${this.last_sort_order || 'trending'}/${topic}`}>{topic}</Link> : null;
 
         const sort_orders = [
+            ['trending', tt('main_menu.trending')],        
             ['created', tt('g.new')],
             ['hot', tt('main_menu.hot')],
-            ['trending', tt('main_menu.trending')],
             ['promoted', tt('g.promoted')]
         ];
         // if (current_account_name) sort_orders.unshift(['home', tt('header_jsx.home')]);
@@ -164,9 +164,9 @@ class Header extends React.Component {
         const selected_sort_order = sort_orders.find(so => so[0] === sort_order);
 
         const sort_orders_horizontal = [
+            ['trending', tt('main_menu.trending')],        
             ['created', tt('g.new')],
             ['hot', tt('main_menu.hot')],
-            ['trending', tt('main_menu.trending')],
             ['promoted', tt('g.promoted')]
         ];
         // if (current_account_name) sort_orders_horizontal.unshift(['home', tt('header_jsx.home')]);
@@ -188,22 +188,18 @@ class Header extends React.Component {
                                     </Link>
                                 </li>
                                 <li className="Header__top-steemit show-for-medium noPrint"><Link to={logo_link}>steemit<span className="beta">beta</span></Link></li>
-                                {(topic_link || user_name || page_name) && <li className="delim show-for-medium">|</li>}
-                                {topic_link && <li className="Header__top-topic">{topic_link}</li>}
-                                {user_name && <li><Link to={`/@${user_name}`}>@{user_name}</Link></li>}
-                                {page_name && <li><span>{page_name}</span></li>}
+                                <li className="delim show-for-medium">|</li>
+                                
+                                
+                                
                                 {(topic_link || user_name || page_name) && sort_order && <li className="delim show-for-small-only">|</li>}
-                                {selected_sort_order && <DropdownMenu className="Header__sort-order-menu hide-for-large" items={sort_order_menu} selected={selected_sort_order[1]} el="li" />}
+                                {selected_sort_order && <DropdownMenu className="Header__sort-order-menu menu-hide-for-large" items={sort_order_menu} selected={selected_sort_order[1]} el="li" />}
+                                <HorizontalMenu items={sort_order_menu_horizontal} />
                             </ul>
                         </div>
                         <div className="columns shrink">
                             <TopRightMenu {...this.props} />
                         </div>
-                    </div>
-                </div>
-                <div className={'Header__sub-nav expanded show-for-medium row' + (this.state.subheader_hidden ? ' hidden' : '')}>
-                    <div className="columns">
-                        <HorizontalMenu items={sort_order_menu_horizontal} />
                     </div>
                 </div>
             </header>

@@ -159,7 +159,7 @@ class Header extends React.Component {
             ['trending', tt('main_menu.trending')],
             ['promoted', tt('g.promoted')]
         ];
-        if (current_account_name) sort_orders.unshift(['home', tt('header_jsx.home')]);
+        // if (current_account_name) sort_orders.unshift(['home', tt('header_jsx.home')]);
         const sort_order_menu = sort_orders.filter(so => so[0] !== sort_order).map(so => ({link: sortOrderToLink(so[0], topic, current_account_name), value: so[1]}));
         const selected_sort_order = sort_orders.find(so => so[0] === sort_order);
 
@@ -169,7 +169,7 @@ class Header extends React.Component {
             ['trending', tt('main_menu.trending')],
             ['promoted', tt('g.promoted')]
         ];
-        if (current_account_name) sort_orders_horizontal.unshift(['home', tt('header_jsx.home')]);
+        // if (current_account_name) sort_orders_horizontal.unshift(['home', tt('header_jsx.home')]);
         const sort_order_menu_horizontal = sort_orders_horizontal.map((so) => {
             let active = (so[0] === sort_order);
             if (so[0] === 'home' && sort_order === 'home' && !home_account) active = false;
@@ -193,7 +193,7 @@ class Header extends React.Component {
                                 {user_name && <li><Link to={`/@${user_name}`}>@{user_name}</Link></li>}
                                 {page_name && <li><span>{page_name}</span></li>}
                                 {(topic_link || user_name || page_name) && sort_order && <li className="delim show-for-small-only">|</li>}
-                                {selected_sort_order && <DropdownMenu className="Header__sort-order-menu show-for-small-only" items={sort_order_menu} selected={selected_sort_order[1]} el="li" />}
+                                {selected_sort_order && <DropdownMenu className="Header__sort-order-menu hide-for-large" items={sort_order_menu} selected={selected_sort_order[1]} el="li" />}
                             </ul>
                         </div>
                         <div className="columns shrink">

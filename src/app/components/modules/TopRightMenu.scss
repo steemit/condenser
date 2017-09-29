@@ -1,6 +1,6 @@
 .sub-menu {
     li {
-        padding: .7rem 1rem;
+        padding: .7rem 0.5rem;
         a {
             padding: 0px;
         }
@@ -45,7 +45,23 @@ div.Header__top
             padding-left: 0.25rem;
         }
         > a {
-            padding: 14px;
+            padding: 14px 0 14px 14px;
         }
     }
 }
+
+
+// li.submit-story {
+//     padding: 0;
+//     > a {
+//         background: #1A5099;
+//         padding: 10px 30px;
+//         margin: 0 2px;
+//         color: white;
+//         transition: all 0.3s ease-in-out;
+//         border-radius: 4px;
+//         &:hover {
+//             background: blue;
+//         }
+//     }
+// }

@@ -50,18 +50,16 @@ div.Header__top
     }
 }
 
-
-// li.submit-story {
-//     padding: 0;
-//     > a {
-//         background: #1A5099;
-//         padding: 10px 30px;
-//         margin: 0 2px;
-//         color: white;
-//         transition: all 0.3s ease-in-out;
-//         border-radius: 4px;
-//         &:hover {
-//             background: blue;
-//         }
-//     }
-// }
+li.submit-story {
+    padding: 0;
+    > a {
+        background: #1A5099;
+        padding: 8px 24px;
+        margin: 0 6px;
+        color: white;
+        transition: all 0.3s ease-in-out;
+        &:hover {
+            background: #236CCC;
+        }
+    }
+}

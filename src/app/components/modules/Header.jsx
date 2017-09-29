@@ -189,9 +189,7 @@ class Header extends React.Component {
                                 </li>
                                 <li className="Header__top-steemit show-for-medium noPrint"><Link to={logo_link}>steemit<span className="beta">beta</span></Link></li>
                                 <li className="delim show-for-medium">|</li>
-                                
-                                
-                                
+                    
                                 {(topic_link || user_name || page_name) && sort_order && <li className="delim show-for-small-only">|</li>}
                                 {selected_sort_order && <DropdownMenu className="Header__sort-order-menu menu-hide-for-large" items={sort_order_menu} selected={selected_sort_order[1]} el="li" />}
                                 <HorizontalMenu items={sort_order_menu_horizontal} />

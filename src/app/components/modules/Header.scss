@@ -6,6 +6,7 @@
   width: 100%;
   z-index: 100;
   background-color: $white;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.05);
   h3 {
     padding-left: 1rem;
     margin-bottom: 0;
@@ -36,6 +37,11 @@
 .Header__top {
   background-color: $white;
   border-bottom: 1px solid $light-gray;
+  padding: 0.25rem 0;
+  transition: all 0.3s ease-out;
+  @media print, screen and (min-width: 52.5em) {
+    padding: 0.75rem 0;
+  }
   ul > li.Header__top-logo {
     padding: .35rem 0 .35rem 0;
   }

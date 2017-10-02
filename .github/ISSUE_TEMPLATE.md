@@ -1,4 +1,4 @@
-# Golos.io
+# Make sure before open new issue
 
 Before opening a new issue, please take a moment to review our [**community guidelines**](https://github.com/GolosChain/tolstoy/blob/master/.github/CONTRIBUTING.md) to make the contribution process easy and effective for everyone involved.
 
@@ -7,6 +7,7 @@ https://github.com/GolosChain/tolstoy/issues?q=is%3Aissue+is%3Aclosed
 
 ## Issue Type
 
+- [ ] Proposal (https://github.com/GolosChain/tolstoy/blob/master/.github/CONTRIBUTING.md#proposal-reports)
 - [ ] Bug (https://github.com/GolosChain/tolstoy/blob/master/.github/CONTRIBUTING.md#bug-reports)
 - [ ] Feature (https://github.com/GolosChain/tolstoy/blob/master/.github/CONTRIBUTING.md#feature-requests)
 

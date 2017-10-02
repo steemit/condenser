@@ -1,4 +1,4 @@
-# Make sure before open new issue
+# Before open issue make sure
 
 Before opening a new issue, please take a moment to review our [**community guidelines**](https://github.com/GolosChain/tolstoy/blob/master/.github/CONTRIBUTING.md) to make the contribution process easy and effective for everyone involved.
 

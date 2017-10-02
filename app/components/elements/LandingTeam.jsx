@@ -17,6 +17,19 @@ export default class LandingTeam extends React.Component {
 
             <div data-wow-delay="1s" className="wow fadeIn small-12 medium-12 large-3 columns small-centered Team__member ">
                 <div className="Team__members__image-wrapper">
+                    <img className="Team__member__img" src="images/landing/george.komarow.jpg" />
+                </div>
+                <strong>Георгий Комаров</strong>
+                <p>CMO</p>
+                <ul>
+                    <li><a href="https://facebook.com/george.komarow"><img className="Team__facebook-logo" src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-facebook-512.png" /></a></li>
+                    <li><a href="mailto:Gkkazak@gmail.com" title="mail to Gkkazak@gmail.com"><Icon name="envelope" size="2x" /></a></li>
+                    <li><a href="/@insider"><Icon name={APP_ICON} size="2x" /></a></li>
+                </ul>
+            </div>
+
+            <div data-wow-delay="1s" className="wow fadeIn small-12 medium-12 large-3 columns small-centered Team__member ">
+                <div className="Team__members__image-wrapper">
                     <img className="Team__member__img" src="images/landing/jevgenika.jpg" />
                 </div>
                 <strong>Евгения Харченко</strong>

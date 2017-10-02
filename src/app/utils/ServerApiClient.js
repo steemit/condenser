@@ -57,6 +57,10 @@ export function markNotificationRead(account, fields) {
 let last_page, last_views, last_page_promise;
 export function recordPageView(page, ref, account) {
     if (last_page_promise && page === last_page) return last_page_promise;
+    if (window.ga) { // virtual pageview
+        window.ga('set', 'page', page);
+        window.ga('send', 'pageview');
+    }
     api.call('overseer.pageview', {page, referer: ref, account}, (error) => {
         if (error) console.warn('overseer error', error, error.data)
     })

@@ -7,7 +7,6 @@ https://github.com/GolosChain/tolstoy/issues?q=is%3Aissue+is%3Aclosed
 
 ## Issue Type
 
-- [ ] Proposal (https://github.com/GolosChain/tolstoy/blob/master/.github/CONTRIBUTING.md#proposal-reports)
 - [ ] Bug (https://github.com/GolosChain/tolstoy/blob/master/.github/CONTRIBUTING.md#bug-reports)
 - [ ] Feature (https://github.com/GolosChain/tolstoy/blob/master/.github/CONTRIBUTING.md#feature-requests)
 

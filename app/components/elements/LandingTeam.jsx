@@ -12,7 +12,7 @@ export default class LandingTeam extends React.Component {
 					</div>
 				</div>
 
-        <div className="row"><div className="small-12"><h3>GolosIO</h3></div></div>
+        <div className="row"><div className="small-12"><h3>GOLOS.io</h3></div></div>
         <div className="row Team__members text-center">
 
             <div data-wow-delay="1s" className="wow fadeIn small-12 medium-12 large-3 columns small-centered Team__member ">
@@ -20,7 +20,7 @@ export default class LandingTeam extends React.Component {
                     <img className="Team__member__img" src="images/landing/george.komarow.jpg" />
                 </div>
                 <strong>Георгий Комаров</strong>
-                <p>CMO</p>
+                <p>CEO</p>
                 <ul>
                     <li><a href="https://facebook.com/george.komarow"><img className="Team__facebook-logo" src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-facebook-512.png" /></a></li>
                     <li><a href="mailto:Gkkazak@gmail.com" title="mail to Gkkazak@gmail.com"><Icon name="envelope" size="2x" /></a></li>

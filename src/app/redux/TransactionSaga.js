@@ -139,8 +139,9 @@ function* broadcastOperation({payload:
     if (!allowPostUnsafe && hasPrivateKeys(payload)) {
         const confirm = tt('g.post_key_warning.confirm')
         const warning = tt('g.post_key_warning.warning')
+        const checkbox = tt('g.post_key_warning.checkbox')
         operationParam.allowPostUnsafe = true
-        yield put(tr.actions.confirmOperation({confirm, warning, operation: operationParam, errorCallback}))
+        yield put(tr.actions.confirmOperation({confirm, warning, checkbox, operation: operationParam, errorCallback}))
         return
     }
     try {

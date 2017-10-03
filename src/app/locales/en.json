@@ -206,7 +206,7 @@
     },
     "post_key_warning": {
         "confirm": "You are about to publish a STEEM private key or master password. You will probably lose control of the associated account and all its funds.",
-        "warning": "Legitimate actors, including employees of Steemit Inc., will never ask you for a private key or master password."
+        "warning": "Legitimate users, including employees of Steemit Inc., will never ask you for a private key or master password."
     }
   },
   "navigation": {

@@ -92,14 +92,6 @@ ul.PostsList__summaries {
     margin-right: 0.25rem;
   }
 }
-.PostSummary__collapse {
-  opacity: 0;
-  will-change: opacity;
-}
-
-.PostSummary:hover .PostSummary__collapse {
-  opacity: 1;
-}
 
 .PostSummary__body {
   width: auto;

@@ -1,4 +1,5 @@
 .HorizontalMenu {
+  display: none;
   .active > a {
     background: none;
     color: $black;
@@ -12,5 +13,26 @@
   }
   > li:last-child > a {
     padding-right: 0;
+  }
+}
+
+
+@media screen and (min-width: 52.5em) { 
+  ul.HorizontalMenu.menu {
+    display: flex;
+    padding-left: 0.5em;
+
+    li > a {
+      padding-left: 0.5em;
+      padding-right: 0.5em;  
+    }
+  }
+}
+
+
+
+@media print, screen and (min-width: 52.5em) {  
+  .menu-hide-for-large {
+    display: none !important; 
   }
 }

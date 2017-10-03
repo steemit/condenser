@@ -8,6 +8,7 @@ bitterx
 bittex
 bittrax
 bittre
+bittrec
 bittres
 bittrex.com
 bittrexe

@@ -12,11 +12,6 @@ find node_modules/eslint-config-airbnb -name '*.js'|xargs sed -i "s/': 2/': 1/"
     "node": true,
     "es6": true
   },
-  "ecmaFeatures": {
-    "blockBindings": true,
-    "forOf": true,
-    "jsx": true
-  },
   "rules": {
     "max-len": 0, /*[1, 160, 4],*/
     "comma-dangle": 0,
@@ -60,5 +55,8 @@ find node_modules/eslint-config-airbnb -name '*.js'|xargs sed -i "s/': 2/': 1/"
     "react/prefer-stateless-function": 0,
     "react/prop-types": 0,
     "radix": 0,
+
+    "jsx-a11y/href-no-hash": "off",
+    "jsx-a11y/anchor-is-valid": ["warn", { "aspects": ["invalidHref"] }]
   }
 }

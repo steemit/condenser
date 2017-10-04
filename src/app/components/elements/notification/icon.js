@@ -3,7 +3,7 @@ import * as type from './type'
 const icon = {}
 //notify even types
 icon[type.ANNOUNCEMENT] = require('assets/icons/notifications/mention.svg')
-//icon[type.ANNOUNCEMENT_IMPORTANT] = require('assets/icons/notifications/?')
+icon[type.ANNOUNCEMENT_IMPORTANT] = require('assets/icons/notifications/mention.svg')
 icon[type.COMMENT_REPLY] = require('assets/icons/notifications/comment.svg')
 icon[type.FOLLOW_AUTHOR_POST] = require('assets/icons/notifications/new-post.svg')
 icon[type.FOLLOW_POST_POST] = require('assets/icons/notifications/new-post.svg')

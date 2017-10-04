@@ -95,10 +95,8 @@ class NotificationLink extends React.Component {
         }
 
         switch (notificationType) {
-            case type.ANNOUNCEMENT_IMPORTANT :
-                //todo: special image - unknown json format
-                break
-            case type.ANNOUNCEMENT :
+            //case type.ANNOUNCEMENT_IMPORTANT :
+                //todo: special image - unknown json format in notification
             case type.POWER_DOWN :
                 //todo: blank circle image
                 break

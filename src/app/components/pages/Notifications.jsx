@@ -2,14 +2,6 @@ import React from 'react'
 import {connect} from 'react-redux'
 import { makeNotificationList } from 'app/components/elements/notification'
 
-/*
-import { Link } from 'react-router'
-import Icon from 'app/components/elements/Icon';
-import tt from 'counterpart';
-*/
-
-import NotificationLI from 'app/components/elements/notification'
-import notificationList from 'app/components/elements/notification/_TestData'
 
 class NotificationPage extends React.Component {
     static propTypes = {

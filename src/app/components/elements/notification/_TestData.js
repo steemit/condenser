@@ -27,7 +27,7 @@ const notifyItemSpec = {
 
 //sample data is from @wolfcat's perspective
 
-export default [
+export const getNotifications = [
     {
         id: "UID", //needed to track .read
         read: true, //a boolean value
@@ -173,3 +173,5 @@ export default [
         }
     }
 ]
+
+export default JSON.stringify(getNotifications, null, 2);

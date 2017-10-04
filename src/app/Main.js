@@ -10,7 +10,7 @@ import ConsoleExports from './utils/ConsoleExports';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import * as steem from 'steem';
 
-import yotifications from 'app/components/elements/notification/_TestData' //Todo: for dev only! Do not merge if present!
+import { getNotifications as yotifications } from 'app/components/elements/notification/_TestData' //Todo: for dev only! Do not merge if present!
 console.log("Search for " + "%c//Todo: for dev only! Do not merge if present!","background:red; color:yellow", "in src and remove before merging")
 window.onerror = error => {
     if (window.$STM_csrf) serverApiRecordEvent('client_error', error);

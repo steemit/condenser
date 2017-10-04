@@ -1,5 +1,10 @@
 import tt from 'counterpart';
 
+
+export function capitalizeFirstLetter(s) {
+  return s.charAt(0).toUpperCase() + s.substring(1);
+}
+
 function fractional_part_len(value) {
     const parts = (Number(value) + '').split('.');
     return parts.length < 2 ? 0 : parts[1].length;

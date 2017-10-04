@@ -13,11 +13,7 @@ import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdow
 import VerticalMenu from 'app/components/elements/VerticalMenu';
 import tt from 'counterpart';
 import { APP_NAME, APP_ICON, DEFAULT_DOMESTIC, DOMESTIC, SEO_TITLE } from 'app/client_config';
-import { detransliterate } from 'app/utils/ParsersAndFormatters';
-
-function capitalizeFirstLetter(string) {
-  return string.charAt(0).toUpperCase() + string.substring(1);
-}
+import {detransliterate, capitalizeFirstLetter} from 'app/utils/ParsersAndFormatters';
 
 function sortOrderToLink(so, topic, account) {
     // to prevent probmes check if topic is not the same as account name

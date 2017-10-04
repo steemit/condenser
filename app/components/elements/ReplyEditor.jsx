@@ -18,9 +18,9 @@ import Dropzone from 'react-dropzone'
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown'
 import VerticalMenu from 'app/components/elements/VerticalMenu'
 import tt from 'counterpart'
-import {DEBT_TICKER, DEFAULT_DOMESTIC, DOMESTIC} from 'app/client_config'
+import {DEBT_TICKER, DEFAULT_DOMESTIC, DOMESTIC, SUPPORT_EMAIL} from 'app/client_config'
 import Icon from 'app/components/elements/Icon.jsx'
-import {detransliterate} from 'app/utils/ParsersAndFormatters'
+import {detransliterate, capitalizeFirstLetter} from 'app/utils/ParsersAndFormatters';
 
 const remarkable = new Remarkable({ html: true, linkify: false, breaks: true })
 const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
@@ -384,6 +384,7 @@ class ReplyEditor extends React.Component {
                           <Link to="/submit.html"><Icon name="pencil" /> {tt('g.submit_a_story')}</Link>
                           {tt('reply_editor.feedback_welcome.message4')}
                         </p>
+                        <p>{capitalizeFirstLetter(tt('g.or'))} <a href={"mailto:" + SUPPORT_EMAIL}>{tt('createaccount_jsx.send_us_email')}</a></p>
                         <p>{tt('reply_editor.feedback_welcome.message5')}</p>
                       </div>
                     }

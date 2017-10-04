@@ -730,7 +730,6 @@ export default formId => connect(
                   if (res.error || res.status !== 'ok') {
                       console.error('Determine language server error', res.error);
                   } else {
-                    console.log(res)
                     if (res.iso6391code) {
                       data.operation.json_metadata.language = res.iso6391code
                     }
@@ -742,22 +741,22 @@ export default formId => connect(
               });
             }
 
-            if (!meta.language) {
-              determineLanguage({
-                type: 'comment',
-                operation,
-                errorCallback,
-                successCallback,
-              })
-            }
-            else {
+            // if (!meta.language) {
+            //   determineLanguage({
+            //     type: 'comment',
+            //     operation,
+            //     errorCallback,
+            //     successCallback,
+            //   })
+            // }
+            // else {
                 dispatch(transaction.actions.broadcastOperation({
                   type: 'comment',
                   operation,
                   errorCallback,
                   successCallback,
                 }))
-            }
+            // }
         },
     })
 )(ReplyEditor)

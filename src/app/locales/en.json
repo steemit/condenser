@@ -205,6 +205,11 @@
       "zero": "No Responses",
       "one": "%(count)s Response",
       "other": "%(count)s Responses"
+    },
+    "post_key_warning": {
+        "confirm": "You are about to publish a STEEM private key or master password. You will probably lose control of the associated account and all its funds.",
+        "warning": "Legitimate users, including employees of Steemit Inc., will never ask you for a private key or master password.",
+        "checkbox": "I understand"
     }
   },
   "navigation": {
@@ -543,8 +548,8 @@
     "keep_me_logged_in": "Keep me logged in",
     "amazing_community": "amazing community",
     "to_comment_and_reward_others": " to comment and reward others.",
-    "sign_up_now_to_earn": "Sign up now to earn ",
-    "free_money": "FREE MONEY!",
+    "signup_button": "Sign up now to earn ",
+    "signup_button_emphasis": "FREE STEEM!",
     "returning_users": "Returning Users: ",
     "join_our": "Join our"
   },

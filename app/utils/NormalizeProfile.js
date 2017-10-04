@@ -20,9 +20,9 @@ export default function normalizeProfile(account) {
     // Parse
     let profile = {};
     if (account.json_metadata) {
-        let metadata = "{created_at: 'GENESIS'}"//account.json_metadata;
+        let metadata = account.json_metadata;
         // https://github.com/GolosChain/tolstoy/issues/450
-        if (metadata.localeCompare("{created_at: 'GENESIS'}")) {
+        if (metadata.localeCompare("{created_at: 'GENESIS'}") == 0) {
             console.error('Invalid GENESIS metadata string', metadata, 'in account', account.name);
             metadata = '{"created_at": "GENESIS"}';
         }

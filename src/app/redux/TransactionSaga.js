@@ -6,6 +6,7 @@ import {findSigningKey} from 'app/redux/AuthSaga'
 import g from 'app/redux/GlobalReducer'
 import user from 'app/redux/User'
 import tr from 'app/redux/Transaction'
+import tt from 'counterpart'
 import getSlug from 'speakingurl'
 import {DEBT_TICKER} from 'app/client_config'
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient'
@@ -125,15 +126,24 @@ function* error_account_witness_vote({operation: {account, witness, approve}}) {
 
 /** Keys, username, and password are not needed for the initial call.  This will check the login and may trigger an action to prompt for the password / key. */
 function* broadcastOperation({payload:
-    {type, operation, confirm, warning, keys, username, password, successCallback, errorCallback}
+    {type, operation, confirm, warning, keys, username, password, successCallback, errorCallback, allowPostUnsafe}
 }) {
-    const operationParam = {type, operation, keys, username, password, successCallback, errorCallback}
+    const operationParam = {type, operation, keys, username, password, successCallback, errorCallback, allowPostUnsafe}
+
     const conf = typeof confirm === 'function' ? confirm() : confirm
     if(conf) {
         yield put(tr.actions.confirmOperation({confirm, warning, operation: operationParam, errorCallback}))
         return
     }
     const payload = {operations: [[type, operation]], keys, username, successCallback, errorCallback}
+    if (!allowPostUnsafe && hasPrivateKeys(payload)) {
+        const confirm = tt('g.post_key_warning.confirm')
+        const warning = tt('g.post_key_warning.warning')
+        const checkbox = tt('g.post_key_warning.checkbox')
+        operationParam.allowPostUnsafe = true
+        yield put(tr.actions.confirmOperation({confirm, warning, checkbox, operation: operationParam, errorCallback}))
+        return
+    }
     try {
         if (!keys || keys.length === 0) {
             payload.keys = []
@@ -157,6 +167,23 @@ function* broadcastOperation({payload:
         console.error('TransactionSage', error);
         if(errorCallback) errorCallback(error.toString())
     }
+}
+
+function hasPrivateKeys(payload) {
+    const blob = JSON.stringify(payload.operations)
+    let m, re = /P?(5[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{50})/g
+    while (true) {
+        m = re.exec(blob)
+        if (m) {
+            try {
+                PrivateKey.fromWif(m[1]) // performs the base58check
+                return true
+            } catch (e) {}
+        } else {
+            break
+        }
+    }
+    return false
 }
 
 function* broadcastPayload({payload: {operations, keys, username, successCallback, errorCallback}}) {

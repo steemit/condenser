@@ -592,8 +592,8 @@
     "account_name_is_not_available":"Korisničko ime nije dostupno"
   },
   "postsummary_jsx":{
-    "resteemed":"Поделиться",
-    "resteemed_by":"Репостнуто",
+    "resteemed":"Reposted",
+    "resteemed_by":"Reposted by",
     "this_post_is":"Ovaj post sadrži oznaku –",
     "you_can":"Možete",
     "reveal_it":"Otkrij to",

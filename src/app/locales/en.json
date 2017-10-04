@@ -635,13 +635,11 @@
     "i_understand_dont_show_again": "I understand, don't show me again"
   },
     "notifications": {
-        "resteem": {
-            "action": "resteemed"
+        "announcement":{
+            "action": "official announcement"
         },
-        "tag": {
-            "action": "tagged you",
-            "actionPost": "tagged you in a story",
-            "actionComment": "tagged you in a comment"
+        "announcementImportant":{
+            "action": "important announcement"
         },
         "followAuthorPost":{
             "action": "posted"
@@ -659,9 +657,22 @@
         "receiveSteem": {
             "action": "received from"
         },
+        "resteem": {
+            "action": "resteemed"
+        },
+        "securityNewMobileDevice":{
+            "action":"New mobile device linked",
+            "body":"If this wasn't you, change your password ASAP",
+            "subject":"Security warning"
+        },
         "securityPasswordChanged":{
             "action":"Password changed",
             "body":"If this wasn't you, recover your account ASAP",
+            "subject":"Security warning"
+        },
+        "securityPowerDown":{
+            "action":"Power Down initiated",
+            "body":"If this wasn't you, change your password ASAP",
             "subject":"Security warning"
         },
         "securityWithrawal":{
@@ -669,15 +680,10 @@
             "body":"If this wasn't you, change your password ASAP",
             "subject":"Security warning"
         },
-        "securityNewMobileDevice":{
-            "action":"New mobile device linked",
-            "body":"If this wasn't you, change your password ASAP",
-            "subject":"Security warning"
-        },
-        "securityPowerDown":{
-            "action":"Power Down initiated",
-            "body":"If this wasn't you, change your password ASAP",
-            "subject":"Security warning"
+        "tag": {
+            "action": "tagged you",
+            "actionPost": "tagged you in a story",
+            "actionComment": "tagged you in a comment"
         },
         "vote": {
             "action": "upvoted you",

@@ -104,8 +104,8 @@ class NotificationLink extends React.Component {
                 picture = <Userpic account={ author } badge={ badge } />
         }
 
-
         return <Link href={ link } className={ classNames } onClick={ this.markRead } >
+            { (!this.props.shown)? <span className="unseenIndicator" dangerouslySetInnerHTML={{ __html: "&#9679"}}></span> : null }
             <div className="item-panel" >
                 { (notificationType !== type.POWER_DOWN) ? <div className={ "Comment__Userpic show-for-medium " + notificationType} >
                         { picture }

@@ -31,6 +31,7 @@ export default [
     {
         id: "UID", //needed to track .read
         read: true, //a boolean value
+        shown: true, //a boolean value
         notificationType: type.POWER_DOWN, //receivedSteem, tagged, resteemed, postComment, commentComment
         created: '2017-09-19T16:19:48',
         author: "roadscape",
@@ -39,6 +40,7 @@ export default [
     {
         id: "UID1.1", //needed to track .read
         read: false, //a boolean value
+        shown: false, //a boolean value
         notificationType: type.ANNOUNCEMENT_IMPORTANT, //receivedSteem, tagged, resteemed, postComment, commentComment
         created: '2017-09-19T18:59:00',
         author: "steemit",
@@ -52,6 +54,7 @@ export default [
     },{
         id: "UID1", //needed to track .read
         read: false, //a boolean value
+        shown: false, //a boolean value
         notificationType: type.RESTEEM, //receivedSteem, tagged, resteemed, postComment, commentComment
         created: '2017-09-19T18:59:00',
         author: "roadscape",
@@ -65,6 +68,7 @@ export default [
     },{
         id: "UID2", //needed to track .read
         read: false, //a boolean value
+        shown: false,
         notificationType: type.VOTE, //receivedSteem, tagged, resteemed, postComment, commentComment
         notificationTime: 3, //Hoping for epoch seconds, but can be whatever people are using
         author: "beanz",
@@ -79,6 +83,7 @@ export default [
     },{
         id: "UID3", //needed to track .read
         read: true, //a boolean value
+        shown: true, //a boolean value
         notificationType: type.RECEIVE_STEEM, //receivedSteem, tagged, resteemed, postComment, commentComment
         created: '2017-09-19T16:19:48',
         author: "roadscape",
@@ -86,6 +91,7 @@ export default [
     },{
         id: "UID4", //needed to track .read
         read: true, //a boolean value
+        shown: true, //a boolean value
         notificationType: type.TAG, //receivedSteem, tagged, resteemed, postComment, commentComment
         created: '2017-09-19T07:48:03',
         author: "lovejoy",
@@ -105,6 +111,7 @@ export default [
     },{
         id: "UID5", //needed to track .read
         read: false, //a boolean value
+        shown: false, //a boolean value
         notificationType: type.VOTE, //receivedSteem, tagged, resteemed, postComment, commentComment
         created: '2017-09-19T11:59:39',
         author: "roadscape",
@@ -118,6 +125,7 @@ export default [
     },{
         id: "UID6", //needed to track .read
         read: true, //a boolean value
+        shown: true, //a boolean value
         notificationType: type.POST_REPLY, //receivedSteem, tagged, resteemed, postComment, commentComment
         created: '2017-09-19T14:24:51',
         author: "lovejoy",
@@ -138,12 +146,14 @@ export default [
     },{
         id: "UID6.1", //needed to track .read
         read: true, //a boolean value
+        shown: true, //a boolean value
         notificationType: type.SECURITY_NEW_MOBILE, //receivedSteem, tagged, resteemed, postComment, commentComment
         created: '2017-09-19T14:24:51',
         author: "security"
     },{
         id: "UID7", //needed to track .read
         read: false, //a boolean value
+        shown: false, //a boolean value
         notificationType: type.COMMENT_REPLY, //receivedSteem, tagged, resteemed, postComment, commentComment
         created: '2017-09-18T17:21:18',
         author: "dbzfan4awhile",

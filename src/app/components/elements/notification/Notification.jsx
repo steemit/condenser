@@ -1,3 +1,6 @@
+/**
+ * @locale {skip-validation}
+ */
 import React from 'react';
 import { Link } from 'react-router'
 import {connect} from 'react-redux'
@@ -38,13 +41,8 @@ class NotificationLink extends React.Component {
         let link = Url.comment(post, item)
         let localeAction = `${localeRoot}.action`
         let picture = null
-
+        console.log('localeAction', localeAction)
         switch (notificationType) {
-            case type.ANNOUNCEMENT :
-                console.log(`Notification type - ${notificationType} needs to use the steemit logo check with all to see if this can just be part of the account, or if it needs special treatment`)
-                throw new Error(`Notification ${notificationType} not implemented`)
-            case type.ANNOUNCEMENT_IMPORTANT :
-                console.log(`Notification type - ${notificationType} needs to use the blog post cover image for its icon`)
             case type.FOLLOW_POST_POST :
                 throw new Error(`Notification ${notificationType} not implemented`)
             case type.POST_REPLY :
@@ -55,6 +53,9 @@ class NotificationLink extends React.Component {
                 headerContent = <span><span className="user">{ author }</span> { tt(localeAction) } <strong>{ item.parentSummary }</strong></span>
                 bodyContent = item.summary
                 break
+            case type.ANNOUNCEMENT :
+            case type.ANNOUNCEMENT_IMPORTANT :
+                //todo: use announcement comment 'image' as icon post steemfest. This will require addl info from yo.
             case type.FOLLOW_AUTHOR_POST :
                 headerContent = <span><span className="user">{ author }</span> { tt(localeAction) } </span>
                 bodyContent = item.summary

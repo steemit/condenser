@@ -35,6 +35,20 @@ export default [
         created: '2017-09-19T16:19:48',
         author: "roadscape",
         amount: 10000.2
+    },
+    {
+        id: "UID1.1", //needed to track .read
+        read: false, //a boolean value
+        notificationType: type.ANNOUNCEMENT_IMPORTANT, //receivedSteem, tagged, resteemed, postComment, commentComment
+        created: '2017-09-19T18:59:00',
+        author: "steemit",
+        item: {
+            author: "wolfcat",
+            category: "introduceyourself",
+            depth: 0,
+            permlink: "from-the-hills-of-ireland-to-planet-steem-a-wolfy-hello",
+            summary: "From the Hills of Ireland to Planet Steem, A Wolfy Hello!", //a string to summarize the item. Title + Content? (max 255 chars)
+        }
     },{
         id: "UID1", //needed to track .read
         read: false, //a boolean value

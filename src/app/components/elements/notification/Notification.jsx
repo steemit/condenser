@@ -109,7 +109,7 @@ class NotificationLink extends React.Component {
 
         return <Link href={ link } className={ classNames } onClick={ this.markRead } >
             <div className="item-panel" >
-                { (notificationType !== type.POWER_DOWN) ? <div className="Comment__Userpic show-for-medium">
+                { (notificationType !== type.POWER_DOWN) ? <div className={ "Comment__Userpic show-for-medium " + notificationType} >
                         { picture }
                 </div> : null }
                 <div className="item-header">

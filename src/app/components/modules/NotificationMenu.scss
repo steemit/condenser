@@ -72,6 +72,20 @@ ul.Notifications {
             &:hover {
                 background: $notif_item_unread_bg_hover;
             }
+
+            .item-panel {
+                .Userpic svg g {
+                    fill: $notif_item_badge_unread_color;
+                }
+
+                .commentReply,
+                .postReply {
+                    .Userpic svg g {
+                        fill: none;
+                        stroke: $notif_item_badge_unread_color;
+                    }
+                }
+            }
         }
 
         a {
@@ -88,6 +102,16 @@ ul.Notifications {
             margin: 0;
             line-height: 22px;
             padding: 10px 0px;
+
+            .Userpic svg g {
+                fill: $black;
+            }
+            .commentReply,
+            .postReply {
+                .Userpic svg g {
+                    fill: none;
+                }
+            }
         }
         .item-header,
         .item-body,

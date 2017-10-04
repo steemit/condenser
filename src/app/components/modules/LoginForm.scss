@@ -7,18 +7,18 @@
   form {
     margin-top: 1.5rem;
   }
-  .button.sign-up {
+  .sign-up {
+    .button {
       background-color: #4078C0 !important;
       padding-top: 1rem;
       padding-bottom: 1rem;
       font-size: 1.2rem;
       text-transform: none;
-  }
-  .free-slogan {
+    }
+    em {
       font-weight: bold;
-  }
-  .free-money {
-      font-weight: bold;
+      font-style: normal;
+    }
   }
   hr {
       margin: 1.75rem auto 2rem auto;

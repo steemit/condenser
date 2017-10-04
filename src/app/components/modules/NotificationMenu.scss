@@ -64,6 +64,7 @@ ul.Notifications {
 
     > li.item {
         background: $notif_item_read_bg;
+        position: relative;
         &:hover {
             background: $notif_item_read_bg_hover;
         }
@@ -71,6 +72,12 @@ ul.Notifications {
             background: $notif_item_unread_bg;
             &:hover {
                 background: $notif_item_unread_bg_hover;
+            }
+            .unseenIndicator {
+                position: absolute;
+                left: 4px;
+                top: 28px;
+                color: $notif_item_unseen_color;
             }
 
             .item-panel {
@@ -92,6 +99,7 @@ ul.Notifications {
             padding-top: 0;
             padding-bottom: 0;
             color: $black;
+
             //padding: 0 1rem 0 1rem; //1rem definition needed for notifications page
         }
 

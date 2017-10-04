@@ -94,6 +94,8 @@ minowbooster
 blocktades
 bloocktrades
 bloctrades
+blocktradess
+blocktrade
 `.trim().split('\n');
 
 export default list;

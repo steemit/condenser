@@ -20,6 +20,7 @@ class NotificationMenu extends React.Component {
         markAllRead: React.PropTypes.func,
         notifications: React.PropTypes.array,
         getSomeGetSomeGetSomeYeahYeah: React.PropTypes.func, // Todo: for dev only! Do not merge if present!
+        comeOnItsSuchAJoy: React.PropTypes.func, // Todo: for dev only! Do not merge if present!
     }
 
     markAllRead = (e) => {
@@ -29,6 +30,10 @@ class NotificationMenu extends React.Component {
 
     loadTestData = () => { // Todo: for dev only! Do not merge if present!
         this.props.getSomeGetSomeGetSomeYeahYeah();
+    }
+
+    loadMoreTestData = () => { // Todo: for dev only! Do not merge if present!
+        this.props.comeOnItsSuchAJoy();
     }
 
     closeMenu = (e) => {
@@ -45,7 +50,8 @@ class NotificationMenu extends React.Component {
             <li className="title">{tt('g.notifications')}
                 <span className="controls-right">
                     <button className="ptc" onClick={ this.markAllRead }>Mark All as Read</button>
-                    <button className="ptc" onClick={ this.loadTestData }>Load test data</button> {/* Todo: for dev only! Do not merge if present!*/}
+                    <button className="ptc" onClick={ this.loadTestData }>Populate</button> {/* Todo: for dev only! Do not merge if present!*/}
+                    <button className="ptc" onClick={ this.loadMoreTestData }>... more</button> {/* Todo: for dev only! Do not merge if present!*/}
                     <Link href={account_link}><Icon name="cog" /></Link>
                 </span>
             </li>
@@ -79,6 +85,17 @@ export default connect(
                     {"id":"UID6","read":true,"shown":true,"notificationType":"postReply","created":"2017-09-19T14:24:51","author":"lovejoy","item":{"author":"lovejoy","category":"introduceyourself","depth":2,"permlink":"re-steemcleaners-re-steemcleaners-re-wolfcat-from-the-hills-of-ireland-to-planet-steem-a-wolfy-hello-20170919t120245144z","summary":"@wolfcat is a new user who normally doesn't spend a lot of time online, plus we are ","parentSummary":"You may want to retract your votes.The account has ignored our many requests to confirm the identity. It seems to be another case of fake identity. Thanks."},"rootItem":{"author":"wolfcat","category":"introduceyourself","permlink":"from-the-hills-of-ireland-to-planet-steem-a-wolfy-hello","summary":"From the Hills of Ireland to Planet Steem, A Wolfy Hello!"}},
                     {"id":"UID6.1","read":true,"shown":true,"notificationType":"securityNewMobileDevice","created":"2017-09-19T14:24:51","author":"security"},
                     {"id":"UID7","read":false,"shown":true,"notificationType":"commentReply","created":"2017-09-18T17:21:18","author":"dbzfan4awhile","item":{"author":"dbzfan4awhile","category":"introduceyourself","depth":3,"permlink":"re-wolfcat-re-dbzfan4awhile-re-wolfcat-from-the-hills-of-ireland-to-planet-steem-a-wolfy-hello-20170918t172118886z","summary":"Awesome!","parentSummary":"Yes! Ill look for you there :)"},"rootItem":{"author":"wolfcat","category":"introduceyourself","permlink":"from-the-hills-of-ireland-to-planet-steem-a-wolfy-hello","summary":"From the Hills of Ireland to Planet Steem, A Wolfy Hello!"}}
+                ],
+            });
+        },
+        comeOnItsSuchAJoy: () => {  // Todo: for dev only! Do not merge if present!
+            dispatch({
+                type: 'notification/APPEND_SOME',
+                payload: [
+                    {"id":"UID6.1","read":false,"shown":false,"notificationType":"securityNewMobileDevice","created":"2017-09-19T14:24:51","author":"security"},
+                    {"id":"UID8","read":false,"shown":false,"notificationType":"powerDown","created":"2021-09-19T16:19:48","author":"roadscape","amount":138},
+                    {"id":"UID9","read":true,"shown":true,"notificationType":"powerDown","created":"2021-09-20T16:19:48","author":"roadscape","amount":138},
+                    {"id":"UID10","read":false,"shown":true,"notificationType":"powerDown","created":"2021-09-21T16:19:48","author":"roadscape","amount":138},
                 ],
             });
         },

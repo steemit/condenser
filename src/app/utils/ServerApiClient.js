@@ -33,8 +33,8 @@ export function serverApiRecordEvent(type, val, rate_limit_ms = 5000) {
     const request = Object.assign({}, request_base, {body: JSON.stringify({csrf: $STM_csrf, type, value})});
     fetch('/api/v1/record_event', request);
     api.call('overseer.collect', {collection: 'event', metadata: {type, value}}, (error) => {
-        if (error) console.warn('overseer error', error, error.data)
-    })
+        if (error) console.warn('overseer error', error, error.data);
+    });
 }
 
 export function getNotifications(account) {
@@ -62,8 +62,8 @@ export function recordPageView(page, ref, account) {
         window.ga('send', 'pageview');
     }
     api.call('overseer.pageview', {page, referer: ref, account}, (error) => {
-        if (error) console.warn('overseer error', error, error.data)
-    })
+        if (error) console.warn('overseer error', error, error.data);
+    });
     if (!process.env.BROWSER || window.$STM_ServerBusy) return Promise.resolve(0);
     const request = Object.assign({}, request_base, {body: JSON.stringify({csrf: $STM_csrf, page, ref})});
     last_page_promise = fetch(`/api/v1/page_view`, request).then(r => r.json()).then(res => {

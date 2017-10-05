@@ -18,12 +18,29 @@ function apiToMap(payload) {
  * @param {Map} state
  * @param {Object} action
  */
-export const byId = (state = Map({}), action = { type: null }) => {
+export const byId = (state = Map(), action = { type: null }) => {
     switch (action.type) {
         case 'notification/RECEIVE_ALL':
             return apiToMap(action.payload);
         case 'notification/APPEND_SOME':
             return state.merge(apiToMap(action.payload));
+        case 'notification/MARK_ALL_READ':
+            return state.map(n => {
+                return {
+                    ...n,
+                    read: true,
+                };
+            });
+        case 'notification/MARK_ONE_READ':
+            return state.set(action.id, {
+                ...state.get(action.id),
+                read: true,
+            });
+        case 'notification/MARK_ONE_SHOWN':
+            return state.set(action.id, {
+                ...state.get(action.id),
+                shown: true,
+            });
         default:
             return state;
     }
@@ -45,6 +62,10 @@ export const unread = (state = OrderedMap(), action = { type: null }) => {
             return state
                 .merge(apiToMap(action.payload).filter(n => !n.read))
                 .sortBy(n => n.created).reverse();
+        case 'notification/MARK_ALL_READ':
+            return OrderedMap();
+        case 'notification/MARK_ONE_READ':
+            return state.delete(action.id);
         default:
             return state;
     }
@@ -56,7 +77,7 @@ export const unread = (state = OrderedMap(), action = { type: null }) => {
  * @param {Map} state
  * @param {Object} action
  */
-export const unshown = (state = OrderedMap(), action) => {
+export const unshown = (state = OrderedMap(), action = { type: null }) => {
     switch (action.type) {
         case 'notification/RECEIVE_ALL':
             return apiToMap(action.payload)
@@ -66,6 +87,8 @@ export const unshown = (state = OrderedMap(), action) => {
             return state
                 .merge(apiToMap(action.payload).filter(n => !n.shown))
                 .sortBy(n => n.created).reverse();
+        case 'notification/MARK_ONE_SHOWN':
+            return state.delete(action.id);
         default:
             return state;
     }

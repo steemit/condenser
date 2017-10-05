@@ -4,6 +4,7 @@ import { Link } from 'react-router'
 import Icon from 'app/components/elements/Icon'
 import tt from 'counterpart'
 
+import notificationReducer from 'app/redux/NotificationReducer';
 import { makeNotificationList } from 'app/components/elements/notification';
 
 class NotificationMenu extends React.Component {
@@ -16,8 +17,9 @@ class NotificationMenu extends React.Component {
             React.PropTypes.string,
             React.PropTypes.element
         ]),
+        markAllRead: React.PropTypes.func,
+        unreadNotifications: React.PropTypes.array,
     }
-
 
     markAllRead = (e) => {
         e.preventDefault()
@@ -41,7 +43,7 @@ class NotificationMenu extends React.Component {
                     <Link href={account_link}><Icon name="cog" /></Link>
                 </span>
             </li>
-            { makeNotificationList(this.props.notifications) }
+            { makeNotificationList(this.props.unreadNotifications) }
             <li className="footer">
                 <Link href={ account_link + '/notifications'} className="view-all">View All</Link>
             </li>
@@ -52,17 +54,15 @@ class NotificationMenu extends React.Component {
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
-        var yotifications = state.app.getIn(['yotifications']);
-        const notifications = (yotifications && yotifications.size > 0)? yotifications.toJS() : []
         return {
-            notifications,
+            unreadNotifications: state.notification.unread.toArray(),
             ...ownProps
         }
     },
     dispatch => ({
         markAllRead: () => {
             const action = {
-                type: 'yotification_markAllRead',
+                type: 'notification/MARK_ALL_READ',
             }
             dispatch(action)
         }

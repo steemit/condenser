@@ -128,10 +128,9 @@ export default connect(
     null,
     dispatch => ({
         markRead: e => {
-            const action = {
-                type: 'yotification_markRead',
+            dispatch({
+                type: 'notification/MARK_ONE_READ',
                 id: e
-            }
-            dispatch(action)
+            })
         }
     }))(NotificationLink)

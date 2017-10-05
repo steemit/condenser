@@ -24,10 +24,8 @@ class NotificationPage extends React.Component {
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
-        var yotifications = state.app.getIn(['yotifications']);
-        const notifications = (yotifications && yotifications.size > 0)? yotifications.toJS() : []
         return {
-            notifications,
+            notifications: state.notification.byId.toArray(),
             ...ownProps
         }
     }

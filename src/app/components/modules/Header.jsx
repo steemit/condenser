@@ -159,7 +159,7 @@ class Header extends React.Component {
             ['hot', tt('main_menu.hot')],
             ['promoted', tt('g.promoted')]
         ];
-        // if (current_account_name) sort_orders.unshift(['home', tt('header_jsx.home')]);
+        if (current_account_name) sort_orders.unshift(['home', tt('header_jsx.home')]);
         const sort_order_menu = sort_orders.filter(so => so[0] !== sort_order).map(so => ({link: sortOrderToLink(so[0], topic, current_account_name), value: so[1]}));
         const selected_sort_order = sort_orders.find(so => so[0] === sort_order);
 

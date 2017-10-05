@@ -5,7 +5,7 @@ import { makeNotificationList } from 'app/components/elements/notification'
 
 class NotificationPage extends React.Component {
     static propTypes = {
-        notifications: React.PropTypes.arrayOf(React.PropTypes.object).isRequired
+        unreadNotifications: React.PropTypes.arrayOf(React.PropTypes.object).isRequired
     };
 
     closeMenu = (e) => {
@@ -16,7 +16,7 @@ class NotificationPage extends React.Component {
     }
 
     render() {
-        return ( <ul className="Notifications"> { makeNotificationList(this.props.notifications) } </ul> )
+        return ( <ul className="Notifications"> { makeNotificationList(this.props.unreadNotifications) } </ul> )
     }
 }
 
@@ -24,10 +24,8 @@ class NotificationPage extends React.Component {
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
-        var yotifications = state.app.getIn(['yotifications']);
-        const notifications = (yotifications && yotifications.size > 0)? yotifications.toJS() : []
         return {
-            notifications,
+            unreadNotifications: state.notification.unread.toArray(),
             ...ownProps
         }
     }

@@ -18,7 +18,7 @@ class NotificationMenu extends React.Component {
             React.PropTypes.element
         ]),
         markAllRead: React.PropTypes.func,
-        unreadNotifications: React.PropTypes.array,
+        notifications: React.PropTypes.array,
         getSomeGetSomeGetSomeYeahYeah: React.PropTypes.func, // Todo: for dev only! Do not merge if present!
     }
 
@@ -49,7 +49,7 @@ class NotificationMenu extends React.Component {
                     <Link href={account_link}><Icon name="cog" /></Link>
                 </span>
             </li>
-            { makeNotificationList(this.props.unreadNotifications) }
+            { makeNotificationList(this.props.notifications) }
             <li className="footer">
                 <Link href={ account_link + '/notifications'} className="view-all">View All</Link>
             </li>
@@ -61,7 +61,7 @@ export default connect(
     // mapStateToProps
     (state, ownProps) => {
         return {
-            unreadNotifications: state.notification.unread.toArray(),
+            notifications: state.notification.byId.toArray(),
             ...ownProps
         }
     },

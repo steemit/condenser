@@ -4,9 +4,6 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import { imageProxy } from 'app/utils/ProxifyUrl';
 
 class Userpic extends Component {
-    static propTypes = {
-        account: PropTypes.string
-    }
 
     shouldComponentUpdate = shouldComponentUpdate(this, 'Userpic')
 
@@ -22,13 +19,20 @@ class Userpic extends Component {
             if(!/^(https?:)\/\//.test(md.profile.profile_image) && hideIfDefault) {
                 return null;
             }
-        } catch (e) {}
+        } catch (e) {
+            /* eslint-disable no-empty */
+        }
 
         const style = {backgroundImage: 'url(' + imageProxy(`/u/${account}/avatar`) + ')' }
 
         return (<div className="Userpic" style={style} />)
     }
 }
+
+Userpic.propTypes = {
+    account: PropTypes.string.isRequired
+}
+
 
 export default connect(
     (state, ownProps) => {

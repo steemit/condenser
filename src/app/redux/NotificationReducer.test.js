@@ -1,6 +1,8 @@
 import chai, { expect } from 'chai';
 import chaiImmutable from 'chai-immutable';
 
+import { Set } from 'immutable';
+
 import { byId, unread, unshown } from './NotificationReducer';
 
 chai.use(chaiImmutable);
@@ -37,28 +39,28 @@ describe('byId', () => {
         expect(reduced).to.have.size(9);
     });
 
-    it('should merge in some appended notifications', () => {
+    it('should merge in some appended notifications, and store them newest-first', () => {
         const initial = byId(undefined, notificationReceiveAllAction);
         const reduced = byId(initial, notificationAppendSomeAction);
 
         expect(reduced).to.have.size(12);
+        expect(reduced.first().id).to.equal('UID5');
+        expect(reduced.last().id).to.equal('UID8');
     });
 });
 
 describe('unread', () => {
-    it('should create a new, immutable state only including unreads when receiving all notifications', () => {
+    it('should create a new, immutable set of ids only including unreads when receiving all notifications', () => {
         const reduced = unread(undefined, notificationReceiveAllAction);
 
-        expect(reduced).to.have.all.keys('UID1', 'UID2', 'UID5', 'UID7');
+        expect(reduced).to.equal(new Set(['UID1', 'UID2', 'UID5', 'UID7']));
     });
 
-    it('should merge in some appended notifications, but only unread ones, in the proper order', () => {
+    it('should merge in some appended notifications, but only unread ones', () => {
         const initial = unread(undefined, notificationReceiveAllAction);
         const reduced = unread(initial, notificationAppendSomeAction);
 
-        expect(reduced).to.have.all.keys('UID1', 'UID2', 'UID5', 'UID7', 'UID6.1', 'UID8', 'UID10');
-        expect(reduced.first().id).to.equal('UID5');
-        expect(reduced.last().id).to.equal('UID8');
+        expect(reduced).to.equal(new Set(['UID1', 'UID2', 'UID5', 'UID7', 'UID6.1', 'UID8', 'UID10']));
     });
 });
 
@@ -66,15 +68,13 @@ describe('unshown', () => {
     it('should create a new, immutable state only including unshowns when receiving all notifications', () => {
         const reduced = unshown(undefined, notificationReceiveAllAction);
 
-        expect(reduced).to.have.all.keys('UID1', 'UID5');
+        expect(reduced).to.equal(new Set(['UID1', 'UID5']));
     });
 
-    it('should merge in some appended notifications, but only unshown ones, in the proper order', () => {
+    it('should merge in some appended notifications, but only unshown ones', () => {
         const initial = unshown(undefined, notificationReceiveAllAction);
         const reduced = unshown(initial, notificationAppendSomeAction);
 
-        expect(reduced).to.have.all.keys('UID1', 'UID5', 'UID6.1', 'UID8');
-        expect(reduced.first().id).to.equal('UID5');
-        expect(reduced.last().id).to.equal('UID8');
+        expect(reduced).to.equal(new Set(['UID1', 'UID5', 'UID6.1', 'UID8']));
     });
 });

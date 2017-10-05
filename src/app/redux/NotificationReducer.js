@@ -1,4 +1,4 @@
-import { Map, OrderedMap } from 'immutable';
+import { Map, OrderedMap, Set } from 'immutable';
 import { combineReducers } from 'redux';
 
 /**
@@ -13,17 +13,17 @@ function apiToMap(payload) {
 }
 
 /**
- * Provides a key-value store of all relevant notifications.
+ * Provides a list of ids of all relevant notifications.
  *
- * @param {Map} state
+ * @param {OrderedMap} state
  * @param {Object} action
  */
-export const byId = (state = Map(), action = { type: null }) => {
+export const byId = (state = OrderedMap(), action = { type: null }) => {
     switch (action.type) {
         case 'notification/RECEIVE_ALL':
-            return apiToMap(action.payload);
+            return apiToMap(action.payload).sortBy(n => n.created).reverse();
         case 'notification/APPEND_SOME':
-            return state.merge(apiToMap(action.payload));
+            return state.merge(apiToMap(action.payload)).sortBy(n => n.created).reverse();
         case 'notification/MARK_ALL_READ':
             return state.map(n => {
                 return {
@@ -47,23 +47,19 @@ export const byId = (state = Map(), action = { type: null }) => {
 };
 
 /**
- * Provides a key-value store of all unread notifications.
+ * Provides a list of ids of all unread notifications.
  *
- * @param {Map} state
+ * @param {Set} state
  * @param {Object} action
  */
-export const unread = (state = OrderedMap(), action = { type: null }) => {
+export const unread = (state = Set(), action = { type: null }) => {
     switch (action.type) {
         case 'notification/RECEIVE_ALL':
-            return apiToMap(action.payload)
-                .filter(n => !n.read)
-                .sortBy(n => n.created).reverse();
+            return Set.fromKeys(apiToMap(action.payload).filter(n => !n.read));
         case 'notification/APPEND_SOME':
-            return state
-                .merge(apiToMap(action.payload).filter(n => !n.read))
-                .sortBy(n => n.created).reverse();
+            return state.union(Set.fromKeys(apiToMap(action.payload).filter(n => !n.read)));
         case 'notification/MARK_ALL_READ':
-            return OrderedMap();
+            return Set();
         case 'notification/MARK_ONE_READ':
             return state.delete(action.id);
         default:
@@ -77,16 +73,14 @@ export const unread = (state = OrderedMap(), action = { type: null }) => {
  * @param {Map} state
  * @param {Object} action
  */
-export const unshown = (state = OrderedMap(), action = { type: null }) => {
+export const unshown = (state = Set(), action = { type: null }) => {
     switch (action.type) {
         case 'notification/RECEIVE_ALL':
-            return apiToMap(action.payload)
-                .filter(n => !n.shown)
-                .sortBy(n => n.created).reverse();
+            return Set.fromKeys(apiToMap(action.payload).filter(n => !n.shown));
         case 'notification/APPEND_SOME':
-            return state
-                .merge(apiToMap(action.payload).filter(n => !n.shown))
-                .sortBy(n => n.created).reverse();
+            return state.union(Set.fromKeys(apiToMap(action.payload).filter(n => !n.shown)));
+        case 'notification/MARK_ALL_SHOWN':
+            return Set();
         case 'notification/MARK_ONE_SHOWN':
             return state.delete(action.id);
         default:

@@ -582,8 +582,13 @@ export default (formId, richTextEditor = null) => connect(
 
             const formCategories = Set(category ? category.trim().replace(/#/g, "").split(/ +/) : [])
             const rootCategory = originalPost && originalPost.category ? originalPost.category : formCategories.first()
-            let allCategories = Set([...formCategories.toJS(), ...rtags.hashtags])
+            let allCategories = Set([...formCategories.toJS()])
             if(/^[-a-z\d]+$/.test(rootCategory)) allCategories = allCategories.add(rootCategory)
+
+            let postHashtags = [...rtags.hashtags]
+            while (allCategories.size < 5 && postHashtags.length > 0) {
+                allCategories = allCategories.add(postHashtags.shift())
+            }
 
             // merge
             const meta = isEdit ? jsonMetadata : {}

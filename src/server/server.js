@@ -76,7 +76,7 @@ const service_worker_js_content = fs
 // some redirects and health status
 app.use(function* (next) {
 
-    if (this.method === 'GET' && this.url === '/health.json') {
+    if (this.method === 'GET' && this.url === '/.well-known/healthcheck.json') {
         this.status = 200;
         this.body = {status: 'ok'};
         return;

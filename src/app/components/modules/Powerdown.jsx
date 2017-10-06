@@ -6,18 +6,20 @@ import Slider from 'react-rangeslider';
 import transaction from 'app/redux/Transaction';
 import user from 'app/redux/User';
 import tt from 'counterpart'
-import {VEST_TICKER, LIQUID_TICKER} from 'app/client_config'
+import {VEST_TICKER, LIQUID_TICKER, VESTING_TOKEN} from 'app/client_config'
 import {numberWithCommas, spToVestsf, vestsToSpf, vestsToSp, assetFloat} from 'app/utils/StateFunctions'
 
 class Powerdown extends React.Component {
 
     constructor(props, context) {
         super(props, context)
-        let new_withdraw = props.to_withdraw
-        if (new_withdraw === 0) {
+        let new_withdraw
+        if (props.to_withdraw - props.withdrawn > 0) {
+            new_withdraw = props.to_withdraw - props.withdrawn
+        } else {
             // Set the default withrawal amount to (available - 5 STEEM)
             // This should be removed post hf20
-            new_withdraw = props.available_shares - spToVestsf(props.state, 5.001)
+            new_withdraw = Math.max(0, props.available_shares - spToVestsf(props.state, 5.001))
         }
         this.state = {
             broadcasting: false,
@@ -58,7 +60,7 @@ class Powerdown extends React.Component {
         }
 
         const notes = []
-        if (to_withdraw !== 0) {
+        if (to_withdraw - withdrawn > 0) {
             const AMOUNT = formatSp(to_withdraw)
             const WITHDRAWN = formatSp(withdrawn)
             notes.push(
@@ -76,7 +78,8 @@ class Powerdown extends React.Component {
             )
         }
         if (notes.length === 0) {
-            const AMOUNT = Math.floor(vestsToSpf(this.props.state, new_withdraw) / 13)
+            let AMOUNT = vestsToSpf(this.props.state, new_withdraw) / 13
+            AMOUNT = AMOUNT.toFixed(AMOUNT >= 10 ? 0 : 1)
             notes.push(
                 <li key="per_week">
                     {tt('powerdown_jsx.per_week', {AMOUNT, LIQUID_TICKER})}
@@ -88,7 +91,7 @@ class Powerdown extends React.Component {
             const AMOUNT = 5
             notes.push(
                 <li key="warning" className="warning">
-                    {tt('powerdown_jsx.warning', {AMOUNT, LIQUID_TICKER})}
+                    {tt('powerdown_jsx.warning', {AMOUNT, VESTING_TOKEN})}
                 </li>
             )
         }
@@ -101,7 +104,6 @@ class Powerdown extends React.Component {
                 </li>
             )
         }
-
 
         return (
             <div className="PowerdownModal">

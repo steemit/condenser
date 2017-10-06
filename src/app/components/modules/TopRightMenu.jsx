@@ -63,7 +63,9 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
                     dropdownPosition="bottom"
                     dropdownAlignment="right"
                     dropdownContent={
-                        <NotificationMenu items={user_menu} account_link={ account_link } />
+                        <div className="NotificationMenuWrapper" >
+                            <NotificationMenu items={user_menu} account_link={ account_link } />
+                        </div>
                     }
                 >
                     {!vertical && <li className={'Header__userpic '}>

@@ -1,3 +1,7 @@
+.NotificationMenuWrapper {
+    max-height:90vh;
+    overflow-y:auto;
+}
 ul.Notifications {
     list-style: none outside;
     > li.item {
@@ -9,6 +13,8 @@ ul.Notifications {
 }
 .Notifications,
 .NotificationMenu {
+
+
 
     .Icon { //for regular list items
         padding-left: 0.1rem;
@@ -81,7 +87,7 @@ ul.Notifications {
                 background: $notif_item_unread_bg_hover;
             }
             .unseenIndicator {
-                color: $notif_item_unseen_color;
+                color: $notif_counter_badge_color;
                 display: block;
                 left: 4px;
                 position: absolute;

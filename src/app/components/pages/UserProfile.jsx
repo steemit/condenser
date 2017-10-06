@@ -30,6 +30,7 @@ import Userpic from 'app/components/elements/Userpic';
 import Callout from 'app/components/elements/Callout';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import userIllegalContent from 'app/utils/userIllegalContent';
+import proxifyImageUrl from 'app/utils/ProxifyUrl';
 
 export default class UserProfile extends React.Component {
     constructor() {
@@ -72,6 +73,7 @@ export default class UserProfile extends React.Component {
 
     componentWillUnmount() {
         this.props.clearTransferDefaults()
+        this.props.clearPowerdownDefaults()
     }
 
     loadMore(last_post, category) {
@@ -161,6 +163,7 @@ export default class UserProfile extends React.Component {
                 <UserWallet
                     account={accountImm}
                     showTransfer={this.props.showTransfer}
+                    showPowerdown={this.props.showPowerdown}
                     current_user={current_user}
                     withdrawVesting={this.props.withdrawVesting} />
                 {isMyAccount && <div><MarkNotificationRead fields="send,receive" account={account.name} /></div>}
@@ -380,11 +383,7 @@ export default class UserProfile extends React.Component {
 
         let cover_image_style = {}
         if(cover_image) {
-            let cover_image_prefix = '';
-            if($STM_Config.img_proxy_prefix) {
-                cover_image_prefix = $STM_Config.img_proxy_prefix + '2048x512/';
-            }
-            cover_image_style = {backgroundImage: "url(" + cover_image_prefix + cover_image + ")"}
+            cover_image_style = {backgroundImage: "url(" + proxifyImageUrl(cover_image, '2048x512') + ")"}
         }
 
         return (
@@ -468,6 +467,12 @@ module.exports = {
             showTransfer: (transferDefaults) => {
                 dispatch(user.actions.setTransferDefaults(transferDefaults))
                 dispatch(user.actions.showTransfer())
+            },
+            clearPowerdownDefaults: () => {dispatch(user.actions.clearPowerdownDefaults())},
+            showPowerdown: (powerdownDefaults) => {
+                console.log('power down defaults:', powerdownDefaults)
+                dispatch(user.actions.setPowerdownDefaults(powerdownDefaults))
+                dispatch(user.actions.showPowerdown())
             },
             withdrawVesting: ({account, vesting_shares, errorCallback, successCallback}) => {
                 const successCallbackWrapper = (...args) => {

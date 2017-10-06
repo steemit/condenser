@@ -15,6 +15,7 @@ import TagList from 'app/components/elements/TagList';
 import UserNames from 'app/components/elements/UserNames';
 import tt from 'counterpart';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
+import proxifyImageUrl from 'app/utils/ProxifyUrl';
 
 function isLeftClickEvent(event) {
     return event.button === 0
@@ -165,13 +166,12 @@ class PostSummary extends React.Component {
 
         let thumb = null;
         if(!gray && p.image_link && !userBlacklisted) {
-          const prox = $STM_Config.img_proxy_prefix
           const size = (thumbSize == 'mobile') ? '640x480' : '256x512';
-          const url = (prox ? prox + size + '/' : '') + p.image_link
+          const url = proxifyImageUrl(p.image_link, size)
           if(thumbSize == 'mobile') {
             thumb = <span onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image-mobile"><img src={url} /></span>
           } else {
-            thumb = <span onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image" style={{backgroundImage: 'url(' + url + ')'}}></span>
+              thumb = <span onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image" style={{backgroundImage: 'url(' + url + ')'}}></span>
           }
         }
         const commentClasses = []
@@ -179,9 +179,7 @@ class PostSummary extends React.Component {
 
         return (
             <article className={'PostSummary hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')} itemScope itemType ="http://schema.org/blogPost">
-                <div className={flagWeight > 0 ? '' : 'PostSummary__collapse'}>
-                    <div className="float-right"><Voting post={post} flag /></div>
-                </div>
+                <div className="float-right"><Voting post={post} flag /></div>
                 {reblogged_by}
                 <div className="PostSummary__header show-for-small-only">
                     {content_title}

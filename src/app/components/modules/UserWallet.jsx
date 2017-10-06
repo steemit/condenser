@@ -7,9 +7,6 @@ import SavingsWithdrawHistory from 'app/components/elements/SavingsWithdrawHisto
 import TransferHistoryRow from 'app/components/cards/TransferHistoryRow';
 import TransactionError from 'app/components/elements/TransactionError';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
-import BlocktradesDeposit from 'app/components/modules/BlocktradesDeposit';
-import Reveal from 'react-foundation-components/lib/global/reveal'
-import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {numberWithCommas, vestingSteem, delegatedSteem} from 'app/utils/StateFunctions'
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu'
 import WalletSubMenu from 'app/components/elements/WalletSubMenu'
@@ -27,10 +24,8 @@ class UserWallet extends React.Component {
     constructor() {
         super();
         this.state = {};
-        this.onShowDeposit = () => {this.setState({showDeposit: !this.state.showDeposit})};
         this.onShowDepositSteem = (e) => {
             if (e && e.preventDefault) e.preventDefault();
-            // this.setState({showDeposit: !this.state.showDeposit, depositType: 'STEEM'})
             const name = this.props.current_user.get('username');
             const new_window = window.open();
             new_window.opener = null;
@@ -44,7 +39,6 @@ class UserWallet extends React.Component {
         };
         this.onShowDepositPower = (current_user_name, e) => {
             e.preventDefault();
-            // this.setState({showDeposit: !this.state.showDeposit, depositType: 'VESTS'})
             const new_window = window.open();
             new_window.opener = null;
             new_window.location = 'https://blocktrades.us/?input_coin_type=btc&output_coin_type=steem_power&receive_address=' + current_user_name;
@@ -61,12 +55,10 @@ class UserWallet extends React.Component {
             new_window.opener = null;
             new_window.location = 'https://blocktrades.us/unregistered_trade/sbd/btc';
         };
-        // this.onShowDeposit = this.onShowDeposit.bind(this)
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'UserWallet');
     }
     render() {
-        const {state: {showDeposit, depositType, toggleDivestError},
-            onShowDeposit, onShowDepositSteem, onShowWithdrawSteem,
+        const {onShowDepositSteem, onShowWithdrawSteem,
             onShowDepositSBD, onShowWithdrawSBD, onShowDepositPower} = this;
         const {convertToSteem, price_per_steem, savings_withdraws, account,
             current_user, open_orders} = this.props;
@@ -95,11 +87,23 @@ class UserWallet extends React.Component {
         const powerDown = (cancel, e) => {
             e.preventDefault()
             const name = account.get('name');
-            const vesting_shares = cancel ? '0.000000 VESTS' : account.get('vesting_shares');
-            this.setState({toggleDivestError: null});
-            const errorCallback = e2 => {this.setState({toggleDivestError: e2.toString()})};
-            const successCallback = () => {this.setState({toggleDivestError: null})}
-            this.props.withdrawVesting({account: name, vesting_shares, errorCallback, successCallback})
+            if (cancel) {
+                const vesting_shares = cancel ? '0.000000 VESTS' : account.get('vesting_shares');
+                this.setState({toggleDivestError: null});
+                const errorCallback = e2 => {this.setState({toggleDivestError: e2.toString()})};
+                const successCallback = () => {this.setState({toggleDivestError: null})}
+                this.props.withdrawVesting({account: name, vesting_shares, errorCallback, successCallback})
+            } else {
+                const to_withdraw = account.get('to_withdraw')
+                const withdrawn = account.get('withdrawn')
+                const vesting_shares = account.get('vesting_shares')
+                const delegated_vesting_shares = account.get('delegated_vesting_shares')
+                this.props.showPowerdown({
+                    account: name,
+                    to_withdraw, withdrawn,
+                    vesting_shares, delegated_vesting_shares,
+                });
+            }
         }
 
         // Sum savings withrawals
@@ -210,16 +214,10 @@ class UserWallet extends React.Component {
             dollar_menu.push({ value: tt('g.sell'), link: '#', onClick: onShowWithdrawSBD });
         }
         if( divesting ) {
-            power_menu.push( { value: 'Cancel Power Down', link:'#', onClick: powerDown.bind(this,true) } );
+            power_menu.push( { value: 'Cancel Power Down', link:'#', onClick: powerDown.bind(this, true) } );
         }
 
         const isWithdrawScheduled = new Date(account.get('next_vesting_withdrawal') + 'Z').getTime() > Date.now()
-        const depositReveal = showDeposit && <div>
-            <Reveal onHide={onShowDeposit} show={showDeposit}>
-                <CloseButton onClick={onShowDeposit} />
-                <BlocktradesDeposit onClose={onShowDeposit} outputCoinType={depositType} />
-            </Reveal>
-        </div>
 
         const steem_balance_str = numberWithCommas(balance_steem.toFixed(3));
         const steem_orders_balance_str = numberWithCommas(steemOrders.toFixed(3));
@@ -268,7 +266,7 @@ class UserWallet extends React.Component {
                     <div className="columns small-12">
                         <div className="UserWallet__claimbox">
                             Your current rewards: {rewards_str}
-                            <button className="button hollow float-right" onClick={e => {this.props.claimRewards(account)}}>Redeem Rewards (Transfer to Balance)</button>
+                            <button className="button hollow float-right" onClick={e => {this.props.claimRewards(account)}}>{tt('userwallet_jsx.redeem_rewards')}</button>
                         </div>
                     </div>
                 </div>
@@ -281,7 +279,7 @@ class UserWallet extends React.Component {
                     {isMyAccount ? <WalletSubMenu account_name={account.get('name')} /> : <div><br /><h4>{tt('g.balances')}</h4><br /></div>}
                 </div>
                 {<div className="columns shrink">
-                    {isMyAccount && <button className="UserWallet__buysp button hollow" onClick={onShowDepositSteem}>Buy Steem or Steem Power</button>}
+                    {isMyAccount && <button className="UserWallet__buysp button hollow" onClick={onShowDepositSteem}>{tt('userwallet_jsx.buy_steem_or_steem_power')}</button>}
                 </div>}
             </div>
             <div className="UserWallet__balance row">
@@ -327,7 +325,7 @@ class UserWallet extends React.Component {
                     {tt('userwallet_jsx.savings')}
                     <div className="secondary">
                         <span>{tt('transfer_jsx.balance_subject_to_3_day_withdraw_waiting_period')}</span>
-                        <span>{tt('asset_currently_collecting', {asset: DEBT_TOKENS, interest: sbdInterest})}</span>
+                        <span>{tt('transfer_jsx.asset_currently_collecting', {asset: DEBT_TOKENS, interest: sbdInterest})}</span>
                     </div>
                 </div>
                 <div className="column small-12 medium-4">
@@ -382,7 +380,6 @@ class UserWallet extends React.Component {
                      </table>
                 </div>
             </div>
-            {depositReveal}
         </div>);
     }
 }

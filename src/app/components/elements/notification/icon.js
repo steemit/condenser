@@ -18,6 +18,7 @@ icon[type.POWER_DOWN] = require('assets/icons/notifications/currency.svg')
 icon[type.TAG] = require('assets/icons/notifications/mention.svg')
 icon.visibilityOn = require('assets/icons/visibility_on.svg')
 icon.visibilityOff = require('assets/icons/visibility_off.svg')
+icon.important = require('assets/icons/notifications/important.svg')
 //icon[type.VOTE] = require('assets/icons/notifications/vote')
 
 export default icon

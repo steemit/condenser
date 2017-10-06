@@ -92,6 +92,11 @@ class NotificationLink extends React.Component {
             case type.SECURITY_POWER_DOWN :
                 headerContent = <span><span className="subject">{ tt(`${localeRoot}.subject`) }</span> { tt(localeAction) }</span>
                 bodyContent = tt(`${localeRoot}.body`)
+                picture =
+                    <div className={"Comment__Userpic show-for-medium " + notificationType}>
+                        <div className="Userpic" dangerouslySetInnerHTML={{ __html: badges.important}} />
+                    </div>
+                console.log("wrote picture", badges.important)
                 break
             case type.TAG :
             case type.VOTE :
@@ -108,14 +113,16 @@ class NotificationLink extends React.Component {
                 return null
         }
 
-        switch (notificationType) {
-            //case type.ANNOUNCEMENT_IMPORTANT :
+        if(!picture) {
+            switch (notificationType) {
+                //case type.ANNOUNCEMENT_IMPORTANT :
                 //todo: special image - unknown json format in notification
-            case type.POWER_DOWN :
-                //todo: blank circle image
-                break
-            default :
-                picture = <Userpic account={ author } badge={ badge } />
+                case type.POWER_DOWN :
+                    //todo: blank circle image
+                    break
+                default :
+                    picture = <Userpic account={author} badge={badge}/>
+            }
         }
 
         const readControl = (

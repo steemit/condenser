@@ -1,6 +1,5 @@
 import React, {PropTypes, Component} from 'react'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
-import g from 'app/redux/GlobalReducer'
 import {connect} from 'react-redux';
 import ChangePassword from 'app/components/elements/ChangePassword'
 

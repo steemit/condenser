@@ -2,12 +2,10 @@ import {Map, fromJS} from 'immutable';
 import {combineReducers} from 'redux';
 import {routerReducer} from 'react-router-redux';
 import appReducer from './AppReducer';
-//import discussionReducer from './DiscussionReducer';
-import globalReducerModule from './GlobalReducer';
-import marketReducerModule from './MarketReducer';
-import user from './User';
-// import auth from './AuthSaga';
-import transaction from './Transaction';
+import globalReducer from './GlobalReducer';
+import marketReducer from './MarketReducer';
+import userReducer from './UserReducer';
+import transactionReducer from './TransactionReducer';
 import offchain from './Offchain';
 import {reducer as formReducer} from 'redux-form'; // @deprecated, instead use: app/utils/ReactForm.js
 import {contentStats} from 'app/utils/StateFunctions'
@@ -47,21 +45,13 @@ function initReducer(reducer, type) {
 }
 
 export default combineReducers({
-    global: initReducer(globalReducerModule.reducer, 'global'),
-    market: initReducer(marketReducerModule.reducer),
+    global: initReducer(globalReducer, 'global'),
+    market: initReducer(marketReducer),
     offchain: initReducer(offchain),
-    user: initReducer(user.reducer),
-    // auth: initReducer(auth.reducer),
-    transaction: initReducer(transaction.reducer),
-    //discussion: initReducer(discussionReducer),
+    user: initReducer(userReducer),
+    transaction: initReducer(transactionReducer),
     discussion: initReducer((state = {}) => state),
     routing: initReducer(routerReducer),
     app: initReducer(appReducer),
     form: formReducer,
 });
-
-/*
-let now
-    benchStart: initReducer((state = {}, action) => {console.log('>> action.type', action.type); now = Date.now(); return state}),
-    benchEnd: initReducer((state = {}, action) => {console.log('<< action.type', action.type, (Date.now() - now), 'ms'); return state}),
-*/

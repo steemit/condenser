@@ -6,11 +6,8 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import Voting from 'app/components/elements/Voting';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import user from 'app/redux/User';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Userpic from 'app/components/elements/Userpic';
-import transaction from 'app/redux/Transaction'
-import {List} from 'immutable'
 import tt from 'counterpart';
 import {parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import {Long} from 'bytebuffer';
@@ -411,13 +408,13 @@ const Comment = connect(
 
     // mapDispatchToProps
     dispatch => ({
-        unlock: () => { dispatch(user.actions.showLogin()) },
+        unlock: () => { dispatch({type: 'user/SHOW_LOGIN'}) },
         deletePost: (author, permlink) => {
-            dispatch(transaction.actions.broadcastOperation({
+            dispatch({type: 'transaction/BROADCAST_OPERATION', payload: {
                 type: 'delete_comment',
                 operation: {author, permlink},
                 confirm: tt('g.are_you_sure'),
-            }))
+            }})
         },
     })
 )(CommentImpl)

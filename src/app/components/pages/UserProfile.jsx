@@ -3,8 +3,6 @@ import React from 'react';
 import { Link } from 'react-router';
 import {connect} from 'react-redux';
 import { browserHistory } from 'react-router';
-import transaction from 'app/redux/Transaction';
-import user from 'app/redux/User';
 import Icon from 'app/components/elements/Icon'
 import UserKeys from 'app/components/elements/UserKeys';
 import PasswordReset from 'app/components/elements/PasswordReset';
@@ -462,29 +460,29 @@ module.exports = {
             };
         },
         dispatch => ({
-            login: () => {dispatch(user.actions.showLogin())},
-            clearTransferDefaults: () => {dispatch(user.actions.clearTransferDefaults())},
+            login: () => {dispatch({type: 'user/SHOW_LOGIN'})},
+            clearTransferDefaults: () => {dispatch({type: 'user/CLEAR_TRANSFER_DEFAULTS'})},
             showTransfer: (transferDefaults) => {
-                dispatch(user.actions.setTransferDefaults(transferDefaults))
-                dispatch(user.actions.showTransfer())
+                dispatch({type: 'user/SET_TRANSFER_DEFAULTS', payload: transferDefaults})
+                dispatch({type: 'user/SHOW_TRANSFER'})
             },
-            clearPowerdownDefaults: () => {dispatch(user.actions.clearPowerdownDefaults())},
+            clearPowerdownDefaults: () => {dispatch({type: 'user/CLEAR_POWERDOWN_DEFAULTS'})},
             showPowerdown: (powerdownDefaults) => {
                 console.log('power down defaults:', powerdownDefaults)
-                dispatch(user.actions.setPowerdownDefaults(powerdownDefaults))
-                dispatch(user.actions.showPowerdown())
+                dispatch({type: 'user/SET_POWERDOWN_DEFAULTS', payload: powerdownDefaults})
+                dispatch({type: 'user/SHOW_POWERDOWN'})
             },
             withdrawVesting: ({account, vesting_shares, errorCallback, successCallback}) => {
                 const successCallbackWrapper = (...args) => {
                     dispatch({type: 'global/GET_STATE', payload: {url: `@${account}/transfers`}})
                     return successCallback(...args)
                 }
-                dispatch(transaction.actions.broadcastOperation({
+                dispatch({type: 'transaction/BROADCAST_OPERATION', payload: {
                     type: 'withdraw_vesting',
                     operation: {account, vesting_shares},
                     errorCallback,
                     successCallback: successCallbackWrapper,
-                }))
+                }})
             },
             requestData: (args) => dispatch({type: 'REQUEST_DATA', payload: args}),
         })

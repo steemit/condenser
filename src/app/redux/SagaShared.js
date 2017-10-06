@@ -1,6 +1,5 @@
 import {fromJS} from 'immutable'
 import {call, put, select} from 'redux-saga/effects';
-import g from 'app/redux/GlobalReducer'
 import {takeEvery} from 'redux-saga';
 import tt from 'counterpart';
 import {api} from 'steem';
@@ -19,7 +18,7 @@ export function* getAccount(username, force = false) {
         [account] = yield call([api, api.getAccountsAsync], [username])
         if(account) {
             account = fromJS(account)
-            yield put(g.actions.receiveAccount({account}))
+            yield put({type: 'global/RECEIVE_ACCOUNT', payload: {account}})
         }
     }
     return account
@@ -32,7 +31,7 @@ export function* watchGetState() {
 export function* getState({payload: {url}}) {
     try {
         const state = yield call([api, api.getStateAsync], url)
-        yield put(g.actions.receiveState(state));
+        yield put({type: 'global/RECEIVE_STATE', payload: state});
     } catch (error) {
         console.error('~~ Saga getState error ~~>', url, error);
         yield put({type: 'global/STEEM_API_ERROR', error: error.message});
@@ -53,7 +52,7 @@ function* showTransactionErrorNotification() {
 
 export function* getContent({author, permlink, resolve, reject}) {
     const content = yield call([api, api.getContentAsync], author, permlink);
-    yield put(g.actions.receiveContent({content}))
+    yield put({type: 'global/RECEIVE_CONTENT', payload: {content}})
     if (resolve && content) {
         resolve(content);
     } else if (reject && !content) {

@@ -1,6 +1,5 @@
 /* eslint react/prop-types: 0 */
 import React from 'react'
-import transaction from 'app/redux/Transaction'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import {validate_account_name} from 'app/utils/ChainValidation'
 import {cleanReduxInput} from 'app/utils/ReduxForms'
@@ -252,14 +251,14 @@ export default reduxForm(
                     {authType: 'posting', oldAuth: password, newAuth: ph('posting', newWif)},
                     {authType: 'memo', oldAuth: password, newAuth: ph('memo', newWif)},
                 ]
-            dispatch(transaction.actions.updateAuthorities({
+            dispatch({type: 'transaction/UPDATE_AUTHORITIES', payload: {
                 twofa,
                 // signingKey provides the password if it was not provided in auths
                 signingKey: authType ? password : null,
                 accountName, auths,
                 onSuccess: success, onError: error,
                 // notifySuccess: 'Change password success'
-            }))
+            }})
         },
         notify: (message) => {
             dispatch({type: 'ADD_NOTIFICATION', payload: {

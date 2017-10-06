@@ -1,9 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import {connect} from 'react-redux';
-import user from 'app/redux/User';
 import tt from 'counterpart';
-import g from 'app/redux/GlobalReducer';
 
 /** Display a public key.  Offer to show a private key, but only if it matches the provided public key */
 class ShowKey extends Component {
@@ -100,10 +98,10 @@ export default connect(
     (state, ownProps) => ownProps,
     dispatch => ({
         showLogin: ({username, authType}) => {
-            dispatch(user.actions.showLogin({loginDefault: {username, authType}}))
+            dispatch({type: 'user/SHOW_LOGIN', payload: {loginDefault: {username, authType}}})
         },
         showQRKey: ({type, isPrivate, text}) => {
-            dispatch(g.actions.showDialog({name: "qr_key", params: {type, isPrivate, text}}));
+            dispatch({type: 'global/SHOW_DIALOG', payload: {name: "qr_key", params: {type, isPrivate, text}}});
         }
     })
 )(ShowKey)

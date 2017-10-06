@@ -1,6 +1,5 @@
 import React from 'react';
 import reactForm from 'app/utils/ReactForm'
-import transaction from 'app/redux/Transaction';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer'
 import CategorySelector from 'app/components/cards/CategorySelector'
 import {validateCategory} from 'app/components/cards/CategorySelector'
@@ -10,16 +9,14 @@ import Tooltip from 'app/components/elements/Tooltip'
 import sanitizeConfig, {allowedTags} from 'app/utils/SanitizeConfig'
 import sanitize from 'sanitize-html'
 import HtmlReady from 'shared/HtmlReady'
-import g from 'app/redux/GlobalReducer'
 import {Set} from 'immutable'
 import Remarkable from 'remarkable'
 import Dropzone from 'react-dropzone'
 import tt from 'counterpart'
 
 const remarkable = new Remarkable({ html: true, linkify: false, breaks: true })
-const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
+
 const RTE_DEFAULT = false
-//var htmlclean = require('htmlclean');
 
 class ReplyEditor extends React.Component {
 
@@ -39,6 +36,7 @@ class ReplyEditor extends React.Component {
         category: React.PropTypes.string, // initial value
         title: React.PropTypes.string, // initial value
         body: React.PropTypes.string, // initial value
+        richTextEditor: React.PropTypes.function,
     }
 
     static defaultProps = {
@@ -89,7 +87,7 @@ class ReplyEditor extends React.Component {
             body.props.onChange(raw)
             this.setState({
                 rte,
-                rte_value: rte ? stateFromHtml(raw) : null
+                rte_value: rte ? stateFromHtml(this.props.richTextEditor, raw) : null
             })
             this.setAutoVote()
             this.setState({payoutType: this.props.isStory ? (localStorage.getItem('defaultPayoutType') || '50%') : '50%'})
@@ -179,7 +177,7 @@ class ReplyEditor extends React.Component {
         if(!body.value || confirm(tt('reply_editor.are_you_sure_you_want_to_clear_this_form'))) {
             replyForm.resetForm()
             this.setAutoVote()
-            this.setState({rte_value: stateFromHtml()})
+            this.setState({rte_value: stateFromHtml(this.props.richTextEditor)})
             this.setState({progress: {}})
             if(onCancel) onCancel(e)
         }
@@ -214,7 +212,7 @@ class ReplyEditor extends React.Component {
         const state = {rte: !this.state.rte};
         if (state.rte) {
             const {body} = this.state
-            state.rte_value = isHtmlTest(body.value) ? stateFromHtml(body.value) : stateFromMarkdown(body.value)
+            state.rte_value = isHtmlTest(body.value) ? stateFromHtml(this.props.richTextEditor, body.value) : stateFromMarkdown(this.props.richTextEditor, body.value)
         }
         this.setState(state);
         localStorage.setItem('replyEditorData-rte', !this.state.rte)
@@ -335,6 +333,7 @@ class ReplyEditor extends React.Component {
         const vframe_class = isStory ? 'vframe' : '';
         const vframe_section_class = isStory ? 'vframe__section' : '';
         const vframe_section_shrink_class = isStory ? 'vframe__section--shrink' : '';
+        const RichTextEditor = this.props.richTextEditor;
 
         return (
             <div className="ReplyEditor row">
@@ -474,7 +473,7 @@ function stateToHtml(state) {
     return `<html>\n${html}\n</html>`;
 }
 
-function stateFromHtml(html = null) {
+function stateFromHtml(RichTextEditor, html = null) {
     if(!RichTextEditor) return null;
     if(html) html = stripHtmlWrapper(html)
     if(html && html.trim() == '') html = null
@@ -482,7 +481,7 @@ function stateFromHtml(html = null) {
         : RichTextEditor.createEmptyValue()
 }
 
-function stateFromMarkdown(markdown) {
+function stateFromMarkdown(RichTextEditor, markdown) {
     let html
     if(markdown && markdown.trim() !== '') {
         html = remarkable.render(markdown)
@@ -490,12 +489,12 @@ function stateFromMarkdown(markdown) {
         //html = htmlclean(html) // normalize whitespace
         console.log("markdown converted to:", html)
     }
-    return stateFromHtml(html)
+    return stateFromHtml(RichTextEditor, html)
 }
 
 import {connect} from 'react-redux'
 
-export default formId => connect(
+export default (formId, richTextEditor = null) => connect(
     // mapStateToProps
     (state, ownProps) => {
         const username = state.user.getIn(['current', 'username'])
@@ -517,7 +516,7 @@ export default formId => connect(
             ...ownProps,
             fields, isStory, username,
             initialValues: {title, body, category}, state,
-            formId,
+            formId, richTextEditor,
         }
         return ret
     },
@@ -525,10 +524,10 @@ export default formId => connect(
     // mapDispatchToProps
     dispatch => ({
         clearMetaData: (id) => {
-            dispatch(g.actions.clearMeta({id}))
+            dispatch({type: 'global/CLEAR_META', payload: {id}})
         },
         setMetaData: (id, jsonMetadata) => {
-            dispatch(g.actions.setMetaData({id, meta: jsonMetadata ? jsonMetadata.steem : null}))
+            dispatch({type: 'global/SET_META_DATA', payload: {id, meta: jsonMetadata ? jsonMetadata.steem : null}})
         },
         uploadImage: (file, progress) => {
             dispatch({
@@ -645,12 +644,12 @@ export default formId => connect(
                 json_metadata: meta,
                 __config
             }
-            dispatch(transaction.actions.broadcastOperation({
+            dispatch({type: 'transaction/BROADCAST_OPERATION', payload: {
                 type: 'comment',
                 operation,
                 errorCallback,
                 successCallback,
-            }))
+            }})
         },
     })
 )(ReplyEditor)

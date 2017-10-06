@@ -3,7 +3,6 @@ import React from 'react'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper'
-import transaction from 'app/redux/Transaction'
 import Memo from 'app/components/elements/Memo'
 import tt from 'counterpart'
 
@@ -112,13 +111,13 @@ export default connect(
                 dispatch({type: 'global/GET_STATE', payload: {url: `@${fro}/transfers`}})
                 success()
             }
-            dispatch(transaction.actions.broadcastOperation({
+            dispatch({type: 'transaction/BROADCAST_OPERATION', payload: {
                 type: 'cancel_transfer_from_savings',
                 operation: {from: fro, request_id},
                 confirm,
                 successCallback,
                 errorCallback
-            }))
+            }})
         },
     })
 )(SavingsWithdrawHistory)

@@ -2,7 +2,6 @@
 import React from 'react';
 import {connect} from 'react-redux'
 import {Link} from 'react-router'
-import g from 'app/redux/GlobalReducer'
 import SavingsWithdrawHistory from 'app/components/elements/SavingsWithdrawHistory';
 import TransferHistoryRow from 'app/components/cards/TransferHistoryRow';
 import TransactionError from 'app/components/elements/TransactionError';
@@ -16,7 +15,6 @@ import {FormattedHTMLMessage} from 'app/Translator';
 import tt from 'counterpart';
 import {List} from 'immutable'
 import { LIQUID_TOKEN, LIQUID_TICKER, DEBT_TOKENS, VESTING_TOKEN } from 'app/client_config';
-import transaction from 'app/redux/Transaction';
 
 const assetPrecision = 1000;
 
@@ -421,21 +419,21 @@ export default connect(
                 reward_vests: account.get('reward_vesting_balance')
             };
 
-            dispatch(transaction.actions.broadcastOperation({
+            dispatch({type: 'transaction/BROADCAST_OPERATION', payload: {
                 type: 'claim_reward_balance',
                 operation,
                 successCallback,
-            }))
+            }})
         },
         convertToSteem: (e) => {
             e.preventDefault()
             const name = 'convertToSteem';
-            dispatch(g.actions.showDialog({name}))
+            dispatch({type: 'global/SHOW_DIALOG', payload: {name}})
         },
         showChangePassword: (username) => {
             const name = 'changePassword';
-            dispatch(g.actions.remove({key: name}));
-            dispatch(g.actions.showDialog({name, params: {username}}))
+            dispatch({type: 'global/REMOVE', payload: {key: name}});
+            dispatch({type: 'global/SHOW_DIALOG', payload: {name, params: {username}}})
         },
     })
 )(UserWallet)

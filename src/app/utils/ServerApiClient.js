@@ -24,7 +24,6 @@ export function serverApiLogout() {
 
 let last_call;
 export function serverApiRecordEvent(type, val, rate_limit_ms = 5000) {
-    console.log('-- serverApiRecordEvent -->', type, val, rate_limit_ms);
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;
     if (last_call && (new Date() - last_call) < rate_limit_ms) return;
     last_call = new Date();

@@ -149,15 +149,21 @@ export default connect(
     dispatch => ({
         markRead: e => {
             dispatch({
-                type: 'notification/MARK_ONE_READ',
-                id: e
+                type: 'notification/UPDATE_ONE',
+                id: e,
+                updates: {
+                    read: true
+                }
             })
         },
         markUnread: e => {
             console.log("markun", e)
             dispatch({
                 type: 'notification/MARK_UNREAD',
-                id: e
+                id: e,
+                updates: {
+                    read: false
+                }
             })
         }
     }))(NotificationLink)

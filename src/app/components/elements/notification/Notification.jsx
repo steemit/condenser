@@ -159,7 +159,7 @@ export default connect(
         markUnread: e => {
             console.log("markun", e)
             dispatch({
-                type: 'notification/MARK_UNREAD',
+                type: 'notification/UPDATE_ONE',
                 id: e,
                 updates: {
                     read: false

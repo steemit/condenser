@@ -13,6 +13,7 @@ find node_modules/eslint-config-airbnb -name '*.js'|xargs sed -i "s/': 2/': 1/"
     "es6": true
   },
   "rules": {
+      "arrow-parens": 0,
     "max-len": 0, /*[1, 160, 4],*/
     "comma-dangle": 0,
     "semi": [0],

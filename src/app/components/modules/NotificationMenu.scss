@@ -65,8 +65,15 @@ ul.Notifications {
     > li.item {
         background: $notif_item_read_bg;
         position: relative;
+        &:active,
         &:hover {
             background: $notif_item_read_bg_hover;
+            .rightControls {
+                display: block;
+                &:hover {
+                    fill: $black;
+                }
+            }
         }
         &.unread {
             background: $notif_item_unread_bg;
@@ -74,10 +81,11 @@ ul.Notifications {
                 background: $notif_item_unread_bg_hover;
             }
             .unseenIndicator {
-                position: absolute;
-                left: 4px;
-                top: 28px;
                 color: $notif_item_unseen_color;
+                display: block;
+                left: 4px;
+                position: absolute;
+                top: 28px;
             }
 
             .item-panel {
@@ -147,6 +155,19 @@ ul.Notifications {
                 font-size:1rem;
                 text-transform: lowercase;
             }
+        }
+        .rightControls {
+            display:none;
+            height: 40px;
+            padding: 10px;
+            position: absolute;
+            right: 0px;
+            top: 0px;
+            width: 40px;
+            fill:$dark-gray;
+        }
+        .unseenIndicator {
+            display:none;
         }
     }
 }

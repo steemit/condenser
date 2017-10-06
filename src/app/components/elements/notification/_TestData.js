@@ -83,7 +83,7 @@ export const getNotifications = [
             permlink: "from-the-hills-of-ireland-to-planet-steem-a-wolfy-hello",
             summary: "From the Hills of Ireland to Planet Steem, A Wolfy Hello!", //a string to summarize the item. Title + Content? (max 255 chars)
         }
-    },
+    }/*,
     {
         id: "UID3", //needed to track .read
         read: true, //a boolean value
@@ -180,7 +180,7 @@ export const getNotifications = [
             permlink: "from-the-hills-of-ireland-to-planet-steem-a-wolfy-hello",
             summary: "From the Hills of Ireland to Planet Steem, A Wolfy Hello!"
         }
-    }
+    } */
 ]
 
 export default getNotifications;

@@ -5,11 +5,11 @@ import Iso from 'iso';
 import React from 'react';
 import { render } from 'react-dom';
 import { renderToString } from 'react-dom/server';
-import { Router, RouterContext, match, applyRouterMiddleware } from 'react-router';
+import { browserHistory, Router, RouterContext, match, applyRouterMiddleware } from 'react-router';
 import { Provider } from 'react-redux';
 import RootRoute from 'app/RootRoute';
 import {createStore, applyMiddleware, compose} from 'redux';
-import { browserHistory } from 'react-router';
+//import { browserHistory } from 'react-router';
 import { useScroll } from 'react-router-scroll';
 import createSagaMiddleware from 'redux-saga';
 import { syncHistoryWithStore } from 'react-router-redux';
@@ -27,6 +27,7 @@ import Translator from 'app/Translator';
 import {notificationsArrayToMap} from 'app/utils/Notifications';
 import {routeRegex} from "app/ResolveRoute";
 import {contentStats} from 'app/utils/StateFunctions'
+import testDataNotifications from 'app/components/elements/notification/_TestData'
 
 import {api} from 'steem';
 
@@ -84,7 +85,8 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
         const store = createStore(rootReducer, initial_state, middleware);
         store.dispatch({ // Todo: for dev only! Do not merge if present!
             type: 'notification/RECEIVE_ALL',
-            payload: [
+            payload: testDataNotifications,
+            /*payload: [
                 {"id":"UID","read":true,"shown":true,"notificationType":"powerDown","created":"2010-09-19T16:19:48","author":"roadscape","amount":10000.2},
                 {"id":"UID1","read":false,"shown":false,"notificationType":"resteem","created":"2010-08-19T18:59:00","author":"roadscape","item":{"author":"wolfcat","category":"introduceyourself","depth":0,"permlink":"from-the-hills-of-ireland-to-planet-steem-a-wolfy-hello","summary":"From the Hills of Ireland to Planet Steem, A Wolfy Hello!"}},
                 {"id":"UID2","read":false,"shown":true,"notificationType":"vote","notificationTime":3,"author":"beanz","created":"2017-09-19T18:59:00","item":{"author":"wolfcat","category":"introduceyourself","depth":0,"permlink":"from-the-hills-of-ireland-to-planet-steem-a-wolfy-hello","summary":"From the Hills of Ireland to Planet Steem, A Wolfy Hello!"}},
@@ -94,7 +96,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
                 {"id":"UID6","read":true,"shown":true,"notificationType":"postReply","created":"2017-09-19T14:24:51","author":"lovejoy","item":{"author":"lovejoy","category":"introduceyourself","depth":2,"permlink":"re-steemcleaners-re-steemcleaners-re-wolfcat-from-the-hills-of-ireland-to-planet-steem-a-wolfy-hello-20170919t120245144z","summary":"@wolfcat is a new user who normally doesn't spend a lot of time online, plus we are ","parentSummary":"You may want to retract your votes.The account has ignored our many requests to confirm the identity. It seems to be another case of fake identity. Thanks."},"rootItem":{"author":"wolfcat","category":"introduceyourself","permlink":"from-the-hills-of-ireland-to-planet-steem-a-wolfy-hello","summary":"From the Hills of Ireland to Planet Steem, A Wolfy Hello!"}},
                 {"id":"UID6.1","read":true,"shown":true,"notificationType":"securityNewMobileDevice","created":"2017-09-19T14:24:51","author":"security"},
                 {"id":"UID7","read":false,"shown":true,"notificationType":"commentReply","created":"2017-09-18T17:21:18","author":"dbzfan4awhile","item":{"author":"dbzfan4awhile","category":"introduceyourself","depth":3,"permlink":"re-wolfcat-re-dbzfan4awhile-re-wolfcat-from-the-hills-of-ireland-to-planet-steem-a-wolfy-hello-20170918t172118886z","summary":"Awesome!","parentSummary":"Yes! Ill look for you there :)"},"rootItem":{"author":"wolfcat","category":"introduceyourself","permlink":"from-the-hills-of-ireland-to-planet-steem-a-wolfy-hello","summary":"From the Hills of Ireland to Planet Steem, A Wolfy Hello!"}}
-            ],
+            ],*/
         });
         setStore(store);
         sagaMiddleware.run(PollDataSaga).done

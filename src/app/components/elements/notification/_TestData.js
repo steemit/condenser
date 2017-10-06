@@ -1,6 +1,6 @@
 import * as type from './type'
 
-//notify object spec - see notifyList below for specific examples
+/**notify object spec - see notifyList below for specific examples
 const notifyItemSpec = {
     id: "UID", //needed to track .read
     read: false, //a boolean value
@@ -13,8 +13,8 @@ const notifyItemSpec = {
         category: "the item category",
         depth: 0,
         permlink: "the item permlink",
-        parentSummary: "",  //a string to summarize the parent item. Title or Content (max 255 chars)
-                            //exists only for type.COMMENT_REPLY, type.POST_REPLY,
+        parentSummary: "", //a string to summarize the parent item. Title or Content (max 255 chars)
+        //exists only for type.COMMENT_REPLY, type.POST_REPLY,
         summary: "", //a string to summarize the item. Title or Content (max 255 chars)
     },
     rootItem: { //exists only if there is a root for item, property definitions follow .item children
@@ -24,6 +24,7 @@ const notifyItemSpec = {
         summary: ""
     }
 }
+*/
 
 //sample data is from @wolfcat's perspective
 
@@ -51,7 +52,8 @@ export const getNotifications = [
             permlink: "from-the-hills-of-ireland-to-planet-steem-a-wolfy-hello",
             summary: "From the Hills of Ireland to Planet Steem, A Wolfy Hello!", //a string to summarize the item. Title + Content? (max 255 chars)
         }
-    },{
+    },
+    {
         id: "UID1", //needed to track .read
         read: false, //a boolean value
         shown: false, //a boolean value
@@ -65,7 +67,8 @@ export const getNotifications = [
             permlink: "from-the-hills-of-ireland-to-planet-steem-a-wolfy-hello",
             summary: "From the Hills of Ireland to Planet Steem, A Wolfy Hello!", //a string to summarize the item. Title + Content? (max 255 chars)
         }
-    },{
+    },
+    {
         id: "UID2", //needed to track .read
         read: false, //a boolean value
         shown: false,
@@ -80,7 +83,8 @@ export const getNotifications = [
             permlink: "from-the-hills-of-ireland-to-planet-steem-a-wolfy-hello",
             summary: "From the Hills of Ireland to Planet Steem, A Wolfy Hello!", //a string to summarize the item. Title + Content? (max 255 chars)
         }
-    },{
+    },
+    {
         id: "UID3", //needed to track .read
         read: true, //a boolean value
         shown: true, //a boolean value
@@ -88,7 +92,8 @@ export const getNotifications = [
         created: '2017-09-19T16:19:48',
         author: "roadscape",
         amount: 10000.2
-    },{
+    },
+    {
         id: "UID4", //needed to track .read
         read: true, //a boolean value
         shown: true, //a boolean value
@@ -108,7 +113,8 @@ export const getNotifications = [
             permlink: "from-the-hills-of-ireland-to-planet-steem-a-wolfy-hello",
             summary: "From the Hills of Ireland to Planet Steem, A Wolfy Hello!"
         }
-    },{
+    },
+    {
         id: "UID5", //needed to track .read
         read: false, //a boolean value
         shown: false, //a boolean value
@@ -122,7 +128,8 @@ export const getNotifications = [
             permlink: "from-the-hills-of-ireland-to-planet-steem-a-wolfy-hello",
             summary: "From the Hills of Ireland to Planet Steem, A Wolfy Hello!", //a string to summarize the item. Title + Content? (max 255 chars)
         }
-    },{
+    },
+    {
         id: "UID6", //needed to track .read
         read: true, //a boolean value
         shown: true, //a boolean value
@@ -143,14 +150,16 @@ export const getNotifications = [
             permlink: "from-the-hills-of-ireland-to-planet-steem-a-wolfy-hello",
             summary: "From the Hills of Ireland to Planet Steem, A Wolfy Hello!"
         }
-    },{
+    },
+    {
         id: "UID6.1", //needed to track .read
         read: true, //a boolean value
         shown: true, //a boolean value
         notificationType: type.SECURITY_NEW_MOBILE, //receivedSteem, tagged, resteemed, postComment, commentComment
         created: '2017-09-19T14:24:51',
         author: "security"
-    },{
+    },
+    {
         id: "UID7", //needed to track .read
         read: false, //a boolean value
         shown: false, //a boolean value
@@ -174,4 +183,4 @@ export const getNotifications = [
     }
 ]
 
-export default JSON.stringify(getNotifications, null, 2);
+export default getNotifications;

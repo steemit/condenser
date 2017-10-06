@@ -4,7 +4,10 @@ import chaiImmutable from 'chai-immutable';
 
 import { Set } from 'immutable';
 
-import { byId, unread, unshown } from './NotificationReducer';
+import {
+    byId,
+    createList,
+} from './NotificationReducer';
 
 chai.use(chaiImmutable);
 
@@ -56,14 +59,14 @@ describe('byId', () => {
 
 describe('unread', () => {
     it('should create a new, immutable set of ids only including unreads when receiving all notifications', () => {
-        const reduced = unread(undefined, notificationReceiveAllAction);
+        const reduced = createList({ prop: 'read', val: false})(undefined, notificationReceiveAllAction);
 
         expect(reduced).to.equal(new Set(['UID1', 'UID2', 'UID5', 'UID7']));
     });
 
     it('should merge in some appended notifications, but only unread ones', () => {
-        const initial = unread(undefined, notificationReceiveAllAction);
-        const reduced = unread(initial, notificationAppendSomeAction);
+        const initial = createList({ prop: 'read', val: false})(undefined, notificationReceiveAllAction);
+        const reduced = createList({ prop: 'read', val: false})(initial, notificationAppendSomeAction);
 
         expect(reduced).to.equal(new Set(['UID1', 'UID2', 'UID5', 'UID7', 'UID6.1', 'UID8', 'UID10']));
     });
@@ -71,15 +74,37 @@ describe('unread', () => {
 
 describe('unshown', () => {
     it('should create a new, immutable state only including unshowns when receiving all notifications', () => {
-        const reduced = unshown(undefined, notificationReceiveAllAction);
+        const reduced = createList({ prop: 'shown', val: false})(undefined, notificationReceiveAllAction);
 
         expect(reduced).to.equal(new Set(['UID1', 'UID5']));
     });
 
     it('should merge in some appended notifications, but only unshown ones', () => {
-        const initial = unshown(undefined, notificationReceiveAllAction);
-        const reduced = unshown(initial, notificationAppendSomeAction);
+        const initial = createList({ prop: 'shown', val: false})(undefined, notificationReceiveAllAction);
+        const reduced = createList({ prop: 'shown', val: false})(initial, notificationAppendSomeAction);
 
         expect(reduced).to.equal(new Set(['UID1', 'UID5', 'UID6.1', 'UID8']));
+    });
+});
+
+describe('createList', () => {
+    it('should create a reducer which filters based on a certain property value', () => {
+        const unread = createList({ prop: 'read', val: false });
+        const initialUnread = unread(undefined, notificationReceiveAllAction);
+        expect(initialUnread).to.equal(new Set(['UID1', 'UID2', 'UID5', 'UID7']));
+        const reducedUnread = unread(initialUnread, notificationAppendSomeAction);
+        expect(reducedUnread).to.equal(new Set(['UID1', 'UID2', 'UID5', 'UID7', 'UID6.1', 'UID8', 'UID10']));
+
+        const unshown = createList({ prop: 'shown', val: false });
+        const initialUnshown = unshown(undefined, notificationReceiveAllAction);
+        expect(initialUnshown).to.equal(new Set(['UID1', 'UID5']));
+        const reducedUnshown = unshown(initialUnshown, notificationAppendSomeAction);
+        expect(reducedUnshown).to.equal(new Set(['UID1', 'UID5', 'UID6.1', 'UID8']));
+
+        const onlyPowerDown = createList({ prop: 'notificationType', val: 'powerDown' });
+        const initialOnlyPowerDown = onlyPowerDown(undefined, notificationReceiveAllAction);
+        expect(initialOnlyPowerDown).to.equal(new Set(['UID']));
+        const reducedOnlyPowerDown = onlyPowerDown(initialOnlyPowerDown, notificationAppendSomeAction);
+        expect(reducedOnlyPowerDown).to.equal(new Set(['UID', 'UID8', 'UID9', 'UID10']));
     });
 });

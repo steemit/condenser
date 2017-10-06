@@ -10,6 +10,7 @@ import VerticalMenu from 'app/components/elements/VerticalMenu';
 import NotificationMenu from 'app/components/modules/NotificationMenu';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import NotifiCounter from 'app/components/elements/NotifiCounter';
+import YotifiCounter from 'app/components/elements/YotifiCounter';
 import tt from 'counterpart';
 
 const defaultNavigate = (e) => {
@@ -71,7 +72,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
                     {!vertical && <li className={'Header__userpic '}>
                         <a href={account_link} title={tt('g.notfications')} onClick={e => e.preventDefault()}>
                             <Icon name="notify" size="1_5x" />
-                            <div className="TopRightMenu__notificounter"><NotifiCounter fields="total" /></div>
+                            <div className="TopRightMenu__notificounter"><YotifiCounter /></div>
                         </a>
                     </li>}
                 </LinkWithDropdown>

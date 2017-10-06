@@ -41,6 +41,11 @@ export const byId = (state = OrderedMap(), action = { type: null }) => {
                 ...state.get(action.id),
                 shown: true,
             });
+        case 'notification/MARK_UNREAD':
+            return state.set(action.id, {
+                ...state.get(action.id),
+                read: false,
+            });
         default:
             return state;
     }

@@ -1,6 +1,8 @@
 /**
  * @locale {skip-validation}
+ *
  */
+/* eslint-disable */
 import React from 'react';
 import { Link } from 'react-router'
 import {connect} from 'react-redux'
@@ -19,9 +21,20 @@ class NotificationLink extends React.Component {
         }
     }
 
+    markReadDefault = (e) => {
+        this.props.markRead(this.state.id)
+    }
+
     markRead = (e) => {
         e.preventDefault()
+        e.stopPropagation()
         this.props.markRead(this.state.id)
+    }
+
+    markUnread = (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        this.props.markUnread(this.state.id)
     }
 
     render() {
@@ -30,6 +43,7 @@ class NotificationLink extends React.Component {
         const classNames = (this.props.read)? '' : 'unread'
         const created = this.props.created
         const item = this.props.item
+        const read = this.props.read
         const post = this.props.rootItem
         const notificationType = this.props.notificationType
 
@@ -41,7 +55,7 @@ class NotificationLink extends React.Component {
         let link = Url.comment(post, item)
         let localeAction = `${localeRoot}.action`
         let picture = null
-        console.log('localeAction', localeAction)
+
         switch (notificationType) {
             case type.FOLLOW_POST_POST :
                 throw new Error(`Notification ${notificationType} not implemented`)
@@ -104,8 +118,12 @@ class NotificationLink extends React.Component {
                 picture = <Userpic account={ author } badge={ badge } />
         }
 
-        return <Link href={ link } className={ classNames } onClick={ this.markRead } >
-            { (!this.props.shown)? <span className="unseenIndicator" dangerouslySetInnerHTML={{ __html: "&#9679"}}></span> : null }
+        const readControl = (
+            <div className="rightControls" onClick={ (read)? this.markUnread : this.markRead } dangerouslySetInnerHTML={{ __html: (read)? badges.visibilityOn : badges.visibilityOff }} />
+        )
+
+        return ( <Link href={ link } className={ classNames } onClick={ this.markReadDefault } >
+            { (!this.props.shown)? <span className="unseenIndicator" dangerouslySetInnerHTML={{ __html: "&#9679"}} /> : null }
             <div className="item-panel" >
                 { (notificationType !== type.POWER_DOWN) ? <div className={ "Comment__Userpic show-for-medium " + notificationType} >
                         { picture }
@@ -120,7 +138,9 @@ class NotificationLink extends React.Component {
                     <TimeAgoWrapper date={created} className="updated" />
                 </div>
             </div>
+            { readControl }
         </Link>
+         )
     }
 }
 
@@ -130,6 +150,13 @@ export default connect(
         markRead: e => {
             dispatch({
                 type: 'notification/MARK_ONE_READ',
+                id: e
+            })
+        },
+        markUnread: e => {
+            console.log("markun", e)
+            dispatch({
+                type: 'notification/MARK_UNREAD',
                 id: e
             })
         }

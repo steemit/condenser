@@ -2,12 +2,6 @@
 # yarn lockfile v1
 
 
-"@newrelic/native-metrics@^2.1.1":
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/@newrelic/native-metrics/-/native-metrics-2.1.1.tgz#2a7abd87373e46b3c957a08124a72c0c41968dc8"
-  dependencies:
-    nan "^2.4.0"
-
 "@steem/crypto-session@git+https://github.com/steemit/crypto-session.git#83a90b319ce5bc6a70362d52a15a815de7e729bb":
   version "1.0.3"
   resolved "git+https://github.com/steemit/crypto-session.git#83a90b319ce5bc6a70362d52a15a815de7e729bb"
@@ -5089,16 +5083,6 @@ negotiator@0.6.1:
 net@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/net/-/net-1.0.2.tgz#d1757ec9a7fb2371d83cf4755ce3e27e10829388"
-
-newrelic@^1.40.0:
-  version "1.40.0"
-  resolved "https://registry.yarnpkg.com/newrelic/-/newrelic-1.40.0.tgz#2548df14c441ebfc9d3b8eb989d137f7b69a1d6f"
-  dependencies:
-    concat-stream "^1.5.0"
-    https-proxy-agent "^0.3.5"
-    json-stringify-safe "^5.0.0"
-    readable-stream "^1.1.13"
-    semver "^5.3.0"
 
 next-tick@1:
   version "1.0.0"

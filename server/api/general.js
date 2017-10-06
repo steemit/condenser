@@ -320,6 +320,7 @@ export default function useGeneralApi(app) {
             return;
         }
         console.log('-- /page_view -->', this.session.uid, page);
+        recordWebEvent(this, 'PageView', page);
         const remote_ip = getRemoteIp(this.req);
         try {
             let views = 1, unique = true;

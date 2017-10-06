@@ -1,5 +1,6 @@
 import { Map, OrderedMap, Set } from 'immutable';
 import { combineReducers } from 'redux';
+import { allTypes } from 'app/components/elements/notification/type';
 
 /**
  * Normalizes API payload.
@@ -41,52 +42,46 @@ export const byId = (state = OrderedMap(), action = { type: null }) => {
     }
 };
 
-/**
- * Provides a list of ids of all unread notifications.
- *
- * @param {Set} state
- * @param {Object} action
- */
-export const unread = (state = Set(), action = { type: null }) => {
-    switch (action.type) {
-        case 'notification/RECEIVE_ALL':
-            return Set.fromKeys(apiToMap(action.payload).filter(n => !n.read));
-        case 'notification/APPEND_SOME':
-            return state.union(Set.fromKeys(apiToMap(action.payload).filter(n => !n.read)));
-        case 'notification/MARK_ALL_READ':
-            return Set();
-        case 'notification/UPDATE_ONE':
-            return (action.updates.read && action.updates.read === true) ? state.delete(action.id) : state;
-        default:
-            return state;
-    }
-};
 
 /**
- * Provides a key-value store of all unshown notifications.
+ * Creates a reducer which provides a list of ids of all notifications which match the given filter.
  *
- * @param {Map} state
- * @param {Object} action
+ * @param {Object} state
+ * @return {Function} reducer
  */
-export const unshown = (state = Set(), action = { type: null }) => {
-    switch (action.type) {
-        case 'notification/RECEIVE_ALL':
-            return Set.fromKeys(apiToMap(action.payload).filter(n => !n.shown));
-        case 'notification/APPEND_SOME':
-            return state.union(Set.fromKeys(apiToMap(action.payload).filter(n => !n.shown)));
-        case 'notification/MARK_ALL_SHOWN':
-            return Set();
-        case 'notification/UPDATE_ONE':
-            return (action.updates.shown && action.updates.shown === true) ? state.delete(action.id) : state;
-        default:
-            return state;
-    }
+export const createList = ({ prop, val }) => {
+    return (state = Set(), action = { type: null }) => {
+        switch (action.type) {
+            case 'notification/RECEIVE_ALL':
+                return Set.fromKeys(apiToMap(action.payload).filter(n => (n[prop] === val)));
+            case 'notification/APPEND_SOME':
+                return state.union(Set.fromKeys(apiToMap(action.payload).filter(n => (n[prop] === val))));
+            case 'notification/MARK_ALL_READ':
+                return (prop === 'read' && val === 'true') ? Set() : state;
+            case 'notification/MARK_ALL_SHOWN':
+                return (prop === 'shown' && val === 'true') ? Set() : state;
+            case 'notification/UPDATE_ONE':
+                return (action.updates[prop] && action.updates[prop] === val) ? state.delete(action.id) : state;
+            default:
+                return state;
+        }
+    };
+};
+
+const generateByTypeReducers = (types, listCreator) => {
+    return types.reduce((acc, cur) => {
+        return {
+            ...acc,
+            [cur]: listCreator({ prop: 'notificationType', val: cur }),
+        };
+    }, {});
 };
 
 const notificationReducer = combineReducers({
     byId,
-    unread,
-    unshown,
+    unread: createList({ prop: 'read', val: false}),
+    unshown: createList({ prop: 'shown', val: false}),
+    byType: combineReducers(generateByTypeReducers(allTypes, createList)),
 });
 
 export default notificationReducer;

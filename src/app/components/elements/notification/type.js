@@ -14,3 +14,21 @@ export const SECURITY_NEW_MOBILE = 'securityNewMobileDevice';
 export const SECURITY_POWER_DOWN = 'securityPowerDown';
 export const TAG = 'tag';
 export const VOTE = 'vote';
+
+export const allTypes = [
+  ANNOUNCEMENT,
+  ANNOUNCEMENT_IMPORTANT,
+  COMMENT_REPLY,
+  FOLLOW_AUTHOR_POST,
+  FOLLOW_POST_POST,
+  POST_REPLY,
+  RECEIVE_STEEM,
+  RESTEEM,
+  POWER_DOWN,
+  SECURITY_PWD_CHANGE,
+  SECURITY_WITHDRAWAL,
+  SECURITY_NEW_MOBILE,
+  SECURITY_POWER_DOWN,
+  TAG,
+  VOTE,
+];

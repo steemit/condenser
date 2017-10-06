@@ -31,20 +31,10 @@ export const byId = (state = OrderedMap(), action = { type: null }) => {
                     read: true,
                 };
             });
-        case 'notification/MARK_ONE_READ':
+        case 'notification/UPDATE_ONE':
             return state.set(action.id, {
                 ...state.get(action.id),
-                read: true,
-            });
-        case 'notification/MARK_ONE_SHOWN':
-            return state.set(action.id, {
-                ...state.get(action.id),
-                shown: true,
-            });
-        case 'notification/MARK_UNREAD':
-            return state.set(action.id, {
-                ...state.get(action.id),
-                read: false,
+                ...action.updates,
             });
         default:
             return state;
@@ -65,8 +55,8 @@ export const unread = (state = Set(), action = { type: null }) => {
             return state.union(Set.fromKeys(apiToMap(action.payload).filter(n => !n.read)));
         case 'notification/MARK_ALL_READ':
             return Set();
-        case 'notification/MARK_ONE_READ':
-            return state.delete(action.id);
+        case 'notification/UPDATE_ONE':
+            return (action.updates.read && action.updates.read === true) ? state.delete(action.id) : state;
         default:
             return state;
     }
@@ -86,8 +76,8 @@ export const unshown = (state = Set(), action = { type: null }) => {
             return state.union(Set.fromKeys(apiToMap(action.payload).filter(n => !n.shown)));
         case 'notification/MARK_ALL_SHOWN':
             return Set();
-        case 'notification/MARK_ONE_SHOWN':
-            return state.delete(action.id);
+        case 'notification/UPDATE_ONE':
+            return (action.updates.shown && action.updates.shown === true) ? state.delete(action.id) : state;
         default:
             return state;
     }

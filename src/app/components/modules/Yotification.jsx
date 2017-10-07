@@ -32,6 +32,16 @@ const makeNotificationList = (notifications = []) => {
     return ( <ul className="Notifications">{ notificationList }</ul> );
 }
 
+const makeFilterList = () => {
+    const filterLIs = Object.keys(filters).reduce((list, filter) => {
+        console.log(Url.notifications(filter))
+        list.push(<li key={filter}><Link
+            href={Url.notifications(filter)}>{tt(`notifications.filters.${filter}`)}</Link></li>);
+        return list;
+    }, [<li key="all"><Link href={Url.notifications()}>{tt('notifications.filters.all')}</Link></li>]);
+    return ( <ul className="menu">{filterLIs}</ul>);
+}
+
 class YotificationModule extends React.Component {
     constructor(props) {
         super(props);
@@ -77,6 +87,7 @@ class YotificationModule extends React.Component {
                     <Link href={Url.profileSettings()}><Icon name="cog" /></Link>
                 </span>
             </div>
+            { (this.state.showFilters)? makeFilterList() : null}
             { makeNotificationList(this.props.notifications) }
             { (this.state.showFooter)? (<div className="footer">
                 <Link href={ Url.profile() + '/notifications'} className="view-all">View All</Link>
@@ -101,11 +112,13 @@ export default connect(
     // mapStateToProps
     (state, ownProps) => {
         let notifications = state.notification.byId.toArray();
-        //todo: here is where we're going to want to choose which filtered list is handed to the render function (rather than figuring it out inside render)
-        if(notifications && ownProps.filter !== FILTER_ALL && filters[ownProps.filter]) {
-            const filter = filters[ownProps.filter]
+        const filter = (ownProps.filter && filters[ownProps.filter])? ownProps.filter : FILTER_ALL;
+        //todo: here is where we're going to want to choose which filtered list is handed to the render function
+        // (rather than performing the reduction inside this class)
+        if(notifications && filter !== FILTER_ALL) {
+            const filteredTypes = filters[filter]
             notifications = notifications.reduce((notifs, n) => {
-                if(filter.indexOf(n.notificationType) > -1) {
+                if(filteredTypes.indexOf(n.notificationType) > -1) {
                     notifs.push(n);
                 }
                 return notifs;
@@ -113,8 +126,9 @@ export default connect(
         }
 
         return {
+            ...ownProps,
             notifications,
-            ...ownProps
+            filter
         }
     },
     dispatch => ({

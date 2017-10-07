@@ -648,6 +648,7 @@
   },
     "notifications": {
         "filters": {
+          "all": "All",
           "security": "Security",
           "transfers": "Transfers",
           "comments": "Comments",

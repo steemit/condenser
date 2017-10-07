@@ -5,11 +5,11 @@ import Iso from 'iso';
 import React from 'react';
 import { render } from 'react-dom';
 import { renderToString } from 'react-dom/server';
-import { browserHistory, Router, RouterContext, match, applyRouterMiddleware } from 'react-router';
+import { Router, RouterContext, match, applyRouterMiddleware } from 'react-router';
 import { Provider } from 'react-redux';
 import RootRoute from 'app/RootRoute';
 import {createStore, applyMiddleware, compose} from 'redux';
-//import { browserHistory } from 'react-router';
+import { browserHistory } from 'react-router';
 import { useScroll } from 'react-router-scroll';
 import createSagaMiddleware from 'redux-saga';
 import { syncHistoryWithStore } from 'react-router-redux';
@@ -27,7 +27,7 @@ import Translator from 'app/Translator';
 import {notificationsArrayToMap} from 'app/utils/Notifications';
 import {routeRegex} from "app/ResolveRoute";
 import {contentStats} from 'app/utils/StateFunctions'
-import testDataNotifications from 'app/components/elements/notification/_TestData'
+import testNotifications from 'app/components/elements/notification/_TestData'
 
 import {api} from 'steem';
 
@@ -85,7 +85,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
         const store = createStore(rootReducer, initial_state, middleware);
         store.dispatch({ // Todo: for dev only! Do not merge if present!
             type: 'notification/RECEIVE_ALL',
-            payload: testDataNotifications,
+            payload: testNotifications
             /*payload: [
                 {"id":"UID","read":true,"shown":true,"notificationType":"powerDown","created":"2010-09-19T16:19:48","author":"roadscape","amount":10000.2},
                 {"id":"UID1","read":false,"shown":false,"notificationType":"resteem","created":"2010-08-19T18:59:00","author":"roadscape","item":{"author":"wolfcat","category":"introduceyourself","depth":0,"permlink":"from-the-hills-of-ireland-to-planet-steem-a-wolfy-hello","summary":"From the Hills of Ireland to Planet Steem, A Wolfy Hello!"}},

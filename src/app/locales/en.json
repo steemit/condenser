@@ -640,6 +640,14 @@
     "i_understand_dont_show_again": "I understand, don't show me again"
   },
     "notifications": {
+        "filters": {
+          "security": "Security",
+          "transfers": "Transfers",
+          "comments": "Comments",
+          "replies": "Replies",
+          "resteems": "Resteems",
+          "following": "Following"
+        },
         "announcement":{
             "action": "official announcement"
         },

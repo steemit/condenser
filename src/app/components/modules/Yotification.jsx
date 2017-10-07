@@ -2,12 +2,24 @@ import {connect} from 'react-redux';
 import tt from 'counterpart'
 import Icon from 'app/components/elements/Icon';
 import Notification from 'app/components/elements/notification';
+import * as nType from 'app/components/elements/notification/type';
 import { Link } from 'react-router'
 import React from 'react';
 import Url from 'app/utils/Url';
 
 export const LAYOUT_PAGE = 'Page';
 export const LAYOUT_DROPDOWN = 'Dropdown';
+
+export const FILTER_ALL = 'all';
+
+const filters = {
+    security: [nType.SECURITY_PWD_CHANGE, nType.SECURITY_WITHDRAWAL, nType.SECURITY_NEW_MOBILE, nType.SECURITY_POWER_DOWN],
+    transfers: [nType.RECEIVE_STEEM, nType.POWER_DOWN],
+    comments: [nType.POST_REPLY],
+    replies: [nType.COMMENT_REPLY],
+    resteems: [nType.RESTEEM],
+    following: [nType.FOLLOW_AUTHOR_POST]
+}
 
 const makeNotificationList = (notifications = []) => {
     const notificationList = [];
@@ -88,9 +100,20 @@ YotificationModule.defaultProps = {
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
+        let notifications = state.notification.byId.toArray();
         //todo: here is where we're going to want to choose which filtered list is handed to the render function (rather than figuring it out inside render)
+        if(notifications && ownProps.filter !== FILTER_ALL && filters[ownProps.filter]) {
+            const filter = filters[ownProps.filter]
+            notifications = notifications.reduce((notifs, n) => {
+                if(filter.indexOf(n.notificationType) > -1) {
+                    notifs.push(n);
+                }
+                return notifs;
+            }, [])
+        }
+
         return {
-            notifications: state.notification.byId.toArray(),
+            notifications,
             ...ownProps
         }
     },

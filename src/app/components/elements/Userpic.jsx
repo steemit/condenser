@@ -20,10 +20,10 @@ class Userpic extends Component {
                 return null;
             }
         } catch (e) {
-            /* eslint-disable no-empty */
+            /* eslint-disable-line no-empty */
         }
 
-        const style = {backgroundImage: 'url(' + imageProxy(`/u/${account}/avatar`) + ')' }
+        const style = {backgroundImage: 'url(' + imageProxy() + `/u/${account}/avatar)` };
 
         return (<div className="Userpic" style={style} />)
     }

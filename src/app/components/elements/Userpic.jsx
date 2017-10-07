@@ -8,7 +8,6 @@ class Userpic extends Component {
     shouldComponentUpdate = shouldComponentUpdate(this, 'Userpic')
 
     render() {
-
         const {account, json_metadata} = this.props
         const hideIfDefault = this.props.hideIfDefault || false
 
@@ -32,7 +31,6 @@ class Userpic extends Component {
 Userpic.propTypes = {
     account: PropTypes.string.isRequired
 }
-
 
 export default connect(
     (state, ownProps) => {

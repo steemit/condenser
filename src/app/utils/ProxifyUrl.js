@@ -38,6 +38,6 @@ export default (url, dimensions = false) => {
             return $STM_Config.img_proxy_prefix + dims + respUrl;
         }
     }
-    return respUrl
+    return respUrl;
 }
 

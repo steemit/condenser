@@ -1,17 +1,17 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { browserHistory, Link } from 'react-router';
 import {connect} from 'react-redux';
+import tt from 'counterpart';
 import Icon from 'app/components/elements/Icon';
 import user from 'app/redux/User';
 import Userpic from 'app/components/elements/Userpic';
-import { browserHistory } from 'react-router';
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
 import VerticalMenu from 'app/components/elements/VerticalMenu';
-import NotificationMenu from 'app/components/modules/NotificationMenu';
+//import NotificationMenu from 'app/components/modules/NotificationMenu';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import NotifiCounter from 'app/components/elements/NotifiCounter';
 import YotifiCounter from 'app/components/elements/YotifiCounter';
-import tt from 'counterpart';
+import {default as YotificationModule, LAYOUT_DROPDOWN} from "./Yotification"; //eslint-disable-line import/no-named-default
 
 const defaultNavigate = (e) => {
     if (e.metaKey || e.ctrlKey) {
@@ -65,7 +65,8 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
                     dropdownAlignment="right"
                     dropdownContent={
                         <div className="NotificationMenuWrapper" >
-                            <NotificationMenu items={user_menu} account_link={ account_link } />
+                            {/*<NotificationMenu items={user_menu} account_link={ account_link } /> */}
+                            <YotificationModule layout={LAYOUT_DROPDOWN} />
                         </div>
                     }
                 >

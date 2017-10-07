@@ -10,10 +10,12 @@ export const setStore = (theStore) => {
 }
 
 
-export const urlNotifications = () => {
+export const urlNotifications = (filter) => {
     try {
-        return '/@' + store.getState().user.getIn(['current', 'username']) + '/notifications';
-    } catch (e) {}
+        return '/@' + store.getState().user.getIn(['current', 'username']) + '/notifications' + ((filter)? '/' + filter : '');
+    } catch (e) {
+        //eslint-disable-line
+    }
     return '';
 }
 

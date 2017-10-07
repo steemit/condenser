@@ -31,7 +31,7 @@ import Callout from 'app/components/elements/Callout';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import userIllegalContent from 'app/utils/userIllegalContent';
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
-import Notifications from './Notifications';
+import {SUBSECTION_DEFAULT, default as Notifications} from './Notifications'; //eslint-disable-line
 
 export default class UserProfile extends React.Component {
     constructor() {
@@ -113,7 +113,8 @@ export default class UserProfile extends React.Component {
             props: {current_user, wifShown, global_status, follow},
             onPrint
         } = this;
-        let { accountname, section=SECTION_BLOG } = this.props.routeParams;
+        let { accountname, section=SECTION_BLOG, subsection=SUBSECTION_DEFAULT} = this.props.routeParams;
+
         // normalize account from cased params
         accountname = accountname.toLowerCase();
         const username = current_user ? current_user.get('username') : null
@@ -282,7 +283,7 @@ export default class UserProfile extends React.Component {
                 </div>
                 break;
             case SECTION_NOTIFICATIONS :
-                tab_content = <Notifications />
+                tab_content = <Notifications subsection={subsection} />
                 break;
             case SECTION_BLOG :
                 if (account.blog) {
@@ -456,7 +457,7 @@ export default class UserProfile extends React.Component {
 }
 
 module.exports = {
-    path: '@:accountname(/:section)',
+    path: '@:accountname(/:section)(/:subsection)',
     component: connect(
         state => {
             const wifShown = state.global.get('UserKeys_wifShown')

@@ -1,6 +1,6 @@
 import { Map, OrderedMap, Set } from 'immutable';
 import { combineReducers } from 'redux';
-import { allTypes } from 'app/components/elements/notification/type';
+import allTypes from 'app/components/elements/notification/type';
 
 /**
  * Normalizes API payload.

@@ -57,7 +57,7 @@ class NotificationLink extends React.Component {
         let picture = null
 
         switch (notificationType) {
-            case type.FOLLOW_POST_POST :
+            case type.FOLLOW_COMMENT_REPLY :
                 throw new Error(`Notification ${notificationType} not implemented`)
             case type.POST_REPLY :
                 headerContent = <span><span className="user">{ author }</span> { tt(localeAction) } <strong>{ post.summary }</strong></span>
@@ -93,10 +93,9 @@ class NotificationLink extends React.Component {
                 headerContent = <span><span className="subject">{ tt(`${localeRoot}.subject`) }</span> { tt(localeAction) }</span>
                 bodyContent = tt(`${localeRoot}.body`)
                 picture =
-                    <div className={"Comment__Userpic show-for-medium " + notificationType}>
+                    ( <div className={"Comment__Userpic show-for-medium " + notificationType}>
                         <div className="Userpic" dangerouslySetInnerHTML={{ __html: badges.important}} />
-                    </div>
-                console.log("wrote picture", badges.important)
+                    </div> )
                 break
             case type.TAG :
             case type.VOTE :

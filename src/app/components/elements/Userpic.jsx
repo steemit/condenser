@@ -1,7 +1,7 @@
+/*global $STM_Config:false*/
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
-import { imageProxy } from 'app/utils/ProxifyUrl';
 
 class Userpic extends Component {
 
@@ -22,7 +22,7 @@ class Userpic extends Component {
             /* eslint-disable-line no-empty */
         }
 
-        const style = {backgroundImage: 'url(' + imageProxy() + `/u/${account}/avatar)` };
+        const style = {backgroundImage: `url(${$STM_Config.img_proxy_prefix}/u/${account}/avatar)` };
 
         return (<div className="Userpic" style={style} />)
     }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import Tarantool from 'db/tarantool';
+import Redis from 'db/redis';
 import ServerHTML from './server-html';
 import universalRender from '../shared/UniversalRender';
 import models from 'db/models';
@@ -84,7 +85,14 @@ async function appRender(ctx) {
             }
         }
 
-        const { body, title, statusCode, meta } = await universalRender({location: ctx.request.url, store, offchain, ErrorPage, tarantool: Tarantool.instance()});
+        const { body, title, statusCode, meta } = await universalRender({
+            location: ctx.request.url,
+            store,
+            offchain,
+            ErrorPage,
+            tarantool: Tarantool.instance(),
+            redis: Redis.instance()
+        });
 
         // Assets name are found in `webpack-stats` file
         const assets_filename = ROOT + (process.env.NODE_ENV === 'production' ? '/tmp/webpack-stats-prod.json' : '/tmp/webpack-stats-dev.json');

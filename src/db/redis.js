@@ -28,7 +28,7 @@ class Redis {
                         if (err) {
                             reject(err);
                         } else {
-                            resolve(res[0] === '{' ? JSON.parse(res) : res);
+                            resolve(res && res.length > 0 && res[0] === '{' ? JSON.parse(res) : res);
                         }
                     });
                     this.client[call_name].apply(this.client, args);

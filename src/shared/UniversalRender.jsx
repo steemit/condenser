@@ -27,7 +27,6 @@ import Translator from 'app/Translator';
 import {notificationsArrayToMap} from 'app/utils/Notifications';
 import {routeRegex} from "app/ResolveRoute";
 import {contentStats} from 'app/utils/StateFunctions'
-
 import {api} from 'steem';
 
 const sagaMiddleware = createSagaMiddleware(
@@ -59,7 +58,7 @@ const onRouterError = (error) => {
     console.error('onRouterError', error);
 };
 
-async function universalRender({ location, initial_state, offchain, ErrorPage, tarantool }) {
+async function universalRender({ location, initial_state, offchain, ErrorPage, tarantool, redis }) {
     let error, redirect, renderProps;
     try {
         [error, redirect, renderProps] = await runRouter(location, RootRoute);
@@ -119,7 +118,14 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
         if (url.indexOf('/curation-rewards') !== -1) url = url.replace(/\/curation-rewards$/, '/transfers');
         if (url.indexOf('/author-rewards') !== -1) url = url.replace(/\/author-rewards$/, '/transfers');
 
-        onchain = await api.getStateAsync(url);
+        try {
+            onchain = await redis.get(url);
+        } catch (error) {
+        }
+        if (!onchain) {
+            onchain = await api.getStateAsync(url);
+            redis.set(url, onchain);
+        }
 
         if (Object.getOwnPropertyNames(onchain.accounts).length === 0 && (url.match(routeRegex.UserProfile1) || url.match(routeRegex.UserProfile3))) { // protect for invalid account
             return {
@@ -141,7 +147,16 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
 
         if (!url.match(routeRegex.PostsIndex) && !url.match(routeRegex.UserProfile1) && !url.match(routeRegex.UserProfile2) && url.match(routeRegex.PostNoCategory)) {
             const params = url.substr(2, url.length - 1).split("/");
-            const content = await api.getContentAsync(params[0], params[1]);
+            const content_key = `content/${params[0]}/${params[1]}`;
+            let content;
+            try {
+                content = await redis.get(content_key);
+            } catch (error) {
+            }
+            if (!content) {
+                content = await api.getContentAsync(params[0], params[1]);
+                redis.set(content_key, content);
+            }
             if (content.author && content.permlink) { // valid short post url
                 onchain.content[url.substr(2, url.length - 1)] = content;
             } else { // protect on invalid user pages (i.e /user/transferss)

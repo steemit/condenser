@@ -59,6 +59,10 @@
     "secret_key": false,
     "site_key": false
   },
+  "redis": {
+    "host": "127.0.0.1",
+    "port": 6379
+  },
   "registrar": {
     "account": "-",
     "fee": "0.5 STEEM",

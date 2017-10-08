@@ -42,6 +42,10 @@
     "secret_key": "SDC_RECAPTCHA_SECRET_KEY",
     "site_key": "SDC_RECAPTCHA_SITE_KEY"
   },
+  "redis": {
+    "host": "SDC_REDIS_HOSTNAME",
+    "port": "SDC_REDIS_PORT"
+  },
   "registrar": {
     "account": "SDC_REGISTRAR_ACCOUNT",
     "fee": "SDC_REGISTRAR_AMOUNT",

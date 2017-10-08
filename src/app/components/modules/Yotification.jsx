@@ -1,5 +1,6 @@
 import {connect} from 'react-redux';
 import tt from 'counterpart'
+import { Set } from 'immutable';
 import Icon from 'app/components/elements/Icon';
 import Notification from 'app/components/elements/notification';
 import * as nType from 'app/components/elements/notification/type';
@@ -111,18 +112,13 @@ YotificationModule.defaultProps = {
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
-        let notifications = state.notification.byId.toArray();
-        const filter = (ownProps.filter && filters[ownProps.filter])? ownProps.filter : FILTER_ALL;
-        //todo: here is where we're going to want to choose which filtered list is handed to the render function
-        // (rather than performing the reduction inside this class)
-        if(notifications && filter !== FILTER_ALL) {
-            const filteredTypes = filters[filter]
-            notifications = notifications.reduce((notifs, n) => {
-                if(filteredTypes.indexOf(n.notificationType) > -1) {
-                    notifs.push(n);
-                }
-                return notifs;
-            }, [])
+        const filter = (ownProps.filter && filters[ownProps.filter]) ? ownProps.filter : FILTER_ALL;
+        let notifications = state.notification.byId;
+
+        if (notifications && filter !== FILTER_ALL) {
+            const filteredTypes = filters[filter];
+            const filteredIds = filteredTypes.reduce((ids, tok) => state.notification.byType[tok] ? ids.union(state.notification.byType[tok]) : ids, Set());
+            notifications = notifications.filter((v, id) => filteredIds.includes(id));
         }
 
         return {

@@ -81,7 +81,13 @@ app.use(function* (next) {
         this.body = {status: 'ok'};
         return;
     }
-    
+
+    // redirect to home page/feed if known account
+    if (this.method === 'GET' && this.url === '/' && this.session.a) {
+        this.status = 302;
+        this.redirect(`/@${this.session.a}/feed`);
+        return;
+    }
     // normalize user name url from cased params
     if (
         this.method === 'GET' &&

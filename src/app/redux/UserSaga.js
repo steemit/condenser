@@ -289,7 +289,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     if (afterLoginRedirectToWelcome) {
         browserHistory.push('/welcome')
     } else if(feedURL) {
-        browserHistory.push(feedURL);
+        if(document.location.pathname === '/') browserHistory.push(feedURL);
     }
 
 }

@@ -291,7 +291,6 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     } else if(feedURL) {
         if(document.location.pathname === '/') browserHistory.push(feedURL);
     }
-
 }
 
 function* saveLogin_localStorage() {

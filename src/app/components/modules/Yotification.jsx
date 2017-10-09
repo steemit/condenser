@@ -66,11 +66,19 @@ class YotificationModule extends React.Component {
     }
 
     markAllRead = () => {
-        this.props.markAllRead(this.props.filter);
+        if(this.props.filter !== FILTER_ALL) {
+            this.props.markAllRead(filters[this.props.filter]);
+        } else {
+            this.props.markAllRead([]);
+        }
     }
 
     markAllHidden = () => {
-        this.props.markAllHidden(this.props.filter);
+        if(this.props.filter !== FILTER_ALL) {
+            this.props.markAllHidden(filters[this.props.filter]);
+        } else {
+            this.props.markAllHidden([]);
+        }
     }
 
     loadTestData = () => { // Todo: for dev only! Do not merge if present!
@@ -171,20 +179,20 @@ export default connect(
                 ],
             });
         },
-        markAllRead: (notificationType) => {
+        markAllRead: (notificationTypes) => {
             const action = {
                 type: 'notification/MARK_ALL_READ',
                 payload: {
-                    notificationType
+                    notificationTypess
                 }
             }
             dispatch(action)
         },
-        markAllHidden: (notificationType) => {
+        markAllHidden: (notificationTypes) => {
             const action = {
                 type: 'notification/MARK_ALL_Hidden',
                 payload: {
-                    notificationType
+                    notificationTypes
                 }
             }
             dispatch(action)

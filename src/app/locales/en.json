@@ -647,6 +647,12 @@
     "i_understand_dont_show_again": "I understand, don't show me again"
   },
     "notifications": {
+        "controls": {
+          "go_to_page": "View all",
+          "mark_all_read": "Mark All as Read",
+          "mark_all_hidden": "Clear all"
+        },
+
         "filters": {
           "all": "All",
           "security": "Security",

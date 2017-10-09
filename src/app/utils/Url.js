@@ -12,6 +12,7 @@ export const setStore = (theStore) => {
 
 export const urlNotifications = (filter) => {
     try {
+        console.log('urlNotifications', store.getState().user.toJS())
         return '/@' + store.getState().user.getIn(['current', 'username']) + '/notifications' + ((filter)? '/' + filter : '');
     } catch (e) {
         //eslint-disable-line
@@ -31,6 +32,7 @@ export const urlComment = (comment, childComment) => {
 }
 
 export const urlProfile = (userName) => {
+    console.log('urlProfile', store.getState().user.toJS())
     return '/@' + ((userName)? userName : store.getState().user.getIn(['current', 'username']));
 }
 

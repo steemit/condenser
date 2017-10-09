@@ -27,17 +27,17 @@ const makeNotificationList = (notifications = []) => {
     notifications.forEach( notification => {
         if(!notification.hide) {
             const classNames = "item" + ( notification.read ? '' : ' unread' );
-            notificationList.push( <li className={ classNames } key={notification.id}><Notification { ...notification } /></li> );
+            notificationList.push( <li className={classNames} key={notification.id}><Notification {...notification} /></li> );
         }
     })
-    return ( <ul className="Notifications">{ notificationList }</ul> );
+    return ( <ul className="Notifications">{notificationList}</ul> );
 }
 
 const makeFilterList = () => {
+    const locales = tt;
     const filterLIs = Object.keys(filters).reduce((list, filter) => {
-        console.log(Url.notifications(filter))
         list.push(<li key={filter}><Link
-            href={Url.notifications(filter)}>{tt(`notifications.filters.${filter}`)}</Link></li>);
+            href={Url.notifications(filter)}>{locales(`notifications.filters.${filter}`)}</Link></li>);
         return list;
     }, [<li key="all"><Link href={Url.notifications()}>{tt('notifications.filters.all')}</Link></li>]);
     return ( <ul className="menu">{filterLIs}</ul>);
@@ -65,9 +65,12 @@ class YotificationModule extends React.Component {
 
     }
 
-    markAllRead = (e) => {
-        e.preventDefault()
-        this.props.markAllRead()
+    markAllRead = () => {
+        this.props.markAllRead(this.props.filter);
+    }
+
+    markAllHidden = () => {
+        this.props.markAllHidden(this.props.filter);
     }
 
     loadTestData = () => { // Todo: for dev only! Do not merge if present!
@@ -82,18 +85,21 @@ class YotificationModule extends React.Component {
         return ( <div className={"NotificationsModule " + this.state.layout} >
             <div className="title">{tt('g.notifications')}
                 <span className="controls-right">
-                    <button className="ptc" onClick={ this.markAllRead }>Mark All as Read</button>
-                    <button className="ptc" onClick={ this.loadTestData }>Populate</button> {/* Todo: for dev only! Do not merge if present!*/}
-                    <button className="ptc" onClick={ this.loadMoreTestData }>... more</button> {/* Todo: for dev only! Do not merge if present!*/}
+                    {(this.props.showClearAll) ?
+                        <button className="ptc" onClick={this.markAllHidden}>{tt('notifications.controls.mark_all_hidden')}</button> :
+                        <button className="ptc" onClick={this.markAllRead}>{tt('notifications.controls.mark_all_read')}</button>
+                    }
+                    <button className="ptc" onClick={this.loadTestData}>Populate</button> {/* Todo: for dev only! Do not merge if present!*/}
+                    <button className="ptc" onClick={this.loadMoreTestData}>... more</button> {/* Todo: for dev only! Do not merge if present!*/}
                     <Link href={Url.profileSettings()}><Icon name="cog" /></Link>
                 </span>
             </div>
-            { (this.state.showFilters)? makeFilterList() : null}
-            { makeNotificationList(this.props.notifications) }
-            { (this.state.showFooter)? (<div className="footer">
-                <Link href={ Url.profile() + '/notifications'} className="view-all">View All</Link>
-            </div>) : null }
-            </div> );
+            {(this.state.showFilters)? makeFilterList() : null}
+            {makeNotificationList(this.props.notifications)}
+            {(this.state.showFooter)? (<div className="footer">
+                <Link href={Url.profile() + '/notifications'} className="view-all">{tt('notifications.dropdown.gp_to_page')}</Link>
+            </div>) : null}
+        </div>);
     }
 }
 
@@ -101,8 +107,9 @@ YotificationModule.propTypes = {
     comeOnItsSuchAJoy: React.PropTypes.func.isRequired, // Todo: for dev only! Do not merge if present!
     getSomeGetSomeGetSomeYeahYeah: React.PropTypes.func.isRequired, // Todo: for dev only! Do not merge if present!
     markAllRead: React.PropTypes.func.isRequired,
-    notifications: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-    layout: React.PropTypes.oneOf([LAYOUT_PAGE, LAYOUT_DROPDOWN])
+    //notifications: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
+    layout: React.PropTypes.oneOf([LAYOUT_PAGE, LAYOUT_DROPDOWN]),
+    showClearAll: React.PropTypes.bool.isRequired
 };
 
 YotificationModule.defaultProps = {
@@ -113,6 +120,7 @@ export default connect(
     // mapStateToProps
     (state, ownProps) => {
         const filter = (ownProps.filter && filters[ownProps.filter]) ? ownProps.filter : FILTER_ALL;
+        let allRead = true;
         let notifications = state.notification.byId;
 
         if (notifications && filter !== FILTER_ALL) {
@@ -121,10 +129,18 @@ export default connect(
             notifications = notifications.filter((v, id) => filteredIds.includes(id));
         }
 
+        notifications.forEach(function(n) {
+            if (false === n.read) {
+                allRead = false;
+                return false;
+            }
+        });
+
         return {
-            ...ownProps,
             notifications,
-            filter
+            ...ownProps,
+            filter,
+            showClearAll: allRead
         }
     },
     dispatch => ({
@@ -155,9 +171,21 @@ export default connect(
                 ],
             });
         },
-        markAllRead: () => {
+        markAllRead: (notificationType) => {
             const action = {
                 type: 'notification/MARK_ALL_READ',
+                payload: {
+                    notificationType
+                }
+            }
+            dispatch(action)
+        },
+        markAllHidden: (notificationType) => {
+            const action = {
+                type: 'notification/MARK_ALL_Hidden',
+                payload: {
+                    notificationType
+                }
             }
             dispatch(action)
         }

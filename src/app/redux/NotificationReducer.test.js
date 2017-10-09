@@ -55,6 +55,20 @@ describe('byId', () => {
         expect(reduced.first().id).to.equal('UID5');
         expect(reduced.last().id).to.equal('UID8');
     });
+
+    it('should provide an action which takes a list of ids and props/values to update, and applies the updates only to those ids specified', () => {
+        const initial = byId(undefined, notificationReceiveAllAction);
+        const reduced = byId(initial, {
+            type: 'notification/UPDATE_SOME',
+            ids: ['UID', 'UID5'],
+            updates: {
+                author: '☺',
+            },
+        });
+
+        expect(reduced.get('UID').author).to.equal('☺');
+        expect(reduced.get('UID5').author).to.equal('☺');
+    });
 });
 
 describe('unread', () => {
@@ -106,5 +120,20 @@ describe('createList', () => {
         expect(initialOnlyPowerDown).to.equal(new Set(['UID']));
         const reducedOnlyPowerDown = onlyPowerDown(initialOnlyPowerDown, notificationAppendSomeAction);
         expect(reducedOnlyPowerDown).to.equal(new Set(['UID', 'UID8', 'UID9', 'UID10']));
+    });
+
+    it('should provide an action which takes a list of ids and props/values to update, and adds or removes items from the list based on that update', () => {
+        const unread = createList({ prop: 'read', val: false });
+        const initialUnread = unread(undefined, notificationReceiveAllAction);
+        expect(initialUnread).to.equal(new Set(['UID1', 'UID2', 'UID5', 'UID7']));
+
+        const reduced = unread(initialUnread, {
+            type: 'notification/UPDATE_SOME',
+            ids: ['UID2', 'UID5'],
+            updates: {
+                read: true,
+            },
+        });
+        expect(reduced).to.equal(new Set(['UID1', 'UID7']));
     });
 });

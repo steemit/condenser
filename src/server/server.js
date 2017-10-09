@@ -266,8 +266,19 @@ if (env === 'development') {
     const proxy = require('koa-proxy')({
             host: proxyhost,
             map: filePath => 'assets/' + filePath
-});
+    });
     app.use(mount('/assets', proxy));
+
+    // yo proxy
+    // run yo on port 9080
+    // like
+    // docker run -ti -p 9080:8080 steemit/yo:latest
+    const yohost = 'http://0.0.0.0:9080';
+    console.log('proxying to yo dev server at ' + yohost);
+    const yoproxy = require('koa-proxy')({
+        host: yohost,
+    });
+    app.use(mount('/yo', yoproxy));
 } else {
     app.use(
         mount(

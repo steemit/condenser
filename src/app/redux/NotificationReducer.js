@@ -37,6 +37,16 @@ export const byId = (state = OrderedMap(), action = { type: null }) => {
                 ...state.get(action.id),
                 ...action.updates,
             });
+        case 'notification/UPDATE_SOME':
+            return state.map((n, id) => {
+                if (action.ids.indexOf(id) >= 0) {
+                    return {
+                        ...state.get(id),
+                        ...action.updates,
+                    };
+                }
+                return state.get(id);
+            });
         default:
             return state;
     }
@@ -62,6 +72,13 @@ export const createList = ({ prop, val }) => {
                 return (prop === 'shown' && val === 'true') ? Set() : state;
             case 'notification/UPDATE_ONE':
                 return (action.updates[prop] && action.updates[prop] === val) ? state.delete(action.id) : state;
+            case 'notification/UPDATE_SOME':
+                return action.ids.reduce((acc, updatedId) => {
+                    if (action.updates[prop] && action.updates[prop] !== val) {
+                        return acc.delete(updatedId);
+                    }
+                    return acc;
+                }, state);
             default:
                 return state;
         }

@@ -1,0 +1,23 @@
+// Animation helpers
+
+$fade-in-animation-length: 1s;
+$fade-in-animation-delay: 0.03s;
+
+
+.fade-in {
+  @for $i from 1 through 10 {
+    &--#{$i} { 
+      animation: fade-in
+       $fade-in-animation-length ease-in-out $fade-in-animation-delay*$i both;
+    }
+  } 
+}
+
+@keyframes fade-in {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}

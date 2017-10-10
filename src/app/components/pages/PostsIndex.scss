@@ -1,3 +1,4 @@
+
 .PostsList {
   clear: right;
 }
@@ -50,3 +51,94 @@
     }
   }
 }
+
+// Sidebar components on the homepage
+
+
+.c-sidebar {
+  width: 100%;
+  max-width: 240px;
+  font-family: helvetica, sans-serif;
+  &__module {
+      padding: 1.5em 2em;
+    @include themify($themes) {
+        background-color: themed('moduleBackgroundColor');  
+        border: themed('border'); 
+    }    
+    margin-bottom: 1em;
+    box-shadow: 0px 5px 10px 0 rgba(0,0,0,0);
+    transition: 0.2s box-shadow ease-in-out;
+    &:hover {
+      @include MQ(M) {  
+        box-shadow: 0px 5px 10px 0 rgba(0,0,0,0.03);
+      }
+    }   
+    &--tags {
+      display: none;
+      @include MQ(M) {
+        display: block;
+      }
+      @include MQ(L) {
+        display: none;
+      }
+    }
+  }
+  &--left { 
+    display: none;
+    @include MQ(L) {
+      display: block;
+      margin-left: 1em;
+    }
+  }
+  &--right {
+    display: none;
+    @include MQ(M) {
+      display: block;
+      margin-right: 1em;
+    }
+  }
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  &__list-item {
+    margin-bottom: 10px;
+    line-height: 1.2;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  &__h3 {
+    // @extend .h3;
+    font-family: $font-primary;
+    font-weight: bold;
+    @include font-size(18px); 
+    margin: 0 0 16px 0;   
+    &--inline {
+      display: inline;
+    }
+  }
+  &__link {
+    @extend .link;  
+    @extend .link--primary; 
+    &--emphasis {
+      font-weight: bold;
+    }
+  }
+  &__label {
+    display: block;
+    @include font-size(14px);     
+    margin-bottom: 2px;
+  }
+  &__score {
+    font-weight: bold;
+    @include font-size(17px); 
+    margin-bottom: 24px;
+  }
+}
+
+.PostsIndex.row {
+  max-width: 1420px;
+}
+

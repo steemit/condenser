@@ -99,6 +99,10 @@ class PostsIndex extends React.Component {
 
         return (
             <div className={'PostsIndex row' + (fetching ? ' fetching' : '')}>
+                <div className="PostsIndex__topics column shrink show-for-large">
+                    <Topics order={topics_order} current={category} compact={false} />
+                    <small><a onClick={this.onShowSpam}>{showSpam ? tt('g.next_3_strings_together.show_less') : tt('g.next_3_strings_together.show_more')}</a>{' ' + tt('g.next_3_strings_together.value_posts')}</small>
+                </div>
                 <div className="PostsIndex__left column small-collapse">
                     <div className="PostsIndex__topics_compact show-for-small hide-for-large">
                         <Topics order={topics_order} current={category} compact />
@@ -114,10 +118,34 @@ class PostsIndex extends React.Component {
                             showSpam={showSpam}
                         />}
                 </div>
-                <div className="PostsIndex__topics column shrink show-for-large">
-                    <Topics order={topics_order} current={category} compact={false} />
-                    <small><a onClick={this.onShowSpam}>{showSpam ? tt('g.next_3_strings_together.show_less') : tt('g.next_3_strings_together.show_more')}</a>{' ' + tt('g.next_3_strings_together.value_posts')}</small>
-                </div>
+                 <aside className="c-sidebar c-sidebar--right">
+                    <div className="c-sidebar__module">
+                      <div className="c-sidebar__header">
+                        <h3 className="c-sidebar__h3">Your stats</h3>
+                      </div>
+                      <div className="c-sidebar__content">
+                        <ul className="c-sidebar__list">
+                          <li className="c-sidebar__list-item"><span className="c-sidebar__label">Steem Power</span><span className="c-sidebar__score">2,340.890</span></li>
+                          <li className="c-sidebar__list-item"><span className="c-sidebar__label">Power Rank</span><span className="c-sidebar__score">862</span></li>
+                          <li className="c-sidebar__list-item"><span className="c-sidebar__label">Followers</span><span className="c-sidebar__score">340</span></li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div className="c-sidebar__module">
+                      <div className="c-sidebar__header">
+                        <h3 className="c-sidebar__h3">Links</h3>
+                      </div>
+                      <div className="c-sidebar__content">
+                        <ul className="c-sidebar__list">
+                          <li className="c-sidebar__list-item"><a className="c-sidebar__link" href="#">My blog</a></li>
+                          <li className="c-sidebar__list-item"><a className="c-sidebar__link" href="#">My wallet</a></li>
+                          <li className="c-sidebar__list-item"><a className="c-sidebar__link" href="#">Pay someone</a></li>
+                          <li className="c-sidebar__list-item"><a className="c-sidebar__link" href="#">Buy STEEM</a></li>
+                          <li className="c-sidebar__list-item"><a className="c-sidebar__link" href="#">Trade STEEM</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </aside>
             </div>
         );
     }

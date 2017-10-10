@@ -30,6 +30,21 @@ import {contentStats} from 'app/utils/StateFunctions'
 
 import {api} from 'steem';
 
+// iso renderer, same as defaultRenderer except we drop the offchain data
+const isoRenderer = {
+  markup(html, key) {
+    if (!html) return ''
+    return `<div data-iso-key="${key}">${html}</div>`
+  },
+  data(state, key) {
+    if (!state) return ''
+    const s = JSON.parse(state)
+    delete s.offchain
+    state = JSON.stringify(s)
+    return `<script type="application/json" data-iso-key="${key}">${state}</script>`
+  },
+}
+
 const sagaMiddleware = createSagaMiddleware(
     ...userWatches, // keep first to remove keys early when a page change happens
     ...fetchDataWatches,
@@ -221,7 +236,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
         titleBase: 'Steemit - ',
         meta,
         statusCode: status,
-        body: Iso.render(app, server_store.getState())
+        body: Iso.render(app, server_store.getState(), '', isoRenderer)
     };
 }
 

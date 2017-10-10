@@ -12,6 +12,7 @@ import Mixpanel from 'mixpanel';
 import Tarantool from 'db/tarantool';
 import {PublicKey, Signature, hash} from 'steem/lib/auth/ecc';
 import {api, broadcast} from 'steem';
+import secureRandom from 'secure-random';
 
 const mixpanel = config.get('mixpanel') ? Mixpanel.init(config.get('mixpanel')) : null;
 
@@ -43,6 +44,27 @@ export default function useGeneralApi(app) {
     const router = koa_router({prefix: '/api/v1'});
     app.use(router.routes());
     const koaBody = koa_body();
+
+    router.get('/state', function *() {
+        const ctx = this;
+        let login_challenge = ctx.session.login_challenge;
+        if (!login_challenge) {
+            login_challenge = secureRandom.randomBuffer(16).toString('hex');
+            ctx.session.login_challenge = login_challenge;
+        }
+        const offchain = {
+            csrf: ctx.csrf,
+            flash: ctx.flash,
+            new_visit: ctx.session.new_visit,
+            account: ctx.session.a,
+            config: $STM_Config,
+            uid: ctx.session.uid,
+            serverBusy: false,
+            signup_bonus: '$1', // TODO: don't hardcode this
+            login_challenge
+        };
+        this.body = JSON.stringify(offchain);
+    })
 
     router.post('/accounts_wait', koaBody, function *() {
         if (rateLimitReq(this, this.req)) return;

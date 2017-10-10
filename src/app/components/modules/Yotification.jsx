@@ -105,7 +105,7 @@ class YotificationModule extends React.Component {
             {(this.state.showFilters)? makeFilterList() : null}
             {makeNotificationList(this.props.notifications)}
             {(this.state.showFooter)? (<div className="footer">
-                <Link href={Url.profile() + '/notifications'} className="view-all">{tt('notifications.dropdown.gp_to_page')}</Link>
+                <Link href={Url.profile() + '/notifications'} className="view-all">{tt('notifications.controls.go_to_page')}</Link>
             </div>) : null}
         </div>);
     }

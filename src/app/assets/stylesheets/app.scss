@@ -6,13 +6,14 @@
 @import "./foundation-overrides";
 
 @import "./variables";
+@import "./mixins";
 @import "./themes";
 @import "./layout";
 @import './animation';
 
 @import "./fonts";
 @import "./forms";
-@import "./mixins";
+
 @import "./markdown";
 @import "./notifications";
 @import "src/app/components/all";

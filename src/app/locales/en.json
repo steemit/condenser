@@ -190,8 +190,8 @@
       "value_posts": "low value posts"
     },
     "read_only_mode": "Due to server maintenance we are running in read only mode. We are sorry for the inconvenience.",
-    "tags_and_topics": "Tags and Topics",
-    "show_more_topics": "Show more topics",
+    "tags_and_topics": "Tags",
+    "show_more_topics": "View all tags",
     "basic": "Basic",
     "advanced": "Advanced",
     "views": {

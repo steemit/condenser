@@ -5,6 +5,7 @@ $fade-in-animation-delay: 0.03s;
 
 
 .fade-in {
+  @include opacity(0);
   @for $i from 1 through 10 {
     &--#{$i} { 
       animation: fade-in
@@ -15,9 +16,9 @@ $fade-in-animation-delay: 0.03s;
 
 @keyframes fade-in {
 	0% {
-		opacity: 0;
+		@include opacity(0);
 	}
 	100% {
-		opacity: 1;
+		@include opacity(1);
 	}
 }

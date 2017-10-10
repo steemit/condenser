@@ -122,6 +122,7 @@
   &__link {
     @extend .link;  
     @extend .link--primary; 
+    font-family: $font-primary;
     &--emphasis {
       font-weight: bold;
     }
@@ -139,6 +140,6 @@
 }
 
 .PostsIndex.row {
-  max-width: 1420px;
+  max-width: 1500px;
 }
 

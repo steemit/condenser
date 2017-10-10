@@ -99,13 +99,11 @@ class PostsIndex extends React.Component {
 
         return (
             <div className={'PostsIndex row' + (fetching ? ' fetching' : '')}>
-                
-                <div className="PostsIndex__topics column shrink show-for-large">
+                <aside className="c-sidebar c-sidebar--left">
                     <Topics order={topics_order} current={category} compact={false} />
                     <small><a onClick={this.onShowSpam}>{showSpam ? tt('g.next_3_strings_together.show_less') : tt('g.next_3_strings_together.show_more')}</a>{' ' + tt('g.next_3_strings_together.value_posts')}</small>
-                </div>
-
-                <div className="PostsIndex__left column small-collapse">
+                </aside>   
+                <div className="PostsIndex__left column small-collapse fade-in--1">
                     <div className="PostsIndex__topics_compact show-for-small hide-for-large">
                         <Topics order={topics_order} current={category} compact />
                     </div>
@@ -143,7 +141,6 @@ class PostsIndex extends React.Component {
                           <li className="c-sidebar__list-item"><a className="c-sidebar__link" href="#">My wallet</a></li>
                           <li className="c-sidebar__list-item"><a className="c-sidebar__link" href="#">Pay someone</a></li>
                           <li className="c-sidebar__list-item"><a className="c-sidebar__link" href="#">Buy STEEM</a></li>
-                          <li className="c-sidebar__list-item"><a className="c-sidebar__link" href="#">Trade STEEM</a></li>
                         </ul>
                       </div>
                     </div>

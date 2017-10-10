@@ -5,11 +5,11 @@ import Iso from 'iso';
 import React from 'react';
 import { render } from 'react-dom';
 import { renderToString } from 'react-dom/server';
-import { Router, RouterContext, match, applyRouterMiddleware } from 'react-router';
+import { Router, RouterContext, match, applyRouterMiddleware, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
 import RootRoute from 'app/RootRoute';
+import resolveRoute from 'app/ResolveRoute';
 import {createStore, applyMiddleware, compose} from 'redux';
-import { browserHistory } from 'react-router';
 import { useScroll } from 'react-router-scroll';
 import createSagaMiddleware from 'redux-saga';
 import { syncHistoryWithStore } from 'react-router-redux';
@@ -113,13 +113,31 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
     // below is only executed on the server
     let server_store, onchain;
     try {
+
+        const route = resolveRoute(location);
+        console.log('-- universalRender route -->', route);
+
         let url = location === '/' ? 'trending' : location;
         // Replace /curation-rewards and /author-rewards with /transfers for UserProfile
         // to resolve data correctly
         if (url.indexOf('/curation-rewards') !== -1) url = url.replace(/\/curation-rewards$/, '/transfers');
         if (url.indexOf('/author-rewards') !== -1) url = url.replace(/\/author-rewards$/, '/transfers');
 
+        if (route.page === 'Post') {
+            const content = await api.getContentAsync(route.params[0], route.params[1]);
+            if (!content || !content.author) {
+                return {
+                    title: 'Page Not Found - Steemit',
+                    statusCode: 404,
+                    body: renderToString(<NotFound />)
+                };
+            }
+            url = `${content.category}/@${content.author}/${content.permlink}`;
+        }
+
+        console.log('-- universalRender url -->', url);
         onchain = await api.getStateAsync(url);
+        //console.log('-- onchain -->', onchain);
 
         if (Object.getOwnPropertyNames(onchain.accounts).length === 0 && (url.match(routeRegex.UserProfile1) || url.match(routeRegex.UserProfile3))) { // protect for invalid account
             return {
@@ -130,7 +148,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
         }
 
         // If we are not loading a post, truncate state data to bring response size down.
-        if (!url.match(routeRegex.Post)) {
+        if (route.page !== 'Post') {
             for (var key in onchain.content) {
                 //onchain.content[key]['body'] = onchain.content[key]['body'].substring(0, 1024) // TODO: can be removed. will be handled by steemd
                 // Count some stats then remove voting data. But keep current user's votes. (#1040)
@@ -139,19 +157,6 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
             }
         }
 
-        if (!url.match(routeRegex.PostsIndex) && !url.match(routeRegex.UserProfile1) && !url.match(routeRegex.UserProfile2) && url.match(routeRegex.PostNoCategory)) {
-            const params = url.substr(2, url.length - 1).split("/");
-            const content = await api.getContentAsync(params[0], params[1]);
-            if (content.author && content.permlink) { // valid short post url
-                onchain.content[url.substr(2, url.length - 1)] = content;
-            } else { // protect on invalid user pages (i.e /user/transferss)
-                return {
-                    title: 'Page Not Found - Steemit',
-                    statusCode: 404,
-                    body: renderToString(<NotFound />)
-                };
-            }
-        }
         // Calculate signup bonus
         const fee = parseFloat($STM_Config.registrar_fee.split(' ')[0]),
               {base, quote} = onchain.feed_price,

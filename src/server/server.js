@@ -49,6 +49,14 @@ const numProcesses = process.env.NUM_PROCESSES || os.cpus().length;
 
 app.use(requestTime(numProcesses));
 
+// drop set-cookie headers for everything but state api
+app.use(function*(next) {
+    yield* next;
+    if (this.request.url !== '/api/v1/state') {
+        delete this.response.remove('set-cookie');
+    }
+});
+
 app.keys = [config.get('session_key')];
 
 const crypto_key = config.get('server_session_secret');

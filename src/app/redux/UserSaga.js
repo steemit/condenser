@@ -261,8 +261,9 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
             delegated_vesting_shares: account.get('delegated_vesting_shares')}))
     }
 
-    if (!autopost && saveLogin)
+    if (!autopost && saveLogin) {
         yield put(user.actions.saveLogin());
+    }
 
     try {
         // const challengeString = yield serverApiLoginChallenge()

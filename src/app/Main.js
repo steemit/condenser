@@ -124,7 +124,7 @@ async function getOffchainState() {
 }
 
 async function main() {
-    offchain = getOffchainState()
+    offchain = await getOffchainState()
     if (!window.Intl) {
         require.ensure(['intl/dist/Intl'], (require) => {
             window.IntlPolyfill = window.Intl = require('intl/dist/Intl')

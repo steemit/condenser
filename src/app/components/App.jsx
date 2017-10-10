@@ -201,100 +201,102 @@ class App extends React.Component {
         return <div className={'App' + ' theme-original' + (lp ? ' LP' : '') + (ip ? ' index-page' : '') + (miniHeader ? ' mini-header' : '')}
                     ref="App_root"
                 >
-            <SidePanel ref="side_panel" alignment="right">
-                <TopRightMenu vertical navigate={this.navigate} />
-                <ul className="vertical menu">
-                    <li>
-                        <a href="/welcome" onClick={this.navigate}>
-                            {tt('navigation.welcome')}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/faq.html" onClick={this.navigate}>
-                            {tt('navigation.faq')}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/tags" onClick={this.navigate}>
-                            {tt('navigation.explore')}
-                        </a>
-                    </li>
-                    <li>
-                        <a onClick={() => depositSteem(username)}>
-                            {tt('navigation.buy_LIQUID_TOKEN', {LIQUID_TOKEN})}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/market" onClick={this.navigate}>
-                            {tt('navigation.currency_market')}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/recover_account_step_1" onClick={this.navigate}>
-                            {tt('navigation.stolen_account_recovery')}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/change_password" onClick={this.navigate}>
-                            {tt('navigation.change_account_password')}
-                        </a>
-                    </li>
-                    <li className="last">
-                        <a href="/~witnesses" onClick={this.navigate}>
-                            {tt('navigation.vote_for_witnesses')}
-                        </a>
-                    </li>
-                </ul>
-                <ul className="vertical menu">
-                    <li>
-                        <a href="https://steemit.chat/home" target="_blank" rel="noopener noreferrer">
-                            {tt('navigation.chat')}&nbsp;<Icon name="extlink" />
-                        </a>
-                    </li>
-                    <li>
-                        <a href="http://steemtools.com/" onClick={this.navigate} target="_blank" rel="noopener noreferrer">
-                            {tt('navigation.app_center')}&nbsp;<Icon name="extlink" />
-                        </a>
-                    </li>
-                    <li className="last">
-                        <a href="https://steemit.github.io/steemit-docs/" target="_blank" rel="noopener noreferrer">
-                            {tt('navigation.api_docs')}&nbsp;<Icon name="extlink" />
-                        </a>
-                    </li>
-                </ul>
-                <ul className="vertical menu">
-                    <li>
-                        <a href="https://steem.io/SteemWhitePaper.pdf" onClick={this.navigate}>
-                            {tt('navigation.whitepaper')}&nbsp;<Icon name="extlink" />
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://steem.io" onClick={this.navigate}>
-                            {tt('navigation.about')}&nbsp;<Icon name="extlink" />
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/privacy.html" onClick={this.navigate} rel="nofollow">
-                            {tt('navigation.privacy_policy')}
-                        </a>
-                    </li>
-                    <li className="last">
-                        <a href="/tos.html" onClick={this.navigate} rel="nofollow">
-                            {tt('navigation.terms_of_service')}
-                        </a>
-                    </li>
-                </ul>
-            </SidePanel>
-            {miniHeader ? <MiniHeader /> : <Header toggleOffCanvasMenu={this.toggleOffCanvasMenu} menuOpen={this.state.open} />}
-            <div className="App__content">
-                {welcome_screen}
-                {callout}
-                {children}
-                {lp ? <LpFooter /> : null}
-            </div>
-            <Dialogs />
-            <Modals />
-            <PageViewsCounter />
+            <div class="container"> 
+                <SidePanel ref="side_panel" alignment="right">
+                    <TopRightMenu vertical navigate={this.navigate} />
+                    <ul className="vertical menu">
+                        <li>
+                            <a href="/welcome" onClick={this.navigate}>
+                                {tt('navigation.welcome')}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/faq.html" onClick={this.navigate}>
+                                {tt('navigation.faq')}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/tags" onClick={this.navigate}>
+                                {tt('navigation.explore')}
+                            </a>
+                        </li>
+                        <li>
+                            <a onClick={() => depositSteem(username)}>
+                                {tt('navigation.buy_LIQUID_TOKEN', {LIQUID_TOKEN})}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/market" onClick={this.navigate}>
+                                {tt('navigation.currency_market')}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/recover_account_step_1" onClick={this.navigate}>
+                                {tt('navigation.stolen_account_recovery')}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/change_password" onClick={this.navigate}>
+                                {tt('navigation.change_account_password')}
+                            </a>
+                        </li>
+                        <li className="last">
+                            <a href="/~witnesses" onClick={this.navigate}>
+                                {tt('navigation.vote_for_witnesses')}
+                            </a>
+                        </li>
+                    </ul>
+                    <ul className="vertical menu">
+                        <li>
+                            <a href="https://steemit.chat/home" target="_blank" rel="noopener noreferrer">
+                                {tt('navigation.chat')}&nbsp;<Icon name="extlink" />
+                            </a>
+                        </li>
+                        <li>
+                            <a href="http://steemtools.com/" onClick={this.navigate} target="_blank" rel="noopener noreferrer">
+                                {tt('navigation.app_center')}&nbsp;<Icon name="extlink" />
+                            </a>
+                        </li>
+                        <li className="last">
+                            <a href="https://steemit.github.io/steemit-docs/" target="_blank" rel="noopener noreferrer">
+                                {tt('navigation.api_docs')}&nbsp;<Icon name="extlink" />
+                            </a>
+                        </li>
+                    </ul>
+                    <ul className="vertical menu">
+                        <li>
+                            <a href="https://steem.io/SteemWhitePaper.pdf" onClick={this.navigate}>
+                                {tt('navigation.whitepaper')}&nbsp;<Icon name="extlink" />
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://steem.io" onClick={this.navigate}>
+                                {tt('navigation.about')}&nbsp;<Icon name="extlink" />
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/privacy.html" onClick={this.navigate} rel="nofollow">
+                                {tt('navigation.privacy_policy')}
+                            </a>
+                        </li>
+                        <li className="last">
+                            <a href="/tos.html" onClick={this.navigate} rel="nofollow">
+                                {tt('navigation.terms_of_service')}
+                            </a>
+                        </li>
+                    </ul>
+                </SidePanel>
+                {miniHeader ? <MiniHeader /> : <Header toggleOffCanvasMenu={this.toggleOffCanvasMenu} menuOpen={this.state.open} />}
+                <div className="App__content">
+                    {welcome_screen}
+                    {callout}
+                    {children}
+                    {lp ? <LpFooter /> : null}
+                </div>
+                <Dialogs />
+                <Modals />
+                <PageViewsCounter />
+            </div> 
         </div>
     }
 }

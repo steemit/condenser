@@ -85,6 +85,20 @@ $themes: (
 }
 
 
+  .theme-original {
+    background-color: $color-background-off-white; 
+    color: $color-text-dark;
+  }
+  .theme-light {
+    background-color: $color-background-off-white; 
+    color: $color-text-dark;
+  }
+  .theme-dark {
+    background-color: $color-background-dark; 
+    color: $color-text-white;
+  }
+
+
 // Utility classes to be used with @extend 
 
 .link {

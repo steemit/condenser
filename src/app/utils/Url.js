@@ -12,7 +12,6 @@ export const setStore = (theStore) => {
 
 export const urlNotifications = (filter) => {
     try {
-        console.log('urlNotifications', store.getState().user.toJS())
         return '/@' + store.getState().user.getIn(['current', 'username']) + '/notifications' + ((filter)? '/' + filter : '');
     } catch (e) {
         //eslint-disable-line
@@ -27,7 +26,9 @@ export const urlComment = (comment, childComment) => {
         if (childComment) {
             urlSegments.push('#@' + childComment.author, childComment.permlink);
         }
-    } catch (e) {}
+    } catch (e) {
+        //eslint-disable-line
+    }
     return urlSegments.join('/');
 }
 

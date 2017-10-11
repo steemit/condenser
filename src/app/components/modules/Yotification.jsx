@@ -65,27 +65,27 @@ class YotificationModule extends React.Component {
 
     }
 
-    markAllRead = () => {
-        if(this.props.filter !== FILTER_ALL) {
-            this.props.markAllRead(filters[this.props.filter]);
-        } else {
-            this.props.markAllRead([]);
-        }
+    markAllRead = () => { //eslint-disable-line no-undef
+        const ids = [];
+        this.props.notifications.forEach((n) => {
+            ids.push(n.id);
+        });
+        this.props.markSomeRead(ids);
     }
 
-    markAllHidden = () => {
-        if(this.props.filter !== FILTER_ALL) {
-            this.props.markAllHidden(filters[this.props.filter]);
-        } else {
-            this.props.markAllHidden([]);
-        }
+    markAllHidden = () => { //eslint-disable-line no-undef
+        const ids = [];
+        this.props.notifications.forEach((n) => {
+            ids.push(n.id);
+        });
+        this.props.markSomeHidden(ids);
     }
 
-    loadTestData = () => { // Todo: for dev only! Do not merge if present!
+    loadTestData = () => { //eslint-disable-line no-undef // Todo: for dev only! Do not merge if present!
         this.props.getSomeGetSomeGetSomeYeahYeah();
     }
 
-    loadMoreTestData = () => { // Todo: for dev only! Do not merge if present!
+    loadMoreTestData = () => { //eslint-disable-line no-undef // Todo: for dev only! Do not merge if present!
         this.props.comeOnItsSuchAJoy();
     }
 
@@ -114,7 +114,7 @@ class YotificationModule extends React.Component {
 YotificationModule.propTypes = {
     comeOnItsSuchAJoy: React.PropTypes.func.isRequired, // Todo: for dev only! Do not merge if present!
     getSomeGetSomeGetSomeYeahYeah: React.PropTypes.func.isRequired, // Todo: for dev only! Do not merge if present!
-    markAllRead: React.PropTypes.func.isRequired,
+    markSomeRead: React.PropTypes.func.isRequired,
     //notifications: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
     layout: React.PropTypes.oneOf([LAYOUT_PAGE, LAYOUT_DROPDOWN]),
     showClearAll: React.PropTypes.bool.isRequired
@@ -152,7 +152,7 @@ export default connect(
         }
     },
     dispatch => ({
-        getSomeGetSomeGetSomeYeahYeah: () => {  // Todo: for dev only! Do not merge if present!
+        getSomeGetSomeGetSomeYeahYeah: () => { // Todo: for dev only! Do not merge if present!
             dispatch({
                 type: 'notification/RECEIVE_ALL',
                 payload: [
@@ -168,7 +168,7 @@ export default connect(
                 ],
             });
         },
-        comeOnItsSuchAJoy: () => {  // Todo: for dev only! Do not merge if present!
+        comeOnItsSuchAJoy: () => { // Todo: for dev only! Do not merge if present!
             dispatch({
                 type: 'notification/APPEND_SOME',
                 payload: [
@@ -179,22 +179,24 @@ export default connect(
                 ],
             });
         },
-        markAllRead: (notificationTypes) => {
+        markSomeRead: (notificationIds) => {
             const action = {
                 type: 'notification/MARK_ALL_READ',
                 payload: {
-                    notificationTypess
+                    ids: notificationIds
                 }
-            }
+            };
+            console.log('markSomeRead action:', JSON.stringify(action, null, 4));
             dispatch(action)
         },
-        markAllHidden: (notificationTypes) => {
+        markSomeHidden: (notificationIds) => {
             const action = {
                 type: 'notification/MARK_ALL_Hidden',
                 payload: {
-                    notificationTypes
+                    ids: notificationIds
                 }
-            }
+            };
+            console.log('markAllHidden action:', JSON.stringify(action, null, 4));
             dispatch(action)
         }
     })

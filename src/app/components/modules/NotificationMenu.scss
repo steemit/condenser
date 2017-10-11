@@ -61,6 +61,9 @@ ul.Notifications {
 
     }
     &.Page {
+        > ul.menu {
+            overflow-x: auto;
+        }
         > .title {
             padding-left: 0;
             padding-right: 0.2rem;

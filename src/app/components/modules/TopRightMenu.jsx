@@ -10,6 +10,7 @@ import VerticalMenu from 'app/components/elements/VerticalMenu';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import NotifiCounter from 'app/components/elements/NotifiCounter';
 import tt from 'counterpart';
+import {linkBuilder} from 'app/Routes';
 
 const defaultNavigate = (e) => {
     if (e.metaKey || e.ctrlKey) {
@@ -26,20 +27,20 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
     const mcl = vertical ? '' : ' sub-menu';
     const lcn = vertical ? '' : 'show-for-medium';
     const nav = navigate || defaultNavigate;
-    const submit_story = $STM_Config.read_only_mode ? null : <li className={lcn + ' submit-story' + (vertical ? ' last' : '')}><a href="/submit.html" onClick={nav}>{tt('g.submit_a_story')}</a></li>;
-    const submit_icon = $STM_Config.read_only_mode ? null : <li className="show-for-small-only"><Link to="/submit.html"><Icon name="pencil2" /></Link></li>;
-    const feed_link = `/@${username}/feed`;
-    const replies_link = `/@${username}/recent-replies`;
-    const wallet_link = `/@${username}/transfers`;
-    const account_link = `/@${username}`;
-    const comments_link = `/@${username}/comments`;
-    const reset_password_link = `/@${username}/password`;
-    const settings_link = `/@${username}/settings`;
+    const submit_story = $STM_Config.read_only_mode ? null : <li className={lcn + ' submit-story' + (vertical ? ' last' : '')}><a href={linkBuilder.post()} onClick={nav}>{tt('g.submit_a_story')}</a></li>;
+    const submit_icon = $STM_Config.read_only_mode ? null : <li className="show-for-small-only"><Link to={linkBuilder.post()}><Icon name="pencil2" /></Link></li>;
+    const feed_link = linkBuilder.userFeed(username);
+    const replies_link = linkBuilder.userReplies(username);
+    const wallet_link = linkBuilder.userWallet(username);
+    const profile_link = linkBuilder.userProfile(username);
+    const comments_link = linkBuilder.userComments(username);
+    const reset_password_link = linkBuilder.userPassword(username);
+    const settings_link = linkBuilder.userSettings(username);
     const tt_search = tt('g.search');
     if (loggedIn) { // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!
         const user_menu = [
             {link: feed_link, icon: "home", value: tt('g.feed'), addon: <NotifiCounter fields="feed" />},
-            {link: account_link, icon: 'profile', value: tt('g.blog')},
+            {link: profile_link, icon: 'profile', value: tt('g.blog')},
             {link: comments_link, icon: 'replies', value: tt('g.comments')},
             {link: replies_link, icon: 'reply', value: tt('g.replies'), addon: <NotifiCounter fields="comment_reply" />},
             {link: wallet_link, icon: 'wallet', value: tt('g.wallet'), addon: <NotifiCounter fields="follow,send,receive,account_update" />},
@@ -51,7 +52,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
         ];
         return (
             <ul className={mcn + mcl}>
-                <li className={lcn + " Header__search"}><a href="/static/search.html" title={tt_search}>{vertical ? <span>{tt_search}</span> : <Icon name="search" />}</a></li>
+                <li className={lcn + " Header__search"}><a href={linkBuilder.search()} title={tt_search}>{vertical ? <span>{tt_search}</span> : <Icon name="search" />}</a></li>
                 {submit_story}
                 {!vertical && submit_icon}
                 <LinkWithDropdown
@@ -63,7 +64,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
                     }
                 >
                     {!vertical && <li className={'Header__userpic '}>
-                        <a href={account_link} title={username} onClick={e => e.preventDefault()}>
+                        <a href={profile_link} title={username} onClick={e => e.preventDefault()}>
                             <Userpic account={username} />
                         </a>
                         <div className="TopRightMenu__notificounter"><NotifiCounter fields="total" /></div>
@@ -78,7 +79,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
     if (probablyLoggedIn) {
         return (
             <ul className={mcn + mcl}>
-                {!vertical && <li className="Header__search"><a href="/static/search.html" title={tt_search}><Icon name="search" /></a></li>}
+                {!vertical && <li className="Header__search"><a href={linkBuilder.search()} title={tt_search}><Icon name="search" /></a></li>}
                 <li className={lcn} style={{paddingTop: 0, paddingBottom: 0}}><LoadingIndicator type="circle" inline /></li>
                 {toggleOffCanvasMenu && <li className="toggle-menu Header__hamburger"><a href="#" onClick={toggleOffCanvasMenu}>
                     <span className="hamburger" />
@@ -88,9 +89,9 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
     }
     return (
         <ul className={mcn + mcl}>
-            {!vertical && <li className="Header__search"><a href="/static/search.html" title={tt_search}><Icon name="search" /></a></li>}
-            <li className={lcn}><a href="/pick_account">{tt('g.sign_up')}</a></li>
-            <li className={lcn}><a href="/login.html" onClick={showLogin}>{tt('g.login')}</a></li>
+            {!vertical && <li className="Header__search"><a href={linkBuilder.search()} title={tt_search}><Icon name="search" /></a></li>}
+            <li className={lcn}><a href={linkBuilder.signup()}>{tt('g.sign_up')}</a></li>
+            <li className={lcn}><a href={linkBuilder.login()} onClick={showLogin}>{tt('g.login')}</a></li>
             {submit_story}
             {!vertical && submit_icon}
             {toggleOffCanvasMenu && <li className="toggle-menu Header__hamburger"><a href="#" onClick={toggleOffCanvasMenu}>

@@ -130,3 +130,17 @@ export function resolveRoute(path)
     }
     return {page: 'NotFound'};
 }
+
+export const linkBuilder = {
+    userProfile: name => `/${name}`,
+    userFeed: name => `/${name}/feed`,
+    userReplies: name => `/${name}/recent-replies`,
+    userWallet: name => `/${name}/transfers`,
+    userComments: name => `/${name}/comments`,
+    userPassword: name => `/${name}/password`,
+    userSettings: name => `/${name}/settings`,
+    search: () => '/static/search.html',
+    post: () => '/submit.html',
+    signup: () => '/pick_account',
+    login: () => '/login.html',
+};

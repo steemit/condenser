@@ -1,5 +1,5 @@
 import React from 'react';
-import {default as YotificationModule, LAYOUT_PAGE, FILTER_ALL} from 'app/components/modules/Yotification'; //eslint-disable-line import/no-named-default
+import YotificationModule, { LAYOUT_PAGE, FILTER_ALL } from 'app/components/modules/Yotification';
 
 export const SUBSECTION_DEFAULT = FILTER_ALL;
 

@@ -69,7 +69,7 @@ class PostsIndex extends React.Component {
         let emptyText = '';
         let markNotificationRead = null;
         if (category === 'feed') {
-            const account_name = order.slice(1);
+            const account_name = order;
             order = 'by_feed';
             topics_order = 'trending';
             posts = this.props.accounts.getIn([account_name, 'feed']);

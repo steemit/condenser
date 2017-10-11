@@ -13,12 +13,12 @@ export const routeRegex = {
 };
 
 export const routeRegexNew = {
-    PostsIndex: /^\/([\w\.\d-]+)\/feed\/?$/,
     UserProfile1: /^\/([\w\.\d-]+)\/?$/,
     UserProfile2: /^\/([\w\.\d-]+)\/(blog|posts|comments|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)\/?$/,
     UserProfile3: /^\/([\w\.\d-]+)\/[\w\.\d-]+/,
     UserEndPoints: /^(blog|posts|comments|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)$/,
-    CategoryFilters: /^\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/?$/ig,
+    PostsIndex: /^\/c\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/?$/,
+    PostsIndexUserFeed: /^\/([\w\.\d-]+)\/feed\/?$/,
     Post: /^\/([\w\d\.-]+)\/([\w\d-]+)\/?($|\?)/,
     PostJson: /^\/([\w\d\.-]+)\/([\w\d-]+)(\.json)$/,
     UserJson: /^\/([\w\.\d-]+)(\.json)$/,
@@ -106,6 +106,10 @@ export default function resolveRoute(path)
     //     return {page: 'Post', params: match.slice(1)};
     // }
     let match = path.match(routeRegexNew.PostsIndex);
+    if (match) {
+        return {page: 'PostsIndex', params: match.slice(1)};
+    }
+    match = path.match(routeRegexNew.PostsIndexUserFeed);
     if (match) {
         return {page: 'PostsIndex', params: ['home', match[1]]};
     }

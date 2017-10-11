@@ -133,11 +133,18 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
                 };
             }
             url = `${content.category}/@${content.author}/${content.permlink}`;
+        } else if (route.page === 'UserProfile') {
+            url = `/@${route.params.join('/')}`;
+        } else if (route.page === 'PostsIndex') {
+            if (route.params[0] === 'home') {
+                url = `/@${route.params[1]}/feed`;
+            } else {
+                url = route.params.join('/');
+            }
         }
 
         console.log('-- universalRender url -->', url);
         onchain = await api.getStateAsync(url);
-        //console.log('-- onchain -->', onchain);
 
         if (Object.getOwnPropertyNames(onchain.accounts).length === 0 && (url.match(routeRegex.UserProfile1) || url.match(routeRegex.UserProfile3))) { // protect for invalid account
             return {

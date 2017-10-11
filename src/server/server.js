@@ -114,14 +114,14 @@ app.use(function* (next) {
         }
     }
     // normalize top category filtering from cased params
-    if (this.method === 'GET' && routeRegex.CategoryFilters.test(this.url)) {
-        const p = this.originalUrl.toLowerCase();
-        if (p !== this.originalUrl) {
-            this.status = 301;
-            this.redirect(p);
-            return;
-        }
-    }
+    // if (this.method === 'GET' && routeRegex.CategoryFilters.test(this.url)) {
+    //     const p = this.originalUrl.toLowerCase();
+    //     if (p !== this.originalUrl) {
+    //         this.status = 301;
+    //         this.redirect(p);
+    //         return;
+    //     }
+    // }
     // // do not enter unless session uid & verified phone
     // if (this.url === '/create_account' && !this.session.uid) {
     //     this.status = 302;

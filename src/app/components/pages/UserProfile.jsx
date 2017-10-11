@@ -442,7 +442,7 @@ export default class UserProfile extends React.Component {
 }
 
 module.exports = {
-    path: '@:accountname(/:section)',
+    path: ':accountname(/:section)',
     component: connect(
         state => {
             const wifShown = state.global.get('UserKeys_wifShown')

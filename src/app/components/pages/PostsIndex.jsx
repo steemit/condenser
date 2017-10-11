@@ -63,13 +63,13 @@ class PostsIndex extends React.Component {
         this.setState({showSpam: !this.state.showSpam})
     }
     render() {
-        let {category, order = constants.DEFAULT_SORT_ORDER} = this.props.routeParams;
+        let {user_or_c, order, category} = this.props.routeParams;
         let topics_order = order;
         let posts = [];
         let emptyText = '';
         let markNotificationRead = null;
-        if (category === 'feed') {
-            const account_name = order;
+        if (order === 'feed') {
+            const account_name = user_or_c;
             order = 'by_feed';
             topics_order = 'trending';
             posts = this.props.accounts.getIn([account_name, 'feed']);
@@ -124,7 +124,7 @@ class PostsIndex extends React.Component {
 }
 
 module.exports = {
-    path: ':order(/:category)',
+    path: '/:user_or_c/:order(/:category)',
     component: connect(
         (state) => {
             return {

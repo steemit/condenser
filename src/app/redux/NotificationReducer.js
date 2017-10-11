@@ -63,6 +63,7 @@ export const createList = ({ prop, val }) => {
     return (state = Set(), action = { type: null }) => {
         switch (action.type) {
             case 'notification/RECEIVE_ALL':
+                console.log('ben, is this the best place to do snake_toCamel case transforms? And change notify_id, notify_type to id & notificationType respectively?')
                 return Set.fromKeys(apiToMap(action.payload).filter(n => (n[prop] === val)));
             case 'notification/APPEND_SOME':
                 return state.union(Set.fromKeys(apiToMap(action.payload).filter(n => (n[prop] === val))));

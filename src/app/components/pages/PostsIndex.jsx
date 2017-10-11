@@ -12,6 +12,7 @@ import Immutable from "immutable";
 import Callout from 'app/components/elements/Callout';
 import Topics from './Topics';
 import { SidebarModule } from '../modules/SidebarModule';
+import SidebarStats from 'app/components/elements/SidebarStats';
 
 
 class PostsIndex extends React.Component {
@@ -129,18 +130,7 @@ class PostsIndex extends React.Component {
                         />}
                 </article>
                  <aside className="c-sidebar c-sidebar--right">
-                    <div className="c-sidebar__module">
-                      <div className="c-sidebar__header">
-                        <h3 className="c-sidebar__h3">Stats</h3>
-                      </div>
-                      <div className="c-sidebar__content">
-                        <ul className="c-sidebar__list">
-                          <li className="c-sidebar__list-item"><span className="c-sidebar__label">Steem Power</span><span className="c-sidebar__score">2,340.890</span></li>
-                          <li className="c-sidebar__list-item"><span className="c-sidebar__label">Power Rank</span><span className="c-sidebar__score">862</span></li>
-                          <li className="c-sidebar__list-item"><span className="c-sidebar__label">Followers</span><span className="c-sidebar__score">340</span></li>
-                        </ul>
-                      </div>
-                    </div>
+                    <SidebarStats steemPower={123} powerRank={"five"} followers={23} />
                     <div className="c-sidebar__module">
                       <div className="c-sidebar__header">
                         <h3 className="c-sidebar__h3">Links</h3>

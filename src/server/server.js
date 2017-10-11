@@ -27,7 +27,7 @@ import flash from 'koa-flash';
 import minimist from 'minimist';
 import Grant from 'grant-koa';
 import config from 'config';
-import { routeRegex } from 'app/ResolveRoute';
+import { routeRegex } from 'app/Routes';
 import secureRandom from 'secure-random';
 import userIllegalContent from 'app/utils/userIllegalContent';
 

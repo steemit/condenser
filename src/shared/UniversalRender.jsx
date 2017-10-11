@@ -8,7 +8,7 @@ import { renderToString } from 'react-dom/server';
 import { Router, RouterContext, match, applyRouterMiddleware, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
 import RootRoute from 'app/RootRoute';
-import resolveRoute from 'app/ResolveRoute';
+import {resolveRoute, routeRegex} from 'app/Routes';
 import {createStore, applyMiddleware, compose} from 'redux';
 import { useScroll } from 'react-router-scroll';
 import createSagaMiddleware from 'redux-saga';
@@ -25,7 +25,6 @@ import {component as NotFound} from 'app/components/pages/NotFound';
 import extractMeta from 'app/utils/ExtractMeta';
 import Translator from 'app/Translator';
 import {notificationsArrayToMap} from 'app/utils/Notifications';
-import {routeRegex} from "app/ResolveRoute";
 import {contentStats} from 'app/utils/StateFunctions'
 
 import {api} from 'steem';

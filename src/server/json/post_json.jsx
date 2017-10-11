@@ -1,6 +1,6 @@
 import koa_router from 'koa-router';
 import React from 'react';
-import {routeRegex} from "app/ResolveRoute";
+import {routeRegex} from "app/Routes";
 import {api} from 'steem'
 
 export default function usePostJson(app) {

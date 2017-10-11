@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import {connect} from 'react-redux';
 import TopRightMenu from 'app/components/modules/TopRightMenu';
 import Icon from 'app/components/elements/Icon';
-import resolveRoute from 'app/ResolveRoute';
+import {resolveRoute} from 'app/Routes';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import HorizontalMenu from 'app/components/elements/HorizontalMenu';
@@ -154,7 +154,7 @@ class Header extends React.Component {
         const topic_link = topic ? <Link to={`/${this.last_sort_order || 'trending'}/${topic}`}>{topic}</Link> : null;
 
         const sort_orders = [
-            ['trending', tt('main_menu.trending')],        
+            ['trending', tt('main_menu.trending')],
             ['created', tt('g.new')],
             ['hot', tt('main_menu.hot')],
             ['promoted', tt('g.promoted')]
@@ -164,7 +164,7 @@ class Header extends React.Component {
         const selected_sort_order = sort_orders.find(so => so[0] === sort_order);
 
         const sort_orders_horizontal = [
-            ['trending', tt('main_menu.trending')],        
+            ['trending', tt('main_menu.trending')],
             ['created', tt('g.new')],
             ['hot', tt('main_menu.hot')],
             ['promoted', tt('g.promoted')]
@@ -189,7 +189,7 @@ class Header extends React.Component {
                                 </li>
                                 <li className="Header__top-steemit show-for-medium noPrint"><Link to={logo_link}>steemit<span className="beta">beta</span></Link></li>
                                 <li className="delim show-for-medium">|</li>
-                    
+
                                 {(topic_link || user_name || page_name) && sort_order && <li className="delim show-for-small-only">|</li>}
                                 {selected_sort_order && <DropdownMenu className="Header__sort-order-menu menu-hide-for-large" items={sort_order_menu} selected={selected_sort_order[1]} el="li" />}
                                 <HorizontalMenu items={sort_order_menu_horizontal} />

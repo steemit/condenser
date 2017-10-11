@@ -65,6 +65,13 @@ class YotificationModule extends React.Component {
 
     }
 
+    componentDidMount() {
+        const self = this;
+        setTimeout(() => {
+            self.props.markSomeShown();
+        }, 3000)
+    }
+
     markAllRead = () => { //eslint-disable-line no-undef
         const ids = [];
         this.props.notifications.forEach((n) => {
@@ -179,6 +186,16 @@ export default connect(
                 ],
             });
         },
+        markSomeShown: (notificationIds) => {
+            const action = {
+                type: 'notification/MARK_ALL_SHOWN',
+                payload: {
+                    ids: notificationIds
+                }
+            };
+            console.log('markSomeShown action:', JSON.stringify(action, null, 4)); // Todo: for dev only! Do not merge if present!
+            dispatch(action)
+        },
         markSomeRead: (notificationIds) => {
             const action = {
                 type: 'notification/MARK_ALL_READ',
@@ -186,7 +203,7 @@ export default connect(
                     ids: notificationIds
                 }
             };
-            console.log('markSomeRead action:', JSON.stringify(action, null, 4));
+            console.log('markSomeRead action:', JSON.stringify(action, null, 4)); // Todo: for dev only! Do not merge if present!
             dispatch(action)
         },
         markSomeHidden: (notificationIds) => {
@@ -196,7 +213,7 @@ export default connect(
                     ids: notificationIds
                 }
             };
-            console.log('markAllHidden action:', JSON.stringify(action, null, 4));
+            console.log('markAllHidden action:', JSON.stringify(action, null, 4)); // Todo: for dev only! Do not merge if present!
             dispatch(action)
         }
     })

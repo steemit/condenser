@@ -26,10 +26,19 @@ export const byId = (state = OrderedMap(), action = { type: null }) => {
         case 'notification/APPEND_SOME':
             return state.merge(apiToMap(action.payload)).sortBy(n => n.created).reverse();
         case 'notification/MARK_ALL_READ':
+            //filters needed here that use the id list? // Todo: for dev only! Do not merge if present! 
             return state.map(n => {
                 return {
                     ...n,
                     read: true,
+                };
+            });
+        case 'notification/MARK_ALL_SHOWN':
+            //filters needed here that use the id list? // Todo: for dev only! Do not merge if present!
+            return state.map(n => {
+                return {
+                    ...n,
+                    shown: true,
                 };
             });
         case 'notification/UPDATE_ONE':

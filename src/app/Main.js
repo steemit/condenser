@@ -120,7 +120,7 @@ async function runApp(initial_state) {
 }
 
 async function getOffchainState() {
-    return (await fetch('/api/v1/state')).json()
+    return (await fetch('/api/v1/state', {credentials: 'same-origin'})).json()
 }
 
 async function main() {

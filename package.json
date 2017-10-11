@@ -8,20 +8,20 @@
   "description": "steemit.com is the koa web server & middleware and react.js in-browser code for the world's first blockchain content + social media monetization platform!",
   "main": "index.js",
   "scripts": {
-    "build": "node scripts/check_translations.js; NODE_ENV=production ./node_modules/babel-cli/bin/babel-node.js ./node_modules/.bin/webpack --stats --config ./webpack/prod.config.js; rm -rf ./lib; babel src --out-dir lib -Dq",
+    "build": "NODE_ENV=production ./node_modules/babel-cli/bin/babel-node.js ./node_modules/.bin/webpack --stats --config ./webpack/prod.config.js; rm -rf ./lib; babel src --out-dir lib -Dq",
     "mocha": "NODE_ENV=test mocha ./mocha.setup.js",
     "test": "npm run mocha -- src/app/**/*.test.js",
     "test:watch:all": "npm test -- --watch --watch-extensions jsx",
     "test:watch": "npm run mocha -- --watch --watch-extensions jsx",
+    "eslint": "LIST=`git diff-index --name-only HEAD | grep .*\\.js | grep -v json`; if [ \"$LIST\" ]; then eslint $LIST; fi",
     "production": "NODE_ENV=production node lib/server/index.js",
-    "start": "node scripts/check_translations.js; NODE_ENV=development ./node_modules/babel-cli/bin/babel-node.js ./webpack/dev-server.js",
+    "start": "NODE_ENV=development ./node_modules/babel-cli/bin/babel-node.js ./webpack/dev-server.js",
     "webpush": "./node_modules/babel-cli/bin/babel-node.js ./scripts/webpush_notify.js",
     "checktranslations": "node scripts/check_translations.js"
   },
   "author": "Steemit, Inc.",
   "license": "MIT",
   "dependencies": {
-    "@newrelic/native-metrics": "^2.1.1",
     "@steem/crypto-session": "git+https://github.com/steemit/crypto-session.git#83a90b319ce5bc6a70362d52a15a815de7e729bb",
     "assert": "^1.3.0",
     "autoprefixer-loader": "^3.2.0",
@@ -87,7 +87,6 @@
     "mixpanel": "^0.5.0",
     "mysql": "^2.10.2",
     "net": "^1.0.2",
-    "newrelic": "^1.40.0",
     "node-sass": "^3.4.2",
     "os": "^0.1.1",
     "purest": "^2.0.1",
@@ -154,16 +153,20 @@
     "dev-ip": "^1.0.1",
     "dirty-chai": "^1.2.2",
     "enzyme": "^2.1.0",
-    "eslint": "^2.13.1",
-    "eslint-config-airbnb": "^6.1.0",
-    "eslint-plugin-babel": "^3.1.0",
-    "eslint-plugin-react": "^4.2.0",
+    "escope": "^3.6.0",
+    "eslint": "^4.7.0",
+    "eslint-config-airbnb": "^15.1.0",
+    "eslint-plugin-babel": "^4.1.2",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-react": "^7.4.0",
     "extract-text-webpack-plugin": "^1.0.1",
     "jsdom": "^9.8.0",
     "koa-webpack-dev-middleware": "^1.1.0",
     "koa-webpack-hot-middleware": "^1.0.3",
     "mocha": "^2.4.5",
     "node-watch": "^0.5.5",
+    "pre-commit": "^1.2.2",
     "react-addons-perf": "15.4.2",
     "react-addons-test-utils": "15.4.2",
     "react-transform-catch-errors": "^1.0.1",
@@ -177,5 +180,9 @@
   },
   "engines": {
     "node": ">=7.0.0"
-  }
+  },
+  "pre-commit": [
+    "eslint",
+    "checktranslations"
+  ]
 }

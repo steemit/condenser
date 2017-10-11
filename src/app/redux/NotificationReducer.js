@@ -76,16 +76,21 @@ export const createList = ({ prop, val }) => {
                 return Set.fromKeys(apiToMap(action.payload).filter(n => (n[prop] === val)));
             case 'notification/APPEND_SOME':
                 return state.union(Set.fromKeys(apiToMap(action.payload).filter(n => (n[prop] === val))));
-            case 'notification/MARK_ALL_READ':
-                return (prop === 'read' && val === 'true') ? Set() : state;
-            case 'notification/MARK_ALL_SHOWN':
-                return (prop === 'shown' && val === 'true') ? Set() : state;
             case 'notification/UPDATE_ONE':
-                return (action.updates[prop] && action.updates[prop] === val) ? state.delete(action.id) : state;
+                if (action.updates.hasOwnProperty(prop) && action.updates[prop] !== val) {
+                    return state.delete(action.id);
+                }
+                if (action.updates.hasOwnProperty(prop) && action.updates[prop] === val) {
+                    return state.add(action.id);
+                }
+                return state;
             case 'notification/UPDATE_SOME':
                 return action.ids.reduce((acc, updatedId) => {
-                    if (action.updates[prop] && action.updates[prop] !== val) {
+                    if (action.updates.hasOwnProperty(prop) && action.updates[prop] !== val) {
                         return acc.delete(updatedId);
+                    }
+                    if (action.updates.hasOwnProperty(prop) && action.updates[prop] === val) {
+                        return acc.add(updatedId);
                     }
                     return acc;
                 }, state);
@@ -106,8 +111,8 @@ const generateByTypeReducers = (types, listCreator) => {
 
 const notificationReducer = combineReducers({
     byId,
-    unread: createList({ prop: 'read', val: false}),
-    unshown: createList({ prop: 'shown', val: false}),
+    unread: createList({ prop: 'read', val: false }),
+    unshown: createList({ prop: 'shown', val: false }),
     byType: combineReducers(generateByTypeReducers(allTypes, createList)),
 });
 

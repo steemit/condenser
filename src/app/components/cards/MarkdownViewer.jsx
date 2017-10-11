@@ -3,8 +3,7 @@ import {connect} from 'react-redux'
 import {Component} from 'react'
 import Remarkable from 'remarkable'
 import YoutubePreview from 'app/components/elements/YoutubePreview'
-import sanitizeConfig, {noImageText} from 'app/utils/SanitizeConfig'
-import sanitize from 'sanitize-html'
+import {sanitize, noImageText} from '@steemit/render'
 import HtmlReady from 'shared/HtmlReady'
 import tt from 'counterpart';
 
@@ -88,7 +87,7 @@ class MarkdownViewer extends Component {
         if (this.props.allowDangerousHTML === true) {
             console.log('WARN\tMarkdownViewer rendering unsanitized content')
         } else {
-            cleanText = sanitize(renderedText, sanitizeConfig({large, highQualityPost, noImage: noImage && allowNoImage}))
+            cleanText = sanitize(renderedText, {large, highQualityPost, noImage: noImage && allowNoImage})
         }
 
         if(/<\s*script/ig.test(cleanText)) {

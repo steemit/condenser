@@ -16,6 +16,12 @@
     libsodium "^0.4.8"
     libsodium-wrappers "^0.4.8"
 
+"@steemit/render@git+https://github.com/steemit/steemit-render.git#b9edf19cee423252ac16b157e6892dcea5e1fe40":
+  version "1.0.0"
+  resolved "git+https://github.com/steemit/steemit-render.git#b9edf19cee423252ac16b157e6892dcea5e1fe40"
+  dependencies:
+    sanitize-html "^1.14.1"
+
 "@types/geojson@^1.0.0":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@types/geojson/-/geojson-1.0.2.tgz#b02d10ab028e2928ac592a051aaa4981a1941d03"

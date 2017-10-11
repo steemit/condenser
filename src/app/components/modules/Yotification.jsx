@@ -37,9 +37,9 @@ const makeFilterList = () => {
     const locales = tt;
     const filterLIs = Object.keys(filters).reduce((list, filter) => {
         list.push(<li key={filter}><Link
-            href={Url.notifications(filter)}>{locales(`notifications.filters.${filter}`)}</Link></li>);
+            to={Url.notifications(filter)}>{locales(`notifications.filters.${filter}`)}</Link></li>);
         return list;
-    }, [<li key="all"><Link href={Url.notifications()}>{tt('notifications.filters.all')}</Link></li>]);
+    }, [<li key="all"><Link to={Url.notifications()}>{tt('notifications.filters.all')}</Link></li>]);
     return ( <ul className="menu">{filterLIs}</ul>);
 }
 
@@ -102,13 +102,13 @@ class YotificationModule extends React.Component {
                     }
                     <button className="ptc" onClick={this.loadTestData}>Populate</button> {/* Todo: for dev only! Do not merge if present!*/}
                     <button className="ptc" onClick={this.loadMoreTestData}>... more</button> {/* Todo: for dev only! Do not merge if present!*/}
-                    <Link href={Url.profileSettings()}><Icon name="cog" /></Link>
+                    <Link to={Url.profileSettings()}><Icon name="cog" /></Link>
                 </span>
             </div>
             {(this.state.showFilters)? makeFilterList() : null}
             {makeNotificationList(this.props.notifications)}
             {(this.state.showFooter)? (<div className="footer">
-                <Link href={Url.profile() + '/notifications'} className="view-all">{tt('notifications.controls.go_to_page')}</Link>
+                <Link to={Url.profile() + '/notifications'} className="view-all">{tt('notifications.controls.go_to_page')}</Link>
             </div>) : null}
         </div>);
     }

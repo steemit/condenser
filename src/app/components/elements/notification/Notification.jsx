@@ -128,7 +128,7 @@ class NotificationLink extends React.Component {
             <div className="rightControls" onClick={ (read)? this.markUnread : this.markRead } dangerouslySetInnerHTML={{ __html: (read)? badges.visibilityOn : badges.visibilityOff }} />
         )
 
-        return ( <Link href={ link } className={ classNames } onClick={ this.markReadDefault } >
+        return ( <Link to={ link } className={ classNames } onClick={ this.markReadDefault } >
             { (!this.props.shown)? <span className="unseenIndicator" dangerouslySetInnerHTML={{ __html: "&#9679"}} /> : null }
             <div className="item-panel" >
                 { (notificationType !== type.POWER_DOWN) ? <div className={ "Comment__Userpic show-for-medium " + notificationType} >

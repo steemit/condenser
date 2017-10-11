@@ -180,7 +180,7 @@
     padding: 1em;
     transition: all 0.2s ease-out;
     border: transparent;
-    min-width: 0;
+    min-width: 300px;
   @include themify($themes) {
       background-color: themed('moduleBackgroundColor'); 
   }  
@@ -188,6 +188,7 @@
   @include MQ(M) {
     margin: 0 1em;
     padding: 0.5em 0em;
+    min-width: 550px;
 
     @include themify($themes) {
         background-color: themed('moduleMediumBackgroundColor'); 
@@ -195,12 +196,18 @@
   }
 
   @include MQ(L) {
-    padding: 1.5em 4em;
+    padding: 1.5em 2em;
+        min-width: 700px;
     @include themify($themes) {
         border: themed('border'); 
         box-shadow: 5px 5px 0 0 themed('contentBorderAccent');  
         background-color: themed('moduleBackgroundColor'); 
     }   
+  }
+
+  @include MQ(XL) { 
+    padding: 1.5em 4em;
+    min-width: 1050px;
   }
 
   &:hover {
@@ -337,6 +344,7 @@
     font-weight: bold;
     @include font-size(20px);     
     margin: 0;
+    text-transform: capitalize;
     @include MQ(M) {
       @include font-size(22px);       
     }

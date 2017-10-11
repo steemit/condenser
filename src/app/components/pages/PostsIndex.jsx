@@ -100,6 +100,38 @@ class PostsIndex extends React.Component {
         const fetching = (status && status.fetching) || this.props.loading;
         const {showSpam} = this.state;
 
+        // If we're at one of the four sort order routes without a tag filter,
+        // use the translated string for that sort order, f.ex "trending"
+        //
+        // If you click on a tag while you're in a sort order route,
+        // the title should be the translated string for that sort order
+        // plus the tag string, f.ex "trending: blog"
+        //
+        // Logged-in:
+        // At homepage (@user/feed) say "People I follow"
+        let page_title = 'Posts'; // sensible default here?
+        if (typeof this.props.username !== 'undefined' && category === 'feed') {
+            page_title = 'People I follow'; // todo: localization
+        } else {
+            switch (topics_order) {
+                case 'trending': // cribbed from Header.jsx where it's repeated 2x already :P
+                    page_title = tt('main_menu.trending');
+                    break;
+                case 'created':
+                    page_title = tt('g.new');
+                    break;
+                case 'hot':
+                    page_title = tt('main_menu.hot');
+                    break;
+                case 'promoted':
+                    page_title = tt('g.promoted');
+                    break;
+            }
+            if (typeof category !== 'undefined') {
+                page_title = `${page_title}: ${category}`; // maybe todo: localize the colon?
+            }
+        }
+
         return (
             <div className={'PostsIndex row' + (fetching ? ' fetching' : '')}>
                 <aside className="c-sidebar c-sidebar--left">
@@ -109,7 +141,7 @@ class PostsIndex extends React.Component {
                 <article className="articles">
                     <div className="articles__header">
                         <div className="articles__header-col">
-                        <h1 className="articles__h1">People I follow</h1>
+                        <h1 className="articles__h1">{page_title}</h1>
                     </div>
                     <div className="articles__header-col articles__header-col--right">
                         <div className="articles__tag-selector">

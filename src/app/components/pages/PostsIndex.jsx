@@ -1,7 +1,6 @@
 /* eslint react/prop-types: 0 */
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
-import Topics from './Topics';
 import constants from 'app/redux/constants';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import PostsList from 'app/components/cards/PostsList';
@@ -11,6 +10,9 @@ import MarkNotificationRead from 'app/components/elements/MarkNotificationRead';
 import tt from 'counterpart';
 import Immutable from "immutable";
 import Callout from 'app/components/elements/Callout';
+import Topics from './Topics';
+import { SidebarModule } from '../modules/SidebarModule';
+
 
 class PostsIndex extends React.Component {
 
@@ -102,28 +104,19 @@ class PostsIndex extends React.Component {
                 <aside className="c-sidebar c-sidebar--left">
                     <Topics order={topics_order} current={category} compact={false} />
                     <small><a onClick={this.onShowSpam}>{showSpam ? tt('g.next_3_strings_together.show_less') : tt('g.next_3_strings_together.show_more')}</a>{' ' + tt('g.next_3_strings_together.value_posts')}</small>
-                </aside>   
-
-      <article className="articles">
-            <div className="articles__header">
-                <div className="articles__header-col">
-                    <h1 className="articles__h1">People I follow</h1>
-                </div>
-
-                <div className="articles__header-col articles__header-col--right">
-                    <div className="articles__tag-selector">
-                        <Topics order={topics_order} current={category} compact />
+                </aside>
+                <article className="articles">
+                    <div className="articles__header">
+                        <div className="articles__header-col">
+                        <h1 className="articles__h1">People I follow</h1>
                     </div>
-                </div>         
-            </div> 
-
-            <hr className="articles__hr" />
-
-
-               { /*  <div className="PostsIndex__left column small-collapse fade-in--1"> 
-                    <div className="PostsIndex__topics_compact show-for-small hide-for-large">
-                        <Topics order={topics_order} current={category} compact />
-                    </div> */ }
+                    <div className="articles__header-col articles__header-col--right">
+                        <div className="articles__tag-selector">
+                            <Topics order={topics_order} current={category} compact />
+                        </div>
+                    </div>         
+                </div> 
+                <hr className="articles__hr" />
                     {markNotificationRead}
                     {(!fetching && (posts && !posts.size)) ? <Callout>{emptyText}</Callout> :
                         <PostsList
@@ -134,18 +127,11 @@ class PostsIndex extends React.Component {
                             loadMore={this.loadMore}
                             showSpam={showSpam}
                         />}
-        {/* </div>
-
-        </div> */ }       
-
-
-        </article>
-
-
+                </article>
                  <aside className="c-sidebar c-sidebar--right">
                     <div className="c-sidebar__module">
                       <div className="c-sidebar__header">
-                        <h3 className="c-sidebar__h3">Your stats</h3>
+                        <h3 className="c-sidebar__h3">Stats</h3>
                       </div>
                       <div className="c-sidebar__content">
                         <ul className="c-sidebar__list">
@@ -168,11 +154,26 @@ class PostsIndex extends React.Component {
                         </ul>
                       </div>
                     </div>
+                    <div className="c-sidebar__module">
+                      <div className="c-sidebar__header">
+                        <h3 className="c-sidebar__h3">New to Steemit?</h3>
+                      </div>
+                      <div className="c-sidebar__content">
+                        <ul className="c-sidebar__list">
+                          <li className="c-sidebar__list-item"><a className="c-sidebar__link" href="/welcome">Quick start guide</a></li>
+                          <li className="c-sidebar__list-item"><a className="c-sidebar__link" href="/faq.html">FAQs</a></li>
+                          <li className="c-sidebar__list-item"><a className="c-sidebar__link" href="https://steem.io">About the blockchain</a></li>
+                          <li className="c-sidebar__list-item"><a className="c-sidebar__link" href="/pick_account">Sign up</a></li>
+                        </ul>
+                      </div>
+                    </div>                    
+                    {/* <SidebarModule /> */}
                   </aside>
             </div>
         );
     }
 }
+
 
 module.exports = {
     path: ':order(/:category)',

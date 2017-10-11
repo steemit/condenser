@@ -68,24 +68,20 @@ class YotificationModule extends React.Component {
     componentDidMount() {
         const self = this;
         setTimeout(() => {
-            self.props.markSomeShown();
+            self.markDisplayedShown();
         }, 3000)
     }
 
-    markAllRead = () => { //eslint-disable-line no-undef
-        const ids = [];
-        this.props.notifications.forEach((n) => {
-            ids.push(n.id);
-        });
-        this.props.markSomeRead(ids);
+    markDisplayedRead = () => { //eslint-disable-line no-undef
+        this.props.updateSome(this.props.notifications, {read: true} );
     }
 
-    markAllHidden = () => { //eslint-disable-line no-undef
-        const ids = [];
-        this.props.notifications.forEach((n) => {
-            ids.push(n.id);
-        });
-        this.props.markSomeHidden(ids);
+    markDisplayedHidden = () => { //eslint-disable-line no-undef
+        this.props.updateSome(this.props.notifications, {hide: true} );
+    }
+
+    markDisplayedShown = () => { //eslint-disable-line no-undef
+        this.props.updateSome(this.props.notifications, {shown: true} );
     }
 
     loadTestData = () => { //eslint-disable-line no-undef // Todo: for dev only! Do not merge if present!
@@ -101,8 +97,8 @@ class YotificationModule extends React.Component {
             <div className="title">{tt('g.notifications')}
                 <span className="controls-right">
                     {(this.props.showClearAll) ?
-                        <button className="ptc" onClick={this.markAllHidden}>{tt('notifications.controls.mark_all_hidden')}</button> :
-                        <button className="ptc" onClick={this.markAllRead}>{tt('notifications.controls.mark_all_read')}</button>
+                        <button className="ptc" onClick={this.markDisplayedHidden}>{tt('notifications.controls.mark_all_hidden')}</button> :
+                        <button className="ptc" onClick={this.markDisplayedRead}>{tt('notifications.controls.mark_all_read')}</button>
                     }
                     <button className="ptc" onClick={this.loadTestData}>Populate</button> {/* Todo: for dev only! Do not merge if present!*/}
                     <button className="ptc" onClick={this.loadMoreTestData}>... more</button> {/* Todo: for dev only! Do not merge if present!*/}
@@ -121,7 +117,7 @@ class YotificationModule extends React.Component {
 YotificationModule.propTypes = {
     comeOnItsSuchAJoy: React.PropTypes.func.isRequired, // Todo: for dev only! Do not merge if present!
     getSomeGetSomeGetSomeYeahYeah: React.PropTypes.func.isRequired, // Todo: for dev only! Do not merge if present!
-    markSomeRead: React.PropTypes.func.isRequired,
+    updateSome: React.PropTypes.func.isRequired,
     //notifications: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
     layout: React.PropTypes.oneOf([LAYOUT_PAGE, LAYOUT_DROPDOWN]),
     showClearAll: React.PropTypes.bool.isRequired
@@ -186,35 +182,17 @@ export default connect(
                 ],
             });
         },
-        markSomeShown: (notificationIds) => {
+        updateSome: (notifications, changes) => {
+            const ids = [];
+            notifications.forEach((n) => {
+                ids.push(n.id);
+            });
             const action = {
-                type: 'notification/MARK_ALL_SHOWN',
-                payload: {
-                    ids: notificationIds
-                }
+                type: 'notification/UPDATE_SOME',
+                ids,
+                updates: changes
             };
-            console.log('markSomeShown action:', JSON.stringify(action, null, 4)); // Todo: for dev only! Do not merge if present!
-            dispatch(action)
-        },
-        markSomeRead: (notificationIds) => {
-            const action = {
-                type: 'notification/MARK_ALL_READ',
-                payload: {
-                    ids: notificationIds
-                }
-            };
-            console.log('markSomeRead action:', JSON.stringify(action, null, 4)); // Todo: for dev only! Do not merge if present!
-            dispatch(action)
-        },
-        markSomeHidden: (notificationIds) => {
-            const action = {
-                type: 'notification/MARK_ALL_Hidden',
-                payload: {
-                    ids: notificationIds
-                }
-            };
-            console.log('markAllHidden action:', JSON.stringify(action, null, 4)); // Todo: for dev only! Do not merge if present!
-            dispatch(action)
+            dispatch(action);
         }
     })
 )(YotificationModule)

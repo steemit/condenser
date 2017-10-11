@@ -10,7 +10,7 @@ import ConsoleExports from './utils/ConsoleExports';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import * as steem from 'steem';
 
-import testNotifications from 'app/components/elements/notification/_TestData' //Todo: for dev only! Do not merge if present!
+//import testNotifications from 'app/components/elements/notification/_TestData' //Todo: for dev only! Do not merge if present!
 console.log("Search for " + "%c//Todo: for dev only! Do not merge if present!","background:red; color:yellow", "in src and remove before merging")
 window.onerror = error => {
     if (window.$STM_csrf) serverApiRecordEvent('client_error', error);
@@ -105,7 +105,7 @@ function runApp(initial_state) {
     }
 
     const location = `${window.location.pathname}${window.location.search}${window.location.hash}`;
-    universalRender({history, location, initial_state, setStore: (store) => { setStore(store); theStore = store; }}); //defining the setStore anon function because we need store for konami
+    universalRender({history, location, initial_state, setStore: (store) => { setStore(store); theStore = store; }}) //defining the setStore anon function because we need store for konami
     .catch(error => {
         console.error(error);
         serverApiRecordEvent('client_error', error);

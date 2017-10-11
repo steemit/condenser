@@ -83,6 +83,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
 
     if (process.env.BROWSER) {
         const store = createStore(rootReducer, initial_state, middleware);
+        console.log('notification/RECEIVE_ALL', testNotifications)
         store.dispatch({ // Todo: for dev only! Do not merge if present!
             type: 'notification/RECEIVE_ALL',
             payload: testNotifications

@@ -201,7 +201,6 @@ class App extends React.Component {
         return <div className={'App' + ' theme-original' + (lp ? ' LP' : '') + (ip ? ' index-page' : '') + (miniHeader ? ' mini-header' : '')}
                     ref="App_root"
                 >
-            <div class="container"> 
                 <SidePanel ref="side_panel" alignment="right">
                     <TopRightMenu vertical navigate={this.navigate} />
                     <ul className="vertical menu">
@@ -296,7 +295,6 @@ class App extends React.Component {
                 <Dialogs />
                 <Modals />
                 <PageViewsCounter />
-            </div> 
         </div>
     }
 }

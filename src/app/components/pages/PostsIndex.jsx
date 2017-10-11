@@ -103,10 +103,27 @@ class PostsIndex extends React.Component {
                     <Topics order={topics_order} current={category} compact={false} />
                     <small><a onClick={this.onShowSpam}>{showSpam ? tt('g.next_3_strings_together.show_less') : tt('g.next_3_strings_together.show_more')}</a>{' ' + tt('g.next_3_strings_together.value_posts')}</small>
                 </aside>   
-                <div className="PostsIndex__left column small-collapse fade-in--1">
-                    <div className="PostsIndex__topics_compact show-for-small hide-for-large">
+
+      <article className="articles">
+            <div className="articles__header">
+                <div className="articles__header-col">
+                    <h1 className="articles__h1">People I follow</h1>
+                </div>
+
+                <div className="articles__header-col articles__header-col--right">
+                    <div className="articles__tag-selector">
                         <Topics order={topics_order} current={category} compact />
                     </div>
+                </div>         
+            </div> 
+
+            <hr className="articles__hr" />
+
+
+               { /*  <div className="PostsIndex__left column small-collapse fade-in--1"> 
+                    <div className="PostsIndex__topics_compact show-for-small hide-for-large">
+                        <Topics order={topics_order} current={category} compact />
+                    </div> */ }
                     {markNotificationRead}
                     {(!fetching && (posts && !posts.size)) ? <Callout>{emptyText}</Callout> :
                         <PostsList
@@ -117,7 +134,14 @@ class PostsIndex extends React.Component {
                             loadMore={this.loadMore}
                             showSpam={showSpam}
                         />}
-                </div>
+        {/* </div>
+
+        </div> */ }       
+
+
+        </article>
+
+
                  <aside className="c-sidebar c-sidebar--right">
                     <div className="c-sidebar__module">
                       <div className="c-sidebar__header">

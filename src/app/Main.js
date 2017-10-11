@@ -16,9 +16,13 @@ window.onerror = error => {
     if (window.$STM_csrf) serverApiRecordEvent('client_error', error);
 };
 
-const CMD_LOG_T = 'log-t'
-const CMD_LOG_TOGGLE = 'log-toggle'
-const CMD_LOG_O = 'log-on'
+const kCommand = {
+    CMD_LOG_T: 'log-t',
+    CMD_LOG_TOGGLE: 'log-toggle',
+    CMD_LOG_O: 'log-on',
+    CMD_EXPOSE_STORE: 'expose-store'
+};
+let theStore = false;
 
 try {
     if(process.env.NODE_ENV === 'development') {
@@ -30,7 +34,7 @@ try {
 }
 
 function runApp(initial_state) {
-    initial_state.app.yotifications = testNotifications; //Todo: for dev only! Do not merge if present!
+    //initial_state.app.yotifications = testNotifications; //Todo: for dev only! Do not merge if present!
     console.log('Initial state', initial_state);
     const konami = {
         code: 'xyzzy',
@@ -38,12 +42,13 @@ function runApp(initial_state) {
     };
     const buff = konami.code.split('');
     const cmd = (command) => {
-        console.log('got command:' + command);
+        if(command) console.log('got command:' + command);
+
         switch (command) {
-            case CMD_LOG_O :
+            case kCommand.CMD_LOG_O :
                 konami.enabled = false;
-            case CMD_LOG_TOGGLE :
-            case CMD_LOG_T :
+            case kCommand.CMD_LOG_TOGGLE :
+            case kCommand.CMD_LOG_T :
                 konami.enabled = !konami.enabled;
                 if(konami.enabled) {
                     steem.api.setOptions({logger: console});
@@ -51,8 +56,15 @@ function runApp(initial_state) {
                     steem.api.setOptions({logger: false});
                 }
                 return 'api logging ' + konami.enabled;
+            case kCommand.CMD_EXPOSE_STORE :
+                window.redux = theStore;
+                return 'Redux store assigned to window.redux. Happy \'duxing';
             default :
-                return 'That command is not supported.';
+                console.log('These commands are understood');
+                for(var k in kCommand) if(kCommand.hasOwnProperty(k)) {
+                    console.log(kCommand[k]);
+                }
+                return ''
         }
         //return 'done';
     }
@@ -69,13 +81,13 @@ function runApp(initial_state) {
         buff.push(e.key)
         if(buff.join('') === konami.code) {
             enableKonami();
-            cmd(CMD_LOG_T)
+            cmd(kCommand.CMD_LOG_T)
         }
     };
 
     if(window.location.hash.indexOf('#'+konami.code) === 0) {
         enableKonami()
-        cmd(CMD_LOG_O)
+        cmd(kCommand.CMD_LOG_O)
     }
 
     const config = initial_state.offchain.config
@@ -93,7 +105,7 @@ function runApp(initial_state) {
     }
 
     const location = `${window.location.pathname}${window.location.search}${window.location.hash}`;
-    universalRender({history, location, initial_state, setStore})
+    universalRender({history, location, initial_state, setStore: (store) => { setStore(store); theStore = store; }}); //defining the setStore anon function because we need store for konami
     .catch(error => {
         console.error(error);
         serverApiRecordEvent('client_error', error);

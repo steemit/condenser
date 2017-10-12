@@ -1,6 +1,6 @@
-import { takeLatest } from 'redux-saga';
+import { takeLatest, takeEvery } from 'redux-saga';
 import { call, put, take, fork, race } from 'redux-saga/effects';
-import { fetchAllNotifications, fetchSomeNotifications } from 'app/utils/YoApiClient';
+import { fetchAllNotifications, fetchSomeNotifications, markAsRead } from 'app/utils/YoApiClient';
 
 function delay(millis) {
     const promise = new Promise(resolve => {
@@ -56,6 +56,28 @@ function* fetchSome({ username, since }) {
     });
 }
 
+function* updateOne({ id, updates }) {
+    if (updates.read === true) {
+        const payload = yield call(markAsRead, [id]);
+
+        yield put({
+            type: 'notification/APPEND_SOME',
+            payload,
+        });
+    }
+}
+
+function* updateSome({ ids, updates }) {
+    if (updates.read === true) {
+        const payload = yield call(markAsRead, ids);
+
+        yield put({
+            type: 'notification/APPEND_SOME',
+            payload,
+        });
+    }
+}
+
 export function* NotificationPollSaga() {
     yield [
         fork(watchPollData),
@@ -66,5 +88,7 @@ export function* NotificationFetchSaga() {
     yield [
         takeLatest('notification/FETCH_ALL', fetchAll),
         takeLatest('notification/FETCH_SOME', fetchSome),
+        takeEvery('notification/UPDATE_ONE', updateOne),
+        takeEvery('notification/UPDATE_SOME', updateSome),
     ];
 }

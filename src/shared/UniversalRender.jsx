@@ -217,8 +217,8 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
     }
 
     return {
-        title: 'Steemit',
-        titleBase: 'Steemit - ',
+        title: 'Steemit: actually worth it',
+        titleBase: 'Steemit: ',
         meta,
         statusCode: status,
         body: Iso.render(app, server_store.getState())

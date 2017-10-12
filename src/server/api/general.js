@@ -59,7 +59,6 @@ export default function useGeneralApi(app) {
             config: $STM_Config,
             uid: ctx.session.uid,
             serverBusy: false,
-            signup_bonus: '$1', // TODO: don't hardcode this
             login_challenge
         };
         if (ctx.session.arec) {

@@ -21,7 +21,6 @@ class Post extends React.Component {
         post: React.PropTypes.string,
         routeParams: React.PropTypes.object,
         location: React.PropTypes.object,
-        signup_bonus: React.PropTypes.string,
         current_user: React.PropTypes.object,
     };
     constructor() {
@@ -60,7 +59,7 @@ class Post extends React.Component {
 
     render() {
         const {showSignUp} = this
-        const {current_user, signup_bonus, content} = this.props
+        const {current_user, content} = this.props
         const {showNegativeComments, commentHidden, showAnyway} = this.state
         let post = this.props.post;
         if (!post) {
@@ -165,7 +164,7 @@ class Post extends React.Component {
                     <div className="column">
                         <div className="Post__promo">
                             {tt('g.next_7_strings_single_block.authors_get_paid_when_people_like_you_upvote_their_post')}.
-                            <br />{tt('g.next_7_strings_single_block.if_you_enjoyed_what_you_read_earn_amount', {amount: '$'+localizedCurrency(signup_bonus.substring(1)), INVEST_TOKEN_UPPERCASE})}
+                            <br />{tt('g.next_7_strings_single_block.if_you_enjoyed_what_you_read_earn_amount', {INVEST_TOKEN_UPPERCASE})}
                             <br />
                             <button type="button" className="button sign-up" onClick={showSignUp}>{tt('g.next_7_strings_single_block.sign_up_earn_steem')}<span className="free-money">{tt('g.next_7_strings_single_block.free_steem')}</span></button>
                         </div>
@@ -200,7 +199,6 @@ export default connect(state => {
     }
     return {
         content: state.global.get('content'),
-        signup_bonus: state.offchain.get('signup_bonus'),
         current_user,
         ignoring,
     }

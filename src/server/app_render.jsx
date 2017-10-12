@@ -29,60 +29,6 @@ async function appRender(ctx) {
             uid: ctx.session.uid,
             login_challenge
         };
-        const user_id = ctx.session.user;
-        if (user_id) {
-            let user = null;
-            if (appRender.dbStatus.ok || (new Date() - appRender.dbStatus.lastAttempt) > DB_RECONNECT_TIMEOUT) {
-                try {
-                    user = await models.User.findOne({
-                        attributes: ['name', 'email', 'picture_small', 'account_status'],
-                        where: {id: user_id},
-                        include: [{model: models.Account, attributes: ['name', 'ignored', 'created', 'owner_key']}],
-                        order: 'Accounts.id desc',
-                        logging: false
-                    });
-                    appRender.dbStatus = {ok: true};
-                } catch (e) {
-                    appRender.dbStatus = {ok: false, lastAttempt: new Date()};
-                    console.error('WARNING! mysql query failed: ', e.toString());
-                    offchain.serverBusy = true;
-                }
-            } else {
-                offchain.serverBusy = true;
-            }
-            if (user) {
-                let account = null;
-                let account_has_keys = null;
-                for (const a of user.Accounts) {
-                    if (!a.ignored) {
-                        account = a.name;
-                        if (a.owner_key && !a.created) {
-                            account_has_keys = true;
-                        }
-                        break;
-                    }
-                }
-                offchain.user = {
-                    id: user_id,
-                    name: user.name,
-                    email: user.email,
-                    picture: user.picture_small,
-                    prv: ctx.session.prv,
-                    account_status: user.account_status,
-                    account,
-                    account_has_keys
-                }
-            }
-        }
-        if (ctx.session.arec) {
-            const account_recovery_record = await models.AccountRecoveryRequest.findOne({
-                attributes: ['id', 'account_name', 'status', 'provider'],
-                where: {id: ctx.session.arec, status: 'confirmed'}
-            });
-            if (account_recovery_record) {
-                offchain.recover_account = account_recovery_record.account_name;
-            }
-        }
 
         const { body, title, statusCode, meta } = await universalRender({location: ctx.request.url, store, offchain, ErrorPage, tarantool: Tarantool.instance()});
 

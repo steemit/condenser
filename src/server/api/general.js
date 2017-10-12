@@ -63,6 +63,15 @@ export default function useGeneralApi(app) {
             signup_bonus: '$1', // TODO: don't hardcode this
             login_challenge
         };
+        if (ctx.session.arec) {
+            const account_recovery_record = yield models.AccountRecoveryRequest.findOne({
+                attributes: ['id', 'account_name', 'status', 'provider'],
+                where: {id: ctx.session.arec, status: 'confirmed'}
+            });
+            if (account_recovery_record) {
+                offchain.recover_account = account_recovery_record.account_name;
+            }
+        }
         this.body = JSON.stringify(offchain);
     })
 

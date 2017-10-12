@@ -120,11 +120,17 @@ async function runApp(initial_state) {
 }
 
 async function getOffchainState() {
-    return (await fetch('/api/v1/state', {credentials: 'same-origin'})).json()
+    const state = await (await fetch('/api/v1/state', {credentials: 'same-origin'})).json()
+    const now = Date.now() / 1000
+    const lastVisit = localStorage.getItem('lastVisit') || -Infinity
+    const loginData = localStorage.getItem('autopost2')
+    state.new_visit = (loginData == null && now - lastVisit > 1800)
+    return state
 }
 
 async function main() {
     offchain = await getOffchainState()
+    localStorage.setItem('lastVisit', Date.now() / 1000)
     if (!window.Intl) {
         require.ensure(['intl/dist/Intl'], (require) => {
             window.IntlPolyfill = window.Intl = require('intl/dist/Intl')

@@ -205,10 +205,8 @@ app.use(function*(next) {
     const from_link = this.request.headers.referer;
     if (!this.session.uid) {
         this.session.uid = secureRandom.randomBuffer(13).toString('hex');
-        this.session.new_visit = true;
         if (from_link) this.session.r = from_link;
     } else {
-        this.session.new_visit = this.session.last_visit - last_visit > 1800;
         if (!this.session.r && from_link) {
             this.session.r = from_link;
         }

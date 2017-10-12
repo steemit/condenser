@@ -23,6 +23,13 @@ ul.Notifications {
         color: $notif_dd_black;
         font-weight: bold;
         line-height: 1.5rem;
+        &.absolute {
+            position: absolute;
+            bottom: 0px;
+            left: 0px;
+            width: 100%;
+            background: $white;
+        }
         .controls-right {
             float:right;
         }

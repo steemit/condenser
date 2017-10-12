@@ -46,6 +46,7 @@ export default function useGeneralApi(app) {
     const koaBody = koa_body();
 
     router.get('/state', function *() {
+        this.setCookies = true;
         const ctx = this;
         let login_challenge = ctx.session.login_challenge;
         if (!login_challenge) {

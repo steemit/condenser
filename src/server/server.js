@@ -49,10 +49,11 @@ const numProcesses = process.env.NUM_PROCESSES || os.cpus().length;
 
 app.use(requestTime(numProcesses));
 
-// drop set-cookie headers for everything but state api
+// only use set-cookie headers for specific apis
+// (they bust the cache)
 app.use(function*(next) {
     yield* next;
-    if (this.request.url !== '/api/v1/state') {
+    if (this.setCookies !== true) {
         delete this.response.remove('set-cookie');
     }
 });

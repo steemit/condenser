@@ -39,6 +39,7 @@ const assets = Object.assign({}, require(assets_file), { script: [] });
 // }
 
 function* confirmMobileHandler(e) {
+    this.setCookies = true;
     if (!checkCSRF(this, this.request.body.csrf)) return;
     const confirmation_code = this.params && this.params.code
         ? this.params.code
@@ -108,6 +109,7 @@ export default function useEnterAndConfirmMobilePages(app) {
     const koaBody = koa_body();
 
     router.get("/enter_mobile", function*() {
+        this.setCookies = true;
         console.log(
             "-- /enter_mobile -->",
             this.session.uid,

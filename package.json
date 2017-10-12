@@ -180,7 +180,8 @@
     "fsevents": "*"
   },
   "engines": {
-    "node": ">=7.0.0"
+    "node": ">=7.0.0",
+    "npm": ">=5.4.2"
   },
   "pre-commit": [
     "eslint",

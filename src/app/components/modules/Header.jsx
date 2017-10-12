@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import {connect} from 'react-redux';
 import TopRightMenu from 'app/components/modules/TopRightMenu';
 import Icon from 'app/components/elements/Icon';
-import {resolveRoute} from 'app/Routes';
+import {resolveRoute, linkBuilder} from 'app/Routes';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import HorizontalMenu from 'app/components/elements/HorizontalMenu';
@@ -12,7 +12,7 @@ import tt from 'counterpart';
 import { APP_NAME } from 'app/client_config';
 
 function sortOrderToLink(so, topic, account) {
-    if (so === 'home') return '/@' + account + '/feed';
+    if (so === 'home') return linkBuilder.userFeed(account);
     if (topic) return `/${so}/${topic}`;
     return `/${so}`;
 }
@@ -150,7 +150,7 @@ class Header extends React.Component {
 
         if (process.env.BROWSER && (route.page !== 'Post' && route.page !== 'PostNoCategory')) document.title = page_title + ' — ' + APP_NAME;
 
-        const logo_link = route.params && route.params.length > 1 && this.last_sort_order ? '/' + this.last_sort_order : (current_account_name ? `/@${current_account_name}/feed` : '/');
+        const logo_link = route.params && route.params.length > 1 && this.last_sort_order ? '/' + this.last_sort_order : (current_account_name ? linkBuilder.userFeed(current_account_name) : '/');
         const topic_link = topic ? <Link to={`/${this.last_sort_order || 'trending'}/${topic}`}>{topic}</Link> : null;
 
         const sort_orders = [

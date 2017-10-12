@@ -6,6 +6,7 @@ import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Memo from 'app/components/elements/Memo'
 import {numberWithCommas, vestsToSp} from 'app/utils/StateFunctions'
 import tt from 'counterpart';
+import {linkBuilder} from 'app/Routes';
 
 class TransferHistoryRow extends React.Component {
     render() {
@@ -125,7 +126,7 @@ class TransferHistoryRow extends React.Component {
                 </td>
                 <td className="TransferHistoryRow__text" style={{maxWidth: "40rem"}}>
                     {description_start}
-                    {other_account && <Link to={`/@${other_account}`}>{other_account}</Link>}
+                    {other_account && <Link to={linkBuilder.userProfile(other_account)}>{other_account}</Link>}
                     {description_end}
                 </td>
                 <td className="show-for-medium" style={{maxWidth: "40rem", wordWrap: "break-word"}}>

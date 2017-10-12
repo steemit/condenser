@@ -4,24 +4,25 @@ import { Link } from 'react-router';
 import Userpic from 'app/components/elements/Userpic';
 import Follow from 'app/components/elements/Follow';
 import Reputation from 'app/components/elements/Reputation';
+import {linkBuilder} from 'app/Routes';
 
 const AuthorDropdown = (props) => {
     const author_link = <span className="author" itemProp="author" itemScope itemType="http://schema.org/Person">
-        <Link to={'/@' + props.author}><strong>{props.author}</strong></Link> <Reputation value={props.authorRepLog10} />
+        <Link to={linkBuilder.userProfile(props.author)}><strong>{props.author}</strong></Link> <Reputation value={props.authorRepLog10} />
     </span>;
     if(!(props.follow || props.mute) || props.username === props.author) {
         return author_link;
     } else {
         return (
-            <div className = "Author__container">
+            <div className="Author__container">
                 <div className="Author__dropdown">
-                    <Link to={'/@' + props.author}>
+                    <Link to={linkBuilder.userProfile(props.author)}>
                         <Userpic account={props.author} width="75" height="75" />
                     </Link>
-                    <Link to={'/@' + props.author} className="Author__name">
+                    <Link to={linkBuilder.userProfile(props.author)} className="Author__name">
                         {props.name}
                     </Link>
-                    <Link to={'/@' + props.author} className="Author__username">
+                    <Link to={linkBuilder.userProfile(props.author)} className="Author__username">
                         @{props.author}
                     </Link>
                     <div>

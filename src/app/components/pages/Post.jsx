@@ -3,7 +3,6 @@ import React from 'react';
 import Comment from 'app/components/cards/Comment';
 import PostFull from 'app/components/cards/PostFull';
 import {connect} from 'react-redux';
-
 import {sortComments} from 'app/components/cards/Comment';
 // import { Link } from 'react-router';
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
@@ -13,6 +12,7 @@ import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import { INVEST_TOKEN_UPPERCASE } from 'app/client_config';
+import {linkBuilder} from 'app/Routes';
 
 class Post extends React.Component {
 
@@ -125,7 +125,7 @@ class Post extends React.Component {
         let sort_menu = [];
         let sort_label;
 
-        let selflink = `/${dis.get('category')}/@${post}`;
+        let selflink = `/${post}`;
         for( let o = 0; o < sort_orders.length; ++o ){
             if(sort_orders[o] == sort_order) sort_label = sort_labels[o];
             sort_menu.push({

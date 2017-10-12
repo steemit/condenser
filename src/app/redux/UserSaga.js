@@ -26,7 +26,7 @@ export const userWatches = [
     uploadImageWatch,
 ]
 
-const highSecurityPages = Array(/\/market/, /\/@.+\/(transfers|permissions|password)/, /\/~witnesses/)
+const highSecurityPages = [/\/market/, /\/.+\/(transfers|permissions|password)/, /\/~witnesses/]
 
 function* lookupPreviousOwnerAuthorityWatch() {
     yield* takeLatest('user/lookupPreviousOwnerAuthority', lookupPreviousOwnerAuthority);
@@ -253,7 +253,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
          received_vesting_shares: account.get('received_vesting_shares'),
          delegated_vesting_shares: account.get('delegated_vesting_shares')}))
     } else {
-        yield put(user.actions.setUser({username, vesting_shares: account.get('vesting_shares'), 
+        yield put(user.actions.setUser({username, vesting_shares: account.get('vesting_shares'),
          received_vesting_shares: account.get('received_vesting_shares'),
          delegated_vesting_shares: account.get('delegated_vesting_shares')}))
     }

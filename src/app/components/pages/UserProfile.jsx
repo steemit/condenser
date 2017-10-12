@@ -31,6 +31,7 @@ import Callout from 'app/components/elements/Callout';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import userIllegalContent from 'app/utils/userIllegalContent';
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
+import {linkBuilder} from 'app/Routes';
 
 export default class UserProfile extends React.Component {
     constructor() {
@@ -233,7 +234,7 @@ export default class UserProfile extends React.Component {
                 const emptyText = isMyAccount ? <div>
                     Looks like you haven't posted anything yet.<br /><br />
                     <Link to="/submit.html">Submit a Story</Link><br />
-                    <a href="/steemit/@thecryptofiend/the-missing-faq-a-beginners-guide-to-using-steemit">Read The Beginner's Guide</a><br />
+                    <a href={linkBuilder.post('thecryptofiend', 'the-missing-faq-a-beginners-guide-to-using-steemit')}>Read The Beginner's Guide</a><br />
                     <a href="/welcome">Read The Steemit Welcome Guide</a>
                 </div>:
                     tt('user_profile.user_hasnt_started_bloggin_yet', {name: accountname});
@@ -331,8 +332,8 @@ export default class UserProfile extends React.Component {
         // const wallet_tab_active = section === 'transfers' || section === 'password' || section === 'permissions' ? 'active' : ''; // className={wallet_tab_active}
 
         let rewardsMenu = [
-            {link: `/@${accountname}/curation-rewards`, label: tt('g.curation_rewards'), value: tt('g.curation_rewards')},
-            {link: `/@${accountname}/author-rewards`, label: tt('g.author_rewards'), value: tt('g.author_rewards')}
+            {link: linkBuilder.userCurationRewards(accountname), label: tt('g.curation_rewards'), value: tt('g.curation_rewards')},
+            {link: linkBuilder.userAuthorRewards(accountname), label: tt('g.author_rewards'), value: tt('g.author_rewards')}
         ];
 
         // set account join date
@@ -341,12 +342,12 @@ export default class UserProfile extends React.Component {
         const top_menu = <div className="row UserProfile__top-menu">
             <div className="columns small-10 medium-12 medium-expand">
                 <ul className="menu" style={{flexWrap: "wrap"}}>
-                    <li><Link to={`/@${accountname}`} activeClassName="active">{tt('g.blog')}</Link></li>
-                    <li><Link to={`/@${accountname}/comments`} activeClassName="active">{tt('g.comments')}</Link></li>
-                    <li><Link to={`/@${accountname}/recent-replies`} activeClassName="active">
+                    <li><Link to={linkBuilder.userProfile(accountname)} activeClassName="active">{tt('g.blog')}</Link></li>
+                    <li><Link to={linkBuilder.userComments(accountname)} activeClassName="active">{tt('g.comments')}</Link></li>
+                    <li><Link to={linkBuilder.userReplies(accountname)} activeClassName="active">
                         {tt('g.replies')} {isMyAccount && <NotifiCounter fields="comment_reply" />}
                     </Link></li>
-                    {/*<li><Link to={`/@${accountname}/feed`} activeClassName="active">Feed</Link></li>*/}
+                    {/*<li><Link to={linkBuilder.userFeed(accountname)} activeClassName="active">Feed</Link></li>*/}
                     <li>
                         <LinkWithDropdown
                             closeOnClickOutside
@@ -367,12 +368,12 @@ export default class UserProfile extends React.Component {
             <div className="columns shrink">
                 <ul className="menu" style={{flexWrap: "wrap"}}>
                     <li>
-                        <a href={`/@${accountname}/transfers`} className={walletClass} onClick={e => { e.preventDefault(); browserHistory.push(e.target.pathname); return false; }}>
+                        <a href={linkBuilder.userWallet(accountname)} className={walletClass} onClick={e => { e.preventDefault(); browserHistory.push(e.target.pathname); return false; }}>
                             {tt('g.wallet')} {isMyAccount && <NotifiCounter fields="send,receive,account_update" />}
                         </a>
                     </li>
                     {isMyAccount && <li>
-                        <Link to={`/@${accountname}/settings`} activeClassName="active">{tt('g.settings')}</Link>
+                        <Link to={linkBuilder.userSettings(accountname)} activeClassName="active">{tt('g.settings')}</Link>
                     </li>}
                 </ul>
             </div>
@@ -410,11 +411,11 @@ export default class UserProfile extends React.Component {
                             {about && <p className="UserProfile__bio">{about}</p>}
                             <div className="UserProfile__stats">
                                 <span>
-                                    <Link to={`/@${accountname}/followers`}>{tt('user_profile.follower_count', {count: followerCount})}</Link>
+                                    <Link to={linkBuilder.userFollowers(accountname)}>{tt('user_profile.follower_count', {count: followerCount})}</Link>
                                     {isMyAccount && <NotifiCounter fields="follow" />}
                                 </span>
-                                <span><Link to={`/@${accountname}`}>{tt('user_profile.post_count', {count: account.post_count || 0})}</Link></span>
-                                <span><Link to={`/@${accountname}/followed`}>{tt('user_profile.followed_count', {count: followingCount})}</Link></span>
+                                <span><Link to={linkBuilder.userProfile(accountname)}>{tt('user_profile.post_count', {count: account.post_count || 0})}</Link></span>
+                                <span><Link to={linkBuilder.userFollowed(accountname)}>{tt('user_profile.followed_count', {count: followingCount})}</Link></span>
                             </div>
                             <p className="UserProfile__info">
                                 {location && <span><Icon name="location" /> {location}</span>}

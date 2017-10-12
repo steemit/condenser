@@ -139,8 +139,17 @@ export const linkBuilder = {
     userComments: name => `/${name}/comments`,
     userPassword: name => `/${name}/password`,
     userSettings: name => `/${name}/settings`,
+    userFollowers: name => `/${name}/followers`,
+    userFollowed: name => `/${name}/followed`,
+    userPermissions: name => `/${name}/permissions`,
+    userCurationRewards: name => `/${name}/curation-rewards`,
+    userAuthorRewards: name => `/${name}/author-rewards`,
     search: () => '/static/search.html',
-    post: () => '/submit.html',
+    compose: () => '/submit.html',
     signup: () => '/pick_account',
     login: () => '/login.html',
+    post: (author, permlink) => `/${author}/${permlink}`,
+    comment: (post_author, post_permlink, comment_author, comment_permlink) => {
+        return `/${post_author}/${post_permlink}#${comment_author}/${comment_permlink}`;
+    },
 };

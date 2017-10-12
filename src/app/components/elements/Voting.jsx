@@ -11,6 +11,7 @@ import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import FoundationDropdown from 'app/components/elements/FoundationDropdown';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import tt from 'counterpart';
+import {linkBuilder} from "../../Routes"
 
 const ABOUT_FLAG = <div>
     <p>{tt('voting_jsx.flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following')}</p>
@@ -223,7 +224,7 @@ class Voting extends React.Component {
                 const {percent, voter} = avotes[v]
                 const sign = Math.sign(percent)
                 if(sign === 0) continue
-                voters.push({value: (sign > 0 ? '+ ' : '- ') + voter, link: '/@' + voter})
+                voters.push({value: (sign > 0 ? '+ ' : '- ') + voter, link: linkBuilder.post(voter)})
             }
             if (total_votes > voters.length) {
                 voters.push({value: <span>&hellip; {tt('voting_jsx.and_more', {count: total_votes - voters.length})}</span>});

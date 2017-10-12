@@ -153,3 +153,21 @@ export const linkBuilder = {
         return `/${post_author}/${post_permlink}#${comment_author}/${comment_permlink}`;
     },
 };
+
+export function routeToSteemdUrl(route) {
+    let url = 'trending';
+    if (route.page === 'UserProfile') {
+        url = `/@${route.params.join('/')}`;
+    } else if (route.page === 'PostsIndex') {
+        if (route.params[0] === 'home') {
+            url = `/@${route.params[1]}/feed`;
+        } else {
+            url = route.params.join('/');
+        }
+    }
+    // Replace /curation-rewards and /author-rewards with /transfers for UserProfile
+    // to resolve data correctly
+    // if (url.indexOf("/curation-rewards") !== -1) url = url.replace("/curation-rewards", "/transfers");
+    // if (url.indexOf("/author-rewards") !== -1) url = url.replace("/author-rewards", "/transfers");
+    return url;
+}

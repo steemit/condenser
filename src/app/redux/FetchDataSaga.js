@@ -6,6 +6,7 @@ import GlobalReducer from './GlobalReducer';
 import constants from './constants';
 import {fromJS, Map} from 'immutable'
 import {api} from 'steem';
+import {resolveRoute, routeToSteemdUrl} from 'app/Routes';
 
 export const fetchDataWatches = [watchLocationChange, watchDataRequests, watchFetchJsonRequests, watchFetchState, watchGetContent];
 
@@ -24,7 +25,7 @@ export function* getContentCaller(action) {
 let is_initial_state = true;
 export function* fetchState(location_change_action) {
     const {pathname} = location_change_action.payload;
-    const m = pathname.match(/^\/@([a-z0-9\.-]+)/)
+    const m = pathname.match(/^\/([a-z0-9\.-]{3,})/)
     if(m && m.length === 2) {
         const username = m[1]
         yield fork(fetchFollowCount, username)
@@ -39,15 +40,18 @@ export function* fetchState(location_change_action) {
     is_initial_state = false;
     if(ignore_fetch) return;
 
-    let url = `${pathname}`;
-    if (url === '/') url = 'trending';
-    // Replace /curation-rewards and /author-rewards with /transfers for UserProfile
-    // to resolve data correctly
-    if (url.indexOf("/curation-rewards") !== -1) url = url.replace("/curation-rewards", "/transfers");
-    if (url.indexOf("/author-rewards") !== -1) url = url.replace("/author-rewards", "/transfers");
-
     yield put({type: 'FETCH_DATA_BEGIN'});
+    let url = pathname;
     try {
+        const route = resolveRoute(pathname);
+        if (route.page === 'Post') {
+            const content = yield call([api, api.getContentAsync], route.params[0], route.params[1]);
+            console.log('-- fetchState content -->', content);
+            url = `${content.category}/@${content.author}/${content.permlink}`;
+        } else {
+            url = routeToSteemdUrl(route);
+        }
+        console.log('-- fetchState url -->', url);
         const state = yield call([api, api.getStateAsync], url)
         yield put(GlobalReducer.actions.receiveState(state));
     } catch (error) {

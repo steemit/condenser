@@ -244,7 +244,7 @@ class CommentImpl extends React.Component {
         if(!rootComment && depth === 1) {
             rootComment = comment.parent_author + '/' + comment.parent_permlink;
         }
-        const comment_link = linkBuilder.postComment(comment.parent_author, comment.parent_permlink, comment.author, comment.permlink);
+        const comment_link = linkBuilder.comment(comment.parent_author, comment.parent_permlink, comment.author, comment.permlink);
         const ignore = ignore_list && ignore_list.has(comment.author)
 
         if(!showNegativeComments && (hide || ignore)) {

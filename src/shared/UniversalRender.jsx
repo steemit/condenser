@@ -8,7 +8,7 @@ import { renderToString } from 'react-dom/server';
 import { Router, RouterContext, match, applyRouterMiddleware, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
 import RootRoute from 'app/RootRoute';
-import {resolveRoute, routeRegex} from 'app/Routes';
+import {resolveRoute, routeRegex, routeToSteemdUrl} from 'app/Routes';
 import {createStore, applyMiddleware, compose} from 'redux';
 import { useScroll } from 'react-router-scroll';
 import createSagaMiddleware from 'redux-saga';
@@ -132,17 +132,11 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
                 };
             }
             url = `${content.category}/@${content.author}/${content.permlink}`;
-        } else if (route.page === 'UserProfile') {
-            url = `/@${route.params.join('/')}`;
-        } else if (route.page === 'PostsIndex') {
-            if (route.params[0] === 'home') {
-                url = `/@${route.params[1]}/feed`;
-            } else {
-                url = route.params.join('/');
-            }
+        } else {
+            url = routeToSteemdUrl(route);
         }
-
         console.log('-- universalRender url -->', url);
+
         onchain = await api.getStateAsync(url);
 
         if (Object.getOwnPropertyNames(onchain.accounts).length === 0 && (url.match(routeRegex.UserProfile1) || url.match(routeRegex.UserProfile3))) { // protect for invalid account

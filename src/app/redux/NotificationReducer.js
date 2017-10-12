@@ -10,6 +10,8 @@ import allTypes from 'app/components/elements/notification/type';
  * @return {Map}
  */
 function apiToMap(payload) {
+    if (!payload || payload.length === 0) return Map();
+
     return Map(Object.assign(...payload.map(d => ({ [d.id]: d }))));
 }
 

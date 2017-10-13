@@ -24,6 +24,13 @@ const filters = {
     following: [nType.FOLLOW_AUTHOR_POST]
 }
 
+function topPosition(domElt) {
+    if (!domElt) {
+        return 0;
+    }
+    return domElt.offsetTop + topPosition(domElt.offsetParent);
+}
+
 const makeNotificationList = (notifications = []) => {
     const notificationList = [];
     notifications.forEach( notification => {
@@ -48,28 +55,12 @@ const makeFilterList = (props) => {
 }
 
 //todo: make functional
-const scrollListener = debounce(() => {
-    const el = window.document.getElementById('posts_list');
-    if (!el) return;
-    const scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset :
-        (document.documentElement || document.body.parentNode || document.body).scrollTop;
-    if (topPosition(el) + el.offsetHeight - scrollTop - window.innerHeight < 10) {
-        const {loadMore, posts, category} = this.props;
-        if (loadMore && posts && posts.size) {console.log("loading more"); loadMore(posts.last(), category);}
-    }
 
-    // Detect if we're in mobile mode (renders larger preview imgs)
-    const mq = window.matchMedia('screen and (max-width: 39.9375em)');
-    if(mq.matches) {
-        this.setState({thumbSize: 'mobile'})
-    } else {
-        this.setState({thumbSize: 'desktop'})
-    }
-}, 150)
 
 class YotificationModule extends React.Component {
     constructor(props) {
         super(props);
+        this.htmlId = 'YotifModule_' + Math.floor(Math.random() * 1000);
         switch (props.layout) { //eslint-disable-line
             case LAYOUT_DROPDOWN :
                 this.state = {
@@ -86,10 +77,14 @@ class YotificationModule extends React.Component {
                 };
                 break;
         }
+        this.scrollListener = this.scrollListener.bind(this);
 
     }
 
     componentDidMount() {
+        window.addEventListener('scroll', this.scrollListener, {capture: false, passive: true});
+        window.addEventListener('resize', this.scrollListener, {capture: false, passive: true});
+        this.scrollListener();
         this.markDisplayedShownWithDelay();
     }
 
@@ -129,8 +124,20 @@ class YotificationModule extends React.Component {
         this.props.comeOnItsSuchAJoy();
     }
 
+    scrollListener = debounce(() => { //eslint-disable-line no-undef
+        const el = window.document.getElementById(this.htmlId);
+        console.log('scrollListenerCalled', this.htmlId, el);
+        if (!el) return;
+        const scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset :
+            (document.documentElement || document.body.parentNode || document.body).scrollTop;
+        if (topPosition(el) + el.offsetHeight - scrollTop - window.innerHeight < 10) {
+            this.props.appendSome(this.props.notifications, this.props.filter)
+            //todo: render a spinner here. Check PostsList.jsx for starting point
+        }
+    }, 150)
+
     render() {
-        return ( <div className={"NotificationsModule " + this.state.layout} >
+        return ( <div id={this.htmlId} className={"NotificationsModule " + this.state.layout} >
             <div className="title">{tt('g.notifications')}
                 <span className="controls-right">
                     {(this.props.showClearAll) ?
@@ -156,6 +163,7 @@ YotificationModule.propTypes = {
     comeOnItsSuchAJoy: React.PropTypes.func.isRequired, // Todo: for dev only! Do not merge if present!
     getSomeGetSomeGetSomeYeahYeah: React.PropTypes.func.isRequired, // Todo: for dev only! Do not merge if present!
     updateSome: React.PropTypes.func.isRequired,
+    appendSome: React.PropTypes.func.isRequired,
     //notifications: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
     layout: React.PropTypes.oneOf([LAYOUT_PAGE, LAYOUT_DROPDOWN]),
     showClearAll: React.PropTypes.bool.isRequired
@@ -231,6 +239,15 @@ export default connect(
                 ids,
                 updates: changes
             };
+            dispatch(action);
+        },
+        appendSome: (notifications, filter) => {
+            const action = {
+                type: 'notification/REQUEST_APPEND_SOME',
+                filter,
+                notifications
+            };
+            console.log("gimmee some more notifications!", action);
             dispatch(action);
         }
     })

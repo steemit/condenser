@@ -5,6 +5,7 @@ import Icon from 'app/components/elements/Icon';
 import Notification from 'app/components/elements/notification';
 import * as nType from 'app/components/elements/notification/type';
 import { Link } from 'react-router'
+import debounce from 'lodash.debounce';
 import React from 'react';
 import Url from 'app/utils/Url';
 
@@ -34,15 +35,37 @@ const makeNotificationList = (notifications = []) => {
     return ( <ul className="Notifications">{notificationList}</ul> );
 }
 
-const makeFilterList = () => {
+const makeFilterList = (props) => {
     const locales = tt;
+    let className = ('all' === props.filter)? 'selected' : ''; //eslint-disable-line yoda
     const filterLIs = Object.keys(filters).reduce((list, filter) => {
-        list.push(<li key={filter}><Link
+        className = (filter === props.filter)? 'selected' : '';
+        list.push(<li key={filter} className={className}><Link
             to={Url.notifications(filter)}>{locales(`notifications.filters.${filter}`)}</Link></li>);
         return list;
-    }, [<li key="all"><Link to={Url.notifications()}>{tt('notifications.filters.all')}</Link></li>]);
+    }, [<li key="legend" className="selected">{tt("notifications.filters._label")}</li>,<li key="all" className={className}><Link to={Url.notifications()}>{tt('notifications.filters.all')}</Link></li>]);
     return ( <ul className="menu">{filterLIs}</ul>);
 }
+
+//todo: make functional
+const scrollListener = debounce(() => {
+    const el = window.document.getElementById('posts_list');
+    if (!el) return;
+    const scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset :
+        (document.documentElement || document.body.parentNode || document.body).scrollTop;
+    if (topPosition(el) + el.offsetHeight - scrollTop - window.innerHeight < 10) {
+        const {loadMore, posts, category} = this.props;
+        if (loadMore && posts && posts.size) {console.log("loading more"); loadMore(posts.last(), category);}
+    }
+
+    // Detect if we're in mobile mode (renders larger preview imgs)
+    const mq = window.matchMedia('screen and (max-width: 39.9375em)');
+    if(mq.matches) {
+        this.setState({thumbSize: 'mobile'})
+    } else {
+        this.setState({thumbSize: 'desktop'})
+    }
+}, 150)
 
 class YotificationModule extends React.Component {
     constructor(props) {
@@ -119,7 +142,7 @@ class YotificationModule extends React.Component {
                     <Link to={Url.profileSettings()}><Icon name="cog" /></Link>
                 </span>
             </div>
-            {(this.state.showFilters)? makeFilterList() : null}
+            {(this.state.showFilters)? makeFilterList(this.props) : null}
             {makeNotificationList(this.props.notifications)}
             {(this.state.showFooter)? <div className="footer">{tt('notifications.controls.go_to_page')}</div> : null }
             {(this.state.showFooter)? (<div className="footer absolute">

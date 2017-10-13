@@ -647,6 +647,7 @@
         },
 
         "filters": {
+          "_label": "Filters",
           "all": "All",
           "security": "Security",
           "transfers": "Transfers",

@@ -1,3 +1,4 @@
+
 .PostsList {
   clear: right;
 }
@@ -50,3 +51,415 @@
     }
   }
 }
+
+
+// .container {
+//   width: 100%;
+//   padding-bottom: 4em;
+//   min-height: 100%;
+//   @include themify($themes) {
+//       background-color: themed('backgroundColor');  
+//       color: themed('textColor');
+//     }
+// }
+
+
+.content-container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  // padding-top: 65px;
+  @include MQ(M) {
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    // padding-top: 89px;
+  }
+}
+
+
+// Sidebar components on the homepage
+
+
+.c-sidebar {
+  width: 100%;
+  max-width: 240px;
+  font-family: helvetica, sans-serif;
+  &__module {
+      padding: 1.5em 2em;
+    @include themify($themes) {
+        background-color: themed('moduleBackgroundColor');  
+        border: themed('border'); 
+    }    
+    margin-bottom: 1em;
+    box-shadow: 0px 5px 10px 0 rgba(0,0,0,0);
+    transition: 0.2s box-shadow ease-in-out;
+    &:hover {
+      @include MQ(M) {  
+        box-shadow: 0px 5px 10px 0 rgba(0,0,0,0.03);
+      }
+    }   
+    &--tags {
+      display: none;
+      @include MQ(M) {
+        display: block;
+      }
+      @include MQ(L) {
+        display: none;
+      }
+    }
+  }
+  &--left { 
+    display: none;
+    @include MQ(L) {
+      display: block;
+      margin-left: 1em;
+    }
+  }
+  &--right {
+    display: none;
+    @include MQ(M) {
+      display: block;
+      margin-right: 1em;
+    }
+  }
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  &__list-item {
+    margin-bottom: 10px;
+    line-height: 1.2;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  &__h3 {
+    // @extend .h3;
+    font-family: $font-primary;
+    font-weight: bold;
+    @include font-size(18px); 
+    margin: 0 0 16px 0;   
+    &--inline {
+      display: inline;
+    }
+  }
+  &__link {
+    @extend .link;  
+    @extend .link--primary; 
+    font-family: $font-primary;
+    &--emphasis {
+      font-weight: bold;
+    }
+  }
+  &__label {
+    display: block;
+    @include font-size(14px);     
+    margin-bottom: 2px;
+  }
+  &__score {
+    font-weight: bold;
+    @include font-size(17px); 
+    margin-bottom: 24px;
+  }
+}
+
+.PostsIndex.row {
+  max-width: 1600px;
+  display: flex;
+  flex-wrap: nowrap;
+  margin: 0 auto;
+}
+
+
+
+.articles {
+  font-family: sans-serif;
+    padding: 1em;
+    transition: all 0.2s ease-out;
+    border: transparent;
+    min-width: 300px;
+  @include themify($themes) {
+      background-color: themed('moduleBackgroundColor'); 
+  }  
+  
+  @include MQ(M) {
+    margin: 0 1em;
+    padding: 0.5em 0em;
+    min-width: 550px;
+
+    @include themify($themes) {
+        background-color: themed('moduleMediumBackgroundColor'); 
+    }  
+  }
+
+  @include MQ(L) {
+    padding: 1.5em 2em;
+        min-width: 700px;
+    @include themify($themes) {
+        border: themed('border'); 
+        box-shadow: 5px 5px 0 0 themed('contentBorderAccent');  
+        background-color: themed('moduleBackgroundColor'); 
+    }   
+  }
+
+  @include MQ(XL) { 
+    padding: 1.5em 4em;
+    min-width: 1050px;
+  }
+
+  &:hover {
+    @include MQ(L) {
+      @include themify($themes) {
+          box-shadow: 6px 6px 0 0 themed('contentBorderAccent');  
+      }   
+    }   
+  }
+
+  &__hr {
+    display: none;
+    margin-bottom: 20px;
+    @media screen and (min-width: 39.9375em) {  
+      @include themify($themes) {
+          display: block;
+          border-bottom: themed('border'); 
+        }  
+    }
+
+  }
+
+  &__layout-selector {
+    display: none;
+    @include MQ(M) {
+      display: inline;
+      padding-left: 14px;
+    }
+  }
+  &__icon--layout {
+    width: 24px;
+    height: 24px;
+    position: relative;
+    top: 5px;
+  }
+  &__article {
+    margin: 0em 0 1em;
+    transition: 0.2s all ease-in-out;     
+    border: transparent;
+    @include themify($themes) {
+        background-color: themed('moduleBackgroundColor'); 
+      }       
+    @include MQ(M) {
+      margin: 1em 0 1.5em;
+      box-shadow: 0px 5px 10px 0 rgba(0,0,0,0.0);
+      @include themify($themes) {
+          border: themed('border'); 
+        }         
+    }
+    &:hover {
+      @include MQ(M) {  
+        box-shadow: 0px 5px 10px 0 rgba(0,0,0,0.03);
+      }
+    }   
+  }
+  &__metadata {
+    display: flex;
+    align-items: center;
+    padding: 6px 0em 8px;
+    position: relative;
+    &--header {
+      @include MQ(M) {
+        @include themify($themes) {
+            border-bottom: themed('border'); 
+          }         
+        }
+    }
+    &--footer {
+      @include themify($themes) {
+          border-top: themed('border');
+          border-bottom: themed('border'); 
+        }         
+      @include MQ(M) {
+        @include themify($themes) {
+            border-bottom: transparent; 
+          } 
+      }
+    }   
+    @include MQ(M) {
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+  }
+  &__header {
+    padding-top:5px;
+    padding-bottom: 1em;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    @media all and (min-width: 39.9375em) {
+      padding-bottom: 0;
+    }
+    @include MQ(M) {
+      padding-top: 0;
+    }
+  }
+  &__header-col {
+    &--right {
+      order: 1;
+      width: 100%;
+      @media only screen and (min-width: 370px) {
+        width: auto;
+        order: 2;
+      }
+    }
+  }
+  &__resteem {
+    padding-bottom: 0px;
+    margin-top: 24px;
+
+    @include MQ(M) {
+      margin-top: 1em;
+      padding-bottom: 5px;
+      @include themify($themes) {
+          border-bottom: themed('border'); 
+        }       
+      }
+  }
+  &__resteem-text {
+    @include font-size(14px);     
+    margin-bottom: 4px;
+    @include themify($themes) {
+        color: themed('textColorSecondary');  
+      }   
+  }
+  &__resteem-username {
+    @extend .link--secondary;
+    text-decoration: none;
+  }
+  &__h1 {
+    font-family: $font-primary;
+    font-weight: bold;
+    @include font-size(20px);     
+    margin: 0;
+    text-transform: capitalize;
+    @include MQ(M) {
+      @include font-size(22px);       
+    }
+  }
+  &__h2 {
+    // @extend .h2;
+    margin: 0;
+    @include font-size(18px);     
+    @include MQ(M) {
+      @include font-size(20px);       
+    }   
+  }
+  &__h3 {
+    display: inline;
+  }
+  &__tag-selector {
+    display: inline;
+    select.Topics {
+      margin-bottom: 0 !important;
+      border: transparent;
+      border-bottom: 1px solid #999;
+      border-radius: 0;
+      position: relative;
+      top: -4px; 
+      margin-top: 12px; 
+      @media only screen and (min-width: 370px) {
+        margin-top: 0; 
+      }        
+    }
+    @include MQ(L) {
+      display: none;
+    }
+  }
+  &__p {
+    // @extend .p;
+    margin: 0;
+    padding-top: 4px;   
+    overflow : hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;   
+  }
+  &__link {
+    text-decoration: none;
+    @include themify($themes) {
+        color: themed('textColorPrimary');  
+      }
+  }
+  &__profile-img {
+    display: none;
+    width: 54px;
+    height: auto;
+  }
+  &__text-content {
+    @include MQ(M) {
+      padding: 0 1.2em;
+    }
+  }
+  &__tags {
+    @include themify($themes) {
+        color: themed('textColorSecondary');  
+      }     
+    @include font-size(14px);     
+    margin-bottom: 18px;
+  }
+  &__tag-link {
+    @extend .link;
+    @extend .link--secondary;
+    padding-right: 4px;
+  }
+  &__flag {
+    width: 24px;
+    height: auto;
+    position: absolute;
+    right: -4px;
+    top: 0px;
+    padding: 2px;
+    @include MQ(M) {
+      right: 10px;
+      top: 12px;
+    }
+
+    .icon-flag-svg {
+      @include themify($themes) {
+          fill: themed('textColorSecondary');  
+        }   
+      transition: 0.2s all ease-in-out;
+    }
+    &:hover {
+      cursor: pointer;
+      .icon-flag-svg {
+        @include themify($themes) {
+            fill: themed('textColorError');  
+          }   
+      }
+    }
+  }
+  &__content-block {
+    margin-bottom: 16px;
+    @include MQ(M) {
+      &--text {
+        margin-top: 1em;
+      }
+    }
+  }
+
+  &__content-block--img + &__content-block--text {
+    margin-top: 0;
+  }
+  &__resteem, &__content-block--text, &__metadata {
+    @include MQ(M) {
+      padding-left: 1.1em;
+      padding-right: 1.1em;
+    }
+  } 
+}
+

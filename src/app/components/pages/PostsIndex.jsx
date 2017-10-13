@@ -1,7 +1,6 @@
 /* eslint react/prop-types: 0 */
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
-import Topics from './Topics';
 import constants from 'app/redux/constants';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import PostsList from 'app/components/cards/PostsList';
@@ -11,6 +10,10 @@ import MarkNotificationRead from 'app/components/elements/MarkNotificationRead';
 import tt from 'counterpart';
 import Immutable from "immutable";
 import Callout from 'app/components/elements/Callout';
+import Topics from './Topics';
+import { SidebarModule } from '../modules/SidebarModule';
+import SidebarStats from 'app/components/elements/SidebarStats';
+
 
 class PostsIndex extends React.Component {
 
@@ -97,12 +100,56 @@ class PostsIndex extends React.Component {
         const fetching = (status && status.fetching) || this.props.loading;
         const {showSpam} = this.state;
 
+        // If we're at one of the four sort order routes without a tag filter,
+        // use the translated string for that sort order, f.ex "trending"
+        //
+        // If you click on a tag while you're in a sort order route,
+        // the title should be the translated string for that sort order
+        // plus the tag string, f.ex "trending: blog"
+        //
+        // Logged-in:
+        // At homepage (@user/feed) say "People I follow"
+        let page_title = 'Posts'; // sensible default here?
+        if (typeof this.props.username !== 'undefined' && category === 'feed') {
+            page_title = 'People I follow'; // todo: localization
+        } else {
+            switch (topics_order) {
+                case 'trending': // cribbed from Header.jsx where it's repeated 2x already :P
+                    page_title = tt('main_menu.trending');
+                    break;
+                case 'created':
+                    page_title = tt('g.new');
+                    break;
+                case 'hot':
+                    page_title = tt('main_menu.hot');
+                    break;
+                case 'promoted':
+                    page_title = tt('g.promoted');
+                    break;
+            }
+            if (typeof category !== 'undefined') {
+                page_title = `${page_title}: ${category}`; // maybe todo: localize the colon?
+            }
+        }
+
         return (
             <div className={'PostsIndex row' + (fetching ? ' fetching' : '')}>
-                <div className="PostsIndex__left column small-collapse">
-                    <div className="PostsIndex__topics_compact show-for-small hide-for-large">
-                        <Topics order={topics_order} current={category} compact />
+                <aside className="c-sidebar c-sidebar--left">
+                    <Topics order={topics_order} current={category} compact={false} />
+                    <small><a onClick={this.onShowSpam}>{showSpam ? tt('g.next_3_strings_together.show_less') : tt('g.next_3_strings_together.show_more')}</a>{' ' + tt('g.next_3_strings_together.value_posts')}</small>
+                </aside>
+                <article className="articles">
+                    <div className="articles__header">
+                        <div className="articles__header-col">
+                        <h1 className="articles__h1">{page_title}</h1>
                     </div>
+                    <div className="articles__header-col articles__header-col--right">
+                        <div className="articles__tag-selector">
+                            <Topics order={topics_order} current={category} compact />
+                        </div>
+                    </div>         
+                </div> 
+                <hr className="articles__hr" />
                     {markNotificationRead}
                     {(!fetching && (posts && !posts.size)) ? <Callout>{emptyText}</Callout> :
                         <PostsList
@@ -113,15 +160,42 @@ class PostsIndex extends React.Component {
                             loadMore={this.loadMore}
                             showSpam={showSpam}
                         />}
-                </div>
-                <div className="PostsIndex__topics column shrink show-for-large">
-                    <Topics order={topics_order} current={category} compact={false} />
-                    <small><a onClick={this.onShowSpam}>{showSpam ? tt('g.next_3_strings_together.show_less') : tt('g.next_3_strings_together.show_more')}</a>{' ' + tt('g.next_3_strings_together.value_posts')}</small>
-                </div>
+                </article>
+                 <aside className="c-sidebar c-sidebar--right">
+                    <SidebarStats steemPower={123} powerRank={"five"} followers={23} />
+                    <div className="c-sidebar__module">
+                      <div className="c-sidebar__header">
+                        <h3 className="c-sidebar__h3">Links</h3>
+                      </div>
+                      <div className="c-sidebar__content">
+                        <ul className="c-sidebar__list">
+                          <li className="c-sidebar__list-item"><a className="c-sidebar__link" href="#">My blog</a></li>
+                          <li className="c-sidebar__list-item"><a className="c-sidebar__link" href="#">My wallet</a></li>
+                          <li className="c-sidebar__list-item"><a className="c-sidebar__link" href="#">Pay someone</a></li>
+                          <li className="c-sidebar__list-item"><a className="c-sidebar__link" href="#">Buy STEEM</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div className="c-sidebar__module">
+                      <div className="c-sidebar__header">
+                        <h3 className="c-sidebar__h3">New to Steemit?</h3>
+                      </div>
+                      <div className="c-sidebar__content">
+                        <ul className="c-sidebar__list">
+                          <li className="c-sidebar__list-item"><a className="c-sidebar__link" href="/welcome">Quick start guide</a></li>
+                          <li className="c-sidebar__list-item"><a className="c-sidebar__link" href="/faq.html">FAQs</a></li>
+                          <li className="c-sidebar__list-item"><a className="c-sidebar__link" href="https://steem.io">About the blockchain</a></li>
+                          <li className="c-sidebar__list-item"><a className="c-sidebar__link" href="/pick_account">Sign up</a></li>
+                        </ul>
+                      </div>
+                    </div>                    
+                    {/* <SidebarModule /> */}
+                  </aside>
             </div>
         );
     }
 }
+
 
 module.exports = {
     path: ':order(/:category)',

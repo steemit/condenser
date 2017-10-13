@@ -1,12 +1,19 @@
+
 @import "./foundation-settings";
 @import "~foundation-sites/scss/foundation";
 
 @include foundation-everything(true);
-
 @import "./foundation-overrides";
+
+@import "./variables";
+@import "./mixins";
+@import "./themes";
+@import "./layout";
+@import './animation';
+
 @import "./fonts";
 @import "./forms";
-@import "./mixins";
+
 @import "./markdown";
 @import "./notifications";
 @import "src/app/components/all";
@@ -137,4 +144,19 @@ a.ptc {
 
 h1, h2, h3, h4, h5, h6 {
   line-height: 1.2 !important;
+}
+
+
+
+.c-sidebar {
+  width: 100%;
+  max-width: 240px;
+  font-family: helvetica, sans-serif;
+  &__module {
+      padding: 1.5em 2em;
+    @include themify($themes) {
+        background-color: themed('moduleBackgroundColor');  
+        border: themed('border'); 
+    }  
+  }
 }

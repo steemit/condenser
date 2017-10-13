@@ -10,9 +10,9 @@ import MarkNotificationRead from 'app/components/elements/MarkNotificationRead';
 import tt from 'counterpart';
 import Immutable from "immutable";
 import Callout from 'app/components/elements/Callout';
-import Topics from './Topics';
-import { SidebarModule } from '../modules/SidebarModule';
 import SidebarStats from 'app/components/elements/SidebarStats';
+import SidebarLinks from 'app/components/elements/SidebarLinks';
+import Topics from './Topics';
 
 
 class PostsIndex extends React.Component {
@@ -163,19 +163,8 @@ class PostsIndex extends React.Component {
                 </article>
                  <aside className="c-sidebar c-sidebar--right">
                     <SidebarStats steemPower={123} powerRank={"five"} followers={23} />
-                    <div className="c-sidebar__module">
-                      <div className="c-sidebar__header">
-                        <h3 className="c-sidebar__h3">Links</h3>
-                      </div>
-                      <div className="c-sidebar__content">
-                        <ul className="c-sidebar__list">
-                          <li className="c-sidebar__list-item"><a className="c-sidebar__link" href="#">My blog</a></li>
-                          <li className="c-sidebar__list-item"><a className="c-sidebar__link" href="#">My wallet</a></li>
-                          <li className="c-sidebar__list-item"><a className="c-sidebar__link" href="#">Pay someone</a></li>
-                          <li className="c-sidebar__list-item"><a className="c-sidebar__link" href="#">Buy STEEM</a></li>
-                        </ul>
-                      </div>
-                    </div>
+                    <SidebarLinks username={this.props.username} />
+
                     <div className="c-sidebar__module">
                       <div className="c-sidebar__header">
                         <h3 className="c-sidebar__h3">New to Steemit?</h3>

@@ -163,9 +163,13 @@ class PostsIndex extends React.Component {
                         />}
                 </article>
                  <aside className="c-sidebar c-sidebar--right">
-                    <SidebarStats steemPower={123} powerRank={"five"} followers={23} />
-                    <SidebarLinks username={this.props.username} />
-                    <SidebarNewUsers />                   
+                    { !this.props.username
+                        ? <SidebarNewUsers />
+                        : <div>
+                              <SidebarStats steemPower={123} powerRank={"five"} followers={23} />
+                              <SidebarLinks username={this.props.username} />
+                            </div>
+                    }
                   </aside>
             </div>
         );

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SidebarNewUsers = ({ username }) => (
+const SidebarNewUsers = () => (
   <div className="c-sidebar__module">
     <div className="c-sidebar__header">
       <h3 className="c-sidebar__h3">New to Steemit?</h3>

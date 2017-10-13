@@ -131,7 +131,7 @@ class YotificationModule extends React.Component {
         const scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset :
             (document.documentElement || document.body.parentNode || document.body).scrollTop;
         if (topPosition(el) + el.offsetHeight - scrollTop - window.innerHeight < 10) {
-            this.props.appendSome(this.props.notifications, this.props.filter)
+            this.props.appendSome(this.props.notifications, ('all' !== this.props.filter)? nType[this.props.filter] : false); //eslint-disable-line yoda
             //todo: render a spinner here. Check PostsList.jsx for starting point
         }
     }, 150)
@@ -241,10 +241,10 @@ export default connect(
             };
             dispatch(action);
         },
-        appendSome: (notifications, filter) => {
+        appendSome: (notifications, filters) => {
             const action = {
                 type: 'notification/REQUEST_APPEND_SOME',
-                filter,
+                filters,
                 notifications
             };
             console.log("gimmee some more notifications!", action);

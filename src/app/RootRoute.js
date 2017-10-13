@@ -1,9 +1,9 @@
-// polyfill webpack require.ensure
-//if (typeof require.ensure !== 'function') require.ensure = (d, c) => c(require);
-
 import App from 'app/components/App';
 import PostsIndex from 'app/components/pages/PostsIndex';
 import {resolveRoute} from './Routes';
+
+// polyfill webpack require.ensure
+if (typeof require.ensure !== 'function') require.ensure = (d, c) => c(require);
 
 export default {
     path: '/',
@@ -79,19 +79,21 @@ export default {
             cb(null, [require('app/components/pages/Witnesses')]);
             //});
         } else if (route.page === 'SubmitPost') {
-            //require.ensure([], (require) => {
-            if (process.env.BROWSER)
-                cb(null, [require('app/components/pages/SubmitPost')]);
-            else
+            if (process.env.BROWSER) {
+                require.ensure([], (require) => {
+                    cb(null, [require('app/components/pages/SubmitPost')]);
+                });
+            } else {
                 cb(null, [require('app/components/pages/SubmitPostServerRender')]);
+            }
         } else if (route.page === 'UserProfile') {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/UserProfile')]);
             //});
         } else if (route.page === 'Market') {
-            //require.ensure([], (require) => {
-            cb(null, [require('app/components/pages/Market')]);
-            //});
+            require.ensure([], (require) => {
+                cb(null, [require('app/components/pages/Market')]);
+            });
         } else if (route.page === 'Post') {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/PostPage')]);

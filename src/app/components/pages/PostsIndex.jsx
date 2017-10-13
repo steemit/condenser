@@ -166,7 +166,7 @@ class PostsIndex extends React.Component {
                     { !this.props.username
                         ? <SidebarNewUsers />
                         : <div>
-                              <SidebarStats steemPower={123} powerRank={"five"} followers={23} />
+                              <SidebarStats steemPower={123} followers={23} reputation={62} />
                               <SidebarLinks username={this.props.username} />
                             </div>
                     }

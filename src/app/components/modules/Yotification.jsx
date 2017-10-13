@@ -124,8 +124,8 @@ class YotificationModule extends React.Component {
         this.props.comeOnItsSuchAJoy();
     }
 
-    appendSome = () => {
-        this.props.appendSome(this.props.notifications, ('all' !== this.props.filter)? nType[this.props.filter] : false); //eslint-disable-line yoda
+    appendSome = () => { //eslint-disable-line no-undef
+        this.props.appendSome(('all' !== this.props.filter)? filters[this.props.filter] : false); //eslint-disable-line yoda
     }
 
     scrollListener = debounce(() => { //eslint-disable-line no-undef
@@ -135,7 +135,7 @@ class YotificationModule extends React.Component {
         const scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset :
             (document.documentElement || document.body.parentNode || document.body).scrollTop;
         if (topPosition(el) + el.offsetHeight - scrollTop - window.innerHeight < 10) {
-            this.props.appendSome(this.props.notifications, ('all' !== this.props.filter)? nType[this.props.filter] : false); //eslint-disable-line yoda
+            this.props.appendSome(('all' !== this.props.filter)? filters[this.props.filter] : false); //eslint-disable-line yoda
             //todo: render a spinner here. Check PostsList.jsx for starting point
         }
     }, 150)
@@ -246,13 +246,13 @@ export default connect(
             };
             dispatch(action);
         },
-        appendSome: (notifications, filters) => {
+        appendSome: (notificationTypes) => {
             const action = {
-                type: 'notification/REQUEST_APPEND_SOME',
-                filters,
-                notifications
+                type: 'notification/FETCH_SOME',
+                types: notificationTypes,
+                direction: 'after'
             };
-            console.log("gimmee some more notifications!", action);
+            console.log('broadcasting notification/FETCH_SOME', action);
             dispatch(action);
         }
     })

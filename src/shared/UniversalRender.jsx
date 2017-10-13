@@ -135,7 +135,6 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
         } else {
             url = routeToSteemdUrl(route);
         }
-        console.log('-- universalRender url -->', url);
 
         onchain = await api.getStateAsync(url);
 

@@ -1,27 +1,27 @@
 export const routeRegex = {
-    PostsIndex: /^\/(@[\w\.\d-]+)\/feed\/?$/,
-    UserProfile1: /^\/(@[\w\.\d-]+)\/?$/,
-    UserProfile2: /^\/(@[\w\.\d-]+)\/(blog|posts|comments|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)\/?$/,
-    UserProfile3: /^\/(@[\w\.\d-]+)\/[\w\.\d-]+/,
+    PostsIndex: /^\/(@[\w.\d-]+)\/feed\/?$/,
+    UserProfile1: /^\/(@[\w.\d-]+)\/?$/,
+    UserProfile2: /^\/(@[\w.\d-]+)\/(blog|posts|comments|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)\/?$/,
+    UserProfile3: /^\/(@[\w.\d-]+)\/[\w.\d-]+/,
     UserEndPoints: /^(blog|posts|comments|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)$/,
     CategoryFilters: /^\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/?$/ig,
-    PostNoCategory: /^\/(@[\w\.\d-]+)\/([\w\d-]+)/,
-    Post: /^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)\/?($|\?)/,
-    PostJson: /^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)(\.json)$/,
-    UserJson: /^\/(@[\w\.\d-]+)(\.json)$/,
+    PostNoCategory: /^\/(@[\w.\d-]+)\/([\w\d-]+)/,
+    Post: /^\/([\w\d\-\/]+)\/(\@[\w\d.-]+)\/([\w\d-]+)\/?($|\?)/,
+    PostJson: /^\/([\w\d\-\/]+)\/(\@[\w\d.-]+)\/([\w\d-]+)(\.json)$/,
+    UserJson: /^\/(@[\w.\d-]+)(\.json)$/,
     UserNameJson: /^.*(?=(\.json))/,
 };
 
 export const routeRegexNew = {
-    UserProfile1: /^\/([\w\.\d-]+)\/?$/,
-    UserProfile2: /^\/([\w\.\d-]+)\/(blog|posts|comments|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)\/?$/,
-    UserProfile3: /^\/([\w\.\d-]+)\/[\w\.\d-]+/,
+    UserProfile1: /^\/([\w.\d-]+)\/?$/,
+    UserProfile2: /^\/([\w.\d-]+)\/(blog|posts|comments|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)\/?$/,
+    UserProfile3: /^\/([\w.\d-]+)\/[\w.\d-]+/,
     UserEndPoints: /^(blog|posts|comments|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)$/,
-    PostsIndex: /^\/c\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/?$/,
-    PostsIndexUserFeed: /^\/([\w\.\d-]+)\/feed\/?$/,
-    Post: /^\/([\w\d\.-]+)\/([\w\d-]+)\/?($|\?)/,
-    PostJson: /^\/([\w\d\.-]+)\/([\w\d-]+)(\.json)$/,
-    UserJson: /^\/([\w\.\d-]+)(\.json)$/,
+    PostsIndex: /^\/t\/([\w\d-]+)\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/?$/,
+    PostsIndexUserFeed: /^\/([\w.\d-]+)\/feed\/?$/,
+    Post: /^\/([\w\d.-]+)\/([\w\d-]+)\/?($|\?)/,
+    PostJson: /^\/([\w\d.-]+)\/([\w\d-]+)(\.json)$/,
+    UserJson: /^\/([\w.\d-]+)(\.json)$/,
     UserNameJson: /^.*(?=(\.json))/,
 };
 
@@ -152,6 +152,7 @@ export const linkBuilder = {
     comment: (post_author, post_permlink, comment_author, comment_permlink) => {
         return `/${post_author}/${post_permlink}#${comment_author}/${comment_permlink}`;
     },
+    indexPage: (category, order) => `/t/${category}/${order || 'trending'}`,
 };
 
 export function routeToSteemdUrl(route) {
@@ -162,9 +163,12 @@ export function routeToSteemdUrl(route) {
         if (route.params[0] === 'home') {
             url = `/@${route.params[1]}/feed`;
         } else {
-            url = route.params.join('/');
+            const category = route.params[0];
+            const sort = route.params[1] || 'trending';
+            url = category === 'all' ? `/${sort}` : `/${sort}/${category}`;
         }
     }
+    console.log('-- routeToSteemdUrl -->', url);
     // Replace /curation-rewards and /author-rewards with /transfers for UserProfile
     // to resolve data correctly
     // if (url.indexOf("/curation-rewards") !== -1) url = url.replace("/curation-rewards", "/transfers");

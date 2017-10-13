@@ -42,7 +42,7 @@ class PostsIndex extends React.Component {
     }
 
     getPosts(order, category) {
-        const topic_discussions = this.props.discussions.get(category || '');
+        const topic_discussions = this.props.discussions.get(!category || category === 'all' ? '' : category);
         if (!topic_discussions) return null;
         return topic_discussions.get(order);
     }
@@ -50,9 +50,9 @@ class PostsIndex extends React.Component {
     loadMore(last_post) {
         if (!last_post) return;
         let {accountname} = this.props.routeParams
-        let {category, order = constants.DEFAULT_SORT_ORDER} = this.props.routeParams;
+        let {user_or_t, category, order = constants.DEFAULT_SORT_ORDER} = this.props.routeParams;
         if (category === 'feed') {
-            accountname = order.slice(1);
+            accountname = user_or_t;
             order = 'by_feed';
         }
         if (isFetchingOrRecentlyUpdated(this.props.status, order, category)) return;
@@ -63,13 +63,13 @@ class PostsIndex extends React.Component {
         this.setState({showSpam: !this.state.showSpam})
     }
     render() {
-        let {user_or_c, order, category} = this.props.routeParams;
+        let {user_or_t, category, order} = this.props.routeParams;
         let topics_order = order;
         let posts = [];
         let emptyText = '';
         let markNotificationRead = null;
-        if (order === 'feed') {
-            const account_name = user_or_c;
+        if (category === 'feed') {
+            const account_name = user_or_t;
             order = 'by_feed';
             topics_order = 'trending';
             posts = this.props.accounts.getIn([account_name, 'feed']);
@@ -124,7 +124,7 @@ class PostsIndex extends React.Component {
 }
 
 module.exports = {
-    path: '/:user_or_c/:order(/:category)',
+    path: '/:user_or_t/:category(/:order)',
     component: connect(
         (state) => {
             return {

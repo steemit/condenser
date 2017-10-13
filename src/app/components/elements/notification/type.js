@@ -32,3 +32,25 @@ export default [
     TAG,
     VOTE,
 ];
+
+
+/**
+ from: https://github.com/steemit/yo/blob/mock_api/docs/API
+ Not sure if those are right. The mapping from them to the mocks is v-fuzzy.
+
+ total
+ power_down
+ power_up
+ resteem
+ feed
+ reward
+ send
+ mention
+ follow
+ vote
+ comment_reply
+ post_reply
+ account_update
+ message
+ receive
+ */

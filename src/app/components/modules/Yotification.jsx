@@ -31,7 +31,7 @@ function topPosition(domElt) {
     return domElt.offsetTop + topPosition(domElt.offsetParent);
 }
 
-const makeNotificationList = (notifications = []) => {
+const renderNotificationList = (notifications = []) => {
     const notificationList = [];
     notifications.forEach( notification => {
         if(!notification.hide) {
@@ -42,7 +42,7 @@ const makeNotificationList = (notifications = []) => {
     return ( <ul className="Notifications">{notificationList}</ul> );
 }
 
-const makeFilterList = (props) => {
+const renderFilterList = (props) => {
     const locales = tt;
     let className = ('all' === props.filter)? 'selected' : ''; //eslint-disable-line yoda
     const filterLIs = Object.keys(filters).reduce((list, filter) => {
@@ -124,6 +124,10 @@ class YotificationModule extends React.Component {
         this.props.comeOnItsSuchAJoy();
     }
 
+    appendSome = () => {
+        this.props.appendSome(this.props.notifications, ('all' !== this.props.filter)? nType[this.props.filter] : false); //eslint-disable-line yoda
+    }
+
     scrollListener = debounce(() => { //eslint-disable-line no-undef
         const el = window.document.getElementById(this.htmlId);
         console.log('scrollListenerCalled', this.htmlId, el);
@@ -149,8 +153,9 @@ class YotificationModule extends React.Component {
                     <Link to={Url.profileSettings()}><Icon name="cog" /></Link>
                 </span>
             </div>
-            {(this.state.showFilters)? makeFilterList(this.props) : null}
-            {makeNotificationList(this.props.notifications)}
+            {(this.state.showFilters)? renderFilterList(this.props) : null}
+            {renderNotificationList(this.props.notifications)}
+            <div className="footer"><button className="ptc" onClick={this.appendSome}>Get More!</button></div>
             {(this.state.showFooter)? <div className="footer">{tt('notifications.controls.go_to_page')}</div> : null }
             {(this.state.showFooter)? (<div className="footer absolute">
                 <Link to={Url.profile() + '/notifications'} className="view-all">{tt('notifications.controls.go_to_page')}</Link>

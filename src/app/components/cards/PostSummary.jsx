@@ -16,6 +16,7 @@ import UserNames from 'app/components/elements/UserNames';
 import tt from 'counterpart';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
+import Userpic from 'app/components/elements/Userpic';
 
 function isLeftClickEvent(event) {
     return event.button === 0
@@ -125,6 +126,26 @@ class PostSummary extends React.Component {
             {} {tt('g.in')} <TagList post={p} single />
         </span>);
 
+        // author and category
+        const summary_header = (
+            <div className="articles__summary-header">
+            <div className="user">
+              <a className="user__link" href="#">
+                <Userpic account={p.author} />
+                <p className="user__name"><Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
+                  {/* <span className="user__username">@michaelr (62)</span> */}
+                </p>
+              </a>
+              <a className="timestamp__link" href="#">
+                <span className="timestamp__time">•&nbsp;&nbsp;<TimeAgoWrapper date={p.created} className="updated" /></span>
+              </a>
+            </div>
+            <div className="articles__flag">
+              <svg />  
+            </div>
+          </div>
+        );
+
         const content_footer = (<div className="PostSummary__footer">
             <Voting post={post} showList={false} />
             <VotesAndComments post={post} commentsLink={comments_link} />
@@ -178,9 +199,12 @@ class PostSummary extends React.Component {
         if(gray || ignore) commentClasses.push('downvoted') // rephide
 
         return (
+            <div>
+            {summary_header}
             <article className={'PostSummary hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')} itemScope itemType ="http://schema.org/blogPost">
                 <div className="float-right"><Voting post={post} flag /></div>
                 {reblogged_by}
+                
                 <div className="PostSummary__header show-for-small-only">
                     {content_title}
                 </div>
@@ -196,6 +220,7 @@ class PostSummary extends React.Component {
                     {content_footer}
                 </div>
             </article>
+            </div>
         )
     }
 }

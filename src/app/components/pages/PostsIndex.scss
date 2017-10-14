@@ -261,18 +261,18 @@
       }
     }   
   }
-  &__metadata {
+  &__summary-header {
     display: flex;
     align-items: center;
     padding: 6px 0em 8px;
     position: relative;
-    &--header {
-      @include MQ(M) {
-        @include themify($themes) {
-            border-bottom: themed('border'); 
-          }         
-        }
-    }
+    @include MQ(M) {
+      padding-top: 10px;
+      padding-bottom: 10px;     
+      @include themify($themes) {
+          border-bottom: themed('border'); 
+        }         
+      }
     &--footer {
       @include themify($themes) {
           border-top: themed('border');
@@ -284,9 +284,23 @@
           } 
       }
     }   
+  }
+  &__summary-footer {
+    display: flex;
+    align-items: center;
+    padding: 6px 0em 8px;
+    position: relative;
+    @include themify($themes) {
+        border-top: themed('border');
+        border-bottom: themed('border'); 
+      }         
     @include MQ(M) {
       padding-top: 10px;
-      padding-bottom: 10px;
+      padding-bottom: 10px;             
+      
+      @include themify($themes) {
+          border-bottom: transparent; 
+        } 
     }
   }
   &__header {
@@ -460,4 +474,277 @@
     }
   } 
 }
+
+             
+
+.user {
+  display: flex;
+  align-items: center;
+  &__link {
+    display: flex;
+    align-items: center;
+    @extend .link;
+    &:hover {
+      .user__username {
+        transition: 0.2s all ease-in-out;
+        @include themify($themes) {
+            color: themed('textColorAccent');  
+          } 
+      }
+    }
+  }
+  &__profile-img {
+    width: 40px;
+    height: auto;
+    margin-right: 8px;
+    transition: width 0.2s ease-out;
+    @include MQ(M) {
+      width: 54px;
+      margin-right: 10px;
+    }
+  } 
+  &__name {
+    display: inline;
+    font-weight: bold;
+    padding-right: 4px;
+    margin: 0;
+    line-height: 1.2;
+  }
+  &__username, &__reputation {
+    @extend .link--secondary;
+    font-weight: normal;
+    @include font-size(14px);       
+  }
+}
+
+
+
+.timestamp {
+  &__link {
+    text-decoration: none;
+  }
+  &__time {
+    @extend .link--secondary;
+    font-weight: normal;
+    @include font-size(14px);       
+  }
+}
+
+.action {
+  padding: 4px 10px 2px 0;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  min-width: 60px;
+  transition: 0.2s all ease-in-out;
+
+  &:hover {
+    .icon-svg--accent {
+      @include themify($themes) {
+        fill: themed('colorAccentHover'); 
+      }
+    }
+  }
+
+  @media only screen and (min-width: 420px) {
+    padding: 8px 20px 8px 0;
+  }
+  &__icon {
+    margin-right: 6px;
+    width: 28px;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  &__count {
+    position: relative;
+    top: 1px;
+    @include font-size(13px);       
+    @include themify($themes) {
+        color: themed('textColorSecondary');  
+      } 
+    @media only screen and (min-width: 420px) {
+      @include font-size(15px);             
+    }
+    &--active {
+      @include themify($themes) {
+          color: themed('textColorAccent');  
+        } 
+    }
+  }
+}
+
+
+.icon-svg {
+  transition: 0.2s all ease-in-out;
+  @include themify($themes) {
+      fill: themed('textColorSecondary'); 
+    } 
+  &--accent {
+    @include themify($themes) {
+        fill: themed('textColorAccent'); 
+      } 
+  } 
+  &--layout-line1, &--layout-line2, &--layout-line3 {
+    height: 2px;
+    @include opacity(1);
+    transition: 0.3s all ease-in-out;
+  }
+  &--layout-line2 {
+    y: 11px;
+  }
+  &--layout-line1 {
+    y: 6px;
+  }
+  &--layout-line3 {
+    y: 16px;
+  }
+}
+
+
+
+
+
+
+
+
+
+// Compressed list view CSS
+
+a#changeLayout:focus {
+  outline: none;
+}
+
+@include MQ(M) {
+  .layout-list {
+    transition: 0.3s all ease-in-out;
+
+    .icon-svg {
+      &--layout-line3 {
+        y: 22px;
+        @include opacity(0);
+      }
+      &--layout-line1, &--layout-line2 {
+
+        height: 4px;
+      }
+      &--layout-line2 {
+        y: 14px;
+      }
+      &--layout-line1 {
+        y: 6px;
+      }             
+    } 
+    .content-container {
+      max-width: 1520px;
+    }
+    .hr {
+      &--h1 {
+        display: block;
+      }
+    }
+
+    .articles {
+      padding: 1.5em 1.5em;
+      @include themify($themes) {
+         background-color: themed('moduleBackgroundColor'); 
+         border: themed('border'); 
+      }
+      &__summary {
+        border: transparent;
+        box-shadow: none;
+      }
+      &__h2 {
+        @include font-size(17px);               
+      }
+      &__feature-img {
+        max-width: 112px;
+      }
+      &__summary-header {
+        padding: 2px 0 5px;
+        border: transparent;
+      }
+      &__summary-footer {
+        padding: 2px 0 5px;
+        border: transparent;
+        padding: 4px;
+        padding-top: 3px;
+        border-bottom: 1px solid #eee;
+        @include themify($themes) {
+            border-bottom: themed('borderLight'); 
+          }           
+      }     
+      &__p {
+        @include font-size(15px);       
+        -webkit-line-clamp: 1;
+        padding-right: 6px;
+        margin-top: 2px;
+        padding-top: 0px;   
+      }
+      &__content {
+        display: flex;
+        align-items: top;
+      }
+      &__content-block {
+        margin-bottom: 0;
+        &--img {
+          margin-right: 14px;
+        }
+        &--text {
+          margin-top: 0;
+          min-width: 300px;
+        }
+      } 
+      &__tags {
+        margin: 4px 0 0;
+      } 
+      &__flag {
+        top: 0;
+      }
+      &__resteem {
+        padding-bottom: 0;
+        border-bottom: transparent;
+      }
+      &__resteem, &__content-block--text, &__metadata {
+        @include MQ(M) {
+          padding-left: 0;
+          padding-right: 0;
+        }
+      }       
+    }
+
+    .user {
+      &__name {
+        @include font-size(15px);               
+        font-weight: normal;
+      }
+      &__profile-img {
+        width: 22px;
+        margin-right: 4px;
+      }
+    }
+    .articles__content-block:nth-child(2n) {
+      margin-top: -3px;
+    }
+    .action {
+      &__icon {
+        width: 22px;
+        height: auto;
+      }
+    }
+    .action {
+      padding: 2px 14px 5px 0;
+    }
+  }
+}
+
+@include MQ(L) {
+  .layout-list {
+    .articles {
+      padding: 1.5em 2em; 
+    }
+  }
+}
+
+
 

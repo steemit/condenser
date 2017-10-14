@@ -142,15 +142,15 @@ class PostsIndex extends React.Component {
                 <article className="articles">
                     <div className="articles__header">
                         <div className="articles__header-col">
-                        <h1 className="articles__h1">{page_title}</h1>
-                    </div>
-                    <div className="articles__header-col articles__header-col--right">
-                        <div className="articles__tag-selector">
-                            <Topics order={topics_order} current={category} compact />
+                            <h1 className="articles__h1">{page_title}</h1>
                         </div>
-                    </div>         
-                </div> 
-                <hr className="articles__hr" />
+                        <div className="articles__header-col articles__header-col--right">
+                            <div className="articles__tag-selector">
+                                <Topics order={topics_order} current={category} compact />
+                            </div>
+                        </div>         
+                    </div> 
+                    <hr className="articles__hr" />
                     {markNotificationRead}
                     {(!fetching && (posts && !posts.size)) ? <Callout>{emptyText}</Callout> :
                         <PostsList
@@ -160,7 +160,8 @@ class PostsIndex extends React.Component {
                             category={category}
                             loadMore={this.loadMore}
                             showSpam={showSpam}
-                        />}
+                        />
+                    }
                 </article>
                  <aside className="c-sidebar c-sidebar--right">
                     { !this.props.username

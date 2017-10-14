@@ -35,7 +35,7 @@ class Userpic extends Component {
                        width: (width || 48) + 'px',
                        height: (height || 48) + 'px'}
 
-        return (<div className="Userpic" style={style} />)
+        return (<div className="Userpic user__profile-img" style={style} />)
     }
 }
 

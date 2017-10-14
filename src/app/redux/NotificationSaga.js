@@ -1,6 +1,14 @@
 import { takeLatest, takeEvery } from 'redux-saga';
-import { call, put, take, fork, race } from 'redux-saga/effects';
+import { call, put, take, fork, race, select } from 'redux-saga/effects';
 import { fetchAllNotifications, fetchSomeNotifications, markAsRead } from 'app/utils/YoApiClient';
+
+export function getUsernameFromState(state) {
+    return state.user.getIn(['currentfoo', 'username']);
+}
+
+export function getNotificationsById(state) {
+    return state.notification.byId;
+}
 
 function delay(millis) {
     const promise = new Promise(resolve => {
@@ -38,7 +46,13 @@ function* watchPollData() {
     }
 }
 
-function* fetchAll({ username }) {
+/**
+ * Saga: notification/FETCH_ALL
+ *
+ * Fetch all notifications, with the expectation they'll replace the current store.
+ */
+export function* fetchAll() {
+    const username = yield select(getUsernameFromState);
     const payload = yield call(fetchAllNotifications, username);
 
     yield put({
@@ -47,8 +61,33 @@ function* fetchAll({ username }) {
     });
 }
 
-function* fetchSome({ username, since }) {
-    const payload = yield call(fetchSomeNotifications, username, since);
+/**
+ * Saga: notification/FETCH_SOME
+ *
+ * Fetch some more notifications, with the expectation they'll be UNIONed into the current store.
+ *
+ * @param {Object} options
+ * @param {String[]} [options.types] only return these types; if not provided or falsey return all types
+ * @param {String} [options.direction] either `before` or `after` to get, respectively, notifs created before or updated after what we currently have in state
+ */
+export function* fetchSome({ types = null, direction = 'after' }) {
+    const username = yield select(getUsernameFromState);
+
+    const allNotifs = yield select(getNotificationsById);
+
+    // If direction is specified, find the latest or earliest notification's timestamp.
+    // If types are specified, only search within those types.
+    const filteredNotifs = types ? allNotifs.filter(n => types.indexOf(n.notify_type) > -1) : allNotifs;
+
+    // Notifications are already reverse-sorted by `created` so we can just pull the last one.
+    // Otherwise, sort by updated and pull the most recent (last) one.
+    const timestamp = (direction === 'before') ? filteredNotifs.last().created : filteredNotifs.sortBy(n => n.updated).last().updated;
+
+    const payload = yield call(fetchSomeNotifications, {
+        username,
+        types,
+        [direction]: timestamp,
+    });
 
     yield put({
         type: 'notification/APPEND_SOME',
@@ -56,7 +95,15 @@ function* fetchSome({ username, since }) {
     });
 }
 
-function* updateOne({ id, updates }) {
+/**
+ * Saga: notification/UPDATE_ONE
+ *
+ * Ask Yo to update a single notification, with the expectation that the updated notification will eventually be appended to the current store.
+ *
+ * @param {String} id
+ * @param {Object} updates
+ */
+export function* updateOne({ id, updates }) {
     if (updates.read === true) {
         const payload = yield call(markAsRead, [id]);
 
@@ -67,7 +114,7 @@ function* updateOne({ id, updates }) {
     }
 }
 
-function* updateSome({ ids, updates }) {
+export function* updateSome({ ids, updates }) {
     if (updates.read === true) {
         const payload = yield call(markAsRead, ids);
 

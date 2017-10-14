@@ -46,7 +46,6 @@ class App extends React.Component {
     componentWillMount() {
         if (process.env.BROWSER) localStorage.removeItem('autopost') // July 14 '16 compromise, renamed to autopost2
         this.props.loginUser();
-        if (this.props.username) this.props.fetchNotifications(this.props.username);
     }
 
     componentDidMount() {
@@ -306,7 +305,6 @@ App.propTypes = {
     location: React.PropTypes.object,
     signup_bonus: React.PropTypes.string,
     loginUser: React.PropTypes.func.isRequired,
-    fetchNotifications: React.PropTypes.func.isRequired,
     depositSteem: React.PropTypes.func.isRequired,
     username:  React.PropTypes.string,
 };
@@ -327,12 +325,6 @@ export default connect(
     dispatch => ({
         loginUser: () =>
             dispatch(user.actions.usernamePasswordLogin()),
-        fetchNotifications: (username) => {
-            dispatch({
-                type: 'notification/FETCH_ALL',
-                username,
-            });
-        },
         depositSteem: (username) => {
             const new_window = window.open();
             new_window.opener = null;

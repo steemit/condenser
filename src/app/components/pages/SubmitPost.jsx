@@ -3,8 +3,9 @@ import { browserHistory } from 'react-router';
 import ReplyEditor from 'app/components/elements/ReplyEditor'
 
 const formId = 'submitStory';
-const richTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
-const SubmitReplyEditor = ReplyEditor(formId, richTextEditor);
+// const richTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
+// const SubmitReplyEditor = ReplyEditor(formId, richTextEditor);
+const SubmitReplyEditor = ReplyEditor(formId);
 
 class SubmitPost extends React.Component {
     // static propTypes = {

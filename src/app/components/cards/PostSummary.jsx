@@ -158,6 +158,16 @@ class PostSummary extends React.Component {
             </span>
         </div>)
 
+        const summary_footer = (
+            <div className="PostSummary__footer">
+                <Voting post={post} showList={false} />
+                <VotesAndComments post={post} commentsLink={comments_link} />
+                <span className="PostSummary__time_author_category">
+                    {!archived && <Reblog author={p.author} permlink={p.permlink} parent_author={p.parent_author} />}
+                </span>
+            </div>
+        )        
+
         const {nsfwPref, username} = this.props
         const {revealNsfw} = this.state
 
@@ -218,7 +228,7 @@ class PostSummary extends React.Component {
                         {content_title}
                     </div>
                     {content_body}
-                    {content_footer}
+                    {summary_footer}
                 </div>
             </article>
             </div>

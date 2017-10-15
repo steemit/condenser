@@ -231,7 +231,7 @@
   &__layout-selector {
     display: none;
     @include MQ(M) {
-      display: inline;
+      display: inline-block;
       padding-left: 14px;
     }
   }
@@ -373,7 +373,7 @@
     display: inline;
   }
   &__tag-selector {
-    display: inline;
+    display: inline-block;
     select.Topics {
       margin-bottom: 0 !important;
       border: transparent;
@@ -745,6 +745,36 @@ a#changeLayout:focus {
     }
   }
 }
+
+
+.icon-svg {
+  transition: 0.2s all ease-in-out;
+  @include themify($themes) {
+      fill: themed('textColorSecondary'); 
+    } 
+  &--accent {
+    @include themify($themes) {
+        fill: themed('textColorAccent'); 
+      } 
+  } 
+  &--layout-line1, &--layout-line2, &--layout-line3 {
+    height: 2px;
+    @include opacity(1);
+    transition: 0.3s all ease-in-out;
+  }
+  &--layout-line2 {
+    y: 11px;
+  }
+  &--layout-line1 {
+    y: 6px;
+  }
+  &--layout-line3 {
+    y: 16px;
+  }
+}
+
+
+
 
 
 

@@ -165,11 +165,23 @@
 }
 
 .PostsIndex.row {
-  max-width: 1600px;
+  max-width: 860px;
   display: flex;
   flex-wrap: nowrap;
   margin: 0 auto;
+  @include MQ(L) {
+    max-width: 1240px;
+  }
 }
+
+
+
+
+.PostsIndex.row.layout-list {
+  max-width: 1600px;
+}
+
+
 
 
 
@@ -194,17 +206,13 @@
   }
 
   @include MQ(L) {
-    padding: 1.5em 2em;
+    padding: 1.5em 4em;
         min-width: 700px;
     @include themify($themes) {
         border: themed('border'); 
         box-shadow: 5px 5px 0 0 themed('contentBorderAccent');  
         background-color: themed('moduleBackgroundColor'); 
     }   
-  }
-
-  @include MQ(XL) { 
-    padding: 1.5em 4em;
   }
 
   &:hover {
@@ -344,7 +352,7 @@
     margin-bottom: 4px;
     @include themify($themes) {
         color: themed('textColorSecondary');  
-      }   
+    }   
   }
   &__resteem-username {
     @extend .link--secondary;
@@ -365,8 +373,22 @@
     margin: 0;
     @include font-size(18px);     
     @include MQ(M) {
-      @include font-size(20px);       
+    @include font-size(20px);       
+    
+    a {
+      font-weight: bold;
+      @include themify($themes) {
+          color: themed('textColorPrimary');  
+      }   
+       &:visited {
+          @include themify($themes) {
+              color: themed('textColorSecondary');  
+          } 
+       }
+    }
+
     }   
+
   }
   &__h3 {
     display: inline;
@@ -762,7 +784,7 @@ a#changeLayout:focus {
 @include MQ(L) {
   .layout-list {
     .articles {
-      padding: 1.5em 2em; 
+      padding: 1.5em 3em; 
     }
   }
 }
@@ -770,7 +792,7 @@ a#changeLayout:focus {
 @include MQ(XL) {
   .layout-list {
     .articles {
-      padding: 1.5em 3em; 
+      padding: 1.5em 4em; 
     }
   }
 }

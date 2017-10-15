@@ -115,13 +115,13 @@ class PostSummary extends React.Component {
         const content_body = (<div className="PostSummary__body entry-content">
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>{desc}</a>
         </div>);
-        const content_title = (<h3 className="entry-title">
+        const content_title = (<h2 className="articles__h2 entry-title">
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>
                 {isNsfw && <span className="nsfw-flag">nsfw</span>}
                 {title_text}
                 {full_power && <span title={tt('g.powered_up_100')}><Icon name="steem" /></span>}
             </a>
-        </h3>);
+        </h2>);
 
         // author and category
         const author_category = (<span className="vcard">
@@ -207,12 +207,18 @@ class PostSummary extends React.Component {
 
         let thumb = null;
         if(!gray && p.image_link && !userBlacklisted) {
-          const size = (thumbSize == 'mobile') ? '640x480' : '256x512';
+          
+          {/* const size = (thumbSize == 'mobile') ? '640x480' : '256x512';  */}
+
+          const size = (thumbSize == 'mobile') ? '640x480' : '640x480';
+
+
           const url = proxifyImageUrl(p.image_link, size)
           if(thumbSize == 'mobile') {
-            thumb = <span onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image-mobile"><img src={url} /></span>
+            thumb = <span onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image-mobile"><img className="articles__feature-img" src={url} /></span>
           } else {
-              thumb = <span onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image" style={{backgroundImage: 'url(' + url + ')'}}></span>
+            thumb = <span onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image-mobile"><img className="articles__feature-img" src={url} /></span>
+              {/* thumb = <span onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image" style={{backgroundImage: 'url(' + url + ')'}}></span>  */}
           }
         }
         const commentClasses = []
@@ -222,23 +228,28 @@ class PostSummary extends React.Component {
             <div>
             {reblogged_by}
             {summary_header}
-            <article className={'PostSummary hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')} itemScope itemType ="http://schema.org/blogPost">
-                <div className="PostSummary__header show-for-small-only">
-                    {content_title}
-                </div>
-                
-                {/* <div className="PostSummary__time_author_category_small show-for-small-only">
-                    {author_category}
-                </div>  */}
-                {thumb}
-                <div className="PostSummary__content">
-                    <div className="PostSummary__header show-for-medium">
+
+                <div className={'articles__content PostSummary hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')} itemScope itemType ="http://schema.org/blogPost">
+                    <div className="articles__content-block articles__content-block--img">
+                        <a className="articles__link" href="#">
+                            {thumb}
+                        </a>
+                    </div>                            
+
+                                            {/* 
+                    <div className="PostSummary__header show-for-small-only">
                         {content_title}
                     </div>
-                    {content_body}
-                    {summary_footer}
+                    <div className="PostSummary__time_author_category_small show-for-small-only">
+                        {author_category}
+                    </div>  */}
+                    <div className="articles__content-block articles__content-block--text">                    
+                        {content_title}
+                        {content_body}
+                        {summary_footer}
+                    </div>
                 </div>
-            </article>
+
             </div>
         )
     }

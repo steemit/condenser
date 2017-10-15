@@ -424,9 +424,14 @@
     margin-bottom: 18px;
   }
   &__tag-link {
-    @extend .link;
-    @extend .link--secondary;
-    padding-right: 4px;
+     @include font-size(14px);  
+    @include themify($themes) {
+        color: themed('textColorSecondary');  
+      }     
+    a {
+      @extend .link;
+      @extend .link--secondary;
+    }
   }
   &__flag {
     width: 24px;
@@ -475,14 +480,15 @@
   } 
 }
 
-             
+// ,user layout-block             
 
 .user {
   display: flex;
   align-items: center;
+  &__col {
+    line-height: 1;
+  }
   &__link {
-    display: flex;
-    align-items: center;
     @extend .link;
     &:hover {
       .user__username {
@@ -510,6 +516,12 @@
     padding-right: 4px;
     margin: 0;
     line-height: 1.2;
+
+    a {
+      @extend .link--primary;
+      font-weight: bold;
+      @include font-size(16px);        
+    }
   }
   &__username, &__reputation {
     @extend .link--secondary;
@@ -717,7 +729,7 @@ a#changeLayout:focus {
         }
       }       
     }
-
+    // ,user layout-list
     .user {
       &__name {
         @include font-size(15px);               
@@ -751,6 +763,16 @@ a#changeLayout:focus {
     }
   }
 }
+
+@include MQ(XL) {
+  .layout-list {
+    .articles {
+      padding: 1.5em 3em; 
+    }
+  }
+}
+
+
 
 
 .icon-svg {

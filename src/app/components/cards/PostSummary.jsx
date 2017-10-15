@@ -125,25 +125,30 @@ class PostSummary extends React.Component {
 
         // author and category
         const author_category = (<span className="vcard">
+            <Userpic account={p.author} listView={true} />
+            <Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
+            {} {tt('g.in')} <TagList post={p} single />&nbsp;•&nbsp;
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}><TimeAgoWrapper date={p.created} className="updated" /></a>
-            {} {tt('g.by')} <Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
-            {} {tt('g.in')} <TagList post={p} single />
         </span>);
 
         // author and category
         const summary_header = (
             <div className="articles__summary-header">
             <div className="user">
-              <a className="user__link" href={'/@' + p.author}>
-                <Userpic account={p.author} listView={true} />
-                <p className="user__name"><Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
-                {} {tt('g.in')} <TagList post={p} single />
-                  {/* <span className="user__username">@michaelr (62)</span> */}
-                </p>
-              </a>
-              <a className="timestamp__link" href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>
-                <span className="timestamp__time">•&nbsp;&nbsp;<TimeAgoWrapper date={p.created} className="updated" /></span>
-              </a>
+                <div className="user__col user__col--left">
+                    <a className="user__link" href={'/@' + p.author}>
+                        <Userpic account={p.author} listView={true} />
+                    </a>
+                </div>
+                <div className="user__col user__col--right">
+                    <a className="user__link" href={'/@' + p.author}>
+                        <span className="user__name"><Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} /></span>
+                    </a>
+                    <span className="articles__tag-link">{tt('g.in')}&nbsp;<TagList post={p} single />&nbsp;•&nbsp;</span>
+                    <a className="timestamp__link" href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>
+                        <span className="timestamp__time"><TimeAgoWrapper date={p.created} className="updated" /></span>
+                    </a>
+                </div>
             </div>
             <div className="articles__flag">
               <Voting post={post} flag />  
@@ -221,9 +226,10 @@ class PostSummary extends React.Component {
                 <div className="PostSummary__header show-for-small-only">
                     {content_title}
                 </div>
-                <div className="PostSummary__time_author_category_small show-for-small-only">
+                
+                {/* <div className="PostSummary__time_author_category_small show-for-small-only">
                     {author_category}
-                </div>
+                </div>  */}
                 {thumb}
                 <div className="PostSummary__content">
                     <div className="PostSummary__header show-for-medium">

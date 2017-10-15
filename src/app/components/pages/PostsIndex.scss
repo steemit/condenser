@@ -781,6 +781,12 @@ a#changeLayout:focus {
 
 
 
+.articles__resteem .username {
+    @extend .link--secondary;
+    text-decoration: none;
+}
 
 
-
+.articles__resteem-icon path {
+    fill: #cacaca;
+}

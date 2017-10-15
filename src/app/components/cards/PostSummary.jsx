@@ -76,15 +76,19 @@ class PostSummary extends React.Component {
         }
 
         if(reblogged_by) {
-            reblogged_by = (<div className="PostSummary__reblogged_by">
-                               <span className="articles__resteem-icon"><Icon name="reblog" /></span> {tt('postsummary_jsx.resteemed_by')} <UserNames names={reblogged_by} />
-                           </div>)
+            reblogged_by = (
+                <div className="articles__resteem">
+                    <p className="articles__resteem-text">
+                        <span className="articles__resteem-icon"><Icon name="reblog" /></span>
+                        {tt('postsummary_jsx.resteemed_by')} <UserNames names={reblogged_by} />
+                    </p>
+                </div>)
         }
 
         // 'account' is the current blog being viewed, if applicable.
         if(account && account != content.get('author')) {
             reblogged_by = (<div className="PostSummary__reblogged_by">
-                               <span className="articles__resteem-icon"><Icon name="reblog" /></span> {tt('postsummary_jsx.resteemed')}
+                               <Icon name="reblog" /> {tt('postsummary_jsx.resteemed')}
                            </div>)
         }
 

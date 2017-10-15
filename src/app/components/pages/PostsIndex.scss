@@ -205,7 +205,6 @@
 
   @include MQ(XL) { 
     padding: 1.5em 4em;
-    min-width: 1050px;
   }
 
   &:hover {
@@ -659,6 +658,10 @@ a#changeLayout:focus {
 
     .articles {
       padding: 1.5em 1.5em;
+
+      @include MQ(XL) { 
+        min-width: 1050px;
+      }
       @include themify($themes) {
          background-color: themed('moduleBackgroundColor'); 
          border: themed('border'); 

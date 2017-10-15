@@ -286,7 +286,7 @@ class App extends React.Component {
                     </ul>
                 </SidePanel>
                 {miniHeader ? <MiniHeader /> : <Header toggleOffCanvasMenu={this.toggleOffCanvasMenu} menuOpen={this.state.open} />}
-                <div className="App__content layout-list">
+                <div className="App__content">
                     {welcome_screen}
                     {callout}
                     {children}

@@ -706,6 +706,10 @@ a#changeLayout:focus {
         padding-bottom: 0;
         border-bottom: transparent;
       }
+      &__resteem-icon {
+        position: relative;
+        top: -2px;
+      }
       &__resteem, &__content-block--text, &__metadata {
         @include MQ(M) {
           padding-left: 0;

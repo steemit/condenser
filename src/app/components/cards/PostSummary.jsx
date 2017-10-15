@@ -77,14 +77,14 @@ class PostSummary extends React.Component {
 
         if(reblogged_by) {
             reblogged_by = (<div className="PostSummary__reblogged_by">
-                               <Icon name="reblog" /> {tt('postsummary_jsx.resteemed_by')} <UserNames names={reblogged_by} />
+                               <span className="articles__resteem-icon"><Icon name="reblog" /></span> {tt('postsummary_jsx.resteemed_by')} <UserNames names={reblogged_by} />
                            </div>)
         }
 
         // 'account' is the current blog being viewed, if applicable.
         if(account && account != content.get('author')) {
             reblogged_by = (<div className="PostSummary__reblogged_by">
-                               <Icon name="reblog" /> {tt('postsummary_jsx.resteemed')}
+                               <span className="articles__resteem-icon"><Icon name="reblog" /></span> {tt('postsummary_jsx.resteemed')}
                            </div>)
         }
 
@@ -211,11 +211,9 @@ class PostSummary extends React.Component {
 
         return (
             <div>
+            {reblogged_by}
             {summary_header}
             <article className={'PostSummary hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')} itemScope itemType ="http://schema.org/blogPost">
-                
-                {reblogged_by}
-                
                 <div className="PostSummary__header show-for-small-only">
                     {content_title}
                 </div>

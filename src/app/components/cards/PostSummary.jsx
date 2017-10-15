@@ -142,7 +142,7 @@ class PostSummary extends React.Component {
               </a>
             </div>
             <div className="articles__flag">
-              <svg />  
+              <Voting post={post} flag />  
             </div>
           </div>
         );
@@ -213,7 +213,7 @@ class PostSummary extends React.Component {
             <div>
             {summary_header}
             <article className={'PostSummary hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')} itemScope itemType ="http://schema.org/blogPost">
-                <div className="float-right"><Voting post={post} flag /></div>
+                
                 {reblogged_by}
                 
                 <div className="PostSummary__header show-for-small-only">

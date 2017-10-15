@@ -5,7 +5,8 @@ import proxifyImageUrl from 'app/utils/ProxifyUrl';
 
 class Userpic extends Component {
     static propTypes = {
-        account: PropTypes.string
+        account: PropTypes.string,
+        listView: PropTypes.bool
     }
 
     shouldComponentUpdate = shouldComponentUpdate(this, 'Userpic')
@@ -30,6 +31,8 @@ class Userpic extends Component {
             }
             url = require('assets/images/user.png');
         }
+
+        
 
         const style = {backgroundImage: 'url(' + url + ')',
                        width: (width || 48) + 'px',

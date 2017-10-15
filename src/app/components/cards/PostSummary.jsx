@@ -130,14 +130,14 @@ class PostSummary extends React.Component {
         const summary_header = (
             <div className="articles__summary-header">
             <div className="user">
-              <a className="user__link" href="#">
-                <Userpic account={p.author} />
+              <a className="user__link" href={'/@' + p.author}>
+                <Userpic account={p.author} listView={true} />
                 <p className="user__name"><Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
                 {} {tt('g.in')} <TagList post={p} single />
                   {/* <span className="user__username">@michaelr (62)</span> */}
                 </p>
               </a>
-              <a className="timestamp__link" href="#">
+              <a className="timestamp__link" href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>
                 <span className="timestamp__time">•&nbsp;&nbsp;<TimeAgoWrapper date={p.created} className="updated" /></span>
               </a>
             </div>

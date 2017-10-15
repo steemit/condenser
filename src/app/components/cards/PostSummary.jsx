@@ -133,6 +133,7 @@ class PostSummary extends React.Component {
               <a className="user__link" href="#">
                 <Userpic account={p.author} />
                 <p className="user__name"><Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
+                {} {tt('g.in')} <TagList post={p} single />
                   {/* <span className="user__username">@michaelr (62)</span> */}
                 </p>
               </a>

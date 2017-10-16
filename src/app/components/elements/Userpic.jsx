@@ -5,8 +5,7 @@ import proxifyImageUrl from 'app/utils/ProxifyUrl';
 
 class Userpic extends Component {
     static propTypes = {
-        account: PropTypes.string,
-        listView: PropTypes.bool
+        account: PropTypes.string
     }
 
     shouldComponentUpdate = shouldComponentUpdate(this, 'Userpic')

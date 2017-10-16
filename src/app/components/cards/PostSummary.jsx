@@ -126,29 +126,32 @@ class PostSummary extends React.Component {
 
         // author and category
         const author_category = (<span className="vcard">
-            <Userpic account={p.author} listView={true} />
+            <Userpic account={p.author} />
             <Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
             {} {tt('g.in')} <TagList post={p} single />&nbsp;•&nbsp;
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}><TimeAgoWrapper date={p.created} className="updated" /></a>
         </span>);
-
-        // author and category
+      
+        // New Post Summary heading
         const summary_header = (
             <div className="articles__summary-header">
             <div className="user">
-                <div className="user__col user__col--left">
-                    <a className="user__link" href={'/@' + p.author}>
-                        <Userpic account={p.author} listView={true} />
-                    </a>
-                </div>
+              { !isNsfw
+                    ?  <div className="user__col user__col--left">
+                            <a className="user__link" href={'/@' + p.author}>
+                                <Userpic account={p.author} listView={true} />
+                            </a>
+                        </div>                       
+                    : ""
+                }
                 <div className="user__col user__col--right">
-                    <a className="user__link" href={'/@' + p.author}>
-                        <span className="user__name"><Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} /></span>
-                    </a>
+                    
+                    <span className="user__name"><Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} /></span>
+                    
                     <span className="articles__tag-link">{tt('g.in')}&nbsp;<TagList post={p} single />&nbsp;•&nbsp;</span>
                     <a className="timestamp__link" href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>
                         <span className="timestamp__time"><TimeAgoWrapper date={p.created} className="updated" /></span>
-                        
+
                         {full_power && <span className="articles__icon-steem" title={tt('g.powered_up_100')}><Icon name="steem" /></span>}  
 
                     </a>
@@ -193,14 +196,12 @@ class PostSummary extends React.Component {
                 return (
                     <article className={'PostSummary hentry'} itemScope itemType ="http://schema.org/blogPost">
                         <div className="PostSummary__nsfw-warning">
-                            <div className="PostSummary__time_author_category_small show-for-small-only">
-                                {author_category}
-                            </div>
-                            {tt('postsummary_jsx.this_post_is')} <span className="nsfw-flag">nsfw</span>.
-                            {tt('postsummary_jsx.you_can')} <a href="#" onClick={this.onRevealNsfw}>{tt('postsummary_jsx.reveal_it')}</a> {tt('g.or') + ' '}
+                            {summary_header}
+                            <span className="nsfw-flag">nsfw</span>&nbsp;&nbsp;<a href="#" onClick={this.onRevealNsfw}>{tt('postsummary_jsx.reveal_it')}</a> {tt('g.or') + ' '}                            
                             {username ? <span>{tt('postsummary_jsx.adjust_your')} <Link to={`/@${username}/settings`}>{tt('postsummary_jsx.display_preferences')}</Link>.</span>
                                 : <span><Link to="/pick_account">{tt('postsummary_jsx.create_an_account')}</Link> {tt('postsummary_jsx.to_save_your_preferences')}.</span>}
-                            {content_footer}
+                            
+                            {summary_footer}
                         </div>
                     </article>
                 )
@@ -235,12 +236,14 @@ class PostSummary extends React.Component {
             {summary_header}
 
                 <div className={'articles__content PostSummary hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')} itemScope itemType ="http://schema.org/blogPost">
-                    <div className="articles__content-block articles__content-block--img">
-                        <a className="articles__link" href="#">
-                            {thumb}
-                        </a>
-                    </div>                            
-
+                  { thumb
+                        ? <div className="articles__content-block articles__content-block--img">
+                            <a className="articles__link" href="#">
+                                {thumb}
+                            </a>
+                        </div>                            
+                        : ""
+                    }
                                             {/* 
                     <div className="PostSummary__header show-for-small-only">
                         {content_title}

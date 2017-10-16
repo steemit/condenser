@@ -1,18 +1,22 @@
+import { currentUsername } from './User';
+import proxifyUrl from './ProxifyUrl'; //we want to move proxify into this file.
+
 let store = false;
 
 export const setStore = (theStore) => {
     if(!store) {
         store = theStore;
-        window.theStore = theStore;
     } else {
         throw Error("Routes.setStore - store has already been set.");
     }
 }
 
+export const urlProxify = proxifyUrl;
+
 
 export const urlNotifications = (filter) => {
     try {
-        return '/@' + store.getState().user.getIn(['current', 'username']) + '/notifications' + ((filter)? '/' + filter : '');
+        return '/@' + currentUsername() + '/notifications' + ((filter)? '/' + filter : '');
     } catch (e) {
         //eslint-disable-line
     }
@@ -33,19 +37,28 @@ export const urlComment = (comment, childComment) => {
 }
 
 export const urlProfile = (userName) => {
-    console.log('urlProfile', store.getState().user.toJS())
-    return '/@' + ((userName)? userName : store.getState().user.getIn(['current', 'username']));
+    if(userName) {
+        return '/@' + userName;
+    }
+
+    const uName = currentUsername();
+
+    if(uName) {
+        return '/@' + uName;
+    }
+    return null;
 }
 
 export const urlProfileSettings = (userName) => {
-    return '/@' + ((userName)? userName : store.getState().user.getIn(['current', 'username'])) + '/settings';
+    return '/@' + ((userName)? userName : currentUsername()) + '/settings';
 }
 
 const Url = {
     comment: urlComment,
     notifications: urlNotifications,
     profile: urlProfile,
-    profileSettings: urlProfileSettings
+    profileSettings: urlProfileSettings,
+    proxify: urlProxify
 }
 
 export default Url

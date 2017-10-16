@@ -3,11 +3,21 @@ import { call, put, take, fork, race, select } from 'redux-saga/effects';
 import { fetchAllNotifications, fetchSomeNotifications, markAsRead } from 'app/utils/YoApiClient';
 
 export function getUsernameFromState(state) {
-    return state.user.getIn(['currentfoo', 'username']);
+    return state.user.getIn(['current', 'username']);
 }
 
 export function getNotificationsById(state) {
     return state.notification.byId;
+}
+
+/**
+ * Derive the correct timestamp from some notifications based on the desired direction.
+ *
+ * @param {String} direction
+ * @param {OrderedMap} filteredNotifs
+ */
+export function getTimestamp(direction, filteredNotifs) {
+    return (direction === 'before') ? filteredNotifs.last().created : filteredNotifs.sortBy(n => n.updated).last().updated;
 }
 
 function delay(millis) {
@@ -26,7 +36,7 @@ function* pollNotifications() {
             since: 123, // todo: store timestamp in state & use it here -- action should update timestamp when txn is complete
         });
     } catch (error) {
-        // cancellation error -- can handle this if you wish
+        // TODO: error tracking?
         return;
     }
 }
@@ -81,7 +91,7 @@ export function* fetchSome({ types = null, direction = 'after' }) {
 
     // Notifications are already reverse-sorted by `created` so we can just pull the last one.
     // Otherwise, sort by updated and pull the most recent (last) one.
-    const timestamp = (direction === 'before') ? filteredNotifs.last().created : filteredNotifs.sortBy(n => n.updated).last().updated;
+    const timestamp = call(getTimestamp, direction, filteredNotifs);
 
     const payload = yield call(fetchSomeNotifications, {
         username,

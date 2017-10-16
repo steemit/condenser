@@ -44,7 +44,7 @@ find node_modules/eslint-config-airbnb -name '*.js'|xargs sed -i "s/': 2/': 1/"
     "eol-last": 0,
     "no-loop-func": 0,
     "no-unneeded-ternary": 0, // false trigger const b = b ? b : a
-
+    "yoda": 0,
     /* Nice to haves */
     /*"quotes": [1, "single", "avoid-escape"],*/ "quotes": 0,
     /*"indent", [1,4], */ "indent": 0,

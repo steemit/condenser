@@ -1,5 +1,6 @@
-const YO = '/yo';
+//const YO = '/yo';
 //const YO = 'https://yo.steemitdev.com';
+const YO = 'https://api.steemitdev.com';
 
 /**
  * Re-formats API response a little bit.
@@ -37,10 +38,15 @@ export function fetchAllNotifications(username) {
                 username: 'test_user', // Todo: for dev only! Do not merge if present!
             },
         }),
-    }).then(r => r.json()).then(res => {
+    })
+    .then(r => r.json()).then(res => {
         if (res.result && res.result.length > 0) {
             return normalize(res.result);
         }
+        return []; // empty...?
+    })
+    .catch(error => {
+        return { error };
     });
 }
 
@@ -52,7 +58,7 @@ export function fetchAllNotifications(username) {
  * @param {String[]} types only these notification types
  *
  */
-export function fetchSomeNotifications({username, before, after, types }) {
+export function fetchSomeNotifications({username, before, after, types }) { // Todo: filter by types once api allows for it
     const beforeOrAfterParams = {};
     if (after) beforeOrAfterParams.modified_after = after;
     if (before) beforeOrAfterParams.created_before = before;
@@ -80,6 +86,10 @@ export function fetchSomeNotifications({username, before, after, types }) {
         if (res.result && res.result.length > 0) {
             return normalize(res.result);
         }
+        return [];
+    })
+    .catch(error => {
+        return { error };
     });
 }
 
@@ -104,6 +114,10 @@ export function markAsRead(ids) {
         if (res.result && res.result.length > 0) {
             return normalize(res.result);
         }
+        return [];
+    })
+    .catch(error => {
+        return { error };
     });
 }
 
@@ -128,5 +142,9 @@ export function markAsShown(ids) {
         if (res.result && res.result.length > 0) {
             return normalize(res.result);
         }
+        return [];
+    })
+    .catch(error => {
+        return { error };
     });
 }

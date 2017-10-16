@@ -643,7 +643,9 @@
         "controls": {
           "go_to_page": "View all",
           "mark_all_read": "Mark All as Read",
-          "mark_all_hidden": "Clear all"
+          "mark_all_hidden": "Clear all",
+          "fetch_more": "Get more!",
+          "fetch_no_more": "That's it."
         },
         "filters": {
           "_label": "Filters",

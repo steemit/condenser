@@ -2,6 +2,7 @@ import {connect} from 'react-redux';
 import tt from 'counterpart'
 import { Set } from 'immutable';
 import Icon from 'app/components/elements/Icon';
+import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import Notification from 'app/components/elements/notification';
 import * as nType from 'app/components/elements/notification/type';
 import { Link } from 'react-router'
@@ -155,7 +156,8 @@ class YotificationModule extends React.Component {
             </div>
             {(this.state.showFilters)? renderFilterList(this.props) : null}
             {renderNotificationList(this.props.notifications)}
-            <div className="footer" style={{borderTop: 'none'}}><button className="ptc" onClick={this.appendSome}>Get More!</button></div>
+            <div className="footer get-more">
+                {(true === this.props.fetchMore)? <LoadingIndicator type="circle" inline /> : <button className="ptc" onClick={this.appendSome}>{ this.props.fetchMore }</button>}</div>
             {(this.state.showFooter)? <div className="footer">{tt('notifications.controls.go_to_page')}</div> : null }
             {(this.state.showFooter)? (<div className="footer absolute">
                 <Link to={Url.profile() + '/notifications'} className="view-all">{tt('notifications.controls.go_to_page')}</Link>
@@ -184,6 +186,7 @@ export default connect(
         const filter = (ownProps.filter && filters[ownProps.filter]) ? ownProps.filter : FILTER_ALL;
         let allRead = true;
         let notifications = state.notification.byId;
+        const fetchMore = (state.notification.isFetchingBefore)? true : tt('notifications.controls.fetch_more')
 
         if (notifications && filter !== FILTER_ALL) {
             const filteredTypes = filters[filter];
@@ -199,10 +202,12 @@ export default connect(
             return true;
         });
 
+
         return {
             notifications,
             ...ownProps,
             filter,
+            fetchMore,
             showClearAll: allRead
         }
     },

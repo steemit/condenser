@@ -65,6 +65,9 @@ ul.Notifications {
         a {
             margin:auto;
         }
+        &.get-more {
+            border-top: none;
+        }
 
     }
     &.Page {

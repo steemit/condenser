@@ -50,7 +50,7 @@ const renderFilterList = (props) => {
         list.push(<li key={filter} className={className}><Link
             to={Url.notifications(filter)}>{locales(`notifications.filters.${filter}`)}</Link></li>);
         return list;
-    }, [<li key="legend" className="selected">{tt("notifications.filters._label")}</li>,<li key="all" className={className}><Link to={Url.notifications()}>{tt('notifications.filters.all')}</Link></li>]);
+    }, [<li key="legend" className="selected">{tt("notifications.filters._label")}</li>, <li key="all" className={className}><Link to={Url.notifications()}>{tt('notifications.filters.all')}</Link></li>]);
     return ( <ul className="menu">{filterLIs}</ul>);
 }
 
@@ -130,11 +130,11 @@ class YotificationModule extends React.Component {
 
     scrollListener = debounce(() => { //eslint-disable-line no-undef
         const el = window.document.getElementById(this.htmlId);
-        console.log('scrollListenerCalled', this.htmlId, el);
+        console.log('scrollListenerCalled', this.htmlId, el); //Todo: for dev only! Do not merge if present - probably belongs in a different place
         if (!el) return;
         const scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset :
             (document.documentElement || document.body.parentNode || document.body).scrollTop;
-        if (topPosition(el) + el.offsetHeight - scrollTop - window.innerHeight < 10) {
+        if (topPosition(el) + el.offsetHeight - scrollTop - window.innerHeight < 10) { //eslint-disable-line no-mixed-operators apparently math is scary!?
             this.props.appendSome(('all' !== this.props.filter)? filters[this.props.filter] : false); //eslint-disable-line yoda
             //todo: render a spinner here. Check PostsList.jsx for starting point
         }
@@ -155,7 +155,7 @@ class YotificationModule extends React.Component {
             </div>
             {(this.state.showFilters)? renderFilterList(this.props) : null}
             {renderNotificationList(this.props.notifications)}
-            <div className="footer"><button className="ptc" onClick={this.appendSome}>Get More!</button></div>
+            <div className="footer" style={{borderTop: 'none'}}><button className="ptc" onClick={this.appendSome}>Get More!</button></div>
             {(this.state.showFooter)? <div className="footer">{tt('notifications.controls.go_to_page')}</div> : null }
             {(this.state.showFooter)? (<div className="footer absolute">
                 <Link to={Url.profile() + '/notifications'} className="view-all">{tt('notifications.controls.go_to_page')}</Link>
@@ -252,7 +252,7 @@ export default connect(
                 types: notificationTypes,
                 direction: 'after'
             };
-            console.log('broadcasting notification/FETCH_SOME', action);
+            console.log('broadcasting notification/FETCH_SOME', action); //Todo: for dev only! Do not merge if present - probably belongs in a different place
             dispatch(action);
         }
     })

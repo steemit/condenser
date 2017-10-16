@@ -652,66 +652,68 @@
           "mark_all_read": "Mark All as Read",
           "mark_all_hidden": "Clear all"
         },
-
         "filters": {
           "_label": "Filters",
           "all": "All",
           "security": "Security",
-          "transfers": "Transfers",
-          "comments": "Comments",
-          "replies": "Replies",
-          "resteems": "Resteems",
-          "following": "Following"
+          "posts": "Posts",
+          "wallet": "Wallet",
+          "mentions": "Mentions",
+          "followers": "Followers",
+          "newPosts": "New Posts"
         },
         "announcement":{
             "action": "official announcement"
         },
-        "announcementImportant":{
+        "announcement_important":{
             "action": "important announcement"
         },
-        "followAuthorPost":{
+        "follow":{
             "action": "posted"
         },
-        "commentReply": {
+        "comment_reply": {
             "action": "replied to your comment"
         },
-        "postReply": {
+        "mention": {
+          "action": "tagged you",
+          "actionPost": "tagged you in a story",
+          "actionComment": "tagged you in a comment"
+        },
+        "post_reply": {
             "action": "commented on"
         },
-        "powerDown": {
+        "power_down": {
             "action": "Power down executed",
             "subject": "Notice"
         },
-        "receiveSteem": {
+        "receive": {
             "action": "received from"
         },
         "resteem": {
             "action": "resteemed"
         },
-        "securityNewMobileDevice":{
-            "action":"New mobile device linked",
-            "body":"If this wasn't you, change your password ASAP",
-            "subject":"Security warning"
+        "security_new_mobile_device":{
+          "action":"New mobile device linked",
+          "body":"If this wasn't you, change your password ASAP",
+          "subject":"Security warning",
+          "z_currenty_unused":true
         },
-        "securityPasswordChanged":{
-            "action":"Password changed",
-            "body":"If this wasn't you, recover your account ASAP",
-            "subject":"Security warning"
+        "security_password_changed":{
+          "action":"Password changed",
+          "body":"If this wasn't you, recover your account ASAP",
+          "subject":"Security warning",
+          "z_currenty_unused":true
         },
-        "securityPowerDown":{
-            "action":"Power Down initiated",
-            "body":"If this wasn't you, change your password ASAP",
-            "subject":"Security warning"
+        "power_down":{
+          "action":"Power Down initiated",
+          "body":"If this wasn't you, change your password ASAP",
+          "subject":"Security warning"
         },
-        "securityWithrawal":{
-            "action":"Savings withdrawal initiated",
-            "body":"If this wasn't you, change your password ASAP",
-            "subject":"Security warning"
-        },
-        "tag": {
-            "action": "tagged you",
-            "actionPost": "tagged you in a story",
-            "actionComment": "tagged you in a comment"
+        "security_withrawal":{
+          "action":"Savings withdrawal initiated",
+          "body":"If this wasn't you, change your password ASAP",
+          "subject":"Security warning",
+          "z_currenty_unused":true
         },
         "vote": {
             "action": "upvoted you",

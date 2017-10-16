@@ -55,10 +55,8 @@ class NotificationLink extends React.Component {
         let link = Url.comment(post, item)
         let localeAction = `${localeRoot}.action`
         let picture = null
-
         switch (notificationType) {
-            case type.FOLLOW_COMMENT_REPLY :
-                throw new Error(`Notification ${notificationType} not implemented`)
+            case type.COMMENT_REPLY :
             case type.POST_REPLY :
                 headerContent = <span><span className="user">{ author }</span> { tt(localeAction) } <strong>{ post.summary }</strong></span>
                 bodyContent = item.summary
@@ -70,7 +68,7 @@ class NotificationLink extends React.Component {
             case type.ANNOUNCEMENT :
             case type.ANNOUNCEMENT_IMPORTANT :
                 //todo: use announcement comment 'image' as icon post steemfest. This will require addl info from yo.
-            case type.FOLLOW_AUTHOR_POST :
+            case type.FEED :
                 headerContent = <span><span className="user">{ author }</span> { tt(localeAction) } </span>
                 bodyContent = item.summary
                 break

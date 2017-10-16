@@ -56,6 +56,7 @@ class PostSummary extends React.Component {
             props.total_payout !== this.props.total_payout ||
             props.username !== this.props.username ||
             props.nsfwPref !== this.props.nsfwPref ||
+            props.layoutStyle !== this.props.layoutStyle ||
             state.revealNsfw !== this.state.revealNsfw;
     }
 
@@ -212,20 +213,32 @@ class PostSummary extends React.Component {
 
         let thumb = null;
         if(!gray && p.image_link && !userBlacklisted) {
-          
-          {/* const size = (thumbSize == 'mobile') ? '640x480' : '256x512';  */}
+            // on mobile, we always use blog layout style -- there's no toggler
+            // on desktop, we offer a choice of either blog or list
+            // if the layoutStyle is list, output an image with a srcset
+            // which has the 256x512 for whatever the large breakpoint is where the list layout is used
+            // and the 640 for lower than that
 
-          const size = (thumbSize == 'mobile') ? '640x480' : '640x480';
+            const blogSize = proxifyImageUrl(p.image_link, '640x480');
 
+            if (this.props.layoutStyle === 'blog') {
+                thumb = (
+                    <span onClick={e => navigate(e, onClick, post, p.link)} className="articles__feature-img-container">
+                        <img className="articles__feature-img" src={blogSize} />
+                    </span>
+                );
+            } else {
+                const listSize = proxifyImageUrl(p.image_link, '256x512');
 
-          const url = proxifyImageUrl(p.image_link, size)
-          if(thumbSize == 'mobile') {
-            thumb = <span onClick={e => navigate(e, onClick, post, p.link)} className="articles__feature-img-container"><img className="articles__feature-img" src={url} /></span>
-            {/*  thumb = <span onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image-mobile"><img className="articles__feature-img" src={url} /></span> */}
-          } else {
-            thumb = <span onClick={e => navigate(e, onClick, post, p.link)} className="articles__feature-img-container"><img className="articles__feature-img" src={url} /></span>
-              {/* thumb = <span onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image" style={{backgroundImage: 'url(' + url + ')'}}></span>  */}
-          }
+                thumb = (
+                    <span onClick={e => navigate(e, onClick, post, p.link)} className="articles__feature-img-container">
+                        <picture className="articles__feature-img">
+                            <source srcSet={listSize} media="(min-width: 1000px)" />
+                            <img srcSet={blogSize} />
+                        </picture>
+                    </span>
+                );
+            }
         }
         const commentClasses = []
         if(gray || ignore) commentClasses.push('downvoted') // rephide
@@ -275,7 +288,8 @@ export default connect(
         }
         return {
             post, content, pending_payout, total_payout,
-            username: state.user.getIn(['current', 'username']) || state.offchain.get('account')
+            username: state.user.getIn(['current', 'username']) || state.offchain.get('account'),
+            layoutStyle: state.user.get('layout_style'),
         };
     },
 

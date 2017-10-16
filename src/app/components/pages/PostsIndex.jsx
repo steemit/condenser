@@ -14,7 +14,7 @@ import SidebarStats from 'app/components/elements/SidebarStats';
 import SidebarLinks from 'app/components/elements/SidebarLinks';
 import SidebarNewUsers from 'app/components/elements/SidebarNewUsers';
 import Topics from './Topics';
-
+import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
 
 class PostsIndex extends React.Component {
 
@@ -25,7 +25,8 @@ class PostsIndex extends React.Component {
         routeParams: PropTypes.object,
         requestData: PropTypes.func,
         loading: PropTypes.bool,
-        username: PropTypes.string
+        username: PropTypes.string,
+        layoutStyle: PropTypes.string,
     };
 
     static defaultProps = {
@@ -133,8 +134,10 @@ class PostsIndex extends React.Component {
             }
         }
 
+        const layoutClass = (this.props.layoutStyle === 'blog') ? ' layout-block' : ' layout-list';
+
         return (
-            <div className={'PostsIndex row layout-list' + (fetching ? ' fetching' : '')}>
+            <div className={'PostsIndex row' + (fetching ? ' fetching' : '') + layoutClass}>
                 <aside className="c-sidebar c-sidebar--left">
                     <Topics order={topics_order} current={category} compact={false} />
                     <small><a onClick={this.onShowSpam}>{showSpam ? tt('g.next_3_strings_together.show_less') : tt('g.next_3_strings_together.show_more')}</a>{' ' + tt('g.next_3_strings_together.value_posts')}</small>
@@ -148,18 +151,7 @@ class PostsIndex extends React.Component {
                             <div className="articles__tag-selector">
                                 <Topics order={topics_order} current={category} compact />
                             </div>
-                            <div className="articles__layout-selector">
-                              <a id="changeLayout" href="#">
-                                <svg className="articles__icon--layout">
-                                  <g id="svg-icon-symbol-layout" viewBox="0 0 24 24" stroke="none" strokeWidth={1} fill="none" fillRule="evenodd">
-                                    <rect className="icon-svg icon-svg--accent icon-svg--layout-line1" x={6} y={16} width={12} height={2} />
-                                    <rect className="icon-svg icon-svg--accent icon-svg--layout-line2" x={6} y={11} width={12} height={2} />
-                                    <rect className="icon-svg icon-svg--accent icon-svg--layout-line3" x={6} y={6} width={12} height={2} />
-                                    <path d="M2,2 L2,22 L22,22 L22,2 L2,2 Z M1,1 L23,1 L23,23 L1,23 L1,1 Z" id="icon-svg__border" className="icon-svg icon-svg--accent" fillRule="nonzero" />
-                                  </g>
-                                </svg>                                    
-                              </a>
-                            </div>
+                            <ArticleLayoutSelector />
                         </div>         
                     </div> 
                     <hr className="articles__hr" />
@@ -200,6 +192,7 @@ module.exports = {
                 loading: state.app.get('loading'),
                 accounts: state.global.get('accounts'),
                 username: state.user.getIn(['current', 'username']) || state.offchain.get('account'),
+                layoutStyle: state.user.get('layout_style'),
             };
         },
         (dispatch) => {

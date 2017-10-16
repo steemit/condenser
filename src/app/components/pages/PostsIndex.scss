@@ -191,6 +191,9 @@
     transition: all 0.2s ease-out;
     border: transparent;
     min-width: 300px;
+    max-width: 560px;
+    margin: auto;
+
   @include themify($themes) {
       background-color: themed('moduleBackgroundColor'); 
   }  
@@ -199,6 +202,7 @@
     margin: 0 1em;
     padding: 0.5em 0em;
     min-width: 550px;
+    max-width: none;
 
     @include themify($themes) {
         background-color: themed('moduleMediumBackgroundColor'); 
@@ -226,6 +230,7 @@
   &__hr {
     display: none;
     margin-bottom: 20px;
+    margin-top: 10px;
     @media screen and (min-width: 39.9375em) {  
       @include themify($themes) {
           display: block;
@@ -292,6 +297,20 @@
       }
     }   
   }
+
+  // &__feature-img-container {
+  //   overflow: hidden;
+  //   width: 130px;
+  //   height: 81px;
+  //   position: relative;
+  //   display: inline-block;
+  // }
+  // &__feature-img {
+  //   position: absolute;
+  //   width:100% !important;   
+  //   top: 50%;
+  //   transform:translateY(-50%)
+  // }
   &__summary-footer {
     display: flex;
     align-items: center;
@@ -326,6 +345,7 @@
     }
   }
   &__header-col {
+    margin-bottom: 10px;
     &--right {
       order: 1;
       width: 100%;
@@ -358,6 +378,11 @@
     @extend .link--secondary;
     text-decoration: none;
   }
+  &__icon-steem {
+    padding-left: 5px;
+    transform: scale(0.9);
+    display: inline-block;
+  }
   &__h1 {
     font-family: $font-primary;
     font-weight: bold;
@@ -372,23 +397,20 @@
     // @extend .h2;
     margin: 0;
     @include font-size(18px);     
-    @include MQ(M) {
-    @include font-size(20px);       
-    
     a {
-      font-weight: bold;
-      @include themify($themes) {
-          color: themed('textColorPrimary');  
-      }   
-       &:visited {
-          @include themify($themes) {
-              color: themed('textColorSecondary');  
-          } 
-       }
-    }
-
+    font-weight: bold;
+    @include themify($themes) {
+        color: themed('textColorPrimary');  
     }   
-
+     &:visited {
+        @include themify($themes) {
+            color: themed('textColorSecondary');  
+        } 
+      }
+    }
+    @include MQ(M) {
+      @include font-size(20px);       
+    }   
   }
   &__h3 {
     display: inline;
@@ -695,8 +717,18 @@ a#changeLayout:focus {
       &__h2 {
         @include font-size(17px);               
       }
+      &__feature-img-container {
+        overflow: hidden;
+        width: 130px;
+        height: 81px;
+        position: relative;
+        display: inline-block;
+      }
       &__feature-img {
-        max-width: 112px;
+        position: absolute;
+        width:100% !important;   
+        top: 50%;
+        transform:translateY(-50%)
       }
       &__summary-header {
         padding: 2px 0 5px;
@@ -765,9 +797,6 @@ a#changeLayout:focus {
         height: 24px !important;
         margin-right: 7px;
       }
-    }
-    .articles__content-block:nth-child(2n) {
-      margin-top: -3px;
     }
     .action {
       &__icon {

@@ -131,12 +131,12 @@ ul.PostsList__summaries {
   }
   padding-left: 1rem;
   margin-left: 1rem;
-  border-left: 1px solid #cacaca;
+  border-left: 1px solid $color-border-light;
 
   .Reblog__button {
     margin-right: 1rem;
     padding-right: 1rem;
-    border-right: 1px solid #cacaca;
+    border-right: transparent;
   }
 }
 
@@ -201,7 +201,7 @@ ul.PostsList__summaries {
   }
   .PostSummary__time_author_category {
     margin-left: 0;
-    border-left: 1px solid #cacaca;
+    border-left: 1px solid $color-border-light;
     .Reblog__button {
         margin-right: 1rem;
         padding-right: 1rem;

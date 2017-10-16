@@ -87,12 +87,18 @@ $themes: (
 
 
   .theme-original {
-    background-color: $color-background-off-white; 
+    background-color: $white; 
     color: $color-text-dark;
+    @include MQ(M) {
+      background-color: $color-background-off-white; 
+    }
   }
   .theme-light {
-    background-color: $color-background-off-white; 
+    background-color: $white; 
     color: $color-text-dark;
+    @include MQ(M) {
+      background-color: $color-background-off-white; 
+    }    
   }
   .theme-dark {
     background-color: $color-background-dark; 

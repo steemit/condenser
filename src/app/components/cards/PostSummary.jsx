@@ -118,8 +118,9 @@ class PostSummary extends React.Component {
         const content_title = (<h2 className="articles__h2 entry-title">
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>
                 {isNsfw && <span className="nsfw-flag">nsfw</span>}
+
                 {title_text}
-                {full_power && <span title={tt('g.powered_up_100')}><Icon name="steem" /></span>}
+                
             </a>
         </h2>);
 
@@ -147,6 +148,9 @@ class PostSummary extends React.Component {
                     <span className="articles__tag-link">{tt('g.in')}&nbsp;<TagList post={p} single />&nbsp;•&nbsp;</span>
                     <a className="timestamp__link" href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>
                         <span className="timestamp__time"><TimeAgoWrapper date={p.created} className="updated" /></span>
+                        
+                        {full_power && <span className="articles__icon-steem" title={tt('g.powered_up_100')}><Icon name="steem" /></span>}  
+
                     </a>
                 </div>
             </div>
@@ -215,9 +219,10 @@ class PostSummary extends React.Component {
 
           const url = proxifyImageUrl(p.image_link, size)
           if(thumbSize == 'mobile') {
-            thumb = <span onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image-mobile"><img className="articles__feature-img" src={url} /></span>
+            thumb = <span onClick={e => navigate(e, onClick, post, p.link)} className="articles__feature-img-container"><img className="articles__feature-img" src={url} /></span>
+            {/*  thumb = <span onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image-mobile"><img className="articles__feature-img" src={url} /></span> */}
           } else {
-            thumb = <span onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image-mobile"><img className="articles__feature-img" src={url} /></span>
+            thumb = <span onClick={e => navigate(e, onClick, post, p.link)} className="articles__feature-img-container"><img className="articles__feature-img" src={url} /></span>
               {/* thumb = <span onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image" style={{backgroundImage: 'url(' + url + ')'}}></span>  */}
           }
         }

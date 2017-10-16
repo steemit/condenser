@@ -1,10 +1,11 @@
-/*global describe, it, before, beforeEach, after, afterEach */
+/* eslint no-undef:0 no-unused-vars:0 */
+/* global describe, it, before, beforeEach, after, afterEach */
 
 import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import { call, put, select } from 'redux-saga/effects';
-import { fetchAll, fetchSome, getUsernameFromState, getNotificationsById } from './NotificationSaga';
 import { fetchAllNotifications, fetchSomeNotifications } from 'app/utils/YoApiClient';
+import { fetchAll, fetchSome, getUsernameFromState, getNotificationsById } from './NotificationSaga';
 
 describe('fetchAll', () => {
     it('should get the username from state', () => {
@@ -33,6 +34,12 @@ describe('fetchSome', () => {
 
         const withNotifsNoFilter = gen.next().value;
         expect(withNotifsNoFilter).to.deep.equal(select(getNotificationsById));
+
+        const callFetch = gen.next().value;
+        expect(callFetch.CALL.args[0].after.CALL.args).to.contain('after');
+
+        const fetch = gen.next({ data: 'from online' }).value;
+        expect(fetch).to.deep.equal(put({ type: 'notification/APPEND_SOME', payload: { data: 'from online' } }));
 
         const done = gen.next();
         expect(done).to.deep.equal({ done: true, value: undefined });

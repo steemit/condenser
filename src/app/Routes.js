@@ -30,81 +30,63 @@ export function resolveRoute(path)
     if (path === '/') {
         return {page: 'PostsIndex', params: ['trending']};
     }
-    if (path === '/about.html') {
+    if (path === '/s/about') {
         return {page: 'About'};
     }
-    if (path === '/welcome') {
+    if (path === '/s/welcome') {
         return {page: 'Welcome'};
     }
-    if (path === '/faq.html') {
+    if (path === '/s/faq') {
         return {page: 'Faq'};
     }
-    if (path === '/login.html') {
+    if (path === '/c/login') {
         return {page: 'Login'};
     }
-    if (path === '/privacy.html') {
+    if (path === '/s/privacy') {
         return {page: 'Privacy'};
     }
-    if (path === '/support.html') {
+    if (path === '/s/support') {
         return {page: 'Support'};
     }
-    if (path === '/xss/test' && process.env.NODE_ENV === 'development') {
+    if (path === '/c/xss/test' && process.env.NODE_ENV === 'development') {
         return {page: 'XSSTest'};
     }
-    if (path.match(/^\/tags\/?/)) {
+    if (path.match(/^\/c\/tags\/?/)) {
         return {page: 'Tags'};
     }
-    if (path === '/tos.html') {
+    if (path === '/s/tos') {
         return {page: 'Tos'};
     }
-    if (path === '/change_password') {
+    if (path === '/c/change_password') {
         return {page: 'ChangePassword'};
     }
-    if (path === '/create_account') {
+    if (path === '/c/create_account') {
         return {page: 'CreateAccount'};
     }
-    if (path === '/approval') {
+    if (path === '/c/approval') {
         return {page: 'Approval'};
     }
-    if (path === '/pick_account') {
+    if (path === '/c/pick_account') {
         return {page: 'PickAccount'};
     }
-    if (path === '/recover_account_step_1') {
+    if (path === '/c/recover_account_step_1') {
         return {page: 'RecoverAccountStep1'};
     }
-    if (path === '/recover_account_step_2') {
+    if (path === '/c/recover_account_step_2') {
         return {page: 'RecoverAccountStep2'};
     }
-    if (path === '/waiting_list.html') {
+    if (path === '/c/waiting_list') {
         return {page: 'WaitingList'};
     }
-    if (path === '/market') {
+    if (path === '/c/market') {
         return {page: 'Market'};
     }
-    if (path === '/~witnesses') {
+    if (path === '/c/witnesses') {
         return {page: 'Witnesses'};
     }
-    if (path === '/submit.html') {
+    if (path === '/c/submit') {
         return {page: 'SubmitPost'};
     }
-    // let match = path.match(routeRegex.PostsIndex);
-    // if (match) {
-    //     return {page: 'PostsIndex', params: ['home', match[1]]};
-    // }
-    // match = path.match(routeRegex.UserProfile1) ||
-    //     // @user/"posts" is deprecated in favor of "comments" as of oct-2016 (#443)
-    //     path.match(routeRegex.UserProfile2);
-    // if (match) {
-    //     return {page: 'UserProfile', params: match.slice(1)};
-    // }
-    // match = path.match(routeRegex.PostNoCategory);
-    // if (match) {
-    //     return {page: 'PostNoCategory', params: match.slice(1)};
-    // }
-    // match = path.match(routeRegex.Post);
-    // if (match) {
-    //     return {page: 'Post', params: match.slice(1)};
-    // }
     let match = path.match(routeRegexNew.PostsIndex);
     if (match) {
         return {page: 'PostsIndex', params: match.slice(1)};
@@ -144,15 +126,29 @@ export const linkBuilder = {
     userPermissions: name => `/${name}/permissions`,
     userCurationRewards: name => `/${name}/curation-rewards`,
     userAuthorRewards: name => `/${name}/author-rewards`,
-    search: () => '/static/search.html',
-    compose: () => '/submit.html',
-    signup: () => '/pick_account',
-    login: () => '/login.html',
+    search: () => '/s/search',
+    compose: () => '/c/submit',
+    signup: () => '/c/pick_account',
+    login: () => '/c/login',
     post: (author, permlink) => `/${author}/${permlink}`,
     comment: (post_author, post_permlink, comment_author, comment_permlink) => {
         return `/${post_author}/${post_permlink}#${comment_author}/${comment_permlink}`;
     },
     indexPage: (category, order) => `/t/${category}/${order || 'trending'}`,
+    about: () => '/s/about',
+    welcome: () => '/s/welcome',
+    faq: () => '/s/faq',
+    privacy: () => '/s/privacy',
+    support: () => '/s/support',
+    tags: () => '/c/tags',
+    tos: () => '/s/tos',
+    changePassword: () => '/c/change_password',
+    createAccount: () => '/c/create_account',
+    signUpApproval: () => '/c/approval',
+    recoverAccount: step => `/c/recover_account_step_${step}`,
+    waitingList: () => '/c/waiting_list',
+    market: () => '/c/market',
+    witnesses: () => '/c/witnesses'
 };
 
 export function routeToSteemdUrl(route) {

@@ -17,9 +17,9 @@ import MiniHeader from 'app/components/modules/MiniHeader';
 import tt from 'counterpart';
 import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
-import { APP_NAME, VESTING_TOKEN, LIQUID_TOKEN } from 'app/client_config';
+import { LIQUID_TOKEN } from 'app/client_config';
 import {key_utils} from 'steem/lib/auth/ecc';
-import {resolveRoute} from 'app/Routes';
+import {resolveRoute, linkBuilder} from 'app/Routes';
 
 const pageRequiresEntropy = (path) => {
     const {page} = resolveRoute(path);
@@ -133,7 +133,7 @@ class App extends React.Component {
         const {location, params, children, flash, new_visitor,
             depositSteem, signup_bonus, username} = this.props;
         const lp = false; //location.pathname === '/';
-        const miniHeader = location.pathname === '/create_account' || location.pathname === '/pick_account';
+        const miniHeader = location.pathname === '/c/create_account' || location.pathname === '/c/pick_account';
         const params_keys = Object.keys(params);
         const ip = location.pathname === '/' || (params_keys.length === 2 && params_keys[0] === 'order' && params_keys[1] === 'category');
         const alert = this.props.error || flash.get('alert') || flash.get('error');
@@ -205,17 +205,17 @@ class App extends React.Component {
                 <TopRightMenu vertical navigate={this.navigate} />
                 <ul className="vertical menu">
                     <li>
-                        <a href="/welcome" onClick={this.navigate}>
+                        <a href={linkBuilder.welcome()} onClick={this.navigate}>
                             {tt('navigation.welcome')}
                         </a>
                     </li>
                     <li>
-                        <a href="/faq.html" onClick={this.navigate}>
+                        <a href={linkBuilder.faw()} onClick={this.navigate}>
                             {tt('navigation.faq')}
                         </a>
                     </li>
                     <li>
-                        <a href="/tags" onClick={this.navigate}>
+                        <a href={linkBuilder.tags()} onClick={this.navigate}>
                             {tt('navigation.explore')}
                         </a>
                     </li>
@@ -225,22 +225,22 @@ class App extends React.Component {
                         </a>
                     </li>
                     <li>
-                        <a href="/market" onClick={this.navigate}>
+                        <a href={linkBuilder.market()} onClick={this.navigate}>
                             {tt('navigation.currency_market')}
                         </a>
                     </li>
                     <li>
-                        <a href="/recover_account_step_1" onClick={this.navigate}>
+                        <a href={linkBuilder.recoverAccount(1)} onClick={this.navigate}>
                             {tt('navigation.stolen_account_recovery')}
                         </a>
                     </li>
                     <li>
-                        <a href="/change_password" onClick={this.navigate}>
+                        <a href={linkBuilder.changePassword()} onClick={this.navigate}>
                             {tt('navigation.change_account_password')}
                         </a>
                     </li>
                     <li className="last">
-                        <a href="/~witnesses" onClick={this.navigate}>
+                        <a href={linkBuilder.witnesses()} onClick={this.navigate}>
                             {tt('navigation.vote_for_witnesses')}
                         </a>
                     </li>
@@ -274,12 +274,12 @@ class App extends React.Component {
                         </a>
                     </li>
                     <li>
-                        <a href="/privacy.html" onClick={this.navigate} rel="nofollow">
+                        <a href={linkBuilder.privacy()} onClick={this.navigate} rel="nofollow">
                             {tt('navigation.privacy_policy')}
                         </a>
                     </li>
                     <li className="last">
-                        <a href="/tos.html" onClick={this.navigate} rel="nofollow">
+                        <a href={linkBuilder.tos()} onClick={this.navigate} rel="nofollow">
                             {tt('navigation.terms_of_service')}
                         </a>
                     </li>

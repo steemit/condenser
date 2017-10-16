@@ -85,7 +85,9 @@ class YotificationModule extends React.Component {
     componentDidMount() {
         window.addEventListener('scroll', this.scrollListener, {capture: false, passive: true});
         window.addEventListener('resize', this.scrollListener, {capture: false, passive: true});
-        this.scrollListener();
+        if(LAYOUT_PAGE === this.state.layout) {
+            this.scrollListener();
+        }
         this.markDisplayedShownWithDelay();
     }
 
@@ -131,11 +133,11 @@ class YotificationModule extends React.Component {
 
     scrollListener = debounce(() => { //eslint-disable-line no-undef
         const el = window.document.getElementById(this.htmlId);
-        console.log('scrollListenerCalled', this.htmlId, el); //Todo: for dev only! Do not merge if present - probably belongs in a different place
         if (!el) return;
         const scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset :
             (document.documentElement || document.body.parentNode || document.body).scrollTop;
         if (topPosition(el) + el.offsetHeight - scrollTop - window.innerHeight < 10) { //eslint-disable-line no-mixed-operators apparently math is scary!?
+            console.log('scrollListenerFiring', this.htmlId, el); //Todo: for dev only! Do not merge if present - probably belongs in a different place
             this.props.appendSome(('all' !== this.props.filter)? filters[this.props.filter] : false); //eslint-disable-line yoda
             //todo: render a spinner here. Check PostsList.jsx for starting point
         }

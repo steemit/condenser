@@ -36,12 +36,6 @@ describe('fetchSome', () => {
         expect(withNotifsNoFilter).to.deep.equal(select(getNotificationsById));
 
         const callFetch = gen.next().value;
-        expect(callFetch.CALL.args[0].after.CALL.args).to.contain('after');
-
-        const fetch = gen.next({ data: 'from online' }).value;
-        expect(fetch).to.deep.equal(put({ type: 'notification/APPEND_SOME', payload: { data: 'from online' } }));
-
-        const done = gen.next();
-        expect(done).to.deep.equal({ done: true, value: undefined });
+        expect(callFetch.CALL.args).to.contain('after');
     });
 });

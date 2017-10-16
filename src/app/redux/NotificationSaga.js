@@ -15,8 +15,11 @@ export function getNotificationsById(state) {
  *
  * @param {String} direction
  * @param {OrderedMap} filteredNotifs
+ * @return {Boolean|String}
  */
 export function getTimestamp(direction, filteredNotifs) {
+    if (filteredNotifs.count() < 1) return false;
+
     return (direction === 'before') ? filteredNotifs.last().created : filteredNotifs.sortBy(n => n.updated).last().updated;
 }
 
@@ -32,12 +35,13 @@ function* pollNotifications() {
         yield call(delay, 5000);
         yield put({
             type: 'notification/FETCH_SOME',
-            username: 'test_user', // todo: get user from state
-            since: 123, // todo: store timestamp in state & use it here -- action should update timestamp when txn is complete
+            direction: 'after',
         });
     } catch (error) {
-        // TODO: error tracking?
-        return;
+        yield put({
+            type: 'notification/APPEND_SOME_ERROR', // maybe another type here?
+            msg: 'poll cancelled',
+        });
     }
 }
 
@@ -65,10 +69,17 @@ export function* fetchAll() {
     const username = yield select(getUsernameFromState);
     const payload = yield call(fetchAllNotifications, username);
 
-    yield put({
-        type: 'notification/RECEIVE_ALL',
-        payload,
-    });
+    if (payload.error) {
+        yield put({
+            type: 'notification/RECEIVE_ALL_ERROR',
+            msg: payload.error,
+        });
+    } else {
+        yield put({
+            type: 'notification/RECEIVE_ALL',
+            payload,
+        });
+    }
 }
 
 /**
@@ -91,18 +102,29 @@ export function* fetchSome({ types = null, direction = 'after' }) {
 
     // Notifications are already reverse-sorted by `created` so we can just pull the last one.
     // Otherwise, sort by updated and pull the most recent (last) one.
-    const timestamp = call(getTimestamp, direction, filteredNotifs);
+    const timestamp = yield call(getTimestamp, direction, filteredNotifs);
+    const filter = {};
+    if (timestamp) {
+        filter[direction] = timestamp;
+    }
 
     const payload = yield call(fetchSomeNotifications, {
         username,
         types,
-        [direction]: timestamp,
+        ...filter,
     });
 
-    yield put({
-        type: 'notification/APPEND_SOME',
-        payload,
-    });
+    if (payload.error) {
+        yield put({
+            type: 'notification/APPEND_SOME_ERROR',
+            msg: payload.error,
+        });
+    } else {
+        yield put({
+            type: 'notification/APPEND_SOME',
+            payload,
+        });
+    }
 }
 
 /**

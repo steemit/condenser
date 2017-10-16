@@ -514,7 +514,6 @@
 
   &__content-block--img + &__content-block--text {
     margin-top: 0;
-    margin-left: 14px;
   }
   &__resteem, &__content-block--text, &__metadata {
     @include MQ(M) {
@@ -549,8 +548,8 @@
     margin-right: 8px;
     transition: width 0.2s ease-out;
     @include MQ(M) {
-      width: 54px !important;
-      height: 54px !important;
+      width: 48px !important;
+      height: 48px !important;
       margin-right: 10px;
     }
   } 
@@ -759,14 +758,12 @@ a#changeLayout:focus {
       &__content-block {
         margin-bottom: 0;
         &--img {
+          margin-right: 14px;
         }
         &--text {
           margin-top: 0;
           min-width: 300px;
         }
-      }
-      &__content-block--img + &__content-block--text {
-        margin-left: 14px;
       }
       &__tags {
         margin: 4px 0 0;
@@ -794,11 +791,6 @@ a#changeLayout:focus {
       &__name {
         @include font-size(15px);               
         font-weight: normal;
-      }
-      &__profile-img {
-        width: 24px !important;
-        height: 24px !important;
-        margin-right: 7px;
       }
     }
     .action {
@@ -829,10 +821,17 @@ a#changeLayout:focus {
   }
 }
 
-.Comment__Userpic .user__profile-img {
-  width: 48px !important;
-  height: 48px !important;
+
+.layout-list .user .user__profile-img {
+  width: 24px !important;
+  height: 24px !important;
+  margin-right: 7px;
 }
+
+// .Comment__Userpic .user__profile-img {
+//   width: 48px !important;
+//   height: 48px !important;
+// }
 
 
 .icon-svg {

@@ -3,7 +3,7 @@ ul.PostsList__summaries {
 }
 
 .PostSummary {
-  padding: 0 0 0.5rem;
+  // padding: 0 0 0.5rem;
   margin: 0 0 1.25vw;
   clear: left;
   @include clearfix;
@@ -166,10 +166,10 @@ ul.PostsList__summaries {
 /* Small only */
 @media screen and (max-width: 39.9375em) {
   .PostSummary {
-    padding: 1rem 0.5rem;
+    // padding: 1rem 0.5rem;
     margin-bottom: 0;
     border: none;
-    border-top: 1px solid $light-gray;
+    // border-top: 1px solid $light-gray;
   }
   .PostSummary__image {
     float: none;

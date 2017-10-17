@@ -41,6 +41,10 @@ export const currentUsername = () => {
     return false;
 }
 
+export const isOwnAccount = (username) => {
+    return (username === currentUsername());
+}
+
 export default {
     currentUser
 }

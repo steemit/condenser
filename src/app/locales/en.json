@@ -581,6 +581,22 @@
     "public_profile_settings": "Public Profile Settings",
     "private_post_display_settings": "Private Post Display Settings",
     "not_safe_for_work_nsfw_content": "Not safe for work (NSFW) content",
+    "notifications": {
+      "title": "Notification settings",
+      "transport_website": {
+        "title": "Website notifications",
+        "sub_title": "Appears on Steemit.com"
+      },
+      "meta_types": {
+        "security": "Security setting changes",
+        "wallet": "Wallet",
+        "post_reply": "Comments on your posts",
+        "comments_reply": "Replies to your comments",
+        "resteems": "Resteems",
+        "mentions": "Mentions",
+        "newPosts": "New Posts"
+      }
+    },
     "always_hide": "Always hide",
     "always_warn": "Always warn",
     "always_show": "Always show",

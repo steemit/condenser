@@ -140,7 +140,7 @@ class Settings extends React.Component {
         const following = follow && follow.getIn(['getFollowingAsync', account.name]);
         const ignores = isOwnAccount && following && following.get('ignore_result')
 
-        return <div className="Settings">
+        return <div className="Settings settings-page">
             {/*<div className="row">*/}
                 {/*<div className="small-12 medium-6 large-4 columns">*/}
                     {/*<label>{tt('g.choose_language')}*/}
@@ -153,7 +153,7 @@ class Settings extends React.Component {
             {/*</div>*/}
             {/*<br />*/}
             <div className="row">
-                <form onSubmit={this.handleSubmitForm} className="small-12 medium-6 large-4 columns">
+                <form onSubmit={this.handleSubmitForm} className="settings-group small-12 medium-6 columns">
                     <h4>{tt('settings_jsx.public_profile_settings')}</h4>
                     <label>
                         {tt('settings_jsx.profile_image_url')}
@@ -203,11 +203,16 @@ class Settings extends React.Component {
                         }
                 </form>
             </div>
-
             {isOwnAccount &&
                 <div className="row">
-                    <div className="small-12 medium-6 large-4 columns">
-                        <br /><br />
+                    <div className="settings-group small-12 medium-6 columns">
+                        <h4>{tt('settings_jsx.notifications.title')}</h4>
+                    </div>
+                </div>
+            }
+            {isOwnAccount &&
+                <div className="row">
+                    <div className="settings-group small-12 medium-6 columns">
                         <h4>{tt('settings_jsx.private_post_display_settings')}</h4>
                         <div>
                             {tt('settings_jsx.not_safe_for_work_nsfw_content')}
@@ -225,7 +230,7 @@ class Settings extends React.Component {
                 </div>}
             {ignores && ignores.size > 0 &&
                 <div className="row">
-                    <div className="small-12 medium-6 large-4 columns">
+                    <div className="settings-group small-12 medium-6 large-4 columns">
                         <br /><br />
                         <UserList title={tt('settings_jsx.muted_users')} account={account} users={ignores} />
                     </div>

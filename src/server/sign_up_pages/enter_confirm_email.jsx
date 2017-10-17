@@ -37,16 +37,12 @@ function* confirmEmailHandler() {
     const confirmation_code = this.params && this.params.code
         ? this.params.code
         : this.request.body.code;
-    console.log(
-        "-- /confirm_email -->",
-        this.session.uid,
-        this.session.user,
-        confirmation_code
-    );
+    console.log("-- /confirm_email -->", this.session.uid, this.session.user, confirmation_code);
     const eid = yield models.Identity.findOne({
         where: { confirmation_code, provider: "email"}
     });
     if (!eid) {
+        console.log("confirmation code not found", this.session.uid, this.session.user, confirmation_code);
         this.status = 401;
         this.body = "confirmation code not found";
         return;

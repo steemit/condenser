@@ -47,6 +47,21 @@ export const byId = (state = OrderedMap(), action = { type: null }) => {
     }
 };
 
+const createUpdatedList = ({ prop, val }) => {
+    return (state = Set(), action = { type: null }) => {
+        switch (action.type) {
+            case 'notification/UPDATE_ONE':
+                return updateMatchesList(action.updates, prop, val) ? state.add(action.id) : state;
+            case 'notification/UPDATE_SOME':
+                return updateMatchesList(action.updates, prop, val) ? state.union(Set(action.ids)) : state;
+            case 'notification/SENT_UPDATES':
+                return updateMatchesList(action.updates, prop, val) ? Set() : state;
+            default:
+                return state;
+        }
+    };
+}
+
 /**
  * Is an incoming update event relevant to our list?
  */
@@ -118,6 +133,7 @@ const isFetchingBefore = (state = false, action = { type: null }) => {
         case 'notification/FETCH_SOME':
             if (action.direction === 'before')
                 return true;
+            return state;
         case 'notification/APPEND_SOME':
             return false;
         default:
@@ -140,6 +156,8 @@ const errorMsg = (state = null, action = { type: null }) => {
 
 const notificationReducer = combineReducers({
     byId,
+    idsReadPending: createUpdatedList({ prop: 'read', val: true }),
+    idsShownPending: createUpdatedList({ prop: 'shown', val: true }),
     unread: createList({ prop: 'read', val: false }),
     unshown: createList({ prop: 'shown', val: false }),
     byType: combineReducers(generateByTypeReducers(allTypes, createList)),

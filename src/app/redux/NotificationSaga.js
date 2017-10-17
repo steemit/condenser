@@ -2,12 +2,22 @@ import { takeLatest, takeEvery } from 'redux-saga';
 import { call, put, take, fork, race, select } from 'redux-saga/effects';
 import { fetchAllNotifications, fetchSomeNotifications, markAsRead } from 'app/utils/YoApiClient';
 
+const POLL_WAIT_MS = 5000;
+
 export function getUsernameFromState(state) {
     return state.user.getIn(['current', 'username']);
 }
 
 export function getNotificationsById(state) {
     return state.notification.byId;
+}
+
+export function getIdsReadPending(state) {
+    return state.notification.idsReadPending;
+}
+
+export function getIdsShownPending(state) {
+    return state.notification.idsShownPending;
 }
 
 /**
@@ -32,7 +42,7 @@ function delay(millis) {
 
 function* pollNotifications() {
     try {
-        yield call(delay, 5000);
+        yield call(delay, POLL_WAIT_MS);
         yield put({
             type: 'notification/FETCH_SOME',
             direction: 'after',
@@ -45,8 +55,10 @@ function* pollNotifications() {
     }
 }
 
-// Wait for successful response, then fire another request
-// Cancel polling if user logs out
+/**
+ * Wait for successful response, then fire another request.
+ * Cancel polling if user logs out.
+ */
 function* watchPollData() {
     while (true) {
         yield take([
@@ -57,6 +69,47 @@ function* watchPollData() {
             call(pollNotifications), // and then queue up
             take('user/LOGOUT'), // or quit if they log out
         ]);
+    }
+}
+
+/**
+ * After any server notifs come in, wait a couple seconds, take a diff of user changes,
+ * and for anything that's changed, send the updates to the server.
+ */
+function* watchSyncData() {
+    while (true) {
+        yield call(delay, POLL_WAIT_MS);
+
+        const idsReadPending = yield select(getIdsReadPending);
+        const idsShownPending = yield select(getIdsShownPending);
+
+        // todo: pause watchPollData at this point -- or maybe we just do this in the same loop?
+        if (idsReadPending.count() + idsShownPending.count() > 0) {
+            // this is what we want when shown endpoint is up
+            // todo: once mark-as-shown is available get this up & running
+        }
+
+        if (idsReadPending.count() > 0) {
+            // for now during dev, we only mark as read
+            const payload = yield call(markAsRead, idsReadPending.toArray());
+
+            if (payload.error) {
+                yield put({
+                    type: 'notification/SENT_UPDATES_ERROR',
+                    msg: payload.error,
+                });
+            } else {
+                yield put({
+                    type: 'notification/SENT_UPDATES',
+                    updates: { read: true },
+                });
+
+                yield put({
+                    type: 'notification/APPEND_SOME',
+                    payload,
+                });
+            }
+        }
     }
 }
 
@@ -158,16 +211,15 @@ export function* updateSome({ ids, updates }) {
 }
 
 export function* NotificationPollSaga() {
-    yield [
-        fork(watchPollData),
-    ];
+    yield fork(watchPollData);
+    yield fork(watchSyncData);
 }
 
 export function* NotificationFetchSaga() {
     yield [
         takeLatest('notification/FETCH_ALL', fetchAll),
         takeLatest('notification/FETCH_SOME', fetchSome),
-        takeEvery('notification/UPDATE_ONE', updateOne),
-        takeEvery('notification/UPDATE_SOME', updateSome),
+        //takeEvery('notification/UPDATE_ONE', updateOne),
+        //takeEvery('notification/UPDATE_SOME', updateSome),
     ];
 }

@@ -10,9 +10,12 @@
   "scripts": {
     "build": "NODE_ENV=production ./node_modules/babel-cli/bin/babel-node.js ./node_modules/.bin/webpack --stats --config ./webpack/prod.config.js",
     "mocha": "NODE_ENV=test mocha ./mocha.setup.js",
+    "mocha:win32": "cross-env NODE_ENV=test mocha ./mocha.setup.js",
     "test": "npm run mocha -- app/**/*.test.js",
+    "test:win32": "npm run mocha:win32 -- app/**/*.test.js",
     "test:watch:all": "npm test -- --watch --watch-extensions jsx",
     "test:watch": "npm run mocha -- --watch --watch-extensions jsx",
+    "test:watch:win32": "npm run test:win32 -- --watch",
     "production": "NODE_ENV=production ./node_modules/babel-cli/bin/babel-node.js server/index.js",
     "start": "./node_modules/babel-cli/bin/babel-node.js ./webpack/dev-server.js",
     "start:local": "./.env.start.local.sh",

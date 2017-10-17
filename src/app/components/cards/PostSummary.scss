@@ -94,7 +94,9 @@ ul.PostsList__summaries {
   width: auto;
   padding: 0.3rem 0.1rem 0.15rem;
   font-family: "Helvetica Neue", Helvetica, Verdana, Arial, sans-serif;
-  color: #666;
+  @include themify($themes) {
+    color: themed('textColorPrimary');  
+  }
   overflow: hidden;
   line-height: 1.4;
   text-overflow: ellipsis;

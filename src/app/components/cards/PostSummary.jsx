@@ -140,10 +140,10 @@ class PostSummary extends React.Component {
               { !isNsfw
                     ?  <div className="user__col user__col--left">
                             <a className="user__link" href={'/@' + p.author}>
-                                <Userpic account={p.author} listView={true} />
+                                <Userpic account={p.author} />
                             </a>
                         </div>                       
-                    : ""
+                    : null
                 }
                 <div className="user__col user__col--right">
                     
@@ -254,7 +254,7 @@ class PostSummary extends React.Component {
                                 {thumb}
                             </a>
                         </div>                            
-                        : ""
+                        : null
                     }
                     <div className="articles__content-block articles__content-block--text">                    
                         {content_title}

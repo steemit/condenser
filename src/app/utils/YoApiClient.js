@@ -1,9 +1,12 @@
+import { Map } from 'immutable';
+import types, { settingsInitFalse } from 'app/components/elements/notification/type';
+
 //const YO = '/yo';
 //const YO = 'https://yo.steemitdev.com';
 const YO = 'https://api.steemitdev.com';
 
 /**
- * Re-formats API response a little bit.
+ * Re-formats API notifications response a little bit.
  *
  * @param {Array} res
  *
@@ -17,6 +20,37 @@ function normalize(res) {
         notificationType: n.notify_type,
         item: n.data.item,
     }));
+}
+
+/**
+ * Cleans up settings from Yo.
+ *
+ * @param {Object} settings payload from api
+ * @return {Object}
+ */
+function normalizeSettings(res) {
+    const typesToDefaultAsDisabled = settingsInitFalse;
+    const defaultTypes = types.reduce((acc, t) => {
+        return {
+            ...acc,
+            [t]: typesToDefaultAsDisabled.indexOf(t) < 0,
+        };
+    }, {});
+
+    const defaultSettings = [
+        'website', // TODO: get channels from api or something?
+        'sms',
+        'email',
+    ].map(c => ({
+        channelName: c,
+        types: defaultTypes,
+    }))
+
+    const mapped = Map(Object.assign(...defaultSettings.map(s => ({ [s.channelName]: s }))));
+
+    return {
+        notificationsettings: mapped.merge(Map(res)),
+    };
 }
 
 export function fetchAllNotifications(username) {
@@ -147,4 +181,27 @@ export function markAsShown(ids) {
     .catch(error => {
         return { error };
     });
+}
+
+/**
+ *
+ * @param {*} username
+ * @return {Map|Object} if error, object w/ error prop
+ */
+export function getNotificationSettings(username) {
+    return Promise.resolve(normalizeSettings({
+        foo: 'bar',
+    }));
+}
+
+/**
+ *
+ * @param {*} username
+ * @param {*} settings
+ * @return {Map|Object} if error, object w/ error prop
+ */
+export function saveNotificationSettings(username, settings) {
+    return Promise.resolve(normalizeSettings({
+        foo: 'bar',
+    }));
 }

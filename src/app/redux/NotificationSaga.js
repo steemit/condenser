@@ -211,6 +211,10 @@ export function* updateSome({ ids, updates }) {
 }
 
 export function* NotificationPollSaga() {
+    // We will depend on settings, so fetch em now.
+    yield put({
+        type: 'notificationsettings/FETCH',
+    });
     yield fork(watchPollData);
     yield fork(watchSyncData);
 }

@@ -13,18 +13,22 @@ const TRANSPORT_WEBSITE = 'website';
 
 class YotificatonSettingsPanel extends React.Component {
 
-    onToggleGroup = (groupName, enabled) => { //eslint-disable-line no-undef
-        console.log('onToggleGroup', groupName, enabled); //Todo: for dev only! Do not merge if present!
-        this.props.toggleGroup(groupName, enabled);
+    onToggleSetting = (channel, setting) => {
+        this.props.toggleSetting(channel, setting);
     }
 
     render() {
+        const { isFetching, settings } = this.props;
+
+        // todo: handle all channels, not just TRANSPORT_WEBSITE
         const toggles = [];
-        toggleNotificationGroupNames.forEach( groupName => {
-            toggles.push(<li key={groupName}>{tt('settings_jsx.notifications.meta_types.' + groupName)} <IOSToggle
+        const channel = TRANSPORT_WEBSITE;
+        const types = settings.get(TRANSPORT_WEBSITE).types;
+        for (let key in types) {
+            toggles.push(<li key={key}>{tt('settings_jsx.notifications.meta_types.' + key)} <IOSToggle
                 className="yotification-toggle"
-                onChange={(enabled) => this.onToggleGroup(groupName, enabled)}
-                checked={this.props.groupSettings[groupName]}
+                onChange={enabled => this.onToggleSetting(channel, key)}
+                checked={types[key]}
                 options={
                     {
                         color: '#474F79', //todo: this should not be here.
@@ -32,10 +36,11 @@ class YotificatonSettingsPanel extends React.Component {
                     }
                 }
             /></li>);
-        })
+        };
+
         return (
             <div className={'YotificationSettingsPanel ' + this.props.className}>
-                <h4>{tt('settings_jsx.notifications.title')} <LoadingIndicator type="circle" inline /> </h4>
+                <h4>{tt('settings_jsx.notifications.title')} {isFetching ? <LoadingIndicator type="circle" inline /> : ''}</h4>
                 <ul>{toggles}</ul>
             </div>
         );
@@ -47,27 +52,18 @@ export default connect(
         //{ notificationSettings: [ { channelName: 'website', settings: { vote: false, security: true, }, }, { channelName: 'sms', settings: { etc: '...', } } ] }
         return {
             ...ownProps,
+            isFetching: state.notificationsettings.isFetching,
             transport: TRANSPORT_WEBSITE,
-            groupSettings: toggleNotificationGroupNames.reduce(
-                (obj, groupName) => {
-
-                    obj[groupName] = (groupName !== 'wallet') ? true : false;
-                    return obj;
-                    }, {})
+            settings: state.notificationsettings.settings,
         }
     },
     dispatch => ({
-        toggleGroup: (groupName, enabled) => {
-            const action = {
-                type: 'notifications/SET_NOTIFICATION_TYPES',
-                channelName: TRANSPORT_WEBSITE, //this line or the next should be deleted. I suggest this on.
-                transport: TRANSPORT_WEBSITE,
-                types: toggleNotificationGroups[groupName],
-                groupName,
-                enabled
-            };
-            console.log('broadcasting notifications/SET_NOTIFICATION_TYPES', JSON.stringify(action, null, 4)); //Todo: for dev only! Do not merge if present - probably belongs in a different place
-            dispatch(action);
+        toggleSetting: (channel, setting) => {
+            dispatch({
+                type: 'notificationsettings/TOGGLE_SETTING',
+                channel,
+                setting,
+            });
         }
     })
 )(YotificatonSettingsPanel);

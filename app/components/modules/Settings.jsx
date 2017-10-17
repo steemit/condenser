@@ -92,6 +92,13 @@ class Settings extends React.Component {
     handleSubmit = ({updateInitialValues}) => {
         let {metaData} = this.props
         if (!metaData) metaData = {}
+
+        //fix https://github.com/GolosChain/tolstoy/issues/450
+        if (typeof metaData === 'string' && metaData.localeCompare("{created_at: 'GENESIS'}") == 0) {
+            metaData = {}
+            metaData.created_at = 'GENESIS'
+        }
+
         if(!metaData.profile) metaData.profile = {}
         delete metaData.user_image; // old field... cleanup
 

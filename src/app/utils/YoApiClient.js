@@ -1,9 +1,12 @@
-//const YO = '/yo';
+import { fromJS, Map } from 'immutable';
+import types, { settingsInitFalse } from 'app/components/elements/notification/type';
+
+const YO = '/yo';
 //const YO = 'https://yo.steemitdev.com';
-const YO = 'https://api.steemitdev.com';
+//const YO = 'https://api.steemitdev.com';
 
 /**
- * Re-formats API response a little bit.
+ * Re-formats API notifications response a little bit.
  *
  * @param {Array} res
  *
@@ -17,6 +20,38 @@ function normalize(res) {
         notificationType: n.notify_type,
         item: n.data.item,
     }));
+}
+
+/**
+ * Cleans up settings from Yo.
+ *
+ * If notification_types is null, assume we need to set defaults.
+ *
+ * @param {Object} transportsFromApi transports part of the payload from api
+ * @param {Array} types all the notif types
+ * @param {Array} settingsInitFalse settings to initialize as false by default
+ * @return {Object}
+ */
+export function normalizeSettingsFromApi(transportsFromApi, types, settingsInitFalse) {
+    // For each of the transports coming through from the API,
+    // If the API's notification_types is truthy,
+    // Transform array of enabled types to Map
+    // And assign it to our output Map
+    const defaultTypes = types.reduce((acc, t) => ({
+        ...acc,
+        [t]: settingsInitFalse.indexOf(t) < 0,
+    }), {});
+
+    return Object.keys(transportsFromApi).reduce((acc, transport) => {
+        if (transportsFromApi[transport].notification_types !== null) { // TODO: work with Gareth to make sure api supplies null if nothing has been saved yet
+            const transportTypes = transportsFromApi[transport].notification_types;
+            return acc.setIn([transport, 'notification_types'], types.reduce((acc, type) => {
+                return acc.set(type, !transportTypes.indexOf(type));
+            }, Map()));
+        } else {
+            return acc.setIn([transport, 'notification_types'], Map(defaultTypes));
+        }
+    }, Map());
 }
 
 export function fetchAllNotifications(username) {
@@ -143,6 +178,74 @@ export function markAsShown(ids) {
             return normalize(res.result);
         }
         return [];
+    })
+    .catch(error => {
+        return { error };
+    });
+}
+
+/**
+ *
+ * @param {String} username
+ * @return {Map|Object} if error, object w/ error prop
+ */
+export function getNotificationSettings(username) {
+//    return Promise.resolve(normalizeSettings({
+//        foo: 'bar',
+//    }));
+    return fetch(YO, {
+        method: 'post',
+        credentials: 'same-origin',
+        headers: {
+            Accept: 'application/json',
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            jsonrpc: '2.0',
+            id: 1,
+            method: 'yo.get_transports',
+            params: {
+                test: true, // Todo: for dev only! Do not merge if present!
+                username,
+            },
+        }),
+    }).then(r => r.json()).then(res => {
+        return normalizeSettingsFromApi(res.result, types, settingsInitFalse);
+    })
+    .catch(error => {
+        return { error };
+    });
+}
+
+/**
+ *
+ * @param {String} username
+ * @param {Object} settings
+ * @return {Map|Object} if error, object w/ error prop
+ */
+export function saveNotificationSettings(username, settings) {
+//    return Promise.resolve(normalizeSettings({
+//        foo: 'bar',
+//    }));
+    return fetch(YO, {
+        method: 'post',
+        credentials: 'same-origin',
+        headers: {
+            Accept: 'application/json',
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            jsonrpc: '2.0',
+            id: 1,
+            method: 'yo.set_transports',
+            params: {
+                test: true, // Todo: for dev only! Do not merge if present!
+                username,
+                transports: settings,
+            },
+        }),
+    }).then(r => r.json()).then(res => {
+        return normalizeSettingsFromApi(res.result, types, settingsInitFalse);
     })
     .catch(error => {
         return { error };

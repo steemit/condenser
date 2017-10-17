@@ -21,6 +21,7 @@ import {authWatches} from 'app/redux/AuthSaga';
 import {transactionWatches} from 'app/redux/TransactionSaga';
 import PollDataSaga from 'app/redux/PollDataSaga';
 import { NotificationFetchSaga, NotificationPollSaga } from 'app/redux/NotificationSaga';
+import { NotificationSettingsSaga } from 'app/redux/NotificationSettingsSaga';
 import {component as NotFound} from 'app/components/pages/NotFound';
 import extractMeta from 'app/utils/ExtractMeta';
 import Translator from 'app/Translator';
@@ -90,6 +91,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
 
         sagaMiddleware.run(NotificationFetchSaga);
         sagaMiddleware.run(NotificationPollSaga);
+        sagaMiddleware.run(NotificationSettingsSaga);
 
         const history = syncHistoryWithStore(browserHistory, store);
 

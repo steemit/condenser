@@ -6,6 +6,7 @@ import appReducer from './AppReducer';
 import globalReducerModule from './GlobalReducer';
 import marketReducerModule from './MarketReducer';
 import notificationReducer from './NotificationReducer';
+import notificationsettingsReducer from './NotificationSettingsReducer';
 import user from './User';
 // import auth from './AuthSaga';
 import transaction from './Transaction';
@@ -51,6 +52,7 @@ export default combineReducers({
     global: initReducer(globalReducerModule.reducer, 'global'),
     market: initReducer(marketReducerModule.reducer),
     notification: initReducer(notificationReducer),
+    notificationsettings: initReducer(notificationsettingsReducer),
     offchain: initReducer(offchain),
     user: initReducer(user.reducer),
     // auth: initReducer(auth.reducer),

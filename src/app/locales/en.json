@@ -584,8 +584,8 @@
       "meta_types": {
         "security": "Security setting changes",
         "wallet": "Wallet",
-        "post_reply": "Comments on your posts",
-        "comments_reply": "Replies to your comments",
+        "postReplies": "Comments on your posts",
+        "commentReplies": "Replies to your comments",
         "resteems": "Resteems",
         "mentions": "Mentions",
         "newPosts": "New Posts"

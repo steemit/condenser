@@ -2,25 +2,21 @@ import React from 'react';
 import {connect} from 'react-redux'
 import user from 'app/redux/User';
 import tt from 'counterpart';
-import {ALLOWED_CURRENCIES} from 'app/client_config'
+//import {ALLOWED_CURRENCIES} from 'app/client_config';
 import store from 'store';
 import transaction from 'app/redux/Transaction'
 import o2j from 'shared/clash/object2json'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
-import Userpic from 'app/components/elements/Userpic';
+//import Userpic from 'app/components/elements/Userpic';
 import reactForm from 'app/utils/ReactForm'
 import UserList from 'app/components/elements/UserList';
+import YotificationSettingsPanel from './YotificationSettingsPanel';
 
-
-
-const yotificationUItoType = {
-
-};
 
 class Settings extends React.Component {
 
     constructor(props) {
-        super()
+        super() //todo: why isn't props being passed?
         this.initForm(props)
         this.onNsfwPrefChange = this.onNsfwPrefChange.bind(this)
         this.onNsfwPrefSubmit = this.onNsfwPrefSubmit.bind(this)
@@ -133,6 +129,7 @@ class Settings extends React.Component {
         this.props.changeLanguage(language)
     }
 
+
     render() {
         const {state, props} = this
 
@@ -210,9 +207,7 @@ class Settings extends React.Component {
             </div>
             {isOwnAccount &&
                 <div className="row">
-                    <div className="settings-group small-12 medium-6 columns">
-                        <h4>{tt('settings_jsx.notifications.title')}</h4>
-                    </div>
+                    <YotificationSettingsPanel className="settings-group small-12 medium-6 columns" />
                 </div>
             }
             {isOwnAccount &&

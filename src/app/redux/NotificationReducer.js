@@ -26,7 +26,7 @@ export const byId = (state = OrderedMap(), action = { type: null }) => {
         case 'notification/APPEND_SOME':
             return state.merge(apiToMap(action.payload)).sortBy(n => n.created).reverse();
         case 'notification/MARK_ALL_READ':
-            //filters needed here that use the id list? // Todo: for dev only! Do not merge if present! 
+            //filters needed here that use the id list? // Todo: for dev only! Do not merge if present!
             return state.map(n => {
                 return {
                     ...n,
@@ -72,7 +72,6 @@ export const createList = ({ prop, val }) => {
     return (state = Set(), action = { type: null }) => {
         switch (action.type) {
             case 'notification/RECEIVE_ALL':
-                console.log('ben, If this is where the response from yo is processed, is this the best place to do snake_toCamel case transforms? And change notify_id, notify_type to id & notificationType respectively? Last, flatten .data into the root object.')
                 return Set.fromKeys(apiToMap(action.payload).filter(n => (n[prop] === val)));
             case 'notification/APPEND_SOME':
                 return state.union(Set.fromKeys(apiToMap(action.payload).filter(n => (n[prop] === val))));

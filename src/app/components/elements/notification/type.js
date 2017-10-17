@@ -21,7 +21,7 @@ export const FOLLOW = 'follow';
 export const MENTION = 'mention';
 export const POST_REPLY = 'post_reply';
 export const POWER_DOWN = 'power_down'
-export const SEND = 'send';
+export const SEND_STEEM = 'send';
 export const RECEIVE_STEEM = 'receive';
 export const RESTEEM = 'resteem';
 export const REWARD = 'reward';
@@ -35,9 +35,9 @@ export const SECURITY_WITHDRAWAL = 'security_withrawal'
 export const SECURITY_NEW_MOBILE = 'security_new_mobile_device';
 
 export const filters = {
-    security: [ACCOUNT_UPDATE, POWER_DOWN],
+    security: [ACCOUNT_UPDATE, POWER_DOWN, SECURITY_NEW_MOBILE, SECURITY_WITHDRAWAL, SECURITY_PWD_CHANGE],
     posts: [COMMENT_REPLY, POST_REPLY, VOTE, RESTEEM],
-    wallet: [RECEIVE_STEEM, REWARD, SEND],
+    wallet: [RECEIVE_STEEM, REWARD, SEND_STEEM],
     mentions: [MENTION],
     followers: [FOLLOW],
     newPosts: [FEED]
@@ -53,7 +53,7 @@ export default [
     MENTION,
     POST_REPLY,
     POWER_DOWN,
-    SEND,
+    SEND_STEEM,
     RECEIVE_STEEM,
     RESTEEM,
     REWARD,

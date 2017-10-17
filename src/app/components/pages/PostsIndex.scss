@@ -242,6 +242,7 @@
 
   &__layout-selector {
     display: none;
+    cursor: pointer;
     @include MQ(M) {
       display: inline-block;
       padding-left: 14px;
@@ -632,7 +633,7 @@
 
 
 .icon-svg {
-  transition: 0.2s all ease-in-out;
+  transition: 0.2s all 0.05s ease-in-out;
   @include themify($themes) {
       fill: themed('textColorSecondary'); 
     } 
@@ -658,10 +659,13 @@
 }
 
 
-
-
-
-
+.articles__layout-selector:hover .icon-svg {
+  &--accent {
+    @include themify($themes) {
+        fill: themed('colorAccentHover'); 
+      } 
+  } 
+}
 
 
 

@@ -176,7 +176,7 @@ class PostSummary extends React.Component {
         </div>)
 
         const summary_footer = (
-            <div className="PostSummary__footer">
+            <div className="articles__summary-footer">
                 <Voting post={post} showList={false} />
                 <VotesAndComments post={post} commentsLink={comments_link} />
                 <span className="PostSummary__time_author_category">
@@ -244,11 +244,10 @@ class PostSummary extends React.Component {
         if(gray || ignore) commentClasses.push('downvoted') // rephide
 
         return (
-            <div>
-            {reblogged_by}
-            {summary_header}
-
-                <div className={'articles__content PostSummary hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')} itemScope itemType ="http://schema.org/blogPost">
+            <div className="articles__summary">            
+                {reblogged_by}
+                {summary_header}
+                <div className={'articles__content hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')} itemScope itemType ="http://schema.org/blogPost">
                   { thumb
                         ? <div className="articles__content-block articles__content-block--img">
                             <a className="articles__link" href="#">
@@ -257,20 +256,13 @@ class PostSummary extends React.Component {
                         </div>                            
                         : ""
                     }
-                                            {/* 
-                    <div className="PostSummary__header show-for-small-only">
-                        {content_title}
-                    </div>
-                    <div className="PostSummary__time_author_category_small show-for-small-only">
-                        {author_category}
-                    </div>  */}
                     <div className="articles__content-block articles__content-block--text">                    
                         {content_title}
                         {content_body}
-                        {summary_footer}
+                        {this.props.layoutStyle === 'list' ? summary_footer : null}
                     </div>
+                    {this.props.layoutStyle === 'blog' ? summary_footer : null}
                 </div>
-
             </div>
         )
     }

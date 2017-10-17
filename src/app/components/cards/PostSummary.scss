@@ -97,12 +97,17 @@ ul.PostsList__summaries {
   color: #666;
   overflow: hidden;
   line-height: 1.4;
-  white-space: nowrap;
   text-overflow: ellipsis;
 
   a {
     color: inherit;
     display: inline;
+  }
+}
+
+.layout-list .PostSummary__body {
+  @include MQ(M) {
+    white-space: nowrap;
   }
 }
 
@@ -129,7 +134,6 @@ ul.PostsList__summaries {
     @include hoverUnderline;
   }
   padding-left: 1rem;
-  margin-left: 1rem;
   border-left: 1px solid $color-border-light;
 
   .Reblog__button {

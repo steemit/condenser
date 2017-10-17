@@ -82,7 +82,7 @@
 
 .c-sidebar {
   width: 100%;
-  max-width: 240px;
+  flex: 0 0 240px;
   font-family: helvetica, sans-serif;
   &__module {
       padding: 1.5em 2em;
@@ -178,40 +178,37 @@
 
 
 .PostsIndex.row.layout-list {
-  max-width: 1600px;
+  max-width: none;
+  @include MQ(L) {
+    max-width: 1600px;
+  }
 }
 
 
-
-
-
 .articles {
-  // font-family: sans-serif;
+    font-family: helvetica, sans-serif;
     padding: 1em;
     transition: all 0.2s ease-out;
     border: transparent;
     min-width: 300px;
-    max-width: 560px;
+    max-width: 540px;
     margin: auto;
-
-  @include themify($themes) {
-      background-color: themed('moduleBackgroundColor'); 
-  }  
+    background-color: transparent;
   
   @include MQ(M) {
     margin: 0 1em;
     padding: 0.5em 0em;
     min-width: 550px;
-    max-width: none;
+    max-width: 664px;
 
-    @include themify($themes) {
-        background-color: themed('moduleMediumBackgroundColor'); 
-    }  
   }
-
+  h2 {
+    font-family: sans-serif;
+  }
   @include MQ(L) {
+    min-width: 664px;
+    max-width: 664px;
     padding: 1.5em 4em;
-        min-width: 700px;
     @include themify($themes) {
         border: themed('border'); 
         box-shadow: 5px 5px 0 0 themed('contentBorderAccent');  
@@ -228,16 +225,14 @@
   }
 
   &__hr {
-    display: none;
     margin-bottom: 20px;
-    margin-top: 10px;
-    @media screen and (min-width: 39.9375em) {  
-      @include themify($themes) {
-          display: block;
-          border-bottom: themed('border'); 
-        }  
-    }
-
+    margin-top: 0px;
+    @include themify($themes) {
+        border-bottom: themed('border'); 
+      }    
+    @include MQ(M) {
+        display: none;
+    }        
   }
 
   &__layout-selector {
@@ -254,30 +249,31 @@
     position: relative;
     top: 5px;
   }
-  &__article {
-    margin: 0em 0 1em;
-    transition: 0.2s all ease-in-out;     
-    border: transparent;
-    @include themify($themes) {
-        background-color: themed('moduleBackgroundColor'); 
-      }       
-    @include MQ(M) {
-      margin: 1em 0 1.5em;
-      box-shadow: 0px 5px 10px 0 rgba(0,0,0,0.0);
+  &__summary {
+      margin: 0em 0 1em;
+      transition: 0.2s all ease-in-out;     
+      border: transparent;
       @include themify($themes) {
-          border: themed('border'); 
-        }         
-    }
-    &:hover {
-      @include MQ(M) {  
-        box-shadow: 0px 5px 10px 0 rgba(0,0,0,0.03);
+          background-color: themed('moduleBackgroundColor'); 
+        }       
+      @include MQ(M) {
+        margin: 0 0 1.5em;
+        box-shadow: 0px 5px 10px 0 rgba(0,0,0,0.0);
+        @include themify($themes) {
+            border: themed('border'); 
+          }         
       }
-    }   
+      &:hover {
+        @include MQ(M) {  
+          box-shadow: 0px 5px 10px 0 rgba(0,0,0,0.03);
+        }
+      }   
   }
+
   &__summary-header {
     display: flex;
     align-items: center;
-    padding: 6px 0em 8px;
+    padding: 6px 1em 8px;
     position: relative;
     @include MQ(M) {
       padding-top: 10px;
@@ -298,36 +294,21 @@
       }
     }   
   }
-
-  // &__feature-img-container {
-  //   overflow: hidden;
-  //   width: 130px;
-  //   height: 81px;
-  //   position: relative;
-  //   display: inline-block;
-  // }
-  // &__feature-img {
-  //   position: absolute;
-  //   width:100% !important;   
-  //   top: 50%;
-  //   transform:translateY(-50%)
-  // }
   &__summary-footer {
     display: flex;
     align-items: center;
-    padding: 6px 0em 8px;
     position: relative;
-    @include themify($themes) {
-        border-top: themed('border');
-        border-bottom: themed('border'); 
-      }         
+    @include font-size(15px); 
     @include MQ(M) {
-      padding-top: 10px;
-      padding-bottom: 10px;             
-      
+      padding: 16px;
       @include themify($themes) {
-          border-bottom: transparent; 
+          border-top: themed('border');
         } 
+    }
+    a {
+      @extend .link;
+      @extend .link--primary;
+      @include font-size(15px); 
     }
   }
   &__header {
@@ -338,15 +319,11 @@
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    @media all and (min-width: 39.9375em) {
-      padding-bottom: 0;
-    }
     @include MQ(M) {
       padding-top: 0;
     }
   }
   &__header-col {
-    margin-bottom: 10px;
     &--right {
       order: 1;
       width: 100%;
@@ -397,7 +374,12 @@
   &__h2 {
     // @extend .h2;
     margin: 0;
-    @include font-size(18px);     
+    @include font-size(16px);     
+      overflow : hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;            
     a {
     font-weight: bold;
     @include themify($themes) {
@@ -410,7 +392,7 @@
       }
     }
     @include MQ(M) {
-      @include font-size(20px);       
+      @include font-size(18px);       
     }   
   }
   &__h3 {
@@ -698,15 +680,10 @@ a#changeLayout:focus {
     .content-container {
       max-width: 1520px;
     }
-    .hr {
-      &--h1 {
-        display: block;
-      }
-    }
 
     .articles {
       padding: 1.5em 1.5em;
-
+      max-width: none;
       @include MQ(XL) { 
         min-width: 1050px;
       }
@@ -714,17 +691,33 @@ a#changeLayout:focus {
          background-color: themed('moduleBackgroundColor'); 
          border: themed('border'); 
       }
+      &__hr {   
+        @include MQ(M) {
+          display: block;
+          @include themify($themes) {
+            border-bottom: themed('border'); 
+          } 
+        }          
+      }
       &__summary {
         border: transparent;
         box-shadow: none;
       }
       &__h2 {
-        @include font-size(17px);               
+        @include font-size(17px);  
+
+        @include MQ(M) {
+          -webkit-line-clamp: 2;
+        }        
+        @include MQ(XL) {
+          -webkit-line-clamp: 1;
+        }
+
       }
       &__feature-img-container {
         overflow: hidden;
         width: 130px;
-        height: 81px;
+        height: 77px;
         position: relative;
         display: inline-block;
       }
@@ -743,10 +736,9 @@ a#changeLayout:focus {
         border: transparent;
         padding: 4px;
         padding-top: 3px;
-        border-bottom: 1px solid #eee;
-        @include themify($themes) {
-            border-bottom: themed('borderLight'); 
-          }           
+        // @include themify($themes) {
+        //     border-bottom: themed('borderLight'); 
+        //   }           
       }     
       &__p {
         @include font-size(15px);       

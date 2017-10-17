@@ -4,7 +4,7 @@ import { Set } from 'immutable';
 import Icon from 'app/components/elements/Icon';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import Notification from 'app/components/elements/notification';
-import * as nType from 'app/components/elements/notification/type';
+import { filters } from 'app/components/elements/notification/type';
 import { Link } from 'react-router'
 import debounce from 'lodash.debounce';
 import React from 'react';
@@ -16,14 +16,6 @@ export const FILTER_ALL = 'all';
 
 const TIMEOUT_MARK_SHOWN_MILLIS = 3000;
 
-const filters = {
-    security: [nType.SECURITY_PWD_CHANGE, nType.SECURITY_WITHDRAWAL, nType.SECURITY_NEW_MOBILE, nType.SECURITY_POWER_DOWN],
-    transfers: [nType.RECEIVE_STEEM, nType.POWER_DOWN],
-    comments: [nType.POST_REPLY],
-    replies: [nType.COMMENT_REPLY],
-    resteems: [nType.RESTEEM],
-    following: [nType.FOLLOW_AUTHOR_POST]
-}
 
 function topPosition(domElt) {
     if (!domElt) {

@@ -6,6 +6,7 @@ import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import {browserHistory} from 'react-router';
 import tt from 'counterpart';
 import {FormattedDate} from 'react-intl';
+import {linkBuilder} from 'app/Routes';
 
 class CheckLoginOwner extends React.Component {
     constructor() {
@@ -47,7 +48,7 @@ class CheckLoginOwner extends React.Component {
     }
     recover = () => {
         this.hide()
-        browserHistory.push('/recover_account_step_1')
+        browserHistory.push(linkBuilder.recoverAccount(1))
     }
     onUnderstood = e => {
         const understood = e.target.checked

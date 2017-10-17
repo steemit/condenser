@@ -1,6 +1,7 @@
 import React from 'react';
 import { browserHistory } from 'react-router';
 import ReplyEditor from 'app/components/elements/ReplyEditor'
+import {linkBuilder} from 'app/Routes';
 
 const formId = 'submitStory';
 // const richTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
@@ -16,7 +17,7 @@ class SubmitPost extends React.Component {
         this.success = (/*operation*/) => {
             // const { category } = operation
             localStorage.removeItem('replyEditorData-' + formId)
-            browserHistory.push('/created')//'/category/' + category)
+            browserHistory.push(linkBuilder.indexPage('all', 'created'))
         }
     }
     render() {

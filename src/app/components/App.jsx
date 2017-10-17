@@ -187,7 +187,7 @@ class App extends React.Component {
                             <h2>{tt('navigation.intro_tagline')}</h2>
                             <h4>{tt('navigation.intro_paragraph')}</h4>
                             <br />
-                            <a className="button button--primary" href="/pick_account"> <b>{tt('navigation.sign_up')}</b> </a>
+                            <a className="button button--primary" href={linkBuilder.signup()}> <b>{tt('navigation.sign_up')}</b> </a>
                             &nbsp; &nbsp; &nbsp;
                             <a className="button hollow uppercase" href="https://steem.io" target="_blank" rel="noopener noreferrer" onClick={this.learnMore}> <b>{tt('navigation.learn_more')}</b> </a>
                             <br />

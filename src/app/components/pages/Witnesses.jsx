@@ -207,7 +207,7 @@ class Witnesses extends React.Component {
 
 
 module.exports = {
-    path: '/~witnesses(/:witness)',
+    path: '/c/witnesses(/:witness)',
     component: connect(
         (state) => {
             const current_user = state.user.get('current');

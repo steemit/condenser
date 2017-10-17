@@ -12,6 +12,7 @@ import {PrivateKey, Signature, hash} from 'steem/lib/auth/ecc';
 import {api} from 'steem';
 import {translate} from 'app/Translator';
 import DMCAUserList from 'app/utils/DMCAUserList';
+import {linkBuilder} from "../Routes"
 
 
 export const userWatches = [
@@ -283,7 +284,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         // Does not need to be fatal
         console.error('Server Login Error', error);
     }
-    if (afterLoginRedirectToWelcome) browserHistory.push('/welcome');
+    if (afterLoginRedirectToWelcome) browserHistory.push(linkBuilder.welcome());
 }
 
 function* saveLogin_localStorage() {

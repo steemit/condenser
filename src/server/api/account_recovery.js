@@ -43,7 +43,7 @@ export default function useAccountRecoveryApi(app) {
         if (arec) {
             this.session.arec = arec.id;
             console.log('-- /account_recovery_confirmation -->', this.session.uid, arec.id, arec.account_name, arec.owner_key);
-            this.redirect('/recover_account_step_2');
+            this.redirect('/c/recover_account_step_2');
         } else {
             console.log('-- /account_recovery_confirmation code not found -->', this.session.uid, code);
             this.throw('wrong confirmation code', 404);

@@ -13,6 +13,7 @@ import secureRandom from "secure-random";
 import Mixpanel from "mixpanel";
 import Progress from "react-foundation-components/lib/global/progress-bar";
 import {api} from 'steem';
+import {linkBuilder} from 'app/Routes';
 
 const path = require('path');
 const ROOT = path.join(__dirname, '../../..');
@@ -31,7 +32,7 @@ if (process.env.NODE_ENV === "production") {
 const assets = Object.assign({}, require(assets_file), { script: [] });
 
 assets.script.push("https://www.google.com/recaptcha/api.js");
-assets.script.push("/enter_email/submit_form.js");
+assets.script.push("/c/enter_email/submit_form.js");
 
 function* confirmEmailHandler() {
     const confirmation_code = this.params && this.params.code
@@ -50,7 +51,7 @@ function* confirmEmailHandler() {
     if (eid.email_verified) {
         this.session.user = eid.user_id; // session recovery (user changed browsers)
         this.flash = { success: "Email has already been verified" };
-        this.redirect("/approval?confirm_email=true");
+        this.redirect(linkBuilder.signUpApproval(true));
         return;
     }
     const hours_ago = (Date.now() - eid.updated_at) / 1000.0 / 3600.0;
@@ -72,7 +73,7 @@ function* confirmEmailHandler() {
             eid.email
         );
         this.flash = {error: 'This email has already been used'};
-        this.redirect('/pick_account');
+        this.redirect(linkBuilder.signup());
         return;
     }
 
@@ -95,10 +96,10 @@ function* confirmEmailHandler() {
 
     if (eid_phone) {
         // this.flash = { success: "Thanks for confirming your email!" };
-        this.redirect("/approval?confirm_email=true");
+        this.redirect(linkBuilder.signUpApproval(true));
     } else {
         this.flash = { success: "Thanks for confirming your email. Your phone needs to be confirmed before proceeding." };
-        this.redirect("/enter_mobile");
+        this.redirect(linkBuilder.enterMobile());
     }
 
     // check if the phone is confirmed then redirect to create account - this is useful when we invite users and send them the link
@@ -139,7 +140,7 @@ export default function useEnterAndConfirmEmailPages(app) {
             }
             if (user.account_status === "approved") {
                 console.log("-- approved account for -->", this.session.uid, this.session.user);
-                this.redirect("/create_account");
+                this.redirect(linkBuilder.createAccount());
             } else if (user.account_status === "created") {
                 // check if account is really created onchain
                 let there_is_created_account = false;
@@ -155,11 +156,11 @@ export default function useEnterAndConfirmEmailPages(app) {
                 if (there_is_created_account) {
                     // user clicked expired link - already created account
                     this.flash = {alert: "Your account has already been created."};
-                    this.redirect("/login.html");
+                    this.redirect(linkBuilder.login());
                 } else {
                     user.update({account_status: 'approved'});
                     console.log("-- approved account (ghost) for -->", this.session.uid, this.session.user);
-                    this.redirect("/create_account");
+                    this.redirect(linkBuilder.createAccount());
                 }
             } else if (user.account_status === "waiting") {
                 this.flash = { error: "Your account has not been approved yet." };
@@ -175,19 +176,19 @@ export default function useEnterAndConfirmEmailPages(app) {
         }
     });
 
-    router.get("/enter_email", function*() {
+    router.get(linkBuilder.enterEmail(), function*() {
         console.log("-- /enter_email -->", this.session.uid, this.session.user, this.request.query.account);
         const picked_account_name = this.session.picked_account_name = this.request.query.account;
         if (!picked_account_name) {
             this.flash = { error: "Please select your account name" };
-            this.redirect('/pick_account');
+            this.redirect(linkBuilder.signup());
             return;
         }
         // check for existing account
         const check_account_res = yield api.getAccountsAsync([picked_account_name]);
         if (check_account_res && check_account_res.length > 0) {
             this.flash = { error: `${picked_account_name} is already taken, please try another name` };
-            this.redirect('/pick_account');
+            this.redirect(linkBuilder.signup());
             return;
         }
         let default_email = "";
@@ -200,7 +201,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                 <div className="row" style={{ maxWidth: "32rem" }}>
                     <div className="column">
                         <Progress tabIndex="0" value={50} max={100} />
-                        <form id="submit_email" action="/submit_email" method="POST">
+                        <form id="submit_email" action={linkBuilder.submitEmail()} method="POST">
                             <h4 style={{ color: "#4078c0" }}>
                                 Please provide your email address to continue
                             </h4>
@@ -253,14 +254,14 @@ export default function useEnterAndConfirmEmailPages(app) {
             mixpanel.track("SignupStepEmail", { distinct_id: this.session.uid });
     });
 
-    router.post("/submit_email", koaBody, function*() {
+    router.post(linkBuilder.submitEmail(), koaBody, function*() {
         if (!checkCSRF(this, this.request.body.csrf)) return;
 
         let {email, account} = this.request.body;
         console.log('-- /submit_email -->', this.session.uid, email, account);
         if (!email) {
             this.flash = { error: "Please provide an email address" };
-            this.redirect(`/enter_email?account=${account}`);
+            this.redirect(linkBuilder.enterEmail(null, account));
             return;
         }
         email = email.trim().toLowerCase();
@@ -278,12 +279,12 @@ export default function useEnterAndConfirmEmailPages(app) {
                 this.flash = {
                     error: "Failed captcha verification, please try again"
                 };
-                this.redirect(`/enter_email?email=${email}&account=${account}`);
+                this.redirect(linkBuilder.enterEmail(email, account));
                 return;
             }
         }
 
-        const parsed_email = email.match(/^.+\@.*?([\w\d-]+\.\w+)$/);
+        const parsed_email = email.match(/^.+@.*?([\w\d-]+\.\w+)$/);
 
         if (!parsed_email || parsed_email.length < 2) {
             console.log(
@@ -292,7 +293,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                 email
             );
             this.flash = { error: "Not valid email address" };
-            this.redirect(`/enter_email?email=${email}&account=${account}`);
+            this.redirect(linkBuilder.enterEmail(email, account));
             return;
         }
 
@@ -351,17 +352,17 @@ export default function useEnterAndConfirmEmailPages(app) {
             }
         } catch (error) {
             this.flash = {error: 'Internal Server Error'};
-            this.redirect(`/enter_email?email=${email}&account=${account}`);
+            this.redirect(linkBuilder.enterEmail(email, account));
             console.error('Error in /submit_email :', this.session.uid, error.toString());
         }
 
         // redirect to phone verification
-        this.redirect("/enter_mobile");
+        this.redirect(linkBuilder.enterMobile());
     });
 
     router.get("/confirm_email/:code", confirmEmailHandler);
-    router.post("/confirm_email", koaBody, confirmEmailHandler);
-    router.get("/enter_email/submit_form.js", function*() {
+    router.post("/confirm_email", koaBody, confirmEmailHandler); // for re-submit email
+    router.get("/c/enter_email/submit_form.js", function*() {
         this.type = 'application/javascript';
         this.body = "function submit_email_form(){document.getElementById('submit_email').submit()}";
     });

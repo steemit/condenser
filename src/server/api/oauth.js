@@ -3,6 +3,7 @@ import Purest from 'purest';
 import models from 'db/models';
 import findUser from 'db/utils/find_user';
 import {esc, escAttrs} from 'db/models';
+import {linkBuilder} from 'app/Routes';
 
 const facebook = new Purest({provider: 'facebook'});
 const reddit = new Purest({provider: 'reddit'});
@@ -107,7 +108,7 @@ function* handleFacebookCallback() {
                 if (existing_account) {
                     console.log('-- arec: confirmed user for account -->', this.session.uid, provider, account_recovery_record.id, existing_account.name, this.session.uid, account_recovery_record.owner_key);
                     account_recovery_record.update({user_id: user.id, status: 'confirmed'});
-                    this.redirect('/recover_account_step_2');
+                    this.redirect(linkBuilder.recoverAccount(2));
                 } else {
                     console.log('-- arec: failed to confirm user for account (no account) -->', this.session.uid, provider, account_recovery_record.id, user.id, this.session.uid, account_recovery_record.owner_key);
                     account_recovery_record.update({user_id: user.id, status: 'account not found'});
@@ -153,7 +154,7 @@ function* handleFacebookCallback() {
         return logErrorAndRedirect(this, 'facebook:2', error);
     }
     this.flash = {success: 'Successfully authenticated with Facebook'};
-    this.redirect('/enter_email' + (email ? `?email=${email}` : ''));
+    this.redirect(linkBuilder.enterEmail(email));
     return null;
 }
 
@@ -207,7 +208,7 @@ function* handleRedditCallback() {
                 if (existing_account) {
                     console.log('-- arec: confirmed user for account -->', this.session.uid, provider, account_recovery_record.id, existing_account.name, this.session.uid, account_recovery_record.owner_key);
                     account_recovery_record.update({user_id: user.id, status: 'confirmed'});
-                    this.redirect('/recover_account_step_2');
+                    this.redirect(linkBuilder.recoverAccount(2));
                 } else {
                     console.log('-- arec: failed to confirm user for account (no account) -->', this.session.uid, provider, account_recovery_record.id, user.id, this.session.uid, account_recovery_record.owner_key);
                     account_recovery_record.update({user_id: user.id, status: 'account not found'});
@@ -250,13 +251,13 @@ function* handleRedditCallback() {
         }
         this.session.user = user.id;
         if (waiting_list) {
-            this.redirect('/waiting_list.html');
+            this.redirect(linkBuilder.waitingList());
             return null;
         }
     } catch (error) {
         return logErrorAndRedirect(this, 'reddit', error);
     }
-    this.redirect('/enter_email');
+    this.redirect(linkBuilder.enterEmail());
     return null;
 }
 

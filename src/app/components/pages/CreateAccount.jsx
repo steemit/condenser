@@ -11,6 +11,7 @@ import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInp
 import {saveCords} from 'app/utils/ServerApiClient';
 import {api} from 'steem';
 import { Link } from 'react-router';
+import {linkBuilder} from "../../Routes"
 
 class CreateAccount extends React.Component {
 
@@ -230,15 +231,15 @@ class CreateAccount extends React.Component {
         if (server_error) {
             if (server_error === 'Email address is not confirmed') {
                 next_step = <div className="callout alert">
-                    <a href="/enter_email">Please verify your email address</a>
+                    <a href={linkBuilder.enterEmail()}>Please verify your email address</a>
                 </div>;
             } else if (server_error === 'Phone number is not confirmed') {
                 next_step = <div className="callout alert">
-                    <a href="/enter_mobile">Please verify your phone number</a>
+                    <a href={linkBuilder.enterMobile()}>Please verify your phone number</a>
                 </div>;
             } else {
                 next_step = <div className="callout alert">
-                    <h5>Couldn't create account. Server returned the following error:</h5>
+                    <h5>Couldn&rsquo;t create account. Server returned the following error:</h5>
                     <p>{server_error}</p>
                 </div>;
             }
@@ -261,7 +262,7 @@ class CreateAccount extends React.Component {
                                 <br />
                                 Seriously, we are, for technical reasons, entirely unable to gain
                                 access to an account without knowing the password.  Steemit is a
-                                new model, entirely unlike other sites on the Internet.  It's not
+                                new model, entirely unlike other sites on the Internet.  It&rsquo;s not
                                 simply policy: <strong>We cannot recover your account or password
                                 if you lose it.</strong>
                                 <br />

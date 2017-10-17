@@ -144,11 +144,16 @@ export const linkBuilder = {
     tos: () => '/s/tos',
     changePassword: () => '/c/change_password',
     createAccount: () => '/c/create_account',
-    signUpApproval: () => '/c/approval',
+    signUpApproval: confirm_email => confirm_email ? '/approval?confirm_email=true' : '/c/approval',
     recoverAccount: step => `/c/recover_account_step_${step}`,
     waitingList: () => '/c/waiting_list',
     market: () => '/c/market',
-    witnesses: () => '/c/witnesses'
+    witnesses: () => '/c/witnesses',
+    enterEmail: (email, account) => (email || account) ? `/c/enter_email?email=${email}&account=${account}` : '/c/enter_email',
+    submitEmail: () => '/c/submit_email',
+    enterMobile: (phone, country) => phone ? `/enter_mobile?phone=${phone}&country=${country}`: '/c/enter_mobile',
+    submitMobile: () => '/c/submit_mobile',
+    confirmMobile: with_code => with_code ? '/c/confirm_mobile/:code' : '/c/confirm_mobile',
 };
 
 export function routeToSteemdUrl(route) {

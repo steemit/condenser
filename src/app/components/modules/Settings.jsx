@@ -7,12 +7,8 @@ import o2j from 'shared/clash/object2json'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import reactForm from 'app/utils/ReactForm'
 import UserList from 'app/components/elements/UserList';
+import YotificationSettingsPanel from './YotificationSettingsPanel';
 
-
-
-const yotificationUItoType = {
-
-};
 
 class Settings extends React.Component {
 
@@ -122,6 +118,7 @@ class Settings extends React.Component {
         this.props.setUserPreferences(userPreferences)
     }
 
+
     render() {
         const {state, props} = this
 
@@ -202,9 +199,7 @@ class Settings extends React.Component {
             </div>
             {isOwnAccount &&
                 <div className="row">
-                    <div className="settings-group small-12 medium-6 columns">
-                        <h4>{tt('settings_jsx.notifications.title')}</h4>
-                    </div>
+                    <YotificationSettingsPanel className="settings-group small-12 medium-6 columns" />
                 </div>
             }
             {isOwnAccount &&

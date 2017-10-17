@@ -16,7 +16,7 @@ class Switch extends React.Component {
      * once the component is mounted
      */
     componentDidMount() {
-        const input = this.checkbox;
+        const input = this.elCheckbox;
 
         /* eslint-disable no-undef, no-new */
         new Switchery(input, this.props.options);
@@ -31,7 +31,12 @@ class Switch extends React.Component {
      */
     onClick = () => { //eslint-disable-line no-undef
         if (this.props.onChange) {
-            this.props.onChange(this.checkbox.checked);
+            this.props.onChange(this.elCheckbox.checked);
+        }
+        if(this.elCheckbox.checked) {
+            this.elWrapper.className = this.elWrapper.className.split(' ').join(' ') + ' isChecked';
+        } else {
+            this.elWrapper.className = this.elWrapper.className.replace('isChecked', '');
         }
     }
 
@@ -48,10 +53,11 @@ class Switch extends React.Component {
                         required: this.props.required,
                     },
                 ])}
+                ref={elWrapper => this.elWrapper = elWrapper}
             >
-                <label>{this.props.label}</label>
+                {(this.props.label)? <label>{this.props.label}</label> : null }
                 <input
-                    ref={checkbox => this.checkbox = checkbox}
+                    ref={elCheckbox => this.elCheckbox = elCheckbox}
                     type="checkbox"
                     defaultChecked={this.props.checked}
                 />

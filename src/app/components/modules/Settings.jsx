@@ -250,6 +250,7 @@ export default connect(
         if (typeof metaData === 'string') metaData = o2j.ifStringParseJSON(metaData); // issue #1237
         const profile = metaData && metaData.profile ? metaData.profile : {};
         const locale = state.user.get('locale');
+        const { notificationsettings } = state;
 
         return {
             account,
@@ -259,11 +260,20 @@ export default connect(
             profile,
             follow: state.global.get('follow'),
             locale,
+            notificationsettings,
             ...ownProps
         }
     },
     // mapDispatchToProps
     dispatch => ({
+        saveNotificationSettings: (settings) => {
+            dispatch({
+                type: 'notificationsettings/UPDATE',
+                payload: {
+                    settings: 'here',
+                },
+            });
+        },
         changeLanguage: (language) => {
             dispatch(user.actions.changeLanguage(language))
         },

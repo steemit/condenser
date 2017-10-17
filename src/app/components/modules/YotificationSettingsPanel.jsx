@@ -7,6 +7,7 @@ import {connect} from 'react-redux'
 import tt from 'counterpart';
 import { settingsUIGroupings } from 'app/components/elements/notification/type';
 import IOSToggle from 'app/components/elements/IOSToggle';
+import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 
 class YotificatonSettingsPanel extends React.Component {
 
@@ -20,7 +21,7 @@ class YotificatonSettingsPanel extends React.Component {
         Object.entries(settingsUIGroupings).forEach( entry => {
             //entry[1] is the list of notification types.
             toggles.push(<li key={entry[0]}>{tt('settings_jsx.notifications.meta_types.' + entry[0])} <IOSToggle
-                className="switch-class"
+                className="yotification-toggle"
                 onChange={(enabled) => this.onToggleGrouping(entry[0], enabled)}
                 options={
                     {
@@ -31,9 +32,9 @@ class YotificatonSettingsPanel extends React.Component {
             /></li>);
         })
         return (
-            <div className={this.props.className}>
-                <h4>{tt('settings_jsx.notifications.title')}</h4>
-                {toggles}
+            <div className={'YotificationSettingsPanel ' + this.props.className}>
+                <h4>{tt('settings_jsx.notifications.title')} <LoadingIndicator type="circle" inline /> </h4>
+                <ul>{toggles}</ul>
             </div>
         );
     }

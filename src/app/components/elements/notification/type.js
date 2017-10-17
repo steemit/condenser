@@ -41,7 +41,22 @@ export const filters = {
     mentions: [MENTION],
     followers: [FOLLOW],
     newPosts: [FEED]
-}
+};
+
+//this drives the Notification Settings UI
+export const settingsUIGroupings = {
+    security: [ACCOUNT_UPDATE, POWER_DOWN, SECURITY_NEW_MOBILE, SECURITY_WITHDRAWAL, SECURITY_PWD_CHANGE],
+    wallet: [RECEIVE_STEEM, REWARD, SEND_STEEM],
+    postReplies: [POST_REPLY],
+    commentReplies: [COMMENT_REPLY],
+    mentions: [MENTION],
+    resteems: [RESTEEM],
+    newPosts: [FEED]
+};
+
+//all Notification types that we expect to be false, or may need to initialize false.
+export const settingsInitFalse = [VOTE]
+
 
 export default [
     ANNOUNCEMENT,

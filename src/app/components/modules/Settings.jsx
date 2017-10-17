@@ -9,6 +9,11 @@ import reactForm from 'app/utils/ReactForm'
 import UserList from 'app/components/elements/UserList';
 
 
+
+const yotificationUItoType = {
+
+};
+
 class Settings extends React.Component {
 
     constructor(props) {

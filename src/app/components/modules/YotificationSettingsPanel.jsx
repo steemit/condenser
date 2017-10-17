@@ -11,7 +11,7 @@ import IOSToggle from 'app/components/elements/IOSToggle';
 class YotificatonSettingsPanel extends React.Component {
 
     onToggleGrouping = (grouping, enabled) => { //eslint-disable-line no-undef
-        //todo: determine how to cross/map groupings 
+        //todo: determine how to cross/map groupings
         console.log('onToggleGrouping', grouping, enabled); //Todo: for dev only! Do not merge if present!
     }
 

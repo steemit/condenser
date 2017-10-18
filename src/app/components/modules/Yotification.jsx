@@ -75,15 +75,15 @@ class YotificationModule extends React.Component {
                 };
                 break;
         }
-        this.scrollListener = this.scrollListener.bind(this);
-
+        //this.scrollListener = this.scrollListener.bind(this);
     }
 
     componentDidMount() {
-        window.addEventListener('scroll', this.scrollListener, {capture: false, passive: true});
-        window.addEventListener('resize', this.scrollListener, {capture: false, passive: true});
         if(LAYOUT_PAGE === this.state.layout) {
-            this.scrollListener();
+            window.addEventListener('scroll', this.scrollListenerPage, {capture: false, passive: true});
+            window.addEventListener('resize', this.scrollListenerPage, {capture: false, passive: true});
+        } else if(LAYOUT_DROPDOWN === this.state.layout) {
+            this.rootEl.parentElement.addEventListener('scroll', this.scrollListenerDropdown, {capture: false, passive: true});
         }
         this.markDisplayedShownWithDelay();
     }
@@ -131,29 +131,29 @@ class YotificationModule extends React.Component {
     }
 
     //todo: make sure this doesn't fire too often in either layout
-    scrollListener = debounce(() => { //eslint-disable-line no-undef
+    scrollListenerPage = debounce(() => { //eslint-disable-line no-undef
         const el = window.document.getElementById(this.htmlId);
         if (!el) return;
-        if(LAYOUT_PAGE === this.props.layout) {
-            const scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset :
-                (document.documentElement || document.body.parentNode || document.body).scrollTop;
-            //the eslint thing for the next line...  apparently math is scary!?
-            if (topPosition(el) + el.offsetHeight - scrollTop - window.innerHeight < 10) { //eslint-disable-line no-mixed-operators
-                console.log('YotificationModule - LAYOUT_PAGE - scrollListenerFiring', this.htmlId, el); //Todo: for dev only! Do not merge if present - probably belongs in a different place
-                this.props.appendSome(('all' !== this.props.filter)? filters[this.props.filter] : false); //eslint-disable-line yoda
-            }
-        } else if(LAYOUT_DROPDOWN === this.props.layout) {
-            //this element height and parent element height? + parent element scrollTop
-            if(el.scrollHeight < (el.parent.offsetHeight + el.parent.scrollTop + 10)) {
-                console.log('YotificationModule - LAYOUT_DROPDOWN - scrollListenerFiring', this.htmlId, el); //Todo: for dev only! Do not merge if present - probably belongs in a different place
-                this.props.appendSome(('all' !== this.props.filter)? filters[this.props.filter] : false); //eslint-disable-line yoda
-            }
+        const scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset :
+            (document.documentElement || document.body.parentNode || document.body).scrollTop;
+        //the eslint thing for the next line...  apparently math is scary!?
+        if (topPosition(el) + el.offsetHeight - scrollTop - window.innerHeight < 10) { //eslint-disable-line no-mixed-operators
+            this.props.appendSome(('all' !== this.props.filter)? filters[this.props.filter] : false); //eslint-disable-line yoda
+        }
+    }, 150)
+
+    scrollListenerDropdown = debounce(() => { //eslint-disable-line no-undef
+        const el = window.document.getElementById(this.htmlId);
+        if (!el) return;
+
+        if(el.scrollHeight < (el.parentElement.offsetHeight + el.parentElement.scrollTop + 10)) {
+            this.props.appendSome(('all' !== this.props.filter)? filters[this.props.filter] : false); //eslint-disable-line yoda
         }
 
     }, 150)
 
     render() {
-        return ( <div id={this.htmlId} className={"NotificationsModule " + this.state.layout} >
+        return ( <div id={this.htmlId} className={"NotificationsModule " + this.state.layout} ref={el => { this.rootEl = el }} >
             <div className="title">{tt('g.notifications')}
                 <span className="controls-right">
                     {(this.props.showClearAll) ?

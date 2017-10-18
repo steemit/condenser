@@ -35,11 +35,7 @@ class Switch extends React.Component {
         if (this.props.onChange) {
             this.props.onChange(this.elCheckbox.checked);
         }
-        if(this.elCheckbox.checked) {
-            this.elWrapper.className = this.elWrapper.className.split(' ').join(' ') + ' isChecked';
-        } else {
-            this.elWrapper.className = this.elWrapper.className.replace('isChecked', '');
-        }
+        this.elWrapper.className = classNames([this.props.className, {isChecked:this.elCheckbox.checked}]);
     }
 
     /**
@@ -84,6 +80,7 @@ Switch.propTypes = {
  * Default Props
  */
 Switch.defaultProps = {
+    className: "",
     value: true,
     required: false,
 };

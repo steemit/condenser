@@ -373,6 +373,9 @@ class UserWallet extends React.Component {
                 <div className="column small-12">
                     {/** history */}
                     <h4>{tt('userwallet_jsx.history')}</h4>
+                    <div className="secondary">
+                        <span>{tt('transfer_jsx.beware_of_spam_and_fishing_links')}</span>
+                    </div>
                     <table>
                         <tbody>
                         {transfer_log}

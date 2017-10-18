@@ -1,9 +1,13 @@
 .isChecked {
     .switchery {
-        background: #285194!important;
+        background: #60A2EC!important;
         small {
-            border:1px solid #285194;
+            border:1px solid #60A2EC;
         }
     }
+}
+
+.switchery > small {
+    top:-1px;
 }
 

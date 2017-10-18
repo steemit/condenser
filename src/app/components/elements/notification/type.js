@@ -44,7 +44,7 @@ export const filters = {
 };
 
 //this drives the Notification Settings UI
-export const settingsUIGroupings = {
+export const toggleNotificationGroups = {
     security: [ACCOUNT_UPDATE, POWER_DOWN, SECURITY_NEW_MOBILE, SECURITY_WITHDRAWAL, SECURITY_PWD_CHANGE],
     wallet: [RECEIVE_STEEM, REWARD, SEND_STEEM],
     postReplies: [POST_REPLY],
@@ -53,6 +53,11 @@ export const settingsUIGroupings = {
     resteems: [RESTEEM],
     newPosts: [FEED]
 };
+
+export const toggleNotificationGroupNames = Object.entries(toggleNotificationGroups).reduce( (list, entry) => {
+    list.push(entry[0]);
+    return list;
+}, []);
 
 //all Notification types that we expect to be false, or may need to initialize false.
 export const settingsInitFalse = [VOTE]

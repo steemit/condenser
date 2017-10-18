@@ -19,9 +19,10 @@ class Switch extends React.Component {
      */
     componentDidMount() {
         const input = this.elCheckbox;
+        const options = {...this.props.options, color: false, jackColor: false, secondaryColor: false};
         this.htmlId = 'iostoggle_' + Math.floor(Math.random() * 1000);
         /* eslint-disable no-undef, no-new */
-        new Switchery(input, this.props.options);
+        new Switchery(input, options);
         /* eslint-enable no-new, no-undef */
         input.onchange = this.onChange;
     }
@@ -46,9 +47,11 @@ class Switch extends React.Component {
             <div
                 onClick={this.onClick}
                 className={classNames([
+                    'iostoggle',
                     this.props.className,
                     {
                         required: this.props.required,
+                        isChecked: this.props.checked
                     },
                 ])}
                 ref={elWrapper => this.elWrapper = elWrapper}

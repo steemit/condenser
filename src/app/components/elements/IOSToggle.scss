@@ -7,7 +7,14 @@
     }
 }
 
-.switchery > small {
-    top:-1px;
+.iostoggle {
+    .switchery {
+        height: 27px;
+        > small {
+            top:0;
+            height:25px;
+            width:25px;
+        }
+    }
 }
 

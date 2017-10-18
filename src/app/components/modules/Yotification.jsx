@@ -17,6 +17,11 @@ export const FILTER_ALL = 'all';
 const TIMEOUT_MARK_SHOWN_MILLIS = 3000;
 
 
+/**
+ * Find the absolute offset relative to the window
+ * @param domElt
+ * @returns {*}
+ */
 function topPosition(domElt) {
     if (!domElt) {
         return 0;
@@ -111,11 +116,13 @@ class YotificationModule extends React.Component {
         }, TIMEOUT_MARK_SHOWN_MILLIS)
     }
 
-    loadTestData = () => { //eslint-disable-line no-undef // Todo: for dev only! Do not merge if present!
+    // Todo: for dev only! Do not merge if present!
+    loadTestData = () => { //eslint-disable-line no-undef
         this.props.getSomeGetSomeGetSomeYeahYeah();
     }
 
-    loadMoreTestData = () => { //eslint-disable-line no-undef // Todo: for dev only! Do not merge if present!
+    // Todo: for dev only! Do not merge if present!
+    loadMoreTestData = () => { //eslint-disable-line no-undef
         this.props.comeOnItsSuchAJoy();
     }
 
@@ -123,16 +130,26 @@ class YotificationModule extends React.Component {
         this.props.appendSome(('all' !== this.props.filter)? filters[this.props.filter] : false); //eslint-disable-line yoda
     }
 
+    //todo: make sure this doesn't fire too often in either layout
     scrollListener = debounce(() => { //eslint-disable-line no-undef
         const el = window.document.getElementById(this.htmlId);
         if (!el) return;
-        const scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset :
-            (document.documentElement || document.body.parentNode || document.body).scrollTop;
-        if (topPosition(el) + el.offsetHeight - scrollTop - window.innerHeight < 10) { //eslint-disable-line no-mixed-operators apparently math is scary!?
-            console.log('scrollListenerFiring', this.htmlId, el); //Todo: for dev only! Do not merge if present - probably belongs in a different place
-            this.props.appendSome(('all' !== this.props.filter)? filters[this.props.filter] : false); //eslint-disable-line yoda
-            //todo: render a spinner here. Check PostsList.jsx for starting point
+        if(LAYOUT_PAGE === this.props.layout) {
+            const scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset :
+                (document.documentElement || document.body.parentNode || document.body).scrollTop;
+            //the eslint thing for the next line...  apparently math is scary!?
+            if (topPosition(el) + el.offsetHeight - scrollTop - window.innerHeight < 10) { //eslint-disable-line no-mixed-operators
+                console.log('YotificationModule - LAYOUT_PAGE - scrollListenerFiring', this.htmlId, el); //Todo: for dev only! Do not merge if present - probably belongs in a different place
+                this.props.appendSome(('all' !== this.props.filter)? filters[this.props.filter] : false); //eslint-disable-line yoda
+            }
+        } else if(LAYOUT_DROPDOWN === this.props.layout) {
+            //this element height and parent element height? + parent element scrollTop
+            if(el.scrollHeight < (el.parent.offsetHeight + el.parent.scrollTop + 10)) {
+                console.log('YotificationModule - LAYOUT_DROPDOWN - scrollListenerFiring', this.htmlId, el); //Todo: for dev only! Do not merge if present - probably belongs in a different place
+                this.props.appendSome(('all' !== this.props.filter)? filters[this.props.filter] : false); //eslint-disable-line yoda
+            }
         }
+
     }, 150)
 
     render() {

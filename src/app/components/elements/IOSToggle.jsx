@@ -19,7 +19,7 @@ class Switch extends React.Component {
      */
     componentDidMount() {
         const input = this.elCheckbox;
-
+        this.htmlId = 'iostoggle_' + Math.floor(Math.random() * 1000);
         /* eslint-disable no-undef, no-new */
         new Switchery(input, this.props.options);
         /* eslint-enable no-new, no-undef */
@@ -35,7 +35,7 @@ class Switch extends React.Component {
         if (this.props.onChange) {
             this.props.onChange(this.elCheckbox.checked);
         }
-        this.elWrapper.className = classNames([this.props.className, {isChecked:this.elCheckbox.checked}]);
+        this.elWrapper.className = classNames([this.props.className, {isChecked: this.elCheckbox.checked}]);
     }
 
     /**
@@ -53,8 +53,9 @@ class Switch extends React.Component {
                 ])}
                 ref={elWrapper => this.elWrapper = elWrapper}
             >
-                {(this.props.label)? <label>{this.props.label}</label> : null }
+                {(this.props.label)? <label for={this.htmlId}>{this.props.label}</label> : null }
                 <input
+                    id={this.htmlId}
                     ref={elCheckbox => this.elCheckbox = elCheckbox}
                     type="checkbox"
                     defaultChecked={this.props.checked}

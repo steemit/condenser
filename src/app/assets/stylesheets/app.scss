@@ -62,21 +62,39 @@ a, path, circle {
 }
 
 .secondary {
-  color: $dark-gray;
+  @include themify($themes) {
+    color: themed('textColorSecondary');  
+  } 
   font-size: 90%;
   a {
+    transition: 0.2s all ease-in-out;
     color: $dark-gray;
-    text-decoration: underline;
+    @include themify($themes) {
+      color: themed('textColorSecondary');  
+    } 
+    :hover {
+      @include themify($themes) {
+        color: themed('textColorAccent');  
+      } 
+    } 
+
   }
 }
 
 .ptc,
 a.ptc {
-  color: $black;
   text-decoration: none;
-  &:hover {
+  transition: 0.2s all ease-in-out;
+  @include themify($themes) {
+    color: themed('textColorPrimary');  
+  }  
+
+  &:hover, &:focus {
     color: $dark-gray;
     text-decoration: none;
+    @include themify($themes) {
+        color: themed('textColorAccent');  
+    }  
   }
 }
 

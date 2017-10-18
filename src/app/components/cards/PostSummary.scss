@@ -136,7 +136,9 @@ ul.PostsList__summaries {
     @include hoverUnderline;
   }
   padding-left: 1rem;
-  border-left: 1px solid $color-border-light;
+  @include themify($themes) {
+    border-left: themed('borderLight'); 
+  } 
 
   .Reblog__button {
     margin-right: 1rem;

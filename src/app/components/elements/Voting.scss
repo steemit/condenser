@@ -34,10 +34,14 @@
     padding-right: 0.5rem;
   }
   path {
-    fill: #4BA2F2;
+    @include themify($themes) {
+      fill: themed('colorAccent');
+    }       
   }
   circle {
-    stroke: #4BA2F2;
+      @include themify($themes) {
+        stroke: themed('colorAccent');
+      }       
   }
   // exclude small devices
   @media screen and (min-width: 39.9375em) {
@@ -53,8 +57,10 @@
         fill: #fff;
     }
     circle {
-        fill: #4BA2F2;
-        stroke: #4BA2F2;
+        @include themify($themes) {
+          fill: themed('colorAccent');
+          stroke: themed('colorAccent');
+        }   
     }
     svg {
         background-size: contain;
@@ -74,7 +80,7 @@
 }
 
 .Voting__button-down.votingDown svg {
-  border: 1px solid #a00;
+  border: 1px solid $color-red;
   border-radius: 50%;
   border-right-color: transparent;
   border-top-color: transparent;
@@ -105,8 +111,10 @@
 }
 
 .Voting__button--upvoted circle {
-  fill: #4BA2F2;
-  stroke: #4BA2F2;
+    @include themify($themes) {
+      fill: themed('colorAccent');
+      stroke: themed('colorAccent');
+    }    
 }
 
 .Voting__button--upvoted a:hover path {
@@ -114,12 +122,14 @@
 }
 
 .Voting__button--upvoted a:hover circle {
-  fill: #258DEB;
-  stroke: #258DEB;
+    @include themify($themes) {
+      fill: themed('colorAccentHover');
+      stroke: themed('colorAccentHover');
+    }  
 }
 
 .Voting__button--downvoted path {
-  fill: #a00;
+  fill: $color-red;
 }
 
 .Voting .DropdownMenu ul {
@@ -150,11 +160,15 @@
 }
 
 .Voting__inner {
-  border-right: 1px solid $color-border-light;
+  @include themify($themes) {
+    border-right: themed('borderLight'); 
+  } 
   padding-right: .8rem;
   margin-right: .6rem;
   .DropdownMenu .Icon.dropdown-arrow {
-    margin-right: -0.5rem
+    margin-right: -0.5rem;
+    position: relative;
+    top: 2px;
   }
   .cancel {
     font-size: 80%;

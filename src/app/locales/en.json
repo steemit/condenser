@@ -601,7 +601,7 @@
     "from": "From",
     "to": "To",
     "asset_currently_collecting": "%(asset)s currently collecting %(interest)s%% APR.",
-    "beware_of_spam_and_fishing_links": "Beware of spam and fishing links in transfer memos. Do not open links from users you do not trust. Do not provide your private keys to any third party websites."
+    "beware_of_spam_and_phishing_links": "Beware of spam and phishing links in transfer memos. Do not open links from users you do not trust. Do not provide your private keys to any third party websites."
   },
   "userwallet_jsx": {
     "conversion_complete_tip": "Will complete on",

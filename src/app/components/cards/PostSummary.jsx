@@ -153,7 +153,7 @@ class PostSummary extends React.Component {
                     <a className="timestamp__link" href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>
                         <span className="timestamp__time"><TimeAgoWrapper date={p.created} className="updated" /></span>
 
-                        {full_power && <span className="articles__icon-steem" title={tt('g.powered_up_100')}><Icon name="steem" /></span>}  
+                        {full_power && <span className="articles__icon-100" title={tt('g.powered_up_100')}><Icon name="100" /></span>}  
 
                     </a>
                 </div>

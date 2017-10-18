@@ -78,7 +78,7 @@ function TopRightMenu({account, savings_withdraws, price_per_golos, globalprops,
     const submitStoryPencil = $STM_Config.read_only_mode ? null : <li className="show-for-small-only">
       <Link to="/submit.html"><Icon name="pencil" /></Link>
     </li>;
-    const golosFest = <li className={lcn + ' buttons'}><Link to="/ru--blokcheijn/@aroundb/programma-golos-fest-ukraine-konstruktivnyi-dialog-media-s-innovatorami" className="button alert fest">{tt('g.golos_fest')}</Link></li>;
+    const golosFest = <li className={lcn + ' buttons'}><Link to="/created/ru--godgolosu" className="button alert fest">{tt('g.golos_fest')}</Link></li>;
     const feedLink = `/@${username}/feed`;
     const repliesLink = `/@${username}/recent-replies`;
     const walletLink = `/@${username}/transfers`;

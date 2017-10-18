@@ -152,6 +152,10 @@
       font-weight: bold;
     }
   }
+  &__more-link {
+    @extend .link;
+    @extend .link--accent;
+  }
   &__label {
     display: block;
     @include font-size(14px);     

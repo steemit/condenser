@@ -140,7 +140,7 @@ class PostsIndex extends React.Component {
             <div className={'PostsIndex row' + (fetching ? ' fetching' : '') + layoutClass}>
                 <aside className="c-sidebar c-sidebar--left">
                     <Topics order={topics_order} current={category} compact={false} />
-                    <small><a onClick={this.onShowSpam}>{showSpam ? tt('g.next_3_strings_together.show_less') : tt('g.next_3_strings_together.show_more')}</a>{' ' + tt('g.next_3_strings_together.value_posts')}</small>
+                    <small><a className="c-sidebar__more-link" onClick={this.onShowSpam}>{showSpam ? tt('g.next_3_strings_together.show_less') : tt('g.next_3_strings_together.show_more')}</a>{' ' + tt('g.next_3_strings_together.value_posts')}</small>
                 </aside>
                 <article className="articles">
                     <div className="articles__header">

@@ -9,11 +9,14 @@ import { settingsUIGroupings } from 'app/components/elements/notification/type';
 import IOSToggle from 'app/components/elements/IOSToggle';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 
+const TRANSPORT_WEBSITE = 'website';
+
 class YotificatonSettingsPanel extends React.Component {
 
     onToggleGrouping = (grouping, enabled) => { //eslint-disable-line no-undef
         //todo: determine how to cross/map groupings
         console.log('onToggleGrouping', grouping, enabled); //Todo: for dev only! Do not merge if present!
+        this.props.toggleGrouping(grouping, enabled);
     }
 
     render() {
@@ -40,5 +43,20 @@ class YotificatonSettingsPanel extends React.Component {
     }
 }
 
-export default connect(null, null
+export default connect(
+    null,
+    dispatch => ({
+        toggleGrouping: (grouping, enabled) => {
+            const action = {
+                type: 'notifications/SET_NOTIFICATION_TYPES',
+                channelName: TRANSPORT_WEBSITE, //this line or the next should be deleted. I suggest this on.
+                transport: TRANSPORT_WEBSITE,
+                types: settingsUIGroupings[grouping],
+                grouping,
+                enabled
+            };
+            console.log('broadcasting notifications/SET_NOTIFICATION_TYPES', JSON.stringify(action, null, 4)); //Todo: for dev only! Do not merge if present - probably belongs in a different place
+            dispatch(action);
+        }
+    })
 )(YotificatonSettingsPanel);

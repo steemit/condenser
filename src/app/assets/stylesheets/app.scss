@@ -3,12 +3,13 @@
 @import "~foundation-sites/scss/foundation";
 
 @include foundation-everything(true);
-@import "./foundation-overrides";
 
 @import "./variables";
 @import "./mixins";
 @import "./layout";
 @import "./themes";
+
+@import "./foundation-overrides";
 
 @import './animation';
 

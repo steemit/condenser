@@ -78,15 +78,8 @@
   padding: 1rem 0 2rem 0;
   clear: left;
   a {
-    transition: 0.2s all ease-in-out;
-    @include themify($themes) {
-      color: themed('colorAccent'); 
-    }
-  &:hover {
-      @include themify($themes) {
-        color: themed('colorAccentHover'); 
-      }    
-    }
+    @extend .link;
+    @extend .link--accent;
   }
 }
 

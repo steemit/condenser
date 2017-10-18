@@ -15,6 +15,7 @@ $themes: (
     textColorPrimary: $color-text-dark,
     textColorSecondary: $color-text-gray,
     textColorAccent: $color-text-blue,
+    textColorAccentHover: $color-blue-original-dark,
     textColorError: $color-text-red,
     contentBorderAccent: $color-transparent,
     buttonBackground: $color-blue-original-dark,
@@ -37,7 +38,8 @@ $themes: (
     iconColorSecondary: #cacaca,
     textColorPrimary: $color-text-dark,
     textColorSecondary: $color-text-gray,
-    textColorAccent: $color-text-teal,    
+    textColorAccent: $color-text-teal,   
+    textColorAccentHover: $color-teal, 
     textColorError: $color-text-red,
     contentBorderAccent: $color-teal,
     buttonBackground: $color-blue-black,
@@ -49,7 +51,7 @@ $themes: (
   ),
   dark: (
     colorAccent: $color-teal,
-    colorAccentHover: $color-teal-light,
+    colorAccentHover: $color-teal,
     colorAccentReverse: $color-white,
     backgroundColor: $color-background-dark,
     moduleBackgroundColor: $color-background-dark,
@@ -61,7 +63,8 @@ $themes: (
     iconColorSecondary: $color-text-gray-light,
     textColorPrimary: $color-text-white,
     textColorSecondary: $color-text-gray-light,
-    textColorAccent: $color-teal,
+    textColorAccent: $color-teal-light,
+    textColorAccentHover: $color-teal,
     textColorError: $color-text-red,
     contentBorderAccent: $color-teal,
     buttonBackground: $color-white,
@@ -138,6 +141,16 @@ $themes: (
     &:hover, &:focus {
       @include themify($themes) {
           color: themed('textColorAccent');  
+      } 
+    }
+  }
+  &--accent {
+    @include themify($themes) {
+        color: themed('textColorAccent');  
+    }
+    &:hover, &:focus {
+      @include themify($themes) {
+          color: themed('textColorAccentHover');  
       } 
     }
   }

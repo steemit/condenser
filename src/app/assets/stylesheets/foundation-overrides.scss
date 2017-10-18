@@ -36,3 +36,16 @@ button, .button {
 .callout {
     margin-top: 1rem;
 }
+
+.close-button {
+  transition: color 0.2s ease-in-out;
+  @include themify($themes) {
+    color: themed('textColorSecondary');  
+  } 
+  &:hover, &:focus {
+    @include themify($themes) {
+      color: themed('textColorAccent');  
+    } 
+  }
+}
+

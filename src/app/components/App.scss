@@ -67,7 +67,8 @@
   }
 }
 .PlainLink {
-    color: #8a8a8a;
+    @extend .link;
+    @extend .link--secondary;
 }
 
 .welcomeBanner {

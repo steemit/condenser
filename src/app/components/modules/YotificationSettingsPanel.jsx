@@ -10,6 +10,10 @@ import IOSToggle from 'app/components/elements/IOSToggle';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 
 const TRANSPORT_WEBSITE = 'website';
+const groupingList = Object.entries(settingsUIGroupings).reduce( (list, entry) => {
+        list.push(entry[0]);
+        return list;
+    }, []);
 
 class YotificatonSettingsPanel extends React.Component {
 
@@ -21,14 +25,14 @@ class YotificatonSettingsPanel extends React.Component {
 
     render() {
         const toggles = [];
-        Object.entries(settingsUIGroupings).forEach( entry => {
-            //entry[1] is the list of notification types.
-            toggles.push(<li key={entry[0]}>{tt('settings_jsx.notifications.meta_types.' + entry[0])} <IOSToggle
+        groupingList.forEach( grouping => {
+            toggles.push(<li key={grouping}>{tt('settings_jsx.notifications.meta_types.' + grouping)} <IOSToggle
                 className="yotification-toggle"
-                onChange={(enabled) => this.onToggleGrouping(entry[0], enabled)}
+                onChange={(enabled) => this.onToggleGrouping(grouping, enabled)}
+                checked={this.props.groupingSettings[grouping]}
                 options={
                     {
-                        color: '#474F79',
+                        color: '#474F79', //todo: this should not be here.
                         size: 'small'
                     }
                 }
@@ -44,7 +48,19 @@ class YotificatonSettingsPanel extends React.Component {
 }
 
 export default connect(
-    null,
+    (state, ownProps) => {
+        //{ notificationSettings: [ { channelName: 'website', settings: { vote: false, security: true, }, }, { channelName: 'sms', settings: { etc: '...', } } ] }
+        return {
+            ...ownProps,
+            transport: TRANSPORT_WEBSITE,
+            groupingSettings: groupingList.reduce(
+                (obj, grouping) => {
+
+                    obj[grouping] = (grouping !== 'wallet') ? true : false;
+                    return obj;
+                    }, {})
+        }
+    },
     dispatch => ({
         toggleGrouping: (grouping, enabled) => {
             const action = {

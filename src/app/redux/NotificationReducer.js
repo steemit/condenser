@@ -157,6 +157,7 @@ const errorMsg = (state = null, action = { type: null }) => {
 const notificationReducer = combineReducers({
     byId,
     idsReadPending: createUpdatedList({ prop: 'read', val: true }),
+    idsUnreadPending: createUpdatedList({ prop: 'read', val: false }),
     idsShownPending: createUpdatedList({ prop: 'shown', val: true }),
     unread: createList({ prop: 'read', val: false }),
     unshown: createList({ prop: 'shown', val: false }),

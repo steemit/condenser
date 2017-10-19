@@ -1,6 +1,12 @@
 import { takeLatest } from 'redux-saga';
 import { call, put, take, fork, race, select } from 'redux-saga/effects';
-import { fetchAllNotifications, fetchSomeNotifications, markAsRead } from 'app/utils/YoApiClient';
+import {
+    fetchAllNotifications,
+    fetchSomeNotifications,
+    markAsRead,
+    markAsUnread,
+    markAsShown,
+} from 'app/utils/YoApiClient';
 
 const POLL_WAIT_MS = 5000;
 
@@ -14,6 +20,10 @@ export function getNotificationsById(state) {
 
 export function getIdsReadPending(state) {
     return state.notification.idsReadPending;
+}
+
+export function getIdsUnreadPending(state) {
+    return state.notification.idsUnreadPending;
 }
 
 export function getIdsShownPending(state) {
@@ -65,32 +75,12 @@ function* watchPollData() {
             'notification/RECEIVE_ALL', // hang out til we get our first batch of notifs...
             'notification/APPEND_SOME', // or after one of the polls are done
         ]);
-        yield race([
-            call(pollNotifications), // and then queue up
-            take('user/LOGOUT'), // or quit if they log out
-        ]);
-    }
-}
-
-/**
- * After any server notifs come in, wait a couple seconds, take a diff of user changes,
- * and for anything that's changed, send the updates to the server.
- */
-function* watchSyncData() {
-    while (true) {
-        yield call(delay, POLL_WAIT_MS);
 
         const idsReadPending = yield select(getIdsReadPending);
+        const idsUnreadPending = yield select(getIdsUnreadPending);
         const idsShownPending = yield select(getIdsShownPending);
 
-        // todo: pause watchPollData at this point -- or maybe we just do this in the same loop?
-        if (idsReadPending.count() + idsShownPending.count() > 0) {
-            // this is what we want when shown endpoint is up
-            // todo: once mark-as-shown is available get this up & running
-        }
-
         if (idsReadPending.count() > 0) {
-            // for now during dev, we only mark as read
             const payload = yield call(markAsRead, idsReadPending.toArray());
 
             if (payload.error) {
@@ -110,6 +100,53 @@ function* watchSyncData() {
                 });
             }
         }
+
+        if (idsUnreadPending.count() > 0) {
+            const payload = yield call(markAsUnread, idsUnreadPending.toArray());
+
+            if (payload.error) {
+                yield put({
+                    type: 'notification/SENT_UPDATES_ERROR',
+                    msg: payload.error,
+                });
+            } else {
+                yield put({
+                    type: 'notification/SENT_UPDATES',
+                    updates: { read: false },
+                });
+
+                yield put({
+                    type: 'notification/APPEND_SOME',
+                    payload,
+                });
+            }
+        }
+
+        if (idsShownPending.count() > 0) {
+            const payload = yield call(markAsShown, idsShownPending.toArray());
+
+            if (payload.error) {
+                yield put({
+                    type: 'notification/SENT_UPDATES_ERROR',
+                    msg: payload.error,
+                });
+            } else {
+                yield put({
+                    type: 'notification/SENT_UPDATES',
+                    updates: { shown: true },
+                });
+
+                yield put({
+                    type: 'notification/APPEND_SOME',
+                    payload,
+                });
+            }
+        }
+
+        yield race([
+            call(pollNotifications), // and then queue up
+            take('user/LOGOUT'), // or quit if they log out
+        ]);
     }
 }
 
@@ -212,7 +249,6 @@ export function* updateSome({ ids, updates }) {
 
 export function* NotificationPollSaga() {
     yield fork(watchPollData);
-    yield fork(watchSyncData);
 }
 
 export function* NotificationFetchSaga() {

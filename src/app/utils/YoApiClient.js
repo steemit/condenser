@@ -172,6 +172,34 @@ export function markAsRead(ids) {
     });
 }
 
+export function markAsUnread(ids) {
+    return fetch(YO, {
+        method: 'post',
+        credentials: 'same-origin',
+        headers: {
+            Accept: 'application/json',
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            jsonrpc: '2.0',
+            id: 1,
+            method: 'yo.mark_unread',
+            params: {
+                test: true, // Todo: for dev only! Do not merge if present!
+                ids: ids.map(id => parseInt(id, 10)),
+            },
+        }),
+    }).then(r => r.json()).then(res => {
+        if (res.result && res.result.length > 0) {
+            return normalize(res.result);
+        }
+        return [];
+    })
+    .catch(error => {
+        return { error };
+    });
+}
+
 export function markAsShown(ids) {
     return fetch(YO, {
         method: 'post',
@@ -186,7 +214,7 @@ export function markAsShown(ids) {
             method: 'yo.mark_seen',
             params: {
                 test: true, // Todo: for dev only! Do not merge if present!
-                ids,
+                ids: ids.map(id => parseInt(id, 10)),
             },
         }),
     }).then(r => r.json()).then(res => {

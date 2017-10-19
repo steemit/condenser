@@ -604,7 +604,8 @@
     "withdraw_funds_after_the_required_3_day_waiting_period": "Снять средства после необходимого 3 дневного периода ожидания.",
     "from": "От",
     "to": "Кому",
-    "asset_currently_collecting": "начисляемые годовые на %(asset)s: %(interest)s%%."
+    "asset_currently_collecting": "начисляемые годовые на %(asset)s: %(interest)s%%.",
+    "beware_of_spam_and_phishing_links": "Остерегайтесь спама и фишинговых ссылок в передачах. Не открывайте ссылки от пользователей, которым вы не доверяете. Не предоставляйте свои личные ключи третьим сторонам."
   },
   "userwallet_jsx": {
     "conversion_complete_tip": "Завершается",

@@ -204,9 +204,10 @@
 }
 
 .Voting__adjust_weight {
-  padding: 10px 20px;
+  padding: 40px 20px 20px;
   margin-right: 10px;
   width: 350px;
+  min-width: 320px;
   overflow: hidden;
   .Icon:hover {
     animation: none !important;
@@ -326,4 +327,12 @@
         -moz-box-shadow: 0 0 0 0 rgba(204,169,44, 0);
         box-shadow: 0 0 0 0 rgba(204,169,44, 0);
     }
+}
+
+
+.weight-container {
+  min-width: 300px;
+  width: 90%;
+  margin: 0 auto;
+  padding-bottom: 2px;
 }

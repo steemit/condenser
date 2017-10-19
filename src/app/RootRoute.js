@@ -80,9 +80,9 @@ export default {
             //});
         } else if (route.page === 'SubmitPost') {
             if (process.env.BROWSER) {
-                require.ensure([], (require) => {
+                // require.ensure([], (require) => {
                     cb(null, [require('app/components/pages/SubmitPost')]);
-                });
+                // });
             } else {
                 cb(null, [require('app/components/pages/SubmitPostServerRender')]);
             }

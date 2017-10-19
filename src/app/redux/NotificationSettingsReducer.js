@@ -1,4 +1,4 @@
-import { fromJS, Map } from 'immutable';
+import { Map } from 'immutable';
 import { combineReducers } from 'redux';
 
 const isFetching = (state = false, action = { type: null }) => {
@@ -30,7 +30,7 @@ const settings = (state = Map(), action = { type: null }) => {
                 !state.getIn([action.channel, 'notification_types', action.setting])
             );
         case 'notificationsettings/RECEIVE':
-            return fromJS(action.payload);
+            return action.payload;
         default:
             return state;
     }

@@ -1,5 +1,8 @@
 import { Map } from 'immutable';
-import types, { settingsInitFalse } from 'app/components/elements/notification/type';
+import types, {
+    settingsInitFalse,
+    toggleNotificationGroups,
+} from 'app/components/elements/notification/type';
 
 const YO = '/yo';
 //const YO = 'https://yo.steemitdev.com';
@@ -45,9 +48,11 @@ export function normalizeSettingsFromApi(transportsFromApi, types, settingsInitF
     return Object.keys(transportsFromApi).reduce((transports, transport) => {
         if (transportsFromApi[transport].notification_types !== null) { // TODO: work with Gareth to make sure api supplies null if nothing has been saved yet
             const transportTypes = transportsFromApi[transport].notification_types;
+            const groups = toggleNotificationGroups;
+
             return transports
-                .setIn([transport, 'notification_types'], types.reduce((acc, type) => {
-                    return acc.set(type, (transportTypes.indexOf(type) > -1));
+                .setIn([transport, 'notification_types'], Object.keys(groups).reduce((acc, k) => {
+                    return acc.set(k, (transportsFromApi[transport].notification_types.indexOf(groups[k][0]) > -1));
                 }, Map()))
                 .setIn([transport, 'sub_data'], transportsFromApi[transport].sub_data);
         }
@@ -59,15 +64,17 @@ export function normalizeSettingsFromApi(transportsFromApi, types, settingsInitF
 }
 
 export function denormalizeSettingsToApi(settings) {
-    return settings.entrySeq().toJS().reduce((transports, transport) => ({
-        ...transports,
-        [transport[0]]: {
-            notification_types: transport[1].get('notification_types').reduce((transportTypes, enabled, type) => {
-                return enabled ? [...transportTypes, type] : transportTypes;
-            }, []),
-            sub_data: transport[1].get('sub_data'),
-        },
-    }), {});
+    return settings.entrySeq().toJS().reduce((transports, transport) => {
+        return {
+            ...transports,
+            [transport[0]]: {
+                notification_types: transport[1].get('notification_types').reduce((transportTypes, enabled, type) => {
+                    return enabled ? [...transportTypes, ...toggleNotificationGroups[type]] : transportTypes;
+                }, []),
+                sub_data: transport[1].get('sub_data'),
+            },
+        };
+    }, {});
 }
 
 export function fetchAllNotifications(username) {

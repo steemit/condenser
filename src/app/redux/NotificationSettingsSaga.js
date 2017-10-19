@@ -7,7 +7,7 @@ export function getUsernameFromState(state) {
 }
 
 export function getNotificationSettingsFromState(state) {
-    return state.notificationsettings.settings;
+    return state.notificationsettings.groups;
 }
 
 /**
@@ -59,6 +59,6 @@ export function* updateNotificationSettings() {
 export function* NotificationSettingsSaga() {
     yield [
         takeLatest('notificationsettings/FETCH', fetchNotificationSettings),
-        takeLatest('notificationsettings/TOGGLE_SETTING', updateNotificationSettings),
+        takeLatest('notificationsettings/TOGGLE_GROUP', updateNotificationSettings),
     ];
 }

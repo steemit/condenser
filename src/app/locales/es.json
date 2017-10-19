@@ -331,6 +331,11 @@
     "user_hasnt_started_bloggin_yet": "Looks like %(name)s hasn't started blogging yet!",
     "user_hasnt_followed_anything_yet": "Looks like %(name)s might not be following anyone yet! If %(name)s recently added new users to follow, their personalized feed will populate once new content is available.",
     "user_hasnt_had_any_replies_yet": "%(name)s hasn't had any replies yet",
+    "looks_like_you_havent_posted_anything_yet": "Looks like you haven't posted anything yet.",
+    "create_a_post": "Create a Post",
+    "explore_trending_articles": "Explore Trending Articles",
+    "read_the_quick_start_guide": "Read The Quick Start Guide",
+    "browse_the_faq": "Browse The FAQ",
     "followers": "Followers",
     "this_is_users_reputations_score_it_is_based_on_history_of_votes": "This is %(name)s's reputation score.\n\nThe reputation score is based on the history of votes received by the account, and is used to hide low quality content.",
     "follower_count": {

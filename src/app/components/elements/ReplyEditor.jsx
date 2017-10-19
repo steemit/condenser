@@ -38,7 +38,7 @@ class ReplyEditor extends React.Component {
         category: React.PropTypes.string, // initial value
         title: React.PropTypes.string, // initial value
         body: React.PropTypes.string, // initial value
-        richTextEditor: React.PropTypes.function,
+        richTextEditor: React.PropTypes.func,
     }
 
     static defaultProps = {
@@ -494,9 +494,10 @@ function stateFromMarkdown(RichTextEditor, markdown) {
     return stateFromHtml(RichTextEditor, html)
 }
 
-import {connect} from 'react-redux'
+import {connect} from 'react-redux';
+const richTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
 
-export default (formId, richTextEditor = null) => connect(
+export default (formId) => connect(
     // mapStateToProps
     (state, ownProps) => {
         const username = state.user.getIn(['current', 'username'])

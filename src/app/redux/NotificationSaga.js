@@ -211,8 +211,8 @@ export function* updateSome({ ids, updates }) {
 }
 
 export function* NotificationPollSaga() {
-//    yield fork(watchPollData);
-//    yield fork(watchSyncData);
+    yield fork(watchPollData);
+    yield fork(watchSyncData);
 }
 
 export function* NotificationFetchSaga() {

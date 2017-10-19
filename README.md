@@ -49,6 +49,8 @@ mkdir tmp
 
 Install at least Node v7.5 if you don't already have it. We recommend using `nvm` to do this as it's both the simplest way to install and manage installed version(s) of node. If you need `nvm`, you can get it at [https://github.com/creationix/nvm](https://github.com/creationix/nvm).
 
+Condenser is known to successfully build using node 7.5, npm 4.1.2, and yarn 1.1.0.
+
 Using nvm, you would install like this:
 ```bash
 nvm install v7.5
@@ -197,7 +199,7 @@ user@example:~$ tarantool
 - Component's stylesheet file name should match component name
 
 ##### Js & Jsx
-We are using _Airbnb JavaScript Style Guide_ with some modifications (see .eslintrc).
+We are using _[Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript)_ with some modifications (see .eslintrc).
 Please run _eslint_ in the working directory before committing your changes and make sure you didn't introduce any new styling issues.
 
 ##### CSS & SCSS

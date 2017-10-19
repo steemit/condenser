@@ -257,8 +257,10 @@
       margin: 0em 0 1em;
       transition: 0.2s all ease-in-out;     
       border: transparent;
+
       @include themify($themes) {
           background-color: themed('moduleBackgroundColor'); 
+          border-bottom: themed('border');           
         }       
       @include MQ(M) {
         margin: 0 0 1.5em;
@@ -650,10 +652,18 @@
 }
 
 
+.articles__layout-selector .icon-svg {
+  &--accent {
+    @include themify($themes) {
+        fill: themed('textColorSecondary'); 
+      } 
+  } 
+}
+
 .articles__layout-selector:hover .icon-svg {
   &--accent {
     @include themify($themes) {
-        fill: themed('colorAccentHover'); 
+        fill: themed('textColorPrimary'); 
       } 
   } 
 }
@@ -711,6 +721,10 @@ a#changeLayout:focus {
       &__summary {
         border: transparent;
         box-shadow: none;
+        padding-bottom: 6px;
+        @include themify($themes) {
+          border-bottom: themed('borderLight'); 
+        } 
       }
       &__h2 {
         @include font-size(16px);  

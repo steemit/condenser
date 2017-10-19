@@ -11,7 +11,7 @@ import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInp
 import {saveCords} from 'app/utils/ServerApiClient';
 import {api} from 'steem';
 import { Link } from 'react-router';
-import {linkBuilder} from "../../Routes"
+import {linkBuilder} from "app/Routes"
 
 class CreateAccount extends React.Component {
 
@@ -220,7 +220,7 @@ class CreateAccount extends React.Component {
                     <div className="callout alert">
                         <p>It looks like your sign up request is not approved yet or you already created an account.<br />
                            Please try again later or contact <a href="mailto:support@steemit.com">support@steemit.com</a> for the status of your request.<br />
-                           If you didn't submit your sign up application yet, <Link to="/pick_account">apply now</Link>!
+                           If you didn't submit your sign up application yet, <Link to={linkBuilder.signup()}>apply now</Link>!
                         </p>
                     </div>
                 </div>

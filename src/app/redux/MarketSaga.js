@@ -1,5 +1,6 @@
 import {takeLatest} from 'redux-saga';
 import {call, put} from 'redux-saga/effects';
+import {linkBuilder} from 'app/Routes';
 import MarketReducer from './MarketReducer';
 import {getAccount} from './SagaShared';
 import {api} from 'steem';
@@ -17,7 +18,7 @@ let last_trade = null
 
 export function* fetchMarket(location_change_action) {
     const {pathname} = location_change_action.payload;
-    if (pathname && pathname != "/market") {
+    if (pathname && pathname != linkBuilder.market()) {
         polling = false
         return
     }

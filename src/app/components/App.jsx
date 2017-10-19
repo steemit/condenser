@@ -210,7 +210,7 @@ class App extends React.Component {
                         </a>
                     </li>
                     <li>
-                        <a href={linkBuilder.faw()} onClick={this.navigate}>
+                        <a href={linkBuilder.faq()} onClick={this.navigate}>
                             {tt('navigation.faq')}
                         </a>
                     </li>

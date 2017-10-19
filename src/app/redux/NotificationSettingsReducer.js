@@ -12,6 +12,17 @@ const isFetching = (state = false, action = { type: null }) => {
     }
 };
 
+const isSaving = (state = false, action = { type: null }) => {
+    switch (action.type) {
+        case 'notificationsettings/TOGGLE_GROUP':
+            return true;
+        case 'notificationsettings/RECEIVE':
+            return false;
+        default:
+            return state;
+    }
+};
+
 const errorMsg = (state = '', action = { type: null }) => {
     switch (action.type) {
         case 'notificationsettings/RECEIVE':
@@ -22,12 +33,12 @@ const errorMsg = (state = '', action = { type: null }) => {
     }
 };
 
-const settings = (state = Map(), action = { type: null }) => {
+const groups = (state = Map(), action = { type: null }) => {
     switch (action.type) {
-        case 'notificationsettings/TOGGLE_SETTING':
+        case 'notificationsettings/TOGGLE_GROUP':
             return state.setIn(
-                [action.channel, 'notification_types', action.setting],
-                !state.getIn([action.channel, 'notification_types', action.setting])
+                [action.transport, 'notification_types', action.group],
+                !state.getIn([action.transport, 'notification_types', action.group])
             );
         case 'notificationsettings/RECEIVE':
             return action.payload;
@@ -38,6 +49,7 @@ const settings = (state = Map(), action = { type: null }) => {
 
 export default combineReducers({
     isFetching,
+    isSaving,
     errorMsg,
-    settings,
+    groups,
 });

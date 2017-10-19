@@ -11,7 +11,7 @@ import VerticalMenu from 'app/components/elements/VerticalMenu';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import NotifiCounter from 'app/components/elements/NotifiCounter';
 import YotifiCounter from 'app/components/elements/YotifiCounter';
-import {default as YotificationModule, LAYOUT_DROPDOWN} from "./Yotification"; //eslint-disable-line import/no-named-default
+import YotificationModule, { LAYOUT_DROPDOWN } from "./Yotification";
 
 const defaultNavigate = (e) => {
     if (e.metaKey || e.ctrlKey) {

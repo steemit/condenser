@@ -1,4 +1,4 @@
-import { fromJS, Map } from 'immutable';
+import { Map } from 'immutable';
 import types, { settingsInitFalse } from 'app/components/elements/notification/type';
 
 const YO = '/yo';
@@ -42,16 +42,32 @@ export function normalizeSettingsFromApi(transportsFromApi, types, settingsInitF
         [t]: settingsInitFalse.indexOf(t) < 0,
     }), {});
 
-    return Object.keys(transportsFromApi).reduce((acc, transport) => {
+    return Object.keys(transportsFromApi).reduce((transports, transport) => {
         if (transportsFromApi[transport].notification_types !== null) { // TODO: work with Gareth to make sure api supplies null if nothing has been saved yet
             const transportTypes = transportsFromApi[transport].notification_types;
-            return acc.setIn([transport, 'notification_types'], types.reduce((acc, type) => {
-                return acc.set(type, !transportTypes.indexOf(type));
-            }, Map()));
-        } else {
-            return acc.setIn([transport, 'notification_types'], Map(defaultTypes));
+            return transports
+                .setIn([transport, 'notification_types'], types.reduce((acc, type) => {
+                    return acc.set(type, (transportTypes.indexOf(type) > -1));
+                }, Map()))
+                .setIn([transport, 'sub_data'], transportsFromApi[transport].sub_data);
         }
+
+        return transports
+            .setIn([transport, 'notification_types'], Map(defaultTypes))
+            .setIn([transport, 'sub_data'], transportsFromApi[transport].sub_data);
     }, Map());
+}
+
+export function denormalizeSettingsToApi(settings) {
+    return settings.entrySeq().toJS().reduce((transports, transport) => ({
+        ...transports,
+        [transport[0]]: {
+            notification_types: transport[1].get('notification_types').reduce((transportTypes, enabled, type) => {
+                return enabled ? [...transportTypes, type] : transportTypes;
+            }, []),
+            sub_data: transport[1].get('sub_data'),
+        },
+    }), {});
 }
 
 export function fetchAllNotifications(username) {
@@ -93,7 +109,7 @@ export function fetchAllNotifications(username) {
  * @param {String[]} types only these notification types
  *
  */
-export function fetchSomeNotifications({username, before, after, types }) { // Todo: filter by types once api allows for it
+export function fetchSomeNotifications({ username, before, after, filterTypes }) { // Todo: filter by types once api allows for it
     const beforeOrAfterParams = {};
     if (after) beforeOrAfterParams.modified_after = after;
     if (before) beforeOrAfterParams.created_before = before;
@@ -190,9 +206,6 @@ export function markAsShown(ids) {
  * @return {Map|Object} if error, object w/ error prop
  */
 export function getNotificationSettings(username) {
-//    return Promise.resolve(normalizeSettings({
-//        foo: 'bar',
-//    }));
     return fetch(YO, {
         method: 'post',
         credentials: 'same-origin',
@@ -224,9 +237,6 @@ export function getNotificationSettings(username) {
  * @return {Map|Object} if error, object w/ error prop
  */
 export function saveNotificationSettings(username, settings) {
-//    return Promise.resolve(normalizeSettings({
-//        foo: 'bar',
-//    }));
     return fetch(YO, {
         method: 'post',
         credentials: 'same-origin',
@@ -241,7 +251,7 @@ export function saveNotificationSettings(username, settings) {
             params: {
                 test: true, // Todo: for dev only! Do not merge if present!
                 username,
-                transports: settings,
+                transports: denormalizeSettingsToApi(settings),
             },
         }),
     }).then(r => r.json()).then(res => {

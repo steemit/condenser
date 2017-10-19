@@ -1,4 +1,4 @@
-import { takeLatest, takeEvery } from 'redux-saga';
+import { takeLatest } from 'redux-saga';
 import { call, put, take, fork, race, select } from 'redux-saga/effects';
 import { fetchAllNotifications, fetchSomeNotifications, markAsRead } from 'app/utils/YoApiClient';
 
@@ -211,8 +211,8 @@ export function* updateSome({ ids, updates }) {
 }
 
 export function* NotificationPollSaga() {
-    yield fork(watchPollData);
-    yield fork(watchSyncData);
+//    yield fork(watchPollData);
+//    yield fork(watchSyncData);
 }
 
 export function* NotificationFetchSaga() {

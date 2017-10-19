@@ -197,7 +197,7 @@ class App extends React.Component {
                 </div>
             );
         }
-
+        
         return <div className={'App' + ' theme-original' + (lp ? ' LP' : '') + (ip ? ' index-page' : '') + (miniHeader ? ' mini-header' : '')}
                     ref="App_root"
                 >

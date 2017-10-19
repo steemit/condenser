@@ -10,7 +10,7 @@ import MarkNotificationRead from 'app/components/elements/MarkNotificationRead';
 import tt from 'counterpart';
 import Immutable from "immutable";
 import Callout from 'app/components/elements/Callout';
-import SidebarStats from 'app/components/elements/SidebarStats';
+// import SidebarStats from 'app/components/elements/SidebarStats';
 import SidebarLinks from 'app/components/elements/SidebarLinks';
 import SidebarNewUsers from 'app/components/elements/SidebarNewUsers';
 import Topics from './Topics';
@@ -171,7 +171,7 @@ class PostsIndex extends React.Component {
                     { !this.props.username
                         ? <SidebarNewUsers />
                         : <div>
-                              <SidebarStats steemPower={123} followers={23} reputation={62} />
+                              {/* <SidebarStats steemPower={123} followers={23} reputation={62} />  */}
                               <SidebarLinks username={this.props.username} />
                             </div>
                     }

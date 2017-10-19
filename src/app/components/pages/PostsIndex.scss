@@ -277,11 +277,10 @@
   &__summary-header {
     display: flex;
     align-items: center;
-    padding: 6px 1em 8px;
+    padding: 6px 0 8px;
     position: relative;
     @include MQ(M) {
-      padding-top: 10px;
-      padding-bottom: 8px;     
+      padding: 10px 16px 8px;     
       @include themify($themes) {
           border-bottom: themed('border'); 
         }         
@@ -409,11 +408,15 @@
     select.Topics {
       margin-bottom: 0 !important;
       border: transparent;
+      background-color: transparent;
       border-bottom: 1px solid #999;
       border-radius: 0;
       position: relative;
       top: -4px; 
       margin-top: 12px; 
+      @include themify($themes) {
+          color: themed('textColorPrimary');  
+      }       
       @media only screen and (min-width: 370px) {
         margin-top: 0; 
       }        

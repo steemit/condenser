@@ -257,7 +257,7 @@
       margin: 0em 0 1em;
       transition: 0.2s all ease-in-out;     
       border: transparent;
-
+      padding-bottom: 10px;
       @include themify($themes) {
           background-color: themed('moduleBackgroundColor'); 
           border-bottom: themed('border');           
@@ -265,6 +265,7 @@
       @include MQ(M) {
         margin: 0 0 1.5em;
         box-shadow: 0px 5px 10px 0 rgba(0,0,0,0.0);
+        padding-bottom: 0;
         @include themify($themes) {
             border: themed('border'); 
           }         
@@ -721,10 +722,13 @@ a#changeLayout:focus {
       &__summary {
         border: transparent;
         box-shadow: none;
-        padding-bottom: 6px;
+        padding-bottom: 0px;
         @include themify($themes) {
           border-bottom: themed('borderLight'); 
         } 
+        @include MQ(M) {
+          padding-bottom: 6px;
+        }
       }
       &__h2 {
         @include font-size(16px);  

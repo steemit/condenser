@@ -16,8 +16,8 @@
     "eslint": "LIST=`git diff-index --name-only HEAD | grep .*\\.js | grep -v json`; if [ \"$LIST\" ]; then eslint $LIST; fi",
     "fmt": "prettier --config .prettierrc --write 'src/**/*.js*'",
     "production": "NODE_ENV=production node lib/server/index.js",
-    "start": "NODE_ENV=development ./node_modules/babel-cli/bin/babel-node.js ./webpack/dev-server.js",
-    "webpush": "./node_modules/babel-cli/bin/babel-node.js ./scripts/webpush_notify.js",
+    "start": "NODE_ENV=development babel-node ./webpack/dev-server.js",
+    "webpush": "node ./scripts/webpush_notify.js",
     "checktranslations": "node scripts/check_translations.js"
   },
   "author": "Steemit, Inc.",

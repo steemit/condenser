@@ -5,7 +5,7 @@
 import React from 'react';
 import {connect} from 'react-redux'
 import tt from 'counterpart';
-import { toggleNotificationGroups, toggleNotificationGroupNames } from 'app/components/elements/notification/type';
+import { toggleNotificationGroupNames } from 'app/components/elements/notification/type';
 import IOSToggle from 'app/components/elements/IOSToggle';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 
@@ -17,38 +17,36 @@ class YotificatonSettingsPanel extends React.Component {
         this.props.loadSettings();
     }
 
-    onToggleSetting = (channel, setting) => {
-        this.props.toggleSetting(channel, setting);
+    onToggleGroup = (transport, groupName) => { //eslint-disable-line no-undef
+        console.log('onToggleGroup', groupName); //Todo: for dev only! Do not merge if present!
+        this.props.toggleGroup(transport, groupName);
     }
 
     render() {
         const { isFetching, settings } = this.props;
 
-        if (isFetching || settings.size < 1) {
-            return <LoadingIndicator type="circle" inline />;
-        }
+        /*if (isFetching || settings.size < 1) {
+            return <LoadingIndicator type="circle" inline />
+        } */
 
         // todo: handle all channels, not just TRANSPORT_WEBSITE
         const toggles = [];
-        const channel = TRANSPORT_WEBSITE;
-        const types = settings.get(TRANSPORT_WEBSITE).get('notification_types').toJS();
-        for (let key in types) {
-            toggles.push(<li key={key}>{tt('settings_jsx.notifications.meta_types.' + key)} <IOSToggle
+        toggleNotificationGroupNames.forEach( groupName => {
+            toggles.push(<li key={groupName}>{tt('settings_jsx.notifications.meta_types.' + groupName)} <IOSToggle
                 className="yotification-toggle"
-                onChange={() => this.onToggleSetting(channel, key)}
-                checked={types[key]}
+                onChange={() => this.onToggleGroup(this.props.transport, groupName)}
+                checked={this.props.groupSettings[groupName]}
                 options={
                     {
-                        color: '#474F79', //todo: this should not be here.
                         size: 'small'
                     }
                 }
             /></li>);
-        };
+        })
 
         return (
             <div className={'YotificationSettingsPanel ' + this.props.className}>
-                <h4>{tt('settings_jsx.notifications.title')}</h4>
+                <h4>{tt('settings_jsx.notifications.title')} {(this.props.isSaving)? <LoadingIndicator type="circle" inline /> : null}</h4>
                 <ul>{toggles}</ul>
             </div>
         );
@@ -57,12 +55,11 @@ class YotificatonSettingsPanel extends React.Component {
 
 export default connect(
     (state, ownProps) => {
-        //{ notificationSettings: [ { channelName: 'website', settings: { vote: false, security: true, }, }, { channelName: 'sms', settings: { etc: '...', } } ] }
         return {
             ...ownProps,
             isFetching: state.notificationsettings.isFetching,
             transport: TRANSPORT_WEBSITE,
-            settings: state.notificationsettings.settings,
+            groupSettings: state.notificationsettings.settings,
         }
     },
     dispatch => ({
@@ -71,11 +68,11 @@ export default connect(
                 type: 'notificationsettings/FETCH',
             });
         },
-        toggleSetting: (channel, setting) => {
+        toggleGroup: (transport, group) => {
             dispatch({
-                type: 'notificationsettings/TOGGLE_SETTING',
-                channel,
-                setting,
+                type: 'notificationsettings/TOGGLE_GROUP',
+                transport,
+                group
             });
         }
     })

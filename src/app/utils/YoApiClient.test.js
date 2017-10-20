@@ -14,39 +14,62 @@ chai.use(chaiImmutable);
 
 const apiMockData = {
     get_transports: {
-        "id": 1,
-        "jsonrpc": "2.0",
-        "result": {
-            "email": {
-                "notification_types": [
-                    "receive"
+        id: 1,
+        jsonrpc: '2.0',
+        result: {
+            email: {
+                notification_types: [
+                    'account_update',
+                    'power_down',
+                    'security_new_mobile_device',
+                    'security_withrawal',
+                    'security_password_changed',
+                    'receive',
+                    'reward',
+                    'send',
+                    'post_reply'
                 ],
-                "sub_data": "test@example.com"
+                sub_data: 'test@example.com'
             },
-            "wwwpoll": {
-                "notification_types": null,
-                "sub_data": ''
+            wwwpoll: {
+                notification_types: null,
+                sub_data: '',
             }
         },
     },
     saved_transports: {
-        "id": 1,
-        "jsonrpc": "2.0",
-        "result": {
-            "email": {
-                "notification_types": [
-                    "receive"
+        id: 1,
+        jsonrpc: '2.0',
+        result: {
+            email: {
+                notification_types: [
+                    'account_update',
+                    'power_down',
+                    'security_new_mobile_device',
+                    'security_withrawal',
+                    'security_password_changed',
+                    'receive',
+                    'reward',
+                    'send',
+                    'post_reply'
                 ],
-                "sub_data": "test@example.com"
+                sub_data: 'test@example.com'
             },
-            "wwwpoll": {
-                "notification_types": [
-                    "power_down",
-                    "power_up",
-                    "resteem",
-                    "receive",
+            wwwpoll: {
+                notification_types: [
+                    'account_update',
+                    'power_down',
+                    'security_new_mobile_device',
+                    'security_withrawal',
+                    'security_password_changed',
+                    'receive',
+                    'reward',
+                    'send',
+                    'mention',
+                    'feed',
+                    'resteem',
                 ],
-                "sub_data": ''
+                sub_data: ''
             }
         },
     },
@@ -55,60 +78,33 @@ const apiMockData = {
 const desired = {
     email: {
         notification_types: {
-            power_down: false,
-            power_up: false,
-            resteem: false,
-            receive: true,
-            default_to_false: false,
+            security: true,
+            wallet: true,
+            postReplies: true,
+            commentReplies: false,
+            mentions: false,
+            newPosts: false,
+            resteems: false
         },
-        sub_data: "test@example.com",
+        sub_data: 'test@example.com',
     },
     wwwpoll: {
         notification_types: {
-            power_down: true,
-            power_up: true,
-            resteem: true,
-            receive: true,
-            default_to_false: false,
+            security: true,
+            wallet: true,
+            postReplies: false,
+            commentReplies: false,
+            mentions: true,
+            newPosts: true,
+            resteems: true,
         },
         sub_data: '',
     },
 };
-/*
-const stored = Map({
-    email: Map({
-        notification_types: Map({
-            power_down: false,
-            power_up: false,
-            resteem: false,
-            receive: true,
-            default_to_false: false,
-        }),
-    }),
-    wwwpoll: Map({
-        notification_types: Map({
-            power_down: true,
-            power_up: true,
-            resteem: true,
-            receive: true,
-            default_to_false: false,
-        }),
-    }),
-});*/
-
-const types = [
-    'power_down',
-    'power_up',
-    'resteem',
-    'receive',
-    'default_to_false',
-];
-
-const settingsInitFalse = ['default_to_false'];
 
 describe('normalizeSettingsFromApi', () => {
     it('should take api output & turn it into something useful in the frontend', () => {
-        const normalized = normalizeSettingsFromApi(apiMockData.get_transports.result, types, settingsInitFalse);
+        const normalized = normalizeSettingsFromApi(apiMockData.get_transports.result);
         expect(normalized.toJS()).to.deep.equal(desired);
     });
 });

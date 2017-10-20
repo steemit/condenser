@@ -31,34 +31,25 @@ function normalize(res) {
  * If notification_types is null, assume we need to set defaults.
  *
  * @param {Object} transportsFromApi transports part of the payload from api
- * @param {Array} types all the notif types
- * @param {Array} settingsInitFalse settings to initialize as false by default
  * @return {Object}
  */
-export function normalizeSettingsFromApi(transportsFromApi, types, settingsInitFalse) {
+export function normalizeSettingsFromApi(transportsFromApi) {
     // For each of the transports coming through from the API,
     // If the API's notification_types is truthy,
-    // Transform array of enabled types to Map
-    // And assign it to our output Map
-    const defaultTypes = types.reduce((acc, t) => ({
-        ...acc,
-        [t]: settingsInitFalse.indexOf(t) < 0,
-    }), {});
-
+    // Transform array of enabled types into a Map based on our type->group mapping config,
+    // And assign it to our output Map.
+    // If incoming settings is null, assign default types.
     return Object.keys(transportsFromApi).reduce((transports, transport) => {
-        if (transportsFromApi[transport].notification_types !== null) { // TODO: work with Gareth to make sure api supplies null if nothing has been saved yet
-            const transportTypes = transportsFromApi[transport].notification_types;
-            const groups = toggleNotificationGroups;
+        const typesFromApi = (transportsFromApi[transport].notification_types !== null)
+            ? transportsFromApi[transport].notification_types
+            : types.filter(t => { return settingsInitFalse.indexOf(t) === -1 });
 
-            return transports
-                .setIn([transport, 'notification_types'], Object.keys(groups).reduce((acc, k) => {
-                    return acc.set(k, (transportsFromApi[transport].notification_types.indexOf(groups[k][0]) > -1));
-                }, Map()))
-                .setIn([transport, 'sub_data'], transportsFromApi[transport].sub_data);
-        }
+        const groups = toggleNotificationGroups;
 
         return transports
-            .setIn([transport, 'notification_types'], Map(defaultTypes))
+            .setIn([transport, 'notification_types'], Object.keys(groups).reduce((acc, k) => {
+                return acc.set(k, (typesFromApi.indexOf(groups[k][0]) > -1));
+            }, Map()))
             .setIn([transport, 'sub_data'], transportsFromApi[transport].sub_data);
     }, Map());
 }
@@ -258,7 +249,7 @@ export function getNotificationSettings(username) {
             },
         }),
     }).then(r => r.json()).then(res => {
-        return normalizeSettingsFromApi(res.result, types, settingsInitFalse);
+        return normalizeSettingsFromApi(res.result);
     })
     .catch(error => {
         return { error };
@@ -290,7 +281,7 @@ export function saveNotificationSettings(username, settings) {
             },
         }),
     }).then(r => r.json()).then(res => {
-        return normalizeSettingsFromApi(res.result, types, settingsInitFalse);
+        return normalizeSettingsFromApi(res.result);
     })
     .catch(error => {
         return { error };

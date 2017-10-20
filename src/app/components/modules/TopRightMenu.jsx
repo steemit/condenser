@@ -7,11 +7,10 @@ import user from 'app/redux/User';
 import Userpic from 'app/components/elements/Userpic';
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
 import VerticalMenu from 'app/components/elements/VerticalMenu';
-//import NotificationMenu from 'app/components/modules/NotificationMenu';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import NotifiCounter from 'app/components/elements/NotifiCounter';
 import YotifiCounter from 'app/components/elements/YotifiCounter';
-import YotificationModule, { LAYOUT_DROPDOWN } from "./Yotification";
+import YotificationModule, { LAYOUT_DROPDOWN } from "./YotificationList";
 
 const defaultNavigate = (e) => {
     if (e.metaKey || e.ctrlKey) {

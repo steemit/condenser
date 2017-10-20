@@ -12,6 +12,14 @@ import NotifiCounter from 'app/components/elements/NotifiCounter';
 import YotifiCounter from 'app/components/elements/YotifiCounter';
 import YotificationModule, { LAYOUT_DROPDOWN } from "./YotificationList";
 
+const bodyClick = (e) => {
+    // If this was not a left click, or if CTRL or CMD were held, do not close the menu.
+    if(e.button !== 0 || e.ctrlKey || e.metaKey) return;
+
+    // Simulate clicking of document body which will close any open menus
+    document.body.click();
+}
+
 const defaultNavigate = (e) => {
     if (e.metaKey || e.ctrlKey) {
         // prevent breaking anchor tags
@@ -65,7 +73,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, vertical, navigate
                     dropdownContent={
                         <div className="NotificationMenuWrapper" >
                             {/*<NotificationMenu items={user_menu} account_link={ account_link } /> */}
-                            <YotificationModule layout={LAYOUT_DROPDOWN} />
+                            <YotificationModule layout={LAYOUT_DROPDOWN} onViewAll={bodyClick} />
                         </div>
                     }
                 >

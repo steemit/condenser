@@ -60,8 +60,7 @@ export const toggleNotificationGroupNames = Object.entries(toggleNotificationGro
 }, []);
 
 //all Notification types that we expect to be false, or may need to initialize false.
-export const settingsInitFalse = [VOTE]
-
+export const settingsInitFalse = [POST_REPLY, COMMENT_REPLY]; // todo: what to default? it was vote before but that's not even in the groups!
 
 export default [
     ANNOUNCEMENT,

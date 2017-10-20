@@ -75,8 +75,15 @@ const service_worker_js_content = fs
     .readFileSync(path.join(__dirname, './service-worker.js'))
     .toString();
 
-// some redirects
-app.use(function*(next) {
+// some redirects and health status
+app.use(function* (next) {
+
+    if (this.method === 'GET' && this.url === '/.well-known/healthcheck.json') {
+        this.status = 200;
+        this.body = {status: 'ok'};
+        return;
+    }
+
     // redirect to home page/feed if known account
     if (this.method === 'GET' && this.url === '/' && this.session.a) {
         this.status = 302;

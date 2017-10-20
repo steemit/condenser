@@ -1,21 +1,6 @@
 export const routeRegex = {
-    PostsIndex: /^\/(@[\w.\d-]+)\/feed\/?$/,
-    UserProfile1: /^\/(@[\w.\d-]+)\/?$/,
-    UserProfile2: /^\/(@[\w.\d-]+)\/(blog|posts|comments|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)\/?$/,
-    UserProfile3: /^\/(@[\w.\d-]+)\/[\w.\d-]+/,
-    UserEndPoints: /^(blog|posts|comments|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)$/,
-    CategoryFilters: /^\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/?$/ig,
-    PostNoCategory: /^\/(@[\w.\d-]+)\/([\w\d-]+)/,
-    Post: /^\/([\w\d\-\/]+)\/(\@[\w\d.-]+)\/([\w\d-]+)\/?($|\?)/,
-    PostJson: /^\/([\w\d\-\/]+)\/(\@[\w\d.-]+)\/([\w\d-]+)(\.json)$/,
-    UserJson: /^\/(@[\w.\d-]+)(\.json)$/,
-    UserNameJson: /^.*(?=(\.json))/,
-};
-
-export const routeRegexNew = {
     UserProfile1: /^\/([\w.\d-]+)\/?$/,
     UserProfile2: /^\/([\w.\d-]+)\/(blog|posts|comments|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)\/?$/,
-    UserProfile3: /^\/([\w.\d-]+)\/[\w.\d-]+/,
     UserEndPoints: /^(blog|posts|comments|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)$/,
     PostsIndex: /^\/t\/([\w\d-]+)\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/?$/,
     PostsIndexUserFeed: /^\/([\w.\d-]+)\/feed\/?$/,
@@ -87,21 +72,21 @@ export function resolveRoute(path)
     if (path === '/c/submit') {
         return {page: 'SubmitPost'};
     }
-    let match = path.match(routeRegexNew.PostsIndex);
+    let match = path.match(routeRegex.PostsIndex);
     if (match) {
         return {page: 'PostsIndex', params: match.slice(1)};
     }
-    match = path.match(routeRegexNew.PostsIndexUserFeed);
+    match = path.match(routeRegex.PostsIndexUserFeed);
     if (match) {
         return {page: 'PostsIndex', params: ['home', match[1]]};
     }
-    match = path.match(routeRegexNew.UserProfile1) ||
+    match = path.match(routeRegex.UserProfile1) ||
         // @user/"posts" is deprecated in favor of "comments" as of oct-2016 (#443)
-        path.match(routeRegexNew.UserProfile2);
+        path.match(routeRegex.UserProfile2);
     if (match) {
         return {page: 'UserProfile', params: match.slice(1)};
     }
-    match = path.match(routeRegexNew.Post);
+    match = path.match(routeRegex.Post);
     if (match) {
         return {page: 'Post', params: match.slice(1)};
     }

@@ -38,8 +38,9 @@ class NotificationLink extends React.Component {
     }
 
     render() {
+        console.log('Notification', JSON.stringify(this.props, null, 4))
         const amount = this.props.amount
-        const author = this.props.author
+        const author = this.props.data.author
         const classNames = (this.props.read)? '' : 'unread'
         const created = this.props.created
         const item = this.props.item

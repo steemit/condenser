@@ -16,7 +16,7 @@ const {string, bool, number} = React.PropTypes;
 const closers = [];
 
 const fnCloseAll = () => {
-    var close;
+    let close;
     while(close = closers.shift()) {
         close();
     }
@@ -92,37 +92,37 @@ class Author extends React.Component {
 
         if (!(follow || mute) || username === author) {
             return (
-                <span className="author" itemProp="author" itemScope itemType="http://schema.org/Person">
-                    <strong><Link to={'/@' + author}>{author}</Link></strong> <Reputation value={authorRepLog10} />
-                </span>
+              <span className="author" itemProp="author" itemScope itemType="http://schema.org/Person">
+                <strong><Link to={'/@' + author}>{author}</Link></strong> <Reputation value={authorRepLog10} />
+              </span>
             );
         }
 
         return (
-            <span className="Author">
-                <span itemProp="author" itemScope itemType="http://schema.org/Person">
-                    <strong><Link className="ptc" ref={(link) => {this.authorProfileLink = link}} to={'/@' + author}>{author}<Icon name="dropdown-arrow" /></Link></strong>
-                    <Reputation value={authorRepLog10} />
-                </span>
-                <Overlay
-                    show={this.state.show}
-                    onHide={this.close}
-                    placement="bottom"
-                    container={this}
-                    target={() => findDOMNode(this.target)}
-                    rootClose
-                >
-                    <AuthorDropdown
-                        author={author}
-                        follow={follow}
-                        mute={mute}
-                        authorRepLog10={authorRepLog10}
-                        name={name}
-                        about={about}
-                        username={username}
-                    />
-                </Overlay>
+          <span className="Author">
+            <span itemProp="author" itemScope itemType="http://schema.org/Person">
+              <strong><Link className="ptc" ref={(link) => { this.authorProfileLink = link }} to={'/@' + author}>{author}<Icon name="dropdown-arrow" /></Link></strong>
+              <Reputation value={authorRepLog10} />
             </span>
+            <Overlay
+                show={this.state.show}
+                onHide={this.close}
+                placement="bottom"
+                container={this}
+                target={() => findDOMNode(this.target)}
+                rootClose
+                >
+              <AuthorDropdown
+                  author={author}
+                  follow={follow}
+                  mute={mute}
+                  authorRepLog10={authorRepLog10}
+                  name={name}
+                  about={about}
+                  username={username}
+                    />
+            </Overlay>
+          </span>
         );
     }
 }
@@ -135,7 +135,10 @@ export default connect(
         const username = state.user.getIn(['current', 'username']);
         const account = state.global.getIn(['accounts', author]);
         return {
-            author, follow, mute, authorRepLog10,
+            author,
+            follow,
+            mute,
+            authorRepLog10,
             username,
             account,
         }

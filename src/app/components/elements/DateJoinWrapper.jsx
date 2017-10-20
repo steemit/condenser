@@ -6,7 +6,7 @@ export default class DateJoinWrapper extends React.Component {
     render() {
         const date = new Date(this.props.date);
         return (
-                <span>{tt('g.joined')} <FormattedDate value={date} year="numeric" month="long" /></span>
+          <span>{tt('g.joined')} <FormattedDate value={date} year="numeric" month="long" /></span>
             )
     }
 }

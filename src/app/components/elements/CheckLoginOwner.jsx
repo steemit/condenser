@@ -49,45 +49,46 @@ class CheckLoginOwner extends React.Component {
         this.hide()
         browserHistory.push('/recover_account_step_1')
     }
-    onUnderstood = e => {
+    onUnderstood = (e) => {
         const understood = e.target.checked
         console.log('understood', understood)
         this.setState({understood})
     }
     render() {
         const {last_valid_time, last_valid_date} = this.state
-        if(!last_valid_time) return <span></span>
+        if(!last_valid_time) return <span />
         const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000
         const deadline = last_valid_date.getTime() + THIRTY_DAYS
 
         // https://steemit.com/steem/@originate/steem-s-new-alert-after-key-updates-is-excellent-but-here-s-a-quick-update-that-would-make-it-even-better
         // "If you recently reset your password at(timestamp in strftime, example:  Thu, 21 Jul 2016 02:39:19 PST) this alert was most likely prompted by this action, otherwise your immediate attention is needed"
-        return <span>
-            <Reveal show>
-                <CloseButton onClick={this.hide} />
-                <h3>{tt('g.account_updated')}</h3>
-                <p>
-                    <span className="warning uppercase">{tt('g.warning')}:</span>
-                    {tt('checkloginowner_jsx.your_password_permissions_were_reduced')}
-                    <TimeAgoWrapper date={last_valid_time} />. {tt('checkloginowner_jsx.if_you_did_not_make_this_change') + ' '}
-                    <a onClick={this.recover}>{tt('g.recover_your_account')}</a>.
+        return (<span>
+          <Reveal show>
+            <CloseButton onClick={this.hide} />
+            <h3>{tt('g.account_updated')}</h3>
+            <p>
+              <span className="warning uppercase">{tt('g.warning')}:</span>
+              {tt('checkloginowner_jsx.your_password_permissions_were_reduced')}
+              <TimeAgoWrapper date={last_valid_time} />. {tt('checkloginowner_jsx.if_you_did_not_make_this_change') + ' '}
+              <a onClick={this.recover}>{tt('g.recover_your_account')}</a>.
                 </p>
-                <p>
-                    {tt('checkloginowner_jsx.ownership_changed_on')} <FormattedDate value={last_valid_date} />
+            <p>
+              {tt('checkloginowner_jsx.ownership_changed_on')} <FormattedDate value={last_valid_date} />
+            </p>
+            <p>
+              {tt('checkloginowner_jsx.deadline_for_recovery_is')} <b><TimeAgoWrapper date={deadline} /></b>.
                 </p>
-                <p>
-                    {tt('checkloginowner_jsx.deadline_for_recovery_is')} <b><TimeAgoWrapper date={deadline} /></b>.
-                </p>
-                <p>
-                    <input type="checkbox" onChange={this.onUnderstood} />&nbsp;&nbsp;
-                    {tt('checkloginowner_jsx.i_understand_dont_show_again')}
-                </p>
-                <div className="button" onClick={this.hide}>{tt('g.ok')}</div>
-            </Reveal>
-        </span>
+            <p>
+              <input type="checkbox" onChange={this.onUnderstood} />&nbsp;&nbsp;
+              {tt('checkloginowner_jsx.i_understand_dont_show_again')}
+            </p>
+            <div className="button" onClick={this.hide}>{tt('g.ok')}</div>
+          </Reveal>
+        </span>)
     }
 }
 import {connect} from 'react-redux'
+
 export default connect(
     // mapStateToProps
     (state, ownProps) => {

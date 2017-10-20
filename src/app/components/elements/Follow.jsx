@@ -40,16 +40,16 @@ export default class Follow extends React.Component {
 
     initEvents(props) {
         const {updateFollow, follower, following} = props;
-        const upd = type => {
+        const upd = (type) => {
             if(this.state.busy) return;
             this.setState({busy: true});
-            const done = () => {this.setState({busy: false})};
+            const done = () => { this.setState({busy: false}) };
             updateFollow(follower, following, type, done)
         };
-        this.follow = () => {upd('blog')};
-        this.unfollow = () => {upd()};
-        this.ignore = () => {upd('ignore')};
-        this.unignore = () => {upd()};
+        this.follow = () => { upd('blog') };
+        this.unfollow = () => { upd() };
+        this.ignore = () => { upd('ignore') };
+        this.unignore = () => { upd() };
     }
 
     followLoggedOut(e) {
@@ -65,16 +65,16 @@ export default class Follow extends React.Component {
         if(loading) return <span><LoadingIndicator /> {tt('g.loading')}&hellip;</span>;
         if(loading !== false) {
             // must know what the user is already following before any update can happen
-            return <span></span>
+            return <span />
         }
 
         const {follower, following} = this.props; // html
         // Show follow preview for new users
-        if(!follower || !following) return <span>
-             <label className="button slim hollow secondary" onClick={this.followLoggedOut}>{tt('g.follow')}</label>
-        </span>;
+        if(!follower || !following) return (<span>
+          <label className="button slim hollow secondary" onClick={this.followLoggedOut}>{tt('g.follow')}</label>
+        </span>);
         // Can't follow or ignore self
-        if(follower === following) return <span></span>
+        if(follower === following) return <span />
 
         const {followingWhat} = this.props; // redux
         const {showFollow, showMute, fat, children} = this.props; // html
@@ -83,21 +83,21 @@ export default class Follow extends React.Component {
         const cnBusy = busy ? 'disabled' : '';
         const cnActive = 'button' + (fat ? '' : ' slim');
         const cnInactive = cnActive + ' hollow secondary ' + cnBusy;
-        return <span>
-            {showFollow && followingWhat !== 'blog' &&
-                <label className={cnInactive} onClick={this.follow}>{tt('g.follow')}</label>}
+        return (<span>
+          {showFollow && followingWhat !== 'blog' &&
+            <label className={cnInactive} onClick={this.follow}>{tt('g.follow')}</label>}
 
-            {showFollow && followingWhat === 'blog' &&
-                <label className={cnInactive} onClick={this.unfollow}>{tt('g.unfollow')}</label>}
+          {showFollow && followingWhat === 'blog' &&
+            <label className={cnInactive} onClick={this.unfollow}>{tt('g.unfollow')}</label>}
 
-            {showMute && followingWhat !== 'ignore' &&
-                <label className={cnInactive} onClick={this.ignore}>{tt('g.mute')}</label>}
+          {showMute && followingWhat !== 'ignore' &&
+            <label className={cnInactive} onClick={this.ignore}>{tt('g.mute')}</label>}
 
-            {showMute && followingWhat === 'ignore' &&
-                <label className={cnInactive} onClick={this.unignore}>{tt('g.unmute')}</label>}
+          {showMute && followingWhat === 'ignore' &&
+            <label className={cnInactive} onClick={this.unignore}>{tt('g.unmute')}</label>}
 
-            {children && <span>&nbsp;&nbsp;{children}</span>}
-        </span>
+          {children && <span>&nbsp;&nbsp;{children}</span>}
+        </span>)
     }
 }
 
@@ -142,7 +142,7 @@ module.exports = connect(
                 errorCallback: done,
             }))
         },
-        showLogin: e => {
+        showLogin: (e) => {
             if (e) e.preventDefault();
             dispatch(user.actions.showLogin())
         },

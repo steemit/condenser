@@ -17,7 +17,8 @@ class NotificationLink extends React.Component {
     constructor(notification, ...args) {
         super(notification, ...args)
         this.state = {
-            id: notification.id
+            id: notification.id,
+            onClick: notification.onClick
         }
     }
 
@@ -125,8 +126,7 @@ class NotificationLink extends React.Component {
         const readControl = (
             <div className="rightControls" onClick={ (read)? this.markUnread : this.markRead } dangerouslySetInnerHTML={{ __html: (read)? badges.visibilityOn : badges.visibilityOff }} />
         )
-
-        return ( <Link to={ link } className={ classNames } onClick={ this.markReadDefault } >
+        return ( <Link to={ link } className={ classNames } onClick={(e) =>{ if(this.props.onClick) {this.props.onClick(e);} this.markReadDefault(e) }} >
             { (!this.props.shown)? <span className="unseenIndicator" dangerouslySetInnerHTML={{ __html: "&#9679"}} /> : null }
             <div className="item-panel" >
                 { (notificationType !== type.POWER_DOWN) ? <div className={ "Comment__Userpic show-for-medium " + notificationType} >
@@ -152,7 +152,6 @@ export default connect(
     null,
     dispatch => ({
         markRead: e => {
-            console.log("markr", e)
             dispatch({
                 type: 'notification/UPDATE_ONE',
                 id: e,
@@ -162,7 +161,6 @@ export default connect(
             })
         },
         markUnread: e => {
-            console.log("markunr", e)
             dispatch({
                 type: 'notification/UPDATE_ONE',
                 id: e,

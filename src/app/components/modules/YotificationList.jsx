@@ -29,12 +29,12 @@ function topPosition(domElt) {
     return domElt.offsetTop + topPosition(domElt.offsetParent);
 }
 
-const renderNotificationList = (notifications = []) => {
+const renderNotificationList = (notifications = [], onViewAll) => {
     const notificationList = [];
     notifications.forEach( notification => {
         if(!notification.hide) {
             const classNames = "item" + ( notification.read ? '' : ' unread' );
-            notificationList.push( <li className={classNames} key={notification.id}><Notification {...notification} /></li> );
+            notificationList.push( <li className={classNames} key={notification.id}><Notification {...notification} onClick={onViewAll} /></li> );
         }
     })
     return ( <ul className="Notifications">{notificationList}</ul> );
@@ -153,7 +153,7 @@ class YotificationList extends React.Component {
                 </span>
             </div>
             {(this.state.showFilters)? renderFilterList(this.props) : null}
-            {renderNotificationList(this.props.notifications)}
+            {renderNotificationList(this.props.notifications, this.props.onViewAll)}
             <div className="footer get-more">
                 {(true === this.props.fetchMore)? <LoadingIndicator type="circle" inline /> : <button className="ptc" onClick={this.appendSome}>{ this.props.fetchMore }</button>}</div>
             {(this.state.showFooter)? <div className="footer">{tt('notifications.controls.go_to_page')}</div> : null }

@@ -152,6 +152,7 @@ export default connect(
     null,
     dispatch => ({
         markRead: e => {
+            console.log("markr", e)
             dispatch({
                 type: 'notification/UPDATE_ONE',
                 id: e,
@@ -161,7 +162,7 @@ export default connect(
             })
         },
         markUnread: e => {
-            console.log("markun", e)
+            console.log("markunr", e)
             dispatch({
                 type: 'notification/UPDATE_ONE',
                 id: e,

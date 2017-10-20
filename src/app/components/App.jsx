@@ -55,13 +55,6 @@ class App extends React.Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
-        // setTimeout(() => this.setState({showCallout: false}), 15000);
-        if (nextProps.location.pathname !== this.props.location.pathname) {
-            this.setState({showBanner: false, showCallout: false})
-        }
-    }
-
     componentWillReceiveProps(np) {
         /* Add listener if the next page requires entropy and the current page didn't */
         if (pageRequiresEntropy(np.location.pathname) && !pageRequiresEntropy(this.props.location.pathname)) {

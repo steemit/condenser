@@ -158,7 +158,7 @@ class YotificationList extends React.Component {
                 {(true === this.props.fetchMore)? <LoadingIndicator type="circle" inline /> : <button className="ptc" onClick={this.appendSome}>{ this.props.fetchMore }</button>}</div>
             {(this.state.showFooter)? <div className="footer">{tt('notifications.controls.go_to_page')}</div> : null }
             {(this.state.showFooter)? (<div className="footer absolute">
-                <Link to={Url.profile() + '/notifications'} className="view-all">{tt('notifications.controls.go_to_page')}</Link>
+                <Link to={Url.profile() + '/notifications'} onClick={this.props.onViewAll} className="view-all">{tt('notifications.controls.go_to_page')}</Link>
             </div>) : null}
         </div>);
     }
@@ -169,11 +169,13 @@ YotificationList.propTypes = {
     appendSome: React.PropTypes.func.isRequired,
     //notifications: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
     layout: React.PropTypes.oneOf([LAYOUT_PAGE, LAYOUT_DROPDOWN]),
-    showClearAll: React.PropTypes.bool.isRequired
+    showClearAll: React.PropTypes.bool.isRequired,
+    onViewAll: React.PropTypes.func
 };
 
 YotificationList.defaultProps = {
-    layout: LAYOUT_PAGE
+    layout: LAYOUT_PAGE,
+    onViewAll: null
 };
 
 export default connect(

@@ -67,7 +67,7 @@
     "re": "RE",
     "re_to": "RE: %(topic)s",
     "recent_password": "Недавний пароль",
-    "receive": "Получить ",
+    "receive": "Получено ",
     "remove": "Удалить",
     "remove_vote": "Убрать голос",
     "replied_to": "ответил %(account)s",
@@ -76,6 +76,8 @@
     "reply_count": {
       "zero": "нет ответов",
       "one": "1 ответ",
+      "few": "%(count)s ответа",
+      "many": "%(count)s ответов",
       "other": "%(count)s ответов"
     },
     "reputation": "Репутация",
@@ -99,7 +101,7 @@
     "tag": "Тег",
     "to": " к ",
     "topics": "Топики",
-    "transfer": "Передать ",
+    "transfer": "Перевод ",
     "trending_topics": "Популярное",
     "type": "Тип",
     "unfollow": "Отписаться",
@@ -197,11 +199,15 @@
     "views": {
       "zero": "Нет просмотров",
       "one": "%(count)s просмотр",
+      "few": "%(count)s просмотра",
+      "many": "%(count)s просмотров",
       "other": "%(count)s просмотров"
     },
     "responses": {
       "zero": "Нет ответов",
       "one": "%(count)s ответ",
+      "few": "%(count)s ответа",
+      "many": "%(count)s ответов",
       "other": "%(count)s ответов"
     },
     "post_key_warning": {
@@ -346,16 +352,22 @@
     "follower_count": {
       "zero": "Нет подписчиков",
       "one": "1 подписчик",
+      "few": "%(count)s подписчика",
+      "many": "%(count)s подписчиков",
       "other": "%(count)s подписчиков"
     },
     "followed_count": {
       "zero": "Ни на кого не подписан",
       "one": "1 подписок",
+      "few": "%(count)s подписки",
+      "many": "%(count)s подписок",
       "other": "%(count)s подписок"
     },
     "post_count": {
       "zero": "Постов нет",
       "one": "1 пост",
+      "few": "%(count)s поста",
+      "many": "%(count)s постов",
       "other": "%(count)s постов"
     }
   },
@@ -393,6 +405,8 @@
     "and_more": "и %(count)s больше",
     "votes_plural": {
       "one": "%(count)s голоса",
+      "few": "%(count)s голоса",
+      "many": "%(count)s голосов",
       "other": "%(count)s голосов"
     }
   },
@@ -402,6 +416,8 @@
     "you_have_votes_remaining": {
       "zero": "У Вас не осталось голосов",
       "one": "У Вас остался 1 голос",
+      "few": "У Вас осталось %(count)s голоса",
+      "many": "У Вас осталось %(count)s голосов",
       "other": "У Вас осталось %(count)s голосов"
     },
     "you_can_vote_for_maximum_of_witnesses": "Вы можете голосовать максимум за 30 делегатов",
@@ -420,11 +436,15 @@
     "response_count_tooltip": {
       "zero": "ответов пока нет. Нажмите чтобы ответить.",
       "one": "1 ответ. Нажмите чтобы ответить.",
+      "few": "%(count)s ответа. Нажмите чтобы ответить.",
+      "many": "%(count)s ответов. Нажмите чтобы ответить.",
       "other": "%(count)s ответов. Нажмите чтобы ответить."
     },
     "vote_count": {
       "zero": "нет голосов",
       "one": "1 голос",
+      "few": "%(count)s голоса",
+      "many": "%(count)s голосов",
       "other": "%(count)s голосов"
     }
   },

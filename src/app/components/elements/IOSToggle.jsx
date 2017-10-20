@@ -1,30 +1,23 @@
 import React from 'react';
 import classNames from 'classnames';
-import Switchery from 'switchery';
 import PropTypes from 'prop-types';
 
 
-/**
- * This is a 100% rip of https://github.com/mohithg/react-switchery
- * Which was quite broken @ the time.
- *
- * React switch input component. Note we are using
- * switchery jquery plugin.
- */
-class Switch extends React.Component {
+let htmlIdIncrement = 0;
 
-    /**
-     * We initialize the Switchery object
-     * once the component is mounted
-     */
-    componentDidMount() {
-        const input = this.elCheckbox;
-        const options = {...this.props.options, color: false, jackColor: false, secondaryColor: false};
-        this.htmlId = 'iostoggle_' + Math.floor(Math.random() * 1000);
-        /* eslint-disable no-undef, no-new */
-        new Switchery(input, options);
-        /* eslint-enable no-new, no-undef */
-        input.onchange = this.onChange;
+/**
+ * React switch input component.
+ * HTML & css based on switchery.
+ */
+class IOSToggle extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            value: props.value
+        }
+        this.htmlId = 'iosToggle_' + htmlIdIncrement;
+        htmlIdIncrement++; //eslint-disable-line
     }
 
     /**
@@ -33,36 +26,30 @@ class Switch extends React.Component {
      * function is provided, we call that.
      */
     onClick = () => { //eslint-disable-line no-undef
-        if (this.props.onChange) {
-            this.props.onChange(this.elCheckbox.checked);
-        }
-        this.elWrapper.className = classNames([this.props.className, {isChecked: this.elCheckbox.checked}]);
+        this.props.onClick(!this.props.checked, this.state.value);
     }
 
     /**
      * renders the component
      */
     render() {
+        /* need to implement aria-pressed attribute for accessibility on the root element! This: aria-pressed={this.props.checked? 'true' : 'false'} */
         return (
             <div
+                id={this.htmlId}
+                role={"button"}
+                tabIndex={0}
                 onClick={this.onClick}
                 className={classNames([
                     'iostoggle',
                     this.props.className,
                     {
-                        required: this.props.required,
                         isChecked: this.props.checked
                     },
                 ])}
                 ref={elWrapper => this.elWrapper = elWrapper}
             >
-                {(this.props.label)? <label for={this.htmlId}>{this.props.label}</label> : null }
-                <input
-                    id={this.htmlId}
-                    ref={elCheckbox => this.elCheckbox = elCheckbox}
-                    type="checkbox"
-                    defaultChecked={this.props.checked}
-                />
+                <span className="switchery"><small style={{}} /></span>
             </div>
         );
     }
@@ -71,25 +58,21 @@ class Switch extends React.Component {
 /**
  * Validating propTypes
  */
-Switch.propTypes = {
-    label: PropTypes.string,
+IOSToggle.propTypes = {
     className: PropTypes.string,
-    required: PropTypes.bool,
-    checked: PropTypes.bool,
-    options: PropTypes.object,
-    onChange: PropTypes.func,
+    checked: PropTypes.bool.isRequired,
+    onClick: PropTypes.func.isRequired,
+    value: PropTypes.string.isRequired
 };
 
 /**
  * Default Props
  */
-Switch.defaultProps = {
-    className: "",
-    value: true,
-    required: false,
+IOSToggle.defaultProps = {
+    className: ""
 };
 
 /**
  * Exports the switchery component
  */
-export default Switch;
+export default IOSToggle;

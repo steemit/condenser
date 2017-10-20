@@ -5,7 +5,9 @@
         li {
             border-bottom: 1px solid $notif_item_border_color;
             padding: 15px 10px;
-
+            .LoadingIndicator {
+                float: right;
+            }
             .yotification-toggle {
                 display: inline-block;
                 float: right;

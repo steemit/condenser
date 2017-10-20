@@ -13,40 +13,39 @@ const TRANSPORT_WEBSITE = 'wwwpoll';
 
 class YotificatonSettingsPanel extends React.Component {
 
-    componentWillMount = () => {
-        this.props.loadSettings();
+    componentWillMount = () => { //eslint-disable-line no-undef
+        this.props.loadGroups();
     }
 
-    onToggleGroup = (transport, groupName) => { //eslint-disable-line no-undef
-        console.log('onToggleGroup', groupName); //Todo: for dev only! Do not merge if present!
-        this.props.toggleGroup(transport, groupName);
+    onToggleGroup = (transport, groupName, checked) => { //eslint-disable-line no-undef
+        this.props.toggleGroup(transport, groupName, checked);
     }
 
     render() {
-        const { isFetching, settings } = this.props;
+        const {
+            isFetching,
+            isSaving,
+            groups,
+            transport
+        } = this.props;
 
-        /*if (isFetching || settings.size < 1) {
-            return <LoadingIndicator type="circle" inline />
-        } */
-
-        // todo: handle all channels, not just TRANSPORT_WEBSITE
         const toggles = [];
-        toggleNotificationGroupNames.forEach( groupName => {
-            toggles.push(<li key={groupName}>{tt('settings_jsx.notifications.meta_types.' + groupName)} <IOSToggle
-                className="yotification-toggle"
-                onChange={() => this.onToggleGroup(this.props.transport, groupName)}
-                checked={this.props.groupSettings[groupName]}
-                options={
-                    {
-                        size: 'small'
-                    }
-                }
-            /></li>);
+        toggleNotificationGroupNames.forEach(groupName => {
+            toggles.push(<li key={groupName}>{tt('settings_jsx.notifications.meta_types.' + groupName)} {
+                (isFetching || isSaving || (undefined == groups.getIn([transport, 'notification_types', groupName]))) ?
+                    <LoadingIndicator type="circle" inline />
+                    : <IOSToggle
+                        className="yotification-toggle"
+                        onClick={(checked) => this.onToggleGroup(this.props.transport, groupName, checked)}
+                        checked={groups.getIn([transport, 'notification_types', groupName])}
+                        value={groupName}
+                    />}
+            </li>);
         })
 
         return (
             <div className={'YotificationSettingsPanel ' + this.props.className}>
-                <h4>{tt('settings_jsx.notifications.title')} {(this.props.isSaving)? <LoadingIndicator type="circle" inline /> : null}</h4>
+                <h4>{tt('settings_jsx.notifications.title')} {(this.props.isSaving)? <LoadingIndicator type="circle" inline style={{float: 'right'}} /> : null}</h4>
                 <ul>{toggles}</ul>
             </div>
         );
@@ -55,20 +54,22 @@ class YotificatonSettingsPanel extends React.Component {
 
 export default connect(
     (state, ownProps) => {
+        // todo: handle all channels, not just TRANSPORT_WEBSITE
         return {
             ...ownProps,
             isFetching: state.notificationsettings.isFetching,
+            isSaving: state.notificationsettings.isSaving,
             transport: TRANSPORT_WEBSITE,
-            groupSettings: state.notificationsettings.settings,
+            groups: state.notificationsettings.groups
         }
     },
     dispatch => ({
-        loadSettings: () => {
+        loadGroups: () => {
             dispatch({
                 type: 'notificationsettings/FETCH',
             });
         },
-        toggleGroup: (transport, group) => {
+        toggleGroup: (transport, group, checked) => { //eslint-disable-line no-unused-vars
             dispatch({
                 type: 'notificationsettings/TOGGLE_GROUP',
                 transport,

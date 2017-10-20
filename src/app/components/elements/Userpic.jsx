@@ -31,13 +31,11 @@ class Userpic extends Component {
             url = require('assets/images/user.png');
         }
 
-        
-
         const style = {backgroundImage: 'url(' + url + ')',
                        width: (width || 48) + 'px',
                        height: (height || 48) + 'px'}
 
-        return (<div className="Userpic user__profile-img" style={style} />)
+        return (<div className="Userpic" style={style} />)
     }
 }
 

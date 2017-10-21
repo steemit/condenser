@@ -32,10 +32,6 @@ class Userpic extends Component {
                        width: (width || 48) + 'px',
                        height: (height || 48) + 'px'}
 
-        if(urlUserDefaultPic === url) {
-            return (<div className="Userpic" style={style} >{ badge }</div>)
-        }
-
         return (<div className="Userpic" title={"Picture for " + this.props.account} style={style} >{ badge }</div>)
     }
 }

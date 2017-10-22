@@ -84,7 +84,7 @@ async function appRender(ctx) {
             }
         }
 
-        const { body, title, statusCode, meta } = await universalRender({location: ctx.request.url, store, offchain, ErrorPage, tarantool: Tarantool.instance()});
+        const { body, title, statusCode, meta } = await universalRender({location: decodeURIComponent(ctx.request.url), store, offchain, ErrorPage, tarantool: Tarantool.instance()});
 
         // Assets name are found in `webpack-stats` file
         const assets_filename = ROOT + (process.env.NODE_ENV === 'production' ? '/tmp/webpack-stats-prod.json' : '/tmp/webpack-stats-dev.json');

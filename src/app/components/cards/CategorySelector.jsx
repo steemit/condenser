@@ -82,9 +82,9 @@ export function validateCategory(category, required = true) {
         cats.find(c => c.split('-').length > 2) ? tt('category_selector_jsx.use_one_dash') :
         cats.find(c => c.indexOf(',') >= 0) ? tt('category_selector_jsx.use_spaces_to_separate_tags') :
         cats.find(c => /[A-Z]/.test(c)) ? tt('category_selector_jsx.use_only_lowercase_letters') :
-        cats.find(c => !/^[a-z0-9-#]+$/.test(c)) ? tt('category_selector_jsx.use_only_allowed_characters') :
-        cats.find(c => !/^[a-z-#]/.test(c)) ? tt('category_selector_jsx.must_start_with_a_letter') :
-        cats.find(c => !/[a-z0-9]$/.test(c)) ? tt('category_selector_jsx.must_end_with_a_letter_or_number') :
+        cats.find(c => !/^[\u4E00-\u9FA5\u0400-\u044Fa-z0-9-#]+$/.test(c)) ? tt('category_selector_jsx.use_only_allowed_characters') :
+        cats.find(c => !/^[\u4E00-\u9FA5\u0400-\u044Fa-z-#]/.test(c)) ? tt('category_selector_jsx.must_start_with_a_letter') :
+        cats.find(c => !/[\u4E00-\u9FA5\u0400-\u044Fa-z0-9]$/.test(c)) ? tt('category_selector_jsx.must_end_with_a_letter_or_number') :
         null
     )
 }

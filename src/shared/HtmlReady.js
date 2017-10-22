@@ -134,6 +134,15 @@ function link(state, child) {
             if(! /^\/(?!\/)|(https?:)?\/\//.test(url)) {
                 child.setAttribute('href', "https://"+url)
             }
+
+            // Unlink potential phishing attempts
+            if (child.textContent.match(/https?:\/\/(.*@)?(www\.)?steemit\.com\//)
+                && !url.match(/https?:\/\/(.*@)?(www\.)?steemit\.com\//)) {
+                const phishySpan = child.ownerDocument.createElement('span');
+                phishySpan.textContent = url;
+                phishySpan.setAttribute('class', 'phishy');
+                child.parentNode.replaceChild(phishySpan, child);
+            }
         }
     }
 }

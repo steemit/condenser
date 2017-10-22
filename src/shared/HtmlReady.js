@@ -136,8 +136,8 @@ function link(state, child) {
             }
 
             // Unlink potential phishing attempts
-            if (child.textContent.match(/https?:\/\/(.*@)?(www\.)?steemit\.com\//)
-                && !url.match(/https?:\/\/(.*@)?(www\.)?steemit\.com\//)) {
+            if (child.textContent.match(/https?:\/\/(.*@)?(www\.)?steemit\.com/)
+                && !url.match(/https?:\/\/(.*@)?(www\.)?steemit\.com/)) {
                 const phishySpan = child.ownerDocument.createElement('span');
                 phishySpan.textContent = url;
                 phishySpan.setAttribute('class', 'phishy');

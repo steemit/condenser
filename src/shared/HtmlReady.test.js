@@ -21,5 +21,15 @@ describe('htmlready', () => {
         const cleansed = '<xml xmlns="http://www.w3.org/1999/xhtml"><span class="phishy">https://steamit.com/signup</span></xml>';
         const res = HtmlReady(dirty).html
         expect(res).to.equal(cleansed);
+
+        const withuser = '<xml xmlns="http://www.w3.org/1999/xhtml"><a href="https://steamit.com/signup" xmlns="http://www.w3.org/1999/xhtml">https://official@steemit.com/signup</a></xml>';
+        const cleansedwithuser = '<xml xmlns="http://www.w3.org/1999/xhtml"><span class="phishy">https://steamit.com/signup</span></xml>';
+        const reswithuser = HtmlReady(withuser).html
+        expect(reswithuser).to.equal(cleansedwithuser);
+
+        const noendingslash = '<xml xmlns="http://www.w3.org/1999/xhtml"><a href="https://steamit.com" xmlns="http://www.w3.org/1999/xhtml">https://steemit.com</a></xml>';
+        const cleansednoendingslash = '<xml xmlns="http://www.w3.org/1999/xhtml"><span class="phishy">https://steamit.com</span></xml>';
+        const resnoendingslash = HtmlReady(noendingslash).html
+        expect(resnoendingslash).to.equal(cleansednoendingslash);
     });
 });

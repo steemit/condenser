@@ -2,6 +2,7 @@ import xmldom from 'xmldom'
 import linksRe from 'app/utils/Links'
 import {validate_account_name} from 'app/utils/ChainValidation'
 import proxifyImageUrl from 'app/utils/ProxifyUrl'
+import tt from 'counterpart'
 
 const noop = () => {}
 const DOMParser = new xmldom.DOMParser({
@@ -140,6 +141,7 @@ function link(state, child) {
                 && !url.match(/https?:\/\/(.*@)?(www\.)?steemit\.com/)) {
                 const phishySpan = child.ownerDocument.createElement('div');
                 phishySpan.textContent = `${child.textContent} / ${url}`;
+                phishySpan.setAttribute('title', tt('g.phishy_message'));
                 phishySpan.setAttribute('class', 'phishy');
                 child.parentNode.replaceChild(phishySpan, child);
             }

@@ -139,7 +139,7 @@ function link(state, child) {
             if (child.textContent.match(/https?:\/\/(.*@)?(www\.)?steemit\.com/)
                 && !url.match(/https?:\/\/(.*@)?(www\.)?steemit\.com/)) {
                 const phishySpan = child.ownerDocument.createElement('span');
-                phishySpan.textContent = url;
+                phishySpan.textContent = `${child.textContent} / ${url}`;
                 phishySpan.setAttribute('class', 'phishy');
                 child.parentNode.replaceChild(phishySpan, child);
             }

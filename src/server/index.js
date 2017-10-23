@@ -30,7 +30,8 @@ global.$STM_Config = {
     upload_image: config.get('upload_image'),
     site_domain: config.get('site_domain'),
     facebook_app_id: config.get('facebook_app_id'),
-    google_analytics_id: config.get('google_analytics_id')
+    google_analytics_id: config.get('google_analytics_id'),
+    use_appbase_api: config.get('use_appbase_api')
 };
 
 const WebpackIsomorphicTools = require('webpack-isomorphic-tools');
@@ -43,7 +44,7 @@ global.webpackIsomorphicTools = new WebpackIsomorphicTools(
 );
 
 global.webpackIsomorphicTools.server(ROOT, () => {
-        steem.api.setOptions({ url: config.steemd_connection_server });
+        steem.api.setOptions({ url: config.steemd_connection_server, useAppbaseApi: config.use_appbase_api });
         steem.config.set('address_prefix', config.get('address_prefix'));
         steem.config.set('chain_id', config.get('chain_id'));
 

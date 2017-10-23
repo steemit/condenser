@@ -1,4 +1,5 @@
 {
+  "use_appbase_api": "SDC_USE_APPBASE_API",
   "database_url": "SDC_DATABASE_URL",
   "disable_signups": "SDC_DISABLE_SIGNUPS",
   "facebook_app_id": "SDC_FACEBOOK_APP_ID",

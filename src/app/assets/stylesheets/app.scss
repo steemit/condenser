@@ -140,10 +140,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .phishy {
-    color:red;
-}
-
-.phishy:hover {
-    background:red;
-    color:yellow;
+  display: inline;
+  color: red;
+  &:hover {
+    background: red;
+    color: yellow;
+  }
 }

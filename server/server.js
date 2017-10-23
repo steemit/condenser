@@ -11,9 +11,7 @@ import prod_logger from './prod_logger';
 import favicon from 'koa-favicon';
 import staticCache from 'koa-static-cache';
 import useRedirects from './redirects';
-import useOauthLogin from './api/oauth';
 import useGeneralApi from './api/general';
-import useIcoApi from './api/ico'
 import useAccountRecoveryApi from './api/account_recovery';
 import useNotificationsApi from './api/notifications';
 import useEnterAndConfirmEmailPages from './server_pages/enter_confirm_email';
@@ -21,11 +19,10 @@ import useEnterAndConfirmMobilePages from './server_pages/enter_confirm_mobile';
 import useUserJson from './json/user_json';
 import usePostJson from './json/post_json';
 import isBot from 'koa-isbot';
-import session from '@steem/crypto-session';
+import session from './utils/cryptoSession';
 import csrf from 'koa-csrf';
 import flash from 'koa-flash';
 import minimist from 'minimist';
-import Grant from 'grant-koa';
 import config from 'config';
 import { routeRegex } from 'app/ResolveRoute';
 import { blockedUsers } from 'app/utils/IllegalContent';
@@ -33,9 +30,6 @@ import secureRandom from 'secure-random';
 import { APP_NAME_LATIN } from 'app/client_config';
 
 console.log('application server starting, please wait.');
-
-const grant = new Grant(config.grant);
-// import uploadImage from 'server/upload-image' //medium-editor
 
 const app = new Koa();
 app.name = APP_NAME_LATIN + ' app';
@@ -47,20 +41,13 @@ app.keys = [config.get('session_key')];
 
 const crypto_key = config.get('server_session_secret');
 
-// TODO: To close #366 needs to edit ./node_modules/@steem/crypto-session/index.js
-// vim ./node_modules/@steem/crypto-session/index.js
-// #65 - throw new Error('@steem/crypto-session: Discarding session: ' + text)
-// #65 + //throw new Error('@steem/crypto-session: Discarding session: ' + text)
-// #66 + console.error('@steem/crypto-session: Discarding session', text, error2);
-// #67 + return {};
 session(app, {
     maxAge: 1000 * 3600 * 24 * 60,
     crypto_key,
     key: config.get('session_cookie_key')
 });
 csrf(app);
-
-app.use(mount(grant));
+// app.use(csrf.middleware);
 app.use(flash({ key: 'flash' }));
 
 function convertEntriesToArrays(obj) {
@@ -150,12 +137,7 @@ if (env === 'production') {
 
 app.use(helmet());
 
-app.use(
-    mount(
-        '/static',
-        staticCache(path.join(__dirname, '../app/assets/static'), cacheOpts)
-    )
-);
+app.use(mount('/static', staticCache(path.join(__dirname, '../app/assets/static'), cacheOpts)));
 
 app.use(
     mount('/robots.txt', function*() {
@@ -184,13 +166,15 @@ app.use(
 // set user's uid - used to identify users in logs and some other places
 // FIXME SECURITY PRIVACY cycle this uid after a period of time
 app.use(function*(next) {
-    const last_visit = this.session.last_visit;
-    this.session.last_visit = new Date().getTime() / 1000 | 0;
-    if (!this.session.uid) {
-        this.session.uid = secureRandom.randomBuffer(13).toString('hex');
-        this.session.new_visit = true;
-    } else {
-        this.session.new_visit = this.session.last_visit - last_visit > 1800;
+    if (! /(\.js(on)?|\.css|\.map|\.ico|\.png|\.jpe?g)$/.test(this.url)) {
+        const last_visit = this.session.last_visit;
+        this.session.last_visit = new Date().getTime() / 1000 | 0;
+        if (!this.session.uid) {
+            this.session.uid = secureRandom.randomBuffer(13).toString('hex');
+            this.session.new_visit = true;
+        } else {
+            this.session.new_visit = this.session.last_visit - last_visit > 1800;
+        }
     }
     yield next;
 });
@@ -202,10 +186,8 @@ useUserJson(app);
 usePostJson(app);
 
 useAccountRecoveryApi(app);
-useOauthLogin(app);
 useGeneralApi(app);
 useNotificationsApi(app);
-useIcoApi(app);
 
 // helmet wants some things as bools and some as lists, makes config difficult.
 // our config uses strings, this splits them to lists on whitespace.
@@ -220,43 +202,14 @@ if (env === 'production') {
     app.use(helmet.contentSecurityPolicy(helmetConfig));
 }
 
-app.use(
-    favicon(path.join(__dirname, '../app/assets/images/favicons/favicon.ico'))
-);
+app.use(favicon(path.join(__dirname, '../app/assets/images/favicons/favicon.ico')));
+app.use(mount('/favicons', staticCache(path.join(__dirname, '../app/assets/images/favicons'), cacheOpts)));
+app.use(mount('/images', staticCache(path.join(__dirname, '../app/assets/images'), cacheOpts)));
+app.use(mount('/legal', staticCache(path.join(__dirname, '../app/assets/legal'), cacheOpts)));
+app.use(mount('/sitemap.xml', staticCache(path.join(__dirname, '../app/assets/sitemap.xml'), cacheOpts)));
+app.use(mount('/robots.txt', staticCache(path.join(__dirname, '../app/assets/robots.txt'), cacheOpts)));
 app.use(isBot());
-app.use(
-    mount(
-        '/favicons',
-        staticCache(
-            path.join(__dirname, '../app/assets/images/favicons'),
-            cacheOpts
-        )
-    )
-);
-app.use(
-    mount(
-        '/images',
-        staticCache(path.join(__dirname, '../app/assets/images'), cacheOpts)
-    )
-);
-app.use(
-    mount(
-        '/legal',
-        staticCache(path.join(__dirname, '../app/assets/legal'), cacheOpts)
-    )
-);
-app.use(
-    mount(
-        '/sitemap.xml',
-        staticCache(path.join(__dirname, '../app/assets/sitemap.xml'), cacheOpts)
-    )
-);
-app.use(
-    mount(
-        '/robots.txt',
-        staticCache(path.join(__dirname, '../app/assets/robots.txt'), cacheOpts)
-    )
-);
+
 
 // Proxy asset folder to webpack development server in development mode
 if (env === 'development') {
@@ -271,12 +224,7 @@ if (env === 'development') {
     });
     app.use(mount('/assets', proxy));
 } else {
-    app.use(
-        mount(
-            '/assets',
-            staticCache(path.join(__dirname, '../dist'), cacheOpts)
-        )
-    );
+    app.use(mount('/assets', staticCache(path.join(__dirname, '../dist'), cacheOpts)));
 }
 
 if (env !== 'test') {

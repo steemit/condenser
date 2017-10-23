@@ -110,6 +110,7 @@
   }
   &--left { 
     display: none;
+    order: 1;
     @include MQ(L) {
       display: block;
       margin-left: 1em;
@@ -117,6 +118,7 @@
   }
   &--right {
     display: none;
+    order: 3;
     @include MQ(M) {
       display: block;
       margin-right: 1em;
@@ -204,6 +206,7 @@
     padding: 0.5em 0em;
     min-width: 550px;
     max-width: 664px;
+    order: 2;
 
   }
   h2 {

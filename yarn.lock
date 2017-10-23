@@ -7475,9 +7475,9 @@ stdout-stream@^1.4.0:
   dependencies:
     readable-stream "^2.0.1"
 
-"steem@github:steemit/steem-js#ec4439c":
-  version "0.6.4"
-  resolved "https://codeload.github.com/steemit/steem-js/tar.gz/ec4439c"
+"steem@github:steemit/steem-js#72a36c8":
+  version "0.6.5"
+  resolved "https://codeload.github.com/steemit/steem-js/tar.gz/72a36c8"
   dependencies:
     bigi "^1.4.2"
     bluebird "^3.4.6"

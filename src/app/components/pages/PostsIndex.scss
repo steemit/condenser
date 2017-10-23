@@ -286,7 +286,7 @@
     padding: 6px 0 8px;
     position: relative;
     @include MQ(M) {
-      padding: 10px 16px 8px;     
+      padding: 10px 16px 5px;     
       @include themify($themes) {
           border-bottom: themed('border'); 
         }         
@@ -852,6 +852,10 @@ a#changeLayout:focus {
   width: 24px !important;
   height: 24px !important;
   margin-right: 7px;
+}
+
+.layout-block .Userpic {
+  margin-right: 8px;
 }
 
 // .Comment__Userpic .Userpic {

@@ -43,7 +43,7 @@ class NotificationLink extends React.Component {
         const author = this.props.data.author
         const classNames = (this.props.read)? '' : 'unread'
         const created = this.props.created
-        const item = this.props.item
+        const item = this.props.data
         const read = this.props.read
         const post = this.props.rootItem
         const notificationType = this.props.notificationType
@@ -82,7 +82,7 @@ class NotificationLink extends React.Component {
                 break
             case type.RESTEEM :
                 headerContent = <span><span className="user">{ author }</span> { tt(localeAction) }</span>
-                bodyContent = item.summary
+                bodyContent = item.resteemed_item.summary
                 link = Url.comment(item)
                 break
             case type.SECURITY_PWD_CHANGE :

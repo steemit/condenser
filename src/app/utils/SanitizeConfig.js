@@ -1,4 +1,4 @@
-import { phishingWarningMessage } from 'shared/HtmlReady'; // the only allowable title attribute for a div
+import { getPhishingWarningMessage } from 'shared/HtmlReady'; // the only allowable title attribute for a div
 
 const iframeWhitelist = [
     {
@@ -103,7 +103,7 @@ export default ({large = true, highQualityPost = true, noImage = false, sanitize
             const validClass = classWhitelist.find(e => attribs.class == e)
             if(validClass)
                 attys.class = validClass
-            if (validClass === 'phishy' && attribs.title === phishingWarningMessage)
+            if (validClass === 'phishy' && attribs.title === getPhishingWarningMessage())
                 attys.title = attribs.title
             return {
                 tagName,

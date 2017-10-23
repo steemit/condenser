@@ -4,7 +4,7 @@ import linksRe from 'app/utils/Links'
 import {validate_account_name} from 'app/utils/ChainValidation'
 import proxifyImageUrl from 'app/utils/ProxifyUrl'
 
-export const phishingWarningMessage = tt('g.phishy_message');
+export const getPhishingWarningMessage = () => tt('g.phishy_message');
 
 const noop = () => {}
 const DOMParser = new xmldom.DOMParser({
@@ -143,7 +143,7 @@ function link(state, child) {
                 && !url.match(/https?:\/\/(.*@)?(www\.)?steemit\.com/)) {
                 const phishyDiv = child.ownerDocument.createElement('div');
                 phishyDiv.textContent = `${child.textContent} / ${url}`;
-                phishyDiv.setAttribute('title', phishingWarningMessage);
+                phishyDiv.setAttribute('title', getPhishingWarningMessage());
                 phishyDiv.setAttribute('class', 'phishy');
                 child.parentNode.replaceChild(phishyDiv, child);
             }

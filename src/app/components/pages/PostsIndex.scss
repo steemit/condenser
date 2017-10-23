@@ -707,6 +707,10 @@ a#changeLayout:focus {
     .articles {
       padding: 1.5em 1.5em;
       max-width: none;
+      max-width: 1056px;
+      @include MQ(M) { 
+        min-width: 880px;
+      }      
       @include MQ(XL) { 
         min-width: 1050px;
       }

@@ -4,9 +4,9 @@ import types, {
     toggleNotificationGroups,
 } from 'app/components/elements/notification/type';
 
-const YO = '/yo';
+//const YO = '/yo';
 //const YO = 'https://yo.steemitdev.com';
-//const YO = 'https://api.steemitdev.com';
+const YO = 'https://api.steemitdev.com';
 
 /**
  * Re-formats API notifications response a little bit.
@@ -109,7 +109,7 @@ export function fetchAllNotifications(username) {
  */
 export function fetchSomeNotifications({ username, before, after, filterTypes }) { // Todo: filter by types once api allows for it
     const beforeOrAfterParams = {};
-    if (after) beforeOrAfterParams.modified_after = after;
+    if (after) beforeOrAfterParams.updated_after = after;
     if (before) beforeOrAfterParams.created_before = before;
 
     return fetch(YO, {

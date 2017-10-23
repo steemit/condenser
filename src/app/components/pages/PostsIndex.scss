@@ -266,7 +266,7 @@
           border-bottom: themed('border');           
         }       
       @include MQ(M) {
-        margin: 0 0 1.5em;
+        margin: 0 0 40px;
         box-shadow: 0px 5px 10px 0 rgba(0,0,0,0.0);
         padding-bottom: 0;
         @include themify($themes) {
@@ -726,6 +726,7 @@ a#changeLayout:focus {
         border: transparent;
         box-shadow: none;
         padding-bottom: 0px;
+        margin: 0 0 1.4em;
         @include themify($themes) {
           border-bottom: themed('borderLight'); 
         } 

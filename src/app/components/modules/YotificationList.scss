@@ -16,6 +16,28 @@ ul.Notifications {
     > ul {
         margin:0;
     }
+    > .title {
+        &.absolute {
+            @include breakpoint(large) {
+                background: $white;
+                left:0px;
+                position: absolute;
+                top: 0px;
+                width: 100%;
+
+            }
+            @include breakpoint(medium down) {
+                display:none;
+            }
+        }
+    }
+    > .footer.absolute {
+        background: $white;
+        bottom: 0px;
+        left: 0px;
+        position: absolute;
+        width: 100%;
+    }
     > .title,
     > .footer {
         border-bottom: 1px solid $medium-gray;
@@ -23,13 +45,7 @@ ul.Notifications {
         color: $notif_dd_black;
         font-weight: bold;
         line-height: 1.5rem;
-        &.absolute {
-            position: absolute;
-            bottom: 0px;
-            left: 0px;
-            width: 100%;
-            background: $white;
-        }
+
         .controls-right {
             float:right;
         }

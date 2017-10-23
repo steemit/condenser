@@ -1,5 +1,6 @@
 import {connect} from 'react-redux';
 import tt from 'counterpart'
+import classNames from 'classnames';
 import { Set } from 'immutable';
 import Icon from 'app/components/elements/Icon';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
@@ -33,8 +34,7 @@ const renderNotificationList = (notifications = [], onViewAll) => {
     const notificationList = [];
     notifications.forEach( notification => {
         if(!notification.hide) {
-            const classNames = "item" + ( notification.read ? '' : ' unread' );
-            notificationList.push( <li className={classNames} key={notification.id}><Notification {...notification} onClick={onViewAll} /></li> );
+            notificationList.push( <li className={classNames("item", {unread: (!notification.read)})} key={notification.id}><Notification {...notification} onClick={onViewAll} /></li> );
         }
     })
     return ( <ul className="Notifications">{notificationList}</ul> );
@@ -141,19 +141,24 @@ class YotificationList extends React.Component {
 
     }, 150)
 
+    renderTitle(absolute = false) {
+        return (<div className={classNames("title", {absolute})}>{tt('g.notifications')}
+            <span className="controls-right">
+                {(this.props.showClearAll) ?
+                    <button className="ptc" onClick={this.markDisplayedHidden}>{tt('notifications.controls.mark_all_hidden')}</button> :
+                    <button className="ptc" onClick={this.markDisplayedRead}>{tt('notifications.controls.mark_all_read')}</button>
+                }
+                <Link to={Url.profileSettings()}><Icon name="cog" /></Link>
+            </span>
+        </div>);
+    }
+
     render() {
         return ( <div id={this.htmlId} className={"NotificationsModule " + this.state.layout} ref={el => { this.rootEl = el }} >
-            <div className="title">{tt('g.notifications')}
-                <span className="controls-right">
-                    {(this.props.showClearAll) ?
-                        <button className="ptc" onClick={this.markDisplayedHidden}>{tt('notifications.controls.mark_all_hidden')}</button> :
-                        <button className="ptc" onClick={this.markDisplayedRead}>{tt('notifications.controls.mark_all_read')}</button>
-                    }
-                    <Link to={Url.profileSettings()}><Icon name="cog" /></Link>
-                </span>
-            </div>
+            {this.renderTitle()}
             {(this.state.showFilters)? renderFilterList(this.props) : null}
             {renderNotificationList(this.props.notifications, this.props.onViewAll)}
+            {this.renderTitle(true)}
             <div className="footer get-more">
                 {(true === this.props.fetchMore)? <LoadingIndicator type="circle" inline /> : <button className="ptc" onClick={this.appendSome}>{ this.props.fetchMore }</button>}</div>
             {(this.state.showFooter)? <div className="footer">{tt('notifications.controls.go_to_page')}</div> : null }

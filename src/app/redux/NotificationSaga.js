@@ -180,39 +180,55 @@ export function* fetchAll() {
  * @param {Object} options
  * @param {String[]} [options.types] only return these types; if not provided or falsey return all types
  * @param {String} [options.direction] either `before` or `after` to get, respectively, notifs created before or updated after what we currently have in state
+ * @param {Object} list which list is this fetch related to?
  */
 export function* fetchSome({ types = null, direction = 'after' }) {
-    const username = yield select(getUsernameFromState);
+    try {
+        const username = yield select(getUsernameFromState);
 
-    const allNotifs = yield select(getNotificationsById);
+        const allNotifs = yield select(getNotificationsById);
 
-    // If direction is specified, find the latest or earliest notification's timestamp.
-    // If types are specified, only search within those types.
-    const filteredNotifs = types ? allNotifs.filter(n => types.indexOf(n.notify_type) > -1) : allNotifs;
+        // If direction is specified, find the latest or earliest notification's timestamp.
+        // If types are specified, only search within those types.
+        const filteredNotifs = types ? allNotifs.filter(n => types.indexOf(n.notify_type) > -1) : allNotifs;
 
-    // Notifications are already reverse-sorted by `created` so we can just pull the last one.
-    // Otherwise, sort by updated and pull the most recent (last) one.
-    const timestamp = yield call(getTimestamp, direction, filteredNotifs);
-    const filter = {};
-    if (timestamp) {
-        filter[direction] = timestamp;
-    }
+        // Notifications are already reverse-sorted by `created` so we can just pull the last one.
+        // Otherwise, sort by updated and pull the most recent (last) one.
+        const timestamp = yield call(getTimestamp, direction, filteredNotifs);
+        const filter = {};
+        if (timestamp) {
+            filter[direction] = timestamp;
+        }
 
-    const payload = yield call(fetchSomeNotifications, {
-        username,
-        types,
-        ...filter,
-    });
-
-    if (payload.error) {
-        yield put({
-            type: 'notification/APPEND_SOME_ERROR',
-            msg: payload.error,
+        const payload = yield call(fetchSomeNotifications, {
+            username,
+            types,
+            ...filter,
         });
-    } else {
+
+        if (payload.error) {
+            yield put({
+                type: 'notification/APPEND_SOME_ERROR',
+                msg: payload.error,
+            });
+        } else {
+            yield put({
+                type: 'notification/APPEND_SOME',
+                payload,
+            });
+            if (direction === 'before') {
+                yield put({
+                    type: 'notification/SET_LAST_FETCH_BEFORE_COUNT',
+                    count: payload.length,
+                    types: types ? types.toString() : 'all',
+                });
+            }
+        }
+    } catch (err) {
+        console.warn('FETCH_SOME poll cancelled');
         yield put({
-            type: 'notification/APPEND_SOME',
-            payload,
+            type: 'notification/FETCH_SOME_ERROR', // maybe another type here?
+            msg: 'poll cancelled',
         });
     }
 }

@@ -28,7 +28,6 @@ import Translator from 'app/Translator';
 import {notificationsArrayToMap} from 'app/utils/Notifications';
 import {routeRegex} from "app/ResolveRoute";
 import {contentStats} from 'app/utils/StateFunctions'
-import testNotifications from 'app/components/elements/notification/_TestData'
 
 import {api} from 'steem';
 

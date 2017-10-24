@@ -267,6 +267,7 @@ if (env === 'development') {
     });
     app.use(mount('/assets', proxy));
 
+    //Todo: for dev only! Do not merge if present - do we need this for prod?
     // yo proxy
     // run yo on port 9080
     // like

@@ -41,8 +41,8 @@ const renderNotificationList = (notifications = [], onViewAll) => {
 }
 
 const renderFilterList = (props) => {
-    const locales = tt;
-    let className = ('all' === props.filter)? 'selected' : ''; //eslint-disable-line yoda
+    const locales = tt; // HACK: this works around the notification pre-commit checker for runtime-modified translated strings
+    let className = (props.filter === FILTER_ALL)? 'selected' : '';
     const filterLIs = Object.keys(filters).reduce((list, filter) => {
         className = (filter === props.filter)? 'selected' : '';
         list.push(<li key={filter} className={className}><Link
@@ -116,27 +116,31 @@ class YotificationList extends React.Component {
         }, TIMEOUT_MARK_SHOWN_MILLIS)
     }
     appendSome = () => { //eslint-disable-line no-undef
-        this.props.appendSome(('all' !== this.props.filter)? filters[this.props.filter] : false); //eslint-disable-line yoda
+        this.props.appendSome((this.props.filter !== FILTER_ALL)? filters[this.props.filter] : false);
     }
 
     //todo: make sure this doesn't fire too often in either layout
     scrollListenerPage = debounce(() => { //eslint-disable-line no-undef
+        if (this.props.noMoreToFetch) return;
+
         const el = window.document.getElementById(this.htmlId);
         if (!el) return;
         const scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset :
             (document.documentElement || document.body.parentNode || document.body).scrollTop;
         //the eslint thing for the next line...  apparently math is scary!?
         if (topPosition(el) + el.offsetHeight - scrollTop - window.innerHeight < 10) { //eslint-disable-line no-mixed-operators
-            this.props.appendSome(('all' !== this.props.filter)? filters[this.props.filter] : false); //eslint-disable-line yoda
+            this.props.appendSome((this.props.filter !== FILTER_ALL)? filters[this.props.filter] : false);
         }
     }, 150)
 
     scrollListenerDropdown = debounce(() => { //eslint-disable-line no-undef
+        if (this.props.noMoreToFetch) return;
+
         const el = window.document.getElementById(this.htmlId);
         if (!el) return;
 
         if(el.scrollHeight < (el.parentElement.offsetHeight + el.parentElement.scrollTop + 10)) {
-            this.props.appendSome(('all' !== this.props.filter)? filters[this.props.filter] : false); //eslint-disable-line yoda
+            this.props.appendSome((this.props.filter !== FILTER_ALL)? filters[this.props.filter] : false);
         }
 
     }, 150)
@@ -159,8 +163,16 @@ class YotificationList extends React.Component {
             {(this.state.showFilters)? renderFilterList(this.props) : null}
             {renderNotificationList(this.props.notifications, this.props.onViewAll)}
             {this.renderTitle(true)}
+
             <div className="footer get-more">
-                {(true === this.props.fetchMore)? <LoadingIndicator type="circle" inline /> : <button className="ptc" onClick={this.appendSome}>{ this.props.fetchMore }</button>}</div>
+                {this.props.noMoreToFetch
+                    ? <div>No more to fetch!</div>
+                    : this.props.isFetchingBefore
+                        ? <LoadingIndicator type="circle" inline />
+                        : <button className="ptc" onClick={this.appendSome}>{tt('notifications.controls.fetch_more')}</button>
+                }
+            </div>
+
             {(this.state.showFooter)? <div className="footer">{tt('notifications.controls.go_to_page')}</div> : null }
             {(this.state.showFooter)? (<div className="footer absolute">
                 <Link to={Url.profile() + '/notifications'} onClick={this.props.onViewAll} className="view-all">{tt('notifications.controls.go_to_page')}</Link>
@@ -175,6 +187,8 @@ YotificationList.propTypes = {
     //notifications: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
     layout: React.PropTypes.oneOf([LAYOUT_PAGE, LAYOUT_DROPDOWN]),
     showClearAll: React.PropTypes.bool.isRequired,
+    noMoreToFetch: React.PropTypes.bool.isRequired,
+    isFetchingBefore: React.PropTypes.bool.isRequired,
     onViewAll: React.PropTypes.func
 };
 
@@ -189,29 +203,36 @@ export default connect(
         const filter = (ownProps.filter && filters[ownProps.filter]) ? ownProps.filter : FILTER_ALL;
         let allRead = true;
         let notifications = state.notification.byId;
-        const fetchMore = (state.notification.isFetchingBefore)? true : tt('notifications.controls.fetch_more')
 
         if (notifications && filter !== FILTER_ALL) {
             const filteredTypes = filters[filter];
-            const filteredIds = filteredTypes.reduce((ids, tok) => state.notification.byType[tok] ? ids.union(state.notification.byType[tok]) : ids, Set());
+            const filteredIds = filteredTypes.reduce((ids, tok) => {
+                if (state.notification.byType[tok] && state.notification.byType[tok].ids) {
+                    return ids.union(state.notification.byType[tok].ids);
+                 }
+                 return ids;
+            }, Set());
             notifications = notifications.filter((v, id) => filteredIds.includes(id));
         }
 
         notifications.forEach((n) => {
-            if (false === n.read) { //eslint-disable-line yoda
+            if (n.read === false) {
                 allRead = false;
                 return false;
             }
             return true;
         });
 
+        const filterToken = filter === FILTER_ALL ? FILTER_ALL : filters[filter].toString();
+        const noMoreToFetch = state.notification.lastFetchBeforeCount.get(filterToken) === 0;
 
         return {
             notifications,
             ...ownProps,
             filter,
-            fetchMore,
-            showClearAll: allRead
+            noMoreToFetch,
+            isFetchingBefore: state.notification.isFetchingBefore,
+            showClearAll: allRead,
         }
     },
     dispatch => ({

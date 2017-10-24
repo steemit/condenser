@@ -75,36 +75,36 @@ function updateMatchesList(actionUpdates, prop, val) {
  * @param {Object} state
  * @return {Function} reducer
  */
-export const createList = ({ prop, val }) => {
-    return (state = Set(), action = { type: null }) => {
-        switch (action.type) {
-            case 'notification/RECEIVE_ALL':
-                return Set.fromKeys(apiToMap(action.payload).filter(n => (n[prop] === val)));
-            case 'notification/APPEND_SOME':
-                return state.union(Set.fromKeys(apiToMap(action.payload).filter(n => (n[prop] === val))));
-            case 'notification/UPDATE_ONE':
-                if (!updateMatchesList(action.updates, prop, val)) {
-                    return state.delete(action.id);
-                }
-                if (updateMatchesList(action.updates, prop, val)) {
-                    return state.add(action.id);
-                }
-                return state;
-            case 'notification/UPDATE_SOME':
-                return action.ids.reduce((acc, updatedId) => {
+export const createList = ({ prop, val }) => combineReducers({
+        ids: (state = Set(), action = { type: null }) => {
+            switch (action.type) {
+                case 'notification/RECEIVE_ALL':
+                    return Set.fromKeys(apiToMap(action.payload).filter(n => (n[prop] === val)));
+                case 'notification/APPEND_SOME':
+                    return state.union(Set.fromKeys(apiToMap(action.payload).filter(n => (n[prop] === val))));
+                case 'notification/UPDATE_ONE':
                     if (!updateMatchesList(action.updates, prop, val)) {
-                        return acc.delete(updatedId);
+                        return state.delete(action.id);
                     }
                     if (updateMatchesList(action.updates, prop, val)) {
-                        return acc.add(updatedId);
+                        return state.add(action.id);
                     }
-                    return acc;
-                }, state);
-            default:
-                return state;
-        }
-    };
-};
+                    return state;
+                case 'notification/UPDATE_SOME':
+                    return action.ids.reduce((acc, updatedId) => {
+                        if (!updateMatchesList(action.updates, prop, val)) {
+                            return acc.delete(updatedId);
+                        }
+                        if (updateMatchesList(action.updates, prop, val)) {
+                            return acc.add(updatedId);
+                        }
+                        return acc;
+                    }, state);
+                default:
+                    return state;
+            }
+        },
+});
 
 const generateByTypeReducers = (types, listCreator) => {
     return types.reduce((acc, cur) => {
@@ -165,6 +165,14 @@ const notificationReducer = combineReducers({
     isFetching,
     isFetchingBefore,
     errorMsg,
+    lastFetchBeforeCount: (state = Map(), action = { type: null }) => {
+        switch (action.type) {
+            case 'notification/SET_LAST_FETCH_BEFORE_COUNT':
+                return state.set(action.types, action.count);
+            default:
+                return state;
+        }
+    },
 });
 
 export default notificationReducer;

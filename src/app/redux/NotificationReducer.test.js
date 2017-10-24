@@ -102,7 +102,7 @@ describe('unshown', () => {
 });
 
 describe('createList', () => {
-    it('should create a reducer which filters based on a certain property value, as well as a counter state to be used by our saga when fetching created_before', () => {
+    it('should create a reducer which filters based on a certain property value', () => {
         const unread = createList({ prop: 'read', val: false });
         const initialUnread = unread(undefined, notificationReceiveAllAction);
         expect(initialUnread.ids).to.equal(new Set(['UID1', 'UID2', 'UID5', 'UID7']));
@@ -120,8 +120,6 @@ describe('createList', () => {
         expect(initialOnlyPowerDown.ids).to.equal(new Set(['UID']));
         const reducedOnlyPowerDown = onlyPowerDown(initialOnlyPowerDown, notificationAppendSomeAction);
         expect(reducedOnlyPowerDown.ids).to.equal(new Set(['UID', 'UID8', 'UID9', 'UID10']));
-
-        expect(reducedOnlyPowerDown.lastFetchBeforeCount).to.equal(null);
     });
 
     it('should provide an action which takes a list of ids and props/values to update, and adds or removes items from the list based on that update', () => {

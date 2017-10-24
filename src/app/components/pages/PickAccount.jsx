@@ -222,7 +222,7 @@ class PickAccount extends React.Component {
 }
 
 module.exports = {
-    path: 'pick_account',
+    path: '/c/pick_account',
     component: connect(
         state => {
             return {

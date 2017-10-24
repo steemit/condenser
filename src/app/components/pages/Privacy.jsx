@@ -348,6 +348,6 @@ class Privacy extends React.Component {
 }
 
 module.exports = {
-    path: 'privacy.html',
+    path: '/s/privacy',
     component: Privacy
 };

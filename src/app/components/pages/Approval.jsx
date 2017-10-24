@@ -44,7 +44,7 @@ class Approval extends React.Component {
 }
 
 module.exports = {
-    path: 'approval',
+    path: '/c/approval',
     component: connect(
         state => {
             return {

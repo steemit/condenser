@@ -25,6 +25,6 @@ class ChangePasswordPage extends React.Component {
 }
 
 module.exports = {
-    path: 'change_password',
+    path: '/c/change_password',
     component: ChangePasswordPage
 };

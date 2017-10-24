@@ -129,6 +129,6 @@ class Tos extends React.Component {
 }
 
 module.exports = {
-    path: 'tos.html',
+    path: '/s/tos',
     component: Tos
 };

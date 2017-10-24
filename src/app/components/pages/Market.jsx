@@ -531,7 +531,7 @@ class Market extends React.Component {
 }
 const DEFAULT_EXPIRE = 0xFFFFFFFF//Math.floor((Date.now() / 1000) + (60 * 60 * 24)) // 24 hours
 module.exports = {
-    path: 'market',
+    path: '/c/market',
     component: connect(state => {
         const username = state.user.get('current') ? state.user.get('current').get('username') : null;
         return {

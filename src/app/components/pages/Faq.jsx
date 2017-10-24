@@ -6,7 +6,7 @@ class Faq extends React.Component {
         return (
             <div className="row">
                 <div className="column large-8 medium-10 small-12">
-                    <HelpContent path="faq"/>
+                    <HelpContent path="faq" />
                 </div>
             </div>
         );
@@ -14,6 +14,6 @@ class Faq extends React.Component {
 }
 
 module.exports = {
-    path: 'faq.html',
+    path: '/s/faq',
     component: Faq
 };

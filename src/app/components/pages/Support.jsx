@@ -18,6 +18,6 @@ class Support extends React.Component {
 }
 
 module.exports = {
-    path: 'support.html',
+    path: '/s/support',
     component: Support
 };

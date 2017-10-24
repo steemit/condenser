@@ -60,9 +60,9 @@ export function resolveRoute(path)
     if (path === '/c/recover_account_step_2') {
         return {page: 'RecoverAccountStep2'};
     }
-    if (path === '/c/waiting_list') {
-        return {page: 'WaitingList'};
-    }
+    // if (path === '/c/waiting_list') {
+    //     return {page: 'WaitingList'};
+    // }
     if (path === '/c/market') {
         return {page: 'Market'};
     }

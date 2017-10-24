@@ -49,7 +49,7 @@ export default class TagsIndex extends React.Component {
             return this.compareTags(a, b, order)
         }).map(tag => {
             const name = tag.get('name');
-            const link = `/trending/${name}`;
+            const link = `/c/tags/${name}/trending`;
             return (<tr key={name}>
                 <td>
                     <Link to={link} activeClassName="active">{name}</Link>
@@ -95,7 +95,7 @@ export default class TagsIndex extends React.Component {
 }
 
 module.exports = {
-    path: 'tags(/:order)',
+    path: '/c/tags(/:order)',
     component: connect(state => ({
         tagsAll: state.global.get('tags')
     }))(TagsIndex)

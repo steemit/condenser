@@ -8,7 +8,7 @@ class Welcome extends React.Component {
                 <div className="column large-8 medium-10 small-12">
                     <div className="Welcome__banner">
                         <div className="Welcome__welcome">Welcome to</div>
-                        <img src={require('app/assets/images/welcome.jpg')} />
+                        <img src={require('app/assets/images/welcome.jpg')} alt="Welcome" />
                         <div className="Welcome__caption">Come for the rewards. Stay for the community.</div>
                     </div>
                     <hr />
@@ -20,6 +20,6 @@ class Welcome extends React.Component {
 }
 
 module.exports = {
-    path: 'welcome',
+    path: '/s/welcome',
     component: Welcome
 };

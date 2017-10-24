@@ -54,6 +54,7 @@
     "password": "Password",
     "payouts": "Payouts",
     "permissions": "Permissions",
+    "phishy_message": "Link expanded to plain text; beware of a potential phishing attempt",
     "post": "Post",
     "post_as": "Post as",
     "posts": "Posts",

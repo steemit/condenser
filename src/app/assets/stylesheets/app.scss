@@ -166,8 +166,6 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.2 !important;
 }
 
-
-
 .c-sidebar {
   width: 100%;
   max-width: 240px;
@@ -179,4 +177,9 @@ h1, h2, h3, h4, h5, h6 {
         border: themed('border'); 
     }  
   }
+}
+
+.phishy {
+  display: inline;
+  color: red;
 }

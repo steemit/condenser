@@ -82,7 +82,7 @@ class NotificationLink extends React.Component {
                 break
             case type.RESTEEM :
                 headerContent = <span><span className="user">{ author }</span> { tt(localeAction) }</span>
-                bodyContent = data.resteemed_item.summary
+                bodyContent = data.item.summary
                 link = Url.comment(data)
                 break
             case type.SECURITY_PWD_CHANGE :
@@ -99,12 +99,12 @@ class NotificationLink extends React.Component {
             case type.TAG :
             case type.VOTE :
                 localeAction = localeRoot + '.actionComment'
-                if(0 === item.depth) {
+                if(0 === data.item.depth) {
                     localeAction = localeRoot + '.actionPost'
-                    link = Url.comment(item)
+                    link = Url.comment(data.item)
                 }
                 headerContent = <span><span className="user">{ author }</span> { tt(localeAction) }</span>
-                bodyContent = item.summary
+                bodyContent = data.item.summary
                 break
             default :
                 console.log(`no option for this notification ${notificationType}`, this.props)
@@ -168,5 +168,5 @@ export default connect(
                     read: false
                 }
             })
-        }
+        },
     }))(NotificationLink)

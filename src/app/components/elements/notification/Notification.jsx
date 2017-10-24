@@ -43,9 +43,9 @@ class NotificationLink extends React.Component {
         const author = this.props.data.author
         const classNames = (this.props.read)? '' : 'unread'
         const created = this.props.created
-        const item = this.props.data
+        const data = this.props.data
         const read = this.props.read
-        const post = this.props.rootItem
+        //const post = this.props.rootItem
         const notificationType = this.props.notificationType
 
         const badge = badges[notificationType]? badges[notificationType] : null
@@ -53,25 +53,25 @@ class NotificationLink extends React.Component {
 
         let bodyContent = null
         let headerContent = null
-        let link = Url.comment(post, item)
+        let link = typeof post !== 'undefined' ? Url.comment(post, data) : null
         let localeAction = `${localeRoot}.action`
         let picture = null
         switch (notificationType) {
             case type.COMMENT_REPLY :
             case type.POST_REPLY :
-                headerContent = <span><span className="user">{ author }</span> { tt(localeAction) } <strong>{ post.summary }</strong></span>
-                bodyContent = item.summary
+                headerContent = <span><span className="user">{ author }</span> { tt(localeAction) } <strong>{ data.item.summary }</strong></span>
+                bodyContent = data.item.summary
                 break
             case type.COMMENT_REPLY :
-                headerContent = <span><span className="user">{ author }</span> { tt(localeAction) } <strong>{ item.parentSummary }</strong></span>
-                bodyContent = item.summary
+                headerContent = <span><span className="user">{ author }</span> { tt(localeAction) } <strong>{ data.item.parentSummary }</strong></span>
+                bodyContent = data.item.summary
                 break
             case type.ANNOUNCEMENT :
             case type.ANNOUNCEMENT_IMPORTANT :
                 //todo: use announcement comment 'image' as icon post steemfest. This will require addl info from yo.
             case type.FEED :
                 headerContent = <span><span className="user">{ author }</span> { tt(localeAction) } </span>
-                bodyContent = item.summary
+                bodyContent = data.item.summary
                 break
             case type.POWER_DOWN :
                 console.log(`Notification type - ${notificationType} needs to use the steemit logo check with all to see if this can just be part of the account, or if it needs special treatment`)
@@ -82,8 +82,8 @@ class NotificationLink extends React.Component {
                 break
             case type.RESTEEM :
                 headerContent = <span><span className="user">{ author }</span> { tt(localeAction) }</span>
-                bodyContent = item.resteemed_item.summary
-                link = Url.comment(item)
+                bodyContent = data.resteemed_item.summary
+                link = Url.comment(data)
                 break
             case type.SECURITY_PWD_CHANGE :
             case type.SECURITY_WITHDRAWAL :

@@ -134,7 +134,6 @@
     "svg-inline-loader": "^0.8.0",
     "svg-inline-react": "^1.0.2",
     "svgo-loader": "^1.2.1",
-    "switchery": "^0.0.2",
     "tarantool-driver": "^2.0.1",
     "twilio": "^2.11.1",
     "uncontrollable": "^3.2.1",

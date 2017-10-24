@@ -43,9 +43,9 @@ class NotificationLink extends React.Component {
         const author = this.props.data.author
         const classNames = (this.props.read)? '' : 'unread'
         const created = this.props.created
-        const data = this.props.data
+        const item = this.props.data.item
         const read = this.props.read
-        //const post = this.props.rootItem
+        const post = this.props.data.rootItem
         const notificationType = this.props.notificationType
 
         const badge = badges[notificationType]? badges[notificationType] : null
@@ -53,25 +53,24 @@ class NotificationLink extends React.Component {
 
         let bodyContent = null
         let headerContent = null
-        let link = typeof post !== 'undefined' ? Url.comment(post, data) : null
+        let link = Url.comment(post, item)
         let localeAction = `${localeRoot}.action`
         let picture = null
         switch (notificationType) {
-            case type.COMMENT_REPLY :
             case type.POST_REPLY :
-                headerContent = <span><span className="user">{ author }</span> { tt(localeAction) } <strong>{ data.item.summary }</strong></span>
-                bodyContent = data.item.summary
+                headerContent = <span><span className="user">{ author }</span> { tt(localeAction) } <strong>{ post.summary }</strong></span>
+                bodyContent = item.summary
                 break
             case type.COMMENT_REPLY :
-                headerContent = <span><span className="user">{ author }</span> { tt(localeAction) } <strong>{ data.item.parentSummary }</strong></span>
-                bodyContent = data.item.summary
+                headerContent = <span><span className="user">{ author }</span> { tt(localeAction) } <strong>{ item.parentSummary }</strong></span>
+                bodyContent = item.summary
                 break
             case type.ANNOUNCEMENT :
             case type.ANNOUNCEMENT_IMPORTANT :
-                //todo: use announcement comment 'image' as icon post steemfest. This will require addl info from yo.
+            //todo: use announcement comment 'image' as icon post steemfest. This will require addl info from yo.
             case type.FEED :
                 headerContent = <span><span className="user">{ author }</span> { tt(localeAction) } </span>
-                bodyContent = data.item.summary
+                bodyContent = item.summary
                 break
             case type.POWER_DOWN :
                 console.log(`Notification type - ${notificationType} needs to use the steemit logo check with all to see if this can just be part of the account, or if it needs special treatment`)
@@ -82,8 +81,8 @@ class NotificationLink extends React.Component {
                 break
             case type.RESTEEM :
                 headerContent = <span><span className="user">{ author }</span> { tt(localeAction) }</span>
-                bodyContent = data.item.summary
-                link = Url.comment(data)
+                bodyContent = item.summary
+                link = Url.comment(item)
                 break
             case type.SECURITY_PWD_CHANGE :
             case type.SECURITY_WITHDRAWAL :
@@ -99,12 +98,12 @@ class NotificationLink extends React.Component {
             case type.TAG :
             case type.VOTE :
                 localeAction = localeRoot + '.actionComment'
-                if(0 === data.item.depth) {
+                if(0 === item.depth) {
                     localeAction = localeRoot + '.actionPost'
-                    link = Url.comment(data.item)
+                    link = Url.comment(item)
                 }
                 headerContent = <span><span className="user">{ author }</span> { tt(localeAction) }</span>
-                bodyContent = data.item.summary
+                bodyContent = item.summary
                 break
             default :
                 console.log(`no option for this notification ${notificationType}`, this.props)
@@ -127,24 +126,24 @@ class NotificationLink extends React.Component {
             <div className="rightControls" onClick={ (read)? this.markUnread : this.markRead } dangerouslySetInnerHTML={{ __html: (read)? badges.visibilityOn : badges.visibilityOff }} />
         )
         return ( <Link to={ link } className={ classNames } onClick={(e) =>{ if(this.props.onClick) {this.props.onClick(e);} this.markReadDefault(e) }} >
-            { (!this.props.shown)? <span className="unseenIndicator" dangerouslySetInnerHTML={{ __html: "&#9679"}} /> : null }
-            <div className="item-panel" >
-                { (notificationType !== type.POWER_DOWN) ? <div className={ "Comment__Userpic show-for-medium " + notificationType} >
+                { (!this.props.shown)? <span className="unseenIndicator" dangerouslySetInnerHTML={{ __html: "&#9679"}} /> : null }
+                <div className="item-panel" >
+                    { (notificationType !== type.POWER_DOWN) ? <div className={ "Comment__Userpic show-for-medium " + notificationType} >
                         { picture }
-                </div> : null }
-                <div className="item-header">
-                    { headerContent }
+                    </div> : null }
+                    <div className="item-header">
+                        { headerContent }
+                    </div>
+                    {bodyContent ?
+                        <div className="item-body">{bodyContent}</div> : null
+                    }
+                    <div className="item-footer">
+                        <TimeAgoWrapper date={created} className="updated" />
+                    </div>
                 </div>
-                {bodyContent ?
-                    <div className="item-body">{bodyContent}</div> : null
-                }
-                <div className="item-footer">
-                    <TimeAgoWrapper date={created} className="updated" />
-                </div>
-            </div>
-            { readControl }
-        </Link>
-         )
+                { readControl }
+            </Link>
+        )
     }
 }
 
@@ -168,5 +167,5 @@ export default connect(
                     read: false
                 }
             })
-        },
+        }
     }))(NotificationLink)

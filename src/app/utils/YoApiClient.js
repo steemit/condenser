@@ -5,6 +5,7 @@ import types, {
 } from 'app/components/elements/notification/type';
 
 //const YO = '/yo';
+
 //const YO = 'https://yo.steemitdev.com';
 const YO = 'https://api.steemitdev.com';
 
@@ -16,13 +17,19 @@ const YO = 'https://api.steemitdev.com';
  * @return {Array}
  */
 function normalize(res) {
-    return res.map(n => ({
-        ...n,
-        id: n.notify_id.toString(),
-        shown: n.seen,
-        notificationType: n.notify_type,
-        item: n.data.item,
-    }));
+    return res.map(n => {
+        const resp = {
+            ...n,
+            id: n.notify_id.toString(),
+            shown: n.seen,
+            notificationType: n.notify_type,
+        }
+        if(resp.data.item && resp.data.item.parent_summary) {
+            resp.data.item.parentSummary = resp.data.item.parent_summary;
+            resp.data.item.parent_summary = undefined;
+        }
+        return resp;
+    });
 }
 
 /**

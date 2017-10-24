@@ -48,8 +48,8 @@ class Settings extends React.Component {
 
     onNsfwPrefChange(e) {
         const nsfwPref = e.currentTarget.value;
-        const user_preferences = {...this.props.user_preferences, nsfwPref}
-        this.props.setUserPreferences(user_preferences)
+        const userPreferences = {...this.props.user_preferences, nsfwPref}
+        this.props.setUserPreferences(userPreferences)
     }
 
     handleSubmit = ({updateInitialValues}) => {
@@ -113,8 +113,8 @@ class Settings extends React.Component {
 
     handleLanguageChange = (event) => {
         const locale = event.target.value;
-        const user_preferences = {...this.props.user_preferences, locale}
-        this.props.setUserPreferences(user_preferences)
+        const userPreferences = {...this.props.user_preferences, locale}
+        this.props.setUserPreferences(userPreferences)
     }
 
     render() {

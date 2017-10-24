@@ -216,8 +216,8 @@ export default connect(
         const username = current ? current.get('username') : state.offchain.get('account')
         const content = state.global.get('content');
         const ignore_result = state.global.getIn(['follow', 'getFollowingAsync', username, 'ignore_result']);
-        const user_preferences = state.app.get('user_preferences').toJS();
-        const nsfwPref = user_preferences.nsfwPref || 'warn';
+        const userPreferences = state.app.get('user_preferences').toJS();
+        const nsfwPref = userPreferences.nsfwPref || 'warn';
         return {...props, username, content, ignore_result, pathname, nsfwPref};
     },
     dispatch => ({

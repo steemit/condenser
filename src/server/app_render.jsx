@@ -33,7 +33,7 @@ async function appRender(ctx) {
         if (locale) locale = locale.substring(0, 2);
         const locale_is_supported = supported_locales.find(l => l === locale);
         if (!locale_is_supported) locale = 'en';
-        let user_preferences = {locale};
+        let userPreferences = {locale};
         if (!login_challenge) {
             login_challenge = secureRandom.randomBuffer(16).toString('hex');
             ctx.session.login_challenge = login_challenge;
@@ -102,17 +102,17 @@ async function appRender(ctx) {
             }
         }
         if (ctx.session.a) {
-            const user_preferences_record = await models.UserPreferences.findOne({
+            const userPreferencesRecord = await models.UserPreferences.findOne({
                 attributes: ['json'],
                 where: {account: ctx.session.a},
                 logging: false
             });
-            if (user_preferences_record) {
-                user_preferences = JSON.parse(user_preferences_record.json);
+            if (userPreferencesRecord) {
+                userPreferences = JSON.parse(userPreferencesRecord.json);
             }
         }
 
-        const { body, title, statusCode, meta } = await universalRender({location: ctx.request.url, store, offchain, ErrorPage, tarantool: Tarantool.instance(), user_preferences});
+        const { body, title, statusCode, meta } = await universalRender({location: ctx.request.url, store, offchain, ErrorPage, tarantool: Tarantool.instance(), userPreferences});
 
         // Assets name are found in `webpack-stats` file
         const assets_filename = ROOT + (process.env.NODE_ENV === 'production' ? '/tmp/webpack-stats-prod.json' : '/tmp/webpack-stats-dev.json');

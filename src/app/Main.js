@@ -3,6 +3,7 @@ import 'babel-polyfill';
 import 'whatwg-fetch';
 import './assets/stylesheets/app.scss';
 import plugins from 'app/utils/JsPlugins';
+import { setStore } from 'app/utils/User';
 import Iso from 'iso';
 import universalRender from 'shared/UniversalRender';
 import ConsoleExports from './utils/ConsoleExports';
@@ -89,7 +90,7 @@ function runApp(initial_state) {
     }
 
     const location = `${window.location.pathname}${window.location.search}${window.location.hash}`;
-    universalRender({history, location, initial_state})
+    universalRender({history, location, initial_state, setStore: (store) => { setStore(store); theStore = store; }}) //defining the setStore anon function because we need store for konami
     .catch(error => {
         console.error(error);
         serverApiRecordEvent('client_error', error);

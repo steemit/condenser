@@ -191,7 +191,7 @@ class App extends React.Component {
             );
         }
 
-        return <div className={'App' + (lp ? ' LP' : '') + (ip ? ' index-page' : '') + (miniHeader ? ' mini-header' : '')}
+        return <div className={'App' + ' theme-original' + (lp ? ' LP' : '') + (ip ? ' index-page' : '') + (miniHeader ? ' mini-header' : '')}
                     ref="App_root"
                 >
             <SidePanel ref="side_panel" alignment="right">

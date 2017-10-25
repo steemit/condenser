@@ -144,7 +144,7 @@ class Voting extends React.Component {
             // myVote === current vote
             const dropdown = <FoundationDropdown show={showWeight} onHide={() => this.setState({showWeight: false})} className="Voting__adjust_weight_down">
                 {(myVote == null || myVote === 0) && net_vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD &&
-                    <div>
+                    <div className="weight-container">
                         <div className="weight-display">- {weight / 100}%</div>
                         <Slider min={100} max={10000} step={100} value={weight} onChange={this.handleWeightChange} />
                     </div>

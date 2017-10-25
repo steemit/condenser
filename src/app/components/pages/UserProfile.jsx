@@ -315,8 +315,10 @@ export default class UserProfile extends React.Component {
 
         if (!(section === 'transfers' || section === 'permissions' || section === 'password')) {
             tab_content = <div className="row">
-                <div className="UserProfile__tab_content column">
-                    {tab_content}
+                <div className="UserProfile__tab_content layout-list column">
+                    <article className="articles">
+                        {tab_content}
+                    </article>
                 </div>
             </div>;
         }

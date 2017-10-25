@@ -100,6 +100,7 @@
     "tag": "Tag",
     "to": " to ",
     "topics": "Topics",
+    "all_tags": "All tags",
     "transfer": "Transfer ",
     "trending_topics": "Trending Topics",
     "type": "Type",
@@ -191,8 +192,8 @@
       "value_posts": "low value posts"
     },
     "read_only_mode": "Due to server maintenance we are running in read only mode. We are sorry for the inconvenience.",
-    "tags_and_topics": "Tags and Topics",
-    "show_more_topics": "Show more topics",
+    "tags_and_topics": "Tags",
+    "show_more_topics": "View all tags",
     "basic": "Basic",
     "advanced": "Advanced",
     "views": {
@@ -480,7 +481,7 @@
     "resteemed_by": "Resteemed by",
     "this_post_is": "This post is",
     "you_can": "You can",
-    "reveal_it": "reveal it",
+    "reveal_it": "Reveal this post",
     "adjust_your": "adjust your",
     "display_preferences": "display preferences",
     "create_an_account": "create an account",

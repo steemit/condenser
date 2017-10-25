@@ -5,7 +5,7 @@ import { Link } from 'react-router';
 import {pathTo} from 'app/Routes';
 
 function userLink(name) {
-    return <Link key={name} to={pathTo.userProfile(name)}>{name}</Link>
+    return <Link className="username" key={name} to={pathTo.userProfile(name)}>{name}</Link>
 }
 
 class UserNames extends Component {

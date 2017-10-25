@@ -17,9 +17,10 @@
 .Reblog__button.loading {
   padding-right: 0.5rem;
   svg {
-    @include themify($themes) {
-      border: themed('colorAccent');
-    }
+    // @include themify($themes) {
+    //   border: themed('colorAccent');
+    // }
+    border: 1px solid #4BA2F2;
     border-radius: 100%;
     border-right-color: transparent;
     border-top-color: transparent;

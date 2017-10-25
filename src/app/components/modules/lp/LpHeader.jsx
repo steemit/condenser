@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import tt from 'counterpart';
+import {pathTo} from 'app/Routes';
 
 export default class LpHeader extends React.Component {
     render() {
@@ -11,7 +12,7 @@ export default class LpHeader extends React.Component {
                     </div>
                     <div className="top-bar-right">
                         <ul className="menu">
-                            <li><Link to="/trending" activeClassName="active">{tt('g.browse')}</Link></li>
+                            <li><Link to={pathTo.indexPage('all', 'trending')} activeClassName="active">{tt('g.browse')}</Link></li>
                         </ul>
                     </div>
                 </div>

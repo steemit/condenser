@@ -1,4 +1,5 @@
 import React from 'react';
+import {pathTo} from 'app/Routes';
 
 const SidebarNewUsers = () => (
   <div className="c-sidebar__module">
@@ -7,13 +8,13 @@ const SidebarNewUsers = () => (
     </div>
     <div className="c-sidebar__content">
       <ul className="c-sidebar__list">
-        <li className="c-sidebar__list-item"><a className="c-sidebar__link" href="/welcome">Quick start guide</a></li>
+        <li className="c-sidebar__list-item"><a className="c-sidebar__link" href={pathTo.welcome()}>Quick start guide</a></li>
         <li className="c-sidebar__list-item"><a className="c-sidebar__link" href="https://steem.io">The blockchain</a></li>
-        <li className="c-sidebar__list-item"><a className="c-sidebar__link" href="/faq.html">FAQs</a></li>
-        <li className="c-sidebar__list-item"><a className="c-sidebar__link" href="/pick_account">Sign up</a></li>
+        <li className="c-sidebar__list-item"><a className="c-sidebar__link" href={pathTo.faq()}>FAQs</a></li>
+        <li className="c-sidebar__list-item"><a className="c-sidebar__link" href={pathTo.signup()}>Sign up</a></li>
       </ul>
     </div>
-  </div> 
+  </div>
 );
 
 export default SidebarNewUsers;

@@ -15,6 +15,7 @@ import SidebarLinks from 'app/components/elements/SidebarLinks';
 import SidebarNewUsers from 'app/components/elements/SidebarNewUsers';
 import Topics from './Topics';
 import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
+import {pathTo} from 'app/Routes';
 
 class PostsIndex extends React.Component {
 
@@ -83,9 +84,9 @@ class PostsIndex extends React.Component {
                 emptyText = <div>
                     {tt('posts_index.empty_feed_1')}.<br /><br />
                     {tt('posts_index.empty_feed_2')}.<br /><br />
-                    <Link to="/trending">{tt('posts_index.empty_feed_3')}</Link><br />
-                    <Link to="/welcome">{tt('posts_index.empty_feed_4')}</Link><br />
-                    <Link to="/faq.html">{tt('posts_index.empty_feed_5')}</Link><br />
+                    <Link to={pathTo.indexPage('all', 'trending')}>{tt('posts_index.empty_feed_3')}</Link><br />
+                    <Link to={pathTo.welcome()}>{tt('posts_index.empty_feed_4')}</Link><br />
+                    <Link to={pathTo.faq()}>{tt('posts_index.empty_feed_5')}</Link><br />
                 </div>;
                 markNotificationRead = <MarkNotificationRead fields="feed" account={account_name} />
             } else {
@@ -148,8 +149,8 @@ class PostsIndex extends React.Component {
                                 <Topics order={topics_order} current={category} compact />
                             </div>
                             <ArticleLayoutSelector />
-                        </div>         
-                    </div> 
+                        </div>
+                    </div>
                     <hr className="articles__hr" />
                     {markNotificationRead}
                     {(!fetching && (posts && !posts.size)) ? <Callout>{emptyText}</Callout> :
@@ -162,7 +163,7 @@ class PostsIndex extends React.Component {
                             showSpam={showSpam}
                         />
                     }
-                </article>                
+                </article>
                  <aside className="c-sidebar c-sidebar--right">
                     { !this.props.username
                         ? <SidebarNewUsers />
@@ -175,7 +176,7 @@ class PostsIndex extends React.Component {
                 <aside className="c-sidebar c-sidebar--left">
                     <Topics order={topics_order} current={category} compact={false} />
                     <small><a className="c-sidebar__more-link" onClick={this.onShowSpam}>{showSpam ? tt('g.next_3_strings_together.show_less') : tt('g.next_3_strings_together.show_more')}</a>{' ' + tt('g.next_3_strings_together.value_posts')}</small>
-                </aside>                  
+                </aside>
             </div>
         );
     }

@@ -154,7 +154,7 @@ class PickAccount extends React.Component {
                     <br />
                     <div className="callout success">
                         <p>Congratulations! Your sign up request has been approved.</p>
-                        <p><Link to="/create_account">Let's get your account created!</Link></p>
+                        <p><Link to={pathTo.createAccount()}>Let's get your account created!</Link></p>
                     </div>
                 </div>
             </div>;
@@ -178,11 +178,11 @@ class PickAccount extends React.Component {
         if (server_error) {
             if (server_error === 'Email address is not confirmed') {
                 next_step = <div className="callout alert">
-                    <a href="/enter_email">Please verify your email address</a>
+                    <a href={pathTo.enterEmail()}>Please verify your email address</a>
                 </div>;
             } else if (server_error === 'Phone number is not confirmed') {
                 next_step = <div className="callout alert">
-                    <a href="/enter_mobile">Please verify your phone number</a>
+                    <a href={pathTo.enterMobile()}>Please verify your phone number</a>
                 </div>;
             } else {
                 next_step = <div className="callout alert">
@@ -213,7 +213,7 @@ class PickAccount extends React.Component {
                             <input disabled={submit_btn_disabled} type="submit" className={submit_btn_class} value="CONTINUE" />
                         </form>
                         <br />
-                        <p className="secondary">Already have an account? <Link to="/login.html">Login</Link></p>
+                        <p className="secondary">Already have an account? <Link to={pathTo.login()}>Login</Link></p>
                     </div>
                 </div>
             </div>

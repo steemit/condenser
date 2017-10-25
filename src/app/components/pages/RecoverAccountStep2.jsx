@@ -6,6 +6,7 @@ import tt from 'counterpart';
 import Callout from 'app/components/elements/Callout';
 import {PrivateKey} from 'steem/lib/auth/ecc';
 import {api} from 'steem';
+import {pathTo} from 'app/Routes';
 
 function passwordToOwnerPubKey(account_name, password) {
     let pub_key;
@@ -135,7 +136,7 @@ class RecoverAccountStep2 extends React.Component {
         } else {
             if (success) {
                 // submit = <h4>Congratulations! Your account has been recovered. Please login using your new password.</h4>;
-                window.location = `/login.html#account=${account_to_recover}&msg=accountrecovered`;
+                window.location = pathTo.login() + `#account=${account_to_recover}&msg=accountrecovered`;
             } else {
                 submit = <input disabled={!valid} type="submit" className={submit_btn_class} value="Submit" />;
             }

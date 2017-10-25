@@ -27,6 +27,7 @@ import flash from 'koa-flash';
 import Grant from 'grant-koa';
 import config from 'config';
 import secureRandom from 'secure-random';
+import {pathTo} from 'app/Routes';
 
 if(cluster.isMaster)
     console.log('application server starting, please wait.');
@@ -82,7 +83,7 @@ app.use(function* (next) {
     // redirect to home page/feed if known account
     if (this.method === 'GET' && this.url === '/' && this.session.a) {
         this.status = 302;
-        this.redirect(`/${this.session.a}/feed`);
+        this.redirect(pathTo.userFeed(this.session.a));
         return;
     }
 

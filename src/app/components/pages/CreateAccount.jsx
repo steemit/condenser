@@ -11,7 +11,7 @@ import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInp
 import {saveCords} from 'app/utils/ServerApiClient';
 import {api} from 'steem';
 import { Link } from 'react-router';
-import {pathTo} from "app/Routes"
+import {pathTo} from 'app/Routes';
 
 class CreateAccount extends React.Component {
 
@@ -112,7 +112,7 @@ class CreateAccount extends React.Component {
                 console.error('CreateAccount server error', res.error);
                 this.setState({server_error: res.error || 'Unknown server error', loading: false});
             } else {
-                window.location = `/login.html#account=${name}&msg=accountcreated`;
+                window.location = pathTo.login() + `#account=${name}&msg=accountcreated`;
             }
         }).catch(error => {
             console.error('Caught CreateAccount server error', error);

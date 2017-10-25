@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import SvgImage from 'app/components/elements/SvgImage';
 import AddToWaitingList from 'app/components/modules/AddToWaitingList';
+import {pathTo} from 'app/Routes';
 
 class SignUp extends React.Component {
     constructor() {
@@ -17,7 +18,7 @@ class SignUp extends React.Component {
                 </div>
             </div>;
         }
-        
+
         if (this.props.serverBusy || $STM_Config.disable_signups) {
             return <div className="row">
                 <div className="column callout" style={{margin: '20px', padding: '40px'}}>
@@ -34,7 +35,7 @@ class SignUp extends React.Component {
                     <h3>Sign Up</h3>
                     <p>Steemit funds each account with over {this.props.signup_bonus} worth of Steem Power; to prevent abuse, we
                         require new users to login via social media.<br />
-                        Your personal information will be kept <a href="/privacy.html" target="_blank">private</a>.
+                        Your personal information will be kept <a href={pathTo.privacy()} target="_blank">private</a>.
                     </p>
                 </div>
             </div>
@@ -70,7 +71,7 @@ class SignUp extends React.Component {
             <div className="row">
                 <div className="column">
                       <br />
-                    <p className="secondary">By verifying your account you agree to the Steemit <a href="/tos.html" target="_blank">terms and conditions</a>.</p>
+                    <p className="secondary">By verifying your account you agree to the Steemit <a href={pathTo.tos()} target="_blank">terms and conditions</a>.</p>
                 </div>
             </div>
         </div>

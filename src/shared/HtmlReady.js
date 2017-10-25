@@ -240,7 +240,7 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
         if(valid && usertags) usertags.add(userLower)
         if(!mutate) return user
         return space + (valid ?
-            `<a href="/${pathTo.userProfile(userLower)}">@${user2}</a>` :
+            `<a href="${pathTo.userProfile(userLower)}">@${user2}</a>` :
             '@' + user2
         )
     })

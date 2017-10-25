@@ -39,9 +39,9 @@ class Topics extends React.Component {
 
         if (compact) {
             return <select className={cn} onChange={(e) => browserHistory.push(e.target.value)} value={currentValue}>
-                <option key={'*'} value={'/' + order}>{tt('g.all_tags')}</option>
+                <option key={'*'} value={pathTo.indexPage('all', order)}>{tt('g.all_tags')}</option>
                 {categories.map(cat => {
-                    const link = order ? `/${order}/${cat}` : `/${cat}`;
+                    const link = pathTo.indexPage(cat, order);
                     return <option key={cat} value={link}>{cat}</option>
                 })}
             </select>;
@@ -62,7 +62,7 @@ class Topics extends React.Component {
                     <ul className="c-sidebar__list">
                         {categories}
                         <li className="c-sidebar__link">
-                            <Link className="c-sidebar__link c-sidebar__link--emphasis" to={`/tags`}>{tt('g.show_more_topics')}..</Link>
+                            <Link className="c-sidebar__link c-sidebar__link--emphasis" to={pathTo.tags()}>{tt('g.show_more_topics')}..</Link>
                         </li>
                     </ul>
                 </div>
@@ -74,4 +74,3 @@ class Topics extends React.Component {
 export default connect(state => ({
     categories: state.global.get('tag_idx')
 }))(Topics);
-

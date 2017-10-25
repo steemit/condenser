@@ -2,6 +2,7 @@ import React from 'react';
 import SvgImage from 'app/components/elements/SvgImage';
 import { Link } from 'react-router';
 import Icon from 'app/components/elements/Icon';
+import {pathTo} from "app/Routes";
 
 class NotFound extends React.Component {
 
@@ -30,11 +31,11 @@ class NotFound extends React.Component {
                            or check out some great posts.
                         </p>
                         <ul className="NotFound__menu">
-                          <li><a href="/created">new posts</a></li>
-                          <li><a href="/hot">hot posts</a></li>
-                          <li><a href="/trending">trending posts</a></li>
-                          <li><a href="/promoted">promoted posts</a></li>
-                          <li><a href="/active">active posts</a></li>
+                          <li><a href={pathTo.indexPage('all', 'created')}>new posts</a></li>
+                          <li><a href={pathTo.indexPage('all', 'hot')}>hot posts</a></li>
+                          <li><a href={pathTo.indexPage('all', 'trending')}>trending posts</a></li>
+                          <li><a href={pathTo.indexPage('all', 'promoted')}>promoted posts</a></li>
+                          <li><a href={pathTo.indexPage('all', 'active')}>active posts</a></li>
                         </ul>
                     </div>
                 </div>

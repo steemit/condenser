@@ -45,6 +45,7 @@ const icons = [
     'replies',
     'home',
     'reply',
+    '100',
     'pencil2'
 ];
 const icons_map = {};

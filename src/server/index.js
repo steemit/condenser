@@ -2,14 +2,15 @@ import config from 'config';
 
 import * as steem from 'steem';
 
-delete process.env.BROWSER;
-
 const path = require('path');
 const ROOT = path.join(__dirname, '../..');
 
 // Tell `require` calls to look into `/app` also
 // it will avoid `../../../../../` require strings
-process.env.NODE_PATH = path.resolve(__dirname, '..');
+
+// use Object.assign to bypass transform-inline-environment-variables-babel-plugin (process.env.NODE_PATH= will not work)
+Object.assign(process.env, {NODE_PATH: path.resolve(__dirname, '..')});
+
 require('module').Module._initPaths();
 
 // Load Intl polyfill

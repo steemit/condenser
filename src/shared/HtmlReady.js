@@ -1,8 +1,11 @@
 import xmldom from 'xmldom'
+import tt from 'counterpart'
 import linksRe from 'app/utils/Links'
 import {validate_account_name} from 'app/utils/ChainValidation'
 import proxifyImageUrl from 'app/utils/ProxifyUrl'
 import {pathTo} from 'app/Routes'
+
+export const getPhishingWarningMessage = () => tt('g.phishy_message');
 
 const noop = () => {}
 const DOMParser = new xmldom.DOMParser({
@@ -134,6 +137,16 @@ function link(state, child) {
             // If this link is not relative, http, or https -- add https.
             if(! /^\/(?!\/)|(https?:)?\/\//.test(url)) {
                 child.setAttribute('href', "https://"+url)
+            }
+
+            // Unlink potential phishing attempts
+            if (child.textContent.match(/https?:\/\/(.*@)?(www\.)?steemit\.com/)
+                && !url.match(/https?:\/\/(.*@)?(www\.)?steemit\.com/)) {
+                const phishyDiv = child.ownerDocument.createElement('div');
+                phishyDiv.textContent = `${child.textContent} / ${url}`;
+                phishyDiv.setAttribute('title', getPhishingWarningMessage());
+                phishyDiv.setAttribute('class', 'phishy');
+                child.parentNode.replaceChild(phishyDiv, child);
             }
         }
     }

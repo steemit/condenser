@@ -159,25 +159,25 @@
 
 <a class="anchor" name="Table_of_Contents_Steemit__Inc"></a>
 ### Steemit, Inc.
-- <a href="/s/faq#Who_are_the_Steemit_co_founders">Who are the Steemit co-founders?</a>
-- <a href="/s/faq#Can_I_invest_in_Steemit">Can I invest in Steemit?</a>
-- <a href="/s/faq#What_does_Steemit_s_development_roadmap_look_like">What does Steemit’s development roadmap look like?</a>
-- <a href="/s/faq#Am_I_allowed_to_use_the_Steemit_logo">Am I allowed to use the Steemit logo?</a>
-- <a href="/s/faq#Can_I_purchase_official_Steemit_merchandise">Can I purchase official Steemit merchandise?</a>
-- <a href="/s/faq#Did_Steemit__pre_mine__tokens">Did Steemit "pre-mine" tokens?</a>
-- <a href="/s/faq#What_is_the_Steemit_Privacy_Policy">What is the Steemit Privacy Policy?</a>
+- <a href="/faq.html#Who_is_the_CEO_of_Steemit">Who is the CEO of Steemit?</a>
+- <a href="/faq.html#Can_I_invest_in_Steemit">Can I invest in Steemit?</a>
+- <a href="/faq.html#What_does_Steemit_s_development_roadmap_look_like">What does Steemit’s development roadmap look like?</a>
+- <a href="/faq.html#Am_I_allowed_to_use_the_Steemit_logo">Am I allowed to use the Steemit logo?</a>
+- <a href="/faq.html#Can_I_purchase_official_Steemit_merchandise">Can I purchase official Steemit merchandise?</a>
+- <a href="/faq.html#Did_Steemit__pre_mine__tokens">Did Steemit "pre-mine" tokens?</a>
+- <a href="/faq.html#What_is_the_Steemit_Privacy_Policy">What is the Steemit Privacy Policy?</a>
 
 <a class="anchor" name="Table_of_Contents_Security"></a>
 ### Security
-- <a href="/s/faq#How_can_I_keep_my_Steem_account_secure">How can I keep my Steem account secure?</a>
-- <a href="/s/faq#Why_should_I_be_careful_with_my_master_password">Why should I be careful with my master password?</a>
-- <a href="/s/faq#Why_is_the_master_password_a_long_string_of_gibberish">Why is the master password a long string of gibberish?</a>
-- <a href="/s/faq#What_are_my_different_keys_for">What are my different keys for?</a>
-- <a href="/s/faq#What_do_I_do_if_I_lost_my_password_keys">What do I do if I lost my password/keys?</a>
-- <a href="/s/faq#Are_my_STEEM_and_Steem_Dollar_tokens_insured_in_the_event_of_a_hack_or_if_someone_takes_over_my_account">Are my STEEM and Steem Dollar tokens insured in the event of a hack or if someone takes over my account?</a>
-- <a href="/s/faq#What_should_I_do_if_I_discover_that_someone_hacked_my_account">What should I do if I discover that someone hacked my account?</a>
-- <a href="/s/faq#How_does_the_recovery_process_work">How does the recovery process work?</a>
-- <a href="/s/faq#How_do_I_report_a_security_vulnerability">How do I report a security vulnerability?</a>
+- <a href="/faq.html#How_can_I_keep_my_Steem_account_secure">How can I keep my Steem account secure?</a>
+- <a href="/faq.html#Why_should_I_be_careful_with_my_master_password">Why should I be careful with my master password?</a>
+- <a href="/faq.html#Why_is_the_master_password_a_long_string_of_gibberish">Why is the master password a long string of gibberish?</a>
+- <a href="/faq.html#What_are_my_different_keys_for">What are my different keys for?</a>
+- <a href="/faq.html#What_do_I_do_if_I_lost_my_password_keys">What do I do if I lost my password/keys?</a>
+- <a href="/faq.html#Are_my_STEEM_and_Steem_Dollar_tokens_insured_in_the_event_of_a_hack_or_if_someone_takes_over_my_account">Are my STEEM and Steem Dollar tokens insured in the event of a hack or if someone takes over my account?</a>
+- <a href="/faq.html#What_should_I_do_if_I_discover_that_someone_hacked_my_account">What should I do if I discover that someone hacked my account?</a>
+- <a href="/faq.html#How_does_the_stolen_account_recovery_process_work">How does the stolen account recovery process work?</a>
+- <a href="/faq.html#How_do_I_report_a_security_vulnerability">How do I report a security vulnerability?</a>
 
 <a class="anchor" name="Table_of_Contents_Developers"></a>
 ### Developers
@@ -1192,16 +1192,13 @@ No. Proof of work mining has been removed from Steem.
 <a href="/s/faq#Table_of_Contents_Blockchain">^</a>
 # Steemit, Inc.
 
-<a class="anchor" name="Who_are_the_Steemit_co_founders"></a>
-## Who are the Steemit co-founders?
+<a class="anchor" name="Who_is_the_CEO_of_Steemit"></a>
+## Who is the CEO of Steemit?
 
-Ned Scott, CEO of Steemit, @ned
+Ned Scott, @ned
 https://www.linkedin.com/in/nedscott
 
-Daniel Larimer, CTO of Steemit, @dan @dantheman
-https://www.linkedin.com/in/daniel-larimer-0a367089
-
-<a href="/s/faq#Table_of_Contents_Steemit__Inc">^</a>
+<a href="/faq.html#Table_of_Contents_Steemit__Inc">^</a>
 <a class="anchor" name="Can_I_invest_in_Steemit"></a>
 ## Can I invest in Steemit?
 
@@ -1302,19 +1299,17 @@ No, liquid tokens can not be taken back if stolen or sent to the wrong account. 
 <a class="anchor" name="What_should_I_do_if_I_discover_that_someone_hacked_my_account"></a>
 ## What should I do if I discover that someone hacked my account?
 
-If you made your account through Steemit and it is compromised, immediately visit the <a href="https://steemit.com/recover_account_step_1">Stolen Account Recovery</a> page. This link is also available in the main site menu. You will need to provide your account name and a master password that was used in the last 30 days.
+If you made your account through Steemit and it is compromised, immediately visit the <a href="https://steemit.com/recover_account_step_1">Stolen Account Recovery</a> page. This link is also available in the main site menu. You will need to provide the email address that you used when you signed up, your account name, and a master password that was used in the last 30 days.
 
-<a href="/s/faq#Table_of_Contents_Security">^</a>
-<a class="anchor" name="How_does_the_recovery_process_work"></a>
-## How does the recovery process work?
+<a href="/faq.html#Table_of_Contents_Security">^</a>
+<a class="anchor" name="How_does_the_stolen_account_recovery_process_work"></a>
+## How does the stolen account recovery process work?
 
-In Steem, to be able to recover a compromised account, each account has another account assigned as its designated recovery agent. This is someone who can identify you independently of your key.
+If your password has been changed without your consent, then the account designated as your recovery account can generate a new owner key for the account. The account recovery must be completed within 30 days of the password being changed, and you must supply a recent owner key that was valid within the last 30 days.
 
-Steemit Inc. owns the default recovery account (@steem) for all users who sign up using Steemit.com. Steemit can identify users by their email, Facebook, and Reddit logins if you made an account using Steemit.com.
+Steemit Inc. owns the default recovery account (@steem) for all users who sign up using Steemit.com. Steemit can identify users by their original email, Facebook, or Reddit logins that were used to signup via Steemit.com.
 
-Advanced users using the blockchain software can recover accounts that have different recovery accounts assigned. If your password has been changed without your consent, then the account designated as your recovery account can generate a new owner key after you've supplied a recent owner key (valid in the last 30 days) for the account.
-
-If you don't have the master password or owner key that was valid the past 30 days, then your account will be unrecoverable.
+If you don't have the master password or owner key that was valid the past 30 days, or are unable to prove that you are the original owner of the account, then your account will be unrecoverable.
 
 <a href="/s/faq#Table_of_Contents_Security">^</a>
 <a class="anchor" name="How_do_I_report_a_security_vulnerability"></a>

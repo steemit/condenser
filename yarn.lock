@@ -950,6 +950,10 @@ babel-plugin-transform-function-bind@^6.22.0:
     babel-plugin-syntax-function-bind "^6.8.0"
     babel-runtime "^6.22.0"
 
+babel-plugin-transform-inline-environment-variables@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-inline-environment-variables/-/babel-plugin-transform-inline-environment-variables-0.2.0.tgz#37dad411a819667fd69c33e72f7a14ea1a50ba98"
+
 babel-plugin-transform-object-rest-spread@^6.22.0:
   version "6.26.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-object-rest-spread/-/babel-plugin-transform-object-rest-spread-6.26.0.tgz#0f36692d50fef6b7e2d4b3ac1478137a963b7b06"
@@ -7471,9 +7475,9 @@ stdout-stream@^1.4.0:
   dependencies:
     readable-stream "^2.0.1"
 
-"steem@github:steemit/steem-js#ec4439c":
-  version "0.6.4"
-  resolved "https://codeload.github.com/steemit/steem-js/tar.gz/ec4439c"
+"steem@github:steemit/steem-js#72a36c835a74f446da47e36feea5d5f1f4dde55b":
+  version "0.6.5"
+  resolved "https://codeload.github.com/steemit/steem-js/tar.gz/72a36c835a74f446da47e36feea5d5f1f4dde55b"
   dependencies:
     bigi "^1.4.2"
     bluebird "^3.4.6"

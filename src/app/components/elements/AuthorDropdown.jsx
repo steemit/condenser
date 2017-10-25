@@ -17,7 +17,7 @@ const AuthorDropdown = (props) => {
             <div className="Author__container">
                 <div className="Author__dropdown">
                     <Link to={pathTo.userProfile(props.author)}>
-                        <Userpic account={props.author} width="75" height="75" />
+                        <Userpic account={props.author} />
                     </Link>
                     <Link to={pathTo.userProfile(props.author)} className="Author__name">
                         {props.name}

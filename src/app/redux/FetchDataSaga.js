@@ -72,7 +72,7 @@ export function* watchFetchState() {
 export function* fetchData(action) {
     const {order, author, permlink, accountname} = action.payload;
     let {category} = action.payload;
-    if( !category ) category = "";
+    if( !category || category === 'all') category = '';
     category = category.toLowerCase();
 
     yield put({type: 'global/FETCHING_DATA', payload: {order, category}});

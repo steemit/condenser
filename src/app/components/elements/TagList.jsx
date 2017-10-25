@@ -6,7 +6,7 @@ export default ({post, horizontal, single}) => {
     let sort_order = 'trending';
     if (process.env.BROWSER && window.last_sort_order) sort_order = window.last_sort_order;
 
-    if (single) return <strong><Link to={`/${sort_order}/${post.category}`}>{post.category}</Link></strong>;
+    if (single) return <Link to={`/${sort_order}/${post.category}`}>{post.category}</Link>;
 
     const json = post.json_metadata;
     let tags = []

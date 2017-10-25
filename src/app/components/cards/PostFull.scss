@@ -22,8 +22,12 @@
 }
 
 .PostFull__time_author_category_large {
-  margin: 1.75rem 1.5rem 1.2rem 0;
-  color: #aaa;
+  margin: 1.75rem 0 1.2rem 0;
+  
+  @include themify($themes) {
+      color: themed('textColorSecondary');  
+    }   
+
   strong, a {color: #999}
   font-size: 120%;
   display: block;
@@ -54,9 +58,10 @@
     }
   }
   a {
-    color: $dark-gray;
+    @extend .link;
+    @extend .link--secondary;
     font-weight: 600;
-    @include hoverUnderline;
+
   }
   .PostFull__time_author_category {
     border-right: none;
@@ -73,7 +78,8 @@
   padding: 1rem 0 2rem 0;
   clear: left;
   a {
-    color: #4078C0;
+    @extend .link;
+    @extend .link--accent;
   }
 }
 

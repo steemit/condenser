@@ -1,5 +1,4 @@
 import koa_router from 'koa-router';
-import React from 'react';
 import {routeRegex} from "app/Routes";
 import {api} from 'steem'
 
@@ -9,10 +8,8 @@ export default function usePostJson(app) {
 
     router.get(routeRegex.PostJson, function *() {
         // validate and build post details in JSON
-        const author = this.url.match(/(\@[\w\d\.-]+)/)[0].replace('@', '');
-        const permalink = this.url.match(/(\@[\w\d\.-]+)\/?([\w\d-]+)/)[2];
         let status = "";
-        let post = yield api.getContentAsync(author, permalink);
+        let post = yield api.getContentAsync(this.params['0'], this.params['1']);
 
         if (post.author) {
             status = "200";

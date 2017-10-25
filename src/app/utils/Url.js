@@ -3,15 +3,13 @@ import proxifyUrl from './ProxifyUrl'; //we want to move proxify into this file.
 
 export const urlProxify = proxifyUrl;
 
-export const urlNotifications = (filter) => {
-    try {
-        return '/@' + currentUsername() + '/notifications' + ((filter)? '/' + filter : '');
-    } catch (e) {
-        //eslint-disable-line
-    }
-    return '';
-}
 
+/**
+ * generate the url for a comment. If childComment is provided, generates a url to child comment.
+ * @param comment
+ * @param childComment
+ * @returns {string}
+ */
 export const urlComment = (comment, childComment) => {
     const urlSegments = [''];
     try {
@@ -25,21 +23,45 @@ export const urlComment = (comment, childComment) => {
     return urlSegments.join('/');
 }
 
+/**
+ * generate a notifications url for the current user.
+ * @param userName
+ * @returns {*}
+ */
+export const urlNotifications = (filter) => {
+    try {
+        return '/' + currentUsername() + '/notifications' + ((filter)? '/' + filter : '');
+    } catch (e) {
+        //eslint-disable-line
+    }
+    return '';
+}
+
+/**
+ * generate a profile url. If userName is not provided, generate a profile url for the current user.
+ * @param userName
+ * @returns {*}
+ */
 export const urlProfile = (userName) => {
     if(userName) {
-        return '/@' + userName;
+        return '/' + userName;
     }
 
     const uName = currentUsername();
 
     if(uName) {
-        return '/@' + uName;
+        return '/' + uName;
     }
     return null;
 }
 
+/**
+ * generate a user settings url. If userName is not provided, generate a user settings url for the current user.
+ * @param userName
+ * @returns {*}
+ */
 export const urlProfileSettings = (userName) => {
-    return '/@' + ((userName)? userName : currentUsername()) + '/settings';
+    return '/' + ((userName)? userName : currentUsername()) + '/settings';
 }
 
 const Url = {

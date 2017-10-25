@@ -22,7 +22,7 @@ class Userpic extends Component {
             /* eslint-disable-line no-empty */
         }
 
-        const style = {backgroundImage: 'url(' + imageProxy() + `/u/${account}/avatar)` };
+        const style = {backgroundImage: 'url(' + imageProxy() + `u/${account}/avatar)` };
 
         return (<div className="Userpic" style={style} />)
     }

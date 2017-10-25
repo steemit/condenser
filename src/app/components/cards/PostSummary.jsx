@@ -219,7 +219,7 @@ class PostSummary extends React.Component {
             // which has the 256x512 for whatever the large breakpoint is where the list layout is used
             // and the 640 for lower than that
 
-            const blogSize = proxifyImageUrl(p.image_link, '640x480');
+            const blogSize = proxifyImageUrl(p.image_link, '640x480').replace(/ /g, '%20');
 
             if (this.props.layoutStyle === 'blog') {
                 thumb = (
@@ -228,7 +228,7 @@ class PostSummary extends React.Component {
                     </span>
                 );
             } else {
-                const listSize = proxifyImageUrl(p.image_link, '256x512');
+                const listSize = proxifyImageUrl(p.image_link, '256x512').replace(/ /g, '%20');
 
                 thumb = (
                     <span onClick={e => navigate(e, onClick, post, p.link)} className="articles__feature-img-container">

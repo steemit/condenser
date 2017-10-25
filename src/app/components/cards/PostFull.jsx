@@ -24,7 +24,7 @@ import tt from 'counterpart';
 import userIllegalContent from 'app/utils/userIllegalContent';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import {linkBuilder} from 'app/Routes';
+import {pathTo} from 'app/Routes';
 
 // function loadFbSdk(d, s, id) {
 //     return new Promise(resolve => {
@@ -198,7 +198,7 @@ class PostFull extends React.Component {
         const content = post_content.toJS();
         const {author, permlink, parent_author, parent_permlink} = content
         const jsonMetadata = this.state.showReply ? null : p.json_metadata
-        const link = linkBuilder.post(content.author, content.permlink);
+        const link = pathTo.post(content.author, content.permlink);
 
         const {category, title, body} = content;
         if (process.env.BROWSER && title) document.title = title + ' — '+ APP_NAME;
@@ -263,7 +263,7 @@ class PostFull extends React.Component {
           {full_power && <span title={tt('g.powered_up_100')}><Icon name="steem" /></span>}
         </h1>);
         if(content.depth > 0) {
-            const parent_link = linkBuilder.post(content.parent_author, content.parent_permlink);
+            const parent_link = pathTo.post(content.parent_author, content.parent_permlink);
             let direct_parent_link;
             if(content.depth > 1) {
                 direct_parent_link = (<li>

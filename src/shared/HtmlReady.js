@@ -2,7 +2,7 @@ import xmldom from 'xmldom'
 import linksRe from 'app/utils/Links'
 import {validate_account_name} from 'app/utils/ChainValidation'
 import proxifyImageUrl from 'app/utils/ProxifyUrl'
-import {linkBuilder} from 'app/Routes'
+import {pathTo} from 'app/Routes'
 
 const noop = () => {}
 const DOMParser = new xmldom.DOMParser({
@@ -227,7 +227,7 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
         if(valid && usertags) usertags.add(userLower)
         if(!mutate) return user
         return space + (valid ?
-            `<a href="/${linkBuilder.userProfile(userLower)}">@${user2}</a>` :
+            `<a href="/${pathTo.userProfile(userLower)}">@${user2}</a>` :
             '@' + user2
         )
     })

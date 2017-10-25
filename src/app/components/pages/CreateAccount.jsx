@@ -11,7 +11,7 @@ import GeneratedPasswordInput from 'app/components/elements/GeneratedPasswordInp
 import {saveCords} from 'app/utils/ServerApiClient';
 import {api} from 'steem';
 import { Link } from 'react-router';
-import {linkBuilder} from "app/Routes"
+import {pathTo} from "app/Routes"
 
 class CreateAccount extends React.Component {
 
@@ -220,7 +220,7 @@ class CreateAccount extends React.Component {
                     <div className="callout alert">
                         <p>It looks like your sign up request is not approved yet or you already created an account.<br />
                            Please try again later or contact <a href="mailto:support@steemit.com">support@steemit.com</a> for the status of your request.<br />
-                           If you didn't submit your sign up application yet, <Link to={linkBuilder.signup()}>apply now</Link>!
+                           If you didn't submit your sign up application yet, <Link to={pathTo.signup()}>apply now</Link>!
                         </p>
                     </div>
                 </div>
@@ -231,11 +231,11 @@ class CreateAccount extends React.Component {
         if (server_error) {
             if (server_error === 'Email address is not confirmed') {
                 next_step = <div className="callout alert">
-                    <a href={linkBuilder.enterEmail()}>Please verify your email address</a>
+                    <a href={pathTo.enterEmail()}>Please verify your email address</a>
                 </div>;
             } else if (server_error === 'Phone number is not confirmed') {
                 next_step = <div className="callout alert">
-                    <a href={linkBuilder.enterMobile()}>Please verify your phone number</a>
+                    <a href={pathTo.enterMobile()}>Please verify your phone number</a>
                 </div>;
             } else {
                 next_step = <div className="callout alert">

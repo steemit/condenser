@@ -16,7 +16,7 @@ import UserNames from 'app/components/elements/UserNames';
 import tt from 'counterpart';
 import ImageUserBlockList from 'app/utils/ImageUserBlockList';
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
-import {linkBuilder} from 'app/Routes';
+import {pathTo} from 'app/Routes';
 
 function isLeftClickEvent(event) {
     return event.button === 0
@@ -154,7 +154,7 @@ class PostSummary extends React.Component {
                             </div>
                             {tt('postsummary_jsx.this_post_is')} <span className="nsfw-flag">nsfw</span>.
                             {tt('postsummary_jsx.you_can')} <a href="#" onClick={this.onRevealNsfw}>{tt('postsummary_jsx.reveal_it')}</a> {tt('g.or') + ' '}
-                            {username ? <span>{tt('postsummary_jsx.adjust_your')} <Link to={linkBuilder.userSettings(username)}>{tt('postsummary_jsx.display_preferences')}</Link>.</span>
+                            {username ? <span>{tt('postsummary_jsx.adjust_your')} <Link to={pathTo.userSettings(username)}>{tt('postsummary_jsx.display_preferences')}</Link>.</span>
                                 : <span><Link to="/pick_account">{tt('postsummary_jsx.create_an_account')}</Link> {tt('postsummary_jsx.to_save_your_preferences')}.</span>}
                             {content_footer}
                         </div>

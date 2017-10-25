@@ -13,7 +13,7 @@ import secureRandom from "secure-random";
 import config from "config";
 import Mixpanel from "mixpanel";
 import Progress from 'react-foundation-components/lib/global/progress-bar';
-import {linkBuilder} from "../../app/Routes"
+import {pathTo} from "../../app/Routes"
 
 const path = require('path');
 const ROOT = path.join(__dirname, '../../..');
@@ -57,7 +57,7 @@ function* confirmMobileHandler(e) {
     });
     if (!user) {
         this.flash = { error: "User session not found, please make sure you have cookies enabled in your browser for this website" };
-        this.redirect(linkBuilder.enterMobile());
+        this.redirect(pathTo.enterMobile());
         return;
     }
     const mid = yield models.Identity.findOne({
@@ -66,7 +66,7 @@ function* confirmMobileHandler(e) {
 
     if (!mid) {
         this.flash = { error: "Wrong confirmation code" };
-        this.redirect(linkBuilder.enterMobile());
+        this.redirect(pathTo.enterMobile());
         return;
     }
 
@@ -74,7 +74,7 @@ function* confirmMobileHandler(e) {
     if (hours_ago > 24.0) {
         this.status = 401;
         this.flash = { error: "Confirmation code has been expired" };
-        this.redirect(linkBuilder.enterMobile());
+        this.redirect(pathTo.enterMobile());
         return;
     }
 
@@ -89,7 +89,7 @@ function* confirmMobileHandler(e) {
             mid.phone
         );
         this.flash = { error: "This phone number has already been used" };
-        this.redirect(linkBuilder.enterMobile());
+        this.redirect(pathTo.enterMobile());
         return;
     }
 
@@ -100,7 +100,7 @@ function* confirmMobileHandler(e) {
         mixpanel.track("SignupStepPhone", { distinct_id: this.session.uid });
 
     console.log("--/Success phone redirecting user", this.session.user);
-    this.redirect(linkBuilder.signUpApproval());
+    this.redirect(pathTo.signUpApproval());
 }
 
 export default function useEnterAndConfirmMobilePages(app) {
@@ -108,7 +108,7 @@ export default function useEnterAndConfirmMobilePages(app) {
     app.use(router.routes());
     const koaBody = koa_body();
 
-    router.get(linkBuilder.enterMobile(), function*() {
+    router.get(pathTo.enterMobile(), function*() {
         console.log(
             "-- /enter_mobile -->",
             this.session.uid,
@@ -127,7 +127,7 @@ export default function useEnterAndConfirmMobilePages(app) {
                         <Progress tabIndex="0" value={90} max={100} />
                         <form
                             className="column"
-                            action={linkBuilder.submitMobile()}
+                            action={pathTo.submitMobile()}
                             method="POST"
                         >
                             <h4 style={{ color: "#4078c0" }}>
@@ -192,18 +192,18 @@ recovery should your account ever be compromised.</em>
             mixpanel.track("SignupStep2", { distinct_id: this.session.uid });
     });
 
-    router.post(linkBuilder.submitMobile(), koaBody, function*() {
+    router.post(pathTo.submitMobile(), koaBody, function*() {
         if (!checkCSRF(this, this.request.body.csrf)) return;
         const user_id = this.session.user;
         if (!user_id) {
             this.flash = { error: "Your session has been interrupted, please start over" };
-            this.redirect(linkBuilder.signup());
+            this.redirect(pathTo.signup());
             return;
         }
 
         const country = this.request.body.country;
         const localPhone = this.request.body.phone;
-        const enterMobileUrl = linkBuilder.enterMobile(localPhone, country);
+        const enterMobileUrl = pathTo.enterMobile(localPhone, country);
 
         if (!country || country === "") {
             this.flash = { error: "Please select a country code" };
@@ -252,7 +252,7 @@ recovery should your account ever be compromised.</em>
                         mixpanel.track("SignupStep3", {
                             distinct_id: this.session.uid
                         });
-                    this.redirect(linkBuilder.signUpApproval());
+                    this.redirect(pathTo.signUpApproval());
                     return;
                 }
                 yield mid.update({ verified: false, phone });
@@ -333,7 +333,7 @@ recovery should your account ever be compromised.</em>
                 <div className="row" style={{ maxWidth: "32rem" }}>
                     <form
                         className="column"
-                        action={linkBuilder.confirmMobile()}
+                        action={pathTo.confirmMobile()}
                         method="POST"
                     >
                         <input type="hidden" name="csrf" value={this.csrf} />
@@ -361,8 +361,8 @@ recovery should your account ever be compromised.</em>
             renderToString(<ServerHTML {...props} />);
     });
 
-    router.get(linkBuilder.confirmMobile(true), confirmMobileHandler);
-    router.post(linkBuilder.confirmMobile(), koaBody, confirmMobileHandler);
+    router.get(pathTo.confirmMobile(true), confirmMobileHandler);
+    router.post(pathTo.confirmMobile(), koaBody, confirmMobileHandler);
 }
 
 function digits(text) {

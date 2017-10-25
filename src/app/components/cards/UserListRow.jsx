@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import Follow from 'app/components/elements/Follow';
 import {connect} from 'react-redux';
-import {linkBuilder} from 'app/Routes';
+import {pathTo} from 'app/Routes';
 
 class UserListRow extends React.Component {
     render() {
@@ -13,7 +13,7 @@ class UserListRow extends React.Component {
                     <Follow following={user} />
                 </td>}
                 <td>
-                    <Link to={linkBuilder.userProfile(user)}><strong>{user}</strong></Link>
+                    <Link to={pathTo.userProfile(user)}><strong>{user}</strong></Link>
                 </td>
             </tr>
         );

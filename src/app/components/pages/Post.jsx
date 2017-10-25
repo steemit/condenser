@@ -12,7 +12,7 @@ import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import { INVEST_TOKEN_UPPERCASE } from 'app/client_config';
-import {linkBuilder} from 'app/Routes';
+import {pathTo} from 'app/Routes';
 
 class Post extends React.Component {
 
@@ -31,7 +31,7 @@ class Post extends React.Component {
         };
         this.showSignUp = () => {
             serverApiRecordEvent('SignUp', 'Post Promo');
-            window.location = linkBuilder.signup();
+            window.location = pathTo.signup();
         };
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Post')
     }

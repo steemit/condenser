@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Icon from 'app/components/elements/Icon';
 import tt from 'counterpart';
-import {linkBuilder} from 'app/Routes';
+import {pathTo} from 'app/Routes';
 
 export default class PostHistoryRow extends React.Component {
 
@@ -14,8 +14,8 @@ export default class PostHistoryRow extends React.Component {
 
         let parent_author = op[1].op[1].parent_author;
         let author = op[1].op[1].author;
-        let parent_link = linkBuilder.userProfile(parent_author);
-        let author_link = linkBuilder.userProfile(author);
+        let parent_link = pathTo.userProfile(parent_author);
+        let author_link = pathTo.userProfile(author);
         let parent_perm = op[1].op[1].parent_permlink;
         let permlink = op[1].op[1].permlink;
         let in_reply_to = <span></span>;
@@ -27,7 +27,7 @@ export default class PostHistoryRow extends React.Component {
         //    const content_markdown = op[1].op[1].body;
         //    const body = (<MarkdownViewer formId={} text={content_markdown} jsonMetadata={} />)
         // let post_link = '/' + op[1].op[1].parent_permlink + author_link + '/' + permlink;
-        let post_link = linkBuilder.post(author, permlink);
+        let post_link = pathTo.post(author, permlink);
 
         return( <div>
 

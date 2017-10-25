@@ -25,6 +25,8 @@ const redirects = [
     [/^\/@([\w.\d-]+)\/([\w\d-]+)\/?$/, '/$0/$1'],
     [/^\/([\w\d-/]+)\/@([\w.\d-]+)\/([\w\d-]+)\/?$/, '/$1/$2'],
     [/^\/([\w\d-/]+)\/@([\w.\d-]+)\/([\w\d-]+)\.json$/, '/$1/$2.json'],
+    [/^\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/?$/, '/t/all/$0'],
+    [/^\/(hot|votes|responses|trending|trending30|promoted|cashout|payout|payout_comments|created|active)\/([\w\d-]+)\/?$/, '/t/$1/$0'],
     // [/^\/about.html$/, '/s/about'],
 ];
 

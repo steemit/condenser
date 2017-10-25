@@ -11,7 +11,7 @@ import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import tt from 'counterpart';
 import { APP_URL } from 'app/client_config';
 import {PrivateKey, PublicKey} from 'steem/lib/auth/ecc';
-import {linkBuilder} from 'app/Routes';
+import {pathTo} from 'app/Routes';
 
 class LoginForm extends Component {
 
@@ -79,7 +79,7 @@ class LoginForm extends Component {
     SignUp() {
         const onType = document.getElementsByClassName("OpAction")[0].textContent;
         serverApiRecordEvent('FreeMoneySignUp', onType);
-        window.location.href = linkBuilder.signup();
+        window.location.href = pathTo.signup();
     }
 
     SignIn() {

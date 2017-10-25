@@ -98,7 +98,7 @@ export function resolveRoute(path)
     return {page: 'NotFound'};
 }
 
-export const linkBuilder = {
+export const pathTo = {
     userProfile: name => `/${name}`,
     userFeed: name => `/${name}/feed`,
     userReplies: name => `/${name}/recent-replies`,

@@ -17,7 +17,7 @@ import tt from 'counterpart';
 import {List} from 'immutable'
 import { LIQUID_TOKEN, LIQUID_TICKER, DEBT_TOKENS, VESTING_TOKEN } from 'app/client_config';
 import transaction from 'app/redux/Transaction';
-import {linkBuilder} from "../../Routes"
+import {pathTo} from "../../Routes"
 
 const assetPrecision = 1000;
 
@@ -203,13 +203,13 @@ class UserWallet extends React.Component {
         let dollar_menu = [
             { value: tt('g.transfer'), link: '#', onClick: showTransfer.bind( this, 'SBD', 'Transfer to Account' ) },
             { value: tt('userwallet_jsx.transfer_to_savings'), link: '#', onClick: showTransfer.bind( this, 'SBD', 'Transfer to Savings' ) },
-            { value: tt('userwallet_jsx.market'), link: linkBuilder.market() },
+            { value: tt('userwallet_jsx.market'), link: pathTo.market() },
             { value: tt('userwallet_jsx.convert_to_LIQUID_TOKEN', {LIQUID_TOKEN}), link: '#', onClick: convertToSteem },
         ]
         if(isMyAccount) {
             steem_menu.push({ value: tt('g.buy'), link: '#', onClick: onShowDepositSteem.bind(this, current_user.get('username')) });
             steem_menu.push({ value: tt('g.sell'), link: '#', onClick: onShowWithdrawSteem });
-            steem_menu.push({ value: tt('userwallet_jsx.market'), link: linkBuilder.market() });
+            steem_menu.push({ value: tt('userwallet_jsx.market'), link: pathTo.market() });
             power_menu.push({ value: tt('g.buy'), link: '#', onClick: onShowDepositPower.bind(this, current_user.get('username')) })
             dollar_menu.push({ value: tt('g.buy'), link: '#', onClick: onShowDepositSBD.bind(this, current_user.get('username')) });
             dollar_menu.push({ value: tt('g.sell'), link: '#', onClick: onShowWithdrawSBD });

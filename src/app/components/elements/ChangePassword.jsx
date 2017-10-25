@@ -8,7 +8,7 @@ import tt from 'counterpart';
 import { APP_NAME } from 'app/client_config';
 import {PrivateKey, PublicKey, key_utils} from 'steem/lib/auth/ecc';
 import {api} from 'steem';
-import {linkBuilder} from 'app/Routes';
+import {pathTo} from 'app/Routes';
 
 const {string, oneOf} = React.PropTypes
 
@@ -99,7 +99,7 @@ class ChangePassword extends React.Component {
             console.error('Missing priorAuthKey')
 
         const error2 = /Missing Owner Authority/.test(error) ?
-            <span>{tt('g.this_is_wrong_password')}. {tt('g.do_you_need_to') + ' '}<a href={linkBuilder.recoverAccount(1)}>{tt('g.recover_your_account')}</a>?</span> :
+            <span>{tt('g.this_is_wrong_password')}. {tt('g.do_you_need_to') + ' '}<a href={pathTo.recoverAccount(1)}>{tt('g.recover_your_account')}</a>?</span> :
             error;
 
         const {accountName, nameError} = this.state;
@@ -142,7 +142,7 @@ class ChangePassword extends React.Component {
                     </div>
                     <br />
                     <label>
-                        <div className="float-right"><a href={linkBuilder.recoverAccount(1)}>{tt('g.recover_password')}</a></div>
+                        <div className="float-right"><a href={pathTo.recoverAccount(1)}>{tt('g.recover_password')}</a></div>
                         {tt('g.current_password')}
                         <br />
                         <input {...cleanReduxInput(password)} type="password" disabled={loading} />

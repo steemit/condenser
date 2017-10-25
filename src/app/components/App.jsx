@@ -19,7 +19,7 @@ import PageViewsCounter from 'app/components/elements/PageViewsCounter';
 import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
 import { LIQUID_TOKEN } from 'app/client_config';
 import {key_utils} from 'steem/lib/auth/ecc';
-import {resolveRoute, linkBuilder} from 'app/Routes';
+import {resolveRoute, pathTo} from 'app/Routes';
 
 const pageRequiresEntropy = (path) => {
     const {page} = resolveRoute(path);
@@ -187,7 +187,7 @@ class App extends React.Component {
                             <h2>{tt('navigation.intro_tagline')}</h2>
                             <h4>{tt('navigation.intro_paragraph')}</h4>
                             <br />
-                            <a className="button button--primary" href={linkBuilder.signup()}> <b>{tt('navigation.sign_up')}</b> </a>
+                            <a className="button button--primary" href={pathTo.signup()}> <b>{tt('navigation.sign_up')}</b> </a>
                             &nbsp; &nbsp; &nbsp;
                             <a className="button hollow uppercase" href="https://steem.io" target="_blank" rel="noopener noreferrer" onClick={this.learnMore}> <b>{tt('navigation.learn_more')}</b> </a>
                             <br />
@@ -205,17 +205,17 @@ class App extends React.Component {
                 <TopRightMenu vertical navigate={this.navigate} />
                 <ul className="vertical menu">
                     <li>
-                        <a href={linkBuilder.welcome()} onClick={this.navigate}>
+                        <a href={pathTo.welcome()} onClick={this.navigate}>
                             {tt('navigation.welcome')}
                         </a>
                     </li>
                     <li>
-                        <a href={linkBuilder.faq()} onClick={this.navigate}>
+                        <a href={pathTo.faq()} onClick={this.navigate}>
                             {tt('navigation.faq')}
                         </a>
                     </li>
                     <li>
-                        <a href={linkBuilder.tags()} onClick={this.navigate}>
+                        <a href={pathTo.tags()} onClick={this.navigate}>
                             {tt('navigation.explore')}
                         </a>
                     </li>
@@ -225,22 +225,22 @@ class App extends React.Component {
                         </a>
                     </li>
                     <li>
-                        <a href={linkBuilder.market()} onClick={this.navigate}>
+                        <a href={pathTo.market()} onClick={this.navigate}>
                             {tt('navigation.currency_market')}
                         </a>
                     </li>
                     <li>
-                        <a href={linkBuilder.recoverAccount(1)} onClick={this.navigate}>
+                        <a href={pathTo.recoverAccount(1)} onClick={this.navigate}>
                             {tt('navigation.stolen_account_recovery')}
                         </a>
                     </li>
                     <li>
-                        <a href={linkBuilder.changePassword()} onClick={this.navigate}>
+                        <a href={pathTo.changePassword()} onClick={this.navigate}>
                             {tt('navigation.change_account_password')}
                         </a>
                     </li>
                     <li className="last">
-                        <a href={linkBuilder.witnesses()} onClick={this.navigate}>
+                        <a href={pathTo.witnesses()} onClick={this.navigate}>
                             {tt('navigation.vote_for_witnesses')}
                         </a>
                     </li>
@@ -274,12 +274,12 @@ class App extends React.Component {
                         </a>
                     </li>
                     <li>
-                        <a href={linkBuilder.privacy()} onClick={this.navigate} rel="nofollow">
+                        <a href={pathTo.privacy()} onClick={this.navigate} rel="nofollow">
                             {tt('navigation.privacy_policy')}
                         </a>
                     </li>
                     <li className="last">
-                        <a href={linkBuilder.tos()} onClick={this.navigate} rel="nofollow">
+                        <a href={pathTo.tos()} onClick={this.navigate} rel="nofollow">
                             {tt('navigation.terms_of_service')}
                         </a>
                     </li>

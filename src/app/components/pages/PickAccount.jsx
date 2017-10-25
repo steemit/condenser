@@ -8,7 +8,7 @@ import {validate_account_name} from 'app/utils/ChainValidation';
 import runTests from 'app/utils/BrowserTests';
 import Progress from 'react-foundation-components/lib/global/progress-bar';
 import { Link } from 'react-router';
-import {linkBuilder} from 'app/Routes';
+import {pathTo} from 'app/Routes';
 
 class PickAccount extends React.Component {
 
@@ -48,7 +48,7 @@ class PickAccount extends React.Component {
         this.setState({server_error: '', loading: true});
         const {name} = this.state;
         if (!name) return;
-        window.location = linkBuilder.enterEmail('', name);
+        window.location = pathTo.enterEmail('', name);
     }
 
     onPasswordChange(password, password_valid) {

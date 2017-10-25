@@ -59,7 +59,7 @@ class Topics extends React.Component {
                 <hr />
                {categories}
                <li className="show-more">
-                   <Link to={'/c/tags'}>{tt('g.show_more_topics')}..</Link>
+                   <Link to={pathTo.tags()}>{tt('g.show_more_topics')}..</Link>
                </li>
             </ul>
         );

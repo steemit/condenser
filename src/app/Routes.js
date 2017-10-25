@@ -153,6 +153,10 @@ export function routeToSteemdUrl(route) {
             const sort = route.params[1] || 'trending';
             url = category === 'all' ? `/${sort}` : `/${sort}/${category}`;
         }
+    } else if (route.page === 'Witnesses') {
+        url = '/~witnesses';
+    } else if (route.page === 'Tags') {
+        url = '/tags';
     }
     console.log('-- routeToSteemdUrl -->', url);
     // Replace /curation-rewards and /author-rewards with /transfers for UserProfile

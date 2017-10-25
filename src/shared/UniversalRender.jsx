@@ -138,7 +138,7 @@ async function universalRender({ location, initial_state, offchain, ErrorPage, t
 
         onchain = await api.getStateAsync(url);
 
-        if (Object.getOwnPropertyNames(onchain.accounts).length === 0 && (url.match(routeRegex.UserProfile1) || url.match(routeRegex.UserProfile2))) { // protect for invalid account
+        if (Object.getOwnPropertyNames(onchain.accounts).length === 0 && route.page === 'UserProfile') { // protect for invalid account
             return {
                 title: 'User Not Found - Steemit',
                 statusCode: 404,

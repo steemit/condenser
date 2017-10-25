@@ -1,18 +1,7 @@
 import { currentUsername } from './User';
 import proxifyUrl from './ProxifyUrl'; //we want to move proxify into this file.
 
-let store = false;
-
-export const setStore = (theStore) => {
-    if(!store) {
-        store = theStore;
-    } else {
-        throw Error("Routes.setStore - store has already been set.");
-    }
-}
-
 export const urlProxify = proxifyUrl;
-
 
 export const urlNotifications = (filter) => {
     try {

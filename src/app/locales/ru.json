@@ -99,6 +99,7 @@
     "tag": "Тэг",
     "to": " к ",
     "topics": "Топики",
+    "all_tags": "All tags",
     "transfer": "Передать ",
     "trending_topics": "Популярное",
     "type": "Тип",
@@ -221,11 +222,13 @@
     "sign_up": "Присоединиться",
     "learn_more": "Документация",
     "welcome": "Добро пожаловать",
-    "faq": "Часто задаваемые вопросы",
+    "faq": "ЧаВО",
+    "shop": "Магазин Steemit",
     "chat": "Чат Steemit",
     "app_center": "Центр приложений Steemit",
     "api_docs": "API-документация Steemit",
-    "whitepaper": "Белая книга Steem",
+    "bluepaper": "Синяя бумага Steem",
+    "whitepaper": "Белая книга Steem"
     "intro_tagline": "Здесь говорят деньги.",
     "intro_paragraph": "Ваше мнение имеет цену. Присоединяйтесь к сообществу, которое платит за контент и за работу по отбору самого лучшего контента."
   },
@@ -329,6 +332,13 @@
     "user_hasnt_started_bloggin_yet": "Похоже. что %(name)s еще не завёл блог!",
     "user_hasnt_followed_anything_yet": "Похоже, что %(name)s еще ни на кого не подписан! Если, %(name)s недавно подписался на новых пользователей, их персонализированный канал будет заполняться сразу после появления нового контента.",
     "user_hasnt_had_any_replies_yet": "%(name)s еще не получил ответов",
+    "looks_like_you_havent_posted_anything_yet": "Похоже, ты еще ничего не опубликовал.",
+    "create_a_post": "Создать сообщение",
+    "explore_trending_articles": "Посмотреть статьи, набирающие популярность",
+    "read_the_quick_start_guide": "Прочтите краткое руководство",
+    "browse_the_faq": "Просмотреть ЧаВО",
+    "users_curation_rewards": "Кураторские вознаграждения %(name)s",
+    "users_permissions": "Разрешения %(name)s",
     "followers": "Подписчики",
     "this_is_users_reputations_score_it_is_based_on_history_of_votes": "Это репутация %(name)s.\n\nРепутация рассчитывается на основе истории полученных голосов и используется для сокрытия низкокачественного контента.",
     "follower_count": {
@@ -595,7 +605,8 @@
     "withdraw_funds_after_the_required_3_day_waiting_period": "Снять средства после необходимого 3 дневного периода ожидания.",
     "from": "От",
     "to": "Кому",
-    "asset_currently_collecting": "начисляемые годовые на %(asset)s: %(interest)s%%."
+    "asset_currently_collecting": "начисляемые годовые на %(asset)s: %(interest)s%%.",
+    "beware_of_spam_and_phishing_links": "Остерегайтесь спама и фишинговых ссылок в передачах. Не открывайте ссылки от пользователей, которым вы не доверяете. Не предоставляйте свои личные ключи третьим сторонам."
   },
   "userwallet_jsx": {
     "conversion_complete_tip": "Завершается",

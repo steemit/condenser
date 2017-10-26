@@ -17,9 +17,8 @@ import Dropzone from 'react-dropzone'
 import tt from 'counterpart'
 
 const remarkable = new Remarkable({ html: true, linkify: false, breaks: true })
-const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
+
 const RTE_DEFAULT = false
-//var htmlclean = require('htmlclean');
 
 class ReplyEditor extends React.Component {
 
@@ -39,6 +38,7 @@ class ReplyEditor extends React.Component {
         category: React.PropTypes.string, // initial value
         title: React.PropTypes.string, // initial value
         body: React.PropTypes.string, // initial value
+        richTextEditor: React.PropTypes.func,
     }
 
     static defaultProps = {
@@ -89,7 +89,7 @@ class ReplyEditor extends React.Component {
             body.props.onChange(raw)
             this.setState({
                 rte,
-                rte_value: rte ? stateFromHtml(raw) : null
+                rte_value: rte ? stateFromHtml(this.props.richTextEditor, raw) : null
             })
             this.setAutoVote()
             this.setState({payoutType: this.props.isStory ? (localStorage.getItem('defaultPayoutType') || '50%') : '50%'})
@@ -167,7 +167,7 @@ class ReplyEditor extends React.Component {
         const value = e.target.value
         // TODO block links in title (they do not make good permlinks)
         const hasMarkdown = /(?:\*[\w\s]*\*|\#[\w\s]*\#|_[\w\s]*_|~[\w\s]*~|\]\s*\(|\]\s*\[)/.test(value)
-        this.setState({ titleWarn: hasMarkdown ? 'Markdown is not supported here' : '' })
+        this.setState({ titleWarn: hasMarkdown ? tt('reply_editor.markdown_not_supported') : '' })
         const {title} = this.state
         title.props.onChange(e)
     }
@@ -179,7 +179,7 @@ class ReplyEditor extends React.Component {
         if(!body.value || confirm(tt('reply_editor.are_you_sure_you_want_to_clear_this_form'))) {
             replyForm.resetForm()
             this.setAutoVote()
-            this.setState({rte_value: stateFromHtml()})
+            this.setState({rte_value: stateFromHtml(this.props.richTextEditor)})
             this.setState({progress: {}})
             if(onCancel) onCancel(e)
         }
@@ -214,7 +214,7 @@ class ReplyEditor extends React.Component {
         const state = {rte: !this.state.rte};
         if (state.rte) {
             const {body} = this.state
-            state.rte_value = isHtmlTest(body.value) ? stateFromHtml(body.value) : stateFromMarkdown(body.value)
+            state.rte_value = isHtmlTest(body.value) ? stateFromHtml(this.props.richTextEditor, body.value) : stateFromMarkdown(this.props.richTextEditor, body.value)
         }
         this.setState(state);
         localStorage.setItem('replyEditorData-rte', !this.state.rte)
@@ -335,6 +335,7 @@ class ReplyEditor extends React.Component {
         const vframe_class = isStory ? 'vframe' : '';
         const vframe_section_class = isStory ? 'vframe__section' : '';
         const vframe_section_shrink_class = isStory ? 'vframe__section--shrink' : '';
+        const RichTextEditor = this.props.richTextEditor;
 
         return (
             <div className="ReplyEditor row">
@@ -349,7 +350,16 @@ class ReplyEditor extends React.Component {
                     >
                         <div className={vframe_section_shrink_class}>
                             {isStory && <span>
-                                <input type="text" className="ReplyEditor__title" {...title.props} onChange={onTitleChange} disabled={loading} placeholder="Title" autoComplete="off" ref="titleRef" tabIndex={1} />
+                                <input
+                                    type="text"
+                                    className="ReplyEditor__title"
+                                    onChange={onTitleChange}
+                                    disabled={loading}
+                                    placeholder={tt('reply_editor.title')}
+                                    autoComplete="off"
+                                    ref="titleRef"
+                                    tabIndex={1}
+                                    {...title.props} />
                                 <div className="float-right secondary" style={{marginRight: '1rem'}}>
                                     {rte && <a href="#" onClick={this.toggleRte}>{body.value ? 'Raw HTML' : 'Markdown'}</a>}
                                     {!rte && (isHtml || !body.value) && <a href="#" onClick={this.toggleRte}>{tt('reply_editor.editor')}</a>}
@@ -406,7 +416,7 @@ class ReplyEditor extends React.Component {
                         </div>
                         <div className={vframe_section_shrink_class}>
                             {!loading &&
-                            <button type="submit" className="button" disabled={disabled} tabIndex={4}>{isEdit ? 'Update Post' : postLabel}</button>
+                            <button type="submit" className="button" disabled={disabled} tabIndex={4}>{isEdit ? tt('reply_editor.update_post') : postLabel}</button>
                             }
                             {loading && <span><br /><LoadingIndicator type="circle" /></span>}
                             &nbsp; {!loading && this.props.onCancel &&
@@ -465,7 +475,7 @@ function stateToHtml(state) {
     return `<html>\n${html}\n</html>`;
 }
 
-function stateFromHtml(html = null) {
+function stateFromHtml(RichTextEditor, html = null) {
     if(!RichTextEditor) return null;
     if(html) html = stripHtmlWrapper(html)
     if(html && html.trim() == '') html = null
@@ -473,7 +483,7 @@ function stateFromHtml(html = null) {
         : RichTextEditor.createEmptyValue()
 }
 
-function stateFromMarkdown(markdown) {
+function stateFromMarkdown(RichTextEditor, markdown) {
     let html
     if(markdown && markdown.trim() !== '') {
         html = remarkable.render(markdown)
@@ -481,12 +491,13 @@ function stateFromMarkdown(markdown) {
         //html = htmlclean(html) // normalize whitespace
         console.log("markdown converted to:", html)
     }
-    return stateFromHtml(html)
+    return stateFromHtml(RichTextEditor, html)
 }
 
-import {connect} from 'react-redux'
+import {connect} from 'react-redux';
+const richTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
 
-export default formId => connect(
+export default (formId) => connect(
     // mapStateToProps
     (state, ownProps) => {
         const username = state.user.getIn(['current', 'username'])
@@ -508,7 +519,7 @@ export default formId => connect(
             ...ownProps,
             fields, isStory, username,
             initialValues: {title, body, category}, state,
-            formId,
+            formId, richTextEditor,
         }
         return ret
     },
@@ -574,8 +585,13 @@ export default formId => connect(
 
             const formCategories = Set(category ? category.trim().replace(/#/g, "").split(/ +/) : [])
             const rootCategory = originalPost && originalPost.category ? originalPost.category : formCategories.first()
-            let allCategories = Set([...formCategories.toJS(), ...rtags.hashtags])
+            let allCategories = Set([...formCategories.toJS()])
             if(/^[-a-z\d]+$/.test(rootCategory)) allCategories = allCategories.add(rootCategory)
+
+            let postHashtags = [...rtags.hashtags]
+            while (allCategories.size < 5 && postHashtags.length > 0) {
+                allCategories = allCategories.add(postHashtags.shift())
+            }
 
             // merge
             const meta = isEdit ? jsonMetadata : {}
@@ -598,8 +614,8 @@ export default formId => connect(
             }
 
             if(meta.tags.length > 5) {
-                const includingCategory = isEdit ? ` (including the category '${rootCategory}')` : ''
-                errorCallback(`You have ${meta.tags.length} tags total${includingCategory}.  Please use only 5 in your post and category line.`)
+                const includingCategory = isEdit ? tt('reply_editor.including_the_category', {rootCategory}) : ''
+                errorCallback(tt('reply_editor.use_limited_amount_of_tags', {tagsLength: meta.tags.length, includingCategory}))
                 return
             }
 

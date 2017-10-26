@@ -1,7 +1,10 @@
 import xmldom from 'xmldom'
+import tt from 'counterpart'
 import linksRe from 'app/utils/Links'
 import {validate_account_name} from 'app/utils/ChainValidation'
 import proxifyImageUrl from 'app/utils/ProxifyUrl'
+
+export const getPhishingWarningMessage = () => tt('g.phishy_message');
 
 const noop = () => {}
 const DOMParser = new xmldom.DOMParser({
@@ -134,6 +137,16 @@ function link(state, child) {
             if(! /^\/(?!\/)|(https?:)?\/\//.test(url)) {
                 child.setAttribute('href', "https://"+url)
             }
+
+            // Unlink potential phishing attempts
+            if (child.textContent.match(/https?:\/\/(.*@)?(www\.)?steemit\.com/)
+                && !url.match(/https?:\/\/(.*@)?(www\.)?steemit\.com/)) {
+                const phishyDiv = child.ownerDocument.createElement('div');
+                phishyDiv.textContent = `${child.textContent} / ${url}`;
+                phishyDiv.setAttribute('title', getPhishingWarningMessage());
+                phishyDiv.setAttribute('class', 'phishy');
+                child.parentNode.replaceChild(phishyDiv, child);
+            }
         }
     }
 }
@@ -182,7 +195,7 @@ function proxifyImages(doc) {
     [...doc.getElementsByTagName('img')].forEach(node => {
         const url = node.getAttribute('src')
         if(! linksRe.local.test(url))
-            node.setAttribute('src', proxifyImageUrl(url, '0x0'))
+            node.setAttribute('src', proxifyImageUrl(url, true))
     })
 }
 

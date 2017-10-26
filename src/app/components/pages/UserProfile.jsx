@@ -73,6 +73,7 @@ export default class UserProfile extends React.Component {
 
     componentWillUnmount() {
         this.props.clearTransferDefaults()
+        this.props.clearPowerdownDefaults()
     }
 
     loadMore(last_post, category) {
@@ -162,6 +163,7 @@ export default class UserProfile extends React.Component {
                 <UserWallet
                     account={accountImm}
                     showTransfer={this.props.showTransfer}
+                    showPowerdown={this.props.showPowerdown}
                     current_user={current_user}
                     withdrawVesting={this.props.withdrawVesting} />
                 {isMyAccount && <div><MarkNotificationRead fields="send,receive" account={account.name} /></div>}
@@ -229,10 +231,11 @@ export default class UserProfile extends React.Component {
             if (account.blog) {
                 let posts = accountImm.get('blog');
                 const emptyText = isMyAccount ? <div>
-                    Looks like you haven't posted anything yet.<br /><br />
-                    <Link to="/submit.html">Submit a Story</Link><br />
-                    <a href="/steemit/@thecryptofiend/the-missing-faq-a-beginners-guide-to-using-steemit">Read The Beginner's Guide</a><br />
-                    <a href="/welcome">Read The Steemit Welcome Guide</a>
+                    {tt('user_profile.looks_like_you_havent_posted_anything_yet')}<br /><br />
+                    <Link to="/submit.html">{tt('user_profile.create_a_post')}</Link><br />
+                    <Link to="/trending">{tt('user_profile.explore_trending_articles')}</Link><br />
+                    <Link to="/welcome">{tt('user_profile.read_the_quick_start_guide')}</Link><br />
+                    <Link to="/faq.html">{tt('user_profile.browse_the_faq')}</Link><br />
                 </div>:
                     tt('user_profile.user_hasnt_started_bloggin_yet', {name: accountname});
 
@@ -311,8 +314,10 @@ export default class UserProfile extends React.Component {
 
         if (!(section === 'transfers' || section === 'permissions' || section === 'password')) {
             tab_content = <div className="row">
-                <div className="UserProfile__tab_content column">
-                    {tab_content}
+                <div className="UserProfile__tab_content layout-list column">
+                    <article className="articles">
+                        {tab_content}
+                    </article>
                 </div>
             </div>;
         }
@@ -465,6 +470,12 @@ module.exports = {
             showTransfer: (transferDefaults) => {
                 dispatch(user.actions.setTransferDefaults(transferDefaults))
                 dispatch(user.actions.showTransfer())
+            },
+            clearPowerdownDefaults: () => {dispatch(user.actions.clearPowerdownDefaults())},
+            showPowerdown: (powerdownDefaults) => {
+                console.log('power down defaults:', powerdownDefaults)
+                dispatch(user.actions.setPowerdownDefaults(powerdownDefaults))
+                dispatch(user.actions.showPowerdown())
             },
             withdrawVesting: ({account, vesting_shares, errorCallback, successCallback}) => {
                 const successCallbackWrapper = (...args) => {

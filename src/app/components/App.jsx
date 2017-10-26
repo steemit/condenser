@@ -55,13 +55,6 @@ class App extends React.Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
-        // setTimeout(() => this.setState({showCallout: false}), 15000);
-        if (nextProps.location.pathname !== this.props.location.pathname) {
-            this.setState({showBanner: false, showCallout: false})
-        }
-    }
-
     componentWillReceiveProps(np) {
         /* Add listener if the next page requires entropy and the current page didn't */
         if (pageRequiresEntropy(np.location.pathname) && !pageRequiresEntropy(this.props.location.pathname)) {
@@ -157,14 +150,9 @@ class App extends React.Component {
                         <CloseButton onClick={() => this.setState({showCallout: false})} />
                         <ul>
                             <li>
-                                <a href="https://steemit.com/steemit/@steemitblog/steemit-com-is-now-open-source">
-                                    {tt('submit_a_story.APP_NAME_is_now_open_source', {APP_NAME})}
-                                </a>
-                            </li>
-                            <li>
-                                <a href="https://steemit.com/steemit/@steemitblog/all-recovered-accounts-have-been-fully-refunded">
-                                    {tt('submit_a_story.all_accounts_refunded')}
-                                </a>
+                                /*<a href="https://steemit.com/steemit/@steemitblog/steemit-com-is-now-open-source">
+                                   ...STORY TEXT...
+                                </a>*/
                             </li>
                         </ul>
                     </div>
@@ -189,24 +177,21 @@ class App extends React.Component {
                     <div className="welcomeBanner">
                         <CloseButton onClick={() => this.setState({showBanner: false})} />
                         <div className="text-center">
-                            <h2>{tt('submit_a_story.welcome_to_the_blockchain')}</h2>
-                            <h4>{tt('submit_a_story.your_voice_is_worth_something')}</h4>
+                            <h2>{tt('navigation.intro_tagline')}</h2>
+                            <h4>{tt('navigation.intro_paragraph')}</h4>
                             <br />
-                            <a className="button" href="/pick_account"> <b>{tt('navigation.sign_up')}</b> </a>
+                            <a className="button button--primary" href="/pick_account"> <b>{tt('navigation.sign_up')}</b> </a>
                             &nbsp; &nbsp; &nbsp;
-                            <a className="button hollow uppercase" href="https://steem.io" target="_blank" rel="noopener noreferrer" onClick={this.learnMore}> <b>{tt('submit_a_story.learn_more')}</b> </a>
+                            <a className="button hollow uppercase" href="https://steem.io" target="_blank" rel="noopener noreferrer" onClick={this.learnMore}> <b>{tt('navigation.learn_more')}</b> </a>
                             <br />
                             <br />
-                            <div className="tag3">
-                                <b>{tt('submit_a_story.get_sp_when_sign_up', {signupBonus: signup_bonus, VESTING_TOKEN})}</b>
-                            </div>
                         </div>
                     </div>
                 </div>
             );
         }
 
-        return <div className={'App' + (lp ? ' LP' : '') + (ip ? ' index-page' : '') + (miniHeader ? ' mini-header' : '')}
+        return <div className={'App' + ' theme-original' + (lp ? ' LP' : '') + (ip ? ' index-page' : '') + (miniHeader ? ' mini-header' : '')}
                     ref="App_root"
                 >
             <SidePanel ref="side_panel" alignment="right">
@@ -255,6 +240,11 @@ class App extends React.Component {
                 </ul>
                 <ul className="vertical menu">
                     <li>
+                        <a href="https://thesteemitshop.com/" target="_blank" rel="noopener noreferrer">
+                            {tt('navigation.shop')}&nbsp;<Icon name="extlink" />
+                        </a>
+                    </li>
+                    <li>
                         <a href="https://steemit.chat/home" target="_blank" rel="noopener noreferrer">
                             {tt('navigation.chat')}&nbsp;<Icon name="extlink" />
                         </a>
@@ -272,7 +262,12 @@ class App extends React.Component {
                 </ul>
                 <ul className="vertical menu">
                     <li>
-                        <a href="https://steem.io/SteemWhitePaper.pdf" onClick={this.navigate}>
+                        <a href="https://steem.io/steem-bluepaper.pdf" target="_blank" rel="noopener noreferrer">
+                            {tt('navigation.bluepaper')}&nbsp;<Icon name="extlink" />
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://steem.io/SteemWhitePaper.pdf" target="_blank" rel="noopener noreferrer">
                             {tt('navigation.whitepaper')}&nbsp;<Icon name="extlink" />
                         </a>
                     </li>

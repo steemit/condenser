@@ -98,10 +98,9 @@ function runApp(initial_state) {
 
 if (!window.Intl) {
     require.ensure(['intl/dist/Intl'], (require) => {
-        window.IntlPolyfill = window.Intl = require('intl/dist/Intl');
-        require('intl/locale-data/jsonp/en-US.js');
-        require('intl/locale-data/jsonp/es.js');
-        require('intl/locale-data/jsonp/ru.js');
+        window.IntlPolyfill = window.Intl = require('intl/dist/Intl')
+        require('intl/locale-data/jsonp/en-US.js')
+        require('intl/locale-data/jsonp/es.js')
         Iso.bootstrap(runApp);
     }, "IntlBundle");
 }

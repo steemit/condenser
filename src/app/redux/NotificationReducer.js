@@ -1,6 +1,6 @@
 import { Map, OrderedMap, Set } from 'immutable';
 import { combineReducers } from 'redux';
-import allTypes from 'app/components/elements/notification/type';
+import allTypes, { filters } from 'app/components/elements/notification/type';
 
 /**
  * Normalizes API payload.
@@ -72,39 +72,56 @@ function updateMatchesList(actionUpdates, prop, val) {
 /**
  * Creates a reducer which provides a list of ids of all notifications which match the given filter.
  *
- * @param {Object} state
+ * @param {Object} criterium
+ * @param {String} criterium.prop prop with this name...
+ * @param {?} ceiterium.val ... should match exactly this value
  * @return {Function} reducer
  */
-export const createList = ({ prop, val }) => combineReducers({
-        ids: (state = Set(), action = { type: null }) => {
-            switch (action.type) {
-                case 'notification/RECEIVE_ALL':
-                    return Set.fromKeys(apiToMap(action.payload).filter(n => (n[prop] === val)));
-                case 'notification/APPEND_SOME':
-                    return state.union(Set.fromKeys(apiToMap(action.payload).filter(n => (n[prop] === val))));
-                case 'notification/UPDATE_ONE':
-                    if (!updateMatchesList(action.updates, prop, val)) {
-                        return state.delete(action.id);
-                    }
-                    if (updateMatchesList(action.updates, prop, val)) {
-                        return state.add(action.id);
-                    }
-                    return state;
-                case 'notification/UPDATE_SOME':
-                    return action.ids.reduce((acc, updatedId) => {
-                        if (!updateMatchesList(action.updates, prop, val)) {
-                            return acc.delete(updatedId);
-                        }
-                        if (updateMatchesList(action.updates, prop, val)) {
-                            return acc.add(updatedId);
-                        }
-                        return acc;
-                    }, state);
-                default:
-                    return state;
+export const createList = ({ prop, val }) => (state = Set(), action = { type: null }) => {
+    switch (action.type) {
+        case 'notification/RECEIVE_ALL':
+            return Set.fromKeys(apiToMap(action.payload).filter(n => (n[prop] === val)));
+        case 'notification/APPEND_SOME':
+            return state.union(Set.fromKeys(apiToMap(action.payload).filter(n => (n[prop] === val))));
+        case 'notification/UPDATE_ONE':
+            if (!updateMatchesList(action.updates, prop, val)) {
+                return state.delete(action.id);
             }
-        },
-});
+            if (updateMatchesList(action.updates, prop, val)) {
+                return state.add(action.id);
+            }
+            return state;
+        case 'notification/UPDATE_SOME':
+            return action.ids.reduce((acc, updatedId) => {
+                if (!updateMatchesList(action.updates, prop, val)) {
+                    return acc.delete(updatedId);
+                }
+                if (updateMatchesList(action.updates, prop, val)) {
+                    return acc.add(updatedId);
+                }
+                return acc;
+            }, state);
+        default:
+            return state;
+    }
+};
+
+/**
+ * Creates a reducer which provides a list of ids of all notifications which match the given filter.
+ *
+ * @param {String[]} filtertypes only include notif ids with these types
+ * @return {Function} reducer
+ */
+export const createMultiTypeList = (filtertypes) => (state = Set(), action = { type: null }) => {
+    switch (action.type) {
+        case 'notification/RECEIVE_ALL':
+            return Set.fromKeys(apiToMap(action.payload).filter(n => (filtertypes.indexOf(n.notificationType) > -1)));
+        case 'notification/APPEND_SOME':
+            return state.union(Set.fromKeys(apiToMap(action.payload).filter(n => filtertypes.indexOf(n.notificationType) > -1)));
+        default:
+            return state;
+    }
+};
 
 const generateByTypeReducers = (types, listCreator) => {
     return types.reduce((acc, cur) => {
@@ -114,6 +131,15 @@ const generateByTypeReducers = (types, listCreator) => {
         };
     }, {});
 };
+
+const generateUserfacingTypesReducers = (filtermap, listCreator) => {
+    return Object.keys(filtermap).reduce((acc, cur) => {
+        return {
+            ...acc,
+            [cur]: listCreator(filtermap[cur]),
+        }
+    }, {});
+}
 
 const isFetching = (state = false, action = { type: null }) => {
     switch (action.type) {
@@ -162,6 +188,7 @@ const notificationReducer = combineReducers({
     unread: createList({ prop: 'read', val: false }),
     unshown: createList({ prop: 'shown', val: false }),
     byType: combineReducers(generateByTypeReducers(allTypes, createList)),
+    byUserFacingType: combineReducers(generateUserfacingTypesReducers(filters, createMultiTypeList)),
     isFetching,
     isFetchingBefore,
     errorMsg,

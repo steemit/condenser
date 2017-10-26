@@ -29,3 +29,5 @@ run/config/pm2/process.json
 .vagrant
 
 .env.*
+
+package-lock.json

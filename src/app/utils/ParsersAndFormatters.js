@@ -82,7 +82,7 @@ export function translateError(string) {
             return tt('g.account_name_should_be_shorter')
         case 'Account name should start with a letter.':
             return tt('g.account_name_should_start_with_a_letter')
-        case 'Account name should have only letters, digits, or dashes.':
+        case 'Account name should have only letters, digits, periods or dashes.':
             return tt('g.account_name_should_have_only_letters_digits_or_dashes')
         case 'vote currently exists, user must be indicate a desire to reject witness':
             return tt('g.vote_currently_exists_user_must_be_indicate_a_to_reject_witness')

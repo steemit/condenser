@@ -158,7 +158,7 @@
     "account_name_should_start_with_a_letter": "Account name should start with a letter.",
     "account_name_should_be_shorter": "Account name should be shorter.",
     "account_name_should_be_longer": "Account name should be longer.",
-    "account_name_should_have_only_letters_digits_or_dashes": "Account name should have only letters, digits, or dashes.",
+    "account_name_should_have_only_letters_digits_or_dashes": "Account name should have only letters, digits, periods or dashes.",
     "cannot_increase_reward_of_post_within_the_last_minute_before_payout": "Cannot increase reward of post within the last minute before payout",
     "vote_currently_exists_user_must_be_indicate_a_to_reject_witness": "vote currently exists, user must be indicate a desire to reject witness",
     "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes": "Only one Steem account allowed per IP address every 10 minutes",

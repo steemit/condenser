@@ -8,7 +8,7 @@ async function proxify(method, context, proxy, lifetime /*, options */) {
       res = cache[0].slice(2);
   }
   catch (e) {
-    console.error('-- /api/v1/proxy/method error -->', method, e.message);
+    console.error('-- /api/v1/proxy/method error -->', proxyKey, e.message);
   }
   if (typeof res === 'object' && res.length) {
     res = res[0];
@@ -20,7 +20,12 @@ async function proxify(method, context, proxy, lifetime /*, options */) {
     else {
       res = await context[method].apply(context);
     }
-    await proxy.call('chaindb_set', lifetime, proxyKey, res);
+    try {
+      await proxy.call('chaindb_set', lifetime, proxyKey, res);
+    }
+    catch (e) {
+      console.error('-- /api/v1/proxy/method error -->', proxyKey, e.message);
+    }
   }
   return res;
 }

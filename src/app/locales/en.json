@@ -668,7 +668,7 @@
     "notifications": {
         "controls": {
           "go_to_page": "View all",
-          "mark_all_read": "Mark All as Read",
+          "mark_all_read": "Mark all as Read",
           "mark_all_hidden": "Clear all",
           "fetch_more": "Get more!",
           "fetch_no_more": "That's it."
@@ -730,7 +730,7 @@
           "body":"If this wasn't you, change your password ASAP",
           "subject":"Security warning"
         },
-        "security_withrawal":{
+        "security_withdrawal":{
           "action":"Savings withdrawal initiated",
           "body":"If this wasn't you, change your password ASAP",
           "subject":"Security warning",

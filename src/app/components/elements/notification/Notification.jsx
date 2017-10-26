@@ -72,10 +72,6 @@ class NotificationLink extends React.Component {
                 headerContent = <span><span className="user">{ author }</span> { tt(localeAction) } </span>
                 bodyContent = item.summary
                 break
-            case type.POWER_DOWN :
-                console.log(`Notification type - ${notificationType} needs to use the steemit logo check with all to see if this can just be part of the account, or if it needs special treatment`)
-                headerContent = <span><span className="subject">{ tt(`${localeRoot}.subject`) }</span> { tt(localeAction) }</span>
-                break
             case type.RECEIVE_STEEM :
                 headerContent = <span><span className="subject">{ amount } { tt("g.steem") }</span> { tt(localeAction) } <span className="user">{ author }</span></span>
                 break
@@ -87,15 +83,12 @@ class NotificationLink extends React.Component {
             case type.SECURITY_PWD_CHANGE :
             case type.SECURITY_WITHDRAWAL :
             case type.SECURITY_NEW_MOBILE :
-            case type.SECURITY_POWER_DOWN :
+            case type.POWER_DOWN :
                 headerContent = <span><span className="subject">{ tt(`${localeRoot}.subject`) }</span> { tt(localeAction) }</span>
                 bodyContent = tt(`${localeRoot}.body`)
-                picture =
-                    ( <div className={"Comment__Userpic show-for-medium " + notificationType}>
-                        <div className="Userpic" dangerouslySetInnerHTML={{ __html: badges.important}} />
-                    </div> )
+                picture =( <div className="Userpic" dangerouslySetInnerHTML={{ __html: badges.important}} /> )
                 break
-            case type.MENTION :
+            case type.TAG :
             case type.VOTE :
                 localeAction = localeRoot + '.actionComment'
                 if(0 === item.depth) {
@@ -128,9 +121,9 @@ class NotificationLink extends React.Component {
         return ( <Link to={ link } className={ classNames } onClick={(e) =>{ if(this.props.onClick) {this.props.onClick(e);} this.markReadDefault(e) }} >
                 { (!this.props.shown)? <span className="unseenIndicator" dangerouslySetInnerHTML={{ __html: "&#9679"}} /> : null }
                 <div className="item-panel" >
-                    { (notificationType !== type.POWER_DOWN) ? <div className={ "Comment__Userpic show-for-medium " + notificationType} >
+                    <div className={ "Comment__Userpic show-for-medium " + notificationType} >
                         { picture }
-                    </div> : null }
+                    </div>
                     <div className="item-header">
                         { headerContent }
                     </div>

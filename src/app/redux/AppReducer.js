@@ -23,7 +23,9 @@ const defaultState = Map({
     }),
     user_preferences: Map({
         locale: null,
-        nsfwPref: 'warn'
+        nsfwPref: 'warn',
+        theme: 'light',
+        currency: 'USD'
     })
 });
 

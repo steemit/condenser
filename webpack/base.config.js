@@ -44,7 +44,8 @@ export default {
             'immutable',
             'autolinker',
             'pako',
-            'remarkable'
+            'remarkable',
+            'picturefill'
         ]
     },
     output: {

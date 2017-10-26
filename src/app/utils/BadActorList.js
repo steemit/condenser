@@ -24,6 +24,7 @@ bitrrex
 bttrex
 btrex
 bttrex
+bitttex
 ittrex
 bittrex-deposit
 poloiex

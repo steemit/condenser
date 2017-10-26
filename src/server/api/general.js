@@ -12,6 +12,7 @@ import Mixpanel from 'mixpanel';
 import Tarantool from 'db/tarantool';
 import {PublicKey, Signature, hash} from 'steem/lib/auth/ecc';
 import {api, broadcast} from 'steem';
+import {validate_account_name} from 'app/utils/ChainValidation';
 
 const mixpanel = config.get('mixpanel') ? Mixpanel.init(config.get('mixpanel')) : null;
 
@@ -89,6 +90,13 @@ export default function useGeneralApi(app) {
         if ($STM_Config.disable_signups) {
             this.body = JSON.stringify({error: 'New signups are temporary disabled.'});
             this.status = 401;
+            return;
+        }
+
+        const name_error = validate_account_name(account.name)
+        if (name_error) {
+            this.body = JSON.stringify({error: name_error});
+            this.status = 500;
             return;
         }
 

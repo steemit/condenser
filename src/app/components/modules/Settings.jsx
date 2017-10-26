@@ -130,7 +130,7 @@ class Settings extends React.Component {
         const ignores = isOwnAccount && following && following.get('ignore_result')
 
         return <div className="Settings">
-            <div className="row">
+            {/*<div className="row">
                 <div className="small-12 medium-6 large-4 columns">
                     <label>{tt('g.choose_language')}
                         <select defaultValue={user_preferences.locale} onChange={this.handleLanguageChange}>
@@ -141,7 +141,7 @@ class Settings extends React.Component {
                     </label>
                 </div>
             </div>
-            <br />
+            <br />*/}
             <div className="row">
                 <form onSubmit={this.handleSubmitForm} className="small-12 medium-6 large-4 columns">
                     <h4>{tt('settings_jsx.public_profile_settings')}</h4>

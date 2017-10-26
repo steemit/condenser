@@ -25,6 +25,7 @@ const y = {
     }
 }
 
+// Todo: for dev only! Do not merge if present!
 if(typeof window !== 'undefined') {
     window.y = y;
 }

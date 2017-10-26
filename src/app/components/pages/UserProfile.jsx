@@ -31,7 +31,7 @@ import Callout from 'app/components/elements/Callout';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import userIllegalContent from 'app/utils/userIllegalContent';
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
-import {SUBSECTION_DEFAULT, default as Notifications} from './Notifications'; //eslint-disable-line
+import Notifications, { SUBSECTION_DEFAULT } from './Notifications';
 
 export default class UserProfile extends React.Component {
     constructor() {

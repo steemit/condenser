@@ -1,7 +1,6 @@
 import {connect} from 'react-redux';
 import tt from 'counterpart'
 import classNames from 'classnames';
-import { Set } from 'immutable';
 import Icon from 'app/components/elements/Icon';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import Notification from 'app/components/elements/notification';
@@ -206,18 +205,9 @@ export default connect(
     (state, ownProps) => {
         const filter = (ownProps.filter && filters[ownProps.filter]) ? ownProps.filter : FILTER_ALL;
         let allRead = true;
-        let notifications = state.notification.byId;
-
-        if (notifications && filter !== FILTER_ALL) {
-            const filteredTypes = filters[filter];
-            const filteredIds = filteredTypes.reduce((ids, tok) => {
-                if (state.notification.byType[tok] && state.notification.byType[tok].ids) {
-                    return ids.union(state.notification.byType[tok].ids);
-                 }
-                 return ids;
-            }, Set());
-            notifications = notifications.filter((v, id) => filteredIds.includes(id));
-        }
+        const notifications = filter === FILTER_ALL
+            ? state.notification.byId
+            : state.notification.byId.filter((v, id) => state.notification.byUserFacingType[filter].includes(id));
 
         notifications.forEach((n) => {
             if (n.read === false) {

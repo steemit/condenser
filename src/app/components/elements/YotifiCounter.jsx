@@ -11,7 +11,7 @@ class YotifiCounter extends React.Component {
 
     render() {
         const { unshown } = this.props;
-        const count = unshown.ids.count();
+        const count = unshown.count();
         if (count < 1) return null;
         return <div className="NotifiCounter">{count}</div>;
     }

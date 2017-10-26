@@ -158,25 +158,29 @@ class YotificationList extends React.Component {
     }
 
     render() {
-        return ( <div id={this.htmlId} className={"NotificationsModule " + this.state.layout} ref={el => { this.rootEl = el }} >
-            {this.renderTitle()}
-            {(this.state.showFilters)? renderFilterList(this.props) : null}
-            {renderNotificationList(this.props.notifications, this.props.onViewAll)}
-            {this.renderTitle(true)}
+        return (
+            <div id={this.htmlId}
+                 className={classNames("NotificationsModule", this.state.layout, {'no-notifications': (this.props.notifications.size === 0)})}
+                 ref={el => { this.rootEl = el }} >
 
-            <div className="footer get-more">
-                {this.props.noMoreToFetch
-                    ? <div>No more to fetch!</div>
-                    : this.props.isFetchingBefore
-                        ? <LoadingIndicator type="circle" inline />
-                        : <button className="ptc" onClick={this.appendSome}>{tt('notifications.controls.fetch_more')}</button>
-                }
-            </div>
+                {this.renderTitle()}
+                {(this.state.showFilters)? renderFilterList(this.props) : null}
+                {renderNotificationList(this.props.notifications, this.props.onViewAll)}
+                {this.renderTitle(true)}
 
-            {(this.state.showFooter)? <div className="footer">{tt('notifications.controls.go_to_page')}</div> : null }
-            {(this.state.showFooter)? (<div className="footer absolute">
-                <Link to={Url.profile() + '/notifications'} onClick={this.props.onViewAll} className="view-all">{tt('notifications.controls.go_to_page')}</Link>
-            </div>) : null}
+                <div className="footer get-more">
+                    {this.props.noMoreToFetch
+                        ? <div>No more to fetch!</div>
+                        : this.props.isFetchingBefore
+                            ? <LoadingIndicator type="circle" inline />
+                            : <button className="ptc" onClick={this.appendSome}>{tt('notifications.controls.fetch_more')}</button>
+                    }
+                </div>
+
+                {(this.state.showFooter)? <div className="footer">{tt('notifications.controls.go_to_page')}</div> : null }
+                {(this.state.showFooter)? (<div className="footer absolute">
+                    <Link to={Url.profile() + '/notifications'} onClick={this.props.onViewAll} className="view-all">{tt('notifications.controls.go_to_page')}</Link>
+                </div>) : null}
         </div>);
     }
 }

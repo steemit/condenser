@@ -46,13 +46,12 @@
 
 .PostsList__post_container {
   position: relative;
-  background-color: $white;
+  @include themify($themes) {
+      background-color: themed('moduleBackgroundColor');       
+    }
   margin: 1rem auto;
   padding: 2rem 0.9rem 0 0.9rem;
   transform: translateZ(0);
-  .PostFull {
-    background-color: $white;
-  }
 }
 
 body.with-post-overlay {
@@ -61,7 +60,7 @@ body.with-post-overlay {
 
 @media screen and (min-width: 60rem) {
   .PostsList__post_overlay {
-    background-color: rgba(150, 150, 150, 0.9);
+    background-color: rgba(0, 0, 0, 0.85);
   }
   .PostsList__post_top_overlay {
     border-bottom: none;
@@ -77,9 +76,11 @@ body.with-post-overlay {
     }
   }
   .PostsList__post_container {
-    border-radius: 3px;
     width: 56rem;
-    box-shadow: 0 0 5px 0px rgba(64,64,64,1);
+    margin-bottom: 3em;
+    @include themify($themes) {
+      box-shadow: 5px 5px 0 0 themed('contentBorderAccent');        
+    }    
   }
 }
 

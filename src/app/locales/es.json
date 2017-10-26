@@ -99,6 +99,7 @@
     "tag": "Etiqueta",
     "to": "hasta",
     "topics": "Temas",
+    "all_tags": "All tags",
     "transfer": "Transferir",
     "trending_topics": "Temas Tendencia",
     "type": "Tipo",
@@ -222,9 +223,11 @@
     "learn_more": "Para saber más",
     "welcome": "Bienvenido",
     "faq": "Preguntas Frecuentes",
+    "shop": "The Steemit Shop",
     "chat": "Chat de Steemit",
     "app_center": "Centro de Aplicaciones Steemit",
     "api_docs": "Documentos API de Steemit",
+    "bluepaper": "Steem Bluepaper",
     "whitepaper": "Libro blanco de Steem",
     "intro_tagline": "El dinero habla.",
     "intro_paragraph": "Tu voz tiene valor. Únete a la comunidad que te paga por publicar y votar contenido de alta calidad"
@@ -329,6 +332,11 @@
     "user_hasnt_started_bloggin_yet": "Parece que %(name)s aún no ha comenzado su blog",
     "user_hasnt_followed_anything_yet": "Parece que %(name)s aún no está siguiendo a nadie. Si %(name)s acaba de añadir nuevas cuentas para seguir, el feed personalizado aparecerá cuando el nuevo contenido esté disponible.",
     "user_hasnt_had_any_replies_yet": "%(name)s todavía no ha tenido ninguna respuesta",
+    "looks_like_you_havent_posted_anything_yet": "Looks like you haven't posted anything yet.",
+    "create_a_post": "Create a Post",
+    "explore_trending_articles": "Explore Trending Articles",
+    "read_the_quick_start_guide": "Read The Quick Start Guide",
+    "browse_the_faq": "Browse The FAQ",
     "followers": "Seguidores",
     "this_is_users_reputations_score_it_is_based_on_history_of_votes": "Esto es la reputación de %(name)s's. La reputación está basada en la historia de votos recibidos por la cuenta y se usa para esconder contenido de baja calidad.",
     "follower_count": {
@@ -596,6 +604,7 @@
     "from": "De",
     "to": "Para",
     "asset_currently_collecting": "%(asset)s recolectando actualmente %(interest)s%% APR."
+    "beware_of_spam_and_phishing_links": "Beware of spam and phishing links in transfer memos. Do not open links from users you do not trust. Do not provide your private keys to any third party websites."
   },
   "userwallet_jsx": {
     "conversion_complete_tip": "Se completará el",

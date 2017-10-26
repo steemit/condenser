@@ -20,7 +20,7 @@ export const FEED = 'feed';
 export const FOLLOW = 'follow';
 export const MENTION = 'mention';
 export const POST_REPLY = 'post_reply';
-export const POWER_DOWN = 'power_down'
+export const POWER_DOWN = 'power_down';
 export const SEND_STEEM = 'send';
 export const RECEIVE_STEEM = 'receive';
 export const RESTEEM = 'resteem';
@@ -31,7 +31,7 @@ export const VOTE = 'vote';
 export const ANNOUNCEMENT = 'announcement';
 export const ANNOUNCEMENT_IMPORTANT = 'announcement_important';
 export const SECURITY_PWD_CHANGE = 'security_password_changed';
-export const SECURITY_WITHDRAWAL = 'security_withrawal'
+export const SECURITY_WITHDRAWAL = 'security_withdrawal';
 export const SECURITY_NEW_MOBILE = 'security_new_mobile_device';
 
 export const filters = {

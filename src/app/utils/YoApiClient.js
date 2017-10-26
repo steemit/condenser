@@ -4,9 +4,9 @@ import types, {
     toggleNotificationGroups,
 } from 'app/components/elements/notification/type';
 
-//let YO = '/yo';
+let YO = '/yo';
 //let YO = 'https://yo.steemitdev.com';
-let YO = 'https://api.steemitdev.com';
+//let YO = 'https://api.steemitdev.com';
 let testMode = true;
 const y = {
     local: () => {
@@ -109,7 +109,6 @@ export function fetchAllNotifications(username) {
             method: 'yo.get_notifications',
             params: {
                 test: testMode, // Todo: for dev only! Do not merge if present!
-                notify_type: 'vote', // Todo: for dev only! Do not merge if present!
                 //username, // Todo: for dev only! Do not merge if present!
                 username: 'test_user', // Todo: for dev only! Do not merge if present!
             },
@@ -152,7 +151,7 @@ export function fetchSomeNotifications({ username, before, after, filterTypes })
             method: 'yo.get_notifications',
             params: {
                 test: testMode, // Todo: for dev only! Do not merge if present!
-                notify_type: 'vote', // Todo: for dev only! Do not merge if present!
+                notify_types: filterTypes,
                 //username, // Todo: for dev only! Do not merge if present!
                 username: 'test_user', // Todo: for dev only! Do not merge if present!
                 ...beforeOrAfterParams,

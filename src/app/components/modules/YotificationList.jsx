@@ -243,6 +243,7 @@ export default connect(
             dispatch(action);
         },
         appendSome: (notificationTypes) => {
+            console.log(notificationTypes)
             const action = {
                 type: 'notification/FETCH_SOME',
                 types: notificationTypes,

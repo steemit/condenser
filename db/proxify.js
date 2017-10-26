@@ -14,6 +14,7 @@ async function proxify(method, context, proxy, lifetime /*, options */) {
     res = res[0];
   }
   else {
+    await proxy.call('chaindb_update_in_progress', proxyKey);
     if (typeof options[0] !== 'undefined') {
       res = await context[method].apply(context, options);
     }

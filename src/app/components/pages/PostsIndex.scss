@@ -584,49 +584,6 @@
   }
 }
 
-.action {
-  padding: 4px 10px 2px 0;
-  line-height: 1;
-  display: flex;
-  align-items: center;
-  min-width: 60px;
-  transition: 0.2s all ease-in-out;
-
-  &:hover {
-    .icon-svg--accent {
-      @include themify($themes) {
-        fill: themed('colorAccentHover'); 
-      }
-    }
-  }
-
-  @media only screen and (min-width: 420px) {
-    padding: 8px 20px 8px 0;
-  }
-  &__icon {
-    margin-right: 6px;
-    width: 28px;
-    &:hover {
-      cursor: pointer;
-    }
-  }
-  &__count {
-    position: relative;
-    top: 1px;
-    @include font-size(13px);       
-    @include themify($themes) {
-        color: themed('textColorSecondary');  
-      } 
-    @media only screen and (min-width: 420px) {
-      @include font-size(15px);             
-    }
-    &--active {
-      @include themify($themes) {
-          color: themed('textColorAccent');  
-        } 
-    }
-  }
-}
 
 
 .icon-svg {
